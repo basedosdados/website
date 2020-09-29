@@ -2,6 +2,13 @@
 cd "$(git rev-parse --show-toplevel)" # go to git root
 
 set -e
+
+if [[ ! -d vendor/ckan/.git ]]; then
+    mkdir -p vendor/
+    git clone --depth=1 --branch 2.9.0 https://github.com/ckan/ckan.git
+    mv ckan vendor/
+fi
+
 docker-compose build --parallel
 docker-compose up --scale ckan=0 -d
 
