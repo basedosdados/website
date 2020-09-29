@@ -5,8 +5,9 @@ set -e
 
 if [[ ! -d vendor/ckan/.git ]]; then
     mkdir -p vendor/
-    #git clone --depth=1 --branch ckan-2.9.0 https://github.com/ckan/ckan.git
-    git clone --depth=1 --branch master https://github.com/ckan/ckan.git
+    git clone --depth=1 --branch master --shallow-since=2020-10-01T00:00:00 https://github.com/ckan/ckan.git
+    ( cd vendor/ckan && git checkout e540797e89c7b49857cd2a1eecc9be5de6e909f8) # TODO: go to a tag instead
+    # git clone --depth=1 --branch ckan-2.9.0 https://github.com/ckan/ckan.git
     mv ckan vendor/
 fi
 
