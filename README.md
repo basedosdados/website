@@ -1,1 +1,6 @@
 # website
+
+# TODO
+
+* css
+* extensoes
