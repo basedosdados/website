@@ -1,3 +1,5 @@
+#!/bin/bash
+cd "$(git rev-parse --show-toplevel)" # go to git root
 
 set -e
 docker-compose build --parallel
@@ -15,6 +17,10 @@ PGPASSWORD=ckan pg_restore -d postgres -v -h lh -p 5432 -U ckan  --if-exists  --
 # docker exec -i -e PGPASSWORD=ckan db pg_restore -d postgres -v -h localhost -p 5432 -U ckan \
 #        /postgres-prod-dump.custom --no-owner --exit-on-error
 
+if [[ ! -d assets/storage ]]; then
+    if ! which git-lfs > /dev/null; then echo ERROR!!! PLEASE INSTALL git-lfs to retrieve assets; exit 1; fi
+    unzip assets.zip
+fi
 
 docker-compose up ckan -d
 docker exec -it ckan /usr/local/bin/ckan search-index rebuild
