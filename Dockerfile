@@ -60,10 +60,17 @@ RUN ckan-pip install -U pip && \
 
 ENTRYPOINT ["/ckan-entrypoint.sh"]
 
-USER root
+USER ckan
 EXPOSE 5000
 
 CMD ["ckan", "run", "--host", "0.0.0.0"]
-ENV CKAN_INI /app/production.ini
+
+## OUR ADDITIONS
+
+USER root
+
+ENV CKAN_INI=/app/production.ini PYTHONDONTUSEBYTECODE
 # COPY assets
 COPY production.ini vendor/ckan/ckan/config/who.ini /app/
+COPY ckanext-basedosdados /app/ckanext-basedosdados
+RUN cd /app/ckanext-basedosdados && ckan-pip install -e .

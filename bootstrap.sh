@@ -42,9 +42,10 @@ fi
 
 docker-compose up -d ckan
 
-{
+(
 # TODO: discover why this isnt working on the first run
-docker exec -it ckan usr/local/bin/ckan search-index rebuild ||
+set +e
 docker exec -it ckan usr/local/bin/ckan search-index rebuild
-}
+docker exec -it ckan usr/local/bin/ckan search-index rebuild
+)
 
