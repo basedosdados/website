@@ -1,0 +1,6 @@
+basedosdados:
+  filters: cssrewrite
+  # output: basedosdados/%(version)s_basedosdados.css
+  output: basedosdados/basedosdados.css
+  contents:
+    - basedosdados.css

@@ -69,7 +69,8 @@ CMD ["ckan", "run", "--host", "0.0.0.0"]
 ## OUR ADDITIONS ##
 ###################
 
-ENV CKAN_INI=/app/production.ini PYTHONDONTUSEBYTECODE=1
+ENV CKAN_INI=/app/production.ini PYTHONDONTUSEBYTECODE=1 PIP_NO_PYTHON_VERSION_WARNING=1
+RUN ckan-pip install ipdb # pra dev
 USER root
 
 # INSTALL EXTENSIONS
@@ -80,9 +81,10 @@ COPY utils/install_extension /app/extensions/install_extension
 
 RUN ./install_extension https://github.com/ckan/ckanext-pages.git
 RUN ./install_extension https://github.com/ckan/ckanext-repo.git
-RUN ./install_extension https://github.com/ckan/ckanext-scheming.git
+RUN ./install_extension https://github.com/ckan/ckanext-scheming.git && ckan-pip install ckantoolkit ckanapi
 RUN ./install_extension https://github.com/NaturalHistoryMuseum/ckanext-contact.git
 RUN ./install_extension https://github.com/ckan/ckanext-googleanalytics.git
+RUN ./install_extension https://github.com/stadt-karlsruhe/ckanext-discovery.git
 
 RUN ckan-pip install python-Levenshtein unidecode nltk==3.4.5 ckanext-tagmanager # && $CKAN_VENV/bin/python -m nltk.downloader all
 # RUN git clone https://github.com/cphsolutionslab/ckanext-customuserprivileges && cd ckanext-customuserprivileges && ckan-pip install -e .
@@ -90,6 +92,7 @@ RUN ckan-pip install python-Levenshtein unidecode nltk==3.4.5 ckanext-tagmanager
 COPY extensions/BD_dataset.json /app/extensions/ckanext-scheming/ckanext/scheming/BD_dataset.json
 
 ##### INSTALL Basedosdados Files
+
 WORKDIR /app
 
 # COPY assets
@@ -99,4 +102,3 @@ COPY utils/run production.ini vendor/ckan/ckan/config/who.ini /app/
 
 COPY ckanext-basedosdados /app/ckanext-basedosdados
 RUN cd /app/ckanext-basedosdados && ckan-pip install -e .
-

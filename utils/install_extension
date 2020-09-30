@@ -8,3 +8,4 @@ ckan-pip install -e .
 if [[ -f requirements.txt ]]; then
     ckan-pip install -r requirements.txt
 fi
+ckan-pip freeze | grep $PACKAGE # assert we are installed
