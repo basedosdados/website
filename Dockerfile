@@ -65,12 +65,38 @@ EXPOSE 5000
 
 CMD ["ckan", "run", "--host", "0.0.0.0"]
 
-## OUR ADDITIONS
+###################
+## OUR ADDITIONS ##
+###################
 
+ENV CKAN_INI=/app/production.ini PYTHONDONTUSEBYTECODE=1
 USER root
 
-ENV CKAN_INI=/app/production.ini PYTHONDONTUSEBYTECODE
+# INSTALL EXTENSIONS
+
+WORKDIR /app/extensions
+
+COPY utils/install_extension /app/extensions/install_extension
+
+RUN ./install_extension https://github.com/ckan/ckanext-pages.git
+RUN ./install_extension https://github.com/ckan/ckanext-repo.git
+RUN ./install_extension https://github.com/ckan/ckanext-scheming.git
+RUN ./install_extension https://github.com/NaturalHistoryMuseum/ckanext-contact.git
+RUN ./install_extension https://github.com/ckan/ckanext-googleanalytics.git
+
+RUN ckan-pip install python-Levenshtein unidecode nltk==3.4.5 ckanext-tagmanager # && $CKAN_VENV/bin/python -m nltk.downloader all
+# RUN git clone https://github.com/cphsolutionslab/ckanext-customuserprivileges && cd ckanext-customuserprivileges && ckan-pip install -e .
+
+COPY extensions/BD_dataset.json /app/extensions/ckanext-scheming/ckanext/scheming/BD_dataset.json
+
+##### INSTALL Basedosdados Files
+WORKDIR /app
+
 # COPY assets
-COPY production.ini vendor/ckan/ckan/config/who.ini /app/
+COPY utils/run production.ini vendor/ckan/ckan/config/who.ini /app/
+
+# INSTALL OUR EXTENSION!
+
 COPY ckanext-basedosdados /app/ckanext-basedosdados
 RUN cd /app/ckanext-basedosdados && ckan-pip install -e .
+
