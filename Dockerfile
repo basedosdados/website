@@ -69,7 +69,7 @@ CMD ["ckan", "run", "--host", "0.0.0.0"]
 ## OUR ADDITIONS ##
 ###################
 
-ENV CKAN_INI=/app/production.ini PYTHONDONTUSEBYTECODE=1 PIP_NO_PYTHON_VERSION_WARNING=1
+ENV CKAN_INI=/app/configs/production.ini PYTHONDONTUSEBYTECODE=1 PIP_NO_PYTHON_VERSION_WARNING=1
 RUN ckan-pip install ipdb # pra dev
 USER root
 
@@ -96,7 +96,7 @@ COPY extensions/BD_dataset.json /app/extensions/ckanext-scheming/ckanext/schemin
 WORKDIR /app
 
 # COPY assets
-COPY utils/run production.ini vendor/ckan/ckan/config/who.ini /app/
+COPY utils/run configs/ vendor/ckan/ckan/config/who.ini /app/
 
 # INSTALL OUR EXTENSION!
 

@@ -27,6 +27,8 @@ docker exec -i -e PGPASSWORD=ckan db dropdb -U ckan ckan_default --if-exists
 docker exec -i -e PGPASSWORD=ckan db dropdb -U ckan ckan --if-exists
 PGPASSWORD=ckan pg_restore -d postgres -v -h localhost -p 5432 -U ckan  --if-exists  --clean postgres-prod-dump.custom --create --no-owner --exit-on-error
 docker exec -i -e PGPASSWORD=ckan db psql -U ckan -d postgres --command='ALTER DATABASE ckan_default RENAME TO ckan'
+# Delete green/css config
+docker exec -i -e PGPASSWORD=ckan db psql -U ckan -d postgres --command='DELETE from system_info WHERE id = 2; DELETE from system_info_revision WHERE continuity_id = 2'
 
 # docker run --rm -ti postgres:10 --entrypoint /bin/bash --network host -e PGPASSWORD=ckan pg_restore \
 #    -d postgres -v -h lh -p 5432 -U ckan  --if-exists  --clean postgres-prod-dump.custom --create --no-owner --exit-on-error
@@ -40,12 +42,14 @@ if [[ ! -d assets/storage ]]; then
     chmod -R 777 assets
 fi
 
+
+docker-compose rm --rm ckan bash -c 'cd ckanext-basedosdados; ckan-pip install -e .' # to create the dev links in the volume
 docker-compose up -d ckan
 
 (
 # TODO: discover why this isnt working on the first run
 set +e
-docker exec -it ckan usr/local/bin/ckan search-index rebuild
-docker exec -it ckan usr/local/bin/ckan search-index rebuild
+docker exec -it ckan /usr/local/bin/ckan search-index rebuild
+docker exec -it ckan /usr/local/bin/ckan search-index rebuild
 )
 

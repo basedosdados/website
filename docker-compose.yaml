@@ -1,7 +1,7 @@
 
 # docker-compose build && docker-compose up -d
 # If "docker-compose logs ckan" shows DB not ready, run "docker-compose restart ckan" a few times.
-version: "3"
+version: "3.2"
 
 volumes:
   ckan_config:
@@ -45,6 +45,7 @@ services:
       # - ckan_storage:/var/lib/ckan/webassets
       - ./assets/storage:/var/lib/ckan/storage/
       - ./ckanext-basedosdados:/app/ckanext-basedosdados
+      - ./configs/:/app/configs/
 
   datapusher:
     container_name: datapusher
