@@ -60,7 +60,7 @@ RUN ckan-pip install -U pip && \
 
 ENTRYPOINT ["/ckan-entrypoint.sh"]
 
-USER ckan
+USER root
 EXPOSE 5000
 
 CMD ["ckan", "run", "--host", "0.0.0.0"]
