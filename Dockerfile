@@ -102,3 +102,4 @@ COPY utils/run configs/ vendor/ckan/ckan/config/who.ini /app/
 
 COPY ckanext-basedosdados /app/ckanext-basedosdados
 RUN cd /app/ckanext-basedosdados && ckan-pip install -e .
+RUN ckan-pip install flask_debugtoolbar
