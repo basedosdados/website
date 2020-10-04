@@ -56,7 +56,7 @@ restart_services() {
 rebuild_index() {
     $SSH  '
         cd ~/basedosdados/
-        docker-compose exec ckan /usr/local/bin/ckan search-index rebuild
+        docker-compose exec -T ckan /usr/local/bin/ckan search-index rebuild
     '
 
 }

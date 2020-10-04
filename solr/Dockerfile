@@ -24,3 +24,4 @@ RUN echo name=$SOLR_CORE > /opt/solr/server/solr/$SOLR_CORE/core.properties
 # Giving ownership to Solr
 
 USER root
+CMD ["solr-foreground", "-force"]

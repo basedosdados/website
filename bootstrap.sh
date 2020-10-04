@@ -6,9 +6,10 @@ set -ex
 if [[ ! -d vendor/ckan/.git ]]; then
     mkdir -p vendor/
     ( cd vendor
-      git clone --branch master --shallow-since=2020-09-01T00:00:00 https://github.com/ckan/ckan.git
+      git clone https://github.com/ckan/ckan.git
       cd ckan
-      git checkout e540797e89c7b49857cd2a1eecc9be5de6e909f8 # TODO: go to a tag instead
+      git checkout ckan-2.9.0
+      git diff 9abeaa1b7d2f6539ade946cc3f407878f49950eb^ 9abeaa1b7d2f6539ade946cc3f407878f49950eb | git apply
     )
 fi
 
