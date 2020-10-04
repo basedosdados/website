@@ -1,0 +1,29 @@
+version: '3.5'
+services:
+  ckan:
+    networks:
+    - basedosdados
+    restart: always
+    volumes: []
+      # - ./ckan_config:/etc/ckan
+      # - ./ckan_home:/usr/lib/ckan
+  solr:
+    networks:
+    - basedosdados
+    restart: always
+    volumes:
+      - ./solr_data:/opt/solr/server/solr/ckan/data
+  db:
+    restart: always
+    networks:
+    - basedosdados
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+  redis:
+    restart: always
+    networks:
+    - basedosdados
+
+networks:
+  basedosdados:
+    name: basedosdados

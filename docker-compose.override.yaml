@@ -1,0 +1,12 @@
+version: '3.5'
+services:
+  ckan:
+    volumes:
+      - ./ckanext-basedosdados:/app/ckanext-basedosdados
+      - ./configs/:/app/configs/
+  db:
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+volumes:
+  pg_data:

@@ -95,8 +95,9 @@ COPY extensions/BD_dataset.json /app/extensions/ckanext-scheming/ckanext/schemin
 
 WORKDIR /app
 
-# COPY assets
-COPY utils/run configs/ vendor/ckan/ckan/config/who.ini /app/
+# COPY configs
+COPY ./utils/run ./vendor/ckan/ckan/config/who.ini /app/
+COPY ./configs/ /app/configs/
 
 # INSTALL OUR EXTENSION!
 
