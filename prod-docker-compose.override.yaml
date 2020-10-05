@@ -23,6 +23,13 @@ services:
     restart: always
     networks:
     - basedosdados
+  autoheal:
+    restart: always
+    image: willfarrell/autoheal
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
 networks:
   basedosdados:

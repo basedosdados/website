@@ -68,10 +68,14 @@ CMD ["ckan", "run", "--host", "0.0.0.0"]
 ###################
 ## OUR ADDITIONS ##
 ###################
+USER root
 
 ENV CKAN_INI=/app/configs/production.ini PYTHONDONTUSEBYTECODE=1 PIP_NO_PYTHON_VERSION_WARNING=1
-RUN ckan-pip install ipdb # pra dev
-USER root
+RUN ckan-pip install ipdb flask_debugtoolbar
+RUN ckan-pip install gunicorn
+RUN apt-get update && apt-get install -y curl htop \
+        && apt-get -q clean && rm -rf /var/lib/apt/lists/*
+
 
 # INSTALL EXTENSIONS
 
@@ -98,9 +102,16 @@ WORKDIR /app
 # COPY configs
 COPY ./utils/run ./vendor/ckan/ckan/config/who.ini /app/
 COPY ./configs/ /app/configs/
+COPY ./wsgi.py /app/wsgi.py
 
 # INSTALL OUR EXTENSION!
 
+
 COPY ckanext-basedosdados /app/ckanext-basedosdados
 RUN cd /app/ckanext-basedosdados && ckan-pip install -e .
-RUN ckan-pip install flask_debugtoolbar
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s \
+        CMD curl -f http://localhost:5000 || exit 1
+CMD ["/usr/lib/ckan/venv/bin/gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "wsgi"]
+
+#### END ####
