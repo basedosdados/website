@@ -1,12 +1,31 @@
 version: '3.5'
 services:
+  http2https301:
+    image: quay.io/coreos/nginx-https-redirect
+    ports: ["80:80"]
   ckan:
     networks:
     - basedosdados
     restart: always
-    volumes: []
+    # volumes:
       # - ./ckan_config:/etc/ckan
       # - ./ckan_home:/usr/lib/ckan
+    secrets:
+    - fullchain
+    - privkey
+    ports:
+    - 443:443
+    command: >
+      /usr/lib/ckan/venv/bin/gunicorn
+        --certfile=/run/secrets/fullchain
+        --keyfile=/run/secrets/privkey
+        --bind 0.0.0.0:443 --workers 4 wsgi
+    healthcheck:
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      test: curl -f -k https://localhost:443 || exit 1
+
   solr:
     networks:
     - basedosdados
@@ -34,3 +53,9 @@ services:
 networks:
   basedosdados:
     name: basedosdados
+
+secrets:
+  fullchain:
+    file: /etc/letsencrypt/live/basedosdados.org/fullchain.pem
+  privkey:
+    file: /etc/letsencrypt/live/basedosdados.org/privkey.pem

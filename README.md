@@ -7,4 +7,3 @@
 * Colocar google analytics
 * python3
 * https
-* debugar esse hanging bizarro

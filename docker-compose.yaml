@@ -20,8 +20,6 @@ services:
       - redis
     depends_on:
       - db
-    ports:
-      - "0.0.0.0:${CKAN_PORT}:5000"
     environment:
       # Defaults work with linked containers, change to use own Postgres, SolR, Redis or Datapusher
       # TODO: remove these env vars if they are in production.ini
@@ -35,6 +33,8 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
       - CKAN_REDIS_URL=redis://redis:6379/0
+    command: ["/usr/lib/ckan/venv/bin/gunicorn", "--bind",
+        "0.0.0.0:5000", "--workers", "4", "wsgi"]
 
     volumes:
       - ./assets/storage:/var/lib/ckan/storage/

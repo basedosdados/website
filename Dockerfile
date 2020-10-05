@@ -112,6 +112,4 @@ RUN cd /app/ckanext-basedosdados && ckan-pip install -e .
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s \
         CMD curl -f http://localhost:5000 || exit 1
-CMD ["/usr/lib/ckan/venv/bin/gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "wsgi"]
-
 #### END ####

@@ -3,3 +3,4 @@ build
 tmp
 .git
 assets
+vendor/ckan/.git
