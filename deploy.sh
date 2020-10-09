@@ -46,7 +46,7 @@ restart_services() {
         if [[ ! -f wait-for-200.sh ]]; then curl https://raw.githubusercontent.com/cec/wait-for-endpoint/master/wait-for-endpoint.sh > wait-for-200.sh && chmod +x wait-for-200.sh; fi
         if [[ ! -f wait-for-it.sh ]]; then curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > wait-for-it.sh && chmod +x wait-for-it.sh; fi
         docker-compose rm -sf ckan autoheal
-        docker-compose up -d solr redis http2https301
+        docker-compose up -d solr redis nginx
         docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh redis:6379 
         docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh solr:8983
         docker-compose up -d ckan autoheal
