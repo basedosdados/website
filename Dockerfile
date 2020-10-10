@@ -34,13 +34,9 @@ RUN --mount=type=cache,target=/var/lib/apt,id=apt_list \
         wget
 
 # Define environment variables
-ENV CKAN_HOME /usr/lib/ckan
 ENV CKAN_VENV /venv
 ENV CKAN_CONFIG /ckan-config
 ENV CKAN_STORAGE_PATH=/var/lib/ckan
-
-# Build-time variables specified by docker-compose.yml / .env
-ARG CKAN_SITE_URL
 
 # Create ckan user
 # RUN useradd -r -u 900 -m -c "ckan account" -d $CKAN_HOME -s /bin/false ckan
@@ -57,7 +53,8 @@ RUN mkdir -p $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH && \
 COPY vendor/ckan/ /ckan/
 ENV PYTHONDONTWRITEBYTECODE=1 VIRTUAL_ENV=/venv PATH=/venv/bin:$PATH
 RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
-    pip install -U pip /ckan/
+    pip install -U pip setuptools==45 && \
+    pip install /ckan/[requirements]
     #pip install --upgrade -r /ckan/requirement-setuptools.txt && \
     #pip install --upgrade -r /ckan/requirements-py2.txt && \
 
@@ -71,9 +68,13 @@ EXPOSE 5000
 
 CMD ["ckan", "run", "--host", "0.0.0.0"]
 
+# Upgrade some CKAN dependencies that are emmiting warnings for py3.8
+RUN --mount=type=cache,target=/root/.cache/pip/,id=pip pip install \
+    sqlalchemy==1.3.19 tzlocal==2.1
 ###################
 ## OUR ADDITIONS ##
 ###################
+
 USER root
 
 RUN echo 'exec pip "$@"' > /bin/ckan-pip && chmod +x /bin/ckan-pip
@@ -91,8 +92,9 @@ WORKDIR /app/extensions
 # COPY utils/install_extension /app/extensions/install_extension
 COPY --from=extensions /extensions /app/extensions
 RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
-    pip install `for i in /app/extensions/*; do echo -e $i; done` \
-    && cat /app/extensions/*/requirements.txt > /tmp/reqs \
+    pip install `for i in /app/extensions/*; do echo -e $i; done`
+RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
+    cat /app/extensions/*/requirements.txt | egrep -v '^ *[.#]( |$)' | tee /tmp/reqs \
     && pip install -r /tmp/reqs \
     && pip install ckantoolkit ckanapi \
         python-Levenshtein unidecode nltk==3.4.5 ckanext-tagmanager # && $CKAN_VENV/bin/python -m nltk.downloader all

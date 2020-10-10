@@ -11,8 +11,6 @@ services:
     container_name: ckan
     build:
       context: .
-      args:
-          - CKAN_SITE_URL=${CKAN_SITE_URL}
     image: bdd/ckan
     links:
       - db
@@ -33,7 +31,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
       - CKAN_REDIS_URL=redis://redis:6379/0
-    command: ["/usr/lib/ckan/venv/bin/gunicorn", "--bind",
+    command: ["gunicorn", "--bind",
         "0.0.0.0:5000", "--workers", "4", "wsgi"]
 
     volumes:

@@ -10650,3 +10650,6 @@ div.primary {
     background-color: white;
     background: white
 }
+.facet--ip_brasileiro--nao > a {
+    font-size: x-large;
+}
