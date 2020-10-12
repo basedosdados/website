@@ -35,8 +35,7 @@ services:
         "0.0.0.0:5000", "--workers", "4", "wsgi"]
 
     volumes:
-      - ./assets/storage:/var/lib/ckan/storage/
-      - ./assets/resources:/var/lib/ckan/resources/
+      - ./assets:/app/uploads/
 
   datapusher:
     container_name: datapusher
