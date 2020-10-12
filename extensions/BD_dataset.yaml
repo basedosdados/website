@@ -616,5 +616,3 @@ resource_fields:
   - field_name: formato
     label: Formato
     preset: resource_format_autocomplete
-
-
