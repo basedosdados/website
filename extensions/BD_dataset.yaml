@@ -598,7 +598,7 @@ dataset_fields:
     choices:
     - value: Link Externo
       label: Link Externo
-    - value: BD mais
+    - value: BD Mais
       label: BD Mais
 resource_fields:
   - field_name: url

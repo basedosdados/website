@@ -1,9 +1,9 @@
 {% set content = '''
 ### Base dos Dados Mais
 
-Está no ar a [Base dos Dados Mais (BD+)](https://basedosdados.github.io/mais/)!
+Está no ar a [BD Mais](https://basedosdados.github.io/mais/)<img src="/BD-mais.png" style="margin-right: 3px; margin-left: 3px; width: 18px">!
 
-Baixe dados já *limpos*, *integrados* e *atualizados* de forma extremamente fácil. Basta uma query de *SQL* pelos nossos clientes (Python) (R e Stata em desenvolvimento).
+Baixe dados já *limpos*, *integrados* e *atualizados* de forma extremamente fácil. Basta uma query de *SQL* pelos nossos clientes Python ou CLI. (R e Stata em desenvolvimento).
 
 O usuário tem liberdade total: você pode
 
@@ -13,14 +13,14 @@ O usuário tem liberdade total: você pode
 
 Para saber mais, veja a nossa [documentação](https://basedosdados.github.io/mais/), e código aberto no [Github](https://github.com/basedosdados/mais).
 
-Nos apoie com R$ [aqui](https://apoia.se/basedosdados). O projeto é todo feito por voluntários, mas ainda temos custos de manutenção da infraestrutura.
+Nos apoie com R$ [aqui](https://apoia.se/basedosdados). O projeto é todo feito por voluntários, mas ainda temos custos de infraestrutura.
 
 Entre em contato com nossa comunidade pelo [Telegram](https://t.me/joinchat/OKWc3RnClXnq2hq-8o0h_w) ou [Whatsapp](https://chat.whatsapp.com/HXWgdFc1RmwCoblly5KPBZ), e se inscreva na nossa [newsletter](https://tinyletter.com/basedosdados) para receber novidades.
 '''.strip() %}
 
 <div class="box announcemnt-block">
   <div class="inner">
-  {{ h.render_markdown(content) }}
+  {{ h.render_markdown(content, allow_html=True) }}
   </div>
 </div>
 

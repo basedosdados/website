@@ -29,7 +29,7 @@ build_config() {
 }
 send() {
     $SSH 'mkdir -p ~/basedosdados/'
-    rsync -e 'ssh -i ~/.ssh/BD.pem' -azvv --size-only --progress --partial ./build/images/ $HOST:~/basedosdados/images/ &
+    rsync -e 'ssh -i ~/.ssh/BD.pem' -azvv --size-only --progress --partial ./build/images/ $HOST:~/basedosdados/images/ & # TODO: debug this, the size-only seems to be failing...
     rsync -e 'ssh -i ~/.ssh/BD.pem' -azvv --exclude=images --checksum ./build/ $HOST:~/basedosdados/ &
     wait
 }

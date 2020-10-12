@@ -47,7 +47,7 @@ if [[ ! -d assets/storage ]]; then
 fi
 
 
-docker-compose run --rm --entrypoint='' ckan bash -c 'cd ckanext-basedosdados; ckan-pip install -e .' # to create the dev links in the volume
+docker-compose run --rm --entrypoint='' ckan bash -c 'cd ckanext-basedosdados; pip install -e .' # to create the dev links in the volume
 docker-compose up -d ckan
 
 (
