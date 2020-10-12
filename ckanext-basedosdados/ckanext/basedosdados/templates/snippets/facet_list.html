@@ -1,5 +1,21 @@
 {% ckan_extends %}
 
+{% block facet_list_heading %}
+<h2 class="module-heading">
+    <i class="fa fa-filter"></i>
+    {% set title = title or h.get_facet_title(name) %}
+    {% if name == "download_type" %}
+        <a href="https://basedosdados.github.io/mais/" data-toggle="tooltip"
+                title="Conheça a BD Mais, a forma mais poderosa de baixar dados públicos, clique pra saber 'Mais'..."
+                target="_blank">
+            {{ title }}
+        </a>
+    {% else %}
+        {{ title }}
+    {% endif %}
+</h2>
+{% endblock %}
+
 {% block facet_list_items %}
 {% with items = items or h.get_facet_items_dict(name, search_facets or c.search_facets) %}
     {% if items %}
@@ -8,13 +24,13 @@
         {% for item in items %}
             {% set href = h.remove_url_param(name, item.name, extras=extras, alternative_url=alternative_url) if item.active else h.add_url_param(new_params={name: item.name}, extras=extras, alternative_url=alternative_url) %}
             {% set label = label_function(item) if label_function else item.display_name %}
-            {% set label_truncated = h.truncate(label, 22) if not label_function else label %}
+            {% set label_truncated = h.truncate(label, 40) if not label_function else label %}
             {% set count = count_label(item['count']) if count_label else ('%d' % item['count']) %}
-            <li class="{{ nav_item_class or 'nav-item' + ' facet--' + name + '--' + item['name'] }}{% if item.active %} active{% endif %}">
+            <li class="{{ nav_item_class or 'nav-item' + ' facet--' + name + '--' + item['name'].replace(' ', '_') }}{% if item.active %} active{% endif %}">
             <a href="{{ href }}" title="{{ label if label != label_truncated else '' }}">
-                {% if item['name'] == 'nao' and name == "ip_brasileiro" %}
+                {% if item['name'] == 'BD Mais' and name == "download_type" %}
                 <span class="item-label">{{ label_truncated }}</span>
-                <img src="//gravatar.com/avatar/c773746f6b079bbd741437ee768c0a55?s=22&d=identicon">
+                <img src="/BD-mais.png" class="bd-mais-icon">
                 {% else %}
                 <span class="item-label">{{ label_truncated }}</span>
                 {% endif %}

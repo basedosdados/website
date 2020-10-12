@@ -1,6 +1,9 @@
 #!/bin/bash
 cd "$(git rev-parse --show-toplevel)" # go to git root
 
+if [[ ! -f configs/production.prod.ini ]]; then echo you need to have a configs/production.prod.ini; exit 1; fi;
+if [[ ! -f .env.prod ]]; then echo you need to have a .env.prod; exit 1; fi;
+
 set -ex
 
 if [[ ! -d vendor/ckan/.git ]]; then
@@ -50,7 +53,7 @@ docker-compose up -d ckan
 (
 # TODO: discover why this isnt working on the first run
 set +e
-docker exec -it ckan /usr/local/bin/ckan search-index rebuild
-docker exec -it ckan /usr/local/bin/ckan search-index rebuild
+docker exec -it ckan ckan search-index rebuild
+docker exec -it ckan ckan search-index rebuild
 )
 

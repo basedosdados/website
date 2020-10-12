@@ -10648,8 +10648,12 @@ iframe {
 /* OUR ADDITIONS */
 div.primary {
     background-color: white;
-    background: white
+    background: white;
 }
-.facet--ip_brasileiro--nao > a {
-    font-size: x-large;
+.facet--download_type--BD_Mais > a {
+    font-weight: bold;
+}
+.bd-mais-icon {
+    width: 28px;
+    height: 28px;
 }

@@ -100,7 +100,7 @@ RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
         python-Levenshtein unidecode nltk==3.4.5 ckanext-tagmanager # && $CKAN_VENV/bin/python -m nltk.downloader all
 # RUN git clone https://github.com/cphsolutionslab/ckanext-customuserprivileges && cd ckanext-customuserprivileges && ckan-pip install -e .
 
-COPY extensions/BD_dataset.json /app/extensions/ckanext-scheming/ckanext/scheming/BD_dataset.json
+COPY extensions/BD_dataset.yaml /app/extensions/ckanext-scheming/ckanext/scheming/BD_dataset.yaml
 
 ##### INSTALL Basedosdados Files
 
@@ -109,6 +109,7 @@ WORKDIR /app
 # COPY configs
 COPY ./utils/run ./vendor/ckan/ckan/config/who.ini /app/
 COPY ./configs/ /app/configs/
+RUN cat ./configs/production.*ini > /tmp/a && mv /tmp/a ./configs/production.ini
 COPY ./wsgi.py /app/wsgi.py
 
 # INSTALL OUR EXTENSION!

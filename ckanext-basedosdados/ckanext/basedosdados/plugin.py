@@ -13,11 +13,19 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, ):#toolkit.DefaultDatasetForm)
         facets = collections.OrderedDict()
         # get_action('package_list')(None, {})
         # asian = get_action('package_show')(None, {'id': 'asian-barometer'})
-        facets['ip_brasileiro'] = 'Forma de Download'
-        for key, value in facet_dict.items():
-            facets[key] = value
+        facets['download_type'] = 'Forma de Download'
+        facets['organization'] = 'Organização'
+        facets['groups'] = 'Grupos'
+        facets['tags'] = 'Tags'
+        # facets['pais'] = 'País'
+        # facets['nivel_observacao'] = 'Nivel da Observação'
+        # facets['ano'] = 'Anos'
         return facets
-
+        # OPTIONS: dict_keys(['license_title', 'maintainer', 'relationships_as_object', 'private',
+        # 'maintainer_email', 'num_tags', 'id', 'metadata_created', 'owner_org', 'metadata_modified',
+        # 'author', 'author_email', 'state', 'version', 'license_id', 'type', 'resources', 'num_resources',
+        # 'tags', 'groups', 'creator_user_id', 'relationships_as_subject', 'name', 'isopen', 'url', 'notes',
+        # 'title', 'extras', 'license_url', 'organization'])
 
     # IConfigurer
     def update_config(self, config_):
