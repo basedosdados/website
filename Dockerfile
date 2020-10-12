@@ -32,6 +32,7 @@ RUN --mount=type=cache,target=/var/lib/apt,id=apt_list \
         git-core \
         vim \
         wget
+        # toadd crudini
 
 # Define environment variables
 ENV CKAN_VENV /venv
@@ -78,7 +79,7 @@ RUN --mount=type=cache,target=/root/.cache/pip/,id=pip pip install \
 USER root
 
 RUN echo 'exec pip "$@"' > /bin/ckan-pip && chmod +x /bin/ckan-pip
-ENV CKAN_INI=/app/configs/production.ini PYTHONDONTUSEBYTECODE=1 PIP_NO_PYTHON_VERSION_WARNING=1
+ENV CKAN_INI=/app/configs/ckan.ini PYTHONDONTUSEBYTECODE=1 PIP_NO_PYTHON_VERSION_WARNING=1
 RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
     ckan-pip install ipdb flask_debugtoolbar gunicorn
 RUN --mount=type=cache,target=/var/lib/apt,id=apt_list --mount=type=cache,target=/var/cache/apt,id=apt_arch \
@@ -107,9 +108,12 @@ COPY extensions/BD_dataset.yaml /app/extensions/ckanext-scheming/ckanext/schemin
 WORKDIR /app
 
 # COPY configs
-COPY ./utils/run ./vendor/ckan/ckan/config/who.ini /app/
+COPY ./utils/run_development ./vendor/ckan/ckan/config/who.ini /app/
 COPY ./configs/ /app/configs/
-RUN cat ./configs/production.*ini > /tmp/a && mv /tmp/a ./configs/production.ini
+RUN --mount=type=cache,target=/var/lib/apt,id=apt_list --mount=type=cache,target=/var/cache/apt,id=apt_arch \
+    apt-get install -y crudini
+RUN crudini --merge --inplace ./configs/ckan.ini < ./configs/ckan.prod.ini && \
+    crudini --set --inplace ./configs/ckan.ini server:main ckan.plugins "$(crudini --get ./configs/ckan.ini server:main ckan.plugins) $(crudini --get ./configs/ckan.ini server:main ckan.plugins_prod)"
 COPY ./wsgi.py /app/wsgi.py
 
 # INSTALL OUR EXTENSION!

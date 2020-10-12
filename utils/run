@@ -1,2 +1,0 @@
-#!/bin/bash
-exec ckan run --host 0.0.0.0

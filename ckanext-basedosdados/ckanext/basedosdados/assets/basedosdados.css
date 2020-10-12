@@ -10657,3 +10657,10 @@ div.primary {
     width: 28px;
     height: 28px;
 }
+
+.announcemnt-block {
+    margin-top: 20px;
+}
+.announcemnt-block h3 {
+    margin: 0 0 10px 0;
+}

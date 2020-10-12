@@ -7,3 +7,4 @@
 * Traduzir pra ingles as chaves dos metadados
 * tornar compativel os campos do BQ com o ckan
 * Integracao automatica dos metadados CKAN e BQ
+* Colar extensoes e ckan como subtree do nosso repo

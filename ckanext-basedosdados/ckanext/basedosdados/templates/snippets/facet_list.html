@@ -6,9 +6,10 @@
     {% set title = title or h.get_facet_title(name) %}
     {% if name == "download_type" %}
         <a href="https://basedosdados.github.io/mais/" data-toggle="tooltip"
-                title="Conheça a BD Mais, a forma mais poderosa de baixar dados públicos, clique pra saber 'Mais'..."
+                title="Conheça a BD Mais, a forma mais poderosa de baixar dados públicos, clique pra saber mais..."
                 target="_blank">
             {{ title }}
+            <i class="fa fa-question-circle"></i>
         </a>
     {% else %}
         {{ title }}
@@ -24,7 +25,7 @@
         {% for item in items %}
             {% set href = h.remove_url_param(name, item.name, extras=extras, alternative_url=alternative_url) if item.active else h.add_url_param(new_params={name: item.name}, extras=extras, alternative_url=alternative_url) %}
             {% set label = label_function(item) if label_function else item.display_name %}
-            {% set label_truncated = h.truncate(label, 40) if not label_function else label %}
+            {% set label_truncated = h.truncate(label, 30) if not label_function else label %}
             {% set count = count_label(item['count']) if count_label else ('%d' % item['count']) %}
             <li class="{{ nav_item_class or 'nav-item' + ' facet--' + name + '--' + item['name'].replace(' ', '_') }}{% if item.active %} active{% endif %}">
             <a href="{{ href }}" title="{{ label if label != label_truncated else '' }}">

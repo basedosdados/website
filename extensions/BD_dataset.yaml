@@ -596,9 +596,9 @@ dataset_fields:
     required: 'true'
     preset: select
     choices:
-    - value: link
-      label: Link externo
-    - value: BD_mais
+    - value: Link Externo
+      label: Link Externo
+    - value: BD mais
       label: BD Mais
 resource_fields:
   - field_name: url
@@ -616,4 +616,5 @@ resource_fields:
   - field_name: formato
     label: Formato
     preset: resource_format_autocomplete
+
 
