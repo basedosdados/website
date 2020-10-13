@@ -1,0 +1,11 @@
+{% ckan_extends %}
+
+{% block resources_inner %}
+{% if package.get('download_type') == "BD Mais" %}
+    <img src="/images/bdmais_minilogo.png" class="bd-mais-icon" style="height:16px">
+{% endif %}
+
+{% for group in package.get('groups', []) %}
+    <span href="#" class="badge badge-group">{{group['display_name']}}</span>
+{% endfor %}
+{% endblock %}

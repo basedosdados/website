@@ -60,7 +60,7 @@ RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
 COPY ./utils/run_development /app/
 COPY ./configs/ /app/configs/
 RUN crudini --merge --inplace /app/configs/ckan.ini < /app/configs/ckan.prod.ini && \
-    crudini --set --inplace /app/configs/ckan.ini server:main ckan.plugins "$(crudini --get /app/configs/ckan.ini server:main ckan.plugins) $(crudini --get /app/configs/ckan.ini server:main ckan.plugins_prod)"
+    crudini --set --inplace /app/configs/ckan.ini app:main ckan.plugins "$(crudini --get /app/configs/ckan.ini app:main ckan.plugins) $(crudini --get /app/configs/ckan.ini app:main ckan.plugins_prod)"
 COPY ./wsgi.py /app/wsgi.py
 
 #################################
@@ -72,7 +72,7 @@ WORKDIR /app
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s \
         CMD curl -f http://localhost:5000 || exit 1
 
-ENV CKAN_STORAGE_PATH=/app/uploads CKAN_INI=/app/ckan.ini
+ENV CKAN_STORAGE_PATH=/app/uploads CKAN_INI=/app/configs/ckan.ini
 ENV PIP_NO_PYTHON_VERSION_WARNING=1 PYTHONDONTWRITEBYTECODE=1
 ENV VIRTUAL_ENV=/venv PATH=/venv/bin:$PATH
 
@@ -92,4 +92,4 @@ RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
 COPY ckanext-basedosdados /app/ckanext-basedosdados
 RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
     pip install -e /app/ckanext-basedosdados
-COPY --from=builder /app/run_development /app/configs/ckan.ini /app/configs/who.ini /app/wsgi.py /app/
+COPY --from=builder /app/run_development /app/configs /app/wsgi.py /app/

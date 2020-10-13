@@ -10654,7 +10654,6 @@ div.primary {
     font-weight: bold;
 }
 .bd-mais-icon {
-    width: 28px;
     height: 28px;
 }
 
@@ -10663,4 +10662,8 @@ div.primary {
 }
 .announcemnt-block h3 {
     margin: 0 0 10px 0;
+}
+.badge-group {
+    background-color: #b0bcca;
+    color: white;
 }

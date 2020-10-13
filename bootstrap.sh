@@ -50,10 +50,11 @@ fi
 docker-compose run --rm --entrypoint='' ckan bash -c 'cd ckanext-basedosdados; pip install -e .' # to create the dev links in the volume
 docker-compose up -d ckan
 
+docker exec -it ckan ckan db upgrade
 (
 # TODO: discover why this isnt working on the first run
 set +e
-docker exec -it ckan ckan search-index rebuild
+docker exec -it ckan ckan search-index rebuild || \
 docker exec -it ckan ckan search-index rebuild
 )
 

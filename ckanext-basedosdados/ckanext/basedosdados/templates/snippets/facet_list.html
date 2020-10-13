@@ -30,8 +30,9 @@
             <li class="{{ nav_item_class or 'nav-item' + ' facet--' + name + '--' + item['name'].replace(' ', '_') }}{% if item.active %} active{% endif %}">
             <a href="{{ href }}" title="{{ label if label != label_truncated else '' }}">
                 {% if item['name'] == 'BD Mais' and name == "download_type" %}
-                <span class="item-label">{{ label_truncated }}</span>
-                <img src="/BD-mais.png" class="bd-mais-icon">
+                <span class="item-label">
+                    <img src="/images/bdmais_minilogo.png" class="bd-mais-icon">
+                </span>
                 {% else %}
                 <span class="item-label">{{ label_truncated }}</span>
                 {% endif %}
