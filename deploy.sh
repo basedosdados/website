@@ -1,7 +1,7 @@
 #!/bin/bash -ex
 
 HOST=ec2-user@3.131.160.142
-SSH="ssh -i ~/.ssh/BD.pem $HOST"
+SSH="ssh -o StrictHostKeyChecking=no -i ~/.ssh/BD.pem $HOST"
 
 deploy() {
     rm -rf build
@@ -70,6 +70,8 @@ rebuild_index() {
 
 }
 build_images() {
+    export COMPOSE_DOCKER_CLI_BUILD=1
+    export DOCKER_BUILDKIT=1
     ( docker-compose build ckan && docker save bdd/ckan > build/images/ckan ) &
     ( docker-compose build solr && docker save bdd/solr > build/images/solr ) &
     ( docker-compose build db   && docker save bdd/db > build/images/db ) &

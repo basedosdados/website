@@ -92,4 +92,5 @@ RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
 COPY ckanext-basedosdados /app/ckanext-basedosdados
 RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
     pip install -e /app/ckanext-basedosdados
-COPY --from=builder /app/run_development /app/configs /app/wsgi.py /app/
+COPY --from=builder /app/run_development /app/wsgi.py /app/
+COPY --from=builder /app/configs/who.ini /app/configs/ckan.ini /app/configs/
