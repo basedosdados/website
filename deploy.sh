@@ -75,7 +75,7 @@ build_images() {
     ( docker-compose build ckan && docker save bdd/ckan > build/images/ckan ) &
     ( docker-compose build solr && docker save bdd/solr > build/images/solr ) &
     ( docker-compose build db   && docker save bdd/db > build/images/db ) &
-    wait
+    wait %1; wait %2; wait %3
 }
 
 for i in "$@"; do $i; done

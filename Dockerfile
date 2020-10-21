@@ -77,9 +77,9 @@ ENV PIP_NO_PYTHON_VERSION_WARNING=1 PYTHONDONTWRITEBYTECODE=1
 ENV VIRTUAL_ENV=/venv PATH=/venv/bin:$PATH
 
 # System dependencies
-RUN --mount=type=cache,target=/var/lib/apt,id=apt_list --mount=type=cache,target=/var/cache/apt,id=apt_arch \
+RUN --mount=type=cache,target=/var/lib/apt,id=apt_list2 --mount=type=cache,target=/var/cache/apt,id=apt_arch2\
         apt-get update && apt-get install -y libmagic1 libpq-dev \
-        curl htop vim   # plus some goodies
+                curl htop vim   # plus some goodies
 
 # Get files
 

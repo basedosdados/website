@@ -2,7 +2,10 @@
 
 {% block resources_inner %}
 {% if package.get('download_type') == "BD Mais" %}
-    <img src="/images/bdmais_minilogo.png" class="bd-mais-icon" style="height:16px">
+    {% set href = h.add_url_param(new_params={'download_type': 'BD Mais'}, extras=extras, alternative_url=alternative_url) if 'download_type=BD+Mais' not in h.current_url() else '#' %}
+    <a href="{{href}}" class="badge badge-group">
+        <img src="/images/bdmais_minilogo.png" class="bd-mais-icon" style="height:16px">
+    </a>
 {% endif %}
 
 {% for group in package.get('groups', []) %}
