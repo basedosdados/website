@@ -6,6 +6,7 @@
 {% endif %}
 
 {% for group in package.get('groups', []) %}
-    <span href="#" class="badge badge-group">{{group['display_name']}}</span>
+    {% set href = h.add_url_param(new_params={'groups': group['name']}, extras=extras, alternative_url=alternative_url) if 'groups=' + group['name'] not in h.current_url() else '#' %}
+    <a href="{{href}}" class="badge badge-group">{{group['display_name']}}</a>
 {% endfor %}
 {% endblock %}
