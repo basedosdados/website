@@ -89,6 +89,9 @@ COPY --from=builder /venv /venv
 # Install extensions
 RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
     pip install `for i in /app/extensions/*; do echo -e $i; done`
+# For %debug% jinja directive
+RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
+    pip install jinja2==2.11.2
 COPY ckanext-basedosdados /app/ckanext-basedosdados
 RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
     pip install -e /app/ckanext-basedosdados

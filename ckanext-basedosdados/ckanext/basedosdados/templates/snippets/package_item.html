@@ -2,14 +2,14 @@
 
 {% block resources_inner %}
 {% if package.get('download_type') == "BD Mais" %}
-    {% set href = h.add_url_param(new_params={'download_type': 'BD Mais'}, extras=extras, alternative_url=alternative_url) if 'download_type=BD+Mais' not in h.current_url() else '#' %}
-    <a href="{{href}}" class="badge badge-group">
+    {% set href = h.add_url_param(new_params={'download_type': 'BD Mais'}, extras=extras ) if 'download_type=BD+Mais' not in h.current_url() else '#' %}
+    <a href="{{href}}" class="">
         <img src="/images/bdmais_minilogo.png" class="bd-mais-icon" style="height:16px">
     </a>
 {% endif %}
 
 {% for group in package.get('groups', []) %}
-    {% set href = h.add_url_param(new_params={'groups': group['name']}, extras=extras, alternative_url=alternative_url) if 'groups=' + group['name'] not in h.current_url() else '#' %}
+    {% set href = h.add_url_param(new_params={'groups': group['name']}, extras=extras) if 'groups=' + group['name'] not in h.current_url() else '#' %}
     <a href="{{href}}" class="badge badge-group">{{group['display_name']}}</a>
 {% endfor %}
 {% endblock %}

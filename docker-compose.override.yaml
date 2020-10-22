@@ -6,6 +6,8 @@ services:
     volumes:
       - ./ckanext-basedosdados:/app/ckanext-basedosdados
       - ./configs/:/app/configs/
+    environment:
+    - WERKZEUG_DEBUG_PIN=off
   db:
     volumes:
       - pg_data:/var/lib/postgresql/data

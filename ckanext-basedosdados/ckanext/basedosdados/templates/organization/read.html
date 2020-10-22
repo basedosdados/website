@@ -1,0 +1,7 @@
+{% ckan_extends %}
+
+{% block packages_list %}
+{% if page.items %}
+  {{ h.snippet('snippets/package_list.html', packages=page.items, extras={'id': group_dict.id}) }}
+{% endif %}
+{% endblock %}

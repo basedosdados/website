@@ -31,7 +31,7 @@ send() {
     $SSH 'mkdir -p ~/basedosdados/'
     rsync -e 'ssh -i ~/.ssh/BD.pem' -azvv --size-only --progress --partial ./build/images/ $HOST:~/basedosdados/images/ & # TODO: debug this, the size-only seems to be failing...
     rsync -e 'ssh -i ~/.ssh/BD.pem' -azvv --exclude=images --checksum ./build/ $HOST:~/basedosdados/ &
-    wait
+    for i in `jobs -p`; do wait $i ; done
 }
 load_images() {
     $SSH '
@@ -75,7 +75,7 @@ build_images() {
     ( docker-compose build ckan && docker save bdd/ckan > build/images/ckan ) &
     ( docker-compose build solr && docker save bdd/solr > build/images/solr ) &
     ( docker-compose build db   && docker save bdd/db > build/images/db ) &
-    wait %1; wait %2; wait %3
+    for i in `jobs -p`; do wait $i ; done
 }
 
 for i in "$@"; do $i; done
