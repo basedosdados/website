@@ -2,9 +2,9 @@ version: '3.3'
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
-    ports:
-      - "9200:9200"
-      - "9300:9300"
+    # ports:
+    #  - "9200:9200"
+    #  - "9300:9300"
     volumes:
     - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
     - elasticsearch:/usr/share/elasticsearch/data
@@ -21,11 +21,11 @@ services:
 
   logstash:
     image: docker.elastic.co/logstash/logstash:7.9.2
-    ports:
-      - "5044:5044"
-      - "5001:5001/tcp"
-      - "5001:5001/udp"
-      - "9600:9600"
+    # ports:
+    #   - "5044:5044"
+    #   - "5001:5001/tcp"
+    #   - "5001:5001/udp"
+    #   - "9600:9600"
     volumes:
     - ./logstash.yml:/usr/share/logstash/config/logstash.yml:ro
     - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro

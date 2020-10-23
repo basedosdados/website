@@ -79,5 +79,12 @@ build_images() {
     ( docker-compose build db   && docker save bdd/db > build/images/db ) &
     for i in `jobs -p`; do wait $i ; done
 }
+restart_monitoring() {
+    $SSH  '
+        cd ~/basedosdados/monitoring
+        docker-compose down && docker-compose up -d
+    '
+    
+}
 
 for i in "$@"; do $i; done
