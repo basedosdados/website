@@ -27,6 +27,7 @@ build_config() {
     cp utils/backup_database.sh build/
     cp configs/nginx.conf build/
     cp .env.prod build/.env
+    cp -r monitoring build/
 }
 send() {
     $SSH 'mkdir -p ~/basedosdados/'

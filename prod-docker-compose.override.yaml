@@ -5,6 +5,8 @@ services:
     volumes:
     - ./nginx.conf:/etc/nginx/nginx.conf:ro
     links: ['ckan']
+    external_links:
+    - logstash
     secrets:
     - fullchain
     - privkey
@@ -13,6 +15,13 @@ services:
     - 80:80
     networks:
     - basedosdados
+    # logging:
+    #   driver: syslog
+    #   options:
+    #     syslog-address: tcp://logstash:5001
+    #     syslog-facility: daemon
+
+
   ckan:
     networks:
     - basedosdados
