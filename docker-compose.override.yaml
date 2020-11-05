@@ -5,7 +5,9 @@ services:
       - 5000:5000
     volumes:
       - ./ckanext-basedosdados:/app/ckanext-basedosdados
+      - ./vendor/ckan:/ckan
       - ./configs/:/app/configs/
+      - ckan_home:/root
     environment:
     - WERKZEUG_DEBUG_PIN=off
   db:
@@ -14,3 +16,4 @@ services:
 
 volumes:
   pg_data:
+  ckan_home:

@@ -20,3 +20,4 @@ FROM postgres:11
 ENV POSTGRES_USER ckan
 ARG POSTGRES_PASSWORD
 ADD ./postgresql/docker-entrypoint-initdb.d/00_create_datastore.sh /docker-entrypoint-initdb.d/00_create_datastore.sh
+COPY ./postgresql/wait-until-up /wait-until-up
