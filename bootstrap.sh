@@ -16,30 +16,17 @@ if [[ ! -d vendor/ckan/.git ]]; then
       cd ckan
       git checkout ckan-2.9.0
       git diff 9abeaa1b7d2f6539ade946cc3f407878f49950eb^ 9abeaa1b7d2f6539ade946cc3f407878f49950eb | git apply
+      git add .
     )
 fi
 
 docker-compose build --parallel
 docker-compose up --scale ckan=0 -d
-while true; do
-    { PGPASSWORD=ckan psql -h localhost -p 5432 -U ckan -d postgres -c 'select 1' > /dev/null 2>&1 && break
-    } || { echo waiting for postgres to be ready ; sleep 1 ; }
-done
 
-docker cp ./postgres-prod-dump.custom db:/
-# TODO: swap local for docker when postgres is in the same version as prod and backups
-# docker exec -i -e PGPASSWORD=ckan db pg_restore -d postgres -v -h localhost -p 5432 -U ckan \
-#        /postgres-prod-dump.custom --no-owner --exit-on-error
-docker exec -i -e PGPASSWORD=ckan db dropdb -U ckan ckan_default --if-exists
-docker exec -i -e PGPASSWORD=ckan db dropdb -U ckan ckan --if-exists
-PGPASSWORD=ckan pg_restore -d postgres -v -h localhost -p 5432 -U ckan  --if-exists  --clean postgres-prod-dump.custom --create --no-owner --exit-on-error
-docker exec -i -e PGPASSWORD=ckan db psql -U ckan -d postgres --command='ALTER DATABASE ckan_default RENAME TO ckan'
-# Delete green/css config
-docker exec -i -e PGPASSWORD=ckan db psql -U ckan -d ckan --command='DELETE from system_info_revision WHERE continuity_id = 2; DELETE from system_info WHERE id = 2;'
+echo waiting for postgres to be ready ; docker exec db /wait-until-up
 
-# docker run --rm -ti postgres:10 --entrypoint /bin/bash --network host -e PGPASSWORD=ckan pg_restore \
-#    -d postgres -v -h lh -p 5432 -U ckan  --if-exists  --clean postgres-prod-dump.custom --create --no-owner --exit-on-error
-
+docker exec -i -e PGPASSWORD=ckan db bash -c 'dropdb -U ckan ckan --if-exists && createdb -U ckan ckan'
+docker exec -i -e PGPASSWORD=ckan db psql -v ON_ERROR_STOP=1 --echo-errors --quiet -U ckan ckan < ./postgresql/dev_init_data.sql
 
 
 if [[ ! -d assets/storage ]]; then
@@ -54,10 +41,5 @@ docker-compose run --rm --entrypoint='' ckan bash -c 'cd ckanext-basedosdados; p
 docker-compose up -d ckan
 
 docker exec -it ckan ckan db upgrade
-(
-# TODO: discover why this isnt working on the first run
-set +e
-docker exec -it ckan ckan search-index rebuild || \
-docker exec -it ckan ckan search-index rebuild
-)
 
+docker exec -it ckan ckan search-index rebuild

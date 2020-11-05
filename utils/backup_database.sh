@@ -2,7 +2,8 @@
 cd -P -- "$(dirname -- "$0")" # cd to this script's dir
 
 # DB
-docker-compose exec db pg_dump -U ckan --format=custom -d ckan > /tmp/postgres.dump
+docker-compose exec db pg_dump -U ckan --format=custom -d ckan --file=/tmp/postgres.dump
+docker cp db:/tmp/postgres.dump /tmp/postgres.dump
 aws s3 cp /tmp/postgres.dump s3://basedosdados/backup/postgres.dump --storage-class STANDARD_IA
 echo backup ok
 
