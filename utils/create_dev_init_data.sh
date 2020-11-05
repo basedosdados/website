@@ -31,7 +31,7 @@ docker-compose run --rm ckan bash -xc '
     ckan sysadmin add dev
 '
 
-$DB pg_dump -U ckan --format=plain -d ckan --file=- > ./postgresql/dev_init_data.sql
+$DB pg_dump -U ckan --compress=9 --format=plain -d ckan --file=- > ./postgresql/dev_init_data.sql.gz
 
 echo OK
 

@@ -26,7 +26,9 @@ docker-compose up --scale ckan=0 -d
 echo waiting for postgres to be ready ; docker exec db /wait-until-up
 
 docker exec -i -e PGPASSWORD=ckan db bash -c 'dropdb -U ckan ckan --if-exists && createdb -U ckan ckan'
-docker exec -i -e PGPASSWORD=ckan db psql -v ON_ERROR_STOP=1 --echo-errors --quiet -U ckan ckan < ./postgresql/dev_init_data.sql
+gzip -d -c ./postgresql/dev_init_data.sql.gz | \
+        docker exec -i -e PGPASSWORD=ckan db \
+        psql -v ON_ERROR_STOP=1 --echo-errors --quiet -U ckan ckan
 
 
 if [[ ! -d assets/storage ]]; then
