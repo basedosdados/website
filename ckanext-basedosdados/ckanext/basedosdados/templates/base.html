@@ -1,7 +1,10 @@
+<!-- Exemplo de como sobrescrever um bloco -->
 {% ckan_extends %}
 
 
 {% block styles %}
+<!-- copia o bloco original -->
   {{ super() }}
+  <!-- adiciona a linha abaixo -->
   {% asset 'basedosdados/basedosdados' %}
 {% endblock %}
