@@ -49,6 +49,7 @@ RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
 
 # COPY utils/install_extension /app/extensions/install_extension
 COPY --from=extensions /extensions /app/extensions
+COPY ckanext-basedosdados/requirements.txt /app/extensions/ckanext-basedosdados/requirements.txt
 RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
     cat /app/extensions/*/requirements.txt | egrep -v '^ *[.#]( |$)' | tee /tmp/reqs \
     && pip install -r /tmp/reqs \

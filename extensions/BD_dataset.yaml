@@ -616,3 +616,9 @@ resource_fields:
   - field_name: formato
     label: Formato
     preset: resource_format_autocomplete
+  - field_name: is_bdm
+    label: BD+
+    preset: multiple_checkbox
+    choices:
+    - value: BD+
+      label: BD+

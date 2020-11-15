@@ -6,7 +6,7 @@ import collections
 class BasedosdadosPlugin(plugins.SingletonPlugin, ):#toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.interfaces.IFacets)
-    # plugins.implements(plugins.interfaces.ITemplateHelpers)
+    plugins.implements(plugins.interfaces.ITemplateHelpers)
     # plugins.implements(plugins.IDatasetForm)
 
     # IFacets
@@ -31,8 +31,6 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, ):#toolkit.DefaultDatasetForm)
     def group_facets(self, facets_dict, group_type, package_type): return self.dataset_facets(facets_dict, package_type)
     def organization_facets(self, facets_dict, organization_type, package_type): return self.dataset_facets(package_type)
 
-
-
     # IConfigurer
     def update_config(self, config_):
         toolkit.add_template_directory(config_, 'templates')
@@ -41,8 +39,8 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, ):#toolkit.DefaultDatasetForm)
         # toolkit.add_resource('fanstatic', 'basedosdados')
         toolkit.add_resource('assets', 'basedosdados')
 
-#     def get_helpers(self):
-#         return {'announcement_block_content': announcement_block_content}
-# 
-# def announcement_block_content():
-#     return
+    def get_helpers(self):
+        import ckanext.basedosdados.custom_functions as cf
+        import types
+        FUNS = { name: getattr(cf, name) for name in dir(cf) if not name.startswith('_')}
+        return { k: v for k, v in FUNS.items() if isinstance(v, types.FunctionType) }

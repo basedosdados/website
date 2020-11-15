@@ -10,6 +10,7 @@ services:
       - ckan_home:/root
     environment:
     - WERKZEUG_DEBUG_PIN=off
+    command: ["gunicorn", "--bind=0.0.0.0:5000", "--workers=1", "--reload", "wsgi"]
   db:
     volumes:
       - pg_data:/var/lib/postgresql/data
