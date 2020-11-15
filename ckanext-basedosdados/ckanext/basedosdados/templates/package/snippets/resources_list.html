@@ -11,18 +11,17 @@ Example:
 
 #}
 {% set can_edit = h.check_access('package_update', {'id':pkg.id }) and not is_activity_archive %}
-{% set resources_bdm = [r for r in resources if '(BD+)' in r.name] %}
-{% set resources_links = [r for r in resources if '(BD+)' not in r.name] %}
+{% set resources_bdm, resources_links = h.separate_bdm_and_links_resources(resources) %}
 <section id="dataset-resources" class="resources">
   {% if True %}
-  <h2 id='bd+-resource-list'>BD_MAIS</h2>
+  <h2 id='bd+-resource-list'> {{ _('Download via ') }} <img src="/images/bdmais_minilogo.png" style="margin-right: 3px; margin-left: 3px; height: 18px"> </h2>
     <ul class="resource-list">
         {% for resource in resources_bdm %}
           {% snippet 'package/snippets/resource_item.html', pkg=pkg, res=resource, can_edit=can_edit, is_activity_archive=is_activity_archive %}
         {% endfor %}
       </ul>
   {% endif %}
-  <h2 id='links-resource-list'>{{ _('Data and Resources') }}</h2>
+  <h2 id='links-resource-list'>{{ _('Links externos') }}</h2>
   {% block resource_list %}
     {% if resources %}
       <ul class="resource-list">
