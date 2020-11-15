@@ -20,8 +20,9 @@
         Para mais informações e outras opções de download <a target="_blank" href="https://basedosdados.github.io/mais/">consulte a documentação aqui</a>!
     </div>
     <h3> {{ _('Query SQL de exemplo: ') }} </h3>
-    <!-- TODO: Botar monospaced font, syntax highlight, botao de copy paste-->
-    <blockquote class="sql-code">{{ h.make_example_select_query(res, package) }}</blockquote>
+    <!-- TODO: Botar botao de copy paste-->
+    <link href="/prism.css" rel="stylesheet" /> <script src="/prism.js"></script>
+    <pre><code class="language-sql">{{ h.make_example_select_query(res, package) }}</code></pre>
   {% else %}
       {% block resource_read_url %}
         {{ super() }}
@@ -46,10 +47,12 @@
 
 {% block resource_actions_inner %}
 {{ super() }}
+{% if is_bdm %}
 <div class="btn-group">
     {# Setar bdm como tipo de recurso #}
     <a class="btn btn-primary resource-url-analytics resource-type-bdm" href="{{big_query_url}}">
         <i class="fa fa-external-link"></i> {{ _('Download via Big Query') }}
     </a>
 </div>
+{% endif %}
 {% endblock %}
