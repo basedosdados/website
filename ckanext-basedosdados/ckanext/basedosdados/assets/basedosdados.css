@@ -10668,3 +10668,8 @@ div.primary {
     background-color: #b0bcca;
     color: white;
 }
+.inline-minilogo {
+    margin-right: 3px;
+    margin-left: 3px;
+    height: 18px;
+}

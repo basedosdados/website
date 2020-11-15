@@ -1,6 +1,8 @@
 {% ckan_extends %}
 
 {% set is_bdm = h.is_bdm(resource) %}
+{% set big_query_url = "https://console.cloud.google.com/bigquery?p=basedosdados&d={}&t={}&page=table".format(
+        h.get_package_bdm_schema_name(package), h.get_resource_bdm_table_name(resource)) %}
 
 {% block resource_content %}
   {% block package_archive_notice %}
@@ -9,14 +11,21 @@
   {% block resource_read_title %}
     {{ super() }}
   {% endblock %}
-  {% block resource_read_url %}
-    {{ super() }}
-  {% endblock %}
   {% if is_bdm %}
-    <h3> {{ _('Query de exemplo: ') }} </h3>
+    <div>
+        Que sorte! Esta tabela esta no <img src="/images/bdmais_minilogo.png" class="inline-minilogo">!
+        Para fazer o download de parte ou de todos os dados voce pode usar o
+        <a target="_blank" href={{big_query_url}}>Big Query!</a>
+        {# Copie essa query SQL abaixo e cole no editor do Big Query para baixar as 100 primeiras linhas da tabela. #}
+        Para mais informações e outras opções de download <a target="_blank" href="https://basedosdados.github.io/mais/">consulte a documentação aqui</a>!
+    </div>
+    <h3> {{ _('Query SQL de exemplo: ') }} </h3>
     <!-- TODO: Botar monospaced font, syntax highlight, botao de copy paste-->
     <blockquote class="sql-code">{{ h.make_example_select_query(res, package) }}</blockquote>
   {% else %}
+      {% block resource_read_url %}
+        {{ super() }}
+      {% endblock %}
       <div class="prose notes" property="rdfs:label">
         {% if res.description %}
           {{ h.render_markdown(res.description) }}
@@ -28,4 +37,19 @@
         {% endif %}
       </div>
   {% endif %}
+{% endblock %}
+
+{% block resource_view_content %} {% endblock %}
+{% block primary %} {% endblock %}
+{% block secondary %} {% endblock %}
+
+
+{% block resource_actions_inner %}
+{{ super() }}
+<div class="btn-group">
+    {# Setar bdm como tipo de recurso #}
+    <a class="btn btn-primary resource-url-analytics resource-type-bdm" href="{{big_query_url}}">
+        <i class="fa fa-external-link"></i> {{ _('Download via Big Query') }}
+    </a>
+</div>
 {% endblock %}
