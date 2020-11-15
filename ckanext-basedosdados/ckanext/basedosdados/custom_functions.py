@@ -9,7 +9,7 @@ def is_bdm(r):
     return r.get('is_bdm') or 'bd+' in r.get('formato', '') or '(BD+)' in r['name']
 
 def make_example_select_query(resource, package):
-    return f'''SELECT * FROM "basedosdados.{get_package_bdm_schema_name(package)}.{resource['name']}" LIMIT 100'''
+    return f'''SELECT * FROM `basedosdados.{get_package_bdm_schema_name(package)}.{resource['name']}` LIMIT 100'''
 
 def get_package_bdm_schema_name(package):
     return stringcase.snakecase(package['name'])
