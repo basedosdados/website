@@ -1,7 +1,7 @@
 #!/bin/bash -ex
 cd $(git rev-parse --show-toplevel)
 
-HOST=ec2-user@3.131.160.142
+HOST=ec2-user@basedosdados.org
 SSH="ssh -o StrictHostKeyChecking=no -i ~/.ssh/BD.pem $HOST"
 
 deploy() {
