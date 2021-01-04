@@ -1,0 +1,6 @@
+@daily $HOME/basedosdados/backup_database.sh
+@weekly cd $HOME/basedosdados/ && docker-compose stop nginx && sudo /bin/certbot renew && sudo chown -R ec2-user /etc/letsencrypt/ && docker-compose start nginx
+
+# At 06:21 on Monday
+21 6 * * 1 cd $HOME/basedosdados/ && docker-compose rm -fs ckan; docker-compose up -d ckan 
+21 6 * * 2 /usr/local/bin/docker-clean -i -c -net

@@ -11,7 +11,7 @@ services:
     container_name: ckan
     build:
       context: .
-    image: bdd/ckan
+    image: "bdd/ckan${VTAG}"
     links:
       - db
       - solr

@@ -1,5 +1,24 @@
 # website
 
+# Contribuir:
+
+## Pre requisitos:
+
+* Ter Docker instalado
+* Ter o docker-compose instalado (pip install docker-compose)
+
+* Criar configs/ckan.prod.ini e .env.prod
+
+* Rodar `./bootstrap.sh`
+
+Porta 5000
+Logar como user: dev senha: 12345678
+
+como mudar um template:
+    https://docs.ckan.org/en/2.9/theming/templates.html
+    modificar templates dentro de ckanext-basedosdados
+
+
 # TODO
 * Dar uma limpa nas extensoes: copiar pra dentro o q nao tem tag/versao, e fixar versoes das q tem
 * dar uma limpa nas configuracoes prod/dev, o ideal era ficar tudo nos dc comoses e no .env as coisas privadas

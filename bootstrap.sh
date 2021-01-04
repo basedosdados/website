@@ -4,6 +4,11 @@ cd "$(git rev-parse --show-toplevel)" # go to git root
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 
+not_installed() { command -v $1 > /dev/null; return $?; }
+
+if not_installed git-lfs; then        echo please install git-lfs: https://git-lfs.github.com/ ; exit 1; fi;
+if not_installed docker; then         echo you need to have a configs/ckan.prod.ini; exit 1; fi;
+if not_installed docker-compose; then echo you need to have a configs/ckan.prod.ini; exit 1; fi;
 if [[ ! -f configs/ckan.prod.ini ]]; then echo you need to have a configs/ckan.prod.ini; exit 1; fi;
 if [[ ! -f .env.prod ]]; then echo you need to have a .env.prod; exit 1; fi;
 

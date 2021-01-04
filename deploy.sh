@@ -3,6 +3,7 @@ cd $(git rev-parse --show-toplevel)
 
 HOST=ec2-user@basedosdados.org
 SSH="ssh -o StrictHostKeyChecking=no -i ~/.ssh/BD.pem $HOST"
+VTAG=":`date +%H.%M.%S`" # Simple mechanism to force image update
 
 deploy() {
     rm -rf build
@@ -13,6 +14,7 @@ deploy() {
     load_images
     restart_services
     rebuild_index
+    install_crontab
 }
 
 deploy_configs() {
@@ -26,8 +28,9 @@ build_config() {
     cp prod-docker-compose.override.yaml build/docker-compose.override.yaml
     cp utils/backup_database.sh build/
     cp configs/nginx.conf build/
-    cp .env.prod build/.env
+    cp .env.prod build/.env && echo "VTAG=$VTAG" >> build/.env
     cp -r monitoring build/
+    cp configs/basedosdados_crontab build/basedosdados_crontab
 }
 send() {
     $SSH 'mkdir -p ~/basedosdados/'
@@ -36,11 +39,11 @@ send() {
     for i in `jobs -p`; do wait $i ; done
 }
 load_images() {
-    $SSH '
+    $SSH "
         docker load < ~/basedosdados/images/ckan
         docker load < ~/basedosdados/images/solr
         docker load < ~/basedosdados/images/db
-    '
+    "
 }
 restart_services() {
     $SSH  '
@@ -74,7 +77,7 @@ rebuild_index() {
 build_images() {
     export COMPOSE_DOCKER_CLI_BUILD=1
     export DOCKER_BUILDKIT=1
-    ( docker-compose build ckan && docker save bdd/ckan > build/images/ckan ) &
+    ( VTAG=$VTAG docker-compose build ckan && docker save bdd/ckan > build/images/ckan ) &
     ( docker-compose build solr && docker save bdd/solr > build/images/solr ) &
     ( docker-compose build db   && docker save bdd/db > build/images/db ) &
     for i in `jobs -p`; do wait $i ; done
@@ -84,7 +87,14 @@ restart_monitoring() {
         cd ~/basedosdados/monitoring
         docker-compose down && docker-compose up -d
     '
-    
+}
+install_crontab() {
+    $SSH  '
+        (
+        echo "####### AUTO GENERATED CRONTAB - DONT EDIT MANUALLY ##########"
+        cat ~/basedosdados/basedosdados_crontab
+        ) | crontab
+    '
 }
 
 for i in "$@"; do $i; done
