@@ -4,10 +4,12 @@
 
 ## Pre requisitos:
 
-* Ter Docker instalado
-* Ter o docker-compose instalado (pip install docker-compose)
+Instalar:
+* Docker
+* docker-compose (pip install docker-compose)
+* git-lfs ( download here: https://packagecloud.io/github/git-lfs/install#bash-python, instrucoes: https://git-lfs.github.com/)
 
-* Criar configs/ckan.prod.ini e .env.prod
+* Criar configs/ckan.prod.ini e .env.prod # podem ser arquivos vazios se vc nao for fazer deploy pra prod direto da sua maquina
 
 * Rodar `./bootstrap.sh`
 
