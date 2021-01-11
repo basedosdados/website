@@ -53,16 +53,16 @@
     <div class="btn-group">
         {% if is_bdm_one_click_download %}
             <a target="_blank" class="btn btn-primary resource-url-analytics resource-type-bdm"
-            href="{{one_click_download_url}}
+            href="{{one_click_download_url}}"
             >
             <i class="fa fa-download"></i>
             {{ _('Download Direto') }} ({{ h.boltons.strutils.bytes2human(resource['bdm_file_size']) }}{{'iB' if resource['bdm_file_size'] > 1024 else ''}})
+        </a>
         {% else %}
             <button disabled class="btn btn-primary resource-url-analytics resource-type-bdm" style="cursor:not-allowed">
             {{ _('Download Direto Indisponivel') }}
             </button>
         {% endif %}
-        </a>
     </div>
 <div class="btn-group">
     <a target="_blank" class="btn btn-primary resource-url-analytics resource-type-bdm" href="{{big_query_url}}">
