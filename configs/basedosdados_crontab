@@ -1,3 +1,5 @@
+PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/ec2-user/.local/bin:/home/ec2-user/bin
+
 @daily $HOME/basedosdados/backup_database.sh
 @weekly cd $HOME/basedosdados/ && docker-compose stop nginx && sudo /bin/certbot renew && sudo chown -R ec2-user /etc/letsencrypt/ && docker-compose start nginx
 

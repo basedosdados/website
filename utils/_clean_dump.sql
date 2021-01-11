@@ -23,6 +23,7 @@ begin;
     drop table if exists chosen_pack_extra; create temp table chosen_pack_extra as
         select id from package_extra where package_id in (select * from chosen_pack) ;
 
+    TRUNCATE api_token;
 
     DELETE FROM tracking_summary
     WHERE ctid not IN (
