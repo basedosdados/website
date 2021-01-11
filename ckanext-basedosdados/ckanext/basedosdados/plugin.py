@@ -41,6 +41,9 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, ):#toolkit.DefaultDatasetForm)
 
     def get_helpers(self):
         import ckanext.basedosdados.custom_functions as cf
+        import boltons.strutils
         import types
-        FUNS = { name: getattr(cf, name) for name in dir(cf) if not name.startswith('_')}
-        return { k: v for k, v in FUNS.items() if isinstance(v, types.FunctionType) }
+        funs = { name: getattr(cf, name) for name in dir(cf) if not name.startswith('_')}
+        funs = { k: v for k, v in funs.items() if isinstance(v, types.FunctionType) }
+        funs['boltons'] = boltons
+        return funs

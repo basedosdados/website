@@ -1,6 +1,7 @@
 {% ckan_extends %}
 
 {% set is_bdm = h.is_bdm(resource) %}
+{% set is_bdm_one_click_download = h.is_bdm_one_click_download(resource) %}
 {% set dataset, table = h.get_package_bdm_schema_name(package), h.get_resource_bdm_table_name(resource) %}
 {% set big_query_url = "https://console.cloud.google.com/bigquery?p=basedosdados&d={}&t={}&page=table".format(dataset, table) %}
 {% set one_click_download_url = "https://storage.googleapis.com/basedosdados-public/one-click-download/{}/{}.zip".format(dataset, table) %}
@@ -49,11 +50,20 @@
 {% block resource_actions_inner %}
 {{ super() }}
 {% if is_bdm %}
-<div class="btn-group">
-    <a target="_blank" class="btn btn-primary resource-url-analytics resource-type-bdm" href="{{one_click_download_url}}">
-        <i class="fa fa-download"></i> {{ _('Download Direto') }}
-    </a>
-</div>
+    <div class="btn-group">
+        {% if is_bdm_one_click_download %}
+            <a target="_blank" class="btn btn-primary resource-url-analytics resource-type-bdm"
+            href="{{one_click_download_url}}
+            >
+            <i class="fa fa-download"></i>
+            {{ _('Download Direto') }} ({{ h.boltons.strutils.bytes2human(resource['bdm_file_size']) }}{{'iB' if resource['bdm_file_size'] > 1024 else ''}})
+        {% else %}
+            <button disabled class="btn btn-primary resource-url-analytics resource-type-bdm" style="cursor:not-allowed">
+            {{ _('Download Direto Indisponivel') }}
+            </button>
+        {% endif %}
+        </a>
+    </div>
 <div class="btn-group">
     <a target="_blank" class="btn btn-primary resource-url-analytics resource-type-bdm" href="{{big_query_url}}">
         <i class="fa fa-external-link"></i> {{ _('Download via Big Query') }}
