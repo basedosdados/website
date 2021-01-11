@@ -622,3 +622,4 @@ resource_fields:
     choices:
     - value: BD+
       label: BD+
+  # bdm_file_size
