@@ -25,6 +25,15 @@
     <!-- TODO: melhorar botao de copy paste, mudar esse link e script para assets do ckan-->
     <link href="/prism.css" rel="stylesheet" /> <script src="/prism.js"></script>
     <pre><code class="language-sql">{{ h.make_example_select_query(res, package) }}</code></pre>
+    {% if is_bdm_one_click_download %}
+    <hr>
+    <div>
+        {% set how_many_downloads_with_10_reais = 15_000_000_000 // resource['bdm_file_size']  %} {# 15 GB equivale mais ou menos a 10 Reais#}
+        Essa base economizou algumas horas da sua vida? Com uma <a href="https://novo.apoia.se/support/basedosdados/new?step=new">doação de R$10</a> {# outra opcao menos agressiva eh usar esse link https://apoia.se/basedosdados ? #}
+        voce ajuda {{ how_many_downloads_with_10_reais if how_many_downloads_with_10_reais < 1000 else 'milhares de' }} pessoas
+        a baixarem esse arquivo de graça! <!--TODO: colocar um tooltip aqui explicando a conta --!>
+    </div
+    {% endif %}
   {% else %}
       {% block resource_read_url %}
         {{ super() }}
