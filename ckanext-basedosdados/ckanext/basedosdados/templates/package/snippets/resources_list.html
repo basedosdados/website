@@ -13,7 +13,7 @@ Example:
 {% set can_edit = h.check_access('package_update', {'id':pkg.id }) and not is_activity_archive %}
 {% set resources_bdm, resources_links = h.separate_bdm_and_links_resources(resources) %}
 <section id="dataset-resources" class="resources">
-  {% if True %}
+  {% if resources_bdm %}
   <h2 id='bd+-resource-list'> {{ _('Download via ') }} <img src="/images/bdmais_minilogo.png" style="margin-right: 3px; margin-left: 3px; height: 18px"> </h2>
     <ul class="resource-list">
         {% for resource in resources_bdm %}
@@ -27,7 +27,6 @@ Example:
       <ul class="resource-list">
         {% block resource_list_inner %}
           {% for resource in resources_links %}
-          <!-- name = Consultar (BD+) -->
             {% snippet 'package/snippets/resource_item.html', pkg=pkg, res=resource, can_edit=can_edit, is_activity_archive=is_activity_archive %}
           {% endfor %}
         {% endblock %}

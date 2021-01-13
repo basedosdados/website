@@ -3,7 +3,7 @@ import stringcase
 
 def separate_bdm_and_links_resources(resources):
     links, bdm =  more_itertools.partition(is_bdm, resources)
-    return bdm, links
+    return list(bdm), list(links)
 
 def is_bdm(r):
     return r.get('is_bdm') or 'bd+' in r.get('formato', '') or '(BD+)' in r['name']
