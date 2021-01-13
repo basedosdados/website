@@ -6,8 +6,7 @@ SSH="ssh -o StrictHostKeyChecking=no -i ~/.ssh/BD.pem $HOST"
 VTAG=":`date +%H.%M.%S`" # Simple mechanism to force image update
 
 deploy() {
-    rm -rf build
-    mkdir -p build/images
+    clean
     build_config
     build_images
     send
@@ -18,9 +17,15 @@ deploy() {
 }
 
 deploy_configs() {
+    clean
     build_config
     send
     restart_services
+}
+
+clean() {
+    rm -rf build
+    mkdir -p build/images
 }
 
 build_config() {
@@ -34,7 +39,7 @@ build_config() {
 }
 send() {
     $SSH 'mkdir -p ~/basedosdados/'
-    rsync -e 'ssh -i ~/.ssh/BD.pem' -azvv --size-only --progress --partial ./build/images/ $HOST:~/basedosdados/images/ & # TODO: debug this, the size-only seems to be failing...
+    rsync -e 'ssh -i ~/.ssh/BD.pem' -azvv --progress --partial ./build/images/ $HOST:~/basedosdados/images/ & # TODO: debug this, the size-only seems to be failing...
     rsync -e 'ssh -i ~/.ssh/BD.pem' -azvv --exclude=images --checksum ./build/ $HOST:~/basedosdados/ &
     for i in `jobs -p`; do wait $i ; done
 }
@@ -51,10 +56,10 @@ restart_services() {
         if [[ ! -f wait-for-200.sh ]]; then curl https://raw.githubusercontent.com/cec/wait-for-endpoint/master/wait-for-endpoint.sh > wait-for-200.sh && chmod +x wait-for-200.sh; fi
         if [[ ! -f wait-for-it.sh ]]; then curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > wait-for-it.sh && chmod +x wait-for-it.sh; fi
         docker-compose rm -sf ckan autoheal
-        docker-compose up -d solr redis nginx
+        docker-compose up --no-build -d solr redis nginx
         docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh redis:6379 
         docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh solr:8983
-        docker-compose up -d ckan autoheal
+        docker-compose up --no-build -d ckan autoheal
         docker-compose ps
         ./wait-for-200.sh -t 20 https://localhost:443 || ERROR=1
         if [[ ! $ERROR ]]; then
@@ -77,7 +82,7 @@ rebuild_index() {
 build_images() {
     export COMPOSE_DOCKER_CLI_BUILD=1
     export DOCKER_BUILDKIT=1
-    ( VTAG=$VTAG docker-compose build ckan && docker save bdd/ckan > build/images/ckan ) &
+    ( VTAG=$VTAG docker-compose build ckan && docker save bdd/ckan$VTAG > build/images/ckan ) &
     ( docker-compose build solr && docker save bdd/solr > build/images/solr ) &
     ( docker-compose build db   && docker save bdd/db > build/images/db ) &
     for i in `jobs -p`; do wait $i ; done
