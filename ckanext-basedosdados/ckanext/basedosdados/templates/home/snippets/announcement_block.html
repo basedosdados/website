@@ -1,26 +1,17 @@
 {% set content = '''
-### Base dos Dados Mais
+### Use nosso *datalake* público
 
-Está no ar a [<img src="/images/bdmais_minilogo.png" style="margin-right: 3px; margin-left: 3px; height: 18px">](https://basedosdados.github.io/mais/)!
+Baixe dados já *limpos*, *integrados* e *atualizados* de forma
+extremamente fácil através do nosso *datalake* público.
 
-Baixe dados já *limpos*, *integrados* e *atualizados* de forma extremamente fácil. Basta uma query de *SQL* pelos nossos clientes Python, R ou CLI. (Stata em desenvolvimento).
+As bases disponíveis para download e análise possuem o ícone [<img src="/images/bdmais_minilogo.png" style="margin-right: 3px;
+margin-left: 3px; height: 18px">](/dataset/?download_type=BD+Mais).
 
-O usuário tem liberdade total: você pode
-
-* baixar tabelas inteiras
-* baixar só partes de uma tabela
-* cruzar tabelas e baixar já o produto final.
-
-Veja as [bases com suporte a <img src="/images/bdmais_minilogo.png" style="margin-right: 3px; margin-left: 3px; height: 18px">](/dataset/?download_type=BD+Mais), veja a nossa [documentação](https://basedosdados.github.io/mais/), e código aberto no [Github](https://github.com/basedosdados/mais).
-
-Nos apoie com R$ [aqui](https://apoia.se/basedosdados). O projeto é todo feito por voluntários, mas ainda temos custos de infraestrutura.
-
-Entre em contato com nossa comunidade pelo [Telegram](https://t.me/joinchat/OKWc3RnClXnq2hq-8o0h_w) ou [Whatsapp](https://chat.whatsapp.com/HXWgdFc1RmwCoblly5KPBZ), e se inscreva na nossa [newsletter](https://tinyletter.com/basedosdados) para receber novidades.
+Saiba mais em: https://basedosdados.github.io/mais/
 '''.strip() %}
 
 <div class="box announcemnt-block">
   <div class="inner">
-  {{ h.render_markdown(content, allow_html=True) }}
+    {{ h.render_markdown(content, allow_html=True) }}
   </div>
 </div>
-
