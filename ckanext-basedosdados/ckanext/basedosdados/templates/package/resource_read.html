@@ -3,80 +3,129 @@
 {% set is_bdm = h.is_bdm(resource) %}
 {% set is_bdm_one_click_download = h.is_bdm_one_click_download(resource) %}
 {% set dataset, table = h.get_package_bdm_schema_name(package), h.get_resource_bdm_table_name(resource) %}
-{% set big_query_url = "https://console.cloud.google.com/bigquery?p=basedosdados&d={}&t={}&page=table".format(dataset, table) %}
-{% set one_click_download_url = "https://storage.googleapis.com/basedosdados-public/one-click-download/{}/{}.zip".format(dataset, table) %}
+{% set big_query_url = "https://console.cloud.google.com/bigquery?p=basedosdados&d={}&t={}&page=table".format(dataset,
+table) %}
+{% set one_click_download_url =
+"https://storage.googleapis.com/basedosdados-public/one-click-download/{}/{}.zip".format(dataset, table) %}
 
 {% block resource_content %}
-  {% block package_archive_notice %}
-    {{ super() }}
-  {% endblock %}
-  {% block resource_read_title %}
-    {{ super() }}
-  {% endblock %}
-  {% if is_bdm %}
-    <div>
-        Que sorte! Esta tabela esta no <img src="/images/bdmais_minilogo.png" class="inline-minilogo">!
-        Para fazer o download de parte ou de todos os dados voce pode usar o
-        <a target="_blank" href={{big_query_url}}>Big Query!</a>
-        {# Copie essa query SQL abaixo e cole no editor do Big Query para baixar as 100 primeiras linhas da tabela. #}
-        Para mais informações e outras opções de download <a target="_blank" href="https://basedosdados.github.io/mais/">consulte a documentação aqui</a>!
-    </div>
-    <h3> {{ _('Query SQL de exemplo: ') }} </h3>
-    <!-- TODO: melhorar botao de copy paste, mudar esse link e script para assets do ckan-->
-    <link href="/prism.css" rel="stylesheet" /> <script src="/prism.js"></script>
-    <pre><code class="language-sql">{{ h.make_example_select_query(res, package) }}</code></pre>
-    {% if is_bdm_one_click_download %}
-    <hr>
-    <div>
-        {% set how_many_downloads_with_10_reais = 15_000_000_000 // resource['bdm_file_size']  %} {# 15 GB equivale mais ou menos a 10 Reais#}
-        Essa base economizou algumas horas da sua vida? Com uma <a href="https://novo.apoia.se/support/basedosdados/new?step=new">doação de R$10</a> {# outra opcao menos agressiva eh usar esse link https://apoia.se/basedosdados ? #}
-        voce ajuda {{ how_many_downloads_with_10_reais if how_many_downloads_with_10_reais < 1000 else 'milhares de' }} pessoas
-        a baixarem esse arquivo de graça! <!--TODO: colocar um tooltip aqui explicando a conta --!>
-    </div
-    {% endif %}
-  {% else %}
-      {% block resource_read_url %}
-        {{ super() }}
-      {% endblock %}
-      <div class="prose notes" property="rdfs:label">
-        {% if res.description %}
-          {{ h.render_markdown(res.description) }}
-        {% endif %}
-        {% if not res.description and package.notes %}
-          <h3>{{ _('Dataset description:') }}</h3>
-          <blockquote>{{ h.markdown_extract(h.get_translated(package, 'notes')) }}</blockquote>
-          <p>{% trans dataset=package.title, url=h.url_for(package.type ~ '.read', id=package.id if is_activity_archive else package.name) %}Source: <a href="{{ url }}">{{ dataset }}</a>{% endtrans %}
-        {% endif %}
-      </div>
-  {% endif %}
-{% endblock %}
-
-{% block resource_view_content %} {% endblock %}
-{% block primary %} {% endblock %}
-{% block secondary %} {% endblock %}
-
-
-{% block resource_actions_inner %}
+{% block package_archive_notice %}
 {{ super() }}
+{% endblock %}
+{% block resource_read_title %}
+{{ super() }}
+{% endblock %}
 {% if is_bdm %}
-    <div class="btn-group">
-        {% if is_bdm_one_click_download %}
-            <a target="_blank" class="btn btn-primary resource-url-analytics resource-type-bdm"
-            href="{{one_click_download_url}}"
-            >
-            <i class="fa fa-download"></i>
-            {{ _('Download Direto') }} ({{ h.boltons.strutils.bytes2human(resource['bdm_file_size']) }}{{'iB' if resource['bdm_file_size'] > 1024 else ''}})
-        </a>
-        {% else %}
-            <button disabled class="btn btn-primary resource-url-analytics resource-type-bdm" style="cursor:not-allowed">
-            {{ _('Download Direto Indisponivel') }}
-            </button>
-        {% endif %}
-    </div>
+<div>
+  Nós tratamentos e disponibilizamos esta tabela no nosso
+  <i>datalake</i> público. Além de fazer o <b>download do CSV
+    completo</b> no botão acima, você pode
+  também acessar e analisar a base no <b>BigQuery,
+    Python ou em R</b>:
+</div><br>
+<hr>
+<h3> {{ _('Como analisar os dados via BigQuery') }} </h3>
+<div><a target="_blank" href=https://youtu.be/nGM2OwTUY_M>
+    ▶️ Assita ao nosso tutorial no Youtube</a></div><br>
+<div>Clique no botão <i>Consultar no BigQuery</i> e utilize o <i>Query Editor</i> (Editor de consultas) para
+  acessar os dados. Copie a query abaixo para consultar todos dados da tabela:
+</div>
+<link href="/prism.css" rel="stylesheet" />
+<script src="/prism.js"></script>
+<pre><code class="language-sql">{{ h.make_example_bq_query(res, package) }}</code></pre>
+<div><br>
+  ℹ️ Para usar o BigQuery basta ter uma conta Google. Primeira vez usando?
+  <a target="_blank" href="https://basedosdados.github.io/mais/">Veja o
+    passo a passo para acessar os dados aqui</a>
+</div><br>
+<hr>
+<h3> {{ _('Como analisar os dados via Python 🐍') }} </h3>
+<div><a target="_blank" href=https://www.youtube.com/channel/UCO1AcMaEa7bArIHb85bkSYA>
+    ▶️ Assita ao nosso tutorial no Youtube</a></div><br>
+<div>Criamos um cliente em Python para você acessar os dados do nosso
+  *datalake* público. Com o ambiente confiurado, para obter os dados da
+  tabela basta rodar:
+</div>
+<link href="/prism.css" rel="stylesheet" />
+<script src="/prism.js"></script>
+<pre><code class="language-sql">{{ h.make_example_python_query(res,
+package) }}</code></pre>
+<div><br>
+  ℹ️ Para usar nosso cliente é necessário configurá-lo! Rode
+  <b>basedosdados config</b> e siga as instruções. Veja também os <a target="_blank"
+    href="https://basedosdados.github.io/mais/py_reference_api/">comandos
+    da API</a> ou siga nosso <a target="_blank"
+    href="https://github.com/basedosdados/mais/blob/master/examples/bd_for_beginners.ipynb">notebook
+    exemplo</a>.
+</div><br>
+{% if is_bdm_one_click_download %}
+<hr>
+<h3> {{ _('Como analisar os dados via R') }} </h3>
+<div><a target="_blank" href=https://youtu.be/5_Ir8neyFf4>
+    ▶️ Assista ao nosso tutorial no Youtube</a></div>
+<div><br>
+  Não temos ainda um cliente em R, mas já existe uma biblioteca para
+  conectar diretamente ao BigQuery. Veja o exemplo:
+</div>
+<link href="/prism.css" rel="stylesheet" />
+<script src="/prism.js"></script>
+<pre><code class="language-sql">{{ h.make_example_r_query(res,
+package) }}</code></pre>
+<hr>
+<h3>
+  {% set how_many_downloads_with_50_reais = 75_000_000_000 // resource['bdm_file_size'] %} {# 15 GB equivale mais ou
+  menos a 10 Reais#}
+  <a href="https://novo.apoia.se/support/basedosdados/new?step=new">
+    Quantas horas você economizou? Doando R$50 você ajuda mais {{
+    how_many_downloads_with_50_reais }} pessoas
+    a terem essa base de graça! 💚</a>
+</h3>
+<i>Como fazemos a conta? R$ 50 reais cobrem cerca de
+  15GB de downloads - dividindo pelo tamanho da tabela temos quantos
+  downloads são possíveis.</i>
+
+
+<!--TODO: colocar um tooltip aqui explicando a conta
+</div {% endif %} {% else %} {% block resource_read_url %} {{ super() }} {% endblock %} <div class="prose notes"
+  property="rdfs:label">
+{% if res.description %}
+{{ h.render_markdown(res.description) }}
+{% endif %}
+{% if not res.description and package.notes %}
+<h3>{{ _('Dataset description:') }}</h3>
+<blockquote>{{ h.markdown_extract(h.get_translated(package, 'notes')) }}</blockquote>
+<p>{% trans dataset=package.title, url=h.url_for(package.type ~ '.read', id=package.id if is_activity_archive else
+  package.name) %}Source: <a href="{{ url }}">{{ dataset }}</a>{% endtrans %}
+  {% endif %}
+  </div>
+  {% endif %}
+  {% endblock %}
+
+  {% block resource_view_content %} {% endblock %}
+  {% block primary %} {% endblock %}
+  {% block secondary %} {% endblock %}
+
+
+  {% block resource_actions_inner %}
+  {{ super() }}
+  {% if is_bdm %}
 <div class="btn-group">
-    <a target="_blank" class="btn btn-primary resource-url-analytics resource-type-bdm" href="{{big_query_url}}">
-        <i class="fa fa-external-link"></i> {{ _('Download via Big Query') }}
-    </a>
+  {% if is_bdm_one_click_download %}
+  <a target="_blank" class="btn btn-primary resource-url-analytics resource-type-bdm" href="{{one_click_download_url}}">
+    <i class="fa fa-download"></i>
+    {{ _('Download CSV') }} ({{ h.boltons.strutils.bytes2human(resource['bdm_file_size']) }}{{'iB' if
+    resource['bdm_file_size'] > 1024 else ''}})
+  </a>
+  {% else %}
+  <button disabled class="btn btn-primary resource-url-analytics resource-type-bdm" style="cursor:not-allowed">
+    {{ _('Download Direto Indisponivel') }}
+  </button>
+  {% endif %}
+</div>
+<div class="btn-group">
+  <a target="_blank" class="btn btn-primary resource-url-analytics resource-type-bdm" href="{{big_query_url}}">
+    <i class="fa fa-external-link"></i> {{ _('Consultar no Big Query') }}
+  </a>
 </div>
 {% endif %}
 {% endblock %}
