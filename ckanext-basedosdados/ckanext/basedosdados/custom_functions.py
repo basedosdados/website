@@ -28,7 +28,7 @@ library("bigrquery")
 billing_project_id = "<YOUR_PROJECT_ID>"
 # Para baixar a tabela inteira
 query = "SELECT * FROM `basedosdados.{get_package_bdm_schema_name(package)}.{resource['name']}`"
-d <- bq_table_download(bq_project_query(billing_project_id, pib_per_capita), page_size=500, bigint="integer64")
+d <- bq_table_download(bq_project_query(billing_project_id, query), page_size=500, bigint="integer64")
     '''
 def get_package_bdm_schema_name(package):
     return stringcase.snakecase(package['name'])
