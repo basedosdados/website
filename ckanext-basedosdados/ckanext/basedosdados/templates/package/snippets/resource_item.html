@@ -18,7 +18,7 @@ Example:
 {% if not url_is_edit %}
 <div class="dropdown btn-group">
 
-  {% if h.is_bdm_one_click_download(res) %}
+  <!-- {% if h.is_bdm_one_click_download(res) %}
   {% set dataset, table = h.get_package_bdm_schema_name(pkg), h.get_resource_bdm_table_name(res) %}
   {% set one_click_download_url =
   "https://storage.googleapis.com/basedosdados-public/one-click-download/{}/{}.zip".format(dataset, table) %} {#TODO,
@@ -28,7 +28,7 @@ Example:
     {{ _('Download CSV') }} ({{ h.boltons.strutils.bytes2human(res['bdm_file_size']) }}{{'iB' if res['bdm_file_size'] >
     1024 else ''}})
   </a>
-  {% endif %}
+  {% endif %} -->
 
   {# From here onwards its a copy from ckan #}
   <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
