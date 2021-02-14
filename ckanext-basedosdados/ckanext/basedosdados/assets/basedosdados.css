@@ -9667,6 +9667,7 @@ h4 small {
   border-radius: 4px;
 }
 .masthead {
+  box-shadow: 0px 2px 2px rgb(0 0 0 / 25%);
   margin-bottom: initial;
   padding: 10px 0;
   color: #ffffff;
