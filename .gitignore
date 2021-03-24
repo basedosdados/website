@@ -4,3 +4,4 @@ build
 .env.prod
 dive.log
 configs/ckan.prod.ini
+.idea

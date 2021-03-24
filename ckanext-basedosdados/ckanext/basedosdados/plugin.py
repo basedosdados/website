@@ -2,11 +2,14 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.plugins.toolkit import get_action
 import collections
+from ckantoolkit import missing as MISSING
+import pprint
 
 class BasedosdadosPlugin(plugins.SingletonPlugin, ):#toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.interfaces.IFacets)
     plugins.implements(plugins.interfaces.ITemplateHelpers)
+    plugins.implements(plugins.IValidators)
     # plugins.implements(plugins.IDatasetForm)
 
     # IFacets
@@ -47,3 +50,31 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, ):#toolkit.DefaultDatasetForm)
         funs = { k: v for k, v in funs.items() if isinstance(v, types.FunctionType) }
         funs['boltons'] = boltons
         return funs
+
+    # IValidators
+    def get_validators(self):
+        # from ckanext.scheming.validation import scheming_validator
+        # @scheming_validator
+        def _get_type(key, data):
+            k = list(key)
+            k[-1] = 'resource_type'
+            type_ = data[tuple(k)]
+            if type_ not in ('bdm_table', 'external_link', 'lai_request'):
+             raise Exception( f'Resource Type invalid! {pprint.pformat(locals())}')
+            return type_
+
+        def required_on_types(*types):
+            def validator(key, data, errors, con):
+                type_ = _get_type(key, data)
+                has_data = data[key] != MISSING and data[key]
+                if type_ in types and not has_data:
+                    errors[key].append(f'Field required for {type_} resources')
+            return validator
+        def only_on_types(*types):
+            def validator(key, data, errors, con):
+                type_ = _get_type(key, data)
+                has_data = data[key] != MISSING and data[key]
+                if type_ not in types and has_data:
+                    errors[key].append(f'Field only available for {types} resources. This resource is of type {type_}')
+            return validator
+        return dict(only_on_types=only_on_types, required_on_types=required_on_types)
