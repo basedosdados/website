@@ -621,7 +621,7 @@ resource_fields:
       label:
         pt: 'Urdu'
         en: 'Urdu'
-    validators: only_on_types(external_link) required_on_types(external_link)
+    validators: only_on_types(external_link) required_on_types(external_link) scheming_multiple_choice
   - field_name: has_api
     label:
       pt: 'Tem uma API'
