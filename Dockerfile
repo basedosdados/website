@@ -11,8 +11,6 @@ RUN git clone https://github.com/NaturalHistoryMuseum/ckanext-contact.git
 RUN git clone https://github.com/ckan/ckanext-googleanalytics.git
 RUN git clone https://github.com/stadt-karlsruhe/ckanext-discovery.git
 
-COPY configs/scheming_metadata_defitions.yaml /extensions/ckanext-scheming/ckanext/scheming/scheming_metadata_defitions.yaml
-
 ################ BUILDER #################
 FROM python:3.8 as builder
 LABEL maintainer="Base dos Dados"

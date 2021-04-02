@@ -1,0 +1,858 @@
+scheming_version: 2
+dataset_type: dataset
+about: Schema para Base dos Dados
+about_url: http://github.com/ckan/ckanext-scheming
+
+dataset_fields:
+  - field_name: title
+    label:
+      pt: Título
+      en: Title
+    preset: title
+    form_placeholder:
+      pt: 'exemplo: um título descritivo'
+      en: 'example: a descriptive title'
+    required: true
+  - field_name: dataset_id
+    label:
+      pt: 'Identificador da base'
+      en: 'Dataset ID'
+    preset: dataset_slug
+    form_placeholder:
+      pt: 'exemplo: dataset-id'
+      en: 'example: dataset-id'
+    required: true
+  - field_name: description
+    label:
+      pt: 'Descrição'
+      en: 'Description'
+    form_snippet: markdown.html
+    form_placeholder:
+      pt: 'exemplo: descrição e anotações úteis sobre os dados.'
+      en: 'example: a useful description of the dataset.'
+  - field_name: tag_string
+    label:
+      pt: 'Etiquetas'
+      en: 'Tags'
+    preset: tag_string_autocomplete
+    form_placeholder:
+      pt: 'exemplo: fertilidade, preço, desmatamento'
+      en: 'example: fertilidade, preço, desmatamento'
+    required: true
+  - field_name: organization_id
+    label:
+      pt: Organização
+      en: Organization
+    preset: dataset_organization
+    required: true
+  - field_name: download_type
+    field_type: derived
+    label:
+      pt: 'Tipo de download'
+      en: 'Download type'
+    required: false
+  - field_name: spatial_coverage
+    field_type: derived
+    label:
+      pt: 'Cobertura espacial'
+      en: 'Spatial coverage'
+    required: false
+  - field_name: temporal_coverage
+    field_type: derived
+    label:
+      pt: 'Cobertura temporal'
+      en: 'Temporal coverage'
+    required: false
+  - field_name: observation_level
+    field_type: derived
+    label:
+      pt: 'Nível da observação'
+      en: 'Observation level'
+    required: false
+
+resource_fields:
+  table_fields:
+    - field_name: table_id
+      label:
+        pt: 'Identificador da tabela intra-base.'
+        en: 'Table identifier within dataset'
+      required: true
+      form_placeholder:
+        pt: 'exemplo: table-id'
+        en: 'example: table-id'
+    - field_name: description
+      label:
+        pt: 'Descrição'
+        en: 'Description'
+      form_snippet: markdown.html
+      form_placeholder:
+        pt: 'exemplo: Descrição e anotações úteis sobre a tabela.'
+        en: 'example: a useful description of the table.'
+    - field_name: treatment_description
+      label:
+        pt: 'Descrição do tratamento'
+        en: 'Treatment description'
+      form_snippet: markdown.html
+      form_placeholder:
+        pt: 'exemplo: Descrição e anotações úteis sobre o tratamento da tabela.'
+        en: 'example: a useful description of the table's data treatment.'
+    - field_name: spatial_coverage
+      label:
+        pt: 'Cobertura espacial'
+        en: 'Spatial coverage'
+      form_snippet: markdown.html
+    - field_name: temporal_coverage
+      label:
+        pt: 'Cobertura temporal'
+        en: 'Temporal coverage'
+      required: true
+      helper_text:
+        pt: 'Selecione todos que se aplicam.'
+        en: 'Select all that apply.'
+      preset: multiple_select
+      select_size: 10
+      choices:
+      - value: '1990'
+        label: '1990'
+      - value: '1991'
+        label: '1991'
+      - value: '1992'
+        label: '1992'
+      - value: '1993'
+        label: '1993'
+      - value: '1994'
+        label: '1994'
+      - value: '1995'
+        label: '1995'
+      - value: '1996'
+        label: '1996'
+      - value: '1997'
+        label: '1997'
+      - value: '1998'
+        label: '1998'
+      - value: '1999'
+        label: '1999'
+      - value: '2000'
+        label: '2000'
+      - value: '2001'
+        label: '2001'
+      - value: '2002'
+        label: '2002'
+      - value: '2003'
+        label: '2003'
+      - value: '2004'
+        label: '2004'
+      - value: '2005'
+        label: '2005'
+      - value: '2006'
+        label: '2006'
+      - value: '2007'
+        label: '2007'
+      - value: '2008'
+        label: '2008'
+      - value: '2009'
+        label: '2009'
+      - value: '2010'
+        label: '2010'
+      - value: '2011'
+        label: '2011'
+      - value: '2012'
+        label: '2012'
+      - value: '2013'
+        label: '2013'
+      - value: '2014'
+        label: '2014'
+      - value: '2015'
+        label: '2015'
+      - value: '2016'
+        label: '2016'
+      - value: '2017'
+        label: '2017'
+      - value: '2018'
+        label: '2018'
+      - value: '2019'
+        label: '2019'
+      - value: '2020'
+        label: '2020'
+      - value: '2021'
+        label: '2021'
+    - field_name: update_frequency
+      label:
+        pt: 'Frequência de atualização'
+        en: 'Update Frequency'
+      helper_text:
+        pt: 'Pode ser aproximado.'
+        en: 'May be approximated.'
+      required: true
+      preset: select
+      choices:
+      - value: second
+        label: 
+          pt: 'Segundo'
+          en: 'Second'
+      - value: minute
+        label: 
+          pt: 'Minuto'
+          en: 'Minute'
+      - value: hour
+        label: 
+          pt: 'Hora'
+          en: 'Hour'
+      - value: day
+        label: 
+          pt: 'Dia'
+          en: 'Day'
+      - value: week
+        label:
+          pt: 'Semana'
+          en: 'Week'
+      - value: month
+        label: 
+          pt: 'Mês'
+          en: 'Month'
+      - value: quarter
+        label: 
+          pt: 'Trimestre'
+          en: 'Quarter'
+      - value: semester
+        label:
+          pt: 'Semestre'
+          en: 'Semester'
+      - value: one_year
+        label:
+          pt: '1 ano'
+          en: '1 year'
+      - value: two_years
+        label:
+        pt: '2 anos'
+        en: '2 years'
+      - value: three_years
+        label:
+          pt: '3 anos'
+          en: '3 years'
+      - value: four_year
+        label:
+          pt: '4 anos'
+          en: '4 years'
+      - value: five_years
+        label:
+          pt: '5 anos'
+          en: '5 years'
+      - value: ten_years
+        label:
+          pt: '10 anos'
+          en: '10 years'
+      - value: unique
+        label:
+          pt: 'Único'
+          en: 'Unique'
+      - value: recurring
+        label:
+          pt: 'Recorrente'
+          en: 'Recurring'
+    - field_name: observation_level
+      label:
+        pt: 'Nível da observação'
+        en: 'Observation level'
+      helper_text:
+        pt: 'O que representa cada linha da tabela.'
+        en: 'What each data row represents.'
+      required: true
+      preset: multiple_select
+      select_size: 10
+      choices:
+      - value: placeholder_esfera
+        label: _______________ESFERA
+      - value: country
+        label:
+          pt: 'País'
+          en: 'Country'
+      - value: region
+        label:
+          pt: 'Região'
+          en: 'Region'
+      - value: state
+        label:
+          pt: 'Estado'
+          en: 'State'
+      - value: county
+        label:
+          pt: 'Condado'
+          en: 'County'
+      - value: district
+        label:
+          pt: 'Distrito'
+          en: 'District'
+      - value: municipality
+        label:
+          pt: 'Município'
+          en: 'Municipality'
+      - value: city
+        label:
+          pt: 'Cidade'
+          en: 'City'
+      - value: village
+        label:
+          pt: 'Vila'
+          en: 'Village'
+      - value: placeholder_imagem
+        label: _______________IMAGEM
+      - value: pixel
+        label: Pixel
+      - value: poligono
+        label: Polígono
+      - value: placeholder_individuo
+        label: _______________INDIVÍDUO
+      - value: pessoa
+        label: Pessoa
+      - value: domicilio
+        label: Domicílio
+      - value: animal
+        label: Animal
+      - value: placeholder_estabelecimento
+        label: _______________ESTABELECIMENTO
+      - value: agencia
+        label: Agência
+      - value: aldeia
+        label: Aldeia Indígena
+      - value: area_protegida
+        label: Área Protegida
+      - value: cartorio
+        label: Cartório
+      - value: empresa
+        label: Empresa
+      - value: escola
+        label: Escola
+      - value: estacao
+        label: Estação
+      - value: estadio
+        label: Estádio
+      - value: grupo_terrorista
+        label: Grupo Terrorista
+      - value: hospital
+        label: Hospital
+      - value: imovel
+        label: Imóvel/Propriedade
+      - value: ministerio
+        label: Ministério
+      - value: museu
+        label: Museu
+      - value: ong
+        label: ONG
+      - value: presidio
+        label: Presídio
+      - value: time
+        label: Time
+      - value: universidade
+        label: Universidade
+      - value: placeholder_politica
+        label: _______________POLÍTICA
+      - value: acordo_tratado
+        label: Acordo/Tratado
+      - value: discurso_fala
+        label: Discurso/Fala
+      - value: eleicao
+        label: Eleição
+      - value: lei
+        label: Lei/Proposição/Matéria
+      - value: partido
+        label: Partido
+      - value: placeholder_inovacao
+        label: _______________INOVAÇÃO_E_COMUNICAÇÃO
+      - value: artigo
+        label: Artigo
+      - value: citacao
+        label: Citação
+      - value: dominio
+        label: Domínio
+      - value: livro
+        label: Livro
+      - value: jornal
+        label: Jornal
+      - value: patente
+        label: Patente
+      - value: periodico_revista
+        label: Periódico/Revista
+      - value: placeholder_recursos
+        label: _______________RECURSOS
+      - value: convenio
+        label: Convênio
+      - value: licitacao
+        label: Licitação/Contrato
+      - value: produto
+        label: Produto
+      - value: transacao
+        label: Transação
+      - value: transferencia
+        label: Transferência
+      - value: placeholder_educacao
+        label: _______________EDUCAÇÃO
+      - value: bolsa
+        label: Bolsa
+      - value: prova
+        label: Prova/Exame
+      - value: placeholder_evento
+        label: _______________EVENTOS
+      - value: alerta
+        label: Alerta
+      - value: ataque
+        label: Ataque
+      - value: ato
+        label: Ato
+      - value: concerto_show
+        label: Concerto/Show
+      - value: desastre
+        label: Desastre Natural
+      - value: enchente
+        label: Enchente/Inundação
+      - value: nascimento
+        label: Nascimento
+      - value: pedido
+        label: Pedido
+      - value: obito
+        label: Óbito
+      - value: partida
+        label: Partida
+      - value: placeholder_arte
+        label: _______________ARTE
+      - value: album
+        label: Álbum
+      - value: filme_serie_clipe
+        label: Filme/Série/Clipe
+      - value: foto
+        label: Foto
+      - value: musica
+        label: Música
+      - value: objeto
+        label: Objeto
+      - value: pintura
+        label: Pintura/Desenho/Ilustração
+      - value: placeholder_meio_transp
+        label: _______________MEIOS DE TRANSPORTE
+      - value: carro_onibus
+        label: Carro/Ônibus
+      - value: trem
+        label: Trem
+      - value: aviao_helic
+        label: Avião/Helicóptero
+      - value: embarcacao
+        label: Embarcação
+      - value: placeholder_grupos
+        label: _______________GRUPOS
+      - value: idade
+        label: Idade
+      - value: raca
+        label: Raça
+      - value: sexo
+        label: Sexo
+      - value: placeholder_outros
+        label: _______________OUTROS
+      - value: outro
+        label: Outro
+    - field_name: primary_keys
+      label:
+        pt: 'Chaves primárias'
+        en: 'Primary keys'
+      required: true
+      helper_text:
+        pt: 'Quais colunas conjuntamente identificam uma linha unicamente na tabela? Se não houver, deixe em branco.'
+        en: 'What columns jointly identify a row uniquely in the data? If there aren't, leave it blank.'
+      form_placeholder:
+        pt: 'Exemplo: id_municipio, ano'
+        en: 'Example: id_municipio, ano'
+    - field_name: version
+      label:
+        pt: 'Versão'
+        en: 'Version'
+      required: true
+      validators: ignore_missing unicode package_version_validator
+      form_placeholder:
+        pt: 'exemplo: v1.0'
+        en: 'example: v1.0'
+    - field_name: publisher
+      label:
+        pt: 'Pessoa publicando os dados'
+        en: 'Person publishing the data'
+      required: true
+      form_placeholder:
+        pt: 'exemplo: Fulano da Silva'
+        en: 'example: Joe Smith'
+      display_property: dc:creator
+    - field_name: publisher_email
+      label:
+        pt: 'Email publicador(a)'
+        en: 'Publisher email'
+      required: true
+      form_placeholder:
+        pt: 'exemplo: fulano@example.com'
+        en: 'example: joe@example.com'
+      display_property: dc:creator
+      display_snippet: email.html
+      #display_email_name_field: author
+    - field_name: publisher_github
+      label:
+        pt: 'Conta Github do(a) publicador(a)'
+        en: 'Publisher Github account'
+      required: false
+
+  external_link_fields:
+    - field_name: url
+      label: Url
+      required: true
+      preset: resource_url_upload
+    - field_name: name
+      label: Nome
+      required: true
+      form_placeholder:
+        pt: 'Exemplo: baixar, visualizar'
+        en: 'Example: download, visualize'
+    - field_name: descricao
+      label: Descrição
+      form_snippet: markdown.html
+      form_placeholder: Descrição do recurso
+    - field_name: language
+      label:
+        pt: 'Língua'
+        en: 'Language'
+      helper_text:
+        pt: 'Selecione todos que se aplicam.'
+        en: 'Select all that apply.'
+      required: true
+      preset: multiple_select
+      select_size: 10
+      choices:
+      - value: portuguese
+        label:
+          pt: 'Português'
+          en: 'Portuguese'
+      - value: german
+        label:
+          pt: 'Alemão'
+          en: 'German'
+      - value: arabic
+        label:
+          pt: 'Árabe'
+          en: ''
+      - value: bahasa
+        label:
+          pt: 'Bahasa'
+          en: 'Bahasa'
+      - value: bengali
+        label:
+          pt: 'Bengali'
+          en: 'Bengali'
+      - value: chinese
+        label:
+          pt: 'Chinês'
+          en: 'Chinese'
+      - value: spanish
+        label:
+          pt: 'Espanhol'
+          en: 'Spanish'
+      - value: french
+        label:
+          pt: 'Francês'
+          en: 'French'
+      - value: hebrew
+        label:
+          pt: 'Hebraico'
+          en: 'Hebrew'
+      - value: hindi
+        label:
+          pt: 'Hindi'
+          en: 'Hindi'
+      - value: english
+        label:
+          pt: 'Inglês'
+          en: 'English'
+      - value: japanese
+        label:
+          pt: 'Japonês'
+          en: 'Japanese'
+      - value: malay
+        label:
+          pt: 'Malay'
+          en: 'Malay'
+      - value: russian
+        label:
+          pt: 'Russo'
+          en: 'Russian'
+      - value: thai
+        label:
+          pt: 'Thai'
+          en: 'Thai'
+      - value: urdu
+        label:
+          pt: 'Urdu'
+          en: 'Urdu'
+    - field_name: has_api
+      label:
+        pt: 'Tem uma API'
+        en: 'Has an API'
+      required: false
+      helper_text:
+        pt: 'APIs são instruções e padrões de programação para acesso a um aplicativo ou software.'
+        en: 'APIs are instructions and standards for machine access of software or applications.'
+      preset: select
+      choices:
+      - value: yes
+        label:
+          pt: 'Sim'
+          en: 'Yes'
+      - value: no
+        label:
+          pt: 'Não'
+          en: 'No'
+    - field_name: microdata
+      label:
+        pt: 'Tem microdados'
+        en: 'Has microdata'
+      required: false
+      preset: select
+      choices:
+      - value: yes
+        label:
+          pt: 'Sim'
+          en: 'Yes'
+      - value: no
+        label:
+          pt: 'Não'
+          en: 'No'
+    - field_name: free
+      label:
+        pt: 'Grátis'
+        en: 'Free'
+      required: true
+      preset: select
+      choices:
+      - value: yes
+        label:
+          pt: 'Sim'
+          en: 'Yes'
+      - value: no
+        label:
+          pt: 'Não'
+          en: 'No'
+    - field_name: registration
+      label:
+        pt: 'Precisa de registro'
+        en: 'Needs registration'
+      help_text:
+        pt: 'É necessário registrar um usuário para baixar os dados?'
+        en: 'Is registration necessary for download?'
+      required: true
+      preset: select
+      choices:
+      - value: yes
+        label:
+          pt: 'Sim'
+          en: 'Yes'
+      - value: no
+        label:
+          pt: 'Não'
+          en: 'No'
+    - field_name: availability
+      label:
+        pt: 'Disponibilidade'
+        en: 'Availability'
+      required: true
+      preset: select
+      choices:
+      - value: online
+        label:
+          pt: 'Online'
+          en: 'Online'
+      - value: physical
+        label:
+          pt: 'Físico (CD, DVD, papel, etc)'
+          en: 'Physical (CD, DVD, paper, etc)'
+      - value: in_person
+        label:
+          pt: 'Presencial'
+          en: 'In person'
+    - field_name: brazilian_ip
+      label:
+        pt: 'IP brasileiro'
+        en: 'Brazilian IP'
+      help_text:
+        pt: 'É necessário um IP brasileiro para acessar?'
+        en: 'Is a Brazilian IP necessary for access?'
+      required: true
+      preset: select
+      choices:
+      - value: yes
+        label:
+          pt: 'Sim'
+          en: 'Yes'
+      - value: no
+        label:
+          pt: 'Não'
+          en: 'No'
+    - field_name: license_type
+      label:
+        pt: 'Tipo de licensa'
+        en: 'License type'
+      required: true
+      form_placeholder:
+        pt: 'Exemplos: CC4.0, MIT'
+        en: 'Examples: CC4.0, MIT'
+
+  lai_request_fields:
+    - field_name: origin
+      label:
+        pt: 'Origem do pedido'
+        en: 'Request origin'
+      required: true
+      form_placeholder:
+        pt: 'Exemplos: FalaBR, Senado'
+        en: 'Examples: FalaBR, Senado'
+    - field_name: protocol_number
+      label:
+        pt: 'Número do protocolo'
+        en: 'Protocol number'
+      required: true
+    - field_name: description
+      label:
+        pt: 'Descrição'
+        en: 'Description'
+      required: true
+      form_placeholder:
+        pt: 'Uma descrição detalhada e útil do pedido.'
+        en: 'A detailed and useful description of the request.'
+    - field_name: superior_organ
+      label:
+        pt: 'Órgão superior'
+        en: 'Superior organ'
+      required: true
+    - field_name: linked_organ
+      label:
+        pt: 'Órgão vinculado'
+        en: 'Linked organ'
+      required: true
+    - field_name: start_date
+      label:
+        pt: 'Data de abertura'
+        en: 'Starting date'
+      required: true
+      preset: date
+    - field_name: who_requested
+      label:
+        pt: 'Quem pediu'
+        en: 'Who sent request'
+      required: false
+    - field_name: status
+      label:
+        pt: 'Estado'
+        en: 'Status'
+      required: true
+      preset: select
+      choices:
+      - value: processing
+        label:
+          pt: 'Em tramitação'
+          en: 'Processing'
+      - value: answered
+        label:
+          pt: 'Respondido'
+          en: 'Answered'
+      - value: denied
+        label:
+          pt: 'Negado'
+          en: 'Denied'
+    - field_name: data_url
+      label:
+        pt: 'Url dos dados'
+        en: 'Data Url'
+      required: true
+      preset: resource_url_upload
+    - field_name: request_url
+      label:
+        pt: 'Url dos pedido'
+        en: 'Request Url'
+      required: true
+      preset: resource_url_upload
+    - field_name: spatial_coverage
+      label:
+        pt: 'Cobertura espacial'
+        en: 'Spatial coverage'
+      form_snippet: markdown.html
+    - field_name: temporal_coverage # TODO: tem um jeito mais esperto aqui? permitir intervalos 2000-2017
+      label:
+        pt: 'Cobertura temporal'
+        en: 'Temporal coverage'
+      required: true
+      helper_text:
+        pt: 'Selecione todos que se aplicam.'
+        en: 'Select all that apply.'
+      preset: multiple_select
+      select_size: 10
+      choices:
+      - value: '1990'
+        label: '1990'
+      - value: '1991'
+        label: '1991'
+      - value: '1992'
+        label: '1992'
+      - value: '1993'
+        label: '1993'
+      - value: '1994'
+        label: '1994'
+      - value: '1995'
+        label: '1995'
+      - value: '1996'
+        label: '1996'
+      - value: '1997'
+        label: '1997'
+      - value: '1998'
+        label: '1998'
+      - value: '1999'
+        label: '1999'
+      - value: '2000'
+        label: '2000'
+      - value: '2001'
+        label: '2001'
+      - value: '2002'
+        label: '2002'
+      - value: '2003'
+        label: '2003'
+      - value: '2004'
+        label: '2004'
+      - value: '2005'
+        label: '2005'
+      - value: '2006'
+        label: '2006'
+      - value: '2007'
+        label: '2007'
+      - value: '2008'
+        label: '2008'
+      - value: '2009'
+        label: '2009'
+      - value: '2010'
+        label: '2010'
+      - value: '2011'
+        label: '2011'
+      - value: '2012'
+        label: '2012'
+      - value: '2013'
+        label: '2013'
+      - value: '2014'
+        label: '2014'
+      - value: '2015'
+        label: '2015'
+      - value: '2016'
+        label: '2016'
+      - value: '2017'
+        label: '2017'
+      - value: '2018'
+        label: '2018'
+      - value: '2019'
+        label: '2019'
+      - value: '2020'
+        label: '2020'
+      - value: '2021'
+        label: '2021'
+    - field_name: observations
+      label:
+        pt: 'Observações'
+        en: 'Observations'
+      form_snippet: markdown.html
