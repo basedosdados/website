@@ -65,6 +65,11 @@ dataset_fields:
       pt: 'Nível da observação'
       en: 'Observation level'
     # validators: generate_observation_level
+  - field_name: auxiliary_files_url
+    label:
+      pt: 'Url dos arquivos auxiliares'
+      en: 'Auxiliary files url'
+    # validators: generate_auxiliary_files_url
 
 resource_fields:
   - field_name: name
@@ -98,6 +103,26 @@ resource_fields:
     preset: multiple_select
     select_size: 10
     choices:
+    - value: '1970'
+      label: '1970'
+    - value: '1971'
+      label: '1971'
+    - value: '1972'
+      label: '1972'
+    - value: '1973'
+      label: '1973'
+    - value: '1974'
+      label: '1974'
+    - value: '1975'
+      label: '1975'
+    - value: '1976'
+      label: '1976'
+    - value: '1977'
+      label: '1977'
+    - value: '1978'
+      label: '1978'
+    - value: '1979'
+      label: '1979'
     - value: '1980'
       label: '1980'
     - value: '1981'
@@ -182,6 +207,24 @@ resource_fields:
       label: '2020'
     - value: '2021'
       label: '2021'
+    - value: '2022'
+      label: '2022'
+    - value: '2023'
+      label: '2023'
+    - value: '2024'
+      label: '2024'
+    - value: '2025'
+      label: '2025'
+    - value: '2026'
+      label: '2026'
+    - value: '2027'
+      label: '2027'
+    - value: '2028'
+      label: '2028'
+    - value: '2029'
+      label: '2029'
+    - value: '2030'
+      label: '2030'
     required: true
   - field_name: update_frequency
     label:
@@ -263,11 +306,20 @@ resource_fields:
   - field_name: table_id
     label:
       pt: 'Identificador da tabela intra-base.'
-      en: 'Table identifier within dataset'
+      en: 'Table identifier within dataset.'
     form_placeholder:
       pt: 'exemplo: table-id'
       en: 'example: table-id'
-    validators: only_on_types(bdm_table) required_on_types(bdm_table)
+    validators: only_on_types(bdm_table) #required_on_types(bdm_table) MANUAL
+  - field_name: auxiliary_files_url
+    label:
+      pt: 'Url dos arquivos auxiliares'
+      en: 'Auxiliary files url'
+    helper_text:
+      pt: 'Incluindo dicionários, notas metodológicas, etc.'
+      en: 'Including dicionaries, methological notes, etc.'
+    preset: resource_url_upload
+    validators: only_on_types(bdm_table) ignore_missing unicode remove_whitespace #required_on_types(bdm_table)
   - field_name: treatment_description
     label:
       pt: 'Descrição do tratamento'
@@ -276,19 +328,25 @@ resource_fields:
     form_placeholder:
       pt: "exemplo: Descrição e anotações úteis sobre o tratamento da tabela."
       en: "example: a useful description of the table's data treatment."
-    validators: only_on_types(bdm_table) required_on_types(bdm_table)
+    validators: only_on_types(bdm_table) #required_on_types(bdm_table) MANUAL
   - field_name: observation_level
     label:
       pt: 'Nível da observação'
       en: 'Observation level'
     helper_text:
       pt: 'O que representa cada linha da tabela.'
-      en: 'What each data row represents.'
+      en: 'What each row in the table represents.'
     preset: multiple_select
     select_size: 10
     choices:
-    - value: placeholder_esfera
-      label: _______________ESFERA
+    - value: placeholder_sphere
+      label:
+        pt: '_______________ESFERA'
+        en: '_______________SPHERE'
+    - value: continent
+      label:
+        pt: 'Continente'
+        en: 'Continent'
     - value: country
       label:
         pt: 'País'
@@ -299,7 +357,7 @@ resource_fields:
         en: 'Region'
     - value: state
       label:
-        pt: 'Estado'
+        pt: 'Estado/Unidade da Federação'
         en: 'State'
     - value: county
       label:
@@ -319,36 +377,44 @@ resource_fields:
         en: 'City'
     - value: village
       label:
-        pt: 'Vila'
+        pt: 'Vila/Aldeia'
         en: 'Village'
-    - value: placeholder_image
+    - value: neighborhood
       label:
-        pt: '_______________IMAGEM'
-        en: '_______________IMAGE'
-    - value: pixel
+        pt: 'Bairro'
+        en: 'Neighborhood'
+    - value: zip_code
       label:
-        pt: 'Pixel'
-        en: 'Pixel'
-    - value: polygon
+        pt: 'CEP'
+        en: 'ZIP Code'
+    - value: census_tract
       label:
-        pt: 'Polígono'
-        en: 'Polygon'
+        pt: 'Setor Censitário'
+        en: 'Census Tract'
     - value: placeholder_individual
       label:
         pt: '_______________INDIVÍDUO'
         en: '_______________INDIVIDUAL'
     - value: person
       label:
-        pt: 'Pessoa'
-        en: 'Person'
+        pt: 'Pessoa (aluno, professor, político/candidato, jogador, sócio, etc)'
+        en: 'Person (student, teacher/professor, politician/candidate, player, partner, etc)'
     - value: household
       label:
         pt: 'Domicílio'
         en: 'Household'
+    - value: name
+      label:
+        pt: 'Nome'
+        en: 'Name'
     - value: animal
       label:
-        pt: 'Animal'
-        en: 'Animal'
+        pt: 'Animal (mamífero, micróbio, vírus, etc)'
+        en: 'Animal (mammal, microbe, virus, etc)'
+    - value: plant
+      label:
+        pt: 'Planta (árvore, espécie)'
+        en: 'Plant (tree, species, etc)'
     - value: placeholder_establishment
       label:
         pt: '_______________ESTABELECIMENTO'
@@ -357,143 +423,383 @@ resource_fields:
       label:
         pt: 'Agência'
         en: 'Agency'
-    - value: aldeia
-      label: Aldeia Indígena
-    - value: area_protegida
-      label: Área Protegida
-    - value: cartorio
-      label: Cartório
-    - value: empresa
-      label: Empresa
-    - value: escola
-      label: Escola
-    - value: estacao
-      label: Estação
-    - value: estadio
-      label: Estádio
-    - value: grupo_terrorista
-      label: Grupo Terrorista
+    - value: protected_area
+      label:
+        pt: 'Área Protegida'
+        en: 'Protected Area'
+    - value: library
+      label:
+        pt: 'Biblioteca'
+        en: 'Library'
+    - value: notary_office
+      label:
+        pt: 'Cartório'
+        en: 'Notary's Office'
+    - value: company
+      label:
+        pt: 'Empresa'
+        en: 'Company'
+    - value: school
+      label:
+        pt: 'Escola'
+        en: 'School'
+    - value: station
+      label:
+        pt: 'Estação'
+        en: 'Station'
+    - value: stadium
+      label:
+        pt: 'Estádio'
+        en: 'Stadium'
+    - value: terrorist_group
+      label:
+        pt: 'Grupo Terrorista'
+        en: 'Terrorist Group'
     - value: hospital
-      label: Hospital
-    - value: imovel
-      label: Imóvel/Propriedade
-    - value: ministerio
-      label: Ministério
-    - value: museu
-      label: Museu
-    - value: ong
-      label: ONG
-    - value: presidio
-      label: Presídio
-    - value: time
-      label: Time
-    - value: universidade
-      label: Universidade
-    - value: placeholder_politica
-      label: _______________POLÍTICA
-    - value: acordo_tratado
-      label: Acordo/Tratado
-    - value: discurso_fala
-      label: Discurso/Fala
-    - value: eleicao
-      label: Eleição
-    - value: lei
-      label: Lei/Proposição/Matéria
-    - value: partido
-      label: Partido
-    - value: placeholder_inovacao
-      label: _______________INOVAÇÃO_E_COMUNICAÇÃO
-    - value: artigo
-      label: Artigo
-    - value: citacao
-      label: Citação
-    - value: dominio
-      label: Domínio
-    - value: livro
-      label: Livro
-    - value: jornal
-      label: Jornal
-    - value: patente
-      label: Patente
-    - value: periodico_revista
-      label: Periódico/Revista
-    - value: placeholder_recursos
-      label: _______________RECURSOS
-    - value: convenio
-      label: Convênio
-    - value: licitacao
-      label: Licitação/Contrato
-    - value: produto
-      label: Produto
-    - value: transacao
-      label: Transação
-    - value: transferencia
-      label: Transferência
-    - value: placeholder_educacao
-      label: _______________EDUCAÇÃO
-    - value: bolsa
-      label: Bolsa
-    - value: prova
-      label: Prova/Exame
-    - value: placeholder_evento
-      label: _______________EVENTOS
-    - value: alerta
-      label: Alerta
-    - value: ataque
-      label: Ataque
-    - value: ato
-      label: Ato
-    - value: concerto_show
-      label: Concerto/Show
-    - value: desastre
-      label: Desastre Natural
-    - value: enchente
-      label: Enchente/Inundação
-    - value: nascimento
-      label: Nascimento
-    - value: pedido
-      label: Pedido
-    - value: obito
-      label: Óbito
-    - value: partida
-      label: Partida
-    - value: placeholder_arte
-      label: _______________ARTE
+      label:
+        pt: 'Hospital'
+        en: 'Hospital'
+    - value: property
+      label:
+        pt: 'Imóvel/Propriedade'
+        en: 'Property'
+    - value: ministry
+      label:
+        pt: 'Ministério/Departamento'
+        en: 'Ministry/Department'
+    - value: museum
+      label:
+        pt: 'Museu'
+        en: 'Museum'
+    - value: ngo
+      label:
+        pt: 'Organização Não-Governamental (ONG)'
+        en: 'Nongovernmental Organization (NGO)'
+    - value: terrorist_group
+      label:
+        pt: 'Organização Terrorista'
+        en: 'Terrorist Group'
+    - value: prison
+      label:
+        pt: 'Presídio/Cadeia'
+        en: 'Prison/Jail'
+    - value: team
+      label:
+        pt: 'Time'
+        en: 'Team'
+    - value: university
+      label:
+        pt: 'Universidade'
+        en: 'University'
+    - value: placeholder_politics
+      label:
+        pt: '_______________POLÍTICA'
+        en: '_______________POLITICS'
+    - value: agreement
+      label:
+        pt: 'Acordo/Tratado'
+        en: 'Agreement/Treaty'
+    - value: speech
+      label:
+        pt: 'Discurso/Fala'
+        en: 'Speech'
+    - value: election
+      label:
+        pt: 'Eleição'
+        en: 'Election'
+    - value: law
+      label:
+        pt: 'Lei/Proposição/Matéria'
+        en: 'Law/Proposition'
+    - value: party
+      label:
+        pt: 'Partido'
+        en: 'Party'
+    - value: poll
+      label:
+        pt: 'Pesquisa de Opinião'
+        en: 'Poll'
+    - value: placeholder_inovation
+      label:
+        pt: '_______________CIÊNCIA, INOVAÇÃO, E COMUNICAÇÃO'
+        en: '_______________SCIENCE, INNOVATION, AND COMMUNICATION'
+    - value: article
+      label:
+        pt: 'Artigo'
+        en: 'Article/Paper'
+    - value: citation
+      label:
+        pt: 'Citação'
+        en: 'Citation'
+    - value: domain
+      label:
+        pt: 'Domínio'
+        en: 'Domain'
+    - value: book
+      label:
+        pt: 'Livro'
+        en: 'Book'
+    - value: newspaper
+      label:
+        pt: 'Jornal'
+        en: 'Newspaper'
+    - value: patent
+      label:
+        pt: 'Patente'
+        en: 'Patent'
+    - value: journal
+      label:
+        pt: 'Periódico/Revista'
+        en: 'Journal/Magazine'
+    - value: word
+      label:
+        pt: 'Palavra'
+        en: 'Word'
+    - value: post
+      label:
+        pt: 'Post/Tweet'
+        en: 'Post/Tweet'
+    - value: language
+      label:
+        pt: 'Língua'
+        en: 'Language'
+    - value: crs
+      label:
+        pt: 'Sistema Referencial de Coordenadas'
+        en: 'Coordinate Reference System'
+    - value: protein
+      label:
+        pt: 'Proteína'
+        en: 'Protein'
+    - value: meteor
+      label:
+        pt: 'Meteoro'
+        en: 'Meteor'
+    - value: placeholder_economics
+      label:
+        pt: '_______________ECONOMIA'
+        en: '_______________ECONOMICS'
+    - value: contract
+      label:
+        pt: 'Contrato'
+        en: 'Contract'
+    - value: grant
+      label:
+        pt: 'Concessão/Convênio'
+        en: 'Grant'
+    - value: procurement
+      label:
+        pt: 'Licitação'
+        en: 'Procurement'
+    - value: product
+      label:
+        pt: 'Produto'
+        en: 'Product'
+    - value: transaction
+      label:
+        pt: 'Transação'
+        en: 'Transaction'
+    - value: transfer
+      label:
+        pt: 'Transferência'
+        en: 'Transfer'
+    - value: bill
+      label:
+        pt: 'Nota de dinheiro'
+        en: 'Money bill'
+    - value: occupation
+      label:
+        pt: 'Ocupação'
+        en: 'Occupation'
+    - value: sector
+      label:
+        pt: 'Setor'
+        en: 'Sector'
+    - value: placeholder_education
+      label:
+        pt: '_______________EDUCAÇÃO'
+        en: '_______________EDUCATION'
+    - value: scholarship
+      label:
+        pt: 'Bolsa'
+        en: 'Scholarship'
+    - value: test
+      label:
+        pt: 'Prova/Exame'
+        en: 'Test/Exam'
+    - value: placeholder_event
+      label:
+        pt: '_______________EVENTOS'
+        en: '_______________EVENTS'
+    - value: alert
+      label:
+        pt: 'Alerta'
+        en: 'Alert'
+    - value: attack
+      label:
+        pt: 'Ataque/Atentado'
+        en: 'Attack'
+    - value: act
+      label:
+        pt: 'Ato'
+        en: 'Act'
+    - value: concert
+      label:
+        pt: 'Concerto/Show'
+        en: 'Concert'
+    - value: disinvitation
+      label:
+        pt: 'Cancelamento de convite'
+        en: 'Disinvitation'
+    - value: disaster
+      label:
+        pt: 'Desastre Natural (terremoto, enchente/inundação, fogo, etc)'
+        en: 'Natural Disaster (earthquake, flood, fire, etc)'
+    - value: birth
+      label:
+        pt: 'Nascimento'
+        en: 'Birth'
+    - value: death
+      label:
+        pt: 'Morte/Óbito'
+        en: 'Death'
+    - value: request
+      label:
+        pt: 'Pedido/Solicitação/Reclamação'
+        en: 'Request/Complaint'
+    - value: protest
+      label:
+        pt: 'Protesto'
+        en: 'Protest'
+    - value: match
+      label:
+        pt: 'Partida'
+        en: 'Match'
+    - value: placeholder_art
+      label:
+        pt: '_______________ARTE E ENTRETERIMENTO'
+        en: '_______________ART AND ENTERTAINMENT'
     - value: album
-      label: Álbum
-    - value: filme_serie_clipe
-      label: Filme/Série/Clipe
-    - value: foto
-      label: Foto
-    - value: musica
-      label: Música
-    - value: objeto
-      label: Objeto
-    - value: pintura
-      label: Pintura/Desenho/Ilustração
-    - value: placeholder_meio_transp
-      label: _______________MEIOS DE TRANSPORTE
-    - value: carro_onibus
-      label: Carro/Ônibus
-    - value: trem
-      label: Trem
-    - value: aviao_helic
-      label: Avião/Helicóptero
-    - value: embarcacao
-      label: Embarcação
-    - value: placeholder_grupos
-      label: _______________GRUPOS
-    - value: idade
-      label: Idade
-    - value: raca
-      label: Raça
-    - value: sexo
-      label: Sexo
-    - value: placeholder_outros
-      label: _______________OUTROS
-    - value: outro
-      label: Outro
-    validators: only_on_types(bdm_table) required_on_types(bdm_table)
+      label:
+        pt: 'Álbum'
+        en: 'Album'
+    - value: movie
+      label:
+        pt: 'Filme/Série/Clipe'
+        en: 'Movie/Film/Clip/Show'
+    - value: photo
+      label:
+        pt: 'Foto'
+        en: 'Photo/Picture'
+    - value: song
+      label:
+        pt: 'Música'
+        en: 'Song'
+    - value: statue
+      label:
+        pt: 'Estátua'
+        en: 'Statue'
+    - value: painting
+      label:
+        pt: 'Pintura/Desenho/Ilustração'
+        en: 'Painting/Drawing/Illustration'
+    - value: poem
+      label:
+        pt: 'Poema'
+        en: 'Poem'
+    - value: roller_coaster
+      label:
+        pt: 'Montanha-Russa'
+        en: 'Roller Coaster'
+    - value: placeholder_infrastructure
+      label:
+        pt: '_______________INFRAESTRUTURA'
+        en: '_______________INFRASTRUCTURE'
+    - value: dam
+      label:
+        pt: 'Represa/Barragem'
+        en: 'Dam'
+    - value: satellite
+      label:
+        pt: 'Satélite'
+        en: 'Satellite'
+    - value: street_road
+      label:
+        pt: 'Rua/Avenida/Estrada'
+        en: 'Street/Avenue/Road/Highway'
+    - value: placeholder_transportation
+      label:
+        pt: '_______________TRANSPORTE'
+        en: '_______________TRANSPORTATION'
+    - value: automobile
+      label:
+        pt: 'Carro/Ônibus/Caminhão/Moto'
+        en: 'Car/Bus/Truck/Motorcycle'
+    - value: train
+      label:
+        pt: 'Trem'
+        en: 'Train'
+    - value: aircraft
+      label:
+        pt: 'Avião/Helicóptero'
+        en: 'Plane/Helicopter'
+    - value: ship
+      label:
+        pt: 'Embarcação/Navio'
+        en: 'Ship'
+    - value: placeholder_security
+      label:
+        pt: '_______________SEGURANÇA, VIOLÊNCIA, CRIME'
+        en: '_______________SECURITY, VIOLENCE, CRIME'
+    - value: gun
+      label:
+        pt: 'Arma'
+        en: 'Gun'
+    - value: placeholder_demographic
+      label:
+        pt: '_______________DEMOGRAFIA'
+        en: '_______________DEMOGRAPHIC'
+    - value: age
+      label:
+        pt: 'Idade'
+        en: 'Age'
+    - value: race
+      label:
+        pt: 'Raça/Cor de pele'
+        en: 'Race/Skin color'
+    - value: sex
+      label:
+        pt: 'Sexo'
+        en: 'Sex'
+    - value: placeholder_image
+      label:
+        pt: '_______________IMAGEM'
+        en: '_______________IMAGE'
+    - value: pixel
+      label:
+        pt: 'Pixel/Grid'
+        en: 'Pixel/Grid'
+    - value: polygon
+      label:
+        pt: 'Polígono'
+        en: 'Polygon'
+    - value: placeholder_history
+      label:
+        pt: '_______________HISTÓRIA'
+        en: '_______________HISTORY'
+    - value: empire
+      label:
+        pt: 'Império'
+        en: 'Empire'
+    - value: placeholder_others
+      label:
+        pt: '_______________OUTROS'
+        en: '_______________OTHERS'
+    - value: other
+      label:
+        pt: 'Outro'
+        en: 'Other'
+    validators: only_on_types(bdm_table) scheming_multiple_choice #required_on_types(bdm_table) MANUAL
   - field_name: primary_keys
     label:
       pt: 'Chaves primárias'
@@ -504,7 +810,7 @@ resource_fields:
     form_placeholder:
       pt: 'Exemplo: id_municipio, ano'
       en: 'Example: id_municipio, ano'
-    validators: only_on_types(bdm_table) required_on_types(bdm_table)
+    validators: only_on_types(bdm_table) #required_on_types(bdm_table) MANUAL
   - field_name: version
     label:
       pt: 'Versão'
@@ -512,7 +818,7 @@ resource_fields:
     form_placeholder:
       pt: 'exemplo: v1.0'
       en: 'example: v1.0'
-    validators: only_on_types(bdm_table) required_on_types(bdm_table) unicode package_version_validator
+    validators: only_on_types(bdm_table) unicode package_version_validator #required_on_types(bdm_table) MANUAL
   - field_name: publisher
     label:
       pt: 'Pessoa publicando os dados'
@@ -521,7 +827,7 @@ resource_fields:
       pt: 'exemplo: Fulano da Silva'
       en: 'example: Joe Smith'
     display_property: dc:creator
-    validators: only_on_types(bdm_table) required_on_types(bdm_table)
+    validators: only_on_types(bdm_table) #required_on_types(bdm_table) MANUAL
   - field_name: publisher_email
     label:
       pt: 'Email publicador(a)'
@@ -531,12 +837,17 @@ resource_fields:
       en: 'example: joe@example.com'
     display_property: dc:creator
     display_snippet: email.html
-    validators: only_on_types(bdm_table) required_on_types(bdm_table)
+    validators: only_on_types(bdm_table) #required_on_types(bdm_table) MANUAL
     #display_email_name_field: author
   - field_name: publisher_github
     label:
       pt: 'Conta Github do(a) publicador(a)'
-      en: 'Publisher Github account'
+      en: 'Publisher's Github account'
+    validators: only_on_types(bdm_table) # required_on_types(bdm_table)
+  - field_name: publisher_website
+    label:
+      pt: 'Site do(a) publicador(a)'
+      en: 'Publisher's website'
     validators: only_on_types(bdm_table) # required_on_types(bdm_table)
 
   # external link
@@ -546,7 +857,7 @@ resource_fields:
       pt: 'Url'
       en: 'Url'
     preset: resource_url_upload
-    validators: only_on_types(external_link) required_on_types(external_link) # TODO: add check_url_is_alive validator
+    validators: only_on_types(external_link) required_on_types(external_link) ignore_missing unicode remove_whitespace # TODO: add check_url_is_alive validator
   - field_name: language
     label:
       pt: 'Língua'
@@ -564,7 +875,7 @@ resource_fields:
     - value: arabic
       label:
         pt: 'Árabe'
-        en: ''
+        en: 'Arabic'
     - value: bahasa
       label:
         pt: 'Bahasa'
@@ -639,7 +950,7 @@ resource_fields:
       label:
         pt: 'Não'
         en: 'No'
-    validators: only_on_types(external_link) # required_on_types(external_link)
+    validators: only_on_types(external_link) required_on_types(external_link) scheming_required scheming_choices
   - field_name: free
     label:
       pt: 'Grátis'
@@ -654,7 +965,7 @@ resource_fields:
       label:
         pt: 'Não'
         en: 'No'
-    validators: only_on_types(external_link) required_on_types(external_link)
+    validators: only_on_types(external_link) required_on_types(external_link) scheming_required scheming_choices
   - field_name: registration
     label:
       pt: 'Precisa de registro'
@@ -672,7 +983,7 @@ resource_fields:
       label:
         pt: 'Não'
         en: 'No'
-    validators: only_on_types(external_link) required_on_types(external_link)
+    validators: only_on_types(external_link) required_on_types(external_link) scheming_required scheming_choices
   - field_name: availability
     label:
       pt: 'Disponibilidade'
@@ -691,7 +1002,7 @@ resource_fields:
       label:
         pt: 'Presencial'
         en: 'In person'
-    validators: only_on_types(external_link) required_on_types(external_link)
+    validators: only_on_types(external_link) required_on_types(external_link) scheming_required scheming_choices
   - field_name: brazilian_ip
     label:
       pt: 'IP brasileiro'
@@ -709,7 +1020,7 @@ resource_fields:
       label:
         pt: 'Não'
         en: 'No'
-    validators: only_on_types(external_link) # required_on_types(external_link)
+    validators: only_on_types(external_link) scheming_required scheming_choices #required_on_types(external_link)
   - field_name: license_type
     label:
       pt: 'Tipo de licensa'
@@ -749,7 +1060,7 @@ resource_fields:
       pt: 'Data de abertura'
       en: 'Starting date'
     preset: date
-    validators: only_on_types(lai_request) required_on_types(lai_request)
+    validators: only_on_types(lai_request) required_on_types(lai_request) scheming_required isodate convert_to_json_if_date
   - field_name: who_requested
     label:
       pt: 'Quem pediu'
@@ -773,19 +1084,19 @@ resource_fields:
       label:
         pt: 'Negado'
         en: 'Denied'
-    validators: only_on_types(lai_request) required_on_types(lai_request)
-  - field_name: data_url
-    label:
-      pt: 'Url dos dados'
-      en: 'Data Url'
-    preset: resource_url_upload
-    validators: only_on_types(lai_request) required_on_types(lai_request)
+    validators: only_on_types(lai_request) required_on_types(lai_request) scheming_required scheming_choices
   - field_name: request_url
     label:
       pt: 'Url dos pedido'
       en: 'Request Url'
     preset: resource_url_upload
-    validators: only_on_types(lai_request) required_on_types(lai_request)
+    validators: only_on_types(lai_request) required_on_types(lai_request) ignore_missing unicode remove_whitespace
+  - field_name: data_url
+    label:
+      pt: 'Url dos dados'
+      en: 'Data Url'
+    preset: resource_url_upload
+    validators: only_on_types(lai_request) ignore_missing unicode remove_whitespace #required_on_types(lai_request)
   - field_name: observations
     label:
       pt: 'Observações'
