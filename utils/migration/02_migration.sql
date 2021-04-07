@@ -32,23 +32,21 @@ END $$;
 	INSERT INTO resource (SELECT * FROM _backup_resource) ON CONFLICT (id) DO UPDATE SET url = EXCLUDED.url, format = EXCLUDED.format, description = EXCLUDED.description, position = EXCLUDED.position, hash = EXCLUDED.hash, state = EXCLUDED.state, extras = EXCLUDED.extras, name = EXCLUDED.name, resource_type = EXCLUDED.resource_type, mimetype = EXCLUDED.mimetype, mimetype_inner = EXCLUDED.mimetype_inner, size = EXCLUDED.size, last_modified = EXCLUDED.last_modified, cache_url = EXCLUDED.cache_url, cache_last_updated = EXCLUDED.cache_last_updated, webstore_url = EXCLUDED.webstore_url, webstore_last_updated = EXCLUDED.webstore_last_updated, created = EXCLUDED.created, url_type = EXCLUDED.url_type, package_id = EXCLUDED.package_id, metadata_modified = EXCLUDED.metadata_modified;
 	INSERT INTO package_extra (SELECT * FROM _backup_package_extra) ON CONFLICT (id) DO UPDATE SET package_id = EXCLUDED.package_id, key = EXCLUDED.key, value = EXCLUDED.value, state = EXCLUDED.state;
 
+CREATE EXTENSION IF NOT EXISTS plpython3u;
 -- End of backup
 -- Temp functions definition
-
-CREATE OR REPLACE function pg_temp.rename_key(ext jsonb, from_ text, to_ text) returns jsonb as 
-$$
-	select ext - from_ || (case when ext ? from_ then jsonb_build_object(to_, ext->from_) else '{}'::jsonb end)
-$$ language sql;
-CREATE OR REPLACE function pg_temp.replace_value(ext jsonb, key_ text, from_ text, to_ json) returns jsonb as 
-$$ 
-	select ext || (case when ext ->> key_ = from_ then jsonb_build_object(key_, to_) else '{}'::jsonb end)
-$$ language sql;
-CREATE OR REPLACE function pg_temp.replace_value(ext jsonb, key_ text, from_ text, to_ int) returns jsonb as 
-$$ 
-	select pg_temp.replace_value(ext, key_, from_, to_::text::json)
-$$ language sql;
+CREATE OR REPLACE FUNCTION pg_temp.translate_languages(languages_array text) RETURNS text AS $$
+import json
+FROM_TO =  {"ingles": "english", "portugues": "portuguese", "espanhol": "spanish"}
+array = json.loads(languages_array)
+return json.dumps([FROM_TO[l] for l in array])
+$$ LANGUAGE plpython3u;
 
 -- Start of migration script
+
+-- Show package extras for reference
+SELECT package_id, jsonb_object_agg(pe.key, value) AS package_extras FROM package_extra pe GROUP BY package_id;
+
 
 update resource 
 set resource_type = 
@@ -73,12 +71,15 @@ WITH p AS (
 			package_id
 	) pe ON pe.package_id = p.id 
 )
+
 UPDATE
 	resource
 SET
 	extras = extras::jsonb || jsonb_build_object(
 -- describe metadata as `key, value`
-			'language', package_extras->>'idioma'
+			'language', pg_temp.translate_languages(package_extras->>'idioma')
+			,'description', extras::jsonb->>'descricao'
+
 )
 FROM p WHERE p.id = resource.package_id
 ;
