@@ -32,14 +32,17 @@ END $$;
 	INSERT INTO resource (SELECT * FROM _backup_resource) ON CONFLICT (id) DO UPDATE SET url = EXCLUDED.url, format = EXCLUDED.format, description = EXCLUDED.description, position = EXCLUDED.position, hash = EXCLUDED.hash, state = EXCLUDED.state, extras = EXCLUDED.extras, name = EXCLUDED.name, resource_type = EXCLUDED.resource_type, mimetype = EXCLUDED.mimetype, mimetype_inner = EXCLUDED.mimetype_inner, size = EXCLUDED.size, last_modified = EXCLUDED.last_modified, cache_url = EXCLUDED.cache_url, cache_last_updated = EXCLUDED.cache_last_updated, webstore_url = EXCLUDED.webstore_url, webstore_last_updated = EXCLUDED.webstore_last_updated, created = EXCLUDED.created, url_type = EXCLUDED.url_type, package_id = EXCLUDED.package_id, metadata_modified = EXCLUDED.metadata_modified;
 	INSERT INTO package_extra (SELECT * FROM _backup_package_extra) ON CONFLICT (id) DO UPDATE SET package_id = EXCLUDED.package_id, key = EXCLUDED.key, value = EXCLUDED.value, state = EXCLUDED.state;
 
-CREATE EXTENSION IF NOT EXISTS plpython3u;
 -- End of backup
+
+-- Load python
+CREATE EXTENSION IF NOT EXISTS plpython3u;
+
 -- Temp functions definition
 CREATE OR REPLACE FUNCTION pg_temp.translate_languages(languages_array text) RETURNS text AS $$
-import json
-FROM_TO =  {"ingles": "english", "portugues": "portuguese", "espanhol": "spanish"}
-array = json.loads(languages_array)
-return json.dumps([FROM_TO[l] for l in array])
+	import json
+	FROM_TO =  {"ingles": "english", "portugues": "portuguese", "espanhol": "spanish"}
+	array = json.loads(languages_array)
+	return json.dumps([FROM_TO[l] for l in array])
 $$ LANGUAGE plpython3u;
 
 -- Start of migration script
