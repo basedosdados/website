@@ -433,8 +433,8 @@ resource_fields:
         en: 'Library'
     - value: notary_office
       label:
-        pt: 'Cartório'
-        en: 'Notary's Office'
+        pt: Cartório
+        en: Notary's Office
     - value: company
       label:
         pt: 'Empresa'
@@ -842,12 +842,12 @@ resource_fields:
   - field_name: publisher_github
     label:
       pt: 'Conta Github do(a) publicador(a)'
-      en: 'Publisher's Github account'
+      en: Publisher's Github account
     validators: only_on_types(bdm_table) # required_on_types(bdm_table)
   - field_name: publisher_website
     label:
       pt: 'Site do(a) publicador(a)'
-      en: 'Publisher's website'
+      en: Publisher's website
     validators: only_on_types(bdm_table) # required_on_types(bdm_table)
 
   # external link

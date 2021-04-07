@@ -2,8 +2,8 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.plugins.toolkit import get_action
 import collections
-from ckantoolkit import missing as MISSING
 import pprint
+import types
 
 class BasedosdadosPlugin(plugins.SingletonPlugin, ):#toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IConfigurer)
@@ -45,7 +45,6 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, ):#toolkit.DefaultDatasetForm)
     def get_helpers(self):
         import ckanext.basedosdados.custom_functions as cf
         import boltons.strutils
-        import types
         funs = { name: getattr(cf, name) for name in dir(cf) if not name.startswith('_')}
         funs = { k: v for k, v in funs.items() if isinstance(v, types.FunctionType) }
         funs['boltons'] = boltons
@@ -53,36 +52,7 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, ):#toolkit.DefaultDatasetForm)
 
     # IValidators
     def get_validators(self):
-        # from ckanext.scheming.validation import scheming_validator
-        # @scheming_validator
-        def _get_type(key, data):
-            k = list(key)
-            k[-1] = 'resource_type'
-            type_ = data.get(tuple(k))
-            SUPPORTED_TYPES = ('bdm_table', 'external_link', 'lai_request')
-            if type_ not in SUPPORTED_TYPES:
-                return None
-                #raise Exception( f'Resource Type invalid! Found {type_!r}, but we only accept types: {SUPPORTED_TYPES!r}\n{locals()}')
-            return type_
-
-        def required_on_types(*types):
-            def validator(key, data, errors, con):
-                type_ = _get_type(key, data)
-                if type_ == None:
-                    errors[key].append(f'resource_type not supported.')
-                    return 
-                has_data = data[key] != MISSING and data[key]
-                if type_ in types and not has_data:
-                    errors[key].append(f'Field required for {type_} resources')
-            return validator
-        def only_on_types(*types):
-            def validator(key, data, errors, con):
-                type_ = _get_type(key, data)
-                if type_ == None:
-                    errors[key].append(f'resource_type not supported.')
-                    return 
-                has_data = data[key] != MISSING and data[key]
-                if type_ not in types and has_data:
-                    errors[key].append(f'Field only available for {types} resources. This resource is of type {type_}')
-            return validator
-        return dict(only_on_types=only_on_types, required_on_types=required_on_types)
+        import ckanext.basedosdados.validator_functions as vf
+        funs = { name: getattr(vf, name) for name in dir(vf) if not name.startswith('_')}
+        funs = { k: v for k, v in funs.items() if isinstance(v, types.FunctionType) }
+        return funs
