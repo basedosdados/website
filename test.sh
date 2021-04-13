@@ -19,4 +19,6 @@ for path in $TEST_URLS; do
     curl --silent --fail $URL/$path > /dev/null
 done
 
+URL="$URL" python ./test.py
+
 echo 'ALL OK :)'
