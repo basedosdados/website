@@ -2,11 +2,15 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.plugins.toolkit import get_action
 import collections
+import pprint
+import types
 
 class BasedosdadosPlugin(plugins.SingletonPlugin, ):#toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.interfaces.IFacets)
     plugins.implements(plugins.interfaces.ITemplateHelpers)
+    plugins.implements(plugins.IValidators)
+    plugins.implements(plugins.IActions)
     # plugins.implements(plugins.IDatasetForm)
 
     # IFacets
@@ -40,10 +44,23 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, ):#toolkit.DefaultDatasetForm)
         toolkit.add_resource('assets', 'basedosdados')
 
     def get_helpers(self):
-        import ckanext.basedosdados.custom_functions as cf
         import boltons.strutils
-        import types
-        funs = { name: getattr(cf, name) for name in dir(cf) if not name.startswith('_')}
-        funs = { k: v for k, v in funs.items() if isinstance(v, types.FunctionType) }
+        import ckanext.basedosdados.template_functions as template_functions
+        funs = _read_functions_from_module(template_functions)
         funs['boltons'] = boltons
         return funs
+
+    # IValidators
+    def get_validators(self):
+        import ckanext.basedosdados.validator_functions as validators
+        return _read_functions_from_module(validators)
+
+    # IActions
+    def get_actions(self):
+        import ckanext.basedosdados.endpoint_functions as endpoints
+        return _read_functions_from_module(endpoints)
+
+def _read_functions_from_module(module):
+    funs = { name: getattr(module, name) for name in dir(module) if not name.startswith('_')}
+    funs = { k: v for k, v in funs.items() if isinstance(v, types.FunctionType) }
+    return funs
