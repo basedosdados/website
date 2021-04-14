@@ -26,7 +26,7 @@ table) %}
 <hr>
 <h3> {{ _('Como analisar os dados via BigQuery') }} </h3>
 <div><a target="_blank" href=https://youtu.be/nGM2OwTUY_M>
-    ▶️ Assita ao nosso tutorial no Youtube</a></div><br>
+    ▶️ Assista ao nosso tutorial no Youtube</a></div><br>
 <div>Clique no botão <i>Consultar no BigQuery</i> e utilize o <i>Query Editor</i> (Editor de consultas) para
   acessar os dados. Copie a query abaixo para consultar todos dados da tabela:
 </div>
@@ -41,7 +41,7 @@ table) %}
 <hr>
 <h3> {{ _('Como analisar os dados via Python 🐍') }} </h3>
 <div><a target="_blank" href=https://www.youtube.com/channel/UCO1AcMaEa7bArIHb85bkSYA>
-    ▶️ Assita ao nosso tutorial no Youtube</a></div><br>
+    ▶️ Assista ao nosso tutorial no Youtube</a></div><br>
 <div>Criamos um cliente em Python para você acessar os dados do nosso
   *datalake* público. Com o ambiente confiurado, para obter os dados da
   tabela basta rodar:
@@ -58,7 +58,6 @@ package) }}</code></pre>
     href="https://github.com/basedosdados/mais/blob/master/examples/bd_for_beginners.ipynb">notebook
     exemplo</a>.
 </div><br>
-{% if is_bdm_one_click_download %}
 <hr>
 <h3> {{ _('Como analisar os dados via R') }} </h3>
 <div><a target="_blank" href=https://youtu.be/5_Ir8neyFf4>
@@ -71,6 +70,7 @@ package) }}</code></pre>
 <script src="/prism.js"></script>
 <pre><code class="language-sql">{{ h.make_example_r_query(res,
 package) }}</code></pre>
+{% if is_bdm_one_click_download %}
 <hr>
 <h3>
   {% set how_many_downloads_with_50_reais = 75_000_000_000 // resource['bdm_file_size'] %} {# 15 GB equivale mais ou
