@@ -2,34 +2,51 @@
 
 from ckantoolkit import missing as MISSING
 
+
 def _get_type(key, data):
     k = list(key)
-    k[-1] = 'resource_type'
+    k[-1] = "resource_type"
     type_ = data.get(tuple(k))
-    SUPPORTED_TYPES = ('bdm_table', 'external_link', 'lai_request')
+    SUPPORTED_TYPES = ("bdm_table", "external_link", "lai_request")
     if type_ not in SUPPORTED_TYPES:
         return None
-        #raise Exception( f'Resource Type invalid! Found {type_!r}, but we only accept types: {SUPPORTED_TYPES!r}\n{locals()}')
+        # raise Exception( f'Resource Type invalid! Found {type_!r}, but we only accept types: {SUPPORTED_TYPES!r}\n{locals()}')
     return type_
+
 
 def required_on_types(*types):
     def validator(key, data, errors, con):
         type_ = _get_type(key, data)
         if type_ == None:
-            errors[key].append(f'resource_type not supported.')
-            return 
+            errors[key].append(f"resource_type not supported.")
+            return
         has_data = data[key] != MISSING and data[key]
         if type_ in types and not has_data:
-            errors[key].append(f'Field required for {type_} resources')
+            errors[key].append(f"Field required for {type_} resources")
+
     return validator
+
 
 def only_on_types(*types):
     def validator(key, data, errors, con):
         type_ = _get_type(key, data)
         if type_ == None:
-            errors[key].append(f'resource_type not supported.')
-            return 
+            errors[key].append(f"resource_type not supported.")
+            return
         has_data = data[key] != MISSING and data[key]
         if type_ not in types and has_data:
-            errors[key].append(f'Field only available for {types} resources. This resource is of type {type_}')
+            errors[key].append(
+                f"Field only available for {types} resources. This resource is of type {type_}"
+            )
+
     return validator
+
+
+def bdm_table_columns_metadata_validator(data):
+    from ckanext.basedosdados.bdm_table_column_metadata_validator import (
+        column_validator,
+    )
+
+    validated = column_validator.validate_columns_from_dict(data)
+
+    return validated

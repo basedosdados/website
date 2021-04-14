@@ -1,0 +1,169 @@
+- name: id_municipio
+  description: ID Município - IBGE 7 Dígitos
+  is_in_staging: true
+  is_partition: false
+- name: id_municipio_6
+  description: ID Município - IBGE 6 Dígitos
+  is_in_staging: true
+  is_partition: false
+- name: id_municipio_tse
+  description: ID Município - TSE
+  is_in_staging: true
+  is_partition: false
+- name: id_municipio_rf
+  description: ID Município - Receita Federal
+  is_in_staging: true
+  is_partition: false
+- name: id_municipio_bcb
+  description: ID Município - Banco Central do Brasil
+  is_in_staging: true
+  is_partition: false
+- name: municipio
+  description: Nome Município
+  is_in_staging: true
+  is_partition: false
+- name: capital_uf
+  description: Capital da Unidade da Federação
+  is_in_staging: true
+  is_partition: false
+- name: id_comarca
+  description: ID Sede Comarca
+  is_in_staging: true
+  is_partition: false
+- name: id_regiao_saude
+  description: ID Região de Saúde
+  is_in_staging: true
+  is_partition: false
+- name: regiao_saude
+  description: Região de Saúde
+  is_in_staging: true
+  is_partition: false
+- name: id_regiao_imediata
+  description: ID Região Imediata - IBGE
+  is_in_staging: true
+  is_partition: false
+- name: regiao_imediata
+  description: Região Imediata
+  is_in_staging: true
+  is_partition: false
+- name: id_regiao_intermediaria
+  description: ID Região Intermediária - IBGE
+  is_in_staging: true
+  is_partition: false
+- name: regiao_intermediaria
+  description: Região Intermediária
+  is_in_staging: true
+  is_partition: false
+- name: id_microrregiao
+  description: ID Microrregião - IBGE
+  is_in_staging: true
+  is_partition: false
+- name: microrregiao
+  description: Microrregião
+  is_in_staging: true
+  is_partition: false
+- name: id_mesorregiao
+  description: ID Mesorregião - IBGE
+  is_in_staging: true
+  is_partition: false
+- name: mesorregiao
+  description: Mesorregião
+  is_in_staging: true
+  is_partition: false
+- name: sigla_uf
+  description: Sigla Unidade da Federação
+  is_in_staging: true
+  is_partition: false
+- name: uf
+  description: Unidade da Federação
+  is_in_staging: true
+  is_partition: false
+- name: regiao
+  description: Região
+  is_in_staging: true
+  is_partition: false
+- name: existia_1991
+  description: Existia em 1991
+  is_in_staging: true
+  is_partition: false
+- name: existia_2000
+  description: Existia em 2000
+  is_in_staging: true
+  is_partition: false
+- name: existia_2010
+  description: Existia em 2010
+  is_in_staging: true
+  is_partition: false
+- name: id_escola
+  description: ID Escola - Inep
+  is_in_staging: true
+  is_partition: false
+- name: id_escola_sp
+  description: ID Escola - especifica para o Estado de São Paulo
+  is_in_staging: true
+  is_partition: false
+- name: nome_escola
+  description: Nome da Escola
+  is_in_staging: true
+  is_partition: false
+- name: rede
+  description: Rede Escolar
+  is_in_staging: true
+  is_partition: false
+- name: ano
+  description: Ano
+  is_in_staging: true
+  is_partition: true
+- name: id_setor_censitario
+  description: ID do setor censitário
+  is_in_staging: true
+  is_partition: false
+- name: id_rm
+  description: ID da região metropolitana ou RIDE
+  is_in_staging: true
+  is_partition: false
+- name: nome_rm
+  description: Nome da região metropolitana ou RIDE
+  is_in_staging: true
+  is_partition: false
+- name: id_distrito
+  description: ID do distrito
+  is_in_staging: true
+  is_partition: false
+- name: nome_distrito
+  description: Nome do distrito
+  is_in_staging: true
+  is_partition: false
+- name: id_subdistrito
+  description: ID do subdistrito
+  is_in_staging: true
+  is_partition: false
+- name: nome_subdistrito
+  description: Nome do subdistrito
+  is_in_staging: true
+  is_partition: false
+- name: id_bairro
+  description: ID de bairro
+  is_in_staging: true
+  is_partition: false
+- name: nome_bairro
+  description: Nome do bairro
+  is_in_staging: true
+  is_partition: false
+- name: situacao_setor
+  description: – ID de situação do setor - Situação urbana - IDs 1, 2 e 3; 1 - Área
+    urbanizada de cidade ou vila 2 - Área não urbanizada de cidade ou vila 3 - Área
+    urbana isolada - Situação rural – IDs 4, 5, 6, 7 e 8; 4 - Aglomerado rural de
+    extensão urbana 5 - Aglomerado rural isolado, povoado 6 - Aglomerado rural isolado,
+    núcleo 7 - Aglomerado rural isolado, outros aglomerados 8 - Zona rural, exclusive
+    aglomerado rural
+  is_in_staging: true
+  is_partition: false
+- name: tipo_setor
+  description: Tipo de setor censitário
+  is_in_staging: true
+  is_partition: false
+- name: id_uf
+  description: ID Unidade da Federação - IBGE
+  is_in_staging: true
+  is_partition: false
