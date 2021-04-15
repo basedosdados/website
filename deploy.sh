@@ -5,6 +5,8 @@ HOST=ec2-user@basedosdados.org
 SSH="ssh -o StrictHostKeyChecking=no -i ~/.ssh/BD.pem $HOST"
 VTAG=":`date +%H.%M.%S`" # Simple mechanism to force image update
 
+BUILD_DIR="/tmp/bdd_build"
+
 deploy() {
     clean
     build_config
@@ -24,8 +26,9 @@ deploy_configs() {
 }
 
 clean() {
-    rm -rf build
-    mkdir -p build/images
+    rm -rf $BUILD_DIR ./build
+    mkdir -p $BUILD_DIR/images
+    ln -s $BUILD_DIR ./build
 }
 
 build_config() {

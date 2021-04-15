@@ -1,3 +1,4 @@
 #!/bin/bash
 
 until pg_isready; do sleep 1; done
+sleep 1

@@ -36,6 +36,10 @@ gzip -d -c ./postgresql/dev_init_data.sql.gz | \
         psql -v ON_ERROR_STOP=1 --echo-errors --quiet -U ckan ckan
 
 
+# TODO: tmp, remove this when migration is in prod
+cat ./utils/migration/02_migration.sql | docker exec -i -e PGPASSWORD=ckan db psql -v ON_ERROR_STOP=1 --echo-errors --quiet -U ckan ckan > /dev/null
+
+
 if [[ ! -d assets/storage ]]; then
     if ! which git-lfs > /dev/null; then echo ERROR!!! PLEASE INSTALL git-lfs to retrieve assets; exit 1; fi
     git-lfs pull

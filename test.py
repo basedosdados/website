@@ -1,6 +1,6 @@
 import os
 import requests
-URL = os.environ['URL']
+URL = os.environ.get('URL', "http://localhost:5000")
 
 ret = requests.get(URL + '/api/3/action/package_show?name_or_id=br-sp-ssp-seguranca')
 assert ret.status_code == 200, ret.json()
