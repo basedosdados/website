@@ -47,6 +47,47 @@ def bdm_table_columns_metadata_validator(data):
         column_validator,
     )
 
-    validated = column_validator.validate_columns_from_dict(data)
+    print(
+        "########################## V A L I D A T I N G C O L U M N S ##################################"
+    )
 
-    return validated
+    def validator(key, data, errors, con):
+        validated = column_validator.validate_columns_from_dict(data)
+        if validated:
+            errors[key].append(str(validated))
+
+    return validator
+
+
+def bdm_table_columns_name_validator(*field):
+    from ckanext.basedosdados.bdm_table_column_metadata_validator import (
+        column_validator,
+    )
+
+    print(
+        "########################## V A L I D A T I N G N A M E S ##################################"
+    )
+
+    def validator(key, data, errors, con):
+        validated = column_validator.validate_name(field)
+        if validated:
+            errors[key].append(str(validated))
+
+    return validator
+
+
+def bdm_table_columns_description_validator(*field):
+    from ckanext.basedosdados.bdm_table_column_metadata_validator import (
+        column_validator,
+    )
+
+    print(
+        "########################## V A L I D A T I N G D E S C R I P T I O N ##################################"
+    )
+
+    def validator(key, data, errors, con):
+        validated = column_validator.validate_description(data)
+        if not validated:
+            errors[key].append(validated)
+
+    return validator

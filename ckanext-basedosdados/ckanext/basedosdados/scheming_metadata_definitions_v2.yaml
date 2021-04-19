@@ -807,14 +807,19 @@ resource_fields:
     helper_text:
       pt: "Metadados das colunas da tabela, como nome da coluna e descrição"
       en: "Table columns metadata, such as column name and description"
+      preset: json
     repeating_subfields:
       - field_name: name
         required: true
+        validators: bdm_table_columns_name_validator
       - field_name: description
         required: true
+        validators: bdm_table_columns_description_validator
       - field_name: is_in_staging
+        validators: bdm_table_columns_metadata_validator
       - field_name: is_partition
-    validators: only_on_types(bdm_table) required_on_types(bdm_table) bdm_table_columns_metadata_validator
+        validators: bdm_table_columns_metadata_validator
+    validators: only_on_types(bdm_table) required_on_types(bdm_table)
   - field_name: primary_keys
     label:
       pt: "Chaves primárias"
