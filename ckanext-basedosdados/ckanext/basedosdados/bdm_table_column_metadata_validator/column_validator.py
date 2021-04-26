@@ -7,9 +7,7 @@ from importlib import resources
 import ckanext.basedosdados.bdm_table_column_metadata_validator
 
 
-BD_STD_COLUMNS = resources.open_text(
-    ckanext.basedosdados.bdm_table_column_metadata_validator, "bd_std_columns.yaml"
-)
+BD_STD_COLUMNS = resources.open_text(ckanext.basedosdados.bdm_table_column_metadata_validator, "bd_std_columns.yaml")
 BD_STD_COLUMNS = yaml.safe_load(BD_STD_COLUMNS)
 BD_STD_COLUMNS_BY_NAME = {column["name"]: column for column in BD_STD_COLUMNS}
 # "duplicated columns defined as standard columns"
@@ -50,8 +48,7 @@ def validate_columns_from_yaml(path_to_yaml):
     return v.validate({"columns": columns})
 
 
-SCHEMA = yaml.safe_load(
-    """
+SCHEMA = yaml.safe_load("""
 columns:
   type: list
   schema:
@@ -71,44 +68,36 @@ columns:
         type: boolean
       is_partition:
         type: boolean
-"""
-)
+""")
 VALIDATOR = ColumnMetadataValidator(schema=SCHEMA)
-
 
 def validate_columns_from_dict(column_dict):
     validate = VALIDATOR.validate(column_dict)
-    # print(
-    #     validate.errors["columns"]
-    # )  # TODO: nao basta imprimir, temos q retornar os erros para obedecer a interface do ckan
-    return VALIDATOR.errors
+    # print(validate.errors["columns"])  # TODO: nao basta imprimir, temos q retornar os erros para obedecer a interface do ckan
+    return validate.errors
 
 
 def validate_name(field):
-    schema = yaml.safe_load(
-        """
-    name: 
+    schema = yaml.safe_load("""
+    name:
         type: string
         required: true
         empty: false
         check_with: [lowercase, nospaces, abbreviation]
-    """
-    )
+    """)
     validator = ColumnMetadataValidator(schema)
     valid = validator.validate(field)
     return validator.errors
 
 
 def validate_description(field):
-    schema = yaml.safe_load(
-        """
-    description: 
+    schema = yaml.safe_load("""
+    description:
         type: string
         required: true
         empty: false
         check_with: standard_columns
-    """
-    )
+    """)
     validator = ColumnMetadataValidator(schema)
 
     if not validator.validate(field):

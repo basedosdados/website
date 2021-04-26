@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import os
 import requests
 URL = os.environ.get('URL', "http://localhost:5000")
