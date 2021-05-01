@@ -45,22 +45,42 @@ CREATE OR REPLACE FUNCTION pg_temp.translate_languages(languages_array text) RET
 	return json.dumps([FROM_TO[l] for l in array])
 $$ LANGUAGE plpython3u;
 
+CREATE OR REPLACE FUNCTION pg_temp.translate_times(times_array text) RETURNS text AS $$
+	import json
+	FROM_TO =  {"pre_1999": "CHECK", "atual": "CHECK", "vazio": "CHECK"}
+	return json.dumps([FROM_TO.get(l, l) for l in json.loads(times_array)])
+$$ LANGUAGE plpython3u;
+
+CREATE OR REPLACE FUNCTION pg_temp.translate_boolean(bool text) RETURNS text AS $$
+	return {'sim': 'yes', 'nao': 'no'}[bool]
+$$ LANGUAGE plpython3u;
+
+CREATE OR REPLACE FUNCTION pg_temp.translate_time_unit(t text) RETURNS text AS $$
+	return {'segundos': 'second', 'minuto': 'minute', 'horas': 'hour', 'dois_anos': 'two_years',
+			'dia': 'day', 'semana': 'week', 'mes': 'month', 'trimestre': 'quarter',
+			'semestre': 'semester', 'ano': 'one_year', 'tres_anos': 'three_years',
+			'quatro_anos': 'four_years', 'cinco_anos': 'five_years', 'dez_anos': 'ten_years',
+			'recorrente': 'recurring', 'sem_atualizacao': 'unique', 'vazio': 'empty',
+			'outro': 'other'
+	}[t]
+$$ LANGUAGE plpython3u;
+
 -- Start of migration script
 
 -- Show package extras for reference
 SELECT package_id, jsonb_object_agg(pe.key, value) AS package_extras FROM package_extra pe GROUP BY package_id;
 
 
-update resource 
-set resource_type = 
+update resource
+set resource_type =
 	case when extras::json->>'is_bdm' = '[]' or extras::json->'is_bdm' is null then 
-		'external_link' 
+		'external_link'
 	else 
-		'bdm_table' 
-	end 
+		'bdm_table'
+	end
 ;
 
-WITH p AS ( 
+WITH p AS (
 	SELECT	*
 	FROM
 		package p
@@ -72,7 +92,7 @@ WITH p AS (
 			package_extra pe
 		GROUP BY
 			package_id
-	) pe ON pe.package_id = p.id 
+	) pe ON pe.package_id = p.id
 )
 
 UPDATE
@@ -80,9 +100,32 @@ UPDATE
 SET
 	extras = extras::jsonb || jsonb_build_object(
 -- describe metadata as `key, value`
-			'language', pg_temp.translate_languages(package_extras->>'idioma')
-			,'description', extras::jsonb->>'descricao'
-
+			'is_bdm',                   NULL
+			,'language',                case when resource_type = 'external_link' then pg_temp.translate_languages(package_extras->>'idioma') else NULL end
+			,'description',             case when extras::jsonb->>'descricao' != '' then extras::jsonb->>'descricao' else 'CHECK' END
+			,'descricao',               NULL
+			,'spatial_coverage',        package_extras->>'regiao'
+			,'temporal_coverage',       pg_temp.translate_times(package_extras->>'ano')
+			,'update_frequency',        pg_temp.translate_time_unit(package_extras->>'periodicidade')
+			,'free',                    case when resource_type = 'external_link' then pg_temp.translate_boolean(package_extras->>'gratis') else NULL end
+			,'has_api',                 case when resource_type = 'external_link' then pg_temp.translate_boolean(package_extras->>'api') else NULL end
+			,'license_type',            case when resource_type = 'external_link' then 'CHECK' else NULL end
+			,'signup_needed',           case when resource_type = 'external_link' then pg_temp.translate_boolean(package_extras->>'registro') else NULL end
+			,'version',                 package_extras->>'versao'
+			,'availability',            package_extras->>'disponibilidade'
+			
+			/*
+			 * {"ano": " \"2020\"]", "api": "sim", "pais": "vazio",
+			 *  "autor": "", "coleta": "administrativo", "estado": "vazio",
+			 *  "gratis": "sim", "idioma": "[\"ingles\"]",
+			 *  "regiao": "internacional", "versao": "", "registro": "nao",
+			 *  "mantenedor": "", "microdados": "sim", "autor_email": "",
+			 *  "download_type": "Link Externo", "ip_brasileiro": "nao",
+			 *  "periodicidade": "recorrente", "disponibilidade": "online",
+			 *  "mantenedor_email": "", "nivel_observacao": "[\"convenio\"]"}
+			 * 
+			 */
+			
 )
 FROM p WHERE p.id = resource.package_id
 ;

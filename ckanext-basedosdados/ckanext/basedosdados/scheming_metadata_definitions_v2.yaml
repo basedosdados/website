@@ -13,15 +13,6 @@ dataset_fields:
       pt: "exemplo: um título descritivo"
       en: "example: a descriptive title"
     required: true
-  - field_name: dataset_id
-    label:
-      pt: "Identificador da base"
-      en: "Dataset ID"
-    preset: dataset_slug
-    form_placeholder:
-      pt: "exemplo: dataset-id"
-      en: "example: dataset-id"
-    required: true
   - field_name: description
     label:
       pt: "Descrição"
@@ -103,6 +94,8 @@ resource_fields:
     preset: multiple_select
     select_size: 10
     choices:
+      - value: "CHECK" #TODO: data check
+        label: "CHECK"
       - value: "1970"
         label: "1970"
       - value: "1971"
@@ -299,6 +292,8 @@ resource_fields:
         label:
           pt: "Recorrente"
           en: "Recurring"
+      - value: empty # TODO: dahis review
+      - value: other # TODO: dahis review
     required: true
 
   # bdm_table
@@ -952,7 +947,7 @@ resource_fields:
         label:
           pt: "Urdu"
           en: "Urdu"
-    validators: only_on_types(external_link) required_on_types(external_link) scheming_multiple_choice
+    validators: only_on_types(external_link) required_on_types(external_link) scheming_multiple_choice # TODO: @dahis, serio q eh so no external link ?
   - field_name: has_api
     label:
       pt: "Tem uma API"
@@ -962,44 +957,44 @@ resource_fields:
       en: "APIs are instructions and standards for machine access of software or applications."
     preset: select
     choices:
-      - value: yes
+      - value: "yes" # TODO: @fred check if its possible to use real boolean values
         label:
           pt: "Sim"
           en: "Yes"
-      - value: no
+      - value: "no"
         label:
           pt: "Não"
           en: "No"
-    validators: only_on_types(external_link) required_on_types(external_link) scheming_required scheming_choices
+    validators: only_on_types(external_link) scheming_choices # TODO: data check
   - field_name: free
     label:
       pt: "Grátis"
       en: "Free"
     preset: select
     choices:
-      - value: yes
+      - value: "yes"
         label:
           pt: "Sim"
           en: "Yes"
-      - value: no
+      - value: "no"
         label:
           pt: "Não"
           en: "No"
     validators: only_on_types(external_link) required_on_types(external_link) scheming_required scheming_choices
-  - field_name: registration
+  - field_name: signup_needed
     label:
       pt: "Precisa de registro"
       en: "Needs registration"
     help_text:
       pt: "É necessário registrar um usuário para baixar os dados?"
-      en: "Is registration necessary for download?"
+      en: "Is sign up necessary for download?"
     preset: select
     choices:
-      - value: yes
+      - value: "yes"
         label:
           pt: "Sim"
           en: "Yes"
-      - value: no
+      - value: "no"
         label:
           pt: "Não"
           en: "No"
@@ -1032,11 +1027,11 @@ resource_fields:
       en: "Is a Brazilian IP necessary for access?"
     preset: select
     choices:
-      - value: yes
+      - value: "yes"
         label:
           pt: "Sim"
           en: "Yes"
-      - value: no
+      - value: "no"
         label:
           pt: "Não"
           en: "No"
