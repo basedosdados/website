@@ -1,3 +1,5 @@
 #!/bin/bash
 
-until pg_isready; do sleep 1; done
+until pg_isready; do sleep 1; SLEEPMORE=1; done
+
+if [[ $SLEEPMORE ]]; then sleep 2; fi # Sometimes we stil need to wait
