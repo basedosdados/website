@@ -1,3 +1,13 @@
+
+
+
+#
+# Bugs on scheming: when using custom validators, we must add scheming_required
+# only_on_types(external_link) scheming_required scheming_choices
+#
+
+
+
 scheming_version: 2
 dataset_type: dataset
 about: Schema para Base dos Dados
@@ -965,7 +975,7 @@ resource_fields:
         label:
           pt: "Não"
           en: "No"
-    validators: only_on_types(external_link) scheming_choices # TODO: data check
+    validators: only_on_types(external_link) scheming_required scheming_choices # TODO: data check
   - field_name: free
     label:
       pt: "Grátis"

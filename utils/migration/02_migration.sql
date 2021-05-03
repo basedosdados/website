@@ -73,10 +73,16 @@ SELECT package_id, jsonb_object_agg(pe.key, value) AS package_extras FROM packag
 
 update resource
 set resource_type =
-	case when extras::json->>'is_bdm' = '[]' or extras::json->'is_bdm' is null then 
-		'external_link'
-	else 
+	case when 
+			( extras::json->'is_bdm' IS NOT NULL 
+			AND extras::json->>'is_bdm' != '[]'
+			) OR (
+			extras::json->>'formato' = 'bd+'
+			)
+	then 
 		'bdm_table'
+	else 
+		'external_link'
 	end
 ;
 
@@ -112,8 +118,10 @@ SET
 			,'license_type',            case when resource_type = 'external_link' then 'CHECK' else NULL end
 			,'signup_needed',           case when resource_type = 'external_link' then pg_temp.translate_boolean(package_extras->>'registro') else NULL end
 			,'version',                 package_extras->>'versao'
-			,'availability',            package_extras->>'disponibilidade'
-			
+			,'availability',            case when resource_type = 'external_link' then package_extras->>'disponibilidade' else NULL END
+	)
+		
+	-- Remove basedosdados urls on bd+ resources
 			/*
 			 * {"ano": " \"2020\"]", "api": "sim", "pais": "vazio",
 			 *  "autor": "", "coleta": "administrativo", "estado": "vazio",
@@ -124,13 +132,15 @@ SET
 			 *  "periodicidade": "recorrente", "disponibilidade": "online",
 			 *  "mantenedor_email": "", "nivel_observacao": "[\"convenio\"]"}
 			 * 
-			 */
+			 */ 
+	,url = CASE WHEN resource.url LIKE '%basedosdados.github.io%'
+			THEN '' -- URL must be NULL string ON this DATABASE design
+			ELSE resource.url END
 			
-)
 FROM p WHERE p.id = resource.package_id
 ;
 
 -- Remove nulls
 UPDATE resource SET extras = jsonb_strip_nulls(extras::jsonb);
 SELECT * FROM resource JOIN package ON package.id = resource.package_id 
-LIMIT 10 ;
+LIMIT 100000 ;

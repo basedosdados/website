@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
-import pprint, sys
+from pprint import pprint
+import sys
 import os, json, re, requests
 import ckanapi.errors
 import pandas as pd
+import random
 
 from ckanapi import RemoteCKAN
 
@@ -19,8 +21,13 @@ basedosdados = RemoteCKAN(CKAN_URL, user_agent=user_agent, apikey=CKAN_API_KEY)
 
 def check_package_by_name(package_name):
     package_dict = basedosdados.action.package_show(id=package_name)
-    updated_resource = basedosdados.action.package_validate(**package_dict)
-    print(f'Package {package_name} succesfully updated!')
+    package_dict['extras'] = [kv for kv in package_dict['extras'] if 'key' in kv and 'value' in kv] # there is a strange bug splitting extra dicts into dicts missing value and key, so we simply remove these, we aren't validating extras anyway
+    try:
+        updated_resource = basedosdados.action.package_validate(**package_dict)
+    except ckanapi.errors.ValidationError as e:
+        e.package_dict = package_dict
+        raise
+    print(f'Package {package_name} succesfully validated!')
 
 def check_all_packages(LIMIT=10):
     api_url = CKAN_URL + '/api/3/action/package_list'
@@ -28,6 +35,7 @@ def check_all_packages(LIMIT=10):
     assert result.status_code == 200
 
     package_list = json.loads(result.text)['result']
+    package_list.sort(key=lambda _: random.random())
     errors = {}
     for package_name in package_list[:LIMIT]: # TODO: paralelizar isso
         try:
@@ -36,8 +44,9 @@ def check_all_packages(LIMIT=10):
             errors[package_name] = e
 
     if errors:
+        print('\n========== Errors found!!!! ===============')
         dataset, error = list(errors.items())[0]
-        print(dataset); pprint.pprint(error.error_dict)
+        pprint(dataset); pprint(error.package_dict); print('--ERROR--'); pprint(error.error_dict)
 
         resources = []
         for dataset, error in errors.items():
