@@ -14,6 +14,7 @@ deploy() {
     restart_services
     rebuild_index
     install_crontab
+    install_apprise
 }
 
 deploy_configs() {
@@ -99,6 +100,14 @@ install_crontab() {
         echo "####### AUTO GENERATED CRONTAB - DONT EDIT MANUALLY ##########"
         cat ~/basedosdados/basedosdados_crontab
         ) | crontab
+    '
+}
+install_apprise() {
+    $SSH  '
+        cd ~/basedosdados/
+        source .env
+        echo $APPRISE_CONFIG > ~/.apprise
+        grep DISCORD .env | sed s/DISCORD_//g > ~/.discord_ids
     '
 }
 
