@@ -6,6 +6,8 @@
 # only_on_types(external_link) scheming_required scheming_choices
 #
 
+# TODO:
+# Add a "date_of_last_publish"
 
 
 scheming_version: 2
