@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional, Literal, Union
 import pydantic
 from pydantic import BaseModel, StrictInt as Int, Field, ValidationError, validator
 import jsonschema
 
-from typing import Annotated
+from typing_extensions import Annotated # migrate to py3.9
 
 class Resource(BaseModel):
-    id: Int
+    id: str
     name: str
     # resource_type: str
 
@@ -23,6 +24,7 @@ class LaiRequest(Resource):
 
 class ExternalLink(Resource):
     url: str
+    fred: int
     resource_type: Literal['external_link']
 
 AnyResource = Annotated[Union[LaiRequest, ExternalLink], Field(discriminator='resource_type')]
@@ -37,10 +39,10 @@ class Package(BaseModel):
 
 ##############
 
-import pytest
-from pytest import raises
-
-@pytest.fixture()
+# import pytest
+# from pytest import raises
+# 
+# @pytest.fixture()
 def data():
     return {
         'id': 123
