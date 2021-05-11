@@ -51,25 +51,31 @@ table) %}
 <pre><code class="language-sql">{{ h.make_example_python_query(res,
 package) }}</code></pre>
 <div><br>
-  ℹ️ Para usar nosso cliente é necessário configurá-lo! Rode
-  <b>basedosdados config</b> e siga as instruções. Veja também os <a target="_blank"
-    href="https://basedosdados.github.io/mais/py_reference_api/">comandos
-    da API</a> ou siga nosso <a target="_blank"
-    href="https://github.com/basedosdados/mais/blob/master/examples/bd_for_beginners.ipynb">notebook
-    exemplo</a>.
+  ℹ️ Para usar nosso cliente é necessário um projeto no Google Cloud!
+  Caso você não passe o parâmetro `billing_project_id` na primeira vez
+  que rodar, irá aparecer o passo a passo para você criar e configurar
+  um projeto gratuito para acessar os dados! Caso ainda tenha dúvidas,
+  <a target="_blank" href=https://basedosdados.github.io/mais/access_data_local>leia mais aqui.</a>
 </div><br>
 <hr>
 <h3> {{ _('Como analisar os dados via R') }} </h3>
 <div><a target="_blank" href=https://youtu.be/5_Ir8neyFf4>
-    ▶️ Assista ao nosso tutorial no Youtube</a></div>
-<div><br>
-  Não temos ainda um cliente em R, mas já existe uma biblioteca para
-  conectar diretamente ao BigQuery. Veja o exemplo:
+    ▶️ Assista ao nosso tutorial no Youtube</a></div><br>
+<div>Criamos um cliente em Python para você acessar os dados do nosso
+  *datalake* público. Com o ambiente confiurado, para obter os dados da
+  tabela basta rodar:
 </div>
 <link href="/prism.css" rel="stylesheet" />
 <script src="/prism.js"></script>
 <pre><code class="language-sql">{{ h.make_example_r_query(res,
 package) }}</code></pre>
+<div><br>
+  ℹ️ Para usar nosso cliente é necessário um projeto no Google Cloud!
+  Caso você não passe o parâmetro `billing_project_id` na primeira vez
+  que rodar, irá aparecer o passo a passo para você criar e configurar
+  um projeto gratuito para acessar os dados! Caso ainda tenha dúvidas,
+  <a target="_blank" href=https://basedosdados.github.io/mais/access_data_local>leia mais aqui.</a>
+</div><br>
 {% if is_bdm_one_click_download %}
 <hr>
 <h3>

@@ -18,17 +18,18 @@ def make_example_bq_query(resource, package):
 def make_example_python_query(resource, package):
     return f'''import basedosdados as bd
 # Para carregar o dado direto no pandas
-bd.read_table(dataset_id='{get_package_bdm_schema_name(package)}', 
+df = bd.read_table(dataset_id='{get_package_bdm_schema_name(package)}', 
             table_id='{resource['name']}',
             billing_project_id=<YOUR_PROJECT_ID>)'''
 
 def make_example_r_query(resource, package):
-    return f'''if (!require("bigrquery")) install.packages("bigrquery")
-library("bigrquery")
-billing_project_id = "<YOUR_PROJECT_ID>"
-# Para baixar a tabela inteira
-query = "SELECT * FROM `basedosdados.{get_package_bdm_schema_name(package)}.{resource['name']}`"
-d <- bq_table_download(bq_project_query(billing_project_id, query), page_size=500, bigint="integer64")
+    return f'''if (!require("basedosdados")) install.packages("basedosdados")
+library("basedosdados")
+# Defina o seu projeto no Google Cloud
+set_billing_id("<YOUR_PROJECT_ID>")
+# Para carregar o dado direto no R
+query <- "SELECT * FROM `basedosdados.{get_package_bdm_schema_name(package)}.{resource['name']}`"
+df <- read_sql(query)
     '''
 def get_package_bdm_schema_name(package):
     return stringcase.snakecase(package['name'])
