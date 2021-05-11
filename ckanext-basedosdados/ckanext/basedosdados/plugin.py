@@ -5,13 +5,35 @@ import collections
 import pprint
 import types
 
-class BasedosdadosPlugin(plugins.SingletonPlugin, ):#toolkit.DefaultDatasetForm):
+class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDatasetForm ):#toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.interfaces.IFacets)
     plugins.implements(plugins.interfaces.ITemplateHelpers)
     plugins.implements(plugins.IValidators)
     plugins.implements(plugins.IActions)
-    # plugins.implements(plugins.IDatasetForm)
+    plugins.implements(plugins.IDatasetForm)
+
+    # IDatasetForm
+    is_fallback = lambda s: True
+    package_types = lambda s: []
+    def validate(self, context, data_dict, schema, action):
+        if action == 'package_show': # 'package_show', 'package_create', 'package_update'
+            pass
+        if duplicated_keys := _find_duplicated_keys(data_dict['extras']):
+            return data_dict, {"extras": f'extras contains duplicated keys: {duplicated_keys!r}'}
+        data_dict['extras'] = { i['key']: i['value'] for i in data_dict['extras']}
+        breakpoint()
+
+    # def show_package_schema(self):
+        # return
+
+    def create_package_schema(self):
+        def validator(key, flat_data, errors, context):
+            pass
+        schema = super().create_package_schema()
+        schema['__after'] = validator
+        return schema
+
 
     # IFacets
     def dataset_facets(self, facet_dict, package_type):
@@ -64,3 +86,10 @@ def _read_functions_from_module(module):
     funs = { name: getattr(module, name) for name in dir(module) if not name.startswith('_')}
     funs = { k: v for k, v in funs.items() if isinstance(v, types.FunctionType) }
     return funs
+
+
+
+def _find_duplicated_keys(a_dict):
+        from collections import Counter
+        keys_frequencies = Counter(i['key'] for i in a_dict)
+        return {key for key, count in keys_frequencies.items() if count > 1}

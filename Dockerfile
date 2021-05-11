@@ -72,7 +72,7 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=15s \
         CMD curl -f http://localhost:5000 || exit 1
 
 ENV CKAN_STORAGE_PATH=/app/uploads CKAN_INI=/app/configs/ckan.ini
-ENV PIP_NO_PYTHON_VERSION_WARNING=1 PYTHONDONTWRITEBYTECODE=1
+ENV PIP_NO_PYTHON_VERSION_WARNING=1 PYTHONDONTWRITEBYTECODE=1 PYTHONBREAKPOINT="ipdb.set_trace"
 ENV VIRTUAL_ENV=/venv PATH=/venv/bin:$PATH
 
 # System dependencies
