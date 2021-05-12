@@ -54,7 +54,7 @@ class Package(BaseModel):
             for idx, r in enumerate(values['resources']):
                 assert r.id != None, f"resource {idx!r} id is None"
         elif action == 'package_create':
-            assert values['id'] == None, 'package id is None'
+            assert values['id'] == None, 'package id is not None'
             for idx, r in enumerate(values['resources']):
                 assert r.id == None, f"resource #{idx!r} id field not is None: {r.id!r}"
         return

@@ -3,6 +3,8 @@ import os
 import requests
 from sys import exit
 import unittest.mock
+from copy import deepcopy
+import random
 
 
 CKAN_API_KEY = os.environ.get('CKAN_API_KEY')
@@ -28,6 +30,21 @@ def test():
         ret = ckan.action.package_update(**package)
         ret['metadata_modified'] = unittest.mock.ANY
         assert package == ret
+
+        new_package = deepcopy(package)
+        del new_package['id']
+        for r in new_package['resources']: del r['id']
+        new_package['name'] = str(random.random())
+        ret = ckan.action.package_create(**new_package)
+        ret['metadata_created'] = unittest.mock.ANY
+        ret['metadata_modified'] = unittest.mock.ANY
+        ret['creator_user_id'] = unittest.mock.ANY
+        for r in ret['resources']:
+            r['package_id'] = unittest.mock.ANY
+            r['metadata_modified'] = unittest.mock.ANY
+        for r in new_package['resources']: r['id'] = unittest.mock.ANY
+        new_package['id'] = unittest.mock.ANY
+        assert new_package == ret
 
     del package['name']
     ret = requests.post(CKAN_URL + '/api/3/action/package_validate', json=package)
