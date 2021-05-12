@@ -10,6 +10,8 @@ assert ret.status_code == 200, ret.json()
 package = ret.json()['result']
 print(package)
 
+package['fred'] = 'fred'
+
 ret = requests.post(URL + '/api/3/action/package_validate', json=package)
 assert ret.status_code == 200, ret.json()
 

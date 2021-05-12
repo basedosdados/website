@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional, Literal, Union
 import pydantic
-from pydantic import StrictInt as Int, StrictStr as Str, Field, ValidationError, validator
+from pydantic import StrictInt as Int, StrictStr as Str, Field, ValidationError, validator, PrivateAttr
 import jsonschema
 
 Missing = type(None)
@@ -36,23 +36,24 @@ class ExternalLink(Resource):
 
 AnyResource = Annotated[Union[LaiRequest, ExternalLink, BdmTable], Field(discriminator='resource_type')]
 class Package(BaseModel):
+
     id: ID_TYPE
     resources: List[AnyResource]
+    fred: Optional[Int]
+
+    action__: Optional[Literal['package_show', 'package_create', 'package_update']]
 
 
-class Wrapper(BaseModel):
-    action: Literal['package_show', 'package_create', 'package_update']
-
-    package: Package
-
-    @validator('package')
+    @validator('action__')
     def ids_should_respect_action(cls, value, config, values, field):
-        if values['action'] in ('package_update', 'package_show'):
-            assert value.id != None, 'package id is None'
-            for idx, r in enumerate(value.resources):
+        action = value
+        if not action: return
+        if action in ('package_update', 'package_show'):
+            assert values['id'] != None, 'package id is None'
+            for idx, r in enumerate(values['resources']):
                 assert r.id != None, f"resource {idx!r} id is None"
-        elif values['action'] == 'package_create':
-            assert value.id == None, 'package id is None'
-            for idx, r in enumerate(value.resources):
+        elif action == 'package_create':
+            assert values['id'] == None, 'package id is None'
+            for idx, r in enumerate(values['resources']):
                 assert r.id == None, f"resource #{idx!r} id field not is None: {r.id!r}"
-        return value
+        return

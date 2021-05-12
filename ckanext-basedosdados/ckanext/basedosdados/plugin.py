@@ -1,9 +1,11 @@
-import ckan.plugins as plugins
-import ckan.plugins.toolkit as toolkit
-from ckan.plugins.toolkit import get_action
 import collections
 import pprint
 import types
+import json
+
+import ckan.plugins as plugins
+import ckan.plugins.toolkit as toolkit
+from ckan.plugins.toolkit import get_action
 import ckanext.basedosdados.validator as pydantic_validator
 
 import logging
@@ -27,11 +29,12 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
             data_dict['extras'] = { i['key']: i['value'] for i in data_dict['extras']} # transform extras into a simple dict
         errors = {}
         try:
-            out = pydantic_validator.package.Wrapper.validate({'package': data_dict, 'action': action})
-            return out.package.dict(), {}
+            out = pydantic_validator.package.Package.validate(dict(**data_dict, action__=action))
+            return out.dict(exclude={'action__'}), {}
         except pydantic_validator.ValidationError as ee:
-            errors = ee.errors()
-            errors = {i['loc']: repr(i) for i in errors}
+            return {}, json.loads(ee.json())
+            # errors = ee.errors()
+            # errors = {i['loc']: repr(i) for i in errors}
             log.error('Data dict:')
             log.error(data_dict)
             raise
