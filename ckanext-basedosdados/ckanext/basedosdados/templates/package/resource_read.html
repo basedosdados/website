@@ -17,16 +17,13 @@ table) %}
 {% endblock %}
 {% if is_bdm %}
 <div>
-  Nós tratamos e disponibilizamos esta tabela no nosso
+  Esta tabela está tratada e atualizada no nosso
   <i>datalake</i> público. Além de fazer o <b>download do CSV
     completo</b> no botão acima, você pode
-  também acessar e analisar a base no <b>BigQuery,
-    Python ou em R</b>:
+  também acessar via:
 </div><br>
 <hr>
-<h3> {{ _('Como analisar os dados via BigQuery') }} </h3>
-<div><a target="_blank" href=https://youtu.be/nGM2OwTUY_M>
-    ▶️ Assista ao nosso tutorial no Youtube</a></div><br>
+<h2> {{ _('Acesse os dados via BigQuery') }} </h2>
 <div>Clique no botão <i>Consultar no BigQuery</i> e utilize o <i>Query Editor</i> (Editor de consultas) para
   acessar os dados. Copie a query abaixo para consultar todos dados da tabela:
 </div>
@@ -38,12 +35,12 @@ table) %}
   <a target="_blank" href="https://basedosdados.github.io/mais/">Veja o
     passo a passo para acessar os dados aqui</a>
 </div><br>
-<hr>
-<h3> {{ _('Como analisar os dados via Python 🐍') }} </h3>
-<div><a target="_blank" href=https://www.youtube.com/channel/UCO1AcMaEa7bArIHb85bkSYA>
+<div><a target="_blank" href=https://youtu.be/nGM2OwTUY_M>
     ▶️ Assista ao nosso tutorial no Youtube</a></div><br>
+<hr>
+<h2> {{ _('Acesse os dados via Python 🐍') }} </h2>
 <div>Criamos um cliente em Python para você acessar os dados do nosso
-  *datalake* público. Com o ambiente confiurado, para obter os dados da
+  <i>datalake</i> público. Com o ambiente configurado, para obter os dados da
   tabela basta rodar:
 </div>
 <link href="/prism.css" rel="stylesheet" />
@@ -51,25 +48,33 @@ table) %}
 <pre><code class="language-sql">{{ h.make_example_python_query(res,
 package) }}</code></pre>
 <div><br>
-  ℹ️ Para usar nosso cliente é necessário configurá-lo! Rode
-  <b>basedosdados config</b> e siga as instruções. Veja também os <a target="_blank"
-    href="https://basedosdados.github.io/mais/py_reference_api/">comandos
-    da API</a> ou siga nosso <a target="_blank"
-    href="https://github.com/basedosdados/mais/blob/master/examples/bd_for_beginners.ipynb">notebook
-    exemplo</a>.
+  ℹ️ <b>Para usar nosso cliente é necessário um projeto no Google Cloud!</b><br>
+  Rode o comando sem o parâmetro <i>billing_project_id</i> na primeira vez
+  e siga o passo a passo na tela para criar e configurar
+  um projeto gratuito -
+  <a target="_blank" href=https://basedosdados.github.io/mais/access_data_local>leia mais aqui.</a>
 </div><br>
+<div><a target="_blank" href=https://www.youtube.com/channel/UCO1AcMaEa7bArIHb85bkSYA>
+    ▶️ Assista ao nosso tutorial no Youtube</a></div><br>
 <hr>
-<h3> {{ _('Como analisar os dados via R') }} </h3>
-<div><a target="_blank" href=https://youtu.be/5_Ir8neyFf4>
-    ▶️ Assista ao nosso tutorial no Youtube</a></div>
-<div><br>
-  Não temos ainda um cliente em R, mas já existe uma biblioteca para
-  conectar diretamente ao BigQuery. Veja o exemplo:
+<h2> {{ _('Acesse os dados via R') }} </h2>
+<div>Criamos um cliente em R para você acessar os dados do nosso
+  <i>datalake</i> público. Com o ambiente configurado, para obter os dados da
+  tabela basta rodar:
 </div>
 <link href="/prism.css" rel="stylesheet" />
 <script src="/prism.js"></script>
 <pre><code class="language-sql">{{ h.make_example_r_query(res,
 package) }}</code></pre>
+<div><br>
+  ℹ️ <b>Para usar nosso cliente é necessário um projeto no Google Cloud!</b><br>
+  Rode o comando sem o parâmetro <i>billing_project_id</i> na primeira vez
+  e siga o passo a passo na tela para criar e configurar
+  um projeto gratuito -
+  <a target="_blank" href=https://basedosdados.github.io/mais/access_data_local>leia mais aqui.</a>
+</div><br>
+<div><a target="_blank" href=https://youtu.be/5_Ir8neyFf4>
+    ▶️ Assista ao nosso tutorial no Youtube</a></div><br>
 {% if is_bdm_one_click_download %}
 <hr>
 <h3>
