@@ -19,13 +19,16 @@ class LaiRequest(Resource):
     lai_n: int
     resource_type: Literal['lai_request']
 
+class BdmTable(Resource):
+    resource_type: Literal['bdm_table']
+    temporal_coverage: Str # TODO: List[int]
+
 class ExternalLink(Resource):
     url: str
     resource_type: Literal['external_link']
 
-AnyResource = Annotated[Union[LaiRequest, ExternalLink], Field(discriminator='resource_type')]
+AnyResource = Annotated[Union[LaiRequest, ExternalLink, BdmTable], Field(discriminator='resource_type')]
 class Package(BaseModel):
     id: Str
-    temporal_coverage: List[int]
     resources: List[AnyResource]
 

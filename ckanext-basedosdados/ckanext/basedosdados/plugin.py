@@ -4,8 +4,12 @@ from ckan.plugins.toolkit import get_action
 import collections
 import pprint
 import types
+import ckanext.basedosdados.validator as pydantic_validator
 
-class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDatasetForm ):#toolkit.DefaultDatasetForm):
+import logging
+log = logging.getLogger(__name__)
+
+class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.interfaces.IFacets)
     plugins.implements(plugins.interfaces.ITemplateHelpers)
@@ -17,12 +21,33 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
     is_fallback = lambda s: True
     package_types = lambda s: []
     def validate(self, context, data_dict, schema, action):
-        if action == 'package_show': # 'package_show', 'package_create', 'package_update'
-            pass
+        if action != 'package_show': # 'package_show', 'package_create', 'package_update'
+            print("ABOOOOOOOOOOOOOOOOOOOORT")
+            return data_dict, {}
+        else:
+            print('VAMO')
         if duplicated_keys := _find_duplicated_keys(data_dict['extras']):
             return data_dict, {"extras": f'extras contains duplicated keys: {duplicated_keys!r}'}
         data_dict['extras'] = { i['key']: i['value'] for i in data_dict['extras']}
-        breakpoint()
+        errors = {}
+        try:
+            out = pydantic_validator.package.Package.validate(data_dict)
+            return out.dict(), {}
+        except pydantic_validator.ValidationError as ee:
+            errors = ee.errors()
+            errors = {i['loc']: repr(i) for i in errors}
+            log.debug('Data dict:')
+            log.debug(data_dict)
+            raise
+            # assert set(errors.keys()).issubset(data_dict.keys()) # error keys are = to data_dict keys, we need to enforce this better #TODO
+            errors[('resources', 1, 'id')] = ['deu ruim']
+            import ckan.lib.navl.dictization_functions as df
+            del errors[('resources', 1)]
+            del errors[('resources', 2)]
+            breakpoint()
+            out_errors = df.unflatten(errors)
+            return data_dict, out_errors
+
 
     # def show_package_schema(self):
         # return
