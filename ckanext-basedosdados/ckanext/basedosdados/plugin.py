@@ -32,13 +32,15 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
             out = pydantic_validator.package.Package.validate(dict(**data_dict, action__=action))
             return out.dict(exclude={'action__'}), {}
         except pydantic_validator.ValidationError as ee:
-            return {}, json.loads(ee.json())
+            if action == 'package_show': # its our fault, not the user's so raise and cause a 500
+                log.error('Data dict:')
+                log.error(data_dict)
+                raise
+            return {}, json.loads(ee.json()) # need to jsonify to ensure that data types are json friendly
+            # assert set(errors.keys()).issubset(data_dict.keys()) # error keys are = to data_dict keys, we need to enforce this better #TODO
             # errors = ee.errors()
             # errors = {i['loc']: repr(i) for i in errors}
-            log.error('Data dict:')
-            log.error(data_dict)
-            raise
-            # assert set(errors.keys()).issubset(data_dict.keys()) # error keys are = to data_dict keys, we need to enforce this better #TODO
+            '''
             errors[('resources', 1, 'id')] = ['deu ruim']
             import ckan.lib.navl.dictization_functions as df
             del errors[('resources', 1)]
@@ -46,6 +48,7 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
             breakpoint()
             out_errors = df.unflatten(errors)
             return data_dict, out_errors
+            '''
 
 
     # def show_package_schema(self):

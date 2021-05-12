@@ -40,6 +40,7 @@ class Package(BaseModel):
     id: ID_TYPE
     resources: List[AnyResource]
     fred: Optional[Int]
+    name: Str
 
     action__: Optional[Literal['package_show', 'package_create', 'package_update']]
 
