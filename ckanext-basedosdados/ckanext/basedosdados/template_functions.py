@@ -6,7 +6,7 @@ def separate_bdm_and_links_resources(resources):
     return list(bdm), list(links)
 
 def is_bdm(r):
-    return r.get('is_bdm') or 'bd+' in r.get('formato', '') or '(BD+)' in r['name']
+    return r.get('resource_type') == 'bdm_table'
 
 def is_bdm_one_click_download(r):
     size = r.get('bdm_file_size')

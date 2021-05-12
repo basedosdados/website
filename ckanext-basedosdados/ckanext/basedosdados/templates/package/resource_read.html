@@ -84,19 +84,18 @@ package) }}</code></pre>
   15GB de downloads - dividindo pelo tamanho da tabela temos quantos
   downloads são possíveis.</i>
 
-
-<!--TODO: colocar um tooltip aqui explicando a conta
-</div {% endif %} {% else %} {% block resource_read_url %} {{ super() }} {% endblock %} <div class="prose notes"
+</div>
+{% endif %} {% else %} {% block resource_read_url %} {{ super() }} {% endblock %}
+<div class="prose notes"
   property="rdfs:label">
-{% if res.description %}
+{% if res.description and res.description != 'CHECK' %}
 {{ h.render_markdown(res.description) }}
-{% endif %}
-{% if not res.description and package.notes %}
+{% elif package.notes %}
 <h3>{{ _('Dataset description:') }}</h3>
 <blockquote>{{ h.markdown_extract(h.get_translated(package, 'notes')) }}</blockquote>
 <p>{% trans dataset=package.title, url=h.url_for(package.type ~ '.read', id=package.id if is_activity_archive else
-  package.name) %}Source: <a href="{{ url }}">{{ dataset }}</a>{% endtrans %}
-  {% endif %}
+      package.name) %}Source: <a href="{{ url }}">{{ dataset }}</a>{% endtrans %}
+{% endif %}
   </div>
   {% endif %}
   {% endblock %}
