@@ -39,24 +39,22 @@ class Package(BaseModel):
 
     id: ID_TYPE
     resources: List[AnyResource]
-    fred: Optional[Int]
     name: Str
 
     action__: Optional[Literal['package_show', 'package_create', 'package_update']]
-
 
     @validator('action__')
     def ids_should_respect_action(cls, value, config, values, field):
         action = value
         if not action: return
         if action in ('package_update', 'package_show'):
-            assert values['id'] != None, 'package id is None'
+            assert values['id'] != None, f'package id is None on {action}'
             for idx, r in enumerate(values['resources']):
-                assert r.id != None, f"resource {idx!r} id is None"
+                assert r.id != None, f"resource {idx!r} id is None on {action}"
         elif action == 'package_create':
-            assert values['id'] == None, 'package id is not None'
+            assert values['id'] == None, 'package id is not None on package_create'
             for idx, r in enumerate(values['resources']):
-                assert r.id == None, f"resource #{idx!r} id field not is None: {r.id!r}"
+                assert r.id == None, f"resource #{idx!r} id field not is None: {r.id!r} on package_create"
         return
 
 

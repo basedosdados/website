@@ -42,7 +42,10 @@ def test():
         for r in ret['resources']:
             r['package_id'] = unittest.mock.ANY
             r['metadata_modified'] = unittest.mock.ANY
-        for r in new_package['resources']: r['id'] = unittest.mock.ANY
+        for r in new_package['resources']:
+            r['id'] = unittest.mock.ANY
+        for e in new_package['extras']:
+            e['package_id'] = unittest.mock.ANY
         new_package['id'] = unittest.mock.ANY
         assert new_package == ret
 
