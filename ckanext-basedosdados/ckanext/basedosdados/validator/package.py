@@ -58,3 +58,6 @@ class Package(BaseModel):
             for idx, r in enumerate(values['resources']):
                 assert r.id == None, f"resource #{idx!r} id field not is None: {r.id!r}"
         return
+
+
+# TODO: try to access fields on validation and get annotations on which fields are needed for each tier

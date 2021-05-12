@@ -1,0 +1,4 @@
+Check views on site (they are broken)
+Fix tags filtering on site
+Convert schema to pydantic
+    deal with extras in dictionary (i think it is better to delete them)

@@ -26,7 +26,7 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
         if action == 'package_show': # 'package_show', 'package_create', 'package_update'
             if duplicated_keys := _find_duplicated_keys(data_dict['extras']):
                 raise pydantic_validator.ValidationError({"extras": f'extras contains duplicated keys: {duplicated_keys!r}'})
-            data_dict['extras'] = { i['key']: i['value'] for i in data_dict['extras']} # transform extras into a simple dict
+            # data_dict['extras'] = { i['key']: i['value'] for i in data_dict['extras']} # transform extras into a simple dict # TODO: figure out when do i need to pass extras to main namespace
         try:
             out = pydantic_validator.package.Package.validate(dict(**data_dict, action__=action))
             out = out.dict(exclude={'action__'})
