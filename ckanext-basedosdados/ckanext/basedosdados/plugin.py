@@ -25,12 +25,14 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
     def validate(self, context, data_dict, schema, action):
         if action == 'package_show': # 'package_show', 'package_create', 'package_update'
             if duplicated_keys := _find_duplicated_keys(data_dict['extras']):
-                raise ValidationErro({"extras": f'extras contains duplicated keys: {duplicated_keys!r}'})
+                raise pydantic_validator.ValidationError({"extras": f'extras contains duplicated keys: {duplicated_keys!r}'})
             data_dict['extras'] = { i['key']: i['value'] for i in data_dict['extras']} # transform extras into a simple dict
-        errors = {}
         try:
             out = pydantic_validator.package.Package.validate(dict(**data_dict, action__=action))
-            return out.dict(exclude={'action__'}), {}
+            out = out.dict(exclude={'action__'})
+            if action in ('package_create', 'package_update'):
+                out['extras'] = [{'key':k, 'value':v} for k, v in out['extras'].items()]
+            return out, {}
         except pydantic_validator.ValidationError as ee:
             if action == 'package_show': # its our fault, not the user's so raise and cause a 500
                 log.error('Data dict:')
@@ -49,18 +51,6 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
             out_errors = df.unflatten(errors)
             return data_dict, out_errors
             '''
-
-
-    # def show_package_schema(self):
-        # return
-
-    def create_package_schema(self):
-        def validator(key, flat_data, errors, context):
-            pass
-        schema = super().create_package_schema()
-        schema['__after'] = validator
-        return schema
-
 
     # IFacets
     def dataset_facets(self, facet_dict, package_type):
