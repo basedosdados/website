@@ -23,7 +23,7 @@ df = bd.read_table(dataset_id='{get_package_bdm_schema_name(package)}',
             billing_project_id=<YOUR_PROJECT_ID>)'''
 
 def make_example_r_query(resource, package):
-    return f'''if (!require("basedosdados")) install.packages("basedosdados")
+    return f'''install.packages("basedosdados")
 library("basedosdados")
 # Defina o seu projeto no Google Cloud
 set_billing_id("<YOUR_PROJECT_ID>")
