@@ -45,6 +45,7 @@ if [[ ! -d assets/storage ]]; then
     git-lfs pull
     unzip assets.zip
     chmod -R 777 assets
+    # to update assets please fill folder with new assets and run `zip -r assets.zip assets` and commit zip to git as usual. Zip file will be sent to lfs.
 fi
 
 
