@@ -21,23 +21,19 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
     is_fallback = lambda s: True
     package_types = lambda s: []
     def validate(self, context, data_dict, schema, action):
-        if action != 'package_show': # 'package_show', 'package_create', 'package_update'
-            print("ABOOOOOOOOOOOOOOOOOOOORT")
-            return data_dict, {}
-        else:
-            print('VAMO')
-        if duplicated_keys := _find_duplicated_keys(data_dict['extras']):
-            return data_dict, {"extras": f'extras contains duplicated keys: {duplicated_keys!r}'}
-        data_dict['extras'] = { i['key']: i['value'] for i in data_dict['extras']}
+        if action == 'package_show': # 'package_show', 'package_create', 'package_update'
+            if duplicated_keys := _find_duplicated_keys(data_dict['extras']):
+                raise ValidationErro({"extras": f'extras contains duplicated keys: {duplicated_keys!r}'})
+            data_dict['extras'] = { i['key']: i['value'] for i in data_dict['extras']} # transform extras into a simple dict
         errors = {}
         try:
-            out = pydantic_validator.package.Package.validate(data_dict)
-            return out.dict(), {}
+            out = pydantic_validator.package.Wrapper.validate({'package': data_dict, 'action': action})
+            return out.package.dict(), {}
         except pydantic_validator.ValidationError as ee:
             errors = ee.errors()
             errors = {i['loc']: repr(i) for i in errors}
-            log.debug('Data dict:')
-            log.debug(data_dict)
+            log.error('Data dict:')
+            log.error(data_dict)
             raise
             # assert set(errors.keys()).issubset(data_dict.keys()) # error keys are = to data_dict keys, we need to enforce this better #TODO
             errors[('resources', 1, 'id')] = ['deu ruim']
