@@ -24,8 +24,14 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
     package_types = lambda s: []
 
     def _validate_pydantic(self, data_dict, action):
-        out = pydantic_validator.package.Package.validate(dict(**data_dict, action__=action))
-        out = out.dict(exclude={'action__'})
+        data = pydantic_validator.package.Package.validate(dict(**data_dict, action__=action))
+        out = data.json(exclude={'action__'})
+        out = json.loads(out)
+        oficial = {k: v for k, v in out.items() if k in data.__fields__}
+        extras =  {k: v for k, v in out.items() if k not in data.__fields__}
+        # del out['groups']
+        for k in extras: del out[k]
+        # out['extras'] = [ {'key':k, 'value': json.dumps(v)} for k, v in extras.items()]
         return out
 
     def _validate_show(self, data_dict):
