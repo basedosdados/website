@@ -13,6 +13,7 @@ def data():
         ,'title': '123'
         ,'type': 'dataset'
         ,'state': 'active'
+        ,'private': False
         ,'metadata_created': DATE
         ,'metadata_modified': DATE
         ,'num_resources': 1
@@ -20,7 +21,7 @@ def data():
         ,'resources': [{}]
         ,'temporal_coverage': [2020]
         ,'creator_user_id': '123e4567-e89b-12d3-a456-426614174000'
-        , 'owner_org': '123e4567-e89b-12d3-a456-426614174000'
+        ,'owner_org': '123e4567-e89b-12d3-a456-426614174000'
     }
 
 def jsonify(data):
@@ -49,7 +50,7 @@ def test_ok(data):
         assert out[k] == v
 
 
-@pytest.mark.skip
+#@pytest.mark.skip
 def test_ckanize():
     master_dataset = {
             'ano': ['atual'],

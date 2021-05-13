@@ -36,6 +36,10 @@ class _CkanDefaults(BaseModel):
     metadata_created: datetime
     metadata_modified: datetime
     creator_user_id: UUID
+    private: bool
+    license_title: Optional[Str]
+
+
 
     # Ckan Defaults Complex Fields
     num_resources: Int
@@ -45,6 +49,9 @@ class _CkanDefaults(BaseModel):
     organization: Any
     num_tags: Int
     tags: Any
+
+    relationships_as_object: Any
+    relationships_as_subject: Any
 
     # throwaway field that is used to modify validators. You can think of it as an argument to validate function. Cant use prefix underscores on pydantic so used suffix to indicate this
     action__: Optional[Literal['package_show', 'package_create', 'package_update']] # TODO: after 2021-07-01 add exclude by default when issue is merged in master

@@ -5,6 +5,7 @@ from sys import exit
 import unittest.mock
 from copy import deepcopy
 import random
+from pprint import pprint
 
 
 CKAN_API_KEY = os.environ.get('CKAN_API_KEY')
