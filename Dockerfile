@@ -88,9 +88,12 @@ COPY --from=builder /venv /venv
 # Install extensions
 RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
     pip install `for i in /app/extensions/*; do echo -e $i; done`
-# For %debug% jinja directive, for bug fix in werkzeug debug scope
+#
+# Install debug/dev goodies
+# For %debug% jinja directive | for bug fix in werkzeug debug scope | for better stack traces
 RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
-    pip install jinja2==2.11.2 Werkzeug==1.0.1
+    pip install jinja2==2.11.2 Werkzeug==1.0.1 better_exceptions
+
 COPY ckanext-basedosdados /app/ckanext-basedosdados
 RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
     pip install -e /app/ckanext-basedosdados

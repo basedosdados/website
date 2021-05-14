@@ -40,7 +40,7 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
         # data_dict['extras'] = { i['key']: i['value'] for i in data_dict['extras']} # transform extras into a simple dict # TODO: figure out when do i need to pass extras to main namespace
         try:
             out = self._validate_pydantic(data_dict, 'package_show')
-            return out, {}
+            return out, []
         except pydantic_validator.ValidationError as ee: # a validation error in show is our fault, not the user's so raise and cause a 500
             log.error('Data dict:')
             log.error(data_dict)
@@ -50,18 +50,27 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
         try:
             out = self._validate_pydantic(data_dict, action)
             # out['extras'] = [{'key':k, 'value':v} for k, v in out['extras'].items()]
-            return out, {}
+            return out, []
         except pydantic_validator.ValidationError as ee:
             return {}, json.loads(ee.json()) # need to jsonify to ensure that data types are json friendly
 
     def _validate_update(self, data_dict): return self._validate_create(data_dict, action='package_update')
 
     def validate(self, context, data_dict, schema, action):
-        return {
+        out, errors = {
             'package_show':    self._validate_show
             ,'package_create': self._validate_create
             ,'package_update': self._validate_update
         }[action](data_dict)
+
+        from ckan.lib.navl.dictization_functions import validate as ckan_validate # use old ckan schema to validate ckan stuff. Maybe remove this sometime
+        out_2, errors_2 = ckan_validate(out, schema, context=context)
+        out.update(out_2)
+        if not errors and errors_2: # if pydantic has no errors, send ckan errors to avoid duplicated msgs... This can be improved if we merge errors correctly
+            errors.append({'msg': 'ckan-errors', 'errors': errors_2}) # merge errors in a dirty way
+        return out, errors
+        # return (out || out_2, errors || errors_2)
+
 
     # IFacets
     def dataset_facets(self, facet_dict, package_type):

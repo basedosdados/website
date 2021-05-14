@@ -1,6 +1,12 @@
-Check views on site (they are broken)
 Fix tags filtering on site
 Convert schema to pydantic
     deal with extras in dictionary (i think it is better to delete them)
 collect extras from pydantic
 organize tests
+
+add default api tokens in dev to facilitate testing
+
+---
+
+x Check views on site (they are broken)
+x deal with ckan schema default validators

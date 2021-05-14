@@ -6,7 +6,7 @@ from .package import ID_TYPE
 class Resource(BaseModel):
     id: ID_TYPE
     name: str
-    # resource_type: str
+    position: str
 
 class LaiRequest(Resource):
     lai_n: int
