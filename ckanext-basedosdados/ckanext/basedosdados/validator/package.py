@@ -63,28 +63,28 @@ class _CkanDefaults(BaseModel):
     @validator('resources', pre=True)
     def resources_should_have_position_field(cls, resources):
         for idx, r in enumerate(resources):
-            idx = str(idx) # need to be string cause ckan is dumb and will treat an int 0 as a false value causing problems in later validations
-            assert 'position' not in r or str(r['position']) == idx
+            # idx = (idx) # need to be string cause ckan is dumb and will treat an int 0 as a false value causing problems in later validations
+            # assert r.get('position') is None or r['position'] == idx, f"Position on resource {r.get('name')} is {r['position']!r} but should be {idx!r}."
             r['position'] = idx
         return resources
 
     @validator('action__', pre=False)
     def ids_should_respect_action(cls, action, config, values, field):
         if not action: return
+        resources = values.get('resources', [])
         if action in ('package_update', 'package_show'):
             assert values['id'] != None, f'package id is None on {action}'
-            for idx, r in enumerate(values['resources']):
+            for idx, r in enumerate(resources):
                 assert r.id != None, f"resource {idx!r} id is None on {action}"
         elif action == 'package_create':
             assert values['id'] == None, 'package id is not None on package_create'
-            for idx, r in enumerate(values['resources']):
+            for idx, r in enumerate(resources):
                 assert r.id == None, f"resource #{idx!r} id field not is None: {r.id!r} on package_create"
-
 
 
 class Package(_CkanDefaults):
     # Custom fields
-    download_type: Optional[Literal['Link Externo']] # field_name: download_type # validators: generate_download_type #TODO uncomment generates
+    download_type: Optional[Literal['Link Externo', 'BD Mais']] # field_name: download_type # validators: generate_download_type #TODO uncomment generates
 
 
 # TODO: try to access fields on validation and get annotations on which fields are needed for each tier

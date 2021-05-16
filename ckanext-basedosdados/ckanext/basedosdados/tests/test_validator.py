@@ -50,7 +50,7 @@ def test_ok(data):
         assert out[k] == v
 
 
-#@pytest.mark.skip
+@pytest.mark.skip
 def test_ckanize():
     master_dataset = {
             'ano': ['atual'],

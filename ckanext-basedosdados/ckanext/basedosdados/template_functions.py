@@ -38,10 +38,10 @@ def get_resource_bdm_table_name(resource):
 
 
 def load_json_schema():
-    import ckanext.basedosdados.validator as v
+    from ckanext.basedosdados.validator import resource, package
     from jsonref import JsonRef, json
     to_schema = lambda x: JsonRef.replace_refs(x.schema(), jsonschema=True)
     return json.dumps({
-        'ext_link': to_schema(v.ExternalLink)
-        ,'lai_request': to_schema(v.LaiRequest)
+        'ext_link': to_schema(resource.ExternalLink)
+        ,'lai_request': to_schema(resource.LaiRequest)
     }, indent=2)

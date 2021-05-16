@@ -24,15 +24,15 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
     package_types = lambda s: []
 
     def _validate_pydantic(self, data_dict, action):
-        data = pydantic_validator.package.Package.validate(dict(**data_dict, action__=action))
+        extras = {i['key']: i['value'] for i in data_dict.get('extras', {})}
+        data = pydantic_validator.package.Package.validate(dict(**data_dict, **extras, action__=action))
         out = data.json(exclude={'action__'})
         out = json.loads(out)
         oficial = {k: v for k, v in out.items() if k in data.__fields__}
-        extras =  {k: v for k, v in out.items() if k not in data.__fields__}
+        # extras =  {k: v for k, v in out.items() if k not in data.__fields__}
+        return oficial
         # del out['groups']
-        for k in extras: del out[k]
         # out['extras'] = [ {'key':k, 'value': json.dumps(v)} for k, v in extras.items()]
-        return out
 
     def _validate_show(self, data_dict):
         if duplicated_keys := _find_duplicated_keys(data_dict['extras']):
