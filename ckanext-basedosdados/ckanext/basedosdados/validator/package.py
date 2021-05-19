@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional, Literal, Union, Any
 import pydantic
-from pydantic import StrictInt as Int, StrictStr as Str, Field, ValidationError, validator, PrivateAttr
+from pydantic import StrictInt as Int, StrictStr as Str, Field, ValidationError, validator, PrivateAttr, root_validator
 from uuid import UUID
 import jsonschema
 
@@ -33,25 +33,24 @@ class _CkanDefaults(BaseModel):
     author_email: Optional[Email]
     maintainer: Optional[Str]
     maintainer_email: Optional[Email]
-    state: Literal['active']
+    state: Optional[Literal['active']]
     license_id: Optional[Str]
     url: Optional[Str]
     version: Optional[Str]
-    metadata_created: datetime
-    metadata_modified: datetime
-    creator_user_id: UUID
+    metadata_created: Optional[datetime]
+    metadata_modified: Optional[datetime]
+    creator_user_id: Optional[UUID]
     private: bool
     license_title: Optional[Str]
 
 
-
     # Ckan Defaults Complex Fields
-    num_resources: Int
+    num_resources: Optional[Int]
     resources: List[AnyResource] = []
     groups: Any
     owner_org: UUID
     organization: Any
-    num_tags: Int
+    num_tags: Optional[Int]
     tags: Any
 
     relationships_as_object: Any
@@ -59,6 +58,7 @@ class _CkanDefaults(BaseModel):
 
     # throwaway field that is used to modify validators. You can think of it as an argument to validate function. Cant use prefix underscores on pydantic so used suffix to indicate this
     action__: Optional[Literal['package_show', 'package_create', 'package_update']] # TODO: after 2021-07-01 add exclude by default when issue is merged in master
+
 
     @validator('resources', pre=True)
     def resources_should_have_position_field(cls, resources):
@@ -68,9 +68,9 @@ class _CkanDefaults(BaseModel):
             r['position'] = idx
         return resources
 
-    @validator('action__', pre=False)
-    def ids_should_respect_action(cls, action, config, values, field):
-        if not action: return
+    @root_validator
+    def ids_should_respect_action(cls, values):
+        action = values['action__']
         resources = values.get('resources', [])
         if action in ('package_update', 'package_show'):
             assert values['id'] != None, f'package id is None on {action}'
@@ -80,6 +80,15 @@ class _CkanDefaults(BaseModel):
             assert values['id'] == None, 'package id is not None on package_create'
             for idx, r in enumerate(resources):
                 assert r.id == None, f"resource #{idx!r} id field not is None: {r.id!r} on package_create"
+        return values
+
+    @root_validator # using root_validator I can guarantee that all individual fields are ready. Using `values` on single field validators prooved to hard to synchronize
+    def not_null_on_show(cls, values):
+        for f in ('state', 'metadata_created', 'metadata_modified', 'creator_user_id', 'num_resources', 'num_tags'):
+            if values['action__'] == 'package_show':
+                assert values[f] is not None
+        return values
+
 
 
 class Package(_CkanDefaults):

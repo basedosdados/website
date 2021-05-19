@@ -163,6 +163,27 @@ def test_ckanize():
     assert master_dataset == ret
 
 
+def test_pydantic_validates_individual_items_in_a_list():
+    from pydantic import BaseModel, ValidationError
+    from typing import List, Optional, Literal, Union
+    class Item(BaseModel):
+        id: int
+
+    class ManyItems(BaseModel):
+        items: List[Item]
+    try:
+        ManyItems.validate({'items': [
+                {'id': 12},
+                {'id': '1edfgd2'},
+                {'id': '154535345hfgdh345'},
+        ]})
+    except ValidationError as error:
+        assert error.errors() == (
+                [{'loc': ('items', 1, 'id'), 'msg': 'value is not a valid integer', 'type': 'type_error.integer'},
+                {'loc': ('items', 2, 'id'), 'msg': 'value is not a valid integer', 'type': 'type_error.integer'}]
+        )
+
+
 
 
 if __name__ == '__main__':

@@ -25,8 +25,8 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
 
     def _validate_pydantic(self, data_dict, action):
         extras = {i['key']: i['value'] for i in data_dict.get('extras', {})}
-        data = pydantic_validator.package.Package.validate(dict(**data_dict, **extras, action__=action))
-        out = data.json(exclude={'action__'})
+        data = pydantic_validator.package.Package(**data_dict, **extras, action__=action)
+        out = data.json(exclude={'action__'}, exclude_unset=True) # exclude unset needed by ckan so it can deal with missing values downstream (during partial updates for instance)
         out = json.loads(out)
         oficial = {k: v for k, v in out.items() if k in data.__fields__}
         # extras =  {k: v for k, v in out.items() if k not in data.__fields__}

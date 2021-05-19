@@ -37,11 +37,23 @@ def get_resource_bdm_table_name(resource):
     return resource['name']
 
 
+from ckanext.basedosdados import validator
+
 def load_json_schema():
-    from ckanext.basedosdados.validator import resource, package
     from jsonref import JsonRef, json
     to_schema = lambda x: JsonRef.replace_refs(x.schema(), jsonschema=True)
+    package = to_schema(validator.package.Package)
+    _remove_complex_ckan_fields(package)
+    # package['required'].remove('resources')
     return json.dumps({
-        'ext_link': to_schema(resource.ExternalLink)
-        ,'lai_request': to_schema(resource.LaiRequest)
+        'ext_link': to_schema(validator.resource.ExternalLink)
+        ,'lai_request': to_schema(validator.resource.LaiRequest)
+        ,'package': package
     }, indent=2)
+
+def _remove_complex_ckan_fields(package):
+    ckan_fields = validator.package._CkanDefaults.__fields__
+    for to_exclude in ckan_fields:
+        del package['properties'][to_exclude]
+        if to_exclude in package['required']:
+            package['required'].remove(to_exclude)
