@@ -1,4 +1,5 @@
 from ckanext.basedosdados.validator.package import Package, ValidationError
+from ckanext.basedosdados.validator.resource import Resource, BdmTable, ExternalLink
 import jsonschema
 
 import pytest
@@ -52,6 +53,71 @@ def test_correct_reporting_on_missing_properties_of_a_specific_resource(data):
             "type": "value_error.missing",
         }
     ]
+
+
+def test_resource():
+    data = {
+        "id": "2251834b-0359-49d1-b2e2-ce791d75bdd1",
+        "name": "Baixar",
+        "description": "",
+    }
+
+    out = Resource.validate(data)
+    out = out.dict(exclude={"action__"})
+    out = jsonify(out)
+    jsonschema.validate(jsonify(data), Resource.schema())
+    for k, v in data.items():  # assert data is a subsed of out.dict()
+        assert out[k] == v
+
+
+def test_bdm_table():
+    data = {
+        "id": "2251834b-0359-49d1-b2e2-ce791d75bdd1",
+        "name": "Baixar",
+        "description": "",
+        "table_id": 10,
+        "auxiliary_files_url": ["file_1", "file_2", "file_3"],
+        "observation_level": ["dam", "gun", "age"],
+        "columns": "",
+        "primary_keys": "jasdiasd",
+        "version": "3.0.0",
+        "publisher": "Test",
+        "publisher_email": "test@teste.com",
+        "publisher_github": "",
+        "publisher_website": "www.teste.com.br",
+        "resource_type": "bdm_table",
+    }
+
+    out = BdmTable.validate(data)
+    out = out.dict(exclude={"action__"})
+    out = jsonify(out)
+    jsonschema.validate(jsonify(data), BdmTable.schema())
+    for k, v in data.items():  # assert data is a subsed of out.dict()
+        assert out[k] == v
+
+
+def test_external_link():
+    data = {
+        "id": "2251834b-0359-49d1-b2e2-ce791d75bdd1",
+        "name": "Baixar",
+        "description": "",
+        "url": "www.teste.com.br",
+        "language": ["german", "bahasa", "urdu"],
+        "has_api": "yes",
+        "free": "no",
+        "signup_needed": "yes",
+        "availability": "online",
+        "brazilian_ip": "no",
+        "license_type": "MIT",
+        "resource_type": "external_link",
+    }
+
+    out = ExternalLink.validate(data)
+    out = out.dict(exclude={"action__"})
+    out = jsonify(out)
+    jsonschema.validate(jsonify(data), ExternalLink.schema())
+    for k, v in data.items():  # assert data is a subsed of out.dict()
+        assert out[k] == v
 
 
 def test_ok(data):
@@ -148,29 +214,35 @@ def test_ckanize():
         ],
         "resources": [
             {
-                "cache_last_updated": None,
-                "cache_url": None,
-                "created": "2020-08-26T17:03:18.892877",
-                "datastore_active": False,
-                "descricao": "",
+                "id": "2251834b-0359-49d1-b2e2-ce791d75bdd1",
+                "name": "Baixar",
                 "description": "",
-                "format": "",
-                "formato": "",
-                "hash": "",
-                "id": "0d50b294-cbcd-40b8-9f2a-4d7459c70459",
-                "last_modified": None,
-                "metadata_modified": "2020-08-26T17:03:18.892877",
-                "mimetype": None,
-                "mimetype_inner": None,
-                "name": "Baixar (Projeto Github)",
-                "package_id": "fb7af1b7-8169-46d3-93ae-a4e2ac2a46fa",
-                "position": 0,
-                "resource_type": None,
-                "size": None,
-                "state": "active",
-                "url": "https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words",
-                "url_type": None,
-            }
+                "url": "www.teste.com.br",
+                "language": ["german", "bahasa", "urdu"],
+                "has_api": "yes",
+                "free": "no",
+                "signup_needed": "yes",
+                "availability": "online",
+                "brazilian_ip": "no",
+                "license_type": "MIT",
+                "resource_type": "external_link",
+            },
+            {
+                "id": "2251834b-0359-49d1-b2e2-ce791d75bdd1",
+                "name": "Baixar",
+                "description": "",
+                "table_id": 10,
+                "auxiliary_files_url": ["file_1", "file_2", "file_3"],
+                "observation_level": ["dam", "gun", "age"],
+                "columns": "",
+                "primary_keys": "jasdiasd",
+                "version": "3.0.0",
+                "publisher": "Test",
+                "publisher_email": "test@teste.com",
+                "publisher_github": "",
+                "publisher_website": "www.teste.com.br",
+                "resource_type": "bdm_table",
+            },
         ],
         "tags": [
             {
