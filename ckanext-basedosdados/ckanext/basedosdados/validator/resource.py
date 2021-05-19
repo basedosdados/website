@@ -33,8 +33,8 @@ class UpdateFrequencyEnum(str, Enum):
     ten_years = "Ten Years"
     unique = "Unique"
     recurring = "Recurring"
-    empty = "Empty"  # TODO: dahis review
-    other = "Other"  # TODO: dahis review
+    empty = "Empty"
+    other = "Other"
 
 
 class LanguageEnum(str, Enum):
