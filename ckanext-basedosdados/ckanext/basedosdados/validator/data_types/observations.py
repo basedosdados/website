@@ -40,7 +40,6 @@ class ObservationLevelEstablishmentEnum(str, Enum):
     ministry = "Ministry/Department"
     museum = "Museum"
     ngo = "Nongovernmental Organization (NGO)"
-    terrorist_group = "Terrorist Group"
     prison = "Prison"
     team = "Team"
     university = "University"
@@ -114,7 +113,7 @@ class ObservationLevelArtEnum(str, Enum):
 
 
 class ObservationLevelInfrastructureEnum(str, Enum):
-    dam = "dam"
+    dam = "Dam"
     satellitte = "Satellite"
     street_road = "Street/Avenue/Road/Highway"
 

@@ -1,4 +1,5 @@
 import datetime
+from typing_extensions import Annotated
 
 from . import BaseModel
 from enum import Enum
@@ -10,8 +11,7 @@ from pydantic import (
     ValidationError,
     validator,
 )
-from .package import ID_TYPE, TemporalCoverageEnum
-from .observations import ObservationLevel
+from .data_types import ObservationLevel, TemporalCoverage, IdType
 
 YES_NO = Literal["yes", "no"]
 
@@ -38,28 +38,28 @@ class UpdateFrequencyEnum(str, Enum):
 
 
 class LanguageEnum(str, Enum):
-    german = "German"
-    arabic = "Arabic"
-    bahasa = "Bahasa"
-    bengali = "Bengali"
-    chinese = "Chinese"
-    spanish = "Spanish"
-    french = "French"
-    hebrew = "Hebrew"
-    hindi = "Hindi"
-    english = "English"
-    japanese = "Japanese"
-    malay = "Malay"
-    portuguese = "Portuguese"
-    russian = "Russian"
-    thai = "Thai"
-    urdu = "Urdu"
+    german = "german"  # "German"
+    arabic = "arabic"  # "Arabic"
+    bahasa = "bahasa"  # "Bahasa"
+    bengali = "bengali"  # "Bengali"
+    chinese = "chinese"  # "Chinese"
+    spanish = "spanish"  # "Spanish"
+    french = "french"  # "French"
+    hebrew = "hebrew"  # "Hebrew"
+    hindi = "hindi"  # "Hindi"
+    english = "english"  # "English"
+    japanese = "japanese"  # "Japanese"
+    malay = "malay"  # "Malay"
+    portuguese = "portuguese"  # "Portuguese"
+    russian = "russian"  # "Russian"
+    thai = "thai"  # "Thai"
+    urdu = "urdu"  # "Urdu"
 
 
 class AvailabilityEnum(str, Enum):
-    online = "Online"
-    physical = "Physical (CD, DVD, paper, etc)"
-    in_person = "In Person"
+    online = "online"  # Online
+    physical = "physical"  # Physical (CD, DVD, paper, etc)
+    in_person = "in_person"  # In Person
 
 
 class StatusEnum(str, Enum):
@@ -69,11 +69,11 @@ class StatusEnum(str, Enum):
 
 
 class Resource(BaseModel):
-    id: ID_TYPE
+    id: IdType
     name: Str
     description: Str
     spatial_coverage: Str
-    temporal_coverage: TemporalCoverageEnum = Field(max_items=10)
+    temporal_coverage: TemporalCoverage
     update_frequency: UpdateFrequencyEnum
     # resource_type: str
 

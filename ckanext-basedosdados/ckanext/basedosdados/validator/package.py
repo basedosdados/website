@@ -15,37 +15,22 @@ from enum import Enum
 from uuid import UUID
 import jsonschema
 
-from .observations import ObservationLevel
+from .data_types import ObservationLevel, TemporalCoverage, IdType
 
 from typing_extensions import Annotated  # migrate to py3.9
 
-A = Annotated
-F = Field
-ID_TYPE = A[
-    Optional[Str], F()
-]  # TODO: would be nice to require on show/update but not on create
 Email = Str  # TODO
 
-from . import resource, BaseModel
-from .resource import LaiRequest, ExternalLink, BdmTable
+from . import BaseModel
+from .resource import ExternalLink, BdmTable
 
 AnyResource = Annotated[
-    Union[LaiRequest, ExternalLink, BdmTable], Field(discriminator="resource_type")
+    Union[ExternalLink, BdmTable], Field(discriminator="resource_type")
 ]
 
 
-class TemporalCoverageEnum(str, Enum):
-    CHECK = "CHECK"  # TODO: data check
-
-    def __init__(self, *args, **kwargs):
-        for i in range(1970, 2031):
-            setattr(self, i, i)
-
-        super().__init__(*args, **kwargs)
-
-
 class _CkanDefaults(BaseModel):
-    id: ID_TYPE
+    id: IdType
     name: Str
     title: Str
     type: Literal["dataset"]
@@ -102,7 +87,7 @@ class Package(_CkanDefaults):
 
     # Custom fields
     description: Str
-    temporal_coverage: List[TemporalCoverageEnum] = Field(max_items=10)
+    temporal_coverage: TemporalCoverage
     spatial_coverage: Str
     observation_level: List[ObservationLevel] = Field(max_items=10)
     auxiliary_files_url: List[Str]
