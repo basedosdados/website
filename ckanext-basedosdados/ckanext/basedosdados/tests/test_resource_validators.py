@@ -87,18 +87,47 @@ def test_external_link():
         assert out[k] == v
 
 
-@pytest.mark.skip()
 def test_ok(data):
     data["resources"] = [
         {
+            "id": "2251834b-0359-49d1-b2e2-ce791d75bdd1",
+            "name": "Baixar",
+            "description": "",
+            "spatial_coverage": "spatial",
+            "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
+            "update_frequency": "second",
+            "table_id": 10,
+            "auxiliary_files_url": "www.files.com.br/files-test",
+            "observation_level": ["dam", "gun", "age"],
+            "columns": "",
+            "primary_keys": "jasdiasd",
+            "version": "3.0.0",
+            "publisher": "Test",
+            "publisher_email": "test@teste.com",
+            "publisher_github": "",
+            "publisher_website": "www.teste.com.br",
+            "resource_type": "bdm_table",
+        },
+        {
+            "id": "2251834b-0359-49d1-b2e2-ce791d75bdd1",
+            "name": "Baixar",
+            "description": "",
+            "url": "www.teste.com.br",
+            "spatial_coverage": "spatial",
+            "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
+            "update_frequency": "second",
+            "language": ["german", "bahasa", "urdu"],
+            "has_api": "yes",
+            "free": "no",
+            "signup_needed": "yes",
+            "availability": "online",
+            "brazilian_ip": "no",
+            "license_type": "MIT",
             "resource_type": "external_link",
-            "id": "13",
-            "name": "linkzao",
-            "url": "fgdfg",
-        }
+        },
     ]
     out = Package.validate(data)
-    out = out.dict(exclude={"action__"})
+    out = out.dict(exclude={"action__"}, exclude_unset=True)
     out = jsonify(out)
     jsonschema.validate(jsonify(data), Package.schema())
     for k, v in data.items():  # assert data is a subsed of out.dict()

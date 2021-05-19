@@ -87,10 +87,13 @@ class Package(_CkanDefaults):
 
     # Custom fields
     description: Str
-    temporal_coverage: TemporalCoverage
-    spatial_coverage: Str
-    observation_level: List[ObservationLevel] = Field(max_items=10)
-    auxiliary_files_url: List[Str]
+
+    # Generated Fields
+    # temporal_coverage: TemporalCoverage
+    # spatial_coverage: Str
+    # observation_level: List[ObservationLevel] = Field(max_items=10)
+    # auxiliary_files_url: List[Str]
+
     download_type: Optional[
         Literal["Link Externo"]
     ]  # field_name: download_type # validators: generate_download_type #TODO uncomment generates

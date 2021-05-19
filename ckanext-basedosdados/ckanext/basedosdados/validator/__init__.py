@@ -1,8 +1,10 @@
 from pydantic import ValidationError
 import pydantic
 
+
 class BaseModel(pydantic.BaseModel):
     class Config:
-        extra = 'allow'
+        extra = "forbid"
+
 
 from . import package, resource
