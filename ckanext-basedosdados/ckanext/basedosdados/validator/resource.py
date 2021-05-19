@@ -73,7 +73,7 @@ class Resource(BaseModel):
     name: Str
     description: Str
     spatial_coverage: Str
-    temporal_coverage: TemporalCoverage
+    temporal_coverage: List[TemporalCoverage]
     update_frequency: UpdateFrequencyEnum
     # resource_type: str
 
