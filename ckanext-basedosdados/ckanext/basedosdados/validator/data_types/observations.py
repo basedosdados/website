@@ -3,149 +3,149 @@ from typing import Union
 
 
 class ObservationLevelSphereEnum(str, Enum):
-    continent = "Continent"
-    country = "Country"
-    region = "Region"
-    state = "State"
-    county = "County"
-    district = "District"
-    municipality = "Municipality"
-    city = "City"
-    village = "Village"
-    neighborhood = "Neighborhood"
-    zip_code = "ZIP Code"
-    census_tract = "Census Tract"
+    continent = 'continent' # "Continent"
+    country = 'country' # "Country"
+    region = 'region' # "Region"
+    state = 'state' # "State"
+    county = 'county' # "County"
+    district = 'district' # "District"
+    municipality = 'municipality' # "Municipality"
+    city = 'city' # "City"
+    village = 'village' # "Village"
+    neighborhood = 'neighborhood' # "Neighborhood"
+    zip_code = 'zip_code' # "ZIP Code"
+    census_tract = 'census_tract' # "Census Tract"
 
 
 class ObservationLevelIndividualEnum(str, Enum):
-    person = "Person (student, teacher/professor, politician/candidate, player, partner, etc)"
-    household = "Household"
-    name = "Name"
-    animal = "Animal"
-    plant = "Plant"
+    person = 'person' # "Person (student, teacher/professor, politician/candidate, player, partner, etc)"
+    household = 'household' # "Household"
+    name = 'name' # "Name"
+    animal = 'animal' # "Animal"
+    plant = 'plant' # "Plant"
 
 
 class ObservationLevelEstablishmentEnum(str, Enum):
-    agency = "Agency"
-    protected_area = "Protected Area"
-    library = "Library"
-    notary_office = "Notary's Office"
-    company = "Company"
-    school = "School"
-    station = "Station"
-    stadium = "Stadium"
-    terrorist_group = "Terrorist Group"
-    hospital = "Hospital"
-    property = "Property"
-    ministry = "Ministry/Department"
-    museum = "Museum"
-    ngo = "Nongovernmental Organization (NGO)"
-    prison = "Prison"
-    team = "Team"
-    university = "University"
+    agency = 'agency' # "Agency"
+    protected_area = 'protected_area' # "Protected Area"
+    library = 'library' # "Library"
+    notary_office = 'notary_office' # "Notary's Office"
+    company = 'company' # "Company"
+    school = 'school' # "School"
+    station = 'station' # "Station"
+    stadium = 'stadium' # "Stadium"
+    terrorist_group = 'terrorist_group' # "Terrorist Group"
+    hospital = 'hospital' # "Hospital"
+    property = 'property' # "Property"
+    ministry = 'ministry' # "Ministry/Department"
+    museum = 'museum' # "Museum"
+    ngo = 'ngo' # "Nongovernmental Organization (NGO)"
+    prison = 'prison' # "Prison"
+    team = 'team' # "Team"
+    university = 'university' # "University"
 
 
 class ObservationLevelPoliticsEnum(str, Enum):
-    agreement = "Agreement/Treaty"
-    speech = "Speech"
-    election = "Election"
-    law = "Law/Proposition"
-    party = "Party"
-    poll = "Poll"
+    agreement = 'agreement' # "Agreement/Treaty"
+    speech = 'speech' # "Speech"
+    election = 'election' # "Election"
+    law = 'law' # "Law/Proposition"
+    party = 'party' # "Party"
+    poll = 'poll' # "Poll"
 
 
 class ObservationLevelScienceEnum(str, Enum):
-    article = "Article/Paper"
-    citation = "Citation"
-    domain = "Domain"
-    book = "Book"
-    newspaper = "Newspaper"
-    patent = "Patent"
-    journal = "Journal/Magazine"
-    word = "Word"
-    post = "Post/Tweet"
-    langugage = "Language"
-    crs = "Coordinate Reference System"
-    protein = "Protein"
-    meteor = "Meteor"
+    article = 'article' # "Article/Paper"
+    citation = 'citation' # "Citation"
+    domain = 'domain' # "Domain"
+    book = 'book' # "Book"
+    newspaper = 'newspaper' # "Newspaper"
+    patent = 'patent' # "Patent"
+    journal = 'journal' # "Journal/Magazine"
+    word = 'word' # "Word"
+    post = 'post' # "Post/Tweet"
+    langugage = 'langugage' # "Language"
+    crs = 'crs' # "Coordinate Reference System"
+    protein = 'protein' # "Protein"
+    meteor = 'meteor' # "Meteor"
 
 
 class ObservationLevelEconomicsEnum(str, Enum):
-    contract = "Contract"
-    grant = "Grant"
-    procurement = "Procurement"
-    product = "Product"
-    transaction = "Transaction"
-    transfer = "Transfer"
-    bill = "Money Bill"
-    occupation = "Occupation"
-    sector = "Sector"
+    contract = 'contract' # "Contract"
+    grant = 'grant' # "Grant"
+    procurement = 'procurement' # "Procurement"
+    product = 'product' # "Product"
+    transaction = 'transaction' # "Transaction"
+    transfer = 'transfer' # "Transfer"
+    bill = 'bill' # "Money Bill"
+    occupation = 'occupation' # "Occupation"
+    sector = 'sector' # "Sector"
 
 
 class ObservationLevelEducationEnum(str, Enum):
-    scholarship = "Scholarship"
-    test = "Test/Exam"
+    scholarship = 'scholarship' # "Scholarship"
+    test = 'test' # "Test/Exam"
 
 
 class ObservationLevelEventsEnum(str, Enum):
-    alert = "Alert"
-    attack = "Attack"
-    act = "Act"
-    concert = "Concert"
-    disinvitation = "Disinvitation"
-    disaster = "Natural Disaster (earthquake, flood, fire, etc)"
-    birth = "Birth"
-    death = "Death"
-    request = "Request/Complaint"
-    protest = "Protest"
-    match = "Match"
+    alert = 'alert' # "Alert"
+    attack = 'attack' # "Attack"
+    act = 'act' # "Act"
+    concert = 'concert' # "Concert"
+    disinvitation = 'disinvitation' # "Disinvitation"
+    disaster = 'disaster' # "Natural Disaster (earthquake, flood, fire, etc)"
+    birth = 'birth' # "Birth"
+    death = 'death' # "Death"
+    request = 'request' # "Request/Complaint"
+    protest = 'protest' # "Protest"
+    match = 'match' # "Match"
 
 
 class ObservationLevelArtEnum(str, Enum):
-    album = "Album"
-    movie = "Movie/Film/Clip/Show"
-    photo = "Photo/Picture"
-    song = "Song"
-    statue = "Statue"
-    painting = "Painting/Drawing/Illustration"
-    poem = "Poem"
-    roller_coaster = "Roller Coaster"
+    album = 'album' # "Album"
+    movie = 'movie' # "Movie/Film/Clip/Show"
+    photo = 'photo' # "Photo/Picture"
+    song = 'song' # "Song"
+    statue = 'statue' # "Statue"
+    painting = 'painting' # "Painting/Drawing/Illustration"
+    poem = 'poem' # "Poem"
+    roller_coaster = 'roller_coaster' # "Roller Coaster"
 
 
 class ObservationLevelInfrastructureEnum(str, Enum):
-    dam = "Dam"
-    satellitte = "Satellite"
-    street_road = "Street/Avenue/Road/Highway"
+    dam = 'dam' # "Dam"
+    satellitte = 'satellitte' # "Satellite"
+    street_road = 'street_road' # "Street/Avenue/Road/Highway"
 
 
 class ObservationLevelTransportationEnum(str, Enum):
-    automobile = "Car/Bus/Truck/Motorcycle"
-    train = "Train"
-    aircraft = "Plane/Helicopter"
-    ship = "Ship"
+    automobile = 'automobile' # "Car/Bus/Truck/Motorcycle"
+    train = 'train' # "Train"
+    aircraft = 'aircraft' # "Plane/Helicopter"
+    ship = 'ship' # "Ship"
 
 
 class ObservationLevelSecurityEnum(str, Enum):
-    gun = "Gun"
+    gun = 'gun' # "Gun"
 
 
 class ObservationLevelDemographicEnum(str, Enum):
-    age = "Age"
-    race = "Race/Skin color"
-    sex = "Sex"
+    age = 'age' # "Age"
+    race = 'race' # "Race/Skin color"
+    sex = 'sex' # "Sex"
 
 
 class ObservationLevelImageEnum(str, Enum):
-    pixel = "Pixel/Grid"
-    polygon = "Polygon"
+    pixel = 'pixel' # "Pixel/Grid"
+    polygon = 'polygon' # "Polygon"
 
 
 class ObservationLevelHistoryEnum(str, Enum):
-    empire = "Empire"
+    empire = 'empire' # "Empire"
 
 
 class ObservationLevelOthersEnum(str, Enum):
-    other = "Other"
+    other = 'other' # "Other"
 
 
 ObservationLevel = Union[
