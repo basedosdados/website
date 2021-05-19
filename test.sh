@@ -18,6 +18,7 @@ TEST_URLS='
     organization
     group
     about
+    dataset/new
     dataset/?download_type=BD+Mais
     dataset/?q=futebol
     dataset/br-sp-ssp-seguranca

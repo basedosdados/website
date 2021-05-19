@@ -33,7 +33,7 @@ class _CkanDefaults(BaseModel):
     author_email: Optional[Email]
     maintainer: Optional[Str]
     maintainer_email: Optional[Email]
-    state: Optional[Literal['active']]
+    state: Optional[Literal['active', 'draft', 'deleted']]
     license_id: Optional[Str]
     url: Optional[Str]
     version: Optional[Str]
@@ -74,12 +74,14 @@ class _CkanDefaults(BaseModel):
         resources = values.get('resources', [])
         if action in ('package_update', 'package_show'):
             assert values['id'] != None, f'package id is None on {action}'
-            for idx, r in enumerate(resources):
-                assert r.id != None, f"resource {idx!r} id is None on {action}"
         elif action == 'package_create':
             assert values['id'] == None, 'package id is not None on package_create'
             for idx, r in enumerate(resources):
                 assert r.id == None, f"resource #{idx!r} id field not is None: {r.id!r} on package_create"
+        else: raise ValueError(f'action {action!r} not supported')
+        if action == 'package_show':
+            for idx, r in enumerate(resources):
+                assert r.id != None, f"resource {idx!r} id is None on {action}"
         return values
 
     @root_validator # using root_validator I can guarantee that all individual fields are ready. Using `values` on single field validators prooved to hard to synchronize

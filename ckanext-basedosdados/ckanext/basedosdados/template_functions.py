@@ -41,19 +41,24 @@ from ckanext.basedosdados import validator
 
 def load_json_schema():
     from jsonref import JsonRef, json
-    to_schema = lambda x: JsonRef.replace_refs(x.schema(), jsonschema=True)
-    package = to_schema(validator.package.Package)
-    _remove_complex_ckan_fields(package)
-    # package['required'].remove('resources')
+    def to_schema(x, fields_to_remove):
+        out = JsonRef.replace_refs(x.schema(), jsonschema=True)
+        _remove_complex_ckan_fields(out, fields_to_remove)
+        return out
+    resource_fields_to_delete = list(validator.resource.Resource.__fields__) + ['resource_type']
     return json.dumps({
-        'ext_link': to_schema(validator.resource.ExternalLink)
-        ,'lai_request': to_schema(validator.resource.LaiRequest)
-        ,'package': package
+        'external_link': to_schema(validator.resource.ExternalLink, resource_fields_to_delete)
+        ,'bdm_table':    to_schema(validator.resource.BdmTable,     resource_fields_to_delete)
+        ,'lai_request':  to_schema(validator.resource.LaiRequest,   resource_fields_to_delete)
+        ,'package':      to_schema(validator.package.Package,       validator.package._CkanDefaults.__fields__)
     }, indent=2)
 
-def _remove_complex_ckan_fields(package):
-    ckan_fields = validator.package._CkanDefaults.__fields__
-    for to_exclude in ckan_fields:
-        del package['properties'][to_exclude]
-        if to_exclude in package['required']:
-            package['required'].remove(to_exclude)
+def _remove_complex_ckan_fields(package, fields_to_remove):
+    for field in fields_to_remove:
+        del package['properties'][field]
+        if field in package['required']:
+            package['required'].remove(field)
+
+def get_possible_resource_types():
+    return [{'name': i, 'value': i} for i in validator.resource.RESOURCE_TYPES]
+
