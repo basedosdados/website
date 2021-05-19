@@ -21,6 +21,7 @@ def test_resource():
         "spatial_coverage": "spatial",
         "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
         "update_frequency": "second",
+        "position": 1
     }
 
     out = Resource.validate(data)
@@ -37,6 +38,7 @@ def test_bdm_table():
         "name": "Baixar",
         "description": "",
         "spatial_coverage": "spatial",
+        "position": 1,
         "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
         "update_frequency": "second",
         "table_id": 10,
@@ -67,6 +69,7 @@ def test_external_link():
         "description": "",
         "url": "www.teste.com.br",
         "spatial_coverage": "spatial",
+        "position": 1,
         "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
         "update_frequency": "second",
         "language": ["german", "bahasa", "urdu"],
@@ -94,6 +97,7 @@ def test_ok(data):
             "name": "Baixar",
             "description": "",
             "spatial_coverage": "spatial",
+            "position": 1,
             "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
             "update_frequency": "second",
             "table_id": 10,
@@ -113,6 +117,7 @@ def test_ok(data):
             "name": "Baixar",
             "description": "",
             "url": "www.teste.com.br",
+            "position": 1,
             "spatial_coverage": "spatial",
             "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
             "update_frequency": "second",
@@ -126,7 +131,7 @@ def test_ok(data):
             "resource_type": "external_link",
         },
     ]
-    out = Package.validate(data)
+    out = Package(**data, action__='package_show')
     out = out.dict(exclude={"action__"}, exclude_unset=True)
     out = jsonify(out)
     jsonschema.validate(jsonify(data), Package.schema())

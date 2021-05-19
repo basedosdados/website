@@ -3,8 +3,13 @@ cd $(git rev-parse --show-toplevel)
 
 trap 'catch $? $LINENO' ERR ; catch() { echo "Exit-code $1 occurred on line $2" ;}
 
+if [[ ! $CKAN_API_KEY ]]; then source .ckan_dev_api_token; fi
+
 URL=${URL:-"http://localhost:5000"}
-docker-compose up -d ckan
+
+if ! curl localhost:5000 --fail-early --silent > /dev/null ; then
+    docker-compose up -d ckan
+fi
 utils/wait-for-200 -t 30 $URL
 
 TEST_URLS='
@@ -13,6 +18,7 @@ TEST_URLS='
     organization
     group
     about
+    dataset/new
     dataset/?download_type=BD+Mais
     dataset/?q=futebol
     dataset/br-sp-ssp-seguranca
@@ -28,4 +34,7 @@ done
 
 URL="$URL" python ./test.py
 
+docker-compose run --rm ckan pytest ./ckanext-basedosdados/ckanext/basedosdados/tests/test_validator.py
+
 echo 'ALL OK :)'
+

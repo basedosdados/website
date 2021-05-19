@@ -5,6 +5,8 @@ import jsonschema
 import pytest
 from pytest import raises
 
+from . import data
+
 
 def jsonify(data):
     from pydantic.json import pydantic_encoder
@@ -21,20 +23,15 @@ def test_validating(data):
 
 def test_correct_reporting_on_missing_properties_of_a_specific_resource(data):
     data["resources"] = [
-        {"resource_type": "external_link", "id": "13", "name": "linkzao", "surl": ""}
+        {"resource_type": "external_link", "id": "13", "name": "linkzao"}
     ]
     with raises(ValidationError) as e:
-        Package.validate(data)
-    assert e.value.errors() == [
-        {
-            "loc": ("resources", 0, "ExternalLink", "url"),
-            "msg": "field required",
-            "type": "value_error.missing",
-        }
-    ]
+        Package(**data, action__='package_show')
+    for error in e.value.errors():
+        assert error['type'] == "value_error.missing", error
 
 
-# @pytest.mark.skip
+@pytest.mark.skip
 def test_ckanize():
     master_dataset = {
         "ano": ["atual"],
@@ -179,6 +176,27 @@ def test_ckanize():
         + "/api/3/action/package_show?name_or_id=list-of-dirty-naughty-obscene-and-otherwise-bad-words"
     ).json()["result"]
     assert master_dataset == ret
+
+def test_pydantic_validates_individual_items_in_a_list():
+    from pydantic import BaseModel, ValidationError
+    from typing import List, Optional, Literal, Union
+    class Item(BaseModel):
+        id: int
+
+    class ManyItems(BaseModel):
+        items: List[Item]
+    try:
+        ManyItems.validate({'items': [
+                {'id': 12},
+                {'id': '1edfgd2'},
+                {'id': '154535345hfgdh345'},
+        ]})
+    except ValidationError as error:
+        assert error.errors() == (
+                [{'loc': ('items', 1, 'id'), 'msg': 'value is not a valid integer', 'type': 'type_error.integer'},
+                {'loc': ('items', 2, 'id'), 'msg': 'value is not a valid integer', 'type': 'type_error.integer'}]
+        )
+
 
 
 if __name__ == "__main__":

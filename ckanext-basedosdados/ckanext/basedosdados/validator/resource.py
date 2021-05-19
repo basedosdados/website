@@ -68,6 +68,8 @@ class StatusEnum(str, Enum):
     denied = "Denied"
 
 
+RESOURCE_TYPES = ['lai_request', 'bdm_table', 'external_link'] # TODO: add something that test that subclasses obey this constant
+
 class Resource(BaseModel):
     id: IdType
     name: Str
@@ -75,13 +77,16 @@ class Resource(BaseModel):
     spatial_coverage: Str
     temporal_coverage: TemporalCoverage
     update_frequency: UpdateFrequencyEnum
-    # resource_type: str
+    position: int
+    url: Optional[str] # reserved in ckan
 
 
 # TODO: Remove only_on_types, required
 # Required for later
 """
 class LaiRequest(Resource):
+    resource_type: Literal["lai_request"]
+    
     origin: Str  # Validators  required_on_types(lai_request)
     protocol_number: Str  # Validators  required_on_types(lai_request)
     superior_organ: Str  # Validators  required_on_types(lai_request)
@@ -93,11 +98,11 @@ class LaiRequest(Resource):
     data_url: Str  # Validators  ignore_missing unicode remove_whitespace #required_on_types(lai_request)
     observations: Str  # Validators  # required_on_types(lai_request)
     lai_n: int
-    resource_type: Literal["lai_request"]
 """
 
-
 class BdmTable(Resource):
+    resource_type: Literal["bdm_table"]
+
     table_id: Int  # Validator only on types
     auxiliary_files_url: Optional[
         Str
@@ -111,10 +116,11 @@ class BdmTable(Resource):
     publisher_email: Str
     publisher_github: Str
     publisher_website: Str
-    resource_type: Literal["bdm_table"]
 
 
 class ExternalLink(Resource):
+    resource_type: Literal["external_link"]
+
     url: str  # Validators ignore_missing unicode remove_whitespace # TODO: add check_url_is_alive validator
     language: List[LanguageEnum] = Field(
         max_items=10
@@ -125,4 +131,3 @@ class ExternalLink(Resource):
     availability: AvailabilityEnum  # Validators scheming_required scheming_choices
     brazilian_ip: YES_NO  # Validators scheming_required scheming_choices
     license_type: Str
-    resource_type: Literal["external_link"]

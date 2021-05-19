@@ -3,15 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional, Literal, Union, Any
 import pydantic
-from pydantic import (
-    StrictInt as Int,
-    StrictStr as Str,
-    Field,
-    ValidationError,
-    validator,
-    PrivateAttr,
-)
-from enum import Enum
+from pydantic import StrictInt as Int, StrictStr as Str, Field, ValidationError, validator, PrivateAttr, root_validator
 from uuid import UUID
 import jsonschema
 
@@ -29,9 +21,12 @@ AnyResource = Annotated[
 ]
 
 
+coerce_to_unicode = lambda field: validator('field', allow_reuse=True)()
+
 class _CkanDefaults(BaseModel):
     id: IdType
     name: Str
+
     title: Str
     type: Literal["dataset"]
     notes: Optional[Str]
@@ -39,23 +34,23 @@ class _CkanDefaults(BaseModel):
     author_email: Optional[Email]
     maintainer: Optional[Str]
     maintainer_email: Optional[Email]
-    state: Literal["active"]
+    state: Optional[Literal['active', 'draft', 'deleted']]
     license_id: Optional[Str]
     url: Optional[Str]
     version: Optional[Str]
-    metadata_created: datetime
-    metadata_modified: datetime
-    creator_user_id: UUID
+    metadata_created: Optional[datetime]
+    metadata_modified: Optional[datetime]
+    creator_user_id: Optional[UUID]
     private: bool
     license_title: Optional[Str]
 
     # Ckan Defaults Complex Fields
-    num_resources: Int
-    resources: List[AnyResource]
+    num_resources: Optional[Int]
+    resources: List[AnyResource] = []
     groups: Any
     owner_org: UUID
     organization: Any
-    num_tags: Int
+    num_tags: Optional[Int]
     tags: Any
 
     relationships_as_object: Any
@@ -66,25 +61,41 @@ class _CkanDefaults(BaseModel):
         Literal["package_show", "package_create", "package_update"]
     ]  # TODO: after 2021-07-01 add exclude by default when issue is merged in master
 
-    @validator("action__")
-    def ids_should_respect_action(cls, value, config, values, field):
-        action = value
-        if not action:
-            return
-        if action in ("package_update", "package_show"):
-            assert values["id"] != None, f"package id is None on {action}"
-            for idx, r in enumerate(values["resources"]):
+
+    @validator('resources', pre=True)
+    def resources_should_have_position_field(cls, resources):
+        for idx, r in enumerate(resources):
+            # idx = (idx) # need to be string cause ckan is dumb and will treat an int 0 as a false value causing problems in later validations
+            # assert r.get('position') is None or r['position'] == idx, f"Position on resource {r.get('name')} is {r['position']!r} but should be {idx!r}."
+            r['position'] = idx
+        return resources
+
+    @root_validator
+    def ids_should_respect_action(cls, values):
+        action = values['action__']
+        resources = values.get('resources', [])
+        if action in ('package_update', 'package_show'):
+            assert values['id'] != None, f'package id is None on {action}'
+        elif action == 'package_create':
+            assert values['id'] == None, 'package id is not None on package_create'
+            for idx, r in enumerate(resources):
+                assert r.id == None, f"resource #{idx!r} id field not is None: {r.id!r} on package_create"
+        else: raise ValueError(f'action {action!r} not supported')
+        if action == 'package_show':
+            for idx, r in enumerate(resources):
                 assert r.id != None, f"resource {idx!r} id is None on {action}"
-        elif action == "package_create":
-            assert values["id"] == None, "package id is not None on package_create"
-            for idx, r in enumerate(values["resources"]):
-                assert (
-                    r.id == None
-                ), f"resource #{idx!r} id field not is None: {r.id!r} on package_create"
+        return values
+
+    @root_validator # using root_validator I can guarantee that all individual fields are ready. Using `values` on single field validators prooved to hard to synchronize
+    def not_null_on_show(cls, values):
+        for f in ('state', 'metadata_created', 'metadata_modified', 'creator_user_id', 'num_resources', 'num_tags'):
+            if values['action__'] == 'package_show':
+                assert values[f] is not None
+        return values
+
 
 
 class Package(_CkanDefaults):
-
     # Custom fields
     description: Str
 
@@ -94,9 +105,7 @@ class Package(_CkanDefaults):
     # observation_level: List[ObservationLevel] = Field(max_items=10)
     # auxiliary_files_url: List[Str]
 
-    download_type: Optional[
-        Literal["Link Externo"]
-    ]  # field_name: download_type # validators: generate_download_type #TODO uncomment generates
+    download_type: Optional[Literal['Link Externo', 'BD Mais']] # field_name: download_type # validators: generate_download_type #TODO uncomment generates
 
 
 # TODO: try to access fields on validation and get annotations on which fields are needed for each tier
