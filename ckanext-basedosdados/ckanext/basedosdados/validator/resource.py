@@ -12,6 +12,8 @@ from pydantic import (
 )
 from .package import ID_TYPE
 
+YES_NO = Literal["yes", "no"]
+
 
 class TemporalCoverageEnum(str, Enum):
     CHECK = "CHECK"  # TODO: data check
@@ -44,8 +46,7 @@ class UpdateFrequencyEnum(str, Enum):
     other = "Other"  # TODO: dahis review
 
 
-class ObservationLevelEnum(str, Enum):
-    placeholder_sphere = "_______________SPHERE"
+class ObservationLevelSphereEnum(str, Enum):
     continent = "Continent"
     country = "Country"
     region = "Region"
@@ -58,13 +59,17 @@ class ObservationLevelEnum(str, Enum):
     neighborhood = "Neighborhood"
     zip_code = "ZIP Code"
     census_tract = "Census Tract"
-    placeholder_individual = "_______________INDIVIDUAL"
+
+
+class ObservationLevelIndividualEnum(str, Enum):
     person = "Person (student, teacher/professor, politician/candidate, player, partner, etc)"
     household = "Household"
     name = "Name"
     animal = "Animal"
     plant = "Plant"
-    placeholder_establishment = "_______________ESTABLISHMENT"
+
+
+class ObservationLevelEstablishmentEnum(str, Enum):
     agency = "Agency"
     protected_area = "Protected Area"
     library = "Library"
@@ -83,14 +88,18 @@ class ObservationLevelEnum(str, Enum):
     prison = "Prison"
     team = "Team"
     university = "University"
-    placeholder_politics = "_______________POLITICS"
+
+
+class ObservationLevelPoliticsEnum(str, Enum):
     agreement = "Agreement/Treaty"
     speech = "Speech"
     election = "Election"
     law = "Law/Proposition"
     party = "Party"
     poll = "Poll"
-    placeholder_inovation = "_______________SCIENCE, INNOVATION, AND COMMUNICATION"
+
+
+class ObservationLevelScienceEnum(str, Enum):
     article = "Article/Paper"
     citation = "Citation"
     domain = "Domain"
@@ -104,7 +113,9 @@ class ObservationLevelEnum(str, Enum):
     crs = "Coordinate Reference System"
     protein = "Protein"
     meteor = "Meteor"
-    placeholder_economics = "_______________ECONOMICS"
+
+
+class ObservationLevelEconomicsEnum(str, Enum):
     contract = "Contract"
     grant = "Grant"
     procurement = "Procurement"
@@ -114,10 +125,14 @@ class ObservationLevelEnum(str, Enum):
     bill = "Money Bill"
     occupation = "Occupation"
     sector = "Sector"
-    placeholder_education = "_______________EDUCATION"
+
+
+class ObservationLevelEducationEnum(str, Enum):
     scholarship = "Scholarship"
     test = "Test/Exam"
-    placeholder_event = "_______________EVENTS"
+
+
+class ObservationLevelEventsEnum(str, Enum):
     alert = "Alert"
     attack = "Attack"
     act = "Act"
@@ -129,7 +144,9 @@ class ObservationLevelEnum(str, Enum):
     request = "Request/Complaint"
     protest = "Protest"
     match = "Match"
-    placeholder_art = "_______________ART AND ENTERTAINMENT"
+
+
+class ObservationLevelArtEnum(str, Enum):
     album = "Album"
     movie = "Movie/Film/Clip/Show"
     photo = "Photo/Picture"
@@ -138,28 +155,61 @@ class ObservationLevelEnum(str, Enum):
     painting = "Painting/Drawing/Illustration"
     poem = "Poem"
     roller_coaster = "Roller Coaster"
-    placeholder_infrastructure = "_______________INFRASTRUCTURE"
+
+
+class ObservationLevelInfrastructureEnum(str, Enum):
     dam = "dam"
     satellitte = "Satellite"
     street_road = "Street/Avenue/Road/Highway"
-    placeholder_transportation = "_______________TRANSPORTATION"
+
+
+class ObservationLevelTransportationEnum(str, Enum):
     automobile = "Car/Bus/Truck/Motorcycle"
     train = "Train"
     aircraft = "Plane/Helicopter"
     ship = "Ship"
-    placeholder_security = "_______________SECURITY, VIOLENCE, CRIME"
+
+
+class ObservationLevelSecurityEnum(str, Enum):
     gun = "Gun"
-    placeholder_demographic = "_______________DEMOGRAPHIC"
+
+
+class ObservationLevelDemographicEnum(str, Enum):
     age = "Age"
     race = "Race/Skin color"
     sex = "Sex"
-    placeholder_image = "_______________IMAGE"
+
+
+class ObservationLevelImageEnum(str, Enum):
     pixel = "Pixel/Grid"
     polygon = "Polygon"
-    placeholder_history = "_______________HISTORY"
+
+
+class ObservationLevelHistoryEnum(str, Enum):
     empire = "Empire"
-    placeholder_others = "_______________OTHERS"
+
+
+class ObservationLevelOthersEnum(str, Enum):
     other = "Other"
+
+
+ObservationLevel = Union[
+    ObservationLevelSphereEnum,
+    ObservationLevelIndividualEnum,
+    ObservationLevelEstablishmentEnum,
+    ObservationLevelPoliticsEnum,
+    ObservationLevelScienceEnum,
+    ObservationLevelEconomicsEnum,
+    ObservationLevelEducationEnum,
+    ObservationLevelEventsEnum,
+    ObservationLevelArtEnum,
+    ObservationLevelInfrastructureEnum,
+    ObservationLevelTransportationEnum,
+    ObservationLevelSecurityEnum,
+    ObservationLevelDemographicEnum,
+    ObservationLevelHistoryEnum,
+    ObservationLevelOthersEnum,
+]
 
 
 class LanguageEnum(str, Enum):
@@ -203,47 +253,49 @@ class Resource(BaseModel):
     # resource_type: str
 
 
+# TODO: Remove only_on_types, required
+# Required for later
+"""
 class LaiRequest(Resource):
-    origin: Str  # Validators only_on_types(lai_request) required_on_types(lai_request)
-    protocol_number: Str  # Validators only_on_types(lai_request) required_on_types(lai_request)
-    superior_organ: Str  # Validators only_on_types(lai_request) required_on_types(lai_request)
-    linked_organ: Str  # Validators only_on_types(lai_request) required_on_types(lai_request)
-    start_date: datetime.date  # Validators only_on_types(lai_request) required_on_types(lai_request) scheming_required isodate convert_to_json_if_date
-    who_requested: Str  # Validators only_on_types(lai_request) # required_on_types(lai_request)
-    status: StatusEnum  # Validatos only_on_types(lai_request) required_on_types(lai_request) scheming_required scheming_choices
-    request_url: Str  # Validators only_on_types(lai_request) required_on_types(lai_request) ignore_missing unicode remove_whitespace
-    data_url: Str  # Validators only_on_types(lai_request) ignore_missing unicode remove_whitespace #required_on_types(lai_request)
-    observations: Str  # Validators only_on_types(lai_request) # required_on_types(lai_request)
+    origin: Str  # Validators  required_on_types(lai_request)
+    protocol_number: Str  # Validators  required_on_types(lai_request)
+    superior_organ: Str  # Validators  required_on_types(lai_request)
+    linked_organ: Str  # Validators  required_on_types(lai_request)
+    start_date: datetime.date  # Validators  required_on_types(lai_request) scheming_required isodate convert_to_json_if_date
+    who_requested: Str  # Validators  # required_on_types(lai_request)
+    status: StatusEnum  # Validatos  required_on_types(lai_request) scheming_required scheming_choices
+    request_url: Str  # Validators  required_on_types(lai_request) ignore_missing unicode remove_whitespace
+    data_url: Str  # Validators  ignore_missing unicode remove_whitespace #required_on_types(lai_request)
+    observations: Str  # Validators  # required_on_types(lai_request)
     lai_n: int
     resource_type: Literal["lai_request"]
+"""
 
 
 class BdmTable(Resource):
     table_id: Int  # Validator only on types
-    auxiliary_files_url: Str  # Validators only_on_types(bdm_table) ignore_missing unicode remove_whitespace
-    treatment_description: Str  # Validator only_on_types(bdm_table)
-    observation_level: List[
-        ObservationLevelEnum
-    ]  # Validators only_on_types(bdm_table) scheming_multiple_choice
-    columns: Str  # Validators only_on_types(bdm_table) required_on_types(bdm_table) VER COM FRED
-    primary_keys: Str  # Validators only_on_types(bdm_table) #required_on_types(bdm_table) MANUAL
-    version: Str  # Validators only_on_types(bdm_table) unicode package_version_validator #required_on_types(bdm_table) MANUAL
-    publisher: Str  # Validators only_on_types(bdm_table) #required_on_types(bdm_table) MANUAL display_property: dc:creator
-    publisher_email: Str  # Validators only_on_types(bdm_table) #required_on_types(bdm_table) MANUAL  display_property: dc:creator display_snippet: email.html
-    publisher_github: Str  # Validators only_on_types(bdm_table) # required_on_types(bdm_table)
-    publisher_website: Str  # Validators only_on_types(bdm_table) # required_on_types(bdm_table)
+    auxiliary_files_url: Optional[
+        Str
+    ]  # Validators ignore_missing unicode remove_whitespace
+    treatment_description: Optional[Str]
+    observation_level: List[ObservationLevel]
+    columns: Str
+    primary_keys: Str
+    version: Str
+    publisher: Str
+    publisher_email: Str
+    publisher_github: Str
+    publisher_website: Str
     resource_type: Literal["bdm_table"]
 
 
 class ExternalLink(Resource):
-    url: str  # Validators only_on_types(external_link) required_on_types(external_link) ignore_missing unicode remove_whitespace # TODO: add check_url_is_alive validator
-    language: List[
-        LanguageEnum
-    ]  # Validators only_on_types(external_link) required_on_types(external_link) scheming_multiple_choice # TODO: @dahis, serio q eh so no external link ?
-    has_api: bool  # Validators only_on_types(external_link) scheming_required scheming_choices # TODO: data check VER COM FRED SE PODE SER BOOL
-    free: bool  # Validators only_on_types(external_link) required_on_types(external_link) scheming_required scheming_choices VER COM FRED SE PODE SER BOOL
-    signup_needed: bool  # Validators only_on_types(external_link) required_on_types(external_link) scheming_required scheming_choices VER COM FRED SE PODE SER BOOL
-    availability: AvailabilityEnum  # Validators only_on_types(external_link) required_on_types(external_link) scheming_required scheming_choices
-    brazilian_ip: bool  # Validators only_on_types(external_link) scheming_required scheming_choices #required_on_types(external_link) VER COM FRED SE PODE SER BOOL
-    license_type: Str  # Validators only_on_types(external_link) required_on_types(external_link)
+    url: str  # Validators ignore_missing unicode remove_whitespace # TODO: add check_url_is_alive validator
+    language: List[LanguageEnum]  # TODO: @dahis, serio q eh so no external link ?
+    has_api: YES_NO  # Validators scheming_required scheming_choices # TODO: data check
+    free: YES_NO  # Validators scheming_required scheming_choices
+    signup_needed: YES_NO  # Validators scheming_required scheming_choice
+    availability: AvailabilityEnum  # Validators scheming_required scheming_choices
+    brazilian_ip: YES_NO  # Validators scheming_required scheming_choices
+    license_type: Str
     resource_type: Literal["external_link"]
