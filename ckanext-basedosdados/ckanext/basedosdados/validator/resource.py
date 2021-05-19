@@ -73,7 +73,7 @@ class Resource(BaseModel):
     name: Str
     description: Str
     spatial_coverage: Str
-    temporal_coverage: TemporalCoverageEnum
+    temporal_coverage: TemporalCoverageEnum = Field(max_items=10)
     update_frequency: UpdateFrequencyEnum
     # resource_type: str
 
@@ -103,7 +103,7 @@ class BdmTable(Resource):
         Str
     ]  # Validators ignore_missing unicode remove_whitespace
     treatment_description: Optional[Str]
-    observation_level: List[ObservationLevel]
+    observation_level: List[ObservationLevel] = Field(max_items=10)
     columns: Str
     primary_keys: Str
     version: Str
@@ -116,7 +116,9 @@ class BdmTable(Resource):
 
 class ExternalLink(Resource):
     url: str  # Validators ignore_missing unicode remove_whitespace # TODO: add check_url_is_alive validator
-    language: List[LanguageEnum]  # TODO: @dahis, serio q eh so no external link ?
+    language: List[LanguageEnum] = Field(
+        max_items=10
+    )  # TODO: @dahis, serio q eh so no external link ?
     has_api: YES_NO  # Validators scheming_required scheming_choices # TODO: data check
     free: YES_NO  # Validators scheming_required scheming_choices
     signup_needed: YES_NO  # Validators scheming_required scheming_choice

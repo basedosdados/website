@@ -102,9 +102,9 @@ class Package(_CkanDefaults):
 
     # Custom fields
     description: Str
-    temporal_coverage: List[TemporalCoverageEnum]
+    temporal_coverage: List[TemporalCoverageEnum] = Field(max_items=10)
     spatial_coverage: Str
-    observation_level: ObservationLevel
+    observation_level: List[ObservationLevel] = Field(max_items=10)
     auxiliary_files_url: List[Str]
     download_type: Optional[
         Literal["Link Externo"]
