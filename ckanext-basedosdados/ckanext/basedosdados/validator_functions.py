@@ -2,12 +2,12 @@
 
 from ckantoolkit import missing as MISSING
 
-
+# TODO: check if this file is still relevant
 def _get_type(key, data):
     k = list(key)
     k[-1] = "resource_type"
     type_ = data.get(tuple(k))
-    SUPPORTED_TYPES = ("bdm_table", "external_link", "lai_request")
+    SUPPORTED_TYPES = ("bdm_table", "external_link")
     if type_ not in SUPPORTED_TYPES:
         return None
         # raise Exception( f'Resource Type invalid! Found {type_!r}, but we only accept types: {SUPPORTED_TYPES!r}\n{locals()}')

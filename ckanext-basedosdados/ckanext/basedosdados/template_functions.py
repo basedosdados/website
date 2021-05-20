@@ -49,7 +49,7 @@ def load_json_schema():
     return json.dumps({
         'external_link': to_schema(validator.resource.ExternalLink, resource_fields_to_delete)
         ,'bdm_table':    to_schema(validator.resource.BdmTable,     resource_fields_to_delete)
-        ,'lai_request':  to_schema(validator.resource.LaiRequest,   resource_fields_to_delete)
+        #,'lai_request':  to_schema(validator.resource.LaiRequest,   resource_fields_to_delete)
         ,'package':      to_schema(validator.package.Package,       validator.package._CkanDefaults.__fields__)
     }, indent=2)
 
