@@ -2,6 +2,8 @@ organize tests
 
 add new schema to pydantic model @breno
 
+refactor test fixtures
+
 ---
 
 x Check views on site (they are broken)

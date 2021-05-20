@@ -68,7 +68,7 @@ class StatusEnum(str, Enum):
     denied = "Denied"
 
 
-RESOURCE_TYPES = ['lai_request', 'bdm_table', 'external_link'] # TODO: add something that test that subclasses obey this constant
+RESOURCE_TYPES = ['bdm_table', 'external_link'] # TODO: add something that test that subclasses obey this constant
 
 class Resource(BaseModel):
     id: IdType
