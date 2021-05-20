@@ -31,7 +31,8 @@ def test_correct_reporting_on_missing_properties_of_a_specific_resource(data):
         assert error['type'] == "value_error.missing", error
 
 
-@pytest.mark.skip
+# TODO @Fred: See if this test is needed and remove request
+@pytest.mark.skip()
 def test_ckanize():
     master_dataset = {
         "ano": ["atual"],

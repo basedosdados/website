@@ -96,9 +96,6 @@ class _CkanDefaults(BaseModel):
 
 
 class Package(_CkanDefaults):
-    # Custom fields
-    description: Str
-
     # Generated Fields
     # temporal_coverage: TemporalCoverage
     # spatial_coverage: Str

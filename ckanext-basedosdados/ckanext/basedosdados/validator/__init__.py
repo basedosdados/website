@@ -4,7 +4,7 @@ import pydantic
 
 class BaseModel(pydantic.BaseModel):
     class Config:
-        extra = "forbid"
+        extra = "allow"
 
 
 from . import package, resource

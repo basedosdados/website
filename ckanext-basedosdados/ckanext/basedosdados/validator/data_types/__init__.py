@@ -1,5 +1,5 @@
 from typing_extensions import Annotated
-from typing import Optional, List
+from typing import Optional, List, Union, Literal
 
 from pydantic import StrictInt as Int, Field, StrictStr as Str, BaseModel
 
@@ -16,4 +16,4 @@ class TemporalCoverageInt(BaseModel):
     __root__: int = Field(..., ge=1970, le=2030)
 
 
-TemporalCoverage = List[TemporalCoverageInt]
+TemporalCoverage = List[Union[TemporalCoverageInt, Literal['CHECK']]]

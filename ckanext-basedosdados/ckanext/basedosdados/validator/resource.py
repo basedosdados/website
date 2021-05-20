@@ -103,20 +103,23 @@ class LaiRequest(Resource):
 class BdmTable(Resource):
     resource_type: Literal["bdm_table"]
 
-    table_id: Int  # Validator only on types
+    table_id: Str  # Validator only on types
     auxiliary_files_url: Optional[
         Str
     ]  # Validators ignore_missing unicode remove_whitespace
     treatment_description: Optional[Str]
-    observation_level: List[ObservationLevel] = Field(max_items=10)
-    columns: Str
-    primary_keys: Str
-    version: Str
-    publisher: Str
-    publisher_email: Str
-    publisher_github: Str
-    publisher_website: Str
+    observation_level: Optional[List[ObservationLevel]] = Field(max_items=10) # Required for tier 1
+    columns: Optional[Str] # Required for tier 1
+    primary_keys: Optional[Str] # Required for tier 1
+    version: Optional[Str] # Required for tier 1
+    publisher: Optional[Str] # Required for tier 1
+    publisher_email: Optional[Str] # Required for tier 1
+    publisher_github: Optional[Str] # Required for tier 1
+    publisher_website: Optional[Str] # Required for tier 1
 
+    # TODO: implement this
+    def table_id_should_be_a_valid_bigquery_identifier(cls, value):
+        pass
 
 class ExternalLink(Resource):
     resource_type: Literal["external_link"]
