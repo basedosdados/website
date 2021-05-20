@@ -1,6 +1,6 @@
 from pathlib import Path
-from pydantic import BaseModel, ValidationError, validator
-from typing import List
+from pydantic import BaseModel, ValidationError, validator,StrictStr as Str
+from typing import List, Optional
 from importlib import resources
 import yaml
 import ckanext.basedosdados.bdm_table_column_metadata_validator
@@ -19,8 +19,8 @@ INV_FIELD = []
 
 
 class Column(BaseModel):
-    name: str
-    description: str
+    name: Str
+    description: Str
     is_in_staging: bool
     is_partition: bool
 
@@ -42,7 +42,7 @@ class Column(BaseModel):
     def validate_std_description(cls, value, values):
         if INV_FIELD:
             values.update(INV_FIELD[-1])
-            INV_FIELD.clear()
         is_std_col = BD_STD_COLUMNS_BY_NAME.get(values["name"])
         if is_std_col and value != is_std_col["description"]:
-            raise ValueError("Standard column does not have standard descritpion")
+            raise ValueError(f"Standard column does not have standard descritpion({values['name']}): \'{value}\' should be {is_std_col['description']}")
+        return value
