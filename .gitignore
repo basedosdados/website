@@ -6,3 +6,4 @@ build
 dive.log
 configs/ckan.prod.ini
 .idea
+.hypothesis

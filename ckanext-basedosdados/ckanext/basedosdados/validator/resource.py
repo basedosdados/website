@@ -70,15 +70,17 @@ class StatusEnum(str, Enum):
 
 RESOURCE_TYPES = ['bdm_table', 'external_link'] # TODO: add something that test that subclasses obey this constant
 
-class Resource(BaseModel):
+class _CkanDefaultResource(BaseModel):
     id: IdType
     name: Str
     description: Str
-    spatial_coverage: Str
-    temporal_coverage: TemporalCoverage
-    update_frequency: UpdateFrequencyEnum
     position: int
     url: Optional[str] # reserved in ckan
+
+class Resource(_CkanDefaultResource):
+    spatial_coverage: Optional[Str] # Required for tier 1
+    temporal_coverage: Optional[TemporalCoverage] # Required for tier 1
+    update_frequency: Optional[UpdateFrequencyEnum] # Required for tier 1
 
 
 # TODO: Remove only_on_types, required
@@ -117,6 +119,8 @@ class BdmTable(Resource):
     publisher_github: Optional[Str] # Required for tier 1
     publisher_website: Optional[Str] # Required for tier 1
 
+    bdm_file_size: Union[int, None, Literal['Unavailable']] # should not be editable in form, also, check what use is Unavailable
+
     # TODO: implement this
     def table_id_should_be_a_valid_bigquery_identifier(cls, value):
         pass
@@ -124,13 +128,11 @@ class BdmTable(Resource):
 class ExternalLink(Resource):
     resource_type: Literal["external_link"]
 
-    url: str  # Validators ignore_missing unicode remove_whitespace # TODO: add check_url_is_alive validator
-    language: List[LanguageEnum] = Field(
-        max_items=10
-    )  # TODO: @dahis, serio q eh so no external link ?
-    has_api: YES_NO  # Validators scheming_required scheming_choices # TODO: data check
-    free: YES_NO  # Validators scheming_required scheming_choices
-    signup_needed: YES_NO  # Validators scheming_required scheming_choice
-    availability: AvailabilityEnum  # Validators scheming_required scheming_choices
-    brazilian_ip: YES_NO  # Validators scheming_required scheming_choices
-    license_type: Str
+    url: str  # Required for tier 1 TODO: add check_url_is_alive validator check is url
+    language: Optional[List[LanguageEnum]] = Field( max_items=10)  # Required for tier 1 # TODO: @dahis, serio q eh so no external link ?
+    has_api: Optional[YES_NO]  # Required for tier 1 # TODO: data check
+    free: Optional[YES_NO]  # Required for tier 1
+    signup_needed: Optional[YES_NO] # Required for tier 1
+    availability: Optional[AvailabilityEnum] # Required for tier 1
+    brazilian_ip: Optional[YES_NO] # Required for tier 1
+    license_type: Optional[Str] # Required for tier 1

@@ -19,7 +19,7 @@ begin;
         select id from "user" where name in ('ckan', 'rdahis');
     drop table if exists chosen_pack; create temp table chosen_pack as
         select id from package where creator_user_id in (select id from chosen_user)
-        order by metadata_modified desc limit 100;
+        order by metadata_modified desc LIMIT 100; -- Number of datasets to keep
     drop table if exists chosen_pack_extra; create temp table chosen_pack_extra as
         select id from package_extra where package_id in (select * from chosen_pack) ;
 
@@ -54,7 +54,8 @@ begin;
     DELETE FROM package_tag_revision WHERE package_id not IN ( SELECT * FROM chosen_pack);
     DELETE FROM package_tag WHERE package_id not IN ( SELECT * FROM chosen_pack);
     DELETE FROM package WHERE id not IN ( SELECT * FROM chosen_pack);
-    DELETE FROM "user" WHERE id not IN ( SELECT * FROM chosen_user);
+    DELETE FROM "user" WHERE id not IN ( SELECT * FROM chosen_user); 
+    UPDATE "user" SET api_key='', password='', email='';
     DELETE FROM "member" where table_id not in (
             select * FROM chosen_user union select * FROM chosen_pack);
     DELETE FROM "member_revision" where table_id not in (

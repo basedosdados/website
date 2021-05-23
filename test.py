@@ -8,7 +8,7 @@ import random
 from pprint import pprint
 
 
-CKAN_API_KEY = os.environ.get('CKAN_API_KEY')
+CKAN_API_KEY = os.environ.get('CKAN_API_KEY') or open('.ckan_dev_api_token').read().split('=')[-1].strip()
 CKAN_URL = os.environ.get('CKAN_URL', 'http://localhost:5000')
 def get_client():
     from ckanapi import RemoteCKAN
@@ -19,7 +19,7 @@ ckan = get_client()
 
 
 def test():
-    ret = requests.get(CKAN_URL + '/api/3/action/package_show?name_or_id=br-sp-ssp-seguranca')
+    ret = requests.get(CKAN_URL + '/api/3/action/package_show?name_or_id=br-sp-gov-ssp')
     assert ret.status_code == 200, ret.json()
     package = ret.json()['result']
 

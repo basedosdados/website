@@ -34,7 +34,7 @@ echo waiting for postgres to be ready ; docker exec db /wait-until-up
 docker exec -i -e PGPASSWORD=ckan db bash -c 'dropdb -U ckan ckan --if-exists && createdb -U ckan ckan'
 (
     gzip -d -c ./postgresql/dev_init_data.sql.gz
-    echo "INSERT INTO public.api_token (id,"'"'"name"'"'",user_id,created_at) VALUES ('5ELrpuTWFQ1z1mp0aa9F3MjZlfyAmJFgzaPFHalSMx4yLQy_Tvrc8tntXMySgxyKMbRJeMdkxSCpzu8A','dev token','90af4004-6956-435e-8ca3-4d2a1a494918','2021-05-16 00:03:14.235');"
+    cat ./postgresql/insert_api_token.sql
 ) | \
         docker exec -i -e PGPASSWORD=ckan db \
         psql -v ON_ERROR_STOP=1 --echo-errors --quiet -U ckan ckan

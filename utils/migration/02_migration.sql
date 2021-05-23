@@ -39,30 +39,37 @@ CREATE EXTENSION IF NOT EXISTS plpython3u;
 
 -- Temp functions definition
 CREATE OR REPLACE FUNCTION pg_temp.translate_languages(languages_array text) RETURNS json AS $$
-	import json
-	FROM_TO =  {"ingles": "english", "portugues": "portuguese", "espanhol": "spanish"}
-	array = json.loads(languages_array)
-	return json.dumps([FROM_TO[l] for l in array])
+    if languages_array is None: return
+    import json
+    FROM_TO = {"ingles": "english", "portugues": "portuguese", "espanhol": "spanish"
+            ,"alemao": "german", "arabe": "arabic", "russo": "russian", "chines": "chinese"
+            ,"frances": "french", "japones": "japanese", "bahasa": "bahasa", "hindi": "hindi"
+    }
+    array = json.loads(languages_array)
+    return json.dumps([FROM_TO[l] for l in array])
 $$ LANGUAGE plpython3u;
 
 CREATE OR REPLACE FUNCTION pg_temp.translate_times(times_array text) RETURNS json AS $$
-	import json
-	FROM_TO =  {"pre_1999": "CHECK", "atual": "CHECK", "vazio": "CHECK"}
-	return json.dumps([FROM_TO.get(l, l) for l in json.loads(times_array)])
+    if times_array is None: return
+    import json
+    FROM_TO =  {"pre_1999": "CHECK", "atual": "CHECK", "vazio": "CHECK"}
+    return json.dumps([FROM_TO.get(l, l) for l in json.loads(times_array)])
 $$ LANGUAGE plpython3u;
 
 CREATE OR REPLACE FUNCTION pg_temp.translate_boolean(bool text) RETURNS text AS $$
-	return {'sim': 'yes', 'nao': 'no'}[bool]
+    if bool is None: return
+    return {'sim': 'yes', 'nao': 'no'}[bool]
 $$ LANGUAGE plpython3u;
 
 CREATE OR REPLACE FUNCTION pg_temp.translate_time_unit(t text) RETURNS text AS $$
-	return {'segundos': 'second', 'minuto': 'minute', 'horas': 'hour', 'dois_anos': 'two_years',
-			'dia': 'day', 'semana': 'week', 'mes': 'month', 'trimestre': 'quarter',
-			'semestre': 'semester', 'ano': 'one_year', 'tres_anos': 'three_years',
-			'quatro_anos': 'four_years', 'cinco_anos': 'five_years', 'dez_anos': 'ten_years',
-			'recorrente': 'recurring', 'sem_atualizacao': 'unique', 'vazio': 'empty',
-			'outro': 'other'
-	}[t]
+    if not t: return None
+    return {'segundos': 'second', 'minuto': 'minute', 'horas': 'hour', 'dois_anos': 'two_years',
+    'dia': 'day', 'semana': 'week', 'mes': 'month', 'trimestre': 'quarter',
+    'semestre': 'semester', 'ano': 'one_year', 'tres_anos': 'three_years',
+    'quatro_anos': 'four_years', 'cinco_anos': 'five_years', 'dez_anos': 'ten_years',
+    'recorrente': 'recurring', 'sem_atualizacao': 'unique', 'vazio': 'empty',
+    'outro': 'other'
+}[t]
 $$ LANGUAGE plpython3u;
 
 -- Start of migration script
@@ -144,5 +151,6 @@ FROM p WHERE p.id = resource.package_id
 
 -- Remove nulls
 UPDATE resource SET extras = jsonb_strip_nulls(extras::jsonb);
+UPDATE package SET owner_org = COALESCE(owner_org, '3626e93d-165f-42b8-bde1-2e0972079694'); -- sending to basedosdados org any package without org
 SELECT * FROM resource JOIN package ON package.id = resource.package_id 
 LIMIT 100000 ;
