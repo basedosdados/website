@@ -28,8 +28,6 @@
 
     _fixArrayData(window.form_data__resource, "observation_level")
     _fixArrayData(window.form_data__resource, "language")
-
-    console.log(window.form_data__resource)
 </script>
 
 <script type="module">
@@ -87,7 +85,6 @@
     fields = fields.filter( x => x != 'bdm_file_size')
     schema.properties.bdm_file_size = {'type': 'string', readOnly: true}
     fields.push({'key': 'bdm_file_size', 'type': 'text'})
-        console.log(schema, fields)
     return [schema, fields]
   }
   $('#field-resource_type').on('change', update_form_based_on_resource_type);
