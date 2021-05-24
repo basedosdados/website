@@ -41,12 +41,6 @@ class BdmTable(Resource):
     columns: Optional[List[Column]]
     temporal_coverage: Str  # TODO: List[int]
 
-    # @validator("columns")
-    # def load_columns(cls, value, values):
-    #     if type(value) == str:
-    #         value = yaml.safe_load(value)
-    #     return value
-
 
 class ExternalLink(Resource):
     resource_type: Literal["external_link"]
