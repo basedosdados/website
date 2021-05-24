@@ -18,6 +18,18 @@
   // using global vars to export data to other module. Putting everything in a single script tag messes up with chrome debugging (because its too large)
   window.form_data__resource = {{ data | tojson(indent=2) }}
   window.form_data__schemas = {{ h.load_json_schema() | tojson(indent=2) }}
+
+  function _fixArrayData(data, arrayKeyName){
+    const fieldsToFix = Object.keys(data).filter(k => k.indexOf(arrayKeyName) === 0)
+    const fixedArray = fieldsToFix.map(k => data[k])
+
+    data[arrayKeyName] = fixedArray;
+  }
+
+    _fixArrayData(window.form_data__resource, "observation_level")
+    _fixArrayData(window.form_data__resource, "language")
+
+    console.log(window.form_data__resource)
 </script>
 
 <script type="module">
@@ -45,6 +57,7 @@
         schema: schema
         ,form: [
             ...fields,
+
             { "type": "actions", "items": [ ] } // suppress submit
         ]
         ,value: resource
@@ -54,16 +67,27 @@
     $('.jsonform-required > label').prepend('<span title="Este campo é obrigatório" class="control-required">* </span>')
   }
 
+  function _jsonSchemaFormattedObservationLevelItems(observationLevelItems){
+    return {
+        ...observationLevelItems[0],
+        enum: observationLevelItems.map(i => i.enum).flat(),
+    }
+  }
+
   function _deal_with_compatibility_issues(schema, fields) {
     delete schema.definitions
 
     if(schema === undefined || fields === undefined) throw new Error('missing fields')
-    fields = fields.filter( x => x != 'observation_level')
-    delete schema.properties.observation_level
+    let observationLevel = schema.properties.observation_level
+
+    if(observationLevel){
+       observationLevel.items = _jsonSchemaFormattedObservationLevelItems(observationLevel.items.anyOf)
+    }
 
     fields = fields.filter( x => x != 'bdm_file_size')
     schema.properties.bdm_file_size = {'type': 'string', readOnly: true}
     fields.push({'key': 'bdm_file_size', 'type': 'text'})
+        console.log(schema, fields)
     return [schema, fields]
   }
   $('#field-resource_type').on('change', update_form_based_on_resource_type);
