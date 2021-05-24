@@ -1,5 +1,5 @@
 from pathlib import Path
-from pydantic import BaseModel, ValidationError, validator,StrictStr as Str
+from pydantic import BaseModel, ValidationError, validator, StrictStr as Str
 from typing import List, Optional
 from importlib import resources
 import yaml
@@ -28,14 +28,14 @@ class Column(BaseModel):
     def name_is_lower(cls, value, values):
         if not value.islower():
             INV_FIELD.append({"name": value})
-            raise ValueError("should be all lower case")
+            raise ValueError(f"{value} should be all lower case")
         return value
 
     @validator("name")
     def no_spaces(cls, value, values):
         if " " in value:
             INV_FIELD.append({"name": value})
-            raise ValueError("should not have spaces")
+            raise ValueError(f"{value} should not have spaces")
         return value
 
     @validator("description")
@@ -44,5 +44,7 @@ class Column(BaseModel):
             values.update(INV_FIELD[-1])
         is_std_col = BD_STD_COLUMNS_BY_NAME.get(values["name"])
         if is_std_col and value != is_std_col["description"]:
-            raise ValueError(f"Standard column does not have standard descritpion({values['name']}): \'{value}\' should be {is_std_col['description']}")
+            raise ValueError(
+                f"Standard column does not have standard descritpion({values['name']}): '{value}' should be {is_std_col['description']}"
+            )
         return value
