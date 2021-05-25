@@ -19,15 +19,7 @@
   window.form_data__resource = {{ data | tojson(indent=2) }}
   window.form_data__schemas = {{ h.load_json_schema() | tojson(indent=2) }}
 
-  function _fixArrayData(data, arrayKeyName){
-    const fieldsToFix = Object.keys(data).filter(k => k.indexOf(arrayKeyName) === 0)
-    const fixedArray = fieldsToFix.map(k => data[k])
 
-    data[arrayKeyName] = fixedArray;
-  }
-
-    _fixArrayData(window.form_data__resource, "observation_level")
-    _fixArrayData(window.form_data__resource, "language")
 </script>
 
 <script type="module">
@@ -56,14 +48,67 @@
         ,form: [
             ...fields,
 
-            { "type": "actions", "items": [ ] } // suppress submit
+            // { "type": "actions", "items": [{ "type": "submit", "title": "Submit" }] }// suppress submit
         ]
         ,value: resource
     }
     $('#metadata-jsonform-container').html('')
     $('#metadata-jsonform-container').jsonForm(opts)
     $('.jsonform-required > label').prepend('<span title="Este campo é obrigatório" class="control-required">* </span>')
+    $('form#resource-edit').submit(_fix_array_fields)
+    $('form#resource-edit').submit( (e) => {
+        const data = Object.fromEntries(new FormData(e.target).entries());
+        console.log(data)
+    });
   }
+
+function _fix_array_fields() {
+    // jsonform appends a `[#array_position]` suffix to the tag's name, which causes form data to be malformed when POSTing to backend
+    // this code removes this suffix sending the data as an array, as expected
+    let array_fields = $(".form-group [name*=\\[]").filter( function(idx, el) { return el.name.match(/.*\[[0-9]+\]/)})
+    array_fields.each( (idx, el) => $(el).attr('name', el.name.replace(/\[[0-9]+\]$/, '')) )
+}
+/*
+<div class="tabbable">
+  <div class="form-group">
+    <label for="jsonform-34-elt-choice">
+    Tipo do nivel da observacao
+    </label>
+    <div class="controls">
+      <select class="nav" id="observation_level_type">
+      </select>
+    </div>
+  </div>
+  <div class="tab-content">
+    <div data-idx="0" class="tab-pane active">
+      <div class="form-group jsonform-error-text">
+        <label for="jsonform-34-elt-text">Text</label>
+        <div class="controls">
+        <input type="text" class="form-control" name="text" value="" id="jsonform-34-elt-text" aria-label="Text"><span class="help-block jsonform-errortext" style="display:none;"></span></div>
+      </div>
+    </div>
+    <div data-idx="1" class="tab-pane">
+      <div class="form-group jsonform-error-category">
+        <label for="jsonform-34-elt-category">Category</label>
+        <div class="controls">
+          <select name="category" id="jsonform-34-elt-category" class="form-control" disabled="disabled">
+            <option value="Geography">Geography</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="History">History</option>
+            <option value="Arts">Arts</option>
+            <option value="Science">Science</option>
+            <option value="Sports">Sports</option>
+          </select>
+          <span class="help-block jsonform-errortext" style="display:none;"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+*/
+
+
+
 
   function _jsonSchemaFormattedObservationLevelItems(observationLevelItems){
     return {
