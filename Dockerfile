@@ -12,7 +12,7 @@ RUN git clone https://github.com/ckan/ckanext-googleanalytics.git
 RUN git clone https://github.com/stadt-karlsruhe/ckanext-discovery.git
 
 ################ BUILDER #################
-FROM python:3.8 as builder
+FROM python:3.9 as builder
 LABEL maintainer="Base dos Dados"
 ENV PYTHONDONTWRITEBYTECODE=1 PIP_NO_PYTHON_VERSION_WARNING=1
 
@@ -66,7 +66,7 @@ COPY ./wsgi.py /app/wsgi.py
 ######### FINAL IMAGE ###########
 #################################
 
-FROM python:3.8-slim as final
+FROM python:3.9-slim as final
 WORKDIR /app
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s \
         CMD curl -f http://localhost:5000 || exit 1
@@ -77,7 +77,7 @@ ENV VIRTUAL_ENV=/venv PATH=/venv/bin:$PATH
 
 # System dependencies
 RUN --mount=type=cache,target=/var/lib/apt,id=apt_list2 --mount=type=cache,target=/var/cache/apt,id=apt_arch2\
-        apt-get update && apt-get install -y libmagic1 libpq-dev \
+        apt-get update && apt-get install -y libmagic1 libpq-dev libxslt-dev \
                 curl htop vim   # plus some goodies
 
 # Get files

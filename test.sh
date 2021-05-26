@@ -35,7 +35,7 @@ done
 
 URL="$URL" python ./test.py
 
-docker-compose run --rm ckan pytest ./ckanext-basedosdados/ckanext/basedosdados/tests/test_validator.py
+docker-compose run --rm ckan pytest ./ckanext-basedosdados/ckanext/basedosdados/tests/test_validator.py -vv
 
 echo 'ALL OK :)'
 
