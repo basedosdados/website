@@ -13,13 +13,13 @@ def is_bdm_one_click_download(r):
     return size != 'Unavailable' and type(size) == int and size > 10
 
 def make_example_bq_query(resource, package):
-    return f'''SELECT * FROM `basedosdados.{get_package_bdm_schema_name(package)}.{resource['name']}` LIMIT 100'''
+    return f'''SELECT * FROM `basedosdados.{get_package_bdm_schema_name(package)}.{get_resource_bdm_table_name(resource)}` LIMIT 100'''
     
 def make_example_python_query(resource, package):
     return f'''import basedosdados as bd
 # Para carregar o dado direto no pandas
 bd.read_table(dataset_id='{get_package_bdm_schema_name(package)}', 
-            table_id='{resource['name']}',
+            table_id='{get_resource_bdm_table_name(resource)}',
             billing_project_id=<YOUR_PROJECT_ID>)'''
 
 def make_example_r_query(resource, package):
@@ -27,14 +27,14 @@ def make_example_r_query(resource, package):
 library("bigrquery")
 billing_project_id = "<YOUR_PROJECT_ID>"
 # Para baixar a tabela inteira
-query = "SELECT * FROM `basedosdados.{get_package_bdm_schema_name(package)}.{resource['name']}`"
+query = "SELECT * FROM `basedosdados.{get_package_bdm_schema_name(package)}.{get_resource_bdm_table_name(resource)}`"
 d <- bq_table_download(bq_project_query(billing_project_id, query), page_size=500, bigint="integer64")
     '''
 def get_package_bdm_schema_name(package):
     return stringcase.snakecase(package['name'])
 
 def get_resource_bdm_table_name(resource):
-    return resource['name']
+    return resource['table_id']
 
 
 from ckanext.basedosdados import validator

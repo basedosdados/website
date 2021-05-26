@@ -84,7 +84,7 @@ function _fix_array_fields() {
     if(schema === undefined || fields === undefined) throw new Error('missing fields')
     let observationLevel = schema.properties.observation_level
 
-    if(observationLevel){
+    if(observationLevel && observationLevel.items.anyOf){
        observationLevel.items = _jsonSchemaFormattedObservationLevelItems(observationLevel.items.anyOf)
     }
 

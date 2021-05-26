@@ -4,7 +4,7 @@
 --Perform or restore backup
 
 -- SETUP_BACKUP
-DO $$ BEGIN  
+DO $$ BEGIN
 	-- Create backup tables
 	IF (SELECT to_regclass('public._backup_package') IS NULL) THEN
 		CREATE TABLE public._backup_package AS SELECT * FROM package;
@@ -116,7 +116,7 @@ SET
 			'is_bdm',                   NULL
 			,'table_id',                case when resource_type = 'bdm_table' then resource.name else NULL end
 			,'language',                case when resource_type = 'external_link' then pg_temp.translate_languages(package_extras->>'idioma') else NULL end
-			,'description',             case when extras::jsonb->>'descricao' != '' then extras::jsonb->>'descricao' else 'CHECK' END
+			,'description',             case when extras::jsonb->>'descricao' != '' then extras::jsonb->>'descricao' else '' END
 			,'descricao',               NULL
 			,'spatial_coverage',        package_extras->>'regiao'
 			,'temporal_coverage',       pg_temp.translate_times(package_extras->>'ano')

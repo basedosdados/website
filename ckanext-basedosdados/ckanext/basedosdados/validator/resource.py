@@ -15,6 +15,7 @@ from .data_types import ObservationLevel, TemporalCoverage, IdType
 
 YES_NO = Literal["yes", "no"]
 
+F = Field
 
 class UpdateFrequencyEnum(str, Enum):
     second = "second"  # "Second"
@@ -107,7 +108,7 @@ class BdmTable(Resource):
 
     table_id: Str  # Validator only on types
     auxiliary_files_url: Optional[Str]  # Validators ignore_missing unicode remove_whitespace
-    treatment_description: Optional[Str]
+    treatment_description: Optional[Str] = F(title='Descricao do tratamento')
     observation_level: Optional[Set[ObservationLevel]] = Field(max_items=10) # Required for tier 1
     _observation_level_validator = treat_scalar_as_single_value_set('observation_level')
     columns: Optional[Str] # Required for tier 1

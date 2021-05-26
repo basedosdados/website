@@ -102,7 +102,7 @@ class Package(_CkanDefaults):
     # observation_level: List[ObservationLevel] = Field(max_items=10)
     # auxiliary_files_url: List[Str]
 
-    download_type: Optional[Literal['Link Externo', 'BD Mais']] # field_name: download_type # validators: generate_download_type #TODO uncomment generates
+    download_type: Optional[Literal['Link Externo', 'BD Mais']] # TODO: generate this automatically
 
 
 # TODO: try to access fields on validation and get annotations on which fields are needed for each tier
