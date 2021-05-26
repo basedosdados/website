@@ -4,10 +4,10 @@
 FROM alpine as extensions
 WORKDIR /extensions
 RUN apk add git
-RUN git clone https://github.com/ckan/ckanext-pages.git
-RUN git clone https://github.com/ckan/ckanext-repo.git
-RUN git clone https://github.com/ckan/ckanext-scheming.git
-RUN git clone https://github.com/NaturalHistoryMuseum/ckanext-contact.git
+# RUN git clone https://github.com/ckan/ckanext-pages.git
+# RUN git clone https://github.com/ckan/ckanext-repo.git
+# RUN git clone https://github.com/ckan/ckanext-scheming.git
+# RUN git clone https://github.com/NaturalHistoryMuseum/ckanext-contact.git
 RUN git clone https://github.com/ckan/ckanext-googleanalytics.git
 RUN git clone https://github.com/stadt-karlsruhe/ckanext-discovery.git
 
