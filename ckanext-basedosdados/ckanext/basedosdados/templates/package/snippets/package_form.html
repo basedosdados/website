@@ -18,7 +18,8 @@
   import "https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.1/underscore-min.js"
   import "https://cdnjs.cloudflare.com/ajax/libs/jsonform/2.2.3/jsonform.js"
 
-  var package_ = {{ pkg_dict if pkg_dict else {} | tojson }}
+  {% set package_ = pkg_dict if pkg_dict else {} %} {# Need to set this in another stage. There is a bug in jinja if we run this ternary if statement together with tojson. #}
+  var package_ = {{  package_ | tojson }}
   var schemas = {{ h.load_json_schema() | tojson }}
   window.debug__schemas = schemas
 
