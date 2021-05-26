@@ -56,16 +56,10 @@
     $('#metadata-jsonform-container').jsonForm(opts)
     $('.jsonform-required > label').prepend('<span title="Este campo é obrigatório" class="control-required">* </span>')
     $('form#resource-edit').submit(_fix_array_fields)
-    $('form#resource-edit').submit( (e) => {
-        const data = Object.fromEntries(new FormData(e.target).entries());
-        console.log(data)
-    });
-    $(document).on('mouseover mouseout', 'select', function(){
-        $('option').filter((i, el) =>{
-            if(el.value.indexOf("___") === 0){
-                el.disabled = true;
-            }
-        })
+    $('option:contains("___")').each( (i, opt) => {
+        opt.disabled = true;
+        opt.value = opt.value.replace('___', '')
+        opt.innerHTML = opt.innerHTML.replace('___', '')
     })
   }
 
@@ -80,7 +74,7 @@ function _fix_array_fields() {
     return {
         ...observationLevelItems[0],
         title: "Observation Level",
-        enum: observationLevelItems.map(i => ["_____" + i.title, ...i.enum]).flat(),
+        enum: observationLevelItems.map(i => ["___" + i.title, ...i.enum]).flat(),
     }
   }
 
