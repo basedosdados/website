@@ -18,6 +18,8 @@ def package_validate(context, data_dict):
     package_plugin = lib_plugins.lookup_package_plugin(data_dict['type'])
 
     if 'id' in data_dict: del data_dict['id']
+    for r in data_dict['resources']:
+        if 'id' in r: del r['id']
     if 'name' in data_dict: data_dict['name'] += '_' # add a char so that name doesn't colide with existing package
 
     schema = context.get('schema') or package_plugin.create_package_schema()

@@ -616,10 +616,28 @@ resource_fields:
   - field_name: formato
     label: Formato
     preset: resource_format_autocomplete
+  - field_name: resource_type
+    label: Tipo do Recurso
+    preset: select
+    choices:
+    - value: bdm_table
+      label: Tabela BD+
+    - value: external_link
+      label: Link Externo
+    - value: lai_request
+      label: Pedido LAI
+    required: 'true'
   - field_name: is_bdm
     label: BD+
     preset: multiple_checkbox
     choices:
     - value: BD+
       label: BD+
-  # bdm_file_size
+
+# BDM
+  - field_name: bdm_file_size
+    label: bdm_file_size
+    form_placeholder: markdown.html
+    validators: only_on_types(bdm_table) # required_on_types(bdm_table)
+
+# LINK EXTERNO

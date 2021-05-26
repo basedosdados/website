@@ -10,10 +10,13 @@ services:
       - ckan_home:/root
     environment:
     - WERKZEUG_DEBUG_PIN=off
-    command: ["gunicorn", "--bind=0.0.0.0:5000", "--workers=1", "--reload", "wsgi"]
+    # command: ["gunicorn", "--bind=0.0.0.0:5000", "--workers=1", "--reload", "wsgi"]
+    command: "ckan run --host 0.0.0.0 --port 5000 --reloader true"
   db:
     volumes:
       - pg_data:/var/lib/postgresql/data
+  solr:
+    ports: ["8983:8983"]
 
 volumes:
   pg_data:

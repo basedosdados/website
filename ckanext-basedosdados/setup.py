@@ -43,7 +43,7 @@ setup(
 
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
-        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.7',
     ],
 
 
@@ -67,6 +67,7 @@ setup(
     # have to be included in MANIFEST.in as well.
     include_package_data=True,
     package_data={
+        "": ["*.yaml", "*.yml"]
     },
 
     # Although 'package_data' is the preferred approach, in some case you may

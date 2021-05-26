@@ -1,0 +1,1132 @@
+
+
+
+#
+# Bugs on scheming: when using custom validators, we must add scheming_required
+# only_on_types(external_link) scheming_required scheming_choices
+#
+
+# TODO:
+# Add a "date_of_last_publish"
+
+
+scheming_version: 2
+dataset_type: dataset
+about: Schema para Base dos Dados
+about_url: http://github.com/ckan/ckanext-scheming
+
+dataset_fields:
+  - field_name: title
+    label:
+      pt: "Título"
+      en: "Title"
+    preset: title
+    form_placeholder:
+      pt: "exemplo: um título descritivo"
+      en: "example: a descriptive title"
+    required: true
+  - field_name: description
+    label:
+      pt: "Descrição"
+      en: "Description"
+    form_snippet: markdown.html
+    form_placeholder:
+      pt: "exemplo: descrição e anotações úteis sobre os dados."
+      en: "example: a useful description of the dataset."
+  - field_name: tag_string
+    label:
+      pt: "Etiquetas"
+      en: "Tags"
+    preset: tag_string_autocomplete
+    form_placeholder:
+      pt: "exemplo: fertilidade, preço, desmatamento"
+      en: "example: fertilidade, preço, desmatamento"
+    required: true
+  - field_name: organization_id
+    label:
+      pt: "Organização"
+      en: "Organization"
+    preset: dataset_organization
+    required: true
+  - field_name: download_type
+    label:
+      pt: "Tipo de download"
+      en: "Download type"
+    # validators: generate_download_type #TODO uncomment generates
+  - field_name: spatial_coverage
+    label:
+      pt: "Cobertura espacial"
+      en: "Spatial coverage"
+    # validators: generate_spatial_coverage
+  - field_name: temporal_coverage
+    label:
+      pt: "Cobertura temporal"
+      en: "Temporal coverage"
+    # validators: generate_temporal_coverage
+  - field_name: observation_level
+    label:
+      pt: "Nível da observação"
+      en: "Observation level"
+    # validators: generate_observation_level
+  - field_name: auxiliary_files_url
+    label:
+      pt: "Url dos arquivos auxiliares"
+      en: "Auxiliary files url"
+    # validators: generate_auxiliary_files_url
+
+resource_fields:
+  - field_name: name
+    label:
+      pt: "Nome"
+      en: "Name"
+    required: "true"
+    form_placeholder: "ex.: Baixar, Visualizar"
+  - field_name: description
+    label:
+      pt: "Descrição"
+      en: "Description"
+    form_snippet: markdown.html
+    form_placeholder:
+      pt: "exemplo: Descrição e anotações úteis sobre a tabela."
+      en: "example: a useful description of the table."
+    required: true
+  - field_name: spatial_coverage
+    label:
+      pt: "Cobertura espacial"
+      en: "Spatial coverage"
+    form_snippet: markdown.html
+    required: true
+  - field_name: temporal_coverage
+    label:
+      pt: "Cobertura temporal"
+      en: "Temporal coverage"
+    helper_text:
+      pt: "Selecione todos que se aplicam."
+      en: "Select all that apply."
+    preset: multiple_select
+    select_size: 10
+    choices:
+      - value: "CHECK" #TODO: data check
+        label: "CHECK"
+      - value: "1970"
+        label: "1970"
+      - value: "1971"
+        label: "1971"
+      - value: "1972"
+        label: "1972"
+      - value: "1973"
+        label: "1973"
+      - value: "1974"
+        label: "1974"
+      - value: "1975"
+        label: "1975"
+      - value: "1976"
+        label: "1976"
+      - value: "1977"
+        label: "1977"
+      - value: "1978"
+        label: "1978"
+      - value: "1979"
+        label: "1979"
+      - value: "1980"
+        label: "1980"
+      - value: "1981"
+        label: "1981"
+      - value: "1982"
+        label: "1982"
+      - value: "1983"
+        label: "1983"
+      - value: "1984"
+        label: "1984"
+      - value: "1985"
+        label: "1985"
+      - value: "1986"
+        label: "1986"
+      - value: "1987"
+        label: "1987"
+      - value: "1988"
+        label: "1988"
+      - value: "1989"
+        label: "1989"
+      - value: "1990"
+        label: "1990"
+      - value: "1991"
+        label: "1991"
+      - value: "1992"
+        label: "1992"
+      - value: "1993"
+        label: "1993"
+      - value: "1994"
+        label: "1994"
+      - value: "1995"
+        label: "1995"
+      - value: "1996"
+        label: "1996"
+      - value: "1997"
+        label: "1997"
+      - value: "1998"
+        label: "1998"
+      - value: "1999"
+        label: "1999"
+      - value: "2000"
+        label: "2000"
+      - value: "2001"
+        label: "2001"
+      - value: "2002"
+        label: "2002"
+      - value: "2003"
+        label: "2003"
+      - value: "2004"
+        label: "2004"
+      - value: "2005"
+        label: "2005"
+      - value: "2006"
+        label: "2006"
+      - value: "2007"
+        label: "2007"
+      - value: "2008"
+        label: "2008"
+      - value: "2009"
+        label: "2009"
+      - value: "2010"
+        label: "2010"
+      - value: "2011"
+        label: "2011"
+      - value: "2012"
+        label: "2012"
+      - value: "2013"
+        label: "2013"
+      - value: "2014"
+        label: "2014"
+      - value: "2015"
+        label: "2015"
+      - value: "2016"
+        label: "2016"
+      - value: "2017"
+        label: "2017"
+      - value: "2018"
+        label: "2018"
+      - value: "2019"
+        label: "2019"
+      - value: "2020"
+        label: "2020"
+      - value: "2021"
+        label: "2021"
+      - value: "2022"
+        label: "2022"
+      - value: "2023"
+        label: "2023"
+      - value: "2024"
+        label: "2024"
+      - value: "2025"
+        label: "2025"
+      - value: "2026"
+        label: "2026"
+      - value: "2027"
+        label: "2027"
+      - value: "2028"
+        label: "2028"
+      - value: "2029"
+        label: "2029"
+      - value: "2030"
+        label: "2030"
+    required: true
+  - field_name: update_frequency
+    label:
+      pt: "Frequência de atualização"
+      en: "Update Frequency"
+    helper_text:
+      pt: "Pode ser aproximado."
+      en: "May be approximated."
+    preset: select
+    choices:
+      - value: second
+        label:
+          pt: "Segundo"
+          en: "Second"
+      - value: minute
+        label:
+          pt: "Minuto"
+          en: "Minute"
+      - value: hour
+        label:
+          pt: "Hora"
+          en: "Hour"
+      - value: day
+        label:
+          pt: "Dia"
+          en: "Day"
+      - value: week
+        label:
+          pt: "Semana"
+          en: "Week"
+      - value: month
+        label:
+          pt: "Mês"
+          en: "Month"
+      - value: quarter
+        label:
+          pt: "Trimestre"
+          en: "Quarter"
+      - value: semester
+        label:
+          pt: "Semestre"
+          en: "Semester"
+      - value: one_year
+        label:
+          pt: "1 ano"
+          en: "1 year"
+      - value: two_years
+        label:
+          pt: "2 anos"
+          en: "2 years"
+      - value: three_years
+        label:
+          pt: "3 anos"
+          en: "3 years"
+      - value: four_year
+        label:
+          pt: "4 anos"
+          en: "4 years"
+      - value: five_years
+        label:
+          pt: "5 anos"
+          en: "5 years"
+      - value: ten_years
+        label:
+          pt: "10 anos"
+          en: "10 years"
+      - value: unique
+        label:
+          pt: "Único"
+          en: "Unique"
+      - value: recurring
+        label:
+          pt: "Recorrente"
+          en: "Recurring"
+      - value: empty # TODO: dahis review
+      - value: other # TODO: dahis review
+    required: true
+
+  # bdm_table
+
+  - field_name: table_id
+    label:
+      pt: "Identificador da tabela intra-base."
+      en: "Table identifier within dataset."
+    form_placeholder:
+      pt: "exemplo: table-id"
+      en: "example: table-id"
+    validators: only_on_types(bdm_table) #required_on_types(bdm_table) MANUAL
+  - field_name: auxiliary_files_url
+    label:
+      pt: "Url dos arquivos auxiliares"
+      en: "Auxiliary files url"
+    helper_text:
+      pt: "Incluindo dicionários, notas metodológicas, etc."
+      en: "Including dicionaries, methological notes, etc."
+    preset: resource_url_upload
+    validators: only_on_types(bdm_table) ignore_missing unicode remove_whitespace #required_on_types(bdm_table)
+  - field_name: treatment_description
+    label:
+      pt: "Descrição do tratamento"
+      en: "Treatment description"
+    form_snippet: markdown.html
+    form_placeholder:
+      pt: "exemplo: Descrição e anotações úteis sobre o tratamento da tabela."
+      en: "example: a useful description of the table's data treatment."
+    validators: only_on_types(bdm_table) #required_on_types(bdm_table) MANUAL
+  - field_name: observation_level
+    label:
+      pt: "Nível da observação"
+      en: "Observation level"
+    helper_text:
+      pt: "O que representa cada linha da tabela."
+      en: "What each row in the table represents."
+    preset: multiple_select
+    select_size: 10
+    choices:
+      - value: placeholder_sphere
+        label:
+          pt: "_______________ESFERA"
+          en: "_______________SPHERE"
+      - value: continent
+        label:
+          pt: "Continente"
+          en: "Continent"
+      - value: country
+        label:
+          pt: "País"
+          en: "Country"
+      - value: region
+        label:
+          pt: "Região"
+          en: "Region"
+      - value: state
+        label:
+          pt: "Estado/Unidade da Federação"
+          en: "State"
+      - value: county
+        label:
+          pt: "Condado"
+          en: "County"
+      - value: district
+        label:
+          pt: "Distrito"
+          en: "District"
+      - value: municipality
+        label:
+          pt: "Município"
+          en: "Municipality"
+      - value: city
+        label:
+          pt: "Cidade"
+          en: "City"
+      - value: village
+        label:
+          pt: "Vila/Aldeia"
+          en: "Village"
+      - value: neighborhood
+        label:
+          pt: "Bairro"
+          en: "Neighborhood"
+      - value: zip_code
+        label:
+          pt: "CEP"
+          en: "ZIP Code"
+      - value: census_tract
+        label:
+          pt: "Setor Censitário"
+          en: "Census Tract"
+      - value: placeholder_individual
+        label:
+          pt: "_______________INDIVÍDUO"
+          en: "_______________INDIVIDUAL"
+      - value: person
+        label:
+          pt: "Pessoa (aluno, professor, político/candidato, jogador, sócio, etc)"
+          en: "Person (student, teacher/professor, politician/candidate, player, partner, etc)"
+      - value: household
+        label:
+          pt: "Domicílio"
+          en: "Household"
+      - value: name
+        label:
+          pt: "Nome"
+          en: "Name"
+      - value: animal
+        label:
+          pt: "Animal (mamífero, micróbio, vírus, etc)"
+          en: "Animal (mammal, microbe, virus, etc)"
+      - value: plant
+        label:
+          pt: "Planta (árvore, espécie)"
+          en: "Plant (tree, species, etc)"
+      - value: placeholder_establishment
+        label:
+          pt: "_______________ESTABELECIMENTO"
+          en: "_______________ESTABLISHMENT"
+      - value: agency
+        label:
+          pt: "Agência"
+          en: "Agency"
+      - value: protected_area
+        label:
+          pt: "Área Protegida"
+          en: "Protected Area"
+      - value: library
+        label:
+          pt: "Biblioteca"
+          en: "Library"
+      - value: notary_office
+        label:
+          pt: Cartório
+          en: Notary's Office
+      - value: company
+        label:
+          pt: "Empresa"
+          en: "Company"
+      - value: school
+        label:
+          pt: "Escola"
+          en: "School"
+      - value: station
+        label:
+          pt: "Estação"
+          en: "Station"
+      - value: stadium
+        label:
+          pt: "Estádio"
+          en: "Stadium"
+      - value: terrorist_group
+        label:
+          pt: "Grupo Terrorista"
+          en: "Terrorist Group"
+      - value: hospital
+        label:
+          pt: "Hospital"
+          en: "Hospital"
+      - value: property
+        label:
+          pt: "Imóvel/Propriedade"
+          en: "Property"
+      - value: ministry
+        label:
+          pt: "Ministério/Departamento"
+          en: "Ministry/Department"
+      - value: museum
+        label:
+          pt: "Museu"
+          en: "Museum"
+      - value: ngo
+        label:
+          pt: "Organização Não-Governamental (ONG)"
+          en: "Nongovernmental Organization (NGO)"
+      - value: terrorist_group
+        label:
+          pt: "Organização Terrorista"
+          en: "Terrorist Group"
+      - value: prison
+        label:
+          pt: "Presídio/Cadeia"
+          en: "Prison/Jail"
+      - value: team
+        label:
+          pt: "Time"
+          en: "Team"
+      - value: university
+        label:
+          pt: "Universidade"
+          en: "University"
+      - value: placeholder_politics
+        label:
+          pt: "_______________POLÍTICA"
+          en: "_______________POLITICS"
+      - value: agreement
+        label:
+          pt: "Acordo/Tratado"
+          en: "Agreement/Treaty"
+      - value: speech
+        label:
+          pt: "Discurso/Fala"
+          en: "Speech"
+      - value: election
+        label:
+          pt: "Eleição"
+          en: "Election"
+      - value: law
+        label:
+          pt: "Lei/Proposição/Matéria"
+          en: "Law/Proposition"
+      - value: party
+        label:
+          pt: "Partido"
+          en: "Party"
+      - value: poll
+        label:
+          pt: "Pesquisa de Opinião"
+          en: "Poll"
+      - value: placeholder_inovation
+        label:
+          pt: "_______________CIÊNCIA, INOVAÇÃO, E COMUNICAÇÃO"
+          en: "_______________SCIENCE, INNOVATION, AND COMMUNICATION"
+      - value: article
+        label:
+          pt: "Artigo"
+          en: "Article/Paper"
+      - value: citation
+        label:
+          pt: "Citação"
+          en: "Citation"
+      - value: domain
+        label:
+          pt: "Domínio"
+          en: "Domain"
+      - value: book
+        label:
+          pt: "Livro"
+          en: "Book"
+      - value: newspaper
+        label:
+          pt: "Jornal"
+          en: "Newspaper"
+      - value: patent
+        label:
+          pt: "Patente"
+          en: "Patent"
+      - value: journal
+        label:
+          pt: "Periódico/Revista"
+          en: "Journal/Magazine"
+      - value: word
+        label:
+          pt: "Palavra"
+          en: "Word"
+      - value: post
+        label:
+          pt: "Post/Tweet"
+          en: "Post/Tweet"
+      - value: language
+        label:
+          pt: "Língua"
+          en: "Language"
+      - value: crs
+        label:
+          pt: "Sistema Referencial de Coordenadas"
+          en: "Coordinate Reference System"
+      - value: protein
+        label:
+          pt: "Proteína"
+          en: "Protein"
+      - value: meteor
+        label:
+          pt: "Meteoro"
+          en: "Meteor"
+      - value: placeholder_economics
+        label:
+          pt: "_______________ECONOMIA"
+          en: "_______________ECONOMICS"
+      - value: contract
+        label:
+          pt: "Contrato"
+          en: "Contract"
+      - value: grant
+        label:
+          pt: "Concessão/Convênio"
+          en: "Grant"
+      - value: procurement
+        label:
+          pt: "Licitação"
+          en: "Procurement"
+      - value: product
+        label:
+          pt: "Produto"
+          en: "Product"
+      - value: transaction
+        label:
+          pt: "Transação"
+          en: "Transaction"
+      - value: transfer
+        label:
+          pt: "Transferência"
+          en: "Transfer"
+      - value: bill
+        label:
+          pt: "Nota de dinheiro"
+          en: "Money bill"
+      - value: occupation
+        label:
+          pt: "Ocupação"
+          en: "Occupation"
+      - value: sector
+        label:
+          pt: "Setor"
+          en: "Sector"
+      - value: placeholder_education
+        label:
+          pt: "_______________EDUCAÇÃO"
+          en: "_______________EDUCATION"
+      - value: scholarship
+        label:
+          pt: "Bolsa"
+          en: "Scholarship"
+      - value: test
+        label:
+          pt: "Prova/Exame"
+          en: "Test/Exam"
+      - value: placeholder_event
+        label:
+          pt: "_______________EVENTOS"
+          en: "_______________EVENTS"
+      - value: alert
+        label:
+          pt: "Alerta"
+          en: "Alert"
+      - value: attack
+        label:
+          pt: "Ataque/Atentado"
+          en: "Attack"
+      - value: act
+        label:
+          pt: "Ato"
+          en: "Act"
+      - value: concert
+        label:
+          pt: "Concerto/Show"
+          en: "Concert"
+      - value: disinvitation
+        label:
+          pt: "Cancelamento de convite"
+          en: "Disinvitation"
+      - value: disaster
+        label:
+          pt: "Desastre Natural (terremoto, enchente/inundação, fogo, etc)"
+          en: "Natural Disaster (earthquake, flood, fire, etc)"
+      - value: birth
+        label:
+          pt: "Nascimento"
+          en: "Birth"
+      - value: death
+        label:
+          pt: "Morte/Óbito"
+          en: "Death"
+      - value: request
+        label:
+          pt: "Pedido/Solicitação/Reclamação"
+          en: "Request/Complaint"
+      - value: protest
+        label:
+          pt: "Protesto"
+          en: "Protest"
+      - value: match
+        label:
+          pt: "Partida"
+          en: "Match"
+      - value: placeholder_art
+        label:
+          pt: "_______________ARTE E ENTRETERIMENTO"
+          en: "_______________ART AND ENTERTAINMENT"
+      - value: album
+        label:
+          pt: "Álbum"
+          en: "Album"
+      - value: movie
+        label:
+          pt: "Filme/Série/Clipe"
+          en: "Movie/Film/Clip/Show"
+      - value: photo
+        label:
+          pt: "Foto"
+          en: "Photo/Picture"
+      - value: song
+        label:
+          pt: "Música"
+          en: "Song"
+      - value: statue
+        label:
+          pt: "Estátua"
+          en: "Statue"
+      - value: painting
+        label:
+          pt: "Pintura/Desenho/Ilustração"
+          en: "Painting/Drawing/Illustration"
+      - value: poem
+        label:
+          pt: "Poema"
+          en: "Poem"
+      - value: roller_coaster
+        label:
+          pt: "Montanha-Russa"
+          en: "Roller Coaster"
+      - value: placeholder_infrastructure
+        label:
+          pt: "_______________INFRAESTRUTURA"
+          en: "_______________INFRASTRUCTURE"
+      - value: dam
+        label:
+          pt: "Represa/Barragem"
+          en: "Dam"
+      - value: satellite
+        label:
+          pt: "Satélite"
+          en: "Satellite"
+      - value: street_road
+        label:
+          pt: "Rua/Avenida/Estrada"
+          en: "Street/Avenue/Road/Highway"
+      - value: placeholder_transportation
+        label:
+          pt: "_______________TRANSPORTE"
+          en: "_______________TRANSPORTATION"
+      - value: automobile
+        label:
+          pt: "Carro/Ônibus/Caminhão/Moto"
+          en: "Car/Bus/Truck/Motorcycle"
+      - value: train
+        label:
+          pt: "Trem"
+          en: "Train"
+      - value: aircraft
+        label:
+          pt: "Avião/Helicóptero"
+          en: "Plane/Helicopter"
+      - value: ship
+        label:
+          pt: "Embarcação/Navio"
+          en: "Ship"
+      - value: placeholder_security
+        label:
+          pt: "_______________SEGURANÇA, VIOLÊNCIA, CRIME"
+          en: "_______________SECURITY, VIOLENCE, CRIME"
+      - value: gun
+        label:
+          pt: "Arma"
+          en: "Gun"
+      - value: placeholder_demographic
+        label:
+          pt: "_______________DEMOGRAFIA"
+          en: "_______________DEMOGRAPHIC"
+      - value: age
+        label:
+          pt: "Idade"
+          en: "Age"
+      - value: race
+        label:
+          pt: "Raça/Cor de pele"
+          en: "Race/Skin color"
+      - value: sex
+        label:
+          pt: "Sexo"
+          en: "Sex"
+      - value: placeholder_image
+        label:
+          pt: "_______________IMAGEM"
+          en: "_______________IMAGE"
+      - value: pixel
+        label:
+          pt: "Pixel/Grid"
+          en: "Pixel/Grid"
+      - value: polygon
+        label:
+          pt: "Polígono"
+          en: "Polygon"
+      - value: placeholder_history
+        label:
+          pt: "_______________HISTÓRIA"
+          en: "_______________HISTORY"
+      - value: empire
+        label:
+          pt: "Império"
+          en: "Empire"
+      - value: placeholder_others
+        label:
+          pt: "_______________OUTROS"
+          en: "_______________OTHERS"
+      - value: other
+        label:
+          pt: "Outro"
+          en: "Other"
+    validators: only_on_types(bdm_table) scheming_multiple_choice
+  - field_name: columns
+    label:
+      pt: "Colunas da tabela"
+      en: "Table columns"
+    helper_text:
+      pt: "Metadados das colunas da tabela, como nome da coluna e descrição"
+      en: "Table columns metadata, such as column name and description"
+      preset: json
+    repeating_subfields:
+      - field_name: name
+        required: true
+        validators: bdm_table_columns_name_validator
+      - field_name: description
+        required: true
+        validators: bdm_table_columns_description_validator
+      - field_name: is_in_staging
+        validators: bdm_table_columns_metadata_validator
+      - field_name: is_partition
+        validators: bdm_table_columns_metadata_validator
+    validators: only_on_types(bdm_table) required_on_types(bdm_table)
+  - field_name: primary_keys
+    label:
+      pt: "Chaves primárias"
+      en: "Primary keys"
+    helper_text:
+      pt: "Quais colunas conjuntamente identificam uma linha unicamente na tabela? Se não houver, deixe em branco."
+      en: "What columns jointly identify a row uniquely in the data? If there aren't, leave it blank."
+    form_placeholder:
+      pt: "Exemplo: id_municipio, ano"
+      en: "Example: id_municipio, ano"
+    validators: only_on_types(bdm_table) #required_on_types(bdm_table) MANUAL
+  - field_name: version
+    label:
+      pt: "Versão"
+      en: "Version"
+    form_placeholder:
+      pt: "exemplo: v1.0"
+      en: "example: v1.0"
+    validators: only_on_types(bdm_table) unicode package_version_validator #required_on_types(bdm_table) MANUAL
+  - field_name: publisher
+    label:
+      pt: "Pessoa publicando os dados"
+      en: "Person publishing the data"
+    form_placeholder:
+      pt: "exemplo: Fulano da Silva"
+      en: "example: Joe Smith"
+    display_property: dc:creator
+    validators: only_on_types(bdm_table) #required_on_types(bdm_table) MANUAL
+  - field_name: publisher_email
+    label:
+      pt: "Email publicador(a)"
+      en: "Publisher email"
+    form_placeholder:
+      pt: "exemplo: fulano@example.com"
+      en: "example: joe@example.com"
+    display_property: dc:creator
+    display_snippet: email.html
+    validators: only_on_types(bdm_table) #required_on_types(bdm_table) MANUAL
+    #display_email_name_field: author
+  - field_name: publisher_github
+    label:
+      pt: "Conta Github do(a) publicador(a)"
+      en: Publisher's Github account
+    validators: only_on_types(bdm_table) # required_on_types(bdm_table)
+  - field_name: publisher_website
+    label:
+      pt: "Site do(a) publicador(a)"
+      en: Publisher's website
+    validators: only_on_types(bdm_table) # required_on_types(bdm_table)
+
+  # external link
+
+  - field_name: url
+    label:
+      pt: "Url"
+      en: "Url"
+    preset: resource_url_upload
+    validators: only_on_types(external_link) required_on_types(external_link) ignore_missing unicode remove_whitespace # TODO: add check_url_is_alive validator
+  - field_name: language
+    label:
+      pt: "Língua"
+      en: "Language"
+    helper_text:
+      pt: "Selecione todos que se aplicam."
+      en: "Select all that apply."
+    preset: multiple_select
+    select_size: 10
+    choices:
+      - value: german
+        label:
+          pt: "Alemão"
+          en: "German"
+      - value: arabic
+        label:
+          pt: "Árabe"
+          en: "Arabic"
+      - value: bahasa
+        label:
+          pt: "Bahasa"
+          en: "Bahasa"
+      - value: bengali
+        label:
+          pt: "Bengali"
+          en: "Bengali"
+      - value: chinese
+        label:
+          pt: "Chinês"
+          en: "Chinese"
+      - value: spanish
+        label:
+          pt: "Espanhol"
+          en: "Spanish"
+      - value: french
+        label:
+          pt: "Francês"
+          en: "French"
+      - value: hebrew
+        label:
+          pt: "Hebraico"
+          en: "Hebrew"
+      - value: hindi
+        label:
+          pt: "Hindi"
+          en: "Hindi"
+      - value: english
+        label:
+          pt: "Inglês"
+          en: "English"
+      - value: japanese
+        label:
+          pt: "Japonês"
+          en: "Japanese"
+      - value: malay
+        label:
+          pt: "Malay"
+          en: "Malay"
+      - value: portuguese
+        label:
+          pt: "Português"
+          en: "Portuguese"
+      - value: russian
+        label:
+          pt: "Russo"
+          en: "Russian"
+      - value: thai
+        label:
+          pt: "Thai"
+          en: "Thai"
+      - value: urdu
+        label:
+          pt: "Urdu"
+          en: "Urdu"
+    validators: only_on_types(external_link) required_on_types(external_link) scheming_multiple_choice # TODO: @dahis, serio q eh so no external link ?
+  - field_name: has_api
+    label:
+      pt: "Tem uma API"
+      en: "Has an API"
+    helper_text:
+      pt: "APIs são instruções e padrões de programação para acesso a um aplicativo ou software."
+      en: "APIs are instructions and standards for machine access of software or applications."
+    preset: select
+    choices:
+      - value: "yes" # TODO: @fred check if its possible to use real boolean values
+        label:
+          pt: "Sim"
+          en: "Yes"
+      - value: "no"
+        label:
+          pt: "Não"
+          en: "No"
+    validators: only_on_types(external_link) scheming_required scheming_choices # TODO: data check
+  - field_name: free
+    label:
+      pt: "Grátis"
+      en: "Free"
+    preset: select
+    choices:
+      - value: "yes"
+        label:
+          pt: "Sim"
+          en: "Yes"
+      - value: "no"
+        label:
+          pt: "Não"
+          en: "No"
+    validators: only_on_types(external_link) required_on_types(external_link) scheming_required scheming_choices
+  - field_name: signup_needed
+    label:
+      pt: "Precisa de registro"
+      en: "Needs registration"
+    help_text:
+      pt: "É necessário registrar um usuário para baixar os dados?"
+      en: "Is sign up necessary for download?"
+    preset: select
+    choices:
+      - value: "yes"
+        label:
+          pt: "Sim"
+          en: "Yes"
+      - value: "no"
+        label:
+          pt: "Não"
+          en: "No"
+    validators: only_on_types(external_link) required_on_types(external_link) scheming_required scheming_choices
+  - field_name: availability
+    label:
+      pt: "Disponibilidade"
+      en: "Availability"
+    preset: select
+    choices:
+      - value: online
+        label:
+          pt: "Online"
+          en: "Online"
+      - value: physical
+        label:
+          pt: "Físico (CD, DVD, papel, etc)"
+          en: "Physical (CD, DVD, paper, etc)"
+      - value: in_person
+        label:
+          pt: "Presencial"
+          en: "In person"
+    validators: only_on_types(external_link) required_on_types(external_link) scheming_required scheming_choices
+  - field_name: brazilian_ip
+    label:
+      pt: "IP brasileiro"
+      en: "Brazilian IP"
+    help_text:
+      pt: "É necessário um IP brasileiro para acessar?"
+      en: "Is a Brazilian IP necessary for access?"
+    preset: select
+    choices:
+      - value: "yes"
+        label:
+          pt: "Sim"
+          en: "Yes"
+      - value: "no"
+        label:
+          pt: "Não"
+          en: "No"
+    validators: only_on_types(external_link) scheming_required scheming_choices #required_on_types(external_link)
+  - field_name: license_type
+    label:
+      pt: "Tipo de licensa"
+      en: "License type"
+    form_placeholder:
+      pt: "Exemplos: CC4.0, MIT"
+      en: "Examples: CC4.0, MIT"
+    validators: only_on_types(external_link) required_on_types(external_link)
+
+  # LAI request
+
+  - field_name: origin
+    label:
+      pt: "Origem do pedido"
+      en: "Request origin"
+    form_placeholder:
+      pt: "Exemplos: FalaBR, Senado"
+      en: "Examples: FalaBR, Senado"
+    validators: only_on_types(lai_request) required_on_types(lai_request)
+  - field_name: protocol_number
+    label:
+      pt: "Número do protocolo"
+      en: "Protocol number"
+    validators: only_on_types(lai_request) required_on_types(lai_request)
+  - field_name: superior_organ
+    label:
+      pt: "Órgão superior"
+      en: "Superior organ"
+    validators: only_on_types(lai_request) required_on_types(lai_request)
+  - field_name: linked_organ
+    label:
+      pt: "Órgão vinculado"
+      en: "Linked organ"
+    validators: only_on_types(lai_request) required_on_types(lai_request)
+  - field_name: start_date
+    label:
+      pt: "Data de abertura"
+      en: "Starting date"
+    preset: date
+    validators: only_on_types(lai_request) required_on_types(lai_request) scheming_required isodate convert_to_json_if_date
+  - field_name: who_requested
+    label:
+      pt: "Quem pediu"
+      en: "Who sent request"
+    validators: only_on_types(lai_request) # required_on_types(lai_request)
+  - field_name: status
+    label:
+      pt: "Estado"
+      en: "Status"
+    preset: select
+    choices:
+      - value: processing
+        label:
+          pt: "Em tramitação"
+          en: "Processing"
+      - value: answered
+        label:
+          pt: "Respondido"
+          en: "Answered"
+      - value: denied
+        label:
+          pt: "Negado"
+          en: "Denied"
+    validators: only_on_types(lai_request) required_on_types(lai_request) scheming_required scheming_choices
+  - field_name: request_url
+    label:
+      pt: "Url dos pedido"
+      en: "Request Url"
+    preset: resource_url_upload
+    validators: only_on_types(lai_request) required_on_types(lai_request) ignore_missing unicode remove_whitespace
+  - field_name: data_url
+    label:
+      pt: "Url dos dados"
+      en: "Data Url"
+    preset: resource_url_upload
+    validators: only_on_types(lai_request) ignore_missing unicode remove_whitespace #required_on_types(lai_request)
+  - field_name: observations
+    label:
+      pt: "Observações"
+      en: "Observations"
+    form_snippet: markdown.html
+    validators: only_on_types(lai_request) # required_on_types(lai_request)

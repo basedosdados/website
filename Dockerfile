@@ -11,8 +11,6 @@ RUN git clone https://github.com/NaturalHistoryMuseum/ckanext-contact.git
 RUN git clone https://github.com/ckan/ckanext-googleanalytics.git
 RUN git clone https://github.com/stadt-karlsruhe/ckanext-discovery.git
 
-COPY configs/scheming_metadata_defitions.yaml /extensions/ckanext-scheming/ckanext/scheming/scheming_metadata_defitions.yaml
-
 ################ BUILDER #################
 FROM python:3.8 as builder
 LABEL maintainer="Base dos Dados"
@@ -74,7 +72,7 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=15s \
         CMD curl -f http://localhost:5000 || exit 1
 
 ENV CKAN_STORAGE_PATH=/app/uploads CKAN_INI=/app/configs/ckan.ini
-ENV PIP_NO_PYTHON_VERSION_WARNING=1 PYTHONDONTWRITEBYTECODE=1
+ENV PIP_NO_PYTHON_VERSION_WARNING=1 PYTHONDONTWRITEBYTECODE=1 PYTHONBREAKPOINT="ipdb.set_trace"
 ENV VIRTUAL_ENV=/venv PATH=/venv/bin:$PATH
 
 # System dependencies
@@ -90,9 +88,12 @@ COPY --from=builder /venv /venv
 # Install extensions
 RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
     pip install `for i in /app/extensions/*; do echo -e $i; done`
-# For %debug% jinja directive
+#
+# Install debug/dev goodies
+# For %debug% jinja directive | for bug fix in werkzeug debug scope | for better stack traces
 RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
-    pip install jinja2==2.11.2
+    pip install jinja2==2.11.2 Werkzeug==1.0.1 better_exceptions
+
 COPY ckanext-basedosdados /app/ckanext-basedosdados
 RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
     pip install -e /app/ckanext-basedosdados

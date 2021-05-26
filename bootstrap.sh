@@ -3,6 +3,7 @@ cd "$(git rev-parse --show-toplevel)" # go to git root
 
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
+source .ckan_dev_api_token # export CKAN_API_KEY
 
 not_installed() { ! command -v $1 > /dev/null; return $?; }
 
@@ -31,9 +32,16 @@ docker-compose up --scale ckan=0 -d
 echo waiting for postgres to be ready ; docker exec db /wait-until-up
 
 docker exec -i -e PGPASSWORD=ckan db bash -c 'dropdb -U ckan ckan --if-exists && createdb -U ckan ckan'
-gzip -d -c ./postgresql/dev_init_data.sql.gz | \
+(
+    gzip -d -c ./postgresql/dev_init_data.sql.gz
+    cat ./postgresql/insert_api_token.sql
+) | \
         docker exec -i -e PGPASSWORD=ckan db \
         psql -v ON_ERROR_STOP=1 --echo-errors --quiet -U ckan ckan
+
+
+# TODO: tmp, remove this when migration is in prod
+cat ./utils/migration/02_migration.sql | docker exec -i -e PGPASSWORD=ckan db psql -v ON_ERROR_STOP=1 --echo-errors --quiet -U ckan ckan > /dev/null
 
 
 if [[ ! -d assets/storage ]]; then
@@ -41,6 +49,7 @@ if [[ ! -d assets/storage ]]; then
     git-lfs pull
     unzip assets.zip
     chmod -R 777 assets
+    # to update assets please fill folder with new assets and run `zip -r assets.zip assets` and commit zip to git as usual. Zip file will be sent to lfs.
 fi
 
 
