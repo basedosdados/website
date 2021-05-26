@@ -14,6 +14,7 @@
 <hr></hr>
 <div id="metadata-jsonform-container"></div>
 
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
 <script type="module" id="form_data">
   // using global vars to export data to other module. Putting everything in a single script tag messes up with chrome debugging (because its too large)
   window.form_data__resource = {{ data | tojson(indent=2) }}
@@ -56,10 +57,12 @@
     $('#metadata-jsonform-container').jsonForm(opts)
     $('.jsonform-required > label').prepend('<span title="Este campo é obrigatório" class="control-required">* </span>')
     $('form#resource-edit').submit(_fix_array_fields)
-    $('option:contains("___")').each( (i, opt) => {
-        opt.disabled = true;
-        opt.value = opt.value.replace('___', '')
-        opt.innerHTML = opt.innerHTML.replace('___', '')
+    $(document).on('mouseover mouseout', 'select', function (){
+        $('option:contains("___")').each((i, opt) => {
+            opt.disabled = true;
+            opt.value = opt.value.replace('___', '')
+            opt.innerHTML = opt.innerHTML.replace('___', '')
+        })
     })
   }
 
