@@ -16,6 +16,7 @@ deploy() {
     restart_services
     rebuild_index
     install_crontab
+    install_apprise
 }
 
 deploy_configs() {
@@ -38,6 +39,11 @@ build_config() {
     cp configs/nginx.conf build/
     cp .env.prod build/.env && echo "VTAG=$VTAG" >> build/.env
     cp -r monitoring build/
+
+    cp -r wordpress build/
+    rm build/wordpress/.env && ln -s ../.env build/wordpress/.env
+    mv build/wordpress/prod-docker-compose.override.yaml build/wordpress/docker-compose.override.yaml
+
     cp configs/basedosdados_crontab build/basedosdados_crontab
 }
 send() {
@@ -90,6 +96,12 @@ build_images() {
     ( docker-compose build db   && docker save bdd/db > build/images/db ) &
     for i in `jobs -p`; do wait $i ; done
 }
+restart_wordpress() {
+    $SSH  '
+        cd ~/basedosdados/wordpress
+        docker-compose down && docker-compose up -d
+    '
+}
 restart_monitoring() {
     $SSH  '
         cd ~/basedosdados/monitoring
@@ -102,6 +114,14 @@ install_crontab() {
         echo "####### AUTO GENERATED CRONTAB - DONT EDIT MANUALLY ##########"
         cat ~/basedosdados/basedosdados_crontab
         ) | crontab
+    '
+}
+install_apprise() {
+    $SSH  '
+        cd ~/basedosdados/
+        source .env
+        echo $APPRISE_CONFIG > ~/.apprise
+        grep DISCORD .env | sed s/DISCORD_//g > ~/.discord_ids
     '
 }
 

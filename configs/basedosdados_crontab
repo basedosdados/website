@@ -1,8 +1,17 @@
 PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/ec2-user/.local/bin:/home/ec2-user/bin
 
+# Backup db
 @daily $HOME/basedosdados/backup_database.sh > /tmp/backup_out 2>> /tmp/backup_out || tail /tmp/backup_out | apprise -t 'Database backup failed'
+
+# Renew https certificates
 @weekly cd $HOME/basedosdados/ && docker-compose stop nginx && sudo /bin/certbot renew && sudo chown -R ec2-user /etc/letsencrypt/ && docker-compose start nginx
 
-# At 06:21 on Monday
+
+# Cleanup docker images + ckan logs to save space
 21 6 * * 1 cd $HOME/basedosdados/ && docker-compose rm -fs ckan; docker-compose up -d ckan 
-21 6 * * 2 /usr/local/bin/docker-clean -i -c -net
+41 6 * * 2 /usr/local/bin/docker-clean -i -c -net
+
+
+# Site health monitoring
+*/3 * * * * if [[ $(curl --silent https://basedosdados.org | wc --bytes) < 10000 ]]; then source ~/.discord_ids; apprise -b "$FRED $CAIO $INFRA $JOAO"' - O site esta fora do ar! Ta pegando fogo bicho! Socorro!'; fi
+@daily      if [[ $(df --output=pcent / | tail -1 | sed 's/[% ]//g') > 90 ]]; then source ~/.discord_ids; apprise -b "$FRED $CAIO $INFRA"' - Disco esta ficando cheio!' ; fi
