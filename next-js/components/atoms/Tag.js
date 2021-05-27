@@ -3,7 +3,7 @@ import {Box, Heading} from "@chakra-ui/react";
 export function Tag({children}){
     return(
         <Box padding="6px" backgroundColor="#F6F6F6" borderRadius="10px">
-            <Heading fontWeight="700" fontSize="16px" fontFamily="Montserrat">{children}</Heading>
+            <Heading fontWeight="700" fontSize="14px" fontFamily="Montserrat">{children}</Heading>
         </Box>
     )
 }
