@@ -15,6 +15,10 @@ if [[ ! -f .env.prod ]]; then echo you need to have a .env.prod; exit 1; fi;
 
 set -ex
 
+if [[ $1 == full ]]; then
+    rm -fr vendor/ckan assets
+fi
+
 if [[ ! -d vendor/ckan/.git ]]; then
     mkdir -p vendor/
     ( cd vendor
@@ -39,10 +43,6 @@ docker exec -i -e PGPASSWORD=ckan db bash -c 'dropdb -U ckan ckan --if-exists &&
 ) | \
         docker exec -i -e PGPASSWORD=ckan db \
         psql -v ON_ERROR_STOP=1 --echo-errors --quiet -U ckan ckan
-
-
-# TODO: tmp, remove this when migration is in prod
-cat ./utils/migration/02_migration.sql | docker exec -i -e PGPASSWORD=ckan db psql -v ON_ERROR_STOP=1 --echo-errors --quiet -U ckan ckan > /dev/null
 
 
 if [[ ! -d assets/storage ]]; then

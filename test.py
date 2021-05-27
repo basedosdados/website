@@ -30,7 +30,7 @@ def test():
     if CKAN_API_KEY:
         ret = ckan.action.package_update(**package)
         ret['metadata_modified'] = unittest.mock.ANY
-        assert package == ret
+        assert package == ret, (package, ret)
 
         new_package = deepcopy(package)
         del new_package['id']

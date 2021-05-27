@@ -33,9 +33,9 @@ for path in $TEST_URLS; do
     curl --silent --fail $URL/$path > /dev/null
 done
 
-URL="$URL" python ./test.py
+./test.py
 
-docker-compose run --rm ckan pytest ./ckanext-basedosdados/ckanext/basedosdados/tests/test_validator.py -vv
+docker-compose run --rm ckan pytest ./ckanext-basedosdados/ckanext/basedosdados/tests/ -vv
 
 echo 'ALL OK :)'
 

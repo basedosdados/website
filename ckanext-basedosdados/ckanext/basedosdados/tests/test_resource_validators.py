@@ -7,10 +7,14 @@ from . import data
 
 
 def jsonify(data):
-    from pydantic.json import pydantic_encoder
+    from pydantic.json import custom_pydantic_encoder
     import json
+    def encoder(o):
+        def sort_list(s):
+            return sorted(list(s))
+        return custom_pydantic_encoder({set: sort_list, frozenset: sort_list} , o) # order sets so that tests dont break
 
-    return json.loads(json.dumps(data, default=pydantic_encoder))
+    return json.loads(json.dumps(data, sort_keys=True, default=encoder))
 
 
 def test_resource():
@@ -41,9 +45,9 @@ def test_bdm_table():
         "position": 1,
         "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
         "update_frequency": "second",
-        "table_id": 10,
+        "table_id": 'dfsf',
         "auxiliary_files_url": "www.files.com.br/files-test",
-        "observation_level": ["dam", "gun", "age"],
+        "observation_level": ["age", "dam", "gun"],
         "columns": "",
         "primary_keys": "jasdiasd",
         "version": "3.0.0",
@@ -72,7 +76,7 @@ def test_external_link():
         "position": 1,
         "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
         "update_frequency": "second",
-        "language": ["german", "bahasa", "urdu"],
+        "language": ["bahasa", "german", "urdu"],
         "has_api": "yes",
         "free": "no",
         "signup_needed": "yes",
@@ -89,7 +93,6 @@ def test_external_link():
     for k, v in data.items():  # assert data is a subsed of out.dict()
         assert out[k] == v
 
-
 def test_ok(data):
     data["resources"] = [
         {
@@ -100,9 +103,9 @@ def test_ok(data):
             "position": 1,
             "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
             "update_frequency": "second",
-            "table_id": 10,
+            "table_id": 'fds',
             "auxiliary_files_url": "www.files.com.br/files-test",
-            "observation_level": ["dam", "gun", "age"],
+            "observation_level": ["age", "dam", "gun"],
             "columns": "",
             "primary_keys": "jasdiasd",
             "version": "3.0.0",
@@ -121,7 +124,7 @@ def test_ok(data):
             "spatial_coverage": "spatial",
             "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
             "update_frequency": "second",
-            "language": ["german", "bahasa", "urdu"],
+            "language": ["bahasa", "german", "urdu"],
             "has_api": "yes",
             "free": "no",
             "signup_needed": "yes",

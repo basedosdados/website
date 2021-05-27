@@ -106,18 +106,19 @@ class LaiRequest(Resource):
 class BdmTable(Resource):
     resource_type: Literal["bdm_table"]
 
-    table_id: Str  # Validator only on types
-    auxiliary_files_url: Optional[Str]  # Validators ignore_missing unicode remove_whitespace
-    treatment_description: Optional[Str] = F(title='Descricao do tratamento')
-    observation_level: Optional[Set[ObservationLevel]] = Field(max_items=10) # Required for tier 1
+    table_id:                Str
+    auxiliary_files_url:     Optional[Str]
+    treatment_description:   Optional[Str]                    = F(title='Descricao do tratamento')
+    observation_level:       Optional[Set[ObservationLevel]]  = F(max_items=10) # Required for tier 1
+    columns:                 Optional[Str]                            # Required for tier 1
+    primary_keys:            Optional[Str]                            # Required for tier 1
+    version:                 Optional[Str]                            # Required for tier 1
+    publisher:               Optional[Str]                            # Required for tier 1
+    publisher_email:         Optional[Str]                            # Required for tier 1
+    publisher_github:        Optional[Str]                            # Required for tier 1
+    publisher_website:       Optional[Str]                            # Required for tier 1
+
     _observation_level_validator = treat_scalar_as_single_value_set('observation_level')
-    columns: Optional[Str] # Required for tier 1
-    primary_keys: Optional[Str] # Required for tier 1
-    version: Optional[Str] # Required for tier 1
-    publisher: Optional[Str] # Required for tier 1
-    publisher_email: Optional[Str] # Required for tier 1
-    publisher_github: Optional[Str] # Required for tier 1
-    publisher_website: Optional[Str] # Required for tier 1
 
     bdm_file_size: Union[int, None, Literal['Unavailable', '']] # should not be editable in form, also, check what use is Unavailable
 
