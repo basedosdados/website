@@ -71,3 +71,10 @@ services:
   redis:
     container_name: redis
     image: redis:latest
+
+  next-js:
+    container_name: next-js
+    ports:
+      - "3000:3000"
+    build:
+      context: next-js
