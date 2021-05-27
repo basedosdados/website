@@ -8,7 +8,7 @@ export default function SiteHead({children}){
                 rel="stylesheet"
             />
             <link
-                href="https://fonts.googleapis.com/css?family=Lato:500,700"
+                href="https://fonts.googleapis.com/css?family=Lato:400,500,700"
                 rel="stylesheet"
             />
             {children}
