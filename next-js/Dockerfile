@@ -1,5 +1,5 @@
 # Install dependencies only when needed
-FROM node:alpine AS deps
+FROM node:alpine
 
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
@@ -9,5 +9,3 @@ RUN yarn install
 COPY . .
 
 EXPOSE 3000
-
-CMD ["yarn", "start"]

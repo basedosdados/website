@@ -11,7 +11,7 @@ export default function NewsCard({image, site, title}){
                 <Subtitle>{site}</Subtitle>
                 <Title>{title}</Title>
             </VStack>
-            <Image width="25px" src="/img/arrow_black_right.png" position="absolute" right="20px" bottom="20px"/>
+            <Image width="25px" src="/next-img/arrow_black_right.png" position="absolute" right="20px" bottom="20px"/>
         </Card>
     )
 }

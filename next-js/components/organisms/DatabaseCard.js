@@ -24,7 +24,7 @@ export default function DatabaseCard({name, iconUrl, organization, tags, descrip
     }
 
     function getCardIcon(){
-        if(isPlus && !iconUrl) return <Image src="/img/logo_plus.png" maxWidth="90px" position="absolute" top="20px" left="-50px"/>
+        if(isPlus && !iconUrl) return <Image src="/next-img/logo_plus.png" maxWidth="90px" position="absolute" top="20px" left="-50px"/>
         return <Image src={iconUrl}/>
     }
 
@@ -33,7 +33,7 @@ export default function DatabaseCard({name, iconUrl, organization, tags, descrip
 
     return(
         <Card spacing={2} icon={getCardIcon()} tabColor={getTabColor()} iconBoxColor={getIconBoxColor()}>
-            {isPlus && iconUrl ? <Image src="/img/logo_plus.png" width="80px" position="absolute" top="15px" left="30px"/> : <></>}
+            {isPlus && iconUrl ? <Image src="/next-img/logo_plus.png" width="80px" position="absolute" top="15px" left="30px"/> : <></>}
             <Title>{name}</Title>
             <Subtitle>{organization}</Subtitle>
             <HStack padding="15px 0px">

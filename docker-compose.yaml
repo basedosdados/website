@@ -7,6 +7,21 @@ volumes: {}
   # ckan_storage:
 
 services:
+  nginx:
+    image: nginx
+    volumes:
+      - ./configs/nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 80:80
+    depends_on:
+      - ckan
+      - next-js
+    # logging:
+    #   driver: syslog
+    #   options:
+    #     syslog-address: tcp://logstash:5001
+    #     syslog-facility: daemon
+
   ckan:
     container_name: ckan
     build:
@@ -78,3 +93,7 @@ services:
       - "3000:3000"
     build:
       context: next-js
+    volumes:
+      - ./next-js:/app
+    command: [ "yarn", "run", "dev" ]
+
