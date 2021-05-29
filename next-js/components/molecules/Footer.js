@@ -27,20 +27,20 @@ export default function Footer(){
                 <Image width="250px" src="/next-img/logo_footer.png"/>
                 <HStack paddingBottom="100px" justifyContent="space-around" width="70%" alignItems="flex-start" marginLeft="auto">
                     <LinkVStack title="PRODUTOS">
-                        <Link>Mecanismo de busca</Link>
-                        <Link>Datalake Público</Link>
+                        <Link href="/dataset">Mecanismo de busca</Link>
+                        <Link href="https://basedosdados.github.io/mais/" target="_blank">Datalake Público</Link>
                     </LinkVStack>
                     <LinkVStack title="CONTEÚDO">
                         <Link>Blog</Link>
-                        <Link>Youtube</Link>
+                        <Link href="https://www.youtube.com/c/BasedosDados/videos" target="_blank">Youtube</Link>
                     </LinkVStack>
                     <LinkVStack title="COMUNIDADE">
-                        <Link>Twitter</Link>
-                        <Link>Discord</Link>
-                        <Link>Github</Link>
+                        <Link href="https://twitter.com/basedosdados" target="_blank">Twitter</Link>
+                        <Link href="https://discord.gg/huKWpsVYx4" target="_blank">Discord</Link>
+                        <Link href="https://github.com/basedosdados" target="_blank">Github</Link>
                     </LinkVStack>
                     <LinkVStack title="INSTITUCIONAL">
-                        <Link>Sobre</Link>
+                        <Link href="/about">Sobre</Link>
                         <Link>Termos de uso</Link>
                         <Link>Política de privacidade</Link>
                     </LinkVStack>

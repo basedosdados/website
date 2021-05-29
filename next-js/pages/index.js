@@ -13,8 +13,8 @@ import {useState} from "react";
 function Hero(){
     const [search, setSearch] = useState();
 
-    function getSearchLink(){
-        return `/dataset/?q=${search}`
+    function openSearchLink(){
+        return window.open(`/dataset/?q=${search}`, "_self")
     }
 
     return(
@@ -26,11 +26,12 @@ function Hero(){
                     <ControlledInput
                         value={search}
                         onChange={setSearch}
+                        onEnterPress={openSearchLink}
                         maxWidth="80%"
                         placeholder="Pesquisar palavras-chave, instituições e temas"
                         justifyContent="center"
                         inputStyle={{ padding:"40px", borderRadius:"50px", backgroundColor:"#ffffff", fontSize:"24px"}}
-                        rightIcon={<a href={getSearchLink()} ><Image src="/next-img/arrow_black_right.png" marginRight="40px"/></a>}/>
+                        rightIcon={<Image onClick={openSearchLink} width="40px" marginRight="40px" src="/next-img/arrow_black_right.png"/>}/>
                     <SectionText color="#FFFFFF">930 conjuntos de dados públicos de 498 instituições e 22 temas; 40 bases prontas para análise no nosso datalake.</SectionText>
                 </VStack>
             </Center>
