@@ -1,5 +1,11 @@
 # Como usar a extensão do BD
 
+## Descricao das pastas da extensao:
+
+* assets: arquivos js e css q serao compilados segundo a logica documentada no ckan. Nao esquecer de editar esse webassets.yml
+* validator: inclui as definicoes de meta-metadados e funcoes de validacao.
+
+
 ## Adicionando um action endpoint na API
 
 Os Actions da API do ckan podem ser chamados via:

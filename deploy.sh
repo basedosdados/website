@@ -34,15 +34,16 @@ clean() {
 
 build_config() {
     cp docker-compose.yaml build/docker-compose.yaml
-    cp prod-docker-compose.override.yaml build/docker-compose.override.yaml
+    cp configs/docker-compose.override.prod.yaml build/docker-compose.override.yaml
     cp utils/backup_database.sh build/
     cp configs/nginx.conf build/
     cp .env.prod build/.env && echo "VTAG=$VTAG" >> build/.env
-    cp -r monitoring build/
 
-    cp -r wordpress build/
+    cp -r experimental/monitoring build/
+
+    cp -r experimental/wordpress build/
     rm build/wordpress/.env && ln -s ../.env build/wordpress/.env
-    mv build/wordpress/prod-docker-compose.override.yaml build/wordpress/docker-compose.override.yaml
+    mv build/wordpress/docker-compose.override.prod.yaml build/wordpress/docker-compose.override.yaml
 
     cp configs/basedosdados_crontab build/basedosdados_crontab
 }

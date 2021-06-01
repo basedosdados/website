@@ -33,7 +33,7 @@ for path in $TEST_URLS; do
     curl --silent --fail $URL/$path > /dev/null
 done
 
-./test.py
+pytest ./tests/test.py
 
 docker-compose run --rm ckan pytest ./ckanext-basedosdados/ckanext/basedosdados/tests/ -vv
 

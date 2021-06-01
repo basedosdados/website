@@ -109,18 +109,49 @@ package) }}</code></pre>
 
   {% block resource_view_content %} {% endblock %}
   {% block secondary %} {% endblock %}
-  {#
-  <p>
-      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse-metadata">
-            Mostrar Meta-dados
-      </button>
-  </p>
-  <div class="collapse" id="collapse-metadata">
-    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-  </div>
-  {% endblock %}
-  {% block secondary %} {% endblock %}
-#}
+
+{% block resource_additional_information_inner %}
+    <div class="module-content">
+      <h2>{{ _('Additional Information') }}</h2>
+      <table class="table table-striped table-bordered table-condensed" data-module="table-toggle-more">
+        <thead>
+          <tr>
+            <th scope="col">{{ _('Field') }}</th>
+            <th scope="col">{{ _('Value') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">{{ _('Data last updated') }}</th>
+            {# <td>{{ h.render_datetime(res.last_modified) or h.render_datetime(res.created) or _('unknown') }}</td> #}
+            <td>{{ _('unknown') }}</td>
+          </tr>
+          <tr>
+            <th scope="row">{{ _('Metadata last updated') }}</th>
+            <td>{{ h.render_datetime(res.metadata_modified) or h.render_datetime(res.created) or _('unknown') }}</td>
+          </tr>
+          <tr>
+            <th scope="row">{{ _('Created') }}</th>
+            <td>{{ h.render_datetime(res.created) or _('unknown') }}</td>
+          </tr>
+          <tr>
+            <th scope="row">{{ _('Format') }}</th>
+            <td>{{ res.format or res.mimetype_inner or res.mimetype or _('unknown') }}</td>
+          </tr>
+          <tr>
+            <th scope="row">{{ _('License') }}</th>
+            <td>{% snippet "snippets/license.html", pkg_dict=pkg, text_only=True %}</td>
+          </tr>
+          {% for key, value in h.format_resource_items(res.items()) %}
+            {% if key not in ('created', 'metadata modified', 'last modified', 'format') %}
+              <tr class="toggle-more"><th scope="row">{{ key | capitalize }}</th><td>{{ value }}</td></tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+{% endblock %}
+
 
 
   {% block resource_actions_inner %}
