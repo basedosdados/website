@@ -12,61 +12,62 @@ from pydantic import (
     validator,
 )
 from .data_types import ObservationLevel, TemporalCoverage, IdType
+from .data_types.attr_enum import AttrEnum
 
 YES_NO = Literal["yes", "no"]
 
 F = Field
 
-class UpdateFrequencyEnum(str, Enum):
-    second = "second"  # "Second"
-    minute = "minute"  # "Minute"
-    hour = "hour"  # "Hour"
-    day = "day"  # "Day"
-    week = "week"  # "Week"
-    month = "month"  # "Month"
-    quarter = "quarter"  # "Quarter"
-    semester = "semester"  # "Semester"
-    one_year = "one_year"  # "One Year"
-    two_years = "two_years"  # "Two Years"
-    three_years = "three_years"  # "Three Years"
-    four_years = "four_years"  # "Four Years"
-    five_years = "five_years"  # "Five Years"
-    ten_years = "ten_years"  # "Ten Years"
-    unique = "unique"  # "Unique"
-    recurring = "recurring"  # "Recurring"
-    empty = "empty"  # "Empty"
-    other = "other"  # "Other"
+class UpdateFrequencyEnum(AttrEnum):
+    second                        = {"label": "Second"}
+    minute                        = {"label": "Minute"}
+    hour                          = {"label": "Hour"}
+    day                           = {"label": "Day"}
+    week                          = {"label": "Week"}
+    month                         = {"label": "Month"}
+    quarter                       = {"label": "Quarter"}
+    semester                      = {"label": "Semester"}
+    one_year                      = {"label": "One Year"}
+    two_years                     = {"label": "Two Years"}
+    three_years                   = {"label": "Three Years"}
+    four_years                    = {"label": "Four Years"}
+    five_years                    = {"label": "Five Years"}
+    ten_years                     = {"label": "Ten Years"}
+    unique                        = {"label": "Unique"}
+    recurring                     = {"label": "Recurring"}
+    empty                         = {"label": "Empty"}
+    other                         = {"label": "Other"}
 
 
-class LanguageEnum(str, Enum):
-    german = "german"  # "German"
-    arabic = "arabic"  # "Arabic"
-    bahasa = "bahasa"  # "Bahasa"
-    bengali = "bengali"  # "Bengali"
-    chinese = "chinese"  # "Chinese"
-    spanish = "spanish"  # "Spanish"
-    french = "french"  # "French"
-    hebrew = "hebrew"  # "Hebrew"
-    hindi = "hindi"  # "Hindi"
-    english = "english"  # "English"
-    japanese = "japanese"  # "Japanese"
-    malay = "malay"  # "Malay"
-    portuguese = "portuguese"  # "Portuguese"
-    russian = "russian"  # "Russian"
-    thai = "thai"  # "Thai"
-    urdu = "urdu"  # "Urdu"
+class LanguageEnum(AttrEnum):
+    german                        = {"label": "German"}
+    arabic                        = {"label": "Arabic"}
+    bahasa                        = {"label": "Bahasa"}
+    bengali                       = {"label": "Bengali"}
+    chinese                       = {"label": "Chinese"}
+    spanish                       = {"label": "Spanish"}
+    french                        = {"label": "French"}
+    hebrew                        = {"label": "Hebrew"}
+    hindi                         = {"label": "Hindi"}
+    english                       = {"label": "English"}
+    japanese                      = {"label": "Japanese"}
+    malay                         = {"label": "Malay"}
+    portuguese                    = {"label": "Portuguese"}
+    russian                       = {"label": "Russian"}
+    thai                          = {"label": "Thai"}
+    urdu                          = {"label": "Urdu"}
 
 
-class AvailabilityEnum(str, Enum):
-    online = "online"  # Online
-    physical = "physical"  # Physical (CD, DVD, paper, etc)
-    in_person = "in_person"  # In Person
+class AvailabilityEnum(AttrEnum):
+    online                        = {"label": "Online"}
+    physical                      = {"label": "Physical (CD, DVD, paper, etc)"}
+    in_person                     = {"label": "In Person"}
 
 
-class StatusEnum(str, Enum):
-    processing = "Processing"
-    answered = "Answered"
-    denied = "Denied"
+class StatusEnum(AttrEnum):
+    processing                    = {"label": "Processing"}
+    answered                      = {"label": "Answered"}
+    denied                        = {"label": "Denied"}
 
 
 RESOURCE_TYPES = ['bdm_table', 'external_link'] # TODO: add something that test that subclasses obey this constant
@@ -104,7 +105,7 @@ class LaiRequest(Resource):
 """
 
 class BdmTable(Resource):
-    resource_type: Literal["bdm_table"]
+    resource_type:           Literal["bdm_table"]
 
     table_id:                Str
     auxiliary_files_url:     Optional[Str]

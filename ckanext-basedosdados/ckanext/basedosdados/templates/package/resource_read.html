@@ -108,8 +108,19 @@ package) }}</code></pre>
   {% endblock %}
 
   {% block resource_view_content %} {% endblock %}
-  {% block primary %} {% endblock %}
   {% block secondary %} {% endblock %}
+  {#
+  <p>
+      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse-metadata">
+            Mostrar Meta-dados
+      </button>
+  </p>
+  <div class="collapse" id="collapse-metadata">
+    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+  </div>
+  {% endblock %}
+  {% block secondary %} {% endblock %}
+#}
 
 
   {% block resource_actions_inner %}
