@@ -1,151 +1,149 @@
+from .attr_enum import AttrEnum
 from enum import Enum
 from typing import Union
 
 
-class ObservationLevelSphereEnum(str, Enum):
-    continent = 'continent' # "Continent"
-    country = 'country' # "Country"
-    region = 'region' # "Region"
-    state = 'state' # "State"
-    county = 'county' # "County"
-    district = 'district' # "District"
-    municipality = 'municipality' # "Municipality"
-    city = 'city' # "City"
-    village = 'village' # "Village"
-    neighborhood = 'neighborhood' # "Neighborhood"
-    zip_code = 'zip_code' # "ZIP Code"
-    census_tract = 'census_tract' # "Census Tract"
+class ObservationLevelSphereEnum(AttrEnum):
+    continent        = {'label': "Continent"}
+    country          = {'label': "Country"}
+    region           = {'label': "Region"}
+    state            = {'label': "State"}
+    county           = {'label': "County"}
+    district         = {'label': "District"}
+    municipality     = {'label': "Municipality"}
+    city             = {'label': "City"}
+    village          = {'label': "Village"}
+    neighborhood     = {'label': "Neighborhood"}
+    zip_code         = {'label': "Zip Code"}
+    census_tract     = {'label': "CensusTract"}
 
 
-class ObservationLevelIndividualEnum(str, Enum):
-    person = 'person' # "Person (student, teacher/professor, politician/candidate, player, partner, etc)"
-    household = 'household' # "Household"
-    name = 'name' # "Name"
-    animal = 'animal' # "Animal"
-    plant = 'plant' # "Plant"
+class ObservationLevelIndividualEnum(AttrEnum):
+    person           = {'label': "Person (student, teacher/professor, politician/candidate, player, partner, etc)"}
+    household        = {'label': "Household"}
+    name             = {'label': "Name"}
+    animal           = {'label': "Animal"}
+    plant            = {'label': "Plant"}
 
 
-class ObservationLevelEstablishmentEnum(str, Enum):
-    agency = 'agency' # "Agency"
-    protected_area = 'protected_area' # "Protected Area"
-    library = 'library' # "Library"
-    notary_office = 'notary_office' # "Notary's Office"
-    company = 'company' # "Company"
-    school = 'school' # "School"
-    station = 'station' # "Station"
-    stadium = 'stadium' # "Stadium"
-    terrorist_group = 'terrorist_group' # "Terrorist Group"
-    hospital = 'hospital' # "Hospital"
-    property = 'property' # "Property"
-    ministry = 'ministry' # "Ministry/Department"
-    museum = 'museum' # "Museum"
-    ngo = 'ngo' # "Nongovernmental Organization (NGO)"
-    prison = 'prison' # "Prison"
-    team = 'team' # "Team"
-    university = 'university' # "University"
+class ObservationLevelEstablishmentEnum(AttrEnum):
+    agency           = {'label': "Agency"}
+    protected_area   = {'label': "Protected Area"}
+    library          = {'label': "Library"}
+    notary_office    = {'label': "Notary's Office"}
+    company          = {'label': "Company"}
+    school           = {'label': "School"}
+    station          = {'label': "Station"}
+    stadium          = {'label': "Stadium"}
+    terrorist_group  = {'label': "Terrorist Group"}
+    hospital         = {'label': "Hospital"}
+    property         = {'label': "Property"}
+    ministry         = {'label': "Ministry/Department"}
+    museum           = {'label': "Museum"}
+    ngo              = {'label': "Nongovernmental Organization (NGO)"}
+    prison           = {'label': "Prison"}
+    team             = {'label': "Team"}
+    university       = {'label': "University"}
 
 
-class ObservationLevelPoliticsEnum(str, Enum):
-    agreement = 'agreement' # "Agreement/Treaty"
-    speech = 'speech' # "Speech"
-    election = 'election' # "Election"
-    law = 'law' # "Law/Proposition"
-    party = 'party' # "Party"
-    poll = 'poll' # "Poll"
+class ObservationLevelPoliticsEnum(AttrEnum):
+    agreement        = {'label': "Agreement/Treaty"}
+    speech           = {'label': "Speech"}
+    election         = {'label': "Election"}
+    law              = {'label': "Law/Proposition"}
+    party            = {'label': "Party"}
+    poll             = {'label': "Poll"}
 
 
-class ObservationLevelScienceEnum(str, Enum):
-    article = 'article' # "Article/Paper"
-    citation = 'citation' # "Citation"
-    domain = 'domain' # "Domain"
-    book = 'book' # "Book"
-    newspaper = 'newspaper' # "Newspaper"
-    patent = 'patent' # "Patent"
-    journal = 'journal' # "Journal/Magazine"
-    word = 'word' # "Word"
-    post = 'post' # "Post/Tweet"
-    langugage = 'langugage' # "Language"
-    crs = 'crs' # "Coordinate Reference System"
-    protein = 'protein' # "Protein"
-    meteor = 'meteor' # "Meteor"
+class ObservationLevelScienceEnum(AttrEnum):
+    article          = {'label': "Article/Paper"}
+    citation         = {'label': "Citation"}
+    domain           = {'label': "Domain"}
+    book             = {'label': "Book"}
+    newspaper        = {'label': "Newspaper"}
+    patent           = {'label': "Patent"}
+    journal          = {'label': "Journal/Magazine"}
+    word             = {'label': "Word"}
+    post             = {'label': "Post/Tweet"}
+    langugage        = {'label': "Language"}
+    crs              = {'label': "Coordinate Reference System"}
+    protein          = {'label': "Protein"}
+    meteor           = {'label': "Meteor"}
 
 
-class ObservationLevelEconomicsEnum(str, Enum):
-    contract = 'contract' # "Contract"
-    grant = 'grant' # "Grant"
-    procurement = 'procurement' # "Procurement"
-    product = 'product' # "Product"
-    transaction = 'transaction' # "Transaction"
-    transfer = 'transfer' # "Transfer"
-    bill = 'bill' # "Money Bill"
-    occupation = 'occupation' # "Occupation"
-    sector = 'sector' # "Sector"
+class ObservationLevelEconomicsEnum(AttrEnum):
+    contract         = {'label': "Contract"}
+    grant            = {'label': "Grant"}
+    procurement      = {'label': "Procurement"}
+    product          = {'label': "Product"}
+    transaction      = {'label': "Transaction"}
+    transfer         = {'label': "Transfer"}
+    bill             = {'label': "Money Bill"}
+    occupation       = {'label': "Occupation"}
+    sector           = {'label': "Sector"}
 
 
-class ObservationLevelEducationEnum(str, Enum):
-    scholarship = 'scholarship' # "Scholarship"
-    test = 'test' # "Test/Exam"
+class ObservationLevelEducationEnum(AttrEnum):
+    scholarship      = {'label': "Scholarship"}
+    test             = {'label': "Test/Exam"}
 
 
-class ObservationLevelEventsEnum(str, Enum):
-    alert = 'alert' # "Alert"
-    attack = 'attack' # "Attack"
-    act = 'act' # "Act"
-    concert = 'concert' # "Concert"
-    disinvitation = 'disinvitation' # "Disinvitation"
-    disaster = 'disaster' # "Natural Disaster (earthquake, flood, fire, etc)"
-    birth = 'birth' # "Birth"
-    death = 'death' # "Death"
-    request = 'request' # "Request/Complaint"
-    protest = 'protest' # "Protest"
-    match = 'match' # "Match"
+class ObservationLevelEventsEnum(AttrEnum):
+    alert            = {'label': "Alert"}
+    attack           = {'label': "Attack"}
+    act              = {'label': "Act"}
+    concert          = {'label': "Concert"}
+    disinvitation    = {'label': "Disinvitation"}
+    disaster         = {'label': "Natural Disaster (earthquake, flood, fire, etc)"}
+    birth            = {'label': "Birth"}
+    death            = {'label': "Death"}
+    request          = {'label': "Request/Complaint"}
+    protest          = {'label': "Protest"}
+    match            = {'label': "Match"}
+
+class ObservationLevelArtEnum(AttrEnum):
+    album            = {'label': "Album"}
+    movie            = {'label': "Movie/Film/Clip/Show"}
+    photo            = {'label': "Photo/Picture"}
+    song             = {'label': "Song"}
+    statue           = {'label': "Statue"}
+    painting         = {'label': "Painting/Drawing/Illustration"}
+    poem             = {'label': "Poem"}
+    roller_coaster   = {'label': "Roller Coaster"}
+
+class ObservationLevelInfrastructureEnum(AttrEnum):
+    dam              = {'label': "Dam"}
+    satellitte       = {'label': "Satellite"}
+    street_road      = {'label': "Street/Avenue/Road/Highway"}
 
 
-class ObservationLevelArtEnum(str, Enum):
-    album = 'album' # "Album"
-    movie = 'movie' # "Movie/Film/Clip/Show"
-    photo = 'photo' # "Photo/Picture"
-    song = 'song' # "Song"
-    statue = 'statue' # "Statue"
-    painting = 'painting' # "Painting/Drawing/Illustration"
-    poem = 'poem' # "Poem"
-    roller_coaster = 'roller_coaster' # "Roller Coaster"
+class ObservationLevelTransportationEnum(AttrEnum):
+    automobile       = {'label': "Car/Bus/Truck/Motorcycle"}
+    train            = {'label': "Train"}
+    aircraft         = {'label': "Plane/Helicopter"}
+    ship             = {'label': "Ship"}
+
+class ObservationLevelSecurityEnum(AttrEnum):
+    gun              = {'label': "Gun"}
 
 
-class ObservationLevelInfrastructureEnum(str, Enum):
-    dam = 'dam' # "Dam"
-    satellitte = 'satellitte' # "Satellite"
-    street_road = 'street_road' # "Street/Avenue/Road/Highway"
+class ObservationLevelDemographicEnum(AttrEnum):
+    age              = {'label': "Age"}
+    race             = {'label': "Race/Skin color"}
+    sex              = {'label': "Sex"}
 
 
-class ObservationLevelTransportationEnum(str, Enum):
-    automobile = 'automobile' # "Car/Bus/Truck/Motorcycle"
-    train = 'train' # "Train"
-    aircraft = 'aircraft' # "Plane/Helicopter"
-    ship = 'ship' # "Ship"
+class ObservationLevelImageEnum(AttrEnum):
+    pixel            = {'label': "Pixel/Grid"}
+    polygon          = {'label': "Polygon"}
 
 
-class ObservationLevelSecurityEnum(str, Enum):
-    gun = 'gun' # "Gun"
+class ObservationLevelHistoryEnum(AttrEnum):
+    empire           = {'label': "Empire"}
 
 
-class ObservationLevelDemographicEnum(str, Enum):
-    age = 'age' # "Age"
-    race = 'race' # "Race/Skin color"
-    sex = 'sex' # "Sex"
-
-
-class ObservationLevelImageEnum(str, Enum):
-    pixel = 'pixel' # "Pixel/Grid"
-    polygon = 'polygon' # "Polygon"
-
-
-class ObservationLevelHistoryEnum(str, Enum):
-    empire = 'empire' # "Empire"
-
-
-class ObservationLevelOthersEnum(str, Enum):
-    other = 'other' # "Other"
+class ObservationLevelOthersEnum(AttrEnum):
+    other            = {'label': "Other"}
 
 
 ObservationLevel = Union[

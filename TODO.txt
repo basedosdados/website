@@ -4,6 +4,10 @@ add new schema to pydantic model @breno
 
 refactor test fixtures
 
+remover do historico do git:
+* postgres-prod-dump.custom
+* initdbs
+
 ---
 
 x Check views on site (they are broken)

@@ -2,5 +2,6 @@
 build
 tmp
 .git
-assets
+stack/ckan/assets
+stack/ckan/assets.zip
 vendor/ckan/.git

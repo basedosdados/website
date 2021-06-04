@@ -26,6 +26,7 @@ services:
     container_name: ckan
     build:
       context: .
+      dockerfile: ./stack/ckan/Dockerfile
     image: "bdd/ckan${VTAG}"
     links:
       - db
@@ -49,10 +50,7 @@ services:
     command: ["gunicorn", "--bind",
         "0.0.0.0:5000", "--workers", "4", "wsgi"]
 
-    volumes:
-      - ./assets:/app/uploads/
-
-  datapusher:
+  datapusher: # Not really used, ckan dependency
     container_name: datapusher
     image: clementmouchet/datapusher
     ports:
@@ -63,7 +61,7 @@ services:
     image: bdd/db
     build:
       context: .
-      dockerfile: postgresql/Dockerfile
+      dockerfile: ./stack/postgresql/Dockerfile
       args:
         - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
         - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -80,10 +78,10 @@ services:
     container_name: solr
     build:
       context: .
-      dockerfile: solr/Dockerfile
+      dockerfile: stack/solr/Dockerfile
     image: bdd/solr
 
-  redis:
+  redis: # Not really used, ckan dependency
     container_name: redis
     image: redis:latest
 

@@ -4,6 +4,6 @@ tmp
 build
 .env.prod
 dive.log
-configs/ckan.prod.ini
+configs/ckan.override.prod.ini
 .idea
 .hypothesis

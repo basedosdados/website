@@ -1,0 +1,5 @@
+#!/bin/bash
+
+until pg_isready; do sleep 1; SLEEPMORE=1; done
+
+if [[ $SLEEPMORE ]]; then sleep 2; fi # if we are still not up when we start, give some tolerance
