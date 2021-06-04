@@ -1,4 +1,4 @@
-import {Box, Center, HStack, Image, Text, VStack} from "@chakra-ui/react";
+import {Box, Center, HStack, Image, Stack, Text, VStack} from "@chakra-ui/react";
 import Menu from "../components/molecules/Menu";
 import SiteHead from "../components/atoms/SiteHead";
 import ControlledInput from "../components/atoms/ControlledInput";
@@ -9,6 +9,16 @@ import DatabaseCard from "../components/organisms/DatabaseCard";
 import NewsCard from "../components/organisms/NewsCard";
 import Footer from "../components/molecules/Footer";
 import {useState} from "react";
+import CardCatalog from "../components/organisms/CardCatalog";
+
+function HeroText({children, iconUrl}){
+    return(
+        <VStack textAlign="center">
+            <Image marginBottom="10px" height="140px" src={iconUrl}/>
+            {children}
+        </VStack>
+    )
+}
 
 function Hero(){
     const [search, setSearch] = useState();
@@ -18,80 +28,85 @@ function Hero(){
     }
 
     return(
-        <VStack width="100%" height="100vh" background="linear-gradient(180deg, #3A761E 0%, #66A24A 10.42%, #6CA850 100%);">
+        <VStack width="100%" height="100vh" backgroundColor="#FAFAFA">
             <Menu/>
-            <Center  height="100%">
-                <VStack alignItems="center" spacing={10}>
-                    <BigTitle color="#ffffff">Encontre os dados que você precisa</BigTitle>
-                    <ControlledInput
-                        value={search}
-                        onChange={setSearch}
-                        onEnterPress={openSearchLink}
-                        maxWidth="80%"
-                        placeholder="Pesquisar palavras-chave, instituições e temas"
-                        justifyContent="center"
-                        inputStyle={{ padding:"40px", borderRadius:"50px", backgroundColor:"#ffffff", fontSize:"24px"}}
-                        rightIcon={<Image onClick={openSearchLink} width="40px" marginRight="40px" src="/next-img/arrow_black_right.png"/>}/>
-                    <SectionText color="#FFFFFF">930 conjuntos de dados públicos de 498 instituições e 22 temas; 40 bases prontas para análise no nosso datalake.</SectionText>
+            <Center paddingTop="100px"  height="100%">
+                <VStack height="100%" justifyContent="center" alignItems="center" spacing={20}>
+                    <Stack position="relative" width="100%" direction={{base:'column', lg:'row'}} alignItems="center" spacing={50}>
+                        <Image src="/next-img/home_background.png" position="absolute" right="0px" top="-30px" width="600px"/>
+                        <BigTitle flex="2" color="#2B8C4D">
+                            Um único lugar para buscar, baixar e acessar os dados que você precisa
+                        </BigTitle>
+                        <ControlledInput
+                            value={search}
+                            onChange={setSearch}
+                            onEnterPress={openSearchLink}
+                            flex="3"
+                            placeholder="Pesquisar palavras-chave, instituições e temas"
+                            justifyContent="center"
+                            inputStyle={{ padding:"40px", borderRadius:"50px", backgroundColor:"#ffffff", fontSize:"24px"}}
+                            rightIcon={<Image onClick={openSearchLink} width="40px" marginRight="40px" src="/next-img/arrow_black_right.png"/>}/>
+                    </Stack>
+                    <Stack paddingTop="30px" position="relative" zIndex="1" width="90%" direction={{base:'column', lg:'row'}}>
+                        <HeroText iconUrl="/next-img/icone_busca.png">
+                            <SectionText>
+                                Com o <b>mecanismo de busca</b> é possível descobrir informações sobre mais de 900 bases de dados de diversos temas e organizações.
+                            </SectionText>
+                        </HeroText>
+                        <HeroText iconUrl="/next-img/icone_download.png">
+                            <SectionText>
+                                Disponibilizamos o <b>download</b> dos dados tratados e atualizados direto do nosso datalake público num só click.
+                            </SectionText>
+                        </HeroText>
+                        <HeroText iconUrl="/next-img/icone_pacotes.png">
+                            <SectionText>
+                                Através dos nossos <b>pacotes de programação</b> você pode acessar o datalake público BD+ em Python, R ou pela linha de comando.
+                            </SectionText>
+                        </HeroText>
+                    </Stack>
                 </VStack>
             </Center>
-            <VStack spacing={5} paddingBottom="20px">
-                <SectionText fontWeight="700" color="#FFFFFF">Veja mais sobre nossos dados</SectionText>
-                <Image height="34px" src="/next-img/arrow_white_down.png"/>
-            </VStack>
+            <Center transform="translateY(-20px)" boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)" backgroundColor="#42B0FF" borderRadius="500px"  width="52px" height="60px" >
+                <Image height="24px" src="/next-img/arrow_white_down.png"/>
+            </Center>
         </VStack>
     )
 }
 
-function HomeSection({title, sectionText, sectionTitle, children}){
-    const padding = "7%";
+function CatalogNews(){
     return(
-        <Box padding="50px 0px" backgroundColor="#FAFAFA">
-            <VStack margin="auto" alignItems="flex-start" spacing={12} maxWidth="1500px">
-                <BigTitle alignSelf="center">{title}</BigTitle>
-                <SectionText alignSelf="center" width="70%" textAlign="center">{sectionText}</SectionText>
-                <SectionTitle paddingLeft={padding} alignSelf="flex-start">{sectionTitle}</SectionTitle>
-                <HStack padding={`0px ${padding}`} shouldWrapChildren={true} width="100%" paddingBottom="20px" justify="space-between">
-                    {children}
-                </HStack>
-            </VStack>
-        </Box>
+        <VStack width="100%" padding="60px 0px" alignItems="flex-start" backgroundColor="#FAFAFA" >
+            <BigTitle marginBottom="40px" alignSelf="center">Veja as novidades do nosso catálogo</BigTitle>
+            <CardCatalog
+                sections={{
+                    'populares': [
+                        <DatabaseCard
+                            name="Eleições brasileiras"
+                            organization="Tribunal Superior Eleitoral"
+                            tags={["Política", "Finanças públicas"]}
+                            size="2 GB"
+                            tableNum="13 tabelas (CSV)"
+                            externalLinkNum={1}
+                            updatedSince="13 dias"
+                            updatedAuthor="Ricardo Dahis"
+                            categories={['agro']}
+                        />,
+                       ],
+                }}
+            />
+        </VStack>
     )
 }
 
 export default function Home() {
   return (
-    <>
+      <>
         <SiteHead/>
-        <Hero/>
-        <HomeSection
-            title="ENCONTRE DADOS PÚBLICOS"
-            sectionText="Descubra informações sobre dados públicos de grandes instituições brasileiras e internacionais através da nossa ferramenta de busca. Algumas bases também estão no nosso datalake."
-            sectionTitle="Base mais populares"
-        >
-            <DatabaseCard name="Eleições brasileiras" organization="Tribunal Superior Eleitoral" tags={["Política", "Finanças públicas"]} description="O Repositório de dados eleitorais é uma compilação de informações brutas das eleições, desde as de 1945, voltada para pesquisadores, imprensa e pessoas interessadas em..." size="2 GB" tableNum="13 tabelas (CSV)" externalLinkNum={1} updatedSince="13 dias" updatedAuthor="Ricardo Dahis" iconUrl="/next-img/icon_organization.png" isPlus={true} />
-            <DatabaseCard name="Eleições brasileiras" organization="Tribunal Superior Eleitoral" tags={["Política", "Finanças públicas"]} description="O Repositório de dados eleitorais é uma compilação de informações brutas das eleições, desde as de 1945, voltada para pesquisadores, imprensa e pessoas interessadas em..." externalLinkNum={1} updatedSince="13 dias" updatedAuthor="Ricardo Dahis" iconUrl="/next-img/icon_organization.png" />
-            <DatabaseCard name="Eleições brasileiras" organization="Tribunal Superior Eleitoral" tags={["Política", "Finanças públicas"]} description="O Repositório de dados eleitorais é uma compilação de informações brutas das eleições, desde as de 1945, voltada para pesquisadores, imprensa e pessoas interessadas em..."  externalLinkNum={1} updatedSince="13 dias" updatedAuthor="Ricardo Dahis" iconUrl="/next-img/icon_organization.png"   />
-        </HomeSection>
-        <HomeSection
-            title="USE NOSSO DATALAKE"
-            sectionText={`Baixe e consulte dados já limpos, integrados e atualizados de forma extremamente fácil pelo nosso datalake público. As bases disponíveis no datalake possuem o ícone ${<Image marginLeft="10px" width="70px" display="inline-block" src="/next-img/logo_plus.png"/>}`}
-            sectionTitle="Dados mais recentes na BD+"
-        >
-            <DatabaseCard name="Eleições brasileiras" organization="Tribunal Superior Eleitoral" tags={["Política", "Finanças públicas"]} description="O Repositório de dados eleitorais é uma compilação de informações brutas das eleições, desde as de 1945, voltada para pesquisadores, imprensa e pessoas interessadas em..." size="2 GB" tableNum="13 tabelas (CSV)" externalLinkNum={1} updatedSince="13 dias" updatedAuthor="Ricardo Dahis" isPlus={true} />
-            <DatabaseCard name="Eleições brasileiras" organization="Tribunal Superior Eleitoral" tags={["Política", "Finanças públicas"]} description="O Repositório de dados eleitorais é uma compilação de informações brutas das eleições, desde as de 1945, voltada para pesquisadores, imprensa e pessoas interessadas em..." size="2 GB" tableNum="13 tabelas (CSV)" externalLinkNum={1} updatedSince="13 dias" updatedAuthor="Ricardo Dahis" isPlus={true} />
-            <DatabaseCard name="Eleições brasileiras" organization="Tribunal Superior Eleitoral" tags={["Política", "Finanças públicas"]} description="O Repositório de dados eleitorais é uma compilação de informações brutas das eleições, desde as de 1945, voltada para pesquisadores, imprensa e pessoas interessadas em..." size="2 GB" tableNum="13 tabelas (CSV)" externalLinkNum={1} updatedSince="13 dias" updatedAuthor="Ricardo Dahis" isPlus={true} />
-        </HomeSection>
-        <HomeSection
-            title="EXPLORE NA SUA LINGUAGEM FAVORITA"
-            sectionText="Desenvolvemos pacotes para acesso aos dados da BD+ em Python, R e linha de comando. Além disso, você pode consultar e filtrar dados usando SQL no editor do nosso datalake no Google BigQuery."
-            sectionTitle="Tutoriais e análises"
-        >
-            <NewsCard title="Workshop SQL: Analisando 250 GB em segundos com o BigQuery" site="YOUTUBE" image="/next-img/news_placeholder.png"/>
-            <NewsCard title="Workshop SQL: Analisando 250 GB em segundos com o BigQuery" site="YOUTUBE" image="/next-img/news_placeholder.png"/>
-            <NewsCard title="Workshop SQL: Analisando 250 GB em segundos com o BigQuery" site="YOUTUBE" image="/next-img/news_placeholder.png"/>
-        </HomeSection>
+        <VStack alignItems="center" backgroundColor="#fafafa" padding="0px 5%">
+            <Hero/>
+            <CatalogNews/>
+        </VStack>
         <Footer/>
-    </>
+      </>
   )
 }
