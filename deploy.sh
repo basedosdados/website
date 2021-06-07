@@ -127,3 +127,4 @@ install_apprise() {
 }
 
 for i in "$@"; do $i; done
+
