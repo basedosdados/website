@@ -28,7 +28,8 @@ if [[ ! -d vendor/ckan/.git ]]; then
       cd ckan
       git checkout ckan-2.9.0
       git diff 9abeaa1b7d2f6539ade946cc3f407878f49950eb^ 9abeaa1b7d2f6539ade946cc3f407878f49950eb | git apply # correct a bug in ckan
-      sed -i 's/markdown==2.6.7/markdown>=3.0/' requirements.txt # Change markdown version because it is incompatible with python 3.9
+      # Using perl instead of sed -i as it is portable in Mac as well
+      perl -i -pe 's/markdown==2.6.7/markdown>=3.0/' requirements.txt # Change markdown version because it is incompatible with python 3.9
       git add .
     )
 fi
