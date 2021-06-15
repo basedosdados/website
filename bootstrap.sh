@@ -18,6 +18,7 @@ set -ex
 if [[ $1 == full ]]; then
     rm -fr vendor/ckan stack/ckan/assets
     docker-compose down -vt0
+    DOCKER_BUILD_EXTRA_ARGS='--no-cache --pull'
 fi
 
 if [[ ! -d vendor/ckan/.git ]]; then
@@ -32,7 +33,7 @@ if [[ ! -d vendor/ckan/.git ]]; then
     )
 fi
 
-docker-compose build --parallel
+docker-compose build --parallel $DOCKER_BUILD_EXTRA_ARGS
 docker-compose up --scale ckan=0 -d
 
 echo waiting for postgres to be ready ; docker exec db /wait-until-up
