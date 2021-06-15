@@ -17,6 +17,7 @@ set -ex
 
 if [[ $1 == full ]]; then
     rm -fr vendor/ckan stack/ckan/assets
+    docker-compose down -vt0
 fi
 
 if [[ ! -d vendor/ckan/.git ]]; then
