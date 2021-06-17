@@ -23,6 +23,5 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 ENV POSTGRES_USER ckan
-ARG POSTGRES_PASSWORD
 ADD ./stack/postgresql/docker-entrypoint-initdb.d/00_create_datastore.sh /docker-entrypoint-initdb.d/00_create_datastore.sh
 COPY ./stack/postgresql/wait-until-up /wait-until-up

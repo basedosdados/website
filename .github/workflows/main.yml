@@ -18,9 +18,5 @@ jobs:
           PROD_CKAN_INI: ${{ secrets.PROD_CKAN_INI }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
         run: 'echo "$DOT_ENV_PROD" > .env.prod && echo "$PROD_CKAN_INI" > ./configs/ckan.override.prod.ini && mkdir ~/.ssh && echo "$SSH_KEY" > ~/.ssh/BD.pem && chmod 700 ~/.ssh ~/.ssh/BD.pem'
-      - name: Clone ckan 2.9.0
-        run: |
-          cd vendor && git clone https://github.com/ckan/ckan.git && cd ckan && git checkout ckan-2.9.0 && \
-          git diff 9abeaa1b7d2f6539ade946cc3f407878f49950eb^ 9abeaa1b7d2f6539ade946cc3f407878f49950eb | git apply
       - name: Deploy script
-        run: ls -la ~/.ssh/ && wc ~/.ssh/BD.pem  && ./deploy.sh deploy
+        run: ./deploy.sh deploy
