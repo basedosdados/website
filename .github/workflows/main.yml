@@ -20,3 +20,12 @@ jobs:
         run: 'echo "$DOT_ENV_PROD" > .env.prod && echo "$PROD_CKAN_INI" > ./configs/ckan.override.prod.ini && mkdir ~/.ssh && echo "$SSH_KEY" > ~/.ssh/BD.pem && chmod 700 ~/.ssh ~/.ssh/BD.pem'
       - name: Deploy script
         run: ./deploy.sh deploy
+      - name: Report Failures
+        if: '${{ failure() }}'
+        uses: cstuder/apprise-ga@master
+          env:
+            APPRISE_URL: '${{ secrets.APPRISE_NOTIFICATION_URL }}'
+            INFRA_HANDLES: '${{secrets.NOTIFICATION_DISCORD_INFRA_HANDLES}}'
+        with:
+          title: "Broken CI"
+          message: "{{INFRA_HANDLES}}. CI DEPLOY FAILED, please check https://github.com/basedosdados/website/actions"
