@@ -117,8 +117,8 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
 
     # IActions
     def get_actions(self):
-        import ckanext.basedosdados.endpoint_functions as endpoints
-        return _read_functions_from_module(endpoints)
+        import ckanext.basedosdados.actions as actions
+        return _read_functions_from_module(actions)
 
 def _read_functions_from_module(module):
     funs = { name: getattr(module, name) for name in dir(module) if not name.startswith('_')}
