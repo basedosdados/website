@@ -2,7 +2,7 @@ import { Heading } from "@chakra-ui/react";
 
 export default function BigTitle({
   children,
-  color = "#3A761E",
+  color = "#2B8C4D",
   fontWeigth = "700",
   letterSpacing = "0.1em",
   ...props

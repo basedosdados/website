@@ -24,6 +24,7 @@ import { useState } from "react";
 import CardCatalog from "../components/organisms/CardCatalog";
 import Title from "../components/atoms/Title";
 import Link from "../components/atoms/Link";
+import Typist from "react-typist";
 
 function HeroText({ children, iconUrl }) {
   return (
@@ -188,6 +189,8 @@ function CatalogNews() {
 }
 
 function ExploreInYourFavoriteLanguage() {
+  const [typistKey, setTypistKey] = useState(0);
+
   return (
     <Stack
       width="95%"
@@ -209,13 +212,24 @@ function ExploreInYourFavoriteLanguage() {
         style={{
           flex: 2,
           borderRadius: 26.2245,
-          filter: "drop-shadow(0px 5.2449px 5.2449px rgba(0, 0, 0, 0.25))",
+          filter: "drop-shadow(0px 2.2449px 2.2449px rgba(0, 0, 0, 0.4))",
           maxHeight: 200,
         }}
         id="termynal"
         data-termynal
+        data-ty-typeDelay="40"
+        data-ty-lineDelay="700"
       >
-        <span data-ty="input">pip install basedosdados</span>
+        <Typist
+          key={typistKey}
+          onTypingDone={() => setTypistKey(typistKey + 1)}
+        >
+          <span>$ pip install basedosdados</span>
+          <Typist.Backspace count={30} delay={1000} />
+          <Typist.Delay ms={500} />
+          <span>{">"} install.packages("basedosdados")</span>
+          <Typist.Backspace count={30} delay={1000} />
+        </Typist>
       </div>
     </Stack>
   );
@@ -406,6 +420,10 @@ export default function Home() {
         </VStack>
       </VStack>
       <Footer />
+      <script
+        src="/vendor/terminal.js"
+        data-termynal-container="#termynal"
+      ></script>
     </>
   );
 }

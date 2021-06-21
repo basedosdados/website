@@ -18,7 +18,6 @@ export default function SiteHead({ children }) {
         rel="stylesheet"
       />
       <link href="/vendor/terminal.css" rel="stylesheet" />
-      <script src="/vendor/terminal.js"></script>
       {children}
     </Head>
   );
