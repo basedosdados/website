@@ -8,6 +8,22 @@
 
 ## Adicionando um action endpoint na API
 
+### Ontologia de nomeação dos endpoints
+
+Existirão 5 tipos de endpoint, como no ckan: `create, delete, patch, update, get`, que viverão em seus respectivos arquivos dentro
+de `actions/`.
+
+O site novo do BD só poderá chamar os endpoints criados em `actions`. Todos os endpoints deverão ter o prefixo `bd_`. Exemplo:
+
+```
+nome original: organization_list_for_user
+nome bd:       bd_organization_list_for_user
+```
+
+Mesmo se o endpoint não tiver o comportamento alterado, deve-se criar um novo endpoint BD chamando o antigo.
+
+### Como funciona a API
+
 Os Actions da API do ckan podem ser chamados via:
 
 <url>/api/3/action/<function>
