@@ -36,7 +36,7 @@ export default function Footer() {
         spacing={10}
         direction={{ base: "column", lg: "row" }}
       >
-        <VStack spacing={10}>
+        <VStack width={{ base: "90%", lg: "50%" }} spacing={10}>
           <BigTitle fontSize="26px" color="white">
             Já conhece a nossa newsletter mensal?
           </BigTitle>
@@ -62,12 +62,14 @@ export default function Footer() {
         backgroundColor="#34A15A"
       >
         <Image width="180px" src="/next-img/logo_footer.png" />
-        <HStack
+        <Stack
+          direction={{ base: "column", lg: "row" }}
           paddingBottom="100px"
           justifyContent="space-around"
           width="70%"
           alignItems="flex-start"
           marginLeft="auto"
+          spacing={{ base: 10, lg: 0 }}
         >
           <LinkVStack title="PRODUTOS">
             <Link href="/dataset">Mecanismo de busca</Link>
@@ -100,7 +102,7 @@ export default function Footer() {
             <Link>Termos de uso</Link>
             <Link>Política de privacidade</Link>
           </LinkVStack>
-        </HStack>
+        </Stack>
       </HStack>
     </VStack>
   );

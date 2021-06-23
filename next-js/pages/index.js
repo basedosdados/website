@@ -43,7 +43,11 @@ function Hero() {
   }
 
   return (
-    <VStack width="100%" height="100vh" backgroundColor="#FAFAFA">
+    <VStack
+      width="100%"
+      height={{ base: "initial", lg: "100vh" }}
+      backgroundColor="#FAFAFA"
+    >
       <Menu />
       <Center paddingTop="100px" height="100%">
         <VStack
@@ -66,7 +70,13 @@ function Hero() {
               top="-30px"
               width="600px"
             />
-            <BigTitle fontFamily="Lato" flex="2" color="#2B8C4D">
+            <BigTitle
+              position="relative"
+              zIndex="1"
+              fontFamily="Lato"
+              flex="2"
+              color="#2B8C4D"
+            >
               Um único lugar para buscar, baixar e acessar os dados que você
               precisa
             </BigTitle>
@@ -124,6 +134,7 @@ function Hero() {
         </VStack>
       </Center>
       <Center
+        display={{ base: "none", lg: "flex" }}
         transform="translateY(-20px)"
         boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
         backgroundColor="#42B0FF"
@@ -214,6 +225,7 @@ function ExploreInYourFavoriteLanguage() {
           borderRadius: 26.2245,
           filter: "drop-shadow(0px 2.2449px 2.2449px rgba(0, 0, 0, 0.4))",
           maxHeight: 200,
+          width: "100%",
         }}
         id="termynal"
         data-termynal
@@ -412,7 +424,7 @@ export default function Home() {
       <VStack alignItems="center" backgroundColor="#fafafa" padding="0px 5%">
         <Hero />
         <CatalogNews />
-        <VStack spacing={20}>
+        <VStack spacing={20} width="100%">
           <ExploreInYourFavoriteLanguage />
           <LearnToAnalysis />
           <JoinTheCommunity />
