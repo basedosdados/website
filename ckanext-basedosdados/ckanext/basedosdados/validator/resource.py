@@ -112,7 +112,7 @@ class LaiRequest(Resource):
 
 
 class BdmTable(Resource):
-    resource_type: Literal["bdm_table"] = Field(
+    resource_type: Literal["bdm_table"] = F(
         description="test description KKKKKKKKKKKKKKKKKKKKKK",
     )
 
@@ -166,5 +166,5 @@ class ExternalLink(Resource):
     link_url: Optional[str]
 
 
-def resource_schema_json():
+def table_schema_json():
     return BdmTable.schema_json(indent=2)

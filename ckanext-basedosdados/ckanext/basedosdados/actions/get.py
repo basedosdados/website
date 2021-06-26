@@ -7,13 +7,13 @@ from .. import validator
 
 
 @toolkit.side_effect_free  # Necessário para fazer o GET
-def bd_package_schema(context, data_dict=None):
-    return validator.package.package_schema_json()
+def bd_dataset_schema(context, data_dict=None):
+    return validator.package.dataset_schema_json()
 
 
 @toolkit.side_effect_free  # Necessário para fazer o GET
-def bd_resource_schema(context, data_dict=None):
-    return validator.resource.resource_schema_json()
+def bd_table_schema(context, data_dict=None):
+    return validator.resource.table_schema_json()
 
 
 @toolkit.side_effect_free
