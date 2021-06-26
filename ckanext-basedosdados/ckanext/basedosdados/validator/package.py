@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 from datetime import datetime
+from enum import Enum
 from typing import List, Optional, Literal, Union, Any, Dict
 import pydantic
 from pydantic import (
@@ -174,17 +175,6 @@ class BdmDatasetConfigs(_CkanDefaults):
         },
     )
 
-    # TODO DICT TYPE
-    author: Str = Field(
-        title="author",
-        default=["<nome>"],
-        description=["Qual departamento/grupo/pessoa mantém os dados originais?"],
-        yaml_order={
-            "id_before": "organization",
-            "id_after": "website",
-        },
-    )
-
     website: List[Str] = Field(
         title="website",
         default=["<website>"],
@@ -301,6 +291,18 @@ class BdmDatasetConfigs(_CkanDefaults):
         },
     )
 
+    # TODO DICT TYPE
+    author: Str = Field(
+        title="author",
+        default=["<nome>"],
+        description=["Qual departamento/grupo/pessoa mantém os dados originais?"],
+        yaml_order={
+            "id_before": "organization",
+            "id_after": "website",
+        },
+    )
+
+    # TODO DICT TYPE
     license: Str = Field(
         title="license",
         default=["<MIT>"],
@@ -316,7 +318,7 @@ class BdmDatasetConfigs(_CkanDefaults):
     )
 
 
-# class AuthorM(_CkanDefaults):
+# class AuthorM(BaseModel):
 #     name: Optional[Str]
 #     email: Optional[Str]
 
