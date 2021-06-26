@@ -17,10 +17,15 @@ jobs:
           DOT_ENV_PROD: ${{ secrets.DOT_ENV_PROD }}
           PROD_CKAN_INI: ${{ secrets.PROD_CKAN_INI }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
-        run: 'echo "$DOT_ENV_PROD" > .env.prod && echo "$PROD_CKAN_INI" > ./configs/ckan.prod.ini && mkdir ~/.ssh && echo "$SSH_KEY" > ~/.ssh/BD.pem && chmod 700 ~/.ssh ~/.ssh/BD.pem'
-      - name: Clone ckan 2.9.0
-        run: |
-          cd vendor && git clone https://github.com/ckan/ckan.git && cd ckan && git checkout ckan-2.9.0 && \
-          git diff 9abeaa1b7d2f6539ade946cc3f407878f49950eb^ 9abeaa1b7d2f6539ade946cc3f407878f49950eb | git apply
+        run: 'echo "$DOT_ENV_PROD" > .env.prod && echo "$PROD_CKAN_INI" > ./configs/ckan.override.prod.ini && mkdir ~/.ssh && echo "$SSH_KEY" > ~/.ssh/BD.pem && chmod 700 ~/.ssh ~/.ssh/BD.pem'
       - name: Deploy script
-        run: ls -la ~/.ssh/ && wc ~/.ssh/BD.pem  && ./deploy.sh deploy
+        run: ./deploy.sh deploy
+      - name: Report Failures
+        if: '${{ failure() }}'
+        uses: cstuder/apprise-ga@master
+          env:
+            APPRISE_URL: '${{ secrets.APPRISE_NOTIFICATION_URL }}'
+            INFRA_HANDLES: '${{secrets.NOTIFICATION_DISCORD_INFRA_HANDLES}}'
+        with:
+          title: "Broken CI"
+          message: "{{INFRA_HANDLES}}. CI DEPLOY FAILED, please check https://github.com/basedosdados/website/actions"

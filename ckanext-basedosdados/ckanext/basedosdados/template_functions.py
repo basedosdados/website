@@ -13,45 +13,50 @@ def is_bdm_one_click_download(r):
     return size != 'Unavailable' and type(size) == int and size > 10
 
 def make_example_bq_query(resource, package):
-    return f'''SELECT * FROM `basedosdados.{get_package_bdm_schema_name(package)}.{resource['name']}` LIMIT 100'''
+    return f'''SELECT * FROM `basedosdados.{get_package_bdm_schema_name(package)}.{get_resource_bdm_table_name(resource)}` LIMIT 100'''
     
 def make_example_python_query(resource, package):
     return f'''import basedosdados as bd
 # Para carregar o dado direto no pandas
-bd.read_table(dataset_id='{get_package_bdm_schema_name(package)}', 
-            table_id='{resource['name']}',
+df = bd.read_table(dataset_id='{get_package_bdm_schema_name(package)}', 
+            table_id='{get_resource_bdm_table_name(resource)}',
             billing_project_id=<YOUR_PROJECT_ID>)'''
 
 def make_example_r_query(resource, package):
-    return f'''if (!require("bigrquery")) install.packages("bigrquery")
-library("bigrquery")
-billing_project_id = "<YOUR_PROJECT_ID>"
-# Para baixar a tabela inteira
-query = "SELECT * FROM `basedosdados.{get_package_bdm_schema_name(package)}.{resource['name']}`"
-d <- bq_table_download(bq_project_query(billing_project_id, query), page_size=500, bigint="integer64")
+    return f'''install.packages("basedosdados")
+library("basedosdados")
+# Defina o seu projeto no Google Cloud
+set_billing_id("<YOUR_PROJECT_ID>")
+# Para carregar o dado direto no R
+query <- "SELECT * FROM `basedosdados.{get_package_bdm_schema_name(package)}.{get_resource_bdm_table_name(resource)}`"
+df <- read_sql(query)
     '''
 def get_package_bdm_schema_name(package):
     return stringcase.snakecase(package['name'])
 
 def get_resource_bdm_table_name(resource):
-    return resource['name']
+    return resource['table_id']
 
 
 from ckanext.basedosdados import validator
+import functools
 
 def load_json_schema():
     from jsonref import JsonRef, json
+    from copy import deepcopy
     def to_schema(x, fields_to_remove):
-        out = JsonRef.replace_refs(x.schema(), jsonschema=True)
+        out = deepcopy(JsonRef.replace_refs(x.schema(), jsonschema=True)) # need deepcopy to create a proper dict, jsonref returns a dict-like object that is not json serializable
         _remove_complex_ckan_fields(out, fields_to_remove)
-        return out
+        _migrate_to_schema3(out) # migrate required to schema3 format to comply with jsonform
+        return dict(out)
     resource_fields_to_delete = list(validator.resource.Resource.__fields__) + ['resource_type']
-    return json.dumps({
+    return {
         'external_link': to_schema(validator.resource.ExternalLink, resource_fields_to_delete)
         ,'bdm_table':    to_schema(validator.resource.BdmTable,     resource_fields_to_delete)
-        ,'lai_request':  to_schema(validator.resource.LaiRequest,   resource_fields_to_delete)
+        #,'lai_request':  to_schema(validator.resource.LaiRequest,   resource_fields_to_delete)
         ,'package':      to_schema(validator.package.Package,       validator.package._CkanDefaults.__fields__)
-    }, indent=2)
+    }
+load_json_schema = functools.update_wrapper(load_json_schema, functools.lru_cache(load_json_schema)) # lru_cache messes up function name so we fix it here
 
 def _remove_complex_ckan_fields(package, fields_to_remove):
     for field in fields_to_remove:
@@ -59,6 +64,14 @@ def _remove_complex_ckan_fields(package, fields_to_remove):
         if field in package['required']:
             package['required'].remove(field)
 
+def _migrate_to_schema3(schema):
+    if schema.get('type') == 'object':
+        for f in schema.get('required', []):
+            field = schema.get('properties', {}).get(f, {})
+            field['required'] = True
+        for sub_schema in schema.get('properties', {}).values():
+            _migrate_to_schema3(sub_schema)
+
+
 def get_possible_resource_types():
     return [{'name': i, 'value': i} for i in validator.resource.RESOURCE_TYPES]
-

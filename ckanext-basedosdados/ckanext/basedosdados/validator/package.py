@@ -7,27 +7,28 @@ from pydantic import StrictInt as Int, StrictStr as Str, Field, ValidationError,
 from uuid import UUID
 import jsonschema
 
-from typing_extensions import Annotated # migrate to py3.9
+from .data_types import ObservationLevel, TemporalCoverage, IdType
 
-A = Annotated
-F = Field
-ID_TYPE = A[Optional[Str], F()] # TODO: would be nice to require on show/update but not on create
+from typing_extensions import Annotated  # migrate to py3.9
 
-Email = Str # TODO
+Email = Str  # TODO
 
-from . import resource, BaseModel
-from .resource import LaiRequest, ExternalLink, BdmTable
+from . import BaseModel
+from .resource import ExternalLink, BdmTable
 
-AnyResource = Annotated[Union[LaiRequest, ExternalLink, BdmTable], Field(discriminator='resource_type')]
+AnyResource = Annotated[
+    Union[ExternalLink, BdmTable], Field(discriminator="resource_type")
+]
+
 
 coerce_to_unicode = lambda field: validator('field', allow_reuse=True)()
 
 class _CkanDefaults(BaseModel):
-    id: ID_TYPE
+    id: IdType
     name: Str
 
     title: Str
-    type: Literal['dataset']
+    type: Literal["dataset"]
     notes: Optional[Str]
     author: Optional[Str]
     author_email: Optional[Email]
@@ -43,7 +44,6 @@ class _CkanDefaults(BaseModel):
     private: bool
     license_title: Optional[Str]
 
-
     # Ckan Defaults Complex Fields
     num_resources: Optional[Int]
     resources: List[AnyResource] = []
@@ -57,7 +57,9 @@ class _CkanDefaults(BaseModel):
     relationships_as_subject: Any
 
     # throwaway field that is used to modify validators. You can think of it as an argument to validate function. Cant use prefix underscores on pydantic so used suffix to indicate this
-    action__: Optional[Literal['package_show', 'package_create', 'package_update']] # TODO: after 2021-07-01 add exclude by default when issue is merged in master
+    action__: Optional[
+        Literal["package_show", "package_create", "package_update"]
+    ]  # TODO: after 2021-07-01 add exclude by default when issue is merged in master
 
 
     @validator('resources', pre=True)
@@ -94,8 +96,13 @@ class _CkanDefaults(BaseModel):
 
 
 class Package(_CkanDefaults):
-    # Custom fields
-    download_type: Optional[Literal['Link Externo', 'BD Mais']] # field_name: download_type # validators: generate_download_type #TODO uncomment generates
+    # Generated Fields
+    # temporal_coverage: TemporalCoverage
+    # spatial_coverage: Str
+    # observation_level: List[ObservationLevel] = Field(max_items=10)
+    # auxiliary_files_url: List[Str]
+
+    download_type: Optional[Literal['Link Externo', 'BD Mais']] # TODO: generate this automatically
 
 
 # TODO: try to access fields on validation and get annotations on which fields are needed for each tier

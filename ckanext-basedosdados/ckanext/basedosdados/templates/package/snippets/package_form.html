@@ -11,38 +11,27 @@
 
 <hr></hr>
 <div id="metadata-jsonform-container"></div>
-<div id="res" class="alert"></div>
 
-<script type="text/javascript">
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+<script type="module">
   "use strict"
-  var package_ = {{ pkg_dict if pkg_dict else {} | tojson | safe }}
-  var schemas = {{ h.load_json_schema() | safe }}
+  import 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'
+  import "https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.1/underscore-min.js"
+  import "https://cdnjs.cloudflare.com/ajax/libs/jsonform/2.2.3/jsonform.js"
 
-  // schemas['package']
+  {% set package_ = pkg_dict if pkg_dict else {} %} {# Need to set this in another stage. There is a bug in jinja if we run this ternary if statement together with tojson. #}
+  var package_ = {{  package_ | tojson }}
+  var schemas = {{ h.load_json_schema() | tojson }}
+  window.debug__schemas = schemas
+
   var package_schema = schemas['package']
-  // package_schema['properties']['id']['readonly'] = true
-  // schemas['ext_link']['properties']['id']['readonly'] = true
-  // schemas['ext_link']['properties']['resource_type']['readonly'] = true
-  // schemas['ext_link']['properties']['name']['required'] = true
-  console.log($('#metadata-jsonform-container').jsonForm)
   $('#metadata-jsonform-container').jsonForm({
     schema: package_schema
     ,form: [
         "*",
-        {
-            "type": "actions",
-            "items": [ 
-            //{ "type": "submit", "title": "Atualizar" } 
-            ]
-        }
+        { "type": "actions", "items": [ ] } // suppress submit
     ]
     ,value: package_
-    //,onSubmit: on_submit
   });
 </script>
 {% endblock %}
-
-{#
-{% block metadata_fields %}
-{% endblock %}
-#}

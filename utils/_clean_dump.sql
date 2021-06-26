@@ -14,12 +14,28 @@ begin;
 
 
 ---------- START
+DO $$ -- Delete all tables with '_' prefix
+DECLARE _tbl text;
+BEGIN
+FOR _tbl  IN
+    SELECT quote_ident(table_schema) || '.'
+        || quote_ident(table_name)      -- escape identifier and schema-qualify!
+    FROM   information_schema.tables
+    WHERE  table_name LIKE '\_' || '%'  -- your table name prefix
+    AND    table_schema NOT LIKE 'pg\_%'    -- exclude system schemas
+    AND    table_name NOT LIKE '\_pg\_%'    -- exclude system schemas
+LOOP
+ -- RAISE NOTICE '%',
+   EXECUTE
+  'DROP TABLE ' || _tbl;
+END LOOP;
+END $$;
 
     drop table if exists chosen_user; create temp table chosen_user as
         select id from "user" where name in ('ckan', 'rdahis');
     drop table if exists chosen_pack; create temp table chosen_pack as
         select id from package where creator_user_id in (select id from chosen_user)
-        order by metadata_modified desc limit 100;
+        order by metadata_modified desc LIMIT 100; -- Number of datasets to keep
     drop table if exists chosen_pack_extra; create temp table chosen_pack_extra as
         select id from package_extra where package_id in (select * from chosen_pack) ;
 
@@ -55,6 +71,7 @@ begin;
     DELETE FROM package_tag WHERE package_id not IN ( SELECT * FROM chosen_pack);
     DELETE FROM package WHERE id not IN ( SELECT * FROM chosen_pack);
     DELETE FROM "user" WHERE id not IN ( SELECT * FROM chosen_user);
+    UPDATE "user" SET apikey='', password='', email='';
     DELETE FROM "member" where table_id not in (
             select * FROM chosen_user union select * FROM chosen_pack);
     DELETE FROM "member_revision" where table_id not in (

@@ -4,7 +4,7 @@
 --Perform or restore backup
 
 -- SETUP_BACKUP
-DO $$ BEGIN  
+DO $$ BEGIN
 	-- Create backup tables
 	IF (SELECT to_regclass('public._backup_package') IS NULL) THEN
 		CREATE TABLE public._backup_package AS SELECT * FROM package;
@@ -38,31 +38,38 @@ END $$;
 CREATE EXTENSION IF NOT EXISTS plpython3u;
 
 -- Temp functions definition
-CREATE OR REPLACE FUNCTION pg_temp.translate_languages(languages_array text) RETURNS text AS $$
-	import json
-	FROM_TO =  {"ingles": "english", "portugues": "portuguese", "espanhol": "spanish"}
-	array = json.loads(languages_array)
-	return json.dumps([FROM_TO[l] for l in array])
+CREATE OR REPLACE FUNCTION pg_temp.translate_languages(languages_array text) RETURNS json AS $$
+    if languages_array is None: return
+    import json
+    FROM_TO = {"ingles": "english", "portugues": "portuguese", "espanhol": "spanish"
+            ,"alemao": "german", "arabe": "arabic", "russo": "russian", "chines": "chinese"
+            ,"frances": "french", "japones": "japanese", "bahasa": "bahasa", "hindi": "hindi"
+    }
+    array = json.loads(languages_array)
+    return json.dumps([FROM_TO[l] for l in array])
 $$ LANGUAGE plpython3u;
 
-CREATE OR REPLACE FUNCTION pg_temp.translate_times(times_array text) RETURNS text AS $$
-	import json
-	FROM_TO =  {"pre_1999": "CHECK", "atual": "CHECK", "vazio": "CHECK"}
-	return json.dumps([FROM_TO.get(l, l) for l in json.loads(times_array)])
+CREATE OR REPLACE FUNCTION pg_temp.translate_times(times_array text) RETURNS json AS $$
+    if times_array is None: return
+    import json
+    FROM_TO =  {"pre_1999": "CHECK", "atual": "CHECK", "vazio": "CHECK"}
+    return json.dumps([FROM_TO.get(l, l) for l in json.loads(times_array)])
 $$ LANGUAGE plpython3u;
 
 CREATE OR REPLACE FUNCTION pg_temp.translate_boolean(bool text) RETURNS text AS $$
-	return {'sim': 'yes', 'nao': 'no'}[bool]
+    if bool is None: return
+    return {'sim': 'yes', 'nao': 'no'}[bool]
 $$ LANGUAGE plpython3u;
 
 CREATE OR REPLACE FUNCTION pg_temp.translate_time_unit(t text) RETURNS text AS $$
-	return {'segundos': 'second', 'minuto': 'minute', 'horas': 'hour', 'dois_anos': 'two_years',
-			'dia': 'day', 'semana': 'week', 'mes': 'month', 'trimestre': 'quarter',
-			'semestre': 'semester', 'ano': 'one_year', 'tres_anos': 'three_years',
-			'quatro_anos': 'four_years', 'cinco_anos': 'five_years', 'dez_anos': 'ten_years',
-			'recorrente': 'recurring', 'sem_atualizacao': 'unique', 'vazio': 'empty',
-			'outro': 'other'
-	}[t]
+    if not t: return None
+    return {'segundos': 'second', 'minuto': 'minute', 'horas': 'hour', 'dois_anos': 'two_years',
+    'dia': 'day', 'semana': 'week', 'mes': 'month', 'trimestre': 'quarter',
+    'semestre': 'semester', 'ano': 'one_year', 'tres_anos': 'three_years',
+    'quatro_anos': 'four_years', 'cinco_anos': 'five_years', 'dez_anos': 'ten_years',
+    'recorrente': 'recurring', 'sem_atualizacao': 'unique', 'vazio': 'empty',
+    'outro': 'other'
+}[t]
 $$ LANGUAGE plpython3u;
 
 -- Start of migration script
@@ -107,13 +114,15 @@ SET
 	extras = extras::jsonb || jsonb_build_object(
 -- describe metadata as `key, value`
 			'is_bdm',                   NULL
+			,'table_id',                case when resource_type = 'bdm_table' then resource.name else NULL end
 			,'language',                case when resource_type = 'external_link' then pg_temp.translate_languages(package_extras->>'idioma') else NULL end
-			,'description',             case when extras::jsonb->>'descricao' != '' then extras::jsonb->>'descricao' else 'CHECK' END
+			,'description',             case when extras::jsonb->>'descricao' != '' then extras::jsonb->>'descricao' else '' END
 			,'descricao',               NULL
 			,'spatial_coverage',        package_extras->>'regiao'
 			,'temporal_coverage',       pg_temp.translate_times(package_extras->>'ano')
 			,'update_frequency',        pg_temp.translate_time_unit(package_extras->>'periodicidade')
 			,'free',                    case when resource_type = 'external_link' then pg_temp.translate_boolean(package_extras->>'gratis') else NULL end
+			,'brazilian_ip',            case when resource_type = 'external_link' then pg_temp.translate_boolean(package_extras->>'ip_brasileiro') else NULL end
 			,'has_api',                 case when resource_type = 'external_link' then pg_temp.translate_boolean(package_extras->>'api') else NULL end
 			,'license_type',            case when resource_type = 'external_link' then 'CHECK' else NULL end
 			,'signup_needed',           case when resource_type = 'external_link' then pg_temp.translate_boolean(package_extras->>'registro') else NULL end
@@ -142,5 +151,6 @@ FROM p WHERE p.id = resource.package_id
 
 -- Remove nulls
 UPDATE resource SET extras = jsonb_strip_nulls(extras::jsonb);
+UPDATE package SET owner_org = COALESCE(owner_org, '3626e93d-165f-42b8-bde1-2e0972079694'); -- sending to basedosdados org any package without org
 SELECT * FROM resource JOIN package ON package.id = resource.package_id 
 LIMIT 100000 ;
