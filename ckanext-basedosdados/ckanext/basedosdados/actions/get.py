@@ -8,7 +8,7 @@ from .. import validator
 
 @toolkit.side_effect_free  # Necessário para fazer o GET
 def bd_dataset_schema(context, data_dict=None):
-    return validator.package.dataset_schema_json()
+    return validator.package.bdm_dataset_schema_json()
 
 
 @toolkit.side_effect_free  # Necessário para fazer o GET

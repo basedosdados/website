@@ -338,5 +338,5 @@ class Package(_CkanDefaults):
 # TODO: try to access fields on validation and get annotations on which fields are needed for each tier
 
 
-def dataset_schema_json():
+def bdm_dataset_schema_json():
     return BdmDatasetConfigs.schema_json(indent=2)
