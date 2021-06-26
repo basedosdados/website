@@ -112,7 +112,9 @@ class LaiRequest(Resource):
 
 
 class BdmTable(Resource):
-    resource_type: Literal["bdm_table"]
+    resource_type: Literal["bdm_table"] = Field(
+        description="test description KKKKKKKKKKKKKKKKKKKKKK",
+    )
 
     table_id: Str
     auxiliary_files_url: Optional[Str]
@@ -162,3 +164,7 @@ class ExternalLink(Resource):
     license_type: Optional[Str]  # Required for tier 1
 
     link_url: Optional[str]
+
+
+def resource_schema_json():
+    return BdmTable.schema_json(indent=2)
