@@ -30,9 +30,11 @@ services:
       context: .
       dockerfile: stack/solr/Dockerfile
 
-  next-js:
+  next:
     build:
-      context: next-js
+      context: next
+    volumes:
+      - ./next:/app
 
   nginx:
     volumes:

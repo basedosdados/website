@@ -9,7 +9,7 @@ services:
       - 80:80
     depends_on:
       - ckan
-      - next-js
+      - next
     # logging:
     #   driver: syslog
     #   options:
@@ -66,10 +66,8 @@ services:
     container_name: redis
     image: redis:latest
 
-  next-js:
-    container_name: next-js
+  next:
+    container_name: next
     ports:
       - "3000:3000"
-    image: bdd/next-js${VTAG}
-    volumes:
-      - ./next-js:/app
+    image: bdd/next${VTAG}

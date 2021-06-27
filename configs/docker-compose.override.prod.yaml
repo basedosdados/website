@@ -33,6 +33,10 @@ services:
     volumes:
       - ./assets:/app/uploads/
 
+  next:
+    networks:
+    - basedosdados
+
   solr:
     networks:
     - basedosdados
