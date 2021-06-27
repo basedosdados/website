@@ -89,4 +89,4 @@ services:
       context: next-js
     volumes:
       - ./next-js:/app
-    command: ["yarn", "star
+    command: ["yarn", "start"]
