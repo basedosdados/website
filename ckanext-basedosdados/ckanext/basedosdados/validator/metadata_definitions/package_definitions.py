@@ -24,7 +24,7 @@ class Licence(BaseModel):
     url: Str = Field(user_input_hint=["<url>"])
 
 
-to_string = lambda description: "\n".join(description)
+to_line = lambda description: "\n".join(description)
 
 
 ###################
@@ -34,7 +34,7 @@ to_string = lambda description: "\n".join(description)
 METADATA_MODIFIED_FIELD = Field(
     title="metadata_modified",
     user_input_hint=["<YYYY-MM-DD>"],
-    description=to_string(["AUTO GENERATED"]),
+    description=to_line(["AUTO GENERATED"]),
     yaml_order={
         "id_before": None,
         "id_after": "dataset_id",
@@ -44,7 +44,7 @@ METADATA_MODIFIED_FIELD = Field(
 DATASET_ID_FIELD = Field(
     title="dataset_id",
     user_input_hint=["<dataset_id>"],
-    description=to_string(["AUTO GENERATED"]),
+    description=to_line(["AUTO GENERATED"]),
     yaml_order={
         "id_before": "metadata_modified",
         "id_after": "url_ckan",
@@ -54,7 +54,7 @@ DATASET_ID_FIELD = Field(
 URL_CKAN_FIELD = Field(
     title="url_ckan",
     user_input_hint=["https://basedosdados.org/dataset/<dataset_id>"],
-    description=to_string(["AUTO GENERATED"]),
+    description=to_line(["AUTO GENERATED"]),
     yaml_order={
         "id_before": "dataset_id",
         "id_after": "url_github",
@@ -66,7 +66,7 @@ URL_GITHUB_FIELD = Field(
     user_input_hint=[
         "https://github.com/basedosdados/mais/tree/master/bases/<dataset_id>"
     ],
-    description=to_string(["AUTO GENERATED"]),
+    description=to_line(["AUTO GENERATED"]),
     yaml_order={
         "id_before": "url_ckan",
         "id_after": "description",
@@ -76,7 +76,7 @@ URL_GITHUB_FIELD = Field(
 DESCRIPTION_FIELD = Field(
     title="description",
     user_input_hint=["<descrição>"],
-    description=to_string(
+    description=to_line(
         [
             "Descreva a base",
             "Ela é sobre o que?",
@@ -93,7 +93,7 @@ DESCRIPTION_FIELD = Field(
 ORGANIZATION_FIELD = Field(
     title="organization",
     user_input_hint=["<organização>"],
-    description=to_string(
+    description=to_line(
         [
             "Qual organização disponibiliza os dados originais?",
             "Opções: escolher dessa lista -> https://basedosdados.org/api/3/action/organization_list=",
@@ -107,9 +107,7 @@ ORGANIZATION_FIELD = Field(
 
 AUTHOR_FIELD = Field(
     title="author",
-    description=to_string(
-        ["Qual departamento/grupo/pessoa mantém os dados originais?"]
-    ),
+    description=to_line(["Qual departamento/grupo/pessoa mantém os dados originais?"]),
     yaml_order={
         "id_before": "organization",
         "id_after": "website",
@@ -119,7 +117,7 @@ AUTHOR_FIELD = Field(
 WEBSITE_FIELD = Field(
     title="website",
     user_input_hint=["<website>"],
-    description=to_string(["Onde encontrar os dados originais e mais informações?"]),
+    description=to_line(["Onde encontrar os dados originais e mais informações?"]),
     yaml_order={
         "id_before": "author",
         "id_after": "groups",
@@ -129,7 +127,7 @@ WEBSITE_FIELD = Field(
 GROUPS_FIELD = Field(
     title="groups",
     user_input_hint=["<grupo>"],
-    description=to_string(
+    description=to_line(
         [
             "Quais grupos caracterizam a base?",
             "Opções: escolher dessa lista -> https://basedosdados.org/api/3/action/group_list",
@@ -144,7 +142,7 @@ GROUPS_FIELD = Field(
 TAGS_FIELD = Field(
     title="tags",
     user_input_hint=["<etiqueta>"],
-    description=to_string(
+    description=to_line(
         [
             "Quais etiquetas caracterizam a base?",
             "Opções: escolher dessa lista -> https://basedosdados.org/api/3/action/tag_list",
@@ -163,7 +161,7 @@ TAGS_FIELD = Field(
 LANGUAGES_FIELD = Field(
     title="languages",
     user_input_hint=["<língua>"],
-    description=to_string(
+    description=to_line(
         [
             "Em quais línguas a base (ou a fonte original) está disponível?",
             "Regras: minúsculo, sem acentos.",
@@ -179,7 +177,7 @@ LANGUAGES_FIELD = Field(
 FREE_FIELD = Field(
     title="free",
     user_input_hint=["<sim/não>"],
-    description=to_string(["Os dados originais estão disponíveis de graça?"]),
+    description=to_line(["Os dados originais estão disponíveis de graça?"]),
     yaml_order={
         "id_before": "languages",
         "id_after": "microdata",
@@ -189,7 +187,7 @@ FREE_FIELD = Field(
 MICRODATA_FIELD = Field(
     title="microdata",
     user_input_hint=["<sim/não>"],
-    description=to_string(["Os microdados estão disponíveis para download?"]),
+    description=to_line(["Os microdados estão disponíveis para download?"]),
     yaml_order={
         "id_before": "free",
         "id_after": "API",
@@ -199,7 +197,7 @@ MICRODATA_FIELD = Field(
 API_FIELD = Field(
     title="API",
     user_input_hint=["<sim/não>"],
-    description=to_string(["Existe uma API na fonte original?"]),
+    description=to_line(["Existe uma API na fonte original?"]),
     yaml_order={
         "id_before": "microdata",
         "id_after": "registration",
@@ -209,7 +207,7 @@ API_FIELD = Field(
 REGISTRATION_FIELD = Field(
     title="registration",
     user_input_hint=["<sim/não>"],
-    description=to_string(
+    description=to_line(
         ["É necessário registrar um usuário para baixar os dados originais?"]
     ),
     yaml_order={
@@ -221,7 +219,7 @@ REGISTRATION_FIELD = Field(
 AVAILABILITY_FIELD = Field(
     title="availability",
     user_input_hint=["<online/físico>"],
-    description=to_string(["Como os dados originais estão disponibilizados?"]),
+    description=to_line(["Como os dados originais estão disponibilizados?"]),
     yaml_order={
         "id_before": "registration",
         "id_after": "brazilian_IP",
@@ -231,7 +229,7 @@ AVAILABILITY_FIELD = Field(
 BRAZILIAN_IP_FIELD = Field(
     title="brazilian_IP",
     user_input_hint=["<sim/não>"],
-    description=to_string(["A fonte original requer IP brasileiro para acesso?"]),
+    description=to_line(["A fonte original requer IP brasileiro para acesso?"]),
     yaml_order={
         "id_before": "availability",
         "id_after": "license",
@@ -240,7 +238,7 @@ BRAZILIAN_IP_FIELD = Field(
 
 LICENSE_FIELD = Field(
     title="license",
-    description=to_string(
+    description=to_line(
         [
             "Essa base está sob qual licença?",
             "A licença MIT se aplica a bases públicas.",

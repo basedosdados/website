@@ -35,7 +35,7 @@ class TreatedBy(BaseModel):
     email: Str = Field(user_input_hint=["<email>"])
 
 
-to_string = lambda description: "\n".join(description)
+to_line = lambda description: "\n".join(description)
 
 ###################
 ### YAML FIELDS ###
@@ -44,7 +44,7 @@ to_string = lambda description: "\n".join(description)
 METADATA_MODIFIED_FIELD = Field(
     title="metadata_modified",
     user_input_hint=["<YYYY-MM-DD>"],
-    description=to_string(["AUTO GENERATED"]),
+    description=to_line(["AUTO GENERATED"]),
     yaml_order={
         "id_before": None,
         "id_after": "dataset_id",
@@ -54,7 +54,7 @@ METADATA_MODIFIED_FIELD = Field(
 DATASET_ID_FIELD = Field(
     title="dataset_id",
     user_input_hint=["<dataset_id>"],
-    description=to_string(["AUTO GENERATED"]),
+    description=to_line(["AUTO GENERATED"]),
     yaml_order={
         "id_before": "metadata_modified",
         "id_after": "table_id",
@@ -64,7 +64,7 @@ DATASET_ID_FIELD = Field(
 TABLE_ID_FIELD = Field(
     title="table_id",
     user_input_hint=["<table_id>"],
-    description=to_string(["AUTO GENERATED"]),
+    description=to_line(["AUTO GENERATED"]),
     yaml_order={
         "id_before": "dataset_id",
         "id_after": "source_bucket_name",
@@ -74,7 +74,7 @@ TABLE_ID_FIELD = Field(
 SOURCE_BUCKET_NAME_FIELD = Field(
     title="source_bucket_name",
     user_input_hint=["<source_bucket_name>"],
-    description=to_string(["AUTO GENERATED"]),
+    description=to_line(["AUTO GENERATED"]),
     yaml_order={
         "id_before": "table_id",
         "id_after": "project_id_staging",
@@ -84,7 +84,7 @@ SOURCE_BUCKET_NAME_FIELD = Field(
 PROJECT_ID_STAGING = Field(
     title="project_id_staging",
     user_input_hint=["<project_id_staging>"],
-    description=to_string(["AUTO GENERATED"]),
+    description=to_line(["AUTO GENERATED"]),
     yaml_order={
         "id_before": "source_bucket_name",
         "id_after": "project_id_prod",
@@ -94,7 +94,7 @@ PROJECT_ID_STAGING = Field(
 PROJECT_ID_PROD_FIELD = Field(
     title="project_id_prod",
     user_input_hint=["<project_id_prod>"],
-    description=to_string(["AUTO GENERATED"]),
+    description=to_line(["AUTO GENERATED"]),
     yaml_order={
         "id_before": "project_id_prod",
         "id_after": "url_ckan",
@@ -104,7 +104,7 @@ PROJECT_ID_PROD_FIELD = Field(
 URL_CKAN_FIELD = Field(
     title="url_ckan",
     user_input_hint=["<https://basedosdados.org/dataset/<dataset_id>"],
-    description=to_string(["AUTO GENERATED"]),
+    description=to_line(["AUTO GENERATED"]),
     yaml_order={
         "id_before": "project_id_prod",
         "id_after": "url_github",
@@ -116,7 +116,7 @@ URL_GITHUB: Str = Field(
     user_input_hint=[
         "<https://github.com/basedosdados/mais/tree/master/bases/<dataset_id>"
     ],
-    description=to_string(["AUTO GENERATED"]),
+    description=to_line(["AUTO GENERATED"]),
     yaml_order={
         "id_before": "url_ckan",
         "id_after": "version",
@@ -126,7 +126,7 @@ URL_GITHUB: Str = Field(
 VERSION: Str = Field(
     title="version",
     user_input_hint=["<vA.B>"],
-    description=to_string(["Exemplo versão v1.0"]),
+    description=to_line(["Exemplo versão v1.0"]),
     yaml_order={
         "id_before": "url_github",
         "id_after": "description",
@@ -136,7 +136,7 @@ VERSION: Str = Field(
 DESCRIPTION_FIELD = Field(
     title="description",
     user_input_hint=["<descrição>"],
-    description=to_string(
+    description=to_line(
         [
             "Descreva a tabela. Essas são as primeiras frases que um usuário vai ver.",
             "Você não precisa ser muito conciso. Sinta-se a vontade para dar exemplos de",
@@ -154,7 +154,7 @@ DESCRIPTION_FIELD = Field(
 PUBLISHED_BY_FIELD = Field(
     title="published_by",
     user_input_hint=["<nome>"],
-    description=to_string(["Quem está completando esse arquivo config?"]),
+    description=to_line(["Quem está completando esse arquivo config?"]),
     yaml_order={
         "id_before": "description",
         "id_after": "treated_by",
@@ -165,7 +165,7 @@ PUBLISHED_BY_FIELD = Field(
 TREATED_BY_FIELD = Field(
     title="treated_by",
     user_input_hint=["<nome>"],
-    description=to_string(
+    description=to_line(
         [
             "Qual organização/departamento/pessoa tratou os dados?",
             "As vezes há um ponto intermediário entre os dados originais e subir na Base dos Dados.",
@@ -181,7 +181,7 @@ TREATED_BY_FIELD = Field(
 TREATMENT_DESCRIPTION_FIELD = Field(
     title="treatment_description",
     user_input_hint=["<CEPESP fez X. Eu fiz K>"],
-    description=to_string(
+    description=to_line(
         [
             "Se houve passos de tratamento, limpeza e manipulação de dados, descreva-os aqui."
         ]
@@ -195,7 +195,7 @@ TREATMENT_DESCRIPTION_FIELD = Field(
 DATA_UPDATE_FREQUENCY_FIELD = Field(
     title="data_update_frequency",
     user_input_hint=["<frequência>"],
-    description=to_string(
+    description=to_line(
         [
             "Com qual frequência a base é atualizada?",
             "Opções: hora | dia | semana | mes | 1 ano | 2 anos | 5 anos | 10 anos | unico | recorrente",
@@ -210,7 +210,7 @@ DATA_UPDATE_FREQUENCY_FIELD = Field(
 OBSERVATION_LEVEL_FIELD = Field(
     title="observation_level",
     user_input_hint=["<primeira coluna>"],
-    description=to_string(
+    description=to_line(
         [
             "Nível da observação (qual é a granularidade de cada linha na tabela)",
             "Escolha todas as opções necessárias.",
@@ -230,7 +230,7 @@ OBSERVATION_LEVEL_FIELD = Field(
 PRIMARY_KEYS_FIELD = Field(
     title="primary_keys",
     user_input_hint=["<primeira coluna>"],
-    description=to_string(
+    description=to_line(
         [
             "Quais colunas identificam uma linha unicamente?",
             "Preencha com os nomes de colunas. Ex: id_municipio, ano.",
@@ -251,7 +251,7 @@ COVERAGE_GEO_FIELD = Field(
         "<admin2 - municipios/counties/etc>",
         "<admin3 - distritos/subdistritos/etc>",
     ],
-    description=to_string(
+    description=to_line(
         [
             "Qual é a cobertura espacial da tabela?",
             "Regras:",
@@ -273,7 +273,7 @@ COVERAGE_GEO_FIELD = Field(
 COVERAGE_TIME_FIELD = Field(
     title="coverage_time",
     user_input_hint=["<ano 1>", "<ano 2>"],
-    description=to_string(
+    description=to_line(
         [
             "Qual é a cobertura temporal (em anos) da tabela?",
             "Opções: ..., 1990, 1991, ..., 1999, 2000, 2001, ..., 2019, 2020, ...",
@@ -287,7 +287,7 @@ COVERAGE_TIME_FIELD = Field(
 PARTITIONS_FIELD = Field(
     title="partitions",
     user_input_hint=["<primeira partição>"],
-    description=to_string(
+    description=to_line(
         [
             "Liste as colunas da tabela que representam partições.",
             "Não esqueça de deletar essas colunas nas tabelas .csv na hora de subir para o BigQuery.",
@@ -304,7 +304,7 @@ PARTITIONS_FIELD = Field(
 COLUMNS_FIELD = Field(
     title="columns",
     user_input_hint=["<primeira coluna>"],
-    description=to_string(
+    description=to_line(
         [
             "Quais são as colunas? Certifique-se de escrever uma boa descrição, as pessoas vão gostar",
             "para saber sobre o que é a coluna.",
