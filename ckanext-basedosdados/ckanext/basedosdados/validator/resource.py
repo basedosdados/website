@@ -114,7 +114,7 @@ class BdmTable(Resource):
     treatment_description: Optional[Str]                    = TREATMENT_DESCRIPTION_FIELD
     observation_level    : Optional[Set[ObservationLevel]]  = OBSERVATION_LEVEL_FIELD      # Required for tier 1
     columns              : Optional[Str]                                                   # Required for tier 1
-    primary_keys         : Optional[Str]                    = PRIMARY_KEYS_FIELD                                                                           # Required for tier 1
+    primary_keys         : Optional[Str]                    = PRIMARY_KEYS_FIELD           # Required for tier 1
     version              : Optional[Str]                    = VERSION                      # Required for tier 1
     publisher            : Optional[Str]                                                   # Required for tier 1
     publisher_email      : Optional[Str]                                                   # Required for tier 1
