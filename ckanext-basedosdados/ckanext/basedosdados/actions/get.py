@@ -3,10 +3,7 @@ import os
 import ckan.plugins.toolkit as toolkit
 import requests
 from ckan.logic.action.get import package_search
-from pydantic import Field
 from .. import validator
-from typing import Union
-from typing_extensions import Annotated
 import json
 
 # how to acess the endpoint
