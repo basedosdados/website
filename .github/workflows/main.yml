@@ -23,9 +23,9 @@ jobs:
       - name: Report Failures
         if: '${{ failure() }}'
         uses: cstuder/apprise-ga@master
-          env:
-            APPRISE_URL: '${{ secrets.APPRISE_NOTIFICATION_URL }}'
-            INFRA_HANDLES: '${{secrets.NOTIFICATION_DISCORD_INFRA_HANDLES}}'
+        env:
+          APPRISE_URL: '${{ secrets.APPRISE_NOTIFICATION_URL }}'
+          INFRA_HANDLES: '${{secrets.NOTIFICATION_DISCORD_INFRA_HANDLES}}' # not working, debug this
         with:
           title: "Broken CI"
-          message: "{{INFRA_HANDLES}}. CI DEPLOY FAILED, please check https://github.com/basedosdados/website/actions"
+          message: "<#809077231611674685>. CI DEPLOY FAILED, please check https://github.com/basedosdados/website/actions"

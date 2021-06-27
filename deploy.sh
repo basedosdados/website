@@ -58,6 +58,7 @@ load_images() {
         docker load < ~/basedosdados/images/ckan
         docker load < ~/basedosdados/images/solr
         docker load < ~/basedosdados/images/db
+        docker load < ~/basedosdados/images/next
     "
 }
 restart_services() {
@@ -65,11 +66,13 @@ restart_services() {
         set -e ; cd ~/basedosdados/
         if [[ ! -f wait-for-200.sh ]]; then curl https://raw.githubusercontent.com/cec/wait-for-endpoint/master/wait-for-endpoint.sh > wait-for-200.sh && chmod +x wait-for-200.sh; fi
         if [[ ! -f wait-for-it.sh ]]; then curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > wait-for-it.sh && chmod +x wait-for-it.sh; fi
-        docker-compose rm -sf ckan autoheal
-        docker-compose up --no-build -d solr redis nginx
-        docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh redis:6379 
+        docker-compose rm -sf ckan next autoheal
+        docker-compose up --no-build -d solr redis
+        docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh redis:6379
         docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh solr:8983
-        docker-compose up --no-build -d ckan autoheal
+        docker-compose up --no-build -d ckan next
+        docker-compose up --no-build -d nginx
+        docker-compose up --no-build -d autoheal
         docker-compose ps
         ./wait-for-200.sh -t 20 https://localhost:443 || ERROR=1
         if [[ ! $ERROR ]]; then
@@ -96,6 +99,7 @@ build_images() {
     ( VTAG=$VTAG docker-compose build ckan && docker save bdd/ckan$VTAG > build/images/ckan ) &
     ( docker-compose build solr && docker save bdd/solr > build/images/solr ) &
     ( docker-compose build db   && docker save bdd/db > build/images/db ) &
+    ( VTAG=$VTAG docker-compose build next && docker save bdd/next$VTAG > build/images/next ) &
     for i in `jobs -p`; do wait $i ; done
 }
 restart_wordpress() {

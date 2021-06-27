@@ -1,6 +1,9 @@
-version: '3.5'
+version: "3.5"
 services:
   ckan:
+    build:
+      context: .
+      dockerfile: ./stack/ckan/Dockerfile
     ports:
       - 5000:5000
     volumes:
@@ -10,14 +13,32 @@ services:
       - ./stack/ckan/assets:/app/uploads/
       - ckan_home:/root
     environment:
-    - WERKZEUG_DEBUG_PIN=off
+      - WERKZEUG_DEBUG_PIN=off
     # command: ["gunicorn", "--bind=0.0.0.0:5000", "--workers=1", "--reload", "wsgi"]
     command: "ckan run --host 0.0.0.0 --port 5000 --reloader true"
   db:
+    build:
+      context: .
+      dockerfile: ./stack/postgresql/Dockerfile
+      args:
+        - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
     volumes:
       - pg_data:/var/lib/postgresql/data
   solr:
     ports: ["8983:8983"]
+    build:
+      context: .
+      dockerfile: stack/solr/Dockerfile
+
+  next:
+    build:
+      context: next
+    volumes:
+      - ./next:/app
+
+  nginx:
+    volumes:
+      - ./configs/nginx.dev.conf:/etc/nginx/nginx.conf:ro
 
 volumes:
   pg_data:

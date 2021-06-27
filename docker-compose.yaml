@@ -1,17 +1,23 @@
-
 # docker-compose build && docker-compose up -d
 # If "docker-compose logs ckan" shows DB not ready, run "docker-compose restart ckan" a few times.
 version: "3.5"
 
-volumes: {}
-  # ckan_storage:
-
 services:
+  nginx:
+    image: nginx
+    ports:
+      - 80:80
+    depends_on:
+      - ckan
+      - next
+    # logging:
+    #   driver: syslog
+    #   options:
+    #     syslog-address: tcp://logstash:5001
+    #     syslog-facility: daemon
+
   ckan:
     container_name: ckan
-    build:
-      context: .
-      dockerfile: ./stack/ckan/Dockerfile
     image: "bdd/ckan${VTAG}"
     links:
       - db
@@ -32,8 +38,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
       - CKAN_REDIS_URL=redis://redis:6379/0
-    command: ["gunicorn", "--bind",
-        "0.0.0.0:5000", "--workers", "4", "wsgi"]
+    command: ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "wsgi"]
 
   datapusher: # Not really used, ckan dependency
     container_name: datapusher
@@ -44,11 +49,6 @@ services:
   db:
     container_name: db
     image: bdd/db
-    build:
-      context: .
-      dockerfile: ./stack/postgresql/Dockerfile
-      args:
-        - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
     ports:
       - 5432:5432
     environment:
@@ -60,11 +60,14 @@ services:
 
   solr:
     container_name: solr
-    build:
-      context: .
-      dockerfile: stack/solr/Dockerfile
     image: bdd/solr
 
   redis: # Not really used, ckan dependency
     container_name: redis
     image: redis:latest
+
+  next:
+    container_name: next
+    ports:
+      - "3000:3000"
+    image: bdd/next${VTAG}
