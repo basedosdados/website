@@ -113,22 +113,22 @@ class BdmTable(Resource):
     auxiliary_files_url  : Optional[Str]
     treatment_description: Optional[Str]                    = TREATMENT_DESCRIPTION_FIELD
     observation_level    : Optional[Set[ObservationLevel]]  = OBSERVATION_LEVEL_FIELD      # Required for tier 1
-    columns              : Optional[Str]                                                                              # Required for tier 1
+    columns              : Optional[Str]                                                   # Required for tier 1
     primary_keys         : Optional[Str]                    = PRIMARY_KEYS_FIELD                                                                           # Required for tier 1
-    version              : Optional[Str]                    = VERSION                                                                           # Required for tier 1
-    publisher            : Optional[Str]                                                                              # Required for tier 1
-    publisher_email      : Optional[Str]                                                                              # Required for tier 1
-    publisher_github     : Optional[Str]                                                                              # Required for tier 1
-    publisher_website    : Optional[Str]                                                                              # Required for tier 1
+    version              : Optional[Str]                    = VERSION                      # Required for tier 1
+    publisher            : Optional[Str]                                                   # Required for tier 1
+    publisher_email      : Optional[Str]                                                   # Required for tier 1
+    publisher_github     : Optional[Str]                                                   # Required for tier 1
+    publisher_website    : Optional[Str]                                                   # Required for tier 1
 
     _observation_level_validator = treat_scalar_as_single_value_set('observation_level')
 
     bdm_file_size: Union[int, None, Literal['Unavailable', '']] # should not be editable in form, also, check what use is Unavailable
 
     # Resource fields
-    spatial_coverage : Optional[Str]                 = COVERAGE_GEO_FIELD # Required for tier 1
-    temporal_coverage: Optional[TemporalCoverage]    = COVERAGE_TIME_FIELD # Required for tier 1
-    update_frequency : Optional[UpdateFrequencyEnum] = DATA_UPDATE_FREQUENCY_FIELD# Required for tier 1
+    spatial_coverage : Optional[Str]                 = COVERAGE_GEO_FIELD           # Required for tier 1
+    temporal_coverage: Optional[TemporalCoverage]    = COVERAGE_TIME_FIELD          # Required for tier 1
+    update_frequency : Optional[UpdateFrequencyEnum] = DATA_UPDATE_FREQUENCY_FIELD  # Required for tier 1
     
     # TODO: Remove optional from required fields bellow
     # New YAML FIELDS
@@ -159,7 +159,7 @@ class BdmTable(Resource):
 class ExternalLink(Resource):
     resource_type:             Literal["external_link"]
 
-    url:                       str                                                # Required for tier 1 TODO: add check_url_is_alive validator check is url
+    url:                       str                                                # Required for tier 1 # TODO: add check_url_is_alive validator check is url
     language:                  Optional[Set[LanguageEnum]] = Field( max_items=10) # Required for tier 1 # TODO: @dahis, serio q eh so no external link ?
     has_api:                   Optional[YES_NO]                                   # Required for tier 1 # TODO: data check
     free:                      Optional[YES_NO]                                   # Required for tier 1
