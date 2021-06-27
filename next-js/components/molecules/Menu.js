@@ -1,14 +1,51 @@
-import { Box, HStack, Image } from "@chakra-ui/react";
+import {
+  Box,
+  HStack,
+  VStack,
+  Image,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  useDisclosure,
+  Divider,
+} from "@chakra-ui/react";
 import ControlledInput from "../atoms/ControlledInput";
 import RoundedButton from "../atoms/RoundedButton";
 import Link from "../atoms/Link";
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+
+function MenuDrawer({ isOpen, onClose }) {
+  return (
+    <Drawer zIndex="10px" isOpen={isOpen} placement="top" onClose={onClose}>
+      <DrawerOverlay />
+      <DrawerContent padding="110px 30px 30px 30px">
+        <VStack alignItems="center" width="100%" spacing={5}>
+          <Link color="black" href="/dataset">
+            Dados
+          </Link>
+          <Divider />
+          <Link color="black">Comunidade</Link>
+          <Divider />
+          <Link color="black" href="/about">
+            Sobre
+          </Link>
+          <Divider />
+          <Link color="black">Contato</Link>
+          <Divider />
+          <Link color="black">APOIE</Link>
+        </VStack>
+      </DrawerContent>
+    </Drawer>
+  );
+}
 
 function DesktopLinks() {
   const [search, setSearch] = useState();
 
   function openSearchLink() {
-    window.open(`/dataset/?q=${search}`, "_self");
+    window.open(`new-next-site/search/?q=${search}`, "_self");
   }
 
   return (
@@ -36,7 +73,7 @@ function DesktopLinks() {
             <Image
               cursor="pointer"
               onClick={openSearchLink}
-              src="/next-img/icon_search.png"
+              src="/new-next-site/next-img/icon_search.png"
             />
           }
         />
@@ -48,26 +85,53 @@ function DesktopLinks() {
 }
 
 export default function Menu() {
+  const menuDisclosure = useDisclosure();
+
   return (
-    <Box
-      position="fixed"
-      top="0px"
-      width="100%"
-      left="0px"
-      backgroundColor="#34A15A"
-      boxShadow="0px 4px 4px rgba(0,0,0,0.25)"
-      padding="15px 60px"
-      zIndex="100"
-      as="nav"
-    >
-      <HStack
-        justifyContent={{ base: "center", md: "flex-start" }}
+    <>
+      <MenuDrawer {...menuDisclosure} />
+      <Box
+        position="fixed"
+        top="0px"
         width="100%"
-        spacing={10}
+        left="0px"
+        backgroundColor="#34A15A"
+        boxShadow="0px 4px 4px rgba(0,0,0,0.25)"
+        padding="15px 60px"
+        zIndex="10000000"
+        as="nav"
       >
-        <Image flex="2" maxWidth="105px" src="/next-img/logo.png" />
-        <DesktopLinks />
-      </HStack>
-    </Box>
+        <HStack
+          justifyContent={{ base: "center", md: "flex-start" }}
+          width="100%"
+          spacing={10}
+        >
+          <Box display={{ base: "flex", md: "none" }}>
+            <FontAwesomeIcon
+              onClick={menuDisclosure.onOpen}
+              style={{
+                maxWidth: "20px",
+                alignSelf: "flex-start",
+                flex: 1,
+                position: "fixed",
+                left: 30,
+                top: 23,
+                color: "white",
+              }}
+              icon={faBars}
+            />
+          </Box>
+          <Link href="/new-next-site/">
+            <Image
+              flex="2"
+              transform={{ base: "translateX(-27%)" }}
+              maxWidth={{ base: "80px", lg: "105px" }}
+              src="/new-next-site/next-img/logo.png"
+            />
+          </Link>
+          <DesktopLinks />
+        </HStack>
+      </Box>
+    </>
   );
 }

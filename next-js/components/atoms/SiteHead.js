@@ -1,4 +1,4 @@
-import Head from "next/Head";
+import Head from "next/head";
 
 export default function SiteHead({ children }) {
   return (
@@ -17,7 +17,7 @@ export default function SiteHead({ children }) {
         href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700"
         rel="stylesheet"
       />
-      <link href="/vendor/terminal.css" rel="stylesheet" />
+      <link href="/new-next-site/vendor/terminal.css" rel="stylesheet" />
       {children}
     </Head>
   );

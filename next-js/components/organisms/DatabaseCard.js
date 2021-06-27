@@ -4,21 +4,8 @@ import { Box, Center, HStack, Image } from "@chakra-ui/react";
 import Title from "../atoms/Title";
 import Subtitle from "../atoms/Subtitle";
 import { Tag } from "../atoms/Tag";
-
-function Dot({ radius = 1 }) {
-  return (
-    <Box
-      width={radius}
-      height={radius}
-      borderRadius={radius * 10}
-      backgroundColor="#6F6F6F"
-    />
-  );
-}
-
-function CategoryIcon({ url, active }) {
-  return <Image width="50px" src={url} />;
-}
+import { CategoryIcon } from "../atoms/CategoryIcon";
+import { Dot } from "../atoms/Dot";
 
 export default function DatabaseCard({
   name,
@@ -39,7 +26,7 @@ export default function DatabaseCard({
   return (
     <Card
       icons={categories.map((c) => (
-        <CategoryIcon url={`/next-img/categories/${c}.png`} />
+        <CategoryIcon url={`/new-next-site/next-img/categories/${c}.png`} />
       ))}
       spacing={2}
     >

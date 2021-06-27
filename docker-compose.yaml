@@ -1,9 +1,9 @@
-
 # docker-compose build && docker-compose up -d
 # If "docker-compose logs ckan" shows DB not ready, run "docker-compose restart ckan" a few times.
 version: "3.5"
 
-volumes: {}
+volumes:
+  {}
   # ckan_storage:
 
 services:
@@ -47,8 +47,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
       - CKAN_REDIS_URL=redis://redis:6379/0
-    command: ["gunicorn", "--bind",
-        "0.0.0.0:5000", "--workers", "4", "wsgi"]
+    command: ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "wsgi"]
 
   datapusher: # Not really used, ckan dependency
     container_name: datapusher
@@ -92,5 +91,4 @@ services:
       context: next-js
     volumes:
       - ./next-js:/app
-    command: [ "yarn", "run", "dev" ]
-
+    command: ["yarn", "start"]

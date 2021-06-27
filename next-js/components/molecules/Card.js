@@ -10,6 +10,7 @@ export function Card({
     <Box
       cursor="pointer"
       width="100%"
+      minWidth="330px"
       borderRadius="10px"
       filter="drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))"
     >

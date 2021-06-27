@@ -47,11 +47,14 @@ export default function Footer() {
             inputBackgroundColor="white"
             inputStyle={{ borderRadius: 10 }}
             rightAddon={
-              <Image width="20px" src="/next-img/arrow_black_right.png" />
+              <Image
+                width="20px"
+                src="/new-next-site/next-img/arrow_black_right.png"
+              />
             }
           />
         </VStack>
-        <Image width="150px" src="/next-img/dadinho_mail.png" />
+        <Image width="150px" src="/new-next-site/next-img/dadinho_mail.png" />
       </Stack>
       <HStack
         justifyContent="space-between"
@@ -61,7 +64,10 @@ export default function Footer() {
         spacing={10}
         backgroundColor="#34A15A"
       >
-        <Image width="180px" src="/next-img/logo_footer.png" />
+        <Image
+          width={{ base: "100px", md: "180px" }}
+          src="/new-next-site/next-img/logo_footer.png"
+        />
         <Stack
           direction={{ base: "column", lg: "row" }}
           paddingBottom="100px"

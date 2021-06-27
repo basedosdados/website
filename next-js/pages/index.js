@@ -39,7 +39,7 @@ function Hero() {
   const [search, setSearch] = useState();
 
   function openSearchLink() {
-    return window.open(`/dataset/?q=${search}`, "_self");
+    return window.open(`/new-next-site/search?q=${search}`, "_self");
   }
 
   return (
@@ -64,7 +64,7 @@ function Hero() {
             spacing={50}
           >
             <Image
-              src="/next-img/home_background.png"
+              src="/new-next-site/next-img/home_background.png"
               position="absolute"
               right="0px"
               top="-30px"
@@ -91,14 +91,14 @@ function Hero() {
                 padding: "40px",
                 borderRadius: "50px",
                 backgroundColor: "#ffffff",
-                fontSize: "24px",
+                fontSize: "20px",
               }}
               rightIcon={
                 <Image
                   onClick={openSearchLink}
                   width="40px"
                   marginRight="40px"
-                  src="/next-img/arrow_black_right.png"
+                  src="/new-next-site/next-img/arrow_black_right.png"
                 />
               }
             />
@@ -110,20 +110,20 @@ function Hero() {
             width="90%"
             direction={{ base: "column", lg: "row" }}
           >
-            <HeroText iconUrl="/next-img/icone_busca.png">
+            <HeroText iconUrl="/new-next-site/next-img/icone_busca.png">
               <SectionText>
                 Com o <b>mecanismo de busca</b> é possível descobrir informações
                 sobre mais de 900 bases de dados de diversos temas e
                 organizações.
               </SectionText>
             </HeroText>
-            <HeroText iconUrl="/next-img/icone_download.png">
+            <HeroText iconUrl="/new-next-site/next-img/icone_download.png">
               <SectionText>
                 Disponibilizamos o <b>download</b> dos dados tratados e
                 atualizados direto do nosso datalake público num só click.
               </SectionText>
             </HeroText>
-            <HeroText iconUrl="/next-img/icone_pacotes.png">
+            <HeroText iconUrl="/new-next-site/next-img/icone_pacotes.png">
               <SectionText>
                 Através dos nossos <b>pacotes de programação</b> você pode
                 acessar o datalake público BD+ em Python, R ou pela linha de
@@ -142,7 +142,10 @@ function Hero() {
         width="52px"
         height="60px"
       >
-        <Image height="24px" src="/next-img/arrow_white_down.png" />
+        <Image
+          height="24px"
+          src="/new-next-site/next-img/arrow_white_down.png"
+        />
       </Center>
     </VStack>
   );
@@ -164,6 +167,17 @@ function CatalogNews() {
       <CardCatalog
         sections={{
           populares: [
+            <DatabaseCard
+              name="Eleições brasileiras"
+              organization="Tribunal Superior Eleitoral"
+              tags={["Política", "Finanças públicas"]}
+              size="2 GB"
+              tableNum="13 tabelas (CSV)"
+              externalLinkNum={1}
+              updatedSince="13 dias"
+              updatedAuthor="Ricardo Dahis"
+              categories={["agro"]}
+            />,
             <DatabaseCard
               name="Eleições brasileiras"
               organization="Tribunal Superior Eleitoral"
@@ -219,14 +233,15 @@ function ExploreInYourFavoriteLanguage() {
           Veja mais {">"} {">"}
         </Link>
       </VStack>
-      <div
-        style={{
-          flex: 2,
-          borderRadius: 26.2245,
-          filter: "drop-shadow(0px 2.2449px 2.2449px rgba(0, 0, 0, 0.4))",
-          maxHeight: 200,
-          width: "100%",
-        }}
+      <Box
+        flex="2"
+        borderRadius="26.2245"
+        filter="drop-shadow(0px 2.2449px 2.2449px rgba(0, 0, 0, 0.4))"
+        maxHeight={{ base: "none", md: "200px" }}
+        fontSize={{ base: "14px", md: "inherit" }}
+        padding={{ base: "60px 20px", lg: "60px 30px" }}
+        fontSize={{ base: "12px", lg: "inherit" }}
+        width="100%"
         id="termynal"
         data-termynal
         data-ty-typeDelay="40"
@@ -242,7 +257,7 @@ function ExploreInYourFavoriteLanguage() {
           <span>{">"} install.packages("basedosdados")</span>
           <Typist.Backspace count={30} delay={1000} />
         </Typist>
-      </div>
+      </Box>
     </Stack>
   );
 }
@@ -257,15 +272,19 @@ function LearnToAnalysis() {
       <Image
         display="block"
         height="auto"
+        objectFit="contain"
         width="auto"
         flex="1"
-        maxWidth="600px"
+        maxWidth="100%"
         maxHeight="300px"
-        src="/next-img/tela_jupyter.png"
+        src="/new-next-site/next-img/tela_jupyter.png"
       />
       <VStack spacing={5} alignItems="flex-start" flex="2">
         <BigTitle>Aprenda a fazer análise com os dados</BigTitle>
-        <HStack>
+        <Stack
+          direction={{ base: "column", md: "row" }}
+          spacing={{ base: 10, md: 0 }}
+        >
           <VStack>
             <SectionText>
               Temos tutoriais no blog e workshops no Youtube sobre como começar
@@ -299,7 +318,7 @@ function LearnToAnalysis() {
               Veja mais {">"} {">"}
             </Link>
           </VStack>
-        </HStack>
+        </Stack>
       </VStack>
     </Stack>
   );
@@ -336,7 +355,7 @@ function JoinTheCommunity() {
         flex="2"
         maxBlockSize="200px"
         objectFit="contain"
-        src="/next-img/tela_discord.png"
+        src="/new-next-site/next-img/tela_discord.png"
       />
     </Stack>
   );
@@ -377,7 +396,11 @@ function Support() {
 
   return (
     <VStack paddingTop="60px" width="95%" paddingBottom="100px">
-      <BigTitle width="70%" textAlign="center" fontWeigth="300">
+      <BigTitle
+        width={{ base: "90%", md: "70%" }}
+        textAlign="center"
+        fontWeigth="300"
+      >
         A Base dos Dados só existe com o esforço de diversas pessoas que
       </BigTitle>
       <BigTitle paddingBottom="50px" textAlign="center">
@@ -421,7 +444,12 @@ export default function Home() {
   return (
     <>
       <SiteHead />
-      <VStack alignItems="center" backgroundColor="#fafafa" padding="0px 5%">
+      <VStack
+        alignItems="center"
+        width="100%"
+        backgroundColor="#fafafa"
+        padding="0px 5%"
+      >
         <Hero />
         <CatalogNews />
         <VStack spacing={20} width="100%">
@@ -433,7 +461,7 @@ export default function Home() {
       </VStack>
       <Footer />
       <script
-        src="/vendor/terminal.js"
+        src="/new-next-site/vendor/terminal.js"
         data-termynal-container="#termynal"
       ></script>
     </>
