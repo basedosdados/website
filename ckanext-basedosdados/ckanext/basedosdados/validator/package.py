@@ -291,7 +291,7 @@ class BdmDatasetConfigs(_CkanDefaults):
         },
     )
 
-    # TODO DICT TYPE
+    # TODO: DICT TYPE
     author: Str = Field(
         title="author",
         default=["<nome>"],
@@ -302,7 +302,7 @@ class BdmDatasetConfigs(_CkanDefaults):
         },
     )
 
-    # TODO DICT TYPE
+    # TODO: DICT TYPE
     license: Str = Field(
         title="license",
         default=["<MIT>"],

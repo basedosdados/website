@@ -1,4 +1,5 @@
 import datetime
+
 from typing_extensions import Annotated
 
 from . import BaseModel, treat_scalar_as_single_value_set
@@ -228,11 +229,12 @@ class BdmTableConfigs(Resource):
         description=["Exemplo versão v1.0"],
         yaml_order={
             "id_before": "url_github",
-            "id_after": "last_updated",
+            "id_after": "metadata_modified",
         },
     )
-    last_updated: datetime.date = Field(
-        title="last_updated",
+
+    metadata_modified: datetime.datetime = Field(
+        title="metadata_modified",
         default=["<YYYY-MM-DD>"],
         description=["AUTO GENERATED"],
         yaml_order={
@@ -256,7 +258,7 @@ class BdmTableConfigs(Resource):
         },
     )
 
-    ### TODO DITC TYPE
+    # TODO: DITC TYPE
     published_by: Str = Field(
         title="published_by",
         default=["<nome>"],
@@ -267,7 +269,7 @@ class BdmTableConfigs(Resource):
         },
     )
 
-    ### TODO DITC TYPE
+    # TODO: DITC TYPE
     treated_by: Str = Field(
         title="treated_by",
         default=["<nome>"],
