@@ -113,6 +113,16 @@ class _CkanDefaults(BaseModel):
         return values
 
 
+class Author(BaseModel):
+    name: Str = Field(default=["<nome>"])
+    email: Str = Field(default=["<email>"])
+
+
+class Licence(BaseModel):
+    name: Str = Field(default=["MIT"])
+    url: Str = Field(default=["<url>"])
+
+
 class BdmDatasetConfigs(_CkanDefaults):
     ###################
     ### YAML FIELDS ###
@@ -172,6 +182,15 @@ class BdmDatasetConfigs(_CkanDefaults):
         yaml_order={
             "id_before": "description",
             "id_after": "author",
+        },
+    )
+
+    author: Author = Field(
+        title="author",
+        description=["Qual departamento/grupo/pessoa mantém os dados originais?"],
+        yaml_order={
+            "id_before": "organization",
+            "id_after": "website",
         },
     )
 
@@ -242,7 +261,7 @@ class BdmDatasetConfigs(_CkanDefaults):
     microdata: Str = Field(
         title="microdata",
         default=["<sim/não>"],
-        description=["Are microdata available for download?"],
+        description=["Os microdados estão disponíveis para download?"],
         yaml_order={
             "id_before": "free",
             "id_after": "API",
@@ -291,21 +310,8 @@ class BdmDatasetConfigs(_CkanDefaults):
         },
     )
 
-    # TODO: DICT TYPE
-    author: Str = Field(
-        title="author",
-        default=["<nome>"],
-        description=["Qual departamento/grupo/pessoa mantém os dados originais?"],
-        yaml_order={
-            "id_before": "organization",
-            "id_after": "website",
-        },
-    )
-
-    # TODO: DICT TYPE
-    license: Str = Field(
+    license: Licence = Field(
         title="license",
-        default=["<MIT>"],
         description=[
             "Essa base está sob qual licença?",
             "A licença MIT se aplica a bases públicas.",
@@ -318,9 +324,8 @@ class BdmDatasetConfigs(_CkanDefaults):
     )
 
 
-# class AuthorM(BaseModel):
-#     name: Optional[Str]
-#     email: Optional[Str]
+def bdm_dataset_schema_json():
+    return BdmDatasetConfigs.schema_json(indent=2)
 
 
 class Package(_CkanDefaults):
@@ -336,7 +341,3 @@ class Package(_CkanDefaults):
 
 
 # TODO: try to access fields on validation and get annotations on which fields are needed for each tier
-
-
-def bdm_dataset_schema_json():
-    return BdmDatasetConfigs.schema_json(indent=2)

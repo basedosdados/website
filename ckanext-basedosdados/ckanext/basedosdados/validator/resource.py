@@ -3,7 +3,7 @@ import datetime
 from typing_extensions import Annotated
 
 from . import BaseModel, treat_scalar_as_single_value_set
-from enum import Enum
+
 from typing import List, Optional, Literal, Union, Set
 from pydantic import (
     StrictInt as Int,
@@ -14,6 +14,8 @@ from pydantic import (
 )
 from .data_types import ObservationLevel, TemporalCoverage, IdType
 from .data_types.attr_enum import AttrEnum
+
+from .columns import Column
 
 YES_NO = Literal["yes", "no"]
 
@@ -147,6 +149,24 @@ class BdmTable(Resource):
         pass
 
 
+class PublishedBy(BaseModel):
+    name: Str = Field(default=["<nome [você]>"])
+    code_url: Str = Field(
+        default=[
+            "https://github.com/basedosdados/mais/tree/master/bases/{{ dataset_id }}/code"
+        ]
+    )
+    website: Str = Field(default=["<website>"])
+    email: Str = Field(default=["<email>"])
+
+
+class TreatedBy(BaseModel):
+    name: Str = Field(default=["<nome>"])
+    code_url: Str = Field(default=["<onde encontrar código de tratamento>"])
+    website: Str = Field(default=["<onde encontrar os dados tratados>"])
+    email: Str = Field(default=["<email>"])
+
+
 class BdmTableConfigs(Resource):
     ###################
     ### YAML FIELDS ###
@@ -260,7 +280,7 @@ class BdmTableConfigs(Resource):
     )
 
     # TODO: DITC TYPE
-    published_by: Str = Field(
+    published_by: PublishedBy = Field(
         title="published_by",
         default=["<nome>"],
         description=["Quem está completando esse arquivo config?"],
@@ -271,7 +291,7 @@ class BdmTableConfigs(Resource):
     )
 
     # TODO: DITC TYPE
-    treated_by: Str = Field(
+    treated_by: TreatedBy = Field(
         title="treated_by",
         default=["<nome>"],
         description=[
@@ -392,7 +412,7 @@ class BdmTableConfigs(Resource):
         },
     )
 
-    columns: List = Field(
+    columns: Column = Field(
         title="columns",
         default=["<primeira coluna>"],
         description=[
@@ -412,6 +432,10 @@ class BdmTableConfigs(Resource):
     )
 
 
+def bdm_table_schema_json():
+    return BdmTableConfigs.schema_json(indent=2)
+
+
 class ExternalLink(Resource):
     resource_type: Literal["external_link"]
 
@@ -428,7 +452,3 @@ class ExternalLink(Resource):
     license_type: Optional[Str]  # Required for tier 1
 
     link_url: Optional[str]
-
-
-def bdm_table_schema_json():
-    return BdmTableConfigs.schema_json(indent=2)

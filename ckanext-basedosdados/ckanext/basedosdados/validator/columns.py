@@ -3,14 +3,17 @@ from pydantic import BaseModel, ValidationError, validator, StrictStr as Str
 from typing import List, Optional
 from importlib import resources
 import yaml
-import ckanext.basedosdados.bdm_table_column_metadata_validator
 
 bd_standards = ["municipio", "escola", "setor_censitario", "uf"]
 
-BD_STD_COLUMNS = resources.open_text(
-    ckanext.basedosdados.bdm_table_column_metadata_validator, "bd_std_columns.yaml"
-)
-BD_STD_COLUMNS = yaml.safe_load(BD_STD_COLUMNS)
+# BD_STD_COLUMNS = resources.open_text(
+#     ckanext.basedosdados.validator.bdm_table_column_metadata_validator,
+#     "bd_std_columns.yaml",
+# )
+with open(
+    "/app/ckanext-basedosdados/ckanext/basedosdados/validator/bdm_table_column_metadata_validator/bd_std_columns.yaml"
+) as f:
+    BD_STD_COLUMNS = yaml.safe_load(f)
 BD_STD_COLUMNS_BY_NAME = {column["name"]: column for column in BD_STD_COLUMNS}
 # "duplicated columns defined as standard columns"
 assert len(BD_STD_COLUMNS_BY_NAME) == len(BD_STD_COLUMNS)
