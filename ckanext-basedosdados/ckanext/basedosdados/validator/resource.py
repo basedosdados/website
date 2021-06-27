@@ -144,6 +144,5 @@ class ExternalLink(Resource):
     availability:              Optional[AvailabilityEnum]                         # Required for tier 1
     brazilian_ip:              Optional[YES_NO]                                   # Required for tier 1
     license_type:              Optional[Str]                                      # Required for tier 1
-    link_last_clicked_at:      datetime.date
 
     _language_validator = treat_scalar_as_single_value_set('language')
