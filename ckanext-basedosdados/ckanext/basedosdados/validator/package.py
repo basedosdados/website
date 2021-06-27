@@ -49,7 +49,7 @@ class _CkanDefaults(BaseModel):
     url: Optional[Str]
     version: Optional[Str]
     metadata_created: Optional[datetime]
-    metadata_modified: Optional[datetime]
+    # metadata_modified: Optional[datetime]
     creator_user_id: Optional[UUID]
     private: bool
     license_title: Optional[Str]
@@ -127,12 +127,22 @@ class BdmDatasetConfigs(_CkanDefaults):
     ###################
     ### YAML FIELDS ###
     ###################
+    metadata_modified: datetime = Field(
+        title="metadata_modified",
+        default=["<YYYY-MM-DD>"],
+        description=["AUTO GENERATED"],
+        yaml_order={
+            "id_before": None,
+            "id_after": "dataset_id",
+        },
+    )
+
     dataset_id: Str = Field(
         title="dataset_id",
         default=["<dataset_id>"],
         description=["AUTO GENERATED"],
         yaml_order={
-            "id_before": None,
+            "id_before": "metadata_modified",
             "id_after": "url_ckan",
         },
     )
