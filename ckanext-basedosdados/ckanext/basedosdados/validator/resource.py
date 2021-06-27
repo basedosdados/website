@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from typing_extensions import Annotated
 
 from . import BaseModel, treat_scalar_as_single_value_set
@@ -13,6 +13,8 @@ from pydantic import (
 )
 from .data_types import ObservationLevel, TemporalCoverage, IdType
 from .data_types.attr_enum import AttrEnum
+
+from .metadata_definitions.resource_definitions import *
 
 YES_NO = Literal["yes", "no"]
 
@@ -107,22 +109,43 @@ class LaiRequest(Resource):
 class BdmTable(Resource):
     resource_type:           Literal["bdm_table"]
 
-    table_id:                Str
-    auxiliary_files_url:     Optional[Str]
-    treatment_description:   Optional[Str]                    = F(title='Descricao do tratamento')
-    observation_level:       Optional[Set[ObservationLevel]]  = F(max_items=10) # Required for tier 1
-    columns:                 Optional[Str]                            # Required for tier 1
-    primary_keys:            Optional[Str]                            # Required for tier 1
-    version:                 Optional[Str]                            # Required for tier 1
-    publisher:               Optional[Str]                            # Required for tier 1
-    publisher_email:         Optional[Str]                            # Required for tier 1
-    publisher_github:        Optional[Str]                            # Required for tier 1
-    publisher_website:       Optional[Str]                            # Required for tier 1
+    table_id             : Str                              = TABLE_ID_FIELD
+    auxiliary_files_url  : Optional[Str]
+    treatment_description: Optional[Str]                    = TREATMENT_DESCRIPTION_FIELD
+    observation_level    : Optional[Set[ObservationLevel]]  = OBSERVATION_LEVEL_FIELD      # Required for tier 1
+    columns              : Optional[Str]                                                                              # Required for tier 1
+    primary_keys         : Optional[Str]                    = PRIMARY_KEYS_FIELD                                                                           # Required for tier 1
+    version              : Optional[Str]                    = VERSION                                                                           # Required for tier 1
+    publisher            : Optional[Str]                                                                              # Required for tier 1
+    publisher_email      : Optional[Str]                                                                              # Required for tier 1
+    publisher_github     : Optional[Str]                                                                              # Required for tier 1
+    publisher_website    : Optional[Str]                                                                              # Required for tier 1
 
     _observation_level_validator = treat_scalar_as_single_value_set('observation_level')
 
     bdm_file_size: Union[int, None, Literal['Unavailable', '']] # should not be editable in form, also, check what use is Unavailable
 
+    # Resource fields
+    spatial_coverage : Optional[Str]                 = COVERAGE_GEO_FIELD # Required for tier 1
+    temporal_coverage: Optional[TemporalCoverage]    = COVERAGE_TIME_FIELD # Required for tier 1
+    update_frequency : Optional[UpdateFrequencyEnum] = DATA_UPDATE_FREQUENCY_FIELD# Required for tier 1
+    
+    # TODO: Remove optional from required fields bellow
+    # New YAML FIELDS
+    metadata_modified  : Optional[datetime]    = METADATA_MODIFIED_FIELD
+    dataset_id         : Optional[Str]         = DATASET_ID_FIELD
+    source_bucket_name : Optional[Str]         = SOURCE_BUCKET_NAME_FIELD
+    project_id_staging : Optional[Str]         = PROJECT_ID_STAGING
+    project_id_prod    : Optional[Str]         = PROJECT_ID_PROD_FIELD
+    url_github         : Optional[Str]         = URL_GITHUB
+    description        : Optional[Str]         = DESCRIPTION_FIELD
+    published_by       : Optional[PublishedBy] = PUBLISHED_BY_FIELD
+    treated_by         : Optional[TreatedBy]   = TREATED_BY_FIELD
+    partitinos         : Optional[Str]         = PARTITIONS_FIELD
+    columns            : Optional[Str]         = COLUMNS_FIELD
+
+    
+    
     @validator('bdm_file_size')
     def null_string_is_none(cls, value): # TODO: check why this is not working, as it is still failing when we pass a ''. Had to add '' to type signature
         if value == '':

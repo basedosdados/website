@@ -15,6 +15,7 @@ Email = Str  # TODO
 
 from . import BaseModel
 from .resource import ExternalLink, BdmTable
+from .metadata_definitions.package_definitions import *
 
 AnyResource = Annotated[
     Union[ExternalLink, BdmTable], Field(discriminator="resource_type")
@@ -24,36 +25,36 @@ AnyResource = Annotated[
 coerce_to_unicode = lambda field: validator('field', allow_reuse=True)()
 
 class _CkanDefaults(BaseModel):
-    id: IdType
+    id  : IdType
     name: Str
 
-    title: Str
-    type: Literal["dataset"]
-    notes: Optional[Str]
-    author: Optional[Str]
-    author_email: Optional[Email]
-    maintainer: Optional[Str]
-    maintainer_email: Optional[Email]
-    state: Optional[Literal['active', 'draft', 'deleted']]
-    license_id: Optional[Str]
-    url: Optional[Str]
-    version: Optional[Str]
-    metadata_created: Optional[datetime]
+    title            : Str
+    type             : Literal["dataset"]
+    notes            : Optional[Str]
+    author           : Optional[Str]
+    author_email     : Optional[Email]
+    maintainer       : Optional[Str]
+    maintainer_email : Optional[Email]
+    state            : Optional[Literal['active', 'draft', 'deleted']]
+    license_id       : Optional[Str]
+    url              : Optional[Str]
+    version          : Optional[Str]
+    metadata_created : Optional[datetime]
     metadata_modified: Optional[datetime]
-    creator_user_id: Optional[UUID]
-    private: bool
-    license_title: Optional[Str]
+    creator_user_id  : Optional[UUID]
+    private          : bool
+    license_title    : Optional[Str]
 
     # Ckan Defaults Complex Fields
     num_resources: Optional[Int]
-    resources: List[AnyResource] = []
-    groups: Any
-    owner_org: UUID
-    organization: Any
-    num_tags: Optional[Int]
-    tags: Any
+    resources    : List[AnyResource] = []
+    groups       : Any
+    owner_org    : UUID
+    organization : Any
+    num_tags     : Optional[Int]
+    tags         : Any
 
-    relationships_as_object: Any
+    relationships_as_object : Any
     relationships_as_subject: Any
 
     # throwaway field that is used to modify validators. You can think of it as an argument to validate function. Cant use prefix underscores on pydantic so used suffix to indicate this
@@ -104,5 +105,28 @@ class Package(_CkanDefaults):
 
     download_type: Optional[Literal['Link Externo', 'BD Mais']] # TODO: generate this automatically
 
+    # Ckan Defaults with description
+    author           : Optional[Str]      = AUTHOR_FIELD # This field have name and email in YAML
+    metadata_modified: Optional[datetime] = METADATA_MODIFIED_FIELD
 
+    # Ckan Defaults Complex Fields
+    groups      : Any = GROUPS_FIELD
+    organization: Any = ORGANIZATION_FIELD
+    tags        : Any = TAGS_FIELD
+    
+    # TODO: Remove optional from required fields bellow
+    # New dataset fields
+    dataset_id  : Optional[Str]     = DATASET_ID_FIELD
+    url_github  : Optional[Str]     = URL_GITHUB_FIELD
+    website     : Optional[Str]     = WEBSITE_FIELD
+    languages   : Optional[Str]     = LANGUAGES_FIELD
+    free        : Optional[Str]     = FREE_FIELD
+    microdata   : Optional[Str]     = MICRODATA_FIELD
+    API         : Optional[Str]     = API_FIELD
+    availability: Optional[Str]     = AVAILABILITY_FIELD
+    brazilian_IP: Optional[Str]     = BRAZILIAN_IP_FIELD
+    license     : Optional[Licence] = LICENSE_FIELD
+    
+
+    
 # TODO: try to access fields on validation and get annotations on which fields are needed for each tier
