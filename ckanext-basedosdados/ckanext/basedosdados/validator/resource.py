@@ -151,12 +151,23 @@ class BdmTableConfigs(Resource):
     ###################
     ### YAML FIELDS ###
     ###################
+
+    metadata_modified: datetime.datetime = Field(
+        title="metadata_modified",
+        default=["<YYYY-MM-DD>"],
+        description=["AUTO GENERATED"],
+        yaml_order={
+            "id_before": None,
+            "id_after": "dataset_id",
+        },
+    )
+
     dataset_id: Str = Field(
         title="dataset_id",
         default=["<dataset_id>"],
         description=["AUTO GENERATED"],
         yaml_order={
-            "id_before": None,
+            "id_before": "metadata_modified",
             "id_after": "table_id",
         },
     )
@@ -229,16 +240,6 @@ class BdmTableConfigs(Resource):
         description=["Exemplo versão v1.0"],
         yaml_order={
             "id_before": "url_github",
-            "id_after": "metadata_modified",
-        },
-    )
-
-    metadata_modified: datetime.datetime = Field(
-        title="metadata_modified",
-        default=["<YYYY-MM-DD>"],
-        description=["AUTO GENERATED"],
-        yaml_order={
-            "id_before": "version",
             "id_after": "description",
         },
     )
@@ -253,7 +254,7 @@ class BdmTableConfigs(Resource):
             "Se souber, liste também aplicações: pesquisa, apps, etc. que usem os dados.,",
         ],
         yaml_order={
-            "id_before": "last_updated",
+            "id_before": "version",
             "id_after": "published_by",
         },
     )
