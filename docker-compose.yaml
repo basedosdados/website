@@ -2,10 +2,6 @@
 # If "docker-compose logs ckan" shows DB not ready, run "docker-compose restart ckan" a few times.
 version: "3.5"
 
-volumes:
-  {}
-  # ckan_storage:
-
 services:
   nginx:
     image: nginx
@@ -22,9 +18,6 @@ services:
 
   ckan:
     container_name: ckan
-    build:
-      context: .
-      dockerfile: ./stack/ckan/Dockerfile
     image: "bdd/ckan${VTAG}"
     links:
       - db
@@ -56,11 +49,6 @@ services:
   db:
     container_name: db
     image: bdd/db
-    build:
-      context: .
-      dockerfile: ./stack/postgresql/Dockerfile
-      args:
-        - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
     ports:
       - 5432:5432
     environment:
@@ -72,9 +60,6 @@ services:
 
   solr:
     container_name: solr
-    build:
-      context: .
-      dockerfile: stack/solr/Dockerfile
     image: bdd/solr
 
   redis: # Not really used, ckan dependency
@@ -85,8 +70,7 @@ services:
     container_name: next-js
     ports:
       - "3000:3000"
-    build:
-      context: next-js
+    image: bdd/next-js${VTAG}
     volumes:
       - ./next-js:/app
     command: ["yarn", "start"]
