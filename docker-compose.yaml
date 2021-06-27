@@ -9,8 +9,6 @@ volumes:
 services:
   nginx:
     image: nginx
-    volumes:
-      - ./configs/nginx.dev.conf:/etc/nginx/nginx.conf:ro
     ports:
       - 80:80
     depends_on:
@@ -91,4 +89,4 @@ services:
       context: next-js
     volumes:
       - ./next-js:/app
-    command: ["yarn", "start"]
+    command: ["yarn", "star

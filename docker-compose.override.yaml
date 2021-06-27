@@ -1,4 +1,4 @@
-version: '3.5'
+version: "3.5"
 services:
   ckan:
     ports:
@@ -10,7 +10,7 @@ services:
       - ./stack/ckan/assets:/app/uploads/
       - ckan_home:/root
     environment:
-    - WERKZEUG_DEBUG_PIN=off
+      - WERKZEUG_DEBUG_PIN=off
     # command: ["gunicorn", "--bind=0.0.0.0:5000", "--workers=1", "--reload", "wsgi"]
     command: "ckan run --host 0.0.0.0 --port 5000 --reloader true"
   db:
@@ -18,6 +18,10 @@ services:
       - pg_data:/var/lib/postgresql/data
   solr:
     ports: ["8983:8983"]
+
+  nginx:
+    volumes:
+      - ./configs/nginx.dev.conf:/etc/nginx/nginx.conf:ro
 
 volumes:
   pg_data:

@@ -21,7 +21,13 @@ export default function CardCatalog({ sections, containerStyle }) {
           >
             + {key}
           </Heading>
-          <HStack alignItems="flex-start" width="100%" spacing={5}>
+          <HStack
+            alignItems="flex-start"
+            width="100%"
+            spacing={5}
+            paddingBottom="5px"
+            paddingLeft="5px"
+          >
             {sections[key]}
           </HStack>
         </VStack>

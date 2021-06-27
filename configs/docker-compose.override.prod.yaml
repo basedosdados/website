@@ -5,8 +5,6 @@ services:
     restart: always
     volumes:
     - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    external_links:
-    - logstash
     secrets:
     - fullchain
     - privkey
