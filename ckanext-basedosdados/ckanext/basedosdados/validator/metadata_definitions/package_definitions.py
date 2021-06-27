@@ -30,6 +30,7 @@ to_string = lambda description: "\n".join(description)
 ###################
 ### YAML FIELDS ###
 ###################
+
 METADATA_MODIFIED_FIELD = Field(
     title="metadata_modified",
     user_input_hint=["<YYYY-MM-DD>"],

@@ -269,6 +269,7 @@ COVERAGE_GEO_FIELD = Field(
         "id_after": "coverage_time",
     },
 )
+
 COVERAGE_TIME_FIELD = Field(
     title="coverage_time",
     user_input_hint=["<ano 1>", "<ano 2>"],
