@@ -134,15 +134,15 @@ class BdmTable(Resource):
 
 
 class ExternalLink(Resource):
-    resource_type: Literal["external_link"]
+    resource_type:             Literal["external_link"]
 
-    url: str  # Required for tier 1 TODO: add check_url_is_alive validator check is url
-    language: Optional[Set[LanguageEnum]] = Field( max_items=10)  # Required for tier 1 # TODO: @dahis, serio q eh so no external link ?
+    url:                       str                                                # Required for tier 1 TODO: add check_url_is_alive validator check is url
+    language:                  Optional[Set[LanguageEnum]] = Field( max_items=10) # Required for tier 1 # TODO: @dahis, serio q eh so no external link ?
+    has_api:                   Optional[YES_NO]                                   # Required for tier 1 # TODO: data check
+    free:                      Optional[YES_NO]                                   # Required for tier 1
+    signup_needed:             Optional[YES_NO]                                   # Required for tier 1
+    availability:              Optional[AvailabilityEnum]                         # Required for tier 1
+    brazilian_ip:              Optional[YES_NO]                                   # Required for tier 1
+    license_type:              Optional[Str]                                      # Required for tier 1
+
     _language_validator = treat_scalar_as_single_value_set('language')
-    has_api: Optional[YES_NO]  # Required for tier 1 # TODO: data check
-    free: Optional[YES_NO]  # Required for tier 1
-    signup_needed: Optional[YES_NO] # Required for tier 1
-    availability: Optional[AvailabilityEnum] # Required for tier 1
-    brazilian_ip: Optional[YES_NO] # Required for tier 1
-    license_type: Optional[Str] # Required for tier 1
-
