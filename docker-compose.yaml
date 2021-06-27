@@ -73,4 +73,3 @@ services:
     image: bdd/next-js${VTAG}
     volumes:
       - ./next-js:/app
-    command: ["yarn", "start"]
