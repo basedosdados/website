@@ -3,17 +3,29 @@ import os
 import ckan.plugins.toolkit as toolkit
 import requests
 from ckan.logic.action.get import package_search
+from pydantic import Field
 from .. import validator
+from typing import Union
+from typing_extensions import Annotated
+import json
 
 
 @toolkit.side_effect_free  # Necessário para fazer o GET
 def bd_dataset_schema(context, data_dict=None):
-    return validator.package.bdm_dataset_schema_json()
+    dataset_schema = validator.package.Package.schema_json(indent=2)
+    return json.loads(dataset_schema)
 
 
 @toolkit.side_effect_free  # Necessário para fazer o GET
-def bd_table_schema(context, data_dict=None):
-    return validator.resource.bdm_table_schema_json()
+def bd_bdm_table_schema(context, data_dict):
+    BdmTable_schema = validator.resource.BdmTable.schema_json(indent=2)
+    return json.loads(BdmTable_schema)
+
+
+@toolkit.side_effect_free  # Necessário para fazer o GET
+def bd_external_link_table_schema(context, data_dict):
+    ExternalLink_schema = validator.resource.ExternalLink.schema_json(indent=2)
+    return json.loads(ExternalLink_schema)
 
 
 @toolkit.side_effect_free
