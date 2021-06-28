@@ -93,7 +93,7 @@ PROJECT_ID_PROD_FIELD = Field(
     user_input_hint=["<project_id_prod>"],
     description=to_line(["AUTO GENERATED"]),
     yaml_order={
-        "id_before": "project_id_prod",
+        "id_before": "project_id_staging",
         "id_after": "url_ckan",
     },
 )
@@ -186,12 +186,12 @@ TREATMENT_DESCRIPTION_FIELD = Field(
     ),
     yaml_order={
         "id_before": "treated_by",
-        "id_after": "data_update_frequency",
+        "id_after": "update_frequency",
     },
 )
 
-DATA_UPDATE_FREQUENCY_FIELD = Field(
-    title="data_update_frequency",
+UPDATE_FREQUENCY_FIELD = Field(
+    title="update_frequency",
     user_input_hint=["<frequência>"],
     description=to_line(
         [
@@ -220,7 +220,7 @@ OBSERVATION_LEVEL_FIELD = Field(
     ),
     max_items=10,
     yaml_order={
-        "id_before": "data_update_frequency",
+        "id_before": "update_frequency",
         "id_after": "primary_keys",
     },
 )
@@ -237,12 +237,12 @@ PRIMARY_KEYS_FIELD = Field(
     ),
     yaml_order={
         "id_before": "observation_level",
-        "id_after": "coverage_geo",
+        "id_after": "spatial_coverage",
     },
 )
 
-COVERAGE_GEO_FIELD = Field(
-    title="coverage_geo",
+SPATIAL_COVERAGE_FIELD = Field(
+    title="spatial_coverage",
     user_input_hint=[
         "<admin0 - pais>",
         "<admin1 - estados/regioes/etc>",
@@ -264,12 +264,12 @@ COVERAGE_GEO_FIELD = Field(
     ),
     yaml_order={
         "id_before": "primary_keys",
-        "id_after": "coverage_time",
+        "id_after": "temporal_coverage",
     },
 )
 
-COVERAGE_TIME_FIELD = Field(
-    title="coverage_time",
+TEMPORAL_COVERAGE_FIELD = Field(
+    title="temporal_coverage",
     user_input_hint=["<ano 1>", "<ano 2>"],
     description=to_line(
         [
@@ -278,7 +278,7 @@ COVERAGE_TIME_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_before": "coverage_geo",
+        "id_before": "spatial_coverage",
         "id_after": "partitions",
     },
 )
@@ -294,7 +294,7 @@ PARTITIONS_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_before": "coverage_time",
+        "id_before": "temporal_coverage",
         "id_after": "columns",
     },
 )

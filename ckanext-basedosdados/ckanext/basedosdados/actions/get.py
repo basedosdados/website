@@ -9,6 +9,7 @@ import json
 # how to acess the endpoint
 # http://localhost:5000/api/3/action/<function_name>
 
+
 @toolkit.side_effect_free
 def bd_dataset_schema(context, data_dict):
     dataset_schema = validator.package.Package.schema_json(indent=2)

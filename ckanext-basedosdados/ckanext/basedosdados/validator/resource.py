@@ -126,9 +126,9 @@ class BdmTable(Resource):
     bdm_file_size: Union[int, None, Literal['Unavailable', '']] # should not be editable in form, also, check what use is Unavailable
 
     # Resource fields
-    spatial_coverage : Optional[Str]                 = COVERAGE_GEO_FIELD           # Required for tier 1
-    temporal_coverage: Optional[TemporalCoverage]    = COVERAGE_TIME_FIELD          # Required for tier 1
-    update_frequency : Optional[UpdateFrequencyEnum] = DATA_UPDATE_FREQUENCY_FIELD  # Required for tier 1
+    spatial_coverage : Optional[Str]                 = SPATIAL_COVERAGE_FIELD    # Required for tier 1
+    temporal_coverage: Optional[TemporalCoverage]    = TEMPORAL_COVERAGE_FIELD   # Required for tier 1
+    update_frequency : Optional[UpdateFrequencyEnum] = UPDATE_FREQUENCY_FIELD    # Required for tier 1
     
     # TODO: Remove optional from required fields bellow
     # New YAML FIELDS
@@ -137,6 +137,7 @@ class BdmTable(Resource):
     source_bucket_name : Optional[Str]         = SOURCE_BUCKET_NAME_FIELD
     project_id_staging : Optional[Str]         = PROJECT_ID_STAGING
     project_id_prod    : Optional[Str]         = PROJECT_ID_PROD_FIELD
+    url_ckan           : Optional[Str]         = URL_CKAN_FIELD
     url_github         : Optional[Str]         = URL_GITHUB
     description        : Optional[Str]         = DESCRIPTION_FIELD
     published_by       : Optional[PublishedBy] = PUBLISHED_BY_FIELD

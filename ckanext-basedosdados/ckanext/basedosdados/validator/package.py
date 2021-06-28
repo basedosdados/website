@@ -117,6 +117,7 @@ class Package(_CkanDefaults):
     # TODO: Remove optional from required fields bellow
     # New dataset fields
     dataset_id  : Optional[Str]     = DATASET_ID_FIELD
+    url_ckan    : Optional[Str]     = URL_CKAN_FIELD
     url_github  : Optional[Str]     = URL_GITHUB_FIELD
     website     : Optional[Str]     = WEBSITE_FIELD
     languages   : Optional[Str]     = LANGUAGES_FIELD
