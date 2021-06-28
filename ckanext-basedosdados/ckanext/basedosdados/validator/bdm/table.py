@@ -61,8 +61,7 @@ class BdmTable(Resource):
     description        : Optional[Str]         = DESCRIPTION_FIELD
     published_by       : Optional[PublishedBy] = PUBLISHED_BY_FIELD
     treated_by         : Optional[TreatedBy]   = TREATED_BY_FIELD
-    partitinos         : Optional[Str]         = PARTITIONS_FIELD
-    columns            : Optional[Str]         = COLUMNS_FIELD
+    partitions         : Optional[Str]         = PARTITIONS_FIELD
 
     
     

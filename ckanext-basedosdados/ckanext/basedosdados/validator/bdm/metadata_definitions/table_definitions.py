@@ -32,6 +32,13 @@ class TreatedBy(BaseModel):
     email: Str = Field(user_input_hint=["<email>"])
 
 
+class TreatedBy(BaseModel):
+    name: Str = Field(user_input_hint=["<nome>"])
+    code_url: Str = Field(user_input_hint=["<onde encontrar código de tratamento>"])
+    website: Str = Field(user_input_hint=["<onde encontrar os dados tratados>"])
+    email: Str = Field(user_input_hint=["<email>"])
+
+
 to_line = lambda description: "\n".join(description)
 
 ###################
@@ -295,27 +302,6 @@ PARTITIONS_FIELD = Field(
     ),
     yaml_order={
         "id_before": "temporal_coverage",
-        "id_after": "columns",
-    },
-)
-
-COLUMNS_FIELD = Field(
-    title="columns",
-    user_input_hint=["<primeira coluna>"],
-    description=to_line(
-        [
-            "Quais são as colunas? Certifique-se de escrever uma boa descrição, as pessoas vão gostar",
-            "para saber sobre o que é a coluna.",
-            "Adicionar todas as colunas manualmente pode ser bastante cansativo, por isso, quando",
-            "inicializando este arquivo de configuração, você pode apontar a função para uma amostra de dados que",
-            "preencherá automaticamente as colunas.",
-            "Algumas colunas existirão apenas na tabela final, você as construirá em `publish.sql`.",
-            "Para esses, defina is_in_staging como False.",
-            "Além disso, você deve adicionar as colunas de partição aqui e definir is_partition como True.",
-        ]
-    ),
-    yaml_order={
-        "id_before": "partitions",
-        "id_after": None,
+        "id_after": "None",
     },
 )

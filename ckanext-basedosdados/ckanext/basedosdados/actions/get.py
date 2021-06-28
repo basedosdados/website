@@ -7,6 +7,8 @@ from ckan.logic.action.get import package_search
 
 from ckanext.basedosdados.validator.bdm.dataset import BdmDataset
 from ckanext.basedosdados.validator.bdm.table import BdmTable
+from ckanext.basedosdados.validator.bdm.columns import BdmColumns
+
 from ckanext.basedosdados.validator.external_link.table import ExternalLink
 
 # how to acess the endpoint
@@ -14,21 +16,23 @@ from ckanext.basedosdados.validator.external_link.table import ExternalLink
 
 
 @toolkit.side_effect_free
-def bd_dataset_schema(context, data_dict):
-    dataset_schema = BdmDataset.schema_json(indent=2)
-    return json.loads(dataset_schema)
+def bd_bdm_dataset_schema(context, data_dict):
+    return json.loads(BdmDataset.schema_json(indent=2))
 
 
 @toolkit.side_effect_free
 def bd_bdm_table_schema(context, data_dict):
-    BdmTable_schema = BdmTable.schema_json(indent=2)
-    return json.loads(BdmTable_schema)
+    return json.loads(BdmTable.schema_json(indent=2))
+
+
+@toolkit.side_effect_free
+def bd_bdm_columns_schema(context, data_dict):
+    return json.loads(BdmColumns.schema_json(indent=2))
 
 
 @toolkit.side_effect_free
 def bd_external_link_table_schema(context, data_dict):
-    ExternalLink_schema = ExternalLink.schema_json(indent=2)
-    return json.loads(ExternalLink_schema)
+    return json.loads(ExternalLink.schema_json(indent=2))
 
 
 @toolkit.side_effect_free
