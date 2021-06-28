@@ -9,7 +9,3 @@ except ImportError:
     import pkgutil
 
     __path__ = pkgutil.extend_path(__path__, __name__)
-
-
-ckanext_basedosdados = __import__("ckanext-basedosdados")
-from ckanext_basedosdados import ckanext
