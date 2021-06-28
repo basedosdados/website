@@ -73,7 +73,7 @@ function DesktopLinks() {
             <Image
               cursor="pointer"
               onClick={openSearchLink}
-              src="/new-next-site/next-img/icon_search.png"
+              src="/_nxt/next-img/icon_search.png"
             />
           }
         />
@@ -121,12 +121,12 @@ export default function Menu() {
               icon={faBars}
             />
           </Box>
-          <Link href="/new-next-site/">
+          <Link href="/_nxt/">
             <Image
               flex="2"
               transform={{ base: "translateX(-27%)" }}
               maxWidth={{ base: "80px", lg: "105px" }}
-              src="/new-next-site/next-img/logo.png"
+              src="/_nxt/next-img/logo.png"
             />
           </Link>
           <DesktopLinks />

@@ -113,11 +113,11 @@ function Database({
       </HStack>
       <HStack spacing={5}>
         {isPlus ? (
-          <Image width="80px" src="/new-next-site/next-img/logo_plus.png" />
+          <Image width="80px" src="/_nxt/next-img/logo_plus.png" />
         ) : (
           <></>
         )}
-        <CategoryIcon url="/new-next-site/next-img/categories/agro.png" />
+        <CategoryIcon url="/_nxt/next-img/categories/agro.png" />
       </HStack>
     </Stack>
   );
@@ -228,7 +228,7 @@ export default function SearchPage() {
       </VStack>
       <Footer />
       <script
-        src="/new-next-site/vendor/terminal.js"
+        src="/_nxt/vendor/terminal.js"
         data-termynal-container="#termynal"
       ></script>
     </VStack>
