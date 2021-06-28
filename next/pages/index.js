@@ -39,7 +39,7 @@ function Hero() {
   const [search, setSearch] = useState();
 
   function openSearchLink() {
-    return window.open(`/new-next-site/search?q=${search}`, "_self");
+    return window.open(`/_nxt/search?q=${search}`, "_self");
   }
 
   return (
@@ -64,7 +64,7 @@ function Hero() {
             spacing={50}
           >
             <Image
-              src="/new-next-site/next-img/home_background.png"
+              src="/_nxt/next-img/home_background.png"
               position="absolute"
               right="0px"
               top="-30px"
@@ -98,7 +98,7 @@ function Hero() {
                   onClick={openSearchLink}
                   width="40px"
                   marginRight="40px"
-                  src="/new-next-site/next-img/arrow_black_right.png"
+                  src="/_nxt/next-img/arrow_black_right.png"
                 />
               }
             />
@@ -110,20 +110,20 @@ function Hero() {
             width="90%"
             direction={{ base: "column", lg: "row" }}
           >
-            <HeroText iconUrl="/new-next-site/next-img/icone_busca.png">
+            <HeroText iconUrl="/_nxt/next-img/icone_busca.png">
               <SectionText>
                 Com o <b>mecanismo de busca</b> é possível descobrir informações
                 sobre mais de 900 bases de dados de diversos temas e
                 organizações.
               </SectionText>
             </HeroText>
-            <HeroText iconUrl="/new-next-site/next-img/icone_download.png">
+            <HeroText iconUrl="/_nxt/next-img/icone_download.png">
               <SectionText>
                 Disponibilizamos o <b>download</b> dos dados tratados e
                 atualizados direto do nosso datalake público num só click.
               </SectionText>
             </HeroText>
-            <HeroText iconUrl="/new-next-site/next-img/icone_pacotes.png">
+            <HeroText iconUrl="/_nxt/next-img/icone_pacotes.png">
               <SectionText>
                 Através dos nossos <b>pacotes de programação</b> você pode
                 acessar o datalake público BD+ em Python, R ou pela linha de
@@ -144,7 +144,7 @@ function Hero() {
       >
         <Image
           height="24px"
-          src="/new-next-site/next-img/arrow_white_down.png"
+          src="/_nxt/next-img/arrow_white_down.png"
         />
       </Center>
     </VStack>
@@ -277,7 +277,7 @@ function LearnToAnalysis() {
         flex="1"
         maxWidth="100%"
         maxHeight="300px"
-        src="/new-next-site/next-img/tela_jupyter.png"
+        src="/_nxt/next-img/tela_jupyter.png"
       />
       <VStack spacing={5} alignItems="flex-start" flex="2">
         <BigTitle>Aprenda a fazer análise com os dados</BigTitle>
@@ -355,7 +355,7 @@ function JoinTheCommunity() {
         flex="2"
         maxBlockSize="200px"
         objectFit="contain"
-        src="/new-next-site/next-img/tela_discord.png"
+        src="/_nxt/next-img/tela_discord.png"
       />
     </Stack>
   );
@@ -461,7 +461,7 @@ export default function Home() {
       </VStack>
       <Footer />
       <script
-        src="/new-next-site/vendor/terminal.js"
+        src="/_nxt/vendor/terminal.js"
         data-termynal-container="#termynal"
       ></script>
     </>

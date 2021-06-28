@@ -35,6 +35,7 @@ services:
       context: next
     volumes:
       - ./next:/app
+    command: ["yarn", "run", "dev"]
 
   nginx:
     volumes:
