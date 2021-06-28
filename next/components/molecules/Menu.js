@@ -56,7 +56,7 @@ function DesktopLinks() {
       position={{ base: "relative", md: "initial" }}
     >
       <HStack width="100%" flex="3" spacing={10}>
-        <Link href="/dataset">Dados</Link>
+        <Link href="/_nxt/search">Dados</Link>
         <Link>Comunidade</Link>
         <Link href="/about">Sobre</Link>
         <Link>Contato</Link>
@@ -73,7 +73,7 @@ function DesktopLinks() {
             <Image
               cursor="pointer"
               onClick={openSearchLink}
-              src="/_nxt/next-img/icon_search.png"
+              src="/_nxt/img/icon_search.png"
             />
           }
         />
@@ -126,7 +126,7 @@ export default function Menu() {
               flex="2"
               transform={{ base: "translateX(-27%)" }}
               maxWidth={{ base: "80px", lg: "105px" }}
-              src="/_nxt/next-img/logo.png"
+              src="/_nxt/img/logo.png"
             />
           </Link>
           <DesktopLinks />

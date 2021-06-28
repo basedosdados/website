@@ -113,11 +113,11 @@ function Database({
       </HStack>
       <HStack spacing={5}>
         {isPlus ? (
-          <Image width="80px" src="/_nxt/next-img/logo_plus.png" />
+          <Image width="80px" src="/_nxt/img/logo_plus.png" />
         ) : (
           <></>
         )}
-        <CategoryIcon url="/_nxt/next-img/categories/agro.png" />
+        <CategoryIcon url="/_nxt/img/categories/agro.png" />
       </HStack>
     </Stack>
   );
@@ -169,7 +169,7 @@ export default function SearchPage() {
           fontWeight="normal"
           letterSpacing="0.1em"
         >
-          133 conjuntos de dados encontrados para ”{searchQuery}”
+          133 conjuntos de dados encontrados {searchQuery ? " para " + searchQuery : ""}
         </Heading>
         <HStack
           fontFamily="Lato"

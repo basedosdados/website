@@ -49,12 +49,12 @@ export default function Footer() {
             rightAddon={
               <Image
                 width="20px"
-                src="/_nxt/next-img/arrow_black_right.png"
+                src="/_nxt/img/arrow_black_right.png"
               />
             }
           />
         </VStack>
-        <Image width="150px" src="/_nxt/next-img/dadinho_mail.png" />
+        <Image width="150px" src="/_nxt/img/dadinho_mail.png" />
       </Stack>
       <HStack
         justifyContent="space-between"
@@ -66,7 +66,7 @@ export default function Footer() {
       >
         <Image
           width={{ base: "100px", md: "180px" }}
-          src="/_nxt/next-img/logo_footer.png"
+          src="/_nxt/img/logo_footer.png"
         />
         <Stack
           direction={{ base: "column", lg: "row" }}
