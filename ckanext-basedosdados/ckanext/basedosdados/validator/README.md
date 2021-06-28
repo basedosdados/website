@@ -4,7 +4,7 @@
 
 Para adicionar um novo metadado no dataset, adicione o campo desejado na classe `BdmDataset` em `bdm/dataset.py`. No caso de um novo metadado para a tabela adicinar na classe `BdmTable`em `bdm/table.py`.
 
-Para definir o tipo do campo a ser validado pelo pydantic consultar a documentação ([Field Types ](https://pydantic-docs.helpmanual.io/usage/types/)). Em caso de um campo nested deve ser criar uma classe a ser passada na tipagem, essa classe deve estar localizada antes de ser chamada.
+Para definir o tipo do campo a ser validado pelo pydantic consulte a documentação ([Field Types ](https://pydantic-docs.helpmanual.io/usage/types/)). Em caso de um campo nested, deve ser criada uma classe que será passada para a tipagem, no código essa classe deve estar localizada acima de sua chamada.
 
 
 É indicado utilizar a classe `Optional` na tipagem, podendo ser retirada após a criação do campo no banco de dados do ckan. 
