@@ -1,6 +1,6 @@
 # Como adicionar novos metadados
 
-## Exemplo de tabela bd+
+## Exemplo para tabela bd+
 
 Para adicionar um novo metadado no dataset, adicione o campo desejado na classe `BdmDataset` em `bdm/dataset.py`. No caso de um novo metadado para a tabela adicinar na classe `BdmTable`em `bdm/table.py`.
 
@@ -12,22 +12,19 @@ Para definir o tipo do campo a ser validado pelo pydantic consultar a documenta√
 
 ### Exemplo campo `new_metadata`;
 ```python
-
+from pydantic import StrictStr as Str
 from typing import Optional
 
 from ckanext.basedosdados.validator.ckan_default import BaseModel
 
 class NestedNewMetadata(BaseModel):
-    name: str 
-    email: str
+    name: Str 
+    email: Str
 
 class BdmDataset(_CkanDefaults):
-    .
-    .
-    .
 
     # add new metadata
-    <new_metadata>:  Optional[NestedNewMetadata] = <NEW_METADATA_FIELD>
+    new_metadata:  Optional[NestedNewMetadata] = NEW_METADATA_FIELD
 
 ```
 
@@ -48,14 +45,14 @@ LICENSE_FIELD = Field(
     ),
     yaml_order={
         "id_before": "brazilian_IP",
-        "id_after": "<new_metadata>",
+        "id_after": "new_metadata",
     },
 )
 
 
 NEW_METADATA_FIELD = Field(
-    title="<new_metadata>",
-    user_input_hint=["<>"],
+    title="new_metadata",
+    user_input_hint=["<new_metadata_hint>"],
     description=to_line(["AUTO GENERATED"]),
     yaml_order={
         "id_before": 'license',
