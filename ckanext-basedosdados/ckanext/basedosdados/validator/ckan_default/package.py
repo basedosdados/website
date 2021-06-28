@@ -2,25 +2,25 @@
 from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional, Literal, Union, Any
+from typing_extensions import Annotated  # migrate to py3.9
 import pydantic
 from pydantic import StrictInt as Int, StrictStr as Str, Field, ValidationError, validator, PrivateAttr, root_validator
-from uuid import UUID
 import jsonschema
-
-from .data_types import ObservationLevel, TemporalCoverage, IdType
-
-from typing_extensions import Annotated  # migrate to py3.9
-
-Email = Str  # TODO
+from uuid import UUID
 
 from . import BaseModel
-from .resource import ExternalLink, BdmTable
-from .metadata_definitions.package_definitions import *
+from .data_types import ObservationLevel, TemporalCoverage, IdType
+
+from ckanext.basedosdados.validator.bdm.table import BdmTable
+from ckanext.basedosdados.validator.external_link.table import ExternalLink
+
+
+
+Email = Str  # TODO
 
 AnyResource = Annotated[
     Union[ExternalLink, BdmTable], Field(discriminator="resource_type")
 ]
-
 
 coerce_to_unicode = lambda field: validator('field', allow_reuse=True)()
 
@@ -94,40 +94,3 @@ class _CkanDefaults(BaseModel):
                 assert values[f] is not None
         return values
 
-
-
-class Package(_CkanDefaults):
-    # Generated Fields
-    # temporal_coverage: TemporalCoverage
-    # spatial_coverage: Str
-    # observation_level: List[ObservationLevel] = Field(max_items=10)
-    # auxiliary_files_url: List[Str]
-
-    download_type: Optional[Literal['Link Externo', 'BD Mais']] # TODO: generate this automatically
-
-    # Ckan Defaults with description
-    author           : Optional[Str]      = AUTHOR_FIELD # This field have name and email in YAML
-    metadata_modified: Optional[datetime] = METADATA_MODIFIED_FIELD
-
-    # Ckan Defaults Complex Fields
-    groups      : Any = GROUPS_FIELD
-    organization: Any = ORGANIZATION_FIELD
-    tags        : Any = TAGS_FIELD
-    
-    # TODO: Remove optional from required fields bellow
-    # New dataset fields
-    dataset_id  : Optional[Str]     = DATASET_ID_FIELD
-    url_ckan    : Optional[Str]     = URL_CKAN_FIELD
-    url_github  : Optional[Str]     = URL_GITHUB_FIELD
-    website     : Optional[Str]     = WEBSITE_FIELD
-    languages   : Optional[Str]     = LANGUAGES_FIELD
-    free        : Optional[Str]     = FREE_FIELD
-    microdata   : Optional[Str]     = MICRODATA_FIELD
-    API         : Optional[Str]     = API_FIELD
-    availability: Optional[Str]     = AVAILABILITY_FIELD
-    brazilian_IP: Optional[Str]     = BRAZILIAN_IP_FIELD
-    license     : Optional[Licence] = LICENSE_FIELD
-    
-
-    
-# TODO: try to access fields on validation and get annotations on which fields are needed for each tier

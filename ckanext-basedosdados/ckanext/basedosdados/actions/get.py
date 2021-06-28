@@ -1,10 +1,13 @@
-import os
+import sys
+import json
+import requests
 
 import ckan.plugins.toolkit as toolkit
-import requests
 from ckan.logic.action.get import package_search
-from .. import validator
-import json
+
+from ckanext.basedosdados.validator.bdm.dataset import BdmDataset
+from ckanext.basedosdados.validator.bdm.table import BdmTable
+from ckanext.basedosdados.validator.external_link.table import ExternalLink
 
 # how to acess the endpoint
 # http://localhost:5000/api/3/action/<function_name>
@@ -12,19 +15,19 @@ import json
 
 @toolkit.side_effect_free
 def bd_dataset_schema(context, data_dict):
-    dataset_schema = validator.package.Package.schema_json(indent=2)
+    dataset_schema = BdmDataset.schema_json(indent=2)
     return json.loads(dataset_schema)
 
 
 @toolkit.side_effect_free
 def bd_bdm_table_schema(context, data_dict):
-    BdmTable_schema = validator.resource.BdmTable.schema_json(indent=2)
+    BdmTable_schema = BdmTable.schema_json(indent=2)
     return json.loads(BdmTable_schema)
 
 
 @toolkit.side_effect_free
 def bd_external_link_table_schema(context, data_dict):
-    ExternalLink_schema = validator.resource.ExternalLink.schema_json(indent=2)
+    ExternalLink_schema = ExternalLink.schema_json(indent=2)
     return json.loads(ExternalLink_schema)
 
 

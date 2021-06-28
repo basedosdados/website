@@ -11,7 +11,7 @@ from pydantic import (
     PrivateAttr,
     root_validator,
 )
-from .. import BaseModel
+from ckanext.basedosdados.validator.ckan_default import BaseModel
 
 
 class PublishedBy(BaseModel):
