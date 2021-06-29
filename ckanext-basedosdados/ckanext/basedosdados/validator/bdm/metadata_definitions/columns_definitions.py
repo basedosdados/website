@@ -23,7 +23,7 @@ COLUMNS_FIELD = Field(
 
 
 NAME_FIELD = Field(
-    title="columns",
+    title="columns-name",
     user_input_hint=["<primeira_coluna>"],
     description=to_line(
         [
@@ -33,7 +33,7 @@ NAME_FIELD = Field(
 )
 
 DESCRIPTION_FIELD = Field(
-    title="columns",
+    title="columns-description",
     user_input_hint=["<descrição>"],
     description=to_line(
         [
@@ -43,7 +43,7 @@ DESCRIPTION_FIELD = Field(
 )
 
 IS_IN_STAGING_FIELD = Field(
-    title="columns",
+    title="columns-is_in_staging",
     user_input_hint=["<True/False>"],
     description=to_line(
         [
@@ -53,7 +53,7 @@ IS_IN_STAGING_FIELD = Field(
 )
 
 IS_PARTITION_FIELD = Field(
-    title="columns",
+    title="columns-is_partition",
     user_input_hint=["<True/False>"],
     description=to_line(
         [
