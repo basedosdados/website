@@ -7,7 +7,6 @@ to_line = lambda description: "\n".join(description)
 
 COLUMNS_FIELD = Field(
     title="columns",
-    user_input_hint=["<primeira coluna>"],
     description=to_line(
         [
             "Quais são as colunas? Certifique-se de escrever uma boa descrição, as pessoas vão gostar",
@@ -25,7 +24,7 @@ COLUMNS_FIELD = Field(
 
 NAME_FIELD = Field(
     title="columns",
-    user_input_hint=["<nome_coluna>"],
+    user_input_hint=["<primeira_coluna>"],
     description=to_line(
         [
             "nome da coluna",
