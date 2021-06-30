@@ -1,5 +1,9 @@
-from ckanext.basedosdados.validator.package import Package, ValidationError
-from ckanext.basedosdados.validator.resource import Resource, BdmTable, ExternalLink
+# from ckanext.basedosdados.validator.package import Package, ValidationError
+# from ckanext.basedosdados.validator.resource import Resource, BdmTable, ExternalLink
+from ckanext.basedosdados.validator.bdm.dataset import BdmDataset, ValidationError
+from ckanext.basedosdados.validator.bdm.table import BdmTable, Resource
+from ckanext.basedosdados.validator.external_link.table import ExternalLink
+
 import jsonschema
 
 import pytest
@@ -17,7 +21,7 @@ def jsonify(data):
 
 def test_validating(data):
     with raises(ValidationError) as e:
-        Package.validate(data)
+        BdmDataset.validate(data)
     assert e.match("Discriminator 'resource_type' is missing in value")
 
 
@@ -26,7 +30,7 @@ def test_correct_reporting_on_missing_properties_of_a_specific_resource(data):
         {"resource_type": "external_link", "id": "13", "name": "linkzao"}
     ]
     with raises(ValidationError) as e:
-        Package(**data, action__='package_show')
+        BdmDataset(**data, action__='package_show')
     for error in e.value.errors():
         assert error['type'] == "value_error.missing", error
 
@@ -167,7 +171,7 @@ def test_ckanize():
     }
 
     with raises(ValidationError) as e:
-        Package.validate(master_dataset)
+        BdmDataset.validate(master_dataset)
 
     import requests
 
