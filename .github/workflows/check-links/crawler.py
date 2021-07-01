@@ -24,18 +24,37 @@ class LinkSpider(CrawlSpider):
         "https://basedosdados.org/about",
     ]
 
+    # Test regex rules with
+    # https://regex101.com/
     rules = [
         Rule(
-            LinkExtractor(deny=".*?.*", allow_domains="basedosdados.org"),
+            # Deny links with more than one question mark with
+            #   "(?<!\?)\?(?!\?)"
+            # Deny https://basedosdados.org/dataset/activity/<dataset> page with
+            #   ".*\/dataset\/activity\/.*"
+            #   ".*\/dataset\/.*\?activity_id.*"
+            #   ".*\/dataset\/changes\/.*"
+            # Allow only https://basedosdados.org/ pages with
+            #   "basedosdados\.org.*"
+            LinkExtractor(
+                deny=[
+                    "(?<!\?)\?(?!\?)",
+                    ".*\/dataset\/activity\/.*",
+                    ".*\/activity_id.*",
+                    ".*\/dataset\/changes\/.*",
+                ],
+                allow="basedosdados\.org.*",
+            ),
             callback="parse",
             follow=True,
         ),
         Rule(
-            LinkExtractor(allow=".*?page.*", allow_domains="basedosdados.org"),
+            # Deny https://basedosdados.org/ pages with
+            #   "basedosdados\.org.*"
+            LinkExtractor(deny=["basedosdados\.org.*"]),
             callback="parse",
-            follow=True,
+            follow=False,
         ),
-        Rule(LinkExtractor(), callback="parse", follow=False),
     ]
 
     def parse(self, response):
@@ -43,12 +62,13 @@ class LinkSpider(CrawlSpider):
             item = LinkStatus()
             item["url"] = response.url
             item["status"] = response.status
-            item["link_text"] = response.meta["link_text"].strip()
-            item["referer"] = response.request.headers.get(
-                "Referer", self.start_urls[0]
-            )
+            item["link_text"] = self._format(response.meta["link_text"])
+            item["referer"] = response.request.headers.get("Referer", self.start_urls[0])
             yield item
         yield None
+
+    def _format(self, line):
+        return " ".join(line.strip().split())
 
 
 # References

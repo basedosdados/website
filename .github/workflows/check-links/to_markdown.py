@@ -21,7 +21,9 @@ def gen_report(csvpath, mdpath):
                 referer = link["referer"]
                 domain = referer.split("//")[1]
                 file.write(f"\n\n**[{domain}]({referer})**  \n")
-            file.write(f"- Failed: HTTP Status {link['status']} at [{link['link_text']}]({link['url']})  \n")
+            file.write(
+                f"- Failed: HTTP Status {link['status']} at [{link['link_text']}]({link['url']})  \n"
+            )
 
 
 if __name__ == "__main__":
