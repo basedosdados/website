@@ -6,8 +6,7 @@ import json
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.plugins.toolkit import get_action
-import ckanext.basedosdados.validator as pydantic_validator
-
+from ckanext.basedosdados.validator.bdm.dataset import BdmDataset, ValidationError
 import logging
 log = logging.getLogger(__name__)
 
@@ -26,7 +25,7 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
     def _validate_pydantic(self, data_dict, action):
         extras = {i['key']: i['value'] for i in data_dict.get('extras', {})}
         input = dict(**data_dict, **extras)
-        data = pydantic_validator.package.Package(**input, action__=action)
+        data = BdmDataset(**input, action__=action)
         out = data.json(exclude={'action__'}, exclude_unset=True) # exclude unset needed by ckan so it can deal with missing values downstream (during partial updates for instance)
         out = json.loads(out) # we need to jsonify and de-jsonify so that objects such as datetimes are serialized
         oficial = {k: v for k, v in out.items() if k in data.__fields__}
@@ -37,12 +36,12 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
 
     def _validate_show(self, data_dict):
         if duplicated_keys := _find_duplicated_keys(data_dict['extras']):
-            raise pydantic_validator.ValidationError({"extras": f'extras contains duplicated keys: {duplicated_keys!r}'})
+            raise ValidationError({"extras": f'extras contains duplicated keys: {duplicated_keys!r}'})
         # data_dict['extras'] = { i['key']: i['value'] for i in data_dict['extras']} # transform extras into a simple dict # TODO: figure out when do i need to pass extras to main namespace
         try:
             out = self._validate_pydantic(data_dict, 'package_show')
             return out, []
-        except pydantic_validator.ValidationError as ee: # a validation error in show is our fault, not the user's so raise and cause a 500
+        except ValidationError as ee: # a validation error in show is our fault, not the user's so raise and cause a 500
             log.error('Data dict:')
             log.error(data_dict)
             raise
@@ -52,7 +51,7 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
             out = self._validate_pydantic(data_dict, action)
             # out['extras'] = [{'key':k, 'value':v} for k, v in out['extras'].items()]
             return out, []
-        except pydantic_validator.ValidationError as ee:
+        except ValidationError as ee:
             return {}, json.loads(ee.json()) # need to jsonify to ensure that data types are json friendly
 
     def _validate_update(self, data_dict): return self._validate_create(data_dict, action='package_update')
