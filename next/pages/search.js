@@ -21,6 +21,7 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CategoryIcon } from "../components/atoms/CategoryIcon";
 import { FilterPopover } from "../components/molecules/FilterPopover";
+import { useState } from "react";
 
 function Database({
   image,
@@ -126,7 +127,7 @@ function Database({
 function OrderingLink({ orderBy, label }) {
   const { query } = useRouter();
   const searchQuery = query.q || "";
-  const orderQuery = query.order_by || "";
+  const orderQuery = query.order_by || "relevant";
 
   return (
     <Link
@@ -141,6 +142,17 @@ function OrderingLink({ orderBy, label }) {
 export default function SearchPage() {
   const { query } = useRouter();
   const searchQuery = query.q || "";
+  const [search, setSearch] = useState("");
+
+  function openSearchLink() {
+    window.open(`/_nxt/search/?q=${search}`, "_self");
+  }
+
+  function checkForEnter(e){
+    if (e.key === 'Enter') {
+        openSearchLink();
+    }
+}
 
   return (
     <VStack width="100%">
@@ -159,7 +171,10 @@ export default function SearchPage() {
             padding="25px 0px 25px 20px"
             fontSize="18px"
             fontFamily="Lato"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             letterSpacing="0.1em"
+            onKeyDown={checkForEnter}
           />
           <FilterPopover />
         </InputGroup>

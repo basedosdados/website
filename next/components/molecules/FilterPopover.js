@@ -18,8 +18,8 @@ import {
 
 function FilterInput({ label, onChange, value }) {
   return (
-    <VStack alignItems="flex-start" spacing={3}>
-      <Heading fontFamily="ubuntu" fontWeight="500" fontSize="14px">
+    <VStack alignItems="flex-start" spacing={2}>
+      <Heading fontFamily="ubuntu" fontWeight="500" fontSize="12px">
         {label.toUpperCase()}
       </Heading>
       <Input borderRadius="14.1587px" />
@@ -47,12 +47,12 @@ export function FilterPopover({}) {
           }
         />
       </PopoverTrigger>
-      <PopoverContent maxWidth="500px">
+      <PopoverContent width={{base:"300px", lg:"500px"}} maxWidth="500px">
         <PopoverArrow />
         <PopoverCloseButton />
         <PopoverBody
           width="100%"
-          padding="30px"
+          padding={{base:"20px", md:"30px"}}
           boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
         >
           <VStack alignItems="flex-start" width="100%" spacing={5}>
@@ -66,7 +66,6 @@ export function FilterPopover({}) {
             </HStack>
             <Checkbox
               fontFamily="ubuntu"
-              fontSize="14px"
               padding="10px 0px"
               defaultIsChecked
             >
@@ -88,6 +87,7 @@ export function FilterPopover({}) {
                 letterSpacing="0.1em"
                 borderRadius="23.1818px"
                 width="120px"
+                fontSize="14px"
               >
                 Limpar
               </Button>
@@ -99,6 +99,7 @@ export function FilterPopover({}) {
                 colorScheme="blue"
                 width="120px"
                 boxShadow="0px 4.63636px 4.63636px rgba(0, 0, 0, 0.25);"
+                fontSize="14px"
               >
                 Filtrar
               </Button>

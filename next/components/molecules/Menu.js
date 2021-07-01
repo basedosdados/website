@@ -22,7 +22,7 @@ function MenuDrawer({ isOpen, onClose }) {
       <DrawerOverlay />
       <DrawerContent padding="110px 30px 30px 30px">
         <VStack alignItems="center" width="100%" spacing={5}>
-          <Link color="black" href="/dataset">
+          <Link color="black" href="/_nxt/search">
             Dados
           </Link>
           <Divider />
@@ -45,7 +45,7 @@ function DesktopLinks() {
   const [search, setSearch] = useState();
 
   function openSearchLink() {
-    window.open(`new-next-site/search/?q=${search}`, "_self");
+    window.open(`/_nxt/search/?q=${search}`, "_self");
   }
 
   return (
@@ -65,7 +65,7 @@ function DesktopLinks() {
       <HStack spacing={10} display={{ base: "none", lg: "flex" }}>
         <ControlledInput
           onEnterPress={openSearchLink}
-          color="white"
+          color="black"
           value={search}
           onChange={setSearch}
           inputBackgroundColor="#E6FEE2"
@@ -95,7 +95,7 @@ export default function Menu() {
         top="0px"
         width="100%"
         left="0px"
-        backgroundColor="#34A15A"
+        backgroundColor="#34A25A"
         boxShadow="0px 4px 4px rgba(0,0,0,0.25)"
         padding="15px 60px"
         zIndex="10000000"

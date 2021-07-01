@@ -25,6 +25,8 @@ import CardCatalog from "../components/organisms/CardCatalog";
 import Title from "../components/atoms/Title";
 import Link from "../components/atoms/Link";
 import Typist from "react-typist";
+import { useQuery } from "react-query";
+import { getPopularDatasets, getRecentDatasets } from "./api/datasets";
 
 function HeroText({ children, iconUrl }) {
   return (
@@ -75,7 +77,7 @@ function Hero() {
               zIndex="1"
               fontFamily="Lato"
               flex="2"
-              color="#2B8C4D"
+              color="#358C2B"
             >
               Um único lugar para buscar, baixar e acessar os dados que você
               precisa
@@ -142,16 +144,16 @@ function Hero() {
         width="52px"
         height="60px"
       >
-        <Image
-          height="24px"
-          src="/_nxt/img/arrow_white_down.png"
-        />
+        <Image height="24px" src="/_nxt/img/arrow_white_down.png" />
       </Center>
     </VStack>
   );
 }
 
 function CatalogNews() {
+  const recentDatasets = useQuery("recentDatasets", getRecentDatasets);
+  const popularDatasets = useQuery("popularDatasets", getPopularDatasets);
+
   return (
     <VStack
       width="100%"
@@ -166,47 +168,58 @@ function CatalogNews() {
       </BigTitle>
       <CardCatalog
         sections={{
-          populares: [
+          popular: (popularDatasets.data || []).map((d) => (
             <DatabaseCard
-              name="Eleições brasileiras"
-              organization="Tribunal Superior Eleitoral"
-              tags={["Política", "Finanças públicas"]}
-              size="2 GB"
-              tableNum="13 tabelas (CSV)"
-              externalLinkNum={1}
-              updatedSince="13 dias"
+              link={`/dataset/${d.name}`}
+              name={d.title}
+              organization={d.organization.title}
+              tags={d.tags.map((g) => g.name)}
+              size={
+                d.resources.filter((r) => r.size).length > 0
+                  ? d.resources.filter((r) => r.size)[0].size
+                  : null
+              }
+              tableNum={
+                d.resources.filter((r) => r.resource_type === "bdm_table")
+                  .length
+              }
+              externalLinkNum={
+                d.resources.filter((r) => r.resource_type === "external_link")
+                  .length
+              }
+              updatedSince={d.metadata_modified}
               updatedAuthor="Ricardo Dahis"
-              categories={["agro"]}
-            />,
-            <DatabaseCard
-              name="Eleições brasileiras"
-              organization="Tribunal Superior Eleitoral"
-              tags={["Política", "Finanças públicas"]}
-              size="2 GB"
-              tableNum="13 tabelas (CSV)"
-              externalLinkNum={1}
-              updatedSince="13 dias"
-              updatedAuthor="Ricardo Dahis"
-              categories={["agro"]}
-            />,
-          ],
+              categories={d.groups.map((g) => g.name)}
+            />
+          )),
         }}
       />
       <CardCatalog
         sections={{
-          recentes: [
+          recentes: (recentDatasets.data || []).map((d) => (
             <DatabaseCard
-              name="Eleições brasileiras"
-              organization="Tribunal Superior Eleitoral"
-              tags={["Política", "Finanças públicas"]}
-              size="2 GB"
-              tableNum="13 tabelas (CSV)"
-              externalLinkNum={1}
-              updatedSince="13 dias"
+              link={`/dataset/${d.name}`}
+              name={d.title}
+              organization={d.organization.title}
+              tags={d.tags.map((g) => g.name)}
+              size={
+                d.resources.filter((r) => r.size).length > 0
+                  ? d.resources.filter((r) => r.size)[0].size
+                  : null
+              }
+              tableNum={
+                d.resources.filter((r) => r.resource_type === "bdm_table")
+                  .length
+              }
+              externalLinkNum={
+                d.resources.filter((r) => r.resource_type === "external_link")
+                  .length
+              }
+              updatedSince={d.metadata_modified}
               updatedAuthor="Ricardo Dahis"
-              categories={["agro"]}
-            />,
-          ],
+              categories={d.groups.map((g) => g.name)}
+            />
+          )),
         }}
       />
     </VStack>
