@@ -30,16 +30,16 @@ class LinkSpider(CrawlSpider):
         Rule(
             # Deny links with more than one question mark with
             #   "(?<!\?)\?(?!\?)"
-            # Deny https://basedosdados.org/dataset/activity/<dataset> page with
-            #   ".*\/dataset\/activity\/.*"
-            #   ".*\/dataset\/.*\?activity_id.*"
+            # Deny https://basedosdados.org/<entity>/activity/ pages with
+            #   ".*\/activity\/.*"
+            #   ".*\/activity_id.*"
             #   ".*\/dataset\/changes\/.*"
             # Allow only https://basedosdados.org/ pages with
             #   "basedosdados\.org.*"
             LinkExtractor(
                 deny=[
                     "(?<!\?)\?(?!\?)",
-                    ".*\/dataset\/activity\/.*",
+                    ".*\/activity\/.*",
                     ".*\/activity_id.*",
                     ".*\/dataset\/changes\/.*",
                 ],
@@ -63,7 +63,9 @@ class LinkSpider(CrawlSpider):
             item["url"] = response.url
             item["status"] = response.status
             item["link_text"] = self._format(response.meta["link_text"])
-            item["referer"] = response.request.headers.get("Referer", self.start_urls[0])
+            item["referer"] = response.request.headers.get(
+                "Referer", "https://no.referer"
+            )
             yield item
         yield None
 
