@@ -68,7 +68,7 @@ def bd_table(context, data_dict):
     """
 
     try:
-        table_id = data_dict.get("table_id", "")
+        table_id = data_dict["table_id"]
     except KeyError as e:
         raise ValidationError(f"{e} parameter not found")
 
