@@ -1,6 +1,9 @@
 import os
 
+import ckan.logic as logic
 import requests
+
+ValidationError = logic.ValidationError
 
 
 def bd_subscribe_on_newsletter(context, data_dict):
@@ -12,20 +15,32 @@ def bd_subscribe_on_newsletter(context, data_dict):
     :returns: Hubspot API result
     """
 
-    HUBSPOT_API_KEY = os.environ.get("HUBSPOT_API_KEY", 0)
-    HUBSPOST_SUBSCRIPTION_ID = os.environ.get("HUBSPOST_SUBSCRIPTION_ID", 0)
+    try:
+        email = data_dict["email"]
+    except KeyError as e:
+        raise ValidationError(f"{e} parameter not found")
+
+    try:
+        HUBSPOT_API_KEY = os.environ["HUBSPOT_API_KEY"]
+        HUBSPOST_SUBSCRIPTION_ID = os.environ["HUBSPOT_SUBSCRIPTION_ID"]
+    except KeyError as e:
+        raise ValidationError(f"{e} environment variable not found")
 
     url = "https://api.hubapi.com/communication-preferences/v3/subscribe"
 
-    payload = f'{{"emailAddress":{data_dict["email"]},'
-    payload += f'"subscriptionId":"{HUBSPOST_SUBSCRIPTION_ID}",'
-    payload += f'"legalBasis":"LEGITIMATE_INTEREST_PQL",'
-    payload += f'"legalBasisExplanation":"User subscribed on homepage"}}'
+    data = f'{{"emailAddress":"{email}",'
+    data += f'"subscriptionId":"{HUBSPOST_SUBSCRIPTION_ID}",'
+    data += f'"legalBasis":"LEGITIMATE_INTEREST_PQL",'
+    data += f'"legalBasisExplanation":"User subscribed on homepage"}}'
 
     headers = {"accept": "application/json", "content-type": "application/json"}
 
-    querystring = {"hapikey": HUBSPOT_API_KEY}
+    params = {"hapikey": HUBSPOT_API_KEY}
 
-    response = requests.post(url, data=payload, headers=headers, params=querystring)
+    response = requests.post(url, data=data, headers=headers, params=params)
+    response = response.json()
 
-    return response.text
+    if response["status"] == "error":
+        raise ValidationError(response["message"])
+
+    return response

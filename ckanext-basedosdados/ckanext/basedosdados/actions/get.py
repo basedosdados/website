@@ -12,12 +12,16 @@ def bd_get_dataset(context, data_dict):
     :param dataset_id: dataset name
     :type dataset_id: string
 
-    :returns: dataset most relevant
+    :returns: most relevant dataset
     """
 
-    dataset_id = data_dict.get("dataset_id", "")
+    try:
+        dataset_id = data_dict["dataset_id"]
+        dataset_id = dataset_id.replace("_", "-")
+    except KeyError as e:
+        raise ValidationError(f"{e} parameter not found")
 
-    search = package_search(context, {"name_or_id": dataset_id.replace("_", "-")})
+    search = package_search(context, {"q": f"name={dataset_id}"})
     data = search.get("results", [])
 
     return data[0]
@@ -30,12 +34,15 @@ def bd_get_table(context, data_dict):
     :param table_id: table name
     :type table_id: string
 
-    :returns: table most relevant
+    :returns: most relevant table
     """
 
-    table_id = data_dict.get("table_id", "")
+    try:
+        table_id = data_dict.get("table_id", "")
+    except KeyError as e:
+        raise ValidationError(f"{e} parameter not found")
 
-    search = resource_search(context, {"name": table_id})
+    search = resource_search(context, {"query": f"name:{table_id}"})
     data = search.get("results", [])
 
     return data[0]
