@@ -26,7 +26,7 @@ export default function DatabaseCard({
   return (
     <Card
       icons={categories.map((c) => (
-        <CategoryIcon url={`/new-next-site/next-img/categories/${c}.png`} />
+        <CategoryIcon url={`/_nxt/next-img/categories/${c}.png`} />
       ))}
       spacing={2}
     >

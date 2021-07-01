@@ -1,12 +1,42 @@
-import os
+import sys
+import json
+import requests
 
 import ckan.plugins.toolkit as toolkit
-import requests
 from ckan.logic.action.get import package_search, resource_search
+
+from ckanext.basedosdados.validator.bdm.dataset import BdmDataset
+from ckanext.basedosdados.validator.bdm.table import BdmTable
+from ckanext.basedosdados.validator.bdm.columns import BdmColumns
+
+from ckanext.basedosdados.validator.external_link.table import ExternalLink
+
+# how to acess the endpoint
+# http://localhost:5000/api/3/action/<function_name>
 
 
 @toolkit.side_effect_free
-def bd_get_dataset(context, data_dict):
+def bd_bdm_dataset_schema(context, data_dict):
+    return json.loads(BdmDataset.schema_json(indent=2))
+
+
+@toolkit.side_effect_free
+def bd_bdm_table_schema(context, data_dict):
+    return json.loads(BdmTable.schema_json(indent=2))
+
+
+@toolkit.side_effect_free
+def bd_bdm_columns_schema(context, data_dict):
+    return json.loads(BdmColumns.schema_json(indent=2))
+
+
+@toolkit.side_effect_free
+def bd_external_link_table_schema(context, data_dict):
+    return json.loads(ExternalLink.schema_json(indent=2))
+
+
+@toolkit.side_effect_free
+def bd_dataset(context, data_dict):
     """Show dataset
 
     :param dataset_id: dataset name
@@ -28,7 +58,7 @@ def bd_get_dataset(context, data_dict):
 
 
 @toolkit.side_effect_free
-def bd_get_table(context, data_dict):
+def bd_table(context, data_dict):
     """Show table
 
     :param table_id: table name
@@ -49,7 +79,7 @@ def bd_get_table(context, data_dict):
 
 
 @toolkit.side_effect_free
-def bd_list_recent_datasets(context, data_dict):
+def bd_recent_datasets(context, data_dict):
     """List recent modified datasets
 
     :param limit: quantity of results
@@ -69,7 +99,7 @@ def bd_list_recent_datasets(context, data_dict):
 
 
 @toolkit.side_effect_free
-def bd_list_popular_datasets(context, data_dict):
+def bd_popular_datasets(context, data_dict):
     """List recent popular datasets
 
     :param limit: quantity of results
