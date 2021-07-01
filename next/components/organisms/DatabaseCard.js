@@ -24,6 +24,11 @@ export default function DatabaseCard({
   if (tableNum) databaseInfo.push(`${tableNum} tabelas`);
   if (externalLinkNum) databaseInfo.push(externalLinkNum + " link externo");
 
+  const date1 = new Date();
+  const date2 = new Date(updatedSince);
+  const diffTime = Math.abs(date2 - date1);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
   return (
     <Card
       link={link}
@@ -42,7 +47,7 @@ export default function DatabaseCard({
       <HStack marginTop="auto" padding="15px 0px">
         {size ? (
           <>
-            <Subtitle fontWeight="bold">{size}</Subtitle>
+            <Subtitle fontWeight="bold">{Math.round(size / 1000)} mb</Subtitle>
             <Dot />
           </>
         ) : (
@@ -56,7 +61,7 @@ export default function DatabaseCard({
         ))}
       </HStack>
       <Subtitle fontSize="12px" fontStyle="italic">
-        Atualizado há {updatedSince} por {updatedAuthor}
+        Atualizado há {diffDays} dias.
       </Subtitle>
     </Card>
   );

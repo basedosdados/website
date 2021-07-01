@@ -25,7 +25,7 @@ export default function CardCatalog({ sections, containerStyle }) {
             alignItems="flex-start"
             width="100%"
             spacing={5}
-            paddingBottom="5px"
+            paddingBottom="10px"
             paddingLeft="5px"
           >
             {sections[key]}
