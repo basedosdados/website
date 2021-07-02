@@ -15,6 +15,11 @@ class LinkSpider(CrawlSpider):
     name = "link-checker"
     report_if = set(range(400, 600))
     handle_httpstatus_list = list(report_if)
+    
+    # Send referrer headers to every URL
+    custom_settings = {
+        "REFERRER_POLICY": "unsafe-url"
+    }
 
     start_urls = [
         "https://basedosdados.org/",
