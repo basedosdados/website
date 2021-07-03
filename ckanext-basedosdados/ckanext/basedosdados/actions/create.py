@@ -7,7 +7,7 @@ import requests
 ValidationError = logic.ValidationError
 
 
-def bd_subscribe_on_newsletter(context, data_dict):
+def bd_newsletter_subscribe(context, data_dict):
     """Subscribe email on Hubspot newsletter
 
     :param email: user email
@@ -38,6 +38,10 @@ def bd_subscribe_on_newsletter(context, data_dict):
                 {
                     "property": "email",
                     "value": email,
+                },
+                {
+                    "property": "newsletter",
+                    "value": "Sim",
                 }
             ]
         }
