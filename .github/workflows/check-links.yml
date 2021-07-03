@@ -31,3 +31,4 @@ jobs:
           title: "[infra] corrigir links quebrados"
           content-filepath: ./report.md
           labels: report, automated issue
+          assignees: rdahis
