@@ -38,9 +38,8 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
       - CKAN_REDIS_URL=redis://redis:6379/0
-      # HubSpot Newsletter keys have a maximum 6 months time of life
+      # HubSpot API Keys have a maximum 6 months lifetime
       - HUBSPOT_API_KEY=${HUBSPOT_API_KEY}
-      - HUBSPOT_SUBSCRIPTION_ID=${HUBSPOT_SUBSCRIPTION_ID}
     command: ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "wsgi"]
 
   datapusher: # Not really used, ckan dependency

@@ -1,3 +1,4 @@
+import json
 import os
 
 import ckan.logic as logic
@@ -9,11 +10,13 @@ ValidationError = logic.ValidationError
 def bd_subscribe_on_newsletter(context, data_dict):
     """Subscribe email on Hubspot newsletter
 
-    :param email: quantity of results
+    :param email: user email
     :type email: string
 
     :returns: Hubspot API result
     """
+
+    # Validation -----------------------
 
     try:
         email = data_dict["email"]
@@ -22,25 +25,34 @@ def bd_subscribe_on_newsletter(context, data_dict):
 
     try:
         HUBSPOT_API_KEY = os.environ["HUBSPOT_API_KEY"]
-        HUBSPOST_SUBSCRIPTION_ID = os.environ["HUBSPOT_SUBSCRIPTION_ID"]
     except KeyError as e:
         raise ValidationError(f"{e} environment variable not found")
 
-    url = "https://api.hubapi.com/communication-preferences/v3/subscribe"
+    # Request --------------------------
 
-    data = f'{{"emailAddress":"{email}",'
-    data += f'"subscriptionId":"{HUBSPOST_SUBSCRIPTION_ID}",'
-    data += f'"legalBasis":"LEGITIMATE_INTEREST_PQL",'
-    data += f'"legalBasisExplanation":"User subscribed on homepage"}}'
+    url = "https://api.hubapi.com/contacts/v1/contact/"
+
+    data = json.dumps(
+        {
+            "properties": [
+                {
+                    "property": "email",
+                    "value": email,
+                }
+            ]
+        }
+    )
 
     headers = {"accept": "application/json", "content-type": "application/json"}
 
     params = {"hapikey": HUBSPOT_API_KEY}
 
+    # Response -------------------------
+
     response = requests.post(url, data=data, headers=headers, params=params)
     response = response.json()
 
-    if response["status"] == "error":
+    if "status" in response:
         raise ValidationError(response["message"])
 
     return response
