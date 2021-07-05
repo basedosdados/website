@@ -62,9 +62,6 @@
         ]
         ,value: resource
     }
-
-    console.log(opts)
-    console.log(resource)
     $('#metadata-jsonform-container').html('')
     $('#metadata-jsonform-container').jsonForm(opts)
     $('.jsonform-required > label').prepend('<span title="Este campo é obrigatório" class="control-required">* </span>')
