@@ -41,7 +41,7 @@ def bd_newsletter_subscribe(context, data_dict):
                 },
                 {
                     "property": "newsletter",
-                    "value": "Sim",
+                    "value": "yes",
                 }
             ]
         }
