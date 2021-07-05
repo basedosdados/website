@@ -44,6 +44,15 @@
     let schema_n_fields = _deal_with_compatibility_issues(schema, fields)
     schema = schema_n_fields[0]; fields = schema_n_fields[1];
 
+    Object.keys(schema.properties).forEach(k =>{
+      let value = schema.properties[k];
+      if("allOf" in value){
+        value['type'] = "object";
+        value['properties'] = value["allOf"][0].properties
+        delete value["allOf"]
+      }
+    })
+
     let opts = {
         schema: schema
         ,form: [
@@ -53,6 +62,9 @@
         ]
         ,value: resource
     }
+
+    console.log(opts)
+    console.log(resource)
     $('#metadata-jsonform-container').html('')
     $('#metadata-jsonform-container').jsonForm(opts)
     $('.jsonform-required > label').prepend('<span title="Este campo é obrigatório" class="control-required">* </span>')
