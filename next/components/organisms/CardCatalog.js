@@ -5,14 +5,13 @@ import { VStack, HStack } from "@chakra-ui/react";
 export default function CardCatalog({ sections, containerStyle }) {
   return (
     <VStack
-      overflowY="scroll"
       {...containerStyle}
       alignItems="flex-start"
       spacing={10}
       width="100%"
     >
       {Object.keys(sections).map((key) => (
-        <VStack alignItems="flex-start" spacing={5}>
+        <VStack width="100%" alignItems="flex-start" spacing={5}>
           <Heading
             fontSize="20px"
             backgroundColor="#DEDFE0"
@@ -22,10 +21,11 @@ export default function CardCatalog({ sections, containerStyle }) {
             + {key}
           </Heading>
           <HStack
+            overflowY="scroll"
             alignItems="flex-start"
             width="100%"
             spacing={5}
-            paddingBottom="5px"
+            paddingBottom="10px"
             paddingLeft="5px"
           >
             {sections[key]}

@@ -17,30 +17,37 @@ export default function DatabaseCard({
   externalLinkNum,
   updatedSince,
   updatedAuthor,
+  link,
 }) {
   const databaseInfo = [];
 
-  if (tableNum) databaseInfo.push(tableNum);
+  if (tableNum) databaseInfo.push(`${tableNum} tabelas`);
   if (externalLinkNum) databaseInfo.push(externalLinkNum + " link externo");
+
+  const date1 = new Date();
+  const date2 = new Date(updatedSince);
+  const diffTime = Math.abs(date2 - date1);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
   return (
     <Card
+      link={link}
       icons={categories.map((c) => (
-        <CategoryIcon url={`/_nxt/next-img/categories/${c}.png`} />
+        <CategoryIcon url={`/_nxt/img/categories/icone_${c}.svg`} />
       ))}
       spacing={2}
     >
       <Title>{name}</Title>
       <Subtitle>{organization}</Subtitle>
-      <HStack padding="15px 0px">
+      <HStack width="100%" overflowX="scroll" padding="15px 0px">
         {tags.map((t) => (
           <Tag>{t}</Tag>
         ))}
       </HStack>
-      <HStack padding="15px 0px">
+      <HStack marginTop="auto" padding="15px 0px">
         {size ? (
           <>
-            <Subtitle fontWeight="bold">{size}</Subtitle>
+            <Subtitle fontWeight="bold">{Math.round(size / 1000)} mb</Subtitle>
             <Dot />
           </>
         ) : (
@@ -54,7 +61,7 @@ export default function DatabaseCard({
         ))}
       </HStack>
       <Subtitle fontSize="12px" fontStyle="italic">
-        Atualizado há {updatedSince} por {updatedAuthor}
+        Atualizado há {diffDays} dias.
       </Subtitle>
     </Card>
   );
