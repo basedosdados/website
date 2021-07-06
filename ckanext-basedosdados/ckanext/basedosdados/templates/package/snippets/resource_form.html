@@ -44,6 +44,20 @@
     let schema_n_fields = _deal_with_compatibility_issues(schema, fields)
     schema = schema_n_fields[0]; fields = schema_n_fields[1];
 
+    Object.keys(resource).forEach(k =>{
+      if(k.indexOf(".") == -1) return;
+
+      const [object, key] = k.split(".")
+
+      if(object in resource){
+        resource[object][key] = resource[k];
+      }else{
+        resource[object] = {
+          [key]: resource[k]
+        }
+      }
+    })
+
     Object.keys(schema.properties).forEach(k =>{
       let value = schema.properties[k];
       if("allOf" in value){
