@@ -34,6 +34,7 @@ services:
       - ./assets:/app/uploads/
 
   next:
+    command: ["yarn", "run", "production"]
     networks:
     - basedosdados
 

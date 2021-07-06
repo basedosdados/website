@@ -18,7 +18,7 @@ export default function NewsCard({ image, site, title }) {
       </VStack>
       <Image
         width="25px"
-        src="/new-next-site/next-img/arrow_black_right.png"
+        src="/_nxt/img/arrow_black_right.png"
         position="absolute"
         right="20px"
         bottom="20px"

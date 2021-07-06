@@ -22,7 +22,7 @@ function MenuDrawer({ isOpen, onClose }) {
       <DrawerOverlay />
       <DrawerContent padding="110px 30px 30px 30px">
         <VStack alignItems="center" width="100%" spacing={5}>
-          <Link color="black" href="/dataset">
+          <Link color="black" href="/_nxt/search">
             Dados
           </Link>
           <Divider />
@@ -45,7 +45,7 @@ function DesktopLinks() {
   const [search, setSearch] = useState();
 
   function openSearchLink() {
-    window.open(`new-next-site/search/?q=${search}`, "_self");
+    window.open(`/_nxt/search/?q=${search}`, "_self");
   }
 
   return (
@@ -56,7 +56,7 @@ function DesktopLinks() {
       position={{ base: "relative", md: "initial" }}
     >
       <HStack width="100%" flex="3" spacing={10}>
-        <Link href="/dataset">Dados</Link>
+        <Link href="/_nxt/search">Dados</Link>
         <Link>Comunidade</Link>
         <Link href="/about">Sobre</Link>
         <Link>Contato</Link>
@@ -65,7 +65,7 @@ function DesktopLinks() {
       <HStack spacing={10} display={{ base: "none", lg: "flex" }}>
         <ControlledInput
           onEnterPress={openSearchLink}
-          color="white"
+          color="black"
           value={search}
           onChange={setSearch}
           inputBackgroundColor="#E6FEE2"
@@ -73,7 +73,7 @@ function DesktopLinks() {
             <Image
               cursor="pointer"
               onClick={openSearchLink}
-              src="/new-next-site/next-img/icon_search.png"
+              src="/_nxt/img/icon_search.png"
             />
           }
         />
@@ -95,7 +95,7 @@ export default function Menu() {
         top="0px"
         width="100%"
         left="0px"
-        backgroundColor="#34A15A"
+        backgroundColor="#34A25A"
         boxShadow="0px 4px 4px rgba(0,0,0,0.25)"
         padding="15px 60px"
         zIndex="10000000"
@@ -121,12 +121,12 @@ export default function Menu() {
               icon={faBars}
             />
           </Box>
-          <Link href="/new-next-site/">
+          <Link href="/_nxt/">
             <Image
               flex="2"
               transform={{ base: "translateX(-27%)" }}
               maxWidth={{ base: "80px", lg: "105px" }}
-              src="/new-next-site/next-img/logo.png"
+              src="/_nxt/img/logo.png"
             />
           </Link>
           <DesktopLinks />

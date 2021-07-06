@@ -2,58 +2,59 @@
 from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional, Literal, Union, Any
+from typing_extensions import Annotated  # migrate to py3.9
 import pydantic
 from pydantic import StrictInt as Int, StrictStr as Str, Field, ValidationError, validator, PrivateAttr, root_validator
-from uuid import UUID
 import jsonschema
-
-from .data_types import ObservationLevel, TemporalCoverage, IdType
-
-from typing_extensions import Annotated  # migrate to py3.9
-
-Email = Str  # TODO
+from uuid import UUID
 
 from . import BaseModel
-from .resource import ExternalLink, BdmTable
+from .data_types import ObservationLevel, TemporalCoverage, IdType
+
+from ckanext.basedosdados.validator.bdm.table import BdmTable
+from ckanext.basedosdados.validator.external_link.table import ExternalLink
+
+
+
+Email = Str  # TODO
 
 AnyResource = Annotated[
     Union[ExternalLink, BdmTable], Field(discriminator="resource_type")
 ]
 
-
 coerce_to_unicode = lambda field: validator('field', allow_reuse=True)()
 
 class _CkanDefaults(BaseModel):
-    id: IdType
+    id  : IdType
     name: Str
 
-    title: Str
-    type: Literal["dataset"]
-    notes: Optional[Str]
-    author: Optional[Str]
-    author_email: Optional[Email]
-    maintainer: Optional[Str]
-    maintainer_email: Optional[Email]
-    state: Optional[Literal['active', 'draft', 'deleted']]
-    license_id: Optional[Str]
-    url: Optional[Str]
-    version: Optional[Str]
-    metadata_created: Optional[datetime]
+    title            : Str
+    type             : Literal["dataset"]
+    notes            : Optional[Str]
+    author           : Optional[Str]
+    author_email     : Optional[Email]
+    maintainer       : Optional[Str]
+    maintainer_email : Optional[Email]
+    state            : Optional[Literal['active', 'draft', 'deleted']]
+    license_id       : Optional[Str]
+    url              : Optional[Str]
+    version          : Optional[Str]
+    metadata_created : Optional[datetime]
     metadata_modified: Optional[datetime]
-    creator_user_id: Optional[UUID]
-    private: bool
-    license_title: Optional[Str]
+    creator_user_id  : Optional[UUID]
+    private          : bool
+    license_title    : Optional[Str]
 
     # Ckan Defaults Complex Fields
     num_resources: Optional[Int]
-    resources: List[AnyResource] = []
-    groups: Any
-    owner_org: UUID
-    organization: Any
-    num_tags: Optional[Int]
-    tags: Any
+    resources    : List[AnyResource] = []
+    groups       : Any
+    owner_org    : UUID
+    organization : Any
+    num_tags     : Optional[Int]
+    tags         : Any
 
-    relationships_as_object: Any
+    relationships_as_object : Any
     relationships_as_subject: Any
 
     # throwaway field that is used to modify validators. You can think of it as an argument to validate function. Cant use prefix underscores on pydantic so used suffix to indicate this
@@ -93,16 +94,3 @@ class _CkanDefaults(BaseModel):
                 assert values[f] is not None
         return values
 
-
-
-class Package(_CkanDefaults):
-    # Generated Fields
-    # temporal_coverage: TemporalCoverage
-    # spatial_coverage: Str
-    # observation_level: List[ObservationLevel] = Field(max_items=10)
-    # auxiliary_files_url: List[Str]
-
-    download_type: Optional[Literal['Link Externo', 'BD Mais']] # TODO: generate this automatically
-
-
-# TODO: try to access fields on validation and get annotations on which fields are needed for each tier
