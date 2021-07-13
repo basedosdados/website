@@ -23,4 +23,5 @@ def _treat_scalar_as_single_value_set(cls, value):
 
 
 
-from . import package, resource
+from . import package
+# from ckanext.basedosdados.validator.resource.ckan_default_resource import resource

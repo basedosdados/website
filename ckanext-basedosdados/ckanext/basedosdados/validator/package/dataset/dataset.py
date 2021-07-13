@@ -2,10 +2,10 @@ from datetime import datetime
 from typing import List, Optional, Literal, Union, Any
 from pydantic import StrictInt as Int, StrictStr as Str, Field, ValidationError, validator, PrivateAttr, root_validator
 
-from ckanext.basedosdados.validator.bdm.metadata_definitions.dataset_definitions import *
-from ckanext.basedosdados.validator.ckan_default.package import _CkanDefaults
+from ckanext.basedosdados.validator.package.dataset.dataset_definitions import *
+from ckanext.basedosdados.validator.package.ckan_default_package.package import _CkanDefaults
 
-class BdmDataset(_CkanDefaults):
+class Dataset(_CkanDefaults):
     # Generated Fields
     # temporal_coverage: TemporalCoverage
     # spatial_coverage: Str

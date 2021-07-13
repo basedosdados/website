@@ -1,9 +1,9 @@
 from pydantic import BaseModel, ValidationError, validator, StrictStr as Str
 from typing import List, Optional
 
-from ckanext.basedosdados.validator.ckan_default import BaseModel
+from ckanext.basedosdados.validator.package.ckan_default_package import BaseModel
 
-from ckanext.basedosdados.validator.bdm.metadata_definitions.columns_definitions import *
+from ckanext.basedosdados.validator.resource.bdm.columns.columns_definitions import *
 
 
 class ColumnsMetadata(BaseModel):

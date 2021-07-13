@@ -38,7 +38,13 @@ def get_resource_bdm_table_name(resource):
     return resource['table_id']
 
 
-from ckanext.basedosdados import validator
+from ckanext.basedosdados.validator.package.dataset.dataset import Dataset
+from ckanext.basedosdados.validator.package.ckan_default_package.package import _CkanDefaults
+
+from ckanext.basedosdados.validator.resource.bdm.table.table import BdmTable, Resource
+from ckanext.basedosdados.validator.resource.external_link.source import ExternalLink
+from ckanext.basedosdados.validator.resource.ckan_default_resource.resource import RESOURCE_TYPES
+
 import functools
 
 def load_json_schema():
@@ -49,12 +55,12 @@ def load_json_schema():
         _remove_complex_ckan_fields(out, fields_to_remove)
         _migrate_to_schema3(out) # migrate required to schema3 format to comply with jsonform
         return dict(out)
-    resource_fields_to_delete = list(validator.external_link.table.Resource.__fields__) + ['resource_type']
+    resource_fields_to_delete = list(Resource.__fields__) + ['resource_type']
     return {
-        'external_link': to_schema(validator.external_link.table.ExternalLink, resource_fields_to_delete)
-        ,'bdm_table':    to_schema(validator.bdm.table.BdmTable,     resource_fields_to_delete)
+        'external_link': to_schema(ExternalLink, resource_fields_to_delete)
+        ,'bdm_table':    to_schema(BdmTable,     resource_fields_to_delete)
         #,'lai_request':  to_schema(validator.LaiRequest,   resource_fields_to_delete)
-        ,'package':      to_schema(validator.ckan_default.package._CkanDefaults, validator.ckan_default.package._CkanDefaults.__fields__)
+        ,'package':      to_schema(_CkanDefaults, _CkanDefaults.__fields__)
     }
 load_json_schema = functools.update_wrapper(load_json_schema, functools.lru_cache(load_json_schema)) # lru_cache messes up function name so we fix it here
 
@@ -74,4 +80,4 @@ def _migrate_to_schema3(schema):
 
 
 def get_possible_resource_types():
-    return [{'name': i, 'value': i} for i in validator.ckan_default.resource.RESOURCE_TYPES]
+    return [{'name': i, 'value': i} for i in RESOURCE_TYPES]

@@ -1,6 +1,9 @@
-from ckanext.basedosdados.validator.bdm.dataset import BdmDataset
-from ckanext.basedosdados.validator.bdm.table import BdmTable, Resource
-from ckanext.basedosdados.validator.external_link.table import ExternalLink
+
+
+from ckanext.basedosdados.validator.package.dataset.dataset import Dataset
+from ckanext.basedosdados.validator.resource.bdm.table.table import BdmTable, Resource
+from ckanext.basedosdados.validator.resource.external_link.source import ExternalLink
+
 
 import jsonschema
 import pytest
@@ -136,9 +139,9 @@ def test_ok(data):
             "resource_type": "external_link",
         },
     ]
-    out = BdmDataset(**data, action__='package_show')
+    out = Dataset(**data, action__='package_show')
     out = out.dict(exclude={"action__"}, exclude_unset=True)
     out = jsonify(out)
-    jsonschema.validate(jsonify(data), BdmDataset.schema())
+    jsonschema.validate(jsonify(data), Dataset.schema())
     for k, v in data.items():  # assert data is a subsed of out.dict()
         assert out[k] == v

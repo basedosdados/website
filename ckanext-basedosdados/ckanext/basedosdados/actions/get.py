@@ -5,19 +5,19 @@ import requests
 import ckan.plugins.toolkit as toolkit
 from ckan.logic.action.get import package_search
 
-from ckanext.basedosdados.validator.bdm.dataset import BdmDataset
-from ckanext.basedosdados.validator.bdm.table import BdmTable
-from ckanext.basedosdados.validator.bdm.columns import BdmColumns
+from ckanext.basedosdados.validator.package.dataset.dataset import Dataset
+from ckanext.basedosdados.validator.resource.bdm.table.table import BdmTable
+from ckanext.basedosdados.validator.resource.bdm.columns.columns import BdmColumns
 
-from ckanext.basedosdados.validator.external_link.table import ExternalLink
+from ckanext.basedosdados.validator.resource.external_link.source import ExternalLink
 
 # how to acess the endpoint
 # http://localhost:5000/api/3/action/<function_name>
 
 
 @toolkit.side_effect_free
-def bd_bdm_dataset_schema(context, data_dict):
-    return json.loads(BdmDataset.schema_json(indent=2))
+def bd_dataset_schema(context, data_dict):
+    return json.loads(Dataset.schema_json(indent=2))
 
 
 @toolkit.side_effect_free

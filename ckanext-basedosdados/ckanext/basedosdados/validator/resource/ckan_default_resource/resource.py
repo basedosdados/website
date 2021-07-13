@@ -11,8 +11,8 @@ from pydantic import (
     ValidationError,
     validator,
 )
-from .data_types import IdType
-from .data_types.attr_enum import AttrEnum
+from ckanext.basedosdados.validator.package.ckan_default_package.data_types import IdType
+from ckanext.basedosdados.validator.package.ckan_default_package.data_types.attr_enum import AttrEnum
 
 YES_NO = Literal["yes", "no"]
 

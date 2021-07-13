@@ -11,8 +11,8 @@ from uuid import UUID
 from . import BaseModel
 from .data_types import ObservationLevel, TemporalCoverage, IdType
 
-from ckanext.basedosdados.validator.bdm.table import BdmTable
-from ckanext.basedosdados.validator.external_link.table import ExternalLink
+from ckanext.basedosdados.validator.resource.bdm.table.table import BdmTable
+from ckanext.basedosdados.validator.resource.external_link.source import ExternalLink
 
 
 

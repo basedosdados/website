@@ -11,11 +11,11 @@ from pydantic import (
     validator,
 )
 
-from ckanext.basedosdados.validator.ckan_default import treat_scalar_as_single_value_set
-from ckanext.basedosdados.validator.bdm.metadata_definitions.table_definitions import *
+from ckanext.basedosdados.validator.package.ckan_default_package import treat_scalar_as_single_value_set
+from ckanext.basedosdados.validator.package.ckan_default_package.data_types import ObservationLevel, TemporalCoverage, IdType
 
-from ckanext.basedosdados.validator.ckan_default.data_types import ObservationLevel, TemporalCoverage, IdType
-from ckanext.basedosdados.validator.ckan_default.resource import _CkanDefaultResource, UpdateFrequencyEnum
+from ckanext.basedosdados.validator.resource.bdm.table.table_definitions import *
+from ckanext.basedosdados.validator.resource.ckan_default_resource.resource import _CkanDefaultResource, UpdateFrequencyEnum
 
 
 
@@ -51,7 +51,7 @@ class BdmTable(Resource):
     
     # TODO: Remove optional from required fields bellow
     # New YAML FIELDS
-    metadata_modified  : Optional[datetime]    = METADATA_MODIFIED_FIELD
+    metadata_modified  : Optional[Str]    = METADATA_MODIFIED_FIELD
     dataset_id         : Optional[Str]         = DATASET_ID_FIELD
     source_bucket_name : Optional[Str]         = SOURCE_BUCKET_NAME_FIELD
     project_id_staging : Optional[Str]         = PROJECT_ID_STAGING
