@@ -10,8 +10,8 @@ from pydantic import (
     root_validator,
 )
 
-from ckanext.basedosdados.validator.packages.dataset.fields_definitions import *
-from ckanext.basedosdados.validator.packages.ckan_default.package import _CkanDefaults
+from .fields_definitions import *
+from ckanext.basedosdados.validator.packages import _CkanDefaults
 
 
 class Dataset(_CkanDefaults):

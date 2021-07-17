@@ -27,3 +27,6 @@ def _treat_scalar_as_single_value_set(cls, value):
     if isinstance(value, Iterable):
         return set(value)
     return value
+
+
+from ckanext.basedosdados.validator import packages

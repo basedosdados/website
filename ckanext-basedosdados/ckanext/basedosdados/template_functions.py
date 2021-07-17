@@ -47,7 +47,7 @@ def get_resource_bdm_table_name(resource):
     return resource["table_id"]
 
 
-from ckanext.basedosdados.validator.packages.dataset.dataset import Dataset
+from ckanext.basedosdados.validator.packages import Dataset
 from ckanext.basedosdados.validator.packages.ckan_default.package import _CkanDefaults
 
 from ckanext.basedosdados.validator.resources.bdm.table.table import BdmTable, Resource

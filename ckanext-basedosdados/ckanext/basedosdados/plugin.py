@@ -6,7 +6,7 @@ import json
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.plugins.toolkit import get_action
-from ckanext.basedosdados.validator.packages.dataset.dataset import Dataset
+from ckanext.basedosdados.validator.packages import Dataset
 from pydantic import ValidationError
 import logging
 

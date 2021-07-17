@@ -1,5 +1,5 @@
 from pydantic import ValidationError
-from ckanext.basedosdados.validator.packages.dataset.dataset import Dataset
+from ckanext.basedosdados.validator.packages import Dataset
 from ckanext.basedosdados.validator.resources.bdm.table.table import BdmTable, Resource
 from ckanext.basedosdados.validator.resources.external_link.source import ExternalLink
 

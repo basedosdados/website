@@ -5,7 +5,7 @@ import requests
 import ckan.plugins.toolkit as toolkit
 from ckan.logic.action.get import package_search
 
-from ckanext.basedosdados.validator.packages.dataset.dataset import Dataset
+from ckanext.basedosdados.validator.packages import Dataset
 from ckanext.basedosdados.validator.resources.bdm.table.table import BdmTable
 from ckanext.basedosdados.validator.resources.bdm.columns.columns import BdmColumns
 
