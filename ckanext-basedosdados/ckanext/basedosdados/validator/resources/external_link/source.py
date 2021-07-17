@@ -18,7 +18,7 @@ from ckanext.basedosdados.validator.available_options import (
     TemporalCoverage,
     IdType,
 )
-from ckanext.basedosdados.validator.resources.ckan_default.resource import (
+from ckanext.basedosdados.validator.resources import (
     _CkanDefaultResource,
     UpdateFrequencyEnum,
     LanguageEnum,

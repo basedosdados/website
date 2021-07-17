@@ -1,4 +1,3 @@
-import sys
 import json
 import requests
 
@@ -6,10 +5,7 @@ import ckan.plugins.toolkit as toolkit
 from ckan.logic.action.get import package_search
 
 from ckanext.basedosdados.validator.packages import Dataset
-from ckanext.basedosdados.validator.resources.bdm.table.table import BdmTable
-from ckanext.basedosdados.validator.resources.bdm.columns.columns import BdmColumns
-
-from ckanext.basedosdados.validator.resources.external_link.source import ExternalLink
+from ckanext.basedosdados.validator.resources import BdmTable, BdmColumns, ExternalLink
 
 # how to acess the endpoint
 # http://localhost:5000/api/3/action/<function_name>

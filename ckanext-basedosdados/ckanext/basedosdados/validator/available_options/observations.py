@@ -1,7 +1,7 @@
-from .attr_enum import AttrEnum
 from enum import Enum
 from typing import Union
 
+from .attr_enum import AttrEnum
 
 class ObservationLevelSphereEnum(AttrEnum):
     continent        = {'label': "Continent"}

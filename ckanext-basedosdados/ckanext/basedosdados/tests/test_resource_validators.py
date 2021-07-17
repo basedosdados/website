@@ -1,7 +1,5 @@
 from ckanext.basedosdados.validator.packages import Dataset
-from ckanext.basedosdados.validator.resources.bdm.table.table import BdmTable, Resource
-from ckanext.basedosdados.validator.resources.external_link.source import ExternalLink
-
+from ckanext.basedosdados.validator.resources import BdmTable, Resource, ExternalLink
 
 import jsonschema
 import pytest

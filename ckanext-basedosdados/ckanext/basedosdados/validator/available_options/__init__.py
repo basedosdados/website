@@ -1,7 +1,7 @@
 from typing_extensions import Annotated
 from typing import Optional, List, Union, Literal
 
-from pydantic import StrictInt as Int, Field, StrictStr as Str, BaseModel
+from pydantic import Field, StrictStr as Str, BaseModel
 
 from .observations import ObservationLevel
 

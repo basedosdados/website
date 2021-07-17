@@ -23,7 +23,7 @@ def make_example_bq_query(resource, package):
 def make_example_python_query(resource, package):
     return f"""import basedosdados as bd
 # Para carregar o dado direto no pandas
-df = bd.read_table(dataset_id='{get_package_bdm_schema_name(package)}', 
+df = bd.read_table(dataset_id='{get_package_bdm_schema_name(package)}',
             table_id='{get_resource_bdm_table_name(resource)}',
             billing_project_id=<YOUR_PROJECT_ID>)"""
 
@@ -47,15 +47,13 @@ def get_resource_bdm_table_name(resource):
     return resource["table_id"]
 
 
-from ckanext.basedosdados.validator.packages import Dataset
-from ckanext.basedosdados.validator.packages.ckan_default.package import _CkanDefaults
-
-from ckanext.basedosdados.validator.resources.bdm.table.table import BdmTable, Resource
-from ckanext.basedosdados.validator.resources.external_link.source import ExternalLink
-from ckanext.basedosdados.validator.resources.ckan_default.resource import (
+from ckanext.basedosdados.validator.packages import _CkanDefaults, Dataset
+from ckanext.basedosdados.validator.resources import (
+    BdmTable,
+    Resource,
+    ExternalLink,
     RESOURCE_TYPES,
 )
-
 import functools
 
 

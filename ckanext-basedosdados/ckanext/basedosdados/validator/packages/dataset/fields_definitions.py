@@ -1,16 +1,9 @@
 #!/usr/bin/env python3
-from datetime import datetime
-from typing import List, Optional, Literal, Union, Any, Dict
-import pydantic
 from pydantic import (
-    StrictInt as Int,
     StrictStr as Str,
     Field,
-    ValidationError,
-    validator,
-    PrivateAttr,
-    root_validator,
 )
+
 from ckanext.basedosdados.validator import BaseModel
 
 
