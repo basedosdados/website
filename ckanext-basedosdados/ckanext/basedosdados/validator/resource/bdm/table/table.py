@@ -11,7 +11,7 @@ from pydantic import (
     validator,
 )
 
-from ckanext.basedosdados.validator.package.ckan_default_package import treat_scalar_as_single_value_set
+from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.package.ckan_default_package.data_types import ObservationLevel, TemporalCoverage, IdType
 
 from ckanext.basedosdados.validator.resource.bdm.table.table_definitions import *

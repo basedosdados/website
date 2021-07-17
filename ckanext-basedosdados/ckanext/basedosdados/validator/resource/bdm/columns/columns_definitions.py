@@ -1,6 +1,6 @@
 from pydantic import Field
 
-from ckanext.basedosdados.validator.package.ckan_default_package import BaseModel
+from ckanext.basedosdados.validator import BaseModel
 
 to_line = lambda description: "\n".join(description)
 

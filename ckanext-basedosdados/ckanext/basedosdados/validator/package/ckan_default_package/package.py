@@ -8,7 +8,7 @@ from pydantic import StrictInt as Int, StrictStr as Str, Field, ValidationError,
 import jsonschema
 from uuid import UUID
 
-from . import BaseModel
+from ckanext.basedosdados.validator import BaseModel
 from .data_types import ObservationLevel, TemporalCoverage, IdType
 
 from ckanext.basedosdados.validator.resource.bdm.table.table import BdmTable

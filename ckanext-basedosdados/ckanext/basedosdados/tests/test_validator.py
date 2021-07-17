@@ -1,4 +1,5 @@
-from ckanext.basedosdados.validator.package.dataset.dataset import Dataset, ValidationError
+from pydantic import ValidationError
+from ckanext.basedosdados.validator.package.dataset.dataset import Dataset
 from ckanext.basedosdados.validator.resource.bdm.table.table import BdmTable, Resource
 from ckanext.basedosdados.validator.resource.external_link.source import ExternalLink
 
@@ -28,9 +29,9 @@ def test_correct_reporting_on_missing_properties_of_a_specific_resource(data):
         {"resource_type": "external_link", "id": "13", "name": "linkzao"}
     ]
     with raises(ValidationError) as e:
-        Dataset(**data, action__='package_show')
+        Dataset(**data, action__="package_show")
     for error in e.value.errors():
-        assert error['type'] == "value_error.missing", error
+        assert error["type"] == "value_error.missing", error
 
 
 # TODO @Fred: See if this test is needed and remove request
@@ -180,26 +181,42 @@ def test_ckanize():
     ).json()["result"]
     assert master_dataset == ret
 
+
 def test_pydantic_validates_individual_items_in_a_list():
     from pydantic import BaseModel, ValidationError
     from typing import List, Optional, Literal, Union
+
     class Item(BaseModel):
         id: int
 
     class ManyItems(BaseModel):
         items: List[Item]
+
     try:
-        ManyItems.validate({'items': [
-                {'id': 12},
-                {'id': '1edfgd2'},
-                {'id': '154535345hfgdh345'},
-        ]})
+        ManyItems.validate(
+            {
+                "items": [
+                    {"id": 12},
+                    {"id": "1edfgd2"},
+                    {"id": "154535345hfgdh345"},
+                ]
+            }
+        )
     except ValidationError as error:
         assert error.errors() == (
-                [{'loc': ('items', 1, 'id'), 'msg': 'value is not a valid integer', 'type': 'type_error.integer'},
-                {'loc': ('items', 2, 'id'), 'msg': 'value is not a valid integer', 'type': 'type_error.integer'}]
+            [
+                {
+                    "loc": ("items", 1, "id"),
+                    "msg": "value is not a valid integer",
+                    "type": "type_error.integer",
+                },
+                {
+                    "loc": ("items", 2, "id"),
+                    "msg": "value is not a valid integer",
+                    "type": "type_error.integer",
+                },
+            ]
         )
-
 
 
 if __name__ == "__main__":
