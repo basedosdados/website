@@ -3,7 +3,7 @@ from typing import List, Optional
 
 from ckanext.basedosdados.validator import BaseModel
 
-from ckanext.basedosdados.validator.resources.bdm.columns.columns_definitions import *
+from ckanext.basedosdados.validator.resources.bdm.columns.fields_definitions import *
 
 
 class ColumnsMetadata(BaseModel):

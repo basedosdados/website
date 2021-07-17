@@ -18,7 +18,7 @@ from ckanext.basedosdados.validator.available_options import (
     IdType,
 )
 
-from ckanext.basedosdados.validator.resources.bdm.table.table_definitions import *
+from ckanext.basedosdados.validator.resources.bdm.table.fields_definitions import *
 from ckanext.basedosdados.validator.resources.ckan_default.resource import (
     _CkanDefaultResource,
     UpdateFrequencyEnum,
