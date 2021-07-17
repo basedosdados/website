@@ -3,13 +3,12 @@ from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional, Literal, Union, Any
 from typing_extensions import Annotated  # migrate to py3.9
-import pydantic
 from pydantic import StrictInt as Int, StrictStr as Str, Field, ValidationError, validator, PrivateAttr, root_validator
 import jsonschema
 from uuid import UUID
 
 from ckanext.basedosdados.validator import BaseModel
-from .data_types import ObservationLevel, TemporalCoverage, IdType
+from ckanext.basedosdados.validator.available_options import ObservationLevel, TemporalCoverage, IdType
 
 from ckanext.basedosdados.validator.resource.bdm.table.table import BdmTable
 from ckanext.basedosdados.validator.resource.external_link.source import ExternalLink

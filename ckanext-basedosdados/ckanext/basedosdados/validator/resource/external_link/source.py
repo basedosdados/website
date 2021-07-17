@@ -13,7 +13,7 @@ from pydantic import (
 
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 
-from ckanext.basedosdados.validator.package.ckan_default_package.data_types import ObservationLevel, TemporalCoverage, IdType
+from ckanext.basedosdados.validator.available_options import ObservationLevel, TemporalCoverage, IdType
 from ckanext.basedosdados.validator.resource.ckan_default_resource.resource import _CkanDefaultResource, UpdateFrequencyEnum, LanguageEnum, AvailabilityEnum
 
 YES_NO = Literal["yes", "no"]
