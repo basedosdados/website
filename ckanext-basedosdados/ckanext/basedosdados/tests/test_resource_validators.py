@@ -1,8 +1,6 @@
-
-
-from ckanext.basedosdados.validator.package.dataset.dataset import Dataset
-from ckanext.basedosdados.validator.resource.bdm.table.table import BdmTable, Resource
-from ckanext.basedosdados.validator.resource.external_link.source import ExternalLink
+from ckanext.basedosdados.validator.packages.dataset.dataset import Dataset
+from ckanext.basedosdados.validator.resources.bdm.table.table import BdmTable, Resource
+from ckanext.basedosdados.validator.resources.external_link.source import ExternalLink
 
 
 import jsonschema
@@ -14,10 +12,14 @@ from . import data
 def jsonify(data):
     from pydantic.json import custom_pydantic_encoder
     import json
+
     def encoder(o):
         def sort_list(s):
             return sorted(list(s))
-        return custom_pydantic_encoder({set: sort_list, frozenset: sort_list} , o) # order sets so that tests dont break
+
+        return custom_pydantic_encoder(
+            {set: sort_list, frozenset: sort_list}, o
+        )  # order sets so that tests dont break
 
     return json.loads(json.dumps(data, sort_keys=True, default=encoder))
 
@@ -30,7 +32,7 @@ def test_resource():
         "spatial_coverage": "spatial",
         "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
         "update_frequency": "second",
-        "position": 1
+        "position": 1,
     }
 
     out = Resource.validate(data)
@@ -50,7 +52,7 @@ def test_bdm_table():
         "position": 1,
         "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
         "update_frequency": "second",
-        "table_id": 'dfsf',
+        "table_id": "dfsf",
         "auxiliary_files_url": "www.files.com.br/files-test",
         "observation_level": ["age", "dam", "gun"],
         "columns": "",
@@ -98,6 +100,7 @@ def test_external_link():
     for k, v in data.items():  # assert data is a subsed of out.dict()
         assert out[k] == v
 
+
 def test_ok(data):
     data["resources"] = [
         {
@@ -108,7 +111,7 @@ def test_ok(data):
             "position": 1,
             "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
             "update_frequency": "second",
-            "table_id": 'fds',
+            "table_id": "fds",
             "auxiliary_files_url": "www.files.com.br/files-test",
             "observation_level": ["age", "dam", "gun"],
             "columns": "",
@@ -139,7 +142,7 @@ def test_ok(data):
             "resource_type": "external_link",
         },
     ]
-    out = Dataset(**data, action__='package_show')
+    out = Dataset(**data, action__="package_show")
     out = out.dict(exclude={"action__"}, exclude_unset=True)
     out = jsonify(out)
     jsonschema.validate(jsonify(data), Dataset.schema())
