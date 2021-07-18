@@ -7,7 +7,7 @@ from ckanext.basedosdados.validator.resources.ckan_default.resource import _Ckan
 # RESOUCES BDM
 # -------------------------------------
 from ckanext.basedosdados.validator.resources.bdm.table.table import BdmTable, Resource
-from ckanext.basedosdados.validator.resources.bdm.columns.columns import BdmColumns
+from ckanext.basedosdados.validator.resources.bdm.column.columns import BdmColumns
 
 # -------------------------------------
 # RESOUCES EXTERNAL LINK
