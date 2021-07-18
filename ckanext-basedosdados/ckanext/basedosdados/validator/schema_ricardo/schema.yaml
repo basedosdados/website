@@ -7,6 +7,7 @@
   description:
     en: ""
     pt: ""
+  preset: slug
   required: true
   order: [, ]
 - name: organization_id
@@ -16,6 +17,7 @@
   description:
     en: ""
     pt: ""
+  preset: slug
   required: true
   order: [, ]
 - name: title
@@ -93,12 +95,14 @@
   description:
     en: ""
     pt: ""
+  preset: slug
   required: true
   order: [, ]
 - name: table_id
   description:
     en: ""
     pt: ""
+  preset: slug
   required: true
   order: [, ]
 - name: description
@@ -151,7 +155,7 @@
     en: ""
     pt: ""
   preset: single_choice
-  answers: time_unit
+  options_available: time_unit
   required: true
   order: [, ]
 - name: entity
@@ -165,7 +169,7 @@
     en: ""
     pt: ""
   preset: multiple_choice
-  answers: entity
+  options_available: entity
   required: true
   order: [, ]
 - name: time_unit
@@ -179,7 +183,7 @@
     en: ""
     pt: ""
   preset: single_choice
-  answers: time_unit
+  options_available: time_unit
   required: true
   order: [, ]
 - name: identifying_columns
@@ -227,7 +231,7 @@
   required: true
   order: [, ]
 - name: published_by
-  description:
+  label:
     en: "Published by:"
     pt: "Publicado por:"
   fields:
@@ -333,58 +337,86 @@
   label:
     en: "Table ID"
     pt: "ID da tabela"
+  preset: slug
   required: true
+  order: [,]
 - name: name
   label:
     en: "Name"
     pt: "Nome"
   required: true
+  order: [,]
 - name: type
   label:
     en: "BigQuery type"
     pt: "Tipo no BigQuery"
+  description:
+    en: "BigQuery's column type. See https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types."
+    pt: "Tipo da coluna no BigQuery. Ver https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types."
+  preset: single_choice
+  options_available: bigquery_type
   required: true
+  order: [,]
 - name: description
   label:
     en: "Description"
     pt: "Descrição"
   required: true
+  order: [,]
 - name: time_coverage
   label:
     en: "Time coverage"
     pt: "Cobertura temporal"
+  preset: intervals_list
+  options_available: time_coverage
   required: true
+  order: [,]
 - name: has_dictionary
   label:
     en: "Has dictionary"
     pt: "Tem dicionário"
-  answers: yes_no
+  preset: single_choice
+  options_available: yes_no
   required: true
+  order: [,]
 - name: directory_column
   label:
     en: "Directory column"
     pt: "Coluna em diretório"
+  preset: single_choice
+  options_available: directory_column
   required: true
+  order: [,]
 - name: measurement_unit
   label:
     en: "Measurement unit"
     pt: "Unidade de medida"
+  description:
+    en: "What is the column's measurement unit? See ISO/IEC 80000 for standard notation."
+    pt: "Qual é a unidade de medida da coluna? Ver ISO/IEC 80000 para notação padrão."
+  preset: measurement_unit
+  options_available: measurement_unit
   required: true
+  order: [,]
 - name: original_names
   label:
     en: "Original names"
     pt: "Nomes originais"
+  preset: string
   required: true
+  order: [,]
 
 **bdm_dictionary**
 - name: dataset_id
   label:
     en: "Dataset ID"
     pt: "ID da base"
+  preset: slug
 - name: table_id
   label:
     en: "Table ID"
     pt: "ID da tabela"
+  preset: slug
 - name: last_updated
   label:
     en: "Last updated"
@@ -395,6 +427,7 @@
   label:
     en: "Dataset ID"
     pt: "ID da base"
+  preset: slug
   required: true
   order: [,]
 - name: url
@@ -407,6 +440,7 @@
   placeholder:
     en: "www.example.com/data"
     pt: "www.exemplo.com/dados"
+  preset: url
   required: true
   order: [,]
 - name: description
@@ -419,6 +453,7 @@
   placeholder:
     en: "A descriptive description."
     pt: "Uma descrição descritiva."
+  preset: string
   required: true
   order: [,]
 - name: language
@@ -428,8 +463,8 @@
   description:
     en: "In what languages is the external source available."
     pt: "Em quais línguas a fonte externa está disponível."
-  answers: language
   preset: multiple_choice
+  options_available: language
   required: true
   order: [,]
 - name: has_structured_data
@@ -442,7 +477,8 @@
   placeholder:
     en: ""
     pt: ""
-  answers: yes_no
+  preset: single_choice
+  options_available: yes_no
   required: true
   order: [,]
 - name: has_api
@@ -455,7 +491,8 @@
   placeholder:
     en: ""
     pt: ""
-  answers: yes_no
+  preset: single_choice
+  options_available: yes_no
   required: true
   order: [,]
 - name: is_free
@@ -468,7 +505,8 @@
   placeholder:
     en: ""
     pt: ""
-  answers: yes_no
+  preset: single_choice
+  options_available: yes_no
   required: true
   order: [,]
 - name: requires_registration
@@ -481,7 +519,8 @@
   placeholder:
     en: ""
     pt: ""
-  answers: yes_no
+  preset: single_choice
+  options_available: yes_no
   required: true
   order: [,]
 - name: availability
@@ -494,7 +533,8 @@
   placeholder:
     en: ""
     pt: ""
-  answers: availability
+  preset: single_choice
+  options_available: availability
   required: true
   order: [,]
 - name: country_ip_address_required
@@ -507,8 +547,8 @@
   placeholder:
     en: ""
     pt: ""
-  answers: country
   preset: multiple_choice
+  options_available: country
   required: false
   order: [,]
 - name: license_type
@@ -521,8 +561,8 @@
   placeholder:
     en: ""
     pt: ""
-  answers: license_type
   preset: single_choice
+  options_available: license_type
   required: true
   order: [,]
 - name: spatial_coverage
@@ -535,8 +575,8 @@
   placeholder:
     en: ""
     pt: ""
-  answers: spatial_coverage
   preset: tree
+  options_available: spatial_coverage
   required: true
   order: [,]
 - name: time_coverage
@@ -549,8 +589,8 @@
   placeholder:
     en: ""
     pt: ""
-  answers: time_coverage
   preset: intervals_list
+  options_available: time_coverage
   required: true
   order: [,]
 - name: entity
@@ -563,8 +603,8 @@
   placeholder:
     en: ""
     pt: ""
-  answers: entity
   preset: multiple_choice
+  options_available: entity
   required: true
   order: [,]
 - name: update_frequency
@@ -577,35 +617,217 @@
   placeholder:
     en: ""
     pt: ""
-  answers: time_unit
   preset: single_choice
+  options_available: time_unit
   required: true
   order: [,]
 
 **information_request**
 - name: dataset_id
+  label:
+    en: "Dataset ID"
+    pt: "ID da base"
+  description:
+    en: ""
+    pt: ""
+  preset: slug
+  required: true
+  order: [, ]
 - name: origin
+  label:
+    en: ""
+    pt: ""
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: string
+  required: true
+  order: [, ]
 - name: number
+  label:
+    en: "Number"
+    pt: "Número"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: string
+  required: true
+  order: [, ]
 - name: url
+  label:
+    en: "Url"
+    pt: "Url"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: url
+  required: true
+  order: [, ]
 - name: superior_organ
+  label:
+    en: "Superior Organ"
+    pt: "Órgão superior"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: string
+  required: true
+  order: [, ]
 - name: linked_organ
+  label:
+    en: "Linked Organ"
+    pt: "Órgão vinculado"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: string
+  required: true
+  order: [, ]
 - name: opening_date
+  label:
+    en: "Opening date"
+    pt: "Data de abertura"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: date
+  required: true
+  order: [, ]
 - name: who_requested
-- name: status
+  label:
+    en: "Who requested"
+    pt: "Quem fez o pedido"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: string
+  required: false
+  order: [, ]
 - name: spatial_coverage
+  label:
+    en: "Spatial coverage"
+    pt: "Cobertura espacial"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: tree
+  options_available: spatial_coverage
+  required: true
+  order: [,]
 - name: time_coverage
+  label:
+    en: "Time coverage"
+    pt: "Cobertura temporal"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: intervals_list
+  options_available: time_coverage
+  required: true
+  order: [,]
 - name: entity
+  label:
+    en: "Entity"
+    pt: "Entidade"
+  description:
+    en: "Entity covered by the request."
+    pt: "Entidade coberta pelo pedido."
+  placeholder:
+    en: ""
+    pt: ""
+  preset: multiple_choice
+  options_available: entity
+  required: true
+  order: [,]
 - name: update_frequency
+  label:
+    en: "Update frequency"
+    pt: "Frequência de atualizações"
+  description:
+    en: "In what frequency is the data updated?"
+    pt: "Em qual frequência os dados são atualizados?"
+  placeholder:
+    en: ""
+    pt: ""
+  preset: single_choice
+  options_available: time_unit
+  required: true
+  order: [,]
+- name: status
+  label:
+    en: "Status"
+    pt: "Status"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: single_choice
+  options_available: information_request_status
+  required: true
+  order: [, ]
 - name: data_url
+  label:
+    en: "Data url"
+    pt: "Url dos dados"
+  description:
+    en: "Where are the answer's data available?"
+    pt: "Onde estão os dados da resposta?"
+  placeholder:
+    en: "www.example.com/data"
+    pt: "www.exemplo.com/dados"
+  preset: url
+  required: false
+  order: [,]
 - name: observations
+  label:
+    en: "Observations"
+    pt: "Observações"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: string
+  required: false
+  order: [,]
 
-**instructions_for_access**
+**access_instructions**
 - name: required_materials
 - name: email
 - name: url
 - name: examples_successful_applications
 
-**research_paper_using_dataset**
+**research**
 - name: title
 - name: authors
 - name: year
@@ -618,7 +840,7 @@
 - name: url
 - name: bibtex_entry
 
-**application_using_dataset**
+**application**
 - name: 
 - name: 
 - name: 

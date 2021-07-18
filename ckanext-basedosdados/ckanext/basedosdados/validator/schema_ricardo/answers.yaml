@@ -654,6 +654,55 @@
         en: "Creative Commons 4.0"
         pt: "Creative Commons 4.0"
 
+- name: bigquery_type  # pegar do que já existe no CKAN
+  fields:
+    - name: string
+      label:
+        en: "STRING"
+        pt: "STRING"
+    - name: int64
+      label:
+        en: "INT64"
+        pt: "INT64"
+    - name: float64
+      label:
+        en: "FLOAT64"
+        pt: "FLOAT64"
+    - name: date
+      label:
+        en: "DATE"
+        pt: "DATE"
+    - name: time
+      label:
+        en: "TIME"
+        pt: "TIME"
+    - name: geography
+      label:
+        en: "GEOGRAPHY"
+        pt: "GEOGRAPHY"
+
+- name: directory_column
+  fields:
+    - name: 
+      label:
+        en: ""
+        pt: ""
+
+- name: measurement_unit
+  fields:
+    - name: km
+      label:
+        en: "km"
+        pt: "km"
+    - name: km2
+      label:
+        en: "km2"
+        pt: "km2"
+    - name: m
+      label:
+        en: "m"
+        pt: "m"
+
 - name: information_request_status
   fields:
     - value: processing
