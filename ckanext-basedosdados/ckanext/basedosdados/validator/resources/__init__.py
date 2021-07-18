@@ -1,13 +1,7 @@
 # -------------------------------------
 # RESOUCES CKAN DEFAULT
 # -------------------------------------
-from ckanext.basedosdados.validator.resources.ckan_default.resource import (
-    _CkanDefaultResource,
-    UpdateFrequencyEnum,
-    LanguageEnum,
-    AvailabilityEnum,
-    RESOURCE_TYPES,
-)
+from ckanext.basedosdados.validator.resources.ckan_default.resource import _CkanDefaultResource
 
 # -------------------------------------
 # RESOUCES BDM
@@ -19,3 +13,9 @@ from ckanext.basedosdados.validator.resources.bdm.columns.columns import BdmColu
 # RESOUCES EXTERNAL LINK
 # -------------------------------------
 from ckanext.basedosdados.validator.resources.external_link.source import ExternalLink
+
+
+# -------------------------------------
+# NEW FIELDS
+# -------------------------------------
+RESOURCE_TYPES = ['bdm_table', 'external_link'] # TODO: add something that test that subclasses obey this constant

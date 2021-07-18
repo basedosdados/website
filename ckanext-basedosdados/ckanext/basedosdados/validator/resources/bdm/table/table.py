@@ -8,13 +8,11 @@ from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options import (
     ObservationLevel,
     TemporalCoverage,
+    UpdateFrequencyEnum,
 )
 
 from .fields_definitions import *
-from ckanext.basedosdados.validator.resources import (
-    _CkanDefaultResource,
-    UpdateFrequencyEnum,
-)
+from ckanext.basedosdados.validator.resources import _CkanDefaultResource
 
 
 class Resource(_CkanDefaultResource):
