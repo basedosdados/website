@@ -10,6 +10,7 @@ services:
     depends_on:
       - ckan
       - next
+      - strapi
     # logging:
     #   driver: syslog
     #   options:
