@@ -16,8 +16,8 @@ jobs:
         env:
           DOT_ENV_PROD: ${{ secrets.DOT_ENV_PROD }}
           PROD_CKAN_INI: ${{ secrets.PROD_CKAN_INI }}
-          SSH_KEY: ${{ secrets.SSH_KEY }}
-        run: 'echo "$DOT_ENV_PROD" > .env.prod && echo "$PROD_CKAN_INI" > ./configs/ckan.override.prod.ini && mkdir ~/.ssh && echo "$SSH_KEY_STAGING" > ~/.ssh/BD.pem && chmod 700 ~/.ssh ~/.ssh/BD.pem'
+          SSH_KEY: ${{ secrets.SSH_KEY_DEVELOP }}
+        run: 'echo "$DOT_ENV_PROD" > .env.prod && echo "$PROD_CKAN_INI" > ./configs/ckan.override.prod.ini && mkdir ~/.ssh && echo "$SSH_KEY_DEVELOP" > ~/.ssh/BD.pem && chmod 700 ~/.ssh ~/.ssh/BD.pem'
       - name: Deploy script
         run: ./deploy_staging.sh deploy
       - name: Report Failures
