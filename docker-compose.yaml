@@ -10,6 +10,7 @@ services:
     depends_on:
       - ckan
       - next
+      - strapi
     # logging:
     #   driver: syslog
     #   options:
@@ -71,3 +72,32 @@ services:
     ports:
       - "3000:3000"
     image: bdd/next${VTAG}
+
+  strapi:
+    image: strapi/strapi
+    environment:
+      DATABASE_CLIENT: postgres
+      DATABASE_NAME: strapi
+      DATABASE_HOST: strapi-db
+      DATABASE_PORT: 5432
+      DATABASE_USERNAME: strapi
+      DATABASE_PASSWORD: strapi
+    volumes:
+      - ./strapi:/srv/app
+    ports:
+      - "1337:1337"
+    depends_on:
+      - strapi-db
+
+  strapi-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: strapi
+      POSTGRES_USER: strapi
+      POSTGRES_PASSWORD: strapi
+    volumes:
+      - strapi_db:/var/lib/postgresql/data
+
+volumes:
+  strapi_data:
+  strapi_db:
