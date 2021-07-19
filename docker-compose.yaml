@@ -83,7 +83,7 @@ services:
       DATABASE_USERNAME: strapi
       DATABASE_PASSWORD: strapi
     volumes:
-      - strapi_data:/srv/app
+      - ./strapi:/srv/app
     ports:
       - "1337:1337"
     depends_on:
@@ -100,4 +100,3 @@ services:
 
 volumes:
   strapi_db:
-  strapi_data:
