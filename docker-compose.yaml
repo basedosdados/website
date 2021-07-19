@@ -99,5 +99,4 @@ services:
       - strapi_db:/var/lib/postgresql/data
 
 volumes:
-  strapi_data:
   strapi_db:
