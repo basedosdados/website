@@ -1,4 +1,3 @@
-
 from .attr_enum import AttrEnum
 
 class UpdateFrequencyEnum(AttrEnum):
@@ -18,5 +17,6 @@ class UpdateFrequencyEnum(AttrEnum):
     ten_years                     = {"label": "Ten Years"}
     unique                        = {"label": "Unique"}
     recurring                     = {"label": "Recurring"}
+    uncertain                     = {"label": "Uncertain"}
     empty                         = {"label": "Empty"}
     other                         = {"label": "Other"}
