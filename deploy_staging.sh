@@ -2,7 +2,7 @@
 cd $(git rev-parse --show-toplevel)
 
 HOST=ec2-user@3.131.51.31
-SSH="ssh -o StrictHostKeyChecking=no -i ~/.ssh/BD.pem $HOST"
+SSH="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $HOST"
 VTAG=":`date +%H.%M.%S`" # Simple mechanism to force image update
 
 BUILD_DIR="/tmp/bdd_build"
