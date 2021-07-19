@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: [master]
+    branches: [develop]
 jobs:
   deploy:
     # The type of runner that the job will run on
