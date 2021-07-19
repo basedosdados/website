@@ -1,8 +1,8 @@
 #!/bin/bash -ex
 cd $(git rev-parse --show-toplevel)
 
-HOST=ec2-user@3.131.51.31
-SSH="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $HOST"
+HOST=ec2-user@staging.basedosdados.org
+SSH="ssh -o StrictHostKeyChecking=no -i ~/.ssh/BD.pem $HOST"
 VTAG=":`date +%H.%M.%S`" # Simple mechanism to force image update
 
 BUILD_DIR="/tmp/bdd_build"
@@ -36,7 +36,7 @@ build_config() {
     cp docker-compose.yaml build/docker-compose.yaml
     cp configs/docker-compose.override.prod.yaml build/docker-compose.override.yaml
     cp utils/backup_database.sh build/
-    cp configs/nginx.staging.conf build/
+    cp configs/nginx.conf build/
     cp .env.prod build/.env && echo "VTAG=$VTAG" >> build/.env
 
     cp -r experimental/monitoring build/

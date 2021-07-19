@@ -1,7 +1,7 @@
-name: CI-Staging
+name: CI
 on:
   push:
-    branches: [develop]
+    branches: [master]
 jobs:
   deploy:
     # The type of runner that the job will run on
@@ -16,8 +16,8 @@ jobs:
         env:
           DOT_ENV_PROD: ${{ secrets.DOT_ENV_PROD }}
           PROD_CKAN_INI: ${{ secrets.PROD_CKAN_INI }}
-          SSH_KEY: ${{ secrets.SSH_KEY_DEVELOP }}
-        run: 'echo "$DOT_ENV_PROD" > .env.prod && echo "$PROD_CKAN_INI" > ./configs/ckan.override.prod.ini && mkdir ~/.ssh && echo "$SSH_KEY_DEVELOP" > ~/.ssh/id_rsa && chmod 700 ~/.ssh ~/.ssh/id_rsa'
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+        run: 'echo "$DOT_ENV_PROD" > .env.prod && echo "$PROD_CKAN_INI" > ./configs/ckan.override.prod.ini && mkdir ~/.ssh && echo "$SSH_KEY" > ~/.ssh/BD.pem && chmod 700 ~/.ssh ~/.ssh/BD.pem'
       - name: Deploy script
         run: ./deploy_staging.sh deploy
       - name: Report Failures
