@@ -59,6 +59,8 @@ load_images() {
         docker load < ~/basedosdados/images/solr
         docker load < ~/basedosdados/images/db
         docker load < ~/basedosdados/images/next
+        docker load < ~/basedosdados/images/strapi-db
+        docker loac < ~/basedosdados/images/strapi
     "
 }
 restart_services() {
@@ -70,7 +72,7 @@ restart_services() {
         docker-compose up --no-build -d solr redis
         docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh redis:6379
         docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh solr:8983
-        docker-compose up --no-build -d ckan next
+        docker-compose up --no-build -d ckan next strapi
         docker-compose up --no-build -d nginx
         docker-compose up --no-build -d autoheal
         docker-compose ps
@@ -100,6 +102,8 @@ build_images() {
     ( docker-compose build solr && docker save bdd/solr > build/images/solr ) &
     ( docker-compose build db   && docker save bdd/db > build/images/db ) &
     ( VTAG=$VTAG docker-compose build next && docker save bdd/next$VTAG > build/images/next ) &
+    ( VTAG=$VTAG docker-compose build strapi && docker save bdd/strapi$VTAG > build/images/strapi ) &
+    ( VTAG=$VTAG docker-compose build strapi-db && docker save bdd/strapi-db$VTAG > build/images/strapi-db ) &
     for i in `jobs -p`; do wait $i ; done
 }
 restart_wordpress() {
