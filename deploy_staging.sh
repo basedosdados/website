@@ -36,7 +36,7 @@ build_config() {
     cp docker-compose.yaml build/docker-compose.yaml
     cp configs/docker-compose.override.prod.yaml build/docker-compose.override.yaml
     cp utils/backup_database.sh build/
-    cp configs/nginx.staging.conf build/
+    cp configs/nginx.conf build/
     cp .env.prod build/.env && echo "VTAG=$VTAG" >> build/.env
 
     cp -r experimental/monitoring build/
@@ -59,8 +59,6 @@ load_images() {
         docker load < ~/basedosdados/images/solr
         docker load < ~/basedosdados/images/db
         docker load < ~/basedosdados/images/next
-        docker load < ~/basedosdados/images/strapi-db
-        docker loac < ~/basedosdados/images/strapi
     "
 }
 restart_services() {
@@ -68,7 +66,7 @@ restart_services() {
         set -e ; cd ~/basedosdados/
         if [[ ! -f wait-for-200.sh ]]; then curl https://raw.githubusercontent.com/cec/wait-for-endpoint/master/wait-for-endpoint.sh > wait-for-200.sh && chmod +x wait-for-200.sh; fi
         if [[ ! -f wait-for-it.sh ]]; then curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > wait-for-it.sh && chmod +x wait-for-it.sh; fi
-        docker-compose rm -sf ckan next autoheal
+        docker-compose rm -sf ckan next strapi autoheal
         docker-compose up --no-build -d solr redis
         docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh redis:6379
         docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh solr:8983
@@ -102,8 +100,6 @@ build_images() {
     ( docker-compose build solr && docker save bdd/solr > build/images/solr ) &
     ( docker-compose build db   && docker save bdd/db > build/images/db ) &
     ( VTAG=$VTAG docker-compose build next && docker save bdd/next$VTAG > build/images/next ) &
-    ( VTAG=$VTAG docker-compose build strapi && docker save bdd/strapi$VTAG > build/images/strapi ) &
-    ( VTAG=$VTAG docker-compose build strapi-db && docker save bdd/strapi-db$VTAG > build/images/strapi-db ) &
     for i in `jobs -p`; do wait $i ; done
 }
 restart_wordpress() {
