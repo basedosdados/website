@@ -4,147 +4,133 @@ from typing import Union
 from .attr_enum import AttrEnum
 
 class ObservationLevelSphereEnum(AttrEnum):
-    continent        = {'label': "Continent"}
-    country          = {'label': "Country"}
-    region           = {'label': "Region"}
-    state            = {'label': "State"}
-    county           = {'label': "County"}
-    district         = {'label': "District"}
-    municipality     = {'label': "Municipality"}
-    city             = {'label': "City"}
-    village          = {'label': "Village"}
-    neighborhood     = {'label': "Neighborhood"}
-    zip_code         = {'label': "Zip Code"}
-    census_tract     = {'label': "CensusTract"}
-
+    continent        = {'label': "Continente"} #"Continent"}
+    country          = {'label': "País"} #"Country"}
+    region           = {'label': "Região"} #"Region"}
+    state            = {'label': "Estado/Unidade da Federação"} #"State"}
+    county           = {'label': "Condado"} #"County"}
+    district         = {'label': "Distrito"} #"District"}
+    municipality     = {'label': "Município"} #"Municipality"}
+    city             = {'label': "Cidade"} #"City"}
+    village          = {'label': "Vila"} #"Village"}
+    neighborhood     = {'label': "Bairro"} #"Neighborhood"}
+    zip_code         = {'label': "CEP"} #"Zip Code"}
+    census_tract     = {'label': "Setor censitário"} #"CensusTract"}
 
 class ObservationLevelIndividualEnum(AttrEnum):
-    person           = {'label': "Person (student, teacher/professor, politician/candidate, player, partner, etc)"}
-    household        = {'label': "Household"}
-    name             = {'label': "Name"}
-    animal           = {'label': "Animal"}
-    plant            = {'label': "Plant"}
-
+    person           = {'label': "Pessoa (aluno, professor, político/candidato, jogador, sócio, etc)"} #"Person (student, teacher/professor, politician/candidate, player, partner, etc)"}
+    household        = {'label': "Domicílio"} #"Household"}
+    name             = {'label': "Nome"} #"Name"}
+    animal           = {'label': "Animal (mamífero, micróbio, vírus, etc)"} #"Animal"}
+    plant            = {'label': "Planta (árvore, espécie)"} #"Plant"}
 
 class ObservationLevelEstablishmentEnum(AttrEnum):
-    agency           = {'label': "Agency"}
-    protected_area   = {'label': "Protected Area"}
-    library          = {'label': "Library"}
-    notary_office    = {'label': "Notary's Office"}
-    company          = {'label': "Company"}
-    school           = {'label': "School"}
-    station          = {'label': "Station"}
-    stadium          = {'label': "Stadium"}
-    terrorist_group  = {'label': "Terrorist Group"}
-    hospital         = {'label': "Hospital"}
-    property         = {'label': "Property"}
-    ministry         = {'label': "Ministry/Department"}
-    museum           = {'label': "Museum"}
-    ngo              = {'label': "Nongovernmental Organization (NGO)"}
-    prison           = {'label': "Prison"}
-    team             = {'label': "Team"}
-    university       = {'label': "University"}
-
+    agency           = {'label': "Agência"} #"Agency"}
+    protected_area   = {'label': "Área protegida"} #"Protected Area"}
+    library          = {'label': "Biblioteca"} #"Library"}
+    notary_office    = {'label': "Cartório"} #"Notary's Office"}
+    company          = {'label': "Empresa/Companhia"} #"Company"}
+    school           = {'label': "Creche/Escola/Universidade"} #"School"}
+    station          = {'label': "Estação"} #"Station"}
+    stadium          = {'label': "Estádio"} #"Stadium"}
+    terrorist_group  = {'label': "Grupo terrorista"} #"Terrorist Group"}
+    hospital         = {'label': "Hospital"} #"Hospital"}
+    property         = {'label': "Imóvel/Propriedade"} #"Property"}
+    ministry         = {'label': "Ministério/Departamento"} #"Ministry/Department"}
+    museum           = {'label': "Museu"} #"Museum"}
+    ngo              = {'label': "Organização Não-Governamental (ONG)"} #"Nongovernmental Organization (NGO)"}
+    prison           = {'label': "Presídio/Cadeia"} #"Prison"}
+    team             = {'label': "Time"} #"Team"}
 
 class ObservationLevelPoliticsEnum(AttrEnum):
-    agreement        = {'label': "Agreement/Treaty"}
-    speech           = {'label': "Speech"}
-    election         = {'label': "Election"}
-    law              = {'label': "Law/Proposition"}
-    party            = {'label': "Party"}
-    poll             = {'label': "Poll"}
-
+    agreement        = {'label': "Acordo/Tratado"} #"Agreement/Treaty"}
+    speech           = {'label': "Discurso/Fala"} #"Speech"}
+    election         = {'label': "Eleição"} #"Election"}
+    law              = {'label': "Lei/Proposição/Matéria"} #"Law/Proposition"}
+    party            = {'label': "Partido"} #"Party"}
+    poll             = {'label': "Pesquisa de Opinião"} #"Poll"}
 
 class ObservationLevelScienceEnum(AttrEnum):
-    article          = {'label': "Article/Paper"}
-    citation         = {'label': "Citation"}
-    domain           = {'label': "Domain"}
-    book             = {'label': "Book"}
-    newspaper        = {'label': "Newspaper"}
-    patent           = {'label': "Patent"}
-    journal          = {'label': "Journal/Magazine"}
-    word             = {'label': "Word"}
-    post             = {'label': "Post/Tweet"}
-    langugage        = {'label': "Language"}
-    crs              = {'label': "Coordinate Reference System"}
-    protein          = {'label': "Protein"}
-    meteor           = {'label': "Meteor"}
-
+    article          = {'label': "Artigo"} #"Article/Paper"}
+    citation         = {'label': "Citação"} #"Citation"}
+    domain           = {'label': "Domínio"} #"Domain"}
+    book             = {'label': "Livro"} #"Book"}
+    newspaper        = {'label': "Jornal"} #"Newspaper"}
+    patent           = {'label': "Patente"} #"Patent"}
+    journal          = {'label': "Periódico/Revista"} #"Journal/Magazine"}
+    word             = {'label': "Palavra"} #"Word"}
+    post             = {'label': "Post/Tweet"} #"Post/Tweet"}
+    langugage        = {'label': "Língua"} #"Language"}
+    crs              = {'label': "Creche"} #"Coordinate Reference System"}
+    protein          = {'label': "Proteína"} #"Protein"}
+    meteor           = {'label': "Meteoro"} #"Meteor"}
 
 class ObservationLevelEconomicsEnum(AttrEnum):
-    contract         = {'label': "Contract"}
-    grant            = {'label': "Grant"}
-    procurement      = {'label': "Procurement"}
-    product          = {'label': "Product"}
-    transaction      = {'label': "Transaction"}
-    transfer         = {'label': "Transfer"}
-    bill             = {'label': "Money Bill"}
-    occupation       = {'label': "Occupation"}
-    sector           = {'label': "Sector"}
-
+    contract         = {'label': "Contrato"} #"Contract"}
+    grant            = {'label': "Prêmio/Concessão/Convênio"} #"Grant"}
+    procurement      = {'label': "Licitação"} #"Procurement"}
+    product          = {'label': "Produto"} #"Product"}
+    transaction      = {'label': "Transação"} #"Transaction"}
+    transfer         = {'label': "Transferência"} #"Transfer"}
+    bill             = {'label': "Nota de dinheiro"} #"Money Bill"}
+    occupation       = {'label': "Ocupação"} #"Occupation"}
+    sector           = {'label': "Setor"} #"Sector"}
 
 class ObservationLevelEducationEnum(AttrEnum):
-    scholarship      = {'label': "Scholarship"}
-    test             = {'label': "Test/Exam"}
-
+    scholarship      = {'label': "Bolsa"} #"Scholarship"}
+    exam             = {'label': "Prova/Exame"} #"Test/Exam"}
 
 class ObservationLevelEventsEnum(AttrEnum):
-    alert            = {'label': "Alert"}
-    attack           = {'label': "Attack"}
-    act              = {'label': "Act"}
-    concert          = {'label': "Concert"}
-    disinvitation    = {'label': "Disinvitation"}
-    disaster         = {'label': "Natural Disaster (earthquake, flood, fire, etc)"}
-    birth            = {'label': "Birth"}
-    death            = {'label': "Death"}
-    request          = {'label': "Request/Complaint"}
-    protest          = {'label': "Protest"}
-    match            = {'label': "Match"}
+    alert            = {'label': "Alerta"} #"Alert"}
+    attack           = {'label': "Ataque/Atentado"} #"Attack"}
+    act              = {'label': "Ato"} #"Act"}
+    concert          = {'label': "Concerto/Show"} #"Concert"}
+    disinvitation    = {'label': "Cancelamento de convite"} #"Disinvitation"}
+    disaster         = {'label': "Desastre Natural (terremoto, enchente/inundação, fogo, etc)"} #"Natural Disaster (earthquake, flood, fire, etc)"}
+    birth            = {'label': "Nascimento"} #"Birth"}
+    death            = {'label': "Morte/Óbito"} #"Death"}
+    request          = {'label': "Pedido/Solicitação/Reclamação"} #"Request/Complaint"}
+    protest          = {'label': "Protesto"} #"Protest"}
+    match            = {'label': "Partida"} #"Match"}
 
 class ObservationLevelArtEnum(AttrEnum):
-    album            = {'label': "Album"}
-    movie            = {'label': "Movie/Film/Clip/Show"}
-    photo            = {'label': "Photo/Picture"}
-    song             = {'label': "Song"}
-    statue           = {'label': "Statue"}
-    painting         = {'label': "Painting/Drawing/Illustration"}
-    poem             = {'label': "Poem"}
-    roller_coaster   = {'label': "Roller Coaster"}
+    album            = {'label': "Álbum"} #"Album"}
+    movie            = {'label': "Filme/Série/Clipe"} #"Movie/Film/Clip/Show"}
+    photo            = {'label': "Foto"} #"Photo/Picture"}
+    song             = {'label': "Música"} #"Song"}
+    statue           = {'label': "Estátua"} #"Statue"}
+    painting         = {'label': "Pintura/Desenho/Ilustração"} #"Painting/Drawing/Illustration"}
+    poem             = {'label': "Poema"} #"Poem"}
 
 class ObservationLevelInfrastructureEnum(AttrEnum):
-    dam              = {'label': "Dam"}
-    satellitte       = {'label': "Satellite"}
-    street_road      = {'label': "Street/Avenue/Road/Highway"}
-
+    dam              = {'label': "Represa/Barragem"} #"Dam"}
+    satellitte       = {'label': "Satélite"} #"Satellite"}
+    street_road      = {'label': "Rua/Avenida/Estrada"} #"Street/Avenue/Road/Highway"}
+    roller_coaster   = {'label': "Montanha-Russa"} #"Roller Coaster"}
 
 class ObservationLevelTransportationEnum(AttrEnum):
-    automobile       = {'label': "Car/Bus/Truck/Motorcycle"}
-    train            = {'label': "Train"}
-    aircraft         = {'label': "Plane/Helicopter"}
-    ship             = {'label': "Ship"}
+    automobile       = {'label': "Carro/Ônibus/Caminhão/Moto"} #"Car/Bus/Truck/Motorcycle"}
+    train            = {'label': "Trem"} #"Train"}
+    aircraft         = {'label': "Avião/Helicóptero"} #"Plane/Helicopter"}
+    ship             = {'label': "Embarcação/Navio"} #"Ship"}
 
 class ObservationLevelSecurityEnum(AttrEnum):
-    gun              = {'label': "Gun"}
-
+    gun              = {'label': "Arma"} #"Gun"}
 
 class ObservationLevelDemographicEnum(AttrEnum):
-    age              = {'label': "Age"}
-    race             = {'label': "Race/Skin color"}
-    sex              = {'label': "Sex"}
-
+    age              = {'label': "Idade"} #"Age"}
+    race             = {'label': "Raça/Cor de pele"} #"Race/Skin color"}
+    sex              = {'label': "Sexo"} #"Sex"}
 
 class ObservationLevelImageEnum(AttrEnum):
-    pixel            = {'label': "Pixel/Grid"}
-    polygon          = {'label': "Polygon"}
-
+    pixel            = {'label': "Pixel/Grid"} #"Pixel/Grid"}
+    polygon          = {'label': "Polígono"} #"Polygon"}
 
 class ObservationLevelHistoryEnum(AttrEnum):
-    empire           = {'label': "Empire"}
-
+    empire           = {'label': "Império"} #"Empire"}
 
 class ObservationLevelOthersEnum(AttrEnum):
-    other            = {'label': "Other"}
-
+    other            = {'label': "Outro"} #"Other"}
 
 ObservationLevel = Union[
     ObservationLevelSphereEnum,

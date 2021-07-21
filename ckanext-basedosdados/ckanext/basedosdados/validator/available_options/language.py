@@ -2,19 +2,19 @@
 from .attr_enum import AttrEnum
 
 class LanguageEnum(AttrEnum):
-    arabic     = {"label": "Arabic"}
+    german     = {"label": "Alemão"}
+    arabic     = {"label": "Árabe"}
     bahasa     = {"label": "Bahasa"}
     bengali    = {"label": "Bengali"}
-    chinese    = {"label": "Chinese"}
-    english    = {"label": "English"}
-    french     = {"label": "French"}
-    german     = {"label": "German"}
-    hebrew     = {"label": "Hebrew"}
+    chinese    = {"label": "Chinês"}
+    spanish    = {"label": "Espanhol"}
+    french     = {"label": "Francês"}
+    hebrew     = {"label": "Hebraico"}
     hindi      = {"label": "Hindi"}
-    japanese   = {"label": "Japanese"}
+    english    = {"label": "Inglês"}
+    japanese   = {"label": "Japonês"}
     malay      = {"label": "Malay"}
-    portuguese = {"label": "Portuguese"}
-    russian    = {"label": "Russian"}
-    spanish    = {"label": "Spanish"}
+    portuguese = {"label": "Português"}
+    russian    = {"label": "Russo"}
     thai       = {"label": "Thai"}
     urdu       = {"label": "Urdu"}
