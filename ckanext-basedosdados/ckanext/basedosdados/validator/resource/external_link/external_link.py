@@ -16,11 +16,11 @@ from ckanext.basedosdados.validator.available_options import (
     LanguageEnum,
     AvailabilityEnum,
     YesNoEnum,
-    CountryEnum
+    CountryEnum,
     LicenseEnum
 )
 
-class ExternalLink(Resource): 
+class ExternalLink(_CkanDefaultResource): 
     resource_type: Literal["external_link"]
 
     dataset_id                  : Str                                   = DATASET_ID_FIELD

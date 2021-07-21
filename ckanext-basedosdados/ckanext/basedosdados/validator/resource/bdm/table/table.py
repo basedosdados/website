@@ -6,22 +6,27 @@ from pydantic import (
 
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options import (
-    ObservationLevel,
+    SpatialCoverage,
+    ObservationLevelEnum,
     TemporalCoverage,
-    UpdateFrequencyEnum,
+    TimeUnitEnum,
+    LastUpdated,
+    PublishedBy,
+    DataCleanedBy,
+    YesNoEnum
 )
 
 from .fields_definitions import *
 from ckanext.basedosdados.validator.resource import _CkanDefaultResource
 
-class BdmTable(Resource):
+class BdmTable(_CkanDefaultResource):
     resource_type: Literal["bdm_table"]
 
     dataset_id                  : Str                                   = DATASET_ID_FIELD
     table_id                    : Str                                   = TABLE_ID_FIELD
     description                 : Optional[Str]                         = DESCRIPTION_FIELD
     spatial_coverage            : Optional[SpatialCoverage]             = SPATIAL_COVERAGE_FIELD
-    observation_level           : Optional[Set[ObservationLevelEnum]]   = OBSERVATIONAL_LEVEL_FIELD
+    observation_level           : Optional[Set[ObservationLevelEnum]]   = OBSERVATION_LEVEL_FIELD
     temporal_coverage           : Optional[TemporalCoverage]            = TEMPORAL_COVERAGE_FIELD
     update_frequency            : Optional[TimeUnitEnum]                = UPDATE_FREQUENCY_FIELD
     time_unit                   : Optional[TimeUnitEnum]                = TIME_UNIT_FIELD
@@ -29,7 +34,7 @@ class BdmTable(Resource):
     last_updated                : Optional[LastUpdated]                 = LAST_UPDATED_FIELD  #TODO to include last release, data, metadata
     version                     : Optional[Str]                         = VERSION_FIELD
     published_by                : Optional[PublishedBy]                 = PUBLISHED_BY_FIELD
-    treated_by                  : Optional[TreatedBy]                   = TREATED_BY_FIELD
+    data_cleaned_by             : Optional[DataCleanedBy]               = DATA_CLEANED_BY_FIELD
     data_cleaning_description   : Optional[Str]                         = DATA_CLEANING_DESCRIPTION_FIELD
     raw_url                     : Optional[Str]                         = RAW_URL_FIELD
     auxiliary_files_url         : Optional[Str]                         = AUXILIARY_FILES_URL_FIELD

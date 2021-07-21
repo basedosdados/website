@@ -6,7 +6,8 @@ from .fields_definitions import *
 
 from ckanext.basedosdados.validator.available_options import (
     BigQueryTypeEnum,
-    TemporalCoverage
+    TemporalCoverage,
+    YesNoEnum
 )
 
 class ColumnsMetadata(BaseModel):
