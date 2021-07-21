@@ -16,10 +16,9 @@ class PublishedBy(BaseModel):
     website: Str = Field(user_input_hint=["<website>"])
     email: Str = Field(user_input_hint=["<email>"])
 
-
-class CleanedBy(BaseModel):
+class TreatedBy(BaseModel):
     name: Str = Field(user_input_hint=["<nome>"])
-    code_url: Str = Field(user_input_hint=["<onde encontrar código de limpeza>"])
+    code_url: Str = Field(user_input_hint=["<onde encontrar código de tratamento>"])
     website: Str = Field(user_input_hint=["<onde encontrar os dados tratados>"])
     email: Str = Field(user_input_hint=["<email>"])
 
@@ -70,7 +69,7 @@ SOURCE_BUCKET_NAME_FIELD = Field(
     },
 )
 
-PROJECT_ID_STAGING_FIELD = Field(
+PROJECT_ID_STAGING = Field(
     title="project_id_staging",
     user_input_hint=["<project_id_staging>"],
     description=to_line(["AUTO GENERATED"]),
@@ -152,8 +151,8 @@ PUBLISHED_BY_FIELD = Field(
 )
 
 # TODO: DITC TYPE
-DATA_CLEANED_BY_FIELD = Field(
-    title="Dados limpos por",
+TREATED_BY_FIELD = Field(
+    title="treated_by",
     user_input_hint=["<nome>"],
     description=to_line(
         [
@@ -168,7 +167,7 @@ DATA_CLEANED_BY_FIELD = Field(
     },
 )
 
-DATA_CLEANING_DESCRIPTION_FIELD = Field(
+TREATMENT_DESCRIPTION_FIELD = Field(
     title="treatment_description",
     user_input_hint=["<CEPESP fez X. Eu fiz K>"],
     description=to_line(
@@ -179,6 +178,57 @@ DATA_CLEANING_DESCRIPTION_FIELD = Field(
     yaml_order={
         "id_before": "treated_by",
         "id_after": "update_frequency",
+    },
+)
+
+UPDATE_FREQUENCY_FIELD = Field(
+    title="update_frequency",
+    user_input_hint=["<frequência>"],
+    description=to_line(
+        [
+            "Com qual frequência a base é atualizada?",
+            "Opções: hora | dia | semana | mes | 1 ano | 2 anos | 5 anos | 10 anos | unico | recorrente",
+        ]
+    ),
+    yaml_order={
+        "id_before": "treatment_description",
+        "id_after": "observation_level",
+    },
+)
+
+OBSERVATION_LEVEL_FIELD = Field(
+    title="observation_level",
+    user_input_hint=["<primeira coluna>"],
+    description=to_line(
+        [
+            "Nível da observação (qual é a granularidade de cada linha na tabela)",
+            "Escolha todas as opções necessárias.",
+            "Regras:",
+            "  - minúsculo, sem acento, singular.",
+            "  - em portugues (ou seja, não use os nomes de colunas abaixo)",
+            "Exemplos: pais, estado, municipio, cidade, hora, dia, semana, mes, ano, etc.",
+        ]
+    ),
+    max_items=10,
+    yaml_order={
+        "id_before": "update_frequency",
+        "id_after": "primary_keys",
+    },
+)
+
+PRIMARY_KEYS_FIELD = Field(
+    title="primary_keys",
+    user_input_hint=["<primeira coluna>"],
+    description=to_line(
+        [
+            "Quais colunas identificam uma linha unicamente?",
+            "Preencha com os nomes de colunas. Ex: id_municipio, ano.",
+            "Pode ser vazio pois certas tabelas não possuem identificadores.",
+        ]
+    ),
+    yaml_order={
+        "id_before": "observation_level",
+        "id_after": "spatial_coverage",
     },
 )
 
@@ -209,26 +259,6 @@ SPATIAL_COVERAGE_FIELD = Field(
     },
 )
 
-OBSERVATION_LEVEL_FIELD = Field(
-    title="observation_level",
-    user_input_hint=["<primeira coluna>"],
-    description=to_line(
-        [
-            "Nível da observação (qual é a granularidade de cada linha na tabela)",
-            "Escolha todas as opções necessárias.",
-            "Regras:",
-            "  - minúsculo, sem acento, singular.",
-            "  - em portugues (ou seja, não use os nomes de colunas abaixo)",
-            "Exemplos: pais, estado, municipio, cidade, hora, dia, semana, mes, ano, etc.",
-        ]
-    ),
-    max_items=10,
-    yaml_order={
-        "id_before": "update_frequency",
-        "id_after": "primary_keys",
-    },
-)
-
 TEMPORAL_COVERAGE_FIELD = Field(
     title="temporal_coverage",
     user_input_hint=["<ano 1>", "<ano 2>"],
@@ -243,53 +273,6 @@ TEMPORAL_COVERAGE_FIELD = Field(
         "id_after": "partitions",
     },
 )
-
-UPDATE_FREQUENCY_FIELD = Field(
-    title="update_frequency",
-    user_input_hint=["<frequência>"],
-    description=to_line(
-        [
-            "Com qual frequência a base é atualizada?",
-            "Opções: hora | dia | semana | mes | 1 ano | 2 anos | 5 anos | 10 anos | unico | recorrente",
-        ]
-    ),
-    yaml_order={
-        "id_before": "treatment_description",
-        "id_after": "observation_level",
-    },
-)
-
-TIME_UNIT_FIELD = Field(
-    title="Unidade temporal",
-    user_input_hint=["<unidade temporal>"],
-    description=to_line(
-        [
-            "Qual é a unidade de tempo dos dados?",
-            "Opções: hora | dia | semana | mes | 1 ano | 2 anos | 5 anos | 10 anos | unico | recorrente",
-        ]
-    ),
-    yaml_order={
-        "id_before": "treatment_description",
-        "id_after": "observation_level",
-    },
-)
-
-IDENTIFYING_COLUMNS_FIELD = Field(
-    title="Colunas identificando cada linha unicamente",
-    user_input_hint=["<primeira coluna>"],
-    description=to_line(
-        [
-            "Quais colunas identificam uma linha unicamente?",
-            "Preencha com os nomes de colunas. Ex: id_municipio, ano.",
-            "Pode ser vazio pois certas tabelas não possuem identificadores.",
-        ]
-    ),
-    yaml_order={
-        "id_before": "observation_level",
-        "id_after": "spatial_coverage",
-    },
-)
-
 PARTITIONS_FIELD = Field(
     title="partitions",
     user_input_hint=["<primeira partição>"],

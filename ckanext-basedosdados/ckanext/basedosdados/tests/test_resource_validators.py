@@ -1,5 +1,5 @@
 from ckanext.basedosdados.validator.packages import Dataset
-from ckanext.basedosdados.validator.resources import BdmTable, Resource, ExternalLink
+from ckanext.basedosdados.validator.resources import BdmTable, ExternalLink
 
 import jsonschema
 import pytest
@@ -21,24 +21,24 @@ def jsonify(data):
 
     return json.loads(json.dumps(data, sort_keys=True, default=encoder))
 
+# TODO: DEPRECATED
+# def test_resource():
+#     data = {
+#         "id": "2251834b-0359-49d1-b2e2-ce791d75bdd1",
+#         "name": "Baixar",
+#         "description": "",
+#         "spatial_coverage": "spatial",
+#         "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
+#         "update_frequency": "second",
+#         "position": 1,
+#     }
 
-def test_resource():
-    data = {
-        "id": "2251834b-0359-49d1-b2e2-ce791d75bdd1",
-        "name": "Baixar",
-        "description": "",
-        "spatial_coverage": "spatial",
-        "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
-        "update_frequency": "second",
-        "position": 1,
-    }
-
-    out = Resource.validate(data)
-    out = out.dict(exclude={"action__"})
-    out = jsonify(out)
-    jsonschema.validate(jsonify(data), Resource.schema())
-    for k, v in data.items():  # assert data is a subsed of out.dict()
-        assert out[k] == v
+#     out = Resource.validate(data)
+#     out = out.dict(exclude={"action__"})
+#     out = jsonify(out)
+#     jsonschema.validate(jsonify(data), Resource.schema())
+#     for k, v in data.items():  # assert data is a subsed of out.dict()
+#         assert out[k] == v
 
 
 def test_bdm_table():

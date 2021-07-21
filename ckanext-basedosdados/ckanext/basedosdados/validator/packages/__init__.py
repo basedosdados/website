@@ -6,4 +6,4 @@ from ckanext.basedosdados.validator.packages.ckan_default.package import _CkanDe
 # -------------------------------------
 # PACKAGES DATASET
 # -------------------------------------
-from ckanext.basedosdados.validator.packages.dataset.dataset import Dataset
+from ckanext.basedosdados.validator.packages.dataset import Dataset

@@ -6,17 +6,6 @@ class BaseModel(pydantic.BaseModel):
     class Config:
         extra = "allow"
 
-
-def treat_scalar_as_single_value_set(*fields):
-    # We need this as ckan coerses single value list as scalars 🤦
-    # from:
-    # ckan/views/resource.py:185
-    # ckan/logic/__init__.py:150
-    return pydantic.validator(*fields, pre=True, allow_reuse=True)(
-        _treat_scalar_as_single_value_set
-    )
-
-
 def _treat_scalar_as_single_value_set(cls, value):
     from collections.abc import Iterable
 
@@ -29,4 +18,11 @@ def _treat_scalar_as_single_value_set(cls, value):
     return value
 
 
-from ckanext.basedosdados.validator import packages
+def treat_scalar_as_single_value_set(*fields):
+    # We need this as ckan coerses single value list as scalars 🤦
+    # from:
+    # ckan/views/resource.py:185
+    # ckan/logic/__init__.py:150
+    return pydantic.validator(*fields, pre=True, allow_reuse=True)(
+        _treat_scalar_as_single_value_set
+    )

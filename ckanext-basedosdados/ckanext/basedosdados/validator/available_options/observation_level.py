@@ -132,7 +132,7 @@ class ObservationLevelHistoryEnum(AttrEnum):
 class ObservationLevelOthersEnum(AttrEnum):
     other            = {'label': "Outro"} #"Other"}
 
-ObservationLevel = Union[
+ObservationLevelEnum = Union[
     ObservationLevelSphereEnum,
     ObservationLevelIndividualEnum,
     ObservationLevelEstablishmentEnum,

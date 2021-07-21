@@ -50,7 +50,6 @@ def get_resource_bdm_table_name(resource):
 from ckanext.basedosdados.validator.packages import _CkanDefaults, Dataset
 from ckanext.basedosdados.validator.resources import (
     BdmTable,
-    Resource,
     ExternalLink,
     RESOURCE_TYPES,
 )
@@ -71,7 +70,7 @@ def load_json_schema():
         )  # migrate required to schema3 format to comply with jsonform
         return dict(out)
 
-    resource_fields_to_delete = list(Resource.__fields__) + ["resource_type"]
+    resource_fields_to_delete = ['spatial_coverage', 'temporal_coverage', 'update_frequency',"resource_type"]
     return {
         "external_link": to_schema(ExternalLink, resource_fields_to_delete),
         "bdm_table": to_schema(BdmTable, resource_fields_to_delete)

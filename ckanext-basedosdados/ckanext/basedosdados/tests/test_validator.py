@@ -1,6 +1,6 @@
 from pydantic import ValidationError
 from ckanext.basedosdados.validator.packages import Dataset
-from ckanext.basedosdados.validator.resources import BdmTable, Resource, ExternalLink
+from ckanext.basedosdados.validator.resources import BdmTable, ExternalLink
 
 import jsonschema
 
@@ -22,15 +22,15 @@ def test_validating(data):
         Dataset.validate(data)
     assert e.match("Discriminator 'resource_type' is missing in value")
 
-
-def test_correct_reporting_on_missing_properties_of_a_specific_resource(data):
-    data["resources"] = [
-        {"resource_type": "external_link", "id": "13", "name": "linkzao"}
-    ]
-    with raises(ValidationError) as e:
-        Dataset(**data, action__="package_show")
-    for error in e.value.errors():
-        assert error["type"] == "value_error.missing", error
+#TODO: DEPRECATED
+# def test_correct_reporting_on_missing_properties_of_a_specific_resource(data):
+#     data["resources"] = [
+#         {"resource_type": "external_link", "id": "13", "name": "linkzao"}
+#     ]
+#     with raises(ValidationError) as e:
+#         Dataset(**data, action__="package_show")
+#     for error in e.value.errors():
+#         assert error["type"] == "value_error.missing", error
 
 
 # TODO @Fred: See if this test is needed and remove request
