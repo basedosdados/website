@@ -12,5 +12,3 @@ class _CkanDefaultResource(BaseModel):
     description: Str
     position   : int
     url        : Optional[str] # reserved in ckan
-
-

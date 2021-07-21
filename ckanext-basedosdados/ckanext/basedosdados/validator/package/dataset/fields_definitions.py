@@ -6,16 +6,13 @@ from pydantic import (
 
 from ckanext.basedosdados.validator import BaseModel
 
-
 class Author(BaseModel):
     name: Str = Field(user_input_hint=["<nome>"])
     email: Str = Field(user_input_hint=["<email>"])
 
-
 class Licence(BaseModel):
     name: Str = Field(user_input_hint=["MIT"])
     url: Str = Field(user_input_hint=["<url>"])
-
 
 to_line = lambda description: "\n".join(description)
 
