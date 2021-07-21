@@ -17,7 +17,7 @@ from ckanext.basedosdados.validator.resource import _CkanDefaultResource
 class BdmTable(Resource):
     resource_type: Literal["bdm_table"]
 
-    dataset_id                  : [Str]                                 = DATASET_ID_FIELD
+    dataset_id                  : Str                                   = DATASET_ID_FIELD
     table_id                    : Str                                   = TABLE_ID_FIELD
     description                 : Optional[Str]                         = DESCRIPTION_FIELD
     spatial_coverage            : Optional[SpatialCoverage]             = SPATIAL_COVERAGE_FIELD

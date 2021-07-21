@@ -23,14 +23,14 @@ from ckanext.basedosdados.validator.available_options import (
 class ExternalLink(Resource): 
     resource_type: Literal["external_link"]
 
-    dataset_id                  : Optional[Str]                         = DATASET_ID_FIELD
+    dataset_id                  : Str                                   = DATASET_ID_FIELD
     url                         : Optional[Str]                         = URL_FIELD
     description                 : Optional[Str]                         = DESCRIPTION_FIELD
     language                    : Optional[Set[LanguageEnum]]           = LANGUAGE_FIELD # Field(max_items = 10)
-    has_structured_data         : Optional[set[YesNoEnum]]                   = HAS_STRUCTURED_DATA_FIELD                     
-    has_api                     : Optional[set[YesNoEnum]]                   = HAS_API_FIELD
-    is_free                     : Optional[set[YesNoEnum]]                   = IS_FREE_FIELD
-    requires_registration       : Optional[set[YesNoEnum]]                   = REQUIRES_REGISTRATION_FIELD
+    has_structured_data         : Optional[set[YesNoEnum]]              = HAS_STRUCTURED_DATA_FIELD                     
+    has_api                     : Optional[set[YesNoEnum]]              = HAS_API_FIELD
+    is_free                     : Optional[set[YesNoEnum]]              = IS_FREE_FIELD
+    requires_registration       : Optional[set[YesNoEnum]]              = REQUIRES_REGISTRATION_FIELD
     availability                : Optional[set[AvailabilityEnum]]       = AVAILABILITY_FIELD
     country_ip_address_required : Optional[set[CountryEnum]]            = COUNTRY_IP_ADDRESS_REQUIRED_FIELD
     license                     : Optional[set[LicenseEnum]]            = LICENSE_FIELD                     
