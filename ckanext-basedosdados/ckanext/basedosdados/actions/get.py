@@ -5,7 +5,13 @@ import ckan.plugins.toolkit as toolkit
 from ckan.logic.action.get import package_search
 
 from ckanext.basedosdados.validator.packages import Dataset
-from ckanext.basedosdados.validator.resources import BdmTable, BdmColumns, ExternalLink
+from ckanext.basedosdados.validator.resources import (
+    BdmTable,
+    BdmColumns,
+    BdmDictionary,
+    ExternalLink,
+    InformationRequest,
+)
 
 # how to acess the endpoint
 # http://localhost:5000/api/3/action/<function_name>
@@ -27,8 +33,18 @@ def bd_bdm_columns_schema(context, data_dict):
 
 
 @toolkit.side_effect_free
-def bd_external_link_table_schema(context, data_dict):
+def bd_bdm_dictionary_schema(context, data_dict):
+    return json.loads(BdmDictionary.schema_json(indent=2))
+
+
+@toolkit.side_effect_free
+def bd_external_link_schema(context, data_dict):
     return json.loads(ExternalLink.schema_json(indent=2))
+
+
+@toolkit.side_effect_free
+def bd_information_request_schema(context, data_dict):
+    return json.loads(InformationRequest.schema_json(indent=2))
 
 
 @toolkit.side_effect_free
