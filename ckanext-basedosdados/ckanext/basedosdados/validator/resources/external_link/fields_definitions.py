@@ -5,126 +5,39 @@ from pydantic import (
 )
 from ckanext.basedosdados.validator import BaseModel
 
-
-class PublishedBy(BaseModel):
-    name: Str = Field(user_input_hint=["<nome [você]>"])
-    code_url: Str = Field(
-        user_input_hint=[
-            "https://github.com/basedosdados/mais/tree/master/bases/<dataset_id>/code"
-        ]
-    )
-    website: Str = Field(user_input_hint=["<website>"])
-    email: Str = Field(user_input_hint=["<email>"])
-
-class TreatedBy(BaseModel):
-    name: Str = Field(user_input_hint=["<nome>"])
-    code_url: Str = Field(user_input_hint=["<onde encontrar código de tratamento>"])
-    website: Str = Field(user_input_hint=["<onde encontrar os dados tratados>"])
-    email: Str = Field(user_input_hint=["<email>"])
-
-
 to_line = lambda description: "\n".join(description)
 
-###################
-### YAML FIELDS ###
-###################
+# -------------------------------------
+# ExternalLink Fields
+# -------------------------------------
 
 METADATA_MODIFIED_FIELD = Field(
     title="metadata_modified",
-    user_input_hint=["<YYYY-MM-DD>"],
-    description=to_line(["AUTO GENERATED"]),
     yaml_order={
-        "id_before": None,
-        "id_after": "dataset_id",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
 DATASET_ID_FIELD = Field(
-    title="dataset_id",
-    user_input_hint=["<dataset_id>"],
-    description=to_line(["AUTO GENERATED"]),
+    title="Dataset ID",
     yaml_order={
-        "id_before": "metadata_modified",
-        "id_after": "table_id",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
-TABLE_ID_FIELD = Field(
-    title="table_id",
-    user_input_hint=["<table_id>"],
-    description=to_line(["AUTO GENERATED"]),
+URL_FIELD = Field(
+    title="Url",
+    user_input_hint=["<www.example.com/data>"],
     yaml_order={
-        "id_before": "dataset_id",
-        "id_after": "source_bucket_name",
-    },
-)
-
-SOURCE_BUCKET_NAME_FIELD = Field(
-    title="source_bucket_name",
-    user_input_hint=["<source_bucket_name>"],
-    description=to_line(["AUTO GENERATED"]),
-    yaml_order={
-        "id_before": "table_id",
-        "id_after": "project_id_staging",
-    },
-)
-
-PROJECT_ID_STAGING = Field(
-    title="project_id_staging",
-    user_input_hint=["<project_id_staging>"],
-    description=to_line(["AUTO GENERATED"]),
-    yaml_order={
-        "id_before": "source_bucket_name",
-        "id_after": "project_id_prod",
-    },
-)
-
-PROJECT_ID_PROD_FIELD = Field(
-    title="project_id_prod",
-    user_input_hint=["<project_id_prod>"],
-    description=to_line(["AUTO GENERATED"]),
-    yaml_order={
-        "id_before": "project_id_staging",
-        "id_after": "url_ckan",
-    },
-)
-
-# TODO: remove this field?
-URL_CKAN_FIELD = Field(
-    title="url_ckan",
-    user_input_hint=["<https://basedosdados.org/dataset/<dataset_id>"],
-    description=to_line(["AUTO GENERATED"]),
-    yaml_order={
-        "id_before": "project_id_prod",
-        "id_after": "url_github",
-    },
-)
-
-URL_GITHUB: Str = Field(
-    title="url_github",
-    user_input_hint=[
-        "<https://github.com/basedosdados/mais/tree/master/bases/<dataset_id>"
-    ],
-    description=to_line(["AUTO GENERATED"]),
-    yaml_order={
-        "id_before": "url_ckan",
-        "id_after": "version",
-    },
-)
-
-VERSION: Str = Field(
-    title="version",
-    user_input_hint=["<vA.B>"],
-    description=to_line(["Exemplo versão v1.0"]),
-    yaml_order={
-        "id_before": "url_github",
-        "id_after": "description",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
 DESCRIPTION_FIELD = Field(
-    title="description",
-    user_input_hint=["<descrição>"],
+    title="Descrição",
     description=to_line(
         [
             "Descreva a tabela. Essas são as primeiras frases que um usuário vai ver.",
@@ -134,71 +47,117 @@ DESCRIPTION_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_before": "version",
-        "id_after": "published_by",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
-# TODO: DITC TYPE
-PUBLISHED_BY_FIELD = Field(
-    title="published_by",
-    user_input_hint=["<nome>"],
-    description=to_line(["Quem está completando esse arquivo config?"]),
+LANGUAGE_FIELD = Field(
+    title="Língua",
+    description=to_line(["Em quais línguas a fonte externa está disponível."]),
     yaml_order={
-        "id_before": "description",
-        "id_after": "treated_by",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
-# TODO: DITC TYPE
-TREATED_BY_FIELD = Field(
-    title="treated_by",
-    user_input_hint=["<nome>"],
+HAS_STRUCTURED_DATA_FIELD = Field(
+    title="Tem dados estruturados?",
     description=to_line(
         [
-            "Qual organização/departamento/pessoa tratou os dados?",
-            "As vezes há um ponto intermediário entre os dados originais e subir na Base dos Dados.",
-            "Se essa pessoa é você, preencha abaixo com suas informações.",
+            "A fonte externa disponibiliza dados em formatos estruturados, como csv, json, etc?"
         ]
     ),
+    user_input_hint=["<Sim/Não>"],
     yaml_order={
-        "id_before": "published_by",
-        "id_after": "treatment_description",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
-TREATMENT_DESCRIPTION_FIELD = Field(
-    title="treatment_description",
-    user_input_hint=["<CEPESP fez X. Eu fiz K>"],
+HAS_API_FIELD = Field(
+    title="Tem uma API?",
     description=to_line(
-        [
-            "Se houve passos de tratamento, limpeza e manipulação de dados, descreva-os aqui."
-        ]
+        ["A fonte externa disponibiliza uma API para acesso aos dados?"]
     ),
+    user_input_hint=["<Sim/Não>"],
     yaml_order={
-        "id_before": "treated_by",
-        "id_after": "update_frequency",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
-UPDATE_FREQUENCY_FIELD = Field(
-    title="update_frequency",
-    user_input_hint=["<frequência>"],
+IS_FREE_FIELD = Field(
+    title="É de graça?",
+    description=to_line(["O acesso aos dados da fonte externa é grátis?"]),
+    user_input_hint=["<Sim/Não>"],
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+REQUIRES_REGISTRATION_FIELD = Field(
+    title="Requer registro",
     description=to_line(
-        [
-            "Com qual frequência a base é atualizada?",
-            "Opções: hora | dia | semana | mes | 1 ano | 2 anos | 5 anos | 10 anos | unico | recorrente",
-        ]
+        ["A fonte externa requer registro de usuário para acesso aos dados?"]
+    ),
+    user_input_hint=["<Sim/Não>"],
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+AVAILABILITY_FIELD = Field(
+    title="Disponibilidade",
+    description=to_line(["Como os dados são disponibilizados?"]),
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+COUNTRY_IP_ADDRESS_REQUIRED_FIELD = Field(
+    title="Requer ip do país?",
+    description=to_line([""]),
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+LICENSE_FIELD = Field(
+    title="Tipo de licença de acesso",
+    description=to_line(
+        ["Qual tipo de licença regula acesso aos dados da fonte externa?"]
     ),
     yaml_order={
-        "id_before": "treatment_description",
-        "id_after": "observation_level",
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+SPATIAL_COVERAGE_FIELD = Field(
+    title="Cobertura espacial",
+    description=to_line(["A máxima unidade espacial que a tabela cobre."]),
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+TEMPORAL_COVERAGE_FIELD = Field(
+    title="Cobertura temporal",
+    description=to_line(["Anos cobertos pela tabela."]),
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
     },
 )
 
 OBSERVATION_LEVEL_FIELD = Field(
-    title="observation_level",
-    user_input_hint=["<primeira coluna>"],
+    title="Entidade",
     description=to_line(
         [
             "Nível da observação (qual é a granularidade de cada linha na tabela)",
@@ -211,81 +170,37 @@ OBSERVATION_LEVEL_FIELD = Field(
     ),
     max_items=10,
     yaml_order={
-        "id_before": "update_frequency",
-        "id_after": "primary_keys",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
-PRIMARY_KEYS_FIELD = Field(
-    title="primary_keys",
-    user_input_hint=["<primeira coluna>"],
+UPDATE_FREQUENCY_FIELD = Field(
+    title="Frequência de atualização",
+    user_input_hint=["<frequência>"],
     description=to_line(
         [
-            "Quais colunas identificam uma linha unicamente?",
-            "Preencha com os nomes de colunas. Ex: id_municipio, ano.",
-            "Pode ser vazio pois certas tabelas não possuem identificadores.",
+            "A unidade temporal pela qual a tabela é atualizada.",
+            "Opções: hora | dia | semana | mes | 1 ano | 2 anos | 5 anos | 10 anos | unico | recorrente",
         ]
     ),
     yaml_order={
-        "id_before": "observation_level",
-        "id_after": "spatial_coverage",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
-SPATIAL_COVERAGE_FIELD = Field(
-    title="spatial_coverage",
-    user_input_hint=[
-        "<admin0 - pais>",
-        "<admin1 - estados/regioes/etc>",
-        "<admin2 - municipios/counties/etc>",
-        "<admin3 - distritos/subdistritos/etc>",
-    ],
-    description=to_line(
-        [
-            "Qual é a cobertura espacial da tabela?",
-            "Regras:",
-            "  - minúsculo, sem acento, singular",
-            "  - descer até o menor nível administrativo cuja cobertura abaixo seja 'todos'",
-            "Exemplo 1: tabela que cubra todos os municípios nos estados de SP e GO",
-            "  - brasil",
-            "  - SP, GO",
-            "Exemplo 2: tabela que cubra países inteiros na América Latina",
-            "  - brasil, argentina, peru, equador",
-        ]
-    ),
-    yaml_order={
-        "id_before": "primary_keys",
-        "id_after": "temporal_coverage",
-    },
-)
 
-TEMPORAL_COVERAGE_FIELD = Field(
-    title="temporal_coverage",
-    user_input_hint=["<ano 1>", "<ano 2>"],
+TIME_UNIT_FIELD = Field(
+    title="Unidade temporal",
     description=to_line(
         [
-            "Qual é a cobertura temporal (em anos) da tabela?",
-            "Opções: ..., 1990, 1991, ..., 1999, 2000, 2001, ..., 2019, 2020, ...",
+            "A unidade temporal representada por cada linha.",
+            "Opções: hora | dia | semana | mes | 1 ano | 2 anos | 5 anos | 10 anos | unico | recorrente",
         ]
     ),
     yaml_order={
-        "id_before": "spatial_coverage",
-        "id_after": "partitions",
-    },
-)
-PARTITIONS_FIELD = Field(
-    title="partitions",
-    user_input_hint=["<primeira partição>"],
-    description=to_line(
-        [
-            "Liste as colunas da tabela que representam partições.",
-            "Não esqueça de deletar essas colunas nas tabelas .csv na hora de subir para o BigQuery.",
-            "Isso poupará muito tempo e dinheiro às pessoas utilizando essa tabela.",
-            "Se não houver partições, não modifique abaixo.",
-        ]
-    ),
-    yaml_order={
-        "id_before": "temporal_coverage",
-        "id_after": "None",
+        "id_before": "",
+        "id_after": "",
     },
 )

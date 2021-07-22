@@ -1,6 +1,4 @@
+from typing import Optional, List, Union, Literal
+from typing import Literal
 
-from .attr_enum import AttrEnum
-
-class YesNoEnum(AttrEnum):
-    yes    = {"label": "Sim"}
-    no     = {"label": "Não"}
+YesNoEnum = Literal["Sim", "Não"]
