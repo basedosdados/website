@@ -16,70 +16,93 @@ class RequestedBy(BaseModel):
     website: Str = Field(user_input_hint=["<website>"])
     email: Str = Field(user_input_hint=["<email>"])
 
+
 to_line = lambda description: "\n".join(description)
 
-###################
-### YAML FIELDS ###
-###################
-
+# -------------------------------------
+# InformationRequest Fields
+# -------------------------------------
 DATASET_ID_FIELD = Field(
-    title="dataset_id",
-    user_input_hint=["<dataset_id>"],
-    description=to_line(["AUTO GENERATED"]),
+    title="Dataset ID",
     yaml_order={
-        "id_before": "metadata_modified",
-        "id_after": "table_id",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
 
-DESCRIPTION_FIELD = Field(
-    title="description",
-    user_input_hint=["<descrição>"],
-    description=to_line(
-        [
-            "Descreva a tabela. Essas são as primeiras frases que um usuário vai ver.",
-            "Você não precisa ser muito conciso. Sinta-se a vontade para dar exemplos de",
-            "como usar os dados.",
-            "Se souber, liste também aplicações: pesquisa, apps, etc. que usem os dados.,",
-        ]
-    ),
+ORIGIN_FIELD = Field(
+    title="Origem",
+    description=to_line([""]),
+    user_input_hint=["<>"],
     yaml_order={
-        "id_before": "version",
-        "id_after": "published_by",
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+NUMBER_FIELD = Field(
+    title="Número",
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+URL_FIELD = Field(
+    title="Url",
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+DEPARTMENT_FIELD = Field(
+    title="",
+    description=to_line([""]),
+    user_input_hint=["<>"],
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+OPENING_DATE_FIELD = Field(
+    title="Data de abertura",
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+REQUESTED_BY_FIELD = Field(
+    title="Quem fez o pedido",
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
     },
 )
 
 SPATIAL_COVERAGE_FIELD = Field(
-    title="spatial_coverage",
-    user_input_hint=[
-        "<admin0 - pais>",
-        "<admin1 - estados/regioes/etc>",
-        "<admin2 - municipios/counties/etc>",
-        "<admin3 - distritos/subdistritos/etc>",
-    ],
-    description=to_line(
-        [
-            "Qual é a cobertura espacial da tabela?",
-            "Regras:",
-            "  - minúsculo, sem acento, singular",
-            "  - descer até o menor nível administrativo cuja cobertura abaixo seja 'todos'",
-            "Exemplo 1: tabela que cubra todos os municípios nos estados de SP e GO",
-            "  - brasil",
-            "  - SP, GO",
-            "Exemplo 2: tabela que cubra países inteiros na América Latina",
-            "  - brasil, argentina, peru, equador",
-        ]
-    ),
+    title="Cobertura espacial",
+    description=to_line(["A máxima unidade espacial que a tabela cobre."]),
     yaml_order={
-        "id_before": "primary_keys",
-        "id_after": "temporal_coverage",
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+TEMPORAL_COVERAGE_FIELD = Field(
+    title="Cobertura temporal",
+    description=to_line(["Anos cobertos pela tabela."]),
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
     },
 )
 
 OBSERVATION_LEVEL_FIELD = Field(
-    title="observation_level",
-    user_input_hint=["<primeira coluna>"],
+    title="Entidade",
     description=to_line(
         [
             "Nível da observação (qual é a granularidade de cada linha na tabela)",
@@ -92,52 +115,78 @@ OBSERVATION_LEVEL_FIELD = Field(
     ),
     max_items=10,
     yaml_order={
-        "id_before": "update_frequency",
-        "id_after": "primary_keys",
-    },
-)
-
-TEMPORAL_COVERAGE_FIELD = Field(
-    title="temporal_coverage",
-    user_input_hint=["<ano 1>", "<ano 2>"],
-    description=to_line(
-        [
-            "Qual é a cobertura temporal (em anos) da tabela?",
-            "Opções: ..., 1990, 1991, ..., 1999, 2000, 2001, ..., 2019, 2020, ...",
-        ]
-    ),
-    yaml_order={
-        "id_before": "spatial_coverage",
-        "id_after": "partitions",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
 UPDATE_FREQUENCY_FIELD = Field(
-    title="update_frequency",
+    title="Frequência de atualização",
     user_input_hint=["<frequência>"],
     description=to_line(
         [
-            "Com qual frequência a base é atualizada?",
+            "A unidade temporal pela qual a tabela é atualizada.",
             "Opções: hora | dia | semana | mes | 1 ano | 2 anos | 5 anos | 10 anos | unico | recorrente",
         ]
     ),
     yaml_order={
-        "id_before": "treatment_description",
-        "id_after": "observation_level",
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+STATUS_FIELD = Field(
+    title="Status",
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+DATA_URL_FIELD = Field(
+    title="Url dos dados",
+    description=to_line(["Onde estão os dados da resposta?"]),
+    user_input_hint=["<www.example.com/data>"],
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+OBSERVATIONS_FIEL = Field(
+    title="Observações",
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+DESCRIPTION_FIELD = Field(
+    title="Descrição",
+    description=to_line(
+        [
+            "Descreva a tabela. Essas são as primeiras frases que um usuário vai ver.",
+            "Você não precisa ser muito conciso. Sinta-se a vontade para dar exemplos de",
+            "como usar os dados.",
+            "Se souber, liste também aplicações: pesquisa, apps, etc. que usem os dados.,",
+        ]
+    ),
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
     },
 )
 
 TIME_UNIT_FIELD = Field(
     title="Unidade temporal",
-    user_input_hint=["<unidade temporal>"],
     description=to_line(
         [
-            "Qual é a unidade de tempo dos dados cobertos pelo pedido?",
+            "A unidade temporal representada por cada linha.",
             "Opções: hora | dia | semana | mes | 1 ano | 2 anos | 5 anos | 10 anos | unico | recorrente",
         ]
     ),
     yaml_order={
-        "id_before": "treatment_description",
-        "id_after": "observation_level",
+        "id_before": "",
+        "id_after": "",
     },
 )

@@ -22,21 +22,21 @@ class InformationRequest(_CkanDefaultResource):
     resource_type: Literal["information_request"]
     
     # InformationRequest models
-    dataset_id                  : Optional[Str]                         # = DATASET_ID_FIELD
-    origin                      : Optional[Str]                         # = ORIGIN_FIELD
-    number                      : Optional[Str]                         # = NUMBER_FIELD
-    url                         : Optional[Str]                         # = URL_FIELD
-    department                  : Optional[Str]                         # = DEPARTMENT_FIELD
-    opening_date                : Optional[Str]                         # = OPENING_DATE_FIELD
-    requested_by                : Optional[RequestedBy]                 # = REQUESTED_BY_FIELD
-    spatial_coverage            : Optional[Str]                         # = SPATIAL_COVERAGE_FIELD  # TODO: put spatial_covaerage SpacialCoverageEnum after defning in avaliable_options.py
-    temporal_coverage           : Optional[TemporalCoverageEnum]        # = TEMPORAL_COVERAGE_FIELD
-    observation_level           : Optional[Set[ObservationLevelEnum]]   # = OBSERVATIONAL_LEVEL_FIELD
-    update_frequency            : Optional[TimeUnitEnum]                # = UPDATE_FREQUENCY_FIELD
-    status                      : Optional[StatusEnum]                  # = STATUS_FIELD
-    data_url                    : Optional[Str]                         # = DATA_URL_FIELD
-    observations                : Optional[Str]                         # = OBSERVATIONS_FIELD
-
-    # InformationRequest models that are not in schema
-    description                 : Optional[Str]                         # = DESCRIPTION_FIELD
-    time_unit                   : Optional[TimeUnitEnum]                # = TIME_UNIT_FIELD
+    dataset_id                  : Optional[Str]                         = DATASET_ID_FIELD
+    origin                      : Optional[Str]                         = ORIGIN_FIELD
+    number                      : Optional[Str]                         = NUMBER_FIELD
+    url                         : Optional[Str]                         = URL_FIELD
+    department                  : Optional[Str]                         = DEPARTMENT_FIELD
+    opening_date                : Optional[Str]                         = OPENING_DATE_FIELD
+    requested_by                : Optional[RequestedBy]                 = REQUESTED_BY_FIELD
+    spatial_coverage            : Optional[Str]                         = SPATIAL_COVERAGE_FIELD  # TODO: put spatial_covaerage SpacialCoverageEnum after defning in avaliable_options.py
+    temporal_coverage           : Optional[TemporalCoverageEnum]        = TEMPORAL_COVERAGE_FIELD
+    observation_level           : Optional[Set[ObservationLevelEnum]]   = OBSERVATION_LEVEL_FIELD
+    update_frequency            : Optional[TimeUnitEnum]                = UPDATE_FREQUENCY_FIELD
+    status                      : Optional[StatusEnum]                  = STATUS_FIELD
+    data_url                    : Optional[Str]                         = DATA_URL_FIELD
+    observations                : Optional[Str]                         = OBSERVATIONS_FIEL
+    
+    # InformationRequest models that are not in sche
+    description                 : Optional[Str]                         = DESCRIPTION_FIELD
+    time_unit                   : Optional[TimeUnitEnum]                = TIME_UNIT_FIELD
