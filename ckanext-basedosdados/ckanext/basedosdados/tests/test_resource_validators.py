@@ -53,7 +53,7 @@ def test_bdm_table():
         "table_id": "dfsf",
         "auxiliary_files_url": "www.files.com.br/files-test",
         "observation_level": ["age", "dam", "gun"],
-        "columns": "",
+        # "columns": "", #TODO: add new fields
         "primary_keys": "jasdiasd",
         "version": "3.0.0",
         "publisher": "Test",
@@ -112,7 +112,7 @@ def test_ok(data):
             "table_id": "fds",
             "auxiliary_files_url": "www.files.com.br/files-test",
             "observation_level": ["age", "dam", "gun"],
-            "columns": "",
+            # "columns": "", #TODO: add new fields
             "primary_keys": "jasdiasd",
             "version": "3.0.0",
             "publisher": "Test",
