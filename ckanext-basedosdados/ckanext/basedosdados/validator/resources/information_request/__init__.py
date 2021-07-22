@@ -8,7 +8,6 @@ from pydantic import (
 
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options import (
-    SpatialCoverageEnum,
     EntityEnum,
     TemporalCoverageEnum,
     TimeUnitEnum,
