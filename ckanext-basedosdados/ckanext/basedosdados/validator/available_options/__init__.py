@@ -6,8 +6,9 @@ from pydantic import Field, StrictStr as Str, BaseModel
 # -------------------------------------
 # MODULE OPTIONS
 # -------------------------------------
-from .observation_level import ObservationLevelEnum
 from .spatial_coverage import SpatialCoverageEnum
+from .temporal_coverage import TemporalCoverageEnum
+from .entity import EntityEnum
 from .time_unit import TimeUnitEnum
 from .availability import AvailabilityEnum
 from .status import StatusEnum
@@ -17,7 +18,6 @@ from .country import CountryEnum
 from .license import LicenseEnum
 from .bigquery_type import BigQueryTypeEnum
 from .measurement_unit import MeasurementUnitEnum
-from .temporal_coverage import TemporalCoverageEnum
 
 # -------------------------------------
 # NEW OPTIONS

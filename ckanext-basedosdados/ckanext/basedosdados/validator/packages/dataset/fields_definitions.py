@@ -6,16 +6,13 @@ from pydantic import (
 
 from ckanext.basedosdados.validator import BaseModel
 
-
 class Author(BaseModel):
     name: Str = Field(user_input_hint=["<nome>"])
     email: Str = Field(user_input_hint=["<email>"])
 
-
 class Licence(BaseModel):
     name: Str = Field(user_input_hint=["MIT"])
     url: Str = Field(user_input_hint=["<url>"])
-
 
 # TODO: define spatial_coverage fields
 # class SpatialCoverage(BaseModel):
@@ -24,7 +21,6 @@ class Licence(BaseModel):
 #     country:
 #     state:
 #     city:
-
 
 to_line = lambda description: "\n".join(description)
 
@@ -171,14 +167,15 @@ TEMPORAL_COVERAGE_FIELD = Field(
     },
 )
 
-OBSERVATIONAL_LEVEL_FIELD = Field(
+ENTITY_FIELD = Field(
     title="Entidade",
+    description=to_line(["Entidade representada por cada linha."]),
+    max_items=10,
     yaml_order={
-        "id_before": "",
-        "id_after": "",
+        "id_after": "update_frequency",
+        "id_before": "time_unit",
     },
 )
-
 
 TIME_UNIT_FIELD = Field(
     title="Unidade temporal",
@@ -193,5 +190,23 @@ UPDATE_FREQUENCY_FIELD = Field(
     yaml_order={
         "id_before": "",
         "id_after": "",
+    },
+)
+
+CKAN_URL_FIELD = Field(
+    title="ckan_url",
+    user_input_hint=["<https://basedosdados.org/dataset/<dataset_id>"],
+    yaml_order={
+        "id_after": "project_id_staging",
+        "id_before": "github_url",
+    },
+)
+
+GITHUB_URL_FIELD: Str = Field(
+    title="github_url",
+    user_input_hint=["<https://github.com/basedosdados/mais/tree/master/bases/<dataset_id>"],
+    yaml_order={
+        "id_after": "ckan_url",
+        "id_before": "partitions",
     },
 )

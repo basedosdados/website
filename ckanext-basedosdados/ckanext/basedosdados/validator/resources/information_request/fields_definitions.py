@@ -22,6 +22,7 @@ to_line = lambda description: "\n".join(description)
 # -------------------------------------
 # InformationRequest Fields
 # -------------------------------------
+
 DATASET_ID_FIELD = Field(
     title="Dataset ID",
     yaml_order={
@@ -29,7 +30,6 @@ DATASET_ID_FIELD = Field(
         "id_after": "",
     },
 )
-
 
 ORIGIN_FIELD = Field(
     title="Origem",
@@ -101,7 +101,22 @@ TEMPORAL_COVERAGE_FIELD = Field(
     },
 )
 
-OBSERVATION_LEVEL_FIELD = Field(
+UPDATE_FREQUENCY_FIELD = Field(
+    title="Frequência de atualização",
+    user_input_hint=["<frequência>"],
+    description=to_line(
+        [
+            "A unidade temporal pela qual a tabela é atualizada.",
+            "Opções: hora | dia | semana | mes | 1 ano | 2 anos | 5 anos | 10 anos | unico | recorrente",
+        ]
+    ),
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+ENTITY_FIELD = Field(
     title="Entidade",
     description=to_line(
         [
@@ -120,12 +135,11 @@ OBSERVATION_LEVEL_FIELD = Field(
     },
 )
 
-UPDATE_FREQUENCY_FIELD = Field(
-    title="Frequência de atualização",
-    user_input_hint=["<frequência>"],
+TIME_UNIT_FIELD = Field(
+    title="Unidade temporal",
     description=to_line(
         [
-            "A unidade temporal pela qual a tabela é atualizada.",
+            "A unidade temporal representada por cada linha.",
             "Opções: hora | dia | semana | mes | 1 ano | 2 anos | 5 anos | 10 anos | unico | recorrente",
         ]
     ),
@@ -153,7 +167,7 @@ DATA_URL_FIELD = Field(
     },
 )
 
-OBSERVATIONS_FIEL = Field(
+OBSERVATIONS_FIELD = Field(
     title="Observações",
     yaml_order={
         "id_before": "",
@@ -169,20 +183,6 @@ DESCRIPTION_FIELD = Field(
             "Você não precisa ser muito conciso. Sinta-se a vontade para dar exemplos de",
             "como usar os dados.",
             "Se souber, liste também aplicações: pesquisa, apps, etc. que usem os dados.,",
-        ]
-    ),
-    yaml_order={
-        "id_before": "",
-        "id_after": "",
-    },
-)
-
-TIME_UNIT_FIELD = Field(
-    title="Unidade temporal",
-    description=to_line(
-        [
-            "A unidade temporal representada por cada linha.",
-            "Opções: hora | dia | semana | mes | 1 ano | 2 anos | 5 anos | 10 anos | unico | recorrente",
         ]
     ),
     yaml_order={

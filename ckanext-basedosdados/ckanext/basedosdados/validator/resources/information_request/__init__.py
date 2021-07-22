@@ -9,7 +9,7 @@ from pydantic import (
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options import (
     SpatialCoverageEnum,
-    ObservationLevelEnum,
+    EntityEnum,
     TemporalCoverageEnum,
     TimeUnitEnum,
     StatusEnum
@@ -27,16 +27,15 @@ class InformationRequest(_CkanDefaultResource):
     number                      : Optional[Str]                         = NUMBER_FIELD
     url                         : Optional[Str]                         = URL_FIELD
     department                  : Optional[Str]                         = DEPARTMENT_FIELD
+    description                 : Optional[Str]                         = DESCRIPTION_FIELD
     opening_date                : Optional[Str]                         = OPENING_DATE_FIELD
     requested_by                : Optional[RequestedBy]                 = REQUESTED_BY_FIELD
     spatial_coverage            : Optional[Str]                         = SPATIAL_COVERAGE_FIELD  # TODO: put spatial_covaerage SpacialCoverageEnum after defning in avaliable_options.py
     temporal_coverage           : Optional[TemporalCoverageEnum]        = TEMPORAL_COVERAGE_FIELD
-    observation_level           : Optional[Set[ObservationLevelEnum]]   = OBSERVATION_LEVEL_FIELD
     update_frequency            : Optional[TimeUnitEnum]                = UPDATE_FREQUENCY_FIELD
+    entity                      : Optional[Set[EntityEnum]]             = ENTITY_FIELD
+    time_unit                   : Optional[TimeUnitEnum]                = TIME_UNIT_FIELD
     status                      : Optional[StatusEnum]                  = STATUS_FIELD
     data_url                    : Optional[Str]                         = DATA_URL_FIELD
-    observations                : Optional[Str]                         = OBSERVATIONS_FIEL
+    observations                : Optional[Str]                         = OBSERVATIONS_FIELD
     
-    # InformationRequest models that are not in sche
-    description                 : Optional[Str]                         = DESCRIPTION_FIELD
-    time_unit                   : Optional[TimeUnitEnum]                = TIME_UNIT_FIELD

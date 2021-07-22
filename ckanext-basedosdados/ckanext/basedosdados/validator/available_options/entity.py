@@ -3,7 +3,7 @@ from typing import Union
 
 from .attr_enum import AttrEnum
 
-class ObservationLevelSphereEnum(AttrEnum):
+class EntitySphereEnum(AttrEnum):
     continent        = {'label': "Continente"} #"Continent"}
     country          = {'label': "País"} #"Country"}
     region           = {'label': "Região"} #"Region"}
@@ -17,14 +17,14 @@ class ObservationLevelSphereEnum(AttrEnum):
     zip_code         = {'label': "CEP"} #"Zip Code"}
     census_tract     = {'label': "Setor censitário"} #"CensusTract"}
 
-class ObservationLevelIndividualEnum(AttrEnum):
+class EntityIndividualEnum(AttrEnum):
     person           = {'label': "Pessoa (aluno, professor, político/candidato, jogador, sócio, etc)"} #"Person (student, teacher/professor, politician/candidate, player, partner, etc)"}
     household        = {'label': "Domicílio"} #"Household"}
     name             = {'label': "Nome"} #"Name"}
     animal           = {'label': "Animal (mamífero, micróbio, vírus, etc)"} #"Animal"}
     plant            = {'label': "Planta (árvore, espécie)"} #"Plant"}
 
-class ObservationLevelEstablishmentEnum(AttrEnum):
+class EntityEstablishmentEnum(AttrEnum):
     agency           = {'label': "Agência"} #"Agency"}
     protected_area   = {'label': "Área protegida"} #"Protected Area"}
     library          = {'label': "Biblioteca"} #"Library"}
@@ -42,7 +42,7 @@ class ObservationLevelEstablishmentEnum(AttrEnum):
     prison           = {'label': "Presídio/Cadeia"} #"Prison"}
     team             = {'label': "Time"} #"Team"}
 
-class ObservationLevelPoliticsEnum(AttrEnum):
+class EntityPoliticsEnum(AttrEnum):
     agreement        = {'label': "Acordo/Tratado"} #"Agreement/Treaty"}
     speech           = {'label': "Discurso/Fala"} #"Speech"}
     election         = {'label': "Eleição"} #"Election"}
@@ -50,7 +50,7 @@ class ObservationLevelPoliticsEnum(AttrEnum):
     party            = {'label': "Partido"} #"Party"}
     poll             = {'label': "Pesquisa de Opinião"} #"Poll"}
 
-class ObservationLevelScienceEnum(AttrEnum):
+class EntityScienceEnum(AttrEnum):
     article          = {'label': "Artigo"} #"Article/Paper"}
     citation         = {'label': "Citação"} #"Citation"}
     domain           = {'label': "Domínio"} #"Domain"}
@@ -65,7 +65,7 @@ class ObservationLevelScienceEnum(AttrEnum):
     protein          = {'label': "Proteína"} #"Protein"}
     meteor           = {'label': "Meteoro"} #"Meteor"}
 
-class ObservationLevelEconomicsEnum(AttrEnum):
+class EntityEconomicsEnum(AttrEnum):
     contract         = {'label': "Contrato"} #"Contract"}
     grant            = {'label': "Prêmio/Concessão/Convênio"} #"Grant"}
     procurement      = {'label': "Licitação"} #"Procurement"}
@@ -76,11 +76,11 @@ class ObservationLevelEconomicsEnum(AttrEnum):
     occupation       = {'label': "Ocupação"} #"Occupation"}
     sector           = {'label': "Setor"} #"Sector"}
 
-class ObservationLevelEducationEnum(AttrEnum):
+class EntityEducationEnum(AttrEnum):
     scholarship      = {'label': "Bolsa"} #"Scholarship"}
     exam             = {'label': "Prova/Exame"} #"Test/Exam"}
 
-class ObservationLevelEventsEnum(AttrEnum):
+class EntityEventsEnum(AttrEnum):
     alert            = {'label': "Alerta"} #"Alert"}
     attack           = {'label': "Ataque/Atentado"} #"Attack"}
     act              = {'label': "Ato"} #"Act"}
@@ -93,7 +93,7 @@ class ObservationLevelEventsEnum(AttrEnum):
     protest          = {'label': "Protesto"} #"Protest"}
     match            = {'label': "Partida"} #"Match"}
 
-class ObservationLevelArtEnum(AttrEnum):
+class EntityArtEnum(AttrEnum):
     album            = {'label': "Álbum"} #"Album"}
     movie            = {'label': "Filme/Série/Clipe"} #"Movie/Film/Clip/Show"}
     photo            = {'label': "Foto"} #"Photo/Picture"}
@@ -102,50 +102,50 @@ class ObservationLevelArtEnum(AttrEnum):
     painting         = {'label': "Pintura/Desenho/Ilustração"} #"Painting/Drawing/Illustration"}
     poem             = {'label': "Poema"} #"Poem"}
 
-class ObservationLevelInfrastructureEnum(AttrEnum):
+class EntityInfrastructureEnum(AttrEnum):
     dam              = {'label': "Represa/Barragem"} #"Dam"}
     satellitte       = {'label': "Satélite"} #"Satellite"}
     street_road      = {'label': "Rua/Avenida/Estrada"} #"Street/Avenue/Road/Highway"}
     roller_coaster   = {'label': "Montanha-Russa"} #"Roller Coaster"}
 
-class ObservationLevelTransportationEnum(AttrEnum):
+class EntityTransportationEnum(AttrEnum):
     automobile       = {'label': "Carro/Ônibus/Caminhão/Moto"} #"Car/Bus/Truck/Motorcycle"}
     train            = {'label': "Trem"} #"Train"}
     aircraft         = {'label': "Avião/Helicóptero"} #"Plane/Helicopter"}
     ship             = {'label': "Embarcação/Navio"} #"Ship"}
 
-class ObservationLevelSecurityEnum(AttrEnum):
+class EntitySecurityEnum(AttrEnum):
     gun              = {'label': "Arma"} #"Gun"}
 
-class ObservationLevelDemographicEnum(AttrEnum):
+class EntityDemographicEnum(AttrEnum):
     age              = {'label': "Idade"} #"Age"}
     race             = {'label': "Raça/Cor de pele"} #"Race/Skin color"}
     sex              = {'label': "Sexo"} #"Sex"}
 
-class ObservationLevelImageEnum(AttrEnum):
+class EntityImageEnum(AttrEnum):
     pixel            = {'label': "Pixel/Grid"} #"Pixel/Grid"}
     polygon          = {'label': "Polígono"} #"Polygon"}
 
-class ObservationLevelHistoryEnum(AttrEnum):
+class EntityHistoryEnum(AttrEnum):
     empire           = {'label': "Império"} #"Empire"}
 
-class ObservationLevelOthersEnum(AttrEnum):
+class EntityOthersEnum(AttrEnum):
     other            = {'label': "Outro"} #"Other"}
 
-ObservationLevelEnum = Union[
-    ObservationLevelSphereEnum,
-    ObservationLevelIndividualEnum,
-    ObservationLevelEstablishmentEnum,
-    ObservationLevelPoliticsEnum,
-    ObservationLevelScienceEnum,
-    ObservationLevelEconomicsEnum,
-    ObservationLevelEducationEnum,
-    ObservationLevelEventsEnum,
-    ObservationLevelArtEnum,
-    ObservationLevelInfrastructureEnum,
-    ObservationLevelTransportationEnum,
-    ObservationLevelSecurityEnum,
-    ObservationLevelDemographicEnum,
-    ObservationLevelHistoryEnum,
-    ObservationLevelOthersEnum,
+EntityEnum = Union[
+    EntitySphereEnum,
+    EntityIndividualEnum,
+    EntityEstablishmentEnum,
+    EntityPoliticsEnum,
+    EntityScienceEnum,
+    EntityEconomicsEnum,
+    EntityEducationEnum,
+    EntityEventsEnum,
+    EntityArtEnum,
+    EntityInfrastructureEnum,
+    EntityTransportationEnum,
+    EntitySecurityEnum,
+    EntityDemographicEnum,
+    EntityHistoryEnum,
+    EntityOthersEnum,
 ]
