@@ -4,7 +4,6 @@ import ckan.lib.plugins as lib_plugins
 import ckan.logic as logic
 
 from .get import *
-from .post import *
 
 log = logging.getLogger(__name__)
 ValidationError = logic.ValidationError
