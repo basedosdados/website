@@ -20,25 +20,20 @@ class LastUpdated(BaseModel):
 # -------------------------------------
 
 DATASET_ID_FIELD = Field(
-    title="dataset_id",
-    user_input_hint=["<dataset_id>"],
-    description=to_line(["AUTO GENERATED"]),
+    title="Dataset ID",
     yaml_order={
-        "id_before": "table_id",
-        "id_after": None,
+        "id_before": "",
+        "id_after": "",
     },
 )
 
 TABLE_ID_FIELD = Field(
-    title="table_id",
-    user_input_hint=["<table_id>"],
-    description=to_line(["AUTO GENERATED"]),
+    title="Table ID",
     yaml_order={
-        "id_before": "last_updated",
-        "id_after": "dataset_id",
+        "id_before": "dataset_id",
+        "id_after": "source_bucket_name",
     },
 )
-
 
 LAST_UPDATED_FIELD = Field(
     title="Última atualização",
