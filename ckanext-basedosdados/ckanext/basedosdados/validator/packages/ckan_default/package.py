@@ -63,6 +63,9 @@ class _CkanDefaults(BaseModel):
         Literal["package_show", "package_create", "package_update"]
     ]  # TODO: after 2021-07-01 add exclude by default when issue is merged in master
 
+    # -------------------------------------
+    # VALIDATORS
+    # -------------------------------------
     @validator("resources", pre=True)
     def resources_should_have_position_field(cls, resources):
         for idx, r in enumerate(resources):

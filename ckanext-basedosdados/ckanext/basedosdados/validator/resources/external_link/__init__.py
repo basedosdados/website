@@ -8,7 +8,7 @@ from pydantic import (
 
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options import (
-    SpacialCoverageEnum,
+    SpatialCoverageEnum,
     ObservationLevelEnum,
     TemporalCoverageEnum,
     TimeUnitEnum,
@@ -26,6 +26,7 @@ from ckanext.basedosdados.validator.resources import _CkanDefaultResource
 class ExternalLink(_CkanDefaultResource): 
     resource_type: Literal["external_link"]
 
+    # ExternalLink models
     dataSet_id                  : Optional[Str]                         ##= DATASet_ID_FIELD
     url                         : Optional[Str]                         ##= URL_FIELD
     description                 : Optional[Str]                         ##= DESCRIPTION_FIELD
@@ -37,10 +38,16 @@ class ExternalLink(_CkanDefaultResource):
     availability                : Optional[AvailabilityEnum]            ##= AVAILABILITY_FIELD
     country_ip_address_required : Optional[CountryEnum]                 ##= COUNTRY_IP_ADDRESS_REQUIRED_FIELD
     license                     : Optional[LicenseEnum]                 ##= LICENSE_FIELD                     
-    spatial_coverage            : Optional[Str]                         ##= SPATIAL_COVERAGE_FIELD
-    observation_level           : Optional[Set[ObservationLevelEnum]]   ##= OBSERVATIONAL_LEVEL_FIELD
+    spatial_coverage            : Optional[Str]                         ##= SPATIAL_COVERAGE_FIELD # TODO: put spatial_covaerage SpacialCoverageEnum after defning in avaliable_options.py
     temporal_coverage           : Optional[TemporalCoverageEnum]        ##= TEMPORAL_COVERAGE_FIELD
+    observation_level           : Optional[Set[ObservationLevelEnum]]   ##= OBSERVATIONAL_LEVEL_FIELD
     update_frequency            : Optional[TimeUnitEnum]                ##= UPDATE_FREQUENCY_FIELD
+
+    # ExternalLink models that are not in schema
     time_unit                   : Optional[TimeUnitEnum]                ##= TIME_UNIT_FIELD
 
+    
+    # -------------------------------------
+    # VALIDATORS
+    # -------------------------------------
     _language_validator = treat_scalar_as_single_value_set("language")

@@ -6,113 +6,45 @@ from pydantic import (
 
 from ckanext.basedosdados.validator import BaseModel
 
+
 class Author(BaseModel):
     name: Str = Field(user_input_hint=["<nome>"])
     email: Str = Field(user_input_hint=["<email>"])
+
 
 class Licence(BaseModel):
     name: Str = Field(user_input_hint=["MIT"])
     url: Str = Field(user_input_hint=["<url>"])
 
+#TODO: define spatial_coverage fields
+# class SpatialCoverage(BaseModel):
+#     world:
+#     continet:
+#     country:
+#     state:
+#     city:
+
+
 to_line = lambda description: "\n".join(description)
 
-
-###################
-### YAML FIELDS ###
-###################
-
-METADATA_MODIFIED_FIELD = Field(
-    title="metadata_modified",
-    user_input_hint=["<YYYY-MM-DD>"],
-    description=to_line(["AUTO GENERATED"]),
-    yaml_order={
-        "id_before": None,
-        "id_after": "dataset_id",
-    },
-)
-
-DATASET_ID_FIELD = Field(
-    title="dataset_id",
-    user_input_hint=["<dataset_id>"],
-    description=to_line(["AUTO GENERATED"]),
-    yaml_order={
-        "id_before": "metadata_modified",
-        "id_after": "url_ckan",
-    },
-)
-
-URL_CKAN_FIELD = Field(
-    title="url_ckan",
-    user_input_hint=["https://basedosdados.org/dataset/<dataset_id>"],
-    description=to_line(["AUTO GENERATED"]),
-    yaml_order={
-        "id_before": "dataset_id",
-        "id_after": "url_github",
-    },
-)
-
-URL_GITHUB_FIELD = Field(
-    title="url_github",
-    user_input_hint=[
-        "https://github.com/basedosdados/mais/tree/master/bases/<dataset_id>"
-    ],
-    description=to_line(["AUTO GENERATED"]),
-    yaml_order={
-        "id_before": "url_ckan",
-        "id_after": "description",
-    },
-)
-
-DESCRIPTION_FIELD = Field(
-    title="description",
-    user_input_hint=["<descrição>"],
-    description=to_line(
-        [
-            "Descreva a base",
-            "Ela é sobre o que?",
-            "Quais as principais fontes de dados?",
-            "Há links para FAQs e explicações?",
-        ]
-    ),
-    yaml_order={
-        "id_before": "url_github",
-        "id_after": "organization",
-    },
-)
-
-ORGANIZATION_FIELD = Field(
-    title="organization",
-    user_input_hint=["<organização>"],
-    description=to_line(
-        [
-            "Qual organização disponibiliza os dados originais?",
-            "Opções: escolher dessa lista -> https://basedosdados.org/api/3/action/organization_list=",
-        ]
-    ),
-    yaml_order={
-        "id_before": "description",
-        "id_after": "author",
-    },
-)
 
 AUTHOR_FIELD = Field(
     title="author",
     description=to_line(["Qual departamento/grupo/pessoa mantém os dados originais?"]),
     yaml_order={
-        "id_before": "organization",
-        "id_after": "website",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
-WEBSITE_FIELD = Field(
-    title="website",
-    user_input_hint=["<website>"],
-    description=to_line(["Onde encontrar os dados originais e mais informações?"]),
+METADATA_MODIFIED_FIELD = Field(
+    title="metadata_modified",
     yaml_order={
-        "id_before": "author",
-        "id_after": "groups",
+        "id_before":"",
+        "id_after": "",
     },
 )
+
 
 GROUPS_FIELD = Field(
     title="groups",
@@ -124,8 +56,24 @@ GROUPS_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_before": "website",
-        "id_after": "tags",
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+
+ORGANIZATION_FIELD = Field(
+    title="organization",
+    user_input_hint=["<organização>"],
+    description=to_line(
+        [
+            "Qual organização disponibiliza os dados originais?",
+            "Opções: escolher dessa lista -> https://basedosdados.org/api/3/action/organization_list=",
+        ]
+    ),
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
     },
 )
 
@@ -143,100 +91,105 @@ TAGS_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_before": "groups",
-        "id_after": "languages",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
-LANGUAGES_FIELD = Field(
-    title="languages",
-    user_input_hint=["<língua>"],
+DATASET_ID_FIELD = Field(
+    title="Dataset ID",
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+
+ORGANIZATION_ID_FIELD = Field(
+    title="ID da organização",
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+TITLE_FIELD = Field(
+    title="Título",
+    user_input_hint=["<Um título descritivo>"],
+    yaml_order={
+        "id_before": "",
+        "id_after": "",
+    },
+)
+
+DESCRIPTION_FIELD = Field(
+    title="Descrição",
+    user_input_hint=["<exemplo: descrição e anotações úteis sobre os dados.>"],
     description=to_line(
-        [
-            "Em quais línguas a base (ou a fonte original) está disponível?",
-            "Regras: minúsculo, sem acentos.",
-            "Opções: portugues, ingles, espanhol, frances, chines, russo, hindi, alemao, etc.",
-        ]
+        ["exemplo: descrição e anotações úteis sobre os dados."]
     ),
     yaml_order={
-        "id_before": "tags",
-        "id_after": "free",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
-FREE_FIELD = Field(
-    title="free",
-    user_input_hint=["<sim/não>"],
-    description=to_line(["Os dados originais estão disponíveis de graça?"]),
+TAG_STRING_FIELD  = Field(
+    title="Etiquetas",
+    user_input_hint=["<exemplo: fertilidade, preço, desmatamento>"],
     yaml_order={
-        "id_before": "languages",
-        "id_after": "microdata",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
-MICRODATA_FIELD = Field(
-    title="microdata",
-    user_input_hint=["<sim/não>"],
-    description=to_line(["Os microdados estão disponíveis para download?"]),
+
+DOWNLOAD_TYPE_FIELD  = Field(
+    title="Tipo de download",
     yaml_order={
-        "id_before": "free",
-        "id_after": "API",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
-API_FIELD = Field(
-    title="API",
-    user_input_hint=["<sim/não>"],
-    description=to_line(["Existe uma API na fonte original?"]),
+SPATIAL_COVERAGE_FIELD  = Field(
+    title="Cobertura espacial",
     yaml_order={
-        "id_before": "microdata",
-        "id_after": "registration",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
-REGISTRATION_FIELD = Field(
-    title="registration",
-    user_input_hint=["<sim/não>"],
-    description=to_line(
-        ["É necessário registrar um usuário para baixar os dados originais?"]
-    ),
+
+TEMPORAL_COVERAGE_FIELD  = Field(
+    title="Cobertura temporal",
     yaml_order={
-        "id_before": "API",
-        "id_after": "availability",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
-AVAILABILITY_FIELD = Field(
-    title="availability",
-    user_input_hint=["<online/físico>"],
-    description=to_line(["Como os dados originais estão disponibilizados?"]),
+OBSERVATIONAL_LEVEL_FIELD  = Field(
+    title="Entidade",
     yaml_order={
-        "id_before": "registration",
-        "id_after": "brazilian_IP",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
-BRAZILIAN_IP_FIELD = Field(
-    title="brazilian_IP",
-    user_input_hint=["<sim/não>"],
-    description=to_line(["A fonte original requer IP brasileiro para acesso?"]),
+
+TIME_UNIT_FIELD  = Field(
+    title="Unidade temporal",
     yaml_order={
-        "id_before": "availability",
-        "id_after": "license",
+        "id_before": "",
+        "id_after": "",
     },
 )
 
-LICENSE_FIELD = Field(
-    title="license",
-    description=to_line(
-        [
-            "Essa base está sob qual licença?",
-            "A licença MIT se aplica a bases públicas.",
-            "Caso não seja pública, ver opções aqui: https://help.data.world/hc/en-us/articles/115006114287-Common-license-types-for-datasets",
-        ]
-    ),
+UPDATE_FREQUENCY_FIELD  = Field(
+    title="",
     yaml_order={
-        "id_before": "brazilian_IP",
-        "id_after": None,
+        "id_before": "",
+        "id_after": "",
     },
 )

@@ -13,6 +13,7 @@ from ckanext.basedosdados.validator.resources import _CkanDefaultResource
 class BdmDictionary(_CkanDefaultResource):
     resource_type: Literal["bdm_dictionary"]
 
+    # BdmDictionary models
     dataset_id  : Str = DATASET_ID_FIELD
     table_id    : Str = TABLE_ID_FIELD
     last_updated: Str = LAST_UPDATED_FIELD
