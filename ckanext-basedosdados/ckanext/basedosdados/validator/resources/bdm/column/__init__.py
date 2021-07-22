@@ -21,7 +21,7 @@ from ckanext.basedosdados.validator.available_options import (
 class BdmColumns(BaseModel):
     # ColumnsMetadata models
     dataset_id           : Optional[Str]                 = DATASET_ID_FIELD
-    table_id             : Str                           = TABLE_ID_FIELD
+    table_id             : Optional[Str]                 = TABLE_ID_FIELD
     name                 : Optional[Str]                 = NAME_FIELD
     # bigquery_type        : Optional[BigQueryTypeEnum]    = BIGQUERY_TYPE_FIELD
     description          : Optional[Str]                 = DESCRIPTION_FIELD
