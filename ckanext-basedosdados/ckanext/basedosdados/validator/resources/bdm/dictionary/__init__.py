@@ -1,7 +1,6 @@
-from typing import Optional, Literal, Union, Set
+from typing import Optional, Literal
 from pydantic import (
     StrictStr as Str,
-    validator,
 )
 
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
@@ -14,6 +13,6 @@ class BdmDictionary(_CkanDefaultResource):
     resource_type: Literal["bdm_dictionary"]
 
     # BdmDictionary models
-    dataset_id  : Str = DATASET_ID_FIELD
-    table_id    : Str = TABLE_ID_FIELD
-    last_updated: Str = LAST_UPDATED_FIELD
+    dataset_id   : Optional[Str]        = DATASET_ID_FIELD
+    table_id     : Str                  = TABLE_ID_FIELD
+    last_updated: Optional[LastUpdated] = LAST_UPDATED_FIELD

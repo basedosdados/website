@@ -16,7 +16,8 @@ class Licence(BaseModel):
     name: Str = Field(user_input_hint=["MIT"])
     url: Str = Field(user_input_hint=["<url>"])
 
-#TODO: define spatial_coverage fields
+
+# TODO: define spatial_coverage fields
 # class SpatialCoverage(BaseModel):
 #     world:
 #     continet:
@@ -27,6 +28,9 @@ class Licence(BaseModel):
 
 to_line = lambda description: "\n".join(description)
 
+# -------------------------------------
+# Dataset Fields
+# -------------------------------------
 
 AUTHOR_FIELD = Field(
     title="author",
@@ -40,7 +44,7 @@ AUTHOR_FIELD = Field(
 METADATA_MODIFIED_FIELD = Field(
     title="metadata_modified",
     yaml_order={
-        "id_before":"",
+        "id_before": "",
         "id_after": "",
     },
 )
@@ -125,16 +129,14 @@ TITLE_FIELD = Field(
 DESCRIPTION_FIELD = Field(
     title="Descrição",
     user_input_hint=["<exemplo: descrição e anotações úteis sobre os dados.>"],
-    description=to_line(
-        ["exemplo: descrição e anotações úteis sobre os dados."]
-    ),
+    description=to_line(["exemplo: descrição e anotações úteis sobre os dados."]),
     yaml_order={
         "id_before": "",
         "id_after": "",
     },
 )
 
-TAG_STRING_FIELD  = Field(
+TAG_STRING_FIELD = Field(
     title="Etiquetas",
     user_input_hint=["<exemplo: fertilidade, preço, desmatamento>"],
     yaml_order={
@@ -144,7 +146,7 @@ TAG_STRING_FIELD  = Field(
 )
 
 
-DOWNLOAD_TYPE_FIELD  = Field(
+DOWNLOAD_TYPE_FIELD = Field(
     title="Tipo de download",
     yaml_order={
         "id_before": "",
@@ -152,7 +154,7 @@ DOWNLOAD_TYPE_FIELD  = Field(
     },
 )
 
-SPATIAL_COVERAGE_FIELD  = Field(
+SPATIAL_COVERAGE_FIELD = Field(
     title="Cobertura espacial",
     yaml_order={
         "id_before": "",
@@ -161,7 +163,7 @@ SPATIAL_COVERAGE_FIELD  = Field(
 )
 
 
-TEMPORAL_COVERAGE_FIELD  = Field(
+TEMPORAL_COVERAGE_FIELD = Field(
     title="Cobertura temporal",
     yaml_order={
         "id_before": "",
@@ -169,7 +171,7 @@ TEMPORAL_COVERAGE_FIELD  = Field(
     },
 )
 
-OBSERVATIONAL_LEVEL_FIELD  = Field(
+OBSERVATIONAL_LEVEL_FIELD = Field(
     title="Entidade",
     yaml_order={
         "id_before": "",
@@ -178,7 +180,7 @@ OBSERVATIONAL_LEVEL_FIELD  = Field(
 )
 
 
-TIME_UNIT_FIELD  = Field(
+TIME_UNIT_FIELD = Field(
     title="Unidade temporal",
     yaml_order={
         "id_before": "",
@@ -186,7 +188,7 @@ TIME_UNIT_FIELD  = Field(
     },
 )
 
-UPDATE_FREQUENCY_FIELD  = Field(
+UPDATE_FREQUENCY_FIELD = Field(
     title="",
     yaml_order={
         "id_before": "",
