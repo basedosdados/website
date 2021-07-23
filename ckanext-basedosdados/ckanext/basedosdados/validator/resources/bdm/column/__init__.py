@@ -19,6 +19,7 @@ from ckanext.basedosdados.validator.available_options import (
 
 #TODO: investigate why when put the Enum types the forms dont show the fields
 class BdmColumns(BaseModel):
+    
     # ColumnsMetadata models
     dataset_id           : Optional[Str]                 = DATASET_ID_FIELD
     table_id             : Optional[Str]                 = TABLE_ID_FIELD
