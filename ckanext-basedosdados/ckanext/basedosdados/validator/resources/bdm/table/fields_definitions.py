@@ -111,7 +111,7 @@ TIME_UNIT_FIELD = Field(
 
 IDENTIFYING_COLUMNS_FIELD = Field(
     title="Colunas identificadoras",
-    user_input_hint=["<primeira coluna>"],
+    user_input_hint=["ex. id_municipio, produto, ano"],
     description=to_line(
         [
             "O conjunto mínimo de colunas identificando cada linha unicamente.",
@@ -213,7 +213,7 @@ COVERED_BY_DICTIONARY_FIELD = Field(
 )
 
 SOURCE_BUCKET_NAME_FIELD = Field(
-    title="source_bucket_name",
+    title="Nome do bucket fonte no GCP",
     yaml_order={
         "id_after": "covered_by_dictionary",
         "id_before": "project_id_prod",
@@ -221,7 +221,7 @@ SOURCE_BUCKET_NAME_FIELD = Field(
 )
 
 PROJECT_ID_PROD_FIELD = Field(
-    title="project_id_prod",
+    title="Project ID de produção no GCP",
     yaml_order={
         "id_after": "source_bucket_name",
         "id_before": "project_id_staging",
@@ -229,7 +229,7 @@ PROJECT_ID_PROD_FIELD = Field(
 )
 
 PROJECT_ID_STAGING_FIELD = Field(
-    title="project_id_staging",
+    title="Project ID de staging no GCP",
     yaml_order={
         "id_after": "project_id_prod",
         "id_before": "ckan_url",
@@ -237,8 +237,8 @@ PROJECT_ID_STAGING_FIELD = Field(
 )
 
 PARTITIONS_FIELD = Field(
-    title="partitions",
-    user_input_hint=["<primeira partição>"],
+    title="Partições",
+    user_input_hint=["ex. ano, sigla_uf"],
     description=to_line(
         [
             "Liste as colunas da tabela que representam partições.",
@@ -254,9 +254,8 @@ PARTITIONS_FIELD = Field(
 )
 
 BDM_FILE_SIZE_FIELD = Field(
-    title="",
+    title="Tamanho do arquivo na nuvem",
     description=to_line([""]),
-    user_input_hint=["<>"],
     yaml_order={
         "id_after": "partitions",
         "id_before": "columns",

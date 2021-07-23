@@ -28,7 +28,7 @@ class BdmTable(_CkanDefaultResource):
     entity                    : Optional[Set[EntityEnum]]           = ENTITY_FIELD
     time_unit                 : Optional[TimeUnitEnum]              = TIME_UNIT_FIELD
     identifying_columns       : Optional[Str]                       = IDENTIFYING_COLUMNS_FIELD #TODO make it a list, instead of one string
-    last_updated              : Optional[LastUpdated]               = LAST_UPDATED_FIELD        #TODO to include last release, data, metadata
+    last_updated              : Optional[LastUpdated]               = LAST_UPDATED_FIELD
     version                   : Optional[Str]                       = VERSION_FIELD
     published_by              : Optional[PublishedBy]               = PUBLISHED_BY_FIELD
     data_cleaned_by           : Optional[DataCleanedBy]             = DATA_CLEANED_BY_FIELD
