@@ -38,7 +38,6 @@ class BdmTable(_CkanDefaultResource):
     architecture_url          : Optional[Str]                       = ARCHITECTURE_URL_FIELD
     covered_by_dictionary     : Optional[YesNoEnum]                 = COVERED_BY_DICTIONARY_FIELD
     
-    # BdmTable models that are not in schema
     source_bucket_name : Optional[Str]                                = SOURCE_BUCKET_NAME_FIELD
     project_id_prod    : Optional[Str]                                = PROJECT_ID_PROD_FIELD
     project_id_staging : Optional[Str]                                = PROJECT_ID_STAGING_FIELD

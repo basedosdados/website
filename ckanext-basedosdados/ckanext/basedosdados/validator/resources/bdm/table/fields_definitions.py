@@ -6,6 +6,11 @@ from pydantic import (
 )
 from ckanext.basedosdados.validator import BaseModel
 
+class LastUpdated(BaseModel):
+    metadata: datetime = Field(user_input_hint=["Última atualização: metadados"])
+    data: datetime = Field(user_input_hint=["Última atualização: dados"])
+    release: datetime = Field(user_input_hint=["Último lançamento: dados originais"])
+
 class PublishedBy(BaseModel):
     name: Str = Field(user_input_hint=["<nome [você]>"])
     email: Str = Field(user_input_hint=["<email>"])
@@ -18,11 +23,6 @@ class DataCleanedBy(BaseModel):
     github: Str = Field(user_input_hint=["<usuário Github>"])
     website: Str = Field(user_input_hint=["<onde encontrar os dados tratados>"])
     code_url: Str = Field(user_input_hint=["<onde encontrar código de limpeza>"])
-
-class LastUpdated(BaseModel):
-    metadata: datetime = Field(user_input_hint=["Última atualização: metadados"])
-    data: datetime = Field(user_input_hint=["Última atualização: dados"])
-    release: datetime = Field(user_input_hint=["Último lançamento: dados originais"])
 
 to_line = lambda description: "\n".join(description)
 
