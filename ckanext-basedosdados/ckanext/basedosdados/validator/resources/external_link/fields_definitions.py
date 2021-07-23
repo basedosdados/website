@@ -24,7 +24,16 @@ URL_FIELD = Field(
     user_input_hint=["<www.example.com/data>"],
     yaml_order={
         "id_after": "dataset_id",
-        "id_before": "description",
+        "id_before": "title",
+    },
+)
+
+TITLE_FIELD = Field(
+    title="Título",
+    user_input_hint=["<Um título descritivo>"],
+    yaml_order={
+        "id_before": "url",
+        "id_after": "description",
     },
 )
 
@@ -39,7 +48,7 @@ DESCRIPTION_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "url",
+        "id_after": "title",
         "id_before": "language",
     },
 )

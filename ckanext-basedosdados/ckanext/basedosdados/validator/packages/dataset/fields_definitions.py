@@ -28,23 +28,47 @@ to_line = lambda description: "\n".join(description)
 # Dataset Fields
 # -------------------------------------
 
-AUTHOR_FIELD = Field(
-    title="author",
-    description=to_line(["Qual departamento/grupo/pessoa mantém os dados originais?"]),
+ORGANIZATION_FIELD = Field(
+    title="Organization ID",
+    user_input_hint=["<organização>"],
+    description=to_line(
+        [
+            "Qual organização disponibiliza os dados originais?",
+            "Opções: escolher dessa lista -> https://basedosdados.org/api/3/action/organization_list=",
+        ]
+    ),
     yaml_order={
-        "id_before": "",
-        "id_after": "",
+        "id_after": None,
+        "id_before": "dataset_id",
     },
 )
 
-METADATA_MODIFIED_FIELD = Field(
-    title="metadata_modified",
+DATASET_ID_FIELD = Field(
+    title="Dataset ID",
     yaml_order={
-        "id_before": "",
-        "id_after": "",
+        "id_after": "organization",
+        "id_before": "title",
     },
 )
 
+TITLE_FIELD = Field(
+    title="Título",
+    user_input_hint=["<Um título descritivo>"],
+    yaml_order={
+        "id_after": "dataset_id",
+        "id_before": "description",
+    },
+)
+
+DESCRIPTION_FIELD = Field(
+    title="Descrição",
+    user_input_hint=["<exemplo: descrição e anotações úteis sobre os dados.>"],
+    description=to_line(["exemplo: descrição e anotações úteis sobre os dados."]),
+    yaml_order={
+        "id_after": "title",
+        "id_before": "groups",
+    },
+)
 
 GROUPS_FIELD = Field(
     title="groups",
@@ -56,30 +80,14 @@ GROUPS_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_before": "",
-        "id_after": "",
-    },
-)
-
-
-ORGANIZATION_FIELD = Field(
-    title="organization",
-    user_input_hint=["<organização>"],
-    description=to_line(
-        [
-            "Qual organização disponibiliza os dados originais?",
-            "Opções: escolher dessa lista -> https://basedosdados.org/api/3/action/organization_list=",
-        ]
-    ),
-    yaml_order={
-        "id_before": "",
-        "id_after": "",
+        "id_after": "description",
+        "id_before": "tags",
     },
 )
 
 TAGS_FIELD = Field(
     title="tags",
-    user_input_hint=["<etiqueta>"],
+    user_input_hint=["<exemplo: fertilidade, preco, desmatamento>"],
     description=to_line(
         [
             "Quais etiquetas caracterizam a base?",
@@ -91,79 +99,32 @@ TAGS_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_before": "",
-        "id_after": "",
-    },
-)
-
-DATASET_ID_FIELD = Field(
-    title="Dataset ID",
-    yaml_order={
-        "id_before": "",
-        "id_after": "",
-    },
-)
-
-
-ORGANIZATION_ID_FIELD = Field(
-    title="ID da organização",
-    yaml_order={
-        "id_before": "",
-        "id_after": "",
-    },
-)
-
-TITLE_FIELD = Field(
-    title="Título",
-    user_input_hint=["<Um título descritivo>"],
-    yaml_order={
-        "id_before": "",
-        "id_after": "",
-    },
-)
-
-DESCRIPTION_FIELD = Field(
-    title="Descrição",
-    user_input_hint=["<exemplo: descrição e anotações úteis sobre os dados.>"],
-    description=to_line(["exemplo: descrição e anotações úteis sobre os dados."]),
-    yaml_order={
-        "id_before": "",
-        "id_after": "",
-    },
-)
-
-TAG_STRING_FIELD = Field(
-    title="Etiquetas",
-    user_input_hint=["<exemplo: fertilidade, preço, desmatamento>"],
-    yaml_order={
-        "id_before": "",
-        "id_after": "",
-    },
-)
-
-
-DOWNLOAD_TYPE_FIELD = Field(
-    title="Tipo de download",
-    yaml_order={
-        "id_before": "",
-        "id_after": "",
+        "id_after": "groups",
+        "id_before": "spatial_coverage",
     },
 )
 
 SPATIAL_COVERAGE_FIELD = Field(
     title="Cobertura espacial",
     yaml_order={
-        "id_before": "",
-        "id_after": "",
+        "id_after": "tags",
+        "id_before": "temporal_coverage",
     },
 )
-
 
 TEMPORAL_COVERAGE_FIELD = Field(
     title="Cobertura temporal",
     yaml_order={
-        "id_before": "",
-        "id_after": "",
+        "id_after": "spatial_coverage",
+        "id_before": "entity",
+    },
+)
+
+UPDATE_FREQUENCY_FIELD = Field(
+    title="",
+    yaml_order={
+        "id_after": "temporal_coverage",
+        "id_before": "entity",
     },
 )
 
@@ -180,16 +141,8 @@ ENTITY_FIELD = Field(
 TIME_UNIT_FIELD = Field(
     title="Unidade temporal",
     yaml_order={
-        "id_before": "",
-        "id_after": "",
-    },
-)
-
-UPDATE_FREQUENCY_FIELD = Field(
-    title="",
-    yaml_order={
-        "id_before": "",
-        "id_after": "",
+        "id_after": "entity",
+        "id_before": "ckan_url",
     },
 )
 
@@ -197,7 +150,7 @@ CKAN_URL_FIELD = Field(
     title="ckan_url",
     user_input_hint=["<https://basedosdados.org/dataset/<dataset_id>"],
     yaml_order={
-        "id_after": "project_id_staging",
+        "id_after": "time_unit",
         "id_before": "github_url",
     },
 )
@@ -207,6 +160,39 @@ GITHUB_URL_FIELD: Str = Field(
     user_input_hint=["<https://github.com/basedosdados/mais/tree/master/bases/<dataset_id>"],
     yaml_order={
         "id_after": "ckan_url",
-        "id_before": "partitions",
+        "id_before": "visibility",
+    },
+)
+
+VISIBILITY_FIELD = Field(
+    title="Visibilidade",
+    yaml_order={
+        "id_after": "github_url",
+        "id_before": "download_type",
+    },
+)
+
+DOWNLOAD_TYPE_FIELD = Field(
+    title="Tipo de download",
+    yaml_order={
+        "id_after": "visibility",
+        "id_before": "metadata_modified",
+    },
+)
+
+METADATA_MODIFIED_FIELD = Field(
+    title="metadata_modified",
+    yaml_order={
+        "id_after": "download_type",
+        "id_before": "author",
+    },
+)
+
+AUTHOR_FIELD = Field(
+    title="author",
+    description=to_line(["Qual departamento/grupo/pessoa mantém os dados originais?"]),
+    yaml_order={
+        "id_after": "metadata_modified",
+        "id_before": None,
     },
 )
