@@ -1,5 +1,6 @@
 from enum import EnumMeta, Enum
 
+
 class _EnumMeta(EnumMeta):
     def __new__(meta, name, bases, namespace, **kw):
         members = namespace._member_names
@@ -11,8 +12,9 @@ class _EnumMeta(EnumMeta):
             namespace[k] = (k, value)
         return super().__new__(_EnumMeta, name, bases, namespace, **kw)
 
+
 class AttrEnum(str, Enum, metaclass=_EnumMeta):
-    ''' An enum class that does two things:
+    """An enum class that does two things:
         * Infers the enum name from the variable name.
         * Saves your argument on a `attrs` property
 
@@ -24,7 +26,7 @@ class AttrEnum(str, Enum, metaclass=_EnumMeta):
     20
     >>> Animal('CAT').attr['weight']
     10
-    '''
+    """
 
     def __new__(cls, value, attr):
         obj = str.__new__(cls, value)
@@ -35,12 +37,12 @@ class AttrEnum(str, Enum, metaclass=_EnumMeta):
 
     @classmethod
     def get_all_enum_attr(cls, attr):
-        '''
+        """
         >>> class Animal(AttrEnum):
         >>>    DOG = dict(size=10, weight=20)
         >>>    CAT = dict(size=5, weight=10)
 
         >>> Animal.get_all_enum_attr('size')
         {'DOG': 10, 'CAT': 5}
-        '''
+        """
         return {name: obj.attr.get(attr) for name, obj in cls.__members__.items()}

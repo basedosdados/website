@@ -1,0 +1,848 @@
+
+**dataset**
+- name: dataset_id
+  label:
+    en: "Dataset ID"
+    pt: "ID da base"
+  description:
+    en: ""
+    pt: ""
+  preset: slug
+  required: true
+  order: [, ]
+- name: organization_id
+  label:
+    en: "Organization ID"
+    pt: "ID da organização"
+  description:
+    en: ""
+    pt: ""
+  preset: slug
+  required: true
+  order: [, ]
+- name: title
+  label:
+    en: "Title"
+    pt: "Título"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: "A descriptive title"
+    pt: "Um título descritivo"
+  required: true
+  order: [, ]
+- name: description
+  label:
+    en: "Description"
+    pt: "Descrição"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: "example: a useful description of the dataset."
+    pt: "exemplo: descrição e anotações úteis sobre os dados."
+  required: true
+  order: [, ]
+- name: tag_string
+  label:
+    en: "Tags"
+    pt: "Etiquetas"
+  description:
+    en: ""
+    pt: ""
+  form_placeholder:
+    en: "example: fertilidade, preço, desmatamento"
+    pt: "exemplo: fertilidade, preço, desmatamento"
+  required: true
+  order: [, ]
+- name: download_type
+  label:
+    en: "Download type"
+    pt: "Tipo de download"
+  description:
+    en: ""
+    pt: ""
+  preset: derived
+  order: [, ]
+- name: spatial_coverage
+  label:
+    en: "Spatial coverage"
+    pt: "Cobertura espacial"
+  preset: derived
+  order: [, ]
+- name: time_coverage
+  label:
+    en: "Time coverage"
+    pt: "Cobertura temporal"
+  preset: derived
+  order: [, ]
+- name: entity
+  label:
+    en: "Entity"
+    pt: "Entidade"
+  preset: derived
+  order: [, ]
+- name: time_unit
+  label:
+    en: "Time unit"
+    pt: "Unidade temporal"
+  preset: derived
+  order: [, ]
+
+**bdm_table**
+- name: dataset_id
+  description:
+    en: ""
+    pt: ""
+  preset: slug
+  required: true
+  order: [, ]
+- name: table_id
+  description:
+    en: ""
+    pt: ""
+  preset: slug
+  required: true
+  order: [, ]
+- name: description
+  label:
+    en: "Description"
+    pt: "Descrição"
+  description:
+    en: "A descriptive description."
+    pt: "Uma descrição descritiva."
+  placeholder:
+    en: ""
+    pt: ""
+  preset: string
+  required: true
+  order: [, ]
+- name: spatial_coverage
+  label:
+    en: "Spatial coverage"
+    pt: "Cobertura espacial"
+  description:
+    en: "The maximal spatial unit the table covers."
+    pt: "A máxima unidade espacial que a tabela cobre."
+  placeholder:
+    en: ""
+    pt: ""
+  preset: tree
+  required: true
+  order: [, ]
+- name: time_coverage
+  label:
+    en: "Time coverage"
+    pt: "Cobertura temporal"
+  description:
+    en: "Years covered by the table."
+    pt: "Anos cobertos pela tabela."
+  placeholder:
+    en: ""
+    pt: ""
+  preset: intervals_list
+  required: true
+  order: [, ]
+- name: update_frequency
+  label:
+    en: "Update frequency"
+    pt: "Frequência de atualização"
+  description:
+    en: "The time unit at which the table is updated."
+    pt: "A unidade temporal pela qual a tabela é atualizada."
+  placeholder:
+    en: ""
+    pt: ""
+  preset: single_choice
+  options_available: time_unit
+  required: true
+  order: [, ]
+- name: entity
+  label:
+    en: "Entity"
+    pt: "Entidade"
+  description:
+    en: "Entity covered by the table."
+    pt: "Entidade coberta pela tabela."
+  placeholder:
+    en: ""
+    pt: ""
+  preset: multiple_choice
+  options_available: entity
+  required: true
+  order: [, ]
+- name: time_unit
+  label:
+    en: "Time unit"
+    pt: "Unidade temporal"
+  description:
+    en: "The time unit represented by each row."
+    pt: "A unidade temporal representada por cada linha."
+  placeholder:
+    en: ""
+    pt: ""
+  preset: single_choice
+  options_available: time_unit
+  required: true
+  order: [, ]
+- name: identifying_columns
+  label:
+    en: "Identifying columns"
+    pt: "Colunas identificadoras"
+  description:
+    en: "The minimum set of columns identifying each row uniquely."
+    pt: "O conjunto mínimo de colunas identificando cada linha unicamente."
+  placeholder:
+    en: "Example: id_municipio, ano"
+    pt: "Exemplo: id_municipio, ano"
+  preset: string_list
+  required: true
+  order: [, ]
+- name: last_updated
+  fields:
+    - name: metadata
+      label:
+        en: "Last updated: metadata"
+        pt: "Última atualização: metadados"
+      preset: date
+    - name: data
+      label:
+        en: "Last updated: data"
+        pt: "Última atualização: dados"
+      preset: date
+    - name: release
+      label:
+        en: "Last release: raw data"
+        pt: "Último lançamento: dados originais"
+      preset: date
+  order: [, ]
+- name: version
+  label:
+    en: "Version"
+    pt: "Versão"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: "vA.B"
+    pt: "vA.B"
+  preset: string
+  required: true
+  order: [, ]
+- name: published_by
+  label:
+    en: "Published by:"
+    pt: "Publicado por:"
+  fields:
+    - name: name
+      label:
+        en: "Name"
+        pt: "Nome"
+      placeholder:
+        en: "John Smith"
+        pt: "Fulano da Silva"
+      preset: string
+    - name: email
+      label:
+        en: "Email"
+        pt: "Email"
+      placeholder:
+        en: "john@example.com"
+        pt: "fulano@exemplo.com"
+      preset: email
+    - name: github
+      label:
+        en: "Github user"
+        pt: "Usuário no Github"
+      placeholder:
+        en: "john"
+        pt: "fulano"
+      preset: string
+    - name: website
+      label:
+        en: "Website"
+        pt: "Website"
+      placeholder:
+        en: "www.example.com"
+        pt: "www.exemplo.com"
+      preset: string
+  required: true
+  order: [, ]
+- name: data_cleaning_description
+  label:
+    en: "Data cleaning description"
+    pt: "Descrição da limpeza de dados"
+  description:
+    en: "If there was any data cleaning and manipulation, describe them here."
+    pt: "Se houve passos de tratamento, limpeza e manipulação de dados, descreva-os aqui."
+  placeholder:
+    en: ""
+    pt: ""
+  preset: string
+  required: false
+  order: [, ]
+- name: raw_data_url
+  label:
+    en: "Raw data url"
+    pt: "Url dos dados originais"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: url
+  required: false
+  order: [, ]
+- name: auxiliary_files_url
+  label:
+    en: "Auxiliary files url"
+    pt: "Url dos arquivos auxiliares"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: url
+  required: false
+  order: [, ]
+- name: architecture_table_url
+  label:
+    en: "Architecture table url"
+    pt: "Url da tabela de arquitetura"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: url
+  required: false
+  order: [, ]
+- name: covered_by_dictionary
+  label:
+    en: "Covered by dictionary"
+    pt: "Coberto por dicionário"
+  description:
+    en: ""
+    pt: ""
+  preset: single_choice
+  options_available: yes_no
+  order: [, ]
+
+**bdm_column**
+- name: table_id
+  label:
+    en: "Table ID"
+    pt: "ID da tabela"
+  preset: slug
+  required: true
+  order: [,]
+- name: name
+  label:
+    en: "Name"
+    pt: "Nome"
+  required: true
+  order: [,]
+- name: type
+  label:
+    en: "BigQuery type"
+    pt: "Tipo no BigQuery"
+  description:
+    en: "BigQuery's column type. See https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types."
+    pt: "Tipo da coluna no BigQuery. Ver https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types."
+  preset: single_choice
+  options_available: bigquery_type
+  required: true
+  order: [,]
+- name: description
+  label:
+    en: "Description"
+    pt: "Descrição"
+  required: true
+  order: [,]
+- name: time_coverage
+  label:
+    en: "Time coverage"
+    pt: "Cobertura temporal"
+  preset: intervals_list
+  options_available: time_coverage
+  required: true
+  order: [,]
+- name: has_dictionary
+  label:
+    en: "Has dictionary"
+    pt: "Tem dicionário"
+  preset: single_choice
+  options_available: yes_no
+  required: true
+  order: [,]
+- name: directory_column
+  label:
+    en: "Directory column"
+    pt: "Coluna em diretório"
+  preset: single_choice
+  options_available: directory_column
+  required: true
+  order: [,]
+- name: measurement_unit
+  label:
+    en: "Measurement unit"
+    pt: "Unidade de medida"
+  description:
+    en: "What is the column's measurement unit? See ISO/IEC 80000 for standard notation."
+    pt: "Qual é a unidade de medida da coluna? Ver ISO/IEC 80000 para notação padrão."
+  preset: measurement_unit
+  options_available: measurement_unit
+  required: true
+  order: [,]
+- name: original_names
+  label:
+    en: "Original names"
+    pt: "Nomes originais"
+  preset: string
+  required: true
+  order: [,]
+
+**bdm_dictionary**
+- name: dataset_id
+  label:
+    en: "Dataset ID"
+    pt: "ID da base"
+  preset: slug
+- name: table_id
+  label:
+    en: "Table ID"
+    pt: "ID da tabela"
+  preset: slug
+- name: last_updated
+  label:
+    en: "Last updated"
+    pt: "Última atualização"
+
+**external_source**
+- name: dataset_id
+  label:
+    en: "Dataset ID"
+    pt: "ID da base"
+  preset: slug
+  required: true
+  order: [,]
+- name: url
+  label:
+    en: "Url"
+    pt: "Url"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: "www.example.com/data"
+    pt: "www.exemplo.com/dados"
+  preset: url
+  required: true
+  order: [,]
+- name: description
+  label:
+    en: "Description"
+    pt: "Descrição"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: "A descriptive description."
+    pt: "Uma descrição descritiva."
+  preset: string
+  required: true
+  order: [,]
+- name: language
+  label:
+    en: "Language"
+    pt: "Língua"
+  description:
+    en: "In what languages is the external source available."
+    pt: "Em quais línguas a fonte externa está disponível."
+  preset: multiple_choice
+  options_available: language
+  required: true
+  order: [,]
+- name: has_structured_data
+  label:
+    en: "Has structured data"
+    pt: "Tem dados estruturados"
+  description:
+    en: "Does the external source provides data in structured formats, such as csv, json, etc?"
+    pt: "A fonte externa disponibiliza dados em formatos estruturados, como csv, json, etc?"
+  placeholder:
+    en: ""
+    pt: ""
+  preset: single_choice
+  options_available: yes_no
+  required: true
+  order: [,]
+- name: has_api
+  label:
+    en: "Has an API"
+    pt: "Tem uma API"
+  description:
+    en: "Does the external source provide an API for data access?"
+    pt: "A fonte externa disponibiliza uma API para acesso aos dados?"
+  placeholder:
+    en: ""
+    pt: ""
+  preset: single_choice
+  options_available: yes_no
+  required: true
+  order: [,]
+- name: is_free
+  label:
+    en: "Is free"
+    pt: "É de graça"
+  description:
+    en: "Is access to the external source's data free?"
+    pt: "O acesso aos dados da fonte externa é grátis?"
+  placeholder:
+    en: ""
+    pt: ""
+  preset: single_choice
+  options_available: yes_no
+  required: true
+  order: [,]
+- name: requires_registration
+  label:
+    en: "Requires registration"
+    pt: "Requer registro"
+  description:
+    en: "Does the external source require user registration for data access?"
+    pt: "A fonte externa requer registro de usuário para acesso aos dados?"
+  placeholder:
+    en: ""
+    pt: ""
+  preset: single_choice
+  options_available: yes_no
+  required: true
+  order: [,]
+- name: availability
+  label:
+    en: "Availability"
+    pt: "Disponibilidade"
+  description:
+    en: "How is data made available?"
+    pt: "Como os dados são disponibilizados?"
+  placeholder:
+    en: ""
+    pt: ""
+  preset: single_choice
+  options_available: availability
+  required: true
+  order: [,]
+- name: country_ip_address_required
+  label:
+    en: "Country"
+    pt: ""
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: multiple_choice
+  options_available: country
+  required: false
+  order: [,]
+- name: license_type
+  label:
+    en: "License type"
+    pt: "Tipo de licença de acesso"
+  description:
+    en: "What license type regulates access to the external source's data?"
+    pt: "Qual tipo de licença regula acesso aos dados da fonte externa?"
+  placeholder:
+    en: ""
+    pt: ""
+  preset: single_choice
+  options_available: license_type
+  required: true
+  order: [,]
+- name: spatial_coverage
+  label:
+    en: "Spatial coverage"
+    pt: "Cobertura espacial"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: tree
+  options_available: spatial_coverage
+  required: true
+  order: [,]
+- name: time_coverage
+  label:
+    en: "Time coverage"
+    pt: "Cobertura temporal"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: intervals_list
+  options_available: time_coverage
+  required: true
+  order: [,]
+- name: entity
+  label:
+    en: "Entity"
+    pt: "Entidade"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: multiple_choice
+  options_available: entity
+  required: true
+  order: [,]
+- name: update_frequency
+  label:
+    en: "Update frequency"
+    pt: "Frequência de atualizações"
+  description:
+    en: "In what frequency is the data updated?"
+    pt: "Em qual frequência os dados são atualizados?"
+  placeholder:
+    en: ""
+    pt: ""
+  preset: single_choice
+  options_available: time_unit
+  required: true
+  order: [,]
+
+**information_request**
+- name: dataset_id
+  label:
+    en: "Dataset ID"
+    pt: "ID da base"
+  description:
+    en: ""
+    pt: ""
+  preset: slug
+  required: true
+  order: [, ]
+- name: origin
+  label:
+    en: ""
+    pt: ""
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: string
+  required: true
+  order: [, ]
+- name: number
+  label:
+    en: "Number"
+    pt: "Número"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: string
+  required: true
+  order: [, ]
+- name: url
+  label:
+    en: "Url"
+    pt: "Url"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: url
+  required: true
+  order: [, ]
+- name: superior_organ
+  label:
+    en: "Superior Organ"
+    pt: "Órgão superior"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: string
+  required: true
+  order: [, ]
+- name: linked_organ
+  label:
+    en: "Linked Organ"
+    pt: "Órgão vinculado"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: string
+  required: true
+  order: [, ]
+- name: opening_date
+  label:
+    en: "Opening date"
+    pt: "Data de abertura"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: date
+  required: true
+  order: [, ]
+- name: who_requested
+  label:
+    en: "Who requested"
+    pt: "Quem fez o pedido"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: string
+  required: false
+  order: [, ]
+- name: spatial_coverage
+  label:
+    en: "Spatial coverage"
+    pt: "Cobertura espacial"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: tree
+  options_available: spatial_coverage
+  required: true
+  order: [,]
+- name: time_coverage
+  label:
+    en: "Time coverage"
+    pt: "Cobertura temporal"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: intervals_list
+  options_available: time_coverage
+  required: true
+  order: [,]
+- name: entity
+  label:
+    en: "Entity"
+    pt: "Entidade"
+  description:
+    en: "Entity covered by the request."
+    pt: "Entidade coberta pelo pedido."
+  placeholder:
+    en: ""
+    pt: ""
+  preset: multiple_choice
+  options_available: entity
+  required: true
+  order: [,]
+- name: update_frequency
+  label:
+    en: "Update frequency"
+    pt: "Frequência de atualizações"
+  description:
+    en: "In what frequency is the data updated?"
+    pt: "Em qual frequência os dados são atualizados?"
+  placeholder:
+    en: ""
+    pt: ""
+  preset: single_choice
+  options_available: time_unit
+  required: true
+  order: [,]
+- name: status
+  label:
+    en: "Status"
+    pt: "Status"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: single_choice
+  options_available: information_request_status
+  required: true
+  order: [, ]
+- name: data_url
+  label:
+    en: "Data url"
+    pt: "Url dos dados"
+  description:
+    en: "Where are the answer's data available?"
+    pt: "Onde estão os dados da resposta?"
+  placeholder:
+    en: "www.example.com/data"
+    pt: "www.exemplo.com/dados"
+  preset: url
+  required: false
+  order: [,]
+- name: observations
+  label:
+    en: "Observations"
+    pt: "Observações"
+  description:
+    en: ""
+    pt: ""
+  placeholder:
+    en: ""
+    pt: ""
+  preset: string
+  required: false
+  order: [,]
+
+**access_instructions**
+- name: required_materials
+- name: email
+- name: url
+- name: examples_successful_applications
+
+**research**
+- name: title
+- name: authors
+- name: year
+- name: journal
+- name: volume
+- name: issue
+- name: pages
+- name: abstract
+- name: doi
+- name: url
+- name: bibtex_entry
+
+**application**
+- name: authors
+- name: 
+- name: 
+- name: 
+- name: 

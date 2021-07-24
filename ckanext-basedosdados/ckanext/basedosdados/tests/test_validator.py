@@ -1,8 +1,6 @@
-# from ckanext.basedosdados.validator.package import Package, ValidationError
-# from ckanext.basedosdados.validator.resource import Resource, BdmTable, ExternalLink
-from ckanext.basedosdados.validator.bdm.dataset import BdmDataset, ValidationError
-from ckanext.basedosdados.validator.bdm.table import BdmTable, Resource
-from ckanext.basedosdados.validator.external_link.table import ExternalLink
+from pydantic import ValidationError
+from ckanext.basedosdados.validator.packages import Dataset
+from ckanext.basedosdados.validator.resources import BdmTable, ExternalLink
 
 import jsonschema
 
@@ -21,18 +19,18 @@ def jsonify(data):
 
 def test_validating(data):
     with raises(ValidationError) as e:
-        BdmDataset.validate(data)
+        Dataset.validate(data)
     assert e.match("Discriminator 'resource_type' is missing in value")
 
-
-def test_correct_reporting_on_missing_properties_of_a_specific_resource(data):
-    data["resources"] = [
-        {"resource_type": "external_link", "id": "13", "name": "linkzao"}
-    ]
-    with raises(ValidationError) as e:
-        BdmDataset(**data, action__='package_show')
-    for error in e.value.errors():
-        assert error['type'] == "value_error.missing", error
+#TODO: DEPRECATED
+# def test_correct_reporting_on_missing_properties_of_a_specific_resource(data):
+#     data["resources"] = [
+#         {"resource_type": "external_link", "id": "13", "name": "linkzao"}
+#     ]
+#     with raises(ValidationError) as e:
+#         Dataset(**data, action__="package_show")
+#     for error in e.value.errors():
+#         assert error["type"] == "value_error.missing", error
 
 
 # TODO @Fred: See if this test is needed and remove request
@@ -171,7 +169,7 @@ def test_ckanize():
     }
 
     with raises(ValidationError) as e:
-        BdmDataset.validate(master_dataset)
+        Dataset.validate(master_dataset)
 
     import requests
 
@@ -182,26 +180,42 @@ def test_ckanize():
     ).json()["result"]
     assert master_dataset == ret
 
+
 def test_pydantic_validates_individual_items_in_a_list():
     from pydantic import BaseModel, ValidationError
     from typing import List, Optional, Literal, Union
+
     class Item(BaseModel):
         id: int
 
     class ManyItems(BaseModel):
         items: List[Item]
+
     try:
-        ManyItems.validate({'items': [
-                {'id': 12},
-                {'id': '1edfgd2'},
-                {'id': '154535345hfgdh345'},
-        ]})
+        ManyItems.validate(
+            {
+                "items": [
+                    {"id": 12},
+                    {"id": "1edfgd2"},
+                    {"id": "154535345hfgdh345"},
+                ]
+            }
+        )
     except ValidationError as error:
         assert error.errors() == (
-                [{'loc': ('items', 1, 'id'), 'msg': 'value is not a valid integer', 'type': 'type_error.integer'},
-                {'loc': ('items', 2, 'id'), 'msg': 'value is not a valid integer', 'type': 'type_error.integer'}]
+            [
+                {
+                    "loc": ("items", 1, "id"),
+                    "msg": "value is not a valid integer",
+                    "type": "type_error.integer",
+                },
+                {
+                    "loc": ("items", 2, "id"),
+                    "msg": "value is not a valid integer",
+                    "type": "type_error.integer",
+                },
+            ]
         )
-
 
 
 if __name__ == "__main__":

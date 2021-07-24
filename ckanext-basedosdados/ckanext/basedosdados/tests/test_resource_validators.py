@@ -1,6 +1,5 @@
-from ckanext.basedosdados.validator.bdm.dataset import BdmDataset
-from ckanext.basedosdados.validator.bdm.table import BdmTable, Resource
-from ckanext.basedosdados.validator.external_link.table import ExternalLink
+from ckanext.basedosdados.validator.packages import Dataset
+from ckanext.basedosdados.validator.resources import BdmTable, ExternalLink
 
 import jsonschema
 import pytest
@@ -11,31 +10,35 @@ from . import data
 def jsonify(data):
     from pydantic.json import custom_pydantic_encoder
     import json
+
     def encoder(o):
         def sort_list(s):
             return sorted(list(s))
-        return custom_pydantic_encoder({set: sort_list, frozenset: sort_list} , o) # order sets so that tests dont break
+
+        return custom_pydantic_encoder(
+            {set: sort_list, frozenset: sort_list}, o
+        )  # order sets so that tests dont break
 
     return json.loads(json.dumps(data, sort_keys=True, default=encoder))
 
+# TODO: DEPRECATED
+# def test_resource():
+#     data = {
+#         "id": "2251834b-0359-49d1-b2e2-ce791d75bdd1",
+#         "name": "Baixar",
+#         "description": "",
+#         "spatial_coverage": "spatial",
+#         "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
+#         "update_frequency": "second",
+#         "position": 1,
+#     }
 
-def test_resource():
-    data = {
-        "id": "2251834b-0359-49d1-b2e2-ce791d75bdd1",
-        "name": "Baixar",
-        "description": "",
-        "spatial_coverage": "spatial",
-        "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
-        "update_frequency": "second",
-        "position": 1
-    }
-
-    out = Resource.validate(data)
-    out = out.dict(exclude={"action__"})
-    out = jsonify(out)
-    jsonschema.validate(jsonify(data), Resource.schema())
-    for k, v in data.items():  # assert data is a subsed of out.dict()
-        assert out[k] == v
+#     out = Resource.validate(data)
+#     out = out.dict(exclude={"action__"})
+#     out = jsonify(out)
+#     jsonschema.validate(jsonify(data), Resource.schema())
+#     for k, v in data.items():  # assert data is a subsed of out.dict()
+#         assert out[k] == v
 
 
 def test_bdm_table():
@@ -47,10 +50,10 @@ def test_bdm_table():
         "position": 1,
         "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
         "update_frequency": "second",
-        "table_id": 'dfsf',
+        "table_id": "dfsf",
         "auxiliary_files_url": "www.files.com.br/files-test",
         "observation_level": ["age", "dam", "gun"],
-        "columns": "",
+        # "columns": "", #TODO: add new fields
         "primary_keys": "jasdiasd",
         "version": "3.0.0",
         "publisher": "Test",
@@ -95,6 +98,7 @@ def test_external_link():
     for k, v in data.items():  # assert data is a subsed of out.dict()
         assert out[k] == v
 
+
 def test_ok(data):
     data["resources"] = [
         {
@@ -105,10 +109,10 @@ def test_ok(data):
             "position": 1,
             "temporal_coverage": [2001, 2002, 2003, 2004, 2005],
             "update_frequency": "second",
-            "table_id": 'fds',
+            "table_id": "fds",
             "auxiliary_files_url": "www.files.com.br/files-test",
             "observation_level": ["age", "dam", "gun"],
-            "columns": "",
+            # "columns": "", #TODO: add new fields
             "primary_keys": "jasdiasd",
             "version": "3.0.0",
             "publisher": "Test",
@@ -136,9 +140,9 @@ def test_ok(data):
             "resource_type": "external_link",
         },
     ]
-    out = BdmDataset(**data, action__='package_show')
+    out = Dataset(**data, action__="package_show")
     out = out.dict(exclude={"action__"}, exclude_unset=True)
     out = jsonify(out)
-    jsonschema.validate(jsonify(data), BdmDataset.schema())
+    jsonschema.validate(jsonify(data), Dataset.schema())
     for k, v in data.items():  # assert data is a subsed of out.dict()
         assert out[k] == v
