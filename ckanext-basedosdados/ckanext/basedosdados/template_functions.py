@@ -70,7 +70,13 @@ def load_json_schema():
         )  # migrate required to schema3 format to comply with jsonform
         return dict(out)
 
-    resource_fields_to_delete = ['spatial_coverage', 'temporal_coverage', 'update_frequency',"resource_type"]
+    resource_fields_to_delete = [
+        "spatial_coverage",
+        "temporal_coverage",
+        "update_frequency",
+        "resource_type",
+        "columns",
+    ]
     return {
         "external_link": to_schema(ExternalLink, resource_fields_to_delete),
         "bdm_table": to_schema(BdmTable, resource_fields_to_delete)
@@ -87,7 +93,8 @@ load_json_schema = functools.update_wrapper(
 
 def _remove_complex_ckan_fields(package, fields_to_remove):
     for field in fields_to_remove:
-        del package["properties"][field]
+        if field in package["properties"]:
+            del package["properties"][field]
         if field in package["required"]:
             package["required"].remove(field)
 
