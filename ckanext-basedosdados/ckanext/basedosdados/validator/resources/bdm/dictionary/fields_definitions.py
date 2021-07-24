@@ -8,15 +8,20 @@ from ckanext.basedosdados.validator import BaseModel
 
 to_line = lambda description: "\n".join(description)
 
+# -------------------------------------
+# BdmDictionary Custom Types
+# -------------------------------------
 class LastUpdated(BaseModel):
     metadata: datetime = Field(user_input_hint=["Última atualização: metadados"])
     data: datetime = Field(user_input_hint=["Última atualização: metadados"])
+
 
 class PublishedBy(BaseModel):
     name: Str = Field(user_input_hint=["<nome [você]>"])
     email: Str = Field(user_input_hint=["<email>"])
     github: Str = Field(user_input_hint=["<usuário Github>"])
     website: Str = Field(user_input_hint=["<www.exemplo.com>"])
+
 
 # -------------------------------------
 # BdmDictionary Fields
@@ -135,7 +140,8 @@ COLUMNS_FIELD = Field(
             "Algumas colunas existirão apenas na tabela final, você as construirá em `publish.sql`.",
             "Para esses, defina is_in_staging como False.",
             "Além disso, você deve adicionar as colunas de partição aqui e definir is_partition como True.",
-        ]),
+        ]
+    ),
     yaml_order={
         "id_after": "bdm_file_size",
         "id_before": None,

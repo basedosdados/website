@@ -5,12 +5,15 @@ from pydantic import (
 )
 from ckanext.basedosdados.validator import BaseModel
 
-
+# -------------------------------------
+# InformationRequest Custom Types
+# -------------------------------------
 class RequestedBy(BaseModel):
     name: Str = Field(user_input_hint=["<nome [você]>"])
     email: Str = Field(user_input_hint=["<email>"])
     github: Str = Field(user_input_hint=["<usuário Github>"])
     website: Str = Field(user_input_hint=["<website>"])
+
 
 to_line = lambda description: "\n".join(description)
 
@@ -119,7 +122,7 @@ UPDATE_FREQUENCY_FIELD = Field(
     ),
     yaml_order={
         "id_after": "temporal_coverage",
-        "id_before": "entity",
+        "id_before": "observation_level",
     },
 )
 
@@ -135,9 +138,11 @@ ENTITY_FIELD = Field(
 
 TIME_UNIT_FIELD = Field(
     title="Unidade temporal",
-    description=to_line(["A unidade temporal representada por cada linha dos dados pedidos."]),
+    description=to_line(
+        ["A unidade temporal representada por cada linha dos dados pedidos."]
+    ),
     yaml_order={
-        "id_after": "entity",
+        "id_after": "observation_level",
         "id_before": "status",
     },
 )

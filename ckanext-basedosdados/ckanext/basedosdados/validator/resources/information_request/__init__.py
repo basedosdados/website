@@ -6,6 +6,8 @@ from pydantic import (
     Field,
 )
 
+from .fields_definitions import *
+from ckanext.basedosdados.validator.resources import _CkanDefaultResource
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options import (
     EntityEnum,
@@ -14,8 +16,6 @@ from ckanext.basedosdados.validator.available_options import (
     StatusEnum
 )
 
-from .fields_definitions import *
-from ckanext.basedosdados.validator.resources import _CkanDefaultResource
 
 class InformationRequest(_CkanDefaultResource): 
     resource_type: Literal["information_request"]

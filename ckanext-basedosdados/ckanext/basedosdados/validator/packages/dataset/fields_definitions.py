@@ -6,14 +6,9 @@ from pydantic import (
 
 from ckanext.basedosdados.validator import BaseModel
 
-class Author(BaseModel):
-    name: Str = Field(user_input_hint=["<nome>"])
-    email: Str = Field(user_input_hint=["<email>"])
-
-class Licence(BaseModel):
-    name: Str = Field(user_input_hint=["MIT"])
-    url: Str = Field(user_input_hint=["<url>"])
-
+# -------------------------------------
+# Dataset Custom Types
+# -------------------------------------
 # TODO: define spatial_coverage fields
 # class SpatialCoverage(BaseModel):
 #     world:
@@ -116,7 +111,7 @@ TEMPORAL_COVERAGE_FIELD = Field(
     title="Cobertura temporal",
     yaml_order={
         "id_after": "spatial_coverage",
-        "id_before": "entity",
+        "id_before": "observation_level",
     },
 )
 
@@ -124,7 +119,7 @@ UPDATE_FREQUENCY_FIELD = Field(
     title="",
     yaml_order={
         "id_after": "temporal_coverage",
-        "id_before": "entity",
+        "id_before": "observation_level",
     },
 )
 
@@ -141,7 +136,7 @@ ENTITY_FIELD = Field(
 TIME_UNIT_FIELD = Field(
     title="Unidade temporal",
     yaml_order={
-        "id_after": "entity",
+        "id_after": "observation_level",
         "id_before": "ckan_url",
     },
 )
@@ -157,7 +152,9 @@ CKAN_URL_FIELD = Field(
 
 GITHUB_URL_FIELD: Str = Field(
     title="github_url",
-    user_input_hint=["<https://github.com/basedosdados/mais/tree/master/bases/<dataset_id>"],
+    user_input_hint=[
+        "<https://github.com/basedosdados/mais/tree/master/bases/<dataset_id>"
+    ],
     yaml_order={
         "id_after": "ckan_url",
         "id_before": "visibility",

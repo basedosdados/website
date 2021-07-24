@@ -97,7 +97,9 @@ IS_FREE_FIELD = Field(
 
 REQUIRES_REGISTRATION_FIELD = Field(
     title="Requer registro",
-    description=to_line(["A fonte externa requer registro de usuário para acesso aos dados?"]),
+    description=to_line(
+        ["A fonte externa requer registro de usuário para acesso aos dados?"]
+    ),
     yaml_order={
         "id_after": "is_free",
         "id_before": "availability",
@@ -157,7 +159,7 @@ UPDATE_FREQUENCY_FIELD = Field(
     description=to_line(["A unidade temporal pela qual a tabela é atualizada."]),
     yaml_order={
         "id_after": "temporal_coverage",
-        "id_before": "entity",
+        "id_before": "observation_level",
     },
 )
 
@@ -175,7 +177,7 @@ TIME_UNIT_FIELD = Field(
     title="Unidade temporal",
     description=to_line(["A unidade temporal representada por cada linha."]),
     yaml_order={
-        "id_after": "entity",
+        "id_after": "observation_level",
         "id_before": None,
     },
 )

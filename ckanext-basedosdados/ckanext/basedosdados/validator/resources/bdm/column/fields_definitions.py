@@ -25,7 +25,11 @@ TABLE_ID_FIELD = Field(
 
 NAME_FIELD = Field(
     title="Nome da coluna",
-    description=to_line(["Nome em produção",]),
+    description=to_line(
+        [
+            "Nome em produção",
+        ]
+    ),
     yaml_order={
         "id_after": "table_id",
         "id_before": "bigquery_type",

@@ -6,10 +6,15 @@ from pydantic import (
 )
 from ckanext.basedosdados.validator import BaseModel
 
+
+# -------------------------------------
+# BdmTable Custom Types
+# -------------------------------------
 class LastUpdated(BaseModel):
     metadata: datetime = Field(user_input_hint=["Última atualização: metadados"])
     data: datetime = Field(user_input_hint=["Última atualização: dados"])
     release: datetime = Field(user_input_hint=["Último lançamento: dados originais"])
+
 
 class PublishedBy(BaseModel):
     name: Str = Field(user_input_hint=["<nome [você]>"])
@@ -17,12 +22,14 @@ class PublishedBy(BaseModel):
     github: Str = Field(user_input_hint=["<usuário Github>"])
     website: Str = Field(user_input_hint=["<www.exemplo.com>"])
 
+
 class DataCleanedBy(BaseModel):
     name: Str = Field(user_input_hint=["<nome>"])
     email: Str = Field(user_input_hint=["<email>"])
     github: Str = Field(user_input_hint=["<usuário Github>"])
     website: Str = Field(user_input_hint=["<onde encontrar os dados tratados>"])
     code_url: Str = Field(user_input_hint=["<onde encontrar código de limpeza>"])
+
 
 to_line = lambda description: "\n".join(description)
 
@@ -86,7 +93,7 @@ UPDATE_FREQUENCY_FIELD = Field(
     description=to_line(["A unidade temporal com qual a tabela é atualizada."]),
     yaml_order={
         "id_after": "temporal_coverage",
-        "id_before": "entity",
+        "id_before": "observation_level",
     },
 )
 
@@ -104,7 +111,7 @@ TIME_UNIT_FIELD = Field(
     title="Unidade temporal",
     description=to_line(["A unidade temporal representada por cada linha."]),
     yaml_order={
-        "id_after": "entity",
+        "id_after": "observation_level",
         "id_before": "identifying_columns",
     },
 )
@@ -170,7 +177,11 @@ DATA_CLEANED_BY_FIELD = Field(
 
 DATA_CLEANING_DESCRIPTION_FIELD = Field(
     title="Descrição da limpeza de dados",
-    description=to_line(["Se houve passos de tratamento, limpeza e manipulação de dados, descreva-os aqui."]),
+    description=to_line(
+        [
+            "Se houve passos de tratamento, limpeza e manipulação de dados, descreva-os aqui."
+        ]
+    ),
     yaml_order={
         "id_after": "data_cleaned_by",
         "id_before": "raw_files_url",
@@ -274,7 +285,8 @@ COLUMNS_FIELD = Field(
             "Algumas colunas existirão apenas na tabela final, você as construirá em `publish.sql`.",
             "Para esses, defina is_in_staging como False.",
             "Além disso, você deve adicionar as colunas de partição aqui e definir is_partition como True.",
-        ]),
+        ]
+    ),
     yaml_order={
         "id_after": "bdm_file_size",
         "id_before": None,
