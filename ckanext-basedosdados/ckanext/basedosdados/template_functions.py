@@ -77,10 +77,7 @@ def load_json_schema():
         "temporal_coverage",
         "update_frequency",
         "resource_type",
-        # "requested_by",
         "columns",
-        # "status",
-        # "time_unit",
     ]
     return {
         "information_request": to_schema(InformationRequest, resource_fields_to_delete),

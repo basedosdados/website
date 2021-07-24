@@ -27,7 +27,7 @@ class Dataset(_CkanDefaults):
     dataset_id       : Optional[Str]                  = DATASET_ID_FIELD
     title            : Optional[Str]                  = TITLE_FIELD
     description      : Optional[Str]                  = DESCRIPTION_FIELD
-    spatial_coverage : Optional[Str]                  = SPATIAL_COVERAGE_FIELD #TODO: adds SpatialCoverage in fileds_definitions.py
+    spatial_coverage : Optional[Str]                  = SPATIAL_COVERAGE_FIELD #TODO                                    : adds SpatialCoverage in fileds_definitions.py
     temporal_coverage: Optional[TemporalCoverageEnum] = TEMPORAL_COVERAGE_FIELD
     update_frequency : Optional[TimeUnitEnum]         = UPDATE_FREQUENCY_FIELD
     observation_level: Optional[Set[EntityEnum]]      = ENTITY_FIELD
