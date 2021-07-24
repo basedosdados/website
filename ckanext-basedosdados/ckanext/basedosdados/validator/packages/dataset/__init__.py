@@ -27,14 +27,14 @@ class Dataset(_CkanDefaults):
     dataset_id       : Optional[Str]                  = DATASET_ID_FIELD
     title            : Optional[Str]                  = TITLE_FIELD
     description      : Optional[Str]                  = DESCRIPTION_FIELD
-    spatial_coverage : Optional[Str]                  = SPATIAL_COVERAGE_FIELD #TODO: adds available options
+    spatial_coverage : Optional[Str]                  = SPATIAL_COVERAGE_FIELD #TODO: adds SpatialCoverage in fileds_definitions.py
     temporal_coverage: Optional[TemporalCoverageEnum] = TEMPORAL_COVERAGE_FIELD
     update_frequency : Optional[TimeUnitEnum]         = UPDATE_FREQUENCY_FIELD
     observation_level: Optional[Set[EntityEnum]]      = ENTITY_FIELD
     time_unit        : Optional[TimeUnitEnum]         = TIME_UNIT_FIELD
     ckan_url         : Optional[Str]                     = CKAN_URL_FIELD
     github_url       : Optional[Str]                     = GITHUB_URL_FIELD
-    download_type    : Optional[Literal["BD Mais","Link Externo"]]  # TODO: generate this automatically. Remove "BD Mais", "Link Externo" after migration
+    download_type    : Optional[Literal["BD Mais","Link Externo", "Pedido de Informação", "Dicionário BD Mais"]]  # TODO: generate this automatically. Remove "BD Mais", "Link Externo" after migration
     
     # -------------------------------------
     # VALIDATORS

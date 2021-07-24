@@ -9,7 +9,6 @@ from ckanext.basedosdados.validator.resources.ckan_default.resource import _Ckan
 from ckanext.basedosdados.validator.resources.bdm.column import BdmColumns # this has to be the first one!
 from ckanext.basedosdados.validator.resources.bdm.table import BdmTable
 from ckanext.basedosdados.validator.resources.bdm.dictionary import BdmDictionary
-from ckanext.basedosdados.validator.resources.bdm.table import BdmTable
 
 # -------------------------------------
 # RESOUCES EXTERNAL LINK
@@ -25,4 +24,4 @@ from ckanext.basedosdados.validator.resources.information_request import Informa
 # -------------------------------------
 # NEW FIELDS
 # -------------------------------------
-RESOURCE_TYPES = ['bdm_table', 'external_link'] # TODO: add something that test that subclasses obey this constant
+RESOURCE_TYPES = ['bdm_table', 'external_link','information_request','bdm_dictionary'] # TODO: add something that test that subclasses obey this constant

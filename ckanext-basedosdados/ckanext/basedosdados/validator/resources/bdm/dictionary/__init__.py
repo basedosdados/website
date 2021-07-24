@@ -18,9 +18,9 @@ class BdmDictionary(_CkanDefaultResource):
     last_updated        : Optional[LastUpdated] = LAST_UPDATED_FIELD
     published_by        : Optional[PublishedBy] = PUBLISHED_BY_FIELD
 
-    source_bucket_name : Optional[Str]                                = SOURCE_BUCKET_NAME_FIELD
-    project_id_prod    : Optional[Str]                                = PROJECT_ID_PROD_FIELD
-    project_id_staging : Optional[Str]                                = PROJECT_ID_STAGING_FIELD
-    partitions         : Optional[Str]                                = PARTITIONS_FIELD
-    bdm_file_size      : Union[int, None, Literal["Unavailable", ""]] = BDM_FILE_SIZE_FIELD # should not be editable in form, also, check what use is Unavailable
-    columns            : Optional[List[BdmColumns]]                   = COLUMNS_FIELD
+    source_bucket_name : Optional[Str]                                    = SOURCE_BUCKET_NAME_FIELD
+    project_id_prod    : Optional[Str]                                    = PROJECT_ID_PROD_FIELD
+    project_id_staging : Optional[Str]                                    = PROJECT_ID_STAGING_FIELD
+    partitions         : Optional[Str]                                    = PARTITIONS_FIELD
+    bdm_file_size      : Union[int, None, Literal["Unavailable", ""]]     = BDM_FILE_SIZE_FIELD # should not be editable in form, also, check what use is Unavailable
+    columns            : Union[Optional[List[BdmColumns]], Optional[Str]] = COLUMNS_FIELD  # TODO: remove Optional[Str] after migration 

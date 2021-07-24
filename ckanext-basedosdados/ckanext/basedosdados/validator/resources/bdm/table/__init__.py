@@ -22,7 +22,7 @@ class BdmTable(_CkanDefaultResource):
     dataset_id                : Optional[Str]                  = DATASET_ID_FIELD
     table_id                  : Str                            = TABLE_ID_FIELD
     description               : Optional[Str]                  = DESCRIPTION_FIELD
-    spatial_coverage          : Optional[Str]                  = SPATIAL_COVERAGE_FIELD
+    spatial_coverage          : Optional[Str]                  = SPATIAL_COVERAGE_FIELD #TODO: adds SpatialCoverage in fileds_definitions.py
     temporal_coverage         : Optional[TemporalCoverageEnum] = TEMPORAL_COVERAGE_FIELD
     update_frequency          : Optional[TimeUnitEnum]         = UPDATE_FREQUENCY_FIELD
     observation_level         : Optional[Set[EntityEnum]]      = ENTITY_FIELD
@@ -38,12 +38,12 @@ class BdmTable(_CkanDefaultResource):
     architecture_url          : Optional[Str]                  = ARCHITECTURE_URL_FIELD
     covered_by_dictionary     : Optional[YesNoEnum]            = COVERED_BY_DICTIONARY_FIELD
     
-    source_bucket_name : Optional[Str]                                = SOURCE_BUCKET_NAME_FIELD
-    project_id_prod    : Optional[Str]                                = PROJECT_ID_PROD_FIELD
-    project_id_staging : Optional[Str]                                = PROJECT_ID_STAGING_FIELD
-    partitions         : Optional[Str]                                = PARTITIONS_FIELD
-    bdm_file_size      : Union[int, None, Literal["Unavailable", ""]] = BDM_FILE_SIZE_FIELD # should not be editable in form, also, check what use is Unavailable
-    columns            : Optional[List[BdmColumns]]                   = COLUMNS_FIELD
+    source_bucket_name : Optional[Str]                                    = SOURCE_BUCKET_NAME_FIELD
+    project_id_prod    : Optional[Str]                                    = PROJECT_ID_PROD_FIELD
+    project_id_staging : Optional[Str]                                    = PROJECT_ID_STAGING_FIELD
+    partitions         : Optional[Str]                                    = PARTITIONS_FIELD
+    bdm_file_size      : Union[int, None, Literal["Unavailable", ""]]     = BDM_FILE_SIZE_FIELD # should not be editable in form, also, check what use is Unavailable
+    columns            : Union[Optional[List[BdmColumns]], Optional[Str]] = COLUMNS_FIELD # TODO: remove Optional[Str] after migration
     # -------------------------------------
     # VALIDATORS
     # -------------------------------------

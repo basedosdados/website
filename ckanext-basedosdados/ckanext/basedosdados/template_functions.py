@@ -51,6 +51,8 @@ from ckanext.basedosdados.validator.packages import _CkanDefaults, Dataset
 from ckanext.basedosdados.validator.resources import (
     BdmTable,
     ExternalLink,
+    InformationRequest,
+    BdmDictionary,
     RESOURCE_TYPES,
 )
 import functools
@@ -75,14 +77,17 @@ def load_json_schema():
         "temporal_coverage",
         "update_frequency",
         "resource_type",
+        # "requested_by",
         "columns",
+        # "status",
+        # "time_unit",
     ]
     return {
+        "information_request": to_schema(InformationRequest, resource_fields_to_delete),
         "external_link": to_schema(ExternalLink, resource_fields_to_delete),
-        "bdm_table": to_schema(BdmTable, resource_fields_to_delete)
-        # ,'lai_request':  to_schema(validator.LaiRequest,   resource_fields_to_delete)
-        ,
-        "package": to_schema(_CkanDefaults, _CkanDefaults.__fields__),
+        "bdm_table": to_schema(BdmTable, resource_fields_to_delete),
+        "bdm_dictionary": to_schema(BdmDictionary, resource_fields_to_delete),
+        "package": to_schema(Dataset, resource_fields_to_delete),
     }
 
 

@@ -28,10 +28,10 @@ class InformationRequest(_CkanDefaultResource):
     description                 : Optional[Str]                         = DESCRIPTION_FIELD
     opening_date                : Optional[Str]                         = OPENING_DATE_FIELD
     requested_by                : Optional[RequestedBy]                 = REQUESTED_BY_FIELD
-    spatial_coverage            : Optional[Str]                         = SPATIAL_COVERAGE_FIELD  # TODO: put spatial_covaerage SpacialCoverageEnum after defning in avaliable_options.py
+    spatial_coverage            : Optional[Str]                         = SPATIAL_COVERAGE_FIELD  #TODO: adds SpatialCoverage in fileds_definitions.py
     temporal_coverage           : Optional[TemporalCoverageEnum]        = TEMPORAL_COVERAGE_FIELD
     update_frequency            : Optional[TimeUnitEnum]                = UPDATE_FREQUENCY_FIELD
-    entity                      : Optional[Set[EntityEnum]]             = ENTITY_FIELD
+    observation_level                      : Optional[Set[EntityEnum]]             = ENTITY_FIELD
     time_unit                   : Optional[TimeUnitEnum]                = TIME_UNIT_FIELD
     status                      : Optional[StatusEnum]                  = STATUS_FIELD
     data_url                    : Optional[Str]                         = DATA_URL_FIELD
