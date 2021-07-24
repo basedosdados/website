@@ -43,7 +43,7 @@ class BdmTable(_CkanDefaultResource):
     project_id_staging : Optional[Str]                                = PROJECT_ID_STAGING_FIELD
     partitions         : Optional[Str]                                = PARTITIONS_FIELD
     bdm_file_size      : Union[int, None, Literal["Unavailable", ""]] = BDM_FILE_SIZE_FIELD # should not be editable in form, also, check what use is Unavailable
-    columns            : Optional[List[BdmColumns]]                   = COLUMNS_FIELD
+    # columns            : Optional[List[BdmColumns]]                   = COLUMNS_FIELD
     # -------------------------------------
     # VALIDATORS
     # -------------------------------------

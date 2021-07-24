@@ -16,7 +16,6 @@ from ckanext.basedosdados.validator.available_options import (
     StatusEnum
 )
 
-
 class InformationRequest(_CkanDefaultResource): 
     resource_type: Literal["information_request"]
     
