@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from datetime import datetime
+from typing import Optional
 from pydantic import (
     StrictStr as Str,
     Field,
@@ -17,18 +18,18 @@ class LastUpdated(BaseModel):
 
 
 class PublishedBy(BaseModel):
-    name: Str = Field(user_input_hint=["<nome [você]>"])
-    email: Str = Field(user_input_hint=["<email>"])
-    github: Str = Field(user_input_hint=["<usuário Github>"])
-    website: Str = Field(user_input_hint=["<www.exemplo.com>"])
+    name: Optional[Str] = Field(user_input_hint=["<nome [você]>"])
+    email: Optional[Str] = Field(user_input_hint=["<email>"])
+    github: Optional[Str] = Field(user_input_hint=["<usuário Github>"])
+    website: Optional[Str] = Field(user_input_hint=["<www.exemplo.com>"])
 
 
 class DataCleanedBy(BaseModel):
-    name: Str = Field(user_input_hint=["<nome>"])
-    email: Str = Field(user_input_hint=["<email>"])
-    github: Str = Field(user_input_hint=["<usuário Github>"])
-    website: Str = Field(user_input_hint=["<onde encontrar os dados tratados>"])
-    code_url: Str = Field(user_input_hint=["<onde encontrar código de limpeza>"])
+    name: Optional[Str] = Field(user_input_hint=["<nome>"])
+    email: Optional[Str] = Field(user_input_hint=["<email>"])
+    github: Optional[Str] = Field(user_input_hint=["<usuário Github>"])
+    website: Optional[Str] = Field(user_input_hint=["<onde encontrar os dados tratados>"])
+    code_url: Optional[Str] = Field(user_input_hint=["<onde encontrar código de limpeza>"])
 
 
 to_line = lambda description: "\n".join(description)
