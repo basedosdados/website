@@ -9,17 +9,6 @@ import { getStrapiPage, getStrapiPages } from "../api/strapi";
 import { useState } from "react";
 import showdown from "showdown";
 
-export async function getStaticPaths(context) {
-  let { data: strapiPages } = await getStrapiPages();
-
-  return {
-    paths: strapiPages.map((p) => ({
-      params: { page: p.id.toString() },
-    })),
-    fallback: false,
-  };
-}
-
 export async function getStaticProps(context) {
   let { data: strapiPages } = await getStrapiPages();
 
@@ -27,6 +16,18 @@ export async function getStaticProps(context) {
     props: {
       strapiPages,
     },
+    revalidate: 60, //TODO: Increase this timer
+  };
+}
+
+export async function getStaticPaths(context) {
+  let { data: strapiPages } = await getStrapiPages();
+
+  return {
+    paths: strapiPages.map((p) => ({
+      params: { page: p.id.toString() },
+    })),
+    fallback: "blocking",
   };
 }
 

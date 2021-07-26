@@ -61,11 +61,13 @@ export default function Footer() {
             inputBackgroundColor="white"
             inputStyle={{ borderRadius: 10 }}
             rightAddon={
-              <Image
-                width="20px"
-                height="auto"
-                src="/_nxt/img/arrow_black_right.png"
-              />
+              <Box width="30px" height="20px" position="relative">
+                <Image
+                  layout="fill"
+                  objectFit="contain"
+                  src="/_nxt/img/arrow_black_right.png"
+                />
+              </Box>
             }
           />
         </VStack>
