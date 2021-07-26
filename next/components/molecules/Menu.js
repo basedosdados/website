@@ -2,13 +2,13 @@ import {
   Box,
   HStack,
   VStack,
-  Image,
   Drawer,
   DrawerOverlay,
   DrawerContent,
   useDisclosure,
   Divider,
 } from "@chakra-ui/react";
+import Image from "next/image";
 import ControlledInput from "../atoms/ControlledInput";
 import RoundedButton from "../atoms/RoundedButton";
 import Link from "../atoms/Link";
@@ -16,32 +16,27 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
-function MenuDrawer({ isOpen, onClose }) {
+function MenuDrawer({ isOpen, onClose, links }) {
   return (
     <Drawer zIndex="10px" isOpen={isOpen} placement="top" onClose={onClose}>
       <DrawerOverlay />
       <DrawerContent padding="110px 30px 30px 30px">
         <VStack alignItems="center" width="100%" spacing={5}>
-          <Link color="black" href="/_nxt/search">
-            Dados
-          </Link>
-          <Divider />
-          <Link color="black">Comunidade</Link>
-          <Divider />
-          <Link color="black" href="/about">
-            Sobre
-          </Link>
-          <Divider />
-          <Link color="black">Contato</Link>
-          <Divider />
-          <Link color="black">APOIE</Link>
+          {Object.entries(links).map(([k, v]) => (
+            <>
+              <Link color="black" href={v}>
+                {k}
+              </Link>
+              <Divider />
+            </>
+          ))}
         </VStack>
       </DrawerContent>
     </Drawer>
   );
 }
 
-function DesktopLinks() {
+function DesktopLinks({ links }) {
   const [search, setSearch] = useState();
 
   function openSearchLink() {
@@ -56,11 +51,11 @@ function DesktopLinks() {
       position={{ base: "relative", md: "initial" }}
     >
       <HStack width="100%" flex="3" spacing={10}>
-        <Link href="/_nxt/search">Dados</Link>
-        <Link>Comunidade</Link>
-        <Link href="/about">Sobre</Link>
-        <Link>Contato</Link>
-        <Link>APOIE</Link>
+        {Object.entries(links).map(([k, v]) => (
+          <Link color="white" href={v}>
+            {k}
+          </Link>
+        ))}
       </HStack>
       <HStack spacing={10} display={{ base: "none", lg: "flex" }}>
         <ControlledInput
@@ -70,11 +65,15 @@ function DesktopLinks() {
           onChange={setSearch}
           inputBackgroundColor="#E6FEE2"
           rightIcon={
-            <Image
-              cursor="pointer"
-              onClick={openSearchLink}
-              src="/_nxt/img/icon_search.png"
-            />
+            <Box width="60px" height="60px" position="relative">
+              <Image
+                cursor="pointer"
+                onClick={openSearchLink}
+                layout="fill"
+                objectFit="contain"
+                src="/_nxt/img/icon_search.png"
+              />
+            </Box>
           }
         />
         <Link>Entrar</Link>
@@ -84,12 +83,22 @@ function DesktopLinks() {
   );
 }
 
-export default function Menu() {
+export default function Menu({ strapiPages = [] }) {
   const menuDisclosure = useDisclosure();
+
+  const links = {
+    Dados: "/_nxt/search",
+  };
+
+  strapiPages.map((p) => {
+    links[p.MenuTitle] = "/_nxt/blog/" + p.id + "/";
+  });
+
+  links["APOIE"] = "";
 
   return (
     <>
-      <MenuDrawer {...menuDisclosure} />
+      <MenuDrawer links={links} {...menuDisclosure} />
       <Box
         position="fixed"
         top="0px"
@@ -122,14 +131,20 @@ export default function Menu() {
             />
           </Box>
           <Link href="/_nxt/">
-            <Image
-              flex="2"
+            <Box
               transform={{ base: "translateX(-27%)" }}
-              maxWidth={{ base: "80px", lg: "105px" }}
-              src="/_nxt/img/logo.png"
-            />
+              width={{ base: "80px", lg: "105px" }}
+              height="50px"
+              position="relative"
+            >
+              <Image
+                layout="fill"
+                objectFit="contain"
+                src="/_nxt/img/logo.png"
+              />
+            </Box>
           </Link>
-          <DesktopLinks />
+          <DesktopLinks links={links} />
         </HStack>
       </Box>
     </>

@@ -6,7 +6,6 @@ import {
   Text,
   Divider,
   Link,
-  Image,
   InputGroup,
   InputRightElement,
   Stack,
@@ -14,6 +13,7 @@ import {
   CircularProgress,
   Center,
 } from "@chakra-ui/react";
+import Image from "next/image";
 import SiteHead from "../components/atoms/SiteHead";
 import Footer from "../components/molecules/Footer";
 import Menu from "../components/molecules/Menu";

@@ -3,14 +3,15 @@ import {
   Button,
   Center,
   HStack,
-  Image,
   List,
   ListItem,
   Stack,
   Text,
   UnorderedList,
+  Flex,
   VStack,
 } from "@chakra-ui/react";
+import Image from "next/image";
 import Menu from "../components/molecules/Menu";
 import SiteHead from "../components/atoms/SiteHead";
 import ControlledInput from "../components/atoms/ControlledInput";
@@ -27,11 +28,24 @@ import Link from "../components/atoms/Link";
 import Typist from "react-typist";
 import { useQuery } from "react-query";
 import { getPopularDatasets, getRecentDatasets } from "./api/datasets";
+import { getStrapiPages } from "./api/strapi";
+
+export async function getStaticProps(context) {
+  let { data: strapiPages } = await getStrapiPages();
+
+  return {
+    props: {
+      strapiPages,
+    },
+  };
+}
 
 function HeroText({ children, iconUrl }) {
   return (
     <VStack textAlign="center">
-      <Image marginBottom="10px" height="140px" src={iconUrl} />
+      <Box width="100%" height="140px" marginBottom="10px" position="relative">
+        <Image objectFit="contain" layout="fill" src={iconUrl} />
+      </Box>
       {children}
     </VStack>
   );
@@ -50,7 +64,6 @@ function Hero() {
       height={{ base: "initial", lg: "100vh" }}
       backgroundColor="#FAFAFA"
     >
-      <Menu />
       <Center paddingTop="100px" height="100%">
         <VStack
           height="100%"
@@ -65,13 +78,19 @@ function Hero() {
             alignItems="center"
             spacing={50}
           >
-            <Image
-              src="/_nxt/img/home_background.png"
+            <Box
               position="absolute"
               right="0px"
-              top="-30px"
+              top="-0px"
               width="600px"
-            />
+              height="550px"
+            >
+              <Image
+                src="/_nxt/img/home_background.png"
+                layout="fill"
+                objectFit="contain"
+              />
+            </Box>
             <BigTitle
               position="relative"
               zIndex="1"
@@ -96,12 +115,19 @@ function Hero() {
                 fontSize: "20px",
               }}
               rightIcon={
-                <Image
-                  onClick={openSearchLink}
-                  width="40px"
-                  marginRight="40px"
-                  src="/_nxt/img/arrow_black_right.png"
-                />
+                <Box
+                  transform="translateX(-15px)"
+                  width="50px"
+                  height="50px"
+                  position="relative"
+                >
+                  <Image
+                    onClick={openSearchLink}
+                    layout="fill"
+                    objectFit="contain"
+                    src="/_nxt/img/arrow_black_right.png"
+                  />
+                </Box>
               }
             />
           </Stack>
@@ -141,10 +167,16 @@ function Hero() {
         boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
         backgroundColor="#42B0FF"
         borderRadius="500px"
-        width="52px"
+        width="54px"
         height="60px"
       >
-        <Image height="24px" src="/_nxt/img/arrow_white_down.png" />
+        <Box width="25px" height="25px" position="relative">
+          <Image
+            objectFit="contain"
+            layout="fill"
+            src="/_nxt/img/arrow_white_down.png"
+          />
+        </Box>
       </Center>
     </VStack>
   );
@@ -282,17 +314,20 @@ function LearnToAnalysis() {
       spacing={{ base: 10, lg: 20 }}
       direction={{ base: "column", lg: "row" }}
     >
-      <Image
+      <Box
+        position="relative"
         display="block"
         height="auto"
-        objectFit="contain"
-        width="auto"
         flex="1"
         maxWidth="100%"
-        maxHeight="300px"
-        src="/_nxt/img/tela_jupyter.png"
-      />
-      <VStack spacing={5} alignItems="flex-start" flex="2">
+      >
+        <Image
+          objectFit="contain"
+          layout="fill"
+          src="/_nxt/img/tela_jupyter.png"
+        />
+      </Box>
+      <VStack spacing={5} alignItems="flex-start" flex="1">
         <BigTitle>Aprenda a fazer análise com os dados</BigTitle>
         <Stack
           direction={{ base: "column", md: "row" }}
@@ -345,7 +380,7 @@ function JoinTheCommunity() {
       direction={{ base: "column", lg: "row" }}
       alignItems="center"
     >
-      <VStack alignItems="flex-start" flex="3" spacing={5}>
+      <VStack alignItems="flex-start" flex="1" spacing={5}>
         <BigTitle>
           Faça parte da nossa comunidade, <i>databaser</i>
         </BigTitle>
@@ -364,12 +399,20 @@ function JoinTheCommunity() {
           Discord {">"} {">"}
         </Link>
       </VStack>
-      <Image
-        flex="2"
-        maxBlockSize="200px"
-        objectFit="contain"
-        src="/_nxt/img/tela_discord.png"
-      />
+      <Box
+        position="relative"
+        display="block"
+        height="auto"
+        flex="1"
+        width="100%"
+        height="300px"
+      >
+        <Image
+          layout="fill"
+          objectFit="contain"
+          src="/_nxt/img/tela_discord.png"
+        />
+      </Box>
     </Stack>
   );
 }
@@ -453,10 +496,11 @@ function Support() {
   );
 }
 
-export default function Home() {
+export default function Home({ strapiPages }) {
   return (
     <>
       <SiteHead />
+      <Menu strapiPages={strapiPages} />
       <VStack
         alignItems="center"
         width="100%"
