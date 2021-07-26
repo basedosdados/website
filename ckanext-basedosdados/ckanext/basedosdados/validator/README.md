@@ -7,7 +7,21 @@
 - production: `https://staging.basedosdados.org/api/3/action/<function_name>`
 
 as funções se encontram em [ckanext-basedosdados/ckanext/action/get.py](../actions/get.py)
- 
+
+## Estrutura dos Objetos
+
+- Package [~dataset.yaml]
+   - Ckan Default
+   - Dataset
+- Resources
+   - BDM
+      - Table [~table.yaml]
+      - Dictionary 
+      - Column [~table.yaml]
+   - Information Request
+   - External Link [~dataset.yaml]
+
+
  ## Endpoints dos Schemas
 
 - `Object`: `develop-endpoint`
@@ -17,6 +31,7 @@ as funções se encontram em [ckanext-basedosdados/ckanext/action/get.py](../act
 -  [BdmDictionary](resources/bdm/dictionary/__init__.py): [`bd_bdm_dictionary_schema`](https://staging.basedosdados.org/api/3/action/bd_bdm_dictionary_schema)
 -  [ExternalLink](resources/external_link/__init__.py): [`bd_external_link_schema`](https://staging.basedosdados.org/api/3/action/bd_external_link_schema)
 - [InformationRequest](resources/information_request/__init__.py): [`bd_information_request_schema`](https://staging.basedosdados.org/api/3/action/bd_information_request_schema)
+
  ----
 # Como adicionar novos metadados
 
