@@ -17,7 +17,7 @@ class _CkanDefaultResource(BaseModel, extra=Extra.forbid):
     cache_last_updated : Optional[datetime]
     cache_url          : Optional[Str]
     created            : Optional[datetime]
-    datastore_active   : bool
+    datastore_active   : Optional[bool]
     format             : Optional[Str]
     formato            : Optional[Str]
     hash               : Optional[Str]
