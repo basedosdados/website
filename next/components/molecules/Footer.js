@@ -1,12 +1,12 @@
 import {
   Box,
   HStack,
-  Image,
   InputRightAddon,
   Stack,
   VStack,
   Text,
 } from "@chakra-ui/react";
+import Image from "next/image";
 import ControlledInput from "../atoms/ControlledInput";
 import Title from "../atoms/Title";
 import SectionText from "../atoms/SectionText";
@@ -27,7 +27,9 @@ function SocialLink({ title, href, src }) {
   return (
     <Link href={href} target="_blank">
       <HStack>
-        <Image width="20px" src={src} />
+        <Box position="relative" height="20px" width="20px">
+          <Image layout="fill" objectFit="contain" src={src} />
+        </Box>
         <Text>{title}</Text>
       </HStack>
     </Link>
@@ -59,11 +61,15 @@ export default function Footer() {
             inputBackgroundColor="white"
             inputStyle={{ borderRadius: 10 }}
             rightAddon={
-              <Image width="20px" src="/_nxt/img/arrow_black_right.png" />
+              <Image
+                width="20px"
+                height="auto"
+                src="/_nxt/img/arrow_black_right.png"
+              />
             }
           />
         </VStack>
-        <Image width="150px" src="/_nxt/img/dadinho_mail.png" />
+        <Image width="150px" height="auto" src="/_nxt/img/dadinho_mail.png" />
       </Stack>
       <VStack width="100%" padding={10} spacing={10} backgroundColor="#34A15A">
         <HStack
@@ -71,10 +77,13 @@ export default function Footer() {
           width="100%"
           justifyContent="space-between"
         >
-          <Image
-            width={{ base: "100px", md: "180px" }}
-            src="/_nxt/img/logo_footer.png"
-          />
+          <Box width="150px" height="150px" position="relative">
+            <Image
+              objectFit="contain"
+              layout="fill"
+              src="/_nxt/img/logo_footer.png"
+            />
+          </Box>
           <Stack
             direction={{ base: "column", lg: "row" }}
             paddingBottom="100px"

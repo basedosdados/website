@@ -8,6 +8,7 @@ import {
   Stack,
   Text,
   UnorderedList,
+  Flex,
   VStack,
 } from "@chakra-ui/react";
 import Image from "next/image";
@@ -313,17 +314,20 @@ function LearnToAnalysis() {
       spacing={{ base: 10, lg: 20 }}
       direction={{ base: "column", lg: "row" }}
     >
-      <Image
+      <Box
+        position="relative"
         display="block"
         height="auto"
-        objectFit="contain"
-        width="auto"
         flex="1"
         maxWidth="100%"
-        maxHeight="300px"
-        src="/_nxt/img/tela_jupyter.png"
-      />
-      <VStack spacing={5} alignItems="flex-start" flex="2">
+      >
+        <Image
+          objectFit="contain"
+          layout="fill"
+          src="/_nxt/img/tela_jupyter.png"
+        />
+      </Box>
+      <VStack spacing={5} alignItems="flex-start" flex="1">
         <BigTitle>Aprenda a fazer análise com os dados</BigTitle>
         <Stack
           direction={{ base: "column", md: "row" }}
@@ -376,7 +380,7 @@ function JoinTheCommunity() {
       direction={{ base: "column", lg: "row" }}
       alignItems="center"
     >
-      <VStack alignItems="flex-start" flex="3" spacing={5}>
+      <VStack alignItems="flex-start" flex="1" spacing={5}>
         <BigTitle>
           Faça parte da nossa comunidade, <i>databaser</i>
         </BigTitle>
@@ -395,12 +399,20 @@ function JoinTheCommunity() {
           Discord {">"} {">"}
         </Link>
       </VStack>
-      <Image
-        style={{ flex: 2 }}
-        width="200px"
+      <Box
+        position="relative"
+        display="block"
         height="auto"
-        src="/_nxt/img/tela_discord.png"
-      />
+        flex="1"
+        width="100%"
+        height="300px"
+      >
+        <Image
+          layout="fill"
+          objectFit="contain"
+          src="/_nxt/img/tela_discord.png"
+        />
+      </Box>
     </Stack>
   );
 }
