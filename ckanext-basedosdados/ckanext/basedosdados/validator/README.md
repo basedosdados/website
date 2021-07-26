@@ -14,6 +14,7 @@ as funções se encontram em [ckanext-basedosdados/ckanext/action/get.py](../act
    - Ckan Default
    - Dataset
 - Resources
+   - Ckan Default 
    - BDM
       - Table [~table.yaml]
       - Dictionary 
