@@ -6,12 +6,9 @@ from pydantic import Field, StrictStr as Str, BaseModel
 # -------------------------------------
 # MODULE OPTIONS
 # -------------------------------------
-from .admin1 import Admin1Enum
-from .admin2 import Admin2Enum
 from .availability import AvailabilityEnum
 from .bigquery_type import BigQueryTypeEnum
-from .continent import ContinentEnum
-from .country import CountryEnum
+from .spatial_coverage import ContinentEnum, CountryEnum, Admin1Enum, Admin2Enum
 from .directory import DirectoryEnum
 from .entity import EntityEnum
 from .language import LanguageEnum

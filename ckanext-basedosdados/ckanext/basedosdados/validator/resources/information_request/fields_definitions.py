@@ -22,7 +22,6 @@ class SpatialCoverage(BaseModel):
     # 1. ler os dataframes de diretorios para estrurar árvore de dicts e metadados
         # incluir IDs de entidades e nomes
     # 2. transformar isso num dict para front-end
-
     continent : Optional[Set[ContinentEnum]] = Field(user_input_hint=["Continente"])
     country   : Optional[Set[CountryEnum]]   = Field(user_input_hint=["País"])
     admin1    : Optional[Set[Admin1Enum]]    = Field(user_input_hint=["UF/Estado"])
@@ -30,9 +29,9 @@ class SpatialCoverage(BaseModel):
     #admin3    : Optional[Str] = Field(user_input_hint=["Distrito"])
 
 class RequestedBy(BaseModel):
-    name: Str = Field(user_input_hint=["<nome [você]>"])
-    email: Str = Field(user_input_hint=["<email>"])
-    github: Str = Field(user_input_hint=["<usuário Github>"])
+    name   : Str = Field(user_input_hint=["<nome [você]>"])
+    email  : Str = Field(user_input_hint=["<email>"])
+    github : Str = Field(user_input_hint=["<usuário Github>"])
     website: Str = Field(user_input_hint=["<website>"])
 
 

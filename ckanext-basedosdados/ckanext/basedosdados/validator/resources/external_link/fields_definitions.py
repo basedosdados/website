@@ -13,6 +13,9 @@ from ckanext.basedosdados.validator.available_options import (
 
 to_line = lambda description: "\n".join(description)
 
+# -------------------------------------
+# ExternalLink Custom Types
+# -------------------------------------
 class SpatialCoverage(BaseModel):
     
     #TODO definir campo complexo de spatial_coverage
