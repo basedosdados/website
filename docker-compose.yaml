@@ -74,7 +74,8 @@ services:
     image: bdd/next${VTAG}
 
   strapi:
-    image: strapi/strapi
+    build:
+      context: strapi
     environment:
       DATABASE_CLIENT: postgres
       DATABASE_NAME: strapi
