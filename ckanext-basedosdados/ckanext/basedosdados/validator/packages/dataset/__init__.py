@@ -37,6 +37,11 @@ class Dataset(_CkanDefaults):
     
     download_type    : Optional[Literal["BD Mais","Link Externo", "Pedido de Informação", "Dicionário BD Mais"]]  # TODO: generate this automatically. Remove "BD Mais", "Link Externo" after migration
     
+    cache_last_updated: Optional[datetime]
+    isopen            : Optional[bool]
+    extras            : Optional[Any]                    
+
+
     # -------------------------------------
     # VALIDATORS
     # -------------------------------------
