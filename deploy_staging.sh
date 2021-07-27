@@ -101,7 +101,7 @@ build_images() {
     ( VTAG=$VTAG docker-compose build ckan && docker save bdd/ckan$VTAG > build/images/ckan ) &
     ( docker-compose build solr && docker save bdd/solr > build/images/solr ) &
     ( docker-compose build db   && docker save bdd/db > build/images/db ) &
-    ( VTAG=$VTAG docker-compose build next && docker save next$VTAG > build/images/next ) &
+    ( VTAG=$VTAG docker-compose build next && docker save bdd/next$VTAG > build/images/next ) &
     for i in `jobs -p`; do wait $i ; done
 }
 restart_wordpress() {
