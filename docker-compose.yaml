@@ -74,6 +74,7 @@ services:
     image: bdd/next${VTAG}
 
   strapi:
+    image: bdd/strapi
     build:
       context: strapi
     environment:
