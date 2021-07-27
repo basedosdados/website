@@ -12,23 +12,23 @@ from ckanext.basedosdados.validator import BaseModel
 # BdmTable Custom Types
 # -------------------------------------
 class LastUpdated(BaseModel):
-    metadata: datetime = Field(user_input_hint=["Última atualização: metadados"])
-    data: datetime = Field(user_input_hint=["Última atualização: dados"])
-    release: datetime = Field(user_input_hint=["Último lançamento: dados originais"])
+    metadata: Optional[datetime] = Field(user_input_hint=["Última atualização: metadados"])
+    data    : Optional[datetime] = Field(user_input_hint=["Última atualização: dados"])
+    release : Optional[datetime] = Field(user_input_hint=["Último lançamento: dados originais"])
 
 
 class PublishedBy(BaseModel):
-    name: Optional[Str] = Field(user_input_hint=["<nome [você]>"])
-    email: Optional[Str] = Field(user_input_hint=["<email>"])
-    github: Optional[Str] = Field(user_input_hint=["<usuário Github>"])
+    name   : Optional[Str] = Field(user_input_hint=["<nome [você]>"])
+    email  : Optional[Str] = Field(user_input_hint=["<email>"])
+    github : Optional[Str] = Field(user_input_hint=["<usuário Github>"])
     website: Optional[Str] = Field(user_input_hint=["<www.exemplo.com>"])
 
 
 class DataCleanedBy(BaseModel):
-    name: Optional[Str] = Field(user_input_hint=["<nome>"])
-    email: Optional[Str] = Field(user_input_hint=["<email>"])
-    github: Optional[Str] = Field(user_input_hint=["<usuário Github>"])
-    website: Optional[Str] = Field(user_input_hint=["<onde encontrar os dados tratados>"])
+    name    : Optional[Str] = Field(user_input_hint=["<nome>"])
+    email   : Optional[Str] = Field(user_input_hint=["<email>"])
+    github  : Optional[Str] = Field(user_input_hint=["<usuário Github>"])
+    website : Optional[Str] = Field(user_input_hint=["<onde encontrar os dados tratados>"])
     code_url: Optional[Str] = Field(user_input_hint=["<onde encontrar código de limpeza>"])
 
 
