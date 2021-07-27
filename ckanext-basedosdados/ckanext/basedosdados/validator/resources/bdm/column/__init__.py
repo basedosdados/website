@@ -7,6 +7,7 @@ from ckanext.basedosdados.validator.available_options import (
     BigQueryTypeEnum,
     TemporalCoverageEnum,
     YesNoEnum,
+    DirectoryColumnEnum,
     MeasurementUnitEnum
 )
 
@@ -27,9 +28,9 @@ class BdmColumns(BaseModel):
     description          : Optional[Str]                 = DESCRIPTION_FIELD
     temporal_coverage    : Optional[TemporalCoverageEnum]= TEMPORAL_COVERAGE_FIELD
     covered_by_dictionary: Optional[YesNoEnum]           = COVERED_BY_DICTIONARY_FIELD
-    directory_column     : Optional[Str]                 = DIRECTORY_COLUMN_FIELD
+    directory_column     : Optional[DirectoryColumnEnum] = DIRECTORY_COLUMN_FIELD   #TODO: make it a complex field listing dataset_id, table_id, column name
     measurement_unit     : Optional[MeasurementUnitEnum] = MEASUREMENT_UNIT_FIELD
-    original_names       : Optional[List[Str]]                 = ORIGINAL_NAMES_FIELD  # TODO: make it into a list of string entries
+    original_names       : Optional[List[Str]]           = ORIGINAL_NAMES_FIELD     #TODO: make it a complex field of dictionaries mapping year to name. Ex: {2015: "name_1", 2016: "name_2"}
 
     is_in_staging        : Optional[bool]                = IS_IN_STAGING_FIELD
     is_partition         : Optional[bool]                = IS_PARTITION_FIELD

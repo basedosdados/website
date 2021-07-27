@@ -7,6 +7,7 @@ from .fields_definitions import *
 from ckanext.basedosdados.validator.resources import _CkanDefaultResource, BdmColumns
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options import (
+    SpatialCoverageEnum,
     TemporalCoverageEnum,
     EntityEnum,
     TimeUnitEnum,
@@ -14,29 +15,28 @@ from ckanext.basedosdados.validator.available_options import (
 )
 
 
-
 class BdmTable(_CkanDefaultResource):
     resource_type: Literal["bdm_table"]
 
     # BdmTable models
-    dataset_id                : Optional[Str]                  = DATASET_ID_FIELD
-    table_id                  : Str                            = TABLE_ID_FIELD
-    description               : Optional[Str]                  = DESCRIPTION_FIELD
-    spatial_coverage          : Optional[Str]                  = SPATIAL_COVERAGE_FIELD #TODO: adds SpatialCoverage in fileds_definitions.py
-    temporal_coverage         : Optional[TemporalCoverageEnum] = TEMPORAL_COVERAGE_FIELD
-    update_frequency          : Optional[TimeUnitEnum]         = UPDATE_FREQUENCY_FIELD
-    entity                    : Optional[Set[EntityEnum]]      = ENTITY_FIELD
-    time_unit                 : Optional[TimeUnitEnum]         = TIME_UNIT_FIELD
-    identifying_columns       : Optional[List[Str]]            = IDENTIFYING_COLUMNS_FIELD
-    last_updated              : Optional[LastUpdated]          = LAST_UPDATED_FIELD
-    version                   : Optional[Str]                  = VERSION_FIELD
-    published_by              : Optional[PublishedBy]          = PUBLISHED_BY_FIELD
-    data_cleaned_by           : Optional[DataCleanedBy]        = DATA_CLEANED_BY_FIELD
-    data_cleaning_description : Optional[Str]                  = DATA_CLEANING_DESCRIPTION_FIELD
-    raw_files_url             : Optional[Str]                  = RAW_FILES_URL_FIELD
-    auxiliary_files_url       : Optional[Str]                  = AUXILIARY_FILES_URL_FIELD
-    architecture_url          : Optional[Str]                  = ARCHITECTURE_URL_FIELD
-    covered_by_dictionary     : Optional[YesNoEnum]            = COVERED_BY_DICTIONARY_FIELD
+    dataset_id                : Optional[Str]                       = DATASET_ID_FIELD
+    table_id                  : Str                                 = TABLE_ID_FIELD
+    description               : Optional[Str]                       = DESCRIPTION_FIELD
+    spatial_coverage          : Optional[Set[SpatialCoverageEnum]]  = SPATIAL_COVERAGE_FIELD
+    temporal_coverage         : Optional[TemporalCoverageEnum]      = TEMPORAL_COVERAGE_FIELD
+    update_frequency          : Optional[TimeUnitEnum]              = UPDATE_FREQUENCY_FIELD
+    entity                    : Optional[Set[EntityEnum]]           = ENTITY_FIELD
+    time_unit                 : Optional[TimeUnitEnum]              = TIME_UNIT_FIELD
+    identifying_columns       : Optional[List[Str]]                 = IDENTIFYING_COLUMNS_FIELD
+    last_updated              : Optional[LastUpdated]               = LAST_UPDATED_FIELD
+    version                   : Optional[Str]                       = VERSION_FIELD
+    published_by              : Optional[PublishedBy]               = PUBLISHED_BY_FIELD
+    data_cleaned_by           : Optional[DataCleanedBy]             = DATA_CLEANED_BY_FIELD
+    data_cleaning_description : Optional[Str]                       = DATA_CLEANING_DESCRIPTION_FIELD
+    raw_files_url             : Optional[Str]                       = RAW_FILES_URL_FIELD
+    auxiliary_files_url       : Optional[Str]                       = AUXILIARY_FILES_URL_FIELD
+    architecture_url          : Optional[Str]                       = ARCHITECTURE_URL_FIELD
+    covered_by_dictionary     : Optional[YesNoEnum]                 = COVERED_BY_DICTIONARY_FIELD
     
     source_bucket_name : Optional[Str] = SOURCE_BUCKET_NAME_FIELD
     project_id_prod    : Optional[Str]                                    = PROJECT_ID_PROD_FIELD
@@ -44,6 +44,7 @@ class BdmTable(_CkanDefaultResource):
     partitions         : Optional[Str]                                    = PARTITIONS_FIELD
     bdm_file_size      : Union[int, None, Literal["Unavailable", ""]]     = BDM_FILE_SIZE_FIELD # should not be editable in form, also, check what use is Unavailable
     columns            : Union[Optional[List[BdmColumns]], Optional[Str]] = COLUMNS_FIELD # TODO: remove Optional[Str] after migration
+    
     # -------------------------------------
     # VALIDATORS
     # -------------------------------------

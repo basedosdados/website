@@ -10,8 +10,9 @@ from .fields_definitions import *
 from ckanext.basedosdados.validator.resources import _CkanDefaultResource
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options import (
-    EntityEnum,
+    SpatialCoverageEnum,
     TemporalCoverageEnum,
+    EntityEnum,
     TimeUnitEnum,
     StatusEnum
 )
@@ -28,7 +29,7 @@ class InformationRequest(_CkanDefaultResource):
     description                 : Optional[Str]                         = DESCRIPTION_FIELD
     opening_date                : Optional[Str]                         = OPENING_DATE_FIELD
     requested_by                : Optional[RequestedBy]                 = REQUESTED_BY_FIELD
-    spatial_coverage            : Optional[Str]                         = SPATIAL_COVERAGE_FIELD  #TODO: adds SpatialCoverage in fileds_definitions.py
+    spatial_coverage            : Optional[Set[SpatialCoverageEnum]]    = SPATIAL_COVERAGE_FIELD  #TODO: adds SpatialCoverage in fileds_definitions.py
     temporal_coverage           : Optional[TemporalCoverageEnum]        = TEMPORAL_COVERAGE_FIELD
     update_frequency            : Optional[TimeUnitEnum]                = UPDATE_FREQUENCY_FIELD
     entity                      : Optional[Set[EntityEnum]]             = ENTITY_FIELD
