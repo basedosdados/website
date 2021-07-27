@@ -1,11 +1,30 @@
 #!/usr/bin/env python3
+from typing import Optional, Set
 from pydantic import (
-    StrictStr as Str,
     Field,
 )
 from ckanext.basedosdados.validator import BaseModel
+from ckanext.basedosdados.validator.available_options import (
+    ContinentEnum,
+    CountryEnum,
+    Admin1Enum,
+    Admin2Enum
+)
 
 to_line = lambda description: "\n".join(description)
+
+class SpatialCoverage(BaseModel):
+    
+    #TODO definir campo complexo de spatial_coverage
+    # 1. ler os dataframes de diretorios para estrurar árvore de dicts e metadados
+        # incluir IDs de entidades e nomes
+    # 2. transformar isso num dict para front-end
+
+    continent : Optional[Set[ContinentEnum]] = Field(user_input_hint=["Continente"])
+    country   : Optional[Set[CountryEnum]]   = Field(user_input_hint=["País"])
+    admin1    : Optional[Set[Admin1Enum]]    = Field(user_input_hint=["UF/Estado"])
+    admin2    : Optional[Set[Admin2Enum]]    = Field(user_input_hint=["Município/Condado"])
+    #admin3    : Optional[Str] = Field(user_input_hint=["Distrito"])
 
 # -------------------------------------
 # ExternalLink Fields

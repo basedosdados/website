@@ -1,15 +1,13 @@
 from typing import Optional, Literal, Set
 
 from pydantic import (
-    StrictStr as Str,
-    Field,
+    StrictStr as Str
 )
 
 from .fields_definitions import *
 from ckanext.basedosdados.validator.resources import _CkanDefaultResource
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options import (
-    SpatialCoverageEnum,
     TemporalCoverageEnum,
     EntityEnum,
     TimeUnitEnum,
@@ -37,7 +35,7 @@ class ExternalLink(_CkanDefaultResource):
     availability                : Optional[AvailabilityEnum]            = AVAILABILITY_FIELD
     country_ip_address_required : Optional[Set[CountryEnum]]            = COUNTRY_IP_ADDRESS_REQUIRED_FIELD
     license                     : Optional[LicenseEnum]                 = LICENSE_FIELD
-    spatial_coverage            : Optional[Set[SpatialCoverageEnum]]    = SPATIAL_COVERAGE_FIELD #TODO: adds SpatialCoverage in fileds_definitions.py
+    spatial_coverage            : Optional[SpatialCoverage]             = SPATIAL_COVERAGE_FIELD #TODO: adds SpatialCoverage in fileds_definitions.py
     temporal_coverage           : Optional[TemporalCoverageEnum]        = TEMPORAL_COVERAGE_FIELD
     update_frequency            : Optional[TimeUnitEnum]                = UPDATE_FREQUENCY_FIELD
     entity                      : Optional[Set[EntityEnum]]             = ENTITY_FIELD

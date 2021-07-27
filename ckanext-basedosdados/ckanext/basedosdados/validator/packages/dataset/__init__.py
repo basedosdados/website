@@ -6,7 +6,6 @@ from pydantic import StrictStr as Str
 from .fields_definitions import *
 from ckanext.basedosdados.validator.packages import _CkanDefaults
 from ckanext.basedosdados.validator.available_options import (
-    SpatialCoverageEnum,
     TemporalCoverageEnum,
     EntityEnum,
     TimeUnitEnum,
@@ -28,7 +27,7 @@ class Dataset(_CkanDefaults):
     dataset_id        : Optional[Str]                       = DATASET_ID_FIELD
     title             : Optional[Str]                       = TITLE_FIELD
     description       : Optional[Str]                       = DESCRIPTION_FIELD
-    spatial_coverage  : Optional[Set[SpatialCoverageEnum]]  = SPATIAL_COVERAGE_FIELD #TODO: adds SpatialCoverage in fileds_definitions.py
+    spatial_coverage  : Optional[SpatialCoverage]           = SPATIAL_COVERAGE_FIELD #TODO: adds SpatialCoverage in fileds_definitions.py
     temporal_coverage : Optional[TemporalCoverageEnum]      = TEMPORAL_COVERAGE_FIELD
     update_frequency  : Optional[TimeUnitEnum]              = UPDATE_FREQUENCY_FIELD
     entity            : Optional[Set[EntityEnum]]           = ENTITY_FIELD

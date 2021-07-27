@@ -2,15 +2,13 @@
 from typing import Optional, Literal, Set
 
 from pydantic import (
-    StrictStr as Str,
-    Field,
+    StrictStr as Str
 )
 
 from .fields_definitions import *
 from ckanext.basedosdados.validator.resources import _CkanDefaultResource
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options import (
-    SpatialCoverageEnum,
     TemporalCoverageEnum,
     EntityEnum,
     TimeUnitEnum,
@@ -29,7 +27,7 @@ class InformationRequest(_CkanDefaultResource):
     description                 : Optional[Str]                         = DESCRIPTION_FIELD
     opening_date                : Optional[Str]                         = OPENING_DATE_FIELD
     requested_by                : Optional[RequestedBy]                 = REQUESTED_BY_FIELD
-    spatial_coverage            : Optional[Set[SpatialCoverageEnum]]    = SPATIAL_COVERAGE_FIELD  #TODO: adds SpatialCoverage in fileds_definitions.py
+    spatial_coverage            : Optional[SpatialCoverage]             = SPATIAL_COVERAGE_FIELD
     temporal_coverage           : Optional[TemporalCoverageEnum]        = TEMPORAL_COVERAGE_FIELD
     update_frequency            : Optional[TimeUnitEnum]                = UPDATE_FREQUENCY_FIELD
     entity                      : Optional[Set[EntityEnum]]             = ENTITY_FIELD

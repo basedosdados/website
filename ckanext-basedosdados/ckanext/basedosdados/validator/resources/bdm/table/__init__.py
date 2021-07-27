@@ -7,13 +7,11 @@ from .fields_definitions import *
 from ckanext.basedosdados.validator.resources import _CkanDefaultResource, BdmColumns
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options import (
-    SpatialCoverageEnum,
     TemporalCoverageEnum,
     EntityEnum,
     TimeUnitEnum,
     YesNoEnum
 )
-
 
 class BdmTable(_CkanDefaultResource):
     resource_type: Literal["bdm_table"]
@@ -22,7 +20,7 @@ class BdmTable(_CkanDefaultResource):
     dataset_id                : Optional[Str]                       = DATASET_ID_FIELD
     table_id                  : Str                                 = TABLE_ID_FIELD
     description               : Optional[Str]                       = DESCRIPTION_FIELD
-    spatial_coverage          : Optional[Set[SpatialCoverageEnum]]  = SPATIAL_COVERAGE_FIELD
+    spatial_coverage          : Optional[SpatialCoverage]           = SPATIAL_COVERAGE_FIELD
     temporal_coverage         : Optional[TemporalCoverageEnum]      = TEMPORAL_COVERAGE_FIELD
     update_frequency          : Optional[TimeUnitEnum]              = UPDATE_FREQUENCY_FIELD
     entity                    : Optional[Set[EntityEnum]]           = ENTITY_FIELD
