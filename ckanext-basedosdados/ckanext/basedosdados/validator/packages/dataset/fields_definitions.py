@@ -111,7 +111,7 @@ TEMPORAL_COVERAGE_FIELD = Field(
     title="Cobertura temporal",
     yaml_order={
         "id_after": "spatial_coverage",
-        "id_before": "observation_level",
+        "id_before": "entity",
     },
 )
 
@@ -119,7 +119,7 @@ UPDATE_FREQUENCY_FIELD = Field(
     title="",
     yaml_order={
         "id_after": "temporal_coverage",
-        "id_before": "observation_level",
+        "id_before": "entity",
     },
 )
 
@@ -136,7 +136,7 @@ ENTITY_FIELD = Field(
 TIME_UNIT_FIELD = Field(
     title="Unidade temporal",
     yaml_order={
-        "id_after": "observation_level",
+        "id_after": "entity",
         "id_before": "ckan_url",
     },
 )

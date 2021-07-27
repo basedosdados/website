@@ -122,7 +122,7 @@ UPDATE_FREQUENCY_FIELD = Field(
     ),
     yaml_order={
         "id_after": "temporal_coverage",
-        "id_before": "observation_level",
+        "id_before": "entity",
     },
 )
 
@@ -142,7 +142,7 @@ TIME_UNIT_FIELD = Field(
         ["A unidade temporal representada por cada linha dos dados pedidos."]
     ),
     yaml_order={
-        "id_after": "observation_level",
+        "id_after": "entity",
         "id_before": "status",
     },
 )

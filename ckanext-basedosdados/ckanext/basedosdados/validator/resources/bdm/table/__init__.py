@@ -25,9 +25,9 @@ class BdmTable(_CkanDefaultResource):
     spatial_coverage          : Optional[Str]                  = SPATIAL_COVERAGE_FIELD #TODO: adds SpatialCoverage in fileds_definitions.py
     temporal_coverage         : Optional[TemporalCoverageEnum] = TEMPORAL_COVERAGE_FIELD
     update_frequency          : Optional[TimeUnitEnum]         = UPDATE_FREQUENCY_FIELD
-    observation_level         : Optional[Set[EntityEnum]]      = ENTITY_FIELD
+    entity                    : Optional[Set[EntityEnum]]      = ENTITY_FIELD
     time_unit                 : Optional[TimeUnitEnum]         = TIME_UNIT_FIELD
-    identifying_columns       : Optional[List[Str]]            = IDENTIFYING_COLUMNS_FIELD 
+    identifying_columns       : Optional[List[Str]]            = IDENTIFYING_COLUMNS_FIELD
     last_updated              : Optional[LastUpdated]          = LAST_UPDATED_FIELD
     version                   : Optional[Str]                  = VERSION_FIELD
     published_by              : Optional[PublishedBy]          = PUBLISHED_BY_FIELD
@@ -38,7 +38,7 @@ class BdmTable(_CkanDefaultResource):
     architecture_url          : Optional[Str]                  = ARCHITECTURE_URL_FIELD
     covered_by_dictionary     : Optional[YesNoEnum]            = COVERED_BY_DICTIONARY_FIELD
     
-    source_bucket_name : Optional[Str]                                    = SOURCE_BUCKET_NAME_FIELD
+    source_bucket_name : Optional[Str] = SOURCE_BUCKET_NAME_FIELD
     project_id_prod    : Optional[Str]                                    = PROJECT_ID_PROD_FIELD
     project_id_staging : Optional[Str]                                    = PROJECT_ID_STAGING_FIELD
     partitions         : Optional[Str]                                    = PARTITIONS_FIELD
@@ -47,7 +47,7 @@ class BdmTable(_CkanDefaultResource):
     # -------------------------------------
     # VALIDATORS
     # -------------------------------------
-    _entity_validator = treat_scalar_as_single_value_set("observation_level")
+    _entity_validator = treat_scalar_as_single_value_set("entity")
 
     @validator("bdm_file_size")
     def null_string_is_none(
