@@ -59,6 +59,7 @@ load_images() {
         docker load < ~/basedosdados/images/solr
         docker load < ~/basedosdados/images/db
         docker load < ~/basedosdados/images/next
+        docker load < ~/basedosdados/images/strapi
     "
 }
 restart_services() {
@@ -100,6 +101,7 @@ build_images() {
     ( docker-compose build solr && docker save bdd/solr > build/images/solr ) &
     ( docker-compose build db   && docker save bdd/db > build/images/db ) &
     ( VTAG=$VTAG docker-compose build next && docker save bdd/next$VTAG > build/images/next ) &
+    ( VTAG=$VTAG docker-compose build strapi && docker save bdd/strapi$VTAG > build/images/strapi ) &
     for i in `jobs -p`; do wait $i ; done
 }
 restart_wordpress() {
