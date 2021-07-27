@@ -1,34 +1,51 @@
 #!/usr/bin/env python3
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Set
+
 from pydantic import (
     StrictStr as Str,
     Field,
 )
 from ckanext.basedosdados.validator import BaseModel
-
+from ckanext.basedosdados.validator.available_options import (
+    ContinentEnum,
+    CountryEnum,
+    Admin1Enum,
+    Admin2Enum
+)
 
 # -------------------------------------
 # BdmTable Custom Types
 # -------------------------------------
-class LastUpdated(BaseModel):
-    metadata: datetime = Field(user_input_hint=["Última atualização: metadados"])
-    data: datetime = Field(user_input_hint=["Última atualização: dados"])
-    release: datetime = Field(user_input_hint=["Último lançamento: dados originais"])
 
+class SpatialCoverage(BaseModel):
+    
+    #TODO definir campo complexo de spatial_coverage
+    # 1. ler os dataframes de diretorios para estrurar árvore de dicts e metadados
+        # incluir IDs de entidades e nomes
+    # 2. transformar isso num dict para front-end
+    continent : Optional[Set[ContinentEnum]] = Field(user_input_hint=["Continente"])
+    country   : Optional[Set[CountryEnum]]   = Field(user_input_hint=["País"])
+    admin1    : Optional[Set[Admin1Enum]]    = Field(user_input_hint=["UF/Estado"])
+    admin2    : Optional[Set[Admin2Enum]]    = Field(user_input_hint=["Município/Condado"])
+    #admin3    : Optional[Str] = Field(user_input_hint=["Distrito"])
+
+class LastUpdated(BaseModel):
+    metadata: Optional[datetime] = Field(user_input_hint=["Última atualização: metadados"])
+    data    : Optional[datetime] = Field(user_input_hint=["Última atualização: dados"])
+    release : Optional[datetime] = Field(user_input_hint=["Último lançamento: dados originais"])
 
 class PublishedBy(BaseModel):
-    name: Optional[Str] = Field(user_input_hint=["<nome [você]>"])
-    email: Optional[Str] = Field(user_input_hint=["<email>"])
-    github: Optional[Str] = Field(user_input_hint=["<usuário Github>"])
+    name   : Optional[Str] = Field(user_input_hint=["<nome [você]>"])
+    email  : Optional[Str] = Field(user_input_hint=["<email>"])
+    github : Optional[Str] = Field(user_input_hint=["<usuário Github>"])
     website: Optional[Str] = Field(user_input_hint=["<www.exemplo.com>"])
 
-
 class DataCleanedBy(BaseModel):
-    name: Optional[Str] = Field(user_input_hint=["<nome>"])
-    email: Optional[Str] = Field(user_input_hint=["<email>"])
-    github: Optional[Str] = Field(user_input_hint=["<usuário Github>"])
-    website: Optional[Str] = Field(user_input_hint=["<onde encontrar os dados tratados>"])
+    name    : Optional[Str] = Field(user_input_hint=["<nome>"])
+    email   : Optional[Str] = Field(user_input_hint=["<email>"])
+    github  : Optional[Str] = Field(user_input_hint=["<usuário Github>"])
+    website : Optional[Str] = Field(user_input_hint=["<onde encontrar os dados tratados>"])
     code_url: Optional[Str] = Field(user_input_hint=["<onde encontrar código de limpeza>"])
 
 
@@ -94,7 +111,7 @@ UPDATE_FREQUENCY_FIELD = Field(
     description=to_line(["A unidade temporal com qual a tabela é atualizada."]),
     yaml_order={
         "id_after": "temporal_coverage",
-        "id_before": "observation_level",
+        "id_before": "entity",
     },
 )
 
@@ -112,7 +129,7 @@ TIME_UNIT_FIELD = Field(
     title="Unidade temporal",
     description=to_line(["A unidade temporal representada por cada linha."]),
     yaml_order={
-        "id_after": "observation_level",
+        "id_after": "entity",
         "id_before": "identifying_columns",
     },
 )

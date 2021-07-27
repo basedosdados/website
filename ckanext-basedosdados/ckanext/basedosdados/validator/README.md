@@ -1,4 +1,4 @@
-# Endpoints dos Schemas
+
 
 ## Como assessar os endpoints `GET`
  Use one of the following options:
@@ -34,7 +34,8 @@ as funções se encontram em [ckanext-basedosdados/ckanext/action/get.py](../act
 - [InformationRequest](resources/information_request/__init__.py): [`bd_information_request_schema`](https://staging.basedosdados.org/api/3/action/bd_information_request_schema)
 
  ----
-# Como adicionar novos metadados
+
+# (DEPRECATED) Como adicionar novos metadados
 
 
 
