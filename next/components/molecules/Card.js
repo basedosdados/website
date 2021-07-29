@@ -8,7 +8,7 @@ export function Card({
   link,
 }) {
   return (
-    <Link href={link}>
+    <Link textDecoration="none" href={link}>
       <Box
         cursor="pointer"
         width="400px"

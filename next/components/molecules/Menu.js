@@ -138,6 +138,7 @@ export default function Menu({ strapiPages = [] }) {
               position="relative"
             >
               <Image
+                priority
                 layout="fill"
                 objectFit="contain"
                 src="/_nxt/img/logo.png"
