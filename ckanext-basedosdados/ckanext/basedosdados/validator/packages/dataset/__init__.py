@@ -27,7 +27,7 @@ class Dataset(_CkanDefaults):
     dataset_id        : Optional[Str]                                  = DATASET_ID_FIELD
     title             : Optional[Str]                                  = TITLE_FIELD
     description       : Optional[Str]                                  = DESCRIPTION_FIELD
-    spatial_coverage  : Union[Optional[SpatialCoverage],Optional[Str]] = SPATIAL_COVERAGE_FIELD # TODO: remove Optional[Str] after migration
+    spatial_coverage  : Optional[SpatialCoverage]                      = SPATIAL_COVERAGE_FIELD 
     temporal_coverage : Optional[TemporalCoverageEnum]                 = TEMPORAL_COVERAGE_FIELD
     update_frequency  : Optional[TimeUnitEnum]                         = UPDATE_FREQUENCY_FIELD
     entity            : Optional[Set[EntityEnum]]                      = ENTITY_FIELD
