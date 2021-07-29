@@ -76,8 +76,10 @@ function DesktopLinks({ links }) {
             </Box>
           }
         />
-        <Link>Entrar</Link>
-        <RoundedButton>Cadastrar</RoundedButton>
+        <Link href="/user/login">Entrar</Link>
+        <Link href="/user/register">
+          <RoundedButton>Cadastrar</RoundedButton>
+        </Link>
       </HStack>
     </HStack>
   );
@@ -124,7 +126,7 @@ export default function Menu({ strapiPages = [] }) {
                 flex: 1,
                 position: "fixed",
                 left: 30,
-                top: 23,
+                top: 27,
                 color: "white",
               }}
               icon={faBars}
@@ -133,7 +135,7 @@ export default function Menu({ strapiPages = [] }) {
           <Link href="/_nxt/">
             <Box
               transform={{ base: "translateX(-27%)" }}
-              width={{ base: "80px", lg: "105px" }}
+              width={{ base: "120px", lg: "105px" }}
               height="50px"
               position="relative"
             >

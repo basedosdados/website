@@ -27,7 +27,16 @@ export default function DatabaseCard({
   const date1 = new Date();
   const date2 = new Date(updatedSince);
   const diffTime = Math.abs(date2 - date1);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  let diffLabel = "dia(s)";
+
+  if (diffDays > 30) {
+    diffLabel = "mês(es)";
+    diffDays = Math.floor(diffDays / 30);
+  } else if (diffDays > 365) {
+    diffLabel = "ano(s)";
+    diffDays = Math.floor(diffDays / 365);
+  }
 
   return (
     <Card
@@ -40,7 +49,7 @@ export default function DatabaseCard({
       <Title>{name}</Title>
       <Subtitle>{organization}</Subtitle>
       <HStack width="100%" overflowX="scroll" padding="15px 0px">
-        {tags.map((t) => (
+        {tags.slice(0, tags.length > 3 ? 3 : tags.length).map((t) => (
           <Tag>{t}</Tag>
         ))}
       </HStack>
@@ -61,7 +70,7 @@ export default function DatabaseCard({
         ))}
       </HStack>
       <Subtitle fontSize="12px" fontStyle="italic">
-        Atualizado há {diffDays} dias.
+        Atualizado há {diffDays} {diffLabel}.
       </Subtitle>
     </Card>
   );

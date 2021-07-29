@@ -44,7 +44,7 @@ function HeroText({ children, iconUrl }) {
   return (
     <VStack textAlign="center">
       <Box width="100%" height="140px" marginBottom="10px" position="relative">
-        <Image objectFit="contain" layout="fill" src={iconUrl} />
+        <Image priority objectFit="contain" layout="fill" src={iconUrl} />
       </Box>
       {children}
     </VStack>
@@ -86,6 +86,7 @@ function Hero() {
               height="550px"
             >
               <Image
+                priority
                 src="/_nxt/img/home_background.png"
                 layout="fill"
                 objectFit="contain"
@@ -172,6 +173,7 @@ function Hero() {
       >
         <Box width="25px" height="25px" position="relative">
           <Image
+            priority
             objectFit="contain"
             layout="fill"
             src="/_nxt/img/arrow_white_down.png"
@@ -322,6 +324,7 @@ function LearnToAnalysis() {
         maxWidth="100%"
       >
         <Image
+          priority
           objectFit="contain"
           layout="fill"
           src="/_nxt/img/tela_jupyter.png"
@@ -408,6 +411,7 @@ function JoinTheCommunity() {
         height="300px"
       >
         <Image
+          priority
           layout="fill"
           objectFit="contain"
           src="/_nxt/img/tela_discord.png"

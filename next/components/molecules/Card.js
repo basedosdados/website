@@ -8,7 +8,7 @@ export function Card({
   link,
 }) {
   return (
-    <Link textDecoration="none" href={link}>
+    <a className="card" textDecoration="none" href={link}>
       <Box
         cursor="pointer"
         width="400px"
@@ -37,6 +37,6 @@ export function Card({
           {children}
         </Flex>
       </Box>
-    </Link>
+    </a>
   );
 }

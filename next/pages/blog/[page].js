@@ -6,7 +6,7 @@ import SiteHead from "../../components/atoms/SiteHead";
 import Menu from "../../components/molecules/Menu";
 import Footer from "../../components/molecules/Footer";
 import { getStrapiPage, getStrapiPages } from "../api/strapi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import showdown from "showdown";
 
 export async function getStaticProps(context) {
@@ -36,21 +36,17 @@ function BlogPage({ strapiPages = [] }) {
   const [converter, _] = useState(new showdown.Converter());
   const [leftColumnHtml, setLeftColumnHtml] = useState("");
   const [rightColumnHtml, setRightColumnHtml] = useState("");
+  const [data, setData] = useState(null);
   const { page } = router.query;
-  const { data = null, isLoading } = useQuery(
-    ["page", page],
-    () => getStrapiPage(page),
-    {
-      onSuccess: function (data) {
-        if (!data) return;
 
-        setRightColumnHtml(converter.makeHtml(data.RightColumnText));
-        setLeftColumnHtml(converter.makeHtml(data.LeftColumnText));
-      },
-    }
-  );
+  useEffect(() => {
+    const strapiPage = strapiPages.filter((p) => p.id == page)[0];
+    setRightColumnHtml(converter.makeHtml(strapiPage.RightColumnText));
+    setLeftColumnHtml(converter.makeHtml(strapiPage.LeftColumnText));
+    setData(strapiPage);
+  }, []);
 
-  if (isLoading || !data)
+  if (!data)
     return (
       <>
         <SiteHead />

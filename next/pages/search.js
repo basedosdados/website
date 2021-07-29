@@ -12,8 +12,8 @@ import {
   AbsoluteCenter,
   CircularProgress,
   Center,
+  Image,
 } from "@chakra-ui/react";
-import Image from "next/image";
 import SiteHead from "../components/atoms/SiteHead";
 import Footer from "../components/molecules/Footer";
 import Menu from "../components/molecules/Menu";
@@ -27,6 +27,18 @@ import { FilterPopover } from "../components/molecules/FilterPopover";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { getDatasets } from "./api/datasets";
+import { getStrapiPages } from "./api/strapi";
+
+export async function getStaticProps(context) {
+  let { data: strapiPages } = await getStrapiPages();
+
+  return {
+    props: {
+      strapiPages,
+    },
+    revalidate: 60, //TODO: Increase this timer
+  };
+}
 
 function Database({
   image,
@@ -64,6 +76,7 @@ function Database({
       >
         <HStack spacing={10}>
           <Image
+            priority
             objectFit="contain"
             width="91px"
             height="91px"
@@ -128,7 +141,7 @@ function Database({
         </HStack>
         <HStack spacing={5}>
           {isPlus ? (
-            <Image width="80px" src="/_nxt/img/logo_plus.png" />
+            <Image priority width="80px" src="/_nxt/img/logo_plus.png" />
           ) : (
             <></>
           )}
@@ -156,7 +169,7 @@ function OrderingLink({ orderBy, label }) {
   );
 }
 
-export default function SearchPage() {
+export default function SearchPage({ strapiPages }) {
   const { query } = useRouter();
   const searchQuery = decodeURI(query.q || "");
   const orderQuery = decodeURI(query.order_by || "score desc");
@@ -178,7 +191,7 @@ export default function SearchPage() {
   return (
     <VStack width="100%">
       <SiteHead />
-      <Menu />
+      <Menu strapiPages={strapiPages} />
       <VStack
         alignItems="flex-start"
         padding="0px 5%"

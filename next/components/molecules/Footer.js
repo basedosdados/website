@@ -5,6 +5,7 @@ import {
   Stack,
   VStack,
   Text,
+  Button,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import ControlledInput from "../atoms/ControlledInput";
@@ -13,6 +14,7 @@ import SectionText from "../atoms/SectionText";
 import Link from "../atoms/Link";
 import { useState } from "react";
 import BigTitle from "../atoms/BigTitle";
+import RoundedButton from "../atoms/RoundedButton";
 
 function LinkVStack({ title, children }) {
   return (
@@ -28,7 +30,7 @@ function SocialLink({ title, href, src }) {
     <Link href={href} target="_blank">
       <HStack>
         <Box position="relative" height="20px" width="20px">
-          <Image layout="fill" objectFit="contain" src={src} />
+          <Image priority layout="fill" objectFit="contain" src={src} />
         </Box>
         <Text>{title}</Text>
       </HStack>
@@ -50,37 +52,36 @@ export default function Footer() {
         spacing={10}
         direction={{ base: "column", lg: "row" }}
       >
-        <VStack width={{ base: "90%", lg: "50%" }} spacing={10}>
-          <BigTitle fontSize="26px" color="white">
+        <VStack width={{ base: "90%", lg: "50%" }} spacing={7}>
+          <BigTitle fontSize="26px" textAlign="center" color="white">
             Já conhece a nossa newsletter mensal?
           </BigTitle>
-          <ControlledInput
-            value={email}
-            onChange={setEmail}
-            width="100%"
-            inputBackgroundColor="white"
-            inputStyle={{ borderRadius: 10 }}
-            rightAddon={
-              <Box width="30px" height="20px" position="relative">
-                <Image
-                  layout="fill"
-                  objectFit="contain"
-                  src="/_nxt/img/arrow_black_right.png"
-                />
-              </Box>
-            }
-          />
+          <Link
+            isExternal={true}
+            color="gray"
+            href="https://basedosdados.hubspotpagebuilder.com/assine-a-newsletter-da-base-dos-dados"
+          >
+            <RoundedButton minWidth="300px">Assine Já</RoundedButton>
+          </Link>
         </VStack>
-        <Image width="150px" height="auto" src="/_nxt/img/dadinho_mail.png" />
+        <Image
+          priority
+          width="150px"
+          height="auto"
+          src="/_nxt/img/dadinho_mail.png"
+        />
       </Stack>
       <VStack width="100%" padding={10} spacing={10} backgroundColor="#34A15A">
-        <HStack
+        <Stack
           alignItems="flex-start"
           width="100%"
           justifyContent="space-between"
+          direction={{ base: "column", lg: "row" }}
+          spacing={{ base: 10, lg: 0 }}
         >
-          <Box width="150px" height="150px" position="relative">
+          <Box minWidth="150px" height="150px" position="relative">
             <Image
+              priority
               objectFit="contain"
               layout="fill"
               src="/_nxt/img/logo_footer.png"
@@ -132,7 +133,7 @@ export default function Footer() {
               <Link>Contato</Link>
             </LinkVStack>
           </Stack>
-        </HStack>
+        </Stack>
         <VStack spacing={4}>
           <HStack
             fontFamily="Lato !important"

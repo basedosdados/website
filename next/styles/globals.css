@@ -10,3 +10,8 @@ body {
   font-weight: bold;
   font-size: 28px;
 }
+
+.card :hover {
+  text-decoration: none !important;
+  border-bottom: 0;
+}
