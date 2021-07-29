@@ -61,32 +61,33 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
             # out['extras'] = [{'key':k, 'value':v} for k, v in out['extras'].items()]
             return out, []
         except ValidationError as ee:
-            return {}, json.loads(
-                ee.json()
-            )  # need to jsonify to ensure that data types are json friendly
+                return {}, json.loads(
+                    ee.json()
+                )  # need to jsonify to ensure that data types are json friendly
 
     def _validate_update(self, data_dict):
         return self._validate_create(data_dict, action="package_update")
 
     def validate(self, context, data_dict, schema, action):
+        
         out, errors = {
             "package_show": self._validate_show,
             "package_create": self._validate_create,
             "package_update": self._validate_update,
         }[action](data_dict)
 
-        from ckan.lib.navl.dictization_functions import (
-            validate as ckan_validate,
-        )  # use old ckan schema to validate ckan stuff. Maybe remove this sometime
+        # from ckan.lib.navl.dictization_functions import (
+        #     validate as ckan_validate,
+        # )  # use old ckan schema to validate ckan stuff. Maybe remove this sometime
 
-        out_2, errors_2 = ckan_validate(out, schema, context=context)
-        out.update(out_2)
-        if (
-            not errors and errors_2
-        ):  # if pydantic has no errors, send ckan errors to avoid duplicated msgs... This can be improved if we merge errors correctly
-            errors.append(
-                {"msg": "ckan-errors", "errors": errors_2}
-            )  # merge errors in a dirty way
+        # out_2, errors_2 = ckan_validate(out, schema, context=context)
+        # out.update(out_2)
+        # if (
+        #     not errors and errors_2
+        # ):  # if pydantic has no errors, send ckan errors to avoid duplicated msgs... This can be improved if we merge errors correctly
+        #     errors.append(
+        #         {"msg": "ckan-errors", "errors": errors_2}
+        #     )  # merge errors in a dirty way
         return out, errors
         # return (out || out_2, errors || errors_2)
 
