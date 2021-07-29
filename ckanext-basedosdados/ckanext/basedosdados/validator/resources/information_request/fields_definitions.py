@@ -29,10 +29,11 @@ class SpatialCoverage(BaseModel):
     #admin3    : Optional[Str] = Field(user_input_hint=["Distrito"])
 
 class RequestedBy(BaseModel):
-    name   : Str = Field(user_input_hint=["<nome [você]>"])
-    email  : Str = Field(user_input_hint=["<email>"])
-    github : Str = Field(user_input_hint=["<usuário Github>"])
-    website: Str = Field(user_input_hint=["<website>"])
+    name        : Str = Field(user_input_hint=["<nome [você]>"])
+    email       : Str = Field(user_input_hint=["<email>"])
+    github_user : Str = Field(user_input_hint=["<usuário Github>"])
+    website     : Str = Field(user_input_hint=["<website>"])
+    ckan_user   : Str = Field(user_input_hint=["<ID do usuário no CKAN>"])
 
 
 to_line = lambda description: "\n".join(description)

@@ -35,19 +35,20 @@ class LastUpdated(BaseModel):
     data    : Optional[datetime] = Field(user_input_hint=["Última atualização: dados"])
     release : Optional[datetime] = Field(user_input_hint=["Último lançamento: dados originais"])
 
-class PublishedBy(BaseModel):
-    name   : Optional[Str] = Field(user_input_hint=["<nome [você]>"])
-    email  : Optional[Str] = Field(user_input_hint=["<email>"])
-    github : Optional[Str] = Field(user_input_hint=["<usuário Github>"])
-    website: Optional[Str] = Field(user_input_hint=["<www.exemplo.com>"])
+class PublishedBy(BaseModel): 
+      name        : Optional[Str] = Field(user_input_hint=["<nome [você]>"])
+      email       : Optional[Str] = Field(user_input_hint=["<email>"])
+      github_user : Optional[Str] = Field(user_input_hint=["<usuário Github>"])
+      website     : Optional[Str] = Field(user_input_hint=["<www.exemplo.com>"])
+      ckan_user   : Optional[Str] = Field(user_input_hint=["<id do usuário no ckan>"])
 
-class DataCleanedBy(BaseModel):
-    name    : Optional[Str] = Field(user_input_hint=["<nome>"])
-    email   : Optional[Str] = Field(user_input_hint=["<email>"])
-    github  : Optional[Str] = Field(user_input_hint=["<usuário Github>"])
-    website : Optional[Str] = Field(user_input_hint=["<onde encontrar os dados tratados>"])
-    code_url: Optional[Str] = Field(user_input_hint=["<onde encontrar código de limpeza>"])
-
+class DataCleanedBy(BaseModel): 
+      name        : Optional[Str] = Field(user_input_hint=["<nome>"])
+      email       : Optional[Str] = Field(user_input_hint=["<email>"])
+      github_user : Optional[Str] = Field(user_input_hint=["<usuário Github>"])
+      website     : Optional[Str] = Field(user_input_hint=["<onde encontrar os dados tratados>"])
+      code_url    : Optional[Str] = Field(user_input_hint=["<onde encontrar código de limpeza>"])
+      ckan_user   : Optional[Str] = Field(user_input_hint=["<id do usuário no ckan>"])
 
 to_line = lambda description: "\n".join(description)
 
