@@ -11,6 +11,7 @@ export default function BigTitle({
     <Heading
       fontFamily="Ubuntu"
       fontSize="36px"
+      lineHeight="55px"
       letterSpacing={letterSpacing}
       color={color}
       fontWeight={fontWeigth}

@@ -19,7 +19,9 @@ import RoundedButton from "../atoms/RoundedButton";
 function LinkVStack({ title, children }) {
   return (
     <VStack spacing={5} alignItems="flex-start">
-      <SectionText color="#FFFFFF">{title}</SectionText>
+      <SectionText color="#FFFFFF" fontFamily="Lato" fontWeight="500">
+        {title}
+      </SectionText>
       {children}
     </VStack>
   );
@@ -27,7 +29,7 @@ function LinkVStack({ title, children }) {
 
 function SocialLink({ title, href, src }) {
   return (
-    <Link href={href} target="_blank">
+    <Link color="white" href={href} target="_blank">
       <HStack>
         <Box position="relative" height="20px" width="20px">
           <Image priority layout="fill" objectFit="contain" src={src} />
@@ -43,34 +45,6 @@ export default function Footer() {
 
   return (
     <VStack width="100%" spacing={0}>
-      <Stack
-        alignItems="center"
-        justifyContent="center"
-        backgroundColor="#7EC876"
-        width="100%"
-        padding="50px 0px"
-        spacing={10}
-        direction={{ base: "column", lg: "row" }}
-      >
-        <VStack width={{ base: "90%", lg: "50%" }} spacing={7}>
-          <BigTitle fontSize="26px" textAlign="center" color="white">
-            Já conhece a nossa newsletter mensal?
-          </BigTitle>
-          <Link
-            isExternal={true}
-            color="gray"
-            href="https://basedosdados.hubspotpagebuilder.com/assine-a-newsletter-da-base-dos-dados"
-          >
-            <RoundedButton minWidth="300px">Assine Já</RoundedButton>
-          </Link>
-        </VStack>
-        <Image
-          priority
-          width="150px"
-          height="auto"
-          src="/_nxt/img/dadinho_mail.png"
-        />
-      </Stack>
       <VStack width="100%" padding={10} spacing={10} backgroundColor="#34A15A">
         <Stack
           alignItems="flex-start"
@@ -79,7 +53,7 @@ export default function Footer() {
           direction={{ base: "column", lg: "row" }}
           spacing={{ base: 10, lg: 0 }}
         >
-          <Box minWidth="150px" height="150px" position="relative">
+          <Box minWidth="200px" height="200px" position="relative">
             <Image
               priority
               objectFit="contain"
@@ -97,14 +71,21 @@ export default function Footer() {
             spacing={{ base: 10, lg: 0 }}
           >
             <LinkVStack title="PRODUTOS">
-              <Link href="/dataset">Mecanismo de busca</Link>
-              <Link href="https://basedosdados.github.io/mais/" target="_blank">
+              <Link color="white" href="/dataset">
+                Mecanismo de busca
+              </Link>
+              <Link
+                color="white"
+                href="https://basedosdados.github.io/mais/"
+                target="_blank"
+              >
                 Datalake Público
               </Link>
             </LinkVStack>
             <LinkVStack title="CONTEÚDO">
-              <Link>Blog</Link>
+              <Link color="white">Blog</Link>
               <Link
+                color="white"
                 href="https://www.youtube.com/c/BasedosDados/videos"
                 target="_blank"
               >
@@ -129,8 +110,10 @@ export default function Footer() {
               />
             </LinkVStack>
             <LinkVStack title="INSTITUCIONAL">
-              <Link href="/about">Sobre</Link>
-              <Link>Contato</Link>
+              <Link color="white" href="/about">
+                Sobre
+              </Link>
+              <Link color="white">Contato</Link>
             </LinkVStack>
           </Stack>
         </Stack>
@@ -142,9 +125,9 @@ export default function Footer() {
           >
             <Text>® 2021 Base dos Dados</Text>
             <Text>|</Text>
-            <Link>Termos de uso</Link>
+            <Link color="white">Termos de uso</Link>
             <Text>|</Text>
-            <Link>Política de privacidade</Link>
+            <Link color="white">Política de privacidade</Link>
           </HStack>
           <Text
             color="white"
