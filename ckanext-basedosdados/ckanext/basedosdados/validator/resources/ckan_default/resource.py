@@ -8,7 +8,7 @@ from pydantic import (
 from ckanext.basedosdados.validator.available_options import IdType
 
 ### Do not use extra while creating new models
-class _CkanDefaultResource(BaseModel, extra=Extra.forbid):
+class _CkanDefaultResource(BaseModel):
     id                 : IdType
     name               : Str
     description        : Str

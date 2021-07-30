@@ -20,7 +20,7 @@ class BdmTable(_CkanDefaultResource):
     dataset_id                : Optional[Str]                                    = DATASET_ID_FIELD
     table_id                  : Str                                              = TABLE_ID_FIELD
     description               : Optional[Str]                                    = DESCRIPTION_FIELD
-    spatial_coverage          : Optional[SpatialCoverage]                        = SPATIAL_COVERAGE_FIELD 
+    spatial_coverage          : Union[Optional[SpatialCoverage], Optional[Str]]  = SPATIAL_COVERAGE_FIELD
     temporal_coverage         : Optional[TemporalCoverageEnum]                   = TEMPORAL_COVERAGE_FIELD
     update_frequency          : Optional[TimeUnitEnum]                           = UPDATE_FREQUENCY_FIELD
     entity                    : Optional[Set[EntityEnum]]                        = ENTITY_FIELD
@@ -40,7 +40,7 @@ class BdmTable(_CkanDefaultResource):
     project_id_staging        : Optional[Str]                                    = PROJECT_ID_STAGING_FIELD
     partitions                : Optional[Str]                                    = PARTITIONS_FIELD
     bdm_file_size             : Union[int, None, Literal["Unavailable", ""]]     = BDM_FILE_SIZE_FIELD # should not be editable in form, also, check what use is Unavailable
-    columns                   : Optional[List[BdmColumns]]                       = COLUMNS_FIELD
+    columns                   : Union[Optional[List[BdmColumns]], Optional[Str]] = COLUMNS_FIELD
     
     # -------------------------------------
     # VALIDATORS
