@@ -7,6 +7,7 @@ export default function SectionText({ children, color = "#252A32", ...props }) {
       fontWeight="300"
       lineHeight="24px"
       letterSpacing="0.1em"
+      textAlign="justify"
       color={color}
       {...props}
     >

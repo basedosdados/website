@@ -29,6 +29,7 @@ import Typist from "react-typist";
 import { useQuery } from "react-query";
 import { getPopularDatasets, getRecentDatasets } from "./api/datasets";
 import { getStrapiPages } from "./api/strapi";
+import { ShadowBox } from "../components/atoms/ShadowBox";
 
 export async function getStaticProps(context) {
   let { data: strapiPages } = await getStrapiPages();
@@ -411,41 +412,25 @@ function JoinTheCommunity() {
 }
 
 function Support() {
-  function ButtonList({ buttonText, buttonColor, points }) {
+  function SupportButton({ onClick, children, colorScheme = "blue" }) {
     return (
-      <VStack spacing={10}>
-        <Button
-          boxShadow="0px 13.7273px 13.7273px rgba(0, 0, 0, 0.25);"
-          borderRadius="68.6364px"
-          fontSize="22px"
-          padding="30px"
-          fontFamily="Ubuntu"
-          width="100%"
-          fontWeight="400"
-          backgroundColor={buttonColor}
-          color="white"
-        >
-          {buttonText}
-        </Button>
-        <UnorderedList
-          spacing={2}
-          fontWeight="400"
-          fontFamily="Lato"
-          color="#6E6E6E"
-          letterSpacing="2px"
-          fontSize="14px"
-        >
-          {points.map((p) => (
-            <ListItem>{p}</ListItem>
-          ))}
-        </UnorderedList>
-      </VStack>
+      <Button
+        boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
+        borderRadius="68.6364px"
+        colorScheme={colorScheme}
+        padding="25px"
+        fontFamily="Ubuntu"
+        fontWeight="700"
+        fontSize="20px"
+        minWidth="250px"
+      >
+        {children}
+      </Button>
     );
   }
-
   return (
     <VStack paddingTop="60px" width="95%" paddingBottom="100px">
-      <BigTitle width="90%" textAlign="center" paddingBottom="40px">
+      <BigTitle width="90%" textAlign="center" paddingBottom="60px">
         Existimos através do esforço de pessoas que acreditam no acesso a dados
         abertos de qualidade.
       </BigTitle>
@@ -455,29 +440,25 @@ function Support() {
         direction={{ base: "column", lg: "row" }}
         spacing={10}
       >
-        <ButtonList
-          buttonColor="#3AA1EB"
-          buttonText="Seja um(a) vonluntário(a)"
-          points={[
-            "Ajude a manter e aprimorar os pacotes da BD",
-            "Suba bases de dados no nosso datalake público",
-            "Construa conteúdos e tutoriais para nossas redes",
-          ]}
-        />
-        <ButtonList
-          buttonColor="#FF8484"
-          buttonText="Apoie o projeto"
-          points={["Ajude com doações mensais à Base dos Dados"]}
-        />
-        <ButtonList
-          buttonColor="#3AA1EB"
-          buttonText="Seja nosso(a) parceiro(a)"
-          points={[
-            "Abra os dados de sua organização na BD",
-            "Construa projetos de dados abertos conosco",
-            "Desenvolva aplicações com nossos dados",
-          ]}
-        />
+        <ShadowBox height="270px" title="Voluntariado">
+          <SectionText height="100px">
+            Ajude a manter e aprimorar pacotes, suba bases no nosso datalake ou
+            construa análises e tutoriais para nossas redes.
+          </SectionText>
+          <SupportButton>Comece Aqui</SupportButton>
+        </ShadowBox>
+        <ShadowBox height="270px" title="Parceria">
+          <SectionText height="100px">
+            Abra dados de sua organização, construa projetos de dados abertos
+            conosco ou desenvolva aplicações com nossos dados.
+          </SectionText>
+          <SupportButton>Entre em contato</SupportButton>
+        </ShadowBox>
+        <ShadowBox height="270px" spacing={4} title="Doações">
+          <SupportButton colorScheme="red">Doe via PIX</SupportButton>
+          <SupportButton>Apoio Mensal</SupportButton>
+          <SupportButton>Apoio Institucional</SupportButton>
+        </ShadowBox>
       </Stack>
     </VStack>
   );

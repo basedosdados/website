@@ -12,7 +12,7 @@ import Image from "next/image";
 import ControlledInput from "../atoms/ControlledInput";
 import RoundedButton from "../atoms/RoundedButton";
 import Link from "../atoms/Link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
@@ -83,10 +83,20 @@ function DesktopLinks({ links }) {
 
 export default function Menu({ strapiPages = [] }) {
   const menuDisclosure = useDisclosure();
+  const divRef = useRef();
 
   const links = {
     Dados: "/_nxt/search",
   };
+
+  useEffect(() => {
+    if (!divRef.current || !divRef.current.style) return;
+
+    document.addEventListener("scroll", () => {
+      if (window.scrollY <= 30) divRef.current.style.boxShadow = "none";
+      else divRef.current.style.boxShadow = "0px 4px 4px rgba(0,0,0,0.25)";
+    });
+  }, [divRef.current]);
 
   strapiPages.map((p) => {
     links[p.MenuTitle] = "/_nxt/blog/" + p.id + "/";
@@ -98,14 +108,15 @@ export default function Menu({ strapiPages = [] }) {
     <>
       <MenuDrawer links={links} {...menuDisclosure} />
       <Box
+        ref={divRef}
         position="fixed"
         top="0px"
         width="100%"
         left="0px"
-        boxShadow="0px 4px 4px rgba(0,0,0,0.25)"
         backgroundColor="#FAFAFA"
         padding="15px 60px"
         zIndex="10000000"
+        transition="0.2s"
         as="nav"
       >
         <HStack
