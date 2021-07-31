@@ -29,6 +29,7 @@ import Typist from "react-typist";
 import { useQuery } from "react-query";
 import { getPopularDatasets, getRecentDatasets } from "./api/datasets";
 import { getStrapiPages } from "./api/strapi";
+import { ShadowBox } from "../components/atoms/ShadowBox";
 
 export async function getStaticProps(context) {
   let { data: strapiPages } = await getStrapiPages();
@@ -37,12 +38,13 @@ export async function getStaticProps(context) {
     props: {
       strapiPages,
     },
+    revalidate: 60, //TODO: Increase this timer
   };
 }
 
 function HeroText({ children, iconUrl }) {
   return (
-    <VStack textAlign="center">
+    <VStack maxWidth="350px" textAlign="center">
       <Box width="100%" height="140px" marginBottom="10px" position="relative">
         <Image priority objectFit="contain" layout="fill" src={iconUrl} />
       </Box>
@@ -81,9 +83,9 @@ function Hero() {
             <Box
               position="absolute"
               right="0px"
-              top="-0px"
-              width="600px"
-              height="550px"
+              top="-50%"
+              minWidth="800px"
+              minHeight="568px"
             >
               <Image
                 priority
@@ -97,7 +99,7 @@ function Hero() {
               zIndex="1"
               fontFamily="Lato"
               flex="2"
-              color="#358C2B"
+              fontSize="38px"
             >
               Um único lugar para buscar, baixar e acessar os dados que você
               precisa
@@ -114,6 +116,7 @@ function Hero() {
                 borderRadius: "50px",
                 backgroundColor: "#ffffff",
                 fontSize: "20px",
+                boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
               }}
               rightIcon={
                 <Box
@@ -132,34 +135,33 @@ function Hero() {
               }
             />
           </Stack>
-          <Stack
+          <Flex
             paddingTop="30px"
             position="relative"
             zIndex="1"
-            width="90%"
+            justifyContent="space-evenly"
+            width="100%"
             direction={{ base: "column", lg: "row" }}
           >
             <HeroText iconUrl="/_nxt/img/icone_busca.png">
               <SectionText>
-                Com o <b>mecanismo de busca</b> é possível descobrir informações
-                sobre mais de 900 bases de dados de diversos temas e
-                organizações.
+                Com o mecanismo de busca é possível descobrir informações sobre
+                mais de 900 bases de dados de diversos temas e organizações.
               </SectionText>
             </HeroText>
             <HeroText iconUrl="/_nxt/img/icone_download.png">
               <SectionText>
-                Disponibilizamos o <b>download</b> dos dados tratados e
-                atualizados direto do nosso datalake público num só click.
+                Disponibilizamos o download dos dados tratados e atualizados
+                direto do nosso datalake público num só click.
               </SectionText>
             </HeroText>
             <HeroText iconUrl="/_nxt/img/icone_pacotes.png">
               <SectionText>
-                Através dos nossos <b>pacotes de programação</b> você pode
-                acessar o datalake público BD+ em Python, R ou pela linha de
-                comando.
+                Através dos nossos pacotes de programação você pode acessar o
+                datalake público BD+ em Python, R ou pela linha de comando.
               </SectionText>
             </HeroText>
-          </Stack>
+          </Flex>
         </VStack>
       </Center>
       <Center
@@ -167,11 +169,11 @@ function Hero() {
         transform="translateY(-20px)"
         boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
         backgroundColor="#42B0FF"
-        borderRadius="500px"
-        width="54px"
-        height="60px"
+        borderRadius="1000px"
+        width="50px"
+        height="50px"
       >
-        <Box width="25px" height="25px" position="relative">
+        <Box width="20px" height="20px" position="relative">
           <Image
             priority
             objectFit="contain"
@@ -197,12 +199,12 @@ function CatalogNews() {
       spacing={5}
       paddingBottom="160px"
     >
-      <BigTitle marginBottom="30px" alignSelf="center">
-        Veja as novidades do nosso catálogo
+      <BigTitle marginBottom="0px" alignSelf="center">
+        Novidades no catálogo de dados
       </BigTitle>
       <CardCatalog
         sections={{
-          popular: (popularDatasets.data || []).map((d) => (
+          populares: (popularDatasets.data || []).map((d) => (
             <DatabaseCard
               link={`/dataset/${d.name}`}
               name={d.title}
@@ -269,19 +271,22 @@ function ExploreInYourFavoriteLanguage() {
       spacing={{ base: 10, lg: 140 }}
       direction={{ base: "column", lg: "row" }}
     >
-      <VStack alignItems="flex-start" flex="2" spacing={5}>
-        <BigTitle>Explore na sua linguagem favorita</BigTitle>
-        <SectionText>
-          Desenvolvemos pacotes para acesso aos dados da BD+ em Python, R e
-          linha de comando. Além disso, você pode consultar e filtrar dados
-          usando SQL no editor do nosso datalake no Google BigQuery.
+      <VStack maxWidth="400px" alignItems="flex-start" flex="1" spacing={5}>
+        <Title maxWidth="100%" fontSize="30px" letterSpacing="0.1em">
+          Explore tudo na sua linguagem favorita
+        </Title>
+        <SectionText textAlign="justify">
+          Desenvolvemos <b>pacotes para acesso aos dados da BD+</b> em Python, R
+          e linha de comando. Além disso, você pode{" "}
+          <b>consultar e filtrar dados usando SQL</b> no editor do nosso
+          datalake no Google BigQuery.
         </SectionText>
         <Link paddingTop="10px" color="skyblue" textDecoration="underline">
           Veja mais {">"} {">"}
         </Link>
       </VStack>
       <Box
-        flex="2"
+        flex="1"
         borderRadius="26.2245"
         filter="drop-shadow(0px 2.2449px 2.2449px rgba(0, 0, 0, 0.4))"
         maxHeight={{ base: "none", md: "200px" }}
@@ -311,65 +316,50 @@ function ExploreInYourFavoriteLanguage() {
 
 function LearnToAnalysis() {
   return (
-    <Stack
-      width="95%"
-      spacing={{ base: 10, lg: 20 }}
-      direction={{ base: "column", lg: "row" }}
-    >
+    <Stack width="95%" direction={{ base: "column", lg: "row" }}>
       <Box
         position="relative"
         display="block"
         height="auto"
         flex="1"
-        maxWidth="100%"
+        minWidth="850px"
+        alignItems="flex-start"
+        justifyContent="flex-start"
       >
         <Image
           priority
           objectFit="contain"
+          objectPosition="0"
           layout="fill"
           src="/_nxt/img/tela_jupyter.png"
         />
       </Box>
-      <VStack spacing={5} alignItems="flex-start" flex="1">
-        <BigTitle>Aprenda a fazer análise com os dados</BigTitle>
-        <Stack
-          direction={{ base: "column", md: "row" }}
-          spacing={{ base: 10, md: 0 }}
-        >
-          <VStack>
-            <SectionText>
-              Temos tutoriais no blog e workshops no Youtube sobre como começar
-              a mexer com os pacotes e construir análises com nossos dados.
-            </SectionText>
-            <HStack alignItems="flex-start" width="100%" spacing={5}>
-              <Link
-                paddingTop="20px"
-                color="skyblue"
-                textDecoration="underline"
-                href="https://www.youtube.com/c/BasedosDados/videos"
-                target="_blank"
-              >
-                Youtube {">"} {">"}
-              </Link>
-              <Link
-                paddingTop="20px"
-                color="skyblue"
-                textDecoration="underline"
-              >
-                Blog {">"} {">"}
-              </Link>
-            </HStack>
-          </VStack>
-          <VStack alignItems="flex-start">
-            <SectionText>
-              Todos os códigos das análises estão disponíveis no nosso Github
-              para você testar e reproduzir localmente.
-            </SectionText>
-            <Link paddingTop="20px" color="skyblue" textDecoration="underline">
-              Veja mais {">"} {">"}
+      <VStack maxWidth="500px" spacing={5} alignItems="flex-start" flex="1">
+        <Title maxWidth="100%" fontSize="30px" letterSpacing="0.1em">
+          Aprenda a construir análises com os dados
+        </Title>
+        <VStack>
+          <SectionText textAlign="justify">
+            Produzimos tutoriais e ensaios no blog, workshops no Youtube e
+            análises nas redes sociais com nossos dados. Disponibilizamos os
+            códigos completos no nosso Github para você testar e reproduzir
+            localmente
+          </SectionText>
+          <HStack alignItems="flex-start" width="100%" spacing={5}>
+            <Link
+              paddingTop="20px"
+              color="skyblue"
+              textDecoration="underline"
+              href="https://www.youtube.com/c/BasedosDados/videos"
+              target="_blank"
+            >
+              Youtube {">"} {">"}
             </Link>
-          </VStack>
-        </Stack>
+            <Link paddingTop="20px" color="skyblue" textDecoration="underline">
+              Blog {">"} {">"}
+            </Link>
+          </HStack>
+        </VStack>
       </VStack>
     </Stack>
   );
@@ -383,14 +373,14 @@ function JoinTheCommunity() {
       direction={{ base: "column", lg: "row" }}
       alignItems="center"
     >
-      <VStack alignItems="flex-start" flex="1" spacing={5}>
-        <BigTitle>
+      <VStack maxWidth="450px" alignItems="flex-start" flex="1" spacing={5}>
+        <Title maxWidth="80%" fontSize="30px" letterSpacing="0.1em">
           Faça parte da nossa comunidade, <i>databaser</i>
-        </BigTitle>
-        <SectionText>
+        </Title>
+        <SectionText textAlign="justify">
           Acompanhe todas as discussões, tire dúvidas, fale e aprenda direto com
           a equipe da Base dos Dados e faça parte de um grupo de pessoas
-          incríveis da nossa comunidade de dados abertos no Discord.
+          incríveis da nossa <b>comunidade de dados abertos no Discord.</b>
         </SectionText>
         <Link
           href="https://discord.gg/huKWpsVYx4"
@@ -422,49 +412,27 @@ function JoinTheCommunity() {
 }
 
 function Support() {
-  function ButtonList({ buttonText, buttonColor, points }) {
+  function SupportButton({ onClick, children, colorScheme = "blue" }) {
     return (
-      <VStack spacing={10}>
-        <Button
-          boxShadow="0px 13.7273px 13.7273px rgba(0, 0, 0, 0.25);"
-          borderRadius="68.6364px"
-          fontSize="22px"
-          padding="30px"
-          fontFamily="Ubuntu"
-          width="100%"
-          fontWeight="400"
-          backgroundColor={buttonColor}
-          color="white"
-        >
-          {buttonText}
-        </Button>
-        <UnorderedList
-          spacing={2}
-          fontWeight="400"
-          fontFamily="Lato"
-          color="#6E6E6E"
-          letterSpacing="2px"
-          fontSize="14px"
-        >
-          {points.map((p) => (
-            <ListItem>{p}</ListItem>
-          ))}
-        </UnorderedList>
-      </VStack>
+      <Button
+        boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
+        borderRadius="68.6364px"
+        colorScheme={colorScheme}
+        padding="25px"
+        fontFamily="Ubuntu"
+        fontWeight="700"
+        fontSize="20px"
+        minWidth="250px"
+      >
+        {children}
+      </Button>
     );
   }
-
   return (
     <VStack paddingTop="60px" width="95%" paddingBottom="100px">
-      <BigTitle
-        width={{ base: "90%", md: "70%" }}
-        textAlign="center"
-        fontWeigth="300"
-      >
-        A Base dos Dados só existe com o esforço de diversas pessoas que
-      </BigTitle>
-      <BigTitle paddingBottom="50px" textAlign="center">
-        acreditam no acesso a dados abertos de qualidade.
+      <BigTitle width="90%" textAlign="center" paddingBottom="60px">
+        Existimos através do esforço de pessoas que acreditam no acesso a dados
+        abertos de qualidade.
       </BigTitle>
       <Stack
         width="100%"
@@ -472,29 +440,25 @@ function Support() {
         direction={{ base: "column", lg: "row" }}
         spacing={10}
       >
-        <ButtonList
-          buttonColor="#3AA1EB"
-          buttonText="Seja um(a) vonluntário(a)"
-          points={[
-            "Ajude a manter e aprimorar os pacotes da BD",
-            "Suba bases de dados no nosso datalake público",
-            "Construa conteúdos e tutoriais para nossas redes",
-          ]}
-        />
-        <ButtonList
-          buttonColor="#FF8484"
-          buttonText="Apoie o projeto"
-          points={["Ajude com doações mensais à Base dos Dados"]}
-        />
-        <ButtonList
-          buttonColor="#3AA1EB"
-          buttonText="Seja nosso(a) parceiro(a)"
-          points={[
-            "Abra os dados de sua organização na BD",
-            "Construa projetos de dados abertos conosco",
-            "Desenvolva aplicações com nossos dados",
-          ]}
-        />
+        <ShadowBox height="270px" title="Voluntariado">
+          <SectionText height="100px">
+            Ajude a manter e aprimorar pacotes, suba bases no nosso datalake ou
+            construa análises e tutoriais para nossas redes.
+          </SectionText>
+          <SupportButton>Comece Aqui</SupportButton>
+        </ShadowBox>
+        <ShadowBox height="270px" title="Parceria">
+          <SectionText height="100px">
+            Abra dados de sua organização, construa projetos de dados abertos
+            conosco ou desenvolva aplicações com nossos dados.
+          </SectionText>
+          <SupportButton>Entre em contato</SupportButton>
+        </ShadowBox>
+        <ShadowBox height="270px" spacing={4} title="Doações">
+          <SupportButton colorScheme="red">Doe via PIX</SupportButton>
+          <SupportButton>Apoio Mensal</SupportButton>
+          <SupportButton>Apoio Institucional</SupportButton>
+        </ShadowBox>
       </Stack>
     </VStack>
   );
@@ -508,12 +472,16 @@ export default function Home({ strapiPages }) {
       <VStack
         alignItems="center"
         width="100%"
-        backgroundColor="#fafafa"
+        backgroundColor="#FAFAFA"
         padding="0px 5%"
       >
         <Hero />
         <CatalogNews />
-        <VStack spacing={20} width="100%">
+        <VStack spacing={20} transform="translateY(-100px)" width="100%">
+          <BigTitle textAlign="center" maxWidth="70%" paddingBottom="20px">
+            Mais do que organizar dados, nós reinventamos a forma de trabalhar
+            com eles
+          </BigTitle>
           <ExploreInYourFavoriteLanguage />
           <LearnToAnalysis />
           <JoinTheCommunity />

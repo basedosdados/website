@@ -44,19 +44,21 @@ export default function DatabaseCard({
       icons={categories.map((c) => (
         <CategoryIcon url={`/_nxt/img/categories/icone_${c}.svg`} />
       ))}
-      spacing={2}
+      spacing={0}
     >
-      <Title>{name}</Title>
+      <Title marginBottom="15px">{name}</Title>
       <Subtitle>{organization}</Subtitle>
-      <HStack width="100%" overflowX="scroll" padding="15px 0px">
+      <HStack width="100%" overflowX="scroll" paddingTop="15px">
         {tags.slice(0, tags.length > 3 ? 3 : tags.length).map((t) => (
           <Tag>{t}</Tag>
         ))}
       </HStack>
-      <HStack marginTop="auto" padding="15px 0px">
+      <HStack marginTop="auto">
         {size ? (
           <>
-            <Subtitle fontWeight="bold">{Math.round(size / 1000)} mb</Subtitle>
+            <Subtitle color="#252A32" fontWeight="bold">
+              {Math.round(size / 1000)} mb
+            </Subtitle>
             <Dot />
           </>
         ) : (
@@ -64,12 +66,12 @@ export default function DatabaseCard({
         )}
         {databaseInfo.map((item, index) => (
           <>
-            <Subtitle>{item}</Subtitle>{" "}
+            <Subtitle color="#252A32">{item}</Subtitle>{" "}
             {index !== databaseInfo.length - 1 ? <Dot /> : <></>}{" "}
           </>
         ))}
       </HStack>
-      <Subtitle fontSize="12px" fontStyle="italic">
+      <Subtitle marginTop="auto" fontSize="12px" fontStyle="italic">
         Atualizado há {diffDays} {diffLabel}.
       </Subtitle>
     </Card>

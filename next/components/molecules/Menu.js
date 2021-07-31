@@ -12,7 +12,7 @@ import Image from "next/image";
 import ControlledInput from "../atoms/ControlledInput";
 import RoundedButton from "../atoms/RoundedButton";
 import Link from "../atoms/Link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
@@ -24,9 +24,7 @@ function MenuDrawer({ isOpen, onClose, links }) {
         <VStack alignItems="center" width="100%" spacing={5}>
           {Object.entries(links).map(([k, v]) => (
             <>
-              <Link color="black" href={v}>
-                {k}
-              </Link>
+              <Link href={v}>{k}</Link>
               <Divider />
             </>
           ))}
@@ -52,9 +50,7 @@ function DesktopLinks({ links }) {
     >
       <HStack width="100%" flex="3" spacing={10}>
         {Object.entries(links).map(([k, v]) => (
-          <Link color="white" href={v}>
-            {k}
-          </Link>
+          <Link href={v}>{k}</Link>
         ))}
       </HStack>
       <HStack spacing={10} display={{ base: "none", lg: "flex" }}>
@@ -63,7 +59,7 @@ function DesktopLinks({ links }) {
           color="black"
           value={search}
           onChange={setSearch}
-          inputBackgroundColor="#E6FEE2"
+          inputBackgroundColor="#FAFAFA"
           rightIcon={
             <Box width="60px" height="60px" position="relative">
               <Image
@@ -78,7 +74,7 @@ function DesktopLinks({ links }) {
         />
         <Link href="/user/login">Entrar</Link>
         <Link href="/user/register">
-          <RoundedButton>Cadastrar</RoundedButton>
+          <RoundedButton minWidth="150px">Cadastrar</RoundedButton>
         </Link>
       </HStack>
     </HStack>
@@ -87,10 +83,20 @@ function DesktopLinks({ links }) {
 
 export default function Menu({ strapiPages = [] }) {
   const menuDisclosure = useDisclosure();
+  const divRef = useRef();
 
   const links = {
     Dados: "/_nxt/search",
   };
+
+  useEffect(() => {
+    if (!divRef.current || !divRef.current.style) return;
+
+    document.addEventListener("scroll", () => {
+      if (window.scrollY <= 30) divRef.current.style.boxShadow = "none";
+      else divRef.current.style.boxShadow = "0px 4px 4px rgba(0,0,0,0.25)";
+    });
+  }, [divRef.current]);
 
   strapiPages.map((p) => {
     links[p.MenuTitle] = "/_nxt/blog/" + p.id + "/";
@@ -102,14 +108,15 @@ export default function Menu({ strapiPages = [] }) {
     <>
       <MenuDrawer links={links} {...menuDisclosure} />
       <Box
+        ref={divRef}
         position="fixed"
         top="0px"
         width="100%"
         left="0px"
-        backgroundColor="#34A25A"
-        boxShadow="0px 4px 4px rgba(0,0,0,0.25)"
+        backgroundColor="#FAFAFA"
         padding="15px 60px"
         zIndex="10000000"
+        transition="0.2s"
         as="nav"
       >
         <HStack
