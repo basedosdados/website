@@ -26,7 +26,9 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
     package_types = lambda s: []
 
     def _validate_pydantic(self, data_dict, action):
+        print("bkbkbk\n" * 20)
         extras = {i["key"]: i["value"] for i in data_dict.get("extras", {})}
+        extras.pop('download_type')
         input = dict(**data_dict, **extras)
         data = Dataset(**input, action__=action)
         out = data.json(
@@ -42,6 +44,7 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
         # out['extras'] = [ {'key':k, 'value': json.dumps(v)} for k, v in extras.items()]
 
     def _validate_show(self, data_dict):
+        print("asasas\n" * 20)
         if duplicated_keys := _find_duplicated_keys(data_dict["extras"]):
             raise ValidationError(
                 {"extras": f"extras contains duplicated keys: {duplicated_keys!r}"}
@@ -69,7 +72,6 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
         return self._validate_create(data_dict, action="package_update")
 
     def validate(self, context, data_dict, schema, action):
-        
         out, errors = {
             "package_show": self._validate_show,
             "package_create": self._validate_create,
@@ -96,7 +98,7 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
         facets = collections.OrderedDict()
         # get_action('package_list')(None, {})
         # asian = get_action('package_show')(None, {'id': 'asian-barometer'})
-        facets["download_type"] = "Forma de Download"
+        # facets["download_type"] = "Forma de Download"
         facets["organization"] = "Organização"
         facets["groups"] = "Grupos"
         facets["tags"] = "Tags"
