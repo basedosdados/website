@@ -18,6 +18,7 @@ export default function DatabaseCard({
   updatedSince,
   updatedAuthor,
   link,
+  isPlus = false,
 }) {
   const databaseInfo = [];
 
@@ -41,14 +42,29 @@ export default function DatabaseCard({
   return (
     <Card
       link={link}
-      icons={categories.map((c) => (
-        <CategoryIcon url={`/_nxt/img/categories/icone_${c}.svg`} />
-      ))}
+      icons={[
+        ...categories.map((c) => (
+          <CategoryIcon
+            size="47px"
+            url={`/_nxt/img/categories/icone_${c}${isPlus ? "-1" : ""}.svg`}
+          />
+        )),
+        ...(isPlus
+          ? [
+              <Image
+                width="100px"
+                height="47px"
+                marginRight="10px"
+                src={`/_nxt/img/logo_plus.png`}
+              />,
+            ]
+          : []),
+      ]}
       spacing={0}
     >
       <Title marginBottom="15px">{name}</Title>
       <Subtitle>{organization}</Subtitle>
-      <HStack width="100%" overflowX="scroll" paddingTop="15px">
+      <HStack width="100%" overflowX="none" paddingTop="15px">
         {tags.slice(0, tags.length > 3 ? 3 : tags.length).map((t) => (
           <Tag>{t}</Tag>
         ))}

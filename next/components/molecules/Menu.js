@@ -49,9 +49,22 @@ function DesktopLinks({ links }) {
       position={{ base: "relative", md: "initial" }}
     >
       <HStack width="100%" flex="3" spacing={10}>
-        {Object.entries(links).map(([k, v]) => (
-          <Link href={v}>{k}</Link>
-        ))}
+        {Object.entries(links).map(([k, v]) =>
+          k === "Apoie" ? (
+            <a href={v} target="_blank">
+              <RoundedButton
+                colorScheme="red"
+                backgroundColor="#FF8484"
+                minWidth="100px"
+                letterSpacing="0.1em"
+              >
+                Apoie
+              </RoundedButton>
+            </a>
+          ) : (
+            <Link href={v}>{k}</Link>
+          )
+        )}
       </HStack>
       <HStack spacing={10} display={{ base: "none", lg: "flex" }}>
         <ControlledInput
@@ -90,9 +103,9 @@ export default function Menu({ strapiPages = [] }) {
   };
 
   useEffect(() => {
-    if (!divRef.current || !divRef.current.style) return;
-
     document.addEventListener("scroll", () => {
+      if (!divRef.current || !divRef.current.style) return;
+
       if (window.scrollY <= 30) divRef.current.style.boxShadow = "none";
       else divRef.current.style.boxShadow = "0px 4px 4px rgba(0,0,0,0.25)";
     });
@@ -102,7 +115,9 @@ export default function Menu({ strapiPages = [] }) {
     links[p.MenuTitle] = "/_nxt/blog/" + p.id + "/";
   });
 
-  links["APOIE"] = "";
+  links["Newsletter"] =
+    "https://basedosdados.hubspotpagebuilder.com/assine-a-newsletter-da-base-dos-dados";
+  links["Apoie"] = "https://apoia.se/basedosdados";
 
   return (
     <>
