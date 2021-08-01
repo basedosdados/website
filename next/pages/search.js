@@ -76,6 +76,11 @@ export default function SearchPage({
     () => getDatasets({ search, sort: order, paramFilters })
   );
 
+  useEffect(() => {
+    setSearch(query.q);
+    _setSearch(query.q);
+  }, [query]);
+
   const debouncedSetSearch = useCallback(
     _.debounce((value) => setSearch(value), 500),
     []

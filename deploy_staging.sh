@@ -41,10 +41,6 @@ build_config() {
 
     cp -r experimental/monitoring build/
 
-    cp -r experimental/wordpress build/
-    rm build/wordpress/.env && ln -s ../.env build/wordpress/.env
-    mv build/wordpress/docker-compose.override.prod.yaml build/wordpress/docker-compose.override.yaml
-
     cp configs/basedosdados_crontab build/basedosdados_crontab
 }
 send() {
@@ -72,9 +68,9 @@ restart_services() {
         docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh redis:6379
         docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh solr:8983
         docker-compose up --no-build -d strapi
-        ./wait-for-200.sh -t 20 http://strapi:1337 || ERROR=1
+        docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh strapi:1337
         docker-compose up --no-build -d next ckan
-        ./wait-for-200.sh -t 20 http://next:3000 || ERROR=1
+        docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh next:3000
         docker-compose up --no-build -d nginx
         docker-compose up --no-build -d autoheal
         docker-compose ps
@@ -107,12 +103,6 @@ build_images() {
     ( docker-compose build db   && docker save bdd/db > build/images/db ) &
     ( VTAG=$VTAG docker-compose build next && docker save bdd/next$VTAG > build/images/next ) &
     for i in `jobs -p`; do wait $i ; done
-}
-restart_wordpress() {
-    $SSH  '
-        cd ~/basedosdados/wordpress
-        docker-compose down && docker-compose up -d
-    '
 }
 restart_monitoring() {
     $SSH  '

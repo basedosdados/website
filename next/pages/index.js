@@ -30,10 +30,7 @@ import { useQuery } from "react-query";
 import { getPopularDatasets, getRecentDatasets } from "./api/datasets";
 import { getStrapiPages } from "./api/strapi";
 import { ShadowBox } from "../components/atoms/ShadowBox";
-<<<<<<< HEAD
 import { Tag } from "../components/atoms/Tag";
-=======
->>>>>>> c47af8f0647da0c302180210d155f82a50f9a538
 
 export async function getStaticProps(context) {
   let { data: strapiPages } = await getStrapiPages();
@@ -439,7 +436,6 @@ function JoinTheCommunity() {
 }
 
 function Support() {
-<<<<<<< HEAD
   function SupportButton({
     onClick,
     link,
@@ -463,22 +459,6 @@ function Support() {
           {children}
         </Button>
       </a>
-=======
-  function SupportButton({ onClick, children, colorScheme = "blue" }) {
-    return (
-      <Button
-        boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
-        borderRadius="68.6364px"
-        colorScheme={colorScheme}
-        padding="25px"
-        fontFamily="Ubuntu"
-        fontWeight="700"
-        fontSize="20px"
-        minWidth="250px"
-      >
-        {children}
-      </Button>
->>>>>>> c47af8f0647da0c302180210d155f82a50f9a538
     );
   }
   return (
@@ -498,13 +478,9 @@ function Support() {
             Ajude a manter e aprimorar pacotes, suba bases no nosso datalake ou
             construa análises e tutoriais para nossas redes.
           </SectionText>
-<<<<<<< HEAD
           <SupportButton link="https://basedosdados.github.io/mais/colab_data/">
             Comece Aqui
           </SupportButton>
-=======
-          <SupportButton>Comece Aqui</SupportButton>
->>>>>>> c47af8f0647da0c302180210d155f82a50f9a538
         </ShadowBox>
         <ShadowBox height="270px" title="Parceria">
           <SectionText height="100px">
@@ -514,7 +490,6 @@ function Support() {
           <SupportButton>Entre em contato</SupportButton>
         </ShadowBox>
         <ShadowBox height="270px" spacing={4} title="Doações">
-<<<<<<< HEAD
           <SupportButton
             link="https://drive.google.com/file/d/1aIJhJBSsufArqApvgoYFpevlu8uF5nqm/view?usp=sharing"
             backgroundColor="#FF8484"
@@ -525,10 +500,6 @@ function Support() {
           <SupportButton link="https://apoia.se/basedosdados">
             Apoio Mensal
           </SupportButton>
-=======
-          <SupportButton colorScheme="red">Doe via PIX</SupportButton>
-          <SupportButton>Apoio Mensal</SupportButton>
->>>>>>> c47af8f0647da0c302180210d155f82a50f9a538
           <SupportButton>Apoio Institucional</SupportButton>
         </ShadowBox>
       </Stack>
