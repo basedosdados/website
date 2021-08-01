@@ -76,6 +76,7 @@ restart_services() {
         docker-compose ps
         ./wait-for-200.sh -t 20 https://localhost:443 || ERROR=1
         if [[ ! $ERROR ]]; then
+            docker-compose restart nginx
             echo Server is up
         else
             echo Server not up
