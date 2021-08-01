@@ -30,6 +30,10 @@ import { useQuery } from "react-query";
 import { getPopularDatasets, getRecentDatasets } from "./api/datasets";
 import { getStrapiPages } from "./api/strapi";
 import { ShadowBox } from "../components/atoms/ShadowBox";
+<<<<<<< HEAD
+import { Tag } from "../components/atoms/Tag";
+=======
+>>>>>>> c47af8f0647da0c302180210d155f82a50f9a538
 
 export async function getStaticProps(context) {
   let { data: strapiPages } = await getStrapiPages();
@@ -58,6 +62,19 @@ function Hero() {
 
   function openSearchLink() {
     return window.open(`/_nxt/search?q=${search}`, "_self");
+  }
+
+  function HeroTag({ children }) {
+    return (
+      <Tag
+        padding="5px 10px"
+        minWidth="40px"
+        backgroundColor="#DEDFE0"
+        color="#252A32"
+      >
+        {children}
+      </Tag>
+    );
   }
 
   return (
@@ -104,36 +121,44 @@ function Hero() {
               Um único lugar para buscar, baixar e acessar os dados que você
               precisa
             </BigTitle>
-            <ControlledInput
-              value={search}
-              onChange={setSearch}
-              onEnterPress={openSearchLink}
-              flex="3"
-              placeholder="Pesquisar palavras-chave, instituições e temas"
-              justifyContent="center"
-              inputStyle={{
-                padding: "40px",
-                borderRadius: "50px",
-                backgroundColor: "#ffffff",
-                fontSize: "20px",
-                boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-              }}
-              rightIcon={
-                <Box
-                  transform="translateX(-15px)"
-                  width="50px"
-                  height="50px"
-                  position="relative"
-                >
-                  <Image
-                    onClick={openSearchLink}
-                    layout="fill"
-                    objectFit="contain"
-                    src="/_nxt/img/arrow_black_right.png"
-                  />
-                </Box>
-              }
-            />
+            <VStack spacing={3} alignItems="flex-start" flex="3">
+              <ControlledInput
+                value={search}
+                width="100%"
+                onChange={setSearch}
+                onEnterPress={openSearchLink}
+                placeholder="Pesquisar palavras-chave, instituições e temas"
+                justifyContent="center"
+                inputStyle={{
+                  padding: "40px",
+                  borderRadius: "50px",
+                  backgroundColor: "#ffffff",
+                  fontSize: "20px",
+                  boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                }}
+                rightIcon={
+                  <Box
+                    transform="translateX(-15px)"
+                    width="50px"
+                    height="50px"
+                    position="relative"
+                  >
+                    <Image
+                      onClick={openSearchLink}
+                      layout="fill"
+                      objectFit="contain"
+                      src="/_nxt/img/arrow_black_right.png"
+                    />
+                  </Box>
+                }
+              />
+              <HStack paddingLeft="45px">
+                <SectionText fontSize="14px">Termos populares: </SectionText>
+                <HeroTag>lei</HeroTag>
+                <HeroTag>mortalidade</HeroTag>
+                <HeroTag>covid</HeroTag>
+              </HStack>
+            </VStack>
           </Stack>
           <Flex
             paddingTop="30px"
@@ -226,6 +251,7 @@ function CatalogNews() {
               updatedSince={d.metadata_modified}
               updatedAuthor="Ricardo Dahis"
               categories={d.groups.map((g) => g.name)}
+              isPlus={d.download_type === "BD Mais"}
             />
           )),
         }}
@@ -254,6 +280,7 @@ function CatalogNews() {
               updatedSince={d.metadata_modified}
               updatedAuthor="Ricardo Dahis"
               categories={d.groups.map((g) => g.name)}
+              isPlus={d.download_type === "BD Mais"}
             />
           )),
         }}
@@ -412,6 +439,31 @@ function JoinTheCommunity() {
 }
 
 function Support() {
+<<<<<<< HEAD
+  function SupportButton({
+    onClick,
+    link,
+    children,
+    colorScheme = "blue",
+    backgroundColor = "#3AA1EB",
+  }) {
+    return (
+      <a href={link} target="_blank">
+        <Button
+          boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
+          borderRadius="68.6364px"
+          colorScheme={colorScheme}
+          backgroundColor={backgroundColor}
+          padding="25px"
+          fontFamily="Ubuntu"
+          fontWeight="700"
+          fontSize="20px"
+          minWidth="250px"
+        >
+          {children}
+        </Button>
+      </a>
+=======
   function SupportButton({ onClick, children, colorScheme = "blue" }) {
     return (
       <Button
@@ -426,6 +478,7 @@ function Support() {
       >
         {children}
       </Button>
+>>>>>>> c47af8f0647da0c302180210d155f82a50f9a538
     );
   }
   return (
@@ -445,7 +498,13 @@ function Support() {
             Ajude a manter e aprimorar pacotes, suba bases no nosso datalake ou
             construa análises e tutoriais para nossas redes.
           </SectionText>
+<<<<<<< HEAD
+          <SupportButton link="https://basedosdados.github.io/mais/colab_data/">
+            Comece Aqui
+          </SupportButton>
+=======
           <SupportButton>Comece Aqui</SupportButton>
+>>>>>>> c47af8f0647da0c302180210d155f82a50f9a538
         </ShadowBox>
         <ShadowBox height="270px" title="Parceria">
           <SectionText height="100px">
@@ -455,8 +514,21 @@ function Support() {
           <SupportButton>Entre em contato</SupportButton>
         </ShadowBox>
         <ShadowBox height="270px" spacing={4} title="Doações">
+<<<<<<< HEAD
+          <SupportButton
+            link="https://drive.google.com/file/d/1aIJhJBSsufArqApvgoYFpevlu8uF5nqm/view?usp=sharing"
+            backgroundColor="#FF8484"
+            colorScheme="red"
+          >
+            Doe via PIX
+          </SupportButton>
+          <SupportButton link="https://apoia.se/basedosdados">
+            Apoio Mensal
+          </SupportButton>
+=======
           <SupportButton colorScheme="red">Doe via PIX</SupportButton>
           <SupportButton>Apoio Mensal</SupportButton>
+>>>>>>> c47af8f0647da0c302180210d155f82a50f9a538
           <SupportButton>Apoio Institucional</SupportButton>
         </ShadowBox>
       </Stack>

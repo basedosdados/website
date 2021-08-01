@@ -71,12 +71,16 @@ restart_services() {
         docker-compose up --no-build -d solr redis
         docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh redis:6379
         docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh solr:8983
-        docker-compose up --no-build -d ckan next strapi
+        docker-compose up --no-build -d strapi
+        ./wait-for-200.sh -t 20 http://strapi:1337 || ERROR=1
+        docker-compose up --no-build -d next ckan
+        ./wait-for-200.sh -t 20 http://next:3000 || ERROR=1
         docker-compose up --no-build -d nginx
         docker-compose up --no-build -d autoheal
         docker-compose ps
         ./wait-for-200.sh -t 20 https://localhost:443 || ERROR=1
         if [[ ! $ERROR ]]; then
+            docker-compose restart nginx
             echo Server is up
         else
             echo Server not up

@@ -1,13 +1,19 @@
 import { Box, Heading } from "@chakra-ui/react";
 
-export function Tag({ children }) {
+export function Tag({ children, ...style }) {
   return (
-    <Box padding="6px" backgroundColor="#F6F6F6" borderRadius="8px">
+    <Box
+      padding="6px"
+      backgroundColor="#F6F6F6"
+      borderRadius="20px"
+      textAlign="center"
+      {...style}
+    >
       <Heading
-        textTransform="capitalize"
-        fontWeight="700"
+        fontWeight="400"
         fontSize="12px"
-        fontFamily="Montserrat"
+        fontFamily="Ubuntu"
+        letterSpacing="0.1em"
       >
         {children}
       </Heading>
