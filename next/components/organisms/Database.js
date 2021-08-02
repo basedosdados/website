@@ -31,8 +31,8 @@ export function Database({
   categoriesDisplay,
   isPlus = false,
   link,
-  spatialCoverage = "Não definido",
-  updateFrequency = "Não definido",
+  spatialCoverage,
+  updateFrequency,
 }) {
   const databaseInfo = [];
 
@@ -136,13 +136,13 @@ export function Database({
                   <HStack>
                     <SectionText>Abrangência:</SectionText>
                     <SectionText textTransform="capitalize" fontWeight="bold">
-                      {spatialCoverage.replace("_", " ")}
+                      {(spatialCoverage || "Não definido").replace("_", " ")}
                     </SectionText>
                   </HStack>
                   <HStack>
                     <SectionText>Periocidade:</SectionText>
                     <SectionText textTransform="capitalize" fontWeight="bold">
-                      {updateFrequency.replace("_", " ")}
+                      {(updateFrequency || "Não definido").replace("_", " ")}
                     </SectionText>
                   </HStack>
                   <HStack>
