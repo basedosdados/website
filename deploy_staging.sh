@@ -68,9 +68,8 @@ restart_services() {
         docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh redis:6379
         docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh solr:8983
         docker-compose up --no-build -d strapi
-        docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh strapi:1337
-        docker-compose up --no-build -d next ckan
-        docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh next:3000
+        docker-compose up --no-build -d ckan
+        docker-compose up --no-build -d next
         docker-compose up --no-build -d nginx
         docker-compose up --no-build -d autoheal
         docker-compose ps
