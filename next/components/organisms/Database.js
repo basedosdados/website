@@ -31,8 +31,8 @@ export function Database({
   categoriesDisplay,
   isPlus = false,
   link,
-  spatialCoverage,
-  updateFrequency,
+  spatialCoverage = "Não definido",
+  updateFrequency = "Não definido",
 }) {
   const databaseInfo = [];
 
