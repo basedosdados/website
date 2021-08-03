@@ -130,7 +130,7 @@ def test_ckanize():
                 "description": "",
                 "table_id": 10,
                 "auxiliary_files_url": ["file_1", "file_2", "file_3"],
-                "observation_level": ["dam", "gun", "age"],
+                "entity": ["dam", "gun", "age"],
                 "columns": "",
                 "primary_keys": "jasdiasd",
                 "version": "3.0.0",

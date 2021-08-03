@@ -23,4 +23,4 @@ class BdmDictionary(_CkanDefaultResource):
     project_id_staging : Optional[Str]                                    = PROJECT_ID_STAGING_FIELD
     partitions         : Optional[Str]                                    = PARTITIONS_FIELD
     bdm_file_size      : Union[int, None, Literal["Unavailable", ""]]     = BDM_FILE_SIZE_FIELD # should not be editable in form, also, check what use is Unavailable
-    columns            : Union[Optional[List[BdmColumns]], Optional[Str]] = COLUMNS_FIELD  # TODO: remove Optional[Str] after migration 
+    columns            : Optional[List[BdmColumns]]                       = COLUMNS_FIELD  
