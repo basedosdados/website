@@ -1,7 +1,7 @@
 import collections
-import pprint
 import types
 import json
+import ast
 
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
@@ -26,28 +26,66 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
     package_types = lambda s: []
 
     def _validate_pydantic(self, data_dict, action):
-        extras = {i["key"]: i["value"] for i in data_dict.get("extras", {})}
-        # extras.pop("download_type") # remove download type from extras to not enter in input, this make pydantic not create this field for package when updated
-        input = dict(**data_dict, **extras)
-        data = Dataset(**input, action__=action)
-        out = data.json(
+        """
+        Validates metadata using pydantic.
+
+        1. It unpacks the dataset_args from the extras
+        2. Converts the dataset_args from string to dict
+        3. Merges it do the data_dict
+        4. Validates the data_dict with pydantic
+        5. Repacks the dataset_args to extras in order to be used by CKAN, but it keeps the dataset arguments
+        in the dict to be shown in `package_show`
+
+        Package extras and dataset arguments
+        -------------------------------------
+        All dataset arguments are stored in a dict in the package_extras table called dataset_args.
+        This is the case b/c CKAN only accepts string values for extras. In that way, we know that
+        we always have to unpack a dict that is saved as a string in the extras field.
+        """
+
+        # 1. It unpacks the dataset_args from the extras
+        # 2. Converts the dataset_args from string to dict
+        if isinstance(data_dict['extras'], list):
+
+            if any(['dataset_args' == i['key'] for i in data_dict['extras'] ]):
+
+                template_extras= [{'key': 'dataset_args', 'value': {}}]
+                dataset_args = [d['value'] for d in data_dict.pop('extras', template_extras) 
+                                if d['key'] == 'dataset_args'][0]
+                if isinstance(dataset_args, str):
+                    dataset_args = ast.literal_eval(dataset_args)
+                if not isinstance(dataset_args, dict):
+                    raise TypeError(f'dataset_args should be dict or string, but it is {type(dataset_args)}')
+            else:
+                dataset_args = {}
+
+        # 3. Merges it do the data_dict
+        data_dict = dict(**data_dict, **dataset_args)
+
+        # 4. Validates the data_dict with pydantic
+        validation = Dataset(**data_dict, action__=action)
+
+        # exclude unset needed by ckan so it can deal with missing values downstream (during partial updates for instance)
+        data_dict = validation.json(
             exclude={"action__"}, exclude_unset=True
-        )  # exclude unset needed by ckan so it can deal with missing values downstream (during partial updates for instance)
-        out = json.loads(
-            out
-        )  # we need to jsonify and de-jsonify so that objects such as datetimes are serialized
-        oficial = {k: v for k, v in out.items() if k in data.__fields__}
-        # extras =  {k: v for k, v in out.items() if k not in data.__fields__}
-        return oficial
-        # del out['groups']
-        # out['extras'] = [ {'key':k, 'value': json.dumps(v)} for k, v in extras.items()]
+        )
+
+        # we need to jsonify and de-jsonify so that objects such as datetimes are serialized
+        data_dict = json.loads(
+            data_dict
+        )
+
+        # 5. Repacks the dataset_args to extras in order to be used by CKAN, but it keeps the dataset arguments
+        # in the dict to be shown in `package_show`
+        data_dict["extras"] = [{'key': 'dataset_args', 
+                                'value': {k: data_dict.get(k, None) for k in dataset_args.keys()}}]
+        return data_dict
 
     def _validate_show(self, data_dict):
         if duplicated_keys := _find_duplicated_keys(data_dict["extras"]):
             raise ValidationError(
                 {"extras": f"extras contains duplicated keys: {duplicated_keys!r}"}
             )
-        # data_dict['extras'] = { i['key']: i['value'] for i in data_dict['extras']} # transform extras into a simple dict # TODO: figure out when do i need to pass extras to main namespace
         try:
             out = self._validate_pydantic(data_dict, "package_show")
             return out, []
@@ -67,7 +105,16 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
             )  # need to jsonify to ensure that data types are json friendly
 
     def _validate_update(self, data_dict):
-        return self._validate_create(data_dict, action="package_update")
+
+        # Converts dataset_args from dict to string only if update is the case
+        data_dict, errors = self._validate_create(data_dict, action="package_update")
+        if data_dict.get('extras'):
+            for d in data_dict.get('extras'):
+                if d['key'] == 'dataset_args':
+                    d['value'] = str(d['value'])
+                    break
+
+        return data_dict, errors
 
     def validate(self, context, data_dict, schema, action):
         out, errors = {
@@ -94,15 +141,12 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
     # IFacets
     def dataset_facets(self, facet_dict, package_type):
         facets = collections.OrderedDict()
-        # get_action('package_list')(None, {})
-        # asian = get_action('package_show')(None, {'id': 'asian-barometer'})
+
         facets["download_type"] = "Forma de Download"
         facets["organization"] = "Organização"
         facets["groups"] = "Grupos"
         facets["tags"] = "Tags"
-        # facets['pais'] = 'País'
-        # facets['nivel_observacao'] = 'Nivel da Observação'
-        # facets['ano'] = 'Anos'
+
         return facets
         # OPTIONS: dict_keys(['license_title', 'maintainer', 'relationships_as_object', 'private',
         # 'maintainer_email', 'num_tags', 'id', 'metadata_created', 'owner_org', 'metadata_modified',
