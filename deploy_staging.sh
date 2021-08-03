@@ -75,9 +75,9 @@ restart_services() {
         docker-compose up --no-build -d nginx
         docker-compose up --no-build -d autoheal
         docker-compose ps
+        docker-compose restart nginx
         ./wait-for-200.sh -t 20 https://localhost:443 || ERROR=1
         if [[ ! $ERROR ]]; then
-            docker-compose restart nginx
             echo Server is up
         else
             echo Server not up
