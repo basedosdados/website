@@ -63,7 +63,7 @@ dataset_fields:
       pt: "Cobertura temporal"
       en: "Temporal coverage"
     # validators: generate_temporal_coverage
-  - field_name: observation_level
+  - field_name: entity
     label:
       pt: "Nível da observação"
       en: "Observation level"
@@ -336,7 +336,7 @@ resource_fields:
       pt: "exemplo: Descrição e anotações úteis sobre o tratamento da tabela."
       en: "example: a useful description of the table's data treatment."
     validators: only_on_types(bdm_table) #required_on_types(bdm_table) MANUAL
-  - field_name: observation_level
+  - field_name: entity
     label:
       pt: "Nível da observação"
       en: "Observation level"

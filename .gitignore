@@ -7,3 +7,4 @@ dive.log
 configs/ckan.override.prod.ini
 .idea
 .hypothesis
+utils/packages

@@ -1,7 +1,19 @@
-from pydantic import Field
+from typing import Optional
+from pydantic import (
+    StrictStr as Str,
+    Field,
+)
+from ckanext.basedosdados.validator import BaseModel
+from ckanext.basedosdados.validator.available_options import (
+    DirectoryEnum
+)
 
 to_line = lambda description: "\n".join(description)
 
+class DirectoryColumn(BaseModel):
+    dataset_id  : Optional[DirectoryEnum]   = Field(user_input_hint=["<dataset_id>"])
+    table_id    : Optional[Str]             = Field(user_input_hint=["<table_id>"])
+    column_name : Optional[Str]             = Field(user_input_hint=["<column_name>"])
 
 # -------------------------------------
 # BdmColumns Fields

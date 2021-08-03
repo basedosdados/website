@@ -9,6 +9,7 @@ from pydantic import (
     StrictInt as Int,
     StrictStr as Str,
     Field,
+    Extra,
     validator,
     root_validator,
 )
@@ -24,7 +25,7 @@ AnyResource = Annotated[Union[ExternalLink, BdmTable], Field(discriminator="reso
 
 coerce_to_unicode = lambda field: validator("field", allow_reuse=True)()
 
-
+### Do not use extra while creating new models
 class _CkanDefaults(BaseModel):
     id: IdType
     name: Str
@@ -58,7 +59,8 @@ class _CkanDefaults(BaseModel):
     relationships_as_object : Any
     relationships_as_subject: Any
 
-    # throwaway field that is used to modify validators. You can think of it as an argument to validate function. Cant use prefix underscores on pydantic so used suffix to indicate this
+    # throwaway field that is used to modify validators. You can think of it as an 
+    # argument to validate function. Cant use prefix underscores on pydantic so used suffix to indicate this
     action__: Optional[
         Literal["package_show", "package_create", "package_update"]
     ]  # TODO: after 2021-07-01 add exclude by default when issue is merged in master
@@ -69,8 +71,10 @@ class _CkanDefaults(BaseModel):
     @validator("resources", pre=True)
     def resources_should_have_position_field(cls, resources):
         for idx, r in enumerate(resources):
-            # idx = (idx) # need to be string cause ckan is dumb and will treat an int 0 as a false value causing problems in later validations
-            # assert r.get('position') is None or r['position'] == idx, f"Position on resource {r.get('name')} is {r['position']!r} but should be {idx!r}."
+            # idx = (idx) # need to be string cause ckan is dumb and will treat an int 0 
+            # as a false value causing problems in later validations
+            # assert r.get('position') is None or r['position'] == idx, 
+            # f"Position on resource {r.get('name')} is {r['position']!r} but should be {idx!r}."
             r["position"] = idx
         return resources
 
@@ -93,7 +97,9 @@ class _CkanDefaults(BaseModel):
                 assert r.id != None, f"resource {idx!r} id is None on {action}"
         return values
 
-    @root_validator  # using root_validator I can guarantee that all individual fields are ready. Using `values` on single field validators prooved to hard to synchronize
+    # Using root_validator I can guarantee that all individual fields are ready. 
+    # Using `values` on single field validators prooved to hard to synchronize
+    @root_validator  
     def not_null_on_show(cls, values):
         for f in (
             "state",
