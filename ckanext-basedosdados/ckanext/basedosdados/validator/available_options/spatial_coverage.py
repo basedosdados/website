@@ -33,6 +33,7 @@ class CountryEnum(AttrEnum):
     ita = {"label": "Itália"}
     prt = {"label": "Portugal"}
     gbr = {"label": "Reino Unido"}
+    rus = {"label": "Rússia"}
 
     chn = {"label": "China"}
     ind = {"label": "Índia"}
@@ -40,6 +41,7 @@ class CountryEnum(AttrEnum):
     jpn = {"label": "Japão"}
     mys = {"label": "Malásia"}
     idn = {"label": "Indonésia"}
+    zaf = {"label": "África do Sul"}
     
     
 class Admin1Enum(AttrEnum):

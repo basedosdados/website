@@ -6,6 +6,8 @@ from functools import lru_cache
 import re
 import unidecode
 
+def flatten(t):
+    return [item for sublist in t for item in sublist]
 
 class Migrate:
 
@@ -60,6 +62,13 @@ class Migrate:
             '1 dia': 'day',
             '2 anos': 'two_years',
             '~2 anos': 'two_years',
+            '~3 anos': 'three_years',
+            'dia, semana, mês': None,
+            '~1 mês': 'month',
+            '~6 meses': 'semester',
+            '~1 ano': 'one_year',
+            '5 anos': 'five_years',
+            '~4 anos': 'four_years',
         }
         update_frequency = resource_dict.get('update_frequency', None)
         resource_dict['update_frequency'] =  update_frequency_mapping.get(
@@ -93,6 +102,9 @@ class Migrate:
                 'malasia': ['mys'],
                 'brasil': ['bra'],
                 'japao': ['jpn'],
+                'colombia': ['col'],
+                'africa-sul': ['zaf'],
+                'russia': ['rus'],
                 'EUA': ['usa'],},
             'admin1':
                 {'vazio': None,
@@ -169,7 +181,6 @@ class Migrate:
             'municipio': 'municipality', 
             'pessoa': 'person',
             'outro': None,
-            'pessoa-mes': None,
             'ataque': None,
             'pais': 'country',
             'estado': 'state',
@@ -194,14 +205,12 @@ class Migrate:
             'agencia': 'agency',
             'condado': 'county',
             'vila': 'village',
-            'vila, cidade, assembleia legislativa': None,
             'poligono': 'polygon',
             'time': 'team',
             'partida': 'match',
             'cartorio': 'notary_office',
             'entidade': None,
             'domicilio': 'household',
-            'poligono/pixel': 'pixel',
             'carro_onibus': 'automobile',
             'universidade': 'school',
             'transferencia': 'transfer',
@@ -211,7 +220,6 @@ class Migrate:
             'ato': 'act',
             'tribunal': None,
             'delegacia de policia': None,
-            'voto-foto': None,
             'distrito': 'district',
             'foto': 'photo',
             'objeto': None,
@@ -222,11 +230,8 @@ class Migrate:
             'unidade de conservacao': None,
             'escola': 'school',
             '1 mes': None,
-            'empresa-estado': None,
-            'pais-pais': 'country',
             'raca': 'race',
             'sexo': 'sex',
-            'filme, ator(a), diretor(a)': 'movie',
             'dia': None,
             'publicacao': None,
             'vazio': None,
@@ -239,11 +244,9 @@ class Migrate:
             'estacao': 'station',
             'convenio': None,
             '-': None,
-            'empresa, industria, condado, estado, pais': None,
             'musica, album, banda': None,
             'bolsa': 'scholarship',
             'area_protegida': 'protected_area',
-            'discurso, proposicao, senador(a)': 'speech',
             'crianca, pais': None,
             'dominio': 'domain',
             'organizacao': None,
@@ -255,24 +258,40 @@ class Migrate:
             'contrato': 'contract',
             'evento, deputado(a)': None,
             'professor': 'person',
-            'partido, pais': 'party',
-            'pais-ano': 'country',
             'discurso': 'speech',
-            'gasto, senador(a)': None,
-            'produto, estado': 'product',
             'mes': None,
             'idade': None,
             'evento': None,
-            'aluno, escola': None
+            'terreno': None,
+            'tratado': 'agreement',
+            'museu': 'museum',
+            'obito': 'death',
+            'licitacao': 'procurement',
+            'passageiro(a)': 'person',
+            'estabelecimento': None,
+            'federal': None,
+            'loja': None,
+            'documento': None,
+            'auditoria': None,
+            'agency': None,
+            'planta': 'plant',
+            'caso': None,
+            'typo': None,
+            'eleicao': 'election',
+            'patente': 'patent',
+            'mudanca territorial': None
             }
 
-        if isinstance(entity, str):
+        if isinstance(entity, str) or isinstance(entity, list):
             if isinstance(entity, str):
                 try:
                     entity = ast.literal_eval(entity)
                 except:
                     entity = [unidecode.unidecode(entity.lower())]
-            
+            entity = flatten([e.split(',') for e in entity])
+            entity = flatten([e.split('-') for e in entity])
+            entity = flatten([e.split('/') for e in entity])
+            entity = [e.strip() for e in entity]
             entity = [entity_mapping.get(e, e) for e in entity]
             entity = [e for e in entity if e]
             resource_dict['entity'] = entity if len(entity) else None
@@ -334,6 +353,8 @@ class Migrate:
             'russo': 'russian',
             'portugues, ingles': None,
             'ingles, frances': None,
+            'ingles, espanhol, chines, frances, arabe': None,
+            'ingles, varias': None
         }
         language =  resource_dict.get('language', None)
         if isinstance(language, str):
@@ -353,7 +374,11 @@ class Migrate:
             'nao': 'no',
             'sim': 'yes',
             'restrito': None,
-            'com projeto de pesquisa': 'yes'}
+            'com projeto de pesquisa': 'yes',
+            'por pedido': 'yes',
+            'sim (em pdf)': 'yes',
+            'pedido por email': 'yes',
+            }
         has_structured_data = resource_dict.pop('has_structured_data', None)
         if has_structured_data:
             has_structured_data = unidecode.unidecode(has_structured_data.lower())
@@ -458,9 +483,6 @@ class Migrate:
             extras_dict.pop('autor', None)
             extras_dict.pop('autor_email', None)
             extras_dict.pop('coleta', None)
-            if extras_dict.get('datas'):
-                print(f"{extras_dict.get('datas')=}")
-                print(package_dict['name'])
             extras_dict.pop('artigo cientifico', None)
         
 
@@ -485,7 +507,6 @@ class Migrate:
                                 continue
                             if len(rang[1]) == 2:
                                 rang[1] = rang[0][:2]  + rang[1]
-                            print('d_range', d_range)
                             final.extend(
                                 list(range(int(rang[0]), int(rang[1]) + 1)))
                         else:
