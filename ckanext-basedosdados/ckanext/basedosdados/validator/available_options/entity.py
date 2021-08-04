@@ -64,6 +64,7 @@ class EntityScienceEnum(AttrEnum):
     crs              = {'label': "Creche"} #"Coordinate Reference System"}
     protein          = {'label': "Proteína"} #"Protein"}
     meteor           = {'label': "Meteoro"} #"Meteor"}
+    polygon          = {'label': "Polígono"} #"Polygon"}
 
 class EntityEconomicsEnum(AttrEnum):
     contract         = {'label': "Contrato"} #"Contract"}
@@ -148,4 +149,5 @@ EntityEnum = Union[
     EntityDemographicEnum,
     EntityHistoryEnum,
     EntityOthersEnum,
+    EntityImageEnum
 ]
