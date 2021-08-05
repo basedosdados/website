@@ -75,12 +75,8 @@ function Hero() {
   }
 
   return (
-    <VStack
-      width="100%"
-      height={{ base: "initial", lg: "100vh" }}
-      backgroundColor="#FAFAFA"
-    >
-      <Center paddingTop="100px" height="100%">
+    <VStack width="100%" backgroundColor="#FAFAFA">
+      <Center height="100%">
         <VStack
           height="100%"
           justifyContent="center"
@@ -118,7 +114,12 @@ function Hero() {
               Um único lugar para buscar, baixar e acessar os dados que você
               precisa
             </BigTitle>
-            <VStack spacing={3} alignItems="flex-start" flex="3">
+            <VStack
+              width={{ base: "100%", lg: "initial" }}
+              spacing={3}
+              alignItems="flex-start"
+              flex="3"
+            >
               <ControlledInput
                 value={search}
                 width="100%"
@@ -157,13 +158,15 @@ function Hero() {
               </HStack>
             </VStack>
           </Stack>
-          <Flex
+          <Stack
             paddingTop="30px"
             position="relative"
             zIndex="1"
             justifyContent="space-evenly"
+            alignItems="center"
             width="100%"
             direction={{ base: "column", lg: "row" }}
+            spacing={10}
           >
             <HeroText iconUrl="/_nxt/img/icone_busca.png">
               <SectionText>
@@ -183,7 +186,7 @@ function Hero() {
                 datalake público BD+ em Python, R ou pela linha de comando.
               </SectionText>
             </HeroText>
-          </Flex>
+          </Stack>
         </VStack>
       </Center>
       <Center
@@ -346,7 +349,11 @@ function LearnToAnalysis() {
         display="block"
         height="auto"
         flex="1"
-        minWidth="850px"
+        maxWidth={{ base: "100%", lg: "850px" }}
+        minWidth="300px"
+        width={{ base: "100%", lg: "auto" }}
+        maxHeight={{ base: "400px", lg: null }}
+        minHeight={{ base: "300px", lg: null }}
         alignItems="flex-start"
         justifyContent="flex-start"
       >
@@ -358,7 +365,12 @@ function LearnToAnalysis() {
           src="/_nxt/img/tela_jupyter.png"
         />
       </Box>
-      <VStack maxWidth="500px" spacing={5} alignItems="flex-start" flex="1">
+      <VStack
+        maxWidth={{ base: "100%", lg: "500px" }}
+        spacing={5}
+        alignItems="flex-start"
+        flex="1"
+      >
         <Title maxWidth="100%" fontSize="30px" letterSpacing="0.1em">
           Aprenda a construir análises com os dados
         </Title>
@@ -394,10 +406,15 @@ function JoinTheCommunity() {
     <Stack
       width="95%"
       spacing={{ base: 10, lg: 20 }}
-      direction={{ base: "column", lg: "row" }}
+      direction={{ base: "column-reverse", lg: "row" }}
       alignItems="center"
     >
-      <VStack maxWidth="450px" alignItems="flex-start" flex="1" spacing={5}>
+      <VStack
+        maxWidth={{ base: "100%", lg: "450px" }}
+        alignItems="flex-start"
+        flex="1"
+        spacing={5}
+      >
         <Title maxWidth="80%" fontSize="30px" letterSpacing="0.1em">
           Faça parte da nossa comunidade, <i>databaser</i>
         </Title>
@@ -419,10 +436,9 @@ function JoinTheCommunity() {
       <Box
         position="relative"
         display="block"
-        height="auto"
-        flex="1"
+        flex={{ base: null, lg: "1" }}
         width="100%"
-        height="300px"
+        height={{ base: "200px", lg: "300px" }}
       >
         <Image
           priority
@@ -517,6 +533,7 @@ export default function Home({ strapiPages }) {
         width="100%"
         backgroundColor="#FAFAFA"
         padding="0px 5%"
+        paddingTop="170px"
       >
         <Hero />
         <CatalogNews />

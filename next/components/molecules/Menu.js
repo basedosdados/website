@@ -117,6 +117,7 @@ export default function Menu({ strapiPages = [] }) {
 
   links["Newsletter"] =
     "https://basedosdados.hubspotpagebuilder.com/assine-a-newsletter-da-base-dos-dados";
+  links["Documentação"] = "https://basedosdados.github.io/mais/";
   links["Apoie"] = "https://apoia.se/basedosdados";
 
   return (
