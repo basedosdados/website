@@ -72,6 +72,7 @@ class Migrate:
             "~1 ano": "one_year",
             "5 anos": "five_years",
             "~4 anos": "four_years",
+            "10 anos": "ten_years",
         }
         update_frequency = resource_dict.get("update_frequency", None)
         resource_dict["update_frequency"] = update_frequency_mapping.get(
@@ -93,6 +94,7 @@ class Migrate:
                 "asia": ["asia"],
                 "america_central": ["central_america"],
                 "antartica": ["antarctica"],
+                "oceania": ["oceania"],
             },
             "country": {
                 "vazio": None,
@@ -110,6 +112,7 @@ class Migrate:
                 "africa-sul": ["zaf"],
                 "russia": ["rus"],
                 "EUA": ["usa"],
+                "australia": ["aus"],
             },
             "admin1": {
                 "vazio": None,
@@ -293,6 +296,25 @@ class Migrate:
             "item": None,
             "exportador": None,
             "importador": None,
+            "genero": None,
+            "terremoto": "disaster",
+            "banda": None,
+            "morte": "death",
+            "sancao": None,
+            "ano": None,
+            "igreja": None,
+            "pagina": None,
+            "aluno": "person",
+            "politico": "person",
+            "navio": "ship",
+            "soldado(a)": None,
+            "assembleia legislativa": None,
+            "deputado(a)": None,
+            "industria": None,
+            "senador(a)": None,
+            "materia": "law",
+            "gasto": None,
+            "unidade de gestao": None,
         }
 
         if isinstance(entity, str) or isinstance(entity, list):

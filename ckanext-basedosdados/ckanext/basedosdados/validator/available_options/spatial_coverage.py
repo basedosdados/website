@@ -43,7 +43,8 @@ class CountryEnum(AttrEnum):
     idn = {"label": "Indonésia"}
     zaf = {"label": "África do Sul"}
     
-    
+    aus = {"label": "Austrália"}
+
 class Admin1Enum(AttrEnum):
     
     # por enquanto só para Brasil
