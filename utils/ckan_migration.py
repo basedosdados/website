@@ -73,6 +73,8 @@ class Migrate:
             "5 anos": "five_years",
             "~4 anos": "four_years",
             "10 anos": "ten_years",
+            "1 semana": "week",
+            "3 anos": "three_years",
         }
         update_frequency = resource_dict.get("update_frequency", None)
         resource_dict["update_frequency"] = update_frequency_mapping.get(
@@ -307,14 +309,33 @@ class Migrate:
             "aluno": "person",
             "politico": "person",
             "navio": "ship",
-            "soldado(a)": None,
+            "soldado(a)": "person",
             "assembleia legislativa": None,
-            "deputado(a)": None,
+            "deputado(a)": "person",
             "industria": None,
             "senador(a)": None,
             "materia": "law",
             "gasto": None,
             "unidade de gestao": None,
+            "grupo": None,
+            "jogador": None,
+            "jogo": None,
+            "tecnologia": None,
+            "obra": None,
+            "pedido": "request",
+            "juiz": "person",
+            "serventia": None,
+            "projeto": None,
+            "emenda": None,
+            "citacao": "citation",
+            "medicamento": None,
+            "propriedade": "property",
+            "frente parlamentar": None,
+            "voto": None,
+            "filme": "movie",
+            "ator(a)": "person",
+            "diretor(a)": "person",
+            "crianca": "person",
         }
 
         if isinstance(entity, str) or isinstance(entity, list):
@@ -417,6 +438,7 @@ class Migrate:
             "por pedido": "yes",
             "sim (em pdf)": "yes",
             "pedido por email": "yes",
+            "pedir por formulario": "yes",
         }
         has_structured_data = resource_dict.pop("has_structured_data", None)
         if has_structured_data:
@@ -539,7 +561,7 @@ class Migrate:
 
                 datas = datas.lower()
 
-                if datas in ["atual", "-"]:
+                if datas in ["atual", "-", "retrato 2019"]:
                     return None
                 else:
                     for d_range in datas.split(","):
