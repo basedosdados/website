@@ -1,6 +1,6 @@
 import ast
 import os
-from ckanapi.errors import ValidationError
+from ckanapi.errors import ValidationError, NotFound
 from ckanapi import RemoteCKAN
 from functools import lru_cache
 import re
@@ -17,8 +17,22 @@ class Migrate:
 
     @property
     @lru_cache(maxsize=None)
-    def ckan_api(self):
+    def ckan_api_staging(self):
+        user_agent = None
+        CKAN_API_KEY = CKAN_API_KEY = "colocar_token_api"
+        CKAN_URL = os.environ.get("CKAN_URL", "https://staging.basedosdados.org")
 
+        return RemoteCKAN(CKAN_URL, user_agent=user_agent, apikey=CKAN_API_KEY)
+
+    def update_staging(self):
+        try:
+            self.ckan_api_staging.action.package_update(**self.package_dict)
+        except NotFound as e:
+            print(e)
+
+    @property
+    @lru_cache(maxsize=None)
+    def ckan_api(self):
         # if not os.environ.get('CKAN_API_KEY'):
         #     print("You need to export environment variable `CKAN_API_KEY`. PLease generate an api key from this page: http://localhost:5000/user/dev/api-tokens")
         #     exit(1)
@@ -32,11 +46,19 @@ class Migrate:
         return RemoteCKAN(CKAN_URL, user_agent=user_agent, apikey=CKAN_API_KEY)
 
     def validate(self):
-
         try:
             return self.ckan_api.action.package_validate(**self.package_dict)
         except ValidationError as e:
             return e.error_dict["message"]
+
+    def update(self):
+        try:
+            self.ckan_api.action.package_update(**self.package_dict)
+        except NotFound as e:
+            print(e)
+
+    def show(self):
+        self.ckan_api.action.package_show(id=self.package_dict["id"])
 
     def _update_frequency(self, resource_dict):
         # map update_frequency values
