@@ -12,7 +12,7 @@ class EntitySphereEnum(AttrEnum):
     district         = {'label': "Distrito"} #"District"}
     municipality     = {'label': "Município"} #"Municipality"}
     city             = {'label': "Cidade"} #"City"}
-    village          = {'label': "Vila"} #"Village"}
+    village          = {'label': "Vila/Aldeia"} #"Village"}
     neighborhood     = {'label': "Bairro"} #"Neighborhood"}
     zip_code         = {'label': "CEP"} #"Zip Code"}
     census_tract     = {'label': "Setor censitário"} #"CensusTract"}
@@ -27,47 +27,64 @@ class EntityIndividualEnum(AttrEnum):
 class EntityEstablishmentEnum(AttrEnum):
     agency           = {'label': "Agência"} #"Agency"}
     protected_area   = {'label': "Área protegida"} #"Protected Area"}
+    band             = {'label': "Banda"}
     library          = {'label': "Biblioteca"} #"Library"}
     notary_office    = {'label': "Cartório"} #"Notary's Office"}
-    company          = {'label': "Empresa/Companhia"} #"Company"}
     school           = {'label': "Creche/Escola/Universidade"} #"School"}
+    legislature      = {'label': "Congresso/Assembleia Legislativa"}
+    police_station   = {'label': "Delegacia"} #"Property"}
+    company          = {'label': "Empresa/Companhia"} #"Company"}
     station          = {'label': "Estação"} #"Station"}
     stadium          = {'label': "Estádio"} #"Stadium"}
     terrorist_group  = {'label': "Grupo terrorista"} #"Terrorist Group"}
     hospital         = {'label': "Hospital"} #"Hospital"}
+    church           = {'label': "Igreja"}
     property         = {'label': "Imóvel/Propriedade"} #"Property"}
     ministry         = {'label': "Ministério/Departamento"} #"Ministry/Department"}
     museum           = {'label': "Museu"} #"Museum"}
+    construction     = {'label': "Obra/Construção"} #"Nongovernmental Organization (NGO)"}
     ngo              = {'label': "Organização Não-Governamental (ONG)"} #"Nongovernmental Organization (NGO)"}
     prison           = {'label': "Presídio/Cadeia"} #"Prison"}
     team             = {'label': "Time"} #"Team"}
+    court            = {'label': "Tribunal"} #"Company"}
 
 class EntityPoliticsEnum(AttrEnum):
     agreement        = {'label': "Acordo/Tratado"} #"Agreement/Treaty"}
     speech           = {'label': "Discurso/Fala"} #"Speech"}
     election         = {'label': "Eleição"} #"Election"}
+    caucus           = {'label': "Frente Parlamentar/Caucus"}
     law              = {'label': "Lei/Proposição/Matéria"} #"Law/Proposition"}
     party            = {'label': "Partido"} #"Party"}
     poll             = {'label': "Pesquisa de Opinião"} #"Poll"}
+    vote             = {'label': "Voto"}
 
 class EntityScienceEnum(AttrEnum):
-    article          = {'label': "Artigo"} #"Article/Paper"}
+    article          = {'label': "Artigo/Publicação"} #"Article/Paper"}
     citation         = {'label': "Citação"} #"Citation"}
     domain           = {'label': "Domínio"} #"Domain"}
+    document         = {'label': "Documento"}
+    iceberg          = {'label': "Iceberg"}
     book             = {'label': "Livro"} #"Book"}
     newspaper        = {'label': "Jornal"} #"Newspaper"}
+    drug             = {'label': "Medicamento/Droga"}
     patent           = {'label': "Patente"} #"Patent"}
     journal          = {'label': "Periódico/Revista"} #"Journal/Magazine"}
     word             = {'label': "Palavra"} #"Word"}
     post             = {'label': "Post/Tweet"} #"Post/Tweet"}
     langugage        = {'label': "Língua"} #"Language"}
     crs              = {'label': "Creche"} #"Coordinate Reference System"}
+    page             = {'label': "Página"}
     protein          = {'label': "Proteína"} #"Protein"}
     meteor           = {'label': "Meteoro"} #"Meteor"}
-    polygon          = {'label': "Polígono"} #"Polygon"}
+    terrain          = {'label': "Terreno"}
+    typo             = {'label': "Erro de digitação"}
 
 class EntityEconomicsEnum(AttrEnum):
     contract         = {'label': "Contrato"} #"Contract"}
+    donation         = {'label': "Doação"} #"Contract"}
+    amendment        = {'label': "Emenda Parlamentar"}
+    expenditure      = {'label': "Gasto"}
+    item             = {'label': "Item"}
     grant            = {'label': "Prêmio/Concessão/Convênio"} #"Grant"}
     procurement      = {'label': "Licitação"} #"Procurement"}
     product          = {'label': "Produto"} #"Product"}
@@ -81,18 +98,22 @@ class EntityEducationEnum(AttrEnum):
     scholarship      = {'label': "Bolsa"} #"Scholarship"}
     exam             = {'label': "Prova/Exame"} #"Test/Exam"}
 
-class EntityEventsEnum(AttrEnum):
+class EntityEventEnum(AttrEnum):
     alert            = {'label': "Alerta"} #"Alert"}
     attack           = {'label': "Ataque/Atentado"} #"Attack"}
+    audit            = {'label': "Auditoria"}
     act              = {'label': "Ato"} #"Act"}
     concert          = {'label': "Concerto/Show"} #"Concert"}
     disinvitation    = {'label': "Cancelamento de convite"} #"Disinvitation"}
     disaster         = {'label': "Desastre Natural (terremoto, enchente/inundação, fogo, etc)"} #"Natural Disaster (earthquake, flood, fire, etc)"}
+    war              = {'label': "Guerra/Conflito"}
+    territorial_change = {'label': "Mudança Territorial"}
     birth            = {'label': "Nascimento"} #"Birth"}
     death            = {'label': "Morte/Óbito"} #"Death"}
     request          = {'label': "Pedido/Solicitação/Reclamação"} #"Request/Complaint"}
     protest          = {'label': "Protesto"} #"Protest"}
     match            = {'label': "Partida"} #"Match"}
+    sanction         = {'label': "Sanção/Multa"} #"Match"}
 
 class EntityArtEnum(AttrEnum):
     album            = {'label': "Álbum"} #"Album"}
@@ -130,7 +151,7 @@ class EntityImageEnum(AttrEnum):
 class EntityHistoryEnum(AttrEnum):
     empire           = {'label': "Império"} #"Empire"}
 
-class EntityOthersEnum(AttrEnum):
+class EntityOtherEnum(AttrEnum):
     other            = {'label': "Outro"} #"Other"}
 
 EntityEnum = Union[
@@ -141,13 +162,13 @@ EntityEnum = Union[
     EntityScienceEnum,
     EntityEconomicsEnum,
     EntityEducationEnum,
-    EntityEventsEnum,
+    EntityEventEnum,
     EntityArtEnum,
     EntityInfrastructureEnum,
     EntityTransportationEnum,
     EntitySecurityEnum,
     EntityDemographicEnum,
     EntityHistoryEnum,
-    EntityOthersEnum,
+    EntityOtherEnum,
     EntityImageEnum
 ]
