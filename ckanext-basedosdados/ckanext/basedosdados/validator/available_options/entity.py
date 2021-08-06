@@ -47,6 +47,7 @@ class EntityEstablishmentEnum(AttrEnum):
     prison           = {'label': "Presídio/Cadeia"} #"Prison"}
     team             = {'label': "Time"} #"Team"}
     court            = {'label': "Tribunal"} #"Company"}
+    store            = {'label': "Loja"} #"Store"}
 
 class EntityPoliticsEnum(AttrEnum):
     agreement        = {'label': "Acordo/Tratado"} #"Agreement/Treaty"}
