@@ -45,7 +45,8 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
 
         # 1. It unpacks the dataset_args from the extras
         # 2. Converts the dataset_args from string to dict
-        if isinstance(data_dict['extras'], list):
+        dataset_args = {}
+        if 'extras' in data_dict and isinstance(data_dict['extras'], list):
 
             if any(['dataset_args' == i['key'] for i in data_dict['extras'] ]):
 
@@ -56,8 +57,6 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
                     dataset_args = ast.literal_eval(dataset_args)
                 if not isinstance(dataset_args, dict):
                     raise TypeError(f'dataset_args should be dict or string, but it is {type(dataset_args)}')
-            else:
-                dataset_args = {}
 
         # 3. Merges it do the data_dict
         data_dict = dict(**data_dict, **dataset_args)
