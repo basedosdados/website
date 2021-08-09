@@ -34,7 +34,7 @@ clean() {
 
 build_config() {
     cp docker-compose.yaml build/docker-compose.yaml
-    cp configs/docker-compose.override.prod.yaml build/docker-compose.override.yaml
+    cp configs/docker-compose.override.staging.yaml build/docker-compose.override.yaml
     cp utils/backup_database.sh build/
     cp configs/nginx.staging.conf build/nginx.conf
     cp .env.prod build/.env && echo "VTAG=$VTAG" >> build/.env
