@@ -1,0 +1,37 @@
+# THIS .bashrc is versioned in basedosdados website repo, please alter it there and deploy!
+# Use this file to setup convenience aliases and other stuff for manual ssh in prod/staging
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+        . /etc/bashrc
+fi
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+alias dc=docker-compose
+cd ~/basedosdados
+# cd ~/vault
+
+
+
+RED=$'\033[0;31m'
+GREEN=$'\033[0;32m'
+YELLOW=$'\033[0;33m'
+NOCOLOR=$'\033[0m'
+
+if [[ $BD_ENVIRON == "PROD" ]]; then
+  HOST_ENV="$RED$BD_ENVIRON$NOCOLOR"
+elif [[ $BD_ENVIRON ]]; then
+  HOST_ENV=$BD_ENVIRON
+else
+  HOST_ENV="\h"
+fi
+
+function nonzero_return() {
+  RETVAL=$?
+  [ $RETVAL -ne 0 ] && echo "$RED($RETVAL)$NOCOLOR "
+}
+
+PS1="\`nonzero_return\`\t \u@\[$(tput sgr0)\]$RED$HOST_ENV\[$(tput sgr0)\]:\w\\$\[$(tput sgr0)\] "

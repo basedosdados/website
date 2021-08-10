@@ -89,6 +89,11 @@ O deploy é feito via github actions, basta pushar na master. Se vc adicionar va
 
 Basicamente rodamos o ./deploy.sh que é um script com varias partes. Vc pode rodar manualmente (desde q tenha permissao, claro) uma das partes passando-a como argumento Ex.: `./deploy.sh restart_services`
 
+#### Staging
+
+Podemos fazer deploy pra staging dando push na branch develop.
+
+A variavel de ambiente BD_ENVIRON esta setada como 'STAGING' em staging.basedosdados.org e 'PROD' na maquina basedosdados.org. Essa variavel de ambiente fica disponivel em todas as aplicacoes nao dockerizadas
 
 ### Experimental
 
