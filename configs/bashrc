@@ -1,6 +1,9 @@
 # THIS .bashrc is versioned in basedosdados website repo, please alter it there and deploy!
 # Use this file to setup convenience aliases and other stuff for manual ssh in prod/staging
 
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
 # Source global definitions
 if [ -f /etc/bashrc ]; then
         . /etc/bashrc
