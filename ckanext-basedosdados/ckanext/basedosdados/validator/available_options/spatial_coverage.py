@@ -10,7 +10,6 @@ class ContinentEnum(AttrEnum):
     asia            = {"label": "Ásia"}
     europe          = {"label": "Europa"}
     oceania         = {"label": "Oceania"}
-    antarctica       = {"label": "Antártica"}
 
 class CountryEnum(AttrEnum):
     
@@ -32,19 +31,12 @@ class CountryEnum(AttrEnum):
     fra = {"label": "França"}
     ita = {"label": "Itália"}
     prt = {"label": "Portugal"}
-    gbr = {"label": "Reino Unido"}
-    rus = {"label": "Rússia"}
 
     chn = {"label": "China"}
     ind = {"label": "Índia"}
     tha = {"label": "Tailândia"}
-    jpn = {"label": "Japão"}
-    mys = {"label": "Malásia"}
-    idn = {"label": "Indonésia"}
-    zaf = {"label": "África do Sul"}
     
-    aus = {"label": "Austrália"}
-
+    
 class Admin1Enum(AttrEnum):
     
     # por enquanto só para Brasil
@@ -109,6 +101,4 @@ class Admin2Enum(AttrEnum):
     id_municipio_5208707 = {"label": "Goiânia"}
     id_municipio_5300108 = {"label": "Brasília"}
 
-
-   
 

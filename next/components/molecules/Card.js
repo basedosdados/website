@@ -8,13 +8,13 @@ export function Card({
   link,
 }) {
   return (
-    <Link href={link}>
+    <a className="card" textDecoration="none" href={link}>
       <Box
         cursor="pointer"
         width="400px"
         height="330px"
         borderRadius="10px"
-        filter="drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))"
+        boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
         backgroundColor="#FFFFFF"
         padding={padding}
         borderRadius="10px"
@@ -37,6 +37,6 @@ export function Card({
           {children}
         </Flex>
       </Box>
-    </Link>
+    </a>
   );
 }

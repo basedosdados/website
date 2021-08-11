@@ -38,6 +38,8 @@ services:
       - basedosdados
 
   strapi:
+    build:
+      context: /
     networks:
       - basedosdados
 

@@ -68,13 +68,16 @@ services:
     image: redis:latest
 
   next:
+    image: "bdd/next${VTAG}"
     container_name: next
     ports:
       - "3000:3000"
     image: bdd/next${VTAG}
 
   strapi:
-    image: strapi/strapi
+    image: "bdd/strapi${VTAG}"
+    build:
+      context: strapi
     environment:
       DATABASE_CLIENT: postgres
       DATABASE_NAME: strapi

@@ -5,3 +5,13 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
+
+#blog h1 {
+  font-weight: bold;
+  font-size: 28px;
+}
+
+.card :hover {
+  text-decoration: none !important;
+  border-bottom: 0;
+}
