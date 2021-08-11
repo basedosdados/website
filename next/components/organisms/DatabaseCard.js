@@ -18,6 +18,7 @@ export default function DatabaseCard({
   updatedSince,
   updatedAuthor,
   link,
+  isPlus = false,
 }) {
   const databaseInfo = [];
 
@@ -27,27 +28,53 @@ export default function DatabaseCard({
   const date1 = new Date();
   const date2 = new Date(updatedSince);
   const diffTime = Math.abs(date2 - date1);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  let diffLabel = "dia(s)";
+
+  if (diffDays > 30) {
+    diffLabel = "mês(es)";
+    diffDays = Math.floor(diffDays / 30);
+  } else if (diffDays > 365) {
+    diffLabel = "ano(s)";
+    diffDays = Math.floor(diffDays / 365);
+  }
 
   return (
     <Card
       link={link}
-      icons={categories.map((c) => (
-        <CategoryIcon url={`/_nxt/img/categories/icone_${c}.svg`} />
-      ))}
-      spacing={2}
+      icons={[
+        ...categories.map((c) => (
+          <CategoryIcon
+            size="47px"
+            url={`/_nxt/img/categories/icone_${c}${isPlus ? "-1" : ""}.svg`}
+          />
+        )),
+        ...(isPlus
+          ? [
+              <Image
+                width="100px"
+                height="47px"
+                marginRight="10px"
+                src={`/_nxt/img/logo_plus.png`}
+              />,
+            ]
+          : []),
+      ]}
+      spacing={0}
     >
-      <Title>{name}</Title>
+      <Title marginBottom="15px">{name}</Title>
       <Subtitle>{organization}</Subtitle>
-      <HStack width="100%" overflowX="scroll" padding="15px 0px">
-        {tags.map((t) => (
+      <HStack width="100%" overflowX="none" paddingTop="15px">
+        {tags.slice(0, tags.length > 3 ? 3 : tags.length).map((t) => (
           <Tag>{t}</Tag>
         ))}
       </HStack>
-      <HStack marginTop="auto" padding="15px 0px">
+      <HStack marginTop="auto">
         {size ? (
           <>
-            <Subtitle fontWeight="bold">{Math.round(size / 1000)} mb</Subtitle>
+            <Subtitle color="#252A32" fontWeight="bold">
+              {Math.round(size / 1000)} mb
+            </Subtitle>
             <Dot />
           </>
         ) : (
@@ -55,13 +82,13 @@ export default function DatabaseCard({
         )}
         {databaseInfo.map((item, index) => (
           <>
-            <Subtitle>{item}</Subtitle>{" "}
+            <Subtitle color="#252A32">{item}</Subtitle>{" "}
             {index !== databaseInfo.length - 1 ? <Dot /> : <></>}{" "}
           </>
         ))}
       </HStack>
-      <Subtitle fontSize="12px" fontStyle="italic">
-        Atualizado há {diffDays} dias.
+      <Subtitle marginTop="auto" fontSize="12px" fontStyle="italic">
+        Atualizado há {diffDays} {diffLabel}.
       </Subtitle>
     </Card>
   );

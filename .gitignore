@@ -8,7 +8,6 @@ configs/ckan.override.prod.ini
 .idea
 .hypothesis
 utils/packages
-
-
 __pycache__/
 .ipynb_checkpoints
+

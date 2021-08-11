@@ -12,6 +12,7 @@ class ContinentEnum(AttrEnum):
     oceania         = {"label": "Oceania"}
     antarctica       = {"label": "Antártica"}
 
+
 class CountryEnum(AttrEnum):
     
     # country codes from ISO 3166
@@ -34,6 +35,7 @@ class CountryEnum(AttrEnum):
     prt = {"label": "Portugal"}
     gbr = {"label": "Reino Unido"}
     rus = {"label": "Rússia"}
+
 
     chn = {"label": "China"}
     ind = {"label": "Índia"}
@@ -109,6 +111,4 @@ class Admin2Enum(AttrEnum):
     id_municipio_5208707 = {"label": "Goiânia"}
     id_municipio_5300108 = {"label": "Brasília"}
 
-
-   
 

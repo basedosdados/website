@@ -4,19 +4,23 @@ import { VStack, HStack } from "@chakra-ui/react";
 
 export default function CardCatalog({ sections, containerStyle }) {
   return (
-    <VStack
-      {...containerStyle}
-      alignItems="flex-start"
-      spacing={10}
-      width="100%"
-    >
+    <VStack {...containerStyle} alignItems="flex-start" width="100%">
       {Object.keys(sections).map((key) => (
-        <VStack width="100%" alignItems="flex-start" spacing={5}>
+        <VStack
+          width="100%"
+          alignItems="flex-start"
+          spacing={5}
+          paddingBottom="40px"
+        >
           <Heading
-            fontSize="20px"
-            backgroundColor="#DEDFE0"
-            borderRadius="20px"
-            padding="10px"
+            fontSize="16px"
+            backgroundColor="#2B8C4D"
+            borderRadius="15px"
+            color="white"
+            fontWeight="500"
+            fontFamily="Ubuntu"
+            letterSpacing="0.1em"
+            padding="10px 15px"
           >
             + {key}
           </Heading>

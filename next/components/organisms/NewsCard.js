@@ -1,5 +1,6 @@
 import { Card } from "../molecules/Card";
-import { Image, VStack } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
+import Image from "next/image";
 import Subtitle from "../atoms/Subtitle";
 import Title from "../atoms/Title";
 
@@ -18,6 +19,7 @@ export default function NewsCard({ image, site, title }) {
       </VStack>
       <Image
         width="25px"
+        height="auto"
         src="/_nxt/img/arrow_black_right.png"
         position="absolute"
         right="20px"

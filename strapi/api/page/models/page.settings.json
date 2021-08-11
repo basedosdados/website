@@ -13,8 +13,8 @@
   "attributes": {
     "MenuTitle": {
       "type": "string",
-      "unique": true,
-      "required": true
+      "required": true,
+      "unique": true
     },
     "Title": {
       "type": "string",

@@ -2,46 +2,39 @@ import {
   Box,
   HStack,
   VStack,
-  Image,
   Drawer,
   DrawerOverlay,
   DrawerContent,
   useDisclosure,
   Divider,
 } from "@chakra-ui/react";
+import Image from "next/image";
 import ControlledInput from "../atoms/ControlledInput";
 import RoundedButton from "../atoms/RoundedButton";
 import Link from "../atoms/Link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
-function MenuDrawer({ isOpen, onClose }) {
+function MenuDrawer({ isOpen, onClose, links }) {
   return (
     <Drawer zIndex="10px" isOpen={isOpen} placement="top" onClose={onClose}>
       <DrawerOverlay />
       <DrawerContent padding="110px 30px 30px 30px">
         <VStack alignItems="center" width="100%" spacing={5}>
-          <Link color="black" href="/_nxt/search">
-            Dados
-          </Link>
-          <Divider />
-          <Link color="black">Comunidade</Link>
-          <Divider />
-          <Link color="black" href="/about">
-            Sobre
-          </Link>
-          <Divider />
-          <Link color="black">Contato</Link>
-          <Divider />
-          <Link color="black">APOIE</Link>
+          {Object.entries(links).map(([k, v]) => (
+            <>
+              <Link href={v}>{k}</Link>
+              <Divider />
+            </>
+          ))}
         </VStack>
       </DrawerContent>
     </Drawer>
   );
 }
 
-function DesktopLinks() {
+function DesktopLinks({ links }) {
   const [search, setSearch] = useState();
 
   function openSearchLink() {
@@ -56,11 +49,22 @@ function DesktopLinks() {
       position={{ base: "relative", md: "initial" }}
     >
       <HStack width="100%" flex="3" spacing={10}>
-        <Link href="/_nxt/search">Dados</Link>
-        <Link>Comunidade</Link>
-        <Link href="/about">Sobre</Link>
-        <Link>Contato</Link>
-        <Link>APOIE</Link>
+        {Object.entries(links).map(([k, v]) =>
+          k === "Apoie" ? (
+            <a href={v} target="_blank">
+              <RoundedButton
+                colorScheme="red"
+                backgroundColor="#FF8484"
+                minWidth="100px"
+                letterSpacing="0.1em"
+              >
+                Apoie
+              </RoundedButton>
+            </a>
+          ) : (
+            <Link href={v}>{k}</Link>
+          )
+        )}
       </HStack>
       <HStack spacing={10} display={{ base: "none", lg: "flex" }}>
         <ControlledInput
@@ -68,37 +72,67 @@ function DesktopLinks() {
           color="black"
           value={search}
           onChange={setSearch}
-          inputBackgroundColor="#E6FEE2"
+          inputBackgroundColor="#FAFAFA"
           rightIcon={
-            <Image
-              cursor="pointer"
-              onClick={openSearchLink}
-              src="/_nxt/img/icon_search.png"
-            />
+            <Box width="60px" height="60px" position="relative">
+              <Image
+                cursor="pointer"
+                onClick={openSearchLink}
+                layout="fill"
+                objectFit="contain"
+                src="/_nxt/img/icon_search.png"
+              />
+            </Box>
           }
         />
-        <Link>Entrar</Link>
-        <RoundedButton>Cadastrar</RoundedButton>
+        <Link href="/user/login">Entrar</Link>
+        <Link href="/user/register">
+          <RoundedButton minWidth="150px">Cadastrar</RoundedButton>
+        </Link>
       </HStack>
     </HStack>
   );
 }
 
-export default function Menu() {
+export default function Menu({ strapiPages = [] }) {
   const menuDisclosure = useDisclosure();
+  const divRef = useRef();
+
+  const links = {
+    Dados: "/_nxt/search",
+  };
+
+  useEffect(() => {
+    document.addEventListener("scroll", () => {
+      if (!divRef.current || !divRef.current.style) return;
+
+      if (window.scrollY <= 30) divRef.current.style.boxShadow = "none";
+      else divRef.current.style.boxShadow = "0px 4px 4px rgba(0,0,0,0.25)";
+    });
+  }, [divRef.current]);
+
+  strapiPages.map((p) => {
+    links[p.MenuTitle] = "/_nxt/blog/" + p.id + "/";
+  });
+
+  links["Newsletter"] =
+    "https://basedosdados.hubspotpagebuilder.com/assine-a-newsletter-da-base-dos-dados";
+  links["Documentação"] = "https://basedosdados.github.io/mais/";
+  links["Apoie"] = "https://apoia.se/basedosdados";
 
   return (
     <>
-      <MenuDrawer {...menuDisclosure} />
+      <MenuDrawer links={links} {...menuDisclosure} />
       <Box
+        ref={divRef}
         position="fixed"
         top="0px"
         width="100%"
         left="0px"
-        backgroundColor="#34A25A"
-        boxShadow="0px 4px 4px rgba(0,0,0,0.25)"
+        backgroundColor="#FAFAFA"
         padding="15px 60px"
         zIndex="10000000"
+        transition="0.2s"
         as="nav"
       >
         <HStack
@@ -115,21 +149,28 @@ export default function Menu() {
                 flex: 1,
                 position: "fixed",
                 left: 30,
-                top: 23,
+                top: 27,
                 color: "white",
               }}
               icon={faBars}
             />
           </Box>
           <Link href="/_nxt/">
-            <Image
-              flex="2"
+            <Box
               transform={{ base: "translateX(-27%)" }}
-              maxWidth={{ base: "80px", lg: "105px" }}
-              src="/_nxt/img/logo.png"
-            />
+              width={{ base: "120px", lg: "105px" }}
+              height="50px"
+              position="relative"
+            >
+              <Image
+                priority
+                layout="fill"
+                objectFit="contain"
+                src="/_nxt/img/logo.png"
+              />
+            </Box>
           </Link>
-          <DesktopLinks />
+          <DesktopLinks links={links} />
         </HStack>
       </Box>
     </>

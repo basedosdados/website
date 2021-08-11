@@ -34,16 +34,12 @@ clean() {
 
 build_config() {
     cp docker-compose.yaml build/docker-compose.yaml
-    cp configs/docker-compose.override.prod.yaml build/docker-compose.override.yaml
+    cp configs/docker-compose.override.staging.yaml build/docker-compose.override.yaml
     cp utils/backup_database.sh build/
-    cp configs/nginx.conf build/
+    cp configs/nginx.staging.conf build/nginx.conf
     cp .env.prod build/.env && echo "VTAG=$VTAG" >> build/.env
 
     cp -r experimental/monitoring build/
-
-    cp -r experimental/wordpress build/
-    rm build/wordpress/.env && ln -s ../.env build/wordpress/.env
-    mv build/wordpress/docker-compose.override.prod.yaml build/wordpress/docker-compose.override.yaml
 
     cp configs/basedosdados_crontab build/basedosdados_crontab
 }
@@ -59,6 +55,7 @@ load_images() {
         docker load < ~/basedosdados/images/solr
         docker load < ~/basedosdados/images/db
         docker load < ~/basedosdados/images/next
+        docker load < ~/basedosdados/images/strapi
     "
 }
 restart_services() {
@@ -70,10 +67,15 @@ restart_services() {
         docker-compose up --no-build -d solr redis
         docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh redis:6379
         docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh solr:8983
-        docker-compose up --no-build -d ckan next strapi
+        docker-compose up --no-build -d strapi
+        docker-compose up --no-build -d ckan
+        docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh strapi:1337
+        docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh ckan:5000
+        docker-compose up --no-build -d next
         docker-compose up --no-build -d nginx
         docker-compose up --no-build -d autoheal
         docker-compose ps
+        docker-compose restart nginx
         ./wait-for-200.sh -t 20 https://localhost:443 || ERROR=1
         if [[ ! $ERROR ]]; then
             echo Server is up
@@ -96,17 +98,12 @@ build_images() {
     export COMPOSE_DOCKER_CLI_BUILD=1
     export DOCKER_BUILDKIT=1
     if [[ ! -d vendor/ckan/.git ]]; then ./_clone_ckan.sh; fi
+    ( VTAG=$VTAG docker-compose build strapi && docker save bdd/strapi$VTAG > build/images/strapi ) &
     ( VTAG=$VTAG docker-compose build ckan && docker save bdd/ckan$VTAG > build/images/ckan ) &
     ( docker-compose build solr && docker save bdd/solr > build/images/solr ) &
     ( docker-compose build db   && docker save bdd/db > build/images/db ) &
     ( VTAG=$VTAG docker-compose build next && docker save bdd/next$VTAG > build/images/next ) &
     for i in `jobs -p`; do wait $i ; done
-}
-restart_wordpress() {
-    $SSH  '
-        cd ~/basedosdados/wordpress
-        docker-compose down && docker-compose up -d
-    '
 }
 restart_monitoring() {
     $SSH  '

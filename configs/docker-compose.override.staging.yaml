@@ -77,6 +77,6 @@ networks:
 
 secrets:
   fullchain:
-    file: /etc/letsencrypt/live/basedosdados.org/fullchain.pem
+    file: /etc/letsencrypt/live/staging.basedosdados.org/fullchain.pem
   privkey:
-    file: /etc/letsencrypt/live/basedosdados.org/privkey.pem
+    file: /etc/letsencrypt/live/staging.basedosdados.org/privkey.pem

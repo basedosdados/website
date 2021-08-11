@@ -86,7 +86,6 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
                 "value": {k: data_dict.get(k, None) for k in dataset_args.keys()},
             }
         ]
-
         return data_dict
 
     def _validate_show(self, data_dict):
@@ -120,6 +119,7 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
             for d in data_dict.get("extras"):
                 if d["key"] == "dataset_args":
                     d["value"] = str(d["value"])
+
                     break
 
         return data_dict, errors
