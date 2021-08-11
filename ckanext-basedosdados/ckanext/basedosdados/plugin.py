@@ -63,9 +63,11 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
                     )
             else:
                 dataset_args = {}
+        dataset_args.pop("dataset_args", None)
 
         # 3. Merges it do the data_dict
         data_dict = dict(**data_dict, **dataset_args)
+        data_dict.pop("dataset_args", None)
 
         # 4. Validates the data_dict with pydantic
         validation = Dataset(**data_dict, action__=action)

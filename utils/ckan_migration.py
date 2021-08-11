@@ -19,7 +19,7 @@ class Migrate:
     @lru_cache(maxsize=None)
     def ckan_api_staging(self):
         user_agent = None
-        CKAN_API_KEY = CKAN_API_KEY = "colocar_token_api"
+        CKAN_API_KEY = "put_your_key"
         CKAN_URL = os.environ.get("CKAN_URL", "https://staging.basedosdados.org")
 
         return RemoteCKAN(CKAN_URL, user_agent=user_agent, apikey=CKAN_API_KEY)
@@ -553,9 +553,9 @@ class Migrate:
     def migrate_package_extras(self, package_dict):
 
         # Remove download type from package_dict
-        package_dict.pop("download_type", None)
-        package_dict.pop("license_url", None)
 
+        package_dict.pop("license_url", None)
+        package_dict.pop("download_type", None)
         extras = package_dict.pop("extras")
 
         if extras:
