@@ -28,7 +28,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CategoryIcon } from "../components/atoms/CategoryIcon";
 import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { getDatasets } from "./api/datasets";
+import { searchDatasets } from "./api/datasets";
 import { getStrapiPages } from "./api/strapi";
 import ControlledInput from "../components/atoms/ControlledInput";
 import { Database } from "../components/organisms/Database";
@@ -73,7 +73,7 @@ export default function SearchPage({
   const [_search, _setSearch] = useState(searchQuery); // For debouncing
   const { data, isLoading } = useQuery(
     ["datasets", search, order, paramFilters],
-    () => getDatasets({ search, sort: order, paramFilters })
+    () => searchDatasets({ search, sort: order, paramFilters })
   );
 
   useEffect(() => {

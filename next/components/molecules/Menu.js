@@ -150,14 +150,14 @@ export default function Menu({ strapiPages = [] }) {
                 position: "fixed",
                 left: 30,
                 top: 27,
-                color: "white",
+                color: "black",
               }}
               icon={faBars}
             />
           </Box>
           <Link href="/_nxt/">
             <Box
-              transform={{ base: "translateX(-27%)" }}
+              transform={{ base: "translateX(-20%)" }}
               width={{ base: "120px", lg: "105px" }}
               height="50px"
               position="relative"

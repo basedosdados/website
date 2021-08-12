@@ -218,13 +218,13 @@ function CatalogNews() {
   return (
     <VStack
       width="100%"
-      padding="60px 0px"
+      padding="60px 00px"
       alignItems="flex-start"
       backgroundColor="#FAFAFA"
       spacing={5}
       paddingBottom="160px"
     >
-      <BigTitle marginBottom="0px" alignSelf="center">
+      <BigTitle textAlign="center" marginBottom="0px" alignSelf="center">
         Novidades no catálogo de dados
       </BigTitle>
       <CardCatalog
@@ -525,7 +525,7 @@ function Support() {
 
 export default function Home({ strapiPages }) {
   return (
-    <>
+    <Box backgroundColor="#FAFAFA">
       <SiteHead />
       <Menu strapiPages={strapiPages} />
       <VStack
@@ -536,23 +536,28 @@ export default function Home({ strapiPages }) {
         paddingTop="170px"
       >
         <Hero />
-        <CatalogNews />
-        <VStack spacing={20} transform="translateY(-100px)" width="100%">
-          <BigTitle textAlign="center" maxWidth="70%" paddingBottom="20px">
-            Mais do que organizar dados, nós reinventamos a forma de trabalhar
-            com eles
-          </BigTitle>
-          <ExploreInYourFavoriteLanguage />
-          <LearnToAnalysis />
-          <JoinTheCommunity />
-          <Support />
-        </VStack>
+      </VStack>
+      <CatalogNews />
+      <VStack
+        spacing={20}
+        transform="translateY(-100px)"
+        width="90%"
+        margin="auto"
+      >
+        <BigTitle textAlign="center" maxWidth="70%" paddingBottom="20px">
+          Mais do que organizar dados, nós reinventamos a forma de trabalhar com
+          eles
+        </BigTitle>
+        <ExploreInYourFavoriteLanguage />
+        <LearnToAnalysis />
+        <JoinTheCommunity />
+        <Support />
       </VStack>
       <Footer />
       <script
         src="/_nxt/vendor/terminal.js"
         data-termynal-container="#termynal"
       ></script>
-    </>
+    </Box>
   );
 }
