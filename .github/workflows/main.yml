@@ -3,8 +3,9 @@ on:
   push:
     branches: [ master ]
 jobs:
-  deploy:
+  deploy_prod:
     # The type of runner that the job will run on
+    environment: prod
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -15,9 +16,9 @@ jobs:
       - name: Add secret files
         env:
           DOT_ENV_PROD: ${{ secrets.DOT_ENV_PROD }}
-          PROD_CKAN_INI: ${{ secrets.PROD_CKAN_INI }}
+          CKAN_PROD_INI: ${{ secrets.CKAN_PROD_INI }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
-        run: 'echo "$DOT_ENV_PROD" > .env.prod && echo "$PROD_CKAN_INI" > ./configs/ckan.override.prod.ini && mkdir ~/.ssh && echo "$SSH_KEY" > ~/.ssh/BD.pem && chmod 700 ~/.ssh ~/.ssh/BD.pem'
+        run: 'echo "$DOT_ENV_PROD" > .env.prod && echo "$CKAN_PROD_INI" > ./configs/ckan.override.prod.ini && mkdir ~/.ssh && echo "$SSH_KEY" > ~/.ssh/BD.pem && chmod 700 ~/.ssh ~/.ssh/BD.pem'
       - name: Deploy script
         run: ./deploy.sh deploy
       - name: Report Failures
