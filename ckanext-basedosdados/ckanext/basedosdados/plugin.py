@@ -43,45 +43,49 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
         we always have to unpack a dict that is saved as a string in the extras field.
         """
 
-        # # 1. It unpacks the dataset_args from the extras
-        # # 2. Converts the dataset_args from string to dict
-        # if isinstance(data_dict['extras'], list):
+        # 1. It unpacks the dataset_args from the extras
+        # 2. Converts the dataset_args from string to dict
+        if isinstance(data_dict["extras"], list):
 
-        #     if any(['dataset_args' == i['key'] for i in data_dict['extras'] ]):
+            if any(["dataset_args" == i["key"] for i in data_dict["extras"]]):
 
-        #         template_extras= [{'key': 'dataset_args', 'value': {}}]
-        #         dataset_args = [d['value'] for d in data_dict.pop('extras', template_extras) 
-        #                         if d['key'] == 'dataset_args'][0]
-        #         if isinstance(dataset_args, str):
-        #             dataset_args = ast.literal_eval(dataset_args)
-        #         if not isinstance(dataset_args, dict):
-        #             raise TypeError(f'dataset_args should be dict or string, but it is {type(dataset_args)}')
-        #     else:
-        #         dataset_args = {}
+                template_extras = [{"key": "dataset_args", "value": {}}]
+                dataset_args = [
+                    d["value"]
+                    for d in data_dict.pop("extras", template_extras)
+                    if d["key"] == "dataset_args"
+                ][0]
+                if isinstance(dataset_args, str):
+                    dataset_args = ast.literal_eval(dataset_args)
+                if not isinstance(dataset_args, dict):
+                    raise TypeError(
+                        f"dataset_args should be dict or string, but it is {type(dataset_args)}"
+                    )
+            else:
+                dataset_args = {}
+        dataset_args.pop("dataset_args", None)
 
-        # # 3. Merges it do the data_dict
-        # data_dict = dict(**data_dict, **dataset_args)
+        # 3. Merges it do the data_dict
+        data_dict = dict(**data_dict, **dataset_args)
+        data_dict.pop("dataset_args", None)
 
-        # # 4. Validates the data_dict with pydantic
-        # validation = Dataset(**data_dict, action__=action)
+        # 4. Validates the data_dict with pydantic
+        validation = Dataset(**data_dict, action__=action)
 
-        # # exclude unset needed by ckan so it can deal with missing values downstream (during partial updates for instance)
-        # data_dict = validation.json(
-        #     exclude={"action__"}, exclude_unset=True
-        # )
+        # exclude unset needed by ckan so it can deal with missing values downstream (during partial updates for instance)
+        data_dict = validation.json(exclude={"action__"}, exclude_unset=True)
 
-        # # we need to jsonify and de-jsonify so that objects such as datetimes are serialized
-        # data_dict = json.loads(
-        #     data_dict
-        # )
+        # we need to jsonify and de-jsonify so that objects such as datetimes are serialized
+        data_dict = json.loads(data_dict)
 
-        # # 5. Repacks the dataset_args to extras in order to be used by CKAN, but it keeps the dataset arguments
-        # # in the dict to be shown in `package_show`
-        # data_dict["extras"] = [{'key': 'dataset_args', 
-        #                         'value': {k: data_dict.get(k, None) for k in dataset_args.keys()}}]
-
-        data_dict.pop('action__', None)
-        
+        # 5. Repacks the dataset_args to extras in order to be used by CKAN, but it keeps the dataset arguments
+        # in the dict to be shown in `package_show`
+        data_dict["extras"] = [
+            {
+                "key": "dataset_args",
+                "value": {k: data_dict.get(k, None) for k in dataset_args.keys()},
+            }
+        ]
         return data_dict
 
     def _validate_show(self, data_dict):
@@ -111,10 +115,11 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
 
         # Converts dataset_args from dict to string only if update is the case
         data_dict, errors = self._validate_create(data_dict, action="package_update")
-        if data_dict.get('extras'):
-            for d in data_dict.get('extras'):
-                if d['key'] == 'dataset_args':
-                    d['value'] = str(d['value'])
+        if data_dict.get("extras"):
+            for d in data_dict.get("extras"):
+                if d["key"] == "dataset_args":
+                    d["value"] = str(d["value"])
+
                     break
 
         return data_dict, errors

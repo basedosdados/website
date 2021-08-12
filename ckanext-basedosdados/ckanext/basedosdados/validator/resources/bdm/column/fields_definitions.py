@@ -133,3 +133,13 @@ IS_PARTITION_FIELD = Field(
         "id_before": None,
     },
 )
+
+HAS_SENSITIVE_DATA_FIELD = Field(
+    title="columns-has-sensitive-data",
+    user_input_hint=["<yes/no>"],
+    description=to_line(["[yes, no], se a coluna tem dados sensíveis."]),
+    yaml_order={
+        "id_after": "is_in_staging",
+        "id_before": None,
+    },
+)

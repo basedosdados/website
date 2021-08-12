@@ -16,6 +16,7 @@ deploy() {
     restart_services
     rebuild_index
     install_crontab
+    install_bashrc
     install_apprise
 }
 
@@ -42,6 +43,7 @@ build_config() {
     cp -r experimental/monitoring build/
 
     cp configs/basedosdados_crontab build/basedosdados_crontab
+    cp configs/bashrc build/
 }
 send() {
     $SSH 'mkdir -p ~/basedosdados/'
@@ -117,6 +119,14 @@ install_crontab() {
         echo "####### AUTO GENERATED CRONTAB - DONT EDIT MANUALLY ##########"
         cat ~/basedosdados/basedosdados_crontab
         ) | crontab
+    '
+}
+install_bashrc() {
+    $SSH  '
+        (
+        echo "####### AUTO GENERATED BASHRC - DONT EDIT MANUALLY ##########"
+        cat ~/basedosdados/bashrc
+        ) > ~/.bashrc
     '
 }
 install_apprise() {
