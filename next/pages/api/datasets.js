@@ -1,3 +1,4 @@
+import axios from "axios";
 import { axiosInstance } from "../../axios";
 
 export function getRecentDatasets() {
@@ -13,12 +14,14 @@ export function getPopularDatasets() {
 }
 
 export function listDatasets() {
-  return axiosInstance.get(`/package_list`).then(({ data }) => data.result);
+  return axios
+    .get(`http://ckan:5000/api/3/action/package_list`)
+    .then(({ data }) => data.result);
 }
 
 export function showDataset(id) {
-  return axiosInstance
-    .get(`/package_show?id=${id}`)
+  return axios
+    .get(`http://ckan:5000/api/3/action/package_show?id=${id}`)
     .then(({ data }) => data.result);
 }
 

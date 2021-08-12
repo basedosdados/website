@@ -1,19 +1,12 @@
 import {
-  Input,
   VStack,
   Heading,
   HStack,
   Text,
   Divider,
-  Link,
-  InputGroup,
-  InputRightElement,
   Stack,
-  AbsoluteCenter,
   CircularProgress,
   Center,
-  Image,
-  Box,
   Select,
 } from "@chakra-ui/react";
 import SectionTitle from "../components/atoms/SectionTitle";
@@ -21,41 +14,34 @@ import SiteHead from "../components/atoms/SiteHead";
 import Footer from "../components/molecules/Footer";
 import Menu from "../components/molecules/Menu";
 import { useRouter } from "next/router";
-import { Dot } from "../components/atoms/Dot";
-import Subtitle from "../components/atoms/Subtitle";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CategoryIcon } from "../components/atoms/CategoryIcon";
 import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { searchDatasets } from "./api/datasets";
-import { getStrapiPages } from "./api/strapi";
-import ControlledInput from "../components/atoms/ControlledInput";
+import ControlledInput, {
+  DebouncedControlledInput,
+} from "../components/atoms/ControlledInput";
 import { Database } from "../components/organisms/Database";
 import _ from "lodash";
-import {
-  FilterAccordion,
-  SelectFilterAccordion,
-} from "../components/atoms/FilterAccordion";
+import { SelectFilterAccordion } from "../components/atoms/FilterAccordion";
 import { getOrganizationList } from "./api/organizations";
 import { getGroupList } from "./api/groups";
 import { getTagList } from "./api/tags";
+import { withStrapiPages } from "../hooks/strapi.hook";
+import { MainPageTemplate } from "../components/templates/main";
 
 export async function getStaticProps(context) {
-  let { data: strapiPages } = await getStrapiPages();
   let { data: organizations } = await getOrganizationList();
   let { data: groups } = await getGroupList();
   let { data: tags } = await getTagList();
 
-  return {
+  return withStrapiPages({
     props: {
-      strapiPages,
       organizations: organizations.result,
       groups: groups.result,
       tags: tags.result,
     },
     revalidate: 60, //TODO: Increase this timer
-  };
+  });
 }
 
 export default function SearchPage({
@@ -70,7 +56,6 @@ export default function SearchPage({
   const [order, setOrder] = useState(orderQuery);
   const [search, setSearch] = useState(searchQuery);
   const [paramFilters, setParamFilters] = useState({});
-  const [_search, _setSearch] = useState(searchQuery); // For debouncing
   const { data, isLoading } = useQuery(
     ["datasets", search, order, paramFilters],
     () => searchDatasets({ search, sort: order, paramFilters })
@@ -78,24 +63,16 @@ export default function SearchPage({
 
   useEffect(() => {
     setSearch(query.q);
-    _setSearch(query.q);
   }, [query]);
 
-  const debouncedSetSearch = useCallback(
-    _.debounce((value) => setSearch(value), 500),
-    []
-  );
-
   return (
-    <VStack width="100%" backgroundColor="#FAFAFA">
-      <SiteHead />
-      <Menu strapiPages={strapiPages} />
+    <MainPageTemplate strapiPages={strapiPages}>
       <HStack
-        paddingTop="120px"
         justifyContent="flex-start"
         alignItems="flex-start"
         spacing={10}
         width="90%"
+        margin="auto"
       >
         <VStack
           justifyContent="flex-start"
@@ -143,11 +120,10 @@ export default function SearchPage({
           />
         </VStack>
         <VStack alignItems="flex-start" spacing={5} width="100%">
-          <ControlledInput
-            value={_search}
+          <DebouncedControlledInput
+            value={search}
             onChange={(val) => {
-              _setSearch(val);
-              debouncedSetSearch(val);
+              setSearch(val);
             }}
             flex="3"
             placeholder="Pesquisar palavras-chave, instituições e temas"
@@ -218,7 +194,7 @@ export default function SearchPage({
                 {(data?.results || []).map((d) => (
                   <>
                     <Database
-                      link={`/dataset/${d.name}`}
+                      link={`/_nxt/dataset/${d.id}`}
                       name={d.title}
                       image={
                         "https://basedosdados.org/uploads/group/" +
@@ -267,11 +243,10 @@ export default function SearchPage({
           )}
         </VStack>
       </HStack>
-      <Footer />
       <script
         src="/_nxt/vendor/terminal.js"
         data-termynal-container="#termynal"
       ></script>
-    </VStack>
+    </MainPageTemplate>
   );
 }

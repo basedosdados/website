@@ -31,16 +31,11 @@ import { getPopularDatasets, getRecentDatasets } from "./api/datasets";
 import { getStrapiPages } from "./api/strapi";
 import { ShadowBox } from "../components/atoms/ShadowBox";
 import { Tag } from "../components/atoms/Tag";
+import { MainPageTemplate } from "../components/templates/main";
+import { withStrapiPages } from "../hooks/strapi.hook";
 
 export async function getStaticProps(context) {
-  let { data: strapiPages } = await getStrapiPages();
-
-  return {
-    props: {
-      strapiPages,
-    },
-    revalidate: 60, //TODO: Increase this timer
-  };
+  return await withStrapiPages();
 }
 
 function HeroText({ children, iconUrl }) {
@@ -231,7 +226,7 @@ function CatalogNews() {
         sections={{
           populares: (popularDatasets.data || []).map((d) => (
             <DatabaseCard
-              link={`/dataset/${d.name}`}
+              link={`/_nxt/dataset/${d.name}`}
               name={d.title}
               organization={d.organization.title}
               tags={d.tags.map((g) => g.name)}
@@ -260,7 +255,7 @@ function CatalogNews() {
         sections={{
           recentes: (recentDatasets.data || []).map((d) => (
             <DatabaseCard
-              link={`/dataset/${d.name}`}
+              link={`/_nxt/dataset/${d.name}`}
               name={d.title}
               organization={d.organization.title}
               tags={d.tags.map((g) => g.name)}
@@ -478,7 +473,7 @@ function Support() {
     );
   }
   return (
-    <VStack paddingTop="60px" width="95%" paddingBottom="100px">
+    <VStack paddingTop="60px" width="95%">
       <BigTitle width="90%" textAlign="center" paddingBottom="60px">
         Existimos através do esforço de pessoas que acreditam no acesso a dados
         abertos de qualidade.
@@ -525,15 +520,13 @@ function Support() {
 
 export default function Home({ strapiPages }) {
   return (
-    <Box backgroundColor="#FAFAFA">
-      <SiteHead />
-      <Menu strapiPages={strapiPages} />
+    <MainPageTemplate strapiPages={strapiPages}>
       <VStack
         alignItems="center"
         width="100%"
         backgroundColor="#FAFAFA"
         padding="0px 5%"
-        paddingTop="170px"
+        marginTop="30px"
       >
         <Hero />
       </VStack>
@@ -553,11 +546,10 @@ export default function Home({ strapiPages }) {
         <JoinTheCommunity />
         <Support />
       </VStack>
-      <Footer />
       <script
         src="/_nxt/vendor/terminal.js"
         data-termynal-container="#termynal"
       ></script>
-    </Box>
+    </MainPageTemplate>
   );
 }

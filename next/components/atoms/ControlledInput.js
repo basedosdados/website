@@ -4,6 +4,7 @@ import {
   InputRightAddon,
   InputRightElement,
 } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 
 export default function ControlledInput({
   placeholder,
@@ -17,7 +18,7 @@ export default function ControlledInput({
   inputStyle,
   ...props
 }) {
-  function checkForEnter(e) {
+  async function checkForEnter(e) {
     if (e.key === "Enter" && onEnterPress) {
       onEnterPress();
     }
@@ -36,6 +37,51 @@ export default function ControlledInput({
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
+        {...inputStyle}
+      />
+      <InputRightElement
+        height="100%"
+        padding="8px"
+        marginRight="5px"
+        children={rightIcon}
+      />
+      {rightAddon ? <InputRightAddon children={rightAddon} /> : <></>}
+    </InputGroup>
+  );
+}
+
+export function DebouncedControlledInput({
+  placeholder,
+  variant,
+  value,
+  onChange,
+  onEnterPress,
+  rightIcon = null,
+  rightAddon,
+  inputBackgroundColor = null,
+  inputStyle,
+  ...props
+}) {
+  const [_value, _setValue] = useState(value);
+  const [_timeout, _setTimeout] = useState(null);
+
+  useEffect(() => {
+    clearTimeout(_timeout);
+    _setTimeout(setTimeout(() => onChange(_value), 200));
+  }, [_value]);
+
+  return (
+    <InputGroup variant={variant} flex="1" {...props}>
+      <Input
+        fontFamily="Lato"
+        letterSpacing="0.1em"
+        fontWeight="300"
+        border="1px solid #DEDFE0"
+        backgroundColor={inputBackgroundColor}
+        borderRadius="20px"
+        value={_value}
+        placeholder={placeholder}
+        onChange={(e) => _setValue(e.target.value)}
         {...inputStyle}
       />
       <InputRightElement
