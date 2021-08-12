@@ -31,6 +31,7 @@ export function Card({
             alignItems="center"
             minHeight="50px"
             paddingBottom="20px"
+            spacing={3}
           >
             {icons}
           </HStack>

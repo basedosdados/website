@@ -106,14 +106,12 @@ export function Database({
                     <></>
                   )}
                   {categories.map((c) => (
-                    <Box paddingRight="0px">
-                      <CategoryIcon
-                        size="39px"
-                        url={`/_nxt/img/categories/icone_${c}${
-                          isPlus ? "-1" : ""
-                        }.svg`}
-                      />
-                    </Box>
+                    <CategoryIcon
+                      size="39px"
+                      url={`/_nxt/img/categories/icone_${c}${
+                        isPlus ? "-1" : ""
+                      }.svg`}
+                    />
                   ))}
                 </HStack>
               </Flex>

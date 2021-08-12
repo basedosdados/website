@@ -31,16 +31,11 @@ import { getPopularDatasets, getRecentDatasets } from "./api/datasets";
 import { getStrapiPages } from "./api/strapi";
 import { ShadowBox } from "../components/atoms/ShadowBox";
 import { Tag } from "../components/atoms/Tag";
+import { MainPageTemplate } from "../components/templates/main";
+import { withStrapiPages } from "../hooks/strapi.hook";
 
 export async function getStaticProps(context) {
-  let { data: strapiPages } = await getStrapiPages();
-
-  return {
-    props: {
-      strapiPages,
-    },
-    revalidate: 60, //TODO: Increase this timer
-  };
+  return await withStrapiPages();
 }
 
 function HeroText({ children, iconUrl }) {
@@ -218,20 +213,20 @@ function CatalogNews() {
   return (
     <VStack
       width="100%"
-      padding="60px 0px"
+      padding="60px 00px"
       alignItems="flex-start"
       backgroundColor="#FAFAFA"
       spacing={5}
       paddingBottom="160px"
     >
-      <BigTitle marginBottom="0px" alignSelf="center">
+      <BigTitle textAlign="center" marginBottom="0px" alignSelf="center">
         Novidades no catálogo de dados
       </BigTitle>
       <CardCatalog
         sections={{
           populares: (popularDatasets.data || []).map((d) => (
             <DatabaseCard
-              link={`/dataset/${d.name}`}
+              link={`/_nxt/dataset/${d.name}`}
               name={d.title}
               organization={d.organization.title}
               tags={d.tags.map((g) => g.name)}
@@ -260,7 +255,7 @@ function CatalogNews() {
         sections={{
           recentes: (recentDatasets.data || []).map((d) => (
             <DatabaseCard
-              link={`/dataset/${d.name}`}
+              link={`/_nxt/dataset/${d.name}`}
               name={d.title}
               organization={d.organization.title}
               tags={d.tags.map((g) => g.name)}
@@ -478,7 +473,7 @@ function Support() {
     );
   }
   return (
-    <VStack paddingTop="60px" width="95%" paddingBottom="100px">
+    <VStack paddingTop="60px" width="95%">
       <BigTitle width="90%" textAlign="center" paddingBottom="60px">
         Existimos através do esforço de pessoas que acreditam no acesso a dados
         abertos de qualidade.
@@ -525,34 +520,36 @@ function Support() {
 
 export default function Home({ strapiPages }) {
   return (
-    <>
-      <SiteHead />
-      <Menu strapiPages={strapiPages} />
+    <MainPageTemplate strapiPages={strapiPages}>
       <VStack
         alignItems="center"
         width="100%"
         backgroundColor="#FAFAFA"
         padding="0px 5%"
-        paddingTop="170px"
+        marginTop="30px"
       >
         <Hero />
-        <CatalogNews />
-        <VStack spacing={20} transform="translateY(-100px)" width="100%">
-          <BigTitle textAlign="center" maxWidth="70%" paddingBottom="20px">
-            Mais do que organizar dados, nós reinventamos a forma de trabalhar
-            com eles
-          </BigTitle>
-          <ExploreInYourFavoriteLanguage />
-          <LearnToAnalysis />
-          <JoinTheCommunity />
-          <Support />
-        </VStack>
       </VStack>
-      <Footer />
+      <CatalogNews />
+      <VStack
+        spacing={20}
+        transform="translateY(-100px)"
+        width="90%"
+        margin="auto"
+      >
+        <BigTitle textAlign="center" maxWidth="70%" paddingBottom="20px">
+          Mais do que organizar dados, nós reinventamos a forma de trabalhar com
+          eles
+        </BigTitle>
+        <ExploreInYourFavoriteLanguage />
+        <LearnToAnalysis />
+        <JoinTheCommunity />
+        <Support />
+      </VStack>
       <script
         src="/_nxt/vendor/terminal.js"
         data-termynal-container="#termynal"
       ></script>
-    </>
+    </MainPageTemplate>
   );
 }
