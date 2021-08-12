@@ -1,6 +1,6 @@
 import ast
 import os
-from ckanapi.errors import ValidationError
+from ckanapi.errors import ValidationError, NotFound
 from ckanapi import RemoteCKAN
 from functools import lru_cache
 import re
@@ -17,8 +17,22 @@ class Migrate:
 
     @property
     @lru_cache(maxsize=None)
-    def ckan_api(self):
+    def ckan_api_staging(self):
+        user_agent = None
+        CKAN_API_KEY = "put_your_key"
+        CKAN_URL = os.environ.get("CKAN_URL", "https://staging.basedosdados.org")
 
+        return RemoteCKAN(CKAN_URL, user_agent=user_agent, apikey=CKAN_API_KEY)
+
+    def update_staging(self):
+        try:
+            self.ckan_api_staging.action.package_update(**self.package_dict)
+        except NotFound as e:
+            print(e)
+
+    @property
+    @lru_cache(maxsize=None)
+    def ckan_api(self):
         # if not os.environ.get('CKAN_API_KEY'):
         #     print("You need to export environment variable `CKAN_API_KEY`. PLease generate an api key from this page: http://localhost:5000/user/dev/api-tokens")
         #     exit(1)
@@ -32,16 +46,24 @@ class Migrate:
         return RemoteCKAN(CKAN_URL, user_agent=user_agent, apikey=CKAN_API_KEY)
 
     def validate(self):
-
         try:
             return self.ckan_api.action.package_validate(**self.package_dict)
         except ValidationError as e:
             return e.error_dict["message"]
 
+    def update(self):
+        try:
+            self.ckan_api.action.package_update(**self.package_dict)
+        except NotFound as e:
+            print(e)
+
+    def show(self):
+        self.ckan_api.action.package_show(id=self.package_dict["id"])
+
     def _update_frequency(self, resource_dict):
         # map update_frequency values
         update_frequency_mapping = {
-            "outro": None,
+            "outro": "other",
             "-": None,
             "vazio": None,
             "empty": None,
@@ -196,7 +218,7 @@ class Migrate:
             "municipio": "municipality",
             "pessoa": "person",
             "outro": None,
-            "ataque": None,
+            "ataque": "attack",
             "pais": "country",
             "estado": "state",
             "livro": "book",
@@ -211,7 +233,7 @@ class Migrate:
             "enchente": "disaster",
             "desastre": "disaster",
             "embarcacao": "ship",
-            "pixel": None,
+            "pixel": "pixel",
             "transacao": "transaction",
             "empresa": "company",
             "lei": "law",
@@ -233,31 +255,31 @@ class Migrate:
             "proposicao": "law",
             "pais, estado": None,
             "ato": "act",
-            "tribunal": None,
-            "delegacia de policia": None,
+            "tribunal": "court",
+            "delegacia de policia": "police_station",
             "distrito": "district",
             "foto": "photo",
             "objeto": None,
             "concerto_show": "concert",
             "imovel": "property",
-            "deputado(a), entidade": None,
+            "deputado(a), entidade": "person",
             "presidio": "prison",
-            "unidade de conservacao": None,
+            "unidade de conservacao": "protected_area",
             "escola": "school",
             "1 mes": None,
             "raca": "race",
             "sexo": "sex",
             "dia": None,
-            "publicacao": None,
+            "publicacao": "article",
             "vazio": None,
             "periodico_revista": "journal",
             "instituicao": None,
             "regiao": "region",
-            "alerta": None,
+            "alerta": "alert",
             "sentenca": None,
-            "guerra": None,
+            "guerra": "war",
             "estacao": "station",
-            "convenio": None,
+            "convenio": "grant",
             "-": None,
             "musica, album, banda": None,
             "bolsa": "scholarship",
@@ -266,18 +288,18 @@ class Migrate:
             "dominio": "domain",
             "organizacao": None,
             "empresa, pais": "company",
-            "doacao": None,
-            "musica": None,
-            "aldeia": None,
-            "iceberg": None,
+            "doacao": "donation",
+            "musica": "song",
+            "aldeia": "village",
+            "iceberg": "iceberg",
             "contrato": "contract",
             "evento, deputado(a)": None,
             "professor": "person",
             "discurso": "speech",
             "mes": None,
-            "idade": None,
+            "idade": "age",
             "evento": None,
-            "terreno": None,
+            "terreno": "terrain",
             "tratado": "agreement",
             "museu": "museum",
             "obito": "death",
@@ -285,53 +307,53 @@ class Migrate:
             "passageiro(a)": "person",
             "estabelecimento": None,
             "federal": None,
-            "loja": None,
-            "documento": None,
-            "auditoria": None,
-            "agency": None,
+            "loja": "store",
+            "documento": "document",
+            "auditoria": "audit",
+            "agency": "agency",
             "planta": "plant",
             "caso": None,
-            "typo": None,
+            "typo": "typo",
             "eleicao": "election",
             "patente": "patent",
-            "mudanca territorial": None,
-            "item": None,
-            "exportador": None,
-            "importador": None,
-            "genero": None,
+            "mudanca territorial": "territorial_change",
+            "item": "item",
+            "exportador": "company",
+            "importador": "company",
+            "genero": "sex",
             "terremoto": "disaster",
-            "banda": None,
+            "banda": "band",
             "morte": "death",
-            "sancao": None,
+            "sancao": "sanction",
             "ano": None,
-            "igreja": None,
-            "pagina": None,
+            "igreja": "church",
+            "pagina": "page",
             "aluno": "person",
             "politico": "person",
             "navio": "ship",
             "soldado(a)": "person",
-            "assembleia legislativa": None,
+            "assembleia legislativa": "legislature",
             "deputado(a)": "person",
-            "industria": None,
-            "senador(a)": None,
+            "industria": "sector",
+            "senador(a)": "person",
             "materia": "law",
-            "gasto": None,
+            "gasto": "expenditure",
             "unidade de gestao": None,
             "grupo": None,
-            "jogador": None,
-            "jogo": None,
+            "jogador": "person",
+            "jogo": "match",
             "tecnologia": None,
-            "obra": None,
+            "obra": "construction",
             "pedido": "request",
             "juiz": "person",
-            "serventia": None,
+            "serventia": "court",
             "projeto": None,
-            "emenda": None,
+            "emenda": "amendment",
             "citacao": "citation",
-            "medicamento": None,
+            "medicamento": "drug",
             "propriedade": "property",
-            "frente parlamentar": None,
-            "voto": None,
+            "frente parlamentar": "caucus",
+            "voto": "vote",
             "filme": "movie",
             "ator(a)": "person",
             "diretor(a)": "person",
@@ -531,9 +553,9 @@ class Migrate:
     def migrate_package_extras(self, package_dict):
 
         # Remove download type from package_dict
-        package_dict.pop("download_type", None)
-        package_dict.pop("license_url", None)
 
+        package_dict.pop("license_url", None)
+        package_dict.pop("download_type", None)
         extras = package_dict.pop("extras")
 
         if extras:
