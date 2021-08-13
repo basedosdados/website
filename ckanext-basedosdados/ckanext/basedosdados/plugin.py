@@ -41,11 +41,10 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
         All dataset arguments are stored in a dict in the package_extras table called dataset_args.
         This is the case b/c CKAN only accepts string values for extras. In that way, we know that
         we always have to unpack a dict that is saved as a string in the extras field.
-        """
 
         # 1. It unpacks the dataset_args from the extras
         # 2. Converts the dataset_args from string to dict
-        if isinstance(data_dict.get("extras"), list):
+        if isinstance(data_dict["extras"], list):
 
             if any(["dataset_args" == i["key"] for i in data_dict["extras"]]):
 
@@ -86,10 +85,7 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
                 "value": {k: data_dict.get(k, None) for k in dataset_args.keys()},
             }
         ]
-        
-        if not len(data_dict["extras"][0]["value"]):
-            del data_dict["extras"]
-        
+        """
         return data_dict
 
     def _validate_show(self, data_dict):
@@ -108,12 +104,6 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
     def _validate_create(self, data_dict, action="package_create"):
         try:
             out = self._validate_pydantic(data_dict, action)
-            if out.get("extras"):
-                for d in out.get("extras"):
-                    if d["key"] == "dataset_args":
-                        d["value"] = str(d["value"])
-
-                        break
             # out['extras'] = [{'key':k, 'value':v} for k, v in out['extras'].items()]
             return out, []
         except ValidationError as ee:

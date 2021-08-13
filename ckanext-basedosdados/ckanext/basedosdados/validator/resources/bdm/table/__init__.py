@@ -53,6 +53,7 @@ class BdmTable(_CkanDefaultResource):
     ):  # TODO: check why this is not working, as it is still failing when we pass a ''. Had to add '' to type signature
         if value == "":
             return None
+        return value
 
     # TODO: impleboont this
     def table_id_should_be_a_valid_bigquery_identifier(cls, value):

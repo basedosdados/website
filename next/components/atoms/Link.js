@@ -4,7 +4,7 @@ export default function Link({
   children,
   href,
   target,
-  color = "#252A32",
+  color = "black",
   fontWeigth = "700",
   ...props
 }) {

@@ -26,7 +26,7 @@ AnyResource = Annotated[Union[ExternalLink, BdmTable], Field(discriminator="reso
 coerce_to_unicode = lambda field: validator("field", allow_reuse=True)()
 
 ### Do not use extra while creating new models
-class _CkanDefaults(BaseModel):#, extra=Extra.forbid):
+class _CkanDefaults(BaseModel, extra=Extra.forbid):
     id: IdType
     name: Str
 

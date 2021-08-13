@@ -21,6 +21,7 @@ export default function CardCatalog({ sections, containerStyle }) {
             fontFamily="Ubuntu"
             letterSpacing="0.1em"
             padding="10px 15px"
+            marginLeft="6%"
           >
             + {key}
           </Heading>
@@ -30,7 +31,7 @@ export default function CardCatalog({ sections, containerStyle }) {
             width="100%"
             spacing={5}
             paddingBottom="10px"
-            paddingLeft="5px"
+            paddingLeft="6%"
           >
             {sections[key]}
           </HStack>

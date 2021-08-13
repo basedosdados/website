@@ -48,7 +48,7 @@ function DesktopLinks({ links }) {
       display={{ base: "none", md: "flex" }}
       position={{ base: "relative", md: "initial" }}
     >
-      <HStack width="100%" flex="3" spacing={10}>
+      <HStack width="100%" flex="3" spacing={7}>
         {Object.entries(links).map(([k, v]) =>
           k === "Apoie" ? (
             <a href={v} target="_blank">
@@ -130,7 +130,7 @@ export default function Menu({ strapiPages = [] }) {
         width="100%"
         left="0px"
         backgroundColor="#FAFAFA"
-        padding="15px 60px"
+        padding="15px 30px"
         zIndex="10000000"
         transition="0.2s"
         as="nav"
@@ -150,14 +150,14 @@ export default function Menu({ strapiPages = [] }) {
                 position: "fixed",
                 left: 30,
                 top: 27,
-                color: "white",
+                color: "black",
               }}
               icon={faBars}
             />
           </Box>
           <Link href="/_nxt/">
             <Box
-              transform={{ base: "translateX(-27%)" }}
+              transform={{ base: "translateX(-20%)", lg: "translateX(0%)" }}
               width={{ base: "120px", lg: "105px" }}
               height="50px"
               position="relative"
