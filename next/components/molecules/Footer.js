@@ -48,12 +48,12 @@ export default function Footer() {
       <VStack width="100%" padding={10} spacing={10} backgroundColor="#34A15A">
         <Stack
           alignItems="flex-start"
-          width="100%"
+          width={{ base: "100%", lg: "80%" }}
           justifyContent="space-between"
           direction={{ base: "column", lg: "row" }}
-          spacing={{ base: 10, lg: 0 }}
+          spacing={{ base: 10, lg: 20 }}
         >
-          <Box minWidth="200px" height="200px" position="relative">
+          <Box minWidth="250px" height="250px" position="relative">
             <Image
               priority
               objectFit="contain"
@@ -65,7 +65,7 @@ export default function Footer() {
             direction={{ base: "column", lg: "row" }}
             paddingBottom="100px"
             justifyContent="space-around"
-            width="70%"
+            width="100%"
             alignItems="flex-start"
             marginLeft="auto"
             spacing={{ base: 10, lg: 0 }}

@@ -62,11 +62,15 @@ export default function DatabaseCard({
       ]}
       spacing={0}
     >
-      <Title marginBottom="15px">{name}</Title>
+      <Title minHeight="60px" marginBottom="15px">
+        {name}
+      </Title>
       <Subtitle>{organization}</Subtitle>
       <HStack width="100%" overflowX="none" paddingTop="15px">
         {tags.slice(0, tags.length > 3 ? 3 : tags.length).map((t) => (
-          <Tag>{t}</Tag>
+          <Tag fontWeight="bold" borderRadius="5px">
+            {t}
+          </Tag>
         ))}
       </HStack>
       <HStack marginTop="auto">

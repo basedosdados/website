@@ -21,7 +21,6 @@ import ControlledInput, {
   DebouncedControlledInput,
 } from "../components/atoms/ControlledInput";
 import { Database } from "../components/organisms/Database";
-import _ from "lodash";
 import { SelectFilterAccordion } from "../components/atoms/FilterAccordion";
 import { getOrganizationList } from "./api/organizations";
 import { getGroupList } from "./api/groups";
@@ -51,10 +50,9 @@ export default function SearchPage({
   tags,
 }) {
   const { query } = useRouter();
-  const searchQuery = decodeURI(query.q || "");
   const orderQuery = decodeURI(query.order_by || "score desc");
   const [order, setOrder] = useState(orderQuery);
-  const [search, setSearch] = useState(searchQuery);
+  const [search, setSearch] = useState("");
   const [paramFilters, setParamFilters] = useState({});
   const { data, isLoading } = useQuery(
     ["datasets", search, order, paramFilters],
@@ -62,8 +60,9 @@ export default function SearchPage({
   );
 
   useEffect(() => {
-    setSearch(query.q);
-  }, [query]);
+    setSearch(decodeURI(query.q || ""));
+    if (query.tag) setParamFilters({ ...paramFilters, tags: [query.tag] });
+  }, [query.q, query.tag]);
 
   return (
     <MainPageTemplate strapiPages={strapiPages}>
@@ -114,6 +113,7 @@ export default function SearchPage({
             valueField="name"
             displayField="display_name"
             fieldName="Tags"
+            values={paramFilters.tags}
             onChange={(values) =>
               setParamFilters({ ...paramFilters, tags: values })
             }

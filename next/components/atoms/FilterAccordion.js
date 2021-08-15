@@ -47,7 +47,7 @@ export function SelectFilterAccordion({
 }) {
   return (
     <FilterAccordion fieldName={fieldName}>
-      <CheckboxGroup onChange={(val) => onChange(val)} value={values}>
+      <CheckboxGroup onChange={(val) => onChange(val)} defaultValue={values}>
         <VStack alignItems="flex-start">
           {choices.map((c) => (
             <Checkbox value={c[valueField]}>{c[displayField]}</Checkbox>

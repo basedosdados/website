@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Image } from "@chakra-ui/react";
 
 export function CategoryIcon({ url, active, size = "50px", ...style }) {
   return (
