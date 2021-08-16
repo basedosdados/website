@@ -72,7 +72,7 @@ export default function DatabaseCard({
       <Link href={`/_nxt/search?organization=${organization}`}>
         <Subtitle>{organization}</Subtitle>
       </Link>
-      <HStack width="100%" overflowX="none" paddingTop="15px">
+      <HStack width="100%" overflowX="auto" paddingTop="15px">
         {tags.slice(0, tags.length > 3 ? 3 : tags.length).map((t) => (
           <ThemeTag name={t} />
         ))}

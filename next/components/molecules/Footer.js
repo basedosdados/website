@@ -83,7 +83,20 @@ export default function Footer() {
               </Link>
             </LinkVStack>
             <LinkVStack title="CONTEÚDO">
-              <Link color="white">Blog</Link>
+              <Link
+                href="https://basedosdados.hubspotpagebuilder.com/assine-a-newsletter-da-base-dos-dados"
+                color="white"
+                target="_blank"
+              >
+                Assine a newsletter
+              </Link>
+              <Link
+                href="https://dev.to/basedosdados"
+                color="white"
+                target="_blank"
+              >
+                Blog
+              </Link>
               <Link
                 color="white"
                 href="https://www.youtube.com/c/BasedosDados/videos"
@@ -108,6 +121,20 @@ export default function Footer() {
                 title="Github"
                 src="/_nxt/img/social/github.png"
               />
+              <Link
+                color="white"
+                target="_blank"
+                href="https://chat.whatsapp.com/HXWgdFc1RmwCoblly5KPBZ"
+              >
+                WhatsApp
+              </Link>
+              <Link
+                color="white"
+                target="_blank"
+                href="https://t.me/joinchat/OKWc3RnClXnq2hq-8o0h_w"
+              >
+                Telegram
+              </Link>
             </LinkVStack>
             <LinkVStack title="INSTITUCIONAL">
               <Link color="white" href="/about">

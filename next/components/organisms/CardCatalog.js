@@ -26,7 +26,7 @@ export default function CardCatalog({ sections, containerStyle }) {
             + {key}
           </Heading>
           <HStack
-            overflowY="scroll"
+            overflowY="none"
             alignItems="flex-start"
             width="100%"
             spacing={5}

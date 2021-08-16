@@ -10,6 +10,7 @@ export function ThemeTag({ name }) {
         minWidth="40px"
         backgroundColor="#DEDFE0"
         color="#252A32"
+        whiteSpace="nowrap"
       >
         {name}
       </Tag>
