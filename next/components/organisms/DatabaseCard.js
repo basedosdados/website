@@ -7,6 +7,7 @@ import { Tag } from "../atoms/Tag";
 import { CategoryIcon } from "../atoms/CategoryIcon";
 import { Dot } from "../atoms/Dot";
 import Link from "../atoms/Link";
+import { ThemeTag } from "../atoms/ThemeTag";
 
 export default function DatabaseCard({
   name,
