@@ -8,6 +8,7 @@ import {
   CircularProgress,
   Center,
   Select,
+  AbsoluteCenter,
 } from "@chakra-ui/react";
 import SectionTitle from "../components/atoms/SectionTitle";
 import SiteHead from "../components/atoms/SiteHead";
@@ -54,6 +55,7 @@ export default function SearchPage({
   const [order, setOrder] = useState(orderQuery);
   const [search, setSearch] = useState("");
   const [paramFilters, setParamFilters] = useState({});
+  const [filterKey, setFilterKey] = useState(0);
   const { data, isLoading } = useQuery(
     ["datasets", search, order, paramFilters],
     () => searchDatasets({ search, sort: order, paramFilters })
@@ -61,8 +63,15 @@ export default function SearchPage({
 
   useEffect(() => {
     setSearch(decodeURI(query.q || ""));
-    if (query.tag) setParamFilters({ ...paramFilters, tags: [query.tag] });
-  }, [query.q, query.tag]);
+    setParamFilters({
+      ...paramFilters,
+      tags: query.tag ? [query.tag] : [],
+      organizations: query.organization ? [query.organization] : [],
+      groups: query.group ? [query.group] : [],
+    });
+
+    setFilterKey(filterKey + 1);
+  }, [query.tag, query.organization, query.group]);
 
   return (
     <MainPageTemplate strapiPages={strapiPages}>
@@ -78,6 +87,7 @@ export default function SearchPage({
           alignItems="flex-start"
           minWidth="300px"
           maxWidth="300px"
+          key={filterKey}
         >
           <SectionTitle
             fontSize="16px"
@@ -92,6 +102,7 @@ export default function SearchPage({
           </SectionTitle>
           <SelectFilterAccordion
             choices={organizations}
+            values={paramFilters.organizations}
             valueField="name"
             displayField="display_name"
             fieldName="Organização"
@@ -101,6 +112,7 @@ export default function SearchPage({
           />
           <SelectFilterAccordion
             choices={groups}
+            values={paramFilters.groups}
             valueField="name"
             displayField="display_name"
             fieldName="Temas"
@@ -221,12 +233,7 @@ export default function SearchPage({
                       updatedAuthor="Ricardo Dahis"
                       categories={d.groups.map((g) => g.name)}
                       categoriesDisplay={d.groups.map((g) => g.display_name)}
-                      spatialCoverage={
-                        d.resources.filter((r) => r.spatial_coverage).length > 0
-                          ? d.resources.filter((r) => r.spatial_coverage)[0]
-                              .spatial_coverage
-                          : null
-                      }
+                      spatialCoverage={null}
                       updateFrequency={
                         d.resources.filter((r) => r.update_frequency).length > 0
                           ? d.resources.filter((r) => r.update_frequency)[0]

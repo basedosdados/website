@@ -6,6 +6,7 @@ import Subtitle from "../atoms/Subtitle";
 import { Tag } from "../atoms/Tag";
 import { CategoryIcon } from "../atoms/CategoryIcon";
 import { Dot } from "../atoms/Dot";
+import Link from "../atoms/Link";
 
 export default function DatabaseCard({
   name,
@@ -44,10 +45,12 @@ export default function DatabaseCard({
       link={link}
       icons={[
         ...categories.map((c) => (
-          <CategoryIcon
-            size="47px"
-            url={`/_nxt/img/categories/icone_${c}${isPlus ? "-1" : ""}.svg`}
-          />
+          <Link href={`/_nxt/search?group=${c}`}>
+            <CategoryIcon
+              size="47px"
+              url={`/_nxt/img/categories/icone_${c}${isPlus ? "-1" : ""}.svg`}
+            />
+          </Link>
         )),
         ...(isPlus
           ? [
@@ -65,12 +68,12 @@ export default function DatabaseCard({
       <Title minHeight="60px" marginBottom="15px">
         {name}
       </Title>
-      <Subtitle>{organization}</Subtitle>
+      <Link href={`/_nxt/search?organization=${organization}`}>
+        <Subtitle>{organization}</Subtitle>
+      </Link>
       <HStack width="100%" overflowX="none" paddingTop="15px">
         {tags.slice(0, tags.length > 3 ? 3 : tags.length).map((t) => (
-          <Tag fontWeight="bold" borderRadius="5px">
-            {t}
-          </Tag>
+          <ThemeTag name={t} />
         ))}
       </HStack>
       <HStack marginTop="auto">

@@ -33,6 +33,7 @@ import { ShadowBox } from "../components/atoms/ShadowBox";
 import { Tag } from "../components/atoms/Tag";
 import { MainPageTemplate } from "../components/templates/main";
 import { withStrapiPages } from "../hooks/strapi.hook";
+import { ThemeTag } from "../components/atoms/ThemeTag";
 
 export async function getStaticProps(context) {
   return await withStrapiPages();
@@ -54,19 +55,6 @@ function Hero() {
 
   function openSearchLink() {
     return window.open(`/_nxt/search?q=${search}`, "_self");
-  }
-
-  function HeroTag({ children }) {
-    return (
-      <Tag
-        padding="5px 10px"
-        minWidth="40px"
-        backgroundColor="#DEDFE0"
-        color="#252A32"
-      >
-        {children}
-      </Tag>
-    );
   }
 
   return (
@@ -149,9 +137,9 @@ function Hero() {
               />
               <HStack paddingLeft="45px">
                 <SectionText fontSize="14px">Termos populares: </SectionText>
-                <HeroTag>lei</HeroTag>
-                <HeroTag>mortalidade</HeroTag>
-                <HeroTag>covid</HeroTag>
+                <ThemeTag name="lei" />
+                <ThemeTag name="mortalidade" />
+                <ThemeTag name="covid" />
               </HStack>
             </VStack>
           </Stack>
