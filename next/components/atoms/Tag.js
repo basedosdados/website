@@ -12,6 +12,9 @@ export function Tag({ children, fontWeight, ...style }) {
       <Heading
         fontWeight="400"
         fontSize="12px"
+        _hover={{
+          textDecoration: "underline",
+        }}
         fontFamily="Ubuntu"
         letterSpacing="0.1em"
         fontWeight={fontWeight}

@@ -13,6 +13,7 @@ export default function DatabaseCard({
   name,
   categories = [],
   organization,
+  organizationSlug,
   tags,
   size,
   tableNum,
@@ -43,7 +44,6 @@ export default function DatabaseCard({
 
   return (
     <Card
-      link={link}
       icons={[
         ...categories.map((c) => (
           <Link href={`/_nxt/search?group=${c}`}>
@@ -66,13 +66,20 @@ export default function DatabaseCard({
       ]}
       spacing={0}
     >
-      <Title minHeight="60px" marginBottom="15px">
-        {name}
-      </Title>
-      <Link href={`/_nxt/search?organization=${organization}`}>
+      <Link href={link}>
+        <Title minHeight="60px" marginBottom="15px">
+          {name}
+        </Title>
+      </Link>
+      <Link href={`/_nxt/search?organization=${organizationSlug}`}>
         <Subtitle>{organization}</Subtitle>
       </Link>
-      <HStack width="100%" overflowX="auto" paddingTop="15px">
+      <HStack
+        width="100%"
+        overflowX="auto"
+        className="no-scrollbar"
+        paddingTop="15px"
+      >
         {tags.slice(0, tags.length > 3 ? 3 : tags.length).map((t) => (
           <ThemeTag name={t} />
         ))}

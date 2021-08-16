@@ -182,6 +182,7 @@ function Hero() {
         borderRadius="1000px"
         width="50px"
         height="50px"
+        zIndex="1"
       >
         <Box width="20px" height="20px" position="relative">
           <Image
@@ -209,6 +210,7 @@ function CatalogNews() {
       spacing={5}
       paddingTop="150px"
       paddingBottom="160px"
+      position="relative"
     >
       <BigTitle textAlign="center" marginBottom="0px" alignSelf="center">
         Novidades no catálogo de dados
@@ -220,6 +222,7 @@ function CatalogNews() {
               link={`/_nxt/dataset/${d.name}`}
               name={d.title}
               organization={d.organization.title}
+              organizationSlug={d.organization.name}
               tags={d.tags.map((g) => g.name)}
               size={
                 d.resources.filter((r) => r.size).length > 0
@@ -242,6 +245,21 @@ function CatalogNews() {
           )),
         }}
       />
+      <Box
+        position="absolute"
+        right="0px"
+        top="44%"
+        minWidth="850px"
+        minHeight="568px"
+        zIndex="0px"
+      >
+        <Image
+          priority
+          src="/_nxt/img/home_background.png"
+          layout="fill"
+          objectFit="contain"
+        />
+      </Box>
       <CardCatalog
         sections={{
           recentes: (recentDatasets.data || []).map((d) => (
@@ -342,6 +360,7 @@ function LearnToAnalysis() {
         minHeight={{ base: "300px", lg: null }}
         alignItems="flex-start"
         justifyContent="flex-start"
+        zIndex="1"
       >
         <Image
           priority
@@ -356,11 +375,33 @@ function LearnToAnalysis() {
         spacing={5}
         alignItems="flex-start"
         flex="1"
+        position="relative"
       >
-        <Title maxWidth="100%" fontSize="30px" letterSpacing="0.1em">
+        <Box
+          position="absolute"
+          right="0px"
+          top="-50%"
+          minWidth="850px"
+          minHeight="568px"
+          zIndex="0px"
+        >
+          <Image
+            priority
+            src="/_nxt/img/home_background.png"
+            layout="fill"
+            objectFit="contain"
+          />
+        </Box>
+        <Title
+          zIndex="1"
+          position="relative"
+          maxWidth="100%"
+          fontSize="30px"
+          letterSpacing="0.1em"
+        >
           Aprenda a construir análises com os dados
         </Title>
-        <VStack>
+        <VStack zIndex="1" position="relative">
           <SectionText textAlign="justify">
             Produzimos tutoriais e ensaios no blog, workshops no Youtube e
             análises nas redes sociais com nossos dados. Disponibilizamos os
@@ -377,8 +418,23 @@ function LearnToAnalysis() {
             >
               Youtube {">"} {">"}
             </Link>
-            <Link paddingTop="20px" color="skyblue" textDecoration="underline">
+            <Link
+              href="https://dev.to/basedosdados"
+              target="_blank"
+              paddingTop="20px"
+              color="skyblue"
+              textDecoration="underline"
+            >
               Blog {">"} {">"}
+            </Link>
+            <Link
+              href="https://github.com/basedosdados"
+              target="_blank"
+              paddingTop="20px"
+              color="skyblue"
+              textDecoration="underline"
+            >
+              Github {">"} {">"}
             </Link>
           </HStack>
         </VStack>
@@ -416,7 +472,8 @@ function JoinTheCommunity() {
           color="skyblue"
           textDecoration="underline"
         >
-          Discord {">"} {">"}
+          Discord{">"}
+          {">"}
         </Link>
       </VStack>
       <Box
@@ -464,11 +521,26 @@ function Support() {
     );
   }
   return (
-    <VStack paddingTop="60px" width="95%">
+    <VStack position="relative" paddingTop="60px" width="95%">
       <BigTitle width="90%" textAlign="center" paddingBottom="60px">
         Existimos através do esforço de pessoas que acreditam no acesso a dados
         abertos de qualidade.
       </BigTitle>
+      <Box
+        position="absolute"
+        right="0px"
+        top="30%"
+        minWidth="850px"
+        minHeight="568px"
+        zIndex="0px"
+      >
+        <Image
+          priority
+          src="/_nxt/img/home_background.png"
+          layout="fill"
+          objectFit="contain"
+        />
+      </Box>
       <Stack
         width="100%"
         justifyContent="space-around"

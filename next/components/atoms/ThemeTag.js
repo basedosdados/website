@@ -2,7 +2,10 @@ import { Tag } from "./Tag";
 
 export function ThemeTag({ name }) {
   return (
-    <a href={`/_nxt/search?tag=${name}`}>
+    <a
+      _hover={{ textDecoration: "underline !important" }}
+      href={`/_nxt/search?tag=${name}`}
+    >
       <Tag
         position="relative"
         zIndex="10"

@@ -66,7 +66,7 @@ export default function SearchPage({
     setParamFilters({
       ...paramFilters,
       tags: query.tag ? [query.tag] : [],
-      organizations: query.organization ? [query.organization] : [],
+      organization: query.organization ? [query.organization] : [],
       groups: query.group ? [query.group] : [],
     });
 
@@ -102,7 +102,7 @@ export default function SearchPage({
           </SectionTitle>
           <SelectFilterAccordion
             choices={organizations}
-            values={paramFilters.organizations}
+            values={paramFilters.organization}
             valueField="name"
             displayField="display_name"
             fieldName="Organização"
