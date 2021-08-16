@@ -267,6 +267,7 @@ function CatalogNews() {
               link={`/_nxt/dataset/${d.name}`}
               name={d.title}
               organization={d.organization.title}
+              organizationSlug={d.organization.name}
               tags={d.tags.map((g) => g.name)}
               size={
                 d.resources.filter((r) => r.size).length > 0
