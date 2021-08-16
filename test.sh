@@ -22,11 +22,11 @@ TEST_URLS='
     about
     dataset/?download_type=BD+Mais
     dataset/?q=futebol
-    dataset/br-sp-gov-ssp
-    dataset/activity/br-sp-gov-ssp
-    dataset/changes/f0f49216-9eab-48a4-bd39-62b6b8fdc75d
-    dataset/br-sp-gov-ssp/resource/bf77c64a-124d-4620-991e-456819d0c7a6
-    dataset/br-sp-gov-ssp/resource/c9e2846a-c47a-49cf-bf3a-ab94969baa08
+    dataset/br-geobr-mapas
+    dataset/activity/br-geobr-mapas
+    dataset/changes/aeb5306e-3a04-485d-9f74-bc1823412418
+    dataset/br-geobr-mapas/resource/8a8b6cf2-ad8d-43f0-bb1f-278a28ee8abb
+    dataset/br-geobr-mapas/resource/d7a86855-86fa-48eb-92ce-8a408ad4b4cf
 '
 
 for path in $TEST_URLS; do
