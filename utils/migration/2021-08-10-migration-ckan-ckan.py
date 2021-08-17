@@ -19,7 +19,7 @@ class Migrate:
     @lru_cache(maxsize=None)
     def ckan_api_staging(self):
         user_agent = None
-        CKAN_API_KEY = "put_your_key"
+        CKAN_API_KEY = "put_api_key"
         CKAN_URL = os.environ.get("CKAN_URL", "https://staging.basedosdados.org")
 
         return RemoteCKAN(CKAN_URL, user_agent=user_agent, apikey=CKAN_API_KEY)

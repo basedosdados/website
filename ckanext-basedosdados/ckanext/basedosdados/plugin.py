@@ -1,14 +1,15 @@
-import collections
-import types
-import json
 import ast
+import collections
+import json
+import logging
+import types
+from time import daylight
 
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.plugins.toolkit import get_action
 from ckanext.basedosdados.validator.packages import Dataset
 from pydantic import ValidationError
-import logging
 
 log = logging.getLogger(__name__)
 
@@ -24,6 +25,50 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
     # IDatasetForm
     is_fallback = lambda s: True
     package_types = lambda s: []
+
+    def validate(self, context, data_dict, schema, action):
+        out, errors = {
+            "package_show": self._validate_show,
+            "package_create": self._validate_create,
+            "package_update": self._validate_update,
+        }[action](data_dict)
+
+        return out, errors
+
+    def _validate_show(self, data_dict):
+        if duplicated_keys := _find_duplicated_keys(data_dict["extras"]):
+            raise ValidationError(
+                {"extras": f"extras contains duplicated keys: {duplicated_keys!r}"}
+            )
+        try:
+            out = self._validate_pydantic(data_dict, "package_show")
+            return out, []
+        except ValidationError as error:
+            # a validation error in show is our fault,
+            # not the user's so raise and cause a 500
+            log.error(">" * 60)
+            log.error(">" * 60)
+            log.error(error)
+            log.error(">" * 60)
+            log.error(data_dict)
+            log.error(">" * 60)
+            log.error(">" * 60)
+            raise
+
+    def _validate_create(self, data_dict, action="package_create"):
+        try:
+            out = self._validate_pydantic(data_dict, action)
+            for d in out.get("extras") or []:
+                if d["key"] == "dataset_args":
+                    d["value"] = str(d["value"])
+                    break
+            return out, []
+        except ValidationError as ee:
+            # need to jsonify to ensure that data types are json friendly
+            return {}, json.loads(ee.json())
+
+    def _validate_update(self, data_dict):
+        return self._validate_create(data_dict, action="package_update")
 
     def _validate_pydantic(self, data_dict, action):
         """
@@ -42,35 +87,29 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
         This is the case b/c CKAN only accepts string values for extras. In that way, we know that
         we always have to unpack a dict that is saved as a string in the extras field.
         """
-        
+
+        # 0. Find dataset_args in extras
+        dataset_args = {}
+        for extra in data_dict.get("extras") or []:
+            if extra.get("key") == "dataset_args":
+                dataset_args = extra["value"]
+                break
+
         # 1. It unpacks the dataset_args from the extras
         # 2. Converts the dataset_args from string to dict
-        if isinstance(data_dict["extras"], list):
+        if isinstance(dataset_args, str):
+            dataset_args = ast.literal_eval(dataset_args)
+        elif not isinstance(dataset_args, dict):
+            raise TypeError(
+                f"dataset_args should be dict or string, but it is {type(dataset_args)}"
+            )
 
-            if any(["dataset_args" == i["key"] for i in data_dict["extras"]]):
+        # 3. Merge it do the data_dict
+        data_model = dict(**data_dict, **dataset_args)
+        data_model.pop("extras", None)
 
-                template_extras = [{"key": "dataset_args", "value": {}}]
-                dataset_args = [
-                    d["value"]
-                    for d in data_dict.pop("extras", template_extras)
-                    if d["key"] == "dataset_args"
-                ][0]
-                if isinstance(dataset_args, str):
-                    dataset_args = ast.literal_eval(dataset_args)
-                if not isinstance(dataset_args, dict):
-                    raise TypeError(
-                        f"dataset_args should be dict or string, but it is {type(dataset_args)}"
-                    )
-            else:
-                dataset_args = {}
-        dataset_args.pop("dataset_args", None)
-
-        # 3. Merges it do the data_dict
-        data_dict = dict(**data_dict, **dataset_args)
-        data_dict.pop("dataset_args", None)
-
-        # 4. Validates the data_dict with pydantic
-        validation = Dataset(**data_dict, action__=action)
+        # 4. Validate the data_dict with pydantic
+        validation = Dataset(**data_model, action__=action)
 
         # exclude unset needed by ckan so it can deal with missing values downstream (during partial updates for instance)
         data_dict = validation.json(exclude={"action__"}, exclude_unset=True)
@@ -78,74 +117,16 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
         # we need to jsonify and de-jsonify so that objects such as datetimes are serialized
         data_dict = json.loads(data_dict)
 
-        # 5. Repacks the dataset_args to extras in order to be used by CKAN, but it keeps the dataset arguments
-        # in the dict to be shown in `package_show`
+        # 5. Repack the dataset_args to extras in order to be used by CKAN,
+        # but it keeps the dataset arguments in the dict to be shown in `package_show`
         data_dict["extras"] = [
             {
                 "key": "dataset_args",
                 "value": {k: data_dict.get(k, None) for k in dataset_args.keys()},
             }
         ]
-        
+
         return data_dict
-
-    def _validate_show(self, data_dict):
-        if duplicated_keys := _find_duplicated_keys(data_dict["extras"]):
-            raise ValidationError(
-                {"extras": f"extras contains duplicated keys: {duplicated_keys!r}"}
-            )
-        try:
-            out = self._validate_pydantic(data_dict, "package_show")
-            return out, []
-        except ValidationError as ee:  # a validation error in show is our fault, not the user's so raise and cause a 500
-            log.error("Data dict:")
-            log.error(data_dict)
-            raise
-
-    def _validate_create(self, data_dict, action="package_create"):
-        try:
-            out = self._validate_pydantic(data_dict, action)
-            # out['extras'] = [{'key':k, 'value':v} for k, v in out['extras'].items()]
-            return out, []
-        except ValidationError as ee:
-            return {}, json.loads(
-                ee.json()
-            )  # need to jsonify to ensure that data types are json friendly
-
-    def _validate_update(self, data_dict):
-
-        # Converts dataset_args from dict to string only if update is the case
-        data_dict, errors = self._validate_create(data_dict, action="package_update")
-        if data_dict.get("extras"):
-            for d in data_dict.get("extras"):
-                if d["key"] == "dataset_args":
-                    d["value"] = str(d["value"])
-
-                    break
-
-        return data_dict, errors
-
-    def validate(self, context, data_dict, schema, action):
-        out, errors = {
-            "package_show": self._validate_show,
-            "package_create": self._validate_create,
-            "package_update": self._validate_update,
-        }[action](data_dict)
-
-        # from ckan.lib.navl.dictization_functions import (
-        #     validate as ckan_validate,
-        # )  # use old ckan schema to validate ckan stuff. Maybe remove this sometime
-
-        # out_2, errors_2 = ckan_validate(out, schema, context=context)
-        # out.update(out_2)
-        # if (
-        #     not errors and errors_2
-        # ):  # if pydantic has no errors, send ckan errors to avoid duplicated msgs... This can be improved if we merge errors correctly
-        #     errors.append(
-        #         {"msg": "ckan-errors", "errors": errors_2}
-        #     )  # merge errors in a dirty way
-        return out, errors
-        # return (out || out_2, errors || errors_2)
 
     # IFacets
     def dataset_facets(self, facet_dict, package_type):
