@@ -59,16 +59,16 @@ to_line = lambda description: "\n".join(description)
 DATASET_ID_FIELD = Field(
     title="Dataset ID",
     yaml_order={
-        "id_after": None,
-        "id_before": "table_id",
+        "id_before": None,
+        "id_after": "table_id",
     },
 )
 
 TABLE_ID_FIELD = Field(
     title="Table ID",
     yaml_order={
-        "id_after": "dataset_id",
-        "id_before": "description",
+        "id_before": "dataset_id",
+        "id_after": "description",
     },
 )
 
@@ -83,8 +83,8 @@ DESCRIPTION_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "table_id",
-        "id_before": "spatial_coverage",
+        "id_before": "table_id",
+        "id_after": "spatial_coverage",
     },
 )
 
@@ -92,8 +92,8 @@ SPATIAL_COVERAGE_FIELD = Field(
     title="Cobertura espacial",
     description=to_line(["A máxima unidade espacial que a tabela cobre."]),
     yaml_order={
-        "id_after": "description",
-        "id_before": "temporal_coverage",
+        "id_before": "description",
+        "id_after": "temporal_coverage",
     },
 )
 
@@ -101,8 +101,8 @@ TEMPORAL_COVERAGE_FIELD = Field(
     title="Cobertura temporal",
     description=to_line(["Anos cobertos pela tabela."]),
     yaml_order={
-        "id_after": "spatial_coverage",
-        "id_before": "update_frequency",
+        "id_before": "spatial_coverage",
+        "id_after": "update_frequency",
     },
 )
 
@@ -111,8 +111,8 @@ UPDATE_FREQUENCY_FIELD = Field(
     user_input_hint=["<unidade temporal>"],
     description=to_line(["A unidade temporal com qual a tabela é atualizada."]),
     yaml_order={
-        "id_after": "temporal_coverage",
-        "id_before": "entity",
+        "id_before": "temporal_coverage",
+        "id_after": "entity",
     },
 )
 
@@ -121,8 +121,8 @@ ENTITY_FIELD = Field(
     description=to_line(["Entidade representada por cada linha."]),
     max_items=10,
     yaml_order={
-        "id_after": "update_frequency",
-        "id_before": "time_unit",
+        "id_before": "update_frequency",
+        "id_after": "time_unit",
     },
 )
 
@@ -130,8 +130,8 @@ TIME_UNIT_FIELD = Field(
     title="Unidade temporal",
     description=to_line(["A unidade temporal representada por cada linha."]),
     yaml_order={
-        "id_after": "entity",
-        "id_before": "identifying_columns",
+        "id_before": "entity",
+        "id_after": "identifying_columns",
     },
 )
 
@@ -146,16 +146,16 @@ IDENTIFYING_COLUMNS_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "time_unit",
-        "id_before": "last_updated",
+        "id_before": "time_unit",
+        "id_after": "last_updated",
     },
 )
 
 LAST_UPDATED_FIELD = Field(
     title="Última atualização",
     yaml_order={
-        "id_after": "identifying_columns",
-        "id_before": "version",
+        "id_before": "identifying_columns",
+        "id_after": "version",
     },
 )
 
@@ -163,8 +163,8 @@ VERSION_FIELD = Field(
     title="Versão",
     user_input_hint=["<vA.B>"],
     yaml_order={
-        "id_after": "last_updated",
-        "id_before": "published_by",
+        "id_before": "last_updated",
+        "id_after": "published_by",
     },
 )
 
@@ -173,8 +173,8 @@ PUBLISHED_BY_FIELD = Field(
     title="Publicado por",
     description=to_line(["Quem está preenchendo esses metadados?"]),
     yaml_order={
-        "id_after": "version",
-        "id_before": "data_cleaned_by",
+        "id_before": "version",
+        "id_after": "data_cleaned_by",
     },
 )
 
@@ -189,8 +189,8 @@ DATA_CLEANED_BY_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "published_by",
-        "id_before": "data_cleaning_description",
+        "id_before": "published_by",
+        "id_after": "data_cleaning_description",
     },
 )
 
@@ -202,8 +202,8 @@ DATA_CLEANING_DESCRIPTION_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "data_cleaned_by",
-        "id_before": "raw_files_url",
+        "id_before": "data_cleaned_by",
+        "id_after": "raw_files_url",
     },
 )
 
@@ -211,8 +211,8 @@ RAW_FILES_URL_FIELD = Field(
     title="Url dos dados originais",
     description=to_line(["Url dos dados originais no GCP Storage."]),
     yaml_order={
-        "id_after": "data_cleaning_description",
-        "id_before": "auxiliary_files_url",
+        "id_before": "data_cleaning_description",
+        "id_after": "auxiliary_files_url",
     },
 )
 
@@ -220,8 +220,8 @@ AUXILIARY_FILES_URL_FIELD = Field(
     title="Url dos arquivos auxiliares",
     description=to_line(["Url dos arquivos auxiliares no GCP Storage."]),
     yaml_order={
-        "id_after": "raw_files_url",
-        "id_before": "architecture_url",
+        "id_before": "raw_files_url",
+        "id_after": "architecture_url",
     },
 )
 
@@ -229,40 +229,40 @@ ARCHITECTURE_URL_FIELD = Field(
     title="Url da tabela de arquitetura",
     description=to_line(["Url da tabela de arquitetura no GCP Storage."]),
     yaml_order={
-        "id_after": "auxiliary_files_url",
-        "id_before": "covered_by_dictionary",
+        "id_before": "auxiliary_files_url",
+        "id_after": "covered_by_dictionary",
     },
 )
 
 COVERED_BY_DICTIONARY_FIELD = Field(
     title="Coberto por dicionário",
     yaml_order={
-        "id_after": "architecture_url",
-        "id_before": "source_bucket_name",
+        "id_before": "architecture_url",
+        "id_after": "source_bucket_name",
     },
 )
 
 SOURCE_BUCKET_NAME_FIELD = Field(
     title="Nome do bucket fonte no GCP",
     yaml_order={
-        "id_after": "covered_by_dictionary",
-        "id_before": "project_id_prod",
+        "id_before": "covered_by_dictionary",
+        "id_after": "project_id_prod",
     },
 )
 
 PROJECT_ID_PROD_FIELD = Field(
     title="Project ID de produção no GCP",
     yaml_order={
-        "id_after": "source_bucket_name",
-        "id_before": "project_id_staging",
+        "id_before": "source_bucket_name",
+        "id_after": "project_id_staging",
     },
 )
 
 PROJECT_ID_STAGING_FIELD = Field(
     title="Project ID de staging no GCP",
     yaml_order={
-        "id_after": "project_id_prod",
-        "id_before": "ckan_url",
+        "id_before": "project_id_prod",
+        "id_after": "partitions",
     },
 )
 
@@ -278,8 +278,8 @@ PARTITIONS_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "github_url",
-        "id_before": "bdm_file_size",
+        "id_before": "github_url",
+        "id_after": "bdm_file_size",
     },
 )
 
@@ -287,8 +287,8 @@ BDM_FILE_SIZE_FIELD = Field(
     title="Tamanho do arquivo na nuvem",
     description=to_line([""]),
     yaml_order={
-        "id_after": "partitions",
-        "id_before": "columns",
+        "id_before": "partitions",
+        "id_after": "columns",
     },
 )
 
@@ -307,8 +307,8 @@ COLUMNS_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "bdm_file_size",
-        "id_before": None,
+        "id_before": "bdm_file_size",
+        "id_after": None,
     },
 )
 
