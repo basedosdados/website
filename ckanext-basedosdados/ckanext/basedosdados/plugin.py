@@ -122,7 +122,7 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
         data_dict["extras"] = [
             {
                 "key": "dataset_args",
-                "value": dataset_args,
+                "value": {k: data_dict.get(k, None) for k in dataset_args.keys()},
             }
         ]
 
