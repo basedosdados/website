@@ -41,7 +41,8 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
         All dataset arguments are stored in a dict in the package_extras table called dataset_args.
         This is the case b/c CKAN only accepts string values for extras. In that way, we know that
         we always have to unpack a dict that is saved as a string in the extras field.
-
+        """
+        
         # 1. It unpacks the dataset_args from the extras
         # 2. Converts the dataset_args from string to dict
         if isinstance(data_dict["extras"], list):
@@ -85,7 +86,7 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
                 "value": {k: data_dict.get(k, None) for k in dataset_args.keys()},
             }
         ]
-        """
+        
         return data_dict
 
     def _validate_show(self, data_dict):
