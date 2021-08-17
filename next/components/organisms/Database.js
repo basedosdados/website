@@ -134,13 +134,13 @@ export function Database({
                   <HStack>
                     <SectionText>Abrangência:</SectionText>
                     <SectionText textTransform="capitalize" fontWeight="bold">
-                      {(spatialCoverage || "Não definido").replace("_", " ")}
+                      {spatialCoverage || "Não definido"}
                     </SectionText>
                   </HStack>
                   <HStack>
                     <SectionText>Periocidade:</SectionText>
                     <SectionText textTransform="capitalize" fontWeight="bold">
-                      {(updateFrequency || "Não definido").replace("_", " ")}
+                      {updateFrequency || "Não definido"}
                     </SectionText>
                   </HStack>
                   <HStack>

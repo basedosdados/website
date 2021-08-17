@@ -4,11 +4,22 @@ cd $(git rev-parse --show-toplevel)
 docker-compose down -t0
 docker-compose up -d db
 
+
+
 FILE=$1
 if [[ ! $FILE ]]; then
-    echo Downloading dump from S3
-    AWS_DEFAULT_REGION=us-east-2 AWS_PROFILE=basedosdados aws s3 ls s3://basedosdados/backup/postgres.dump
-    AWS_DEFAULT_REGION=us-east-2 AWS_PROFILE=basedosdados aws s3 cp s3://basedosdados/backup/postgres.dump /tmp/db-ckan.dump
+    if [[ $STAGING ]]; then
+        echo Downloading dump from staging machine via ssh
+        ssh ec2-user@staging.basedosdados.org '
+            docker-compose exec -T db pg_dump -U ckan --format=custom -d ckan --file=/tmp/postgres.dump
+            docker cp db:/tmp/postgres.dump /tmp/postgres.dump
+        '
+        scp staging.basedosdados.org:/tmp/postgres.dump /tmp/db-ckan.dump
+    else
+        echo Downloading dump from S3
+        AWS_DEFAULT_REGION=us-east-2 AWS_PROFILE=basedosdados aws s3 ls s3://basedosdados/backup/postgres.dump
+        AWS_DEFAULT_REGION=us-east-2 AWS_PROFILE=basedosdados aws s3 cp s3://basedosdados/backup/postgres.dump /tmp/db-ckan.dump
+    fi
     FILE=/tmp/db-ckan.dump
     function cleanup() { rm -f /tmp/db-ckan.dump; }
     trap cleanup EXIT
@@ -39,7 +50,7 @@ docker-compose run --rm ckan bash -xc '
     ckan sysadmin add dev
 '
 
-$DB pg_dump -U ckan --compress=9 --format=plain -d ckan --file=- > ./postgresql/dev_init_data.sql.gz
+$DB pg_dump -U ckan --compress=9 --format=plain -d ckan --file=- > ./stack/postgresql/dev_init_data.sql.gz
 
 echo OK
 

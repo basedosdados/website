@@ -19,7 +19,7 @@ ckan = get_client()
 
 
 def test():
-    ret = requests.get(CKAN_URL + '/api/3/action/package_show?name_or_id=br-sp-gov-ssp')
+    ret = requests.get(CKAN_URL + '/api/3/action/package_show?name_or_id=br-geobr-mapas')
     assert ret.status_code == 200, ret.json()
     package = ret.json()['result']
 

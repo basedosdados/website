@@ -33,6 +33,7 @@ import { ShadowBox } from "../components/atoms/ShadowBox";
 import { Tag } from "../components/atoms/Tag";
 import { MainPageTemplate } from "../components/templates/main";
 import { withStrapiPages } from "../hooks/strapi.hook";
+import { ThemeTag } from "../components/atoms/ThemeTag";
 
 export async function getStaticProps(context) {
   return await withStrapiPages();
@@ -40,8 +41,8 @@ export async function getStaticProps(context) {
 
 function HeroText({ children, iconUrl }) {
   return (
-    <VStack maxWidth="350px" textAlign="center">
-      <Box width="100%" height="140px" marginBottom="10px" position="relative">
+    <VStack maxWidth="400px">
+      <Box width="100%" height="130px" marginBottom="20px" position="relative">
         <Image priority objectFit="contain" layout="fill" src={iconUrl} />
       </Box>
       {children}
@@ -54,19 +55,6 @@ function Hero() {
 
   function openSearchLink() {
     return window.open(`/_nxt/search?q=${search}`, "_self");
-  }
-
-  function HeroTag({ children }) {
-    return (
-      <Tag
-        padding="5px 10px"
-        minWidth="40px"
-        backgroundColor="#DEDFE0"
-        color="#252A32"
-      >
-        {children}
-      </Tag>
-    );
   }
 
   return (
@@ -84,12 +72,13 @@ function Hero() {
             direction={{ base: "column", lg: "row" }}
             alignItems="center"
             spacing={50}
+            marginStart="0px !important"
           >
             <Box
               position="absolute"
               right="0px"
-              top="-50%"
-              minWidth="800px"
+              top="-100%"
+              minWidth="850px"
               minHeight="568px"
             >
               <Image
@@ -105,9 +94,9 @@ function Hero() {
               fontFamily="Lato"
               flex="2"
               fontSize="38px"
+              marginStart="0px !important"
             >
-              Um único lugar para buscar, baixar e acessar os dados que você
-              precisa
+              Um único lugar para buscar e acessar os dados que você precisa
             </BigTitle>
             <VStack
               width={{ base: "100%", lg: "initial" }}
@@ -126,7 +115,8 @@ function Hero() {
                   padding: "40px",
                   borderRadius: "50px",
                   backgroundColor: "#ffffff",
-                  fontSize: "20px",
+                  fontSize: "24px",
+                  border: "0px",
                   boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
                 }}
                 rightIcon={
@@ -147,36 +137,36 @@ function Hero() {
               />
               <HStack paddingLeft="45px">
                 <SectionText fontSize="14px">Termos populares: </SectionText>
-                <HeroTag>lei</HeroTag>
-                <HeroTag>mortalidade</HeroTag>
-                <HeroTag>covid</HeroTag>
+                <ThemeTag name="lei" />
+                <ThemeTag name="mortalidade" />
+                <ThemeTag name="covid" />
               </HStack>
             </VStack>
           </Stack>
           <Stack
-            paddingTop="30px"
+            paddingTop="10px"
             position="relative"
             zIndex="1"
-            justifyContent="space-evenly"
+            justifyContent="space-between"
             alignItems="center"
             width="100%"
             direction={{ base: "column", lg: "row" }}
             spacing={10}
           >
             <HeroText iconUrl="/_nxt/img/icone_busca.png">
-              <SectionText>
+              <SectionText fontSize="14px" textAlign="center">
                 Com o mecanismo de busca é possível descobrir informações sobre
                 mais de 900 bases de dados de diversos temas e organizações.
               </SectionText>
             </HeroText>
             <HeroText iconUrl="/_nxt/img/icone_download.png">
-              <SectionText>
+              <SectionText fontSize="14px" textAlign="center">
                 Disponibilizamos o download dos dados tratados e atualizados
                 direto do nosso datalake público num só click.
               </SectionText>
             </HeroText>
             <HeroText iconUrl="/_nxt/img/icone_pacotes.png">
-              <SectionText>
+              <SectionText fontSize="14px" textAlign="center">
                 Através dos nossos pacotes de programação você pode acessar o
                 datalake público BD+ em Python, R ou pela linha de comando.
               </SectionText>
@@ -186,12 +176,13 @@ function Hero() {
       </Center>
       <Center
         display={{ base: "none", lg: "flex" }}
-        transform="translateY(-20px)"
+        transform="translateY(20px)"
         boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
         backgroundColor="#42B0FF"
         borderRadius="1000px"
         width="50px"
         height="50px"
+        zIndex="1"
       >
         <Box width="20px" height="20px" position="relative">
           <Image
@@ -217,7 +208,9 @@ function CatalogNews() {
       alignItems="flex-start"
       backgroundColor="#FAFAFA"
       spacing={5}
+      paddingTop="150px"
       paddingBottom="160px"
+      position="relative"
     >
       <BigTitle textAlign="center" marginBottom="0px" alignSelf="center">
         Novidades no catálogo de dados
@@ -229,6 +222,7 @@ function CatalogNews() {
               link={`/_nxt/dataset/${d.name}`}
               name={d.title}
               organization={d.organization.title}
+              organizationSlug={d.organization.name}
               tags={d.tags.map((g) => g.name)}
               size={
                 d.resources.filter((r) => r.size).length > 0
@@ -251,6 +245,21 @@ function CatalogNews() {
           )),
         }}
       />
+      <Box
+        position="absolute"
+        right="0px"
+        top="44%"
+        minWidth="850px"
+        minHeight="568px"
+        zIndex="0px"
+      >
+        <Image
+          priority
+          src="/_nxt/img/home_background.png"
+          layout="fill"
+          objectFit="contain"
+        />
+      </Box>
       <CardCatalog
         sections={{
           recentes: (recentDatasets.data || []).map((d) => (
@@ -258,6 +267,7 @@ function CatalogNews() {
               link={`/_nxt/dataset/${d.name}`}
               name={d.title}
               organization={d.organization.title}
+              organizationSlug={d.organization.name}
               tags={d.tags.map((g) => g.name)}
               size={
                 d.resources.filter((r) => r.size).length > 0
@@ -351,6 +361,7 @@ function LearnToAnalysis() {
         minHeight={{ base: "300px", lg: null }}
         alignItems="flex-start"
         justifyContent="flex-start"
+        zIndex="1"
       >
         <Image
           priority
@@ -361,15 +372,37 @@ function LearnToAnalysis() {
         />
       </Box>
       <VStack
-        maxWidth={{ base: "100%", lg: "500px" }}
+        maxWidth={{ base: "100%", lg: "400px" }}
         spacing={5}
         alignItems="flex-start"
         flex="1"
+        position="relative"
       >
-        <Title maxWidth="100%" fontSize="30px" letterSpacing="0.1em">
+        <Box
+          position="absolute"
+          right="0px"
+          top="-50%"
+          minWidth="850px"
+          minHeight="568px"
+          zIndex="0px"
+        >
+          <Image
+            priority
+            src="/_nxt/img/home_background.png"
+            layout="fill"
+            objectFit="contain"
+          />
+        </Box>
+        <Title
+          zIndex="1"
+          position="relative"
+          maxWidth="100%"
+          fontSize="30px"
+          letterSpacing="0.1em"
+        >
           Aprenda a construir análises com os dados
         </Title>
-        <VStack>
+        <VStack zIndex="1" position="relative">
           <SectionText textAlign="justify">
             Produzimos tutoriais e ensaios no blog, workshops no Youtube e
             análises nas redes sociais com nossos dados. Disponibilizamos os
@@ -386,8 +419,23 @@ function LearnToAnalysis() {
             >
               Youtube {">"} {">"}
             </Link>
-            <Link paddingTop="20px" color="skyblue" textDecoration="underline">
+            <Link
+              href="https://dev.to/basedosdados"
+              target="_blank"
+              paddingTop="20px"
+              color="skyblue"
+              textDecoration="underline"
+            >
               Blog {">"} {">"}
+            </Link>
+            <Link
+              href="https://github.com/basedosdados"
+              target="_blank"
+              paddingTop="20px"
+              color="skyblue"
+              textDecoration="underline"
+            >
+              Github {">"} {">"}
             </Link>
           </HStack>
         </VStack>
@@ -425,7 +473,8 @@ function JoinTheCommunity() {
           color="skyblue"
           textDecoration="underline"
         >
-          Discord {">"} {">"}
+          Discord{">"}
+          {">"}
         </Link>
       </VStack>
       <Box
@@ -473,11 +522,26 @@ function Support() {
     );
   }
   return (
-    <VStack paddingTop="60px" width="95%">
+    <VStack position="relative" paddingTop="60px" width="95%">
       <BigTitle width="90%" textAlign="center" paddingBottom="60px">
         Existimos através do esforço de pessoas que acreditam no acesso a dados
         abertos de qualidade.
       </BigTitle>
+      <Box
+        position="absolute"
+        right="0px"
+        top="30%"
+        minWidth="850px"
+        minHeight="568px"
+        zIndex="0px"
+      >
+        <Image
+          priority
+          src="/_nxt/img/home_background.png"
+          layout="fill"
+          objectFit="contain"
+        />
+      </Box>
       <Stack
         width="100%"
         justifyContent="space-around"
@@ -485,7 +549,7 @@ function Support() {
         spacing={10}
       >
         <ShadowBox height="270px" title="Voluntariado">
-          <SectionText height="100px">
+          <SectionText fontSize="14px" height="100px">
             Ajude a manter e aprimorar pacotes, suba bases no nosso datalake ou
             construa análises e tutoriais para nossas redes.
           </SectionText>
@@ -494,7 +558,7 @@ function Support() {
           </SupportButton>
         </ShadowBox>
         <ShadowBox height="270px" title="Parceria">
-          <SectionText height="100px">
+          <SectionText fontSize="14px" height="100px">
             Abra dados de sua organização, construa projetos de dados abertos
             conosco ou desenvolva aplicações com nossos dados.
           </SectionText>
@@ -525,8 +589,8 @@ export default function Home({ strapiPages }) {
         alignItems="center"
         width="100%"
         backgroundColor="#FAFAFA"
-        padding="0px 5%"
-        marginTop="30px"
+        padding="0px 7%"
+        marginTop="55px"
       >
         <Hero />
       </VStack>
@@ -534,7 +598,7 @@ export default function Home({ strapiPages }) {
       <VStack
         spacing={20}
         transform="translateY(-100px)"
-        width="90%"
+        width={{ base: "90%", lg: "80%" }}
         margin="auto"
       >
         <BigTitle textAlign="center" maxWidth="70%" paddingBottom="20px">

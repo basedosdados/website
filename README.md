@@ -66,8 +66,30 @@ A pasta utils contem scripts utilizados em dev e em prod para diversas coisas. O
 
 Arquivos com _ na frente sao dependencias de scripts normais e nao devem ser chamados diretamente.
 
+#### Script de atualizacao do banco de dev a partir dos dumps de producao/staging
 
-#### PLUGIN DO BASEDOSDADOS
+Voce pode rodar o script em `./utils/create_dev_init_data.sh` para atualizar o arquivo './postgresql/dev_init_data.sql.gz' que contem o snapshot do banco de dev.
+
+Opcoes:
+Parametro posicional `File`: caso nao queira baixar um backup automaticamente de prod/staging, vc pode passar um path com um arquivo postgres.dump
+
+Parametro variavel de ambiente STAGING=1:
+Se STAGING=1, o script vai baixar do banco de staging ao inves de producao.
+
+Note q vc precisara ter configurado o seu ~/.ssh/config local para acessar as maquinas do basedosdados. Para isso edite (ou crie) `~/.ssh/config` e adicione as seguintes linhas, (modificando o path, logico):
+
+```ssh_config
+HOST bd-s staging.basedosdados.org
+    HostName staging.basedosdados.org
+    User ec2-user
+    IdentityFile /path/para/sua/chave/privada
+HOST bd basedosdados.org
+    HostName basedosdados.org
+    User ec2-user
+    IdentityFile /path/para/sua/chave/privada
+```
+
+### PLUGIN DO BASEDOSDADOS
 
 O plugin do BD mora em `ckanext-basedosdados/ckanext/basedosdados/`. Onde você
 pode encontrar um [README.md](ckanext-basedosdados/ckanext/basedosdados/README.md`) mais completo.

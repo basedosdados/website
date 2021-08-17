@@ -48,12 +48,12 @@ export default function Footer() {
       <VStack width="100%" padding={10} spacing={10} backgroundColor="#34A15A">
         <Stack
           alignItems="flex-start"
-          width="100%"
+          width={{ base: "100%", lg: "80%" }}
           justifyContent="space-between"
           direction={{ base: "column", lg: "row" }}
-          spacing={{ base: 10, lg: 0 }}
+          spacing={{ base: 10, lg: 20 }}
         >
-          <Box minWidth="200px" height="200px" position="relative">
+          <Box minWidth="250px" height="250px" position="relative">
             <Image
               priority
               objectFit="contain"
@@ -65,7 +65,7 @@ export default function Footer() {
             direction={{ base: "column", lg: "row" }}
             paddingBottom="100px"
             justifyContent="space-around"
-            width="70%"
+            width="100%"
             alignItems="flex-start"
             marginLeft="auto"
             spacing={{ base: 10, lg: 0 }}
@@ -83,7 +83,20 @@ export default function Footer() {
               </Link>
             </LinkVStack>
             <LinkVStack title="CONTEÚDO">
-              <Link color="white">Blog</Link>
+              <Link
+                href="https://basedosdados.hubspotpagebuilder.com/assine-a-newsletter-da-base-dos-dados"
+                color="white"
+                target="_blank"
+              >
+                Assine a newsletter
+              </Link>
+              <Link
+                href="https://dev.to/basedosdados"
+                color="white"
+                target="_blank"
+              >
+                Blog
+              </Link>
               <Link
                 color="white"
                 href="https://www.youtube.com/c/BasedosDados/videos"
@@ -108,6 +121,20 @@ export default function Footer() {
                 title="Github"
                 src="/_nxt/img/social/github.png"
               />
+              <Link
+                color="white"
+                target="_blank"
+                href="https://chat.whatsapp.com/HXWgdFc1RmwCoblly5KPBZ"
+              >
+                WhatsApp
+              </Link>
+              <Link
+                color="white"
+                target="_blank"
+                href="https://t.me/joinchat/OKWc3RnClXnq2hq-8o0h_w"
+              >
+                Telegram
+              </Link>
             </LinkVStack>
             <LinkVStack title="INSTITUCIONAL">
               <Link color="white" href="/about">

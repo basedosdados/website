@@ -4,7 +4,12 @@ import { VStack, HStack } from "@chakra-ui/react";
 
 export default function CardCatalog({ sections, containerStyle }) {
   return (
-    <VStack {...containerStyle} alignItems="flex-start" width="100%">
+    <VStack
+      {...containerStyle}
+      alignItems="flex-start"
+      position="relative"
+      width="100%"
+    >
       {Object.keys(sections).map((key) => (
         <VStack
           width="100%"
@@ -26,7 +31,9 @@ export default function CardCatalog({ sections, containerStyle }) {
             + {key}
           </Heading>
           <HStack
-            overflowY="scroll"
+            className="no-scrollbar"
+            overflowY="none"
+            overflowX="scroll"
             alignItems="flex-start"
             width="100%"
             spacing={5}
