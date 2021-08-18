@@ -1,4 +1,12 @@
-import { VStack, Box, Stack, HStack, Image } from "@chakra-ui/react";
+import {
+  VStack,
+  Box,
+  Stack,
+  HStack,
+  Image,
+  Button,
+  Flex,
+} from "@chakra-ui/react";
 import { MainPageTemplate } from "../../components/templates/main";
 import { withStrapiPages } from "../../hooks/strapi.hook";
 import { listDatasets, showDataset } from "../api/datasets";
@@ -7,8 +15,13 @@ import SectionText from "../../components/atoms/SectionText";
 import Title from "../../components/atoms/Title";
 import { CategoryIcon } from "../../components/atoms/CategoryIcon";
 import BigTitle from "../../components/atoms/BigTitle";
-import { SelectFilterAccordion } from "../../components/atoms/FilterAccordion";
+import {
+  CheckboxFilterAccordion,
+  FilterAccordion,
+} from "../../components/atoms/FilterAccordion";
 import { useState } from "react";
+import { SimpleTable } from "../../components/atoms/SimpleTable";
+import Highlight, { defaultProps } from "prism-react-renderer";
 
 export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
@@ -40,7 +53,7 @@ export async function getStaticPaths(context) {
   };
 }
 
-function BdmTablePage({ resource }) {
+function BaseResourcePage({ title, buttonText, onClick, children }) {
   return (
     <VStack
       width="100%"
@@ -50,24 +63,174 @@ function BdmTablePage({ resource }) {
       alignItems="flex-start"
       spacing={7}
     >
-      <Title>{resource.name}</Title>
-      <VStack spacing={0} alignItems="flex-start">
+      <Flex width="100%" alignItems="center">
+        <Title>{title}</Title>
+        {onClick ? (
+          <Button
+            colorScheme="blue"
+            backgroundColor="#3AA1EB"
+            marginLeft="auto"
+            height="35px"
+            borderRadius="13px"
+            letterSpacing="0.1em"
+            onClick={onClick}
+          >
+            {buttonText}
+          </Button>
+        ) : (
+          <></>
+        )}
+      </Flex>
+      {children}
+    </VStack>
+  );
+}
+
+function BdmTablePage({ resource, datasetName }) {
+  const [selectedConsultation, setSelectedConsultation] = useState("BigQuery");
+  const consultationOptions = ["BigQuery", "Python", "R"];
+  const queryName = `${datasetName}.${resource.name}`;
+
+  const consultationLanguage = {
+    BigQuery: "sql",
+    Python: "python",
+    R: "r",
+  };
+
+  const consultationText = {
+    BigQuery: `SELECT * FROM \`basedosdados.${queryName}\` LIMIT 100`,
+    Python: `import basedosdados as bd
+# Para carregar o dado direto no pandas
+df = bd.read_table(dataset_id='${datasetName}', 
+        table_id='${resource.name}',
+        billing_project_id=<YOUR_PROJECT_ID>)`,
+    R: `install.packages("basedosdados")
+library("basedosdados")
+# Defina o seu projeto no Google Cloud
+set_billing_id("<YOUR_PROJECT_ID>")
+# Para carregar o dado direto no R
+query <- "SELECT * FROM \`basedosdados.${queryName}\`"
+df <- read_sql(query)`,
+  };
+
+  return (
+    <BaseResourcePage
+      title={resource.name}
+      buttonText="Download"
+      onClick={() => {}}
+    >
+      <VStack spacing={3} alignItems="flex-start">
         <SectionText>
           <b>Descrição</b>
         </SectionText>
-        <SectionText fontSize="16px">
+        <SectionText fontWeight="400" fontSize="14px">
           {resource.description || "Nenhuma descrição fornecida."}
         </SectionText>
       </VStack>
-      <VStack spacing={0} alignItems="flex-start">
+      <VStack spacing={3} alignItems="flex-start">
         <SectionText>
           <b>Coluna</b>
         </SectionText>
-        <SectionText fontSize="16px">
+        <SimpleTable
+          headers={["nome", "descrição"]}
+          values={resource.columns.map((c) => [c.name, c.description])}
+          containerStyle={{ paddingBottom: "30px" }}
+        />
+      </VStack>
+      <VStack width="100%" spacing={3} alignItems="flex-start">
+        <Title>Consulta aos dados</Title>
+        <HStack>
+          {consultationOptions.map((c) => {
+            const selected = c === selectedConsultation;
+            return (
+              <Button
+                borderWidth={selected ? "3px" : "1px"}
+                borderColor={selected ? "#3AA1EB" : "#DEDFE0"}
+                fontSize="14px"
+                fontFamily="Lato"
+                color={selected ? "#3AA1EB" : "black"}
+                height="35px"
+                letterSpacing="0.1em"
+                borderRadius="8px"
+                minWidth="110px"
+                backgroundColor="transparent"
+                fontWeight={selected ? "bold" : "regular"}
+                onClick={() => setSelectedConsultation(c)}
+              >
+                {c}
+              </Button>
+            );
+          })}
+        </HStack>
+        <Highlight
+          style={{ width: "100%" }}
+          code={consultationText[selectedConsultation]}
+          language={consultationLanguage[selectedConsultation]}
+          {...defaultProps}
+        >
+          {({ className, style, tokens, getLineProps, getTokenProps }) => (
+            <pre
+              className={className}
+              style={{
+                ...style,
+                width: "100%",
+                padding: "10px",
+                borderRadius: "6px",
+              }}
+            >
+              {tokens.map((line, i) => (
+                <div {...getLineProps({ line, key: i })}>
+                  {line.map((token, key) => (
+                    <span {...getTokenProps({ token, key })} />
+                  ))}
+                </div>
+              ))}
+            </pre>
+          )}
+        </Highlight>
+      </VStack>
+      <VStack width="100%" spacing={3} alignItems="flex-start">
+        <Title>Metadados</Title>
+        <SimpleTable
+          containerStyle={{ maxWidth: "80vh" }}
+          headers={["nome", "valor"]}
+          values={Object.entries(resource).map(([key, value]) => [
+            key,
+            JSON.stringify(value),
+          ])}
+        />
+      </VStack>
+    </BaseResourcePage>
+  );
+}
+
+function ExternalLinkPage({ resource }) {
+  return (
+    <BaseResourcePage
+      title={resource.name}
+      buttonText="Acessar"
+      onClick={() => window.open(resource.url)}
+    >
+      <VStack spacing={3} alignItems="flex-start">
+        <SectionText>
+          <b>Descrição</b>
+        </SectionText>
+        <SectionText fontWeight="400" fontSize="14px">
           {resource.description || "Nenhuma descrição fornecida."}
         </SectionText>
       </VStack>
-    </VStack>
+      <VStack width="100%" spacing={3} alignItems="flex-start">
+        <Title>Metadados</Title>
+        <SimpleTable
+          containerStyle={{ maxWidth: "80vh" }}
+          headers={["nome", "valor"]}
+          values={Object.entries(resource).map(([key, value]) => [
+            key,
+            JSON.stringify(value),
+          ])}
+        />
+      </VStack>
+    </BaseResourcePage>
   );
 }
 
@@ -82,13 +245,17 @@ export default function DatasetPage({
     bdmTables.length > 0 ? bdmTables[0] : externalLinks[0]
   );
 
+  console.log(dataset);
+
   function getResourcePage() {
     switch (resource.resource_type) {
       case "bdm_table":
-        return <BdmTablePage resource={resource} />;
+        return (
+          <BdmTablePage datasetName={dataset.dataset_id} resource={resource} />
+        );
 
       case "external_link":
-        return <BdmTablePage resource={resource} />;
+        return <ExternalLinkPage resource={resource} />;
 
       default:
         return <BdmTablePage resource={resource} />;
@@ -119,7 +286,9 @@ export default function DatasetPage({
           <Stack spacing={6} direction={{ base: "row", lg: "column" }}>
             <VStack alignItems="flex-start">
               <Title>Organização</Title>
-              <SectionText>{dataset.organization.title}</SectionText>
+              <SectionText fontWeight="400" fontSize="14px">
+                {dataset.organization.title}
+              </SectionText>
             </VStack>
             <VStack alignItems="flex-start">
               <Title paddingTop="">Temas</Title>
@@ -141,26 +310,44 @@ export default function DatasetPage({
           <BigTitle fontSize="30px" color="black">
             {dataset.title}
           </BigTitle>
-          <SectionText textAlign="left">{dataset.notes}</SectionText>
+          <SectionText fontWeight="400" fontSize="14px" textAlign="left">
+            {dataset.notes}
+          </SectionText>
           <Stack
             paddingTop="20px"
             direction={{ base: "column", lg: "row" }}
-            spacing={10}
+            spacing={4}
             width="100%"
           >
-            <VStack minWidth="200px" spacing={5}>
-              <SelectFilterAccordion
-                choices={bdmTables}
-                valueField="name"
-                displayField="name"
-                fieldName="Tabelas"
-              />
-              <SelectFilterAccordion
-                choices={[]}
-                valueField="name"
-                displayField="display_name"
-                fieldName="Links Externos"
-              />
+            <VStack minWidth="200px" maxWidth="200px" spacing={5}>
+              {bdmTables.length > 0 ? (
+                <FilterAccordion
+                  choices={bdmTables}
+                  value={resource.name}
+                  valueField="name"
+                  displayField="name"
+                  fieldName="Tabelas"
+                  onChange={(name) =>
+                    setResource(bdmTables.filter((b) => b.name === name)[0])
+                  }
+                />
+              ) : (
+                <></>
+              )}
+              {externalLinks.length > 0 ? (
+                <FilterAccordion
+                  choices={externalLinks}
+                  valueField="name"
+                  displayField="name"
+                  fieldName="Links Externos"
+                  value={resource.name}
+                  onChange={(name) =>
+                    setResource(externalLinks.filter((b) => b.name === name)[0])
+                  }
+                />
+              ) : (
+                <></>
+              )}
             </VStack>
             {getResourcePage()}
           </Stack>

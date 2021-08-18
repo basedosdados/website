@@ -10,8 +10,9 @@ import {
   VStack,
   Text,
 } from "@chakra-ui/react";
+import Title from "./Title";
 
-export function FilterAccordion({ fieldName, children }) {
+export function BaseFilterAccordion({ fieldName, children }) {
   return (
     <Accordion allowToggle width="100%">
       <AccordionItem border="0px">
@@ -37,7 +38,7 @@ export function FilterAccordion({ fieldName, children }) {
   );
 }
 
-export function SelectFilterAccordion({
+export function CheckboxFilterAccordion({
   fieldName,
   choices,
   onChange,
@@ -46,7 +47,7 @@ export function SelectFilterAccordion({
   displayField = "display_name",
 }) {
   return (
-    <FilterAccordion fieldName={fieldName}>
+    <BaseFilterAccordion fieldName={fieldName}>
       <CheckboxGroup onChange={(val) => onChange(val)} value={values}>
         <VStack alignItems="flex-start">
           {choices.map((c) => (
@@ -54,6 +55,32 @@ export function SelectFilterAccordion({
           ))}
         </VStack>
       </CheckboxGroup>
-    </FilterAccordion>
+    </BaseFilterAccordion>
+  );
+}
+
+export function FilterAccordion({
+  fieldName,
+  choices,
+  onChange,
+  value,
+  valueField = "id",
+  displayField = "display_name",
+}) {
+  return (
+    <BaseFilterAccordion fieldName={fieldName}>
+      <VStack spacing={5} paddingTop="10px" alignItems="flex-start">
+        {choices.map((c) => (
+          <Title
+            fontSize="14px"
+            cursor="pointer"
+            fontWeigth={c[valueField] === value ? "700" : "400"}
+            onClick={() => onChange(c[valueField])}
+          >
+            {c[displayField]}
+          </Title>
+        ))}
+      </VStack>
+    </BaseFilterAccordion>
   );
 }

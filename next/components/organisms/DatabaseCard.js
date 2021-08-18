@@ -45,7 +45,7 @@ export default function DatabaseCard({
   return (
     <Card
       icons={[
-        ...categories.map((c) => (
+        ...categories.slice(0, Math.min(3, categories.length)).map((c) => (
           <Link href={`/_nxt/search?group=${c}`}>
             <CategoryIcon
               size="47px"
@@ -56,8 +56,8 @@ export default function DatabaseCard({
         ...(isPlus
           ? [
               <Image
-                width="100px"
-                height="47px"
+                width="80px"
+                height="37px"
                 marginRight="10px"
                 src={`/_nxt/img/logo_plus.png`}
               />,

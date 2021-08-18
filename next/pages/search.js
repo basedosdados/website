@@ -22,7 +22,7 @@ import ControlledInput, {
   DebouncedControlledInput,
 } from "../components/atoms/ControlledInput";
 import { Database } from "../components/organisms/Database";
-import { SelectFilterAccordion } from "../components/atoms/FilterAccordion";
+import { CheckboxFilterAccordion } from "../components/atoms/FilterAccordion";
 import { getOrganizationList } from "./api/organizations";
 import { getGroupList } from "./api/groups";
 import { getTagList } from "./api/tags";
@@ -100,7 +100,7 @@ export default function SearchPage({
           >
             Filtrar por
           </SectionTitle>
-          <SelectFilterAccordion
+          <CheckboxFilterAccordion
             choices={organizations}
             values={paramFilters.organization}
             valueField="name"
@@ -110,7 +110,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, organization: values })
             }
           />
-          <SelectFilterAccordion
+          <CheckboxFilterAccordion
             choices={groups}
             values={paramFilters.groups}
             valueField="name"
@@ -120,7 +120,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, groups: values })
             }
           />
-          <SelectFilterAccordion
+          <CheckboxFilterAccordion
             choices={tags}
             valueField="name"
             displayField="display_name"
