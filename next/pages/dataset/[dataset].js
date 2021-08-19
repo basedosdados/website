@@ -63,13 +63,18 @@ function BaseResourcePage({ title, buttonText, onClick, children }) {
       alignItems="flex-start"
       spacing={7}
     >
-      <Flex width="100%" alignItems="center">
+      <Flex
+        flexDirection={{ base: "column", lg: "row" }}
+        width="100%"
+        alignItems={{ base: "flex-start", lg: "center" }}
+      >
         <Title>{title}</Title>
         {onClick ? (
           <Button
             colorScheme="blue"
             backgroundColor="#3AA1EB"
-            marginLeft="auto"
+            marginLeft={{ base: null, lg: "auto" }}
+            marginTop={{ base: "20px", lg: null }}
             height="35px"
             borderRadius="13px"
             letterSpacing="0.1em"
@@ -119,11 +124,11 @@ df <- read_sql(query)`,
       buttonText="Download"
       onClick={() => {}}
     >
-      <VStack spacing={3} alignItems="flex-start">
+      <VStack width="100%" spacing={3} alignItems="flex-start">
         <SectionText>
           <b>Descrição</b>
         </SectionText>
-        <SectionText fontWeight="400" fontSize="14px">
+        <SectionText wordBreak="break-word" fontWeight="400" fontSize="14px">
           {resource.description || "Nenhuma descrição fornecida."}
         </SectionText>
       </VStack>
@@ -176,6 +181,7 @@ df <- read_sql(query)`,
                 width: "100%",
                 padding: "10px",
                 borderRadius: "6px",
+                wordBreak: "break-all",
               }}
             >
               {tokens.map((line, i) => (
@@ -264,18 +270,19 @@ export default function DatasetPage({
 
   return (
     <MainPageTemplate strapiPages={strapiPages}>
-      <Stack
+      <Flex
         direction={{ base: "column", lg: "row" }}
         width={{ base: "90%", lg: "85%" }}
         margin="auto"
         spacing={20}
       >
-        <VStack alignItems="flex-start" spacing={6}>
+        <VStack alignItems={{ base: "flex-start", lg: "flex-start" }}>
           <Image
             borderRadius="31.8889px"
             boxShadow="0px 0px 10px rgba(0,0,0,0.25)"
             minWidth="200px"
             minHeight="200px"
+            margin="auto"
             borderRadius="31px"
             objectFit="contain"
             src={
@@ -283,7 +290,11 @@ export default function DatasetPage({
               dataset.organization.image_url
             }
           />
-          <Stack spacing={6} direction={{ base: "row", lg: "column" }}>
+          <Stack
+            paddingTop={{ base: "30px", lg: "0px" }}
+            spacing={6}
+            direction={{ base: "column", lg: "column" }}
+          >
             <VStack alignItems="flex-start">
               <Title>Organização</Title>
               <SectionText fontWeight="400" fontSize="14px">
@@ -306,7 +317,11 @@ export default function DatasetPage({
             </VStack>
           </Stack>
         </VStack>
-        <VStack spacing={5} alignItems="flex-start">
+        <VStack
+          paddingTop={{ base: "50px", lg: "0px" }}
+          transform={{ base: "", lg: "translateX(50px)" }}
+          alignItems="flex-start"
+        >
           <BigTitle fontSize="30px" color="black">
             {dataset.title}
           </BigTitle>
@@ -319,7 +334,11 @@ export default function DatasetPage({
             spacing={4}
             width="100%"
           >
-            <VStack minWidth="200px" maxWidth="200px" spacing={5}>
+            <VStack
+              minWidth={{ base: "100%", lg: "200px" }}
+              maxWidth={{ base: "100%", lg: "200px" }}
+              spacing={5}
+            >
               {bdmTables.length > 0 ? (
                 <FilterAccordion
                   choices={bdmTables}
@@ -349,10 +368,12 @@ export default function DatasetPage({
                 <></>
               )}
             </VStack>
-            {getResourcePage()}
+            <VStack width="100%" flex="1">
+              {getResourcePage()}
+            </VStack>
           </Stack>
         </VStack>
-      </Stack>
+      </Flex>
     </MainPageTemplate>
   );
 }
