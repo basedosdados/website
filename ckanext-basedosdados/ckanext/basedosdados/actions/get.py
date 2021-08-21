@@ -1,17 +1,14 @@
+import json
+from pathlib import Path
+
 import ckan.plugins.toolkit as toolkit
-from ckan.logic.action.get import (
-    dataset_follower_count,
-    package_search,
-    resource_search,
-)
+from ckan.logic.action.get import (dataset_follower_count, package_search,
+                                   resource_search)
 from ckanext.basedosdados.validator.packages import Dataset
-from ckanext.basedosdados.validator.resources import (
-    BdmColumns,
-    BdmDictionary,
-    BdmTable,
-    ExternalLink,
-    InformationRequest,
-)
+from ckanext.basedosdados.validator.resources import (BdmColumns,
+                                                      BdmDictionary, BdmTable,
+                                                      ExternalLink,
+                                                      InformationRequest)
 from pydantic import ValidationError
 
 # how to acess the endpoint
@@ -263,3 +260,11 @@ def bd_translation(context, data_dict):
         "external_link": extract_translation(ExternalLink.schema()),
         "information_request": extract_translation(InformationRequest.schema()),
     }
+
+
+@toolkit.side_effect_free
+def bd_openapi(context, data_dict):
+    filepath = Path(__file__).parent
+    filepath = filepath / "openapi.json"
+    with open(filepath, "r") as file:
+        return json.load(file)
