@@ -1,14 +1,19 @@
-import json
 import logging
 
 import ckan.plugins.toolkit as toolkit
-from ckan.logic.action.get import (dataset_follower_count, package_search,
-                                   resource_search)
+from ckan.logic.action.get import (
+    dataset_follower_count,
+    package_search,
+    resource_search,
+)
 from ckanext.basedosdados.validator.packages import Dataset
-from ckanext.basedosdados.validator.resources import (BdmColumns,
-                                                      BdmDictionary, BdmTable,
-                                                      ExternalLink,
-                                                      InformationRequest)
+from ckanext.basedosdados.validator.resources import (
+    BdmColumns,
+    BdmDictionary,
+    BdmTable,
+    ExternalLink,
+    InformationRequest,
+)
 from pydantic import ValidationError
 
 log = logging.getLogger(__name__)
@@ -19,32 +24,32 @@ log = logging.getLogger(__name__)
 
 @toolkit.side_effect_free
 def bd_dataset_schema(context, data_dict):
-    return json.loads(Dataset.schema_json(indent=2))
+    return Dataset.schema()
 
 
 @toolkit.side_effect_free
 def bd_bdm_table_schema(context, data_dict):
-    return json.loads(BdmTable.schema_json(indent=2))
+    return BdmTable.schema()
 
 
 @toolkit.side_effect_free
 def bd_bdm_columns_schema(context, data_dict):
-    return json.loads(BdmColumns.schema_json(indent=2))
+    return BdmColumns.schema()
 
 
 @toolkit.side_effect_free
 def bd_bdm_dictionary_schema(context, data_dict):
-    return json.loads(BdmDictionary.schema_json(indent=2))
+    return BdmDictionary.schema()
 
 
 @toolkit.side_effect_free
 def bd_external_link_schema(context, data_dict):
-    return json.loads(ExternalLink.schema_json(indent=2))
+    return ExternalLink.schema()
 
 
 @toolkit.side_effect_free
 def bd_information_request_schema(context, data_dict):
-    return json.loads(InformationRequest.schema_json(indent=2))
+    return InformationRequest.schema()
 
 
 @toolkit.side_effect_free
@@ -243,3 +248,22 @@ def bd_popular_datasets_list(context, data_dict):
         datum["follower_count"] = count
 
     return data
+
+
+@toolkit.side_effect_free
+def bd_translation(context, data_dict):
+    def extract_translation(schema):
+        translation = {}
+        for prop, body in schema["properties"].items():
+            translation[prop] = body.get("title")
+        translation.pop("action__", None)
+        return translation
+
+    return {
+        "dataset": extract_translation(Dataset.schema()),
+        "bdm_table": extract_translation(BdmTable.schema()),
+        "bdm_columns": extract_translation(BdmColumns.schema()),
+        "bdm_dictionary": extract_translation(BdmDictionary.schema()),
+        "external_link": extract_translation(ExternalLink.schema()),
+        "information_request": extract_translation(InformationRequest.schema()),
+    }
