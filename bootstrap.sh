@@ -51,7 +51,7 @@ if [[ ! -d ./stack/ckan/assets/storage ]]; then
     # to update assets please fill folder with new assets and run `zip -r assets.zip assets` and commit zip to git as usual. Zip file will be sent to lfs.
 fi
 
-
+docker-compose run next sh -c "yarn install && yarn build"
 docker-compose run --rm --entrypoint='' ckan bash -c 'cd ckanext-basedosdados; pip install -e .' # to create the dev links in the volume
 docker-compose up -d ckan
 
