@@ -1,5 +1,3 @@
-import logging
-
 import ckan.plugins.toolkit as toolkit
 from ckan.logic.action.get import (
     dataset_follower_count,
@@ -15,8 +13,6 @@ from ckanext.basedosdados.validator.resources import (
     InformationRequest,
 )
 from pydantic import ValidationError
-
-log = logging.getLogger(__name__)
 
 # how to acess the endpoint
 # http://localhost:5000/api/3/action/<function_name>
