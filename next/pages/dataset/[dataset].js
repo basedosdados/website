@@ -22,6 +22,9 @@ import {
 import { useState } from "react";
 import { SimpleTable } from "../../components/atoms/SimpleTable";
 import Highlight, { defaultProps } from "prism-react-renderer";
+import { ExpandableTable } from "../../components/molecules/ExpandableTable";
+import { filterOnlyValidValues, formatObjectsInArray } from "../../utils";
+import Link from "../../components/atoms/Link";
 
 export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
@@ -136,7 +139,7 @@ df <- read_sql(query)`,
         <SectionText>
           <b>Coluna</b>
         </SectionText>
-        <SimpleTable
+        <ExpandableTable
           headers={["nome", "descrição"]}
           values={resource.columns.map((c) => [c.name, c.description])}
           containerStyle={{ paddingBottom: "30px" }}
@@ -197,13 +200,10 @@ df <- read_sql(query)`,
       </VStack>
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Title>Metadados</Title>
-        <SimpleTable
-          containerStyle={{ maxWidth: "80vh" }}
+        <ExpandableTable
+          containerStyle={{ width: "100%" }}
           headers={["nome", "valor"]}
-          values={Object.entries(resource).map(([key, value]) => [
-            key,
-            JSON.stringify(value),
-          ])}
+          values={formatObjectsInArray(filterOnlyValidValues(resource))}
         />
       </VStack>
     </BaseResourcePage>
@@ -227,13 +227,10 @@ function ExternalLinkPage({ resource }) {
       </VStack>
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Title>Metadados</Title>
-        <SimpleTable
+        <ExpandableTable
           containerStyle={{ maxWidth: "80vh" }}
           headers={["nome", "valor"]}
-          values={Object.entries(resource).map(([key, value]) => [
-            key,
-            JSON.stringify(value),
-          ])}
+          values={formatObjectsInArray(filterOnlyValidValues(resource))}
         />
       </VStack>
     </BaseResourcePage>
@@ -276,13 +273,15 @@ export default function DatasetPage({
         margin="auto"
         spacing={20}
       >
-        <VStack alignItems={{ base: "flex-start", lg: "flex-start" }}>
+        <VStack
+          alignItems={{ base: "flex-start", lg: "flex-start" }}
+          justifyContent="flex-start"
+        >
           <Image
             borderRadius="31.8889px"
             boxShadow="0px 0px 10px rgba(0,0,0,0.25)"
             minWidth="200px"
             minHeight="200px"
-            margin="auto"
             borderRadius="31px"
             objectFit="contain"
             src={
@@ -291,28 +290,34 @@ export default function DatasetPage({
             }
           />
           <Stack
-            paddingTop={{ base: "30px", lg: "0px" }}
+            paddingTop={{ base: "30px", lg: "20px" }}
             spacing={6}
             direction={{ base: "column", lg: "column" }}
           >
             <VStack alignItems="flex-start">
               <Title>Organização</Title>
-              <SectionText fontWeight="400" fontSize="14px">
-                {dataset.organization.title}
-              </SectionText>
+              <Link
+                href={`/_nxt/search?organization=${dataset.organization.name}`}
+              >
+                <SectionText fontWeight="400" fontSize="14px">
+                  {dataset.organization.title}
+                </SectionText>
+              </Link>
             </VStack>
             <VStack alignItems="flex-start">
               <Title paddingTop="">Temas</Title>
               {dataset.groups.map((g) => (
-                <HStack key={g.name}>
-                  <CategoryIcon
-                    size="39px"
-                    url={`/_nxt/img/categories/icone_${g.name}${
-                      isPlus ? "-1" : ""
-                    }.svg`}
-                  />
-                  <SectionText>{g.display_name}</SectionText>
-                </HStack>
+                <Link href={`/_nxt/search?group=${g.name}`}>
+                  <HStack key={g.name}>
+                    <CategoryIcon
+                      size="39px"
+                      url={`/_nxt/img/categories/icone_${g.name}${
+                        isPlus ? "-1" : ""
+                      }.svg`}
+                    />
+                    <SectionText>{g.display_name}</SectionText>
+                  </HStack>
+                </Link>
               ))}
             </VStack>
           </Stack>

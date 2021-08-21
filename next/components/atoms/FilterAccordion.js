@@ -12,7 +12,11 @@ import {
 } from "@chakra-ui/react";
 import Title from "./Title";
 
-export function BaseFilterAccordion({ fieldName, children }) {
+export function BaseFilterAccordion({
+  fieldName,
+  children,
+  overflowX = "scroll",
+}) {
   return (
     <Accordion allowToggle width="100%">
       <AccordionItem border="0px">
@@ -30,7 +34,12 @@ export function BaseFilterAccordion({ fieldName, children }) {
             <AccordionIcon />
           </AccordionButton>
         </Text>
-        <AccordionPanel overflowY="scroll" maxHeight="300px" pb={4}>
+        <AccordionPanel
+          overflowY="auto"
+          overflowX={overflowX}
+          maxHeight="300px"
+          pb={4}
+        >
           {children}
         </AccordionPanel>
       </AccordionItem>
@@ -68,7 +77,7 @@ export function FilterAccordion({
   displayField = "display_name",
 }) {
   return (
-    <BaseFilterAccordion fieldName={fieldName}>
+    <BaseFilterAccordion overflowX="none" fieldName={fieldName}>
       <VStack spacing={5} paddingTop="10px" alignItems="flex-start">
         {choices.map((c) => (
           <Title

@@ -62,7 +62,8 @@ export default function SearchPage({
   );
 
   useEffect(() => {
-    setSearch(decodeURI(query.q || ""));
+    if (query.q) setSearch(decodeURI(query.q));
+
     setParamFilters({
       ...paramFilters,
       tags: query.tag ? [query.tag] : [],
@@ -71,7 +72,7 @@ export default function SearchPage({
     });
 
     setFilterKey(filterKey + 1);
-  }, [query.tag, query.organization, query.group]);
+  }, [query.tag, query.organization, query.group, query.q]);
 
   return (
     <MainPageTemplate strapiPages={strapiPages}>

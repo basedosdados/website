@@ -70,6 +70,10 @@ export function DebouncedControlledInput({
     _setTimeout(setTimeout(() => onChange(_value), 200));
   }, [_value]);
 
+  useEffect(() => {
+    _setValue(value);
+  }, [value]);
+
   return (
     <InputGroup variant={variant} flex="1" {...props}>
       <Input
