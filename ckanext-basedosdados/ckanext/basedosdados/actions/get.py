@@ -1,7 +1,6 @@
 import json
-import sys
+import logging
 
-import requests
 from pydantic import ValidationError
 import ckan.plugins.toolkit as toolkit
 from ckan.logic.action.get import (
@@ -19,6 +18,7 @@ from ckanext.basedosdados.validator.resources import (
     InformationRequest,
 )
 
+log = logging.getLogger(__name__)
 
 # how to acess the endpoint
 # http://localhost:5000/api/3/action/<function_name>
@@ -54,6 +54,67 @@ def bd_information_request_schema(context, data_dict):
     return json.loads(InformationRequest.schema_json(indent=2))
 
 
+@toolkit.side_effect_free
+def bd_dataset_search(context, data_dict):
+
+    # pre-process solr parameters #########################
+
+    q = data_dict.get("q", "")
+    page = data_dict.get("page", 1)
+    page_size = data_dict.get("page_size", 10)
+    order_by = data_dict.get("order_by", "score,recent")
+
+    # pre-process solr parameter fq #######################
+
+    def get_parameter(data, bd_key, fq_key):
+        value = data.get(bd_key, "")
+        value = value.split(",")
+        value = " OR ".join(value)
+        return [f"{fq_key}:({value})" if value else ""]
+
+    fq = []
+    fq += get_parameter(data_dict, "tag", "tags")
+    fq += get_parameter(data_dict, "group", "groups")
+    fq += get_parameter(data_dict, "organization", "organization")
+    fq += get_parameter(data_dict, "spatial_coverage", "res_extras_spatial_coverage")
+    fq += get_parameter(data_dict, "temporal_coverage", "res_extras_temporal_coverage")
+
+    fq = [f for f in fq if f]
+    fq = "+".join(fq)
+
+    # pre-process solr parameter sort #####################
+
+    order2sort = {
+        "score": "score desc",
+        "popular": "views_recent desc",
+        "recent": "metadata_modified desc"
+    }
+
+    sort = order_by.split(',')
+    sort = [order2sort[s] for s in sort]
+    sort = ", ".join(sort)
+
+    # search with solr query ##############################
+
+    data = package_search(
+        context,
+        {
+            "q": q,
+            "fq": fq,
+            "rows": 1000,
+            "sort": sort,
+        },
+    )
+
+    # post-process tags ###################################
+
+    # post-process organizations ##########################
+
+    # format result #######################################
+
+    return data
+
+
 def bd_dataset_show(context, data_dict):
     """Show dataset
 
@@ -82,6 +143,8 @@ def bd_dataset_show(context, data_dict):
     :type dataset_id: string
     :returns: most relevant dataset
     """
+
+    log.debug("teste")
 
     try:
         dataset_id = data_dict["dataset_id"]
