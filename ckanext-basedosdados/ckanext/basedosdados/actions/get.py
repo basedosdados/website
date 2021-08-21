@@ -1,22 +1,15 @@
 import json
 import logging
 
-from pydantic import ValidationError
 import ckan.plugins.toolkit as toolkit
-from ckan.logic.action.get import (
-    dataset_follower_count,
-    package_search,
-    resource_search,
-)
-
+from ckan.logic.action.get import (dataset_follower_count, package_search,
+                                   resource_search)
 from ckanext.basedosdados.validator.packages import Dataset
-from ckanext.basedosdados.validator.resources import (
-    BdmTable,
-    BdmColumns,
-    BdmDictionary,
-    ExternalLink,
-    InformationRequest,
-)
+from ckanext.basedosdados.validator.resources import (BdmColumns,
+                                                      BdmDictionary, BdmTable,
+                                                      ExternalLink,
+                                                      InformationRequest)
+from pydantic import ValidationError
 
 log = logging.getLogger(__name__)
 
@@ -76,6 +69,7 @@ def bd_dataset_search(context, data_dict):
     fq += get_parameter(data_dict, "tag", "tags")
     fq += get_parameter(data_dict, "group", "groups")
     fq += get_parameter(data_dict, "organization", "organization")
+    fq += get_parameter(data_dict, "download_type", "extras_dataset_args")
     fq += get_parameter(data_dict, "spatial_coverage", "res_extras_spatial_coverage")
     fq += get_parameter(data_dict, "temporal_coverage", "res_extras_temporal_coverage")
 
@@ -87,16 +81,16 @@ def bd_dataset_search(context, data_dict):
     order2sort = {
         "score": "score desc",
         "popular": "views_recent desc",
-        "recent": "metadata_modified desc"
+        "recent": "metadata_modified desc",
     }
 
-    sort = order_by.split(',')
+    sort = order_by.split(",")
     sort = [order2sort[s] for s in sort]
     sort = ", ".join(sort)
 
     # search with solr query ##############################
 
-    data = package_search(
+    response = package_search(
         context,
         {
             "q": q,
@@ -106,13 +100,45 @@ def bd_dataset_search(context, data_dict):
         },
     )
 
+    # post-process ########################################
+
+    response["datasets"] = response.pop("results", None)
+    response.pop("facets", None)
+    response.pop("search_facets", None)
+    response.pop("sort", None)
+
     # post-process tags ###################################
+
+    response["tags"] = {}
+
+    for dataset in response["datasets"]:
+        for tag in dataset.get("tags", []):
+            key = tag["name"]
+            value = response["tags"].get(key, 0) + 1
+            response["tags"][key] = value
 
     # post-process organizations ##########################
 
-    # format result #######################################
+    response["organizations"] = {}
 
-    return data
+    for dataset in response["datasets"]:
+        key = dataset["organization"]["name"]
+        value = response["organizations"].get(key, 0) + 1
+        response["organizations"][key] = value
+
+    # post-process datasets ###############################
+
+    page = int(page or 1)
+    page_size = int(page_size or 10)
+
+    j = page_size * page
+    i = page_size * (page - 1)
+
+    response["datasets"] = response["datasets"][i:j]
+
+    #######################################################
+
+    return response
 
 
 def bd_dataset_show(context, data_dict):
@@ -143,8 +169,6 @@ def bd_dataset_show(context, data_dict):
     :type dataset_id: string
     :returns: most relevant dataset
     """
-
-    log.debug("teste")
 
     try:
         dataset_id = data_dict["dataset_id"]
