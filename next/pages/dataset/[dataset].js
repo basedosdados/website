@@ -69,7 +69,7 @@ function BaseResourcePage({ title, buttonText, onClick, children }) {
       <Flex
         flexDirection={{ base: "column", lg: "row" }}
         width="100%"
-        alignItems={{ base: "flex-start", lg: "center" }}
+        alignItems={{ base: "flex-start", lg: "flex-start" }}
       >
         <Title>{title}</Title>
         {onClick ? (
@@ -77,7 +77,7 @@ function BaseResourcePage({ title, buttonText, onClick, children }) {
             colorScheme="blue"
             backgroundColor="#3AA1EB"
             marginLeft={{ base: null, lg: "auto" }}
-            marginTop={{ base: "20px", lg: null }}
+            marginTop={{ base: "20px", lg: "0px" }}
             height="35px"
             borderRadius="13px"
             letterSpacing="0.1em"
@@ -171,7 +171,6 @@ df <- read_sql(query)`,
           })}
         </HStack>
         <Highlight
-          style={{ width: "100%" }}
           code={consultationText[selectedConsultation]}
           language={consultationLanguage[selectedConsultation]}
           {...defaultProps}
@@ -184,13 +183,19 @@ df <- read_sql(query)`,
                 width: "100%",
                 padding: "10px",
                 borderRadius: "6px",
-                wordBreak: "break-all",
+                whiteSpace: "break-spaces",
               }}
             >
               {tokens.map((line, i) => (
-                <div {...getLineProps({ line, key: i })}>
+                <div
+                  style={{ wordBreak: "break-all" }}
+                  {...getLineProps({ line, key: i })}
+                >
                   {line.map((token, key) => (
-                    <span {...getTokenProps({ token, key })} />
+                    <span
+                      style={{ wordBreak: "break-all" }}
+                      {...getTokenProps({ token, key })}
+                    />
                   ))}
                 </div>
               ))}
@@ -350,6 +355,7 @@ export default function DatasetPage({
                   value={resource.name}
                   valueField="name"
                   displayField="name"
+                  isActive={resource.resource_type === "bdm_table"}
                   fieldName="Tabelas"
                   onChange={(name) =>
                     setResource(bdmTables.filter((b) => b.name === name)[0])
@@ -363,6 +369,7 @@ export default function DatasetPage({
                   choices={externalLinks}
                   valueField="name"
                   displayField="name"
+                  isActive={resource.resource_type === "external_link"}
                   fieldName="Links Externos"
                   value={resource.name}
                   onChange={(name) =>

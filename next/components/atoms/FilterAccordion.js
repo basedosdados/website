@@ -16,32 +16,48 @@ export function BaseFilterAccordion({
   fieldName,
   children,
   overflowX = "scroll",
+  isOpen = null,
+  isActive = false,
+  onChange = () => {},
 }) {
   return (
-    <Accordion allowToggle width="100%">
+    <Accordion ex allowToggle width="100%">
       <AccordionItem border="0px">
-        <Text>
-          <AccordionButton border="1px solid #DEDFE0" borderRadius="15px">
-            <Box
-              flex="1"
-              textAlign="left"
-              fontFamily="Lato"
-              fontWeight="700"
-              fontSize="16px"
-            >
-              {fieldName}
-            </Box>
-            <AccordionIcon />
-          </AccordionButton>
-        </Text>
-        <AccordionPanel
-          overflowY="auto"
-          overflowX={overflowX}
-          maxHeight="300px"
-          pb={4}
-        >
-          {children}
-        </AccordionPanel>
+        {({ isExpanded }) => (
+          <>
+            <Text>
+              <AccordionButton
+                onClick={onChange}
+                border={isActive ? "2px solid #3AA1EB" : "1px solid #DEDFE0"}
+                color={isActive ? "#3AA1EB" : null}
+                borderRadius="15px"
+              >
+                <Box
+                  flex="1"
+                  textAlign="left"
+                  fontFamily="Lato"
+                  fontWeight="700"
+                  fontSize="16px"
+                >
+                  {fieldName}
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+            </Text>
+            {isExpanded && [null, true].indexOf(isOpen) != -1 ? (
+              <AccordionPanel
+                overflowY="auto"
+                overflowX={overflowX}
+                maxHeight="300px"
+                pb={4}
+              >
+                {children}
+              </AccordionPanel>
+            ) : (
+              <></>
+            )}
+          </>
+        )}
       </AccordionItem>
     </Accordion>
   );
@@ -54,9 +70,11 @@ export function CheckboxFilterAccordion({
   values,
   valueField = "id",
   displayField = "display_name",
+  isActive = false,
+  isOpen = null,
 }) {
   return (
-    <BaseFilterAccordion fieldName={fieldName}>
+    <BaseFilterAccordion isActive={isActive} fieldName={fieldName}>
       <CheckboxGroup onChange={(val) => onChange(val)} value={values}>
         <VStack alignItems="flex-start">
           {choices.map((c) => (
@@ -75,9 +93,16 @@ export function FilterAccordion({
   value,
   valueField = "id",
   displayField = "display_name",
+  isOpen = null,
+  isActive = false,
 }) {
   return (
-    <BaseFilterAccordion overflowX="none" fieldName={fieldName}>
+    <BaseFilterAccordion
+      isActive={isActive}
+      isOpen={isOpen}
+      overflowX="none"
+      fieldName={fieldName}
+    >
       <VStack spacing={5} paddingTop="10px" alignItems="flex-start">
         {choices.map((c) => (
           <Title

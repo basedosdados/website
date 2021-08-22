@@ -102,6 +102,7 @@ export default function SearchPage({
             Filtrar por
           </SectionTitle>
           <CheckboxFilterAccordion
+            isActive={(paramFilters.organization || []).length > 0}
             choices={organizations}
             values={paramFilters.organization}
             valueField="name"
@@ -112,6 +113,7 @@ export default function SearchPage({
             }
           />
           <CheckboxFilterAccordion
+            isActive={(paramFilters.groups || []).length > 0}
             choices={groups}
             values={paramFilters.groups}
             valueField="name"
@@ -122,6 +124,7 @@ export default function SearchPage({
             }
           />
           <CheckboxFilterAccordion
+            isActive={(paramFilters.tags || []).length > 0}
             choices={tags}
             valueField="name"
             displayField="display_name"
