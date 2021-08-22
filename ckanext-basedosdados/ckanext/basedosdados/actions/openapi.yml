@@ -1,3 +1,5 @@
+#browser-based editor where you can write OpenAPI specs.
+#https://editor.swagger.io/
 openapi: 3.0.1
 info:
   title: Base dos Dados
@@ -80,7 +82,7 @@ paths:
         - CKAN
 ############################################################
 ############################################################
-  /bd_dataset_show:
+  /bd_bdm_dataset_show:
     get:
       description: Procura de datasets pelo ID
       parameters:
@@ -88,21 +90,26 @@ paths:
           in: query
           schema:
             type: string
-          example: br-abrinq-oca
+          example: br_sp_alesp
       responses:
         '200':
           description: ""
       tags:
         - Base dos Dados
-  /bd_table_show:
+  /bd_bdm_table_show:
     get:
       description: Procura um recurso (tabela ou link externo) pelo nome
       parameters:
+        - name: dataset_id
+          in: query
+          schema:
+            type: string
+          example: br_sp_alesp
         - name: table_id
           in: query
           schema:
             type: string
-          example: primeira_infancia_municipio
+          example: deputado
       responses:
         '200':
           description: ""
