@@ -1,0 +1,704 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Base dos Dados",
+    "description": "Endpoints da Base Dos Dados e do [CKAN](\"https://docs.ckan.org/en/2.9/api/#action-api-reference\")\n",
+    "version": "0.1"
+  },
+  "servers": [
+    {
+      "url": "https://basedosdados.org/api/3/action"
+    },
+    {
+      "url": "https://staging.basedosdados.org/api/3/action"
+    }
+  ],
+  "paths": {
+    "/package_show": {
+      "get": {
+        "description": "Visualiza um dataset, com suas organizações, grupos, recursos e tags por seu nome ou ID",
+        "parameters": [
+          {
+            "name": "name_or_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "br-abrinq-oca"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CKAN"
+        ]
+      }
+    },
+    "/resource_show": {
+      "get": {
+        "description": "Visualiza um recurso (tabela ou link externo) através de seu UUID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "a296c904-ae44-4d4c-ae40-10b3c3f13231"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        },
+        "tags": [
+          "CKAN"
+        ]
+      }
+    },
+    "/tag_list": {
+      "get": {
+        "description": "Lista as tags",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CKAN"
+        ]
+      }
+    },
+    "/group_list": {
+      "get": {
+        "description": "Lista dos grupos",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        },
+        "tags": [
+          "CKAN"
+        ]
+      }
+    },
+    "/package_list": {
+      "get": {
+        "description": "Lista os pacotes",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CKAN"
+        ]
+      }
+    },
+    "/organization_list": {
+      "get": {
+        "description": "Lista as organizações",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CKAN"
+        ]
+      }
+    },
+    "/bd_bdm_dataset_show": {
+      "get": {
+        "description": "Procura de datasets pelo ID",
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "br_sp_alesp"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Base dos Dados"
+        ]
+      }
+    },
+    "/bd_bdm_table_show": {
+      "get": {
+        "description": "Procura um recurso (tabela ou link externo) pelo nome",
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "br_sp_alesp"
+          },
+          {
+            "name": "table_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "deputado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        },
+        "tags": [
+          "Base dos Dados"
+        ]
+      }
+    },
+    "/bd_recent_datasets_list": {
+      "get": {
+        "description": "Lista os datasets recentemente modificados",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Base dos Dados"
+        ]
+      }
+    },
+    "/bd_popular_datasets_list": {
+      "get": {
+        "description": "Lista os datasets populares",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Base dos Dados"
+        ]
+      }
+    },
+    "/package_validate": {
+      "post": {
+        "description": "Realiza a validação de um dataset com Pydantic",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "isopen": {
+                    "type": "boolean"
+                  },
+                  "private": {
+                    "type": "boolean"
+                  },
+                  "notes": {
+                    "type": "string"
+                  },
+                  "extras": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "package_id": {
+                          "type": "string"
+                        },
+                        "state": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "object",
+                          "properties": {
+                            "download_type": {
+                              "type": "string"
+                            },
+                            "dataset_id": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "key": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "owner_org": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "maintainer": {},
+                  "ckan_url": {
+                    "type": "string"
+                  },
+                  "author_email": {},
+                  "id": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  },
+                  "relationships_as_object": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "creator_user_id": {
+                    "type": "string"
+                  },
+                  "metadata_modified": {
+                    "type": "string"
+                  },
+                  "author": {},
+                  "relationships_as_subject": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "metadata_created": {
+                    "type": "string"
+                  },
+                  "resources": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "project_id_prod": {
+                          "type": "string"
+                        },
+                        "columns": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "is_in_staging": {
+                                "type": "boolean"
+                              },
+                              "is_partition": {
+                                "type": "boolean"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "source_bucket_name": {
+                          "type": "string"
+                        },
+                        "formato": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "package_id": {
+                          "type": "string"
+                        },
+                        "cache_last_updated": {},
+                        "table_id": {
+                          "type": "string"
+                        },
+                        "temporal_coverage": {
+                          "type": "array",
+                          "items": {
+                            "type": "integer"
+                          }
+                        },
+                        "data_cleaned_by": {
+                          "type": "object",
+                          "properties": {
+                            "website": {
+                              "type": "string"
+                            },
+                            "ckan_user": {},
+                            "github_user": {},
+                            "code_url": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "project_id_staging": {
+                          "type": "string"
+                        },
+                        "spatial_coverage": {
+                          "type": "string"
+                        },
+                        "update_frequency": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "state": {
+                          "type": "string"
+                        },
+                        "identifying_columns": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "last_modified": {},
+                        "mimetype_inner": {},
+                        "partitions": {
+                          "type": "string"
+                        },
+                        "metadata_modified": {
+                          "type": "string"
+                        },
+                        "created": {
+                          "type": "string"
+                        },
+                        "url_type": {},
+                        "dataset_id": {
+                          "type": "string"
+                        },
+                        "format": {
+                          "type": "string"
+                        },
+                        "resource_type": {
+                          "type": "string"
+                        },
+                        "bdm_file_size": {
+                          "type": "integer"
+                        },
+                        "version": {
+                          "type": "string"
+                        },
+                        "url": {
+                          "type": "string"
+                        },
+                        "published_by": {
+                          "type": "object",
+                          "properties": {
+                            "website": {
+                              "type": "string"
+                            },
+                            "ckan_user": {},
+                            "github_user": {},
+                            "name": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "size": {},
+                        "cache_url": {},
+                        "datastore_active": {
+                          "type": "boolean"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "mimetype": {},
+                        "data_cleaning_description": {
+                          "type": "string"
+                        },
+                        "position": {
+                          "type": "integer"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "entity": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "groups": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "image_url": {
+                          "type": "string"
+                        },
+                        "created": {
+                          "type": "string"
+                        },
+                        "approval_status": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "is_organization": {
+                          "type": "boolean"
+                        },
+                        "display_name": {
+                          "type": "string"
+                        },
+                        "capacity": {
+                          "type": "string"
+                        },
+                        "image_display_url": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "state": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "version": {},
+                  "url": {
+                    "type": "string"
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "vocabulary_id": {},
+                        "name": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "state": {
+                          "type": "string"
+                        },
+                        "display_name": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "github_url": {
+                    "type": "string"
+                  },
+                  "license_id": {
+                    "type": "string"
+                  },
+                  "organization": {
+                    "type": "object",
+                    "properties": {
+                      "image_url": {
+                        "type": "string"
+                      },
+                      "created": {
+                        "type": "string"
+                      },
+                      "approval_status": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "state": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "is_organization": {
+                        "type": "boolean"
+                      }
+                    }
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "maintainer_email": {},
+                  "license_title": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        },
+        "tags": [
+          "Base dos Dados"
+        ]
+      }
+    },
+    "/bd_dataset_schema": {
+      "get": {
+        "description": "Gera um modelo de dataset",
+        "responses": {
+          "default": {
+            "description": "Auto generated using Swagger Inspector"
+          }
+        },
+        "tags": [
+          "Base dos Dados (Schema)"
+        ]
+      }
+    },
+    "/bd_external_link_schema": {
+      "get": {
+        "description": "Gera um modelo de link externo",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Base dos Dados (Schema)"
+        ]
+      }
+    },
+    "/bd_information_request_schema": {
+      "get": {
+        "description": "Gera um modelo de requisição de informação",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Base dos Dados (Schema)"
+        ]
+      }
+    },
+    "/bd_bdm_table_schema": {
+      "get": {
+        "description": "Gera um modelo de tabela BDM",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Base dos Dados (Schema)"
+        ]
+      }
+    },
+    "/bd_bdm_columns_schema": {
+      "get": {
+        "description": "Gera um modelo de colunas BDM",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
+          }
+        },
+        "tags": [
+          "Base dos Dados (Schema)"
+        ]
+      }
+    },
+    "/bd_bdm_dictionary_schema": {
+      "get": {
+        "description": "Gera um modelo de dicionário BDM",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Base dos Dados (Schema)"
+        ]
+      }
+    }
+  }
+}
