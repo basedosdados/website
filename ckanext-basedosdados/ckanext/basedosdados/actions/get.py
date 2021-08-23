@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+# from jmespath import search
+
 import ckan.plugins.toolkit as toolkit
 from ckan.logic.action.get import (
     dataset_follower_count,
@@ -54,6 +56,82 @@ def bd_information_request_schema(context, data_dict):
 
 
 @toolkit.side_effect_free
+def bd_bdm_dataset_show(context, data_dict):
+    """Show dataset
+    Args:
+        dataset_id (str): dataset ID (required)
+    Returns:
+        list of datasets
+    Example usage:
+        http://localhost:5000/api/3/action/bd_bdm_dataset_show?dataset_id=br_sp_alesp
+    """
+
+    try:
+        dataset_id = data_dict["dataset_id"]
+    except KeyError as e:
+        raise ValidationError(f"{e} parameter not found")
+
+    fq = f"res_extras_dataset_id:({dataset_id})"
+
+    search_result = package_search(
+        context,
+        {
+            "fq": fq,
+            "rows": 1000,
+        },
+    ).get("results")
+
+    # TODO: make error message appear in the error from api
+    if search_result:
+        return search_result
+    else:
+        raise "No dataset found with dataset_id={dataset_id}"
+
+
+@toolkit.side_effect_free
+def bd_bdm_table_show(context, data_dict):
+    """Show table
+    Args:
+        dataset_id (str): dataset ID (required)
+        table_id (str): table ID (required)
+    Returns:
+        list of tables
+    Example usage:
+        http://localhost:5000/api/3/action/bd_bdm_table_show?dataset_id=br_sp_alesp&table_id=deputado
+    """
+
+    try:
+        dataset_id = data_dict["dataset_id"]
+        table_id = data_dict["table_id"]
+    except KeyError as e:
+        raise ValidationError(f"{e} parameter not found")
+
+    fq = f"res_extras_dataset_id:({dataset_id}) AND res_extras_table_id:({table_id})"
+
+    # TODO: maybe use resource_search instead of package_search
+    search_result = package_search(
+        context,
+        {
+            "fq": fq,
+            "rows": 1000,
+        },
+    ).get("results")
+
+    ## get only the resources that match table_id
+    found_resources = []
+    for package in search_result:
+        for resource in package.get("resources"):
+            if resource.get("table_id") == table_id:
+                found_resources.append(resource)
+
+    # TODO: make error message appear in the error from api
+    if found_resources:
+        return found_resources
+    else:
+        raise "No tables found with dataset_id={dataset_id} and table_id={table_id}"
+
+
+@toolkit.side_effect_free
 def bd_dataset_search(context, data_dict):
 
     # pre-process solr parameters #########################
@@ -62,6 +140,7 @@ def bd_dataset_search(context, data_dict):
     page = data_dict.get("page", 1)
     page_size = data_dict.get("page_size", 10)
     order_by = data_dict.get("order_by", "score,recent")
+
     # pre-process solr parameter fq #######################
 
     def get_parameter(data, bd_key, fq_key):
@@ -144,87 +223,6 @@ def bd_dataset_search(context, data_dict):
     #######################################################
 
     return response
-
-
-def _find_dataset_id(data, dataset_id):
-    found_package = f"no package find with dataset_id = {dataset_id}"
-    for package in data or []:
-        extra = package.get("extras")[0]
-        if (
-            extra.get("key") == "dataset_args"
-            and extra["value"].get("dataset_id") == dataset_id
-        ):
-            found_package = package
-
-    return found_package
-
-
-def _find_table_id(found_package, dataset_id, table_id):
-    found_resource = (
-        f"no resource find with dataset_id = {dataset_id} and table_id = {table_id}"
-    )
-    for resource in found_package.get("resources"):
-        if resource.get("table_id") == table_id:
-            found_resource = resource
-
-    return found_resource
-
-
-@toolkit.side_effect_free
-def bd_bdm_dataset_show(context, data_dict):
-    """Show dataset
-    Args:
-        dataset_id (str): dataset ID (required)
-    Returns:
-        dictionary with the dataset
-    Example usage:
-        http://localhost:5000/api/3/action/bd_bdm_dataset_show?dataset_id=br_sp_alesp
-    """
-
-    try:
-        dataset_id = data_dict["dataset_id"]
-    except KeyError as e:
-        raise ValidationError(f"{e} parameter not found")
-
-    search = package_search(context, {"q": f"dataset_id={dataset_id}"})
-    data = search.get("results", [])
-    found_package = _find_dataset_id(data, dataset_id)
-
-    # TODO: Make return sucess=False if found_package is str and add error message
-    if isinstance(found_package, str):
-        return found_package
-    else:
-        return found_package
-
-
-@toolkit.side_effect_free
-def bd_bdm_table_show(context, data_dict):
-    """Show table
-    Args:
-        dataset_id (str): dataset ID (required)
-        table_id (str): table ID (required)
-    Returns:
-        dictionary with the table
-    Example usage:
-        http://localhost:5000/api/3/action/bd_bdm_table_show?dataset_id=br_sp_alesp&table_id=deputado
-    """
-
-    try:
-        dataset_id = data_dict["dataset_id"]
-        table_id = data_dict["table_id"]
-    except KeyError as e:
-        raise ValidationError(f"{e} parameter not found")
-
-    found_package = bd_bdm_dataset_show(context, data_dict)
-
-    # TODO: Make return sucess=False if found_package is str and add error message
-    if isinstance(found_package, str):
-        return found_package
-    else:
-        found_resource = _find_table_id(found_package, dataset_id, table_id)
-
-    # TODO: Make return sucess=False if found_resource is str and add error message
-    return found_resource
 
 
 @toolkit.side_effect_free
