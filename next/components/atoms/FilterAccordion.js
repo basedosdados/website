@@ -47,7 +47,8 @@ export function BaseFilterAccordion({
                 <AccordionIcon />
               </AccordionButton>
             </Text>
-            {isOpen ? (
+            {console.log(isOpen, isExpanded)}
+            {(isOpen && isOpen === true) || (isOpen == null && isExpanded) ? (
               <VStack
                 overflowY="auto"
                 overflowX={overflowX + " !important"}
@@ -86,6 +87,7 @@ export function CheckboxFilterAccordion({
       onChange={onToggle}
       isActive={isActive}
       fieldName={fieldName}
+      isOpen={isOpen}
     >
       <CheckboxGroup onChange={(val) => onChange(val)} value={values}>
         <VStack alignItems="flex-start">
