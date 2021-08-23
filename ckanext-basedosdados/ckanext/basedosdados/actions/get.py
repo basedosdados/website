@@ -1,8 +1,6 @@
 import json
 from pathlib import Path
 
-# from jmespath import search
-
 import ckan.plugins.toolkit as toolkit
 from ckan.logic.action.get import (
     dataset_follower_count,
@@ -63,6 +61,7 @@ def bd_bdm_dataset_show(context, data_dict):
     Returns:
         list of datasets
     Example usage:
+        http://staging.basedosdados.org/api/3/action/bd_bdm_dataset_show?dataset_id=br_sp_alesp
         http://localhost:5000/api/3/action/bd_bdm_dataset_show?dataset_id=br_sp_alesp
     """
 
@@ -81,9 +80,19 @@ def bd_bdm_dataset_show(context, data_dict):
         },
     ).get("results")
 
+    # get the only package that mach dataset_id
+    for package in search_result:
+        for resource in package.get("resources"):
+            if (
+                resource.get("dataset_id") is not None
+                and resource.get("dataset_id") == dataset_id
+            ):
+                found_package = package
+                break
+
     # TODO: make error message appear in the endpoint response
-    if search_result:
-        return search_result
+    if found_package:
+        return found_package
     else:
         raise "No dataset found with dataset_id={dataset_id}"
 
@@ -97,6 +106,7 @@ def bd_bdm_table_show(context, data_dict):
     Returns:
         list of tables
     Example usage:
+        http://staging.basedosdados.org/api/3/action/bd_bdm_table_show?dataset_id=br_sp_alesp&table_id=deputado
         http://localhost:5000/api/3/action/bd_bdm_table_show?dataset_id=br_sp_alesp&table_id=deputado
     """
 
@@ -117,14 +127,16 @@ def bd_bdm_table_show(context, data_dict):
         },
     ).get("results")
 
-    # get the resources that mach table_id, can be more than one. example: deputado mach both deputado and deputados
-    found_resources = []
+    # get the only package that mach dataset_id and table_id
     for package in search_result:
         for resource in package.get("resources"):
-            if resource.get("table_id") is not None and table_id in resource.get(
-                "table_id"
+            if (
+                resource.get("table_id") is not None
+                and resource.get("table_id") == table_id
+                and resource.get("dataset_id") == dataset_id
             ):
-                found_resources.append(resource)
+                found_resources = resource
+                break
 
     # # TODO: make error message appear in the endpoint response
     if found_resources:
