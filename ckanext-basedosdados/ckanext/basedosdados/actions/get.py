@@ -81,7 +81,7 @@ def bd_bdm_dataset_show(context, data_dict):
         },
     ).get("results")
 
-    # TODO: make error message appear in the error from api
+    # TODO: make error message appear in the endpoint response
     if search_result:
         return search_result
     else:
@@ -117,14 +117,16 @@ def bd_bdm_table_show(context, data_dict):
         },
     ).get("results")
 
-    ## get only the resources that match table_id
+    # get the resources that mach table_id, can be more than one. example: deputado mach both deputado and deputados
     found_resources = []
     for package in search_result:
         for resource in package.get("resources"):
-            if resource.get("table_id") == table_id:
+            if resource.get("table_id") is not None and table_id in resource.get(
+                "table_id"
+            ):
                 found_resources.append(resource)
 
-    # TODO: make error message appear in the error from api
+    # # TODO: make error message appear in the endpoint response
     if found_resources:
         return found_resources
     else:
