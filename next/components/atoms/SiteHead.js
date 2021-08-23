@@ -18,6 +18,11 @@ export default function SiteHead({ children }) {
         rel="stylesheet"
       />
       <link href="/_nxt/vendor/terminal.css" rel="stylesheet" />
+      <script
+        charset="utf-8"
+        type="text/javascript"
+        src="https://js.hsforms.net/forms/shell.js"
+      ></script>
       {children}
     </Head>
   );

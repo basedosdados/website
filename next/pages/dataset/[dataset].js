@@ -41,7 +41,7 @@ export async function getStaticProps(context) {
       externalLinks,
       isPlus: dataset.download_type === "BD Mais",
     },
-    revalidate: 30, //TODO: Increase this timer
+    revalidate: 1, //TODO: Increase this timer
   });
 }
 
@@ -71,7 +71,7 @@ function BaseResourcePage({ title, buttonText, onClick, children }) {
         width="100%"
         alignItems={{ base: "flex-start", lg: "flex-start" }}
       >
-        <Title>{title}</Title>
+        <Title wordBreak="break-all">{title}</Title>
         {onClick ? (
           <Button
             colorScheme="blue"
@@ -121,9 +121,18 @@ query <- "SELECT * FROM \`basedosdados.${queryName}\`"
 df <- read_sql(query)`,
   };
 
+  function getSizeLabel() {
+    let size = Math.ceil(resource.bdm_file_size / 1000);
+
+    if (size >= 1000) size = Math.ceil(size / 100) + " gb";
+    else size = size + " mb";
+
+    return `(${size})`;
+  }
+
   return (
     <BaseResourcePage
-      title={resource.name}
+      title={`${resource.name} ${resource.bdm_file_size ? getSizeLabel() : ""}`}
       buttonText="Download"
       onClick={() => {}}
     >
@@ -184,6 +193,7 @@ df <- read_sql(query)`,
                 padding: "10px",
                 borderRadius: "6px",
                 whiteSpace: "break-spaces",
+                wordBreak: "break-all",
               }}
             >
               {tokens.map((line, i) => (
@@ -206,7 +216,7 @@ df <- read_sql(query)`,
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Title>Metadados</Title>
         <ExpandableTable
-          containerStyle={{ width: "100%" }}
+          containerStyle={{ width: "100%", alignItems: "flex-start" }}
           headers={["nome", "valor"]}
           values={formatObjectsInArray(filterOnlyValidValues(resource))}
         />
@@ -233,7 +243,6 @@ function ExternalLinkPage({ resource }) {
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Title>Metadados</Title>
         <ExpandableTable
-          containerStyle={{ maxWidth: "80vh" }}
           headers={["nome", "valor"]}
           values={formatObjectsInArray(filterOnlyValidValues(resource))}
         />
@@ -253,7 +262,12 @@ export default function DatasetPage({
     bdmTables.length > 0 ? bdmTables[0] : externalLinks[0]
   );
 
-  console.log(dataset);
+  const [bdmTableFilter, setBdmTableFilter] = useState(
+    resource.resource_type === "bdm_table"
+  );
+  const [externalLinkTableFilter, setExternalLinkTableFilter] = useState(
+    resource.resource_type === "external_link"
+  );
 
   function getResourcePage() {
     switch (resource.resource_type) {
@@ -287,6 +301,8 @@ export default function DatasetPage({
             boxShadow="0px 0px 10px rgba(0,0,0,0.25)"
             minWidth="200px"
             minHeight="200px"
+            maxWidth="300px"
+            maxHeight="300px"
             borderRadius="31px"
             objectFit="contain"
             src={
@@ -356,10 +372,12 @@ export default function DatasetPage({
                   valueField="name"
                   displayField="name"
                   isActive={resource.resource_type === "bdm_table"}
+                  isOpen={bdmTableFilter}
                   fieldName="Tabelas"
                   onChange={(name) =>
                     setResource(bdmTables.filter((b) => b.name === name)[0])
                   }
+                  onToggle={() => setBdmTableFilter(!bdmTableFilter)}
                 />
               ) : (
                 <></>
@@ -370,10 +388,14 @@ export default function DatasetPage({
                   valueField="name"
                   displayField="name"
                   isActive={resource.resource_type === "external_link"}
+                  isOpen={externalLinkTableFilter}
                   fieldName="Links Externos"
                   value={resource.name}
                   onChange={(name) =>
                     setResource(externalLinks.filter((b) => b.name === name)[0])
+                  }
+                  onToggle={() =>
+                    setExternalLinkTableFilter(!externalLinkTableFilter)
                   }
                 />
               ) : (

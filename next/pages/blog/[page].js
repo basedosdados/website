@@ -1,4 +1,12 @@
-import { Box, Center, CircularProgress, Stack, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  CircularProgress,
+  Flex,
+  Image,
+  Stack,
+  VStack,
+} from "@chakra-ui/react";
 import { useQuery } from "react-query";
 import { useRouter } from "next/router";
 import BigTitle from "../../components/atoms/BigTitle";
@@ -44,6 +52,17 @@ function BlogPage({ strapiPages = [] }) {
     setRightColumnHtml(converter.makeHtml(strapiPage.RightColumnText));
     setLeftColumnHtml(converter.makeHtml(strapiPage.LeftColumnText));
     setData(strapiPage);
+
+    typeof hbspt != "undefined" ? (
+      hbspt.forms.create({
+        region: "na1",
+        portalId: "9331013",
+        formId: "3c85cc81-2b91-4a90-b3ff-41412dfed25e",
+        target: "#form-hbspt",
+      })
+    ) : (
+      <></>
+    );
   }, []);
 
   if (!data)
@@ -71,20 +90,47 @@ function BlogPage({ strapiPages = [] }) {
         alignItems="center"
         width="100%"
         backgroundColor="#fafafa"
-        padding="50px 5%"
-        marginTop="80px"
+        padding="50px 8%"
+        paddingTop="200px"
         minHeight="60vh"
       >
         <>
           <BigTitle>{data.title}</BigTitle>
-          <Stack
+          <Box position="absolute" width="80%">
+            <Box
+              position="absolute"
+              right="0px"
+              top="-200%"
+              minWidth="100px"
+              minHeight="108px"
+              zIndex="0"
+            >
+              <Image
+                priority
+                src="/_nxt/img/home_background.png"
+                layout="fill"
+                objectFit="contain"
+              />
+            </Box>
+          </Box>
+
+          <Flex
             spacing={20}
             id="blog"
-            direction={{ base: "column", lg: "row" }}
+            flexDirection={{ base: "column", lg: "row" }}
+            position="relative"
+            zIndex="1"
           >
-            <Box dangerouslySetInnerHTML={{ __html: leftColumnHtml }} />
-            <Box dangerouslySetInnerHTML={{ __html: rightColumnHtml }} />
-          </Stack>
+            <Box
+              flex="1"
+              marginRight={{ base: "0px", lg: "5%" }}
+              dangerouslySetInnerHTML={{ __html: leftColumnHtml }}
+            />
+            <Box
+              flex="1"
+              dangerouslySetInnerHTML={{ __html: rightColumnHtml }}
+            />
+          </Flex>
         </>
       </VStack>
       <Footer />

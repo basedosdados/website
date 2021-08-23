@@ -9,7 +9,10 @@ import {
   CheckboxGroup,
   VStack,
   Text,
+  Tooltip,
 } from "@chakra-ui/react";
+import { useEffect } from "react/cjs/react.production.min";
+import { limitTextSize } from "../../utils";
 import Title from "./Title";
 
 export function BaseFilterAccordion({
@@ -44,15 +47,19 @@ export function BaseFilterAccordion({
                 <AccordionIcon />
               </AccordionButton>
             </Text>
-            {isExpanded && [null, true].indexOf(isOpen) != -1 ? (
-              <AccordionPanel
+            {isOpen ? (
+              <VStack
                 overflowY="auto"
-                overflowX={overflowX}
+                overflowX={overflowX + " !important"}
                 maxHeight="300px"
                 pb={4}
+                pt={2}
+                pl={4}
+                width="100%"
+                alignItems="flex-start"
               >
                 {children}
-              </AccordionPanel>
+              </VStack>
             ) : (
               <></>
             )}
@@ -67,6 +74,7 @@ export function CheckboxFilterAccordion({
   fieldName,
   choices,
   onChange,
+  onToggle,
   values,
   valueField = "id",
   displayField = "display_name",
@@ -74,7 +82,11 @@ export function CheckboxFilterAccordion({
   isOpen = null,
 }) {
   return (
-    <BaseFilterAccordion isActive={isActive} fieldName={fieldName}>
+    <BaseFilterAccordion
+      onChange={onToggle}
+      isActive={isActive}
+      fieldName={fieldName}
+    >
       <CheckboxGroup onChange={(val) => onChange(val)} value={values}>
         <VStack alignItems="flex-start">
           {choices.map((c) => (
@@ -90,6 +102,7 @@ export function FilterAccordion({
   fieldName,
   choices,
   onChange,
+  onToggle,
   value,
   valueField = "id",
   displayField = "display_name",
@@ -100,19 +113,27 @@ export function FilterAccordion({
     <BaseFilterAccordion
       isActive={isActive}
       isOpen={isOpen}
-      overflowX="none"
+      onChange={onToggle}
+      overflowX="hidden"
       fieldName={fieldName}
     >
-      <VStack spacing={5} paddingTop="10px" alignItems="flex-start">
+      <VStack
+        overflowX="none !important"
+        spacing={5}
+        paddingTop="10px"
+        alignItems="flex-start"
+      >
         {choices.map((c) => (
-          <Title
-            fontSize="14px"
-            cursor="pointer"
-            fontWeigth={c[valueField] === value ? "700" : "400"}
-            onClick={() => onChange(c[valueField])}
-          >
-            {c[displayField]}
-          </Title>
+          <Tooltip label={c[displayField]} aria-label={c[displayField]}>
+            <Title
+              fontSize="14px"
+              cursor="pointer"
+              fontWeigth={c[valueField] === value ? "700" : "400"}
+              onClick={() => onChange(c[valueField])}
+            >
+              {c[displayField]}
+            </Title>
+          </Tooltip>
         ))}
       </VStack>
     </BaseFilterAccordion>

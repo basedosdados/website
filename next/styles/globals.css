@@ -8,7 +8,25 @@ body {
 
 #blog h1 {
   font-weight: bold;
-  font-size: 28px;
+  font-size: 40px;
+  color: #2b8c4d;
+  font-family: Lato;
+  letter-spacing: 0.1em;
+}
+
+#blog p {
+  font-size: 16px;
+  color: #6e6e6e;
+  font-family: Lato;
+  letter-spacing: 0.1em;
+}
+
+#form-hbspt {
+  background-color: white;
+  padding: 5% 7%;
+  padding-bottom: 0px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
 }
 
 .card :hover {
