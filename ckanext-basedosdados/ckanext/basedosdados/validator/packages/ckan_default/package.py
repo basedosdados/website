@@ -28,21 +28,21 @@ coerce_to_unicode = lambda field: validator("field", allow_reuse=True)()
 ### Do not use extra while creating new models
 class _CkanDefaults(BaseModel): #, extra=Extra.forbid):
     id: IdType
-    name: Str
+    name: Str = Field(title="Nome")
 
-    title            : Str
-    type             : Literal["dataset"]
+    title            : Str                                               = Field(title="Título")
+    type             : Literal["dataset"]                                = Field(title="Tipo")
     notes            : Optional[Str]
     author           : Optional[Str]
     author_email     : Optional[Email]
     maintainer       : Optional[Str]
     maintainer_email : Optional[Email]
-    state            : Optional[Literal["active", "draft", "deleted"]]
-    license_id       : Optional[Str]
+    state            : Optional[Literal["active", "draft", "deleted"]]  
+    license_id       : Optional[Str]                                    = Field(title="URL")
     url              : Optional[Str]
     version          : Optional[Str]
-    metadata_created : Optional[datetime]
-    metadata_modified: Optional[datetime]
+    metadata_created : Optional[datetime]                               = Field(title="Útima Atualização")
+    metadata_modified: Optional[datetime]                               = Field(title="Data de Modificação")
     creator_user_id  : Optional[UUID]
     private          : bool
     license_title    : Optional[Str]
@@ -50,11 +50,11 @@ class _CkanDefaults(BaseModel): #, extra=Extra.forbid):
     # Ckan Defaults Complex Fields
     num_resources: Optional[Int]
     resources    : List[AnyResource] = []
-    groups       : Any
+    groups       : Any                       = Field(title="Grupos")
     owner_org    : UUID
-    organization : Any
+    organization : Any                       = Field(title="Organização")
     num_tags     : Optional[Int]
-    tags         : Any
+    tags         : Any                       = Field(title="Etiquetas")
 
     relationships_as_object : Any
     relationships_as_subject: Any
