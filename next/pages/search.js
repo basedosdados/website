@@ -229,7 +229,7 @@ export default function SearchPage({ strapiPages }) {
                 width="100%"
                 alignItems="flex-start"
                 spacing={3}
-                padding="60px 0px"
+                padding="30px 0px"
               >
                 {(data?.datasets || []).map((d) => (
                   <>
@@ -240,7 +240,7 @@ export default function SearchPage({ strapiPages }) {
                         "https://basedosdados.org/uploads/group/" +
                         d.organization.image_url
                       }
-                      organization={d.organization.title}
+                      organization={d.organization}
                       tags={d.tags.map((g) => g.name)}
                       size={
                         d.resources.filter((r) => r.size).length > 0

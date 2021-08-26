@@ -43,3 +43,20 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.chakra-checkbox__label {
+  font-size: 14px !important;
+}
+
+.chakra-checkbox__control {
+  background-color: transparent !important;
+  padding: 5px !important;
+  width: 20px !important;
+  height: 20px !important;
+  border-width: 3px !important;
+  border-radius: 4px !important;
+}
+
+.chakra-checkbox__control svg {
+  color: #2b8c4d;
+}

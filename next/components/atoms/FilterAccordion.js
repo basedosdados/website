@@ -42,7 +42,7 @@ export function BaseFilterAccordion({
                   textAlign="left"
                   fontFamily="Lato"
                   fontWeight="700"
-                  fontSize="16px"
+                  fontSize="15px"
                   letterSpacing="0.1em"
                 >
                   {fieldName}
@@ -139,8 +139,8 @@ export function CheckboxFilterAccordion({
                 fontWeight="700"
                 value={c[valueField]}
                 color="#7D7D7D"
+                colorScheme="green"
                 letterSpacing="0.1em"
-                fontSize="16px"
               >
                 {c[displayField]}
               </Checkbox>

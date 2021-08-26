@@ -46,15 +46,16 @@ export function Database({
       alignItems="flex-start"
       width="100%"
       spacing={{ base: 5, md: 0 }}
+      padding="10px 0px"
     >
       <HStack alignItems="flex-start" width="100%" spacing={10}>
         <Image
           priority
           objectFit="contain"
-          maxWidth="91px"
-          maxHeight="91px"
-          minWidth="91px"
-          minHeight="91px"
+          maxWidth="105px"
+          maxHeight="105px"
+          minWidth="105px"
+          minHeight="105px"
           borderRadius="10.1111px"
           filter="drop-shadow(0px 2.02222px 2.02222px rgba(0, 0, 0, 0.25));"
           src={image}
@@ -74,19 +75,21 @@ export function Database({
                 spacing={5}
                 pt={1}
               >
-                <Heading
-                  margin="0px"
-                  padding="0px"
-                  fontWeight="700"
-                  fontFamily="Lato"
-                  fontSize="18px"
-                  letterSpacing="0.1em"
-                  color="#252A32"
-                  maxWidth="500px"
-                  minWidth="100px"
-                >
-                  {name}
-                </Heading>
+                <Link href={link}>
+                  <Heading
+                    margin="0px"
+                    padding="0px"
+                    fontWeight="700"
+                    fontFamily="Lato"
+                    fontSize="18px"
+                    letterSpacing="0.1em"
+                    color="#252A32"
+                    maxWidth="500px"
+                    minWidth="100px"
+                  >
+                    {name}
+                  </Heading>
+                </Link>
                 <HStack
                   borderRadius="10.5233px"
                   border="0.743243px solid #6F6F6F"
@@ -106,7 +109,7 @@ export function Database({
                 alignItems="flex-start"
                 justifyContent="flex-start"
                 marginLeft="auto"
-                spacing={3}
+                spacing={2}
               >
                 {isPlus ? (
                   <Image
@@ -119,12 +122,14 @@ export function Database({
                   <></>
                 )}
                 {categories.map((c) => (
-                  <CategoryIcon
-                    size="36px"
-                    url={`/_nxt/img/categories/icone_${c}${
-                      isPlus ? "-1" : ""
-                    }.svg`}
-                  />
+                  <Link href={`/_nxt/search?group=${c}`}>
+                    <CategoryIcon
+                      size="36px"
+                      url={`/_nxt/img/categories/icone_${c}${
+                        isPlus ? "-1" : ""
+                      }.svg`}
+                    />
+                  </Link>
                 ))}
               </HStack>
             </Flex>
@@ -132,14 +137,17 @@ export function Database({
               <HStack fontSize="12px" spacing={5}>
                 <HStack>
                   <SectionText color="#6F6F6F">Organização:</SectionText>
-                  <SectionText
-                    color="#6F6F6F"
-                    textAlign="left"
-                    lineHeight="15px"
-                    fontWeight="bold"
-                  >
-                    {limitTextSize(organization, 30)}
-                  </SectionText>
+                  <Link href={`/_nxt/search?organization=${organization.name}`}>
+                    <SectionText
+                      color="#6F6F6F"
+                      textAlign="left"
+                      lineHeight="15px"
+                      fontWeight="bold"
+                      fontSize="12px"
+                    >
+                      {limitTextSize(organization.title, 30)}
+                    </SectionText>
+                  </Link>
                 </HStack>
                 <HStack>
                   <SectionText color="#6F6F6F">Temas:</SectionText>
@@ -189,26 +197,34 @@ export function Database({
             </VStack>
           </VStack>
           <VStack paddingTop="10px">
-            <HStack>
-              <HStack>
-                <Image src="/_nxt/img/icons/database.svg" />
-                {size ? (
-                  <>
-                    <Subtitle fontSize="14px" fontWeight="bold">
-                      {Math.round(size / 1000)} mb
+            <HStack spacing={5}>
+              {tableNum ? (
+                <HStack>
+                  <Image src="/_nxt/img/icons/database.svg" />
+                  <Subtitle color="#2B8C4D" fontSize="15px" fontWeight="bold">
+                    {tableNum} tabelas
+                  </Subtitle>
+                  {size ? (
+                    <Subtitle color="#2B8C4D" fontSize="15px" fontWeight="bold">
+                      ({Math.round(size / 1000)} mb)
                     </Subtitle>
-                    <Dot />
-                  </>
-                ) : (
-                  <></>
-                )}
-              </HStack>
-              {databaseInfo.map((item, index) => (
-                <>
-                  <Subtitle fontSize="14px">{item}</Subtitle>{" "}
-                  {index !== databaseInfo.length - 1 ? <Dot /> : <></>}{" "}
-                </>
-              ))}
+                  ) : (
+                    <></>
+                  )}
+                </HStack>
+              ) : (
+                <></>
+              )}
+              {externalLinkNum ? (
+                <HStack>
+                  <Image src="/_nxt/img/icons/link.svg" />
+                  <Subtitle color="#2B8C4D" fontSize="15px" fontWeight="bold">
+                    {externalLinkNum} links externos
+                  </Subtitle>
+                </HStack>
+              ) : (
+                <></>
+              )}
             </HStack>
           </VStack>
         </VStack>
