@@ -11,9 +11,6 @@ import {
   AbsoluteCenter,
 } from "@chakra-ui/react";
 import SectionTitle from "../components/atoms/SectionTitle";
-import SiteHead from "../components/atoms/SiteHead";
-import Footer from "../components/molecules/Footer";
-import Menu from "../components/molecules/Menu";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
@@ -23,35 +20,18 @@ import ControlledInput, {
 } from "../components/atoms/ControlledInput";
 import { Database } from "../components/organisms/Database";
 import { CheckboxFilterAccordion } from "../components/atoms/FilterAccordion";
-import { getOrganizationList } from "./api/organizations";
-import { getGroupList } from "./api/groups";
-import { getTagList } from "./api/tags";
 import { withStrapiPages } from "../hooks/strapi.hook";
 import { MainPageTemplate } from "../components/templates/main";
 
 export async function getStaticProps(context) {
-  let { data: organizations } = await getOrganizationList();
-  let { data: groups } = await getGroupList();
-  let { data: tags } = await getTagList();
-
   return withStrapiPages({
-    props: {
-      organizations: organizations.result,
-      groups: groups.result,
-      tags: tags.result,
-    },
     revalidate: 60, //TODO: Increase this timer
   });
 }
 
-export default function SearchPage({
-  strapiPages,
-  organizations,
-  groups,
-  tags,
-}) {
+export default function SearchPage({ strapiPages }) {
   const { query } = useRouter();
-  const orderQuery = decodeURI(query.order_by || "score desc");
+  const orderQuery = decodeURI(query.order_by || "score");
   const [order, setOrder] = useState(orderQuery);
   const [search, setSearch] = useState("");
   const [paramFilters, setParamFilters] = useState({});
@@ -60,15 +40,36 @@ export default function SearchPage({
     ["datasets", search, order, paramFilters],
     () => searchDatasets({ search, sort: order, paramFilters })
   );
+  const organizations = data?.organizations
+    ? Object.keys(data?.organizations).map((o) => ({
+        name: o,
+        displayName:
+          data.organizations_display_names[o] + ` (${data.organizations[o]})`,
+      }))
+    : [];
+
+  const groups = data?.groups
+    ? Object.keys(data?.groups).map((o) => ({
+        name: o,
+        displayName: data.groups_display_names[o] + ` (${data.groups[o]})`,
+      }))
+    : [];
+
+  const tags = data?.tags
+    ? Object.keys(data.tags).map((t) => ({
+        name: t,
+        displayName: t + ` (${data.tags[t]})`,
+      }))
+    : [];
 
   useEffect(() => {
     if (query.q) setSearch(decodeURI(query.q));
 
     setParamFilters({
       ...paramFilters,
-      tags: query.tag ? [query.tag] : [],
+      tag: query.tag ? [query.tag] : [],
       organization: query.organization ? [query.organization] : [],
-      groups: query.group ? [query.group] : [],
+      group: query.group ? [query.group] : [],
     });
 
     setFilterKey(filterKey + 1);
@@ -80,7 +81,7 @@ export default function SearchPage({
         justifyContent="flex-start"
         alignItems="flex-start"
         spacing={10}
-        width="90%"
+        width="85%"
         margin="auto"
       >
         <VStack
@@ -93,45 +94,68 @@ export default function SearchPage({
           <SectionTitle
             fontSize="16px"
             textAlign="top"
-            padding="16px 20px"
             borderRadius="20px"
             color="white"
             backgroundColor="#2B8C4D"
             width="100%"
+            height="50px"
+            paddingLeft="20px"
+            justifyContent="flex-start"
+            alignItems="center"
+            display="flex"
           >
             Filtrar por
           </SectionTitle>
           <CheckboxFilterAccordion
+            isActive={(paramFilters.download_type || []).length > 0}
+            choices={[
+              {
+                name: "BD Mais",
+              },
+              { name: "Link Externo" },
+            ]}
+            values={paramFilters.download_type}
+            valueField="name"
+            displayField="name"
+            fieldName="Forma de Download"
+            onChange={(values) =>
+              setParamFilters({ ...paramFilters, download_type: values })
+            }
+          />
+          <CheckboxFilterAccordion
+            canSearch={true}
             isActive={(paramFilters.organization || []).length > 0}
             choices={organizations}
             values={paramFilters.organization}
             valueField="name"
-            displayField="display_name"
+            displayField="displayName"
             fieldName="Organização"
             onChange={(values) =>
               setParamFilters({ ...paramFilters, organization: values })
             }
           />
           <CheckboxFilterAccordion
-            isActive={(paramFilters.groups || []).length > 0}
+            canSearch={true}
+            isActive={(paramFilters.group || []).length > 0}
             choices={groups}
-            values={paramFilters.groups}
+            values={paramFilters.group}
             valueField="name"
-            displayField="display_name"
+            displayField="displayName"
             fieldName="Temas"
             onChange={(values) =>
-              setParamFilters({ ...paramFilters, groups: values })
+              setParamFilters({ ...paramFilters, group: values })
             }
           />
           <CheckboxFilterAccordion
-            isActive={(paramFilters.tags || []).length > 0}
+            canSearch={true}
+            isActive={(paramFilters.tag || []).length > 0}
             choices={tags}
             valueField="name"
-            displayField="display_name"
+            displayField="displayName"
             fieldName="Tags"
-            values={paramFilters.tags}
+            values={paramFilters.tag}
             onChange={(values) =>
-              setParamFilters({ ...paramFilters, tags: values })
+              setParamFilters({ ...paramFilters, tag: values })
             }
           />
         </VStack>
@@ -142,14 +166,16 @@ export default function SearchPage({
               setSearch(val);
             }}
             flex="3"
-            placeholder="Pesquisar palavras-chave, instituições e temas"
+            placeholder="Pesquise palavras-chave, instituições e temas"
             justifyContent="center"
             inputStyle={{
-              padding: "25px",
-              borderRadius: "20px",
+              padding: "20px",
+              borderRadius: "17px",
               backgroundColor: "#ffffff",
-              fontSize: "18px",
-              boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+              color: "#6F6F6F",
+              fontSize: "16px",
+              height: "50px",
+              boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.20)",
             }}
           />
           {isLoading ? (
@@ -193,21 +219,19 @@ export default function SearchPage({
                       setOrder(event.target.value);
                     }}
                   >
-                    <option value="score desc">Relevância</option>
-                    <option value="views_recent desc">Recente</option>
-                    <option value="metadata_modified desc">
-                      Última Atualização
-                    </option>
+                    <option value="score">Relevância</option>
+                    <option value="recent">Recente</option>
+                    <option value="popular">Poupulares</option>
                   </Select>
                 </Stack>
               </HStack>
               <VStack
                 width="100%"
                 alignItems="flex-start"
-                spacing={10}
+                spacing={3}
                 padding="60px 0px"
               >
-                {(data?.results || []).map((d) => (
+                {(data?.datasets || []).map((d) => (
                   <>
                     <Database
                       link={`/_nxt/dataset/${d.id}`}

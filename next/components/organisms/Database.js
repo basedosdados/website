@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { limitTextSize } from "../../utils";
 import { CategoryIcon } from "../atoms/CategoryIcon";
 import { Dot } from "../atoms/Dot";
 import Link from "../atoms/Link";
@@ -40,129 +41,168 @@ export function Database({
   if (externalLinkNum) databaseInfo.push(externalLinkNum + " link externo");
 
   return (
-    <Link width="100%" href={link}>
-      <VStack
-        paddingTop={{ base: "0px", md: "0px" }}
-        paddingBottom={{ base: "50px", md: "0px" }}
-        justifyContent="space-between"
-        alignItems="flex-start"
-        width="100%"
-        spacing={{ base: 5, md: 0 }}
-      >
-        <HStack width="100%" spacing={10}>
-          <Image
-            priority
-            objectFit="contain"
-            width="91px"
-            height="91px"
-            borderRadius="10.1111px"
-            filter="drop-shadow(0px 2.02222px 2.02222px rgba(0, 0, 0, 0.25));"
-            src={image}
-            backgroundColor="#eee"
-          />
-          <VStack
-            alignItems="flex-start"
-            justifyContent="space-between"
-            spacing={1}
-            width="100%"
-            height="91px"
-          >
-            <VStack width="100%" alignItems="flex-start">
-              <Flex width="100%">
-                <HStack maxWidth="600px" spacing={5}>
-                  <Heading
-                    fontWeight="700"
-                    fontFamily="Lato"
-                    fontSize="21px"
-                    letterSpacing="0.05em"
-                    color="#252A32"
-                  >
-                    {name}
+    <VStack
+      justifyContent="space-between"
+      alignItems="flex-start"
+      width="100%"
+      spacing={{ base: 5, md: 0 }}
+    >
+      <HStack alignItems="flex-start" width="100%" spacing={10}>
+        <Image
+          priority
+          objectFit="contain"
+          maxWidth="91px"
+          maxHeight="91px"
+          minWidth="91px"
+          minHeight="91px"
+          borderRadius="10.1111px"
+          filter="drop-shadow(0px 2.02222px 2.02222px rgba(0, 0, 0, 0.25));"
+          src={image}
+          backgroundColor="#eee"
+        />
+        <VStack
+          alignItems="flex-start"
+          justifyContent="space-between"
+          spacing={1}
+          width="100%"
+        >
+          <VStack width="100%" spacing={1} alignItems="flex-start">
+            <Flex justifyContent="center" alignItems="flex-start" width="100%">
+              <HStack
+                justifyContent="center"
+                alignItems="flex-start"
+                spacing={5}
+                pt={1}
+              >
+                <Heading
+                  margin="0px"
+                  padding="0px"
+                  fontWeight="700"
+                  fontFamily="Lato"
+                  fontSize="18px"
+                  letterSpacing="0.1em"
+                  color="#252A32"
+                  maxWidth="500px"
+                  minWidth="100px"
+                >
+                  {name}
+                </Heading>
+                <HStack
+                  borderRadius="10.5233px"
+                  border="0.743243px solid #6F6F6F"
+                  padding="2px 7px"
+                  alignItems="center"
+                  height="20px"
+                  marginLeft="10px"
+                  spacing={1}
+                >
+                  <FontAwesomeIcon style={{ width: "10px" }} icon={faStar} />
+                  <Heading fontFamily="Lato" fontSize="14px">
+                    {stars || 0}
                   </Heading>
-                  <HStack
-                    borderRadius="10.5233px"
-                    border="0.743243px solid #6F6F6F"
-                    padding="2px 7px"
-                    alignItems="center"
-                    height="20px"
-                    marginLeft="10px"
-                    spacing={1}
+                </HStack>
+              </HStack>
+              <HStack
+                alignItems="flex-start"
+                justifyContent="flex-start"
+                marginLeft="auto"
+                spacing={3}
+              >
+                {isPlus ? (
+                  <Image
+                    paddingRight="10px"
+                    priority
+                    width="80px"
+                    src="/_nxt/img/logo_plus.png"
+                  />
+                ) : (
+                  <></>
+                )}
+                {categories.map((c) => (
+                  <CategoryIcon
+                    size="36px"
+                    url={`/_nxt/img/categories/icone_${c}${
+                      isPlus ? "-1" : ""
+                    }.svg`}
+                  />
+                ))}
+              </HStack>
+            </Flex>
+            <VStack spacing={0} width="100%" alignItems="flex-start">
+              <HStack fontSize="12px" spacing={5}>
+                <HStack>
+                  <SectionText color="#6F6F6F">Organização:</SectionText>
+                  <SectionText
+                    color="#6F6F6F"
+                    textAlign="left"
+                    lineHeight="15px"
+                    fontWeight="bold"
                   >
-                    <FontAwesomeIcon style={{ width: "10px" }} icon={faStar} />
-                    <Heading fontFamily="Lato" fontSize="14px">
-                      {stars || 0}
-                    </Heading>
-                  </HStack>
+                    {limitTextSize(organization, 30)}
+                  </SectionText>
                 </HStack>
-                <HStack marginLeft="auto" spacing={3}>
-                  {isPlus ? (
-                    <Image
-                      paddingRight="10px"
-                      priority
-                      width="80px"
-                      src="/_nxt/img/logo_plus.png"
-                    />
-                  ) : (
-                    <></>
-                  )}
-                  {categories.map((c) => (
-                    <CategoryIcon
-                      size="39px"
-                      url={`/_nxt/img/categories/icone_${c}${
-                        isPlus ? "-1" : ""
-                      }.svg`}
-                    />
-                  ))}
-                </HStack>
-              </Flex>
-              <VStack spacing={0} width="100%" alignItems="flex-start">
-                <HStack fontSize="12px" spacing={5}>
-                  <HStack>
-                    <SectionText>Organização:</SectionText>
-                    <SectionText fontWeight="bold">{organization}</SectionText>
-                  </HStack>
-                  <HStack>
-                    <SectionText>Temas:</SectionText>
-                    <SectionText fontWeight="bold">
-                      {categoriesDisplay
+                <HStack>
+                  <SectionText color="#6F6F6F">Temas:</SectionText>
+                  <SectionText
+                    color="#6F6F6F"
+                    textAlign="left"
+                    lineHeight="15px"
+                    fontWeight="bold"
+                  >
+                    {limitTextSize(
+                      categoriesDisplay
                         .slice(0, Math.min(categoriesDisplay.length, 3))
-                        .join(", ")}
-                    </SectionText>
-                  </HStack>
+                        .join(", "),
+                      30
+                    )}
+                  </SectionText>
                 </HStack>
-                <HStack fontSize="12px" spacing={5}>
-                  <HStack>
-                    <SectionText>Abrangência:</SectionText>
-                    <SectionText textTransform="capitalize" fontWeight="bold">
-                      {spatialCoverage || "Não definido"}
-                    </SectionText>
-                  </HStack>
-                  <HStack>
-                    <SectionText>Periocidade:</SectionText>
-                    <SectionText textTransform="capitalize" fontWeight="bold">
-                      {updateFrequency || "Não definido"}
-                    </SectionText>
-                  </HStack>
-                  <HStack>
-                    <SectionText>Última Atualização:</SectionText>
-                    <SectionText fontWeight="bold">
-                      {new Date(updatedSince).toLocaleDateString("pt-BR")}
-                    </SectionText>
-                  </HStack>
+              </HStack>
+              <HStack fontSize="12px" spacing={5}>
+                <HStack>
+                  <SectionText color="#6F6F6F">Abrangência:</SectionText>
+                  <SectionText
+                    color="#6F6F6F"
+                    textTransform="capitalize"
+                    fontWeight="bold"
+                  >
+                    {spatialCoverage || "Não definido"}
+                  </SectionText>
                 </HStack>
-              </VStack>
+                <HStack>
+                  <SectionText color="#6F6F6F">Periocidade:</SectionText>
+                  <SectionText
+                    color="#6F6F6F"
+                    textTransform="capitalize"
+                    fontWeight="bold"
+                  >
+                    {updateFrequency || "Não definido"}
+                  </SectionText>
+                </HStack>
+                <HStack>
+                  <SectionText color="#6F6F6F">Última Atualização:</SectionText>
+                  <SectionText color="#6F6F6F" fontWeight="bold">
+                    {new Date(updatedSince).toLocaleDateString("pt-BR")}
+                  </SectionText>
+                </HStack>
+              </HStack>
             </VStack>
+          </VStack>
+          <VStack paddingTop="10px">
             <HStack>
-              {size ? (
-                <>
-                  <Subtitle fontSize="14px" fontWeight="bold">
-                    {Math.round(size / 1000)} mb
-                  </Subtitle>
-                  <Dot />
-                </>
-              ) : (
-                <></>
-              )}
+              <HStack>
+                <Image src="/_nxt/img/icons/database.svg" />
+                {size ? (
+                  <>
+                    <Subtitle fontSize="14px" fontWeight="bold">
+                      {Math.round(size / 1000)} mb
+                    </Subtitle>
+                    <Dot />
+                  </>
+                ) : (
+                  <></>
+                )}
+              </HStack>
               {databaseInfo.map((item, index) => (
                 <>
                   <Subtitle fontSize="14px">{item}</Subtitle>{" "}
@@ -171,8 +211,8 @@ export function Database({
               ))}
             </HStack>
           </VStack>
-        </HStack>
-      </VStack>
-    </Link>
+        </VStack>
+      </HStack>
+    </VStack>
   );
 }

@@ -32,15 +32,14 @@ export function searchDatasets({ search = "", sort = "", paramFilters = {} }) {
   if (search == null) return { count: 0, results: [] };
 
   if (sort) {
-    url += "&sort=" + encodeURI(sort);
+    url += "&order_by=" + encodeURI(sort);
   }
 
   if (entries.length > 0) {
-    url += "&fq=";
     Object.entries(paramFilters).forEach(([k, v]) => {
       if (v.length == 0 || !v) return;
 
-      url += `${k}:${v.join(" ")} `;
+      url += `&${k}=${v.join(",")} `;
     });
   }
 

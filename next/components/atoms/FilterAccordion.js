@@ -10,9 +10,11 @@ import {
   VStack,
   Text,
   Tooltip,
+  Image,
 } from "@chakra-ui/react";
-import { useEffect } from "react/cjs/react.production.min";
+import { useState } from "react";
 import { limitTextSize } from "../../utils";
+import ControlledInput from "./ControlledInput";
 import Title from "./Title";
 
 export function BaseFilterAccordion({
@@ -33,7 +35,7 @@ export function BaseFilterAccordion({
                 onClick={onChange}
                 border={isActive ? "2px solid #3AA1EB" : "1px solid #DEDFE0"}
                 color={isActive ? "#3AA1EB" : null}
-                borderRadius="15px"
+                borderRadius="13px"
               >
                 <Box
                   flex="1"
@@ -41,6 +43,7 @@ export function BaseFilterAccordion({
                   fontFamily="Lato"
                   fontWeight="700"
                   fontSize="16px"
+                  letterSpacing="0.1em"
                 >
                   {fieldName}
                 </Box>
@@ -56,6 +59,7 @@ export function BaseFilterAccordion({
                 pb={4}
                 pt={2}
                 pl={4}
+                pr={4}
                 width="100%"
                 alignItems="flex-start"
               >
@@ -81,7 +85,10 @@ export function CheckboxFilterAccordion({
   displayField = "display_name",
   isActive = false,
   isOpen = null,
+  canSearch = false,
 }) {
+  const [search, setSearch] = useState("");
+
   return (
     <BaseFilterAccordion
       onChange={onToggle}
@@ -90,10 +97,54 @@ export function CheckboxFilterAccordion({
       isOpen={isOpen}
     >
       <CheckboxGroup onChange={(val) => onChange(val)} value={values}>
-        <VStack alignItems="flex-start">
-          {choices.map((c) => (
-            <Checkbox value={c[valueField]}>{c[displayField]}</Checkbox>
-          ))}
+        {canSearch ? (
+          <VStack paddingBottom="10px" width="100%" alignItems="center">
+            <ControlledInput
+              color="black"
+              value={search}
+              onChange={setSearch}
+              inputBackgroundColor="#FAFAFA"
+              inputStyle={{
+                height: "30px",
+                fontSize: "14px",
+                width: "100%",
+                margin: "0",
+                borderRadius: "20px",
+              }}
+              rightIcon={
+                <Box width="20px" height="20px" position="relative">
+                  <Image
+                    cursor="pointer"
+                    layout="fill"
+                    objectFit="contain"
+                    src="/_nxt/img/icon_search.png"
+                  />
+                </Box>
+              }
+            />
+          </VStack>
+        ) : (
+          <></>
+        )}
+        <VStack alignItems="flex-start" overflowY="scroll">
+          {choices
+            .filter(
+              (c) =>
+                c[displayField].toLowerCase().indexOf(search.toLowerCase()) !=
+                -1
+            )
+            .map((c) => (
+              <Checkbox
+                fontFamily="Lato"
+                fontWeight="700"
+                value={c[valueField]}
+                color="#7D7D7D"
+                letterSpacing="0.1em"
+                fontSize="16px"
+              >
+                {c[displayField]}
+              </Checkbox>
+            ))}
         </VStack>
       </CheckboxGroup>
     </BaseFilterAccordion>
