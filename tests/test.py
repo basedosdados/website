@@ -8,7 +8,7 @@ import random
 from pprint import pprint
 
 
-CKAN_API_KEY = os.environ.get('CKAN_API_KEY') or open('.ckan_dev_api_token').read().split('=')[-1].strip()
+CKAN_API_KEY = os.environ.get('CKAN_API_KEY') or open('configs/ckan_dev_api_token.sh').read().split('=')[-1].strip()
 CKAN_URL = os.environ.get('CKAN_URL', 'http://localhost:5000')
 def get_client():
     from ckanapi import RemoteCKAN

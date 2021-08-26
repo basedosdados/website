@@ -1,13 +1,11 @@
-name: CI-DEV
+name: ci-dev
 on:
   push:
     branches: [develop]
 jobs:
   deploy:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Clone repo
         uses: actions/checkout@v2
       - name: Set up Docker Buildx
@@ -17,9 +15,14 @@ jobs:
           DOT_ENV_PROD: ${{ secrets.DOT_ENV_PROD }}
           CKAN_STAGING_INI: ${{ secrets.CKAN_STAGING_INI }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
-        run: 'echo "$DOT_ENV_PROD" > .env.prod && echo "$CKAN_STAGING_INI" > ./configs/ckan.override.prod.ini && mkdir ~/.ssh && echo "$SSH_KEY" > ~/.ssh/BD.pem && chmod 700 ~/.ssh ~/.ssh/BD.pem'
-      - name: Deploy script
-        run: ./deploy_staging.sh deploy
+        run: |
+          echo "$DOT_ENV_PROD" > .env.prod && \
+          echo "$CKAN_STAGING_INI" > ./configs/ckan.override.prod.ini && \
+          mkdir ~/.ssh && \
+          echo "$SSH_KEY" > ~/.ssh/BD.pem && \
+          chmod 700 ~/.ssh ~/.ssh/BD.pem
+      - name: Deploy website
+        run: ./deploy-staging.sh deploy
       - name: Report Failures
         if: "${{ failure() }}"
         uses: cstuder/apprise-ga@master
