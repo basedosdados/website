@@ -205,6 +205,18 @@ def bd_dataset_search(context, data_dict):
     response.pop("search_facets", None)
     response.pop("sort", None)
 
+    # post-process groups ###################################
+
+    response["groups"] = {}
+    response["groups_display_names"] = {}
+
+    for dataset in response["datasets"]:
+        for group in dataset.get("groups", []):
+            key = group["name"]
+            response["groups_display_names"][key] = group["display_name"]
+            value = response["groups"].get(key, 0) + 1
+            response["groups"][key] = value
+
     # post-process tags ###################################
 
     response["tags"] = {}
@@ -218,9 +230,11 @@ def bd_dataset_search(context, data_dict):
     # post-process organizations ##########################
 
     response["organizations"] = {}
+    response["organizations_display_names"] = {}
 
     for dataset in response["datasets"]:
         key = dataset["organization"]["name"]
+        response["organizations_display_names"][key] = dataset["organization"]["title"]
         value = response["organizations"].get(key, 0) + 1
         response["organizations"][key] = value
 
