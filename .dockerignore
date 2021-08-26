@@ -1,7 +1,6 @@
-# vendor
-build
-tmp
 .git
+build
 stack/ckan/assets
 stack/ckan/assets.zip
+tmp
 vendor/ckan/.git

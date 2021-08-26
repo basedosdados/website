@@ -99,7 +99,7 @@ rebuild_index() {
 build_images() {
     export COMPOSE_DOCKER_CLI_BUILD=1
     export DOCKER_BUILDKIT=1
-    if [[ ! -d vendor/ckan/.git ]]; then ./_clone_ckan.sh; fi
+    if [[ ! -d vendor/ckan/.git ]]; then ./clone-ckan.sh; fi
     ( VTAG=$VTAG docker-compose build strapi && docker save bdd/strapi$VTAG > build/images/strapi ) &
     ( VTAG=$VTAG docker-compose build ckan && docker save bdd/ckan$VTAG > build/images/ckan ) &
     ( docker-compose build solr && docker save bdd/solr > build/images/solr ) &
