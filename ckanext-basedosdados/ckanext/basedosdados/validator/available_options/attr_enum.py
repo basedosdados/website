@@ -1,4 +1,4 @@
-from enum import EnumMeta, Enum
+from enum import Enum, EnumMeta
 
 
 class _EnumMeta(EnumMeta):

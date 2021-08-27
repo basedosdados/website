@@ -1,7 +1,8 @@
-
 from .attr_enum import AttrEnum
 
+
 class LanguageEnum(AttrEnum):
+    # fmt: off
     german     = {"label": "Alemão"}
     arabic     = {"label": "Árabe"}
     bahasa     = {"label": "Bahasa"}
@@ -18,3 +19,4 @@ class LanguageEnum(AttrEnum):
     russian    = {"label": "Russo"}
     thai       = {"label": "Thai"}
     urdu       = {"label": "Urdu"}
+    # fmt: on
