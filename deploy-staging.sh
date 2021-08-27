@@ -36,7 +36,7 @@ clean() {
 build_config() {
     cp docker-compose.yaml build/docker-compose.yaml
     cp configs/docker-compose.override.staging.yaml build/docker-compose.override.yaml
-    cp utils/backup_database.sh build/
+    cp utils/backup-database.sh build/
     cp configs/nginx.staging.conf build/nginx.conf
     cp .env.prod build/.env && echo "VTAG=$VTAG" >> build/.env
 
@@ -44,12 +44,14 @@ build_config() {
 
     cp configs/basedosdados_crontab build/basedosdados_crontab
 }
+
 send() {
     $SSH 'mkdir -p ~/basedosdados/'
     rsync -e 'ssh -i ~/.ssh/BD.pem' -azvv --progress --partial ./build/images/ $HOST:~/basedosdados/images/ & # TODO: debug this, the size-only seems to be failing...
     rsync -e 'ssh -i ~/.ssh/BD.pem' -azvv --exclude=images --checksum ./build/ $HOST:~/basedosdados/ &
     for i in `jobs -p`; do wait $i ; done
 }
+
 load_images() {
     $SSH "
         docker load < ~/basedosdados/images/ckan
@@ -59,6 +61,7 @@ load_images() {
         docker load < ~/basedosdados/images/strapi
     "
 }
+
 restart_services() {
     $SSH  '
         set -e ; cd ~/basedosdados/
@@ -88,6 +91,7 @@ restart_services() {
         fi
     '
 }
+
 rebuild_index() {
     $SSH  '
         cd ~/basedosdados/
@@ -95,6 +99,7 @@ rebuild_index() {
     '
 
 }
+
 build_images() {
     export COMPOSE_DOCKER_CLI_BUILD=1
     export DOCKER_BUILDKIT=1
@@ -106,12 +111,14 @@ build_images() {
     ( VTAG=$VTAG docker-compose build next && docker save bdd/next$VTAG > build/images/next ) &
     for i in `jobs -p`; do wait $i ; done
 }
+
 restart_monitoring() {
     $SSH  '
         cd ~/basedosdados/monitoring
         docker-compose down && docker-compose up -d
     '
 }
+
 install_crontab() {
     $SSH  '
         (
@@ -120,6 +127,7 @@ install_crontab() {
         ) | crontab
     '
 }
+
 install_apprise() {
     $SSH  '
         cd ~/basedosdados/

@@ -1,4 +1,5 @@
 #!/bin/bash -ex
+
 cd $(git rev-parse --show-toplevel)
 
 trap 'catch $? $LINENO' ERR ; catch() { echo "Exit-code $1 occurred on line $2" ;}
@@ -12,7 +13,8 @@ if ! curl localhost:5000 --fail-early --silent > /dev/null ; then
 fi
 utils/wait-for-200 -t 30 $URL
 
-# Cant test dataset/new as it needs authentication. TODO: migrate this test in such a way we can test this
+# Can't test dataset/new as it needs authentication.
+# TODO: migrate this test in such a way we can test this
 
 TEST_URLS='
     #
@@ -38,4 +40,3 @@ pytest ./tests/test.py
 docker-compose run --rm ckan pytest ./ckanext-basedosdados/ckanext/basedosdados/tests/ -vv
 
 echo 'ALL OK :)'
-

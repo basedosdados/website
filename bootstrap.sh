@@ -8,13 +8,23 @@ export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 
 # export CKAN_API_KEY
-source configs/ckan_dev_api_token.sh
+source configs/ckan-dev-api-token.sh
 
 # test if git-lfs, docker and docker-compose are installed
 not_installed() { ! command -v $1 > /dev/null; return $?; }
 if not_installed git-lfs; then        echo please install git-lfs: https://git-lfs.github.com/ ; exit 1; fi;
 if not_installed docker; then         echo you need to have docker installed; exit 1; fi;
 if not_installed docker-compose; then echo you need to have a docker-compose installed; exit 1; fi
+
+# create empty .env.prod
+if [ ! -f .env.prod ]; then
+    echo > .env.prod
+fi
+
+# create empty configs/ckan.override.prod.in
+if [ ! -f configs/ckan.override.prod.ini ]; then
+    echo > configs/ckan.override.prod.ini
+fi
 
 set -ex
 
@@ -26,7 +36,7 @@ if [[ $1 == full ]]; then
 fi
 
 if [[ ! -d vendor/ckan/.git ]]; then
-    ./clone-ckan.sh
+    ./utils/clone-ckan.sh
 fi
 
 docker-compose build --parallel $DOCKER_BUILD_EXTRA_ARGS

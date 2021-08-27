@@ -1,5 +1,6 @@
 # docker-compose build && docker-compose up -d
 # If "docker-compose logs ckan" shows DB not ready, run "docker-compose restart ckan" a few times.
+
 version: "3.5"
 
 services:
@@ -73,6 +74,8 @@ services:
     ports:
       - "3000:3000"
     image: bdd/next${VTAG}
+    depends_on:
+      - ckan
 
   strapi:
     image: "bdd/strapi${VTAG}"

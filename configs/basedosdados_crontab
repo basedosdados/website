@@ -1,7 +1,7 @@
 PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/ec2-user/.local/bin:/home/ec2-user/bin
 
 # Backup db
-@daily $HOME/basedosdados/backup_database.sh > /tmp/backup_out 2>> /tmp/backup_out || tail /tmp/backup_out | apprise -t 'Database backup failed'
+@daily $HOME/basedosdados/backup-database.sh > /tmp/backup_out 2>> /tmp/backup_out || tail /tmp/backup_out | apprise -t 'Database backup failed'
 
 # Renew https certificates
 @weekly cd $HOME/basedosdados/ && docker-compose stop nginx && sudo /bin/certbot renew && sudo chown -R ec2-user /etc/letsencrypt/ && docker-compose start nginx

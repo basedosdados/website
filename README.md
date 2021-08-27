@@ -6,7 +6,7 @@
 - Execute `./bootstrap.sh`;
 - Acesse localhost:5000.
 
-É possível também logar com o usuário `dev` e senha `12345678`. Note que o script `bootstrap.sh` inicializa o ambiente dev, caso tenha algum problema é possível inicializar do zero (com novos downloads e builds) com `./bootstrap.sh full`. Caso precise, a chave de API do ckan em desenvolvimento se encontra em `configs/ckan_dev_api_token.sh`, e para adicionar as suas variáveis de ambiente rode `source configs/ckan_dev_api_token.sh` ou adicione ao seu `bashrc`.
+É possível também logar com o usuário `dev` e senha `12345678`. Note que o script `bootstrap.sh` inicializa o ambiente dev, caso tenha algum problema é possível inicializar do zero (com novos downloads e builds) com `./bootstrap.sh full`. Caso precise, a chave de API do ckan em desenvolvimento se encontra em `configs/ckan-dev-api-token.sh`, e para adicionar as suas variáveis de ambiente rode `source configs/ckan-dev-api-token.sh` ou adicione ao seu `bashrc`.
 
 É possível visualizar e modificar o banco de dados (com dbeaver) em:
 
@@ -50,7 +50,7 @@ O plugin da Base dos Dados mora em `ckanext-basedosdados/ckanext/basedosdados`. 
 O ambiente de dev funciona com docker-compose. Duas features do docker-compose importantes que usamos aqui:
 
 - docker-compose suporta interpolação de variáveis usando a sintaxe `${VAR_NAME}` lendo automaticamente de um arquivo com nome `.env` no mesmo diretório do docker-compose.yaml
-- docker-compose AUTOMATICAMENTE da merge entre o arquivo docker-compose.yaml e o arquivo docker-compose.override.yaml (caso houver), e considera isso o yaml q "ta valendo"
+- docker-compose automaticamente da merge entre o arquivo docker-compose.yaml e o arquivo docker-compose.override.yaml (caso houver), e considera isso o yaml q "ta valendo"
 
 As configurações que variam entre dev e prod ficam em variáveis de ambiente definidas no docker-compose.yaml. Idealmente colocamos no .env somente as variáveis privadas (como senhas e outros segredos) e interpolamos seu valor. Usando o .env para dev e .env.prod para prod. Outras configuracoes nao secretas que diferem entre os ambientes ficam nos arquivos docker-compose.override.yaml e prod-docker-compose.override.yaml
 
@@ -59,13 +59,13 @@ As configurações que variam entre dev e prod ficam em variáveis de ambiente d
 Existem outros lugares com configurações dev/prod. Em `configs/` temos:
 
 - crontab é o cron que roda em produção, fazendo backup, monitoramento e manutenção;
-- ckan.ini / ckan.override.prod.ini são arquivos de configuração do ckan. No caso, o ckan.ini e usado em dev e o ckan.prod.ini é MERGEADO em cima dele na hora de deployar pra prod;
+- ckan.ini / ckan.override.prod.ini são arquivos de configuração do ckan. No caso, o ckan.ini e usado em dev e o ckan.prod.ini é mergeado em cima dele na hora de deployar pra prod;
 - nginx.conf eh o arquivo de configuração do nginx (que roda em produção);
 - who.ini outro arquivo de configuração do ckan (que nunca mexemos).
 
 ## Pasta `utils`
 
-A pasta utils contem scripts utilizados em dev e em prod para diversas coisas. Os nomes dos scripts devem ser autoexplicativos e conter comentários explicando sua razão de ser. Arquivos com _ na frente são dependências de scripts normais e não devem ser chamados diretamente.
+A pasta utils contem scripts utilizados em dev e em prod para diversas coisas. Os nomes dos scripts devem ser autoexplicativos e conter comentários explicando sua razão de ser.
 
 ### Script de atualização do banco de dev a partir dos dumps de produção/staging
 
