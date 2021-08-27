@@ -1,7 +1,8 @@
 from .attr_enum import AttrEnum
 
+
 class ContinentEnum(AttrEnum):
-    
+    # fmt: off
     all             = {"label": "Todos"}
     africa          = {"label": "África"}
     north_america   = {"label": "América do Norte"}
@@ -11,23 +12,22 @@ class ContinentEnum(AttrEnum):
     europe          = {"label": "Europa"}
     oceania         = {"label": "Oceania"}
     antarctica       = {"label": "Antártica"}
+    # fmt: on
 
 
 class CountryEnum(AttrEnum):
-    
     # country codes from ISO 3166
     # https://www.iban.com/country-codes
-    
+
+    # fmt: off
     bra = {"label": "Brasil"}
     arg = {"label": "Argentina"}
     bol = {"label": "Bolívia"}
     chl = {"label": "Chile"}
     col = {"label": "Colômbia"}
-
     can = {"label": "Canadá"}
     usa = {"label": "Estados Unidos da América"}
     mex = {"label": "México"}
-    
     deu = {"label": "Alemanha"}
     esp = {"label": "Espanha"}
     fra = {"label": "França"}
@@ -35,8 +35,6 @@ class CountryEnum(AttrEnum):
     prt = {"label": "Portugal"}
     gbr = {"label": "Reino Unido"}
     rus = {"label": "Rússia"}
-
-
     chn = {"label": "China"}
     ind = {"label": "Índia"}
     tha = {"label": "Tailândia"}
@@ -44,13 +42,14 @@ class CountryEnum(AttrEnum):
     mys = {"label": "Malásia"}
     idn = {"label": "Indonésia"}
     zaf = {"label": "África do Sul"}
-    
     aus = {"label": "Austrália"}
+    # fmt: on
+
 
 class Admin1Enum(AttrEnum):
-    
     # por enquanto só para Brasil
 
+    # fmt: off
     id_uf_12 = {"label": "AC"}
     id_uf_27 = {"label": "AL"}
     id_uf_13 = {"label": "AM"}
@@ -78,11 +77,13 @@ class Admin1Enum(AttrEnum):
     id_uf_28 = {"label": "SE"}
     id_uf_35 = {"label": "SP"}
     id_uf_17 = {"label": "TO"}
+    # fmt: on
+
 
 class Admin2Enum(AttrEnum):
-    
     # por enquanto só para capitais de UFs no Brasil
-    
+
+    # fmt: off
     id_municipio_1100205 = {"label": "Porto Velho"}
     id_municipio_1200401 = {"label": "Rio Branco"}
     id_municipio_1302603 = {"label": "Manaus"}
@@ -110,5 +111,4 @@ class Admin2Enum(AttrEnum):
     id_municipio_5103403 = {"label": "Cuiabá"}
     id_municipio_5208707 = {"label": "Goiânia"}
     id_municipio_5300108 = {"label": "Brasília"}
-
-
+    # fmt: on

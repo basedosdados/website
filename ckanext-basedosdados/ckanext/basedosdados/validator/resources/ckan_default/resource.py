@@ -1,15 +1,14 @@
-from ckanext.basedosdados.validator import BaseModel
-from typing import Optional
 from datetime import datetime
-from pydantic import (
-    StrictStr as Str,
-    Extra,
-    Field
-)
+from pydantic import StrictStr as Str, Extra, Field
+from typing import Optional
+
+from ckanext.basedosdados.validator import BaseModel
 from ckanext.basedosdados.validator.available_options import IdType
 
+
 ### Do not use extra while creating new models
-class _CkanDefaultResource(BaseModel): #, extra=Extra.forbid):
+class _CkanDefaultResource(BaseModel):  # , extra=Extra.forbid):
+    # fmt: off
     id                 : IdType
     name               : Str                              = Field(title="Nome")
     description        : Str                              = Field(title="Descrição")

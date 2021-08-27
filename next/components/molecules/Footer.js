@@ -48,7 +48,7 @@ export default function Footer() {
       <VStack width="100%" padding={10} spacing={10} backgroundColor="#34A15A">
         <Stack
           alignItems="flex-start"
-          width={{ base: "100%", lg: "80%" }}
+          width={{ base: "100%", lg: "92%" }}
           justifyContent="space-between"
           direction={{ base: "column", lg: "row" }}
           spacing={{ base: 10, lg: 20 }}
@@ -99,10 +99,10 @@ export default function Footer() {
               </Link>
               <Link
                 color="white"
-                href="https://www.youtube.com/c/BasedosDados/videos"
+                href="https://www.youtube.com/c/BasedosDados/featured"
                 target="_blank"
               >
-                Youtube
+                YouTube
               </Link>
             </LinkVStack>
             <LinkVStack title="COMUNIDADE">
@@ -118,7 +118,7 @@ export default function Footer() {
               />
               <SocialLink
                 href="https://github.com/basedosdados"
-                title="Github"
+                title="GitHub"
                 src="/_nxt/img/social/github.png"
               />
               <Link

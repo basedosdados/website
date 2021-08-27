@@ -26,7 +26,7 @@ export function showDataset(id) {
 }
 
 export function searchDatasets({ search = "", sort = "", paramFilters = {} }) {
-  let url = `/package_search?q=${search}`;
+  let url = `/bd_dataset_search?q=${search}`;
   let entries = Object.entries(paramFilters);
 
   if (search == null) return { count: 0, results: [] };

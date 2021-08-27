@@ -1,6 +1,8 @@
 from .attr_enum import AttrEnum
 
+
 class TimeUnitEnum(AttrEnum):
+    # fmt: off
     second                        = {"label": "Segundo"} #"Second"}
     minute                        = {"label": "Minuto"} #"Minute"}
     hour                          = {"label": "Hora"} #"Hour"}
@@ -19,3 +21,4 @@ class TimeUnitEnum(AttrEnum):
     recurring                     = {"label": "Recorrente"} #"Recurring"}
     uncertain                     = {"label": "Incerto"} #"Uncertain"}
     other                         = {"label": "Outro"} #"Other"}
+    # fmt: on

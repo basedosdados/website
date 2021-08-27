@@ -1,24 +1,23 @@
+from typing import Literal, Optional, Set, Union
 
-from typing import Optional, Literal, Set, Union
-
-from pydantic import (
-    StrictStr as Str
-)
-
-from .fields_definitions import *
-from ckanext.basedosdados.validator.resources import _CkanDefaultResource
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options import (
-    TemporalCoverageEnum,
     EntityEnum,
+    StatusEnum,
+    TemporalCoverageEnum,
     TimeUnitEnum,
-    StatusEnum
 )
+from ckanext.basedosdados.validator.resources import _CkanDefaultResource
+from pydantic import StrictStr as Str
 
-class InformationRequest(_CkanDefaultResource): 
+from .fields_definitions import *
+
+
+class InformationRequest(_CkanDefaultResource):
     resource_type: Literal["information_request"]
-    
+
     # InformationRequest models
+    # fmt: off
     dataset_id        : Optional[Str]                                   = DATASET_ID_FIELD
     origin            : Optional[Str]                                   = ORIGIN_FIELD
     number            : Optional[Str]                                   = NUMBER_FIELD
@@ -35,4 +34,4 @@ class InformationRequest(_CkanDefaultResource):
     status            : Optional[StatusEnum]                            = STATUS_FIELD
     data_url          : Optional[Str]                                   = DATA_URL_FIELD
     observations      : Optional[Str]                                   = OBSERVATIONS_FIELD
-    
+    # fmt: on
