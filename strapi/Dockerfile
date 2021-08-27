@@ -2,17 +2,17 @@ FROM strapi/base
 
 WORKDIR /my-path
 
-# COPY ./package.json ./
-# COPY ./yarn.lock ./
+COPY ./package.json ./
+COPY ./yarn.lock ./
 
-# RUN yarn install
+RUN yarn install
 
-# COPY . .
+COPY . .
 
-# ENV NODE_ENV production
+ENV NODE_ENV production
 
-# RUN yarn build
+RUN yarn build
 
-# EXPOSE 1337
+EXPOSE 1337
 
-# CMD ["yarn", "start"]
+CMD ["yarn", "start"]

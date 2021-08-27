@@ -3,8 +3,8 @@ FROM node:alpine
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json yarn.lock /app/
-# RUN yarn install
+RUN yarn install
 
-# COPY . /app/
+COPY . /app/
 
-# EXPOSE 3000
+EXPOSE 3000
