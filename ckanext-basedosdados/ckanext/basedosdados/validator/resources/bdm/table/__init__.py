@@ -1,22 +1,24 @@
-from typing import Optional, Literal, Union, Set, List
-from pydantic import (
-    StrictStr as Str,
-    validator,
-)
-from .fields_definitions import *
-from ckanext.basedosdados.validator.resources import _CkanDefaultResource, BdmColumns
+from typing import List, Literal, Optional, Set, Union
+
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options import (
-    TemporalCoverageEnum,
     EntityEnum,
+    TemporalCoverageEnum,
     TimeUnitEnum,
-    YesNoEnum
+    YesNoEnum,
 )
+from ckanext.basedosdados.validator.resources import BdmColumns, _CkanDefaultResource
+from pydantic import StrictStr as Str
+from pydantic import validator
+
+from .fields_definitions import *
+
 
 class BdmTable(_CkanDefaultResource):
     resource_type: Literal["bdm_table"]
 
     # BdmTable models
+    # fmt: off
     dataset_id                : Optional[Str]                                    = DATASET_ID_FIELD
     table_id                  : Str                                              = TABLE_ID_FIELD
     description               : Optional[Str]                                    = DESCRIPTION_FIELD
@@ -41,20 +43,22 @@ class BdmTable(_CkanDefaultResource):
     partitions                : Optional[Str]                                    = PARTITIONS_FIELD
     bdm_file_size             : Union[int, None, Literal["Unavailable", ""]]     = BDM_FILE_SIZE_FIELD # should not be editable in form, also, check what use is Unavailable
     columns                   : Union[Optional[List[BdmColumns]], Optional[Str]] = COLUMNS_FIELD
-    
+    # fmt: on
+
     # -------------------------------------
     # VALIDATORS
     # -------------------------------------
     _entity_validator = treat_scalar_as_single_value_set("entity")
 
     @validator("bdm_file_size")
-    def null_string_is_none(
-        cls, value
-    ):  # TODO: check why this is not working, as it is still failing when we pass a ''. Had to add '' to type signature
+    def null_string_is_none(cls, value):
+        # TODO: check why this is not working,
+        # as it is still failing when we pass a ''.
+        # Had to add '' to type signature
         if value == "":
             return None
         return value
 
-    # TODO: impleboont this
+    # TODO: implement this
     def table_id_should_be_a_valid_bigquery_identifier(cls, value):
         pass

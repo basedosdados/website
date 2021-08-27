@@ -1,10 +1,11 @@
-from pydantic import ValidationError
 import pydantic
+from pydantic import ValidationError
 
 
 class BaseModel(pydantic.BaseModel):
     class Config:
         extra = "allow"
+
 
 def _treat_scalar_as_single_value_set(cls, value):
     from collections.abc import Iterable

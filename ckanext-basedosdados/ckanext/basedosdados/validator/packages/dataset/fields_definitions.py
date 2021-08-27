@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
 from typing import Optional, Set
 
-from pydantic import (
-    StrictStr as Str,
-    Field,
-)
 from ckanext.basedosdados.validator import BaseModel
 from ckanext.basedosdados.validator.available_options import (
-    ContinentEnum,
-    CountryEnum,
     Admin1Enum,
     Admin2Enum,
+    ContinentEnum,
+    CountryEnum,
 )
-
+from pydantic import Field
+from pydantic import StrictStr as Str
 
 # -------------------------------------
 # Dataset Custom Types

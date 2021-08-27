@@ -1,82 +1,32 @@
-# website [basedosdados.org](http://basedosdados.org)
+# [basedosdados.org](http://basedosdados.org)
 
-# Contribuir:
+## Para desenvolvimento local
 
-## Pre requisitos:
+- Instale docker, docker-compose, git-lfs (instruções em [git-lfs.github.com](https://git-lfs.github.com/));
+- Execute `./bootstrap.sh`;
+- Acesse localhost:5000.
 
-Instalar:
-* Docker
-* docker-compose (pip install docker-compose)
-* git-lfs ( download here: https://packagecloud.io/github/git-lfs/install#bash-python, instrucoes: https://git-lfs.github.com/)
+É possível também logar com o usuário `dev` e senha `12345678`. Note que o script `bootstrap.sh` inicializa o ambiente dev, caso tenha algum problema é possível inicializar do zero (com novos downloads e builds) com `./bootstrap.sh full`. Caso precise, a chave de API do ckan em desenvolvimento se encontra em `configs/ckan-dev-api-token.sh`, e para adicionar as suas variáveis de ambiente rode `source configs/ckan-dev-api-token.sh` ou adicione ao seu `bashrc`.
 
-* Criar configs/ckan.override.prod.ini e .env.prod # podem ser arquivos vazios se vc nao for fazer deploy pra prod direto da sua maquina
+É possível visualizar e modificar o banco de dados (com dbeaver) em:
 
-* Rodar `./bootstrap.sh`
+```
+host:localhost
+port:5432
+database:ckan
+user:ckan
+password:ckan
+```
 
-Porta 5000
-Logar como user: dev senha: 12345678
+## Para deploy do site
 
-## Editando html
+O deploy é feito via github actions, basta pushar na master. Se você adicionar variáveis de ambiente secretas em prod, vai ter que atualizar o arquivo .env.prod no github actions! Basicamente rodamos o `./deploy.sh`, que é um script com várias partes. Você pode rodar manualmente (desde que tenha permissão, claro) uma das partes, passando-a como argumento, como `./deploy.sh restart_services`.
 
-como mudar um template:
-    https://docs.ckan.org/en/2.9/theming/templates.html
-    modificar templates dentro de ckanext-basedosdados
+De forma análoga é possível fazer o deploy do site staging, pushando na branch develop. Neste caso a variável de ambiente `BD_ENVIRON` tem valor `STAGING`, ao invés de `PROD`. Essa variável fica disponível para todas as aplicações não dockerizadas.
 
+## Para configurar o SSH
 
-Em alguns casos (arquivos novos) o ckan nao detecta as modificacoes automaticamente, entao vc pode dar um `docker-compose down -t0 ckan` e depois `docker-compose up ckan` pra restartar o servico.
-
-## bootstrap.sh
-
-Esse script inicializa o ambiente de dev, se vc quiser re-inicializar completamente, deleteando tudo e buildando tudo de novo do 0, rode `./bootstrap.sh full`
-
-## API TOKEN
-
-rode `source .ckan_dev_api_token` para carregar a variavel de ambiente `CKAN_API_TOKEN` com um token valido de dev. Coloque no seu .bashrc se vc for preguicoso.
-
-## Configs
-
-### Variaveis de ambiente e docker-compose
-
-O ambiente de dev funciona basicamente nas costas do docker-compose
-
-Duas features do docker-compose importantes q usamos aqui:
-
-* docker-compose suporta interpolacao de variaveis usando a sintaxe `${VAR_NAME}` lendo automaticamente de um arquivo com nome `.env` no mesmo diretorio do docker-compose.yaml
-* docker-compose AUTOMATICAMENTE da merge entre o arquivo docker-compose.yaml e o arquivo docker-compose.override.yaml (caso houver), e considera isso o yaml q "ta valendo"
-
-As configuracoes q variam entre dev e prod ficam em variaveis de ambiente definidas no docker-compose.yaml
-
-Idealmente colocamos no .env somente as variaveis privadas (como senhas e outros segredos) e interpolamos seu valor. Usando o .env para dev e .env.prod para prod.
-
-Outras configuracoes nao secretas q diferem entre os ambientes ficam nos arquivos docker-compose.override.yaml e prod-docker-compose.override.yaml
-
-### outras configuracoes dev/prod
-
-Existem outros lugares com configuracoes dev/prod.
-
-configs/
-* crontab (o cron q roda em producao, fazendo backup, monitoramento e manutencao)
-* ckan.ini / ckan.override.prod.ini sao arquivos de configuracao do ckan. No caso, o ckan.ini eh usado em dev e o ckan.prod.ini é MERGEADO em cima dele na hora de deployar pra prod.
-* nginx.conf eh o arquivo de conf do nginx (q roda em producao)
-* who.ini outro arquivo de conf do ckan (q nunca mechemos)
-
-### Utils
-
-A pasta utils contem scripts utilizados em dev e em prod para diversas coisas. Os nomes dos scripts devem ser autoexplicativos e conter comentarios explicando sua razao de ser.
-
-Arquivos com _ na frente sao dependencias de scripts normais e nao devem ser chamados diretamente.
-
-#### Script de atualizacao do banco de dev a partir dos dumps de producao/staging
-
-Voce pode rodar o script em `./utils/create_dev_init_data.sh` para atualizar o arquivo './postgresql/dev_init_data.sql.gz' que contem o snapshot do banco de dev.
-
-Opcoes:
-Parametro posicional `File`: caso nao queira baixar um backup automaticamente de prod/staging, vc pode passar um path com um arquivo postgres.dump
-
-Parametro variavel de ambiente STAGING=1:
-Se STAGING=1, o script vai baixar do banco de staging ao inves de producao.
-
-Note q vc precisara ter configurado o seu ~/.ssh/config local para acessar as maquinas do basedosdados. Para isso edite (ou crie) `~/.ssh/config` e adicione as seguintes linhas, (modificando o path, logico):
+Note que você precisará ter configurado o seu ~/.ssh/config local para acessar as máquinas do base dos dados. Para isso edite (ou crie) `~/.ssh/config` e adicione as seguintes linhas, (modificando o path, lógico):
 
 ```ssh_config
 HOST bd-s staging.basedosdados.org
@@ -89,39 +39,34 @@ HOST bd basedosdados.org
     IdentityFile /path/para/sua/chave/privada
 ```
 
-### PLUGIN DO BASEDOSDADOS
+## Pasta `ckanext-basedosdados`
 
-O plugin do BD mora em `ckanext-basedosdados/ckanext/basedosdados/`. Onde você
-pode encontrar um [README.md](ckanext-basedosdados/ckanext/basedosdados/README.md`) mais completo.
+O plugin da Base dos Dados mora em `ckanext-basedosdados/ckanext/basedosdados`. Consulte este [README.md](ckanext-basedosdados/ckanext/basedosdados/README.md).
 
-#### POSTGRES
+## Pasta `configs`
 
-O banco estará disponível em:
-```
-host:localhost
-port:5432
-database:ckan
-user:ckan
-password:ckan
-```
+### Variáveis de ambiente e docker-compose
 
-### Deploy
+O ambiente de dev funciona com docker-compose. Duas features do docker-compose importantes que usamos aqui:
 
-O deploy é feito via github actions, basta pushar na master. Se vc adicionar variaveis de ambiente secretas em prod, vai ter q atualizar o arquivo .env.prod no github actions!
+- docker-compose suporta interpolação de variáveis usando a sintaxe `${VAR_NAME}` lendo automaticamente de um arquivo com nome `.env` no mesmo diretório do docker-compose.yaml
+- docker-compose automaticamente da merge entre o arquivo docker-compose.yaml e o arquivo docker-compose.override.yaml (caso houver), e considera isso o yaml q "ta valendo"
 
-Basicamente rodamos o ./deploy.sh que é um script com varias partes. Vc pode rodar manualmente (desde q tenha permissao, claro) uma das partes passando-a como argumento Ex.: `./deploy.sh restart_services`
+As configurações que variam entre dev e prod ficam em variáveis de ambiente definidas no docker-compose.yaml. Idealmente colocamos no .env somente as variáveis privadas (como senhas e outros segredos) e interpolamos seu valor. Usando o .env para dev e .env.prod para prod. Outras configuracoes nao secretas que diferem entre os ambientes ficam nos arquivos docker-compose.override.yaml e prod-docker-compose.override.yaml
 
-#### Staging
+### Outras configurações de ambiente
 
-Podemos fazer deploy pra staging dando push na branch develop.
+Existem outros lugares com configurações dev/prod. Em `configs/` temos:
 
-A variavel de ambiente BD_ENVIRON esta setada como 'STAGING' em staging.basedosdados.org e 'PROD' na maquina basedosdados.org. Essa variavel de ambiente fica disponivel em todas as aplicacoes nao dockerizadas
+- crontab é o cron que roda em produção, fazendo backup, monitoramento e manutenção;
+- ckan.ini / ckan.override.prod.ini são arquivos de configuração do ckan. No caso, o ckan.ini e usado em dev e o ckan.prod.ini é mergeado em cima dele na hora de deployar pra prod;
+- nginx.conf eh o arquivo de configuração do nginx (que roda em produção);
+- who.ini outro arquivo de configuração do ckan (que nunca mexemos).
 
-### Experimental
+## Pasta `utils`
 
-Essa pasta contem coisas q ainda estao em fase de experimentacao/poc
+A pasta utils contem scripts utilizados em dev e em prod para diversas coisas. Os nomes dos scripts devem ser autoexplicativos e conter comentários explicando sua razão de ser.
 
-# TODO
-* Dar uma limpa nas extensoes: copiar pra dentro o q nao tem tag/versao, e fixar versoes das q tem
-* dar uma limpa nas configuracoes prod/dev, o ideal era ficar tudo nos dc comoses e no .env as coisas privadas
-* Colar extensoes e ckan como subtree do nosso repo
+### Script de atualização do banco de dev a partir dos dumps de produção/staging
+
+Você pode rodar o script em `./utils/create_dev_init_data.sh` para atualizar o arquivo './postgresql/dev_init_data.sql.gz' que contem o snapshot do banco de dev. Esse script aceita como parâmetro posicional `File`, caso não queira baixar um backup automaticamente de prod/staging, você pode passar um path com um arquivo postgres.dump. Se STAGING=1, o script vai baixar do banco de staging ao invés de produção.

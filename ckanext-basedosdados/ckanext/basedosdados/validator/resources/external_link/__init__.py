@@ -1,28 +1,27 @@
-from typing import Optional, Literal, Set, Union
+from typing import Literal, Optional, Set, Union
 
-from pydantic import (
-    StrictStr as Str
-)
-
-from .fields_definitions import *
-from ckanext.basedosdados.validator.resources import _CkanDefaultResource
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options import (
-    TemporalCoverageEnum,
-    EntityEnum,
-    TimeUnitEnum,
-    LanguageEnum,
     AvailabilityEnum,
-    YesNoEnum,
     CountryEnum,
-    LicenseEnum
+    EntityEnum,
+    LanguageEnum,
+    LicenseEnum,
+    TemporalCoverageEnum,
+    TimeUnitEnum,
+    YesNoEnum,
 )
+from ckanext.basedosdados.validator.resources import _CkanDefaultResource
+from pydantic import StrictStr as Str
+
+from .fields_definitions import *
 
 
-class ExternalLink(_CkanDefaultResource): 
+class ExternalLink(_CkanDefaultResource):
     resource_type: Literal["external_link"]
 
     # External Link models
+    # fmt: off
     dataset_id                  : Optional[Str]                                  = DATASET_ID_FIELD
     url                         : Optional[Str]                                  = URL_FIELD
     title                       : Optional[Str]                                  = TITLE_FIELD
@@ -40,6 +39,7 @@ class ExternalLink(_CkanDefaultResource):
     update_frequency            : Optional[TimeUnitEnum]                         = UPDATE_FREQUENCY_FIELD
     entity                      : Optional[Set[EntityEnum]]                      = ENTITY_FIELD
     time_unit                   : Optional[TimeUnitEnum]                         = TIME_UNIT_FIELD
+    # fmt: on
 
     # -------------------------------------
     # VALIDATORS

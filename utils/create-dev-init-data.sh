@@ -1,10 +1,9 @@
 #!/bin/bash -ex
+
 cd $(git rev-parse --show-toplevel)
 
 docker-compose down -t0
 docker-compose up -d db
-
-
 
 FILE=$1
 if [[ ! $FILE ]]; then
@@ -32,9 +31,9 @@ $DB bash -c 'dropdb -U ckan ckan --if-exists && createdb -U ckan ckan'
 $DB pg_restore -U ckan -d ckan --format=custom --exit-on-error < $FILE
 
 if [[ $KEEP_ALL_DATASETS ]]; then
-    cat ./utils/_clean_dump.sql | sed 's/LIMIT 100; -- Number of datasets to keep/;/' | $DB psql -v ON_ERROR_STOP=1 -U ckan
+    cat ./utils/clean-dump.sql | sed 's/LIMIT 100; -- Number of datasets to keep/;/' | $DB psql -v ON_ERROR_STOP=1 -U ckan
 else
-    cat ./utils/_clean_dump.sql | $DB psql -v ON_ERROR_STOP=1 -U ckan
+    cat ./utils/clean-dump.sql | $DB psql -v ON_ERROR_STOP=1 -U ckan
 fi
 
 

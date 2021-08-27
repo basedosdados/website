@@ -1,0 +1,58 @@
+name: ci-dev
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9.x'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install isort black pylint
+      - name: Check library sort
+        run: isort --check-only --profile black --skip __init.py__ --skip vendor .
+      - name: Check code format
+        run: black --check .
+      - name: Check lint
+        run: |
+          pylint --ignore migration,vendor --exit-zero \
+          ckanext-basedosdados/ckanext/basedosdados
+      # - name: Test
+      #   run: ./test.sh
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Add secret files
+        env:
+          DOT_ENV_PROD: ${{ secrets.DOT_ENV_PROD }}
+          CKAN_STAGING_INI: ${{ secrets.CKAN_STAGING_INI }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+        run: |
+          echo "$DOT_ENV_PROD" > .env.prod && \
+          echo "$CKAN_STAGING_INI" > ./configs/ckan.override.prod.ini && \
+          mkdir ~/.ssh && \
+          echo "$SSH_KEY" > ~/.ssh/BD.pem && \
+          chmod 700 ~/.ssh ~/.ssh/BD.pem
+      - name: Deploy website
+        run: ./deploy-staging.sh deploy
+      - name: Report Failures
+        if: "${{ failure() }}"
+        uses: cstuder/apprise-ga@master
+        env:
+          APPRISE_URL: "${{ secrets.APPRISE_NOTIFICATION_URL }}"
+          INFRA_HANDLES: "${{secrets.NOTIFICATION_DISCORD_INFRA_HANDLES}}" # not working, debug this
+        with:
+          title: "Broken CI"
+          message: "<#809077231611674685>. CI DEPLOY FAILED, please check https://github.com/basedosdados/website/actions"

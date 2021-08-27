@@ -2,6 +2,7 @@
 
 from ckantoolkit import missing as MISSING
 
+
 # TODO: check if this file is still relevant
 def _get_type(key, data):
     k = list(key)
@@ -43,9 +44,13 @@ def only_on_types(*types):
 
 
 def bdm_table_columns_metadata_validator(data):
-    from ckanext.basedosdados.bdm_table_column_metadata_validator import column_validator
+    from ckanext.basedosdados.bdm_table_column_metadata_validator import (
+        column_validator,
+    )
 
-    print( "########################## VALIDATING COLUMNS ##################################")
+    print(
+        "########################## VALIDATING COLUMNS ##################################"
+    )
 
     def validator(key, data, errors, con):
         validated = column_validator.validate_columns_from_dict(data)
@@ -56,9 +61,13 @@ def bdm_table_columns_metadata_validator(data):
 
 
 def bdm_table_columns_name_validator(*field):
-    from ckanext.basedosdados.bdm_table_column_metadata_validator import column_validator
+    from ckanext.basedosdados.bdm_table_column_metadata_validator import (
+        column_validator,
+    )
 
-    print( "########################## VALIDATING NAMES ##################################")
+    print(
+        "########################## VALIDATING NAMES ##################################"
+    )
 
     def validator(key, data, errors, con):
         validated = column_validator.validate_name(field)
@@ -69,9 +78,13 @@ def bdm_table_columns_name_validator(*field):
 
 
 def bdm_table_columns_description_validator(*field):
-    from ckanext.basedosdados.bdm_table_column_metadata_validator import column_validator
+    from ckanext.basedosdados.bdm_table_column_metadata_validator import (
+        column_validator,
+    )
 
-    print( "########################## VALIDATING DESCRIPTIONS ##################################")
+    print(
+        "########################## VALIDATING DESCRIPTIONS ##################################"
+    )
 
     def validator(key, data, errors, con):
         validated = column_validator.validate_description(data)

@@ -3,7 +3,9 @@ from typing import Union
 
 from .attr_enum import AttrEnum
 
+
 class EntitySphereEnum(AttrEnum):
+    # fmt: off
     continent        = {'label': "Continente"} #"Continent"}
     country          = {'label': "País"} #"Country"}
     region           = {'label': "Região"} #"Region"}
@@ -16,15 +18,21 @@ class EntitySphereEnum(AttrEnum):
     neighborhood     = {'label': "Bairro"} #"Neighborhood"}
     zip_code         = {'label': "CEP"} #"Zip Code"}
     census_tract     = {'label': "Setor censitário"} #"CensusTract"}
+    # fmt: on
+
 
 class EntityIndividualEnum(AttrEnum):
+    # fmt: off
     person           = {'label': "Pessoa (aluno, professor, político/candidato, jogador, sócio, etc)"} #"Person (student, teacher/professor, politician/candidate, player, partner, etc)"}
     household        = {'label': "Domicílio"} #"Household"}
     name             = {'label': "Nome"} #"Name"}
     animal           = {'label': "Animal (mamífero, micróbio, vírus, etc)"} #"Animal"}
     plant            = {'label': "Planta (árvore, espécie)"} #"Plant"}
+    # fmt: on
+
 
 class EntityEstablishmentEnum(AttrEnum):
+    # fmt: off
     agency           = {'label': "Agência"} #"Agency"}
     protected_area   = {'label': "Área protegida"} #"Protected Area"}
     band             = {'label': "Banda"}
@@ -48,8 +56,11 @@ class EntityEstablishmentEnum(AttrEnum):
     team             = {'label': "Time"} #"Team"}
     court            = {'label': "Tribunal"} #"Company"}
     store            = {'label': "Loja"} #"Store"}
+    # fmt: on
+
 
 class EntityPoliticsEnum(AttrEnum):
+    # fmt: off
     agreement        = {'label': "Acordo/Tratado"} #"Agreement/Treaty"}
     speech           = {'label': "Discurso/Fala"} #"Speech"}
     election         = {'label': "Eleição"} #"Election"}
@@ -58,8 +69,11 @@ class EntityPoliticsEnum(AttrEnum):
     party            = {'label': "Partido"} #"Party"}
     poll             = {'label': "Pesquisa de Opinião"} #"Poll"}
     vote             = {'label': "Voto"}
+    # fmt: on
+
 
 class EntityScienceEnum(AttrEnum):
+    # fmt: off
     article          = {'label': "Artigo/Publicação"} #"Article/Paper"}
     citation         = {'label': "Citação"} #"Citation"}
     domain           = {'label': "Domínio"} #"Domain"}
@@ -79,8 +93,11 @@ class EntityScienceEnum(AttrEnum):
     meteor           = {'label': "Meteoro"} #"Meteor"}
     terrain          = {'label': "Terreno"}
     typo             = {'label': "Erro de digitação"}
+    # fmt: on
+
 
 class EntityEconomicsEnum(AttrEnum):
+    # fmt: off
     contract         = {'label': "Contrato"} #"Contract"}
     donation         = {'label': "Doação"} #"Contract"}
     amendment        = {'label': "Emenda Parlamentar"}
@@ -94,12 +111,18 @@ class EntityEconomicsEnum(AttrEnum):
     bill             = {'label': "Nota de dinheiro"} #"Money Bill"}
     occupation       = {'label': "Ocupação"} #"Occupation"}
     sector           = {'label': "Setor"} #"Sector"}
+    # fmt: on
+
 
 class EntityEducationEnum(AttrEnum):
+    # fmt: off
     scholarship      = {'label': "Bolsa"} #"Scholarship"}
     exam             = {'label': "Prova/Exame"} #"Test/Exam"}
+    # fmt: on
+
 
 class EntityEventEnum(AttrEnum):
+    # fmt: off
     alert            = {'label': "Alerta"} #"Alert"}
     attack           = {'label': "Ataque/Atentado"} #"Attack"}
     audit            = {'label': "Auditoria"}
@@ -115,8 +138,11 @@ class EntityEventEnum(AttrEnum):
     protest          = {'label': "Protesto"} #"Protest"}
     match            = {'label': "Partida"} #"Match"}
     sanction         = {'label': "Sanção/Multa"} #"Match"}
+    # fmt: on
+
 
 class EntityArtEnum(AttrEnum):
+    # fmt: off
     album            = {'label': "Álbum"} #"Album"}
     movie            = {'label': "Filme/Série/Clipe"} #"Movie/Film/Clip/Show"}
     photo            = {'label': "Foto"} #"Photo/Picture"}
@@ -124,36 +150,59 @@ class EntityArtEnum(AttrEnum):
     statue           = {'label': "Estátua"} #"Statue"}
     painting         = {'label': "Pintura/Desenho/Ilustração"} #"Painting/Drawing/Illustration"}
     poem             = {'label': "Poema"} #"Poem"}
+    # fmt: on
+
 
 class EntityInfrastructureEnum(AttrEnum):
+    # fmt: off
     dam              = {'label': "Represa/Barragem"} #"Dam"}
     satellitte       = {'label': "Satélite"} #"Satellite"}
     street_road      = {'label': "Rua/Avenida/Estrada"} #"Street/Avenue/Road/Highway"}
     roller_coaster   = {'label': "Montanha-Russa"} #"Roller Coaster"}
+    # fmt: on
+
 
 class EntityTransportationEnum(AttrEnum):
+    # fmt: off
     automobile       = {'label': "Carro/Ônibus/Caminhão/Moto"} #"Car/Bus/Truck/Motorcycle"}
     train            = {'label': "Trem"} #"Train"}
     aircraft         = {'label': "Avião/Helicóptero"} #"Plane/Helicopter"}
     ship             = {'label': "Embarcação/Navio"} #"Ship"}
+    # fmt: on
+
 
 class EntitySecurityEnum(AttrEnum):
+    # fmt: off
     gun              = {'label': "Arma"} #"Gun"}
+    # fmt: on
+
 
 class EntityDemographicEnum(AttrEnum):
+    # fmt: off
     age              = {'label': "Idade"} #"Age"}
     race             = {'label': "Raça/Cor de pele"} #"Race/Skin color"}
     sex              = {'label': "Sexo"} #"Sex"}
+    # fmt: on
+
 
 class EntityImageEnum(AttrEnum):
+    # fmt: off
     pixel            = {'label': "Pixel/Grid"} #"Pixel/Grid"}
     polygon          = {'label': "Polígono"} #"Polygon"}
+    # fmt: on
+
 
 class EntityHistoryEnum(AttrEnum):
+    # fmt: off
     empire           = {'label': "Império"} #"Empire"}
+    # fmt: on
+
 
 class EntityOtherEnum(AttrEnum):
+    # fmt: off
     other            = {'label': "Outro"} #"Other"}
+    # fmt: on
+
 
 EntityEnum = Union[
     EntitySphereEnum,
@@ -171,5 +220,5 @@ EntityEnum = Union[
     EntityDemographicEnum,
     EntityHistoryEnum,
     EntityOtherEnum,
-    EntityImageEnum
+    EntityImageEnum,
 ]

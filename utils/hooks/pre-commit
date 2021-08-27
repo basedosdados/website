@@ -1,0 +1,23 @@
+#!/bin/bash
+
+echo ------------------------------------------------------
+echo Sort
+echo ------------------------------------------------------
+
+python -m isort --profile black --skip __init__.py --skip vendor .
+
+echo ------------------------------------------------------
+echo Format
+echo ------------------------------------------------------
+
+python -m black --exclude "migration|vendor" .
+
+echo ------------------------------------------------------
+echo Lint
+echo ------------------------------------------------------
+
+python -m pylint --ignore migration,vendor --exit-zero ckanext-basedosdados/ckanext/basedosdados
+
+echo ------------------------------------------------------
+echo Commit
+echo ------------------------------------------------------
