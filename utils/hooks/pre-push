@@ -4,7 +4,7 @@ echo ------------------------------------------------------
 echo Sort
 echo ------------------------------------------------------
 
-python -m isort --profile black .
+python -m isort --profile black --skip vendor/** .
 
 echo ------------------------------------------------------
 echo Format
