@@ -1,18 +1,17 @@
-from pydantic import ValidationError
+import jsonschema
+import pytest
 from ckanext.basedosdados.validator.packages import Dataset
 from ckanext.basedosdados.validator.resources import BdmTable, ExternalLink
-
-import jsonschema
-
-import pytest
+from pydantic import ValidationError
 from pytest import raises
 
 from . import data
 
 
 def jsonify(data):
-    from pydantic.json import pydantic_encoder
     import json
+
+    from pydantic.json import pydantic_encoder
 
     return json.loads(json.dumps(data, default=pydantic_encoder))
 
@@ -22,7 +21,8 @@ def test_validating(data):
         Dataset.validate(data)
     assert e.match("Discriminator 'resource_type' is missing in value")
 
-#TODO: DEPRECATED
+
+# TODO: DEPRECATED
 # def test_correct_reporting_on_missing_properties_of_a_specific_resource(data):
 #     data["resources"] = [
 #         {"resource_type": "external_link", "id": "13", "name": "linkzao"}
@@ -182,8 +182,9 @@ def test_ckanize():
 
 
 def test_pydantic_validates_individual_items_in_a_list():
+    from typing import List, Literal, Optional, Union
+
     from pydantic import BaseModel, ValidationError
-    from typing import List, Optional, Literal, Union
 
     class Item(BaseModel):
         id: int

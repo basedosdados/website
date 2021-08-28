@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 from datetime import datetime
-from pydantic import (
-    StrictStr as Str,
-    Field,
-)
+
 from ckanext.basedosdados.validator import BaseModel
+from pydantic import Field
+from pydantic import StrictStr as Str
 
 to_line = lambda description: "\n".join(description)
 

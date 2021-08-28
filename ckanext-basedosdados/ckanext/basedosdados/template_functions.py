@@ -47,20 +47,22 @@ def get_resource_bdm_table_name(resource):
     return resource["table_id"]
 
 
-from ckanext.basedosdados.validator.packages import _CkanDefaults, Dataset
+import functools
+
+from ckanext.basedosdados.validator.packages import Dataset, _CkanDefaults
 from ckanext.basedosdados.validator.resources import (
+    RESOURCE_TYPES,
+    BdmDictionary,
     BdmTable,
     ExternalLink,
     InformationRequest,
-    BdmDictionary,
-    RESOURCE_TYPES,
 )
-import functools
 
 
 def load_json_schema():
-    from jsonref import JsonRef, json
     from copy import deepcopy
+
+    from jsonref import JsonRef, json
 
     def to_schema(x, fields_to_remove):
         out = deepcopy(

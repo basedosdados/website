@@ -1,10 +1,11 @@
 import ast
 import os
-from ckanapi.errors import ValidationError, NotFound
-from ckanapi import RemoteCKAN
-from functools import lru_cache
 import re
+from functools import lru_cache
+
 import unidecode
+from ckanapi import RemoteCKAN
+from ckanapi.errors import NotFound, ValidationError
 
 
 def flatten(t):

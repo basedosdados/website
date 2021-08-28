@@ -1,9 +1,12 @@
 #!/bin/bash -ex
-cd -P -- "$(dirname -- "$0")" # cd to this script's dir
+
+# cd to this script's dir
+cd -P -- "$(dirname -- "$0")"
 
 if [[ $BD_ENVIRON != 'PROD' ]]; then
+    # no backup in staging
     echo Skipping backup because we are not in prod
-    exit 0  # no backup in staging
+    exit 0
 fi
 
 # DB

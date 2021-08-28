@@ -4,11 +4,14 @@ from pathlib import Path
 import ckan.plugins.toolkit as toolkit
 from ckan.logic.action.get import (
     dataset_follower_count,
-    package_show,
-    resource_show,
     package_search,
+    package_show,
     resource_search,
+<<<<<<< HEAD
     get_site_user
+=======
+    resource_show,
+>>>>>>> c7f65eb6ce6d0a6804ee087a3304632f6d911357
 )
 from ckanext.basedosdados.validator.packages import Dataset
 from ckanext.basedosdados.validator.resources import (

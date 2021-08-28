@@ -1,15 +1,15 @@
-from ckanext.basedosdados.validator.packages import Dataset
-from ckanext.basedosdados.validator.resources import BdmTable, ExternalLink
-
 import jsonschema
 import pytest
+from ckanext.basedosdados.validator.packages import Dataset
+from ckanext.basedosdados.validator.resources import BdmTable, ExternalLink
 
 from . import data
 
 
 def jsonify(data):
-    from pydantic.json import custom_pydantic_encoder
     import json
+
+    from pydantic.json import custom_pydantic_encoder
 
     def encoder(o):
         def sort_list(s):
@@ -20,6 +20,7 @@ def jsonify(data):
         )  # order sets so that tests dont break
 
     return json.loads(json.dumps(data, sort_keys=True, default=encoder))
+
 
 # TODO: DEPRECATED
 # def test_resource():
