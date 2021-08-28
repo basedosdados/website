@@ -7,6 +7,7 @@ from ckan.logic.action.get import (
     package_search,
     package_show,
     resource_search,
+    get_site_user,
     resource_show,
 )
 from ckanext.basedosdados.validator.packages import Dataset
@@ -52,6 +53,19 @@ def bd_external_link_schema(context, data_dict):
 def bd_information_request_schema(context, data_dict):
     return InformationRequest.schema()
 
+
+@toolkit.side_effect_free
+def bd_get_current_user(context, data_dict):
+    user = context['auth_user_obj']
+
+    if not user:
+        return None
+
+    return {
+        "fullname": user.fullname,
+        "image_url": user.image_url,
+        "name": user.name
+    }
 
 @toolkit.side_effect_free
 def bd_bdm_dataset_show(context, data_dict):
@@ -205,6 +219,18 @@ def bd_dataset_search(context, data_dict):
     response.pop("search_facets", None)
     response.pop("sort", None)
 
+    # post-process groups ###################################
+
+    response["groups"] = {}
+    response["groups_display_names"] = {}
+
+    for dataset in response["datasets"]:
+        for group in dataset.get("groups", []):
+            key = group["name"]
+            response["groups_display_names"][key] = group["display_name"]
+            value = response["groups"].get(key, 0) + 1
+            response["groups"][key] = value
+
     # post-process tags ###################################
 
     response["tags"] = {}
@@ -218,9 +244,11 @@ def bd_dataset_search(context, data_dict):
     # post-process organizations ##########################
 
     response["organizations"] = {}
+    response["organizations_display_names"] = {}
 
     for dataset in response["datasets"]:
         key = dataset["organization"]["name"]
+        response["organizations_display_names"][key] = dataset["organization"]["title"]
         value = response["organizations"].get(key, 0) + 1
         response["organizations"][key] = value
 
