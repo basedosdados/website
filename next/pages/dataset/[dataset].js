@@ -317,9 +317,7 @@ export default function DatasetPage({
           >
             <VStack alignItems="flex-start">
               <Title>Organização</Title>
-              <Link
-                href={`/_nxt/search?organization=${dataset.organization.name}`}
-              >
+              <Link href={`/search?organization=${dataset.organization.name}`}>
                 <SectionText fontWeight="400" fontSize="14px">
                   {dataset.organization.title}
                 </SectionText>
@@ -328,11 +326,11 @@ export default function DatasetPage({
             <VStack alignItems="flex-start">
               <Title paddingTop="">Temas</Title>
               {dataset.groups.map((g) => (
-                <Link href={`/_nxt/search?group=${g.name}`}>
+                <Link href={`/search?group=${g.name}`}>
                   <HStack key={g.name}>
                     <CategoryIcon
                       size="39px"
-                      url={`/_nxt/img/categories/icone_${g.name}${
+                      url={`/img/categories/icone_${g.name}${
                         isPlus ? "-1" : ""
                       }.svg`}
                     />

@@ -117,7 +117,7 @@ export function CheckboxFilterAccordion({
                     cursor="pointer"
                     layout="fill"
                     objectFit="contain"
-                    src="/_nxt/img/icon_search.png"
+                    src="/img/icon_search.png"
                   />
                 </Box>
               }

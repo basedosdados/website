@@ -8,6 +8,7 @@ from ckan.logic.action.get import (
     resource_show,
     package_search,
     resource_search,
+    get_site_user
 )
 from ckanext.basedosdados.validator.packages import Dataset
 from ckanext.basedosdados.validator.resources import (
@@ -52,6 +53,18 @@ def bd_external_link_schema(context, data_dict):
 def bd_information_request_schema(context, data_dict):
     return InformationRequest.schema()
 
+
+@toolkit.side_effect_free
+def bd_get_current_user(context, data_dict):
+    user = context['auth_user_obj']
+
+    if not user:
+        return None
+
+    return {
+        "fullname": user.fullname,
+        "image_url": user.image_url
+    }
 
 @toolkit.side_effect_free
 def bd_bdm_dataset_show(context, data_dict):

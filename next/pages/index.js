@@ -59,7 +59,7 @@ function Hero() {
   console.log("isMobile", isMobile);
 
   function openSearchLink() {
-    return window.open(`/_nxt/search?q=${search}`, "_self");
+    return window.open(`/search?q=${search}`, "_self");
   }
 
   return (
@@ -88,7 +88,7 @@ function Hero() {
             >
               <Image
                 priority
-                src="/_nxt/img/home_background.png"
+                src="/img/home_background.png"
                 layout="fill"
                 objectFit="contain"
               />
@@ -139,7 +139,7 @@ function Hero() {
                       onClick={openSearchLink}
                       layout="fill"
                       objectFit="contain"
-                      src="/_nxt/img/arrow_black_right.png"
+                      src="/img/arrow_black_right.png"
                     />
                   </Box>
                 }
@@ -162,19 +162,19 @@ function Hero() {
             direction={{ base: "column", lg: "row" }}
             spacing={10}
           >
-            <HeroText iconUrl="/_nxt/img/icone_busca.png">
+            <HeroText iconUrl="/img/icone_busca.png">
               <SectionText fontSize="14px" textAlign="center">
                 Com o mecanismo de busca é possível descobrir informações sobre
                 mais de 900 bases de dados de diversos temas e organizações.
               </SectionText>
             </HeroText>
-            <HeroText iconUrl="/_nxt/img/icone_download.png">
+            <HeroText iconUrl="/img/icone_download.png">
               <SectionText fontSize="14px" textAlign="center">
                 Disponibilizamos o download dos dados tratados e atualizados
                 direto do nosso datalake público num só click.
               </SectionText>
             </HeroText>
-            <HeroText iconUrl="/_nxt/img/icone_pacotes.png">
+            <HeroText iconUrl="/img/icone_pacotes.png">
               <SectionText fontSize="14px" textAlign="center">
                 Através dos nossos pacotes de programação você pode acessar o
                 datalake público BD+ em Python, R ou pela linha de comando.
@@ -197,7 +197,7 @@ function Hero() {
             priority
             layout="fill"
             objectFit="contain"
-            src="/_nxt/img/arrow_white_down.png"
+            src="/img/arrow_white_down.png"
           />
         </Box>
       </Center>
@@ -227,7 +227,7 @@ function CatalogNews() {
         sections={{
           populares: (popularDatasets.data || []).map((d) => (
             <DatabaseCard
-              link={`/_nxt/dataset/${d.name}`}
+              link={`/dataset/${d.name}`}
               name={d.title}
               organization={d.organization.title}
               organizationSlug={d.organization.name}
@@ -263,7 +263,7 @@ function CatalogNews() {
       >
         <Image
           priority
-          src="/_nxt/img/home_background.png"
+          src="/img/home_background.png"
           layout="fill"
           objectFit="contain"
         />
@@ -272,7 +272,7 @@ function CatalogNews() {
         sections={{
           recentes: (recentDatasets.data || []).map((d) => (
             <DatabaseCard
-              link={`/_nxt/dataset/${d.name}`}
+              link={`/dataset/${d.name}`}
               name={d.title}
               organization={d.organization.title}
               organizationSlug={d.organization.name}
@@ -395,7 +395,7 @@ function LearnToAnalysis() {
             objectFit="contain"
             objectPosition="0"
             layout="fill"
-            src="/_nxt/img/tela_jupyter.png"
+            src="/img/tela_jupyter.png"
           />
         </Box>
       }
@@ -411,7 +411,7 @@ function LearnToAnalysis() {
           >
             <Image
               priority
-              src="/_nxt/img/home_background.png"
+              src="/img/home_background.png"
               layout="fill"
               objectFit="contain"
             />
@@ -479,7 +479,7 @@ function JoinTheCommunity() {
             priority
             layout="fill"
             objectFit="contain"
-            src="/_nxt/img/tela_discord.png"
+            src="/img/tela_discord.png"
           />
         </Box>
       }
@@ -530,7 +530,7 @@ function Support() {
       >
         <Image
           priority
-          src="/_nxt/img/home_background.png"
+          src="/img/home_background.png"
           layout="fill"
           objectFit="contain"
         />
@@ -606,7 +606,7 @@ export default function Home({ strapiPages }) {
         <Support />
       </VStack>
       <script
-        src="/_nxt/vendor/terminal.js"
+        src="/vendor/terminal.js"
         data-termynal-container="#termynal"
       ></script>
     </MainPageTemplate>

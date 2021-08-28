@@ -38,7 +38,7 @@ function DesktopLinks({ links }) {
   const [search, setSearch] = useState();
 
   function openSearchLink() {
-    window.open(`/_nxt/search/?q=${search}`, "_self");
+    window.open(`/search/?q=${search}`, "_self");
   }
 
   return (
@@ -79,7 +79,7 @@ function DesktopLinks({ links }) {
                 onClick={openSearchLink}
                 layout="fill"
                 objectFit="contain"
-                src="/_nxt/img/icon_search.png"
+                src="/img/icon_search.png"
               />
             </Box>
           }
@@ -98,7 +98,7 @@ export default function Menu({ strapiPages = [] }) {
   const divRef = useRef();
 
   const links = {
-    Dados: "/_nxt/search",
+    Dados: "/search",
   };
 
   useEffect(() => {
@@ -111,7 +111,7 @@ export default function Menu({ strapiPages = [] }) {
   }, [divRef.current]);
 
   strapiPages.map((p) => {
-    links[p.MenuTitle] = "/_nxt/blog/" + p.id + "/";
+    links[p.MenuTitle] = "/blog/" + p.id + "/";
   });
 
   links["Newsletter"] =
@@ -154,7 +154,7 @@ export default function Menu({ strapiPages = [] }) {
               icon={faBars}
             />
           </Box>
-          <Link href="/_nxt/">
+          <Link href="/">
             <Box
               transform={{ base: "translateX(-20%)", lg: "translateX(0%)" }}
               width={{ base: "120px", lg: "105px" }}
@@ -165,7 +165,7 @@ export default function Menu({ strapiPages = [] }) {
                 priority
                 layout="fill"
                 objectFit="contain"
-                src="/_nxt/img/logo.png"
+                src="/img/logo.png"
               />
             </Box>
           </Link>

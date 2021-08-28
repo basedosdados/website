@@ -4,7 +4,7 @@ export function ThemeTag({ name }) {
   return (
     <a
       _hover={{ textDecoration: "underline !important" }}
-      href={`/_nxt/search?tag=${name}`}
+      href={`/search?tag=${name}`}
     >
       <Tag
         position="relative"

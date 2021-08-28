@@ -107,7 +107,7 @@ function BlogPage({ strapiPages = [] }) {
             >
               <Image
                 priority
-                src="/_nxt/img/home_background.png"
+                src="/img/home_background.png"
                 layout="fill"
                 objectFit="contain"
               />

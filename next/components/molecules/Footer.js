@@ -58,7 +58,7 @@ export default function Footer() {
               priority
               objectFit="contain"
               layout="fill"
-              src="/_nxt/img/logo_footer.png"
+              src="/img/logo_footer.png"
             />
           </Box>
           <Stack
@@ -109,17 +109,17 @@ export default function Footer() {
               <SocialLink
                 href="https://twitter.com/basedosdados"
                 title="Twitter"
-                src="/_nxt/img/social/twitter.png"
+                src="/img/social/twitter.png"
               />
               <SocialLink
                 href="https://discord.gg/huKWpsVYx4"
                 title="Discord"
-                src="/_nxt/img/social/discord.png"
+                src="/img/social/discord.png"
               />
               <SocialLink
                 href="https://github.com/basedosdados"
                 title="GitHub"
-                src="/_nxt/img/social/github.png"
+                src="/img/social/github.png"
               />
               <Link
                 color="white"

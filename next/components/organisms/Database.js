@@ -48,7 +48,12 @@ export function Database({
       spacing={{ base: 5, md: 0 }}
       padding="10px 0px"
     >
-      <HStack alignItems="flex-start" width="100%" spacing={10}>
+      <Stack
+        direction={{ base: "column", lg: "row" }}
+        alignItems="flex-start"
+        width="100%"
+        spacing={10}
+      >
         <Image
           priority
           objectFit="contain"
@@ -68,12 +73,17 @@ export function Database({
           width="100%"
         >
           <VStack width="100%" spacing={1} alignItems="flex-start">
-            <Flex justifyContent="center" alignItems="flex-start" width="100%">
+            <Flex
+              flexDir={{ base: "column", lg: "row" }}
+              justifyContent="center"
+              alignItems="flex-start"
+              width="100%"
+            >
               <HStack
                 justifyContent="center"
                 alignItems="flex-start"
                 spacing={5}
-                pt={1}
+                pb={{ base: 4, lg: 0 }}
               >
                 <Link href={link}>
                   <Heading
@@ -84,13 +94,11 @@ export function Database({
                     fontSize="18px"
                     letterSpacing="0.1em"
                     color="#252A32"
-                    maxWidth="500px"
-                    minWidth="100px"
                   >
                     {name}
                   </Heading>
                 </Link>
-                <HStack
+                {/*<HStack
                   borderRadius="10.5233px"
                   border="0.743243px solid #6F6F6F"
                   padding="2px 7px"
@@ -103,29 +111,30 @@ export function Database({
                   <Heading fontFamily="Lato" fontSize="14px">
                     {stars || 0}
                   </Heading>
-                </HStack>
+                </HStack>*/}
               </HStack>
               <HStack
-                alignItems="flex-start"
-                justifyContent="flex-start"
+                justifyContent={{ base: "flex-start", lg: "flex-end" }}
                 marginLeft="auto"
                 spacing={2}
+                pb={{ base: 3, lg: 0 }}
+                width="100%"
               >
                 {isPlus ? (
                   <Image
                     paddingRight="10px"
                     priority
                     width="80px"
-                    src="/_nxt/img/logo_plus.png"
+                    src="/img/logo_plus.png"
                   />
                 ) : (
                   <></>
                 )}
                 {categories.map((c) => (
-                  <Link href={`/_nxt/search?group=${c}`}>
+                  <Link href={`/search?group=${c}`}>
                     <CategoryIcon
                       size="36px"
-                      url={`/_nxt/img/categories/icone_${c}${
+                      url={`/img/categories/icone_${c}${
                         isPlus ? "-1" : ""
                       }.svg`}
                     />
@@ -134,10 +143,14 @@ export function Database({
               </HStack>
             </Flex>
             <VStack spacing={0} width="100%" alignItems="flex-start">
-              <HStack fontSize="12px" spacing={5}>
+              <Stack
+                direction={{ base: "column", lg: "row" }}
+                fontSize="12px"
+                spacing={{ base: 0, lg: 5 }}
+              >
                 <HStack>
                   <SectionText color="#6F6F6F">Organização:</SectionText>
-                  <Link href={`/_nxt/search?organization=${organization.name}`}>
+                  <Link href={`/search?organization=${organization.name}`}>
                     <SectionText
                       color="#6F6F6F"
                       textAlign="left"
@@ -165,8 +178,12 @@ export function Database({
                     )}
                   </SectionText>
                 </HStack>
-              </HStack>
-              <HStack fontSize="12px" spacing={5}>
+              </Stack>
+              <Stack
+                direction={{ base: "column", lg: "row" }}
+                fontSize="12px"
+                spacing={{ base: 0, lg: 5 }}
+              >
                 <HStack>
                   <SectionText color="#6F6F6F">Abrangência:</SectionText>
                   <SectionText
@@ -193,14 +210,14 @@ export function Database({
                     {new Date(updatedSince).toLocaleDateString("pt-BR")}
                   </SectionText>
                 </HStack>
-              </HStack>
+              </Stack>
             </VStack>
           </VStack>
           <VStack paddingTop="10px">
             <HStack spacing={5}>
               {tableNum ? (
                 <HStack>
-                  <Image src="/_nxt/img/icons/database.svg" />
+                  <Image src="/img/icons/database.svg" />
                   <Subtitle color="#2B8C4D" fontSize="15px" fontWeight="bold">
                     {tableNum} tabelas
                   </Subtitle>
@@ -217,7 +234,7 @@ export function Database({
               )}
               {externalLinkNum ? (
                 <HStack>
-                  <Image src="/_nxt/img/icons/link.svg" />
+                  <Image src="/img/icons/link.svg" />
                   <Subtitle color="#2B8C4D" fontSize="15px" fontWeight="bold">
                     {externalLinkNum} links externos
                   </Subtitle>
@@ -228,7 +245,7 @@ export function Database({
             </HStack>
           </VStack>
         </VStack>
-      </HStack>
+      </Stack>
     </VStack>
   );
 }

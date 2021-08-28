@@ -46,10 +46,10 @@ export default function DatabaseCard({
     <Card
       icons={[
         ...categories.slice(0, Math.min(3, categories.length)).map((c) => (
-          <Link href={`/_nxt/search?group=${c}`}>
+          <Link href={`/search?group=${c}`}>
             <CategoryIcon
               size="47px"
-              url={`/_nxt/img/categories/icone_${c}${isPlus ? "-1" : ""}.svg`}
+              url={`/img/categories/icone_${c}${isPlus ? "-1" : ""}.svg`}
             />
           </Link>
         )),
@@ -59,7 +59,7 @@ export default function DatabaseCard({
                 width="80px"
                 height="37px"
                 marginRight="10px"
-                src={`/_nxt/img/logo_plus.png`}
+                src={`/img/logo_plus.png`}
               />,
             ]
           : []),
@@ -71,7 +71,7 @@ export default function DatabaseCard({
           {name}
         </Title>
       </Link>
-      <Link href={`/_nxt/search?organization=${organizationSlug}`}>
+      <Link href={`/search?organization=${organizationSlug}`}>
         <Subtitle>{organization}</Subtitle>
       </Link>
       <HStack

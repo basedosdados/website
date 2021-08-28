@@ -77,18 +77,19 @@ export default function SearchPage({ strapiPages }) {
 
   return (
     <MainPageTemplate strapiPages={strapiPages}>
-      <HStack
+      <Stack
         justifyContent="flex-start"
         alignItems="flex-start"
         spacing={10}
         width="85%"
         margin="auto"
+        direction={{ base: "column", lg: "row" }}
       >
         <VStack
           justifyContent="flex-start"
           alignItems="flex-start"
-          minWidth="300px"
-          maxWidth="300px"
+          minWidth={{ base: "100%", lg: "300px" }}
+          maxWidth={{ base: "100%", lg: "300px" }}
           key={filterKey}
         >
           <SectionTitle
@@ -234,7 +235,7 @@ export default function SearchPage({ strapiPages }) {
                 {(data?.datasets || []).map((d) => (
                   <>
                     <Database
-                      link={`/_nxt/dataset/${d.id}`}
+                      link={`/dataset/${d.id}`}
                       name={d.title}
                       image={
                         "https://basedosdados.org/uploads/group/" +
@@ -277,9 +278,9 @@ export default function SearchPage({ strapiPages }) {
             </>
           )}
         </VStack>
-      </HStack>
+      </Stack>
       <script
-        src="/_nxt/vendor/terminal.js"
+        src="/vendor/terminal.js"
         data-termynal-container="#termynal"
       ></script>
     </MainPageTemplate>
