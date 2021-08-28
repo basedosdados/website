@@ -56,6 +56,13 @@ def bd_information_request_schema(context, data_dict):
 
 @toolkit.side_effect_free
 def bd_get_current_user(context, data_dict):
+    """Shows current user data
+    Args:
+        none
+    Returns:
+        data about the current logged user, returns None if not logged
+    """
+
     user = context['auth_user_obj']
 
     if not user:
