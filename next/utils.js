@@ -40,3 +40,7 @@ export function limitTextSize(text, size) {
 
   return text;
 }
+
+export function isBdPlus(dataset) {
+  return dataset.resources.some((r) => r.resource_type === "bdm_table");
+}

@@ -63,7 +63,8 @@ def bd_get_current_user(context, data_dict):
 
     return {
         "fullname": user.fullname,
-        "image_url": user.image_url
+        "image_url": user.image_url,
+        "name": user.name
     }
 
 @toolkit.side_effect_free

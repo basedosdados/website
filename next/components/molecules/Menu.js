@@ -7,14 +7,16 @@ import {
   DrawerContent,
   useDisclosure,
   Divider,
+  Avatar,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import ControlledInput from "../atoms/ControlledInput";
 import RoundedButton from "../atoms/RoundedButton";
 import Link from "../atoms/Link";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import UserContext from "../../context/user";
 
 function MenuDrawer({ isOpen, onClose, links }) {
   return (
@@ -36,6 +38,7 @@ function MenuDrawer({ isOpen, onClose, links }) {
 
 function DesktopLinks({ links }) {
   const [search, setSearch] = useState();
+  const userData = useContext(UserContext);
 
   function openSearchLink() {
     window.open(`/search/?q=${search}`, "_self");
@@ -84,10 +87,21 @@ function DesktopLinks({ links }) {
             </Box>
           }
         />
-        <Link href="/user/login">Entrar</Link>
-        <Link href="/user/register">
-          <RoundedButton minWidth="150px">Cadastrar</RoundedButton>
-        </Link>
+        {userData ? (
+          <HStack spacing={5}>
+            <Avatar src={userData.image_url} />
+            <Link style={{ fontSize: "12px" }} href={`/user/${userData.name}`}>
+              {userData.fullname}
+            </Link>
+          </HStack>
+        ) : (
+          <>
+            <Link href="/user/login">Entrar</Link>
+            <Link href="/user/register">
+              <RoundedButton minWidth="150px">Cadastrar</RoundedButton>
+            </Link>
+          </>
+        )}
       </HStack>
     </HStack>
   );

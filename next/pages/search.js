@@ -22,6 +22,7 @@ import { Database } from "../components/organisms/Database";
 import { CheckboxFilterAccordion } from "../components/atoms/FilterAccordion";
 import { withStrapiPages } from "../hooks/strapi.hook";
 import { MainPageTemplate } from "../components/templates/main";
+import { isBdPlus } from "../utils";
 
 export async function getStaticProps(context) {
   return withStrapiPages({
@@ -269,7 +270,7 @@ export default function SearchPage({ strapiPages }) {
                               .update_frequency
                           : null
                       }
-                      isPlus={d.download_type === "BD Mais"}
+                      isPlus={isBdPlus(d)}
                     />
                     <Divider />
                   </>

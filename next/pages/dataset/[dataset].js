@@ -23,7 +23,11 @@ import { useState } from "react";
 import { SimpleTable } from "../../components/atoms/SimpleTable";
 import Highlight, { defaultProps } from "prism-react-renderer";
 import { ExpandableTable } from "../../components/molecules/ExpandableTable";
-import { filterOnlyValidValues, formatObjectsInArray } from "../../utils";
+import {
+  filterOnlyValidValues,
+  formatObjectsInArray,
+  isBdPlus,
+} from "../../utils";
 import Link from "../../components/atoms/Link";
 
 export async function getStaticProps(context) {
@@ -39,7 +43,7 @@ export async function getStaticProps(context) {
       dataset,
       bdmTables,
       externalLinks,
-      isPlus: dataset.download_type === "BD Mais",
+      isPlus: isBdPlus(dataset),
     },
     revalidate: 1, //TODO: Increase this timer
   });

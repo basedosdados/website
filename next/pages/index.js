@@ -36,6 +36,7 @@ import { withStrapiPages } from "../hooks/strapi.hook";
 import { ThemeTag } from "../components/atoms/ThemeTag";
 import { LinkDash } from "../components/atoms/LinkDash";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
+import { isBdPlus } from "../utils";
 
 export async function getStaticProps(context) {
   return await withStrapiPages();
@@ -248,7 +249,7 @@ function CatalogNews() {
               updatedSince={d.metadata_modified}
               updatedAuthor="Ricardo Dahis"
               categories={d.groups.map((g) => g.name)}
-              isPlus={d.download_type === "BD Mais"}
+              isPlus={isBdPlus(d)}
             />
           )),
         }}
@@ -293,7 +294,7 @@ function CatalogNews() {
               updatedSince={d.metadata_modified}
               updatedAuthor="Ricardo Dahis"
               categories={d.groups.map((g) => g.name)}
-              isPlus={d.download_type === "BD Mais"}
+              isPlus={isBdPlus(d)}
             />
           )),
         }}
