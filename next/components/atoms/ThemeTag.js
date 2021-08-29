@@ -4,7 +4,7 @@ export function ThemeTag({ name }) {
   return (
     <a
       _hover={{ textDecoration: "underline !important" }}
-      href={`/search?tag=${name}`}
+      href={`/dataset?tag=${name}`}
     >
       <Tag
         position="relative"

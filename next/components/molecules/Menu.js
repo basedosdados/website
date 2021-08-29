@@ -48,8 +48,8 @@ function DesktopLinks({ links }) {
     <HStack
       justifyContent="space-between"
       width="100%"
-      display={{ base: "none", md: "flex" }}
-      position={{ base: "relative", md: "initial" }}
+      display={{ base: "none", lg: "flex" }}
+      position={{ base: "relative", lg: "initial" }}
     >
       <HStack width="100%" flex="3" spacing={7}>
         {Object.entries(links).map(([k, v]) =>
@@ -89,7 +89,11 @@ function DesktopLinks({ links }) {
         />
         {userData ? (
           <HStack spacing={5}>
-            <Avatar src={userData.image_url} />
+            <Avatar
+              bg="#2B8C4D"
+              name={userData?.fullname}
+              src={userData.image_url}
+            />
             <Link style={{ fontSize: "12px" }} href={`/user/${userData.name}`}>
               {userData.fullname}
             </Link>
@@ -110,6 +114,7 @@ function DesktopLinks({ links }) {
 export default function Menu({ strapiPages = [] }) {
   const menuDisclosure = useDisclosure();
   const divRef = useRef();
+  const userData = useContext(UserContext);
 
   const links = {
     Dados: "/search",
@@ -149,11 +154,11 @@ export default function Menu({ strapiPages = [] }) {
         as="nav"
       >
         <HStack
-          justifyContent={{ base: "center", md: "flex-start" }}
+          justifyContent={{ base: "center", lg: "flex-start" }}
           width="100%"
           spacing={10}
         >
-          <Box display={{ base: "flex", md: "none" }}>
+          <Box display={{ base: "flex", lg: "none" }}>
             <FontAwesomeIcon
               onClick={menuDisclosure.onOpen}
               style={{
@@ -183,6 +188,14 @@ export default function Menu({ strapiPages = [] }) {
               />
             </Box>
           </Link>
+          <Avatar
+            bg="#2B8C4D"
+            position="fixed"
+            right="30px"
+            display={{ base: "flex", lg: "none" }}
+            src={userData?.image_url}
+            name={userData?.fullname}
+          />
           <DesktopLinks links={links} />
         </HStack>
       </Box>

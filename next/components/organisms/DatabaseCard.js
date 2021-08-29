@@ -46,7 +46,7 @@ export default function DatabaseCard({
     <Card
       icons={[
         ...categories.slice(0, Math.min(3, categories.length)).map((c) => (
-          <Link href={`/search?group=${c}`}>
+          <Link href={`/dataset?group=${c}`}>
             <CategoryIcon
               size="47px"
               url={`/img/categories/icone_${c}${isPlus ? "-1" : ""}.svg`}
@@ -71,7 +71,7 @@ export default function DatabaseCard({
           {name}
         </Title>
       </Link>
-      <Link href={`/search?organization=${organizationSlug}`}>
+      <Link href={`/dataset?organization=${organizationSlug}`}>
         <Subtitle>{organization}</Subtitle>
       </Link>
       <HStack

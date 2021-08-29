@@ -24,6 +24,7 @@ export function ExpandableTable({ headers, values, containerStyle }) {
       <Button
         minHeight="40px"
         maxHeight="40px"
+        width="100%"
         onClick={() => setExpanded(!expanded)}
       >
         {expanded ? "Ver Menos" : "Ver Mais"}

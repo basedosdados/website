@@ -60,7 +60,7 @@ function Hero() {
   console.log("isMobile", isMobile);
 
   function openSearchLink() {
-    return window.open(`/search?q=${search}`, "_self");
+    return window.open(`/dataset?q=${search}`, "_self");
   }
 
   return (

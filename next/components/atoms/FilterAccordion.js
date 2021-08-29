@@ -11,6 +11,7 @@ import {
   Text,
   Tooltip,
   Image,
+  HStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { limitTextSize } from "../../utils";
@@ -24,6 +25,7 @@ export function BaseFilterAccordion({
   isOpen = null,
   isActive = false,
   onChange = () => {},
+  bdPlus = null,
 }) {
   return (
     <Accordion ex allowToggle width="100%">
@@ -37,17 +39,28 @@ export function BaseFilterAccordion({
                 color={isActive ? "#3AA1EB" : null}
                 borderRadius="13px"
               >
-                <Box
-                  flex="1"
-                  textAlign="left"
-                  fontFamily="Lato"
-                  fontWeight="700"
-                  fontSize="15px"
-                  letterSpacing="0.1em"
+                <HStack
+                  spacing={2}
+                  alignContent="baseline"
+                  justifyContent="center"
                 >
-                  {fieldName}
-                </Box>
-                <AccordionIcon />
+                  <Box
+                    flex="1"
+                    textAlign="left"
+                    fontFamily="Lato"
+                    fontWeight="700"
+                    fontSize="15px"
+                    letterSpacing="0.1em"
+                  >
+                    {fieldName}
+                  </Box>
+                  {bdPlus ? (
+                    <Image src="/img/logo_plus.png" height="20px" />
+                  ) : (
+                    <></>
+                  )}
+                </HStack>
+                <AccordionIcon marginLeft="auto" />
               </AccordionButton>
             </Text>
             {console.log(isOpen, isExpanded)}
@@ -157,6 +170,7 @@ export function FilterAccordion({
   onChange,
   onToggle,
   value,
+  bdPlus = null,
   valueField = "id",
   displayField = "display_name",
   isOpen = null,
@@ -168,6 +182,7 @@ export function FilterAccordion({
       isOpen={isOpen}
       onChange={onToggle}
       overflowX="hidden"
+      bdPlus={bdPlus}
       fieldName={fieldName}
     >
       <VStack
@@ -177,16 +192,14 @@ export function FilterAccordion({
         alignItems="flex-start"
       >
         {choices.map((c) => (
-          <Tooltip label={c[displayField]} aria-label={c[displayField]}>
-            <Title
-              fontSize="14px"
-              cursor="pointer"
-              fontWeigth={c[valueField] === value ? "700" : "400"}
-              onClick={() => onChange(c[valueField])}
-            >
-              {c[displayField]}
-            </Title>
-          </Tooltip>
+          <Title
+            fontSize="14px"
+            cursor="pointer"
+            fontWeigth={c[valueField] === value ? "700" : "400"}
+            onClick={() => onChange(c[valueField])}
+          >
+            {c[displayField]}
+          </Title>
         ))}
       </VStack>
     </BaseFilterAccordion>

@@ -5,24 +5,21 @@ import {
   Text,
   Divider,
   Stack,
-  CircularProgress,
-  Center,
   Select,
-  AbsoluteCenter,
+  Skeleton,
 } from "@chakra-ui/react";
-import SectionTitle from "../components/atoms/SectionTitle";
+import ReactPaginate from "react-paginate";
+import SectionTitle from "../../components/atoms/SectionTitle";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { searchDatasets } from "./api/datasets";
-import ControlledInput, {
-  DebouncedControlledInput,
-} from "../components/atoms/ControlledInput";
-import { Database } from "../components/organisms/Database";
-import { CheckboxFilterAccordion } from "../components/atoms/FilterAccordion";
-import { withStrapiPages } from "../hooks/strapi.hook";
-import { MainPageTemplate } from "../components/templates/main";
-import { isBdPlus } from "../utils";
+import { searchDatasets } from "../api/datasets";
+import { DebouncedControlledInput } from "../../components/atoms/ControlledInput";
+import { Database } from "../../components/organisms/Database";
+import { CheckboxFilterAccordion } from "../../components/atoms/FilterAccordion";
+import { withStrapiPages } from "../../hooks/strapi.hook";
+import { MainPageTemplate } from "../../components/templates/main";
+import { isBdPlus } from "../../utils";
 
 export async function getStaticProps(context) {
   return withStrapiPages({
@@ -36,10 +33,17 @@ export default function SearchPage({ strapiPages }) {
   const [order, setOrder] = useState(orderQuery);
   const [search, setSearch] = useState("");
   const [paramFilters, setParamFilters] = useState({});
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(0);
   const [filterKey, setFilterKey] = useState(0);
   const { data, isLoading } = useQuery(
-    ["datasets", search, order, paramFilters],
-    () => searchDatasets({ search, sort: order, paramFilters })
+    ["datasets", search, order, paramFilters, page],
+    () => searchDatasets({ search, sort: order, page, paramFilters }),
+    {
+      onSuccess(data) {
+        setPageSize(Math.ceil(data.count / 10));
+      },
+    }
   );
   const organizations = data?.organizations
     ? Object.keys(data?.organizations).map((o) => ({
@@ -75,6 +79,10 @@ export default function SearchPage({ strapiPages }) {
 
     setFilterKey(filterKey + 1);
   }, [query.tag, query.organization, query.group, query.q]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [paramFilters]);
 
   return (
     <MainPageTemplate strapiPages={strapiPages}>
@@ -180,103 +188,120 @@ export default function SearchPage({ strapiPages }) {
               boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.20)",
             }}
           />
-          {isLoading ? (
-            <Center width="100%" height="500px">
-              <CircularProgress isIndeterminate />
-            </Center>
-          ) : (
-            <>
-              <Heading
-                fontFamily="Ubuntu"
-                fontSize="30px"
-                fontWeight="400"
-                paddingTop="20px"
-                letterSpacing="0.1em"
+          <>
+            <Heading
+              fontFamily="Ubuntu"
+              fontSize="30px"
+              fontWeight="400"
+              paddingTop="20px"
+              letterSpacing="0.1em"
+            >
+              {data?.count || "..."} itens encontrados{" "}
+              {search ? " para " + search : ""}
+            </Heading>
+            <HStack
+              fontFamily="Lato"
+              letterSpacing="0.1em"
+              fontWeight="100"
+              fontSize="16px"
+              color="#6F6F6F"
+            >
+              <Stack
+                alignItems="center"
+                direction={{ base: "column", md: "row" }}
+                spacing={5}
               >
-                {data?.count} itens encontrados{" "}
-                {search ? " para " + search : ""}
-              </Heading>
-              <HStack
-                fontFamily="Lato"
-                letterSpacing="0.1em"
-                fontWeight="100"
-                fontSize="16px"
-                color="#6F6F6F"
-              >
-                <Stack
-                  alignItems="center"
-                  direction={{ base: "column", md: "row" }}
-                  spacing={5}
+                <Text whiteSpace="nowrap">Ordenar por:</Text>
+                <Select
+                  fontWeight="bold"
+                  fontFamily="Lato"
+                  minWidth="200px"
+                  color="black"
+                  borderRadius="20px"
+                  height="45px"
+                  value={order}
+                  onChange={(event) => {
+                    setOrder(event.target.value);
+                  }}
                 >
-                  <Text whiteSpace="nowrap">Ordenar por:</Text>
-                  <Select
-                    fontWeight="bold"
-                    fontFamily="Lato"
-                    minWidth="200px"
-                    color="black"
-                    borderRadius="20px"
-                    height="45px"
-                    value={order}
-                    onChange={(event) => {
-                      setOrder(event.target.value);
-                    }}
-                  >
-                    <option value="score">Relevância</option>
-                    <option value="recent">Recente</option>
-                    <option value="popular">Poupulares</option>
-                  </Select>
-                </Stack>
-              </HStack>
-              <VStack
-                width="100%"
-                alignItems="flex-start"
-                spacing={3}
-                padding="30px 0px"
-              >
-                {(data?.datasets || []).map((d) => (
-                  <>
-                    <Database
-                      link={`/dataset/${d.id}`}
-                      name={d.title}
-                      image={
-                        "https://basedosdados.org/uploads/group/" +
-                        d.organization.image_url
-                      }
-                      organization={d.organization}
-                      tags={d.tags.map((g) => g.name)}
-                      size={
-                        d.resources.filter((r) => r.size).length > 0
-                          ? d.resources.filter((r) => r.size)[0].size
-                          : null
-                      }
-                      tableNum={
-                        d.resources.filter(
-                          (r) => r.resource_type === "bdm_table"
-                        ).length
-                      }
-                      externalLinkNum={
-                        d.resources.filter(
-                          (r) => r.resource_type === "external_link"
-                        ).length
-                      }
-                      updatedSince={d.metadata_modified}
-                      updatedAuthor="Ricardo Dahis"
-                      categories={d.groups.map((g) => g.name)}
-                      categoriesDisplay={d.groups.map((g) => g.display_name)}
-                      spatialCoverage={null}
-                      updateFrequency={
-                        d.resources.filter((r) => r.update_frequency).length > 0
-                          ? d.resources.filter((r) => r.update_frequency)[0]
-                              .update_frequency
-                          : null
-                      }
-                      isPlus={isBdPlus(d)}
-                    />
-                    <Divider />
-                  </>
-                ))}
-              </VStack>
-            </>
+                  <option value="score">Relevância</option>
+                  <option value="recent">Recente</option>
+                  <option value="popular">Poupulares</option>
+                </Select>
+              </Stack>
+            </HStack>
+            <VStack
+              width="100%"
+              alignItems="flex-start"
+              spacing={3}
+              padding="30px 0px"
+            >
+              {isLoading
+                ? new Array(10).fill(0).map(() => (
+                    <>
+                      <Skeleton width="100%" height="130px" /> <Divider />
+                    </>
+                  ))
+                : (data?.datasets || []).map((d) => (
+                    <>
+                      <Database
+                        link={`/dataset/${d.id}`}
+                        name={d.title}
+                        image={
+                          "https://basedosdados.org/uploads/group/" +
+                          d.organization.image_url
+                        }
+                        organization={d.organization}
+                        tags={d.tags.map((g) => g.name)}
+                        size={
+                          d.resources.filter((r) => r.size).length > 0
+                            ? d.resources.filter((r) => r.size)[0].size
+                            : null
+                        }
+                        tableNum={
+                          d.resources.filter(
+                            (r) => r.resource_type === "bdm_table"
+                          ).length
+                        }
+                        externalLinkNum={
+                          d.resources.filter(
+                            (r) => r.resource_type === "external_link"
+                          ).length
+                        }
+                        updatedSince={d.metadata_modified}
+                        updatedAuthor="Ricardo Dahis"
+                        categories={d.groups.map((g) => g.name)}
+                        categoriesDisplay={d.groups.map((g) => g.display_name)}
+                        spatialCoverage={null}
+                        updateFrequency={
+                          d.resources.filter((r) => r.update_frequency).length >
+                          0
+                            ? d.resources.filter((r) => r.update_frequency)[0]
+                                .update_frequency
+                            : null
+                        }
+                        isPlus={isBdPlus(d)}
+                      />
+                      <Divider />
+                    </>
+                  ))}
+              <ReactPaginate
+                previousLabel={"Anterior"}
+                nextLabel={"Próxima"}
+                breakLabel={"..."}
+                breakClassName={"break-me"}
+                forcePage={page - 1}
+                pageCount={pageSize}
+                marginPagesDisplayed={1}
+                pageRangeDisplayed={2}
+                onPageChange={(data) => {
+                  setPage(data.selected + 1);
+                }}
+                containerClassName={"pagination"}
+                activeClassName={"active"}
+              />
+            </VStack>
+          </>
           )}
         </VStack>
       </Stack>

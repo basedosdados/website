@@ -25,8 +25,13 @@ export function showDataset(id) {
     .then(({ data }) => data.result);
 }
 
-export function searchDatasets({ search = "", sort = "", paramFilters = {} }) {
-  let url = `/bd_dataset_search?q=${search}`;
+export function searchDatasets({
+  search = "",
+  sort = "",
+  page = 1,
+  paramFilters = {},
+}) {
+  let url = `/bd_dataset_search?q=${search}&page=${page}`;
   let entries = Object.entries(paramFilters);
 
   if (search == null) return { count: 0, results: [] };

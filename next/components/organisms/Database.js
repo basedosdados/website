@@ -131,7 +131,7 @@ export function Database({
                   <></>
                 )}
                 {categories.map((c) => (
-                  <Link href={`/search?group=${c}`}>
+                  <Link href={`/dataset?group=${c}`}>
                     <CategoryIcon
                       size="36px"
                       url={`/img/categories/icone_${c}${
@@ -150,7 +150,7 @@ export function Database({
               >
                 <HStack>
                   <SectionText color="#6F6F6F">Organização:</SectionText>
-                  <Link href={`/search?organization=${organization.name}`}>
+                  <Link href={`/dataset?organization=${organization.name}`}>
                     <SectionText
                       color="#6F6F6F"
                       textAlign="left"

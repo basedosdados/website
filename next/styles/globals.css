@@ -60,3 +60,41 @@ body {
 .chakra-checkbox__control svg {
   color: #2b8c4d;
 }
+
+.pagination {
+  list-style-type: none;
+  display: flex;
+  align-self: center;
+  padding-top: 5px;
+}
+
+.pagination li {
+  text-align: center;
+  margin-right: 10px;
+  border: 1px solid #dedfe0;
+  border-radius: 10px;
+  display: flex;
+}
+
+.pagination a {
+  font-family: "Lato";
+  font-weight: 700;
+  min-width: 35px;
+  padding: 3px;
+}
+
+.pagination .active {
+  background-color: #2b8c4d;
+  color: white;
+  border: 1px solid #2b8c4d;
+}
+
+.pagination .disabled a {
+  cursor: default !important;
+  color: #dedfe0;
+}
+
+.markdown a {
+  text-decoration: underline;
+  color: #3aa1eb;
+}
