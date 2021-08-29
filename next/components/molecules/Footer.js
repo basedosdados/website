@@ -47,6 +47,9 @@ function FooterLink(props) {
 export default function Footer({ strapiPages }) {
   const [email, setEmail] = useState();
 
+  const contactPage = strapiPages.filter((p) => p.Title === "Contato");
+  const aboutPage = strapiPages.filter((p) => p.Title === "Sobre");
+
   return (
     <VStack width="100%" spacing={0}>
       <VStack width="100%" padding={10} spacing={10} backgroundColor="#34A15A">
@@ -141,10 +144,21 @@ export default function Footer({ strapiPages }) {
               </FooterLink>
             </LinkVStack>
             <LinkVStack title="INSTITUCIONAL">
-              <FooterLink color="white" href="/about">
+              <FooterLink
+                href={aboutPage.length > 0 ? "/blog/" + aboutPage[0].id : ""}
+                color="white"
+                href="/about"
+              >
                 Sobre
               </FooterLink>
-              <FooterLink color="white">Contato</FooterLink>
+              <FooterLink
+                color="white"
+                href={
+                  contactPage.length > 0 ? "/blog/" + contactPage[0].id : ""
+                }
+              >
+                Contato
+              </FooterLink>
               <Link
                 fontWeigth="700"
                 color="white"

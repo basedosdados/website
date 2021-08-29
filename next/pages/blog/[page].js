@@ -66,9 +66,7 @@ function BlogPage({ strapiPages = [] }) {
 
   if (!data)
     return (
-      <>
-        <SiteHead />
-        <Menu strapiPages={strapiPages} />
+      <MainPageTemplate strapiPages={strapiPages}>
         <Center
           minHeight="600px"
           width="100%"
@@ -77,8 +75,7 @@ function BlogPage({ strapiPages = [] }) {
         >
           <CircularProgress isIndeterminate />
         </Center>
-        <Footer />
-      </>
+      </MainPageTemplate>
     );
 
   return (
