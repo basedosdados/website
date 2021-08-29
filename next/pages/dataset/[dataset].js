@@ -18,9 +18,11 @@ import {
 import Link from "../../components/atoms/Link";
 import { SimpleButton } from "../../components/atoms/SimpleButton";
 import { Markdown } from "../../components/atoms/Markdown";
+import { getTranslations } from "../api/translations";
 
 export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
+  const translations = await getTranslations();
   const resources = dataset["resources"];
   const bdmTables = resources.filter((r) => r.resource_type === "bdm_table");
   const externalLinks = resources.filter(
@@ -270,6 +272,7 @@ export default function DatasetPage({
   externalLinks,
   strapiPages,
   isPlus,
+  translations,
 }) {
   const [resource, setResource] = useState(
     bdmTables.length > 0 ? bdmTables[0] : externalLinks[0]
@@ -281,6 +284,8 @@ export default function DatasetPage({
   const [externalLinkTableFilter, setExternalLinkTableFilter] = useState(
     resource.resource_type === "external_link"
   );
+
+  console.log({ translations });
 
   function getResourcePage() {
     switch (resource.resource_type) {

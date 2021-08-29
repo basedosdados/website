@@ -18,7 +18,7 @@ export function MainPageTemplate({ strapiPages, children }) {
         <Box paddingTop="130px" paddingBottom="50px">
           {children}
         </Box>
-        <Footer />
+        <Footer strapiPages={strapiPages} />
       </Box>
     </UserContext.Provider>
   );

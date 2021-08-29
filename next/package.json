@@ -9,6 +9,7 @@
     "production": "next build && next start"
   },
   "dependencies": {
+    "@brainhubeu/react-carousel": "^2.0.4",
     "@chakra-ui/react": "^1.6.3",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",

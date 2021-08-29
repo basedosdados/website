@@ -98,3 +98,23 @@ body {
   text-decoration: underline;
   color: #3aa1eb;
 }
+
+.BrainhubCarousel__arrows {
+  background-color: transparent !important;
+}
+
+.BrainhubCarousel__arrows {
+  background-color: transparent !important;
+}
+
+.BrainhubCarousel__arrowLeft {
+  transform: translateX(10px);
+}
+
+.BrainhubCarousel__arrowRight {
+  transform: translateX(-10px);
+}
+
+.BrainhubCarousel__arrows span {
+  border-color: #2b8c4d !important;
+}

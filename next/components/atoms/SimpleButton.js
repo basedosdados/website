@@ -9,7 +9,7 @@ export function SimpleButton({ onClick, children, isActive }) {
       borderRadius="13px"
       width="100%"
       justifyContent="flex-start"
-      backgroundColor="white"
+      backgroundColor="transparent"
       fontFamily="Lato"
       fontWeight="700"
       fontSize="15px"

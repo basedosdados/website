@@ -39,7 +39,16 @@ import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { isBdPlus } from "../utils";
 
 export async function getStaticProps(context) {
-  return await withStrapiPages();
+  const recentDatasets = await getRecentDatasets();
+  const popularDatasets = await getPopularDatasets();
+
+  return await withStrapiPages({
+    props: {
+      recentDatasets,
+      popularDatasets,
+    },
+    revalidate: 60,
+  });
 }
 
 function HeroText({ children, iconUrl }) {
@@ -206,10 +215,8 @@ function Hero() {
   );
 }
 
-function CatalogNews() {
-  const recentDatasets = useQuery("recentDatasets", getRecentDatasets);
-  const popularDatasets = useQuery("popularDatasets", getPopularDatasets);
-
+function CatalogNews({ recentDatasets, popularDatasets }) {
+  console.log("datasets", recentDatasets, popularDatasets);
   return (
     <VStack
       width="100%"
@@ -226,7 +233,7 @@ function CatalogNews() {
       </BigTitle>
       <CardCatalog
         sections={{
-          populares: (popularDatasets.data || []).map((d) => (
+          populares: (popularDatasets || []).map((d) => (
             <DatabaseCard
               link={`/dataset/${d.name}`}
               name={d.title}
@@ -271,7 +278,7 @@ function CatalogNews() {
       </Box>
       <CardCatalog
         sections={{
-          recentes: (recentDatasets.data || []).map((d) => (
+          recentes: (recentDatasets || []).map((d) => (
             <DatabaseCard
               link={`/dataset/${d.name}`}
               name={d.title}
@@ -576,7 +583,7 @@ function Support() {
   );
 }
 
-export default function Home({ strapiPages }) {
+export default function Home({ strapiPages, recentDatasets, popularDatasets }) {
   return (
     <MainPageTemplate strapiPages={strapiPages}>
       <VStack
@@ -590,7 +597,10 @@ export default function Home({ strapiPages }) {
       >
         <Hero />
       </VStack>
-      <CatalogNews />
+      <CatalogNews
+        recentDatasets={recentDatasets}
+        popularDatasets={popularDatasets}
+      />
       <VStack
         spacing={20}
         transform="translateY(-100px)"

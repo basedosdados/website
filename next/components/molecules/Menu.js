@@ -41,7 +41,7 @@ function DesktopLinks({ links }) {
   const userData = useContext(UserContext);
 
   function openSearchLink() {
-    window.open(`/search/?q=${search}`, "_self");
+    window.open(`/dataset?q=${search}`, "_self");
   }
 
   return (
@@ -117,7 +117,7 @@ export default function Menu({ strapiPages = [] }) {
   const userData = useContext(UserContext);
 
   const links = {
-    Dados: "/search",
+    Dados: "/dataset",
   };
 
   useEffect(() => {

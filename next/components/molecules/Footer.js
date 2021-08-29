@@ -40,7 +40,11 @@ function SocialLink({ title, href, src }) {
   );
 }
 
-export default function Footer() {
+function FooterLink(props) {
+  return <Link fontWeigth="500" {...props} />;
+}
+
+export default function Footer({ strapiPages }) {
   const [email, setEmail] = useState();
 
   return (
@@ -71,39 +75,39 @@ export default function Footer() {
             spacing={{ base: 10, lg: 0 }}
           >
             <LinkVStack title="PRODUTOS">
-              <Link color="white" href="/dataset">
+              <FooterLink color="white" href="/dataset">
                 Mecanismo de busca
-              </Link>
-              <Link
+              </FooterLink>
+              <FooterLink
                 color="white"
                 href="https://basedosdados.github.io/mais/"
                 target="_blank"
               >
                 Datalake Público
-              </Link>
+              </FooterLink>
             </LinkVStack>
             <LinkVStack title="CONTEÚDO">
-              <Link
+              <FooterLink
                 href="https://basedosdados.hubspotpagebuilder.com/assine-a-newsletter-da-base-dos-dados"
                 color="white"
                 target="_blank"
               >
                 Assine a newsletter
-              </Link>
-              <Link
+              </FooterLink>
+              <FooterLink
                 href="https://dev.to/basedosdados"
                 color="white"
                 target="_blank"
               >
                 Blog
-              </Link>
-              <Link
+              </FooterLink>
+              <FooterLink
                 color="white"
                 href="https://www.youtube.com/c/BasedosDados/featured"
                 target="_blank"
               >
                 YouTube
-              </Link>
+              </FooterLink>
             </LinkVStack>
             <LinkVStack title="COMUNIDADE">
               <SocialLink
@@ -121,26 +125,34 @@ export default function Footer() {
                 title="GitHub"
                 src="/img/social/github.png"
               />
-              <Link
+              <FooterLink
                 color="white"
                 target="_blank"
                 href="https://chat.whatsapp.com/HXWgdFc1RmwCoblly5KPBZ"
               >
                 WhatsApp
-              </Link>
-              <Link
+              </FooterLink>
+              <FooterLink
                 color="white"
                 target="_blank"
                 href="https://t.me/joinchat/OKWc3RnClXnq2hq-8o0h_w"
               >
                 Telegram
-              </Link>
+              </FooterLink>
             </LinkVStack>
             <LinkVStack title="INSTITUCIONAL">
-              <Link color="white" href="/about">
+              <FooterLink color="white" href="/about">
                 Sobre
+              </FooterLink>
+              <FooterLink color="white">Contato</FooterLink>
+              <Link
+                fontWeigth="700"
+                color="white"
+                href="https://apoia.se/basedosdados"
+                target="_blank"
+              >
+                Apoie o projeto
               </Link>
-              <Link color="white">Contato</Link>
             </LinkVStack>
           </Stack>
         </Stack>
