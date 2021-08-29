@@ -7,11 +7,8 @@ from ckan.logic.action.get import (
     package_search,
     package_show,
     resource_search,
-<<<<<<< HEAD
-    get_site_user
-=======
+    get_site_user,
     resource_show,
->>>>>>> c7f65eb6ce6d0a6804ee087a3304632f6d911357
 )
 from ckanext.basedosdados.validator.packages import Dataset
 from ckanext.basedosdados.validator.resources import (
@@ -59,6 +56,13 @@ def bd_information_request_schema(context, data_dict):
 
 @toolkit.side_effect_free
 def bd_get_current_user(context, data_dict):
+    """Shows current user data
+    Args:
+        none
+    Returns:
+        data about the current logged user, returns None if not logged
+    """
+
     user = context['auth_user_obj']
 
     if not user:

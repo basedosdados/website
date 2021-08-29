@@ -16,6 +16,7 @@ import Footer from "../../components/molecules/Footer";
 import { getStrapiPage, getStrapiPages } from "../api/strapi";
 import { useEffect, useState } from "react";
 import showdown from "showdown";
+import { MainPageTemplate } from "../../components/templates/main";
 
 export async function getStaticProps(context) {
   let { data: strapiPages } = await getStrapiPages();
@@ -83,24 +84,22 @@ function BlogPage({ strapiPages = [] }) {
     );
 
   return (
-    <>
-      <SiteHead />
-      <Menu strapiPages={strapiPages} />
+    <MainPageTemplate strapiPages={strapiPages}>
       <VStack
         alignItems="center"
         width="100%"
         backgroundColor="#fafafa"
-        padding="50px 8%"
-        paddingTop="200px"
+        padding="0px 8%"
+        paddingTop="50px"
         minHeight="60vh"
       >
         <>
           <BigTitle>{data.title}</BigTitle>
-          <Box position="absolute" width="80%">
+          <Box position="relative" width="80%">
             <Box
               position="absolute"
               right="0px"
-              top="-200%"
+              top="-500%"
               minWidth="100px"
               minHeight="108px"
               zIndex="0"
@@ -133,8 +132,7 @@ function BlogPage({ strapiPages = [] }) {
           </Flex>
         </>
       </VStack>
-      <Footer />
-    </>
+    </MainPageTemplate>
   );
 }
 
