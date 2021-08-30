@@ -55,12 +55,14 @@ export default function DatabaseCard({
         )),
         ...(isPlus
           ? [
-              <Image
-                width="80px"
-                height="37px"
-                marginRight="10px"
-                src={`/img/logo_plus.png`}
-              />,
+              <Link href={`/dataset?bdPlus=true`}>
+                <Image
+                  width="80px"
+                  height="37px"
+                  marginRight="10px"
+                  src={`/img/logo_plus.png`}
+                />
+              </Link>,
             ]
           : []),
       ]}

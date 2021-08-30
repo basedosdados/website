@@ -3,34 +3,21 @@ import {
   Button,
   Center,
   HStack,
-  List,
-  ListItem,
   Stack,
-  Text,
-  UnorderedList,
   Flex,
   VStack,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import Menu from "../components/molecules/Menu";
-import SiteHead from "../components/atoms/SiteHead";
 import ControlledInput from "../components/atoms/ControlledInput";
 import SectionText from "../components/atoms/SectionText";
 import BigTitle from "../components/atoms/BigTitle";
-import SectionTitle from "../components/atoms/SectionTitle";
 import DatabaseCard from "../components/organisms/DatabaseCard";
-import NewsCard from "../components/organisms/NewsCard";
-import Footer from "../components/molecules/Footer";
 import { useState } from "react";
 import CardCatalog from "../components/organisms/CardCatalog";
 import Title from "../components/atoms/Title";
-import Link from "../components/atoms/Link";
 import Typist from "react-typist";
-import { useQuery } from "react-query";
 import { getPopularDatasets, getRecentDatasets } from "./api/datasets";
-import { getStrapiPages } from "./api/strapi";
 import { ShadowBox } from "../components/atoms/ShadowBox";
-import { Tag } from "../components/atoms/Tag";
 import { MainPageTemplate } from "../components/templates/main";
 import { withStrapiPages } from "../hooks/strapi.hook";
 import { ThemeTag } from "../components/atoms/ThemeTag";
@@ -53,8 +40,14 @@ export async function getStaticProps(context) {
 
 function HeroText({ children, iconUrl }) {
   return (
-    <VStack maxWidth="400px">
-      <Box width="100%" height="130px" marginBottom="20px" position="relative">
+    <VStack alignItems="center" justifyContent="center" maxWidth="400px">
+      <Box
+        margin="auto"
+        width="100%"
+        height="130px"
+        marginBottom="20px"
+        position="relative"
+      >
         <Image priority objectFit="contain" layout="fill" src={iconUrl} />
       </Box>
       {children}
@@ -65,8 +58,6 @@ function HeroText({ children, iconUrl }) {
 function Hero() {
   const [search, setSearch] = useState();
   const isMobile = useCheckMobile();
-
-  console.log("isMobile", isMobile);
 
   function openSearchLink() {
     return window.open(`/dataset?q=${search}`, "_self");
@@ -181,13 +172,14 @@ function Hero() {
             <HeroText iconUrl="/img/icone_download.png">
               <SectionText fontSize="14px" textAlign="center">
                 Disponibilizamos o download dos dados tratados e atualizados
-                direto do nosso datalake público num só click.
+                direto do nosso <i>datalake</i> público num só click.
               </SectionText>
             </HeroText>
             <HeroText iconUrl="/img/icone_pacotes.png">
               <SectionText fontSize="14px" textAlign="center">
-                Através dos nossos pacotes de programação você pode acessar o
-                datalake público BD+ em Python, R ou pela linha de comando.
+                Através dos nossos pacotes de programação você pode acessar o{" "}
+                <i>datalake</i> público BD+ em Python, R ou pela linha de
+                comando.
               </SectionText>
             </HeroText>
           </Stack>
@@ -348,7 +340,7 @@ function ExploreInYourFavoriteLanguage() {
             Desenvolvemos <b>pacotes para acesso aos dados da BD+</b> em Python,
             R e linha de comando. Além disso, você pode{" "}
             <b>consultar e filtrar dados usando SQL</b> no editor do nosso
-            datalake no Google BigQuery.
+            <i>datalake</i> no Google BigQuery.
           </SectionText>
           <LinkDash href="https://basedosdados.github.io/mais/">
             Veja mais
@@ -435,10 +427,11 @@ function LearnToAnalysis() {
           </Title>
           <VStack spacing={4} zIndex="1" position="relative">
             <SectionText textAlign="justify">
-              Produzimos tutoriais e ensaios no blog, workshops no Youtube e
-              análises nas redes sociais com nossos dados. Disponibilizamos os
-              códigos completos no nosso GitHub para você testar e reproduzir
-              localmente
+              Produzimos{" "}
+              <b> tutoriais e ensaios no blog, workshops no Youtube</b> e{" "}
+              <b>análises nas redes sociais</b> com nossos dados.
+              Disponibilizamos os <b>códigos completos</b> no nosso GitHub para
+              você testar e reproduzir localmente
             </SectionText>
             <HStack alignItems="flex-start" width="100%" spacing={5}>
               <LinkDash href="https://www.youtube.com/c/BasedosDados/videos">
@@ -551,8 +544,8 @@ function Support() {
       >
         <ShadowBox height="270px" title="Voluntariado">
           <SectionText fontSize="14px" height="100px">
-            Ajude a manter e aprimorar pacotes, suba bases no nosso datalake ou
-            construa análises e tutoriais para nossas redes.
+            Ajude a manter e aprimorar pacotes, suba bases no nosso{" "}
+            <i>datalake</i> ou construa análises e tutoriais para nossas redes.
           </SectionText>
           <SupportButton link="https://basedosdados.github.io/mais/colab_data/">
             Comece aqui

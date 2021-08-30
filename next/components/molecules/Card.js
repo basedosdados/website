@@ -16,7 +16,7 @@ export function Card({
       backgroundColor="#FFFFFF"
       padding={padding}
       borderRadius="10px"
-      margin="10px 0px"
+      margin={{ base: "10px", lg: "10px 0px" }}
     >
       <Flex
         flexDirection="column"

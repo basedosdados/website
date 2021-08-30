@@ -63,7 +63,6 @@ export function BaseFilterAccordion({
                 <AccordionIcon marginLeft="auto" />
               </AccordionButton>
             </Text>
-            {console.log(isOpen, isExpanded)}
             {(isOpen && isOpen === true) || (isOpen == null && isExpanded) ? (
               <VStack
                 overflowY="auto"

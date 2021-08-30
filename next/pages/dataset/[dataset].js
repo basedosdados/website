@@ -14,6 +14,7 @@ import {
   filterOnlyValidValues,
   formatObjectsInArray,
   isBdPlus,
+  translate,
 } from "../../utils";
 import Link from "../../components/atoms/Link";
 import { SimpleButton } from "../../components/atoms/SimpleButton";
@@ -34,6 +35,7 @@ export async function getStaticProps(context) {
       dataset,
       bdmTables,
       externalLinks,
+      translations,
       isPlus: isBdPlus(dataset),
     },
     revalidate: 1, //TODO: Increase this timer
@@ -100,7 +102,7 @@ function BaseResourcePage({
   );
 }
 
-function BdmTablePage({ resource, datasetName }) {
+function BdmTablePage({ translations, resource, datasetName }) {
   const [selectedConsultation, setSelectedConsultation] = useState("BigQuery");
   const consultationOptions = ["BigQuery", "Python", "R"];
   const queryName = `${datasetName}.${resource.name}`;
@@ -197,6 +199,7 @@ df <- read_sql(query)`,
                 borderRadius: "6px",
                 whiteSpace: "break-spaces",
                 wordBreak: "break-all",
+                backgroundColor: "#252A32",
               }}
             >
               {tokens.map((line, i) => (
@@ -221,14 +224,16 @@ df <- read_sql(query)`,
         <ExpandableTable
           containerStyle={{ width: "100%", alignItems: "flex-start" }}
           headers={["nome", "valor"]}
-          values={formatObjectsInArray(filterOnlyValidValues(resource))}
+          values={formatObjectsInArray(
+            filterOnlyValidValues(translate(translations, resource))
+          )}
         />
       </VStack>
     </BaseResourcePage>
   );
 }
 
-function ExternalLinkPage({ resource }) {
+function ExternalLinkPage({ translations, resource }) {
   return (
     <BaseResourcePage
       title={resource.name}
@@ -248,19 +253,23 @@ function ExternalLinkPage({ resource }) {
         <Title>Metadados</Title>
         <ExpandableTable
           headers={["nome", "valor"]}
-          values={formatObjectsInArray(filterOnlyValidValues(resource))}
+          values={formatObjectsInArray(
+            filterOnlyValidValues(translate(translations, resource))
+          )}
         />
       </VStack>
     </BaseResourcePage>
   );
 }
 
-function MetadataPage({ dataset }) {
+function MetadataPage({ translations, dataset }) {
   return (
     <BaseResourcePage title="Metadados">
       <ExpandableTable
         headers={["nome", "valor"]}
-        values={formatObjectsInArray(filterOnlyValidValues(dataset))}
+        values={formatObjectsInArray(
+          filterOnlyValidValues(translate(translations, dataset))
+        )}
       />
     </BaseResourcePage>
   );
@@ -285,20 +294,32 @@ export default function DatasetPage({
     resource.resource_type === "external_link"
   );
 
-  console.log({ translations });
-
   function getResourcePage() {
     switch (resource.resource_type) {
       case "bdm_table":
         return (
-          <BdmTablePage datasetName={dataset.dataset_id} resource={resource} />
+          <BdmTablePage
+            translations={translations["bdm_table"]}
+            datasetName={dataset.dataset_id}
+            resource={resource}
+          />
         );
 
       case "external_link":
-        return <ExternalLinkPage resource={resource} />;
+        return (
+          <ExternalLinkPage
+            translations={translations["external_link"]}
+            resource={resource}
+          />
+        );
 
       default:
-        return <MetadataPage dataset={dataset} />;
+        return (
+          <MetadataPage
+            translations={translations["dataset"]}
+            dataset={dataset}
+          />
+        );
     }
   }
 

@@ -29,7 +29,7 @@ function LinkVStack({ title, children }) {
 
 function SocialLink({ title, href, src }) {
   return (
-    <Link color="white" href={href} target="_blank">
+    <Link fontWeigth="500" color="white" href={href} target="_blank">
       <HStack>
         <Box position="relative" height="20px" width="20px">
           <Image priority layout="fill" objectFit="contain" src={src} />
@@ -104,13 +104,13 @@ export default function Footer({ strapiPages }) {
               >
                 Blog
               </FooterLink>
-              <FooterLink
+              <SocialLink
                 color="white"
                 href="https://www.youtube.com/c/BasedosDados/featured"
                 target="_blank"
-              >
-                YouTube
-              </FooterLink>
+                title="Youtube"
+                src="/img/logos/youtube.png"
+              />
             </LinkVStack>
             <LinkVStack title="COMUNIDADE">
               <SocialLink
@@ -128,20 +128,21 @@ export default function Footer({ strapiPages }) {
                 title="GitHub"
                 src="/img/social/github.png"
               />
-              <FooterLink
-                color="white"
-                target="_blank"
+              <SocialLink
+                href="https://www.linkedin.com/company/base-dos-dados/mycompany/"
+                title="LinkedIn"
+                src="/img/logos/linkedin.png"
+              />
+              <SocialLink
                 href="https://chat.whatsapp.com/HXWgdFc1RmwCoblly5KPBZ"
-              >
-                WhatsApp
-              </FooterLink>
-              <FooterLink
-                color="white"
-                target="_blank"
+                title="WhatsApp"
+                src="/img/logos/whatsapp.png"
+              />
+              <SocialLink
                 href="https://t.me/joinchat/OKWc3RnClXnq2hq-8o0h_w"
-              >
-                Telegram
-              </FooterLink>
+                title="Telegram"
+                src="/img/logos/telegram.png"
+              />
             </LinkVStack>
             <LinkVStack title="INSTITUCIONAL">
               <FooterLink

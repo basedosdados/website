@@ -46,25 +46,34 @@ export default function SearchPage({ strapiPages }) {
     }
   );
   const organizations = data?.organizations
-    ? Object.keys(data?.organizations).map((o) => ({
-        name: o,
-        displayName:
-          data.organizations_display_names[o] + ` (${data.organizations[o]})`,
-      }))
+    ? Object.keys(data?.organizations)
+        .map((o) => ({
+          name: o,
+          displayName:
+            data.organizations_display_names[o] + ` (${data.organizations[o]})`,
+          value: data.organizations[o],
+        }))
+        .sort((a, b) => b.value - a.value)
     : [];
 
   const groups = data?.groups
-    ? Object.keys(data?.groups).map((o) => ({
-        name: o,
-        displayName: data.groups_display_names[o] + ` (${data.groups[o]})`,
-      }))
+    ? Object.keys(data?.groups)
+        .map((o) => ({
+          name: o,
+          displayName: data.groups_display_names[o] + ` (${data.groups[o]})`,
+          value: data.groups[o],
+        }))
+        .sort((a, b) => b.value - a.value)
     : [];
 
   const tags = data?.tags
-    ? Object.keys(data.tags).map((t) => ({
-        name: t,
-        displayName: t + ` (${data.tags[t]})`,
-      }))
+    ? Object.keys(data.tags)
+        .map((t) => ({
+          name: t,
+          displayName: t + ` (${data.tags[t]})`,
+          value: data.tags[t],
+        }))
+        .sort((a, b) => b.value - a.value)
     : [];
 
   useEffect(() => {
@@ -75,14 +84,15 @@ export default function SearchPage({ strapiPages }) {
       tag: query.tag ? [query.tag] : [],
       organization: query.organization ? [query.organization] : [],
       group: query.group ? [query.group] : [],
+      download_type: query.bdPlus ? ["BD Mais"] : [],
     });
 
     setFilterKey(filterKey + 1);
-  }, [query.tag, query.organization, query.group, query.q]);
+  }, [query.tag, query.organization, query.group, query.q, query.bdPlus]);
 
   useEffect(() => {
     setPage(1);
-  }, [paramFilters]);
+  }, [paramFilters, search]);
 
   return (
     <MainPageTemplate strapiPages={strapiPages}>
