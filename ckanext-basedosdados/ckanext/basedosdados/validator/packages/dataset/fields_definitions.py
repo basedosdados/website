@@ -169,7 +169,7 @@ GITHUB_URL_FIELD: Str = Field(
     ],
     yaml_order={
         "id_before": "ckan_url",
-        "id_after": None,
+        "id_after": "metadata_modified",
     },
 )
 
@@ -181,6 +181,10 @@ DOWNLOAD_TYPE_FIELD = Field(
 
 METADATA_MODIFIED_FIELD = Field(
     title="metadata_modified",
+    yaml_order={
+        "id_before": "github_url",
+        "id_after": None,
+    }
 )
 
 AUTHOR_FIELD = Field(
