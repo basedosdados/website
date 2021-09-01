@@ -319,10 +319,17 @@ COLUMNS_FIELD = Field(
     ),
     yaml_order={
         "id_before": "bdm_file_size",
-        "id_after": None,
+        "id_after": "metadata_modified",
     },
 )
 
+METADATA_MODIFIED_FIELD = Field(
+    title="metadata_modified",
+    yaml_order={
+        "id_before": "columns",
+        "id_after": None,
+    }
+)
 
 # =================================================================================================================================
 # =================================================================================================================================

@@ -17,6 +17,7 @@ from .fields_definitions import *
 class BdmTable(_CkanDefaultResource):
     resource_type: Literal["bdm_table"]
 
+    metadata_modified         : Optional[datetime]                               = METADATA_MODIFIED_FIELD #TODO: can we rename this to last_updated and make it a derived field for dataset and all resources?
     # BdmTable models
     # fmt: off
     dataset_id                : Optional[Str]                                    = DATASET_ID_FIELD
