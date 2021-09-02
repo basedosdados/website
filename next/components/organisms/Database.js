@@ -54,18 +54,20 @@ export function Database({
         width="100%"
         spacing={10}
       >
-        <Image
-          priority
-          objectFit="contain"
-          maxWidth="105px"
-          maxHeight="105px"
-          minWidth="105px"
-          minHeight="105px"
-          borderRadius="10.1111px"
-          filter="drop-shadow(0px 2.02222px 2.02222px rgba(0, 0, 0, 0.25));"
-          src={image}
-          backgroundColor="#eee"
-        />
+        <Link href={`/dataset?organization=${organization.name}`}>
+          <Image
+            priority
+            objectFit="contain"
+            maxWidth="105px"
+            maxHeight="105px"
+            minWidth="105px"
+            minHeight="105px"
+            borderRadius="10.1111px"
+            filter="drop-shadow(0px 2.02222px 2.02222px rgba(0, 0, 0, 0.25));"
+            src={image}
+            backgroundColor="#eee"
+          />
+        </Link>
         <VStack
           alignItems="flex-start"
           justifyContent="space-between"
@@ -121,12 +123,14 @@ export function Database({
                 width="100%"
               >
                 {isPlus ? (
-                  <Image
-                    paddingRight="10px"
-                    priority
-                    width="80px"
-                    src="/img/logo_plus.png"
-                  />
+                  <Link href="/dataset?bdPlus=true">
+                    <Image
+                      paddingRight="10px"
+                      priority
+                      width="80px"
+                      src="/img/logo_plus.png"
+                    />
+                  </Link>
                 ) : (
                   <></>
                 )}
@@ -184,26 +188,6 @@ export function Database({
                 fontSize="12px"
                 spacing={{ base: 0, lg: 5 }}
               >
-                <HStack>
-                  <SectionText color="#6F6F6F">Abrangência:</SectionText>
-                  <SectionText
-                    color="#6F6F6F"
-                    textTransform="capitalize"
-                    fontWeight="bold"
-                  >
-                    {spatialCoverage || "Não definido"}
-                  </SectionText>
-                </HStack>
-                <HStack>
-                  <SectionText color="#6F6F6F">Periocidade:</SectionText>
-                  <SectionText
-                    color="#6F6F6F"
-                    textTransform="capitalize"
-                    fontWeight="bold"
-                  >
-                    {updateFrequency || "Não definido"}
-                  </SectionText>
-                </HStack>
                 <HStack>
                   <SectionText color="#6F6F6F">Última Atualização:</SectionText>
                   <SectionText color="#6F6F6F" fontWeight="bold">
