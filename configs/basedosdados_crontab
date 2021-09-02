@@ -8,8 +8,8 @@ PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/ec2-user/.local/bin
 
 
 # Cleanup docker images + ckan logs to save space
-21 6 * * 1 cd $HOME/basedosdados/ && docker-compose rm -fs ckan; docker-compose up -d ckan 
-41 6 * * 2 /usr/local/bin/docker-clean -i -c -net
+21 6 * * 1 cd $HOME/basedosdados/ && docker-compose rm -fs ckan; docker-compose up -d ckan
+41 6 * * 2 /usr/local/bin/docker-clean images
 
 
 # Site health monitoring
