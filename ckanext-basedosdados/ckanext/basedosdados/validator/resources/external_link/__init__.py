@@ -11,6 +11,8 @@ from ckanext.basedosdados.validator.available_options import (
     TimeUnitEnum,
     YesNoEnum,
 )
+
+from ckanext.basedosdados.validator import SpatialCoverage
 from ckanext.basedosdados.validator.resources import _CkanDefaultResource
 from pydantic import StrictStr as Str
 

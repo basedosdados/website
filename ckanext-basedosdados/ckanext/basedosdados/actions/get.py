@@ -5,6 +5,10 @@ import ckan.plugins.toolkit as toolkit
 from ckan.logic.action.get import (
     dataset_follower_count,
     package_search,
+    package_show,
+    resource_search,
+    get_site_user,
+    resource_show,
 )
 from ckanext.basedosdados.validator.packages import Dataset
 from ckanext.basedosdados.validator.resources import (
@@ -59,16 +63,13 @@ def bd_get_current_user(context, data_dict):
         data about the current logged user, returns None if not logged
     """
 
-    user = context['auth_user_obj']
+    user = context["auth_user_obj"]
 
     if not user:
         return None
 
-    return {
-        "fullname": user.fullname,
-        "image_url": user.image_url,
-        "name": user.name
-    }
+    return {"fullname": user.fullname, "image_url": user.image_url, "name": user.name}
+
 
 @toolkit.side_effect_free
 def bd_bdm_dataset_show(context, data_dict):
@@ -183,9 +184,8 @@ def bd_dataset_search(context, data_dict):
     fq = []
     fq += get_parameter(data_dict, "tag", "tags")
     fq += get_parameter(data_dict, "group", "groups")
-    fq += get_parameter(data_dict, "resource_type", "res_type")
     fq += get_parameter(data_dict, "organization", "organization")
-    fq += get_parameter(data_dict, "entity", "res_extras_entity")
+    fq += get_parameter(data_dict, "download_type", "extras_dataset_args")
     fq += get_parameter(data_dict, "spatial_coverage", "res_extras_spatial_coverage")
     fq += get_parameter(data_dict, "temporal_coverage", "res_extras_temporal_coverage")
 
@@ -255,21 +255,6 @@ def bd_dataset_search(context, data_dict):
         response["organizations_display_names"][key] = dataset["organization"]["title"]
         value = response["organizations"].get(key, 0) + 1
         response["organizations"][key] = value
-    
-    # post-process entities ###############################
-
-    response["entities"] = {}
-
-    for dataset in response["datasets"]:
-        entities = []
-        for resource in dataset["resources"]:
-            res_entities = resource.get("entity", []) or []
-            entities.extend(res_entities)
-        entities = list(set(entities))
-        
-        for key in entities:
-            value = response["entities"].get(key, 0) + 1
-            response["entities"][key] = value
 
     # post-process datasets ###############################
 
