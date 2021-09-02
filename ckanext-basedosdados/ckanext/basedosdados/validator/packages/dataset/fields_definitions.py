@@ -18,7 +18,7 @@ to_line = lambda description: "\n".join(description)
 # -------------------------------------
 
 ORGANIZATION_FIELD = Field(
-    title="Organization ID",
+    title="ID Organização",
     user_input_hint=["<organização>"],
     description=to_line(
         [
@@ -33,7 +33,7 @@ ORGANIZATION_FIELD = Field(
 )
 
 DATASET_ID_FIELD = Field(
-    title="Dataset ID",
+    title="ID Base",
     yaml_order={
         "id_before": "organization",
         "id_after": "title",
@@ -60,7 +60,7 @@ DESCRIPTION_FIELD = Field(
 )
 
 GROUPS_FIELD = Field(
-    title="groups",
+    title="Temas",
     user_input_hint=["<grupo>"],
     description=to_line(
         [
@@ -75,7 +75,7 @@ GROUPS_FIELD = Field(
 )
 
 TAGS_FIELD = Field(
-    title="tags",
+    title="Etiquetas",
     user_input_hint=["<exemplo: fertilidade, preco, desmatamento>"],
     description=to_line(
         [
@@ -94,7 +94,7 @@ TAGS_FIELD = Field(
 )
 
 SPATIAL_COVERAGE_FIELD = Field(
-    title="Cobertura espacial",
+    title="Cobertura Espacial",
     yaml_order={
         "id_before": "tags",
         "id_after": "temporal_coverage",
@@ -102,7 +102,7 @@ SPATIAL_COVERAGE_FIELD = Field(
 )
 
 TEMPORAL_COVERAGE_FIELD = Field(
-    title="Cobertura temporal",
+    title="Cobertura Temporal",
     yaml_order={
         "id_before": "spatial_coverage",
         "id_after": "entity",
@@ -110,7 +110,7 @@ TEMPORAL_COVERAGE_FIELD = Field(
 )
 
 UPDATE_FREQUENCY_FIELD = Field(
-    title="",
+    title="Frequência de Atualização",
     yaml_order={
         "id_before": "temporal_coverage",
         "id_after": "entity",
@@ -128,7 +128,7 @@ ENTITY_FIELD = Field(
 )
 
 TIME_UNIT_FIELD = Field(
-    title="Unidade temporal",
+    title="Unidade Temporal",
     yaml_order={
         "id_before": "entity",
         "id_after": "ckan_url",
@@ -136,7 +136,7 @@ TIME_UNIT_FIELD = Field(
 )
 
 CKAN_URL_FIELD = Field(
-    title="ckan_url",
+    title="Url CKAN",
     user_input_hint=["<https://basedosdados.org/dataset/<dataset_id>"],
     yaml_order={
         "id_before": "time_unit",
@@ -145,7 +145,7 @@ CKAN_URL_FIELD = Field(
 )
 
 GITHUB_URL_FIELD: Str = Field(
-    title="github_url",
+    title="Url Github",
     user_input_hint=[
         "<https://github.com/basedosdados/mais/tree/master/bases/<dataset_id>"
     ],
@@ -158,11 +158,11 @@ GITHUB_URL_FIELD: Str = Field(
 VISIBILITY_FIELD = Field(title="Visibilidade")
 
 DOWNLOAD_TYPE_FIELD = Field(
-    title="Tipo de download",
+    title="Tipo de Download",
 )
 
 METADATA_MODIFIED_FIELD = Field(
-    title="metadata_modified",
+    title="Data de Modificação",
     yaml_order={
         "id_before": "github_url",
         "id_after": None,
@@ -170,6 +170,6 @@ METADATA_MODIFIED_FIELD = Field(
 )
 
 AUTHOR_FIELD = Field(
-    title="author",
+    title="Autor(a)",
     description=to_line(["Qual departamento/grupo/pessoa mantém os dados originais?"]),
 )

@@ -27,7 +27,7 @@ class PublishedBy(BaseModel):
 # -------------------------------------
 
 DATASET_ID_FIELD = Field(
-    title="Dataset ID",
+    title="ID Base",
     yaml_order={
         "id_after": None,
         "id_before": "table_id",
@@ -35,7 +35,7 @@ DATASET_ID_FIELD = Field(
 )
 
 TABLE_ID_FIELD = Field(
-    title="Table ID",
+    title="ID Tabela",
     yaml_order={
         "id_after": "dataset_id",
         "id_before": "identifying_columns",
@@ -43,7 +43,7 @@ TABLE_ID_FIELD = Field(
 )
 
 IDENTIFYING_COLUMNS_FIELD = Field(
-    title="Colunas identificadoras",
+    title="Colunas Identificadoras",
     user_input_hint=["<primeira coluna>"],
     description=to_line(
         [
@@ -59,7 +59,7 @@ IDENTIFYING_COLUMNS_FIELD = Field(
 )
 
 LAST_UPDATED_FIELD = Field(
-    title="Última atualização",
+    title="Data da Última Atualização",
     yaml_order={
         "id_after": "identifying_columns",
         "id_before": "published_by",
@@ -77,7 +77,7 @@ PUBLISHED_BY_FIELD = Field(
 )
 
 SOURCE_BUCKET_NAME_FIELD = Field(
-    title="source_bucket_name",
+    title="Nome do Bucket Fonte no GCP",
     yaml_order={
         "id_after": "published_by",
         "id_before": "project_id_prod",
@@ -85,7 +85,7 @@ SOURCE_BUCKET_NAME_FIELD = Field(
 )
 
 PROJECT_ID_PROD_FIELD = Field(
-    title="project_id_prod",
+    title="ID do Projeto de Produção no GCP",
     yaml_order={
         "id_after": "source_bucket_name",
         "id_before": "project_id_staging",
@@ -93,7 +93,7 @@ PROJECT_ID_PROD_FIELD = Field(
 )
 
 PROJECT_ID_STAGING_FIELD = Field(
-    title="project_id_staging",
+    title="ID do Projeto de Staging no GCP",
     yaml_order={
         "id_after": "project_id_prod",
         "id_before": "ckan_url",
@@ -101,7 +101,7 @@ PROJECT_ID_STAGING_FIELD = Field(
 )
 
 PARTITIONS_FIELD = Field(
-    title="partitions",
+    title="Partições",
     user_input_hint=["<primeira partição>"],
     description=to_line(
         [
@@ -118,7 +118,7 @@ PARTITIONS_FIELD = Field(
 )
 
 BDM_FILE_SIZE_FIELD = Field(
-    title="",
+    title="Tamanho do Arquivo",
     description=to_line([""]),
     user_input_hint=["<>"],
     yaml_order={

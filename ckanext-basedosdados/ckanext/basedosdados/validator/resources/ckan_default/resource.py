@@ -10,22 +10,22 @@ from ckanext.basedosdados.validator.available_options import IdType
 class _CkanDefaultResource(BaseModel):  # , extra=Extra.forbid):
     # fmt: off
     id                 : IdType
+    
     name               : Str                              = Field(title="Nome")
     description        : Str                              = Field(title="Descrição")
     position           : int                              = Field(title="Posição")
     url                : Optional[str]                    = Field(title="URL") # reserved in ckan 
-    cache_last_updated : Optional[datetime]               
-    cache_url          : Optional[Str]                    
-    created            : Optional[datetime]               
-    datastore_active   : Optional[bool]                   
-    format             : Optional[Str]                    
-    formato            : Optional[Str]                    
-    hash               : Optional[Str]                    
-    last_modified      : Optional[datetime]               = Field(title="Útima atualização")
+    cache_last_updated : Optional[datetime]               = Field(title="Última Atualização do Cache")
+    cache_url          : Optional[Str]                    = Field(title="Url Cache")
+    created            : Optional[datetime]               = Field(title="Data de Criação")
+    datastore_active   : Optional[bool]                   = Field(title="Datastore Ativa")
+    format             : Optional[Str]                    = Field(title="Formato")
+    hash               : Optional[Str]                    = Field(title="Hash")
+    last_modified      : Optional[datetime]               = Field(title="Data da Útima Atualização")
     metadata_modified  : Optional[datetime]               = Field(title="Data de Modificação")
     mimetype           : Optional[Str]                    
     mimetype_inner     : Optional[Str]                    
     package_id         : Optional[Str]                    
     size               : Optional[float]                  
-    state              : Optional[Str]                    
+    state              : Optional[Str]                    = Field(title="Estado")
     url_type           : Optional[Str]                    

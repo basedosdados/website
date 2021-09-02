@@ -31,7 +31,7 @@ to_line = lambda description: "\n".join(description)
 # -------------------------------------
 
 DATASET_ID_FIELD = Field(
-    title="Dataset ID",
+    title="ID Base",
     yaml_order={
         "id_after": None,
         "id_before": "origin",
@@ -89,7 +89,7 @@ DESCRIPTION_FIELD = Field(
 )
 
 OPENING_DATE_FIELD = Field(
-    title="Data de abertura",
+    title="Data de Abertura",
     yaml_order={
         "id_after": "description",
         "id_before": "requested_by",
@@ -97,7 +97,7 @@ OPENING_DATE_FIELD = Field(
 )
 
 REQUESTED_BY_FIELD = Field(
-    title="Quem fez o pedido",
+    title="Quem Fez o Pedido",
     yaml_order={
         "id_after": "opening_date",
         "id_before": "spatial_coverage",
@@ -105,7 +105,7 @@ REQUESTED_BY_FIELD = Field(
 )
 
 SPATIAL_COVERAGE_FIELD = Field(
-    title="Cobertura espacial",
+    title="Cobertura Espacial",
     description=to_line(["A máxima unidade espacial que os dados pedidos cobrem."]),
     yaml_order={
         "id_after": "requested_by",
@@ -114,7 +114,7 @@ SPATIAL_COVERAGE_FIELD = Field(
 )
 
 TEMPORAL_COVERAGE_FIELD = Field(
-    title="Cobertura temporal",
+    title="Cobertura Temporal",
     description=to_line(["Anos cobertos pelos dados pedidos."]),
     yaml_order={
         "id_after": "spatial_coverage",
@@ -123,7 +123,7 @@ TEMPORAL_COVERAGE_FIELD = Field(
 )
 
 UPDATE_FREQUENCY_FIELD = Field(
-    title="Frequência de atualização",
+    title="Frequência de Atualização",
     description=to_line(
         [
             "A unidade temporal na qual os dados pedidos são atualizados.",
@@ -146,7 +146,7 @@ ENTITY_FIELD = Field(
 )
 
 TIME_UNIT_FIELD = Field(
-    title="Unidade temporal",
+    title="Unidade Temporal",
     description=to_line(
         ["A unidade temporal representada por cada linha dos dados pedidos."]
     ),
@@ -157,7 +157,7 @@ TIME_UNIT_FIELD = Field(
 )
 
 STATUS_FIELD = Field(
-    title="Status",
+    title="Estado",
     yaml_order={
         "id_after": "time_unit",
         "id_before": "data_url",
@@ -165,7 +165,7 @@ STATUS_FIELD = Field(
 )
 
 DATA_URL_FIELD = Field(
-    title="Url dos dados",
+    title="Url dos Dados",
     description=to_line(["Onde estão os dados da resposta?"]),
     user_input_hint=["<www.exemplo.com/dados>"],
     yaml_order={

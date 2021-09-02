@@ -18,14 +18,9 @@ class DirectoryColumn(BaseModel):
 # BdmColumns Fields
 # -------------------------------------
 
-
 NAME_FIELD = Field(
-    title="Nome da coluna",
-    description=to_line(
-        [
-            "Nome em produção",
-        ]
-    ),
+    title="Nome",
+    description=to_line(["Nome em produção"]),
     yaml_order={
         "id_before": None,
         "id_after": "bigquery_type",
@@ -55,7 +50,7 @@ DESCRIPTION_FIELD = Field(
 )
 
 TEMPORAL_COVERAGE_FIELD = Field(
-    title="Cobertura temporal",
+    title="Cobertura Temporal",
     user_input_hint="<2001-2010>",
     description=to_line(["Anos cobertos pela tabela."]),
     yaml_order={
@@ -65,7 +60,7 @@ TEMPORAL_COVERAGE_FIELD = Field(
 )
 
 COVERED_BY_DICTIONARY_FIELD = Field(
-    title="Coberta por um dicionário",
+    title="Coberta por um Dicionário",
     user_input_hint="<yes/no>",
     yaml_order={
         "id_before": "temporal_coverage",
@@ -74,7 +69,7 @@ COVERED_BY_DICTIONARY_FIELD = Field(
 )
 
 DIRECTORY_COLUMN_FIELD = Field(
-    title="Coluna correspondente nos diretórios",
+    title="Coluna Correspondente nos Diretórios",
     user_input_hint="<---->",
     yaml_order={
         "id_before": "covered_by_dictionary",
@@ -83,7 +78,7 @@ DIRECTORY_COLUMN_FIELD = Field(
 )
 
 MEASUREMENT_UNIT_FIELD = Field(
-    title="Unidade de medida",
+    title="Unidade de Medida",
     user_input_hint="<km/R$>",
     description=to_line(
         ["Qual é a unidade de medida da coluna? Ver ISO/IEC 80000 para notação padrão."]
@@ -95,7 +90,7 @@ MEASUREMENT_UNIT_FIELD = Field(
 )
 
 HAS_SENSITIVE_DATA_FIELD = Field(
-    title="columns-has-sensitive-data",
+    title="Contém Dados Sensíveis (LGPD)",
     user_input_hint="<yes/no>",
     description=to_line(["[yes, no], se a coluna tem dados sensíveis."]),
     yaml_order={
@@ -105,7 +100,7 @@ HAS_SENSITIVE_DATA_FIELD = Field(
 )
 
 IS_IN_STAGING_FIELD = Field(
-    title="columns-is_in_staging",
+    title="Está em Staging",
     user_input_hint=True,
     description=to_line(["Bool [True, False], se a coluna está na tabela staging"]),
     yaml_order={
@@ -115,7 +110,7 @@ IS_IN_STAGING_FIELD = Field(
 )
 
 IS_PARTITION_FIELD = Field(
-    title="columns-is_partition",
+    title="É Partição",
     user_input_hint=False,
     description=to_line(["Bool [True, False], se a coluna é uma partição."]),
     yaml_order={
@@ -123,19 +118,3 @@ IS_PARTITION_FIELD = Field(
         "id_after": None,
     },
 )
-
-# DATASET_ID_FIELD = Field(
-#     title="Dataset ID",
-#     yaml_order={
-#         "id_before": "is_partition",
-#         "id_after": "table_id",
-#     },
-# )
-
-# TABLE_ID_FIELD = Field(
-#     title="Table ID",
-#     yaml_order={
-#         "id_before": "dataset_id",
-#         "id_after": None,
-#     },
-# )
