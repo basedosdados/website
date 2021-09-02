@@ -18,7 +18,7 @@ class DataCleanedBy(BaseModel):
     github_user : Optional[Str] = Field(title="Usuário Github",user_input_hint=["<usuário Github>"])
     ckan_user   : Optional[Str] = Field(title="Usuário CKAN",user_input_hint=["<id do usuário no ckan>"])
     website     : Optional[Str] = Field(title="Website",user_input_hint=["<onde encontrar os dados tratados>"])
-    code_url : Optional[Str]    = Field(title="Url código de limpeza",user_input_hint=["<onde encontrar código de limpeza>"])
+    code_url    : Optional[Str] = Field(title="Url código de limpeza",user_input_hint=["<onde encontrar código de limpeza>"])
     # fmt: on
 
 
@@ -28,7 +28,7 @@ class DataCleanedBy(BaseModel):
 to_line = lambda description: "\n".join(description)
 
 DATASET_ID_FIELD = Field(
-    title="ID Base",
+    title="ID Conjunto",
     yaml_order={
         "id_before": None,
         "id_after": "table_id",

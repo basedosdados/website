@@ -12,7 +12,7 @@ from pydantic import Field
 to_line = lambda description: "\n".join(description)
 
 DATASET_ID_FIELD = Field(
-    title="ID Base",
+    title="ID Conjunto",
     yaml_order={
         "id_after": None,
         "id_before": "table_id",
