@@ -9,14 +9,14 @@ from pydantic import StrictStr as Str
 # -------------------------------------
 # BdmTable Custom Types
 # -------------------------------------
+
 class DataCleanedBy(BaseModel):
     # fmt: off
     name        : Optional[Str] = Field(title="Nome",user_input_hint=["<nome>"])
     email       : Optional[Str] = Field(title="Email",user_input_hint=["<email>"])
     github_user : Optional[Str] = Field(title="Usuário Github",user_input_hint=["<usuário Github>"])
-    website     : Optional[Str] = Field(title="Url dados tratados",user_input_hint=["<onde encontrar os dados tratados>"])
-    code_url    : Optional[Str] = Field(title="Url código de limpeza",user_input_hint=["<onde encontrar código de limpeza>"])
-    ckan_user   : Optional[Str] = Field(title="Usuário Ckan",user_input_hint=["<id do usuário no ckan>"])
+    website     : Optional[Str] = Field(title="Website",user_input_hint=["<onde encontrar os dados tratados>"])
+    ckan_user   : Optional[Str] = Field(title="Usuário CKAN",user_input_hint=["<id do usuário no ckan>"])
     # fmt: on
 
 
@@ -172,6 +172,15 @@ DATA_CLEANING_DESCRIPTION_FIELD = Field(
     ),
     yaml_order={
         "id_before": "data_cleaned_by",
+        "id_after": "data_cleaning_code_url",
+    },
+)
+
+DATA_CLEANING_CODE_URL = Field(
+    title="Url do Código de Limpeza dos Dados",
+    description=to_line(["Url do código de limpeza dos dados."]),
+    yaml_order={
+        "id_before": "data_cleaning_description",
         "id_after": "raw_files_url",
     },
 )
@@ -180,7 +189,7 @@ RAW_FILES_URL_FIELD = Field(
     title="Url dos Dados Originais",
     description=to_line(["Url dos dados originais no GCP Storage."]),
     yaml_order={
-        "id_before": "data_cleaning_description",
+        "id_before": "data_cleaning_code_url",
         "id_after": "auxiliary_files_url",
     },
 )
