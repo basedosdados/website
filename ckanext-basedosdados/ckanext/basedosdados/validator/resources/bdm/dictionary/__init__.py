@@ -2,6 +2,8 @@ from typing import List, Literal, Optional, Union
 
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.resources import BdmColumns, _CkanDefaultResource
+from ckanext.basedosdados.validator.resources.bdm import LastUpdated, PublishedBy
+
 from pydantic import StrictStr as Str
 
 from .fields_definitions import *

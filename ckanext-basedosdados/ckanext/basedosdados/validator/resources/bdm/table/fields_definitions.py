@@ -1,57 +1,32 @@
 #!/usr/bin/env python3
-from datetime import datetime
-from typing import Optional, Set
+from typing import Optional
 
 from ckanext.basedosdados.validator import BaseModel
-from ckanext.basedosdados.validator.available_options import (
-    Admin1Enum,
-    Admin2Enum,
-    ContinentEnum,
-    CountryEnum,
-)
+
 from pydantic import Field
 from pydantic import StrictStr as Str
 
 # -------------------------------------
 # BdmTable Custom Types
 # -------------------------------------
-class LastUpdated(BaseModel):
-    # fmt: off
-    metadata: Optional[datetime] = Field(user_input_hint=["Última atualização: metadados"])
-    data    : Optional[datetime] = Field(user_input_hint=["Última atualização: dados"])
-    release : Optional[datetime] = Field(user_input_hint=["Último lançamento: dados originais"])
-    # fmt: on
-
-
-class PublishedBy(BaseModel):
-    # fmt: off
-    name        : Optional[Str] = Field(user_input_hint=["<nome [você]>"])
-    email       : Optional[Str] = Field(user_input_hint=["<email>"])
-    github_user : Optional[Str] = Field(user_input_hint=["<usuário Github>"])
-    website     : Optional[Str] = Field(user_input_hint=["<www.exemplo.com>"])
-    ckan_user   : Optional[Str] = Field(user_input_hint=["<id do usuário no ckan>"])
-    # fmt: on
-
-
 class DataCleanedBy(BaseModel):
     # fmt: off
-    name        : Optional[Str] = Field(user_input_hint=["<nome>"])
-    email       : Optional[Str] = Field(user_input_hint=["<email>"])
-    github_user : Optional[Str] = Field(user_input_hint=["<usuário Github>"])
-    website     : Optional[Str] = Field(user_input_hint=["<onde encontrar os dados tratados>"])
-    code_url    : Optional[Str] = Field(user_input_hint=["<onde encontrar código de limpeza>"])
-    ckan_user   : Optional[Str] = Field(user_input_hint=["<id do usuário no ckan>"])
+    name        : Optional[Str] = Field(title="Nome",user_input_hint=["<nome>"])
+    email       : Optional[Str] = Field(title="Email",user_input_hint=["<email>"])
+    github_user : Optional[Str] = Field(title="Usuário Github",user_input_hint=["<usuário Github>"])
+    website     : Optional[Str] = Field(title="Url dados tratados",user_input_hint=["<onde encontrar os dados tratados>"])
+    code_url    : Optional[Str] = Field(title="Url código de limpeza",user_input_hint=["<onde encontrar código de limpeza>"])
+    ckan_user   : Optional[Str] = Field(title="Usuário Ckan",user_input_hint=["<id do usuário no ckan>"])
     # fmt: on
 
-
-to_line = lambda description: "\n".join(description)
 
 # -------------------------------------
 # BdmTable Fields
 # -------------------------------------
+to_line = lambda description: "\n".join(description)
 
 DATASET_ID_FIELD = Field(
-    title="Dataset ID",
+    title="ID Base",
     yaml_order={
         "id_before": None,
         "id_after": "table_id",
@@ -59,7 +34,7 @@ DATASET_ID_FIELD = Field(
 )
 
 TABLE_ID_FIELD = Field(
-    title="Table ID",
+    title="ID Tabela",
     yaml_order={
         "id_before": "dataset_id",
         "id_after": "description",
@@ -83,7 +58,7 @@ DESCRIPTION_FIELD = Field(
 )
 
 SPATIAL_COVERAGE_FIELD = Field(
-    title="Cobertura espacial",
+    title="Cobertura Espacial",
     description=to_line(["A máxima unidade espacial que a tabela cobre."]),
     yaml_order={
         "id_before": "description",
@@ -92,7 +67,7 @@ SPATIAL_COVERAGE_FIELD = Field(
 )
 
 TEMPORAL_COVERAGE_FIELD = Field(
-    title="Cobertura temporal",
+    title="Cobertura Temporal",
     description=to_line(["Anos cobertos pela tabela."]),
     yaml_order={
         "id_before": "spatial_coverage",
@@ -101,7 +76,7 @@ TEMPORAL_COVERAGE_FIELD = Field(
 )
 
 UPDATE_FREQUENCY_FIELD = Field(
-    title="Frequência de atualização",
+    title="Frequência de Atualização",
     user_input_hint=["<unidade temporal>"],
     description=to_line(["A unidade temporal com qual a tabela é atualizada."]),
     yaml_order={
@@ -121,7 +96,7 @@ ENTITY_FIELD = Field(
 )
 
 TIME_UNIT_FIELD = Field(
-    title="Unidade temporal",
+    title="Unidade Temporal",
     description=to_line(["A unidade temporal representada por cada linha."]),
     yaml_order={
         "id_before": "entity",
@@ -130,7 +105,7 @@ TIME_UNIT_FIELD = Field(
 )
 
 IDENTIFYING_COLUMNS_FIELD = Field(
-    title="Colunas identificadoras",
+    title="Colunas Identificadoras",
     user_input_hint=["ex. id_municipio, produto, ano"],
     description=to_line(
         [
@@ -146,7 +121,7 @@ IDENTIFYING_COLUMNS_FIELD = Field(
 )
 
 LAST_UPDATED_FIELD = Field(
-    title="Última atualização",
+    title="Data da Última Atualização",
     yaml_order={
         "id_before": "identifying_columns",
         "id_after": "version",
@@ -174,7 +149,7 @@ PUBLISHED_BY_FIELD = Field(
 
 # TODO: DICT TYPE
 DATA_CLEANED_BY_FIELD = Field(
-    title="Dados limpos por",
+    title="Dados Limpos por",
     description=to_line(
         [
             "Qual organização/departamento/pessoa tratou os dados?",
@@ -189,7 +164,7 @@ DATA_CLEANED_BY_FIELD = Field(
 )
 
 DATA_CLEANING_DESCRIPTION_FIELD = Field(
-    title="Descrição da limpeza de dados",
+    title="Descrição da Limpeza de Dados",
     description=to_line(
         [
             "Se houve passos de tratamento, limpeza e manipulação de dados, descreva-os aqui."
@@ -202,7 +177,7 @@ DATA_CLEANING_DESCRIPTION_FIELD = Field(
 )
 
 RAW_FILES_URL_FIELD = Field(
-    title="Url dos dados originais",
+    title="Url dos Dados Originais",
     description=to_line(["Url dos dados originais no GCP Storage."]),
     yaml_order={
         "id_before": "data_cleaning_description",
@@ -211,7 +186,7 @@ RAW_FILES_URL_FIELD = Field(
 )
 
 AUXILIARY_FILES_URL_FIELD = Field(
-    title="Url dos arquivos auxiliares",
+    title="Url dos Arquivos Auxiliares",
     description=to_line(["Url dos arquivos auxiliares no GCP Storage."]),
     yaml_order={
         "id_before": "raw_files_url",
@@ -220,7 +195,7 @@ AUXILIARY_FILES_URL_FIELD = Field(
 )
 
 ARCHITECTURE_URL_FIELD = Field(
-    title="Url da tabela de arquitetura",
+    title="Url da Tabela de Arquitetura",
     description=to_line(["Url da tabela de arquitetura no GCP Storage."]),
     yaml_order={
         "id_before": "auxiliary_files_url",
@@ -229,7 +204,7 @@ ARCHITECTURE_URL_FIELD = Field(
 )
 
 COVERED_BY_DICTIONARY_FIELD = Field(
-    title="Coberto por dicionário",
+    title="Coberto por Dicionário",
     yaml_order={
         "id_before": "architecture_url",
         "id_after": "source_bucket_name",
@@ -237,7 +212,7 @@ COVERED_BY_DICTIONARY_FIELD = Field(
 )
 
 SOURCE_BUCKET_NAME_FIELD = Field(
-    title="Nome do bucket fonte no GCP",
+    title="Nome do Bucket Fonte no GCP",
     yaml_order={
         "id_before": "covered_by_dictionary",
         "id_after": "project_id_prod",
@@ -245,7 +220,7 @@ SOURCE_BUCKET_NAME_FIELD = Field(
 )
 
 PROJECT_ID_PROD_FIELD = Field(
-    title="Project ID de produção no GCP",
+    title="ID do Projeto de Produção no GCP",
     yaml_order={
         "id_before": "source_bucket_name",
         "id_after": "project_id_staging",
@@ -253,7 +228,7 @@ PROJECT_ID_PROD_FIELD = Field(
 )
 
 PROJECT_ID_STAGING_FIELD = Field(
-    title="Project ID de staging no GCP",
+    title="ID do Projeto de Staging no GCP",
     yaml_order={
         "id_before": "project_id_prod",
         "id_after": "partitions",
@@ -278,7 +253,7 @@ PARTITIONS_FIELD = Field(
 )
 
 BDM_FILE_SIZE_FIELD = Field(
-    title="Tamanho do arquivo na nuvem",
+    title="Tamanho do Arquivo",
     description=to_line([""]),
     yaml_order={
         "id_before": "partitions",
@@ -307,7 +282,7 @@ COLUMNS_FIELD = Field(
 )
 
 METADATA_MODIFIED_FIELD = Field(
-    title="metadata_modified",
+    title="Data da Última Modificação dos Metadados",
     yaml_order={
         "id_before": "columns",
         "id_after": None,

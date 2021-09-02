@@ -1,13 +1,6 @@
 #!/usr/bin/env python3
-from typing import Optional, Set
-
 from ckanext.basedosdados.validator import BaseModel
-from ckanext.basedosdados.validator.available_options import (
-    Admin1Enum,
-    Admin2Enum,
-    ContinentEnum,
-    CountryEnum,
-)
+
 from pydantic import Field
 from pydantic import StrictStr as Str
 
@@ -16,22 +9,21 @@ from pydantic import StrictStr as Str
 # -------------------------------------
 class RequestedBy(BaseModel):
     # fmt: off
-    name        : Str = Field(user_input_hint=["<nome [você]>"])
-    email       : Str = Field(user_input_hint=["<email>"])
-    github_user : Str = Field(user_input_hint=["<usuário Github>"])
-    website     : Str = Field(user_input_hint=["<website>"])
-    ckan_user   : Str = Field(user_input_hint=["<ID do usuário no CKAN>"])
+    name        : Str = Field(title="Nome",user_input_hint=["<nome [você]>"])
+    email       : Str = Field(title="Email",user_input_hint=["<email>"])
+    github_user : Str = Field(title="Usuário Github",user_input_hint=["<usuário Github>"])
+    website     : Str = Field(title="Website",user_input_hint=["<website>"])
+    ckan_user   : Str = Field(title="Usuário Ckan",user_input_hint=["<ID do usuário no CKAN>"])
     # fmt: on
 
-
-to_line = lambda description: "\n".join(description)
 
 # -------------------------------------
 # InformationRequest Fields
 # -------------------------------------
+to_line = lambda description: "\n".join(description)
 
 DATASET_ID_FIELD = Field(
-    title="Dataset ID",
+    title="ID Base",
     yaml_order={
         "id_after": None,
         "id_before": "origin",
@@ -89,7 +81,7 @@ DESCRIPTION_FIELD = Field(
 )
 
 OPENING_DATE_FIELD = Field(
-    title="Data de abertura",
+    title="Data de Abertura",
     yaml_order={
         "id_after": "description",
         "id_before": "requested_by",
@@ -97,7 +89,7 @@ OPENING_DATE_FIELD = Field(
 )
 
 REQUESTED_BY_FIELD = Field(
-    title="Quem fez o pedido",
+    title="Quem Fez o Pedido",
     yaml_order={
         "id_after": "opening_date",
         "id_before": "spatial_coverage",
@@ -105,7 +97,7 @@ REQUESTED_BY_FIELD = Field(
 )
 
 SPATIAL_COVERAGE_FIELD = Field(
-    title="Cobertura espacial",
+    title="Cobertura Espacial",
     description=to_line(["A máxima unidade espacial que os dados pedidos cobrem."]),
     yaml_order={
         "id_after": "requested_by",
@@ -114,7 +106,7 @@ SPATIAL_COVERAGE_FIELD = Field(
 )
 
 TEMPORAL_COVERAGE_FIELD = Field(
-    title="Cobertura temporal",
+    title="Cobertura Temporal",
     description=to_line(["Anos cobertos pelos dados pedidos."]),
     yaml_order={
         "id_after": "spatial_coverage",
@@ -123,7 +115,7 @@ TEMPORAL_COVERAGE_FIELD = Field(
 )
 
 UPDATE_FREQUENCY_FIELD = Field(
-    title="Frequência de atualização",
+    title="Frequência de Atualização",
     description=to_line(
         [
             "A unidade temporal na qual os dados pedidos são atualizados.",
@@ -146,7 +138,7 @@ ENTITY_FIELD = Field(
 )
 
 TIME_UNIT_FIELD = Field(
-    title="Unidade temporal",
+    title="Unidade Temporal",
     description=to_line(
         ["A unidade temporal representada por cada linha dos dados pedidos."]
     ),
@@ -165,7 +157,7 @@ STATUS_FIELD = Field(
 )
 
 DATA_URL_FIELD = Field(
-    title="Url dos dados",
+    title="Url dos Dados",
     description=to_line(["Onde estão os dados da resposta?"]),
     user_input_hint=["<www.exemplo.com/dados>"],
     yaml_order={

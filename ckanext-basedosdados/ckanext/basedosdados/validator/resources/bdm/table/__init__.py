@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List, Literal, Optional, Set, Union
 
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
@@ -9,6 +10,8 @@ from ckanext.basedosdados.validator.available_options import (
 )
 from ckanext.basedosdados.validator import SpatialCoverage
 from ckanext.basedosdados.validator.resources import BdmColumns, _CkanDefaultResource
+from ckanext.basedosdados.validator.resources.bdm import LastUpdated, PublishedBy
+
 from pydantic import StrictStr as Str
 from pydantic import validator
 

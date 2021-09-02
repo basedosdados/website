@@ -1,16 +1,4 @@
-#!/usr/bin/env python3
-from typing import Optional, Set
-
-from ckanext.basedosdados.validator import BaseModel
-from ckanext.basedosdados.validator.available_options import (
-    Admin1Enum,
-    Admin2Enum,
-    ContinentEnum,
-    CountryEnum,
-)
 from pydantic import Field
-
-to_line = lambda description: "\n".join(description)
 
 # -------------------------------------
 # ExternalLink Custom Types
@@ -20,9 +8,10 @@ to_line = lambda description: "\n".join(description)
 # -------------------------------------
 # ExternalLink Fields
 # -------------------------------------
+to_line = lambda description: "\n".join(description)
 
 DATASET_ID_FIELD = Field(
-    title="Dataset ID",
+    title="ID Base",
     yaml_order={
         "id_after": None,
         "id_before": "url",
@@ -73,7 +62,7 @@ LANGUAGE_FIELD = Field(
 )
 
 HAS_STRUCTURED_DATA_FIELD = Field(
-    title="Tem dados estruturados?",
+    title="Tem Dados Estruturados",
     description=to_line(
         [
             "A fonte externa disponibiliza dados em formatos estruturados, como csv, json, etc?"
@@ -86,7 +75,7 @@ HAS_STRUCTURED_DATA_FIELD = Field(
 )
 
 HAS_API_FIELD = Field(
-    title="Tem uma API?",
+    title="Tem uma API",
     description=to_line(
         ["A fonte externa disponibiliza uma API para acesso aos dados?"]
     ),
@@ -97,7 +86,7 @@ HAS_API_FIELD = Field(
 )
 
 IS_FREE_FIELD = Field(
-    title="É de graça?",
+    title="É de Graça",
     description=to_line(["O acesso aos dados da fonte externa é grátis?"]),
     yaml_order={
         "id_after": "has_api",
@@ -106,7 +95,7 @@ IS_FREE_FIELD = Field(
 )
 
 REQUIRES_REGISTRATION_FIELD = Field(
-    title="Requer registro",
+    title="Requer Registro",
     description=to_line(
         ["A fonte externa requer registro de usuário para acesso aos dados?"]
     ),
@@ -126,7 +115,7 @@ AVAILABILITY_FIELD = Field(
 )
 
 COUNTRY_IP_ADDRESS_REQUIRED_FIELD = Field(
-    title="Requer ip de algum país?",
+    title="Requer IP de Algum País",
     description=to_line([""]),
     yaml_order={
         "id_after": "availability",
@@ -135,7 +124,7 @@ COUNTRY_IP_ADDRESS_REQUIRED_FIELD = Field(
 )
 
 LICENSE_FIELD = Field(
-    title="Tipo de licença de acesso",
+    title="Tipo de Licença",
     description=to_line(
         ["Qual tipo de licença regula acesso aos dados da fonte externa?"]
     ),
@@ -146,7 +135,7 @@ LICENSE_FIELD = Field(
 )
 
 SPATIAL_COVERAGE_FIELD = Field(
-    title="Cobertura espacial",
+    title="Cobertura Espacial",
     description=to_line(["A máxima unidade espacial que a tabela cobre."]),
     yaml_order={
         "id_after": "license",
@@ -155,7 +144,7 @@ SPATIAL_COVERAGE_FIELD = Field(
 )
 
 TEMPORAL_COVERAGE_FIELD = Field(
-    title="Cobertura temporal",
+    title="Cobertura Temporal",
     description=to_line(["Anos cobertos pela tabela."]),
     yaml_order={
         "id_after": "spatial_coverage",
@@ -164,7 +153,7 @@ TEMPORAL_COVERAGE_FIELD = Field(
 )
 
 UPDATE_FREQUENCY_FIELD = Field(
-    title="Frequência de atualização",
+    title="Frequência de Atualização",
     user_input_hint=["<frequência>"],
     description=to_line(["A unidade temporal pela qual a tabela é atualizada."]),
     yaml_order={
@@ -184,7 +173,7 @@ ENTITY_FIELD = Field(
 )
 
 TIME_UNIT_FIELD = Field(
-    title="Unidade temporal",
+    title="Unidade Temporal",
     description=to_line(["A unidade temporal representada por cada linha."]),
     yaml_order={
         "id_after": "entity",
