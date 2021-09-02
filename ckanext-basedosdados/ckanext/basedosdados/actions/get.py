@@ -59,16 +59,13 @@ def bd_get_current_user(context, data_dict):
         data about the current logged user, returns None if not logged
     """
 
-    user = context['auth_user_obj']
+    user = context["auth_user_obj"]
 
     if not user:
         return None
 
-    return {
-        "fullname": user.fullname,
-        "image_url": user.image_url,
-        "name": user.name
-    }
+    return {"fullname": user.fullname, "image_url": user.image_url, "name": user.name}
+
 
 @toolkit.side_effect_free
 def bd_bdm_dataset_show(context, data_dict):
@@ -255,7 +252,7 @@ def bd_dataset_search(context, data_dict):
         response["organizations_display_names"][key] = dataset["organization"]["title"]
         value = response["organizations"].get(key, 0) + 1
         response["organizations"][key] = value
-    
+
     # post-process entities ###############################
 
     response["entities"] = {}
@@ -266,7 +263,7 @@ def bd_dataset_search(context, data_dict):
             res_entities = resource.get("entity", []) or []
             entities.extend(res_entities)
         entities = list(set(entities))
-        
+
         for key in entities:
             value = response["entities"].get(key, 0) + 1
             response["entities"][key] = value
