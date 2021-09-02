@@ -19,11 +19,11 @@ from .fields_definitions import *
 
 
 class BdmTable(_CkanDefaultResource):
+    # fmt: off
     resource_type: Literal["bdm_table"]
 
     metadata_modified         : Optional[datetime]                               = METADATA_MODIFIED_FIELD #TODO: can we rename this to last_updated and make it a derived field for dataset and all resources?
     # BdmTable models
-    # fmt: off
     dataset_id                : Optional[Str]                                    = DATASET_ID_FIELD
     table_id                  : Str                                              = TABLE_ID_FIELD
     description               : Optional[Str]                                    = DESCRIPTION_FIELD
@@ -38,6 +38,7 @@ class BdmTable(_CkanDefaultResource):
     published_by              : Optional[PublishedBy]                            = PUBLISHED_BY_FIELD
     data_cleaned_by           : Optional[DataCleanedBy]                          = DATA_CLEANED_BY_FIELD
     data_cleaning_description : Optional[Str]                                    = DATA_CLEANING_DESCRIPTION_FIELD
+    # data_cleaning_code_url    : Optional[Str]                                    = DATA_CLEANING_CODE_URL #TODO: future implementation
     raw_files_url             : Optional[Str]                                    = RAW_FILES_URL_FIELD
     auxiliary_files_url       : Optional[Str]                                    = AUXILIARY_FILES_URL_FIELD
     architecture_url          : Optional[Str]                                    = ARCHITECTURE_URL_FIELD

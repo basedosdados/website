@@ -13,7 +13,7 @@ class RequestedBy(BaseModel):
     email       : Str = Field(title="Email",user_input_hint=["<email>"])
     github_user : Str = Field(title="Usuário Github",user_input_hint=["<usuário Github>"])
     website     : Str = Field(title="Website",user_input_hint=["<website>"])
-    ckan_user   : Str = Field(title="Usuário Ckan",user_input_hint=["<ID do usuário no CKAN>"])
+    ckan_user   : Str = Field(title="Usuário CKAN",user_input_hint=["<ID do usuário no CKAN>"])
     # fmt: on
 
 
