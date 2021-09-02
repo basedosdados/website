@@ -27,14 +27,8 @@ class _CkanDefaults(BaseModel):  # , extra=Extra.forbid):
     id: IdType
     name: Str = Field(title="Nome")
 
-<<<<<<< HEAD
     title            : Str                                               = Field(title="Título")
     type             : Literal["dataset"]                                = Field(title="Tipo")
-=======
-    # fmt: off
-    title            : Str
-    type             : Literal["dataset"]
->>>>>>> develop
     notes            : Optional[Str]
     author           : Optional[Str]
     author_email     : Optional[Email]
@@ -59,12 +53,7 @@ class _CkanDefaults(BaseModel):  # , extra=Extra.forbid):
     owner_org    : UUID
     organization : Any                       = Field(title="Organização")
     num_tags     : Optional[Int]
-<<<<<<< HEAD
     tags         : Any                       = Field(title="Etiquetas")
-=======
-    tags         : Any
-    # fmt: on
->>>>>>> develop
 
     relationships_as_object: Any
     relationships_as_subject: Any
