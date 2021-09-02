@@ -99,6 +99,11 @@ body {
   color: #3aa1eb;
 }
 
+.markdown ul {
+  margin-top:10px;
+  margin-left: 30px;
+}
+
 .BrainhubCarousel__arrows {
   background-color: transparent !important;
 }

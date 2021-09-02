@@ -238,6 +238,10 @@ df <- read_sql(query)`,
             </pre>
           )}
         </Highlight>
+        <SectionText fontSize="14px" fontWeight="500">
+          Primeira vez usando {selectedConsultation}? <Link>Clique aqui</Link>{" "}
+          para ver a documentação.{" "}
+        </SectionText>
       </VStack>
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Title>Metadados</Title>
@@ -247,7 +251,8 @@ df <- read_sql(query)`,
           values={formatObjectsInArray(
             translate(
               translations,
-              filterOnlyValidValues(resource, [
+              filterOnlyValidValues({ dataset_id: datasetName, ...resource }, [
+                "dataset_id",
                 "table_id",
                 "spatial_coverage",
                 "temporal_coverage",
