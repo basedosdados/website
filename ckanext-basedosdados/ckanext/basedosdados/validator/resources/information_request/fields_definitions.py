@@ -1,13 +1,6 @@
 #!/usr/bin/env python3
-from typing import Optional, Set
-
 from ckanext.basedosdados.validator import BaseModel
-from ckanext.basedosdados.validator.available_options import (
-    Admin1Enum,
-    Admin2Enum,
-    ContinentEnum,
-    CountryEnum,
-)
+
 from pydantic import Field
 from pydantic import StrictStr as Str
 
@@ -16,19 +9,18 @@ from pydantic import StrictStr as Str
 # -------------------------------------
 class RequestedBy(BaseModel):
     # fmt: off
-    name        : Str = Field(user_input_hint=["<nome [você]>"])
-    email       : Str = Field(user_input_hint=["<email>"])
-    github_user : Str = Field(user_input_hint=["<usuário Github>"])
-    website     : Str = Field(user_input_hint=["<website>"])
-    ckan_user   : Str = Field(user_input_hint=["<ID do usuário no CKAN>"])
+    name        : Str = Field(title="Nome",user_input_hint=["<nome [você]>"])
+    email       : Str = Field(title="Email",user_input_hint=["<email>"])
+    github_user : Str = Field(title="Usuário Github",user_input_hint=["<usuário Github>"])
+    website     : Str = Field(title="Website",user_input_hint=["<website>"])
+    ckan_user   : Str = Field(title="Usuário Ckan",user_input_hint=["<ID do usuário no CKAN>"])
     # fmt: on
 
-
-to_line = lambda description: "\n".join(description)
 
 # -------------------------------------
 # InformationRequest Fields
 # -------------------------------------
+to_line = lambda description: "\n".join(description)
 
 DATASET_ID_FIELD = Field(
     title="ID Base",
@@ -157,7 +149,7 @@ TIME_UNIT_FIELD = Field(
 )
 
 STATUS_FIELD = Field(
-    title="Estado",
+    title="Status",
     yaml_order={
         "id_after": "time_unit",
         "id_before": "data_url",

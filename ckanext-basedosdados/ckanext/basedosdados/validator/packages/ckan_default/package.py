@@ -37,7 +37,7 @@ class _CkanDefaults(BaseModel):  # , extra=Extra.forbid):
     maintainer_email : Optional[Email]
     state            : Optional[Literal["active", "draft", "deleted"]]  = Field(title="Estado")
     license_id       : Optional[Str]                                    = Field(title="ID da Licença")
-    url              : Optional[Str]                                    = Field(title="URL")
+    url              : Optional[Str]                                    = Field(title="Url")
     version          : Optional[Str]                                    = Field(title="Versão")
     metadata_created : Optional[datetime]                               = Field(title="Data de Criação")
     metadata_modified: Optional[datetime]                               = Field(title="Data de Modificação")

@@ -1,21 +1,15 @@
 #!/usr/bin/env python3
-from typing import Optional, Set
-
-from ckanext.basedosdados.validator import BaseModel
-
 from pydantic import Field
-from pydantic import StrictStr as Str
 
 # -------------------------------------
 # Dataset Custom Types
 # -------------------------------------
 
 
-to_line = lambda description: "\n".join(description)
-
 # -------------------------------------
 # Dataset Fields
 # -------------------------------------
+to_line = lambda description: "\n".join(description)
 
 ORGANIZATION_FIELD = Field(
     title="ID Organização",
@@ -144,7 +138,7 @@ CKAN_URL_FIELD = Field(
     },
 )
 
-GITHUB_URL_FIELD: Str = Field(
+GITHUB_URL_FIELD = Field(
     title="Url Github",
     user_input_hint=[
         "<https://github.com/basedosdados/mais/tree/master/bases/<dataset_id>"

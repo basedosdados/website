@@ -1,30 +1,15 @@
 #!/usr/bin/env python3
-from datetime import datetime
-
-from ckanext.basedosdados.validator import BaseModel
 from pydantic import Field
-from pydantic import StrictStr as Str
-
-to_line = lambda description: "\n".join(description)
 
 # -------------------------------------
 # BdmDictionary Custom Types
 # -------------------------------------
-class LastUpdated(BaseModel):
-    metadata: datetime = Field(user_input_hint=["Última atualização: metadados"])
-    data: datetime = Field(user_input_hint=["Última atualização: metadados"])
-
-
-class PublishedBy(BaseModel):
-    name: Str = Field(user_input_hint=["<nome [você]>"])
-    email: Str = Field(user_input_hint=["<email>"])
-    github: Str = Field(user_input_hint=["<usuário Github>"])
-    website: Str = Field(user_input_hint=["<www.exemplo.com>"])
 
 
 # -------------------------------------
 # BdmDictionary Fields
 # -------------------------------------
+to_line = lambda description: "\n".join(description)
 
 DATASET_ID_FIELD = Field(
     title="ID Base",

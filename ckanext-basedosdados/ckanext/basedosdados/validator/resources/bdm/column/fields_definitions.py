@@ -7,11 +7,13 @@ from pydantic import StrictStr as Str
 
 to_line = lambda description: "\n".join(description)
 
-
+# -------------------------------------
+# BdmColumns Custom Types
+# -------------------------------------
 class DirectoryColumn(BaseModel):
-    dataset_id: Optional[DirectoryEnum] = Field(user_input_hint=["<dataset_id>"])
-    table_id: Optional[Str] = Field(user_input_hint=["<table_id>"])
-    column_name: Optional[Str] = Field(user_input_hint=["<column_name>"])
+    dataset_id : Optional[DirectoryEnum] = Field(title="ID dataset",user_input_hint=["<dataset_id>"])
+    table_id   : Optional[Str]           = Field(title="ID tabela",user_input_hint=["<table_id>"])
+    column_name: Optional[Str]           = Field(title="Nome Coluna",user_input_hint=["<column_name>"])
 
 
 # -------------------------------------

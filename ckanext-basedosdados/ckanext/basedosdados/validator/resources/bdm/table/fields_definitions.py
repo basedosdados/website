@@ -1,54 +1,29 @@
 #!/usr/bin/env python3
-from datetime import datetime
-from typing import Optional, Set
+from typing import Optional
 
 from ckanext.basedosdados.validator import BaseModel
-from ckanext.basedosdados.validator.available_options import (
-    Admin1Enum,
-    Admin2Enum,
-    ContinentEnum,
-    CountryEnum,
-)
+
 from pydantic import Field
 from pydantic import StrictStr as Str
 
 # -------------------------------------
 # BdmTable Custom Types
 # -------------------------------------
-class LastUpdated(BaseModel):
-    # fmt: off
-    metadata: Optional[datetime] = Field(user_input_hint=["Última atualização: metadados"])
-    data    : Optional[datetime] = Field(user_input_hint=["Última atualização: dados"])
-    release : Optional[datetime] = Field(user_input_hint=["Último lançamento: dados originais"])
-    # fmt: on
-
-
-class PublishedBy(BaseModel):
-    # fmt: off
-    name        : Optional[Str] = Field(user_input_hint=["<nome [você]>"])
-    email       : Optional[Str] = Field(user_input_hint=["<email>"])
-    github_user : Optional[Str] = Field(user_input_hint=["<usuário Github>"])
-    website     : Optional[Str] = Field(user_input_hint=["<www.exemplo.com>"])
-    ckan_user   : Optional[Str] = Field(user_input_hint=["<id do usuário no ckan>"])
-    # fmt: on
-
-
 class DataCleanedBy(BaseModel):
     # fmt: off
-    name        : Optional[Str] = Field(user_input_hint=["<nome>"])
-    email       : Optional[Str] = Field(user_input_hint=["<email>"])
-    github_user : Optional[Str] = Field(user_input_hint=["<usuário Github>"])
-    website     : Optional[Str] = Field(user_input_hint=["<onde encontrar os dados tratados>"])
-    code_url    : Optional[Str] = Field(user_input_hint=["<onde encontrar código de limpeza>"])
-    ckan_user   : Optional[Str] = Field(user_input_hint=["<id do usuário no ckan>"])
+    name        : Optional[Str] = Field(title="Nome",user_input_hint=["<nome>"])
+    email       : Optional[Str] = Field(title="Email",user_input_hint=["<email>"])
+    github_user : Optional[Str] = Field(title="Usuário Github",user_input_hint=["<usuário Github>"])
+    website     : Optional[Str] = Field(title="Url dados tratados",user_input_hint=["<onde encontrar os dados tratados>"])
+    code_url    : Optional[Str] = Field(title="Url código de limpeza",user_input_hint=["<onde encontrar código de limpeza>"])
+    ckan_user   : Optional[Str] = Field(title="Usuário Ckan",user_input_hint=["<id do usuário no ckan>"])
     # fmt: on
 
-
-to_line = lambda description: "\n".join(description)
 
 # -------------------------------------
 # BdmTable Fields
 # -------------------------------------
+to_line = lambda description: "\n".join(description)
 
 DATASET_ID_FIELD = Field(
     title="ID Base",

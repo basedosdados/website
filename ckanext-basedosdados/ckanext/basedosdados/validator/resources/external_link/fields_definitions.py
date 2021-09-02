@@ -1,16 +1,4 @@
-#!/usr/bin/env python3
-from typing import Optional, Set
-
-from ckanext.basedosdados.validator import BaseModel
-from ckanext.basedosdados.validator.available_options import (
-    Admin1Enum,
-    Admin2Enum,
-    ContinentEnum,
-    CountryEnum,
-)
 from pydantic import Field
-
-to_line = lambda description: "\n".join(description)
 
 # -------------------------------------
 # ExternalLink Custom Types
@@ -20,6 +8,7 @@ to_line = lambda description: "\n".join(description)
 # -------------------------------------
 # ExternalLink Fields
 # -------------------------------------
+to_line = lambda description: "\n".join(description)
 
 DATASET_ID_FIELD = Field(
     title="ID Base",
@@ -74,7 +63,11 @@ LANGUAGE_FIELD = Field(
 
 HAS_STRUCTURED_DATA_FIELD = Field(
     title="Tem Dados Estruturados",
-    description=to_line(["A fonte externa disponibiliza dados em formatos estruturados, como csv, json, etc?"]),
+    description=to_line(
+        [
+            "A fonte externa disponibiliza dados em formatos estruturados, como csv, json, etc?"
+        ]
+    ),
     yaml_order={
         "id_after": "language",
         "id_before": "has_api",
@@ -103,7 +96,9 @@ IS_FREE_FIELD = Field(
 
 REQUIRES_REGISTRATION_FIELD = Field(
     title="Requer Registro",
-    description=to_line(["A fonte externa requer registro de usuário para acesso aos dados?"]),
+    description=to_line(
+        ["A fonte externa requer registro de usuário para acesso aos dados?"]
+    ),
     yaml_order={
         "id_after": "is_free",
         "id_before": "availability",
@@ -130,7 +125,9 @@ COUNTRY_IP_ADDRESS_REQUIRED_FIELD = Field(
 
 LICENSE_FIELD = Field(
     title="Tipo de Licença",
-    description=to_line(["Qual tipo de licença regula acesso aos dados da fonte externa?"]),
+    description=to_line(
+        ["Qual tipo de licença regula acesso aos dados da fonte externa?"]
+    ),
     yaml_order={
         "id_after": "country_ip_address_required",
         "id_before": "spatial_coverage",
