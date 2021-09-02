@@ -1,33 +1,29 @@
-import {
-  VStack,
-  Box,
-  Stack,
-  HStack,
-  Image,
-  Button,
-  Flex,
-} from "@chakra-ui/react";
+import { VStack, Stack, HStack, Image, Button, Flex } from "@chakra-ui/react";
 import { MainPageTemplate } from "../../components/templates/main";
 import { withStrapiPages } from "../../hooks/strapi.hook";
 import { listDatasets, showDataset } from "../api/datasets";
-import SectionTitle from "../../components/atoms/SectionTitle";
 import SectionText from "../../components/atoms/SectionText";
 import Title from "../../components/atoms/Title";
 import { CategoryIcon } from "../../components/atoms/CategoryIcon";
 import BigTitle from "../../components/atoms/BigTitle";
-import {
-  CheckboxFilterAccordion,
-  FilterAccordion,
-} from "../../components/atoms/FilterAccordion";
+import { FilterAccordion } from "../../components/atoms/FilterAccordion";
 import { useState } from "react";
-import { SimpleTable } from "../../components/atoms/SimpleTable";
 import Highlight, { defaultProps } from "prism-react-renderer";
 import { ExpandableTable } from "../../components/molecules/ExpandableTable";
-import { filterOnlyValidValues, formatObjectsInArray } from "../../utils";
+import {
+  filterOnlyValidValues,
+  formatObjectsInArray,
+  isBdPlus,
+  translate,
+} from "../../utils";
 import Link from "../../components/atoms/Link";
+import { SimpleButton } from "../../components/atoms/SimpleButton";
+import { Markdown } from "../../components/atoms/Markdown";
+import { getTranslations } from "../api/translations";
 
 export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
+  const translations = await getTranslations();
   const resources = dataset["resources"];
   const bdmTables = resources.filter((r) => r.resource_type === "bdm_table");
   const externalLinks = resources.filter(
@@ -39,7 +35,8 @@ export async function getStaticProps(context) {
       dataset,
       bdmTables,
       externalLinks,
-      isPlus: dataset.download_type === "BD Mais",
+      translations,
+      isPlus: isBdPlus(dataset),
     },
     revalidate: 1, //TODO: Increase this timer
   });
@@ -56,7 +53,13 @@ export async function getStaticPaths(context) {
   };
 }
 
-function BaseResourcePage({ title, buttonText, onClick, children }) {
+function BaseResourcePage({
+  title,
+  buttonText,
+  onClick,
+  children,
+  buttonRightIcon = <></>,
+}) {
   return (
     <VStack
       width="100%"
@@ -80,7 +83,12 @@ function BaseResourcePage({ title, buttonText, onClick, children }) {
             marginTop={{ base: "20px", lg: "0px" }}
             height="35px"
             borderRadius="13px"
+            fontFamily="Lato"
+            alignContent="center"
+            justifyContent="center"
             letterSpacing="0.1em"
+            boxShadow="0px 4px 4px 0px #00000040"
+            rightIcon={buttonRightIcon}
             onClick={onClick}
           >
             {buttonText}
@@ -94,7 +102,7 @@ function BaseResourcePage({ title, buttonText, onClick, children }) {
   );
 }
 
-function BdmTablePage({ resource, datasetName }) {
+function BdmTablePage({ translations, resource, datasetName }) {
   const [selectedConsultation, setSelectedConsultation] = useState("BigQuery");
   const consultationOptions = ["BigQuery", "Python", "R"];
   const queryName = `${datasetName}.${resource.name}`;
@@ -133,25 +141,22 @@ df <- read_sql(query)`,
   return (
     <BaseResourcePage
       title={`${resource.name} ${resource.bdm_file_size ? getSizeLabel() : ""}`}
-      buttonText="Download"
-      onClick={() => {}}
     >
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <SectionText>
           <b>Descrição</b>
         </SectionText>
-        <SectionText wordBreak="break-word" fontWeight="400" fontSize="14px">
+        <Markdown>
           {resource.description || "Nenhuma descrição fornecida."}
-        </SectionText>
+        </Markdown>
       </VStack>
-      <VStack spacing={3} alignItems="flex-start">
+      <VStack width="100%" spacing={3} alignItems="flex-start">
         <SectionText>
           <b>Coluna</b>
         </SectionText>
         <ExpandableTable
           headers={["nome", "descrição"]}
           values={resource.columns.map((c) => [c.name, c.description])}
-          containerStyle={{ paddingBottom: "30px" }}
         />
       </VStack>
       <VStack width="100%" spacing={3} alignItems="flex-start">
@@ -194,6 +199,7 @@ df <- read_sql(query)`,
                 borderRadius: "6px",
                 whiteSpace: "break-spaces",
                 wordBreak: "break-all",
+                backgroundColor: "#252A32",
               }}
             >
               {tokens.map((line, i) => (
@@ -218,18 +224,21 @@ df <- read_sql(query)`,
         <ExpandableTable
           containerStyle={{ width: "100%", alignItems: "flex-start" }}
           headers={["nome", "valor"]}
-          values={formatObjectsInArray(filterOnlyValidValues(resource))}
+          values={formatObjectsInArray(
+            filterOnlyValidValues(translate(translations, resource))
+          )}
         />
       </VStack>
     </BaseResourcePage>
   );
 }
 
-function ExternalLinkPage({ resource }) {
+function ExternalLinkPage({ translations, resource }) {
   return (
     <BaseResourcePage
       title={resource.name}
       buttonText="Acessar"
+      buttonRightIcon={<Image src="/img/icons/white_right_arrow.svg" />}
       onClick={() => window.open(resource.url)}
     >
       <VStack spacing={3} alignItems="flex-start">
@@ -244,9 +253,24 @@ function ExternalLinkPage({ resource }) {
         <Title>Metadados</Title>
         <ExpandableTable
           headers={["nome", "valor"]}
-          values={formatObjectsInArray(filterOnlyValidValues(resource))}
+          values={formatObjectsInArray(
+            filterOnlyValidValues(translate(translations, resource))
+          )}
         />
       </VStack>
+    </BaseResourcePage>
+  );
+}
+
+function MetadataPage({ translations, dataset }) {
+  return (
+    <BaseResourcePage title="Metadados">
+      <ExpandableTable
+        headers={["nome", "valor"]}
+        values={formatObjectsInArray(
+          filterOnlyValidValues(translate(translations, dataset))
+        )}
+      />
     </BaseResourcePage>
   );
 }
@@ -257,6 +281,7 @@ export default function DatasetPage({
   externalLinks,
   strapiPages,
   isPlus,
+  translations,
 }) {
   const [resource, setResource] = useState(
     bdmTables.length > 0 ? bdmTables[0] : externalLinks[0]
@@ -273,14 +298,28 @@ export default function DatasetPage({
     switch (resource.resource_type) {
       case "bdm_table":
         return (
-          <BdmTablePage datasetName={dataset.dataset_id} resource={resource} />
+          <BdmTablePage
+            translations={translations["bdm_table"]}
+            datasetName={dataset.dataset_id}
+            resource={resource}
+          />
         );
 
       case "external_link":
-        return <ExternalLinkPage resource={resource} />;
+        return (
+          <ExternalLinkPage
+            translations={translations["external_link"]}
+            resource={resource}
+          />
+        );
 
       default:
-        return <BdmTablePage resource={resource} />;
+        return (
+          <MetadataPage
+            translations={translations["dataset"]}
+            dataset={dataset}
+          />
+        );
     }
   }
 
@@ -290,19 +329,20 @@ export default function DatasetPage({
         direction={{ base: "column", lg: "row" }}
         width={{ base: "90%", lg: "85%" }}
         margin="auto"
-        spacing={20}
+        spacing={10}
       >
         <VStack
           alignItems={{ base: "flex-start", lg: "flex-start" }}
           justifyContent="flex-start"
+          width="220px"
         >
           <Image
             borderRadius="31.8889px"
             boxShadow="0px 0px 10px rgba(0,0,0,0.25)"
-            minWidth="200px"
-            minHeight="200px"
-            maxWidth="300px"
-            maxHeight="300px"
+            minWidth="220px"
+            minHeight="220px"
+            maxWidth="220px"
+            maxHeight="220px"
             borderRadius="31px"
             objectFit="contain"
             src={
@@ -317,9 +357,7 @@ export default function DatasetPage({
           >
             <VStack alignItems="flex-start">
               <Title>Organização</Title>
-              <Link
-                href={`/_nxt/search?organization=${dataset.organization.name}`}
-              >
+              <Link href={`/dataset?organization=${dataset.organization.name}`}>
                 <SectionText fontWeight="400" fontSize="14px">
                   {dataset.organization.title}
                 </SectionText>
@@ -328,11 +366,11 @@ export default function DatasetPage({
             <VStack alignItems="flex-start">
               <Title paddingTop="">Temas</Title>
               {dataset.groups.map((g) => (
-                <Link href={`/_nxt/search?group=${g.name}`}>
+                <Link href={`/dataset?group=${g.name}`}>
                   <HStack key={g.name}>
                     <CategoryIcon
                       size="39px"
-                      url={`/_nxt/img/categories/icone_${g.name}${
+                      url={`/img/categories/icone_${g.name}${
                         isPlus ? "-1" : ""
                       }.svg`}
                     />
@@ -351,9 +389,8 @@ export default function DatasetPage({
           <BigTitle fontSize="30px" color="black">
             {dataset.title}
           </BigTitle>
-          <SectionText fontWeight="400" fontSize="14px" textAlign="left">
-            {dataset.notes}
-          </SectionText>
+          <Markdown>{dataset.notes}</Markdown>
+
           <Stack
             paddingTop="20px"
             direction={{ base: "column", lg: "row" }}
@@ -365,6 +402,12 @@ export default function DatasetPage({
               maxWidth={{ base: "100%", lg: "200px" }}
               spacing={5}
             >
+              <SimpleButton
+                isActive={resource.resource_type === "metadata"}
+                onClick={() => setResource({ resource_type: "metadata" })}
+              >
+                Metadados
+              </SimpleButton>
               {bdmTables.length > 0 ? (
                 <FilterAccordion
                   choices={bdmTables}
@@ -374,6 +417,7 @@ export default function DatasetPage({
                   isActive={resource.resource_type === "bdm_table"}
                   isOpen={bdmTableFilter}
                   fieldName="Tabelas"
+                  bdPlus={true}
                   onChange={(name) =>
                     setResource(bdmTables.filter((b) => b.name === name)[0])
                   }

@@ -2,14 +2,14 @@ import axios from "axios";
 import { axiosInstance } from "../../axios";
 
 export function getRecentDatasets() {
-  return axiosInstance
-    .get("/bd_recent_datasets_list?limit=10")
+  return axios
+    .get("http://ckan:5000/api/3/action/bd_recent_datasets_list?limit=10")
     .then(({ data }) => data.result);
 }
 
 export function getPopularDatasets() {
-  return axiosInstance
-    .get("/bd_popular_datasets_list?limit=10")
+  return axios
+    .get("http://ckan:5000/api/3/action/bd_popular_datasets_list?limit=10")
     .then(({ data }) => data.result);
 }
 
@@ -25,22 +25,26 @@ export function showDataset(id) {
     .then(({ data }) => data.result);
 }
 
-export function searchDatasets({ search = "", sort = "", paramFilters = {} }) {
-  let url = `/bd_dataset_search?q=${search}`;
+export function searchDatasets({
+  search = "",
+  sort = "",
+  page = 1,
+  paramFilters = {},
+}) {
+  let url = `/bd_dataset_search?q=${search}&page=${page}`;
   let entries = Object.entries(paramFilters);
 
   if (search == null) return { count: 0, results: [] };
 
   if (sort) {
-    url += "&sort=" + encodeURI(sort);
+    url += "&order_by=" + encodeURI(sort);
   }
 
   if (entries.length > 0) {
-    url += "&fq=";
     Object.entries(paramFilters).forEach(([k, v]) => {
       if (v.length == 0 || !v) return;
 
-      url += `${k}:${v.join(" ")} `;
+      url += `&${k}=${v.join(",")} `;
     });
   }
 

@@ -4,18 +4,17 @@ import {
   CircularProgress,
   Flex,
   Image,
-  Stack,
   VStack,
 } from "@chakra-ui/react";
-import { useQuery } from "react-query";
 import { useRouter } from "next/router";
 import BigTitle from "../../components/atoms/BigTitle";
 import SiteHead from "../../components/atoms/SiteHead";
 import Menu from "../../components/molecules/Menu";
 import Footer from "../../components/molecules/Footer";
-import { getStrapiPage, getStrapiPages } from "../api/strapi";
+import { getStrapiPages } from "../api/strapi";
 import { useEffect, useState } from "react";
 import showdown from "showdown";
+import { MainPageTemplate } from "../../components/templates/main";
 
 export async function getStaticProps(context) {
   let { data: strapiPages } = await getStrapiPages();
@@ -67,9 +66,7 @@ function BlogPage({ strapiPages = [] }) {
 
   if (!data)
     return (
-      <>
-        <SiteHead />
-        <Menu strapiPages={strapiPages} />
+      <MainPageTemplate strapiPages={strapiPages}>
         <Center
           minHeight="600px"
           width="100%"
@@ -78,36 +75,33 @@ function BlogPage({ strapiPages = [] }) {
         >
           <CircularProgress isIndeterminate />
         </Center>
-        <Footer />
-      </>
+      </MainPageTemplate>
     );
 
   return (
-    <>
-      <SiteHead />
-      <Menu strapiPages={strapiPages} />
+    <MainPageTemplate strapiPages={strapiPages}>
       <VStack
         alignItems="center"
         width="100%"
         backgroundColor="#fafafa"
-        padding="50px 8%"
-        paddingTop="200px"
+        padding="0px 8%"
+        paddingTop="50px"
         minHeight="60vh"
       >
         <>
           <BigTitle>{data.title}</BigTitle>
-          <Box position="absolute" width="80%">
+          <Box position="relative" width="80%">
             <Box
               position="absolute"
               right="0px"
-              top="-200%"
+              top="-500%"
               minWidth="100px"
               minHeight="108px"
               zIndex="0"
             >
               <Image
                 priority
-                src="/_nxt/img/home_background.png"
+                src="/img/home_background.png"
                 layout="fill"
                 objectFit="contain"
               />
@@ -133,8 +127,7 @@ function BlogPage({ strapiPages = [] }) {
           </Flex>
         </>
       </VStack>
-      <Footer />
-    </>
+    </MainPageTemplate>
   );
 }
 

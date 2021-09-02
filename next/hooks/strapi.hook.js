@@ -10,6 +10,10 @@ export async function withStrapiPages(staticProps = null) {
     };
   }
 
+  if (staticProps.props == null) {
+    staticProps.props = {};
+  }
+
   staticProps.props.strapiPages = strapiPages;
 
   return staticProps;

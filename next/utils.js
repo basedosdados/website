@@ -40,3 +40,20 @@ export function limitTextSize(text, size) {
 
   return text;
 }
+
+export function isBdPlus(dataset) {
+  return dataset.resources.some((r) => r.resource_type === "bdm_table");
+}
+
+export function translate(translations, object) {
+  const newObj = {};
+
+  if (!object) return {};
+
+  Object.entries(object).forEach(([k, v]) => {
+    if (k in translations) newObj[translations[k]] = v;
+    else newObj[k] = v;
+  });
+
+  return newObj;
+}

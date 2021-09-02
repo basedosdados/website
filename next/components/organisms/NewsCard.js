@@ -20,7 +20,7 @@ export default function NewsCard({ image, site, title }) {
       <Image
         width="25px"
         height="auto"
-        src="/_nxt/img/arrow_black_right.png"
+        src="/img/arrow_black_right.png"
         position="absolute"
         right="20px"
         bottom="20px"

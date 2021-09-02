@@ -7,14 +7,16 @@ import {
   DrawerContent,
   useDisclosure,
   Divider,
+  Avatar,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import ControlledInput from "../atoms/ControlledInput";
 import RoundedButton from "../atoms/RoundedButton";
 import Link from "../atoms/Link";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import UserContext from "../../context/user";
 
 function MenuDrawer({ isOpen, onClose, links }) {
   return (
@@ -36,17 +38,18 @@ function MenuDrawer({ isOpen, onClose, links }) {
 
 function DesktopLinks({ links }) {
   const [search, setSearch] = useState();
+  const userData = useContext(UserContext);
 
   function openSearchLink() {
-    window.open(`/_nxt/search/?q=${search}`, "_self");
+    window.open(`/dataset?q=${search}`, "_self");
   }
 
   return (
     <HStack
       justifyContent="space-between"
       width="100%"
-      display={{ base: "none", md: "flex" }}
-      position={{ base: "relative", md: "initial" }}
+      display={{ base: "none", lg: "flex" }}
+      position={{ base: "relative", lg: "initial" }}
     >
       <HStack width="100%" flex="3" spacing={7}>
         {Object.entries(links).map(([k, v]) =>
@@ -79,15 +82,30 @@ function DesktopLinks({ links }) {
                 onClick={openSearchLink}
                 layout="fill"
                 objectFit="contain"
-                src="/_nxt/img/icon_search.png"
+                src="/img/icon_search.png"
               />
             </Box>
           }
         />
-        <Link href="/user/login">Entrar</Link>
-        <Link href="/user/register">
-          <RoundedButton minWidth="150px">Cadastrar</RoundedButton>
-        </Link>
+        {userData ? (
+          <HStack spacing={5}>
+            <Avatar
+              bg="#2B8C4D"
+              name={userData?.fullname}
+              src={userData.image_url}
+            />
+            <Link style={{ fontSize: "12px" }} href={`/user/${userData.name}`}>
+              {userData.fullname}
+            </Link>
+          </HStack>
+        ) : (
+          <>
+            <Link href="/user/login">Entrar</Link>
+            <Link href="/user/register">
+              <RoundedButton minWidth="150px">Cadastrar</RoundedButton>
+            </Link>
+          </>
+        )}
       </HStack>
     </HStack>
   );
@@ -96,9 +114,10 @@ function DesktopLinks({ links }) {
 export default function Menu({ strapiPages = [] }) {
   const menuDisclosure = useDisclosure();
   const divRef = useRef();
+  const userData = useContext(UserContext);
 
   const links = {
-    Dados: "/_nxt/search",
+    Dados: "/dataset",
   };
 
   useEffect(() => {
@@ -111,7 +130,7 @@ export default function Menu({ strapiPages = [] }) {
   }, [divRef.current]);
 
   strapiPages.map((p) => {
-    links[p.MenuTitle] = "/_nxt/blog/" + p.id + "/";
+    links[p.MenuTitle] = "/blog/" + p.id + "/";
   });
 
   links["Newsletter"] =
@@ -135,11 +154,11 @@ export default function Menu({ strapiPages = [] }) {
         as="nav"
       >
         <HStack
-          justifyContent={{ base: "center", md: "flex-start" }}
+          justifyContent={{ base: "center", lg: "flex-start" }}
           width="100%"
           spacing={10}
         >
-          <Box display={{ base: "flex", md: "none" }}>
+          <Box display={{ base: "flex", lg: "none" }}>
             <FontAwesomeIcon
               onClick={menuDisclosure.onOpen}
               style={{
@@ -154,7 +173,7 @@ export default function Menu({ strapiPages = [] }) {
               icon={faBars}
             />
           </Box>
-          <Link href="/_nxt/">
+          <Link href="/">
             <Box
               transform={{ base: "translateX(-20%)", lg: "translateX(0%)" }}
               width={{ base: "120px", lg: "105px" }}
@@ -165,10 +184,18 @@ export default function Menu({ strapiPages = [] }) {
                 priority
                 layout="fill"
                 objectFit="contain"
-                src="/_nxt/img/logo.png"
+                src="/img/logo.png"
               />
             </Box>
           </Link>
+          <Avatar
+            bg="#2B8C4D"
+            position="fixed"
+            right="30px"
+            display={{ base: "flex", lg: "none" }}
+            src={userData?.image_url}
+            name={userData?.fullname}
+          />
           <DesktopLinks links={links} />
         </HStack>
       </Box>

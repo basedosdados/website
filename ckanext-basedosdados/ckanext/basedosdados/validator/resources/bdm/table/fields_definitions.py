@@ -15,23 +15,6 @@ from pydantic import StrictStr as Str
 # -------------------------------------
 # BdmTable Custom Types
 # -------------------------------------
-
-
-class SpatialCoverage(BaseModel):
-
-    # TODO definir campo complexo de spatial_coverage
-    # 1. ler os dataframes de diretorios para estrurar árvore de dicts e metadados
-    # incluir IDs de entidades e nomes
-    # 2. transformar isso num dict para front-end
-    # fmt: off
-    continent : Optional[Set[ContinentEnum]] = Field(user_input_hint=["Continente"])
-    country   : Optional[Set[CountryEnum]]   = Field(user_input_hint=["País"])
-    admin1    : Optional[Set[Admin1Enum]]    = Field(user_input_hint=["UF/Estado"])
-    admin2    : Optional[Set[Admin2Enum]]    = Field(user_input_hint=["Município/Condado"])
-    # admin3    : Optional[Str] = Field(user_input_hint=["Distrito"])
-    # fmt: on
-
-
 class LastUpdated(BaseModel):
     # fmt: off
     metadata: Optional[datetime] = Field(user_input_hint=["Última atualização: metadados"])
@@ -319,10 +302,17 @@ COLUMNS_FIELD = Field(
     ),
     yaml_order={
         "id_before": "bdm_file_size",
-        "id_after": None,
+        "id_after": "metadata_modified",
     },
 )
 
+METADATA_MODIFIED_FIELD = Field(
+    title="metadata_modified",
+    yaml_order={
+        "id_before": "columns",
+        "id_after": None,
+    },
+)
 
 # =================================================================================================================================
 # =================================================================================================================================

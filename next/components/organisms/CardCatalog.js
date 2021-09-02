@@ -1,8 +1,18 @@
 import React from "react";
 import { Heading } from "@chakra-ui/react";
 import { VStack, HStack } from "@chakra-ui/react";
+import dynamic from "next/dynamic";
+import { slidesToShowPlugin } from "@brainhubeu/react-carousel";
+import "@brainhubeu/react-carousel/lib/style.css";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+
+const Carousel = dynamic(() => import("@brainhubeu/react-carousel"), {
+  ssr: false,
+});
 
 export default function CardCatalog({ sections, containerStyle }) {
+  const isMobile = useCheckMobile();
+
   return (
     <VStack
       {...containerStyle}
@@ -30,18 +40,21 @@ export default function CardCatalog({ sections, containerStyle }) {
           >
             + {key}
           </Heading>
-          <HStack
-            className="no-scrollbar"
-            overflowY="none"
-            overflowX="scroll"
-            alignItems="flex-start"
-            width="100%"
-            spacing={5}
-            paddingBottom="10px"
-            paddingLeft="6%"
+          <Carousel
+            plugins={[
+              "infinite",
+              "arrows",
+              "fastSwipe",
+              {
+                resolve: slidesToShowPlugin,
+                options: {
+                  numberOfSlides: isMobile ? 1 : 4,
+                },
+              },
+            ]}
           >
             {sections[key]}
-          </HStack>
+          </Carousel>
         </VStack>
       ))}
     </VStack>

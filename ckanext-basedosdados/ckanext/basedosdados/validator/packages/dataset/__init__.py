@@ -6,6 +6,7 @@ from ckanext.basedosdados.validator.available_options import (
     TemporalCoverageEnum,
     TimeUnitEnum,
 )
+from ckanext.basedosdados.validator import SpatialCoverage
 from ckanext.basedosdados.validator.packages import _CkanDefaults
 from pydantic import StrictStr as Str
 

@@ -2,31 +2,13 @@
 from typing import Optional, Set
 
 from ckanext.basedosdados.validator import BaseModel
-from ckanext.basedosdados.validator.available_options import (
-    Admin1Enum,
-    Admin2Enum,
-    ContinentEnum,
-    CountryEnum,
-)
+
 from pydantic import Field
 from pydantic import StrictStr as Str
 
 # -------------------------------------
 # Dataset Custom Types
 # -------------------------------------
-
-
-class SpatialCoverage(BaseModel):
-
-    # TODO definir campo complexo de spatial_coverage
-    # 1. ler os dataframes de diretorios para estrurar árvore de dicts e metadados
-    # incluir IDs de entidades e nomes
-    # 2. transformar isso num dict para front-end
-    continent: Optional[Set[ContinentEnum]] = Field(user_input_hint=["Continente"])
-    country: Optional[Set[CountryEnum]] = Field(user_input_hint=["País"])
-    admin1: Optional[Set[Admin1Enum]] = Field(user_input_hint=["UF/Estado"])
-    admin2: Optional[Set[Admin2Enum]] = Field(user_input_hint=["Município/Condado"])
-    #         admin3    : Optional[Str]     = Field(user_input_hint=["Distrito"])
 
 
 to_line = lambda description: "\n".join(description)
@@ -169,7 +151,7 @@ GITHUB_URL_FIELD: Str = Field(
     ],
     yaml_order={
         "id_before": "ckan_url",
-        "id_after": None,
+        "id_after": "metadata_modified",
     },
 )
 
@@ -181,6 +163,10 @@ DOWNLOAD_TYPE_FIELD = Field(
 
 METADATA_MODIFIED_FIELD = Field(
     title="metadata_modified",
+    yaml_order={
+        "id_before": "github_url",
+        "id_after": None,
+    },
 )
 
 AUTHOR_FIELD = Field(

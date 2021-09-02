@@ -3,48 +3,51 @@ import {
   Button,
   Center,
   HStack,
-  List,
-  ListItem,
   Stack,
-  Text,
-  UnorderedList,
   Flex,
   VStack,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import Menu from "../components/molecules/Menu";
-import SiteHead from "../components/atoms/SiteHead";
 import ControlledInput from "../components/atoms/ControlledInput";
 import SectionText from "../components/atoms/SectionText";
 import BigTitle from "../components/atoms/BigTitle";
-import SectionTitle from "../components/atoms/SectionTitle";
 import DatabaseCard from "../components/organisms/DatabaseCard";
-import NewsCard from "../components/organisms/NewsCard";
-import Footer from "../components/molecules/Footer";
 import { useState } from "react";
 import CardCatalog from "../components/organisms/CardCatalog";
 import Title from "../components/atoms/Title";
-import Link from "../components/atoms/Link";
 import Typist from "react-typist";
-import { useQuery } from "react-query";
 import { getPopularDatasets, getRecentDatasets } from "./api/datasets";
-import { getStrapiPages } from "./api/strapi";
 import { ShadowBox } from "../components/atoms/ShadowBox";
-import { Tag } from "../components/atoms/Tag";
 import { MainPageTemplate } from "../components/templates/main";
 import { withStrapiPages } from "../hooks/strapi.hook";
 import { ThemeTag } from "../components/atoms/ThemeTag";
 import { LinkDash } from "../components/atoms/LinkDash";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
+import { isBdPlus } from "../utils";
 
 export async function getStaticProps(context) {
-  return await withStrapiPages();
+  const recentDatasets = await getRecentDatasets();
+  const popularDatasets = await getPopularDatasets();
+
+  return await withStrapiPages({
+    props: {
+      recentDatasets,
+      popularDatasets,
+    },
+    revalidate: 60,
+  });
 }
 
 function HeroText({ children, iconUrl }) {
   return (
-    <VStack maxWidth="400px">
-      <Box width="100%" height="130px" marginBottom="20px" position="relative">
+    <VStack alignItems="center" justifyContent="center" maxWidth="400px">
+      <Box
+        margin="auto"
+        width="100%"
+        height="130px"
+        marginBottom="20px"
+        position="relative"
+      >
         <Image priority objectFit="contain" layout="fill" src={iconUrl} />
       </Box>
       {children}
@@ -56,10 +59,8 @@ function Hero() {
   const [search, setSearch] = useState();
   const isMobile = useCheckMobile();
 
-  console.log("isMobile", isMobile);
-
   function openSearchLink() {
-    return window.open(`/_nxt/search?q=${search}`, "_self");
+    return window.open(`/dataset?q=${search}`, "_self");
   }
 
   return (
@@ -88,7 +89,7 @@ function Hero() {
             >
               <Image
                 priority
-                src="/_nxt/img/home_background.png"
+                src="/img/home_background.png"
                 layout="fill"
                 objectFit="contain"
               />
@@ -139,7 +140,7 @@ function Hero() {
                       onClick={openSearchLink}
                       layout="fill"
                       objectFit="contain"
-                      src="/_nxt/img/arrow_black_right.png"
+                      src="/img/arrow_black_right.png"
                     />
                   </Box>
                 }
@@ -162,22 +163,23 @@ function Hero() {
             direction={{ base: "column", lg: "row" }}
             spacing={10}
           >
-            <HeroText iconUrl="/_nxt/img/icone_busca.png">
+            <HeroText iconUrl="/img/icone_busca.png">
               <SectionText fontSize="14px" textAlign="center">
                 Com o mecanismo de busca é possível descobrir informações sobre
                 mais de 900 bases de dados de diversos temas e organizações.
               </SectionText>
             </HeroText>
-            <HeroText iconUrl="/_nxt/img/icone_download.png">
+            <HeroText iconUrl="/img/icone_download.png">
               <SectionText fontSize="14px" textAlign="center">
                 Disponibilizamos o download dos dados tratados e atualizados
-                direto do nosso datalake público num só click.
+                direto do nosso <i>datalake</i> público num só click.
               </SectionText>
             </HeroText>
-            <HeroText iconUrl="/_nxt/img/icone_pacotes.png">
+            <HeroText iconUrl="/img/icone_pacotes.png">
               <SectionText fontSize="14px" textAlign="center">
-                Através dos nossos pacotes de programação você pode acessar o
-                datalake público BD+ em Python, R ou pela linha de comando.
+                Através dos nossos pacotes de programação você pode acessar o{" "}
+                <i>datalake</i> público BD+ em Python, R ou pela linha de
+                comando.
               </SectionText>
             </HeroText>
           </Stack>
@@ -197,7 +199,7 @@ function Hero() {
             priority
             layout="fill"
             objectFit="contain"
-            src="/_nxt/img/arrow_white_down.png"
+            src="/img/arrow_white_down.png"
           />
         </Box>
       </Center>
@@ -205,10 +207,8 @@ function Hero() {
   );
 }
 
-function CatalogNews() {
-  const recentDatasets = useQuery("recentDatasets", getRecentDatasets);
-  const popularDatasets = useQuery("popularDatasets", getPopularDatasets);
-
+function CatalogNews({ recentDatasets, popularDatasets }) {
+  console.log("datasets", recentDatasets, popularDatasets);
   return (
     <VStack
       width="100%"
@@ -225,9 +225,9 @@ function CatalogNews() {
       </BigTitle>
       <CardCatalog
         sections={{
-          populares: (popularDatasets.data || []).map((d) => (
+          populares: (popularDatasets || []).map((d) => (
             <DatabaseCard
-              link={`/_nxt/dataset/${d.name}`}
+              link={`/dataset/${d.name}`}
               name={d.title}
               organization={d.organization.title}
               organizationSlug={d.organization.name}
@@ -248,7 +248,7 @@ function CatalogNews() {
               updatedSince={d.metadata_modified}
               updatedAuthor="Ricardo Dahis"
               categories={d.groups.map((g) => g.name)}
-              isPlus={d.download_type === "BD Mais"}
+              isPlus={isBdPlus(d)}
             />
           )),
         }}
@@ -263,16 +263,16 @@ function CatalogNews() {
       >
         <Image
           priority
-          src="/_nxt/img/home_background.png"
+          src="/img/home_background.png"
           layout="fill"
           objectFit="contain"
         />
       </Box>
       <CardCatalog
         sections={{
-          recentes: (recentDatasets.data || []).map((d) => (
+          recentes: (recentDatasets || []).map((d) => (
             <DatabaseCard
-              link={`/_nxt/dataset/${d.name}`}
+              link={`/dataset/${d.name}`}
               name={d.title}
               organization={d.organization.title}
               organizationSlug={d.organization.name}
@@ -293,7 +293,7 @@ function CatalogNews() {
               updatedSince={d.metadata_modified}
               updatedAuthor="Ricardo Dahis"
               categories={d.groups.map((g) => g.name)}
-              isPlus={d.download_type === "BD Mais"}
+              isPlus={isBdPlus(d)}
             />
           )),
         }}
@@ -340,7 +340,7 @@ function ExploreInYourFavoriteLanguage() {
             Desenvolvemos <b>pacotes para acesso aos dados da BD+</b> em Python,
             R e linha de comando. Além disso, você pode{" "}
             <b>consultar e filtrar dados usando SQL</b> no editor do nosso
-            datalake no Google BigQuery.
+            <i>datalake</i> no Google BigQuery.
           </SectionText>
           <LinkDash href="https://basedosdados.github.io/mais/">
             Veja mais
@@ -395,7 +395,7 @@ function LearnToAnalysis() {
             objectFit="contain"
             objectPosition="0"
             layout="fill"
-            src="/_nxt/img/tela_jupyter.png"
+            src="/img/tela_jupyter.png"
           />
         </Box>
       }
@@ -411,7 +411,7 @@ function LearnToAnalysis() {
           >
             <Image
               priority
-              src="/_nxt/img/home_background.png"
+              src="/img/home_background.png"
               layout="fill"
               objectFit="contain"
             />
@@ -427,10 +427,11 @@ function LearnToAnalysis() {
           </Title>
           <VStack spacing={4} zIndex="1" position="relative">
             <SectionText textAlign="justify">
-              Produzimos tutoriais e ensaios no blog, workshops no Youtube e
-              análises nas redes sociais com nossos dados. Disponibilizamos os
-              códigos completos no nosso GitHub para você testar e reproduzir
-              localmente
+              Produzimos{" "}
+              <b> tutoriais e ensaios no blog, workshops no Youtube</b> e{" "}
+              <b>análises nas redes sociais</b> com nossos dados.
+              Disponibilizamos os <b>códigos completos</b> no nosso GitHub para
+              você testar e reproduzir localmente
             </SectionText>
             <HStack alignItems="flex-start" width="100%" spacing={5}>
               <LinkDash href="https://www.youtube.com/c/BasedosDados/videos">
@@ -479,7 +480,7 @@ function JoinTheCommunity() {
             priority
             layout="fill"
             objectFit="contain"
-            src="/_nxt/img/tela_discord.png"
+            src="/img/tela_discord.png"
           />
         </Box>
       }
@@ -530,7 +531,7 @@ function Support() {
       >
         <Image
           priority
-          src="/_nxt/img/home_background.png"
+          src="/img/home_background.png"
           layout="fill"
           objectFit="contain"
         />
@@ -543,8 +544,8 @@ function Support() {
       >
         <ShadowBox height="270px" title="Voluntariado">
           <SectionText fontSize="14px" height="100px">
-            Ajude a manter e aprimorar pacotes, suba bases no nosso datalake ou
-            construa análises e tutoriais para nossas redes.
+            Ajude a manter e aprimorar pacotes, suba bases no nosso{" "}
+            <i>datalake</i> ou construa análises e tutoriais para nossas redes.
           </SectionText>
           <SupportButton link="https://basedosdados.github.io/mais/colab_data/">
             Comece aqui
@@ -575,7 +576,7 @@ function Support() {
   );
 }
 
-export default function Home({ strapiPages }) {
+export default function Home({ strapiPages, recentDatasets, popularDatasets }) {
   return (
     <MainPageTemplate strapiPages={strapiPages}>
       <VStack
@@ -589,7 +590,10 @@ export default function Home({ strapiPages }) {
       >
         <Hero />
       </VStack>
-      <CatalogNews />
+      <CatalogNews
+        recentDatasets={recentDatasets}
+        popularDatasets={popularDatasets}
+      />
       <VStack
         spacing={20}
         transform="translateY(-100px)"
@@ -606,7 +610,7 @@ export default function Home({ strapiPages }) {
         <Support />
       </VStack>
       <script
-        src="/_nxt/vendor/terminal.js"
+        src="/vendor/terminal.js"
         data-termynal-container="#termynal"
       ></script>
     </MainPageTemplate>
