@@ -1,6 +1,9 @@
-export function filterOnlyValidValues(obj) {
+export function filterOnlyValidValues(obj, validValues = null) {
   return Object.entries(obj).filter(
-    ([k, v]) => ["", null, " "].indexOf(v) == -1 && ["columns"].indexOf(k) == -1
+    ([k, v]) =>
+      ["", null, " "].indexOf(v) == -1 &&
+      ["columns"].indexOf(k) == -1 &&
+      (validValues == null || (validValues && validValues.indexOf(k) != -1))
   );
 }
 
@@ -46,14 +49,8 @@ export function isBdPlus(dataset) {
 }
 
 export function translate(translations, object) {
-  const newObj = {};
-
-  if (!object) return {};
-
-  Object.entries(object).forEach(([k, v]) => {
-    if (k in translations) newObj[translations[k]] = v;
-    else newObj[k] = v;
+  return object.map(([k, v]) => {
+    if (k in translations) return [translations[k], v];
+    else return [k, v];
   });
-
-  return newObj;
 }

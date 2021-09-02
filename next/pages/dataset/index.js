@@ -84,7 +84,7 @@ export default function SearchPage({ strapiPages }) {
       tag: query.tag ? [query.tag] : [],
       organization: query.organization ? [query.organization] : [],
       group: query.group ? [query.group] : [],
-      download_type: query.bdPlus ? ["BD Mais"] : [],
+      resource_type: query.bdPlus ? ["bdm_table"] : [],
     });
 
     setFilterKey(filterKey + 1);
@@ -127,19 +127,20 @@ export default function SearchPage({ strapiPages }) {
             Filtrar por
           </SectionTitle>
           <CheckboxFilterAccordion
-            isActive={(paramFilters.download_type || []).length > 0}
+            isActive={(paramFilters.resource_type || []).length > 0}
             choices={[
               {
+                key: "bdm_table",
                 name: "BD Mais",
               },
-              { name: "Link Externo" },
+              { key: "external_link", name: "Link Externo" },
             ]}
-            values={paramFilters.download_type}
-            valueField="name"
+            values={paramFilters.resource_type}
+            valueField="key"
             displayField="name"
             fieldName="Forma de Download"
             onChange={(values) =>
-              setParamFilters({ ...paramFilters, download_type: values })
+              setParamFilters({ ...paramFilters, resource_type: values })
             }
           />
           <CheckboxFilterAccordion
@@ -194,6 +195,7 @@ export default function SearchPage({ strapiPages }) {
               backgroundColor: "#ffffff",
               color: "#6F6F6F",
               fontSize: "16px",
+              fontWeight: 500,
               height: "50px",
               boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.20)",
             }}

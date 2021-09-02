@@ -161,7 +161,7 @@ df <- read_sql(query)`,
       </VStack>
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Title>Consulta aos dados</Title>
-        <HStack>
+        <Stack width="100%" direction={{ base: "column", lg: "row" }}>
           {consultationOptions.map((c) => {
             const selected = c === selectedConsultation;
             return (
@@ -183,7 +183,27 @@ df <- read_sql(query)`,
               </Button>
             );
           })}
-        </HStack>
+          <Link
+            href={`https://storage.googleapis.com/basedosdados-public/one-click-download/${datasetName}/${resource.name}.zip`}
+          >
+            <Button
+              borderWidth={"1px"}
+              borderColor={"#DEDFE0"}
+              fontSize="14px"
+              fontFamily="Lato"
+              color={"black"}
+              height="35px"
+              letterSpacing="0.1em"
+              borderRadius="8px"
+              width={{ base: "100%", lg: "initial" }}
+              minWidth="110px"
+              backgroundColor="transparent"
+              fontWeight={"regular"}
+            >
+              Download
+            </Button>
+          </Link>
+        </Stack>
         <Highlight
           code={consultationText[selectedConsultation]}
           language={consultationLanguage[selectedConsultation]}
@@ -225,7 +245,30 @@ df <- read_sql(query)`,
           containerStyle={{ width: "100%", alignItems: "flex-start" }}
           headers={["nome", "valor"]}
           values={formatObjectsInArray(
-            filterOnlyValidValues(translate(translations, resource))
+            translate(
+              translations,
+              filterOnlyValidValues(resource, [
+                "table_id",
+                "spatial_coverage",
+                "temporal_coverage",
+                "update_frequency",
+                "entity",
+                "time_unit",
+                "identifying_columns",
+                "last_updated",
+                "version",
+                "published_by",
+                "data_cleaned_by",
+                "data_cleaning_description",
+                "raw_files_url",
+                "auxiliary_files_url",
+                "architecture_url",
+                "covered_by_dictionary",
+                "partitions",
+                "bdm_file_size",
+                "columns",
+              ])
+            )
           )}
         />
       </VStack>
@@ -241,20 +284,32 @@ function ExternalLinkPage({ translations, resource }) {
       buttonRightIcon={<Image src="/img/icons/white_right_arrow.svg" />}
       onClick={() => window.open(resource.url)}
     >
-      <VStack spacing={3} alignItems="flex-start">
-        <SectionText>
-          <b>Descrição</b>
-        </SectionText>
-        <SectionText fontWeight="400" fontSize="14px">
-          {resource.description || "Nenhuma descrição fornecida."}
-        </SectionText>
-      </VStack>
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Title>Metadados</Title>
         <ExpandableTable
           headers={["nome", "valor"]}
           values={formatObjectsInArray(
-            filterOnlyValidValues(translate(translations, resource))
+            translate(
+              translations,
+              filterOnlyValidValues(resource, [
+                "title",
+                "url",
+                "description",
+                "language",
+                "has_structured_data",
+                "has_api",
+                "is_free",
+                "requires_registration",
+                "availability",
+                "country_ip_address_required",
+                "license",
+                "spatial_coverage",
+                "temporal_coverage",
+                "update_frequency",
+                "entity",
+                "time_unit",
+              ])
+            )
           )}
         />
       </VStack>
@@ -268,7 +323,21 @@ function MetadataPage({ translations, dataset }) {
       <ExpandableTable
         headers={["nome", "valor"]}
         values={formatObjectsInArray(
-          filterOnlyValidValues(translate(translations, dataset))
+          translate(
+            translations,
+            filterOnlyValidValues(dataset, [
+              "id",
+              "groups",
+              "tags",
+              "spatial_coverage",
+              "temporal_coverage",
+              "update_frequency",
+              "entity",
+              "time_unit",
+              "ckan_url",
+              "github_url",
+            ])
+          )
         )}
       />
     </BaseResourcePage>
@@ -429,14 +498,14 @@ export default function DatasetPage({
               {externalLinks.length > 0 ? (
                 <FilterAccordion
                   choices={externalLinks}
-                  valueField="name"
+                  valueField="url"
                   displayField="name"
                   isActive={resource.resource_type === "external_link"}
                   isOpen={externalLinkTableFilter}
                   fieldName="Links Externos"
-                  value={resource.name}
-                  onChange={(name) =>
-                    setResource(externalLinks.filter((b) => b.name === name)[0])
+                  value={resource.url}
+                  onChange={(url) =>
+                    setResource(externalLinks.filter((b) => b.url === url)[0])
                   }
                   onToggle={() =>
                     setExternalLinkTableFilter(!externalLinkTableFilter)
