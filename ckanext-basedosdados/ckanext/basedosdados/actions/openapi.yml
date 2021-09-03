@@ -7,6 +7,7 @@ info:
     Endpoints da Base Dos Dados e do [CKAN]("https://docs.ckan.org/en/2.9/api/#action-api-reference")
   version: '0.1'
 servers:
+  - url: http://localhost/api/3/action
   - url: https://basedosdados.org/api/3/action
   - url: https://staging.basedosdados.org/api/3/action
 paths:
@@ -80,8 +81,6 @@ paths:
           description: ""
       tags:
         - CKAN
-############################################################
-############################################################
   /bd_bdm_dataset_show:
     get:
       description: Procura de datasets pelo ID
