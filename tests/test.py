@@ -32,9 +32,9 @@ def test():
     assert ret.status_code == 200, ret.json()
     package = ret.json()["result"]
 
-    ret = requests.post(CKAN_URL + "/api/3/action/bd_package_validate", json=package)
+    ret = requests.post(CKAN_URL + "/api/3/action/package_validate", json=package)
     assert ret.status_code == 200, ret.json()
-    assert ckan.action.bd_package_validate(**package)
+    assert ckan.action.package_validate(**package)
 
     if CKAN_API_KEY:
         ret = ckan.action.package_update(**package)
@@ -63,7 +63,7 @@ def test():
         ret = ckan.action.package_delete(id=ret["id"])
 
     del package["name"]
-    ret = requests.post(CKAN_URL + "/api/3/action/bd_package_validate", json=package)
+    ret = requests.post(CKAN_URL + "/api/3/action/package_validate", json=package)
     assert ret.status_code == 409, ret.json()
     assert ret.json()["error"] == {
         "message": [

@@ -219,7 +219,7 @@
         ]
       }
     },
-    "/bd_package_validate": {
+    "/package_validate": {
       "post": {
         "description": "Realiza a validação de um dataset com Pydantic",
         "requestBody": {
