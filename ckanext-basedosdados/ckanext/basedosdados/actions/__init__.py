@@ -9,7 +9,7 @@ log = logging.getLogger(__name__)
 ValidationError = logic.ValidationError
 
 
-def package_validate(context, data_dict):
+def bd_dataset_validate(context, data_dict):
     context["ignore_auth"] = True
 
     if "type" not in data_dict:

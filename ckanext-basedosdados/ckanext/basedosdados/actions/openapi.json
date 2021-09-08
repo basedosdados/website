@@ -2,18 +2,21 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Base dos Dados",
-    "description": "**Descrição**\n- Endpoints da Base Dos Dados e do [CKAN](\"https://docs.ckan.org/en/2.9/api/#action-api-reference\")\n\n**Para atualizar uma base:**  \n- Valide os dados com **package_show**;\n- Adicione uma chave de api valida do CKAN;\n- Atualize a base com **package_update**.\n\n**Para visualizar uma base:**  \n- Visualize com o **package_show**.\n",
+    "description": "**Descrição**\n- Endpoints da Base Dos Dados e do [CKAN](\"https://docs.ckan.org/en/2.9/api/#action-api-reference\")\n\n**Para visualizar uma base:**  \n- Visualize com o **package_show**.\n\n**Para atualizar uma base:**  \n- Realize download dos dados com **package_show**;\n- Atualize manualmente a base (com ponderação);\n- Valide a alteração com **bd_dataset_validate**;\n- Atualize a base com **package_update**.\n",
     "version": "0.1"
   },
   "servers": [
     {
-      "url": "http://localhost/api/3/action"
+      "url": "https://staging.basedosdados.org/api/3/action",
+      "description": "Servidor de homologação"
     },
     {
-      "url": "https://basedosdados.org/api/3/action"
+      "url": "https://basedosdados.org/api/3/action",
+      "description": "Servidor de produção"
     },
     {
-      "url": "https://staging.basedosdados.org/api/3/action"
+      "url": "http://localhost:5000/api/3/action",
+      "description": "Servidor local"
     }
   ],
   "paths": {
@@ -27,7 +30,7 @@
             "schema": {
               "type": "string"
             },
-            "example": "br-abrinq-oca"
+            "example": "br-bd-diretorios-brasil"
           }
         ],
         "responses": {
@@ -35,6 +38,51 @@
             "description": ""
           }
         },
+        "tags": [
+          "CKAN"
+        ]
+      }
+    },
+    "/package_update": {
+      "post": {
+        "description": "Atualiza um dataset com Pydantic",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Dataset"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "help": {
+                      "type": "string"
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/Dataset"
+                    },
+                    "sucess": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
         "tags": [
           "CKAN"
         ]
@@ -193,33 +241,7 @@
         ]
       }
     },
-    "/bd_recent_datasets_list": {
-      "get": {
-        "description": "Lista os datasets recentemente modificados",
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Base dos Dados"
-        ]
-      }
-    },
-    "/bd_popular_datasets_list": {
-      "get": {
-        "description": "Lista os datasets populares",
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Base dos Dados"
-        ]
-      }
-    },
-    "/package_validate": {
+    "/bd_dataset_validate": {
       "post": {
         "description": "Realiza a validação de um dataset com Pydantic",
         "requestBody": {
@@ -254,11 +276,32 @@
             }
           }
         },
-        "security": [
-          {
-            "ApiKeyAuth": []
+        "tags": [
+          "Base dos Dados"
+        ]
+      }
+    },
+    "/bd_recent_datasets_list": {
+      "get": {
+        "description": "Lista os datasets recentemente modificados",
+        "responses": {
+          "200": {
+            "description": ""
           }
-        ],
+        },
+        "tags": [
+          "Base dos Dados"
+        ]
+      }
+    },
+    "/bd_popular_datasets_list": {
+      "get": {
+        "description": "Lista os datasets populares",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
         "tags": [
           "Base dos Dados"
         ]

@@ -7,18 +7,23 @@ info:
     **Descrição**
     - Endpoints da Base Dos Dados e do [CKAN]("https://docs.ckan.org/en/2.9/api/#action-api-reference")
     
-    **Para atualizar uma base:**  
-    - Valide os dados com **package_show**;
-    - Adicione uma chave de api valida do CKAN;
-    - Atualize a base com **package_update**.
-    
     **Para visualizar uma base:**  
     - Visualize com o **package_show**.
+    
+    **Para atualizar uma base:**  
+    - Realize download dos dados com **package_show**;
+    - Atualize manualmente a base (com ponderação);
+    - Valide a alteração com **bd_dataset_validate**;
+    - Atualize a base com **package_update**.
+    
   version: '0.1'
 servers:
-  - url: http://localhost/api/3/action
-  - url: https://basedosdados.org/api/3/action
   - url: https://staging.basedosdados.org/api/3/action
+    description: Servidor de homologação
+  - url: https://basedosdados.org/api/3/action
+    description: Servidor de produção
+  - url: http://localhost:5000/api/3/action
+    description: Servidor local
 paths:
   /package_show:
     get:
@@ -28,10 +33,36 @@ paths:
           in: query
           schema:
             type: string
-          example: br-abrinq-oca
+          example: br-bd-diretorios-brasil
       responses:
         '200':
           description: ""
+      tags:
+        - CKAN
+  /package_update:
+    post:
+      description: Atualiza um dataset com Pydantic
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  help:
+                    type: string
+                  result:
+                    $ref: '#/components/schemas/Dataset'
+                  sucess:
+                    type: boolean
+      security:
+        - ApiKeyAuth: []
       tags:
         - CKAN
   /resource_show:
@@ -82,6 +113,8 @@ paths:
           description: ""
       tags:
         - CKAN
+  ############################################################
+  ############################################################
   /organization_list:
     get:
       description: Lista as organizações
@@ -128,23 +161,7 @@ paths:
               examples: {}
       tags:
         - Base dos Dados
-  /bd_recent_datasets_list:
-    get:
-      description: Lista os datasets recentemente modificados
-      responses:
-        '200':
-          description: ""
-      tags:
-        - Base dos Dados
-  /bd_popular_datasets_list:
-    get:
-      description: Lista os datasets populares
-      responses:
-        '200':
-          description: ""
-      tags:
-        - Base dos Dados
-  /package_validate:
+  /bd_dataset_validate:
     post:
       description: Realiza a validação de um dataset com Pydantic
       requestBody:
@@ -166,12 +183,26 @@ paths:
                     $ref: '#/components/schemas/Dataset'
                   sucess:
                     type: boolean
-      security:
-        - ApiKeyAuth: []
       tags:
         - Base dos Dados
-############################################################
-############################################################
+  /bd_recent_datasets_list:
+    get:
+      description: Lista os datasets recentemente modificados
+      responses:
+        '200':
+          description: ""
+      tags:
+        - Base dos Dados
+  /bd_popular_datasets_list:
+    get:
+      description: Lista os datasets populares
+      responses:
+        '200':
+          description: ""
+      tags:
+        - Base dos Dados
+  ############################################################
+  ############################################################
   /bd_dataset_schema:
     get:
       description: Gera um modelo de dataset
@@ -225,7 +256,6 @@ paths:
           description: ""
       tags:
         - Base dos Dados (Schema)
-
 components:
   securitySchemes:
     ApiKeyAuth:
