@@ -9,4 +9,4 @@ build
 configs/ckan.override.prod.ini
 dive.log
 tmp
-utils/packages
+**/packages
