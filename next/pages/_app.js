@@ -12,6 +12,28 @@ function MyApp({ Component, pageProps }) {
     <QueryClientProvider client={queryClient}>
       <Head>
         <link rel="icon" type="image/ico" href="/favicon.ico" />
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary" key="twcard" />
+        <meta name="twitter:creator" content="Base dos Dados" key="twhandle" />
+
+        {/* Open Graph */}
+        <meta property="og:url" content={window.location.href} key="ogurl" />
+        <meta
+          property="og:image"
+          content={window.location.host + "/thumbnails/conjunto.png"}
+          key="ogimage"
+        />
+        <meta
+          property="og:site_name"
+          content="Base dos Dados"
+          key="ogsitename"
+        />
+        <meta property="og:title" content="Base dos Dados" key="ogtitle" />
+        <meta
+          property="og:description"
+          content="Baixe dados já limpos, integrados e atualizados de forma extremamente fácil através do nosso datalake público."
+          key="ogdesc"
+        />
       </Head>
       <ChakraProvider>
         <Component {...pageProps} />

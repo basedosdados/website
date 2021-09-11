@@ -113,7 +113,7 @@ function BaseResourcePage({
 function BdmTablePage({ translations, resource, datasetName }) {
   const [selectedConsultation, setSelectedConsultation] = useState("SQL");
   const consultationOptions = ["SQL", "Python", "R"];
-  const queryName = `${datasetName}.${resource.name}`;
+  const queryName = `${resource.dataset_id}.${resource.name}`;
 
   const consultationLanguage = {
     SQL: "sql",
@@ -125,7 +125,7 @@ function BdmTablePage({ translations, resource, datasetName }) {
     SQL: `SELECT * FROM \`basedosdados.${queryName}\` LIMIT 100`,
     Python: `import basedosdados as bd
 # Para carregar o dado direto no pandas
-df = bd.read_table(dataset_id='${datasetName}', 
+df = bd.read_table(dataset_id='${resource.dataset_id}', 
         table_id='${resource.name}',
         billing_project_id=<YOUR_PROJECT_ID>)`,
     R: `install.packages("basedosdados")
@@ -192,7 +192,28 @@ df <- read_sql(query)`,
             );
           })}
           <Link
-            href={`https://storage.googleapis.com/basedosdados-public/one-click-download/${datasetName}/${resource.name}.zip`}
+            target="_blank"
+            href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${resource.dataset_id}&t=${resource.name}&page=table`}
+          >
+            <Button
+              borderWidth={"1px"}
+              borderColor={"#DEDFE0"}
+              fontSize="14px"
+              fontFamily="Lato"
+              color={"black"}
+              height="35px"
+              letterSpacing="0.1em"
+              borderRadius="8px"
+              width={{ base: "100%", lg: "initial" }}
+              minWidth="110px"
+              backgroundColor="transparent"
+              fontWeight={"regular"}
+            >
+              BigQuery
+            </Button>
+          </Link>
+          <Link
+            href={`https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}.zip`}
           >
             <Button
               borderWidth={"1px"}
