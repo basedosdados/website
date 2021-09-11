@@ -12,6 +12,10 @@ function MyApp({ Component, pageProps }) {
     <QueryClientProvider client={queryClient}>
       <Head>
         <link rel="icon" type="image/ico" href="/favicon.ico" />
+        <link
+          rel="image_src"
+          href="https://i.ibb.co/nD79bG7/thumbnail-conjunto.png"
+        />
         <title>Base dos Dados</title>
         {/* Twitter */}
         <meta name="twitter:card" content="summary" key="twcard" />
