@@ -8,9 +8,6 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import BigTitle from "../../components/atoms/BigTitle";
-import SiteHead from "../../components/atoms/SiteHead";
-import Menu from "../../components/molecules/Menu";
-import Footer from "../../components/molecules/Footer";
 import { getStrapiPages } from "../api/strapi";
 import { useEffect, useState } from "react";
 import showdown from "showdown";

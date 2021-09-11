@@ -206,7 +206,6 @@ function Hero() {
 }
 
 function CatalogNews({ recentDatasets, popularDatasets }) {
-  console.log("datasets", recentDatasets, popularDatasets);
   return (
     <VStack
       width="100%"

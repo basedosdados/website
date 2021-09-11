@@ -1,12 +1,4 @@
-import {
-  VStack,
-  Stack,
-  HStack,
-  Image,
-  Button,
-  Flex,
-  Heading,
-} from "@chakra-ui/react";
+import { VStack, Stack, HStack, Image, Button, Flex } from "@chakra-ui/react";
 import Head from "next/head";
 import { MainPageTemplate } from "../../components/templates/main";
 import { withStrapiPages } from "../../hooks/strapi.hook";
@@ -47,7 +39,7 @@ export async function getStaticProps(context) {
       translations,
       isPlus: isBdPlus(dataset),
     },
-    revalidate: 1, //TODO: Increase this timer
+    revalidate: 60, //TODO: Increase this timer
   });
 }
 
