@@ -54,7 +54,7 @@ export function Database({
         width="100%"
         spacing={10}
       >
-        <Link href={`/dataset?organization=${organization.name}`}>
+        <Link href={link}>
           <Image
             priority
             objectFit="contain"

@@ -26,12 +26,10 @@ import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { isBdPlus } from "../utils";
 
 export async function getStaticProps(context) {
-  const recentDatasets = await getRecentDatasets();
   const popularDatasets = await getPopularDatasets();
 
   return await withStrapiPages({
     props: {
-      recentDatasets,
       popularDatasets,
     },
     revalidate: 60,
@@ -226,51 +224,6 @@ function CatalogNews({ recentDatasets, popularDatasets }) {
       <CardCatalog
         sections={{
           populares: (popularDatasets || []).map((d) => (
-            <DatabaseCard
-              link={`/dataset/${d.name}`}
-              name={d.title}
-              organization={d.organization.title}
-              organizationSlug={d.organization.name}
-              tags={d.tags.map((g) => g.name)}
-              size={
-                d.resources.filter((r) => r.size).length > 0
-                  ? d.resources.filter((r) => r.size)[0].size
-                  : null
-              }
-              tableNum={
-                d.resources.filter((r) => r.resource_type === "bdm_table")
-                  .length
-              }
-              externalLinkNum={
-                d.resources.filter((r) => r.resource_type === "external_link")
-                  .length
-              }
-              updatedSince={d.metadata_modified}
-              updatedAuthor="Ricardo Dahis"
-              categories={d.groups.map((g) => g.name)}
-              isPlus={isBdPlus(d)}
-            />
-          )),
-        }}
-      />
-      <Box
-        position="absolute"
-        right="0px"
-        top="44%"
-        minWidth="850px"
-        minHeight="568px"
-        zIndex="0px"
-      >
-        <Image
-          priority
-          src="/img/home_background.png"
-          layout="fill"
-          objectFit="contain"
-        />
-      </Box>
-      <CardCatalog
-        sections={{
-          recentes: (recentDatasets || []).map((d) => (
             <DatabaseCard
               link={`/dataset/${d.name}`}
               name={d.title}

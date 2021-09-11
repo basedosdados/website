@@ -1,4 +1,12 @@
-import { VStack, Stack, HStack, Image, Button, Flex } from "@chakra-ui/react";
+import {
+  VStack,
+  Stack,
+  HStack,
+  Image,
+  Button,
+  Flex,
+  Heading,
+} from "@chakra-ui/react";
 import { MainPageTemplate } from "../../components/templates/main";
 import { withStrapiPages } from "../../hooks/strapi.hook";
 import { listDatasets, showDataset } from "../api/datasets";
@@ -103,18 +111,18 @@ function BaseResourcePage({
 }
 
 function BdmTablePage({ translations, resource, datasetName }) {
-  const [selectedConsultation, setSelectedConsultation] = useState("BigQuery");
-  const consultationOptions = ["BigQuery", "Python", "R"];
+  const [selectedConsultation, setSelectedConsultation] = useState("SQL");
+  const consultationOptions = ["SQL", "Python", "R"];
   const queryName = `${datasetName}.${resource.name}`;
 
   const consultationLanguage = {
-    BigQuery: "sql",
+    SQL: "sql",
     Python: "python",
     R: "r",
   };
 
   const consultationText = {
-    BigQuery: `SELECT * FROM \`basedosdados.${queryName}\` LIMIT 100`,
+    SQL: `SELECT * FROM \`basedosdados.${queryName}\` LIMIT 100`,
     Python: `import basedosdados as bd
 # Para carregar o dado direto no pandas
 df = bd.read_table(dataset_id='${datasetName}', 
@@ -244,7 +252,7 @@ df <- read_sql(query)`,
         </SectionText>
       </VStack>
       <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Title>Metadados</Title>
+        <Title>Metadados da Tabela</Title>
         <ExpandableTable
           containerStyle={{ width: "100%", alignItems: "flex-start" }}
           headers={["nome", "valor"]}
@@ -290,7 +298,7 @@ function ExternalLinkPage({ translations, resource }) {
       onClick={() => window.open(resource.url)}
     >
       <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Title>Metadados</Title>
+        <Title>Metadados do Link Externo</Title>
         <ExpandableTable
           headers={["nome", "valor"]}
           values={formatObjectsInArray(
@@ -324,7 +332,7 @@ function ExternalLinkPage({ translations, resource }) {
 
 function MetadataPage({ translations, dataset }) {
   return (
-    <BaseResourcePage title="Metadados">
+    <BaseResourcePage title="Metadados do Conjunto">
       <ExpandableTable
         headers={["nome", "valor"]}
         values={formatObjectsInArray(
@@ -472,15 +480,27 @@ export default function DatasetPage({
             width="100%"
           >
             <VStack
-              minWidth={{ base: "100%", lg: "200px" }}
-              maxWidth={{ base: "100%", lg: "200px" }}
+              minWidth={{ base: "100%", lg: "230px" }}
+              maxWidth={{ base: "100%", lg: "230px" }}
               spacing={5}
+              align="flex-start"
+              justify="flex-start"
             >
+              <BigTitle
+                fontSize="18px"
+                color="black"
+                margin="0px"
+                padding="0px"
+                height="40px"
+                paddingLeft="15px"
+              >
+                Recursos
+              </BigTitle>
               <SimpleButton
                 isActive={resource.resource_type === "metadata"}
                 onClick={() => setResource({ resource_type: "metadata" })}
               >
-                Metadados
+                Metadados do Conjunto
               </SimpleButton>
               {bdmTables.length > 0 ? (
                 <FilterAccordion

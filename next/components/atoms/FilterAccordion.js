@@ -26,6 +26,7 @@ export function BaseFilterAccordion({
   isActive = false,
   onChange = () => {},
   bdPlus = null,
+  alwaysOpen = false,
 }) {
   return (
     <Accordion ex allowToggle width="100%">
@@ -60,7 +61,7 @@ export function BaseFilterAccordion({
                     <></>
                   )}
                 </HStack>
-                <AccordionIcon marginLeft="auto" />
+                {!alwaysOpen ? <AccordionIcon marginLeft="auto" /> : <></>}
               </AccordionButton>
             </Text>
             {(isOpen && isOpen === true) || (isOpen == null && isExpanded) ? (
@@ -93,6 +94,7 @@ export function CheckboxFilterAccordion({
   onChange,
   onToggle,
   values,
+  alwaysOpen = false,
   valueField = "id",
   displayField = "display_name",
   isActive = false,
@@ -106,7 +108,8 @@ export function CheckboxFilterAccordion({
       onChange={onToggle}
       isActive={isActive}
       fieldName={fieldName}
-      isOpen={isOpen}
+      isOpen={alwaysOpen ? alwaysOpen : isOpen}
+      alwaysOpen={alwaysOpen}
     >
       <CheckboxGroup onChange={(val) => onChange(val)} value={values}>
         {canSearch ? (
@@ -139,24 +142,25 @@ export function CheckboxFilterAccordion({
           <></>
         )}
         <VStack alignItems="flex-start" overflowY="scroll">
-          {choices
-            .filter(
-              (c) =>
-                c[displayField].toLowerCase().indexOf(search.toLowerCase()) !=
-                -1
-            )
-            .map((c) => (
-              <Checkbox
-                fontFamily="Lato"
-                fontWeight="700"
-                value={c[valueField]}
-                color="#7D7D7D"
-                colorScheme="green"
-                letterSpacing="0.1em"
-              >
-                {c[displayField]}
-              </Checkbox>
-            ))}
+          {(canSearch
+            ? choices.filter(
+                (c) =>
+                  c[displayField].toLowerCase().indexOf(search.toLowerCase()) !=
+                  -1
+              )
+            : choices
+          ).map((c) => (
+            <Checkbox
+              fontFamily="Lato"
+              fontWeight="700"
+              value={c[valueField]}
+              color="#7D7D7D"
+              colorScheme="green"
+              letterSpacing="0.1em"
+            >
+              {c[displayField]}
+            </Checkbox>
+          ))}
         </VStack>
       </CheckboxGroup>
     </BaseFilterAccordion>

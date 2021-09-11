@@ -6,6 +6,7 @@ import {
   Divider,
   Stack,
   Select,
+  Image,
   Skeleton,
 } from "@chakra-ui/react";
 import ReactPaginate from "react-paginate";
@@ -128,17 +129,18 @@ export default function SearchPage({ strapiPages }) {
           </SectionTitle>
           <CheckboxFilterAccordion
             isActive={(paramFilters.resource_type || []).length > 0}
+            alwaysOpen
             choices={[
               {
                 key: "bdm_table",
-                name: "BD Mais",
+                name: <Image height="35px" src="/img/logo_plus.png" />,
               },
               { key: "external_link", name: "Link Externo" },
             ]}
             values={paramFilters.resource_type}
             valueField="key"
             displayField="name"
-            fieldName="Forma de Download"
+            fieldName="Forma de Acesso"
             onChange={(values) =>
               setParamFilters({ ...paramFilters, resource_type: values })
             }
@@ -238,7 +240,7 @@ export default function SearchPage({ strapiPages }) {
                 >
                   <option value="score">Relevância</option>
                   <option value="recent">Recente</option>
-                  <option value="popular">Poupulares</option>
+                  <option value="popular">Populares</option>
                 </Select>
               </Stack>
             </HStack>

@@ -104,9 +104,6 @@ export default function DatabaseCard({
           </>
         ))}
       </HStack>
-      <Subtitle marginTop="auto" fontSize="12px" fontStyle="italic">
-        Atualizado há {diffDays} {diffLabel}.
-      </Subtitle>
     </Card>
   );
 }

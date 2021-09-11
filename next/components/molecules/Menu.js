@@ -64,7 +64,9 @@ function DesktopLinks({ links }) {
               </RoundedButton>
             </a>
           ) : (
-            <Link href={v}>{k}</Link>
+            <Link href={v} target={v.startsWith("https") ? "_blank" : null}>
+              {k}
+            </Link>
           )
         )}
       </HStack>
@@ -129,13 +131,14 @@ export default function Menu({ strapiPages = [] }) {
     });
   }, [divRef.current]);
 
+  links["Aprenda"] = "https://basedosdados.github.io/mais/";
+
   strapiPages.map((p) => {
     links[p.MenuTitle] = "/blog/" + p.id + "/";
   });
 
   links["Newsletter"] =
     "https://basedosdados.hubspotpagebuilder.com/assine-a-newsletter-da-base-dos-dados";
-  links["Aprenda"] = "https://basedosdados.github.io/mais/";
   links["Apoie"] = "https://apoia.se/basedosdados";
 
   return (
