@@ -167,8 +167,7 @@ def bd_dataset_search(context, data_dict):
     q = data_dict.get("q", "")
     page = data_dict.get("page", 1)
     page_size = data_dict.get("page_size", 10)
-    order_by = data_dict.get("order_by", "score,recent")
-
+    order_by = data_dict.get("order_by", "score")
     # pre-process solr parameter fq #######################
 
     def get_parameter(data, bd_key, fq_key):
@@ -284,6 +283,27 @@ def bd_dataset_search(context, data_dict):
 
         response["resource_bdm_table_count"] += resource_bdm_table_count
         response["resource_external_link_count"] += resource_external_link_count
+
+    # post-process datasets order by ###################################
+
+    order = ["bdm_table", "information_request", "external_link"]
+    resources_order_dict = {}
+    for i, package in enumerate(response["datasets"]):
+        resources_type = [
+            resource.get("resource_type") for resource in package.get("resources")
+        ]
+        for item in order:
+            if item in resources_type:
+                resources_order_dict[i] = item
+                break
+
+    datasets_final_order = []
+    for item in order:
+        for position in resources_order_dict:
+            if resources_order_dict[position] == item:
+                datasets_final_order.append(response["datasets"][position])
+
+    response["datasets"] = datasets_final_order
 
     # post-process datasets ###############################
 
