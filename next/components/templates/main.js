@@ -15,7 +15,7 @@ export function MainPageTemplate({ strapiPages, children }) {
       <Box backgroundColor="#FAFAFA">
         <SiteHead />
         <Menu strapiPages={strapiPages} />
-        <Box paddingTop="130px" paddingBottom="50px">
+        <Box paddingTop={{ base: "30px", lg: "120px" }} paddingBottom="50px">
           {children}
         </Box>
         <Footer strapiPages={strapiPages} />

@@ -205,7 +205,7 @@ function Hero() {
   );
 }
 
-function CatalogNews({ recentDatasets, popularDatasets }) {
+function CatalogNews({ popularDatasets }) {
   return (
     <VStack
       width="100%"
@@ -230,8 +230,11 @@ function CatalogNews({ recentDatasets, popularDatasets }) {
               organizationSlug={d.organization.name}
               tags={d.tags.map((g) => g.name)}
               size={
-                d.resources.filter((r) => r.size).length > 0
-                  ? d.resources.filter((r) => r.size)[0].size
+                d.resources.filter((r) => r.bdm_file_size).length > 0
+                  ? d.resources.filter((r) => r.bdm_file_size)[0]
+                      .bdm_file_size /
+                    1024 /
+                    1024
                   : null
               }
               tableNum={
@@ -528,7 +531,7 @@ function Support() {
   );
 }
 
-export default function Home({ strapiPages, recentDatasets, popularDatasets }) {
+export default function Home({ strapiPages, popularDatasets }) {
   return (
     <MainPageTemplate strapiPages={strapiPages}>
       <VStack
@@ -542,10 +545,7 @@ export default function Home({ strapiPages, recentDatasets, popularDatasets }) {
       >
         <Hero />
       </VStack>
-      <CatalogNews
-        recentDatasets={recentDatasets}
-        popularDatasets={popularDatasets}
-      />
+      <CatalogNews popularDatasets={popularDatasets} />
       <VStack
         spacing={20}
         transform="translateY(-100px)"
