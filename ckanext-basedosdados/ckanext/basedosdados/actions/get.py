@@ -167,7 +167,7 @@ def bd_dataset_search(context, data_dict):
     q = data_dict.get("q", "")
     page = data_dict.get("page", 1)
     page_size = data_dict.get("page_size", 10)
-    order_by = data_dict.get("order_by", "score")
+    order_by = data_dict.get("order_by", "score,recent")
     # pre-process solr parameter fq #######################
 
     def get_parameter(data, bd_key, fq_key):
