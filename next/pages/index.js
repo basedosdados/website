@@ -46,7 +46,13 @@ function HeroText({ children, iconUrl }) {
         marginBottom="20px"
         position="relative"
       >
-        <Image priority objectFit="contain" layout="fill" src={iconUrl} />
+        <Image
+          loading="eager"
+          priority
+          objectFit="contain"
+          layout="fill"
+          src={iconUrl}
+        />
       </Box>
       {children}
     </VStack>

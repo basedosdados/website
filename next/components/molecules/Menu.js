@@ -131,7 +131,7 @@ export default function Menu({ strapiPages = [] }) {
     });
   }, [divRef.current]);
 
-  links["Aprenda"] = "https://basedosdados.github.io/mais/";
+  links["Documentação"] = "https://basedosdados.github.io/mais/";
 
   strapiPages.map((p) => {
     links[p.MenuTitle] = "/blog/" + p.id + "/";
@@ -184,6 +184,7 @@ export default function Menu({ strapiPages = [] }) {
               position="relative"
             >
               <Image
+                loading="eager"
                 priority
                 layout="fill"
                 objectFit="contain"

@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }) {
         {/* Open Graph */}
         <meta
           property="og:image"
-          content="/thumbnails/conjunto.png"
+          content="https://staging.basedosdados.org/thumbnails/conjunto.png"
           key="ogimage"
         />
         <meta
