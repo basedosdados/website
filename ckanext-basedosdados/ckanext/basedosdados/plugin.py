@@ -124,6 +124,10 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
             }
         ]
 
+        # 6. Removes extras from the main dict
+        for k in dataset_args.keys():
+            data_dict.pop(k, None)
+
         return data_dict
 
     # IFacets

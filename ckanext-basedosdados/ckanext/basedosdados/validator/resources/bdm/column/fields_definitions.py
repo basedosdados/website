@@ -11,10 +11,13 @@ to_line = lambda description: "\n".join(description)
 # BdmColumns Custom Types
 # -------------------------------------
 
+
 class DirectoryColumn(BaseModel):
-    dataset_id : Optional[DirectoryEnum] = Field(title="ID Base",user_input_hint=["<dataset_id>"])
+    # fmt: off
+    dataset_id : Optional[DirectoryEnum] = Field(title="ID Conjunto",user_input_hint=["<dataset_id>"])
     table_id   : Optional[Str]           = Field(title="ID Tabela",user_input_hint=["<table_id>"])
     column_name: Optional[Str]           = Field(title="Nome Coluna",user_input_hint=["<column_name>"])
+    # fmt: on
 
 
 # -------------------------------------
