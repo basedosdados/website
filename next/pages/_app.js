@@ -17,6 +17,11 @@ function MyApp({ Component, pageProps }) {
           href="https://i.ibb.co/nD79bG7/thumbnail-conjunto.png"
         />
         <title>Base dos Dados</title>
+        <meta
+          property="description"
+          content="Baixe dados já limpos, integrados e atualizados de forma extremamente fácil através do nosso datalake público."
+        />
+
         {/* Twitter */}
         <meta name="twitter:card" content="summary" key="twcard" />
         <meta name="twitter:creator" content="Base dos Dados" key="twhandle" />
