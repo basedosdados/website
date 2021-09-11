@@ -7,6 +7,7 @@ import {
   Flex,
   Heading,
 } from "@chakra-ui/react";
+import Head from "next/head";
 import { MainPageTemplate } from "../../components/templates/main";
 import { withStrapiPages } from "../../hooks/strapi.hook";
 import { listDatasets, showDataset } from "../api/datasets";
@@ -428,6 +429,17 @@ export default function DatasetPage({
 
   return (
     <MainPageTemplate strapiPages={strapiPages}>
+      <Head>
+        <title>Base dos Dados - {dataset.title}</title>
+
+        {/* Open Graph */}
+        <meta
+          property="og:title"
+          content={`Base dos Dados - ${dataset.title}`}
+          key="ogtitle"
+        />
+        <meta property="og:description" content={dataset.notes} key="ogdesc" />
+      </Head>
       <Flex
         direction={{ base: "column", lg: "row" }}
         width={{ base: "90%", lg: "85%" }}

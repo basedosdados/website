@@ -12,15 +12,15 @@ function MyApp({ Component, pageProps }) {
     <QueryClientProvider client={queryClient}>
       <Head>
         <link rel="icon" type="image/ico" href="/favicon.ico" />
+        <title>Base dos Dados</title>
         {/* Twitter */}
         <meta name="twitter:card" content="summary" key="twcard" />
         <meta name="twitter:creator" content="Base dos Dados" key="twhandle" />
 
         {/* Open Graph */}
-        <meta property="og:url" content={window.location.href} key="ogurl" />
         <meta
           property="og:image"
-          content={window.location.host + "/thumbnails/conjunto.png"}
+          content="/thumbnails/conjunto.png"
           key="ogimage"
         />
         <meta
