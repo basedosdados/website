@@ -268,6 +268,23 @@ def bd_dataset_search(context, data_dict):
             value = response["entities"].get(key, 0) + 1
             response["entities"][key] = value
 
+    # post-process resource count #########################
+
+    response["resource_bdm_table_count"] = 0
+    response["resource_external_link_count"] = 0
+
+    for dataset in response["datasets"]:
+        resource_bdm_table_count = 0
+        resource_external_link_count = 0
+        for resource in dataset["resources"]:
+            if resource["resource_type"] == "bdm_table":
+                resource_bdm_table_count = 1
+            elif resource["resource_type"] == "external_link":
+                resource_external_link_count = 1
+
+        response["resource_bdm_table_count"] += resource_bdm_table_count
+        response["resource_external_link_count"] += resource_external_link_count
+
     # post-process datasets ###############################
 
     page = int(page or 1)
