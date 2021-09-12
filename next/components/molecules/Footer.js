@@ -86,7 +86,7 @@ export default function Footer({ strapiPages }) {
                 href="https://basedosdados.github.io/mais/"
                 target="_blank"
               >
-                Datalake Público
+                Datalake público
               </FooterLink>
             </LinkVStack>
             <LinkVStack title="CONTEÚDO">

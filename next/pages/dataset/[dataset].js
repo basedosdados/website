@@ -1,4 +1,12 @@
-import { VStack, Stack, HStack, Image, Button, Flex } from "@chakra-ui/react";
+import {
+  VStack,
+  Stack,
+  HStack,
+  Image,
+  Button,
+  Flex,
+  Text,
+} from "@chakra-ui/react";
 import Head from "next/head";
 import { MainPageTemplate } from "../../components/templates/main";
 import { withStrapiPages } from "../../hooks/strapi.hook";
@@ -16,11 +24,13 @@ import {
   formatObjectsInArray,
   isBdPlus,
   translate,
+  unionArrays,
 } from "../../utils";
 import Link from "../../components/atoms/Link";
 import { SimpleButton } from "../../components/atoms/SimpleButton";
 import { Markdown } from "../../components/atoms/Markdown";
 import { getTranslations } from "../api/translations";
+import { LinkDash } from "../../components/atoms/LinkDash";
 
 export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
@@ -114,13 +124,42 @@ function BdmTablePage({ translations, resource, datasetName }) {
     R: "r",
   };
 
+  const helpText = {
+    SQL: (
+      <>
+        Copie o código,{" "}
+        <LinkDash
+          fontWeight="700"
+          textDecoration="none"
+          dash={false}
+          href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${resource.dataset_id}&t=${resource.name}&page=table`}
+        >
+          clique para ir ao <i>datalake</i>
+        </LinkDash>{" "}
+        no BigQuery e cole no Editor de Consultas:
+      </>
+    ),
+    Python: (
+      <>
+        Criamos um pacote em Python para você acessar o <i>datalake</i>. Basta
+        rodar o código:
+      </>
+    ),
+    R: (
+      <>
+        Criamos um pacote em R para você acessar o <i>datalake</i>. Basta rodar
+        o código:
+      </>
+    ),
+  };
+
   const consultationText = {
     SQL: `SELECT * FROM \`basedosdados.${queryName}\` LIMIT 100`,
     Python: `import basedosdados as bd
 # Para carregar o dado direto no pandas
 df = bd.read_table(dataset_id='${resource.dataset_id}', 
         table_id='${resource.name}',
-        billing_project_id=<YOUR_PROJECT_ID>)`,
+        billing_project_id="<YOUR_PROJECT_ID>")`,
     R: `install.packages("basedosdados")
 library("basedosdados")
 # Defina o seu projeto no Google Cloud
@@ -131,12 +170,17 @@ df <- read_sql(query)`,
   };
 
   function getSizeLabel() {
-    let size = Math.ceil(resource.bdm_file_size / 1000);
+    let sizeLabel;
+    let size = resource.bdm_file_size;
 
-    if (size >= 1000) size = Math.ceil(size / 100) + " gb";
-    else size = size + " mb";
+    if (size) {
+      if (size < 1000000) sizeLabel = Math.round(size / 1024) + " kb";
+      else if (size >= 1000000)
+        sizeLabel = Math.round(size / (1024 * 1024)) + " mb";
+      else sizeLabel = Math.round(size / (1024 * 1024 * 1024)) + " gb";
+    }
 
-    return `(${size})`;
+    return `(${sizeLabel})`;
   }
 
   return (
@@ -144,14 +188,40 @@ df <- read_sql(query)`,
       title={`${resource.name} ${resource.bdm_file_size ? getSizeLabel() : ""}`}
     >
       <VStack width="100%" spacing={3} alignItems="flex-start">
-        <SectionText>
+        <Text
+          fontFamily="Lato"
+          lineHeight="24px"
+          letterSpacing="0.1em"
+          fontWeight="400"
+          fontSize="14px"
+          backgroundColor="rgba(130, 202, 255, 0.15);"
+          padding="15px 20px"
+          borderRadius="20px"
+          width="100%"
+        >
+          <b>
+            Esta tabela está tratada e atualizada no nosso datalake público.
+          </b>
+          <br /> Você consultar seus dados via download, SQL (BigQuery), Python
+          ou R{" "}
+          <LinkDash
+            fontWeight="bold"
+            textDecoration="none"
+            target="_self"
+            href="#acesso"
+            dash={false}
+          >
+            abaixo.
+          </LinkDash>
+        </Text>
+        <SectionText padding="10px 0px">
           <b>Descrição</b>
         </SectionText>
         <Markdown>
           {resource.description || "Nenhuma descrição fornecida."}
         </Markdown>
       </VStack>
-      <VStack width="100%" spacing={3} alignItems="flex-start">
+      <VStack id="acesso" width="100%" spacing={3} alignItems="flex-start">
         <SectionText>
           <b>Coluna</b>
         </SectionText>
@@ -184,27 +254,7 @@ df <- read_sql(query)`,
               </Button>
             );
           })}
-          <Link
-            target="_blank"
-            href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${resource.dataset_id}&t=${resource.name}&page=table`}
-          >
-            <Button
-              borderWidth={"1px"}
-              borderColor={"#DEDFE0"}
-              fontSize="14px"
-              fontFamily="Lato"
-              color={"black"}
-              height="35px"
-              letterSpacing="0.1em"
-              borderRadius="8px"
-              width={{ base: "100%", lg: "initial" }}
-              minWidth="110px"
-              backgroundColor="transparent"
-              fontWeight={"regular"}
-            >
-              BigQuery
-            </Button>
-          </Link>
+
           <Link
             href={`https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}.zip`}
           >
@@ -226,6 +276,9 @@ df <- read_sql(query)`,
             </Button>
           </Link>
         </Stack>
+        <SectionText fontSize="14px" fontWeight="300">
+          {helpText[selectedConsultation]}
+        </SectionText>
         <Highlight
           code={consultationText[selectedConsultation]}
           language={consultationLanguage[selectedConsultation]}
@@ -260,13 +313,23 @@ df <- read_sql(query)`,
             </pre>
           )}
         </Highlight>
-        <SectionText fontSize="14px" fontWeight="500">
-          Primeira vez usando {selectedConsultation}? <Link>Clique aqui</Link>{" "}
-          para ver a documentação.{" "}
+        <SectionText fontSize="14px" fontWeight="300">
+          <i>
+            Para consulta é necessário um projeto no Google Cloud.{" "}
+            <b>Primeira vez?</b>{" "}
+            <LinkDash
+              href="https://basedosdados.github.io/mais/access_data_bq/"
+              dash={false}
+              fontWeight="bold"
+              textDecoration="none"
+            >
+              Siga o passo a passo.
+            </LinkDash>
+          </i>
         </SectionText>
       </VStack>
       <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Title>Metadados da Tabela</Title>
+        <Title>Metadados da tabela</Title>
         <ExpandableTable
           containerStyle={{ width: "100%", alignItems: "flex-start" }}
           headers={["nome", "valor"]}
@@ -312,7 +375,7 @@ function ExternalLinkPage({ translations, resource }) {
       onClick={() => window.open(resource.url)}
     >
       <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Title>Metadados do Link Externo</Title>
+        <Title>Metadados do link externo</Title>
         <ExpandableTable
           headers={["nome", "valor"]}
           values={formatObjectsInArray(
@@ -345,14 +408,33 @@ function ExternalLinkPage({ translations, resource }) {
 }
 
 function MetadataPage({ translations, dataset }) {
+  const _dataset = { ...dataset };
+  const unionResourceFields = [
+    "spatial_coverage",
+    "temporal_coverage",
+    "update_frequency",
+  ];
+
+  _dataset["groups"] = _dataset["groups"].map((t) => t.display_name);
+  _dataset["tags"] = _dataset["tags"].map((t) => t.display_name);
+
+  unionResourceFields.forEach(
+    (f) =>
+      (_dataset[f] = unionArrays(
+        dataset.resources.map((r) =>
+          r[f] ? (typeof r[f] === "array" ? r[f] : [r[f]]) : []
+        )
+      ))
+  );
+
   return (
-    <BaseResourcePage title="Metadados do Conjunto">
+    <BaseResourcePage title="Metadados do conjunto">
       <ExpandableTable
         headers={["nome", "valor"]}
         values={formatObjectsInArray(
           translate(
             translations,
-            filterOnlyValidValues(dataset, [
+            filterOnlyValidValues(_dataset, [
               "id",
               "groups",
               "tags",
@@ -360,7 +442,6 @@ function MetadataPage({ translations, dataset }) {
               "temporal_coverage",
               "update_frequency",
               "entity",
-              "time_unit",
               "ckan_url",
               "github_url",
             ])
@@ -525,17 +606,18 @@ export default function DatasetPage({
                 isActive={resource.resource_type === "metadata"}
                 onClick={() => setResource({ resource_type: "metadata" })}
               >
-                Metadados do Conjunto
+                Metadados do conjunto
               </SimpleButton>
               {bdmTables.length > 0 ? (
                 <FilterAccordion
+                  alwaysOpen={true}
                   choices={bdmTables}
                   value={resource.name}
                   valueField="name"
                   displayField="name"
                   isActive={resource.resource_type === "bdm_table"}
                   isOpen={bdmTableFilter}
-                  fieldName="Tabelas"
+                  fieldName="Tabelas tratadas"
                   bdPlus={true}
                   onChange={(name) =>
                     setResource(bdmTables.filter((b) => b.name === name)[0])
@@ -547,12 +629,13 @@ export default function DatasetPage({
               )}
               {externalLinks.length > 0 ? (
                 <FilterAccordion
+                  alwaysOpen={true}
                   choices={externalLinks}
                   valueField="url"
                   displayField="name"
                   isActive={resource.resource_type === "external_link"}
                   isOpen={externalLinkTableFilter}
-                  fieldName="Links Externos"
+                  fieldName="Links externos"
                   value={resource.url}
                   onChange={(url) =>
                     setResource(externalLinks.filter((b) => b.url === url)[0])

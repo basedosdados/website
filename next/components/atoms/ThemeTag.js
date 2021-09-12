@@ -8,12 +8,10 @@ export function ThemeTag({ name }) {
     >
       <Tag
         position="relative"
-        zIndex="10"
-        padding="5px 10px"
-        minWidth="40px"
-        backgroundColor="#DEDFE0"
-        color="#252A32"
+        fontSize="10px"
         whiteSpace="nowrap"
+        borderRadius="7px"
+        padding="4px 6px"
       >
         {name}
       </Tag>

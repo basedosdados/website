@@ -1,6 +1,6 @@
 import { Card } from "../molecules/Card";
 import DescriptionText from "../atoms/DescriptionText";
-import { Box, Center, HStack, Image } from "@chakra-ui/react";
+import { Box, Center, HStack, Image, VStack } from "@chakra-ui/react";
 import Title from "../atoms/Title";
 import Subtitle from "../atoms/Subtitle";
 import { Tag } from "../atoms/Tag";
@@ -25,22 +25,42 @@ export default function DatabaseCard({
 }) {
   const databaseInfo = [];
 
-  if (tableNum) databaseInfo.push(`${tableNum} tabelas`);
-  if (externalLinkNum) databaseInfo.push(externalLinkNum + " link externo");
+  let sizeLabel;
 
-  const date1 = new Date();
-  const date2 = new Date(updatedSince);
-  const diffTime = Math.abs(date2 - date1);
-  let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  let diffLabel = "dia(s)";
-
-  if (diffDays > 30) {
-    diffLabel = "mês(es)";
-    diffDays = Math.floor(diffDays / 30);
-  } else if (diffDays > 365) {
-    diffLabel = "ano(s)";
-    diffDays = Math.floor(diffDays / 365);
+  if (size) {
+    if (size < 1000000) sizeLabel = Math.round(size / 1024) + " kb";
+    else if (size >= 1000000)
+      sizeLabel = Math.round(size / (1024 * 1024)) + " mb";
+    else sizeLabel = Math.round(size / (1024 * 1024 * 1024)) + " gb";
   }
+
+  databaseInfo.push(
+    <HStack whiteSpace="nowrap">
+      <b>{tableNum} tabelas tratadas </b>
+      <Link href={`/dataset?bdPlus=true`}>
+        <Image
+          height="15px"
+          src={
+            tableNum === 0
+              ? `/img/logos/bd_plus_cinza.png`
+              : `/img/logo_plus.png`
+          }
+        />
+      </Link>
+      {sizeLabel ? (
+        <>
+          <Dot />
+          <Subtitle color="#252A32" fontWeight="bold">
+            {sizeLabel}
+          </Subtitle>
+        </>
+      ) : (
+        <></>
+      )}
+    </HStack>
+  );
+
+  if (externalLinkNum) databaseInfo.push(externalLinkNum + " link externo");
 
   return (
     <Card
@@ -48,28 +68,16 @@ export default function DatabaseCard({
         ...categories.slice(0, Math.min(3, categories.length)).map((c) => (
           <Link href={`/dataset?group=${c}`}>
             <CategoryIcon
-              size="47px"
+              size="37px"
               url={`/img/categories/icone_${c}${isPlus ? "-1" : ""}.svg`}
             />
           </Link>
         )),
-        ...(isPlus
-          ? [
-              <Link href={`/dataset?bdPlus=true`}>
-                <Image
-                  width="80px"
-                  height="37px"
-                  marginRight="10px"
-                  src={`/img/logo_plus.png`}
-                />
-              </Link>,
-            ]
-          : []),
       ]}
       spacing={0}
     >
       <Link href={link}>
-        <Title minHeight="60px" marginBottom="15px">
+        <Title fontSize="16px" minHeight="60px" marginBottom="15px">
           {name}
         </Title>
       </Link>
@@ -86,24 +94,13 @@ export default function DatabaseCard({
           <ThemeTag name={t} />
         ))}
       </HStack>
-      <HStack marginTop="auto">
-        {size ? (
-          <>
-            <Subtitle color="#252A32" fontWeight="bold">
-              {Math.round(size / 1000)} mb
-            </Subtitle>
-            <Dot />
-          </>
-        ) : (
-          <></>
-        )}
+      <VStack spacing={1} align="flex-start" marginTop="auto">
         {databaseInfo.map((item, index) => (
           <>
-            <Subtitle color="#252A32">{item}</Subtitle>{" "}
-            {index !== databaseInfo.length - 1 ? <Dot /> : <></>}{" "}
+            <Subtitle color="#252A32">{item}</Subtitle>
           </>
         ))}
-      </HStack>
+      </VStack>
     </Card>
   );
 }

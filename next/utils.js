@@ -54,3 +54,14 @@ export function translate(translations, object) {
     else return [k, v];
   });
 }
+
+export function unionArrays(arrays) {
+  console.log(arrays);
+  const result = [];
+
+  arrays.forEach((array) =>
+    array.forEach((v) => (result.indexOf(v) === -1 ? result.push(v) : null))
+  );
+
+  return result;
+}

@@ -5,12 +5,14 @@ import dynamic from "next/dynamic";
 import { slidesToShowPlugin } from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import BigTitle from "../atoms/BigTitle";
+import SectionText from "../atoms/SectionText";
 
 const Carousel = dynamic(() => import("@brainhubeu/react-carousel"), {
   ssr: false,
 });
 
-export default function CardCatalog({ sections, containerStyle }) {
+export default function CardCatalog({ title, text, children, containerStyle }) {
   const isMobile = useCheckMobile();
 
   return (
@@ -18,45 +20,50 @@ export default function CardCatalog({ sections, containerStyle }) {
       {...containerStyle}
       alignItems="flex-start"
       position="relative"
-      width="100%"
+      width="95%"
+      alignSelf="center"
     >
-      {Object.keys(sections).map((key) => (
-        <VStack
-          width="100%"
-          alignItems="flex-start"
-          spacing={5}
-          paddingBottom="40px"
-        >
-          <Heading
-            fontSize="16px"
-            backgroundColor="#2B8C4D"
-            borderRadius="15px"
-            color="white"
-            fontWeight="500"
-            fontFamily="Ubuntu"
-            letterSpacing="0.1em"
-            padding="10px 15px"
-            marginLeft="6%"
-          >
-            + {key}
-          </Heading>
-          <Carousel
-            plugins={[
-              "infinite",
-              "arrows",
-              "fastSwipe",
-              {
-                resolve: slidesToShowPlugin,
-                options: {
-                  numberOfSlides: isMobile ? 1 : 4,
-                },
+      <BigTitle textAlign="center" marginBottom="0px" alignSelf="center">
+        {title}
+      </BigTitle>
+      <SectionText
+        fontSize="17px"
+        alignSelf="center"
+        letterSpacing="0.05em"
+        fontWeight="500"
+        paddingBottom="20px"
+      >
+        {text}
+      </SectionText>
+      <VStack
+        width="100%"
+        alignItems="flex-start"
+        spacing={5}
+        paddingBottom="40px"
+      ></VStack>
+      <VStack
+        width="100%"
+        alignItems="flex-start"
+        spacing={5}
+        paddingBottom="40px"
+        position="relative"
+      >
+        <Carousel
+          plugins={[
+            "infinite",
+            "arrows",
+            "fastSwipe",
+            {
+              resolve: slidesToShowPlugin,
+              options: {
+                numberOfSlides: isMobile ? 1 : 4,
               },
-            ]}
-          >
-            {sections[key]}
-          </Carousel>
-        </VStack>
-      ))}
+            },
+          ]}
+        >
+          {children}
+        </Carousel>
+      </VStack>
     </VStack>
   );
 }

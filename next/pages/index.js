@@ -6,6 +6,7 @@ import {
   Stack,
   Flex,
   VStack,
+  Image as ChakraImage,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import ControlledInput from "../components/atoms/ControlledInput";
@@ -16,7 +17,12 @@ import { useState } from "react";
 import CardCatalog from "../components/organisms/CardCatalog";
 import Title from "../components/atoms/Title";
 import Typist from "react-typist";
-import { getPopularDatasets, getRecentDatasets } from "./api/datasets";
+import {
+  getPopularDatalakeDatasets,
+  getPopularDatasets,
+  getRecentDatasets,
+  searchDatasets,
+} from "./api/datasets";
 import { ShadowBox } from "../components/atoms/ShadowBox";
 import { MainPageTemplate } from "../components/templates/main";
 import { withStrapiPages } from "../hooks/strapi.hook";
@@ -24,13 +30,16 @@ import { ThemeTag } from "../components/atoms/ThemeTag";
 import { LinkDash } from "../components/atoms/LinkDash";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { isBdPlus } from "../utils";
+import Link from "../components/atoms/Link";
 
 export async function getStaticProps(context) {
   const popularDatasets = await getPopularDatasets();
+  const popularDatalakeDatasets = await getPopularDatalakeDatasets();
 
   return await withStrapiPages({
     props: {
       popularDatasets,
+      popularDatalakeDatasets,
     },
     revalidate: 60,
   });
@@ -211,7 +220,7 @@ function Hero() {
   );
 }
 
-function CatalogNews({ popularDatasets }) {
+function CatalogNews({ popularDatasets, popularDatalakeDatasets }) {
   return (
     <VStack
       width="100%"
@@ -223,42 +232,102 @@ function CatalogNews({ popularDatasets }) {
       paddingBottom="160px"
       position="relative"
     >
-      <BigTitle textAlign="center" marginBottom="0px" alignSelf="center">
-        Novidades no catálogo de dados
-      </BigTitle>
       <CardCatalog
-        sections={{
-          populares: (popularDatasets || []).map((d) => (
-            <DatabaseCard
-              link={`/dataset/${d.name}`}
-              name={d.title}
-              organization={d.organization.title}
-              organizationSlug={d.organization.name}
-              tags={d.tags.map((g) => g.name)}
-              size={
-                d.resources.filter((r) => r.bdm_file_size).length > 0
-                  ? d.resources.filter((r) => r.bdm_file_size)[0]
-                      .bdm_file_size /
-                    1024 /
-                    1024
-                  : null
-              }
-              tableNum={
-                d.resources.filter((r) => r.resource_type === "bdm_table")
-                  .length
-              }
-              externalLinkNum={
-                d.resources.filter((r) => r.resource_type === "external_link")
-                  .length
-              }
-              updatedSince={d.metadata_modified}
-              updatedAuthor="Ricardo Dahis"
-              categories={d.groups.map((g) => g.name)}
-              isPlus={isBdPlus(d)}
+        title={
+          <HStack>
+            <div>Novidades no </div> <i>datalake</i>{" "}
+            <ChakraImage
+              paddingLeft="10px"
+              height="50px"
+              src="/img/logo_plus.png"
             />
-          )),
-        }}
-      />
+          </HStack>
+        }
+        text={
+          <div>
+            Onde você pode acessar <b>tabelas tratadas e prontas para uso</b> de
+            forma gratuita.{" "}
+            <LinkDash
+              fontWeight="700"
+              dash={false}
+              textDecoration="none"
+              href="https://basedosdados.github.io/mais/"
+            >
+              Entenda.
+            </LinkDash>
+          </div>
+        }
+      >
+        {popularDatalakeDatasets.map((d) => (
+          <DatabaseCard
+            link={`/dataset/${d.name}`}
+            name={d.title}
+            organization={d.organization.title}
+            organizationSlug={d.organization.name}
+            tags={d.tags.map((g) => g.name)}
+            size={
+              d.resources.filter((r) => r.bdm_file_size && r.bdm_file_size > 0)
+                .length > 0
+                ? d.resources.filter((r) => r.bdm_file_size)[0].bdm_file_size
+                : null
+            }
+            tableNum={
+              d.resources.filter((r) => r.resource_type === "bdm_table").length
+            }
+            externalLinkNum={
+              d.resources.filter((r) => r.resource_type === "external_link")
+                .length
+            }
+            updatedSince={d.metadata_modified}
+            categories={d.groups.map((g) => g.name)}
+            isPlus={isBdPlus(d)}
+          />
+        ))}
+      </CardCatalog>
+      <CardCatalog
+        title="Outras novidades no catálogo"
+        text={
+          <div>
+            Onde você também pode acessar metadados de diversas bases públicas
+            num só lugar.{" "}
+            <LinkDash
+              fontWeight="700"
+              dash={false}
+              textDecoration="none"
+              href="https://basedosdados.github.io/mais/"
+            >
+              Entenda.
+            </LinkDash>
+          </div>
+        }
+      >
+        {popularDatasets.map((d) => (
+          <DatabaseCard
+            link={`/dataset/${d.name}`}
+            name={d.title}
+            organization={d.organization.title}
+            organizationSlug={d.organization.name}
+            tags={d.tags.map((g) => g.name)}
+            size={
+              d.resources.filter((r) => r.bdm_file_size && r.bdm_file_size > 0)
+                .length > 0
+                ? d.resources.filter((r) => r.bdm_file_size)[0].bdm_file_size
+                : null
+            }
+            tableNum={
+              d.resources.filter((r) => r.resource_type === "bdm_table").length
+            }
+            externalLinkNum={
+              d.resources.filter((r) => r.resource_type === "external_link")
+                .length
+            }
+            updatedSince={d.metadata_modified}
+            updatedAuthor="Ricardo Dahis"
+            categories={d.groups.map((g) => g.name)}
+            isPlus={isBdPlus(d)}
+          />
+        ))}
+      </CardCatalog>
     </VStack>
   );
 }
@@ -537,7 +606,11 @@ function Support() {
   );
 }
 
-export default function Home({ strapiPages, popularDatasets }) {
+export default function Home({
+  strapiPages,
+  popularDatasets,
+  popularDatalakeDatasets,
+}) {
   return (
     <MainPageTemplate strapiPages={strapiPages}>
       <VStack
@@ -551,7 +624,10 @@ export default function Home({ strapiPages, popularDatasets }) {
       >
         <Hero />
       </VStack>
-      <CatalogNews popularDatasets={popularDatasets} />
+      <CatalogNews
+        popularDatasets={popularDatasets}
+        popularDatalakeDatasets={popularDatalakeDatasets}
+      />
       <VStack
         spacing={20}
         transform="translateY(-100px)"

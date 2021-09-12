@@ -1,6 +1,6 @@
 import { Link } from "@chakra-ui/react";
 
-export function LinkDash({ children, href }) {
+export function LinkDash({ children, href, dash = true, ...style }) {
   return (
     <Link
       color="#3AA1EB"
@@ -10,8 +10,9 @@ export function LinkDash({ children, href }) {
       letterSpacing="0.1em"
       fontFamily="Lato"
       fontSize="15px"
+      {...style}
     >
-      {children} {">"} {">"}
+      {children} {dash ? "> >" : null}
     </Link>
   );
 }

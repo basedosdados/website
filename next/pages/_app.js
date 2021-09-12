@@ -21,6 +21,10 @@ function MyApp({ Component, pageProps }) {
           property="description"
           content="Baixe dados já limpos, integrados e atualizados de forma extremamente fácil através do nosso datalake público."
         />
+        <script
+          defer
+          src="https://unpkg.com/smoothscroll-polyfill@0.4.4/dist/smoothscroll.min.js"
+        ></script>
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary" key="twcard" />
@@ -43,6 +47,8 @@ function MyApp({ Component, pageProps }) {
           content="Baixe dados já limpos, integrados e atualizados de forma extremamente fácil através do nosso datalake público."
           key="ogdesc"
         />
+        <meta property="og:image:width" content="1201" />
+        <meta property="og:image:height" content="601" />
       </Head>
       <ChakraProvider>
         <Component {...pageProps} />

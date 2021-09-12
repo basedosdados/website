@@ -20,7 +20,8 @@ import { Database } from "../../components/organisms/Database";
 import { CheckboxFilterAccordion } from "../../components/atoms/FilterAccordion";
 import { withStrapiPages } from "../../hooks/strapi.hook";
 import { MainPageTemplate } from "../../components/templates/main";
-import { isBdPlus } from "../../utils";
+import { isBdPlus, unionArrays } from "../../utils";
+import { Tag } from "../../components/atoms/Tag";
 
 export async function getStaticProps(context) {
   return withStrapiPages({
@@ -46,6 +47,14 @@ export default function SearchPage({ strapiPages }) {
       },
     }
   );
+
+  const fieldTranslations = {
+    organization: "Organização",
+    tag: "Tag",
+    group: "Tema",
+    resource_type: "Forma de consulta",
+  };
+
   const organizations = data?.organizations
     ? Object.keys(data?.organizations)
         .map((o) => ({
@@ -115,9 +124,8 @@ export default function SearchPage({ strapiPages }) {
           <SectionTitle
             fontSize="16px"
             textAlign="top"
-            borderRadius="20px"
-            color="white"
-            backgroundColor="#2B8C4D"
+            color="#252A32"
+            fontWeigth="300"
             width="100%"
             height="50px"
             paddingLeft="20px"
@@ -125,7 +133,7 @@ export default function SearchPage({ strapiPages }) {
             alignItems="center"
             display="flex"
           >
-            Filtrar por
+            Filtrar resultados por
           </SectionTitle>
           <CheckboxFilterAccordion
             isActive={(paramFilters.resource_type || []).length > 0}
@@ -133,14 +141,24 @@ export default function SearchPage({ strapiPages }) {
             choices={[
               {
                 key: "bdm_table",
-                name: <Image height="35px" src="/img/logo_plus.png" />,
+                name: (
+                  <HStack>
+                    <Image height="35px" src="/img/logo_plus.png" />{" "}
+                    <div>{`(${data?.resource_bdm_table_count || "0"})`}</div>
+                  </HStack>
+                ),
               },
-              { key: "external_link", name: "Link Externo" },
+              {
+                key: "external_link",
+                name: `Link externo (${
+                  data?.resource_external_link_count || "0"
+                })`,
+              },
             ]}
             values={paramFilters.resource_type}
             valueField="key"
             displayField="name"
-            fieldName="Forma de Acesso"
+            fieldName="Forma de consulta"
             onChange={(values) =>
               setParamFilters({ ...paramFilters, resource_type: values })
             }
@@ -204,15 +222,53 @@ export default function SearchPage({ strapiPages }) {
           />
           <>
             <Heading
+              width="100%"
               fontFamily="Ubuntu"
               fontSize="30px"
               fontWeight="400"
               paddingTop="20px"
               letterSpacing="0.1em"
             >
-              {data?.count || "..."} itens encontrados{" "}
+              {data?.count || "..."} conjunto(s) encontrado(s){" "}
               {search ? " para " + search : ""}
             </Heading>
+            <Stack spacing={3} direction={{ base: "column", lg: "row" }}>
+              {Object.entries(paramFilters)
+                .filter(([k, v]) => v.length > 0)
+                .map(([k, values]) => (
+                  <>
+                    <Text
+                      fontFamily="Lato"
+                      letterSpacing="0.1em"
+                      fontWeight="100"
+                      fontSize="16px"
+                      color="#6F6F6F"
+                    >
+                      {fieldTranslations[k]}:
+                    </Text>
+                    <Stack direction={{ base: "column", lg: "row" }}>
+                      {values.map((v) => (
+                        <Tag
+                          whiteSpace="nowrap"
+                          onClick={() => {
+                            let newArr = [...values];
+                            newArr.splice(values.indexOf(v), 1);
+                            setParamFilters({ ...paramFilters, [k]: newArr });
+                          }}
+                          hover={false}
+                          backgroundColor="#7D7D7D"
+                          color="white"
+                          borderRadius="7px"
+                          padding="5px 8px"
+                          cursor="pointer"
+                        >
+                          <b>{v} x</b>
+                        </Tag>
+                      ))}
+                    </Stack>
+                  </>
+                ))}
+            </Stack>
             <HStack
               fontFamily="Lato"
               letterSpacing="0.1em"
@@ -268,10 +324,16 @@ export default function SearchPage({ strapiPages }) {
                         organization={d.organization}
                         tags={d.tags.map((g) => g.name)}
                         size={
-                          d.resources.filter((r) => r.size).length > 0
-                            ? d.resources.filter((r) => r.size)[0].size
+                          d.resources.filter((r) => r.bdm_file_size).length > 0
+                            ? d.resources.filter((r) => r.bdm_file_size)[0]
+                                .bdm_file_size
                             : null
                         }
+                        temporalCoverage={unionArrays(
+                          d.resources
+                            .filter((r) => r?.temporal_coverage?.length)
+                            .map((r) => r.temporal_coverage)
+                        ).sort()}
                         tableNum={
                           d.resources.filter(
                             (r) => r.resource_type === "bdm_table"

@@ -4,13 +4,13 @@ export function Card({
   children,
   icons = [],
   spacing = 5,
-  padding = "30px 30px 30px 30px",
+  padding = "25px 25px 25px 25px",
   link,
 }) {
   return (
     <Box
-      width="300px"
-      height="330px"
+      width="280px"
+      height="310px"
       borderRadius="10px"
       boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
       backgroundColor="#FFFFFF"

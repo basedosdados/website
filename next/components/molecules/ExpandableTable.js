@@ -27,7 +27,7 @@ export function ExpandableTable({ headers, values, containerStyle }) {
         width="100%"
         onClick={() => setExpanded(!expanded)}
       >
-        {expanded ? "Ver Menos" : "Ver Mais"}
+        {expanded ? "Ver menos" : "Ver mais"}
       </Button>
     </VStack>
   );

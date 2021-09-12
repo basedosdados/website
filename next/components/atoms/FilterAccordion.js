@@ -44,9 +44,11 @@ export function BaseFilterAccordion({
                   spacing={2}
                   alignContent="baseline"
                   justifyContent="center"
+                  width="100%"
                 >
                   <Box
                     flex="1"
+                    width="100%"
                     textAlign="left"
                     fontFamily="Lato"
                     fontWeight="700"
@@ -177,12 +179,14 @@ export function FilterAccordion({
   valueField = "id",
   displayField = "display_name",
   isOpen = null,
+  alwaysOpen = false,
   isActive = false,
 }) {
   return (
     <BaseFilterAccordion
+      isOpen={alwaysOpen ? alwaysOpen : isOpen}
+      alwaysOpen={alwaysOpen}
       isActive={isActive}
-      isOpen={isOpen}
       onChange={onToggle}
       overflowX="hidden"
       bdPlus={bdPlus}

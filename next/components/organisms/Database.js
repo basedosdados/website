@@ -20,25 +20,24 @@ import Subtitle from "../atoms/Subtitle";
 export function Database({
   image,
   name,
-  children,
-  updatedSince,
-  updatedAuthor,
   organization,
   size,
   tableNum,
   externalLinkNum,
-  stars,
   categories,
   categoriesDisplay,
   isPlus = false,
+  temporalCoverage,
   link,
-  spatialCoverage,
-  updateFrequency,
 }) {
-  const databaseInfo = [];
+  let sizeLabel;
 
-  if (tableNum) databaseInfo.push(tableNum + " tabelas");
-  if (externalLinkNum) databaseInfo.push(externalLinkNum + " link externo");
+  if (size) {
+    if (size < 1000000) sizeLabel = Math.round(size / 1024) + " kb";
+    else if (size >= 1000000)
+      sizeLabel = Math.round(size / (1024 * 1024)) + " mb";
+    else sizeLabel = Math.round(size / (1024 * 1024 * 1024)) + " gb";
+  }
 
   return (
     <VStack
@@ -122,18 +121,6 @@ export function Database({
                 pb={{ base: 3, lg: 0 }}
                 width="100%"
               >
-                {isPlus ? (
-                  <Link href="/dataset?bdPlus=true">
-                    <Image
-                      paddingRight="10px"
-                      priority
-                      width="80px"
-                      src="/img/logo_plus.png"
-                    />
-                  </Link>
-                ) : (
-                  <></>
-                )}
                 {categories.map((c) => (
                   <Link href={`/dataset?group=${c}`}>
                     <CategoryIcon
@@ -188,10 +175,11 @@ export function Database({
                 fontSize="12px"
                 spacing={{ base: 0, lg: 5 }}
               >
-                <HStack>
-                  <SectionText color="#6F6F6F">Última Atualização:</SectionText>
+                <HStack spacing={2} align="flex-start">
+                  <SectionText color="#6F6F6F">Cobertura temporal:</SectionText>
                   <SectionText color="#6F6F6F" fontWeight="bold">
-                    {new Date(updatedSince).toLocaleDateString("pt-BR")}
+                    {temporalCoverage[0]} -{" "}
+                    {temporalCoverage[temporalCoverage.length - 1]}
                   </SectionText>
                 </HStack>
               </Stack>
@@ -199,27 +187,60 @@ export function Database({
           </VStack>
           <VStack paddingTop="10px">
             <HStack spacing={5}>
-              {tableNum ? (
-                <HStack>
-                  <Image src="/img/icons/database.svg" />
-                  <Subtitle color="#2B8C4D" fontSize="15px" fontWeight="bold">
-                    {tableNum} tabelas
+              <HStack>
+                <Image
+                  height="15px"
+                  src={
+                    tableNum === 0
+                      ? "/img/icons/database_disabled.png"
+                      : "/img/icons/database.png"
+                  }
+                />
+                <Subtitle
+                  whiteSpace="nowrap"
+                  color={tableNum === 0 ? "#6F6F6F" : "#2B8C4D"}
+                  fontSize="15px"
+                  fontWeight="bold"
+                >
+                  {tableNum} tabelas tratadas{" "}
+                </Subtitle>
+                <Link href="/dataset?bdPlus=true">
+                  <Image
+                    height="15px"
+                    src={
+                      tableNum === 0
+                        ? "/img/logos/bd_plus_cinza.png"
+                        : "/img/logo_plus.png"
+                    }
+                  />
+                </Link>
+                {size ? (
+                  <Subtitle
+                    color={tableNum === 0 ? "#6F6F6F" : "#2B8C4D"}
+                    fontSize="15px"
+                    fontWeight="bold"
+                  >
+                    ({sizeLabel})
                   </Subtitle>
-                  {size ? (
-                    <Subtitle color="#2B8C4D" fontSize="15px" fontWeight="bold">
-                      ({Math.round(size / 1000)} mb)
-                    </Subtitle>
-                  ) : (
-                    <></>
-                  )}
-                </HStack>
-              ) : (
-                <></>
-              )}
+                ) : (
+                  <></>
+                )}
+              </HStack>
               {externalLinkNum ? (
                 <HStack>
-                  <Image src="/img/icons/link.svg" />
-                  <Subtitle color="#2B8C4D" fontSize="15px" fontWeight="bold">
+                  <Image
+                    height="15px"
+                    src={
+                      tableNum === 0
+                        ? "/img/icons/link_disabled.png"
+                        : "/img/icons/link.png"
+                    }
+                  />
+                  <Subtitle
+                    color={tableNum === 0 ? "#6F6F6F" : "#2B8C4D"}
+                    fontSize="15px"
+                    fontWeight="bold"
+                  >
                     {externalLinkNum} links externos
                   </Subtitle>
                 </HStack>
