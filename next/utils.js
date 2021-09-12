@@ -56,12 +56,14 @@ export function translate(translations, object) {
 }
 
 export function unionArrays(arrays) {
-  console.log(arrays);
+  const array = arrays.flat(3);
   const result = [];
 
-  arrays.forEach((array) =>
-    array.forEach((v) => (result.indexOf(v) === -1 ? result.push(v) : null))
-  );
+  console.log(array);
+
+  array.forEach((v) => (result.indexOf(v) === -1 ? result.push(v) : null));
+
+  console.log(result);
 
   return result;
 }

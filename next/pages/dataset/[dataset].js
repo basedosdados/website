@@ -209,8 +209,8 @@ df <- read_sql(query)`,
           <b>
             Esta tabela está tratada e atualizada no nosso datalake público.
           </b>
-          <br /> Você pode consultar seus dados via download, SQL (BigQuery), Python
-          ou R{" "}
+          <br /> Você pode consultar seus dados via download, SQL (BigQuery),
+          Python ou R{" "}
           <LinkDash
             fontWeight="bold"
             textDecoration="none"
@@ -425,10 +425,32 @@ function MetadataPage({ translations, dataset }) {
   _dataset["groups"] = _dataset["groups"].map((t) => t.display_name);
   _dataset["tags"] = _dataset["tags"].map((t) => t.display_name);
 
+  _dataset["resources"] = _dataset["resources"].map((resource) => {
+    const _resource = { ...resource };
+
+    function fixSpatialCoverage(sc) {
+      if (sc == null) return [];
+
+      if (typeof sc === "object") {
+        if (Object.keys(sc).length === 0) return [];
+
+        return [sc.continent[0], sc.country[0]];
+      }
+
+      return sc;
+    }
+
+    _resource["spatial_coverage"] = fixSpatialCoverage(
+      _resource["spatial_coverage"]
+    );
+
+    return _resource;
+  });
+
   unionResourceFields.forEach(
     (f) =>
       (_dataset[f] = unionArrays(
-        dataset.resources.map((r) =>
+        _dataset.resources.map((r) =>
           r[f] ? (typeof r[f] === "array" ? r[f] : [r[f]]) : []
         )
       ))
