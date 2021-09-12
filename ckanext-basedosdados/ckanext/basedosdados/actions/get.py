@@ -13,6 +13,7 @@ from ckanext.basedosdados.validator.resources import (
     BdmTable,
     ExternalLink,
     InformationRequest,
+    RESOURCE_TYPES,
 )
 from pydantic import ValidationError
 
@@ -285,9 +286,12 @@ def bd_dataset_search(context, data_dict):
         response["resource_external_link_count"] += resource_external_link_count
 
     # post-process datasets order by resource_type ###################################
-
-    resource_type_order = ["bdm_table", "information_request", "external_link"]
+    
+    resource_type_order = ["bdm_table","bdm_dictionary","information_request", "external_link"]
+    resource_types_not_included = [resource_type for resource_type in RESOURCE_TYPES if resource_type not in resource_type_order]
+    resource_type_order = resource_type_order + resource_types_not_included
     resources_order_dict = {}
+
     for i, package in enumerate(response["datasets"]):
         resources_type = [
             resource.get("resource_type") for resource in package.get("resources")
