@@ -68,7 +68,7 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
     def _validate_update(self, data_dict):
         return self._validate_create(data_dict, action="package_update")
 
-    def _validate_pydantic(self, data_dict, action, validate=False):
+    def _validate_pydantic(self, data_dict, action, validate=True):
         """
         Validates metadata using pydantic.
 
