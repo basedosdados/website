@@ -68,7 +68,7 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
     def _validate_update(self, data_dict):
         return self._validate_create(data_dict, action="package_update")
 
-    def _validate_pydantic(self, data_dict, action):
+    def _validate_pydantic(self, data_dict, action, validate=False):
         """
         Validates metadata using pydantic.
 
@@ -85,48 +85,48 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
         This is the case b/c CKAN only accepts string values for extras. In that way, we know that
         we always have to unpack a dict that is saved as a string in the extras field.
         """
+        if validate:
+            # 0. Find dataset_args in extras
+            dataset_args = {}
+            for extra in data_dict.get("extras") or []:
+                if extra.get("key") == "dataset_args":
+                    dataset_args = extra["value"]
+                    break
 
-        # 0. Find dataset_args in extras
-        dataset_args = {}
-        for extra in data_dict.get("extras") or []:
-            if extra.get("key") == "dataset_args":
-                dataset_args = extra["value"]
-                break
+            # 1. It unpacks the dataset_args from the extras
+            # 2. Converts the dataset_args from string to dict
+            if isinstance(dataset_args, str):
+                dataset_args = ast.literal_eval(dataset_args)
+            elif not isinstance(dataset_args, dict):
+                raise TypeError(
+                    f"dataset_args should be dict or string, but it is {type(dataset_args)}"
+                )
 
-        # 1. It unpacks the dataset_args from the extras
-        # 2. Converts the dataset_args from string to dict
-        if isinstance(dataset_args, str):
-            dataset_args = ast.literal_eval(dataset_args)
-        elif not isinstance(dataset_args, dict):
-            raise TypeError(
-                f"dataset_args should be dict or string, but it is {type(dataset_args)}"
-            )
+            # 3. Merge it do the data_dict
+            data_model = dict(**data_dict, **dataset_args)
+            data_model.pop("extras", None)
 
-        # 3. Merge it do the data_dict
-        data_model = dict(**data_dict, **dataset_args)
-        data_model.pop("extras", None)
+            # 4. Validate the data_dict with pydantic
+            validation = Dataset(**data_model, action__=action)
 
-        # 4. Validate the data_dict with pydantic
-        validation = Dataset(**data_model, action__=action)
+            # exclude unset needed by ckan so it can deal with missing values downstream (during partial updates for instance)
+            data_dict = validation.json(exclude={"action__"}, exclude_unset=True)
 
-        # exclude unset needed by ckan so it can deal with missing values downstream (during partial updates for instance)
-        data_dict = validation.json(exclude={"action__"}, exclude_unset=True)
+            # we need to jsonify and de-jsonify so that objects such as datetimes are serialized
+            data_dict = json.loads(data_dict)
 
-        # we need to jsonify and de-jsonify so that objects such as datetimes are serialized
-        data_dict = json.loads(data_dict)
+            # 5. Repack the dataset_args to extras in order to be used by CKAN,
+            # but it keeps the dataset arguments in the dict to be shown in `package_show`
+            data_dict["extras"] = [
+                {
+                    "key": "dataset_args",
+                    "value": {k: data_dict.get(k, None) for k in dataset_args.keys()},
+                }
+            ]
 
-        # 5. Repack the dataset_args to extras in order to be used by CKAN,
-        # but it keeps the dataset arguments in the dict to be shown in `package_show`
-        data_dict["extras"] = [
-            {
-                "key": "dataset_args",
-                "value": {k: data_dict.get(k, None) for k in dataset_args.keys()},
-            }
-        ]
-
-        # 6. Removes extras from the main dict
-        for k in dataset_args.keys():
-            data_dict.pop(k, None)
+            # 6. Removes extras from the main dict
+            for k in dataset_args.keys():
+                data_dict.pop(k, None)
 
         return data_dict
 
