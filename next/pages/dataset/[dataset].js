@@ -570,6 +570,7 @@ export default function DatasetPage({
           </Stack>
         </VStack>
         <VStack
+          width="100%"
           paddingTop={{ base: "50px", lg: "0px" }}
           transform={{ base: "", lg: "translateX(50px)" }}
           alignItems="flex-start"

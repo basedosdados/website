@@ -142,8 +142,9 @@ export default function SearchPage({ strapiPages }) {
               {
                 key: "bdm_table",
                 name: (
-                  <HStack>
-                    <Image height="35px" src="/img/logo_plus.png" />{" "}
+                  <HStack whiteSpace="nowrap">
+                    <div>Tabelas tratadas</div>
+                    <Image height="30px" src="/img/logo_plus.png" />{" "}
                     <div>{`(${data?.resource_bdm_table_count || "0"})`}</div>
                   </HStack>
                 ),

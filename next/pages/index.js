@@ -234,14 +234,15 @@ function CatalogNews({ popularDatasets, popularDatalakeDatasets }) {
     >
       <CardCatalog
         title={
-          <HStack>
+          <Stack direction={{ base: "column", lg: "row" }}>
             <div>Novidades no </div> <i>datalake</i>{" "}
             <ChakraImage
               paddingLeft="10px"
-              height="50px"
+              height={{ base: "80px", lg: "50px" }}
+              width={{ base: "200px", lg: "auto" }}
               src="/img/logo_plus.png"
             />
-          </HStack>
+          </Stack>
         }
         text={
           <div>
@@ -547,14 +548,25 @@ function Support() {
   }
   return (
     <VStack position="relative" paddingTop="60px" width="95%">
-      <BigTitle width="90%" textAlign="center" paddingBottom="60px">
-        Existimos através do esforço de pessoas que acreditam no acesso a dados
-        abertos de qualidade
+      <BigTitle position="relative" zIndex="1" width="90%" textAlign="center">
+        Como colaborar conosco
       </BigTitle>
+      <SectionText
+        position="relative"
+        zIndex="1"
+        fontSize="17px"
+        alignSelf="center"
+        letterSpacing="0.05em"
+        fontWeight="500"
+        paddingBottom="60px"
+      >
+        Existimos através do esforço de{" "}
+        <b>pessoas que acreditam no acesso a dados abertos de qualidade</b>.
+      </SectionText>
       <Box
         position="absolute"
         right="0px"
-        top="30%"
+        top="20%"
         minWidth="850px"
         minHeight="568px"
         zIndex="0px"
@@ -617,27 +629,40 @@ export default function Home({
         alignItems="center"
         width="100%"
         backgroundColor="#FAFAFA"
-        padding="0px 7%"
+        padding="0px 10%"
         marginTop="55px"
         zIndex="10"
         position="relative"
       >
         <Hero />
       </VStack>
-      <CatalogNews
-        popularDatasets={popularDatasets}
-        popularDatalakeDatasets={popularDatalakeDatasets}
-      />
+      <VStack padding="0px 5%">
+        <CatalogNews
+          popularDatasets={popularDatasets}
+          popularDatalakeDatasets={popularDatalakeDatasets}
+        />
+      </VStack>
       <VStack
         spacing={20}
         transform="translateY(-100px)"
-        width={{ base: "90%", lg: "92%" }}
+        width={{ base: "90%", lg: "85%" }}
         margin="auto"
       >
-        <BigTitle textAlign="center" maxWidth="80%" paddingBottom="20px">
-          Mais do que organizar dados, nós reinventamos a forma de trabalhar com
-          eles
-        </BigTitle>
+        <VStack width="100%">
+          <BigTitle textAlign="center" maxWidth="100%" paddingBottom="10px">
+            Explore, aprenda e participe
+          </BigTitle>
+          <SectionText
+            fontSize="17px"
+            alignSelf="center"
+            letterSpacing="0.05em"
+            fontWeight="500"
+            paddingBottom="20px"
+          >
+            Facilitamos o trabalho para que a distância entre você e sua análise
+            seja <b>apenas uma boa pergunta</b>.
+          </SectionText>
+        </VStack>
         <ExploreInYourFavoriteLanguage />
         <LearnToAnalysis />
         <JoinTheCommunity />

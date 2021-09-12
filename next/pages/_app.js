@@ -27,7 +27,12 @@ function MyApp({ Component, pageProps }) {
         ></script>
 
         {/* Twitter */}
-        <meta name="twitter:card" content="summary" key="twcard" />
+        <meta name="twitter:card" content="summary_large_image" key="twcard" />
+        <meta
+          name="twitter:image"
+          content="https://i.ibb.co/nD79bG7/thumbnail-conjunto.png"
+          key="twimage"
+        />
         <meta name="twitter:creator" content="Base dos Dados" key="twhandle" />
 
         {/* Open Graph */}

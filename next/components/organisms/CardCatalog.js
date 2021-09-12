@@ -20,7 +20,7 @@ export default function CardCatalog({ title, text, children, containerStyle }) {
       {...containerStyle}
       alignItems="flex-start"
       position="relative"
-      width="95%"
+      width="100%"
       alignSelf="center"
     >
       <BigTitle textAlign="center" marginBottom="0px" alignSelf="center">
