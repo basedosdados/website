@@ -1,16 +1,19 @@
 import { Card } from "../molecules/Card";
 import DescriptionText from "../atoms/DescriptionText";
-import { Box, Center, HStack, Image } from "@chakra-ui/react";
+import { Box, Center, HStack, Image, VStack } from "@chakra-ui/react";
 import Title from "../atoms/Title";
 import Subtitle from "../atoms/Subtitle";
 import { Tag } from "../atoms/Tag";
 import { CategoryIcon } from "../atoms/CategoryIcon";
 import { Dot } from "../atoms/Dot";
+import Link from "../atoms/Link";
+import { ThemeTag } from "../atoms/ThemeTag";
 
 export default function DatabaseCard({
   name,
   categories = [],
   organization,
+  organizationSlug,
   tags,
   size,
   tableNum,
@@ -18,51 +21,86 @@ export default function DatabaseCard({
   updatedSince,
   updatedAuthor,
   link,
+  isPlus = false,
 }) {
   const databaseInfo = [];
 
-  if (tableNum) databaseInfo.push(`${tableNum} tabelas`);
-  if (externalLinkNum) databaseInfo.push(externalLinkNum + " link externo");
+  let sizeLabel;
 
-  const date1 = new Date();
-  const date2 = new Date(updatedSince);
-  const diffTime = Math.abs(date2 - date1);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  if (size) {
+    if (size < 1000000) sizeLabel = Math.round(size / 1024) + " kb";
+    else if (size >= 1000000)
+      sizeLabel = Math.round(size / (1024 * 1024)) + " mb";
+    else sizeLabel = Math.round(size / (1024 * 1024 * 1024)) + " gb";
+  }
+
+  databaseInfo.push(
+    <HStack whiteSpace="nowrap">
+      <b>{tableNum} tabelas tratadas </b>
+      <Link href={`/dataset?bdPlus=true`}>
+        <Image
+          height="15px"
+          src={
+            tableNum === 0
+              ? `/img/logos/bd_plus_cinza.png`
+              : `/img/logo_plus.png`
+          }
+        />
+      </Link>
+      {sizeLabel ? (
+        <>
+          <Dot />
+          <Subtitle color="#252A32" fontWeight="bold">
+            {sizeLabel}
+          </Subtitle>
+        </>
+      ) : (
+        <></>
+      )}
+    </HStack>
+  );
+
+  if (externalLinkNum) databaseInfo.push(externalLinkNum + " link externo");
 
   return (
     <Card
-      link={link}
-      icons={categories.map((c) => (
-        <CategoryIcon url={`/_nxt/img/categories/icone_${c}.svg`} />
-      ))}
-      spacing={2}
+      icons={[
+        ...categories.slice(0, Math.min(3, categories.length)).map((c) => (
+          <Link href={`/dataset?group=${c}`}>
+            <CategoryIcon
+              size="37px"
+              url={`/img/categories/icone_${c}${isPlus ? "-1" : ""}.svg`}
+            />
+          </Link>
+        )),
+      ]}
+      spacing={0}
     >
-      <Title>{name}</Title>
-      <Subtitle>{organization}</Subtitle>
-      <HStack width="100%" overflowX="scroll" padding="15px 0px">
-        {tags.map((t) => (
-          <Tag>{t}</Tag>
+      <Link href={link}>
+        <Title fontSize="16px" minHeight="60px" marginBottom="15px">
+          {name}
+        </Title>
+      </Link>
+      <Link href={`/dataset?organization=${organizationSlug}`}>
+        <Subtitle>{organization}</Subtitle>
+      </Link>
+      <HStack
+        width="100%"
+        overflowX="auto"
+        className="no-scrollbar"
+        paddingTop="15px"
+      >
+        {tags.slice(0, tags.length > 3 ? 3 : tags.length).map((t) => (
+          <ThemeTag name={t} />
         ))}
       </HStack>
-      <HStack marginTop="auto" padding="15px 0px">
-        {size ? (
-          <>
-            <Subtitle fontWeight="bold">{Math.round(size / 1000)} mb</Subtitle>
-            <Dot />
-          </>
-        ) : (
-          <></>
-        )}
+      <VStack spacing={1} align="flex-start" marginTop="auto">
         {databaseInfo.map((item, index) => (
           <>
-            <Subtitle>{item}</Subtitle>{" "}
-            {index !== databaseInfo.length - 1 ? <Dot /> : <></>}{" "}
+            <Subtitle color="#252A32">{item}</Subtitle>
           </>
         ))}
-      </HStack>
-      <Subtitle fontSize="12px" fontStyle="italic">
-        Atualizado há {diffDays} dias.
-      </Subtitle>
+      </VStack>
     </Card>
   );
 }

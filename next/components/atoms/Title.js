@@ -2,15 +2,17 @@ import { Heading } from "@chakra-ui/react";
 
 export default function Title({
   children,
-  color = "#2B8C4D",
+  color = "black",
   fontWeigth = "700",
+  ...style
 }) {
   return (
     <Heading
-      fontFamily="Montserrat"
-      fontSize="22px"
+      fontFamily="Ubuntu"
+      fontSize="18px"
       color={color}
       fontWeight={fontWeigth}
+      {...style}
     >
       {children}
     </Heading>
