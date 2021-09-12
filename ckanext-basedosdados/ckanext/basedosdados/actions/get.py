@@ -284,21 +284,21 @@ def bd_dataset_search(context, data_dict):
         response["resource_bdm_table_count"] += resource_bdm_table_count
         response["resource_external_link_count"] += resource_external_link_count
 
-    # post-process datasets order by ###################################
+    # post-process datasets order by resource_type ###################################
 
-    order = ["bdm_table", "information_request", "external_link"]
+    resource_type_order = ["bdm_table", "information_request", "external_link"]
     resources_order_dict = {}
     for i, package in enumerate(response["datasets"]):
         resources_type = [
             resource.get("resource_type") for resource in package.get("resources")
         ]
-        for item in order:
+        for item in resource_type_order:
             if item in resources_type:
                 resources_order_dict[i] = item
                 break
 
     datasets_final_order = []
-    for item in order:
+    for item in resource_type_order:
         for position in resources_order_dict:
             if resources_order_dict[position] == item:
                 datasets_final_order.append(response["datasets"][position])
