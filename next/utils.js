@@ -59,11 +59,7 @@ export function unionArrays(arrays) {
   const array = arrays.flat(3);
   const result = [];
 
-  console.log(array);
-
   array.forEach((v) => (result.indexOf(v) === -1 ? result.push(v) : null));
-
-  console.log(result);
 
   return result;
 }
