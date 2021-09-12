@@ -111,6 +111,7 @@ export function CheckboxFilterAccordion({
       isActive={isActive}
       fieldName={fieldName}
       isOpen={alwaysOpen ? alwaysOpen : isOpen}
+      overflowX="hidden"
       alwaysOpen={alwaysOpen}
     >
       <CheckboxGroup onChange={(val) => onChange(val)} value={values}>
@@ -143,7 +144,11 @@ export function CheckboxFilterAccordion({
         ) : (
           <></>
         )}
-        <VStack alignItems="flex-start" overflowY="scroll">
+        <VStack
+          overflowX="hidden !important"
+          alignItems="flex-start"
+          overflowY="scroll"
+        >
           {(canSearch
             ? choices.filter(
                 (c) =>
@@ -193,7 +198,7 @@ export function FilterAccordion({
       fieldName={fieldName}
     >
       <VStack
-        overflowX="none !important"
+        overflowX="hidden !important"
         spacing={5}
         paddingTop="10px"
         alignItems="flex-start"

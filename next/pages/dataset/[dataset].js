@@ -153,6 +153,13 @@ function BdmTablePage({ translations, resource, datasetName }) {
     ),
   };
 
+  const helpLink = {
+    SQL: "https://basedosdados.github.io/mais/access_data_bq/#primeiros-passos",
+    Python:
+      "https://basedosdados.github.io/mais/access_data_packages/#primeiros-passos",
+    R: "https://basedosdados.github.io/mais/access_data_packages/#primeiros-passos",
+  };
+
   const consultationText = {
     SQL: `SELECT * FROM \`basedosdados.${queryName}\` LIMIT 100`,
     Python: `import basedosdados as bd
@@ -202,7 +209,7 @@ df <- read_sql(query)`,
           <b>
             Esta tabela está tratada e atualizada no nosso datalake público.
           </b>
-          <br /> Você consultar seus dados via download, SQL (BigQuery), Python
+          <br /> Você pode consultar seus dados via download, SQL (BigQuery), Python
           ou R{" "}
           <LinkDash
             fontWeight="bold"
@@ -318,7 +325,7 @@ df <- read_sql(query)`,
             Para consulta é necessário um projeto no Google Cloud.{" "}
             <b>Primeira vez?</b>{" "}
             <LinkDash
-              href="https://basedosdados.github.io/mais/access_data_bq/"
+              href={helpLink[selectedConsultation]}
               dash={false}
               fontWeight="bold"
               textDecoration="none"

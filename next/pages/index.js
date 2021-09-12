@@ -373,7 +373,7 @@ function ExploreInYourFavoriteLanguage() {
             <b>consultar e filtrar dados usando SQL</b> no editor do nosso
             <i>datalake</i> no Google BigQuery.
           </SectionText>
-          <LinkDash href="https://basedosdados.github.io/mais/">
+          <LinkDash href="https://basedosdados.github.io/mais/access_data_packages">
             Veja mais
           </LinkDash>
         </VStack>
@@ -519,16 +519,19 @@ function JoinTheCommunity() {
   );
 }
 
-function Support() {
+function Support({ strapiPages }) {
+  const contactPage = strapiPages.filter((p) => p.Title === "Contato");
+
   function SupportButton({
     onClick,
     link,
     children,
     colorScheme = "blue",
     backgroundColor = "#3AA1EB",
+    target = "_blank",
   }) {
     return (
-      <a href={link} target="_blank">
+      <a href={link} target={target}>
         <Button
           boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
           borderRadius="68.6364px"
@@ -546,6 +549,7 @@ function Support() {
       </a>
     );
   }
+
   return (
     <VStack position="relative" paddingTop="60px" width="95%">
       <BigTitle position="relative" zIndex="1" width="90%" textAlign="center">
@@ -589,7 +593,7 @@ function Support() {
             Ajude a manter e aprimorar pacotes, suba bases no nosso{" "}
             <i>datalake</i> ou construa análises e tutoriais para nossas redes.
           </SectionText>
-          <SupportButton link="https://basedosdados.github.io/mais/colab_data/">
+          <SupportButton link="https://basedosdados.github.io/mais/colab/">
             Comece aqui
           </SupportButton>
         </ShadowBox>
@@ -598,7 +602,12 @@ function Support() {
             Abra dados de sua organização, construa projetos de dados abertos
             conosco ou desenvolva aplicações com nossos dados.
           </SectionText>
-          <SupportButton>Entre em contato</SupportButton>
+          <SupportButton
+            link={contactPage.length > 0 ? "/blog/" + contactPage[0].id : ""}
+            target="_self"
+          >
+            Entre em contato
+          </SupportButton>
         </ShadowBox>
         <ShadowBox height="270px" spacing={4} title="Doações">
           <SupportButton
@@ -611,7 +620,12 @@ function Support() {
           <SupportButton link="https://apoia.se/basedosdados">
             Apoio mensal
           </SupportButton>
-          <SupportButton>Apoio institucional</SupportButton>
+          <SupportButton
+            link={contactPage.length > 0 ? "/blog/" + contactPage[0].id : ""}
+            target="_self"
+          >
+            Apoio institucional
+          </SupportButton>
         </ShadowBox>
       </Stack>
     </VStack>
@@ -666,7 +680,7 @@ export default function Home({
         <ExploreInYourFavoriteLanguage />
         <LearnToAnalysis />
         <JoinTheCommunity />
-        <Support />
+        <Support strapiPages={strapiPages} />
       </VStack>
       <script
         src="/vendor/terminal.js"

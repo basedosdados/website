@@ -148,7 +148,6 @@ export default function Footer({ strapiPages }) {
               <FooterLink
                 href={aboutPage.length > 0 ? "/blog/" + aboutPage[0].id : ""}
                 color="white"
-                href="/about"
               >
                 Sobre
               </FooterLink>
