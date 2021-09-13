@@ -95,6 +95,10 @@ body {
   color: #dedfe0;
 }
 
+.markdown {
+  word-break: break-word;
+}
+
 .markdown a {
   text-decoration: underline;
   color: #3aa1eb;
