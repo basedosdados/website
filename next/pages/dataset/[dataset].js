@@ -561,6 +561,7 @@ export default function DatasetPage({
         width={{ base: "90%", lg: "85%" }}
         margin="auto"
         spacing={10}
+        paddingTop={{base:"50px", lg:"0px"}}
       >
         <VStack
           alignItems={{ base: "flex-start", lg: "flex-start" }}
