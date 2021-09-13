@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }) {
         <link rel="icon" type="image/ico" href="/favicon.ico" />
         <link
           rel="image_src"
-          href="https://i.ibb.co/nD79bG7/thumbnail-conjunto.png"
+          href="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/thumbnail_geral.png"
         />
         <title>Base dos Dados</title>
         <meta
@@ -30,7 +30,7 @@ function MyApp({ Component, pageProps }) {
         <meta name="twitter:card" content="summary_large_image" key="twcard" />
         <meta
           name="twitter:image"
-          content="https://i.ibb.co/nD79bG7/thumbnail-conjunto.png"
+          content="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/thumbnail_geral.png"
           key="twimage"
         />
         <meta name="twitter:creator" content="Base dos Dados" key="twhandle" />
@@ -38,7 +38,7 @@ function MyApp({ Component, pageProps }) {
         {/* Open Graph */}
         <meta
           property="og:image"
-          content="https://i.ibb.co/nD79bG7/thumbnail-conjunto.png"
+          content="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/thumbnail_geral.png"
           key="ogimage"
         />
         <meta

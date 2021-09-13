@@ -535,6 +535,20 @@ export default function DatasetPage({
         <title>Base dos Dados - {dataset.title}</title>
 
         {/* Open Graph */}
+        <link
+          rel="image_src"
+          href="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/thumbnail_conjunto.png"
+        />
+        <meta
+          property="og:image"
+          content="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/thumbnail_conjunto.png"
+          key="ogimage"
+        />
+        <meta
+          name="twitter:image"
+          content="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/thumbnail_conjunto.png"
+          key="twimage"
+        />
         <meta
           property="og:title"
           content={`Base dos Dados - ${dataset.title}`}
