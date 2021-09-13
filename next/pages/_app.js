@@ -30,6 +30,11 @@ function MyApp({ Component, pageProps }) {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@basedosdados" />
         <meta name="twitter:creator" content="@basedosdados" />
+        <meta
+          name="twitter:image"
+          content="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/thumbnail_geral.png"
+          key="twimage"
+        />
 
         {/* Open Graph */}
         <meta
