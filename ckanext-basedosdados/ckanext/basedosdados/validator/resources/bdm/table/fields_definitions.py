@@ -2,7 +2,6 @@
 from typing import Optional
 
 from ckanext.basedosdados.validator import BaseModel
-
 from pydantic import Field
 from pydantic import StrictStr as Str
 

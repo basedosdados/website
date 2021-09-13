@@ -3,7 +3,7 @@ on:
   pull_request:
   workflow_dispatch:
 jobs:
-  test:
+  integrate:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -17,12 +17,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install isort black pylint
       - name: Check library sort
-        run: isort --check-only --profile black --skip __init__.py --skip vendor .
+        run: python -m isort --check-only --profile black --skip __init__.py --skip vendor .
       - name: Check code format
-        run: black --check .
+        run: python -m black --check .
       - name: Check lint
         run: |
-          pylint --ignore migration,vendor --exit-zero \
+          python -m pylint --ignore migration,vendor --exit-zero \
           ckanext-basedosdados/ckanext/basedosdados
       # - name: Test
       #   run: ./test.sh

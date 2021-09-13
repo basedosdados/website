@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 from ckanext.basedosdados.validator import BaseModel
-
 from pydantic import Field
 from pydantic import StrictStr as Str
+
 
 # -------------------------------------
 # InformationRequest Custom Types
