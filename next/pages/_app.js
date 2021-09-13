@@ -27,13 +27,9 @@ function MyApp({ Component, pageProps }) {
         ></script>
 
         {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" key="twcard" />
-        <meta
-          name="twitter:image"
-          content="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/thumbnail_geral.png"
-          key="twimage"
-        />
-        <meta name="twitter:creator" content="Base dos Dados" key="twhandle" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@basedosdados" />
+        <meta name="twitter:creator" content="@basedosdados" />
 
         {/* Open Graph */}
         <meta
@@ -52,8 +48,23 @@ function MyApp({ Component, pageProps }) {
           content="Baixe dados já limpos, integrados e atualizados de forma extremamente fácil através do nosso datalake público."
           key="ogdesc"
         />
-        <meta property="og:image:width" content="1201" />
-        <meta property="og:image:height" content="601" />
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=UA-203687587-1%22%3E"
+        ></script>
+        <script>
+          {(() => {
+            if (typeof window === "undefined") return;
+
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+              dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
+
+            gtag("config", "UA-203687587-1");
+          })()}
+        </script>
       </Head>
       <ChakraProvider>
         <Component {...pageProps} />

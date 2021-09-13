@@ -162,7 +162,7 @@ function Hero() {
                 <SectionText fontSize="14px">Termos populares: </SectionText>
                 <ThemeTag name="lei" />
                 <ThemeTag name="mortalidade" />
-                <ThemeTag name="covid" />
+                <ThemeTag name="COVID19" />
               </HStack>
             </VStack>
           </Stack>
