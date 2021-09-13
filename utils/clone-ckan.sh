@@ -12,7 +12,7 @@ git clone https://github.com/ckan/ckan.git
 
 cd ckan
 
-git checkout ckan-2.9.0
+git checkout ckan-2.9.3
 
 # correct a bug in ckan
 git diff 9abeaa1b7d2f6539ade946cc3f407878f49950eb^ 9abeaa1b7d2f6539ade946cc3f407878f49950eb | git apply
