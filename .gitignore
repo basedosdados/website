@@ -10,3 +10,4 @@ configs/ckan.override.prod.ini
 dive.log
 tmp
 **/packages
+__MACOSX

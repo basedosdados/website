@@ -118,6 +118,13 @@ function BdmTablePage({ translations, resource, datasetName }) {
   const consultationOptions = ["SQL", "Python", "R"];
   const queryName = `${resource.dataset_id}.${resource.name}`;
 
+  if (
+    resource.spatial_coverage &&
+    typeof resource.spatial_coverage === "array"
+  ) {
+    resource.spatial_coverage = resource.spatial_coverage.sort();
+  }
+
   const consultationLanguage = {
     SQL: "sql",
     Python: "python",
@@ -191,9 +198,7 @@ df <- read_sql(query)`,
   }
 
   return (
-    <BaseResourcePage
-      title={`${resource.name} ${resource.bdm_file_size ? getSizeLabel() : ""}`}
-    >
+    <BaseResourcePage title={`${resource.name}`}>
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Text
           fontFamily="Lato"
@@ -450,9 +455,9 @@ function MetadataPage({ translations, dataset }) {
   unionResourceFields.forEach(
     (f) =>
       (_dataset[f] = unionArrays(
-        _dataset.resources.map((r) =>
-          r[f] ? (typeof r[f] === "array" ? r[f] : [r[f]]) : []
-        )
+        _dataset.resources
+          .map((r) => (r[f] ? (typeof r[f] === "array" ? r[f] : [r[f]]) : []))
+          .sort()
       ))
   );
 
@@ -561,7 +566,7 @@ export default function DatasetPage({
         width={{ base: "90%", lg: "85%" }}
         margin="auto"
         spacing={10}
-        paddingTop={{base:"50px", lg:"0px"}}
+        paddingTop={{ base: "80px", lg: "0px" }}
       >
         <VStack
           alignItems={{ base: "flex-start", lg: "flex-start" }}

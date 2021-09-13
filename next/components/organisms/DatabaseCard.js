@@ -47,16 +47,6 @@ export default function DatabaseCard({
           }
         />
       </Link>
-      {sizeLabel ? (
-        <>
-          <Dot />
-          <Subtitle color="#252A32" fontWeight="bold">
-            {sizeLabel}
-          </Subtitle>
-        </>
-      ) : (
-        <></>
-      )}
     </HStack>
   );
 
