@@ -214,17 +214,6 @@ export function Database({
                     }
                   />
                 </Link>
-                {size ? (
-                  <Subtitle
-                    color={tableNum === 0 ? "#6F6F6F" : "#2B8C4D"}
-                    fontSize="15px"
-                    fontWeight="bold"
-                  >
-                    ({sizeLabel})
-                  </Subtitle>
-                ) : (
-                  <></>
-                )}
               </HStack>
               {externalLinkNum ? (
                 <HStack>

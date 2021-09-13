@@ -52,19 +52,17 @@ function MyApp({ Component, pageProps }) {
           async
           src="https://www.googletagmanager.com/gtag/js?id=UA-203687587-1%22%3E"
         ></script>
-        <script>
-          {(() => {
-            if (typeof window === "undefined") return;
-
-            window.dataLayer = window.dataLayer || [];
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
             function gtag() {
               dataLayer.push(arguments);
             }
             gtag("js", new Date());
 
-            gtag("config", "UA-203687587-1");
-          })()}
-        </script>
+            gtag("config", "UA-203687587-1");`,
+          }}
+        ></script>
       </Head>
       <ChakraProvider>
         <Component {...pageProps} />

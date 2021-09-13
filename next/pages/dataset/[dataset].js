@@ -191,9 +191,7 @@ df <- read_sql(query)`,
   }
 
   return (
-    <BaseResourcePage
-      title={`${resource.name} ${resource.bdm_file_size ? getSizeLabel() : ""}`}
-    >
+    <BaseResourcePage title={`${resource.name}`}>
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Text
           fontFamily="Lato"
@@ -442,7 +440,7 @@ function MetadataPage({ translations, dataset }) {
 
     _resource["spatial_coverage"] = fixSpatialCoverage(
       _resource["spatial_coverage"]
-    );
+    ).sort();
 
     return _resource;
   });
@@ -561,7 +559,7 @@ export default function DatasetPage({
         width={{ base: "90%", lg: "85%" }}
         margin="auto"
         spacing={10}
-        paddingTop={{base:"50px", lg:"0px"}}
+        paddingTop={{ base: "50px", lg: "0px" }}
       >
         <VStack
           alignItems={{ base: "flex-start", lg: "flex-start" }}
