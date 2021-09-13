@@ -1,32 +1,9 @@
-name: ci-dev
+name: cd-dev
 on:
   push:
     branches: [develop]
   workflow_dispatch:
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.9.x'
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install isort black pylint
-      - name: Check library sort
-        run: isort --check-only --profile black --skip __init__.py --skip vendor .
-      - name: Check code format
-        run: black --check .
-      - name: Check lint
-        run: |
-          pylint --ignore migration,vendor --exit-zero \
-          ckanext-basedosdados/ckanext/basedosdados
-      # - name: Test
-      #   run: ./test.sh
   deploy:
     runs-on: ubuntu-latest
     steps:
