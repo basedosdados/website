@@ -46,7 +46,7 @@ RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
 
 # INSTALL EXTENSIONS
 
-# COPY utils/install_extension /app/extensions/install_extension
+# COPY utils/install-extension.sh /app/extensions/install-extension.sh
 COPY --from=extensions /extensions /app/extensions
 COPY ckanext-basedosdados/requirements.txt /app/extensions/ckanext-basedosdados/requirements.txt
 RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \

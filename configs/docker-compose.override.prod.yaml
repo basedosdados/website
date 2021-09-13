@@ -1,28 +1,27 @@
-version: '3.5'
+version: "3.5"
 services:
   nginx:
     image: nginx
     restart: always
     volumes:
-    - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     secrets:
-    - fullchain
-    - privkey
+      - fullchain
+      - privkey
     ports:
-    - 443:443
-    - 80:80
+      - 443:443
+      - 80:80
     networks:
-    - basedosdados
+      - basedosdados
     # logging:
     #   driver: syslog
     #   options:
     #     syslog-address: tcp://logstash:5001
     #     syslog-facility: daemon
 
-
   ckan:
     networks:
-    - basedosdados
+      - basedosdados
     restart: always
     healthcheck:
       interval: 30s
@@ -36,24 +35,34 @@ services:
   next:
     command: ["yarn", "run", "production"]
     networks:
-    - basedosdados
+      - basedosdados
+
+  strapi:
+    build:
+      context: /
+    networks:
+      - basedosdados
+
+  strapi-db:
+    networks:
+      - basedosdados
 
   solr:
     networks:
-    - basedosdados
+      - basedosdados
     restart: always
     volumes:
       - ./solr_data:/opt/solr/server/solr/ckan/data
   db:
     restart: always
     networks:
-    - basedosdados
+      - basedosdados
     volumes:
       - ./pg_data:/var/lib/postgresql/data
   redis:
     restart: always
     networks:
-    - basedosdados
+      - basedosdados
   autoheal:
     restart: always
     image: willfarrell/autoheal

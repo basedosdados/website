@@ -1,5 +1,6 @@
 # docker-compose build && docker-compose up -d
 # If "docker-compose logs ckan" shows DB not ready, run "docker-compose restart ckan" a few times.
+
 version: "3.5"
 
 services:
@@ -10,6 +11,7 @@ services:
     depends_on:
       - ckan
       - next
+      - strapi
     # logging:
     #   driver: syslog
     #   options:
@@ -67,7 +69,40 @@ services:
     image: redis:latest
 
   next:
+    image: "bdd/next${VTAG}"
     container_name: next
     ports:
       - "3000:3000"
     image: bdd/next${VTAG}
+    depends_on:
+      - ckan
+
+  strapi:
+    image: "bdd/strapi${VTAG}"
+    build:
+      context: strapi
+    environment:
+      DATABASE_CLIENT: postgres
+      DATABASE_NAME: strapi
+      DATABASE_HOST: strapi-db
+      DATABASE_PORT: 5432
+      DATABASE_USERNAME: strapi
+      DATABASE_PASSWORD: strapi
+    volumes:
+      - ./strapi:/srv/app
+    ports:
+      - "1337:1337"
+    depends_on:
+      - strapi-db
+
+  strapi-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: strapi
+      POSTGRES_USER: strapi
+      POSTGRES_PASSWORD: strapi
+    volumes:
+      - strapi_db:/var/lib/postgresql/data
+
+volumes:
+  strapi_db:

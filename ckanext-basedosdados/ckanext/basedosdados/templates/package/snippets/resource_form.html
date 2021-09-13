@@ -96,11 +96,11 @@ function _fix_array_fields() {
     array_fields.each( (idx, el) => $(el).attr('name', el.name.replace(/\[[0-9]+\]$/, '')) )
 }
 
-  function _jsonSchemaFormattedObservationLevelItems(observationLevelItems){
+  function _jsonSchemaFormattedEntityItems(entityItems){
     return {
-        ...observationLevelItems[0],
-        title: "Observation Level",
-        enum: observationLevelItems.map(i => ["___" + i.title, ...i.enum]).flat(),
+        ...entityItems[0],
+        title: "Entity",
+        enum: entityItems.map(i => ["___" + i.title, ...i.enum]).flat(),
     }
   }
 
@@ -108,10 +108,10 @@ function _fix_array_fields() {
     delete schema.definitions
 
     if(schema === undefined || fields === undefined) throw new Error('missing fields')
-    let observationLevel = schema.properties.observation_level
+    let entity = schema.properties.entity
 
-    if(observationLevel && observationLevel.items.anyOf){
-       observationLevel.items = _jsonSchemaFormattedObservationLevelItems(observationLevel.items.anyOf)
+    if(entity && entity.items.anyOf){
+      entity.items = _jsonSchemaFormattedEntityItems(entity.items.anyOf)
     }
 
     fields = fields.filter( x => x != 'bdm_file_size')

@@ -17,7 +17,12 @@ export default function SiteHead({ children }) {
         href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700"
         rel="stylesheet"
       />
-      <link href="/_nxt/vendor/terminal.css" rel="stylesheet" />
+      <link href="/vendor/terminal.css" rel="stylesheet" />
+      <script
+        charset="utf-8"
+        type="text/javascript"
+        src="https://js.hsforms.net/forms/shell.js"
+      ></script>
       {children}
     </Head>
   );

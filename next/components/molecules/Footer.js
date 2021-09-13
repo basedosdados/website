@@ -1,23 +1,27 @@
 import {
   Box,
   HStack,
-  Image,
   InputRightAddon,
   Stack,
   VStack,
   Text,
+  Button,
 } from "@chakra-ui/react";
+import Image from "next/image";
 import ControlledInput from "../atoms/ControlledInput";
 import Title from "../atoms/Title";
 import SectionText from "../atoms/SectionText";
 import Link from "../atoms/Link";
 import { useState } from "react";
 import BigTitle from "../atoms/BigTitle";
+import RoundedButton from "../atoms/RoundedButton";
 
 function LinkVStack({ title, children }) {
   return (
     <VStack spacing={5} alignItems="flex-start">
-      <SectionText color="#FFFFFF">{title}</SectionText>
+      <SectionText color="#FFFFFF" fontFamily="Lato" fontWeight="500">
+        {title}
+      </SectionText>
       {children}
     </VStack>
   );
@@ -25,103 +29,147 @@ function LinkVStack({ title, children }) {
 
 function SocialLink({ title, href, src }) {
   return (
-    <Link href={href} target="_blank">
+    <Link fontWeigth="500" color="white" href={href} target="_blank">
       <HStack>
-        <Image width="20px" src={src} />
+        <Box position="relative" height="20px" width="20px">
+          <Image priority layout="fill" objectFit="contain" src={src} />
+        </Box>
         <Text>{title}</Text>
       </HStack>
     </Link>
   );
 }
 
-export default function Footer() {
+function FooterLink(props) {
+  return <Link fontWeigth="500" {...props} />;
+}
+
+export default function Footer({ strapiPages }) {
   const [email, setEmail] = useState();
+
+  const contactPage = strapiPages.filter((p) => p.Title === "Contato");
+  const aboutPage = strapiPages.filter((p) => p.Title === "Sobre");
 
   return (
     <VStack width="100%" spacing={0}>
-      <Stack
-        alignItems="center"
-        justifyContent="center"
-        backgroundColor="#7EC876"
-        width="100%"
-        padding="50px 0px"
-        spacing={10}
-        direction={{ base: "column", lg: "row" }}
-      >
-        <VStack width={{ base: "90%", lg: "50%" }} spacing={10}>
-          <BigTitle fontSize="26px" color="white">
-            Já conhece a nossa newsletter mensal?
-          </BigTitle>
-          <ControlledInput
-            value={email}
-            onChange={setEmail}
-            width="100%"
-            inputBackgroundColor="white"
-            inputStyle={{ borderRadius: 10 }}
-            rightAddon={
-              <Image width="20px" src="/_nxt/img/arrow_black_right.png" />
-            }
-          />
-        </VStack>
-        <Image width="150px" src="/_nxt/img/dadinho_mail.png" />
-      </Stack>
       <VStack width="100%" padding={10} spacing={10} backgroundColor="#34A15A">
-        <HStack
+        <Stack
           alignItems="flex-start"
-          width="100%"
+          width={{ base: "100%", lg: "92%" }}
           justifyContent="space-between"
+          direction={{ base: "column", lg: "row" }}
+          spacing={{ base: 10, lg: 20 }}
         >
-          <Image
-            width={{ base: "100px", md: "180px" }}
-            src="/_nxt/img/logo_footer.png"
-          />
+          <Box minWidth="250px" height="250px" position="relative">
+            <Image
+              priority
+              objectFit="contain"
+              layout="fill"
+              src="/img/logo_footer.png"
+            />
+          </Box>
           <Stack
             direction={{ base: "column", lg: "row" }}
             paddingBottom="100px"
             justifyContent="space-around"
-            width="70%"
+            width="100%"
             alignItems="flex-start"
             marginLeft="auto"
             spacing={{ base: 10, lg: 0 }}
           >
             <LinkVStack title="PRODUTOS">
-              <Link href="/dataset">Mecanismo de busca</Link>
-              <Link href="https://basedosdados.github.io/mais/" target="_blank">
-                Datalake Público
-              </Link>
-            </LinkVStack>
-            <LinkVStack title="CONTEÚDO">
-              <Link>Blog</Link>
-              <Link
-                href="https://www.youtube.com/c/BasedosDados/videos"
+              <FooterLink color="white" href="/dataset">
+                Mecanismo de busca
+              </FooterLink>
+              <FooterLink
+                color="white"
+                href="https://basedosdados.github.io/mais/"
                 target="_blank"
               >
-                Youtube
-              </Link>
+                Datalake público
+              </FooterLink>
+            </LinkVStack>
+            <LinkVStack title="CONTEÚDO">
+              <FooterLink
+                href="https://basedosdados.hubspotpagebuilder.com/assine-a-newsletter-da-base-dos-dados"
+                color="white"
+                target="_blank"
+              >
+                Assine a newsletter
+              </FooterLink>
+              <FooterLink
+                href="https://dev.to/basedosdados"
+                color="white"
+                target="_blank"
+              >
+                Blog
+              </FooterLink>
+              <SocialLink
+                color="white"
+                href="https://www.youtube.com/c/BasedosDados/featured"
+                target="_blank"
+                title="Youtube"
+                src="/img/logos/youtube.png"
+              />
             </LinkVStack>
             <LinkVStack title="COMUNIDADE">
               <SocialLink
                 href="https://twitter.com/basedosdados"
                 title="Twitter"
-                src="/_nxt/img/social/twitter.png"
+                src="/img/social/twitter.png"
               />
               <SocialLink
                 href="https://discord.gg/huKWpsVYx4"
                 title="Discord"
-                src="/_nxt/img/social/discord.png"
+                src="/img/social/discord.png"
               />
               <SocialLink
                 href="https://github.com/basedosdados"
-                title="Github"
-                src="/_nxt/img/social/github.png"
+                title="GitHub"
+                src="/img/social/github.png"
+              />
+              <SocialLink
+                href="https://www.linkedin.com/company/base-dos-dados/mycompany/"
+                title="LinkedIn"
+                src="/img/logos/linkedin.png"
+              />
+              <SocialLink
+                href="https://chat.whatsapp.com/HXWgdFc1RmwCoblly5KPBZ"
+                title="WhatsApp"
+                src="/img/logos/whatsapp.png"
+              />
+              <SocialLink
+                href="https://t.me/joinchat/OKWc3RnClXnq2hq-8o0h_w"
+                title="Telegram"
+                src="/img/logos/telegram.png"
               />
             </LinkVStack>
             <LinkVStack title="INSTITUCIONAL">
-              <Link href="/about">Sobre</Link>
-              <Link>Contato</Link>
+              <FooterLink
+                href={aboutPage.length > 0 ? "/blog/" + aboutPage[0].id : ""}
+                color="white"
+              >
+                Sobre
+              </FooterLink>
+              <FooterLink
+                color="white"
+                href={
+                  contactPage.length > 0 ? "/blog/" + contactPage[0].id : ""
+                }
+              >
+                Contato
+              </FooterLink>
+              <Link
+                fontWeigth="700"
+                color="white"
+                href="https://apoia.se/basedosdados"
+                target="_blank"
+              >
+                Apoie o projeto
+              </Link>
             </LinkVStack>
           </Stack>
-        </HStack>
+        </Stack>
         <VStack spacing={4}>
           <HStack
             fontFamily="Lato !important"
@@ -130,9 +178,9 @@ export default function Footer() {
           >
             <Text>® 2021 Base dos Dados</Text>
             <Text>|</Text>
-            <Link>Termos de uso</Link>
+            <Link color="white">Termos de uso</Link>
             <Text>|</Text>
-            <Link>Política de privacidade</Link>
+            <Link color="white">Política de privacidade</Link>
           </HStack>
           <Text
             color="white"
