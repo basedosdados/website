@@ -83,30 +83,22 @@ TAGS_FIELD = Field(
     ),
     yaml_order={
         "id_before": "groups",
-        "id_after": "spatial_coverage",
+        "id_after": "update_frequency",
     },
 )
 
 SPATIAL_COVERAGE_FIELD = Field(
     title="Cobertura Espacial",
-    yaml_order={
-        "id_before": "tags",
-        "id_after": "temporal_coverage",
-    },
 )
 
 TEMPORAL_COVERAGE_FIELD = Field(
     title="Cobertura Temporal",
-    yaml_order={
-        "id_before": "spatial_coverage",
-        "id_after": "entity",
-    },
 )
 
 UPDATE_FREQUENCY_FIELD = Field(
     title="Frequência de Atualização",
     yaml_order={
-        "id_before": "temporal_coverage",
+        "id_before": "tags",
         "id_after": "entity",
     },
 )
