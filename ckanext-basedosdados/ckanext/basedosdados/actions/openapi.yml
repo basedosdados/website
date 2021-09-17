@@ -31,106 +31,6 @@ servers:
   - url: http://localhost/api/3/action
     description: Servidor de desenvolvimento
 paths:
-  /dataset_purge:
-    post:
-      description: Deleta todos os metadados de uma base de dados.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  example: dataset-id
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  help:
-                    type: string
-                    example: >-
-                      https://basedosdados.org/api/3/action/help_show?name=dataset_purge
-                  success:
-                    type: boolean
-                  result:
-                    type: string
-                    nullable: true
-                    example: null
-      security:
-        - ApiKeyAuth: []
-      tags:
-        - CKAN
-  /package_create:
-    post:
-      description: >-
-        Cria uma base. E de acordo com a documentação do CKAN, para adicionar
-        grupos a uma base o usuário deve estar autorizado a editar estes grupos.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DatasetOnCreate'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  help:
-                    type: string
-                    example: >-
-                      https://basedosdados.org/api/3/action/help_show?name=package_create
-                  result:
-                    $ref: '#/components/schemas/Dataset'
-                  success:
-                    type: boolean
-      security:
-        - ApiKeyAuth: []
-      tags:
-        - CKAN
-  /package_delete:
-    post:
-      description: >-
-        Adiciona uma tag a base que oculta a mesmo, mas não deleta no banco de
-        dados.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  example: dataset-id
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  help:
-                    type: string
-                    example: >-
-                      https://basedosdados.org/api/3/action/help_show?name=package_delete
-                  success:
-                    type: boolean
-                  result:
-                    type: string
-                    nullable: true
-                    example: null
-      security:
-        - ApiKeyAuth: []
-      tags:
-        - CKAN
   /package_list:
     get:
       description: Lista as bases.
@@ -152,40 +52,6 @@ paths:
                       type: string
                   success:
                     type: boolean
-      tags:
-        - CKAN
-  /package_patch:
-    post:
-      description: >-
-        Atualiza parcialmente uma base. Note que caso esteja adicionando ou
-        alterando um recurso é obrigatório enviar todos os recursos já
-        existentes. Cada recurso não enviado e considerado deletado pelo CKAN. A
-        documentação do CKAN recomenda o seguinte processo: 1) realizar o
-        download de uma base com **package_show**; 2) Alterar os metadados desta
-        base; e 3) Atualizar a base com **package_update**.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Dataset'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  help:
-                    type: string
-                    example: >-
-                      https://basedosdados.org/api/3/action/help_show?name=package_patch
-                  result:
-                    $ref: '#/components/schemas/Dataset'
-                  success:
-                    type: boolean
-      security:
-        - ApiKeyAuth: []
       tags:
         - CKAN
   /package_show:
@@ -242,6 +108,252 @@ paths:
                       https://basedosdados.org/api/3/action/help_show?name=package_update
                   result:
                     $ref: '#/components/schemas/Dataset'
+                  success:
+                    type: boolean
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - CKAN
+  /package_patch:
+    post:
+      description: >-
+        Atualiza parcialmente uma base. Note que caso esteja adicionando ou
+        alterando um recurso é obrigatório enviar todos os recursos já
+        existentes. Cada recurso não enviado e considerado deletado pelo CKAN. A
+        documentação do CKAN recomenda o seguinte processo: 1) realizar o
+        download de uma base com **package_show**; 2) Alterar os metadados desta
+        base; e 3) Atualizar a base com **package_update**.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  help:
+                    type: string
+                    example: >-
+                      https://basedosdados.org/api/3/action/help_show?name=package_patch
+                  result:
+                    $ref: '#/components/schemas/Dataset'
+                  success:
+                    type: boolean
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - CKAN
+  /package_create:
+    post:
+      description: >-
+        Cria uma base. E de acordo com a documentação do CKAN, para adicionar
+        grupos a uma base o usuário deve estar autorizado a editar estes grupos.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetOnCreate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  help:
+                    type: string
+                    example: >-
+                      https://basedosdados.org/api/3/action/help_show?name=package_create
+                  result:
+                    $ref: '#/components/schemas/Dataset'
+                  success:
+                    type: boolean
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - CKAN
+  /dataset_purge:
+    post:
+      description: Deleta todos os metadados de uma base de dados.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: dataset-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  help:
+                    type: string
+                    example: >-
+                      https://basedosdados.org/api/3/action/help_show?name=dataset_purge
+                  success:
+                    type: boolean
+                  result:
+                    type: string
+                    nullable: true
+                    example: null
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - CKAN
+  /package_delete:
+    post:
+      description: >-
+        Adiciona uma tag a base que oculta a mesmo, mas não deleta no banco de
+        dados.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: dataset-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  help:
+                    type: string
+                    example: >-
+                      https://basedosdados.org/api/3/action/help_show?name=package_delete
+                  success:
+                    type: boolean
+                  result:
+                    type: string
+                    nullable: true
+                    example: null
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - CKAN
+  /resource_list:
+    get:
+      description: Lista os recursos.
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  help:
+                    type: string
+                    example: >-
+                      https://basedosdados.org/api/3/action/help_show?name=resource_list
+                  result:
+                    type: array
+                    items:
+                      type: string
+                  success:
+                    type: boolean
+      tags:
+        - CKAN
+  /resource_show:
+    get:
+      description: Visualiza um recurso (tabela ou link externo) através de seu UUID.
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: string
+          example: a296c904-ae44-4d4c-ae40-10b3c3f13231
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  help:
+                    type: string
+                    example: >-
+                      https://basedosdados.org/api/3/action/help_show?name=resource_show
+                  result:
+                    $ref: '#/components/schemas/Resource'
+                  success:
+                    type: boolean
+      tags:
+        - CKAN
+  /resource_update:
+    post:
+      description: >-
+        Atualiza os metadados de um recurso. Recomenda-se sempre realizar o
+        download dos metadados mais atuais, para então atualizar o que for
+        necessário.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Resource'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  help:
+                    type: string
+                    example: >-
+                      https://basedosdados.org/api/3/action/help_show?name=resource_update
+                  result:
+                    $ref: '#/components/schemas/Resource'
+                  success:
+                    type: boolean
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - CKAN
+  /resource_patch:
+    post:
+      description: >-
+        Atualiza parcialmente os metadados de um recurso. Recomenda-se sempre
+        realizar o download dos metadados mais atuais, para então atualizar o
+        que for necessário.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Resource'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  help:
+                    type: string
+                    example: >-
+                      https://basedosdados.org/api/3/action/help_show?name=resource_patch
+                  result:
+                    $ref: '#/components/schemas/Resource'
                   success:
                     type: boolean
       security:
@@ -308,118 +420,6 @@ paths:
                     type: string
                     nullable: true
                     example: null
-      security:
-        - ApiKeyAuth: []
-      tags:
-        - CKAN
-  /resource_list:
-    get:
-      description: Lista os recursos.
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  help:
-                    type: string
-                    example: >-
-                      https://basedosdados.org/api/3/action/help_show?name=resource_list
-                  result:
-                    type: array
-                    items:
-                      type: string
-                  success:
-                    type: boolean
-      tags:
-        - CKAN
-  /resource_patch:
-    post:
-      description: >-
-        Atualiza parcialmente os metadados de um recurso. Recomenda-se sempre
-        realizar o download dos metadados mais atuais, para então atualizar o
-        que for necessário.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Resource'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  help:
-                    type: string
-                    example: >-
-                      https://basedosdados.org/api/3/action/help_show?name=resource_patch
-                  result:
-                    $ref: '#/components/schemas/Resource'
-                  success:
-                    type: boolean
-      security:
-        - ApiKeyAuth: []
-      tags:
-        - CKAN
-  /resource_show:
-    get:
-      description: Visualiza um recurso (tabela ou link externo) através de seu UUID.
-      parameters:
-        - name: id
-          in: query
-          schema:
-            type: string
-          example: a296c904-ae44-4d4c-ae40-10b3c3f13231
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  help:
-                    type: string
-                    example: >-
-                      https://basedosdados.org/api/3/action/help_show?name=resource_show
-                  result:
-                    $ref: '#/components/schemas/Resource'
-                  success:
-                    type: boolean
-      tags:
-        - CKAN
-  /resource_update:
-    post:
-      description: >-
-        Atualiza os metadados de um recurso. Recomenda-se sempre realizar o
-        download dos metadados mais atuais, para então atualizar o que for
-        necessário.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Resource'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  help:
-                    type: string
-                    example: >-
-                      https://basedosdados.org/api/3/action/help_show?name=resource_update
-                  result:
-                    $ref: '#/components/schemas/Resource'
-                  success:
-                    type: boolean
       security:
         - ApiKeyAuth: []
       tags:
@@ -493,65 +493,6 @@ paths:
                     type: boolean
       tags:
         - CKAN
-  /bd_bdm_dataset_show:
-    get:
-      description: Procura de datasets pelo ID.
-      parameters:
-        - in: query
-          name: dataset_id
-          schema:
-            type: string
-          example: br_sp_alesp
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  help:
-                    type: string
-                    example: >-
-                      https://basedosdados.org/api/3/action/help_show?name=bd_bdm_dataset_show
-                  result:
-                    $ref: '#/components/schemas/Dataset'
-                  success:
-                    type: boolean
-      tags:
-        - Base dos Dados
-  /bd_bdm_table_show:
-    get:
-      description: Procura um recurso (tabela ou link externo) pelo seu nome.
-      parameters:
-        - in: query
-          name: dataset_id
-          schema:
-            type: string
-          example: br_sp_alesp
-        - in: query
-          name: table_id
-          schema:
-            type: string
-          example: deputado
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  help:
-                    type: string
-                    example: >-
-                      https://basedosdados.org/api/3/action/help_show?name=bd_bdm_table_show
-                  result:
-                    $ref: '#/components/schemas/Resource'
-                  success:
-                    type: boolean
-      tags:
-        - Base dos Dados
   /bd_dataset_search:
     get:
       description: Busca bases
@@ -670,6 +611,65 @@ paths:
                     type: boolean
       tags:
         - Base dos Dados
+  /bd_bdm_dataset_show:
+    get:
+      description: Procura de datasets pelo ID.
+      parameters:
+        - in: query
+          name: dataset_id
+          schema:
+            type: string
+          example: br_sp_alesp
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  help:
+                    type: string
+                    example: >-
+                      https://basedosdados.org/api/3/action/help_show?name=bd_bdm_dataset_show
+                  result:
+                    $ref: '#/components/schemas/Dataset'
+                  success:
+                    type: boolean
+      tags:
+        - Base dos Dados
+  /bd_bdm_table_show:
+    get:
+      description: Procura um recurso (tabela ou link externo) pelo seu nome.
+      parameters:
+        - in: query
+          name: dataset_id
+          schema:
+            type: string
+          example: br_sp_alesp
+        - in: query
+          name: table_id
+          schema:
+            type: string
+          example: deputado
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  help:
+                    type: string
+                    example: >-
+                      https://basedosdados.org/api/3/action/help_show?name=bd_bdm_table_show
+                  result:
+                    $ref: '#/components/schemas/Resource'
+                  success:
+                    type: boolean
+      tags:
+        - Base dos Dados
   /bd_openapi:
     get:
       description: Exibe esta documentação em formato json.
@@ -770,6 +770,27 @@ paths:
                     type: boolean
       tags:
         - Base dos Dados
+  /bd_dataset_schema:
+    get:
+      description: Gera um modelo de dataset.
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  help:
+                    type: string
+                    example: >-
+                      https://basedosdados.org/api/3/action/help_show?name=bd_dataset_schema
+                  result:
+                    $ref: '#/components/schemas/DatasetSchema'
+                  success:
+                    type: boolean
+      tags:
+        - Base dos Dados (Schema)
   /bd_bdm_table_schema:
     get:
       description: Gera um modelo de tabela.
@@ -833,27 +854,6 @@ paths:
                     type: boolean
       tags:
         - Base dos Dados (Schema)
-  /bd_dataset_schema:
-    get:
-      description: Gera um modelo de dataset.
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  help:
-                    type: string
-                    example: >-
-                      https://basedosdados.org/api/3/action/help_show?name=bd_dataset_schema
-                  result:
-                    $ref: '#/components/schemas/DatasetSchema'
-                  success:
-                    type: boolean
-      tags:
-        - Base dos Dados (Schema)
   /bd_external_link_schema:
     get:
       description: Gera um modelo de link externo.
@@ -903,495 +903,7 @@ components:
       in: header
       name: Authorization
   schemas:
-    ColumnsSchema:
-      type: object
-      properties:
-        title:
-          type: string
-        type:
-          type: string
-        properties:
-          type: object
-          properties:
-            name:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                      nullable: true
-                    id_after:
-                      type: string
-                type:
-                  type: string
-            bigquery_type:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                allOf:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      $ref:
-                        type: string
-            description:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                type:
-                  type: string
-            temporal_coverage:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                user_input_hint:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                allOf:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      $ref:
-                        type: string
-            covered_by_dictionary:
-              type: object
-              properties:
-                title:
-                  type: string
-                user_input_hint:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                allOf:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      $ref:
-                        type: string
-            directory_column:
-              type: object
-              properties:
-                title:
-                  type: string
-                user_input_hint:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                allOf:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      $ref:
-                        type: string
-            measurement_unit:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                user_input_hint:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                allOf:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      $ref:
-                        type: string
-            has_sensitive_data:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                user_input_hint:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                allOf:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      $ref:
-                        type: string
-            is_in_staging:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                user_input_hint:
-                  type: boolean
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                type:
-                  type: string
-            is_partition:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                user_input_hint:
-                  type: boolean
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                      nullable: true
-                type:
-                  type: string
-        definitions:
-          type: object
-          properties:
-            BigQueryTypeEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            TemporalCoverageEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                minimum:
-                  type: integer
-                maximum:
-                  type: integer
-                type:
-                  type: string
-                items:
-                  type: object
-                  properties:
-                    type:
-                      type: string
-                    minimum:
-                      type: integer
-                    maximum:
-                      type: integer
-            YesNoEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            DirectoryEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            DirectoryColumn:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-                properties:
-                  type: object
-                  properties:
-                    dataset_id:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        allOf:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              $ref:
-                                type: string
-                    table_id:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-                    column_name:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-            MeasurementUnitEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-    Dataset:
-      properties:
-        isopen:
-          type: boolean
-        private:
-          type: boolean
-        notes:
-          type: string
-        extras:
-          type: array
-          items:
-            $ref: '#/components/schemas/Extra'
-        owner_org:
-          type: string
-        title:
-          type: string
-        type:
-          type: string
-        maintainer:
-          type: string
-        ckan_url:
-          type: string
-        author_email:
-          type: string
-        id:
-          type: string
-        state:
-          type: string
-        relationships_as_object:
-          type: array
-          items:
-            type: string
-        creator_user_id:
-          type: string
-        metadata_modified:
-          type: string
-        author:
-          type: string
-        relationships_as_subject:
-          type: array
-          items:
-            type: string
-        metadata_created:
-          type: string
-        resources:
-          type: array
-          items:
-            $ref: '#/components/schemas/Resource'
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/Group'
-        version:
-          type: string
-        url:
-          type: string
-        tags:
-          type: array
-          items:
-            type: object
-            properties:
-              vocabulary_id:
-                type: string
-              name:
-                type: string
-              id:
-                type: string
-              state:
-                type: string
-              display_name:
-                type: string
-        github_url:
-          type: string
-        license_id:
-          type: string
-        organization:
-          $ref: '#/components/schemas/Organization'
-        name:
-          type: string
-        maintainer_email:
-          type: string
-        license_title:
-          type: string
-    DatasetOnCreate:
-      description: >-
-        Dataset como definido no CKAN. Durante a sua criação é possível
-        adicionar mais valores no campo Extras.
-      properties:
-        private:
-          type: boolean
-        notes:
-          type: string
-        extras:
-          type: array
-          items:
-            $ref: '#/components/schemas/Extra'
-        owner_org:
-          type: string
-        title:
-          type: string
-        type:
-          type: string
-        maintainer:
-          type: string
-        author_email:
-          type: string
-        state:
-          type: string
-        relationships_as_object:
-          type: array
-          items:
-            type: string
-        author:
-          type: string
-        relationships_as_subject:
-          type: array
-          items:
-            type: string
-        resources:
-          type: array
-          items:
-            $ref: '#/components/schemas/Resource'
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/Group'
-        version:
-          type: string
-        url:
-          type: string
-        tags:
-          type: array
-          items:
-            type: object
-            properties:
-              vocabulary_id:
-                type: string
-              name:
-                type: string
-              id:
-                type: string
-              state:
-                type: string
-              display_name:
-                type: string
-        license_id:
-          type: string
-        organization:
-          $ref: '#/components/schemas/Organization'
-        name:
-          type: string
-        maintainer_email:
-          type: string
-    DatasetSchema:
+    DatasetSchema:  
       type: object
       properties:
         title:
@@ -3941,6 +3453,1845 @@ components:
                   type: array
                   items:
                     type: string
+    TableSchema:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          type: string
+        properties:
+          type: object
+          properties:
+            id:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+            name:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+            description:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                type:
+                  type: string
+            position:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+            url:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+            cache_last_updated:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+                format:
+                  type: string
+            cache_url:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+            created:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+                format:
+                  type: string
+            datastore_active:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+            format:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+            hash:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+            last_modified:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+                format:
+                  type: string
+            metadata_modified:
+              type: object
+              properties:
+                title:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                      nullable: true
+                type:
+                  type: string
+                format:
+                  type: string
+            mimetype:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+            mimetype_inner:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+            package_id:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+            size:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+            state:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+            url_type:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+            resource_type:
+              type: object
+              properties:
+                title:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            dataset_id:
+              type: object
+              properties:
+                title:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                      nullable: true
+                    id_after:
+                      type: string
+                type:
+                  type: string
+            table_id:
+              type: object
+              properties:
+                title:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                type:
+                  type: string
+            spatial_coverage:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                anyOf:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      $ref:
+                        type: string
+            temporal_coverage:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                allOf:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      $ref:
+                        type: string
+            update_frequency:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                user_input_hint:
+                  type: array
+                  items:
+                    type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                allOf:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      $ref:
+                        type: string
+            entity:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                maxItems:
+                  type: integer
+                type:
+                  type: string
+                items:
+                  type: object
+                  properties:
+                    anyOf:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          $ref:
+                            type: string
+                uniqueItems:
+                  type: boolean
+            time_unit:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                allOf:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      $ref:
+                        type: string
+            identifying_columns:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                user_input_hint:
+                  type: array
+                  items:
+                    type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                type:
+                  type: string
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+            last_updated:
+              type: object
+              properties:
+                title:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                allOf:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      $ref:
+                        type: string
+            version:
+              type: object
+              properties:
+                title:
+                  type: string
+                user_input_hint:
+                  type: array
+                  items:
+                    type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                type:
+                  type: string
+            published_by:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                allOf:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      $ref:
+                        type: string
+            data_cleaned_by:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                allOf:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      $ref:
+                        type: string
+            data_cleaning_description:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                type:
+                  type: string
+            raw_files_url:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                type:
+                  type: string
+            auxiliary_files_url:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                type:
+                  type: string
+            architecture_url:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                type:
+                  type: string
+            covered_by_dictionary:
+              type: object
+              properties:
+                title:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                allOf:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      $ref:
+                        type: string
+            source_bucket_name:
+              type: object
+              properties:
+                title:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                type:
+                  type: string
+            project_id_prod:
+              type: object
+              properties:
+                title:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                type:
+                  type: string
+            project_id_staging:
+              type: object
+              properties:
+                title:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                type:
+                  type: string
+            partitions:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                user_input_hint:
+                  type: array
+                  items:
+                    type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                type:
+                  type: string
+            bdm_file_size:
+              type: object
+              properties:
+                title:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                anyOf:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+            columns:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                anyOf:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      items:
+                        type: object
+                        properties:
+                          $ref:
+                            type: string
+        required:
+          type: array
+          items:
+            type: string
+        definitions:
+          type: object
+          properties:
+            ContinentEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            CountryEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            Admin1Enum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            Admin2Enum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            SpatialCoverage:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+                properties:
+                  type: object
+                  properties:
+                    continent:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                        items:
+                          type: object
+                          properties:
+                            $ref:
+                              type: string
+                        uniqueItems:
+                          type: boolean
+                    country:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                        items:
+                          type: object
+                          properties:
+                            $ref:
+                              type: string
+                        uniqueItems:
+                          type: boolean
+                    admin1:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                        items:
+                          type: object
+                          properties:
+                            $ref:
+                              type: string
+                        uniqueItems:
+                          type: boolean
+                    admin2:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                        items:
+                          type: object
+                          properties:
+                            $ref:
+                              type: string
+                        uniqueItems:
+                          type: boolean
+            TemporalCoverageEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                minimum:
+                  type: integer
+                maximum:
+                  type: integer
+                type:
+                  type: string
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    minimum:
+                      type: integer
+                    maximum:
+                      type: integer
+            TimeUnitEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            EntitySphereEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            EntityIndividualEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            EntityEstablishmentEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            EntityPoliticsEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            EntityScienceEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            EntityEconomicsEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            EntityEducationEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            EntityEventEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            EntityArtEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            EntityInfrastructureEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            EntityTransportationEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            EntitySecurityEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            EntityDemographicEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            EntityHistoryEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            EntityOtherEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            EntityImageEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            LastUpdated:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+                properties:
+                  type: object
+                  properties:
+                    metadata:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                        format:
+                          type: string
+                    data:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                        format:
+                          type: string
+                    release:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                        format:
+                          type: string
+            PublishedBy:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+                properties:
+                  type: object
+                  properties:
+                    name:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                    email:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                    github_user:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                    website:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                    ckan_user:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+            DataCleanedBy:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+                properties:
+                  type: object
+                  properties:
+                    name:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                    email:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                    github_user:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                    ckan_user:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                    website:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                    code_url:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+            YesNoEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            BigQueryTypeEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            DirectoryEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            DirectoryColumn:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+                properties:
+                  type: object
+                  properties:
+                    dataset_id:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        allOf:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              $ref:
+                                type: string
+                    table_id:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                    column_name:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+            MeasurementUnitEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            BdmColumns:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+                properties:
+                  type: object
+                  properties:
+                    name:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        yaml_order:
+                          type: object
+                          properties:
+                            id_before:
+                              type: string
+                              nullable: true
+                            id_after:
+                              type: string
+                        type:
+                          type: string
+                    bigquery_type:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        yaml_order:
+                          type: object
+                          properties:
+                            id_before:
+                              type: string
+                            id_after:
+                              type: string
+                        allOf:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              $ref:
+                                type: string
+                    description:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        yaml_order:
+                          type: object
+                          properties:
+                            id_before:
+                              type: string
+                            id_after:
+                              type: string
+                        type:
+                          type: string
+                    temporal_coverage:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        user_input_hint:
+                          type: string
+                        yaml_order:
+                          type: object
+                          properties:
+                            id_before:
+                              type: string
+                            id_after:
+                              type: string
+                        allOf:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              $ref:
+                                type: string
+                    covered_by_dictionary:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: string
+                        yaml_order:
+                          type: object
+                          properties:
+                            id_before:
+                              type: string
+                            id_after:
+                              type: string
+                        allOf:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              $ref:
+                                type: string
+                    directory_column:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: string
+                        yaml_order:
+                          type: object
+                          properties:
+                            id_before:
+                              type: string
+                            id_after:
+                              type: string
+                        allOf:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              $ref:
+                                type: string
+                    measurement_unit:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        user_input_hint:
+                          type: string
+                        yaml_order:
+                          type: object
+                          properties:
+                            id_before:
+                              type: string
+                            id_after:
+                              type: string
+                        allOf:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              $ref:
+                                type: string
+                    has_sensitive_data:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        user_input_hint:
+                          type: string
+                        yaml_order:
+                          type: object
+                          properties:
+                            id_before:
+                              type: string
+                            id_after:
+                              type: string
+                        allOf:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              $ref:
+                                type: string
+                    is_in_staging:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        user_input_hint:
+                          type: boolean
+                        yaml_order:
+                          type: object
+                          properties:
+                            id_before:
+                              type: string
+                            id_after:
+                              type: string
+                        type:
+                          type: string
+                    is_partition:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        user_input_hint:
+                          type: boolean
+                        yaml_order:
+                          type: object
+                          properties:
+                            id_before:
+                              type: string
+                            id_after:
+                              type: string
+                              nullable: true
+                        type:
+                          type: string
+    ColumnsSchema:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          type: string
+        properties:
+          type: object
+          properties:
+            name:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                      nullable: true
+                    id_after:
+                      type: string
+                type:
+                  type: string
+            bigquery_type:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                allOf:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      $ref:
+                        type: string
+            description:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                type:
+                  type: string
+            temporal_coverage:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                user_input_hint:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                allOf:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      $ref:
+                        type: string
+            covered_by_dictionary:
+              type: object
+              properties:
+                title:
+                  type: string
+                user_input_hint:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                allOf:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      $ref:
+                        type: string
+            directory_column:
+              type: object
+              properties:
+                title:
+                  type: string
+                user_input_hint:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                allOf:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      $ref:
+                        type: string
+            measurement_unit:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                user_input_hint:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                allOf:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      $ref:
+                        type: string
+            has_sensitive_data:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                user_input_hint:
+                  type: string
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                allOf:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      $ref:
+                        type: string
+            is_in_staging:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                user_input_hint:
+                  type: boolean
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                type:
+                  type: string
+            is_partition:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                user_input_hint:
+                  type: boolean
+                yaml_order:
+                  type: object
+                  properties:
+                    id_before:
+                      type: string
+                    id_after:
+                      type: string
+                      nullable: true
+                type:
+                  type: string
+        definitions:
+          type: object
+          properties:
+            BigQueryTypeEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            TemporalCoverageEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                minimum:
+                  type: integer
+                maximum:
+                  type: integer
+                type:
+                  type: string
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    minimum:
+                      type: integer
+                    maximum:
+                      type: integer
+            YesNoEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            DirectoryEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
+            DirectoryColumn:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+                properties:
+                  type: object
+                  properties:
+                    dataset_id:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        allOf:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              $ref:
+                                type: string
+                    table_id:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                    column_name:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        user_input_hint:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+            MeasurementUnitEnum:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                enum:
+                  type: array
+                  items:
+                    type: string
+                type:
+                  type: string
     DictionarySchema:
       type: object
       properties:
@@ -5695,41 +7046,6 @@ components:
                     type: string
                 type:
                   type: string
-    Extra:
-      properties:
-        key:
-          type: string
-          example: dataset_args
-        value:
-          type: object
-    Group:
-      properties:
-        image_url:
-          type: string
-        created:
-          type: string
-        approval_status:
-          type: string
-        description:
-          type: string
-        title:
-          type: string
-        type:
-          type: string
-        is_organization:
-          type: boolean
-        display_name:
-          type: string
-        capacity:
-          type: string
-        image_display_url:
-          type: string
-        name:
-          type: string
-        id:
-          type: string
-        state:
-          type: string
     InformationRequestSchema:
       type: object
       properties:
@@ -6642,28 +7958,89 @@ components:
                     type: string
                 type:
                   type: string
-    Organization:
+    Dataset:
       properties:
-        image_url:
+        isopen:
+          type: boolean
+        private:
+          type: boolean
+        notes:
           type: string
-        created:
-          type: string
-        approval_status:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        id:
-          type: string
-        state:
+        extras:
+          type: array
+          items:
+            $ref: '#/components/schemas/Extra'
+        owner_org:
           type: string
         title:
           type: string
         type:
           type: string
-        is_organization:
-          type: boolean
+        maintainer:
+          type: string
+        ckan_url:
+          type: string
+        author_email:
+          type: string
+        id:
+          type: string
+        state:
+          type: string
+        relationships_as_object:
+          type: array
+          items:
+            type: string
+        creator_user_id:
+          type: string
+        metadata_modified:
+          type: string
+        author:
+          type: string
+        relationships_as_subject:
+          type: array
+          items:
+            type: string
+        metadata_created:
+          type: string
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/Resource'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+        version:
+          type: string
+        url:
+          type: string
+        tags:
+          type: array
+          items:
+            type: object
+            properties:
+              vocabulary_id:
+                type: string
+              name:
+                type: string
+              id:
+                type: string
+              state:
+                type: string
+              display_name:
+                type: string
+        github_url:
+          type: string
+        license_id:
+          type: string
+        organization:
+          $ref: '#/components/schemas/Organization'
+        name:
+          type: string
+        maintainer_email:
+          type: string
+        license_title:
+          type: string
     Resource:
       properties:
         project_id_prod:
@@ -6783,6 +8160,133 @@ components:
           type: array
           items:
             type: string
+    Extra:
+      properties:
+        key:
+          type: string
+          example: dataset_args
+        value:
+          type: object
+    Group:
+      properties:
+        image_url:
+          type: string
+        created:
+          type: string
+        approval_status:
+          type: string
+        description:
+          type: string
+        title:
+          type: string
+        type:
+          type: string
+        is_organization:
+          type: boolean
+        display_name:
+          type: string
+        capacity:
+          type: string
+        image_display_url:
+          type: string
+        name:
+          type: string
+        id:
+          type: string
+        state:
+          type: string
+    Organization:
+      properties:
+        image_url:
+          type: string
+        created:
+          type: string
+        approval_status:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        id:
+          type: string
+        state:
+          type: string
+        title:
+          type: string
+        type:
+          type: string
+        is_organization:
+          type: boolean
+    DatasetOnCreate:
+      description: >-
+        Dataset como definido no CKAN. Durante a sua criação é possível
+        adicionar mais valores no campo Extras.
+      properties:
+        private:
+          type: boolean
+        notes:
+          type: string
+        extras:
+          type: array
+          items:
+            $ref: '#/components/schemas/Extra'
+        owner_org:
+          type: string
+        title:
+          type: string
+        type:
+          type: string
+        maintainer:
+          type: string
+        author_email:
+          type: string
+        state:
+          type: string
+        relationships_as_object:
+          type: array
+          items:
+            type: string
+        author:
+          type: string
+        relationships_as_subject:
+          type: array
+          items:
+            type: string
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/Resource'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+        version:
+          type: string
+        url:
+          type: string
+        tags:
+          type: array
+          items:
+            type: object
+            properties:
+              vocabulary_id:
+                type: string
+              name:
+                type: string
+              id:
+                type: string
+              state:
+                type: string
+              display_name:
+                type: string
+        license_id:
+          type: string
+        organization:
+          $ref: '#/components/schemas/Organization'
+        name:
+          type: string
+        maintainer_email:
+          type: string
     ResourceOnCreate:
       description: >-
         Recurso como definido no CKAN. Em sua criação é possível adicionar os
@@ -6810,1507 +8314,3 @@ components:
           type: string
         mimetype:
           type: string
-    TableSchema:
-      type: object
-      properties:
-        title:
-          type: string
-        type:
-          type: string
-        properties:
-          type: object
-          properties:
-            id:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-            name:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-            description:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                type:
-                  type: string
-            position:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-            url:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-            cache_last_updated:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-                format:
-                  type: string
-            cache_url:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-            created:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-                format:
-                  type: string
-            datastore_active:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-            format:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-            hash:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-            last_modified:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-                format:
-                  type: string
-            metadata_modified:
-              type: object
-              properties:
-                title:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                      nullable: true
-                type:
-                  type: string
-                format:
-                  type: string
-            mimetype:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-            mimetype_inner:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-            package_id:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-            size:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-            state:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-            url_type:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-            resource_type:
-              type: object
-              properties:
-                title:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            dataset_id:
-              type: object
-              properties:
-                title:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                      nullable: true
-                    id_after:
-                      type: string
-                type:
-                  type: string
-            table_id:
-              type: object
-              properties:
-                title:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                type:
-                  type: string
-            spatial_coverage:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                anyOf:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      $ref:
-                        type: string
-            temporal_coverage:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                allOf:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      $ref:
-                        type: string
-            update_frequency:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                allOf:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      $ref:
-                        type: string
-            entity:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                maxItems:
-                  type: integer
-                type:
-                  type: string
-                items:
-                  type: object
-                  properties:
-                    anyOf:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          $ref:
-                            type: string
-                uniqueItems:
-                  type: boolean
-            time_unit:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                allOf:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      $ref:
-                        type: string
-            identifying_columns:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                type:
-                  type: string
-                items:
-                  type: object
-                  properties:
-                    type:
-                      type: string
-            last_updated:
-              type: object
-              properties:
-                title:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                allOf:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      $ref:
-                        type: string
-            version:
-              type: object
-              properties:
-                title:
-                  type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                type:
-                  type: string
-            published_by:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                allOf:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      $ref:
-                        type: string
-            data_cleaned_by:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                allOf:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      $ref:
-                        type: string
-            data_cleaning_description:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                type:
-                  type: string
-            raw_files_url:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                type:
-                  type: string
-            auxiliary_files_url:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                type:
-                  type: string
-            architecture_url:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                type:
-                  type: string
-            covered_by_dictionary:
-              type: object
-              properties:
-                title:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                allOf:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      $ref:
-                        type: string
-            source_bucket_name:
-              type: object
-              properties:
-                title:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                type:
-                  type: string
-            project_id_prod:
-              type: object
-              properties:
-                title:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                type:
-                  type: string
-            project_id_staging:
-              type: object
-              properties:
-                title:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                type:
-                  type: string
-            partitions:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                type:
-                  type: string
-            bdm_file_size:
-              type: object
-              properties:
-                title:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                anyOf:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      type:
-                        type: string
-            columns:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                yaml_order:
-                  type: object
-                  properties:
-                    id_before:
-                      type: string
-                    id_after:
-                      type: string
-                anyOf:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      type:
-                        type: string
-                      items:
-                        type: object
-                        properties:
-                          $ref:
-                            type: string
-        required:
-          type: array
-          items:
-            type: string
-        definitions:
-          type: object
-          properties:
-            ContinentEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            CountryEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            Admin1Enum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            Admin2Enum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            SpatialCoverage:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-                properties:
-                  type: object
-                  properties:
-                    continent:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-                        items:
-                          type: object
-                          properties:
-                            $ref:
-                              type: string
-                        uniqueItems:
-                          type: boolean
-                    country:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-                        items:
-                          type: object
-                          properties:
-                            $ref:
-                              type: string
-                        uniqueItems:
-                          type: boolean
-                    admin1:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-                        items:
-                          type: object
-                          properties:
-                            $ref:
-                              type: string
-                        uniqueItems:
-                          type: boolean
-                    admin2:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-                        items:
-                          type: object
-                          properties:
-                            $ref:
-                              type: string
-                        uniqueItems:
-                          type: boolean
-            TemporalCoverageEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                minimum:
-                  type: integer
-                maximum:
-                  type: integer
-                type:
-                  type: string
-                items:
-                  type: object
-                  properties:
-                    type:
-                      type: string
-                    minimum:
-                      type: integer
-                    maximum:
-                      type: integer
-            TimeUnitEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            EntitySphereEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            EntityIndividualEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            EntityEstablishmentEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            EntityPoliticsEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            EntityScienceEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            EntityEconomicsEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            EntityEducationEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            EntityEventEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            EntityArtEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            EntityInfrastructureEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            EntityTransportationEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            EntitySecurityEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            EntityDemographicEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            EntityHistoryEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            EntityOtherEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            EntityImageEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            LastUpdated:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-                properties:
-                  type: object
-                  properties:
-                    metadata:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-                        format:
-                          type: string
-                    data:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-                        format:
-                          type: string
-                    release:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-                        format:
-                          type: string
-            PublishedBy:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-                properties:
-                  type: object
-                  properties:
-                    name:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-                    email:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-                    github_user:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-                    website:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-                    ckan_user:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-            DataCleanedBy:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-                properties:
-                  type: object
-                  properties:
-                    name:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-                    email:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-                    github_user:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-                    ckan_user:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-                    website:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-                    code_url:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-            YesNoEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            BigQueryTypeEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            DirectoryEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            DirectoryColumn:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-                properties:
-                  type: object
-                  properties:
-                    dataset_id:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        allOf:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              $ref:
-                                type: string
-                    table_id:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-                    column_name:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
-                        type:
-                          type: string
-            MeasurementUnitEnum:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                enum:
-                  type: array
-                  items:
-                    type: string
-                type:
-                  type: string
-            BdmColumns:
-              type: object
-              properties:
-                title:
-                  type: string
-                type:
-                  type: string
-                properties:
-                  type: object
-                  properties:
-                    name:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        description:
-                          type: string
-                        yaml_order:
-                          type: object
-                          properties:
-                            id_before:
-                              type: string
-                              nullable: true
-                            id_after:
-                              type: string
-                        type:
-                          type: string
-                    bigquery_type:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        description:
-                          type: string
-                        yaml_order:
-                          type: object
-                          properties:
-                            id_before:
-                              type: string
-                            id_after:
-                              type: string
-                        allOf:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              $ref:
-                                type: string
-                    description:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        description:
-                          type: string
-                        yaml_order:
-                          type: object
-                          properties:
-                            id_before:
-                              type: string
-                            id_after:
-                              type: string
-                        type:
-                          type: string
-                    temporal_coverage:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        description:
-                          type: string
-                        user_input_hint:
-                          type: string
-                        yaml_order:
-                          type: object
-                          properties:
-                            id_before:
-                              type: string
-                            id_after:
-                              type: string
-                        allOf:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              $ref:
-                                type: string
-                    covered_by_dictionary:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: string
-                        yaml_order:
-                          type: object
-                          properties:
-                            id_before:
-                              type: string
-                            id_after:
-                              type: string
-                        allOf:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              $ref:
-                                type: string
-                    directory_column:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        user_input_hint:
-                          type: string
-                        yaml_order:
-                          type: object
-                          properties:
-                            id_before:
-                              type: string
-                            id_after:
-                              type: string
-                        allOf:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              $ref:
-                                type: string
-                    measurement_unit:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        description:
-                          type: string
-                        user_input_hint:
-                          type: string
-                        yaml_order:
-                          type: object
-                          properties:
-                            id_before:
-                              type: string
-                            id_after:
-                              type: string
-                        allOf:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              $ref:
-                                type: string
-                    has_sensitive_data:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        description:
-                          type: string
-                        user_input_hint:
-                          type: string
-                        yaml_order:
-                          type: object
-                          properties:
-                            id_before:
-                              type: string
-                            id_after:
-                              type: string
-                        allOf:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              $ref:
-                                type: string
-                    is_in_staging:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        description:
-                          type: string
-                        user_input_hint:
-                          type: boolean
-                        yaml_order:
-                          type: object
-                          properties:
-                            id_before:
-                              type: string
-                            id_after:
-                              type: string
-                        type:
-                          type: string
-                    is_partition:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        description:
-                          type: string
-                        user_input_hint:
-                          type: boolean
-                        yaml_order:
-                          type: object
-                          properties:
-                            id_before:
-                              type: string
-                            id_after:
-                              type: string
-                              nullable: true
-                        type:
-                          type: string
