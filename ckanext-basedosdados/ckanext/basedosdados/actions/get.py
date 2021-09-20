@@ -62,7 +62,12 @@ def bd_get_current_user(context, data_dict):
     if not user:
         return None
 
-    return {"fullname": user.fullname, "image_url": user.image_url, "name": user.name}
+    return {
+        "fullname": user.fullname,
+        "image_url": user.image_url,
+        "name": user.name,
+        "is_admin": user.sysadmin,
+    }
 
 
 @toolkit.side_effect_free
