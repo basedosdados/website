@@ -85,8 +85,9 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
         This is the case b/c CKAN only accepts string values for extras. In that way, we know that
         we always have to unpack a dict that is saved as a string in the extras field.
         """
-        if not validate: return data_dict
-        
+        if not validate:
+            return data_dict
+
         # 0. Find dataset_args in extras
         dataset_args = {}
         for extra in data_dict.get("extras") or []:
