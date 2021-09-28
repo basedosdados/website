@@ -2,18 +2,18 @@ import { Button } from "@chakra-ui/button";
 import { VStack, Text, Stack } from "@chakra-ui/layout";
 import Highlight, { defaultProps } from "prism-react-renderer";
 import { useState } from "react";
-import Link from "../../../../components/atoms/Link";
-import { LinkDash } from "../../../../components/atoms/LinkDash";
-import { Markdown } from "../../../../components/atoms/Markdown";
-import SectionText from "../../../../components/atoms/SectionText";
-import Title from "../../../../components/atoms/Title";
-import { ExpandableTable } from "../../../../components/molecules/ExpandableTable";
+import Link from "../atoms/Link";
+import { LinkDash } from "../atoms/LinkDash";
+import { Markdown } from "../atoms/Markdown";
+import SectionText from "../atoms/SectionText";
+import Title from "../atoms/Title";
+import { ExpandableTable } from "../molecules/ExpandableTable";
 import {
   filterOnlyValidValues,
   formatObjectsInArray,
   translate,
-} from "../../../../utils";
-import { BaseResourcePage } from "./BaseResourcePage";
+} from "../../utils";
+import { BaseResourcePage } from "../molecules/BaseResourcePage";
 
 export function BdmTablePage({ translations, resource, datasetName }) {
   const [selectedConsultation, setSelectedConsultation] = useState("SQL");

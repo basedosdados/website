@@ -1,14 +1,14 @@
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { ExpandableTable } from "../../../../components/molecules/ExpandableTable";
+import { ExpandableTable } from "../molecules/ExpandableTable";
 import {
   filterOnlyValidValues,
   formatObjectsInArray,
   translate,
   unionArrays,
-} from "../../../../utils";
-import { BaseResourcePage } from "./BaseResourcePage";
+} from "../../utils";
+import { BaseResourcePage } from "../molecules/BaseResourcePage";
 import { DatasetEditPage } from "./DatasetEditPage";
 
 export function MetadataPage({ translations, dataset }) {

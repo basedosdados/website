@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
-import { getSchema } from "../../../api/schemas";
-import { BaseResourcePage } from "./BaseResourcePage";
+import { getSchema } from "../../pages/api/schemas";
+import { BaseResourcePage } from "../molecules/BaseResourcePage";
 import Form from "@rjsf/core";
 import Head from "next/head";
 import { CircularProgress } from "@chakra-ui/progress";
 import { Center, VStack } from "@chakra-ui/layout";
-import { updateDataset } from "../../../api/datasets";
+import { updateDataset } from "../../pages/api/datasets";
 import { useToast } from "@chakra-ui/toast";
 
 export function DatasetEditPage({ dataset }) {

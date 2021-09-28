@@ -1,12 +1,12 @@
 import { VStack, Image } from "@chakra-ui/react";
-import Title from "../../../../components/atoms/Title";
-import { ExpandableTable } from "../../../../components/molecules/ExpandableTable";
+import Title from "../atoms/Title";
+import { ExpandableTable } from "../molecules/ExpandableTable";
 import {
   filterOnlyValidValues,
   formatObjectsInArray,
   translate,
-} from "../../../../utils";
-import { BaseResourcePage } from "./BaseResourcePage";
+} from "../../utils";
+import { BaseResourcePage } from "../molecules/BaseResourcePage";
 
 export function ExternalLinkPage({ translations, resource }) {
   return (

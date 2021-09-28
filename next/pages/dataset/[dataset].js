@@ -1,22 +1,22 @@
 import { VStack, Stack, HStack, Image, Flex } from "@chakra-ui/react";
 import Head from "next/head";
-import { MainPageTemplate } from "../../../components/templates/main";
-import { withStrapiPages } from "../../../hooks/strapi.hook";
-import { listDatasets, showDataset } from "../../api/datasets";
-import SectionText from "../../../components/atoms/SectionText";
-import Title from "../../../components/atoms/Title";
-import { CategoryIcon } from "../../../components/atoms/CategoryIcon";
-import BigTitle from "../../../components/atoms/BigTitle";
-import { FilterAccordion } from "../../../components/atoms/FilterAccordion";
+import { MainPageTemplate } from "../../components/templates/main";
+import { withStrapiPages } from "../../hooks/strapi.hook";
+import { listDatasets, showDataset } from "../api/datasets";
+import SectionText from "../../components/atoms/SectionText";
+import Title from "../../components/atoms/Title";
+import { CategoryIcon } from "../../components/atoms/CategoryIcon";
+import BigTitle from "../../components/atoms/BigTitle";
+import { FilterAccordion } from "../../components/atoms/FilterAccordion";
 import { useState } from "react";
-import { isBdPlus } from "../../../utils";
-import Link from "../../../components/atoms/Link";
-import { SimpleButton } from "../../../components/atoms/SimpleButton";
-import { Markdown } from "../../../components/atoms/Markdown";
-import { getTranslations } from "../../api/translations";
-import { ExternalLinkPage } from "./components/ExternalLinkPage";
-import { BdmTablePage } from "./components/BdmTablePage";
-import { MetadataPage } from "./components/MetadataPage";
+import { isBdPlus } from "../../utils";
+import Link from "../../components/atoms/Link";
+import { SimpleButton } from "../../components/atoms/SimpleButton";
+import { Markdown } from "../../components/atoms/Markdown";
+import { getTranslations } from "../api/translations";
+import { ExternalLinkPage } from "../../components/organisms/ExternalLinkPage";
+import { BdmTablePage } from "../../components/organisms/BdmTablePage";
+import { MetadataPage } from "../../components/organisms/MetadataPage";
 
 export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);

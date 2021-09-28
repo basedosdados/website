@@ -3,9 +3,9 @@ import { Flex, VStack } from "@chakra-ui/layout";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext } from "react";
-import Link from "../../../../components/atoms/Link";
-import Title from "../../../../components/atoms/Title";
-import UserContext from "../../../../context/user";
+import Link from "../atoms/Link";
+import Title from "../atoms/Title";
+import UserContext from "../../context/user";
 
 export function BaseResourcePage({
   title,
