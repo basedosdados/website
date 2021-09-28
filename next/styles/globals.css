@@ -128,3 +128,13 @@ body {
 .BrainhubCarousel__arrows span {
   border-color: #dedfe0 !important;
 }
+
+.rjsf {
+  width: 100%;
+  white-space: break-spaces;
+}
+
+.rjsf pre {
+  max-width: 50%;
+  white-space: break-spaces;
+}
