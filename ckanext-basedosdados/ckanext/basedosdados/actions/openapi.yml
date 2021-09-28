@@ -613,7 +613,7 @@ paths:
         - Base dos Dados
   /bd_bdm_dataset_show:
     get:
-      description: Procura de datasets pelo ID.
+      description: Busca de dataset pelo ID.
       parameters:
         - in: query
           name: dataset_id
@@ -640,7 +640,7 @@ paths:
         - Base dos Dados
   /bd_bdm_table_show:
     get:
-      description: Procura um recurso (tabela ou link externo) pelo seu nome.
+      description: Busca de tabela pelo ID.
       parameters:
         - in: query
           name: dataset_id

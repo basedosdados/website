@@ -247,7 +247,6 @@ PROJECT_ID_STAGING_FIELD = Field(
 
 PARTITIONS_FIELD = Field(
     title="Partições",
-    user_input_hint=["ex. ano, sigla_uf"],
     description=to_line(
         [
             "Liste as colunas da tabela que representam partições.",
