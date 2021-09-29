@@ -3,6 +3,39 @@ from pathlib import Path
 
 import ckan.plugins.toolkit as toolkit
 from ckan.logic.action.get import dataset_follower_count, package_search
+from ckanext.basedosdados.validator.available_options import (
+    Admin1Enum,
+    Admin2Enum,
+    AvailabilityEnum,
+    BigQueryTypeEnum,
+    ContinentEnum,
+    CountryEnum,
+    DirectoryEnum,
+    LanguageEnum,
+    LicenseEnum,
+    MeasurementUnitEnum,
+    StatusEnum,
+    TimeUnitEnum,
+    YesNoEnum,
+)
+from ckanext.basedosdados.validator.available_options.entity import (
+    EntityArtEnum,
+    EntityDemographicEnum,
+    EntityEconomicsEnum,
+    EntityEducationEnum,
+    EntityEstablishmentEnum,
+    EntityEventEnum,
+    EntityHistoryEnum,
+    EntityImageEnum,
+    EntityIndividualEnum,
+    EntityInfrastructureEnum,
+    EntityOtherEnum,
+    EntityPoliticsEnum,
+    EntityScienceEnum,
+    EntitySecurityEnum,
+    EntitySphereEnum,
+    EntityTransportationEnum,
+)
 from ckanext.basedosdados.validator.packages import Dataset
 from ckanext.basedosdados.validator.resources import (
     RESOURCE_TYPES,
@@ -396,6 +429,41 @@ def bd_translation(context, data_dict):
         "bdm_dictionary": extract_translation(BdmDictionary.schema()),
         "external_link": extract_translation(ExternalLink.schema()),
         "information_request": extract_translation(InformationRequest.schema()),
+    }
+
+
+@toolkit.side_effect_free
+def bd_available_options(context, data_dict):
+    return {
+        "AvailabilityEnum": AvailabilityEnum.get_all_enum_attr("label"),
+        "BigQueryTypeEnum": BigQueryTypeEnum.get_all_enum_attr("label"),
+        "DirectoryEnum": DirectoryEnum.get_all_enum_attr("label"),
+        "EntityArtEnum": EntityArtEnum.get_all_enum_attr("label"),
+        "EntityDemographicEnum": EntityDemographicEnum.get_all_enum_attr("label"),
+        "EntityEconomicsEnum": EntityEconomicsEnum.get_all_enum_attr("label"),
+        "EntityEducationEnum": EntityEducationEnum.get_all_enum_attr("label"),
+        "EntityEstablishmentEnum": EntityEstablishmentEnum.get_all_enum_attr("label"),
+        "EntityEventEnum": EntityEventEnum.get_all_enum_attr("label"),
+        "EntityHistoryEnum": EntityHistoryEnum.get_all_enum_attr("label"),
+        "EntityImageEnum": EntityImageEnum.get_all_enum_attr("label"),
+        "EntityIndividualEnum": EntityIndividualEnum.get_all_enum_attr("label"),
+        "EntityInfrastructureEnum": EntityInfrastructureEnum.get_all_enum_attr("label"),
+        "EntityOtherEnum": EntityOtherEnum.get_all_enum_attr("label"),
+        "EntityPoliticsEnum": EntityPoliticsEnum.get_all_enum_attr("label"),
+        "EntityScienceEnum": EntityScienceEnum.get_all_enum_attr("label"),
+        "EntitySecurityEnum": EntitySecurityEnum.get_all_enum_attr("label"),
+        "EntitySphereEnum": EntitySphereEnum.get_all_enum_attr("label"),
+        "EntityTransportationEnum": EntityTransportationEnum.get_all_enum_attr("label"),
+        "LanguageEnum": LanguageEnum.get_all_enum_attr("label"),
+        "LicenseEnum": LicenseEnum.get_all_enum_attr("label"),
+        "MeasurementUnitEnum": MeasurementUnitEnum.get_all_enum_attr("label"),
+        "Admin1Enum": Admin1Enum.get_all_enum_attr("label"),
+        "Admin2Enum": Admin2Enum.get_all_enum_attr("label"),
+        "ContinentEnum": ContinentEnum.get_all_enum_attr("label"),
+        "CountryEnum": CountryEnum.get_all_enum_attr("label"),
+        "StatusEnum": StatusEnum.get_all_enum_attr("label"),
+        "TimeUnitEnum": TimeUnitEnum.get_all_enum_attr("label"),
+        "YesNoEnum": YesNoEnum.get_all_enum_attr("label"),
     }
 
 
