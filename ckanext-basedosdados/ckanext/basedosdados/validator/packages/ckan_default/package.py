@@ -24,7 +24,7 @@ coerce_to_unicode = lambda field: validator("field", allow_reuse=True)()
 
 ### Do not use extra while creating new models
 class _CkanDefaults(BaseModel):  # , extra=Extra.forbid):
-    
+    # fmt: off
     id: IdType
     
     name             : Str                                               = Field(title="Nome")
@@ -44,10 +44,7 @@ class _CkanDefaults(BaseModel):  # , extra=Extra.forbid):
     creator_user_id  : Optional[UUID]                                   = Field(title="ID do(a) Usuário(a) Criador(a)")
     private          : bool                                             = Field(title="Privado")
     license_title    : Optional[Str]                                    = Field(title="Título da Licença")
-    # fmt: on
 
-    # Ckan Defaults Complex Fields
-    # fmt: off
     num_resources: Optional[Int]                                        = Field(title="Número de Recursos")
     resources    : List[AnyResource] = []
     groups       : Any                                                  = Field(title="Temas")
@@ -58,6 +55,7 @@ class _CkanDefaults(BaseModel):  # , extra=Extra.forbid):
 
     relationships_as_object: Any
     relationships_as_subject: Any
+    # fmt: on
 
     # throwaway field that is used to modify validators. You can think of it as an
     # argument to validate function. Cant use prefix underscores on pydantic so used suffix to indicate this
