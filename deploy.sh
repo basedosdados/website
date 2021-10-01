@@ -65,8 +65,9 @@ load_images() {
 }
 
 restart_services() {
-    $SSH  '
+    $SSH  "
         set -e ; cd ~/basedosdados/
+        export HOST_NAME=$HOST_NAME
         if [[ ! -f wait-for-200.sh ]]; then curl https://raw.githubusercontent.com/cec/wait-for-endpoint/master/wait-for-endpoint.sh > wait-for-200.sh && chmod +x wait-for-200.sh; fi
         if [[ ! -f wait-for-it.sh ]]; then curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > wait-for-it.sh && chmod +x wait-for-it.sh; fi
         docker-compose rm -sf ckan next strapi autoheal
@@ -91,7 +92,7 @@ restart_services() {
             sleep 1
             docker-compose logs ckan
         fi
-    '
+    "
 }
 
 rebuild_index() {

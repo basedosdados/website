@@ -18,7 +18,6 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
         run: |
           echo "$DOT_ENV_PROD" > .env.prod && \
-          echo "HOST_NAME=staging.basedosdados.org" >> .env.prod \
           echo "$CKAN_STAGING_INI" > ./configs/ckan.override.prod.ini && \
           mkdir ~/.ssh && \
           echo "$SSH_KEY" > ~/.ssh/BD.pem && \
@@ -26,6 +25,7 @@ jobs:
       - name: Deploy website
         env:
           HOST: ec2-user@staging.basedosdados.org
+          HOST_NAME: staging.basedosdados.org
         run: ./deploy.sh deploy
       - name: Report Failures
         if: "${{ failure() }}"
