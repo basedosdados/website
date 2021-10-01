@@ -62,3 +62,7 @@ export function getPopularDatalakeDatasets() {
 export function updateDataset(dataset) {
   return axiosInstance.post(`/package_update`, dataset);
 }
+
+export function updateResource(resource) {
+  return axiosInstance.post(`/resource_update`, resource);
+}

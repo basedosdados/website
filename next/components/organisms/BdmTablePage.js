@@ -14,6 +14,9 @@ import {
   translate,
 } from "../../utils";
 import { BaseResourcePage } from "../molecules/BaseResourcePage";
+import { SchemaForm } from "../molecules/SchemaForm";
+import { getBdmTableSchema } from "../../pages/api/schemas";
+import { updateResource } from "../../pages/api/datasets";
 
 export function BdmTablePage({ translations, resource, datasetName }) {
   const [selectedConsultation, setSelectedConsultation] = useState("SQL");
@@ -89,6 +92,19 @@ export function BdmTablePage({ translations, resource, datasetName }) {
     <BaseResourcePage
       editLink={`/resource/edit/${resource.id}`}
       title={`${resource.name}`}
+      formComponent={
+        <SchemaForm
+          data={resource}
+          schemaName="Tabela Bdm"
+          loadSchemaFunction={getBdmTableSchema}
+          updateFunction={updateResource}
+          prepareData={(data) => {
+            data.identifying_columns = data.identifying_columns || [];
+
+            return data;
+          }}
+        />
+      }
     >
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Text

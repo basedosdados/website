@@ -23,7 +23,10 @@ jobs:
           echo "$SSH_KEY" > ~/.ssh/BD.pem && \
           chmod 700 ~/.ssh ~/.ssh/BD.pem
       - name: Deploy website
-        run: ./deploy-staging.sh deploy
+        env:
+          HOST_NAME: staging.basedosdados.org
+          HOST: ec2-user@staging.basedosdados.org
+        run: ./deploy.sh deploy
       - name: Report Failures
         if: "${{ failure() }}"
         uses: cstuder/apprise-ga@master
