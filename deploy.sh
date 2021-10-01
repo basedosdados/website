@@ -71,16 +71,7 @@ restart_services() {
         if [[ ! -f wait-for-it.sh ]]; then curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > wait-for-it.sh && chmod +x wait-for-it.sh; fi
         export HOST_NAME=$HOST_NAME
         docker-compose rm -sf ckan next strapi autoheal
-        docker-compose up --no-build -d solr redis
-        docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh redis:6379
-        docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh solr:8983
-        docker-compose up --no-build -d strapi
-        docker-compose up --no-build -d ckan
-        docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh strapi:1337
-        docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh ckan:5000
-        docker-compose up --no-build -d next
-        docker-compose up --no-build -d nginx
-        docker-compose up --no-build -d autoheal
+        docker-compose up --no-build -d
         docker-compose ps
         docker-compose restart nginx
         ./wait-for-200.sh -t 20 https://localhost:443 || ERROR=1
