@@ -67,9 +67,9 @@ load_images() {
 restart_services() {
     $SSH  "
         set -e ; cd ~/basedosdados/
-        export HOST_NAME=$HOST_NAME
         if [[ ! -f wait-for-200.sh ]]; then curl https://raw.githubusercontent.com/cec/wait-for-endpoint/master/wait-for-endpoint.sh > wait-for-200.sh && chmod +x wait-for-200.sh; fi
         if [[ ! -f wait-for-it.sh ]]; then curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > wait-for-it.sh && chmod +x wait-for-it.sh; fi
+        export HOST_NAME=$HOST_NAME
         docker-compose rm -sf ckan next strapi autoheal
         docker-compose up --no-build -d solr redis
         docker run --rm --network basedosdados -v `pwd`:/app bash /app/wait-for-it.sh redis:6379
