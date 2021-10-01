@@ -770,6 +770,27 @@ paths:
                     type: boolean
       tags:
         - Base dos Dados
+  /bd_available_options:
+    get:
+      description: Gera map entre os campos Enum e os Labels de available_options.
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  help:
+                    type: string
+                    example: >-
+                      https://basedosdados.org/api/3/action/help_show?name=bd_available_options
+                  result:
+                    type: object
+                  success:
+                    type: boolean
+      tags:
+        - Base dos Dados
   /bd_dataset_schema:
     get:
       description: Gera um modelo de dataset.
