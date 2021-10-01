@@ -2,7 +2,6 @@
 
 cd $(git rev-parse --show-toplevel)
 
-HOST=ec2-user@basedosdados.org
 SSH="ssh -o StrictHostKeyChecking=no -i ~/.ssh/BD.pem $HOST"
 VTAG=":`date +%H.%M.%S`" # Simple mechanism to force image update
 
