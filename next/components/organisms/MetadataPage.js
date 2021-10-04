@@ -9,7 +9,7 @@ import {
 } from "../../utils";
 import { BaseResourcePage } from "../molecules/BaseResourcePage";
 import { SchemaForm } from "../molecules/SchemaForm";
-import { updateDataset } from "../../pages/api/datasets";
+import { deleteDataset, updateDataset } from "../../pages/api/datasets";
 import { getDatasetSchema } from "../../pages/api/schemas";
 
 export function MetadataPage({ translations, dataset }) {
@@ -59,12 +59,20 @@ export function MetadataPage({ translations, dataset }) {
       buttonText="Editar"
       buttonRightIcon={<FontAwesomeIcon icon={faPen} />}
       title="Metadados do conjunto"
+      removeFunction={() => deleteDataset(dataset)}
       formComponent={
         <SchemaForm
           data={dataset}
           updateFunction={updateDataset}
           loadSchemaFunction={getDatasetSchema}
           schemaName="Dataset"
+          prepareData={(data) => {
+            data.maintainer = data.maintainer || "";
+            data.maintainer_email = data.maintainer_email || "";
+            data.version = data.version || "";
+
+            return data;
+          }}
         />
       }
     >

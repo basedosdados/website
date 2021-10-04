@@ -66,3 +66,11 @@ export function updateDataset(dataset) {
 export function updateResource(resource) {
   return axiosInstance.post(`/resource_update`, resource);
 }
+
+export function deleteDataset(dataset) {
+  return axiosInstance.post(`/package_delete`, dataset);
+}
+
+export function deleteResource(resource) {
+  return axiosInstance.post(`/resource_delete`, resource);
+}

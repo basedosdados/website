@@ -11,6 +11,12 @@ export function getBdmTableSchema() {
       delete schema.properties.metadata_modified;
       delete schema.properties.last_updated;
       delete schema.properties.cache_last_updated;
+      delete schema.properties.cache_url;
+      delete schema.properties.mimetype;
+      delete schema.properties.mimetype_inner;
+      delete schema.properties.size;
+      delete schema.properties.url_type;
+      delete schema.properties.bdm_file_size;
 
       return schema;
     })
@@ -28,6 +34,11 @@ export function getExternalLinkSchema() {
       delete schema.properties.metadata_modified;
       delete schema.properties.last_updated;
       delete schema.properties.cache_last_updated;
+      delete schema.properties.cache_url;
+      delete schema.properties.mimetype;
+      delete schema.properties.mimetype_inner;
+      delete schema.properties.size;
+      delete schema.properties.url_type;
 
       return schema;
     })

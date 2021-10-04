@@ -16,7 +16,7 @@ import {
 import { BaseResourcePage } from "../molecules/BaseResourcePage";
 import { SchemaForm } from "../molecules/SchemaForm";
 import { getBdmTableSchema } from "../../pages/api/schemas";
-import { updateResource } from "../../pages/api/datasets";
+import { deleteResource, updateResource } from "../../pages/api/datasets";
 
 export function BdmTablePage({ translations, resource, datasetName }) {
   const [selectedConsultation, setSelectedConsultation] = useState("SQL");
@@ -92,6 +92,7 @@ export function BdmTablePage({ translations, resource, datasetName }) {
     <BaseResourcePage
       editLink={`/resource/edit/${resource.id}`}
       title={`${resource.name}`}
+      removeFunction={() => deleteResource(resource)}
       formComponent={
         <SchemaForm
           data={resource}
@@ -100,6 +101,13 @@ export function BdmTablePage({ translations, resource, datasetName }) {
           updateFunction={updateResource}
           prepareData={(data) => {
             data.identifying_columns = data.identifying_columns || [];
+            data.published_by.github_user = data.published_by.github_user || "";
+            data.published_by.ckan_user = data.published_by.ckan_user || "";
+            data.data_cleaned_by.github_user =
+              data.data_cleaned_by.github_user || "";
+            data.data_cleaned_by.ckan_user =
+              data.data_cleaned_by.ckan_user || "";
+            data.data_cleaned_by.website = data.data_cleaned_by.website || "";
 
             return data;
           }}

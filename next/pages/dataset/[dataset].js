@@ -35,7 +35,7 @@ export async function getStaticProps(context) {
       translations,
       isPlus: isBdPlus(dataset),
     },
-    revalidate: 60, //TODO: Increase this timer
+    revalidate: 1, //TODO: Increase this timer
   });
 }
 

@@ -29,6 +29,7 @@ export function SchemaForm({
         description: `${schemaName} atualizado(a), agora é seguro sair do formulário.`,
         status: "success",
       });
+      window.location.reload();
     },
     onError() {
       toast({
