@@ -74,14 +74,6 @@ restart_services() {
         docker-compose up --no-build -d
         docker-compose ps
         docker-compose restart nginx
-        if [[ ! $ERROR ]]; then
-            echo Server is up
-        else
-            echo Server not up
-            docker-compose ps
-            sleep 1
-            docker-compose logs ckan
-        fi
     "
 }
 
