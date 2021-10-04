@@ -56,8 +56,6 @@ export function MetadataPage({ translations, dataset }) {
 
   return (
     <BaseResourcePage
-      buttonText="Editar"
-      buttonRightIcon={<FontAwesomeIcon icon={faPen} />}
       title="Metadados do conjunto"
       removeFunction={() => deleteDataset(dataset)}
       formComponent={

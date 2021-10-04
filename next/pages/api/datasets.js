@@ -74,3 +74,14 @@ export function deleteDataset(dataset) {
 export function deleteResource(resource) {
   return axiosInstance.post(`/resource_delete`, resource);
 }
+
+export function createDataset(dataset) {
+  return axiosInstance.post(`/package_create`, dataset);
+}
+
+export function createResource(resource, packageId) {
+  return axiosInstance.post(`/resource_create`, {
+    ...resource,
+    package_id: packageId,
+  });
+}

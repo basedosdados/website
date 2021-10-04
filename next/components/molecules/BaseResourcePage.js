@@ -22,14 +22,16 @@ export function BaseResourcePage({
   children,
   removeFunction,
   formComponent = null,
+  forceForm = false,
 }) {
   const [editing, setEditing] = useState(false);
   const deleteModalDisclosure = useDisclosure();
   const userData = useContext(UserContext);
 
   useEffect(() => {
+    if (forceForm) return setEditing(true);
     setEditing(false);
-  }, [children]);
+  }, [children, forceForm]);
 
   return (
     <VStack

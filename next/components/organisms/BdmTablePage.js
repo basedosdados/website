@@ -154,7 +154,7 @@ export function BdmTablePage({ translations, resource, datasetName }) {
         </SectionText>
         <ExpandableTable
           headers={["nome", "descrição"]}
-          values={resource.columns.map((c) => [c.name, c.description])}
+          values={(resource?.columns || []).map((c) => [c.name, c.description])}
         />
       </VStack>
       <VStack width="100%" spacing={3} alignItems="flex-start">
