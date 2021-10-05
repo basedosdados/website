@@ -37,7 +37,8 @@ if [[ ! -d vendor/ckan/.git ]]; then
 fi
 
 # build and instantiate images, except by ckan
-docker-compose build --parallel $DOCKER_BUILD_EXTRA_ARGS
+# add the flag--parallel for speed
+docker-compose build $DOCKER_BUILD_EXTRA_ARGS
 docker-compose up --scale ckan=0 -d
 
 # waiting for postgres to be ready
