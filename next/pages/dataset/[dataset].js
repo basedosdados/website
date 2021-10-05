@@ -2,13 +2,18 @@ import { VStack, Stack, HStack, Image, Flex } from "@chakra-ui/react";
 import Head from "next/head";
 import { MainPageTemplate } from "../../components/templates/main";
 import { withStrapiPages } from "../../hooks/strapi.hook";
-import { listDatasets, showDataset } from "../api/datasets";
+import {
+  createResource,
+  listDatasets,
+  showDataset,
+  updateResource,
+} from "../api/datasets";
 import SectionText from "../../components/atoms/SectionText";
 import Title from "../../components/atoms/Title";
 import { CategoryIcon } from "../../components/atoms/CategoryIcon";
 import BigTitle from "../../components/atoms/BigTitle";
 import { FilterAccordion } from "../../components/atoms/FilterAccordion";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { isBdPlus } from "../../utils";
 import Link from "../../components/atoms/Link";
 import { SimpleButton } from "../../components/atoms/SimpleButton";
@@ -17,6 +22,10 @@ import { getTranslations } from "../api/translations";
 import { ExternalLinkPage } from "../../components/organisms/ExternalLinkPage";
 import { BdmTablePage } from "../../components/organisms/BdmTablePage";
 import { MetadataPage } from "../../components/organisms/MetadataPage";
+import UserContext from "../../context/user";
+import { SchemaForm } from "../../components/molecules/SchemaForm";
+import { getBdmTableSchema, getExternalLinkSchema } from "../api/schemas";
+import { BaseResourcePage } from "../../components/molecules/BaseResourcePage";
 
 export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
@@ -35,7 +44,7 @@ export async function getStaticProps(context) {
       translations,
       isPlus: isBdPlus(dataset),
     },
-    revalidate: 60, //TODO: Increase this timer
+    revalidate: 1, //TODO: Increase this timer
   });
 }
 
@@ -50,6 +59,29 @@ export async function getStaticPaths(context) {
   };
 }
 
+function AdminButtons({ resource, setResource }) {
+  const userData = useContext(UserContext);
+
+  if (!userData?.is_admin) return <></>;
+
+  return (
+    <>
+      <SimpleButton
+        isActive={resource.resource_type === "create_bdm_table"}
+        onClick={() => setResource({ resource_type: "create_bdm_table" })}
+      >
+        Criar tabela tratada
+      </SimpleButton>
+      <SimpleButton
+        isActive={resource.resource_type === "create_external_link"}
+        onClick={() => setResource({ resource_type: "create_external_link" })}
+      >
+        Criar link externo
+      </SimpleButton>
+    </>
+  );
+}
+
 export default function DatasetPage({
   dataset,
   bdmTables,
@@ -61,7 +93,6 @@ export default function DatasetPage({
   const [resource, setResource] = useState(
     bdmTables.length > 0 ? bdmTables[0] : externalLinks[0]
   );
-
   const [bdmTableFilter, setBdmTableFilter] = useState(
     resource.resource_type === "bdm_table"
   );
@@ -85,6 +116,36 @@ export default function DatasetPage({
           <ExternalLinkPage
             translations={translations["external_link"]}
             resource={resource}
+          />
+        );
+
+      case "create_bdm_table":
+        return (
+          <BaseResourcePage
+            title="Criar tabela tratada"
+            forceForm
+            formComponent={
+              <SchemaForm
+                schemaName="Tabela tratada"
+                loadSchemaFunction={getBdmTableSchema}
+                updateFunction={(data) => createResource(data, dataset.id)}
+              />
+            }
+          />
+        );
+
+      case "create_external_link":
+        return (
+          <BaseResourcePage
+            title="Criar link externo"
+            forceForm
+            formComponent={
+              <SchemaForm
+                schemaName="Link externo"
+                loadSchemaFunction={getExternalLinkSchema}
+                updateFunction={(data) => createResource(data, dataset.id)}
+              />
+            }
           />
         );
 
@@ -222,6 +283,7 @@ export default function DatasetPage({
               >
                 Metadados do conjunto
               </SimpleButton>
+              <AdminButtons resource={resource} setResource={setResource} />
               {bdmTables.length > 0 ? (
                 <FilterAccordion
                   alwaysOpen={true}

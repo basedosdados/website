@@ -1,41 +1,62 @@
 import { axiosInstance } from "../../axios";
 
-export function getSchema() {
+export function getBdmTableSchema() {
+  return axiosInstance
+    .get(`/bd_bdm_table_schema`)
+    .then(({ data }) => {
+      const schema = data.result;
+
+      delete schema.properties.created;
+      delete schema.properties.last_modified;
+      delete schema.properties.metadata_modified;
+      delete schema.properties.last_updated;
+      delete schema.properties.cache_last_updated;
+      delete schema.properties.cache_url;
+      delete schema.properties.mimetype;
+      delete schema.properties.mimetype_inner;
+      delete schema.properties.size;
+      delete schema.properties.url_type;
+      delete schema.properties.bdm_file_size;
+
+      return schema;
+    })
+    .catch(() => ({}));
+}
+
+export function getExternalLinkSchema() {
+  return axiosInstance
+    .get(`/bd_external_link_schema`)
+    .then(({ data }) => {
+      const schema = data.result;
+
+      delete schema.properties.created;
+      delete schema.properties.last_modified;
+      delete schema.properties.metadata_modified;
+      delete schema.properties.last_updated;
+      delete schema.properties.cache_last_updated;
+      delete schema.properties.cache_url;
+      delete schema.properties.mimetype;
+      delete schema.properties.mimetype_inner;
+      delete schema.properties.size;
+      delete schema.properties.url_type;
+
+      return schema;
+    })
+    .catch(() => ({}));
+}
+
+export function getDatasetSchema() {
   return axiosInstance
     .get(`/bd_dataset_schema`)
     .then(({ data }) => {
       const schema = data.result;
 
-      schema.properties["bdm_tables"] = {
-        default: [],
-        title: "Tabelas BDM",
-        type: "array",
-        items: { $ref: "#/definitions/BdmTable" },
-      };
-
-      schema.properties["external_links"] = {
-        default: [],
-        title: "Links Externos",
-        type: "array",
-        items: { $ref: "#/definitions/ExternalLink" },
-      };
-
-      console.log(schema);
-
       delete schema.properties.resources;
       delete schema.properties.metadata_created;
       delete schema.properties.metadata_modified;
       delete schema.properties.cache_last_updated;
-      delete schema.definitions.BdmTable.properties.created;
-      delete schema.definitions.BdmTable.properties.last_modified;
-      delete schema.definitions.BdmTable.properties.metadata_modified;
-      delete schema.definitions.BdmTable.properties.last_updated;
-      delete schema.definitions.BdmTable.properties.cache_last_updated;
-      delete schema.definitions.ExternalLink.properties.created;
-      delete schema.definitions.ExternalLink.properties.last_modified;
-      delete schema.definitions.ExternalLink.properties.last_updated;
-      delete schema.definitions.ExternalLink.properties.metadata_modified;
-      delete schema.definitions.ExternalLink.properties.cache_last_updated;
+      delete schema?.properties?.spatial_coverage;
+      delete schema?.properties?.temporal_coverage;
 
       return schema;
     })

@@ -14,6 +14,9 @@ import {
   translate,
 } from "../../utils";
 import { BaseResourcePage } from "../molecules/BaseResourcePage";
+import { SchemaForm } from "../molecules/SchemaForm";
+import { getBdmTableSchema } from "../../pages/api/schemas";
+import { deleteResource, updateResource } from "../../pages/api/datasets";
 
 export function BdmTablePage({ translations, resource, datasetName }) {
   const [selectedConsultation, setSelectedConsultation] = useState("SQL");
@@ -89,6 +92,27 @@ export function BdmTablePage({ translations, resource, datasetName }) {
     <BaseResourcePage
       editLink={`/resource/edit/${resource.id}`}
       title={`${resource.name}`}
+      removeFunction={() => deleteResource(resource)}
+      formComponent={
+        <SchemaForm
+          data={resource}
+          schemaName="Tabela Bdm"
+          loadSchemaFunction={getBdmTableSchema}
+          updateFunction={updateResource}
+          prepareData={(data) => {
+            data.identifying_columns = data.identifying_columns || [];
+            data.published_by.github_user = data.published_by.github_user || "";
+            data.published_by.ckan_user = data.published_by.ckan_user || "";
+            data.data_cleaned_by.github_user =
+              data.data_cleaned_by.github_user || "";
+            data.data_cleaned_by.ckan_user =
+              data.data_cleaned_by.ckan_user || "";
+            data.data_cleaned_by.website = data.data_cleaned_by.website || "";
+
+            return data;
+          }}
+        />
+      }
     >
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Text
@@ -130,7 +154,7 @@ export function BdmTablePage({ translations, resource, datasetName }) {
         </SectionText>
         <ExpandableTable
           headers={["nome", "descrição"]}
-          values={resource.columns.map((c) => [c.name, c.description])}
+          values={(resource?.columns || []).map((c) => [c.name, c.description])}
         />
       </VStack>
       <VStack width="100%" spacing={3} alignItems="flex-start">

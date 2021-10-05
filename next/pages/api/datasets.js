@@ -62,3 +62,26 @@ export function getPopularDatalakeDatasets() {
 export function updateDataset(dataset) {
   return axiosInstance.post(`/package_update`, dataset);
 }
+
+export function updateResource(resource) {
+  return axiosInstance.post(`/resource_update`, resource);
+}
+
+export function deleteDataset(dataset) {
+  return axiosInstance.post(`/package_delete`, dataset);
+}
+
+export function deleteResource(resource) {
+  return axiosInstance.post(`/resource_delete`, resource);
+}
+
+export function createDataset(dataset) {
+  return axiosInstance.post(`/package_create`, dataset);
+}
+
+export function createResource(resource, packageId) {
+  return axiosInstance.post(`/resource_create`, {
+    ...resource,
+    package_id: packageId,
+  });
+}
