@@ -1,36 +1,31 @@
-import {
-  VStack,
-  Stack,
-  HStack,
-  Image,
-  Button,
-  Flex,
-  Text,
-} from "@chakra-ui/react";
+import { VStack, Stack, HStack, Image, Flex } from "@chakra-ui/react";
 import Head from "next/head";
 import { MainPageTemplate } from "../../components/templates/main";
 import { withStrapiPages } from "../../hooks/strapi.hook";
-import { listDatasets, showDataset } from "../api/datasets";
+import {
+  createResource,
+  listDatasets,
+  showDataset,
+  updateResource,
+} from "../api/datasets";
 import SectionText from "../../components/atoms/SectionText";
 import Title from "../../components/atoms/Title";
 import { CategoryIcon } from "../../components/atoms/CategoryIcon";
 import BigTitle from "../../components/atoms/BigTitle";
 import { FilterAccordion } from "../../components/atoms/FilterAccordion";
-import { useState } from "react";
-import Highlight, { defaultProps } from "prism-react-renderer";
-import { ExpandableTable } from "../../components/molecules/ExpandableTable";
-import {
-  filterOnlyValidValues,
-  formatObjectsInArray,
-  isBdPlus,
-  translate,
-  unionArrays,
-} from "../../utils";
+import { useContext, useState } from "react";
+import { isBdPlus } from "../../utils";
 import Link from "../../components/atoms/Link";
 import { SimpleButton } from "../../components/atoms/SimpleButton";
 import { Markdown } from "../../components/atoms/Markdown";
 import { getTranslations } from "../api/translations";
-import { LinkDash } from "../../components/atoms/LinkDash";
+import { ExternalLinkPage } from "../../components/organisms/ExternalLinkPage";
+import { BdmTablePage } from "../../components/organisms/BdmTablePage";
+import { MetadataPage } from "../../components/organisms/MetadataPage";
+import UserContext from "../../context/user";
+import { SchemaForm } from "../../components/molecules/SchemaForm";
+import { getBdmTableSchema, getExternalLinkSchema } from "../api/schemas";
+import { BaseResourcePage } from "../../components/molecules/BaseResourcePage";
 
 export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
@@ -49,7 +44,7 @@ export async function getStaticProps(context) {
       translations,
       isPlus: isBdPlus(dataset),
     },
-    revalidate: 60, //TODO: Increase this timer
+    revalidate: 1, //TODO: Increase this timer
   });
 }
 
@@ -64,425 +59,26 @@ export async function getStaticPaths(context) {
   };
 }
 
-function BaseResourcePage({
-  title,
-  buttonText,
-  onClick,
-  children,
-  buttonRightIcon = <></>,
-}) {
+function AdminButtons({ resource, setResource }) {
+  const userData = useContext(UserContext);
+
+  if (!userData?.is_admin) return <></>;
+
   return (
-    <VStack
-      width="100%"
-      border="1px solid #DEDFE0"
-      borderRadius="20px"
-      padding="20px"
-      alignItems="flex-start"
-      spacing={7}
-    >
-      <Flex
-        flexDirection={{ base: "column", lg: "row" }}
-        width="100%"
-        alignItems={{ base: "flex-start", lg: "flex-start" }}
+    <>
+      <SimpleButton
+        isActive={resource.resource_type === "create_bdm_table"}
+        onClick={() => setResource({ resource_type: "create_bdm_table" })}
       >
-        <Title wordBreak="break-all">{title}</Title>
-        {onClick ? (
-          <Button
-            colorScheme="blue"
-            backgroundColor="#3AA1EB"
-            marginLeft={{ base: null, lg: "auto" }}
-            marginTop={{ base: "20px", lg: "0px" }}
-            height="35px"
-            borderRadius="13px"
-            fontFamily="Lato"
-            alignContent="center"
-            justifyContent="center"
-            letterSpacing="0.1em"
-            boxShadow="0px 4px 4px 0px #00000040"
-            rightIcon={buttonRightIcon}
-            onClick={onClick}
-          >
-            {buttonText}
-          </Button>
-        ) : (
-          <></>
-        )}
-      </Flex>
-      {children}
-    </VStack>
-  );
-}
-
-function BdmTablePage({ translations, resource, datasetName }) {
-  const [selectedConsultation, setSelectedConsultation] = useState("SQL");
-  const consultationOptions = ["SQL", "Python", "R"];
-  const queryName = `${resource.dataset_id}.${resource.name}`;
-
-  if (
-    resource.spatial_coverage &&
-    typeof resource.spatial_coverage === "array"
-  ) {
-    resource.spatial_coverage = resource.spatial_coverage.sort();
-  }
-
-  const consultationLanguage = {
-    SQL: "sql",
-    Python: "python",
-    R: "r",
-  };
-
-  const helpText = {
-    SQL: (
-      <>
-        Copie o código,{" "}
-        <LinkDash
-          fontWeight="700"
-          textDecoration="none"
-          dash={false}
-          href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${resource.dataset_id}&t=${resource.name}&page=table`}
-        >
-          clique para ir ao <i>datalake</i>
-        </LinkDash>{" "}
-        no BigQuery e cole no Editor de Consultas:
-      </>
-    ),
-    Python: (
-      <>
-        Criamos um pacote em Python para você acessar o <i>datalake</i>. Basta
-        rodar o código:
-      </>
-    ),
-    R: (
-      <>
-        Criamos um pacote em R para você acessar o <i>datalake</i>. Basta rodar
-        o código:
-      </>
-    ),
-  };
-
-  const helpLink = {
-    SQL: "https://basedosdados.github.io/mais/access_data_bq/#primeiros-passos",
-    Python:
-      "https://basedosdados.github.io/mais/access_data_packages/#primeiros-passos",
-    R: "https://basedosdados.github.io/mais/access_data_packages/#primeiros-passos",
-  };
-
-  const consultationText = {
-    SQL: `SELECT * FROM \`basedosdados.${queryName}\` LIMIT 100`,
-    Python: `import basedosdados as bd
-# Para carregar o dado direto no pandas
-df = bd.read_table(dataset_id='${resource.dataset_id}', 
-        table_id='${resource.name}',
-        billing_project_id="<YOUR_PROJECT_ID>")`,
-    R: `install.packages("basedosdados")
-library("basedosdados")
-# Defina o seu projeto no Google Cloud
-set_billing_id("<YOUR_PROJECT_ID>")
-# Para carregar o dado direto no R
-query <- "SELECT * FROM \`basedosdados.${queryName}\`"
-df <- read_sql(query)`,
-  };
-
-  function getSizeLabel() {
-    let sizeLabel;
-    let size = resource.bdm_file_size;
-
-    if (size) {
-      if (size < 1000000) sizeLabel = Math.round(size / 1024) + " kb";
-      else if (size >= 1000000)
-        sizeLabel = Math.round(size / (1024 * 1024)) + " mb";
-      else sizeLabel = Math.round(size / (1024 * 1024 * 1024)) + " gb";
-    }
-
-    return `(${sizeLabel})`;
-  }
-
-  return (
-    <BaseResourcePage title={`${resource.name}`}>
-      <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Text
-          fontFamily="Lato"
-          lineHeight="24px"
-          letterSpacing="0.1em"
-          fontWeight="400"
-          fontSize="14px"
-          backgroundColor="rgba(130, 202, 255, 0.15);"
-          padding="15px 20px"
-          borderRadius="20px"
-          width="100%"
-        >
-          <b>
-            Esta tabela está tratada e atualizada no nosso datalake público.
-          </b>
-          <br /> Você pode consultar seus dados via download, SQL (BigQuery),
-          Python ou R{" "}
-          <LinkDash
-            fontWeight="bold"
-            textDecoration="none"
-            target="_self"
-            href="#acesso"
-            dash={false}
-          >
-            abaixo.
-          </LinkDash>
-        </Text>
-        <SectionText padding="10px 0px">
-          <b>Descrição</b>
-        </SectionText>
-        <Markdown>
-          {resource.description || "Nenhuma descrição fornecida."}
-        </Markdown>
-      </VStack>
-      <VStack id="acesso" width="100%" spacing={3} alignItems="flex-start">
-        <SectionText>
-          <b>Coluna</b>
-        </SectionText>
-        <ExpandableTable
-          headers={["nome", "descrição"]}
-          values={resource.columns.map((c) => [c.name, c.description])}
-        />
-      </VStack>
-      <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Title>Consulta aos dados</Title>
-        <Stack width="100%" direction={{ base: "column", lg: "row" }}>
-          {consultationOptions.map((c) => {
-            const selected = c === selectedConsultation;
-            return (
-              <Button
-                borderWidth={selected ? "3px" : "1px"}
-                borderColor={selected ? "#3AA1EB" : "#DEDFE0"}
-                fontSize="14px"
-                fontFamily="Lato"
-                color={selected ? "#3AA1EB" : "black"}
-                height="35px"
-                letterSpacing="0.1em"
-                borderRadius="8px"
-                minWidth="110px"
-                backgroundColor="transparent"
-                fontWeight={selected ? "bold" : "regular"}
-                onClick={() => setSelectedConsultation(c)}
-              >
-                {c}
-              </Button>
-            );
-          })}
-
-          <Link
-            href={`https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}.zip`}
-          >
-            <Button
-              borderWidth={"1px"}
-              borderColor={"#DEDFE0"}
-              fontSize="14px"
-              fontFamily="Lato"
-              color={"black"}
-              height="35px"
-              letterSpacing="0.1em"
-              borderRadius="8px"
-              width={{ base: "100%", lg: "initial" }}
-              minWidth="110px"
-              backgroundColor="transparent"
-              fontWeight={"regular"}
-            >
-              Download
-            </Button>
-          </Link>
-        </Stack>
-        <SectionText fontSize="14px" fontWeight="300">
-          {helpText[selectedConsultation]}
-        </SectionText>
-        <Highlight
-          code={consultationText[selectedConsultation]}
-          language={consultationLanguage[selectedConsultation]}
-          {...defaultProps}
-        >
-          {({ className, style, tokens, getLineProps, getTokenProps }) => (
-            <pre
-              className={className}
-              style={{
-                ...style,
-                width: "100%",
-                padding: "10px",
-                borderRadius: "6px",
-                whiteSpace: "break-spaces",
-                wordBreak: "break-all",
-                backgroundColor: "#252A32",
-              }}
-            >
-              {tokens.map((line, i) => (
-                <div
-                  style={{ wordBreak: "break-all" }}
-                  {...getLineProps({ line, key: i })}
-                >
-                  {line.map((token, key) => (
-                    <span
-                      style={{ wordBreak: "break-all" }}
-                      {...getTokenProps({ token, key })}
-                    />
-                  ))}
-                </div>
-              ))}
-            </pre>
-          )}
-        </Highlight>
-        <SectionText fontSize="14px" fontWeight="300">
-          <i>
-            Para consulta é necessário um projeto no Google Cloud.{" "}
-            <b>Primeira vez?</b>{" "}
-            <LinkDash
-              href={helpLink[selectedConsultation]}
-              dash={false}
-              fontWeight="bold"
-              textDecoration="none"
-            >
-              Siga o passo a passo.
-            </LinkDash>
-          </i>
-        </SectionText>
-      </VStack>
-      <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Title>Metadados da tabela</Title>
-        <ExpandableTable
-          containerStyle={{ width: "100%", alignItems: "flex-start" }}
-          headers={["nome", "valor"]}
-          values={formatObjectsInArray(
-            translate(
-              translations,
-              filterOnlyValidValues({ dataset_id: datasetName, ...resource }, [
-                "dataset_id",
-                "table_id",
-                "spatial_coverage",
-                "temporal_coverage",
-                "update_frequency",
-                "entity",
-                "time_unit",
-                "identifying_columns",
-                "last_updated",
-                "version",
-                "published_by",
-                "data_cleaned_by",
-                "data_cleaning_description",
-                "raw_files_url",
-                "auxiliary_files_url",
-                "architecture_url",
-                "covered_by_dictionary",
-                "partitions",
-                "bdm_file_size",
-                "columns",
-              ])
-            )
-          )}
-        />
-      </VStack>
-    </BaseResourcePage>
-  );
-}
-
-function ExternalLinkPage({ translations, resource }) {
-  return (
-    <BaseResourcePage
-      title={resource.name}
-      buttonText="Acessar"
-      buttonRightIcon={<Image src="/img/icons/white_right_arrow.svg" />}
-      onClick={() => window.open(resource.url)}
-    >
-      <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Title>Metadados do link externo</Title>
-        <ExpandableTable
-          headers={["nome", "valor"]}
-          values={formatObjectsInArray(
-            translate(
-              translations,
-              filterOnlyValidValues(resource, [
-                "title",
-                "url",
-                "description",
-                "language",
-                "has_structured_data",
-                "has_api",
-                "is_free",
-                "requires_registration",
-                "availability",
-                "country_ip_address_required",
-                "license",
-                "spatial_coverage",
-                "temporal_coverage",
-                "update_frequency",
-                "entity",
-                "time_unit",
-              ])
-            )
-          )}
-        />
-      </VStack>
-    </BaseResourcePage>
-  );
-}
-
-function MetadataPage({ translations, dataset }) {
-  const _dataset = { ...dataset };
-  const unionResourceFields = [
-    "spatial_coverage",
-    "temporal_coverage",
-    "update_frequency",
-  ];
-
-  _dataset["groups"] = _dataset["groups"].map((t) => t.display_name);
-  _dataset["tags"] = _dataset["tags"].map((t) => t.display_name);
-
-  _dataset["resources"] = _dataset["resources"].map((resource) => {
-    const _resource = { ...resource };
-
-    function fixSpatialCoverage(sc) {
-      if (sc == null) return [];
-
-      if (typeof sc === "object") {
-        if (Object.keys(sc).length === 0) return [];
-
-        return [sc.continent[0], sc.country[0]];
-      }
-
-      return sc;
-    }
-
-    _resource["spatial_coverage"] = fixSpatialCoverage(
-      _resource["spatial_coverage"]
-    );
-
-    return _resource;
-  });
-
-  unionResourceFields.forEach(
-    (f) =>
-      (_dataset[f] = unionArrays(
-        _dataset.resources
-          .map((r) => (r[f] ? (typeof r[f] === "array" ? r[f] : [r[f]]) : []))
-          .sort()
-      ))
-  );
-
-  return (
-    <BaseResourcePage title="Metadados do conjunto">
-      <ExpandableTable
-        headers={["nome", "valor"]}
-        values={formatObjectsInArray(
-          translate(
-            translations,
-            filterOnlyValidValues(_dataset, [
-              "id",
-              "groups",
-              "tags",
-              "spatial_coverage",
-              "temporal_coverage",
-              "update_frequency",
-              "entity",
-              "ckan_url",
-              "github_url",
-            ])
-          )
-        )}
-      />
-    </BaseResourcePage>
+        Criar tabela tratada
+      </SimpleButton>
+      <SimpleButton
+        isActive={resource.resource_type === "create_external_link"}
+        onClick={() => setResource({ resource_type: "create_external_link" })}
+      >
+        Criar link externo
+      </SimpleButton>
+    </>
   );
 }
 
@@ -497,7 +93,6 @@ export default function DatasetPage({
   const [resource, setResource] = useState(
     bdmTables.length > 0 ? bdmTables[0] : externalLinks[0]
   );
-
   const [bdmTableFilter, setBdmTableFilter] = useState(
     resource.resource_type === "bdm_table"
   );
@@ -521,6 +116,36 @@ export default function DatasetPage({
           <ExternalLinkPage
             translations={translations["external_link"]}
             resource={resource}
+          />
+        );
+
+      case "create_bdm_table":
+        return (
+          <BaseResourcePage
+            title="Criar tabela tratada"
+            forceForm
+            formComponent={
+              <SchemaForm
+                schemaName="Tabela tratada"
+                loadSchemaFunction={getBdmTableSchema}
+                updateFunction={(data) => createResource(data, dataset.id)}
+              />
+            }
+          />
+        );
+
+      case "create_external_link":
+        return (
+          <BaseResourcePage
+            title="Criar link externo"
+            forceForm
+            formComponent={
+              <SchemaForm
+                schemaName="Link externo"
+                loadSchemaFunction={getExternalLinkSchema}
+                updateFunction={(data) => createResource(data, dataset.id)}
+              />
+            }
           />
         );
 
@@ -658,6 +283,7 @@ export default function DatasetPage({
               >
                 Metadados do conjunto
               </SimpleButton>
+              <AdminButtons resource={resource} setResource={setResource} />
               {bdmTables.length > 0 ? (
                 <FilterAccordion
                   alwaysOpen={true}

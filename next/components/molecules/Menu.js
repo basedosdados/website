@@ -152,7 +152,7 @@ export default function Menu({ strapiPages = [] }) {
         left="0px"
         backgroundColor="#FAFAFA"
         padding="15px 30px"
-        zIndex="10000000"
+        zIndex="999"
         transition="0.2s"
         as="nav"
       >

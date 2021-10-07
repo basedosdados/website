@@ -8,13 +8,24 @@ import {
   Select,
   Image,
   Skeleton,
+  Flex,
+  Button,
+  Icon,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
 } from "@chakra-ui/react";
 import ReactPaginate from "react-paginate";
 import SectionTitle from "../../components/atoms/SectionTitle";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { searchDatasets } from "../api/datasets";
+import { createDataset, searchDatasets } from "../api/datasets";
 import { DebouncedControlledInput } from "../../components/atoms/ControlledInput";
 import { Database } from "../../components/organisms/Database";
 import { CheckboxFilterAccordion } from "../../components/atoms/FilterAccordion";
@@ -22,6 +33,11 @@ import { withStrapiPages } from "../../hooks/strapi.hook";
 import { MainPageTemplate } from "../../components/templates/main";
 import { isBdPlus, unionArrays } from "../../utils";
 import { Tag } from "../../components/atoms/Tag";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { SchemaForm } from "../../components/molecules/SchemaForm";
+import { getDatasetSchema } from "../api/schemas";
+import UserContext from "../../context/user";
 
 export async function getStaticProps(context) {
   return withStrapiPages({
@@ -29,9 +45,38 @@ export async function getStaticProps(context) {
   });
 }
 
+function NewDatasetModal({ isOpen, onClose }) {
+  return (
+    <Modal
+      size="2xl"
+      closeOnOverlayClick={false}
+      isOpen={isOpen}
+      onClose={onClose}
+    >
+      <ModalOverlay zIndex="999" />
+      <ModalContent zIndex="9999">
+        <ModalCloseButton />
+        <ModalBody padding="20px 20px">
+          <SchemaForm
+            schemaName="Dataset"
+            loadSchemaFunction={getDatasetSchema}
+            updateFunction={createDataset}
+            onSuccess={(data) => {
+              const id = data.result.id;
+              window.open("/dataset/" + id, "_self");
+            }}
+          />
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+  );
+}
+
 export default function SearchPage({ strapiPages }) {
   const { query } = useRouter();
+  const datasetDisclosure = useDisclosure();
   const orderQuery = decodeURI(query.order_by || "score");
+  const userData = useContext(UserContext);
   const [order, setOrder] = useState(orderQuery);
   const [search, setSearch] = useState("");
   const [paramFilters, setParamFilters] = useState({});
@@ -106,6 +151,7 @@ export default function SearchPage({ strapiPages }) {
 
   return (
     <MainPageTemplate strapiPages={strapiPages}>
+      <NewDatasetModal {...datasetDisclosure} />
       <Stack
         justifyContent="flex-start"
         alignItems="flex-start"
@@ -222,17 +268,37 @@ export default function SearchPage({ strapiPages }) {
             }}
           />
           <>
-            <Heading
-              width="100%"
-              fontFamily="Ubuntu"
-              fontSize="30px"
-              fontWeight="400"
-              paddingTop="20px"
-              letterSpacing="0.1em"
-            >
-              {data?.count || "..."} conjunto(s) encontrado(s){" "}
-              {search ? " para " + search : ""}
-            </Heading>
+            <Flex width="100%" justify="center" align="baseline">
+              <Heading
+                width="100%"
+                fontFamily="Ubuntu"
+                fontSize="30px"
+                fontWeight="400"
+                paddingTop="20px"
+                letterSpacing="0.1em"
+              >
+                {data?.count || "..."} conjunto(s) encontrado(s){" "}
+                {search ? " para " + search : ""}
+              </Heading>
+              {userData?.is_admin ? (
+                <Button
+                  w="170px"
+                  backgroundColor="#3AA1EB"
+                  colorScheme="blue"
+                  onClick={datasetDisclosure.onOpen}
+                  leftIcon={
+                    <Icon>
+                      <FontAwesomeIcon icon={faPlus} />
+                    </Icon>
+                  }
+                  marginLeft="auto"
+                >
+                  Criar Dataset
+                </Button>
+              ) : (
+                <></>
+              )}
+            </Flex>
             <Stack spacing={3} direction={{ base: "column", lg: "row" }}>
               {Object.entries(paramFilters)
                 .filter(([k, v]) => v.length > 0)
@@ -379,7 +445,7 @@ export default function SearchPage({ strapiPages }) {
               />
             </VStack>
           </>
-          )}
+          )
         </VStack>
       </Stack>
       <script
