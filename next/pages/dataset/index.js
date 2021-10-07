@@ -62,8 +62,8 @@ function NewDatasetModal({ isOpen, onClose }) {
             loadSchemaFunction={getDatasetSchema}
             updateFunction={createDataset}
             onSuccess={(data) => {
-              const id = data.result.id;
-              window.open("/dataset/" + id, "_self");
+              const name = data.result.name;
+              window.open("/dataset/" + name, "_self");
             }}
           />
         </ModalBody>
@@ -382,7 +382,7 @@ export default function SearchPage({ strapiPages }) {
                 : (data?.datasets || []).map((d) => (
                     <>
                       <Database
-                        link={`/dataset/${d.id}`}
+                        link={`/dataset/${d.name}`}
                         name={d.title}
                         image={
                           "https://basedosdados.org/uploads/group/" +
