@@ -1,4 +1,4 @@
-import { VStack, Stack, HStack, Image, Flex } from "@chakra-ui/react";
+import { VStack, Stack, HStack, Image, Flex, Box } from "@chakra-ui/react";
 import Head from "next/head";
 import { MainPageTemplate } from "../../components/templates/main";
 import { withStrapiPages } from "../../hooks/strapi.hook";
@@ -26,6 +26,7 @@ import UserContext from "../../context/user";
 import { SchemaForm } from "../../components/molecules/SchemaForm";
 import { getBdmTableSchema, getExternalLinkSchema } from "../api/schemas";
 import { BaseResourcePage } from "../../components/molecules/BaseResourcePage";
+import NextImage from "next/image";
 
 export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
@@ -198,20 +199,25 @@ export default function DatasetPage({
           justifyContent="flex-start"
           width="220px"
         >
-          <Image
-            borderRadius="31.8889px"
-            boxShadow="0px 0px 10px rgba(0,0,0,0.25)"
+          <Box
+            position="relative"
             minWidth="220px"
             minHeight="220px"
             maxWidth="220px"
-            maxHeight="220px"
-            borderRadius="31px"
-            objectFit="contain"
-            src={
-              "https://basedosdados.org/uploads/group/" +
-              dataset.organization.image_url
-            }
-          />
+            boxShadow="0px 0px 10px rgba(0, 0, 0, 0.25)"
+            borderRadius="31.8889px"
+          >
+            <NextImage
+              layout="fill"
+              className="rounded"
+              priority="eager"
+              objectFit="contain"
+              src={
+                "https://basedosdados.org/uploads/group/" +
+                dataset.organization.image_url
+              }
+            />
+          </Box>
           <Stack
             paddingTop={{ base: "30px", lg: "20px" }}
             spacing={6}
@@ -232,9 +238,9 @@ export default function DatasetPage({
                   <HStack key={g.name}>
                     <CategoryIcon
                       size="39px"
-                      url={`/img/categories/icone_${g.name}${
-                        isPlus ? "-1" : ""
-                      }.svg`}
+                      url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${
+                        g.name
+                      }${isPlus ? "-1" : ""}.svg`}
                     />
                     <SectionText>{g.display_name}</SectionText>
                   </HStack>
