@@ -102,7 +102,7 @@ function Hero() {
             >
               <Image
                 priority
-                src="/img/home_background.png"
+                src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/home_background.png"
                 layout="fill"
                 objectFit="contain"
               />
@@ -176,19 +176,19 @@ function Hero() {
             direction={{ base: "column", lg: "row" }}
             spacing={10}
           >
-            <HeroText iconUrl="/img/icone_busca.png">
+            <HeroText iconUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/icone_busca.png">
               <SectionText fontSize="14px" textAlign="center">
                 Com o mecanismo de busca é possível descobrir informações sobre
                 mais de 900 bases de dados de diversos temas e organizações.
               </SectionText>
             </HeroText>
-            <HeroText iconUrl="/img/icone_download.png">
+            <HeroText iconUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/icone_download.png">
               <SectionText fontSize="14px" textAlign="center">
                 Disponibilizamos o download dos dados tratados e atualizados
                 direto do nosso <i>datalake</i> público num só click.
               </SectionText>
             </HeroText>
-            <HeroText iconUrl="/img/icone_pacotes.png">
+            <HeroText iconUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/icone_pacotes.png">
               <SectionText fontSize="14px" textAlign="center">
                 Através dos nossos pacotes de programação você pode acessar o{" "}
                 <i>datalake</i> público BD+ em Python, R ou pela linha de
@@ -442,7 +442,7 @@ function LearnToAnalysis() {
           >
             <Image
               priority
-              src="/img/home_background.png"
+              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/home_background.png"
               layout="fill"
               objectFit="contain"
             />
@@ -577,7 +577,7 @@ function Support({ strapiPages }) {
       >
         <Image
           priority
-          src="/img/home_background.png"
+          src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/home_background.png"
           layout="fill"
           objectFit="contain"
         />

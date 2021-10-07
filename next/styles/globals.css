@@ -7,6 +7,10 @@ body {
   scroll-behavior: smooth;
 }
 
+.rounded {
+  border-radius: 31.8889px;
+}
+
 #blog h1 {
   font-weight: bold;
   font-size: 40px;
