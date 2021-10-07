@@ -23,7 +23,7 @@ import {
 import ReactPaginate from "react-paginate";
 import SectionTitle from "../../components/atoms/SectionTitle";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { createDataset, searchDatasets } from "../api/datasets";
 import { DebouncedControlledInput } from "../../components/atoms/ControlledInput";
@@ -37,6 +37,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { SchemaForm } from "../../components/molecules/SchemaForm";
 import { getDatasetSchema } from "../api/schemas";
+import UserContext from "../../context/user";
 
 export async function getStaticProps(context) {
   return withStrapiPages({
@@ -75,6 +76,7 @@ export default function SearchPage({ strapiPages }) {
   const { query } = useRouter();
   const datasetDisclosure = useDisclosure();
   const orderQuery = decodeURI(query.order_by || "score");
+  const userData = useContext(UserContext);
   const [order, setOrder] = useState(orderQuery);
   const [search, setSearch] = useState("");
   const [paramFilters, setParamFilters] = useState({});
@@ -278,20 +280,24 @@ export default function SearchPage({ strapiPages }) {
                 {data?.count || "..."} conjunto(s) encontrado(s){" "}
                 {search ? " para " + search : ""}
               </Heading>
-              <Button
-                w="170px"
-                backgroundColor="#3AA1EB"
-                colorScheme="blue"
-                onClick={datasetDisclosure.onOpen}
-                leftIcon={
-                  <Icon>
-                    <FontAwesomeIcon icon={faPlus} />
-                  </Icon>
-                }
-                marginLeft="auto"
-              >
-                Criar Dataset
-              </Button>
+              {userData?.is_admin ? (
+                <Button
+                  w="170px"
+                  backgroundColor="#3AA1EB"
+                  colorScheme="blue"
+                  onClick={datasetDisclosure.onOpen}
+                  leftIcon={
+                    <Icon>
+                      <FontAwesomeIcon icon={faPlus} />
+                    </Icon>
+                  }
+                  marginLeft="auto"
+                >
+                  Criar Dataset
+                </Button>
+              ) : (
+                <></>
+              )}
             </Flex>
             <Stack spacing={3} direction={{ base: "column", lg: "row" }}>
               {Object.entries(paramFilters)
