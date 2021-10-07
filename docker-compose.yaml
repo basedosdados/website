@@ -94,6 +94,7 @@ services:
       - "1337:1337"
     depends_on:
       - strapi-db
+    command: ["yarn", "start"]
 
   strapi-db:
     image: postgres
