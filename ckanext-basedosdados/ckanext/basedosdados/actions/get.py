@@ -328,6 +328,7 @@ def bd_dataset_search(context, data_dict):
         "bdm_dictionary",
         "information_request",
         "external_link",
+        None,
     ]
     resource_types_not_included = [
         resource_type
@@ -335,12 +336,15 @@ def bd_dataset_search(context, data_dict):
         if resource_type not in resource_type_order
     ]
     resource_type_order = resource_type_order + resource_types_not_included
-    resources_order_dict = {}
 
+    resources_order_dict = {}
+    print(resource_type_order)
     for i, package in enumerate(response["datasets"]):
         resources_type = [
             resource.get("resource_type") for resource in package.get("resources")
         ]
+        resources_type = resources_type if resources_type != [] else [None]
+
         for item in resource_type_order:
             if item in resources_type:
                 resources_order_dict[i] = item
