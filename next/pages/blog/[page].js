@@ -67,7 +67,7 @@ function BlogPage({ strapiPages = [] }) {
         <Center
           minHeight="600px"
           width="100%"
-          backgroundColor="#fafafa"
+          backgroundColor="#FFFFFF"
           padding="0px 5%"
         >
           <CircularProgress isIndeterminate />
@@ -80,7 +80,7 @@ function BlogPage({ strapiPages = [] }) {
       <VStack
         alignItems="center"
         width="100%"
-        backgroundColor="#fafafa"
+        backgroundColor="#FFFFFF"
         padding="0px 8%"
         paddingTop="50px"
         minHeight="60vh"

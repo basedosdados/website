@@ -76,7 +76,7 @@ function DesktopLinks({ links }) {
           color="black"
           value={search}
           onChange={setSearch}
-          inputBackgroundColor="#FAFAFA"
+          inputBackgroundColor="#FFFFFF"
           rightIcon={
             <Box width="60px" height="60px" position="relative">
               <Image
@@ -150,7 +150,7 @@ export default function Menu({ strapiPages = [] }) {
         top="0px"
         width="100%"
         left="0px"
-        backgroundColor="#FAFAFA"
+        backgroundColor="#FFFFFF"
         padding="15px 30px"
         zIndex="999"
         transition="0.2s"

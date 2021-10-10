@@ -12,7 +12,7 @@ export function MainPageTemplate({ strapiPages, children }) {
 
   return (
     <UserContext.Provider value={data}>
-      <Box backgroundColor="#FAFAFA">
+      <Box backgroundColor="#FFFFFF">
         <SiteHead />
         <Menu strapiPages={strapiPages} />
         <Box paddingTop={{ base: "30px", lg: "120px" }} paddingBottom="50px">

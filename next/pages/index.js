@@ -77,7 +77,7 @@ function Hero() {
   }
 
   return (
-    <VStack width="100%" backgroundColor="#FAFAFA">
+    <VStack width="100%" backgroundColor="#FFFFFF">
       <Center height="100%">
         <VStack
           height="100%"
@@ -226,7 +226,7 @@ function CatalogNews({ popularDatasets, popularDatalakeDatasets }) {
       width="100%"
       padding="60px 00px"
       alignItems="flex-start"
-      backgroundColor="#FAFAFA"
+      backgroundColor="#FFFFFF"
       spacing={5}
       paddingTop="75px"
       paddingBottom="160px"
@@ -645,7 +645,7 @@ export default function Home({
       <VStack
         alignItems="center"
         width="100%"
-        backgroundColor="#FAFAFA"
+        backgroundColor="#FFFFFF"
         padding="0px 10%"
         marginTop="55px"
         zIndex="10"
