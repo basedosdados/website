@@ -50,7 +50,7 @@ export default function DatabaseCard({
     </HStack>
   );
 
-  if (externalLinkNum) databaseInfo.push(externalLinkNum + " link externo");
+  if (externalLinkNum) databaseInfo.push(externalLinkNum + " links externos");
 
   return (
     <Card

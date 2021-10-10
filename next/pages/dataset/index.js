@@ -197,7 +197,7 @@ export default function SearchPage({ strapiPages }) {
               },
               {
                 key: "external_link",
-                name: `Link externo (${
+                name: `Links externos (${
                   data?.resource_external_link_count || "0"
                 })`,
               },
