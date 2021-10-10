@@ -178,17 +178,17 @@ function Hero() {
           >
             <HeroText iconUrl="/img/icone_busca.png">
               <SectionText fontSize="14px" textAlign="center">
-              Busque por <b>dados abertos</b> de diversos temas e organizações.
+                Busque por <b>dados abertos</b> de diversos temas e organizações.
               </SectionText>
             </HeroText>
             <HeroText iconUrl="/img/icone_download.png">
               <SectionText fontSize="14px" textAlign="center">
-              Acesse e baixe as <b>tabelas tratadas</b> do nosso <i>datalake</i> público.
+                Acesse e baixe as <b>tabelas tratadas</b> do nosso <i>datalake</i> público.
               </SectionText>
             </HeroText>
             <HeroText iconUrl="/img/icone_pacotes.png">
               <SectionText fontSize="14px" textAlign="center">
-              Desenvolva com nossos <b>pacotes</b> em Python e R. 
+                Desenvolva com nossos <b>pacotes</b> em Python e R.
               </SectionText>
             </HeroText>
           </Stack>
@@ -196,8 +196,9 @@ function Hero() {
       </Center>
       <Center
         display={{ base: "none", lg: "flex" }}
-        boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
-        backgroundColor="#42B0FF"
+        // boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)" -- remove a
+        // sombra pois não está implementado como um botão
+        backgroundColor="#34A15A"
         borderRadius="1000px"
         width="50px"
         height="50px"
