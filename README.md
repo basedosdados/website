@@ -2,12 +2,21 @@
 
 ## Para desenvolvimento local
 
-- Instale docker, docker-compose, git-lfs (instruções em [git-lfs.github.com](https://git-lfs.github.com/));
+### Passo a passo
+- Instale docker, docker-compose, git-lfs (instruções em
+  [git-lfs.github.com](https://git-lfs.github.com/));
+> É necessário ter pelo menos 4GB para o Docker, veja como alterar [aqui](https://stackoverflow.com/questions/44533319/how-to-assign-more-memory-to-docker-container).
+
 - Execute `./bootstrap.sh`;
+> Caso ocorra erro de *timeout*, remova o parâmetro `--parallel` no comando `docker-compose build
+> --parallel $DOCKER_BUILD_EXTRA_ARGS` e teste novamente.
+
 - Acesse localhost:5000.
 
+### Login
 É possível também logar com o usuário `dev` e senha `12345678`. Note que o script `bootstrap.sh` inicializa o ambiente dev, caso tenha algum problema é possível inicializar do zero (com novos downloads e builds) com `./bootstrap.sh full`. Caso precise, a chave de API do ckan em desenvolvimento se encontra em `configs/ckan-dev-api-token.sh`, e para adicionar as suas variáveis de ambiente rode `source configs/ckan-dev-api-token.sh` ou adicione ao seu `bashrc`.
 
+### Banco de dados
 É possível visualizar e modificar o banco de dados (com dbeaver) em:
 
 ```
