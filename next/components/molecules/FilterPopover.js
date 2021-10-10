@@ -27,7 +27,7 @@ function FilterInput({ label, onChange, value }) {
   );
 }
 
-export function FilterPopover({}) {
+export function FilterPopover({ }) {
   return (
     <Popover placement="bottom-end">
       <PopoverTrigger>
@@ -47,13 +47,13 @@ export function FilterPopover({}) {
           }
         />
       </PopoverTrigger>
-      <PopoverContent width={{base:"300px", lg:"500px"}} maxWidth="500px">
+      <PopoverContent width={{ base: "300px", lg: "500px" }} maxWidth="500px">
         <PopoverArrow />
         <PopoverCloseButton />
         <PopoverBody
           width="100%"
-          padding={{base:"20px", md:"30px"}}
-          boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
+          padding={{ base: "20px", md: "30px" }}
+          boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
         >
           <VStack alignItems="flex-start" width="100%" spacing={5}>
             <HStack width="100%" justifyContent="space-between">

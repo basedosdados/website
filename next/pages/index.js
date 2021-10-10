@@ -140,7 +140,7 @@ function Hero() {
                   backgroundColor: "#ffffff",
                   fontSize: "24px",
                   border: "0px",
-                  boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                  boxShadow: "0 2px 5px 1px rgba(64, 60, 67, 0.16)",
                 }}
                 rightIcon={
                   <Box
@@ -200,7 +200,7 @@ function Hero() {
       </Center>
       <Center
         display={{ base: "none", lg: "flex" }}
-        boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
+        boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
         backgroundColor="#42B0FF"
         borderRadius="1000px"
         width="50px"
@@ -459,10 +459,10 @@ function LearnToAnalysis() {
           <VStack spacing={4} zIndex="1" position="relative">
             <SectionText textAlign="justify">
               Produzimos{" "}
-              <b> tutoriais e ensaios no blog, workshops no Youtube</b> e{" "}
-              <b>análises nas redes sociais</b> com nossos dados.
-              Disponibilizamos os <b>códigos completos</b> no nosso GitHub para
-              você testar e reproduzir localmente
+              <b> tutoriais e análises no blog, workshops no YouTube</b> e{" "}
+              e muito mais com nossos dados.
+              O código completo de todos os exemplos fica disponível no nosso GitHub para
+              você testar e reproduzir localmente.
             </SectionText>
             <HStack alignItems="flex-start" width="100%" spacing={5}>
               <LinkDash href="https://www.youtube.com/c/BasedosDados/videos">
@@ -493,10 +493,13 @@ function JoinTheCommunity() {
           </Title>
           <SectionText textAlign="justify">
             Acompanhe todas as discussões, tire dúvidas, fale e aprenda direto
-            com a equipe da Base dos Dados e faça parte de um grupo de pessoas
-            incríveis da nossa <b>comunidade de dados abertos no Discord.</b>
+            com a equipe e a comunidade da Base dos Dados pelo Discord. Para ir além,
+            seja voluntário(a) da BD e colabore com dados, análises ou infraestrutura.
           </SectionText>
-          <LinkDash href="https://discord.gg/huKWpsVYx4">Discord</LinkDash>
+          <HStack alignItems="flex-start" width="100%" spacing={5}>
+            <LinkDash href="https://basedosdados.github.io/mais/colab/">Voluntariado</LinkDash>
+            <LinkDash href="https://discord.gg/huKWpsVYx4">Discord</LinkDash>
+          </HStack>
         </VStack>
       }
       rightColumn={
@@ -533,7 +536,7 @@ function Support({ strapiPages }) {
     return (
       <a href={link} target={target}>
         <Button
-          boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
+          boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
           borderRadius="68.6364px"
           colorScheme={colorScheme}
           backgroundColor={backgroundColor}
