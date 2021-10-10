@@ -118,8 +118,11 @@ export default function Menu({ strapiPages = [] }) {
   const divRef = useRef();
   const userData = useContext(UserContext);
 
+  links["Quem Somos"] = "/blog/2/"; // TODO: mudar ID da página para quem-somos
+
   const links = {
     Dados: "/dataset",
+    // Serviços: "/servicos" - TODO: adicionar quando tiver a pagina
   };
 
   useEffect(() => {
@@ -131,15 +134,14 @@ export default function Menu({ strapiPages = [] }) {
     });
   }, [divRef.current]);
 
-  links["Documentação"] = "https://basedosdados.github.io/mais/";
-
-  strapiPages.map((p) => {
-    links[p.MenuTitle] = "/blog/" + p.id + "/";
-  });
+  links["Blog"] = "https://medium.com/basedosdados";
 
   links["Newsletter"] =
     "https://basedosdados.hubspotpagebuilder.com/assine-a-newsletter-da-base-dos-dados";
-  links["Apoie"] = "https://apoia.se/basedosdados";
+
+  links["Fale Conosco"] = "/blog/1/";
+
+  links["Apoie"] = "https://apoia.se/basedosdados"; // TODO: mudar para descer na nova seção da Homee
 
   return (
     <>
