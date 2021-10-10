@@ -8,8 +8,8 @@
 > É necessário ter pelo menos 4GB para o Docker, veja como alterar [aqui](https://stackoverflow.com/questions/44533319/how-to-assign-more-memory-to-docker-container).
 
 - Execute `./bootstrap.sh`;
-> Caso ocorra erro de *timeout*, remova o parâmetro `--parallel` no comando `docker-compose build
-> --parallel $DOCKER_BUILD_EXTRA_ARGS` e teste novamente.
+> Caso ocorra *timeout*, remova o parâmetro `--parallel` em `docker-compose build
+> --parallel $DOCKER_BUILD_EXTRA_ARGS` e teste novamente. Caso ainda dê erro no build do container `strapi`, adicione `--network-timeout=100000` [nesta linha](https://github.com/basedosdados/website/blob/master/strapi/Dockerfile#L8).
 
 - Acesse localhost:5000.
 
