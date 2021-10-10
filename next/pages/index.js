@@ -371,7 +371,7 @@ function ExploreInYourFavoriteLanguage() {
             <i>datalake</i> no Google BigQuery.
           </SectionText>
           <LinkDash href="https://basedosdados.github.io/mais/access_data_packages">
-            Veja mais
+            <b>Veja mais</b>
           </LinkDash>
         </VStack>
       }
@@ -463,10 +463,10 @@ function LearnToAnalysis() {
             </SectionText>
             <HStack alignItems="flex-start" width="100%" spacing={5}>
               <LinkDash href="https://www.youtube.com/c/BasedosDados/videos">
-                YouTube
+                <b>YouTube</b>
               </LinkDash>
-              <LinkDash href="https://dev.to/basedosdados">Blog</LinkDash>
-              <LinkDash href="https://github.com/basedosdados">GitHub</LinkDash>
+              <LinkDash href="https://dev.to/basedosdados"><b>Blog</b></LinkDash>
+              <LinkDash href="https://github.com/basedosdados"><b>GitHub</b></LinkDash>
             </HStack>
           </VStack>
         </VStack>
@@ -494,8 +494,8 @@ function JoinTheCommunity() {
             seja voluntário(a) da BD e colabore com dados, análises ou infraestrutura.
           </SectionText>
           <HStack alignItems="flex-start" width="100%" spacing={5}>
-            <LinkDash href="https://basedosdados.github.io/mais/colab/">Voluntariado</LinkDash>
-            <LinkDash href="https://discord.gg/huKWpsVYx4">Discord</LinkDash>
+            <LinkDash href="https://basedosdados.github.io/mais/colab/"><b>Voluntariado</b></LinkDash>
+            <LinkDash href="https://discord.gg/huKWpsVYx4"><b>Discord</b></LinkDash>
           </HStack>
         </VStack>
       }
