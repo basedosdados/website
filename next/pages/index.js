@@ -178,21 +178,17 @@ function Hero() {
           >
             <HeroText iconUrl="/img/icone_busca.png">
               <SectionText fontSize="14px" textAlign="center">
-                Com o mecanismo de busca é possível descobrir informações sobre
-                mais de 900 bases de dados de diversos temas e organizações.
+              Busque por <b>dados abertos</b> de diversos temas e organizações.
               </SectionText>
             </HeroText>
             <HeroText iconUrl="/img/icone_download.png">
               <SectionText fontSize="14px" textAlign="center">
-                Disponibilizamos o download dos dados tratados e atualizados
-                direto do nosso <i>datalake</i> público num só click.
+              Acesse e baixe as <b>tabelas tratadas</b> do nosso <i>datalake</i> público.
               </SectionText>
             </HeroText>
             <HeroText iconUrl="/img/icone_pacotes.png">
               <SectionText fontSize="14px" textAlign="center">
-                Através dos nossos pacotes de programação você pode acessar o{" "}
-                <i>datalake</i> público BD+ em Python, R ou pela linha de
-                comando.
+              Desenvolva com nossos <b>pacotes</b> em Python e R. 
               </SectionText>
             </HeroText>
           </Stack>
