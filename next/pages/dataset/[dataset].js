@@ -30,7 +30,7 @@ import { BaseResourcePage } from "../../components/molecules/BaseResourcePage";
 export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
   const translations = await getTranslations();
-  const resources = dataset["resources"];
+  const resources = dataset["resources"] || [];
   let bdPlus;
   const bdmTables = resources.filter((r) => r?.resource_type === "bdm_table");
   const externalLinks = resources.filter(
@@ -62,7 +62,7 @@ export async function getStaticPaths(context) {
     paths: datasets.map((d) => ({
       params: { dataset: d },
     })),
-    fallback: "blocking",
+    fallback: false,
   };
 }
 
