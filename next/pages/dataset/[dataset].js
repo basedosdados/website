@@ -32,9 +32,11 @@ export async function getStaticProps(context) {
   const translations = await getTranslations();
   const resources = dataset["resources"] || [];
   let bdPlus;
-  const bdmTables = resources.filter((r) => r?.resource_type === "bdm_table");
+  const bdmTables = resources.filter(
+    (r) => r && r?.resource_type === "bdm_table"
+  );
   const externalLinks = resources.filter(
-    (r) => r?.resource_type === "external_link"
+    (r) => r && r?.resource_type === "external_link"
   );
 
   try {
