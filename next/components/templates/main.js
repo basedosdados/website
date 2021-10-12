@@ -7,12 +7,16 @@ import SiteHead from "../atoms/SiteHead";
 import Footer from "../molecules/Footer";
 import Menu from "../molecules/Menu";
 
-export function MainPageTemplate({ strapiPages, children }) {
+export function MainPageTemplate({
+  strapiPages,
+  children,
+  backgroundColor = "#FAFAFA",
+}) {
   const { data = null, isLoading } = useQuery("user", getUser);
 
   return (
     <UserContext.Provider value={data}>
-      <Box backgroundColor="#FAFAFA">
+      <Box backgroundColor={backgroundColor}>
         <SiteHead />
         <Menu strapiPages={strapiPages} />
         <Box paddingTop={{ base: "30px", lg: "120px" }} paddingBottom="50px">

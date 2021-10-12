@@ -31,6 +31,7 @@ import { LinkDash } from "../components/atoms/LinkDash";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { isBdPlus } from "../utils";
 import Link from "../components/atoms/Link";
+import { KnowOurServices } from "../components/molecules/KnowOurServices";
 
 export async function getStaticProps(context) {
   const popularDatasets = await getPopularDatasets();
@@ -77,7 +78,7 @@ function Hero() {
   }
 
   return (
-    <VStack width="100%" backgroundColor="#FAFAFA">
+    <VStack width="100%">
       <Center height="100%">
         <VStack
           height="100%"
@@ -93,20 +94,6 @@ function Hero() {
             spacing={50}
             marginStart="0px !important"
           >
-            <Box
-              position="absolute"
-              right="0px"
-              top="-80%"
-              minWidth="850px"
-              minHeight="568px"
-            >
-              <Image
-                priority
-                src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/home_background.png"
-                layout="fill"
-                objectFit="contain"
-              />
-            </Box>
             <BigTitle
               position="relative"
               zIndex="1"
@@ -226,7 +213,6 @@ function CatalogNews({ popularDatasets, popularDatalakeDatasets }) {
       width="100%"
       padding="60px 00px"
       alignItems="flex-start"
-      backgroundColor="#FAFAFA"
       spacing={5}
       paddingTop="75px"
       paddingBottom="160px"
@@ -442,7 +428,7 @@ function LearnToAnalysis() {
           >
             <Image
               priority
-              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/home_background.png"
+              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/fundo_rede.png"
               layout="fill"
               objectFit="contain"
             />
@@ -577,7 +563,7 @@ function Support({ strapiPages }) {
       >
         <Image
           priority
-          src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/home_background.png"
+          src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/fundo_rede.png"
           layout="fill"
           objectFit="contain"
         />
@@ -638,11 +624,10 @@ export default function Home({
   popularDatalakeDatasets,
 }) {
   return (
-    <MainPageTemplate strapiPages={strapiPages}>
+    <MainPageTemplate backgroundColor="#FFFFFF" strapiPages={strapiPages}>
       <VStack
         alignItems="center"
         width="100%"
-        backgroundColor="#FAFAFA"
         padding="0px 10%"
         marginTop="55px"
         zIndex="10"
@@ -650,15 +635,16 @@ export default function Home({
       >
         <Hero />
       </VStack>
-      <VStack padding="0px 5%">
+      <VStack padding="0px 5%" marginBottom="-100px">
         <CatalogNews
           popularDatasets={popularDatasets}
           popularDatalakeDatasets={popularDatalakeDatasets}
         />
       </VStack>
+      <KnowOurServices />
       <VStack
+        paddingTop="100px"
         spacing={20}
-        transform="translateY(-100px)"
         width={{ base: "90%", lg: "85%" }}
         margin="auto"
       >
