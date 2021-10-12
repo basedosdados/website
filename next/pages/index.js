@@ -127,7 +127,7 @@ function Hero() {
                   backgroundColor: "#ffffff",
                   fontSize: "24px",
                   border: "0px",
-                  boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                  boxShadow: "0 2px 5px 1px rgba(64, 60, 67, 0.16)",
                 }}
                 rightIcon={
                   <Box
@@ -165,21 +165,19 @@ function Hero() {
           >
             <HeroText iconUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/icone_busca.png">
               <SectionText fontSize="14px" textAlign="center">
-                Com o mecanismo de busca é possível descobrir informações sobre
-                mais de 900 bases de dados de diversos temas e organizações.
+                Busque por <b>dados abertos</b> de diversos temas e
+                organizações.
               </SectionText>
             </HeroText>
             <HeroText iconUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/icone_download.png">
               <SectionText fontSize="14px" textAlign="center">
-                Disponibilizamos o download dos dados tratados e atualizados
-                direto do nosso <i>datalake</i> público num só click.
+                Acesse e baixe as <b>tabelas tratadas</b> do nosso{" "}
+                <i>datalake</i> público.
               </SectionText>
             </HeroText>
             <HeroText iconUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/icone_pacotes.png">
               <SectionText fontSize="14px" textAlign="center">
-                Através dos nossos pacotes de programação você pode acessar o{" "}
-                <i>datalake</i> público BD+ em Python, R ou pela linha de
-                comando.
+                Desenvolva com nossos <b>pacotes</b> em Python e R.
               </SectionText>
             </HeroText>
           </Stack>
@@ -187,8 +185,9 @@ function Hero() {
       </Center>
       <Center
         display={{ base: "none", lg: "flex" }}
-        boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
-        backgroundColor="#42B0FF"
+        // boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)" -- remove a
+        // sombra pois não está implementado como um botão
+        backgroundColor="#34A15A"
         borderRadius="1000px"
         width="50px"
         height="50px"
@@ -360,7 +359,7 @@ function ExploreInYourFavoriteLanguage() {
             <i>datalake</i> no Google BigQuery.
           </SectionText>
           <LinkDash href="https://basedosdados.github.io/mais/access_data_packages">
-            Veja mais
+            <b>Veja mais</b>
           </LinkDash>
         </VStack>
       }
@@ -445,17 +444,21 @@ function LearnToAnalysis() {
           <VStack spacing={4} zIndex="1" position="relative">
             <SectionText textAlign="justify">
               Produzimos{" "}
-              <b> tutoriais e ensaios no blog, workshops no Youtube</b> e{" "}
-              <b>análises nas redes sociais</b> com nossos dados.
-              Disponibilizamos os <b>códigos completos</b> no nosso GitHub para
-              você testar e reproduzir localmente
+              <b> tutoriais e análises no blog, workshops no YouTube</b> e e
+              muito mais com nossos dados. O código completo de todos os
+              exemplos fica disponível no nosso GitHub para você testar e
+              reproduzir localmente.
             </SectionText>
             <HStack alignItems="flex-start" width="100%" spacing={5}>
               <LinkDash href="https://www.youtube.com/c/BasedosDados/videos">
-                YouTube
+                <b>YouTube</b>
               </LinkDash>
-              <LinkDash href="https://dev.to/basedosdados">Blog</LinkDash>
-              <LinkDash href="https://github.com/basedosdados">GitHub</LinkDash>
+              <LinkDash href="https://dev.to/basedosdados">
+                <b>Blog</b>
+              </LinkDash>
+              <LinkDash href="https://github.com/basedosdados">
+                <b>GitHub</b>
+              </LinkDash>
             </HStack>
           </VStack>
         </VStack>
@@ -479,10 +482,18 @@ function JoinTheCommunity() {
           </Title>
           <SectionText textAlign="justify">
             Acompanhe todas as discussões, tire dúvidas, fale e aprenda direto
-            com a equipe da Base dos Dados e faça parte de um grupo de pessoas
-            incríveis da nossa <b>comunidade de dados abertos no Discord.</b>
+            com a equipe e a comunidade da Base dos Dados pelo Discord. Para ir
+            além, seja voluntário(a) da BD e colabore com dados, análises ou
+            infraestrutura.
           </SectionText>
-          <LinkDash href="https://discord.gg/huKWpsVYx4">Discord</LinkDash>
+          <HStack alignItems="flex-start" width="100%" spacing={5}>
+            <LinkDash href="https://basedosdados.github.io/mais/colab/">
+              <b>Voluntariado</b>
+            </LinkDash>
+            <LinkDash href="https://discord.gg/huKWpsVYx4">
+              <b>Discord</b>
+            </LinkDash>
+          </HStack>
         </VStack>
       }
       rightColumn={
@@ -519,7 +530,7 @@ function Support({ strapiPages }) {
     return (
       <a href={link} target={target}>
         <Button
-          boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
+          boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
           borderRadius="68.6364px"
           colorScheme={colorScheme}
           backgroundColor={backgroundColor}
