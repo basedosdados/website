@@ -31,9 +31,9 @@ export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
   const translations = await getTranslations();
   const resources = dataset["resources"];
-  const bdmTables = resources.filter((r) => r.resource_type === "bdm_table");
+  const bdmTables = resources.filter((r) => r?.resource_type === "bdm_table");
   const externalLinks = resources.filter(
-    (r) => r.resource_type === "external_link"
+    (r) => r?.resource_type === "external_link"
   );
 
   return await withStrapiPages({
