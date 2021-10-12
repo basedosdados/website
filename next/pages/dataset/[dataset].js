@@ -54,9 +54,11 @@ export async function getStaticPaths(context) {
   let datasets = await listDatasets();
 
   return {
-    paths: datasets.map((d) => ({
-      params: { dataset: d },
-    })),
+    paths: datasets
+      .filter((d) => d != "br-me-siconfi")
+      .map((d) => ({
+        params: { dataset: d },
+      })),
     fallback: "blocking",
   };
 }
