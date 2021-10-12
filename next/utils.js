@@ -45,7 +45,9 @@ export function limitTextSize(text, size) {
 }
 
 export function isBdPlus(dataset) {
-  return dataset.resources.some((r) => r?.resource_type === "bdm_table");
+  return dataset.resources
+    .filter((r) => r?.resource_type)
+    .some((r) => r?.resource_type === "bdm_table");
 }
 
 export function translate(translations, object) {
