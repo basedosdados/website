@@ -51,7 +51,7 @@ export default function Footer({ strapiPages }) {
   // const aboutPage = strapiPages.filter((p) => p.Title === "Sobre");
 
   return (
-    <VStack width="100%" spacing={0}>
+    <VStack position="relative" zIndex="10" width="100%" spacing={0}>
       <VStack width="100%" padding={10} spacing={10} backgroundColor="#34A15A">
         <Stack
           alignItems="flex-start"
@@ -200,7 +200,8 @@ export default function Footer({ strapiPages }) {
             fontWeight="500"
             letterSpacing="0.1em"
           >
-            Ícones adaptados de Freepik e Smashicons disponíveis em Storyset e Flaticon.
+            Ícones adaptados de Freepik e Smashicons disponíveis em Storyset e
+            Flaticon.
           </Text>
         </VStack>
       </VStack>

@@ -4,7 +4,7 @@ import { useState } from "react";
 import BigTitle from "../atoms/BigTitle";
 import SectionText from "../atoms/SectionText";
 
-export function KnowOurServices() {
+export function KnowOurServices({ ...props }) {
   const [currentTab, setCurrentTab] = useState("Captura de dados");
   const tabs = {
     "Captura de dados": {
@@ -24,7 +24,7 @@ export function KnowOurServices() {
     },
   };
   return (
-    <VStack>
+    <VStack {...props} width="100%">
       <BigTitle textAlign="center" maxWidth="100%" paddingBottom="40px">
         Conheça nossos serviços
       </BigTitle>

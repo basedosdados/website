@@ -20,9 +20,9 @@ import UserContext from "../../context/user";
 
 function MenuDrawer({ isOpen, onClose, links }) {
   return (
-    <Drawer zIndex="10px" isOpen={isOpen} placement="top" onClose={onClose}>
+    <Drawer isOpen={isOpen} placement="top" onClose={onClose}>
       <DrawerOverlay />
-      <DrawerContent padding="110px 30px 30px 30px">
+      <DrawerContent padding="30px 30px 30px 30px">
         <VStack alignItems="center" width="100%" spacing={5}>
           {Object.entries(links).map(([k, v]) => (
             <>
@@ -58,19 +58,25 @@ function DesktopLinks({ links }) {
               <RoundedButton
                 colorScheme="red"
                 backgroundColor="#FF8484"
-                minWidth="100px"
+                minWidth="80px"
+                height="35px"
+                fontSize="14px"
               >
                 Apoie
               </RoundedButton>
             </a>
           ) : (
-            <Link href={v} target={v.startsWith("https") ? "_blank" : null}>
+            <Link
+              fontSize="14px"
+              href={v}
+              target={v.startsWith("https") ? "_blank" : null}
+            >
               {k}
             </Link>
           )
         )}
       </HStack>
-      <HStack spacing={10} display={{ base: "none", lg: "flex" }}>
+      <HStack spacing={9} display={{ base: "none", lg: "flex" }}>
         <ControlledInput
           onEnterPress={openSearchLink}
           color="black"
@@ -102,9 +108,13 @@ function DesktopLinks({ links }) {
           </HStack>
         ) : (
           <>
-            <Link href="/user/login">Entrar</Link>
+            <Link fontSize="14px" href="/user/login">
+              Entrar
+            </Link>
             <Link href="/user/register">
-              <RoundedButton minWidth="150px">Cadastrar</RoundedButton>
+              <RoundedButton height="35px" fontSize="14px" minWidth="130px">
+                Cadastrar
+              </RoundedButton>
             </Link>
           </>
         )}
@@ -118,11 +128,10 @@ export default function Menu({ strapiPages = [] }) {
   const divRef = useRef();
   const userData = useContext(UserContext);
 
-  links["Quem Somos"] = "/blog/2/"; // TODO: mudar ID da página para quem-somos
-
   const links = {
+    "Quem Somos": "/blog/2/", // TODO: mudar ID da página para quem-somos
     Dados: "/dataset",
-    // Serviços: "/servicos" - TODO: adicionar quando tiver a pagina
+    Serviços: "/servicos",
   };
 
   useEffect(() => {
@@ -130,7 +139,9 @@ export default function Menu({ strapiPages = [] }) {
       if (!divRef.current || !divRef.current.style) return;
 
       if (window.scrollY <= 30) divRef.current.style.boxShadow = "none";
-      else divRef.current.style.boxShadow = "0px 4px 4px rgba(0,0,0,0.25)";
+      else
+        divRef.current.style.boxShadow =
+          "0px 2px 5px 1px rgba(64, 60, 67, 0.16)";
     });
   }, [divRef.current]);
 
@@ -153,7 +164,7 @@ export default function Menu({ strapiPages = [] }) {
         width="100%"
         left="0px"
         backgroundColor="#FFFFFF"
-        padding="15px 30px"
+        padding="10px 30px"
         zIndex="999"
         transition="0.2s"
         as="nav"
@@ -161,7 +172,7 @@ export default function Menu({ strapiPages = [] }) {
         <HStack
           justifyContent={{ base: "center", lg: "flex-start" }}
           width="100%"
-          spacing={10}
+          spacing={6}
         >
           <Box display={{ base: "flex", lg: "none" }}>
             <FontAwesomeIcon
@@ -181,7 +192,7 @@ export default function Menu({ strapiPages = [] }) {
           <Link href="/">
             <Box
               transform={{ base: "translateX(-20%)", lg: "translateX(0%)" }}
-              width={{ base: "120px", lg: "105px" }}
+              width={{ base: "120px", lg: "100px" }}
               height="50px"
               position="relative"
             >

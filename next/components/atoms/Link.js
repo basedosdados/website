@@ -10,7 +10,6 @@ export default function Link({
 }) {
   return (
     <ChakraLink
-      {...props}
       target={target}
       href={href}
       fontFamily="Lato"
@@ -18,6 +17,7 @@ export default function Link({
       letterSpacing="0.15em"
       color={color}
       fontWeight={fontWeigth}
+      {...props}
     >
       {children}
     </ChakraLink>

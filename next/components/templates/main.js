@@ -10,7 +10,7 @@ import Menu from "../molecules/Menu";
 export function MainPageTemplate({
   strapiPages,
   children,
-  backgroundColor = "#FAFAFA",
+  backgroundColor = "#FFFFFF",
 }) {
   const { data = null, isLoading } = useQuery("user", getUser);
 
