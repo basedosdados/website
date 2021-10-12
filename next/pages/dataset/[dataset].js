@@ -30,7 +30,7 @@ import { BaseResourcePage } from "../../components/molecules/BaseResourcePage";
 export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
   const translations = await getTranslations();
-  const resources = dataset["resources"] || [];
+  const resources = dataset?.resources || [];
   const bdmTables = resources.filter(
     (r) => r && r?.resource_type === "bdm_table"
   );
@@ -54,12 +54,10 @@ export async function getStaticPaths(context) {
   let datasets = await listDatasets();
 
   return {
-    paths: datasets
-      .filter((d) => d?.resources && d?.resources?.length > 0)
-      .map((d) => ({
-        params: { dataset: d },
-      })),
-    fallback: false,
+    paths: datasets.map((d) => ({
+      params: { dataset: d },
+    })),
+    fallback: "blocking",
   };
 }
 
