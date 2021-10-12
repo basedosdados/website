@@ -31,9 +31,12 @@ export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
   const translations = await getTranslations();
   const resources = dataset["resources"] || [];
-  let bdPlus;
-  const bdmTables = [];
-  const externalLinks = [];
+  const bdmTables = resources.filter(
+    (r) => r && r?.resource_type === "bdm_table"
+  );
+  const externalLinks = resources.filter(
+    (r) => r && r?.resource_type === "external_link"
+  );
 
   return await withStrapiPages({
     props: {
@@ -41,7 +44,7 @@ export async function getStaticProps(context) {
       bdmTables,
       externalLinks,
       translations,
-      isPlus: true,
+      isPlus: isBdPlus(dataset),
     },
     revalidate: 1, //TODO: Increase this timer
   });
@@ -51,9 +54,11 @@ export async function getStaticPaths(context) {
   let datasets = await listDatasets();
 
   return {
-    paths: datasets.map((d) => ({
-      params: { dataset: d },
-    })),
+    paths: datasets
+      .filter((d) => d?.resources && d?.resources?.length > 0)
+      .map((d) => ({
+        params: { dataset: d },
+      })),
     fallback: false,
   };
 }
