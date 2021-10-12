@@ -507,7 +507,7 @@ function Support({ strapiPages }) {
   }
 
   return (
-    <VStack position="relative" paddingTop="60px" width="95%">
+    <VStack id="support" position="relative" paddingTop="60px" width="95%">
       <BigTitle position="relative" zIndex="1" width="90%" textAlign="center">
         Apoie a Base dos Dados
       </BigTitle>

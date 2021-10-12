@@ -164,18 +164,10 @@ export default function Footer({ strapiPages }) {
               >
                 Fale Conosco
               </FooterLink>
-              {/* <FooterLink
-                color="white"
-                href="https://basedosdados.org/servicos"
-              >
+              <FooterLink color="white" href="/servicos">
                 Serviços
-              </FooterLink> */}
-              <Link
-                fontWeigth="700"
-                color="white"
-                href="https://apoia.se/basedosdados" // TODO: Mudar para ancora na nova secao da Home
-                target="_blank"
-              >
+              </FooterLink>
+              <Link fontWeigth="700" color="white" href="/#support">
                 Apoie o projeto
               </Link>
             </LinkVStack>
