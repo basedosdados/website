@@ -4,6 +4,7 @@ import {
   Center,
   HStack,
   Stack,
+  Text,
   Flex,
   VStack,
   Image as ChakraImage,
@@ -270,50 +271,6 @@ function CatalogNews({ popularDatasets, popularDatalakeDatasets }) {
           />
         ))}
       </CardCatalog>
-      <CardCatalog
-        title="Outras novidades no catálogo"
-        text={
-          <div>
-            Onde você também pode acessar metadados de diversas bases públicas
-            num só lugar.{" "}
-            <LinkDash
-              fontWeight="700"
-              dash={false}
-              textDecoration="none"
-              href="https://basedosdados.github.io/mais/"
-            >
-              Entenda.
-            </LinkDash>
-          </div>
-        }
-      >
-        {popularDatasets.map((d) => (
-          <DatabaseCard
-            link={`/dataset/${d.name}`}
-            name={d.title}
-            organization={d.organization.title}
-            organizationSlug={d.organization.name}
-            tags={d.tags.map((g) => g.name)}
-            size={
-              d.resources.filter((r) => r.bdm_file_size && r.bdm_file_size > 0)
-                .length > 0
-                ? d.resources.filter((r) => r.bdm_file_size)[0].bdm_file_size
-                : null
-            }
-            tableNum={
-              d.resources.filter((r) => r.resource_type === "bdm_table").length
-            }
-            externalLinkNum={
-              d.resources.filter((r) => r.resource_type === "external_link")
-                .length
-            }
-            updatedSince={d.metadata_modified}
-            updatedAuthor="Ricardo Dahis"
-            categories={d.groups.map((g) => g.name)}
-            isPlus={isBdPlus(d)}
-          />
-        ))}
-      </CardCatalog>
     </VStack>
   );
 }
@@ -526,6 +483,7 @@ function Support({ strapiPages }) {
     colorScheme = "blue",
     backgroundColor = "#3AA1EB",
     target = "_blank",
+    ...props
   }) {
     return (
       <a href={link} target={target}>
@@ -534,11 +492,12 @@ function Support({ strapiPages }) {
           borderRadius="68.6364px"
           colorScheme={colorScheme}
           backgroundColor={backgroundColor}
-          padding="25px"
+          padding="23px"
           fontFamily="Ubuntu"
           fontWeight="700"
+          display="flex"
           fontSize="18px"
-          minWidth="250px"
+          minWidth="200px"
           letterSpacing="0.1em"
         >
           {children}
@@ -550,7 +509,7 @@ function Support({ strapiPages }) {
   return (
     <VStack position="relative" paddingTop="60px" width="95%">
       <BigTitle position="relative" zIndex="1" width="90%" textAlign="center">
-        Como colaborar conosco
+        Apoie a Base dos Dados
       </BigTitle>
       <SectionText
         position="relative"
@@ -561,70 +520,187 @@ function Support({ strapiPages }) {
         fontWeight="500"
         paddingBottom="60px"
       >
-        Existimos através do esforço de{" "}
-        <b>pessoas que acreditam no acesso a dados abertos de qualidade</b>.
+        Existimos através do esforço de pessoas que acreditam no acesso a dados
+        abertos de qualidade.
       </SectionText>
-      <Box
-        position="absolute"
-        right="0px"
-        top="20%"
-        minWidth="850px"
-        minHeight="568px"
-        zIndex="0px"
-      >
-        <Image
-          priority
-          src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/fundo_rede.png"
-          layout="fill"
-          objectFit="contain"
-        />
-      </Box>
       <Stack
         width="100%"
+        paddingBottom="30px"
         justifyContent="space-around"
         direction={{ base: "column", lg: "row" }}
         spacing={10}
       >
-        <ShadowBox height="270px" title="Voluntariado">
-          <SectionText fontSize="14px" height="100px">
-            Ajude a manter e aprimorar pacotes, suba bases no nosso{" "}
-            <i>datalake</i> ou construa análises e tutoriais para nossas redes.
-          </SectionText>
-          <SupportButton link="https://basedosdados.github.io/mais/colab/">
-            Comece aqui
-          </SupportButton>
-        </ShadowBox>
-        <ShadowBox height="270px" title="Parceria">
-          <SectionText fontSize="14px" height="100px">
-            Abra dados de sua organização, construa projetos de dados abertos
-            conosco ou desenvolva aplicações com nossos dados.
-          </SectionText>
-          <SupportButton
-            link={contactPage.length > 0 ? "/blog/" + contactPage[0].id : ""}
-            target="_self"
+        <ShadowBox height="250px" title="Apoio Inicial">
+          <SectionText
+            fontWeight="400"
+            padding="10px 0px"
+            fontSize="14px"
+            height="100px"
           >
-            Entre em contato
+            Bolso apertado? Doe apenas R$0,50 por dia e ajude a manter a
+            iniciativa.
+          </SectionText>
+          <SupportButton
+            alignItems="flex-end"
+            link="https://apoia.se/basedosdados"
+          >
+            <Flex paddingBottom="10px" align="flex-end">
+              R${" "}
+              <Text
+                fontSize="30px"
+                margin="0px"
+                padding="0px 10px"
+                marginBottom="-5px"
+              >
+                15
+              </Text>{" "}
+              / mês
+            </Flex>
           </SupportButton>
         </ShadowBox>
-        <ShadowBox height="270px" spacing={4} title="Doações">
+        <ShadowBox
+          height="250px"
+          border="2.5px solid #FF8484"
+          title={
+            <Text color="#FF8484">
+              <b>Apoio entusiasta</b>
+            </Text>
+          }
+        >
+          <SectionText
+            fontWeight="400"
+            padding="10px 0px"
+            fontSize="14px"
+            height="100px"
+          >
+            Dobre sua doação:{" "}
+            <b>R$ 1 real por dia para fazer databasers felizes.</b>
+          </SectionText>
           <SupportButton
-            link="https://drive.google.com/file/d/1aIJhJBSsufArqApvgoYFpevlu8uF5nqm/view?usp=sharing"
-            backgroundColor="#FF8484"
             colorScheme="red"
+            backgroundColor="#FF8484"
+            alignItems="flex-end"
+            link="https://apoia.se/basedosdados"
           >
-            Doe via PIX
+            <Flex paddingBottom="10px" align="flex-end">
+              R${" "}
+              <Text
+                fontSize="30px"
+                margin="0px"
+                padding="0px 10px"
+                marginBottom="-5px"
+              >
+                30
+              </Text>{" "}
+              / mês
+            </Flex>
           </SupportButton>
-          <SupportButton link="https://apoia.se/basedosdados">
-            Apoio mensal
-          </SupportButton>
+        </ShadowBox>
+        <ShadowBox
+          height="250px"
+          title={
+            <Text>
+              Apoio <i>databaser</i>
+            </Text>
+          }
+        >
+          <SectionText
+            fontWeight="400"
+            padding="10px 0px"
+            fontSize="14px"
+            height="80px"
+          >
+            Já poupamos algumas horas do seu trabalho? Que tal doar R$50 para
+            ajudarmos ainda mais pessoas?
+          </SectionText>
           <SupportButton
-            link={contactPage.length > 0 ? "/blog/" + contactPage[0].id : ""}
-            target="_self"
+            alignItems="flex-end"
+            link="https://apoia.se/basedosdados"
           >
-            Apoio institucional
+            <Flex paddingBottom="10px" align="flex-end">
+              R${" "}
+              <Text
+                fontSize="30px"
+                margin="0px"
+                padding="0px 10px"
+                marginBottom="-5px"
+              >
+                50
+              </Text>{" "}
+              / mês
+            </Flex>
           </SupportButton>
         </ShadowBox>
       </Stack>
+      <ShadowBox padding="0px">
+        <BigTitle padding="0px" fontSize="24px" color="#252A32">
+          Doe via PIX
+        </BigTitle>
+        <Stack
+          align="center"
+          justify="space-between"
+          width="100%"
+          direction={{ base: "column", lg: "row" }}
+          padding="0px 50px"
+        >
+          <Stack
+            width={{ base: "100%", lg: "initial" }}
+            spacing={10}
+            direction={{ base: "column", lg: "row" }}
+          >
+            <ChakraImage
+              height="180px"
+              objectFit="contain"
+              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/bd_qrcode.png"
+            />
+
+            <SectionText
+              padding={{ base: "0px 0px", lg: "10px 0px" }}
+              marginLeft="auto"
+              fontWeight="400"
+              fontSize="14px"
+            >
+              <b>
+                Chave CNPJ
+                <br /> 42494318000116
+              </b>
+              <br />
+              <br />
+              Banco: Stone
+              <br /> Razão Social: Base dos Dados
+              <br /> CNPJ: 42494318/0001-16
+              <br />
+              Agência: 0001 | Conta: 6761821-5
+            </SectionText>
+          </Stack>
+          <SectionText fontWeight="400" fontSize="14px">
+            1. Abra o app do seu banco
+            <br />
+            <br />
+            2. Escolha a opção de pagamento com PIX QR Code ou chave
+            <br />
+            <br />
+            3. Escaneie o QR Code ou digite a chave ao lado
+            <br />
+            <br />
+            4. 💚. Faça sua doação!
+            <br />
+            <br />
+          </SectionText>
+        </Stack>
+      </ShadowBox>
+      <SectionText
+        paddingTop="20px"
+        paddingBottom="30px"
+        fontWeight="400"
+        fontSize="14px"
+      >
+        Gostaria de apoiar institucionalmente a Base dos Dados?{" "}
+        <LinkDash fontWeight="bold" fontSize="14px" href="/blog/1/">
+          Entre em contato conosco
+        </LinkDash>
+        .
+      </SectionText>
     </VStack>
   );
 }
