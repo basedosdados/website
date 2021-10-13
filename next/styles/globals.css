@@ -7,6 +7,10 @@ body {
   scroll-behavior: smooth;
 }
 
+.rounded {
+  border-radius: 31.8889px;
+}
+
 #blog h1 {
   font-weight: bold;
   font-size: 40px;
@@ -26,7 +30,7 @@ body {
   background-color: white;
   padding: 5% 7%;
   padding-bottom: 0px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 5px 1px rgba(64, 60, 67, 0.16);
   border-radius: 10px;
 }
 

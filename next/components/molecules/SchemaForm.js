@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
-import { getBdmTableSchema, getSchema } from "../../pages/api/schemas";
-import { BaseResourcePage } from "./BaseResourcePage";
 import Form from "@rjsf/core";
 import { CircularProgress } from "@chakra-ui/progress";
 import { Center, VStack } from "@chakra-ui/layout";
-import { updateDataset, updateResource } from "../../pages/api/datasets";
 import { useToast } from "@chakra-ui/toast";
+import Head from "next/head";
 
 export function SchemaForm({
   data,
   loadSchemaFunction,
   updateFunction,
+  onSuccess = null,
   schemaName,
   prepareData = (data) => {
     return data;
@@ -23,13 +22,14 @@ export function SchemaForm({
     loadSchemaFunction
   );
   const updateMutation = useMutation(updateFunction, {
-    onSuccess() {
+    onSuccess({ data }) {
       toast({
         title: `${schemaName} Atualizado(a)!`,
         description: `${schemaName} atualizado(a), agora é seguro sair do formulário.`,
         status: "success",
       });
-      window.location.reload();
+      if (onSuccess) onSuccess(data);
+      else window.location.reload();
     },
     onError() {
       toast({
@@ -53,6 +53,14 @@ export function SchemaForm({
         </Center>
       ) : (
         <VStack width="100%">
+          <Head>
+            <link
+              rel="stylesheet"
+              href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+              integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+              crossorigin="anonymous"
+            />
+          </Head>
           <Form
             schema={schema}
             formData={_data}

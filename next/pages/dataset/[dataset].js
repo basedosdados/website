@@ -30,10 +30,12 @@ import { BaseResourcePage } from "../../components/molecules/BaseResourcePage";
 export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
   const translations = await getTranslations();
-  const resources = dataset["resources"];
-  const bdmTables = resources.filter((r) => r.resource_type === "bdm_table");
+  const resources = dataset?.resources || [];
+  const bdmTables = resources.filter(
+    (r) => r && r?.resource_type === "bdm_table"
+  );
   const externalLinks = resources.filter(
-    (r) => r.resource_type === "external_link"
+    (r) => r && r?.resource_type === "external_link"
   );
 
   return await withStrapiPages({
@@ -52,9 +54,11 @@ export async function getStaticPaths(context) {
   let datasets = await listDatasets();
 
   return {
-    paths: datasets.map((d) => ({
-      params: { dataset: d },
-    })),
+    paths: datasets
+      .filter((d) => d != "br-me-siconfi")
+      .map((d) => ({
+        params: { dataset: d },
+      })),
     fallback: "blocking",
   };
 }
@@ -94,10 +98,10 @@ export default function DatasetPage({
     bdmTables.length > 0 ? bdmTables[0] : externalLinks[0]
   );
   const [bdmTableFilter, setBdmTableFilter] = useState(
-    resource.resource_type === "bdm_table"
+    resource?.resource_type === "bdm_table"
   );
   const [externalLinkTableFilter, setExternalLinkTableFilter] = useState(
-    resource.resource_type === "external_link"
+    resource?.resource_type === "external_link"
   );
 
   function getResourcePage() {

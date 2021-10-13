@@ -125,7 +125,7 @@ export function Database({
                   <Link href={`/dataset?group=${c}`}>
                     <CategoryIcon
                       size="36px"
-                      url={`/img/categories/icone_${c}${
+                      url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c}${
                         isPlus ? "-1" : ""
                       }.svg`}
                     />

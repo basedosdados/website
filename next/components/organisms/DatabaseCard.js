@@ -50,7 +50,7 @@ export default function DatabaseCard({
     </HStack>
   );
 
-  if (externalLinkNum) databaseInfo.push(externalLinkNum + " link externo");
+  if (externalLinkNum) databaseInfo.push(externalLinkNum + " links externos");
 
   return (
     <Card
@@ -59,7 +59,9 @@ export default function DatabaseCard({
           <Link href={`/dataset?group=${c}`}>
             <CategoryIcon
               size="37px"
-              url={`/img/categories/icone_${c}${isPlus ? "-1" : ""}.svg`}
+              url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c}${
+                isPlus ? "-1" : ""
+              }.svg`}
             />
           </Link>
         )),

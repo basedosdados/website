@@ -47,11 +47,11 @@ function FooterLink(props) {
 export default function Footer({ strapiPages }) {
   const [email, setEmail] = useState();
 
-  const contactPage = strapiPages.filter((p) => p.Title === "Contato");
-  const aboutPage = strapiPages.filter((p) => p.Title === "Sobre");
+  // const contactPage = strapiPages.filter((p) => p.Title === "Contato");
+  // const aboutPage = strapiPages.filter((p) => p.Title === "Sobre");
 
   return (
-    <VStack width="100%" spacing={0}>
+    <VStack position="relative" zIndex="10" width="100%" spacing={0}>
       <VStack width="100%" padding={10} spacing={10} backgroundColor="#34A15A">
         <Stack
           alignItems="flex-start"
@@ -83,10 +83,17 @@ export default function Footer({ strapiPages }) {
               </FooterLink>
               <FooterLink
                 color="white"
-                href="https://basedosdados.github.io/mais/"
+                href="https://basedosdados.github.io/mais/" // TODO: ir para "Dados" com filtro BD+
                 target="_blank"
               >
                 Datalake público
+              </FooterLink>
+              <FooterLink
+                color="white"
+                href="https://basedosdados.github.io/mais/access_data_packages/"
+                target="_blank"
+              >
+                Pacotes
               </FooterLink>
             </LinkVStack>
             <LinkVStack title="CONTEÚDO">
@@ -98,7 +105,7 @@ export default function Footer({ strapiPages }) {
                 Assine a newsletter
               </FooterLink>
               <FooterLink
-                href="https://dev.to/basedosdados"
+                href="https://medium.com/basedosdados"
                 color="white"
                 target="_blank"
               >
@@ -146,25 +153,21 @@ export default function Footer({ strapiPages }) {
             </LinkVStack>
             <LinkVStack title="INSTITUCIONAL">
               <FooterLink
-                href={aboutPage.length > 0 ? "/blog/" + aboutPage[0].id : ""}
+                href="https://basedosdados.org/blog/2/" // TODO: Mudar o ID para quem-somos
                 color="white"
               >
-                Sobre
+                Quem Somos
               </FooterLink>
               <FooterLink
                 color="white"
-                href={
-                  contactPage.length > 0 ? "/blog/" + contactPage[0].id : ""
-                }
+                href="https://basedosdados.org/blog/1/" // TODO: Mudar o ID para fale-conosco
               >
-                Contato
+                Fale Conosco
               </FooterLink>
-              <Link
-                fontWeigth="700"
-                color="white"
-                href="https://apoia.se/basedosdados"
-                target="_blank"
-              >
+              <FooterLink color="white" href="/servicos">
+                Serviços
+              </FooterLink>
+              <Link fontWeigth="700" color="white" href="/#support">
                 Apoie o projeto
               </Link>
             </LinkVStack>
@@ -177,10 +180,10 @@ export default function Footer({ strapiPages }) {
             letterSpacing="0.1em"
           >
             <Text>® 2021 Base dos Dados</Text>
-            <Text>|</Text>
+            {/* <Text>|</Text> // TODO: Não existem essas páginas ainda!
             <Link color="white">Termos de uso</Link>
             <Text>|</Text>
-            <Link color="white">Política de privacidade</Link>
+            <Link color="white">Política de privacidade</Link> */}
           </HStack>
           <Text
             color="white"
@@ -189,8 +192,8 @@ export default function Footer({ strapiPages }) {
             fontWeight="500"
             letterSpacing="0.1em"
           >
-            Ícones adaptados de Freepik, Smashicons, Pixel perfect, Vectors
-            Market, Icongeek26, disponíveis em Flaticon
+            Ícones adaptados de Freepik e Smashicons disponíveis em Storyset e
+            Flaticon.
           </Text>
         </VStack>
       </VStack>
