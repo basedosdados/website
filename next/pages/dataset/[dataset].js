@@ -166,7 +166,7 @@ export default function DatasetPage({
   return (
     <MainPageTemplate strapiPages={strapiPages}>
       <Head>
-        <title>Base dos Dados - {dataset.title}</title>
+        <title>{dataset.title} - Base dos Dados</title>
 
         {/* Open Graph */}
         <link

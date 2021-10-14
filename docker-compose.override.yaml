@@ -37,9 +37,11 @@ services:
       - ./next:/app
     command: ["yarn", "run", "dev"]
 
-  #strapi: #ENABLE THIS IF DEVELOPING STRAPI
-  #  image: strapi/strapi
-  #  command: ["yarn", "run", "develop"]
+  strapi:
+    image: strapi/strapi
+    command: ["yarn", "run", "develop"]
+    environment:
+      - NODE_ENV=development
 
   nginx:
     volumes:

@@ -13,11 +13,15 @@
   "attributes": {
     "MenuTitle": {
       "type": "string",
-      "required": true,
       "unique": true
     },
     "Title": {
       "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "ShowInMenu": {
+      "type": "boolean",
       "required": true
     },
     "LeftColumnText": {
