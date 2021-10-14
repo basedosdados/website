@@ -33,6 +33,7 @@ import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { isBdPlus } from "../utils";
 import Link from "../components/atoms/Link";
 import { KnowOurServices } from "../components/molecules/KnowOurServices";
+import { BePartner } from "../components/organisms/BePartner";
 
 export async function getStaticProps(context) {
   const popularDatasets = await getPopularDatasets();
@@ -47,24 +48,28 @@ export async function getStaticProps(context) {
   });
 }
 
-function HeroText({ children, iconUrl }) {
+function HeroText({ children, iconUrl, height = "100px" }) {
   return (
     <VStack alignItems="center" justifyContent="center" maxWidth="400px">
-      <Box
-        margin="auto"
-        width="100%"
-        height="130px"
-        marginBottom="20px"
-        position="relative"
-      >
-        <Image
-          loading="eager"
-          priority
-          objectFit="contain"
-          layout="fill"
-          src={iconUrl}
-        />
-      </Box>
+      <Flex justify="baseline" align="baseline" width="100%" height="130px">
+        <Flex
+          margin="auto"
+          width="100%"
+          height={height}
+          marginBottom="20px"
+          position="relative"
+          justify="baseline"
+          align="baseline"
+        >
+          <Image
+            loading="eager"
+            priority
+            objectFit="contain"
+            layout="fill"
+            src={iconUrl}
+          />
+        </Flex>
+      </Flex>
       {children}
     </VStack>
   );
@@ -87,10 +92,9 @@ function Hero() {
           alignItems="center"
           spacing={20}
         >
-          <Stack
+          <VStack
             position="relative"
             width="100%"
-            direction={{ base: "column", lg: "row" }}
             alignItems="center"
             spacing={50}
             marginStart="0px !important"
@@ -100,13 +104,15 @@ function Hero() {
               zIndex="1"
               fontFamily="Lato"
               flex="2"
-              fontSize="38px"
+              fontSize="36px"
+              fontWeigth="700"
               marginStart="0px !important"
             >
-              Um único lugar para buscar e acessar os dados que você precisa
+              Encontre os dados que você precisa
             </BigTitle>
             <VStack
-              width={{ base: "100%", lg: "initial" }}
+              maxWidth="700px"
+              width="100%"
               spacing={3}
               alignItems="flex-start"
               flex="3"
@@ -116,11 +122,7 @@ function Hero() {
                 width="100%"
                 onChange={setSearch}
                 onEnterPress={openSearchLink}
-                placeholder={
-                  isMobile
-                    ? "Pesquisar dados"
-                    : "Pesquisar palavras-chave, instituições ou temas"
-                }
+                alignSelf="center"
                 justifyContent="center"
                 inputStyle={{
                   padding: "40px",
@@ -146,14 +148,14 @@ function Hero() {
                   </Box>
                 }
               />
-              <HStack paddingLeft="45px">
+              <HStack paddingLeft="40px">
                 <SectionText fontSize="14px">Termos populares: </SectionText>
                 <ThemeTag name="lei" />
                 <ThemeTag name="mortalidade" />
                 <ThemeTag name="COVID19" />
               </HStack>
             </VStack>
-          </Stack>
+          </VStack>
           <Stack
             paddingTop="10px"
             position="relative"
@@ -164,23 +166,41 @@ function Hero() {
             direction={{ base: "column", lg: "row" }}
             spacing={10}
           >
-            <HeroText iconUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/icone_busca.png">
+            <HeroText
+              height="90px"
+              iconUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/loupe 1.png"
+            >
               <SectionText fontSize="14px" textAlign="center">
                 Busque por <b>dados abertos</b> de diversos temas e
                 organizações.
               </SectionText>
             </HeroText>
-            <HeroText iconUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/icone_download.png">
+            <HeroText
+              height="120px"
+              iconUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/download 1.png"
+            >
               <SectionText fontSize="14px" textAlign="center">
                 Acesse e baixe as <b>tabelas tratadas</b> do nosso{" "}
                 <i>datalake</i> público.
               </SectionText>
             </HeroText>
-            <HeroText iconUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/icone_pacotes.png">
+            <HeroText
+              height="80px"
+              iconUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/_.png"
+            >
               <SectionText fontSize="14px" textAlign="center">
                 Desenvolva com nossos <b>pacotes</b> em Python e R.
               </SectionText>
             </HeroText>
+            <Flex paddingLeft={{ base: "0", lg: "50px" }}>
+              <Image
+                src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/GC_CustomerAwardWinner_SocialImpact+1.png"
+                width="227px"
+                height="336"
+                loading="eager"
+                priority
+              />
+            </Flex>
           </Stack>
         </VStack>
       </Center>
@@ -507,7 +527,7 @@ function Support({ strapiPages }) {
   }
 
   return (
-    <VStack id="support" position="relative" paddingTop="60px" width="95%">
+    <VStack id="support" position="relative" paddingTop="40px" width="95%">
       <BigTitle position="relative" zIndex="1" width="90%" textAlign="center">
         Apoie a Base dos Dados
       </BigTitle>
@@ -753,6 +773,7 @@ export default function Home({
         <ExploreInYourFavoriteLanguage />
         <LearnToAnalysis />
         <JoinTheCommunity />
+        <BePartner />
         <Support strapiPages={strapiPages} />
       </VStack>
       <script

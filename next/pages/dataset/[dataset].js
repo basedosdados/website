@@ -55,7 +55,7 @@ export async function getStaticPaths(context) {
 
   return {
     paths: datasets
-      .filter((d) => d != "br-me-siconfi")
+      .filter((d) => d != "br-me-siconfi") // TODO: Fix the dataset and remove this line
       .map((d) => ({
         params: { dataset: d },
       })),
