@@ -17,7 +17,7 @@ ORGANIZATION_FIELD = Field(
     description=to_line(
         [
             "Qual organização disponibiliza os dados originais?",
-            "Opções: escolher dessa lista -> https://basedosdados.org/api/3/action/organization_list=",
+            "Opções: escolher dessa lista -> https://basedosdados.org/api/3/action/organization_list",
         ]
     ),
     yaml_order={
@@ -141,6 +141,12 @@ METADATA_MODIFIED_FIELD = Field(
         "id_before": "github_url",
         "id_after": None,
     },
+    description=to_line(
+        [
+            "Não altere esse campo.",
+            "Data da última modificação dos metadados gerada automaticamente pelo CKAN."
+        ]
+    )
 )
 
 AUTHOR_FIELD = Field(
