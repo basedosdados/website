@@ -24,9 +24,15 @@ class MeasurementUnitEnum(AttrEnum):
     cny = {"label": "CNY"}
     jpy = {"label": "JPY"}
     
+    # economics
+    minimum_wage = {"label": "salário mínimo"}
+    
     # date_time
     year = {"label": "ano"}
     month = {"label": "mês"}
     day = {"label": "dia"}
     second = {"label": "segundo"}
+    
+    # percentage
+    percent = {"label": "porcentagem"}
     
