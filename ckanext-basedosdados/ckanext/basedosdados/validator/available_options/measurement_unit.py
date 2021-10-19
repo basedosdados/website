@@ -1,7 +1,7 @@
 from .attr_enum import AttrEnum
 
 class MeasurementUnitEnum(AttrEnum):
-    
+    # fmt: off
     # space
     kilometer   = {"label": "km"}
     kilometer2  = {"label": "km2"}
@@ -49,4 +49,4 @@ class MeasurementUnitEnum(AttrEnum):
     
     # percentage
     percent = {"label": "porcentagem"}
-    
+    # fmt: on
