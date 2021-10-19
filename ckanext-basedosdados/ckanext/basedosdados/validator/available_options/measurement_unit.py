@@ -3,15 +3,24 @@ from .attr_enum import AttrEnum
 class MeasurementUnitEnum(AttrEnum):
     
     # space
-    km  = {"label": "km"}
-    km2 = {"label": "km2"}
-    m   = {"label": "m"}
-    m2  = {"label": "m2"}
-    ha  = {"label": "ha"}
+    kilometer   = {"label": "km"}
+    kilometer2  = {"label": "km2"}
+    meter       = {"label": "m"}
+    meter2      = {"label": "m2"}
+    centimeter  = {"label": "cm"}
+    centimeter2 = {"label": "cm2"}
+    hectare     = {"label": "hectare"}
+    acre        = {"label": "acre"}
+    mile        = {"label": "milha"}
+    mile2       = {"label": "milha^2"}
+    foot        = {"label": "pé"}
+    inch        = {"label": "polegada"}
     
     # mass
-    kg  = {"label": "kg"}
-    t   = {"label": "t"}
+    kilogram  = {"label": "kg"}
+    ton = {"label": "tonelada"}
+    ounce  = {"label": "onça"}
+    gallon = {"label": "galão"}
     
     # people
     person = {"label": "pessoa"}
@@ -29,7 +38,10 @@ class MeasurementUnitEnum(AttrEnum):
     
     # date_time
     year = {"label": "ano"}
+    semester = {"label": "semestre"}
+    quarter = {"label": "trimestre"}
     month = {"label": "mês"}
+    week = {"label": "semana"}
     day = {"label": "dia"}
     second = {"label": "segundo"}
     
