@@ -11,16 +11,16 @@ class MeasurementUnitEnum(AttrEnum):
     centimeter2 = {"label": "cm2"}
     hectare     = {"label": "hectare"}
     acre        = {"label": "acre"}
-    mile        = {"label": "milha"}
-    mile2       = {"label": "milha^2"}
+    mile        = {"label": "mi"}
+    mile2       = {"label": "mi2"}
     foot        = {"label": "pé"}
     inch        = {"label": "polegada"}
     
     # mass
-    kilogram  = {"label": "kg"}
-    ton = {"label": "tonelada"}
-    ounce  = {"label": "onça"}
-    gallon = {"label": "galão"}
+    kilogram = {"label": "kg"}
+    ton      = {"label": "tonelada"}
+    ounce    = {"label": "onça"}
+    gallon   = {"label": "galão"}
     
     # people
     person = {"label": "pessoa"}
@@ -37,13 +37,13 @@ class MeasurementUnitEnum(AttrEnum):
     minimum_wage = {"label": "salário mínimo"}
     
     # date_time
-    year = {"label": "ano"}
+    year     = {"label": "ano"}
     semester = {"label": "semestre"}
-    quarter = {"label": "trimestre"}
-    month = {"label": "mês"}
-    week = {"label": "semana"}
-    day = {"label": "dia"}
-    second = {"label": "segundo"}
+    quarter  = {"label": "trimestre"}
+    month    = {"label": "mês"}
+    week     = {"label": "semana"}
+    day      = {"label": "dia"}
+    second   = {"label": "segundo"}
     
     # percentage
     percent = {"label": "porcentagem"}
