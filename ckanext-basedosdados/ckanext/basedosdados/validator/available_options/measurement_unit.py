@@ -14,7 +14,9 @@ class MeasurementUnitEnum(AttrEnum):
     mile        = {"label": "mi"}
     mile2       = {"label": "mi2"}
     foot        = {"label": "pé"}
+    foot2       = {"label": "pé2"}
     inch        = {"label": "polegada"}
+    inch2       = {"label": "polegada2"}
     
     # mass
     kilogram = {"label": "kg"}
