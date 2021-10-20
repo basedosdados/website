@@ -13,6 +13,11 @@ to_line = lambda description: "\n".join(description)
 
 DATASET_ID_FIELD = Field(
     title="ID Conjunto",
+    description=to_line(
+        [
+            "Campo dataset_id padrão."
+        ]
+    ),
     yaml_order={
         "id_after": None,
         "id_before": "table_id",
@@ -21,6 +26,11 @@ DATASET_ID_FIELD = Field(
 
 TABLE_ID_FIELD = Field(
     title="ID Tabela",
+    description=to_line(
+        [
+            "Campo table_id padrão."
+        ]
+    ),
     yaml_order={
         "id_after": "dataset_id",
         "id_before": "identifying_columns",
@@ -29,11 +39,11 @@ TABLE_ID_FIELD = Field(
 
 IDENTIFYING_COLUMNS_FIELD = Field(
     title="Colunas Identificadoras",
-    user_input_hint=["<primeira coluna>"],
     description=to_line(
         [
             "O conjunto mínimo de colunas identificando cada linha unicamente.",
-            "Preencha com os nomes de colunas. Ex: id_municipio, ano.",
+            "Preencha com os nomes de colunas.",
+            "Exemplos: id_municipio, ano.",
             "Pode ser vazio pois certas tabelas não possuem identificadores.",
         ]
     ),
@@ -54,7 +64,11 @@ LAST_UPDATED_FIELD = Field(
 # TODO: DICT TYPE
 PUBLISHED_BY_FIELD = Field(
     title="Publicado por",
-    description=to_line(["Quem está preenchendo esses metadados?"]),
+    description=to_line(
+        [
+            "Quem está preenchendo esses metadados?"
+        ]
+    ),
     yaml_order={
         "id_after": "last_updated",
         "id_before": "source_bucket_name",
@@ -87,7 +101,6 @@ PROJECT_ID_STAGING_FIELD = Field(
 
 PARTITIONS_FIELD = Field(
     title="Partições",
-    user_input_hint=["<primeira partição>"],
     description=to_line(
         [
             "Liste as colunas da tabela que representam partições.",
@@ -104,8 +117,6 @@ PARTITIONS_FIELD = Field(
 
 BDM_FILE_SIZE_FIELD = Field(
     title="Tamanho do Arquivo",
-    description=to_line([""]),
-    user_input_hint=["<>"],
     yaml_order={
         "id_after": "partitions",
         "id_before": "columns",

@@ -13,11 +13,11 @@ to_line = lambda description: "\n".join(description)
 
 ORGANIZATION_FIELD = Field(
     title="ID Organização",
-    user_input_hint=["<organização>"],
     description=to_line(
         [
             "Qual organização disponibiliza os dados originais?",
             "Opções: escolher dessa lista -> https://basedosdados.org/api/3/action/organization_list",
+            "Exemplos: br-ibge, br-tse, br-rj-gov"
         ]
     ),
     yaml_order={
@@ -36,7 +36,12 @@ DATASET_ID_FIELD = Field(
 
 TITLE_FIELD = Field(
     title="Título",
-    user_input_hint=["<Um título descritivo>"],
+    description=to_line(
+        [
+            "Título do conjunto, a ser exibido no mecanismo de busca.",
+            "Exemplo: População brasileira"
+        ],
+    ),
     yaml_order={
         "id_before": "dataset_id",
         "id_after": "description",
@@ -45,8 +50,11 @@ TITLE_FIELD = Field(
 
 DESCRIPTION_FIELD = Field(
     title="Descrição",
-    user_input_hint=["<exemplo: descrição e anotações úteis sobre os dados.>"],
-    description=to_line(["exemplo: descrição e anotações úteis sobre os dados."]),
+    description=to_line(
+        [
+            "Descrição e anotações úteis sobre os dados."
+        ]
+    ),
     yaml_order={
         "id_before": "title",
         "id_after": "groups",
@@ -55,11 +63,11 @@ DESCRIPTION_FIELD = Field(
 
 GROUPS_FIELD = Field(
     title="Temas",
-    user_input_hint=["<grupo>"],
     description=to_line(
         [
-            "Quais grupos caracterizam a base?",
+            "Quais temas caracterizam a base?",
             "Opções: escolher dessa lista -> https://basedosdados.org/api/3/action/group_list",
+            "Importante: preencher com a chave, e não o valor."
         ]
     ),
     yaml_order={
@@ -70,14 +78,15 @@ GROUPS_FIELD = Field(
 
 TAGS_FIELD = Field(
     title="Etiquetas",
-    user_input_hint=["<exemplo: fertilidade, preco, desmatamento>"],
     description=to_line(
         [
             "Quais etiquetas caracterizam a base?",
             "Opções: escolher dessa lista -> https://basedosdados.org/api/3/action/tag_list",
+            "Exemplos: fertilidade, preco, desmatamento.",
             "Caso crie etiquetas novas, as regras são:",
             "   - letras minúsculas",
             "   - sem acentos",
+            "   - sempre no singular",
             "   - não repita nomes de grupos (ex. educacao, saude, meio ambiente, economia, etc.)",
         ]
     ),
@@ -101,7 +110,6 @@ UPDATE_FREQUENCY_FIELD = Field(
 
 ENTITY_FIELD = Field(
     title="Entidade",
-    description=to_line(["Entidade representada por cada linha."]),
     max_items=10,
 )
 
@@ -111,7 +119,12 @@ TIME_UNIT_FIELD = Field(
 
 CKAN_URL_FIELD = Field(
     title="Url CKAN",
-    user_input_hint=["<https://basedosdados.org/dataset/<dataset_id>"],
+    description=to_line(
+        [
+            "Url completa do CKAN já contendo o dataset-id",
+            "Exemplo: https://basedosdados.org/dataset/<dataset-id>"
+        ]   
+    ),
     yaml_order={
         "id_before": "tags",
         "id_after": "github_url",
@@ -120,36 +133,43 @@ CKAN_URL_FIELD = Field(
 
 GITHUB_URL_FIELD = Field(
     title="Url Github",
-    user_input_hint=[
-        "<https://github.com/basedosdados/mais/tree/master/bases/<dataset_id>"
-    ],
+    description=to_line(
+        [
+            "Url completa do Github já contendo o dataset_id",
+            "Exemplo: https://github.com/basedosdados/mais/tree/master/bases/<dataset_id>"
+        ]
+    ),
     yaml_order={
         "id_before": "ckan_url",
         "id_after": "metadata_modified",
     },
 )
 
-VISIBILITY_FIELD = Field(title="Visibilidade")
-
-DOWNLOAD_TYPE_FIELD = Field(
-    title="Tipo de Download",
-)
-
 METADATA_MODIFIED_FIELD = Field(
     title="Data de Modificação",
-    yaml_order={
-        "id_before": "github_url",
-        "id_after": None,
-    },
     description=to_line(
         [
             "Não altere esse campo.",
             "Data da última modificação dos metadados gerada automaticamente pelo CKAN."
         ]
-    )
+    ),
+    yaml_order={
+        "id_before": "github_url",
+        "id_after": None,
+    },
 )
+
+DOWNLOAD_TYPE_FIELD = Field(
+    title="Tipo de Download",
+)
+
+VISIBILITY_FIELD = Field(title="Visibilidade")
 
 AUTHOR_FIELD = Field(
     title="Autor(a)",
-    description=to_line(["Qual departamento/grupo/pessoa mantém os dados originais?"]),
+    description=to_line(
+        [
+            "Qual departamento/grupo/pessoa mantém os dados originais?"
+        ]
+    ),
 )

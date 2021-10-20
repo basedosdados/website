@@ -69,7 +69,13 @@ SPATIAL_COVERAGE_FIELD = Field(
 
 TEMPORAL_COVERAGE_FIELD = Field(
     title="Cobertura Temporal",
-    description=to_line(["Anos cobertos pela tabela."]),
+    description=to_line(
+        [
+            "Anos cobertos pela tabela.",
+            "Preencher como lista de intervalos.",
+            "Exemplo: 1995(1)2019."
+        ]
+    ),
     yaml_order={
         "id_before": "spatial_coverage",
         "id_after": "update_frequency",
@@ -78,8 +84,12 @@ TEMPORAL_COVERAGE_FIELD = Field(
 
 UPDATE_FREQUENCY_FIELD = Field(
     title="Frequência de Atualização",
-    user_input_hint=["<unidade temporal>"],
-    description=to_line(["A unidade temporal com qual a tabela é atualizada."]),
+    description=to_line(
+        [
+            "A unidade temporal com qual a tabela é atualizada.",
+            "Opções em 'https://basedosdados.org/api/3/action/bd_available_options'"
+        ]
+    ),
     yaml_order={
         "id_before": "temporal_coverage",
         "id_after": "entity",
@@ -88,7 +98,12 @@ UPDATE_FREQUENCY_FIELD = Field(
 
 ENTITY_FIELD = Field(
     title="Entidade",
-    description=to_line(["Entidade representada por cada linha."]),
+    description=to_line(
+        [
+            "Entidade representada por cada linha.",
+            "Opções em 'https://basedosdados.org/api/3/action/bd_available_options'"
+        ]
+    ),
     max_items=10,
     yaml_order={
         "id_before": "update_frequency",
@@ -98,7 +113,12 @@ ENTITY_FIELD = Field(
 
 TIME_UNIT_FIELD = Field(
     title="Unidade Temporal",
-    description=to_line(["A unidade temporal representada por cada linha."]),
+    description=to_line(
+        [
+            "A unidade temporal representada por cada linha.",
+            "Opções em 'https://basedosdados.org/api/3/action/bd_available_options'"
+        ]
+    ),
     yaml_order={
         "id_before": "entity",
         "id_after": "identifying_columns",
@@ -107,11 +127,11 @@ TIME_UNIT_FIELD = Field(
 
 IDENTIFYING_COLUMNS_FIELD = Field(
     title="Colunas Identificadoras",
-    user_input_hint=["ex. id_municipio, produto, ano"],
     description=to_line(
         [
             "O conjunto mínimo de colunas identificando cada linha unicamente.",
-            "Preencha com os nomes de colunas. Ex: id_municipio, ano.",
+            "Preencha com os nomes de colunas.",
+            "Exemplos: id_municipio, ano.",
             "Pode ser vazio pois certas tabelas não possuem identificadores.",
         ]
     ),
@@ -188,7 +208,11 @@ DATA_CLEANING_DESCRIPTION_FIELD = Field(
 
 RAW_FILES_URL_FIELD = Field(
     title="Url dos Dados Originais",
-    description=to_line(["Url dos dados originais no GCP Storage."]),
+    description=to_line(
+        [
+            "Url dos dados originais no GCP Storage."
+        ]
+    ),
     yaml_order={
         "id_before": "data_cleaning_description",
         "id_after": "auxiliary_files_url",
@@ -197,7 +221,11 @@ RAW_FILES_URL_FIELD = Field(
 
 AUXILIARY_FILES_URL_FIELD = Field(
     title="Url dos Arquivos Auxiliares",
-    description=to_line(["Url dos arquivos auxiliares no GCP Storage."]),
+    description=to_line(
+        [
+            "Url dos arquivos auxiliares no GCP Storage."
+        ]
+    ),
     yaml_order={
         "id_before": "raw_files_url",
         "id_after": "architecture_url",
@@ -206,7 +234,11 @@ AUXILIARY_FILES_URL_FIELD = Field(
 
 ARCHITECTURE_URL_FIELD = Field(
     title="Url da Tabela de Arquitetura",
-    description=to_line(["Url da tabela de arquitetura no GCP Storage."]),
+    description=to_line(
+        [
+            "Url da tabela de arquitetura no GCP Storage."
+        ]
+    ),
     yaml_order={
         "id_before": "auxiliary_files_url",
         "id_after": "covered_by_dictionary",
@@ -215,6 +247,12 @@ ARCHITECTURE_URL_FIELD = Field(
 
 COVERED_BY_DICTIONARY_FIELD = Field(
     title="Coberto por Dicionário",
+    description=to_line(
+        [
+            "A tabela tem colunas que precisam de dicionário?",
+            "Opções: yes, no."
+        ]
+    ),
     yaml_order={
         "id_before": "architecture_url",
         "id_after": "source_bucket_name",
