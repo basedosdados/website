@@ -9,11 +9,11 @@ from pydantic import StrictStr as Str
 # -------------------------------------
 class RequestedBy(BaseModel):
     # fmt: off
-    name        : Str = Field(title="Nome",user_input_hint=["<nome [você]>"])
-    email       : Str = Field(title="Email",user_input_hint=["<email>"])
-    github_user : Str = Field(title="Usuário Github",user_input_hint=["<usuário Github>"])
-    website     : Str = Field(title="Website",user_input_hint=["<website>"])
-    ckan_user   : Str = Field(title="Usuário CKAN",user_input_hint=["<ID do usuário no CKAN>"])
+    name        : Str = Field(title="Nome",description=["<nome [você]>"])
+    email       : Str = Field(title="Email",description=["<email>"])
+    github_user : Str = Field(title="Usuário Github",description=["<usuário Github>"])
+    website     : Str = Field(title="Website",description=["<website>"])
+    ckan_user   : Str = Field(title="Usuário CKAN",description=["<ID do usuário no CKAN>"])
     # fmt: on
 
 
@@ -211,7 +211,6 @@ DATA_URL_FIELD = Field(
             "Exemplo: www.exemplo.com/dados.csv"
         ]
     ),
-    user_input_hint=[""],
     yaml_order={
         "id_after": "status",
         "id_before": "observations",

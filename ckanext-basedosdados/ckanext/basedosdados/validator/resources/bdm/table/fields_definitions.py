@@ -12,12 +12,12 @@ from pydantic import StrictStr as Str
 
 class DataCleanedBy(BaseModel):
     # fmt: off
-    name        : Optional[Str] = Field(title="Nome",user_input_hint=["<nome>"])
-    email       : Optional[Str] = Field(title="Email",user_input_hint=["<email>"])
-    github_user : Optional[Str] = Field(title="Usuário Github",user_input_hint=["<usuário Github>"])
-    ckan_user   : Optional[Str] = Field(title="Usuário CKAN",user_input_hint=["<id do usuário no ckan>"])
-    website     : Optional[Str] = Field(title="Website",user_input_hint=["<onde encontrar os dados tratados>"])
-    code_url    : Optional[Str] = Field(title="Url código de limpeza",user_input_hint=["<onde encontrar código de limpeza>"])
+    name        : Optional[Str] = Field(title="Nome",description=["<nome>"])
+    email       : Optional[Str] = Field(title="Email",description=["<email>"])
+    github_user : Optional[Str] = Field(title="Usuário Github",description=["<usuário Github>"])
+    ckan_user   : Optional[Str] = Field(title="Usuário CKAN",description=["<id do usuário no ckan>"])
+    website     : Optional[Str] = Field(title="Website",description=["<onde encontrar os dados tratados>"])
+    code_url    : Optional[Str] = Field(title="Url código de limpeza",description=["<onde encontrar código de limpeza>"])
     # fmt: on
 
 
@@ -151,7 +151,12 @@ LAST_UPDATED_FIELD = Field(
 
 VERSION_FIELD = Field(
     title="Versão",
-    user_input_hint=["<vA.B>"],
+    description=to_line(
+        [
+            "Versão da tabela. Seguindo o padrão de semantic versioning.",
+            "Exemplo: v1.1.3"
+        ]
+    ),
     yaml_order={
         "id_before": "last_updated",
         "id_after": "published_by",

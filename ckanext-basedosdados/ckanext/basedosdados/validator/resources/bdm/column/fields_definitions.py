@@ -14,9 +14,9 @@ to_line = lambda description: "\n".join(description)
 
 class DirectoryColumn(BaseModel):
     # fmt: off
-    dataset_id : Optional[DirectoryEnum] = Field(title="ID Conjunto",user_input_hint=["<dataset_id>"])
-    table_id   : Optional[Str]           = Field(title="ID Tabela",user_input_hint=["<table_id>"])
-    column_name: Optional[Str]           = Field(title="Nome Coluna",user_input_hint=["<column_name>"])
+    dataset_id : Optional[DirectoryEnum] = Field(title="ID Conjunto",description=["<dataset_id>"])
+    table_id   : Optional[Str]           = Field(title="ID Tabela",description=["<table_id>"])
+    column_name: Optional[Str]           = Field(title="Nome Coluna",description=["<column_name>"])
     # fmt: on
 
 
@@ -88,7 +88,6 @@ COVERED_BY_DICTIONARY_FIELD = Field(
             "Opções: yes, no."
         ]
     ),
-    user_input_hint="<yes/no>",
     yaml_order={
         "id_before": "temporal_coverage",
         "id_after": "directory_column",
@@ -152,7 +151,6 @@ IS_IN_STAGING_FIELD = Field(
 
 IS_PARTITION_FIELD = Field(
     title="É Partição",
-    user_input_hint=False,
     description=to_line(
         [
             "A coluna é uma partição?",
