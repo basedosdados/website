@@ -18,9 +18,10 @@
 ARG PG_MAJOR=11
 FROM postgres:$PG_MAJOR
 
-# RUN apt-get update \
-#     && apt-get install -y --no-install-recommends postgresql-contrib-$PG_MAJOR postgresql-plpython3-$PG_MAJOR \
-#     && rm -rf /var/lib/apt/lists/*
+# deactivate because mac m1 bug
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends postgresql-contrib-$PG_MAJOR postgresql-plpython3-$PG_MAJOR \
+    && rm -rf /var/lib/apt/lists/* ; exit 0
 
 ENV POSTGRES_USER ckan
 ADD ./stack/postgresql/docker-entrypoint-initdb.d/00_create_datastore.sh /docker-entrypoint-initdb.d/00_create_datastore.sh
