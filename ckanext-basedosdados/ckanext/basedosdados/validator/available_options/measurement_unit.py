@@ -1,11 +1,12 @@
 from .attr_enum import AttrEnum
 
+
 class MeasurementUnitEnum(AttrEnum):
     # fmt: off
     # space
-    kilometer   = {"label": "km"}
-    kilometer2  = {"label": "km2"}
-    meter       = {"label": "m"}
+    km          = {"label": "km"}
+    km2         = {"label": "km2"}
+    m           = {"label": "m"}
     meter2      = {"label": "m2"}
     centimeter  = {"label": "cm"}
     centimeter2 = {"label": "cm2"}
