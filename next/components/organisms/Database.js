@@ -39,6 +39,17 @@ export function Database({
     else sizeLabel = Math.round(size / (1024 * 1024 * 1024)) + " gb";
   }
 
+  function getTemporalCoverage() {
+    if (temporalCoverage.length === 0 || !temporalCoverage) return "";
+    if (temporalCoverage.length === 1) return temporalCoverage[0];
+
+    return (
+      temporalCoverage[0] +
+      " - " +
+      temporalCoverage[temporalCoverage.length - 1]
+    );
+  }
+
   return (
     <VStack
       justifyContent="space-between"
@@ -99,20 +110,6 @@ export function Database({
                     {name}
                   </Heading>
                 </Link>
-                {/*<HStack
-                  borderRadius="10.5233px"
-                  border="0.743243px solid #6F6F6F"
-                  padding="2px 7px"
-                  alignItems="center"
-                  height="20px"
-                  marginLeft="10px"
-                  spacing={1}
-                >
-                  <FontAwesomeIcon style={{ width: "10px" }} icon={faStar} />
-                  <Heading fontFamily="Lato" fontSize="14px">
-                    {stars || 0}
-                  </Heading>
-                </HStack>*/}
               </HStack>
               <HStack
                 justifyContent={{ base: "flex-start", lg: "flex-end" }}
@@ -178,8 +175,7 @@ export function Database({
                 <HStack spacing={2} align="flex-start">
                   <SectionText color="#6F6F6F">Cobertura temporal:</SectionText>
                   <SectionText color="#6F6F6F" fontWeight="bold">
-                    {temporalCoverage[0]} -{" "}
-                    {temporalCoverage[temporalCoverage.length - 1]}
+                    {getTemporalCoverage()}
                   </SectionText>
                 </HStack>
               </Stack>
