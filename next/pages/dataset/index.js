@@ -62,6 +62,11 @@ function NewDatasetModal({ isOpen, onClose }) {
             schemaName="Dataset"
             loadSchemaFunction={getDatasetSchema}
             updateFunction={createDataset}
+            prepareData={(d) => {
+              d.private = false;
+
+              return d;
+            }}
             onSuccess={(data) => {
               const name = data.result.name;
               window.open("/dataset/" + name, "_self");
