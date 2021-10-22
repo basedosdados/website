@@ -202,7 +202,8 @@ export function Database({
                   fontSize="15px"
                   fontWeight="bold"
                 >
-                  {tableNum} tabelas tratadas{" "}
+                  {tableNum}{" "}
+                  {tableNum === 1 ? "tabela tratada" : "tabelas tratadas"}
                 </Subtitle>
                 <Link href="/dataset?bdPlus=true">
                   <Image
@@ -230,7 +231,8 @@ export function Database({
                     fontSize="15px"
                     fontWeight="bold"
                   >
-                    {externalLinkNum} links externos
+                    {externalLinkNum}{" "}
+                    {externalLinkNum === 1 ? "link externo" : "links externos"}
                   </Subtitle>
                 </HStack>
               ) : (

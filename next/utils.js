@@ -14,7 +14,7 @@ export function formatObjectsInArray(arr) {
         k,
         filterOnlyValidValues(v)
           .map(([k, v]) => `${isNumeric(k) ? "" : k + ": "} ${v}`)
-          .join(",\t"),
+          .join("\n"),
       ];
     }
 
@@ -51,7 +51,6 @@ export function isBdPlus(dataset) {
 }
 
 export function translate(keyTranslations, valueTranslations, object) {
-  console.log(valueTranslations);
   return object.map(([k, v]) => {
     const newKey = k in keyTranslations ? keyTranslations[k] : k;
     const newValue = v in valueTranslations ? valueTranslations[v] : v;

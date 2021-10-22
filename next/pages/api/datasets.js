@@ -76,6 +76,7 @@ export function deleteResource(resource) {
 }
 
 export function createDataset(dataset) {
+  dataset["private"] = false;
   return axiosInstance.post(`/package_create`, dataset);
 }
 

@@ -42,8 +42,6 @@ export async function getStaticProps(context) {
     (r) => r && r?.resource_type === "external_link"
   );
 
-  console.log(availableOptionsTranslations);
-
   return await withStrapiPages({
     props: {
       dataset,
@@ -78,13 +76,13 @@ function AdminButtons({ resource, setResource }) {
   return (
     <>
       <SimpleButton
-        isActive={resource.resource_type === "create_bdm_table"}
+        isActive={resource?.resource_type === "create_bdm_table"}
         onClick={() => setResource({ resource_type: "create_bdm_table" })}
       >
         Criar tabela tratada
       </SimpleButton>
       <SimpleButton
-        isActive={resource.resource_type === "create_external_link"}
+        isActive={resource?.resource_type === "create_external_link"}
         onClick={() => setResource({ resource_type: "create_external_link" })}
       >
         Criar link externo
@@ -113,7 +111,7 @@ export default function DatasetPage({
   );
 
   function getResourcePage() {
-    switch (resource.resource_type) {
+    switch (resource?.resource_type) {
       case "bdm_table":
         return (
           <BdmTablePage
@@ -265,9 +263,9 @@ export default function DatasetPage({
           alignItems="flex-start"
         >
           <BigTitle fontSize="30px" color="black">
-            {dataset.title}
+            {dataset.title || "Conjunto sem nome"}
           </BigTitle>
-          <Markdown>{dataset.notes}</Markdown>
+          <Markdown>{dataset.notes || "Conjunto sem descrição"}</Markdown>
 
           <Stack
             paddingTop="20px"
@@ -293,7 +291,7 @@ export default function DatasetPage({
                 Recursos
               </BigTitle>
               <SimpleButton
-                isActive={resource.resource_type === "metadata"}
+                isActive={!resource}
                 onClick={() => setResource({ resource_type: "metadata" })}
               >
                 Metadados do conjunto

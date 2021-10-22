@@ -8,6 +8,7 @@ import SectionText from "../atoms/SectionText";
 import Title from "../atoms/Title";
 import { ExpandableTable } from "../molecules/ExpandableTable";
 import {
+  breakNestedObjects,
   filterOnlyValidValues,
   formatObjectsInArray,
   translate,

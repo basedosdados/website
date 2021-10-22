@@ -38,6 +38,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { SchemaForm } from "../../components/molecules/SchemaForm";
 import { getDatasetSchema } from "../api/schemas";
 import UserContext from "../../context/user";
+import { getUser } from "../api/user";
 
 export async function getStaticProps(context) {
   return withStrapiPages({
@@ -62,8 +63,8 @@ function NewDatasetModal({ isOpen, onClose }) {
             loadSchemaFunction={getDatasetSchema}
             updateFunction={createDataset}
             onSuccess={(data) => {
-              const id = data.result.id;
-              window.open("/dataset/" + id, "_self");
+              const name = data.result.name;
+              window.open("/dataset/" + name, "_self");
             }}
           />
         </ModalBody>
@@ -76,7 +77,7 @@ export default function SearchPage({ strapiPages }) {
   const { query } = useRouter();
   const datasetDisclosure = useDisclosure();
   const orderQuery = decodeURI(query.order_by || "score");
-  const userData = useContext(UserContext);
+  const { data: userData = null } = useQuery("user", getUser);
   const [order, setOrder] = useState(orderQuery);
   const [search, setSearch] = useState("");
   const [paramFilters, setParamFilters] = useState({});
@@ -293,7 +294,7 @@ export default function SearchPage({ strapiPages }) {
                   }
                   marginLeft="auto"
                 >
-                  Criar Dataset
+                  Criar Conjunto
                 </Button>
               ) : (
                 <></>
@@ -383,7 +384,7 @@ export default function SearchPage({ strapiPages }) {
                     <>
                       <Database
                         link={`/dataset/${d.name}`}
-                        name={d.title}
+                        name={d.title || "Conjunto sem nome"}
                         image={
                           "https://basedosdados.org/uploads/group/" +
                           d.organization.image_url
