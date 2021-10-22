@@ -72,6 +72,7 @@ export function MetadataPage({
             data.maintainer = data.maintainer || "";
             data.maintainer_email = data.maintainer_email || "";
             data.version = data.version || "";
+            data.type = "dataset";
 
             return data;
           }}

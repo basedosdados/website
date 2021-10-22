@@ -140,6 +140,9 @@ export default function DatasetPage({
               <SchemaForm
                 schemaName="Tabela tratada"
                 loadSchemaFunction={getBdmTableSchema}
+                prepareData={(d) => {
+                  d.resource_type = "bdm_table";
+                }}
                 updateFunction={(data) => createResource(data, dataset.id)}
               />
             }
@@ -155,6 +158,9 @@ export default function DatasetPage({
               <SchemaForm
                 schemaName="Link externo"
                 loadSchemaFunction={getExternalLinkSchema}
+                prepareData={(d) => {
+                  d.resource_type = "external_link";
+                }}
                 updateFunction={(data) => createResource(data, dataset.id)}
               />
             }
