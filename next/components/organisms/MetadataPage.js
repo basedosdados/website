@@ -86,6 +86,7 @@ export function MetadataPage({
             availableOptionsTranslations,
             filterOnlyValidValues(_dataset, [
               "id",
+              "name",
               "groups",
               "tags",
               "spatial_coverage",

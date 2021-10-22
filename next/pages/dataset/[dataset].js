@@ -291,7 +291,7 @@ export default function DatasetPage({
                 Recursos
               </BigTitle>
               <SimpleButton
-                isActive={!resource}
+                isActive={!resource || resource?.resource_type === "metadata"}
                 onClick={() => setResource({ resource_type: "metadata" })}
               >
                 Metadados do conjunto

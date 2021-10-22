@@ -53,7 +53,13 @@ export function isBdPlus(dataset) {
 export function translate(keyTranslations, valueTranslations, object) {
   return object.map(([k, v]) => {
     const newKey = k in keyTranslations ? keyTranslations[k] : k;
-    const newValue = v in valueTranslations ? valueTranslations[v] : v;
+    let newValue = v in valueTranslations ? valueTranslations[v] : v;
+
+    if (Array.isArray(newValue)) {
+      newValue = newValue
+        .map((v) => (v in valueTranslations ? valueTranslations[v] : v))
+        .join(", ");
+    }
 
     return [newKey, newValue];
   });
