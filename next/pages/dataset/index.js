@@ -382,7 +382,7 @@ export default function SearchPage({ strapiPages }) {
                 : (data?.datasets || []).map((d) => (
                     <>
                       <Database
-                        link={`/dataset/${d.id}`}
+                        link={`/dataset/${d.name}`}
                         name={d.title}
                         image={
                           "https://basedosdados.org/uploads/group/" +
