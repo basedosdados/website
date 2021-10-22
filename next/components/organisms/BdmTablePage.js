@@ -20,7 +20,12 @@ import { BlueBox } from "../molecules/BlueBox";
 import RoundedButton from "../atoms/RoundedButton";
 import Link from "../atoms/Link";
 
-export function BdmTablePage({ translations, resource, datasetName }) {
+export function BdmTablePage({
+  translations,
+  resource,
+  datasetName,
+  availableOptionsTranslations,
+}) {
   const [selectedConsultation, setSelectedConsultation] = useState("SQL");
   const consultationOptions = ["SQL", "Python", "R", "Download"];
   const queryName = `${resource.dataset_id}.${resource.name}`;
@@ -318,6 +323,7 @@ export function BdmTablePage({ translations, resource, datasetName }) {
           values={formatObjectsInArray(
             translate(
               translations,
+              availableOptionsTranslations,
               filterOnlyValidValues({ dataset_id: datasetName, ...resource }, [
                 "dataset_id",
                 "table_id",

@@ -11,7 +11,11 @@ import { deleteResource, updateResource } from "../../pages/api/datasets";
 import { getExternalLinkSchema } from "../../pages/api/schemas";
 import { SchemaForm } from "../molecules/SchemaForm";
 
-export function ExternalLinkPage({ translations, resource }) {
+export function ExternalLinkPage({
+  translations,
+  resource,
+  availableOptionsTranslations,
+}) {
   return (
     <BaseResourcePage
       title={resource.name}
@@ -43,6 +47,7 @@ export function ExternalLinkPage({ translations, resource }) {
           values={formatObjectsInArray(
             translate(
               translations,
+              availableOptionsTranslations,
               filterOnlyValidValues(resource, [
                 "title",
                 "url",

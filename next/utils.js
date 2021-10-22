@@ -50,10 +50,13 @@ export function isBdPlus(dataset) {
     .some((r) => r && r?.resource_type === "bdm_table");
 }
 
-export function translate(translations, object) {
+export function translate(keyTranslations, valueTranslations, object) {
+  console.log(valueTranslations);
   return object.map(([k, v]) => {
-    if (k in translations) return [translations[k], v];
-    else return [k, v];
+    const newKey = k in keyTranslations ? keyTranslations[k] : k;
+    const newValue = v in valueTranslations ? valueTranslations[v] : v;
+
+    return [newKey, newValue];
   });
 }
 

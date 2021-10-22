@@ -18,7 +18,10 @@ import { isBdPlus } from "../../utils";
 import Link from "../../components/atoms/Link";
 import { SimpleButton } from "../../components/atoms/SimpleButton";
 import { Markdown } from "../../components/atoms/Markdown";
-import { getTranslations } from "../api/translations";
+import {
+  getAvailableOptionsTranslations,
+  getTranslations,
+} from "../api/translations";
 import { ExternalLinkPage } from "../../components/organisms/ExternalLinkPage";
 import { BdmTablePage } from "../../components/organisms/BdmTablePage";
 import { MetadataPage } from "../../components/organisms/MetadataPage";
@@ -30,6 +33,7 @@ import { BaseResourcePage } from "../../components/molecules/BaseResourcePage";
 export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
   const translations = await getTranslations();
+  const availableOptionsTranslations = await getAvailableOptionsTranslations();
   const resources = dataset?.resources || [];
   const bdmTables = resources.filter(
     (r) => r && r?.resource_type === "bdm_table"
@@ -38,12 +42,15 @@ export async function getStaticProps(context) {
     (r) => r && r?.resource_type === "external_link"
   );
 
+  console.log(availableOptionsTranslations);
+
   return await withStrapiPages({
     props: {
       dataset,
       bdmTables,
       externalLinks,
       translations,
+      availableOptionsTranslations,
       isPlus: isBdPlus(dataset),
     },
     revalidate: 1, //TODO: Increase this timer
@@ -93,6 +100,7 @@ export default function DatasetPage({
   strapiPages,
   isPlus,
   translations,
+  availableOptionsTranslations,
 }) {
   const [resource, setResource] = useState(
     bdmTables.length > 0 ? bdmTables[0] : externalLinks[0]
@@ -109,6 +117,7 @@ export default function DatasetPage({
       case "bdm_table":
         return (
           <BdmTablePage
+            availableOptionsTranslations={availableOptionsTranslations}
             translations={translations["bdm_table"]}
             datasetName={dataset.dataset_id}
             resource={resource}
@@ -118,6 +127,7 @@ export default function DatasetPage({
       case "external_link":
         return (
           <ExternalLinkPage
+            availableOptionsTranslations={availableOptionsTranslations}
             translations={translations["external_link"]}
             resource={resource}
           />
@@ -156,6 +166,7 @@ export default function DatasetPage({
       default:
         return (
           <MetadataPage
+            availableOptionsTranslations={availableOptionsTranslations}
             translations={translations["dataset"]}
             dataset={dataset}
           />

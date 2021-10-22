@@ -437,6 +437,41 @@ def bd_translation(context, data_dict):
 
 
 @toolkit.side_effect_free
+def bd_available_options_dict(context, data_dict):
+    return {
+        **AvailabilityEnum.get_all_enum_attr("label"),
+        **BigQueryTypeEnum.get_all_enum_attr("label"),
+        **DirectoryEnum.get_all_enum_attr("label"),
+        **EntityArtEnum.get_all_enum_attr("label"),
+        **EntityDemographicEnum.get_all_enum_attr("label"),
+        **EntityEconomicsEnum.get_all_enum_attr("label"),
+        **EntityEducationEnum.get_all_enum_attr("label"),
+        **EntityEstablishmentEnum.get_all_enum_attr("label"),
+        **EntityEventEnum.get_all_enum_attr("label"),
+        **EntityHistoryEnum.get_all_enum_attr("label"),
+        **EntityImageEnum.get_all_enum_attr("label"),
+        **EntityIndividualEnum.get_all_enum_attr("label"),
+        **EntityInfrastructureEnum.get_all_enum_attr("label"),
+        **EntityOtherEnum.get_all_enum_attr("label"),
+        **EntityPoliticsEnum.get_all_enum_attr("label"),
+        **EntityScienceEnum.get_all_enum_attr("label"),
+        **EntitySecurityEnum.get_all_enum_attr("label"),
+        **EntitySphereEnum.get_all_enum_attr("label"),
+        **EntityTransportationEnum.get_all_enum_attr("label"),
+        **LanguageEnum.get_all_enum_attr("label"),
+        **LicenseEnum.get_all_enum_attr("label"),
+        **MeasurementUnitEnum.get_all_enum_attr("label"),
+        **Admin1Enum.get_all_enum_attr("label"),
+        **Admin2Enum.get_all_enum_attr("label"),
+        **ContinentEnum.get_all_enum_attr("label"),
+        **CountryEnum.get_all_enum_attr("label"),
+        **StatusEnum.get_all_enum_attr("label"),
+        **TimeUnitEnum.get_all_enum_attr("label"),
+        **YesNoEnum.get_all_enum_attr("label"),
+    }
+
+
+@toolkit.side_effect_free
 def bd_available_options(context, data_dict):
     return {
         "Availability": AvailabilityEnum.get_all_enum_attr("label"),

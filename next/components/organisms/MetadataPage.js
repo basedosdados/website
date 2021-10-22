@@ -12,7 +12,11 @@ import { SchemaForm } from "../molecules/SchemaForm";
 import { deleteDataset, updateDataset } from "../../pages/api/datasets";
 import { getDatasetSchema } from "../../pages/api/schemas";
 
-export function MetadataPage({ translations, dataset }) {
+export function MetadataPage({
+  translations,
+  dataset,
+  availableOptionsTranslations,
+}) {
   const _dataset = { ...dataset };
   const unionResourceFields = [
     "spatial_coverage",
@@ -79,6 +83,7 @@ export function MetadataPage({ translations, dataset }) {
         values={formatObjectsInArray(
           translate(
             translations,
+            availableOptionsTranslations,
             filterOnlyValidValues(_dataset, [
               "id",
               "groups",
