@@ -748,13 +748,14 @@ export default function Home({
           popularDatalakeDatasets={popularDatalakeDatasets}
         />
       </VStack>
-      <KnowOurServices />
+      <BePartner />
       <VStack
         paddingTop="100px"
         spacing={20}
         width={{ base: "90%", lg: "85%" }}
         margin="auto"
       >
+        <Support strapiPages={strapiPages} />
         <VStack width="100%">
           <BigTitle textAlign="center" maxWidth="100%" paddingBottom="10px">
             Explore, aprenda e participe
@@ -773,8 +774,6 @@ export default function Home({
         <ExploreInYourFavoriteLanguage />
         <LearnToAnalysis />
         <JoinTheCommunity />
-        <BePartner />
-        <Support strapiPages={strapiPages} />
       </VStack>
       <script
         src="/vendor/terminal.js"

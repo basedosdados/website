@@ -4,6 +4,7 @@ import BigTitle from "../atoms/BigTitle";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
 import SectionText from "../atoms/SectionText";
+import SectionTitle from "../atoms/SectionTitle";
 import { ShadowBox } from "../atoms/ShadowBox";
 
 function PartnerBox({ src, ...props }) {
@@ -25,12 +26,20 @@ function PartnerBox({ src, ...props }) {
 export function BePartner() {
   return (
     <VStack spacing={7}>
-      <BigTitle>Faça parte da nossa rede de parcerias</BigTitle>
-      <SectionText>
-        Abra dados de sua organização, construa{" "}
-        <b>projetos de dados abertos conosco</b> ou desenvolva aplicações com
-        nossos dados.
-      </SectionText>
+      <BigTitle>Como impactamos pessoas e organizações</BigTitle>
+      <Stack direction={{ base: "row", lg: "column" }}>
+        <VStack>
+          <SectionTitle>
+            Faça parte de nossa rede de parceiros e clientes
+          </SectionTitle>
+          <SectionText>
+            Abra dados de sua organização, construa{" "}
+            <b>projetos de dados abertos conosco</b> ou desenvolva aplicações
+            com nossos dados.
+          </SectionText>
+        </VStack>
+      </Stack>
+
       <Link href="/blog/1/">
         <RoundedButton>Entre em contato</RoundedButton>
       </Link>
