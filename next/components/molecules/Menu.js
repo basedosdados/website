@@ -8,6 +8,7 @@ import {
   useDisclosure,
   Divider,
   Avatar,
+  MenuItem,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import ControlledInput from "../atoms/ControlledInput";
@@ -17,6 +18,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import UserContext from "../../context/user";
+import { MenuDropdown } from "./MenuDropdown";
 
 function MenuDrawer({ isOpen, onClose, links }) {
   return (
@@ -52,20 +54,37 @@ function DesktopLinks({ links }) {
       position={{ base: "relative", lg: "initial" }}
     >
       <HStack width="100%" flex="3" spacing={7}>
-        {Object.entries(links).map(([k, v]) =>
-          k === "Apoie" ? (
-            <a href={v} target="_blank">
-              <RoundedButton
-                colorScheme="red"
-                backgroundColor="#FF8484"
-                minWidth="80px"
-                height="35px"
-                fontSize="14px"
-              >
-                Apoie
-              </RoundedButton>
-            </a>
-          ) : (
+        {Object.entries(links).map(([k, v]) => {
+          if (k === "Apoie")
+            return (
+              <a href={v} target="_blank">
+                <RoundedButton
+                  colorScheme="red"
+                  backgroundColor="#FF8484"
+                  minWidth="80px"
+                  height="35px"
+                  fontSize="14px"
+                >
+                  Apoie
+                </RoundedButton>
+              </a>
+            );
+
+          if (typeof v === "object") {
+            return (
+              <MenuDropdown title={k}>
+                {Object.entries(v).map(([k, v]) => (
+                  <MenuItem>
+                    <Link fontSize="14px" href={v}>
+                      {k}
+                    </Link>
+                  </MenuItem>
+                ))}
+              </MenuDropdown>
+            );
+          }
+
+          return (
             <Link
               fontSize="14px"
               href={v}
@@ -73,8 +92,8 @@ function DesktopLinks({ links }) {
             >
               {k}
             </Link>
-          )
-        )}
+          );
+        })}
       </HStack>
       <HStack spacing={9} display={{ base: "none", lg: "flex" }}>
         <ControlledInput
@@ -129,9 +148,15 @@ export default function Menu({ strapiPages = [] }) {
   const userData = useContext(UserContext);
 
   const links = {
-    "Quem Somos": "/blog/2/", // TODO: mudar ID da página para quem-somos
     Dados: "/dataset",
-    Serviços: "/servicos",
+    Blog: "https://medium.com/basedosdados",
+    Newsletter:
+      "https://basedosdados.hubspotpagebuilder.com/assine-a-newsletter-da-base-dos-dados",
+    Institucional: {
+      "Quem Somos": "/blog/2/",
+      "Fale Conosco": "/blog/1/",
+    },
+    Apoie: "https://apoia.se/basedosdados",
   };
 
   useEffect(() => {
@@ -144,15 +169,6 @@ export default function Menu({ strapiPages = [] }) {
           "0px 2px 5px 1px rgba(64, 60, 67, 0.16)";
     });
   }, [divRef.current]);
-
-  links["Blog"] = "https://medium.com/basedosdados";
-
-  links["Newsletter"] =
-    "https://basedosdados.hubspotpagebuilder.com/assine-a-newsletter-da-base-dos-dados";
-
-  links["Fale Conosco"] = "/blog/1/";
-
-  links["Apoie"] = "https://apoia.se/basedosdados"; // TODO: mudar para descer na nova seção da Homee
 
   return (
     <>

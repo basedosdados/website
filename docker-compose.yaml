@@ -73,7 +73,6 @@ services:
     container_name: next
     ports:
       - "3000:3000"
-    image: bdd/next${VTAG}
     depends_on:
       - ckan
 
@@ -103,7 +102,7 @@ services:
       POSTGRES_DB: strapi
       POSTGRES_USER: strapi
       POSTGRES_PASSWORD: strapi
-      
+
     volumes:
       - strapi_db:/var/lib/postgresql/data
 

@@ -142,3 +142,7 @@ body {
   max-width: 50%;
   white-space: break-spaces;
 }
+
+*:focus {
+  box-shadow: none !important;
+}

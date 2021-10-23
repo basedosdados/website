@@ -130,7 +130,7 @@ function Hero() {
                   backgroundColor: "#ffffff",
                   fontSize: "24px",
                   border: "0px",
-                  boxShadow: "0 2px 5px 1px rgba(64, 60, 67, 0.16)",
+                  boxShadow: "0 2px 5px 1px rgba(64, 60, 67, 0.16) !important",
                 }}
                 rightIcon={
                   <Box
@@ -206,13 +206,13 @@ function Hero() {
       </Center>
       <Center
         display={{ base: "none", lg: "flex" }}
-        // boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)" -- remove a
-        // sombra pois não está implementado como um botão
         backgroundColor="#34A15A"
         borderRadius="1000px"
         width="50px"
         height="50px"
         transform="translateY(35px);"
+        cursor="pointer"
+        onClick={() => window.open("#catalog", "_self")}
       >
         <Box width="20px" height="20px" position="relative">
           <Image
@@ -742,7 +742,7 @@ export default function Home({
       >
         <Hero />
       </VStack>
-      <VStack padding="0px 5%" marginBottom="-100px">
+      <VStack id="catalog" padding="0px 5%" marginBottom="-100px">
         <CatalogNews
           popularDatasets={popularDatasets}
           popularDatalakeDatasets={popularDatalakeDatasets}
@@ -750,7 +750,8 @@ export default function Home({
       </VStack>
       <BePartner />
       <VStack
-        paddingTop="100px"
+        paddingTop="70px"
+        pb="60px"
         spacing={20}
         width={{ base: "90%", lg: "85%" }}
         margin="auto"
