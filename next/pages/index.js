@@ -430,7 +430,7 @@ function LearnToAnalysis() {
               <LinkDash href="https://www.youtube.com/c/BasedosDados/videos">
                 <b>YouTube</b>
               </LinkDash>
-              <LinkDash href="https://dev.to/basedosdados">
+              <LinkDash href="https://medium.com/basedosdados">
                 <b>Blog</b>
               </LinkDash>
               <LinkDash href="https://github.com/basedosdados">
