@@ -328,6 +328,7 @@ def bd_dataset_search(context, data_dict):
         "bdm_dictionary",
         "information_request",
         "external_link",
+        None,
     ]
     resource_types_not_included = [
         resource_type
@@ -335,12 +336,15 @@ def bd_dataset_search(context, data_dict):
         if resource_type not in resource_type_order
     ]
     resource_type_order = resource_type_order + resource_types_not_included
-    resources_order_dict = {}
 
+    resources_order_dict = {}
+    print(resource_type_order)
     for i, package in enumerate(response["datasets"]):
         resources_type = [
             resource.get("resource_type") for resource in package.get("resources")
         ]
+        resources_type = resources_type if resources_type != [] else [None]
+
         for item in resource_type_order:
             if item in resources_type:
                 resources_order_dict[i] = item
@@ -429,6 +433,41 @@ def bd_translation(context, data_dict):
         "bdm_dictionary": extract_translation(BdmDictionary.schema()),
         "external_link": extract_translation(ExternalLink.schema()),
         "information_request": extract_translation(InformationRequest.schema()),
+    }
+
+
+@toolkit.side_effect_free
+def bd_available_options_dict(context, data_dict):
+    return {
+        **AvailabilityEnum.get_all_enum_attr("label"),
+        **BigQueryTypeEnum.get_all_enum_attr("label"),
+        **DirectoryEnum.get_all_enum_attr("label"),
+        **EntityArtEnum.get_all_enum_attr("label"),
+        **EntityDemographicEnum.get_all_enum_attr("label"),
+        **EntityEconomicsEnum.get_all_enum_attr("label"),
+        **EntityEducationEnum.get_all_enum_attr("label"),
+        **EntityEstablishmentEnum.get_all_enum_attr("label"),
+        **EntityEventEnum.get_all_enum_attr("label"),
+        **EntityHistoryEnum.get_all_enum_attr("label"),
+        **EntityImageEnum.get_all_enum_attr("label"),
+        **EntityIndividualEnum.get_all_enum_attr("label"),
+        **EntityInfrastructureEnum.get_all_enum_attr("label"),
+        **EntityOtherEnum.get_all_enum_attr("label"),
+        **EntityPoliticsEnum.get_all_enum_attr("label"),
+        **EntityScienceEnum.get_all_enum_attr("label"),
+        **EntitySecurityEnum.get_all_enum_attr("label"),
+        **EntitySphereEnum.get_all_enum_attr("label"),
+        **EntityTransportationEnum.get_all_enum_attr("label"),
+        **LanguageEnum.get_all_enum_attr("label"),
+        **LicenseEnum.get_all_enum_attr("label"),
+        **MeasurementUnitEnum.get_all_enum_attr("label"),
+        **Admin1Enum.get_all_enum_attr("label"),
+        **Admin2Enum.get_all_enum_attr("label"),
+        **ContinentEnum.get_all_enum_attr("label"),
+        **CountryEnum.get_all_enum_attr("label"),
+        **StatusEnum.get_all_enum_attr("label"),
+        **TimeUnitEnum.get_all_enum_attr("label"),
+        **YesNoEnum.get_all_enum_attr("label"),
     }
 
 

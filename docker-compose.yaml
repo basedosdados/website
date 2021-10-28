@@ -73,7 +73,6 @@ services:
     container_name: next
     ports:
       - "3000:3000"
-    image: bdd/next${VTAG}
     depends_on:
       - ckan
 
@@ -87,6 +86,7 @@ services:
       DATABASE_HOST: strapi-db
       DATABASE_PORT: 5432
       DATABASE_USERNAME: strapi
+      NODE_ENV: production
       DATABASE_PASSWORD: strapi
     volumes:
       - ./strapi:/srv/app
@@ -102,6 +102,7 @@ services:
       POSTGRES_DB: strapi
       POSTGRES_USER: strapi
       POSTGRES_PASSWORD: strapi
+
     volumes:
       - strapi_db:/var/lib/postgresql/data
 

@@ -12,7 +12,7 @@ export function Card({
       width="280px"
       height="310px"
       borderRadius="10px"
-      boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
+      boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
       backgroundColor="#FFFFFF"
       padding={padding}
       borderRadius="10px"

@@ -18,6 +18,7 @@
 ARG PG_MAJOR=11
 FROM postgres:$PG_MAJOR
 
+# deactivate because mac m1 bug
 RUN apt-get update \
     && apt-get install -y --no-install-recommends postgresql-contrib-$PG_MAJOR postgresql-plpython3-$PG_MAJOR \
     && rm -rf /var/lib/apt/lists/* ; exit 0

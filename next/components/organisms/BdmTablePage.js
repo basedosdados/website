@@ -1,14 +1,14 @@
 import { Button } from "@chakra-ui/button";
-import { VStack, Text, Stack } from "@chakra-ui/layout";
+import { VStack, Text, Stack, Image } from "@chakra-ui/react";
 import Highlight, { defaultProps } from "prism-react-renderer";
 import { useState } from "react";
-import Link from "../atoms/Link";
 import { LinkDash } from "../atoms/LinkDash";
 import { Markdown } from "../atoms/Markdown";
 import SectionText from "../atoms/SectionText";
 import Title from "../atoms/Title";
 import { ExpandableTable } from "../molecules/ExpandableTable";
 import {
+  breakNestedObjects,
   filterOnlyValidValues,
   formatObjectsInArray,
   translate,
@@ -17,10 +17,18 @@ import { BaseResourcePage } from "../molecules/BaseResourcePage";
 import { SchemaForm } from "../molecules/SchemaForm";
 import { getBdmTableSchema } from "../../pages/api/schemas";
 import { deleteResource, updateResource } from "../../pages/api/datasets";
+import { BlueBox } from "../molecules/BlueBox";
+import RoundedButton from "../atoms/RoundedButton";
+import Link from "../atoms/Link";
 
-export function BdmTablePage({ translations, resource, datasetName }) {
+export function BdmTablePage({
+  translations,
+  resource,
+  datasetName,
+  availableOptionsTranslations,
+}) {
   const [selectedConsultation, setSelectedConsultation] = useState("SQL");
-  const consultationOptions = ["SQL", "Python", "R"];
+  const consultationOptions = ["SQL", "Python", "R", "Download"];
   const queryName = `${resource.dataset_id}.${resource.name}`;
 
   if (
@@ -61,6 +69,78 @@ export function BdmTablePage({ translations, resource, datasetName }) {
       <>
         Criamos um pacote em R para você acessar o <i>datalake</i>. Basta rodar
         o código:
+      </>
+    ),
+    Download: (
+      <>
+        <BlueBox
+          title="Estes dados estão disponíveis porque diversas pessoas colaboram para a sua manutenção."
+          text={
+            <>
+              Apoie você também com doação financeira ou{" "}
+              <LinkDash
+                fontWeight="bold"
+                textDecoration="none"
+                target="_blank"
+                href="https://basedosdados.github.io/mais/colab/"
+                dash={false}
+              >
+                saiba como contribuir com seu tempo.
+              </LinkDash>
+            </>
+          }
+        />
+        <Stack
+          paddingTop="30px"
+          paddingBottom="20px"
+          align="center"
+          direction={{ base: "column", lg: "row" }}
+          justify="space-between"
+        >
+          <Image
+            height="130px"
+            objectFit="contain"
+            src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/bd_qrcode.png"
+          />
+          <SectionText
+            padding={{ base: "0px 0px", lg: "10px 0px" }}
+            marginLeft="auto"
+            fontWeight="400"
+            fontSize="13px"
+          >
+            <Text fontWeight="bold" fontFamily="Ubuntu" fontSize="18px">
+              Doe via PIX
+            </Text>
+            <br />
+            Chave CNPJ
+            <br /> 42494318000116
+          </SectionText>
+          <Link
+            maxWidth="180px"
+            width="100%"
+            textDecoration="none !important"
+            target="_blank"
+            href="/#support"
+          >
+            <RoundedButton width="100%">Doação mensal</RoundedButton>
+          </Link>
+          <Link
+            maxWidth="210px"
+            width="100%"
+            textDecoration="none !important"
+            href={`https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}.zip`}
+          >
+            <RoundedButton
+              width="100%"
+              color="#3AA1EB"
+              border="2px solid #3AA1EB"
+              backgroundColor="white"
+              colorScheme="gray"
+            >
+              Download dos dados
+            </RoundedButton>
+          </Link>
+        </Stack>
       </>
     ),
   };
@@ -115,32 +195,24 @@ export function BdmTablePage({ translations, resource, datasetName }) {
       }
     >
       <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Text
-          fontFamily="Lato"
-          lineHeight="24px"
-          letterSpacing="0.1em"
-          fontWeight="400"
-          fontSize="14px"
-          backgroundColor="rgba(130, 202, 255, 0.15);"
-          padding="15px 20px"
-          borderRadius="20px"
-          width="100%"
-        >
-          <b>
-            Esta tabela está tratada e atualizada no nosso datalake público.
-          </b>
-          <br /> Você pode consultar seus dados via download, SQL (BigQuery),
-          Python ou R{" "}
-          <LinkDash
-            fontWeight="bold"
-            textDecoration="none"
-            target="_self"
-            href="#acesso"
-            dash={false}
-          >
-            abaixo.
-          </LinkDash>
-        </Text>
+        <BlueBox
+          title="Esta tabela está tratada e atualizada no nosso datalake público."
+          text={
+            <>
+              Você pode consultar seus dados via download, SQL (BigQuery),
+              Python ou R{" "}
+              <LinkDash
+                fontWeight="bold"
+                textDecoration="none"
+                target="_self"
+                href="#acesso"
+                dash={false}
+              >
+                abaixo.
+              </LinkDash>
+            </>
+          }
+        />
         <SectionText padding="10px 0px">
           <b>Descrição</b>
         </SectionText>
@@ -181,79 +253,68 @@ export function BdmTablePage({ translations, resource, datasetName }) {
               </Button>
             );
           })}
-
-          <Link
-            href={`https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}.zip`}
-          >
-            <Button
-              borderWidth={"1px"}
-              borderColor={"#DEDFE0"}
-              fontSize="14px"
-              fontFamily="Lato"
-              color={"black"}
-              height="35px"
-              letterSpacing="0.1em"
-              borderRadius="8px"
-              width={{ base: "100%", lg: "initial" }}
-              minWidth="110px"
-              backgroundColor="transparent"
-              fontWeight={"regular"}
-            >
-              Download
-            </Button>
-          </Link>
         </Stack>
-        <SectionText fontSize="14px" fontWeight="300">
-          {helpText[selectedConsultation]}
-        </SectionText>
-        <Highlight
-          code={consultationText[selectedConsultation]}
-          language={consultationLanguage[selectedConsultation]}
-          {...defaultProps}
-        >
-          {({ className, style, tokens, getLineProps, getTokenProps }) => (
-            <pre
-              className={className}
-              style={{
-                ...style,
-                width: "100%",
-                padding: "10px",
-                borderRadius: "6px",
-                whiteSpace: "break-spaces",
-                wordBreak: "break-all",
-                backgroundColor: "#252A32",
-              }}
+        {helpText[selectedConsultation] ? (
+          <SectionText fontSize="14px" fontWeight="300">
+            {helpText[selectedConsultation]}
+          </SectionText>
+        ) : (
+          <></>
+        )}
+        {consultationText[selectedConsultation] ? (
+          <>
+            <Highlight
+              code={consultationText[selectedConsultation]}
+              language={consultationLanguage[selectedConsultation]}
+              {...defaultProps}
             >
-              {tokens.map((line, i) => (
-                <div
-                  style={{ wordBreak: "break-all" }}
-                  {...getLineProps({ line, key: i })}
+              {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                <pre
+                  className={className}
+                  style={{
+                    ...style,
+                    width: "100%",
+                    padding: "10px",
+                    borderRadius: "6px",
+                    whiteSpace: "break-spaces",
+                    wordBreak: "break-all",
+                    backgroundColor: "#252A32",
+                  }}
                 >
-                  {line.map((token, key) => (
-                    <span
+                  {tokens.map((line, i) => (
+                    <div
                       style={{ wordBreak: "break-all" }}
-                      {...getTokenProps({ token, key })}
-                    />
+                      {...getLineProps({ line, key: i })}
+                    >
+                      {line.map((token, key) => (
+                        <span
+                          style={{ wordBreak: "break-all" }}
+                          {...getTokenProps({ token, key })}
+                        />
+                      ))}
+                    </div>
                   ))}
-                </div>
-              ))}
-            </pre>
-          )}
-        </Highlight>
-        <SectionText fontSize="14px" fontWeight="300">
-          <i>
-            Para consulta é necessário um projeto no Google Cloud.{" "}
-            <b>Primeira vez?</b>{" "}
-            <LinkDash
-              href={helpLink[selectedConsultation]}
-              dash={false}
-              fontWeight="bold"
-              textDecoration="none"
-            >
-              Siga o passo a passo.
-            </LinkDash>
-          </i>
-        </SectionText>
+                </pre>
+              )}
+            </Highlight>
+            <SectionText fontSize="14px" fontWeight="300">
+              <i>
+                Para consulta é necessário um projeto no Google Cloud.{" "}
+                <b>Primeira vez?</b>{" "}
+                <LinkDash
+                  href={helpLink[selectedConsultation]}
+                  dash={false}
+                  fontWeight="bold"
+                  textDecoration="none"
+                >
+                  Siga o passo a passo.
+                </LinkDash>
+              </i>
+            </SectionText>
+          </>
+        ) : (
+          <></>
+        )}
       </VStack>
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Title>Metadados da tabela</Title>
@@ -263,6 +324,7 @@ export function BdmTablePage({ translations, resource, datasetName }) {
           values={formatObjectsInArray(
             translate(
               translations,
+              availableOptionsTranslations,
               filterOnlyValidValues({ dataset_id: datasetName, ...resource }, [
                 "dataset_id",
                 "table_id",

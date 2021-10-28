@@ -14,7 +14,7 @@ export function formatObjectsInArray(arr) {
         k,
         filterOnlyValidValues(v)
           .map(([k, v]) => `${isNumeric(k) ? "" : k + ": "} ${v}`)
-          .join(",\t"),
+          .join("\n"),
       ];
     }
 
@@ -45,13 +45,23 @@ export function limitTextSize(text, size) {
 }
 
 export function isBdPlus(dataset) {
-  return dataset.resources.some((r) => r.resource_type === "bdm_table");
+  return (dataset?.resources || [])
+    .filter((r) => r && r?.resource_type)
+    .some((r) => r && r?.resource_type === "bdm_table");
 }
 
-export function translate(translations, object) {
+export function translate(keyTranslations, valueTranslations, object) {
   return object.map(([k, v]) => {
-    if (k in translations) return [translations[k], v];
-    else return [k, v];
+    const newKey = k in keyTranslations ? keyTranslations[k] : k;
+    let newValue = v in valueTranslations ? valueTranslations[v] : v;
+
+    if (Array.isArray(newValue)) {
+      newValue = newValue
+        .map((v) => (v in valueTranslations ? valueTranslations[v] : v))
+        .join(", ");
+    }
+
+    return [newKey, newValue];
   });
 }
 

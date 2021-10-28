@@ -25,10 +25,11 @@ export default function ControlledInput({
   }
 
   return (
-    <InputGroup variant={variant} flex="1" {...props}>
+    <InputGroup flex="1" {...props}>
       <Input
         onKeyDown={checkForEnter}
         fontFamily="Lato"
+        variant="outline"
         letterSpacing="0.1em"
         fontWeight="300"
         border="1px solid #DEDFE0"

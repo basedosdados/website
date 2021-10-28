@@ -4,6 +4,7 @@ import {
   Center,
   HStack,
   Stack,
+  Text,
   Flex,
   VStack,
   Image as ChakraImage,
@@ -31,6 +32,8 @@ import { LinkDash } from "../components/atoms/LinkDash";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { isBdPlus } from "../utils";
 import Link from "../components/atoms/Link";
+import { KnowOurServices } from "../components/molecules/KnowOurServices";
+import { BePartner } from "../components/organisms/BePartner";
 
 export async function getStaticProps(context) {
   const popularDatasets = await getPopularDatasets();
@@ -45,24 +48,28 @@ export async function getStaticProps(context) {
   });
 }
 
-function HeroText({ children, iconUrl }) {
+function HeroText({ children, iconUrl, height = "100px" }) {
   return (
     <VStack alignItems="center" justifyContent="center" maxWidth="400px">
-      <Box
-        margin="auto"
-        width="100%"
-        height="130px"
-        marginBottom="20px"
-        position="relative"
-      >
-        <Image
-          loading="eager"
-          priority
-          objectFit="contain"
-          layout="fill"
-          src={iconUrl}
-        />
-      </Box>
+      <Flex justify="baseline" align="baseline" width="100%" height="130px">
+        <Flex
+          margin="auto"
+          width="100%"
+          height={height}
+          marginBottom="20px"
+          position="relative"
+          justify="baseline"
+          align="baseline"
+        >
+          <Image
+            loading="eager"
+            priority
+            objectFit="contain"
+            layout="fill"
+            src={iconUrl}
+          />
+        </Flex>
+      </Flex>
       {children}
     </VStack>
   );
@@ -77,7 +84,7 @@ function Hero() {
   }
 
   return (
-    <VStack width="100%" backgroundColor="#FAFAFA">
+    <VStack width="100%">
       <Center height="100%">
         <VStack
           height="100%"
@@ -85,40 +92,27 @@ function Hero() {
           alignItems="center"
           spacing={20}
         >
-          <Stack
+          <VStack
             position="relative"
             width="100%"
-            direction={{ base: "column", lg: "row" }}
             alignItems="center"
             spacing={50}
             marginStart="0px !important"
           >
-            <Box
-              position="absolute"
-              right="0px"
-              top="-80%"
-              minWidth="850px"
-              minHeight="568px"
-            >
-              <Image
-                priority
-                src="/img/home_background.png"
-                layout="fill"
-                objectFit="contain"
-              />
-            </Box>
             <BigTitle
               position="relative"
               zIndex="1"
               fontFamily="Lato"
               flex="2"
-              fontSize="38px"
+              fontSize="36px"
+              fontWeigth="700"
               marginStart="0px !important"
             >
-              Um único lugar para buscar e acessar os dados que você precisa
+              Encontre os dados que você precisa
             </BigTitle>
             <VStack
-              width={{ base: "100%", lg: "initial" }}
+              maxWidth="700px"
+              width="100%"
               spacing={3}
               alignItems="flex-start"
               flex="3"
@@ -128,11 +122,7 @@ function Hero() {
                 width="100%"
                 onChange={setSearch}
                 onEnterPress={openSearchLink}
-                placeholder={
-                  isMobile
-                    ? "Pesquisar dados"
-                    : "Pesquisar palavras-chave, instituições ou temas"
-                }
+                alignSelf="center"
                 justifyContent="center"
                 inputStyle={{
                   padding: "40px",
@@ -140,7 +130,7 @@ function Hero() {
                   backgroundColor: "#ffffff",
                   fontSize: "24px",
                   border: "0px",
-                  boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                  boxShadow: "0 2px 5px 1px rgba(64, 60, 67, 0.16) !important",
                 }}
                 rightIcon={
                   <Box
@@ -158,14 +148,14 @@ function Hero() {
                   </Box>
                 }
               />
-              <HStack paddingLeft="45px">
+              <HStack paddingLeft="40px">
                 <SectionText fontSize="14px">Termos populares: </SectionText>
                 <ThemeTag name="lei" />
                 <ThemeTag name="mortalidade" />
                 <ThemeTag name="COVID19" />
               </HStack>
             </VStack>
-          </Stack>
+          </VStack>
           <Stack
             paddingTop="10px"
             position="relative"
@@ -176,36 +166,53 @@ function Hero() {
             direction={{ base: "column", lg: "row" }}
             spacing={10}
           >
-            <HeroText iconUrl="/img/icone_busca.png">
+            <HeroText
+              height="90px"
+              iconUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/loupe 1.png"
+            >
               <SectionText fontSize="14px" textAlign="center">
-                Com o mecanismo de busca é possível descobrir informações sobre
-                mais de 900 bases de dados de diversos temas e organizações.
+                Busque por <b>dados abertos</b> de diversos temas e
+                organizações.
               </SectionText>
             </HeroText>
-            <HeroText iconUrl="/img/icone_download.png">
+            <HeroText
+              height="120px"
+              iconUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/download 1.png"
+            >
               <SectionText fontSize="14px" textAlign="center">
-                Disponibilizamos o download dos dados tratados e atualizados
-                direto do nosso <i>datalake</i> público num só click.
+                Acesse e baixe as <b>tabelas tratadas</b> do nosso{" "}
+                <i>datalake</i> público.
               </SectionText>
             </HeroText>
-            <HeroText iconUrl="/img/icone_pacotes.png">
+            <HeroText
+              height="80px"
+              iconUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/_.png"
+            >
               <SectionText fontSize="14px" textAlign="center">
-                Através dos nossos pacotes de programação você pode acessar o{" "}
-                <i>datalake</i> público BD+ em Python, R ou pela linha de
-                comando.
+                Desenvolva com nossos <b>pacotes</b> em Python e R.
               </SectionText>
             </HeroText>
+            <Flex paddingLeft={{ base: "0", lg: "50px" }}>
+              <Image
+                src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/GC_CustomerAwardWinner_SocialImpact+1.png"
+                width="227px"
+                height="336"
+                loading="eager"
+                priority
+              />
+            </Flex>
           </Stack>
         </VStack>
       </Center>
       <Center
         display={{ base: "none", lg: "flex" }}
-        boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
-        backgroundColor="#42B0FF"
+        backgroundColor="#34A15A"
         borderRadius="1000px"
         width="50px"
         height="50px"
         transform="translateY(35px);"
+        cursor="pointer"
+        onClick={() => window.open("#catalog", "_self")}
       >
         <Box width="20px" height="20px" position="relative">
           <Image
@@ -226,7 +233,6 @@ function CatalogNews({ popularDatasets, popularDatalakeDatasets }) {
       width="100%"
       padding="60px 00px"
       alignItems="flex-start"
-      backgroundColor="#FAFAFA"
       spacing={5}
       paddingTop="75px"
       paddingBottom="160px"
@@ -285,50 +291,6 @@ function CatalogNews({ popularDatasets, popularDatalakeDatasets }) {
           />
         ))}
       </CardCatalog>
-      <CardCatalog
-        title="Outras novidades no catálogo"
-        text={
-          <div>
-            Onde você também pode acessar metadados de diversas bases públicas
-            num só lugar.{" "}
-            <LinkDash
-              fontWeight="700"
-              dash={false}
-              textDecoration="none"
-              href="https://basedosdados.github.io/mais/"
-            >
-              Entenda.
-            </LinkDash>
-          </div>
-        }
-      >
-        {popularDatasets.map((d) => (
-          <DatabaseCard
-            link={`/dataset/${d.name}`}
-            name={d.title}
-            organization={d.organization.title}
-            organizationSlug={d.organization.name}
-            tags={d.tags.map((g) => g.name)}
-            size={
-              d.resources.filter((r) => r.bdm_file_size && r.bdm_file_size > 0)
-                .length > 0
-                ? d.resources.filter((r) => r.bdm_file_size)[0].bdm_file_size
-                : null
-            }
-            tableNum={
-              d.resources.filter((r) => r.resource_type === "bdm_table").length
-            }
-            externalLinkNum={
-              d.resources.filter((r) => r.resource_type === "external_link")
-                .length
-            }
-            updatedSince={d.metadata_modified}
-            updatedAuthor="Ricardo Dahis"
-            categories={d.groups.map((g) => g.name)}
-            isPlus={isBdPlus(d)}
-          />
-        ))}
-      </CardCatalog>
     </VStack>
   );
 }
@@ -374,7 +336,7 @@ function ExploreInYourFavoriteLanguage() {
             <i>datalake</i> no Google BigQuery.
           </SectionText>
           <LinkDash href="https://basedosdados.github.io/mais/access_data_packages">
-            Veja mais
+            <b>Veja mais</b>
           </LinkDash>
         </VStack>
       }
@@ -442,7 +404,7 @@ function LearnToAnalysis() {
           >
             <Image
               priority
-              src="/img/home_background.png"
+              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/fundo_rede.png"
               layout="fill"
               objectFit="contain"
             />
@@ -459,17 +421,21 @@ function LearnToAnalysis() {
           <VStack spacing={4} zIndex="1" position="relative">
             <SectionText textAlign="justify">
               Produzimos{" "}
-              <b> tutoriais e ensaios no blog, workshops no Youtube</b> e{" "}
-              <b>análises nas redes sociais</b> com nossos dados.
-              Disponibilizamos os <b>códigos completos</b> no nosso GitHub para
-              você testar e reproduzir localmente
+              <b> tutoriais e análises no blog, workshops no YouTube</b> e e
+              muito mais com nossos dados. O código completo de todos os
+              exemplos fica disponível no nosso GitHub para você testar e
+              reproduzir localmente.
             </SectionText>
             <HStack alignItems="flex-start" width="100%" spacing={5}>
               <LinkDash href="https://www.youtube.com/c/BasedosDados/videos">
-                YouTube
+                <b>YouTube</b>
               </LinkDash>
-              <LinkDash href="https://dev.to/basedosdados">Blog</LinkDash>
-              <LinkDash href="https://github.com/basedosdados">GitHub</LinkDash>
+              <LinkDash href="https://medium.com/basedosdados">
+                <b>Blog</b>
+              </LinkDash>
+              <LinkDash href="https://github.com/basedosdados">
+                <b>GitHub</b>
+              </LinkDash>
             </HStack>
           </VStack>
         </VStack>
@@ -493,10 +459,18 @@ function JoinTheCommunity() {
           </Title>
           <SectionText textAlign="justify">
             Acompanhe todas as discussões, tire dúvidas, fale e aprenda direto
-            com a equipe da Base dos Dados e faça parte de um grupo de pessoas
-            incríveis da nossa <b>comunidade de dados abertos no Discord.</b>
+            com a equipe e a comunidade da Base dos Dados pelo Discord. Para ir
+            além, seja voluntário(a) da BD e colabore com dados, análises ou
+            infraestrutura.
           </SectionText>
-          <LinkDash href="https://discord.gg/huKWpsVYx4">Discord</LinkDash>
+          <HStack alignItems="flex-start" width="100%" spacing={5}>
+            <LinkDash href="https://basedosdados.github.io/mais/colab/">
+              <b>Voluntariado</b>
+            </LinkDash>
+            <LinkDash href="https://discord.gg/huKWpsVYx4">
+              <b>Discord</b>
+            </LinkDash>
+          </HStack>
         </VStack>
       }
       rightColumn={
@@ -529,19 +503,21 @@ function Support({ strapiPages }) {
     colorScheme = "blue",
     backgroundColor = "#3AA1EB",
     target = "_blank",
+    ...props
   }) {
     return (
       <a href={link} target={target}>
         <Button
-          boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
+          boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
           borderRadius="68.6364px"
           colorScheme={colorScheme}
           backgroundColor={backgroundColor}
-          padding="25px"
+          padding="23px"
           fontFamily="Ubuntu"
           fontWeight="700"
+          display="flex"
           fontSize="18px"
-          minWidth="250px"
+          minWidth="200px"
           letterSpacing="0.1em"
         >
           {children}
@@ -551,9 +527,9 @@ function Support({ strapiPages }) {
   }
 
   return (
-    <VStack position="relative" paddingTop="60px" width="95%">
+    <VStack id="support" position="relative" paddingTop="40px" width="95%">
       <BigTitle position="relative" zIndex="1" width="90%" textAlign="center">
-        Como colaborar conosco
+        Apoie a Base dos Dados
       </BigTitle>
       <SectionText
         position="relative"
@@ -564,70 +540,187 @@ function Support({ strapiPages }) {
         fontWeight="500"
         paddingBottom="60px"
       >
-        Existimos através do esforço de{" "}
-        <b>pessoas que acreditam no acesso a dados abertos de qualidade</b>.
+        Existimos através do esforço de pessoas que acreditam no acesso a dados
+        abertos de qualidade.
       </SectionText>
-      <Box
-        position="absolute"
-        right="0px"
-        top="20%"
-        minWidth="850px"
-        minHeight="568px"
-        zIndex="0px"
-      >
-        <Image
-          priority
-          src="/img/home_background.png"
-          layout="fill"
-          objectFit="contain"
-        />
-      </Box>
       <Stack
         width="100%"
+        paddingBottom="30px"
         justifyContent="space-around"
         direction={{ base: "column", lg: "row" }}
         spacing={10}
       >
-        <ShadowBox height="270px" title="Voluntariado">
-          <SectionText fontSize="14px" height="100px">
-            Ajude a manter e aprimorar pacotes, suba bases no nosso{" "}
-            <i>datalake</i> ou construa análises e tutoriais para nossas redes.
-          </SectionText>
-          <SupportButton link="https://basedosdados.github.io/mais/colab/">
-            Comece aqui
-          </SupportButton>
-        </ShadowBox>
-        <ShadowBox height="270px" title="Parceria">
-          <SectionText fontSize="14px" height="100px">
-            Abra dados de sua organização, construa projetos de dados abertos
-            conosco ou desenvolva aplicações com nossos dados.
-          </SectionText>
-          <SupportButton
-            link={contactPage.length > 0 ? "/blog/" + contactPage[0].id : ""}
-            target="_self"
+        <ShadowBox height="250px" title="Apoio Inicial">
+          <SectionText
+            fontWeight="400"
+            padding="10px 0px"
+            fontSize="14px"
+            height="100px"
           >
-            Entre em contato
+            Bolso apertado? Doe apenas R$0,50 por dia e ajude a manter a
+            iniciativa.
+          </SectionText>
+          <SupportButton
+            alignItems="flex-end"
+            link="https://apoia.se/basedosdados"
+          >
+            <Flex paddingBottom="10px" align="flex-end">
+              R${" "}
+              <Text
+                fontSize="30px"
+                margin="0px"
+                padding="0px 10px"
+                marginBottom="-5px"
+              >
+                15
+              </Text>{" "}
+              / mês
+            </Flex>
           </SupportButton>
         </ShadowBox>
-        <ShadowBox height="270px" spacing={4} title="Doações">
+        <ShadowBox
+          height="250px"
+          border="2.5px solid #FF8484"
+          title={
+            <Text color="#FF8484">
+              <b>Apoio entusiasta</b>
+            </Text>
+          }
+        >
+          <SectionText
+            fontWeight="400"
+            padding="10px 0px"
+            fontSize="14px"
+            height="100px"
+          >
+            Dobre sua doação:{" "}
+            <b>R$ 1 real por dia para fazer databasers felizes.</b>
+          </SectionText>
           <SupportButton
-            link="https://drive.google.com/file/d/1aIJhJBSsufArqApvgoYFpevlu8uF5nqm/view?usp=sharing"
-            backgroundColor="#FF8484"
             colorScheme="red"
+            backgroundColor="#FF8484"
+            alignItems="flex-end"
+            link="https://apoia.se/basedosdados"
           >
-            Doe via PIX
+            <Flex paddingBottom="10px" align="flex-end">
+              R${" "}
+              <Text
+                fontSize="30px"
+                margin="0px"
+                padding="0px 10px"
+                marginBottom="-5px"
+              >
+                30
+              </Text>{" "}
+              / mês
+            </Flex>
           </SupportButton>
-          <SupportButton link="https://apoia.se/basedosdados">
-            Apoio mensal
-          </SupportButton>
+        </ShadowBox>
+        <ShadowBox
+          height="250px"
+          title={
+            <Text>
+              Apoio <i>databaser</i>
+            </Text>
+          }
+        >
+          <SectionText
+            fontWeight="400"
+            padding="10px 0px"
+            fontSize="14px"
+            height="80px"
+          >
+            Já poupamos algumas horas do seu trabalho? Que tal doar R$50 para
+            ajudarmos ainda mais pessoas?
+          </SectionText>
           <SupportButton
-            link={contactPage.length > 0 ? "/blog/" + contactPage[0].id : ""}
-            target="_self"
+            alignItems="flex-end"
+            link="https://apoia.se/basedosdados"
           >
-            Apoio institucional
+            <Flex paddingBottom="10px" align="flex-end">
+              R${" "}
+              <Text
+                fontSize="30px"
+                margin="0px"
+                padding="0px 10px"
+                marginBottom="-5px"
+              >
+                50
+              </Text>{" "}
+              / mês
+            </Flex>
           </SupportButton>
         </ShadowBox>
       </Stack>
+      <ShadowBox padding="0px">
+        <BigTitle padding="0px" fontSize="24px" color="#252A32">
+          Doe via PIX
+        </BigTitle>
+        <Stack
+          align="center"
+          justify="space-between"
+          width="100%"
+          direction={{ base: "column", lg: "row" }}
+          padding="0px 50px"
+        >
+          <Stack
+            width={{ base: "100%", lg: "initial" }}
+            spacing={10}
+            direction={{ base: "column", lg: "row" }}
+          >
+            <ChakraImage
+              height="180px"
+              objectFit="contain"
+              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/bd_qrcode.png"
+            />
+
+            <SectionText
+              padding={{ base: "0px 0px", lg: "10px 0px" }}
+              marginLeft="auto"
+              fontWeight="400"
+              fontSize="14px"
+            >
+              <b>
+                Chave CNPJ
+                <br /> 42494318000116
+              </b>
+              <br />
+              <br />
+              Banco: Stone
+              <br /> Razão Social: Base dos Dados
+              <br /> CNPJ: 42494318/0001-16
+              <br />
+              Agência: 0001 | Conta: 6761821-5
+            </SectionText>
+          </Stack>
+          <SectionText fontWeight="400" fontSize="14px">
+            1. Abra o app do seu banco
+            <br />
+            <br />
+            2. Escolha a opção de pagamento com PIX QR Code ou chave
+            <br />
+            <br />
+            3. Escaneie o QR Code ou digite a chave ao lado
+            <br />
+            <br />
+            4. 💚. Faça sua doação!
+            <br />
+            <br />
+          </SectionText>
+        </Stack>
+      </ShadowBox>
+      <SectionText
+        paddingTop="20px"
+        paddingBottom="30px"
+        fontWeight="400"
+        fontSize="14px"
+      >
+        Gostaria de apoiar institucionalmente a Base dos Dados?{" "}
+        <LinkDash fontWeight="bold" fontSize="14px" href="/blog/1/">
+          Entre em contato conosco
+        </LinkDash>
+        .
+      </SectionText>
     </VStack>
   );
 }
@@ -638,11 +731,10 @@ export default function Home({
   popularDatalakeDatasets,
 }) {
   return (
-    <MainPageTemplate strapiPages={strapiPages}>
+    <MainPageTemplate backgroundColor="#FFFFFF" strapiPages={strapiPages}>
       <VStack
         alignItems="center"
         width="100%"
-        backgroundColor="#FAFAFA"
         padding="0px 10%"
         marginTop="55px"
         zIndex="10"
@@ -650,18 +742,21 @@ export default function Home({
       >
         <Hero />
       </VStack>
-      <VStack padding="0px 5%">
+      <VStack id="catalog" padding="0px 5%" marginBottom="-100px">
         <CatalogNews
           popularDatasets={popularDatasets}
           popularDatalakeDatasets={popularDatalakeDatasets}
         />
       </VStack>
+      <BePartner />
       <VStack
+        paddingTop="70px"
+        pb="60px"
         spacing={20}
-        transform="translateY(-100px)"
         width={{ base: "90%", lg: "85%" }}
         margin="auto"
       >
+        <Support strapiPages={strapiPages} />
         <VStack width="100%">
           <BigTitle textAlign="center" maxWidth="100%" paddingBottom="10px">
             Explore, aprenda e participe
@@ -680,7 +775,6 @@ export default function Home({
         <ExploreInYourFavoriteLanguage />
         <LearnToAnalysis />
         <JoinTheCommunity />
-        <Support strapiPages={strapiPages} />
       </VStack>
       <script
         src="/vendor/terminal.js"

@@ -18,7 +18,10 @@ import { isBdPlus } from "../../utils";
 import Link from "../../components/atoms/Link";
 import { SimpleButton } from "../../components/atoms/SimpleButton";
 import { Markdown } from "../../components/atoms/Markdown";
-import { getTranslations } from "../api/translations";
+import {
+  getAvailableOptionsTranslations,
+  getTranslations,
+} from "../api/translations";
 import { ExternalLinkPage } from "../../components/organisms/ExternalLinkPage";
 import { BdmTablePage } from "../../components/organisms/BdmTablePage";
 import { MetadataPage } from "../../components/organisms/MetadataPage";
@@ -30,10 +33,13 @@ import { BaseResourcePage } from "../../components/molecules/BaseResourcePage";
 export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
   const translations = await getTranslations();
-  const resources = dataset["resources"];
-  const bdmTables = resources.filter((r) => r.resource_type === "bdm_table");
+  const availableOptionsTranslations = await getAvailableOptionsTranslations();
+  const resources = dataset?.resources || [];
+  const bdmTables = resources.filter(
+    (r) => r && r?.resource_type === "bdm_table"
+  );
   const externalLinks = resources.filter(
-    (r) => r.resource_type === "external_link"
+    (r) => r && r?.resource_type === "external_link"
   );
 
   return await withStrapiPages({
@@ -42,6 +48,7 @@ export async function getStaticProps(context) {
       bdmTables,
       externalLinks,
       translations,
+      availableOptionsTranslations,
       isPlus: isBdPlus(dataset),
     },
     revalidate: 1, //TODO: Increase this timer
@@ -52,9 +59,11 @@ export async function getStaticPaths(context) {
   let datasets = await listDatasets();
 
   return {
-    paths: datasets.map((d) => ({
-      params: { dataset: d },
-    })),
+    paths: datasets
+      .filter((d) => d != "br-me-siconfi") // TODO: Fix the dataset and remove this line
+      .map((d) => ({
+        params: { dataset: d },
+      })),
     fallback: "blocking",
   };
 }
@@ -67,13 +76,13 @@ function AdminButtons({ resource, setResource }) {
   return (
     <>
       <SimpleButton
-        isActive={resource.resource_type === "create_bdm_table"}
+        isActive={resource?.resource_type === "create_bdm_table"}
         onClick={() => setResource({ resource_type: "create_bdm_table" })}
       >
         Criar tabela tratada
       </SimpleButton>
       <SimpleButton
-        isActive={resource.resource_type === "create_external_link"}
+        isActive={resource?.resource_type === "create_external_link"}
         onClick={() => setResource({ resource_type: "create_external_link" })}
       >
         Criar link externo
@@ -89,22 +98,24 @@ export default function DatasetPage({
   strapiPages,
   isPlus,
   translations,
+  availableOptionsTranslations,
 }) {
   const [resource, setResource] = useState(
     bdmTables.length > 0 ? bdmTables[0] : externalLinks[0]
   );
   const [bdmTableFilter, setBdmTableFilter] = useState(
-    resource.resource_type === "bdm_table"
+    resource?.resource_type === "bdm_table"
   );
   const [externalLinkTableFilter, setExternalLinkTableFilter] = useState(
-    resource.resource_type === "external_link"
+    resource?.resource_type === "external_link"
   );
 
   function getResourcePage() {
-    switch (resource.resource_type) {
+    switch (resource?.resource_type) {
       case "bdm_table":
         return (
           <BdmTablePage
+            availableOptionsTranslations={availableOptionsTranslations}
             translations={translations["bdm_table"]}
             datasetName={dataset.dataset_id}
             resource={resource}
@@ -114,6 +125,7 @@ export default function DatasetPage({
       case "external_link":
         return (
           <ExternalLinkPage
+            availableOptionsTranslations={availableOptionsTranslations}
             translations={translations["external_link"]}
             resource={resource}
           />
@@ -128,6 +140,9 @@ export default function DatasetPage({
               <SchemaForm
                 schemaName="Tabela tratada"
                 loadSchemaFunction={getBdmTableSchema}
+                prepareData={(d) => {
+                  d.resource_type = "bdm_table";
+                }}
                 updateFunction={(data) => createResource(data, dataset.id)}
               />
             }
@@ -143,6 +158,9 @@ export default function DatasetPage({
               <SchemaForm
                 schemaName="Link externo"
                 loadSchemaFunction={getExternalLinkSchema}
+                prepareData={(d) => {
+                  d.resource_type = "external_link";
+                }}
                 updateFunction={(data) => createResource(data, dataset.id)}
               />
             }
@@ -152,6 +170,7 @@ export default function DatasetPage({
       default:
         return (
           <MetadataPage
+            availableOptionsTranslations={availableOptionsTranslations}
             translations={translations["dataset"]}
             dataset={dataset}
           />
@@ -162,7 +181,7 @@ export default function DatasetPage({
   return (
     <MainPageTemplate strapiPages={strapiPages}>
       <Head>
-        <title>Base dos Dados - {dataset.title}</title>
+        <title>{dataset.title} - Base dos Dados</title>
 
         {/* Open Graph */}
         <link
@@ -250,9 +269,9 @@ export default function DatasetPage({
           alignItems="flex-start"
         >
           <BigTitle fontSize="30px" color="black">
-            {dataset.title}
+            {dataset.title || "Conjunto sem nome"}
           </BigTitle>
-          <Markdown>{dataset.notes}</Markdown>
+          <Markdown>{dataset.notes || "Conjunto sem descrição"}</Markdown>
 
           <Stack
             paddingTop="20px"
@@ -278,7 +297,7 @@ export default function DatasetPage({
                 Recursos
               </BigTitle>
               <SimpleButton
-                isActive={resource.resource_type === "metadata"}
+                isActive={!resource || resource?.resource_type === "metadata"}
                 onClick={() => setResource({ resource_type: "metadata" })}
               >
                 Metadados do conjunto

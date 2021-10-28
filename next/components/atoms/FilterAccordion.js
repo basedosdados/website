@@ -24,7 +24,7 @@ export function BaseFilterAccordion({
   overflowX = "scroll",
   isOpen = null,
   isActive = false,
-  onChange = () => {},
+  onChange = () => { },
   bdPlus = null,
   alwaysOpen = false,
 }) {
@@ -121,7 +121,7 @@ export function CheckboxFilterAccordion({
               color="black"
               value={search}
               onChange={setSearch}
-              inputBackgroundColor="#FAFAFA"
+              inputBackgroundColor="#FFFFFF"
               inputStyle={{
                 height: "30px",
                 fontSize: "14px",
@@ -151,10 +151,10 @@ export function CheckboxFilterAccordion({
         >
           {(canSearch
             ? choices.filter(
-                (c) =>
-                  c[displayField].toLowerCase().indexOf(search.toLowerCase()) !=
-                  -1
-              )
+              (c) =>
+                c[displayField].toLowerCase().indexOf(search.toLowerCase()) !=
+                -1
+            )
             : choices
           ).map((c) => (
             <Checkbox
