@@ -13,7 +13,6 @@
   "dependencies": {
     "knex": "0.21.18",
     "pg": "8.5.1",
-    "sharp": "^0.28.3",
     "strapi": "3.6.5",
     "strapi-admin": "3.6.5",
     "strapi-connector-bookshelf": "3.6.5",

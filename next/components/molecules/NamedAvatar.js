@@ -9,7 +9,7 @@ export function NamedAvatar({ src, name, position, ...props }) {
         <Text>{name}</Text>
         <SectionText letterSpacing="0.05rem">{position}</SectionText>
       </VStack>
-      <Avatar src={src} />
+      <Avatar backgroundColor="white" src={src} />
     </HStack>
   );
 }

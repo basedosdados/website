@@ -26,12 +26,22 @@ function MenuDrawer({ isOpen, onClose, links }) {
       <DrawerOverlay />
       <DrawerContent padding="30px 30px 30px 30px">
         <VStack alignItems="center" width="100%" spacing={5}>
-          {Object.entries(links).map(([k, v]) => (
-            <>
-              <Link href={v}>{k}</Link>
-              <Divider />
-            </>
-          ))}
+          {Object.entries(links).map(([k, v]) => {
+            if (typeof v === "object") {
+              return Object.entries(v).map(([k, v]) => (
+                <>
+                  <Link href={v}>{k}</Link>
+                  <Divider />
+                </>
+              ));
+            }
+            return (
+              <>
+                <Link href={v}>{k}</Link>
+                <Divider />
+              </>
+            );
+          })}
         </VStack>
       </DrawerContent>
     </Drawer>

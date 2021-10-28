@@ -98,7 +98,7 @@ function BlogPage({ strapiPages = [] }) {
             >
               <Image
                 priority
-                src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/home_background.png"
+                src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/fundo_rede.png"
                 layout="fill"
                 objectFit="contain"
               />
