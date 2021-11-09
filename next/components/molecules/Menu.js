@@ -159,6 +159,7 @@ export default function Menu({ strapiPages = [] }) {
 
   const links = {
     Dados: "/dataset",
+    Documentação: "https://basedosdados.github.io/mais/",
     Blog: "https://medium.com/basedosdados",
     Newsletter:
       "https://basedosdados.hubspotpagebuilder.com/assine-a-newsletter-da-base-dos-dados",
@@ -166,7 +167,6 @@ export default function Menu({ strapiPages = [] }) {
       "Quem Somos": "/blog/2/",
       "Fale Conosco": "/blog/1/",
     },
-    Documentação: "https://basedosdados.github.io/mais/",
     Apoie: "https://apoia.se/basedosdados",
   };
 

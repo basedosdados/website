@@ -13,7 +13,7 @@ export default function RoundedButton({
       colorScheme={colorScheme}
       backgroundColor={backgroundColor}
       onClick={onClick}
-      borderRadius="18px"
+      borderRadius="68.6364px"
       boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
       letterSpacing="0.1em"
       {...style}

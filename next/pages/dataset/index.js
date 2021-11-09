@@ -270,7 +270,7 @@ export default function SearchPage({ strapiPages }) {
               fontSize: "16px",
               fontWeight: 500,
               height: "50px",
-              boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.20)",
+              boxShadow: "0 2px 5px 1px rgba(64, 60, 67, 0.16) !important",
             }}
           />
           <>

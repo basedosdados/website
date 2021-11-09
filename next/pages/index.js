@@ -550,7 +550,7 @@ function Support({ strapiPages }) {
         direction={{ base: "column", lg: "row" }}
         spacing={10}
       >
-        <ShadowBox height="250px" title="Apoio Inicial">
+        <ShadowBox height="250px" title="Apoio inicial">
           <SectionText
             fontWeight="400"
             padding="10px 0px"
@@ -703,7 +703,7 @@ function Support({ strapiPages }) {
             3. Escaneie o QR Code ou digite a chave ao lado
             <br />
             <br />
-            4. 💚. Faça sua doação!
+            💚. Faça sua doação!
             <br />
             <br />
           </SectionText>
@@ -716,10 +716,15 @@ function Support({ strapiPages }) {
         fontSize="14px"
       >
         Gostaria de apoiar institucionalmente a Base dos Dados?{" "}
-        <LinkDash fontWeight="bold" fontSize="14px" href="/blog/1/">
-          Entre em contato conosco
+        <LinkDash
+          dash={false}
+          textDecoration="none"
+          fontWeight="bolder"
+          fontSize="14px"
+          href="/blog/1/"
+        >
+          Entre em contato conosco.
         </LinkDash>
-        .
       </SectionText>
     </VStack>
   );

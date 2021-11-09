@@ -38,6 +38,7 @@ export function BaseFilterAccordion({
                 onClick={onChange}
                 border={isActive ? "2px solid #3AA1EB" : "1px solid #DEDFE0"}
                 color={isActive ? "#3AA1EB" : null}
+                _hover={alwaysOpen ? { cursor: "inherit" } : null}
                 borderRadius="13px"
               >
                 <HStack
@@ -197,7 +198,12 @@ export function FilterAccordion({
       bdPlus={bdPlus}
       fieldName={fieldName}
     >
-      <VStack spacing={1} overflowX="hidden !important" alignItems="flex-start">
+      <VStack
+        width="100%"
+        spacing={1}
+        overflowX="hidden !important"
+        alignItems="flex-start"
+      >
         {choices.map((c) => (
           <Title
             fontSize="14px"
@@ -208,8 +214,9 @@ export function FilterAccordion({
             transform="translateX(-10px)"
             zIndex="100"
             position="relative"
+            width="100%"
             backgroundColor={
-              c[valueField] === value ? "#FAFAFA" : "transparent"
+              c[valueField] === value ? "#F5F5F5" : "transparent"
             }
             onClick={() => onChange(c[valueField])}
           >

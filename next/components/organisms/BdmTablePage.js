@@ -255,7 +255,7 @@ export function BdmTablePage({
           })}
         </Stack>
         {helpText[selectedConsultation] ? (
-          <SectionText fontSize="14px" fontWeight="300">
+          <SectionText width="100%" fontSize="14px" fontWeight="300">
             {helpText[selectedConsultation]}
           </SectionText>
         ) : (
