@@ -299,7 +299,7 @@ export default function DatasetPage({
       <VStack
         paddingTop={{ base: "50px", lg: "0px" }}
         margin="auto"
-        width="90vw"
+        width={{ base: "90vw", lg: "80vw" }}
       >
         <Stack
           direction={{ base: "column", lg: "row" }}
@@ -310,7 +310,7 @@ export default function DatasetPage({
           <Image
             borderRadius="31.8889px"
             boxShadow="0px 0px 10px rgba(0,0,0,0.25)"
-            width={{ base: "50vw", lg: "23vw" }}
+            width={{ base: "50vw", lg: "16vw" }}
             borderRadius="31px"
             objectFit="contain"
             src={
@@ -329,7 +329,7 @@ export default function DatasetPage({
             >
               {dataset.title || "Conjunto sem nome"}
             </BigTitle>
-            <Markdown width={{ base: "90vw", lg: "70vw" }} limit={true}>
+            <Markdown width={{ base: "90vw", lg: "60vw" }} limit={true}>
               {dataset.notes || "Conjunto sem descrição"}
             </Markdown>
 
