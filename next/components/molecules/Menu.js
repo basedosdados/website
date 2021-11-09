@@ -166,6 +166,7 @@ export default function Menu({ strapiPages = [] }) {
       "Quem Somos": "/blog/2/",
       "Fale Conosco": "/blog/1/",
     },
+    Documentação: "https://basedosdados.github.io/mais/",
     Apoie: "https://apoia.se/basedosdados",
   };
 

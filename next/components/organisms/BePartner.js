@@ -16,7 +16,11 @@ const Carousel = dynamic(() => import("@brainhubeu/react-carousel"), {
 
 function Testimonial({ children, name, position, src }) {
   return (
-    <VStack padding="30px" paddingTop="50px" width="100%">
+    <VStack
+      padding={{ base: "0px", lg: "30px" }}
+      paddingTop={{ base: "0px", lg: "50px" }}
+      width="100%"
+    >
       <Image
         width="60px"
         paddingBottom="15px"
@@ -90,28 +94,36 @@ export function BePartner() {
             </RoundedButton>
           </Link>
         </VStack>
-        <VStack spacing={5}>
-          <HStack spacing={5}>
-            <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/tesouro_nacional.png" />
-            <PartnerBox
-              padding="0px 10px"
-              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/fiquem_sabendo.png"
-            />
-            <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/governosp.png" />
-            <PartnerBox
-              padding="0px 20px"
-              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/riomais.png"
-            />
-          </HStack>
-          <HStack spacing={5}>
-            <PartnerBox
-              padding="0px 20px"
-              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/ipea.png"
-            />
-            <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/alziras.png" />
-            <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/rio.png" />
-            <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/aponte.png" />
-          </HStack>
+        <VStack paddingTop={{ base: "20px", lg: 0 }} spacing={5}>
+          <Stack direction={{ base: "column", lg: "row" }} spacing={5}>
+            <HStack spacing={5}>
+              <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/tesouro_nacional.png" />
+              <PartnerBox
+                padding="0px 10px"
+                src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/fiquem_sabendo.png"
+              />
+            </HStack>
+            <HStack spacing={5}>
+              <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/governosp.png" />
+              <PartnerBox
+                padding="0px 20px"
+                src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/riomais.png"
+              />
+            </HStack>
+          </Stack>
+          <Stack direction={{ base: "column", lg: "row" }} spacing={5}>
+            <HStack spacing={5}>
+              <PartnerBox
+                padding="0px 20px"
+                src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/ipea.png"
+              />
+              <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/alziras.png" />
+            </HStack>
+            <HStack spacing={5}>
+              <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/rio.png" />
+              <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/aponte.png" />
+            </HStack>
+          </Stack>
         </VStack>
       </Stack>
       <HStack w="110%">
