@@ -24,7 +24,7 @@ export function BaseFilterAccordion({
   overflowX = "scroll",
   isOpen = null,
   isActive = false,
-  onChange = () => { },
+  onChange = () => {},
   bdPlus = null,
   alwaysOpen = false,
 }) {
@@ -151,10 +151,10 @@ export function CheckboxFilterAccordion({
         >
           {(canSearch
             ? choices.filter(
-              (c) =>
-                c[displayField].toLowerCase().indexOf(search.toLowerCase()) !=
-                -1
-            )
+                (c) =>
+                  c[displayField].toLowerCase().indexOf(search.toLowerCase()) !=
+                  -1
+              )
             : choices
           ).map((c) => (
             <Checkbox
@@ -197,17 +197,20 @@ export function FilterAccordion({
       bdPlus={bdPlus}
       fieldName={fieldName}
     >
-      <VStack
-        overflowX="hidden !important"
-        spacing={5}
-        paddingTop="10px"
-        alignItems="flex-start"
-      >
+      <VStack spacing={1} overflowX="hidden !important" alignItems="flex-start">
         {choices.map((c) => (
           <Title
             fontSize="14px"
             cursor="pointer"
             fontWeigth={c[valueField] === value ? "700" : "400"}
+            padding="5px 10px"
+            borderRadius="5px"
+            transform="translateX(-10px)"
+            zIndex="100"
+            position="relative"
+            backgroundColor={
+              c[valueField] === value ? "#FAFAFA" : "transparent"
+            }
             onClick={() => onChange(c[valueField])}
           >
             {c[displayField]}

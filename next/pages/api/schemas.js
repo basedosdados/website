@@ -40,7 +40,6 @@ export function getExternalLinkSchema() {
 
       delete schema.properties.id;
       delete schema.properties.position;
-      delete schema.properties.url;
       delete schema.properties.datastore_active;
       delete schema.properties.format;
       delete schema.properties.hash;
