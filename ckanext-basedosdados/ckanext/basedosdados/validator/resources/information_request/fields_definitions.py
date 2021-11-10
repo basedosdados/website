@@ -3,24 +3,24 @@ from ckanext.basedosdados.validator import BaseModel
 from pydantic import Field
 from pydantic import StrictStr as Str
 
+to_line = lambda description: "\n".join(description)
 
 # -------------------------------------
 # InformationRequest Custom Types
 # -------------------------------------
 class RequestedBy(BaseModel):
     # fmt: off
-    name        : Str = Field(title="Nome",description=["<nome [você]>"])
-    email       : Str = Field(title="Email",description=["<email>"])
-    github_user : Str = Field(title="Usuário Github",description=["<usuário Github>"])
-    website     : Str = Field(title="Website",description=["<website>"])
-    ckan_user   : Str = Field(title="Usuário CKAN",description=["<ID do usuário no CKAN>"])
+    name        : Str = Field(title="Nome",description=to_line(["<nome [você]>"]))
+    email       : Str = Field(title="Email",description=to_line(["<email>"]))
+    github_user : Str = Field(title="Usuário Github",description=to_line(["<usuário Github>"]))
+    website     : Str = Field(title="Website",description=to_line(["<website>"]))
+    ckan_user   : Str = Field(title="Usuário CKAN",description=to_line(["<ID do usuário no CKAN>"]))
     # fmt: on
 
 
 # -------------------------------------
 # InformationRequest Fields
 # -------------------------------------
-to_line = lambda description: "\n".join(description)
 
 DATASET_ID_FIELD = Field(
     title="ID Conjunto",

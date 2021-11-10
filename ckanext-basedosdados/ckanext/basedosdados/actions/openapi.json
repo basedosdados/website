@@ -1417,12 +1417,6 @@
                   "title": {
                     "type": "string"
                   },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
                   "yaml_order": {
                     "type": "object",
                     "properties": {
@@ -1687,12 +1681,6 @@
                   "description": {
                     "type": "string"
                   },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
                   "yaml_order": {
                     "type": "object",
                     "properties": {
@@ -1729,12 +1717,6 @@
                   "description": {
                     "type": "string"
                   },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
                   "yaml_order": {
                     "type": "object",
                     "properties": {
@@ -1768,12 +1750,6 @@
                   },
                   "description": {
                     "type": "string"
-                  },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
                   },
                   "yaml_order": {
                     "type": "object",
@@ -1859,12 +1835,6 @@
                   },
                   "description": {
                     "type": "string"
-                  },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
                   },
                   "yaml_order": {
                     "type": "object",
@@ -2055,12 +2025,6 @@
                   "title": {
                     "type": "string"
                   },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
                   "yaml_order": {
                     "type": "object",
                     "properties": {
@@ -2082,12 +2046,6 @@
                 "properties": {
                   "title": {
                     "type": "string"
-                  },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
                   },
                   "yaml_order": {
                     "type": "object",
@@ -2336,12 +2294,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           },
@@ -2363,12 +2315,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "type": {
                             "type": "string"
@@ -2392,12 +2338,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           },
@@ -2419,12 +2359,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "type": {
                             "type": "string"
@@ -2893,12 +2827,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "yaml_order": {
                             "type": "object",
                             "properties": {
@@ -3126,12 +3054,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "yaml_order": {
                             "type": "object",
@@ -3491,12 +3413,6 @@
                           "description": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "yaml_order": {
                             "type": "object",
                             "properties": {
@@ -3630,11 +3546,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -3650,11 +3563,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -3670,11 +3580,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -3706,11 +3613,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -3723,11 +3627,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -3740,11 +3641,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -3757,11 +3655,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -3774,11 +3669,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -3807,11 +3699,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -3824,11 +3713,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -3841,11 +3727,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -3858,11 +3741,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -3875,11 +3755,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -3892,11 +3769,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -3965,11 +3839,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "allOf": {
                             "type": "array",
@@ -3990,11 +3861,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -4007,11 +3875,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -4147,9 +4012,6 @@
                           "description": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "string"
-                          },
                           "yaml_order": {
                             "type": "object",
                             "properties": {
@@ -4180,9 +4042,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "string"
-                          },
                           "yaml_order": {
                             "type": "object",
                             "properties": {
@@ -4211,9 +4070,6 @@
                         "type": "object",
                         "properties": {
                           "title": {
-                            "type": "string"
-                          },
-                          "user_input_hint": {
                             "type": "string"
                           },
                           "yaml_order": {
@@ -4249,9 +4105,6 @@
                           "description": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "string"
-                          },
                           "yaml_order": {
                             "type": "object",
                             "properties": {
@@ -4283,9 +4136,6 @@
                             "type": "string"
                           },
                           "description": {
-                            "type": "string"
-                          },
-                          "user_input_hint": {
                             "type": "string"
                           },
                           "yaml_order": {
@@ -4321,9 +4171,6 @@
                           "description": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "boolean"
-                          },
                           "yaml_order": {
                             "type": "object",
                             "properties": {
@@ -4348,9 +4195,6 @@
                           },
                           "description": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "boolean"
                           },
                           "yaml_order": {
                             "type": "object",
@@ -4769,12 +4613,6 @@
                           "description": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "yaml_order": {
                             "type": "object",
                             "properties": {
@@ -4888,12 +4726,6 @@
                           "description": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "yaml_order": {
                             "type": "object",
                             "properties": {
@@ -4953,12 +4785,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "yaml_order": {
                             "type": "object",
@@ -5246,12 +5072,6 @@
                           },
                           "description": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "yaml_order": {
                             "type": "object",
@@ -5750,12 +5570,6 @@
                   "description": {
                     "type": "string"
                   },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
                   "yaml_order": {
                     "type": "object",
                     "properties": {
@@ -5869,12 +5683,6 @@
                   "description": {
                     "type": "string"
                   },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
                   "yaml_order": {
                     "type": "object",
                     "properties": {
@@ -5934,12 +5742,6 @@
                 "properties": {
                   "title": {
                     "type": "string"
-                  },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
                   },
                   "yaml_order": {
                     "type": "object",
@@ -6228,12 +6030,6 @@
                   "description": {
                     "type": "string"
                   },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
                   "yaml_order": {
                     "type": "object",
                     "properties": {
@@ -6430,12 +6226,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           },
@@ -6457,12 +6247,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "type": {
                             "type": "string"
@@ -6486,12 +6270,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           },
@@ -6513,12 +6291,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "type": {
                             "type": "string"
@@ -6929,12 +6701,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           },
@@ -6949,12 +6715,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           },
@@ -6968,12 +6728,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "type": {
                             "type": "string"
@@ -7005,12 +6759,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           }
@@ -7021,12 +6769,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "type": {
                             "type": "string"
@@ -7039,12 +6781,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           }
@@ -7056,12 +6792,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           }
@@ -7072,12 +6802,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "type": {
                             "type": "string"
@@ -7106,11 +6830,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -7123,11 +6844,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -7140,11 +6858,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -7157,11 +6872,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -7174,11 +6886,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -7191,11 +6900,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -7284,12 +6990,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "allOf": {
                             "type": "array",
                             "items": {
@@ -7309,12 +7009,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           }
@@ -7325,12 +7019,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "type": {
                             "type": "string"
@@ -7466,9 +7154,6 @@
                           "description": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "string"
-                          },
                           "yaml_order": {
                             "type": "object",
                             "properties": {
@@ -7499,9 +7184,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "string"
-                          },
                           "yaml_order": {
                             "type": "object",
                             "properties": {
@@ -7530,9 +7212,6 @@
                         "type": "object",
                         "properties": {
                           "title": {
-                            "type": "string"
-                          },
-                          "user_input_hint": {
                             "type": "string"
                           },
                           "yaml_order": {
@@ -7568,9 +7247,6 @@
                           "description": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "string"
-                          },
                           "yaml_order": {
                             "type": "object",
                             "properties": {
@@ -7602,9 +7278,6 @@
                             "type": "string"
                           },
                           "description": {
-                            "type": "string"
-                          },
-                          "user_input_hint": {
                             "type": "string"
                           },
                           "yaml_order": {
@@ -7640,9 +7313,6 @@
                           "description": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "boolean"
-                          },
                           "yaml_order": {
                             "type": "object",
                             "properties": {
@@ -7667,9 +7337,6 @@
                           },
                           "description": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "boolean"
                           },
                           "yaml_order": {
                             "type": "object",
@@ -7801,9 +7468,6 @@
                   "description": {
                     "type": "string"
                   },
-                  "user_input_hint": {
-                    "type": "string"
-                  },
                   "yaml_order": {
                     "type": "object",
                     "properties": {
@@ -7834,9 +7498,6 @@
                   "title": {
                     "type": "string"
                   },
-                  "user_input_hint": {
-                    "type": "string"
-                  },
                   "yaml_order": {
                     "type": "object",
                     "properties": {
@@ -7865,9 +7526,6 @@
                 "type": "object",
                 "properties": {
                   "title": {
-                    "type": "string"
-                  },
-                  "user_input_hint": {
                     "type": "string"
                   },
                   "yaml_order": {
@@ -7903,9 +7561,6 @@
                   "description": {
                     "type": "string"
                   },
-                  "user_input_hint": {
-                    "type": "string"
-                  },
                   "yaml_order": {
                     "type": "object",
                     "properties": {
@@ -7937,9 +7592,6 @@
                     "type": "string"
                   },
                   "description": {
-                    "type": "string"
-                  },
-                  "user_input_hint": {
                     "type": "string"
                   },
                   "yaml_order": {
@@ -7975,9 +7627,6 @@
                   "description": {
                     "type": "string"
                   },
-                  "user_input_hint": {
-                    "type": "boolean"
-                  },
                   "yaml_order": {
                     "type": "object",
                     "properties": {
@@ -8002,9 +7651,6 @@
                   },
                   "description": {
                     "type": "string"
-                  },
-                  "user_input_hint": {
-                    "type": "boolean"
                   },
                   "yaml_order": {
                     "type": "object",
@@ -8137,12 +7783,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "allOf": {
                             "type": "array",
                             "items": {
@@ -8162,12 +7802,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           }
@@ -8178,12 +7812,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "type": {
                             "type": "string"
@@ -8522,12 +8150,6 @@
                   "description": {
                     "type": "string"
                   },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
                   "yaml_order": {
                     "type": "object",
                     "properties": {
@@ -8690,12 +8312,6 @@
                   "description": {
                     "type": "string"
                   },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
                   "yaml_order": {
                     "type": "object",
                     "properties": {
@@ -8717,12 +8333,6 @@
                 "properties": {
                   "title": {
                     "type": "string"
-                  },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
                   },
                   "yaml_order": {
                     "type": "object",
@@ -8811,12 +8421,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           },
@@ -8831,12 +8435,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           },
@@ -8850,12 +8448,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "type": {
                             "type": "string"
@@ -8887,12 +8479,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           }
@@ -8903,12 +8489,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "type": {
                             "type": "string"
@@ -8921,12 +8501,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           }
@@ -8938,12 +8512,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           }
@@ -8954,12 +8522,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "type": {
                             "type": "string"
@@ -9079,12 +8641,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "allOf": {
                             "type": "array",
                             "items": {
@@ -9104,12 +8660,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           }
@@ -9120,12 +8670,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "type": {
                             "type": "string"
@@ -9261,9 +8805,6 @@
                           "description": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "string"
-                          },
                           "yaml_order": {
                             "type": "object",
                             "properties": {
@@ -9294,9 +8835,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "string"
-                          },
                           "yaml_order": {
                             "type": "object",
                             "properties": {
@@ -9325,9 +8863,6 @@
                         "type": "object",
                         "properties": {
                           "title": {
-                            "type": "string"
-                          },
-                          "user_input_hint": {
                             "type": "string"
                           },
                           "yaml_order": {
@@ -9363,9 +8898,6 @@
                           "description": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "string"
-                          },
                           "yaml_order": {
                             "type": "object",
                             "properties": {
@@ -9397,9 +8929,6 @@
                             "type": "string"
                           },
                           "description": {
-                            "type": "string"
-                          },
-                          "user_input_hint": {
                             "type": "string"
                           },
                           "yaml_order": {
@@ -9435,9 +8964,6 @@
                           "description": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "boolean"
-                          },
                           "yaml_order": {
                             "type": "object",
                             "properties": {
@@ -9462,9 +8988,6 @@
                           },
                           "description": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "boolean"
                           },
                           "yaml_order": {
                             "type": "object",
@@ -9566,12 +9089,6 @@
                 "properties": {
                   "title": {
                     "type": "string"
-                  },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
                   },
                   "yaml_order": {
                     "type": "object",
@@ -9800,12 +9317,6 @@
                 "properties": {
                   "title": {
                     "type": "string"
-                  },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
                   },
                   "yaml_order": {
                     "type": "object",
@@ -10165,12 +9676,6 @@
                   "description": {
                     "type": "string"
                   },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
                   "yaml_order": {
                     "type": "object",
                     "properties": {
@@ -10465,12 +9970,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           },
@@ -10492,12 +9991,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "type": {
                             "type": "string"
@@ -10521,12 +10014,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           },
@@ -10548,12 +10035,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "type": {
                             "type": "string"
@@ -11257,12 +10738,6 @@
                   "description": {
                     "type": "string"
                   },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
                   "yaml_order": {
                     "type": "object",
                     "properties": {
@@ -11309,12 +10784,6 @@
                   },
                   "description": {
                     "type": "string"
-                  },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
                   },
                   "yaml_order": {
                     "type": "object",
@@ -11602,12 +11071,6 @@
                   "description": {
                     "type": "string"
                   },
-                  "user_input_hint": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
                   "yaml_order": {
                     "type": "object",
                     "properties": {
@@ -11676,11 +11139,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -11693,11 +11153,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -11710,11 +11167,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -11727,11 +11181,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -11744,11 +11195,8 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
+                          "description": {
+                            "type": "string"
                           },
                           "type": {
                             "type": "string"
@@ -11863,12 +11311,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           },
@@ -11890,12 +11332,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "type": {
                             "type": "string"
@@ -11919,12 +11355,6 @@
                           "title": {
                             "type": "string"
                           },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          },
                           "type": {
                             "type": "string"
                           },
@@ -11946,12 +11376,6 @@
                         "properties": {
                           "title": {
                             "type": "string"
-                          },
-                          "user_input_hint": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
                           },
                           "type": {
                             "type": "string"
