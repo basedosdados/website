@@ -953,10 +953,6 @@ components:
               properties:
                 title:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
                 yaml_order:
                   type: object
                   properties:
@@ -1126,10 +1122,6 @@ components:
                   type: string
                 description:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
                 yaml_order:
                   type: object
                   properties:
@@ -1153,10 +1145,7 @@ components:
                   type: string
                 description:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -1179,10 +1168,7 @@ components:
                   type: string
                 description:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -1237,10 +1223,7 @@ components:
                   type: string
                 description:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -1361,10 +1344,7 @@ components:
               properties:
                 title:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -1379,10 +1359,7 @@ components:
               properties:
                 title:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -1545,10 +1522,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         items:
@@ -1563,10 +1537,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         items:
@@ -1581,10 +1552,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         items:
@@ -1599,10 +1567,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         items:
@@ -1905,10 +1870,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -2055,10 +2017,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -2287,10 +2246,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -2376,10 +2332,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                         format:
@@ -2389,10 +2343,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                         format:
@@ -2402,10 +2354,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                         format:
@@ -2425,10 +2375,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     email:
@@ -2436,10 +2384,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     github_user:
@@ -2447,10 +2393,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     website:
@@ -2458,10 +2402,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     ckan_user:
@@ -2469,10 +2411,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
             DataCleanedBy:
@@ -2490,10 +2430,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     email:
@@ -2501,10 +2439,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     github_user:
@@ -2512,10 +2448,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     ckan_user:
@@ -2523,10 +2457,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     website:
@@ -2534,10 +2466,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     code_url:
@@ -2545,10 +2475,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
             BigQueryTypeEnum:
@@ -2592,10 +2520,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         allOf:
                           type: array
                           items:
@@ -2608,10 +2534,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     column_name:
@@ -2619,10 +2543,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
             MeasurementUnitEnum:
@@ -2709,8 +2631,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -2730,8 +2651,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -2751,8 +2671,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -2774,8 +2693,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -2797,8 +2715,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -2820,8 +2737,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: boolean
+
                         yaml_order:
                           type: object
                           properties:
@@ -2838,8 +2754,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: boolean
+
                         yaml_order:
                           type: object
                           properties:
@@ -3107,10 +3022,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -3183,10 +3095,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -3225,10 +3134,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -3412,10 +3318,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -3731,10 +3634,7 @@ components:
                   type: string
                 description:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -3807,10 +3707,7 @@ components:
                   type: string
                 description:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -3849,10 +3746,7 @@ components:
               properties:
                 title:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -4036,10 +3930,7 @@ components:
                   type: string
                 description:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -4168,10 +4059,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         items:
@@ -4186,10 +4074,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         items:
@@ -4204,10 +4089,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         items:
@@ -4222,10 +4104,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         items:
@@ -4491,10 +4370,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         format:
@@ -4504,10 +4380,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         format:
@@ -4517,10 +4390,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         format:
@@ -4540,10 +4410,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                     email:
@@ -4551,10 +4418,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                     github_user:
@@ -4562,10 +4426,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                     website:
@@ -4573,10 +4434,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                     ckan_user:
@@ -4584,10 +4442,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
             DataCleanedBy:
@@ -4605,10 +4460,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     email:
@@ -4616,10 +4469,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     github_user:
@@ -4627,10 +4478,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     ckan_user:
@@ -4638,10 +4487,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     website:
@@ -4649,10 +4496,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     code_url:
@@ -4660,10 +4505,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
             YesNoEnum:
@@ -4720,10 +4563,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         allOf:
                           type: array
                           items:
@@ -4736,10 +4576,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                     column_name:
@@ -4747,10 +4584,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
             MeasurementUnitEnum:
@@ -4837,8 +4671,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -4858,8 +4691,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -4879,8 +4711,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -4902,8 +4733,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -4925,8 +4755,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -4948,8 +4777,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: boolean
+
                         yaml_order:
                           type: object
                           properties:
@@ -4966,8 +4794,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: boolean
+
                         yaml_order:
                           type: object
                           properties:
@@ -5049,8 +4876,7 @@ components:
                   type: string
                 description:
                   type: string
-                user_input_hint:
-                  type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -5070,8 +4896,6 @@ components:
               properties:
                 title:
                   type: string
-                user_input_hint:
-                  type: string
                 yaml_order:
                   type: object
                   properties:
@@ -5090,8 +4914,6 @@ components:
               type: object
               properties:
                 title:
-                  type: string
-                user_input_hint:
                   type: string
                 yaml_order:
                   type: object
@@ -5114,8 +4936,6 @@ components:
                   type: string
                 description:
                   type: string
-                user_input_hint:
-                  type: string
                 yaml_order:
                   type: object
                   properties:
@@ -5137,8 +4957,7 @@ components:
                   type: string
                 description:
                   type: string
-                user_input_hint:
-                  type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -5160,8 +4979,6 @@ components:
                   type: string
                 description:
                   type: string
-                user_input_hint:
-                  type: boolean
                 yaml_order:
                   type: object
                   properties:
@@ -5178,8 +4995,6 @@ components:
                   type: string
                 description:
                   type: string
-                user_input_hint:
-                  type: boolean
                 yaml_order:
                   type: object
                   properties:
@@ -5267,10 +5082,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         allOf:
                           type: array
                           items:
@@ -5283,10 +5095,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                     column_name:
@@ -5294,10 +5103,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
             MeasurementUnitEnum:
@@ -5511,10 +5317,7 @@ components:
                   type: string
                 description:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -5618,10 +5421,7 @@ components:
                   type: string
                 description:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -5636,10 +5436,7 @@ components:
               properties:
                 title:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -5698,10 +5495,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         format:
@@ -5711,10 +5505,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         format:
@@ -5724,10 +5515,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         format:
@@ -5747,10 +5535,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                     email:
@@ -5758,10 +5543,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                     github_user:
@@ -5769,10 +5551,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                     website:
@@ -5780,10 +5559,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                     ckan_user:
@@ -5791,10 +5567,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
             BigQueryTypeEnum:
@@ -5871,10 +5644,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         allOf:
                           type: array
                           items:
@@ -5887,10 +5657,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                     column_name:
@@ -5898,10 +5665,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
             MeasurementUnitEnum:
@@ -5988,8 +5752,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -6009,8 +5772,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -6030,8 +5792,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -6053,8 +5814,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -6076,8 +5836,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: string
+
                         yaml_order:
                           type: object
                           properties:
@@ -6099,8 +5858,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: boolean
+
                         yaml_order:
                           type: object
                           properties:
@@ -6117,8 +5875,7 @@ components:
                           type: string
                         description:
                           type: string
-                        user_input_hint:
-                          type: boolean
+
                         yaml_order:
                           type: object
                           properties:
@@ -6181,10 +5938,7 @@ components:
               properties:
                 title:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -6331,10 +6085,7 @@ components:
               properties:
                 title:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -6563,10 +6314,7 @@ components:
                   type: string
                 description:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -6759,10 +6507,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         items:
@@ -6777,10 +6522,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         items:
@@ -6795,10 +6537,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         items:
@@ -6813,10 +6552,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         items:
@@ -7267,10 +7003,7 @@ components:
                   type: string
                 description:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -7301,10 +7034,7 @@ components:
                   type: string
                 description:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
+
                 yaml_order:
                   type: object
                   properties:
@@ -7487,10 +7217,6 @@ components:
                   type: string
                 description:
                   type: string
-                user_input_hint:
-                  type: array
-                  items:
-                    type: string
                 yaml_order:
                   type: object
                   properties:
@@ -7537,10 +7263,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     email:
@@ -7548,10 +7272,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     github_user:
@@ -7559,10 +7281,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     website:
@@ -7570,10 +7290,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                     ckan_user:
@@ -7581,10 +7299,8 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+                        description:
+                          type: string
                         type:
                           type: string
                 required:
@@ -7658,10 +7374,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         items:
@@ -7676,10 +7389,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         items:
@@ -7694,10 +7404,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         items:
@@ -7712,10 +7419,7 @@ components:
                       properties:
                         title:
                           type: string
-                        user_input_hint:
-                          type: array
-                          items:
-                            type: string
+
                         type:
                           type: string
                         items:

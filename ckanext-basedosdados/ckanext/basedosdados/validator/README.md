@@ -91,7 +91,6 @@ LICENSE_FIELD = Field(
 
 NEW_METADATA_FIELD = Field(
     title="new_metadata",
-    user_input_hint=["<new_metadata_hint>"],
     description=to_line(["AUTO GENERATED"]),
     yaml_order={
         "id_before": 'license',

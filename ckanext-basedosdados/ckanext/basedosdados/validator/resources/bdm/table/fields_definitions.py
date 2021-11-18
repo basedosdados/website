@@ -9,22 +9,21 @@ from pydantic import StrictStr as Str
 # BdmTable Custom Types
 # -------------------------------------
 
+to_line = lambda description: "\n".join(description)
 
 class DataCleanedBy(BaseModel):
     # fmt: off
-    name        : Optional[Str] = Field(title="Nome",description=["<nome>"])
-    email       : Optional[Str] = Field(title="Email",description=["<email>"])
-    github_user : Optional[Str] = Field(title="Usuário Github",description=["<usuário Github>"])
-    ckan_user   : Optional[Str] = Field(title="Usuário CKAN",description=["<id do usuário no ckan>"])
-    website     : Optional[Str] = Field(title="Website",description=["<onde encontrar os dados tratados>"])
-    code_url    : Optional[Str] = Field(title="Url código de limpeza",description=["<onde encontrar código de limpeza>"])
+    name        : Optional[Str] = Field(title="Nome",description=to_line(["<nome>"]))
+    email       : Optional[Str] = Field(title="Email",description=to_line(["<email>"]))
+    github_user : Optional[Str] = Field(title="Usuário Github",description=to_line(["<usuário Github>"]))
+    ckan_user   : Optional[Str] = Field(title="Usuário CKAN",description=to_line(["<id do usuário no ckan>"]))
+    website     : Optional[Str] = Field(title="Website",description=to_line(["<onde encontrar os dados tratados>"]))
+    code_url    : Optional[Str] = Field(title="Url código de limpeza",description=to_line(["<onde encontrar código de limpeza>"]))
     # fmt: on
-
 
 # -------------------------------------
 # BdmTable Fields
 # -------------------------------------
-to_line = lambda description: "\n".join(description)
 
 DATASET_ID_FIELD = Field(
     title="ID Conjunto",
