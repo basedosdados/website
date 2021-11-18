@@ -311,6 +311,7 @@ export default function DatasetPage({
             borderRadius="31.8889px"
             boxShadow="0px 0px 10px rgba(0,0,0,0.25)"
             width={{ base: "50vw", lg: "16vw" }}
+            height={{ base: "50vw", lg: "16vw" }}
             borderRadius="31px"
             objectFit="contain"
             src={

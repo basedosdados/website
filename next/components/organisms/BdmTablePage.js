@@ -188,6 +188,7 @@ export function BdmTablePage({
             data.data_cleaned_by.ckan_user =
               data.data_cleaned_by.ckan_user || "";
             data.data_cleaned_by.website = data.data_cleaned_by.website || "";
+            data.resource_type = "bdm_table";
 
             return data;
           }}

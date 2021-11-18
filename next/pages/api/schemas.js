@@ -26,6 +26,7 @@ export function getBdmTableSchema() {
       delete schema.properties.size;
       delete schema.properties.url_type;
       delete schema.properties.bdm_file_size;
+      delete schema.required;
 
       return schema;
     })
@@ -56,6 +57,7 @@ export function getExternalLinkSchema() {
       delete schema.properties.mimetype_inner;
       delete schema.properties.size;
       delete schema.properties.url_type;
+      delete schema.required;
 
       return schema;
     })
@@ -100,6 +102,7 @@ export function getDatasetSchema() {
       delete schema.properties.cache_last_updated;
       delete schema?.properties?.spatial_coverage;
       delete schema?.properties?.temporal_coverage;
+      delete schema.required;
 
       return schema;
     })

@@ -31,6 +31,7 @@ export function ExternalLinkPage({
               data.country_ip_address_required || [];
             data.maintainer = data.maintainer || "";
             data.maintainer_email = data.maintainer_email || "";
+            data.resource_type = "external_link";
 
             return data;
           }}
