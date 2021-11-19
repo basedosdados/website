@@ -24,7 +24,7 @@ export function BaseFilterAccordion({
   overflowX = "scroll",
   isOpen = null,
   isActive = false,
-  onChange = () => {},
+  onChange = () => { },
   bdPlus = null,
   alwaysOpen = false,
 }) {
@@ -152,10 +152,10 @@ export function CheckboxFilterAccordion({
         >
           {(canSearch
             ? choices.filter(
-                (c) =>
-                  c[displayField].toLowerCase().indexOf(search.toLowerCase()) !=
-                  -1
-              )
+              (c) =>
+                c[displayField].toLowerCase().indexOf(search.toLowerCase()) !=
+                -1
+            )
             : choices
           ).map((c) => (
             <Checkbox

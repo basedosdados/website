@@ -154,7 +154,6 @@ function ResourcesPage({
                 loadSchemaFunction={getBdmTableSchema}
                 prepareData={(d) => {
                   d.resource_type = "bdm_table";
-
                   return d;
                 }}
                 updateFunction={(data) => createResource(data, dataset.id)}
@@ -174,7 +173,6 @@ function ResourcesPage({
                 loadSchemaFunction={getExternalLinkSchema}
                 prepareData={(d) => {
                   d.resource_type = "external_link";
-
                   return d;
                 }}
                 updateFunction={(data) => createResource(data, dataset.id)}
