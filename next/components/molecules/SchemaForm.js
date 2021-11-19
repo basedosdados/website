@@ -31,10 +31,23 @@ export function SchemaForm({
       if (onSuccess) onSuccess(data);
       else window.location.reload();
     },
-    onError() {
+    onError(error) {
+      const data = error.response.data.error;
+      const errorStr = data.message
+        .map((m) => {
+          let message = m.msg;
+
+          if (m.loc) {
+            message = m.loc[3] + " " + message;
+          }
+
+          return message;
+        })
+        .join(",");
+
       toast({
         title: "Erro",
-        description: `Ocorreu um erro ao atualizar o(a) ${schemaName}, por favor entre em contato com a equipe de tecnologia.`,
+        description: errorStr,
         status: "error",
       });
     },
@@ -65,10 +78,13 @@ export function SchemaForm({
             schema={schema}
             formData={_data}
             onChange={(e) => setData(e.formData)}
+            noValidate={true}
             onSubmit={() => {
-              updateMutation.mutate({
-                ..._data,
-              });
+              updateMutation.mutate(
+                prepareData({
+                  ..._data,
+                })
+              );
               toast({
                 title: "Salvando...",
                 description: `Atualizando o(a) ${schemaName}, por favor aguarde.`,

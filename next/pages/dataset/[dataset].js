@@ -1,4 +1,15 @@
-import { VStack, Stack, HStack, Image, Flex } from "@chakra-ui/react";
+import {
+  VStack,
+  Stack,
+  HStack,
+  Image,
+  Flex,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanel,
+  TabPanels,
+} from "@chakra-ui/react";
 import Head from "next/head";
 import { MainPageTemplate } from "../../components/templates/main";
 import { withStrapiPages } from "../../hooks/strapi.hook";
@@ -14,7 +25,7 @@ import { CategoryIcon } from "../../components/atoms/CategoryIcon";
 import BigTitle from "../../components/atoms/BigTitle";
 import { FilterAccordion } from "../../components/atoms/FilterAccordion";
 import { useContext, useState } from "react";
-import { isBdPlus } from "../../utils";
+import { isBdPlus, unionArrays } from "../../utils";
 import Link from "../../components/atoms/Link";
 import { SimpleButton } from "../../components/atoms/SimpleButton";
 import { Markdown } from "../../components/atoms/Markdown";
@@ -29,6 +40,7 @@ import UserContext from "../../context/user";
 import { SchemaForm } from "../../components/molecules/SchemaForm";
 import { getBdmTableSchema, getExternalLinkSchema } from "../api/schemas";
 import { BaseResourcePage } from "../../components/molecules/BaseResourcePage";
+import GreenTab from "../../components/atoms/GreenTab";
 
 export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
@@ -91,21 +103,21 @@ function AdminButtons({ resource, setResource }) {
   );
 }
 
-export default function DatasetPage({
-  dataset,
+function ResourcesPage({
   bdmTables,
   externalLinks,
-  strapiPages,
-  isPlus,
-  translations,
   availableOptionsTranslations,
+  translations,
+  dataset,
 }) {
   const [resource, setResource] = useState(
     bdmTables.length > 0 ? bdmTables[0] : externalLinks[0]
   );
+
   const [bdmTableFilter, setBdmTableFilter] = useState(
     resource?.resource_type === "bdm_table"
   );
+
   const [externalLinkTableFilter, setExternalLinkTableFilter] = useState(
     resource?.resource_type === "external_link"
   );
@@ -142,6 +154,7 @@ export default function DatasetPage({
                 loadSchemaFunction={getBdmTableSchema}
                 prepareData={(d) => {
                   d.resource_type = "bdm_table";
+                  return d;
                 }}
                 updateFunction={(data) => createResource(data, dataset.id)}
               />
@@ -160,22 +173,102 @@ export default function DatasetPage({
                 loadSchemaFunction={getExternalLinkSchema}
                 prepareData={(d) => {
                   d.resource_type = "external_link";
+                  return d;
                 }}
                 updateFunction={(data) => createResource(data, dataset.id)}
               />
             }
           />
         );
-
-      default:
-        return (
-          <MetadataPage
-            availableOptionsTranslations={availableOptionsTranslations}
-            translations={translations["dataset"]}
-            dataset={dataset}
-          />
-        );
     }
+  }
+
+  return (
+    <Stack
+      paddingTop="20px"
+      direction={{ base: "column", lg: "row" }}
+      spacing={4}
+      width="100%"
+    >
+      <VStack
+        minWidth={{ base: "100%", lg: "250px" }}
+        maxWidth={{ base: "100%", lg: "250px" }}
+        spacing={5}
+        align="flex-start"
+        justify="flex-start"
+      >
+        <AdminButtons resource={resource} setResource={setResource} />
+        {bdmTables.length > 0 ? (
+          <FilterAccordion
+            alwaysOpen={true}
+            choices={bdmTables}
+            value={resource.name}
+            valueField="name"
+            displayField="name"
+            isActive={resource.resource_type === "bdm_table"}
+            isOpen={bdmTableFilter}
+            fieldName="Tabelas tratadas"
+            bdPlus={true}
+            onChange={(name) =>
+              setResource(bdmTables.filter((b) => b.name === name)[0])
+            }
+            onToggle={() => setBdmTableFilter(!bdmTableFilter)}
+          />
+        ) : (
+          <></>
+        )}
+        {externalLinks.length > 0 ? (
+          <FilterAccordion
+            alwaysOpen={true}
+            choices={externalLinks}
+            valueField="url"
+            displayField="name"
+            isActive={resource.resource_type === "external_link"}
+            isOpen={externalLinkTableFilter}
+            fieldName="Links externos"
+            value={resource.url}
+            onChange={(url) =>
+              setResource(externalLinks.filter((b) => b.url === url)[0])
+            }
+            onToggle={() =>
+              setExternalLinkTableFilter(!externalLinkTableFilter)
+            }
+          />
+        ) : (
+          <></>
+        )}
+      </VStack>
+      <VStack width="100%" flex="1">
+        {getResourcePage()}
+      </VStack>
+    </Stack>
+  );
+}
+
+export default function DatasetPage({
+  dataset,
+  bdmTables,
+  externalLinks,
+  strapiPages,
+  isPlus,
+  translations,
+  availableOptionsTranslations,
+}) {
+  function getTemporalCoverage() {
+    const temporalCoverage = unionArrays(
+      dataset.resources
+        .filter((r) => r?.temporal_coverage?.length)
+        .map((r) => r.temporal_coverage)
+    ).sort();
+
+    if (temporalCoverage.length === 0 || !temporalCoverage) return "";
+    if (temporalCoverage.length === 1) return temporalCoverage[0];
+
+    return (
+      temporalCoverage[0] +
+      " - " +
+      temporalCoverage[temporalCoverage.length - 1]
+    );
   }
 
   return (
@@ -205,25 +298,22 @@ export default function DatasetPage({
         />
         <meta property="og:description" content={dataset.notes} key="ogdesc" />
       </Head>
-      <Flex
-        direction={{ base: "column", lg: "row" }}
-        width={{ base: "90%", lg: "85%" }}
+      <VStack
+        paddingTop={{ base: "50px", lg: "0px" }}
         margin="auto"
-        spacing={10}
-        paddingTop={{ base: "80px", lg: "0px" }}
+        width={{ base: "90vw", lg: "80vw" }}
       >
-        <VStack
-          alignItems={{ base: "flex-start", lg: "flex-start" }}
-          justifyContent="flex-start"
-          width="220px"
+        <Stack
+          direction={{ base: "column", lg: "row" }}
+          margin="auto"
+          spacing={10}
+          align="flex-start"
         >
           <Image
             borderRadius="31.8889px"
             boxShadow="0px 0px 10px rgba(0,0,0,0.25)"
-            minWidth="220px"
-            minHeight="220px"
-            maxWidth="220px"
-            maxHeight="220px"
+            width={{ base: "50vw", lg: "16vw" }}
+            height={{ base: "50vw", lg: "16vw" }}
             borderRadius="31px"
             objectFit="contain"
             src={
@@ -231,124 +321,68 @@ export default function DatasetPage({
               dataset.organization.image_url
             }
           />
-          <Stack
-            paddingTop={{ base: "30px", lg: "20px" }}
-            spacing={6}
-            direction={{ base: "column", lg: "column" }}
-          >
-            <VStack alignItems="flex-start">
-              <Title>Organização</Title>
-              <Link href={`/dataset?organization=${dataset.organization.name}`}>
-                <SectionText fontWeight="400" fontSize="14px">
-                  {dataset.organization.title}
-                </SectionText>
-              </Link>
-            </VStack>
-            <VStack alignItems="flex-start">
-              <Title paddingTop="">Temas</Title>
-              {dataset.groups.map((g) => (
-                <Link href={`/dataset?group=${g.name}`}>
-                  <HStack key={g.name}>
-                    <CategoryIcon
-                      size="39px"
-                      url={`/img/categories/icone_${g.name}${
-                        isPlus ? "-1" : ""
-                      }.svg`}
-                    />
-                    <SectionText>{g.display_name}</SectionText>
-                  </HStack>
-                </Link>
-              ))}
-            </VStack>
-          </Stack>
-        </VStack>
-        <VStack
-          width="100%"
-          paddingTop={{ base: "50px", lg: "0px" }}
-          transform={{ base: "", lg: "translateX(50px)" }}
-          alignItems="flex-start"
-        >
-          <BigTitle fontSize="30px" color="black">
-            {dataset.title || "Conjunto sem nome"}
-          </BigTitle>
-          <Markdown>{dataset.notes || "Conjunto sem descrição"}</Markdown>
-
-          <Stack
-            paddingTop="20px"
-            direction={{ base: "column", lg: "row" }}
-            spacing={4}
-            width="100%"
-          >
-            <VStack
-              minWidth={{ base: "100%", lg: "230px" }}
-              maxWidth={{ base: "100%", lg: "230px" }}
-              spacing={5}
-              align="flex-start"
-              justify="flex-start"
+          <VStack spacing={0} align="flex-start">
+            <BigTitle
+              overflow="hidden"
+              textOverflow="ellipsis"
+              whiteSpace="nowrap"
+              fontSize="28px"
+              w={{ base: "90vw", lg: "70vw" }}
+              color="black"
             >
-              <BigTitle
-                fontSize="18px"
-                color="black"
-                margin="0px"
-                padding="0px"
-                height="40px"
-                paddingLeft="15px"
-              >
-                Recursos
-              </BigTitle>
-              <SimpleButton
-                isActive={!resource || resource?.resource_type === "metadata"}
-                onClick={() => setResource({ resource_type: "metadata" })}
-              >
-                Metadados do conjunto
-              </SimpleButton>
-              <AdminButtons resource={resource} setResource={setResource} />
-              {bdmTables.length > 0 ? (
-                <FilterAccordion
-                  alwaysOpen={true}
-                  choices={bdmTables}
-                  value={resource.name}
-                  valueField="name"
-                  displayField="name"
-                  isActive={resource.resource_type === "bdm_table"}
-                  isOpen={bdmTableFilter}
-                  fieldName="Tabelas tratadas"
-                  bdPlus={true}
-                  onChange={(name) =>
-                    setResource(bdmTables.filter((b) => b.name === name)[0])
-                  }
-                  onToggle={() => setBdmTableFilter(!bdmTableFilter)}
-                />
-              ) : (
-                <></>
-              )}
-              {externalLinks.length > 0 ? (
-                <FilterAccordion
-                  alwaysOpen={true}
-                  choices={externalLinks}
-                  valueField="url"
-                  displayField="name"
-                  isActive={resource.resource_type === "external_link"}
-                  isOpen={externalLinkTableFilter}
-                  fieldName="Links externos"
-                  value={resource.url}
-                  onChange={(url) =>
-                    setResource(externalLinks.filter((b) => b.url === url)[0])
-                  }
-                  onToggle={() =>
-                    setExternalLinkTableFilter(!externalLinkTableFilter)
-                  }
-                />
-              ) : (
-                <></>
-              )}
+              {dataset.title || "Conjunto sem nome"}
+            </BigTitle>
+            <Markdown width={{ base: "90vw", lg: "60vw" }} limit={true}>
+              {dataset.notes || "Conjunto sem descrição"}
+            </Markdown>
+
+            <VStack align="flex-start" spacing={3} pt="15px">
+              <VStack align="flex-start">
+                <Title fontSize="16px">Organização</Title>
+                <Link
+                  href={`/dataset?organization=${dataset.organization.name}`}
+                >
+                  <SectionText fontWeight="400" fontSize="14px">
+                    {dataset.organization.title}
+                  </SectionText>
+                </Link>
+              </VStack>
+
+              <VStack align="flex-start">
+                <Title fontSize="16px">Cobertura Temporal</Title>
+                <SectionText fontWeight="400" fontSize="14px">
+                  {getTemporalCoverage()}
+                </SectionText>
+              </VStack>
             </VStack>
-            <VStack width="100%" flex="1">
-              {getResourcePage()}
-            </VStack>
-          </Stack>
-        </VStack>
-      </Flex>
+          </VStack>
+        </Stack>
+
+        <Tabs isLazy pt="20px" w={{ base: "90vw", lg: "100%" }}>
+          <TabList padding="0px" border="0px" fontFamily="Ubuntu !important">
+            <GreenTab>Recursos</GreenTab>
+            <GreenTab>Metadados</GreenTab>
+          </TabList>
+          <TabPanels>
+            <TabPanel padding="0px">
+              <ResourcesPage
+                bdmTables={bdmTables}
+                externalLinks={externalLinks}
+                availableOptionsTranslations={availableOptionsTranslations}
+                translations={translations}
+                dataset={dataset}
+              />
+            </TabPanel>
+            <TabPanel padding="0px" pt="20px">
+              <MetadataPage
+                dataset={dataset}
+                translations={translations}
+                availableOptionsTranslations={availableOptionsTranslations}
+              />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </VStack>
     </MainPageTemplate>
   );
 }

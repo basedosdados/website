@@ -9,22 +9,21 @@ from pydantic import StrictStr as Str
 # BdmTable Custom Types
 # -------------------------------------
 
+to_line = lambda description: "\n".join(description)
 
 class DataCleanedBy(BaseModel):
     # fmt: off
-    name        : Optional[Str] = Field(title="Nome",user_input_hint=["<nome>"])
-    email       : Optional[Str] = Field(title="Email",user_input_hint=["<email>"])
-    github_user : Optional[Str] = Field(title="Usuário Github",user_input_hint=["<usuário Github>"])
-    ckan_user   : Optional[Str] = Field(title="Usuário CKAN",user_input_hint=["<id do usuário no ckan>"])
-    website     : Optional[Str] = Field(title="Website",user_input_hint=["<onde encontrar os dados tratados>"])
-    code_url    : Optional[Str] = Field(title="Url código de limpeza",user_input_hint=["<onde encontrar código de limpeza>"])
+    name        : Optional[Str] = Field(title="Nome",description=to_line(["<nome>"]))
+    email       : Optional[Str] = Field(title="Email",description=to_line(["<email>"]))
+    github_user : Optional[Str] = Field(title="Usuário Github",description=to_line(["<usuário Github>"]))
+    ckan_user   : Optional[Str] = Field(title="Usuário CKAN",description=to_line(["<id do usuário no ckan>"]))
+    website     : Optional[Str] = Field(title="Website",description=to_line(["<onde encontrar os dados tratados>"]))
+    code_url    : Optional[Str] = Field(title="Url código de limpeza",description=to_line(["<onde encontrar código de limpeza>"]))
     # fmt: on
-
 
 # -------------------------------------
 # BdmTable Fields
 # -------------------------------------
-to_line = lambda description: "\n".join(description)
 
 DATASET_ID_FIELD = Field(
     title="ID Conjunto",
@@ -69,7 +68,13 @@ SPATIAL_COVERAGE_FIELD = Field(
 
 TEMPORAL_COVERAGE_FIELD = Field(
     title="Cobertura Temporal",
-    description=to_line(["Anos cobertos pela tabela."]),
+    description=to_line(
+        [
+            "Anos cobertos pela tabela.",
+            "Preencher como lista de intervalos.",
+            "Exemplo: 1995(1)2019."
+        ]
+    ),
     yaml_order={
         "id_before": "spatial_coverage",
         "id_after": "update_frequency",
@@ -78,8 +83,12 @@ TEMPORAL_COVERAGE_FIELD = Field(
 
 UPDATE_FREQUENCY_FIELD = Field(
     title="Frequência de Atualização",
-    user_input_hint=["<unidade temporal>"],
-    description=to_line(["A unidade temporal com qual a tabela é atualizada."]),
+    description=to_line(
+        [
+            "A unidade temporal com qual a tabela é atualizada.",
+            "Opções em 'https://basedosdados.org/api/3/action/bd_available_options'"
+        ]
+    ),
     yaml_order={
         "id_before": "temporal_coverage",
         "id_after": "entity",
@@ -88,7 +97,12 @@ UPDATE_FREQUENCY_FIELD = Field(
 
 ENTITY_FIELD = Field(
     title="Entidade",
-    description=to_line(["Entidade representada por cada linha."]),
+    description=to_line(
+        [
+            "Entidade representada por cada linha.",
+            "Opções em 'https://basedosdados.org/api/3/action/bd_available_options'"
+        ]
+    ),
     max_items=10,
     yaml_order={
         "id_before": "update_frequency",
@@ -98,7 +112,12 @@ ENTITY_FIELD = Field(
 
 TIME_UNIT_FIELD = Field(
     title="Unidade Temporal",
-    description=to_line(["A unidade temporal representada por cada linha."]),
+    description=to_line(
+        [
+            "A unidade temporal representada por cada linha.",
+            "Opções em 'https://basedosdados.org/api/3/action/bd_available_options'"
+        ]
+    ),
     yaml_order={
         "id_before": "entity",
         "id_after": "identifying_columns",
@@ -107,11 +126,11 @@ TIME_UNIT_FIELD = Field(
 
 IDENTIFYING_COLUMNS_FIELD = Field(
     title="Colunas Identificadoras",
-    user_input_hint=["ex. id_municipio, produto, ano"],
     description=to_line(
         [
             "O conjunto mínimo de colunas identificando cada linha unicamente.",
-            "Preencha com os nomes de colunas. Ex: id_municipio, ano.",
+            "Preencha com os nomes de colunas.",
+            "Exemplos: id_municipio, ano.",
             "Pode ser vazio pois certas tabelas não possuem identificadores.",
         ]
     ),
@@ -131,7 +150,12 @@ LAST_UPDATED_FIELD = Field(
 
 VERSION_FIELD = Field(
     title="Versão",
-    user_input_hint=["<vA.B>"],
+    description=to_line(
+        [
+            "Versão da tabela. Seguindo o padrão de semantic versioning.",
+            "Exemplo: v1.1.3"
+        ]
+    ),
     yaml_order={
         "id_before": "last_updated",
         "id_after": "published_by",
@@ -188,7 +212,11 @@ DATA_CLEANING_DESCRIPTION_FIELD = Field(
 
 RAW_FILES_URL_FIELD = Field(
     title="Url dos Dados Originais",
-    description=to_line(["Url dos dados originais no GCP Storage."]),
+    description=to_line(
+        [
+            "Url dos dados originais no GCP Storage."
+        ]
+    ),
     yaml_order={
         "id_before": "data_cleaning_description",
         "id_after": "auxiliary_files_url",
@@ -197,7 +225,11 @@ RAW_FILES_URL_FIELD = Field(
 
 AUXILIARY_FILES_URL_FIELD = Field(
     title="Url dos Arquivos Auxiliares",
-    description=to_line(["Url dos arquivos auxiliares no GCP Storage."]),
+    description=to_line(
+        [
+            "Url dos arquivos auxiliares no GCP Storage."
+        ]
+    ),
     yaml_order={
         "id_before": "raw_files_url",
         "id_after": "architecture_url",
@@ -206,7 +238,11 @@ AUXILIARY_FILES_URL_FIELD = Field(
 
 ARCHITECTURE_URL_FIELD = Field(
     title="Url da Tabela de Arquitetura",
-    description=to_line(["Url da tabela de arquitetura no GCP Storage."]),
+    description=to_line(
+        [
+            "Url da tabela de arquitetura no GCP Storage."
+        ]
+    ),
     yaml_order={
         "id_before": "auxiliary_files_url",
         "id_after": "covered_by_dictionary",
@@ -215,6 +251,12 @@ ARCHITECTURE_URL_FIELD = Field(
 
 COVERED_BY_DICTIONARY_FIELD = Field(
     title="Coberto por Dicionário",
+    description=to_line(
+        [
+            "A tabela tem colunas que precisam de dicionário?",
+            "Opções: yes, no."
+        ]
+    ),
     yaml_order={
         "id_before": "architecture_url",
         "id_after": "source_bucket_name",

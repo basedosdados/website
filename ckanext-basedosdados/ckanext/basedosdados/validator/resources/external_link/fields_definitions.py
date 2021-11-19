@@ -20,7 +20,11 @@ DATASET_ID_FIELD = Field(
 
 URL_FIELD = Field(
     title="Url",
-    user_input_hint=["<www.example.com/data>"],
+    description=to_line(
+        [
+            "Url da fonte original.",
+        ]
+    ),
     yaml_order={
         "id_after": "dataset_id",
         "id_before": "title",
@@ -29,7 +33,11 @@ URL_FIELD = Field(
 
 TITLE_FIELD = Field(
     title="Título",
-    user_input_hint=["<Um título descritivo>"],
+    description=to_line(
+        [
+            "Um título descritivo.",
+        ]
+    ),
     yaml_order={
         "id_before": "url",
         "id_after": "description",
@@ -40,10 +48,10 @@ DESCRIPTION_FIELD = Field(
     title="Descrição",
     description=to_line(
         [
-            "Descreva a tabela. Essas são as primeiras frases que um usuário vai ver.",
+            "Descreva a fonte externa. Essas são as primeiras frases que um usuário vai ver.",
             "Você não precisa ser muito conciso. Sinta-se a vontade para dar exemplos de",
             "como usar os dados.",
-            "Se souber, liste também aplicações: pesquisa, apps, etc. que usem os dados.,",
+            "Se souber, liste também aplicações: pesquisa, apps, etc. que usem os dados.",
         ]
     ),
     yaml_order={
@@ -54,7 +62,12 @@ DESCRIPTION_FIELD = Field(
 
 LANGUAGE_FIELD = Field(
     title="Língua",
-    description=to_line(["Em quais línguas a fonte externa está disponível."]),
+    description=to_line(
+        [
+            "Em quais línguas a fonte externa está disponível.",
+            "Opções em 'language' em https://basedosdados.org/api/3/action/bd_available_options."
+        ]
+    ),
     yaml_order={
         "id_after": "description",
         "id_before": "has_structure_data",
@@ -65,7 +78,8 @@ HAS_STRUCTURED_DATA_FIELD = Field(
     title="Tem Dados Estruturados",
     description=to_line(
         [
-            "A fonte externa disponibiliza dados em formatos estruturados, como csv, json, etc?"
+            "A fonte externa disponibiliza dados em formatos estruturados, como csv, json, etc?",
+            "Opções: yes, no."
         ]
     ),
     yaml_order={
@@ -77,7 +91,10 @@ HAS_STRUCTURED_DATA_FIELD = Field(
 HAS_API_FIELD = Field(
     title="Tem uma API",
     description=to_line(
-        ["A fonte externa disponibiliza uma API para acesso aos dados?"]
+        [
+            "A fonte externa disponibiliza uma API para acesso aos dados?",
+            "Opções: yes, no."
+        ]
     ),
     yaml_order={
         "id_after": "has_structured_data",
@@ -87,7 +104,12 @@ HAS_API_FIELD = Field(
 
 IS_FREE_FIELD = Field(
     title="É de Graça",
-    description=to_line(["O acesso aos dados da fonte externa é grátis?"]),
+    description=to_line(
+        [
+            "O acesso aos dados da fonte externa é grátis?",
+            "Opções: yes, no."
+        ]
+    ),
     yaml_order={
         "id_after": "has_api",
         "id_before": "requires_registration",
@@ -97,7 +119,10 @@ IS_FREE_FIELD = Field(
 REQUIRES_REGISTRATION_FIELD = Field(
     title="Requer Registro",
     description=to_line(
-        ["A fonte externa requer registro de usuário para acesso aos dados?"]
+        [
+            "A fonte externa requer registro de usuário para acesso aos dados?",
+            "Opções: yes, no."
+        ]
     ),
     yaml_order={
         "id_after": "is_free",
@@ -107,7 +132,12 @@ REQUIRES_REGISTRATION_FIELD = Field(
 
 AVAILABILITY_FIELD = Field(
     title="Disponibilidade",
-    description=to_line(["Como os dados são disponibilizados?"]),
+    description=to_line(
+        [
+            "Como os dados são disponibilizados?",
+            "Opções 'availability' em https://basedosdados.org/api/3/action/bd_available_options."
+        ]
+    ),
     yaml_order={
         "id_after": "requires_registration",
         "id_before": "country_ip_address_required",
@@ -116,7 +146,12 @@ AVAILABILITY_FIELD = Field(
 
 COUNTRY_IP_ADDRESS_REQUIRED_FIELD = Field(
     title="Requer IP de Algum País",
-    description=to_line([""]),
+    description=to_line(
+        [
+            "Países nos quais o acesso à fonte externa é liberado.",
+            "Opções em 'country' em https://basedosdados.org/api/3/action/bd_available_options."
+        ]
+    ),
     yaml_order={
         "id_after": "availability",
         "id_before": "license",
@@ -126,7 +161,9 @@ COUNTRY_IP_ADDRESS_REQUIRED_FIELD = Field(
 LICENSE_FIELD = Field(
     title="Tipo de Licença",
     description=to_line(
-        ["Qual tipo de licença regula acesso aos dados da fonte externa?"]
+        [
+            "Qual tipo de licença regula acesso aos dados da fonte externa?"
+        ]
     ),
     yaml_order={
         "id_after": "country_ip_address_required",
@@ -136,7 +173,11 @@ LICENSE_FIELD = Field(
 
 SPATIAL_COVERAGE_FIELD = Field(
     title="Cobertura Espacial",
-    description=to_line(["A máxima unidade espacial que a tabela cobre."]),
+    description=to_line(
+        [
+            "A máxima unidade espacial que a tabela cobre."
+        ]
+    ),
     yaml_order={
         "id_after": "license",
         "id_before": "temporal_coverage",
@@ -145,7 +186,13 @@ SPATIAL_COVERAGE_FIELD = Field(
 
 TEMPORAL_COVERAGE_FIELD = Field(
     title="Cobertura Temporal",
-    description=to_line(["Anos cobertos pela tabela."]),
+    description=to_line(
+        [
+            "Anos cobertos pela tabela.",
+            "Preencher como lista de intervalos.",
+            "Exemplos: 1995(1)2018 ou (1)2020."
+        ]
+    ),
     yaml_order={
         "id_after": "spatial_coverage",
         "id_before": "update_frequency",
@@ -154,8 +201,12 @@ TEMPORAL_COVERAGE_FIELD = Field(
 
 UPDATE_FREQUENCY_FIELD = Field(
     title="Frequência de Atualização",
-    user_input_hint=["<frequência>"],
-    description=to_line(["A unidade temporal pela qual a tabela é atualizada."]),
+    description=to_line(
+        [
+            "A unidade temporal pela qual a tabela é atualizada.",
+            "Opções em 'time_unit' em https://basedosdados.org/api/3/action/bd_available_options."
+        ]
+    ),
     yaml_order={
         "id_after": "temporal_coverage",
         "id_before": "entity",
@@ -164,7 +215,11 @@ UPDATE_FREQUENCY_FIELD = Field(
 
 ENTITY_FIELD = Field(
     title="Entidade",
-    description=to_line(["Entidade representada por cada linha."]),
+    description=to_line(
+        [
+            "Entidade representada por cada linha."
+        ]
+    ),
     max_items=10,
     yaml_order={
         "id_after": "update_frequency",
@@ -174,7 +229,12 @@ ENTITY_FIELD = Field(
 
 TIME_UNIT_FIELD = Field(
     title="Unidade Temporal",
-    description=to_line(["A unidade temporal representada por cada linha."]),
+    description=to_line(
+        [
+            "A unidade temporal representada por cada linha.",
+            "Opções em 'time_unit' em https://basedosdados.org/api/3/action/bd_available_options."
+        ]
+    ),
     yaml_order={
         "id_after": "entity",
         "id_before": None,

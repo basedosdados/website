@@ -61,8 +61,8 @@ export function BaseResourcePage({
               <Button onClick={deleteModalDisclosure.onClose}>Cancelar</Button>
               <Button
                 colorScheme="red"
-                onClick={() => {
-                  removeFunction();
+                onClick={async () => {
+                  await removeFunction();
                   window.location.reload();
                 }}
                 ml={3}

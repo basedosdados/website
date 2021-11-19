@@ -188,6 +188,7 @@ export function BdmTablePage({
             data.data_cleaned_by.ckan_user =
               data.data_cleaned_by.ckan_user || "";
             data.data_cleaned_by.website = data.data_cleaned_by.website || "";
+            data.resource_type = "bdm_table";
 
             return data;
           }}
@@ -255,7 +256,7 @@ export function BdmTablePage({
           })}
         </Stack>
         {helpText[selectedConsultation] ? (
-          <SectionText fontSize="14px" fontWeight="300">
+          <SectionText width="100%" fontSize="14px" fontWeight="300">
             {helpText[selectedConsultation]}
           </SectionText>
         ) : (
