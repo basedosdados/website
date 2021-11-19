@@ -174,6 +174,8 @@ function ResourcesPage({
                 loadSchemaFunction={getExternalLinkSchema}
                 prepareData={(d) => {
                   d.resource_type = "external_link";
+
+                  return d;
                 }}
                 updateFunction={(data) => createResource(data, dataset.id)}
               />
