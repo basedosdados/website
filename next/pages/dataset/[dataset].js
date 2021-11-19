@@ -154,6 +154,8 @@ function ResourcesPage({
                 loadSchemaFunction={getBdmTableSchema}
                 prepareData={(d) => {
                   d.resource_type = "bdm_table";
+
+                  return d;
                 }}
                 updateFunction={(data) => createResource(data, dataset.id)}
               />

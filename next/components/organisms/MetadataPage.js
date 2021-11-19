@@ -61,7 +61,10 @@ export function MetadataPage({
   return (
     <BaseResourcePage
       title="Metadados do conjunto"
-      removeFunction={() => deleteDataset(dataset)}
+      removeFunction={async () => {
+        await deleteDataset(dataset);
+        await deleteDataset(dataset);
+      }}
       formComponent={
         <SchemaForm
           data={dataset}
