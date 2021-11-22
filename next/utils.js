@@ -73,3 +73,21 @@ export function unionArrays(arrays) {
 
   return result;
 }
+
+export function addParametersToCurrentURL(params) {
+  const originalUrl = window.location.href;
+  const splitUrl = originalUrl.split("?");
+  const urlParams = new URLSearchParams(splitUrl.length > 0 ? splitUrl[1] : "");
+
+  Object.assign(urlParams, params);
+
+  window.history.pushState(
+    {},
+    "",
+    splitUrl[0] +
+      "?" +
+      Object.entries(urlParams)
+        .map(([k, v]) => `${k}=${v}`)
+        .join("&")
+  );
+}

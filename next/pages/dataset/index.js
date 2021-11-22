@@ -31,7 +31,12 @@ import { Database } from "../../components/organisms/Database";
 import { CheckboxFilterAccordion } from "../../components/atoms/FilterAccordion";
 import { withStrapiPages } from "../../hooks/strapi.hook";
 import { MainPageTemplate } from "../../components/templates/main";
-import { isBdPlus, unionArrays } from "../../utils";
+import {
+  addParametersToCurrentURL,
+  addParameterToCurrentURL,
+  isBdPlus,
+  unionArrays,
+} from "../../utils";
 import { Tag } from "../../components/atoms/Tag";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -81,9 +86,8 @@ function NewDatasetModal({ isOpen, onClose }) {
 export default function SearchPage({ strapiPages }) {
   const { query } = useRouter();
   const datasetDisclosure = useDisclosure();
-  const orderQuery = decodeURI(query.order_by || "score");
   const { data: userData = null } = useQuery("user", getUser);
-  const [order, setOrder] = useState(orderQuery);
+  const [order, setOrder] = useState("score");
   const [search, setSearch] = useState("");
   const [paramFilters, setParamFilters] = useState({});
   const [page, setPage] = useState(1);
@@ -139,21 +143,38 @@ export default function SearchPage({ strapiPages }) {
 
   useEffect(() => {
     if (query.q) setSearch(decodeURI(query.q));
+    if (query.order_by) setOrder(decodeURI(query.order_by));
 
     setParamFilters({
       ...paramFilters,
-      tag: query.tag ? [query.tag] : [],
+      tag: query.tag ? [...query.tag.split(",")] : [],
       organization: query.organization ? [query.organization] : [],
       group: query.group ? [query.group] : [],
-      resource_type: query.bdPlus ? ["bdm_table"] : [],
+      resource_type: query.resource_type ? [query.resource_type] : [],
     });
 
     setFilterKey(filterKey + 1);
-  }, [query.tag, query.organization, query.group, query.q, query.bdPlus]);
+  }, [
+    query.tag,
+    query.organization,
+    query.group,
+    query.q,
+    query.bdPlus,
+    query.order,
+  ]);
 
   useEffect(() => {
+    const paramObj = { ...paramFilters, order_by: order };
+
+    Object.keys(paramObj).forEach((p) => {
+      const value = paramObj[p];
+
+      if (value?.length === 0 || value === "") delete paramObj[p];
+    });
+
+    addParametersToCurrentURL(paramObj);
     setPage(1);
-  }, [paramFilters, search]);
+  }, [paramFilters, search, order]);
 
   return (
     <MainPageTemplate strapiPages={strapiPages}>
@@ -212,9 +233,9 @@ export default function SearchPage({ strapiPages }) {
             valueField="key"
             displayField="name"
             fieldName="Forma de consulta"
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, resource_type: values })
-            }
+            onChange={(values) => {
+              setParamFilters({ ...paramFilters, resource_type: values });
+            }}
           />
           <CheckboxFilterAccordion
             canSearch={true}
