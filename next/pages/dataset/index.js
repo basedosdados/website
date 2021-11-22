@@ -208,7 +208,19 @@ export default function SearchPage({
         .sort((a, b) => b.value - a.value)
     : [];
 
-  const spatial_coverages = {
+  const updateFrequencies = data?.update_frequencies
+    ? Object.keys(data.update_frequencies)
+        .map((t) => ({
+          name: t,
+          displayName:
+            availableOptionsTranslations[t] +
+            ` (${data.update_frequencies[t]})`,
+          value: t,
+        }))
+        .sort((a, b) => b.value - a.value)
+    : [];
+
+  const spatialCoverages = {
     Continente: data?.spatial_coverage_continent
       ? Object.keys(data.spatial_coverage_continent)
           .map((t) => ({
@@ -409,10 +421,7 @@ export default function SearchPage({
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.spatial_coverage || []).length > 0}
-            choices={[
-              ...spatial_coverages.Continente,
-              ...spatial_coverages.País,
-            ]}
+            choices={[...spatialCoverages.Continente, ...spatialCoverages.País]}
             values={paramFilters.spatial_coverage}
             valueField="name"
             displayField="displayName"
@@ -421,6 +430,18 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, spatial_coverage: values })
             }
           />
+          {/*<CheckboxFilterAccordion
+            canSearch={true}
+            isActive={(paramFilters.update_frequency || []).length > 0}
+            choices={updateFrequencies}
+            values={paramFilters.update_frequency}
+            valueField="name"
+            displayField="displayName"
+            fieldName="Frequência de atualização"
+            onChange={(values) =>
+              setParamFilters({ ...paramFilters, update_frequency: values })
+            }
+          />*/}
           <RangeFilterAccordion
             isActive={(paramFilters.temporal_coverage || []).length > 0}
             fieldName="Cobertura temporal"

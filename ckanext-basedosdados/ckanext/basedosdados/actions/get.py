@@ -304,6 +304,25 @@ def bd_dataset_search(context, data_dict):
             value = response["entities"].get(key, 0) + 1
             response["entities"][key] = value
 
+    # post-process update frequency ###############################
+
+    response["update_frequencies"] = {}
+
+    for dataset in response["datasets"]:
+        update_frequencies = []
+        for resource in dataset["resources"]:
+            res_update_frequencies = resource.get("update_frequency", None)
+
+            if res_update_frequencies is None:
+                continue
+
+            update_frequencies.append(res_update_frequencies)
+        update_frequencies = list(set(update_frequencies))
+
+        for key in update_frequencies:
+            value = response["update_frequencies"].get(key, 0) + 1
+            response["update_frequencies"][key] = value
+
     # post-process spatial coverage ###############################
 
     response["spatial_coverage_continent"] = {}
