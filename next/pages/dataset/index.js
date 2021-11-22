@@ -34,18 +34,12 @@ import {
 } from "../../components/atoms/FilterAccordion";
 import { withStrapiPages } from "../../hooks/strapi.hook";
 import { MainPageTemplate } from "../../components/templates/main";
-import {
-  addParametersToCurrentURL,
-  addParameterToCurrentURL,
-  isBdPlus,
-  unionArrays,
-} from "../../utils";
+import { addParametersToCurrentURL, isBdPlus, unionArrays } from "../../utils";
 import { Tag } from "../../components/atoms/Tag";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { SchemaForm } from "../../components/molecules/SchemaForm";
 import { getDatasetSchema } from "../api/schemas";
-import UserContext from "../../context/user";
 import { getUser } from "../api/user";
 import {
   getAvailableOptionsTranslations,
@@ -162,8 +156,6 @@ export default function SearchPage({
     }
   );
 
-  console.log(availableOptionsTranslations, translations);
-
   const fieldTranslations = {
     organization: "Organização",
     tag: "Tag",
@@ -171,6 +163,7 @@ export default function SearchPage({
     resource_type: "Forma de consulta",
     temporal_coverage: "Cobertura temporal",
     entity: "Entidade",
+    spatial_coverage: "Cobertura espacial",
   };
 
   const organizations = data?.organizations
@@ -215,6 +208,31 @@ export default function SearchPage({
         .sort((a, b) => b.value - a.value)
     : [];
 
+  const spatial_coverages = {
+    Continente: data?.spatial_coverage_continent
+      ? Object.keys(data.spatial_coverage_continent)
+          .map((t) => ({
+            name: t,
+            displayName:
+              availableOptionsTranslations[t] +
+              ` (${data.spatial_coverage_continent[t]})`,
+            value: t,
+          }))
+          .sort((a, b) => b.value - a.value)
+      : [],
+    País: data?.spatial_coverage_country
+      ? Object.keys(data.spatial_coverage_country)
+          .map((t) => ({
+            name: t,
+            displayName:
+              availableOptionsTranslations[t] +
+              ` (${data.spatial_coverage_country[t]})`,
+            value: t,
+          }))
+          .sort((a, b) => b.value - a.value)
+      : [],
+  };
+
   // Loads filter from URL
   useEffect(() => {
     if (query.q) setSearch(decodeURI(query.q));
@@ -236,6 +254,8 @@ export default function SearchPage({
       organization: query.organization ? [query.organization] : [],
       group: query.group ? [query.group] : [],
       resource_type: query.resource_type ? [query.resource_type] : [],
+      entity: query.entity ? [query.entity] : [],
+      spatial_coverage: query.spatial_coverage ? [query.spatial_coverage] : [],
       temporal_coverage: query.temporal_coverage
         ? query.temporal_coverage.split("-")
         : [],
@@ -250,6 +270,8 @@ export default function SearchPage({
     query.bdPlus,
     query.order,
     query.temporal_coverage,
+    query.entity,
+    query.spatial_coverage,
   ]);
 
   useEffect(() => {
@@ -382,6 +404,21 @@ export default function SearchPage({
             fieldName="Entidade"
             onChange={(values) =>
               setParamFilters({ ...paramFilters, entity: values })
+            }
+          />
+          <CheckboxFilterAccordion
+            canSearch={true}
+            isActive={(paramFilters.spatial_coverage || []).length > 0}
+            choices={[
+              ...spatial_coverages.Continente,
+              ...spatial_coverages.País,
+            ]}
+            values={paramFilters.spatial_coverage}
+            valueField="name"
+            displayField="displayName"
+            fieldName="Cobertura espacial"
+            onChange={(values) =>
+              setParamFilters({ ...paramFilters, spatial_coverage: values })
             }
           />
           <RangeFilterAccordion
