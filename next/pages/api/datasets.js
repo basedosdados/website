@@ -1,18 +1,6 @@
 import axios from "axios";
 import { axiosInstance } from "../../axios";
 
-export function getRecentDatasets() {
-  return axios
-    .get("http://ckan:5000/api/3/action/bd_recent_datasets_list?limit=10")
-    .then(({ data }) => data.result);
-}
-
-export function getPopularDatasets() {
-  return axios
-    .get("http://ckan:5000/api/3/action/bd_popular_datasets_list?limit=10")
-    .then(({ data }) => data.result);
-}
-
 export function listDatasets() {
   return axios
     .get(`http://ckan:5000/api/3/action/package_list`)

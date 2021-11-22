@@ -18,12 +18,7 @@ import { useState } from "react";
 import CardCatalog from "../components/organisms/CardCatalog";
 import Title from "../components/atoms/Title";
 import Typist from "react-typist";
-import {
-  getPopularDatalakeDatasets,
-  getPopularDatasets,
-  getRecentDatasets,
-  searchDatasets,
-} from "./api/datasets";
+import { getPopularDatalakeDatasets } from "./api/datasets";
 import { ShadowBox } from "../components/atoms/ShadowBox";
 import { MainPageTemplate } from "../components/templates/main";
 import { withStrapiPages } from "../hooks/strapi.hook";
@@ -31,17 +26,13 @@ import { ThemeTag } from "../components/atoms/ThemeTag";
 import { LinkDash } from "../components/atoms/LinkDash";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { isBdPlus } from "../utils";
-import Link from "../components/atoms/Link";
-import { KnowOurServices } from "../components/molecules/KnowOurServices";
 import { BePartner } from "../components/organisms/BePartner";
 
 export async function getStaticProps(context) {
-  const popularDatasets = await getPopularDatasets();
   const popularDatalakeDatasets = await getPopularDatalakeDatasets();
 
   return await withStrapiPages({
     props: {
-      popularDatasets,
       popularDatalakeDatasets,
     },
     revalidate: 60,
