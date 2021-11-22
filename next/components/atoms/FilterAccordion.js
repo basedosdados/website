@@ -12,10 +12,12 @@ import {
   Tooltip,
   Image,
   HStack,
+  Input,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { limitTextSize } from "../../utils";
 import ControlledInput from "./ControlledInput";
+import SectionText from "./SectionText";
 import Title from "./Title";
 
 export function BaseFilterAccordion({
@@ -149,6 +151,7 @@ export function CheckboxFilterAccordion({
           overflowX="hidden !important"
           alignItems="flex-start"
           overflowY="scroll"
+          width="100%"
         >
           {(canSearch
             ? choices.filter(
@@ -171,6 +174,74 @@ export function CheckboxFilterAccordion({
           ))}
         </VStack>
       </CheckboxGroup>
+    </BaseFilterAccordion>
+  );
+}
+
+export function RangeFilterAccordion({
+  fieldName,
+  onChange,
+  onToggle,
+  isOpen = null,
+  alwaysOpen = false,
+  isActive = false,
+  maxValue = null,
+  minValue = null,
+}) {
+  const [min, setMin] = useState();
+  const [max, setMax] = useState();
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    setError(false);
+    if (min > max) return setError(true);
+    if (!min && !max) return;
+
+    onChange({ min, max });
+  }, [min, max]);
+
+  useEffect(() => {
+    setMin(minValue);
+    setMax(maxValue);
+  }, []);
+
+  return (
+    <BaseFilterAccordion
+      isOpen={alwaysOpen ? alwaysOpen : isOpen}
+      alwaysOpen={alwaysOpen}
+      isActive={isActive}
+      onChange={onToggle}
+      overflowX="hidden"
+      fieldName={fieldName}
+    >
+      <VStack align="flex-start">
+        <HStack padding="10px 0px" width="100%">
+          <ControlledInput
+            value={min}
+            onChange={setMin}
+            width="100%"
+            placeholder="Min"
+          />
+          <ControlledInput
+            value={max}
+            onChange={setMax}
+            width="100%"
+            placeholder="Max"
+          />
+        </HStack>
+        {error ? (
+          <SectionText
+            paddingLeft="20px"
+            color="red"
+            fontWeight="bold"
+            fontSize="12px"
+          >
+            Intervalo inválido!
+          </SectionText>
+        ) : (
+          <></>
+        )}
+      </VStack>
     </BaseFilterAccordion>
   );
 }

@@ -28,7 +28,10 @@ import { useQuery } from "react-query";
 import { createDataset, searchDatasets } from "../api/datasets";
 import { DebouncedControlledInput } from "../../components/atoms/ControlledInput";
 import { Database } from "../../components/organisms/Database";
-import { CheckboxFilterAccordion } from "../../components/atoms/FilterAccordion";
+import {
+  CheckboxFilterAccordion,
+  RangeFilterAccordion,
+} from "../../components/atoms/FilterAccordion";
 import { withStrapiPages } from "../../hooks/strapi.hook";
 import { MainPageTemplate } from "../../components/templates/main";
 import {
@@ -44,10 +47,20 @@ import { SchemaForm } from "../../components/molecules/SchemaForm";
 import { getDatasetSchema } from "../api/schemas";
 import UserContext from "../../context/user";
 import { getUser } from "../api/user";
+import {
+  getAvailableOptionsTranslations,
+  getTranslations,
+} from "../api/translations";
 
 export async function getStaticProps(context) {
+  const translations = await getTranslations();
+  const availableOptionsTranslations = await getAvailableOptionsTranslations();
   return withStrapiPages({
     revalidate: 60, //TODO: Increase this timer
+    props: {
+      translations,
+      availableOptionsTranslations,
+    },
   });
 }
 
@@ -83,7 +96,53 @@ function NewDatasetModal({ isOpen, onClose }) {
   );
 }
 
-export default function SearchPage({ strapiPages }) {
+function FilterTags({
+  label,
+  fieldName,
+  values,
+  setParamFilters,
+  paramFilters,
+}) {
+  return (
+    <>
+      <Text
+        fontFamily="Lato"
+        letterSpacing="0.1em"
+        fontWeight="100"
+        fontSize="16px"
+        color="#6F6F6F"
+      >
+        {label}
+      </Text>
+      <Stack direction={{ base: "column", lg: "row" }}>
+        {values.map((v) => (
+          <Tag
+            whiteSpace="nowrap"
+            onClick={() => {
+              let newArr = [...values];
+              newArr.splice(values.indexOf(v), 1);
+              setParamFilters({ ...paramFilters, [fieldName]: newArr });
+            }}
+            hover={false}
+            backgroundColor="#7D7D7D"
+            color="white"
+            borderRadius="7px"
+            padding="5px 8px"
+            cursor="pointer"
+          >
+            <b>{v} x</b>
+          </Tag>
+        ))}
+      </Stack>
+    </>
+  );
+}
+
+export default function SearchPage({
+  strapiPages,
+  availableOptionsTranslations,
+  translations,
+}) {
   const { query } = useRouter();
   const datasetDisclosure = useDisclosure();
   const { data: userData = null } = useQuery("user", getUser);
@@ -103,11 +162,15 @@ export default function SearchPage({ strapiPages }) {
     }
   );
 
+  console.log(availableOptionsTranslations, translations);
+
   const fieldTranslations = {
     organization: "Organização",
     tag: "Tag",
     group: "Tema",
     resource_type: "Forma de consulta",
+    temporal_coverage: "Cobertura temporal",
+    entity: "Entidade",
   };
 
   const organizations = data?.organizations
@@ -141,16 +204,41 @@ export default function SearchPage({ strapiPages }) {
         .sort((a, b) => b.value - a.value)
     : [];
 
+  const entities = data?.entities
+    ? Object.keys(data.entities)
+        .map((t) => ({
+          name: t,
+          displayName:
+            availableOptionsTranslations[t] + ` (${data.entities[t]})`,
+          value: t,
+        }))
+        .sort((a, b) => b.value - a.value)
+    : [];
+
+  // Loads filter from URL
   useEffect(() => {
     if (query.q) setSearch(decodeURI(query.q));
     if (query.order_by) setOrder(decodeURI(query.order_by));
 
+    if (query.temporal_coverage) {
+      const [start, end] = query.temporal_coverage
+        .split("-")
+        .map((v) => parseFloat(v));
+      setParamFilters({
+        ...paramFilters,
+        temporal_coverage: new Array(end - start).map((_, i) => start + i),
+      });
+    }
+
     setParamFilters({
       ...paramFilters,
-      tag: query.tag ? [...query.tag.split(",")] : [],
+      tag: query.tag ? query.tag.split(",") : [],
       organization: query.organization ? [query.organization] : [],
       group: query.group ? [query.group] : [],
       resource_type: query.resource_type ? [query.resource_type] : [],
+      temporal_coverage: query.temporal_coverage
+        ? query.temporal_coverage.split("-")
+        : [],
     });
 
     setFilterKey(filterKey + 1);
@@ -161,6 +249,7 @@ export default function SearchPage({ strapiPages }) {
     query.q,
     query.bdPlus,
     query.order,
+    query.temporal_coverage,
   ]);
 
   useEffect(() => {
@@ -171,6 +260,16 @@ export default function SearchPage({ strapiPages }) {
 
       if (value?.length === 0 || value === "") delete paramObj[p];
     });
+
+    // Only add 2000-2005 to url instead of 2000,2001,2002,2003,2004,2005 which can cause error 414
+    if (
+      paramFilters.temporal_coverage &&
+      paramFilters.temporal_coverage.length
+    ) {
+      paramObj.temporal_coverage = `${paramObj.temporal_coverage[0]}-${
+        paramObj.temporal_coverage[paramObj.temporal_coverage.length - 1]
+      }`;
+    }
 
     addParametersToCurrentURL(paramObj);
     setPage(1);
@@ -273,6 +372,43 @@ export default function SearchPage({ strapiPages }) {
               setParamFilters({ ...paramFilters, tag: values })
             }
           />
+          <CheckboxFilterAccordion
+            canSearch={true}
+            isActive={(paramFilters.entity || []).length > 0}
+            choices={entities}
+            values={paramFilters.entity}
+            valueField="name"
+            displayField="displayName"
+            fieldName="Entidade"
+            onChange={(values) =>
+              setParamFilters({ ...paramFilters, entity: values })
+            }
+          />
+          <RangeFilterAccordion
+            isActive={(paramFilters.temporal_coverage || []).length > 0}
+            fieldName="Cobertura temporal"
+            minValue={(paramFilters.temporal_coverage || [])[0]}
+            maxValue={
+              (paramFilters.temporal_coverage || [])[
+                (paramFilters.temporal_coverage || []).length - 1
+              ]
+            }
+            onChange={(val) => {
+              if ((val.min < 1000 || !val.min) && (val.max < 1000 || !val.max))
+                return;
+
+              const start = parseInt(val.min || val.max);
+              const range =
+                Math.max((val.max || val.min) - (val.min || max.max), 0) + 1;
+
+              setParamFilters({
+                ...paramFilters,
+                temporal_coverage: new Array(range)
+                  .fill(0)
+                  .map((_, i) => start + i),
+              });
+            }}
+          />
         </VStack>
         <VStack alignItems="flex-start" spacing={5} width="100%">
           <DebouncedControlledInput
@@ -326,41 +462,28 @@ export default function SearchPage({ strapiPages }) {
                 <></>
               )}
             </Flex>
-            <Stack spacing={3} direction={{ base: "column", lg: "row" }}>
+            <Stack
+              overflowX="scroll"
+              width="60vw"
+              whiteSpace="nowrap"
+              paddingBottom="10px"
+              spacing={3}
+              direction={{ base: "column", lg: "row" }}
+            >
               {Object.entries(paramFilters)
                 .filter(([k, v]) => v.length > 0)
                 .map(([k, values]) => (
-                  <>
-                    <Text
-                      fontFamily="Lato"
-                      letterSpacing="0.1em"
-                      fontWeight="100"
-                      fontSize="16px"
-                      color="#6F6F6F"
-                    >
-                      {fieldTranslations[k]}:
-                    </Text>
-                    <Stack direction={{ base: "column", lg: "row" }}>
-                      {values.map((v) => (
-                        <Tag
-                          whiteSpace="nowrap"
-                          onClick={() => {
-                            let newArr = [...values];
-                            newArr.splice(values.indexOf(v), 1);
-                            setParamFilters({ ...paramFilters, [k]: newArr });
-                          }}
-                          hover={false}
-                          backgroundColor="#7D7D7D"
-                          color="white"
-                          borderRadius="7px"
-                          padding="5px 8px"
-                          cursor="pointer"
-                        >
-                          <b>{v} x</b>
-                        </Tag>
-                      ))}
-                    </Stack>
-                  </>
+                  <FilterTags
+                    label={fieldTranslations[k]}
+                    fieldName={k}
+                    values={
+                      k === "temporal_coverage"
+                        ? [`${values[0]}-${values[values.length - 1]}`]
+                        : values
+                    }
+                    paramFilters={paramFilters}
+                    setParamFilters={setParamFilters}
+                  />
                 ))}
             </Stack>
             <HStack
