@@ -218,7 +218,7 @@ function Hero() {
   );
 }
 
-function CatalogNews({ popularDatasets, popularDatalakeDatasets }) {
+function CatalogNews({ popularDatalakeDatasets }) {
   return (
     <VStack
       width="100%"

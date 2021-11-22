@@ -15,6 +15,11 @@ axiosInstance.interceptors.response.use(undefined, (error) => {
     window.location.reload();
   }
 
+  if (error?.response?.status === 500) {
+    console.log(error);
+    console.log(error.response.data);
+  }
+
   return Promise.reject(error);
 });
 
