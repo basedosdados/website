@@ -193,8 +193,10 @@ export function RangeFilterAccordion({
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    setError(false);
-    if (min > max) return setError(true);
+    setError(null);
+
+    if (min > max) return setError("Intervalo inválido!");
+    if (min && max && max - min > 300) return setError("Intervalo muito longo");
     if (!min && !max) return;
 
     onChange({ min, max });
@@ -236,7 +238,7 @@ export function RangeFilterAccordion({
             fontWeight="bold"
             fontSize="12px"
           >
-            Intervalo inválido!
+            {error}
           </SectionText>
         ) : (
           <></>

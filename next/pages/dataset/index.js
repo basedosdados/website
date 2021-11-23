@@ -418,7 +418,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, entity: values })
             }
           />
-          <CheckboxFilterAccordion
+          {/*<CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.spatial_coverage || []).length > 0}
             choices={[...spatialCoverages.Continente, ...spatialCoverages.País]}
@@ -429,7 +429,7 @@ export default function SearchPage({
             onChange={(values) =>
               setParamFilters({ ...paramFilters, spatial_coverage: values })
             }
-          />
+          />*/}
           {/*<CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.update_frequency || []).length > 0}
@@ -452,12 +452,12 @@ export default function SearchPage({
               ]
             }
             onChange={(val) => {
-              if ((val.min < 1000 || !val.min) && (val.max < 1000 || !val.max))
+              if (val.min < 1000 || !val.min || val.max < 1000 || !val.max)
                 return;
 
               const start = parseInt(val.min || val.max);
               const range =
-                Math.max((val.max || val.min) - (val.min || max.max), 0) + 1;
+                Math.max((val.max || val.min) - (val.min || val.max), 0) + 1;
 
               setParamFilters({
                 ...paramFilters,
