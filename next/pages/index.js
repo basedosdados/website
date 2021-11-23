@@ -29,7 +29,12 @@ import { isBdPlus } from "../utils";
 import { BePartner } from "../components/organisms/BePartner";
 
 export async function getStaticProps(context) {
-  const popularDatalakeDatasets = await getPopularDatalakeDatasets();
+  let popularDatalakeDatasets;
+  try {
+    popularDatalakeDatasets = await getPopularDatalakeDatasets();
+  } catch {
+    popularDatalakeDatasets = [];
+  }
 
   return await withStrapiPages({
     props: {

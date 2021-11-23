@@ -20,6 +20,9 @@ axiosInstance.interceptors.response.use(undefined, (error) => {
     console.log(error.response.data);
   }
 
+  console.log(error);
+  console.log(error.response.data);
+
   return Promise.reject(error);
 });
 
