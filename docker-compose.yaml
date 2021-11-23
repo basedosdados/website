@@ -40,6 +40,8 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
       - CKAN_REDIS_URL=redis://redis:6379/0
+      - BETTER_EXCEPTIONS=1
+      - WERKZEUG_DEBUG_PIN=off
     command: ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "wsgi"]
 
   datapusher: # Not really used, ckan dependency

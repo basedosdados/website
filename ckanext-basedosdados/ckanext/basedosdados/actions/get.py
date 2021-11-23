@@ -333,7 +333,10 @@ def bd_dataset_search(context, data_dict):
             res_spatial_coverage = []
             resource_spatial_coverage = resource.get("spatial_coverage", {})
 
-            if "continent" in resource_spatial_coverage:
+            if (
+                "continent" in resource_spatial_coverage
+                and resource_spatial_coverage["continent"] is not None
+            ):
                 res_spatial_coverage.extend(resource_spatial_coverage["continent"])
 
             spatial_coverage.extend(res_spatial_coverage)
