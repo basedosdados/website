@@ -335,7 +335,7 @@ def bd_dataset_search(context, data_dict):
 
             if (
                 "continent" in resource_spatial_coverage
-                and resource_spatial_coverage["continent"] is not None
+                and type(resource_spatial_coverage.get("continent", None)) is str
             ):
                 res_spatial_coverage.extend(resource_spatial_coverage["continent"])
 
