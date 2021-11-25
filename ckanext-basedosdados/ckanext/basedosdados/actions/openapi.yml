@@ -567,6 +567,11 @@ paths:
           schema:
             type: string
             example: 2000, 2001
+        - in: query
+          name: update_frequency
+          description: Frequência de Atualização
+          schema:
+            type: string
       responses:
         '200':
           description: OK
