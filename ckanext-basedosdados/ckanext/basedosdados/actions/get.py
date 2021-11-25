@@ -221,6 +221,7 @@ def bd_dataset_search(context, data_dict):
     fq += get_parameter(data_dict, "entity", "res_extras_entity")
     fq += get_parameter(data_dict, "spatial_coverage", "res_extras_spatial_coverage")
     fq += get_parameter(data_dict, "temporal_coverage", "res_extras_temporal_coverage")
+    fq += get_parameter(data_dict, "update_frequency", "res_extras_update_frequency")
 
     fq = [f for f in fq if f]
     fq = "+".join(fq)
@@ -323,11 +324,49 @@ def bd_dataset_search(context, data_dict):
             value = response["update_frequencies"].get(key, 0) + 1
             response["update_frequencies"][key] = value
 
-    # post-process spatial coverage ###############################
+    # post-process spatial coverage continent ###############################
 
     response["spatial_coverage_continent"] = {}
+    for dataset in response["datasets"]:
+        spatial_coverage_continent = []
+        for resource in dataset["resources"]:
+            res_spatial_coverage = resource.get("spatial_coverage", {})
+            res_spatial_coverage_continent = (
+                res_spatial_coverage.get("continent", [])
+                if isinstance(res_spatial_coverage, dict)
+                else []
+            )
+            if res_spatial_coverage_continent:
+                spatial_coverage_continent.extend(res_spatial_coverage_continent)
+            else:
+                continue
+        spatial_coverage_continent = list(set(spatial_coverage_continent))
+
+        for key in spatial_coverage_continent:
+            value = response["spatial_coverage_continent"].get(key, 0) + 1
+            response["spatial_coverage_continent"][key] = value
+
+    # post-process spatial coverage country ###############################
 
     response["spatial_coverage_country"] = {}
+    for dataset in response["datasets"]:
+        spatial_coverage_country = []
+        for resource in dataset["resources"]:
+            res_spatial_coverage = resource.get("spatial_coverage", {})
+            res_spatial_coverage_country = (
+                res_spatial_coverage.get("country", [])
+                if isinstance(res_spatial_coverage, dict)
+                else []
+            )
+            if res_spatial_coverage_country:
+                spatial_coverage_country.extend(res_spatial_coverage_country)
+            else:
+                continue
+        spatial_coverage_country = list(set(spatial_coverage_country))
+
+        for key in spatial_coverage_country:
+            value = response["spatial_coverage_country"].get(key, 0) + 1
+            response["spatial_coverage_country"][key] = value
 
     # post-process resource count #########################
 
@@ -363,7 +402,7 @@ def bd_dataset_search(context, data_dict):
     resource_type_order = resource_type_order + resource_types_not_included
 
     resources_order_dict = {}
-    print(resource_type_order)
+
     for i, package in enumerate(response["datasets"]):
         resources_type = [
             resource.get("resource_type") for resource in package.get("resources")
