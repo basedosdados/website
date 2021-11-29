@@ -409,18 +409,6 @@ export default function SearchPage({
           />
           <CheckboxFilterAccordion
             canSearch={true}
-            isActive={(paramFilters.entity || []).length > 0}
-            choices={entities}
-            values={paramFilters.entity}
-            valueField="name"
-            displayField="displayName"
-            fieldName="Entidade"
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, entity: values })
-            }
-          />
-          <CheckboxFilterAccordion
-            canSearch={true}
             isActive={(paramFilters.spatial_coverage || []).length > 0}
             choices={[...spatialCoverages.Continente, ...spatialCoverages.País]}
             values={paramFilters.spatial_coverage}
@@ -429,18 +417,6 @@ export default function SearchPage({
             fieldName="Cobertura espacial"
             onChange={(values) =>
               setParamFilters({ ...paramFilters, spatial_coverage: values })
-            }
-          />
-          <CheckboxFilterAccordion
-            canSearch={true}
-            isActive={(paramFilters.update_frequency || []).length > 0}
-            choices={updateFrequencies}
-            values={paramFilters.update_frequency}
-            valueField="name"
-            displayField="displayName"
-            fieldName="Frequência de atualização"
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, update_frequency: values })
             }
           />
           <RangeFilterAccordion
@@ -467,6 +443,30 @@ export default function SearchPage({
                   .map((_, i) => start + i),
               });
             }}
+          />
+          <CheckboxFilterAccordion
+            canSearch={true}
+            isActive={(paramFilters.entity || []).length > 0}
+            choices={entities}
+            values={paramFilters.entity}
+            valueField="name"
+            displayField="displayName"
+            fieldName="Entidade"
+            onChange={(values) =>
+              setParamFilters({ ...paramFilters, entity: values })
+            }
+          />
+          <CheckboxFilterAccordion
+            canSearch={true}
+            isActive={(paramFilters.update_frequency || []).length > 0}
+            choices={updateFrequencies}
+            values={paramFilters.update_frequency}
+            valueField="name"
+            displayField="displayName"
+            fieldName="Frequência de atualização"
+            onChange={(values) =>
+              setParamFilters({ ...paramFilters, update_frequency: values })
+            }
           />
         </VStack>
         <VStack alignItems="flex-start" spacing={5} width="100%">

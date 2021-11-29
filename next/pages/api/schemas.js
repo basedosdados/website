@@ -1,5 +1,37 @@
 import { axiosInstance } from "../../axios";
 
+export function getInformationRequestSchema() {
+  return axiosInstance
+    .get("/bd_information_request_schema")
+    .then(({ data }) => {
+      const schema = data.result;
+
+      delete schema.properties.id;
+      delete schema.properties.position;
+      delete schema.properties.url;
+      delete schema.properties.datastore_active;
+      delete schema.properties.format;
+      delete schema.properties.hash;
+      delete schema.properties.state;
+      delete schema.properties.package_id;
+      delete schema.properties.created;
+      delete schema.properties.last_modified;
+      delete schema.properties.resource_type;
+      delete schema.properties.metadata_modified;
+      delete schema.properties.last_updated;
+      delete schema.properties.cache_last_updated;
+      delete schema.properties.cache_url;
+      delete schema.properties.mimetype;
+      delete schema.properties.mimetype_inner;
+      delete schema.properties.size;
+      delete schema.properties.url_type;
+      delete schema.required;
+
+      return schema;
+    })
+    .catch(() => ({}));
+}
+
 export function getBdmTableSchema() {
   return axiosInstance
     .get(`/bd_bdm_table_schema`)

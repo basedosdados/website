@@ -38,7 +38,11 @@ import { BdmTablePage } from "../../components/organisms/BdmTablePage";
 import { MetadataPage } from "../../components/organisms/MetadataPage";
 import UserContext from "../../context/user";
 import { SchemaForm } from "../../components/molecules/SchemaForm";
-import { getBdmTableSchema, getExternalLinkSchema } from "../api/schemas";
+import {
+  getBdmTableSchema,
+  getExternalLinkSchema,
+  getInformationRequestSchema,
+} from "../api/schemas";
 import { BaseResourcePage } from "../../components/molecules/BaseResourcePage";
 import GreenTab from "../../components/atoms/GreenTab";
 
@@ -92,6 +96,14 @@ function AdminButtons({ resource, setResource }) {
         onClick={() => setResource({ resource_type: "create_bdm_table" })}
       >
         Criar tabela tratada
+      </SimpleButton>
+      <SimpleButton
+        isActive={resource?.resource_type === "create_information_request"}
+        onClick={() =>
+          setResource({ resource_type: "create_information_request" })
+        }
+      >
+        Criar pedido LAI
       </SimpleButton>
       <SimpleButton
         isActive={resource?.resource_type === "create_external_link"}
@@ -154,6 +166,26 @@ function ResourcesPage({
                 loadSchemaFunction={getBdmTableSchema}
                 prepareData={(d) => {
                   d.resource_type = "bdm_table";
+
+                  return d;
+                }}
+                updateFunction={(data) => createResource(data, dataset.id)}
+              />
+            }
+          />
+        );
+
+      case "create_information_request":
+        return (
+          <BaseResourcePage
+            title="Criar pedido LAI"
+            forceForm
+            formComponent={
+              <SchemaForm
+                schemaName="Pedido LAI"
+                loadSchemaFunction={getInformationRequestSchema}
+                prepareData={(d) => {
+                  d.resource_type = "information_request";
 
                   return d;
                 }}

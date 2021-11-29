@@ -63,7 +63,7 @@ export function MetadataPage({
       title="Metadados do conjunto"
       removeFunction={async () => {
         await deleteDataset(dataset);
-        await deleteDataset(dataset);
+        window.history.pushState({}, "", "/dataset");
       }}
       formComponent={
         <SchemaForm
