@@ -164,6 +164,7 @@ export default function SearchPage({
     temporal_coverage: "Cobertura temporal",
     entity: "Entidade",
     spatial_coverage: "Cobertura espacial",
+    update_frequency: "Frequência de atualização",
   };
 
   const organizations = data?.organizations
@@ -418,7 +419,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, entity: values })
             }
           />
-          {/*<CheckboxFilterAccordion
+          <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.spatial_coverage || []).length > 0}
             choices={[...spatialCoverages.Continente, ...spatialCoverages.País]}
@@ -429,8 +430,8 @@ export default function SearchPage({
             onChange={(values) =>
               setParamFilters({ ...paramFilters, spatial_coverage: values })
             }
-          />*/}
-          {/*<CheckboxFilterAccordion
+          />
+          <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.update_frequency || []).length > 0}
             choices={updateFrequencies}
@@ -441,7 +442,7 @@ export default function SearchPage({
             onChange={(values) =>
               setParamFilters({ ...paramFilters, update_frequency: values })
             }
-          />*/}
+          />
           <RangeFilterAccordion
             isActive={(paramFilters.temporal_coverage || []).length > 0}
             fieldName="Cobertura temporal"
