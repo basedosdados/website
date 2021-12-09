@@ -100,7 +100,7 @@ services:
     command: ["yarn", "start"]
 
   superset:
-    image: "bdd/superset${VTAG}"
+    image: "bdd/superset"
     build:
       context: superset
     ports:
