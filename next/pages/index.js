@@ -683,7 +683,7 @@ function Support({ strapiPages }) {
               <br />
               <br />
               Banco: Stone
-              <br /> Razão Social: Base dos Dados
+              <br /> Razão Social: Instituto Base dos Dados
               <br /> CNPJ: 42494318/0001-16
               <br />
               Agência: 0001 | Conta: 6761821-5

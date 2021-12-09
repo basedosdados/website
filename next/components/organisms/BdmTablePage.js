@@ -1,6 +1,7 @@
 import { Button } from "@chakra-ui/button";
 import { VStack, Text, Stack, Image } from "@chakra-ui/react";
 import Highlight, { defaultProps } from "prism-react-renderer";
+import dracula from "prism-react-renderer/themes/dracula";
 import { useState } from "react";
 import { LinkDash } from "../atoms/LinkDash";
 import { Markdown } from "../atoms/Markdown";
@@ -265,6 +266,7 @@ export function BdmTablePage({
         {consultationText[selectedConsultation] ? (
           <>
             <Highlight
+              theme={dracula}
               code={consultationText[selectedConsultation]}
               language={consultationLanguage[selectedConsultation]}
               {...defaultProps}

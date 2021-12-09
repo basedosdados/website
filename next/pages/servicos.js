@@ -84,7 +84,7 @@ function Section({
         marginLeft="5vw"
         flex="2"
       >
-        <Image src={imageUrl} />
+        <Image height="300px" src={imageUrl} />
       </Box>
     </Flex>
   );
@@ -98,6 +98,7 @@ function BorderBox({ title, children }) {
       padding="25px"
       border="1.5px solid #DEDFE0"
       width="350px"
+      height="260px"
       spacing={4}
     >
       <SectionTitle fontSize="20px">{title}</SectionTitle>
