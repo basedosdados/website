@@ -162,7 +162,7 @@ export default function Menu({ strapiPages = [] }) {
     Documentação: "https://basedosdados.github.io/mais/",
     Blog: "https://medium.com/basedosdados",
     Newsletter:
-      "https://basedosdados.hubspotpagebuilder.com/assine-a-newsletter-da-base-dos-dados",
+      "https://info.basedosdados.org/assine-a-newsletter-da-base-dos-dados",
     Institucional: {
       "Quem Somos": "/blog/2/",
       "Fale Conosco": "/blog/1/",

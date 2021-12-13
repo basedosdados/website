@@ -98,7 +98,7 @@ export default function Footer({ strapiPages }) {
             </LinkVStack>
             <LinkVStack title="CONTEÚDO">
               <FooterLink
-                href="https://basedosdados.hubspotpagebuilder.com/assine-a-newsletter-da-base-dos-dados"
+                href="https://info.basedosdados.org/assine-a-newsletter-da-base-dos-dados"
                 color="white"
                 target="_blank"
               >
