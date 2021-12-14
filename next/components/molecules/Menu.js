@@ -160,13 +160,14 @@ export default function Menu({ strapiPages = [] }) {
   const links = {
     Dados: "/dataset",
     Documentação: "https://basedosdados.github.io/mais/",
-    Blog: "https://medium.com/basedosdados",
-    Newsletter:
-      "https://info.basedosdados.org/assine-a-newsletter-da-base-dos-dados",
     Institucional: {
       "Quem Somos": "/blog/2/",
-      "Fale Conosco": "/blog/1/",
+      Contato: "/blog/1/",
+      Blog: "https://medium.com/basedosdados",
+      Newsletter:
+        "https://info.basedosdados.org/assine-a-newsletter-da-base-dos-dados",
     },
+    Serviços: "/servicos",
     Apoie: "https://apoia.se/basedosdados",
   };
 
