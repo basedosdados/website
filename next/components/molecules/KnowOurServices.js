@@ -16,19 +16,7 @@ export function KnowOurServices({ ...props }) {
       title: "Alinhamento de expectativas de negócio e de engenharia",
       text: "O segundo passo é entender qual a melhor forma de entregarmos os dados desejados. Explicamos nosso processo padronizado de engenharia e buscamos entregar o valor dos dados da forma mais acessível e completa possível. ",
     },
-    "3. Pesquisa de bases": {
-      title: "Identificação das bases de dados",
-      text: (
-        <>
-          O próximo passo é realizar uma varredura em bases de dados, sejam elas
-          já presentes em nosso <i>datalake</i>, catalogadas em nosso buscador
-          ou ainda não disponibilizadas de forma organizada pelo nosso time. O
-          objetivo é identificar como extrair todo valor requisitado de maneira
-          selecionada e estruturada.
-        </>
-      ),
-    },
-    "4. Orçamento": {
+    "3. Orçamento": {
       title: "Orçamento transparente e simplificado",
       text: (
         <>
@@ -40,7 +28,7 @@ export function KnowOurServices({ ...props }) {
         </>
       ),
     },
-    "5. Execução": {
+    "4. Execução": {
       title: "Execução ágil e entrega de valor",
       text: (
         <>

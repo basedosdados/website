@@ -22,7 +22,7 @@ function FixedBottomBar() {
       width="100%"
       padding="10px 20px"
       height="70px"
-      backgroundColor="#7EC876"
+      backgroundColor="#2B8C4D"
       justify="center"
       align="center"
       spacing={10}
@@ -61,7 +61,11 @@ function Section({
   ...props
 }) {
   return (
-    <Flex direction={{ base: "column-reverse", lg: "row" }} {...props}>
+    <Flex
+      id={title}
+      direction={{ base: "column-reverse", lg: "row" }}
+      {...props}
+    >
       <VStack align="flex-start" flex="3">
         <SectionTitle fontSize="24px" fontFamily="Ubuntu" marginBottom="20px">
           {title}
@@ -84,7 +88,7 @@ function Section({
         marginLeft="5vw"
         flex="2"
       >
-        <Image height="300px" src={imageUrl} />
+        <Image src={imageUrl} />
       </Box>
     </Flex>
   );
@@ -98,7 +102,7 @@ function BorderBox({ title, children }) {
       padding="25px"
       border="1.5px solid #DEDFE0"
       width="350px"
-      height="260px"
+      height="280px"
       spacing={4}
     >
       <SectionTitle fontSize="20px">{title}</SectionTitle>
@@ -110,6 +114,15 @@ function BorderBox({ title, children }) {
 }
 
 export default function Services({ strapiPages }) {
+  const services = {
+    "Captura de dados":
+      "https://basedosdados-static.s3.us-east-2.amazonaws.com/images/cloud.png",
+    "Análise de dados":
+      "https://basedosdados-static.s3.us-east-2.amazonaws.com/images/bar.png",
+    "Consultoria de dados":
+      "https://basedosdados-static.s3.us-east-2.amazonaws.com/images/lightbulb.png",
+  };
+
   return (
     <MainPageTemplate strapiPages={strapiPages}>
       <VStack
@@ -121,9 +134,26 @@ export default function Services({ strapiPages }) {
           Conheça nossos serviços
         </BigTitle>
         <SectionText fontFamily="Ubuntu" paddingBottom="40px">
-          A Base dos Dados captura, trata e analisa os dados que você ou sua
-          organização precisa.
+          A Base dos Dados é a especialista que ajuda você ou sua equipe a
+          trabalhar e extrair o máximo de valor dos dados.
         </SectionText>
+        <Stack
+          justify="space-between"
+          width="80%"
+          paddingBottom="50px"
+          direction={{ base: "column", lg: "row" }}
+        >
+          {Object.entries(services).map(([k, v]) => (
+            <Link href={`#${k}`}>
+              <VStack justify="flex-end">
+                <Image marginBottom="15px" height="100px" src={v} />
+                <SectionText fontSize="12px" fontWeight="bold">
+                  {k}
+                </SectionText>
+              </VStack>
+            </Link>
+          ))}
+        </Stack>
         <Section
           title="Captura de dados"
           imageUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/ilustracao_captura_dados-2.png"
@@ -155,7 +185,32 @@ export default function Services({ strapiPages }) {
           tabelas tratadas podem ser disponibilizadas com exclusividade ou serem
           públicas.
         </Section>
-        <KnowOurServices paddingBottom="50px" />
+        <SectionText paddingBottom="20px">
+          Nosso trabalho com engenharia de dados
+        </SectionText>
+        <Stack
+          justifyContent="space-between"
+          width="100%"
+          direction={{ base: "column", lg: "row" }}
+          align="center"
+          paddingBottom="50px"
+        >
+          <BorderBox title="Tecnologia de ponta">
+            Utilizando da infraestrutura do Google Cloud Platform, uma das
+            maiores plataformas de armazenamento e processamento de dados,
+            garantimos a segurança e a confiabilidade do nosso trabalho.
+          </BorderBox>
+          <BorderBox title="Flexibilidade">
+            Seja envios pontuais, atualizações recorrentes, acesso via API, ou
+            conexão com plataformas de BI, entregamos a solução que você precisa
+            de forma ágil e completa.
+          </BorderBox>
+          <BorderBox title="Frameworks reconhecidos">
+            Com frameworks e sistemas de gestão de dados tais como CKAN,
+            garantimos a qualidade e a organização do seu sistema de dados sem
+            gerar qualquer preocupação para sua equipe.
+          </BorderBox>
+        </Stack>
         <Section
           title="Análise de dados"
           imageUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/ilustracao_analises.png"
@@ -220,6 +275,7 @@ export default function Services({ strapiPages }) {
           banco de dados pode poupar horas de trabalho de sua equipe ao
           consultar, manipular ou atualizar as informações.
         </Section>
+        <SectionText paddingBottom="20px">Frentes de atuação</SectionText>
         <Stack
           justifyContent="space-between"
           width="100%"
@@ -242,6 +298,14 @@ export default function Services({ strapiPages }) {
             rápidas e escaláveis direto na nuvem.
           </BorderBox>
         </Stack>
+        <SectionTitle paddingTop="80px" paddingBottom="20px" color="#2B8C4D">
+          Nosso fluxo de trabalho
+        </SectionTitle>
+        <SectionText paddingBottom="20px">
+          Uma mesma metodologia de trabalho para todos os serviços, pautada na
+          satisfação dos clientes e na primazia pela qualidade.
+        </SectionText>
+        <KnowOurServices paddingBottom="50px" />
       </VStack>
       <FixedBottomBar />
     </MainPageTemplate>
