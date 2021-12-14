@@ -43,10 +43,6 @@ services:
     networks:
       - basedosdados
 
-  superset:
-    networks:
-      - basedosdados
-
   strapi-db:
     networks:
       - basedosdados

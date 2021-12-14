@@ -12,7 +12,6 @@ services:
       - ckan
       - next
       - strapi
-      - superset
     # logging:
     #   driver: syslog
     #   options:
@@ -98,13 +97,6 @@ services:
     depends_on:
       - strapi-db
     command: ["yarn", "start"]
-
-  superset:
-    image: "bdd/superset"
-    build:
-      context: superset
-    ports:
-      - "8080:8088"
 
   strapi-db:
     image: postgres

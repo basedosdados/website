@@ -61,7 +61,6 @@ load_images() {
         docker load < ~/basedosdados/images/db
         docker load < ~/basedosdados/images/next
         docker load < ~/basedosdados/images/strapi
-        docker load < ~/basedosdados/images/superset
     "
 }
 
@@ -95,7 +94,6 @@ build_images() {
     ( docker-compose build solr && docker save bdd/solr > build/images/solr ) &
     ( docker-compose build db   && docker save bdd/db > build/images/db ) &
     ( VTAG=$VTAG docker-compose build next && docker save bdd/next$VTAG > build/images/next ) &
-    ( docker-compose build superset && docker save bdd/superset > build/images/superset ) &
     for i in `jobs -p`; do wait $i ; done
 }
 
