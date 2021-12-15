@@ -81,13 +81,5 @@ docker exec -it ckan ckan db upgrade
 # rebuild ckan index
 docker exec -it ckan ckan search-index rebuild
 
-# start next container without the default entrypoint
-docker-compose run -d --entrypoint='' next sh -c "yarn install && yarn build && yarn run dev"
-
-# manually wait for next container to be ready, also know as gambiarra
-# next.js needs to be fully ready before nginx is called
-# change this as desired
-sleep 10
-
 # start nginx container
 docker-compose up -d nginx

@@ -37,11 +37,6 @@ services:
       - ./next:/app
     command: ["yarn", "run", "dev"]
 
-  strapi:
-    command: ["yarn", "run", "develop"]
-    environment:
-      - NODE_ENV=development
-
   nginx:
     volumes:
       - ./configs/nginx.dev.conf:/etc/nginx/nginx.conf:ro

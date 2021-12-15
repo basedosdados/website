@@ -11,7 +11,6 @@ services:
     depends_on:
       - ckan
       - next
-      - strapi
       - django
 
   ckan:
@@ -74,26 +73,6 @@ services:
     depends_on:
       - ckan
 
-  strapi:
-    image: "bdd/strapi${VTAG}"
-    build:
-      context: strapi
-    environment:
-      DATABASE_CLIENT: postgres
-      DATABASE_NAME: strapi
-      DATABASE_HOST: strapi-db
-      DATABASE_PORT: 5432
-      DATABASE_USERNAME: strapi
-      NODE_ENV: production
-      DATABASE_PASSWORD: strapi
-    volumes:
-      - ./strapi:/srv/app
-    ports:
-      - "1337:1337"
-    depends_on:
-      - strapi-db
-    command: ["yarn", "start"]
-
   django:
     image: "bdd/django${VTAG}"
     build:
@@ -110,16 +89,6 @@ services:
       - django-db
     command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
-  strapi-db:
-    image: postgres
-    environment:
-      POSTGRES_DB: strapi
-      POSTGRES_USER: strapi
-      POSTGRES_PASSWORD: strapi
-
-    volumes:
-      - strapi_db:/var/lib/postgresql/data
-
   django-db:
     image: postgres
     environment:
@@ -131,5 +100,4 @@ services:
       - django_db:/var/lib/postgresql/data
 
 volumes:
-  strapi_db:
   django_db:

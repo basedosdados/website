@@ -37,13 +37,8 @@ services:
     networks:
       - basedosdados
 
-  strapi:
-    build:
-      context: /
-    networks:
-      - basedosdados
-
-  strapi-db:
+  django:
+    command: ["gunicorn", "api.asgi"]
     networks:
       - basedosdados
 

@@ -2,9 +2,16 @@
 
 ## Para desenvolvimento local
 
+### Caso Primeira Vez
+
 - Instale docker, docker-compose, git-lfs (instruções em [git-lfs.github.com](https://git-lfs.github.com/));
 - Execute `./bootstrap.sh`;
-- Acesse localhost:5000.
+- Acesse localhost;
+
+### Outras Vezes
+
+- Execute `docker-compose up`;
+- Acesse localhost;
 
 É possível também logar com o usuário `dev` e senha `12345678`. Note que o script `bootstrap.sh` inicializa o ambiente dev, caso tenha algum problema é possível inicializar do zero (com novos downloads e builds) com `./bootstrap.sh full`. Caso precise, a chave de API do ckan em desenvolvimento se encontra em `configs/ckan-dev-api-token.sh`, e para adicionar as suas variáveis de ambiente rode `source configs/ckan-dev-api-token.sh` ou adicione ao seu `bashrc`.
 
