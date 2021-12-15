@@ -64,6 +64,7 @@ function Section({
     <Flex
       id={title}
       direction={{ base: "column-reverse", lg: "row" }}
+      paddingTop="80px"
       {...props}
     >
       <VStack align="flex-start" flex="3">

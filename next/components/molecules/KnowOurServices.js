@@ -10,21 +10,23 @@ export function KnowOurServices({ ...props }) {
   const tabs = {
     "1. Demanda": {
       title: "Identificação de demandas e necessidades do cliente",
-      text: "Trabalhamos colaborativamente para compreender as reais necessidades por trás dos pedidos de nossos clientes. O trabalho de descoberta compreende discussões sobre os objetivos e usos dos dados a serem capturados. É neste passo que fica claro para nós e nossos clientes nosso objetivo final.",
+      text: "Trabalhamos colaborativamente para compreender as reais necessidades por trás dos pedidos de nossos clientes. O trabalho de descoberta compreende discussões sobre os objetivos do projeto ou o uso dos dados a serem capturados e analisados. É nesta etapa que fica claro para nossa equipe e para os clientes o objetivo final do serviço.",
     },
     "2. Planejamento": {
-      title: "Alinhamento de expectativas de negócio e de engenharia",
-      text: "O segundo passo é entender qual a melhor forma de entregarmos os dados desejados. Explicamos nosso processo padronizado de engenharia e buscamos entregar o valor dos dados da forma mais acessível e completa possível. ",
+      title:
+        "Alinhamento de expectativas de negócio, engenharia ou capacitação",
+      text: "O segundo passo é entender qual a melhor forma de entregarmos o valor que você precisa. Não trabalhamos com propostas genéricas. Cada projeto é pensado e orientado 100% para as demandas dos clientes, seja no formato de entrega de dados, análises ou capacitações específicas.",
     },
     "3. Orçamento": {
       title: "Orçamento transparente e simplificado",
       text: (
         <>
-          Uma vez claramente alinhado o escopo, formato e expectativas,
-          entregamos uma proposta de orçamento completamente transparente.
-          Baseamos nosso trabalho na quantidade e complexidade de{" "}
-          <i>datasets</i>, trabalho necessário e urgência. Tudo explícito de
-          forma direta e alinhada com o que foi identificado até então.
+          Uma vez alinhado o escopo, formato e expectativas, entregamos uma
+          proposta de orçamento completamente transparente. Para isso,
+          consideramos fatores como a quantidade e complexidade de{" "}
+          <i>datasets</i>, trabalho necessário, tamanho da equipe e urgência.
+          Tudo explícito de forma direta e em conformidade com o que foi
+          determinado até então.
         </>
       ),
     },
@@ -35,7 +37,7 @@ export function KnowOurServices({ ...props }) {
           Por fim, nossa entrega é comprometida com prazos e, sobretudo,
           qualidade. A comunicação é constante durante toda execução.
           Trabalhando de forma <i>lean</i> e com profissionais experientes na
-          área, nosso time é focado em satisfazer nossos clientes.
+          área, nossa equipe preza pela satisfação de nossos clientes.
         </>
       ),
     },

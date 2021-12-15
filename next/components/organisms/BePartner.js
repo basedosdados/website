@@ -107,7 +107,7 @@ export function BePartner() {
               <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/governosp.png" />
               <PartnerBox
                 padding="0px 20px"
-                src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/riomais.png"
+                src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/bg__lemann.png"
               />
             </HStack>
           </Stack>

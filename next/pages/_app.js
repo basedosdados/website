@@ -16,6 +16,7 @@ function MyApp({ Component, pageProps }) {
           rel="image_src"
           href="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/thumbnail_geral.png"
         />
+        <link rel="stylesheet" href="/vendor/prism.css" data-noprefix />
         <title>Base dos Dados</title>
         <meta
           property="description"

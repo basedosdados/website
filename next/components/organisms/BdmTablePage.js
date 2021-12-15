@@ -1,8 +1,6 @@
 import { Button } from "@chakra-ui/button";
 import { VStack, Text, Stack, Image } from "@chakra-ui/react";
-import Highlight, { defaultProps } from "prism-react-renderer";
-import dracula from "prism-react-renderer/themes/dracula";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LinkDash } from "../atoms/LinkDash";
 import { Markdown } from "../atoms/Markdown";
 import SectionText from "../atoms/SectionText";
@@ -42,7 +40,7 @@ export function BdmTablePage({
   const consultationLanguage = {
     SQL: "sql",
     Python: "python",
-    R: "r",
+    R: "R",
   };
 
   const helpText = {
@@ -156,18 +154,22 @@ export function BdmTablePage({
   const consultationText = {
     SQL: `SELECT * FROM \`basedosdados.${queryName}\` LIMIT 100`,
     Python: `import basedosdados as bd
-    # Para carregar o dado direto no pandas
-    df = bd.read_table(dataset_id='${resource.dataset_id}', 
-            table_id='${resource.name}',
-            billing_project_id="<YOUR_PROJECT_ID>")`,
+# Para carregar o dado direto no pandas
+df = bd.read_table(dataset_id='${resource.dataset_id}', 
+table_id='${resource.name}',
+billing_project_id="<YOUR_PROJECT_ID>")`,
     R: `install.packages("basedosdados")
-    library("basedosdados")
-    # Defina o seu projeto no Google Cloud
-    set_billing_id("<YOUR_PROJECT_ID>")
-    # Para carregar o dado direto no R
-    query <- "SELECT * FROM \`basedosdados.${queryName}\`"
-    df <- read_sql(query)`,
+library("basedosdados")
+# Defina o seu projeto no Google Cloud
+set_billing_id("<YOUR_PROJECT_ID>")
+# Para carregar o dado direto no R
+query <- "SELECT * FROM \`basedosdados.${queryName}\`"
+df <- read_sql(query)`,
   };
+
+  useEffect(() => {
+    if (window) window.Prism.highlightAll();
+  }, [consultationText]);
 
   return (
     <BaseResourcePage
@@ -265,41 +267,21 @@ export function BdmTablePage({
         )}
         {consultationText[selectedConsultation] ? (
           <>
-            <Highlight
-              theme={dracula}
-              code={consultationText[selectedConsultation]}
-              language={consultationLanguage[selectedConsultation]}
-              {...defaultProps}
+            <pre
+              style={{
+                width: "100%",
+                padding: "10px",
+                borderRadius: "6px",
+                whiteSpace: "break-spaces",
+                wordBreak: "break-all",
+              }}
             >
-              {({ className, style, tokens, getLineProps, getTokenProps }) => (
-                <pre
-                  className={className}
-                  style={{
-                    ...style,
-                    width: "100%",
-                    padding: "10px",
-                    borderRadius: "6px",
-                    whiteSpace: "break-spaces",
-                    wordBreak: "break-all",
-                    backgroundColor: "#252A32",
-                  }}
-                >
-                  {tokens.map((line, i) => (
-                    <div
-                      style={{ wordBreak: "break-all" }}
-                      {...getLineProps({ line, key: i })}
-                    >
-                      {line.map((token, key) => (
-                        <span
-                          style={{ wordBreak: "break-all" }}
-                          {...getTokenProps({ token, key })}
-                        />
-                      ))}
-                    </div>
-                  ))}
-                </pre>
-              )}
-            </Highlight>
+              <code
+                className={`language-${consultationLanguage[selectedConsultation]}`}
+              >
+                {consultationText[selectedConsultation]}
+              </code>
+            </pre>
             <SectionText fontSize="14px" fontWeight="300">
               <i>
                 Para consulta é necessário um projeto no Google Cloud.{" "}
@@ -314,6 +296,7 @@ export function BdmTablePage({
                 </LinkDash>
               </i>
             </SectionText>
+            <script key={selectedConsultation} src="/vendor/prism.js"></script>
           </>
         ) : (
           <></>

@@ -146,3 +146,15 @@ body {
 *:focus {
   box-shadow: none !important;
 }
+
+.token.number {
+  color: #e44748 !important;
+}
+
+.token.keyword {
+  color: #ffdf54 !important;
+}
+
+.token.operator {
+  color: #ace158 !important;
+}
