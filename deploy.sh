@@ -72,6 +72,7 @@ restart_services() {
         export HOST_NAME=$HOST_NAME
         docker-compose rm -sf ckan next django autoheal
         docker-compose up --no-build -d
+        docker-compose run django python manage.py collectstatic
         docker-compose ps
         docker-compose restart nginx
     "

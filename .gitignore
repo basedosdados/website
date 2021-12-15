@@ -11,3 +11,4 @@ dive.log
 tmp
 **/packages
 __MACOSX
+django/api/static/

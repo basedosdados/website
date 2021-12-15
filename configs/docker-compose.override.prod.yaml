@@ -38,7 +38,6 @@ services:
       - basedosdados
 
   django:
-    command: ["gunicorn", "api.asgi"]
     networks:
       - basedosdados
 
