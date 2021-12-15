@@ -81,8 +81,6 @@ services:
       - DATABASE_URL=postgres://django:django@django-db:5432/django?conn_max_age=600
       - DEBUG=False
       - SECRET_KEY=${SECRET_KEY}
-    volumes:
-      - ./django:/usr/src/app
     ports:
       - "8000:8000"
     depends_on:

@@ -30,6 +30,10 @@ services:
       context: .
       dockerfile: stack/solr/Dockerfile
 
+  django:
+    volumes:
+      - ./django:/usr/src/app
+
   next:
     build:
       context: next
