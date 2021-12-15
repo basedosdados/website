@@ -21,7 +21,7 @@ import Typist from "react-typist";
 import { getPopularDatalakeDatasets } from "./api/datasets";
 import { ShadowBox } from "../components/atoms/ShadowBox";
 import { MainPageTemplate } from "../components/templates/main";
-import { withStrapiPages } from "../hooks/strapi.hook";
+import { withPages } from "../hooks/pages.hook";
 import { ThemeTag } from "../components/atoms/ThemeTag";
 import { LinkDash } from "../components/atoms/LinkDash";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
@@ -36,7 +36,7 @@ export async function getStaticProps(context) {
     popularDatalakeDatasets = [];
   }
 
-  return await withStrapiPages({
+  return await withPages({
     props: {
       popularDatalakeDatasets,
     },
@@ -489,8 +489,8 @@ function JoinTheCommunity() {
   );
 }
 
-function Support({ strapiPages }) {
-  const contactPage = strapiPages.filter((p) => p.Title === "Contato");
+function Support({ pages }) {
+  const contactPage = pages.filter((p) => p.Title === "Contato");
 
   function SupportButton({
     onClick,
@@ -727,12 +727,12 @@ function Support({ strapiPages }) {
 }
 
 export default function Home({
-  strapiPages,
+  pages,
   popularDatasets,
   popularDatalakeDatasets,
 }) {
   return (
-    <MainPageTemplate backgroundColor="#FFFFFF" strapiPages={strapiPages}>
+    <MainPageTemplate backgroundColor="#FFFFFF" pages={pages}>
       <VStack
         alignItems="center"
         width="100%"
@@ -757,7 +757,7 @@ export default function Home({
         width={{ base: "90%", lg: "85%" }}
         margin="auto"
       >
-        <Support strapiPages={strapiPages} />
+        <Support pages={pages} />
         <VStack width="100%">
           <BigTitle textAlign="center" maxWidth="100%" paddingBottom="10px">
             Explore, aprenda e participe

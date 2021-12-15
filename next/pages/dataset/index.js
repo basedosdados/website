@@ -32,7 +32,7 @@ import {
   CheckboxFilterAccordion,
   RangeFilterAccordion,
 } from "../../components/atoms/FilterAccordion";
-import { withStrapiPages } from "../../hooks/strapi.hook";
+import { withPages } from "../../hooks/pages.hook";
 import { MainPageTemplate } from "../../components/templates/main";
 import { addParametersToCurrentURL, isBdPlus, unionArrays } from "../../utils";
 import { Tag } from "../../components/atoms/Tag";
@@ -49,7 +49,7 @@ import {
 export async function getStaticProps(context) {
   const translations = await getTranslations();
   const availableOptionsTranslations = await getAvailableOptionsTranslations();
-  return withStrapiPages({
+  return withPages({
     revalidate: 60, //TODO: Increase this timer
     props: {
       translations,
@@ -133,7 +133,7 @@ function FilterTags({
 }
 
 export default function SearchPage({
-  strapiPages,
+  pages,
   availableOptionsTranslations,
   translations,
 }) {
@@ -311,7 +311,7 @@ export default function SearchPage({
   }, [paramFilters, search, order]);
 
   return (
-    <MainPageTemplate strapiPages={strapiPages}>
+    <MainPageTemplate pages={pages}>
       <NewDatasetModal {...datasetDisclosure} />
       <Stack
         justifyContent="flex-start"

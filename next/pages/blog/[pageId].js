@@ -8,46 +8,46 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import BigTitle from "../../components/atoms/BigTitle";
-import { getStrapiPages } from "../api/strapi";
+import { getPages } from "../api/pages";
 import { useEffect, useState } from "react";
 import showdown from "showdown";
 import { MainPageTemplate } from "../../components/templates/main";
 
 export async function getStaticProps(context) {
-  let { data: strapiPages } = await getStrapiPages();
+  let { data: pages } = await getPages();
 
   return {
     props: {
-      strapiPages,
+      pages,
     },
     revalidate: 60, //TODO: Increase this timer
   };
 }
 
 export async function getStaticPaths(context) {
-  let { data: strapiPages } = await getStrapiPages();
+  let { data: pages } = await getPages();
 
   return {
-    paths: strapiPages.map((p) => ({
-      params: { page: p.id.toString() },
+    paths: pages.map((p) => ({
+      params: { pageId: p.id.toString() },
     })),
     fallback: "blocking",
   };
 }
 
-function BlogPage({ strapiPages = [] }) {
+function BlogPage({ pages = [] }) {
   const router = useRouter();
   const [converter, _] = useState(new showdown.Converter());
   const [leftColumnHtml, setLeftColumnHtml] = useState("");
   const [rightColumnHtml, setRightColumnHtml] = useState("");
   const [data, setData] = useState(null);
-  const { page } = router.query;
+  const { pageId } = router.query;
 
   useEffect(() => {
-    const strapiPage = strapiPages.filter((p) => p.id == page)[0];
-    setRightColumnHtml(converter.makeHtml(strapiPage.RightColumnText));
-    setLeftColumnHtml(converter.makeHtml(strapiPage.LeftColumnText));
-    setData(strapiPage);
+    const page = pages.filter((p) => p.id == pageId)[0];
+    setRightColumnHtml(converter.makeHtml(page.right_column_markdown));
+    setLeftColumnHtml(converter.makeHtml(page.left_column_markdown));
+    setData(page);
 
     typeof hbspt != "undefined" ? (
       hbspt.forms.create({
@@ -63,7 +63,7 @@ function BlogPage({ strapiPages = [] }) {
 
   if (!data)
     return (
-      <MainPageTemplate strapiPages={strapiPages}>
+      <MainPageTemplate pages={pages}>
         <Center
           minHeight="600px"
           width="100%"
@@ -76,7 +76,7 @@ function BlogPage({ strapiPages = [] }) {
     );
 
   return (
-    <MainPageTemplate strapiPages={strapiPages}>
+    <MainPageTemplate pages={pages}>
       <VStack
         alignItems="center"
         width="100%"

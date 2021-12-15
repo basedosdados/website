@@ -152,7 +152,7 @@ function DesktopLinks({ links }) {
   );
 }
 
-export default function Menu({ strapiPages = [] }) {
+export default function Menu({ pages = [] }) {
   const menuDisclosure = useDisclosure();
   const divRef = useRef();
   const userData = useContext(UserContext);

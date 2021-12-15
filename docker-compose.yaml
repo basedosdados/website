@@ -12,11 +12,7 @@ services:
       - ckan
       - next
       - strapi
-    # logging:
-    #   driver: syslog
-    #   options:
-    #     syslog-address: tcp://logstash:5001
-    #     syslog-facility: daemon
+      - django
 
   ckan:
     container_name: ckan
@@ -98,6 +94,22 @@ services:
       - strapi-db
     command: ["yarn", "start"]
 
+  django:
+    image: "bdd/django${VTAG}"
+    build:
+      context: django
+    environment:
+      - DATABASE_URL=postgres://django:django@django-db:5432/django?conn_max_age=600
+      - DEBUG=False
+      - SECRET_KEY=${SECRET_KEY}
+    volumes:
+      - ./django:/usr/src/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - django-db
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
   strapi-db:
     image: postgres
     environment:
@@ -108,5 +120,16 @@ services:
     volumes:
       - strapi_db:/var/lib/postgresql/data
 
+  django-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: django
+      POSTGRES_USER: django
+      POSTGRES_PASSWORD: django
+
+    volumes:
+      - django_db:/var/lib/postgresql/data
+
 volumes:
   strapi_db:
+  django_db:

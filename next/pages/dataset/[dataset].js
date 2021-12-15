@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { MainPageTemplate } from "../../components/templates/main";
-import { withStrapiPages } from "../../hooks/strapi.hook";
+import { withPages } from "../../hooks/pages.hook";
 import {
   createResource,
   listDatasets,
@@ -58,7 +58,7 @@ export async function getStaticProps(context) {
     (r) => r && r?.resource_type === "external_link"
   );
 
-  return await withStrapiPages({
+  return await withPages({
     props: {
       dataset,
       bdmTables,
@@ -283,7 +283,7 @@ export default function DatasetPage({
   dataset,
   bdmTables,
   externalLinks,
-  strapiPages,
+  pages,
   isPlus,
   translations,
   availableOptionsTranslations,
@@ -306,7 +306,7 @@ export default function DatasetPage({
   }
 
   return (
-    <MainPageTemplate strapiPages={strapiPages}>
+    <MainPageTemplate pages={pages}>
       <Head>
         <title>{dataset.title} - Base dos Dados</title>
 

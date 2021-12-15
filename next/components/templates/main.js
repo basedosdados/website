@@ -8,7 +8,7 @@ import Footer from "../molecules/Footer";
 import Menu from "../molecules/Menu";
 
 export function MainPageTemplate({
-  strapiPages,
+  pages,
   children,
   backgroundColor = "#FFFFFF",
 }) {
@@ -18,11 +18,11 @@ export function MainPageTemplate({
     <UserContext.Provider value={data}>
       <Box backgroundColor={backgroundColor}>
         <SiteHead />
-        <Menu strapiPages={strapiPages} />
+        <Menu pages={pages} />
         <Box paddingTop={{ base: "30px", lg: "120px" }} paddingBottom="50px">
           {children}
         </Box>
-        <Footer strapiPages={strapiPages} />
+        <Footer pages={pages} />
       </Box>
     </UserContext.Provider>
   );

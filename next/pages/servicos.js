@@ -8,10 +8,10 @@ import SectionTitle from "../components/atoms/SectionTitle";
 import { KnowOurServices } from "../components/molecules/KnowOurServices";
 import { NamedAvatar } from "../components/molecules/NamedAvatar";
 import { MainPageTemplate } from "../components/templates/main";
-import { withStrapiPages } from "../hooks/strapi.hook";
+import { withPages } from "../hooks/pages.hook";
 
 export async function getStaticProps(context) {
-  return await withStrapiPages();
+  return await withPages();
 }
 
 function FixedBottomBar() {
@@ -114,7 +114,7 @@ function BorderBox({ title, children }) {
   );
 }
 
-export default function Services({ strapiPages }) {
+export default function Services({ pages }) {
   const services = {
     "Captura de dados":
       "https://basedosdados-static.s3.us-east-2.amazonaws.com/images/cloud.png",
@@ -125,7 +125,7 @@ export default function Services({ strapiPages }) {
   };
 
   return (
-    <MainPageTemplate strapiPages={strapiPages}>
+    <MainPageTemplate pages={pages}>
       <VStack
         paddingTop={{ base: "50px", lg: "0px" }}
         width="80%"
