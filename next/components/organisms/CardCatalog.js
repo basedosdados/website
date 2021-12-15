@@ -52,14 +52,39 @@ export default function CardCatalog({ title, text, children, containerStyle }) {
           plugins={[
             "infinite",
             "arrows",
-            "fastSwipe",
             {
               resolve: slidesToShowPlugin,
               options: {
-                numberOfSlides: isMobile ? 1 : 4,
+                numberOfSlides: 4,
               },
             },
           ]}
+          breakpoints={{
+            768: {
+              plugins: [
+                "infinite",
+                "arrows",
+                {
+                  resolve: slidesToShowPlugin,
+                  options: {
+                    numberOfSlides: 1,
+                  },
+                },
+              ],
+            },
+            1200: {
+              plugins: [
+                "infinite",
+                "arrows",
+                {
+                  resolve: slidesToShowPlugin,
+                  options: {
+                    numberOfSlides: 2,
+                  },
+                },
+              ],
+            },
+          }}
         >
           {children}
         </Carousel>
