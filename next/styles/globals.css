@@ -146,7 +146,6 @@ body {
 *:focus {
   box-shadow: none !important;
 }
-<<<<<<< HEAD
 
 .token.number {
   color: #e44748 !important;
@@ -159,5 +158,3 @@ body {
 .token.operator {
   color: #ace158 !important;
 }
-=======
->>>>>>> 3beb4b1a77bd65a04814ae1b5e9630ebd67d4673
