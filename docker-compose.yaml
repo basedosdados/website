@@ -98,4 +98,4 @@ services:
       - django_db:/var/lib/postgresql/data
 
 volumes:
-  django_db:
+  django-db:

@@ -41,6 +41,10 @@ services:
     networks:
       - basedosdados
 
+  django-db:
+    networks:
+      - basedosdados
+
   solr:
     networks:
       - basedosdados
