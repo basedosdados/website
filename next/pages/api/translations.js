@@ -13,9 +13,3 @@ export async function getAvailableOptionsTranslations() {
     .then(({ data }) => data.result)
     .catch(() => []);
 }
-
-export async function getAvailableOptionsTranslations() {
-  return axios
-    .get("http://ckan:5000/api/3/action/bd_available_options_dict")
-    .then(({ data }) => data.result);
-}
