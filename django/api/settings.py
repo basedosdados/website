@@ -29,7 +29,11 @@ SECRET_KEY = env.str("SECRET_KEY")
 DEBUG = env.str("DEBUG")
 
 ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = ["http://localhost"]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost",
+    "https://staging.basedosdados.org",
+    "https://basedosdados.org",
+]
 CORS_ORIGIN_ALLOW_ALL = True
 
 

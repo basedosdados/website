@@ -5,6 +5,7 @@ export default function RoundedButton({
   children,
   colorScheme = "blue",
   backgroundColor = "#3AA1EB",
+  _hover = {},
   ...style
 }) {
   return (
@@ -16,6 +17,10 @@ export default function RoundedButton({
       borderRadius="68.6364px"
       boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
       letterSpacing="0.1em"
+      _hover={{
+        ..._hover,
+        transform: "translateY(-3px);",
+      }}
       {...style}
     >
       {children}

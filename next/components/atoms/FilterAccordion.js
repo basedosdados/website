@@ -46,12 +46,11 @@ export function BaseFilterAccordion({
                 <HStack
                   spacing={2}
                   alignContent="baseline"
-                  justifyContent="center"
+                  justifyContent="flex-start"
                   width="100%"
                 >
                   <Box
-                    flex="1"
-                    width="100%"
+                    width="fit-content"
                     textAlign="left"
                     fontFamily="Lato"
                     fontWeight="700"
@@ -76,8 +75,6 @@ export function BaseFilterAccordion({
                 maxHeight="300px"
                 pb={4}
                 pt={2}
-                pl={4}
-                pr={4}
                 width="100%"
                 alignItems="flex-start"
               >
@@ -278,23 +275,29 @@ export function FilterAccordion({
         alignItems="flex-start"
       >
         {choices.map((c) => (
-          <Title
-            fontSize="14px"
-            cursor="pointer"
-            fontWeigth={c[valueField] === value ? "700" : "400"}
-            padding="5px 10px"
-            borderRadius="5px"
-            transform="translateX(-10px)"
-            zIndex="100"
-            position="relative"
-            width="100%"
+          <Box
             backgroundColor={
-              c[valueField] === value ? "#F5F5F5" : "transparent"
+              c[valueField] === value ? "#EBEBEB" : "transparent"
             }
-            onClick={() => onChange(c[valueField])}
+            width="100%"
+            _hover={{ backgroundColor: "#F5F5F5" }}
+            borderRadius="5px"
           >
-            {c[displayField]}
-          </Title>
+            <Title
+              fontSize="14px"
+              cursor="pointer"
+              fontWeigth={c[valueField] === value ? "500" : "400"}
+              padding="5px 30px"
+              borderRadius="5px"
+              transform="translateX(-10px)"
+              zIndex="100"
+              position="relative"
+              width="100%"
+              onClick={() => onChange(c[valueField])}
+            >
+              {c[displayField]}
+            </Title>
+          </Box>
         ))}
       </VStack>
     </BaseFilterAccordion>

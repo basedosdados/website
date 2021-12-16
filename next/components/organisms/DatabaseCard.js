@@ -37,16 +37,12 @@ export default function DatabaseCard({
   databaseInfo.push(
     <HStack whiteSpace="nowrap">
       <b>{tableNum} tabelas tratadas </b>
-      <Link href={`/dataset?bdPlus=true`}>
-        <Image
-          height="15px"
-          src={
-            tableNum === 0
-              ? `/img/logos/bd_plus_cinza.png`
-              : `/img/logo_plus.png`
-          }
-        />
-      </Link>
+      <Image
+        height="15px"
+        src={
+          tableNum === 0 ? `/img/logos/bd_plus_cinza.png` : `/img/logo_plus.png`
+        }
+      />
     </HStack>
   );
 

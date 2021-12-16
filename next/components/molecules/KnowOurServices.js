@@ -43,7 +43,7 @@ export function KnowOurServices({ ...props }) {
     },
   };
   return (
-    <VStack {...props} width={{ base: "100%", lg: "90%" }}>
+    <VStack {...props} width={{ base: "100%", lg: "75%" }}>
       <HStack
         boxShadow="0px 2px 5px 1px rgba(0, 0, 0, 0.25)"
         borderRadius="15px"
@@ -53,13 +53,13 @@ export function KnowOurServices({ ...props }) {
         backgroundColor="white"
         padding="0px 5%"
         overflowX={{ base: "scroll", lg: "none" }}
-        maxW={{ base: "300px", lg: "initial" }}
+        maxW={{ base: "500px", lg: "initial" }}
       >
         {Object.keys(tabs).map((tabName) => (
           <Heading
-            color="#252A32"
+            color={tabName === currentTab ? "#34A15A" : "#252A32"}
             fontFamily="Ubuntu"
-            fontSize="18px"
+            fontSize="16px"
             height="50px"
             alignItems="center"
             whiteSpace="nowrap"

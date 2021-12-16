@@ -201,16 +201,14 @@ export function Database({
                   {tableNum}{" "}
                   {tableNum === 1 ? "tabela tratada" : "tabelas tratadas"}
                 </Subtitle>
-                <Link href="/dataset?bdPlus=true">
-                  <Image
-                    height="15px"
-                    src={
-                      tableNum === 0
-                        ? "/img/logos/bd_plus_cinza.png"
-                        : "/img/logo_plus.png"
-                    }
-                  />
-                </Link>
+                <Image
+                  height="15px"
+                  src={
+                    tableNum === 0
+                      ? "/img/logos/bd_plus_cinza.png"
+                      : "/img/logo_plus.png"
+                  }
+                />
               </HStack>
               {externalLinkNum ? (
                 <HStack>

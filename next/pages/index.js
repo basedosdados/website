@@ -515,6 +515,9 @@ function Support({ pages }) {
           fontSize="18px"
           minWidth="200px"
           letterSpacing="0.1em"
+          _hover={{
+            transform: "translateY(-3px);",
+          }}
         >
           {children}
         </Button>
