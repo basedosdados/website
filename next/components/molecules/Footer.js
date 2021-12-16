@@ -47,9 +47,6 @@ function FooterLink(props) {
 export default function Footer({ pages }) {
   const [email, setEmail] = useState();
 
-  // const contactPage = pages.filter((p) => p.Title === "Contato");
-  // const aboutPage = pages.filter((p) => p.Title === "Sobre");
-
   return (
     <VStack position="relative" zIndex="10" width="100%" spacing={0}>
       <VStack width="100%" padding={10} spacing={10} backgroundColor="#34A15A">

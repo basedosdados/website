@@ -13,7 +13,11 @@
 - Execute `docker-compose up`;
 - Acesse localhost;
 
+### Login
+
 É possível também logar com o usuário `dev` e senha `12345678`. Note que o script `bootstrap.sh` inicializa o ambiente dev, caso tenha algum problema é possível inicializar do zero (com novos downloads e builds) com `./bootstrap.sh full`. Caso precise, a chave de API do ckan em desenvolvimento se encontra em `configs/ckan-dev-api-token.sh`, e para adicionar as suas variáveis de ambiente rode `source configs/ckan-dev-api-token.sh` ou adicione ao seu `bashrc`.
+
+### Banco de dados
 
 É possível visualizar e modificar o banco de dados (com dbeaver) em:
 

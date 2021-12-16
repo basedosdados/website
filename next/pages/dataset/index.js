@@ -40,11 +40,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { SchemaForm } from "../../components/molecules/SchemaForm";
 import { getDatasetSchema } from "../api/schemas";
+<<<<<<< HEAD
 import { getUser } from "../api/user";
 import {
   getAvailableOptionsTranslations,
   getTranslations,
 } from "../api/translations";
+=======
+import UserContext from "../../context/user";
+import { getUser } from "../api/user";
+>>>>>>> 3beb4b1a77bd65a04814ae1b5e9630ebd67d4673
 
 export async function getStaticProps(context) {
   const translations = await getTranslations();
@@ -139,8 +144,14 @@ export default function SearchPage({
 }) {
   const { query } = useRouter();
   const datasetDisclosure = useDisclosure();
+<<<<<<< HEAD
   const { data: userData = null } = useQuery("user", getUser);
   const [order, setOrder] = useState("score");
+=======
+  const orderQuery = decodeURI(query.order_by || "score");
+  const { data: userData = null } = useQuery("user", getUser);
+  const [order, setOrder] = useState(orderQuery);
+>>>>>>> 3beb4b1a77bd65a04814ae1b5e9630ebd67d4673
   const [search, setSearch] = useState("");
   const [paramFilters, setParamFilters] = useState({});
   const [page, setPage] = useState(1);

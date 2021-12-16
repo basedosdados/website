@@ -98,6 +98,7 @@ function AdminButtons({ resource, setResource }) {
         Criar tabela tratada
       </SimpleButton>
       <SimpleButton
+<<<<<<< HEAD
         isActive={resource?.resource_type === "create_information_request"}
         onClick={() =>
           setResource({ resource_type: "create_information_request" })
@@ -106,6 +107,8 @@ function AdminButtons({ resource, setResource }) {
         Criar pedido LAI
       </SimpleButton>
       <SimpleButton
+=======
+>>>>>>> 3beb4b1a77bd65a04814ae1b5e9630ebd67d4673
         isActive={resource?.resource_type === "create_external_link"}
         onClick={() => setResource({ resource_type: "create_external_link" })}
       >
@@ -166,6 +169,7 @@ function ResourcesPage({
                 loadSchemaFunction={getBdmTableSchema}
                 prepareData={(d) => {
                   d.resource_type = "bdm_table";
+<<<<<<< HEAD
 
                   return d;
                 }}
@@ -187,6 +191,8 @@ function ResourcesPage({
                 prepareData={(d) => {
                   d.resource_type = "information_request";
 
+=======
+>>>>>>> 3beb4b1a77bd65a04814ae1b5e9630ebd67d4673
                   return d;
                 }}
                 updateFunction={(data) => createResource(data, dataset.id)}
@@ -206,7 +212,10 @@ function ResourcesPage({
                 loadSchemaFunction={getExternalLinkSchema}
                 prepareData={(d) => {
                   d.resource_type = "external_link";
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3beb4b1a77bd65a04814ae1b5e9630ebd67d4673
                   return d;
                 }}
                 updateFunction={(data) => createResource(data, dataset.id)}
@@ -283,7 +292,11 @@ export default function DatasetPage({
   dataset,
   bdmTables,
   externalLinks,
+<<<<<<< HEAD
   pages,
+=======
+  strapiPages,
+>>>>>>> 3beb4b1a77bd65a04814ae1b5e9630ebd67d4673
   isPlus,
   translations,
   availableOptionsTranslations,

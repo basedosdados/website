@@ -26,6 +26,11 @@ import { ThemeTag } from "../components/atoms/ThemeTag";
 import { LinkDash } from "../components/atoms/LinkDash";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { isBdPlus } from "../utils";
+<<<<<<< HEAD
+=======
+import Link from "../components/atoms/Link";
+import { KnowOurServices } from "../components/molecules/KnowOurServices";
+>>>>>>> 3beb4b1a77bd65a04814ae1b5e9630ebd67d4673
 import { BePartner } from "../components/organisms/BePartner";
 
 export async function getStaticProps(context) {
@@ -686,7 +691,11 @@ function Support({ pages }) {
               <br />
               <br />
               Banco: Stone
+<<<<<<< HEAD
               <br /> Razão Social: Instituto Base dos Dados
+=======
+              <br /> Razão Social: Base dos Dados
+>>>>>>> 3beb4b1a77bd65a04814ae1b5e9630ebd67d4673
               <br /> CNPJ: 42494318/0001-16
               <br />
               Agência: 0001 | Conta: 6761821-5
@@ -735,7 +744,11 @@ export default function Home({
   popularDatalakeDatasets,
 }) {
   return (
+<<<<<<< HEAD
     <MainPageTemplate backgroundColor="#FFFFFF" pages={pages}>
+=======
+    <MainPageTemplate backgroundColor="#FFFFFF" strapiPages={strapiPages}>
+>>>>>>> 3beb4b1a77bd65a04814ae1b5e9630ebd67d4673
       <VStack
         alignItems="center"
         width="100%"
@@ -760,7 +773,11 @@ export default function Home({
         width={{ base: "90%", lg: "85%" }}
         margin="auto"
       >
+<<<<<<< HEAD
         <Support pages={pages} />
+=======
+        <Support strapiPages={strapiPages} />
+>>>>>>> 3beb4b1a77bd65a04814ae1b5e9630ebd67d4673
         <VStack width="100%">
           <BigTitle textAlign="center" maxWidth="100%" paddingBottom="10px">
             Explore, aprenda e participe

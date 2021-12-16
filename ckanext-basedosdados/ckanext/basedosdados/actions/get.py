@@ -402,7 +402,7 @@ def bd_dataset_search(context, data_dict):
     resource_type_order = resource_type_order + resource_types_not_included
 
     resources_order_dict = {}
-
+    print(resource_type_order)
     for i, package in enumerate(response["datasets"]):
         resources_type = [
             resource.get("resource_type") for resource in package.get("resources")
