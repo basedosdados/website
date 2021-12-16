@@ -26,7 +26,8 @@ class MeasurementUnitEnum(AttrEnum):
     gallon   = {"label": "galão"}
     
     # people
-    person = {"label": "pessoa"}
+    person    = {"label": "pessoa"}
+    household = {"label": "domicílio"}
     
     # currency
     brl = {"label": "BRL"}
@@ -43,9 +44,12 @@ class MeasurementUnitEnum(AttrEnum):
     year     = {"label": "ano"}
     semester = {"label": "semestre"}
     quarter  = {"label": "trimestre"}
+    bimester = {"label": "bimestre"}
     month    = {"label": "mês"}
     week     = {"label": "semana"}
     day      = {"label": "dia"}
+    hour     = {"label": "hora"}
+    minute   = {"label": "minuto"}
     second   = {"label": "segundo"}
     
     # percentage
