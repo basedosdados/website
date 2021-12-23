@@ -33,7 +33,7 @@ COPY vendor/ckan/ /ckan/
 RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
     pip install -U pip setuptools==45 && \
     pip install /ckan/[requirements] && \
-    pip install sqlalchemy==1.3.19 tzlocal==2.1 # Upgrade some CKAN dependencies that are emmiting warnings for py3.8
+    pip install 'sqlalchemy==1.3.19' 'tzlocal==2.1' # Upgrade some CKAN dependencies that are emmiting warnings for py3.8
 
 # No need for that crap!  RUN cp -v /ckan/contrib/docker/ckan-entrypoint.sh /ckan-entrypoint.sh && chmod +x /ckan-entrypoint.sh
 
