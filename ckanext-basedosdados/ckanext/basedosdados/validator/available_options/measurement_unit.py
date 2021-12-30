@@ -3,22 +3,24 @@ from .attr_enum import AttrEnum
 
 class MeasurementUnitEnum(AttrEnum):
     # fmt: off
-    # space
+    # distance
     km          = {"label": "km"}
-    km2         = {"label": "km2"}
     m           = {"label": "m"}
-    meter2      = {"label": "m2"}
     centimeter  = {"label": "cm"}
+    mile        = {"label": "mi"}
+    foot        = {"label": "pé"}
+    inch        = {"label": "polegada"}
+
+    # area
+    km2         = {"label": "km2"}
+    meter2      = {"label": "m2"}
     centimeter2 = {"label": "cm2"}
     hectare     = {"label": "hectare"}
     acre        = {"label": "acre"}
-    mile        = {"label": "mi"}
     mile2       = {"label": "mi2"}
-    foot        = {"label": "pé"}
     foot2       = {"label": "pé2"}
-    inch        = {"label": "polegada"}
     inch2       = {"label": "polegada2"}
-    
+
     # mass
     kilogram = {"label": "kg"}
     gram     = {"label": "g"}
