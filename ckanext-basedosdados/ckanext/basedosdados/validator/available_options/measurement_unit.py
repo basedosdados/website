@@ -21,9 +21,26 @@ class MeasurementUnitEnum(AttrEnum):
     
     # mass
     kilogram = {"label": "kg"}
+    gram     = {"label": "g"}
+    miligram = {"label": "mg"}
     ton      = {"label": "tonelada"}
     ounce    = {"label": "onça"}
+
+    # volume
     gallon   = {"label": "galão"}
+    litre    = {"label": "litro"}
+    militre  = {"label": "ml"}
+    meter3   = {"label": "m3"}
+    barrel   = {"label": "barril"}
+    boe      = {"label": "barril de óleo equivalente"}
+    toe      = {"label": "tonelada de óleo equivalente"}
+
+    # energy
+    W        = {"label": "watt"}
+    kW       = {"label": "quilowatt"}
+    kWh      = {"label": "quilowatt-hora"}
+    V        = {"label": "volt"}
+    kV       = {"label": "quilovolt"}
     
     # people
     person    = {"label": "pessoa"}
