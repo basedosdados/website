@@ -3,29 +3,30 @@ from .attr_enum import AttrEnum
 
 class MeasurementUnitEnum(AttrEnum):
     # fmt: off
+    
     # distance
-    km          = {"label": "km"}
-    m           = {"label": "m"}
+    kilometer   = {"label": "km"}
+    meter       = {"label": "m"}
     centimeter  = {"label": "cm"}
     mile        = {"label": "mi"}
     foot        = {"label": "pé"}
     inch        = {"label": "polegada"}
 
     # area
-    km2         = {"label": "km2"}
+    kilometer2  = {"label": "km2"}
     meter2      = {"label": "m2"}
     centimeter2 = {"label": "cm2"}
-    hectare     = {"label": "hectare"}
+    hectare     = {"label": "ha"}
     acre        = {"label": "acre"}
     mile2       = {"label": "mi2"}
     foot2       = {"label": "pé2"}
     inch2       = {"label": "polegada2"}
 
     # mass
+    ton      = {"label": "tonelada"}
     kilogram = {"label": "kg"}
     gram     = {"label": "g"}
     miligram = {"label": "mg"}
-    ton      = {"label": "tonelada"}
     ounce    = {"label": "onça"}
 
     # volume
@@ -33,16 +34,18 @@ class MeasurementUnitEnum(AttrEnum):
     litre    = {"label": "litro"}
     militre  = {"label": "ml"}
     meter3   = {"label": "m3"}
+    mile3    = {"label": "mi3"}
+    foot3    = {"label": "pé3"}
+    inch3    = {"label": "polegada3"}
     barrel   = {"label": "barril"}
     boe      = {"label": "barril de óleo equivalente"}
     toe      = {"label": "tonelada de óleo equivalente"}
 
     # energy
-    W        = {"label": "watt"}
-    kW       = {"label": "quilowatt"}
-    kWh      = {"label": "quilowatt-hora"}
-    V        = {"label": "volt"}
-    kV       = {"label": "quilovolt"}
+    watt           = {"label": "W"}
+    kilowatt       = {"label": "kW"}
+    volt           = {"label": "V"}
+    kilovolt       = {"label": "kV"}
     
     # people
     person    = {"label": "pessoa"}
@@ -59,7 +62,7 @@ class MeasurementUnitEnum(AttrEnum):
     # economics
     minimum_wage = {"label": "salário mínimo"}
     
-    # date_time
+    # date-time
     year     = {"label": "ano"}
     semester = {"label": "semestre"}
     quarter  = {"label": "trimestre"}
