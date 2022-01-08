@@ -44,20 +44,31 @@ class MeasurementUnitEnum(AttrEnum):
     # energy
     watt           = {"label": "W"}
     kilowatt       = {"label": "kW"}
+    megawatt       = {"label": "mW"}
+    gigawatt       = {"label": "gW"}
+    terawatt       = {"label": "tW"}
     volt           = {"label": "V"}
     kilovolt       = {"label": "kV"}
+    megavolt       = {"label": "mV"}
+    gigavolt       = {"label": "gV"}
+    teravolt       = {"label": "tV"}
     
     # people
     person    = {"label": "pessoa"}
     household = {"label": "domicílio"}
     
     # currency
+    ars = {"label": "ARS"}
     brl = {"label": "BRL"}
+    cad = {"label": "CAD"}
+    clp = {"label": "CLP"}
     usd = {"label": "USD"}
     eur = {"label": "EUR"}
     gbp = {"label": "GBP"}
     cny = {"label": "CNY"}
+    inr = {"label": "INR"}
     jpy = {"label": "JPY"}
+    zar = {"label": "ZAR"}
     
     # economics
     minimum_wage = {"label": "salário mínimo"}
