@@ -24,7 +24,7 @@ class BdmTable(_CkanDefaultResource):
 
     metadata_modified         : Optional[datetime]                               = METADATA_MODIFIED_FIELD #TODO: can we rename this to last_updated and make it a derived field for dataset and all resources?
     # BdmTable models
-    dataset_id                : Optional[Str]                                    = DATASET_ID_FIELD
+    dataset_id                : Str                                              = DATASET_ID_FIELD
     table_id                  : Str                                              = TABLE_ID_FIELD
     description               : Optional[Str]                                    = DESCRIPTION_FIELD
     spatial_coverage          : Union[Optional[SpatialCoverage], Optional[Str]]  = SPATIAL_COVERAGE_FIELD
