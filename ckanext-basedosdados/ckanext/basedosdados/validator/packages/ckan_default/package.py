@@ -7,7 +7,12 @@ from uuid import UUID
 
 from ckanext.basedosdados.validator import BaseModel
 from ckanext.basedosdados.validator.available_options import IdType
-from ckanext.basedosdados.validator.resources import BdmTable, ExternalLink
+from ckanext.basedosdados.validator.resources import (
+    BdmTable,
+    ExternalLink,
+    InformationRequest,
+    BdmDictionary,
+)
 from pydantic import Extra, Field
 from pydantic import StrictInt as Int
 from pydantic import StrictStr as Str
@@ -17,7 +22,8 @@ from typing_extensions import Annotated  # migrate to py3.9
 Email = Str  # TODO
 
 AnyResource = Annotated[
-    Union[ExternalLink, BdmTable], Field(discriminator="resource_type")
+    Union[ExternalLink, BdmTable, InformationRequest, BdmDictionary],
+    Field(discriminator="resource_type"),
 ]
 
 coerce_to_unicode = lambda field: validator("field", allow_reuse=True)()
