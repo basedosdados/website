@@ -42,7 +42,6 @@ class BdmTable(_CkanDefaultResource):
     raw_files_url             : Optional[Str]                                    = RAW_FILES_URL_FIELD
     auxiliary_files_url       : Optional[Str]                                    = AUXILIARY_FILES_URL_FIELD
     architecture_url          : Optional[Str]                                    = ARCHITECTURE_URL_FIELD
-    covered_by_dictionary     : Optional[YesNoEnum]                              = COVERED_BY_DICTIONARY_FIELD
     source_bucket_name        : Optional[Str]                                    = SOURCE_BUCKET_NAME_FIELD
     project_id_prod           : Optional[Str]                                    = PROJECT_ID_PROD_FIELD
     project_id_staging        : Optional[Str]                                    = PROJECT_ID_STAGING_FIELD
