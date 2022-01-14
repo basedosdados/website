@@ -24,8 +24,8 @@ class ExternalLink(_CkanDefaultResource):
 
     # External Link models
     # fmt: off
-    dataset_id                  : Optional[Str]                                  = DATASET_ID_FIELD
-    url                         : Optional[Str]                                  = URL_FIELD
+    dataset_id                  : Str                                            = DATASET_ID_FIELD
+    url                         : Str                                            = URL_FIELD
     title                       : Optional[Str]                                  = TITLE_FIELD
     description                 : Optional[Str]                                  = DESCRIPTION_FIELD
     language                    : Optional[Set[LanguageEnum]]                    = LANGUAGE_FIELD # Field(max_items = 10)

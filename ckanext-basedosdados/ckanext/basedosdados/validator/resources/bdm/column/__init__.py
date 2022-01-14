@@ -17,11 +17,11 @@ class BdmColumns(BaseModel):
 
     # ColumnsMetadata models
     # fmt: off
-    name                  : Optional[Str]                  = NAME_FIELD
-    bigquery_type         : Optional[BigQueryTypeEnum]     = BIGQUERY_TYPE_FIELD
-    description           : Optional[Str]                  = DESCRIPTION_FIELD
+    name                  : Str                            = NAME_FIELD
+    bigquery_type         : BigQueryTypeEnum               = BIGQUERY_TYPE_FIELD
+    description           : Str                            = DESCRIPTION_FIELD
     temporal_coverage     : Optional[TemporalCoverageEnum] = TEMPORAL_COVERAGE_FIELD
-    covered_by_dictionary : Optional[YesNoEnum]             = COVERED_BY_DICTIONARY_FIELD
+    covered_by_dictionary : Optional[YesNoEnum]            = COVERED_BY_DICTIONARY_FIELD
     directory_column      : Optional[DirectoryColumn]      = DIRECTORY_COLUMN_FIELD
     measurement_unit      : Optional[MeasurementUnitEnum]  = MEASUREMENT_UNIT_FIELD
     has_sensitive_data    : Optional[YesNoEnum]            = HAS_SENSITIVE_DATA_FIELD

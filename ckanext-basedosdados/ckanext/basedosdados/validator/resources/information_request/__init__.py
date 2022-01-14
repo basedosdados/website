@@ -20,7 +20,7 @@ class InformationRequest(_CkanDefaultResource):
 
     # InformationRequest models
     # fmt: off
-    dataset_id        : Optional[Str]                                   = DATASET_ID_FIELD
+    dataset_id        : Str                                             = DATASET_ID_FIELD
     origin            : Optional[Str]                                   = ORIGIN_FIELD
     number            : Optional[Str]                                   = NUMBER_FIELD
     url               : Optional[Str]                                   = URL_FIELD
