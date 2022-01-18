@@ -245,20 +245,6 @@ ARCHITECTURE_URL_FIELD = Field(
     ),
     yaml_order={
         "id_before": "auxiliary_files_url",
-        "id_after": "covered_by_dictionary",
-    },
-)
-
-COVERED_BY_DICTIONARY_FIELD = Field(
-    title="Coberto por Dicionário",
-    description=to_line(
-        [
-            "A tabela tem colunas que precisam de dicionário?",
-            "Opções: yes, no."
-        ]
-    ),
-    yaml_order={
-        "id_before": "architecture_url",
         "id_after": "source_bucket_name",
     },
 )
@@ -266,7 +252,7 @@ COVERED_BY_DICTIONARY_FIELD = Field(
 SOURCE_BUCKET_NAME_FIELD = Field(
     title="Nome do Bucket Fonte no GCP",
     yaml_order={
-        "id_before": "covered_by_dictionary",
+        "id_before": "architecture_url",
         "id_after": "project_id_prod",
     },
 )

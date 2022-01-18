@@ -22,14 +22,6 @@ ORGANIZATION_FIELD = Field(
     ),
     yaml_order={
         "id_before": None,
-        "id_after": "dataset_id",
-    },
-)
-
-DATASET_ID_FIELD = Field(
-    title="ID Conjunto",
-    yaml_order={
-        "id_before": "organization",
         "id_after": "title",
     },
 )
@@ -43,7 +35,7 @@ TITLE_FIELD = Field(
         ],
     ),
     yaml_order={
-        "id_before": "dataset_id",
+        "id_before": "organization",
         "id_after": "description",
     },
 )
@@ -96,27 +88,6 @@ TAGS_FIELD = Field(
     },
 )
 
-SPATIAL_COVERAGE_FIELD = Field(
-    title="Cobertura Espacial",
-)
-
-TEMPORAL_COVERAGE_FIELD = Field(
-    title="Cobertura Temporal",
-)
-
-UPDATE_FREQUENCY_FIELD = Field(
-    title="Frequência de Atualização",
-)
-
-ENTITY_FIELD = Field(
-    title="Entidade",
-    max_items=10,
-)
-
-TIME_UNIT_FIELD = Field(
-    title="Unidade Temporal",
-)
-
 CKAN_URL_FIELD = Field(
     title="Url CKAN",
     description=to_line(
@@ -157,10 +128,6 @@ METADATA_MODIFIED_FIELD = Field(
         "id_before": "github_url",
         "id_after": None,
     },
-)
-
-DOWNLOAD_TYPE_FIELD = Field(
-    title="Tipo de Download",
 )
 
 VISIBILITY_FIELD = Field(title="Visibilidade")
