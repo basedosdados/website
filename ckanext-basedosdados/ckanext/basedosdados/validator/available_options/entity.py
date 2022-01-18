@@ -4,6 +4,22 @@ from typing import Union
 from .attr_enum import AttrEnum
 
 
+class EntityDateTimeEnum(AttrEnum):
+    # fmt: off
+    year       = {"label": "Ano"} #"One Year"}
+    semester   = {"label": "Semestre"} #"Semester"}
+    quarter    = {"label": "Trimestre"} #"Quarter"}
+    bimester   = {"label": "Bimestre"} #"Bimester"}
+    month      = {"label": "Mês"} #"Month"}
+    week       = {"label": "Semana"} #"Week"}
+    day        = {"label": "Dia"} #"Day"}
+    hour       = {"label": "Hora"} #"Hour"}
+    minute     = {"label": "Minuto"} #"Minute"}
+    second     = {"label": "Segundo"} #"Second"}
+    date       = {"label": "Data"} #"Date"}
+    time       = {"label": "Horário"} #"Time"}
+    # fmt: on
+
 class EntitySphereEnum(AttrEnum):
     # fmt: off
     continent        = {'label': "Continente"} #"Continent"}
@@ -205,6 +221,7 @@ class EntityOtherEnum(AttrEnum):
 
 
 EntityEnum = Union[
+    EntityDateTimeEnum,
     EntitySphereEnum,
     EntityIndividualEnum,
     EntityEstablishmentEnum,
