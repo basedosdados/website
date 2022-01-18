@@ -81,3 +81,5 @@ A pasta utils contem scripts utilizados em dev e em prod para diversas coisas. O
 ### Script de atualização do banco de dev a partir dos dumps de produção/staging
 
 Você pode rodar o script em `./utils/create_dev_init_data.sh` para atualizar o arquivo './postgresql/dev_init_data.sql.gz' que contem o snapshot do banco de dev. Esse script aceita como parâmetro posicional `File`, caso não queira baixar um backup automaticamente de prod/staging, você pode passar um path com um arquivo postgres.dump. Se STAGING=1, o script vai baixar do banco de staging ao invés de produção.
+
+Esse script requer a existência de um profile chamado `basedosdados` criado em `~/.aws/config`. Você pode pegar as variávels `aws_access_key_id` e `aws_secret_access_key` na própria AWS após criar uma `access key` em uma conta admin.
