@@ -40,7 +40,6 @@ class ExternalLink(_CkanDefaultResource):
     temporal_coverage           : Optional[TemporalCoverageEnum]                 = TEMPORAL_COVERAGE_FIELD
     update_frequency            : Optional[TimeUnitEnum]                         = UPDATE_FREQUENCY_FIELD
     entity                      : Optional[Set[EntityEnum]]                      = ENTITY_FIELD
-    time_unit                   : Optional[TimeUnitEnum]                         = TIME_UNIT_FIELD
     # fmt: on
 
     # -------------------------------------

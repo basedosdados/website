@@ -106,20 +106,6 @@ ENTITY_FIELD = Field(
     max_items=10,
     yaml_order={
         "id_before": "update_frequency",
-        "id_after": "time_unit",
-    },
-)
-
-TIME_UNIT_FIELD = Field(
-    title="Unidade Temporal",
-    description=to_line(
-        [
-            "A unidade temporal representada por cada linha.",
-            "Opções em 'https://basedosdados.org/api/3/action/bd_available_options'"
-        ]
-    ),
-    yaml_order={
-        "id_before": "entity",
         "id_after": "identifying_columns",
     },
 )
@@ -135,7 +121,7 @@ IDENTIFYING_COLUMNS_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_before": "time_unit",
+        "id_before": "entity",
         "id_after": "last_updated",
     },
 )

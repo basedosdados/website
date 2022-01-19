@@ -32,7 +32,6 @@ class InformationRequest(_CkanDefaultResource):
     temporal_coverage : Optional[TemporalCoverageEnum]                  = TEMPORAL_COVERAGE_FIELD
     update_frequency  : Optional[TimeUnitEnum]                          = UPDATE_FREQUENCY_FIELD
     entity            : Optional[Set[EntityEnum]]                       = ENTITY_FIELD
-    time_unit         : Optional[TimeUnitEnum]                          = TIME_UNIT_FIELD
     status            : Optional[StatusEnum]                            = STATUS_FIELD
     data_url          : Optional[Str]                                   = DATA_URL_FIELD
     observations      : Optional[Str]                                   = OBSERVATIONS_FIELD
