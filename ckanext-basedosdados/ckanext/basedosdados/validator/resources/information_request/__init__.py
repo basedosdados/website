@@ -20,19 +20,20 @@ class InformationRequest(_CkanDefaultResource):
 
     # InformationRequest models
     # fmt: off
-    dataset_id        : Str                                             = DATASET_ID_FIELD
-    origin            : Optional[Str]                                   = ORIGIN_FIELD
-    number            : Optional[Str]                                   = NUMBER_FIELD
-    url               : Optional[Str]                                   = URL_FIELD
-    department        : Optional[Str]                                   = DEPARTMENT_FIELD
-    description       : Optional[Str]                                   = DESCRIPTION_FIELD
-    opening_date      : Optional[Str]                                   = OPENING_DATE_FIELD
-    requested_by      : Optional[RequestedBy]                           = REQUESTED_BY_FIELD
-    spatial_coverage  : Union[Optional[SpatialCoverage], Optional[Str]] = SPATIAL_COVERAGE_FIELD
-    temporal_coverage : Optional[TemporalCoverageEnum]                  = TEMPORAL_COVERAGE_FIELD
-    update_frequency  : Optional[TimeUnitEnum]                          = UPDATE_FREQUENCY_FIELD
-    entity            : Optional[Set[EntityEnum]]                       = ENTITY_FIELD
-    status            : Optional[StatusEnum]                            = STATUS_FIELD
-    data_url          : Optional[Str]                                   = DATA_URL_FIELD
-    observations      : Optional[Str]                                   = OBSERVATIONS_FIELD
+    dataset_id           : Str                                             = DATASET_ID_FIELD
+    origin               : Optional[Str]                                   = ORIGIN_FIELD
+    number               : Optional[Str]                                   = NUMBER_FIELD
+    url                  : Optional[Str]                                   = URL_FIELD
+    department           : Optional[Str]                                   = DEPARTMENT_FIELD
+    description          : Optional[Str]                                   = DESCRIPTION_FIELD
+    opening_date         : Optional[Str]                                   = OPENING_DATE_FIELD
+    requested_by         : Optional[RequestedBy]                           = REQUESTED_BY_FIELD
+    spatial_coverage     : Union[Optional[SpatialCoverage], Optional[Str]] = SPATIAL_COVERAGE_FIELD
+    temporal_coverage    : Optional[TemporalCoverageEnum]                  = TEMPORAL_COVERAGE_FIELD
+    update_frequency     : Optional[TimeUnitEnum]                          = UPDATE_FREQUENCY_FIELD
+    entity               : Optional[Set[EntityEnum]]                       = ENTITY_FIELD
+    status               : Optional[StatusEnum]                            = STATUS_FIELD
+    data_url             : Optional[Str]                                   = DATA_URL_FIELD
+    observations         : Optional[Str]                                   = OBSERVATIONS_FIELD
+    partner_organization : Optional[PartnerOrganization]                   = PARTNER_ORGANIZATION_FIELD
     # fmt: on

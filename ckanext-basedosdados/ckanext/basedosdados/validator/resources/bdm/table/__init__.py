@@ -10,7 +10,7 @@ from ckanext.basedosdados.validator.available_options import (
 )
 from ckanext.basedosdados.validator import SpatialCoverage
 from ckanext.basedosdados.validator.resources import BdmColumns, _CkanDefaultResource
-from ckanext.basedosdados.validator.resources.bdm import LastUpdated, PublishedBy
+from ckanext.basedosdados.validator.resources.bdm import LastUpdated, PublishedBy, PartnerOrganization
 
 from pydantic import StrictStr as Str
 from pydantic import validator
@@ -38,6 +38,7 @@ class BdmTable(_CkanDefaultResource):
     data_cleaned_by           : Optional[DataCleanedBy]                          = DATA_CLEANED_BY_FIELD
     data_cleaning_description : Optional[Str]                                    = DATA_CLEANING_DESCRIPTION_FIELD
     data_cleaning_code_url    : Optional[Str]                                    = DATA_CLEANING_CODE_URL_FIELD
+    partner_organization      : Optional[PartnerOrganization]                    = PARTNER_ORGANIZATION_FIELD
     raw_files_url             : Optional[Str]                                    = RAW_FILES_URL_FIELD
     auxiliary_files_url       : Optional[Str]                                    = AUXILIARY_FILES_URL_FIELD
     architecture_url          : Optional[Str]                                    = ARCHITECTURE_URL_FIELD

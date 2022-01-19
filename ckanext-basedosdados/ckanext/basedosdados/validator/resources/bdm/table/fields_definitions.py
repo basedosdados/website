@@ -191,6 +191,15 @@ DATA_CLEANING_CODE_URL_FIELD = Field(
     description=to_line(["Url do código de limpeza dos dados."]),
     yaml_order={
         "id_before": "data_cleaning_description",
+        "id_after": "partner_organization",
+    },
+)
+
+PARTNER_ORGANIZATION_FIELD = Field(
+    title="Organização parceira",
+    description=to_line(["Organização que ajudou institucionalmente na disponibilização dos dados."]),
+    yaml_order={
+        "id_before": "data_cleaning_code_url",
         "id_after": "raw_files_url",
     },
 )
@@ -203,7 +212,7 @@ RAW_FILES_URL_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_before": "data_cleaning_code_url",
+        "id_before": "partner_organization",
         "id_after": "auxiliary_files_url",
     },
 )

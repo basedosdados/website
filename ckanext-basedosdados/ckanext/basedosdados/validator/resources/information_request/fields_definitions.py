@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+
+from typing import Optional
+
 from ckanext.basedosdados.validator import BaseModel
 from pydantic import Field
 from pydantic import StrictStr as Str
@@ -10,11 +13,18 @@ to_line = lambda description: "\n".join(description)
 # -------------------------------------
 class RequestedBy(BaseModel):
     # fmt: off
-    name        : Str = Field(title="Nome",description=to_line(["<nome [você]>"]))
-    email       : Str = Field(title="Email",description=to_line(["<email>"]))
-    github_user : Str = Field(title="Usuário Github",description=to_line(["<usuário Github>"]))
-    website     : Str = Field(title="Website",description=to_line(["<website>"]))
-    ckan_user   : Str = Field(title="Usuário CKAN",description=to_line(["<ID do usuário no CKAN>"]))
+    name        : Optional[Str] = Field(title="Nome",description=to_line(["<nome [você]>"]))
+    email       : Optional[Str] = Field(title="Email",description=to_line(["<email>"]))
+    github_user : Optional[Str] = Field(title="Usuário Github",description=to_line(["<usuário Github>"]))
+    website     : Optional[Str] = Field(title="Website",description=to_line(["<website>"]))
+    ckan_user   : Optional[Str] = Field(title="Usuário CKAN",description=to_line(["<ID do usuário no CKAN>"]))
+    # fmt: on
+
+
+class PartnerOrganization(BaseModel):
+    # fmt: off
+    name            : Optional[Str] = Field(title="Nome",description=to_line(["Nome completo"]))
+    organization_id : Optional[Str] = Field(title="ID Organização",description=to_line(["ID Organização - CKAN"]))
     # fmt: on
 
 
@@ -207,6 +217,16 @@ OBSERVATIONS_FIELD = Field(
     title="Observações",
     yaml_order={
         "id_after": "data_url",
-        "id_before": None,
+        "id_before": "partner_organization",
     },
 )
+
+PARTNER_ORGANIZATION_FIELD = Field(
+    title="Organização parceira",
+    description=to_line(["Organização que ajudou institucionalmente na criação ou disponibilização do pedido de informação."]),
+    yaml_order={
+        "id_before": "observations",
+        "id_after": None,
+    },
+)
+
