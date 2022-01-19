@@ -40,15 +40,28 @@ TITLE_FIELD = Field(
     },
 )
 
-DESCRIPTION_FIELD = Field(
-    title="Descrição",
+SHORT_DESCRIPTION_FIELD = Field(
+    title="Descrição curta",
     description=to_line(
         [
-            "Descrição e anotações úteis sobre os dados."
+            "Descrição curta (até 280 caracteres) do conjunto."
         ]
     ),
     yaml_order={
         "id_before": "title",
+        "id_after": "description",
+    },
+)
+
+DESCRIPTION_FIELD = Field(
+    title="Descrição",
+    description=to_line(
+        [
+            "Descrição do conjunto."
+        ]
+    ),
+    yaml_order={
+        "id_before": "short_description",
         "id_after": "groups",
     },
 )

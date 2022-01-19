@@ -32,6 +32,7 @@ class Dataset(_CkanDefaults):
     # Dataset models
     # fmt: off
     title             : Optional[Str]                  = TITLE_FIELD
+    short_description : Optional[Str]                  = SHORT_DESCRIPTION_FIELD
     description       : Optional[Str]                  = DESCRIPTION_FIELD
     ckan_url          : Optional[Str]                  = CKAN_URL_FIELD
     github_url        : Optional[Str]                  = GITHUB_URL_FIELD             
