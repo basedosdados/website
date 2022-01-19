@@ -138,6 +138,7 @@ AVAILABILITY_FIELD = Field(
             "Opções 'availability' em https://basedosdados.org/api/3/action/bd_available_options."
         ]
     ),
+    default="online",
     yaml_order={
         "id_after": "requires_registration",
         "id_before": "country_ip_address_required",

@@ -88,6 +88,7 @@ COVERED_BY_DICTIONARY_FIELD = Field(
             "Opções: yes, no."
         ]
     ),
+    default="no",
     yaml_order={
         "id_before": "temporal_coverage",
         "id_after": "directory_column",
@@ -129,6 +130,7 @@ HAS_SENSITIVE_DATA_FIELD = Field(
             "Opções: yes, no."
         ]
     ),
+    default="no",
     yaml_order={
         "id_before": "measurement_unit",
         "id_after": "is_in_staging",
