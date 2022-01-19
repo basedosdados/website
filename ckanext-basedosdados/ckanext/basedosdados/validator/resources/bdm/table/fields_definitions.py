@@ -18,7 +18,6 @@ class DataCleanedBy(BaseModel):
     github_user : Optional[Str] = Field(title="Usuário Github",description=to_line(["<usuário Github>"]))
     ckan_user   : Optional[Str] = Field(title="Usuário CKAN",description=to_line(["<id do usuário no ckan>"]))
     website     : Optional[Str] = Field(title="Website",description=to_line(["<onde encontrar os dados tratados>"]))
-    code_url    : Optional[Str] = Field(title="Url código de limpeza",description=to_line(["<onde encontrar código de limpeza>"]))
     # fmt: on
 
 # -------------------------------------
@@ -183,18 +182,18 @@ DATA_CLEANING_DESCRIPTION_FIELD = Field(
     ),
     yaml_order={
         "id_before": "data_cleaned_by",
-        "id_after": "raw_files_url",
+        "id_after": "data_cleaning_code_url",
     },
 )
 
-# DATA_CLEANING_CODE_URL = Field(
-#     title="Url do Código de Limpeza dos Dados",
-#     description=to_line(["Url do código de limpeza dos dados."]),
-#     yaml_order={
-#         "id_before": "data_cleaning_description",
-#         "id_after": "raw_files_url",
-#     },
-# )
+DATA_CLEANING_CODE_URL_FIELD = Field(
+    title="Url do Código de Limpeza dos Dados",
+    description=to_line(["Url do código de limpeza dos dados."]),
+    yaml_order={
+        "id_before": "data_cleaning_description",
+        "id_after": "raw_files_url",
+    },
+)
 
 RAW_FILES_URL_FIELD = Field(
     title="Url dos Dados Originais",
@@ -204,7 +203,7 @@ RAW_FILES_URL_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_before": "data_cleaning_description",
+        "id_before": "data_cleaning_code_url",
         "id_after": "auxiliary_files_url",
     },
 )
