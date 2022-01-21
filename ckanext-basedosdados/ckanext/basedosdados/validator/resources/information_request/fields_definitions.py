@@ -11,6 +11,7 @@ to_line = lambda description: "\n".join(description)
 # -------------------------------------
 # InformationRequest Custom Types
 # -------------------------------------
+
 class RequestedBy(BaseModel):
     # fmt: off
     name        : Optional[Str] = Field(title="Nome",description=to_line(["<nome [você]>"]))
@@ -166,22 +167,20 @@ UPDATE_FREQUENCY_FIELD = Field(
     ),
     yaml_order={
         "id_after": "temporal_coverage",
-        "id_before": "entity",
+        "id_before": "observation_level",
     },
 )
 
-ENTITY_FIELD = Field(
-    title="Entidade",
+OBSERVATION_LEVEL_FIELD = Field(
+    title="Nível da observação",
     description=to_line(
         [
-            "Entidade coberta pelos dados pedidos."
-            "Opções em 'entity' em https://basedosdados.org/api/3/action/bd_available_options."
+            "Nível de observação dos dados: o que representa cada linha.",
         ]
     ),
-    max_items=10,
     yaml_order={
-        "id_after": "update_frequency",
-        "id_before": "status",
+        "id_before": "update_frequency",
+        "id_after": "status",
     },
 )
 

@@ -3,12 +3,10 @@ from typing import List, Literal, Optional, Set, Union
 
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options import (
-    EntityEnum,
     TemporalCoverageEnum,
     TimeUnitEnum,
-    YesNoEnum,
 )
-from ckanext.basedosdados.validator import SpatialCoverage
+from ckanext.basedosdados.validator import SpatialCoverage, ObservationLevel
 from ckanext.basedosdados.validator.resources import BdmColumns, _CkanDefaultResource
 from ckanext.basedosdados.validator.resources.bdm import LastUpdated, PublishedBy, PartnerOrganization
 
@@ -30,8 +28,7 @@ class BdmTable(_CkanDefaultResource):
     spatial_coverage          : Union[Optional[SpatialCoverage], Optional[Str]]  = SPATIAL_COVERAGE_FIELD
     temporal_coverage         : Optional[TemporalCoverageEnum]                   = TEMPORAL_COVERAGE_FIELD
     update_frequency          : Optional[TimeUnitEnum]                           = UPDATE_FREQUENCY_FIELD
-    entity                    : Optional[Set[EntityEnum]]                        = ENTITY_FIELD
-    identifying_columns       : Optional[List[Str]]                              = IDENTIFYING_COLUMNS_FIELD
+    observation_level         : Optional[List[ObservationLevel]]                 = OBSERVATION_LEVEL_FIELD
     last_updated              : Optional[LastUpdated]                            = LAST_UPDATED_FIELD
     version                   : Optional[Str]                                    = VERSION_FIELD
     published_by              : Optional[PublishedBy]                            = PUBLISHED_BY_FIELD
@@ -53,7 +50,6 @@ class BdmTable(_CkanDefaultResource):
     # -------------------------------------
     # VALIDATORS
     # -------------------------------------
-    _entity_validator = treat_scalar_as_single_value_set("entity")
 
     @validator("bdm_file_size")
     def null_string_is_none(cls, value):

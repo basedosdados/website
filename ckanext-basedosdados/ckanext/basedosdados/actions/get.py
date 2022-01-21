@@ -20,6 +20,7 @@ from ckanext.basedosdados.validator.available_options import (
 )
 from ckanext.basedosdados.validator.available_options.entity import (
     EntityArtEnum,
+    EntityDateTimeEnum,
     EntityDemographicEnum,
     EntityEconomicsEnum,
     EntityEducationEnum,
@@ -33,7 +34,7 @@ from ckanext.basedosdados.validator.available_options.entity import (
     EntityPoliticsEnum,
     EntityScienceEnum,
     EntitySecurityEnum,
-    EntitySphereEnum,
+    EntitySpatialEnum,
     EntityTransportationEnum,
 )
 from ckanext.basedosdados.validator.packages import Dataset
@@ -507,6 +508,7 @@ def bd_available_options_dict(context, data_dict):
         **BigQueryTypeEnum.get_all_enum_attr("label"),
         **DirectoryEnum.get_all_enum_attr("label"),
         **EntityArtEnum.get_all_enum_attr("label"),
+        **EntityDateTimeEnum.get_all_enum_attr("label"),
         **EntityDemographicEnum.get_all_enum_attr("label"),
         **EntityEconomicsEnum.get_all_enum_attr("label"),
         **EntityEducationEnum.get_all_enum_attr("label"),
@@ -520,7 +522,7 @@ def bd_available_options_dict(context, data_dict):
         **EntityPoliticsEnum.get_all_enum_attr("label"),
         **EntityScienceEnum.get_all_enum_attr("label"),
         **EntitySecurityEnum.get_all_enum_attr("label"),
-        **EntitySphereEnum.get_all_enum_attr("label"),
+        **EntitySpatialEnum.get_all_enum_attr("label"),
         **EntityTransportationEnum.get_all_enum_attr("label"),
         **LanguageEnum.get_all_enum_attr("label"),
         **LicenseEnum.get_all_enum_attr("label"),
@@ -543,6 +545,7 @@ def bd_available_options(context, data_dict):
         "Directory": DirectoryEnum.get_all_enum_attr("label"),
         "Entity": {
             "Entity Art": EntityArtEnum.get_all_enum_attr("label"),
+            "Entity Date-Time": EntityDateTimeEnum.get_all_enum_attr("label"),
             "Entity Demographic": EntityDemographicEnum.get_all_enum_attr("label"),
             "Entity Economics": EntityEconomicsEnum.get_all_enum_attr("label"),
             "Entity Education": EntityEducationEnum.get_all_enum_attr("label"),
@@ -551,17 +554,13 @@ def bd_available_options(context, data_dict):
             "Entity History": EntityHistoryEnum.get_all_enum_attr("label"),
             "Entity Image": EntityImageEnum.get_all_enum_attr("label"),
             "Entity Individual": EntityIndividualEnum.get_all_enum_attr("label"),
-            "Entity Infrastructure": EntityInfrastructureEnum.get_all_enum_attr(
-                "label"
-            ),
+            "Entity Infrastructure": EntityInfrastructureEnum.get_all_enum_attr("label"),
             "Entity Other": EntityOtherEnum.get_all_enum_attr("label"),
             "Entity Politics": EntityPoliticsEnum.get_all_enum_attr("label"),
             "Entity Science": EntityScienceEnum.get_all_enum_attr("label"),
             "Entity Security": EntitySecurityEnum.get_all_enum_attr("label"),
-            "Entity Sphere": EntitySphereEnum.get_all_enum_attr("label"),
-            "Entity Transportation": EntityTransportationEnum.get_all_enum_attr(
-                "label"
-            ),
+            "Entity Spatial": EntitySpatialEnum.get_all_enum_attr("label"),
+            "Entity Transportation": EntityTransportationEnum.get_all_enum_attr("label"),
         },
         "Language": LanguageEnum.get_all_enum_attr("label"),
         "License": LicenseEnum.get_all_enum_attr("label"),

@@ -94,33 +94,15 @@ UPDATE_FREQUENCY_FIELD = Field(
     },
 )
 
-ENTITY_FIELD = Field(
-    title="Entidade",
+OBSERVATION_LEVEL_FIELD = Field(
+    title="Nível da observação",
     description=to_line(
         [
-            "Entidade representada por cada linha.",
-            "Opções em 'https://basedosdados.org/api/3/action/bd_available_options'"
+            "Nível de observação da tabela: o que representa cada linha.",
         ]
     ),
-    max_items=10,
     yaml_order={
         "id_before": "update_frequency",
-        "id_after": "identifying_columns",
-    },
-)
-
-IDENTIFYING_COLUMNS_FIELD = Field(
-    title="Colunas Identificadoras",
-    description=to_line(
-        [
-            "O conjunto mínimo de colunas identificando cada linha unicamente.",
-            "Preencha com os nomes de colunas.",
-            "Exemplos: id_municipio, ano.",
-            "Pode ser vazio pois certas tabelas não possuem identificadores.",
-        ]
-    ),
-    yaml_order={
-        "id_before": "entity",
         "id_after": "last_updated",
     },
 )
@@ -128,7 +110,7 @@ IDENTIFYING_COLUMNS_FIELD = Field(
 LAST_UPDATED_FIELD = Field(
     title="Data da Última Atualização",
     yaml_order={
-        "id_before": "identifying_columns",
+        "id_before": "observation_level",
         "id_after": "version",
     },
 )
@@ -147,7 +129,6 @@ VERSION_FIELD = Field(
     },
 )
 
-# TODO: DICT TYPE
 PUBLISHED_BY_FIELD = Field(
     title="Publicado por",
     description=to_line(["Quem está preenchendo esses metadados?"]),
@@ -157,7 +138,6 @@ PUBLISHED_BY_FIELD = Field(
     },
 )
 
-# TODO: DICT TYPE
 DATA_CLEANED_BY_FIELD = Field(
     title="Dados Limpos por",
     description=to_line(

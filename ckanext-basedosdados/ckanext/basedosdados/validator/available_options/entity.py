@@ -20,14 +20,15 @@ class EntityDateTimeEnum(AttrEnum):
     time       = {"label": "Horário"} #"Time"}
     # fmt: on
 
-class EntitySphereEnum(AttrEnum):
+
+class EntitySpatialEnum(AttrEnum):
     # fmt: off
     continent        = {'label': "Continente"} #"Continent"}
     country          = {'label': "País"} #"Country"}
     region           = {'label': "Região"} #"Region"}
     state            = {'label': "Estado/Unidade da Federação"} #"State"}
-    county           = {'label': "Condado"} #"County"}
     district         = {'label': "Distrito"} #"District"}
+    county           = {'label': "Condado"} #"County"}
     municipality     = {'label': "Município"} #"Municipality"}
     city             = {'label': "Cidade"} #"City"}
     village          = {'label': "Vila/Aldeia"} #"Village"}
@@ -222,7 +223,7 @@ class EntityOtherEnum(AttrEnum):
 
 EntityEnum = Union[
     EntityDateTimeEnum,
-    EntitySphereEnum,
+    EntitySpatialEnum,
     EntityIndividualEnum,
     EntityEstablishmentEnum,
     EntityPoliticsEnum,

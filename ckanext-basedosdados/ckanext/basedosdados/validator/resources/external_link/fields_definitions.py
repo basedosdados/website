@@ -210,20 +210,19 @@ UPDATE_FREQUENCY_FIELD = Field(
     ),
     yaml_order={
         "id_after": "temporal_coverage",
-        "id_before": "entity",
+        "id_before": "observation_level",
     },
 )
 
-ENTITY_FIELD = Field(
-    title="Entidade",
+OBSERVATION_LEVEL_FIELD = Field(
+    title="Nível da observação",
     description=to_line(
         [
-            "Entidade representada por cada linha."
+            "Nível de observação dos dados: o que representa cada linha.",
         ]
     ),
-    max_items=10,
     yaml_order={
-        "id_after": "update_frequency",
-        "id_before": None,
+        "id_before": "update_frequency",
+        "id_after": None,
     },
 )
