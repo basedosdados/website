@@ -70,7 +70,7 @@ class ObservationLevel(BaseModel):
             "Opções em 'https://basedosdados.org/api/3/action/bd_available_options'"
         ]
     ))
-    entity  : EntityEnum  = Field(title="Entidade",description=to_line(
+    entity  : Optional[EntityEnum]  = Field(title="Entidade",description=to_line(
         [
             "Opções em 'https://basedosdados.org/api/3/action/bd_available_options'"
         ]

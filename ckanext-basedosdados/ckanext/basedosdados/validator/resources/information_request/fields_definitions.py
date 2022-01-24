@@ -14,11 +14,11 @@ to_line = lambda description: "\n".join(description)
 
 class RequestedBy(BaseModel):
     # fmt: off
-    name        : Optional[Str] = Field(title="Nome",description=to_line(["<nome [você]>"]))
-    email       : Optional[Str] = Field(title="Email",description=to_line(["<email>"]))
-    github_user : Optional[Str] = Field(title="Usuário Github",description=to_line(["<usuário Github>"]))
-    website     : Optional[Str] = Field(title="Website",description=to_line(["<website>"]))
-    ckan_user   : Optional[Str] = Field(title="Usuário CKAN",description=to_line(["<ID do usuário no CKAN>"]))
+    name        : Optional[Str] = Field(title="Nome")
+    email       : Optional[Str] = Field(title="Email")
+    github_user : Optional[Str] = Field(title="Usuário Github")
+    ckan_user   : Optional[Str] = Field(title="Usuário CKAN")
+    website     : Optional[Str] = Field(title="Website")
     # fmt: on
 
 

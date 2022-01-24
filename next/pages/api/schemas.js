@@ -18,7 +18,6 @@ export function getInformationRequestSchema() {
       delete schema.properties.last_modified;
       delete schema.properties.resource_type;
       delete schema.properties.metadata_modified;
-      delete schema.properties.last_updated;
       delete schema.properties.cache_last_updated;
       delete schema.properties.cache_url;
       delete schema.properties.mimetype;
@@ -50,7 +49,6 @@ export function getBdmTableSchema() {
       delete schema.properties.last_modified;
       delete schema.properties.resource_type;
       delete schema.properties.metadata_modified;
-      delete schema.properties.last_updated;
       delete schema.properties.cache_last_updated;
       delete schema.properties.cache_url;
       delete schema.properties.mimetype;
@@ -82,7 +80,6 @@ export function getExternalLinkSchema() {
       delete schema.properties.created;
       delete schema.properties.last_modified;
       delete schema.properties.metadata_modified;
-      delete schema.properties.last_updated;
       delete schema.properties.cache_last_updated;
       delete schema.properties.cache_url;
       delete schema.properties.mimetype;
@@ -124,11 +121,9 @@ export function getDatasetSchema() {
       delete schema.properties.action__;
       delete schema.properties.visibility;
       delete schema.properties.update_frequency;
-      delete schema.properties.entity;
-      delete schema.properties.time_unit;
+      delete schema.properties.observation_level;
       delete schema.properties.ckan_url;
       delete schema.properties.isopen;
-      delete schema.properties.download_type;
       delete schema.properties.metadata_created;
       delete schema.properties.metadata_modified;
       delete schema.properties.cache_last_updated;

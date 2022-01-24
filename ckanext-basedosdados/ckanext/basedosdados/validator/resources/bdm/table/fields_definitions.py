@@ -13,11 +13,11 @@ to_line = lambda description: "\n".join(description)
 
 class DataCleanedBy(BaseModel):
     # fmt: off
-    name        : Optional[Str] = Field(title="Nome",description=to_line(["<nome>"]))
-    email       : Optional[Str] = Field(title="Email",description=to_line(["<email>"]))
-    github_user : Optional[Str] = Field(title="Usuário Github",description=to_line(["<usuário Github>"]))
-    ckan_user   : Optional[Str] = Field(title="Usuário CKAN",description=to_line(["<id do usuário no ckan>"]))
-    website     : Optional[Str] = Field(title="Website",description=to_line(["<onde encontrar os dados tratados>"]))
+    name        : Optional[Str] = Field(title="Nome")
+    email       : Optional[Str] = Field(title="Email")
+    github_user : Optional[Str] = Field(title="Usuário Github")
+    ckan_user   : Optional[Str] = Field(title="Usuário CKAN")
+    website     : Optional[Str] = Field(title="Website")
     # fmt: on
 
 # -------------------------------------

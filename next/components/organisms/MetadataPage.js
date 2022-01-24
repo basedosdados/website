@@ -96,7 +96,7 @@ export function MetadataPage({
               "spatial_coverage",
               "temporal_coverage",
               "update_frequency",
-              "entity",
+              "observation_level",
               "ckan_url",
               "github_url",
             ])

@@ -179,11 +179,11 @@ df <- read_sql(query)`,
       formComponent={
         <SchemaForm
           data={resource}
-          schemaName="Tabela Bdm"
+          schemaName="Tabela BD+"
           loadSchemaFunction={getBdmTableSchema}
           updateFunction={updateResource}
           prepareData={(data) => {
-            data.identifying_columns = data.identifying_columns || [];
+            data.observation_level = data.observation_level || [];
             data.published_by.github_user = data.published_by.github_user || "";
             data.published_by.ckan_user = data.published_by.ckan_user || "";
             data.data_cleaned_by.github_user =
@@ -317,9 +317,7 @@ df <- read_sql(query)`,
                 "spatial_coverage",
                 "temporal_coverage",
                 "update_frequency",
-                "entity",
-                "time_unit",
-                "identifying_columns",
+                "observation_level",
                 "last_updated",
                 "version",
                 "published_by",
