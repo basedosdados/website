@@ -1,4 +1,4 @@
-"use strict";
+"use";
 
 
 function clear_debug() {
