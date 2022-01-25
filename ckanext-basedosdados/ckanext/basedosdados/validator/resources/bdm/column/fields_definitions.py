@@ -133,6 +133,19 @@ HAS_SENSITIVE_DATA_FIELD = Field(
     default="no",
     yaml_order={
         "id_before": "measurement_unit",
+        "id_after": "observations",
+    },
+)
+
+OBSERVATIONS_FIELD = Field(
+    title="Observações",
+    description=to_line(
+        [
+            "Informações sobre a coluna: arquitetura, decisões de limpeza, etc.",
+        ]
+    ),
+    yaml_order={
+        "id_before": "has_sensitive_data",
         "id_after": "is_in_staging",
     },
 )
@@ -146,7 +159,7 @@ IS_IN_STAGING_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_before": "has_sensitive_data",
+        "id_before": "observations",
         "id_after": "is_partition",
     },
 )
