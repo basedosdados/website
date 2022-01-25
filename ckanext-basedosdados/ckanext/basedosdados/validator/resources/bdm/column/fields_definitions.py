@@ -158,6 +158,7 @@ IS_IN_STAGING_FIELD = Field(
             "Opções: True, False"
         ]
     ),
+    default=True,
     yaml_order={
         "id_before": "observations",
         "id_after": "is_partition",
@@ -172,6 +173,7 @@ IS_PARTITION_FIELD = Field(
             "Opções: True, False"
         ]
     ),
+    default=False,
     yaml_order={
         "id_before": "is_in_staging",
         "id_after": None,

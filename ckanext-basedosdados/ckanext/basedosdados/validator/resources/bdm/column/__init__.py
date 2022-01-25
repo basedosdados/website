@@ -14,7 +14,6 @@ from .fields_definitions import *
 
 class BdmColumns(BaseModel):
 
-    # ColumnsMetadata models
     # fmt: off
     name                  : Str                            = NAME_FIELD
     bigquery_type         : Optional[BigQueryTypeEnum]     = BIGQUERY_TYPE_FIELD
@@ -27,5 +26,4 @@ class BdmColumns(BaseModel):
     observations          : Optional[Str]                  = OBSERVATIONS_FIELD
     is_in_staging         : Optional[bool]                 = IS_IN_STAGING_FIELD
     is_partition          : Optional[bool]                 = IS_PARTITION_FIELD
-    # original_names       : Optional[List[Str]] = ORIGINAL_NAMES_FIELD #TODO: make it a complex field of dictionaries mapping year to name. Ex: {2015: "name_1", 2016: "name_2"}
     # fmt: on
