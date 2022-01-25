@@ -12,7 +12,6 @@ from pydantic import StrictStr as Str
 from .fields_definitions import *
 
 
-# TODO: investigate why when put the Enum types the forms dont show the fields
 class BdmColumns(BaseModel):
 
     # ColumnsMetadata models
