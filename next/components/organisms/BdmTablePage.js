@@ -163,8 +163,8 @@ library("basedosdados")
 # Defina o seu projeto no Google Cloud
 set_billing_id("<YOUR_PROJECT_ID>")
 # Para carregar o dado direto no R
-query <- "SELECT * FROM \`basedosdados.${queryName}\`"
-df <- read_sql(query)`,
+query <- bdplyr("${queryName}")
+df <- bd_collect(query)`,
   };
 
   useEffect(() => {
