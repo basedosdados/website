@@ -328,7 +328,7 @@ function ExploreInYourFavoriteLanguage() {
           <SectionText textAlign="justify">
             Desenvolvemos <b>pacotes para acesso aos dados da BD+</b> em Python,
             R e linha de comando. Além disso, você pode{" "}
-            <b>consultar e filtrar dados usando SQL</b> no editor do nosso
+            <b>consultar e filtrar dados usando SQL</b> no editor do nosso 
             <i>datalake</i> no Google BigQuery.
           </SectionText>
           <LinkDash href="https://basedosdados.github.io/mais/access_data_packages">
