@@ -165,7 +165,7 @@ export default function Menu({ pages = [] }) {
       Contato: "/blog/1/",
       Blog: "https://medium.com/basedosdados",
       Newsletter:
-        "https://info.basedosdados.org/assine-a-newsletter-da-base-dos-dados",
+        "https://info.basedosdados.org/assine-newsletter",
     },
     Serviços: "/servicos",
     Apoie: "https://apoia.se/basedosdados",

@@ -95,7 +95,7 @@ export default function Footer({ pages }) {
             </LinkVStack>
             <LinkVStack title="CONTEÚDO">
               <FooterLink
-                href="https://info.basedosdados.org/assine-a-newsletter-da-base-dos-dados"
+                href="https://info.basedosdados.org/assine-newsletter"
                 color="white"
                 target="_blank"
               >
