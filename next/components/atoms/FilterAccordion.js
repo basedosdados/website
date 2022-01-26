@@ -37,11 +37,9 @@ export function BaseFilterAccordion({
           <>
             <Text>
               <AccordionButton
-                onClick={onChange}
-                border={isActive ? "2px solid #3AA1EB" : "1px solid #DEDFE0"}
+                onClick={onChange}        
                 color={isActive ? "#3AA1EB" : null}
                 _hover={alwaysOpen ? { cursor: "inherit" } : null}
-                borderRadius="13px"
               >
                 <HStack
                   spacing={2}
@@ -54,7 +52,7 @@ export function BaseFilterAccordion({
                     textAlign="left"
                     fontFamily="Lato"
                     fontWeight="700"
-                    fontSize="15px"
+                    fontSize="16px"
                     letterSpacing="0.1em"
                   >
                     {fieldName}
@@ -123,7 +121,7 @@ export function CheckboxFilterAccordion({
               onChange={setSearch}
               inputBackgroundColor="#FFFFFF"
               inputStyle={{
-                height: "30px",
+                height: "50px",
                 fontSize: "14px",
                 width: "100%",
                 margin: "0",
