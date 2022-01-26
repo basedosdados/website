@@ -549,7 +549,7 @@ function Support({ pages }) {
         direction={{ base: "column", lg: "row" }}
         spacing={10}
       >
-        <ShadowBox height="250px" title="Apoio inicial">
+        <ShadowBox height="250px" title="Entusiasta 🤩">
           <SectionText
             fontWeight="400"
             padding="10px 0px"
@@ -582,7 +582,7 @@ function Support({ pages }) {
           border="2.5px solid #FF8484"
           title={
             <Text color="#FF8484">
-              <b>Apoio entusiasta</b>
+              <b><i>Databaser</i> 🎲</b>
             </Text>
           }
         >
@@ -619,7 +619,7 @@ function Support({ pages }) {
           height="250px"
           title={
             <Text>
-              Apoio <i>databaser</i>
+              Mestre dos dados 🔮
             </Text>
           }
         >
