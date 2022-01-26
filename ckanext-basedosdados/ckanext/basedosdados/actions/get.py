@@ -257,7 +257,7 @@ def bd_dataset_search(context, data_dict):
     response.pop("facets", None)
     response.pop("search_facets", None)
     response.pop("sort", None)
-
+    
     # post-process groups ###################################
 
     response["groups"] = {}
@@ -298,8 +298,10 @@ def bd_dataset_search(context, data_dict):
     for dataset in response["datasets"]:
         entities = []
         for resource in dataset["resources"]:
-            res_entities = resource.get("entity", []) or []
-            entities.extend(res_entities)
+            for ol in resource['observation_level']:
+                if "entity" in ol:
+                    res_entities = ol.get("entity")
+                    entities.append(res_entities)
         entities = list(set(entities))
 
         for key in entities:
@@ -403,7 +405,7 @@ def bd_dataset_search(context, data_dict):
     resource_type_order = resource_type_order + resource_types_not_included
 
     resources_order_dict = {}
-    print(resource_type_order)
+
     for i, package in enumerate(response["datasets"]):
         resources_type = [
             resource.get("resource_type") for resource in package.get("resources")
