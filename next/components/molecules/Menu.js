@@ -112,6 +112,9 @@ function DesktopLinks({ links }) {
           value={search}
           onChange={setSearch}
           inputBackgroundColor="#FFFFFF"
+          inputStyle={{
+            borderRadius: "15px",
+          }}
           rightIcon={
             <Box width="60px" height="60px" position="relative">
               <Image

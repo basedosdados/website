@@ -122,7 +122,7 @@ function Hero() {
                 justifyContent="center"
                 inputStyle={{
                   padding: "40px",
-                  borderRadius: "50px",
+                  borderRadius: "25px",
                   backgroundColor: "#ffffff",
                   fontSize: "24px",
                   border: "0px",

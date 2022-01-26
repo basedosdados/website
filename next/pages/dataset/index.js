@@ -486,7 +486,7 @@ export default function SearchPage({
               fontSize: "16px",
               fontWeight: 500,
               height: "50px",
-              boxShadow: "0 2px 5px 1px rgba(64, 60, 67, 0.16) !important",
+              boxShadow: "0px 2px 5px 1px rgb(0 0 0 / 5%)",
             }}
           />
           <>
