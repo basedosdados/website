@@ -20,8 +20,6 @@ class BdmTable(_CkanDefaultResource):
     # fmt: off
     resource_type: Literal["bdm_table"]
 
-    metadata_modified         : Optional[datetime]                               = METADATA_MODIFIED_FIELD #TODO: can we rename this to last_updated and make it a derived field for dataset and all resources?
-    # BdmTable models
     dataset_id                : Str                                              = DATASET_ID_FIELD
     table_id                  : Str                                              = TABLE_ID_FIELD
     description               : Optional[Str]                                    = DESCRIPTION_FIELD
@@ -43,23 +41,8 @@ class BdmTable(_CkanDefaultResource):
     project_id_prod           : Optional[Str]                                    = PROJECT_ID_PROD_FIELD
     project_id_staging        : Optional[Str]                                    = PROJECT_ID_STAGING_FIELD
     partitions                : Optional[List[Str]]                              = PARTITIONS_FIELD
-    bdm_file_size             : Union[int, None, Literal["Unavailable", ""]]     = BDM_FILE_SIZE_FIELD # should not be editable in form, also, check what use is Unavailable
+    uncompressed_file_size    : Optional[int]                                    = UNCOMPRESSED_FILE_SIZE_FIELD
+    compressed_file_size      : Optional[int]                                    = COMPRESSED_FILE_SIZE_FIELD
     columns                   : Optional[List[BdmColumns]]                       = COLUMNS_FIELD
+    metadata_modified         : Optional[datetime]                               = METADATA_MODIFIED_FIELD #TODO: can we rename this to last_updated and make it a derived field for dataset and all resources?
     # fmt: on
-
-    # -------------------------------------
-    # VALIDATORS
-    # -------------------------------------
-
-    @validator("bdm_file_size")
-    def null_string_is_none(cls, value):
-        # TODO: check why this is not working,
-        # as it is still failing when we pass a ''.
-        # Had to add '' to type signature
-        if value == "":
-            return None
-        return value
-
-    # TODO: implement this
-    def table_id_should_be_a_valid_bigquery_identifier(cls, value):
-        pass

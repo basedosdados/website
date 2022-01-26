@@ -328,7 +328,6 @@ df <- read_sql(query)`,
                 "architecture_url",
                 "covered_by_dictionary",
                 "partitions",
-                "bdm_file_size",
                 "columns",
               ])
             )

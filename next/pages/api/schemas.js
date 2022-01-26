@@ -55,7 +55,8 @@ export function getBdmTableSchema() {
       delete schema.properties.mimetype_inner;
       delete schema.properties.size;
       delete schema.properties.url_type;
-      delete schema.properties.bdm_file_size;
+      delete schema.properties.uncompressed_file_size;
+      delete schema.properties.compressed_file_size;
       delete schema.required;
 
       return schema;

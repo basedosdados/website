@@ -259,15 +259,24 @@ PARTITIONS_FIELD = Field(
     ),
     yaml_order={
         "id_before": "github_url",
-        "id_after": "bdm_file_size",
+        "id_after": "uncompressed_file_size",
     },
 )
 
-BDM_FILE_SIZE_FIELD = Field(
-    title="Tamanho do Arquivo",
+UNCOMPRESSED_FILE_SIZE_FIELD = Field(
+    title="Tamanho do Arquivo Não-Comprimido",
     description=to_line([""]),
     yaml_order={
         "id_before": "partitions",
+        "id_after": "compressed_file_size",
+    },
+)
+
+COMPRESSED_FILE_SIZE_FIELD = Field(
+    title="Tamanho do Arquivo Comprimido",
+    description=to_line([""]),
+    yaml_order={
+        "id_before": "uncompressed_file_size",
         "id_after": "columns",
     },
 )
@@ -299,10 +308,3 @@ METADATA_MODIFIED_FIELD = Field(
         "id_after": None,
     },
 )
-
-# =================================================================================================================================
-# =================================================================================================================================
-# =================================================================================================================================
-# =================================================================================================================================
-# =================================================================================================================================
-# =================================================================================================================================

@@ -14,9 +14,9 @@ to_line = lambda description: "\n".join(description)
 
 class DirectoryColumn(BaseModel):
     # fmt: off
-    dataset_id : Optional[DirectoryEnum] = Field(title="ID Conjunto",description=to_line(["<dataset_id>"]))
-    table_id   : Optional[Str]           = Field(title="ID Tabela",description=to_line(["<table_id>"]))
-    column_name: Optional[Str]           = Field(title="Nome Coluna",description=to_line(["<column_name>"]))
+    dataset_id : Optional[DirectoryEnum] = Field(title="ID Conjunto")
+    table_id   : Optional[Str]           = Field(title="ID Tabela")
+    column_name: Optional[Str]           = Field(title="Nome Coluna")
     # fmt: on
 
 
