@@ -570,8 +570,8 @@ export default function SearchPage({
                     setOrder(event.target.value);
                   }}
                 >
-                  <option value="score">Relevância</option>
-                  <option value="recent">Recente</option>
+                  <option value="score">Relevantes</option>
+                  <option value="recent">Recentes</option>
                   <option value="popular">Populares</option>
                 </Select>
               </Stack>
