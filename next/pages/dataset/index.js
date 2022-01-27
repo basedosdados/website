@@ -335,12 +335,12 @@ export default function SearchPage({
             fontWeigth="300"
             width="100%"
             height="50px"
-            paddingLeft="20px"
+            // paddingLeft="20px"
             justifyContent="flex-start"
             alignItems="center"
             display="flex"
           >
-            Filtrar resultados por
+            Filtrar resultados:
           </SectionTitle>
           <CheckboxFilterAccordion
             isActive={(paramFilters.resource_type || []).length > 0}
@@ -557,7 +557,7 @@ export default function SearchPage({
                 direction={{ base: "column", md: "row" }}
                 spacing={5}
               >
-                <Text whiteSpace="nowrap">Ordenar por:</Text>
+                <Text whiteSpace="nowrap">Ordenar:</Text>
                 <Select
                   fontWeight="bold"
                   fontFamily="Lato"
@@ -570,8 +570,8 @@ export default function SearchPage({
                     setOrder(event.target.value);
                   }}
                 >
-                  <option value="score">Relevantes</option>
-                  <option value="recent">Recentes</option>
+                  {/* <option value="score">Relevantes</option>  TODO: review this */}
+                  <option value="recent">Mais recentes</option>
                   <option value="popular">Populares</option>
                 </Select>
               </Stack>
