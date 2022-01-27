@@ -36,6 +36,7 @@ import {
 import { ExternalLinkPage } from "../../components/organisms/ExternalLinkPage";
 import { BdmTablePage } from "../../components/organisms/BdmTablePage";
 import { MetadataPage } from "../../components/organisms/MetadataPage";
+import { DashboardsPage } from "../../components/organisms/DashboardsPage";
 import UserContext from "../../context/user";
 import { SchemaForm } from "../../components/molecules/SchemaForm";
 import {
@@ -395,6 +396,7 @@ export default function DatasetPage({
           <TabList padding="0px" border="0px" fontFamily="Ubuntu !important">
             <GreenTab>Recursos</GreenTab>
             <GreenTab>Metadados</GreenTab>
+            <GreenTab>Perguntas</GreenTab>
           </TabList>
           <TabPanels>
             <TabPanel padding="0px">
@@ -411,6 +413,12 @@ export default function DatasetPage({
                 dataset={dataset}
                 translations={translations}
                 availableOptionsTranslations={availableOptionsTranslations}
+              />
+            </TabPanel>
+            <TabPanel padding="0px">
+              <DashboardsPage
+                dataset={dataset}
+                availableOptionsTranslations={availableOptionsTrasnslations}
               />
             </TabPanel>
           </TabPanels>
