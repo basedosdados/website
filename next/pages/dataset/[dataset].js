@@ -396,7 +396,7 @@ export default function DatasetPage({
           <TabList padding="0px" border="0px" fontFamily="Ubuntu !important">
             <GreenTab>Recursos</GreenTab>
             <GreenTab>Metadados</GreenTab>
-            <GreenTab>Perguntas</GreenTab>
+            <GreenTab>Painéis</GreenTab>
           </TabList>
           <TabPanels>
             <TabPanel padding="0px">
