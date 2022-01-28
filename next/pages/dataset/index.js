@@ -451,7 +451,7 @@ export default function SearchPage({
             values={paramFilters.entity}
             valueField="name"
             displayField="displayName"
-            fieldName="Entidade"
+            fieldName="Nível da observação"
             onChange={(values) =>
               setParamFilters({ ...paramFilters, entity: values })
             }

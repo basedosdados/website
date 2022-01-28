@@ -138,6 +138,7 @@ AVAILABILITY_FIELD = Field(
             "Opções 'availability' em https://basedosdados.org/api/3/action/bd_available_options."
         ]
     ),
+    default="online",
     yaml_order={
         "id_after": "requires_registration",
         "id_before": "country_ip_address_required",
@@ -209,34 +210,19 @@ UPDATE_FREQUENCY_FIELD = Field(
     ),
     yaml_order={
         "id_after": "temporal_coverage",
-        "id_before": "entity",
+        "id_before": "observation_level",
     },
 )
 
-ENTITY_FIELD = Field(
-    title="Entidade",
+OBSERVATION_LEVEL_FIELD = Field(
+    title="Nível da observação",
     description=to_line(
         [
-            "Entidade representada por cada linha."
-        ]
-    ),
-    max_items=10,
-    yaml_order={
-        "id_after": "update_frequency",
-        "id_before": "time_unit",
-    },
-)
-
-TIME_UNIT_FIELD = Field(
-    title="Unidade Temporal",
-    description=to_line(
-        [
-            "A unidade temporal representada por cada linha.",
-            "Opções em 'time_unit' em https://basedosdados.org/api/3/action/bd_available_options."
+            "Nível de observação dos dados: o que representa cada linha.",
         ]
     ),
     yaml_order={
-        "id_after": "entity",
-        "id_before": None,
+        "id_before": "update_frequency",
+        "id_after": None,
     },
 )

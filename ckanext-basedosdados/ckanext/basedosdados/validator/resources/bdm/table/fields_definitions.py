@@ -13,12 +13,11 @@ to_line = lambda description: "\n".join(description)
 
 class DataCleanedBy(BaseModel):
     # fmt: off
-    name        : Optional[Str] = Field(title="Nome",description=to_line(["<nome>"]))
-    email       : Optional[Str] = Field(title="Email",description=to_line(["<email>"]))
-    github_user : Optional[Str] = Field(title="Usuário Github",description=to_line(["<usuário Github>"]))
-    ckan_user   : Optional[Str] = Field(title="Usuário CKAN",description=to_line(["<id do usuário no ckan>"]))
-    website     : Optional[Str] = Field(title="Website",description=to_line(["<onde encontrar os dados tratados>"]))
-    code_url    : Optional[Str] = Field(title="Url código de limpeza",description=to_line(["<onde encontrar código de limpeza>"]))
+    name        : Optional[Str] = Field(title="Nome")
+    email       : Optional[Str] = Field(title="Email")
+    github_user : Optional[Str] = Field(title="Usuário Github")
+    ckan_user   : Optional[Str] = Field(title="Usuário CKAN")
+    website     : Optional[Str] = Field(title="Website")
     # fmt: on
 
 # -------------------------------------
@@ -95,47 +94,15 @@ UPDATE_FREQUENCY_FIELD = Field(
     },
 )
 
-ENTITY_FIELD = Field(
-    title="Entidade",
+OBSERVATION_LEVEL_FIELD = Field(
+    title="Nível da observação",
     description=to_line(
         [
-            "Entidade representada por cada linha.",
-            "Opções em 'https://basedosdados.org/api/3/action/bd_available_options'"
+            "Nível de observação da tabela: o que representa cada linha.",
         ]
     ),
-    max_items=10,
     yaml_order={
         "id_before": "update_frequency",
-        "id_after": "time_unit",
-    },
-)
-
-TIME_UNIT_FIELD = Field(
-    title="Unidade Temporal",
-    description=to_line(
-        [
-            "A unidade temporal representada por cada linha.",
-            "Opções em 'https://basedosdados.org/api/3/action/bd_available_options'"
-        ]
-    ),
-    yaml_order={
-        "id_before": "entity",
-        "id_after": "identifying_columns",
-    },
-)
-
-IDENTIFYING_COLUMNS_FIELD = Field(
-    title="Colunas Identificadoras",
-    description=to_line(
-        [
-            "O conjunto mínimo de colunas identificando cada linha unicamente.",
-            "Preencha com os nomes de colunas.",
-            "Exemplos: id_municipio, ano.",
-            "Pode ser vazio pois certas tabelas não possuem identificadores.",
-        ]
-    ),
-    yaml_order={
-        "id_before": "time_unit",
         "id_after": "last_updated",
     },
 )
@@ -143,7 +110,7 @@ IDENTIFYING_COLUMNS_FIELD = Field(
 LAST_UPDATED_FIELD = Field(
     title="Data da Última Atualização",
     yaml_order={
-        "id_before": "identifying_columns",
+        "id_before": "observation_level",
         "id_after": "version",
     },
 )
@@ -162,7 +129,6 @@ VERSION_FIELD = Field(
     },
 )
 
-# TODO: DICT TYPE
 PUBLISHED_BY_FIELD = Field(
     title="Publicado por",
     description=to_line(["Quem está preenchendo esses metadados?"]),
@@ -172,7 +138,6 @@ PUBLISHED_BY_FIELD = Field(
     },
 )
 
-# TODO: DICT TYPE
 DATA_CLEANED_BY_FIELD = Field(
     title="Dados Limpos por",
     description=to_line(
@@ -197,18 +162,27 @@ DATA_CLEANING_DESCRIPTION_FIELD = Field(
     ),
     yaml_order={
         "id_before": "data_cleaned_by",
-        "id_after": "raw_files_url",
+        "id_after": "data_cleaning_code_url",
     },
 )
 
-# DATA_CLEANING_CODE_URL = Field(
-#     title="Url do Código de Limpeza dos Dados",
-#     description=to_line(["Url do código de limpeza dos dados."]),
-#     yaml_order={
-#         "id_before": "data_cleaning_description",
-#         "id_after": "raw_files_url",
-#     },
-# )
+DATA_CLEANING_CODE_URL_FIELD = Field(
+    title="Url do Código de Limpeza dos Dados",
+    description=to_line(["Url do código de limpeza dos dados."]),
+    yaml_order={
+        "id_before": "data_cleaning_description",
+        "id_after": "partner_organization",
+    },
+)
+
+PARTNER_ORGANIZATION_FIELD = Field(
+    title="Organização parceira",
+    description=to_line(["Organização que ajudou institucionalmente na disponibilização dos dados."]),
+    yaml_order={
+        "id_before": "data_cleaning_code_url",
+        "id_after": "raw_files_url",
+    },
+)
 
 RAW_FILES_URL_FIELD = Field(
     title="Url dos Dados Originais",
@@ -218,7 +192,7 @@ RAW_FILES_URL_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_before": "data_cleaning_description",
+        "id_before": "partner_organization",
         "id_after": "auxiliary_files_url",
     },
 )
@@ -245,20 +219,6 @@ ARCHITECTURE_URL_FIELD = Field(
     ),
     yaml_order={
         "id_before": "auxiliary_files_url",
-        "id_after": "covered_by_dictionary",
-    },
-)
-
-COVERED_BY_DICTIONARY_FIELD = Field(
-    title="Coberto por Dicionário",
-    description=to_line(
-        [
-            "A tabela tem colunas que precisam de dicionário?",
-            "Opções: yes, no."
-        ]
-    ),
-    yaml_order={
-        "id_before": "architecture_url",
         "id_after": "source_bucket_name",
     },
 )
@@ -266,7 +226,7 @@ COVERED_BY_DICTIONARY_FIELD = Field(
 SOURCE_BUCKET_NAME_FIELD = Field(
     title="Nome do Bucket Fonte no GCP",
     yaml_order={
-        "id_before": "covered_by_dictionary",
+        "id_before": "architecture_url",
         "id_after": "project_id_prod",
     },
 )
@@ -299,15 +259,24 @@ PARTITIONS_FIELD = Field(
     ),
     yaml_order={
         "id_before": "github_url",
-        "id_after": "bdm_file_size",
+        "id_after": "uncompressed_file_size",
     },
 )
 
-BDM_FILE_SIZE_FIELD = Field(
-    title="Tamanho do Arquivo",
+UNCOMPRESSED_FILE_SIZE_FIELD = Field(
+    title="Tamanho do Arquivo Não-Comprimido",
     description=to_line([""]),
     yaml_order={
         "id_before": "partitions",
+        "id_after": "compressed_file_size",
+    },
+)
+
+COMPRESSED_FILE_SIZE_FIELD = Field(
+    title="Tamanho do Arquivo Comprimido",
+    description=to_line([""]),
+    yaml_order={
+        "id_before": "uncompressed_file_size",
         "id_after": "columns",
     },
 )
@@ -339,10 +308,3 @@ METADATA_MODIFIED_FIELD = Field(
         "id_after": None,
     },
 )
-
-# =================================================================================================================================
-# =================================================================================================================================
-# =================================================================================================================================
-# =================================================================================================================================
-# =================================================================================================================================
-# =================================================================================================================================

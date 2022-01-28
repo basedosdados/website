@@ -64,8 +64,7 @@ export function ExternalLinkPage({
                 "spatial_coverage",
                 "temporal_coverage",
                 "update_frequency",
-                "entity",
-                "time_unit",
+                "observation_level",
               ])
             )
           )}

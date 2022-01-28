@@ -13,17 +13,24 @@ to_line = lambda description: "\n".join(description)
 
 class LastUpdated(BaseModel):
     # fmt: off
-    metadata: Optional[datetime]  = Field(title="Metadados",description=to_line(["Última atualização: metadados"]))
-    data     : Optional[datetime] = Field(title="Dados",description=to_line(["Última atualização: dados"]))
-    release  : Optional[datetime] = Field(title="Dados Originais",description=to_line(["Último lançamento: dados originais"]))
+    metadata : Optional[Str] = Field(title="Metadados")
+    data     : Optional[Str] = Field(title="Dados")
+    release  : Optional[Str] = Field(title="Dados Originais")
     # fmt: on
 
 
 class PublishedBy(BaseModel):
     # fmt: off
-    name        : Optional[Str] = Field(title="Nome",description=to_line(["<nome [você]>"]))
-    email       : Optional[Str] = Field(title="Email",description=to_line(["<email>"]))
-    github_user : Optional[Str] = Field(title="Usuário Github",description=to_line(["<usuário Github>"]))
-    website     : Optional[Str] = Field(title="Website",description=to_line(["<www.exemplo.com>"]))
-    ckan_user   : Optional[Str] = Field(title="Usuário CKAN",description=to_line(["<id do usuário no ckan>"]))
+    name        : Optional[Str] = Field(title="Nome")
+    email       : Optional[Str] = Field(title="Email")
+    github_user : Optional[Str] = Field(title="Usuário Github")
+    ckan_user   : Optional[Str] = Field(title="Usuário CKAN")
+    website     : Optional[Str] = Field(title="Website")
+    # fmt: on
+
+
+class PartnerOrganization(BaseModel):
+    # fmt: off
+    name            : Optional[Str] = Field(title="Nome",description=to_line(["Nome completo"]))
+    organization_id : Optional[Str] = Field(title="ID Organização",description=to_line(["ID Organização - CKAN"]))
     # fmt: on

@@ -4,14 +4,31 @@ from typing import Union
 from .attr_enum import AttrEnum
 
 
-class EntitySphereEnum(AttrEnum):
+class EntityDateTimeEnum(AttrEnum):
+    # fmt: off
+    year       = {"label": "Ano"} #"One Year"}
+    semester   = {"label": "Semestre"} #"Semester"}
+    quarter    = {"label": "Trimestre"} #"Quarter"}
+    bimester   = {"label": "Bimestre"} #"Bimester"}
+    month      = {"label": "Mês"} #"Month"}
+    week       = {"label": "Semana"} #"Week"}
+    day        = {"label": "Dia"} #"Day"}
+    hour       = {"label": "Hora"} #"Hour"}
+    minute     = {"label": "Minuto"} #"Minute"}
+    second     = {"label": "Segundo"} #"Second"}
+    date       = {"label": "Data"} #"Date"}
+    time       = {"label": "Horário"} #"Time"}
+    # fmt: on
+
+
+class EntitySpatialEnum(AttrEnum):
     # fmt: off
     continent        = {'label': "Continente"} #"Continent"}
     country          = {'label': "País"} #"Country"}
     region           = {'label': "Região"} #"Region"}
     state            = {'label': "Estado/Unidade da Federação"} #"State"}
-    county           = {'label': "Condado"} #"County"}
     district         = {'label': "Distrito"} #"District"}
+    county           = {'label': "Condado"} #"County"}
     municipality     = {'label': "Município"} #"Municipality"}
     city             = {'label': "Cidade"} #"City"}
     village          = {'label': "Vila/Aldeia"} #"Village"}
@@ -205,7 +222,8 @@ class EntityOtherEnum(AttrEnum):
 
 
 EntityEnum = Union[
-    EntitySphereEnum,
+    EntityDateTimeEnum,
+    EntitySpatialEnum,
     EntityIndividualEnum,
     EntityEstablishmentEnum,
     EntityPoliticsEnum,
