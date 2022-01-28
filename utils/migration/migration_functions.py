@@ -482,6 +482,14 @@ def migrate_external_link_title_to_name(package):
 		
 	return package
 
+def migrate_notes_field(package):
+
+	if 'notes' in package and package['notes'] != '': 
+		package['description'] = package['notes']
+		package['notes'] = ''
+	
+	return package
+
 def list_datasets(packages, condition):
 
 	l = []

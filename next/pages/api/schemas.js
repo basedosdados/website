@@ -128,8 +128,8 @@ export function getDatasetSchema() {
       delete schema.properties.metadata_created;
       delete schema.properties.metadata_modified;
       delete schema.properties.cache_last_updated;
-      delete schema?.properties?.spatial_coverage;
-      delete schema?.properties?.temporal_coverage;
+      /*delete schema?.properties?.spatial_coverage;
+      delete schema?.properties?.temporal_coverage;*/
       delete schema.required;
 
       return schema;
