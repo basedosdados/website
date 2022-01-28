@@ -252,12 +252,11 @@ def bd_dataset_search(context, data_dict):
     )
 
     # post-process ########################################
-
     response["datasets"] = response.pop("results", None)
     response.pop("facets", None)
     response.pop("search_facets", None)
     response.pop("sort", None)
-    
+
     # post-process groups ###################################
 
     response["groups"] = {}
@@ -271,7 +270,6 @@ def bd_dataset_search(context, data_dict):
             response["groups"][key] = value
 
     # post-process tags ###################################
-
     response["tags"] = {}
 
     for dataset in response["datasets"]:
@@ -298,7 +296,7 @@ def bd_dataset_search(context, data_dict):
     for dataset in response["datasets"]:
         entities = []
         for resource in dataset["resources"]:
-            for ol in resource['observation_level']:
+            for ol in resource.get("observation_level", {}):
                 if "entity" in ol:
                     res_entities = ol.get("entity")
                     entities.append(res_entities)
@@ -424,6 +422,20 @@ def bd_dataset_search(context, data_dict):
                 datasets_final_order.append(response["datasets"][position])
 
     response["datasets"] = datasets_final_order
+
+    # post-process sort filters ###############################
+    sort_dict = lambda dictioanry: dict(
+        sorted(dictioanry.items(), key=lambda x: x[1], reverse=True)
+    )
+
+    for key in response.keys():
+        if key == "count" or key == "datasets":
+            pass
+        else:
+            try:
+                response[key] = sort_dict(response[key])
+            except Exception as e:
+                print("Error: ", e)
 
     # post-process datasets ###############################
 
@@ -556,13 +568,17 @@ def bd_available_options(context, data_dict):
             "Entity History": EntityHistoryEnum.get_all_enum_attr("label"),
             "Entity Image": EntityImageEnum.get_all_enum_attr("label"),
             "Entity Individual": EntityIndividualEnum.get_all_enum_attr("label"),
-            "Entity Infrastructure": EntityInfrastructureEnum.get_all_enum_attr("label"),
+            "Entity Infrastructure": EntityInfrastructureEnum.get_all_enum_attr(
+                "label"
+            ),
             "Entity Other": EntityOtherEnum.get_all_enum_attr("label"),
             "Entity Politics": EntityPoliticsEnum.get_all_enum_attr("label"),
             "Entity Science": EntityScienceEnum.get_all_enum_attr("label"),
             "Entity Security": EntitySecurityEnum.get_all_enum_attr("label"),
             "Entity Spatial": EntitySpatialEnum.get_all_enum_attr("label"),
-            "Entity Transportation": EntityTransportationEnum.get_all_enum_attr("label"),
+            "Entity Transportation": EntityTransportationEnum.get_all_enum_attr(
+                "label"
+            ),
         },
         "Language": LanguageEnum.get_all_enum_attr("label"),
         "License": LicenseEnum.get_all_enum_attr("label"),
