@@ -208,7 +208,7 @@ def migrate_data_cleaning_code_url(package):
 
 	return package
 
-def migrate_spatial_coverage(package):
+def standardize_old_spatial_coverage(package):
 
 	for k, resource in enumerate(package['resources']):
 		
@@ -217,18 +217,28 @@ def migrate_spatial_coverage(package):
 		else:
 			if 'spatial_coverage' in resource:
 				if resource['spatial_coverage'] == 'all':
-					resource['spatial_coverage'] = {'continent': ['all'],
+					resource['spatial_coverage'] = {'continent': None,
+													'country': None,
+													'admin1': None,
+													'admin2': None}
+				elif resource['spatial_coverage'] == 'south_america':
+					resource['spatial_coverage'] = {'continent': ['south_america'],
+													'country': None,
+													'admin1': None,
+													'admin2': None}
+				elif resource['spatial_coverage'] == 'north_america':
+					resource['spatial_coverage'] = {'continent': ['north_america'],
+													'country': None,
+													'admin1': None,
+													'admin2': None}
+				elif resource['spatial_coverage'] == 'europe':
+					resource['spatial_coverage'] = {'continent': ['europe'],
 													'country': None,
 													'admin1': None,
 													'admin2': None}
 				elif resource['spatial_coverage'] == 'bra':
 					resource['spatial_coverage'] = {'continent': ['south_america'],
 													'country': ['bra'],
-													'admin1': None,
-													'admin2': None}
-				elif resource['spatial_coverage'] == 'europe':
-					resource['spatial_coverage'] = {'continent': ['europe'],
-													'country': None,
 													'admin1': None,
 													'admin2': None}
 				elif resource['spatial_coverage'] == 'bra,id_uf_35':
@@ -252,11 +262,168 @@ def migrate_spatial_coverage(package):
 													'admin1': ['id_uf_33'],
 													'admin2': None}
 				else:
-
 					pass
+			
+			else:
+				pass
 		
 		package['resources'][k] = resource
 	
+	return package
+
+def migrate_spatial_coverage(package):
+
+	mapping = {
+		'bra': 'br',
+		'usa': 'us',
+		'arg': 'ar', 
+		'bol': 'bo', 
+		'chl': 'cl', 
+		'col': 'co', 
+		'can': 'ca', 
+		'mex': 'mx', 
+		'deu': 'de', 
+		'esp': 'es', 
+		'fra': 'fr', 
+		'ita': 'it', 
+		'prt': 'pt', 
+		'gbr': 'gb',
+		'rus': 'ru', 
+		'chn': 'cn', 
+		'ind': 'in', 
+		'tha': 'th', 
+		'jpn': 'jp', 
+		'mys': 'my', 
+		'idn': 'id', 
+		'zaf': 'za',
+		'aus': 'au', 
+	}
+
+	for k, resource in enumerate(package['resources']):
+
+		if 'spatial_coverage' in resource and resource['spatial_coverage'] not in [None, {}]:
+			
+			if 'continent' in resource['spatial_coverage'] and resource['spatial_coverage']['continent'] is None:
+				resource['spatial_coverage'] = None
+			elif ('continent' in resource['spatial_coverage'] and 
+				resource['spatial_coverage']['continent'] is not None and
+				'all' in resource['spatial_coverage']['continent']):
+				resource['spatial_coverage'] = []
+			elif resource['spatial_coverage'] == {'continent': ['south_america'],
+											'country': None,
+											'admin1': None,
+											'admin2': None}:
+				resource['spatial_coverage'] = [
+					{
+						'continent': 'south_america'
+					}
+				]
+			elif resource['spatial_coverage'] == {'continent': ['north_america'],
+											'country': None,
+											'admin1': None,
+											'admin2': None}:
+				resource['spatial_coverage'] = [
+					{
+						'continent': 'north_america'
+					}
+				]
+			elif resource['spatial_coverage'] == {'continent': ['europe'],
+											'country': None,
+											'admin1': None,
+											'admin2': None}:
+				resource['spatial_coverage'] = [
+					{
+						'continent': 'europe'
+					}
+				]
+			elif (resource['spatial_coverage']['continent'] not in [None, []] and 
+				('country' in resource['spatial_coverage'] and resource['spatial_coverage']['country'] not in [None, []]) and
+				('admin1' not in resource['spatial_coverage'] or resource['spatial_coverage']['admin1'] in [None, []])):
+				sc = [
+					{
+						'continent': resource['spatial_coverage']['continent'][0],
+						'country': mapping[resource['spatial_coverage']['country'][0]]
+					}
+				]
+				resource['spatial_coverage'] = sc
+			elif (
+				('continent' in resource['spatial_coverage'] and resource['spatial_coverage']['continent'] not in [None, []]) and 
+				('country' in resource['spatial_coverage'] and resource['spatial_coverage']['country'] not in [None, []]) and
+				('admin1' in resource['spatial_coverage'] and resource['spatial_coverage']['admin1'] not in [None, []]) and
+				('admin2' not in resource['spatial_coverage'] or resource['spatial_coverage']['admin2'] in [None, []])):
+
+				sc = []
+				if len(resource['spatial_coverage']['admin1']) >= 15:
+					sc.append(
+						{
+							'continent': resource['spatial_coverage']['continent'][0],
+							'country': mapping[resource['spatial_coverage']['country'][0]],
+						}
+					)
+				else:
+					for admin1 in resource['spatial_coverage']['admin1']:
+						sc.append(
+							{
+								'continent': resource['spatial_coverage']['continent'][0],
+								'country': mapping[resource['spatial_coverage']['country'][0]],
+								'admin1': admin1
+							}
+						)
+				resource['spatial_coverage'] = sc
+			else:
+				resource['spatial_coverage'] = []
+		
+		else:
+			resource['spatial_coverage'] = None
+		
+		package['resources'][k] = resource
+
+	return package
+
+def migrate_country_ip_address_required(package):
+
+	mapping = {
+		'bra': 'br',
+		'usa': 'us',
+		'arg': 'ar', 
+		'bol': 'bo', 
+		'chl': 'cl', 
+		'col': 'co', 
+		'can': 'ca', 
+		'mex': 'mx', 
+		'deu': 'de', 
+		'esp': 'es', 
+		'fra': 'fr', 
+		'ita': 'it', 
+		'prt': 'pt', 
+		'gbr': 'gb',
+		'rus': 'ru', 
+		'chn': 'cn', 
+		'ind': 'in', 
+		'tha': 'th', 
+		'jpn': 'jp', 
+		'mys': 'my', 
+		'idn': 'id', 
+		'zaf': 'za',
+		'aus': 'au', 
+	}
+
+	for k, resource in enumerate(package['resources']):
+		if 'country_ip_address_required' in resource and resource['country_ip_address_required'] not in [None, '']:
+			countries = []
+			for country in resource['country_ip_address_required']:
+				countries.append(mapping[country])
+			resource['country_ip_address_required'] = countries
+			
+			package['resources'][k] = resource
+	
+	return package
+
+def migrate_spatial_coverage_keys(package):
+
+	#TODO: convert id_uf_35 to SP
+	#TODO: convert id_municipio_1100015 to 1100015
+
 	return package
 
 def subLists(l):
@@ -397,41 +564,48 @@ def migrate_observation_level(package):
 
 	for i, resource in enumerate(package['resources']):
 		
-		resource['observation_level'] = []
-
-		if resource['name'] == 'dicionario': # `dicionario` has different metadata from `bdm_table`
-			pass
+		if resource['name'] == 'dicionario':
+			if 'observation_level' in resource:
+				del resource['observation_level']
 
 		else:
-			if 'entity' in resource and resource['entity'] not in [None, []]:
-				
-				for k, entity in enumerate(resource['entity']):
 
-					# migrate entity
-					resource['observation_level'].append({'entity': entity})
+			if 'observation_level' in resource:
+				pass
 
-					# fill out country for common spatial entities
-					if entity in ['municipality', 'district', 'census_tract']:
-						resource['observation_level'][k]['country'] = 'bra'
-					elif entity in ['county']:
-						resource['observation_level'][k]['country'] = 'usa'
+			else:
 
-			if 'identifying_columns' in resource and resource['identifying_columns'] not in [None, []]:
-				
-				standard_observation_levels = [
-					['', 'year', 'ano'],
-					['', 'quarter', 'trimestre'],
-					['', 'month', 'mes'],
-					['', 'day', 'dia'],
-					['', 'date', 'data'],
-					['bra', 'state', 'sigla_uf'],
-					['bra', 'state', 'id_uf'],
-					['bra', 'municipality', 'id_municipio'],
-					['bra', 'district', 'id_distrito'],
-					['bra', 'census_tract', 'id_setor_censitario'],
-				]
+				resource['observation_level'] = []
 
-				resource = fill_out_observation_level_from_identifying_columns(resource, standard_observation_levels)
+				if 'entity' in resource and resource['entity'] not in [None, []]:
+					
+					for k, entity in enumerate(resource['entity']):
+
+						# migrate entity
+						resource['observation_level'].append({'entity': entity})
+
+						# fill out country for common spatial entities
+						if entity in ['municipality', 'district', 'census_tract']:
+							resource['observation_level'][k]['country'] = 'br'
+						elif entity in ['county']:
+							resource['observation_level'][k]['country'] = 'us'
+
+				if 'identifying_columns' in resource and resource['identifying_columns'] not in [None, []]:
+					
+					standard_observation_levels = [
+						['', 'year', 'ano'],
+						['', 'quarter', 'trimestre'],
+						['', 'month', 'mes'],
+						['', 'day', 'dia'],
+						['', 'date', 'data'],
+						['br', 'state', 'sigla_uf'],
+						['br', 'state', 'id_uf'],
+						['br', 'municipality', 'id_municipio'],
+						['br', 'district', 'id_distrito'],
+						['br', 'census_tract', 'id_setor_censitario'],
+					]
+
+					resource = fill_out_observation_level_from_identifying_columns(resource, standard_observation_levels)
 			
 		package['resources'][i] = resource
 

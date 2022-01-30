@@ -34,7 +34,8 @@ class ExternalLink(_CkanDefaultResource):
     availability                : Optional[AvailabilityEnum]                     = AVAILABILITY_FIELD
     country_ip_address_required : Optional[Set[CountryEnum]]                     = COUNTRY_IP_ADDRESS_REQUIRED_FIELD
     license                     : Optional[LicenseEnum]                          = LICENSE_FIELD
-    spatial_coverage            : Optional[SpatialCoverage]                      = SPATIAL_COVERAGE_FIELD
+    #spatial_coverage            : Optional[SpatialCoverage]                      = SPATIAL_COVERAGE_FIELD
+    spatial_coverage            : Optional[List[SpatialCoverage]]                      = SPATIAL_COVERAGE_FIELD
     temporal_coverage           : Optional[TemporalCoverageEnum]                 = TEMPORAL_COVERAGE_FIELD
     update_frequency            : Optional[TimeUnitEnum]                         = UPDATE_FREQUENCY_FIELD
     observation_level           : Optional[List[ObservationLevel]]               = OBSERVATION_LEVEL_FIELD
