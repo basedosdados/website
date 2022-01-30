@@ -36,7 +36,7 @@ class _CkanDefaults(BaseModel):  # , extra=Extra.forbid):
     name             : Str                                               = Field(title="Nome")
     title            : Str                                               = Field(title="Título")
     type             : Literal["dataset"]                                = Field(title="Tipo")
-    notes            : Optional[Str]                                     = Field(title="Notas")
+    notes            : Optional[Str]                                     = Field(title="Descrição")
     author           : Optional[Str]
     author_email     : Optional[Email]
     maintainer       : Optional[Str]

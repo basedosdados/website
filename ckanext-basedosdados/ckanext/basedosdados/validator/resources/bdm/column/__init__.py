@@ -21,7 +21,7 @@ class BdmColumns(BaseModel):
     temporal_coverage     : Optional[TemporalCoverageEnum] = TEMPORAL_COVERAGE_FIELD
     covered_by_dictionary : Optional[YesNoEnum]            = COVERED_BY_DICTIONARY_FIELD
     directory_column      : Optional[DirectoryColumn]      = DIRECTORY_COLUMN_FIELD
-    measurement_unit      : Optional[MeasurementUnitEnum]  = MEASUREMENT_UNIT_FIELD
+    measurement_unit      : Optional[Str]                  = MEASUREMENT_UNIT_FIELD
     has_sensitive_data    : Optional[YesNoEnum]            = HAS_SENSITIVE_DATA_FIELD
     observations          : Optional[Str]                  = OBSERVATIONS_FIELD
     is_in_staging         : Optional[bool]                 = IS_IN_STAGING_FIELD

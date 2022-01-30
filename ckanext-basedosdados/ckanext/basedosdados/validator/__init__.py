@@ -49,16 +49,11 @@ from ckanext.basedosdados.validator.available_options import (
 to_line = lambda description: "\n".join(description)
 
 class SpatialCoverage(BaseModel):
-    # TODO definir campo complexo de spatial_coverage
-    # 1. ler os dataframes de diretorios para estrurar árvore de dicts e metadados
-    # incluir IDs de entidades e nomes
-    # 2. transformar isso num dict para front-end
     # fmt: off
-    continent: Optional[Set[ContinentEnum]] = Field(title="Continente", description=to_line(["Continente"]))
-    country  : Optional[Set[CountryEnum]]   = Field(title="País",description=to_line(["País"]))
-    admin1   : Optional[Set[Admin1Enum]]    = Field(title="UF/Estado",description=to_line(["UF/Estado"]))
-    admin2   : Optional[Set[Admin2Enum]]    = Field(title="Município/Condado",description=to_line(["Município/Condado"]))
-    #         admin3    : Optional[Str]     = Field(description=to_line(["Distrito"]))
+    continent: Optional[ContinentEnum] = Field(title="Continente", description=to_line(["Continente"]))
+    country  : Optional[CountryEnum]   = Field(title="País",description=to_line(["País"]))
+    admin1   : Optional[Admin1Enum]    = Field(title="UF/Estado",description=to_line(["UF/Estado"]))
+    admin2   : Optional[Admin2Enum]    = Field(title="Município/Condado",description=to_line(["Município/Condado"]))
     # fmt: on
 
 

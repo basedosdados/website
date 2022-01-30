@@ -90,7 +90,7 @@ UPDATE_FREQUENCY_FIELD = Field(
     ),
     yaml_order={
         "id_before": "temporal_coverage",
-        "id_after": "entity",
+        "id_after": "observation_level",
     },
 )
 
@@ -258,25 +258,7 @@ PARTITIONS_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_before": "github_url",
-        "id_after": "uncompressed_file_size",
-    },
-)
-
-UNCOMPRESSED_FILE_SIZE_FIELD = Field(
-    title="Tamanho do Arquivo Não-Comprimido",
-    description=to_line([""]),
-    yaml_order={
-        "id_before": "partitions",
-        "id_after": "compressed_file_size",
-    },
-)
-
-COMPRESSED_FILE_SIZE_FIELD = Field(
-    title="Tamanho do Arquivo Comprimido",
-    description=to_line([""]),
-    yaml_order={
-        "id_before": "uncompressed_file_size",
+        "id_before": "project_id_staging",
         "id_after": "columns",
     },
 )
@@ -296,7 +278,7 @@ COLUMNS_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_before": "bdm_file_size",
+        "id_before": "partitions",
         "id_after": "metadata_modified",
     },
 )
@@ -307,4 +289,14 @@ METADATA_MODIFIED_FIELD = Field(
         "id_before": "columns",
         "id_after": None,
     },
+)
+
+UNCOMPRESSED_FILE_SIZE_FIELD = Field(
+    title="Tamanho do Arquivo Não-Comprimido",
+    description=to_line([""]),
+)
+
+COMPRESSED_FILE_SIZE_FIELD = Field(
+    title="Tamanho do Arquivo Comprimido",
+    description=to_line([""]),
 )

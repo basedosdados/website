@@ -112,8 +112,9 @@ MEASUREMENT_UNIT_FIELD = Field(
     title="Unidade de Medida",
     description=to_line(
         [
-            "Qual é a unidade de medida da coluna?"
-            "Opções: ver elementos em 'Measurement Unit' em https://basedosdados.org/api/3/action/bd_available_options."
+            "Qual é a unidade de medida da coluna?",
+            "Escreva a fórmula matemática baseada nas chaves de unidades básicas permitidas em https://basedosdados.org/api/3/action/bd_available_options na seção Measurement Unit.",
+            "Exemplos: 'kilometer^2', 'meter^3 / second', '1000 * person', 'gigawatt'."
         ]
     ),
     yaml_order={
