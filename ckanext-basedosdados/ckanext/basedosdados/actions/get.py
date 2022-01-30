@@ -254,12 +254,11 @@ def bd_dataset_search(context, data_dict):
     )
 
     # post-process ########################################
-
     response["datasets"] = response.pop("results", None)
     response.pop("facets", None)
     response.pop("search_facets", None)
     response.pop("sort", None)
-    
+
     # post-process groups ###################################
 
     response["groups"] = {}
@@ -273,7 +272,6 @@ def bd_dataset_search(context, data_dict):
             response["groups"][key] = value
 
     # post-process tags ###################################
-
     response["tags"] = {}
 
     for dataset in response["datasets"]:
@@ -595,7 +593,7 @@ def bd_dataset_search(context, data_dict):
                 response[key] = sort_dict(response[key])
             except Exception as e:
                 print("Error: ", e)
-    
+
     # post-process datasets ###############################
 
     page = int(page or 1)
@@ -727,13 +725,17 @@ def bd_available_options(context, data_dict):
             "Entity History": EntityHistoryEnum.get_all_enum_attr("label"),
             "Entity Image": EntityImageEnum.get_all_enum_attr("label"),
             "Entity Individual": EntityIndividualEnum.get_all_enum_attr("label"),
-            "Entity Infrastructure": EntityInfrastructureEnum.get_all_enum_attr("label"),
+            "Entity Infrastructure": EntityInfrastructureEnum.get_all_enum_attr(
+                "label"
+            ),
             "Entity Other": EntityOtherEnum.get_all_enum_attr("label"),
             "Entity Politics": EntityPoliticsEnum.get_all_enum_attr("label"),
             "Entity Science": EntityScienceEnum.get_all_enum_attr("label"),
             "Entity Security": EntitySecurityEnum.get_all_enum_attr("label"),
             "Entity Spatial": EntitySpatialEnum.get_all_enum_attr("label"),
-            "Entity Transportation": EntityTransportationEnum.get_all_enum_attr("label"),
+            "Entity Transportation": EntityTransportationEnum.get_all_enum_attr(
+                "label"
+            ),
         },
         "Language": LanguageEnum.get_all_enum_attr("label"),
         "License": LicenseEnum.get_all_enum_attr("label"),
