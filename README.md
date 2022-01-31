@@ -61,7 +61,7 @@ O plugin da Base dos Dados mora em `ckanext-basedosdados/ckanext/basedosdados`. 
 O ambiente de dev funciona com docker-compose. Duas features do docker-compose importantes que usamos aqui:
 
 - docker-compose suporta interpolação de variáveis usando a sintaxe `${VAR_NAME}` lendo automaticamente de um arquivo com nome `.env` no mesmo diretório do docker-compose.yaml
-- docker-compose automaticamente da merge entre o arquivo docker-compose.yaml e o arquivo docker-compose.override.yaml (caso houver), e considera isso o yaml q "ta valendo"
+- docker-compose automaticamente da merge entre o arquivo docker-compose.yaml e o arquivo docker-compose.override.yaml (caso houver), e considera isso o yaml que "ta valendo"
 
 As configurações que variam entre dev e prod ficam em variáveis de ambiente definidas no docker-compose.yaml. Idealmente colocamos no .env somente as variáveis privadas (como senhas e outros segredos) e interpolamos seu valor. Usando o .env para dev e .env.prod para prod. Outras configuracoes nao secretas que diferem entre os ambientes ficam nos arquivos docker-compose.override.yaml e prod-docker-compose.override.yaml
 
@@ -83,3 +83,18 @@ A pasta utils contem scripts utilizados em dev e em prod para diversas coisas. O
 Você pode rodar o script em `./utils/create_dev_init_data.sh` para atualizar o arquivo './postgresql/dev_init_data.sql.gz' que contem o snapshot do banco de dev. Esse script aceita como parâmetro posicional `File`, caso não queira baixar um backup automaticamente de prod/staging, você pode passar um path com um arquivo postgres.dump. Se STAGING=1, o script vai baixar do banco de staging ao invés de produção.
 
 Esse script requer a existência de um profile chamado `basedosdados` criado em `~/.aws/config`. Você pode pegar as variávels `aws_access_key_id` e `aws_secret_access_key` na própria AWS após criar uma `access key` em uma conta admin.
+
+## FAQ
+
+Soluções para perguntas e problemas recorrentes:
+
+### 1. O que fazer quando cai o container de CKAN de produção?
+
+1. Rodar `ssh ec2-user@basedosdados.org`.
+2. Dentro da máquina de produção, rodar `docker-compose up -d ckan`.
+
+### 2. Como atualizar o dump local do db (em `stack/postgresql/dev_init_data.sql.gz`) baseado no banco de staging?
+
+1. Rodar `ssh ec2-user@staging.basedosdados.org`.
+2. Dentro da máquina de desenvolvimento, rodar `./backup_database.sh`.
+3. Da sua máquina local, rodar `utils/create-dev-init-data.sh` com `STAGING=True`.
