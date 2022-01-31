@@ -17,7 +17,6 @@ from .fields_definitions import *
 class InformationRequest(_CkanDefaultResource):
     resource_type: Literal["information_request"]
 
-    # InformationRequest models
     # fmt: off
     dataset_id           : Str                               = DATASET_ID_FIELD
     origin               : Optional[Str]                     = ORIGIN_FIELD
@@ -27,8 +26,7 @@ class InformationRequest(_CkanDefaultResource):
     description          : Optional[Str]                     = DESCRIPTION_FIELD
     opening_date         : Optional[Str]                     = OPENING_DATE_FIELD
     requested_by         : Optional[RequestedBy]             = REQUESTED_BY_FIELD
-    #spatial_coverage     : Optional[SpatialCoverage]         = SPATIAL_COVERAGE_FIELD
-    spatial_coverage     : Optional[List[SpatialCoverage]]         = SPATIAL_COVERAGE_FIELD
+    spatial_coverage     : Optional[List[SpatialCoverage]]   = SPATIAL_COVERAGE_FIELD
     temporal_coverage    : Optional[TemporalCoverageEnum]    = TEMPORAL_COVERAGE_FIELD
     update_frequency     : Optional[TimeUnitEnum]            = UPDATE_FREQUENCY_FIELD
     observation_level    : Optional[List[ObservationLevel]]  = OBSERVATION_LEVEL_FIELD
