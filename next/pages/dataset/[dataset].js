@@ -311,7 +311,10 @@ export default function DatasetPage({
       
     }
     
-    var years    = years.sort();
+    var years = years.sort();
+
+    if (years.length === 1) return years[0];
+
     var min_date = years[0];
     var max_date = years[years.length-1];
 
