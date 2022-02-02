@@ -336,7 +336,7 @@ def bd_dataset_search(context, data_dict):
 
         spatial_coverage_continent = []
         for resource in dataset['resources']:
-            if resource['spatial_coverage'] is not None:
+            if 'spatial_coverage' in resource and resource['spatial_coverage'] is not None:
 
                 # count cases where coverage is whole world
                 if resource['spatial_coverage'] == []:
@@ -366,7 +366,7 @@ def bd_dataset_search(context, data_dict):
         
         spatial_coverage_country = []
         for resource in dataset['resources']:
-            if resource['spatial_coverage'] is not None:
+            if 'spatial_coverage' in resource and resource['spatial_coverage'] is not None:
 
                 # count cases where coverage is whole world
                 if resource['spatial_coverage'] == []:
@@ -409,7 +409,7 @@ def bd_dataset_search(context, data_dict):
         
         spatial_coverage_admin1 = []
         for resource in dataset['resources']:
-            if resource['spatial_coverage'] is not None:
+            if 'spatial_coverage' in resource and resource['spatial_coverage'] is not None:
 
                 # count cases where coverage is whole world
                 if resource['spatial_coverage'] == []:
@@ -464,7 +464,7 @@ def bd_dataset_search(context, data_dict):
 
         spatial_coverage_admin2 = []
         for resource in dataset['resources']:
-            if resource['spatial_coverage'] is not None:
+            if 'spatial_coverage' in resource and resource['spatial_coverage'] is not None:
 
                 # count cases where coverage is whole world
                 if resource['spatial_coverage'] == []:
