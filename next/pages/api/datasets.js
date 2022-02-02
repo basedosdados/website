@@ -47,6 +47,14 @@ export function getPopularDatalakeDatasets() {
     .then(({ data }) => data.result.datasets);
 }
 
+export function getRecentDatalakeDatasets() {
+  return axios
+    .get(
+      `http://ckan:5000/api/3/action/bd_dataset_search?q=&page=1&order_by=recent&resource_type=bdm_table`
+    )
+    .then(({ data }) => data.result.datasets);
+}
+
 export function updateDataset(dataset) {
   return axiosInstance.post(`/package_update`, dataset);
 }
