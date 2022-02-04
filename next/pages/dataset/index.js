@@ -19,6 +19,7 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
+  Box,
 } from "@chakra-ui/react";
 import ReactPaginate from "react-paginate";
 import SectionTitle from "../../components/atoms/SectionTitle";
@@ -45,6 +46,7 @@ import {
   getAvailableOptionsTranslations,
   getTranslations,
 } from "../api/translations";
+import SearchIcon from "../../public/img/icons/searchIcon";
 
 export async function getStaticProps(context) {
   const translations = await getTranslations();
@@ -317,15 +319,15 @@ export default function SearchPage({
         justifyContent="flex-start"
         alignItems="flex-start"
         spacing={10}
-        width="85%"
+        width="90%"
         margin="auto"
         direction={{ base: "column", lg: "row" }}
       >
         <VStack
           justifyContent="flex-start"
           alignItems="flex-start"
-          minWidth={{ base: "100%", lg: "300px" }}
-          maxWidth={{ base: "100%", lg: "300px" }}
+          minWidth={{ base: "100%", lg: "320px" }}
+          maxWidth={{ base: "100%", lg: "320px" }}
           key={filterKey}
         >
           <SectionTitle
@@ -335,7 +337,6 @@ export default function SearchPage({
             fontWeigth="300"
             width="100%"
             height="50px"
-            // paddingLeft="20px"
             justifyContent="flex-start"
             alignItems="center"
             display="flex"
@@ -351,7 +352,7 @@ export default function SearchPage({
                 name: (
                   <HStack whiteSpace="nowrap">
                     <div>Tabelas tratadas</div>
-                    <Image height="30px" src="/img/logo_plus.png" />{" "}
+                    <Image height="20px" src="/img/logo_plus.png" />{" "}
                     <div>{`(${data?.resource_bdm_table_count || "0"})`}</div>
                   </HStack>
                 ),
@@ -476,15 +477,15 @@ export default function SearchPage({
               setSearch(val);
             }}
             flex="3"
-            placeholder="Pesquise palavras-chave, instituições e temas"
+            placeholder="Pesquise palavras-chave, instituições ou temas"
             justifyContent="center"
             inputStyle={{
+              border: "1px solid #444",
               padding: "20px",
               borderRadius: "17px",
               backgroundColor: "#ffffff",
               color: "#6F6F6F",
               fontSize: "16px",
-              fontWeight: 500,
               height: "50px",
               boxShadow: "0px 2px 5px 1px rgb(0 0 0 / 5%)",
             }}
@@ -522,7 +523,7 @@ export default function SearchPage({
               )}
             </Flex>
             <Stack
-              overflowX="scroll"
+              overflow="auto"
               width="60vw"
               whiteSpace="nowrap"
               paddingBottom="10px"
@@ -559,7 +560,6 @@ export default function SearchPage({
               >
                 <Text whiteSpace="nowrap">Ordenar:</Text>
                 <Select
-                  fontWeight="bold"
                   fontFamily="Lato"
                   minWidth="200px"
                   color="black"

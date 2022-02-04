@@ -19,6 +19,7 @@ import { limitTextSize } from "../../utils";
 import ControlledInput from "./ControlledInput";
 import SectionText from "./SectionText";
 import Title from "./Title";
+import SearchIcon from "../../public/img/icons/searchIcon"
 
 export function BaseFilterAccordion({
   fieldName,
@@ -37,9 +38,9 @@ export function BaseFilterAccordion({
           <>
             <Text>
               <AccordionButton
-                onClick={onChange}        
+                onClick={onChange}
                 color={isActive ? "#3AA1EB" : null}
-                _hover={alwaysOpen ? { cursor: "inherit" } : null}
+                _hover={{ cursor: "pointer", color: "#3AA1EB" }}
               >
                 <HStack
                   spacing={2}
@@ -51,7 +52,6 @@ export function BaseFilterAccordion({
                     width="fit-content"
                     textAlign="left"
                     fontFamily="Lato"
-                    fontWeight="700"
                     fontSize="16px"
                     letterSpacing="0.1em"
                   >
@@ -63,7 +63,7 @@ export function BaseFilterAccordion({
                     <></>
                   )}
                 </HStack>
-                {!alwaysOpen ? <AccordionIcon marginLeft="auto" /> : <></>}
+                {!alwaysOpen ? <AccordionIcon margin="0 15px 0 auto" /> : <></>}
               </AccordionButton>
             </Text>
             {(isOpen && isOpen === true) || (isOpen == null && isExpanded) ? (
@@ -71,8 +71,6 @@ export function BaseFilterAccordion({
                 overflowY="auto"
                 overflowX={overflowX + " !important"}
                 maxHeight="300px"
-                pb={4}
-                pt={2}
                 width="100%"
                 alignItems="flex-start"
               >
@@ -126,15 +124,18 @@ export function CheckboxFilterAccordion({
                 width: "100%",
                 margin: "0",
                 borderRadius: "20px",
+                margin: "10px 15px 0",
               }}
               rightIcon={
-                <Box width="20px" height="20px" position="relative">
-                  <Image
-                    cursor="pointer"
-                    layout="fill"
-                    objectFit="contain"
-                    src="/img/icon_search.png"
-                  />
+                <Box 
+                  width="25px"
+                  height="25px"
+                  position="relative"
+                  right="14px"
+                  top="2px"
+                  cursor="pointer"
+                >
+                  <SearchIcon/>
                 </Box>
               }
             />
@@ -145,8 +146,9 @@ export function CheckboxFilterAccordion({
         <VStack
           overflowX="hidden !important"
           alignItems="flex-start"
-          overflowY="scroll"
+          overflowY="auto"
           width="100%"
+          padding="10px 0"
         >
           {(canSearch
             ? choices.filter(
@@ -158,11 +160,11 @@ export function CheckboxFilterAccordion({
           ).map((c) => (
             <Checkbox
               fontFamily="Lato"
-              fontWeight="700"
               value={c[valueField]}
               color="#7D7D7D"
               colorScheme="green"
               letterSpacing="0.1em"
+              padding="0 0 0 16px"
             >
               {c[displayField]}
             </Checkbox>
