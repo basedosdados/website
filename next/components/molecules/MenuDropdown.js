@@ -1,6 +1,6 @@
 import { Button } from "@chakra-ui/button";
 import { Menu, MenuButton, MenuList } from "@chakra-ui/menu";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 
 export function MenuDropdown({ title, children }) {
   const [open, setOpen] = useState(false);

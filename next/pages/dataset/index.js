@@ -46,7 +46,7 @@ import {
   getAvailableOptionsTranslations,
   getTranslations,
 } from "../api/translations";
-import SearchIcon from "../../public/img/icons/searchIcon";
+import FilterIcon from "../../public/img/icons/filterIcon";
 
 export async function getStaticProps(context) {
   const translations = await getTranslations();
@@ -328,21 +328,31 @@ export default function SearchPage({
           alignItems="flex-start"
           minWidth={{ base: "100%", lg: "320px" }}
           maxWidth={{ base: "100%", lg: "320px" }}
+          padding="0 40px 0 0"
+          borderRight="1px solid #DEDFE0"
           key={filterKey}
         >
-          <SectionTitle
-            fontSize="16px"
-            textAlign="top"
-            color="#252A32"
-            fontWeigth="300"
-            width="100%"
-            height="50px"
-            justifyContent="flex-start"
-            alignItems="center"
-            display="flex"
-          >
-            Filtrar resultados:
-          </SectionTitle>
+          <Box display="flex" alignItems="center" >
+            <FilterIcon
+              width="20px"
+              height="25px"
+            />
+            <SectionTitle
+              fontSize="16px"
+              textAlign="top"
+              color="#252A32"
+              fontWeigth="700"
+              width="100%"
+              height="50px"
+              justifyContent="flex-start"
+              alignItems="center"
+              display="flex"
+              marginLeft="10px"
+            >
+              Filtrar resultados:
+            </SectionTitle>
+          </Box>
+          
           <CheckboxFilterAccordion
             isActive={(paramFilters.resource_type || []).length > 0}
             alwaysOpen

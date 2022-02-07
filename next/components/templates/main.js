@@ -1,5 +1,4 @@
 import { Box } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import UserContext from "../../context/user";
 import { getUser } from "../../pages/api/user";

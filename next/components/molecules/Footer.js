@@ -1,20 +1,13 @@
 import {
   Box,
   HStack,
-  InputRightAddon,
   Stack,
   VStack,
   Text,
-  Button,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import ControlledInput from "../atoms/ControlledInput";
-import Title from "../atoms/Title";
 import SectionText from "../atoms/SectionText";
 import Link from "../atoms/Link";
-import { useState } from "react";
-import BigTitle from "../atoms/BigTitle";
-import RoundedButton from "../atoms/RoundedButton";
 
 function LinkVStack({ title, children }) {
   return (
@@ -45,7 +38,6 @@ function FooterLink(props) {
 }
 
 export default function Footer({ pages }) {
-  const [email, setEmail] = useState();
 
   return (
     <VStack position="relative" zIndex="10" width="100%" spacing={0}>

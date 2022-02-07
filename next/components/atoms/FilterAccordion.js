@@ -15,7 +15,6 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { limitTextSize } from "../../utils";
 import ControlledInput from "./ControlledInput";
 import SectionText from "./SectionText";
 import Title from "./Title";
@@ -41,6 +40,7 @@ export function BaseFilterAccordion({
                 onClick={onChange}
                 color={isActive ? "#3AA1EB" : null}
                 _hover={{ cursor: "pointer", color: "#3AA1EB" }}
+                padding="10px 10px 0 0"
               >
                 <HStack
                   spacing={2}
@@ -63,7 +63,7 @@ export function BaseFilterAccordion({
                     <></>
                   )}
                 </HStack>
-                {!alwaysOpen ? <AccordionIcon margin="0 15px 0 auto" /> : <></>}
+                {!alwaysOpen ? <AccordionIcon marginLeft="auto" /> : <></>}
               </AccordionButton>
             </Text>
             {(isOpen && isOpen === true) || (isOpen == null && isExpanded) ? (
@@ -112,29 +112,20 @@ export function CheckboxFilterAccordion({
     >
       <CheckboxGroup onChange={(val) => onChange(val)} value={values}>
         {canSearch ? (
-          <VStack paddingBottom="10px" width="100%" alignItems="center">
+          <VStack padding="15px 0 10px" width="100%" alignItems="center">
             <ControlledInput
               color="black"
               value={search}
               onChange={setSearch}
               inputBackgroundColor="#FFFFFF"
               inputStyle={{
-                height: "50px",
+                height: "40px",
                 fontSize: "14px",
                 width: "100%",
-                margin: "0",
-                borderRadius: "20px",
-                margin: "10px 15px 0",
+                borderRadius: "16px",
               }}
               rightIcon={
-                <Box 
-                  width="25px"
-                  height="25px"
-                  position="relative"
-                  right="14px"
-                  top="2px"
-                  cursor="pointer"
-                >
+                <Box cursor="pointer">
                   <SearchIcon/>
                 </Box>
               }
@@ -164,7 +155,6 @@ export function CheckboxFilterAccordion({
               color="#7D7D7D"
               colorScheme="green"
               letterSpacing="0.1em"
-              padding="0 0 0 16px"
             >
               {c[displayField]}
             </Checkbox>
