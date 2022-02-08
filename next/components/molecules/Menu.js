@@ -8,7 +8,6 @@ import {
   useDisclosure,
   Divider,
   Avatar,
-  MenuItem,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import ControlledInput from "../atoms/ControlledInput";
@@ -19,6 +18,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import UserContext from "../../context/user";
 import { MenuDropdown } from "./MenuDropdown";
+import SearchIcon from "../../public/img/icons/searchIcon";
 
 function MenuDrawer({ isOpen, onClose, links }) {
   return (
@@ -62,6 +62,7 @@ function DesktopLinks({ links }) {
       width="100%"
       display={{ base: "none", lg: "flex" }}
       position={{ base: "relative", lg: "initial" }}
+      gap="24px"
     >
       <HStack width="100%" flex="3" spacing={7}>
         {Object.entries(links).map(([k, v]) => {
@@ -82,13 +83,29 @@ function DesktopLinks({ links }) {
 
           if (typeof v === "object") {
             return (
-              <MenuDropdown title={k}>
+              <MenuDropdown
+                title={k}
+                marginLeft="-25px"
+                marginTop="7px"
+                minWidth="120px"
+                borderColor="#DEDFE0"
+                borderTopRadius="0"
+                borderBottomRadius="10px"
+                _first={{ paddingTop: "10px"}}
+                _last={{ paddingBottom: "10px"}}
+              >
                 {Object.entries(v).map(([k, v]) => (
-                  <MenuItem>
-                    <Link fontSize="14px" href={v}>
-                      {k}
-                    </Link>
-                  </MenuItem>
+                  <Link
+                    display="flex"
+                    flexDirection="colunm"
+                    _hover={{ opacity: "0.6" }}
+                    fontSize="14px"
+                    color="#252A32"
+                    href={v}
+                    padding="10px 24px"
+                  >
+                    {k}
+                  </Link>
                 ))}
               </MenuDropdown>
             );
@@ -96,6 +113,7 @@ function DesktopLinks({ links }) {
 
           return (
             <Link
+              _hover={{ opacity: "0.6" }}
               fontSize="14px"
               href={v}
               target={v.startsWith("https") ? "_blank" : null}
@@ -116,14 +134,8 @@ function DesktopLinks({ links }) {
             borderRadius: "15px",
           }}
           rightIcon={
-            <Box width="60px" height="60px" position="relative">
-              <Image
-                cursor="pointer"
-                onClick={openSearchLink}
-                layout="fill"
-                objectFit="contain"
-                src="/img/icon_search.png"
-              />
+            <Box onClick={openSearchLink} cursor="pointer">
+              <SearchIcon color="#D0D0D0"/>
             </Box>
           }
         />
@@ -181,7 +193,7 @@ export default function Menu({ pages = [] }) {
       if (window.scrollY <= 30) divRef.current.style.boxShadow = "none";
       else
         divRef.current.style.boxShadow =
-          "0px 2px 5px 1px rgba(64, 60, 67, 0.16)";
+          "0px 2px 15px 1px rgba(64, 60, 67, 0.07)";
     });
   }, [divRef.current]);
 

@@ -34,6 +34,19 @@ body {
   border-radius: 10px;
 }
 
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #dadada;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #a3a3a3;
+  border-radius: 10px;
+}
+
 .card :hover {
   border-bottom: 0;
 }
@@ -54,16 +67,11 @@ body {
 }
 
 .chakra-checkbox__control {
-  background-color: transparent !important;
   padding: 5px !important;
   width: 20px !important;
   height: 20px !important;
   border-width: 3px !important;
   border-radius: 4px !important;
-}
-
-.chakra-checkbox__control svg {
-  color: #2b8c4d;
 }
 
 .pagination {

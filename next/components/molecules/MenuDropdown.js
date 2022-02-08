@@ -2,14 +2,14 @@ import { Button } from "@chakra-ui/button";
 import { Menu, MenuButton, MenuList } from "@chakra-ui/menu";
 import React, { useState } from "react";
 
-export function MenuDropdown({ title, children }) {
+export function MenuDropdown({ title, children, ...style }) {
   const [open, setOpen] = useState(false);
 
   return (
     <Menu onMouseExit={() => setOpen(false)} isOpen={open}>
       <MenuButton
         backgroundColor="transparent"
-        _hover={{ backgroundColor: "transparent" }}
+        _hover={{ backgroundColor: "transparent", opacity: "0.6" }}
         onMouseOver={() => setOpen(true)}
         as={Button}
         fontFamily="Lato"
@@ -17,20 +17,21 @@ export function MenuDropdown({ title, children }) {
         letterSpacing="0.15em"
         _active={{ backgroundColor: "transparent" }}
         padding="0px"
-        color="black"
+        color="#252A32"
         fontWeight="700"
       >
         {title}
       </MenuButton>
-      <MenuList
-        maxW="30px"
-        padding="0px"
-        marginLeft="-13px"
-        marginTop="-10px"
-        onMouseLeave={() => setOpen(false)}
-      >
-        {children}
-      </MenuList>
+
+        <MenuList
+          padding="0px"
+          color="#252A32"
+          {...style}
+          onMouseLeave={() => setOpen(false)}
+        >
+          {children}
+        </MenuList>
+      
     </Menu>
   );
 }

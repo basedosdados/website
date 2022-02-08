@@ -336,12 +336,14 @@ export default function SearchPage({
             <FilterIcon
               width="20px"
               height="25px"
+              widthIcon="15px"
+              heightIcon="20px"
             />
             <SectionTitle
-              fontSize="16px"
+              fontSize="20px"
               textAlign="top"
+              fontWeigth="500"
               color="#252A32"
-              fontWeigth="700"
               width="100%"
               height="50px"
               justifyContent="flex-start"
@@ -349,7 +351,7 @@ export default function SearchPage({
               display="flex"
               marginLeft="10px"
             >
-              Filtrar resultados:
+              Filtrar resultados
             </SectionTitle>
           </Box>
           
