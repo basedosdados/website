@@ -33,6 +33,8 @@ export default function ControlledInput({
         letterSpacing="0.1em"
         fontWeight="300"
         border="1px solid #DEDFE0"
+        _hover={{borderColor:"#42B0FF"}}
+        focusBorderColor="#42B0FF"
         backgroundColor={inputBackgroundColor}
         borderRadius="20px"
         value={value}
@@ -81,7 +83,10 @@ export function DebouncedControlledInput({
         fontFamily="Lato"
         letterSpacing="0.1em"
         fontWeight="300"
+        _hover={{borderColor:"#42B0FF"}}
+        _placeholder={{color:"#BDBDBD"}}
         border="1px solid #DEDFE0"
+        focusBorderColor="#42B0FF"
         backgroundColor={inputBackgroundColor}
         borderRadius="20px"
         value={_value}

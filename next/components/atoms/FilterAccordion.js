@@ -60,7 +60,7 @@ export function BaseFilterAccordion({
                     <></>
                   )}
                 </HStack>
-                {!alwaysOpen ? <AccordionIcon color="#7D7D7D" marginLeft="auto" /> : <></>}
+                {!alwaysOpen ? <AccordionIcon color={isActive ? "#2B8C4D" : null } marginLeft="auto" fontSize="18px"/> : <></>}
               </AccordionButton>
             </Text>
             {(isOpen && isOpen === true) || (isOpen == null && isExpanded) ? (
