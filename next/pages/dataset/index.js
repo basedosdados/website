@@ -290,7 +290,7 @@ export default function SearchPage({
   ]);
 
   useEffect(() => {
-    const paramObj = { ...paramFilters, order_by: order };
+    const paramObj = { ...paramFilters, order_by: order, q: search};
 
     Object.keys(paramObj).forEach((p) => {
       const value = paramObj[p];

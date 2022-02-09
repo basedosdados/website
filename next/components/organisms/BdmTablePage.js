@@ -19,6 +19,7 @@ import { deleteResource, updateResource } from "../../pages/api/datasets";
 import { BlueBox } from "../molecules/BlueBox";
 import RoundedButton from "../atoms/RoundedButton";
 import Link from "../atoms/Link";
+import { isValidDownload } from "../../pages/api/download";
 
 export function BdmTablePage({
   translations,
@@ -28,8 +29,10 @@ export function BdmTablePage({
 }) {
   const [selectedConsultation, setSelectedConsultation] = useState("SQL");
   const consultationOptions = ["SQL", "Python", "R", "Download"];
+  const [canDownload, setCanDownload] = useState(false)
   const queryName = `${resource.dataset_id}.${resource.name}`;
-
+  const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}.zip`
+  
   if (
     resource.spatial_coverage &&
     typeof resource.spatial_coverage === "array"
@@ -42,6 +45,10 @@ export function BdmTablePage({
     Python: "python",
     R: "R",
   };
+
+  useEffect(() => {
+    isValidDownload(downloadUrl).then(setCanDownload)
+  },[])
 
   const helpText = {
     SQL: (
@@ -127,7 +134,8 @@ export function BdmTablePage({
             maxWidth="210px"
             width="100%"
             textDecoration="none !important"
-            href={`https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}.zip`}
+            href={downloadUrl}
+            _disable={!canDownload}
           >
             <RoundedButton
               width="100%"
