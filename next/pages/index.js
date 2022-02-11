@@ -71,6 +71,8 @@ function HeroText({ children, iconUrl, height = "100px" }) {
   );
 }
 
+const cardThemes = [0,1,2,3,4,5,6,7,8,9]
+
 function Hero() {
   const [search, setSearch] = useState();
   const isMobile = useCheckMobile();
@@ -81,35 +83,39 @@ function Hero() {
 
   return (
     <VStack width="100%">
-      <Center height="100%">
+      <VStack 
+        height="100%"
+      >
         <VStack
           height="100%"
           justifyContent="center"
           alignItems="center"
           spacing={20}
         >
+          {/*Bar search*/}
           <VStack
             position="relative"
             width="100%"
-            alignItems="center"
-            spacing={50}
             marginStart="0px !important"
+            direction="column"
+            marginRight={{ base: "0", lg: "100px", xl: "0"   }}
           >
             <BigTitle
               position="relative"
               zIndex="1"
-              fontFamily="Lato"
+              fontFamily="Ubuntu"
               flex="2"
-              fontSize="36px"
-              fontWeigth="700"
+              fontSize="38px"
+              letterSpacing="2px"
               marginStart="0px !important"
+              marginBottom="50px"
             >
               Encontre os dados que você precisa
             </BigTitle>
             <VStack
-              maxWidth="700px"
+              maxWidth="650px"
               width="100%"
-              spacing={3}
+              spacing={3} 
               alignItems="flex-start"
               flex="3"
             >
@@ -121,7 +127,8 @@ function Hero() {
                 alignSelf="center"
                 justifyContent="center"
                 inputStyle={{
-                  padding: "40px",
+                  padding: "20px 65px 20px 30px",
+                  height: "80px",
                   borderRadius: "25px",
                   backgroundColor: "#ffffff",
                   fontSize: "24px",
@@ -152,73 +159,56 @@ function Hero() {
               </HStack>
             </VStack>
           </VStack>
+
+          {/*search theme*/}
           <Stack
-            paddingTop="10px"
-            position="relative"
-            zIndex="1"
-            justifyContent="space-between"
+            justifyContent="center"
             alignItems="center"
+            direction="row"
+            gap="20px"
             width="100%"
-            direction={{ base: "column", lg: "row" }}
-            spacing={10}
+            padding="0 100px"
           >
-            <HeroText
-              height="90px"
-              iconUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/loupe 1.png"
-            >
-              <SectionText fontSize="14px" textAlign="center">
-                Busque por <b>dados abertos</b> de diversos temas e
-                organizações.
-              </SectionText>
-            </HeroText>
-            <HeroText
-              height="120px"
-              iconUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/download 1.png"
-            >
-              <SectionText fontSize="14px" textAlign="center">
-                Acesse e baixe as <b>tabelas tratadas</b> do nosso{" "}
-                <i>datalake</i> público.
-              </SectionText>
-            </HeroText>
-            <HeroText
-              height="80px"
-              iconUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/_.png"
-            >
-              <SectionText fontSize="14px" textAlign="center">
-                Desenvolva com nossos <b>pacotes</b> em Python e R.
-              </SectionText>
-            </HeroText>
-            <Flex paddingLeft={{ base: "0", lg: "50px" }}>
-              <Image
-                src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/GC_CustomerAwardWinner_SocialImpact+1.png"
-                width="227px"
-                height="336"
-                loading="eager"
-                priority
-              />
-            </Flex>
+            {cardThemes.map((elm) => (
+              <Center
+                cursor="pointer"
+                width="100px"
+                height="100px"
+                borderRadius="14px"
+                backgroundColor="#FFF"
+                boxShadow="0px 1px 6px rgba(0, 0, 0, 0.25)"
+                _hover={{ transform:"scale(1.1)", backgroundColor:"#2B8C4D" }}
+                transition="all 0.5s" 
+              >
+                {elm}
+              </Center>
+            ))}
           </Stack>
         </VStack>
-      </Center>
-      <Center
-        display={{ base: "none", lg: "flex" }}
-        backgroundColor="#34A15A"
-        borderRadius="1000px"
-        width="50px"
-        height="50px"
-        transform="translateY(35px);"
-        cursor="pointer"
-        onClick={() => window.open("#catalog", "_self")}
-      >
-        <Box width="20px" height="20px" position="relative">
-          <Image
-            priority
-            layout="fill"
-            objectFit="contain"
-            src="/img/arrow_white_down.png"
-          />
-        </Box>
-      </Center>
+
+        {/*Google cloud icon*/}
+        <Stack
+          position={{ base: "relative", lg: "absolute" }}
+          top={{ base: "0", lg: "-120px" }}
+          right="0"
+        >
+          <Box
+            margin={{ base: "50px 0", lg: "40px", }}
+            width={{ base: "200px", lg: "140px", xl: "160px" }}
+            height={{ base: "200px", lg: "140px", xl: "160px" }}
+          >
+            <Image
+              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/GC_CustomerAwardWinner_SocialImpact+1.png"
+              width="227px"
+              height="336px"
+              loading="eager"
+              priority
+            />
+          </Box>
+          
+        </Stack>
+
+      </VStack>
     </VStack>
   );
 }

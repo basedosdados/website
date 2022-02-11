@@ -1,11 +1,8 @@
 import { Card } from "../molecules/Card";
-import DescriptionText from "../atoms/DescriptionText";
-import { Box, Center, HStack, Image, VStack } from "@chakra-ui/react";
+import { HStack, Image, VStack } from "@chakra-ui/react";
 import Title from "../atoms/Title";
 import Subtitle from "../atoms/Subtitle";
-import { Tag } from "../atoms/Tag";
 import { CategoryIcon } from "../atoms/CategoryIcon";
-import { Dot } from "../atoms/Dot";
 import Link from "../atoms/Link";
 import { ThemeTag } from "../atoms/ThemeTag";
 

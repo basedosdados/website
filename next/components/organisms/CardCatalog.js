@@ -1,6 +1,5 @@
 import React from "react";
-import { Heading } from "@chakra-ui/react";
-import { VStack, HStack } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { slidesToShowPlugin } from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
