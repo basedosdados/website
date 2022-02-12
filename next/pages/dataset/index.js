@@ -434,7 +434,7 @@ export default function SearchPage({
             values={paramFilters.spatial_coverage}
             valueField="name"
             displayField="displayName"
-            fieldName="Cobertura espacial: continente"
+            fieldName="Cobertura espacial: Continente"
             onChange={(values) =>
               setParamFilters({ ...paramFilters, spatial_coverage: values })
             }
@@ -446,7 +446,7 @@ export default function SearchPage({
             values={paramFilters.spatial_coverage}
             valueField="name"
             displayField="displayName"
-            fieldName="Cobertura espacial: país"
+            fieldName="Cobertura espacial: País"
             onChange={(values) =>
               setParamFilters({ ...paramFilters, spatial_coverage: values })
             }
@@ -470,7 +470,7 @@ export default function SearchPage({
             values={paramFilters.spatial_coverage}
             valueField="name"
             displayField="displayName"
-            fieldName="Cobertura espacial: município"
+            fieldName="Cobertura espacial: Município"
             onChange={(values) =>
               setParamFilters({ ...paramFilters, spatial_coverage: values })
             }
@@ -500,7 +500,7 @@ export default function SearchPage({
               });
             }}
           />
-          <CheckboxFilterAccordion
+          {/* <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.entity || []).length > 0}
             choices={entities}
@@ -511,7 +511,7 @@ export default function SearchPage({
             onChange={(values) =>
               setParamFilters({ ...paramFilters, entity: values })
             }
-          />
+          /> */}
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.update_frequency || []).length > 0}
