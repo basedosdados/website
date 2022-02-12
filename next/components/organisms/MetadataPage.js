@@ -36,7 +36,7 @@ export function MetadataPage({
       if (typeof sc === "object") {
         if (Object.keys(sc).length === 0) return [];
 
-        return [sc.continent[0], sc.country[0]];
+        return [sc.continent, sc.country];
       }
 
       return sc;
