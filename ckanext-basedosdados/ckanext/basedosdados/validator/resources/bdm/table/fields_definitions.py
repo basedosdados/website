@@ -26,6 +26,12 @@ class DataCleanedBy(BaseModel):
 
 DATASET_ID_FIELD = Field(
     title="ID Conjunto",
+    description=to_line(
+        [
+            "Igual ao dataset.name mas como lower case.",
+            "Exemplos: br_ibge_populacao, br_inep_censo_escolar",
+        ]
+    ),
     yaml_order={
         "id_before": None,
         "id_after": "table_id",
@@ -58,7 +64,14 @@ DESCRIPTION_FIELD = Field(
 
 SPATIAL_COVERAGE_FIELD = Field(
     title="Cobertura Espacial",
-    description=to_line(["A máxima unidade espacial que a tabela cobre."]),
+    description=to_line(
+        [
+            "A máxima unidade espacial que a tabela cobre.",
+            "Exemplo:",
+            "  - continent: south_america",
+            "    country: br",
+        ]
+    ),
     yaml_order={
         "id_before": "description",
         "id_after": "temporal_coverage",
@@ -71,7 +84,7 @@ TEMPORAL_COVERAGE_FIELD = Field(
         [
             "Anos cobertos pela tabela.",
             "Preencher como lista de intervalos.",
-            "Exemplo: 1995(1)2019."
+            "Exemplos: ['1995(1)2019'], ['2002(2)2010', '2016', '2020']."
         ]
     ),
     yaml_order={

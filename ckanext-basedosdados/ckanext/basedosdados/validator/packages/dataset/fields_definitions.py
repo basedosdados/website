@@ -11,21 +11,6 @@ from pydantic import Field
 # -------------------------------------
 to_line = lambda description: "\n".join(description)
 
-DATASET_ID_FIELD = Field(
-    title="ID do conjunto (BigQuery)",
-    description=to_line(
-        [
-            "dataset_id no BigQuery",
-            "Igual ao campo `name` mas com lower_case.",
-            "Exemplos: br_ibge_populacao, br_tse_eleicoes"
-        ]
-    ),
-    yaml_order={
-        "id_before": None,
-        "id_after": "name",
-    },
-)
-
 NAME_FIELD = Field(
     title="Nome",
     description=to_line(
@@ -35,7 +20,7 @@ NAME_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_before": "dataset_id",
+        "id_before": None,
         "id_after": "title",
     },
 )

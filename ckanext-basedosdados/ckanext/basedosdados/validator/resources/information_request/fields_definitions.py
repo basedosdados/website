@@ -33,14 +33,6 @@ class PartnerOrganization(BaseModel):
 # InformationRequest Fields
 # -------------------------------------
 
-DATASET_ID_FIELD = Field(
-    title="ID Conjunto",
-    yaml_order={
-        "id_after": None,
-        "id_before": "origin",
-    },
-)
-
 ORIGIN_FIELD = Field(
     title="Origem",
     description=to_line(
@@ -50,8 +42,8 @@ ORIGIN_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "dataset_id",
-        "id_before": "number",
+        "id_before": None,
+        "id_after": "number",
     },
 )
 
@@ -63,8 +55,8 @@ NUMBER_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "origin",
-        "id_before": "url",
+        "id_before": "origin",
+        "id_after": "url",
     },
 )
 
@@ -76,8 +68,8 @@ URL_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "number",
-        "id_before": "department",
+        "id_before": "number",
+        "id_after": "department",
     },
 )
 
@@ -89,8 +81,8 @@ DEPARTMENT_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "url",
-        "id_before": "description",
+        "id_before": "url",
+        "id_after": "description",
     },
 )
 
@@ -103,8 +95,8 @@ DESCRIPTION_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "department",
-        "id_before": "opening_date",
+        "id_before": "department",
+        "id_after": "opening_date",
     },
 )
 
@@ -116,16 +108,16 @@ OPENING_DATE_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "description",
-        "id_before": "requested_by",
+        "id_before": "description",
+        "id_after": "requested_by",
     },
 )
 
 REQUESTED_BY_FIELD = Field(
     title="Quem Fez o Pedido",
     yaml_order={
-        "id_after": "opening_date",
-        "id_before": "spatial_coverage",
+        "id_before": "opening_date",
+        "id_after": "spatial_coverage",
     },
 )
 
@@ -137,8 +129,8 @@ SPATIAL_COVERAGE_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "requested_by",
-        "id_before": "temporal_coverage",
+        "id_before": "requested_by",
+        "id_after": "temporal_coverage",
     },
 )
 
@@ -152,8 +144,8 @@ TEMPORAL_COVERAGE_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "spatial_coverage",
-        "id_before": "update_frequency",
+        "id_before": "spatial_coverage",
+        "id_after": "update_frequency",
     },
 )
 
@@ -166,8 +158,8 @@ UPDATE_FREQUENCY_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "temporal_coverage",
-        "id_before": "observation_level",
+        "id_before": "temporal_coverage",
+        "id_after": "observation_level",
     },
 )
 
@@ -193,8 +185,8 @@ STATUS_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "entity",
-        "id_before": "data_url",
+        "id_before": "observation_level",
+        "id_after": "data_url",
     },
 )
 
@@ -207,16 +199,16 @@ DATA_URL_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "status",
-        "id_before": "observations",
+        "id_before": "status",
+        "id_after": "observations",
     },
 )
 
 OBSERVATIONS_FIELD = Field(
     title="Observações",
     yaml_order={
-        "id_after": "data_url",
-        "id_before": "partner_organization",
+        "id_before": "data_url",
+        "id_after": "partner_organization",
     },
 )
 

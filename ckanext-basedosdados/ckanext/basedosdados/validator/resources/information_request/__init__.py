@@ -18,7 +18,6 @@ class InformationRequest(_CkanDefaultResource):
     resource_type: Literal["information_request"]
 
     # fmt: off
-    dataset_id           : Str                               = DATASET_ID_FIELD
     origin               : Optional[Str]                     = ORIGIN_FIELD
     number               : Optional[Str]                     = NUMBER_FIELD
     url                  : Optional[Str]                     = URL_FIELD

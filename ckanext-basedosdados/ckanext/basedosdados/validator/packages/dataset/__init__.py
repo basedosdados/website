@@ -23,7 +23,6 @@ class Dataset(_CkanDefaults):
     groups             : Any                 = GROUPS_FIELD
     tags               : Any                 = TAGS_FIELD
 
-    dataset_id         : Optional[Str]       = DATASET_ID_FIELD
     short_description  : Optional[Str]       = SHORT_DESCRIPTION_FIELD
     description        : Optional[Str]       = DESCRIPTION_FIELD
     ckan_url           : Optional[Str]       = CKAN_URL_FIELD

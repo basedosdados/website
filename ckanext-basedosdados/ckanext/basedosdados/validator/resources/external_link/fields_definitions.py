@@ -10,14 +10,6 @@ from pydantic import Field
 # -------------------------------------
 to_line = lambda description: "\n".join(description)
 
-DATASET_ID_FIELD = Field(
-    title="ID Conjunto",
-    yaml_order={
-        "id_after": None,
-        "id_before": "url",
-    },
-)
-
 URL_FIELD = Field(
     title="Url",
     description=to_line(
@@ -26,8 +18,8 @@ URL_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "dataset_id",
-        "id_before": "title",
+        "id_before": None,
+        "id_after": "title",
     },
 )
 
@@ -55,8 +47,8 @@ DESCRIPTION_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "title",
-        "id_before": "language",
+        "id_before": "title",
+        "id_after": "language",
     },
 )
 
@@ -69,8 +61,8 @@ LANGUAGE_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "description",
-        "id_before": "has_structure_data",
+        "id_before": "description",
+        "id_after": "has_structure_data",
     },
 )
 
@@ -83,8 +75,8 @@ HAS_STRUCTURED_DATA_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "language",
-        "id_before": "has_api",
+        "id_before": "language",
+        "id_after": "has_api",
     },
 )
 
@@ -97,8 +89,8 @@ HAS_API_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "has_structured_data",
-        "id_before": "is_free",
+        "id_before": "has_structured_data",
+        "id_after": "is_free",
     },
 )
 
@@ -111,8 +103,8 @@ IS_FREE_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "has_api",
-        "id_before": "requires_registration",
+        "id_before": "has_api",
+        "id_after": "requires_registration",
     },
 )
 
@@ -125,8 +117,8 @@ REQUIRES_REGISTRATION_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "is_free",
-        "id_before": "availability",
+        "id_before": "is_free",
+        "id_after": "availability",
     },
 )
 
@@ -140,8 +132,8 @@ AVAILABILITY_FIELD = Field(
     ),
     default="online",
     yaml_order={
-        "id_after": "requires_registration",
-        "id_before": "country_ip_address_required",
+        "id_before": "requires_registration",
+        "id_after": "country_ip_address_required",
     },
 )
 
@@ -154,8 +146,8 @@ COUNTRY_IP_ADDRESS_REQUIRED_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "availability",
-        "id_before": "license",
+        "id_before": "availability",
+        "id_after": "license",
     },
 )
 
@@ -167,8 +159,8 @@ LICENSE_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "country_ip_address_required",
-        "id_before": "spatial_coverage",
+        "id_before": "country_ip_address_required",
+        "id_after": "spatial_coverage",
     },
 )
 
@@ -180,8 +172,8 @@ SPATIAL_COVERAGE_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "license",
-        "id_before": "temporal_coverage",
+        "id_before": "license",
+        "id_after": "temporal_coverage",
     },
 )
 
@@ -195,8 +187,8 @@ TEMPORAL_COVERAGE_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "spatial_coverage",
-        "id_before": "update_frequency",
+        "id_before": "spatial_coverage",
+        "id_after": "update_frequency",
     },
 )
 
@@ -209,8 +201,8 @@ UPDATE_FREQUENCY_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "temporal_coverage",
-        "id_before": "observation_level",
+        "id_before": "temporal_coverage",
+        "id_after": "observation_level",
     },
 )
 
