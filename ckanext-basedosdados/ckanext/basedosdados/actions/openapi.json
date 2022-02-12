@@ -694,6 +694,49 @@
                 ]
             }
         },
+        "/organization_show": {
+            "get": {
+                "description": "Visualiza um organização.",
+                "parameters": [{
+                    "name": "id",
+                    "in": "query",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "example": "br-bd"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "help": {
+                                            "type": "string",
+                                            "example": "https://basedosdados.org/api/3/action/help_show?name=organization_show"
+                                        },
+                                        "result": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "success": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "CKAN"
+                ]
+            }
+        },
         "/bd_dataset_search": {
             "get": {
                 "description": "Busca bases",

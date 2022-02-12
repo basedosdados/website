@@ -14,7 +14,7 @@ from .entity import EntityEnum
 from .language import LanguageEnum
 from .license import LicenseEnum
 from .measurement_unit import MeasurementUnitEnum
-from .spatial_coverage import Admin1Enum, Admin2Enum, ContinentEnum, CountryEnum
+from .spatial_coverage import Admin1Enum, Admin2Enum, ContinentEnum, CountryEnum, SpatialCoverage
 from .status import StatusEnum
 from .temporal_coverage import TemporalCoverageEnum
 from .time_unit import TimeUnitEnum

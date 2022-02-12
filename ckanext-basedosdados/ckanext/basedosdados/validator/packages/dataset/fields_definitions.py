@@ -11,25 +11,16 @@ from pydantic import Field
 # -------------------------------------
 to_line = lambda description: "\n".join(description)
 
-ORGANIZATION_FIELD = Field(
-    title="ID Organização",
+NAME_FIELD = Field(
+    title="Nome",
     description=to_line(
         [
-            "Qual organização disponibiliza os dados originais?",
-            "Opções: escolher dessa lista -> https://basedosdados.org/api/3/action/organization_list",
-            "Exemplos: br-ibge, br-tse, br-rj-gov"
+            "Nome (slug) do conjunto no CKAN",
+            "Exemplos: br-ibge-populacao, br-tse-eleicoes"
         ]
     ),
     yaml_order={
         "id_before": None,
-        "id_after": "dataset_id",
-    },
-)
-
-DATASET_ID_FIELD = Field(
-    title="ID Conjunto",
-    yaml_order={
-        "id_before": "organization",
         "id_after": "title",
     },
 )
@@ -43,20 +34,31 @@ TITLE_FIELD = Field(
         ],
     ),
     yaml_order={
-        "id_before": "dataset_id",
-        "id_after": "description",
+        "id_before": "name",
+        "id_after": "organization",
     },
 )
 
-DESCRIPTION_FIELD = Field(
-    title="Descrição",
+ORGANIZATION_FIELD = Field(
+    title="ID Organização",
     description=to_line(
         [
-            "Descrição e anotações úteis sobre os dados."
+            "Qual organização disponibiliza os dados originais?",
+            "Opções: escolher dessa lista -> https://basedosdados.org/api/3/action/organization_list",
+            "Exemplos: br-ibge, br-tse, br-rj-gov"
         ]
     ),
     yaml_order={
         "id_before": "title",
+        "id_after": "notes",
+    },
+)
+
+NOTES_FIELD = Field(
+    title="Descrição",
+    description="Descrição do conjunto",
+    yaml_order={
+        "id_before": "organization",
         "id_after": "groups",
     },
 )
@@ -71,7 +73,7 @@ GROUPS_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_before": "description",
+        "id_before": "notes",
         "id_after": "tags",
     },
 )
@@ -92,55 +94,6 @@ TAGS_FIELD = Field(
     ),
     yaml_order={
         "id_before": "groups",
-        "id_after": "ckan_url",
-    },
-)
-
-SPATIAL_COVERAGE_FIELD = Field(
-    title="Cobertura Espacial",
-)
-
-TEMPORAL_COVERAGE_FIELD = Field(
-    title="Cobertura Temporal",
-)
-
-UPDATE_FREQUENCY_FIELD = Field(
-    title="Frequência de Atualização",
-)
-
-ENTITY_FIELD = Field(
-    title="Entidade",
-    max_items=10,
-)
-
-TIME_UNIT_FIELD = Field(
-    title="Unidade Temporal",
-)
-
-CKAN_URL_FIELD = Field(
-    title="Url CKAN",
-    description=to_line(
-        [
-            "Url completa do CKAN já contendo o dataset-id",
-            "Exemplo: https://basedosdados.org/dataset/<dataset-id>"
-        ]   
-    ),
-    yaml_order={
-        "id_before": "tags",
-        "id_after": "github_url",
-    },
-)
-
-GITHUB_URL_FIELD = Field(
-    title="Url Github",
-    description=to_line(
-        [
-            "Url completa do Github já contendo o dataset_id",
-            "Exemplo: https://github.com/basedosdados/mais/tree/master/bases/<dataset_id>"
-        ]
-    ),
-    yaml_order={
-        "id_before": "ckan_url",
         "id_after": "metadata_modified",
     },
 )
@@ -154,22 +107,55 @@ METADATA_MODIFIED_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_before": "github_url",
+        "id_before": "tags",
         "id_after": None,
     },
 )
 
-DOWNLOAD_TYPE_FIELD = Field(
-    title="Tipo de Download",
-)
-
-VISIBILITY_FIELD = Field(title="Visibilidade")
 
 AUTHOR_FIELD = Field(
     title="Autor(a)",
     description=to_line(
         [
             "Qual departamento/grupo/pessoa mantém os dados originais?"
+        ]
+    ),
+)
+
+SHORT_DESCRIPTION_FIELD = Field(
+    title="Descrição curta",
+    description=to_line(
+        [
+            "Descrição curta (até 280 caracteres) do conjunto."
+        ]
+    ),
+)
+
+DESCRIPTION_FIELD = Field(
+    title="Descrição",
+    description=to_line(
+        [
+            "Descrição do conjunto."
+        ]
+    ),
+)
+
+CKAN_URL_FIELD = Field(
+    title="Url CKAN",
+    description=to_line(
+        [
+            "Url completa do CKAN já contendo o dataset-id",
+            "Exemplo: https://basedosdados.org/dataset/<dataset-id>"
+        ]   
+    ),
+)
+
+GITHUB_URL_FIELD = Field(
+    title="Url Github",
+    description=to_line(
+        [
+            "Url completa do Github já contendo o dataset_id",
+            "Exemplo: https://github.com/basedosdados/mais/tree/master/bases/<dataset_id>"
         ]
     ),
 )

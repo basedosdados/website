@@ -21,7 +21,7 @@ from ckanext.basedosdados.validator.resources.bdm.table import BdmTable
 from ckanext.basedosdados.validator.resources.external_link import ExternalLink
 
 # -------------------------------------
-# RESOUCES EXTERNAL LINK
+# RESOUCES INFORMATION REQUEST
 # -------------------------------------
 from ckanext.basedosdados.validator.resources.information_request import (
     InformationRequest,

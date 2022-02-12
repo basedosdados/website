@@ -13,7 +13,7 @@ if [[ ! $FILE ]]; then
             docker-compose exec -T db pg_dump -U ckan --format=custom -d ckan --file=/tmp/postgres.dump
             docker cp db:/tmp/postgres.dump /tmp/postgres.dump
         '
-        scp staging.basedosdados.org:/tmp/postgres.dump /tmp/db-ckan.dump
+        scp ec2-user@staging.basedosdados.org:/tmp/postgres.dump /tmp/db-ckan.dump
     else
         echo Downloading dump from S3
         AWS_DEFAULT_REGION=us-east-2 AWS_PROFILE=basedosdados aws s3 ls s3://basedosdados/backup/postgres.dump

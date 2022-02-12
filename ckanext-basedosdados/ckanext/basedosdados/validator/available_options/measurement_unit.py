@@ -13,14 +13,8 @@ class MeasurementUnitEnum(AttrEnum):
     inch        = {"label": "polegada"}
 
     # area
-    kilometer2  = {"label": "km2"}
-    meter2      = {"label": "m2"}
-    centimeter2 = {"label": "cm2"}
     hectare     = {"label": "ha"}
     acre        = {"label": "acre"}
-    mile2       = {"label": "mi2"}
-    foot2       = {"label": "pé2"}
-    inch2       = {"label": "polegada2"}
 
     # mass
     ton      = {"label": "tonelada"}
@@ -33,10 +27,6 @@ class MeasurementUnitEnum(AttrEnum):
     gallon   = {"label": "galão"}
     litre    = {"label": "litro"}
     militre  = {"label": "ml"}
-    meter3   = {"label": "m3"}
-    mile3    = {"label": "mi3"}
-    foot3    = {"label": "pé3"}
-    inch3    = {"label": "polegada3"}
     barrel   = {"label": "barril"}
     boe      = {"label": "barril de óleo equivalente"}
     toe      = {"label": "tonelada de óleo equivalente"}

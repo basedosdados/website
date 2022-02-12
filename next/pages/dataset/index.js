@@ -169,21 +169,21 @@ export default function SearchPage({
 
   const organizations = data?.organizations
     ? Object.keys(data?.organizations)
-        .map((o) => ({
-          name: o,
+        .map((t) => ({
+          name: t,
           displayName:
-            data.organizations_display_names[o] + ` (${data.organizations[o]})`,
-          value: data.organizations[o],
+            data.organizations_display_names[t] + ` (${data.organizations[t]})`,
+          value: data.organizations[t],
         }))
         .sort((a, b) => b.value - a.value)
     : [];
 
   const groups = data?.groups
     ? Object.keys(data?.groups)
-        .map((o) => ({
-          name: o,
-          displayName: data.groups_display_names[o] + ` (${data.groups[o]})`,
-          value: data.groups[o],
+        .map((t) => ({
+          name: t,
+          displayName: data.groups_display_names[t] + ` (${data.groups[t]})`,
+          value: data.groups[t],
         }))
         .sort((a, b) => b.value - a.value)
     : [];
@@ -204,7 +204,7 @@ export default function SearchPage({
           name: t,
           displayName:
             availableOptionsTranslations[t] + ` (${data.entities[t]})`,
-          value: t,
+          value: data.entities[t],
         }))
         .sort((a, b) => b.value - a.value)
     : [];
@@ -214,9 +214,8 @@ export default function SearchPage({
         .map((t) => ({
           name: t,
           displayName:
-            availableOptionsTranslations[t] +
-            ` (${data.update_frequencies[t]})`,
-          value: t,
+            availableOptionsTranslations[t] + ` (${data.update_frequencies[t]})`,
+          value: data.update_frequencies[t],
         }))
         .sort((a, b) => b.value - a.value)
     : [];
@@ -229,7 +228,7 @@ export default function SearchPage({
             displayName:
               availableOptionsTranslations[t] +
               ` (${data.spatial_coverage_continent[t]})`,
-            value: t,
+            value: data.spatial_coverage_continent[t],
           }))
           .sort((a, b) => b.value - a.value)
       : [],
@@ -238,9 +237,30 @@ export default function SearchPage({
           .map((t) => ({
             name: t,
             displayName:
+              availableOptionsTranslations[t] + ` (${data.spatial_coverage_country[t]})`,
+            value: data.spatial_coverage_country[t],
+          }))
+          .sort((a, b) => b.value - a.value)
+      : [],
+    Admin1: data?.spatial_coverage_admin1
+      ? Object.keys(data.spatial_coverage_admin1)
+          .map((t) => ({
+            name: t,
+            displayName:
               availableOptionsTranslations[t] +
-              ` (${data.spatial_coverage_country[t]})`,
-            value: t,
+              ` (${data.spatial_coverage_admin1[t]})`,
+            value: data.spatial_coverage_admin1[t],
+          }))
+          .sort((a, b) => b.value - a.value)
+      : [],
+    Admin2: data?.spatial_coverage_admin2
+      ? Object.keys(data.spatial_coverage_admin2)
+          .map((t) => ({
+            name: t,
+            displayName:
+              availableOptionsTranslations[t] +
+              ` (${data.spatial_coverage_admin2[t]})`,
+            value: data.spatial_coverage_admin2[t],
           }))
           .sort((a, b) => b.value - a.value)
       : [],
@@ -401,7 +421,7 @@ export default function SearchPage({
             choices={tags}
             valueField="name"
             displayField="displayName"
-            fieldName="Tags"
+            fieldName="Etiquetas"
             values={paramFilters.tag}
             onChange={(values) =>
               setParamFilters({ ...paramFilters, tag: values })
@@ -410,11 +430,47 @@ export default function SearchPage({
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.spatial_coverage || []).length > 0}
-            choices={[...spatialCoverages.Continente, ...spatialCoverages.País]}
+            choices={[...spatialCoverages.Continente]}
             values={paramFilters.spatial_coverage}
             valueField="name"
             displayField="displayName"
-            fieldName="Cobertura espacial"
+            fieldName="Cobertura espacial: Continente"
+            onChange={(values) =>
+              setParamFilters({ ...paramFilters, spatial_coverage: values })
+            }
+          />
+          <CheckboxFilterAccordion
+            canSearch={true}
+            isActive={(paramFilters.spatial_coverage || []).length > 0}
+            choices={[...spatialCoverages.País]}
+            values={paramFilters.spatial_coverage}
+            valueField="name"
+            displayField="displayName"
+            fieldName="Cobertura espacial: País"
+            onChange={(values) =>
+              setParamFilters({ ...paramFilters, spatial_coverage: values })
+            }
+          />
+          <CheckboxFilterAccordion
+            canSearch={true}
+            isActive={(paramFilters.spatial_coverage || []).length > 0}
+            choices={[...spatialCoverages.Admin1]}
+            values={paramFilters.spatial_coverage}
+            valueField="name"
+            displayField="displayName"
+            fieldName="Cobertura espacial: UF"
+            onChange={(values) =>
+              setParamFilters({ ...paramFilters, spatial_coverage: values })
+            }
+          />
+          <CheckboxFilterAccordion
+            canSearch={true}
+            isActive={(paramFilters.spatial_coverage || []).length > 0}
+            choices={[...spatialCoverages.Admin2]}
+            values={paramFilters.spatial_coverage}
+            valueField="name"
+            displayField="displayName"
+            fieldName="Cobertura espacial: Município"
             onChange={(values) =>
               setParamFilters({ ...paramFilters, spatial_coverage: values })
             }
@@ -444,18 +500,18 @@ export default function SearchPage({
               });
             }}
           />
-          <CheckboxFilterAccordion
+          {/* <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.entity || []).length > 0}
             choices={entities}
             values={paramFilters.entity}
             valueField="name"
             displayField="displayName"
-            fieldName="Entidade"
+            fieldName="Nível da observação"
             onChange={(values) =>
               setParamFilters({ ...paramFilters, entity: values })
             }
-          />
+          /> */}
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.update_frequency || []).length > 0}

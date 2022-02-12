@@ -14,8 +14,8 @@ class BdmDictionary(_CkanDefaultResource):
 
     # BdmDictionary models
     # fmt: off
-    dataset_id          : Optional[Str]         = DATASET_ID_FIELD
-    table_id            : Optional[Str]         = TABLE_ID_FIELD
+    dataset_id          : Str                   = DATASET_ID_FIELD
+    table_id            : Str                   = TABLE_ID_FIELD
     identifying_columns : Optional[List[Str]]   = IDENTIFYING_COLUMNS_FIELD
     last_updated        : Optional[LastUpdated] = LAST_UPDATED_FIELD
     published_by        : Optional[PublishedBy] = PUBLISHED_BY_FIELD

@@ -3,6 +3,8 @@ from pathlib import Path
 
 import ckan.plugins.toolkit as toolkit
 from ckan.logic.action.get import dataset_follower_count, package_search
+
+from ckanext.basedosdados.validator.available_options import SpatialCoverage
 from ckanext.basedosdados.validator.available_options import (
     Admin1Enum,
     Admin2Enum,
@@ -20,6 +22,7 @@ from ckanext.basedosdados.validator.available_options import (
 )
 from ckanext.basedosdados.validator.available_options.entity import (
     EntityArtEnum,
+    EntityDateTimeEnum,
     EntityDemographicEnum,
     EntityEconomicsEnum,
     EntityEducationEnum,
@@ -33,7 +36,7 @@ from ckanext.basedosdados.validator.available_options.entity import (
     EntityPoliticsEnum,
     EntityScienceEnum,
     EntitySecurityEnum,
-    EntitySphereEnum,
+    EntitySpatialEnum,
     EntityTransportationEnum,
 )
 from ckanext.basedosdados.validator.packages import Dataset
@@ -251,7 +254,6 @@ def bd_dataset_search(context, data_dict):
     )
 
     # post-process ########################################
-
     response["datasets"] = response.pop("results", None)
     response.pop("facets", None)
     response.pop("search_facets", None)
@@ -270,7 +272,6 @@ def bd_dataset_search(context, data_dict):
             response["groups"][key] = value
 
     # post-process tags ###################################
-
     response["tags"] = {}
 
     for dataset in response["datasets"]:
@@ -297,8 +298,10 @@ def bd_dataset_search(context, data_dict):
     for dataset in response["datasets"]:
         entities = []
         for resource in dataset["resources"]:
-            res_entities = resource.get("entity", []) or []
-            entities.extend(res_entities)
+            for ol in resource.get("observation_level", {}):
+                if "entity" in ol:
+                    res_entities = ol.get("entity")
+                    entities.append(res_entities)
         entities = list(set(entities))
 
         for key in entities:
@@ -326,20 +329,30 @@ def bd_dataset_search(context, data_dict):
 
     # post-process spatial coverage continent ###############################
 
+    SpatialCoverageClass = SpatialCoverage()
+
     response["spatial_coverage_continent"] = {}
     for dataset in response["datasets"]:
+
         spatial_coverage_continent = []
-        for resource in dataset["resources"]:
-            res_spatial_coverage = resource.get("spatial_coverage", {})
-            res_spatial_coverage_continent = (
-                res_spatial_coverage.get("continent", [])
-                if isinstance(res_spatial_coverage, dict)
-                else []
-            )
-            if res_spatial_coverage_continent:
-                spatial_coverage_continent.extend(res_spatial_coverage_continent)
-            else:
-                continue
+        for resource in dataset['resources']:
+            if 'spatial_coverage' in resource and resource['spatial_coverage'] is not None:
+
+                # count cases where coverage is whole world
+                if resource['spatial_coverage'] == []:
+                    for continent in SpatialCoverageClass.get_children(
+                        level='world',
+                        levels_below=1):
+                        
+                        spatial_coverage_continent.append(continent)
+                
+                # count continent directly
+                else:
+                    for sc in resource.get('spatial_coverage', []):
+                        if 'continent' in sc:
+                            res_spatial_coverage = sc.get('continent', '')
+                            spatial_coverage_continent.append(res_spatial_coverage)
+
         spatial_coverage_continent = list(set(spatial_coverage_continent))
 
         for key in spatial_coverage_continent:
@@ -350,23 +363,167 @@ def bd_dataset_search(context, data_dict):
 
     response["spatial_coverage_country"] = {}
     for dataset in response["datasets"]:
+        
         spatial_coverage_country = []
-        for resource in dataset["resources"]:
-            res_spatial_coverage = resource.get("spatial_coverage", {})
-            res_spatial_coverage_country = (
-                res_spatial_coverage.get("country", [])
-                if isinstance(res_spatial_coverage, dict)
-                else []
-            )
-            if res_spatial_coverage_country:
-                spatial_coverage_country.extend(res_spatial_coverage_country)
-            else:
-                continue
+        for resource in dataset['resources']:
+            if 'spatial_coverage' in resource and resource['spatial_coverage'] is not None:
+
+                # count cases where coverage is whole world
+                if resource['spatial_coverage'] == []:
+                    for country in SpatialCoverageClass.get_children(
+                        level='world',
+                        levels_below=2):
+                        
+                        spatial_coverage_country.append(country)
+
+                else:
+                    for sc in resource.get('spatial_coverage', []):
+                        
+                        if 'continent' in sc:
+                            
+                            # count cases where coverage is whole continent
+                            if 'country' not in sc:
+                                continent = sc['continent']
+                                for country in SpatialCoverageClass.get_children(
+                                    level='continent',
+                                    id=continent,
+                                    levels_below=1):
+                                    
+                                    spatial_coverage_country.append(country)
+                        
+                            # count country directly
+                            else:
+                                res_spatial_coverage = sc.get('country', '')
+                                spatial_coverage_country.append(res_spatial_coverage)
+
         spatial_coverage_country = list(set(spatial_coverage_country))
 
         for key in spatial_coverage_country:
             value = response["spatial_coverage_country"].get(key, 0) + 1
             response["spatial_coverage_country"][key] = value
+    
+    # post-process spatial coverage admin1 ###############################
+
+    response["spatial_coverage_admin1"] = {}
+    for dataset in response["datasets"]:
+        
+        spatial_coverage_admin1 = []
+        for resource in dataset['resources']:
+            if 'spatial_coverage' in resource and resource['spatial_coverage'] is not None:
+
+                # count cases where coverage is whole world
+                if resource['spatial_coverage'] == []:
+                    for admin1 in SpatialCoverageClass.get_children(
+                        level='world',
+                        levels_below=3):
+                        
+                        spatial_coverage_admin1.append(admin1)
+
+                else:
+                    for sc in resource.get('spatial_coverage', []):
+                        
+                        if 'continent' in sc:
+                            
+                            # count cases where coverage is whole continent
+                            if 'country' not in sc:
+                                continent = sc['continent']
+                                for admin1 in SpatialCoverageClass.get_children(
+                                    level='continent',
+                                    id=continent,
+                                    levels_below=2):
+                                    
+                                    spatial_coverage_admin1.append(admin1)
+                        
+                            else:
+
+                                # count cases where coverage is whole country
+                                if 'admin1' not in sc:
+                                    country = sc['country']
+                                    for admin1 in SpatialCoverageClass.get_children(
+                                        level='country',
+                                        id=country,
+                                        levels_below=1):
+                                        
+                                        spatial_coverage_admin1.append(admin1)
+
+                                # count admin1 directly
+                                else:
+                                    res_spatial_coverage = sc.get('admin1', '')
+                                    spatial_coverage_admin1.append(res_spatial_coverage)
+
+        spatial_coverage_admin1 = list(set(spatial_coverage_admin1))
+
+        for key in spatial_coverage_admin1:
+            value = response["spatial_coverage_admin1"].get(key, 0) + 1
+            response["spatial_coverage_admin1"][key] = value
+
+    # post-process spatial coverage admin2 ###############################
+
+    response["spatial_coverage_admin2"] = {}
+    for dataset in response["datasets"]:
+
+        spatial_coverage_admin2 = []
+        for resource in dataset['resources']:
+            if 'spatial_coverage' in resource and resource['spatial_coverage'] is not None:
+
+                # count cases where coverage is whole world
+                if resource['spatial_coverage'] == []:
+                    for admin2 in SpatialCoverageClass.get_children(
+                        level='world',
+                        levels_below=4):
+                        
+                        spatial_coverage_admin2.append(admin2)
+
+                else:
+                    for sc in resource.get('spatial_coverage', []):
+                        
+                        if 'continent' in sc:
+                            
+                            # count cases where coverage is whole continent
+                            if 'country' not in sc:
+                                continent = sc['continent']
+                                for admin2 in SpatialCoverageClass.get_children(
+                                    level='continent',
+                                    id=continent,
+                                    levels_below=3):
+                                    
+                                    spatial_coverage_admin2.append(admin2)
+                        
+                            else:
+
+                                # count cases where coverage is whole country
+                                if 'admin1' not in sc:
+                                    country = sc['country']
+                                    for admin2 in SpatialCoverageClass.get_children(
+                                        level='country',
+                                        id=country,
+                                        levels_below=2):
+                                        
+                                        spatial_coverage_admin2.append(admin2)
+
+                                else:
+                                    
+                                    # count cases where coverage is whole admin1
+                                    if 'admin2' not in sc:
+                                        admin1 = sc['admin1']
+                                        for admin2 in SpatialCoverageClass.get_children(
+                                            level='admin1',
+                                            id=admin1,
+                                            levels_below=1):
+                                            
+                                            spatial_coverage_admin2.append(admin2)
+                                    
+                                    else:
+
+                                        # count admin2 directly
+                                        res_spatial_coverage = sc.get('admin2', '')
+                                        spatial_coverage_admin2.append(res_spatial_coverage)
+        
+        spatial_coverage_admin2 = list(set(spatial_coverage_admin2))
+        
+        for key in spatial_coverage_admin2:
+            value = response["spatial_coverage_admin2"].get(key, 0) + 1
+            response["spatial_coverage_admin2"][key] = value
 
     # post-process resource count #########################
 
@@ -402,7 +559,7 @@ def bd_dataset_search(context, data_dict):
     resource_type_order = resource_type_order + resource_types_not_included
 
     resources_order_dict = {}
-    print(resource_type_order)
+
     for i, package in enumerate(response["datasets"]):
         resources_type = [
             resource.get("resource_type") for resource in package.get("resources")
@@ -421,6 +578,21 @@ def bd_dataset_search(context, data_dict):
                 datasets_final_order.append(response["datasets"][position])
 
     response["datasets"] = datasets_final_order
+
+    # post-process sort filters ###############################
+    
+    sort_dict = lambda dictionary: dict(
+        sorted(dictionary.items(), key=lambda x: x[1], reverse=True)
+    )
+
+    for key in response.keys():
+        if key == "count" or key == "datasets":
+            pass
+        else:
+            try:
+                response[key] = sort_dict(response[key])
+            except Exception as e:
+                print("Error: ", e)
 
     # post-process datasets ###############################
 
@@ -507,6 +679,7 @@ def bd_available_options_dict(context, data_dict):
         **BigQueryTypeEnum.get_all_enum_attr("label"),
         **DirectoryEnum.get_all_enum_attr("label"),
         **EntityArtEnum.get_all_enum_attr("label"),
+        **EntityDateTimeEnum.get_all_enum_attr("label"),
         **EntityDemographicEnum.get_all_enum_attr("label"),
         **EntityEconomicsEnum.get_all_enum_attr("label"),
         **EntityEducationEnum.get_all_enum_attr("label"),
@@ -520,7 +693,7 @@ def bd_available_options_dict(context, data_dict):
         **EntityPoliticsEnum.get_all_enum_attr("label"),
         **EntityScienceEnum.get_all_enum_attr("label"),
         **EntitySecurityEnum.get_all_enum_attr("label"),
-        **EntitySphereEnum.get_all_enum_attr("label"),
+        **EntitySpatialEnum.get_all_enum_attr("label"),
         **EntityTransportationEnum.get_all_enum_attr("label"),
         **LanguageEnum.get_all_enum_attr("label"),
         **LicenseEnum.get_all_enum_attr("label"),
@@ -543,6 +716,7 @@ def bd_available_options(context, data_dict):
         "Directory": DirectoryEnum.get_all_enum_attr("label"),
         "Entity": {
             "Entity Art": EntityArtEnum.get_all_enum_attr("label"),
+            "Entity Date-Time": EntityDateTimeEnum.get_all_enum_attr("label"),
             "Entity Demographic": EntityDemographicEnum.get_all_enum_attr("label"),
             "Entity Economics": EntityEconomicsEnum.get_all_enum_attr("label"),
             "Entity Education": EntityEducationEnum.get_all_enum_attr("label"),
@@ -558,7 +732,7 @@ def bd_available_options(context, data_dict):
             "Entity Politics": EntityPoliticsEnum.get_all_enum_attr("label"),
             "Entity Science": EntityScienceEnum.get_all_enum_attr("label"),
             "Entity Security": EntitySecurityEnum.get_all_enum_attr("label"),
-            "Entity Sphere": EntitySphereEnum.get_all_enum_attr("label"),
+            "Entity Spatial": EntitySpatialEnum.get_all_enum_attr("label"),
             "Entity Transportation": EntityTransportationEnum.get_all_enum_attr(
                 "label"
             ),
