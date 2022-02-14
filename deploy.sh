@@ -5,7 +5,7 @@ cd $(git rev-parse --show-toplevel)
 HOST=${HOST:-basedosdados.org}
 
 SSH="ssh -o StrictHostKeyChecking=no -i ~/.ssh/BD.pem $HOST"
-VTAG=":`date +%H.%M.%S`" # Simple mechanism to force image update
+VTAG=":`date +%m%d.%H%M.%S`" # Simple mechanism to force image update
 
 BUILD_DIR="/tmp/bdd_build"
 
