@@ -40,14 +40,33 @@ export function Database({
   }
 
   function getTemporalCoverage() {
-    if (temporalCoverage.length === 0 || !temporalCoverage) return "";
-    if (temporalCoverage.length === 1) return temporalCoverage[0];
 
-    return (
-      temporalCoverage[0] +
-      " - " +
-      temporalCoverage[temporalCoverage.length - 1]
-    );
+    if (temporalCoverage.length === 0 || !temporalCoverage) return "";
+
+    var years = [];
+    for (let i = 0; i < temporalCoverage.length; i++) {
+      var interval = temporalCoverage[i];
+      if (interval.includes("(")) {
+        var first = interval.substring(0, interval.indexOf('('));
+        var last  = interval.substring(   interval.indexOf(')')+1);
+        years.push(first);
+        years.push(last);
+      }
+      else {
+        years.push(interval);
+      }
+      
+    }
+
+    var years = years.sort();
+    
+    if (years.length === 1) return years[0];
+
+    var min_date = years[0];
+    var max_date = years[years.length-1];
+
+    return (min_date + " - " + max_date);
+
   }
 
   return (

@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+
+from typing import Optional
+
 from ckanext.basedosdados.validator import BaseModel
 from pydantic import Field
 from pydantic import StrictStr as Str
@@ -8,27 +11,27 @@ to_line = lambda description: "\n".join(description)
 # -------------------------------------
 # InformationRequest Custom Types
 # -------------------------------------
+
 class RequestedBy(BaseModel):
     # fmt: off
-    name        : Str = Field(title="Nome",description=to_line(["<nome [você]>"]))
-    email       : Str = Field(title="Email",description=to_line(["<email>"]))
-    github_user : Str = Field(title="Usuário Github",description=to_line(["<usuário Github>"]))
-    website     : Str = Field(title="Website",description=to_line(["<website>"]))
-    ckan_user   : Str = Field(title="Usuário CKAN",description=to_line(["<ID do usuário no CKAN>"]))
+    name        : Optional[Str] = Field(title="Nome")
+    email       : Optional[Str] = Field(title="Email")
+    github_user : Optional[Str] = Field(title="Usuário Github")
+    ckan_user   : Optional[Str] = Field(title="Usuário CKAN")
+    website     : Optional[Str] = Field(title="Website")
+    # fmt: on
+
+
+class PartnerOrganization(BaseModel):
+    # fmt: off
+    name            : Optional[Str] = Field(title="Nome",description=to_line(["Nome completo"]))
+    organization_id : Optional[Str] = Field(title="ID Organização",description=to_line(["ID Organização - CKAN"]))
     # fmt: on
 
 
 # -------------------------------------
 # InformationRequest Fields
 # -------------------------------------
-
-DATASET_ID_FIELD = Field(
-    title="ID Conjunto",
-    yaml_order={
-        "id_after": None,
-        "id_before": "origin",
-    },
-)
 
 ORIGIN_FIELD = Field(
     title="Origem",
@@ -39,8 +42,8 @@ ORIGIN_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "dataset_id",
-        "id_before": "number",
+        "id_before": None,
+        "id_after": "number",
     },
 )
 
@@ -52,8 +55,8 @@ NUMBER_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "origin",
-        "id_before": "url",
+        "id_before": "origin",
+        "id_after": "url",
     },
 )
 
@@ -65,8 +68,8 @@ URL_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "number",
-        "id_before": "department",
+        "id_before": "number",
+        "id_after": "department",
     },
 )
 
@@ -78,8 +81,8 @@ DEPARTMENT_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "url",
-        "id_before": "description",
+        "id_before": "url",
+        "id_after": "description",
     },
 )
 
@@ -92,8 +95,8 @@ DESCRIPTION_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "department",
-        "id_before": "opening_date",
+        "id_before": "department",
+        "id_after": "opening_date",
     },
 )
 
@@ -105,16 +108,16 @@ OPENING_DATE_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "description",
-        "id_before": "requested_by",
+        "id_before": "description",
+        "id_after": "requested_by",
     },
 )
 
 REQUESTED_BY_FIELD = Field(
     title="Quem Fez o Pedido",
     yaml_order={
-        "id_after": "opening_date",
-        "id_before": "spatial_coverage",
+        "id_before": "opening_date",
+        "id_after": "spatial_coverage",
     },
 )
 
@@ -126,8 +129,8 @@ SPATIAL_COVERAGE_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "requested_by",
-        "id_before": "temporal_coverage",
+        "id_before": "requested_by",
+        "id_after": "temporal_coverage",
     },
 )
 
@@ -141,8 +144,8 @@ TEMPORAL_COVERAGE_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "spatial_coverage",
-        "id_before": "update_frequency",
+        "id_before": "spatial_coverage",
+        "id_after": "update_frequency",
     },
 )
 
@@ -155,37 +158,21 @@ UPDATE_FREQUENCY_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "temporal_coverage",
-        "id_before": "entity",
+        "id_before": "temporal_coverage",
+        "id_after": "observation_level",
     },
 )
 
-ENTITY_FIELD = Field(
-    title="Entidade",
+OBSERVATION_LEVEL_FIELD = Field(
+    title="Nível da observação",
     description=to_line(
         [
-            "Entidade coberta pelos dados pedidos."
-            "Opções em 'entity' em https://basedosdados.org/api/3/action/bd_available_options."
-        ]
-    ),
-    max_items=10,
-    yaml_order={
-        "id_after": "update_frequency",
-        "id_before": "time_unit",
-    },
-)
-
-TIME_UNIT_FIELD = Field(
-    title="Unidade Temporal",
-    description=to_line(
-        [
-            "A unidade temporal representada por cada linha dos dados pedidos."
-            "Opções em 'time_unit' em https://basedosdados.org/api/3/action/bd_available_options."
+            "Nível de observação dos dados: o que representa cada linha.",
         ]
     ),
     yaml_order={
-        "id_after": "entity",
-        "id_before": "status",
+        "id_before": "update_frequency",
+        "id_after": "status",
     },
 )
 
@@ -198,8 +185,8 @@ STATUS_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "time_unit",
-        "id_before": "data_url",
+        "id_before": "observation_level",
+        "id_after": "data_url",
     },
 )
 
@@ -212,15 +199,25 @@ DATA_URL_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_after": "status",
-        "id_before": "observations",
+        "id_before": "status",
+        "id_after": "observations",
     },
 )
 
 OBSERVATIONS_FIELD = Field(
     title="Observações",
     yaml_order={
-        "id_after": "data_url",
-        "id_before": None,
+        "id_before": "data_url",
+        "id_after": "partner_organization",
     },
 )
+
+PARTNER_ORGANIZATION_FIELD = Field(
+    title="Organização parceira",
+    description=to_line(["Organização que ajudou institucionalmente na criação ou disponibilização do pedido de informação."]),
+    yaml_order={
+        "id_before": "observations",
+        "id_after": None,
+    },
+)
+

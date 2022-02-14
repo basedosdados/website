@@ -31,6 +31,8 @@ services:
       dockerfile: stack/solr/Dockerfile
 
   django:
+    build:
+      context: django
     volumes:
       - ./django:/usr/src/app
 

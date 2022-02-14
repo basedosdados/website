@@ -13,6 +13,7 @@ log = logging.getLogger(__name__)
 
 
 class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDatasetForm):
+    plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.interfaces.IFacets)
     plugins.implements(plugins.interfaces.ITemplateHelpers)
@@ -24,6 +25,19 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
     is_fallback = lambda s: True
     package_types = lambda s: []
 
+    # IPackageController
+    def before_index(self, fields_to_index):
+        # virtual_multi_obs_level_entity
+        entities = set()
+        for resource in fields_to_index.get("res_extras_observation_level", {}):
+            entity = set(e.get("entity") for e in resource if "entity" in e)
+            entities |= entity
+        fields_to_index["virtual_multi_obs_level_entity"] = list(entities)
+        # del fields_to_index['res_extras_observation_level']
+
+        return fields_to_index
+
+    # IValidators
     def validate(self, context, data_dict, schema, action):
         out, errors = {
             "package_show": self._validate_show,

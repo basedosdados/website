@@ -171,8 +171,8 @@ library("basedosdados")
 # Defina o seu projeto no Google Cloud
 set_billing_id("<YOUR_PROJECT_ID>")
 # Para carregar o dado direto no R
-query <- "SELECT * FROM \`basedosdados.${queryName}\`"
-df <- read_sql(query)`,
+query <- bdplyr("${queryName}")
+df <- bd_collect(query)`,
   };
 
   useEffect(() => {
@@ -187,11 +187,11 @@ df <- read_sql(query)`,
       formComponent={
         <SchemaForm
           data={resource}
-          schemaName="Tabela Bdm"
+          schemaName="Tabela BD+"
           loadSchemaFunction={getBdmTableSchema}
           updateFunction={updateResource}
           prepareData={(data) => {
-            data.identifying_columns = data.identifying_columns || [];
+            data.observation_level = data.observation_level || [];
             data.published_by.github_user = data.published_by.github_user || "";
             data.published_by.ckan_user = data.published_by.ckan_user || "";
             data.data_cleaned_by.github_user =
@@ -325,9 +325,7 @@ df <- read_sql(query)`,
                 "spatial_coverage",
                 "temporal_coverage",
                 "update_frequency",
-                "entity",
-                "time_unit",
-                "identifying_columns",
+                "observation_level",
                 "last_updated",
                 "version",
                 "published_by",
@@ -338,7 +336,6 @@ df <- read_sql(query)`,
                 "architecture_url",
                 "covered_by_dictionary",
                 "partitions",
-                "bdm_file_size",
                 "columns",
               ])
             )

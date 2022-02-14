@@ -18,7 +18,10 @@ import { useState } from "react";
 import CardCatalog from "../components/organisms/CardCatalog";
 import Title from "../components/atoms/Title";
 import Typist from "react-typist";
-import { getPopularDatalakeDatasets } from "./api/datasets";
+import {
+  getPopularDatalakeDatasets,
+  getRecentDatalakeDatasets
+} from "./api/datasets";
 import { ShadowBox } from "../components/atoms/ShadowBox";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
@@ -29,16 +32,16 @@ import { isBdPlus } from "../utils";
 import { BePartner } from "../components/organisms/BePartner";
 
 export async function getStaticProps(context) {
-  let popularDatalakeDatasets;
+  let recentDatalakeDatasets;
   try {
-    popularDatalakeDatasets = await getPopularDatalakeDatasets();
+    recentDatalakeDatasets = await getRecentDatalakeDatasets();
   } catch {
-    popularDatalakeDatasets = [];
+    recentDatalakeDatasets = [];
   }
 
   return await withPages({
     props: {
-      popularDatalakeDatasets,
+      recentDatalakeDatasets,
     },
     revalidate: 60,
   });
@@ -213,7 +216,7 @@ function Hero() {
   );
 }
 
-function CatalogNews({ popularDatalakeDatasets }) {
+function CatalogNews({ recentDatalakeDatasets }) {
   return (
     <VStack
       width="100%"
@@ -251,7 +254,7 @@ function CatalogNews({ popularDatalakeDatasets }) {
           </div>
         }
       >
-        {popularDatalakeDatasets.map((d) => (
+        {recentDatalakeDatasets.map((d) => (
           <DatabaseCard
             link={`/dataset/${d.name}`}
             name={d.title}
@@ -722,7 +725,7 @@ function Support({ pages }) {
 export default function Home({
   pages,
   popularDatasets,
-  popularDatalakeDatasets,
+  recentDatalakeDatasets,
 }) {
   return (
     <MainPageTemplate backgroundColor="#FFFFFF" pages={pages}>
@@ -739,7 +742,7 @@ export default function Home({
       <VStack id="catalog" padding="0px 5%" marginBottom="-100px">
         <CatalogNews
           popularDatasets={popularDatasets}
-          popularDatalakeDatasets={popularDatalakeDatasets}
+          recentDatalakeDatasets={recentDatalakeDatasets}
         />
       </VStack>
       <BePartner />

@@ -14,9 +14,9 @@ to_line = lambda description: "\n".join(description)
 
 class DirectoryColumn(BaseModel):
     # fmt: off
-    dataset_id : Optional[DirectoryEnum] = Field(title="ID Conjunto",description=to_line(["<dataset_id>"]))
-    table_id   : Optional[Str]           = Field(title="ID Tabela",description=to_line(["<table_id>"]))
-    column_name: Optional[Str]           = Field(title="Nome Coluna",description=to_line(["<column_name>"]))
+    dataset_id : Optional[DirectoryEnum] = Field(title="ID Conjunto")
+    table_id   : Optional[Str]           = Field(title="ID Tabela")
+    column_name: Optional[Str]           = Field(title="Nome Coluna")
     # fmt: on
 
 
@@ -88,6 +88,7 @@ COVERED_BY_DICTIONARY_FIELD = Field(
             "Opções: yes, no."
         ]
     ),
+    default="no",
     yaml_order={
         "id_before": "temporal_coverage",
         "id_after": "directory_column",
@@ -111,8 +112,9 @@ MEASUREMENT_UNIT_FIELD = Field(
     title="Unidade de Medida",
     description=to_line(
         [
-            "Qual é a unidade de medida da coluna?"
-            "Opções: ver elementos em 'Measurement Unit' em https://basedosdados.org/api/3/action/bd_available_options."
+            "Qual é a unidade de medida da coluna?",
+            "Escreva a fórmula matemática baseada nas chaves de unidades básicas permitidas em https://basedosdados.org/api/3/action/bd_available_options na seção Measurement Unit.",
+            "Exemplos: 'kilometer^2', 'meter^3 / second', '1000 * person', 'gigawatt'."
         ]
     ),
     yaml_order={
@@ -129,8 +131,22 @@ HAS_SENSITIVE_DATA_FIELD = Field(
             "Opções: yes, no."
         ]
     ),
+    default="no",
     yaml_order={
         "id_before": "measurement_unit",
+        "id_after": "observations",
+    },
+)
+
+OBSERVATIONS_FIELD = Field(
+    title="Observações",
+    description=to_line(
+        [
+            "Informações sobre a coluna: arquitetura, decisões de limpeza, etc.",
+        ]
+    ),
+    yaml_order={
+        "id_before": "has_sensitive_data",
         "id_after": "is_in_staging",
     },
 )
@@ -143,8 +159,9 @@ IS_IN_STAGING_FIELD = Field(
             "Opções: True, False"
         ]
     ),
+    default=True,
     yaml_order={
-        "id_before": "has_sensitive_data",
+        "id_before": "observations",
         "id_after": "is_partition",
     },
 )
@@ -157,6 +174,7 @@ IS_PARTITION_FIELD = Field(
             "Opções: True, False"
         ]
     ),
+    default=False,
     yaml_order={
         "id_before": "is_in_staging",
         "id_after": None,

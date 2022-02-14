@@ -130,7 +130,7 @@ export default function Footer({ pages }) {
                 src="/img/logos/linkedin.png"
               />
               <SocialLink
-                href="https://chat.whatsapp.com/HXWgdFc1RmwCoblly5KPBZ"
+                href="https://chat.whatsapp.com/CLLFXb1ogPPDomCM6tQT22"
                 title="WhatsApp"
                 src="/img/logos/whatsapp.png"
               />
