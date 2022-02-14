@@ -171,6 +171,12 @@ schema. In this case the version should be set to the next CKAN version number.
 
     <dynamicField name="extras_*" type="text" indexed="true" stored="true" multiValued="false"/>
     <dynamicField name="res_extras_*" type="text" indexed="true" stored="true" multiValued="true"/>
+
+    <!-- BD CUSTOM FIELDS -->
+    <dynamicField name="virtual_multi_*" type="text" indexed="true" stored="true" multiValued="true"/>
+    <dynamicField name="virtual_*" type="text" indexed="true" stored="true"/>
+    <!-- END OF BD CUSTOM FIELDS -->
+
     <dynamicField name="vocab_*" type="string" indexed="true" stored="true" multiValued="true"/>
     <dynamicField name="*" type="string" indexed="true"  stored="false"/>
 </fields>

@@ -1,5 +1,7 @@
 import json
 from pathlib import Path
+import logging
+log = logging.getLogger(__name__)
 
 import ckan.plugins.toolkit as toolkit
 from ckan.logic.action.get import dataset_follower_count, package_search
@@ -213,7 +215,7 @@ def bd_dataset_search(context, data_dict):
     def get_parameter(data, bd_key, fq_key):
         value = data.get(bd_key, "")
         value = value.split(",")
-        value = " OR ".join(value)
+        value = " AND ".join(value)
         return [f"{fq_key}:({value})" if value else ""]
 
     fq = []
@@ -221,10 +223,10 @@ def bd_dataset_search(context, data_dict):
     fq += get_parameter(data_dict, "group", "groups")
     fq += get_parameter(data_dict, "resource_type", "res_type")
     fq += get_parameter(data_dict, "organization", "organization")
-    fq += get_parameter(data_dict, "entity", "res_extras_entity")
     fq += get_parameter(data_dict, "spatial_coverage", "res_extras_spatial_coverage")
     fq += get_parameter(data_dict, "temporal_coverage", "res_extras_temporal_coverage")
     fq += get_parameter(data_dict, "update_frequency", "res_extras_update_frequency")
+    fq += get_parameter(data_dict, "obs_level_entity", "virtual_multi_obs_level_entity")
 
     fq = [f for f in fq if f]
     fq = "+".join(fq)
@@ -298,7 +300,11 @@ def bd_dataset_search(context, data_dict):
     for dataset in response["datasets"]:
         entities = []
         for resource in dataset["resources"]:
+<<<<<<< HEAD
             for ol in resource.get("observation_level", {}):
+=======
+            for ol in resource.get("observation_level") or {}:
+>>>>>>> 3993e3f854a3c4d6baeed80f061cc7eccef388c1
                 if "entity" in ol:
                     res_entities = ol.get("entity")
                     entities.append(res_entities)
@@ -580,12 +586,16 @@ def bd_dataset_search(context, data_dict):
     response["datasets"] = datasets_final_order
 
     # post-process sort filters ###############################
+<<<<<<< HEAD
     
+=======
+>>>>>>> 3993e3f854a3c4d6baeed80f061cc7eccef388c1
     sort_dict = lambda dictionary: dict(
         sorted(dictionary.items(), key=lambda x: x[1], reverse=True)
     )
 
     for key in response.keys():
+<<<<<<< HEAD
         if key == "count" or key == "datasets":
             pass
         else:
@@ -593,6 +603,10 @@ def bd_dataset_search(context, data_dict):
                 response[key] = sort_dict(response[key])
             except Exception as e:
                 print("Error: ", e)
+=======
+        if isinstance(response[key], dict):
+            response[key] = sort_dict(response[key])
+>>>>>>> 3993e3f854a3c4d6baeed80f061cc7eccef388c1
 
     # post-process datasets ###############################
 

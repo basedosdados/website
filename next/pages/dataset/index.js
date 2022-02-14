@@ -284,14 +284,12 @@ export default function SearchPage({
     setParamFilters({
       ...paramFilters,
       tag: query.tag ? query.tag.split(",") : [],
-      organization: query.organization ? [query.organization] : [],
-      group: query.group ? [query.group] : [],
-      resource_type: query.resource_type ? [query.resource_type] : [],
-      entity: query.entity ? [query.entity] : [],
-      spatial_coverage: query.spatial_coverage ? [query.spatial_coverage] : [],
-      temporal_coverage: query.temporal_coverage
-        ? query.temporal_coverage.split("-")
-        : [],
+      organization: query.organization ? query.organization.split(",") : [],
+      group: query.group ? query.group.split(',') : [],
+      resource_type: query.resource_type ? query.resource_type.split(",") : [],
+      obs_level_entity: query.obs_level_entity ? query.obs_level_entity.split(",") : [],
+      spatial_coverage: query.spatial_coverage ? query.spatial_coverage.split(",") : [],
+      temporal_coverage: query.temporal_coverage ? query.temporal_coverage.split("-") : [],
     });
 
     setFilterKey(filterKey + 1);
@@ -434,7 +432,11 @@ export default function SearchPage({
             values={paramFilters.spatial_coverage}
             valueField="name"
             displayField="displayName"
+<<<<<<< HEAD
             fieldName="Cobertura espacial: continente"
+=======
+            fieldName="Cobertura espacial: Continente"
+>>>>>>> 3993e3f854a3c4d6baeed80f061cc7eccef388c1
             onChange={(values) =>
               setParamFilters({ ...paramFilters, spatial_coverage: values })
             }
@@ -446,7 +448,11 @@ export default function SearchPage({
             values={paramFilters.spatial_coverage}
             valueField="name"
             displayField="displayName"
+<<<<<<< HEAD
             fieldName="Cobertura espacial: país"
+=======
+            fieldName="Cobertura espacial: País"
+>>>>>>> 3993e3f854a3c4d6baeed80f061cc7eccef388c1
             onChange={(values) =>
               setParamFilters({ ...paramFilters, spatial_coverage: values })
             }
@@ -470,11 +476,16 @@ export default function SearchPage({
             values={paramFilters.spatial_coverage}
             valueField="name"
             displayField="displayName"
+<<<<<<< HEAD
             fieldName="Cobertura espacial: município"
+=======
+            fieldName="Cobertura espacial: Município"
+>>>>>>> 3993e3f854a3c4d6baeed80f061cc7eccef388c1
             onChange={(values) =>
               setParamFilters({ ...paramFilters, spatial_coverage: values })
             }
           />
+      {/*
           <RangeFilterAccordion
             isActive={(paramFilters.temporal_coverage || []).length > 0}
             fieldName="Cobertura temporal"
@@ -500,16 +511,17 @@ export default function SearchPage({
               });
             }}
           />
+    */}
           <CheckboxFilterAccordion
             canSearch={true}
-            isActive={(paramFilters.entity || []).length > 0}
+            isActive={(paramFilters.obs_level_entity || []).length > 0}
             choices={entities}
-            values={paramFilters.entity}
+            values={paramFilters.obs_level_entity}
             valueField="name"
             displayField="displayName"
             fieldName="Nível da observação"
             onChange={(values) =>
-              setParamFilters({ ...paramFilters, entity: values })
+              setParamFilters({ ...paramFilters, obs_level_entity: values })
             }
           />
           <CheckboxFilterAccordion
