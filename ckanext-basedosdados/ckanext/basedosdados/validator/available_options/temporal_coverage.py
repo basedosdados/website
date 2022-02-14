@@ -1,10 +1,6 @@
 from typing import Any, List, Literal, Union
 
-<<<<<<< HEAD
-from pydantic import StrictStr as Str
-=======
 from pydantic import StrictStr as Str, StrictInt as Int, conlist as ConstrainedList, conint as ConstrainedInt
->>>>>>> 3993e3f854a3c4d6baeed80f061cc7eccef388c1
 from pydantic import BaseModel, Field
 import pydantic
 import datetime
@@ -27,9 +23,6 @@ class _TemporalRange(BaseModel):
     step: ConstrainedInt(ge=1)
 
 class TemporalCoverageEnum(BaseModel):
-<<<<<<< HEAD
-    __root__: List[Str] = Field(...)
-=======
     __root__: List[_TemporalRange] = Field(...)
 
     # TODO: add a validator to guarantee ranges dont overlap
@@ -37,4 +30,3 @@ class TemporalCoverageEnum(BaseModel):
 class TemporalCoverageEnum(BaseModel): # TODO: delete this
     __root__: List[str] = Field(...)
     ''' 2012(1)2015 '''
->>>>>>> 3993e3f854a3c4d6baeed80f061cc7eccef388c1
