@@ -298,7 +298,7 @@ def bd_dataset_search(context, data_dict):
     for dataset in response["datasets"]:
         entities = []
         for resource in dataset["resources"]:
-            for ol in resource.get("observation_level", {}):
+            for ol in resource.get("observation_level") or {}:
                 if "entity" in ol:
                     res_entities = ol.get("entity")
                     entities.append(res_entities)
