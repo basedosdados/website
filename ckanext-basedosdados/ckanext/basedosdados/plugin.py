@@ -29,11 +29,11 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
     def before_index(self, fields_to_index):
         # virtual_multi_obs_level_entity
         entities = set()
-        for resource in fields_to_index['res_extras_observation_level']:
-            entity = set(e.get('entity') for e in resource if 'entity' in e)
+        for resource in fields_to_index["res_extras_observation_level"]:
+            entity = set(e.get("entity") for e in resource if "entity" in e)
             entities |= entity
-        fields_to_index['virtual_multi_obs_level_entity'] = list(entities)
-        del fields_to_index['res_extras_observation_level']
+        fields_to_index["virtual_multi_obs_level_entity"] = list(entities)
+        # del fields_to_index['res_extras_observation_level']
 
         return fields_to_index
 
