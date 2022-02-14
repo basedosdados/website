@@ -69,7 +69,7 @@ restart_services() {
         set -e ; cd ~/basedosdados/
         if [[ ! -f wait-for-200.sh ]]; then curl https://raw.githubusercontent.com/cec/wait-for-endpoint/master/wait-for-endpoint.sh > wait-for-200.sh && chmod +x wait-for-200.sh; fi
         if [[ ! -f wait-for-it.sh ]]; then curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > wait-for-it.sh && chmod +x wait-for-it.sh; fi
-        export HOST_NAME=$HOST_NAME
+        export HOSTNAME=$HOSTNAME
         docker-compose rm -sf ckan next django autoheal
         docker-compose up --no-build -d
         docker-compose run django python manage.py collectstatic

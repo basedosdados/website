@@ -9,8 +9,8 @@ RUN apk add git
 # RUN git clone https://github.com/ckan/ckanext-repo.git
 # RUN git clone https://github.com/ckan/ckanext-scheming.git
 # RUN git clone https://github.com/NaturalHistoryMuseum/ckanext-contact.git
-RUN git clone https://github.com/ckan/ckanext-googleanalytics.git
-RUN git clone https://github.com/stadt-karlsruhe/ckanext-discovery.git
+# RUN git clone https://github.com/ckan/ckanext-googleanalytics.git
+# RUN git clone https://github.com/stadt-karlsruhe/ckanext-discovery.git
 
 ################ BUILDER #################
 FROM python:3.9 as builder
@@ -85,9 +85,9 @@ RUN --mount=type=cache,target=/var/lib/apt,id=apt_list2 --mount=type=cache,targe
 COPY --from=extensions /extensions /app/extensions
 COPY --from=builder /venv /venv
 
-# Install extensions
-RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
-    pip install `for i in /app/extensions/*; do echo -e $i; done`
+# # Install extensions
+# RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
+#     pip install `for i in /app/extensions/*; do echo -e $i; done`
 #
 # Install debug/dev goodies
 # For %debug% jinja directive | for bug fix in werkzeug debug scope | for better stack traces
