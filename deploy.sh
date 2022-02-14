@@ -2,6 +2,8 @@
 
 cd $(git rev-parse --show-toplevel)
 
+HOST=${HOST:-basedosdados.org}
+
 SSH="ssh -o StrictHostKeyChecking=no -i ~/.ssh/BD.pem $HOST"
 VTAG=":`date +%H.%M.%S`" # Simple mechanism to force image update
 
@@ -38,7 +40,7 @@ build_config() {
     cp configs/docker-compose.override.prod.yaml build/docker-compose.override.yaml
     cp utils/backup-database.sh build/
     cp configs/nginx.conf build/
-    cp .env.prod build/.env && echo "VTAG=$VTAG" >> build/.env
+    cp .env.prod build/.env && echo -e "VTAG=$VTAG\nHOSTNAME=$HOST" >> build/.env
 
     cp -r experimental/monitoring build/
 
@@ -65,8 +67,8 @@ load_images() {
 }
 
 restart_services() {
-    $SSH  "
-        set -e ; cd ~/basedosdados/
+    $SSH  '
+        set -ex ; cd ~/basedosdados/
         if [[ ! -f wait-for-200.sh ]]; then curl https://raw.githubusercontent.com/cec/wait-for-endpoint/master/wait-for-endpoint.sh > wait-for-200.sh && chmod +x wait-for-200.sh; fi
         if [[ ! -f wait-for-it.sh ]]; then curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > wait-for-it.sh && chmod +x wait-for-it.sh; fi
         export HOSTNAME=$HOSTNAME
@@ -75,7 +77,7 @@ restart_services() {
         docker-compose run django python manage.py collectstatic
         docker-compose ps
         docker-compose restart nginx
-    "
+    '
 }
 
 rebuild_index() {

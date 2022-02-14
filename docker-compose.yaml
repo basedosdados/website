@@ -75,8 +75,6 @@ services:
 
   django:
     image: "bdd/django${VTAG}"
-    build:
-      context: django
     environment:
       - DATABASE_URL=postgres://django:django@django-db:5432/django?conn_max_age=600
       - DEBUG=False

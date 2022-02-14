@@ -42,7 +42,7 @@ RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
 ###################
 
 RUN --mount=type=cache,target=/root/.cache/pip/,id=pip \
-    pip install ipdb flask_debugtoolbar gunicorn
+    pip install ipdb flask_debugtoolbar gunicorn cryptography
 
 # INSTALL EXTENSIONS
 
