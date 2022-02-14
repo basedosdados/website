@@ -226,7 +226,7 @@ def bd_dataset_search(context, data_dict):
     fq += get_parameter(data_dict, "spatial_coverage", "res_extras_spatial_coverage")
     fq += get_parameter(data_dict, "temporal_coverage", "res_extras_temporal_coverage")
     fq += get_parameter(data_dict, "update_frequency", "res_extras_update_frequency")
-    fq += get_parameter(data_dict, "obs_level_entity", "res_virtual_multi_obs_level_entity")
+    fq += get_parameter(data_dict, "obs_level_entity", "virtual_multi_obs_level_entity")
 
     fq = [f for f in fq if f]
     fq = "+".join(fq)
