@@ -16,6 +16,7 @@ import BigTitle from "../components/atoms/BigTitle";
 import DatabaseCard from "../components/organisms/DatabaseCard";
 import { useState } from "react";
 import CardCatalog from "../components/organisms/CardCatalog";
+import ThemeCatalog from "../components/organisms/ThemeCatalog";
 import Title from "../components/atoms/Title";
 import Typist from "react-typist";
 import {
@@ -74,7 +75,7 @@ function HeroText({ children, iconUrl, height = "100px" }) {
   );
 }
 
-const cardThemes = [0,1,2,3,4,5,6,7,8,9]
+const cardThemes = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
 
 function Hero() {
   const [search, setSearch] = useState();
@@ -86,10 +87,12 @@ function Hero() {
 
   return (
     <VStack width="100%">
-      <VStack 
-        height="100%"
+      <VStack
+          width="100%"
+          height="100%"
       >
         <VStack
+          width="100%"
           height="100%"
           justifyContent="center"
           alignItems="center"
@@ -164,29 +167,30 @@ function Hero() {
           </VStack>
 
           {/*search theme*/}
-          <Stack
-            justifyContent="center"
-            alignItems="center"
-            direction="row"
-            gap="20px"
+          <VStack
             width="100%"
-            padding="0 100px"
+            position="relative"
           >
-            {cardThemes.map((elm) => (
-              <Center
-                cursor="pointer"
-                width="100px"
-                height="100px"
-                borderRadius="14px"
-                backgroundColor="#FFF"
-                boxShadow="0px 1px 6px rgba(0, 0, 0, 0.25)"
-                _hover={{ transform:"scale(1.1)", backgroundColor:"#2B8C4D" }}
-                transition="all 0.5s" 
-              >
-                {elm}
-              </Center>
-            ))}
-          </Stack>
+            <ThemeCatalog>
+              {cardThemes.map((elm) => (
+                <Center
+                  cursor="pointer"
+                  width="100px"
+                  minWidth="100px"
+                  height="100px"
+                  minHeight="100px"
+                  borderRadius="14px"
+                  backgroundColor="#FFF"
+                  boxShadow="0px 1px 6px rgba(0, 0, 0, 0.25)"
+                  _hover={{ transform:"scale(1.1)", backgroundColor:"#2B8C4D" }}
+                  transition="all 0.5s" 
+                  margin="10px 0"
+                >
+                  {elm}
+                </Center>
+              ))}
+            </ThemeCatalog>
+          </VStack>
         </VStack>
 
         {/*Google cloud icon*/}
