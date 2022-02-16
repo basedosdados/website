@@ -222,12 +222,16 @@ export default function Menu({ pages = [] }) {
               onClick={menuDisclosure.onOpen}
               style={{
                 maxWidth: "20px",
+                minWidth: "35px",
+                minHeight: "35px",
                 alignSelf: "flex-start",
                 flex: 1,
                 position: "fixed",
-                left: 30,
-                top: 27,
-                color: "black",
+                left: 0,
+                top: 0,
+                margin: "15px 0 0 10px",
+                color: "#252A32",
+                cursor: "pointer",
               }}
               icon={faBars}
             />

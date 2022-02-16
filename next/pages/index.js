@@ -14,7 +14,7 @@ import ControlledInput from "../components/atoms/ControlledInput";
 import SectionText from "../components/atoms/SectionText";
 import BigTitle from "../components/atoms/BigTitle";
 import DatabaseCard from "../components/organisms/DatabaseCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CardCatalog from "../components/organisms/CardCatalog";
 import ThemeCatalog from "../components/organisms/ThemeCatalog";
 import Title from "../components/atoms/Title";
@@ -75,11 +75,15 @@ function HeroText({ children, iconUrl, height = "100px" }) {
   );
 }
 
-const cardThemes = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
 
 function Hero() {
   const [search, setSearch] = useState();
+  const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
+  
+  useEffect(() => {
+    setIsMobileMod(isMobile)
+  },[isMobile])
 
   function openSearchLink() {
     return window.open(`/dataset?q=${search}`, "_self");
@@ -112,9 +116,10 @@ function Hero() {
               fontFamily="Ubuntu"
               flex="2"
               fontSize="38px"
-              letterSpacing="2px"
+              letterSpacing={{ base:"0", lg: "2px" }}
+              textAlign="center"
               marginStart="0px !important"
-              marginBottom="50px"
+              marginBottom={ isMobileMod ? "30px" : "50px" }
             >
               Encontre os dados que você precisa
             </BigTitle>
@@ -157,8 +162,10 @@ function Hero() {
                   </Box>
                 }
               />
-              <HStack paddingLeft="40px">
-                <SectionText fontSize="14px">Termos populares: </SectionText>
+              <HStack paddingLeft={ isMobileMod ? "20px" : "40px" }>
+                {!isMobileMod && 
+                  <SectionText fontSize="14px">Termos populares: </SectionText>
+                }
                 <ThemeTag name="lei" />
                 <ThemeTag name="mortalidade" />
                 <ThemeTag name="COVID19" />
@@ -171,25 +178,7 @@ function Hero() {
             width="100%"
             position="relative"
           >
-            <ThemeCatalog>
-              {cardThemes.map((elm) => (
-                <Center
-                  cursor="pointer"
-                  width="100px"
-                  minWidth="100px"
-                  height="100px"
-                  minHeight="100px"
-                  borderRadius="14px"
-                  backgroundColor="#FFF"
-                  boxShadow="0px 1px 6px rgba(0, 0, 0, 0.25)"
-                  _hover={{ transform:"scale(1.1)", backgroundColor:"#2B8C4D" }}
-                  transition="all 0.5s" 
-                  margin="10px 0"
-                >
-                  {elm}
-                </Center>
-              ))}
-            </ThemeCatalog>
+            <ThemeCatalog />
           </VStack>
         </VStack>
 
@@ -231,33 +220,7 @@ function CatalogNews({ recentDatalakeDatasets }) {
       paddingBottom="160px"
       position="relative"
     >
-      <CardCatalog
-        title={
-          <Stack direction={{ base: "column", lg: "row" }}>
-            <div>Novidades no </div> <i>datalake</i>{" "}
-            <ChakraImage
-              paddingLeft="10px"
-              height={{ base: "80px", lg: "50px" }}
-              width={{ base: "200px", lg: "auto" }}
-              src="/img/logo_plus.png"
-            />
-          </Stack>
-        }
-        text={
-          <div>
-            Onde você pode acessar <b>tabelas tratadas e prontas para uso</b> de
-            forma gratuita.{" "}
-            <LinkDash
-              fontWeight="700"
-              dash={false}
-              textDecoration="none"
-              href="https://basedosdados.github.io/mais/"
-            >
-              Entenda.
-            </LinkDash>
-          </div>
-        }
-      >
+      <CardCatalog>
         {recentDatalakeDatasets.map((d) => (
           <DatabaseCard
             link={`/dataset/${d.name}`}
