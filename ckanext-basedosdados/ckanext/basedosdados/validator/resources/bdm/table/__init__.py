@@ -1,12 +1,13 @@
 from datetime import datetime
 from typing import List, Literal, Optional, Set, Union
+from basedosdados.validator.available_options.spatial_coverage import Area as SpatialCoverageArea, SpatialCoverageAreas
 
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options import (
     TemporalCoverageEnum,
     TimeUnitEnum,
 )
-from ckanext.basedosdados.validator import SpatialCoverage, ObservationLevel
+from ckanext.basedosdados.validator import ObservationLevel
 from ckanext.basedosdados.validator.resources import BdmColumns, _CkanDefaultResource
 from ckanext.basedosdados.validator.resources.bdm import (
     LastUpdated,
@@ -27,7 +28,7 @@ class BdmTable(_CkanDefaultResource):
     dataset_id                : Str                                              = DATASET_ID_FIELD
     table_id                  : Str                                              = TABLE_ID_FIELD
     description               : Optional[Str]                                    = DESCRIPTION_FIELD
-    spatial_coverage          : Optional[List[SpatialCoverage]]                  = SPATIAL_COVERAGE_FIELD
+    spatial_coverage          : Optional[List[SpatialCoverageArea]]              = SPATIAL_COVERAGE_FIELD
     temporal_coverage         : Optional[TemporalCoverageEnum]                   = TEMPORAL_COVERAGE_FIELD
     update_frequency          : Optional[TimeUnitEnum]                           = UPDATE_FREQUENCY_FIELD
     observation_level         : Optional[List[ObservationLevel]]                 = OBSERVATION_LEVEL_FIELD
@@ -51,3 +52,6 @@ class BdmTable(_CkanDefaultResource):
     metadata_modified         : Optional[datetime]                               = METADATA_MODIFIED_FIELD #TODO: can we rename this to last_updated and make it a derived field for dataset and all resources?
     title                     : Optional[Str]                                    = TITLE_FIELD
     # fmt: on
+    @validator('spatial_coverage', pre=True)
+    def get_area_from_id(self, value):
+        return SpatialCoverageAreas[value]
