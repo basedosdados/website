@@ -1,28 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { VStack, Center } from "@chakra-ui/react";
+import { VStack, Center, Image } from "@chakra-ui/react";
 import dynamic from 'next/dynamic';
 import { slidesToShowPlugin, slidesToScrollPlugin, autoplayPlugin } from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import { getGroupList } from "../../pages/api/groups"
+import { getRecentDatalakeDatasets } from "../../pages/api/datasets";
+import DatabaseCard from "./DatabaseCard";
 
 const Carousel = dynamic(
   () => import('@brainhubeu/react-carousel'),
   { ssr: false },
- )
+)
 
-const themes = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
-
-function Themes () {
-  const isMobile = useCheckMobile();
-  const [isMobileMod, setIsMobileMod] = useState(false)
+function Themes ({ isMobileMod }) {
+  const [listThemes, setListThemes] = useState([])
 
   useEffect(() => {
-    setIsMobileMod(isMobile)
-  },[isMobile])
+    getGroupList().then(res => {
+      setListThemes(res.data.result)
+    })
+  },[])
 
   return (
     <Carousel
-      itemWidth={ isMobileMod ? "50px" : "100px" }
+      itemWidth={ isMobileMod ? "45px" : "90px" }
       offset={20}
       animationSpeed={1000}
       plugins={[
@@ -48,13 +50,14 @@ function Themes () {
         }
       ]}
     >
-      {themes.map((elm) => (
+      {listThemes && listThemes.map((elm) => (
         <Center
+          key={elm.id}
           cursor="pointer"
-          width={ isMobileMod ? "50px" : "100px" }
-          minWidth={ isMobileMod ? "50px" : "100px" }
-          height={ isMobileMod ? "50px" : "100px" }
-          minHeight={ isMobileMod ? "50px" : "100px" }
+          width={ isMobileMod ? "45px" : "90px" }
+          minWidth={ isMobileMod ? "45px" : "90px" }
+          height={ isMobileMod ? "45px" : "90px" }
+          minHeight={ isMobileMod ? "45px" : "90px" }
           borderRadius="14px"
           backgroundColor="#FFF"
           boxShadow="0px 1px 6px rgba(0, 0, 0, 0.25)"
@@ -62,7 +65,13 @@ function Themes () {
           transition="all 0.5s" 
           margin="10px 0"
         >
-          {elm}
+          <Image
+            width="100%"
+            height="100%"
+            alt={`${elm.name}`}
+            src={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${elm.name}.svg`} 
+          >
+          </Image>
         </Center>
       ))}
     </Carousel>
@@ -70,20 +79,77 @@ function Themes () {
 }
 
 
-function CardThemes ({ Children }) {
+function CardThemes ({ isMobileMod }) {
+  const [recentThemes, setRecentThemes] = useState([])
+
+  useEffect(() => {
+    try {
+      getRecentDatalakeDatasets().then(res => {
+        setRecentThemes(res)
+      })
+    } catch {
+      setRecentThemes('')
+    }
+  },[])
+
+  recentThemes ? console.log(recentThemes) : ''
 
   return (
     <VStack
       width="100%"
-      padding="60px 00px"
+      minWidth="280px"
       alignItems="flex-start"
-      spacing={5}
-      paddingTop="75px"
-      paddingBottom="160px"
+      padding="25px 0"
+      margin="50px 0 !important"
+      borderRadius="15px"
       position="relative"
+      backgroundColor="#fbfbfb"
     >
-      <Carousel>
-        {Children}
+      <Carousel
+        itemWidth={ isMobileMod ? "150px" : "300px"}
+        offset={20}
+        animationSpeed={1000}
+        plugins={[
+          'arrows',
+          'infinite',
+          {
+            resolve: slidesToShowPlugin,
+            options: {
+              numberOfSlides: 5
+            }
+          },
+          {
+            resolve: autoplayPlugin,
+            options: {
+              interval: 8000,
+            }
+          }
+        ]}
+      >
+        {recentThemes && recentThemes.map((elm) => (
+          <DatabaseCard
+            link={`/dataset/${elm.name}`}
+            name={elm.title}
+            organization={elm.organization.title}
+            organizationSlug={elm.organization.name}
+            tags={elm.tags.map((g) => g.name)}
+            size={
+              elm.resources.filter((r) => r.bdm_file_size && r.bdm_file_size > 0)
+                .length > 0
+                ? elm.resources.filter((r) => r.bdm_file_size)[0].bdm_file_size
+                : null
+            }
+            tableNum={
+              elm.resources.filter((r) => r.resource_type === "bdm_table").length
+            }
+            externalLinkNum={
+              elm.resources.filter((r) => r.resource_type === "external_link")
+                .length
+            }
+            updatedSince={elm.metadata_modified}
+            categories={elm.groups.map((g) => g.name)}
+          />
+          ))}
       </Carousel>
     </VStack>
   )
@@ -91,13 +157,21 @@ function CardThemes ({ Children }) {
 
 
 export default function ThemeCatalog () {
+  const [isMobileMod, setIsMobileMod] = useState(false)
+  const isMobile = useCheckMobile();
+  
+  useEffect(() => {
+    setIsMobileMod(isMobile)
+  },[isMobile])
+
   return (
     <VStack
       width="100%"
       alignItems="center"
       gap="50px"
     >
-      <Themes/>
+      <Themes isMobileMod={isMobileMod} />
+      <CardThemes isMobileMod={isMobileMod} />
     </VStack>
   )
 }

@@ -11,7 +11,7 @@ export function Card({
     <Box
       width="280px"
       height="310px"
-      borderRadius="10px"
+      borderRadius="12px"
       boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
       backgroundColor="#FFFFFF"
       padding={padding}

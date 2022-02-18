@@ -48,6 +48,7 @@ export async function getStaticProps(context) {
   });
 }
 
+
 function HeroText({ children, iconUrl, height = "100px" }) {
   return (
     <VStack alignItems="center" justifyContent="center" maxWidth="400px">
@@ -175,9 +176,20 @@ function Hero() {
 
           {/*search theme*/}
           <VStack
+            marginTop={"80px !important"}
             width="100%"
             position="relative"
           >
+            <Title
+              fontSize="25px"
+              fontWeigth="400"
+              minHeight="30px"
+              marginBottom="40px"
+              color="#9c9c9c"
+              letterSpacing="1px"
+            >
+              Busque por tema
+            </Title>
             <ThemeCatalog />
           </VStack>
         </VStack>
@@ -209,47 +221,6 @@ function Hero() {
   );
 }
 
-function CatalogNews({ recentDatalakeDatasets }) {
-  return (
-    <VStack
-      width="100%"
-      padding="60px 00px"
-      alignItems="flex-start"
-      spacing={5}
-      paddingTop="75px"
-      paddingBottom="160px"
-      position="relative"
-    >
-      <CardCatalog>
-        {recentDatalakeDatasets.map((d) => (
-          <DatabaseCard
-            link={`/dataset/${d.name}`}
-            name={d.title}
-            organization={d.organization.title}
-            organizationSlug={d.organization.name}
-            tags={d.tags.map((g) => g.name)}
-            size={
-              d.resources.filter((r) => r.bdm_file_size && r.bdm_file_size > 0)
-                .length > 0
-                ? d.resources.filter((r) => r.bdm_file_size)[0].bdm_file_size
-                : null
-            }
-            tableNum={
-              d.resources.filter((r) => r.resource_type === "bdm_table").length
-            }
-            externalLinkNum={
-              d.resources.filter((r) => r.resource_type === "external_link")
-                .length
-            }
-            updatedSince={d.metadata_modified}
-            categories={d.groups.map((g) => g.name)}
-            isPlus={isBdPlus(d)}
-          />
-        ))}
-      </CardCatalog>
-    </VStack>
-  );
-}
 
 function ImageSection({ leftColumn, rightColumn, isReversed = false }) {
   return (
@@ -689,11 +660,7 @@ function Support({ pages }) {
   );
 }
 
-export default function Home({
-  pages,
-  popularDatasets,
-  recentDatalakeDatasets,
-}) {
+export default function Home({ pages }) {
   return (
     <MainPageTemplate backgroundColor="#FFFFFF" pages={pages}>
       <VStack
@@ -705,12 +672,6 @@ export default function Home({
         position="relative"
       >
         <Hero />
-      </VStack>
-      <VStack id="catalog" padding="0px 5%" marginBottom="-100px">
-        <CatalogNews
-          popularDatasets={popularDatasets}
-          recentDatalakeDatasets={recentDatalakeDatasets}
-        />
       </VStack>
       <BePartner />
       <VStack
