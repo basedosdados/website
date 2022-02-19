@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import List, Literal, Optional, Set, Union
-from basedosdados.validator.available_options.spatial_coverage import Area as SpatialCoverageArea, SpatialCoverageAreas
+from ckanext.basedosdados.validator.available_options.spatial_coverage import Area as SpatialCoverageArea, SpatialCoverageAreas
 
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options import (
@@ -52,6 +52,7 @@ class BdmTable(_CkanDefaultResource):
     metadata_modified         : Optional[datetime]                               = METADATA_MODIFIED_FIELD #TODO: can we rename this to last_updated and make it a derived field for dataset and all resources?
     title                     : Optional[Str]                                    = TITLE_FIELD
     # fmt: on
+    
     @validator('spatial_coverage', pre=True)
-    def get_area_from_id(self, value):
+    def get_area_from_id(cls, value):
         return SpatialCoverageAreas[value]
