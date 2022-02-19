@@ -7,3 +7,4 @@ jsonschema
 typing_extensions
 pytest
 jsonref
+pandas
