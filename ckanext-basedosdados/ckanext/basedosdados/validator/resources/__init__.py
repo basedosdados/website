@@ -1,9 +1,13 @@
 # -------------------------------------
+# Validators reused across resource types
+# -------------------------------------
+
+from ckanext.basedosdados.validator.available_options.spatial_coverage import SpatialCoverageArea
+
+# -------------------------------------
 # RESOUCES CKAN DEFAULT
 # -------------------------------------
-from ckanext.basedosdados.validator.resources.ckan_default.resource import (
-    _CkanDefaultResource,  # this has to be the first because of import initializations
-)
+from ckanext.basedosdados.validator.resources.ckan_default.resource import _CkanDefaultResource  # this has to be the first because of import initializations
 
 # -------------------------------------
 # RESOUCES BDM
@@ -36,3 +40,4 @@ RESOURCE_TYPES = [
     "information_request",
     "bdm_dictionary",
 ]  # TODO: add something that test that subclasses obey this constant
+

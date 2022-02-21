@@ -4,71 +4,7 @@ from pydantic import BaseModel
 import pandas
 import importlib.resources
 
-def build_areas_from_csv(csv_path):
-    df = pandas.read_csv(csv_path)['id label__pt'.split()]
-    def create_area(row):
-        key = row['id']
-        value = {'label': {k.removeprefix('label__'): v for k, v in row.items() if k.startswith('label__')}}
-        Area(id=key, **value)
-    for row in df.to_dict(orient='records'):
-        create_area(row) 
-
-SpatialCoverageAreas = {}
-class Area(BaseModel):
-    id: str
-    label: Dict[str, str]
-
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        SpatialCoverageAreas[self.id] = self
-
-    @property
-    def _tree_id(self):
-        return self.id if self.id != 'world' else ''
-
-    def parent(self):
-        if self.id == 'world': return None
-        if not '.' in self._tree_id: return SpatialCoverageAreas['world']
-        return SpatialCoverageAreas[self._tree_id.rsplit('.', 1)[0]]
-
-    def children(self):
-        return [SpatialCoverageAreas[area] for area in SpatialCoverageAreas if area.startswith(self._tree_id)]
-
-    def __contains__(a, b):
-        if isinstance(b, AreaUnion):
-            return all(b_sub in a for b_sub in b.areas)
-        return b.id.startswith(a._tree_id)
-
-    def __add__(a, b):
-        if b in a: return a
-        if a in b: return b
-        return AreaUnion(areas=[a,b])
-
-Area(id='world', label={'pt': 'Mundo'})
-
-class AreaUnion(BaseModel): 
-    areas: List[Area]
-    def __contains__(self, b):
-        for a in self.areas:
-            if b in a: return True
-        return False
-
-    def __add__(self, b):
-        if b in self: return self
-        areas = [a for a in self.areas if a not in b]
-        areas.append(b)
-        return AreaUnion(areas=areas)
-        # TODO: check if union can be represented by fewer higher level Areas. Ex rj + sp + mg + ... = BR
-
-
-import ckanext.basedosdados.validator.available_options.spatial_coverage as spatial_coverage
-with importlib.resources.path(spatial_coverage, 'municipio_brazil.csv') as path: # TODO: mudar isso aqui pra ler o arquivo certo
-    build_areas_from_csv(path)
-
-
-
-
+from ._tmp import *
 
 ################### TODO: delete below
 
