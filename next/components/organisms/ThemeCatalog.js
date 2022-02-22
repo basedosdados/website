@@ -5,7 +5,7 @@ import { slidesToShowPlugin, slidesToScrollPlugin, autoplayPlugin } from "@brain
 import "@brainhubeu/react-carousel/lib/style.css";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { getGroupList } from "../../pages/api/groups"
-import { getRecentDatalakeDatasets } from "../../pages/api/datasets";
+import { getRecentDatalakeDatasetsByTheme } from "../../pages/api/datasets";
 import DatabaseCard from "./DatabaseCard";
 
 const Carousel = dynamic(
@@ -13,8 +13,18 @@ const Carousel = dynamic(
   { ssr: false },
 )
 
-function Themes ({ isMobileMod }) {
+function Themes ({ isMobileMod, newRecentDataLakeDataSets }) {
   const [listThemes, setListThemes] = useState([])
+  const [selectedTheme, setSelectedTheme] = useState()
+  const [autoPlay, setAutoPlay] = useState(false)
+
+  const searchTheme = (elm) => {
+    setSelectedTheme(elm.name)
+    setAutoPlay(true)
+    newRecentDataLakeDataSets({
+      name: elm.name,
+    })
+  }
 
   useEffect(() => {
     getGroupList().then(res => {
@@ -23,81 +33,72 @@ function Themes ({ isMobileMod }) {
   },[])
 
   return (
-    <Carousel
-      itemWidth={ isMobileMod ? "45px" : "90px" }
-      offset={20}
-      animationSpeed={1000}
-      plugins={[
-        'arrows',
-        'infinite',
-        {
-          resolve: slidesToShowPlugin,
-          options: {
-            numberOfSlides: 22
-          }
-        },
-        {
-          resolve: slidesToScrollPlugin,
-          options: {
-            numberOfSlides: 10,
-          },
-        },
-        {
-          resolve: autoplayPlugin,
-          options: {
-            interval: 5000,
-          }
-        }
-      ]}
+    <Center
+      width="100%"
+      minWidth="400px"
     >
-      {listThemes && listThemes.map((elm) => (
-        <Center
-          key={elm.id}
-          cursor="pointer"
-          width={ isMobileMod ? "45px" : "90px" }
-          minWidth={ isMobileMod ? "45px" : "90px" }
-          height={ isMobileMod ? "45px" : "90px" }
-          minHeight={ isMobileMod ? "45px" : "90px" }
-          borderRadius="14px"
-          backgroundColor="#FFF"
-          boxShadow="0px 1px 6px rgba(0, 0, 0, 0.25)"
-          _hover={{ transform:"scale(1.1)", backgroundColor:"#2B8C4D" }}
-          transition="all 0.5s" 
-          margin="10px 0"
-        >
-          <Image
-            width="100%"
-            height="100%"
-            alt={`${elm.name}`}
-            src={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${elm.name}.svg`} 
+      <Carousel
+        itemWidth={ isMobileMod ? "45px" : "90px" }
+        offset={20}
+        animationSpeed={1000}
+        stopAutoPlayOnHover={autoPlay}
+        plugins={[ "arrows",
+          {
+            resolve: slidesToShowPlugin,
+            options: {
+              numberOfSlides: listThemes.length
+            }
+          },
+          {
+            resolve: slidesToScrollPlugin,
+            options: {
+              numberOfSlides: listThemes.length/2,
+            },
+          },
+          {
+            resolve: autoplayPlugin,
+            options: {
+              interval: 5000,
+            }
+          }
+        ]}
+      >
+        {listThemes && listThemes.map((elm) => (
+          <Center
+            onClick={() => searchTheme(elm)}
+            key={elm.id}
+            cursor="pointer"
+            width={ isMobileMod ? "45px" : "90px" }
+            minWidth={ isMobileMod ? "45px" : "90px" }
+            height={ isMobileMod ? "45px" : "90px" }
+            minHeight={ isMobileMod ? "45px" : "90px" }
+            borderRadius="14px"
+            backgroundColor={ selectedTheme === elm.name ? "#2B8C4D" : "FFF"} 
+            boxShadow="0px 1px 6px rgba(0, 0, 0, 0.25)"
+            _hover={{ transform:"scale(1.1)", backgroundColor:"#2B8C4D" }}
+            transition="all 0.5s" 
+            margin="10px 0"
           >
-          </Image>
-        </Center>
-      ))}
-    </Carousel>
+            <Image
+              width="100%"
+              height="100%"
+              alt={`${elm.name}`}
+              src={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${elm.name}.svg`} 
+            />
+          </Center>
+        ))}
+      </Carousel>
+    </Center>
   )
 }
 
 
-function CardThemes ({ isMobileMod }) {
-  const [recentThemes, setRecentThemes] = useState([])
-
-  useEffect(() => {
-    try {
-      getRecentDatalakeDatasets().then(res => {
-        setRecentThemes(res)
-      })
-    } catch {
-      setRecentThemes('')
-    }
-  },[])
-
-  recentThemes ? console.log(recentThemes) : ''
+function CardThemes ({ isMobileMod, recentThemes }) {
 
   return (
     <VStack
       width="100%"
-      minWidth="280px"
+      minWidth="400px"
       alignItems="flex-start"
       padding="25px 0"
       margin="50px 0 !important"
@@ -110,12 +111,11 @@ function CardThemes ({ isMobileMod }) {
         offset={20}
         animationSpeed={1000}
         plugins={[
-          'arrows',
-          'infinite',
+          "arrows",
           {
             resolve: slidesToShowPlugin,
             options: {
-              numberOfSlides: 5
+              numberOfSlides: recentThemes.length
             }
           },
           {
@@ -155,23 +155,39 @@ function CardThemes ({ isMobileMod }) {
   )
 }
 
-
-export default function ThemeCatalog () {
-  const [isMobileMod, setIsMobileMod] = useState(false)
+export default function ThemeCatalog ({ recentDatalakeDatasets }) {
+  const [recentThemes, setRecentThemes] = useState([])
   const isMobile = useCheckMobile();
-  
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  },[isMobile])
 
+  useEffect(() => {
+    if(recentDatalakeDatasets) {
+      setRecentThemes(recentDatalakeDatasets)
+    } else {
+      setRecentThemes()
+    }
+  },[])
+
+  const newRecentDataLake = (elm) => {
+    return getRecentDatalakeDatasetsByTheme(elm.name)
+      .then(res => {
+        setRecentThemes(res)
+      })
+  }
   return (
     <VStack
       width="100%"
       alignItems="center"
       gap="50px"
     >
-      <Themes isMobileMod={isMobileMod} />
-      <CardThemes isMobileMod={isMobileMod} />
+      <Themes
+        newRecentDataLakeDataSets={newRecentDataLake}
+        isMobileMod={isMobile} 
+      />
+
+      <CardThemes 
+        isMobileMod={isMobile} 
+        recentThemes={recentThemes} 
+      />
     </VStack>
   )
 }

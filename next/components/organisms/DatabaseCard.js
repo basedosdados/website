@@ -3,6 +3,7 @@ import { HStack, Image, VStack } from "@chakra-ui/react";
 import Title from "../atoms/Title";
 import Subtitle from "../atoms/Subtitle";
 import { CategoryIcon } from "../atoms/CategoryIcon";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import Link from "../atoms/Link";
 import { ThemeTag } from "../atoms/ThemeTag";
 
@@ -20,6 +21,7 @@ export default function DatabaseCard({
   link,
   isPlus = false,
 }) {
+  const isMobile = useCheckMobile();
   const databaseInfo = [];
 
   let sizeLabel;
@@ -32,7 +34,11 @@ export default function DatabaseCard({
   }
 
   databaseInfo.push(
-    <HStack whiteSpace="nowrap">
+    <HStack
+      whiteSpace="nowrap" 
+      fontSize={isMobile ? "10px" : "14px"}
+      color={tableNum === 0 ? "#C4C4C4" : "#42B0FF" }
+    >
       <b>{tableNum} tabelas tratadas </b>
       <Image
         height="15px"
@@ -43,7 +49,7 @@ export default function DatabaseCard({
     </HStack>
   );
 
-  if (externalLinkNum) databaseInfo.push(externalLinkNum + " links externos");
+  if (externalLinkNum) databaseInfo.push(externalLinkNum + " fontes originais");
 
   return (
     <Card
@@ -61,29 +67,47 @@ export default function DatabaseCard({
       ]}
       spacing={0}
     >
-      <Link href={link}>
-        <Title fontSize="16px" minHeight="60px" marginBottom="15px">
+      <Link 
+        letterSpacing="1px"
+        href={link}
+      >
+        <Title 
+          fontSize={isMobile ? "14px" : "16px"}
+          lineHeight={isMobile ? "15px" : "23px"}
+          textOverflow="ellipsis"
+          marginBottom="10px"
+          noOfLines={2}
+        >
           {name}
         </Title>
       </Link>
       <Link href={`/dataset?organization=${organizationSlug}`}>
-        <Subtitle>{organization}</Subtitle>
+        <Subtitle
+          noOfLines={2}
+          lineHeight={isMobile ? "12px" : "18px"}
+          textOverflow="ellipsis"
+          letterSpacing="1px"
+          fontSize={isMobile ? "10px" : "12px"}
+        >{organization}</Subtitle>
       </Link>
-      <HStack
-        width="100%"
-        overflowX="auto"
-        className="no-scrollbar"
-        paddingTop="15px"
-      >
-        {tags.slice(0, tags.length > 3 ? 3 : tags.length).map((t) => (
-          <ThemeTag name={t} />
-        ))}
-      </HStack>
       <VStack spacing={1} align="flex-start" marginTop="auto">
+        <HStack
+          width="100%"
+          overflowX="auto"
+          className="no-scrollbar"
+          margin={isMobile ? "5px 0 0 0" : "0 0 25px"}
+        >
+          {tags.slice(0, tags.length > isMobile ? 2 : 3 ? isMobile ? 2 : 3 : tags.length).map((t) => (
+            <ThemeTag name={t} />
+          ))}
+        </HStack>
         {databaseInfo.map((item, index) => (
-          <>
-            <Subtitle color="#252A32">{item}</Subtitle>
-          </>
+          <Subtitle 
+            fontSize={isMobile ? "10px" : "12px"}
+            color="#252A32"
+          >
+            {item}
+          </Subtitle>
         ))}
       </VStack>
     </Card>

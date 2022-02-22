@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Center,
   HStack,
   Stack,
   Text,
@@ -48,7 +47,6 @@ export async function getStaticProps(context) {
   });
 }
 
-
 function HeroText({ children, iconUrl, height = "100px" }) {
   return (
     <VStack alignItems="center" justifyContent="center" maxWidth="400px">
@@ -77,11 +75,11 @@ function HeroText({ children, iconUrl, height = "100px" }) {
 }
 
 
-function Hero() {
+function Hero({ recentDatalakeDatasets }) {
   const [search, setSearch] = useState();
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
-  
+
   useEffect(() => {
     setIsMobileMod(isMobile)
   },[isMobile])
@@ -190,14 +188,17 @@ function Hero() {
             >
               Busque por tema
             </Title>
-            <ThemeCatalog />
+            <ThemeCatalog
+              recentDatalakeDatasets={recentDatalakeDatasets}
+            />
           </VStack>
         </VStack>
 
         {/*Google cloud icon*/}
         <Stack
           position={{ base: "relative", lg: "absolute" }}
-          top={{ base: "0", lg: "-120px" }}
+          top={{ base: "-85px", lg: "-120px", xl: "-120px" }}
+          marginBottom={{ base: "30px !important", lg: "" }}
           right="0"
         >
           <Box
@@ -660,7 +661,11 @@ function Support({ pages }) {
   );
 }
 
-export default function Home({ pages }) {
+export default function Home({ 
+  pages,
+  popularDatasets,
+  recentDatalakeDatasets,
+}) {
   return (
     <MainPageTemplate backgroundColor="#FFFFFF" pages={pages}>
       <VStack
@@ -671,7 +676,9 @@ export default function Home({ pages }) {
         zIndex="10"
         position="relative"
       >
-        <Hero />
+        <Hero 
+          recentDatalakeDatasets={recentDatalakeDatasets} 
+        />
       </VStack>
       <BePartner />
       <VStack
