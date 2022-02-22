@@ -4,6 +4,7 @@ from pydantic import BaseModel, validator
 import pandas
 import importlib.resources
 from dataclasses import dataclass
+import dataclasses
 
 def build_areas_from_csv(csv_path):
     df = pandas.read_csv(csv_path)['id label__pt'.split()]
@@ -45,6 +46,9 @@ class Area:
         if b in a: return a
         if a in b: return b
         return AreaUnion(areas=[a,b])
+
+    def dict(self):
+        return dataclasses.asdict(self)
 
 Area(id='world', label={'pt': 'Mundo'})
 
