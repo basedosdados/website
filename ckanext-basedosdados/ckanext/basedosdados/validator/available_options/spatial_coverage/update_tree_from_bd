@@ -43,3 +43,5 @@ tree = basedosdados.read_sql('''
 
 path = SPATIAL_COVERAGE_DIR / 'spatial_coverage_tree.csv'
 tree.to_csv(path, index=False)
+print(f'{tree.shape[0]} lines saved to {path}')
+print(f'Done')
