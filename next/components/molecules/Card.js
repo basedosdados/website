@@ -8,18 +8,18 @@ export function Card({
   padding = "25px 25px 25px 25px",
   link,
 }) {
-  const isMobile = useCheckMobile();
 
   return (
     <Box
-      width={isMobile ? "200px" : "280px"}
-      height={isMobile ? "210px" : "290px"}
+      width="280px"
+      height="290px"
       borderRadius="12px"
       boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
+      _hover={{ boxShadow:"0px 7px 19px 1px rgb(64 60 67 / 16%)" }}
       backgroundColor="#FFFFFF"
       padding={padding}
       borderRadius="10px"
-      margin={{ base: "10px", lg: "10px 0px" }}
+      margin={{ base: "20px 0 !important", lg: "10px 0px" }}
     >
       <Flex
         flexDirection="column"

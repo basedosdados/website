@@ -36,7 +36,7 @@ export default function DatabaseCard({
   databaseInfo.push(
     <HStack
       whiteSpace="nowrap" 
-      fontSize={isMobile ? "10px" : "14px"}
+      fontSize="14px"
       color={tableNum === 0 ? "#C4C4C4" : "#42B0FF" }
     >
       <b>{tableNum} tabelas tratadas </b>
@@ -72,8 +72,8 @@ export default function DatabaseCard({
         href={link}
       >
         <Title 
-          fontSize={isMobile ? "14px" : "16px"}
-          lineHeight={isMobile ? "15px" : "23px"}
+          fontSize="16px"
+          lineHeight="23px"
           textOverflow="ellipsis"
           marginBottom="10px"
           noOfLines={2}
@@ -84,10 +84,10 @@ export default function DatabaseCard({
       <Link href={`/dataset?organization=${organizationSlug}`}>
         <Subtitle
           noOfLines={2}
-          lineHeight={isMobile ? "12px" : "18px"}
+          lineHeight="18px"
           textOverflow="ellipsis"
           letterSpacing="1px"
-          fontSize={isMobile ? "10px" : "12px"}
+          fontSize="12px"
         >{organization}</Subtitle>
       </Link>
       <VStack spacing={1} align="flex-start" marginTop="auto">
@@ -95,7 +95,7 @@ export default function DatabaseCard({
           width="100%"
           overflowX="auto"
           className="no-scrollbar"
-          margin={isMobile ? "5px 0 0 0" : "0 0 25px"}
+          margin="0 0 25px"
         >
           {tags.slice(0, tags.length > isMobile ? 2 : 3 ? isMobile ? 2 : 3 : tags.length).map((t) => (
             <ThemeTag name={t} />
@@ -103,7 +103,7 @@ export default function DatabaseCard({
         </HStack>
         {databaseInfo.map((item, index) => (
           <Subtitle 
-            fontSize={isMobile ? "10px" : "12px"}
+            fontSize="12px"
             color="#252A32"
           >
             {item}

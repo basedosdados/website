@@ -14,7 +14,6 @@ import SectionText from "../components/atoms/SectionText";
 import BigTitle from "../components/atoms/BigTitle";
 import DatabaseCard from "../components/organisms/DatabaseCard";
 import { useEffect, useState } from "react";
-import CardCatalog from "../components/organisms/CardCatalog";
 import ThemeCatalog from "../components/organisms/ThemeCatalog";
 import Title from "../components/atoms/Title";
 import Typist from "react-typist";
@@ -176,7 +175,9 @@ function Hero({ recentDatalakeDatasets }) {
           <VStack
             marginTop={"80px !important"}
             width="100%"
+            paddingTop={{ base:"0", lg:"120px"}}
             position="relative"
+            id="theme"
           >
             <Title
               fontSize="25px"
@@ -197,8 +198,8 @@ function Hero({ recentDatalakeDatasets }) {
         {/*Google cloud icon*/}
         <Stack
           position={{ base: "relative", lg: "absolute" }}
-          top={{ base: "-85px", lg: "-120px", xl: "-120px" }}
-          marginBottom={{ base: "30px !important", lg: "" }}
+          top={{ base: "-35px", lg: "-120px", xl: "-120px" }}
+          marginBottom={{ base: "70px !important", lg: "" }}
           right="0"
         >
           <Box
