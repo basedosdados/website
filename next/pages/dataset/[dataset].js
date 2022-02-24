@@ -1,6 +1,7 @@
 import {
   VStack,
   Stack,
+  Center,
   HStack,
   Image,
   Flex,
@@ -361,24 +362,34 @@ export default function DatasetPage({
           spacing={10}
           align="flex-start"
         >
-          <Image
-            borderRadius="31.8889px"
-            boxShadow="0px 0px 10px rgba(0,0,0,0.25)"
-            width={{ base: "50vw", lg: "16vw" }}
-            height={{ base: "50vw", lg: "16vw" }}
-            borderRadius="31px"
-            objectFit="contain"
-            src={
-              "https://basedosdados.org/uploads/group/" +
-              dataset.organization.image_url
-            }
-          />
-          <VStack spacing={0} align="flex-start">
+          <Center
+            paddingTop="15px"
+            width="100%"
+            minWidth="235px"
+            height="100%"
+          >
+            <Image
+              borderRadius="31.8889px"
+              boxShadow="0px 0px 10px rgba(0,0,0,0.25)"
+              width={{ base: "25%", lg: "100%" }}
+              minWidth={{ base: "250px", lg: "225px"}}
+              height={{ base: "25%", lg: "100%" }}
+              minHeight={{ base: "250px", lg: "225px"}}
+              borderRadius="31px"
+              objectFit="contain"
+              src={
+                "https://basedosdados.org/uploads/group/" +
+                dataset.organization.image_url
+              }
+            />
+          </Center>
+          <VStack spacing={0} align="flex-start" width="100%">
             <BigTitle
               overflow="hidden"
               textOverflow="ellipsis"
               whiteSpace="nowrap"
               fontSize="28px"
+              letterSpacing="1px"
               w={{ base: "90vw", lg: "70vw" }}
               color="black"
             >
@@ -388,13 +399,14 @@ export default function DatasetPage({
               {dataset.notes || "Conjunto sem descrição"}
             </Markdown>
 
-            <VStack align="flex-start" spacing={3} pt="15px">
+            <VStack align="flex-start" spacing={4} paddingTop="20px">
               <VStack align="flex-start">
                 <Title fontSize="16px">Organização</Title>
                 <Link
+                  marginTop="3px !important" 
                   href={`/dataset?organization=${dataset.organization.name}`}
                 >
-                  <SectionText fontWeight="400" fontSize="14px">
+                  <SectionText letterSpacing="1px" fontWeight="400" fontSize="14px">
                     {dataset.organization.title}
                   </SectionText>
                 </Link>
@@ -402,7 +414,7 @@ export default function DatasetPage({
 
               <VStack align="flex-start">
                 <Title fontSize="16px">Cobertura Temporal</Title>
-                <SectionText fontWeight="400" fontSize="14px">
+                <SectionText letterSpacing="1px" marginTop="3px !important" fontWeight="400" fontSize="14px">
                   {getTemporalCoverage()}
                 </SectionText>
               </VStack>
@@ -414,7 +426,7 @@ export default function DatasetPage({
           <TabList padding="0px" border="0px" fontFamily="Ubuntu !important">
             <GreenTab>Recursos</GreenTab>
             <GreenTab>Metadados</GreenTab>
-            <GreenTab>Painéis</GreenTab>
+            {dataset.id === "br-ibge-ipca" && <GreenTab>Painéis</GreenTab>}
           </TabList>
           <TabPanels>
             <TabPanel padding="0px">
@@ -433,12 +445,14 @@ export default function DatasetPage({
                 availableOptionsTranslations={availableOptionsTranslations}
               />
             </TabPanel>
-            <TabPanel padding="0px">
-              <DashboardsPage
-                dataset={dataset}
-                availableOptionsTranslations={availableOptionsTrasnslations}
-              />
-            </TabPanel>
+            {dataset.id === "br-ibge-ipca" &&
+              <TabPanel padding="0px">
+                <DashboardsPage
+                  dataset={dataset}
+                  availableOptionsTranslations={availableOptionsTranslations}
+                />
+              </TabPanel>
+            }
           </TabPanels>
         </Tabs>
       </VStack>

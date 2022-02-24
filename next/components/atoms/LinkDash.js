@@ -5,14 +5,16 @@ export function LinkDash({ children, href, dash = true, ...style }) {
     <Link
       color="#3AA1EB"
       href={href}
-      textDecoration="underline"
+      textDecoration="none"
+      _hover={{ textDecoration: "none", opacity:"0.6" }}
       target="_blank"
-      letterSpacing="0.1em"
+      margin="0 !important"
+      letterSpacing="1px"
       fontFamily="Lato"
       fontSize="15px"
       {...style}
     >
-      {children} {dash ? "> >" : null}
+      {children} {dash ? "..." : null}
     </Link>
   );
 }
