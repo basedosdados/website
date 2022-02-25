@@ -436,7 +436,7 @@ export default function DatasetPage({
             <TabPanel padding="0px">
               <DashboardsPage
                 dataset={dataset}
-                availableOptionsTranslations={availableOptionsTrasnslations}
+                availableOptionsTranslations={availableOptionsTranslations}
               />
             </TabPanel>
           </TabPanels>
