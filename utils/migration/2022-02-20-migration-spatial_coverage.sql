@@ -1,5 +1,5 @@
 -- Load python
--- CREATE EXTENSION IF NOT EXISTS plpython3u;
+ CREATE EXTENSION IF NOT EXISTS plpython3u;
 
 -- Temp functions definition
 CREATE OR REPLACE FUNCTION pg_temp.migrate_sc(sc_list_str json) RETURNS json AS $$
@@ -68,4 +68,4 @@ set extras = extras::jsonb || jsonb_build_object('spatial_coverage', pg_temp.mig
 select extras
 from resource;
 
-ROLLBACK
+COMMIT
