@@ -128,9 +128,9 @@ install_bashrc() {
 install_apprise() {
     $SSH  '
         cd ~/basedosdados/
-        source .env
+        source build/.env
         echo $APPRISE_CONFIG > ~/.apprise
-        grep DISCORD .env | sed s/DISCORD_//g > ~/.discord_ids
+        grep DISCORD build/.env | sed s/DISCORD_//g > ~/.discord_ids
     '
 }
 
