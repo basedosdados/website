@@ -5,6 +5,7 @@ import { CircularProgress } from "@chakra-ui/progress";
 import { Center, VStack } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import Head from "next/head";
+import { GeoTree } from "./GeoTree";
 
 export function SchemaForm({
   data,
@@ -65,11 +66,11 @@ export function SchemaForm({
   const uiSchema = {
       spatial_coverage:{
           items: {
-          'ui:field' : 'geo_tree'
+          'ui:field' : 'GeoTree'
           }
       }
   }
-  const fields = {geo_tree: (props) => geo_tree(props, schema)}
+  const fields = {GeoTree: (props) => GeoTree(props, schema)}
 
   /////
 
@@ -115,46 +116,3 @@ export function SchemaForm({
     </>
   );
 }
-
-function geo_tree(props, schema) {
-    const n_levels = 5
-    let [chosen_levels, set_chosen_levels] = useState(Array(n_levels).fill('', 0));
-
-    let tree = Object.values(schema.spatial_coverage_tree)
-    tree.forEach(x => {x.level = x.id.split('.').length - 1})
-
-    let selects = []
-    const update_chosen_levels = (level) => (e) => {
-        let new_chosen_levels = Array(n_levels).fill('', 0)
-        for(let i=0; i<level; i++) new_chosen_levels[i] = chosen_levels[i]
-        new_chosen_levels[level] = e.target.value
-        set_chosen_levels(new_chosen_levels)
-    }
-
-    for (let i=0; i<n_levels; i++){
-        let options = tree.filter(x => x.level === i && (i === 0 || (chosen_levels[i-1] !== '' && x.id.startsWith(chosen_levels[i-1]))))
-        options = options.map(x => <option key={x.id} value={x.id}>{x.label.pt}</option>)
-        options.unshift(<option key={'empty'} value={''}>{'--'}</option>)
-        selects.push(
-            <select class="form-control" onChange={update_chosen_levels(i)} value={chosen_levels[i]}>
-                {options}
-            </select>
-        )
-    }
-
-    const formid = props.idSchema['$id']
-
-    function build_id() {
-        let lvls = chosen_levels.filter(w => w !== '')
-        if (lvls.length === 0) return ''
-        return lvls.slice(-1)[0]
-    }
-
-    return (
-        <div>
-            <label> </label>
-            {selects}
-            <input readOnly className="form-control" id={formid} name={formid} label="spatial_coverage_hidden_field" placeholder="" type="text" hidden={false} value={build_id()}></input>
-        </div>
-    )
-  }
