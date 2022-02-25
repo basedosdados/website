@@ -46,9 +46,9 @@ export function BdmTablePage({
     R: "R",
   };
 
-  useEffect(() => {
-    isValidDownload(downloadUrl).then(setCanDownload)
-  },[])
+  //useEffect(() => {
+  //  isValidDownload(downloadUrl).then(setCanDownload)
+  //},[])
 
   const helpText = {
     SQL: (
