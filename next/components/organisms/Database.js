@@ -4,15 +4,10 @@ import {
   Image,
   Stack,
   VStack,
-  Text,
   Flex,
-  Box,
 } from "@chakra-ui/react";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { limitTextSize } from "../../utils";
 import { CategoryIcon } from "../atoms/CategoryIcon";
-import { Dot } from "../atoms/Dot";
 import Link from "../atoms/Link";
 import SectionText from "../atoms/SectionText";
 import Subtitle from "../atoms/Subtitle";

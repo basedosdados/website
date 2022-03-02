@@ -15,7 +15,7 @@ export function SimpleTable({ headers, values, containerStyle }) {
             padding="5px 15px"
             borderRightWidth="1px"
             flex="1"
-            fontWeight="bold"
+            fontWeight="500"
             fontSize="15px"
           >
             {h}
@@ -40,6 +40,7 @@ export function SimpleTable({ headers, values, containerStyle }) {
               padding="6px 15px"
               paddingBottom="3px"
               wordBreak="break-all"
+              fontFamily="Lato"
             >
               {r}
             </Title>

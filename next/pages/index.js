@@ -106,15 +106,16 @@ function Hero({ recentDatalakeDatasets }) {
             width="100%"
             marginStart="0px !important"
             direction="column"
-            marginRight={{ base: "0", lg: "100px", xl: "0"   }}
+            marginTop={{ base: "100px", lg: "50px" }}
           >
             <BigTitle
               position="relative"
               zIndex="1"
+              fontWeigth="500"
               fontFamily="Ubuntu"
               flex="2"
-              fontSize="38px"
-              letterSpacing={{ base:"0", lg: "2px" }}
+              fontSize="34px"
+              letterSpacing={{ base:"0", lg: "0.5px" }}
               textAlign="center"
               marginStart="0px !important"
               marginBottom={ isMobileMod ? "30px" : "50px" }
@@ -173,17 +174,17 @@ function Hero({ recentDatalakeDatasets }) {
 
           {/*search theme*/}
           <VStack
-            marginTop={"80px !important"}
+            margin="0 !important"
+            paddingTop="120px"
             width="100%"
-            paddingTop={{ base:"0", lg:"120px"}}
             position="relative"
             id="theme"
           >
             <Title
-              fontSize="25px"
+              fontSize="22px"
               fontWeigth="400"
               minHeight="30px"
-              marginBottom="40px"
+              marginBottom="20px"
               color="#9c9c9c"
               letterSpacing="1px"
             >
