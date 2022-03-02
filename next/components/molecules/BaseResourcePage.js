@@ -36,7 +36,6 @@ export function BaseResourcePage({
   return (
     <VStack
       width="100%"
-      border="1px solid #DEDFE0"
       borderRadius="20px"
       padding="20px"
       alignItems="flex-start"
