@@ -26,6 +26,7 @@ export function BaseFilterAccordion({
   onChange = () => {},
   bdPlus = null,
   alwaysOpen = false,
+  isHovering = true
 }) {
   return (
     <Accordion ex allowToggle width="100%">
@@ -36,7 +37,7 @@ export function BaseFilterAccordion({
               <AccordionButton
                 onClick={onChange}
                 color={isActive ? "#2B8C4D" : null}
-                _hover={{ cursor: "pointer", color: "#2B8C4D" }}
+                _hover={isHovering ? { cursor: "pointer", color: "#2B8C4D" } : "none"}
                 padding="10px 16px 0 0"
               >
                 <HStack
@@ -50,7 +51,7 @@ export function BaseFilterAccordion({
                     fontWeight="700"
                     fontFamily="Lato"
                     fontSize="16px"
-                    letterSpacing="0.1em"
+                    letterSpacing="0.5px"
                   >
                     {fieldName}
                   </Box>
@@ -244,12 +245,14 @@ export function FilterAccordion({
   isOpen = null,
   alwaysOpen = false,
   isActive = false,
+  isHovering = false
 }) {
   return (
     <BaseFilterAccordion
       isOpen={alwaysOpen ? alwaysOpen : isOpen}
       alwaysOpen={alwaysOpen}
       isActive={isActive}
+      isHovering={isHovering}
       onChange={onToggle}
       overflowX="hidden"
       bdPlus={bdPlus}
@@ -260,22 +263,24 @@ export function FilterAccordion({
         spacing={1}
         overflowX="hidden !important"
         alignItems="flex-start"
+        marginTop="10px"
       >
         {choices.map((c) => (
           <Box
-            backgroundColor={
-              c[valueField] === value ? "#EBEBEB" : "transparent"
+            borderLeft={
+              c[valueField] === value ? "3px solid #2B8C4D" : "transparent"
             }
             width="100%"
-            _hover={{ backgroundColor: "#F5F5F5" }}
-            borderRadius="5px"
           >
             <Title
               fontSize="14px"
               cursor="pointer"
-              fontWeigth={c[valueField] === value ? "500" : "400"}
-              padding="5px 30px"
+              fontWeight={c[valueField] === value ? "500" : "400"}
+              color={c[valueField] === value ? "#2B8C4D" : "#7D7D7D"}
+              _hover={{ color:"#2B8C4D", fontWeight:"500"}}
+              padding="5px 20px"
               borderRadius="5px"
+              letterSpacing="0.5px"
               transform="translateX(-10px)"
               zIndex="100"
               position="relative"

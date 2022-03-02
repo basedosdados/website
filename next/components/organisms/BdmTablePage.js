@@ -19,7 +19,6 @@ import { deleteResource, updateResource } from "../../pages/api/datasets";
 import { BlueBox } from "../molecules/BlueBox";
 import RoundedButton from "../atoms/RoundedButton";
 import Link from "../atoms/Link";
-import { isValidDownload } from "../../pages/api/download";
 
 export function BdmTablePage({
   translations,
@@ -45,10 +44,6 @@ export function BdmTablePage({
     Python: "python",
     R: "R",
   };
-
-  // useEffect(() => {
-  //   isValidDownload(downloadUrl).then(setCanDownload)
-  // },[])
 
   const helpText = {
     SQL: (

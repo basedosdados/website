@@ -22,7 +22,6 @@ import {
 } from "../api/datasets";
 import SectionText from "../../components/atoms/SectionText";
 import Title from "../../components/atoms/Title";
-import { CategoryIcon } from "../../components/atoms/CategoryIcon";
 import BigTitle from "../../components/atoms/BigTitle";
 import { FilterAccordion } from "../../components/atoms/FilterAccordion";
 import { useContext, useState } from "react";
@@ -47,6 +46,8 @@ import {
 } from "../api/schemas";
 import { BaseResourcePage } from "../../components/molecules/BaseResourcePage";
 import GreenTab from "../../components/atoms/GreenTab";
+import DataBaseIcon from "../../public/img/icons/databaseIcon";
+import DocIcon from "../../public/img/icons/docIcon";
 
 export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
@@ -231,6 +232,7 @@ function ResourcesPage({
         spacing={5}
         align="flex-start"
         justify="flex-start"
+        borderRight="1px solid #DEDFE0"
       >
         <AdminButtons resource={resource} setResource={setResource} />
         {bdmTables.length > 0 ? (
@@ -240,7 +242,6 @@ function ResourcesPage({
             value={resource.name}
             valueField="name"
             displayField="name"
-            isActive={resource.resource_type === "bdm_table"}
             isOpen={bdmTableFilter}
             fieldName="Tabelas tratadas"
             bdPlus={true}
@@ -258,9 +259,8 @@ function ResourcesPage({
             choices={externalLinks}
             valueField="url"
             displayField="name"
-            isActive={resource.resource_type === "external_link"}
             isOpen={externalLinkTableFilter}
-            fieldName="Links externos"
+            fieldName="Originais"
             value={resource.url}
             onChange={(url) =>
               setResource(externalLinks.filter((b) => b.url === url)[0])
@@ -289,6 +289,8 @@ export default function DatasetPage({
   translations,
   availableOptionsTranslations,
 }) {
+  const [tabIndex, setTabIndex] = useState(0)
+
   function getTemporalCoverage() {
     const temporalCoverage = unionArrays(
       dataset.resources
@@ -422,10 +424,35 @@ export default function DatasetPage({
           </VStack>
         </Stack>
 
-        <Tabs isLazy pt="20px" w={{ base: "90vw", lg: "100%" }}>
-          <TabList padding="0px" border="0px" fontFamily="Ubuntu !important">
-            <GreenTab>Recursos</GreenTab>
-            <GreenTab>Metadados</GreenTab>
+        <Tabs 
+          onChange={(index) => setTabIndex(index)}
+          isLazy
+          paddingTop="20px"
+          width={{ base: "90vw", lg: "100%" }}
+        >
+          <TabList 
+            padding="0px"
+            fontFamily="Ubuntu !important"
+            borderBottom= "2px solid #DEDFE0"
+          >
+            <GreenTab>
+              <DataBaseIcon
+                widthIcon="20px"
+                heightIcon="20px"
+                marginRight="10px"
+                fill={tabIndex === 0 ? "#2B8C4D" :"#C4C4C4"}
+              />
+              Dados
+            </GreenTab>
+            <GreenTab>
+              <DocIcon
+                widthIcon="20px"
+                heightIcon="20px"
+                marginRight="10px"
+                fill={tabIndex === 1 ? "#2B8C4D" :"#C4C4C4"}
+              />
+              Metadados
+            </GreenTab>
             {dataset.id === "br-ibge-ipca" && <GreenTab>Painéis</GreenTab>}
           </TabList>
           <TabPanels>

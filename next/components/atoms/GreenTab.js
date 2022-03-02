@@ -4,13 +4,17 @@ import { Tab } from "@chakra-ui/tabs";
 export default function GreenTab({ children }) {
   return (
     <Tab
-      marginRight="20px"
       fontSize="17px"
-      letterSpacing="0.05em"
+      letterSpacing="0.5px"
+      paddingBottom="10px"
+      _hover={{
+        borderBottom: "2px solid #CECECE"
+      }}
       _selected={{
-        color: "rgba(43, 140, 77, 1)",
+        color: "#2B8C4D",
         fontWeight: "bold",
-        borderBottom: "3px solid rgba(43, 140, 77, 1)",
+        borderBottom: "2px solid #2B8C4D",
+        pointerEvents: "none"
       }}
     >
       {children}
