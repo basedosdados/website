@@ -35,6 +35,7 @@ import {
 } from "../api/translations";
 import { ExternalLinkPage } from "../../components/organisms/ExternalLinkPage";
 import { BdmTablePage } from "../../components/organisms/BdmTablePage";
+import { InformationRequestPage } from "../../components/organisms/InformationRequestPage";
 import { MetadataPage } from "../../components/organisms/MetadataPage";
 import { DashboardsPage } from "../../components/organisms/DashboardsPage";
 import UserContext from "../../context/user";
@@ -58,12 +59,16 @@ export async function getStaticProps(context) {
   const externalLinks = resources.filter(
     (r) => r && r?.resource_type === "external_link"
   );
+  const informationRequest = resources.filter(
+    (r) => r && r?.resource_type === "information_request"
+  );
 
   return await withPages({
     props: {
       dataset,
       bdmTables,
       externalLinks,
+      informationRequest,
       translations,
       availableOptionsTranslations,
       isPlus: isBdPlus(dataset),
@@ -119,12 +124,13 @@ function AdminButtons({ resource, setResource }) {
 function ResourcesPage({
   bdmTables,
   externalLinks,
+  informationRequest,
   availableOptionsTranslations,
   translations,
   dataset,
 }) {
   const [resource, setResource] = useState(
-    bdmTables.length > 0 ? bdmTables[0] : externalLinks[0]
+    bdmTables.length > 0 ? bdmTables[0] : externalLinks[0] || informationRequest[0]
   );
 
   const [bdmTableFilter, setBdmTableFilter] = useState(
@@ -133,6 +139,10 @@ function ResourcesPage({
 
   const [externalLinkTableFilter, setExternalLinkTableFilter] = useState(
     resource?.resource_type === "external_link"
+  );
+
+  const [informationRequestFilter, setInformationRequestFilter] = useState(
+    resource?.resource_type === "information_request"
   );
 
   function getResourcePage() {
@@ -152,6 +162,15 @@ function ResourcesPage({
           <ExternalLinkPage
             availableOptionsTranslations={availableOptionsTranslations}
             translations={translations["external_link"]}
+            resource={resource}
+          />
+        );
+        
+      case "information_request":
+        return (
+          <InformationRequestPage
+            availableOptionsTranslations={availableOptionsTranslations}
+            translations={translations["information_request"]}
             resource={resource}
           />
         );
@@ -176,26 +195,6 @@ function ResourcesPage({
           />
         );
 
-      case "create_information_request":
-        return (
-          <BaseResourcePage
-            title="Criar pedido LAI"
-            forceForm
-            formComponent={
-              <SchemaForm
-                schemaName="Pedido LAI"
-                loadSchemaFunction={getInformationRequestSchema}
-                prepareData={(d) => {
-                  d.resource_type = "information_request";
-
-                  return d;
-                }}
-                updateFunction={(data) => createResource(data, dataset.id)}
-              />
-            }
-          />
-        );
-
       case "create_external_link":
         return (
           <BaseResourcePage
@@ -207,6 +206,26 @@ function ResourcesPage({
                 loadSchemaFunction={getExternalLinkSchema}
                 prepareData={(d) => {
                   d.resource_type = "external_link";
+                  return d;
+                }}
+                updateFunction={(data) => createResource(data, dataset.id)}
+              />
+            }
+          />
+        );
+
+        case "create_information_request":
+        return (
+          <BaseResourcePage
+            title="Criar pedido LAI"
+            forceForm
+            formComponent={
+              <SchemaForm
+                schemaName="Pedido LAI"
+                loadSchemaFunction={getInformationRequestSchema}
+                prepareData={(d) => {
+                  d.resource_type = "information_request";
+
                   return d;
                 }}
                 updateFunction={(data) => createResource(data, dataset.id)}
@@ -271,6 +290,26 @@ function ResourcesPage({
         ) : (
           <></>
         )}
+        {informationRequest.length > 0 ? (
+          <FilterAccordion
+            alwaysOpen={true}
+            choices={informationRequest}
+            valueField="url"
+            displayField="name"
+            isActive={resource.resource_type === "information_request"}
+            isOpen={informationRequestFilter}
+            fieldName="Pedidos LAI"
+            value={resource.url}
+            onChange={(url) =>
+              setResource(informationRequest.filter((b) => b.url === url)[0])
+            }
+            onToggle={() =>
+              setInformationRequestFilter(!informationRequestFilter)
+            }
+          />
+        ) : (
+          <></>
+        )}
       </VStack>
       <VStack width="100%" flex="1">
         {getResourcePage()}
@@ -283,6 +322,7 @@ export default function DatasetPage({
   dataset,
   bdmTables,
   externalLinks,
+  informationRequest,
   pages,
   isPlus,
   translations,
@@ -421,6 +461,7 @@ export default function DatasetPage({
               <ResourcesPage
                 bdmTables={bdmTables}
                 externalLinks={externalLinks}
+                informationRequest={informationRequest}
                 availableOptionsTranslations={availableOptionsTranslations}
                 translations={translations}
                 dataset={dataset}
