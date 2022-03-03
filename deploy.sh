@@ -19,7 +19,7 @@ deploy() {
     rebuild_index
     install_crontab
     install_bashrc
-    install_apprise
+    # install_apprise
 }
 
 deploy_configs() {
@@ -125,13 +125,13 @@ install_bashrc() {
     '
 }
 
-install_apprise() {
-    $SSH  '
-        cd ~/basedosdados/
-        source .env
-        echo $APPRISE_CONFIG > ~/.apprise
-        grep DISCORD .env | sed s/DISCORD_//g > ~/.discord_ids
-    '
-}
+# install_apprise() {
+#     $SSH  '
+#         cd ~/basedosdados/
+#         source .env
+#         echo $APPRISE_CONFIG > ~/.apprise
+#         grep DISCORD .env | sed s/DISCORD_//g > ~/.discord_ids
+#     '
+# }
 
 for i in "$@"; do $i; done

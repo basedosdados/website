@@ -16,12 +16,10 @@ const Carousel = dynamic(
 function Themes ({ isMobileMod, newRecentDataLakeDataSets }) {
   const [listThemes, setListThemes] = useState([])
   const [selectedTheme, setSelectedTheme] = useState()
-  const [autoPlay, setAutoPlay] = useState(false)
 
   const searchTheme = (elm) => {
     window.open("#theme", "_self")
     setSelectedTheme(elm.name)
-    setAutoPlay(true)
     newRecentDataLakeDataSets({
       name: elm.name,
     })
@@ -40,18 +38,11 @@ function Themes ({ isMobileMod, newRecentDataLakeDataSets }) {
       <Carousel
         offset={isMobileMod ? 50 : 70}
         animationSpeed={1000}
-        stopAutoPlayOnHover={autoPlay}
         plugins={[ "arrows",
           {
             resolve: slidesToShowPlugin,
             options: {
               numberOfSlides: listThemes && listThemes.length
-            }
-          },
-          {
-            resolve: autoplayPlugin,
-            options: {
-              interval: 5000,
             }
           },
           {
@@ -120,20 +111,9 @@ function CardThemes ({ isMobileMod, recentThemes }) {
         animationSpeed={1000}
         plugins={ isMobileMod ?
           [
-            "arrows", "centered",
-            {
-              resolve: autoplayPlugin,
-              options: {
-                interval: 8000,
-              }
-            }
+            "arrows", "centered"
           ] : [ 
-            "arrows", {
-              resolve: autoplayPlugin,
-              options: {
-                interval: 8000,
-              }
-            },
+            "arrows",
             {
               resolve: slidesToShowPlugin,
               options: {

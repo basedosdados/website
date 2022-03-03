@@ -14,7 +14,7 @@ export default function Link({
       href={href}
       fontFamily="Lato"
       fontSize="15px"
-      letterSpacing="0.15em"
+      letterSpacing="0.5px"
       color={color}
       _hover="none"
       fontWeight={fontWeigth}

@@ -45,6 +45,7 @@ import {
   getTranslations,
 } from "../api/translations";
 import FilterIcon from "../../public/img/icons/filterIcon";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
 export async function getStaticProps(context) {
   const translations = await getTranslations();
@@ -138,6 +139,7 @@ export default function SearchPage({
   translations,
 }) {
   const { query } = useRouter();
+  const isMobile = useCheckMobile();
   const datasetDisclosure = useDisclosure();
   const { data: userData = null } = useQuery("user", getUser);
   const [order, setOrder] = useState("score");
@@ -363,8 +365,8 @@ export default function SearchPage({
           alignItems="flex-start"
           minWidth={{ base: "100%", lg: "320px" }}
           maxWidth={{ base: "100%", lg: "320px" }}
-          padding="0 40px 0 0"
-          borderRight="1px solid #DEDFE0"
+          padding={!isMobile ? "0 40px 0 0" : ""}
+          borderRight={!isMobile ? "1px solid #DEDFE0" : ""}
           key={filterKey}
         >
           <Box display="flex" marginBottom="10px" alignItems="center" >
@@ -419,18 +421,6 @@ export default function SearchPage({
           />
           <CheckboxFilterAccordion
             canSearch={true}
-            isActive={(paramFilters.organization || []).length > 0}
-            choices={organizations}
-            values={paramFilters.organization}
-            valueField="name"
-            displayField="displayName"
-            fieldName="Organização"
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, organization: values })
-            }
-          />
-          <CheckboxFilterAccordion
-            canSearch={true}
             isActive={(paramFilters.group || []).length > 0}
             choices={groups}
             values={paramFilters.group}
@@ -439,6 +429,18 @@ export default function SearchPage({
             fieldName="Temas"
             onChange={(values) =>
               setParamFilters({ ...paramFilters, group: values })
+            }
+          />
+          <CheckboxFilterAccordion
+            canSearch={true}
+            isActive={(paramFilters.organization || []).length > 0}
+            choices={organizations}
+            values={paramFilters.organization}
+            valueField="name"
+            displayField="displayName"
+            fieldName="Organização"
+            onChange={(values) =>
+              setParamFilters({ ...paramFilters, organization: values })
             }
           />
           <CheckboxFilterAccordion
@@ -453,7 +455,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, tag: values })
             }
           />
-          <CheckboxFilterAccordion
+          {/* <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.spatial_coverage || []).length > 0}
             choices={[...spatialCoverages.Continente]}
@@ -500,7 +502,7 @@ export default function SearchPage({
             onChange={(values) =>
               setParamFilters({ ...paramFilters, spatial_coverage: values })
             }
-          />
+          /> */}
       {/*
           <RangeFilterAccordion
             isActive={(paramFilters.temporal_coverage || []).length > 0}
