@@ -414,6 +414,7 @@ export default function DatasetPage({
               boxShadow="0px 0px 10px rgba(0,0,0,0.25)"
               width={{ base: "25%", lg: "100%" }}
               minWidth={{ base: "250px", lg: "225px"}}
+              maxWidth="225px"
               height={{ base: "25%", lg: "100%" }}
               minHeight={{ base: "250px", lg: "225px"}}
               borderRadius="31px"
@@ -431,7 +432,7 @@ export default function DatasetPage({
               whiteSpace="nowrap"
               fontSize="28px"
               letterSpacing="1px"
-              w={{ base: "90vw", lg: "70vw" }}
+              width={{ base: "90vw", lg: "60vw" }}
               color="black"
             >
               {dataset.title || "Conjunto sem nome"}
@@ -478,7 +479,7 @@ export default function DatasetPage({
               <DataBaseIcon
                 widthIcon="20px"
                 heightIcon="20px"
-                marginRight="10px"
+                marginRight="6px"
                 fill={tabIndex === 0 ? "#2B8C4D" :"#C4C4C4"}
               />
               Dados
@@ -487,7 +488,7 @@ export default function DatasetPage({
               <DocIcon
                 widthIcon="20px"
                 heightIcon="20px"
-                marginRight="10px"
+                marginRight="6px"
                 fill={tabIndex === 1 ? "#2B8C4D" :"#C4C4C4"}
               />
               Metadados

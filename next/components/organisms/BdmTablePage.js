@@ -19,6 +19,7 @@ import { deleteResource, updateResource } from "../../pages/api/datasets";
 import { BlueBox } from "../molecules/BlueBox";
 import RoundedButton from "../atoms/RoundedButton";
 import Link from "../atoms/Link";
+import DataInformationQuery from "../molecules/DataInformationQuery";
 
 export function BdmTablePage({
   translations,
@@ -28,7 +29,6 @@ export function BdmTablePage({
 }) {
   const [selectedConsultation, setSelectedConsultation] = useState("SQL");
   const consultationOptions = ["SQL", "Python", "R", "Download"];
-  const [canDownload, setCanDownload] = useState(false)
   const queryName = `${resource.dataset_id}.${resource.name}`;
   const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}.zip`
   
@@ -130,7 +130,6 @@ export function BdmTablePage({
             width="100%"
             textDecoration="none !important"
             href={downloadUrl}
-            _disable={!canDownload}
           >
             <RoundedButton
               width="100%"
@@ -201,43 +200,9 @@ df <- bd_collect(query)`,
         />
       }
     >
-      <VStack width="100%" spacing={3} alignItems="flex-start">
-        <BlueBox
-          title="Esta tabela está tratada e atualizada no nosso datalake público."
-          text={
-            <>
-              Você pode consultar seus dados via download, SQL (BigQuery),
-              Python ou R{" "}
-              <LinkDash
-                fontWeight="bold"
-                textDecoration="none"
-                target="_self"
-                href="#acesso"
-                dash={false}
-              >
-                abaixo.
-              </LinkDash>
-            </>
-          }
-        />
-        <SectionText padding="10px 0px">
-          <b>Descrição</b>
-        </SectionText>
-        <Markdown>
-          {resource.description || "Nenhuma descrição fornecida."}
-        </Markdown>
-      </VStack>
-      <VStack id="acesso" width="100%" spacing={3} alignItems="flex-start">
-        <SectionText>
-          <b>Coluna</b>
-        </SectionText>
-        <ExpandableTable
-          headers={["nome", "descrição"]}
-          values={(resource?.columns || []).map((c) => [c.name, c.description])}
-        />
-      </VStack>
-      <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Title>Consulta aos dados</Title>
+      <DataInformationQuery resource={resource} />
+      <VStack width="100%" marginTop="50px !important" spacing={3} alignItems="flex-start">
+        <Title fontWeigth="400" >Consulta aos dados</Title>
         <Stack width="100%" direction={{ base: "column", lg: "row" }}>
           {consultationOptions.map((c) => {
             const selected = c === selectedConsultation;
@@ -305,6 +270,25 @@ df <- bd_collect(query)`,
           <></>
         )}
       </VStack>
+
+      <VStack width="100%" spacing={3} alignItems="flex-start">
+        <SectionText padding="10px 0px">
+          <b>Descrição</b>
+        </SectionText>
+        <Markdown>
+          {resource.description || "Nenhuma descrição fornecida."}
+        </Markdown>
+      </VStack>
+      <VStack id="acesso" width="100%" spacing={3} alignItems="flex-start">
+        <SectionText>
+          <b>Coluna</b>
+        </SectionText>
+        <ExpandableTable
+          headers={["nome", "descrição"]}
+          values={(resource?.columns || []).map((c) => [c.name, c.description])}
+        />
+      </VStack>
+      
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Title>Metadados da tabela</Title>
         <ExpandableTable
