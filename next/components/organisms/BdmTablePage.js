@@ -175,6 +175,7 @@ df <- bd_collect(query)`,
 
   return (
     <BaseResourcePage
+      padding="20px 17px"
       editLink={`/resource/edit/${resource.id}`}
       title={`${resource.name}`}
       removeFunction={() => deleteResource(resource)}
@@ -272,17 +273,33 @@ df <- bd_collect(query)`,
       </VStack>
 
       <VStack width="100%" spacing={3} alignItems="flex-start">
-        <SectionText padding="10px 0px">
-          <b>Descrição</b>
-        </SectionText>
-        <Markdown>
+        <Title fontWeigth="400">
+          Descrição
+        </Title>
+        <Markdown
+          marginTop="10px !important"
+          styleText= {{
+            fontSize:"14px",
+            fontWeight:"300",
+            letterSpacing:"0.5px",
+            color:"#252A32" 
+          }}
+        >
           {resource.description || "Nenhuma descrição fornecida."}
         </Markdown>
       </VStack>
       <VStack id="acesso" width="100%" spacing={3} alignItems="flex-start">
-        <SectionText>
-          <b>Coluna</b>
-        </SectionText>
+        <Title fontWeigth="400">
+          Cobertura temporal
+        </Title>
+        <Text color="#252A32" fontSize="14px" fontWeight="300" fontFamily="Lato" letterSpacing="0.5px">
+          {resource.temporal_coverage[0] || "Nenhuma cobertura temporal."}
+        </Text>
+      </VStack>
+      <VStack id="acesso" width="100%" spacing={3} alignItems="flex-start">
+        <Title fontWeigth="400">
+          Coluna
+        </Title>
         <ExpandableTable
           headers={["nome", "descrição"]}
           values={(resource?.columns || []).map((c) => [c.name, c.description])}
@@ -302,7 +319,6 @@ df <- bd_collect(query)`,
                 "dataset_id",
                 "table_id",
                 "spatial_coverage",
-                "temporal_coverage",
                 "update_frequency",
                 "observation_level",
                 "last_updated",

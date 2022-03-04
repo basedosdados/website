@@ -4,7 +4,7 @@ import { Tab } from "@chakra-ui/tabs";
 export default function GreenTab({ children }) {
   return (
     <Tab
-      fontSize="17px"
+      fontSize="18px"
       letterSpacing="0.5px"
       paddingBottom="10px"
       _hover={{

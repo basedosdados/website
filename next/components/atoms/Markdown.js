@@ -7,6 +7,7 @@ export function Markdown({
   children,
   limit = false,
   onLimitToggle = () => {},
+  styleText ={},
   ...style
 }) {
   const [isLimited, setIsLimited] = useState(true);
@@ -21,6 +22,7 @@ export function Markdown({
         fontSize="14px"
         textAlign="left"
         className="markdown"
+        style={styleText}
         dangerouslySetInnerHTML={{
           __html: converter.makeHtml(children),
         }}

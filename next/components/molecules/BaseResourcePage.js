@@ -23,6 +23,7 @@ export function BaseResourcePage({
   removeFunction,
   formComponent = null,
   forceForm = false,
+  ...style
 }) {
   const [editing, setEditing] = useState(false);
   const deleteModalDisclosure = useDisclosure();
@@ -40,6 +41,7 @@ export function BaseResourcePage({
       padding="20px"
       alignItems="flex-start"
       spacing={7}
+      {...style}
     >
       <AlertDialog
         isOpen={deleteModalDisclosure.isOpen}

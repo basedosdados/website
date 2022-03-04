@@ -9,6 +9,7 @@ import {
   TabPanels,
   Text,
   Image,
+  Box,
 } from "@chakra-ui/react";
 import Title from "../atoms/Title";
 import Link from "../atoms/Link";
@@ -16,6 +17,37 @@ import { LinkDash } from "../atoms/LinkDash";
 import GreenTab from "../atoms/GreenTab"
 import RoundedButton from "../atoms/RoundedButton";
 import { BlueBox } from "../molecules/BlueBox";
+
+export function BoxBigQueryGoogle({ href }) {
+
+  return (
+    <Box
+      display="flex"
+      flexDirection="row"
+      fontSize="14px"
+      fontWeight="300"
+      fontFamily="Lato"
+      letterSpacing="0.5px"
+      padding="10px 12px"
+      boxShadow="0 1px 4px 0 rgba(0,0,0, 0.25)"
+      borderLeft="3px solid #3AA1EB"
+      borderEndRadius="6px"
+      marginTop="20px"
+      alignItems="center"
+    >
+      <Image width="20px" height="20px" marginRight="10px" src="https://img.icons8.com/color/48/000000/google-logo.png"/>
+      <Text color="#252A32">
+        Para usar o BigQuery basta ter uma conta Google. Primeira vez? 
+        <Link
+          target="_blank"
+          href={href}
+          color="#3AA1EB"
+        > Siga o passo a passo.
+        </Link>
+      </Text>
+    </Box>
+  )
+}
 
 
 export default function DataInformationQuery ({ resource }) {
@@ -28,7 +60,7 @@ export default function DataInformationQuery ({ resource }) {
       alignItems="flex-start"
       width="100%"
     >
-      <Title fontWeigth="400" >Consulta aos dados</Title>
+      <Title fontWeigth="400">Consulta aos dados</Title>
       <Tabs 
         paddingTop="20px"
         width={{ base: "90vw", lg: "100%" }}
@@ -52,6 +84,7 @@ export default function DataInformationQuery ({ resource }) {
               fontSize="16px"
               letterSpacing="0.5px"
               fontWeight="300"
+              color="#252A32" 
             >
               Copie o código abaixo, 
               <LinkDash 
@@ -63,11 +96,14 @@ export default function DataInformationQuery ({ resource }) {
               </LinkDash> para ir ao <i>datalake</i> no BigQuery e cole no Editor de Consultas:
             </Text>
           
-          
+            <BoxBigQueryGoogle
+              href={"https://basedosdados.github.io/mais/access_data_bq/#primeiros-passos"}
+            />
           </TabPanel>
 
           <TabPanel padding="0">
             <Text
+              color="#252A32" 
               fontFamily="Lato"
               marginTop="20px"
               fontSize="16px"
@@ -76,10 +112,15 @@ export default function DataInformationQuery ({ resource }) {
             >
               Criamos um pacote em Python para você acessar o <i>datalake</i>. Basta rodar o código:
             </Text>
+
+            <BoxBigQueryGoogle
+              href={"https://basedosdados.github.io/mais/access_data_packages/#primeiros-passos"}
+            />
           </TabPanel>
 
           <TabPanel padding="0">
             <Text
+              color="#252A32" 
               fontFamily="Lato"
               marginTop="20px"
               fontSize="16px"
@@ -88,13 +129,17 @@ export default function DataInformationQuery ({ resource }) {
             >
               Criamos um pacote em R para você acessar o <i>datalake</i>. Basta rodar o código:
             </Text>
+
+            <BoxBigQueryGoogle
+              href={"https://basedosdados.github.io/mais/access_data_packages/#primeiros-passos"}
+            />
           </TabPanel>
 
           <TabPanel padding="20px 0 0">
             <BlueBox
               title="Estes dados estão disponíveis porque diversas pessoas colaboram para a sua manutenção."
               text={
-                <Text>
+                <Text color="#252A32">
                   Apoie você também com doação financeira ou
                   <LinkDash
                     fontWeight="bold"
@@ -118,7 +163,7 @@ export default function DataInformationQuery ({ resource }) {
                 flexDirection="column"
                 justifyContent="center"
               >
-                <Text fontWeight="bold" fontFamily="Ubuntu" fontSize="18px">
+                <Text color="#252A32" fontWeight="bold" fontFamily="Ubuntu" fontSize="18px">
                   Doe via PIX
                 </Text>
 
@@ -128,7 +173,7 @@ export default function DataInformationQuery ({ resource }) {
                   src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/bd_qrcode.png"
                 />
 
-                <Text fontSize="16px">
+                <Text color="#252A32" fontSize="16px">
                   Chave CNPJ
                   <br /> 42494318000116
                 </Text>
