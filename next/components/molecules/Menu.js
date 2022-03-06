@@ -177,7 +177,7 @@ export default function Menu({ pages = [] }) {
     Documentação: "https://basedosdados.github.io/mais/",
     Institucional: {
       "Quem somos": "/quem-somos",
-      Contato: "/blog/1/",
+      Contato: "/contato",
       Blog: "https://medium.com/basedosdados",
       Newsletter:
         "https://info.basedosdados.org/assine-newsletter",
