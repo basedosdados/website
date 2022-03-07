@@ -23,6 +23,7 @@ export function BaseResourcePage({
   removeFunction,
   formComponent = null,
   forceForm = false,
+  ...style
 }) {
   const [editing, setEditing] = useState(false);
   const deleteModalDisclosure = useDisclosure();
@@ -40,6 +41,7 @@ export function BaseResourcePage({
       padding="20px"
       alignItems="flex-start"
       spacing={7}
+      {...style}
     >
       <AlertDialog
         isOpen={deleteModalDisclosure.isOpen}
@@ -77,7 +79,12 @@ export function BaseResourcePage({
         width="100%"
         alignItems={{ base: "flex-start", lg: "flex-start" }}
       >
-        <Title width="100%" wordBreak="break-all">
+        <Title 
+          width="100%"
+          letterSpacing="0.5px"
+          lineHeight="0"
+          wordBreak="break-all"
+        >
           {(editing ? "Editando " : "") + title}
         </Title>
         {userData?.is_admin && formComponent && !editing ? (

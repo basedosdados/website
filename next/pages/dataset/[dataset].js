@@ -400,11 +400,11 @@ export default function DatasetPage({
         <Stack
           direction={{ base: "column", lg: "row" }}
           margin="auto"
-          spacing={10}
+          spacing={8}
           align="flex-start"
         >
           <Center
-            paddingTop="15px"
+            paddingTop="10px"
             width="100%"
             minWidth="235px"
             height="100%"
@@ -413,10 +413,10 @@ export default function DatasetPage({
               borderRadius="31.8889px"
               boxShadow="0px 0px 10px rgba(0,0,0,0.25)"
               width={{ base: "25%", lg: "100%" }}
-              minWidth={{ base: "250px", lg: "225px"}}
+              minWidth="250px"
+              maxWidth="225px"
               height={{ base: "25%", lg: "100%" }}
-              minHeight={{ base: "250px", lg: "225px"}}
-              borderRadius="31px"
+              minHeight="250px"
               objectFit="contain"
               src={
                 "https://basedosdados.org/uploads/group/" +
@@ -431,31 +431,39 @@ export default function DatasetPage({
               whiteSpace="nowrap"
               fontSize="28px"
               letterSpacing="1px"
-              w={{ base: "90vw", lg: "70vw" }}
+              width={{ base: "90vw", lg: "60vw" }}
               color="black"
             >
               {dataset.title || "Conjunto sem nome"}
             </BigTitle>
-            <Markdown width={{ base: "90vw", lg: "60vw" }} limit={true}>
+            <Markdown 
+              width={{ base: "90vw", lg: "60vw" }}
+              limit={true}
+              styleText= {{
+                fontSize:"16px",
+                fontWeight:"300",
+                letterSpacing:"0.5px"
+              }}
+            >
               {dataset.notes || "Conjunto sem descrição"}
             </Markdown>
 
             <VStack align="flex-start" spacing={4} paddingTop="20px">
               <VStack align="flex-start">
-                <Title fontSize="16px">Organização</Title>
+                <Title fontWeigth="400" fontSize="18px">Organização</Title>
                 <Link
                   marginTop="3px !important" 
                   href={`/dataset?organization=${dataset.organization.name}`}
                 >
-                  <SectionText letterSpacing="1px" fontWeight="400" fontSize="14px">
+                  <SectionText letterSpacing="0.5px" fontWeight="300" fontSize="16px">
                     {dataset.organization.title}
                   </SectionText>
                 </Link>
               </VStack>
 
               <VStack align="flex-start">
-                <Title fontSize="16px">Cobertura Temporal</Title>
-                <SectionText letterSpacing="1px" marginTop="3px !important" fontWeight="400" fontSize="14px">
+                <Title fontWeight="400" fontSize="18px">Cobertura Temporal</Title>
+                <SectionText letterSpacing="0.5px" marginTop="3px !important" fontWeight="300" fontSize="16px">
                   {getTemporalCoverage()}
                 </SectionText>
               </VStack>
@@ -478,7 +486,7 @@ export default function DatasetPage({
               <DataBaseIcon
                 widthIcon="20px"
                 heightIcon="20px"
-                marginRight="10px"
+                marginRight="6px"
                 fill={tabIndex === 0 ? "#2B8C4D" :"#C4C4C4"}
               />
               Dados
@@ -487,7 +495,7 @@ export default function DatasetPage({
               <DocIcon
                 widthIcon="20px"
                 heightIcon="20px"
-                marginRight="10px"
+                marginRight="6px"
                 fill={tabIndex === 1 ? "#2B8C4D" :"#C4C4C4"}
               />
               Metadados

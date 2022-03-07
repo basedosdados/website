@@ -26,12 +26,9 @@ code[class*=language-], pre[class*=language-] {
 }
 
 pre[class*=language-] {
-  border-radius:.5em;
-  border:0em solid #545454;
-  box-shadow:0px 0px 0em #000 inset;
-  margin:.5em 0;
+  border-radius:8px;
+  margin: 0;
   overflow:auto;
-  padding:1em
 }
 
 pre[class*=language-]::-moz-selection {

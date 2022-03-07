@@ -48,8 +48,8 @@ export function BaseFilterAccordion({
                 >
                   <Box
                     width="fit-content"
-                    fontWeight="700"
-                    fontFamily="Lato"
+                    fontWeight="500"
+                    fontFamily="Ubuntu"
                     fontSize="16px"
                     letterSpacing="0.5px"
                   >
