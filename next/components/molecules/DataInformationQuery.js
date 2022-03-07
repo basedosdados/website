@@ -1,15 +1,15 @@
 import {
   VStack,
-  HStack,
   Stack,
   Tabs,
   TabList,
-  Tab,
   TabPanel,
   TabPanels,
   Text,
   Image,
   Box,
+  useClipboard,
+  Button,
 } from "@chakra-ui/react";
 import Title from "../atoms/Title";
 import Link from "../atoms/Link";
@@ -17,6 +17,7 @@ import { LinkDash } from "../atoms/LinkDash";
 import GreenTab from "../atoms/GreenTab"
 import RoundedButton from "../atoms/RoundedButton";
 import { BlueBox } from "../molecules/BlueBox";
+import CopyIcon from "../../public/img/icons/copyIcon"
 
 export function BoxBigQueryGoogle({ href }) {
 
@@ -49,9 +50,48 @@ export function BoxBigQueryGoogle({ href }) {
   )
 }
 
+export function PrismCodeHighlight({ language, children }) {
+  const { hasCopied, onCopy } = useClipboard(children)
+
+  return (
+    <pre
+      style={{
+        position: "relative",
+        width: "100%",
+        padding: "10px 100px 10px 10px",
+        borderRadius: "6px",
+        whiteSpace: "break-spaces",
+        wordBreak: "break-all",
+      }}
+    >
+      <code
+        className={`language-${language}`}
+      >
+        {children}
+      </code>
+      <Button
+        position="absolute"
+        top="0"
+        right="0"
+        onClick={onCopy}
+        color="#707783"
+        fontFamily="Lato"
+        fontWeight="500"
+        backgroundColor="transparent"
+        _hover={{ backgroundColor:"transparent", opacity:"0.6"}}
+      >
+        {hasCopied ? "Copiado" : "Copiar"}
+        <CopyIcon marginLeft="5px"/>
+      </Button>
+    </pre>
+    
+  )
+}
+
 
 export default function DataInformationQuery ({ resource }) {
   const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}.zip`
+  const queryName = `${resource.dataset_id}.${resource.name}`;
 
   return (
     <VStack
@@ -80,7 +120,7 @@ export default function DataInformationQuery ({ resource }) {
           <TabPanel padding="0">
             <Text
               fontFamily="Lato"
-              marginTop="20px"
+              margin="20px 0 14px"
               fontSize="16px"
               letterSpacing="0.5px"
               fontWeight="300"
@@ -95,17 +135,22 @@ export default function DataInformationQuery ({ resource }) {
               > clique aqui
               </LinkDash> para ir ao <i>datalake</i> no BigQuery e cole no Editor de Consultas:
             </Text>
+
+            <PrismCodeHighlight language="sql">
+              {`SELECT * FROM \`basedosdados.${queryName}\` LIMIT 100`}
+            </PrismCodeHighlight>
           
             <BoxBigQueryGoogle
               href={"https://basedosdados.github.io/mais/access_data_bq/#primeiros-passos"}
             />
+            <script key="sql" src="/vendor/prism.js"></script>
           </TabPanel>
 
           <TabPanel padding="0">
             <Text
               color="#252A32" 
               fontFamily="Lato"
-              marginTop="20px"
+              margin="20px 0 14px"
               fontSize="16px"
               letterSpacing="0.5px"
               fontWeight="300"
@@ -113,16 +158,25 @@ export default function DataInformationQuery ({ resource }) {
               Criamos um pacote em Python para você acessar o <i>datalake</i>. Basta rodar o código:
             </Text>
 
+            <PrismCodeHighlight language="python">
+              {`import basedosdados as bd
+# Para carregar o dado direto no pandas
+df = bd.read_table(dataset_id='${resource.dataset_id}', 
+table_id='${resource.name}',
+billing_project_id="<YOUR_PROJECT_ID>")`}
+            </PrismCodeHighlight>
+
             <BoxBigQueryGoogle
               href={"https://basedosdados.github.io/mais/access_data_packages/#primeiros-passos"}
             />
+            <script key="python" src="/vendor/prism.js"></script>
           </TabPanel>
 
           <TabPanel padding="0">
             <Text
               color="#252A32" 
               fontFamily="Lato"
-              marginTop="20px"
+              margin="20px 0 14px"
               fontSize="16px"
               letterSpacing="0.5px"
               fontWeight="300"
@@ -130,9 +184,20 @@ export default function DataInformationQuery ({ resource }) {
               Criamos um pacote em R para você acessar o <i>datalake</i>. Basta rodar o código:
             </Text>
 
+            <PrismCodeHighlight language="R">
+              {`install.packages("basedosdados")
+library("basedosdados")
+# Defina o seu projeto no Google Cloud
+set_billing_id("<YOUR_PROJECT_ID>")
+# Para carregar o dado direto no R
+query <- bdplyr("${queryName}")
+df <- bd_collect(query)`}
+            </PrismCodeHighlight>
+
             <BoxBigQueryGoogle
               href={"https://basedosdados.github.io/mais/access_data_packages/#primeiros-passos"}
             />
+            <script key="R" src="/vendor/prism.js"></script>
           </TabPanel>
 
           <TabPanel padding="20px 0 0">
