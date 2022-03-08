@@ -10,7 +10,7 @@ export default function SectionTitle({
     <Heading
       fontFamily="Lato"
       fontSize="32px"
-      letterSpacing="0.1em"
+      letterSpacing="0.5px"
       color={color}
       fontWeight={fontWeigth}
       {...style}

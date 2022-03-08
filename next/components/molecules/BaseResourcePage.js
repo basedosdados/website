@@ -79,7 +79,7 @@ export function BaseResourcePage({
         width="100%"
         alignItems={{ base: "flex-start", lg: "flex-start" }}
       >
-        <Title 
+        <Title
           width="100%"
           letterSpacing="0.5px"
           lineHeight="0"
@@ -100,7 +100,7 @@ export function BaseResourcePage({
               fontFamily="Lato"
               alignContent="center"
               justifyContent="center"
-              letterSpacing="0.1em"
+              letterSpacing="0.5px"
               boxShadow="0px 4px 4px 0px #00000040"
               leftIcon={
                 <Icon>
@@ -120,7 +120,7 @@ export function BaseResourcePage({
               fontFamily="Lato"
               alignContent="center"
               justifyContent="center"
-              letterSpacing="0.1em"
+              letterSpacing="0.5px"
               boxShadow="0px 4px 4px 0px #00000040"
               leftIcon={
                 <Icon>

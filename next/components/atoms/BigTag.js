@@ -7,7 +7,7 @@ export function BigTag({ children, ...style }) {
       color="white"
       fontWeight="500"
       fontFamily="Ubuntu"
-      letterSpacing="0.1em"
+      letterSpacing="0.5px"
       padding="10px 15px"
       width="100%"
       {...style}
