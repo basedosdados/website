@@ -12,13 +12,11 @@ import Image from "next/image";
 import ControlledInput from "../components/atoms/ControlledInput";
 import SectionText from "../components/atoms/SectionText";
 import BigTitle from "../components/atoms/BigTitle";
-import DatabaseCard from "../components/organisms/DatabaseCard";
 import { useEffect, useState } from "react";
 import ThemeCatalog from "../components/organisms/ThemeCatalog";
 import Title from "../components/atoms/Title";
 import Typist from "react-typist";
 import {
-  getPopularDatalakeDatasets,
   getRecentDatalakeDatasets
 } from "./api/datasets";
 import { ShadowBox } from "../components/atoms/ShadowBox";
@@ -27,7 +25,6 @@ import { withPages } from "../hooks/pages.hook";
 import { ThemeTag } from "../components/atoms/ThemeTag";
 import { LinkDash } from "../components/atoms/LinkDash";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
-import { isBdPlus } from "../utils";
 import { BePartner } from "../components/organisms/BePartner";
 
 export async function getStaticProps(context) {
@@ -46,32 +43,32 @@ export async function getStaticProps(context) {
   });
 }
 
-function HeroText({ children, iconUrl, height = "100px" }) {
-  return (
-    <VStack alignItems="center" justifyContent="center" maxWidth="400px">
-      <Flex justify="baseline" align="baseline" width="100%" height="130px">
-        <Flex
-          margin="auto"
-          width="100%"
-          height={height}
-          marginBottom="20px"
-          position="relative"
-          justify="baseline"
-          align="baseline"
-        >
-          <Image
-            loading="eager"
-            priority
-            objectFit="contain"
-            layout="fill"
-            src={iconUrl}
-          />
-        </Flex>
-      </Flex>
-      {children}
-    </VStack>
-  );
-}
+// function HeroText({ children, iconUrl, height = "100px" }) {
+//   return (
+//     <VStack alignItems="center" justifyContent="center" maxWidth="400px">
+//       <Flex justify="baseline" align="baseline" width="100%" height="130px">
+//         <Flex
+//           margin="auto"
+//           width="100%"
+//           height={height}
+//           marginBottom="20px"
+//           position="relative"
+//           justify="baseline"
+//           align="baseline"
+//         >
+//           <Image
+//             loading="eager"
+//             priority
+//             objectFit="contain"
+//             layout="fill"
+//             src={iconUrl}
+//           />
+//         </Flex>
+//       </Flex>
+//       {children}
+//     </VStack>
+//   );
+// }
 
 
 function Hero({ recentDatalakeDatasets }) {
