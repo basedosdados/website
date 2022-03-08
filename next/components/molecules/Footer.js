@@ -142,16 +142,16 @@ export default function Footer({ pages }) {
             </LinkVStack>
             <LinkVStack title="INSTITUCIONAL">
               <FooterLink
-                href="https://basedosdados.org/blog/2/" // TODO: Mudar o ID para quem-somos
+                href="https://basedosdados.org/quem-somos"
                 color="white"
               >
                 Quem Somos
               </FooterLink>
               <FooterLink
                 color="white"
-                href="https://basedosdados.org/blog/1/" // TODO: Mudar o ID para fale-conosco
+                href="https://basedosdados.org/blog/1/" // TODO: Mudar o ID para contato
               >
-                Fale Conosco
+                Contato
               </FooterLink>
               <FooterLink color="white" href="/servicos">
                 Serviços
@@ -168,7 +168,7 @@ export default function Footer({ pages }) {
             color="white !important"
             letterSpacing="0.5px"
           >
-            <Text>® 2021 Base dos Dados</Text>
+            <Text>® 2022 Base dos Dados</Text>
             {/* <Text>|</Text> // TODO: Não existem essas páginas ainda!
             <Link color="white">Termos de uso</Link>
             <Text>|</Text>
@@ -181,7 +181,7 @@ export default function Footer({ pages }) {
             fontWeight="500"
             letterSpacing="0.5px"
           >
-            Ícones adaptados de Freepik e Smashicons disponíveis em Storyset e
+            Ícones adaptados de Freepik e disponíveis em Storyset e
             Flaticon.
           </Text>
         </VStack>
