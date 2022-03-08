@@ -239,7 +239,7 @@ export function Database({
                     fontWeight="bold"
                   >
                     {externalLinkNum}{" "}
-                    {externalLinkNum === 1 ? "link externo" : "links externos"}
+                    {externalLinkNum === 1 ? "fonte original" : "fontes originais"}
                   </Subtitle>
                 </HStack>
               ) : (

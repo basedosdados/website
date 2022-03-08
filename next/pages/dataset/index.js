@@ -405,7 +405,7 @@ export default function SearchPage({
               },
               {
                 key: "external_link",
-                name: `Links externos (${data?.resource_external_link_count || "0"
+                name: `Fontes originais (${data?.resource_external_link_count || "0"
                   })`,
               },
             ]}
