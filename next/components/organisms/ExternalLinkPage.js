@@ -25,7 +25,7 @@ export function ExternalLinkPage({
           data={resource}
           updateFunction={updateResource}
           loadSchemaFunction={getExternalLinkSchema}
-          schemaName="Link Externo"
+          schemaName="Fonte original"
           prepareData={(data) => {
             data.country_ip_address_required =
               data.country_ip_address_required || [];
@@ -42,7 +42,6 @@ export function ExternalLinkPage({
       onClick={() => window.open(resource.url)}
     >
       <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Title>Metadados do link externo</Title>
         <ExpandableTable
           headers={["nome", "valor"]}
           values={formatObjectsInArray(

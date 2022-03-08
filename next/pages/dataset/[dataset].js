@@ -117,7 +117,7 @@ function AdminButtons({ resource, setResource }) {
         isActive={resource?.resource_type === "create_external_link"}
         onClick={() => setResource({ resource_type: "create_external_link" })}
       >
-        Criar link externo
+        Criar fonte original
       </SimpleButton>
     </>
   );
@@ -200,11 +200,11 @@ function ResourcesPage({
       case "create_external_link":
         return (
           <BaseResourcePage
-            title="Criar link externo"
+            title="Criar fonte original"
             forceForm
             formComponent={
               <SchemaForm
-                schemaName="Link externo"
+                schemaName="Fonte original"
                 loadSchemaFunction={getExternalLinkSchema}
                 prepareData={(d) => {
                   d.resource_type = "external_link";

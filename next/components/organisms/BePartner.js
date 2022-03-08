@@ -75,7 +75,7 @@ export function BePartner() {
           <SectionTitle fontFamily="Ubuntu" fontSize="28px">
             Faça parte de nossa rede de parceiros e clientes
           </SectionTitle>
-          <SectionText letterSpacing="0.1em">
+          <SectionText letterSpacing="0.5px">
             <b>
               Fortalecemos o uso eficaz e escalável de dados em governos,
               empresas e organizações.

@@ -166,7 +166,7 @@ export default function Footer({ pages }) {
           <HStack
             fontFamily="Lato !important"
             color="white !important"
-            letterSpacing="0.1em"
+            letterSpacing="0.5px"
           >
             <Text>® 2021 Base dos Dados</Text>
             {/* <Text>|</Text> // TODO: Não existem essas páginas ainda!
@@ -179,7 +179,7 @@ export default function Footer({ pages }) {
             fontSize="12px"
             fontFamily="Lato"
             fontWeight="500"
-            letterSpacing="0.1em"
+            letterSpacing="0.5px"
           >
             Ícones adaptados de Freepik e Smashicons disponíveis em Storyset e
             Flaticon.

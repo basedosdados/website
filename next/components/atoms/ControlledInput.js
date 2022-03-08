@@ -30,10 +30,10 @@ export default function ControlledInput({
         onKeyDown={checkForEnter}
         fontFamily="Lato"
         variant="outline"
-        letterSpacing="0.1em"
+        letterSpacing="0.5px"
         fontWeight="300"
         border="1px solid #DEDFE0"
-        _hover={{borderColor:"#42B0FF"}}
+        _hover={{ borderColor: "#42B0FF" }}
         focusBorderColor="#42B0FF"
         backgroundColor={inputBackgroundColor}
         borderRadius="20px"
@@ -81,10 +81,10 @@ export function DebouncedControlledInput({
     <InputGroup variant={variant} flex="1" {...props}>
       <Input
         fontFamily="Lato"
-        letterSpacing="0.1em"
+        letterSpacing="0.5px"
         fontWeight="300"
-        _hover={{borderColor:"#42B0FF"}}
-        _placeholder={{color:"#BDBDBD"}}
+        _hover={{ borderColor: "#42B0FF" }}
+        _placeholder={{ color: "#BDBDBD" }}
         border="1px solid #DEDFE0"
         focusBorderColor="#42B0FF"
         backgroundColor={inputBackgroundColor}

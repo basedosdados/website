@@ -102,7 +102,7 @@ function FilterTags({
     <>
       <Text
         fontFamily="Lato"
-        letterSpacing="0.1em"
+        letterSpacing="0.5px"
         fontWeight="100"
         fontSize="16px"
         color="#6F6F6F"
@@ -171,100 +171,100 @@ export default function SearchPage({
 
   const organizations = data?.organizations
     ? Object.keys(data?.organizations)
-        .map((t) => ({
-          name: t,
-          displayName:
-            data.organizations_display_names[t] + ` (${data.organizations[t]})`,
-          value: data.organizations[t],
-        }))
-        .sort((a, b) => b.value - a.value)
+      .map((t) => ({
+        name: t,
+        displayName:
+          data.organizations_display_names[t] + ` (${data.organizations[t]})`,
+        value: data.organizations[t],
+      }))
+      .sort((a, b) => b.value - a.value)
     : [];
 
   const groups = data?.groups
     ? Object.keys(data?.groups)
-        .map((t) => ({
-          name: t,
-          displayName: data.groups_display_names[t] + ` (${data.groups[t]})`,
-          value: data.groups[t],
-        }))
-        .sort((a, b) => b.value - a.value)
+      .map((t) => ({
+        name: t,
+        displayName: data.groups_display_names[t] + ` (${data.groups[t]})`,
+        value: data.groups[t],
+      }))
+      .sort((a, b) => b.value - a.value)
     : [];
 
   const tags = data?.tags
     ? Object.keys(data.tags)
-        .map((t) => ({
-          name: t,
-          displayName: t + ` (${data.tags[t]})`,
-          value: data.tags[t],
-        }))
-        .sort((a, b) => b.value - a.value)
+      .map((t) => ({
+        name: t,
+        displayName: t + ` (${data.tags[t]})`,
+        value: data.tags[t],
+      }))
+      .sort((a, b) => b.value - a.value)
     : [];
 
   const entities = data?.entities
     ? Object.keys(data.entities)
-        .map((t) => ({
-          name: t,
-          displayName:
-            availableOptionsTranslations[t] + ` (${data.entities[t]})`,
-          value: data.entities[t],
-        }))
-        .sort((a, b) => b.value - a.value)
+      .map((t) => ({
+        name: t,
+        displayName:
+          availableOptionsTranslations[t] + ` (${data.entities[t]})`,
+        value: data.entities[t],
+      }))
+      .sort((a, b) => b.value - a.value)
     : [];
 
   const updateFrequencies = data?.update_frequencies
     ? Object.keys(data.update_frequencies)
-        .map((t) => ({
-          name: t,
-          displayName:
-            availableOptionsTranslations[t] + ` (${data.update_frequencies[t]})`,
-          value: data.update_frequencies[t],
-        }))
-        .sort((a, b) => b.value - a.value)
+      .map((t) => ({
+        name: t,
+        displayName:
+          availableOptionsTranslations[t] + ` (${data.update_frequencies[t]})`,
+        value: data.update_frequencies[t],
+      }))
+      .sort((a, b) => b.value - a.value)
     : [];
 
   const spatialCoverages = {
     Continente: data?.spatial_coverage_continent
       ? Object.keys(data.spatial_coverage_continent)
-          .map((t) => ({
-            name: t,
-            displayName:
-              availableOptionsTranslations[t] +
-              ` (${data.spatial_coverage_continent[t]})`,
-            value: data.spatial_coverage_continent[t],
-          }))
-          .sort((a, b) => b.value - a.value)
+        .map((t) => ({
+          name: t,
+          displayName:
+            availableOptionsTranslations[t] +
+            ` (${data.spatial_coverage_continent[t]})`,
+          value: data.spatial_coverage_continent[t],
+        }))
+        .sort((a, b) => b.value - a.value)
       : [],
     País: data?.spatial_coverage_country
       ? Object.keys(data.spatial_coverage_country)
-          .map((t) => ({
-            name: t,
-            displayName:
-              availableOptionsTranslations[t] + ` (${data.spatial_coverage_country[t]})`,
-            value: data.spatial_coverage_country[t],
-          }))
-          .sort((a, b) => b.value - a.value)
+        .map((t) => ({
+          name: t,
+          displayName:
+            availableOptionsTranslations[t] + ` (${data.spatial_coverage_country[t]})`,
+          value: data.spatial_coverage_country[t],
+        }))
+        .sort((a, b) => b.value - a.value)
       : [],
     Admin1: data?.spatial_coverage_admin1
       ? Object.keys(data.spatial_coverage_admin1)
-          .map((t) => ({
-            name: t,
-            displayName:
-              availableOptionsTranslations[t] +
-              ` (${data.spatial_coverage_admin1[t]})`,
-            value: data.spatial_coverage_admin1[t],
-          }))
-          .sort((a, b) => b.value - a.value)
+        .map((t) => ({
+          name: t,
+          displayName:
+            availableOptionsTranslations[t] +
+            ` (${data.spatial_coverage_admin1[t]})`,
+          value: data.spatial_coverage_admin1[t],
+        }))
+        .sort((a, b) => b.value - a.value)
       : [],
     Admin2: data?.spatial_coverage_admin2
       ? Object.keys(data.spatial_coverage_admin2)
-          .map((t) => ({
-            name: t,
-            displayName:
-              availableOptionsTranslations[t] +
-              ` (${data.spatial_coverage_admin2[t]})`,
-            value: data.spatial_coverage_admin2[t],
-          }))
-          .sort((a, b) => b.value - a.value)
+        .map((t) => ({
+          name: t,
+          displayName:
+            availableOptionsTranslations[t] +
+            ` (${data.spatial_coverage_admin2[t]})`,
+          value: data.spatial_coverage_admin2[t],
+        }))
+        .sort((a, b) => b.value - a.value)
       : [],
   };
 
@@ -308,7 +308,7 @@ export default function SearchPage({
   ]);
 
   useEffect(() => {
-    const paramObj = { ...paramFilters, order_by: order, q: search};
+    const paramObj = { ...paramFilters, order_by: order, q: search };
 
     Object.keys(paramObj).forEach((p) => {
       const value = paramObj[p];
@@ -321,9 +321,8 @@ export default function SearchPage({
       paramFilters.temporal_coverage &&
       paramFilters.temporal_coverage.length
     ) {
-      paramObj.temporal_coverage = `${paramObj.temporal_coverage[0]}-${
-        paramObj.temporal_coverage[paramObj.temporal_coverage.length - 1]
-      }`;
+      paramObj.temporal_coverage = `${paramObj.temporal_coverage[0]}-${paramObj.temporal_coverage[paramObj.temporal_coverage.length - 1]
+        }`;
     }
 
     addParametersToCurrentURL(paramObj);
@@ -389,7 +388,7 @@ export default function SearchPage({
               Filtrar resultados
             </SectionTitle>
           </Box>
-          
+
           <CheckboxFilterAccordion
             isActive={(paramFilters.resource_type || []).length > 0}
             alwaysOpen
@@ -406,9 +405,8 @@ export default function SearchPage({
               },
               {
                 key: "external_link",
-                name: `Links externos (${
-                  data?.resource_external_link_count || "0"
-                })`,
+                name: `Fontes originais (${data?.resource_external_link_count || "0"
+                  })`,
               },
             ]}
             values={paramFilters.resource_type}
@@ -503,7 +501,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, spatial_coverage: values })
             }
           /> */}
-      {/*
+          {/*
           <RangeFilterAccordion
             isActive={(paramFilters.temporal_coverage || []).length > 0}
             fieldName="Cobertura temporal"
@@ -612,7 +610,7 @@ export default function SearchPage({
           </Stack>
           <HStack
             fontFamily="Lato"
-            letterSpacing="0.1em"
+            letterSpacing="0.5px"
             fontWeight="100"
             fontSize="16px"
             color="#6F6F6F"
@@ -650,59 +648,59 @@ export default function SearchPage({
           >
             {isLoading
               ? new Array(10).fill(0).map(() => (
-                  <>
-                    <Skeleton width="100%" height="130px" /> <Divider />
-                  </>
-                ))
+                <>
+                  <Skeleton width="100%" height="130px" /> <Divider />
+                </>
+              ))
               : (data?.datasets || []).map((d) => (
-                  <>
-                    <Database
-                      link={`/dataset/${d.name}`}
-                      name={d.title || "Conjunto sem nome"}
-                      image={
-                        "https://basedosdados.org/uploads/group/" +
-                        d.organization.image_url
-                      }
-                      organization={d.organization}
-                      tags={d.tags.map((g) => g.name)}
-                      size={
-                        d.resources.filter((r) => r.bdm_file_size).length > 0
-                          ? d.resources.filter((r) => r.bdm_file_size)[0]
-                              .bdm_file_size
-                          : null
-                      }
-                      temporalCoverage={unionArrays(
-                        d.resources
-                          .filter((r) => r?.temporal_coverage?.length)
-                          .map((r) => r.temporal_coverage)
-                      ).sort()}
-                      tableNum={
-                        d.resources.filter(
-                          (r) => r.resource_type === "bdm_table"
-                        ).length
-                      }
-                      externalLinkNum={
-                        d.resources.filter(
-                          (r) => r.resource_type === "external_link"
-                        ).length
-                      }
-                      updatedSince={d.metadata_modified}
-                      updatedAuthor="Ricardo Dahis"
-                      categories={d.groups.map((g) => g.name)}
-                      categoriesDisplay={d.groups.map((g) => g.display_name)}
-                      spatialCoverage={null}
-                      updateFrequency={
-                        d.resources.filter((r) => r.update_frequency).length >
+                <>
+                  <Database
+                    link={`/dataset/${d.name}`}
+                    name={d.title || "Conjunto sem nome"}
+                    image={
+                      "https://basedosdados.org/uploads/group/" +
+                      d.organization.image_url
+                    }
+                    organization={d.organization}
+                    tags={d.tags.map((g) => g.name)}
+                    size={
+                      d.resources.filter((r) => r.bdm_file_size).length > 0
+                        ? d.resources.filter((r) => r.bdm_file_size)[0]
+                          .bdm_file_size
+                        : null
+                    }
+                    temporalCoverage={unionArrays(
+                      d.resources
+                        .filter((r) => r?.temporal_coverage?.length)
+                        .map((r) => r.temporal_coverage)
+                    ).sort()}
+                    tableNum={
+                      d.resources.filter(
+                        (r) => r.resource_type === "bdm_table"
+                      ).length
+                    }
+                    externalLinkNum={
+                      d.resources.filter(
+                        (r) => r.resource_type === "external_link"
+                      ).length
+                    }
+                    updatedSince={d.metadata_modified}
+                    updatedAuthor="Ricardo Dahis"
+                    categories={d.groups.map((g) => g.name)}
+                    categoriesDisplay={d.groups.map((g) => g.display_name)}
+                    spatialCoverage={null}
+                    updateFrequency={
+                      d.resources.filter((r) => r.update_frequency).length >
                         0
-                          ? d.resources.filter((r) => r.update_frequency)[0]
-                              .update_frequency
-                          : null
-                      }
-                      isPlus={isBdPlus(d)}
-                    />
-                    <Divider />
-                  </>
-                ))}
+                        ? d.resources.filter((r) => r.update_frequency)[0]
+                          .update_frequency
+                        : null
+                    }
+                    isPlus={isBdPlus(d)}
+                  />
+                  <Divider />
+                </>
+              ))}
             <ReactPaginate
               previousLabel={"Anterior"}
               nextLabel={"Próxima"}

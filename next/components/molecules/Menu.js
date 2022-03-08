@@ -159,7 +159,7 @@ export default function Menu({ pages = [] }) {
     Dados: "/dataset",
     Documentação: "https://basedosdados.github.io/mais/",
     Institucional: {
-      "Quem Somos": "/blog/2/",
+      "Quem somos": "/quem-somos",
       Contato: "/blog/1/",
       Blog: "https://medium.com/basedosdados",
       Newsletter:

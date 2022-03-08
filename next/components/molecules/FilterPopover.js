@@ -84,7 +84,7 @@ export function FilterPopover({ }) {
                 color="#A8A8A8"
                 variant="ghost"
                 fontFamily="ubuntu"
-                letterSpacing="0.1em"
+                letterSpacing="0.5px"
                 borderRadius="23.1818px"
                 width="120px"
                 fontSize="14px"
@@ -94,7 +94,7 @@ export function FilterPopover({ }) {
               <Button
                 backgroundColor="#42B0FF"
                 fontFamily="ubuntu"
-                letterSpacing="0.1em"
+                letterSpacing="0.5px"
                 borderRadius="23.1818px"
                 colorScheme="blue"
                 width="120px"

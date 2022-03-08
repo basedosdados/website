@@ -81,7 +81,7 @@ function Hero({ recentDatalakeDatasets }) {
 
   useEffect(() => {
     setIsMobileMod(isMobile)
-  },[isMobile])
+  }, [isMobile])
 
   function openSearchLink() {
     return window.open(`/dataset?q=${search}`, "_self");
@@ -90,8 +90,8 @@ function Hero({ recentDatalakeDatasets }) {
   return (
     <VStack width="100%">
       <VStack
-          width="100%"
-          height="100%"
+        width="100%"
+        height="100%"
       >
         <VStack
           width="100%"
@@ -115,17 +115,17 @@ function Hero({ recentDatalakeDatasets }) {
               fontFamily="Ubuntu"
               flex="2"
               fontSize="34px"
-              letterSpacing={{ base:"0", lg: "0.5px" }}
+              letterSpacing={{ base: "0", lg: "0.5px" }}
               textAlign="center"
               marginStart="0px !important"
-              marginBottom={ isMobileMod ? "30px" : "50px" }
+              marginBottom={isMobileMod ? "30px" : "50px"}
             >
               Encontre os dados que você precisa
             </BigTitle>
             <VStack
               maxWidth="650px"
               width="100%"
-              spacing={3} 
+              spacing={3}
               alignItems="flex-start"
               flex="3"
             >
@@ -161,8 +161,8 @@ function Hero({ recentDatalakeDatasets }) {
                   </Box>
                 }
               />
-              <HStack paddingLeft={ isMobileMod ? "20px" : "40px" }>
-                {!isMobileMod && 
+              <HStack paddingLeft={isMobileMod ? "20px" : "40px"}>
+                {!isMobileMod &&
                   <SectionText fontSize="14px">Termos populares: </SectionText>
                 }
                 <ThemeTag name="lei" />
@@ -216,7 +216,7 @@ function Hero({ recentDatalakeDatasets }) {
               priority
             />
           </Box>
-          
+
         </Stack>
 
       </VStack>
@@ -256,13 +256,13 @@ function ExploreInYourFavoriteLanguage() {
     <ImageSection
       leftColumn={
         <VStack alignItems="flex-start" spacing={5}>
-          <Title maxWidth="100%" fontSize="30px" letterSpacing="0.1em">
+          <Title maxWidth="100%" fontSize="30px" letterSpacing="0.5px">
             Explore tudo na sua linguagem favorita
           </Title>
           <SectionText textAlign="justify">
             Desenvolvemos <b>pacotes para acesso aos dados da BD+</b> em Python,
             R e linha de comando. Além disso, você pode{" "}
-            <b>consultar e filtrar dados usando SQL</b> no editor do nosso 
+            <b>consultar e filtrar dados usando SQL</b> no editor do nosso
             <i>datalake</i> no Google BigQuery.
           </SectionText>
           <LinkDash href="https://basedosdados.github.io/mais/access_data_packages">
@@ -344,7 +344,7 @@ function LearnToAnalysis() {
             position="relative"
             maxWidth="100%"
             fontSize="30px"
-            letterSpacing="0.1em"
+            letterSpacing="0.5px"
           >
             Aprenda a construir análises com os dados
           </Title>
@@ -384,7 +384,7 @@ function JoinTheCommunity() {
           flex="1"
           spacing={5}
         >
-          <Title maxWidth="80%" fontSize="30px" letterSpacing="0.1em">
+          <Title maxWidth="80%" fontSize="30px" letterSpacing="0.5px">
             Faça parte da nossa comunidade, <i>databaser</i>
           </Title>
           <SectionText textAlign="justify">
@@ -448,7 +448,7 @@ function Support({ pages }) {
           display="flex"
           fontSize="18px"
           minWidth="200px"
-          letterSpacing="0.1em"
+          letterSpacing="0.5px"
           _hover={{
             transform: "translateY(-3px);",
           }}
@@ -663,7 +663,7 @@ function Support({ pages }) {
   );
 }
 
-export default function Home({ 
+export default function Home({
   pages,
   popularDatasets,
   recentDatalakeDatasets,
@@ -678,8 +678,8 @@ export default function Home({
         zIndex="10"
         position="relative"
       >
-        <Hero 
-          recentDatalakeDatasets={recentDatalakeDatasets} 
+        <Hero
+          recentDatalakeDatasets={recentDatalakeDatasets}
         />
       </VStack>
       <BePartner />

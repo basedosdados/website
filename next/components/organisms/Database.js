@@ -43,22 +43,22 @@ export function Database({
       var interval = temporalCoverage[i];
       if (interval.includes("(")) {
         var first = interval.substring(0, interval.indexOf('('));
-        var last  = interval.substring(   interval.indexOf(')')+1);
+        var last = interval.substring(interval.indexOf(')') + 1);
         years.push(first);
         years.push(last);
       }
       else {
         years.push(interval);
       }
-      
+
     }
 
     var years = years.sort();
-    
+
     if (years.length === 1) return years[0];
 
     var min_date = years[0];
-    var max_date = years[years.length-1];
+    var max_date = years[years.length - 1];
 
     return (min_date + " - " + max_date);
 
@@ -118,7 +118,7 @@ export function Database({
                     fontWeight="700"
                     fontFamily="Lato"
                     fontSize="18px"
-                    letterSpacing="0.1em"
+                    letterSpacing="0.5px"
                     color="#252A32"
                   >
                     {name}
@@ -136,9 +136,8 @@ export function Database({
                   <Link href={`/dataset?group=${c}`}>
                     <CategoryIcon
                       size="36px"
-                      url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c}${
-                        isPlus ? "-1" : ""
-                      }.svg`}
+                      url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c}${isPlus ? "-1" : ""
+                        }.svg`}
                     />
                   </Link>
                 ))}
@@ -240,7 +239,7 @@ export function Database({
                     fontWeight="bold"
                   >
                     {externalLinkNum}{" "}
-                    {externalLinkNum === 1 ? "link externo" : "links externos"}
+                    {externalLinkNum === 1 ? "fonte original" : "fontes originais"}
                   </Subtitle>
                 </HStack>
               ) : (

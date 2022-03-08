@@ -15,7 +15,7 @@ export function ShadowBox({ title, children, spacing = 5, ...props }) {
       position="relative"
       {...props}
     >
-      <Title fontSize="28px" fontWeigth="400" letterSpacing="0.1em">
+      <Title fontSize="28px" fontWeigth="400" letterSpacing="0.5px">
         {title}
       </Title>
       {children}
