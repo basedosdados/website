@@ -10,7 +10,6 @@ import {
   Avatar,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import ControlledInput from "../atoms/ControlledInput";
 import RoundedButton from "../atoms/RoundedButton";
 import Link from "../atoms/Link";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -18,7 +17,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import UserContext from "../../context/user";
 import { MenuDropdown } from "./MenuDropdown";
-import SearchIcon from "../../public/img/icons/searchIcon";
 
 function MenuDrawer({ isOpen, onClose, links }) {
   return (
@@ -124,21 +122,6 @@ function DesktopLinks({ links }) {
         })}
       </HStack>
       <HStack spacing={9} display={{ base: "none", lg: "flex" }}>
-        <ControlledInput
-          onEnterPress={openSearchLink}
-          color="black"
-          value={search}
-          onChange={setSearch}
-          inputBackgroundColor="#FFFFFF"
-          inputStyle={{
-            borderRadius: "15px",
-          }}
-          rightIcon={
-            <Box onClick={openSearchLink} cursor="pointer">
-              <SearchIcon color="#D0D0D0"/>
-            </Box>
-          }
-        />
         {userData ? (
           <HStack spacing={5}>
             <Avatar
