@@ -15,7 +15,7 @@ export default function RoundedButton({
       backgroundColor={backgroundColor}
       onClick={onClick}
       borderRadius="68.6364px"
-      boxShadow="1px 1px 1px 1px rgba(64, 60, 67, 0.16)"
+      boxShadow="0px 1px 0px 0px rgba(64, 60, 67, 0.16)"
       letterSpacing="0.5px"
       _hover={{
         ..._hover,
