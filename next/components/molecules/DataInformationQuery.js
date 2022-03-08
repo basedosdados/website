@@ -11,6 +11,7 @@ import {
   useClipboard,
   Button,
 } from "@chakra-ui/react";
+import { useEffect } from "react";
 import Title from "../atoms/Title";
 import Link from "../atoms/Link";
 import { LinkDash } from "../atoms/LinkDash";
@@ -92,6 +93,10 @@ export function PrismCodeHighlight({ language, children }) {
 export default function DataInformationQuery ({ resource }) {
   const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}.zip`
   const queryName = `${resource.dataset_id}.${resource.name}`;
+
+  useEffect(() => {
+    if (window) window.Prism.highlightAll();
+  }, []);
 
   return (
     <VStack

@@ -154,10 +154,12 @@ body {
 
 .BrainhubCarousel__arrowLeft {
   transform: translateX(10px);
+  margin-right: 50px;
 }
 
 .BrainhubCarousel__arrowRight {
   transform: translateX(-10px);
+  margin-left: 50px;  
 }
 
 .BrainhubCarousel__arrows span {

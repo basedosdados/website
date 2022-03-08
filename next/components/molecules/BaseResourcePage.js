@@ -79,7 +79,7 @@ export function BaseResourcePage({
         width="100%"
         alignItems={{ base: "flex-start", lg: "flex-start" }}
       >
-        <Title
+        <Title 
           width="100%"
           letterSpacing="0.5px"
           lineHeight="0"

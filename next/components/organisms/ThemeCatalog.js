@@ -1,7 +1,13 @@
+import { 
+  VStack,
+  Center,
+  Image, 
+  Tooltip, 
+  Button 
+} from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
-import { VStack, Center, Image, Tooltip } from "@chakra-ui/react";
 import dynamic from 'next/dynamic';
-import { slidesToShowPlugin, slidesToScrollPlugin, autoplayPlugin } from "@brainhubeu/react-carousel";
+import { slidesToShowPlugin, slidesToScrollPlugin } from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { getGroupList } from "../../pages/api/groups"
@@ -13,8 +19,7 @@ const Carousel = dynamic(
   { ssr: false },
 )
 
-function Themes ({ isMobileMod, newRecentDataLakeDataSets }) {
-  const [listThemes, setListThemes] = useState([])
+function Themes ({ isMobileMod, newRecentDataLakeDataSets, listThemes=[] }) {
   const [selectedTheme, setSelectedTheme] = useState()
 
   const searchTheme = (elm) => {
@@ -24,16 +29,13 @@ function Themes ({ isMobileMod, newRecentDataLakeDataSets }) {
       name: elm.name,
     })
   }
-
-  useEffect(() => {
-    getGroupList().then(res => {
-      setListThemes(res.data.result)
-    })
-  },[])
   
+  if(listThemes.length === 0)
+    return null
+
   return (
     <Center
-      width="100%"
+      width="95vw"
     >
       <Carousel
         offset={isMobileMod ? 50 : 70}
@@ -96,14 +98,13 @@ function CardThemes ({ isMobileMod, recentThemes }) {
 
   return (
     <VStack
-      width="100%"
+      width="85vw"
       minWidth="400px"
       alignItems="flex-start"
       padding="25px 0"
       margin="50px 0 !important"
       borderRadius="15px"
       position="relative"
-      backgroundColor="#fbfbfb"
     >
       <Carousel
         offset={ isMobileMod ? 0 : 20}
@@ -154,14 +155,14 @@ function CardThemes ({ isMobileMod, recentThemes }) {
 
 export default function ThemeCatalog ({ recentDatalakeDatasets }) {
   const [recentThemes, setRecentThemes] = useState([])
+  const [listThemes, setListThemes] = useState([])
   const isMobile = useCheckMobile();
 
   useEffect(() => {
-    if(recentDatalakeDatasets) {
-      setRecentThemes(recentDatalakeDatasets)
-    } else {
-      setRecentThemes()
-    }
+    getGroupList().then(res => {
+      setListThemes(res.data.result)
+    })
+    recentDatalakeDatasets ? setRecentThemes(recentDatalakeDatasets) : setRecentThemes()
   },[])
 
   const newRecentDataLake = (elm) => {
@@ -177,6 +178,7 @@ export default function ThemeCatalog ({ recentDatalakeDatasets }) {
       gap="50px"
     >
       <Themes
+        listThemes={listThemes}
         newRecentDataLakeDataSets={newRecentDataLake}
         isMobileMod={isMobile} 
       />
