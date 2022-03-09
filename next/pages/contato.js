@@ -22,27 +22,26 @@ export default function Contato({ pages }) {
     document.body.appendChild(script);
 
     script.addEventListener('load', () => {
-        // @TS-ignore
-        if (window.hbspt) {
-            // @TS-ignore
-            window.hbspt.forms.create({
-                region: "na1",
-                portalId: "9331013",
-                formId: "3c85cc81-2b91-4a90-b3ff-41412dfed25e",
-                target: '#contato'
-            })
-        }
-    });
-   },[]);
+      if (window.hbspt) {
+        window.hbspt.forms.create({
+          region: "na1",
+          portalId: "9331013",
+          formId: "3c85cc81-2b91-4a90-b3ff-41412dfed25e",
+          target: '#form-hbspt'
+        })
+      }
+    })
+  },[])
     
   return (
     <MainPageTemplate pages={pages}>
       <Stack
-      paddingTop={{ base: "80px", lg: "0px" }}
-      width="80%"
-      justify="space-between"
-      direction={{ base: "column", lg: "row" }}
-      margin="auto"
+        gridGap={{base:"40px", lg: "100px"}}
+        paddingTop={{ base: "80px", lg: "0px" }}
+        width="80%"
+        justify="space-between"
+        direction={{ base: "column", lg: "row" }}
+        margin="auto"
       >
         <VStack maxWidth={{ base: "100%", lg: "45%" }}>
           <Box contentAlign="flex-start">
@@ -100,9 +99,16 @@ export default function Contato({ pages }) {
             </SectionText>
           </Box>
         </VStack>
-        <Box>
-            <Box width="100%" height="100%" id="contato"/>
-        </Box>
+        <Stack paddingTop="20px" >
+          <Box 
+            width="100%"
+            minWidth={{base:"100%", lg: "500px"}} 
+            maxWidth="500px"
+            height="100%" 
+            maxHeight="600px" 
+            id="form-hbspt"
+          />
+        </Stack>
       </Stack>
     </MainPageTemplate>
   )

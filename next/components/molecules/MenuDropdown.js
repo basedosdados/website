@@ -14,7 +14,7 @@ export function MenuDropdown({ title, children, ...style }) {
         as={Button}
         fontFamily="Lato"
         fontSize="14px"
-        letterSpacing="0.15em"
+        letterSpacing="0.5px"
         _active={{ backgroundColor: "transparent" }}
         padding="0px"
         color="#252A32"
