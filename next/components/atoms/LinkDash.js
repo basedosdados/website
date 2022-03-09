@@ -9,12 +9,12 @@ export function LinkDash({ children, href, dash = true, ...style }) {
       _hover={{ textDecoration: "none", opacity:"0.6" }}
       target="_blank"
       margin="0 !important"
-      letterSpacing="1px"
+      letterSpacing="0.5px"
       fontFamily="Lato"
       fontSize="15px"
       {...style}
     >
-      {children} {dash ? "..." : null}
+      {children} {dash ? ">>" : null}
     </Link>
   );
 }
