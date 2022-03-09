@@ -149,7 +149,7 @@ export default function Footer({ pages }) {
               </FooterLink>
               <FooterLink
                 color="white"
-                href="https://basedosdados.org/blog/1/" // TODO: Mudar o ID para contato
+                href="https://basedosdados.org/contato"
               >
                 Contato
               </FooterLink>

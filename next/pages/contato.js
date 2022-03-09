@@ -22,27 +22,26 @@ export default function Contato({ pages }) {
     document.body.appendChild(script);
 
     script.addEventListener('load', () => {
-        // @TS-ignore
-        if (window.hbspt) {
-            // @TS-ignore
-            window.hbspt.forms.create({
-                region: "na1",
-                portalId: "9331013",
-                formId: "3c85cc81-2b91-4a90-b3ff-41412dfed25e",
-                target: '#contato'
-            })
-        }
-    });
-   },[]);
+      if (window.hbspt) {
+        window.hbspt.forms.create({
+          region: "na1",
+          portalId: "9331013",
+          formId: "3c85cc81-2b91-4a90-b3ff-41412dfed25e",
+          target: '#form-hbspt'
+        })
+      }
+    })
+  },[])
     
   return (
     <MainPageTemplate pages={pages}>
       <Stack
-      paddingTop={{ base: "80px", lg: "0px" }}
-      width="80%"
-      justify="space-between"
-      direction={{ base: "column", lg: "row" }}
-      margin="auto"
+        gridGap={{base:"40px", lg: "100px"}}
+        paddingTop={{ base: "80px", lg: "0px" }}
+        width="80%"
+        justify="space-between"
+        direction={{ base: "column", lg: "row" }}
+        margin="auto"
       >
         <VStack maxWidth={{ base: "100%", lg: "45%" }}>
           <Box contentAlign="flex-start">
@@ -64,11 +63,11 @@ export default function Contato({ pages }) {
             <SectionText fontSize="14px" fontWeight="300" paddingBottom="25px" color="#6F6F6F">
               Fale diretamente com nossa equipe comercial para marcarmos uma conversa e avaliarmos como{" "}
               <LinkDash
-              href="/servicos"
-              dash={false}
-              fontSize="14px"
-              fontWeight="bold"
-              textDecoration="none"
+                href="/servicos"
+                dash={false}
+                fontSize="14px"
+                fontWeight="bold"
+                textDecoration="none"
               >
                 nossos serviços{" "}
               </LinkDash>
@@ -89,20 +88,27 @@ export default function Contato({ pages }) {
             <SectionText fontSize="14px" fontWeight="300" color="#6F6F6F">
               Dúvidas? Fale com a nossa comunidade no{" "}
               <LinkDash
-              href="https://discord.gg/huKWpsVYx4"
-              dash={false}
-              fontSize="14px"
-              fontWeight="bold"
-              textDecoration="none"
+                href="https://discord.gg/huKWpsVYx4"
+                dash={false}
+                fontSize="14px"
+                fontWeight="bold"
+                textDecoration="none"
               >
                 Discord.
               </LinkDash>
             </SectionText>
           </Box>
         </VStack>
-        <Box>
-            <Box width="100%" height="100%" id="contato"/>
-        </Box>
+        <Stack paddingTop="20px" >
+          <Box 
+            width="100%"
+            minWidth={{base:"100%", lg: "500px"}} 
+            maxWidth="500px"
+            height="100%" 
+            maxHeight="600px" 
+            id="form-hbspt"
+          />
+        </Stack>
       </Stack>
     </MainPageTemplate>
   )
