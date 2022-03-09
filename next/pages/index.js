@@ -185,7 +185,7 @@ function Hero({ recentDatalakeDatasets }) {
               color="#9c9c9c"
               letterSpacing="1px"
             >
-              Busque por tema
+              Explore as bases mais recentes {/* Busque por tema */}
             </Title>
             <ThemeCatalog
               recentDatalakeDatasets={recentDatalakeDatasets}
