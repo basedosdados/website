@@ -159,8 +159,8 @@ export default function ThemeCatalog ({ recentDatalakeDatasets }) {
   const isMobile = useCheckMobile();
 
   useEffect(() => {
-    getGroupList().then(data => {
-      setListThemes(data.result)
+    getGroupList().then(res => {
+      setListThemes(res.data.result)
     })
     recentDatalakeDatasets ? setRecentThemes(recentDatalakeDatasets) : setRecentThemes()
   },[])
