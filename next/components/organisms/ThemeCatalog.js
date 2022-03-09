@@ -177,11 +177,11 @@ export default function ThemeCatalog ({ recentDatalakeDatasets }) {
       alignItems="center"
       gap="50px"
     >
-      {/* <Themes
-        listThemes={listThemes}
-        newRecentDataLakeDataSets={newRecentDataLake}
-        isMobileMod={isMobile} 
-      /> */}
+       <Themes
+         listThemes={listThemes}
+         newRecentDataLakeDataSets={newRecentDataLake}
+         isMobileMod={isMobile} 
+       />
 
       <CardThemes 
         isMobileMod={isMobile} 
