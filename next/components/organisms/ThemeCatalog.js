@@ -160,8 +160,7 @@ export default function ThemeCatalog ({ recentDatalakeDatasets }) {
 
   useEffect(() => {
     getGroupList().then(res => {
-      console.log(res)
-      setListThemes(res.result)
+      setListThemes(res.data.result)
     })
     recentDatalakeDatasets ? setRecentThemes(recentDatalakeDatasets) : setRecentThemes()
   },[])
