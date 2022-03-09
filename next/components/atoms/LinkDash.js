@@ -14,7 +14,7 @@ export function LinkDash({ children, href, dash = true, ...style }) {
       fontSize="15px"
       {...style}
     >
-      {children} {dash ? "..." : null}
+      {children} {dash ? ">>" : null}
     </Link>
   );
 }

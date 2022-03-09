@@ -3,14 +3,14 @@ import { Heading } from "@chakra-ui/react";
 export default function SectionTitle({
   children,
   color = "#000000",
-  fontWeigth = "700",
+  fontWeigth = "400",
   ...style
 }) {
   return (
     <Heading
-      fontFamily="Lato"
+      fontFamily="Ubuntu"
       fontSize="32px"
-      letterSpacing="0.1em"
+      letterSpacing="0.5px"
       color={color}
       fontWeight={fontWeigth}
       {...style}

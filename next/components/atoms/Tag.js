@@ -19,7 +19,7 @@ export function Tag({
         fontWeight="400"
         fontSize={fontSize}
         fontFamily="Ubuntu"
-        letterSpacing="0.1em"
+        letterSpacing="0.5px"
         fontWeight={fontWeight}
       >
         {children}

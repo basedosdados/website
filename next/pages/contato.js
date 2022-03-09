@@ -63,11 +63,11 @@ export default function Contato({ pages }) {
             <SectionText fontSize="14px" fontWeight="300" paddingBottom="25px" color="#6F6F6F">
               Fale diretamente com nossa equipe comercial para marcarmos uma conversa e avaliarmos como{" "}
               <LinkDash
-              href="/servicos"
-              dash={false}
-              fontSize="14px"
-              fontWeight="bold"
-              textDecoration="none"
+                href="/servicos"
+                dash={false}
+                fontSize="14px"
+                fontWeight="bold"
+                textDecoration="none"
               >
                 nossos serviços{" "}
               </LinkDash>
@@ -88,11 +88,11 @@ export default function Contato({ pages }) {
             <SectionText fontSize="14px" fontWeight="300" color="#6F6F6F">
               Dúvidas? Fale com a nossa comunidade no{" "}
               <LinkDash
-              href="https://discord.gg/huKWpsVYx4"
-              dash={false}
-              fontSize="14px"
-              fontWeight="bold"
-              textDecoration="none"
+                href="https://discord.gg/huKWpsVYx4"
+                dash={false}
+                fontSize="14px"
+                fontWeight="bold"
+                textDecoration="none"
               >
                 Discord.
               </LinkDash>

@@ -6,7 +6,7 @@ export function BlueBox({ title, text }) {
       <Text
         fontFamily="Lato"
         lineHeight="24px"
-        letterSpacing="0.1em"
+        letterSpacing="0.5px"
         fontWeight="400"
         fontSize="14px"
         backgroundColor="rgba(130, 202, 255, 0.15);"

@@ -23,7 +23,7 @@ export function BaseFilterAccordion({
   overflowX = "scroll",
   isOpen = null,
   isActive = false,
-  onChange = () => {},
+  onChange = () => { },
   bdPlus = null,
   alwaysOpen = false,
   isHovering = true
@@ -48,8 +48,8 @@ export function BaseFilterAccordion({
                 >
                   <Box
                     width="fit-content"
-                    fontWeight="700"
-                    fontFamily="Lato"
+                    fontWeight="500"
+                    fontFamily="Ubuntu"
                     fontSize="16px"
                     letterSpacing="0.5px"
                   >
@@ -61,7 +61,7 @@ export function BaseFilterAccordion({
                     <></>
                   )}
                 </HStack>
-                {!alwaysOpen ? <AccordionIcon color={isActive ? "#2B8C4D" : null } marginLeft="auto" fontSize="18px"/> : <></>}
+                {!alwaysOpen ? <AccordionIcon color={isActive ? "#2B8C4D" : null} marginLeft="auto" fontSize="18px" /> : <></>}
               </AccordionButton>
             </Text>
             {(isOpen && isOpen === true) || (isOpen == null && isExpanded) ? (
@@ -124,7 +124,7 @@ export function CheckboxFilterAccordion({
               }}
               rightIcon={
                 <Box cursor="pointer">
-                  <SearchIcon color="#D0D0D0"/>
+                  <SearchIcon color="#D0D0D0" />
                 </Box>
               }
             />
@@ -141,10 +141,10 @@ export function CheckboxFilterAccordion({
         >
           {(canSearch
             ? choices.filter(
-                (c) =>
-                  c[displayField].toLowerCase().indexOf(search.toLowerCase()) !=
-                  -1
-              )
+              (c) =>
+                c[displayField].toLowerCase().indexOf(search.toLowerCase()) !=
+                -1
+            )
             : choices
           ).map((c) => (
             <Checkbox
@@ -152,7 +152,7 @@ export function CheckboxFilterAccordion({
               value={c[valueField]}
               color="#7D7D7D"
               colorScheme="green"
-              letterSpacing="0.1em"
+              letterSpacing="0.5px"
             >
               {c[displayField]}
             </Checkbox>
@@ -277,7 +277,7 @@ export function FilterAccordion({
               cursor="pointer"
               fontWeight={c[valueField] === value ? "500" : "400"}
               color={c[valueField] === value ? "#2B8C4D" : "#7D7D7D"}
-              _hover={{ color:"#2B8C4D", fontWeight:"500"}}
+              _hover={{ color: "#2B8C4D", fontWeight: "500" }}
               padding="5px 20px"
               borderRadius="5px"
               letterSpacing="0.5px"

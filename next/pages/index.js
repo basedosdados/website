@@ -12,13 +12,12 @@ import Image from "next/image";
 import ControlledInput from "../components/atoms/ControlledInput";
 import SectionText from "../components/atoms/SectionText";
 import BigTitle from "../components/atoms/BigTitle";
-import DatabaseCard from "../components/organisms/DatabaseCard";
 import { useEffect, useState } from "react";
 import ThemeCatalog from "../components/organisms/ThemeCatalog";
 import Title from "../components/atoms/Title";
+import SectionTitle from "../components/atoms/SectionTitle";
 import Typist from "react-typist";
 import {
-  getPopularDatalakeDatasets,
   getRecentDatalakeDatasets
 } from "./api/datasets";
 import { ShadowBox } from "../components/atoms/ShadowBox";
@@ -27,7 +26,6 @@ import { withPages } from "../hooks/pages.hook";
 import { ThemeTag } from "../components/atoms/ThemeTag";
 import { LinkDash } from "../components/atoms/LinkDash";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
-import { isBdPlus } from "../utils";
 import { BePartner } from "../components/organisms/BePartner";
 
 export async function getStaticProps(context) {
@@ -46,32 +44,32 @@ export async function getStaticProps(context) {
   });
 }
 
-function HeroText({ children, iconUrl, height = "100px" }) {
-  return (
-    <VStack alignItems="center" justifyContent="center" maxWidth="400px">
-      <Flex justify="baseline" align="baseline" width="100%" height="130px">
-        <Flex
-          margin="auto"
-          width="100%"
-          height={height}
-          marginBottom="20px"
-          position="relative"
-          justify="baseline"
-          align="baseline"
-        >
-          <Image
-            loading="eager"
-            priority
-            objectFit="contain"
-            layout="fill"
-            src={iconUrl}
-          />
-        </Flex>
-      </Flex>
-      {children}
-    </VStack>
-  );
-}
+// function HeroText({ children, iconUrl, height = "100px" }) {
+//   return (
+//     <VStack alignItems="center" justifyContent="center" maxWidth="400px">
+//       <Flex justify="baseline" align="baseline" width="100%" height="130px">
+//         <Flex
+//           margin="auto"
+//           width="100%"
+//           height={height}
+//           marginBottom="20px"
+//           position="relative"
+//           justify="baseline"
+//           align="baseline"
+//         >
+//           <Image
+//             loading="eager"
+//             priority
+//             objectFit="contain"
+//             layout="fill"
+//             src={iconUrl}
+//           />
+//         </Flex>
+//       </Flex>
+//       {children}
+//     </VStack>
+//   );
+// }
 
 
 function Hero({ recentDatalakeDatasets }) {
@@ -81,7 +79,7 @@ function Hero({ recentDatalakeDatasets }) {
 
   useEffect(() => {
     setIsMobileMod(isMobile)
-  },[isMobile])
+  }, [isMobile])
 
   function openSearchLink() {
     return window.open(`/dataset?q=${search}`, "_self");
@@ -90,8 +88,8 @@ function Hero({ recentDatalakeDatasets }) {
   return (
     <VStack width="100%">
       <VStack
-          width="100%"
-          height="100%"
+        width="100%"
+        height="100%"
       >
         <VStack
           width="100%"
@@ -115,17 +113,17 @@ function Hero({ recentDatalakeDatasets }) {
               fontFamily="Ubuntu"
               flex="2"
               fontSize="34px"
-              letterSpacing={{ base:"0", lg: "0.5px" }}
+              letterSpacing={{ base: "0", lg: "0.5px" }}
               textAlign="center"
               marginStart="0px !important"
-              marginBottom={ isMobileMod ? "30px" : "50px" }
+              marginBottom={isMobileMod ? "30px" : "50px"}
             >
               Encontre os dados que você precisa
             </BigTitle>
             <VStack
               maxWidth="650px"
               width="100%"
-              spacing={3} 
+              spacing={3}
               alignItems="flex-start"
               flex="3"
             >
@@ -161,8 +159,8 @@ function Hero({ recentDatalakeDatasets }) {
                   </Box>
                 }
               />
-              <HStack paddingLeft={ isMobileMod ? "20px" : "40px" }>
-                {!isMobileMod && 
+              <HStack paddingLeft={isMobileMod ? "20px" : "40px"}>
+                {!isMobileMod &&
                   <SectionText fontSize="14px">Termos populares: </SectionText>
                 }
                 <ThemeTag name="lei" />
@@ -188,7 +186,7 @@ function Hero({ recentDatalakeDatasets }) {
               color="#9c9c9c"
               letterSpacing="1px"
             >
-              Busque por tema
+              Explore as bases mais recentes {/* Busque por tema */}
             </Title>
             <ThemeCatalog
               recentDatalakeDatasets={recentDatalakeDatasets}
@@ -216,7 +214,7 @@ function Hero({ recentDatalakeDatasets }) {
               priority
             />
           </Box>
-          
+
         </Stack>
 
       </VStack>
@@ -256,13 +254,13 @@ function ExploreInYourFavoriteLanguage() {
     <ImageSection
       leftColumn={
         <VStack alignItems="flex-start" spacing={5}>
-          <Title maxWidth="100%" fontSize="30px" letterSpacing="0.1em">
+          <SectionTitle maxWidth="100%" fontSize="28px" letterSpacing="0.5px">
             Explore tudo na sua linguagem favorita
-          </Title>
+          </SectionTitle>
           <SectionText textAlign="justify">
             Desenvolvemos <b>pacotes para acesso aos dados da BD+</b> em Python,
             R e linha de comando. Além disso, você pode{" "}
-            <b>consultar e filtrar dados usando SQL</b> no editor do nosso 
+            <b>consultar e filtrar dados usando SQL</b> no editor do nosso
             <i>datalake</i> no Google BigQuery.
           </SectionText>
           <LinkDash href="https://basedosdados.github.io/mais/access_data_packages">
@@ -339,15 +337,15 @@ function LearnToAnalysis() {
               objectFit="contain"
             />
           </Box>
-          <Title
+          <SectionTitle
             zIndex="1"
             position="relative"
             maxWidth="100%"
-            fontSize="30px"
-            letterSpacing="0.1em"
+            fontSize="28px"
+            letterSpacing="0.5px"
           >
             Aprenda a construir análises com os dados
-          </Title>
+          </SectionTitle>
           <VStack spacing={4} zIndex="1" position="relative">
             <SectionText textAlign="justify">
               Produzimos{" "}
@@ -384,9 +382,9 @@ function JoinTheCommunity() {
           flex="1"
           spacing={5}
         >
-          <Title maxWidth="80%" fontSize="30px" letterSpacing="0.1em">
+          <SectionTitle maxWidth="80%" fontSize="28px" letterSpacing="0.5px">
             Faça parte da nossa comunidade, <i>databaser</i>
-          </Title>
+          </SectionTitle>
           <SectionText textAlign="justify">
             Acompanhe todas as discussões, tire dúvidas, fale e aprenda direto
             com a equipe e a comunidade da Base dos Dados pelo Discord. Para ir
@@ -448,7 +446,7 @@ function Support({ pages }) {
           display="flex"
           fontSize="18px"
           minWidth="200px"
-          letterSpacing="0.1em"
+          letterSpacing="0.5px"
           _hover={{
             transform: "translateY(-3px);",
           }}
@@ -663,7 +661,7 @@ function Support({ pages }) {
   );
 }
 
-export default function Home({ 
+export default function Home({
   pages,
   popularDatasets,
   recentDatalakeDatasets,
@@ -678,8 +676,8 @@ export default function Home({
         zIndex="10"
         position="relative"
       >
-        <Hero 
-          recentDatalakeDatasets={recentDatalakeDatasets} 
+        <Hero
+          recentDatalakeDatasets={recentDatalakeDatasets}
         />
       </VStack>
       <BePartner />

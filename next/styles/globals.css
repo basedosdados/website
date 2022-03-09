@@ -16,14 +16,14 @@ body {
   font-size: 40px;
   color: #2b8c4d;
   font-family: Lato;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.5px;
 }
 
 #blog p {
   font-size: 16px;
   color: #6e6e6e;
   font-family: Lato;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.5px;
 }
 
 #form-hbspt {
@@ -154,10 +154,12 @@ body {
 
 .BrainhubCarousel__arrowLeft {
   transform: translateX(10px);
+  margin-right: 50px;
 }
 
 .BrainhubCarousel__arrowRight {
   transform: translateX(-10px);
+  margin-left: 50px;  
 }
 
 .BrainhubCarousel__arrows span {
