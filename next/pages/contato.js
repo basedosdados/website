@@ -3,6 +3,7 @@ import {
     VStack,
     Stack,
   } from "@chakra-ui/react";
+import { useEffect } from "react"
 import { LinkDash } from "../components/atoms/LinkDash";
 import BigTitle from "../components/atoms/BigTitle";
 import Title from "../components/atoms/Title";
