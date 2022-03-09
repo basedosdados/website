@@ -149,9 +149,9 @@ export default function Footer({ pages }) {
               </FooterLink>
               <FooterLink
                 color="white"
-                href="https://basedosdados.org/blog/1/" // TODO: Mudar o ID para fale-conosco
+                href="https://basedosdados.org/contato"
               >
-                Fale Conosco
+                Contato
               </FooterLink>
               <FooterLink color="white" href="/servicos">
                 Serviços
