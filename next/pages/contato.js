@@ -15,6 +15,25 @@ export async function getStaticProps(context) {
 }
 
 export default function Contato({ pages }) {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src='https://js.hsforms.net/forms/v2.js';
+    document.body.appendChild(script);
+
+    script.addEventListener('load', () => {
+        // @TS-ignore
+        if (window.hbspt) {
+            // @TS-ignore
+            window.hbspt.forms.create({
+                region: "na1",
+                portalId: "9331013",
+                formId: "3c85cc81-2b91-4a90-b3ff-41412dfed25e",
+                target: '#contato'
+            })
+        }
+    });
+   },[]);
+    
   return (
     <MainPageTemplate pages={pages}>
       <Stack
@@ -80,6 +99,9 @@ export default function Contato({ pages }) {
             </SectionText>
           </Box>
         </VStack>
+        <Box>
+            <Box width="100%" height="100%" id="contato"/>
+        </Box>
       </Stack>
     </MainPageTemplate>
   )
