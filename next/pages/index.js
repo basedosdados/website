@@ -15,6 +15,7 @@ import BigTitle from "../components/atoms/BigTitle";
 import { useEffect, useState } from "react";
 import ThemeCatalog from "../components/organisms/ThemeCatalog";
 import Title from "../components/atoms/Title";
+import SectionTitle from "../components/atoms/SectionTitle";
 import Typist from "react-typist";
 import {
   getRecentDatalakeDatasets
@@ -253,9 +254,9 @@ function ExploreInYourFavoriteLanguage() {
     <ImageSection
       leftColumn={
         <VStack alignItems="flex-start" spacing={5}>
-          <Title maxWidth="100%" fontSize="30px" letterSpacing="0.5px">
+          <SectionTitle maxWidth="100%" fontSize="28px" letterSpacing="0.5px">
             Explore tudo na sua linguagem favorita
-          </Title>
+          </SectionTitle>
           <SectionText textAlign="justify">
             Desenvolvemos <b>pacotes para acesso aos dados da BD+</b> em Python,
             R e linha de comando. Além disso, você pode{" "}
@@ -336,15 +337,15 @@ function LearnToAnalysis() {
               objectFit="contain"
             />
           </Box>
-          <Title
+          <SectionTitle
             zIndex="1"
             position="relative"
             maxWidth="100%"
-            fontSize="30px"
+            fontSize="28px"
             letterSpacing="0.5px"
           >
             Aprenda a construir análises com os dados
-          </Title>
+          </SectionTitle>
           <VStack spacing={4} zIndex="1" position="relative">
             <SectionText textAlign="justify">
               Produzimos{" "}
@@ -381,9 +382,9 @@ function JoinTheCommunity() {
           flex="1"
           spacing={5}
         >
-          <Title maxWidth="80%" fontSize="30px" letterSpacing="0.5px">
+          <SectionTitle maxWidth="80%" fontSize="28px" letterSpacing="0.5px">
             Faça parte da nossa comunidade, <i>databaser</i>
-          </Title>
+          </SectionTitle>
           <SectionText textAlign="justify">
             Acompanhe todas as discussões, tire dúvidas, fale e aprenda direto
             com a equipe e a comunidade da Base dos Dados pelo Discord. Para ir
