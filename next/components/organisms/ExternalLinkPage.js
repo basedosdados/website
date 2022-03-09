@@ -37,9 +37,7 @@ export function ExternalLinkPage({
           }}
         />
       }
-      buttonText="Acessar"
-      buttonRightIcon={<Image src="/img/icons/white_right_arrow.svg" />}
-      onClick={() => window.open(resource.url)}
+      urlExternal={resource.url}
     >
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <ExpandableTable

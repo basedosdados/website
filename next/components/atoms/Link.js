@@ -16,7 +16,7 @@ export default function Link({
       fontSize="15px"
       letterSpacing="0.5px"
       color={color}
-      _hover="none"
+      _hover={{ textDecoration: "none", opacity:"0.6" }}
       fontWeight={fontWeigth}
       {...props}
     >

@@ -10,6 +10,7 @@ import {
   Box,
   useClipboard,
   Button,
+  HStack,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import Title from "../atoms/Title";
@@ -17,37 +18,27 @@ import Link from "../atoms/Link";
 import { LinkDash } from "../atoms/LinkDash";
 import GreenTab from "../atoms/GreenTab"
 import RoundedButton from "../atoms/RoundedButton";
-import { BlueBox } from "../molecules/BlueBox";
 import CopyIcon from "../../public/img/icons/copyIcon"
+import { DisclaimerBox } from "./DisclaimerBox"
 
 export function BoxBigQueryGoogle({ href }) {
 
   return (
-    <Box
-      display="flex"
-      flexDirection="row"
-      fontSize="14px"
-      fontWeight="300"
-      fontFamily="Lato"
-      letterSpacing="0.5px"
-      padding="10px 12px"
-      boxShadow="0 1px 4px 0 rgba(0,0,0, 0.25)"
-      borderLeft="3px solid #3AA1EB"
-      borderEndRadius="6px"
-      marginTop="20px"
-      alignItems="center"
-    >
-      <Image width="20px" height="20px" marginRight="10px" src="https://img.icons8.com/color/48/000000/google-logo.png"/>
-      <Text color="#252A32">
-        Para usar o BigQuery basta ter uma conta Google. Primeira vez? 
-        <Link
-          target="_blank"
-          href={href}
-          color="#3AA1EB"
-        > Siga o passo a passo.
-        </Link>
-      </Text>
-    </Box>
+    <DisclaimerBox>
+      <HStack spacing={0}>
+        <Image width="20px" height="20px" marginRight="10px" src="https://img.icons8.com/color/48/000000/google-logo.png"/>
+        <Text color="#252A32">
+          Para usar o BigQuery basta ter uma conta Google. Primeira vez? 
+          <LinkDash
+            fontWeight="700"
+            target="_blank"
+            dash={false}
+            href={href}
+          > Siga o passo a passo.
+          </LinkDash>
+        </Text>
+      </HStack>
+    </DisclaimerBox>
   )
 }
 
@@ -96,12 +87,11 @@ export default function DataInformationQuery ({ resource }) {
 
   useEffect(() => {
     if (window) window.Prism.highlightAll();
-  }, []);
+  }, [resource]);
 
   return (
     <VStack
       spacing={-1} 
-      marginTop="50px !important"
       alignItems="flex-start"
       width="100%"
     >
@@ -206,7 +196,7 @@ df <- bd_collect(query)`}
           </TabPanel>
 
           <TabPanel padding="20px 0 0">
-            <BlueBox
+            <DisclaimerBox
               title="Estes dados estão disponíveis porque diversas pessoas colaboram para a sua manutenção."
               text={
                 <Text color="#252A32">
@@ -222,51 +212,47 @@ df <- bd_collect(query)`}
                 </Text>
               }
             />
-            <Stack
+            <VStack
+              alignItems="flex-start"
               padding="30px 0 20px"
               direction="column"
               height="100%"
+              spacing={5}
             >
-              <Stack
-                flex={1}
-                alignItems="flex-start"
-                flexDirection="column"
-                justifyContent="center"
-              >
-                <Text color="#252A32" fontWeight="bold" fontFamily="Ubuntu" fontSize="18px">
-                  Doe via PIX
-                </Text>
-
+              <HStack spacing={10}>
                 <Image
                   height="250px"
                   objectFit="contain"
+                  marginLeft="-15px"
                   src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/bd_qrcode.png"
                 />
 
-                <Text color="#252A32" fontSize="16px">
-                  Chave CNPJ
-                  <br /> 42494318000116
-                </Text>
-              </Stack>
-              <Stack 
-                flexDirection="row"
-                gridGap="20px"
-                alignItems="center"
-                justifyContent="flex-end"
-                spacing={0}
-              >
+                <Stack spacing={5} >
+                  <Text color="#252A32" fontWeight="bold" fontFamily="Ubuntu" fontSize="20px">
+                    Doe via PIX
+                  </Text>
+                  <Text color="#252A32" fontSize="18px">
+                    Chave CNPJ
+                    <br /> 42494318000116
+                  </Text>
+                </Stack>
+              </HStack>
+
+              <HStack spacing={5}>
                 <Link
-                  maxWidth="210px"
+                  minWidth="225px"
                   width="100%"
                   textDecoration="none !important"
+                  _hover={{ opacity:"none" }}
                   target="_blank"
                   href="/#support"
                 >
                   <RoundedButton width="100%">Doação mensal</RoundedButton>
                 </Link>
                 <Link
-                  maxWidth="210px"
+                  minWidth="225px"
                   width="100%"
+                  _hover={{ opacity:"none" }}
                   textDecoration="none !important"
                   href={downloadUrl}
                 >
@@ -280,8 +266,8 @@ df <- bd_collect(query)`}
                     Download dos dados
                   </RoundedButton>
                 </Link>
-              </Stack>
-            </Stack>
+              </HStack>
+            </VStack>
           </TabPanel>
         </TabPanels>
       </Tabs>

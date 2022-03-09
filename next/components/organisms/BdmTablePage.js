@@ -62,7 +62,6 @@ export function BdmTablePage({
           Descrição
         </Title>
         <Markdown
-          marginTop="10px !important"
           styleText= {{
             fontSize:"14px",
             fontWeight:"300",
@@ -92,7 +91,7 @@ export function BdmTablePage({
       </VStack>
       
       <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Title>Metadados da tabela</Title>
+        <Title fontWeigth="400">Metadados da tabela</Title>
         <ExpandableTable
           containerStyle={{ width: "100%", alignItems: "flex-start" }}
           headers={["nome", "valor"]}

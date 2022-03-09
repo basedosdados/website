@@ -188,7 +188,6 @@ function ResourcesPage({
                 loadSchemaFunction={getBdmTableSchema}
                 prepareData={(d) => {
                   d.resource_type = "bdm_table";
-
                   return d;
                 }}
                 updateFunction={(data) => createResource(data, dataset.id)}
@@ -216,25 +215,24 @@ function ResourcesPage({
           />
         );
 
-        case "create_information_request":
-        return (
-          <BaseResourcePage
-            title="Criar pedido LAI"
-            forceForm
-            formComponent={
-              <SchemaForm
-                schemaName="Pedido LAI"
-                loadSchemaFunction={getInformationRequestSchema}
-                prepareData={(d) => {
-                  d.resource_type = "information_request";
-
-                  return d;
-                }}
-                updateFunction={(data) => createResource(data, dataset.id)}
-              />
-            }
-          />
-        );
+      case "create_information_request":
+      return (
+        <BaseResourcePage
+          title="Criar pedido LAI"
+          forceForm
+          formComponent={
+            <SchemaForm
+              schemaName="Pedido LAI"
+              loadSchemaFunction={getInformationRequestSchema}
+              prepareData={(d) => {
+                d.resource_type = "information_request";
+                return d;
+              }}
+              updateFunction={(data) => createResource(data, dataset.id)}
+            />
+          }
+        />
+      );
     }
   }
 
@@ -295,13 +293,13 @@ function ResourcesPage({
           <FilterAccordion
             alwaysOpen={true}
             choices={informationRequest}
-            valueField="url"
+            valueField="name"
             displayField="name"
             isOpen={informationRequestFilter}
             fieldName="Pedidos LAI"
-            value={resource.url}
-            onChange={(url) =>
-              setResource(informationRequest.filter((b) => b.url === url)[0])
+            value={resource.name}
+            onChange={(name) =>
+              setResource(informationRequest.filter((b) => b.name === name)[0])
             }
             onToggle={() =>
               setInformationRequestFilter(!informationRequestFilter)
