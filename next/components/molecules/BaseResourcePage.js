@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/button";
-import { Flex, HStack, VStack } from "@chakra-ui/layout";
+import { Flex, HStack, VStack, Box } from "@chakra-ui/layout";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useState } from "react";
@@ -16,6 +16,7 @@ import {
   AlertDialogOverlay,
 } from "@chakra-ui/modal";
 import { useDisclosure } from "@chakra-ui/hooks";
+import RoundedButton from "../atoms/RoundedButton"
 
 export function BaseResourcePage({
   title,
@@ -23,6 +24,7 @@ export function BaseResourcePage({
   removeFunction,
   formComponent = null,
   forceForm = false,
+  urlExternal,
   ...style
 }) {
   const [editing, setEditing] = useState(false);
@@ -36,6 +38,7 @@ export function BaseResourcePage({
 
   return (
     <VStack
+      position="relative"
       width="100%"
       borderRadius="20px"
       padding="20px"
@@ -78,6 +81,7 @@ export function BaseResourcePage({
         flexDirection={{ base: "column", lg: "row" }}
         width="100%"
         alignItems={{ base: "flex-start", lg: "flex-start" }}
+        marginBottom="20px"
       >
         <Title 
           width="100%"
@@ -134,6 +138,22 @@ export function BaseResourcePage({
         ) : (
           <></>
         )}
+        {urlExternal && 
+          <Box
+            position="absolute"
+            top="0"
+            right="0"
+          >
+            <RoundedButton
+              height="35px"
+              fontSize="14px"
+              minWidth="100px"
+              onClick={() => window.open(urlExternal)}
+            >
+              Acessar
+            </RoundedButton>
+          </Box>
+        }
       </Flex>
       {editing ? formComponent : children}
       {editing ? (

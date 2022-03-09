@@ -44,22 +44,19 @@ export function InformationRequestPage({
           }}
         />
       }
-      buttonText="Acessar"
-      buttonRightIcon={<Image src="/img/icons/white_right_arrow.svg" />}
-      onClick={() => window.open(resource.url)}
+      urlExternal={resource.url}
     >
-      <VStack width="100%" letterSpacing="0.5px" spacing={3} alignItems="flex-start">
-
+      <VStack marginTop="0 !important" width="100%" letterSpacing="0.5px" spacing={3} alignItems="flex-start">
         <VStack
           alignItems="flex-start"
-          padding="15px 20px"
-          backgroundColor="#ECF7FF"
+          padding="15px 0"
           borderRadius="10px"
           color="#252A32"
           fontFamily="Lato"
           fontSize="16px"
+          spacing={5}
         >
-          <Text>
+          <Text fontWeight="300">
             A disponibilização destes dados é resultado de uma parceria com:
           </Text>
           <HStack margin="10px 0" gridGap={2}>
@@ -69,12 +66,20 @@ export function InformationRequestPage({
               src={"/img/icons/fiquem_sabendo.png"}
               width="80px"
               height="80px"
+              onClick={() => window.open("https://fiquemsabendo.com.br/")}
+              cursor="pointer"
             />
             <Box>
-              <Text marginBottom="5px" fontWeight="bold">
+              <Text
+                width="130px"
+                onClick={() => window.open("https://fiquemsabendo.com.br/")}
+                cursor="pointer"
+                marginBottom="5px"
+                fontWeight="bold"
+              >
                 Fiquem Sabendo
               </Text>
-              <Text>
+              <Text fontWeight="300" fontSize="14px">
                 Agência de dados públicos independente e especializada na Lei de Acesso à Informação.
               </Text>
             </Box>
@@ -88,7 +93,7 @@ export function InformationRequestPage({
           fontSize="16px"
         >
           <Title fontWeigth="normal">Detalhes do pedido</Title>
-          <Text >
+          <Text fontWeight="300" fontSize="14px">
             Você pode consultar o <Link isExternal={true} url={resource.url} color="#42B0FF"> pedido </Link> para saber mais detalhes. 
           </Text>
         </VStack>

@@ -138,7 +138,7 @@ function DesktopLinks({ links }) {
             <Link fontSize="14px" href="/user/login">
               Entrar
             </Link>
-            <Link href="/user/register">
+            <Link _hover={{ opacity:"none" }} href="/user/register">
               <RoundedButton height="35px" fontSize="14px" minWidth="130px">
                 Cadastrar
               </RoundedButton>

@@ -424,7 +424,7 @@ export default function SearchPage({
             values={paramFilters.group}
             valueField="name"
             displayField="displayName"
-            fieldName="Temas"
+            fieldName="Tema"
             onChange={(values) =>
               setParamFilters({ ...paramFilters, group: values })
             }
@@ -447,7 +447,7 @@ export default function SearchPage({
             choices={tags}
             valueField="name"
             displayField="displayName"
-            fieldName="Etiquetas"
+            fieldName="Etiqueta"
             values={paramFilters.tag}
             onChange={(values) =>
               setParamFilters({ ...paramFilters, tag: values })
