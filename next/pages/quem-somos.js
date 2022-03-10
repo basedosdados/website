@@ -6,6 +6,7 @@ import {
 } from "@chakra-ui/react";
 import BigTitle from "../components/atoms/BigTitle";
 import SectionText from "../components/atoms/SectionText";
+import { LinkDash } from "../components/atoms/LinkDash";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
   
@@ -53,7 +54,16 @@ export default function QuemSomos({ pages }) {
           </SectionText>
           <SectionText fontSize="14px" fontWeight="300" paddingBottom="20px">
             Depois de um trabalho em conjunto estruturando as primeiras bases de dados com a <b>Fernanda Scovino</b>, <b>Fred Israel</b> e <b>Diego Oliveira</b>, todos co-fundadores da BD, lançamos nosso <i>datalake</i> público em <b>outubro de 2020</b>. Desde então, nossa organização vem crescendo em qualidade e quantidade de dados, número de colaboradores, parceiros e usuários. Faça parte dessa história também!
-          </SectionText> 
+          </SectionText>
+          <LinkDash
+            href="https://drive.google.com/file/d/1JNcr4psQr42EV9mTafn512TD8p87ZP3a/view?usp=sharing"
+            dash={false}
+            fontSize="14px"
+            fontWeight="bold"
+            textDecoration="none"
+          >
+            Veja nosso estatuto.
+          </LinkDash>
         </Box>
       </VStack>
     </Stack>
