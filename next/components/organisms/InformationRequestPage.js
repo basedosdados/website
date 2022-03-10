@@ -107,11 +107,22 @@ export function InformationRequestPage({
               translations,
               availableOptionsTranslations,
               filterOnlyValidValues(resource, [
-                "url",
-                "requested_by",
-                "spatial_coverage",
                 "data_url",
+                "dataset_id",
+                "description",
+                "format",
+                "hash",
+                "mimetype",
+                "mimetype_inner",
+                "name",
+                "number",
+                "requested_by",
+                "resource_type",
+                "size",
+                "spatial_coverage",
                 "state",
+                "url",
+                "url_type",
               ])
             )
           )}
