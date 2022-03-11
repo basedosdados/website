@@ -431,7 +431,7 @@ export default function DatasetPage({
               textOverflow="ellipsis"
               whiteSpace="nowrap"
               fontSize="28px"
-              letterSpacing="1px"
+              letterSpacing="0.5px"
               width={{ base: "90vw", lg: "60vw" }}
               color="black"
             >
