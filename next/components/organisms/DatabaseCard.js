@@ -1,5 +1,5 @@
 import { Card } from "../molecules/Card";
-import { HStack, Image, VStack } from "@chakra-ui/react";
+import { HStack, Image, VStack, Center } from "@chakra-ui/react";
 import Title from "../atoms/Title";
 import Subtitle from "../atoms/Subtitle";
 import { CategoryIcon } from "../atoms/CategoryIcon";
@@ -16,6 +16,7 @@ export default function DatabaseCard({
   size,
   tableNum,
   externalLinkNum,
+  informationRequestNum,
   updatedSince,
   updatedAuthor,
   link,
@@ -50,19 +51,27 @@ export default function DatabaseCard({
   );
 
   if (externalLinkNum) databaseInfo.push(externalLinkNum + " fontes originais");
+  if (informationRequestNum) databaseInfo.push(
+      (externalLinkNum ? "\xa0\xa0•\xa0\xa0\xa0" : "") + informationRequestNum + " pedidos LAI"
+    );
 
   return (
     <Card
       icons={[
         ...categories.slice(0, Math.min(3, categories.length)).map((c) => (
-          <Link href={`/dataset?group=${c}`}>
-            <CategoryIcon
-              size="37px"
-              url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c}${
-                isPlus ? "-1" : ""
-              }.svg`}
-            />
-          </Link>
+          <Center
+            width="30px" 
+            height="30px" 
+            backgroundColor="#2B8C4D" 
+            borderRadius="6px"
+          >
+            <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${c}`}>
+              <CategoryIcon
+                size="37px"
+                url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c}.svg`}
+              />
+            </Link>
+          </Center>
         )),
       ]}
       spacing={0}
@@ -101,14 +110,22 @@ export default function DatabaseCard({
             <ThemeTag name={t} />
           ))}
         </HStack>
-        {databaseInfo.map((item, index) => (
           <Subtitle 
             fontSize="12px"
             color="#252A32"
           >
-            {item}
+            {databaseInfo[0]}
           </Subtitle>
-        ))}
+          <HStack>
+            {databaseInfo.slice(1, databaseInfo.leght).map((item, index) => (
+              <Subtitle 
+                fontSize="12px"
+                color="#252A32"
+              >
+                {item}
+              </Subtitle>
+            ))}
+          </HStack>
       </VStack>
     </Card>
   );

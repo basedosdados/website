@@ -74,10 +74,12 @@ function Themes ({ isMobileMod, newRecentDataLakeDataSets, listThemes=[] }) {
             <Tooltip 
               label={elm.display_name}
               fontSize="16px"
+              fontWeight="700"
               padding="5px 15px"
               backgroundColor="#2A2F38"
               marginTop="10px"
-              color="#FFF" 
+              color="#FFF"
+              borderRadius="6px"
             >
               <Image
                 width="100%"
@@ -141,8 +143,10 @@ function CardThemes ({ isMobileMod, recentThemes }) {
               elm.resources.filter((r) => r.resource_type === "bdm_table").length
             }
             externalLinkNum={
-              elm.resources.filter((r) => r.resource_type === "external_link")
-                .length
+              elm.resources.filter((r) => r.resource_type === "external_link").length
+            }
+            informationRequestNum={
+              elm.resources.filter((r) => r.resource_type === "information_request").length
             }
             updatedSince={elm.metadata_modified}
             categories={elm.groups.map((g) => g.name)}

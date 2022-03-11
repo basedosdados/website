@@ -5,6 +5,7 @@ import {
   Stack,
   VStack,
   Flex,
+  Center,
 } from "@chakra-ui/react";
 import { limitTextSize } from "../../utils";
 import { CategoryIcon } from "../atoms/CategoryIcon";
@@ -100,15 +101,15 @@ export function Database({
         >
           <VStack width="100%" spacing={1} alignItems="flex-start">
             <Flex
+              position="relative"
               flexDir={{ base: "column", lg: "row" }}
               justifyContent="center"
               alignItems="flex-start"
               width="100%"
             >
               <HStack
-                justifyContent="center"
+                width="100%"
                 alignItems="flex-start"
-                spacing={5}
                 pb={{ base: 4, lg: 0 }}
               >
                 <Link href={link}>
@@ -126,20 +127,27 @@ export function Database({
                 </Link>
               </HStack>
               <HStack
+                position="absolute"
+                top="0"
+                right="0"
                 justifyContent={{ base: "flex-start", lg: "flex-end" }}
-                marginLeft="auto"
                 spacing={2}
-                pb={{ base: 3, lg: 0 }}
                 width="100%"
               >
-                {categories.map((c) => (
-                  <Link href={`/dataset?group=${c}`}>
-                    <CategoryIcon
-                      size="36px"
-                      url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c}${isPlus ? "-1" : ""
-                        }.svg`}
-                    />
-                  </Link>
+                {categories.slice(0, Math.min(3, categories.length)).map((c) => (
+                  <Center
+                    width="36px" 
+                    height="36px" 
+                    backgroundColor="#2B8C4D" 
+                    borderRadius="6px"
+                  >
+                    <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${c}`}>
+                      <CategoryIcon
+                        size="36px"
+                        url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c}.svg`}
+                      />
+                    </Link>
+                  </Center>
                 ))}
               </HStack>
             </Flex>
@@ -194,7 +202,7 @@ export function Database({
               </Stack>
             </VStack>
           </VStack>
-          <VStack paddingTop="10px">
+          <VStack>
             <HStack spacing={5}>
               <HStack>
                 <Image
