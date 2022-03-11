@@ -245,6 +245,7 @@ export function FilterAccordion({
   isOpen = null,
   alwaysOpen = false,
   isActive = false,
+  isHovering,
 }) {
   return (
     <BaseFilterAccordion
@@ -252,6 +253,7 @@ export function FilterAccordion({
       alwaysOpen={alwaysOpen}
       isActive={isActive}
       onChange={onToggle}
+      isHovering={isHovering}
       overflowX="hidden"
       bdPlus={bdPlus}
       fieldName={fieldName}

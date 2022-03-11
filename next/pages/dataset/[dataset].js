@@ -262,6 +262,7 @@ function ResourcesPage({
             isOpen={bdmTableFilter}
             fieldName="Tabelas tratadas"
             bdPlus={true}
+            isHovering={false}
             onChange={(name) =>
               setResource(bdmTables.filter((b) => b.name === name)[0])
             }
@@ -279,6 +280,7 @@ function ResourcesPage({
             isOpen={externalLinkTableFilter}
             fieldName="Originais"
             value={resource.url}
+            isHovering={false}
             onChange={(url) =>
               setResource(externalLinks.filter((b) => b.url === url)[0])
             }
@@ -298,6 +300,7 @@ function ResourcesPage({
             isOpen={informationRequestFilter}
             fieldName="Pedidos LAI"
             value={resource.name}
+            isHovering={false}
             onChange={(name) =>
               setResource(informationRequest.filter((b) => b.name === name)[0])
             }

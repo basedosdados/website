@@ -160,7 +160,7 @@ function CardThemes ({ isMobileMod, recentThemes }) {
 export default function ThemeCatalog ({ recentDatalakeDatasets }) {
   const [recentThemes, setRecentThemes] = useState([])
   const [listThemes, setListThemes] = useState([])
-  const isMobile = useCheckMobile();
+  const isMobile = useCheckMobile()
 
   useEffect(() => {
     getGroupList().then(res => {
