@@ -368,7 +368,7 @@ console.log(data)
           borderRight={!isMobile ? "1px solid #DEDFE0" : ""}
           key={filterKey}
         >
-          <Box display="flex" marginBottom="10px" alignItems="center" >
+          <Box display="flex" marginBottom="10px" alignItems="center">
             <FilterIcon
               width="20px"
               height="25px"
