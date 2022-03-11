@@ -1,19 +1,16 @@
 import { Box, HStack, Flex } from "@chakra-ui/react";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
 export function Card({
   children,
   icons = [],
   spacing = 5,
   padding = "25px 25px 25px 25px",
-  link,
 }) {
 
   return (
     <Box
       width="280px"
       height="290px"
-      borderRadius="12px"
       boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
       _hover={{ boxShadow:"0px 7px 19px 1px rgb(64 60 67 / 16%)" }}
       backgroundColor="#FFFFFF"
