@@ -1,5 +1,5 @@
 import { Card } from "../molecules/Card";
-import { HStack, Image, VStack, Center } from "@chakra-ui/react";
+import { HStack, Image, VStack, Center, Text } from "@chakra-ui/react";
 import Title from "../atoms/Title";
 import Subtitle from "../atoms/Subtitle";
 import { CategoryIcon } from "../atoms/CategoryIcon";
@@ -51,9 +51,7 @@ export default function DatabaseCard({
   );
 
   if (externalLinkNum) databaseInfo.push(externalLinkNum + " fontes originais");
-  if (informationRequestNum) databaseInfo.push(
-      (externalLinkNum ? "\xa0\xa0•\xa0\xa0\xa0" : "") + informationRequestNum + " pedidos LAI"
-    );
+  if (informationRequestNum) databaseInfo.push(informationRequestNum + " pedidos LAI");
 
   return (
     <Card
@@ -95,7 +93,7 @@ export default function DatabaseCard({
           noOfLines={2}
           lineHeight="18px"
           textOverflow="ellipsis"
-          letterSpacing="1px"
+          letterSpacing="0.5px"
           fontSize="12px"
         >{organization}</Subtitle>
       </Link>
@@ -117,14 +115,19 @@ export default function DatabaseCard({
             {databaseInfo[0]}
           </Subtitle>
           <HStack>
-            {databaseInfo.slice(1, databaseInfo.leght).map((item, index) => (
-              <Subtitle 
-                fontSize="12px"
-                color="#252A32"
-              >
-                {item}
-              </Subtitle>
-            ))}
+            <Subtitle 
+              fontSize="12px"
+              color={databaseInfo[1] ? "#252A32" : "#C4C4C4"}
+            >
+              {databaseInfo[1] ? databaseInfo[1] : "0 fontes originais"}
+            </Subtitle>
+            <Text color="#DEDFE0">•</Text>
+            <Subtitle 
+              fontSize="12px"
+              color={databaseInfo[2] ? "#252A32" : "#C4C4C4"}
+            >
+              {databaseInfo[2] ? databaseInfo[2] : "0 pedidos LAI"}
+            </Subtitle>
           </HStack>
       </VStack>
     </Card>
