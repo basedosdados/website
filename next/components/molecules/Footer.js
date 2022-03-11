@@ -49,7 +49,7 @@ export default function Footer({ pages }) {
           direction={{ base: "column", lg: "row" }}
           spacing={{ base: 10, lg: 20 }}
         >
-          <Box minWidth="250px" height="250px" position="relative">
+          <Box minWidth="200px" height="200px" position="relative">
             <Image
               priority
               objectFit="contain"
@@ -85,13 +85,35 @@ export default function Footer({ pages }) {
                 Pacotes
               </FooterLink>
             </LinkVStack>
-            <LinkVStack title="CONTEÚDO">
+            <LinkVStack title="SERVIÇOS">
+              <FooterLink 
+                color="white" 
+                href="/servicos#Captura de dados"
+              >
+                Captura de dados
+              </FooterLink>
               <FooterLink
-                href="https://info.basedosdados.org/assine-newsletter"
+                color="white"
+                href="/servicos#Análise de dados"
+                target="_blank"
+              >
+                Análise de dados
+              </FooterLink>
+              <FooterLink
+                color="white"
+                href="/servicos#Consultoria de dados"
+                target="_blank"
+              >
+                Consultoria de dados
+              </FooterLink>
+            </LinkVStack>
+            <LinkVStack title="TUTORIAIS">
+              <FooterLink
+                href="https://basedosdados.github.io/mais/"
                 color="white"
                 target="_blank"
               >
-                Assine a newsletter
+                Documentação
               </FooterLink>
               <FooterLink
                 href="https://medium.com/basedosdados"
@@ -101,10 +123,10 @@ export default function Footer({ pages }) {
                 Blog
               </FooterLink>
               <SocialLink
-                color="white"
                 href="https://www.youtube.com/c/BasedosDados/featured"
+                color="white"
                 target="_blank"
-                title="Youtube"
+                title="YouTube"
                 src="/img/logos/youtube.png"
               />
             </LinkVStack>
@@ -145,16 +167,27 @@ export default function Footer({ pages }) {
                 href="https://basedosdados.org/quem-somos"
                 color="white"
               >
-                Quem Somos
+                Quem somos
               </FooterLink>
               <FooterLink
+                href="https://info.basedosdados.org/newsletter"
                 color="white"
+                target="_blank"
+              >
+                Newsletter
+              </FooterLink>
+              <FooterLink
+                href="https://info.basedosdados.org/carreiras"
+                color="white"
+                target="_blank"
+              >
+                Carreiras
+              </FooterLink>
+              <FooterLink
                 href="https://basedosdados.org/contato"
+                color="white"
               >
                 Contato
-              </FooterLink>
-              <FooterLink color="white" href="/servicos">
-                Serviços
               </FooterLink>
               <Link fontWeigth="700" color="white" href="/#support">
                 Apoie o projeto
