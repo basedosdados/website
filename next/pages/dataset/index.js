@@ -157,7 +157,7 @@ export default function SearchPage({
       },
     }
   );
-
+console.log(data)
   const fieldTranslations = {
     organization: "Organização",
     tag: "Tag",
@@ -368,7 +368,7 @@ export default function SearchPage({
           borderRight={!isMobile ? "1px solid #DEDFE0" : ""}
           key={filterKey}
         >
-          <Box display="flex" marginBottom="10px" alignItems="center" >
+          <Box display="flex" marginBottom="10px" alignItems="center">
             <FilterIcon
               width="20px"
               height="25px"
@@ -406,6 +406,11 @@ export default function SearchPage({
               {
                 key: "external_link",
                 name: `Fontes originais (${data?.resource_external_link_count || "0"
+                  })`,
+              },
+              {
+                key: "information_request",
+                name: `Pedidos LAI (${data?.resource_information_request_count || "0"
                   })`,
               },
             ]}
@@ -682,6 +687,11 @@ export default function SearchPage({
                     externalLinkNum={
                       d.resources.filter(
                         (r) => r.resource_type === "external_link"
+                      ).length
+                    }
+                    informationRequestNum={
+                      d.resources.filter(
+                        (r) => r.resource_type === "information_request"
                       ).length
                     }
                     updatedSince={d.metadata_modified}

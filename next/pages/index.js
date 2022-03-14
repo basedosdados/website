@@ -98,7 +98,6 @@ function Hero({ recentDatalakeDatasets }) {
           alignItems="center"
           spacing={20}
         >
-          {/*Bar search*/}
           <VStack
             position="relative"
             width="100%"
@@ -170,7 +169,6 @@ function Hero({ recentDatalakeDatasets }) {
             </VStack>
           </VStack>
 
-          {/*search theme*/}
           <VStack
             margin="0 !important"
             paddingTop="120px"
@@ -186,7 +184,7 @@ function Hero({ recentDatalakeDatasets }) {
               color="#9c9c9c"
               letterSpacing="1px"
             >
-              Explore as bases mais recentes {/* Busque por tema */}
+              Busque por tema
             </Title>
             <ThemeCatalog
               recentDatalakeDatasets={recentDatalakeDatasets}
@@ -194,7 +192,6 @@ function Hero({ recentDatalakeDatasets }) {
           </VStack>
         </VStack>
 
-        {/*Google cloud icon*/}
         <Stack
           position={{ base: "relative", lg: "absolute" }}
           top={{ base: "-35px", lg: "-120px", xl: "-120px" }}

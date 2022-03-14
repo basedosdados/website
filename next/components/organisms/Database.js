@@ -5,12 +5,17 @@ import {
   Stack,
   VStack,
   Flex,
+  Center,
 } from "@chakra-ui/react";
 import { limitTextSize } from "../../utils";
 import { CategoryIcon } from "../atoms/CategoryIcon";
 import Link from "../atoms/Link";
 import SectionText from "../atoms/SectionText";
 import Subtitle from "../atoms/Subtitle";
+import DataBaseIcon from "../../public/img/icons/databaseIcon";
+import LinkIcon from "../../public/img/icons/linkIcon";
+import InfoIcon from "../../public/img/icons/infoIcon";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
 export function Database({
   image,
@@ -19,12 +24,14 @@ export function Database({
   size,
   tableNum,
   externalLinkNum,
+  informationRequestNum,
   categories,
   categoriesDisplay,
   isPlus = false,
   temporalCoverage,
   link,
 }) {
+  const isMobile = useCheckMobile()
   let sizeLabel;
 
   if (size) {
@@ -78,7 +85,7 @@ export function Database({
         width="100%"
         spacing={10}
       >
-        <Link href={link}>
+        <Link _hover={{opacity:"none"}} href={link}>
           <Image
             priority
             objectFit="contain"
@@ -100,15 +107,15 @@ export function Database({
         >
           <VStack width="100%" spacing={1} alignItems="flex-start">
             <Flex
+              position="relative"
               flexDir={{ base: "column", lg: "row" }}
               justifyContent="center"
               alignItems="flex-start"
               width="100%"
             >
               <HStack
-                justifyContent="center"
+                width="100%"
                 alignItems="flex-start"
-                spacing={5}
                 pb={{ base: 4, lg: 0 }}
               >
                 <Link href={link}>
@@ -116,7 +123,7 @@ export function Database({
                     margin="0px"
                     padding="0px"
                     fontWeight="700"
-                    fontFamily="Lato"
+                    fontFamily="Ubuntu"
                     fontSize="18px"
                     letterSpacing="0.5px"
                     color="#252A32"
@@ -126,20 +133,26 @@ export function Database({
                 </Link>
               </HStack>
               <HStack
+                position="absolute"
+                top={isMobile ? "-120px" :"-12px"}
+                right="0"
                 justifyContent={{ base: "flex-start", lg: "flex-end" }}
-                marginLeft="auto"
                 spacing={2}
-                pb={{ base: 3, lg: 0 }}
-                width="100%"
               >
-                {categories.map((c) => (
-                  <Link href={`/dataset?group=${c}`}>
-                    <CategoryIcon
-                      size="36px"
-                      url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c}${isPlus ? "-1" : ""
-                        }.svg`}
-                    />
-                  </Link>
+                {categories.slice(0, Math.min(3, categories.length)).map((c) => (
+                  <Center
+                    width="36px" 
+                    height="36px" 
+                    backgroundColor="#2B8C4D" 
+                    borderRadius="6px"
+                  >
+                    <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${c}`}>
+                      <CategoryIcon
+                        size="36px"
+                        url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c}.svg`}
+                      />
+                    </Link>
+                  </Center>
                 ))}
               </HStack>
             </Flex>
@@ -157,7 +170,7 @@ export function Database({
                       textAlign="left"
                       lineHeight="15px"
                       fontWeight="bold"
-                      fontSize="12px"
+                      fontSize="14px"
                     >
                       {limitTextSize(organization.title, 30)}
                     </SectionText>
@@ -194,22 +207,20 @@ export function Database({
               </Stack>
             </VStack>
           </VStack>
-          <VStack paddingTop="10px">
+          <VStack>
             <HStack spacing={5}>
               <HStack>
-                <Image
-                  height="15px"
-                  src={
-                    tableNum === 0
-                      ? "/img/icons/database_disabled.png"
-                      : "/img/icons/database.png"
-                  }
+                <DataBaseIcon 
+                  solid={true}
+                  widthIcon="15px"
+                  heightIcon="15px"
+                  fill={tableNum === 0 ? "#C4C4C4" : "#2B8C4D"}
                 />
                 <Subtitle
                   whiteSpace="nowrap"
-                  color={tableNum === 0 ? "#6F6F6F" : "#2B8C4D"}
+                  color={tableNum === 0 ? "#C4C4C4" : "#2B8C4D"}
                   fontSize="15px"
-                  fontWeight="bold"
+                  fontWeight="500"
                 >
                   {tableNum}{" "}
                   {tableNum === 1 ? "tabela tratada" : "tabelas tratadas"}
@@ -223,28 +234,40 @@ export function Database({
                   }
                 />
               </HStack>
-              {externalLinkNum ? (
-                <HStack>
-                  <Image
-                    height="15px"
-                    src={
-                      tableNum === 0
-                        ? "/img/icons/link_disabled.png"
-                        : "/img/icons/link.png"
-                    }
-                  />
-                  <Subtitle
-                    color={tableNum === 0 ? "#6F6F6F" : "#2B8C4D"}
-                    fontSize="15px"
-                    fontWeight="bold"
-                  >
-                    {externalLinkNum}{" "}
-                    {externalLinkNum === 1 ? "fonte original" : "fontes originais"}
-                  </Subtitle>
-                </HStack>
-              ) : (
-                <></>
-              )}
+
+              <HStack>
+                <LinkIcon 
+                  solid={true}
+                  widthIcon="15px"
+                  heightIcon="15px"
+                  fill={externalLinkNum === 0 ? "#C4C4C4" : "#2B8C4D"}
+                />
+                <Subtitle
+                  color={externalLinkNum === 0 ? "#C4C4C4" : "#2B8C4D"}
+                  fontSize="15px"
+                  fontWeight="500"
+                >
+                  {externalLinkNum}{" "}
+                  {externalLinkNum === 1 ? "fonte original" : "fontes originais"}
+                </Subtitle>
+              </HStack>
+              
+              <HStack>
+                <InfoIcon 
+                  solid={true}
+                  widthIcon="15px"
+                  heightIcon="15px"
+                  fill={informationRequestNum === 0 ? "#C4C4C4" : "#2B8C4D"}
+                />
+                <Subtitle
+                  color={informationRequestNum === 0 ? "#C4C4C4" : "#2B8C4D"}
+                  fontSize="15px"
+                  fontWeight="500"
+                >
+                  {informationRequestNum}{" "}
+                  {informationRequestNum === 1 ? "pedido LAI" : "pedidos LAI"}
+                </Subtitle>
+              </HStack>
             </HStack>
           </VStack>
         </VStack>

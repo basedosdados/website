@@ -139,7 +139,7 @@ function DesktopLinks({ links }) {
               Entrar
             </Link>
             <Link _hover={{ opacity:"none" }} href="/user/register">
-              <RoundedButton height="35px" fontSize="14px" minWidth="130px">
+              <RoundedButton height="35px" fontSize="14px" minWidth="110px">
                 Cadastrar
               </RoundedButton>
             </Link>
@@ -157,15 +157,18 @@ export default function Menu({ pages = [] }) {
 
   const links = {
     Dados: "/dataset",
-    Documentação: "https://basedosdados.github.io/mais/",
-    Institucional: {
-      "Quem somos": "/quem-somos",
-      Contato: "/contato",
+    Tutoriais: {
+      Documentação: "https://basedosdados.github.io/mais/",
       Blog: "https://medium.com/basedosdados",
-      Newsletter:
-        "https://info.basedosdados.org/assine-newsletter",
+      YouTube: "https://www.youtube.com/c/BasedosDados/featured"
     },
     Serviços: "/servicos",
+    Institucional: {
+      Newsletter: "https://info.basedosdados.org/newsletter",
+      Carreiras: "https://info.basedosdados.org/carreiras"
+    },
+    "Quem somos": "/quem-somos",
+    Contato: "/contato",
     Apoie: "https://apoia.se/basedosdados",
   };
 
@@ -219,7 +222,7 @@ export default function Menu({ pages = [] }) {
               icon={faBars}
             />
           </Box>
-          <Link href="/">
+          <Link _hover={{opacity:"none"}} href="/">
             <Box
               transform={{ base: "translateX(-20%)", lg: "translateX(0%)" }}
               width={{ base: "120px", lg: "100px" }}

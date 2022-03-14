@@ -540,18 +540,23 @@ def bd_dataset_search(context, data_dict):
 
     response["resource_bdm_table_count"] = 0
     response["resource_external_link_count"] = 0
+    response["resource_information_request_count"] = 0
 
     for dataset in response["datasets"]:
         resource_bdm_table_count = 0
         resource_external_link_count = 0
+        resource_information_request_count = 0
         for resource in dataset["resources"]:
             if resource["resource_type"] == "bdm_table":
                 resource_bdm_table_count = 1
             elif resource["resource_type"] == "external_link":
                 resource_external_link_count = 1
+            elif resource["resource_type"] == "information_request":
+                resource_information_request_count = 1
 
         response["resource_bdm_table_count"] += resource_bdm_table_count
         response["resource_external_link_count"] += resource_external_link_count
+        response["resource_information_request_count"] += resource_information_request_count
 
     # post-process datasets order by resource_type ###################################
 

@@ -37,7 +37,7 @@ export function BaseFilterAccordion({
               <AccordionButton
                 onClick={onChange}
                 color={isActive ? "#2B8C4D" : null}
-                _hover={isHovering ? { cursor: "pointer", color: "#2B8C4D" } : "none"}
+                _hover={isHovering ? { cursor: "pointer", opacity: "0.6" } : "none"}
                 padding="10px 16px 0 0"
               >
                 <HStack
@@ -245,15 +245,15 @@ export function FilterAccordion({
   isOpen = null,
   alwaysOpen = false,
   isActive = false,
-  isHovering = false
+  isHovering,
 }) {
   return (
     <BaseFilterAccordion
       isOpen={alwaysOpen ? alwaysOpen : isOpen}
       alwaysOpen={alwaysOpen}
       isActive={isActive}
-      isHovering={isHovering}
       onChange={onToggle}
+      isHovering={isHovering}
       overflowX="hidden"
       bdPlus={bdPlus}
       fieldName={fieldName}
@@ -277,7 +277,7 @@ export function FilterAccordion({
               cursor="pointer"
               fontWeight={c[valueField] === value ? "500" : "400"}
               color={c[valueField] === value ? "#2B8C4D" : "#7D7D7D"}
-              _hover={{ color: "#2B8C4D", fontWeight: "500" }}
+              _hover={c[valueField] === value ? "none" : {  opacity: "0.6" , fontWeight: "500" }}
               padding="5px 20px"
               borderRadius="5px"
               letterSpacing="0.5px"
