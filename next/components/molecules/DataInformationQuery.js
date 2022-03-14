@@ -103,7 +103,7 @@ export default function DataInformationQuery ({ resource }) {
         <TabList 
           padding="0px"
           fontFamily="Ubuntu !important"
-          borderBottom= "2px solid #DEDFE0"
+          borderBottom= "2px solid #DEDFE0 !important"
         >
           <GreenTab>SQL</GreenTab>
           <GreenTab>Python</GreenTab>

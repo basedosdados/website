@@ -98,6 +98,7 @@ function DesktopLinks({ links }) {
                     flexDirection="colunm"
                     _hover={{ opacity: "0.6" }}
                     fontSize="14px"
+                    target="_blank"
                     color="#252A32"
                     href={v}
                     padding="10px 24px"

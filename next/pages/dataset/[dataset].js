@@ -481,7 +481,7 @@ export default function DatasetPage({
           <TabList 
             padding="0px"
             fontFamily="Ubuntu !important"
-            borderBottom= "2px solid #DEDFE0"
+            borderBottom= "2px solid #DEDFE0 !important"
           >
             <GreenTab>
               <DataBaseIcon

@@ -334,9 +334,7 @@ console.log(data)
       <NewDatasetModal {...datasetDisclosure} />
       <DebouncedControlledInput
         value={search}
-        onChange={(val) => {
-          setSearch(val);
-        }}
+        onChange={(val) => setSearch(val)}
         placeholder="Pesquise palavras-chave, instituições ou temas"
         justifyContent="center"
         inputStyle={{
@@ -344,11 +342,11 @@ console.log(data)
           padding: "20px",
           marginBottom: "50px",
           borderRadius: "17px",
-          backgroundColor: "#ffffff",
+          backgroundColor: "#FFF",
           color: "#6F6F6F",
           fontSize: "16px",
           height: "50px",
-          boxShadow: "0px 1px 3px 1px rgb(0 0 0 / 5%)",
+          boxShadow: "0 1px 3px 0 rgba(0 0 0 /0.2) !important",
         }}
       />
       <Stack
@@ -567,7 +565,7 @@ console.log(data)
               fontWeight="400"
               letterSpacing="1px"
             >
-              {data?.count || "..."} conjunto(s) encontrado(s){" "}
+              {data?.count || "..."} {`conjunto${data?.count > 1 ? "s": ""} encontrado${data?.count > 1 ? "s": ""}`}
               {search ? " para " + search : ""}
             </Heading>
             {userData?.is_admin ? (
