@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 class Page(models.Model):
     menu_title = models.CharField(

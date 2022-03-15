@@ -1,13 +1,11 @@
 import json
-from pathlib import Path
 import logging
+from pathlib import Path
 
 log = logging.getLogger(__name__)
 
 import ckan.plugins.toolkit as toolkit
 from ckan.logic.action.get import dataset_follower_count, package_search
-
-from ckanext.basedosdados.validator.available_options import SpatialCoverage
 from ckanext.basedosdados.validator.available_options import (
     Admin1Enum,
     Admin2Enum,
@@ -19,6 +17,7 @@ from ckanext.basedosdados.validator.available_options import (
     LanguageEnum,
     LicenseEnum,
     MeasurementUnitEnum,
+    SpatialCoverage,
     StatusEnum,
     TimeUnitEnum,
     YesNoEnum,

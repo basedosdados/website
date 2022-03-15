@@ -8,10 +8,10 @@ from uuid import UUID
 from ckanext.basedosdados.validator import BaseModel
 from ckanext.basedosdados.validator.available_options import IdType
 from ckanext.basedosdados.validator.resources import (
+    BdmDictionary,
     BdmTable,
     ExternalLink,
     InformationRequest,
-    BdmDictionary,
 )
 from pydantic import Extra, Field
 from pydantic import StrictInt as Int
