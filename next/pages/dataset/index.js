@@ -140,6 +140,7 @@ export default function SearchPage({
 }) {
   const { query } = useRouter();
   const isMobile = useCheckMobile();
+  const [isMobileMode, setIsMobileMode] = useState(false)
   const datasetDisclosure = useDisclosure();
   const { data: userData = null } = useQuery("user", getUser);
   const [order, setOrder] = useState("score");
@@ -157,7 +158,11 @@ export default function SearchPage({
       },
     }
   );
-console.log(data)
+  
+  useEffect(() => {
+    setIsMobileMode(isMobile)
+  },[isMobile])
+
   const fieldTranslations = {
     organization: "Organização",
     tag: "Tag",
@@ -348,6 +353,7 @@ console.log(data)
           height: "50px",
           boxShadow: "0 1px 3px 0 rgba(0 0 0 /0.2) !important",
         }}
+        marginTop={isMobileMode && "70px"}
       />
       <Stack
         justifyContent="flex-start"
@@ -361,9 +367,8 @@ console.log(data)
           justifyContent="flex-start"
           alignItems="flex-start"
           minWidth={{ base: "100%", lg: "320px" }}
-          maxWidth={{ base: "100%", lg: "320px" }}
-          padding={!isMobile ? "0 40px 0 0" : ""}
-          borderRight={!isMobile ? "1px solid #DEDFE0" : ""}
+          padding={isMobileMode ? "" : "0 40px 0 0"}
+          borderRight={isMobileMode ? "" : "1px solid #DEDFE0"}
           key={filterKey}
         >
           <Box display="flex" marginBottom="10px" alignItems="center">
@@ -530,7 +535,7 @@ console.log(data)
               });
             }}
           />
-    */}
+          */}
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.obs_level_entity || []).length > 0}
@@ -695,7 +700,6 @@ console.log(data)
                     updatedSince={d.metadata_modified}
                     updatedAuthor="Ricardo Dahis"
                     categories={d.groups.map((g) => g.name)}
-                    categoriesDisplay={d.groups.map((g) => g.display_name)}
                     spatialCoverage={null}
                     updateFrequency={
                       d.resources.filter((r) => r.update_frequency).length >
@@ -710,14 +714,14 @@ console.log(data)
                 </>
               ))}
             <ReactPaginate
-              previousLabel={"Anterior"}
-              nextLabel={"Próxima"}
+              previousLabel={isMobileMode ? "<" : "Anterior"}
+              nextLabel={isMobileMode ? ">" : "Próxima"}
               breakLabel={"..."}
               breakClassName={"break-me"}
               forcePage={page - 1}
               pageCount={pageSize}
-              marginPagesDisplayed={1}
-              pageRangeDisplayed={2}
+              marginPagesDisplayed={isMobileMode ? 0 : 1}
+              pageRangeDisplayed={isMobileMode ? 0 : 2}
               onPageChange={(data) => {
                 setPage(data.selected + 1);
               }}

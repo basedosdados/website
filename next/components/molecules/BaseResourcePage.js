@@ -24,7 +24,9 @@ export function BaseResourcePage({
   removeFunction,
   formComponent = null,
   forceForm = false,
+  isShowButtons= false,
   urlExternal,
+  urlInformationRequest,
   ...style
 }) {
   const [editing, setEditing] = useState(false);
@@ -138,21 +140,42 @@ export function BaseResourcePage({
         ) : (
           <></>
         )}
-        {urlExternal && 
-          <Box
+        
+        {isShowButtons &&
+          <HStack
             position="absolute"
             top="0"
             right="0"
+            spacing={2}
           >
             <RoundedButton
               height="35px"
               fontSize="14px"
               minWidth="100px"
+              color={urlInformationRequest ? "#3AA1EB" : "#FFF"}
+              border={urlInformationRequest && "2px solid #3AA1EB"}
+              backgroundColor={urlInformationRequest && "#FFF"}
+              isDisabled={urlExternal ? false : true}
+              _disabled={{color:"#C1C1C1", borderColor: "#C1C1C1"}}
+              _hover={urlExternal ? "" : {transform:"none"}}
               onClick={() => window.open(urlExternal)}
             >
-              Acessar
+              {urlInformationRequest ? "Acessar o pedido" :"Acessar"}
             </RoundedButton>
-          </Box>
+            {urlInformationRequest &&
+              <RoundedButton
+                height="35px"
+                fontSize="14px"
+                minWidth="100px"
+                isDisabled={urlInformationRequest ? false : true}
+                _disabled={{backgroundColor:"#C1C1C1"}}
+                _hover={urlInformationRequest ? "" : {transform:"none"}}
+                onClick={() => window.open(urlInformationRequest)}
+              >
+                Acessar os dados
+              </RoundedButton>
+            }
+          </HStack>
         }
       </Flex>
       {editing ? formComponent : children}

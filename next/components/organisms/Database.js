@@ -26,7 +26,6 @@ export function Database({
   externalLinkNum,
   informationRequestNum,
   categories,
-  categoriesDisplay,
   isPlus = false,
   temporalCoverage,
   link,
@@ -176,22 +175,6 @@ export function Database({
                     </SectionText>
                   </Link>
                 </HStack>
-                <HStack>
-                  <SectionText color="#6F6F6F">Temas:</SectionText>
-                  <SectionText
-                    color="#6F6F6F"
-                    textAlign="left"
-                    lineHeight="15px"
-                    fontWeight="bold"
-                  >
-                    {limitTextSize(
-                      categoriesDisplay
-                        .slice(0, Math.min(categoriesDisplay.length, 3))
-                        .join(", "),
-                      30
-                    )}
-                  </SectionText>
-                </HStack>
               </Stack>
               <Stack
                 direction={{ base: "column", lg: "row" }}
@@ -208,7 +191,11 @@ export function Database({
             </VStack>
           </VStack>
           <VStack>
-            <HStack spacing={5}>
+            <HStack 
+              flexDirection={isMobile && "column"}
+              alignItems={isMobile && "flex-start"}
+              spacing={isMobile ? 0 : 5}
+            >
               <HStack>
                 <DataBaseIcon 
                   solid={true}

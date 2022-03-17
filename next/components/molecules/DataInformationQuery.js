@@ -199,7 +199,7 @@ df <- bd_collect(query)`}
             <DisclaimerBox
               title="Estes dados estão disponíveis porque diversas pessoas colaboram para a sua manutenção."
               text={
-                <Text color="#252A32">
+              <Text color="#252A32">
                   Apoie você também com doação financeira ou
                   <LinkDash
                     fontWeight="bold"
