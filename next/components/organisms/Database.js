@@ -197,7 +197,7 @@ export function Database({
               spacing={isMobile ? 0 : 5}
             >
               <HStack>
-                <DataBaseIcon 
+                <DataBaseIcon
                   solid={true}
                   widthIcon="15px"
                   heightIcon="15px"
@@ -224,7 +224,6 @@ export function Database({
 
               <HStack>
                 <LinkIcon 
-                  solid={true}
                   widthIcon="15px"
                   heightIcon="15px"
                   fill={externalLinkNum === 0 ? "#C4C4C4" : "#2B8C4D"}
@@ -241,7 +240,6 @@ export function Database({
               
               <HStack>
                 <InfoIcon 
-                  solid={true}
                   widthIcon="15px"
                   heightIcon="15px"
                   fill={informationRequestNum === 0 ? "#C4C4C4" : "#2B8C4D"}

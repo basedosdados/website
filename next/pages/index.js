@@ -27,6 +27,8 @@ import { ThemeTag } from "../components/atoms/ThemeTag";
 import { LinkDash } from "../components/atoms/LinkDash";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { BePartner } from "../components/organisms/BePartner";
+import SearchIcon from "../public/img/icons/searchIcon"
+import ArrowIcon from "../public/img/icons/arrowIcon"
 
 export async function getStaticProps(context) {
   let recentDatalakeDatasets;
@@ -143,19 +145,23 @@ function Hero({ recentDatalakeDatasets }) {
                   boxShadow: "0 2px 5px 1px rgba(64, 60, 67, 0.16) !important",
                 }}
                 rightIcon={
-                  <Box
-                    transform="translateX(-15px)"
-                    width="50px"
-                    height="50px"
-                    position="relative"
-                  >
-                    <Image
+                  (search ?
+                    <ArrowIcon
+                      widthIcon="28px"
+                      heightIcon="28px"
+                      fill="#252A32"
+                      marginRight="20px"
+                      cursor="pointer"
                       onClick={openSearchLink}
-                      layout="fill"
-                      objectFit="contain"
-                      src="/img/arrow_black_right.png"
                     />
-                  </Box>
+                    :
+                    <SearchIcon
+                      widthIcon="28px"
+                      heightIcon="28px"
+                      fill="#252A32"
+                      marginRight="25px"
+                    />
+                  )
                 }
               />
               <HStack paddingLeft={isMobileMod ? "20px" : "40px"}>

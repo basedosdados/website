@@ -48,9 +48,12 @@ export function PrismCodeHighlight({ language, children }) {
   return (
     <pre
       style={{
-        position: "relative",
+        display: "flex",
+        justifyContent: "space-between",
+        gap: "20px",
+        flexDirection: "row",
         width: "100%",
-        padding: "10px 100px 10px 10px",
+        padding: "10px",
         borderRadius: "6px",
         whiteSpace: "break-spaces",
         wordBreak: "break-all",
@@ -61,10 +64,11 @@ export function PrismCodeHighlight({ language, children }) {
       >
         {children}
       </code>
+      
       <Button
-        position="absolute"
-        top="0"
-        right="0"
+        height="20px"
+        minWidth="100px"
+        padding="0 0 0 10px"
         onClick={onCopy}
         color="#707783"
         fontFamily="Lato"

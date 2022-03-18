@@ -26,10 +26,9 @@ export function BdmTablePage({
   ) {
     resource.spatial_coverage = resource.spatial_coverage.sort();
   }
-
   return (
     <BaseResourcePage
-      padding="20px 17px"
+      padding="20px 10px 20px 0"
       editLink={`/resource/edit/${resource.id}`}
       title={`${resource.name}`}
       removeFunction={() => deleteResource(resource)}
@@ -85,8 +84,9 @@ export function BdmTablePage({
           Coluna
         </Title>
         <ExpandableTable
-          headers={["nome", "descrição"]}
-          values={(resource?.columns || []).map((c) => [c.name, c.description])}
+          horizontal={true}
+          headers={["nome", "descrição", "tipo", "diretório", "contém dados sensíveis", "unidade de medida", "cobertura temporal"]}
+          values={(resource?.columns || []).map((c) => [c.name, c.description, c.bigquery_type, c.directory_column, c.has_sensitive_data, c.measurement_unit, c.temporal_coverage ])}
         />
       </VStack>
       

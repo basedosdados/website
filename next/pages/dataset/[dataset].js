@@ -312,7 +312,12 @@ function ResourcesPage({
           <></>
         )}
       </VStack>
-      <VStack width="100%" flex="1">
+      <VStack
+        width="100%"
+        overflow="hidden"
+        alignItems="flex-start"
+        flex="1"
+      >
         {getResourcePage()}
       </VStack>
     </Stack>
