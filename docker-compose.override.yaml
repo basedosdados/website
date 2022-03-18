@@ -29,20 +29,12 @@ services:
     build:
       context: .
       dockerfile: stack/solr/Dockerfile
-
-  django:
-    build:
-      context: django
-    volumes:
-      - ./django:/usr/src/app
-
   next:
     build:
       context: next
     volumes:
       - ./next:/app
     command: ["yarn", "run", "dev"]
-
   nginx:
     volumes:
       - ./configs/nginx.dev.conf:/etc/nginx/nginx.conf:ro

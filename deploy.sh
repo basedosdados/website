@@ -62,7 +62,6 @@ load_images() {
         docker load < ~/basedosdados/images/solr
         docker load < ~/basedosdados/images/db
         docker load < ~/basedosdados/images/next
-        docker load < ~/basedosdados/images/django
     "
 }
 
@@ -72,9 +71,8 @@ restart_services() {
         if [[ ! -f wait-for-200.sh ]]; then curl https://raw.githubusercontent.com/cec/wait-for-endpoint/master/wait-for-endpoint.sh > wait-for-200.sh && chmod +x wait-for-200.sh; fi
         if [[ ! -f wait-for-it.sh ]]; then curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > wait-for-it.sh && chmod +x wait-for-it.sh; fi
         export HOSTNAME=$HOSTNAME
-        docker-compose rm -sf ckan next django autoheal
+        docker-compose rm -sf ckan next autoheal
         docker-compose up --no-build -d
-        docker-compose run django python manage.py collectstatic
         docker-compose ps
         docker-compose restart nginx
     '
@@ -92,7 +90,6 @@ build_images() {
     export COMPOSE_DOCKER_CLI_BUILD=1
     export DOCKER_BUILDKIT=1
     if [[ ! -d vendor/ckan/.git ]]; then ./utils/clone-ckan.sh; fi
-    ( VTAG=$VTAG docker-compose build django && docker save bdd/django$VTAG > build/images/django ) &
     ( VTAG=$VTAG docker-compose build ckan && docker save bdd/ckan$VTAG > build/images/ckan ) &
     ( docker-compose build solr && docker save bdd/solr > build/images/solr ) &
     ( docker-compose build db   && docker save bdd/db > build/images/db ) &

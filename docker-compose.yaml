@@ -11,8 +11,6 @@ services:
     depends_on:
       - ckan
       - next
-      - django
-
   ckan:
     container_name: ckan
     image: "bdd/ckan${VTAG}"
@@ -38,13 +36,11 @@ services:
       - BETTER_EXCEPTIONS=1
       - WERKZEUG_DEBUG_PIN=off
     command: ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "wsgi"]
-
   datapusher: # Not really used, ckan dependency
     container_name: datapusher
     image: clementmouchet/datapusher
     ports:
       - "8800:8800"
-
   db:
     container_name: db
     image: bdd/db
@@ -56,15 +52,12 @@ services:
       - POSTGRES_USER=ckan
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "ckan"]
-
   solr:
     container_name: solr
     image: bdd/solr
-
   redis: # Not really used, ckan dependency
     container_name: redis
     image: redis:latest
-
   next:
     image: "bdd/next${VTAG}"
     container_name: next
@@ -72,28 +65,3 @@ services:
       - "3000:3000"
     depends_on:
       - ckan
-
-  django:
-    image: "bdd/django${VTAG}"
-    environment:
-      - DATABASE_URL=postgres://django:django@django-db:5432/django?conn_max_age=600
-      - DEBUG=False
-      - SECRET_KEY=${SECRET_KEY}
-    ports:
-      - "8000:8000"
-    depends_on:
-      - django-db
-    command: ["gunicorn", "api.wsgi", "--bind=0.0.0.0:8000", "--reload"]
-
-  django-db:
-    image: postgres
-    environment:
-      POSTGRES_DB: django
-      POSTGRES_USER: django
-      POSTGRES_PASSWORD: django
-
-    volumes:
-      - django_db:/var/lib/postgresql/data
-
-volumes:
-  django_db:
