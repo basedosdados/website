@@ -7,6 +7,7 @@ repos:
     # - id: fix-byte-order-marker # fixes BOM
     # - id: fix-encoding-pragma # fixes encoding pragma
     - id: no-commit-to-branch # prevents committing to protected branches
+      args: ['-b', 'develop', '-b', 'master']
     - id: trailing-whitespace # prevents trailing whitespace
 -   repo: https://github.com/psf/black
     rev: 22.1.0
