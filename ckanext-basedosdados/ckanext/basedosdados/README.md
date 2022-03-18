@@ -46,7 +46,7 @@ Para acessar o resultado, basta acessar `http://localhost:5000/api/3/action/get_
 
 ```json
 {
- "help": "http://localhost:5000/api/3/action/help_show?name=get_test", 
+ "help": "http://localhost:5000/api/3/action/help_show?name=get_test",
  "success": true,
  "result": "Ueba!"
 }
@@ -94,8 +94,8 @@ E a resposta:
 
 O CKAN faz a interface com o banco de dados via ORM do `sqlachemy`. Essencialmente,
 existe uma classe para cada tabela, essas classes são chamadas de `Model`.
-Para acessar as tabelas, ou `Models`, dentro da lógica de um endpoint, 
-basta usar a variável `context`. 
+Para acessar as tabelas, ou `Models`, dentro da lógica de um endpoint,
+basta usar a variável `context`.
 
 Ela contém informações sobre o contexto como o usuário, ..., e os `Models` disponíveis.
 Então, basta acessar `context["Model"]` para ter um objeto com as tabelas. Daí,
@@ -143,7 +143,7 @@ SET
 
 Para visualizar as mudanças nos metadados, execute `docker exec -it ckan ckan search-index rebuild`.
 
-Note que os validadores são executados automaticamente, tanto para leitura quanto para escrita. Vide código em `plugin.py`. 
+Note que os validadores são executados automaticamente, tanto para leitura quanto para escrita. Vide código em `plugin.py`.
 
 <!--------------------------------------------------------->
 <!--------------------------------------------------------->
