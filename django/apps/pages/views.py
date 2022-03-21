@@ -1,6 +1,8 @@
 from rest_framework import mixins, viewsets
-from .serializers import PageSerializer
+
 from .models import Page
+from .serializers import PageSerializer
+
 
 # Create your views here.
 class PageViewSet(
