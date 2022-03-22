@@ -28,14 +28,14 @@ function MenuDrawer({ isOpen, onClose, links }) {
             if (typeof v === "object") {
               return Object.entries(v).map(([k, v]) => (
                 <>
-                  <Link href={v}>{k}</Link>
+                  <Link fontFamily="Ubuntu" fontWeigth="500" href={v}>{k}</Link>
                   <Divider />
                 </>
               ));
             }
             return (
               <>
-                <Link href={v}>{k}</Link>
+                <Link fontFamily="Ubuntu" fontWeigth="500" href={v}>{k}</Link>
                 <Divider />
               </>
             );
@@ -88,6 +88,8 @@ function DesktopLinks({ links }) {
                 minWidth="120px"
                 borderColor="#DEDFE0"
                 borderTopRadius="0"
+                fontFamily="Ubuntu"
+                fontWeigth="500"
                 borderBottomRadius="10px"
                 _first={{ paddingTop: "10px"}}
                 _last={{ paddingBottom: "10px"}}
@@ -100,6 +102,8 @@ function DesktopLinks({ links }) {
                     fontSize="14px"
                     target="_blank"
                     color="#252A32"
+                    fontFamily="Ubuntu"
+                    fontWeigth="500"
                     href={v}
                     padding="10px 24px"
                   >
@@ -114,6 +118,8 @@ function DesktopLinks({ links }) {
             <Link
               _hover={{ opacity: "0.6" }}
               fontSize="14px"
+              fontFamily="Ubuntu"
+              fontWeigth="500"
               href={v}
               target={v.startsWith("https") ? "_blank" : null}
             >

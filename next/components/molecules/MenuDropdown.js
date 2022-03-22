@@ -12,13 +12,13 @@ export function MenuDropdown({ title, children, ...style }) {
         _hover={{ backgroundColor: "transparent", opacity: "0.6" }}
         onMouseOver={() => setOpen(true)}
         as={Button}
-        fontFamily="Lato"
+        fontFamily="Ubuntu"
         fontSize="14px"
         letterSpacing="0.5px"
         _active={{ backgroundColor: "transparent" }}
         padding="0px"
         color="#252A32"
-        fontWeight="700"
+        fontWeight="500"
       >
         {title}
       </MenuButton>

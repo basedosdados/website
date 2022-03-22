@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   HStack,
   Stack,
   Text,
@@ -29,6 +28,11 @@ import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { BePartner } from "../components/organisms/BePartner";
 import SearchIcon from "../public/img/icons/searchIcon"
 import ArrowIcon from "../public/img/icons/arrowIcon"
+import EnthusiasticImage from "../public/img/enthusiasticImage"
+import DatabaseImage from "../public/img/databaseImage"
+import MasterOfDatabaseImage from "../public/img/masterOfDatabaseImage"
+import RoundedButton from "../components/atoms/RoundedButton"
+import Link from "../components/atoms/Link"
 
 export async function getStaticProps(context) {
   let recentDatalakeDatasets;
@@ -426,176 +430,151 @@ function JoinTheCommunity() {
 
 function Support({ pages }) {
   const contactPage = pages.filter((p) => p.Title === "Contato");
+  const [isMobileMod, setIsMobileMod] = useState(false)
+  const isMobile = useCheckMobile();
 
-  function SupportButton({
-    onClick,
-    link,
-    children,
-    colorScheme = "blue",
-    backgroundColor = "#3AA1EB",
-    target = "_blank",
-    ...props
-  }) {
-    return (
-      <a href={link} target={target}>
-        <Button
-          boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
-          borderRadius="68.6364px"
-          colorScheme={colorScheme}
-          backgroundColor={backgroundColor}
-          padding="23px"
-          fontFamily="Ubuntu"
-          fontWeight="700"
-          display="flex"
-          fontSize="18px"
-          minWidth="200px"
-          letterSpacing="0.5px"
-          _hover={{
-            transform: "translateY(-3px);",
-          }}
-        >
-          {children}
-        </Button>
-      </a>
-    );
-  }
+  useEffect(() => {
+    setIsMobileMod(isMobile)
+  }, [isMobile])
+  
 
   return (
     <VStack id="support" position="relative" paddingTop="40px" width="95%">
-      <BigTitle position="relative" zIndex="1" width="90%" textAlign="center">
-        Apoie a Base dos Dados
+      <BigTitle
+        color="#252A32"
+        position="relative"
+        zIndex="1"
+        width={isMobileMod ? "100%" : "80%"}
+        fontSize={isMobileMod ? "22px" : "32px"}
+        lineHeight={isMobileMod && "28px"}
+        fontWeigth="400"
+        textAlign="center"
+        marginBottom="20px"
+      >
+        Existimos através do esforço de pessoas que acreditam no acesso a dados abertos de qualidade.
       </BigTitle>
       <SectionText
         position="relative"
         zIndex="1"
+        color="#9C9C9C"
         fontSize="17px"
         alignSelf="center"
-        letterSpacing="0.05em"
-        fontWeight="500"
-        paddingBottom="60px"
-      >
-        Existimos através do esforço de pessoas que acreditam no acesso a dados
-        abertos de qualidade.
+        letterSpacing="0.5px"
+        fontWeight="300"
+        paddingBottom="45px"
+      > Apoie a Base dos Dados você também:
       </SectionText>
+
       <Stack
         width="100%"
-        paddingBottom="30px"
+        paddingBottom="50px"
         justifyContent="space-around"
         direction={{ base: "column", lg: "row" }}
         spacing={10}
       >
-        <ShadowBox height="250px" title="Entusiasta 🤩">
-          <SectionText
-            fontWeight="400"
-            padding="10px 0px"
-            fontSize="14px"
-            height="100px"
-          >
-            Bolso apertado? Doe apenas R$0,50 por dia e ajude a manter a
-            iniciativa.
-          </SectionText>
-          <SupportButton
-            alignItems="flex-end"
-            link="https://apoia.se/basedosdados"
-          >
-            <Flex paddingBottom="10px" align="flex-end">
-              R${" "}
-              <Text
-                fontSize="30px"
-                margin="0px"
-                padding="0px 10px"
-                marginBottom="-5px"
-              >
-                15
-              </Text>{" "}
-              / mês
-            </Flex>
-          </SupportButton>
-        </ShadowBox>
         <ShadowBox
-          height="250px"
+          height="100%"
+          image= {
+            <EnthusiasticImage
+              widthImage="100%"
+              heightImage="100%"
+            />
+          }
+          title="Entusiasta"
+          spacing={5}
+        >
+          <SectionText
+            fontWeight="300"
+            fontSize="14px"
+            textAlign="center"
+          >
+            Bolso apertado? Apenas R$0,50 por dia para ajudar a manter a iniciativa.
+          </SectionText>
+          <Link _hover={{ opacity:"none" }} target="_blank" href="https://apoia.se/basedosdados">
+            <RoundedButton width="200px">
+                R$ <p style={{fontSize:"24px", margin:"0 5px"}}>15</p>/ mês
+            </RoundedButton>
+          </Link>
+        </ShadowBox>
+
+        <ShadowBox
+          height="100%"
           border="2.5px solid #FF8484"
+          image= {
+            <DatabaseImage
+              widthImage="100%"
+              heightImage="100%"
+              backgroundColor="#FF8484"
+            />
+          }
           title={
             <Text color="#FF8484">
-              <b><i>Databaser</i> 🎲</b>
+              <b><i>Databaser</i></b>
             </Text>
           }
+          spacing={5}
         >
           <SectionText
-            fontWeight="400"
-            padding="10px 0px"
+            fontWeight="300"
             fontSize="14px"
-            height="100px"
+            display="flex"
+            flexDirection="column"
+            textAlign="center"
           >
-            Dobre sua doação:{" "}
-            <b>R$ 1 real por dia para fazer databasers felizes.</b>
+            <b>Doe R$ 1 real por dia</b> 
+            <p>para fazer databasers felizes.</p>
           </SectionText>
-          <SupportButton
-            colorScheme="red"
-            backgroundColor="#FF8484"
-            alignItems="flex-end"
-            link="https://apoia.se/basedosdados"
-          >
-            <Flex paddingBottom="10px" align="flex-end">
-              R${" "}
-              <Text
-                fontSize="30px"
-                margin="0px"
-                padding="0px 10px"
-                marginBottom="-5px"
-              >
-                30
-              </Text>{" "}
-              / mês
-            </Flex>
-          </SupportButton>
+          <Link _hover={{ opacity:"none" }} target="_blank" href="https://apoia.se/basedosdados">
+            <RoundedButton backgroundColor="#FF8484" width="200px">
+                R$ <p style={{fontSize:"24px", margin:"0 5px"}}>30</p>/ mês
+            </RoundedButton>
+          </Link>
         </ShadowBox>
+
         <ShadowBox
-          height="250px"
-          title={
-            <Text>
-              Mestre dos dados 🔮
-            </Text>
+          height="100%"
+          image= {
+            <MasterOfDatabaseImage
+              widthImage="100%"
+              heightImage="100%"
+            />
           }
+          title="Mestre dos dados"
+          spacing={5}
         >
           <SectionText
-            fontWeight="400"
-            padding="10px 0px"
+            fontWeight="300"
             fontSize="14px"
-            height="80px"
+            textAlign="center"
           >
-            Já poupamos algumas horas do seu trabalho? Que tal doar R$50 para
-            ajudarmos ainda mais pessoas?
+            Menos de R$2 reais por dia para pouparmos ainda mais seu trabalho.
           </SectionText>
-          <SupportButton
-            alignItems="flex-end"
-            link="https://apoia.se/basedosdados"
-          >
-            <Flex paddingBottom="10px" align="flex-end">
-              R${" "}
-              <Text
-                fontSize="30px"
-                margin="0px"
-                padding="0px 10px"
-                marginBottom="-5px"
-              >
-                50
-              </Text>{" "}
-              / mês
-            </Flex>
-          </SupportButton>
+          <Link _hover={{ opacity:"none" }} target="_blank" href="https://apoia.se/basedosdados">
+            <RoundedButton width="200px">
+                R$ <p style={{fontSize:"24px", margin:"0 5px"}}>50</p>/ mês
+            </RoundedButton>
+          </Link>
         </ShadowBox>
       </Stack>
-      <ShadowBox padding="0px">
-        <BigTitle padding="0px" fontSize="24px" color="#252A32">
+
+      <Box padding="0px">
+        <BigTitle 
+          width="100%"
+          textAlign="center"
+          padding="0px"
+          fontSize="24px"
+          color="#252A32"
+          fontWeigth="400"
+        >
           Doe via PIX
         </BigTitle>
         <Stack
-          align="center"
           justify="space-between"
+          alignItems="flex-start"
           width="100%"
+          gridGap={10}
           direction={{ base: "column", lg: "row" }}
-          padding="0px 50px"
+          padding="20px 20px 0"
         >
           <Stack
             width={{ base: "100%", lg: "initial" }}
@@ -603,61 +582,60 @@ function Support({ pages }) {
             direction={{ base: "column", lg: "row" }}
           >
             <ChakraImage
+              position="relative"
+              top="-5px"
               height="180px"
               objectFit="contain"
               src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/bd_qrcode.png"
             />
-
             <SectionText
-              padding={{ base: "0px 0px", lg: "10px 0px" }}
               marginLeft="auto"
-              fontWeight="400"
+              fontWeight="300"
               fontSize="14px"
+              flex={1}
             >
-              <b>
-                Chave CNPJ
-                <br /> 42494318000116
-              </b>
-              <br />
-              <br />
-              Banco: Stone
-              <br /> Razão Social: Instituto Base dos Dados
-              <br /> CNPJ: 42494318/0001-16
-              <br />
-              Agência: 0001 | Conta: 6761821-5
+              Chave CNPJ<br/> 
+              <b style={{fontWeight:"500"}}>42494318000116</b>
+              <br/>
+              <br/>
+              Banco: <b style={{fontWeight:"500"}}>Stone</b>
+              <br/> Razão Social: <b style={{fontWeight:"500"}}>Instituto Base dos Dados</b>
+              <br/> CNPJ: <b style={{fontWeight:"500"}}>42494318/0001-16</b>
+              <br/>
+              Agência: <b style={{fontWeight:"500"}}>0001</b> | Conta: <b style={{fontWeight:"500"}}>6761821-5</b>
             </SectionText>
           </Stack>
-          <SectionText fontWeight="400" fontSize="14px">
-            1. Abra o app do seu banco
-            <br />
-            <br />
-            2. Escolha a opção de pagamento com PIX QR Code ou chave
-            <br />
-            <br />
-            3. Escaneie o QR Code ou digite a chave ao lado
-            <br />
-            <br />
-            💚. Faça sua doação!
-            <br />
-            <br />
+          <SectionText
+            fontWeight="300"
+            fontSize="14px"
+            maxHeight="190px"
+            textAlign="start"
+            flex={1}
+          >
+            1. Abra o app do seu banco <br style={{display:"block", marginBottom: "10px", content:""}}/>
+            2. Escolha a opção de pagamento com PIX QR Code ou chave <br/>
+            3. Escaneie o QR Code ou digite a chave ao lado <br/>
+            ❤. Faça sua doação!
           </SectionText>
         </Stack>
-      </ShadowBox>
+      </Box>
+
       <SectionText
         paddingTop="20px"
         paddingBottom="30px"
-        fontWeight="400"
+        fontWeight="300"
+        fontFamily="Ubuntu"
         fontSize="14px"
       >
-        Gostaria de apoiar institucionalmente a Base dos Dados?{" "}
+        💰 Gostaria de apoiar institucionalmente a Base dos Dados?
         <LinkDash
           dash={false}
           textDecoration="none"
-          fontWeight="bolder"
+          fontWeight="700"
+          fontFamily="Ubuntu"
           fontSize="14px"
           href="/blog/1/"
-        >
-          Entre em contato conosco.
+        > Entre em contato conosco.
         </LinkDash>
       </SectionText>
     </VStack>

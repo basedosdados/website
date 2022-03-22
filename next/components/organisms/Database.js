@@ -6,6 +6,7 @@ import {
   VStack,
   Flex,
   Center,
+  Tooltip,
 } from "@chakra-ui/react";
 import { limitTextSize } from "../../utils";
 import { CategoryIcon } from "../atoms/CategoryIcon";
@@ -139,19 +140,30 @@ export function Database({
                 spacing={2}
               >
                 {categories.slice(0, Math.min(3, categories.length)).map((c) => (
-                  <Center
-                    width="36px" 
-                    height="36px" 
-                    backgroundColor="#2B8C4D" 
+                  <Tooltip 
+                    label={c[1]}
+                    fontSize="16px"
+                    fontWeight="500"
+                    padding="5px 15px"
+                    backgroundColor="#2A2F38"
+                    marginTop="10px"
+                    color="#FFF"
                     borderRadius="6px"
-                  >
-                    <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${c}`}>
-                      <CategoryIcon
-                        size="36px"
-                        url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c}.svg`}
-                      />
-                    </Link>
-                  </Center>
+                  >   
+                    <Center
+                      width="36px" 
+                      height="36px" 
+                      backgroundColor="#2B8C4D" 
+                      borderRadius="6px"
+                    >
+                      <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${c[0]}`}>
+                        <CategoryIcon
+                          size="36px"
+                          url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c[0]}.svg`}
+                        />
+                      </Link>
+                    </Center>
+                  </Tooltip>
                 ))}
               </HStack>
             </Flex>

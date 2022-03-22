@@ -340,7 +340,7 @@ export default function SearchPage({
       <DebouncedControlledInput
         value={search}
         onChange={(val) => setSearch(val)}
-        placeholder="Pesquise palavras-chave, instituições ou temas"
+        placeholder={isMobileMode ? "Palavras-chave, instituições ou temas" :"Pesquise palavras-chave, instituições ou temas"}
         justifyContent="center"
         inputStyle={{
           width: "90%",
@@ -358,7 +358,7 @@ export default function SearchPage({
       <Stack
         justifyContent="flex-start"
         alignItems="flex-start"
-        spacing={10}
+        spacing={isMobileMode ? 10 : 0}
         width="90%"
         margin="auto"
         direction={{ base: "column", lg: "row" }}
@@ -367,8 +367,7 @@ export default function SearchPage({
           justifyContent="flex-start"
           alignItems="flex-start"
           minWidth={{ base: "100%", lg: "320px" }}
-          padding={isMobileMode ? "" : "0 40px 0 0"}
-          borderRight={isMobileMode ? "" : "1px solid #DEDFE0"}
+          padding={isMobileMode ? "" : "0 20px 0 0"}
           key={filterKey}
         >
           <Box display="flex" marginBottom="10px" alignItems="center">
@@ -561,7 +560,13 @@ export default function SearchPage({
             }
           />
         </VStack>
-        <VStack alignItems="flex-start" spacing={5} width="100%">
+        <VStack
+          alignItems="flex-start"
+          spacing={5}
+          width="100%"
+          paddingLeft={isMobileMode ? "" : "40px"}
+          borderLeft={isMobileMode ? "" : "1px solid #DEDFE0"}
+        >
           <Flex width="100%" justify="center" align="baseline">
             <Heading
               width="100%"
@@ -699,7 +704,7 @@ export default function SearchPage({
                     }
                     updatedSince={d.metadata_modified}
                     updatedAuthor="Ricardo Dahis"
-                    categories={d.groups.map((g) => g.name)}
+                    categories={d.groups.map((g) => [g.name, g.display_name])}
                     spatialCoverage={null}
                     updateFrequency={
                       d.resources.filter((r) => r.update_frequency).length >
@@ -710,7 +715,7 @@ export default function SearchPage({
                     }
                     isPlus={isBdPlus(d)}
                   />
-                  <Divider />
+                  <Divider border="0" borderBottom="1px solid #DEDFE0" opacity={1}/>
                 </>
               ))}
             <ReactPaginate
