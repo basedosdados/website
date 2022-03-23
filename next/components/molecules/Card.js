@@ -1,22 +1,22 @@
-import { Center, Box, VStack, HStack, Flex, Link } from "@chakra-ui/react";
+import { Box, HStack, Flex } from "@chakra-ui/react";
 
 export function Card({
   children,
   icons = [],
   spacing = 5,
   padding = "25px 25px 25px 25px",
-  link,
 }) {
+
   return (
     <Box
       width="280px"
-      height="310px"
-      borderRadius="10px"
+      height="290px"
       boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
+      _hover={{ boxShadow:"0px 7px 19px 1px rgb(64 60 67 / 16%)" }}
       backgroundColor="#FFFFFF"
       padding={padding}
       borderRadius="10px"
-      margin={{ base: "10px", lg: "10px 0px" }}
+      margin={{ base: "20px 0 !important", lg: "10px 0px" }}
     >
       <Flex
         flexDirection="column"
@@ -29,7 +29,7 @@ export function Card({
           justifyContent="center"
           alignItems="center"
           minHeight="50px"
-          paddingBottom="20px"
+          paddingBottom="12px"
           spacing={2}
         >
           {icons}

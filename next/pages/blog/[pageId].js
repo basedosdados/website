@@ -44,7 +44,7 @@ function BlogPage({ pages = [] }) {
   const { pageId } = router.query;
 
   useEffect(() => {
-    const page = pages.filter((p) => p.id == pageId)[0];
+    const page = pages.filter((p) => p.id == pageId)[0] || {};
     setRightColumnHtml(converter.makeHtml(page.right_column_markdown));
     setLeftColumnHtml(converter.makeHtml(page.left_column_markdown));
     setData(page);

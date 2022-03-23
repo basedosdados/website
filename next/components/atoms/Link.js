@@ -4,7 +4,7 @@ export default function Link({
   children,
   href,
   target,
-  color = "black",
+  color = "#252A32",
   fontWeigth = "700",
   ...props
 }) {
@@ -14,8 +14,9 @@ export default function Link({
       href={href}
       fontFamily="Lato"
       fontSize="15px"
-      letterSpacing="0.15em"
+      letterSpacing="0.5px"
       color={color}
+      _hover={{ textDecoration: "none", opacity:"0.6" }}
       fontWeight={fontWeigth}
       {...props}
     >

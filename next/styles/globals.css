@@ -16,14 +16,14 @@ body {
   font-size: 40px;
   color: #2b8c4d;
   font-family: Lato;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.5px;
 }
 
 #blog p {
   font-size: 16px;
   color: #6e6e6e;
   font-family: Lato;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.5px;
 }
 
 #form-hbspt {
@@ -31,6 +31,19 @@ body {
   padding: 5% 7%;
   padding-bottom: 0px;
   box-shadow: 0 2px 5px 1px rgba(64, 60, 67, 0.16);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #dadada;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #a3a3a3;
   border-radius: 10px;
 }
 
@@ -54,16 +67,34 @@ body {
 }
 
 .chakra-checkbox__control {
-  background-color: transparent !important;
   padding: 5px !important;
   width: 20px !important;
   height: 20px !important;
   border-width: 3px !important;
   border-radius: 4px !important;
+  border-color: #DEDFE0 !important;
 }
 
-.chakra-checkbox__control svg {
-  color: #2b8c4d;
+.chakra-checkbox__control[data-focus] {
+  box-shadow: none !important;
+}
+
+.chakra-checkbox__control[data-checked] {
+  background: #2b8c4d !important;
+  border-color: #2b8c4d !important;
+}
+
+.chakra-skeleton {
+  background-color: #F0F0F0 !important;
+  border-radius: 12px !important;
+  animation: gray-scale 1s infinite !important;
+}
+
+@keyframes gray-scale {
+  50% {
+    -webkit-filter: brightness(98%); 
+    filter: brightness(98%);
+  }
 }
 
 .pagination {
@@ -85,7 +116,7 @@ body {
   font-family: "Lato";
   font-weight: 700;
   min-width: 35px;
-  padding: 3px;
+  padding: 5px 10px;
 }
 
 .pagination .active {

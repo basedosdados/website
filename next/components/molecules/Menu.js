@@ -8,10 +8,8 @@ import {
   useDisclosure,
   Divider,
   Avatar,
-  MenuItem,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import ControlledInput from "../atoms/ControlledInput";
 import RoundedButton from "../atoms/RoundedButton";
 import Link from "../atoms/Link";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -30,14 +28,14 @@ function MenuDrawer({ isOpen, onClose, links }) {
             if (typeof v === "object") {
               return Object.entries(v).map(([k, v]) => (
                 <>
-                  <Link href={v}>{k}</Link>
+                  <Link fontFamily="Ubuntu" fontWeigth="500" href={v}>{k}</Link>
                   <Divider />
                 </>
               ));
             }
             return (
               <>
-                <Link href={v}>{k}</Link>
+                <Link fontFamily="Ubuntu" fontWeigth="500" href={v}>{k}</Link>
                 <Divider />
               </>
             );
@@ -62,6 +60,7 @@ function DesktopLinks({ links }) {
       width="100%"
       display={{ base: "none", lg: "flex" }}
       position={{ base: "relative", lg: "initial" }}
+      gap="24px"
     >
       <HStack width="100%" flex="3" spacing={7}>
         {Object.entries(links).map(([k, v]) => {
@@ -82,13 +81,34 @@ function DesktopLinks({ links }) {
 
           if (typeof v === "object") {
             return (
-              <MenuDropdown title={k}>
+              <MenuDropdown
+                title={k}
+                marginLeft="-25px"
+                marginTop="7px"
+                minWidth="120px"
+                borderColor="#DEDFE0"
+                borderTopRadius="0"
+                fontFamily="Ubuntu"
+                fontWeigth="500"
+                borderBottomRadius="10px"
+                _first={{ paddingTop: "10px"}}
+                _last={{ paddingBottom: "10px"}}
+              >
                 {Object.entries(v).map(([k, v]) => (
-                  <MenuItem>
-                    <Link fontSize="14px" href={v}>
-                      {k}
-                    </Link>
-                  </MenuItem>
+                  <Link
+                    display="flex"
+                    flexDirection="colunm"
+                    _hover={{ opacity: "0.6" }}
+                    fontSize="14px"
+                    target="_blank"
+                    color="#252A32"
+                    fontFamily="Ubuntu"
+                    fontWeigth="500"
+                    href={v}
+                    padding="10px 24px"
+                  >
+                    {k}
+                  </Link>
                 ))}
               </MenuDropdown>
             );
@@ -96,7 +116,10 @@ function DesktopLinks({ links }) {
 
           return (
             <Link
+              _hover={{ opacity: "0.6" }}
               fontSize="14px"
+              fontFamily="Ubuntu"
+              fontWeigth="500"
               href={v}
               target={v.startsWith("https") ? "_blank" : null}
             >
@@ -106,24 +129,6 @@ function DesktopLinks({ links }) {
         })}
       </HStack>
       <HStack spacing={9} display={{ base: "none", lg: "flex" }}>
-        <ControlledInput
-          onEnterPress={openSearchLink}
-          color="black"
-          value={search}
-          onChange={setSearch}
-          inputBackgroundColor="#FFFFFF"
-          rightIcon={
-            <Box width="60px" height="60px" position="relative">
-              <Image
-                cursor="pointer"
-                onClick={openSearchLink}
-                layout="fill"
-                objectFit="contain"
-                src="/img/icon_search.png"
-              />
-            </Box>
-          }
-        />
         {userData ? (
           <HStack spacing={5}>
             <Avatar
@@ -140,8 +145,8 @@ function DesktopLinks({ links }) {
             <Link fontSize="14px" href="/user/login">
               Entrar
             </Link>
-            <Link href="/user/register">
-              <RoundedButton height="35px" fontSize="14px" minWidth="130px">
+            <Link _hover={{ opacity:"none" }} href="/user/register">
+              <RoundedButton height="35px" fontSize="14px" minWidth="110px">
                 Cadastrar
               </RoundedButton>
             </Link>
@@ -159,15 +164,18 @@ export default function Menu({ pages = [] }) {
 
   const links = {
     Dados: "/dataset",
-    Documentação: "https://basedosdados.github.io/mais/",
-    Institucional: {
-      "Quem Somos": "/blog/2/",
-      Contato: "/blog/1/",
+    Tutoriais: {
+      Documentação: "https://basedosdados.github.io/mais/",
       Blog: "https://medium.com/basedosdados",
-      Newsletter:
-        "https://info.basedosdados.org/assine-a-newsletter-da-base-dos-dados",
+      YouTube: "https://www.youtube.com/c/BasedosDados/featured"
     },
     Serviços: "/servicos",
+    Institucional: {
+      Newsletter: "https://info.basedosdados.org/newsletter",
+      Carreiras: "https://info.basedosdados.org/carreiras"
+    },
+    "Quem somos": "/quem-somos",
+    Contato: "/contato",
     Apoie: "https://apoia.se/basedosdados",
   };
 
@@ -178,7 +186,7 @@ export default function Menu({ pages = [] }) {
       if (window.scrollY <= 30) divRef.current.style.boxShadow = "none";
       else
         divRef.current.style.boxShadow =
-          "0px 2px 5px 1px rgba(64, 60, 67, 0.16)";
+          "0px 2px 15px 1px rgba(64, 60, 67, 0.07)";
     });
   }, [divRef.current]);
 
@@ -206,22 +214,25 @@ export default function Menu({ pages = [] }) {
             <FontAwesomeIcon
               onClick={menuDisclosure.onOpen}
               style={{
-                maxWidth: "20px",
+                minWidth: "30px",
+                minHeight: "30px",
                 alignSelf: "flex-start",
                 flex: 1,
                 position: "fixed",
-                left: 30,
-                top: 27,
-                color: "black",
+                left: 0,
+                top: 0,
+                margin: "15px 0 0 17px",
+                color: "#616161",
+                cursor: "pointer",
               }}
               icon={faBars}
             />
           </Box>
-          <Link href="/">
+          <Link _hover={{opacity:"none"}} href="/">
             <Box
               transform={{ base: "translateX(-20%)", lg: "translateX(0%)" }}
               width={{ base: "120px", lg: "100px" }}
-              height="50px"
+              height="40px"
               position="relative"
             >
               <Image
@@ -237,6 +248,8 @@ export default function Menu({ pages = [] }) {
             bg="#2B8C4D"
             position="fixed"
             right="30px"
+            height="40px"
+            width="40px"
             display={{ base: "flex", lg: "none" }}
             src={userData?.image_url}
             name={userData?.fullname}

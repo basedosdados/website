@@ -3,7 +3,6 @@ import { Tag } from "./Tag";
 export function ThemeTag({ name }) {
   return (
     <a
-      _hover={{ textDecoration: "underline !important" }}
       href={`/dataset?tag=${name}`}
     >
       <Tag
@@ -12,6 +11,7 @@ export function ThemeTag({ name }) {
         whiteSpace="nowrap"
         borderRadius="7px"
         padding="4px 6px"
+        backgroundColor="#DEDFE0"
       >
         {name}
       </Tag>

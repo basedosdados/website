@@ -7,6 +7,7 @@ export function Markdown({
   children,
   limit = false,
   onLimitToggle = () => {},
+  styleText ={},
   ...style
 }) {
   const [isLimited, setIsLimited] = useState(true);
@@ -16,11 +17,12 @@ export function Markdown({
       <Box
         fontFamily="Lato"
         lineHeight="24px"
-        letterSpacing="0.1em"
+        letterSpacing="1px"
         fontWeight="400"
         fontSize="14px"
         textAlign="left"
         className="markdown"
+        style={styleText}
         dangerouslySetInnerHTML={{
           __html: converter.makeHtml(children),
         }}
@@ -35,8 +37,8 @@ export function Markdown({
           : {})}
       />
       {limit ? (
-        <LinkDash fontSize="12px" onClick={() => setIsLimited(!isLimited)}>
-          Ler {isLimited ? "Mais" : "Menos"}
+        <LinkDash fontSize="14px" onClick={() => setIsLimited(!isLimited)}>
+          Ler {isLimited ? "mais" : "menos"}
         </LinkDash>
       ) : (
         <></>

@@ -10,10 +10,10 @@ export function SimpleButton({ onClick, children, isActive }) {
       width="100%"
       justifyContent="flex-start"
       backgroundColor="transparent"
-      fontFamily="Lato"
+      fontFamily="Ubuntu"
       fontWeight="700"
       fontSize="15px"
-      letterSpacing="0.1em"
+      letterSpacing="0.5px"
       _hover={{
         backgroundColor: "rgba(0,0,0,0.04)",
       }}

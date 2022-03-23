@@ -18,15 +18,8 @@ export function Tag({
       <Heading
         fontWeight="400"
         fontSize={fontSize}
-        _hover={
-          hover
-            ? {
-                textDecoration: "underline",
-              }
-            : {}
-        }
         fontFamily="Ubuntu"
-        letterSpacing="0.1em"
+        letterSpacing="0.5px"
         fontWeight={fontWeight}
       >
         {children}

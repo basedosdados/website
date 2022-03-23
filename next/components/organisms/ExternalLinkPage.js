@@ -25,7 +25,7 @@ export function ExternalLinkPage({
           data={resource}
           updateFunction={updateResource}
           loadSchemaFunction={getExternalLinkSchema}
-          schemaName="Link Externo"
+          schemaName="Fonte original"
           prepareData={(data) => {
             data.country_ip_address_required =
               data.country_ip_address_required || [];
@@ -37,12 +37,10 @@ export function ExternalLinkPage({
           }}
         />
       }
-      buttonText="Acessar"
-      buttonRightIcon={<Image src="/img/icons/white_right_arrow.svg" />}
-      onClick={() => window.open(resource.url)}
+      isShowButtons={true}
+      urlExternal={resource.url}
     >
       <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Title>Metadados do link externo</Title>
         <ExpandableTable
           headers={["nome", "valor"]}
           values={formatObjectsInArray(
@@ -51,7 +49,6 @@ export function ExternalLinkPage({
               availableOptionsTranslations,
               filterOnlyValidValues(resource, [
                 "title",
-                "url",
                 "description",
                 "language",
                 "has_structured_data",

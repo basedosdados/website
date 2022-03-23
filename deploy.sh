@@ -5,7 +5,7 @@ cd $(git rev-parse --show-toplevel)
 HOST=${HOST:-basedosdados.org}
 
 SSH="ssh -o StrictHostKeyChecking=no -i ~/.ssh/BD.pem $HOST"
-VTAG=":`date +%H.%M.%S`" # Simple mechanism to force image update
+VTAG=":`date +%m%d.%H%M.%S`" # Simple mechanism to force image update
 
 BUILD_DIR="/tmp/bdd_build"
 
@@ -19,7 +19,7 @@ deploy() {
     rebuild_index
     install_crontab
     install_bashrc
-    install_apprise
+    # install_apprise
 }
 
 deploy_configs() {
@@ -51,8 +51,8 @@ build_config() {
 send() {
     $SSH 'mkdir -p ~/basedosdados/'
     # TODO: debug this, the size-only seems to be failing...
-    rsync -e 'ssh -i ~/.ssh/BD.pem' -azvv --progress --partial ./build/images/ $HOST:~/basedosdados/images/ &
-    rsync -e 'ssh -i ~/.ssh/BD.pem' -azvv --exclude=images --checksum ./build/ $HOST:~/basedosdados/ &
+    rsync -e 'ssh -i ~/.ssh/BD.pem' -azvv --progress --partial --inplace ./build/images/ $HOST:~/basedosdados/images/ &
+    rsync -e 'ssh -i ~/.ssh/BD.pem' -azvv --exclude=images --checksum --inplace ./build/ $HOST:~/basedosdados/ &
     for i in `jobs -p`; do wait $i ; done
 }
 
@@ -125,13 +125,13 @@ install_bashrc() {
     '
 }
 
-install_apprise() {
-    $SSH  '
-        cd ~/basedosdados/
-        source .env
-        echo $APPRISE_CONFIG > ~/.apprise
-        grep DISCORD .env | sed s/DISCORD_//g > ~/.discord_ids
-    '
-}
+# install_apprise() {
+#     $SSH  '
+#         cd ~/basedosdados/
+#         source .env
+#         echo $APPRISE_CONFIG > ~/.apprise
+#         grep DISCORD .env | sed s/DISCORD_//g > ~/.discord_ids
+#     '
+# }
 
 for i in "$@"; do $i; done

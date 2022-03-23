@@ -3,22 +3,19 @@ import {
   AccordionButton,
   AccordionIcon,
   AccordionItem,
-  AccordionPanel,
   Box,
   Checkbox,
   CheckboxGroup,
   VStack,
   Text,
-  Tooltip,
   Image,
   HStack,
-  Input,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { limitTextSize } from "../../utils";
 import ControlledInput from "./ControlledInput";
 import SectionText from "./SectionText";
 import Title from "./Title";
+import SearchIcon from "../../public/img/icons/searchIcon"
 
 export function BaseFilterAccordion({
   fieldName,
@@ -26,9 +23,10 @@ export function BaseFilterAccordion({
   overflowX = "scroll",
   isOpen = null,
   isActive = false,
-  onChange = () => {},
+  onChange = () => { },
   bdPlus = null,
   alwaysOpen = false,
+  isHovering = true
 }) {
   return (
     <Accordion ex allowToggle width="100%">
@@ -38,10 +36,9 @@ export function BaseFilterAccordion({
             <Text>
               <AccordionButton
                 onClick={onChange}
-                border={isActive ? "2px solid #3AA1EB" : "1px solid #DEDFE0"}
-                color={isActive ? "#3AA1EB" : null}
-                _hover={alwaysOpen ? { cursor: "inherit" } : null}
-                borderRadius="13px"
+                color={isActive ? "#2B8C4D" : null}
+                _hover={isHovering ? { cursor: "pointer", opacity: "0.6" } : "none"}
+                padding="10px 16px 0 0"
               >
                 <HStack
                   spacing={2}
@@ -51,11 +48,10 @@ export function BaseFilterAccordion({
                 >
                   <Box
                     width="fit-content"
-                    textAlign="left"
-                    fontFamily="Lato"
-                    fontWeight="700"
-                    fontSize="15px"
-                    letterSpacing="0.1em"
+                    fontWeight="500"
+                    fontFamily="Ubuntu"
+                    fontSize="16px"
+                    letterSpacing="0.5px"
                   >
                     {fieldName}
                   </Box>
@@ -65,7 +61,7 @@ export function BaseFilterAccordion({
                     <></>
                   )}
                 </HStack>
-                {!alwaysOpen ? <AccordionIcon marginLeft="auto" /> : <></>}
+                {!alwaysOpen ? <AccordionIcon color={isActive ? "#2B8C4D" : null} marginLeft="auto" fontSize="18px" /> : <></>}
               </AccordionButton>
             </Text>
             {(isOpen && isOpen === true) || (isOpen == null && isExpanded) ? (
@@ -73,8 +69,6 @@ export function BaseFilterAccordion({
                 overflowY="auto"
                 overflowX={overflowX + " !important"}
                 maxHeight="300px"
-                pb={4}
-                pt={2}
                 width="100%"
                 alignItems="flex-start"
               >
@@ -114,29 +108,23 @@ export function CheckboxFilterAccordion({
       overflowX="hidden"
       alwaysOpen={alwaysOpen}
     >
-      <CheckboxGroup onChange={(val) => onChange(val)} value={values}>
+      <CheckboxGroup onChange={(val) => onChange(val)} value={values} >
         {canSearch ? (
-          <VStack paddingBottom="10px" width="100%" alignItems="center">
+          <VStack padding="15px 0 10px" width="100%" alignItems="center">
             <ControlledInput
               color="black"
               value={search}
               onChange={setSearch}
               inputBackgroundColor="#FFFFFF"
               inputStyle={{
-                height: "30px",
+                height: "40px",
                 fontSize: "14px",
                 width: "100%",
-                margin: "0",
-                borderRadius: "20px",
+                borderRadius: "16px",
               }}
               rightIcon={
-                <Box width="20px" height="20px" position="relative">
-                  <Image
-                    cursor="pointer"
-                    layout="fill"
-                    objectFit="contain"
-                    src="/img/icon_search.png"
-                  />
+                <Box cursor="pointer">
+                  <SearchIcon fill="#D0D0D0"/>
                 </Box>
               }
             />
@@ -147,24 +135,24 @@ export function CheckboxFilterAccordion({
         <VStack
           overflowX="hidden !important"
           alignItems="flex-start"
-          overflowY="scroll"
+          overflowY="auto"
           width="100%"
+          padding="10px 0"
         >
           {(canSearch
             ? choices.filter(
-                (c) =>
-                  c[displayField].toLowerCase().indexOf(search.toLowerCase()) !=
-                  -1
-              )
+              (c) =>
+                c[displayField].toLowerCase().indexOf(search.toLowerCase()) !=
+                -1
+            )
             : choices
           ).map((c) => (
             <Checkbox
               fontFamily="Lato"
-              fontWeight="700"
               value={c[valueField]}
               color="#7D7D7D"
               colorScheme="green"
-              letterSpacing="0.1em"
+              letterSpacing="0.5px"
             >
               {c[displayField]}
             </Checkbox>
@@ -257,6 +245,7 @@ export function FilterAccordion({
   isOpen = null,
   alwaysOpen = false,
   isActive = false,
+  isHovering,
 }) {
   return (
     <BaseFilterAccordion
@@ -264,6 +253,7 @@ export function FilterAccordion({
       alwaysOpen={alwaysOpen}
       isActive={isActive}
       onChange={onToggle}
+      isHovering={isHovering}
       overflowX="hidden"
       bdPlus={bdPlus}
       fieldName={fieldName}
@@ -273,22 +263,24 @@ export function FilterAccordion({
         spacing={1}
         overflowX="hidden !important"
         alignItems="flex-start"
+        marginTop="10px"
       >
         {choices.map((c) => (
           <Box
-            backgroundColor={
-              c[valueField] === value ? "#EBEBEB" : "transparent"
+            borderLeft={
+              c[valueField] === value ? "3px solid #2B8C4D" : "transparent"
             }
             width="100%"
-            _hover={{ backgroundColor: "#F5F5F5" }}
-            borderRadius="5px"
           >
             <Title
               fontSize="14px"
               cursor="pointer"
-              fontWeigth={c[valueField] === value ? "500" : "400"}
-              padding="5px 30px"
+              fontWeight={c[valueField] === value ? "500" : "400"}
+              color={c[valueField] === value ? "#2B8C4D" : "#7D7D7D"}
+              _hover={c[valueField] === value ? "none" : {  opacity: "0.6" , fontWeight: "500" }}
+              padding="5px 20px"
               borderRadius="5px"
+              letterSpacing="0.5px"
               transform="translateX(-10px)"
               zIndex="100"
               position="relative"

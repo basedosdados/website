@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/button";
-import { Flex, HStack, VStack } from "@chakra-ui/layout";
+import { Flex, HStack, VStack, Box } from "@chakra-ui/layout";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useState } from "react";
@@ -16,6 +16,7 @@ import {
   AlertDialogOverlay,
 } from "@chakra-ui/modal";
 import { useDisclosure } from "@chakra-ui/hooks";
+import RoundedButton from "../atoms/RoundedButton"
 
 export function BaseResourcePage({
   title,
@@ -23,6 +24,10 @@ export function BaseResourcePage({
   removeFunction,
   formComponent = null,
   forceForm = false,
+  isShowButtons= false,
+  urlExternal,
+  urlInformationRequest,
+  ...style
 }) {
   const [editing, setEditing] = useState(false);
   const deleteModalDisclosure = useDisclosure();
@@ -35,12 +40,13 @@ export function BaseResourcePage({
 
   return (
     <VStack
+      position="relative"
       width="100%"
-      border="1px solid #DEDFE0"
       borderRadius="20px"
       padding="20px"
       alignItems="flex-start"
       spacing={7}
+      {...style}
     >
       <AlertDialog
         isOpen={deleteModalDisclosure.isOpen}
@@ -77,8 +83,14 @@ export function BaseResourcePage({
         flexDirection={{ base: "column", lg: "row" }}
         width="100%"
         alignItems={{ base: "flex-start", lg: "flex-start" }}
+        marginBottom="20px"
       >
-        <Title width="100%" wordBreak="break-all">
+        <Title 
+          width="100%"
+          letterSpacing="0.5px"
+          lineHeight="0"
+          wordBreak="break-all"
+        >
           {(editing ? "Editando " : "") + title}
         </Title>
         {userData?.is_admin && formComponent && !editing ? (
@@ -94,7 +106,7 @@ export function BaseResourcePage({
               fontFamily="Lato"
               alignContent="center"
               justifyContent="center"
-              letterSpacing="0.1em"
+              letterSpacing="0.5px"
               boxShadow="0px 4px 4px 0px #00000040"
               leftIcon={
                 <Icon>
@@ -114,7 +126,7 @@ export function BaseResourcePage({
               fontFamily="Lato"
               alignContent="center"
               justifyContent="center"
-              letterSpacing="0.1em"
+              letterSpacing="0.5px"
               boxShadow="0px 4px 4px 0px #00000040"
               leftIcon={
                 <Icon>
@@ -128,6 +140,43 @@ export function BaseResourcePage({
         ) : (
           <></>
         )}
+        
+        {isShowButtons &&
+          <HStack
+            position="absolute"
+            top="0"
+            right="0"
+            spacing={2}
+          >
+            <RoundedButton
+              height="35px"
+              fontSize="14px"
+              minWidth="100px"
+              color={urlInformationRequest ? "#3AA1EB" : "#FFF"}
+              border={urlInformationRequest && "2px solid #3AA1EB"}
+              backgroundColor={urlInformationRequest && "#FFF"}
+              isDisabled={urlExternal ? false : true}
+              _disabled={{color:"#C1C1C1", borderColor: "#C1C1C1"}}
+              _hover={urlExternal ? "" : {transform:"none"}}
+              onClick={() => window.open(urlExternal)}
+            >
+              {urlInformationRequest ? "Acessar o pedido" :"Acessar"}
+            </RoundedButton>
+            {urlInformationRequest &&
+              <RoundedButton
+                height="35px"
+                fontSize="14px"
+                minWidth="100px"
+                isDisabled={urlInformationRequest ? false : true}
+                _disabled={{backgroundColor:"#C1C1C1"}}
+                _hover={urlInformationRequest ? "" : {transform:"none"}}
+                onClick={() => window.open(urlInformationRequest)}
+              >
+                Acessar os dados
+              </RoundedButton>
+            }
+          </HStack>
+        }
       </Flex>
       {editing ? formComponent : children}
       {editing ? (

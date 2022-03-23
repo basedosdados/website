@@ -11,6 +11,7 @@ export default function Title({
       fontFamily="Ubuntu"
       fontSize="18px"
       color={color}
+      letterSpacing="0.5px"
       fontWeight={fontWeigth}
       {...style}
     >

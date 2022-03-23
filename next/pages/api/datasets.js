@@ -55,6 +55,14 @@ export function getRecentDatalakeDatasets() {
     .then(({ data }) => data.result.datasets);
 }
 
+export function getRecentDatalakeDatasetsByTheme(id) {
+  return axios
+    .get(
+      `https://staging.basedosdados.org/api/3/action/bd_dataset_search?q=&page=1&order_by=recent&group=${id}`
+    )
+    .then(({ data }) => data.result.datasets);
+}
+
 export function updateDataset(dataset) {
   return axiosInstance.post(`/package_update`, dataset);
 }

@@ -1,20 +1,13 @@
 import {
   Box,
   HStack,
-  InputRightAddon,
   Stack,
   VStack,
   Text,
-  Button,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import ControlledInput from "../atoms/ControlledInput";
-import Title from "../atoms/Title";
 import SectionText from "../atoms/SectionText";
 import Link from "../atoms/Link";
-import { useState } from "react";
-import BigTitle from "../atoms/BigTitle";
-import RoundedButton from "../atoms/RoundedButton";
 
 function LinkVStack({ title, children }) {
   return (
@@ -45,7 +38,6 @@ function FooterLink(props) {
 }
 
 export default function Footer({ pages }) {
-  const [email, setEmail] = useState();
 
   return (
     <VStack position="relative" zIndex="10" width="100%" spacing={0}>
@@ -57,7 +49,7 @@ export default function Footer({ pages }) {
           direction={{ base: "column", lg: "row" }}
           spacing={{ base: 10, lg: 20 }}
         >
-          <Box minWidth="250px" height="250px" position="relative">
+          <Box minWidth="200px" height="200px" position="relative">
             <Image
               priority
               objectFit="contain"
@@ -93,13 +85,35 @@ export default function Footer({ pages }) {
                 Pacotes
               </FooterLink>
             </LinkVStack>
-            <LinkVStack title="CONTEÚDO">
+            <LinkVStack title="SERVIÇOS">
+              <FooterLink 
+                color="white" 
+                href="/servicos#Captura de dados"
+              >
+                Captura de dados
+              </FooterLink>
               <FooterLink
-                href="https://info.basedosdados.org/assine-a-newsletter-da-base-dos-dados"
+                color="white"
+                href="/servicos#Análise de dados"
+                target="_blank"
+              >
+                Análise de dados
+              </FooterLink>
+              <FooterLink
+                color="white"
+                href="/servicos#Consultoria de dados"
+                target="_blank"
+              >
+                Consultoria de dados
+              </FooterLink>
+            </LinkVStack>
+            <LinkVStack title="TUTORIAIS">
+              <FooterLink
+                href="https://basedosdados.github.io/mais/"
                 color="white"
                 target="_blank"
               >
-                Assine a newsletter
+                Documentação
               </FooterLink>
               <FooterLink
                 href="https://medium.com/basedosdados"
@@ -109,10 +123,10 @@ export default function Footer({ pages }) {
                 Blog
               </FooterLink>
               <SocialLink
-                color="white"
                 href="https://www.youtube.com/c/BasedosDados/featured"
+                color="white"
                 target="_blank"
-                title="Youtube"
+                title="YouTube"
                 src="/img/logos/youtube.png"
               />
             </LinkVStack>
@@ -150,19 +164,30 @@ export default function Footer({ pages }) {
             </LinkVStack>
             <LinkVStack title="INSTITUCIONAL">
               <FooterLink
-                href="https://basedosdados.org/blog/2/" // TODO: Mudar o ID para quem-somos
+                href="https://basedosdados.org/quem-somos"
                 color="white"
               >
-                Quem Somos
+                Quem somos
               </FooterLink>
               <FooterLink
+                href="https://info.basedosdados.org/newsletter"
                 color="white"
-                href="https://basedosdados.org/blog/1/" // TODO: Mudar o ID para fale-conosco
+                target="_blank"
               >
-                Fale Conosco
+                Newsletter
               </FooterLink>
-              <FooterLink color="white" href="/servicos">
-                Serviços
+              <FooterLink
+                href="https://info.basedosdados.org/carreiras"
+                color="white"
+                target="_blank"
+              >
+                Carreiras
+              </FooterLink>
+              <FooterLink
+                href="https://basedosdados.org/contato"
+                color="white"
+              >
+                Contato
               </FooterLink>
               <Link fontWeigth="700" color="white" href="/#support">
                 Apoie o projeto
@@ -174,9 +199,9 @@ export default function Footer({ pages }) {
           <HStack
             fontFamily="Lato !important"
             color="white !important"
-            letterSpacing="0.1em"
+            letterSpacing="0.5px"
           >
-            <Text>® 2021 Base dos Dados</Text>
+            <Text>® 2022 Base dos Dados</Text>
             {/* <Text>|</Text> // TODO: Não existem essas páginas ainda!
             <Link color="white">Termos de uso</Link>
             <Text>|</Text>
@@ -187,9 +212,9 @@ export default function Footer({ pages }) {
             fontSize="12px"
             fontFamily="Lato"
             fontWeight="500"
-            letterSpacing="0.1em"
+            letterSpacing="0.5px"
           >
-            Ícones adaptados de Freepik e Smashicons disponíveis em Storyset e
+            Ícones adaptados de Freepik e disponíveis em Storyset e
             Flaticon.
           </Text>
         </VStack>
