@@ -88,16 +88,15 @@ export function BdmTablePage({
           {resource.temporal_coverage[0] || "Nenhuma cobertura temporal."}
         </Text>
       </VStack>
-      {/* <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
+      <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
         <Title fontWeigth="400">
           Coluna
         </Title>
         <ExpandableTable
-          horizontal={true}
-          headers={["nome", "descrição", "tipo", "diretório", "contém dados sensíveis", "unidade de medida", "cobertura temporal"]}
-          values={(resource?.columns || []).map((c) => [c.name, c.description, c.bigquery_type, c.directory_column, c.has_sensitive_data, c.measurement_unit, c.temporal_coverage ])}
+          headers={["nome", "descrição"]}
+          values={(resource?.columns || []).map((c) => [c.name, c.description])}
         />
-      </VStack> */}
+      </VStack>
       
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Accordion
