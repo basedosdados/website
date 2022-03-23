@@ -1,12 +1,8 @@
 import { Image } from "@chakra-ui/image";
-import { HStack, Stack, VStack } from "@chakra-ui/layout";
+import { HStack, Stack, VStack, Text, Center } from "@chakra-ui/layout";
 import dynamic from "next/dynamic";
 import BigTitle from "../atoms/BigTitle";
-import Link from "../atoms/Link";
-import RoundedButton from "../atoms/RoundedButton";
 import SectionText from "../atoms/SectionText";
-import SectionTitle from "../atoms/SectionTitle";
-import { ShadowBox } from "../atoms/ShadowBox";
 import { NamedAvatar } from "../molecules/NamedAvatar";
 import { slidesToShowPlugin } from "@brainhubeu/react-carousel";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
@@ -50,17 +46,26 @@ function Testimonial({ children, name, position, src }) {
 
 function PartnerBox({ src, ...props }) {
   return (
-    <ShadowBox
+    <Stack
+      width="100%"
+      height="100%"
+      minWidth="100px"
+      minHeight="100px"
+      maxWidth="100px"
+      maxHeight="100px"
       align="center"
       justify="center"
-      width="120px"
-      height="120px"
       padding="0px"
-      paddingBottom="20px"
-      {...props}
+      filter="grayscale(100%)"
     >
-      <Image width="100%" height="100%" objectFit="contain" src={src} />
-    </ShadowBox>
+      <Image
+        width="100%"
+        height="100%"
+        objectFit="contain"
+        src={src} 
+        {...props} 
+      />
+    </Stack>
   );
 }
 
@@ -69,67 +74,42 @@ export function BePartner() {
 
   return (
     <VStack width="80%" spacing={7} margin="auto">
-      <BigTitle>Como impactamos pessoas e organizações</BigTitle>
+      {/* <BigTitle>Como impactamos pessoas e organizações</BigTitle> */}
       <Stack
         width="100%"
         justifyContent="space-between"
-        pt="50px"
-        direction={{ base: "column", lg: "row" }}
+        paddingTop="40px"
+        direction="column"
+        spacing={10}
       >
-        <VStack alignItems="flex-start" spacing={6} maxW="500px">
-          <SectionTitle fontFamily="Ubuntu" fontSize="28px">
-            Faça parte de nossa rede de parceiros e clientes
-          </SectionTitle>
-          <SectionText letterSpacing="0.5px">
-            <b>
-              Fortalecemos o uso eficaz e escalável de dados em governos,
-              empresas e organizações.
-            </b>{" "}
-            Abra dados de sua organização, construa projetos de dados abertos
-            conosco ou desenvolva aplicações com nossos dados.
-          </SectionText>
-          <Link textDecoration="none !important" href="/blog/1/">
-            <RoundedButton
-              fontFamily="Ubuntu"
-              fontSize="18px"
-              width="250px"
-              height="45px"
-            >
-              Entre em contato
-            </RoundedButton>
-          </Link>
-        </VStack>
-        <VStack paddingTop={{ base: "20px", lg: 0 }} spacing={5}>
-          <Stack direction={{ base: "column", lg: "row" }} spacing={5}>
-            <HStack spacing={5}>
-              <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/tesouro_nacional.png" />
-              <PartnerBox
-                padding="0px 10px"
-                src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/fiquem_sabendo.png"
-              />
-            </HStack>
-            <HStack spacing={5}>
-              <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/governosp.png" />
-              <PartnerBox
-                padding="0px 20px"
-                src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/bg__lemann.png"
-              />
-            </HStack>
-          </Stack>
-          <Stack direction={{ base: "column", lg: "row" }} spacing={5}>
-            <HStack spacing={5}>
-              <PartnerBox
-                padding="0px 20px"
-                src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/ipea.png"
-              />
-              <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/alziras.png" />
-            </HStack>
-            <HStack spacing={5}>
-              <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/rio.png" />
-              <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/aponte.png" />
-            </HStack>
-          </Stack>
-        </VStack>
+        <Center width="100%">
+          <Text
+            zIndex={2}
+            fontSize="18px"
+            fontWeight="300"
+            color="#7D7D7D"
+            fontFamily="Ubuntu"
+          >Parcerias com</Text>
+        </Center>
+        <Stack
+          direction="row"
+          width="100%"
+          maxWidth="1600px"
+          spacing={0}
+          gridGap="50px"
+          alignItems="center"
+          justifyContent="center"
+          flexWrap="wrap"
+        >
+          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/tesouro_nacional.png" />
+          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/ipea.png" />
+          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/alziras.png" />
+          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/fiquem_sabendo.png" />
+          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/bg__lemann.png" />
+          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/rio.png" />
+          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/governosp.png" />
+          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/aponte.png" />
+        </Stack>
       </Stack>
       {!isMobile &&
         <HStack w="110%">

@@ -112,8 +112,8 @@ export default function DataInformationQuery ({ resource }) {
           <GreenTab>SQL</GreenTab>
           <GreenTab>Python</GreenTab>
           <GreenTab>R</GreenTab>
+          <GreenTab>Stata</GreenTab>
           <GreenTab>Download</GreenTab>
-
         </TabList>
         <TabPanels>
           <TabPanel padding="0">
@@ -197,6 +197,33 @@ df <- bd_collect(query)`}
               href={"https://basedosdados.github.io/mais/access_data_packages/#primeiros-passos"}
             />
             <script key="R" src="/vendor/prism.js"></script>
+          </TabPanel>
+
+          <TabPanel padding="0">
+            <Text
+              color="#252A32" 
+              fontFamily="Lato"
+              margin="20px 0 14px"
+              fontSize="16px"
+              letterSpacing="0.5px"
+              fontWeight="300"
+            >
+              Criamos um pacote em Stata para você acessar o <i>datalake</i>. Basta rodar o código:
+            </Text>
+
+            <PrismCodeHighlight language="Stata">
+              {`github install basedosdados/stata-package
+bd_read_table, ///
+path("<PATH>") ///
+dataset_id(${resource.dataset_id}) ///
+table_id(${resource.table_id}) ///
+billing_project_id("<PROJECT_ID>")`}
+            </PrismCodeHighlight>
+
+            <BoxBigQueryGoogle
+              href={"https://basedosdados.github.io/mais/access_data_packages/#primeiros-passos"}
+            />
+            <script key="Stata" src="/vendor/prism.js"></script>
           </TabPanel>
 
           <TabPanel padding="20px 0 0">

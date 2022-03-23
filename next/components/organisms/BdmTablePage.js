@@ -1,4 +1,13 @@
-import { VStack, Text } from "@chakra-ui/react";
+import {
+  VStack,
+  Stack,
+  Text,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+} from "@chakra-ui/react";
 import { Markdown } from "../atoms/Markdown";
 import Title from "../atoms/Title";
 import { ExpandableTable, ExpandableTableHorizontal } from "../molecules/ExpandableTable";
@@ -79,7 +88,7 @@ export function BdmTablePage({
           {resource.temporal_coverage[0] || "Nenhuma cobertura temporal."}
         </Text>
       </VStack>
-      <VStack id="acesso" width="100%" spacing={3} alignItems="flex-start">
+      <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
         <Title fontWeigth="400">
           Coluna
         </Title>
@@ -91,35 +100,53 @@ export function BdmTablePage({
       </VStack>
       
       <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Title fontWeigth="400">Metadados da tabela</Title>
-        <ExpandableTable
-          containerStyle={{ width: "100%", alignItems: "flex-start" }}
-          headers={["nome", "valor"]}
-          values={formatObjectsInArray(
-            translate(
-              translations,
-              availableOptionsTranslations,
-              filterOnlyValidValues({ dataset_id: datasetName, ...resource }, [
-                "dataset_id",
-                "table_id",
-                "spatial_coverage",
-                "update_frequency",
-                "observation_level",
-                "last_updated",
-                "version",
-                "published_by",
-                "data_cleaned_by",
-                "data_cleaning_description",
-                "raw_files_url",
-                "auxiliary_files_url",
-                "architecture_url",
-                "covered_by_dictionary",
-                "partitions",
-                "columns",
-              ])
-            )
-          )}
-        />
+        <Accordion
+          borderColor="transparent"
+          borderWidth={0}
+          width="100%"
+          ex
+          allowToggle
+        >
+          <AccordionItem>
+            <AccordionButton marginBottom={5} padding={0} _hover={{backgroundColor: "transparent"}} >
+              <Stack flex='1' textAlign='left'>
+                <Title fontWeigth="400">Informações adicionais</Title>
+              </Stack>
+              <AccordionIcon color="#252A32" fontSize="18px"/>
+            </AccordionButton>
+
+            <AccordionPanel padding={0}>
+              <ExpandableTable
+                containerStyle={{ width: "100%", alignItems: "flex-start" }}
+                headers={["nome", "valor"]}
+                values={formatObjectsInArray(
+                  translate(
+                    translations,
+                    availableOptionsTranslations,
+                    filterOnlyValidValues({ dataset_id: datasetName, ...resource }, [
+                      "dataset_id",
+                      "table_id",
+                      "spatial_coverage",
+                      "update_frequency",
+                      "observation_level",
+                      "last_updated",
+                      "version",
+                      "published_by",
+                      "data_cleaned_by",
+                      "data_cleaning_description",
+                      "raw_files_url",
+                      "auxiliary_files_url",
+                      "architecture_url",
+                      "covered_by_dictionary",
+                      "partitions",
+                      "columns",
+                    ])
+                  )
+                )}
+              />
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
       </VStack>
     </BaseResourcePage>
   );
