@@ -1,4 +1,13 @@
-import { VStack, Text } from "@chakra-ui/react";
+import {
+  VStack,
+  Stack,
+  Text,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+} from "@chakra-ui/react";
 import { Markdown } from "../atoms/Markdown";
 import Title from "../atoms/Title";
 import { ExpandableTable, ExpandableTableHorizontal } from "../molecules/ExpandableTable";
@@ -26,10 +35,9 @@ export function BdmTablePage({
   ) {
     resource.spatial_coverage = resource.spatial_coverage.sort();
   }
-
   return (
     <BaseResourcePage
-      padding="20px 17px"
+      padding="20px 10px 20px 0"
       editLink={`/resource/edit/${resource.id}`}
       title={`${resource.name}`}
       removeFunction={() => deleteResource(resource)}
@@ -80,46 +88,65 @@ export function BdmTablePage({
           {resource.temporal_coverage[0] || "Nenhuma cobertura temporal."}
         </Text>
       </VStack>
-      <VStack id="acesso" width="100%" spacing={3} alignItems="flex-start">
+      <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
         <Title fontWeigth="400">
           Coluna
         </Title>
         <ExpandableTable
-          headers={["nome", "descrição"]}
-          values={(resource?.columns || []).map((c) => [c.name, c.description])}
+          horizontal={true}
+          headers={["nome", "descrição", "tipo", "diretório", "contém dados sensíveis", "unidade de medida", "cobertura temporal"]}
+          values={(resource?.columns || []).map((c) => [c.name, c.description, c.bigquery_type, c.directory_column, c.has_sensitive_data, c.measurement_unit, c.temporal_coverage ])}
         />
       </VStack>
       
       <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Title fontWeigth="400">Metadados da tabela</Title>
-        <ExpandableTable
-          containerStyle={{ width: "100%", alignItems: "flex-start" }}
-          headers={["nome", "valor"]}
-          values={formatObjectsInArray(
-            translate(
-              translations,
-              availableOptionsTranslations,
-              filterOnlyValidValues({ dataset_id: datasetName, ...resource }, [
-                "dataset_id",
-                "table_id",
-                "spatial_coverage",
-                "update_frequency",
-                "observation_level",
-                "last_updated",
-                "version",
-                "published_by",
-                "data_cleaned_by",
-                "data_cleaning_description",
-                "raw_files_url",
-                "auxiliary_files_url",
-                "architecture_url",
-                "covered_by_dictionary",
-                "partitions",
-                "columns",
-              ])
-            )
-          )}
-        />
+        <Accordion
+          borderColor="transparent"
+          borderWidth={0}
+          width="100%"
+          ex
+          allowToggle
+        >
+          <AccordionItem>
+            <AccordionButton marginBottom={5} padding={0} _hover={{backgroundColor: "transparent"}} >
+              <Stack flex='1' textAlign='left'>
+                <Title fontWeigth="400">Informações adicionais</Title>
+              </Stack>
+              <AccordionIcon color="#252A32" fontSize="18px"/>
+            </AccordionButton>
+
+            <AccordionPanel padding={0}>
+              <ExpandableTable
+                containerStyle={{ width: "100%", alignItems: "flex-start" }}
+                headers={["nome", "valor"]}
+                values={formatObjectsInArray(
+                  translate(
+                    translations,
+                    availableOptionsTranslations,
+                    filterOnlyValidValues({ dataset_id: datasetName, ...resource }, [
+                      "dataset_id",
+                      "table_id",
+                      "spatial_coverage",
+                      "update_frequency",
+                      "observation_level",
+                      "last_updated",
+                      "version",
+                      "published_by",
+                      "data_cleaned_by",
+                      "data_cleaning_description",
+                      "raw_files_url",
+                      "auxiliary_files_url",
+                      "architecture_url",
+                      "covered_by_dictionary",
+                      "partitions",
+                      "columns",
+                    ])
+                  )
+                )}
+              />
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
       </VStack>
     </BaseResourcePage>
   );

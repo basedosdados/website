@@ -140,6 +140,7 @@ export default function SearchPage({
 }) {
   const { query } = useRouter();
   const isMobile = useCheckMobile();
+  const [isMobileMode, setIsMobileMode] = useState(false)
   const datasetDisclosure = useDisclosure();
   const { data: userData = null } = useQuery("user", getUser);
   const [order, setOrder] = useState("score");
@@ -157,7 +158,11 @@ export default function SearchPage({
       },
     }
   );
-console.log(data)
+  
+  useEffect(() => {
+    setIsMobileMode(isMobile)
+  },[isMobile])
+
   const fieldTranslations = {
     organization: "Organização",
     tag: "Tag",
@@ -334,27 +339,26 @@ console.log(data)
       <NewDatasetModal {...datasetDisclosure} />
       <DebouncedControlledInput
         value={search}
-        onChange={(val) => {
-          setSearch(val);
-        }}
-        placeholder="Pesquise palavras-chave, instituições ou temas"
+        onChange={(val) => setSearch(val)}
+        placeholder={isMobileMode ? "Palavras-chave, instituições ou temas" :"Pesquise palavras-chave, instituições ou temas"}
         justifyContent="center"
         inputStyle={{
           width: "90%",
           padding: "20px",
           marginBottom: "50px",
           borderRadius: "17px",
-          backgroundColor: "#ffffff",
+          backgroundColor: "#FFF",
           color: "#6F6F6F",
           fontSize: "16px",
           height: "50px",
-          boxShadow: "0px 1px 3px 1px rgb(0 0 0 / 5%)",
+          boxShadow: "0 1px 3px 0 rgba(0 0 0 /0.2) !important",
         }}
+        marginTop={isMobileMode && "70px"}
       />
       <Stack
         justifyContent="flex-start"
         alignItems="flex-start"
-        spacing={10}
+        spacing={isMobileMode ? 10 : 0}
         width="90%"
         margin="auto"
         direction={{ base: "column", lg: "row" }}
@@ -363,9 +367,7 @@ console.log(data)
           justifyContent="flex-start"
           alignItems="flex-start"
           minWidth={{ base: "100%", lg: "320px" }}
-          maxWidth={{ base: "100%", lg: "320px" }}
-          padding={!isMobile ? "0 40px 0 0" : ""}
-          borderRight={!isMobile ? "1px solid #DEDFE0" : ""}
+          padding={isMobileMode ? "" : "0 20px 0 0"}
           key={filterKey}
         >
           <Box display="flex" marginBottom="10px" alignItems="center">
@@ -532,7 +534,7 @@ console.log(data)
               });
             }}
           />
-    */}
+          */}
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.obs_level_entity || []).length > 0}
@@ -558,7 +560,13 @@ console.log(data)
             }
           />
         </VStack>
-        <VStack alignItems="flex-start" spacing={5} width="100%">
+        <VStack
+          alignItems="flex-start"
+          spacing={5}
+          width="100%"
+          paddingLeft={isMobileMode ? "" : "40px"}
+          borderLeft={isMobileMode ? "" : "1px solid #DEDFE0"}
+        >
           <Flex width="100%" justify="center" align="baseline">
             <Heading
               width="100%"
@@ -567,7 +575,7 @@ console.log(data)
               fontWeight="400"
               letterSpacing="1px"
             >
-              {data?.count || "..."} conjunto(s) encontrado(s){" "}
+              {data?.count || "..."} {`conjunto${data?.count > 1 ? "s": ""} encontrado${data?.count > 1 ? "s": ""}`}
               {search ? " para " + search : ""}
             </Heading>
             {userData?.is_admin ? (
@@ -696,8 +704,7 @@ console.log(data)
                     }
                     updatedSince={d.metadata_modified}
                     updatedAuthor="Ricardo Dahis"
-                    categories={d.groups.map((g) => g.name)}
-                    categoriesDisplay={d.groups.map((g) => g.display_name)}
+                    categories={d.groups.map((g) => [g.name, g.display_name])}
                     spatialCoverage={null}
                     updateFrequency={
                       d.resources.filter((r) => r.update_frequency).length >
@@ -708,18 +715,18 @@ console.log(data)
                     }
                     isPlus={isBdPlus(d)}
                   />
-                  <Divider />
+                  <Divider border="0" borderBottom="1px solid #DEDFE0" opacity={1}/>
                 </>
               ))}
             <ReactPaginate
-              previousLabel={"Anterior"}
-              nextLabel={"Próxima"}
+              previousLabel={isMobileMode ? "<" : "Anterior"}
+              nextLabel={isMobileMode ? ">" : "Próxima"}
               breakLabel={"..."}
               breakClassName={"break-me"}
               forcePage={page - 1}
               pageCount={pageSize}
-              marginPagesDisplayed={1}
-              pageRangeDisplayed={2}
+              marginPagesDisplayed={isMobileMode ? 0 : 1}
+              pageRangeDisplayed={isMobileMode ? 0 : 2}
               onPageChange={(data) => {
                 setPage(data.selected + 1);
               }}

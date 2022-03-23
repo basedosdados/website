@@ -74,7 +74,7 @@ function Themes ({ isMobileMod, newRecentDataLakeDataSets, listThemes=[] }) {
             <Tooltip 
               label={elm.display_name}
               fontSize="16px"
-              fontWeight="700"
+              fontWeight="500"
               padding="5px 15px"
               backgroundColor="#2A2F38"
               marginTop="10px"
@@ -149,7 +149,7 @@ function CardThemes ({ isMobileMod, recentThemes }) {
               elm.resources.filter((r) => r.resource_type === "information_request").length
             }
             updatedSince={elm.metadata_modified}
-            categories={elm.groups.map((g) => g.name)}
+            categories={elm.groups.map((g) => [g.name, g.display_name])}
           />
         ))}
       </Carousel>

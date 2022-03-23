@@ -28,14 +28,14 @@ function MenuDrawer({ isOpen, onClose, links }) {
             if (typeof v === "object") {
               return Object.entries(v).map(([k, v]) => (
                 <>
-                  <Link href={v}>{k}</Link>
+                  <Link fontFamily="Ubuntu" fontWeigth="500" href={v}>{k}</Link>
                   <Divider />
                 </>
               ));
             }
             return (
               <>
-                <Link href={v}>{k}</Link>
+                <Link fontFamily="Ubuntu" fontWeigth="500" href={v}>{k}</Link>
                 <Divider />
               </>
             );
@@ -88,6 +88,8 @@ function DesktopLinks({ links }) {
                 minWidth="120px"
                 borderColor="#DEDFE0"
                 borderTopRadius="0"
+                fontFamily="Ubuntu"
+                fontWeigth="500"
                 borderBottomRadius="10px"
                 _first={{ paddingTop: "10px"}}
                 _last={{ paddingBottom: "10px"}}
@@ -98,7 +100,10 @@ function DesktopLinks({ links }) {
                     flexDirection="colunm"
                     _hover={{ opacity: "0.6" }}
                     fontSize="14px"
+                    target="_blank"
                     color="#252A32"
+                    fontFamily="Ubuntu"
+                    fontWeigth="500"
                     href={v}
                     padding="10px 24px"
                   >
@@ -113,6 +118,8 @@ function DesktopLinks({ links }) {
             <Link
               _hover={{ opacity: "0.6" }}
               fontSize="14px"
+              fontFamily="Ubuntu"
+              fontWeigth="500"
               href={v}
               target={v.startsWith("https") ? "_blank" : null}
             >
@@ -207,16 +214,15 @@ export default function Menu({ pages = [] }) {
             <FontAwesomeIcon
               onClick={menuDisclosure.onOpen}
               style={{
-                maxWidth: "20px",
-                minWidth: "35px",
-                minHeight: "35px",
+                minWidth: "30px",
+                minHeight: "30px",
                 alignSelf: "flex-start",
                 flex: 1,
                 position: "fixed",
                 left: 0,
                 top: 0,
-                margin: "15px 0 0 10px",
-                color: "#252A32",
+                margin: "15px 0 0 17px",
+                color: "#616161",
                 cursor: "pointer",
               }}
               icon={faBars}
@@ -226,7 +232,7 @@ export default function Menu({ pages = [] }) {
             <Box
               transform={{ base: "translateX(-20%)", lg: "translateX(0%)" }}
               width={{ base: "120px", lg: "100px" }}
-              height="50px"
+              height="40px"
               position="relative"
             >
               <Image
@@ -242,6 +248,8 @@ export default function Menu({ pages = [] }) {
             bg="#2B8C4D"
             position="fixed"
             right="30px"
+            height="40px"
+            width="40px"
             display={{ base: "flex", lg: "none" }}
             src={userData?.image_url}
             name={userData?.fullname}

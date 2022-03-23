@@ -6,6 +6,7 @@ import {
   VStack,
   Flex,
   Center,
+  Tooltip,
 } from "@chakra-ui/react";
 import { limitTextSize } from "../../utils";
 import { CategoryIcon } from "../atoms/CategoryIcon";
@@ -26,7 +27,6 @@ export function Database({
   externalLinkNum,
   informationRequestNum,
   categories,
-  categoriesDisplay,
   isPlus = false,
   temporalCoverage,
   link,
@@ -140,19 +140,30 @@ export function Database({
                 spacing={2}
               >
                 {categories.slice(0, Math.min(3, categories.length)).map((c) => (
-                  <Center
-                    width="36px" 
-                    height="36px" 
-                    backgroundColor="#2B8C4D" 
+                  <Tooltip 
+                    label={c[1]}
+                    fontSize="16px"
+                    fontWeight="500"
+                    padding="5px 15px"
+                    backgroundColor="#2A2F38"
+                    marginTop="10px"
+                    color="#FFF"
                     borderRadius="6px"
-                  >
-                    <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${c}`}>
-                      <CategoryIcon
-                        size="36px"
-                        url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c}.svg`}
-                      />
-                    </Link>
-                  </Center>
+                  >   
+                    <Center
+                      width="36px" 
+                      height="36px" 
+                      backgroundColor="#2B8C4D" 
+                      borderRadius="6px"
+                    >
+                      <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${c[0]}`}>
+                        <CategoryIcon
+                          size="36px"
+                          url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c[0]}.svg`}
+                        />
+                      </Link>
+                    </Center>
+                  </Tooltip>
                 ))}
               </HStack>
             </Flex>
@@ -176,22 +187,6 @@ export function Database({
                     </SectionText>
                   </Link>
                 </HStack>
-                <HStack>
-                  <SectionText color="#6F6F6F">Temas:</SectionText>
-                  <SectionText
-                    color="#6F6F6F"
-                    textAlign="left"
-                    lineHeight="15px"
-                    fontWeight="bold"
-                  >
-                    {limitTextSize(
-                      categoriesDisplay
-                        .slice(0, Math.min(categoriesDisplay.length, 3))
-                        .join(", "),
-                      30
-                    )}
-                  </SectionText>
-                </HStack>
               </Stack>
               <Stack
                 direction={{ base: "column", lg: "row" }}
@@ -208,9 +203,13 @@ export function Database({
             </VStack>
           </VStack>
           <VStack>
-            <HStack spacing={5}>
+            <HStack 
+              flexDirection={isMobile && "column"}
+              alignItems={isMobile && "flex-start"}
+              spacing={isMobile ? 0 : 5}
+            >
               <HStack>
-                <DataBaseIcon 
+                <DataBaseIcon
                   solid={true}
                   widthIcon="15px"
                   heightIcon="15px"
@@ -237,7 +236,6 @@ export function Database({
 
               <HStack>
                 <LinkIcon 
-                  solid={true}
                   widthIcon="15px"
                   heightIcon="15px"
                   fill={externalLinkNum === 0 ? "#C4C4C4" : "#2B8C4D"}
@@ -254,7 +252,6 @@ export function Database({
               
               <HStack>
                 <InfoIcon 
-                  solid={true}
                   widthIcon="15px"
                   heightIcon="15px"
                   fill={informationRequestNum === 0 ? "#C4C4C4" : "#2B8C4D"}

@@ -1,5 +1,5 @@
 import { Card } from "../molecules/Card";
-import { HStack, Image, VStack, Center, Text } from "@chakra-ui/react";
+import { HStack, Image, VStack, Center, Text, Tooltip } from "@chakra-ui/react";
 import Title from "../atoms/Title";
 import Subtitle from "../atoms/Subtitle";
 import { CategoryIcon } from "../atoms/CategoryIcon";
@@ -9,7 +9,7 @@ import { ThemeTag } from "../atoms/ThemeTag";
 
 export default function DatabaseCard({
   name,
-  categories = [],
+  categories = [{}],
   organization,
   organizationSlug,
   tags,
@@ -57,19 +57,30 @@ export default function DatabaseCard({
     <Card
       icons={[
         ...categories.slice(0, Math.min(3, categories.length)).map((c) => (
-          <Center
-            width="30px" 
-            height="30px" 
-            backgroundColor="#2B8C4D" 
+          <Tooltip 
+            label={c[1]}
+            fontSize="16px"
+            fontWeight="500"
+            padding="5px 15px"
+            backgroundColor="#2A2F38"
+            marginTop="10px"
+            color="#FFF"
             borderRadius="6px"
           >
-            <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${c}`}>
-              <CategoryIcon
-                size="37px"
-                url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c}.svg`}
-              />
-            </Link>
-          </Center>
+            <Center
+              width="30px" 
+              height="30px" 
+              backgroundColor="#2B8C4D" 
+              borderRadius="6px"
+            >
+              <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${c[0]}`}>
+                <CategoryIcon
+                  size="37px"
+                  url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c[0]}.svg`}
+                />
+              </Link>
+            </Center>
+          </Tooltip>
         )),
       ]}
       spacing={0}

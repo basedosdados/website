@@ -23,7 +23,6 @@ export function DisclaimerBox({ title, text, children }) {
           letterSpacing="0.5px"
           fontWeight="300"
           fontSize="14px"
-          padding="10px"
           width="100%"
         >
           <b>{title}</b>

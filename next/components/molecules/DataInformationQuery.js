@@ -48,9 +48,12 @@ export function PrismCodeHighlight({ language, children }) {
   return (
     <pre
       style={{
-        position: "relative",
+        display: "flex",
+        justifyContent: "space-between",
+        gap: "20px",
+        flexDirection: "row",
         width: "100%",
-        padding: "10px 100px 10px 10px",
+        padding: "10px",
         borderRadius: "6px",
         whiteSpace: "break-spaces",
         wordBreak: "break-all",
@@ -61,10 +64,11 @@ export function PrismCodeHighlight({ language, children }) {
       >
         {children}
       </code>
+      
       <Button
-        position="absolute"
-        top="0"
-        right="0"
+        height="20px"
+        minWidth="100px"
+        padding="0 0 0 10px"
         onClick={onCopy}
         color="#707783"
         fontFamily="Lato"
@@ -103,13 +107,13 @@ export default function DataInformationQuery ({ resource }) {
         <TabList 
           padding="0px"
           fontFamily="Ubuntu !important"
-          borderBottom= "2px solid #DEDFE0"
+          borderBottom= "2px solid #DEDFE0 !important"
         >
           <GreenTab>SQL</GreenTab>
           <GreenTab>Python</GreenTab>
           <GreenTab>R</GreenTab>
+          <GreenTab>Stata</GreenTab>
           <GreenTab>Download</GreenTab>
-
         </TabList>
         <TabPanels>
           <TabPanel padding="0">
@@ -195,11 +199,38 @@ df <- bd_collect(query)`}
             <script key="R" src="/vendor/prism.js"></script>
           </TabPanel>
 
+          <TabPanel padding="0">
+            <Text
+              color="#252A32" 
+              fontFamily="Lato"
+              margin="20px 0 14px"
+              fontSize="16px"
+              letterSpacing="0.5px"
+              fontWeight="300"
+            >
+              Criamos um pacote em Stata para você acessar o <i>datalake</i>. Basta rodar o código:
+            </Text>
+
+            <PrismCodeHighlight language="Stata">
+              {`github install basedosdados/stata-package
+bd_read_table, ///
+path("<PATH>") ///
+dataset_id(${resource.dataset_id}) ///
+table_id(${resource.table_id}) ///
+billing_project_id("<PROJECT_ID>")`}
+            </PrismCodeHighlight>
+
+            <BoxBigQueryGoogle
+              href={"https://basedosdados.github.io/mais/access_data_packages/#primeiros-passos"}
+            />
+            <script key="Stata" src="/vendor/prism.js"></script>
+          </TabPanel>
+
           <TabPanel padding="20px 0 0">
             <DisclaimerBox
               title="Estes dados estão disponíveis porque diversas pessoas colaboram para a sua manutenção."
               text={
-                <Text color="#252A32">
+              <Text color="#252A32">
                   Apoie você também com doação financeira ou
                   <LinkDash
                     fontWeight="bold"

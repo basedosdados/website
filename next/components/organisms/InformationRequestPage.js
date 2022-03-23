@@ -44,13 +44,15 @@ export function InformationRequestPage({
           }}
         />
       }
+      isShowButtons={true}
       urlExternal={resource.url}
+      urlInformationRequest={resource.data_url}
     >
       <VStack marginTop="0 !important" width="100%" letterSpacing="0.5px" spacing={3} alignItems="flex-start">
         <VStack
           alignItems="flex-start"
-          padding="15px 0"
           borderRadius="10px"
+          marginTop="20px"
           color="#252A32"
           fontFamily="Lato"
           fontSize="16px"
@@ -92,9 +94,9 @@ export function InformationRequestPage({
           fontFamily="Lato"
           fontSize="16px"
         >
-          <Title fontWeigth="normal">Detalhes do pedido</Title>
+          <Title fontWeigth="normal">Descrição</Title>
           <Text fontWeight="300" fontSize="14px">
-            Você pode consultar o <Link isExternal={true} url={resource.url} color="#42B0FF"> pedido </Link> para saber mais detalhes. 
+            {resource.description}
           </Text>
         </VStack>
 
@@ -107,9 +109,7 @@ export function InformationRequestPage({
               translations,
               availableOptionsTranslations,
               filterOnlyValidValues(resource, [
-                "data_url",
                 "dataset_id",
-                "description",
                 "format",
                 "hash",
                 "mimetype",
@@ -119,8 +119,6 @@ export function InformationRequestPage({
                 "size",
                 "spatial_coverage",
                 "state",
-                "url",
-                "url_type",
               ])
             )
           )}

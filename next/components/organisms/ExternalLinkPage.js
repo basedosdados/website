@@ -37,6 +37,7 @@ export function ExternalLinkPage({
           }}
         />
       }
+      isShowButtons={true}
       urlExternal={resource.url}
     >
       <VStack width="100%" spacing={3} alignItems="flex-start">
@@ -48,7 +49,6 @@ export function ExternalLinkPage({
               availableOptionsTranslations,
               filterOnlyValidValues(resource, [
                 "title",
-                "url",
                 "description",
                 "language",
                 "has_structured_data",

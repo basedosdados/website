@@ -2,12 +2,9 @@ import {
   VStack,
   Stack,
   Center,
-  HStack,
   Image,
-  Flex,
   Tabs,
   TabList,
-  Tab,
   TabPanel,
   TabPanels,
 } from "@chakra-ui/react";
@@ -24,8 +21,9 @@ import SectionText from "../../components/atoms/SectionText";
 import Title from "../../components/atoms/Title";
 import BigTitle from "../../components/atoms/BigTitle";
 import { FilterAccordion } from "../../components/atoms/FilterAccordion";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { isBdPlus, unionArrays } from "../../utils";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import Link from "../../components/atoms/Link";
 import { SimpleButton } from "../../components/atoms/SimpleButton";
 import { Markdown } from "../../components/atoms/Markdown";
@@ -131,6 +129,13 @@ function ResourcesPage({
   translations,
   dataset,
 }) {
+  const [isMobileMod, setIsMobileMod] = useState(false)
+  const isMobile = useCheckMobile();
+
+  useEffect(() => {
+    setIsMobileMod(isMobile)
+  }, [isMobile])
+
   const [resource, setResource] = useState(
     bdmTables.length > 0 ? bdmTables[0] : externalLinks[0] || informationRequest[0]
   );
@@ -249,7 +254,7 @@ function ResourcesPage({
         spacing={5}
         align="flex-start"
         justify="flex-start"
-        borderRight="1px solid #DEDFE0"
+        borderRight={!isMobileMod && "1px solid #DEDFE0"}
       >
         <AdminButtons resource={resource} setResource={setResource} />
         {bdmTables.length > 0 ? (
@@ -312,7 +317,13 @@ function ResourcesPage({
           <></>
         )}
       </VStack>
-      <VStack width="100%" flex="1">
+      <VStack
+        width="100%"
+        overflow="hidden"
+        marginLeft={{base:"0", lg: "32px !important", xl: "44px !important"}}
+        alignItems="flex-start"
+        flex="1"
+      >
         {getResourcePage()}
       </VStack>
     </Stack>
@@ -481,7 +492,7 @@ export default function DatasetPage({
           <TabList 
             padding="0px"
             fontFamily="Ubuntu !important"
-            borderBottom= "2px solid #DEDFE0"
+            borderBottom= "2px solid #DEDFE0 !important"
           >
             <GreenTab>
               <DataBaseIcon
