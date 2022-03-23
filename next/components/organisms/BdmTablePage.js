@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { Markdown } from "../atoms/Markdown";
 import Title from "../atoms/Title";
-import { ExpandableTable, ExpandableTableHorizontal } from "../molecules/ExpandableTable";
+import { ExpandableTable } from "../molecules/ExpandableTable";
 import {
   breakNestedObjects,
   filterOnlyValidValues,
@@ -88,7 +88,7 @@ export function BdmTablePage({
           {resource.temporal_coverage[0] || "Nenhuma cobertura temporal."}
         </Text>
       </VStack>
-      <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
+      {/* <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
         <Title fontWeigth="400">
           Coluna
         </Title>
@@ -97,7 +97,7 @@ export function BdmTablePage({
           headers={["nome", "descrição", "tipo", "diretório", "contém dados sensíveis", "unidade de medida", "cobertura temporal"]}
           values={(resource?.columns || []).map((c) => [c.name, c.description, c.bigquery_type, c.directory_column, c.has_sensitive_data, c.measurement_unit, c.temporal_coverage ])}
         />
-      </VStack>
+      </VStack> */}
       
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Accordion

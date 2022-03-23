@@ -214,10 +214,10 @@ df <- bd_collect(query)`}
             <PrismCodeHighlight language="Stata">
               {`github install basedosdados/stata-package
 bd_read_table, ///
-path("<PATH>") ///
-dataset_id(${resource.dataset_id}) ///
-table_id(${resource.table_id}) ///
-billing_project_id("<PROJECT_ID>")`}
+    path("<PATH>") ///
+    dataset_id("${resource.dataset_id}") ///
+    table_id("${resource.table_id}") ///
+    billing_project_id("<PROJECT_ID>")`}
             </PrismCodeHighlight>
 
             <BoxBigQueryGoogle
