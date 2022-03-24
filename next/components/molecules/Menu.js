@@ -17,6 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import UserContext from "../../context/user";
 import { MenuDropdown } from "./MenuDropdown";
+import BDLogoImage from "../../public/img/logos/bd_logo";
 
 function MenuDrawer({ isOpen, onClose, links }) {
   return (
@@ -229,20 +230,11 @@ export default function Menu({ pages = [] }) {
             />
           </Box>
           <Link _hover={{opacity:"none"}} href="/">
-            <Box
-              transform={{ base: "translateX(-20%)", lg: "translateX(0%)" }}
-              width={{ base: "120px", lg: "100px" }}
+            <BDLogoImage
+              transform="translateX(-20%)"
               height="40px"
-              position="relative"
-            >
-              <Image
-                loading="eager"
-                priority
-                layout="fill"
-                objectFit="contain"
-                src="/img/logo.png"
-              />
-            </Box>
+              widthImage="80px"
+            />
           </Link>
           <Avatar
             bg="#2B8C4D"
