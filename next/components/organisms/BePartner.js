@@ -96,7 +96,7 @@ export function BePartner() {
           width="100%"
           maxWidth="1600px"
           spacing={0}
-          gridGap="50px"
+          gridGap="30px"
           alignItems="center"
           justifyContent="center"
           flexWrap="wrap"
