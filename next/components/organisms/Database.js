@@ -17,6 +17,7 @@ import DataBaseIcon from "../../public/img/icons/databaseIcon";
 import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
 
 export function Database({
   image,
@@ -118,7 +119,7 @@ export function Database({
                 alignItems="flex-start"
                 pb={{ base: 4, lg: 0 }}
               >
-                <Link href={link}>
+                <Link width="100%" href={link}>
                   <Heading
                     margin="0px"
                     padding="0px"
@@ -131,40 +132,39 @@ export function Database({
                     {name}
                   </Heading>
                 </Link>
-              </HStack>
-              <HStack
-                position="absolute"
-                top={isMobile ? "-120px" :"-12px"}
-                right="0"
-                justifyContent={{ base: "flex-start", lg: "flex-end" }}
-                spacing={2}
-              >
-                {categories.slice(0, Math.min(3, categories.length)).map((c) => (
-                  <Tooltip 
-                    label={c[1]}
-                    fontSize="16px"
-                    fontWeight="500"
-                    padding="5px 15px"
-                    backgroundColor="#2A2F38"
-                    marginTop="10px"
-                    color="#FFF"
-                    borderRadius="6px"
-                  >   
-                    <Center
-                      width="36px" 
-                      height="36px" 
-                      backgroundColor="#2B8C4D" 
+                <HStack
+                  justifyContent={{ base: "flex-start", lg: "flex-end" }}
+                  marginLeft="30px !important"
+                  spacing={2}
+                >
+                  {categories.slice(0, Math.min(3, categories.length)).map((c) => (
+                    <Tooltip 
+                      label={c[1]}
+                      fontSize="16px"
+                      fontWeight="500"
+                      padding="5px 15px"
+                      backgroundColor="#2A2F38"
+                      marginTop="10px"
+                      color="#FFF"
                       borderRadius="6px"
-                    >
-                      <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${c[0]}`}>
-                        <CategoryIcon
-                          size="36px"
-                          url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c[0]}.svg`}
-                        />
-                      </Link>
-                    </Center>
-                  </Tooltip>
-                ))}
+                    >   
+                      <Center
+                        width="36px" 
+                        height="36px" 
+                        backgroundColor="#2B8C4D"
+                        padding="4px"
+                        borderRadius="6px"
+                      >
+                        <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${c[0]}`}>
+                          <CategoryIcon
+                            size="36px"
+                            url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c[0]}.svg`}
+                          />
+                        </Link>
+                      </Center>
+                    </Tooltip>
+                  ))}
+                </HStack>
               </HStack>
             </Flex>
             <VStack spacing={0} width="100%" alignItems="flex-start">
@@ -183,7 +183,7 @@ export function Database({
                       fontWeight="bold"
                       fontSize="14px"
                     >
-                      {limitTextSize(organization.title, 30)}
+                      {organization.title}
                     </SectionText>
                   </Link>
                 </HStack>
@@ -208,7 +208,7 @@ export function Database({
               alignItems={isMobile && "flex-start"}
               spacing={isMobile ? 0 : 5}
             >
-              <HStack>
+              <HStack spacing={1}>
                 <DataBaseIcon
                   solid={true}
                   widthIcon="15px"
@@ -216,6 +216,7 @@ export function Database({
                   fill={tableNum === 0 ? "#C4C4C4" : "#2B8C4D"}
                 />
                 <Subtitle
+                  marginLeft="8px !important"
                   whiteSpace="nowrap"
                   color={tableNum === 0 ? "#C4C4C4" : "#2B8C4D"}
                   fontSize="15px"
@@ -224,13 +225,9 @@ export function Database({
                   {tableNum}{" "}
                   {tableNum === 1 ? "tabela tratada" : "tabelas tratadas"}
                 </Subtitle>
-                <Image
-                  height="15px"
-                  src={
-                    tableNum === 0
-                      ? "/img/logos/bd_plus_cinza.png"
-                      : "/img/logo_plus.png"
-                  }
+                <BDLogoPlusImage 
+                  widthImage="38px"
+                  empty={tableNum === 0}
                 />
               </HStack>
 

@@ -143,7 +143,7 @@ function DesktopLinks({ links }) {
           </HStack>
         ) : (
           <>
-            <Link fontSize="14px" href="/user/login">
+            <Link fontSize="14px" fontFamily="Ubuntu" fontWeigth="500" href="/user/login">
               Entrar
             </Link>
             <Link _hover={{ opacity:"none" }} href="/user/register">

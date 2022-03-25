@@ -60,10 +60,10 @@ function Themes ({ isMobileMod, newRecentDataLakeDataSets, listThemes=[] }) {
             onClick={() => searchTheme(elm)}
             key={elm.id}
             cursor="pointer"
-            width={ isMobileMod ? "45px" : "90px" }
-            minWidth={ isMobileMod ? "45px" : "90px" }
-            height={ isMobileMod ? "45px" : "90px" }
-            minHeight={ isMobileMod ? "45px" : "90px" }
+            width={ isMobileMod ? "45px" : "80px" }
+            minWidth={ isMobileMod ? "45px" : "80px" }
+            height={ isMobileMod ? "45px" : "80px" }
+            minHeight={ isMobileMod ? "45px" : "80px" }
             borderRadius={ isMobileMod ? "8px" : "14px" }
             backgroundColor={ selectedTheme === elm.name ? "#2B8C4D" : "FFF"} 
             boxShadow="0px 1px 6px rgba(0, 0, 0, 0.25)"
@@ -83,7 +83,11 @@ function Themes ({ isMobileMod, newRecentDataLakeDataSets, listThemes=[] }) {
             >
               <Image
                 width="100%"
+                padding={ isMobileMod ? "5px" : "10px"}
                 height="100%"
+                transition="all 0.5s" 
+                filter={selectedTheme === elm.name ? "invert(1)" :"invert(0.8)"}
+                _hover={{ filter:"invert(1)"}}
                 alt={`${elm.name}`}
                 src={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${elm.name}.svg`} 
               />

@@ -195,6 +195,8 @@ function Hero({ recentDatalakeDatasets }) {
               marginBottom="20px"
               color="#9c9c9c"
               letterSpacing="1px"
+              cursor="pointer"
+              onClick={() => window.open("#theme", "_self")}
             >
               Busque por tema
             </Title>
@@ -243,7 +245,6 @@ function Products() {
   return (
     <VStack
       paddingTop="70px"
-      spacing={20}
       width={{ base: "90%", lg: "85%" }}
       margin="auto"
     >
@@ -262,7 +263,7 @@ function Products() {
           Facilitamos o trabalho para que a distância{!isMobileMod && <br/>}
           entre você e sua análise seja <span style={{color:"#2B8C4D"}}>apenas uma boa pergunta</span>.
         </BigTitle>
-        <VStack maxWidth="1600px" spacing={!isMobileMod && 20}>
+        <VStack maxWidth="1600px" spacing={!isMobileMod && 120}>
           <HStack
             flexDirection={isMobileMod && "column"}
             justifyContent="center"
@@ -443,6 +444,7 @@ function Support({ pages }) {
           maxWidth="1600px"
           paddingBottom="50px"
           justifyContent="center"
+          alignItems="center"
           direction={{ base: "column", lg: "row" }}
           gridGap="30px"
         >
