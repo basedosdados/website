@@ -8,6 +8,7 @@ import {
 import Image from "next/image";
 import SectionText from "../atoms/SectionText";
 import Link from "../atoms/Link";
+import BDLogoFooterImage from "../../public/img/logos/bd_logo_footer";
 
 function LinkVStack({ title, children }) {
   return (
@@ -50,11 +51,10 @@ export default function Footer({ pages }) {
           spacing={{ base: 10, lg: 20 }}
         >
           <Box minWidth="200px" height="200px" position="relative">
-            <Image
+            <BDLogoFooterImage
               priority
               objectFit="contain"
               layout="fill"
-              src="/img/logo_footer.png"
             />
           </Box>
           <Stack
