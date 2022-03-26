@@ -85,7 +85,7 @@ export function BdmTablePage({
           Cobertura temporal
         </Title>
         <Text color="#252A32" fontSize="14px" fontWeight="300" fontFamily="Lato" letterSpacing="0.5px">
-          {resource.temporal_coverage[0] || "Nenhuma cobertura temporal."}
+          {resource?.temporal_coverage[0] || "Nenhuma cobertura temporal."}
         </Text>
       </VStack>
       <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
