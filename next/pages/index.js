@@ -314,7 +314,7 @@ function Products() {
               <SectionText>DADOS TRATADOS</SectionText>
               <SectionTitle paddingBottom="10px" fontSize="24px" color="#252A32">Acesse dados de qualidade</SectionTitle>
               <SectionText>
-                Com as tabelas tratadas do nosso datalake público,
+                Com as tabelas tratadas do nosso <i>datalake</i> público,
                 você não precisa mais gastar horas limpando bases.
                 Nossa metodologia de padronização permite <b>cruzar facilmente dados de diferentes organizações.</b> Assim, você pode focar no que realmente importa.
               </SectionText>
@@ -344,7 +344,7 @@ function Products() {
               <SectionTitle paddingBottom="10px" fontSize="24px" color="#252A32">Explore na sua linguagem favorita</SectionTitle>
               <SectionText>
                 Desenvolvemos pacotes para acesso aos dados tratados em <b>Python</b>, <b>R</b> e <b>linha de comando</b>. Além disso, você pode consultar e filtrar
-                dados usando <b>SQL</b> no editor do nosso datalake público no Google BigQuery.
+                dados usando <b>SQL</b> no editor do nosso <i>datalake</i> público no Google BigQuery.
               </SectionText>
               <Box position="relative">
                 <Link
