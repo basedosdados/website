@@ -37,13 +37,6 @@ services:
     networks:
       - basedosdados
 
-  django:
-    networks:
-      - basedosdados
-
-  django-db:
-    networks:
-      - basedosdados
 
   solr:
     networks:
