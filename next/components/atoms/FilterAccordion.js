@@ -16,6 +16,7 @@ import ControlledInput from "./ControlledInput";
 import SectionText from "./SectionText";
 import Title from "./Title";
 import SearchIcon from "../../public/img/icons/searchIcon"
+import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
 
 export function BaseFilterAccordion({
   fieldName,
@@ -56,7 +57,10 @@ export function BaseFilterAccordion({
                     {fieldName}
                   </Box>
                   {bdPlus ? (
-                    <Image src="/img/logo_plus.png" height="20px" />
+                    <BDLogoPlusImage
+                      widthImage="45px"
+                      marginLeft="5px !important"
+                    />
                   ) : (
                     <></>
                   )}

@@ -33,6 +33,7 @@ import DatabaseImage from "../public/img/databaseImage";
 import MasterOfDatabaseImage from "../public/img/masterOfDatabaseImage";
 import ProductsFiltersImage from "../public/img/productsFiltersImage";
 import ProcessedDataImage from "../public/img/processedDataImage";
+import BDLogoPlusImage from "../public/img/logos/bd_logo_plus"
 import RoundedButton from "../components/atoms/RoundedButton";
 import Link from "../components/atoms/Link";
 
@@ -195,6 +196,8 @@ function Hero({ recentDatalakeDatasets }) {
               marginBottom="20px"
               color="#9c9c9c"
               letterSpacing="1px"
+              cursor="pointer"
+              onClick={() => window.open("#theme", "_self")}
             >
               Busque por tema
             </Title>
@@ -243,7 +246,6 @@ function Products() {
   return (
     <VStack
       paddingTop="70px"
-      spacing={20}
       width={{ base: "90%", lg: "85%" }}
       margin="auto"
     >
@@ -262,7 +264,7 @@ function Products() {
           Facilitamos o trabalho para que a distância{!isMobileMod && <br/>}
           entre você e sua análise seja <span style={{color:"#2B8C4D"}}>apenas uma boa pergunta</span>.
         </BigTitle>
-        <VStack maxWidth="1600px" spacing={!isMobileMod && 20}>
+        <VStack maxWidth="1600px" spacing={!isMobileMod && 120}>
           <HStack
             flexDirection={isMobileMod && "column"}
             justifyContent="center"
@@ -310,10 +312,15 @@ function Products() {
               />
             </Stack>
             <Stack maxWidth={isMobileMod ? "300px" : "430px"}>
-              <SectionText>DADOS TRATADOS</SectionText>
+              <HStack spacing={1}>
+                <SectionText>TABELAS TRATADAS</SectionText>
+                <BDLogoPlusImage
+                  widthImage="40px"
+                />
+              </HStack> 
               <SectionTitle paddingBottom="10px" fontSize="24px" color="#252A32">Acesse dados de qualidade</SectionTitle>
               <SectionText>
-                Com as tabelas tratadas do nosso datalake público,
+                Com as tabelas tratadas do nosso <i>datalake</i> público,
                 você não precisa mais gastar horas limpando bases.
                 Nossa metodologia de padronização permite <b>cruzar facilmente dados de diferentes organizações.</b> Assim, você pode focar no que realmente importa.
               </SectionText>
@@ -343,7 +350,7 @@ function Products() {
               <SectionTitle paddingBottom="10px" fontSize="24px" color="#252A32">Explore na sua linguagem favorita</SectionTitle>
               <SectionText>
                 Desenvolvemos pacotes para acesso aos dados tratados em <b>Python</b>, <b>R</b> e <b>linha de comando</b>. Além disso, você pode consultar e filtrar
-                dados usando <b>SQL</b> no editor do nosso datalake público no Google BigQuery.
+                dados usando <b>SQL</b> no editor do nosso <i>datalake</i> público no Google BigQuery.
               </SectionText>
               <Box position="relative">
                 <Link
@@ -443,6 +450,7 @@ function Support({ pages }) {
           maxWidth="1600px"
           paddingBottom="50px"
           justifyContent="center"
+          alignItems="center"
           direction={{ base: "column", lg: "row" }}
           gridGap="30px"
         >

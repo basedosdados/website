@@ -5,6 +5,7 @@ export default function GreenTab({ children }) {
   return (
     <Tab
       fontSize="18px"
+      fontWeight="400"
       letterSpacing="0.5px"
       paddingBottom="10px"
       _hover={{
@@ -12,7 +13,7 @@ export default function GreenTab({ children }) {
       }}
       _selected={{
         color: "#2B8C4D",
-        fontWeight: "bold",
+        fontWeight: "600",
         borderBottom: "3px solid #2B8C4D",
         pointerEvents: "none"
       }}
