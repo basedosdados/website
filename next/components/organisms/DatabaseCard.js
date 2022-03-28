@@ -92,6 +92,7 @@ export default function DatabaseCard({
       >
         <Title 
           fontSize="16px"
+          minHeight="56px"
           lineHeight="23px"
           textOverflow="ellipsis"
           marginBottom="10px"
