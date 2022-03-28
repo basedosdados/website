@@ -7,6 +7,7 @@ import types
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckanext.basedosdados.validator.packages import Dataset
+from ckanext.basedosdados.virtual_fields import create_virtual_fields
 from pydantic import ValidationError
 
 log = logging.getLogger(__name__)
@@ -27,15 +28,13 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
 
     # IPackageController
     def before_index(self, fields_to_index):
-        # virtual_multi_obs_level_entity #TODO: Move this to a folder and document virtual fields
-        entities = set()
-        for resource in fields_to_index.get("res_extras_observation_level", []):
-            if resource == None: continue
-            entity = set(e.get("entity") for e in resource if "entity" in e)
-            entities |= entity
-        fields_to_index["virtual_multi_obs_level_entity"] = list(entities)
-        # del fields_to_index['res_extras_observation_level']
-
+        virtual_fields = create_virtual_fields(fields_to_index)
+        new_fields = {}
+        for key, value in virtual_fields.items():
+            assert type(value) in (str, int, list, float, None)
+            multi = 'multi_' if isinstance(value, list) else ''
+            new_fields[f'virtual_{multi}{key}'] = value
+        fields_to_index.update(new_fields)
         return fields_to_index
 
     # IValidators
