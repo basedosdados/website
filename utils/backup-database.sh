@@ -3,11 +3,11 @@
 # cd to this script's dir
 cd -P -- "$(dirname -- "$0")"
 
-#if [[ $BD_ENVIRON != 'PROD' ]]; then
+if [[ $BD_ENVIRON != 'PROD' ]]; then
     # no backup in staging
-#    echo Skipping backup because we are not in prod
-#    exit 0
-#fi
+    echo Skipping backup because we are not in prod
+    exit 0
+fi
 
 # DB
 docker-compose exec -T db pg_dump -U ckan --format=custom -d ckan --file=/tmp/postgres.dump

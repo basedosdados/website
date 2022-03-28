@@ -27,9 +27,10 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
 
     # IPackageController
     def before_index(self, fields_to_index):
-        # virtual_multi_obs_level_entity
+        # virtual_multi_obs_level_entity #TODO: Move this to a folder and document virtual fields
         entities = set()
-        for resource in fields_to_index.get("res_extras_observation_level", {}):
+        for resource in fields_to_index.get("res_extras_observation_level", []):
+            if resource == None: continue
             entity = set(e.get("entity") for e in resource if "entity" in e)
             entities |= entity
         fields_to_index["virtual_multi_obs_level_entity"] = list(entities)

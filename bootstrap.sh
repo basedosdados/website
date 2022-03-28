@@ -38,7 +38,7 @@ fi
 
 # build and instantiate images, except by ckan
 # add the flag--parallel for speed
-docker-compose build $DOCKER_BUILD_EXTRA_ARGS
+docker-compose build --parallel $DOCKER_BUILD_EXTRA_ARGS
 docker-compose up --scale ckan=0 -d
 
 # waiting for postgres to be ready
@@ -79,7 +79,7 @@ docker-compose up -d ckan
 docker exec -it ckan ckan db upgrade
 
 # rebuild ckan index
-docker exec -it ckan ckan search-index rebuild
+docker exec -it ckan ckan search-index rebuild --verbose
 
 # start nginx container
 docker-compose up -d nginx

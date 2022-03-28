@@ -98,3 +98,13 @@ Soluções para perguntas e problemas recorrentes:
 1. Rodar `ssh ec2-user@staging.basedosdados.org`.
 2. Dentro da máquina de desenvolvimento, rodar `./backup_database.sh`.
 3. Da sua máquina local, rodar `utils/create-dev-init-data.sh` com `STAGING=True`.
+
+### 3. Como acessecar o banco de producao
+
+0. Desative o seu banco local rodando `docker-compose rm -sf db`
+1. Em um terminal livre rode: ssh basedosdados.org -L 5432:localhost:5432
+
+Esse comando acima vai criar um tunnel de ssh, permitindo vc acessar o banco de prod como se estivesse local
+
+2. Use algum programa (recomendo o DBEAVER) pra conectar no banco de prod, apontando para localhost:5432.
+Para conseguir as credenciais do banco, peca pra alguem q tem.
