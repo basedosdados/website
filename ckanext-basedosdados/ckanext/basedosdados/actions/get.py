@@ -182,7 +182,8 @@ def bd_bdm_table_show(context, data_dict):
         },
     ).get("results")
 
-    # get the only package that mach dataset_id and table_id
+    found_resources = None
+    # get the only package that matches dataset_id and table_id
     for package in search_result:
         for resource in package.get("resources"):
             if (
@@ -194,10 +195,8 @@ def bd_bdm_table_show(context, data_dict):
                 break
 
     # # TODO: make error message appear in the endpoint response
-    if found_resources:
-        return found_resources
-    else:
-        raise "No tables found with dataset_id={dataset_id} and table_id={table_id}"
+    if found_resources: return found_resources
+    raise "No tables found with dataset_id={dataset_id} and table_id={table_id}"
 
 
 @toolkit.side_effect_free

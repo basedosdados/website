@@ -4,7 +4,7 @@ cd $(git rev-parse --show-toplevel)
 
 trap 'catch $? $LINENO' ERR ; catch() { echo "Exit-code $1 occurred on line $2" ;}
 
-if [[ ! $CKAN_API_KEY ]]; then source .ckan_dev_api_token; fi
+if [[ ! $CKAN_API_KEY ]]; then source ./configs/ckan-dev-api-token.sh; fi
 
 URL=${URL:-"http://localhost:5000"}
 
