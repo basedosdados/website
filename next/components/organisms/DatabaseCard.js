@@ -92,7 +92,7 @@ export default function DatabaseCard({
       >
         <Title 
           fontSize="16px"
-          minHeight="56px"
+          minHeight="45px"
           lineHeight="23px"
           textOverflow="ellipsis"
           marginBottom="10px"
@@ -104,6 +104,7 @@ export default function DatabaseCard({
       <Link href={`/dataset?organization=${organizationSlug}`}>
         <Subtitle
           noOfLines={2}
+          minHeight="45px"
           lineHeight="18px"
           textOverflow="ellipsis"
           letterSpacing="0.5px"
@@ -115,7 +116,7 @@ export default function DatabaseCard({
           width="100%"
           overflowX="auto"
           className="no-scrollbar"
-          margin="0 0 25px"
+          margin="0 0 20px"
         >
           {tags.slice(0, tags.length > isMobile ? 2 : 3 ? isMobile ? 2 : 3 : tags.length).map((t) => (
             <ThemeTag name={t} />
