@@ -17,7 +17,6 @@ export function Card({
       padding={padding}
       borderRadius="10px"
       margin={{ base: "20px 0 !important", lg: "10px 0px" }}
-      overflow="hidden"
     >
       <Flex
         flexDirection="column"
@@ -25,6 +24,7 @@ export function Card({
         spacing={spacing}
         position="relative"
         height="100%"
+        overflow="hidden"
       >
         <HStack
           justifyContent="center"
