@@ -18,12 +18,15 @@ function Testimonial({ children, name, position, src }) {
       paddingTop={{ base: "0px", lg: "50px" }}
       width="80%"
     >
-      <Image
-        width="50px"
-        paddingBottom="5px"
-        alignSelf="flex-start"
-        src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/%E2%80%9C.png"
-      />
+      <Stack 
+        alignItems="center"
+      >
+        <Image
+          width="50px"
+          paddingBottom="20px"
+          src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/%E2%80%9C.png"
+        />
+      </Stack>
       <SectionText
         paddingLeft="50px"
         paddingBottom="20px"
