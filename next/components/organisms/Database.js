@@ -90,10 +90,10 @@ export function Database({
           <Image
             priority
             objectFit="contain"
-            maxWidth="105px"
-            maxHeight="105px"
-            minWidth="105px"
-            minHeight="105px"
+            maxWidth="110px"
+            maxHeight="110px"
+            minWidth="110px"
+            minHeight="110px"
             borderRadius="10.1111px"
             filter="drop-shadow(0px 2.02222px 2.02222px rgba(0, 0, 0, 0.25));"
             src={image}
