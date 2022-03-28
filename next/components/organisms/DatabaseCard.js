@@ -104,7 +104,6 @@ export default function DatabaseCard({
       <Link href={`/dataset?organization=${organizationSlug}`}>
         <Subtitle
           noOfLines={2}
-          minHeight="45px"
           lineHeight="18px"
           textOverflow="ellipsis"
           letterSpacing="0.5px"
