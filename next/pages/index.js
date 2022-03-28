@@ -33,6 +33,7 @@ import DatabaseImage from "../public/img/databaseImage";
 import MasterOfDatabaseImage from "../public/img/masterOfDatabaseImage";
 import ProductsFiltersImage from "../public/img/productsFiltersImage";
 import ProcessedDataImage from "../public/img/processedDataImage";
+import BDLogoPlusImage from "../public/img/logos/bd_logo_plus"
 import RoundedButton from "../components/atoms/RoundedButton";
 import Link from "../components/atoms/Link";
 
@@ -311,7 +312,12 @@ function Products() {
               />
             </Stack>
             <Stack maxWidth={isMobileMod ? "300px" : "430px"}>
-              <SectionText>DADOS TRATADOS</SectionText>
+              <HStack spacing={1}>
+                <SectionText>TABELAS TRATADAS</SectionText>
+                <BDLogoPlusImage
+                  widthImage="40px"
+                />
+              </HStack> 
               <SectionTitle paddingBottom="10px" fontSize="24px" color="#252A32">Acesse dados de qualidade</SectionTitle>
               <SectionText>
                 Com as tabelas tratadas do nosso <i>datalake</i> público,
