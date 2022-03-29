@@ -37,7 +37,7 @@ export function Markdown({
           : {})}
       />
       {limit ? (
-        <LinkDash fontSize="14px" onClick={() => setIsLimited(!isLimited)}>
+        <LinkDash fontSize="14px" fontWeight="700" onClick={() => setIsLimited(!isLimited)}>
           Ler {isLimited ? "mais" : "menos"}
         </LinkDash>
       ) : (
