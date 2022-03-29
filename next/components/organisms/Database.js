@@ -44,7 +44,7 @@ export function Database({
 
   function getTemporalCoverage() {
 
-    if (temporalCoverage.length === 0 || !temporalCoverage) return "";
+    if (temporalCoverage.length === 0 || !temporalCoverage) return "Não listado";
 
     var years = [];
     for (let i = 0; i < temporalCoverage.length; i++) {
@@ -84,6 +84,7 @@ export function Database({
         direction={{ base: "column", lg: "row" }}
         alignItems="flex-start"
         width="100%"
+        height="100%"
         spacing={6}
       >
         <Link _hover={{opacity:"none"}} href={link}>
@@ -105,6 +106,7 @@ export function Database({
           justifyContent="space-between"
           spacing={1}
           width="100%"
+          minHeight="115px"
         >
           <VStack width="100%" spacing={1} alignItems="flex-start">
             <Flex
@@ -207,7 +209,6 @@ export function Database({
               flexDirection={isMobile && "column"}
               alignItems={isMobile && "flex-start"}
               spacing={isMobile ? 0 : 5}
-              marginTop="8px"
             >
               <HStack spacing={1}>
                 <DataBaseIcon
