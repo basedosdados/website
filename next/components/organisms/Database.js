@@ -84,17 +84,17 @@ export function Database({
         direction={{ base: "column", lg: "row" }}
         alignItems="flex-start"
         width="100%"
-        spacing={10}
+        spacing={6}
       >
         <Link _hover={{opacity:"none"}} href={link}>
           <Image
             priority
             objectFit="contain"
-            maxWidth="110px"
-            maxHeight="110px"
-            minWidth="110px"
-            minHeight="110px"
-            borderRadius="10.1111px"
+            maxWidth="115px"
+            maxHeight="115px"
+            minWidth="115px"
+            minHeight="115px"
+            borderRadius="10px"
             filter="drop-shadow(0px 2.02222px 2.02222px rgba(0, 0, 0, 0.25));"
             src={image}
             backgroundColor="#eee"
@@ -207,6 +207,7 @@ export function Database({
               flexDirection={isMobile && "column"}
               alignItems={isMobile && "flex-start"}
               spacing={isMobile ? 0 : 5}
+              marginTop="8px"
             >
               <HStack spacing={1}>
                 <DataBaseIcon
