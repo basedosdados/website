@@ -381,11 +381,8 @@ export default function SearchPage({
             />
             <SectionTitle
               fontFamily="Ubuntu"
-              letterSpacing="1px"
               fontSize="20px"
               textAlign="top"
-              fontWeigth="400"
-              color="#252A32"
               width="100%"
               marginLeft="10px"
             >
@@ -578,7 +575,8 @@ export default function SearchPage({
               fontFamily="Ubuntu"
               fontSize="26px"
               fontWeight="400"
-              letterSpacing="1px"
+              letterSpacing="0.5px"
+              color="#252A32"
             >
               {data?.count || "..."} {`conjunto${data?.count > 1 ? "s": ""} encontrado${data?.count > 1 ? "s": ""}`}
               {search ? " para " + search : ""}

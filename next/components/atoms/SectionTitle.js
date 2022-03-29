@@ -2,7 +2,7 @@ import { Heading } from "@chakra-ui/react";
 
 export default function SectionTitle({
   children,
-  color = "#000000",
+  color = "#252A32",
   fontWeigth = "400",
   ...style
 }) {

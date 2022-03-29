@@ -66,7 +66,7 @@ function Themes ({ isMobileMod, newRecentDataLakeDataSets, listThemes=[] }) {
             minHeight={ isMobileMod ? "45px" : "80px" }
             borderRadius={ isMobileMod ? "8px" : "14px" }
             backgroundColor={ selectedTheme === elm.name ? "#2B8C4D" : "FFF"} 
-            boxShadow="0px 1px 6px rgba(0, 0, 0, 0.25)"
+            boxShadow="0px 1px 8px 1px rgba(64, 60, 67, 0.20)"
             _hover={{ transform:"scale(1.1)", backgroundColor:"#2B8C4D" }}
             transition="all 0.5s" 
             margin="10px 0"

@@ -173,7 +173,7 @@ function Hero({ recentDatalakeDatasets }) {
               />
               <HStack paddingLeft={isMobileMod ? "20px" : "40px"}>
                 {!isMobileMod &&
-                  <SectionText fontSize="14px">Termos populares: </SectionText>
+                  <SectionText fontFamily="Ubuntu" fontSize="13px">Termos populares: </SectionText>
                 }
                 <ThemeTag name="lei" />
                 <ThemeTag name="mortalidade" />
@@ -194,8 +194,7 @@ function Hero({ recentDatalakeDatasets }) {
               fontWeigth="400"
               minHeight="30px"
               marginBottom="20px"
-              color="#9c9c9c"
-              letterSpacing="1px"
+              color="#9C9C9C"
               cursor="pointer"
               onClick={() => window.open("#theme", "_self")}
             >
@@ -274,8 +273,8 @@ function Products() {
               <SectionText>FILTROS</SectionText>
               <SectionTitle paddingBottom="10px" fontSize="24px" color="#252A32">Busque dados como quiser</SectionTitle>
               <SectionText>
-                São <b>vários filtros</b> para ajudar você a encontrar os dados que necessita.
-                Ao navegar entre <b>centenas de conjuntos de dados</b> disponíveis na plataforma,
+                São vários filtros para ajudar você a encontrar os dados que necessita.
+                Ao navegar entre centenas de conjuntos de dados disponíveis na plataforma,
                 você pode refinar sua busca por tema, organização, forma de consulta, nível da observação e mais.
               </SectionText>
               <Box position="relative">
@@ -322,7 +321,7 @@ function Products() {
               <SectionText>
                 Com as tabelas tratadas do nosso <i>datalake</i> público,
                 você não precisa mais gastar horas limpando bases.
-                Nossa metodologia de padronização permite <b>cruzar facilmente dados de diferentes organizações.</b> Assim, você pode focar no que realmente importa.
+                Nossa metodologia de padronização permite cruzar facilmente dados de diferentes organizações. Assim, você pode focar no que realmente importa.
               </SectionText>
               <Box position="relative">
                 <Link
@@ -349,8 +348,8 @@ function Products() {
               <SectionText>PACOTES</SectionText>
               <SectionTitle paddingBottom="10px" fontSize="24px" color="#252A32">Explore na sua linguagem favorita</SectionTitle>
               <SectionText>
-                Desenvolvemos pacotes para acesso aos dados tratados em <b>Python</b>, <b>R</b> e <b>linha de comando</b>. Além disso, você pode consultar e filtrar
-                dados usando <b>SQL</b> no editor do nosso <i>datalake</i> público no Google BigQuery.
+                Desenvolvemos pacotes para acesso aos dados tratados em Python, R e linha de comando. Além disso, você pode consultar e filtrar
+                dados usando SQL no editor do nosso <i>datalake</i> público no Google BigQuery.
               </SectionText>
               <Box position="relative">
                 <Link
@@ -436,13 +435,14 @@ function Support({ pages }) {
         <SectionText
           position="relative"
           zIndex="1"
-          color="#9C9C9C"
+          color="#6F6F6F"
+          fontFamily="Ubuntu"
           fontSize="17px"
           alignSelf="center"
           letterSpacing="0.5px"
           fontWeight="300"
           paddingBottom="45px"
-        > Apoie a Base dos Dados você também:
+        > Apoie a Base dos Dados você também
         </SectionText>
 
         <Stack
@@ -490,8 +490,11 @@ function Support({ pages }) {
               />
             }
             title={
-              <Text color="#FF8484">
-                <b><i>Databaser</i></b>
+              <Text 
+                color="#FF8484"
+                fontWeight="500"
+              >
+                <i>Databaser</i>
               </Text>
             }
             spacing={5}
@@ -605,18 +608,14 @@ function Support({ pages }) {
         <SectionText
           paddingTop="20px"
           paddingBottom="30px"
-          fontWeight="300"
-          fontFamily="Ubuntu"
-          fontSize="14px"
         >
           💰 Gostaria de apoiar institucionalmente a Base dos Dados?
           <LinkDash
             dash={false}
             textDecoration="none"
             fontWeight="700"
-            fontFamily="Ubuntu"
             fontSize="14px"
-            href="/blog/1/"
+            href="/contato"
           > Entre em contato conosco.
           </LinkDash>
         </SectionText>

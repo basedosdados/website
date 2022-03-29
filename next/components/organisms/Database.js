@@ -44,7 +44,7 @@ export function Database({
 
   function getTemporalCoverage() {
 
-    if (temporalCoverage.length === 0 || !temporalCoverage) return "";
+    if (temporalCoverage.length === 0 || !temporalCoverage) return "Não listado";
 
     var years = [];
     for (let i = 0; i < temporalCoverage.length; i++) {
@@ -84,17 +84,18 @@ export function Database({
         direction={{ base: "column", lg: "row" }}
         alignItems="flex-start"
         width="100%"
-        spacing={10}
+        height="100%"
+        spacing={6}
       >
         <Link _hover={{opacity:"none"}} href={link}>
           <Image
             priority
             objectFit="contain"
-            maxWidth="110px"
-            maxHeight="110px"
-            minWidth="110px"
-            minHeight="110px"
-            borderRadius="10.1111px"
+            maxWidth="115px"
+            maxHeight="115px"
+            minWidth="115px"
+            minHeight="115px"
+            borderRadius="10px"
             filter="drop-shadow(0px 2.02222px 2.02222px rgba(0, 0, 0, 0.25));"
             src={image}
             backgroundColor="#eee"
@@ -105,6 +106,7 @@ export function Database({
           justifyContent="space-between"
           spacing={1}
           width="100%"
+          minHeight="115px"
         >
           <VStack width="100%" spacing={1} alignItems="flex-start">
             <Flex
