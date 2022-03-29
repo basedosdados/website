@@ -18,6 +18,7 @@ import Title from "./Title";
 import SearchIcon from "../../public/img/icons/searchIcon"
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
 
+
 export function BaseFilterAccordion({
   fieldName,
   children,

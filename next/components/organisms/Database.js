@@ -19,6 +19,7 @@ import InfoIcon from "../../public/img/icons/infoIcon";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
 
+
 export function Database({
   image,
   name,

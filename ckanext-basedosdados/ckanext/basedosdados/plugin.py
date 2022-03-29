@@ -35,6 +35,7 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
             multi = 'multi_' if isinstance(value, list) else ''
             new_fields[f'virtual_{multi}{key}'] = value
         fields_to_index.update(new_fields)
+
         return fields_to_index
 
     # IValidators

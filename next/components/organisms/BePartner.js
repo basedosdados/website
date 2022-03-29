@@ -15,8 +15,7 @@ const Carousel = dynamic(() => import("@brainhubeu/react-carousel"), {
 function Testimonial({ children, name, position, src }) {
   return (
     <VStack
-      padding={{ base: "0px", lg: "30px" }}
-      paddingTop={{ base: "0px", lg: "80px" }}
+      padding={{ base: "0px", lg: "80px 30px 30px" }}
       width="80%"
     >
       <Stack 
