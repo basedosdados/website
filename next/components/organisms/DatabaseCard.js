@@ -6,6 +6,7 @@ import { CategoryIcon } from "../atoms/CategoryIcon";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import Link from "../atoms/Link";
 import { ThemeTag } from "../atoms/ThemeTag";
+import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
 
 export default function DatabaseCard({
   name,
@@ -40,12 +41,11 @@ export default function DatabaseCard({
       fontSize="14px"
       color={tableNum === 0 ? "#C4C4C4" : "#42B0FF" }
     >
-      <b>{tableNum} tabelas tratadas </b>
-      <Image
-        height="15px"
-        src={
-          tableNum === 0 ? `/img/logos/bd_plus_cinza.png` : `/img/logo_plus.png`
-        }
+      <b>{tableNum} tabelas tratadas</b>
+      <BDLogoPlusImage
+        widthImage="38px"
+        marginLeft="5px !important"
+        empty={tableNum === 0}
       />
     </HStack>
   );
@@ -76,6 +76,7 @@ export default function DatabaseCard({
               <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${c[0]}`}>
                 <CategoryIcon
                   size="37px"
+                  padding="4px"
                   url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c[0]}.svg`}
                 />
               </Link>
@@ -91,6 +92,7 @@ export default function DatabaseCard({
       >
         <Title 
           fontSize="16px"
+          minHeight="45px"
           lineHeight="23px"
           textOverflow="ellipsis"
           marginBottom="10px"
@@ -113,7 +115,7 @@ export default function DatabaseCard({
           width="100%"
           overflowX="auto"
           className="no-scrollbar"
-          margin="0 0 25px"
+          margin="0 0 20px"
         >
           {tags.slice(0, tags.length > isMobile ? 2 : 3 ? isMobile ? 2 : 3 : tags.length).map((t) => (
             <ThemeTag name={t} />

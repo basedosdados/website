@@ -24,6 +24,7 @@ export function Card({
         spacing={spacing}
         position="relative"
         height="100%"
+        overflow="hidden"
       >
         <HStack
           justifyContent="center"

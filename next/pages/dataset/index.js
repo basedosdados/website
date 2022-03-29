@@ -46,6 +46,7 @@ import {
 } from "../api/translations";
 import FilterIcon from "../../public/img/icons/filterIcon";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
 
 export async function getStaticProps(context) {
   const translations = await getTranslations();
@@ -367,6 +368,7 @@ export default function SearchPage({
           justifyContent="flex-start"
           alignItems="flex-start"
           minWidth={{ base: "100%", lg: "320px" }}
+          maxWidth={{ base: "100%", lg: "320px" }}
           padding={isMobileMode ? "" : "0 20px 0 0"}
           key={filterKey}
         >
@@ -379,11 +381,8 @@ export default function SearchPage({
             />
             <SectionTitle
               fontFamily="Ubuntu"
-              letterSpacing="1px"
               fontSize="20px"
               textAlign="top"
-              fontWeigth="400"
-              color="#252A32"
               width="100%"
               marginLeft="10px"
             >
@@ -400,7 +399,10 @@ export default function SearchPage({
                 name: (
                   <HStack whiteSpace="nowrap">
                     <div>Tabelas tratadas</div>
-                    <Image height="20px" src="/img/logo_plus.png" />{" "}
+                    <BDLogoPlusImage
+                      marginLeft="5px !important"
+                      widthImage="40px"
+                    />
                     <div>{`(${data?.resource_bdm_table_count || "0"})`}</div>
                   </HStack>
                 ),
@@ -573,7 +575,8 @@ export default function SearchPage({
               fontFamily="Ubuntu"
               fontSize="26px"
               fontWeight="400"
-              letterSpacing="1px"
+              letterSpacing="0.5px"
+              color="#252A32"
             >
               {data?.count || "..."} {`conjunto${data?.count > 1 ? "s": ""} encontrado${data?.count > 1 ? "s": ""}`}
               {search ? " para " + search : ""}
