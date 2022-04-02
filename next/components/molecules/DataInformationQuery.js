@@ -212,7 +212,8 @@ df <- bd_collect(query)`}
             </Text>
 
             <PrismCodeHighlight language="Stata">
-              {`net install basedosdados, from("https://raw.githubusercontent.com/basedosdados/mais/master/stata-package%22)
+              {`net install basedosdados, from("https://raw.githubusercontent.com/basedosdados/mais/master/stata-package")
+
 bd_read_table, ///
     path("<PATH>") ///
     dataset_id("${resource.dataset_id}") ///
