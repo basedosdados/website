@@ -8,6 +8,7 @@ import {
   AccordionPanel,
   AccordionIcon,
 } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
 import { Markdown } from "../atoms/Markdown";
 import Title from "../atoms/Title";
 import { ExpandableTable } from "../molecules/ExpandableTable";
@@ -29,6 +30,22 @@ export function BdmTablePage({
   datasetName,
   availableOptionsTranslations,
 }) {
+  const [isColumns, setIsColumns] = useState(false)
+  const [columnsHeaders, setColumnsHeaders] = useState([])
+  const [columnsValues, setColumnsValues] = useState([])
+
+  useEffect(() => {
+    if (resource.columns[0]) {
+      setIsColumns(true)
+      setColumnsHeaders(Object.keys(resource.columns[0]))
+      setColumnsValues(
+        resource.columns.map((c) => {
+          return Object.values(c)
+        })
+      )
+    }
+  },[resource])
+
   if (
     resource.spatial_coverage &&
     typeof resource.spatial_coverage === "array"
@@ -74,7 +91,7 @@ export function BdmTablePage({
             fontSize:"14px",
             fontWeight:"300",
             letterSpacing:"0.5px",
-            color:"#252A32" 
+            color:"#252A32"
           }}
         >
           {resource.description || "Nenhuma descrição fornecida."}
@@ -88,16 +105,19 @@ export function BdmTablePage({
           {resource?.temporal_coverage ? resource.temporal_coverage[0] : "Nenhuma cobertura temporal."}
         </Text>
       </VStack>
-      <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
-        <Title fontWeigth="400">
-          Coluna
-        </Title>
-        <ExpandableTable
-          headers={["nome", "descrição"]}
-          values={(resource?.columns || []).map((c) => [c.name, c.description])}
-        />
-      </VStack>
-      
+      {isColumns &&
+        <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
+          <Title fontWeigth="400">
+            Coluna
+          </Title>
+            <ExpandableTable
+              horizontal={true}
+              headers={columnsHeaders}
+              values={columnsValues}
+            />
+        </VStack>
+      }
+
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Accordion
           borderColor="transparent"
