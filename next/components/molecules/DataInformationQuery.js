@@ -159,6 +159,7 @@ export default function DataInformationQuery ({ resource }) {
 
             <PrismCodeHighlight language="python">
               {`import basedosdados as bd
+              
 # Para carregar o dado direto no pandas
 df = bd.read_table(dataset_id='${resource.dataset_id}', 
 table_id='${resource.name}',
@@ -186,8 +187,10 @@ billing_project_id="<YOUR_PROJECT_ID>")`}
             <PrismCodeHighlight language="R">
               {`install.packages("basedosdados")
 library("basedosdados")
+
 # Defina o seu projeto no Google Cloud
 set_billing_id("<YOUR_PROJECT_ID>")
+
 # Para carregar o dado direto no R
 query <- bdplyr("${queryName}")
 df <- bd_collect(query)`}
@@ -212,7 +215,8 @@ df <- bd_collect(query)`}
             </Text>
 
             <PrismCodeHighlight language="Stata">
-              {`net install basedosdados, from("https://raw.githubusercontent.com/basedosdados/mais/master/stata-package%22)
+              {`net install basedosdados, from("https://raw.githubusercontent.com/basedosdados/mais/master/stata-package")
+
 bd_read_table, ///
     path("<PATH>") ///
     dataset_id("${resource.dataset_id}") ///
@@ -236,7 +240,7 @@ bd_read_table, ///
                     fontWeight="bold"
                     textDecoration="none"
                     target="_blank"
-                    href="https://basedosdados.github.io/mais/colab/"
+                    href="https://basedosdados.github.io/mais/colab_data/"
                     dash={false}
                     > saiba como contribuir com seu tempo.
                   </LinkDash>
