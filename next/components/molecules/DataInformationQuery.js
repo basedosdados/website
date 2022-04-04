@@ -237,7 +237,7 @@ bd_read_table, ///
                     fontWeight="bold"
                     textDecoration="none"
                     target="_blank"
-                    href="https://basedosdados.github.io/mais/colab/"
+                    href="https://basedosdados.github.io/mais/colab_data/"
                     dash={false}
                     > saiba como contribuir com seu tempo.
                   </LinkDash>
