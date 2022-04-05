@@ -2,21 +2,39 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
-  TableCaption,
-  Box,
-  Button,
   HStack,
 } from '@chakra-ui/react'
+import { useState, useEffect } from 'react'
+import { getAvailableOptionsTranslations } from '../../pages/api/translations'
 
 export default function HorizontalExpandableTable({
   headers,
   values,
+  translations,
   containerStyle,
 }) {
+
+  const [translatedHeaders, setTranslatedHeaders] = useState({})
+  const [translatedValues, setTranslatedValues] = useState({})
+
+  useEffect(() => {
+    translations && setTranslatedHeaders(translations)
+
+    getAvailableOptionsTranslations().then(res => {
+      setTranslatedValues(res)
+    })
+  },[translatedHeaders])
+
+  function translateHeaders (field) {
+    return translatedHeaders[field]
+  }
+
+  function translateValues (field) {
+    return translatedValues[field] || field
+  }
 
   return (
     <HStack
@@ -39,7 +57,7 @@ export default function HorizontalExpandableTable({
               textTransform="capitalize"
               borderY="1px solid #E4E4E4 !important"
             >
-              {elm}
+              {translatedHeaders ? translateHeaders(elm) : elm}
             </Th>
           ))}
         </Thead>
@@ -57,7 +75,7 @@ export default function HorizontalExpandableTable({
                     color:"#252A32"
                   }}
                 >
-                  {r ? r : "Não listado"}
+                  {r ? translateValues(r) : "Não listado"}
                 </Td>
               ))}
             </Tr>
@@ -65,5 +83,5 @@ export default function HorizontalExpandableTable({
         </Tbody>
       </Table>
     </HStack>
-  )   
+  )
 }
