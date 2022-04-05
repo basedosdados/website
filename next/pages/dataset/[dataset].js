@@ -158,7 +158,7 @@ function ResourcesPage({
         return (
           <BdmTablePage
             availableOptionsTranslations={availableOptionsTranslations}
-            translations={translations["bdm_table"]}
+            translations={translations}
             datasetName={dataset.dataset_id}
             resource={resource}
           />
@@ -172,7 +172,7 @@ function ResourcesPage({
             resource={resource}
           />
         );
-        
+
       case "information_request":
         return (
           <InformationRequestPage
@@ -363,9 +363,9 @@ export default function DatasetPage({
       else {
         years.push(interval);
       }
-      
+
     }
-    
+
     var years = years.sort();
 
     if (years.length === 1) return years[0];
@@ -448,7 +448,7 @@ export default function DatasetPage({
             >
               {dataset.title || "Conjunto sem nome"}
             </BigTitle>
-            <Markdown 
+            <Markdown
               width={{ base: "90vw", lg: "60vw" }}
               limit={true}
               styleText= {{
@@ -464,7 +464,7 @@ export default function DatasetPage({
               <VStack align="flex-start">
                 <Title fontWeigth="400" fontSize="18px">Organização</Title>
                 <Link
-                  marginTop="3px !important" 
+                  marginTop="3px !important"
                   href={`/dataset?organization=${dataset.organization.name}`}
                 >
                   <SectionText letterSpacing="0.5px" fontWeight="300" fontSize="16px">
@@ -483,13 +483,13 @@ export default function DatasetPage({
           </VStack>
         </Stack>
 
-        <Tabs 
+        <Tabs
           onChange={(index) => setTabIndex(index)}
           isLazy
           paddingTop="20px"
           width={{ base: "90vw", lg: "100%" }}
         >
-          <TabList 
+          <TabList
             padding="0px"
             fontFamily="Ubuntu !important"
             borderBottom= "2px solid #DEDFE0 !important"

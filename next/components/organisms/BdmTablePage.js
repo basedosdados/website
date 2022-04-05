@@ -111,6 +111,7 @@ export function BdmTablePage({
             Coluna
           </Title>
             <ExpandableTable
+              translations={translations.bdm_columns}
               horizontal={true}
               headers={columnsHeaders}
               values={columnsValues}
@@ -140,7 +141,7 @@ export function BdmTablePage({
                 headers={["nome", "valor"]}
                 values={formatObjectsInArray(
                   translate(
-                    translations,
+                    translations.bdm_table,
                     availableOptionsTranslations,
                     filterOnlyValidValues({ dataset_id: datasetName, ...resource }, [
                       "dataset_id",

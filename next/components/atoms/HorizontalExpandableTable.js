@@ -11,12 +11,24 @@ import {
   Button,
   HStack,
 } from '@chakra-ui/react'
+import { useState, useEffect } from 'react'
 
 export default function HorizontalExpandableTable({
   headers,
   values,
+  translations,
   containerStyle,
 }) {
+
+  const [translated, setTranslated] = useState({})
+
+  useEffect(() => {
+    translations && setTranslated(translations)
+  },[translated])
+
+  function translate (field) {
+    return translated[field]
+  }
 
   return (
     <HStack
@@ -39,7 +51,7 @@ export default function HorizontalExpandableTable({
               textTransform="capitalize"
               borderY="1px solid #E4E4E4 !important"
             >
-              {elm}
+              {translated ? translate(elm) : elm}
             </Th>
           ))}
         </Thead>
@@ -65,5 +77,5 @@ export default function HorizontalExpandableTable({
         </Tbody>
       </Table>
     </HStack>
-  )   
+  )
 }
