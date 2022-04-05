@@ -385,16 +385,16 @@ export default function DatasetPage({
         {/* Open Graph */}
         <link
           rel="image_src"
-          href="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/thumbnail_conjunto.png"
+          href="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/2022/thumbnail_conjunto.png"
         />
         <meta
           property="og:image"
-          content="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/thumbnail_conjunto.png"
+          content="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/2022/thumbnail_conjunto.png"
           key="ogimage"
         />
         <meta
           name="twitter:image"
-          content="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/thumbnail_conjunto.png"
+          content="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/2022/thumbnail_conjunto.png"
           key="twimage"
         />
         <meta
