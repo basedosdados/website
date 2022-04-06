@@ -42,7 +42,7 @@ export function BdmTablePage({
       const ArrayValues = resource.columns.map((c) => {
         return Object.values(c)
       })
-      const filter = ["is_in_staging"]
+      const filter = ["is_in_staging", "is_partition", "temporal_coverage"]
 
       filter.map((elm) => {
         for( let i = 0; i < ArrayHeaders.length; i++){
@@ -54,7 +54,6 @@ export function BdmTablePage({
             i--
             setColumnsHeaders(ArrayHeaders)
             setColumnsValues(ArrayValues)
-            console.log(columnsHeaders)
           } else {
             setColumnsHeaders(ArrayHeaders)
             setColumnsValues(ArrayValues)

@@ -8,7 +8,6 @@ import {
   HStack,
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
-import { getAvailableOptionsTranslations } from '../../pages/api/translations'
 
 export default function HorizontalExpandableTable({
   headers,
@@ -28,7 +27,7 @@ export default function HorizontalExpandableTable({
   },[translatedHeaders])
 
   function translateHeaders (field) {
-    return translatedHeaders[field]
+    return translatedHeaders[field] || field
   }
 
   function translateValues (field) {
