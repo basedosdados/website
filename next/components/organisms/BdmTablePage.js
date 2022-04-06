@@ -33,6 +33,17 @@ export function BdmTablePage({
   const [isColumns, setIsColumns] = useState(false)
   const [columnsHeaders, setColumnsHeaders] = useState([])
   const [columnsValues, setColumnsValues] = useState([])
+  const tooltip = {
+    name: "Indica o nome de cada coluna para cada ano.",
+    bigquery_type: "Indica o tipo de dado no BigQuery. Ex.: INT64 (Inteiro), STRING (String), DATA (Data), FLOA64 (Float) etc.",
+    description: "Indica a descrição dos dados da coluna.",
+    temporal_coverage: "Indica a cobertura temporal da coluna.",
+    covered_by_dictionary: "Indica se a coluna é coberta por dicionário.",
+    directory_column: "Indica se a coluna é coberta por um dicionário da BD.",
+    measurement_unit: "Indica a unidade de medida da coluna. ",
+    has_sensitive_data: "Indica se a coluna possui dados sensíveis. Ex.:  CPF identificado, dados de conta bancária, etc. ",
+    observations: "Indica processos de tratamentos realizados na coluna que precisam ser evidenciados. "
+  }
 
   useEffect(() => {
     if (resource.columns[0]) {
@@ -130,6 +141,7 @@ export function BdmTablePage({
             <ExpandableTable
               translations={translations.bdm_columns}
               availableOptionsTranslations={availableOptionsTranslations}
+              tooltip={tooltip}
               horizontal={true}
               headers={columnsHeaders}
               values={columnsValues}
