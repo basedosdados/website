@@ -7,6 +7,7 @@ export function ExpandableTable({
   headers,
   values,
   translations,
+  availableOptionsTranslations,
   containerStyle,
   horizontal = false,
 }) {
@@ -20,6 +21,7 @@ export function ExpandableTable({
           headers={headers}
           values={values}
           translations={translations}
+          availableOptionsTranslations={availableOptionsTranslations}
           containerStyle={containerStyle}
         />
         :
@@ -37,6 +39,7 @@ export function ExpandableTable({
       {horizontal ?
         <HorizontalExpandableTable
           translations={translations}
+          availableOptionsTranslations={availableOptionsTranslations}
           headers={headers}
           values={expanded ? values : values.slice(0, Math.min(3, values.length))}
           containerStyle={containerStyle}

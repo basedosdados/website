@@ -37,12 +37,30 @@ export function BdmTablePage({
   useEffect(() => {
     if (resource.columns[0]) {
       setIsColumns(true)
-      setColumnsHeaders(Object.keys(resource.columns[0]))
-      setColumnsValues(
-        resource.columns.map((c) => {
-          return Object.values(c)
-        })
-      )
+
+      const ArrayHeaders = Object.keys(resource.columns[0])
+      const ArrayValues = resource.columns.map((c) => {
+        return Object.values(c)
+      })
+      const filter = ["is_in_staging"]
+
+      filter.map((elm) => {
+        for( let i = 0; i < ArrayHeaders.length; i++){
+          if ( ArrayHeaders[i] === elm) {
+            ArrayHeaders.splice(i, 1)
+            ArrayValues.map(c => {
+              c.splice(i, 1)
+            })
+            i--
+            setColumnsHeaders(ArrayHeaders)
+            setColumnsValues(ArrayValues)
+            console.log(columnsHeaders)
+          } else {
+            setColumnsHeaders(ArrayHeaders)
+            setColumnsValues(ArrayValues)
+          }
+        }
+      })
     }
   },[resource])
 
@@ -112,6 +130,7 @@ export function BdmTablePage({
           </Title>
             <ExpandableTable
               translations={translations.bdm_columns}
+              availableOptionsTranslations={availableOptionsTranslations}
               horizontal={true}
               headers={columnsHeaders}
               values={columnsValues}

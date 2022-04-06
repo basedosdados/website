@@ -14,6 +14,7 @@ export default function HorizontalExpandableTable({
   headers,
   values,
   translations,
+  availableOptionsTranslations,
   containerStyle,
 }) {
 
@@ -22,10 +23,8 @@ export default function HorizontalExpandableTable({
 
   useEffect(() => {
     translations && setTranslatedHeaders(translations)
+    setTranslatedValues(availableOptionsTranslations)
 
-    getAvailableOptionsTranslations().then(res => {
-      setTranslatedValues(res)
-    })
   },[translatedHeaders])
 
   function translateHeaders (field) {
