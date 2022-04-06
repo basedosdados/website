@@ -7,8 +7,10 @@ export function ExpandableTable({
   headers,
   values,
   translations,
-  containerStyle,
+  availableOptionsTranslations,
+  tooltip,
   horizontal = false,
+  containerStyle,
 }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -20,6 +22,8 @@ export function ExpandableTable({
           headers={headers}
           values={values}
           translations={translations}
+          availableOptionsTranslations={availableOptionsTranslations}
+          tooltip={tooltip}
           containerStyle={containerStyle}
         />
         :
@@ -37,8 +41,10 @@ export function ExpandableTable({
       {horizontal ?
         <HorizontalExpandableTable
           translations={translations}
+          availableOptionsTranslations={availableOptionsTranslations}
           headers={headers}
           values={expanded ? values : values.slice(0, Math.min(3, values.length))}
+          tooltip={tooltip}
           containerStyle={containerStyle}
         />
         :

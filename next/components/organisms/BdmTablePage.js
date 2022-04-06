@@ -33,16 +33,44 @@ export function BdmTablePage({
   const [isColumns, setIsColumns] = useState(false)
   const [columnsHeaders, setColumnsHeaders] = useState([])
   const [columnsValues, setColumnsValues] = useState([])
+  const tooltip = {
+    name: "Indica o nome de cada coluna para cada ano.",
+    bigquery_type: "Indica o tipo de dado no BigQuery. Ex.: INT64 (Inteiro), STRING (String), DATA (Data), FLOA64 (Float) etc.",
+    description: "Indica a descrição dos dados da coluna.",
+    temporal_coverage: "Indica a cobertura temporal da coluna.",
+    covered_by_dictionary: "Indica se a coluna é coberta por dicionário.",
+    directory_column: "Indica se a coluna é coberta por um dicionário da BD.",
+    measurement_unit: "Indica a unidade de medida da coluna. ",
+    has_sensitive_data: "Indica se a coluna possui dados sensíveis. Ex.:  CPF identificado, dados de conta bancária, etc. ",
+    observations: "Indica processos de tratamentos realizados na coluna que precisam ser evidenciados. "
+  }
 
   useEffect(() => {
     if (resource.columns[0]) {
       setIsColumns(true)
-      setColumnsHeaders(Object.keys(resource.columns[0]))
-      setColumnsValues(
-        resource.columns.map((c) => {
-          return Object.values(c)
-        })
-      )
+
+      const ArrayHeaders = Object.keys(resource.columns[0])
+      const ArrayValues = resource.columns.map((c) => {
+        return Object.values(c)
+      })
+      const filter = ["is_in_staging", "is_partition", "temporal_coverage"]
+
+      filter.map((elm) => {
+        for( let i = 0; i < ArrayHeaders.length; i++){
+          if ( ArrayHeaders[i] === elm) {
+            ArrayHeaders.splice(i, 1)
+            ArrayValues.map(c => {
+              c.splice(i, 1)
+            })
+            i--
+            setColumnsHeaders(ArrayHeaders)
+            setColumnsValues(ArrayValues)
+          } else {
+            setColumnsHeaders(ArrayHeaders)
+            setColumnsValues(ArrayValues)
+          }
+        }
+      })
     }
   },[resource])
 
@@ -112,6 +140,8 @@ export function BdmTablePage({
           </Title>
             <ExpandableTable
               translations={translations.bdm_columns}
+              availableOptionsTranslations={availableOptionsTranslations}
+              tooltip={tooltip}
               horizontal={true}
               headers={columnsHeaders}
               values={columnsValues}

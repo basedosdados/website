@@ -6,14 +6,16 @@ import {
   Th,
   Td,
   HStack,
+  Tooltip,
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
-import { getAvailableOptionsTranslations } from '../../pages/api/translations'
 
 export default function HorizontalExpandableTable({
   headers,
   values,
   translations,
+  availableOptionsTranslations,
+  tooltip,
   containerStyle,
 }) {
 
@@ -22,14 +24,11 @@ export default function HorizontalExpandableTable({
 
   useEffect(() => {
     translations && setTranslatedHeaders(translations)
-
-    getAvailableOptionsTranslations().then(res => {
-      setTranslatedValues(res)
-    })
+    setTranslatedValues(availableOptionsTranslations)
   },[translatedHeaders])
 
   function translateHeaders (field) {
-    return translatedHeaders[field]
+    return translatedHeaders[field] || field
   }
 
   function translateValues (field) {
@@ -57,7 +56,24 @@ export default function HorizontalExpandableTable({
               textTransform="capitalize"
               borderY="1px solid #E4E4E4 !important"
             >
-              {translatedHeaders ? translateHeaders(elm) : elm}
+              {tooltip ?
+                <Tooltip
+                  label={tooltip[elm]}
+                  fontSize="16px"
+                  fontWeight="500"
+                  padding="5px 15px"
+                  backgroundColor="#2A2F38"
+                  marginTop="10px"
+                  color="#FFF"
+                  borderRadius="6px"
+                >
+                  {translatedHeaders ? translateHeaders(elm) : elm}
+                </Tooltip>
+                :
+                <>
+                  {translatedHeaders ? translateHeaders(elm) : elm}
+                </>
+              }
             </Th>
           ))}
         </Thead>
