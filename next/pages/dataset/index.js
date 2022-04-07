@@ -104,8 +104,8 @@ function FilterTags({
       <Text
         fontFamily="Lato"
         letterSpacing="0.5px"
-        fontWeight="100"
-        fontSize="16px"
+        fontWeight="300"
+        fontSize="14px"
         color="#6F6F6F"
       >
         {label}
@@ -122,7 +122,7 @@ function FilterTags({
             hover={false}
             backgroundColor="#2B8C4D"
             color="white"
-            borderRadius="7px"
+            borderRadius="8px"
             padding="5px 8px"
             cursor="pointer"
           >
@@ -346,13 +346,13 @@ export default function SearchPage({
         inputStyle={{
           width: "90%",
           padding: "20px",
-          marginBottom: "50px",
+          marginBottom: "64px",
           borderRadius: "17px",
           backgroundColor: "#FFF",
           color: "#6F6F6F",
           fontSize: "16px",
           height: "50px",
-          boxShadow: "0 1px 3px 0 rgba(0 0 0 /0.2) !important",
+          boxShadow: "0 1px 3px 0.5 rgba(100 93 103 /0.16) !important",
         }}
         marginTop={isMobileMode && "70px"}
       />
@@ -361,6 +361,7 @@ export default function SearchPage({
         alignItems="flex-start"
         spacing={isMobileMode ? 10 : 0}
         width="90%"
+        maxWidth="1264px"
         margin="auto"
         direction={{ base: "column", lg: "row" }}
       >
@@ -378,16 +379,19 @@ export default function SearchPage({
               height="25px"
               widthIcon="15px"
               heightIcon="20px"
+              fill="#252A32"
             />
-            <SectionTitle
+            <Text
               fontFamily="Ubuntu"
               fontSize="20px"
+              fontWeight="400"
               textAlign="top"
               width="100%"
-              marginLeft="10px"
+              marginLeft="8px"
+              letterSpacing="0.2px"
             >
               Filtrar resultados
-            </SectionTitle>
+            </Text>
           </Box>
 
           <CheckboxFilterAccordion
@@ -564,7 +568,6 @@ export default function SearchPage({
         </VStack>
         <VStack
           alignItems="flex-start"
-          spacing={5}
           width="100%"
           paddingLeft={isMobileMode ? "" : "40px"}
           borderLeft={isMobileMode ? "" : "1px solid #DEDFE0"}
@@ -575,7 +578,7 @@ export default function SearchPage({
               fontFamily="Ubuntu"
               fontSize="26px"
               fontWeight="400"
-              letterSpacing="0.5px"
+              letterSpacing="0px"
               color="#252A32"
             >
               {data?.count || "..."} {`conjunto${data?.count > 1 ? "s": ""} encontrado${data?.count > 1 ? "s": ""}`}
@@ -602,9 +605,9 @@ export default function SearchPage({
           </Flex>
           <Stack
             overflow="auto"
-            width="60vw"
+            width="90vw"
+            margin="32px 0px 40px"
             whiteSpace="nowrap"
-            paddingBottom="10px"
             spacing={3}
             direction={{ base: "column", lg: "row" }}
           >
@@ -627,21 +630,21 @@ export default function SearchPage({
           <HStack
             fontFamily="Lato"
             letterSpacing="0.5px"
-            fontWeight="100"
+            fontWeight="300"
             fontSize="16px"
             color="#6F6F6F"
           >
             <Stack
               alignItems="center"
-              direction={{ base: "column", md: "row" }}
-              spacing={5}
+              direction="row"
+              spacing="8px"
             >
               <Text whiteSpace="nowrap">Ordenar:</Text>
               <Select
                 fontFamily="Lato"
                 minWidth="150px"
-                color="black"
-                borderRadius="15px"
+                color="#252A32"
+                borderRadius="16px"
                 focusBorderColor="#42B0FF"
                 border="1px solid #DEDFE0"
                 height="40px"
@@ -660,7 +663,7 @@ export default function SearchPage({
             width="100%"
             alignItems="flex-start"
             spacing={3}
-            padding="30px 0px"
+            padding="28px 0px"
           >
             {isLoading
               ? new Array(10).fill(0).map(() => (

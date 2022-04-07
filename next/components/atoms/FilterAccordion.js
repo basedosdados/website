@@ -40,7 +40,8 @@ export function BaseFilterAccordion({
                 onClick={onChange}
                 color={isActive ? "#2B8C4D" : null}
                 _hover={isHovering ? { cursor: "pointer", opacity: "0.6" } : "none"}
-                padding="10px 16px 0 0"
+                padding="16px 16px 0 0"
+                marginBottom="8px"
               >
                 <HStack
                   spacing={2}
@@ -53,7 +54,8 @@ export function BaseFilterAccordion({
                     fontWeight="500"
                     fontFamily="Ubuntu"
                     fontSize="16px"
-                    letterSpacing="0.5px"
+                    color="#252A32"
+                    letterSpacing="0.2px"
                   >
                     {fieldName}
                   </Box>
@@ -117,7 +119,7 @@ export function CheckboxFilterAccordion({
         {canSearch ? (
           <VStack padding="15px 0 10px" width="100%" alignItems="center">
             <ControlledInput
-              color="black"
+              color="#252A32"
               value={search}
               onChange={setSearch}
               inputBackgroundColor="#FFFFFF"
@@ -142,7 +144,7 @@ export function CheckboxFilterAccordion({
           alignItems="flex-start"
           overflowY="auto"
           width="100%"
-          padding="10px 0"
+          padding="8px 0"
         >
           {(canSearch
             ? choices.filter(
@@ -207,7 +209,7 @@ export function RangeFilterAccordion({
       fieldName={fieldName}
     >
       <VStack align="flex-start">
-        <HStack padding="10px 0px" width="100%">
+        <HStack padding="8px 0px" width="100%">
           <ControlledInput
             value={min}
             onChange={setMin}

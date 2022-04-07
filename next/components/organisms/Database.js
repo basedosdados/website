@@ -10,9 +10,9 @@ import {
 } from "@chakra-ui/react";
 import { limitTextSize } from "../../utils";
 import { CategoryIcon } from "../atoms/CategoryIcon";
+import Title from "../atoms/Title";
 import Link from "../atoms/Link";
 import SectionText from "../atoms/SectionText";
-import Subtitle from "../atoms/Subtitle";
 import DataBaseIcon from "../../public/img/icons/databaseIcon";
 import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
@@ -78,8 +78,8 @@ export function Database({
       justifyContent="space-between"
       alignItems="flex-start"
       width="100%"
-      spacing={{ base: 5, md: 0 }}
-      padding="10px 0px"
+      spacing={{ base: 4, md: 0 }}
+      padding="16px 0px"
     >
       <Stack
         direction={{ base: "column", lg: "row" }}
@@ -97,7 +97,7 @@ export function Database({
             minWidth="115px"
             minHeight="115px"
             borderRadius="10px"
-            filter="drop-shadow(0px 2.02222px 2.02222px rgba(0, 0, 0, 0.25));"
+            filter="drop-shadow(0px 2px 3px rgba(100, 96, 103, 0.16));"
             src={image}
             backgroundColor="#eee"
           />
@@ -117,27 +117,23 @@ export function Database({
               alignItems="flex-start"
               width="100%"
             >
-              <HStack
+              <Stack
+                direction={{ base: "column", lg: "row" }}
                 width="100%"
                 alignItems="flex-start"
-                pb={{ base: 4, lg: 0 }}
+                pb={{ base: 2, lg: 0 }}
               >
                 <Link width="100%" href={link}>
-                  <Heading
+                  <Title
                     margin="0px"
                     padding="0px"
-                    fontWeight="700"
-                    fontFamily="Ubuntu"
-                    fontSize="18px"
-                    letterSpacing="0.5px"
-                    color="#252A32"
                   >
                     {name}
-                  </Heading>
+                  </Title>
                 </Link>
                 <HStack
                   justifyContent={{ base: "flex-start", lg: "flex-end" }}
-                  marginLeft="30px !important"
+                  margin={isMobile ? "16px 0px 0px !important" : "0px 0px 0px 28px !important"}
                   spacing={2}
                 >
                   {categories.slice(0, Math.min(3, categories.length)).map((c) => (
@@ -168,23 +164,19 @@ export function Database({
                     </Tooltip>
                   ))}
                 </HStack>
-              </HStack>
+              </Stack>
             </Flex>
             <VStack spacing={0} width="100%" alignItems="flex-start">
               <Stack
                 direction={{ base: "column", lg: "row" }}
-                fontSize="12px"
                 spacing={{ base: 0, lg: 5 }}
               >
-                <HStack>
+                <HStack pb={{ base: 1, lg: 0 }}>
                   <SectionText color="#6F6F6F">Organização:</SectionText>
                   <Link href={`/dataset?organization=${organization.name}`}>
                     <SectionText
                       color="#6F6F6F"
-                      textAlign="left"
-                      lineHeight="15px"
-                      fontWeight="bold"
-                      fontSize="14px"
+                      fontWeight="400"
                     >
                       {organization.title}
                     </SectionText>
@@ -193,12 +185,15 @@ export function Database({
               </Stack>
               <Stack
                 direction={{ base: "column", lg: "row" }}
-                fontSize="12px"
                 spacing={{ base: 0, lg: 5 }}
               >
-                <HStack spacing={2} align="flex-start">
+                <HStack 
+                  spacing={2} 
+                  align="flex-start"
+                  pb={{ base: 1, lg: 0 }}
+                >
                   <SectionText color="#6F6F6F">Cobertura temporal:</SectionText>
-                  <SectionText color="#6F6F6F" fontWeight="bold">
+                  <SectionText color="#6F6F6F" fontWeight="400">
                     {getTemporalCoverage()}
                   </SectionText>
                 </HStack>
@@ -209,7 +204,7 @@ export function Database({
             <HStack
               flexDirection={isMobile && "column"}
               alignItems={isMobile && "flex-start"}
-              spacing={isMobile ? 0 : 5}
+              spacing={isMobile ? 1 : 5}
             >
               <HStack spacing={1}>
                 <DataBaseIcon
@@ -218,16 +213,17 @@ export function Database({
                   heightIcon="15px"
                   fill={tableNum === 0 ? "#C4C4C4" : "#2B8C4D"}
                 />
-                <Subtitle
+                <Text
                   marginLeft="8px !important"
                   whiteSpace="nowrap"
                   color={tableNum === 0 ? "#C4C4C4" : "#2B8C4D"}
-                  fontSize="15px"
+                  fontSize="16px"
                   fontWeight="500"
+                  letterSpacing="0px"
                 >
                   {tableNum}{" "}
                   {tableNum === 1 ? "tabela tratada" : "tabelas tratadas"}
-                </Subtitle>
+                </Text>
                 <BDLogoPlusImage
                   widthImage="38px"
                   empty={tableNum === 0}
@@ -240,14 +236,15 @@ export function Database({
                   heightIcon="15px"
                   fill={externalLinkNum === 0 ? "#C4C4C4" : "#2B8C4D"}
                 />
-                <Subtitle
+                <Text
                   color={externalLinkNum === 0 ? "#C4C4C4" : "#2B8C4D"}
-                  fontSize="15px"
+                  fontSize="16px"
                   fontWeight="500"
+                  letterSpacing="0px"
                 >
                   {externalLinkNum}{" "}
                   {externalLinkNum === 1 ? "fonte original" : "fontes originais"}
-                </Subtitle>
+                </Text>
               </HStack>
 
               <HStack>
@@ -256,14 +253,15 @@ export function Database({
                   heightIcon="15px"
                   fill={informationRequestNum === 0 ? "#C4C4C4" : "#2B8C4D"}
                 />
-                <Subtitle
+                <Text
                   color={informationRequestNum === 0 ? "#C4C4C4" : "#2B8C4D"}
-                  fontSize="15px"
+                  fontSize="16px"
                   fontWeight="500"
+                  letterSpacing="0px"
                 >
                   {informationRequestNum}{" "}
                   {informationRequestNum === 1 ? "pedido LAI" : "pedidos LAI"}
-                </Subtitle>
+                </Text>
               </HStack>
             </HStack>
           </VStack>
