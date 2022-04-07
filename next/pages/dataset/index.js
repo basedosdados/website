@@ -159,7 +159,7 @@ export default function SearchPage({
       },
     }
   );
-  
+
   useEffect(() => {
     setIsMobileMode(isMobile)
   },[isMobile])
@@ -345,8 +345,9 @@ export default function SearchPage({
         justifyContent="center"
         inputStyle={{
           width: "90%",
+          maxWidth: "1264px",
+          margin: "0 auto 64px",
           padding: "20px",
-          marginBottom: "64px",
           borderRadius: "17px",
           backgroundColor: "#FFF",
           color: "#6F6F6F",
@@ -568,6 +569,7 @@ export default function SearchPage({
         </VStack>
         <VStack
           alignItems="flex-start"
+          overflow="hidden"
           width="100%"
           paddingLeft={isMobileMode ? "" : "40px"}
           borderLeft={isMobileMode ? "" : "1px solid #DEDFE0"}
@@ -606,7 +608,7 @@ export default function SearchPage({
           <Stack
             overflow="auto"
             width="90vw"
-            margin="32px 0px 40px"
+            margin="16px 0px 24px !important"
             whiteSpace="nowrap"
             spacing={3}
             direction={{ base: "column", lg: "row" }}

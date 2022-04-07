@@ -5,6 +5,7 @@ import {
   Stack,
   VStack,
   Flex,
+  Text,
   Center,
   Tooltip,
 } from "@chakra-ui/react";
@@ -18,7 +19,6 @@ import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
-
 
 export function Database({
   image,
@@ -127,6 +127,8 @@ export function Database({
                   <Title
                     margin="0px"
                     padding="0px"
+                    noOfLines={2}
+                    textOverflow="ellipsis"
                   >
                     {name}
                   </Title>
@@ -141,7 +143,7 @@ export function Database({
                       label={c[1]}
                       fontSize="16px"
                       fontWeight="500"
-                      padding="5px 15px"
+                      padding="5px 16px 6px"
                       backgroundColor="#2A2F38"
                       marginTop="10px"
                       color="#FFF"
@@ -177,6 +179,8 @@ export function Database({
                     <SectionText
                       color="#6F6F6F"
                       fontWeight="400"
+                      noOfLines={1}
+                      textOverflow="ellipsis"
                     >
                       {organization.title}
                     </SectionText>
@@ -187,8 +191,8 @@ export function Database({
                 direction={{ base: "column", lg: "row" }}
                 spacing={{ base: 0, lg: 5 }}
               >
-                <HStack 
-                  spacing={2} 
+                <HStack
+                  spacing={2}
                   align="flex-start"
                   pb={{ base: 1, lg: 0 }}
                 >
@@ -204,7 +208,7 @@ export function Database({
             <HStack
               flexDirection={isMobile && "column"}
               alignItems={isMobile && "flex-start"}
-              spacing={isMobile ? 1 : 5}
+              spacing={isMobile ? 0 : 5}
             >
               <HStack spacing={1}>
                 <DataBaseIcon
@@ -220,6 +224,7 @@ export function Database({
                   fontSize="16px"
                   fontWeight="500"
                   letterSpacing="0px"
+                  fontFamily="Ubuntu"
                 >
                   {tableNum}{" "}
                   {tableNum === 1 ? "tabela tratada" : "tabelas tratadas"}
@@ -241,6 +246,7 @@ export function Database({
                   fontSize="16px"
                   fontWeight="500"
                   letterSpacing="0px"
+                  fontFamily="Ubuntu"
                 >
                   {externalLinkNum}{" "}
                   {externalLinkNum === 1 ? "fonte original" : "fontes originais"}
@@ -258,6 +264,7 @@ export function Database({
                   fontSize="16px"
                   fontWeight="500"
                   letterSpacing="0px"
+                  fontFamily="Ubuntu"
                 >
                   {informationRequestNum}{" "}
                   {informationRequestNum === 1 ? "pedido LAI" : "pedidos LAI"}
