@@ -61,7 +61,7 @@ export default function DatabaseCard({
             label={c[1]}
             fontSize="16px"
             fontWeight="500"
-            padding="5px 15px"
+            padding="5px 16px 6px"
             backgroundColor="#2A2F38"
             marginTop="10px"
             color="#FFF"
