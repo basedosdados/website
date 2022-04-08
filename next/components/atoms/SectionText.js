@@ -1,6 +1,4 @@
 import { Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
 export default function SectionText({ 
   children, 
@@ -9,13 +7,6 @@ export default function SectionText({
   fontWeigth = "300",
   ...props
 }) {
-
-  const [isMobileMod, setIsMobileMod] = useState(false)
-  const isMobile = useCheckMobile();
-
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
 
   return (
     <Text

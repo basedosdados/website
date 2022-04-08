@@ -270,7 +270,6 @@ export function FilterAccordion({
         spacing={1}
         overflowX="hidden !important"
         alignItems="flex-start"
-        marginTop="10px"
       >
         {choices.map((c) => (
           <Box
@@ -279,15 +278,16 @@ export function FilterAccordion({
             }
             width="100%"
           >
-            <Title
+            <Text
+              fontFamily="Ubuntu"
               fontSize="14px"
+              lineHeight="16px"
+              letterSpacing="0.2px"
               cursor="pointer"
               fontWeight={c[valueField] === value ? "500" : "400"}
               color={c[valueField] === value ? "#2B8C4D" : "#7D7D7D"}
               _hover={c[valueField] === value ? "none" : {  opacity: "0.6" , fontWeight: "500" }}
-              padding="5px 20px"
-              borderRadius="5px"
-              letterSpacing="0.5px"
+              padding="8px 24px"
               transform="translateX(-10px)"
               zIndex="100"
               position="relative"
@@ -295,7 +295,7 @@ export function FilterAccordion({
               onClick={() => onChange(c[valueField])}
             >
               {c[displayField]}
-            </Title>
+            </Text>
           </Box>
         ))}
       </VStack>

@@ -9,8 +9,8 @@ import {
   AccordionIcon,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { Markdown } from "../atoms/Markdown";
-import Title from "../atoms/Title";
+import Subtitle from "../atoms/Subtitle";
+import SectionText from "../atoms/SectionText";
 import { ExpandableTable } from "../molecules/ExpandableTable";
 import {
   breakNestedObjects,
@@ -54,7 +54,7 @@ export function BdmTablePage({
   }
   return (
     <BaseResourcePage
-      padding="20px 10px 20px 0"
+      padding="16px 8px 0 0"
       editLink={`/resource/edit/${resource.id}`}
       title={`${resource.name}`}
       removeFunction={() => deleteResource(resource)}
@@ -82,34 +82,21 @@ export function BdmTablePage({
     >
       <DataInformationQuery resource={resource} />
 
-      <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Title fontWeigth="400">
-          Descrição
-        </Title>
-        <Markdown
-          styleText= {{
-            fontSize:"14px",
-            fontWeight:"300",
-            letterSpacing:"0.5px",
-            color:"#252A32"
-          }}
-        >
+      <VStack width="100%" spacing={4} alignItems="flex-start">
+        <Subtitle>Descrição</Subtitle>
+        <SectionText>
           {resource.description || "Nenhuma descrição fornecida."}
-        </Markdown>
+        </SectionText>
       </VStack>
-      <VStack id="acesso" width="100%" spacing={3} alignItems="flex-start">
-        <Title fontWeigth="400">
-          Cobertura temporal
-        </Title>
-        <Text color="#252A32" fontSize="14px" fontWeight="300" fontFamily="Lato" letterSpacing="0.5px">
-          {resource?.temporal_coverage ? resource.temporal_coverage[0] : "Nenhuma cobertura temporal."}
-        </Text>
+      <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
+        <Subtitle>Cobertura temporal</Subtitle>
+        <SectionText>
+          {resource?.temporal_coverage ? resource.temporal_coverage[0] : "Nenhuma cobertura temporal fornecida."}
+        </SectionText>
       </VStack>
       {isColumns &&
         <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
-          <Title fontWeigth="400">
-            Coluna
-          </Title>
+          <Subtitle>Colunas</Subtitle>
             <ExpandableTable
               translations={translations.bdm_columns}
               horizontal={true}
@@ -130,7 +117,7 @@ export function BdmTablePage({
           <AccordionItem>
             <AccordionButton marginBottom={5} padding={0} _hover={{backgroundColor: "transparent"}} >
               <Stack flex='1' textAlign='left'>
-                <Title fontWeigth="400">Informações adicionais</Title>
+                <Subtitle>Informações adicionais</Subtitle>
               </Stack>
               <AccordionIcon color="#252A32" fontSize="18px"/>
             </AccordionButton>

@@ -45,7 +45,7 @@ export function BaseResourcePage({
       borderRadius="20px"
       padding="20px"
       alignItems="flex-start"
-      spacing={7}
+      spacing={6}
       {...style}
     >
       <AlertDialog
@@ -87,8 +87,6 @@ export function BaseResourcePage({
       >
         <Title 
           width="100%"
-          letterSpacing="0.5px"
-          lineHeight="0"
           wordBreak="break-all"
         >
           {(editing ? "Editando " : "") + title}
