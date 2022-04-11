@@ -24,15 +24,11 @@ export default function HorizontalExpandableTable({
 
   useEffect(() => {
     translations && setTranslatedHeaders(translations)
-    setTranslatedValues(availableOptionsTranslations)
-  },[translatedHeaders])
+    availableOptionsTranslations && setTranslatedValues(availableOptionsTranslations)
+  },[translations, availableOptionsTranslations])
 
-  function translateHeaders (field) {
-    return translatedHeaders[field] || field
-  }
-
-  function translateValues (field) {
-    return translatedValues[field] || field
+  function translate (value, field) {
+    return value[field] || field
   }
 
   return (
@@ -67,11 +63,11 @@ export default function HorizontalExpandableTable({
                   color="#FFF"
                   borderRadius="6px"
                 >
-                  {translatedHeaders ? translateHeaders(elm) : elm}
+                  {translatedHeaders ? translate(translatedHeaders, elm) : elm}
                 </Tooltip>
                 :
                 <>
-                  {translatedHeaders ? translateHeaders(elm) : elm}
+                  {translatedHeaders ? translate(translatedHeaders, elm) : elm}
                 </>
               }
             </Th>
@@ -91,7 +87,7 @@ export default function HorizontalExpandableTable({
                     color:"#252A32"
                   }}
                 >
-                  {r ? translateValues(r) : "Não listado"}
+                  {r ? r : "Não listado"}
                 </Td>
               ))}
             </Tr>

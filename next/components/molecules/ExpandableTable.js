@@ -40,10 +40,10 @@ export function ExpandableTable({
     <VStack width="100%" spacing={5}>
       {horizontal ?
         <HorizontalExpandableTable
-          translations={translations}
-          availableOptionsTranslations={availableOptionsTranslations}
           headers={headers}
           values={expanded ? values : values.slice(0, Math.min(3, values.length))}
+          translations={translations}
+          availableOptionsTranslations={availableOptionsTranslations}
           tooltip={tooltip}
           containerStyle={containerStyle}
         />
