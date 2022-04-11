@@ -21,6 +21,7 @@ from ckanext.basedosdados.validator.available_options import (
     StatusEnum,
     TimeUnitEnum,
     YesNoEnum,
+    RawQualityTierEnum,
 )
 from ckanext.basedosdados.validator.available_options.entity import (
     EntityArtEnum,
@@ -223,9 +224,10 @@ def bd_dataset_search(context, data_dict):
     fq += get_parameter(data_dict, "resource_type", "res_type")
     fq += get_parameter(data_dict, "organization", "organization")
     fq += get_parameter(data_dict, "spatial_coverage", "res_extras_spatial_coverage")
-    fq += get_parameter(data_dict, "temporal_coverage", "res_extras_temporal_coverage")
+    fq += get_parameter(data_dict, "temporal_coverage", "virtual_multi_temporal_coverage")
     fq += get_parameter(data_dict, "update_frequency", "res_extras_update_frequency")
-    fq += get_parameter(data_dict, "obs_level_entity", "virtual_multi_obs_level_entity")
+    fq += get_parameter(data_dict, "entity", "virtual_multi_entity")
+    fq += get_parameter(data_dict, "raw_quality_tier", "virtual_raw_quality_tier")
 
     fq = [f for f in fq if f]
     fq = "+".join(fq)
@@ -243,7 +245,7 @@ def bd_dataset_search(context, data_dict):
     sort = ", ".join(sort)
 
     # search with solr query ##############################
-
+    
     response = package_search(
         context,
         {
@@ -534,6 +536,59 @@ def bd_dataset_search(context, data_dict):
             value = response["spatial_coverage_admin2"].get(key, 0) + 1
             response["spatial_coverage_admin2"][key] = value
 
+    # post-process raw quality tier ##########################
+    
+    response["raw_quality_tiers"] = {}
+
+    for dataset in response["datasets"]:
+        tier = ''
+        grades = []
+        for resource in dataset['resources']:
+            if resource['resource_type'] == 'external_link':
+
+                has_structured_data         = resource.get('has_structured_data', None)
+                has_api                     = resource.get('has_api', None)
+                is_free                     = resource.get('is_free', None)
+                requires_registration       = resource.get('requires_registration', None)
+                availability                = resource.get('availability', None)
+                country_ip_address_required = resource.get('country_ip_address_required', None)
+                license                     = resource.get('license', None)
+                
+                #if 'country_ip_address_required' in resource:
+                #    print(resource['country_ip_address_required'])
+                
+                grade = (
+                    10 * (has_structured_data == 'yes') + \
+                    6  * (has_api == 'yes') + \
+                    8  * (is_free == 'yes') + \
+                    4  * (requires_registration == 'no') + \
+                    8  * (availability == 'online') + \
+                    5  * (country_ip_address_required == []) + \
+                    6  * (license != None)
+                ) / (10 + 6 + 8 + 4 + 8 + 5 + 6)
+                
+                grades.append(grade)
+        
+        if grades: # some datasets may not have any resources
+            grade = max(grades)
+            if grade < 0.5:
+                tier = 'low'
+            elif grade >= 0.5 and grade < 0.75:
+                tier = 'medium'
+            else:
+                tier = 'high'
+        
+            key = tier
+            value = response["raw_quality_tiers"].get(key, 0) + 1
+            response["raw_quality_tiers"][key] = value
+        
+        #if tier == 'high': #and dataset['name'] == 'br-cvm-administradores-carteira':
+            #import 
+        #    print(' ')
+        #    print(dataset['name'])
+        #    print('YEAHAHAHAHAHAHAH')
+        #    print(' ')
+
     # post-process resource count #########################
 
     response["resource_bdm_table_count"] = 0
@@ -713,6 +768,7 @@ def bd_available_options_dict(context, data_dict):
         **StatusEnum.get_all_enum_attr("label"),
         **TimeUnitEnum.get_all_enum_attr("label"),
         **YesNoEnum.get_all_enum_attr("label"),
+        **RawQualityTierEnum.get_all_enum_attr("label"),
     }
 
 
@@ -757,6 +813,7 @@ def bd_available_options(context, data_dict):
         "Status": StatusEnum.get_all_enum_attr("label"),
         "Time Unit": TimeUnitEnum.get_all_enum_attr("label"),
         "Yes No": YesNoEnum.get_all_enum_attr("label"),
+        "Raw Quality Tier": RawQualityTierEnum.get_all_enum_attr("label"),
     }
 
 
