@@ -66,13 +66,11 @@ export function BdmTablePage({
           } else {
             setColumnsHeaders(ArrayHeaders)
             setColumnsValues(ArrayValues)
-          } else {
-            setColumnsHeaders(ArrayHeaders)
-            setColumnsValues(ArrayValues)
+
           }
         }
       })
-      setIsColumns(false)
+        setIsColumns(false)
       console.log(columnsHeaders)
       console.log(columnsValues)
     }
