@@ -47,8 +47,6 @@ export function BdmTablePage({
 
   useEffect(() => {
     if (resource.columns[0]) {
-      setIsColumns(true)
-
       const ArrayHeaders = Object.keys(resource.columns[0])
       const ArrayValues = resource.columns.map((c) => {
         return Object.values(c)
@@ -68,9 +66,15 @@ export function BdmTablePage({
           } else {
             setColumnsHeaders(ArrayHeaders)
             setColumnsValues(ArrayValues)
+          } else {
+            setColumnsHeaders(ArrayHeaders)
+            setColumnsValues(ArrayValues)
           }
         }
       })
+      setIsColumns(false)
+      console.log(columnsHeaders)
+      console.log(columnsValues)
     }
   },[resource])
 
