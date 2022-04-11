@@ -554,9 +554,6 @@ def bd_dataset_search(context, data_dict):
                 country_ip_address_required = resource.get('country_ip_address_required', None)
                 license                     = resource.get('license', None)
                 
-                #if 'country_ip_address_required' in resource:
-                #    print(resource['country_ip_address_required'])
-                
                 grade = (
                     10 * (has_structured_data == 'yes') + \
                     6  * (has_api == 'yes') + \
@@ -582,13 +579,6 @@ def bd_dataset_search(context, data_dict):
             value = response["raw_quality_tiers"].get(key, 0) + 1
             response["raw_quality_tiers"][key] = value
         
-        #if tier == 'high': #and dataset['name'] == 'br-cvm-administradores-carteira':
-            #import 
-        #    print(' ')
-        #    print(dataset['name'])
-        #    print('YEAHAHAHAHAHAHAH')
-        #    print(' ')
-
     # post-process resource count #########################
 
     response["resource_bdm_table_count"] = 0
