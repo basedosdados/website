@@ -51,24 +51,24 @@ export function BdmTablePage({
       const ArrayValues = resource.columns.map((c) => {
         return Object.values(c)
       })
-      // const filter = ["is_in_staging", "is_partition", "temporal_coverage"]
+      const filter = ["is_in_staging", "is_partition", "temporal_coverage"]
 
-      // filter.map((elm) => {
-        // for( let i = 0; i < ArrayHeaders.length; i++){
-        //   if ( ArrayHeaders[i] === elm) {
-        //     ArrayHeaders.splice(i, 1)
-        //     ArrayValues.map(c => {
-        //       c.splice(i, 1)
-        //     })
-        //     i--
-        //     setColumnsHeaders(ArrayHeaders)
-        //     setColumnsValues(ArrayValues)
-        //   } else {
+      filter.map((elm) => {
+        for( let i = 0; i < ArrayHeaders.length; i++){
+          if ( ArrayHeaders[i] === elm) {
+            ArrayHeaders.splice(i, 1)
+            ArrayValues.map(c => {
+              c.splice(i, 1)
+            })
+            i--
             setColumnsHeaders(ArrayHeaders)
             setColumnsValues(ArrayValues)
-        //   }
-        // }
-      // })
+          } else {
+            setColumnsHeaders(ArrayHeaders)
+            setColumnsValues(ArrayValues)
+          }
+        }
+      })
       setIsColumns(true)
     }
   },[resource])
