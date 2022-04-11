@@ -19,6 +19,7 @@ from .status import StatusEnum
 from .temporal_coverage import TemporalCoverageEnum
 from .time_unit import TimeUnitEnum
 from .yes_no import YesNoEnum
+from .raw_quality_tier import RawQualityTierEnum
 
 # -------------------------------------
 # NEW OPTIONS
