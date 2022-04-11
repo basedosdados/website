@@ -14,12 +14,14 @@ def create_virtual_fields(fields):
 ################################### Define virtual fields bellow this line ###################################
 
 def create_entity(fields):
-    entities = set()
+    entities = []
     for ol in fields.get("res_extras_observation_level", []):
         if ol == None: continue
-        entity = set(e.get("entity") for e in ol if "entity" in e)
-        entities |= entity
-    return list(entities)
+        for e in ol:
+            if "entity" in e:
+                entities.append(e["entity"])
+    entities = list(set(entities))
+    return entities
 
 def create_temporal_coverage(fields):
     years = set()
