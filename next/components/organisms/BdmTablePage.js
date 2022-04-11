@@ -66,6 +66,7 @@ export function BdmTablePage({
           } else {
             setColumnsHeaders(ArrayHeaders)
             setColumnsValues(ArrayValues)
+
           }
         }
       })
