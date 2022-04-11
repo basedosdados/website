@@ -87,7 +87,7 @@ export default function HorizontalExpandableTable({
                     color:"#252A32"
                   }}
                 >
-                  {r ? r : "Não listado"}
+                  {r ? translate(translatedValues, r) : "Não listado"}
                 </Td>
               ))}
             </Tr>

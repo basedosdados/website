@@ -69,7 +69,9 @@ export function BdmTablePage({
           }
         }
       })
-      setIsColumns(true)
+      setIsColumns(false)
+      console.log(columnsHeaders)
+      console.log(columnsValues)
     }
   },[resource])
 
