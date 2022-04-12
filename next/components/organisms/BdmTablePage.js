@@ -51,7 +51,7 @@ export function BdmTablePage({
       const ArrayValues = resource.columns.map((c) => {
         return Object.values(c)
       })
-      const filter = ["is_in_staging", "is_partition", "temporal_coverage"]
+      const filter = ["is_in_staging", "is_partition", "temporal_coverage", "directory_column"]
 
       filter.map((elm) => {
         for( let i = 0; i < ArrayHeaders.length; i++){
@@ -66,14 +66,12 @@ export function BdmTablePage({
           } else {
             setColumnsHeaders(ArrayHeaders)
             setColumnsValues(ArrayValues)
-
           }
         }
       })
-        setIsColumns(false)
-        console.log(ArrayHeaders)
-        console.log(ArrayValues)
-      }
+
+      setIsColumns(true)
+    }
   },[resource])
 
   if (
@@ -82,6 +80,7 @@ export function BdmTablePage({
   ) {
     resource.spatial_coverage = resource.spatial_coverage.sort();
   }
+
   return (
     <BaseResourcePage
       padding="20px 10px 20px 0"

@@ -23,11 +23,14 @@ export default function HorizontalExpandableTable({
   const [translatedValues, setTranslatedValues] = useState({})
 
   useEffect(() => {
-    translations && setTranslatedHeaders(translations)
-    availableOptionsTranslations && setTranslatedValues(availableOptionsTranslations)
+    setTranslatedHeaders(translations)
+    setTranslatedValues(availableOptionsTranslations)
   },[translations, availableOptionsTranslations])
 
   function translate (value, field) {
+    if(typeof field === 'boolean') {
+      return field === true ? "Sim" : "Não"
+    }
     return value[field] || field
   }
 
@@ -63,11 +66,11 @@ export default function HorizontalExpandableTable({
                   color="#FFF"
                   borderRadius="6px"
                 >
-                  {translatedHeaders ? translate(translatedHeaders, elm) : elm}
+                  {translations ? translate(translatedHeaders, elm) : elm}
                 </Tooltip>
                 :
                 <>
-                  {translatedHeaders ? translate(translatedHeaders, elm) : elm}
+                  {translations ? translate(translatedHeaders, elm) : elm}
                 </>
               }
             </Th>
