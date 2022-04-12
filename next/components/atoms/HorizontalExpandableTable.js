@@ -27,11 +27,16 @@ export default function HorizontalExpandableTable({
     setTranslatedValues(availableOptionsTranslations)
   },[translations, availableOptionsTranslations])
 
-  function translate (value, field) {
-    if(typeof field === 'boolean') {
+  function translate (field, translation) {
+    if(typeof field === "boolean") {
       return field === true ? "Sim" : "Não"
     }
-    return value[field] || field
+
+    if(typeof field === "object") {
+      return JSON.stringify(field)
+    }
+
+    return translation[field] || field
   }
 
   return (
@@ -66,11 +71,11 @@ export default function HorizontalExpandableTable({
                   color="#FFF"
                   borderRadius="6px"
                 >
-                  {translations ? translate(translatedHeaders, elm) : elm}
+                  {translations ? translate(elm, translatedHeaders) : elm}
                 </Tooltip>
                 :
                 <>
-                  {translations ? translate(translatedHeaders, elm) : elm}
+                  {translations ? translate(elm, translatedHeaders) : elm}
                 </>
               }
             </Th>
@@ -90,7 +95,7 @@ export default function HorizontalExpandableTable({
                     color:"#252A32"
                   }}
                 >
-                  {r ? translate(translatedValues, r) : "Não listado"}
+                  {r ? translate(r, translatedValues) : "Não listado"}
                 </Td>
               ))}
             </Tr>
