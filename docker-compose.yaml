@@ -11,6 +11,13 @@ services:
     depends_on:
       - ckan
       - next
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
 
   ckan:
     container_name: ckan
@@ -37,12 +44,26 @@ services:
       - BETTER_EXCEPTIONS=1
       - WERKZEUG_DEBUG_PIN=off
     command: ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "wsgi"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
 
   datapusher: # Not really used, ckan dependency
     container_name: datapusher
     image: clementmouchet/datapusher
     ports:
       - "8800:8800"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8800/"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
 
   db:
     container_name: db
@@ -55,14 +76,28 @@ services:
       - POSTGRES_USER=ckan
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "ckan"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
 
   solr:
     container_name: solr
     image: bdd/solr
+    # TODO: add healthcheck
+    restart: unless-stopped
 
   redis: # Not really used, ckan dependency
     container_name: redis
     image: redis:latest
+    healthcheck:
+      test: ["CMD", "redis-cli","ping"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
 
   next:
     image: "bdd/next${VTAG}"
@@ -71,3 +106,5 @@ services:
       - "3000:3000"
     depends_on:
       - ckan
+    # TODO: add healthcheck
+    restart: unless-stopped
