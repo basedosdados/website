@@ -3,11 +3,14 @@ import { useState } from "react";
 import { SimpleTable } from "../atoms/SimpleTable";
 import HorizontalExpandableTable from "../atoms/HorizontalExpandableTable";
 
-export function ExpandableTable({ 
+export function ExpandableTable({
   headers,
   values,
-  containerStyle,
+  translations,
+  availableOptionsTranslations,
+  tooltip,
   horizontal = false,
+  containerStyle,
 }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -18,6 +21,9 @@ export function ExpandableTable({
         <HorizontalExpandableTable
           headers={headers}
           values={values}
+          translations={translations}
+          availableOptionsTranslations={availableOptionsTranslations}
+          tooltip={tooltip}
           containerStyle={containerStyle}
         />
         :
@@ -36,6 +42,9 @@ export function ExpandableTable({
         <HorizontalExpandableTable
           headers={headers}
           values={expanded ? values : values.slice(0, Math.min(3, values.length))}
+          translations={translations}
+          availableOptionsTranslations={availableOptionsTranslations}
+          tooltip={tooltip}
           containerStyle={containerStyle}
         />
         :

@@ -99,12 +99,19 @@ Soluções para perguntas e problemas recorrentes:
 2. Dentro da máquina de desenvolvimento, rodar `./backup_database.sh`.
 3. Da sua máquina local, rodar `utils/create-dev-init-data.sh` com `STAGING=True`.
 
-### 3. Como acessecar o banco de producao
+### 3. Como acessar o banco de produção
 
 0. Desative o seu banco local rodando `docker-compose rm -sf db`
 1. Em um terminal livre rode: ssh basedosdados.org -L 5432:localhost:5432
 
-Esse comando acima vai criar um tunnel de ssh, permitindo vc acessar o banco de prod como se estivesse local
+Esse comando acima vai criar um tunnel de ssh, permitindo você acessar o banco de produção como se estivesse local
 
-2. Use algum programa (recomendo o DBEAVER) pra conectar no banco de prod, apontando para localhost:5432.
-Para conseguir as credenciais do banco, peca pra alguem q tem.
+2. Use algum programa (recomendo o DBEAVER) pra conectar no banco de produção, apontando para localhost:5432.
+Para conseguir as credenciais do banco, peça pra alguém que tem.
+
+### 4. Como adicionar/promover usuários a sysadmin no CKAN
+
+1. Entrar na máquina desejada (`prod` ou `dev`)
+2. Rodar `docker-compose exec -T ckan ckan sysadmin add <user>`
+
+Ver mais instruções [aqui](https://docs.ckan.org/en/2.9/maintaining/getting-started.html#create-admin-user).

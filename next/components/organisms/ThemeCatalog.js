@@ -1,9 +1,9 @@
-import { 
+import {
   VStack,
   Center,
-  Image, 
-  Tooltip, 
-  Button 
+  Image,
+  Tooltip,
+  Button
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import dynamic from 'next/dynamic';
@@ -29,7 +29,7 @@ function Themes ({ isMobileMod, newRecentDataLakeDataSets, listThemes=[] }) {
       name: elm.name,
     })
   }
-  
+
   if(listThemes.length === 0)
     return null
 
@@ -65,13 +65,13 @@ function Themes ({ isMobileMod, newRecentDataLakeDataSets, listThemes=[] }) {
             height={ isMobileMod ? "45px" : "80px" }
             minHeight={ isMobileMod ? "45px" : "80px" }
             borderRadius={ isMobileMod ? "8px" : "14px" }
-            backgroundColor={ selectedTheme === elm.name ? "#2B8C4D" : "FFF"} 
+            backgroundColor={ selectedTheme === elm.name ? "#2B8C4D" : "FFF"}
             boxShadow="0px 1px 8px 1px rgba(64, 60, 67, 0.20)"
             _hover={{ transform:"scale(1.1)", backgroundColor:"#2B8C4D" }}
-            transition="all 0.5s" 
+            transition="all 0.5s"
             margin="10px 0"
           >
-            <Tooltip 
+            <Tooltip
               label={elm.display_name}
               fontSize="16px"
               fontWeight="500"
@@ -85,11 +85,11 @@ function Themes ({ isMobileMod, newRecentDataLakeDataSets, listThemes=[] }) {
                 width="100%"
                 padding={ isMobileMod ? "5px" : "10px"}
                 height="100%"
-                transition="all 0.5s" 
+                transition="all 0.5s"
                 filter={selectedTheme === elm.name ? "invert(1)" :"invert(0.8)"}
                 _hover={{ filter:"invert(1)"}}
                 alt={`${elm.name}`}
-                src={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${elm.name}.svg`} 
+                src={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${elm.name}.svg`}
               />
             </Tooltip>
           </Center>
@@ -119,13 +119,13 @@ function CardThemes ({ isMobileMod, recentThemes }) {
         plugins={ isMobileMod ?
           [
             "arrows", "centered"
-          ] : [ 
+          ] : [
             "arrows",
             {
               resolve: slidesToShowPlugin,
               options: {
                 numberOfSlides: recentThemes && recentThemes.length
-              }   
+              }
             }
           ]
         }
@@ -188,12 +188,12 @@ export default function ThemeCatalog ({ recentDatalakeDatasets }) {
        <Themes
          listThemes={listThemes}
          newRecentDataLakeDataSets={newRecentDataLake}
-         isMobileMod={isMobile} 
+         isMobileMod={isMobile}
        />
 
-      <CardThemes 
-        isMobileMod={isMobile} 
-        recentThemes={recentThemes} 
+      <CardThemes
+        isMobileMod={isMobile}
+        recentThemes={recentThemes}
       />
     </VStack>
   )

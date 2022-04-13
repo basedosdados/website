@@ -37,7 +37,7 @@ export default function DatabaseCard({
 
   databaseInfo.push(
     <HStack
-      whiteSpace="nowrap" 
+      whiteSpace="nowrap"
       fontSize="14px"
       color={tableNum === 0 ? "#C4C4C4" : "#42B0FF" }
     >
@@ -57,7 +57,7 @@ export default function DatabaseCard({
     <Card
       icons={[
         ...categories.slice(0, Math.min(3, categories.length)).map((c) => (
-          <Tooltip 
+          <Tooltip
             label={c[1]}
             fontSize="16px"
             fontWeight="500"
@@ -68,16 +68,16 @@ export default function DatabaseCard({
             borderRadius="6px"
           >
             <Center
-              width="30px" 
-              height="30px" 
-              backgroundColor="#2B8C4D" 
+              width="30px"
+              height="30px"
+              backgroundColor="#2B8C4D"
               borderRadius="6px"
             >
               <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${c[0]}`}>
                 <CategoryIcon
                   size="37px"
                   padding="4px"
-                  url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c[0]}.svg`}
+                  url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${c[0]}.svg`}
                 />
               </Link>
             </Center>
@@ -86,11 +86,11 @@ export default function DatabaseCard({
       ]}
       spacing={0}
     >
-      <Link 
+      <Link
         letterSpacing="1px"
         href={link}
       >
-        <Title 
+        <Title
           fontSize="16px"
           minHeight="45px"
           lineHeight="23px"
@@ -121,21 +121,21 @@ export default function DatabaseCard({
             <ThemeTag name={t} />
           ))}
         </HStack>
-          <Subtitle 
+          <Subtitle
             fontSize="12px"
             color="#252A32"
           >
             {databaseInfo[0]}
           </Subtitle>
           <HStack>
-            <Subtitle 
+            <Subtitle
               fontSize="12px"
               color={databaseInfo[1] ? "#252A32" : "#C4C4C4"}
             >
               {databaseInfo[1] ? databaseInfo[1] : "0 fontes originais"}
             </Subtitle>
             <Text color="#DEDFE0">•</Text>
-            <Subtitle 
+            <Subtitle
               fontSize="12px"
               color={databaseInfo[2] ? "#252A32" : "#C4C4C4"}
             >

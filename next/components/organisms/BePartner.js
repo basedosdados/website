@@ -18,7 +18,7 @@ function Testimonial({ children, name, position, src }) {
       padding={{ base: "0px", lg: "80px 30px 30px" }}
       width="80%"
     >
-      <Stack 
+      <Stack
         alignItems="center"
       >
         <Image
@@ -65,8 +65,8 @@ function PartnerBox({ src, ...props }) {
         width="100%"
         height="100%"
         objectFit="contain"
-        src={src} 
-        {...props} 
+        src={src}
+        {...props}
       />
     </Stack>
   );
@@ -102,14 +102,14 @@ export function BePartner() {
           justifyContent="center"
           flexWrap="wrap"
         >
-          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/tesouro_nacional.png" />
-          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/ipea.png" />
-          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/alziras.png" />
-          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/fiquem_sabendo.png" />
-          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/bg__lemann.png" />
-          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/rio.png" />
-          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/governosp.png" />
-          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/aponte.png" />
+          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/tesouro_nacional.png" />
+          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/ipea.png" />
+          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/alziras.png" />
+          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/fiquem_sabendo.png" />
+          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/bg__lemann.png" />
+          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/rio.png" />
+          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/governosp.png" />
+          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/aponte.png" />
         </Stack>
       </Stack>
       {!isMobile &&
@@ -128,19 +128,32 @@ export function BePartner() {
             ]}
           >
             <Testimonial
+              name="Fernando Barbalho"
+              position="Cientista de Dados do Tesouro Nacional"
+              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/tesouro_nacional.png"
+            >
+              A siconfiBD é um pacote que traz de forma rápida e programática os
+              dados da Secretaria do Tesouro Nacional.
+              O código é construído de forma <i>open-source</i> pela equipe do Tesouro
+              e utiliza as tabelas tratadas BD+ para compor funções em R.
+              Qual a despesa de pessoal dos 100 municípios brasileiros mais
+              populosos? Essas e mais de outras 18 perguntas podem ser consultadas
+              diretamente pelo pacote, sem necessidade de SQL.
+            </Testimonial>
+            <Testimonial
               name="Marina Barros"
               position="Diretora-Executiva do Instituto Alziras"
-              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/alziras.png"
+              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/alziras.png"
             >
-              Com o apoio da Base dos Dados realizamos o levantamento das 
-              desigualdades de gênero e raça nas eleições 2016-2020 e das 
-              distorções de financiamento de campanhas de prefeitas e vereadoras 
+              Com o apoio da Base dos Dados realizamos o levantamento das
+              desigualdades de gênero e raça nas eleições 2016-2020 e das
+              distorções de financiamento de campanhas de prefeitas e vereadoras
               nas últimas eleições, o que resultará no lançamento de uma publicação inédita.
             </Testimonial>
             <Testimonial
               name="Amanda de Albuquerque e Mariana Carvalho"
               position="Co-fundadoras dA Ponte"
-              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/aponte.png"
+              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/aponte.png"
             >
               Criamos um importante produto nosso, a Fotografia do Município,
               em parceria com a BD. A Fotografia
@@ -150,19 +163,6 @@ export function BePartner() {
               dados. A parceria foi o que nos permitiu avançar rápido no
               desenvolvimento da ferramenta, e garantiu a qualidade de dados
               alta como queríamos desde o início.
-            </Testimonial>
-            <Testimonial
-              name="Fernando Barbalho"
-              position="Cientista de Dados do Tesouro Nacional"
-              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/tesouro_nacional.png"
-            >
-              A siconfiBD é um pacote que traz de forma rápida e programática os
-              dados da Secretaria do Tesouro Nacional.
-              O código é construído de forma <i>open-source</i> pela equipe do Tesouro
-              e utiliza as tabelas tratadas BD+ para compor funções em R.
-              Qual a despesa de pessoal dos 100 municípios brasileiros mais
-              populosos? Essas e mais de outras 18 perguntas podem ser consultadas
-              diretamente pelo pacote, sem necessidade de SQL.
             </Testimonial>
           </Carousel>
         </HStack>

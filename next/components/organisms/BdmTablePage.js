@@ -8,6 +8,7 @@ import {
   AccordionPanel,
   AccordionIcon,
 } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
 import { Markdown } from "../atoms/Markdown";
 import Title from "../atoms/Title";
 import { ExpandableTable } from "../molecules/ExpandableTable";
@@ -29,12 +30,57 @@ export function BdmTablePage({
   datasetName,
   availableOptionsTranslations,
 }) {
+  const [isColumns, setIsColumns] = useState(false)
+  const [columnsHeaders, setColumnsHeaders] = useState([])
+  const [columnsValues, setColumnsValues] = useState([])
+  const tooltip = {
+    name: "Indica o nome de cada coluna para cada ano.",
+    bigquery_type: "Indica o tipo de dado no BigQuery. Ex.: INT64 (Inteiro), STRING (String), DATA (Data), FLOA64 (Float) etc.",
+    description: "Indica a descrição dos dados da coluna.",
+    temporal_coverage: "Indica a cobertura temporal da coluna.",
+    covered_by_dictionary: "Indica se a coluna é coberta por dicionário.",
+    directory_column: "Indica se a coluna é coberta por um dicionário da BD.",
+    measurement_unit: "Indica a unidade de medida da coluna. ",
+    has_sensitive_data: "Indica se a coluna possui dados sensíveis. Ex.:  CPF identificado, dados de conta bancária, etc. ",
+    observations: "Indica processos de tratamentos realizados na coluna que precisam ser evidenciados. "
+  }
+
+  useEffect(() => {
+    if (resource.columns[0]) {
+      const ArrayHeaders = Object.keys(resource.columns[0])
+      const ArrayValues = resource.columns.map((c) => {
+        return Object.values(c)
+      })
+      const filter = ["is_in_staging", "is_partition"]
+
+      filter.map((elm) => {
+        for( let i = 0; i < ArrayHeaders.length; i++){
+          if ( ArrayHeaders[i] === elm) {
+            ArrayHeaders.splice(i, 1)
+            ArrayValues.map(c => {
+              c.splice(i, 1)
+            })
+            i--
+            setColumnsHeaders(ArrayHeaders)
+            setColumnsValues(ArrayValues)
+          } else {
+            setColumnsHeaders(ArrayHeaders)
+            setColumnsValues(ArrayValues)
+          }
+        }
+      })
+
+      setIsColumns(true)
+    }
+  },[resource])
+
   if (
     resource.spatial_coverage &&
     typeof resource.spatial_coverage === "array"
   ) {
     resource.spatial_coverage = resource.spatial_coverage.sort();
   }
+
   return (
     <BaseResourcePage
       padding="20px 10px 20px 0"
@@ -74,7 +120,7 @@ export function BdmTablePage({
             fontSize:"14px",
             fontWeight:"300",
             letterSpacing:"0.5px",
-            color:"#252A32" 
+            color:"#252A32"
           }}
         >
           {resource.description || "Nenhuma descrição fornecida."}
@@ -88,16 +134,22 @@ export function BdmTablePage({
           {resource?.temporal_coverage ? resource.temporal_coverage[0] : "Nenhuma cobertura temporal."}
         </Text>
       </VStack>
-      <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
-        <Title fontWeigth="400">
-          Coluna
-        </Title>
-        <ExpandableTable
-          headers={["nome", "descrição"]}
-          values={(resource?.columns || []).map((c) => [c.name, c.description])}
-        />
-      </VStack>
-      
+      {isColumns &&
+        <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
+          <Title fontWeigth="400">
+            Coluna
+          </Title>
+            <ExpandableTable
+              translations={translations.bdm_columns}
+              availableOptionsTranslations={availableOptionsTranslations}
+              tooltip={tooltip}
+              horizontal={true}
+              headers={columnsHeaders}
+              values={columnsValues}
+            />
+        </VStack>
+      }
+
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Accordion
           borderColor="transparent"
@@ -120,7 +172,7 @@ export function BdmTablePage({
                 headers={["nome", "valor"]}
                 values={formatObjectsInArray(
                   translate(
-                    translations,
+                    translations.bdm_table,
                     availableOptionsTranslations,
                     filterOnlyValidValues({ dataset_id: datasetName, ...resource }, [
                       "dataset_id",

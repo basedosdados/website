@@ -218,7 +218,7 @@ function Hero({ recentDatalakeDatasets }) {
             height={{ base: "200px", lg: "140px", xl: "160px" }}
           >
             <Image
-              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/GC_CustomerAwardWinner_SocialImpact+1.png"
+              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/2022/GC_CustomerAwardWinner_SocialImpact+1.png"
               width="227px"
               height="336px"
               loading="eager"
@@ -241,7 +241,7 @@ function Products() {
   useEffect(() => {
     setIsMobileMod(isMobile)
   }, [isMobile])
-  
+
   return (
     <VStack
       paddingTop="70px"
@@ -292,7 +292,7 @@ function Products() {
               </Box>
             </Stack>
             <Stack>
-              <ProductsFiltersImage 
+              <ProductsFiltersImage
                 widthImage={isMobileMod ? "300px" : "550px"}
                 heightImage={isMobileMod && "250px"}
               />
@@ -305,7 +305,7 @@ function Products() {
             gridGap={isMobileMod ? "70px" : "150px"}
           >
             <Stack order={isMobileMod && 1}>
-              <ProcessedDataImage 
+              <ProcessedDataImage
                 widthImage={isMobileMod ? "300px" : "550px"}
                 heightImage={isMobileMod && "250px"}
               />
@@ -316,7 +316,7 @@ function Products() {
                 <BDLogoPlusImage
                   widthImage="40px"
                 />
-              </HStack> 
+              </HStack>
               <SectionTitle paddingBottom="10px" fontSize="24px" color="#252A32">Acesse dados de qualidade</SectionTitle>
               <SectionText>
                 Com as tabelas tratadas do nosso <i>datalake</i> público,
@@ -338,7 +338,7 @@ function Products() {
               </Box>
             </Stack>
           </HStack>
-          
+
           <HStack
             flexDirection={isMobileMod && "column"}
             justifyContent="center"
@@ -408,7 +408,7 @@ function Support({ pages }) {
   useEffect(() => {
     setIsMobileMod(isMobile)
   }, [isMobile])
-  
+
 
   return (
     <VStack
@@ -490,7 +490,7 @@ function Support({ pages }) {
               />
             }
             title={
-              <Text 
+              <Text
                 color="#FF8484"
                 fontWeight="500"
               >
@@ -506,7 +506,7 @@ function Support({ pages }) {
               flexDirection="column"
               textAlign="center"
             >
-              <b>Doe R$ 1 real por dia</b> 
+              <b>Doe R$ 1 real por dia</b>
               <p>para fazer databasers felizes.</p>
             </SectionText>
             <Link _hover={{ opacity:"none" }} target="_blank" href="https://apoia.se/basedosdados">
@@ -543,7 +543,7 @@ function Support({ pages }) {
         </Stack>
 
         <Box padding="0px">
-          <BigTitle 
+          <BigTitle
             width="100%"
             textAlign="center"
             padding="0px"
@@ -579,10 +579,10 @@ function Support({ pages }) {
                 fontSize="14px"
                 flex={1}
               >
-                Chave CNPJ<br/> 
+                Chave CNPJ<br/>
                 <b style={{fontWeight:"500"}}>42494318000116</b> <br/><br/>
-                Banco: <b style={{fontWeight:"500"}}>Stone</b> <br/> 
-                Razão Social: <b style={{fontWeight:"500"}}>Instituto Base dos Dados</b> <br/> 
+                Banco: <b style={{fontWeight:"500"}}>Stone</b> <br/>
+                Razão Social: <b style={{fontWeight:"500"}}>Instituto Base dos Dados</b> <br/>
                 CNPJ: <b style={{fontWeight:"500"}}>42494318/0001-16</b> <br/>
                 Agência: <b style={{fontWeight:"500"}}>0001</b> | Conta: <b style={{fontWeight:"500"}}>6761821-5</b>
               </SectionText>
@@ -596,9 +596,9 @@ function Support({ pages }) {
                 lineHeight={{base:"30px", lg:"30px", xl: "40px"}}
                 flex={1}
               >
-                1. Abra o app do seu banco<br/> 
-                2. Escolha a opção de pagamento com PIX QR Code ou chave<br/> 
-                3. Escaneie o QR Code ou digite a chave ao lado<br/> 
+                1. Abra o app do seu banco<br/>
+                2. Escolha a opção de pagamento com PIX QR Code ou chave<br/>
+                3. Escaneie o QR Code ou digite a chave ao lado<br/>
                 ❤. Faça sua doação!
               </SectionText>
             </Stack>

@@ -169,10 +169,11 @@ export default function SearchPage({
     tag: "Tag",
     group: "Tema",
     resource_type: "Forma de consulta",
+    spatial_coverage: "Cobertura espacial",
     temporal_coverage: "Cobertura temporal",
     entity: "Entidade",
-    spatial_coverage: "Cobertura espacial",
     update_frequency: "Frequência de atualização",
+    raw_quality_tier: "Qualidade da fonte original",
   };
 
   const organizations = data?.organizations
@@ -224,6 +225,17 @@ export default function SearchPage({
         displayName:
           availableOptionsTranslations[t] + ` (${data.update_frequencies[t]})`,
         value: data.update_frequencies[t],
+      }))
+      .sort((a, b) => b.value - a.value)
+    : [];
+
+  const rawQualityTiers = data?.raw_quality_tiers
+    ? Object.keys(data.raw_quality_tiers)
+      .map((t) => ({
+        name: t,
+        displayName:
+          availableOptionsTranslations[t] + ` (${data.raw_quality_tiers[t]})`,
+        value: data.raw_quality_tiers[t],
       }))
       .sort((a, b) => b.value - a.value)
     : [];
@@ -295,9 +307,9 @@ export default function SearchPage({
       organization: query.organization ? query.organization.split(",") : [],
       group: query.group ? query.group.split(',') : [],
       resource_type: query.resource_type ? query.resource_type.split(",") : [],
-      obs_level_entity: query.obs_level_entity ? query.obs_level_entity.split(",") : [],
       spatial_coverage: query.spatial_coverage ? query.spatial_coverage.split(",") : [],
       temporal_coverage: query.temporal_coverage ? query.temporal_coverage.split("-") : [],
+      entity: query.entity ? query.entity.split(",") : [],
     });
 
     setFilterKey(filterKey + 1);
@@ -308,9 +320,9 @@ export default function SearchPage({
     query.q,
     query.bdPlus,
     query.order,
+    query.spatial_coverage,
     query.temporal_coverage,
     query.entity,
-    query.spatial_coverage,
   ]);
 
   useEffect(() => {
@@ -510,7 +522,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, spatial_coverage: values })
             }
           /> */}
-          {/*
+          
           <RangeFilterAccordion
             isActive={(paramFilters.temporal_coverage || []).length > 0}
             fieldName="Cobertura temporal"
@@ -521,32 +533,31 @@ export default function SearchPage({
               ]
             }
             onChange={(val) => {
-              if (val.min < 1000 || !val.min || val.max < 1000 || !val.max)
+              if (val.min < 0 || !val.min || val.max < 0 || !val.max || val.min > val.max)
                 return;
-
-              const start = parseInt(val.min || val.max);
+              
+              const start = parseInt(Math.max(val.min, 0));
               const range =
-                Math.max((val.max || val.min) - (val.min || val.max), 0) + 1;
+                Math.max((val.max - val.min), 0) + 1;
 
               setParamFilters({
                 ...paramFilters,
                 temporal_coverage: new Array(range)
-                  .fill(0)
-                  .map((_, i) => start + i),
+                .fill(0)
+                .map((_, i) => start + i),
               });
             }}
           />
-          */}
           <CheckboxFilterAccordion
             canSearch={true}
-            isActive={(paramFilters.obs_level_entity || []).length > 0}
+            isActive={(paramFilters.entity || []).length > 0}
             choices={entities}
-            values={paramFilters.obs_level_entity}
+            values={paramFilters.entity}
             valueField="name"
             displayField="displayName"
             fieldName="Nível da observação"
             onChange={(values) =>
-              setParamFilters({ ...paramFilters, obs_level_entity: values })
+              setParamFilters({ ...paramFilters, entity: values })
             }
           />
           <CheckboxFilterAccordion
@@ -559,6 +570,18 @@ export default function SearchPage({
             fieldName="Frequência de atualização"
             onChange={(values) =>
               setParamFilters({ ...paramFilters, update_frequency: values })
+            }
+          />
+          <CheckboxFilterAccordion
+            canSearch={true}
+            isActive={(paramFilters.raw_quality_tier || []).length > 0}
+            choices={rawQualityTiers}
+            values={paramFilters.raw_quality_tier}
+            valueField="name"
+            displayField="displayName"
+            fieldName="Qualidade da fonte original"
+            onChange={(values) =>
+              setParamFilters({ ...paramFilters, raw_quality_tier: values })
             }
           />
         </VStack>

@@ -141,7 +141,7 @@ export function Database({
                   spacing={2}
                 >
                   {categories.slice(0, Math.min(3, categories.length)).map((c) => (
-                    <Tooltip 
+                    <Tooltip
                       label={c[1]}
                       fontSize="16px"
                       fontWeight="500"
@@ -150,10 +150,10 @@ export function Database({
                       marginTop="10px"
                       color="#FFF"
                       borderRadius="6px"
-                    >   
+                    >
                       <Center
-                        width="36px" 
-                        height="36px" 
+                        width="36px"
+                        height="36px"
                         backgroundColor="#2B8C4D"
                         padding="4px"
                         borderRadius="6px"
@@ -161,7 +161,7 @@ export function Database({
                         <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${c[0]}`}>
                           <CategoryIcon
                             size="36px"
-                            url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/icone_${c[0]}.svg`}
+                            url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${c[0]}.svg`}
                           />
                         </Link>
                       </Center>
@@ -206,7 +206,7 @@ export function Database({
             </VStack>
           </VStack>
           <VStack>
-            <HStack 
+            <HStack
               flexDirection={isMobile && "column"}
               alignItems={isMobile && "flex-start"}
               spacing={isMobile ? 0 : 5}
@@ -228,14 +228,14 @@ export function Database({
                   {tableNum}{" "}
                   {tableNum === 1 ? "tabela tratada" : "tabelas tratadas"}
                 </Subtitle>
-                <BDLogoPlusImage 
+                <BDLogoPlusImage
                   widthImage="38px"
                   empty={tableNum === 0}
                 />
               </HStack>
 
               <HStack>
-                <LinkIcon 
+                <LinkIcon
                   widthIcon="15px"
                   heightIcon="15px"
                   fill={externalLinkNum === 0 ? "#C4C4C4" : "#2B8C4D"}
@@ -249,9 +249,9 @@ export function Database({
                   {externalLinkNum === 1 ? "fonte original" : "fontes originais"}
                 </Subtitle>
               </HStack>
-              
+
               <HStack>
-                <InfoIcon 
+                <InfoIcon
                   widthIcon="15px"
                   heightIcon="15px"
                   fill={informationRequestNum === 0 ? "#C4C4C4" : "#2B8C4D"}
