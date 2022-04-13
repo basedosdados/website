@@ -9,6 +9,8 @@ import {
   Tooltip,
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
+import { formatJson } from '../../utils'
+import InfoIcon from '../../public/img/icons/infoIcon'
 
 export default function HorizontalExpandableTable({
   headers,
@@ -33,7 +35,11 @@ export default function HorizontalExpandableTable({
     }
 
     if(typeof field === "object") {
-      return JSON.stringify(field)
+      if(field.length === 0) {
+        return "Não listado"
+      } else {
+        return formatJson(JSON.stringify(field))
+      }
     }
 
     return translation[field] || field
@@ -49,7 +55,7 @@ export default function HorizontalExpandableTable({
         <Thead>
           {headers.slice(0, headers.length).map((elm) => (
             <Th
-              minWidth="200px"
+              minWidth="275px"
               padding="5px 15px"
               fontSize="14px"
               color="#707070"
@@ -71,7 +77,10 @@ export default function HorizontalExpandableTable({
                   color="#FFF"
                   borderRadius="6px"
                 >
-                  {translations ? translate(elm, translatedHeaders) : elm}
+                  <div style={{display: "flex", gap: "10px", cursor: "pointer"}}>
+                    {translations ? translate(elm, translatedHeaders) : elm}
+                    <InfoIcon tip/>
+                  </div>
                 </Tooltip>
                 :
                 <>
