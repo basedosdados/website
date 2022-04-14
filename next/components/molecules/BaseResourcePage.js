@@ -45,7 +45,7 @@ export function BaseResourcePage({
       borderRadius="20px"
       padding="20px"
       alignItems="flex-start"
-      spacing={6}
+      spacing={8}
       {...style}
     >
       <AlertDialog
@@ -83,9 +83,8 @@ export function BaseResourcePage({
         flexDirection={{ base: "column", lg: "row" }}
         width="100%"
         alignItems={{ base: "flex-start", lg: "flex-start" }}
-        marginBottom="20px"
       >
-        <Title 
+        <Title
           width="100%"
           wordBreak="break-all"
         >
@@ -138,7 +137,7 @@ export function BaseResourcePage({
         ) : (
           <></>
         )}
-        
+
         {isShowButtons &&
           <HStack
             position="absolute"

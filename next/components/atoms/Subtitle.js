@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Heading } from "@chakra-ui/react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
@@ -7,7 +8,6 @@ export default function Subtitle({
   fontWeigth = "400",
   ...props
 }) {
-
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
 

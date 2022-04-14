@@ -31,6 +31,7 @@ export function BoxBigQueryGoogle({ href }) {
           Para usar o BigQuery basta ter uma conta Google. Primeira vez?
           <Link
             target="_blank"
+            color="#3AA1EB"
             href={href}
           > Siga o passo a passo.
           </Link>
@@ -62,7 +63,7 @@ export function PrismCodeHighlight({ language, children }) {
       >
         {children}
       </code>
-      
+
       <Button
         height="20px"
         minWidth="100px"
@@ -78,7 +79,7 @@ export function PrismCodeHighlight({ language, children }) {
         <CopyIcon marginLeft="5px"/>
       </Button>
     </pre>
-    
+
   )
 }
 
@@ -93,46 +94,51 @@ export default function DataInformationQuery ({ resource }) {
 
   return (
     <VStack
-      spacing={-1} 
+      spacing={-1}
       alignItems="flex-start"
       width="100%"
     >
       <Subtitle>Consulta aos dados</Subtitle>
-      <Tabs 
+      <Tabs
         paddingTop="16px"
         width={{ base: "90vw", lg: "100%" }}
       >
-        <TabList 
+        <TabList
           padding="0px"
           fontFamily="Ubuntu !important"
           borderBottom= "2px solid #DEDFE0 !important"
         >
-          <GreenTab 
+          <GreenTab
             fontSize="16px"
+            paddingBottom="8px !important"
             letterSpacing="0.2px"
           >
             SQL
           </GreenTab>
           <GreenTab
             fontSize="16px"
+            paddingBottom="8px !important"
             letterSpacing="0.2px"
           >
             Python
           </GreenTab>
           <GreenTab
             fontSize="16px"
+            paddingBottom="8px !important"
             letterSpacing="0.2px"
           >
             R
           </GreenTab>
           <GreenTab
             fontSize="16px"
+            paddingBottom="8px !important"
             letterSpacing="0.2px"
           >
             Stata
           </GreenTab>
           <GreenTab
             fontSize="16px"
+            paddingBottom="8px !important"
             letterSpacing="0.2px"
           >
             Download
@@ -141,12 +147,12 @@ export default function DataInformationQuery ({ resource }) {
         <TabPanels>
           <TabPanel padding="0">
             <SectionText
-              margin="24px 0 16px" 
+              margin="24px 0 16px"
             >
               Copie o código abaixo,
               <Link
                 color="#3AA1EB"
-                textDecoration="none" 
+                textDecoration="none"
                 href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${resource.dataset_id}&t=${resource.name}&page=table`}
               > clique aqui
               </Link> para ir ao <i>datalake</i> no BigQuery e cole no Editor de Consultas:
@@ -155,7 +161,7 @@ export default function DataInformationQuery ({ resource }) {
             <PrismCodeHighlight language="sql">
               {`SELECT * FROM \`basedosdados.${queryName}\` LIMIT 100`}
             </PrismCodeHighlight>
-          
+
             <BoxBigQueryGoogle
               href={"https://basedosdados.github.io/mais/access_data_bq/#primeiros-passos"}
             />
@@ -164,16 +170,16 @@ export default function DataInformationQuery ({ resource }) {
 
           <TabPanel padding="0">
             <SectionText
-              margin="24px 0 16px" 
+              margin="24px 0 16px"
             >
               Criamos um pacote em Python para você acessar o <i>datalake</i>. Basta rodar o código:
             </SectionText>
 
             <PrismCodeHighlight language="python">
               {`import basedosdados as bd
-              
+
 # Para carregar o dado direto no pandas
-df = bd.read_table(dataset_id='${resource.dataset_id}', 
+df = bd.read_table(dataset_id='${resource.dataset_id}',
 table_id='${resource.name}',
 billing_project_id="<YOUR_PROJECT_ID>")`}
             </PrismCodeHighlight>
@@ -186,7 +192,7 @@ billing_project_id="<YOUR_PROJECT_ID>")`}
 
           <TabPanel padding="0">
             <SectionText
-              margin="24px 0 16px" 
+              margin="24px 0 16px"
             >
               Criamos um pacote em R para você acessar o <i>datalake</i>. Basta rodar o código:
             </SectionText>
@@ -211,7 +217,7 @@ df <- bd_collect(query)`}
 
           <TabPanel padding="0">
             <SectionText
-              margin="24px 0 16px" 
+              margin="24px 0 16px"
             >
               Criamos um pacote em Stata para você acessar o <i>datalake</i>. Basta rodar o código:
             </SectionText>
@@ -234,15 +240,17 @@ bd_read_table, ///
 
           <TabPanel padding="16px 0 0">
             <DisclaimerBox
+              marginTop="0"
               title="Estes dados estão disponíveis porque diversas pessoas colaboram para a sua manutenção."
               text={
               <SectionText>
                   Apoie você também com doação financeira ou
                   <Link
                     textDecoration="none"
+                    color="#3AA1EB"
                     target="_blank"
                     href="https://basedosdados.github.io/mais/colab_data/"
-                  > saiba como contribuir com seu tempo.
+                  > saiba como contribuir com seu tempo<a style={{color:"#252A32", fontSize:"14px"}}>.</a>
                   </Link>
               </SectionText>
               }

@@ -128,13 +128,8 @@ function ResourcesPage({
   availableOptionsTranslations,
   translations,
   dataset,
+  isMobileMod,
 }) {
-  const [isMobileMod, setIsMobileMod] = useState(false)
-  const isMobile = useCheckMobile();
-
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
 
   const [resource, setResource] = useState(
     bdmTables.length > 0 ? bdmTables[0] : externalLinks[0] || informationRequest[0]
@@ -251,7 +246,7 @@ function ResourcesPage({
       <VStack
         minWidth={{ base: "100%", lg: "250px" }}
         maxWidth={{ base: "100%", lg: "250px" }}
-        spacing={6}
+        spacing={2}
         align="flex-start"
         justify="flex-start"
         borderRight={!isMobileMod && "1px solid #DEDFE0"}
@@ -341,6 +336,12 @@ export default function DatasetPage({
   availableOptionsTranslations,
 }) {
   const [tabIndex, setTabIndex] = useState(0)
+  const [isMobileMod, setIsMobileMod] = useState(false)
+  const isMobile = useCheckMobile();
+
+  useEffect(() => {
+    setIsMobileMod(isMobile)
+  }, [isMobile])
 
   function getTemporalCoverage() {
     const temporalCoverage = unionArrays(
@@ -426,9 +427,8 @@ export default function DatasetPage({
               boxShadow="0px 4px 8px rgba(100, 96, 103, 0.16)"
               width={{ base: "25%", lg: "100%" }}
               minWidth="250px"
-              maxWidth="225px"
-              height={{ base: "25%", lg: "100%" }}
               minHeight="250px"
+              height={{ base: "25%", lg: "100%" }}
               objectFit="contain"
               src={
                 "https://basedosdados.org/uploads/group/" +
@@ -460,7 +460,7 @@ export default function DatasetPage({
                   marginTop="4px !important"
                   href={`/dataset?organization=${dataset.organization.name}`}
                 >
-                  <SectionText 
+                  <SectionText
                     fontSize={isMobileMod ? "14px" : "16px"}
                   >
                     {dataset.organization.title}
@@ -470,7 +470,7 @@ export default function DatasetPage({
 
               <VStack align="flex-start">
                 <Subtitle>Cobertura temporal</Subtitle>
-                <SectionText 
+                <SectionText
                   marginTop="4px !important"
                   fontSize={isMobileMod ? "14px" : "16px"}
                 >
@@ -503,8 +503,8 @@ export default function DatasetPage({
             </GreenTab>
             <GreenTab>
               <DocIcon
-                widthIcon="22px"
-                heightIcon="22px"
+                widthIcon="24px"
+                heightIcon="24px"
                 marginRight="6px"
                 fill={tabIndex === 1 ? "#2B8C4D" :"#C4C4C4"}
               />
@@ -521,6 +521,7 @@ export default function DatasetPage({
                 availableOptionsTranslations={availableOptionsTranslations}
                 translations={translations}
                 dataset={dataset}
+                isMobileMod={isMobileMod}
               />
             </TabPanel>
             <TabPanel padding="0px" pt="20px">

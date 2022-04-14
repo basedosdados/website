@@ -1,7 +1,7 @@
 import React from "react";
 import { Tab } from "@chakra-ui/tabs";
 
-export default function GreenTab({ children }) {
+export default function GreenTab({ children, ...style }) {
   return (
     <Tab
       fontSize="18px"
@@ -17,6 +17,7 @@ export default function GreenTab({ children }) {
         borderBottom: "3px solid #2B8C4D",
         pointerEvents: "none"
       }}
+      {...style}
     >
       {children}
     </Tab>

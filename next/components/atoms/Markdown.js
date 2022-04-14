@@ -1,5 +1,5 @@
 import { Box, VStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import showdown from "showdown";
 import { LinkDash } from "./LinkDash";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
