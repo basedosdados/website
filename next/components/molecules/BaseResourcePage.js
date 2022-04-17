@@ -95,7 +95,7 @@ export function BaseResourcePage({
             <Button
               marginLeft={{ base: null, lg: "auto" }}
               colorScheme="blue"
-              backgroundColor="#3AA1EB"
+              backgroundColor="#42B0FF"
               marginTop={{ base: "20px", lg: "0px" }}
               height="35px"
               onClick={() => setEditing(true)}
@@ -149,8 +149,8 @@ export function BaseResourcePage({
               height="35px"
               fontSize="14px"
               minWidth="100px"
-              color={urlInformationRequest ? "#3AA1EB" : "#FFF"}
-              border={urlInformationRequest && "2px solid #3AA1EB"}
+              color={urlInformationRequest ? "#42B0FF" : "#FFF"}
+              border={urlInformationRequest && "2px solid #42B0FF"}
               backgroundColor={urlInformationRequest && "#FFF"}
               isDisabled={urlExternal ? false : true}
               _disabled={{color:"#C1C1C1", borderColor: "#C1C1C1"}}

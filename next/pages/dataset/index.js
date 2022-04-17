@@ -589,7 +589,7 @@ export default function SearchPage({
             {userData?.is_admin ? (
               <Button
                 w="170px"
-                backgroundColor="#3AA1EB"
+                backgroundColor="#42B0FF"
                 colorScheme="blue"
                 onClick={datasetDisclosure.onOpen}
                 leftIcon={

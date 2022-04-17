@@ -31,7 +31,7 @@ export function BoxBigQueryGoogle({ href }) {
           Para usar o BigQuery basta ter uma conta Google. Primeira vez?
           <Link
             target="_blank"
-            color="#3AA1EB"
+            color="#42B0FF"
             href={href}
           > Siga o passo a passo.
           </Link>
@@ -151,7 +151,7 @@ export default function DataInformationQuery ({ resource }) {
             >
               Copie o código abaixo,
               <Link
-                color="#3AA1EB"
+                color="#42B0FF"
                 textDecoration="none"
                 href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${resource.dataset_id}&t=${resource.name}&page=table`}
               > clique aqui
@@ -247,7 +247,7 @@ bd_read_table, ///
                   Apoie você também com doação financeira ou
                   <Link
                     textDecoration="none"
-                    color="#3AA1EB"
+                    color="#42B0FF"
                     target="_blank"
                     href="https://basedosdados.github.io/mais/colab_data/"
                   > saiba como contribuir com seu tempo<a style={{color:"#252A32", fontSize:"14px"}}>.</a>
@@ -301,8 +301,8 @@ bd_read_table, ///
                 >
                   <RoundedButton
                     width="100%"
-                    color="#3AA1EB"
-                    border="2px solid #3AA1EB"
+                    color="#42B0FF"
+                    border="2px solid #42B0FF"
                     backgroundColor="white"
                     colorScheme="gray"
                   >
