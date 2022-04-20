@@ -52,7 +52,9 @@ services:
       context: next
     volumes:
       - ./next:/app
-    command: ["yarn", "run", "dev"]
+    command: >
+      sh -c "yarn install &&
+             yarn run dev"
 
   nginx:
     volumes:
