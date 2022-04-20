@@ -101,7 +101,7 @@ function FilterTags({
     <>
       <Text
         fontFamily="Lato"
-        letterSpacing="0.5px"
+        letterSpacing="0.1em"
         fontWeight="100"
         fontSize="16px"
         color="#6F6F6F"
