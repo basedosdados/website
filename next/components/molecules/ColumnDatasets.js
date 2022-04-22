@@ -1,4 +1,4 @@
-import {
+import { 
   Table,
   Thead,
   Tbody,
@@ -7,12 +7,14 @@ import {
   Td,
   HStack,
   Tooltip,
-} from '@chakra-ui/react'
-import { useState, useEffect } from 'react'
-import { formatJson } from '../../utils'
+  Button,
+  VStack
+} from "@chakra-ui/react";
+import { useState, useEffect } from "react";
+import { formatJson } from '../../utils';
 import InfoIcon from '../../public/img/icons/infoIcon'
 
-export default function HorizontalExpandableTable({
+function TableDatasets({
   headers,
   values,
   translations,
@@ -20,15 +22,25 @@ export default function HorizontalExpandableTable({
   tooltip,
   containerStyle,
 }) {
-
+  const [columnValues, setColumnValues] = useState({})
   const [translatedHeaders, setTranslatedHeaders] = useState({})
   const [translatedValues, setTranslatedValues] = useState({})
 
   useEffect(() => {
+    const ArrayValues = values.map((elm) => {
+      Object.values(elm)
+      // console.log(Object.values(elm))
+    })
+    console.log(headers)
+    setColumnValues(ArrayValues)
     setTranslatedHeaders(translations)
     setTranslatedValues(availableOptionsTranslations)
-  },[translations, availableOptionsTranslations])
+  },[translations, availableOptionsTranslations, values])
 
+  function renderColumns() {
+
+  }
+  
   function translate (field, translation) {
     if(typeof field === "boolean") {
       return field === true ? "Sim" : "Não"
@@ -53,9 +65,10 @@ export default function HorizontalExpandableTable({
     >
       <Table>
         <Thead>
-          {headers.slice(0, headers.length).map((elm) => (
+          {headers.map((elm) => (
             <Th
-              minWidth="275px"
+              minWidth="200px"
+              flex={1}
               padding="5px 15px"
               fontSize="14px"
               color="#707070"
@@ -64,6 +77,7 @@ export default function HorizontalExpandableTable({
               fontFamily="Ubuntu"
               letterSpacing="0.5px"
               textTransform="capitalize"
+              boxSizing="content-box"
               borderY="1px solid #E4E4E4 !important"
             >
               {tooltip ?
@@ -79,7 +93,7 @@ export default function HorizontalExpandableTable({
                 >
                   <div style={{display: "flex", gap: "10px", cursor: "pointer"}}>
                     {translations ? translate(elm, translatedHeaders) : elm}
-                    <InfoIcon tip/>
+                    <InfoIcon fill="#707070"tip/>
                   </div>
                 </Tooltip>
                 :
@@ -91,9 +105,9 @@ export default function HorizontalExpandableTable({
           ))}
         </Thead>
         <Tbody>
-          {values.slice(0, values.length).map((elm) => (
+          {/* {columnValues.map((elm) => (
             <Tr>
-              {elm.slice(0, elm.length).map((r) => (
+              {elm.map((r) => (
                 <Td
                   padding="6px 15px 3px"
                   fontSize="14px"
@@ -108,9 +122,59 @@ export default function HorizontalExpandableTable({
                 </Td>
               ))}
             </Tr>
-          ))}
+          ))} */}
         </Tbody>
       </Table>
     </HStack>
   )
+}
+
+export default function ColumnsDatasets({
+  headers,
+  values,
+  translations,
+  availableOptionsTranslations,
+  tooltip,
+  containerStyle,
+}) {
+  const [expanded, setExpanded] = useState(false);
+
+  if (values.length <= 5)
+    return (
+      <TableDatasets
+        headers={headers}
+        values={values}
+        translations={translations}
+        availableOptionsTranslations={availableOptionsTranslations}
+        tooltip={tooltip}
+        containerStyle={containerStyle}
+      />
+    )
+
+  return (
+    <VStack width="100%" spacing={5}>
+      <TableDatasets
+        headers={headers}
+        values={expanded ? values : values.slice(0, Math.min(3, values.length))}
+        translations={translations}
+        availableOptionsTranslations={availableOptionsTranslations}
+        tooltip={tooltip}
+        containerStyle={containerStyle}
+      />
+        
+      <Button
+        width="100%"
+        backgroundColor="#E3E3E3"
+        color="#525252"
+        fontSize="14px"
+        marginTop="5px !important"
+        minHeight="30px !important"
+        maxHeight="30px !important"
+        _hover={{backgroundColor:"", opacity:"0.6"}}
+        onClick={() => setExpanded(!expanded)}
+      >
+        {expanded ? "Ver menos" : "Ver mais"}
+      </Button>
+    </VStack>
+  );
 }

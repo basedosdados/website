@@ -137,3 +137,14 @@ export function getInformationRequestSchema() {
     })
     .catch(() => ({}));
 }
+
+export function getBdmColumnsSchema() {
+  return axiosInstance
+    .get(`/bd_bdm_columns_schema`)
+    .then(({ data }) => {
+      const schema = data.result.properties;
+
+      return schema;
+    })
+    .catch(() => ({}));
+}
