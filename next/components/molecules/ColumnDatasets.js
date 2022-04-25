@@ -22,24 +22,30 @@ function TableDatasets({
   tooltip,
   containerStyle,
 }) {
-  const [columnValues, setColumnValues] = useState({})
+  const [columnHeaders, setColumnHeaders] = useState([])
+  const [columnValues, setColumnValues] = useState([])
   const [translatedHeaders, setTranslatedHeaders] = useState({})
   const [translatedValues, setTranslatedValues] = useState({})
 
   useEffect(() => {
+    setColumnHeaders(headers)
+    
+    const ArrayHeaders = headers.reduce((obj, cur) => (
+      {...obj, [cur]: "Não listado"}), {})
     const ArrayValues = values.map((elm) => {
-      Object.values(elm)
-      // console.log(Object.values(elm))
+      // console.log(elm)
+      const newValue = Object.assign(ArrayHeaders, elm)
+      return Object.values(newValue)
     })
-    console.log(headers)
+
     setColumnValues(ArrayValues)
+  },[values, headers])
+
+  useEffect(() => {
     setTranslatedHeaders(translations)
     setTranslatedValues(availableOptionsTranslations)
-  },[translations, availableOptionsTranslations, values])
+  },[translations, availableOptionsTranslations])
 
-  function renderColumns() {
-
-  }
   
   function translate (field, translation) {
     if(typeof field === "boolean") {
@@ -65,7 +71,7 @@ function TableDatasets({
     >
       <Table>
         <Thead>
-          {headers.map((elm) => (
+          {columnHeaders.map((elm) => (
             <Th
               minWidth="200px"
               flex={1}
@@ -105,11 +111,11 @@ function TableDatasets({
           ))}
         </Thead>
         <Tbody>
-          {/* {columnValues.map((elm) => (
+          {columnValues.map((elm) => (
             <Tr>
               {elm.map((r) => (
                 <Td
-                  padding="6px 15px 3px"
+                  padding="10px 15px"
                   fontSize="14px"
                   fontFamily="Lato"
                   letterSpacing="0.5px"
@@ -122,7 +128,7 @@ function TableDatasets({
                 </Td>
               ))}
             </Tr>
-          ))} */}
+          ))}
         </Tbody>
       </Table>
     </HStack>
