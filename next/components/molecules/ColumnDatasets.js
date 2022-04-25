@@ -22,23 +22,25 @@ function TableDatasets({
   tooltip,
   containerStyle,
 }) {
-  const [columnHeaders, setColumnHeaders] = useState([])
-  const [columnValues, setColumnValues] = useState([])
+  const [columnsHeaders, setColumnsHeaders] = useState([])
+  const [columnsValues, setColumnsValues] = useState([])
   const [translatedHeaders, setTranslatedHeaders] = useState({})
   const [translatedValues, setTranslatedValues] = useState({})
 
   useEffect(() => {
-    setColumnHeaders(headers)
-    
-    const ArrayHeaders = headers.reduce((obj, cur) => (
+    const schemaHeaders = headers.reduce((obj, cur) => (
       {...obj, [cur]: "Não listado"}), {})
-    const ArrayValues = values.map((elm) => {
-      // console.log(elm)
-      const newValue = Object.assign(ArrayHeaders, elm)
-      return Object.values(newValue)
-    })
+    const newValues = values.map((elm) => {
+      Object.assign(schemaHeaders, elm)
+      delete schemaHeaders.is_in_staging
+      delete schemaHeaders.is_partition
 
-    setColumnValues(ArrayValues)
+      return Object.values(schemaHeaders)
+    })
+    
+    setColumnsHeaders(Object.keys(schemaHeaders))
+    setColumnsValues(newValues)
+    
   },[values, headers])
 
   useEffect(() => {
@@ -60,6 +62,10 @@ function TableDatasets({
       }
     }
 
+    if(translation[field] === "Data") {
+      return "DATA"
+    }
+
     return translation[field] || field
   }
 
@@ -71,7 +77,7 @@ function TableDatasets({
     >
       <Table>
         <Thead>
-          {columnHeaders.map((elm) => (
+          {columnsHeaders.map((elm) => (
             <Th
               minWidth="200px"
               flex={1}
@@ -111,7 +117,7 @@ function TableDatasets({
           ))}
         </Thead>
         <Tbody>
-          {columnValues.map((elm) => (
+          {columnsValues.map((elm) => (
             <Tr>
               {elm.map((r) => (
                 <Td
