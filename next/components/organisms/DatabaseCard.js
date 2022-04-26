@@ -1,12 +1,10 @@
-import { Card } from "../molecules/Card";
 import { HStack, Image, VStack, Center, Text, Tooltip } from "@chakra-ui/react";
-import Title from "../atoms/Title";
-import Subtitle from "../atoms/Subtitle";
+import { Card } from "../molecules/Card";
 import { CategoryIcon } from "../atoms/CategoryIcon";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import Link from "../atoms/Link";
 import { ThemeTag } from "../atoms/ThemeTag";
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
 export default function DatabaseCard({
   name,
@@ -38,7 +36,9 @@ export default function DatabaseCard({
   databaseInfo.push(
     <HStack
       whiteSpace="nowrap"
+      fontFamily="Ubuntu"
       fontSize="14px"
+      letterSpacing="0.3px"
       color={tableNum === 0 ? "#C4C4C4" : "#42B0FF" }
     >
       <b>{tableNum} tabelas tratadas</b>
@@ -86,12 +86,13 @@ export default function DatabaseCard({
       ]}
       spacing={0}
     >
-      <Link
-        letterSpacing="1px"
-        href={link}
-      >
-        <Title
+      <Link href={link}>
+        <Text
+          fontFamily="Ubuntu"
           fontSize="16px"
+          fontWeight="700"
+          letterSpacing="0.3px"
+          color="#252A32"
           minHeight="45px"
           lineHeight="23px"
           textOverflow="ellipsis"
@@ -99,16 +100,19 @@ export default function DatabaseCard({
           noOfLines={2}
         >
           {name}
-        </Title>
+        </Text>
       </Link>
       <Link href={`/dataset?organization=${organizationSlug}`}>
-        <Subtitle
+        <Text
           noOfLines={2}
           lineHeight="18px"
           textOverflow="ellipsis"
-          letterSpacing="0.5px"
+          letterSpacing="0.3px"
+          fontFamily="Ubuntu"
           fontSize="12px"
-        >{organization}</Subtitle>
+          fontWeight="400"
+          color="#6F6F6F"
+        >{organization}</Text>
       </Link>
       <VStack spacing={1} align="flex-start" marginTop="auto">
         <HStack
@@ -121,26 +125,35 @@ export default function DatabaseCard({
             <ThemeTag name={t} />
           ))}
         </HStack>
-          <Subtitle
+          <Text
+            fontFamily="Ubuntu"
             fontSize="12px"
+            fontWeight="400"
+            letterSpacing="0.3px"
             color="#252A32"
           >
             {databaseInfo[0]}
-          </Subtitle>
+          </Text>
           <HStack>
-            <Subtitle
+            <Text
+              fontFamily="Ubuntu"
               fontSize="12px"
+              fontWeight="400"
+              letterSpacing="0.3px"
               color={databaseInfo[1] ? "#252A32" : "#C4C4C4"}
             >
               {databaseInfo[1] ? databaseInfo[1] : "0 fontes originais"}
-            </Subtitle>
+            </Text>
             <Text color="#DEDFE0">•</Text>
-            <Subtitle
-              fontSize="12px"
-              color={databaseInfo[2] ? "#252A32" : "#C4C4C4"}
-            >
-              {databaseInfo[2] ? databaseInfo[2] : "0 pedidos LAI"}
-            </Subtitle>
+              <Text
+                fontFamily="Ubuntu"
+                fontSize="12px"
+                fontWeight="400"
+                letterSpacing="0.3px"
+                color={databaseInfo[2] ? "#252A32" : "#C4C4C4"}
+              >
+                {databaseInfo[2] ? databaseInfo[2] : "0 pedidos LAI"}
+              </Text>
           </HStack>
       </VStack>
     </Card>
