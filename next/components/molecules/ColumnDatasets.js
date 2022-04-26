@@ -31,13 +31,17 @@ function TableDatasets({
     const schemaHeaders = headers.reduce((obj, cur) => (
       {...obj, [cur]: "Não listado"}), {})
     const newValues = values.map((elm) => {
-      Object.assign(schemaHeaders, elm)
-      delete schemaHeaders.is_in_staging
-      delete schemaHeaders.is_partition
+      const row = {...schemaHeaders, ...elm}
+      
+      delete row.is_in_staging
+      delete row.is_partition
 
-      return Object.values(schemaHeaders)
+      return Object.values(row)
     })
-    
+
+    delete schemaHeaders.is_in_staging
+    delete schemaHeaders.is_partition
+
     setColumnsHeaders(Object.keys(schemaHeaders))
     setColumnsValues(newValues)
     
