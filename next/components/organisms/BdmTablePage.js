@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import { Markdown } from "../atoms/Markdown";
 import Title from "../atoms/Title";
 import { ExpandableTable } from "../molecules/ExpandableTable";
+import ColumnDatasets from "../molecules/ColumnDatasets";
 import {
   breakNestedObjects,
   filterOnlyValidValues,
@@ -20,17 +21,19 @@ import {
 } from "../../utils";
 import { BaseResourcePage } from "../molecules/BaseResourcePage";
 import { SchemaForm } from "../molecules/SchemaForm";
+import { getBdmColumnsSchema } from '../../pages/api/schemas'
 import { getBdmTableSchema } from "../../pages/api/schemas";
 import { deleteResource, updateResource } from "../../pages/api/datasets";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 
 export function BdmTablePage({
-  translations,
-  resource,
-  datasetName,
   availableOptionsTranslations,
+  translations,
+  datasetName,
+  resource,
 }) {
-  const [isColumns, setIsColumns] = useState(false)
+  const [showColumns, setShowColumns] = useState(false)
+  const [schema, setSchema] = useState({})
   const [columnsHeaders, setColumnsHeaders] = useState([])
   const [columnsValues, setColumnsValues] = useState([])
   const tooltip = {
@@ -44,35 +47,22 @@ export function BdmTablePage({
     has_sensitive_data: "Indica se a coluna possui dados sensíveis. Ex.:  CPF identificado, dados de conta bancária, etc. ",
     observations: "Indica processos de tratamentos realizados na coluna que precisam ser evidenciados. "
   }
-
+  
   useEffect(() => {
-    if (resource.columns[0]) {
-      const ArrayHeaders = Object.keys(resource.columns[0])
-      const ArrayValues = resource.columns.map((c) => {
-        return Object.values(c)
-      })
-      const filter = ["is_in_staging", "is_partition"]
+    fetchSchema()
+  },[])
+  
+  async function fetchSchema()  {
+    const columnsSchema = await getBdmColumnsSchema()
+    setSchema(columnsSchema)
+  }
+  
+  useEffect(() => {
+    setColumnsHeaders(Object.keys(schema))
+    setColumnsValues(resource.columns)
 
-      filter.map((elm) => {
-        for( let i = 0; i < ArrayHeaders.length; i++){
-          if ( ArrayHeaders[i] === elm) {
-            ArrayHeaders.splice(i, 1)
-            ArrayValues.map(c => {
-              c.splice(i, 1)
-            })
-            i--
-            setColumnsHeaders(ArrayHeaders)
-            setColumnsValues(ArrayValues)
-          } else {
-            setColumnsHeaders(ArrayHeaders)
-            setColumnsValues(ArrayValues)
-          }
-        }
-      })
-
-      setIsColumns(true)
-    }
-  },[resource])
+    setShowColumns(true)
+  },[schema, resource])
 
   if (
     resource.spatial_coverage &&
@@ -134,16 +124,16 @@ export function BdmTablePage({
           {resource?.temporal_coverage ? resource.temporal_coverage[0] : "Nenhuma cobertura temporal."}
         </Text>
       </VStack>
-      {isColumns &&
+
+      {showColumns &&
         <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
           <Title fontWeigth="400">
-            Coluna
+            Colunas
           </Title>
-            <ExpandableTable
+            <ColumnDatasets
               translations={translations.bdm_columns}
               availableOptionsTranslations={availableOptionsTranslations}
               tooltip={tooltip}
-              horizontal={true}
               headers={columnsHeaders}
               values={columnsValues}
             />

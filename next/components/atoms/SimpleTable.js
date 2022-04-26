@@ -1,7 +1,12 @@
-import { Flex, HStack, Text, VStack } from "@chakra-ui/react";
+import { Flex, VStack } from "@chakra-ui/react";
 import Title from "./Title";
 
-export function SimpleTable({ headers, values, containerStyle }) {
+export function SimpleTable({
+  headers,
+  values,
+  containerStyle
+}) {
+
   return (
     <VStack width="100%" height="100%" {...containerStyle}>
       <Flex
