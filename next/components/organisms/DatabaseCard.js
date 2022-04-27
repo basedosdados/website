@@ -23,7 +23,6 @@ export default function DatabaseCard({
 }) {
   const isMobile = useCheckMobile();
   const databaseInfo = [];
-
   let sizeLabel;
 
   if (size) {
@@ -41,7 +40,7 @@ export default function DatabaseCard({
       letterSpacing="0.3px"
       color={tableNum === 0 ? "#C4C4C4" : "#42B0FF" }
     >
-      <b>{tableNum} tabelas tratadas</b>
+      <b>{tableNum === 1 ? tableNum + " tabela tratada" : tableNum + " tabelas tratadas"}</b>
       <BDLogoPlusImage
         widthImage="38px"
         marginLeft="5px !important"
@@ -50,8 +49,16 @@ export default function DatabaseCard({
     </HStack>
   );
 
-  if (externalLinkNum) databaseInfo.push(externalLinkNum + " fontes originais");
-  if (informationRequestNum) databaseInfo.push(informationRequestNum + " pedidos LAI");
+  if (externalLinkNum) {
+    databaseInfo.push(
+      externalLinkNum === 1 ? externalLinkNum + " fonte original" : externalLinkNum + " fontes originais"
+    )
+  }
+  if (informationRequestNum) {
+    databaseInfo.push(
+      informationRequestNum === 1 ? informationRequestNum + " pedido LAI" : informationRequestNum + " pedidos LAI"
+    )
+  }
 
   return (
     <Card

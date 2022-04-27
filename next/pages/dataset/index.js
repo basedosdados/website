@@ -314,6 +314,7 @@ export default function SearchPage({
 
     setFilterKey(filterKey + 1);
   }, [
+    query.resource_type,
     query.tag,
     query.organization,
     query.group,

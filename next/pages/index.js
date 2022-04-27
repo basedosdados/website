@@ -265,11 +265,12 @@ function Products() {
           Facilitamos o trabalho para que a distância {!isMobileMod && <br/>}
           entre você e sua análise seja <span style={{color:"#2B8C4D"}}>apenas uma boa pergunta</span>.
         </Display>
-        <VStack spacing={!isMobileMod && 120}>
+
+        <VStack spacing={isMobileMod ? 8 : 120}>
           <HStack
             flexDirection={isMobileMod && "column"}
             justifyContent="center"
-            gridGap={isMobileMod ? "70px" : "160px"}
+            gridGap={isMobileMod ? "0" : "160px"}
           >
             <Stack maxWidth={isMobileMod ? "300px" : "430px"}>
               <Text
@@ -282,20 +283,22 @@ function Products() {
               >
                 FILTROS
               </Text>
+
               <SectionTitle marginTop="0 !important">Busque dados como quiser</SectionTitle>
               <SectionText>
                 São vários filtros para ajudar você a encontrar os dados que necessita.
                 Ao navegar entre centenas de conjuntos de dados disponíveis na plataforma,
                 você pode refinar sua busca por tema, organização, cobertura temporal, nível da observação e mais.
               </SectionText>
-              <Box position="relative">
-                <SectionLink
-                  href={"/dataset"}
-                >
-                  Comece sua pesquisa
-                </SectionLink>
-              </Box>
+
+              <SectionLink
+                marginTop="24px !important"
+                href={"/dataset"}
+              >
+                Comece sua pesquisa
+              </SectionLink>
             </Stack>
+
             <Stack>
               <ProductsFiltersImage
                 widthImage={isMobileMod ? "300px" : "550px"}
@@ -307,15 +310,12 @@ function Products() {
           <HStack
             flexDirection={isMobileMod && "column"}
             justifyContent="center"
-            gridGap={isMobileMod ? "70px" : "160px"}
+            gridGap={isMobileMod ? "0" : "160px"}
           >
-            <Stack order={isMobileMod && 1}>
-              <ProcessedDataImage
-                widthImage={isMobileMod ? "300px" : "550px"}
-                heightImage={isMobileMod && "250px"}
-              />
-            </Stack>
-            <Stack maxWidth={isMobileMod ? "300px" : "430px"}>
+            <Stack 
+              order={isMobileMod ? 0 : 1}
+              maxWidth={isMobileMod ? "300px" : "430px"}
+            >
               <HStack spacing={1}>
                 <Text
                   fontFamily="Ubuntu"
@@ -340,13 +340,19 @@ function Products() {
                 Nossa metodologia de padronização permite cruzar facilmente dados de diferentes organizações. Assim, você pode focar no que realmente importa.
               </SectionText>
 
-              <Box position="relative">
-                <SectionLink
-                  href={"/dataset?resource_type=bdm_table"}
-                >
-                  Veja os dados disponíveis
-                </SectionLink>
-              </Box>
+              <SectionLink
+                marginTop="24px !important"
+                href={"/dataset?resource_type=bdm_table&order_by=score"}
+              >
+                Veja os dados disponíveis
+              </SectionLink>
+            </Stack>
+
+            <Stack order={isMobileMod ? 1 : 0}>
+              <ProcessedDataImage
+                widthImage={isMobileMod ? "300px" : "550px"}
+                heightImage={isMobileMod && "250px"}
+              />
             </Stack>
           </HStack>
 
@@ -355,7 +361,7 @@ function Products() {
             justifyContent="center"
             gridGap={isMobileMod ? "100px" : "160px"}
           >
-            <Stack maxWidth={isMobileMod ? "300px" : "430px"} marginBottom="40px">
+            <Stack maxWidth={isMobileMod ? "300px" : "430px"}>
               <Text
                 fontFamily="Ubuntu"
                 fontSize="14px"
@@ -366,19 +372,21 @@ function Products() {
               >
                 PACOTES
               </Text>
+
               <SectionTitle marginTop="0 !important">Explore na sua linguagem favorita</SectionTitle>
               <SectionText>
                 Desenvolvemos pacotes para acesso aos dados tratados em Python, R e linha de comando. Além disso, você pode consultar e filtrar
                 dados usando SQL no editor do nosso <i>datalake</i> público no Google BigQuery.
               </SectionText>
-              <Box position="relative">
-                <SectionLink
-                  href={"https://basedosdados.github.io/mais/"}
-                >
-                  Saiba como acessar
-                </SectionLink>
-              </Box>
+
+              <SectionLink
+                marginTop="24px !important"
+                href={"https://basedosdados.github.io/mais/"}
+              >
+                Saiba como acessar
+              </SectionLink>
             </Stack>
+
             <Stack
               maxWidth={isMobileMod ? "320px" : "550px"}
               minWidth={isMobileMod ? "320px" : "550px"}
@@ -436,7 +444,7 @@ function Support({ pages }) {
           zIndex="1"
           width="100%"
           textAlign="center"
-          margin={isMobileMod ? "40px 0px" : "136px 0px 40px"}
+          margin={isMobileMod ? "80px 0px 40px" : "176px 0px 40px"}
         >
           Existimos através do esforço de pessoas {!isMobileMod && <br/>}
           que acreditam no acesso a dados abertos de qualidade.
@@ -496,12 +504,9 @@ function Support({ pages }) {
               />
             }
             title={
-              <Text
-                color="#FF8484"
-                fontWeight="500"
-              >
+              <a style={{ color:"#FF8484", fontWeight:"500"}}>
                 <i>Databaser</i>
-              </Text>
+              </a>
             }
             spacing={4}
           >

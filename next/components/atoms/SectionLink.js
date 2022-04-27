@@ -7,9 +7,7 @@ export default function Link({
   href,
   target,
   ...props
-  
 }) {
-
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
 
@@ -19,6 +17,7 @@ export default function Link({
 
   return (
     <ChakraLink
+      width="fit-content"
       target={target}
       href={href}
       fontFamily="Ubuntu"
@@ -27,9 +26,6 @@ export default function Link({
       fontWeight="700"
       color="#42B0FF"
       _hover={{ textDecoration: "none", opacity:"0.6" }}
-      position="absolute"
-      top="10px"
-      left="0"
       paddingBottom="4px"
       borderBottom="1px solid #42B0FF"
       {...props}

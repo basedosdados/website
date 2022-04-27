@@ -85,16 +85,17 @@ function TableDatasets({
             <Th
               minWidth="200px"
               flex={1}
-              padding="5px 15px"
+              padding="8px 24px"
               fontSize="14px"
-              color="#707070"
-              background="#F5F5F5"
+              color="#6F6F6F"
+              background="#F6F6F6"
               fontWeight="500"
               fontFamily="Ubuntu"
-              letterSpacing="0.5px"
+              letterSpacing="0.4px"
               textTransform="capitalize"
               boxSizing="content-box"
-              borderY="1px solid #E4E4E4 !important"
+
+              borderY="1px solid #DEDFE0 !important"
             >
               {tooltip ?
                 <Tooltip
@@ -109,7 +110,7 @@ function TableDatasets({
                 >
                   <div style={{display: "flex", gap: "10px", cursor: "pointer"}}>
                     {translations ? translate(elm, translatedHeaders) : elm}
-                    <InfoIcon fill="#707070"tip/>
+                    <InfoIcon fill="#6F6F6F"tip/>
                   </div>
                 </Tooltip>
                 :
@@ -125,7 +126,7 @@ function TableDatasets({
             <Tr>
               {elm.map((r) => (
                 <Td
-                  padding="10px 15px"
+                  padding="10px 24px"
                   fontSize="14px"
                   fontFamily="Lato"
                   letterSpacing="0.5px"

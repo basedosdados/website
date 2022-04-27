@@ -3,7 +3,7 @@ import { HStack, Stack, VStack, Text, Center } from "@chakra-ui/layout";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { NamedAvatar } from "../molecules/NamedAvatar";
-import { slidesToShowPlugin } from "@brainhubeu/react-carousel";
+import { slidesToShowPlugin, autoplayPlugin } from "@brainhubeu/react-carousel";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
 const Carousel = dynamic(() => import("@brainhubeu/react-carousel"), {
@@ -136,8 +136,13 @@ export function BePartner() {
                 options: {
                   numberOfSlides: 1,
                 },
+                resolve: autoplayPlugin,
+                options: {
+                  interval: 20000,
+                },
               },
             ]}
+            animationSpeed={1000}
           >
             <Testimonial
               name="Fernando Barbalho"
