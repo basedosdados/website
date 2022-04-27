@@ -1,5 +1,14 @@
 version: "3.5"
 services:
+
+  autoheal:
+    restart: always
+    image: willfarrell/autoheal
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
   ckan:
     build:
       context: .
@@ -16,6 +25,7 @@ services:
       - BETTER_EXCEPTIONS=1
       - WERKZEUG_DEBUG_PIN=off
     command: "ckan run --host 0.0.0.0 --port 5000"
+
   db:
     build:
       context: .
@@ -24,24 +34,21 @@ services:
         - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
     volumes:
       - pg_data:/var/lib/postgresql/data
+
   solr:
     ports: ["8983:8983"]
     build:
       context: .
       dockerfile: stack/solr/Dockerfile
 
-  django:
-    build:
-      context: django
-    volumes:
-      - ./django:/usr/src/app
-
   next:
     build:
       context: next
     volumes:
       - ./next:/app
-    command: ["yarn", "run", "dev"]
+    command: >
+      sh -c "yarn install &&
+             yarn run dev"
 
   nginx:
     volumes:

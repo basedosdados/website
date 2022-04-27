@@ -317,26 +317,29 @@ function Products() {
             </Stack>
             <Stack maxWidth={isMobileMod ? "300px" : "430px"}>
               <HStack spacing={1}>
-              <Text
-               fontFamily="Ubuntu"
-               fontSize="14px"
-               fontWeight="300"
-               color="#6F6F6F"
-               letterSpacing="0.5px"
-               lineHeight="24px"
-              >
-                TABELAS TRATADAS
-              </Text>
+                <Text
+                  fontFamily="Ubuntu"
+                  fontSize="14px"
+                  fontWeight="300"
+                  color="#6F6F6F"
+                  letterSpacing="0.5px"
+                  lineHeight="24px"
+                >
+                  TABELAS TRATADAS
+                </Text>
+
                 <BDLogoPlusImage
                   widthImage="40px"
                 />
               </HStack>
+              
               <SectionTitle marginTop="0 !important">Acesse dados de qualidade</SectionTitle>
               <SectionText>
                 Com as tabelas tratadas do nosso <i>datalake</i> público,
                 você não precisa mais gastar horas limpando bases.
                 Nossa metodologia de padronização permite cruzar facilmente dados de diferentes organizações. Assim, você pode focar no que realmente importa.
               </SectionText>
+
               <Box position="relative">
                 <SectionLink
                   href={"/dataset?resource_type=bdm_table"}

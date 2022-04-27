@@ -187,8 +187,8 @@ export function RangeFilterAccordion({
   useEffect(() => {
     setError(null);
 
-    if (min > max) return setError("Intervalo inválido!");
-    if (min && max && max - min > 300) return setError("Intervalo muito longo");
+    if (min > max) return;
+    if ((!min && min < 0) || (!max && max < 0)) return setError("Antigo demais!");
     if (!min && !max) return;
 
     onChange({ min, max });

@@ -42,6 +42,15 @@ TABLE_ID_FIELD = Field(
     title="ID Tabela",
     yaml_order={
         "id_before": "dataset_id",
+        "id_after": "title",
+    },
+)
+
+TITLE_FIELD = Field(
+    title="Título",
+    description=to_line(["Título da tabela."]),
+    yaml_order={
+        "id_before": "table_id",
         "id_after": "description",
     },
 )
@@ -57,7 +66,7 @@ DESCRIPTION_FIELD = Field(
         ]
     ),
     yaml_order={
-        "id_before": "table_id",
+        "id_before": "title",
         "id_after": "spatial_coverage",
     },
 )
@@ -300,7 +309,7 @@ METADATA_MODIFIED_FIELD = Field(
     title="Data da Última Modificação dos Metadados",
     yaml_order={
         "id_before": "columns",
-        "id_after": None,
+        "id_after": 'title',
     },
 )
 
