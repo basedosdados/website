@@ -9,7 +9,6 @@ import {
   Divider,
   Avatar,
 } from "@chakra-ui/react";
-import Image from "next/image";
 import RoundedButton from "../atoms/RoundedButton";
 import Link from "../atoms/Link";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -29,14 +28,14 @@ function MenuDrawer({ isOpen, onClose, links }) {
             if (typeof v === "object") {
               return Object.entries(v).map(([k, v]) => (
                 <>
-                  <Link fontFamily="Ubuntu" fontWeigth="500" href={v}>{k}</Link>
+                  <Link fontFamily="Ubuntu" fontWeigth="400" href={v}>{k}</Link>
                   <Divider />
                 </>
               ));
             }
             return (
               <>
-                <Link fontFamily="Ubuntu" fontWeigth="500" href={v}>{k}</Link>
+                <Link fontFamily="Ubuntu" fontWeigth="400" href={v}>{k}</Link>
                 <Divider />
               </>
             );
@@ -63,7 +62,7 @@ function DesktopLinks({ links }) {
       position={{ base: "relative", lg: "initial" }}
       gap="24px"
     >
-      <HStack width="100%" flex="3" spacing={7}>
+      <HStack width="100%" flex="3" spacing={8}>
         {Object.entries(links).map(([k, v]) => {
           if (k === "Apoie")
             return (
@@ -85,15 +84,16 @@ function DesktopLinks({ links }) {
               <MenuDropdown
                 title={k}
                 marginLeft="-25px"
-                marginTop="7px"
-                minWidth="120px"
-                borderColor="#DEDFE0"
-                borderTopRadius="0"
+                marginTop="10px"
+                minWidth="180px"
+                borderColor="#FFF"
                 fontFamily="Ubuntu"
-                fontWeigth="500"
-                borderBottomRadius="10px"
+                fontWeigth="400"
+                letterSpacing="0.3px"
+                borderRadius="10px"
                 _first={{ paddingTop: "10px"}}
                 _last={{ paddingBottom: "10px"}}
+                boxShadow= "0 1px 8px 1px rgba(64, 60, 67, 0.16)"
               >
                 {Object.entries(v).map(([k, v]) => (
                   <Link
@@ -104,7 +104,8 @@ function DesktopLinks({ links }) {
                     target="_blank"
                     color="#252A32"
                     fontFamily="Ubuntu"
-                    fontWeigth="500"
+                    fontWeigth="400"
+                    letterSpacing="0.3px"
                     href={v}
                     padding="10px 24px"
                   >
@@ -120,7 +121,8 @@ function DesktopLinks({ links }) {
               _hover={{ opacity: "0.6" }}
               fontSize="14px"
               fontFamily="Ubuntu"
-              fontWeigth="500"
+              fontWeigth="400"
+              letterSpacing="0.3px"
               href={v}
               target={v.startsWith("https") ? "_blank" : null}
             >
@@ -129,7 +131,7 @@ function DesktopLinks({ links }) {
           );
         })}
       </HStack>
-      <HStack spacing={9} display={{ base: "none", lg: "flex" }}>
+      <HStack spacing={8} display={{ base: "none", lg: "flex" }}>
         {userData ? (
           <HStack spacing={5}>
             <Avatar
@@ -143,7 +145,7 @@ function DesktopLinks({ links }) {
           </HStack>
         ) : (
           <>
-            <Link fontSize="14px" fontFamily="Ubuntu" fontWeigth="500" href="/user/login">
+            <Link fontSize="14px" fontFamily="Ubuntu" fontWeigth="400" letterSpacing="0.3px" href="/user/login">
               Entrar
             </Link>
             <Link _hover={{ opacity:"none" }} href="/user/register">
@@ -187,7 +189,7 @@ export default function Menu({ pages = [] }) {
       if (window.scrollY <= 30) divRef.current.style.boxShadow = "none";
       else
         divRef.current.style.boxShadow =
-          "0px 2px 15px 1px rgba(64, 60, 67, 0.07)";
+          "0px 1px 8px 1px rgba(64, 60, 67, 0.16)";
     });
   }, [divRef.current]);
 
@@ -201,7 +203,7 @@ export default function Menu({ pages = [] }) {
         width="100%"
         left="0px"
         backgroundColor="#FFFFFF"
-        padding="10px 30px"
+        padding="16px 30px"
         zIndex="999"
         transition="0.2s"
         as="nav"
@@ -209,6 +211,8 @@ export default function Menu({ pages = [] }) {
         <HStack
           justifyContent={{ base: "center", lg: "flex-start" }}
           width="100%"
+          maxWidth="1264px"
+          margin="0 auto"
           spacing={6}
         >
           <Box display={{ base: "flex", lg: "none" }}>

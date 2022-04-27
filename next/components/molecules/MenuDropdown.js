@@ -14,11 +14,11 @@ export function MenuDropdown({ title, children, ...style }) {
         as={Button}
         fontFamily="Ubuntu"
         fontSize="14px"
-        letterSpacing="0.5px"
+        letterSpacing="0.3px"
         _active={{ backgroundColor: "transparent" }}
         padding="0px"
         color="#252A32"
-        fontWeight="500"
+        fontWeight="400"
       >
         {title}
       </MenuButton>
