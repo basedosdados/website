@@ -19,6 +19,7 @@ import Typist from "react-typist";
 import {
   getRecentDatalakeDatasets
 } from "./api/datasets";
+import { getGroupList } from "./api/groups"
 import { ShadowBox } from "../components/atoms/ShadowBox";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
@@ -38,7 +39,9 @@ import RoundedButton from "../components/atoms/RoundedButton";
 import Link from "../components/atoms/Link";
 
 export async function getStaticProps(context) {
+  const themes = await getGroupList();
   let recentDatalakeDatasets;
+
   try {
     recentDatalakeDatasets = await getRecentDatalakeDatasets();
   } catch {
@@ -48,6 +51,7 @@ export async function getStaticProps(context) {
   return await withPages({
     props: {
       recentDatalakeDatasets,
+      themes  
     },
     revalidate: 60,
   });
@@ -81,7 +85,7 @@ export async function getStaticProps(context) {
 // }
 
 
-function Hero({ recentDatalakeDatasets }) {
+function Hero({ recentDatalakeDatasets, themes }) {
   const [search, setSearch] = useState();
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
@@ -207,6 +211,7 @@ function Hero({ recentDatalakeDatasets }) {
               Busque por tema
             </Text>
             <ThemeCatalog
+              themes={themes}
               recentDatalakeDatasets={recentDatalakeDatasets}
             />
           </VStack>
@@ -638,6 +643,7 @@ export default function Home({
   pages,
   popularDatasets,
   recentDatalakeDatasets,
+  themes,
 }) {
   return (
     <MainPageTemplate backgroundColor="#FFFFFF" pages={pages}>
@@ -651,6 +657,7 @@ export default function Home({
       >
         <Hero
           recentDatalakeDatasets={recentDatalakeDatasets}
+          themes={themes}
         />
       </VStack>
       <BePartner />

@@ -10,7 +10,6 @@ import dynamic from 'next/dynamic';
 import { slidesToShowPlugin, slidesToScrollPlugin } from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { getGroupList } from "../../pages/api/groups"
 import { getRecentDatalakeDatasetsByTheme } from "../../pages/api/datasets";
 import DatabaseCard from "./DatabaseCard";
 
@@ -162,17 +161,15 @@ function CardThemes ({ isMobileMod, recentThemes }) {
   )
 }
 
-export default function ThemeCatalog ({ recentDatalakeDatasets }) {
+export default function ThemeCatalog ({ recentDatalakeDatasets, themes }) {
   const [recentThemes, setRecentThemes] = useState([])
   const [listThemes, setListThemes] = useState([])
   const isMobile = useCheckMobile()
 
   useEffect(() => {
-    getGroupList().then(res => {
-      setListThemes(res.data.result)
-    })
+    setListThemes(themes)
     recentDatalakeDatasets ? setRecentThemes(recentDatalakeDatasets) : setRecentThemes()
-  },[])
+  },[recentDatalakeDatasets, themes])
 
   const newRecentDataLake = (elm) => {
     return getRecentDatalakeDatasetsByTheme(elm.name)
