@@ -309,7 +309,7 @@ METADATA_MODIFIED_FIELD = Field(
     title="Data da Última Modificação dos Metadados",
     yaml_order={
         "id_before": "columns",
-        "id_after": 'title',
+        "id_after": None,
     },
 )
 
