@@ -3,7 +3,6 @@ import {
   Center,
   Image,
   Tooltip,
-  Button
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import dynamic from 'next/dynamic';
@@ -11,7 +10,7 @@ import { slidesToShowPlugin, slidesToScrollPlugin } from "@brainhubeu/react-caro
 import "@brainhubeu/react-carousel/lib/style.css";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { getRecentDatalakeDatasetsByTheme } from "../../pages/api/datasets";
-import DatabaseCard from "./DatabaseCard";
+import DatabaseCard from "../organisms/DatabaseCard";
 
 const Carousel = dynamic(
   () => import('@brainhubeu/react-carousel'),
@@ -29,6 +28,24 @@ function Themes ({ isMobileMod, newRecentDataLakeDataSets, listThemes=[] }) {
     })
   }
 
+  const plug = [ "arrows",
+    {
+      resolve: slidesToShowPlugin,
+      options: {
+        numberOfSlides: listThemes && listThemes.length
+      }
+    },
+    {
+      resolve: slidesToScrollPlugin,
+      options: {
+        numberOfSlides: listThemes && listThemes.length/4,
+      }
+    }
+  ]
+
+  const plugMobile = [...plug]
+  plugMobile.splice(0, 1)
+
   if(listThemes.length === 0)
     return null
 
@@ -40,20 +57,7 @@ function Themes ({ isMobileMod, newRecentDataLakeDataSets, listThemes=[] }) {
       <Carousel
         offset={isMobileMod ? 50 : 70}
         animationSpeed={1000}
-        plugins={[ "arrows",
-          {
-            resolve: slidesToShowPlugin,
-            options: {
-              numberOfSlides: listThemes && listThemes.length
-            }
-          },
-          {
-            resolve: slidesToScrollPlugin,
-            options: {
-              numberOfSlides: listThemes && listThemes.length/4,
-            }
-          }
-        ]}
+        plugins={isMobileMod ? plugMobile : plug}
       >
         {listThemes && listThemes.map((elm) => (
           <Center
@@ -72,6 +76,7 @@ function Themes ({ isMobileMod, newRecentDataLakeDataSets, listThemes=[] }) {
             margin="10px 0"
           >
             <Tooltip
+              hasArrow
               label={elm.display_name}
               fontSize="16px"
               fontWeight="500"

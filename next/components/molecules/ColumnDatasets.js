@@ -67,7 +67,7 @@ function TableDatasets({
     }
 
     if(translation[field] === "Data") {
-      return "DATA"
+      return "DATE"
     }
 
     return translation[field] || field
@@ -99,6 +99,7 @@ function TableDatasets({
             >
               {tooltip ?
                 <Tooltip
+                  hasArrow
                   label={tooltip[elm]}
                   fontSize="16px"
                   fontWeight="500"

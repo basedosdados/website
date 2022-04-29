@@ -12,7 +12,7 @@ import ControlledInput from "../components/atoms/ControlledInput";
 import SectionText from "../components/atoms/SectionText";
 import Display from "../components/atoms/Display";
 import { useEffect, useState } from "react";
-import ThemeCatalog from "../components/organisms/ThemeCatalog";
+import ThemeCatalog from "../components/molecules/ThemeCatalog";
 import SectionTitle from "../components/atoms/SectionTitle";
 import SectionLink from "../components/atoms/SectionLink"
 import Typist from "react-typist";

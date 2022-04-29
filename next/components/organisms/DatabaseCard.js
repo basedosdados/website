@@ -65,6 +65,7 @@ export default function DatabaseCard({
       icons={[
         ...categories.slice(0, Math.min(3, categories.length)).map((c) => (
           <Tooltip
+            hasArrow
             label={c[1]}
             fontSize="16px"
             fontWeight="500"

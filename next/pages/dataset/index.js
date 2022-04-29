@@ -98,7 +98,12 @@ function FilterTags({
   values,
   setParamFilters,
   paramFilters,
+  translations
 }) {
+  function translate (field, translation) {
+    return translation[field] || field
+  }
+
   return (
     <>
       <Text
@@ -126,7 +131,7 @@ function FilterTags({
             padding="5px 8px"
             cursor="pointer"
           >
-            <b>{v} x</b>
+            <b>{translations ? translate(v, translations) : v} x</b>
           </Tag>
         ))}
       </Stack>
@@ -175,7 +180,7 @@ export default function SearchPage({
     update_frequency: "Frequência de atualização",
     raw_quality_tier: "Qualidade da fonte original",
   };
-
+console.log(data)
   const organizations = data?.organizations
     ? Object.keys(data?.organizations)
       .map((t) => ({
@@ -641,6 +646,7 @@ export default function SearchPage({
               .filter(([k, v]) => v.length > 0)
               .map(([k, values]) => (
                 <FilterTags
+                  translations={availableOptionsTranslations}
                   label={fieldTranslations[k]}
                   fieldName={k}
                   values={
