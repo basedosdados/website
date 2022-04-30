@@ -17,11 +17,11 @@ from ckanext.basedosdados.validator.available_options import (
     LanguageEnum,
     LicenseEnum,
     MeasurementUnitEnum,
+    RawQualityTierEnum,
     SpatialCoverage,
     StatusEnum,
     TimeUnitEnum,
     YesNoEnum,
-    RawQualityTierEnum,
 )
 from ckanext.basedosdados.validator.available_options.entity import (
     EntityArtEnum,
