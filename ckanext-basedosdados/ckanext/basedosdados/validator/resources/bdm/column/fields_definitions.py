@@ -26,11 +26,7 @@ class DirectoryColumn(BaseModel):
 
 NAME_FIELD = Field(
     title="Nome",
-    description=to_line(
-        [
-            "Nome em produção"
-        ]
-    ),
+    description=to_line(["Nome em produção"]),
     yaml_order={
         "id_before": None,
         "id_after": "bigquery_type",
@@ -43,7 +39,7 @@ BIGQUERY_TYPE_FIELD = Field(
         [
             "Tipo no BigQuery.",
             "Opções: string, int64, float64, date, time, geometry."
-            "Ver https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types."
+            "Ver https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types.",
         ]
     ),
     yaml_order={
@@ -54,11 +50,7 @@ BIGQUERY_TYPE_FIELD = Field(
 
 DESCRIPTION_FIELD = Field(
     title="Descrição",
-    description=to_line(
-        [
-            "Descrição"
-        ]
-    ),
+    description=to_line(["Descrição"]),
     yaml_order={
         "id_before": "bigquery_type",
         "id_after": "temporal_coverage",
@@ -71,7 +63,7 @@ TEMPORAL_COVERAGE_FIELD = Field(
         [
             "Anos cobertos pela tabela.",
             "Preenchido como lista de intervalos sem repetir os metadados da tabela."
-            "Exemplo: 2001(1)2010, ou (1)2020, ou (1)."
+            "Exemplo: 2001(1)2010, ou (1)2020, ou (1).",
         ]
     ),
     yaml_order={
@@ -82,12 +74,7 @@ TEMPORAL_COVERAGE_FIELD = Field(
 
 COVERED_BY_DICTIONARY_FIELD = Field(
     title="Coberta por um Dicionário",
-    description=to_line(
-        [
-            "A coluna precisa de dicionário?",
-            "Opções: yes, no."
-        ]
-    ),
+    description=to_line(["A coluna precisa de dicionário?", "Opções: yes, no."]),
     default="no",
     yaml_order={
         "id_before": "temporal_coverage",
@@ -97,11 +84,7 @@ COVERED_BY_DICTIONARY_FIELD = Field(
 
 DIRECTORY_COLUMN_FIELD = Field(
     title="Coluna Correspondente nos Diretórios",
-    description=to_line(
-        [
-            "Chave primária nos diretórios correspondente à coluna."
-        ]
-    ),
+    description=to_line(["Chave primária nos diretórios correspondente à coluna."]),
     yaml_order={
         "id_before": "covered_by_dictionary",
         "id_after": "measurement_unit",
@@ -114,7 +97,7 @@ MEASUREMENT_UNIT_FIELD = Field(
         [
             "Qual é a unidade de medida da coluna?",
             "Escreva a fórmula matemática baseada nas chaves de unidades básicas permitidas em https://basedosdados.org/api/3/action/bd_available_options na seção Measurement Unit.",
-            "Exemplos: 'kilometer^2', 'meter^3 / second', '1000 * person', 'gigawatt'."
+            "Exemplos: 'kilometer^2', 'meter^3 / second', '1000 * person', 'gigawatt'.",
         ]
     ),
     yaml_order={
@@ -128,7 +111,7 @@ HAS_SENSITIVE_DATA_FIELD = Field(
     description=to_line(
         [
             "A coluna contém dados sensíveis, como definido pela Lei Geral de Proteção de Dados (LGPD)?",
-            "Opções: yes, no."
+            "Opções: yes, no.",
         ]
     ),
     default="no",
@@ -153,12 +136,7 @@ OBSERVATIONS_FIELD = Field(
 
 IS_IN_STAGING_FIELD = Field(
     title="Está em Staging",
-    description=to_line(
-        [
-            "A coluna está na tabela staging?",
-            "Opções: True, False"
-        ]
-    ),
+    description=to_line(["A coluna está na tabela staging?", "Opções: True, False"]),
     default=True,
     yaml_order={
         "id_before": "observations",
@@ -168,12 +146,7 @@ IS_IN_STAGING_FIELD = Field(
 
 IS_PARTITION_FIELD = Field(
     title="É Partição",
-    description=to_line(
-        [
-            "A coluna é uma partição?",
-            "Opções: True, False"
-        ]
-    ),
+    description=to_line(["A coluna é uma partição?", "Opções: True, False"]),
     default=False,
     yaml_order={
         "id_before": "is_in_staging",

@@ -57,7 +57,7 @@ LANGUAGE_FIELD = Field(
     description=to_line(
         [
             "Em quais línguas a fonte externa está disponível.",
-            "Opções em 'language' em https://basedosdados.org/api/3/action/bd_available_options."
+            "Opções em 'language' em https://basedosdados.org/api/3/action/bd_available_options.",
         ]
     ),
     yaml_order={
@@ -71,7 +71,7 @@ HAS_STRUCTURED_DATA_FIELD = Field(
     description=to_line(
         [
             "A fonte externa disponibiliza dados em formatos estruturados, como csv, json, etc?",
-            "Opções: yes, no."
+            "Opções: yes, no.",
         ]
     ),
     yaml_order={
@@ -85,7 +85,7 @@ HAS_API_FIELD = Field(
     description=to_line(
         [
             "A fonte externa disponibiliza uma API para acesso aos dados?",
-            "Opções: yes, no."
+            "Opções: yes, no.",
         ]
     ),
     yaml_order={
@@ -97,10 +97,7 @@ HAS_API_FIELD = Field(
 IS_FREE_FIELD = Field(
     title="É de Graça",
     description=to_line(
-        [
-            "O acesso aos dados da fonte externa é grátis?",
-            "Opções: yes, no."
-        ]
+        ["O acesso aos dados da fonte externa é grátis?", "Opções: yes, no."]
     ),
     yaml_order={
         "id_before": "has_api",
@@ -113,7 +110,7 @@ REQUIRES_REGISTRATION_FIELD = Field(
     description=to_line(
         [
             "A fonte externa requer registro de usuário para acesso aos dados?",
-            "Opções: yes, no."
+            "Opções: yes, no.",
         ]
     ),
     yaml_order={
@@ -127,7 +124,7 @@ AVAILABILITY_FIELD = Field(
     description=to_line(
         [
             "Como os dados são disponibilizados?",
-            "Opções 'availability' em https://basedosdados.org/api/3/action/bd_available_options."
+            "Opções 'availability' em https://basedosdados.org/api/3/action/bd_available_options.",
         ]
     ),
     default="online",
@@ -142,7 +139,7 @@ COUNTRY_IP_ADDRESS_REQUIRED_FIELD = Field(
     description=to_line(
         [
             "Países nos quais o acesso à fonte externa é liberado.",
-            "Opções em 'country' em https://basedosdados.org/api/3/action/bd_available_options."
+            "Opções em 'country' em https://basedosdados.org/api/3/action/bd_available_options.",
         ]
     ),
     yaml_order={
@@ -154,9 +151,7 @@ COUNTRY_IP_ADDRESS_REQUIRED_FIELD = Field(
 LICENSE_FIELD = Field(
     title="Tipo de Licença",
     description=to_line(
-        [
-            "Qual tipo de licença regula acesso aos dados da fonte externa?"
-        ]
+        ["Qual tipo de licença regula acesso aos dados da fonte externa?"]
     ),
     yaml_order={
         "id_before": "country_ip_address_required",
@@ -166,11 +161,7 @@ LICENSE_FIELD = Field(
 
 SPATIAL_COVERAGE_FIELD = Field(
     title="Cobertura Espacial",
-    description=to_line(
-        [
-            "A máxima unidade espacial que a tabela cobre."
-        ]
-    ),
+    description=to_line(["A máxima unidade espacial que a tabela cobre."]),
     yaml_order={
         "id_before": "license",
         "id_after": "temporal_coverage",
@@ -183,7 +174,7 @@ TEMPORAL_COVERAGE_FIELD = Field(
         [
             "Anos cobertos pela tabela.",
             "Preencher como lista de intervalos.",
-            "Exemplos: 1995(1)2018 ou (1)2020."
+            "Exemplos: 1995(1)2018 ou (1)2020.",
         ]
     ),
     yaml_order={
@@ -197,7 +188,7 @@ UPDATE_FREQUENCY_FIELD = Field(
     description=to_line(
         [
             "A unidade temporal pela qual a tabela é atualizada.",
-            "Opções em 'time_unit' em https://basedosdados.org/api/3/action/bd_available_options."
+            "Opções em 'time_unit' em https://basedosdados.org/api/3/action/bd_available_options.",
         ]
     ),
     yaml_order={

@@ -32,8 +32,8 @@ class BasedosdadosPlugin(plugins.SingletonPlugin, plugins.toolkit.DefaultDataset
         new_fields = {}
         for key, value in virtual_fields.items():
             assert type(value) in (str, int, list, float, None)
-            multi = 'multi_' if isinstance(value, list) else ''
-            new_fields[f'virtual_{multi}{key}'] = value
+            multi = "multi_" if isinstance(value, list) else ""
+            new_fields[f"virtual_{multi}{key}"] = value
         fields_to_index.update(new_fields)
 
         return fields_to_index

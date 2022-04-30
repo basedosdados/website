@@ -2,7 +2,7 @@ from .attr_enum import AttrEnum
 
 
 class LicenseEnum(AttrEnum):
-    
+
     # fmt: off
     odc_by      = {"label": "Open Data Commons Attribution License (ODC BY)"}
     odbl        = {"label": "Open Data Commons Open Database License (ODbL)"}

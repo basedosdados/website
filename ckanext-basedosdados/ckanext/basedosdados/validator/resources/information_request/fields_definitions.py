@@ -12,6 +12,7 @@ to_line = lambda description: "\n".join(description)
 # InformationRequest Custom Types
 # -------------------------------------
 
+
 class RequestedBy(BaseModel):
     # fmt: off
     name        : Optional[Str] = Field(title="Nome")
@@ -35,12 +36,7 @@ class PartnerOrganization(BaseModel):
 
 ORIGIN_FIELD = Field(
     title="Origem",
-    description=to_line(
-        [
-            "Origem do pedido",
-            "Exemplos: FalaBr, Senado, SIC-SP, etc."
-        ]
-    ),
+    description=to_line(["Origem do pedido", "Exemplos: FalaBr, Senado, SIC-SP, etc."]),
     yaml_order={
         "id_before": None,
         "id_after": "number",
@@ -49,11 +45,7 @@ ORIGIN_FIELD = Field(
 
 NUMBER_FIELD = Field(
     title="Número",
-    description=to_line(
-        [
-            "Número de pedido."
-        ]
-    ),
+    description=to_line(["Número de pedido."]),
     yaml_order={
         "id_before": "origin",
         "id_after": "url",
@@ -62,11 +54,7 @@ NUMBER_FIELD = Field(
 
 URL_FIELD = Field(
     title="Url",
-    description=to_line(
-        [
-            "Url onde está disponível o pedido."
-        ]
-    ),
+    description=to_line(["Url onde está disponível o pedido."]),
     yaml_order={
         "id_before": "number",
         "id_after": "department",
@@ -75,11 +63,7 @@ URL_FIELD = Field(
 
 DEPARTMENT_FIELD = Field(
     title="Departamento",
-    description=to_line(
-        [
-            "Departamento/Órgão vinculado"
-        ]
-    ),
+    description=to_line(["Departamento/Órgão vinculado"]),
     yaml_order={
         "id_before": "url",
         "id_after": "description",
@@ -102,11 +86,7 @@ DESCRIPTION_FIELD = Field(
 
 OPENING_DATE_FIELD = Field(
     title="Data de Abertura",
-    description=to_line(
-        [
-            "Formato YYYY-MM-DD"
-        ]
-    ),
+    description=to_line(["Formato YYYY-MM-DD"]),
     yaml_order={
         "id_before": "description",
         "id_after": "requested_by",
@@ -123,11 +103,7 @@ REQUESTED_BY_FIELD = Field(
 
 SPATIAL_COVERAGE_FIELD = Field(
     title="Cobertura Espacial",
-    description=to_line(
-        [
-            "A máxima unidade espacial que os dados pedidos cobrem."
-        ]
-    ),
+    description=to_line(["A máxima unidade espacial que os dados pedidos cobrem."]),
     yaml_order={
         "id_before": "requested_by",
         "id_after": "temporal_coverage",
@@ -138,9 +114,8 @@ TEMPORAL_COVERAGE_FIELD = Field(
     title="Cobertura Temporal",
     description=to_line(
         [
-            "Anos cobertos pelos dados pedidos."
-            "Preencher como lista de intervalos.",
-            "Exemplos: 1995(1)2018 ou (1)2020."
+            "Anos cobertos pelos dados pedidos." "Preencher como lista de intervalos.",
+            "Exemplos: 1995(1)2018 ou (1)2020.",
         ]
     ),
     yaml_order={
@@ -154,7 +129,7 @@ UPDATE_FREQUENCY_FIELD = Field(
     description=to_line(
         [
             "A unidade temporal na qual os dados pedidos são atualizados.",
-            "Opções em 'time_unit' em https://basedosdados.org/api/3/action/bd_available_options."
+            "Opções em 'time_unit' em https://basedosdados.org/api/3/action/bd_available_options.",
         ]
     ),
     yaml_order={
@@ -193,10 +168,7 @@ STATUS_FIELD = Field(
 DATA_URL_FIELD = Field(
     title="Url dos Dados",
     description=to_line(
-        [
-            "Onde estão os dados da resposta?",
-            "Exemplo: www.exemplo.com/dados.csv"
-        ]
+        ["Onde estão os dados da resposta?", "Exemplo: www.exemplo.com/dados.csv"]
     ),
     yaml_order={
         "id_before": "status",
@@ -214,10 +186,13 @@ OBSERVATIONS_FIELD = Field(
 
 PARTNER_ORGANIZATION_FIELD = Field(
     title="Organização parceira",
-    description=to_line(["Organização que ajudou institucionalmente na criação ou disponibilização do pedido de informação."]),
+    description=to_line(
+        [
+            "Organização que ajudou institucionalmente na criação ou disponibilização do pedido de informação."
+        ]
+    ),
     yaml_order={
         "id_before": "observations",
         "id_after": None,
     },
 )
-
