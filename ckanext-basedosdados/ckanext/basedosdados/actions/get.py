@@ -196,7 +196,8 @@ def bd_bdm_table_show(context, data_dict):
                 break
 
     # # TODO: make error message appear in the endpoint response
-    if found_resources: return found_resources
+    if found_resources:
+        return found_resources
     raise "No tables found with dataset_id={dataset_id} and table_id={table_id}"
 
 
@@ -224,7 +225,9 @@ def bd_dataset_search(context, data_dict):
     fq += get_parameter(data_dict, "resource_type", "res_type")
     fq += get_parameter(data_dict, "organization", "organization")
     fq += get_parameter(data_dict, "spatial_coverage", "res_extras_spatial_coverage")
-    fq += get_parameter(data_dict, "temporal_coverage", "virtual_multi_temporal_coverage")
+    fq += get_parameter(
+        data_dict, "temporal_coverage", "virtual_multi_temporal_coverage"
+    )
     fq += get_parameter(data_dict, "update_frequency", "res_extras_update_frequency")
     fq += get_parameter(data_dict, "entity", "virtual_multi_entity")
     fq += get_parameter(data_dict, "raw_quality_tier", "virtual_raw_quality_tier")
@@ -245,7 +248,7 @@ def bd_dataset_search(context, data_dict):
     sort = ", ".join(sort)
 
     # search with solr query ##############################
-    
+
     response = package_search(
         context,
         {
@@ -537,48 +540,50 @@ def bd_dataset_search(context, data_dict):
             response["spatial_coverage_admin2"][key] = value
 
     # post-process raw quality tier ##########################
-    
+
     response["raw_quality_tiers"] = {}
 
     for dataset in response["datasets"]:
-        tier = ''
+        tier = ""
         grades = []
-        for resource in dataset['resources']:
-            if resource['resource_type'] == 'external_link':
+        for resource in dataset["resources"]:
+            if resource["resource_type"] == "external_link":
 
-                has_structured_data         = resource.get('has_structured_data', None)
-                has_api                     = resource.get('has_api', None)
-                is_free                     = resource.get('is_free', None)
-                requires_registration       = resource.get('requires_registration', None)
-                availability                = resource.get('availability', None)
-                country_ip_address_required = resource.get('country_ip_address_required', None)
-                license                     = resource.get('license', None)
-                
+                has_structured_data = resource.get("has_structured_data", None)
+                has_api = resource.get("has_api", None)
+                is_free = resource.get("is_free", None)
+                requires_registration = resource.get("requires_registration", None)
+                availability = resource.get("availability", None)
+                country_ip_address_required = resource.get(
+                    "country_ip_address_required", None
+                )
+                license = resource.get("license", None)
+
                 grade = (
-                    10 * (has_structured_data == 'yes') + \
-                    6  * (has_api == 'yes') + \
-                    8  * (is_free == 'yes') + \
-                    4  * (requires_registration == 'no') + \
-                    8  * (availability == 'online') + \
-                    5  * (country_ip_address_required == []) + \
-                    6  * (license != None)
+                    10 * (has_structured_data == "yes")
+                    + 6 * (has_api == "yes")
+                    + 8 * (is_free == "yes")
+                    + 4 * (requires_registration == "no")
+                    + 8 * (availability == "online")
+                    + 5 * (country_ip_address_required == [])
+                    + 6 * (license != None)
                 ) / (10 + 6 + 8 + 4 + 8 + 5 + 6)
-                
+
                 grades.append(grade)
-        
-        if grades: # some datasets may not have any resources
+
+        if grades:  # some datasets may not have any resources
             grade = max(grades)
             if grade < 0.5:
-                tier = 'low'
+                tier = "low"
             elif grade >= 0.5 and grade < 0.75:
-                tier = 'medium'
+                tier = "medium"
             else:
-                tier = 'high'
-        
+                tier = "high"
+
             key = tier
             value = response["raw_quality_tiers"].get(key, 0) + 1
             response["raw_quality_tiers"][key] = value
-        
+
     # post-process resource count #########################
 
     response["resource_bdm_table_count"] = 0
@@ -599,7 +604,9 @@ def bd_dataset_search(context, data_dict):
 
         response["resource_bdm_table_count"] += resource_bdm_table_count
         response["resource_external_link_count"] += resource_external_link_count
-        response["resource_information_request_count"] += resource_information_request_count
+        response[
+            "resource_information_request_count"
+        ] += resource_information_request_count
 
     # post-process datasets order by resource_type ###################################
 
