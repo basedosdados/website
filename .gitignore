@@ -12,3 +12,4 @@ tmp
 **/packages
 __MACOSX
 django/api/static/
+venv/

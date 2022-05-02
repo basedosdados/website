@@ -8,7 +8,11 @@ from ckanext.basedosdados.validator.available_options import (
 )
 from ckanext.basedosdados.validator import SpatialCoverage, ObservationLevel
 from ckanext.basedosdados.validator.resources import BdmColumns, _CkanDefaultResource
-from ckanext.basedosdados.validator.resources.bdm import LastUpdated, PublishedBy, PartnerOrganization
+from ckanext.basedosdados.validator.resources.bdm import (
+    LastUpdated,
+    PublishedBy,
+    PartnerOrganization,
+)
 
 from pydantic import StrictStr as Str
 from pydantic import validator

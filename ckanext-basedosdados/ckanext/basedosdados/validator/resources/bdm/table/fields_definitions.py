@@ -11,6 +11,7 @@ from pydantic import StrictStr as Str
 
 to_line = lambda description: "\n".join(description)
 
+
 class DataCleanedBy(BaseModel):
     # fmt: off
     name        : Optional[Str] = Field(title="Nome")
@@ -19,6 +20,7 @@ class DataCleanedBy(BaseModel):
     ckan_user   : Optional[Str] = Field(title="Usuário CKAN")
     website     : Optional[Str] = Field(title="Website")
     # fmt: on
+
 
 # -------------------------------------
 # BdmTable Fields
@@ -93,7 +95,7 @@ TEMPORAL_COVERAGE_FIELD = Field(
         [
             "Anos cobertos pela tabela.",
             "Preencher como lista de intervalos.",
-            "Exemplos: ['1995(1)2019'], ['2002(2)2010', '2016', '2020']."
+            "Exemplos: ['1995(1)2019'], ['2002(2)2010', '2016', '2020'].",
         ]
     ),
     yaml_order={
@@ -107,7 +109,7 @@ UPDATE_FREQUENCY_FIELD = Field(
     description=to_line(
         [
             "A unidade temporal com qual a tabela é atualizada.",
-            "Opções em 'https://basedosdados.org/api/3/action/bd_available_options'"
+            "Opções em 'https://basedosdados.org/api/3/action/bd_available_options'",
         ]
     ),
     yaml_order={
@@ -142,7 +144,7 @@ VERSION_FIELD = Field(
     description=to_line(
         [
             "Versão da tabela. Seguindo o padrão de semantic versioning.",
-            "Exemplo: v1.1.3"
+            "Exemplo: v1.1.3",
         ]
     ),
     yaml_order={
@@ -199,7 +201,9 @@ DATA_CLEANING_CODE_URL_FIELD = Field(
 
 PARTNER_ORGANIZATION_FIELD = Field(
     title="Organização parceira",
-    description=to_line(["Organização que ajudou institucionalmente na disponibilização dos dados."]),
+    description=to_line(
+        ["Organização que ajudou institucionalmente na disponibilização dos dados."]
+    ),
     yaml_order={
         "id_before": "data_cleaning_code_url",
         "id_after": "raw_files_url",
@@ -208,11 +212,7 @@ PARTNER_ORGANIZATION_FIELD = Field(
 
 RAW_FILES_URL_FIELD = Field(
     title="Url dos Dados Originais",
-    description=to_line(
-        [
-            "Url dos dados originais no GCP Storage."
-        ]
-    ),
+    description=to_line(["Url dos dados originais no GCP Storage."]),
     yaml_order={
         "id_before": "partner_organization",
         "id_after": "auxiliary_files_url",
@@ -221,11 +221,7 @@ RAW_FILES_URL_FIELD = Field(
 
 AUXILIARY_FILES_URL_FIELD = Field(
     title="Url dos Arquivos Auxiliares",
-    description=to_line(
-        [
-            "Url dos arquivos auxiliares no GCP Storage."
-        ]
-    ),
+    description=to_line(["Url dos arquivos auxiliares no GCP Storage."]),
     yaml_order={
         "id_before": "raw_files_url",
         "id_after": "architecture_url",
@@ -234,11 +230,7 @@ AUXILIARY_FILES_URL_FIELD = Field(
 
 ARCHITECTURE_URL_FIELD = Field(
     title="Url da Tabela de Arquitetura",
-    description=to_line(
-        [
-            "Url da tabela de arquitetura no GCP Storage."
-        ]
-    ),
+    description=to_line(["Url da tabela de arquitetura no GCP Storage."]),
     yaml_order={
         "id_before": "auxiliary_files_url",
         "id_after": "source_bucket_name",
@@ -309,7 +301,7 @@ METADATA_MODIFIED_FIELD = Field(
     title="Data da Última Modificação dos Metadados",
     yaml_order={
         "id_before": "columns",
-        "id_after": 'title',
+        "id_after": None,
     },
 )
 

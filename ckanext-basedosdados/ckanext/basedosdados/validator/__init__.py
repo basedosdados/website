@@ -43,10 +43,11 @@ from ckanext.basedosdados.validator.available_options import (
     Admin2Enum,
     ContinentEnum,
     CountryEnum,
-    EntityEnum
+    EntityEnum,
 )
 
 to_line = lambda description: "\n".join(description)
+
 
 class SpatialCoverage(BaseModel):
     # fmt: off

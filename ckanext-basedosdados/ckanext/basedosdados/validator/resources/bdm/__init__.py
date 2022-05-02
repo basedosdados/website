@@ -11,6 +11,7 @@ from pydantic import StrictStr as Str
 
 to_line = lambda description: "\n".join(description)
 
+
 class LastUpdated(BaseModel):
     # fmt: off
     metadata : Optional[Str] = Field(title="Metadados")
