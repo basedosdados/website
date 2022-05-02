@@ -50,6 +50,8 @@ HOST bd basedosdados.org
     IdentityFile /path/para/sua/chave/privada
 ```
 
+Para dar permissão a novos usuários para terem acesso às máquinas de `staging` ou `prod`, é preciso alguém (1) adicionar o usuário no IAM da AWS, e (2) adicionar a chave ssh pública da pessoa no arquivo `~/.ssh/authorized-keys`.
+
 ## Pasta `ckanext-basedosdados`
 
 O plugin da Base dos Dados mora em `ckanext-basedosdados/ckanext/basedosdados`. Consulte este [README.md](ckanext-basedosdados/ckanext/basedosdados/README.md).
