@@ -109,8 +109,8 @@ function CardThemes ({ isMobileMod, recentThemes }) {
 
   return (
     <VStack
-      width="85vw"
-      minWidth="400px"
+      width="90vw"
+      minWidth="370px"
       maxWidth="1284px"
       alignItems="flex-start"
       padding="24px 0"

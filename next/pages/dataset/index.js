@@ -180,7 +180,7 @@ export default function SearchPage({
     update_frequency: "Frequência de atualização",
     raw_quality_tier: "Qualidade da fonte original",
   };
-console.log(data)
+
   const organizations = data?.organizations
     ? Object.keys(data?.organizations)
       .map((t) => ({
