@@ -1,4 +1,4 @@
-# [basedosdados.org](http://basedosdados.org)
+# [basedosdados.org](http://basedosdados.org) 
 
 ## Para desenvolvimento local
 
@@ -115,3 +115,28 @@ Para conseguir as credenciais do banco, peça pra alguém que tem.
 2. Rodar `docker-compose exec -T ckan ckan sysadmin add <user>`
 
 Ver mais instruções [aqui](https://docs.ckan.org/en/2.9/maintaining/getting-started.html#create-admin-user).
+
+# Arquitetura desse repositorio
+
+## Como é o fluxo de dados do Backend
+
+Os dados do nosso site, 
+
+Api (ckan), Index (SOLR), DB (postgres)
+
+```mermaid
+flowchart TD
+User -- Escreve algo na caixa de busca --> Front -- Faz request ajax para o backend--> Back
+Back -- Faz uma query no SOLR para buscar pacotes relevantes --> Index -. O Solr usa o banco para montar o seu index .- DB
+User[Usuario]
+Front["Frontend (Next)"]
+Back["Backend (aka. Api / Ckan)"]
+Index["Search engine (Solr)"]
+DB[("Banco (postgres)")]
+```
+
+A fonte de verdade fica no Banco, mas as consultas dos usuarios batem no Solr. Isso porque o solr é um servico otimizado para fazer buscas e consultas. [Documentacao do Solr](https://solr.apache.org/guide/8_11/searching.html)
+
+O Solr depende de um Index, que é um arquivo q ele mesmo mantem. A unica coisa que a gente precisa fazer é avisar quando q ele precisa re-montar (ou atualizar) o index. Quando vc pede um reindex, o solr recria tudo a partir dos dados do banco. 
+
+Se um usuario edita um dataset/resource pelo site, ou via api, o reindex acontece automaticamente. Se vc editar direto no banco (via uma migration SQL por exemplo), ae precisamos pedir o reindex manualmente.

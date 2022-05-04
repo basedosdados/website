@@ -1,0 +1,31 @@
+name: Continuous Deployment
+on:
+  push:
+    branches:
+      - develop
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy-staging:
+    name: Deploy Staging Environment
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: 'https://staging.basedosdados.org'
+
+    steps:
+      - name: Run a one-line script
+        run: echo Deploy Staging Environment
+
+  deploy-production:
+    name: Deploy Production Environment
+    runs-on: ubuntu-latest
+    environment:
+      name: prod
+      url: 'https://basedosdados.org'
+    needs: deploy-staging
+
+    steps:
+      - name: Run a one-line script
+        run: echo Deploy Production Environment

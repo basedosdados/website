@@ -13,11 +13,7 @@ to_line = lambda description: "\n".join(description)
 
 DATASET_ID_FIELD = Field(
     title="ID Conjunto",
-    description=to_line(
-        [
-            "Campo dataset_id padrão."
-        ]
-    ),
+    description=to_line(["Campo dataset_id padrão."]),
     yaml_order={
         "id_after": None,
         "id_before": "table_id",
@@ -26,11 +22,7 @@ DATASET_ID_FIELD = Field(
 
 TABLE_ID_FIELD = Field(
     title="ID Tabela",
-    description=to_line(
-        [
-            "Campo table_id padrão."
-        ]
-    ),
+    description=to_line(["Campo table_id padrão."]),
     yaml_order={
         "id_after": "dataset_id",
         "id_before": "identifying_columns",
@@ -64,11 +56,7 @@ LAST_UPDATED_FIELD = Field(
 # TODO: DICT TYPE
 PUBLISHED_BY_FIELD = Field(
     title="Publicado por",
-    description=to_line(
-        [
-            "Quem está preenchendo esses metadados?"
-        ]
-    ),
+    description=to_line(["Quem está preenchendo esses metadados?"]),
     yaml_order={
         "id_after": "last_updated",
         "id_before": "source_bucket_name",

@@ -8,7 +8,11 @@ from ckanext.basedosdados.validator.available_options import (
 )
 from ckanext.basedosdados.validator import SpatialCoverage, ObservationLevel
 from ckanext.basedosdados.validator.resources import BdmColumns, _CkanDefaultResource
-from ckanext.basedosdados.validator.resources.bdm import LastUpdated, PublishedBy, PartnerOrganization
+from ckanext.basedosdados.validator.resources.bdm import (
+    LastUpdated,
+    PublishedBy,
+    PartnerOrganization,
+)
 
 from pydantic import StrictStr as Str
 from pydantic import validator
@@ -45,4 +49,5 @@ class BdmTable(_CkanDefaultResource):
     compressed_file_size      : Optional[int]                                    = COMPRESSED_FILE_SIZE_FIELD
     columns                   : Optional[List[BdmColumns]]                       = COLUMNS_FIELD
     metadata_modified         : Optional[datetime]                               = METADATA_MODIFIED_FIELD #TODO: can we rename this to last_updated and make it a derived field for dataset and all resources?
+    title                     : Optional[Str]                                    = TITLE_FIELD
     # fmt: on

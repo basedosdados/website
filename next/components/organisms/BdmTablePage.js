@@ -9,9 +9,10 @@ import {
   AccordionIcon,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { Markdown } from "../atoms/Markdown";
-import Title from "../atoms/Title";
+import Subtitle from "../atoms/Subtitle";
+import SectionText from "../atoms/SectionText";
 import { ExpandableTable } from "../molecules/ExpandableTable";
+import ColumnDatasets from "../molecules/ColumnDatasets";
 import {
   breakNestedObjects,
   filterOnlyValidValues,
@@ -20,17 +21,20 @@ import {
 } from "../../utils";
 import { BaseResourcePage } from "../molecules/BaseResourcePage";
 import { SchemaForm } from "../molecules/SchemaForm";
+import { getBdmColumnsSchema } from '../../pages/api/schemas'
 import { getBdmTableSchema } from "../../pages/api/schemas";
 import { deleteResource, updateResource } from "../../pages/api/datasets";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 
 export function BdmTablePage({
-  translations,
-  resource,
-  datasetName,
   availableOptionsTranslations,
+  translations,
+  datasetName,
+  resource,
 }) {
-  const [isColumns, setIsColumns] = useState(false)
+
+  const [showColumns, setShowColumns] = useState(false)
+  const [schema, setSchema] = useState({})
   const [columnsHeaders, setColumnsHeaders] = useState([])
   const [columnsValues, setColumnsValues] = useState([])
   const tooltip = {
@@ -44,35 +48,22 @@ export function BdmTablePage({
     has_sensitive_data: "Indica se a coluna possui dados sensíveis. Ex.:  CPF identificado, dados de conta bancária, etc. ",
     observations: "Indica processos de tratamentos realizados na coluna que precisam ser evidenciados. "
   }
-
+  
   useEffect(() => {
-    if (resource.columns[0]) {
-      const ArrayHeaders = Object.keys(resource.columns[0])
-      const ArrayValues = resource.columns.map((c) => {
-        return Object.values(c)
-      })
-      const filter = ["is_in_staging", "is_partition"]
+    fetchSchema()
+  },[])
+  
+  async function fetchSchema()  {
+    const columnsSchema = await getBdmColumnsSchema()
+    setSchema(columnsSchema)
+  }
+  
+  useEffect(() => {
+    setColumnsHeaders(Object.keys(schema))
+    setColumnsValues(resource.columns)
 
-      filter.map((elm) => {
-        for( let i = 0; i < ArrayHeaders.length; i++){
-          if ( ArrayHeaders[i] === elm) {
-            ArrayHeaders.splice(i, 1)
-            ArrayValues.map(c => {
-              c.splice(i, 1)
-            })
-            i--
-            setColumnsHeaders(ArrayHeaders)
-            setColumnsValues(ArrayValues)
-          } else {
-            setColumnsHeaders(ArrayHeaders)
-            setColumnsValues(ArrayValues)
-          }
-        }
-      })
-
-      setIsColumns(true)
-    }
-  },[resource])
+    setShowColumns(true)
+  },[schema, resource])
 
   if (
     resource.spatial_coverage &&
@@ -83,7 +74,7 @@ export function BdmTablePage({
 
   return (
     <BaseResourcePage
-      padding="20px 10px 20px 0"
+      padding="16px 8px 0 0"
       editLink={`/resource/edit/${resource.id}`}
       title={`${resource.name}`}
       removeFunction={() => deleteResource(resource)}
@@ -111,39 +102,28 @@ export function BdmTablePage({
     >
       <DataInformationQuery resource={resource} />
 
-      <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Title fontWeigth="400">
-          Descrição
-        </Title>
-        <Markdown
-          styleText= {{
-            fontSize:"14px",
-            fontWeight:"300",
-            letterSpacing:"0.5px",
-            color:"#252A32"
-          }}
-        >
+      <VStack width="100%" spacing={4} alignItems="flex-start">
+        <Subtitle>Descrição</Subtitle>
+        <SectionText>
           {resource.description || "Nenhuma descrição fornecida."}
-        </Markdown>
+        </SectionText>
       </VStack>
-      <VStack id="acesso" width="100%" spacing={3} alignItems="flex-start">
-        <Title fontWeigth="400">
-          Cobertura temporal
-        </Title>
-        <Text color="#252A32" fontSize="14px" fontWeight="300" fontFamily="Lato" letterSpacing="0.5px">
-          {resource?.temporal_coverage ? resource.temporal_coverage[0] : "Nenhuma cobertura temporal."}
-        </Text>
+      <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
+        <Subtitle>Cobertura temporal</Subtitle>
+        <SectionText>
+          {resource?.temporal_coverage ? resource.temporal_coverage[0] : "Nenhuma cobertura temporal fornecida."}
+        </SectionText>
       </VStack>
-      {isColumns &&
+
+      {showColumns &&
         <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
-          <Title fontWeigth="400">
-            Coluna
-          </Title>
-            <ExpandableTable
+          <Subtitle>
+            Colunas
+          </Subtitle>
+            <ColumnDatasets
               translations={translations.bdm_columns}
               availableOptionsTranslations={availableOptionsTranslations}
               tooltip={tooltip}
-              horizontal={true}
               headers={columnsHeaders}
               values={columnsValues}
             />
@@ -161,7 +141,7 @@ export function BdmTablePage({
           <AccordionItem>
             <AccordionButton marginBottom={5} padding={0} _hover={{backgroundColor: "transparent"}} >
               <Stack flex='1' textAlign='left'>
-                <Title fontWeigth="400">Informações adicionais</Title>
+                <Subtitle>Informações adicionais</Subtitle>
               </Stack>
               <AccordionIcon color="#252A32" fontSize="18px"/>
             </AccordionButton>

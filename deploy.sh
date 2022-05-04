@@ -62,7 +62,6 @@ load_images() {
         docker load < ~/basedosdados/images/solr
         docker load < ~/basedosdados/images/db
         docker load < ~/basedosdados/images/next
-        docker load < ~/basedosdados/images/django
     "
 }
 

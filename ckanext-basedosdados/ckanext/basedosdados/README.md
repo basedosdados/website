@@ -122,9 +122,37 @@ def get_news(context, data_dict=None):
 <!--------------------------------------------------------->
 <!--------------------------------------------------------->
 
+## Metadados
+
+Basicamente no BD temos duas entidades principais: os Datasets (tambem chamados de "packages") e os Resources.
+
+Os datasets sao os itens q a gente busca no site, como por exemplo: `Orçamento do Estado de São Paulo`. Sao como se fossem caixinhas q contem dados relativos a um certo assunto.
+
+Um dataset pode ter (e normalmente tem) mais q um resource. Os resources sao metadados associados a um conjunto de dados especifico. Por exemplo: uma tabela, ou um pedido lai. Seguindo o exemplo acima, temos, `br_sp_gov_orcamento.receita_arrecadada` como um dos resources dentro do pacote `br_sp_gov_orcamento`.
+
+### Tipos de resources
+
+Existem (no momento) 3 tipos de resources:
+
+* BDM Tables - Representa uma tabela no datalake da BD
+* External Link - Representa literalmente um link para uma base q esta hosteada em outro site (um link para um site do governo por exemplo).
+* Information request - Representa a documentacao de um pedido de Lei de Acesso a Informacao relativo a certos dados. Assim, mesmo q o dado nao esteja disponivel ainda, fica possivel pro usuario acompanhar o processo.
+
+Package 
+    |
+   / \
+Res1  Res2
+
+### Metadados dos resources
+
+Todos os resources tem metadados proprios, e cada tipo tem alguns metadados especializados do tipo. Exemplo, uma BDM Table vai possuir metadado de `nome_da_tabela` e `ultima_atualizacao`, enquanto o External Link vai possuir um campo `url_link`.
+
+As definicoes de quais metadados cada recurso tem ficam em: ./validator/resources/
+
+
 ### Alterando os metadados da BD
 
-Na pasta `validator` estão contidos os validadores de dados escritos em [pydantic](https://pydantic-docs.helpmanual.io/), os de datasets em `package.py` e os de resource, bdm table e external link em `resource.py`. Adicionar um novo campo ao banco de dados é um processo em duas fases:
+Na pasta `validator` estão contidos os validadores de dados escritos em [pydantic](https://pydantic-docs.helpmanual.io/), os de datasets em `packages/` e os de resource, bdm table e external link em `resource/`. Adicionar um novo campo ao banco de dados é um processo em duas fases:
 
 1. Adicionar o campo a classe que o mesmo pertence, como adicionar `dataset_id` a classe `Package`.
 2. Adicionar o campo ao banco de dados, através uma migration, criando um valor padrão para o mesmo.
