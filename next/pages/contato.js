@@ -3,11 +3,11 @@ import {
     VStack,
     Stack,
   } from "@chakra-ui/react";
-import { useEffect } from "react";
-import Display from "../components/atoms/Display";
-import Subtitle from "../components/atoms/Subtitle";
+import { useEffect } from "react"
+import { LinkDash } from "../components/atoms/LinkDash";
+import BigTitle from "../components/atoms/BigTitle";
+import Title from "../components/atoms/Title";
 import SectionText from "../components/atoms/SectionText";
-import Link from "../components/atoms/Link";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
     
@@ -39,64 +39,63 @@ export default function Contato({ pages }) {
         gridGap={{base:"40px", lg: "100px"}}
         paddingTop={{ base: "80px", lg: "0px" }}
         width="80%"
-        maxWidth="1264px"
         justify="space-between"
         direction={{ base: "column", lg: "row" }}
         margin="auto"
       >
         <VStack maxWidth={{ base: "100%", lg: "45%" }}>
           <Box contentAlign="flex-start">
-            <Display 
-              color="#2B8C4D"
-              paddingBottom="24px"
-            >
+            <BigTitle paddingBottom="20px">
               Entre em contato
-            </Display>
-            <SectionText paddingBottom="24px">
+            </BigTitle>
+            <SectionText fontSize="14px" fontWeight="300" paddingBottom="25px" color="#6F6F6F">
               Envie sua mensagem no formulário ao lado para falar com nossa equipe.
             </SectionText>
-            <Subtitle paddingBottom="8px">
+            <Title fontSize="18px" fontWeight="400" paddingBottom="5px" color="#252A43">
               Apoio institucional
-            </Subtitle>
-            <SectionText paddingBottom="24px">
+            </Title>
+            <SectionText fontSize="14px" fontWeight="300" paddingBottom="25px" color="#6F6F6F">
               A Base dos Dados é mantida por meio doações de pessoas que acreditam na transparência e acesso a dados de qualidade. Colabore para o crescimento e fortalecimento da iniciativa.
             </SectionText>
-            <Subtitle paddingBottom="8px">
+            <Title fontSize="18px" fontWeight="400" paddingBottom="5px" color="#252A43">
               Serviços
-            </Subtitle>
-            <SectionText paddingBottom="24px">
+            </Title>
+            <SectionText fontSize="14px" fontWeight="300" paddingBottom="25px" color="#6F6F6F">
               Fale diretamente com nossa equipe comercial para marcarmos uma conversa e avaliarmos como{" "}
-              <Link
+              <LinkDash
                 href="/servicos"
+                dash={false}
+                fontSize="14px"
+                fontWeight="bold"
                 textDecoration="none"
-                color="#42B0FF"
               >
                 nossos serviços{" "}
-              </Link>
+              </LinkDash>
               podem ajudar.
             </SectionText>
-            <Subtitle paddingBottom="8px">
+            <Title fontSize="18px" fontWeight="400" paddingBottom="5px" color="#252A43">
               Projetos e Parcerias
-            </Subtitle>
-            <SectionText paddingBottom="24px">
+            </Title>
+            <SectionText fontSize="14px" fontWeight="300" paddingBottom="25px" color="#6F6F6F">
               Desenvolvemos projetos e aplicações com outras organizações afins para promover o acesso a dados públicos de qualidade. Estamos sempre abertos a novas ideias.
             </SectionText>
-            <Subtitle paddingBottom="8px">
+            <Title fontSize="18px" fontWeight="400" paddingBottom="5px" color="#252A43">
               Dados
-            </Subtitle>
-            <SectionText paddingBottom="24px">
+            </Title>
+            <SectionText fontSize="14px" fontWeight="300" paddingBottom="25px" color="#6F6F6F">
               Auxiliamos pessoas e organizações a subirem dados no nosso <i>datalake</i>. Escreva sua proposta para nossa equipe de Dados.
             </SectionText>
-            <SectionText paddingBottom="24px">
+            <SectionText fontSize="14px" fontWeight="300" color="#6F6F6F">
               Dúvidas? Fale com a nossa comunidade no{" "}
-              <Link
+              <LinkDash
                 href="https://discord.gg/huKWpsVYx4"
+                dash={false}
+                fontSize="14px"
+                fontWeight="bold"
                 textDecoration="none"
-                color="#42B0FF"
-                target="_blank"
               >
-                Discord<a style={{color:"#252A32", fontWeight:"300"}}>.</a>
-              </Link>
+                Discord.
+              </LinkDash>
             </SectionText>
           </Box>
         </VStack>

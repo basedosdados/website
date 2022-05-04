@@ -10,8 +10,7 @@ export function ThemeTag({ name }) {
         fontSize="10px"
         whiteSpace="nowrap"
         borderRadius="7px"
-        padding="5px 6px"
-        color="#252A32"
+        padding="4px 6px"
         backgroundColor="#DEDFE0"
       >
         {name}

@@ -4,7 +4,7 @@ export default function RoundedButton({
   onClick,
   children,
   colorScheme = "blue",
-  backgroundColor = "#42B0FF",
+  backgroundColor = "#3AA1EB",
   _hover = {},
   ...style
 }) {

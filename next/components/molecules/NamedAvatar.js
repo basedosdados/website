@@ -1,26 +1,25 @@
 import { Avatar } from "@chakra-ui/avatar";
 import { HStack, Text, VStack } from "@chakra-ui/layout";
+import Title from "../atoms/Title"
+import SectionText from "../atoms/SectionText";
 
 export function NamedAvatar({ src, name, position, ...props }) {
   return (
     <HStack spacing={3} {...props}>
       <VStack spacing={0} align="flex-end">
-        <Text
-          fontFamily="Ubuntu"
-          fontSize="18px"
+        <Title
           fontWeight="400"
-          letterSpacing="0.1px"
           color="#2A2532"
         >
           {name}
-        </Text>
+        </Title>
         <Text
           fontFamily="Ubuntu"
           fontSiz="14px"
           fontWeight="300"
           color="#252A32"
-          paddingTop="4px"
-          letterSpacing="0.3px"
+          paddingTop="3px"
+          letterSpacing="0.5px"
         >
           {position}
         </Text>
