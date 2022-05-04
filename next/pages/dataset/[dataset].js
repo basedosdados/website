@@ -445,6 +445,7 @@ export default function DatasetPage({
               textOverflow="ellipsis"
               whiteSpace="nowrap"
               width={{ base: "90vw", lg: "60vw" }}
+              maxWidth="970px"
               paddingBottom="8px"
             >
               {dataset.title || "Conjunto sem nome"}
