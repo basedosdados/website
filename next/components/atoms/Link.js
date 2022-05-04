@@ -13,7 +13,7 @@ export default function Link({
       target={target}
       href={href}
       fontFamily="Lato"
-      fontSize="15px"
+      fontSize="14px"
       letterSpacing="0.5px"
       color={color}
       _hover={{ textDecoration: "none", opacity:"0.6" }}

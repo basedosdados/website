@@ -12,14 +12,16 @@ import {
   Button,
   HStack,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
-import Title from "../atoms/Title";
+import { useState, useEffect } from "react";
+import Subtitle from "../atoms/Subtitle";
+import SectionText from "../atoms/SectionText";
 import Link from "../atoms/Link";
-import { LinkDash } from "../atoms/LinkDash";
-import GreenTab from "../atoms/GreenTab"
+import GreenTab from "../atoms/GreenTab";
 import RoundedButton from "../atoms/RoundedButton";
-import CopyIcon from "../../public/img/icons/copyIcon"
-import { DisclaimerBox } from "./DisclaimerBox"
+import CopyIcon from "../../public/img/icons/copyIcon";
+import { DisclaimerBox } from "./DisclaimerBox";
+import ExclamationIcon from "../../public/img/icons/exclamationIcon";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
 
 export function BoxBigQueryGoogle({ href }) {
 
@@ -27,16 +29,15 @@ export function BoxBigQueryGoogle({ href }) {
     <DisclaimerBox>
       <HStack spacing={0}>
         <Image width="20px" height="20px" marginRight="10px" src="https://img.icons8.com/color/48/000000/google-logo.png"/>
-        <Text color="#252A32">
-          Para usar o BigQuery basta ter uma conta Google. Primeira vez? 
-          <LinkDash
-            fontWeight="700"
+        <SectionText>
+          Para usar o BigQuery basta ter uma conta Google. Primeira vez?
+          <Link
             target="_blank"
-            dash={false}
+            color="#42B0FF"
             href={href}
           > Siga o passo a passo.
-          </LinkDash>
-        </Text>
+          </Link>
+        </SectionText>
       </HStack>
     </DisclaimerBox>
   )
@@ -64,7 +65,7 @@ export function PrismCodeHighlight({ language, children }) {
       >
         {children}
       </code>
-      
+
       <Button
         height="20px"
         minWidth="100px"
@@ -80,65 +81,94 @@ export function PrismCodeHighlight({ language, children }) {
         <CopyIcon marginLeft="5px"/>
       </Button>
     </pre>
-    
+
   )
 }
-
 
 export default function DataInformationQuery ({ resource }) {
   const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}.zip`
   const queryName = `${resource.dataset_id}.${resource.name}`;
+  const [isMobileMod, setIsMobileMod] = useState(false)
+  const isMobile = useCheckMobile();
+
+  useEffect(() => {
+    setIsMobileMod(isMobile)
+  },[isMobile])
 
   useEffect(() => {
     if (window) window.Prism.highlightAll();
-  }, [resource]);
+  }, [resource])
 
   return (
     <VStack
-      spacing={-1} 
+      spacing={-1}
       alignItems="flex-start"
       width="100%"
     >
-      <Title fontWeigth="400">Consulta aos dados</Title>
-      <Tabs 
-        paddingTop="20px"
+      <Subtitle>Consulta aos dados</Subtitle>
+      <Tabs
+        paddingTop="16px"
         width={{ base: "90vw", lg: "100%" }}
       >
-        <TabList 
+        <TabList
           padding="0px"
           fontFamily="Ubuntu !important"
           borderBottom= "2px solid #DEDFE0 !important"
         >
-          <GreenTab>SQL</GreenTab>
-          <GreenTab>Python</GreenTab>
-          <GreenTab>R</GreenTab>
-          <GreenTab>Stata</GreenTab>
-          <GreenTab>Download</GreenTab>
+          <GreenTab
+            fontSize="16px"
+            paddingBottom="8px !important"
+            letterSpacing="0.2px"
+          >
+            SQL
+          </GreenTab>
+          <GreenTab
+            fontSize="16px"
+            paddingBottom="8px !important"
+            letterSpacing="0.2px"
+          >
+            Python
+          </GreenTab>
+          <GreenTab
+            fontSize="16px"
+            paddingBottom="8px !important"
+            letterSpacing="0.2px"
+          >
+            R
+          </GreenTab>
+          <GreenTab
+            fontSize="16px"
+            paddingBottom="8px !important"
+            letterSpacing="0.2px"
+          >
+            Stata
+          </GreenTab>
+          <GreenTab
+            fontSize="16px"
+            paddingBottom="8px !important"
+            letterSpacing="0.2px"
+          >
+            Download
+          </GreenTab>
         </TabList>
         <TabPanels>
           <TabPanel padding="0">
-            <Text
-              fontFamily="Lato"
-              margin="20px 0 14px"
-              fontSize="16px"
-              letterSpacing="0.5px"
-              fontWeight="300"
-              color="#252A32" 
+            <SectionText
+              margin="24px 0 16px"
             >
-              Copie o código abaixo, 
-              <LinkDash 
-                fontWeight="700" 
-                textDecoration="none" 
-                dash={false} 
+              Copie o código abaixo,
+              <Link
+                color="#42B0FF"
+                textDecoration="none"
                 href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${resource.dataset_id}&t=${resource.name}&page=table`}
               > clique aqui
-              </LinkDash> para ir ao <i>datalake</i> no BigQuery e cole no Editor de Consultas:
-            </Text>
+              </Link> para ir ao <i>datalake</i> no BigQuery e cole no Editor de Consultas:
+            </SectionText>
 
             <PrismCodeHighlight language="sql">
               {`SELECT * FROM \`basedosdados.${queryName}\` LIMIT 100`}
             </PrismCodeHighlight>
-          
+
             <BoxBigQueryGoogle
               href={"https://basedosdados.github.io/mais/access_data_bq/#primeiros-passos"}
             />
@@ -146,22 +176,17 @@ export default function DataInformationQuery ({ resource }) {
           </TabPanel>
 
           <TabPanel padding="0">
-            <Text
-              color="#252A32" 
-              fontFamily="Lato"
-              margin="20px 0 14px"
-              fontSize="16px"
-              letterSpacing="0.5px"
-              fontWeight="300"
+            <SectionText
+              margin="24px 0 16px"
             >
               Criamos um pacote em Python para você acessar o <i>datalake</i>. Basta rodar o código:
-            </Text>
+            </SectionText>
 
             <PrismCodeHighlight language="python">
               {`import basedosdados as bd
-              
+
 # Para carregar o dado direto no pandas
-df = bd.read_table(dataset_id='${resource.dataset_id}', 
+df = bd.read_table(dataset_id='${resource.dataset_id}',
 table_id='${resource.name}',
 billing_project_id="<YOUR_PROJECT_ID>")`}
             </PrismCodeHighlight>
@@ -173,16 +198,11 @@ billing_project_id="<YOUR_PROJECT_ID>")`}
           </TabPanel>
 
           <TabPanel padding="0">
-            <Text
-              color="#252A32" 
-              fontFamily="Lato"
-              margin="20px 0 14px"
-              fontSize="16px"
-              letterSpacing="0.5px"
-              fontWeight="300"
+            <SectionText
+              margin="24px 0 16px"
             >
               Criamos um pacote em R para você acessar o <i>datalake</i>. Basta rodar o código:
-            </Text>
+            </SectionText>
 
             <PrismCodeHighlight language="R">
               {`install.packages("basedosdados")
@@ -203,16 +223,11 @@ df <- bd_collect(query)`}
           </TabPanel>
 
           <TabPanel padding="0">
-            <Text
-              color="#252A32" 
-              fontFamily="Lato"
-              margin="20px 0 14px"
-              fontSize="16px"
-              letterSpacing="0.5px"
-              fontWeight="300"
+            <SectionText
+              margin="24px 0 16px"
             >
               Criamos um pacote em Stata para você acessar o <i>datalake</i>. Basta rodar o código:
-            </Text>
+            </SectionText>
 
             <PrismCodeHighlight language="Stata">
               {`net install basedosdados, from("https://raw.githubusercontent.com/basedosdados/mais/master/stata-package")
@@ -230,31 +245,35 @@ bd_read_table, ///
             <script key="Stata" src="/vendor/prism.js"></script>
           </TabPanel>
 
-          <TabPanel padding="20px 0 0">
-            <DisclaimerBox
-              title="Estes dados estão disponíveis porque diversas pessoas colaboram para a sua manutenção."
-              text={
-              <Text color="#252A32">
-                  Apoie você também com doação financeira ou
-                  <LinkDash
-                    fontWeight="bold"
-                    textDecoration="none"
-                    target="_blank"
-                    href="https://basedosdados.github.io/mais/colab_data/"
-                    dash={false}
-                    > saiba como contribuir com seu tempo.
-                  </LinkDash>
-                </Text>
-              }
-            />
+          <TabPanel padding="16px 0 0">
+            <SectionText>
+              Estes dados estão disponíveis porque diversas pessoas colaboram para a sua manutenção.
+            </SectionText>
+            <SectionText>
+              Antes de baixar os dados, apoie você também com uma doação financeira ou <Link color="#42B0FF" href="https://basedosdados.github.io/mais/colab_data/">saiba como contribuir com seu tempo</Link>.
+            </SectionText>
+            <DisclaimerBox>
+              <HStack gridGap="8px" alignItems="flex-start">
+                <ExclamationIcon 
+                  widthIcon="20px"
+                  heightIcon="20px"
+                  fill="#42B0FF"
+                  marginTop="4px"
+                />
+                <Box>
+                  <SectionText fontWeigth="700">ATENÇÃO: O tamanho da tabela ultrapassou o limite permitido para download.</SectionText>
+                  <SectionText>Ao clicar em <i>Download dos dados</i>, você baixará apenas uma prévia dos dados. Para acessar a tabela completa, utilize nossos pacotes em Python, R ou Stata.</SectionText>
+                </Box>
+              </HStack>
+            </DisclaimerBox>
             <VStack
-              alignItems="flex-start"
-              padding="30px 0 20px"
+              alignItems={isMobileMod ? "center" :"flex-start"}
+              padding="32px 0 24px"
               direction="column"
               height="100%"
-              spacing={5}
+              spacing={4}
             >
-              <HStack spacing={10}>
+              <HStack spacing={10} flexDirection={isMobileMod && "column"}>
                 <Image
                   height="250px"
                   objectFit="contain"
@@ -266,14 +285,18 @@ bd_read_table, ///
                   <Text color="#252A32" fontWeight="bold" fontFamily="Ubuntu" fontSize="20px">
                     Doe via PIX
                   </Text>
-                  <Text color="#252A32" fontSize="18px">
+                  <Text color="#252A32" fontFamily="Lato" fontSize="18px">
                     Chave CNPJ
                     <br /> 42494318000116
                   </Text>
                 </Stack>
               </HStack>
 
-              <HStack spacing={5}>
+              <HStack
+                spacing={!isMobileMod && 6}
+                flexDirection={isMobileMod && "column"}
+                gridGap={isMobileMod && "10px"}
+              >
                 <Link
                   minWidth="225px"
                   width="100%"
@@ -293,8 +316,8 @@ bd_read_table, ///
                 >
                   <RoundedButton
                     width="100%"
-                    color="#3AA1EB"
-                    border="2px solid #3AA1EB"
+                    color="#42B0FF"
+                    border="2px solid #42B0FF"
                     backgroundColor="white"
                     colorScheme="gray"
                   >

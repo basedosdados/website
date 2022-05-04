@@ -8,7 +8,9 @@ import {
   HStack,
   Tooltip,
   Button,
-  VStack
+  VStack,
+  Box,
+  Center
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { formatJson } from '../../utils';
@@ -67,7 +69,7 @@ function TableDatasets({
     }
 
     if(translation[field] === "Data") {
-      return "DATA"
+      return "DATE"
     }
 
     return translation[field] || field
@@ -83,35 +85,38 @@ function TableDatasets({
         <Thead>
           {columnsHeaders.map((elm) => (
             <Th
-              minWidth="200px"
+              minWidth="220px"
               flex={1}
-              padding="5px 15px"
+              padding="8px 24px"
               fontSize="14px"
-              color="#707070"
-              background="#F5F5F5"
+              color="#6F6F6F"
+              background="#F6F6F6"
               fontWeight="500"
               fontFamily="Ubuntu"
-              letterSpacing="0.5px"
+              letterSpacing="0.4px"
               textTransform="capitalize"
               boxSizing="content-box"
-              borderY="1px solid #E4E4E4 !important"
+              borderY="1px solid #DEDFE0 !important"
             >
               {tooltip ?
-                <Tooltip
-                  label={tooltip[elm]}
-                  fontSize="16px"
-                  fontWeight="500"
-                  padding="5px 15px"
-                  backgroundColor="#2A2F38"
-                  marginTop="10px"
-                  color="#FFF"
-                  borderRadius="6px"
-                >
-                  <div style={{display: "flex", gap: "10px", cursor: "pointer"}}>
-                    {translations ? translate(elm, translatedHeaders) : elm}
-                    <InfoIcon fill="#707070"tip/>
-                  </div>
-                </Tooltip>
+                <Box display="flex" gridGap="8px" cursor="pointer">
+                  {translations ? translate(elm, translatedHeaders) : elm}
+                  <Tooltip
+                    hasArrow
+                    label={tooltip[elm]}
+                    fontSize="16px"
+                    fontWeight="500"
+                    padding="5px 15px"
+                    backgroundColor="#2A2F38"
+                    marginTop="8px"
+                    color="#FFF"
+                    borderRadius="6px"
+                  >
+                    <Center>
+                      <InfoIcon fill="#A3A3A3" tip/>
+                    </Center>
+                  </Tooltip>
+                </Box>
                 :
                 <>
                   {translations ? translate(elm, translatedHeaders) : elm}
@@ -125,7 +130,7 @@ function TableDatasets({
             <Tr>
               {elm.map((r) => (
                 <Td
-                  padding="10px 15px"
+                  padding="10px 24px"
                   fontSize="14px"
                   fontFamily="Lato"
                   letterSpacing="0.5px"
