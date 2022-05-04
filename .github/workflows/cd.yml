@@ -3,29 +3,92 @@ on:
   push:
     branches:
       - develop
-      - main
+      - master
   workflow_dispatch:
 
 jobs:
-  deploy-staging:
-    name: Deploy Staging Environment
+  deploy-develop:
+    if: github.ref_name == 'develop'
+    name: Deploy Development Environment
     runs-on: ubuntu-latest
     environment:
       name: staging
       url: 'https://staging.basedosdados.org'
 
     steps:
-      - name: Run a one-line script
-        run: echo Deploy Staging Environment
+      - name: Clone Repository
+        uses: actions/checkout@v2
+
+      - name: Set Up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Add Secret Files
+        env:
+          DOT_ENV_PROD: ${{ secrets.DOT_ENV_PROD }}
+          CKAN_STAGING_INI: ${{ secrets.CKAN_STAGING_INI }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+        run: |
+          echo "$DOT_ENV_PROD" > .env.prod && \
+          echo "$CKAN_STAGING_INI" > ./configs/ckan.override.prod.ini && \
+          mkdir ~/.ssh && \
+          echo "$SSH_KEY" > ~/.ssh/BD.pem && \
+          chmod 700 ~/.ssh ~/.ssh/BD.pem
+
+      - name: Deploy Website
+        env:
+          HOST: ec2-user@staging.basedosdados.org
+          HOST_NAME: staging.basedosdados.org
+        run: ./deploy.sh deploy
+
+      - name: Report Failures
+        if: "${{ failure() }}"
+        uses: cstuder/apprise-ga@master
+        env:
+          APPRISE_URL: "${{ secrets.APPRISE_NOTIFICATION_URL }}"
+          INFRA_HANDLES: "${{secrets.NOTIFICATION_DISCORD_INFRA_HANDLES}}" # not working, debug this
+        with:
+          title: "Broken CI"
+          message: "<#809077231611674685>. CI DEPLOY FAILED, please check https://github.com/basedosdados/website/actions"
 
   deploy-production:
+    if: github.ref_name == 'master'
     name: Deploy Production Environment
     runs-on: ubuntu-latest
     environment:
       name: prod
       url: 'https://basedosdados.org'
-    needs: deploy-staging
 
     steps:
-      - name: Run a one-line script
-        run: echo Deploy Production Environment
+      - name: Clone Repository
+        uses: actions/checkout@v2
+
+      - name: Set Up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Add Secret Files
+        env:
+          DOT_ENV_PROD: ${{ secrets.DOT_ENV_PROD }}
+          CKAN_PROD_INI: ${{ secrets.CKAN_PROD_INI }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+        run: |
+          echo "$DOT_ENV_PROD" > .env.prod && \
+          echo "$CKAN_PROD_INI" > ./configs/ckan.override.prod.ini && \
+          mkdir ~/.ssh && \
+          echo "$SSH_KEY" > ~/.ssh/BD.pem && \
+          chmod 700 ~/.ssh ~/.ssh/BD.pem
+
+      - name: Deploy Website
+        env:
+          HOST: ec2-user@basedosdados.org
+          HOST_NAME: basedosdados.org
+        run: ./deploy.sh deploy
+
+      - name: Report Failures
+        if: "${{ failure() }}"
+        uses: cstuder/apprise-ga@master
+        env:
+          APPRISE_URL: "${{ secrets.APPRISE_NOTIFICATION_URL }}"
+          INFRA_HANDLES: "${{secrets.NOTIFICATION_DISCORD_INFRA_HANDLES}}" # not working, debug this
+        with:
+          title: "Broken CI"
+          message: "<#809077231611674685>. CI DEPLOY FAILED, please check https://github.com/basedosdados/website/actions"
