@@ -3,7 +3,7 @@ import { Link } from "@chakra-ui/react";
 export function LinkDash({ children, href, dash = true, ...style }) {
   return (
     <Link
-      color="#3AA1EB"
+      color="#42B0FF"
       href={href}
       textDecoration="none"
       _hover={{ textDecoration: "none", opacity:"0.6" }}

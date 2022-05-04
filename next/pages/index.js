@@ -10,15 +10,16 @@ import {
 import Image from "next/image";
 import ControlledInput from "../components/atoms/ControlledInput";
 import SectionText from "../components/atoms/SectionText";
-import BigTitle from "../components/atoms/BigTitle";
+import Display from "../components/atoms/Display";
 import { useEffect, useState } from "react";
-import ThemeCatalog from "../components/organisms/ThemeCatalog";
-import Title from "../components/atoms/Title";
+import ThemeCatalog from "../components/molecules/ThemeCatalog";
 import SectionTitle from "../components/atoms/SectionTitle";
+import SectionLink from "../components/atoms/SectionLink"
 import Typist from "react-typist";
 import {
   getRecentDatalakeDatasets
 } from "./api/datasets";
+import { getGroupList } from "./api/groups"
 import { ShadowBox } from "../components/atoms/ShadowBox";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
@@ -38,7 +39,9 @@ import RoundedButton from "../components/atoms/RoundedButton";
 import Link from "../components/atoms/Link";
 
 export async function getStaticProps(context) {
+  const themes = await getGroupList();
   let recentDatalakeDatasets;
+
   try {
     recentDatalakeDatasets = await getRecentDatalakeDatasets();
   } catch {
@@ -48,6 +51,7 @@ export async function getStaticProps(context) {
   return await withPages({
     props: {
       recentDatalakeDatasets,
+      themes  
     },
     revalidate: 60,
   });
@@ -81,7 +85,7 @@ export async function getStaticProps(context) {
 // }
 
 
-function Hero({ recentDatalakeDatasets }) {
+function Hero({ recentDatalakeDatasets, themes }) {
   const [search, setSearch] = useState();
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
@@ -112,26 +116,23 @@ function Hero({ recentDatalakeDatasets }) {
             width="100%"
             marginStart="0px !important"
             direction="column"
-            marginTop={{ base: "100px", lg: "50px" }}
+            marginTop={{ base: "100px", lg: "56px" }}
           >
-            <BigTitle
+            <Display
               position="relative"
               zIndex="1"
-              fontWeigth="500"
-              fontFamily="Ubuntu"
               flex="2"
-              fontSize="34px"
-              letterSpacing={{ base: "0", lg: "0.5px" }}
               textAlign="center"
               marginStart="0px !important"
-              marginBottom={isMobileMod ? "30px" : "50px"}
+              marginBottom={isMobileMod ? "32px" : "40px"}
+              color="#2B8C4D"
             >
               Encontre os dados que você precisa
-            </BigTitle>
+            </Display>
             <VStack
               maxWidth="650px"
               width="100%"
-              spacing={3}
+              spacing={4}
               alignItems="flex-start"
               flex="3"
             >
@@ -142,14 +143,15 @@ function Hero({ recentDatalakeDatasets }) {
                 onEnterPress={openSearchLink}
                 alignSelf="center"
                 justifyContent="center"
+                isBorderColor={false}
                 inputStyle={{
-                  padding: "20px 65px 20px 30px",
+                  padding: "24px 64px 24px 32px",
                   height: "80px",
                   borderRadius: "25px",
                   backgroundColor: "#ffffff",
                   fontSize: "24px",
                   border: "0px",
-                  boxShadow: "0 2px 5px 1px rgba(64, 60, 67, 0.16) !important",
+                  boxShadow: "0 1px 8px 1px rgba(64, 60, 67, 0.16) !important",
                 }}
                 rightIcon={
                   (search ?
@@ -171,9 +173,17 @@ function Hero({ recentDatalakeDatasets }) {
                   )
                 }
               />
-              <HStack paddingLeft={isMobileMod ? "20px" : "40px"}>
+              <HStack paddingLeft={isMobileMod ? "20px" : "32px"}>
                 {!isMobileMod &&
-                  <SectionText fontFamily="Ubuntu" fontSize="13px">Termos populares: </SectionText>
+                  <Text 
+                    fontFamily="Ubuntu"
+                    fontSize="13px"
+                    fontWeight="300"
+                    letterSpacing="0.4px"
+                    color="#252A32"
+                  >
+                    Termos populares: 
+                  </Text>
                 }
                 <ThemeTag name="lei" />
                 <ThemeTag name="mortalidade" />
@@ -189,18 +199,21 @@ function Hero({ recentDatalakeDatasets }) {
             position="relative"
             id="theme"
           >
-            <Title
-              fontSize="22px"
+            <Text
+              fontFamily="Ubuntu"
+              fontSize={isMobileMod ? "16px" : "22px"}
               fontWeigth="400"
+              letterSpacing={isMobileMod ? "0.2px" : "0.1px"}
               minHeight="30px"
-              marginBottom="20px"
-              color="#9C9C9C"
+              marginBottom="24px"
+              color="#A3A3A3"
               cursor="pointer"
               onClick={() => window.open("#theme", "_self")}
             >
               Busque por tema
-            </Title>
+            </Text>
             <ThemeCatalog
+              themes={themes}
               recentDatalakeDatasets={recentDatalakeDatasets}
             />
           </VStack>
@@ -244,53 +257,55 @@ function Products() {
 
   return (
     <VStack
-      paddingTop="70px"
       width={{ base: "90%", lg: "85%" }}
+      maxWidth="1264px"
       margin="auto"
     >
       <VStack id="support" position="relative" width="95%">
-        <BigTitle
-          color="#252A32"
+        <Display
           position="relative"
           zIndex="1"
           width="100%"
-          fontSize={isMobileMod ? "22px" : "32px"}
-          lineHeight={isMobileMod && "28px"}
-          fontWeigth="400"
           textAlign="center"
-          marginBottom="80px"
+          margin="80px 0px"
         >
-          Facilitamos o trabalho para que a distância{!isMobileMod && <br/>}
+          Facilitamos o trabalho para que a distância {!isMobileMod && <br/>}
           entre você e sua análise seja <span style={{color:"#2B8C4D"}}>apenas uma boa pergunta</span>.
-        </BigTitle>
-        <VStack maxWidth="1600px" spacing={!isMobileMod && 120}>
+        </Display>
+
+        <VStack spacing={isMobileMod ? 8 : 120}>
           <HStack
             flexDirection={isMobileMod && "column"}
             justifyContent="center"
-            gridGap={isMobileMod ? "70px" : "150px"}
+            gridGap={isMobileMod ? "0" : "160px"}
           >
             <Stack maxWidth={isMobileMod ? "300px" : "430px"}>
-              <SectionText>FILTROS</SectionText>
-              <SectionTitle paddingBottom="10px" fontSize="24px" color="#252A32">Busque dados como quiser</SectionTitle>
+              <Text
+               fontFamily="Ubuntu"
+               fontSize="14px"
+               fontWeight="300"
+               color="#6F6F6F"
+               letterSpacing="0.5px"
+               lineHeight="24px"
+              >
+                FILTROS
+              </Text>
+
+              <SectionTitle marginTop="0 !important">Busque dados como quiser</SectionTitle>
               <SectionText>
                 São vários filtros para ajudar você a encontrar os dados que necessita.
                 Ao navegar entre centenas de conjuntos de dados disponíveis na plataforma,
-                você pode refinar sua busca por tema, organização, forma de consulta, nível da observação e mais.
+                você pode refinar sua busca por tema, organização, cobertura temporal, nível da observação e mais.
               </SectionText>
-              <Box position="relative">
-                <Link
-                  position="absolute"
-                  top="10px"
-                  left="0"
-                  paddingBottom="6px"
-                  color="#42B0FF"
-                  borderBottom="1px solid #42B0FF"
-                  href={"/dataset"}
-                >
-                  Comece sua pesquisa
-                </Link>
-              </Box>
+
+              <SectionLink
+                marginTop="24px !important"
+                href={"/dataset"}
+              >
+                Comece sua pesquisa
+              </SectionLink>
             </Stack>
+
             <Stack>
               <ProductsFiltersImage
                 widthImage={isMobileMod ? "300px" : "550px"}
@@ -302,76 +317,90 @@ function Products() {
           <HStack
             flexDirection={isMobileMod && "column"}
             justifyContent="center"
-            gridGap={isMobileMod ? "70px" : "150px"}
+            gridGap={isMobileMod ? "0" : "160px"}
           >
-            <Stack order={isMobileMod && 1}>
-              <ProcessedDataImage
-                widthImage={isMobileMod ? "300px" : "550px"}
-                heightImage={isMobileMod && "250px"}
-              />
-            </Stack>
-            <Stack maxWidth={isMobileMod ? "300px" : "430px"}>
+            <Stack 
+              order={isMobileMod ? 0 : 1}
+              maxWidth={isMobileMod ? "300px" : "430px"}
+            >
               <HStack spacing={1}>
-                <SectionText>TABELAS TRATADAS</SectionText>
+                <Text
+                  fontFamily="Ubuntu"
+                  fontSize="14px"
+                  fontWeight="300"
+                  color="#6F6F6F"
+                  letterSpacing="0.5px"
+                  lineHeight="24px"
+                >
+                  TABELAS TRATADAS
+                </Text>
+
                 <BDLogoPlusImage
                   widthImage="40px"
                 />
               </HStack>
-              <SectionTitle paddingBottom="10px" fontSize="24px" color="#252A32">Acesse dados de qualidade</SectionTitle>
+              
+              <SectionTitle marginTop="0 !important">Acesse dados de qualidade</SectionTitle>
               <SectionText>
                 Com as tabelas tratadas do nosso <i>datalake</i> público,
                 você não precisa mais gastar horas limpando bases.
                 Nossa metodologia de padronização permite cruzar facilmente dados de diferentes organizações. Assim, você pode focar no que realmente importa.
               </SectionText>
-              <Box position="relative">
-                <Link
-                  position="absolute"
-                  top="10px"
-                  left="0"
-                  paddingBottom="6px"
-                  color="#42B0FF"
-                  borderBottom="1px solid #42B0FF"
-                  href={"/dataset?resource_type=bdm_table"}
-                >
-                  Veja os dados disponíveis
-                </Link>
-              </Box>
+
+              <SectionLink
+                marginTop="24px !important"
+                href={"/dataset?resource_type=bdm_table&order_by=score"}
+              >
+                Veja os dados disponíveis
+              </SectionLink>
+            </Stack>
+
+            <Stack order={isMobileMod ? 1 : 0}>
+              <ProcessedDataImage
+                widthImage={isMobileMod ? "300px" : "550px"}
+                heightImage={isMobileMod && "250px"}
+              />
             </Stack>
           </HStack>
 
           <HStack
             flexDirection={isMobileMod && "column"}
             justifyContent="center"
-            gridGap={isMobileMod ? "100px" : "150px"}
+            gridGap={isMobileMod ? "100px" : "160px"}
           >
-            <Stack maxWidth={isMobileMod ? "300px" : "430px"} >
-              <SectionText>PACOTES</SectionText>
-              <SectionTitle paddingBottom="10px" fontSize="24px" color="#252A32">Explore na sua linguagem favorita</SectionTitle>
+            <Stack maxWidth={isMobileMod ? "300px" : "430px"}>
+              <Text
+                fontFamily="Ubuntu"
+                fontSize="14px"
+                fontWeight="300"
+                color="#6F6F6F"
+                letterSpacing="0.5px"
+                lineHeight="24px"
+              >
+                PACOTES
+              </Text>
+
+              <SectionTitle marginTop="0 !important">Explore na sua linguagem favorita</SectionTitle>
               <SectionText>
                 Desenvolvemos pacotes para acesso aos dados tratados em Python, R e linha de comando. Além disso, você pode consultar e filtrar
                 dados usando SQL no editor do nosso <i>datalake</i> público no Google BigQuery.
               </SectionText>
-              <Box position="relative">
-                <Link
-                  position="absolute"
-                  top="10px"
-                  left="0"
-                  paddingBottom="6px"
-                  color="#42B0FF"
-                  borderBottom="1px solid #42B0FF"
-                  href={"https://basedosdados.github.io/mais/"}
-                >
-                  Saiba como acessar
-                </Link>
-              </Box>
+
+              <SectionLink
+                marginTop="24px !important"
+                href={"https://basedosdados.github.io/mais/"}
+              >
+                Saiba como acessar
+              </SectionLink>
             </Stack>
+
             <Stack
               maxWidth={isMobileMod ? "320px" : "550px"}
               minWidth={isMobileMod ? "320px" : "550px"}
             >
               <Box
-                borderRadius={isMobileMod ? "12px" :"20px"}
-                filter="drop-shadow(0px 2.2449px 2.2449px rgba(0, 0, 0, 0.4))"
+                borderRadius={isMobileMod ? "8px" :"12px"}
+                filter="drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.4))"
                 maxHeight={{ base: "none", md: "200px" }}
                 padding={{ base: "60px 20px", lg: "60px 30px" }}
                 fontSize={{ base: "12px", lg: "inherit" }}
@@ -412,47 +441,41 @@ function Support({ pages }) {
 
   return (
     <VStack
-      paddingTop={isMobileMod ? "100px" :"200px"}
       spacing={20}
       width={{ base: "90%", lg: "85%" }}
       margin="auto"
     >
       <VStack id="support" position="relative" width="95%">
-        <BigTitle
-          color="#252A32"
+        <Display
           position="relative"
           zIndex="1"
           width="100%"
-          fontSize={isMobileMod ? "22px" : "32px"}
-          lineHeight={isMobileMod && "28px"}
-          fontWeigth="400"
           textAlign="center"
-          marginBottom="20px"
+          margin={isMobileMod ? "80px 0px 40px" : "176px 0px 40px"}
         >
-          Existimos através do esforço de pessoas{!isMobileMod && <br/>}
+          Existimos através do esforço de pessoas {!isMobileMod && <br/>}
           que acreditam no acesso a dados abertos de qualidade.
-        </BigTitle>
-        <SectionText
+        </Display>
+        <Text
           position="relative"
           zIndex="1"
           color="#6F6F6F"
           fontFamily="Ubuntu"
-          fontSize="17px"
+          fontSize={isMobileMod ? "16px" : "18px"}
           alignSelf="center"
-          letterSpacing="0.5px"
+          letterSpacing="0.1px"
           fontWeight="300"
-          paddingBottom="45px"
+          margin="0 0 48px !important"
         > Apoie a Base dos Dados você também
-        </SectionText>
+        </Text>
 
         <Stack
           width="100%"
-          maxWidth="1600px"
-          paddingBottom="50px"
+          margin="0 0 56px !important"
           justifyContent="center"
           alignItems="center"
           direction={{ base: "column", lg: "row" }}
-          gridGap="30px"
+          gridGap="48px"
         >
           <ShadowBox
             height="100%"
@@ -463,11 +486,9 @@ function Support({ pages }) {
               />
             }
             title="Entusiasta"
-            spacing={5}
+            spacing={4}
           >
             <SectionText
-              fontWeight="300"
-              fontSize="14px"
               textAlign="center"
             >
               Bolso apertado? Apenas R$0,50 por dia para ajudar a manter a iniciativa.
@@ -490,24 +511,20 @@ function Support({ pages }) {
               />
             }
             title={
-              <Text
-                color="#FF8484"
-                fontWeight="500"
-              >
+              <a style={{ color:"#FF8484", fontWeight:"500"}}>
                 <i>Databaser</i>
-              </Text>
+              </a>
             }
-            spacing={5}
+            spacing={4}
           >
             <SectionText
-              fontWeight="300"
-              fontSize="14px"
               display="flex"
               flexDirection="column"
               textAlign="center"
+              color="#252A32 !important"
             >
               <b>Doe R$ 1 real por dia</b>
-              <p>para fazer databasers felizes.</p>
+              <p>para fazer <i>databasers</i> felizes.</p>
             </SectionText>
             <Link _hover={{ opacity:"none" }} target="_blank" href="https://apoia.se/basedosdados">
               <RoundedButton backgroundColor="#FF8484" width="200px">
@@ -525,11 +542,9 @@ function Support({ pages }) {
               />
             }
             title="Mestre dos dados"
-            spacing={5}
+            spacing={4}
           >
             <SectionText
-              fontWeight="300"
-              fontSize="14px"
               textAlign="center"
             >
               Menos de R$2 reais por dia para pouparmos ainda mais seu trabalho.
@@ -543,23 +558,26 @@ function Support({ pages }) {
         </Stack>
 
         <Box padding="0px">
-          <BigTitle
+          <Text
             width="100%"
             textAlign="center"
-            padding="0px"
-            fontSize="24px"
+            fontFamily="Ubuntu"
+            fontSize={isMobileMod ? "20px" : "24px"}
+            letterSpacing={isMobileMod ? "0.2px" : "0px"}
             color="#252A32"
             fontWeigth="400"
+            lineHeight="32px"
+            paddingBottom="24px"
           >
             Doe via PIX
-          </BigTitle>
+          </Text>
           <Stack
             justify="space-between"
             alignItems="flex-start"
             width="100%"
             gridGap={10}
             direction={{ base: "column", lg: "row" }}
-            padding={!isMobileMod && "20px 20px 0"}
+            margin={!isMobileMod && "24px 24px 0px"}
           >
             <Stack
               width={{ base: "100%", lg: "initial" }}
@@ -606,8 +624,7 @@ function Support({ pages }) {
         </Box>
 
         <SectionText
-          paddingTop="20px"
-          paddingBottom="30px"
+          margin="32px 0 !important"
         >
           💰 Gostaria de apoiar institucionalmente a Base dos Dados?
           <LinkDash
@@ -628,6 +645,7 @@ export default function Home({
   pages,
   popularDatasets,
   recentDatalakeDatasets,
+  themes,
 }) {
   return (
     <MainPageTemplate backgroundColor="#FFFFFF" pages={pages}>
@@ -635,12 +653,13 @@ export default function Home({
         alignItems="center"
         width="100%"
         padding="0px 10%"
-        marginTop="55px"
+        marginTop="56px"
         zIndex="10"
         position="relative"
       >
         <Hero
           recentDatalakeDatasets={recentDatalakeDatasets}
+          themes={themes}
         />
       </VStack>
       <BePartner />
