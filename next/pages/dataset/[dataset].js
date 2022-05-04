@@ -409,10 +409,11 @@ export default function DatasetPage({
         paddingTop={{ base: "50px", lg: "0px" }}
         margin="auto"
         width={{ base: "90vw", lg: "80vw" }}
+        maxWidth="1264px"
       >
         <Stack
           direction={{ base: "column", lg: "row" }}
-          margin="auto"
+          marginRight="auto"
           spacing={8}
           align="flex-start"
         >
@@ -427,7 +428,9 @@ export default function DatasetPage({
               boxShadow="0px 4px 8px rgba(100, 96, 103, 0.16)"
               width={{ base: "25%", lg: "100%" }}
               minWidth="250px"
+              maxWidth="250px"
               minHeight="250px"
+              maxHeight="250px"
               height={{ base: "25%", lg: "100%" }}
               objectFit="contain"
               src={
@@ -448,6 +451,7 @@ export default function DatasetPage({
             </BigTitle>
             <Markdown
               width={{ base: "90vw", lg: "60vw" }}
+              maxWidth="970px"
               limit={true}
             >
               {dataset.notes || "Nenhuma descrição fornecida."}

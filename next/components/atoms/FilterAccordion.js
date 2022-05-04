@@ -215,12 +215,26 @@ export function RangeFilterAccordion({
             onChange={setMin}
             width="100%"
             placeholder="Min"
+            type="number"
+            inputStyle={{
+              height: "40px",
+              fontSize: "14px",
+              width: "100%",
+              borderRadius: "16px",
+            }}
           />
           <ControlledInput
             value={max}
             onChange={setMax}
             width="100%"
             placeholder="Max"
+            type="number"
+            inputStyle={{
+              height: "40px",
+              fontSize: "14px",
+              width: "100%",
+              borderRadius: "16px",
+            }}
           />
         </HStack>
         {error ? (

@@ -141,7 +141,7 @@ export function BaseResourcePage({
         {isShowButtons &&
           <HStack
             position="absolute"
-            top="0"
+            top="14px"
             right="0"
             spacing={2}
           >

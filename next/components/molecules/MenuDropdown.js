@@ -12,7 +12,7 @@ export function MenuDropdown({ title, children, ...style }) {
     setIsOpenMenu(true);
   }
   const btnMouseLeaveEvent = () => {
-    timerRef.current = window.setTimeout(() => {
+    timerRef.current = setTimeout(() => {
       setIsOpenMenu(false);
     }, 2000);
   }
@@ -43,8 +43,9 @@ export function MenuDropdown({ title, children, ...style }) {
       >
         <Box display="flex">
           {title}
-          <ArrowIcon 
-            marginLeft="4px"
+          <ArrowIcon
+            widthIcon="12px"
+            marginLeft="6px"
             chevron={true}
             rotation={"rotate(90deg)"}
           />

@@ -12,7 +12,7 @@ import {
   Button,
   HStack,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import Subtitle from "../atoms/Subtitle";
 import SectionText from "../atoms/SectionText";
 import Link from "../atoms/Link";
@@ -20,6 +20,8 @@ import GreenTab from "../atoms/GreenTab";
 import RoundedButton from "../atoms/RoundedButton";
 import CopyIcon from "../../public/img/icons/copyIcon";
 import { DisclaimerBox } from "./DisclaimerBox";
+import ExclamationIcon from "../../public/img/icons/exclamationIcon";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
 
 export function BoxBigQueryGoogle({ href }) {
 
@@ -83,14 +85,19 @@ export function PrismCodeHighlight({ language, children }) {
   )
 }
 
-
 export default function DataInformationQuery ({ resource }) {
   const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}.zip`
   const queryName = `${resource.dataset_id}.${resource.name}`;
+  const [isMobileMod, setIsMobileMod] = useState(false)
+  const isMobile = useCheckMobile();
+
+  useEffect(() => {
+    setIsMobileMod(isMobile)
+  },[isMobile])
 
   useEffect(() => {
     if (window) window.Prism.highlightAll();
-  }, [resource]);
+  }, [resource])
 
   return (
     <VStack
@@ -239,30 +246,34 @@ bd_read_table, ///
           </TabPanel>
 
           <TabPanel padding="16px 0 0">
-            <DisclaimerBox
-              marginTop="0"
-              title="Estes dados estão disponíveis porque diversas pessoas colaboram para a sua manutenção."
-              text={
-              <SectionText>
-                  Apoie você também com doação financeira ou
-                  <Link
-                    textDecoration="none"
-                    color="#42B0FF"
-                    target="_blank"
-                    href="https://basedosdados.github.io/mais/colab_data/"
-                  > saiba como contribuir com seu tempo<a style={{color:"#252A32", fontSize:"14px"}}>.</a>
-                  </Link>
-              </SectionText>
-              }
-            />
+            <SectionText>
+              Estes dados estão disponíveis porque diversas pessoas colaboram para a sua manutenção.
+            </SectionText>
+            <SectionText>
+              Antes de baixar os dados, apoie você também com uma doação financeira ou <Link color="#42B0FF" href="https://basedosdados.github.io/mais/colab_data/">saiba como contribuir com seu tempo</Link>.
+            </SectionText>
+            <DisclaimerBox>
+              <HStack gridGap="8px" alignItems="flex-start">
+                <ExclamationIcon 
+                  widthIcon="20px"
+                  heightIcon="20px"
+                  fill="#42B0FF"
+                  marginTop="4px"
+                />
+                <Box>
+                  <SectionText fontWeigth="700">ATENÇÃO: O tamanho da tabela ultrapassou o limite permitido para download.</SectionText>
+                  <SectionText>Ao clicar em <i>Download dos dados</i>, você baixará apenas uma prévia dos dados. Para acessar a tabela completa, utilize nossos pacotes em Python, R ou Stata.</SectionText>
+                </Box>
+              </HStack>
+            </DisclaimerBox>
             <VStack
-              alignItems="flex-start"
+              alignItems={isMobileMod ? "center" :"flex-start"}
               padding="32px 0 24px"
               direction="column"
               height="100%"
               spacing={4}
             >
-              <HStack spacing={10}>
+              <HStack spacing={10} flexDirection={isMobileMod && "column"}>
                 <Image
                   height="250px"
                   objectFit="contain"
@@ -281,7 +292,11 @@ bd_read_table, ///
                 </Stack>
               </HStack>
 
-              <HStack spacing={6}>
+              <HStack
+                spacing={!isMobileMod && 6}
+                flexDirection={isMobileMod && "column"}
+                gridGap={isMobileMod && "10px"}
+              >
                 <Link
                   minWidth="225px"
                   width="100%"

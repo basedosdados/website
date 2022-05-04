@@ -127,7 +127,7 @@ function Hero({ recentDatalakeDatasets, themes }) {
               marginBottom={isMobileMod ? "32px" : "40px"}
               color="#2B8C4D"
             >
-              Encontre os dados que precisa
+              Encontre os dados que você precisa
             </Display>
             <VStack
               maxWidth="650px"
@@ -143,6 +143,7 @@ function Hero({ recentDatalakeDatasets, themes }) {
                 onEnterPress={openSearchLink}
                 alignSelf="center"
                 justifyContent="center"
+                isBorderColor={false}
                 inputStyle={{
                   padding: "24px 64px 24px 32px",
                   height: "80px",
@@ -192,7 +193,8 @@ function Hero({ recentDatalakeDatasets, themes }) {
           </VStack>
 
           <VStack
-            margin="120px 0 0 !important"
+            margin="0 !important"
+            paddingTop="120px"
             width="100%"
             position="relative"
             id="theme"
