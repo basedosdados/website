@@ -1,11 +1,9 @@
 import { Image } from "@chakra-ui/image";
 import { HStack, Stack, VStack, Text, Center } from "@chakra-ui/layout";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import BigTitle from "../atoms/BigTitle";
-import SectionText from "../atoms/SectionText";
-import Title from "../atoms/Title";
 import { NamedAvatar } from "../molecules/NamedAvatar";
-import { slidesToShowPlugin } from "@brainhubeu/react-carousel";
+import { slidesToShowPlugin, autoplayPlugin } from "@brainhubeu/react-carousel";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
 const Carousel = dynamic(() => import("@brainhubeu/react-carousel"), {
@@ -15,7 +13,7 @@ const Carousel = dynamic(() => import("@brainhubeu/react-carousel"), {
 function Testimonial({ children, name, position, src }) {
   return (
     <VStack
-      padding={{ base: "0px", lg: "80px 30px 30px" }}
+      margin={{ base: "0px", lg: "80px 32px 32px" }}
       width="80%"
     >
       <Stack
@@ -23,20 +21,20 @@ function Testimonial({ children, name, position, src }) {
       >
         <Image
           width="50px"
-          paddingBottom="20px"
           src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/%E2%80%9C.png"
         />
       </Stack>
-      <SectionText
-        padding="0px 20px 50px 20px"
+      <Text
+        margin="32px 16px 48px !important"
         fontFamily="Ubuntu"
         fontSize="28px"
         fontWeight="300"
+        letterSpacing="-0.1px"
         textAlign="center"
         lineHeight="45px"
       >
         {children}
-      </SectionText>
+      </Text>
       <NamedAvatar
         alignSelf="flex-end"
         name={name}
@@ -73,29 +71,40 @@ function PartnerBox({ src, ...props }) {
 }
 
 export function BePartner() {
+  const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
 
+  useEffect(() => {
+    setIsMobileMod(isMobile)
+  }, [isMobile])
+
   return (
-    <VStack width="80%" spacing={7} margin="auto">
+    <VStack width="80%" margin="auto">
       {/* <BigTitle>Como impactamos pessoas e organizações</BigTitle> */}
       <Stack
         width="100%"
+        maxWidth="1264px"
         justifyContent="space-between"
-        paddingTop="40px"
+        marginTop="40px"
         direction="column"
         spacing={10}
       >
         <Center width="100%">
-          <Title
+          <Text
             zIndex={2}
+            fontFamily="Ubuntu"
+            fontSize={isMobileMod ? "16px" : "18px"}
             fontWeight="300"
-            color="#6F6F6F"
-          >Parcerias com</Title>
+            letterSpacing={isMobileMod ? "0.2px" : "0.1px"}
+            color="#7D7D7D"
+          >
+            Parcerias com
+          </Text>
         </Center>
         <Stack
           direction="row"
           width="100%"
-          maxWidth="1600px"
+          maxWidth="1264px"
           spacing={0}
           gridGap="30px"
           alignItems="center"
@@ -113,7 +122,10 @@ export function BePartner() {
         </Stack>
       </Stack>
       {!isMobile &&
-        <HStack paddingBottom="30px" w="110%">
+        <HStack 
+          w="110%"
+          maxWidth="1264px" 
+        >
           <Carousel
             plugins={[
               "infinite",
@@ -124,15 +136,20 @@ export function BePartner() {
                 options: {
                   numberOfSlides: 1,
                 },
+                resolve: autoplayPlugin,
+                options: {
+                  interval: 20000,
+                },
               },
             ]}
+            animationSpeed={1000}
           >
             <Testimonial
               name="Fernando Barbalho"
               position="Cientista de Dados do Tesouro Nacional"
               src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/tesouro_nacional.png"
             >
-              A siconfiBD é um pacote que traz de forma rápida e programática os
+              O siconfiBD é um pacote que traz de forma rápida e programática os
               dados da Secretaria do Tesouro Nacional.
               O código é construído de forma <i>open-source</i> pela equipe do Tesouro
               e utiliza as tabelas tratadas BD+ para compor funções em R.

@@ -3,16 +3,14 @@ import {
   Center,
   Image,
   Tooltip,
-  Button
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import dynamic from 'next/dynamic';
 import { slidesToShowPlugin, slidesToScrollPlugin } from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { getGroupList } from "../../pages/api/groups"
 import { getRecentDatalakeDatasetsByTheme } from "../../pages/api/datasets";
-import DatabaseCard from "./DatabaseCard";
+import DatabaseCard from "../organisms/DatabaseCard";
 
 const Carousel = dynamic(
   () => import('@brainhubeu/react-carousel'),
@@ -30,52 +28,59 @@ function Themes ({ isMobileMod, newRecentDataLakeDataSets, listThemes=[] }) {
     })
   }
 
+  const plug = [ "arrows",
+    {
+      resolve: slidesToShowPlugin,
+      options: {
+        numberOfSlides: listThemes && listThemes.length
+      }
+    },
+    {
+      resolve: slidesToScrollPlugin,
+      options: {
+        numberOfSlides: listThemes && listThemes.length/4,
+      }
+    }
+  ]
+
+  const plugMobile = [...plug]
+  plugMobile.splice(0, 1)
+
   if(listThemes.length === 0)
     return null
 
   return (
     <Center
       width="95vw"
+      maxWidth="1364px"
     >
       <Carousel
         offset={isMobileMod ? 50 : 70}
         animationSpeed={1000}
-        plugins={[ "arrows",
-          {
-            resolve: slidesToShowPlugin,
-            options: {
-              numberOfSlides: listThemes && listThemes.length
-            }
-          },
-          {
-            resolve: slidesToScrollPlugin,
-            options: {
-              numberOfSlides: listThemes && listThemes.length/4,
-            }
-          }
-        ]}
+        plugins={isMobileMod ? plugMobile : plug}
       >
         {listThemes && listThemes.map((elm) => (
           <Center
             onClick={() => searchTheme(elm)}
             key={elm.id}
             cursor="pointer"
-            width={ isMobileMod ? "45px" : "80px" }
-            minWidth={ isMobileMod ? "45px" : "80px" }
-            height={ isMobileMod ? "45px" : "80px" }
-            minHeight={ isMobileMod ? "45px" : "80px" }
-            borderRadius={ isMobileMod ? "8px" : "14px" }
+            width={ isMobileMod ? "45px" : "100px" }
+            minWidth={ isMobileMod ? "45px" : "100px" }
+            height={ isMobileMod ? "45px" : "100px" }
+            minHeight={ isMobileMod ? "45px" : "100px" }
+            borderRadius={ isMobileMod ? "8px" : "16px" }
             backgroundColor={ selectedTheme === elm.name ? "#2B8C4D" : "FFF"}
-            boxShadow="0px 1px 8px 1px rgba(64, 60, 67, 0.20)"
+            boxShadow="0px 1px 8px 1px rgba(64, 60, 67, 0.16)"
             _hover={{ transform:"scale(1.1)", backgroundColor:"#2B8C4D" }}
             transition="all 0.5s"
             margin="10px 0"
           >
             <Tooltip
+              hasArrow
               label={elm.display_name}
               fontSize="16px"
               fontWeight="500"
-              padding="5px 15px"
+              padding="5px 16px 6px"
               backgroundColor="#2A2F38"
               marginTop="10px"
               color="#FFF"
@@ -104,12 +109,12 @@ function CardThemes ({ isMobileMod, recentThemes }) {
 
   return (
     <VStack
-      width="85vw"
-      minWidth="400px"
+      width="90vw"
+      minWidth="370px"
+      maxWidth="1284px"
       alignItems="flex-start"
-      padding="25px 0"
-      margin="50px 0 !important"
-      borderRadius="15px"
+      padding="24px 0"
+      margin="48px 0 !important"
       position="relative"
     >
       <Carousel
@@ -161,17 +166,15 @@ function CardThemes ({ isMobileMod, recentThemes }) {
   )
 }
 
-export default function ThemeCatalog ({ recentDatalakeDatasets }) {
+export default function ThemeCatalog ({ recentDatalakeDatasets, themes }) {
   const [recentThemes, setRecentThemes] = useState([])
   const [listThemes, setListThemes] = useState([])
   const isMobile = useCheckMobile()
 
   useEffect(() => {
-    getGroupList().then(res => {
-      setListThemes(res.data.result)
-    })
+    setListThemes(themes)
     recentDatalakeDatasets ? setRecentThemes(recentDatalakeDatasets) : setRecentThemes()
-  },[])
+  },[recentDatalakeDatasets, themes])
 
   const newRecentDataLake = (elm) => {
     return getRecentDatalakeDatasetsByTheme(elm.name)

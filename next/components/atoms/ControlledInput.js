@@ -16,6 +16,7 @@ export default function ControlledInput({
   rightAddon,
   inputBackgroundColor = null,
   inputStyle,
+  isBorderColor = true,
   ...props
 }) {
   async function checkForEnter(e) {
@@ -33,7 +34,8 @@ export default function ControlledInput({
         letterSpacing="0.5px"
         fontWeight="300"
         border="1px solid #DEDFE0 !important"
-        _hover={{ borderColor: "#42B0FF !important" }}
+        _focus={isBorderColor && { border:"2px solid #42B0FF !important" }}
+        _hover={isBorderColor && { border:"2px solid #42B0FF !important" }}
         backgroundColor={inputBackgroundColor}
         borderRadius="20px"
         value={value}

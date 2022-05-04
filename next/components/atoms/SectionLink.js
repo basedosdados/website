@@ -1,14 +1,13 @@
-import { Heading } from "@chakra-ui/react";
+import { Link as ChakraLink } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
-export default function BigTitle({
+export default function Link({
   children,
-  color = "#252A32",
-  fontWeigth = "500",
+  href,
+  target,
   ...props
 }) {
-  
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
 
@@ -17,16 +16,21 @@ export default function BigTitle({
   }, [isMobile])
 
   return (
-    <Heading
+    <ChakraLink
+      width="fit-content"
+      target={target}
+      href={href}
       fontFamily="Ubuntu"
-      fontSize={isMobileMod ? "20px" : "28px"}
-      lineHeight={isMobileMod ? "24px" : "40px"}
+      fontSize={isMobileMod ? "12px" : "15px"}
       letterSpacing={isMobileMod ? "0.2px" : "0.1px"}
-      color={color}
-      fontWeight={fontWeigth}
+      fontWeight="700"
+      color="#42B0FF"
+      _hover={{ textDecoration: "none", opacity:"0.6" }}
+      paddingBottom="4px"
+      borderBottom="1px solid #42B0FF"
       {...props}
     >
       {children}
-    </Heading>
+    </ChakraLink>
   );
 }

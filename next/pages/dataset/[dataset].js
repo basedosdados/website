@@ -17,9 +17,9 @@ import {
   showDataset,
   updateResource,
 } from "../api/datasets";
-import SectionText from "../../components/atoms/SectionText";
-import Title from "../../components/atoms/Title";
 import BigTitle from "../../components/atoms/BigTitle";
+import Subtitle from "../../components/atoms/Subtitle";
+import SectionText from "../../components/atoms/SectionText";
 import { FilterAccordion } from "../../components/atoms/FilterAccordion";
 import { useContext, useState, useEffect } from "react";
 import { isBdPlus, unionArrays } from "../../utils";
@@ -128,13 +128,8 @@ function ResourcesPage({
   availableOptionsTranslations,
   translations,
   dataset,
+  isMobileMod,
 }) {
-  const [isMobileMod, setIsMobileMod] = useState(false)
-  const isMobile = useCheckMobile();
-
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
 
   const [resource, setResource] = useState(
     bdmTables.length > 0 ? bdmTables[0] : externalLinks[0] || informationRequest[0]
@@ -243,7 +238,7 @@ function ResourcesPage({
 
   return (
     <Stack
-      paddingTop="20px"
+      paddingTop="24px"
       direction={{ base: "column", lg: "row" }}
       spacing={4}
       width="100%"
@@ -251,7 +246,7 @@ function ResourcesPage({
       <VStack
         minWidth={{ base: "100%", lg: "250px" }}
         maxWidth={{ base: "100%", lg: "250px" }}
-        spacing={5}
+        spacing={2}
         align="flex-start"
         justify="flex-start"
         borderRight={!isMobileMod && "1px solid #DEDFE0"}
@@ -283,7 +278,7 @@ function ResourcesPage({
             valueField="url"
             displayField="name"
             isOpen={externalLinkTableFilter}
-            fieldName="Originais"
+            fieldName="Fontes originais"
             value={resource.url}
             isHovering={false}
             onChange={(url) =>
@@ -320,7 +315,7 @@ function ResourcesPage({
       <VStack
         width="100%"
         overflow="hidden"
-        marginLeft={{base:"0", lg: "32px !important", xl: "44px !important"}}
+        marginLeft={{base:"0", lg: "32px !important", xl: "40px !important"}}
         alignItems="flex-start"
         flex="1"
       >
@@ -341,6 +336,12 @@ export default function DatasetPage({
   availableOptionsTranslations,
 }) {
   const [tabIndex, setTabIndex] = useState(0)
+  const [isMobileMod, setIsMobileMod] = useState(false)
+  const isMobile = useCheckMobile();
+
+  useEffect(() => {
+    setIsMobileMod(isMobile)
+  }, [isMobile])
 
   function getTemporalCoverage() {
     const temporalCoverage = unionArrays(
@@ -380,7 +381,7 @@ export default function DatasetPage({
   return (
     <MainPageTemplate pages={pages}>
       <Head>
-        <title>{dataset.title} - Base dos Dados</title>
+        <title>{dataset.title} — Base dos Dados</title>
 
         {/* Open Graph */}
         <link
@@ -408,10 +409,11 @@ export default function DatasetPage({
         paddingTop={{ base: "50px", lg: "0px" }}
         margin="auto"
         width={{ base: "90vw", lg: "80vw" }}
+        maxWidth="1264px"
       >
         <Stack
           direction={{ base: "column", lg: "row" }}
-          margin="auto"
+          marginRight="auto"
           spacing={8}
           align="flex-start"
         >
@@ -422,13 +424,14 @@ export default function DatasetPage({
             height="100%"
           >
             <Image
-              borderRadius="31.8889px"
-              boxShadow="0px 0px 10px rgba(0,0,0,0.25)"
+              borderRadius="32px"
+              boxShadow="0px 4px 8px rgba(100, 96, 103, 0.16)"
               width={{ base: "25%", lg: "100%" }}
               minWidth="250px"
-              maxWidth="225px"
-              height={{ base: "25%", lg: "100%" }}
+              maxWidth="250px"
               minHeight="250px"
+              maxHeight="250px"
+              height={{ base: "25%", lg: "100%" }}
               objectFit="contain"
               src={
                 "https://basedosdados.org/uploads/group/" +
@@ -441,41 +444,40 @@ export default function DatasetPage({
               overflow="hidden"
               textOverflow="ellipsis"
               whiteSpace="nowrap"
-              fontSize="28px"
-              letterSpacing="0.5px"
               width={{ base: "90vw", lg: "60vw" }}
-              color="black"
+              paddingBottom="8px"
             >
               {dataset.title || "Conjunto sem nome"}
             </BigTitle>
             <Markdown
               width={{ base: "90vw", lg: "60vw" }}
+              maxWidth="970px"
               limit={true}
-              styleText= {{
-                fontSize:"16px",
-                fontWeight:"300",
-                letterSpacing:"0.5px"
-              }}
             >
-              {dataset.notes || "Conjunto sem descrição"}
+              {dataset.notes || "Nenhuma descrição fornecida."}
             </Markdown>
 
-            <VStack align="flex-start" spacing={4} paddingTop="20px">
+            <VStack align="flex-start" spacing={5} paddingTop="20px">
               <VStack align="flex-start">
-                <Title fontWeigth="400" fontSize="18px">Organização</Title>
+                <Subtitle>Organização</Subtitle>
                 <Link
-                  marginTop="3px !important"
+                  marginTop="4px !important"
                   href={`/dataset?organization=${dataset.organization.name}`}
                 >
-                  <SectionText letterSpacing="0.5px" fontWeight="300" fontSize="16px">
+                  <SectionText
+                    fontSize={isMobileMod ? "14px" : "16px"}
+                  >
                     {dataset.organization.title}
                   </SectionText>
                 </Link>
               </VStack>
 
               <VStack align="flex-start">
-                <Title fontWeight="400" fontSize="18px">Cobertura Temporal</Title>
-                <SectionText letterSpacing="0.5px" marginTop="3px !important" fontWeight="300" fontSize="16px">
+                <Subtitle>Cobertura temporal</Subtitle>
+                <SectionText
+                  marginTop="4px !important"
+                  fontSize={isMobileMod ? "14px" : "16px"}
+                >
                   {getTemporalCoverage()}
                 </SectionText>
               </VStack>
@@ -486,7 +488,7 @@ export default function DatasetPage({
         <Tabs
           onChange={(index) => setTabIndex(index)}
           isLazy
-          paddingTop="20px"
+          paddingTop="32px"
           width={{ base: "90vw", lg: "100%" }}
         >
           <TabList
@@ -505,8 +507,8 @@ export default function DatasetPage({
             </GreenTab>
             <GreenTab>
               <DocIcon
-                widthIcon="22px"
-                heightIcon="22px"
+                widthIcon="24px"
+                heightIcon="24px"
                 marginRight="6px"
                 fill={tabIndex === 1 ? "#2B8C4D" :"#C4C4C4"}
               />
@@ -523,6 +525,7 @@ export default function DatasetPage({
                 availableOptionsTranslations={availableOptionsTranslations}
                 translations={translations}
                 dataset={dataset}
+                isMobileMod={isMobileMod}
               />
             </TabPanel>
             <TabPanel padding="0px" pt="20px">
