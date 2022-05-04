@@ -252,20 +252,20 @@ bd_read_table, ///
             <SectionText>
               Antes de baixar os dados, apoie você também com uma doação financeira ou <Link color="#42B0FF" href="https://basedosdados.github.io/mais/colab_data/">saiba como contribuir com seu tempo</Link>.
             </SectionText>
-            <DisclaimerBox>
-              <HStack gridGap="8px" alignItems="flex-start">
-                <ExclamationIcon 
-                  widthIcon="20px"
-                  heightIcon="20px"
-                  fill="#42B0FF"
-                  marginTop="4px"
-                />
-                <Box>
-                  <SectionText fontWeigth="700">ATENÇÃO: O tamanho da tabela ultrapassou o limite permitido para download.</SectionText>
-                  <SectionText>Ao clicar em <i>Download dos dados</i>, você baixará apenas uma prévia dos dados. Para acessar a tabela completa, utilize nossos pacotes em Python, R ou Stata.</SectionText>
-                </Box>
-              </HStack>
-            </DisclaimerBox>
+//             <DisclaimerBox>
+//               <HStack gridGap="8px" alignItems="flex-start">
+//                 <ExclamationIcon 
+//                   widthIcon="20px"
+//                   heightIcon="20px"
+//                   fill="#42B0FF"
+//                   marginTop="4px"
+//                 />
+//                 <Box>
+//                   <SectionText fontWeigth="700">ATENÇÃO: O tamanho da tabela ultrapassou o limite permitido para download.</SectionText>
+//                   <SectionText>Ao clicar em <i>Download dos dados</i>, você baixará apenas uma prévia dos dados. Para acessar a tabela completa, utilize nossos pacotes em Python, R ou Stata.</SectionText>
+//                 </Box>
+//               </HStack>
+//             </DisclaimerBox>
             <VStack
               alignItems={isMobileMod ? "center" :"flex-start"}
               padding="32px 0 24px"
