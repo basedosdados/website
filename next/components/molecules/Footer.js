@@ -6,21 +6,16 @@ import {
   Text,
 } from "@chakra-ui/react";
 import Image from "next/image";
+import SectionText from "../atoms/SectionText";
 import Link from "../atoms/Link";
 import BDLogoFooterImage from "../../public/img/logos/bd_logo_footer";
 
 function LinkVStack({ title, children }) {
   return (
     <VStack spacing={5} alignItems="flex-start">
-      <Text 
-        color="#FFFFFF"
-        fontFamily="Ubuntu"
-        fontSize="15px"
-        fontWeight="400"
-        letterSpacing="0.5px"
-      >
+      <SectionText color="#FFFFFF" fontFamily="Lato" fontWeight="500">
         {title}
-      </Text>
+      </SectionText>
       {children}
     </VStack>
   );
@@ -28,7 +23,7 @@ function LinkVStack({ title, children }) {
 
 function SocialLink({ title, href, src }) {
   return (
-    <Link fontFamily="Ubuntu" fontWeigth="300" letterSpacing="0.3px" color="white" href={href} target="_blank">
+    <Link fontWeigth="500" color="white" href={href} target="_blank">
       <HStack>
         <Box position="relative" height="20px" width="20px">
           <Image priority layout="fill" objectFit="contain" src={src} />
@@ -40,23 +35,17 @@ function SocialLink({ title, href, src }) {
 }
 
 function FooterLink(props) {
-  return <Link fontFamily="Ubuntu" fontWeigth="300" letterSpacing="0.3px" {...props} />;
+  return <Link fontWeigth="500" {...props} />;
 }
 
 export default function Footer({ pages }) {
 
   return (
     <VStack position="relative" zIndex="10" width="100%" spacing={0}>
-      <VStack 
-        width="100%" 
-        padding="40px 24px"
-        spacing={10}
-        backgroundColor="#34A15A"
-      >
+      <VStack width="100%" padding={10} spacing={10} backgroundColor="#34A15A">
         <Stack
           alignItems="flex-start"
           width={{ base: "100%", lg: "92%" }}
-          maxWidth="1264px"
           justifyContent="space-between"
           direction={{ base: "column", lg: "row" }}
           spacing={{ base: 10, lg: 20 }}
@@ -208,10 +197,9 @@ export default function Footer({ pages }) {
         </Stack>
         <VStack spacing={4}>
           <HStack
-            fontFamily="Ubuntu"
-            fontWeight="300"
-            color="white"
-            letterSpacing="0.3px"
+            fontFamily="Lato !important"
+            color="white !important"
+            letterSpacing="0.5px"
           >
             <Text>® 2022 Base dos Dados</Text>
             {/* <Text>|</Text> // TODO: Não existem essas páginas ainda!
@@ -221,10 +209,10 @@ export default function Footer({ pages }) {
           </HStack>
           <Text
             color="white"
-            fontSize="10px"
-            fontFamily="Ubuntu"
-            fontWeight="300"
-            letterSpacing="0.2px"
+            fontSize="12px"
+            fontFamily="Lato"
+            fontWeight="500"
+            letterSpacing="0.5px"
           >
             Ícones adaptados de Freepik e disponíveis em Storyset e
             Flaticon.

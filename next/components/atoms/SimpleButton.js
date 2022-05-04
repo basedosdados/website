@@ -4,8 +4,8 @@ export function SimpleButton({ onClick, children, isActive }) {
   return (
     <Button
       onClick={onClick}
-      border={isActive ? "2px solid #42B0FF" : "1px solid #DEDFE0"}
-      color={isActive ? "#42B0FF" : null}
+      border={isActive ? "2px solid #3AA1EB" : "1px solid #DEDFE0"}
+      color={isActive ? "#3AA1EB" : null}
       borderRadius="13px"
       width="100%"
       justifyContent="flex-start"

@@ -40,8 +40,7 @@ export function BaseFilterAccordion({
                 onClick={onChange}
                 color={isActive ? "#2B8C4D" : null}
                 _hover={isHovering ? { cursor: "pointer", opacity: "0.6" } : "none"}
-                padding="16px 16px 0 0"
-                marginBottom="8px"
+                padding="10px 16px 0 0"
               >
                 <HStack
                   spacing={2}
@@ -54,8 +53,7 @@ export function BaseFilterAccordion({
                     fontWeight="500"
                     fontFamily="Ubuntu"
                     fontSize="16px"
-                    color="#252A32"
-                    letterSpacing="0.2px"
+                    letterSpacing="0.5px"
                   >
                     {fieldName}
                   </Box>
@@ -119,7 +117,7 @@ export function CheckboxFilterAccordion({
         {canSearch ? (
           <VStack padding="15px 0 10px" width="100%" alignItems="center">
             <ControlledInput
-              color="#252A32"
+              color="black"
               value={search}
               onChange={setSearch}
               inputBackgroundColor="#FFFFFF"
@@ -144,7 +142,7 @@ export function CheckboxFilterAccordion({
           alignItems="flex-start"
           overflowY="auto"
           width="100%"
-          padding="8px 0"
+          padding="10px 0"
         >
           {(canSearch
             ? choices.filter(
@@ -209,32 +207,18 @@ export function RangeFilterAccordion({
       fieldName={fieldName}
     >
       <VStack align="flex-start">
-        <HStack padding="8px 0px" width="100%">
+        <HStack padding="10px 0px" width="100%">
           <ControlledInput
             value={min}
             onChange={setMin}
             width="100%"
             placeholder="Min"
-            type="number"
-            inputStyle={{
-              height: "40px",
-              fontSize: "14px",
-              width: "100%",
-              borderRadius: "16px",
-            }}
           />
           <ControlledInput
             value={max}
             onChange={setMax}
             width="100%"
             placeholder="Max"
-            type="number"
-            inputStyle={{
-              height: "40px",
-              fontSize: "14px",
-              width: "100%",
-              borderRadius: "16px",
-            }}
           />
         </HStack>
         {error ? (
@@ -284,6 +268,7 @@ export function FilterAccordion({
         spacing={1}
         overflowX="hidden !important"
         alignItems="flex-start"
+        marginTop="10px"
       >
         {choices.map((c) => (
           <Box
@@ -292,16 +277,15 @@ export function FilterAccordion({
             }
             width="100%"
           >
-            <Text
-              fontFamily="Ubuntu"
+            <Title
               fontSize="14px"
-              lineHeight="16px"
-              letterSpacing="0.2px"
               cursor="pointer"
               fontWeight={c[valueField] === value ? "500" : "400"}
               color={c[valueField] === value ? "#2B8C4D" : "#7D7D7D"}
               _hover={c[valueField] === value ? "none" : {  opacity: "0.6" , fontWeight: "500" }}
-              padding="8px 24px"
+              padding="5px 20px"
+              borderRadius="5px"
+              letterSpacing="0.5px"
               transform="translateX(-10px)"
               zIndex="100"
               position="relative"
@@ -309,7 +293,7 @@ export function FilterAccordion({
               onClick={() => onChange(c[valueField])}
             >
               {c[displayField]}
-            </Text>
+            </Title>
           </Box>
         ))}
       </VStack>

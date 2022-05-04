@@ -4,9 +4,9 @@ import {
   VStack,
   Stack,
 } from "@chakra-ui/react";
-import Display from "../components/atoms/Display";
+import BigTitle from "../components/atoms/BigTitle";
 import SectionText from "../components/atoms/SectionText";
-import Link from "../components/atoms/Link";
+import { LinkDash } from "../components/atoms/LinkDash";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
   
@@ -21,19 +21,15 @@ export default function QuemSomos({ pages }) {
       paddingTop={{ base: "80px", lg: "0px" }}
       paddingBottom={{ base: "10px", lg: "50px" }}
       width="80%"
-      maxWidth="1264px"
       justify="space-between"
       direction={{ base: "column", lg: "row" }}
       margin="auto"
     >
       <VStack maxWidth={{ base: "100%", lg: "45%" }}>
         <Box contentAlign="flex-start">
-        <Display 
-              color="#2B8C4D"
-              paddingBottom="24px"
-            >
+          <BigTitle paddingBottom="25px">
             Quem somos
-          </Display>
+          </BigTitle>
           <SectionText fontSize="14px" fontWeight="300" paddingBottom="20px">
             A Base dos Dados é uma organização não-governamental, sem fins lucrativos, <i>open source</i> e colaborativa. Nossa missão é universalizar o acesso a dados públicos de qualidade para que <b>a distância entre qualquer pessoa e uma análise seja apenas uma boa pergunta</b>.
           </SectionText>
@@ -59,14 +55,15 @@ export default function QuemSomos({ pages }) {
           <SectionText fontSize="14px" fontWeight="300" paddingBottom="20px">
             Depois de um trabalho em conjunto estruturando as primeiras bases de dados com a <b>Fernanda Scovino</b>, <b>Fred Israel</b> e <b>Diego Oliveira</b>, todos co-fundadores da BD, lançamos nosso <i>datalake</i> público em <b>outubro de 2020</b>. Desde então, nossa organização vem crescendo em qualidade e quantidade de dados, número de colaboradores, parceiros e usuários. Faça parte dessa história também!
           </SectionText>
-          <Link
+          <LinkDash
             href="https://drive.google.com/file/d/1JNcr4psQr42EV9mTafn512TD8p87ZP3a/view?usp=sharing"
+            dash={false}
+            fontSize="14px"
+            fontWeight="bold"
             textDecoration="none"
-            color="#42B0FF"
-            target="_blank"
           >
             Veja nosso estatuto.
-          </Link>
+          </LinkDash>
         </Box>
       </VStack>
     </Stack>

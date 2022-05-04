@@ -1,23 +1,22 @@
 import React from "react";
 import { Tab } from "@chakra-ui/tabs";
 
-export default function GreenTab({ children, ...style }) {
+export default function GreenTab({ children }) {
   return (
     <Tab
       fontSize="18px"
       fontWeight="400"
-      letterSpacing="0.1px"
-      padding="8px 16px 12px"
+      letterSpacing="0.5px"
+      paddingBottom="10px"
       _hover={{
-        borderBottom: "3px solid #D0D0D0"
+        borderBottom: "3px solid #CECECE"
       }}
       _selected={{
         color: "#2B8C4D",
-        fontWeight: "700",
+        fontWeight: "600",
         borderBottom: "3px solid #2B8C4D",
         pointerEvents: "none"
       }}
-      {...style}
     >
       {children}
     </Tab>

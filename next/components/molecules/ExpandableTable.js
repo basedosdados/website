@@ -5,7 +5,6 @@ import { SimpleTable } from "../atoms/SimpleTable";
 export function ExpandableTable({
   headers,
   values,
-  translations,
   containerStyle,
 }) {
   const [expanded, setExpanded] = useState(false);

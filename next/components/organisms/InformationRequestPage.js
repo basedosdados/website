@@ -1,12 +1,11 @@
-import {
+import { 
   VStack,
   HStack,
   Image,
-  Box,
+  Box, 
   Text,
 } from "@chakra-ui/react";
-import Subtitle from "../atoms/Subtitle";
-import SectionText from "../atoms/SectionText";
+import Title from "../atoms/Title";
 import { ExpandableTable } from "../molecules/ExpandableTable";
 import {
   filterOnlyValidValues,
@@ -59,13 +58,13 @@ export function InformationRequestPage({
           fontSize="16px"
           spacing={5}
         >
-          <SectionText>
+          <Text fontWeight="300">
             A disponibilização destes dados é resultado de uma parceria com:
-          </SectionText>
+          </Text>
           <HStack margin="10px 0" gridGap={2}>
-            <Image
+            <Image 
               border="1px solid #DEDFE0"
-              borderRadius="10px"
+              borderRadius="10px" 
               src={"/img/icons/fiquem_sabendo.png"}
               width="80px"
               height="80px"
@@ -82,25 +81,27 @@ export function InformationRequestPage({
               >
                 Fiquem Sabendo
               </Text>
-              <SectionText>
+              <Text fontWeight="300" fontSize="14px">
                 Agência de dados públicos independente e especializada na Lei de Acesso à Informação.
-              </SectionText>
+              </Text>
             </Box>
           </HStack>
         </VStack>
 
         <VStack
           alignItems="flex-start"
-          marginTop="32px !important"
+          marginTop="30px !important"
           fontFamily="Lato"
           fontSize="16px"
         >
-          <Subtitle marginBottom="8px !important">Descrição</Subtitle>
-          <SectionText>
+          <Title fontWeigth="normal">Descrição</Title>
+          <Text fontWeight="300" fontSize="14px">
             {resource.description}
-          </SectionText>
+          </Text>
         </VStack>
-        <Subtitle margin="32px 0 10px !important">Metadados do pedido</Subtitle>
+
+
+        <Title marginTop="30px !important" fontWeigth="normal">Metadados do pedido</Title>
         <ExpandableTable
           headers={["nome", "valor"]}
           values={formatObjectsInArray(

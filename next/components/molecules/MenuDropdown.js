@@ -1,66 +1,37 @@
-import React, { useRef, useState } from "react";
 import { Button } from "@chakra-ui/button";
 import { Menu, MenuButton, MenuList } from "@chakra-ui/menu";
-import { Box } from "@chakra-ui/react"
-import ArrowIcon from "../../public/img/icons/arrowIcon"
+import React, { useState } from "react";
 
 export function MenuDropdown({ title, children, ...style }) {
-  const timerRef = useRef();
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
-
-  const btnMouseEnterEvent = () => {
-    setIsOpenMenu(true);
-  }
-  const btnMouseLeaveEvent = () => {
-    timerRef.current = setTimeout(() => {
-      setIsOpenMenu(false);
-    }, 2000);
-  }
-  const menuListMouseEnterEvent = () => {
-    clearTimeout(timerRef.current);
-    timerRef.current = undefined;
-    setIsOpenMenu(true);
-  };
-  const menuListMouseLeaveEvent = () => {
-    setIsOpenMenu(false);
-  };
+  const [open, setOpen] = useState(false);
 
   return (
-    <Menu isOpen={isOpenMenu}>
+    <Menu onMouseExit={() => setOpen(false)} isOpen={open}>
       <MenuButton
         backgroundColor="transparent"
         _hover={{ backgroundColor: "transparent", opacity: "0.6" }}
-        onMouseEnter={btnMouseEnterEvent}
-        onMouseLeave={btnMouseLeaveEvent}
+        onMouseOver={() => setOpen(true)}
         as={Button}
         fontFamily="Ubuntu"
         fontSize="14px"
-        letterSpacing="0.3px"
+        letterSpacing="0.5px"
         _active={{ backgroundColor: "transparent" }}
         padding="0px"
         color="#252A32"
-        fontWeight="400"
+        fontWeight="500"
       >
-        <Box display="flex">
-          {title}
-          <ArrowIcon
-            widthIcon="12px"
-            marginLeft="6px"
-            chevron={true}
-            rotation={"rotate(90deg)"}
-          />
-        </Box> 
+        {title}
       </MenuButton>
 
-      <MenuList
-        onMouseEnter={menuListMouseEnterEvent}
-        onMouseLeave={menuListMouseLeaveEvent}
-        padding="0px"
-        color="#252A32"
-        {...style}
-      >
-        {children}
-      </MenuList>
+        <MenuList
+          padding="0px"
+          color="#252A32"
+          {...style}
+          onMouseLeave={() => setOpen(false)}
+        >
+          {children}
+        </MenuList>
+      
     </Menu>
   );
 }

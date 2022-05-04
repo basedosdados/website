@@ -1,16 +1,7 @@
-import { VStack, Box, Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import { VStack, Box } from "@chakra-ui/react";
+import Title from "./Title";
 
 export function ShadowBox({ title, image, children, spacing = 5, ...props}) {
-
-  const [isMobileMod, setIsMobileMod] = useState(false)
-  const isMobile = useCheckMobile();
-
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
-
   return (
     <VStack
       width="300px"
@@ -31,12 +22,13 @@ export function ShadowBox({ title, image, children, spacing = 5, ...props}) {
         </Box>
       }
       <VStack
-        padding="16px 32px 32px"
+        padding="20px 30px"
         backgroundColor="white"
         borderRadius="16px"
         width="100%"
         height="100%"
         minHeight="160px"
+        paddingBottom="30px"
         spacing={spacing}
         position="relative"
         border={image && "2px solid #DEDFE0"}
@@ -44,14 +36,9 @@ export function ShadowBox({ title, image, children, spacing = 5, ...props}) {
         borderTopRadius="0"
         {...props}
       >
-        <Text
-          fontFamily="Ubuntu"
-          fontSize={isMobileMod ? "20px" : "24px"}
-          fontWeigth="400"
-          letterSpacing={isMobileMod? "0.2px" : "0px"}
-        >
+        <Title fontSize="24px" fontWeigth="400" letterSpacing="0.5px">
           {title}
-        </Text>
+        </Title>
         {children}
       </VStack>
     </VStack>

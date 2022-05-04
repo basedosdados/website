@@ -1,25 +1,15 @@
-import { useState, useEffect } from "react";
 import { Heading } from "@chakra-ui/react";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
 export default function Subtitle({
   children,
-  color = "#252A32",
+  color = "#6F6F6F",
   fontWeigth = "400",
   ...props
 }) {
-  const [isMobileMod, setIsMobileMod] = useState(false)
-  const isMobile = useCheckMobile();
-
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
-
   return (
     <Heading
       fontFamily="Ubuntu"
-      fontSize={isMobileMod ? "16px" : "18px"}
-      letterSpacing={isMobileMod ? "0.2px" : "0.1px"}
+      fontSize="12px"
       color={color}
       fontWeight={fontWeigth}
       {...props}
