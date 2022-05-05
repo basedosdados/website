@@ -22,7 +22,7 @@ import Subtitle from "../../components/atoms/Subtitle";
 import SectionText from "../../components/atoms/SectionText";
 import { FilterAccordion } from "../../components/atoms/FilterAccordion";
 import { useContext, useState, useEffect } from "react";
-import { isBdPlus, unionArrays } from "../../utils";
+import { isBdPlus, unionArrays, getTemporalCoverage } from "../../utils";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import Link from "../../components/atoms/Link";
 import { SimpleButton } from "../../components/atoms/SimpleButton";
@@ -343,41 +343,6 @@ export default function DatasetPage({
     setIsMobileMod(isMobile)
   }, [isMobile])
 
-  function getTemporalCoverage() {
-    const temporalCoverage = unionArrays(
-      dataset.resources
-        .filter((r) => r?.temporal_coverage?.length)
-        .map((r) => r.temporal_coverage)
-    ).sort();
-
-    if (temporalCoverage.length === 0 || !temporalCoverage) return "";
-
-    var years = [];
-    for (let i = 0; i < temporalCoverage.length; i++) {
-      var interval = temporalCoverage[i];
-      if (interval.includes("(")) {
-        var first = interval.substring(0, interval.indexOf('('));
-        var last  = interval.substring(   interval.indexOf(')')+1);
-        years.push(first);
-        years.push(last);
-      }
-      else {
-        years.push(interval);
-      }
-
-    }
-
-    var years = years.sort();
-
-    if (years.length === 1) return years[0];
-
-    var min_date = years[0];
-    var max_date = years[years.length-1];
-
-    return (min_date + " - " + max_date);
-
-  }
-
   return (
     <MainPageTemplate pages={pages}>
       <Head>
@@ -479,7 +444,7 @@ export default function DatasetPage({
                   marginTop="4px !important"
                   fontSize={isMobileMod ? "14px" : "16px"}
                 >
-                  {getTemporalCoverage()}
+                  {getTemporalCoverage(dataset.resources)}
                 </SectionText>
               </VStack>
             </VStack>

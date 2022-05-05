@@ -64,7 +64,8 @@ function TableDatasets({
       if(field.length === 0) {
         return "Não listado"
       } else {
-        return formatJson(JSON.stringify(field))
+        const newJson = JSON.stringify(field)
+        return formatJson(newJson, true)
       }
     }
 

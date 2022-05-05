@@ -20,7 +20,6 @@ import {
   Box,
 } from "@chakra-ui/react";
 import ReactPaginate from "react-paginate";
-import SectionTitle from "../../components/atoms/SectionTitle";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
