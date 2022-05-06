@@ -407,6 +407,7 @@ export default function SearchPage({
               textAlign="top"
               width="100%"
               marginLeft="8px"
+              color="#252A32"
               letterSpacing="0.2px"
             >
               Filtrar resultados
