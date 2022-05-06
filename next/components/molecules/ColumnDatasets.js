@@ -13,7 +13,7 @@ import {
   Center
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { formatJson } from '../../utils';
+import { formatJson, getTemporalCoverage } from '../../utils';
 import InfoIcon from '../../public/img/icons/infoIcon'
 
 function TableDatasets({
@@ -33,8 +33,28 @@ function TableDatasets({
     const schemaHeaders = headers.reduce((obj, cur) => (
       {...obj, [cur]: "Não listado"}), {})
     const newValues = values.map((elm) => {
-      const row = {...schemaHeaders, ...elm}
+      const values = elm
+      const directoryColumn = () => {
+        if(typeof values.directory_column === "object") {
+          const directory = values.directory_column
+          return {
+            directory_column :`${directory.dataset_id}.${directory.table_id}:${directory.column_name}`
+          }
+        } else {
+          return {directory_column : "Não listado"}
+        }
+      }
+      const newTemporalCoverage = () => {
+        if(typeof values.temporal_coverage === "object") {
+          return {temporal_coverage: getTemporalCoverage(values.temporal_coverage)}
+        } else {
+          return {temporal_coverage : "Não listado"}
+        }
+      }
       
+      const formatting = {...values, ... directoryColumn(), ...newTemporalCoverage()}
+      const row = {...schemaHeaders, ...formatting}
+
       delete row.is_in_staging
       delete row.is_partition
 

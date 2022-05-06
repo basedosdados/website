@@ -343,6 +343,12 @@ export default function DatasetPage({
     setIsMobileMod(isMobile)
   }, [isMobile])
 
+  const temporalCoverage = unionArrays(
+    dataset.resources
+      .filter((r) => r?.temporal_coverage?.length)
+      .map((r) => r.temporal_coverage)
+  ).sort();
+
   return (
     <MainPageTemplate pages={pages}>
       <Head>
@@ -444,7 +450,7 @@ export default function DatasetPage({
                   marginTop="4px !important"
                   fontSize={isMobileMod ? "14px" : "16px"}
                 >
-                  {getTemporalCoverage(dataset.resources)}
+                  {getTemporalCoverage(temporalCoverage)}
                 </SectionText>
               </VStack>
             </VStack>

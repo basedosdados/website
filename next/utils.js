@@ -176,65 +176,28 @@ export function formatJson(json, replace) {
   return newJson;
 }
 
-export function getTemporalCoverage(data, result) {
-  if (result) {
-    const temporalCoverage = data
-    if (temporalCoverage.length === 0 || !temporalCoverage) return "";
-    
-    var years = [];
-    for (let i = 0; i < temporalCoverage.length; i++) {
-      var interval = temporalCoverage[i];
-      if (interval.includes("(")) {
-        var first = interval.substring(0, interval.indexOf('('));
-        var last  = interval.substring(   interval.indexOf(')')+1);
-        years.push(first);
-        years.push(last);
-      }
-      else {
-        years.push(interval);
-      }
-  
+export function getTemporalCoverage(temporalCoverage, arrayYears) {
+  if (temporalCoverage.length === 0 || !temporalCoverage) return "";
+  var years = [];
+  for (let i = 0; i < temporalCoverage.length; i++) {
+    var interval = temporalCoverage[i];
+    if (interval.includes("(")) {
+      var first = interval.substring(0, interval.indexOf('('));
+      var last  = interval.substring(   interval.indexOf(')')+1);
+      years.push(first);
+      years.push(last);
+      console.log(temporalCoverage)
     }
-  
-    var years = years.sort();
-  
-    if (years.length === 1) return years[0];
-  
-    var min_date = years[0];
-    var max_date = years[years.length-1];
-  
-    return (min_date + " - " + max_date);
+    else {
+      years.push(interval);
+    }
 
-  } else {
-    const temporalCoverage = unionArrays(
-      data
-        .filter((r) => r?.temporal_coverage?.length)
-        .map((r) => r.temporal_coverage)
-    ).sort();
-    if (temporalCoverage.length === 0 || !temporalCoverage) return "";
-    
-    var years = [];
-    for (let i = 0; i < temporalCoverage.length; i++) {
-      var interval = temporalCoverage[i];
-      if (interval.includes("(")) {
-        var first = interval.substring(0, interval.indexOf('('));
-        var last  = interval.substring(   interval.indexOf(')')+1);
-        years.push(first);
-        years.push(last);
-      }
-      else {
-        years.push(interval);
-      }
-  
-    }
-  
-    var years = years.sort();
-  
-    if (years.length === 1) return years[0];
-  
-    var min_date = years[0];
-    var max_date = years[years.length-1];
-  
-    return (min_date + " - " + max_date);
   }
+
+  var years = years.sort();
+  if (years.length === 1) return years[0];
+
+  var min_date = years[0];
+  var max_date = years[years.length-1];
+  return (min_date + " - " + max_date);
 }

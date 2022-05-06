@@ -18,6 +18,7 @@ import {
   filterOnlyValidValues,
   formatObjectsInArray,
   translate,
+  getTemporalCoverage,
 } from "../../utils";
 import { BaseResourcePage } from "../molecules/BaseResourcePage";
 import { SchemaForm } from "../molecules/SchemaForm";
@@ -37,6 +38,7 @@ export function BdmTablePage({
   const [schema, setSchema] = useState({})
   const [columnsHeaders, setColumnsHeaders] = useState([])
   const [columnsValues, setColumnsValues] = useState([])
+  const [temporalCoverage, setTemporalCoverage] = useState([])
   const tooltip = {
     name: "Indica o nome de cada coluna para cada ano.",
     bigquery_type: "Indica o tipo de dado no BigQuery. Ex.: INT64 (Inteiro), STRING (String), DATA (Data), FLOA64 (Float) etc.",
@@ -57,10 +59,11 @@ export function BdmTablePage({
     const columnsSchema = await getBdmColumnsSchema()
     setSchema(columnsSchema)
   }
-  
+
   useEffect(() => {
     setColumnsHeaders(Object.keys(schema))
     setColumnsValues(resource.columns)
+    setTemporalCoverage(getTemporalCoverage(resource?.temporal_coverage))
 
     setShowColumns(true)
   },[schema, resource])
@@ -111,7 +114,7 @@ export function BdmTablePage({
       <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Cobertura temporal</Subtitle>
         <SectionText>
-          {resource?.temporal_coverage ? resource.temporal_coverage[0] : "Nenhuma cobertura temporal fornecida."}
+          {temporalCoverage}
         </SectionText>
       </VStack>
 

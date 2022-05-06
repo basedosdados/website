@@ -168,7 +168,7 @@ export function Database({
                 >
                   <SectionText color="#6F6F6F">Cobertura temporal:</SectionText>
                   <SectionText color="#6F6F6F" fontWeight="400">
-                    {getTemporalCoverage(temporalCoverage, true)}
+                    {getTemporalCoverage(temporalCoverage)}
                   </SectionText>
                 </HStack>
               </Stack>
