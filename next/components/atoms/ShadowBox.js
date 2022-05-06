@@ -49,6 +49,7 @@ export function ShadowBox({ title, image, children, spacing = 5, ...props}) {
           fontSize={isMobileMod ? "20px" : "24px"}
           fontWeigth="400"
           letterSpacing={isMobileMod? "0.2px" : "0px"}
+          color="#252A32"
         >
           {title}
         </Text>

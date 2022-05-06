@@ -16,11 +16,11 @@ export async function getStaticProps(context) {
   
 export default function QuemSomos({ pages }) {
   return (
-  <MainPageTemplate pages={pages}>
+  <MainPageTemplate pages={pages} paddingX="24px">
     <Stack
       paddingTop={{ base: "80px", lg: "0px" }}
       paddingBottom={{ base: "10px", lg: "50px" }}
-      width="80%"
+      width="100%"
       maxWidth="1264px"
       justify="space-between"
       direction={{ base: "column", lg: "row" }}

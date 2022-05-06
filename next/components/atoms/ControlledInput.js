@@ -64,6 +64,7 @@ export function DebouncedControlledInput({
   rightAddon,
   inputBackgroundColor = null,
   inputStyle,
+  isBorderColor = true,
   ...props
 }) {
   const [_value, _setValue] = useState(value);
@@ -86,7 +87,8 @@ export function DebouncedControlledInput({
         fontWeight="300"
         _placeholder={{ color: "#BDBDBD" }}
         border="1px solid #DEDFE0 !important"
-        _hover={{ borderColor: "#42B0FF !important" }}
+        _focus={isBorderColor && { border:"2px solid #42B0FF !important" }}
+        _hover={isBorderColor && { border:"2px solid #42B0FF !important" }}
         backgroundColor={inputBackgroundColor}
         borderRadius="20px"
         value={_value}

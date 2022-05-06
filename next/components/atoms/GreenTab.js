@@ -7,6 +7,7 @@ export default function GreenTab({ children, ...style }) {
       fontSize="18px"
       fontWeight="400"
       letterSpacing="0.1px"
+      color="#252A32"
       padding="8px 16px 12px"
       _hover={{
         borderBottom: "3px solid #D0D0D0"
