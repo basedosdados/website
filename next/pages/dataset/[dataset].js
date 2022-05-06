@@ -414,7 +414,7 @@ export default function DatasetPage({
         <Stack
           direction={{ base: "column", lg: "row" }}
           marginRight="auto"
-          spacing={8}
+          spacing={10}
           align="flex-start"
         >
           <Center
