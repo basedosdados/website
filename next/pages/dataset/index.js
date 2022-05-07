@@ -312,6 +312,7 @@ export default function SearchPage({
       organization: query.organization ? query.organization.split(",") : [],
       group: query.group ? query.group.split(',') : [],
       resource_type: query.resource_type ? query.resource_type.split(",") : [],
+      // obs_level_entity: query.obs_level_entity ? query.obs_level_entity.split(",") : [],
       spatial_coverage: query.spatial_coverage ? query.spatial_coverage.split(",") : [],
       temporal_coverage: query.temporal_coverage ? query.temporal_coverage.split("-") : [],
       entity: query.entity ? query.entity.split(",") : [],
@@ -534,7 +535,6 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, spatial_coverage: values })
             }
           /> */}
-          
           <RangeFilterAccordion
             isActive={(paramFilters.temporal_coverage || []).length > 0}
             fieldName="Cobertura temporal"
@@ -562,14 +562,14 @@ export default function SearchPage({
           />
           <CheckboxFilterAccordion
             canSearch={true}
-            isActive={(paramFilters.entity || []).length > 0}
+            isActive={(paramFilters.obs_level_entity || []).length > 0}
             choices={entities}
-            values={paramFilters.entity}
+            values={paramFilters.obs_level_entity}
             valueField="name"
             displayField="displayName"
             fieldName="Nível da observação"
             onChange={(values) =>
-              setParamFilters({ ...paramFilters, entity: values })
+              setParamFilters({ ...paramFilters, obs_level_entity: values })
             }
           />
           <CheckboxFilterAccordion

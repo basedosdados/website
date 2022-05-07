@@ -48,7 +48,7 @@ export function getBdmTableSchema() {
   return axiosInstance
     .get(`/bd_bdm_table_schema`)
     .then(({ data }) => {
-      const schema = data.result;
+      const schema = data.result.schema;
 
       delete schema.properties.id;
       delete schema.properties.position;
@@ -72,7 +72,7 @@ export function getBdmTableSchema() {
       delete schema.properties.compressed_file_size;
       delete schema.required;
 
-      return schema;
+      return {schema: schema, spatial_coverage_tree: data.result.spatial_coverage_tree};
     })
     .catch(() => ({}));
 }
