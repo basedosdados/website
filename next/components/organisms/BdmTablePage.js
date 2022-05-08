@@ -126,6 +126,7 @@ export function BdmTablePage({
             <ColumnDatasets
               translations={translations.bdm_columns}
               availableOptionsTranslations={availableOptionsTranslations}
+              parentTemporalCoverage={temporalCoverage}
               tooltip={tooltip}
               headers={columnsHeaders}
               values={columnsValues}

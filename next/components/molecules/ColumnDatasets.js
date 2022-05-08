@@ -21,6 +21,7 @@ function TableDatasets({
   values,
   translations,
   availableOptionsTranslations,
+  parentTemporalCoverage,
   tooltip,
   containerStyle,
 }) {
@@ -44,9 +45,10 @@ function TableDatasets({
           return {directory_column : "Não listado"}
         }
       }
+
       const newTemporalCoverage = () => {
         if(typeof values.temporal_coverage === "object") {
-          return {temporal_coverage: getTemporalCoverage(values.temporal_coverage)}
+          return {temporal_coverage: getTemporalCoverage(values.temporal_coverage, parentTemporalCoverage)}
         } else {
           return {temporal_coverage : "Não listado"}
         }
@@ -176,6 +178,7 @@ export default function ColumnsDatasets({
   values,
   translations,
   availableOptionsTranslations,
+  parentTemporalCoverage,
   tooltip,
   containerStyle,
 }) {
@@ -188,6 +191,7 @@ export default function ColumnsDatasets({
         values={values}
         translations={translations}
         availableOptionsTranslations={availableOptionsTranslations}
+        parentTemporalCoverage={parentTemporalCoverage}
         tooltip={tooltip}
         containerStyle={containerStyle}
       />
@@ -200,6 +204,7 @@ export default function ColumnsDatasets({
         values={expanded ? values : values.slice(0, Math.min(3, values.length))}
         translations={translations}
         availableOptionsTranslations={availableOptionsTranslations}
+        parentTemporalCoverage={parentTemporalCoverage}
         tooltip={tooltip}
         containerStyle={containerStyle}
       />

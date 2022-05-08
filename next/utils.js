@@ -176,28 +176,39 @@ export function formatJson(json, replace) {
   return newJson;
 }
 
-export function getTemporalCoverage(temporalCoverage, arrayYears) {
-  if (temporalCoverage.length === 0 || !temporalCoverage) return "";
-  var years = [];
-  for (let i = 0; i < temporalCoverage.length; i++) {
-    var interval = temporalCoverage[i];
-    if (interval.includes("(")) {
-      var first = interval.substring(0, interval.indexOf('('));
-      var last  = interval.substring(   interval.indexOf(')')+1);
-      years.push(first);
-      years.push(last);
-      console.log(temporalCoverage)
-    }
-    else {
-      years.push(interval);
-    }
+export function getTemporalCoverage(temporalCoverage, parentTemporalCoverage) {
+  if (temporalCoverage.length === 0 || !temporalCoverage) return ""
+  let years = []
 
+  const getYears = (value = "") => {
+    return value.split(/\(\d+\)|\-/)
   }
 
-  var years = years.sort();
-  if (years.length === 1) return years[0];
+  const parentYears = getYears(parentTemporalCoverage)
 
-  var min_date = years[0];
-  var max_date = years[years.length-1];
-  return (min_date + " - " + max_date);
+  temporalCoverage.forEach((interval) => {
+    const itens = getYears(interval)
+    itens
+      .map((year, i) => {
+        if (!year) {
+          return (parentYears[i] || "").trim()
+        }
+
+        return year.trim()
+      })
+      .filter(year => !!year)
+      .forEach(year => years.push(year))
+  })
+
+  years = years.sort()
+
+  if (years.length === 0) {
+    return parentYears.join(" - ")
+  }
+
+  if (years.length === 1) return years[0]
+
+  const min_date = years[0]
+  const max_date = years[years.length-1]
+  return `${min_date} - ${max_date}`
 }
