@@ -9,10 +9,6 @@ from ._tmp import *
 ################### TODO: delete below
 
 
-
-
-
-
 class ContinentEnum(AttrEnum):
     # fmt: off
     africa          = {"label": "África"}
