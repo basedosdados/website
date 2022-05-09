@@ -9,14 +9,6 @@ from pydantic import conint as ConstrainedInt
 from pydantic import conlist as ConstrainedList
 
 
-class _TemporalRange(BaseModel):
-    """Exemplo: {'start': [2001, 1, 3], 'end': 'inherit', 'step':1}"""
-
-    start: _DateList
-    end: Union[_DateList, Literal["inherit"]]
-    step: ConstrainedInt(ge=1)
-
-
 class _DateList(BaseModel):
     __root__: ConstrainedList(Int, min_items=1, max_items=3)
 
@@ -42,6 +34,6 @@ class TemporalCoverageEnum(BaseModel):
     # TODO: add a validator to guarantee ranges dont overlap
 
 
-class TemporalCoverageEnum(BaseModel):  # TODO: delete this
-    __root__: List[str] = Field(...)
-    """ 2012(1)2015 """
+# class TemporalCoverageEnum(BaseModel):  # TODO: delete this
+#     __root__: List[str] = Field(...)
+#     """ 2012(1)2015 """
