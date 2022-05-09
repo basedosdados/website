@@ -1,10 +1,13 @@
-from ..attr_enum import AttrEnum
-from typing import List, Union, Optional, Dict
-from pydantic import BaseModel, validator
-import pandas
+import dataclasses
 import importlib.resources
 from dataclasses import dataclass
-import dataclasses
+from typing import Dict, List, Optional, Union
+
+import pandas
+from pydantic import BaseModel, validator
+
+from ..attr_enum import AttrEnum
+
 
 def build_areas_from_csv(csv_path):
     df = pandas.read_csv(csv_path)['id label__pt'.split()]
@@ -82,5 +85,6 @@ class SpatialCoverageArea(BaseModel):
 
 
 import ckanext.basedosdados.validator.available_options.spatial_coverage as spatial_coverage
+
 with importlib.resources.path(spatial_coverage, 'spatial_coverage_tree.csv') as path: # TODO: mudar isso aqui pra ler o arquivo certo
     build_areas_from_csv(path)

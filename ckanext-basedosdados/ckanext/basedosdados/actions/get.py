@@ -1,7 +1,7 @@
 import json
 import logging
 from pathlib import Path
-import logging
+
 log = logging.getLogger(__name__)
 
 log = logging.getLogger(__name__)
@@ -64,7 +64,11 @@ def bd_dataset_schema(context, data_dict):
     return Dataset.schema()
 
 
-from ckanext.basedosdados.validator.available_options.spatial_coverage import SPATIAL_COVERAGE_AREAS
+from ckanext.basedosdados.validator.available_options.spatial_coverage import (
+    SPATIAL_COVERAGE_AREAS,
+)
+
+
 def get_spatial_coverage_tree():
     return {k: v.dict() for k, v in SPATIAL_COVERAGE_AREAS.items()}
 
