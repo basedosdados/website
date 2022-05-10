@@ -12,7 +12,6 @@ export function LinkDash({ children, href, dash = true, ...style }) {
       letterSpacing="0.5px"
       fontFamily="Lato"
       fontSize="15px"
-      fontWeight="700"
       {...style}
     >
       {children} {dash ? ">>" : null}

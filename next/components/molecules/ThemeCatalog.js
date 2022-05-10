@@ -77,11 +77,11 @@ function Themes ({ isMobileMod, newRecentDataLakeDataSets, listThemes=[] }) {
           >
             <Tooltip
               hasArrow
-              bg="#2A2F38"
               label={elm.display_name}
               fontSize="16px"
               fontWeight="500"
               padding="5px 16px 6px"
+              backgroundColor="#2A2F38"
               marginTop="10px"
               color="#FFF"
               borderRadius="6px"

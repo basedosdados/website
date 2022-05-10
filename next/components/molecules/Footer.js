@@ -46,21 +46,16 @@ function FooterLink(props) {
 export default function Footer({ pages }) {
 
   return (
-    <VStack 
-      backgroundColor="#34A15A"
-      position="relative"
-      zIndex="10"
-      width="100%"
-      spacing={0}
-    >
+    <VStack position="relative" zIndex="10" width="100%" spacing={0}>
       <VStack 
-        width="100%"
+        width="100%" 
         padding="40px 24px"
         spacing={10}
+        backgroundColor="#34A15A"
       >
         <Stack
           alignItems="flex-start"
-          width="100%"
+          width={{ base: "100%", lg: "92%" }}
           maxWidth="1264px"
           justifyContent="space-between"
           direction={{ base: "column", lg: "row" }}

@@ -66,11 +66,11 @@ export default function DatabaseCard({
         ...categories.slice(0, Math.min(3, categories.length)).map((c) => (
           <Tooltip
             hasArrow
-            bg="#2A2F38"
             label={c[1]}
             fontSize="16px"
             fontWeight="500"
             padding="5px 16px 6px"
+            backgroundColor="#2A2F38"
             marginTop="10px"
             color="#FFF"
             borderRadius="6px"

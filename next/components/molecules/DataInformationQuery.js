@@ -245,8 +245,8 @@ bd_read_table, ///
             <script key="Stata" src="/vendor/prism.js"></script>
           </TabPanel>
 
-          <TabPanel padding="0">
-            <SectionText marginTop="24px">
+          <TabPanel padding="16px 0 0">
+            <SectionText>
               Estes dados estão disponíveis porque diversas pessoas colaboram para a sua manutenção.
             </SectionText>
             <SectionText>

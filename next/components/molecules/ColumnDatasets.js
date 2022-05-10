@@ -103,11 +103,11 @@ function TableDatasets({
                   {translations ? translate(elm, translatedHeaders) : elm}
                   <Tooltip
                     hasArrow
-                    bg="#2A2F38"
                     label={tooltip[elm]}
                     fontSize="16px"
                     fontWeight="500"
                     padding="5px 15px"
+                    backgroundColor="#2A2F38"
                     marginTop="8px"
                     color="#FFF"
                     borderRadius="6px"
@@ -139,7 +139,7 @@ function TableDatasets({
                     color:"#252A32"
                   }}
                 >
-                  {r ? translate(r, translatedValues) : <p style={{margin:"0", fontWeight:"700", color:"#C4C4C4"}}>Não listado</p>}
+                  {r ? translate(r, translatedValues) : "Não listado"}
                 </Td>
               ))}
             </Tr>

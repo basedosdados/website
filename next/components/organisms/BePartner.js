@@ -32,7 +32,6 @@ function Testimonial({ children, name, position, src }) {
         letterSpacing="-0.1px"
         textAlign="center"
         lineHeight="45px"
-        color="#252A32"
       >
         {children}
       </Text>

@@ -62,7 +62,7 @@ function DesktopLinks({ links }) {
       position={{ base: "relative", lg: "initial" }}
       gap="24px"
     >
-      <HStack width="100%" flex="3" spacing={7}>
+      <HStack width="100%" flex="3" spacing={8}>
         {Object.entries(links).map(([k, v]) => {
           if (k === "Apoie")
             return (
@@ -235,7 +235,7 @@ export default function Menu({ pages = [] }) {
           </Box>
           <Link _hover={{opacity:"none"}} href="/">
             <BDLogoImage
-              transform="translateX(-27%)"
+              transform="translateX(-20%)"
               height="40px"
               widthImage="80px"
             />
