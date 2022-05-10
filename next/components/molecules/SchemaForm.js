@@ -5,7 +5,6 @@ import { CircularProgress } from "@chakra-ui/progress";
 import { Center, VStack } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import Head from "next/head";
-import { GeoTree } from "./GeoTree";
 
 export function SchemaForm({
   data,
@@ -18,7 +17,7 @@ export function SchemaForm({
   },
 }) {
   const toast = useToast();
-  let { data: schema = {}, isLoading } = useQuery(
+  const { data: schema = {}, isLoading } = useQuery(
     "schema",
     loadSchemaFunction
   );
@@ -59,22 +58,6 @@ export function SchemaForm({
     setData(prepareData({ ...data }));
   }, [data]);
 
-
-
-  //// Geo stuff
-
-  const uiSchema = {
-      spatial_coverage:{
-          items: {
-          'ui:field' : 'GeoTree'
-          }
-      }
-  }
-  const fields = {GeoTree: (props) => GeoTree(props, schema)}
-
-  /////
-
-  if (schema.schema === undefined) schema = {schema: schema} // TODO: remove this after changing all endpoints
   return (
     <>
       {isLoading ? (
@@ -92,12 +75,10 @@ export function SchemaForm({
             />
           </Head>
           <Form
-            schema={schema.schema}
+            schema={schema}
             formData={_data}
             onChange={(e) => setData(e.formData)}
             noValidate={true}
-            uiSchema={uiSchema}
-            fields={fields}
             onSubmit={() => {
               updateMutation.mutate(
                 prepareData({
