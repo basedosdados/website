@@ -12,10 +12,10 @@ git clone https://github.com/ckan/ckan.git
 
 cd ckan
 
-git checkout ckan-2.9.3
+git checkout ckan-2.9.5
 
 # correct a bug in ckan
-git diff 9abeaa1b7d2f6539ade946cc3f407878f49950eb^ 9abeaa1b7d2f6539ade946cc3f407878f49950eb | git apply
+#git diff 9abeaa1b7d2f6539ade946cc3f407878f49950eb^ 9abeaa1b7d2f6539ade946cc3f407878f49950eb | git apply
 
 # using perl instead of sed -i as it is portable in Mac as well
 # change markdown version because it is incompatible with python 3.9
