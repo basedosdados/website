@@ -37,9 +37,17 @@ function TableDatasets({
       const values = elm
       const directoryColumn = () => {
         if(typeof values.directory_column === "object") {
-          const directory = values.directory_column
+          const directory = Object.values(values.directory_column)
+            .map((elm) => {
+              if(!elm) {
+                return "-"
+              } else {
+                return elm
+              }
+            })
+            console.log(directory)
           return {
-            directory_column :`${directory.dataset_id}.${directory.table_id}:${directory.column_name}`
+            directory_column : `${directory[0]}.${directory[1]}:${directory[2]}`
           }
         } else {
           return {directory_column : "Não listado"}
