@@ -45,7 +45,6 @@ function TableDatasets({
                 return elm
               }
             })
-            console.log(directory)
           return {
             directory_column : `${directory[0]}.${directory[1]}:${directory[2]}`
           }
