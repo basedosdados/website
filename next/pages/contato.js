@@ -34,11 +34,11 @@ export default function Contato({ pages }) {
   },[])
     
   return (
-    <MainPageTemplate pages={pages}>
+    <MainPageTemplate pages={pages} paddingX="24px">
       <Stack
         gridGap={{base:"40px", lg: "100px"}}
         paddingTop={{ base: "80px", lg: "0px" }}
-        width="80%"
+        width="100%"
         maxWidth="1264px"
         justify="space-between"
         direction={{ base: "column", lg: "row" }}
@@ -87,7 +87,7 @@ export default function Contato({ pages }) {
             <SectionText paddingBottom="24px">
               Auxiliamos pessoas e organizações a subirem dados no nosso <i>datalake</i>. Escreva sua proposta para nossa equipe de Dados.
             </SectionText>
-            <SectionText paddingBottom="24px">
+            <SectionText paddingBottom="24px" fontWeigth="500">
               Dúvidas? Fale com a nossa comunidade no{" "}
               <Link
                 href="https://discord.gg/huKWpsVYx4"
@@ -95,7 +95,7 @@ export default function Contato({ pages }) {
                 color="#42B0FF"
                 target="_blank"
               >
-                Discord<a style={{color:"#252A32", fontWeight:"300"}}>.</a>
+                Discord<a style={{color:"#252A32", fontWeight:"500"}}>.</a>
               </Link>
             </SectionText>
           </Box>
