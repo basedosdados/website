@@ -9,7 +9,7 @@ import {
   Center,
   Tooltip,
 } from "@chakra-ui/react";
-import { limitTextSize } from "../../utils";
+import { limitTextSize, getTemporalCoverage } from "../../utils";
 import { CategoryIcon } from "../atoms/CategoryIcon";
 import Title from "../atoms/Title";
 import Link from "../atoms/Link";
@@ -41,36 +41,6 @@ export function Database({
     else if (size >= 1000000)
       sizeLabel = Math.round(size / (1024 * 1024)) + " mb";
     else sizeLabel = Math.round(size / (1024 * 1024 * 1024)) + " gb";
-  }
-
-  function getTemporalCoverage() {
-
-    if (temporalCoverage.length === 0 || !temporalCoverage) return "Não listado";
-
-    var years = [];
-    for (let i = 0; i < temporalCoverage.length; i++) {
-      var interval = temporalCoverage[i];
-      if (interval.includes("(")) {
-        var first = interval.substring(0, interval.indexOf('('));
-        var last = interval.substring(interval.indexOf(')') + 1);
-        years.push(first);
-        years.push(last);
-      }
-      else {
-        years.push(interval);
-      }
-
-    }
-
-    var years = years.sort();
-
-    if (years.length === 1) return years[0];
-
-    var min_date = years[0];
-    var max_date = years[years.length - 1];
-
-    return (min_date + " - " + max_date);
-
   }
 
   return (
@@ -198,7 +168,7 @@ export function Database({
                 >
                   <SectionText color="#6F6F6F">Cobertura temporal:</SectionText>
                   <SectionText color="#6F6F6F" fontWeight="400">
-                    {getTemporalCoverage()}
+                    {getTemporalCoverage(temporalCoverage)}
                   </SectionText>
                 </HStack>
               </Stack>

@@ -13,7 +13,7 @@ import {
   Center
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { formatJson } from '../../utils';
+import { formatJson, getTemporalCoverage } from '../../utils';
 import InfoIcon from '../../public/img/icons/infoIcon'
 
 function TableDatasets({
@@ -21,6 +21,7 @@ function TableDatasets({
   values,
   translations,
   availableOptionsTranslations,
+  parentTemporalCoverage,
   tooltip,
   containerStyle,
 }) {
@@ -33,8 +34,36 @@ function TableDatasets({
     const schemaHeaders = headers.reduce((obj, cur) => (
       {...obj, [cur]: "Não listado"}), {})
     const newValues = values.map((elm) => {
-      const row = {...schemaHeaders, ...elm}
+      const values = elm
+      const directoryColumn = () => {
+        if(typeof values.directory_column === "object") {
+          const directory = Object.values(values.directory_column)
+            .map((elm) => {
+              if(!elm) {
+                return "-"
+              } else {
+                return elm
+              }
+            })
+          return {
+            directory_column : `${directory[0]}.${directory[1]}:${directory[2]}`
+          }
+        } else {
+          return {directory_column : "Não listado"}
+        }
+      }
+
+      const newTemporalCoverage = () => {
+        if(typeof values.temporal_coverage === "object") {
+          return {temporal_coverage: getTemporalCoverage(values.temporal_coverage, parentTemporalCoverage)}
+        } else {
+          return {temporal_coverage : "Não listado"}
+        }
+      }
       
+      const formatting = {...values, ... directoryColumn(), ...newTemporalCoverage()}
+      const row = {...schemaHeaders, ...formatting}
+
       delete row.is_in_staging
       delete row.is_partition
 
@@ -64,7 +93,8 @@ function TableDatasets({
       if(field.length === 0) {
         return "Não listado"
       } else {
-        return formatJson(JSON.stringify(field))
+        const newJson = JSON.stringify(field)
+        return formatJson(newJson, true)
       }
     }
 
@@ -155,6 +185,7 @@ export default function ColumnsDatasets({
   values,
   translations,
   availableOptionsTranslations,
+  parentTemporalCoverage,
   tooltip,
   containerStyle,
 }) {
@@ -167,6 +198,7 @@ export default function ColumnsDatasets({
         values={values}
         translations={translations}
         availableOptionsTranslations={availableOptionsTranslations}
+        parentTemporalCoverage={parentTemporalCoverage}
         tooltip={tooltip}
         containerStyle={containerStyle}
       />
@@ -179,6 +211,7 @@ export default function ColumnsDatasets({
         values={expanded ? values : values.slice(0, Math.min(3, values.length))}
         translations={translations}
         availableOptionsTranslations={availableOptionsTranslations}
+        parentTemporalCoverage={parentTemporalCoverage}
         tooltip={tooltip}
         containerStyle={containerStyle}
       />
