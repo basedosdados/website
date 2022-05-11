@@ -105,6 +105,26 @@ function TableDatasets({
     return translation[field] || field
   }
 
+  const empty = () => {
+    return (
+      <p style={{margin:"0", fontWeight:"700", color:"#C4C4C4"}}>
+        Não listado
+      </p>
+    )
+  }
+
+  function isEmpty(value) {
+    if(value) {
+      if(value === "Não listado"){
+        return empty()
+      } else {
+        return translate(value, translatedValues)
+      }
+    } else {
+      return empty()
+    }
+  }
+
   return (
     <HStack
       width="100%"
@@ -169,7 +189,7 @@ function TableDatasets({
                     color:"#252A32"
                   }}
                 >
-                  {r ? translate(r, translatedValues) : <p style={{margin:"0", fontWeight:"700", color:"#C4C4C4"}}>Não listado</p>}
+                  {isEmpty(r)}
                 </Td>
               ))}
             </Tr>
