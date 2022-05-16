@@ -40,7 +40,7 @@ function TableDatasets({
           const directory = Object.values(values.directory_column)
             .map((elm) => {
               if(!elm) {
-                return "-"
+                return "Não listado"
               } else {
                 return elm
               }
@@ -53,7 +53,7 @@ function TableDatasets({
         }
       }
 
-      const newTemporalCoverage = () => {
+      const temporalCoverage = () => {
         if(typeof values.temporal_coverage === "object") {
           return {temporal_coverage: getTemporalCoverage(values.temporal_coverage, parentTemporalCoverage)}
         } else {
@@ -61,13 +61,28 @@ function TableDatasets({
         }
       }
       
-      const formatting = {...values, ... directoryColumn(), ...newTemporalCoverage()}
+      const formatting = {
+        ...values,
+        ...directoryColumn(),
+        ...temporalCoverage(),
+      }
       const row = {...schemaHeaders, ...formatting}
 
       delete row.is_in_staging
       delete row.is_partition
+      
+      const translations = () => {
+        return {
+          bigquery_type : translate(row.bigquery_type, translatedValues),
+          measurement_unit : translate(row.measurement_unit, translatedValues),
+          covered_by_dictionary: translate(row.covered_by_dictionary, translatedValues),
+          has_sensitive_data: translate(row.has_sensitive_data, translatedValues),
+        }
+      }
 
-      return Object.values(row)
+      const translatedRow = {...row,...translations()}
+
+      return Object.values(translatedRow)
     })
 
     delete schemaHeaders.is_in_staging
@@ -84,12 +99,15 @@ function TableDatasets({
   },[translations, availableOptionsTranslations])
 
   
-  function translate (field, translation) {
+  function translate(field, translation) {
     if(typeof field === "boolean") {
       return field === true ? "Sim" : "Não"
     }
 
     if(typeof field === "object") {
+      if(!field){
+        return "Não listado"
+      }
       if(field.length === 0) {
         return "Não listado"
       } else {
@@ -115,10 +133,10 @@ function TableDatasets({
 
   function isEmpty(value) {
     if(value) {
-      if(value === "Não listado"){
+      if(value === "Não listado" || value === "Não listado.Não listado:Não listado"){
         return empty()
       } else {
-        return translate(value, translatedValues)
+        return value
       }
     } else {
       return empty()
