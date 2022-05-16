@@ -35,6 +35,7 @@ export function BdmTablePage({
 }) {
 
   const [showColumns, setShowColumns] = useState(false)
+  const [showTemporalCoverage, setShowTemporalCoverage] = useState(false)
   const [schema, setSchema] = useState({})
   const [columnsHeaders, setColumnsHeaders] = useState([])
   const [columnsValues, setColumnsValues] = useState([])
@@ -62,10 +63,16 @@ export function BdmTablePage({
 
   useEffect(() => {
     setColumnsHeaders(Object.keys(schema))
-    setColumnsValues(resource.columns)
-    setTemporalCoverage(getTemporalCoverage(resource?.temporal_coverage))
+    if(resource.columns) {
+      setColumnsValues(resource.columns)
+      setShowColumns(true)
+    }
+    if(resource.temporal_coverage) {
+      console.log(resource)
+      setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
+      setShowTemporalCoverage(true)
+    }
 
-    setShowColumns(true)
   },[schema, resource])
 
   if (
@@ -111,12 +118,15 @@ export function BdmTablePage({
           {resource.description || "Nenhuma descrição fornecida."}
         </SectionText>
       </VStack>
-      <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
-        <Subtitle>Cobertura temporal</Subtitle>
-        <SectionText>
-          {temporalCoverage}
-        </SectionText>
-      </VStack>
+      
+      {showTemporalCoverage &&
+        <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
+          <Subtitle>Cobertura temporal</Subtitle>
+          <SectionText>
+            {temporalCoverage}
+          </SectionText>
+        </VStack>
+      }
 
       {showColumns &&
         <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
