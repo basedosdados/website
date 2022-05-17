@@ -36,6 +36,9 @@ function TableDatasets({
     const newValues = values.map((elm) => {
       const values = elm
       const directoryColumn = () => {
+        if(!values.directory_column) {
+          return {directory_column : "Não listado"}
+        }
         if(typeof values.directory_column === "object") {
           const directory = Object.values(values.directory_column)
             .map((elm) => {
@@ -45,6 +48,7 @@ function TableDatasets({
                 return elm
               }
             })
+
           return {
             directory_column : `${directory[0]}.${directory[1]}:${directory[2]}`
           }
@@ -54,6 +58,9 @@ function TableDatasets({
       }
 
       const temporalCoverage = () => {
+        if(!values.temporal_coverage) {
+          return {temporal_coverage : "Não listado"}
+        }
         if(typeof values.temporal_coverage === "object") {
           return {temporal_coverage: getTemporalCoverage(values.temporal_coverage, parentTemporalCoverage)}
         } else {
@@ -227,7 +234,7 @@ export default function ColumnsDatasets({
   tooltip,
   containerStyle,
 }) {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false)
 
   if (values.length <= 5)
     return (
