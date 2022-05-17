@@ -21,6 +21,7 @@ function TableDatasets({
   values,
   translations,
   availableOptionsTranslations,
+  translationsOptions,
   parentTemporalCoverage,
   tooltip,
   containerStyle,
@@ -28,7 +29,8 @@ function TableDatasets({
   const [columnsHeaders, setColumnsHeaders] = useState([])
   const [columnsValues, setColumnsValues] = useState([])
   const [translatedHeaders, setTranslatedHeaders] = useState({})
-  const [translatedValues, setTranslatedValues] = useState({})
+  const [generalAvailableTranslations, setGeneralAvailableTranslations] = useState({})
+  const [availableTranslations, setAvailableTranslations] = useState({})
 
   useEffect(() => {
     const schemaHeaders = headers.reduce((obj, cur) => (
@@ -80,10 +82,10 @@ function TableDatasets({
       
       const translations = () => {
         return {
-          bigquery_type : translate(row.bigquery_type, translatedValues),
-          measurement_unit : translate(row.measurement_unit, translatedValues),
-          covered_by_dictionary: translate(row.covered_by_dictionary, translatedValues),
-          has_sensitive_data: translate(row.has_sensitive_data, translatedValues),
+          bigquery_type : translate(row.bigquery_type, translationsOptions["BigQuery Type"]),
+          measurement_unit : translate(row.measurement_unit, translationsOptions["Measurement Unit"]),
+          covered_by_dictionary: translate(row.covered_by_dictionary, generalAvailableTranslations),
+          has_sensitive_data: translate(row.has_sensitive_data, generalAvailableTranslations),
         }
       }
 
@@ -102,8 +104,9 @@ function TableDatasets({
 
   useEffect(() => {
     setTranslatedHeaders(translations)
-    setTranslatedValues(availableOptionsTranslations)
-  },[translations, availableOptionsTranslations])
+    setGeneralAvailableTranslations(availableOptionsTranslations)
+    setAvailableTranslations(translationsOptions)
+  },[translations, availableOptionsTranslations, translationsOptions])
 
   
   function translate(field, translation) {
@@ -121,10 +124,6 @@ function TableDatasets({
         const newJson = JSON.stringify(field)
         return formatJson(newJson, true)
       }
-    }
-
-    if(translation[field] === "Data") {
-      return "DATE"
     }
 
     return translation[field] || field
@@ -230,6 +229,7 @@ export default function ColumnsDatasets({
   values,
   translations,
   availableOptionsTranslations,
+  translationsOptions,
   parentTemporalCoverage,
   tooltip,
   containerStyle,
@@ -243,6 +243,7 @@ export default function ColumnsDatasets({
         values={values}
         translations={translations}
         availableOptionsTranslations={availableOptionsTranslations}
+        translationsOptions={translationsOptions}
         parentTemporalCoverage={parentTemporalCoverage}
         tooltip={tooltip}
         containerStyle={containerStyle}
@@ -256,6 +257,7 @@ export default function ColumnsDatasets({
         values={expanded ? values : values.slice(0, Math.min(3, values.length))}
         translations={translations}
         availableOptionsTranslations={availableOptionsTranslations}
+        translationsOptions={translationsOptions}
         parentTemporalCoverage={parentTemporalCoverage}
         tooltip={tooltip}
         containerStyle={containerStyle}
