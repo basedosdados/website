@@ -13,7 +13,7 @@ import {
   Center
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { formatJson } from '../../utils';
+import { formatJson, getTemporalCoverage } from '../../utils';
 import InfoIcon from '../../public/img/icons/infoIcon'
 
 function TableDatasets({
@@ -21,24 +21,77 @@ function TableDatasets({
   values,
   translations,
   availableOptionsTranslations,
+  translationsOptions,
+  parentTemporalCoverage,
   tooltip,
   containerStyle,
 }) {
   const [columnsHeaders, setColumnsHeaders] = useState([])
   const [columnsValues, setColumnsValues] = useState([])
   const [translatedHeaders, setTranslatedHeaders] = useState({})
-  const [translatedValues, setTranslatedValues] = useState({})
+  const [generalAvailableTranslations, setGeneralAvailableTranslations] = useState({})
+  const [availableTranslations, setAvailableTranslations] = useState({})
 
   useEffect(() => {
     const schemaHeaders = headers.reduce((obj, cur) => (
       {...obj, [cur]: "Não listado"}), {})
     const newValues = values.map((elm) => {
-      const row = {...schemaHeaders, ...elm}
+      const values = elm
+      const directoryColumn = () => {
+        if(!values.directory_column) {
+          return {directory_column : "Não listado"}
+        }
+        if(typeof values.directory_column === "object") {
+          const directory = Object.values(values.directory_column)
+            .map((elm) => {
+              if(!elm) {
+                return "Não listado"
+              } else {
+                return elm
+              }
+            })
+
+          return {
+            directory_column : `${directory[0]}.${directory[1]}:${directory[2]}`
+          }
+        } else {
+          return {directory_column : "Não listado"}
+        }
+      }
+
+      const temporalCoverage = () => {
+        if(!values.temporal_coverage) {
+          return {temporal_coverage : "Não listado"}
+        }
+        if(typeof values.temporal_coverage === "object") {
+          return {temporal_coverage: getTemporalCoverage(values.temporal_coverage, parentTemporalCoverage)}
+        } else {
+          return {temporal_coverage : "Não listado"}
+        }
+      }
       
+      const formatting = {
+        ...values,
+        ...directoryColumn(),
+        ...temporalCoverage(),
+      }
+      const row = {...schemaHeaders, ...formatting}
+
       delete row.is_in_staging
       delete row.is_partition
+      
+      const translations = () => {
+        return {
+          bigquery_type : translate(row.bigquery_type, translationsOptions["BigQuery Type"]),
+          measurement_unit : translate(row.measurement_unit, translationsOptions["Measurement Unit"]),
+          covered_by_dictionary: translate(row.covered_by_dictionary, generalAvailableTranslations),
+          has_sensitive_data: translate(row.has_sensitive_data, generalAvailableTranslations),
+        }
+      }
 
-      return Object.values(row)
+      const translatedRow = {...row,...translations()}
+
+      return Object.values(translatedRow)
     })
 
     delete schemaHeaders.is_in_staging
@@ -51,28 +104,49 @@ function TableDatasets({
 
   useEffect(() => {
     setTranslatedHeaders(translations)
-    setTranslatedValues(availableOptionsTranslations)
-  },[translations, availableOptionsTranslations])
+    setGeneralAvailableTranslations(availableOptionsTranslations)
+    setAvailableTranslations(translationsOptions)
+  },[translations, availableOptionsTranslations, translationsOptions])
 
   
-  function translate (field, translation) {
+  function translate(field, translation) {
     if(typeof field === "boolean") {
       return field === true ? "Sim" : "Não"
     }
 
     if(typeof field === "object") {
+      if(!field){
+        return "Não listado"
+      }
       if(field.length === 0) {
         return "Não listado"
       } else {
-        return formatJson(JSON.stringify(field))
+        const newJson = JSON.stringify(field)
+        return formatJson(newJson, true)
       }
     }
 
-    if(translation[field] === "Data") {
-      return "DATE"
-    }
-
     return translation[field] || field
+  }
+
+  const empty = () => {
+    return (
+      <p style={{margin:"0", fontWeight:"700", color:"#C4C4C4"}}>
+        Não listado
+      </p>
+    )
+  }
+
+  function isEmpty(value) {
+    if(value) {
+      if(value === "Não listado" || value === "Não listado.Não listado:Não listado"){
+        return empty()
+      } else {
+        return value
+      }
+    } else {
+      return empty()
+    }
   }
 
   return (
@@ -103,11 +177,11 @@ function TableDatasets({
                   {translations ? translate(elm, translatedHeaders) : elm}
                   <Tooltip
                     hasArrow
+                    bg="#2A2F38"
                     label={tooltip[elm]}
                     fontSize="16px"
                     fontWeight="500"
                     padding="5px 15px"
-                    backgroundColor="#2A2F38"
                     marginTop="8px"
                     color="#FFF"
                     borderRadius="6px"
@@ -139,7 +213,7 @@ function TableDatasets({
                     color:"#252A32"
                   }}
                 >
-                  {r ? translate(r, translatedValues) : "Não listado"}
+                  {isEmpty(r)}
                 </Td>
               ))}
             </Tr>
@@ -155,10 +229,12 @@ export default function ColumnsDatasets({
   values,
   translations,
   availableOptionsTranslations,
+  translationsOptions,
+  parentTemporalCoverage,
   tooltip,
   containerStyle,
 }) {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false)
 
   if (values.length <= 5)
     return (
@@ -167,6 +243,8 @@ export default function ColumnsDatasets({
         values={values}
         translations={translations}
         availableOptionsTranslations={availableOptionsTranslations}
+        translationsOptions={translationsOptions}
+        parentTemporalCoverage={parentTemporalCoverage}
         tooltip={tooltip}
         containerStyle={containerStyle}
       />
@@ -179,6 +257,8 @@ export default function ColumnsDatasets({
         values={expanded ? values : values.slice(0, Math.min(3, values.length))}
         translations={translations}
         availableOptionsTranslations={availableOptionsTranslations}
+        translationsOptions={translationsOptions}
+        parentTemporalCoverage={parentTemporalCoverage}
         tooltip={tooltip}
         containerStyle={containerStyle}
       />

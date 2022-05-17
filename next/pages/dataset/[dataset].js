@@ -22,7 +22,7 @@ import Subtitle from "../../components/atoms/Subtitle";
 import SectionText from "../../components/atoms/SectionText";
 import { FilterAccordion } from "../../components/atoms/FilterAccordion";
 import { useContext, useState, useEffect } from "react";
-import { isBdPlus, unionArrays } from "../../utils";
+import { isBdPlus, unionArrays, getTemporalCoverage } from "../../utils";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import Link from "../../components/atoms/Link";
 import { SimpleButton } from "../../components/atoms/SimpleButton";
@@ -30,6 +30,7 @@ import { Markdown } from "../../components/atoms/Markdown";
 import {
   getAvailableOptionsTranslations,
   getTranslations,
+  getTranslationsOptions
 } from "../api/translations";
 import { ExternalLinkPage } from "../../components/organisms/ExternalLinkPage";
 import { BdmTablePage } from "../../components/organisms/BdmTablePage";
@@ -52,6 +53,7 @@ export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
   const translations = await getTranslations();
   const availableOptionsTranslations = await getAvailableOptionsTranslations();
+  const translationsOptions = await getTranslationsOptions();
   const resources = dataset?.resources || [];
   const bdmTables = resources.filter(
     (r) => r && r?.resource_type === "bdm_table"
@@ -71,6 +73,7 @@ export async function getStaticProps(context) {
       informationRequest,
       translations,
       availableOptionsTranslations,
+      translationsOptions,
       isPlus: isBdPlus(dataset),
     },
     revalidate: 1, //TODO: Increase this timer
@@ -126,6 +129,7 @@ function ResourcesPage({
   externalLinks,
   informationRequest,
   availableOptionsTranslations,
+  translationsOptions,
   translations,
   dataset,
   isMobileMod,
@@ -153,6 +157,7 @@ function ResourcesPage({
         return (
           <BdmTablePage
             availableOptionsTranslations={availableOptionsTranslations}
+            translationsOptions={translationsOptions}
             translations={translations}
             datasetName={dataset.dataset_id}
             resource={resource}
@@ -334,6 +339,7 @@ export default function DatasetPage({
   isPlus,
   translations,
   availableOptionsTranslations,
+  translationsOptions,
 }) {
   const [tabIndex, setTabIndex] = useState(0)
   const [isMobileMod, setIsMobileMod] = useState(false)
@@ -343,40 +349,11 @@ export default function DatasetPage({
     setIsMobileMod(isMobile)
   }, [isMobile])
 
-  function getTemporalCoverage() {
-    const temporalCoverage = unionArrays(
-      dataset.resources
-        .filter((r) => r?.temporal_coverage?.length)
-        .map((r) => r.temporal_coverage)
-    ).sort();
-
-    if (temporalCoverage.length === 0 || !temporalCoverage) return "";
-
-    var years = [];
-    for (let i = 0; i < temporalCoverage.length; i++) {
-      var interval = temporalCoverage[i];
-      if (interval.includes("(")) {
-        var first = interval.substring(0, interval.indexOf('('));
-        var last  = interval.substring(   interval.indexOf(')')+1);
-        years.push(first);
-        years.push(last);
-      }
-      else {
-        years.push(interval);
-      }
-
-    }
-
-    var years = years.sort();
-
-    if (years.length === 1) return years[0];
-
-    var min_date = years[0];
-    var max_date = years[years.length-1];
-
-    return (min_date + " - " + max_date);
-
-  }
+  const temporalCoverage = unionArrays(
+    dataset.resources
+      .filter((r) => r?.temporal_coverage?.length)
+      .map((r) => r.temporal_coverage)
+  ).sort();
 
   return (
     <MainPageTemplate pages={pages}>
@@ -414,7 +391,7 @@ export default function DatasetPage({
         <Stack
           direction={{ base: "column", lg: "row" }}
           marginRight="auto"
-          spacing={8}
+          spacing={10}
           align="flex-start"
         >
           <Center
@@ -479,7 +456,7 @@ export default function DatasetPage({
                   marginTop="4px !important"
                   fontSize={isMobileMod ? "14px" : "16px"}
                 >
-                  {getTemporalCoverage()}
+                  {getTemporalCoverage(temporalCoverage)}
                 </SectionText>
               </VStack>
             </VStack>
@@ -524,6 +501,7 @@ export default function DatasetPage({
                 externalLinks={externalLinks}
                 informationRequest={informationRequest}
                 availableOptionsTranslations={availableOptionsTranslations}
+                translationsOptions={translationsOptions}
                 translations={translations}
                 dataset={dataset}
                 isMobileMod={isMobileMod}

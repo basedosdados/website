@@ -20,7 +20,6 @@ import {
   Box,
 } from "@chakra-ui/react";
 import ReactPaginate from "react-paginate";
-import SectionTitle from "../../components/atoms/SectionTitle";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
@@ -407,6 +406,7 @@ export default function SearchPage({
               textAlign="top"
               width="100%"
               marginLeft="8px"
+              color="#252A32"
               letterSpacing="0.2px"
             >
               Filtrar resultados

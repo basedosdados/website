@@ -53,7 +53,7 @@ export function isBdPlus(dataset) {
 export function translate(keyTranslations, valueTranslations, object) {
   const formatObject = (value) => {
     if(typeof value === "object") {
-      return formatJson(JSON.stringify(value))
+      return formatJson(JSON.stringify(value), true)
     }
 
     return value
@@ -106,7 +106,7 @@ export function repeat(s, count) {
   return new Array(count + 1).join(s);
 }
 
-export function formatJson(json) {
+export function formatJson(json, replace) {
   var i           = 0,
     il          = 0,
     tab         = "    ",
@@ -170,5 +170,45 @@ export function formatJson(json) {
     }
   }
 
+  if(replace){
+    return newJson.replace(/[\[\]{\{\}'"]+/g, '')
+  }
   return newJson;
+}
+
+export function getTemporalCoverage(temporalCoverage, parentTemporalCoverage) {
+  if (temporalCoverage.length === 0 || !temporalCoverage) return ""
+  let years = []
+
+  const getYears = (value = "") => {
+    return value.split(/\(\d+\)|\-/)
+  }
+
+  const parentYears = getYears(parentTemporalCoverage)
+
+  temporalCoverage.forEach((interval) => {
+    const itens = getYears(interval)
+    itens
+      .map((year, i) => {
+        if (!year) {
+          return (parentYears[i] || "").trim()
+        }
+
+        return year.trim()
+      })
+      .filter(year => !!year)
+      .forEach(year => years.push(year))
+  })
+
+  years = years.sort()
+
+  if (years.length === 0) {
+    return parentYears.join(" - ")
+  }
+
+  if (years.length === 1) return years[0]
+
+  const min_date = years[0]
+  const max_date = years[years.length-1]
+  return `${min_date} - ${max_date}`
 }

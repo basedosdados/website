@@ -18,6 +18,7 @@ import {
   filterOnlyValidValues,
   formatObjectsInArray,
   translate,
+  getTemporalCoverage,
 } from "../../utils";
 import { BaseResourcePage } from "../molecules/BaseResourcePage";
 import { SchemaForm } from "../molecules/SchemaForm";
@@ -28,15 +29,18 @@ import DataInformationQuery from "../molecules/DataInformationQuery";
 
 export function BdmTablePage({
   availableOptionsTranslations,
+  translationsOptions,
   translations,
   datasetName,
   resource,
 }) {
 
   const [showColumns, setShowColumns] = useState(false)
+  const [showTemporalCoverage, setShowTemporalCoverage] = useState(false)
   const [schema, setSchema] = useState({})
   const [columnsHeaders, setColumnsHeaders] = useState([])
   const [columnsValues, setColumnsValues] = useState([])
+  const [temporalCoverage, setTemporalCoverage] = useState([])
   const tooltip = {
     name: "Indica o nome de cada coluna para cada ano.",
     bigquery_type: "Indica o tipo de dado no BigQuery. Ex.: INT64 (Inteiro), STRING (String), DATA (Data), FLOA64 (Float) etc.",
@@ -48,7 +52,7 @@ export function BdmTablePage({
     has_sensitive_data: "Indica se a coluna possui dados sensíveis. Ex.:  CPF identificado, dados de conta bancária, etc. ",
     observations: "Indica processos de tratamentos realizados na coluna que precisam ser evidenciados. "
   }
-  
+
   useEffect(() => {
     fetchSchema()
   },[])
@@ -57,12 +61,18 @@ export function BdmTablePage({
     const columnsSchema = await getBdmColumnsSchema()
     setSchema(columnsSchema)
   }
-  
+
   useEffect(() => {
     setColumnsHeaders(Object.keys(schema))
-    setColumnsValues(resource.columns)
+    if(resource.columns) {
+      setColumnsValues(resource.columns)
+      setShowColumns(true)
+    }
+    if(resource.temporal_coverage) {
+      setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
+      setShowTemporalCoverage(true)
+    }
 
-    setShowColumns(true)
   },[schema, resource])
 
   if (
@@ -108,12 +118,15 @@ export function BdmTablePage({
           {resource.description || "Nenhuma descrição fornecida."}
         </SectionText>
       </VStack>
-      <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
-        <Subtitle>Cobertura temporal</Subtitle>
-        <SectionText>
-          {resource?.temporal_coverage ? resource.temporal_coverage[0] : "Nenhuma cobertura temporal fornecida."}
-        </SectionText>
-      </VStack>
+      
+      {showTemporalCoverage &&
+        <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
+          <Subtitle>Cobertura temporal</Subtitle>
+          <SectionText>
+            {temporalCoverage}
+          </SectionText>
+        </VStack>
+      }
 
       {showColumns &&
         <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
@@ -123,6 +136,8 @@ export function BdmTablePage({
             <ColumnDatasets
               translations={translations.bdm_columns}
               availableOptionsTranslations={availableOptionsTranslations}
+              translationsOptions={translationsOptions}
+              parentTemporalCoverage={temporalCoverage}
               tooltip={tooltip}
               headers={columnsHeaders}
               values={columnsValues}

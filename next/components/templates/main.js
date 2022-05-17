@@ -10,6 +10,7 @@ export function MainPageTemplate({
   pages,
   children,
   backgroundColor = "#FFFFFF",
+  ...style
 }) {
   const { data = null, isLoading } = useQuery("user", getUser);
 
@@ -18,7 +19,7 @@ export function MainPageTemplate({
       <Box backgroundColor={backgroundColor}>
         <SiteHead />
         <Menu pages={pages} />
-        <Box paddingTop={{ base: "30px", lg: "120px" }} paddingBottom="50px">
+        <Box paddingTop={{ base: "30px", lg: "120px" }} paddingBottom="50px" {...style}>
           {children}
         </Box>
         <Footer pages={pages} />
