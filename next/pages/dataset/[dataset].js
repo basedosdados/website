@@ -30,6 +30,7 @@ import { Markdown } from "../../components/atoms/Markdown";
 import {
   getAvailableOptionsTranslations,
   getTranslations,
+  getTranslationsOptions
 } from "../api/translations";
 import { ExternalLinkPage } from "../../components/organisms/ExternalLinkPage";
 import { BdmTablePage } from "../../components/organisms/BdmTablePage";
@@ -52,6 +53,7 @@ export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
   const translations = await getTranslations();
   const availableOptionsTranslations = await getAvailableOptionsTranslations();
+  const translationsOptions = await getTranslationsOptions();
   const resources = dataset?.resources || [];
   const bdmTables = resources.filter(
     (r) => r && r?.resource_type === "bdm_table"
@@ -71,6 +73,7 @@ export async function getStaticProps(context) {
       informationRequest,
       translations,
       availableOptionsTranslations,
+      translationsOptions,
       isPlus: isBdPlus(dataset),
     },
     revalidate: 1, //TODO: Increase this timer
@@ -126,6 +129,7 @@ function ResourcesPage({
   externalLinks,
   informationRequest,
   availableOptionsTranslations,
+  translationsOptions,
   translations,
   dataset,
   isMobileMod,
@@ -153,6 +157,7 @@ function ResourcesPage({
         return (
           <BdmTablePage
             availableOptionsTranslations={availableOptionsTranslations}
+            translationsOptions={translationsOptions}
             translations={translations}
             datasetName={dataset.dataset_id}
             resource={resource}
@@ -334,6 +339,7 @@ export default function DatasetPage({
   isPlus,
   translations,
   availableOptionsTranslations,
+  translationsOptions,
 }) {
   const [tabIndex, setTabIndex] = useState(0)
   const [isMobileMod, setIsMobileMod] = useState(false)
@@ -495,6 +501,7 @@ export default function DatasetPage({
                 externalLinks={externalLinks}
                 informationRequest={informationRequest}
                 availableOptionsTranslations={availableOptionsTranslations}
+                translationsOptions={translationsOptions}
                 translations={translations}
                 dataset={dataset}
                 isMobileMod={isMobileMod}
