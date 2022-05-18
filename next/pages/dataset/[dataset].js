@@ -349,11 +349,19 @@ export default function DatasetPage({
     setIsMobileMod(isMobile)
   }, [isMobile])
 
-  const temporalCoverage = unionArrays(
-    dataset.resources
-      .filter((r) => r?.temporal_coverage?.length)
-      .map((r) => r.temporal_coverage)
-  ).sort();
+  const validateTemporalCoverage = () => {
+    const temporalCoverage = unionArrays(
+      dataset.resources
+        .filter((r) => r?.temporal_coverage?.length)
+        .map((r) => r.temporal_coverage)
+    ).sort();
+    
+    if(temporalCoverage.length === 0) {
+      return "Nenhuma cobertura temporal fornecida"
+    } else {
+      return getTemporalCoverage(temporalCoverage)
+    }
+  }
 
   return (
     <MainPageTemplate pages={pages}>
@@ -456,7 +464,7 @@ export default function DatasetPage({
                   marginTop="4px !important"
                   fontSize={isMobileMod ? "14px" : "16px"}
                 >
-                  {getTemporalCoverage(temporalCoverage)}
+                  {validateTemporalCoverage()}
                 </SectionText>
               </VStack>
             </VStack>
