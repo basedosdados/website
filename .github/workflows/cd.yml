@@ -30,10 +30,11 @@ jobs:
           token: ${{ secrets.VAULT_TOKEN }}
           secrets: |
             secret/data/ckan_credentials    ENV_PROD    | CKAN_DOT_ENV_PROD ;
-            secret/data/ckan_credentials    STAGING_INI | CKAN_STAGING_INI ;
-            secret/data/aws_credentials     SSH_KEY     | SSH_KEY
+            secret/data/ckan_credentials    STAGING_INI | CKAN_STAGING_INI 
 
       - name: Add Secrets File
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
         run: |
           echo "$CKAN_DOT_ENV_PROD" > .env.prod
           echo "$CKAN_STAGING_INI" > ./configs/ckan.override.prod.ini
