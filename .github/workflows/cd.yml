@@ -30,16 +30,14 @@ jobs:
           url: https://vault.basedosdados.org
           token: ${{ secrets.VAULT_TOKEN }}
           secrets: |
-            secret/data/ckan_credentials    ENV_PROD        | CKAN_DOT_ENV_PROD;
-            secret/data/ckan_credentials    STAGING_INI     | CKAN_STAGING_INI;
-            secret/data/aws_credentials     SSH_KEY         | SSH_KEY
-
-      - name: Add Secret Files
+            secret/data/ckan_credentials    ENV_PROD    | CKAN_DOT_ENV_PROD;
+            secret/data/ckan_credentials    STAGING_INI | CKAN_STAGING_INI;
+            secret/data/aws_credentials     SSH_KEY     | SSH_KEY
         run: |
-          echo ${{ steps.importing.outputs.CKAN_DOT_ENV_PROD }} > .env.prod && \
-          echo ${{ steps.importing.outputs.CKAN_STAGING_INI }} > ./configs/ckan.override.prod.ini && \
-          mkdir ~/.ssh && \
-          echo ${{ steps.importing.outputs.SSH_KEY }} > ~/.ssh/BD.pem && \
+          echo "$CKAN_DOT_ENV_PROD" > env.prod
+          echo "$CKAN_STAGING_INI" > ./configs/ckan.override.prod.ini
+          mkdir ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/BD.pem &&
           chmod 700 ~/.ssh ~/.ssh/BD.pem
 
       - name: Deploy Website
