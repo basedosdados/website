@@ -7,30 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  get-secrets:
-    name: Get Secrets
-    runs-on: ubuntu-latest
-    outputs:
-      ENV_PROD: ${{ steps.importing.outputs.CKAN_DOT_ENV_PROD }}
-      STAGING_INI: ${{ steps.importing.outputs.CKAN_STAGING_INI }}
-      PRODUCTION_INI: ${{ steps.importing.outputs.CKAN_PRODUCTION_INI }}
-      SSH_KEY: ${{ steps.importing.outputs.SSH_KEY }}
-
-    steps:
-      - name: Import Secrets
-        id: importing
-        uses: hashicorp/vault-action@v2.4.1
-        with:
-          url: https://vault.basedosdados.org
-          token: ${{ secrets.VAULT_TOKEN }}
-          secrets: |
-            secret/data/ckan_credentials    ENV_PROD        | CKAN_DOT_ENV_PROD;
-            secret/data/ckan_credentials    STAGING_INI     | CKAN_STAGING_INI;
-            secret/data/ckan_credentials    PRODUCTION_INI  | CKAN_PRODUCTION_INI;
-            secret/data/aws_credentials     SSH_KEY         | SSH_KEY
-
   deploy-develop:
-    needs: get-secrets
     if: github.ref_name == 'develop'
     name: Deploy Development Environment
     runs-on: ubuntu-latest
@@ -46,11 +23,15 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: Add Secret Files
+        env:
+          DOT_ENV_PROD: ${{ secrets.DOT_ENV_PROD }}
+          CKAN_STAGING_INI: ${{ secrets.CKAN_STAGING_INI }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
         run: |
-          echo ${{ needs.get-secrets.outputs.ENV_PROD }} > .env.prod && \
-          echo ${{ needs.get-secrets.outputs.STAGING_INI }} " > ./configs/ckan.override.prod.ini && \
+          echo "$DOT_ENV_PROD" > .env.prod && \
+          echo "$CKAN_STAGING_INI" > ./configs/ckan.override.prod.ini && \
           mkdir ~/.ssh && \
-          echo ${{ needs.get-secrets.outputs.SSH_KEY }} > ~/.ssh/BD.pem && \
+          echo "$SSH_KEY" > ~/.ssh/BD.pem && \
           chmod 700 ~/.ssh ~/.ssh/BD.pem
 
       - name: Deploy Website
