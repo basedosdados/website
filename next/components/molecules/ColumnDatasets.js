@@ -28,9 +28,6 @@ function TableDatasets({
 }) {
   const [columnsHeaders, setColumnsHeaders] = useState([])
   const [columnsValues, setColumnsValues] = useState([])
-  const [translatedHeaders, setTranslatedHeaders] = useState({})
-  const [generalAvailableTranslations, setGeneralAvailableTranslations] = useState({})
-  const [availableTranslations, setAvailableTranslations] = useState({})
 
   useEffect(() => {
     const schemaHeaders = headers.reduce((obj, cur) => (
@@ -84,8 +81,8 @@ function TableDatasets({
         return {
           bigquery_type : translate(row.bigquery_type, translationsOptions["BigQuery Type"]),
           measurement_unit : translate(row.measurement_unit, translationsOptions["Measurement Unit"]),
-          covered_by_dictionary: translate(row.covered_by_dictionary, generalAvailableTranslations),
-          has_sensitive_data: translate(row.has_sensitive_data, generalAvailableTranslations),
+          covered_by_dictionary: translate(row.covered_by_dictionary, availableOptionsTranslations),
+          has_sensitive_data: translate(row.has_sensitive_data, availableOptionsTranslations),
         }
       }
 
@@ -101,13 +98,6 @@ function TableDatasets({
     setColumnsValues(newValues)
     
   },[values, headers])
-
-  useEffect(() => {
-    setTranslatedHeaders(translations)
-    setGeneralAvailableTranslations(availableOptionsTranslations)
-    setAvailableTranslations(translationsOptions)
-  },[translations, availableOptionsTranslations, translationsOptions])
-
   
   function translate(field, translation) {
     if(typeof field === "boolean") {
@@ -131,7 +121,7 @@ function TableDatasets({
 
   const empty = () => {
     return (
-      <p style={{margin:"0", fontWeight:"700", color:"#C4C4C4"}}>
+      <p style={{margin:"0", fontWeight:"500", color:"#C4C4C4"}}>
         Não listado
       </p>
     )
@@ -174,7 +164,7 @@ function TableDatasets({
             >
               {tooltip ?
                 <Box display="flex" gridGap="8px" cursor="pointer">
-                  {translations ? translate(elm, translatedHeaders) : elm}
+                  {translations ? translate(elm, translations) : elm}
                   <Tooltip
                     hasArrow
                     bg="#2A2F38"
@@ -193,7 +183,7 @@ function TableDatasets({
                 </Box>
                 :
                 <>
-                  {translations ? translate(elm, translatedHeaders) : elm}
+                  {translations ? translate(elm, translations) : elm}
                 </>
               }
             </Th>
