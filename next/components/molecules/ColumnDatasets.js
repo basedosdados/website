@@ -21,6 +21,7 @@ function TableDatasets({
   values,
   translations,
   availableOptionsTranslations,
+  translationsOptions,
   parentTemporalCoverage,
   tooltip,
   containerStyle,
@@ -28,7 +29,8 @@ function TableDatasets({
   const [columnsHeaders, setColumnsHeaders] = useState([])
   const [columnsValues, setColumnsValues] = useState([])
   const [translatedHeaders, setTranslatedHeaders] = useState({})
-  const [translatedValues, setTranslatedValues] = useState({})
+  const [generalAvailableTranslations, setGeneralAvailableTranslations] = useState({})
+  const [availableTranslations, setAvailableTranslations] = useState({})
 
   useEffect(() => {
     const schemaHeaders = headers.reduce((obj, cur) => (
@@ -36,15 +38,19 @@ function TableDatasets({
     const newValues = values.map((elm) => {
       const values = elm
       const directoryColumn = () => {
+        if(!values.directory_column) {
+          return {directory_column : "Não listado"}
+        }
         if(typeof values.directory_column === "object") {
           const directory = Object.values(values.directory_column)
             .map((elm) => {
               if(!elm) {
-                return "-"
+                return "Não listado"
               } else {
                 return elm
               }
             })
+
           return {
             directory_column : `${directory[0]}.${directory[1]}:${directory[2]}`
           }
@@ -53,7 +59,10 @@ function TableDatasets({
         }
       }
 
-      const newTemporalCoverage = () => {
+      const temporalCoverage = () => {
+        if(!values.temporal_coverage) {
+          return {temporal_coverage : "Não listado"}
+        }
         if(typeof values.temporal_coverage === "object") {
           return {temporal_coverage: getTemporalCoverage(values.temporal_coverage, parentTemporalCoverage)}
         } else {
@@ -61,13 +70,28 @@ function TableDatasets({
         }
       }
       
-      const formatting = {...values, ... directoryColumn(), ...newTemporalCoverage()}
+      const formatting = {
+        ...values,
+        ...directoryColumn(),
+        ...temporalCoverage(),
+      }
       const row = {...schemaHeaders, ...formatting}
 
       delete row.is_in_staging
       delete row.is_partition
+      
+      const translations = () => {
+        return {
+          bigquery_type : translate(row.bigquery_type, translationsOptions["BigQuery Type"]),
+          measurement_unit : translate(row.measurement_unit, translationsOptions["Measurement Unit"]),
+          covered_by_dictionary: translate(row.covered_by_dictionary, generalAvailableTranslations),
+          has_sensitive_data: translate(row.has_sensitive_data, generalAvailableTranslations),
+        }
+      }
 
-      return Object.values(row)
+      const translatedRow = {...row,...translations()}
+
+      return Object.values(translatedRow)
     })
 
     delete schemaHeaders.is_in_staging
@@ -80,26 +104,26 @@ function TableDatasets({
 
   useEffect(() => {
     setTranslatedHeaders(translations)
-    setTranslatedValues(availableOptionsTranslations)
-  },[translations, availableOptionsTranslations])
+    setGeneralAvailableTranslations(availableOptionsTranslations)
+    setAvailableTranslations(translationsOptions)
+  },[translations, availableOptionsTranslations, translationsOptions])
 
   
-  function translate (field, translation) {
+  function translate(field, translation) {
     if(typeof field === "boolean") {
       return field === true ? "Sim" : "Não"
     }
 
     if(typeof field === "object") {
+      if(!field){
+        return "Não listado"
+      }
       if(field.length === 0) {
         return "Não listado"
       } else {
         const newJson = JSON.stringify(field)
         return formatJson(newJson, true)
       }
-    }
-
-    if(translation[field] === "Data") {
-      return "DATE"
     }
 
     return translation[field] || field
@@ -115,10 +139,10 @@ function TableDatasets({
 
   function isEmpty(value) {
     if(value) {
-      if(value === "Não listado"){
+      if(value === "Não listado" || value === "Não listado.Não listado:Não listado"){
         return empty()
       } else {
-        return translate(value, translatedValues)
+        return value
       }
     } else {
       return empty()
@@ -205,11 +229,12 @@ export default function ColumnsDatasets({
   values,
   translations,
   availableOptionsTranslations,
+  translationsOptions,
   parentTemporalCoverage,
   tooltip,
   containerStyle,
 }) {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false)
 
   if (values.length <= 5)
     return (
@@ -218,6 +243,7 @@ export default function ColumnsDatasets({
         values={values}
         translations={translations}
         availableOptionsTranslations={availableOptionsTranslations}
+        translationsOptions={translationsOptions}
         parentTemporalCoverage={parentTemporalCoverage}
         tooltip={tooltip}
         containerStyle={containerStyle}
@@ -231,6 +257,7 @@ export default function ColumnsDatasets({
         values={expanded ? values : values.slice(0, Math.min(3, values.length))}
         translations={translations}
         availableOptionsTranslations={availableOptionsTranslations}
+        translationsOptions={translationsOptions}
         parentTemporalCoverage={parentTemporalCoverage}
         tooltip={tooltip}
         containerStyle={containerStyle}

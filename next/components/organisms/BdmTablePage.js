@@ -29,12 +29,14 @@ import DataInformationQuery from "../molecules/DataInformationQuery";
 
 export function BdmTablePage({
   availableOptionsTranslations,
+  translationsOptions,
   translations,
   datasetName,
   resource,
 }) {
 
   const [showColumns, setShowColumns] = useState(false)
+  const [showTemporalCoverage, setShowTemporalCoverage] = useState(false)
   const [schema, setSchema] = useState({})
   const [columnsHeaders, setColumnsHeaders] = useState([])
   const [columnsValues, setColumnsValues] = useState([])
@@ -50,7 +52,7 @@ export function BdmTablePage({
     has_sensitive_data: "Indica se a coluna possui dados sensíveis. Ex.:  CPF identificado, dados de conta bancária, etc. ",
     observations: "Indica processos de tratamentos realizados na coluna que precisam ser evidenciados. "
   }
-  
+
   useEffect(() => {
     fetchSchema()
   },[])
@@ -62,10 +64,15 @@ export function BdmTablePage({
 
   useEffect(() => {
     setColumnsHeaders(Object.keys(schema))
-    setColumnsValues(resource.columns)
-    setTemporalCoverage(getTemporalCoverage(resource?.temporal_coverage))
+    if(resource.columns) {
+      setColumnsValues(resource.columns)
+      setShowColumns(true)
+    }
+    if(resource.temporal_coverage) {
+      setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
+      setShowTemporalCoverage(true)
+    }
 
-    setShowColumns(true)
   },[schema, resource])
 
   if (
@@ -111,12 +118,15 @@ export function BdmTablePage({
           {resource.description || "Nenhuma descrição fornecida."}
         </SectionText>
       </VStack>
-      <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
-        <Subtitle>Cobertura temporal</Subtitle>
-        <SectionText>
-          {temporalCoverage}
-        </SectionText>
-      </VStack>
+      
+      {showTemporalCoverage &&
+        <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
+          <Subtitle>Cobertura temporal</Subtitle>
+          <SectionText>
+            {temporalCoverage}
+          </SectionText>
+        </VStack>
+      }
 
       {showColumns &&
         <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
@@ -126,6 +136,7 @@ export function BdmTablePage({
             <ColumnDatasets
               translations={translations.bdm_columns}
               availableOptionsTranslations={availableOptionsTranslations}
+              translationsOptions={translationsOptions}
               parentTemporalCoverage={temporalCoverage}
               tooltip={tooltip}
               headers={columnsHeaders}
