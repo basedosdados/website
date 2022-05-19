@@ -181,7 +181,7 @@ export function getTemporalCoverage(temporalCoverage, parentTemporalCoverage) {
   let years = []
 
   const getYears = (value = "") => {
-    return value.split(/\(\d+\)|\-/)
+    return value.split(/\(\d+\)/)
   }
 
   const parentYears = getYears(parentTemporalCoverage)
