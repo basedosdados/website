@@ -65,7 +65,7 @@ jobs:
     name: Deploy Production Environment
     runs-on: ubuntu-latest
     environment:
-      name: prod
+      name: production
       url: 'https://basedosdados.org'
 
     steps:
