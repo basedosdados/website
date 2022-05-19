@@ -9,7 +9,7 @@ on:
 jobs:
   deploy-develop:
     if: github.ref_name == 'develop'
-    name: Deploy Development Environment
+    name: Deploy Staging Environment
     runs-on: ubuntu-latest
     environment:
       name: staging
@@ -22,16 +22,26 @@ jobs:
       - name: Set Up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
+      - name: Import Secrets
+        id: importing
+        uses: hashicorp/vault-action@v2.4.1
+        with:
+          url: https://vault.basedosdados.org
+          token: ${{ secrets.VAULT_TOKEN }}
+          secrets: |
+            secret/data/ckan_credentials    ENV_PROD            | CKAN_DOT_ENV_PROD ;
+            secret/data/ckan_credentials    STAGING_INI         | CKAN_STAGING_INI ;
+            secret/data/aws_credentials     BD_PRIVATE_SSH_KEY  | BD_PRIVATE_SSH_KEY
+
       - name: Add Secret Files
         env:
           DOT_ENV_PROD: ${{ secrets.DOT_ENV_PROD }}
           CKAN_STAGING_INI: ${{ secrets.CKAN_STAGING_INI }}
-          SSH_KEY: ${{ secrets.SSH_KEY }}
         run: |
           echo "$DOT_ENV_PROD" > .env.prod && \
           echo "$CKAN_STAGING_INI" > ./configs/ckan.override.prod.ini && \
           mkdir ~/.ssh && \
-          echo "$SSH_KEY" > ~/.ssh/BD.pem && \
+          echo "$BD_PRIVATE_SSH_KEY" > ~/.ssh/BD.pem && \
           chmod 700 ~/.ssh ~/.ssh/BD.pem
 
       - name: Deploy Website

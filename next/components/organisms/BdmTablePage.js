@@ -65,12 +65,22 @@ export function BdmTablePage({
   useEffect(() => {
     setColumnsHeaders(Object.keys(schema))
     if(resource.columns) {
-      setColumnsValues(resource.columns)
-      setShowColumns(true)
+      if(resource.columns.length === 0) {
+        setColumnsValues(resource.columns)
+        setShowColumns(false)
+      } else {
+        setColumnsValues(resource.columns)
+        setShowColumns(true)
+      }
     }
     if(resource.temporal_coverage) {
-      setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
-      setShowTemporalCoverage(true)
+      if(resource.temporal_coverage.length === 0) {
+        setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
+        setShowTemporalCoverage(false)
+      } else {
+        setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
+        setShowTemporalCoverage(true)
+      }
     }
 
   },[schema, resource])
@@ -119,31 +129,39 @@ export function BdmTablePage({
         </SectionText>
       </VStack>
       
-      {showTemporalCoverage &&
-        <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
-          <Subtitle>Cobertura temporal</Subtitle>
+      <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
+        <Subtitle>Cobertura temporal</Subtitle>
+        {showTemporalCoverage ?
           <SectionText>
             {temporalCoverage}
           </SectionText>
-        </VStack>
-      }
+        :
+          <SectionText>
+            Nenhuma cobertura temporal fornecida
+          </SectionText>
+        }
+      </VStack>
 
-      {showColumns &&
-        <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
-          <Subtitle>
-            Colunas
-          </Subtitle>
-            <ColumnDatasets
-              translations={translations.bdm_columns}
-              availableOptionsTranslations={availableOptionsTranslations}
-              translationsOptions={translationsOptions}
-              parentTemporalCoverage={temporalCoverage}
-              tooltip={tooltip}
-              headers={columnsHeaders}
-              values={columnsValues}
-            />
-        </VStack>
-      }
+      <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
+        <Subtitle>
+          Colunas
+        </Subtitle>
+        {showColumns ?
+          <ColumnDatasets
+            translations={translations.bdm_columns}
+            availableOptionsTranslations={availableOptionsTranslations}
+            translationsOptions={translationsOptions}
+            parentTemporalCoverage={temporalCoverage}
+            tooltip={tooltip}
+            headers={columnsHeaders}
+            values={columnsValues}
+          />
+        :
+          <SectionText>
+            Nenhuma informação de coluna fornecida
+          </SectionText>
+        }
+      </VStack>
 
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Accordion
