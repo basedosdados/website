@@ -3,13 +3,14 @@ on:
   push:
     branches:
       - develop
+      - staging
       - master
   workflow_dispatch:
 
 jobs:
   deploy-develop:
-    if: github.ref_name == 'develop'
-    name: Deploy Development Environment
+    if: github.ref_name == 'develop' || github.ref_name == 'staging'
+    name: Deploy Staging Environment
     runs-on: ubuntu-latest
     environment:
       name: staging
@@ -22,16 +23,26 @@ jobs:
       - name: Set Up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
+      - name: Import Secrets
+        id: importing
+        uses: hashicorp/vault-action@v2.4.1
+        with:
+          url: https://vault.basedosdados.org
+          token: ${{ secrets.VAULT_TOKEN }}
+          secrets: |
+            secret/data/ckan_credentials    ENV_STAGING         | CKAN_ENV_STAGING ;
+            secret/data/ckan_credentials    INI_STAGING         | CKAN_INI_STAGING ;
+            secret/data/aws_credentials     BD_PRIVATE_SSH_KEY  | AWS_BD_PRIVATE_SSH_KEY
+
       - name: Add Secret Files
         env:
-          DOT_ENV_PROD: ${{ secrets.DOT_ENV_PROD }}
-          CKAN_STAGING_INI: ${{ secrets.CKAN_STAGING_INI }}
-          SSH_KEY: ${{ secrets.SSH_KEY }}
+          CKAN_ENV_STAGING: ${{ secrets.DOT_ENV_PROD }}
+          CKAN_INI_STAGING: ${{ secrets.CKAN_STAGING_INI }}
         run: |
-          echo "$DOT_ENV_PROD" > .env.prod && \
-          echo "$CKAN_STAGING_INI" > ./configs/ckan.override.prod.ini && \
+          echo "$CKAN_ENV_STAGING" > .env.prod && \
+          echo "$CKAN_INI_STAGING" > ./configs/ckan.override.prod.ini && \
           mkdir ~/.ssh && \
-          echo "$SSH_KEY" > ~/.ssh/BD.pem && \
+          echo "$AWS_BD_PRIVATE_SSH_KEY" > ~/.ssh/BD.pem && \
           chmod 700 ~/.ssh ~/.ssh/BD.pem
 
       - name: Deploy Website
@@ -65,16 +76,26 @@ jobs:
       - name: Set Up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
+      - name: Import Secrets
+        id: importing
+        uses: hashicorp/vault-action@v2.4.1
+        with:
+          url: https://vault.basedosdados.org
+          token: ${{ secrets.VAULT_TOKEN }}
+          secrets: |
+            secret/data/ckan_credentials    ENV_PRODUCTION      | CKAN_ENV_PRODUCTION ;
+            secret/data/ckan_credentials    INI_PRODUCTION      | CKAN_INI_PRODUCTION ;
+            secret/data/aws_credentials     BD_PRIVATE_SSH_KEY  | AWS_BD_PRIVATE_SSH_KEY
+
       - name: Add Secret Files
         env:
-          DOT_ENV_PROD: ${{ secrets.DOT_ENV_PROD }}
-          CKAN_PROD_INI: ${{ secrets.CKAN_PROD_INI }}
-          SSH_KEY: ${{ secrets.SSH_KEY }}
+          CKAN_ENV_PRODUCTION: ${{ secrets.DOT_ENV_PROD }}
+          CKAN_INI_PRODUCTION: ${{ secrets.CKAN_STAGING_INI }}
         run: |
-          echo "$DOT_ENV_PROD" > .env.prod && \
-          echo "$CKAN_PROD_INI" > ./configs/ckan.override.prod.ini && \
+          echo "$CKAN_ENV_PRODUCTION" > .env.prod && \
+          echo "$CKAN_INI_PRODUCTION" > ./configs/ckan.override.prod.ini && \
           mkdir ~/.ssh && \
-          echo "$SSH_KEY" > ~/.ssh/BD.pem && \
+          echo "$AWS_BD_PRIVATE_SSH_KEY" > ~/.ssh/BD.pem && \
           chmod 700 ~/.ssh ~/.ssh/BD.pem
 
       - name: Deploy Website

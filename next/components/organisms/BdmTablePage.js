@@ -42,15 +42,15 @@ export function BdmTablePage({
   const [columnsValues, setColumnsValues] = useState([])
   const [temporalCoverage, setTemporalCoverage] = useState([])
   const tooltip = {
-    name: "Indica o nome de cada coluna para cada ano.",
-    bigquery_type: "Indica o tipo de dado no BigQuery. Ex.: INT64 (Inteiro), STRING (String), DATA (Data), FLOA64 (Float) etc.",
-    description: "Indica a descrição dos dados da coluna.",
-    temporal_coverage: "Indica a cobertura temporal da coluna.",
-    covered_by_dictionary: "Indica se a coluna é coberta por dicionário.",
-    directory_column: "Indica se a coluna é coberta por um dicionário da BD.",
-    measurement_unit: "Indica a unidade de medida da coluna. ",
-    has_sensitive_data: "Indica se a coluna possui dados sensíveis. Ex.:  CPF identificado, dados de conta bancária, etc. ",
-    observations: "Indica processos de tratamentos realizados na coluna que precisam ser evidenciados. "
+    name: "Nome da coluna.",
+    bigquery_type: "Tipo de dado no BigQuery — categorias: INTEGER (Inteiro), STRING (Texto), DATE (Data), FLOAT64 (Decimal), GEOGRAPHY (Geográfico).",
+    description: "Descrição dos dados da coluna.",
+    temporal_coverage: "Data inicial e final de cobertura dos dados. Pode variar entre colunas, de acordo com a disponibilidade nos dados originais.",
+    covered_by_dictionary: "Indica se a coluna possui categorias descritas na tabela 'dicionario', explicando o significado das suas chaves e valores — ex: 'sexo' possui os valores 0 e 1 na coluna, e, no dicionario, você irá encontrar 'sexo' com as categorias (chave: 1 - valor: Feminino), (chave: 0 - valor: Masculino).",
+    directory_column: "Caso preenchida, indica que a coluna é chave primária de uma entidade — ex: id_municipio = chave primária de municípios. Isso significa que a coluna é igual em todos os conjuntos do datalake. Informações centralizadas da entidade se encontram no diretório conforme: [diretorio].[tabela]:[coluna].",
+    measurement_unit: "Unidade de medida da coluna — ex: km, m2, kg.",
+    has_sensitive_data: "Indica se a coluna possui dados sensíveis — ex: CPF identificado, dados de conta bancária, etc.",
+    observations: "Descreve processos de tratamentos realizados na coluna que precisam ser evidenciados."
   }
 
   useEffect(() => {
@@ -65,12 +65,22 @@ export function BdmTablePage({
   useEffect(() => {
     setColumnsHeaders(Object.keys(schema))
     if(resource.columns) {
-      setColumnsValues(resource.columns)
-      setShowColumns(true)
+      if(resource.columns.length === 0) {
+        setColumnsValues(resource.columns)
+        setShowColumns(false)
+      } else {
+        setColumnsValues(resource.columns)
+        setShowColumns(true)
+      }
     }
     if(resource.temporal_coverage) {
-      setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
-      setShowTemporalCoverage(true)
+      if(resource.temporal_coverage.length === 0) {
+        setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
+        setShowTemporalCoverage(false)
+      } else {
+        setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
+        setShowTemporalCoverage(true)
+      }
     }
 
   },[schema, resource])
@@ -119,31 +129,39 @@ export function BdmTablePage({
         </SectionText>
       </VStack>
       
-      {showTemporalCoverage &&
-        <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
-          <Subtitle>Cobertura temporal</Subtitle>
+      <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
+        <Subtitle>Cobertura temporal</Subtitle>
+        {showTemporalCoverage ?
           <SectionText>
             {temporalCoverage}
           </SectionText>
-        </VStack>
-      }
+        :
+          <SectionText>
+            Nenhuma cobertura temporal fornecida
+          </SectionText>
+        }
+      </VStack>
 
-      {showColumns &&
-        <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
-          <Subtitle>
-            Colunas
-          </Subtitle>
-            <ColumnDatasets
-              translations={translations.bdm_columns}
-              availableOptionsTranslations={availableOptionsTranslations}
-              translationsOptions={translationsOptions}
-              parentTemporalCoverage={temporalCoverage}
-              tooltip={tooltip}
-              headers={columnsHeaders}
-              values={columnsValues}
-            />
-        </VStack>
-      }
+      <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
+        <Subtitle>
+          Colunas
+        </Subtitle>
+        {showColumns ?
+          <ColumnDatasets
+            translations={translations.bdm_columns}
+            availableOptionsTranslations={availableOptionsTranslations}
+            translationsOptions={translationsOptions}
+            parentTemporalCoverage={temporalCoverage}
+            tooltip={tooltip}
+            headers={columnsHeaders}
+            values={columnsValues}
+          />
+        :
+          <SectionText>
+            Nenhuma informação de coluna fornecida
+          </SectionText>
+        }
+      </VStack>
 
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <Accordion
