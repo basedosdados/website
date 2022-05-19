@@ -98,7 +98,7 @@ function TableDatasets({
     setColumnsValues(newValues)
     
   },[values, headers])
-  
+
   function translate(field, translation) {
     if(typeof field === "boolean") {
       return field === true ? "Sim" : "Não"
