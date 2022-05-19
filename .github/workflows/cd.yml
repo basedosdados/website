@@ -35,6 +35,8 @@ jobs:
             secret/data/aws_credentials     BD_PRIVATE_SSH_KEY  | AWS_BD_PRIVATE_SSH_KEY
 
       - name: Add Secret Files
+        env:
+          CKAN_INI_STAGING: ${{ secrets.CKAN_STAGING_INI }}
         run: |
           echo "$CKAN_ENV_STAGING" > .env.prod && \
           echo "$CKAN_INI_STAGING" > ./configs/ckan.override.prod.ini && \
@@ -85,6 +87,8 @@ jobs:
             secret/data/aws_credentials     BD_PRIVATE_SSH_KEY  | AWS_BD_PRIVATE_SSH_KEY
 
       - name: Add Secret Files
+        env:
+          CKAN_INI_PRODUCTION: ${{ secrets.CKAN_STAGING_INI }}
         run: |
           echo "$CKAN_ENV_PRODUCTION" > .env.prod && \
           echo "$CKAN_INI_PRODUCTION" > ./configs/ckan.override.prod.ini && \
