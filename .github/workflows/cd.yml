@@ -2,14 +2,13 @@ name: Continuous Deployment
 on:
   push:
     branches:
-      - develop
       - staging
       - master
   workflow_dispatch:
 
 jobs:
-  deploy-develop:
-    if: github.ref_name == 'develop' || github.ref_name == 'staging'
+  deploy-staging:
+    if: github.ref_name == 'staging'
     name: Deploy Staging Environment
     runs-on: ubuntu-latest
     environment:
