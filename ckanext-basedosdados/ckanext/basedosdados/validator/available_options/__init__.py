@@ -16,7 +16,7 @@ from .license import LicenseEnum
 from .measurement_unit import MeasurementUnitEnum
 from .status import StatusEnum
 from .spatial_coverage import *
-from .temporal_coverage import TemporalCoverageEnum
+# from .temporal_coverage import TemporalCoverageEnum
 from .time_unit import TimeUnitEnum
 from .yes_no import YesNoEnum
 from .raw_quality_tier import RawQualityTierEnum
