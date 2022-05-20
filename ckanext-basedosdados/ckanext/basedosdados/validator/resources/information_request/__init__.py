@@ -1,6 +1,8 @@
 from typing import Literal, Optional, Set, List, Union
 
-from ckanext.basedosdados.validator.available_options.spatial_coverage import SpatialCoverageArea
+from ckanext.basedosdados.validator.available_options.spatial_coverage import (
+    SpatialCoverageArea,
+)
 from ckanext.basedosdados.validator.available_options import (
     StatusEnum,
     TemporalCoverageEnum,

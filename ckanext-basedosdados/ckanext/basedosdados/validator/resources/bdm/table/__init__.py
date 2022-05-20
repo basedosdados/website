@@ -1,6 +1,8 @@
 from datetime import datetime
 from typing import List, Literal, Optional, Set, Union
-from ckanext.basedosdados.validator.available_options.spatial_coverage import SpatialCoverageArea
+from ckanext.basedosdados.validator.available_options.spatial_coverage import (
+    SpatialCoverageArea,
+)
 
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options import (
