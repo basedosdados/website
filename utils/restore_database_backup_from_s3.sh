@@ -2,7 +2,7 @@
 
 cd $(git rev-parse --show-toplevel)
 
-if [[ $STAGING ]]; then
+if [[ $BD_ENVIRON = 'STAGING' ]]; then
     echo Downloading dump from S3
     AWS_DEFAULT_REGION=us-east-2 AWS_PROFILE=basedosdados aws s3 ls s3://basedosdados/backup/postgres.dump
     AWS_DEFAULT_REGION=us-east-2 AWS_PROFILE=basedosdados aws s3 cp s3://basedosdados/backup/postgres.dump /tmp/db-ckan.dump
