@@ -9,6 +9,8 @@ import {
   TabPanels,
 } from "@chakra-ui/react";
 import Head from "next/head";
+import { useContext, useState, useEffect } from "react";
+import { useRouter } from "next/router"
 import { MainPageTemplate } from "../../components/templates/main";
 import { withPages } from "../../hooks/pages.hook";
 import {
@@ -21,7 +23,6 @@ import BigTitle from "../../components/atoms/BigTitle";
 import Subtitle from "../../components/atoms/Subtitle";
 import SectionText from "../../components/atoms/SectionText";
 import { FilterAccordion } from "../../components/atoms/FilterAccordion";
-import { useContext, useState, useEffect } from "react";
 import { isBdPlus, unionArrays, getTemporalCoverage } from "../../utils";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import Link from "../../components/atoms/Link";
@@ -134,10 +135,39 @@ function ResourcesPage({
   dataset,
   isMobileMod,
 }) {
+  const router = useRouter()
+  const resourceTables = bdmTables.length > 0 ? bdmTables[0] : externalLinks[0] || informationRequest[0]
+  const [resource, setResource] = useState(resourceTables)
+  
+  const pushQuery = (key, value) => {
+    router.push({
+      pathname: `/dataset/${router.query.dataset}`,
+      query: { [key]: value }
+    },
+      undefined, { shallow: true }
+    )
+  }
 
-  const [resource, setResource] = useState(
-    bdmTables.length > 0 ? bdmTables[0] : externalLinks[0] || informationRequest[0]
-  );
+  useEffect(() => {
+    const query = router.query
+
+    if(Object.keys(query).length === 1) {
+      switch (resourceTables.resource_type) {
+        case "bdm_table": {
+          pushQuery("bdm_table", resourceTables.name)
+        }
+        break;
+        case "external_link": {
+          pushQuery("external_link", resourceTables.name)
+        }
+        break;
+        case "information_request": {
+          pushQuery("information_request", resourceTables.name)
+        }
+        break;
+      }
+    }
+  },[])
 
   const [bdmTableFilter, setBdmTableFilter] = useState(
     resource?.resource_type === "bdm_table"
@@ -240,7 +270,7 @@ function ResourcesPage({
       );
     }
   }
-
+1
   return (
     <Stack
       paddingTop="24px"
@@ -268,8 +298,10 @@ function ResourcesPage({
             fieldName="Tabelas tratadas"
             bdPlus={true}
             isHovering={false}
-            onChange={(name) =>
-              setResource(bdmTables.filter((b) => b.name === name)[0])
+            onChange={(name) => {
+                setResource(bdmTables.filter((b) => b.name === name)[0])
+                pushQuery("bdm_table", name)
+              }
             }
             onToggle={() => setBdmTableFilter(!bdmTableFilter)}
           />
@@ -286,9 +318,11 @@ function ResourcesPage({
             fieldName="Fontes originais"
             value={resource.url}
             isHovering={false}
-            onChange={(url) =>
-              setResource(externalLinks.filter((b) => b.url === url)[0])
-            }
+            onChange={(url) => {
+              const filterUrl = externalLinks.filter((b) => b.url === url)[0]
+              setResource(filterUrl)
+              pushQuery("external_link", filterUrl.name)
+            }}
             onToggle={() =>
               setExternalLinkTableFilter(!externalLinkTableFilter)
             }
@@ -306,9 +340,10 @@ function ResourcesPage({
             fieldName="Pedidos LAI"
             value={resource.name}
             isHovering={false}
-            onChange={(name) =>
+            onChange={(name) => {
               setResource(informationRequest.filter((b) => b.name === name)[0])
-            }
+              pushQuery("information_request", name)
+            }}
             onToggle={() =>
               setInformationRequestFilter(!informationRequestFilter)
             }
@@ -343,7 +378,7 @@ export default function DatasetPage({
 }) {
   const [tabIndex, setTabIndex] = useState(0)
   const [isMobileMod, setIsMobileMod] = useState(false)
-  const isMobile = useCheckMobile();
+  const isMobile = useCheckMobile()
 
   useEffect(() => {
     setIsMobileMod(isMobile)
