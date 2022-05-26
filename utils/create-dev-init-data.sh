@@ -30,12 +30,14 @@ $DB /wait-until-up localhost:5432
 $DB bash -c 'dropdb -U ckan ckan --if-exists && createdb -U ckan ckan'
 $DB pg_restore -U ckan -d ckan --format=custom --exit-on-error < $FILE
 
+(
+SQL=./utils/clean-dump.sql
 if [[ $KEEP_ALL_DATASETS ]]; then
-    FILTER="sed 's/LIMIT 100; -- Number of datasets to keep/;/'"
+    sed 's/LIMIT 100; -- Number of datasets to keep/;/' < $SQL
 else
-    FILTER='cat'
+    cat < $SQL
 fi
-    cat ./utils/clean-dump.sql | $FILTER | $DB psql -v ON_ERROR_STOP=1 -U ckan
+) | $DB psql -v ON_ERROR_STOP=1 -U ckan
 
 
 docker-compose run --rm -T ckan bash -xec '
