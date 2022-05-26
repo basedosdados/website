@@ -7,8 +7,8 @@ if [[ $BD_ENVIRON != "STAGING" ]]; then
     exit 1
 fi
 
-AWS_DEFAULT_REGION=us-east-2 AWS_PROFILE=basedosdados aws s3 ls s3://basedosdados/backup/postgres.dump
-AWS_DEFAULT_REGION=us-east-2 AWS_PROFILE=basedosdados aws s3 cp s3://basedosdados/backup/postgres.dump /tmp/db-ckan.dump
+aws s3 ls s3://basedosdados/backup/postgres.dump
+aws s3 cp s3://basedosdados/backup/postgres.dump /tmp/db-ckan.dump
 
 docker-compose stop
 docker-compose up -d db
