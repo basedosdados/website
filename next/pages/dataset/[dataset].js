@@ -136,12 +136,13 @@ function ResourcesPage({
   isMobileMod,
 }) {
   const router = useRouter()
+  const { query } = router
   const resourceTables = bdmTables.length > 0 ? bdmTables[0] : externalLinks[0] || informationRequest[0]
   const [resource, setResource] = useState(resourceTables)
   
   const pushQuery = (key, value) => {
     router.push({
-      pathname: `/dataset/${router.query.dataset}`,
+      pathname: `/dataset/${query.dataset}`,
       query: { [key]: value }
     },
       undefined, { shallow: true }
@@ -149,24 +150,36 @@ function ResourcesPage({
   }
 
   useEffect(() => {
-    const query = router.query
+    const queryParams = new URLSearchParams(window.location.search)
 
-    if(Object.keys(query).length === 1) {
+    if(queryParams.has("bdm_table")) {
+      const bdmTable = bdmTables.filter((b) => b.name === queryParams.get("bdm_table"))[0]
+      if(bdmTable) {
+        setResource(bdmTable)
+      } else {
+        queryParams.delete("bdm_table")
+      }
+    }
+
+    if(queryParams.toString().length === 0) {
       switch (resourceTables.resource_type) {
         case "bdm_table": {
-          pushQuery("bdm_table", resourceTables.name)
+          queryParams.append("bdm_table", resourceTables.name)
         }
         break;
         case "external_link": {
-          pushQuery("external_link", resourceTables.name)
+          queryParams.append("external_link", resourceTables.name)
         }
         break;
         case "information_request": {
-          pushQuery("information_request", resourceTables.name)
+          queryParams.append("information_request", resourceTables.name)
         }
         break;
       }
     }
+
+    let newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + queryParams.toString();
+      window.history.replaceState({path: newurl}, '', newurl);
   },[])
 
   const [bdmTableFilter, setBdmTableFilter] = useState(
