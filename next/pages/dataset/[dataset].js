@@ -161,6 +161,24 @@ function ResourcesPage({
       }
     }
 
+    if(queryParams.has("external_link")) {
+      const externalLink = externalLinks.filter((b) => b.name === queryParams.get("external_link"))[0]
+      if(externalLink) {
+        setResource(externalLink)
+      } else {
+        queryParams.delete("external_link")
+      }
+    }
+
+    if(queryParams.has("information_request")) {
+      const informationRequests = informationRequest.filter((b) => b.name === queryParams.get("information_request"))[0]
+      if(informationRequests) {
+        setResource(informationRequests)
+      } else {
+        queryParams.delete("information_request")
+      }
+    }
+
     if(queryParams.toString().length === 0) {
       switch (resourceTables.resource_type) {
         case "bdm_table": {

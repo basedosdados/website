@@ -15,6 +15,7 @@ import {
 import { useState, useEffect } from "react";
 import { formatJson, getTemporalCoverage } from '../../utils';
 import InfoIcon from '../../public/img/icons/infoIcon'
+import RedirectIcon from '../../public/img/icons/redirectIcon'
 
 function TableDatasets({
   headers,
@@ -47,10 +48,7 @@ function TableDatasets({
                 return elm
               }
             })
-
-          return {
-            directory_column : `${directory[0]}.${directory[1]}:${directory[2]}`
-          }
+          return { directory_column : directory }
         } else {
           return {directory_column : "Não listado"}
         }
@@ -127,9 +125,33 @@ function TableDatasets({
     )
   }
 
-  function isEmpty(value) {
+  const directoryColumnValue = (value) => {
+    const newDirectoryColumn = `${value[0]}.${value[1]}:${value[2]}`
+  
+    if (newDirectoryColumn === "Não listado.Não listado:Não listado") {
+      return empty()
+    }
+
+    return (
+      <div style={{display:"flex", gap:"10px"}}>
+        {newDirectoryColumn}
+        <a target={"_blank"} href={`/dataset/${value[0]}?bdm_table=${value[1]}`}>
+          <RedirectIcon 
+            cursor="pointer" 
+            _hover={{opacity:0.7}}
+          />
+        </a> 
+      </div>
+    )
+  }
+
+  function valueVerification (value) {
+    if(typeof value === "object") {
+      return directoryColumnValue(value)
+    }
+
     if(value) {
-      if(value === "Não listado" || value === "Não listado.Não listado:Não listado"){
+      if(value === "Não listado"){
         return empty()
       } else {
         return value
@@ -145,71 +167,78 @@ function TableDatasets({
       overflowX="auto"
       {...containerStyle}
     >
-      <Table>
-        <Thead>
-          {columnsHeaders.map((elm) => (
-            <Th
-              minWidth="220px"
-              flex={1}
-              padding="8px 24px"
-              fontSize="14px"
-              color="#6F6F6F"
-              background="#F6F6F6"
-              fontWeight="500"
-              fontFamily="Ubuntu"
-              letterSpacing="0.4px"
-              textTransform="capitalize"
-              boxSizing="content-box"
-              borderY="1px solid #DEDFE0 !important"
-            >
-              {tooltip ?
-                <Box display="flex" gridGap="8px" cursor="pointer">
-                  {translations ? translate(elm, translations) : elm}
-                  <Tooltip
-                    hasArrow
-                    bg="#2A2F38"
-                    label={tooltip[elm]}
-                    fontSize="16px"
-                    fontWeight="500"
-                    padding="5px 15px"
-                    marginTop="8px"
-                    color="#FFF"
-                    borderRadius="6px"
+      <Box
+        height="100%"
+        maxHeight="400px"
+        overflowY="auto"
+      >
+        <Table position="relative">
+          <Thead>
+            {columnsHeaders.map((elm) => (
+              <Th
+                position="sticky"
+                top="0"
+                minWidth="220px"
+                flex={1}
+                padding="8px 24px"
+                fontSize="14px"
+                color="#6F6F6F"
+                background="#F6F6F6"
+                fontWeight="500"
+                fontFamily="Ubuntu"
+                letterSpacing="0.4px"
+                textTransform="capitalize"
+                boxSizing="content-box"
+              >
+                {tooltip ?
+                  <Box display="flex" gridGap="8px" cursor="pointer">
+                    {translations ? translate(elm, translations) : elm}
+                    <Tooltip
+                      hasArrow
+                      bg="#2A2F38"
+                      label={tooltip[elm]}
+                      fontSize="16px"
+                      fontWeight="500"
+                      padding="5px 15px"
+                      marginTop="8px"
+                      color="#FFF"
+                      borderRadius="6px"
+                    >
+                      <Center>
+                        <InfoIcon fill="#A3A3A3" tip/>
+                      </Center>
+                    </Tooltip>
+                  </Box>
+                  :
+                  <>
+                    {translations ? translate(elm, translations) : elm}
+                  </>
+                }
+              </Th>
+            ))}
+          </Thead>
+          <Tbody>
+            {columnsValues.map((elm) => (
+              <Tr>
+                {elm.map((r) => (
+                  <Td
+                    padding="10px 24px"
+                    fontSize="14px"
+                    fontFamily="Lato"
+                    letterSpacing="0.5px"
+                    color="#000000a8"
+                    _first={{
+                      color:"#252A32"
+                    }}
                   >
-                    <Center>
-                      <InfoIcon fill="#A3A3A3" tip/>
-                    </Center>
-                  </Tooltip>
-                </Box>
-                :
-                <>
-                  {translations ? translate(elm, translations) : elm}
-                </>
-              }
-            </Th>
-          ))}
-        </Thead>
-        <Tbody>
-          {columnsValues.map((elm) => (
-            <Tr>
-              {elm.map((r) => (
-                <Td
-                  padding="10px 24px"
-                  fontSize="14px"
-                  fontFamily="Lato"
-                  letterSpacing="0.5px"
-                  color="#000000a8"
-                  _first={{
-                    color:"#252A32"
-                  }}
-                >
-                  {isEmpty(r)}
-                </Td>
-              ))}
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
+                    {valueVerification(r)}
+                  </Td>
+                ))}
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </Box>
     </HStack>
   )
 }
