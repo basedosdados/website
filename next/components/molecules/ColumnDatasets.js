@@ -133,10 +133,11 @@ function TableDatasets({
     }
 
     return (
-      <div style={{display:"flex", gap:"10px"}}>
+      <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
         {newDirectoryColumn}
         <a target={"_blank"} href={`/dataset/${value[0]}?bdm_table=${value[1]}`}>
-          <RedirectIcon 
+          <RedirectIcon
+            fill="#949494"
             cursor="pointer" 
             _hover={{opacity:0.7}}
           />
