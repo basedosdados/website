@@ -1,7 +1,6 @@
 import {
   VStack,
   Stack,
-  Text,
   Accordion,
   AccordionItem,
   AccordionButton,
