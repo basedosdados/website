@@ -127,6 +127,7 @@ function TableDatasets({
 
   const directoryColumnValue = (value) => {
     const newDirectoryColumn = `${value[0]}.${value[1]}:${value[2]}`
+    const datasetUrl = value[0].replace(/_/g, "-")
   
     if (newDirectoryColumn === "Não listado.Não listado:Não listado") {
       return empty()
@@ -135,7 +136,7 @@ function TableDatasets({
     return (
       <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
         {newDirectoryColumn}
-        <a target={"_blank"} href={`/dataset/${value[0]}?bdm_table=${value[1]}`}>
+        <a target={"_blank"} href={`/dataset/${datasetUrl}?bdm_table=${value[1]}`}>
           <RedirectIcon
             fill="#949494"
             cursor="pointer" 
