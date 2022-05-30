@@ -138,7 +138,7 @@ function TableDatasets({
         {newDirectoryColumn}
         <a target={"_blank"} href={`/dataset/${datasetUrl}?bdm_table=${value[1]}`}>
           <RedirectIcon
-            fill="#949494"
+            fill="#42B0FF"
             cursor="pointer" 
             _hover={{opacity:0.7}}
           />
