@@ -48,7 +48,7 @@ function TableDatasets({
                 return elm
               }
             })
-          return { directory_column : directory }
+            return { directory_column : directory }
         } else {
           return {directory_column : "Não listado"}
         }
@@ -148,6 +148,10 @@ function TableDatasets({
   }
 
   function valueVerification (value) {
+    if(value === null) {
+      return empty()
+    }
+
     if(typeof value === "object") {
       return directoryColumnValue(value)
     }
@@ -250,53 +254,22 @@ export default function ColumnsDatasets({
   values,
   translations,
   availableOptionsTranslations,
-  translationsOptions,
+  translationsOptions,  
   parentTemporalCoverage,
   tooltip,
   containerStyle,
 }) {
-  const [expanded, setExpanded] = useState(false)
-
-  if (values.length <= 5)
-    return (
-      <TableDatasets
-        headers={headers}
-        values={values}
-        translations={translations}
-        availableOptionsTranslations={availableOptionsTranslations}
-        translationsOptions={translationsOptions}
-        parentTemporalCoverage={parentTemporalCoverage}
-        tooltip={tooltip}
-        containerStyle={containerStyle}
-      />
-    )
 
   return (
-    <VStack width="100%" spacing={5}>
-      <TableDatasets
-        headers={headers}
-        values={expanded ? values : values.slice(0, Math.min(3, values.length))}
-        translations={translations}
-        availableOptionsTranslations={availableOptionsTranslations}
-        translationsOptions={translationsOptions}
-        parentTemporalCoverage={parentTemporalCoverage}
-        tooltip={tooltip}
-        containerStyle={containerStyle}
-      />
-        
-      <Button
-        width="100%"
-        backgroundColor="#E3E3E3"
-        color="#525252"
-        fontSize="14px"
-        marginTop="5px !important"
-        minHeight="30px !important"
-        maxHeight="30px !important"
-        _hover={{backgroundColor:"", opacity:"0.6"}}
-        onClick={() => setExpanded(!expanded)}
-      >
-        {expanded ? "Ver menos" : "Ver mais"}
-      </Button>
-    </VStack>
-  );
+    <TableDatasets
+      headers={headers}
+      values={values}
+      translations={translations}
+      availableOptionsTranslations={availableOptionsTranslations}
+      translationsOptions={translationsOptions}
+      parentTemporalCoverage={parentTemporalCoverage}
+      tooltip={tooltip}
+      containerStyle={containerStyle}
+    />
+  )
 }
