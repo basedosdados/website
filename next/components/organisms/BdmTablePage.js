@@ -1,6 +1,10 @@
 import {
   VStack,
   Stack,
+  Box,
+  Text,
+  Grid,
+  GridItem,
   Accordion,
   AccordionItem,
   AccordionButton,
@@ -17,14 +21,20 @@ import {
   filterOnlyValidValues,
   formatObjectsInArray,
   translate,
+  formatJson,
   getTemporalCoverage,
 } from "../../utils";
 import { BaseResourcePage } from "../molecules/BaseResourcePage";
 import { SchemaForm } from "../molecules/SchemaForm";
-import { getBdmColumnsSchema } from '../../pages/api/schemas'
+import { getBdmColumnsSchema } from '../../pages/api/schemas';
 import { getBdmTableSchema } from "../../pages/api/schemas";
 import { deleteResource, updateResource } from "../../pages/api/datasets";
 import DataInformationQuery from "../molecules/DataInformationQuery";
+import StarIcon from "../../public/img/icons/starIcon";
+import FrequencyIcon from "../../public/img/icons/frequencyIcon";
+import ObservationLevelIcon from "../../public/img/icons/observationLevelIcon";
+import PartitionIcon from "../../public/img/icons/partitionIcon";
+import UserIcon from "../../public/img/icons/userIcon"
 
 export function BdmTablePage({
   availableOptionsTranslations,
@@ -61,6 +71,26 @@ export function BdmTablePage({
     setSchema(columnsSchema)
   }
 
+  function translateField(field, translation) {
+    if(typeof field === "boolean") {
+      return field === true ? "Sim" : "Não"
+    }
+
+    if(typeof field === "object") {
+      if(!field){
+        return "Não listado"
+      }
+      if(field.length === 0) {
+        return "Não listado"
+      } else {
+        const newJson = JSON.stringify(field)
+        return formatJson(newJson, true)
+      }
+    }
+
+    return translation[field] || field
+  }
+
   useEffect(() => {
     setColumnsHeaders(Object.keys(schema))
     if(resource.columns) {
@@ -91,6 +121,26 @@ export function BdmTablePage({
     resource.spatial_coverage = resource.spatial_coverage.sort();
   }
 
+  const AddInfoTextBase = ({title, text, children, ...style}) => {
+    return (
+      <Box display="flex" alignItems="center" gridGap="8px" {...style}>
+        <Text
+          fontFamily="ubuntu"
+          fontSize="14px"
+          fontWeight="400" 
+          letterSpacing="0.3px"
+          lineHeight="16px"
+          color="#252A32"
+        >{title}</Text>
+        <SectionText>
+          {translateField(text, availableOptionsTranslations)}
+        </SectionText>
+        {children}
+      </Box>
+    )
+  }
+
+console.log(resource.observation_level)
   return (
     <BaseResourcePage
       padding="16px 8px 0 0"
@@ -130,15 +180,9 @@ export function BdmTablePage({
       
       <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Cobertura temporal</Subtitle>
-        {showTemporalCoverage ?
           <SectionText>
-            {temporalCoverage}
+            {showTemporalCoverage ? temporalCoverage : "Nenhuma cobertura temporal fornecida"}
           </SectionText>
-        :
-          <SectionText>
-            Nenhuma cobertura temporal fornecida
-          </SectionText>
-        }
       </VStack>
 
       <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
@@ -179,37 +223,109 @@ export function BdmTablePage({
             </AccordionButton>
 
             <AccordionPanel padding={0}>
-              <ExpandableTable
-                containerStyle={{ width: "100%", alignItems: "flex-start" }}
-                headers={["nome", "valor"]}
-                values={formatObjectsInArray(
-                  translate(
-                    translations.bdm_table,
-                    availableOptionsTranslations,
-                    filterOnlyValidValues({ dataset_id: datasetName, ...resource }, [
-                      "dataset_id",
-                      "table_id",
-                      "spatial_coverage",
-                      "update_frequency",
-                      "observation_level",
-                      "last_updated",
-                      "version",
-                      "published_by",
-                      "data_cleaned_by",
-                      "data_cleaning_description",
-                      "raw_files_url",
-                      "auxiliary_files_url",
-                      "architecture_url",
-                      "covered_by_dictionary",
-                      "partitions",
-                      "columns",
-                    ])
-                  )
-                )}
-              />
+              
+              <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+
+                <GridItem display="flex" alignItems="flex-start" gridGap="8px">
+                  <StarIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+                  <Box>
+                    <AddInfoTextBase
+                      title="ID do conjunto:"
+                      text={resource.dataset_id}
+                    />
+                    <AddInfoTextBase
+                      title="ID da tabela:"
+                      text={resource.table_id}
+                    />
+                  </Box>
+                </GridItem>
+
+                <GridItem display="flex" alignItems="flex-start" gridGap="8px">
+                  <FrequencyIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+                  <Box>
+                    <AddInfoTextBase
+                      title="Frequência de atualização:"
+                      text={resource.update_frequency}
+                    />
+                  </Box>
+                </GridItem>
+
+                <GridItem display="flex" alignItems="flex-start" gridGap="8px">
+                  <ObservationLevelIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+                  <Box>
+                    <AddInfoTextBase
+                      title="Nível da observação:"
+                      text={resource.observation_level}
+                    >
+                      
+                    </AddInfoTextBase>
+                  </Box>
+                </GridItem>
+
+                <GridItem display="flex" alignItems="flex-start" gridGap="8px">
+                  <PartitionIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+                  <Box>
+                    <AddInfoTextBase
+                      title="Partições:"
+                      text={resource.partitions}
+                    />
+                  </Box>
+                </GridItem>
+
+                <GridItem display="flex" alignItems="flex-start" gridGap="8px">
+                  <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+                  <Box>
+                    <AddInfoTextBase
+                      title="Publicação por:"
+                      text={resource.published_by}
+                    />
+                  </Box>
+                </GridItem>
+
+                <GridItem display="flex" alignItems="flex-start" gridGap="8px">
+                  <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+                  <Box>
+                    <AddInfoTextBase
+                      title="Tratamento por:"
+                      text={resource.data_cleaned_by}
+                    />
+                  </Box>
+                </GridItem>
+
+              </Grid>
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
+
+        <ExpandableTable
+          containerStyle={{ width: "100%", alignItems: "flex-start" }}
+          headers={["nome", "valor"]}
+          values={formatObjectsInArray(
+            translate(
+              translations.bdm_table,
+              availableOptionsTranslations,
+              filterOnlyValidValues({ dataset_id: datasetName, ...resource }, [
+                "dataset_id",
+                "table_id",
+                "spatial_coverage",
+                "update_frequency",
+                "observation_level",
+                "last_updated",
+                "version",
+                "published_by",
+                "data_cleaned_by",
+                "data_cleaning_description",
+                "raw_files_url",
+                "auxiliary_files_url",
+                "architecture_url",
+                "covered_by_dictionary",
+                "partitions",
+                "columns",
+              ])
+            )
+          )}
+        />
+
       </VStack>
     </BaseResourcePage>
   );
