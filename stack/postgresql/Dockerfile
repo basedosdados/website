@@ -15,7 +15,7 @@
 # # Include datastore setup scripts
 # ADD ./postgresql/docker-entrypoint-initdb.d /docker-entrypoint-initdb.d
 
-ARG PG_MAJOR=11
+ARG PG_MAJOR=12
 FROM postgres:$PG_MAJOR
 
 RUN apt-get update \
