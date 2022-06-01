@@ -5,11 +5,6 @@ import {
   Text,
   Grid,
   GridItem,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import Subtitle from "../atoms/Subtitle";
@@ -29,6 +24,7 @@ import { SchemaForm } from "../molecules/SchemaForm";
 import { getBdmColumnsSchema } from '../../pages/api/schemas';
 import { getBdmTableSchema } from "../../pages/api/schemas";
 import { deleteResource, updateResource } from "../../pages/api/datasets";
+import { SimpleTable } from "../atoms/SimpleTable";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import StarIcon from "../../public/img/icons/starIcon";
 import FrequencyIcon from "../../public/img/icons/frequencyIcon";
@@ -140,7 +136,6 @@ export function BdmTablePage({
     )
   }
 
-console.log(resource.observation_level)
   return (
     <BaseResourcePage
       padding="16px 8px 0 0"
@@ -207,99 +202,103 @@ console.log(resource.observation_level)
       </VStack>
 
       <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Accordion
-          borderColor="transparent"
-          borderWidth={0}
-          width="100%"
-          ex
-          allowToggle
-        >
-          <AccordionItem>
-            <AccordionButton marginBottom={5} padding={0} _hover={{backgroundColor: "transparent"}} >
-              <Stack flex='1' textAlign='left'>
-                <Subtitle>Informações adicionais</Subtitle>
-              </Stack>
-              <AccordionIcon color="#252A32" fontSize="18px"/>
-            </AccordionButton>
+        <Stack flex="1" >
+          <Subtitle>Informações adicionais</Subtitle>
+        </Stack>
 
-            <AccordionPanel padding={0}>
-              
-              <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+        <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+          {/* dataset_id */}
+          <GridItem display="flex" alignItems="flex-start" gridGap="8px">
+            <StarIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <Box>
+              <AddInfoTextBase
+                title="ID do conjunto:"
+                text={resource.dataset_id}
+              />
+              <AddInfoTextBase
+                title="ID da tabela:"
+                text={resource.table_id}
+              />
+            </Box>
+          </GridItem>
 
-                <GridItem display="flex" alignItems="flex-start" gridGap="8px">
-                  <StarIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-                  <Box>
-                    <AddInfoTextBase
-                      title="ID do conjunto:"
-                      text={resource.dataset_id}
-                    />
-                    <AddInfoTextBase
-                      title="ID da tabela:"
-                      text={resource.table_id}
-                    />
-                  </Box>
-                </GridItem>
+          {/* update_frequency */}
+          <GridItem display="flex" alignItems="flex-start" gridGap="8px">
+            <FrequencyIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <Box>
+              <AddInfoTextBase
+                title="Frequência de atualização:"
+                text={resource.update_frequency}
+              />
+            </Box>
+          </GridItem>
 
-                <GridItem display="flex" alignItems="flex-start" gridGap="8px">
-                  <FrequencyIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-                  <Box>
-                    <AddInfoTextBase
-                      title="Frequência de atualização:"
-                      text={resource.update_frequency}
-                    />
-                  </Box>
-                </GridItem>
+          {/* observation_level */}
+          <GridItem colSpan={2} display="flex" flexDirection="column" alignItems="flex-start" gridGap="8px">
+            <Box display="flex" flexDirection="row" gridGap="8px">
+              <ObservationLevelIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+              <Text
+                fontFamily="ubuntu"
+                fontSize="14px"
+                fontWeight="400" 
+                letterSpacing="0.3px"
+                lineHeight="16px"
+                color="#252A32"
+              >Nível da observação:</Text>
+            </Box>
+            
+            <Box display="flex" width="100%" flexWrap="wrap" flexDirection="row" gridGap={4}>
+              {resource.observation_level.map((elm) => (
+                <SimpleTable
+                  headers={["campo","valor"]}
+                  values={translate(
+                    availableOptionsTranslations,
+                    availableOptionsTranslations,
+                    Object.entries(elm)
+                  )}
+                  containerStyle={{ width:"100%", flex:1 }}
+                />
+              ))}
+            </Box>
+          </GridItem>
 
-                <GridItem display="flex" alignItems="flex-start" gridGap="8px">
-                  <ObservationLevelIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-                  <Box>
-                    <AddInfoTextBase
-                      title="Nível da observação:"
-                      text={resource.observation_level}
-                    >
-                      
-                    </AddInfoTextBase>
-                  </Box>
-                </GridItem>
+          {/* partitions */}
+          <GridItem display="flex" alignItems="flex-start" gridGap="8px">
+            <PartitionIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <Box>
+              <AddInfoTextBase
+                title="Partições no BigQuery:"
+                text={resource.partitions}
+              />
+            </Box>
+          </GridItem>
 
-                <GridItem display="flex" alignItems="flex-start" gridGap="8px">
-                  <PartitionIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-                  <Box>
-                    <AddInfoTextBase
-                      title="Partições:"
-                      text={resource.partitions}
-                    />
-                  </Box>
-                </GridItem>
+          {/* published_by */}
+          <GridItem display="flex" alignItems="flex-start" gridGap="8px">
+            <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <Box>
+              <AddInfoTextBase
+                title="Publicação por:"
+                text={resource.published_by.name}
+              />
+            </Box>
+          </GridItem>
 
-                <GridItem display="flex" alignItems="flex-start" gridGap="8px">
-                  <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-                  <Box>
-                    <AddInfoTextBase
-                      title="Publicação por:"
-                      text={resource.published_by}
-                    />
-                  </Box>
-                </GridItem>
-
-                <GridItem display="flex" alignItems="flex-start" gridGap="8px">
-                  <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-                  <Box>
-                    <AddInfoTextBase
-                      title="Tratamento por:"
-                      text={resource.data_cleaned_by}
-                    />
-                  </Box>
-                </GridItem>
-
-              </Grid>
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
+          {/* data_cleaned_by */}
+          <GridItem display="flex" alignItems="flex-start" gridGap="8px">
+            <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <Box>
+              <AddInfoTextBase
+                title="Tratamento por:"
+                text={resource.data_cleaned_by.name}
+              />
+            </Box>
+          </GridItem>
+        </Grid>
 
         <ExpandableTable
           containerStyle={{ width: "100%", alignItems: "flex-start" }}
-          headers={["nome", "valor"]}
+          headers={["nome", "valor","a","b"]}
           values={formatObjectsInArray(
             translate(
               translations.bdm_table,

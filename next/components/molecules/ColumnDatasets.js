@@ -1,4 +1,5 @@
-import { 
+import {
+  TableContainer,
   Table,
   Thead,
   Tbody,
@@ -7,8 +8,6 @@ import {
   Td,
   HStack,
   Tooltip,
-  Button,
-  VStack,
   Box,
   Center
 } from "@chakra-ui/react";
@@ -170,10 +169,9 @@ function TableDatasets({
   return (
     <HStack
       width="100%"
-      overflowX="auto"
       {...containerStyle}
     >
-      <Box
+      <TableContainer
         height="100%"
         maxHeight="400px"
         overflowY="auto"
@@ -184,8 +182,6 @@ function TableDatasets({
               <Th
                 position="sticky"
                 top="0"
-                minWidth="220px"
-                flex={1}
                 padding="8px 24px"
                 fontSize="14px"
                 color="#6F6F6F"
@@ -194,7 +190,6 @@ function TableDatasets({
                 fontFamily="Ubuntu"
                 letterSpacing="0.4px"
                 textTransform="capitalize"
-                boxSizing="content-box"
               >
                 {tooltip ?
                   <Box display="flex" gridGap="8px" cursor="pointer">
@@ -244,7 +239,7 @@ function TableDatasets({
             ))}
           </Tbody>
         </Table>
-      </Box>
+      </TableContainer>
     </HStack>
   )
 }
