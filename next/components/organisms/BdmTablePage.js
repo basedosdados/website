@@ -31,6 +31,12 @@ import FrequencyIcon from "../../public/img/icons/frequencyIcon";
 import ObservationLevelIcon from "../../public/img/icons/observationLevelIcon";
 import PartitionIcon from "../../public/img/icons/partitionIcon";
 import UserIcon from "../../public/img/icons/userIcon"
+import VersionIcon from "../../public/img/icons/versionIcon"
+import EmailIcon from "../../public/img/icons/emailIcon"
+import GitIcon from "../../public/img/icons/gitIcon"
+import CkanIcon from "../../public/img/icons/ckanIcon"
+import WebIcon from "../../public/img/icons/webIcon"
+import TwitterIcon from "../../public/img/icons/twitterIcon"
 
 export function BdmTablePage({
   availableOptionsTranslations,
@@ -119,13 +125,13 @@ export function BdmTablePage({
 
   const AddInfoTextBase = ({title, text, children, ...style}) => {
     return (
-      <Box display="flex" alignItems="center" gridGap="8px" {...style}>
+      <Box display="block" alignItems="center" gridGap="8px" {...style}>
         <Text
           fontFamily="ubuntu"
           fontSize="14px"
           fontWeight="400" 
           letterSpacing="0.3px"
-          lineHeight="16px"
+          marginBottom="8px"
           color="#252A32"
         >{title}</Text>
         <SectionText>
@@ -134,6 +140,30 @@ export function BdmTablePage({
         {children}
       </Box>
     )
+  }
+
+  const keyIcons = (ref) => {
+    let href = ""
+
+    if(ref.github_user) {
+      const github = ref.github_user.replace(/(https:)\/\/(github.com)\//gim, "")
+      href = `https://github.com/${github}` 
+    }
+    if(ref.twitter_user) {
+      const twitter = ref.twitter_user.replace(/(https:)\/\/(twitter.com)\//gim, "")
+      href = `https://twitter.com/${twitter}`
+    }
+    if(ref.email) { href = `mailto:${ref.email}` }
+    if(ref.ckan_user) { href = `/user/${ref.ckan_user}` }
+    if(ref.website) { href = `https://${ref.website}` }
+
+    return {
+      cursor: "pointer",
+      widthIcon:"18px",
+      heightIcon:"18px",
+      fill: "#42B0FF",
+      onClick: () => {window.open(href)}
+    }
   }
 
   return (
@@ -206,35 +236,35 @@ export function BdmTablePage({
           <Subtitle>Informações adicionais</Subtitle>
         </Stack>
 
-        <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+        <Grid width="100%" templateColumns="repeat(2, 1fr)" gap={8}>
           {/* dataset_id */}
           <GridItem display="flex" alignItems="flex-start" gridGap="8px">
             <StarIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-            <Box>
-              <AddInfoTextBase
-                title="ID do conjunto:"
-                text={resource.dataset_id}
-              />
-              <AddInfoTextBase
-                title="ID da tabela:"
-                text={resource.table_id}
-              />
-            </Box>
+            <AddInfoTextBase
+              title="ID do conjunto"
+              text={resource.dataset_id}
+            />
+          </GridItem>
+
+          <GridItem display="flex" alignItems="flex-start" gridGap="8px">
+            <StarIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <AddInfoTextBase
+              title="ID da tabela"
+              text={resource.table_id}
+            />
           </GridItem>
 
           {/* update_frequency */}
-          <GridItem display="flex" alignItems="flex-start" gridGap="8px">
+          <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
             <FrequencyIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-            <Box>
-              <AddInfoTextBase
-                title="Frequência de atualização:"
-                text={resource.update_frequency}
-              />
-            </Box>
+            <AddInfoTextBase
+              title="Frequência de atualização"
+              text={resource.update_frequency}
+            />
           </GridItem>
 
           {/* observation_level */}
-          <GridItem colSpan={2} display="flex" flexDirection="column" alignItems="flex-start" gridGap="8px">
+          {/* <GridItem colSpan={2} display="flex" flexDirection="column" alignItems="flex-start" gridGap="8px">
             <Box display="flex" flexDirection="row" gridGap="8px">
               <ObservationLevelIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
               <Text
@@ -251,23 +281,23 @@ export function BdmTablePage({
               {resource.observation_level.map((elm) => (
                 <SimpleTable
                   headers={["campo","valor"]}
-                  values={translate(
-                    availableOptionsTranslations,
-                    availableOptionsTranslations,
-                    Object.entries(elm)
-                  )}
-                  containerStyle={{ width:"100%", flex:1 }}
+                  values={Object.entries(elm)}
+                  containerStyle={{
+                    minWidth:"200px",
+                    height:"auto",
+                    flex:1 
+                  }}
                 />
               ))}
             </Box>
-          </GridItem>
+          </GridItem> */}
 
           {/* partitions */}
-          <GridItem display="flex" alignItems="flex-start" gridGap="8px">
+          <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
             <PartitionIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
             <Box>
               <AddInfoTextBase
-                title="Partições no BigQuery:"
+                title="Partições no BigQuery"
                 text={resource.partitions}
               />
             </Box>
@@ -276,29 +306,46 @@ export function BdmTablePage({
           {/* published_by */}
           <GridItem display="flex" alignItems="flex-start" gridGap="8px">
             <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-            <Box>
-              <AddInfoTextBase
-                title="Publicação por:"
-                text={resource.published_by.name}
-              />
-            </Box>
+            <AddInfoTextBase title="Publicação por">
+              <Box display="flex" gridGap="10px">
+                {resource.published_by.name ? <SectionText>{resource.published_by.name}</SectionText> : <SectionText>Não listado</SectionText>}
+                {resource.published_by.email && <EmailIcon {...keyIcons({email : resource.published_by.email})}/>}
+                {resource.published_by.github_user && <GitIcon {...keyIcons({github_user : resource.published_by.github_user})}/>}
+                {resource.published_by.ckan_user && <CkanIcon {...keyIcons({ckan_user : resource.published_by.ckan_user})}/>}
+                {resource.published_by.website && <WebIcon {...keyIcons({website : resource.published_by.website})}/>}
+                {resource.published_by.twitter_user && <TwitterIcon {...keyIcons({twitter_user : resource.published_by.twitter_user})}/>}
+              </Box>
+            </AddInfoTextBase>
           </GridItem>
 
           {/* data_cleaned_by */}
           <GridItem display="flex" alignItems="flex-start" gridGap="8px">
             <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-            <Box>
-              <AddInfoTextBase
-                title="Tratamento por:"
-                text={resource.data_cleaned_by.name}
-              />
-            </Box>
+            <AddInfoTextBase title="Tratamento por">
+              <Box display="flex" gridGap="10px">
+                {resource.data_cleaned_by.name ? <SectionText>{resource.data_cleaned_by.name}</SectionText> : <SectionText>Não listado</SectionText>}
+                {resource.data_cleaned_by.email && <EmailIcon {...keyIcons({email : resource.data_cleaned_by.email})}/>}
+                {resource.data_cleaned_by.github_user && <GitIcon {...keyIcons({github_user : resource.data_cleaned_by.github_user})}/>}
+                {resource.data_cleaned_by.ckan_user && <CkanIcon {...keyIcons({ckan_user : resource.data_cleaned_by.ckan_user})}/>}
+                {resource.data_cleaned_by.website && <WebIcon {...keyIcons({website : resource.data_cleaned_by.website})}/>}
+                {resource.data_cleaned_by.twitter_user && <TwitterIcon {...keyIcons({twitter_user : resource.data_cleaned_by.twitter_user})}/>}
+              </Box>
+            </AddInfoTextBase>
+          </GridItem>
+
+          {/* version */}
+          <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
+            <VersionIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <AddInfoTextBase
+              title="Versão"
+              text={resource.version}
+            />
           </GridItem>
         </Grid>
 
         <ExpandableTable
           containerStyle={{ width: "100%", alignItems: "flex-start" }}
-          headers={["nome", "valor","a","b"]}
+          headers={["nome", "valor"]}
           values={formatObjectsInArray(
             translate(
               translations.bdm_table,

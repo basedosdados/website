@@ -16,7 +16,6 @@ export function SimpleTable({
 
   return (
     <TableContainer 
-      border="1px solid #DEDFE0"
       width="100%"
       height="100%"
       {...containerStyle}
