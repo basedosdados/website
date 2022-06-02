@@ -39,9 +39,9 @@ from pydantic import Field
 from pydantic import StrictStr as Str
 
 from ckanext.basedosdados.validator.available_options import (
-    Admin1Enum,
-    Admin2Enum,
-    ContinentEnum,
+    #Admin1Enum,
+    #Admin2Enum,
+    #ContinentEnum,
     CountryEnum,
     EntityEnum,
 )
@@ -49,12 +49,12 @@ from ckanext.basedosdados.validator.available_options import (
 to_line = lambda description: "\n".join(description)
 
 
-class SpatialCoverage(BaseModel):
+#class SpatialCoverage(BaseModel):
     # fmt: off
-    continent: Optional[ContinentEnum] = Field(title="Continente", description=to_line(["Continente"]))
-    country  : Optional[CountryEnum]   = Field(title="País",description=to_line(["País"]))
-    admin1   : Optional[Admin1Enum]    = Field(title="UF/Estado",description=to_line(["UF/Estado"]))
-    admin2   : Optional[Admin2Enum]    = Field(title="Município/Condado",description=to_line(["Município/Condado"]))
+#    continent: Optional[ContinentEnum] = Field(title="Continente", description=to_line(["Continente"]))
+#    country  : Optional[CountryEnum]   = Field(title="País",description=to_line(["País"]))
+#    admin1   : Optional[Admin1Enum]    = Field(title="UF/Estado",description=to_line(["UF/Estado"]))
+#    admin2   : Optional[Admin2Enum]    = Field(title="Município/Condado",description=to_line(["Município/Condado"]))
     # fmt: on
 
 
