@@ -45,7 +45,7 @@ class Area:
     def parent(self):
         if self.id == "world":
             return None
-        if not "." in self._tree_id:
+        if "." not in self._tree_id:
             return SPATIAL_COVERAGE_AREAS["world"]
         return SPATIAL_COVERAGE_AREAS[self._tree_id.rsplit(".", 1)[0]]
 
@@ -53,7 +53,7 @@ class Area:
         return [
             SPATIAL_COVERAGE_AREAS[area]
             for area in SPATIAL_COVERAGE_AREAS
-            if area.startswith(self._tree_id)
+            if area.startswith(self._tree_id) and len(area) > len(self._tree_id) # + "." #or self._tree_id == "world"
         ]
 
     def __contains__(a, b):
