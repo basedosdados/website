@@ -53,7 +53,8 @@ class Area:
         return [
             SPATIAL_COVERAGE_AREAS[area]
             for area in SPATIAL_COVERAGE_AREAS
-            if area.startswith(self._tree_id) and len(area) > len(self._tree_id) # + "." #or self._tree_id == "world"
+            if area.startswith(self._tree_id)
+            and len(area) > len(self._tree_id)  # + "." #or self._tree_id == "world"
         ]
 
     def __contains__(a, b):
