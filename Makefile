@@ -37,3 +37,14 @@ docker-stop:
 
 docker-up:
 	docker-compose up -d
+
+.PHONY: python-fmt python-library-sort python-lint
+
+python-fmt:
+	python -m black .
+
+python-library-sort:
+	python -m isort --profile black --skip __init__.py --skip vendor --skip venv .
+
+python-lint:
+	 python -m pylint --ignore migration, vendor --exit-zero ckanext-basedosdados/ckanext/basedosdados
