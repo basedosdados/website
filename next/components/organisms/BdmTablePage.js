@@ -19,6 +19,7 @@ import {
   formatJson,
   getTemporalCoverage,
 } from "../../utils";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { BaseResourcePage } from "../molecules/BaseResourcePage";
 import { SchemaForm } from "../molecules/SchemaForm";
 import { getBdmColumnsSchema } from '../../pages/api/schemas';
@@ -45,13 +46,16 @@ export function BdmTablePage({
   datasetName,
   resource,
 }) {
-
+  const isMobile = useCheckMobile();
+  const [isMobileMod, setIsMobileMod] = useState(false)
   const [showColumns, setShowColumns] = useState(false)
   const [showTemporalCoverage, setShowTemporalCoverage] = useState(false)
   const [schema, setSchema] = useState({})
   const [columnsHeaders, setColumnsHeaders] = useState([])
   const [columnsValues, setColumnsValues] = useState([])
   const [temporalCoverage, setTemporalCoverage] = useState([])
+  const [observationLevel, setObservationLevel] = useState([])
+
   const tooltip = {
     name: "Nome da coluna.",
     bigquery_type: "Tipo de dado no BigQuery — categorias: INTEGER (Inteiro), STRING (Texto), DATE (Data), FLOAT64 (Decimal), GEOGRAPHY (Geográfico).",
@@ -63,6 +67,10 @@ export function BdmTablePage({
     has_sensitive_data: "Indica se a coluna possui dados sensíveis — ex: CPF identificado, dados de conta bancária, etc.",
     observations: "Descreve processos de tratamentos realizados na coluna que precisam ser evidenciados."
   }
+
+  useEffect(() => {
+    setIsMobileMod(isMobile)
+  }, [isMobile])
 
   useEffect(() => {
     fetchSchema()
@@ -116,6 +124,48 @@ export function BdmTablePage({
 
   },[schema, resource])
 
+  useEffect(() => {
+    const schemaHeaders = {entity: "...", column : "..."}
+    const valueObservationLevel = resource.observation_level.map((elm) => {
+      const values = elm
+      
+      const valueColumn = () => {
+        if(typeof values.column === "object") {
+          const newColumn = Object.values(values.column)
+            .map((elm) => {
+              if(!elm) {
+                return "..."
+              } else {
+                return elm
+              }
+            })
+          return {column : newColumn.toString()}
+        }
+      }
+
+      const row = {...schemaHeaders, ...values, ...valueColumn()}
+      
+      delete row.country
+      delete row.columns
+      
+      if(row.entity === "..." && row.column === "...") {
+        delete row.entity
+        delete row.column
+        return [""]
+      }
+
+      return Object.values(row)
+    })
+
+    function filterArray(value) {
+      return value.length > 1
+    }
+    const newValues = valueObservationLevel.filter(filterArray)
+
+    setObservationLevel(newValues)
+
+  },[resource.observation_level])
+
   if (
     resource.spatial_coverage &&
     typeof resource.spatial_coverage === "array"
@@ -168,7 +218,7 @@ export function BdmTablePage({
 
   return (
     <BaseResourcePage
-      padding="16px 8px 0 0"
+      padding={isMobileMod ? "16px 0 0" : "16px 8px 0 0"}
       editLink={`/resource/edit/${resource.id}`}
       title={`${resource.name}`}
       removeFunction={() => deleteResource(resource)}
@@ -231,14 +281,27 @@ export function BdmTablePage({
         }
       </VStack>
 
-      <VStack width="100%" spacing={3} alignItems="flex-start">
+      <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
+        <Subtitle>
+          Nível da observação
+        </Subtitle>
+        {observationLevel.length === 0 ?
+          <SectionText>Não listado</SectionText>
+        :
+          <SimpleTable
+            headers={["Entidade","Colunas Correspondentes"]}
+            values={Object.values(observationLevel)}
+          />
+        }
+      </VStack>
+
+      <VStack width="100%" spacing={5} alignItems="flex-start">
         <Stack flex="1" >
           <Subtitle>Informações adicionais</Subtitle>
         </Stack>
 
-        <Grid width="100%" templateColumns="repeat(2, 1fr)" gap={8}>
-          {/* dataset_id */}
-          <GridItem display="flex" alignItems="flex-start" gridGap="8px">
+        <Grid width="100%" flex={1} templateColumns="repeat(2, 1fr)" gap={8}>
+          <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <StarIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="ID do conjunto"
@@ -246,7 +309,7 @@ export function BdmTablePage({
             />
           </GridItem>
 
-          <GridItem display="flex" alignItems="flex-start" gridGap="8px">
+          <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <StarIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="ID da tabela"
@@ -254,7 +317,6 @@ export function BdmTablePage({
             />
           </GridItem>
 
-          {/* update_frequency */}
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
             <FrequencyIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
@@ -263,52 +325,19 @@ export function BdmTablePage({
             />
           </GridItem>
 
-          {/* observation_level */}
-          {/* <GridItem colSpan={2} display="flex" flexDirection="column" alignItems="flex-start" gridGap="8px">
-            <Box display="flex" flexDirection="row" gridGap="8px">
-              <ObservationLevelIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-              <Text
-                fontFamily="ubuntu"
-                fontSize="14px"
-                fontWeight="400" 
-                letterSpacing="0.3px"
-                lineHeight="16px"
-                color="#252A32"
-              >Nível da observação:</Text>
-            </Box>
-            
-            <Box display="flex" width="100%" flexWrap="wrap" flexDirection="row" gridGap={4}>
-              {resource.observation_level.map((elm) => (
-                <SimpleTable
-                  headers={["campo","valor"]}
-                  values={Object.entries(elm)}
-                  containerStyle={{
-                    minWidth:"200px",
-                    height:"auto",
-                    flex:1 
-                  }}
-                />
-              ))}
-            </Box>
-          </GridItem> */}
-
-          {/* partitions */}
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
             <PartitionIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-            <Box>
-              <AddInfoTextBase
-                title="Partições no BigQuery"
-                text={resource.partitions}
-              />
-            </Box>
+            <AddInfoTextBase
+              title="Partições no BigQuery"
+              text={resource.partitions}
+            />
           </GridItem>
 
-          {/* published_by */}
-          <GridItem display="flex" alignItems="flex-start" gridGap="8px">
+          <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
             <AddInfoTextBase title="Publicação por">
-              <Box display="flex" gridGap="10px">
-                {resource.published_by.name ? <SectionText>{resource.published_by.name}</SectionText> : <SectionText>Não listado</SectionText>}
+              <Box display="flex" gridGap="4px" >
+                {resource.published_by.name ? <SectionText >{resource.published_by.name}</SectionText> : <SectionText>Não listado</SectionText>}
                 {resource.published_by.email && <EmailIcon {...keyIcons({email : resource.published_by.email})}/>}
                 {resource.published_by.github_user && <GitIcon {...keyIcons({github_user : resource.published_by.github_user})}/>}
                 {resource.published_by.ckan_user && <CkanIcon {...keyIcons({ckan_user : resource.published_by.ckan_user})}/>}
@@ -318,8 +347,7 @@ export function BdmTablePage({
             </AddInfoTextBase>
           </GridItem>
 
-          {/* data_cleaned_by */}
-          <GridItem display="flex" alignItems="flex-start" gridGap="8px">
+          <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
             <AddInfoTextBase title="Tratamento por">
               <Box display="flex" gridGap="10px">
@@ -333,7 +361,6 @@ export function BdmTablePage({
             </AddInfoTextBase>
           </GridItem>
 
-          {/* version */}
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
             <VersionIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
@@ -342,35 +369,6 @@ export function BdmTablePage({
             />
           </GridItem>
         </Grid>
-
-        <ExpandableTable
-          containerStyle={{ width: "100%", alignItems: "flex-start" }}
-          headers={["nome", "valor"]}
-          values={formatObjectsInArray(
-            translate(
-              translations.bdm_table,
-              availableOptionsTranslations,
-              filterOnlyValidValues({ dataset_id: datasetName, ...resource }, [
-                "dataset_id",
-                "table_id",
-                "spatial_coverage",
-                "update_frequency",
-                "observation_level",
-                "last_updated",
-                "version",
-                "published_by",
-                "data_cleaned_by",
-                "data_cleaning_description",
-                "raw_files_url",
-                "auxiliary_files_url",
-                "architecture_url",
-                "covered_by_dictionary",
-                "partitions",
-                "columns",
-              ])
-            )
-          )}
-        />
 
       </VStack>
     </BaseResourcePage>
