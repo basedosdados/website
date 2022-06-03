@@ -6,7 +6,7 @@ log = logging.getLogger(__name__)
 
 import ckan.plugins.toolkit as toolkit
 from ckan.logic.action.get import dataset_follower_count, package_search
-from ckanext.basedosdados.validator.available_options import (  # SpatialCoverage,; ContinentEnum,; CountryEnum,; Admin1Enum,; Admin2Enum,
+from ckanext.basedosdados.validator.available_options import (
     AvailabilityEnum,
     BigQueryTypeEnum,
     DirectoryEnum,
@@ -63,8 +63,8 @@ def bd_dataset_schema(context, data_dict):
 
 
 def get_spatial_coverage_tree():
-    return {v.id: v.label["pt"] for k, v in SPATIAL_COVERAGE_AREAS.items()}
-    # return {k: v.dict() for k, v in SPATIAL_COVERAGE_AREAS.items()}
+    return {k: v.dict() for k, v in SPATIAL_COVERAGE_AREAS.items()}
+    #return {v.id: v.label["pt"] for k, v in SPATIAL_COVERAGE_AREAS.items()}
 
 
 @toolkit.side_effect_free
@@ -77,7 +77,8 @@ def bd_bdm_table_schema(context, data_dict):
 
 @toolkit.side_effect_free
 def bd_spatial_coverage_tree(context, data_dict):
-    return get_spatial_coverage_tree()
+    return {v.id: v.label["pt"] for k, v in SPATIAL_COVERAGE_AREAS.items()}
+    #return get_spatial_coverage_tree()
 
 
 @toolkit.side_effect_free
@@ -387,23 +388,6 @@ def bd_dataset_search(context, data_dict):
                     elif id.count(".") == 3:
                         spatial_coverage_admin2.append(id)
 
-                    # spatial_coverage_continent.append(".".join(id.split(".", 1)[:1]))
-                    # spatial_coverage_country.append(".".join(id.split(".", 2)[:2]))
-                    # spatial_coverage_admin1.append(".".join(id.split(".", 3)[:3]))
-                    # spatial_coverage_admin2.append(".".join(id.split(".", 4)[:4]))
-
-                # split_id = id.split(".")
-                # for level in range(0,len(split_id)):
-                #    if level == 0:
-                #        spatial_coverage_continent.append(split_id[0])
-                #    if level == 1:
-                #        spatial_coverage_country.append(split_id[0] + "." + split_id[1])
-                #    if level == 2:
-                #        spatial_coverage_admin1.append(split_id[0] + "." + split_id[1] + "." + split_id[2])
-                #    if level == 3:
-                #        spatial_coverage_admin2.append(split_id[0] + "." + split_id[1] + "." + split_id[2] + "." + split_id[3])
-            # continue
-
         spatial_coverage_continent = list(set(spatial_coverage_continent))
         spatial_coverage_country = list(set(spatial_coverage_country))
         spatial_coverage_admin1 = list(set(spatial_coverage_admin1))
@@ -421,212 +405,6 @@ def bd_dataset_search(context, data_dict):
         for key in spatial_coverage_admin2:
             value = response["spatial_coverage_admin2"].get(key, 0) + 1
             response["spatial_coverage_admin2"][key] = value
-
-    # post-process spatial coverage continent ###############################
-
-    # SpatialCoverageClass = SpatialCoverage()
-
-    # response["spatial_coverage_continent"] = {}
-    # for dataset in response["datasets"]:
-
-    #    spatial_coverage_continent = []
-    #    for resource in dataset["resources"]:
-    #        if (
-    #            "spatial_coverage" in resource
-    #            and resource["spatial_coverage"] is not None
-    #        ):
-
-    #            # count cases where coverage is whole world
-    #            if resource["spatial_coverage"] == []:
-    #                for continent in SpatialCoverageClass.get_children(
-    #                    level="world", levels_below=1
-    #                ):
-
-    #                    spatial_coverage_continent.append(continent)
-
-    #            # count continent directly
-    #            else:
-    #                for sc in resource.get("spatial_coverage", []):
-    #                    if "continent" in sc:
-    #                        res_spatial_coverage = sc.get("continent", "")
-    #                        spatial_coverage_continent.append(res_spatial_coverage)
-
-    #    spatial_coverage_continent = list(set(spatial_coverage_continent))
-
-    #    for key in spatial_coverage_continent:
-    #        value = response["spatial_coverage_continent"].get(key, 0) + 1
-    #        response["spatial_coverage_continent"][key] = value
-
-    # post-process spatial coverage country ###############################
-
-    # response["spatial_coverage_country"] = {}
-    # for dataset in response["datasets"]:
-
-    #    spatial_coverage_country = []
-    #    for resource in dataset["resources"]:
-    #        if (
-    #            "spatial_coverage" in resource
-    #            and resource["spatial_coverage"] is not None
-    #        ):
-
-    #            # count cases where coverage is whole world
-    #            if resource["spatial_coverage"] == []:
-    #                for country in SpatialCoverageClass.get_children(
-    #                    level="world", levels_below=2
-    #                ):
-
-    #                    spatial_coverage_country.append(country)
-
-    #            else:
-    #                for sc in resource.get("spatial_coverage", []):
-
-    #                    if "continent" in sc:
-
-    #                        # count cases where coverage is whole continent
-    #                        if "country" not in sc:
-    #                            continent = sc["continent"]
-    #                            for country in SpatialCoverageClass.get_children(
-    #                                level="continent", id=continent, levels_below=1
-    #                            ):
-
-    #                                spatial_coverage_country.append(country)
-
-    #                        # count country directly
-    #                        else:
-    #                            res_spatial_coverage = sc.get("country", "")
-    #                            spatial_coverage_country.append(res_spatial_coverage)
-
-    #    spatial_coverage_country = list(set(spatial_coverage_country))
-
-    #    for key in spatial_coverage_country:
-    #        value = response["spatial_coverage_country"].get(key, 0) + 1
-    #        response["spatial_coverage_country"][key] = value
-
-    # post-process spatial coverage admin1 ###############################
-
-    #    response["spatial_coverage_admin1"] = {}
-    #    for dataset in response["datasets"]:
-    #
-    #        spatial_coverage_admin1 = []
-    #        for resource in dataset["resources"]:
-    #            if (
-    #                "spatial_coverage" in resource
-    #                and resource["spatial_coverage"] is not None
-    #            ):
-    #
-    #                # count cases where coverage is whole world
-    #                if resource["spatial_coverage"] == []:
-    #                    for admin1 in SpatialCoverageClass.get_children(
-    #                        level="world", levels_below=3
-    #                    ):
-    #
-    #                        spatial_coverage_admin1.append(admin1)
-    #
-    #                else:
-    #                    for sc in resource.get("spatial_coverage", []):
-    #
-    #                        if "continent" in sc:
-    #
-    #                            # count cases where coverage is whole continent
-    #                            if "country" not in sc:
-    #                                continent = sc["continent"]
-    #                                for admin1 in SpatialCoverageClass.get_children(
-    #                                    level="continent", id=continent, levels_below=2
-    #                                ):
-    #
-    #                                    spatial_coverage_admin1.append(admin1)
-    #
-    #                            else:
-    #
-    #                                # count cases where coverage is whole country
-    #                                if "admin1" not in sc:
-    #                                    country = sc["country"]
-    #                                    for admin1 in SpatialCoverageClass.get_children(
-    #                                        level="country", id=country, levels_below=1
-    #                                    ):
-    #
-    #                                        spatial_coverage_admin1.append(admin1)
-    #
-    #                                # count admin1 directly
-    #                                else:
-    #                                    res_spatial_coverage = sc.get("admin1", "")
-    #                                    spatial_coverage_admin1.append(res_spatial_coverage)
-    #
-    #        spatial_coverage_admin1 = list(set(spatial_coverage_admin1))
-    #
-    #        for key in spatial_coverage_admin1:
-    #            value = response["spatial_coverage_admin1"].get(key, 0) + 1
-    #            response["spatial_coverage_admin1"][key] = value
-    #
-    #    # post-process spatial coverage admin2 ###############################
-    #
-    #    response["spatial_coverage_admin2"] = {}
-    #    for dataset in response["datasets"]:
-    #
-    #        spatial_coverage_admin2 = []
-    #        for resource in dataset["resources"]:
-    #            if (
-    #                "spatial_coverage" in resource
-    #                and resource["spatial_coverage"] is not None
-    #            ):
-    #
-    #                # count cases where coverage is whole world
-    #                if resource["spatial_coverage"] == []:
-    #                    for admin2 in SpatialCoverageClass.get_children(
-    #                        level="world", levels_below=4
-    #                    ):
-    #
-    #                        spatial_coverage_admin2.append(admin2)
-    #
-    #                else:
-    #                    for sc in resource.get("spatial_coverage", []):
-    #
-    #                        if "continent" in sc:
-    #
-    #                            # count cases where coverage is whole continent
-    #                            if "country" not in sc:
-    #                                continent = sc["continent"]
-    #                                for admin2 in SpatialCoverageClass.get_children(
-    #                                    level="continent", id=continent, levels_below=3
-    #                                ):
-    #
-    #                                    spatial_coverage_admin2.append(admin2)
-    #
-    #                            else:
-    #
-    #                                # count cases where coverage is whole country
-    #                                if "admin1" not in sc:
-    #                                    country = sc["country"]
-    #                                    for admin2 in SpatialCoverageClass.get_children(
-    #                                        level="country", id=country, levels_below=2
-    #                                    ):
-    #
-    #                                        spatial_coverage_admin2.append(admin2)
-    #
-    #                                else:
-    #
-    #                                    # count cases where coverage is whole admin1
-    #                                    if "admin2" not in sc:
-    #                                        admin1 = sc["admin1"]
-    #                                        for admin2 in SpatialCoverageClass.get_children(
-    #                                            level="admin1", id=admin1, levels_below=1
-    #                                        ):
-    #
-    #                                            spatial_coverage_admin2.append(admin2)
-    #
-    #                                    else:
-    #
-    #                                        # count admin2 directly
-    #                                        res_spatial_coverage = sc.get("admin2", "")
-    #                                        spatial_coverage_admin2.append(
-    #                                            res_spatial_coverage
-    #                                        )
-    #
-    #        spatial_coverage_admin2 = list(set(spatial_coverage_admin2))
-    #
-    #        for key in spatial_coverage_admin2:
-    #            value = response["spatial_coverage_admin2"].get(key, 0) + 1
-    #            response["spatial_coverage_admin2"][key] = value
 
     # post-process raw quality tier ##########################
 
@@ -851,7 +629,7 @@ def bd_available_options_dict(context, data_dict):
         **TimeUnitEnum.get_all_enum_attr("label"),
         **YesNoEnum.get_all_enum_attr("label"),
         **RawQualityTierEnum.get_all_enum_attr("label"),
-        **get_spatial_coverage_tree(),
+        **{v.id: v.label["pt"] for k, v in SPATIAL_COVERAGE_AREAS.items()} # get_spatial_coverage_tree(),
     }
 
 
@@ -887,17 +665,11 @@ def bd_available_options(context, data_dict):
         "Language": LanguageEnum.get_all_enum_attr("label"),
         "License": LicenseEnum.get_all_enum_attr("label"),
         "Measurement Unit": MeasurementUnitEnum.get_all_enum_attr("label"),
-        # "Spatial Coverage": {
-        #    "Admin1": Admin1Enum.get_all_enum_attr("label"),
-        #    "Admin2": Admin2Enum.get_all_enum_attr("label"),
-        #    "Continent": ContinentEnum.get_all_enum_attr("label"),
-        #    "Country": CountryEnum.get_all_enum_attr("label"),
-        # },
         "Status": StatusEnum.get_all_enum_attr("label"),
         "Time Unit": TimeUnitEnum.get_all_enum_attr("label"),
         "Yes No": YesNoEnum.get_all_enum_attr("label"),
         "Raw Quality Tier": RawQualityTierEnum.get_all_enum_attr("label"),
-        "Spatial Coverage": get_spatial_coverage_tree(),  # {v.id: v.label['pt'] for k, v in SPATIAL_COVERAGE_AREAS.items()},
+        "Spatial Coverage": {v.id: v.label["pt"] for k, v in SPATIAL_COVERAGE_AREAS.items()} #get_spatial_coverage_tree(),
     }
 
 

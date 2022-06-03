@@ -1,16 +1,11 @@
 import dataclasses
 import importlib.resources
 from dataclasses import dataclass
-#from ..attr_enum import AttrEnum
-from typing import List, Dict # Union, Optional, 
-#from pydantic import BaseModel
+from typing import List, Dict
 from pydantic import BaseModel, validator
 import pandas
 import importlib.resources
 
-#from typing import Dict, List, Optional, Union
-
-#import pandas
 from ..attr_enum import AttrEnum
 
 #----------------------------------
@@ -48,8 +43,6 @@ class CountryEnum(AttrEnum):
     # fmt: on
 
 #----------------------------------
-
-#from ._tmp import *
 
 def build_areas_from_csv(csv_path):
     df = pandas.read_csv(csv_path)["id label__pt".split()]
