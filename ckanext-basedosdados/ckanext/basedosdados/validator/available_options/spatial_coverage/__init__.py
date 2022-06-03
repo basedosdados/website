@@ -144,3 +144,8 @@ with importlib.resources.path(
 ) as path:  # TODO: mudar isso aqui pra ler o arquivo certo
     build_areas_from_csv(path)
 
+def get_spatial_coverage_children(area_id):
+    world = Area(id="world", label={"pt": "Mundo"})
+    area = [area for area in world.children() if area.id == area_id][0]
+    return area.children()
+

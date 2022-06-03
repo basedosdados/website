@@ -16,7 +16,6 @@ def create_virtual_fields(fields):
 ###################################
 ################################### Define virtual fields bellow this line ###################################
 
-
 def create_spatial_coverage(fields):
 
     area_ids = []
@@ -28,12 +27,10 @@ def create_spatial_coverage(fields):
             if area_id == None:
                 continue
             area_ids.append(area_id)
-            area = Area(id=area_id, label={"pt": ""})
-            for child in area.children():
+            for child in get_spatial_coverage_children(area_id):
                 area_ids.append(child.id)
     area_ids = list(set(area_ids))
-    # if fields['name'] == 'br-ibge-censo-agropecuario':
-    #    breakpoint()
+    
     return area_ids
 
 
