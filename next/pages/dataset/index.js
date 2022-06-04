@@ -245,7 +245,7 @@ export default function SearchPage({
     : [];
 
   const spatialCoverages = {
-    Continente: data?.spatial_coverage_continent
+    continent: data?.spatial_coverage_continent
       ? Object.keys(data.spatial_coverage_continent)
         .map((t) => ({
           name: t,
@@ -256,7 +256,7 @@ export default function SearchPage({
         }))
         .sort((a, b) => b.value - a.value)
       : [],
-    País: data?.spatial_coverage_country
+    country: data?.spatial_coverage_country
       ? Object.keys(data.spatial_coverage_country)
         .map((t) => ({
           name: t,
@@ -266,7 +266,7 @@ export default function SearchPage({
         }))
         .sort((a, b) => b.value - a.value)
       : [],
-    Admin1: data?.spatial_coverage_admin1
+    admin1: data?.spatial_coverage_admin1
       ? Object.keys(data.spatial_coverage_admin1)
         .map((t) => ({
           name: t,
@@ -277,7 +277,7 @@ export default function SearchPage({
         }))
         .sort((a, b) => b.value - a.value)
       : [],
-    Admin2: data?.spatial_coverage_admin2
+    admin2: data?.spatial_coverage_admin2
       ? Object.keys(data.spatial_coverage_admin2)
         .map((t) => ({
           name: t,
@@ -485,10 +485,10 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, tag: values })
             }
           />
-          {/* <CheckboxFilterAccordion
+          <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.spatial_coverage || []).length > 0}
-            choices={[...spatialCoverages.Continente]}
+            choices={[...spatialCoverages.continent]}
             values={paramFilters.spatial_coverage}
             valueField="name"
             displayField="displayName"
@@ -500,7 +500,7 @@ export default function SearchPage({
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.spatial_coverage || []).length > 0}
-            choices={[...spatialCoverages.País]}
+            choices={[...spatialCoverages.country]}
             values={paramFilters.spatial_coverage}
             valueField="name"
             displayField="displayName"
@@ -512,7 +512,7 @@ export default function SearchPage({
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.spatial_coverage || []).length > 0}
-            choices={[...spatialCoverages.Admin1]}
+            choices={[...spatialCoverages.admin1]}
             values={paramFilters.spatial_coverage}
             valueField="name"
             displayField="displayName"
@@ -524,7 +524,7 @@ export default function SearchPage({
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.spatial_coverage || []).length > 0}
-            choices={[...spatialCoverages.Admin2]}
+            choices={[...spatialCoverages.admin2]}
             values={paramFilters.spatial_coverage}
             valueField="name"
             displayField="displayName"
@@ -532,8 +532,7 @@ export default function SearchPage({
             onChange={(values) =>
               setParamFilters({ ...paramFilters, spatial_coverage: values })
             }
-          /> */}
-          
+          />
           <RangeFilterAccordion
             isActive={(paramFilters.temporal_coverage || []).length > 0}
             fieldName="Cobertura temporal"
