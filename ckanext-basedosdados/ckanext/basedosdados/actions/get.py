@@ -19,9 +19,6 @@ from ckanext.basedosdados.validator.available_options import (
     YesNoEnum,
 )
 
-# from ckanext.basedosdados.validator.available_options.spatial_coverage import (
-#    SPATIAL_COVERAGE_AREAS,
-# )
 from ckanext.basedosdados.validator.available_options.entity import (
     EntityArtEnum,
     EntityDateTimeEnum,
