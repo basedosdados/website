@@ -24,13 +24,13 @@ def create_spatial_coverage(fields):
         if resource_spatial_coverage == None:
             continue
         for area_id in resource_spatial_coverage:
-            if area_id == None:
+            if area_id is None:
                 continue
+            #if area_id != 'world':
             area_ids.append(area_id)
             for child in get_spatial_coverage_children(area_id):
                 area_ids.append(child.id)
     area_ids = list(set(area_ids))
-    
     return area_ids
 
 

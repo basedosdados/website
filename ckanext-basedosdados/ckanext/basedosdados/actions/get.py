@@ -365,11 +365,10 @@ def bd_dataset_search(context, data_dict):
             for area_id in resource["spatial_coverage"] or []:
                 if area_id is None:
                     continue
-                if area_id != "world":
+                if area_id != 'world':
                     area_ids.append(area_id)
-                for child in get_spatial_coverage_children(area_id):
-                    if child.id != "world":
-                        area_ids.append(child.id)
+                for child in get_spatial_coverage_children(area_id):    
+                    area_ids.append(child.id)
 
             spatial_coverage_continent = []
             spatial_coverage_country = []
@@ -377,20 +376,19 @@ def bd_dataset_search(context, data_dict):
             spatial_coverage_admin2 = []
 
             for id in area_ids:
-                if id != "world":
-                    if id.count(".") == 0:
-                        spatial_coverage_continent.append(id)
-                    elif id.count(".") == 1:
-                        spatial_coverage_country.append(id)
-                    elif id.count(".") == 2:
-                        spatial_coverage_admin1.append(id)
-                    elif id.count(".") == 3:
-                        spatial_coverage_admin2.append(id)
+                if id.count(".") == 0:
+                    spatial_coverage_continent.append(id)
+                elif id.count(".") == 1:
+                    spatial_coverage_country.append(id)
+                elif id.count(".") == 2:
+                    spatial_coverage_admin1.append(id)
+                elif id.count(".") == 3:
+                    spatial_coverage_admin2.append(id)
 
         spatial_coverage_continent = list(set(spatial_coverage_continent))
-        spatial_coverage_country = list(set(spatial_coverage_country))
-        spatial_coverage_admin1 = list(set(spatial_coverage_admin1))
-        spatial_coverage_admin2 = list(set(spatial_coverage_admin2))
+        spatial_coverage_country   = list(set(spatial_coverage_country))
+        spatial_coverage_admin1    = list(set(spatial_coverage_admin1))
+        spatial_coverage_admin2    = list(set(spatial_coverage_admin2))
 
         for key in spatial_coverage_continent:
             value = response["spatial_coverage_continent"].get(key, 0) + 1

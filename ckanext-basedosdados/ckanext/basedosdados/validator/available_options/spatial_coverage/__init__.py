@@ -87,7 +87,7 @@ class Area:
         return [
             SPATIAL_COVERAGE_AREAS[area]
             for area in SPATIAL_COVERAGE_AREAS
-            if area.startswith(self._tree_id) and len(area) > len(self._tree_id) # + "." #or self._tree_id == "world"
+            if area.startswith(self._tree_id) and len(SPATIAL_COVERAGE_AREAS[area]._tree_id) > len(self._tree_id)
         ]
 
     def __contains__(a, b):
@@ -146,6 +146,8 @@ with importlib.resources.path(
 
 def get_spatial_coverage_children(area_id):
     world = Area(id="world", label={"pt": "Mundo"})
+    if area_id == 'world':
+        return world.children()
     area = [area for area in world.children() if area.id == area_id][0]
     return area.children()
 
