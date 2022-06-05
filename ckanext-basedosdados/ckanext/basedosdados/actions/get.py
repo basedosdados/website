@@ -351,11 +351,11 @@ def bd_dataset_search(context, data_dict):
     response["spatial_coverage_country"] = {}
     response["spatial_coverage_admin1"] = {}
     response["spatial_coverage_admin2"] = {}
-
+    
     for dataset in response["datasets"]:
+        
+        area_ids = []
         for resource in dataset["resources"]:
-
-            area_ids = []
 
             if resource is None:
                 continue

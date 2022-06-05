@@ -21,14 +21,13 @@ def create_spatial_coverage(fields):
     area_ids = []
 
     for resource_spatial_coverage in fields.get("res_extras_spatial_coverage", []):
-        if resource_spatial_coverage == None:
-            continue
-        for area_id in resource_spatial_coverage:
-            if area_id is None:
-                continue
-            area_ids.append(area_id)
-            for child in get_spatial_coverage_children(area_id):
-                area_ids.append(child.id)
+        if resource_spatial_coverage is not None:
+            for area_id in resource_spatial_coverage or []:
+                if area_id is None:
+                    continue
+                area_ids.append(area_id)
+                for child in get_spatial_coverage_children(area_id):
+                    area_ids.append(child.id)
     area_ids = list(set(area_ids))
     return area_ids
 
