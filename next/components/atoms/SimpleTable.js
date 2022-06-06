@@ -11,7 +11,8 @@ import {
 export function SimpleTable({
   headers,
   values,
-  containerStyle
+  containerStyle,
+  firstValues
 }) {
 
   return (
@@ -49,7 +50,8 @@ export function SimpleTable({
                   letterSpacing="0.5px"
                   color="#000000a8"
                   _first={{
-                    color:"#252A32"
+                    color:"#252A32",
+                    ...firstValues
                   }}
                 >
                   {r}

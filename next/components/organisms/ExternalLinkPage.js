@@ -1,5 +1,10 @@
-import { VStack, Image } from "@chakra-ui/react";
-import Title from "../atoms/Title";
+import {
+  VStack,
+  Stack,
+  Box,
+  Grid,
+  GridItem,
+} from "@chakra-ui/react";
 import { ExpandableTable } from "../molecules/ExpandableTable";
 import {
   filterOnlyValidValues,
@@ -40,6 +45,7 @@ export function ExternalLinkPage({
       isShowButtons={true}
       urlExternal={resource.url}
     >
+
       <VStack width="100%" spacing={3} alignItems="flex-start">
         <ExpandableTable
           headers={["nome", "valor"]}

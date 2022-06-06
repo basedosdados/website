@@ -125,32 +125,40 @@ export function BdmTablePage({
   },[schema, resource])
 
   useEffect(() => {
-    const schemaHeaders = {entity: "...", column : "..."}
+    const schemaHeaders = {entity: "-", columns : "-"}
     const valueObservationLevel = resource.observation_level.map((elm) => {
       const values = elm
-      
+
       const valueColumn = () => {
-        if(typeof values.column === "object") {
-          const newColumn = Object.values(values.column)
+        if(typeof values.columns === "object") {
+          const newColumn = Object.values(values.columns)
             .map((elm) => {
               if(!elm) {
-                return "..."
+                return "-"
               } else {
                 return elm
               }
             })
-          return {column : newColumn.toString()}
+          return {columns : newColumn.toString()}
         }
       }
 
-      const row = {...schemaHeaders, ...values, ...valueColumn()}
+      const translationsEntity = () => {
+        if(values.entity) {
+          return {entity : translateField(values.entity, availableOptionsTranslations)}
+        } else {
+          return {entity : "-"}
+        }
+      }
+
+      const row = {...schemaHeaders, ...values, ...valueColumn(), ...translationsEntity()}
       
       delete row.country
-      delete row.columns
+      delete row.column
       
-      if(row.entity === "..." && row.column === "...") {
+      if(row.entity === "-" && row.columns === "-") {
         delete row.entity
-        delete row.column
+        delete row.columns
         return [""]
       }
 
@@ -291,6 +299,7 @@ export function BdmTablePage({
           <SimpleTable
             headers={["Entidade","Colunas Correspondentes"]}
             values={Object.values(observationLevel)}
+            firstValues={{textTransform: "capitalize"}}
           />
         }
       </VStack>
@@ -300,7 +309,7 @@ export function BdmTablePage({
           <Subtitle>Informações adicionais</Subtitle>
         </Stack>
 
-        <Grid width="100%" flex={1} templateColumns="repeat(2, 1fr)" gap={8}>
+        <Grid width="100%" flex={1} templateColumns="repeat(2, 1fr)" gap={6}>
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <StarIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
@@ -337,7 +346,7 @@ export function BdmTablePage({
             <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
             <AddInfoTextBase title="Publicação por">
               <Box display="flex" gridGap="4px" >
-                {resource.published_by.name ? <SectionText >{resource.published_by.name}</SectionText> : <SectionText>Não listado</SectionText>}
+                {resource.published_by.name ? <SectionText marginRight="4px !important">{resource.published_by.name}</SectionText> : <SectionText marginRight="4px !important">Não listado</SectionText>}
                 {resource.published_by.email && <EmailIcon {...keyIcons({email : resource.published_by.email})}/>}
                 {resource.published_by.github_user && <GitIcon {...keyIcons({github_user : resource.published_by.github_user})}/>}
                 {resource.published_by.ckan_user && <CkanIcon {...keyIcons({ckan_user : resource.published_by.ckan_user})}/>}
@@ -350,8 +359,8 @@ export function BdmTablePage({
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
             <AddInfoTextBase title="Tratamento por">
-              <Box display="flex" gridGap="10px">
-                {resource.data_cleaned_by.name ? <SectionText>{resource.data_cleaned_by.name}</SectionText> : <SectionText>Não listado</SectionText>}
+              <Box display="flex" gridGap="4px">
+                {resource.data_cleaned_by.name ? <SectionText marginRight="4px !important">{resource.data_cleaned_by.name}</SectionText> : <SectionText marginRight="4px !important">Não listado</SectionText>}
                 {resource.data_cleaned_by.email && <EmailIcon {...keyIcons({email : resource.data_cleaned_by.email})}/>}
                 {resource.data_cleaned_by.github_user && <GitIcon {...keyIcons({github_user : resource.data_cleaned_by.github_user})}/>}
                 {resource.data_cleaned_by.ckan_user && <CkanIcon {...keyIcons({ckan_user : resource.data_cleaned_by.ckan_user})}/>}
