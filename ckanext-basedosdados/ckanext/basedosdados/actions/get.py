@@ -272,6 +272,7 @@ def bd_dataset_search(context, data_dict):
     )
 
     # post-process ########################################
+    
     response["datasets"] = response.pop("results", None)
     response.pop("facets", None)
     response.pop("search_facets", None)
@@ -290,6 +291,7 @@ def bd_dataset_search(context, data_dict):
             response["groups"][key] = value
 
     # post-process tags ###################################
+    
     response["tags"] = {}
 
     for dataset in response["datasets"]:
@@ -355,6 +357,12 @@ def bd_dataset_search(context, data_dict):
     for dataset in response["datasets"]:
         
         area_ids = []
+        
+        spatial_coverage_continent = []
+        spatial_coverage_country = []
+        spatial_coverage_admin1 = []
+        spatial_coverage_admin2 = []
+
         for resource in dataset["resources"]:
 
             if resource is None:
@@ -366,11 +374,6 @@ def bd_dataset_search(context, data_dict):
                     area_ids.append(area_id)
                 for child in get_spatial_coverage_children(area_id):    
                     area_ids.append(child.id)
-
-            spatial_coverage_continent = []
-            spatial_coverage_country = []
-            spatial_coverage_admin1 = []
-            spatial_coverage_admin2 = []
 
             for id in area_ids:
                 if id.count(".") == 0:
