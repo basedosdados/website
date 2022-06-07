@@ -372,8 +372,14 @@ def bd_dataset_search(context, data_dict):
                     continue
                 if area_id != 'world':
                     area_ids.append(area_id)
-                for child in get_spatial_coverage_children(area_id):    
-                    area_ids.append(child.id)
+                    area_ids = area_ids + list(world.children_dict()[area_id].children_dict().keys())
+                else:
+                    area_ids = area_ids + list(world.children_dict().keys())
+                #area = Area(id=area_id, label={"pt": ""})
+                #for child in area.children():
+                #area_ids = area_ids + list(world.children_dict()[area_id].children_dict().keys())
+                #for child in get_spatial_coverage_children(area_id):
+                #    area_ids.append(child.id)
 
             for id in area_ids:
                 if id.count(".") == 0:

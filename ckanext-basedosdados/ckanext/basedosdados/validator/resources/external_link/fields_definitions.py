@@ -161,7 +161,13 @@ LICENSE_FIELD = Field(
 
 SPATIAL_COVERAGE_FIELD = Field(
     title="Cobertura Espacial",
-    description=to_line(["A máxima unidade espacial que a tabela cobre."]),
+    description=to_line(
+        [
+            "As máximas unidades espaciais que a tabela cobre.",
+            "Exemplo:",
+            "  - sa.br",
+        ]
+    ),
     yaml_order={
         "id_before": "license",
         "id_after": "temporal_coverage",
