@@ -12,7 +12,7 @@ export function SimpleTable({
   headers,
   values,
   containerStyle,
-  firstValues
+  valuesTable
 }) {
 
   return (
@@ -51,8 +51,8 @@ export function SimpleTable({
                   color="#000000a8"
                   _first={{
                     color:"#252A32",
-                    ...firstValues
                   }}
+                  {...valuesTable}
                 >
                   {r}
                 </Td>

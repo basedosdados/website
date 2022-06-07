@@ -1,7 +1,7 @@
-import { Text, Stack } from "@chakra-ui/layout";
+import { Stack } from "@chakra-ui/layout";
 import SectionText from "../atoms/SectionText";
 
-export function DisclaimerBox({ title, text, children }) {
+export function DisclaimerBox({ title, text, children, ...style }) {
   return (
     <Stack
       display="flex"
@@ -12,6 +12,7 @@ export function DisclaimerBox({ title, text, children }) {
       borderEndRadius="6px"
       marginTop="24px"
       alignItems="center"
+      {...style}
     > 
       {!children &&
         <SectionText

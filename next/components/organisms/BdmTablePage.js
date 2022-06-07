@@ -9,7 +9,6 @@ import {
 import { useState, useEffect } from "react";
 import Subtitle from "../atoms/Subtitle";
 import SectionText from "../atoms/SectionText";
-import { ExpandableTable } from "../molecules/ExpandableTable";
 import ColumnDatasets from "../molecules/ColumnDatasets";
 import {
   breakNestedObjects,
@@ -29,7 +28,6 @@ import { SimpleTable } from "../atoms/SimpleTable";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import StarIcon from "../../public/img/icons/starIcon";
 import FrequencyIcon from "../../public/img/icons/frequencyIcon";
-import ObservationLevelIcon from "../../public/img/icons/observationLevelIcon";
 import PartitionIcon from "../../public/img/icons/partitionIcon";
 import UserIcon from "../../public/img/icons/userIcon"
 import VersionIcon from "../../public/img/icons/versionIcon"
@@ -82,6 +80,9 @@ export function BdmTablePage({
   }
 
   function translateField(field, translation) {
+    if(!field)
+      return "Não listado"
+
     if(typeof field === "boolean") {
       return field === true ? "Sim" : "Não"
     }
@@ -125,7 +126,7 @@ export function BdmTablePage({
   },[schema, resource])
 
   useEffect(() => {
-    const schemaHeaders = {entity: "-", columns : "-"}
+    const schemaHeaders = { entity: "-", columns : "-" }
     const valueObservationLevel = resource.observation_level.map((elm) => {
       const values = elm
 
@@ -263,9 +264,9 @@ export function BdmTablePage({
       
       <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Cobertura temporal</Subtitle>
-          <SectionText>
-            {showTemporalCoverage ? temporalCoverage : "Nenhuma cobertura temporal fornecida"}
-          </SectionText>
+        <SectionText>
+          {showTemporalCoverage ? temporalCoverage : "Nenhuma cobertura temporal fornecida"}
+        </SectionText>
       </VStack>
 
       <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
@@ -299,7 +300,7 @@ export function BdmTablePage({
           <SimpleTable
             headers={["Entidade","Colunas Correspondentes"]}
             values={Object.values(observationLevel)}
-            firstValues={{textTransform: "capitalize"}}
+            valuesTable={{_first:{textTransform: "capitalize"}}}
           />
         }
       </VStack>
