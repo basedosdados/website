@@ -65,25 +65,40 @@ export function ExternalLinkPage({
   },[resource.temporalCoverage])
 
   useEffect(() => {
-    const schemaHeaders = { country : "-",entity: "-" }
+    const schemaHeaders = { entity: "-", columns : "-" }
     const valueObservationLevel = resource.observation_level.map((elm) => {
       const values = elm
 
-      const translationsFields = () => {
-        return {
-          entity : translateField(values.entity, availableOptionsTranslations),
-          country : translateField(values.country, availableOptionsTranslations)
+      const valueColumn = () => {
+        if(typeof values.columns === "object") {
+          const newColumn = Object.values(values.columns)
+            .map((elm) => {
+              if(!elm) {
+                return "-"
+              } else {
+                return elm
+              }
+            })
+          return {columns : newColumn.toString()}
         }
       }
 
-      const row = {...schemaHeaders, ...values, ...translationsFields()}
+      const translationsEntity = () => {
+        if(values.entity) {
+          return {entity : translateField(values.entity, availableOptionsTranslations)}
+        } else {
+          return {entity : "-"}
+        }
+      }
+
+      const row = {...schemaHeaders, ...values, ...valueColumn(), ...translationsEntity()}
       
-      delete row.columns
+      delete row.country
       delete row.column
       
-      if(row.entity === "-" && row.country === "-") {
+      if(row.entity === "-" && row.columns === "-") {
         delete row.entity
-        delete row.country
+        delete row.columns
         return [""]
       }
 
@@ -176,8 +191,8 @@ export function ExternalLinkPage({
           <HStack spacing={0}>
             <ExclamationIcon widthIcon="20px" heightIcon="20px" fill="#42B0FF"/>
             <SectionText display="flex">
-              <p style={{margin:"0 0 0 16px", fontWeight: "bolder", fontFamily: "lato"}}>
-                ATENÇÃO</p>: Estes dados não passaram pela metodologia de tratamento da Base dos Dados.
+              <p style={{margin:"0 4px 0 12px", fontWeight: "bolder", fontFamily: "lato"}}>
+                ATENÇÃO:</p>Estes dados não passaram pela metodologia de tratamento da Base dos Dados.
             </SectionText>
           </HStack>
         </DisclaimerBox>
@@ -187,11 +202,12 @@ export function ExternalLinkPage({
           fontSize="14px"
           minWidth="100px"
           color="#FFF"
-          backgroundColor="#42B0FF"
+          backgroundColor={resource.url ? "#42B0FF" : "#A3A3A3"}
+          padding="0 20px"
           isDisabled={resource.url ? false : true}
           onClick={() => window.open(resource.url)}
         >
-          <RedirectIcon marginRight="10px" widthIcon="14px" heightIcon="14px" fill="#FFF"/>
+          <RedirectIcon marginRight="8px" widthIcon="14px" heightIcon="14px" fill="#FFF"/>
           Acessar fonte original
         </RoundedButton>
       </VStack>
@@ -264,7 +280,7 @@ export function ExternalLinkPage({
                 <SectionText marginRight="4px !important">Não listado</SectionText>
                 :
                 <SimpleTable 
-                  headers={["País", "Entidade"]}
+                  headers={["Entidade","Colunas Correspondentes"]}
                   values={Object.values(observationLevel)}
                   valuesTable={{_first:{textTransform: "capitalize"}}}
                 />

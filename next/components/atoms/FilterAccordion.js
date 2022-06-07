@@ -38,7 +38,6 @@ export function BaseFilterAccordion({
             <Text>
               <AccordionButton
                 onClick={onChange}
-                color={isActive ? "#2B8C4D" : null}
                 _hover={isHovering ? { cursor: "pointer", opacity: "0.6" } : "none"}
                 padding="16px 16px 0 0"
                 marginBottom="8px"
@@ -54,7 +53,7 @@ export function BaseFilterAccordion({
                     fontWeight="500"
                     fontFamily="Ubuntu"
                     fontSize="16px"
-                    color="#252A32"
+                    color={isActive ? "#2B8C4D" : "#252A32"}
                     letterSpacing="0.2px"
                   >
                     {fieldName}
