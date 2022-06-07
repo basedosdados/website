@@ -89,6 +89,13 @@ class Area:
             for area in SPATIAL_COVERAGE_AREAS
             if area.startswith(self._tree_id) and len(SPATIAL_COVERAGE_AREAS[area]._tree_id) > len(self._tree_id)
         ]
+    
+    def children_dict(self):
+        return {
+            str(area): SPATIAL_COVERAGE_AREAS[area]
+            for area in SPATIAL_COVERAGE_AREAS
+            if area.startswith(self._tree_id) and len(SPATIAL_COVERAGE_AREAS[area]._tree_id) > len(self._tree_id)
+        }
 
     def __contains__(a, b):
         if isinstance(b, AreaUnion):
@@ -140,14 +147,16 @@ class SpatialCoverageArea(BaseModel):
 import ckanext.basedosdados.validator.available_options.spatial_coverage as spatial_coverage
 
 with importlib.resources.path(
-    spatial_coverage, "spatial_coverage_tree.csv"
+    spatial_coverage, "spatial_coverage_tree_reduced.csv"
 ) as path:  # TODO: mudar isso aqui pra ler o arquivo certo
     build_areas_from_csv(path)
 
+world = Area(id="world", label={"pt": "Mundo"})
+
 def get_spatial_coverage_children(area_id):
-    world = Area(id="world", label={"pt": "Mundo"})
     if area_id == 'world':
         return world.children()
-    area = [area for area in world.children() if area.id == area_id][0]
-    return area.children()
+    return world.children_dict()[area_id].children()
+    #area = [area for area in world.children() if area.id == area_id][0]
+    #return area.children()
 

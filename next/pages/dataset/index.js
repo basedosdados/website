@@ -277,6 +277,7 @@ export default function SearchPage({
         }))
         .sort((a, b) => b.value - a.value)
       : [],
+    /*
     admin2: data?.spatial_coverage_admin2
       ? Object.keys(data.spatial_coverage_admin2)
         .map((t) => ({
@@ -288,6 +289,7 @@ export default function SearchPage({
         }))
         .sort((a, b) => b.value - a.value)
       : [],
+    */
   };
 
   // Loads filter from URL
@@ -521,7 +523,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, spatial_coverage: values })
             }
           />
-          <CheckboxFilterAccordion
+          {/* <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.spatial_coverage || []).length > 0}
             choices={[...spatialCoverages.admin2]}
@@ -532,7 +534,7 @@ export default function SearchPage({
             onChange={(values) =>
               setParamFilters({ ...paramFilters, spatial_coverage: values })
             }
-          />
+          /> */}
           <RangeFilterAccordion
             isActive={(paramFilters.temporal_coverage || []).length > 0}
             fieldName="Cobertura temporal"

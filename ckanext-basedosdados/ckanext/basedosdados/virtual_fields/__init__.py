@@ -20,15 +20,23 @@ def create_spatial_coverage(fields):
 
     area_ids = []
 
+    #world = Area(id="world", label={"pt": "Mundo"})
+    #breakpoint()
     for resource_spatial_coverage in fields.get("res_extras_spatial_coverage", []):
         if resource_spatial_coverage is not None:
             for area_id in resource_spatial_coverage or []:
                 if area_id is None:
                     continue
                 area_ids.append(area_id)
-                for child in get_spatial_coverage_children(area_id):
-                    area_ids.append(child.id)
+                if area_id == 'world':
+                    area_ids = area_ids + list(world.children_dict().keys())
+                else:
+                    area_ids = area_ids + list(world.children_dict()[area_id].children_dict().keys())
+                #for child in get_spatial_coverage_children(area_id):
+                #    area_ids.append(child.id)
     area_ids = list(set(area_ids))
+    #breakpoint()
+
     return area_ids
 
 
