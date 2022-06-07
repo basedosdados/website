@@ -19,7 +19,6 @@ from ckanext.basedosdados.validator.available_options import (
     TimeUnitEnum,
     YesNoEnum,
 )
-
 from ckanext.basedosdados.validator.available_options.entity import (
     EntityArtEnum,
     EntityDateTimeEnum,
