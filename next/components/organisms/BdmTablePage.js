@@ -345,8 +345,16 @@ export function BdmTablePage({
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-            <AddInfoTextBase title="Publicação por">
-              <Box display="flex" gridGap="4px" >
+            <Box display="block" alignItems="center" gridGap="8px" {...style}>
+              <Text
+                fontFamily="ubuntu"
+                fontSize="14px"
+                fontWeight="400" 
+                letterSpacing="0.3px"
+                marginBottom="8px"
+                color="#252A32"
+              >Publicação por</Text>
+              <Box display="flex" gridGap="4px">
                 {resource.published_by.name ? <SectionText marginRight="4px !important">{resource.published_by.name}</SectionText> : <SectionText marginRight="4px !important">Não listado</SectionText>}
                 {resource.published_by.email && <EmailIcon {...keyIcons({email : resource.published_by.email})}/>}
                 {resource.published_by.github_user && <GitIcon {...keyIcons({github_user : resource.published_by.github_user})}/>}
@@ -354,12 +362,20 @@ export function BdmTablePage({
                 {resource.published_by.website && <WebIcon {...keyIcons({website : resource.published_by.website})}/>}
                 {resource.published_by.twitter_user && <TwitterIcon {...keyIcons({twitter_user : resource.published_by.twitter_user})}/>}
               </Box>
-            </AddInfoTextBase>
+            </Box>
           </GridItem>
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-            <AddInfoTextBase title="Tratamento por">
+            <Box display="block" alignItems="center" gridGap="8px" {...style}>
+              <Text
+                fontFamily="ubuntu"
+                fontSize="14px"
+                fontWeight="400" 
+                letterSpacing="0.3px"
+                marginBottom="8px"
+                color="#252A32"
+              >Tratamento por</Text>
               <Box display="flex" gridGap="4px">
                 {resource.data_cleaned_by.name ? <SectionText marginRight="4px !important">{resource.data_cleaned_by.name}</SectionText> : <SectionText marginRight="4px !important">Não listado</SectionText>}
                 {resource.data_cleaned_by.email && <EmailIcon {...keyIcons({email : resource.data_cleaned_by.email})}/>}
@@ -368,7 +384,7 @@ export function BdmTablePage({
                 {resource.data_cleaned_by.website && <WebIcon {...keyIcons({website : resource.data_cleaned_by.website})}/>}
                 {resource.data_cleaned_by.twitter_user && <TwitterIcon {...keyIcons({twitter_user : resource.data_cleaned_by.twitter_user})}/>}
               </Box>
-            </AddInfoTextBase>
+            </Box>
           </GridItem>
 
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
