@@ -1,62 +1,66 @@
-import { Flex, VStack } from "@chakra-ui/react";
-import Title from "./Title";
+import {
+  TableContainer,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+} from "@chakra-ui/react";
 
 export function SimpleTable({
   headers,
   values,
-  containerStyle
+  containerStyle,
+  valuesTable
 }) {
 
   return (
-    <VStack width="100%" height="100%" {...containerStyle}>
-      <Flex
-        borderWidth="1px 0px"
-        borderColor="#E4E4E4"
-        width="100%"
-        alignItems="flex-start"
-        justifyContent="flex-start"
-        backgroundColor="#F5F5F5"
-      >
-        {headers.map((h) => (
-          <Title
-            padding="5px 15px"
-            flex="1"
-            fontWeight="500"
-            fontSize="14px"
-            color="#707070"
-            textTransform="capitalize"
-          >
-            {h}
-          </Title>
-        ))}
-      </Flex>
-      {values.map((h) => (
-        <Flex
-          marginTop="0px !important"
-          borderBottomWidth="1px"
-          height="100%"
-          width="100%"
-          flex="1"
-        >
-          {h.map((r) => (
-            <Title
-              flex="1"
-              fontSize="15px"
-              fontWeigth="400"
-              padding="6px 15px"
-              paddingBottom="3px"
-              wordBreak="break-all"
-              fontFamily="Lato"
-              color="#000000a8"
-              _first={{
-                color:"#252A32"
-              }}
+    <TableContainer 
+      width="100%"
+      height="100%"
+      {...containerStyle}
+    >
+      <Table>
+        <Thead>
+          {headers.map((h) => (
+            <Th
+              padding="8px 24px"
+              fontSize="14px"
+              color="#6F6F6F"
+              background="#F6F6F6"
+              fontWeight="500"
+              fontFamily="Ubuntu"
+              letterSpacing="0.4px"
+              textTransform="capitalize"
+              boxSizing="content-box"
             >
-              {r}
-            </Title>
+              {h}
+            </Th>
           ))}
-        </Flex>
-      ))}
-    </VStack>
-  );
+        </Thead>
+        <Tbody>
+          {values.map((h) => (
+            <Tr>
+              {h.map((r) => (
+                <Td
+                  padding="10px 24px"
+                  fontSize="14px"
+                  fontFamily="Lato"
+                  letterSpacing="0.5px"
+                  color="#000000a8"
+                  _first={{
+                    color:"#252A32",
+                  }}
+                  {...valuesTable}
+                >
+                  {r}
+                </Td>
+              ))}
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </TableContainer>
+  )
 }

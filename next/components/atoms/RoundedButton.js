@@ -13,6 +13,7 @@ export default function RoundedButton({
       border="0px"
       colorScheme={colorScheme}
       backgroundColor={backgroundColor}
+      _active={{backgroundColor:"none"}}
       onClick={onClick}
       fontFamily="Ubuntu"
       borderRadius="68.6364px"
