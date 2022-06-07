@@ -8,10 +8,10 @@ import importlib.resources
 
 from ..attr_enum import AttrEnum
 
-#----------------------------------
-# TODO: make this come 
+# ----------------------------------
+# TODO: make this come
 # automatically from directory
-#----------------------------------
+# ----------------------------------
 class CountryEnum(AttrEnum):
     # country codes from ISO 3166
     # https://www.iban.com/country-codes
@@ -42,7 +42,9 @@ class CountryEnum(AttrEnum):
     au = {"label": "Austrália"}
     # fmt: on
 
-#----------------------------------
+
+# ----------------------------------
+
 
 def build_areas_from_csv(csv_path):
     df = pandas.read_csv(csv_path)["id label__pt".split()]
@@ -63,6 +65,7 @@ def build_areas_from_csv(csv_path):
 
 
 SPATIAL_COVERAGE_AREAS = {}
+
 
 @dataclass
 class Area:
@@ -87,14 +90,16 @@ class Area:
         return [
             SPATIAL_COVERAGE_AREAS[area]
             for area in SPATIAL_COVERAGE_AREAS
-            if area.startswith(self._tree_id) and len(SPATIAL_COVERAGE_AREAS[area]._tree_id) > len(self._tree_id)
+            if area.startswith(self._tree_id)
+            and len(SPATIAL_COVERAGE_AREAS[area]._tree_id) > len(self._tree_id)
         ]
-    
+
     def children_dict(self):
         return {
             str(area): SPATIAL_COVERAGE_AREAS[area]
             for area in SPATIAL_COVERAGE_AREAS
-            if area.startswith(self._tree_id) and len(SPATIAL_COVERAGE_AREAS[area]._tree_id) > len(self._tree_id)
+            if area.startswith(self._tree_id)
+            and len(SPATIAL_COVERAGE_AREAS[area]._tree_id) > len(self._tree_id)
         }
 
     def __contains__(a, b):
@@ -112,7 +117,9 @@ class Area:
     def dict(self):
         return dataclasses.asdict(self)
 
+
 Area(id="world", label={"pt": "Mundo"})
+
 
 @dataclass
 class AreaUnion:
@@ -132,6 +139,7 @@ class AreaUnion:
         return AreaUnion(areas=areas)
         # TODO: check if union can be represented by fewer higher level Areas. Ex rj + sp + mg + ... = BR
 
+
 class SpatialCoverageArea(BaseModel):
     __root__: str
 
@@ -144,6 +152,7 @@ class SpatialCoverageArea(BaseModel):
     def area(self):
         return SPATIAL_COVERAGE_AREAS[self.__root__]
 
+
 import ckanext.basedosdados.validator.available_options.spatial_coverage as spatial_coverage
 
 with importlib.resources.path(
@@ -153,7 +162,8 @@ with importlib.resources.path(
 
 world = Area(id="world", label={"pt": "Mundo"})
 
+
 def get_spatial_coverage_children(area_id):
-    if area_id == 'world':
+    if area_id == "world":
         return world.children()
     return world.children_dict()[area_id].children()

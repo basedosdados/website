@@ -16,6 +16,7 @@ def create_virtual_fields(fields):
 ###################################
 ################################### Define virtual fields bellow this line ###################################
 
+
 def create_spatial_coverage(fields):
 
     area_ids = []
@@ -26,10 +27,12 @@ def create_spatial_coverage(fields):
                 if area_id is None:
                     continue
                 area_ids.append(area_id)
-                if area_id == 'world':
+                if area_id == "world":
                     area_ids = area_ids + list(world.children_dict().keys())
                 else:
-                    area_ids = area_ids + list(world.children_dict()[area_id].children_dict().keys())
+                    area_ids = area_ids + list(
+                        world.children_dict()[area_id].children_dict().keys()
+                    )
     area_ids = list(set(area_ids))
 
     return area_ids

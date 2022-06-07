@@ -45,6 +45,7 @@ from ckanext.basedosdados.validator.available_options import (
 
 to_line = lambda description: "\n".join(description)
 
+
 class ObservationLevel(BaseModel):
     # fmt: off
     country : Optional[CountryEnum] = Field(title="País",description=to_line(

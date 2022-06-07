@@ -61,7 +61,7 @@ def bd_dataset_schema(context, data_dict):
 
 def get_spatial_coverage_tree():
     return {k: v.dict() for k, v in SPATIAL_COVERAGE_AREAS.items()}
-    #return {v.id: v.label["pt"] for k, v in SPATIAL_COVERAGE_AREAS.items()}
+    # return {v.id: v.label["pt"] for k, v in SPATIAL_COVERAGE_AREAS.items()}
 
 
 @toolkit.side_effect_free
@@ -75,7 +75,7 @@ def bd_bdm_table_schema(context, data_dict):
 @toolkit.side_effect_free
 def bd_spatial_coverage_tree(context, data_dict):
     return {v.id: v.label["pt"] for k, v in SPATIAL_COVERAGE_AREAS.items()}
-    #return get_spatial_coverage_tree()
+    # return get_spatial_coverage_tree()
 
 
 @toolkit.side_effect_free
@@ -272,7 +272,7 @@ def bd_dataset_search(context, data_dict):
     )
 
     # post-process ########################################
-    
+
     response["datasets"] = response.pop("results", None)
     response.pop("facets", None)
     response.pop("search_facets", None)
@@ -291,7 +291,7 @@ def bd_dataset_search(context, data_dict):
             response["groups"][key] = value
 
     # post-process tags ###################################
-    
+
     response["tags"] = {}
 
     for dataset in response["datasets"]:
@@ -353,11 +353,11 @@ def bd_dataset_search(context, data_dict):
     response["spatial_coverage_country"] = {}
     response["spatial_coverage_admin1"] = {}
     response["spatial_coverage_admin2"] = {}
-    
+
     for dataset in response["datasets"]:
-        
+
         area_ids = []
-        
+
         spatial_coverage_continent = []
         spatial_coverage_country = []
         spatial_coverage_admin1 = []
@@ -370,9 +370,11 @@ def bd_dataset_search(context, data_dict):
             for area_id in resource["spatial_coverage"] or []:
                 if area_id is None:
                     continue
-                if area_id != 'world':
+                if area_id != "world":
                     area_ids.append(area_id)
-                    area_ids = area_ids + list(world.children_dict()[area_id].children_dict().keys())
+                    area_ids = area_ids + list(
+                        world.children_dict()[area_id].children_dict().keys()
+                    )
                 else:
                     area_ids = area_ids + list(world.children_dict().keys())
 
@@ -387,9 +389,9 @@ def bd_dataset_search(context, data_dict):
                     spatial_coverage_admin2.append(id)
 
         spatial_coverage_continent = list(set(spatial_coverage_continent))
-        spatial_coverage_country   = list(set(spatial_coverage_country))
-        spatial_coverage_admin1    = list(set(spatial_coverage_admin1))
-        spatial_coverage_admin2    = list(set(spatial_coverage_admin2))
+        spatial_coverage_country = list(set(spatial_coverage_country))
+        spatial_coverage_admin1 = list(set(spatial_coverage_admin1))
+        spatial_coverage_admin2 = list(set(spatial_coverage_admin2))
 
         for key in spatial_coverage_continent:
             value = response["spatial_coverage_continent"].get(key, 0) + 1
@@ -628,7 +630,9 @@ def bd_available_options_dict(context, data_dict):
         **StatusEnum.get_all_enum_attr("label"),
         **TimeUnitEnum.get_all_enum_attr("label"),
         **YesNoEnum.get_all_enum_attr("label"),
-        **{v.id: v.label["pt"] for k, v in SPATIAL_COVERAGE_AREAS.items()} # get_spatial_coverage_tree(),
+        **{
+            v.id: v.label["pt"] for k, v in SPATIAL_COVERAGE_AREAS.items()
+        },  # get_spatial_coverage_tree(),
     }
 
 
@@ -669,7 +673,9 @@ def bd_available_options(context, data_dict):
         "Status": StatusEnum.get_all_enum_attr("label"),
         "Time Unit": TimeUnitEnum.get_all_enum_attr("label"),
         "Yes No": YesNoEnum.get_all_enum_attr("label"),
-        "Spatial Coverage": {v.id: v.label["pt"] for k, v in SPATIAL_COVERAGE_AREAS.items()} #get_spatial_coverage_tree(),
+        "Spatial Coverage": {
+            v.id: v.label["pt"] for k, v in SPATIAL_COVERAGE_AREAS.items()
+        },  # get_spatial_coverage_tree(),
     }
 
 
