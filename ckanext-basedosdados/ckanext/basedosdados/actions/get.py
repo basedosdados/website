@@ -14,6 +14,7 @@ from ckanext.basedosdados.validator.available_options import (
     LicenseEnum,
     MeasurementUnitEnum,
     RawQualityTierEnum,
+    ResourceTypeEnum,
     StatusEnum,
     TimeUnitEnum,
     YesNoEnum,
@@ -375,11 +376,6 @@ def bd_dataset_search(context, data_dict):
                     area_ids = area_ids + list(world.children_dict()[area_id].children_dict().keys())
                 else:
                     area_ids = area_ids + list(world.children_dict().keys())
-                #area = Area(id=area_id, label={"pt": ""})
-                #for child in area.children():
-                #area_ids = area_ids + list(world.children_dict()[area_id].children_dict().keys())
-                #for child in get_spatial_coverage_children(area_id):
-                #    area_ids.append(child.id)
 
             for id in area_ids:
                 if id.count(".") == 0:
@@ -628,10 +624,11 @@ def bd_available_options_dict(context, data_dict):
         **LanguageEnum.get_all_enum_attr("label"),
         **LicenseEnum.get_all_enum_attr("label"),
         **MeasurementUnitEnum.get_all_enum_attr("label"),
+        **RawQualityTierEnum.get_all_enum_attr("label"),
+        **ResourceTypeEnum.get_all_enum_attr("label"),
         **StatusEnum.get_all_enum_attr("label"),
         **TimeUnitEnum.get_all_enum_attr("label"),
         **YesNoEnum.get_all_enum_attr("label"),
-        **RawQualityTierEnum.get_all_enum_attr("label"),
         **{v.id: v.label["pt"] for k, v in SPATIAL_COVERAGE_AREAS.items()} # get_spatial_coverage_tree(),
     }
 
@@ -668,10 +665,11 @@ def bd_available_options(context, data_dict):
         "Language": LanguageEnum.get_all_enum_attr("label"),
         "License": LicenseEnum.get_all_enum_attr("label"),
         "Measurement Unit": MeasurementUnitEnum.get_all_enum_attr("label"),
+        "Raw Quality Tier": RawQualityTierEnum.get_all_enum_attr("label"),
+        "Resource Type": ResourceTypeEnum.get_all_enum_attr("label"),
         "Status": StatusEnum.get_all_enum_attr("label"),
         "Time Unit": TimeUnitEnum.get_all_enum_attr("label"),
         "Yes No": YesNoEnum.get_all_enum_attr("label"),
-        "Raw Quality Tier": RawQualityTierEnum.get_all_enum_attr("label"),
         "Spatial Coverage": {v.id: v.label["pt"] for k, v in SPATIAL_COVERAGE_AREAS.items()} #get_spatial_coverage_tree(),
     }
 
