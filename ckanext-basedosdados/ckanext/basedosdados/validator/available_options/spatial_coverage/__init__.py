@@ -157,6 +157,3 @@ def get_spatial_coverage_children(area_id):
     if area_id == 'world':
         return world.children()
     return world.children_dict()[area_id].children()
-    #area = [area for area in world.children() if area.id == area_id][0]
-    #return area.children()
-
