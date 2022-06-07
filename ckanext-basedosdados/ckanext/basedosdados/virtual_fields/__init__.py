@@ -1,4 +1,5 @@
 import collections
+from ckanext.basedosdados.validator.available_options.spatial_coverage import *
 
 
 def create_virtual_fields(fields):
@@ -14,6 +15,27 @@ def create_virtual_fields(fields):
 ### The function should return either a list of scalars or a scalar field (int, str, float, etc)
 ###################################
 ################################### Define virtual fields bellow this line ###################################
+
+
+def create_spatial_coverage(fields):
+
+    area_ids = []
+
+    for resource_spatial_coverage in fields.get("res_extras_spatial_coverage", []):
+        if resource_spatial_coverage is not None:
+            for area_id in resource_spatial_coverage or []:
+                if area_id is None:
+                    continue
+                area_ids.append(area_id)
+                if area_id == "world":
+                    area_ids = area_ids + list(world.children_dict().keys())
+                else:
+                    area_ids = area_ids + list(
+                        world.children_dict()[area_id].children_dict().keys()
+                    )
+    area_ids = list(set(area_ids))
+
+    return area_ids
 
 
 def create_entity(fields):

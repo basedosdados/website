@@ -1,0 +1,284 @@
+id,label__pt,label__en
+af,África,Africa
+af.ao,Angola,Angola
+af.bf,Burkina Faso,Burkina Faso
+af.bi,Burundi,Burundi
+af.bj,Benim,Benin
+af.bw,Botswana,Botswana
+af.cd,República Democrática do Congo,Congo (the Democratic Republic of the)
+af.cf,República Centro-Africana,Central African Republic (the)
+af.cg,República do Congo,Congo (the)
+af.ci,Costa do Marfim,Côte d'Ivoire
+af.cm,Camarões,Cameroon
+af.cv,Cabo Verde,Cabo Verde
+af.dj,Djibouti,Djibouti
+af.dz,Argélia,Algeria
+af.eg,Egito,Egypt
+af.eh,Saara Ocidental,Western Sahara
+af.er,Eritreia,Eritrea
+af.et,Etiópia,Ethiopia
+af.ga,Gabão,Gabon
+af.gh,Gana,Ghana
+af.gm,Gâmbia,Gambia (the)
+af.gn,Guiné,Guinea
+af.gq,Guiné Equatorial,Equatorial Guinea
+af.gw,Guiné-Bissau,Guinea-Bissau
+af.ke,Quénia,Kenya
+af.km,Comores,Comoros (the)
+af.lr,Libéria,Liberia
+af.ls,Lesoto,Lesotho
+af.ly,Líbia,Libya
+af.ma,Marrocos,Morocco
+af.mg,Madagáscar,Madagascar
+af.ml,Mali,Mali
+af.mr,Mauritânia,Mauritania
+af.mu,Maurícia,Mauritius
+af.mw,Malawi,Malawi
+af.mz,Moçambique,Mozambique
+af.na,Namíbia,Namibia
+af.ne,Níger,Niger (the)
+af.ng,Nigéria,Nigeria
+af.re,Ilha da Reunião,Réunion
+af.rw,Ruanda,Rwanda
+af.sc,Seicheles,Seychelles
+af.sd,Sudão,Sudan (the)
+af.sh,"Santa Helena, Ascensão e Tristão da Cunha","Saint Helena, Ascension and Tristan da Cunha"
+af.sl,Serra Leoa,Sierra Leone
+af.sn,Senegal,Senegal
+af.so,Somália,Somalia
+af.ss,Sudão Do Sul,South Sudan
+af.st,São Tomé e Príncipe,Sao Tome and Principe
+af.sz,Suazilândia,Eswatini
+af.td,Chade,Chad
+af.tg,Togo,Togo
+af.tn,Tunísia,Tunisia
+af.tz,Tanzânia,"Tanzania, the United Republic of"
+af.ug,Uganda,Uganda
+af.yt,Mayotte,Mayotte
+af.za,África do Sul,South Africa
+af.zm,Zâmbia,Zambia
+af.zw,Zimbábue,Zimbabwe
+an,Antártica,Antarctica
+an.aq,Antártica,Antarctica
+an.bv,Ilha Bouvet,Bouvet Island
+an.hm,Ilha Heard e Ilhas McDonald,Heard Island and McDonald Islands
+an.tf,Territórios Franceses do Sul,French Southern Territories (the)
+as,Ásia,Asia
+as.ae,Emirados Árabes Unidos,United Arab Emirates (the)
+as.af,Afeganistão,Afghanistan
+as.am,Armênia,Armenia
+as.az,Azerbaijão,Azerbaijan
+as.bd,Bangladesh,Bangladesh
+as.bh,Bahrein,Bahrain
+as.bn,Brunei,Brunei Darussalam
+as.bt,Butão,Bhutan
+as.cc,Ilhas Cocos,Cocos (Keeling) Islands (the)
+as.cn,China,China
+as.cx,Ilha Christmas,Christmas Island
+as.ge,Geórgia,Georgia
+as.hk,Hong Kong,Hong Kong
+as.id,Indonésia,Indonesia
+as.il,Israel,Israel
+as.in,Índia ,India
+as.io,Território do Oceano Índico Britânico,British Indian Ocean Territory (the)
+as.iq,Iraque,Iraq
+as.ir,Irã,Iran (Islamic Republic of)
+as.jo,Jordânia,Jordan
+as.jp,Japão,Japan
+as.kg,República Quirguiz,Kyrgyzstan
+as.kh,Camboja,Cambodia
+as.kp,Coreia do Norte,Korea (the Democratic People's Republic of)
+as.kr,Coreia do Sul,Korea (the Republic of)
+as.kw,Kuwait ,Kuwait
+as.kz,Cazaquistão,Kazakhstan
+as.la,Laos,Lao People's Democratic Republic (the)
+as.lb,Líbano,Lebanon
+as.lk,Sri Lanka,Sri Lanka
+as.mm,Myanmar,Myanmar
+as.mn,Mongólia,Mongolia
+as.mo,Macau,Macao
+as.mv,Maldivas,Maldives
+as.my,Malásia,Malaysia
+as.np,Nepal,Nepal
+as.om,Omã,Oman
+as.ph,Filipinas,Philippines (the)
+as.pk,Paquistão,Pakistan
+as.ps,Palestina,"Palestine, State of"
+as.qa,Catar,Qatar
+as.sa,Arábia Saudita,Saudi Arabia
+as.sg,Cingapura,Singapore
+as.sy,Síria,Syrian Arab Republic (the)
+as.th,Tailândia,Thailand
+as.tj,Tajiquistão,Tajikistan
+as.tl,Timor-Leste,Timor-Leste
+as.tm,Turcomenistão,Turkmenistan
+as.tr,Turquia,Turkey
+as.tw,Taiwan,Taiwan (Province of China)
+as.uz,Uzbequistão,Uzbekistan
+as.vn,Vietnã,Viet Nam
+as.ye,Iémen,Yemen
+eu,Europa,Europe
+eu.ad,Andorra,Andorra
+eu.al,Albânia,Albania
+eu.at,Áustria,Austria
+eu.ax,Ilhas Åland,Åland Islands
+eu.ba,Bósnia e Herzegovina,Bosnia and Herzegovina
+eu.be,Bélgica,Belgium
+eu.bg,Bulgária,Bulgaria
+eu.by,Bielorrússia,Belarus
+eu.ch,Suíça,Switzerland
+eu.cy,Chipre,Cyprus
+eu.cz,República Tcheca,Czechia
+eu.de,Alemanha,Germany
+eu.dk,Dinamarca,Denmark
+eu.ee,Estônia,Estonia
+eu.es,Espanha,Spain
+eu.fi,Finlândia,Finland
+eu.fo,Ilhas Feroe,Faroe Islands (the)
+eu.fr,França,France
+eu.gb,Reino Unido,United Kingdom of Great Britain and Northern Ireland (the)
+eu.gg,Guernsey,Guernsey
+eu.gi,Gibraltar,Gibraltar
+eu.gr,Grécia,Greece
+eu.hr,Croácia,Croatia
+eu.hu,Hungria,Hungary
+eu.ie,Irlanda,Ireland
+eu.im,Ilha de Man,Isle of Man
+eu.is,Islândia,Iceland
+eu.it,Itália,Italy
+eu.je,Jersey,Jersey
+eu.li,Liechtenstein,Liechtenstein
+eu.lt,Lituânia,Lithuania
+eu.lu,Luxemburgo,Luxembourg
+eu.lv,Letónia,Latvia
+eu.mc,Mônaco,Monaco
+eu.md,Moldávia,Moldova (the Republic of)
+eu.me,Montenegro,Montenegro
+eu.mk,Macedônia,North Macedonia
+eu.mt,Malta,Malta
+eu.nl,Holanda,Netherlands (the)
+eu.no,Noruega,Norway
+eu.pl,Polônia,Poland
+eu.pt,Portugal,Portugal
+eu.ro,Roménia,Romania
+eu.rs,Sérvia,Serbia
+eu.ru,Rússia,Russian Federation (the)
+eu.se,Suécia,Sweden
+eu.si,Eslovênia,Slovenia
+eu.sj,Svalbard e Jan Mayen,Svalbard and Jan Mayen
+eu.sk,Eslováquia,Slovakia
+eu.sm,San Marino,San Marino
+eu.ua,Ucrânia,Ukraine
+eu.va,Vaticano,Holy See (the)
+na,América do Norte,North America
+na.ag,Antígua e Barbuda,Antigua and Barbuda
+na.ai,Anguila,Anguilla
+na.aw,Aruba,Aruba
+na.bb,Barbados,Barbados
+na.bl,São Bartolomeu,Saint Barthélemy
+na.bm,Bermudas,Bermuda
+na.bq,Países Baixos Caribenhos,"Bonaire, Sint Eustatius and Saba"
+na.bs,Bahamas,Bahamas (the)
+na.bz,Belize,Belize
+na.ca,Canadá,Canada
+na.cr,Costa Rica,Costa Rica
+na.cu,Cuba,Cuba
+na.cw,Curaçao,Curaçao
+na.dm,Dominica,Dominica
+na.do,República Dominicana,Dominican Republic (the)
+na.gd,Granada,Grenada
+na.gl,Groenlândia,Greenland
+na.gp,Guadalupe,Guadeloupe
+na.gt,Guatemala,Guatemala
+na.hn,Honduras,Honduras
+na.ht,Haiti ,Haiti
+na.jm,Jamaica,Jamaica
+na.kn,São Cristóvão e Nevis,Saint Kitts and Nevis
+na.ky,Ilhas Cayman,Cayman Islands (the)
+na.lc,Santa Lúcia,Saint Lucia
+na.mf,São Martinho (França),Saint Martin (French part)
+na.mq,Martinica,Martinique
+na.ms,Monserrate,Montserrat
+na.mx,México,Mexico
+na.ni,Nicarágua,Nicaragua
+na.pa,Panamá,Panama
+na.pm,São Pedro e Miquelon,Saint Pierre and Miquelon
+na.pr,Porto Rico,Puerto Rico
+na.sv,El Salvador,El Salvador
+na.sx,São Martinho (Países Baixos),Sint Maarten (Dutch part)
+na.tc,Ilhas Turcas e Caicos,Turks and Caicos Islands (the)
+na.tt,Trinidad e Tobago,Trinidad and Tobago
+na.us,Estados Unidos,United States of America (the)
+na.vc,São Vicente e Granadinas,Saint Vincent and the Grenadines
+na.vg,Ilhas Virgens Britânicas,Virgin Islands (British)
+na.vi,Ilhas Virgens Americanas,Virgin Islands (U.S.)
+oc,Oceania,Oceania
+oc.as,Samoa Americana,American Samoa
+oc.au,Austrália,Australia
+oc.ck,Ilhas Cook,Cook Islands (the)
+oc.fj,Fiji,Fiji
+oc.fm,Estados Federados da Micronésia,Micronesia (Federated States of)
+oc.gu,Guam,Guam
+oc.ki,Kiribati,Kiribati
+oc.mh,Ilhas Marshall,Marshall Islands (the)
+oc.mp,Ilhas Marianas do Norte,Northern Mariana Islands (the)
+oc.nc,Nova Caledônia,New Caledonia
+oc.nf,Ilha Norfolk,Norfolk Island
+oc.nr,Nauru,Nauru
+oc.nu,Niue,Niue
+oc.nz,Nova Zelândia,New Zealand
+oc.pf,Polinésia Francesa,French Polynesia
+oc.pg,Papua-Nova Guiné,Papua New Guinea
+oc.pn,Pitcairn,Pitcairn
+oc.pw,Palau,Palau
+oc.sb,Ilhas Salomão,Solomon Islands
+oc.tk,Tokelau,Tokelau
+oc.to,Tonga,Tonga
+oc.tv,Tuvalu,Tuvalu
+oc.um,Ilhas Menores Distantes dos Estados Unidos,United States Minor Outlying Islands (the)
+oc.vu,Vanuatu,Vanuatu
+oc.wf,Wallis e Futuna,Wallis and Futuna
+oc.ws,Samoa,Samoa
+sa,América do Sul,South America
+sa.ar,Argentina,Argentina
+sa.bo,Bolívia,Bolivia (Plurinational State of)
+sa.br,Brasil,Brazil
+sa.br.ac,Acre,Acre
+sa.br.al,Alagoas,Alagoas
+sa.br.am,Amazonas,Amazonas
+sa.br.ap,Amapá,Amapá
+sa.br.ba,Bahia,Bahia
+sa.br.ce,Ceará,Ceará
+sa.br.df,Distrito Federal,Distrito Federal
+sa.br.es,Espírito Santo,Espírito Santo
+sa.br.go,Goiás,Goiás
+sa.br.ma,Maranhão,Maranhão
+sa.br.mg,Minas Gerais,Minas Gerais
+sa.br.ms,Mato Grosso do Sul,Mato Grosso do Sul
+sa.br.mt,Mato Grosso,Mato Grosso
+sa.br.pa,Pará,Pará
+sa.br.pb,Paraíba,Paraíba
+sa.br.pe,Pernambuco,Pernambuco
+sa.br.pi,Piauí,Piauí
+sa.br.pr,Paraná,Paraná
+sa.br.rj,Rio de Janeiro,Rio de Janeiro
+sa.br.rn,Rio Grande do Norte,Rio Grande do Norte
+sa.br.ro,Rondônia,Rondônia
+sa.br.rr,Roraima,Roraima
+sa.br.rs,Rio Grande do Sul,Rio Grande do Sul
+sa.br.sc,Santa Catarina,Santa Catarina
+sa.br.se,Sergipe,Sergipe
+sa.br.sp,São Paulo,São Paulo
+sa.br.to,Tocantins,Tocantins
+sa.cl,Chile,Chile
+sa.co,Colômbia,Colombia
+sa.ec,Equador,Ecuador
+sa.fk,Ilhas Falkland (Ilhas Malvinas),Falkland Islands (the) [Malvinas]
+sa.gf,Guiana Francesa,French Guiana
+sa.gs,Ilhas Geórgia do Sul e Sandwich do Sul,South Georgia and the South Sandwich Islands
+sa.gy,Guiana,Guyana
+sa.pe,Peru,Peru
+sa.py,Paraguai,Paraguay
+sa.sr,Suriname,Suriname
+sa.uy,Uruguai,Uruguay
+sa.ve,Venezuela,Venezuela (Bolivarian Republic of)

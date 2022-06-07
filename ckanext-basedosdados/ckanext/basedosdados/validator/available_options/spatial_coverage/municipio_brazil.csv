@@ -1,9 +1,0 @@
-id,id_municipio_6,id_municipio_tse,id_municipio_rf,id_municipio_bcb,label__pt,capital_uf,id_comarca,id_regiao_saude,nome_regiao_saude,id_regiao_imediata,nome_regiao_imediata,id_regiao_intermediaria,nome_regiao_intermediaria,id_microrregiao,nome_microrregiao,id_mesorregiao,nome_mesorregiao,ddd,id_uf,sigla_uf,nome_uf,nome_regiao
-1100015,110001,310,33,43036,Alta Floresta D'Oeste,0,1100015,11005,Zona da Mata,110005,Cacoal,1102,Ji-Paraná,11006,Cacoal,1102,Leste Rondoniense,69,11,RO,Rondônia,Norte
-1100023,110002,78,7,9393,Ariquemes,0,1100023,11001,Vale do Jamari,110002,Ariquemes,1101,Porto Velho,11003,Ariquemes,1102,Leste Rondoniense,69,11,RO,Rondônia,Norte
-1100031,110003,450,37,44626,Cabixi,0,1100064,11006,Cone Sul,110006,Vilhena,1102,Ji-Paraná,11008,Colorado do Oeste,1102,Leste Rondoniense,69,11,RO,Rondônia,Norte
-1100049,110004,94,9,10746,Cacoal,0,1100049,11002,Café,110005,Cacoal,1102,Ji-Paraná,11006,Cacoal,1102,Leste Rondoniense,69,11,RO,Rondônia,Norte
-1100056,110005,272,27,42219,Cerejeiras,0,1100056,11006,Cone Sul,110006,Vilhena,1102,Ji-Paraná,11008,Colorado do Oeste,1102,Leste Rondoniense,69,11,RO,Rondônia,Norte
-1100064,110006,230,23,41210,Colorado do Oeste,0,1100064,11006,Cone Sul,110006,Vilhena,1102,Ji-Paraná,11008,Colorado do Oeste,1102,Leste Rondoniense,69,11,RO,Rondônia,Norte
-1100072,110007,655,981,46954,Corumbiara,0,1100064,11006,Cone Sul,110006,Vilhena,1102,Ji-Paraná,11008,Colorado do Oeste,1102,Leste Rondoniense,69,11,RO,Rondônia,Norte
-1100080,110008,213,21,41117,Costa Marques,0,1100080,11007,Vale do Guaporé,110004,Ji-Paraná,1102,Ji-Paraná,11002,Guajará-Mirim,1101,Madeira-Guaporé,69,11,RO,Rondônia,Norte

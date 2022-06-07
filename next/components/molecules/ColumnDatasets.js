@@ -190,6 +190,8 @@ function TableDatasets({
                 fontFamily="Ubuntu"
                 letterSpacing="0.4px"
                 textTransform="capitalize"
+                boxSizing="content-box"
+                zIndex={1}
               >
                 {tooltip ?
                   <Box display="flex" gridGap="8px" cursor="pointer">
