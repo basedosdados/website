@@ -180,7 +180,7 @@ function ResourcesPage({
     }
 
     if(queryParams.toString().length === 0) {
-      switch (resourceTables.resource_type) {
+      switch (resourceTables?.resource_type) {
         case "bdm_table": {
           queryParams.append("bdm_table", resourceTables.name)
         }

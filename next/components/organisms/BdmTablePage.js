@@ -1,30 +1,41 @@
 import {
   VStack,
   Stack,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
+  Box,
+  Text,
+  Grid,
+  GridItem,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import Subtitle from "../atoms/Subtitle";
 import SectionText from "../atoms/SectionText";
-import { ExpandableTable } from "../molecules/ExpandableTable";
 import ColumnDatasets from "../molecules/ColumnDatasets";
 import {
   breakNestedObjects,
   filterOnlyValidValues,
   formatObjectsInArray,
   translate,
+  formatJson,
   getTemporalCoverage,
 } from "../../utils";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { BaseResourcePage } from "../molecules/BaseResourcePage";
 import { SchemaForm } from "../molecules/SchemaForm";
-import { getBdmColumnsSchema } from '../../pages/api/schemas'
+import { getBdmColumnsSchema } from '../../pages/api/schemas';
 import { getBdmTableSchema } from "../../pages/api/schemas";
 import { deleteResource, updateResource } from "../../pages/api/datasets";
+import { SimpleTable } from "../atoms/SimpleTable";
 import DataInformationQuery from "../molecules/DataInformationQuery";
+import StarIcon from "../../public/img/icons/starIcon";
+import FrequencyIcon from "../../public/img/icons/frequencyIcon";
+import PartitionIcon from "../../public/img/icons/partitionIcon";
+import UserIcon from "../../public/img/icons/userIcon"
+import VersionIcon from "../../public/img/icons/versionIcon"
+import EmailIcon from "../../public/img/icons/emailIcon"
+import GitIcon from "../../public/img/icons/gitIcon"
+import CkanIcon from "../../public/img/icons/ckanIcon"
+import WebIcon from "../../public/img/icons/webIcon"
+import TwitterIcon from "../../public/img/icons/twitterIcon"
 
 export function BdmTablePage({
   availableOptionsTranslations,
@@ -33,13 +44,16 @@ export function BdmTablePage({
   datasetName,
   resource,
 }) {
-
+  const isMobile = useCheckMobile();
+  const [isMobileMod, setIsMobileMod] = useState(false)
   const [showColumns, setShowColumns] = useState(false)
   const [showTemporalCoverage, setShowTemporalCoverage] = useState(false)
   const [schema, setSchema] = useState({})
   const [columnsHeaders, setColumnsHeaders] = useState([])
   const [columnsValues, setColumnsValues] = useState([])
   const [temporalCoverage, setTemporalCoverage] = useState([])
+  const [observationLevel, setObservationLevel] = useState([])
+
   const tooltip = {
     name: "Nome da coluna.",
     bigquery_type: "Tipo de dado no BigQuery — categorias: INTEGER (Inteiro), STRING (Texto), DATE (Data), FLOAT64 (Decimal), GEOGRAPHY (Geográfico).",
@@ -53,12 +67,39 @@ export function BdmTablePage({
   }
 
   useEffect(() => {
+    setIsMobileMod(isMobile)
+  }, [isMobile])
+
+  useEffect(() => {
     fetchSchema()
   },[])
   
   async function fetchSchema()  {
     const columnsSchema = await getBdmColumnsSchema()
     setSchema(columnsSchema)
+  }
+
+  function translateField(field, translation) {
+    if(!field)
+      return "Não listado"
+
+    if(typeof field === "boolean") {
+      return field === true ? "Sim" : "Não"
+    }
+
+    if(typeof field === "object") {
+      if(!field){
+        return "Não listado"
+      }
+      if(field.length === 0) {
+        return "Não listado"
+      } else {
+        const newJson = JSON.stringify(field)
+        return formatJson(newJson, true)
+      }
+    }
+
+    return translation[field] || field
   }
 
   useEffect(() => {
@@ -84,6 +125,56 @@ export function BdmTablePage({
 
   },[schema, resource])
 
+  useEffect(() => {
+    const schemaHeaders = { entity: "-", columns : "-" }
+    const valueObservationLevel = resource.observation_level.map((elm) => {
+      const values = elm
+
+      const valueColumn = () => {
+        if(typeof values.columns === "object") {
+          const newColumn = Object.values(values.columns)
+            .map((elm) => {
+              if(!elm) {
+                return "-"
+              } else {
+                return elm
+              }
+            })
+          return {columns : newColumn.toString()}
+        }
+      }
+
+      const translationsEntity = () => {
+        if(values.entity) {
+          return {entity : translateField(values.entity, availableOptionsTranslations)}
+        } else {
+          return {entity : "-"}
+        }
+      }
+
+      const row = {...schemaHeaders, ...values, ...valueColumn(), ...translationsEntity()}
+      
+      delete row.country
+      delete row.column
+      
+      if(row.entity === "-" && row.columns === "-") {
+        delete row.entity
+        delete row.columns
+        return [""]
+      }
+
+      return Object.values(row)
+    })
+
+    function filterArray(value) {
+      return value.length > 1
+    }
+    const newValues = valueObservationLevel.filter(filterArray)
+
+    setObservationLevel(newValues)
+
+  },[resource.observation_level])
+
   if (
     resource.spatial_coverage &&
     typeof resource.spatial_coverage === "array"
@@ -91,9 +182,52 @@ export function BdmTablePage({
     resource.spatial_coverage = resource.spatial_coverage.sort();
   }
 
+  const AddInfoTextBase = ({title, text, children, ...style}) => {
+    return (
+      <Box display="block" alignItems="center" gridGap="8px" {...style}>
+        <Text
+          fontFamily="ubuntu"
+          fontSize="14px"
+          fontWeight="400" 
+          letterSpacing="0.3px"
+          marginBottom="8px"
+          color="#252A32"
+        >{title}</Text>
+        <SectionText>
+          {translateField(text, availableOptionsTranslations)}
+        </SectionText>
+        {children}
+      </Box>
+    )
+  }
+
+  const keyIcons = (ref) => {
+    let href = ""
+
+    if(ref.github_user) {
+      const github = ref.github_user.replace(/(https:)\/\/(github.com)\//gim, "")
+      href = `https://github.com/${github}` 
+    }
+    if(ref.twitter_user) {
+      const twitter = ref.twitter_user.replace(/(https:)\/\/(twitter.com)\//gim, "")
+      href = `https://twitter.com/${twitter}`
+    }
+    if(ref.email) { href = `mailto:${ref.email}` }
+    if(ref.ckan_user) { href = `/user/${ref.ckan_user}` }
+    if(ref.website) { href = `https://${ref.website}` }
+
+    return {
+      cursor: "pointer",
+      widthIcon:"18px",
+      heightIcon:"18px",
+      fill: "#42B0FF",
+      onClick: () => {window.open(href)}
+    }
+  }
+
   return (
     <BaseResourcePage
-      padding="16px 8px 0 0"
+      padding={isMobileMod ? "16px 0 0" : "16px 8px 0 0"}
       editLink={`/resource/edit/${resource.id}`}
       title={`${resource.name}`}
       removeFunction={() => deleteResource(resource)}
@@ -130,15 +264,9 @@ export function BdmTablePage({
       
       <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Cobertura temporal</Subtitle>
-        {showTemporalCoverage ?
-          <SectionText>
-            {temporalCoverage}
-          </SectionText>
-        :
-          <SectionText>
-            Nenhuma cobertura temporal fornecida
-          </SectionText>
-        }
+        <SectionText>
+          {showTemporalCoverage ? temporalCoverage : "Nenhuma cobertura temporal fornecida"}
+        </SectionText>
       </VStack>
 
       <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
@@ -162,54 +290,112 @@ export function BdmTablePage({
         }
       </VStack>
 
-      <VStack width="100%" spacing={3} alignItems="flex-start">
-        <Accordion
-          borderColor="transparent"
-          borderWidth={0}
-          width="100%"
-          ex
-          allowToggle
-        >
-          <AccordionItem>
-            <AccordionButton marginBottom={5} padding={0} _hover={{backgroundColor: "transparent"}} >
-              <Stack flex='1' textAlign='left'>
-                <Subtitle>Informações adicionais</Subtitle>
-              </Stack>
-              <AccordionIcon color="#252A32" fontSize="18px"/>
-            </AccordionButton>
+      <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
+        <Subtitle>
+          Nível da observação
+        </Subtitle>
+        {observationLevel.length === 0 ?
+          <SectionText>Não listado</SectionText>
+        :
+          <SimpleTable
+            headers={["Entidade","Colunas Correspondentes"]}
+            values={Object.values(observationLevel)}
+            valuesTable={{_first:{textTransform: "capitalize"}}}
+          />
+        }
+      </VStack>
 
-            <AccordionPanel padding={0}>
-              <ExpandableTable
-                containerStyle={{ width: "100%", alignItems: "flex-start" }}
-                headers={["nome", "valor"]}
-                values={formatObjectsInArray(
-                  translate(
-                    translations.bdm_table,
-                    availableOptionsTranslations,
-                    filterOnlyValidValues({ dataset_id: datasetName, ...resource }, [
-                      "dataset_id",
-                      "table_id",
-                      "spatial_coverage",
-                      "update_frequency",
-                      "observation_level",
-                      "last_updated",
-                      "version",
-                      "published_by",
-                      "data_cleaned_by",
-                      "data_cleaning_description",
-                      "raw_files_url",
-                      "auxiliary_files_url",
-                      "architecture_url",
-                      "covered_by_dictionary",
-                      "partitions",
-                      "columns",
-                    ])
-                  )
-                )}
-              />
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
+      <VStack width="100%" spacing={5} alignItems="flex-start">
+        <Stack flex="1" >
+          <Subtitle>Informações adicionais</Subtitle>
+        </Stack>
+
+        <Grid width="100%" flex={1} templateColumns="repeat(2, 1fr)" gap={6}>
+          <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
+            <StarIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <AddInfoTextBase
+              title="ID do conjunto"
+              text={resource.dataset_id}
+            />
+          </GridItem>
+
+          <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
+            <StarIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <AddInfoTextBase
+              title="ID da tabela"
+              text={resource.table_id}
+            />
+          </GridItem>
+
+          <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
+            <FrequencyIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <AddInfoTextBase
+              title="Frequência de atualização"
+              text={resource.update_frequency}
+            />
+          </GridItem>
+
+          <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
+            <PartitionIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <AddInfoTextBase
+              title="Partições no BigQuery"
+              text={resource.partitions}
+            />
+          </GridItem>
+
+          <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
+            <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <Box display="block" alignItems="center" gridGap="8px">
+              <Text
+                fontFamily="ubuntu"
+                fontSize="14px"
+                fontWeight="400" 
+                letterSpacing="0.3px"
+                marginBottom="8px"
+                color="#252A32"
+              >Publicação por</Text>
+              <Box display="flex" gridGap="4px">
+                {resource.published_by.name ? <SectionText marginRight="4px !important">{resource.published_by.name}</SectionText> : <SectionText marginRight="4px !important">Não listado</SectionText>}
+                {resource.published_by.email && <EmailIcon {...keyIcons({email : resource.published_by.email})}/>}
+                {resource.published_by.github_user && <GitIcon {...keyIcons({github_user : resource.published_by.github_user})}/>}
+                {resource.published_by.ckan_user && <CkanIcon {...keyIcons({ckan_user : resource.published_by.ckan_user})}/>}
+                {resource.published_by.website && <WebIcon {...keyIcons({website : resource.published_by.website})}/>}
+                {resource.published_by.twitter_user && <TwitterIcon {...keyIcons({twitter_user : resource.published_by.twitter_user})}/>}
+              </Box>
+            </Box>
+          </GridItem>
+
+          <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
+            <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <Box display="block" alignItems="center" gridGap="8px">
+              <Text
+                fontFamily="ubuntu"
+                fontSize="14px"
+                fontWeight="400" 
+                letterSpacing="0.3px"
+                marginBottom="8px"
+                color="#252A32"
+              >Tratamento por</Text>
+              <Box display="flex" gridGap="4px">
+                {resource.data_cleaned_by.name ? <SectionText marginRight="4px !important">{resource.data_cleaned_by.name}</SectionText> : <SectionText marginRight="4px !important">Não listado</SectionText>}
+                {resource.data_cleaned_by.email && <EmailIcon {...keyIcons({email : resource.data_cleaned_by.email})}/>}
+                {resource.data_cleaned_by.github_user && <GitIcon {...keyIcons({github_user : resource.data_cleaned_by.github_user})}/>}
+                {resource.data_cleaned_by.ckan_user && <CkanIcon {...keyIcons({ckan_user : resource.data_cleaned_by.ckan_user})}/>}
+                {resource.data_cleaned_by.website && <WebIcon {...keyIcons({website : resource.data_cleaned_by.website})}/>}
+                {resource.data_cleaned_by.twitter_user && <TwitterIcon {...keyIcons({twitter_user : resource.data_cleaned_by.twitter_user})}/>}
+              </Box>
+            </Box>
+          </GridItem>
+
+          <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
+            <VersionIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <AddInfoTextBase
+              title="Versão"
+              text={resource.version}
+            />
+          </GridItem>
+        </Grid>
+
       </VStack>
     </BaseResourcePage>
   );

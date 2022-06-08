@@ -77,10 +77,9 @@ SPATIAL_COVERAGE_FIELD = Field(
     title="Cobertura Espacial",
     description=to_line(
         [
-            "A máxima unidade espacial que a tabela cobre.",
+            "As máximas unidades espaciais que a tabela cobre.",
             "Exemplo:",
-            "  - continent: south_america",
-            "    country: br",
+            "  - sa.br",
         ]
     ),
     yaml_order={

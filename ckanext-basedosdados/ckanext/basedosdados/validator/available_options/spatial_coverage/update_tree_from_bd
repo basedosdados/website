@@ -28,9 +28,9 @@ tree = basedosdados.read_sql('''
     UNION ALL
 
     SELECT
-    LOWER(CONCAT(sigla_continente,'.',sigla_iso2)) AS id,
-    nome_pt AS `label__pt`,
-    nome_en AS `label__en`,
+    LOWER(CONCAT(sigla_continente,'.',sigla_pais_iso2)) AS id,
+    nome AS `label__pt`,
+    nome_ingles AS `label__en`,
     FROM `basedosdados-dev.br_bd_diretorios_mundo.pais`
 
     UNION ALL
@@ -44,7 +44,37 @@ tree = basedosdados.read_sql('''
     ORDER BY id
 ''', billing_project_id=os.environ["BILLING_PROJECT_ID"])
 
-path = SPATIAL_COVERAGE_DIR / 'spatial_coverage_tree.csv'
+tree_reduced = basedosdados.read_sql('''
+    SELECT
+    LOWER(CONCAT('sa.br.', sigla)) AS id,
+    nome AS `label__pt`,
+    nome AS `label__en`,
+    FROM `basedosdados.br_bd_diretorios_brasil.uf`
+
+    UNION ALL
+
+    SELECT
+    LOWER(CONCAT(sigla_continente,'.',sigla_pais_iso2)) AS id,
+    nome AS `label__pt`,
+    nome_ingles AS `label__en`,
+    FROM `basedosdados-dev.br_bd_diretorios_mundo.pais`
+
+    UNION ALL
+
+    SELECT
+    LOWER(CONCAT(sigla)) AS id,
+    nome_pt AS `label__pt`,
+    nome_en AS `label__en`,
+    FROM `basedosdados-dev.br_bd_diretorios_mundo.continente`
+
+    ORDER BY id
+''', billing_project_id=os.environ["BILLING_PROJECT_ID"])
+
+path         = SPATIAL_COVERAGE_DIR / 'spatial_coverage_tree.csv'
+path_reduced = SPATIAL_COVERAGE_DIR / 'spatial_coverage_tree_reduced.csv'
+
 tree.to_csv(path, index=False)
+tree_reduced.to_csv(path_reduced, index=False)
+
 print(f'{tree.shape[0]} lines saved to {path}')
 print(f'Done')

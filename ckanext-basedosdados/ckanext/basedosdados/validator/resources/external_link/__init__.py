@@ -3,10 +3,10 @@ from typing import Literal, Optional, Set, List, Union
 from ckanext.basedosdados.validator import treat_scalar_as_single_value_set
 from ckanext.basedosdados.validator.available_options.spatial_coverage import (
     SpatialCoverageArea,
+    CountryEnum,
 )
 from ckanext.basedosdados.validator.available_options import (
     AvailabilityEnum,
-    CountryEnum,
     LanguageEnum,
     LicenseEnum,
     TemporalCoverageEnum,
