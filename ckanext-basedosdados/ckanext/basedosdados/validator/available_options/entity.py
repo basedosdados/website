@@ -40,7 +40,7 @@ class EntitySpatialEnum(AttrEnum):
 
 class EntityIndividualEnum(AttrEnum):
     # fmt: off
-    person           = {'label': "Pessoa (aluno, professor, político/candidato, jogador, sócio, etc)"} #"Person (student, teacher/professor, politician/candidate, player, partner, etc)"}
+    person           = {'label': "Pessoa"} #"Person"}
     household        = {'label': "Domicílio"} #"Household"}
     name             = {'label': "Nome"} #"Name"}
     animal           = {'label': "Animal (mamífero, micróbio, vírus, etc)"} #"Animal"}

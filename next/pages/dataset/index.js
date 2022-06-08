@@ -41,6 +41,7 @@ import { getDatasetSchema } from "../api/schemas";
 import { getUser } from "../api/user";
 import {
   getAvailableOptionsTranslations,
+  getTranslationsOptions,
   getTranslations,
 } from "../api/translations";
 import FilterIcon from "../../public/img/icons/filterIcon";
@@ -50,11 +51,13 @@ import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
 export async function getStaticProps(context) {
   const translations = await getTranslations();
   const availableOptionsTranslations = await getAvailableOptionsTranslations();
+  const optionsTranslations = await getTranslationsOptions();
   return withPages({
     revalidate: 60, //TODO: Increase this timer
     props: {
       translations,
       availableOptionsTranslations,
+      optionsTranslations,
     },
   });
 }
@@ -142,6 +145,7 @@ export default function SearchPage({
   pages,
   availableOptionsTranslations,
   translations,
+  optionsTranslations,
 }) {
   const { query } = useRouter();
   const isMobile = useCheckMobile();
@@ -216,7 +220,7 @@ export default function SearchPage({
       .map((t) => ({
         name: t,
         displayName:
-          availableOptionsTranslations[t] + ` (${data.entities[t]})`,
+        optionsTranslations["Entity"][t] + ` (${data.entities[t]})`,
         value: data.entities[t],
       }))
       .sort((a, b) => b.value - a.value)
@@ -227,7 +231,7 @@ export default function SearchPage({
       .map((t) => ({
         name: t,
         displayName:
-          availableOptionsTranslations[t] + ` (${data.update_frequencies[t]})`,
+        optionsTranslations["Time Unit"][t] + ` (${data.update_frequencies[t]})`,
         value: data.update_frequencies[t],
       }))
       .sort((a, b) => b.value - a.value)
@@ -238,7 +242,7 @@ export default function SearchPage({
       .map((t) => ({
         name: t,
         displayName:
-          availableOptionsTranslations[t] + ` (${data.raw_quality_tiers[t]})`,
+        optionsTranslations["Raw Quality Tier"][t] + ` (${data.raw_quality_tiers[t]})`,
         value: data.raw_quality_tiers[t],
       }))
       .sort((a, b) => b.value - a.value)
@@ -250,7 +254,7 @@ export default function SearchPage({
         .map((t) => ({
           name: t,
           displayName:
-            availableOptionsTranslations[t] +
+          optionsTranslations["Spatial Coverage"][t] +
             ` (${data.spatial_coverage_continent[t]})`,
           value: data.spatial_coverage_continent[t],
         }))
@@ -261,7 +265,7 @@ export default function SearchPage({
         .map((t) => ({
           name: t,
           displayName:
-            availableOptionsTranslations[t] + ` (${data.spatial_coverage_country[t]})`,
+          optionsTranslations["Spatial Coverage"][t] + ` (${data.spatial_coverage_country[t]})`,
           value: data.spatial_coverage_country[t],
         }))
         .sort((a, b) => b.value - a.value)
@@ -271,7 +275,7 @@ export default function SearchPage({
         .map((t) => ({
           name: t,
           displayName:
-            availableOptionsTranslations[t] +
+          optionsTranslations["Spatial Coverage"][t] +
             ` (${data.spatial_coverage_admin1[t]})`,
           value: data.spatial_coverage_admin1[t],
         }))
@@ -283,7 +287,7 @@ export default function SearchPage({
         .map((t) => ({
           name: t,
           displayName:
-            availableOptionsTranslations[t] +
+            optionsTranslations["Spatial Coverage"][t] +
             ` (${data.spatial_coverage_admin2[t]})`,
           value: data.spatial_coverage_admin2[t],
         }))
