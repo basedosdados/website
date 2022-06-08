@@ -345,7 +345,7 @@ export function BdmTablePage({
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-            <Box display="block" alignItems="center" gridGap="8px" {...style}>
+            <Box display="block" alignItems="center" gridGap="8px">
               <Text
                 fontFamily="ubuntu"
                 fontSize="14px"
@@ -367,7 +367,7 @@ export function BdmTablePage({
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-            <Box display="block" alignItems="center" gridGap="8px" {...style}>
+            <Box display="block" alignItems="center" gridGap="8px">
               <Text
                 fontFamily="ubuntu"
                 fontSize="14px"
