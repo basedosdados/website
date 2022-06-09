@@ -224,7 +224,7 @@ function Hero({ recentDatalakeDatasets, themes }) {
         <Box
           position={{ base: "relative", lg: "absolute" }}
           top={{ base: "-35px", lg: "-95px", xl: "-95px" }}
-          right={{ base: "-35px", lg: "-100px", xl: "-35px" }}
+          right={{ base: "-35px", lg: "-115px", xl: "-26px" }}
           marginBottom={{ base: "70px !important", lg: "" }}
           margin={{ base: "50px 0", lg: "40px", }}
           width={{ base: "200px", lg: "140px", xl: "160px" }}
