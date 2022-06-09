@@ -11,7 +11,11 @@ import {
   useClipboard,
   Button,
   HStack,
-  Select,
+  Menu,
+  MenuItem,
+  MenuList,
+  MenuButton,
+  IconButton,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { DisclaimerBox } from "./DisclaimerBox";
@@ -125,8 +129,6 @@ export default function DataInformationQuery ({ resource }) {
       width="100%"
     >
       <Subtitle>Consulta aos dados</Subtitle>
-      <button onClick={() => setTabIndex(4)}>aaaa</button>
-
       <Tabs
         paddingTop="16px"
         width={{ base: "90vw", lg: "100%" }}
@@ -137,6 +139,7 @@ export default function DataInformationQuery ({ resource }) {
           padding="0px"
           fontFamily="Ubuntu !important"
           borderBottom= "2px solid #DEDFE0 !important"
+          justifyContent={isMobileMod && "space-around"}
         >
           <GreenTab
             fontSize="16px"
@@ -167,14 +170,28 @@ export default function DataInformationQuery ({ resource }) {
             Stata
           </GreenTab>
           {isMobileMod ?
-            <Select
-              variant="unstyled"
-              icon={
-                <MenuVerticalIcon/>
-              }
-            >
-              <option value={4}>Download</option>
-            </Select>
+            <Menu>
+              <MenuButton
+                variant="unstyled"
+                top="2px"
+                as={IconButton}
+                rightIcon={
+                  <MenuVerticalIcon 
+                    widthIcon="20px" 
+                    heightIcon="20px"
+                    position="relative"
+                    right="4px"
+                    top="2px"
+                    fill={tabIndex === 4 && "#2B8C4D"}
+                  />
+                }
+                borderRadius="none"
+                borderBottom={tabIndex === 4 &&"3px solid #2B8C4D"}
+              />
+              <MenuList>
+                <MenuItem _focus={{backgroundColor: "#FFF"}} onClick={() => setTabIndex(4)}>Download</MenuItem>
+              </MenuList>
+            </Menu>
             :
             <GreenTab
               fontSize="16px"

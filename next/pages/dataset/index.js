@@ -27,6 +27,7 @@ import { createDataset, searchDatasets } from "../api/datasets";
 import { DebouncedControlledInput } from "../../components/atoms/ControlledInput";
 import { Database } from "../../components/organisms/Database";
 import {
+  SimpleFilterAccordion,
   CheckboxFilterAccordion,
   RangeFilterAccordion,
 } from "../../components/atoms/FilterAccordion";
@@ -491,54 +492,65 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, tag: values })
             }
           />
-          <CheckboxFilterAccordion
-            canSearch={true}
+          <SimpleFilterAccordion
+            fieldName="Cobertura espacial"
             isActive={(paramFilters.spatial_coverage || []).length > 0}
-            choices={[...spatialCoverages.continent]}
-            values={paramFilters.spatial_coverage}
-            valueField="name"
-            displayField="displayName"
-            fieldName="Cobertura espacial: Continente"
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, spatial_coverage: values })
-            }
-          />
-          <CheckboxFilterAccordion
-            canSearch={true}
-            isActive={(paramFilters.spatial_coverage || []).length > 0}
-            choices={[...spatialCoverages.country]}
-            values={paramFilters.spatial_coverage}
-            valueField="name"
-            displayField="displayName"
-            fieldName="Cobertura espacial: País"
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, spatial_coverage: values })
-            }
-          />
-          <CheckboxFilterAccordion
-            canSearch={true}
-            isActive={(paramFilters.spatial_coverage || []).length > 0}
-            choices={[...spatialCoverages.admin1]}
-            values={paramFilters.spatial_coverage}
-            valueField="name"
-            displayField="displayName"
-            fieldName="Cobertura espacial: UF"
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, spatial_coverage: values })
-            }
-          />
-          {/* <CheckboxFilterAccordion
-            canSearch={true}
-            isActive={(paramFilters.spatial_coverage || []).length > 0}
-            choices={[...spatialCoverages.admin2]}
-            values={paramFilters.spatial_coverage}
-            valueField="name"
-            displayField="displayName"
-            fieldName="Cobertura espacial: Município"
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, spatial_coverage: values })
-            }
-          /> */}
+            styleChildren={{
+              marginLeft:"16px !important",
+              width:"95%"
+            }}
+          >
+            <Stack width="100%">
+              <CheckboxFilterAccordion
+                canSearch={true}
+                isActive={(paramFilters.spatial_coverage || []).length > 0}
+                choices={[...spatialCoverages.continent]}
+                values={paramFilters.spatial_coverage}
+                valueField="name"
+                displayField="displayName"
+                fieldName="Continente"
+                onChange={(values) =>
+                  setParamFilters({ ...paramFilters, spatial_coverage: values })
+                }
+              />
+              <CheckboxFilterAccordion
+                canSearch={true}
+                isActive={(paramFilters.spatial_coverage || []).length > 0}
+                choices={[...spatialCoverages.country]}
+                values={paramFilters.spatial_coverage}
+                valueField="name"
+                displayField="displayName"
+                fieldName="País"
+                onChange={(values) =>
+                  setParamFilters({ ...paramFilters, spatial_coverage: values })
+                }
+              />
+              <CheckboxFilterAccordion
+                canSearch={true}
+                isActive={(paramFilters.spatial_coverage || []).length > 0}
+                choices={[...spatialCoverages.admin1]}
+                values={paramFilters.spatial_coverage}
+                valueField="name"
+                displayField="displayName"
+                fieldName="UF"
+                onChange={(values) =>
+                  setParamFilters({ ...paramFilters, spatial_coverage: values })
+                }
+              />
+              {/* <CheckboxFilterAccordion
+                canSearch={true}
+                isActive={(paramFilters.spatial_coverage || []).length > 0}
+                choices={[...spatialCoverages.admin2]}
+                values={paramFilters.spatial_coverage}
+                valueField="name"
+                displayField="displayName"
+                fieldName="Município"
+                onChange={(values) =>
+                  setParamFilters({ ...paramFilters, spatial_coverage: values })
+                }
+              /> */}
+            </Stack>
+          </SimpleFilterAccordion>
           <RangeFilterAccordion
             isActive={(paramFilters.temporal_coverage || []).length > 0}
             fieldName="Cobertura temporal"
