@@ -12,8 +12,7 @@ import {
 import RoundedButton from "../atoms/RoundedButton";
 import Link from "../atoms/Link";
 import { useContext, useEffect, useRef, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import FarBarsIcon from "../../public/img/icons/farBarsIcon";
 import UserContext from "../../context/user";
 import { MenuDropdown } from "./MenuDropdown";
 import BDLogoImage from "../../public/img/logos/bd_logo";
@@ -216,21 +215,16 @@ export default function Menu({ pages = [] }) {
           spacing={6}
         >
           <Box display={{ base: "flex", lg: "none" }}>
-            <FontAwesomeIcon
+            <FarBarsIcon
+              position="fixed"
+              top="0"
+              left="0"
+              margin="20px 0 0 20px"
+              widthIcon="30px"
+              heightIcon="30px"
               onClick={menuDisclosure.onOpen}
-              style={{
-                minWidth: "30px",
-                minHeight: "30px",
-                alignSelf: "flex-start",
-                flex: 1,
-                position: "fixed",
-                left: 0,
-                top: 0,
-                margin: "15px 0 0 17px",
-                color: "#616161",
-                cursor: "pointer",
-              }}
-              icon={faBars}
+              fill="#616161"
+              cursor="pointer"
             />
           </Box>
           <Link _hover={{opacity:"none"}} href="/">

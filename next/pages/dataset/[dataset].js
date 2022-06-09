@@ -153,6 +153,14 @@ function ResourcesPage({
     const queryParams = new URLSearchParams(window.location.search)
 
     if(queryParams.has("bdm_table")) {
+      if(queryParams.get("bdm_table") === "") {
+        if(bdmTables) {
+          setResource(bdmTables[0]) 
+        } else {
+          queryParams.delete("bdm_table")
+        }
+      }
+
       const bdmTable = bdmTables.filter((b) => b.name === queryParams.get("bdm_table"))[0]
       if(bdmTable) {
         setResource(bdmTable)
@@ -162,6 +170,14 @@ function ResourcesPage({
     }
 
     if(queryParams.has("external_link")) {
+      if(queryParams.get("external_link") === "") {
+        if(externalLinks) {
+          setResource(externalLinks[0])
+        } else {
+          queryParams.delete("external_link")
+        }
+      }
+
       const externalLink = externalLinks.filter((b) => b.name === queryParams.get("external_link"))[0]
       if(externalLink) {
         setResource(externalLink)
@@ -171,6 +187,14 @@ function ResourcesPage({
     }
 
     if(queryParams.has("information_request")) {
+      if(queryParams.get("information_request") === "") {
+        if(informationRequest) {
+          setResource(informationRequest[0])
+        } else {
+          queryParams.delete("information_request")
+        }
+      }
+
       const informationRequests = informationRequest.filter((b) => b.name === queryParams.get("information_request"))[0]
       if(informationRequests) {
         setResource(informationRequests)

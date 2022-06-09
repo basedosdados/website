@@ -11,17 +11,24 @@ import {
   useClipboard,
   Button,
   HStack,
+  Menu,
+  MenuItem,
+  MenuList,
+  MenuButton,
+  IconButton,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import { DisclaimerBox } from "./DisclaimerBox";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import Subtitle from "../atoms/Subtitle";
 import SectionText from "../atoms/SectionText";
 import Link from "../atoms/Link";
 import GreenTab from "../atoms/GreenTab";
 import RoundedButton from "../atoms/RoundedButton";
+import DownloadIcon from "../../public/img/icons/downloadIcon";
 import CopyIcon from "../../public/img/icons/copyIcon";
-import { DisclaimerBox } from "./DisclaimerBox";
 import ExclamationIcon from "../../public/img/icons/exclamationIcon";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
+import MenuVerticalIcon from "../../public/img/icons/menuVerticalIcon"
 
 export function BoxBigQueryGoogle({ href }) {
 
@@ -78,16 +85,32 @@ export function PrismCodeHighlight({ language, children }) {
         _hover={{ backgroundColor:"transparent", opacity:"0.6"}}
       >
         {hasCopied ? "Copiado" : "Copiar"}
-        <CopyIcon marginLeft="5px"/>
+        <CopyIcon widthIcon="20px" heightIcon="20px" fill="#707783" marginLeft="5px"/>
       </Button>
     </pre>
 
   )
 }
 
+export function TextPix ({ title, text }) {
+
+  return (
+    <Box>
+      <Text color="#FF8484" letterSpacing="0.3px" fontSize="14px" fontWeight="700" fontFamily="ubuntu">
+        {title}
+      </Text>
+      <SectionText fontWeigth="500">
+        {text}
+      </SectionText>
+    </Box>
+  )
+}
+
 export default function DataInformationQuery ({ resource }) {
   const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}.zip`
   const queryName = `${resource.dataset_id}.${resource.name}`;
+  const { hasCopied, onCopy } = useClipboard("42494318000116")
+  const [tabIndex, setTabIndex] = useState(0)
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
 
@@ -109,11 +132,14 @@ export default function DataInformationQuery ({ resource }) {
       <Tabs
         paddingTop="16px"
         width={{ base: "90vw", lg: "100%" }}
+        onChange={(index) => setTabIndex(index)}
+        index={tabIndex}
       >
         <TabList
           padding="0px"
           fontFamily="Ubuntu !important"
           borderBottom= "2px solid #DEDFE0 !important"
+          justifyContent={isMobileMod && "space-around"}
         >
           <GreenTab
             fontSize="16px"
@@ -143,13 +169,38 @@ export default function DataInformationQuery ({ resource }) {
           >
             Stata
           </GreenTab>
-          <GreenTab
-            fontSize="16px"
-            paddingBottom="8px !important"
-            letterSpacing="0.2px"
-          >
-            Download
-          </GreenTab>
+          {isMobileMod ?
+            <Menu>
+              <MenuButton
+                variant="unstyled"
+                top="2px"
+                as={IconButton}
+                rightIcon={
+                  <MenuVerticalIcon 
+                    widthIcon="20px" 
+                    heightIcon="20px"
+                    position="relative"
+                    right="4px"
+                    top="2px"
+                    fill={tabIndex === 4 && "#2B8C4D"}
+                  />
+                }
+                borderRadius="none"
+                borderBottom={tabIndex === 4 &&"3px solid #2B8C4D"}
+              />
+              <MenuList>
+                <MenuItem _focus={{backgroundColor: "#FFF"}} onClick={() => setTabIndex(4)}>Download</MenuItem>
+              </MenuList>
+            </Menu>
+            :
+            <GreenTab
+              fontSize="16px"
+              paddingBottom="8px !important"
+              letterSpacing="0.2px"
+            >
+              Download
+            </GreenTab>
+          }
         </TabList>
         <TabPanels>
           <TabPanel padding="0">
@@ -268,62 +319,90 @@ bd_read_table, ///
               </DisclaimerBox> */}
             <VStack
               alignItems={isMobileMod ? "center" :"flex-start"}
-              padding="32px 0 24px"
+              padding={isMobileMod ? "32px 0 24px 0 !important" :"32px 0 24px 40px !important"}
+              margin="24px 4px 0"
               direction="column"
               height="100%"
-              spacing={4}
+              boxShadow="0 1px 8px 1px rgba(100, 96, 103, 0.16)"
+              borderRadius="6px"
             >
-              <HStack spacing={10} flexDirection={isMobileMod && "column"}>
-                <Image
-                  height="250px"
-                  objectFit="contain"
-                  marginLeft="-15px"
-                  src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/bd_qrcode.png"
-                />
+              <HStack marginBottom="32px" spacing={0} alignItems="flex-start" flexDirection="column">
+                <Box
+                  width={isMobileMod ? "100%" : "216px" }
+                  textAlign="center"
+                  marginBottom="24px"
+                >
+                  <Text color="#FF8484" fontWeight="700" fontFamily="Ubuntu" fontSize="18px">
+                    Doe agora
+                  </Text>
+                </Box>
+
+                <HStack 
+                  flexDirection={isMobileMod && "column"}
+                  spacing={isMobileMod ? 0 : 8}
+                >
+                  <Image
+                    height="216px"
+                    objectFit="contain"
+                    border="2px solid #DEDFE0"
+                    borderRadius="5px"
+                    src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/bd_qrcode.png"
+                  />
+
+                  <VStack
+                    marginTop={isMobileMod && "32px !important"}
+                    justifyContent="center"
+                    alignItems="flex-start"
+                  >
+                    <TextPix title="Razão Social" text="Instituto Base dos Dados"/>
+                    <TextPix title="CNPJ" text="42494318/0001-16"/>
+                    <TextPix title="Banco" text="Stone"/>
+                    <Box display="flex" gridGap="48px">
+                      <TextPix title="Agência" text="0001"/>
+                      <TextPix title="Conta" text="6761821-5"/>
+                    </Box>
+                  </VStack>
+                </HStack>
 
                 <Stack spacing={5} >
-                  <Text color="#252A32" fontWeight="bold" fontFamily="Ubuntu" fontSize="20px">
-                    Doe via PIX
-                  </Text>
-                  <Text color="#252A32" fontFamily="Lato" fontSize="18px">
-                    Chave CNPJ
-                    <br /> 42494318000116
-                  </Text>
+                  
                 </Stack>
               </HStack>
 
               <HStack
                 spacing={!isMobileMod && 6}
                 flexDirection={isMobileMod && "column"}
-                gridGap={isMobileMod && "10px"}
+                gridGap={isMobileMod && "16px"}
               >
-                <Link
-                  minWidth="225px"
+                <RoundedButton
+                  fontSize="14px"
+                  fontWeight="700"
+                  backgroundColor="#FF8484"
+                  paddingX="30px"
                   width="100%"
-                  textDecoration="none !important"
-                  _hover={{ opacity:"none" }}
-                  target="_blank"
-                  href="/#support"
+                  gridGap="6px"
+                  onClick={onCopy}
+                  opacity={hasCopied && "0.8"}
                 >
-                  <RoundedButton width="100%">Doação mensal</RoundedButton>
-                </Link>
-                <Link
-                  minWidth="225px"
+                  <CopyIcon widthIcon="22px" heightIcon="22px" fill="#FFF"/>
+                  {hasCopied ? "Copiada chave PIX" :"Copiar chave PIX"}
+                </RoundedButton>
+                
+                <RoundedButton
+                  fontSize="14px"
+                  fontWeight="700"
+                  backgroundColor="#FFF"
+                  color="#FF8484"
+                  border="1px solid #FF8484"
+                  paddingX="30px"
                   width="100%"
-                  _hover={{ opacity:"none" }}
-                  textDecoration="none !important"
-                  href={downloadUrl}
+                  gridGap="6px"
+                  onClick={() => window.open(downloadUrl)}
                 >
-                  <RoundedButton
-                    width="100%"
-                    color="#42B0FF"
-                    border="2px solid #42B0FF"
-                    backgroundColor="white"
-                    colorScheme="gray"
-                  >
-                    Download dos dados
-                  </RoundedButton>
-                </Link>
+                  <DownloadIcon widthIcon="22px" heightIcon="22px" fill="#FF8484"/>
+                  Download dos dados
+                </RoundedButton>
+
               </HStack>
             </VStack>
           </TabPanel>

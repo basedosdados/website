@@ -101,7 +101,9 @@ function Hero({ recentDatalakeDatasets, themes }) {
   return (
     <VStack width="100%">
       <VStack
+        position="relative"
         width="100%"
+        maxWidth="1264px"
         height="100%"
       >
         <VStack
@@ -219,27 +221,23 @@ function Hero({ recentDatalakeDatasets, themes }) {
           </VStack>
         </VStack>
 
-        <Stack
+        <Box
           position={{ base: "relative", lg: "absolute" }}
-          top={{ base: "-35px", lg: "-120px", xl: "-120px" }}
+          top={{ base: "-35px", lg: "-95px", xl: "-95px" }}
+          right={{ base: "-35px", lg: "-100px", xl: "-35px" }}
           marginBottom={{ base: "70px !important", lg: "" }}
-          right="0"
+          margin={{ base: "50px 0", lg: "40px", }}
+          width={{ base: "200px", lg: "140px", xl: "160px" }}
+          height={{ base: "200px", lg: "140px", xl: "160px" }}
         >
-          <Box
-            margin={{ base: "50px 0", lg: "40px", }}
-            width={{ base: "200px", lg: "140px", xl: "160px" }}
-            height={{ base: "200px", lg: "140px", xl: "160px" }}
-          >
-            <Image
-              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/2022/GC_CustomerAwardWinner_SocialImpact+1.png"
-              width="227px"
-              height="336px"
-              loading="eager"
-              priority
-            />
-          </Box>
-
-        </Stack>
+          <Image
+            src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/2022/GC_CustomerAwardWinner_SocialImpact+1.png"
+            width="227px"
+            height="336px"
+            loading="eager"
+            priority
+          />
+        </Box>
 
       </VStack>
     </VStack>
