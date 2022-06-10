@@ -125,7 +125,7 @@ function Hero({ recentDatalakeDatasets, themes }) {
             width="100%"
             marginStart="0px !important"
             direction="column"
-            marginTop={{ base: "100px", lg: "72px" }}
+            marginTop="112px"
           >
             <Display
               position="relative"
