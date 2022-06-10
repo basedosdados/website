@@ -99,7 +99,14 @@ function Hero({ recentDatalakeDatasets, themes }) {
   }
 
   return (
-    <VStack width="100%">
+    <VStack
+        alignItems="center"
+        width="100%"
+        padding="0px 10%"
+        marginTop="56px"
+        zIndex="10"
+        position="relative"
+    >
       <VStack
         position="relative"
         width="100%"
@@ -118,7 +125,7 @@ function Hero({ recentDatalakeDatasets, themes }) {
             width="100%"
             marginStart="0px !important"
             direction="column"
-            marginTop={{ base: "100px", lg: "56px" }}
+            marginTop={{ base: "100px", lg: "72px" }}
           >
             <Display
               position="relative"
@@ -126,7 +133,7 @@ function Hero({ recentDatalakeDatasets, themes }) {
               flex="2"
               textAlign="center"
               marginStart="0px !important"
-              marginBottom={isMobileMod ? "32px" : "40px"}
+              marginBottom="16px"
               color="#2B8C4D"
             >
               Encontre os dados que você precisa
@@ -220,25 +227,6 @@ function Hero({ recentDatalakeDatasets, themes }) {
             />
           </VStack>
         </VStack>
-
-        <Box
-          position={{ base: "relative", lg: "absolute" }}
-          top={{ base: "-35px", lg: "-95px", xl: "-95px" }}
-          right={{ base: "-35px", lg: "-115px", xl: "-24px" }}
-          marginBottom={{ base: "70px !important", lg: "" }}
-          margin={{ base: "50px 0", lg: "40px", }}
-          width={{ base: "200px", lg: "140px", xl: "160px" }}
-          height={{ base: "200px", lg: "140px", xl: "160px" }}
-        >
-          <Image
-            src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/2022/GC_CustomerAwardWinner_SocialImpact+1.png"
-            width="227px"
-            height="336px"
-            loading="eager"
-            priority
-          />
-        </Box>
-
       </VStack>
     </VStack>
   );
@@ -639,6 +627,38 @@ function Support({ pages }) {
   );
 }
 
+function GoogleCloud () {
+  return (
+    <Stack
+      width="100%"
+      maxWidth="1264px"
+      height={{base: "100%" , lg: "0"}}
+      alignItems="center"
+      paddingX={{base: "0" , lg: "30px", xl: "0"}}
+      order={{base: 1 , lg: 0}}
+    >
+      <Stack
+        width="100%"
+        alignItems={{base:"center", lg:"flex-end"}}
+        marginBottom={{base:"140px", lg:"0"}}
+      >
+        <Box
+          width={{ base: "200px", lg: "140px", xl: "160px" }}
+          height={{ base: "200px", lg: "140px", xl: "160px" }}
+        >
+          <Image
+            src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/2022/GC_CustomerAwardWinner_SocialImpact+1.png"
+            width="227px"
+            height="336px"
+            loading="eager"
+            priority
+          />
+        </Box>
+      </Stack>
+    </Stack>
+  )
+}
+
 export default function Home({
   pages,
   popularDatasets,
@@ -647,14 +667,8 @@ export default function Home({
 }) {
   return (
     <MainPageTemplate backgroundColor="#FFFFFF" pages={pages}>
-      <VStack
-        alignItems="center"
-        width="100%"
-        padding="0px 10%"
-        marginTop="56px"
-        zIndex="10"
-        position="relative"
-      >
+      <VStack>
+        <GoogleCloud/>
         <Hero
           recentDatalakeDatasets={recentDatalakeDatasets}
           themes={themes}
