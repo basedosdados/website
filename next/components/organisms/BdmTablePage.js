@@ -294,7 +294,7 @@ export function BdmTablePage({
         <Subtitle>
           Nível da observação
         </Subtitle>
-        {observationLevel.length === 0 ?
+        {observationLevel === null ?
           <SectionText>Não listado</SectionText>
         :
           <SimpleTable
