@@ -315,3 +315,63 @@ export function FilterAccordion({
     </BaseFilterAccordion>
   );
 }
+
+export function SimpleFilterAccordion({
+  fieldName,
+  children,
+  isOpen = null,
+  isActive = false,
+  onChange = () => { },
+  isHovering = true,
+  styleChildren
+}) {
+  return (
+    <Accordion ex allowToggle width="100%">
+      <AccordionItem border="0px">
+        {({ isExpanded }) => (
+          <>
+            <Text>
+              <AccordionButton
+                onClick={onChange}
+                _hover={isHovering ? { cursor: "pointer", opacity: "0.6" } : "none"}
+                padding="16px 16px 0 0"
+                marginBottom="8px"
+              >
+                <HStack
+                  spacing={2}
+                  alignContent="baseline"
+                  justifyContent="flex-start"
+                  width="100%"
+                >
+                  <Box
+                    width="fit-content"
+                    fontWeight="500"
+                    fontFamily="Ubuntu"
+                    fontSize="16px"
+                    color={isActive ? "#2B8C4D" : "#252A32"}
+                    letterSpacing="0.2px"
+                  >
+                    {fieldName}
+                  </Box>
+                </HStack>
+                <AccordionIcon color={isActive ? "#2B8C4D" : null} marginLeft="auto" fontSize="18px" />
+              </AccordionButton>
+            </Text>
+            {(isOpen && isOpen === true) || (isOpen == null && isExpanded) ? (
+              <VStack
+                overflowY="auto"
+                width="100%"
+                alignItems="flex-start"
+                {...styleChildren}
+              >
+                {children}
+              </VStack>
+            ) : (
+              <></>
+            )}
+          </>
+        )}
+      </AccordionItem>
+    </Accordion>
+  );
+}

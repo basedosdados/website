@@ -39,6 +39,8 @@ export default function DatabaseCard({
       fontSize="14px"
       letterSpacing="0.3px"
       color={tableNum === 0 ? "#C4C4C4" : "#42B0FF" }
+      cursor="pointer"
+      onClick={() => window.open(`${link}?bdm_table`)}
     >
       <b>{tableNum === 1 ? tableNum + " tabela tratada" : tableNum + " tabelas tratadas"}</b>
       <BDLogoPlusImage
@@ -149,6 +151,12 @@ export default function DatabaseCard({
               fontWeight="400"
               letterSpacing="0.3px"
               color={databaseInfo[1] ? "#252A32" : "#C4C4C4"}
+              cursor={databaseInfo[1] && "pointer"}
+              onClick={() => {
+                  if(databaseInfo[1])
+                  return window.open(`${link}?external_link`)
+                }
+              }
             >
               {databaseInfo[1] ? databaseInfo[1] : "0 fontes originais"}
             </Text>
@@ -159,6 +167,11 @@ export default function DatabaseCard({
                 fontWeight="400"
                 letterSpacing="0.3px"
                 color={databaseInfo[2] ? "#252A32" : "#C4C4C4"}
+                cursor={databaseInfo[2] && "pointer"}
+                onClick={() => {
+                  if(databaseInfo[2])
+                  window.open(`${link}?information_request`)}
+                }
               >
                 {databaseInfo[2] ? databaseInfo[2] : "0 pedidos LAI"}
               </Text>
