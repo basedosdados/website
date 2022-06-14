@@ -145,24 +145,12 @@ body {
   margin-left: 30px;
 }
 
-.BrainhubCarousel__arrows {
-  background-color: transparent !important;
+.swiper-button-prev::after {
+  color: #DEDFE0;
 }
 
-.BrainhubCarousel__arrows {
-  background-color: transparent !important;
-}
-
-.BrainhubCarousel__arrowLeft {
-  transform: translateX(10px);
-}
-
-.BrainhubCarousel__arrowRight {
-  transform: translateX(-10px);
-}
-
-.BrainhubCarousel__arrows span {
-  border-color: #dedfe0 !important;
+.swiper-button-next::after {
+  color: #DEDFE0;
 }
 
 .rjsf {

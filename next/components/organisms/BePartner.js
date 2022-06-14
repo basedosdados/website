@@ -1,14 +1,8 @@
 import { Image } from "@chakra-ui/image";
 import { HStack, Stack, VStack, Text, Center } from "@chakra-ui/layout";
 import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
 import { NamedAvatar } from "../molecules/NamedAvatar";
-import { slidesToShowPlugin, autoplayPlugin } from "@brainhubeu/react-carousel";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-
-const Carousel = dynamic(() => import("@brainhubeu/react-carousel"), {
-  ssr: false,
-});
 
 function Testimonial({ children, name, position, src }) {
   return (
@@ -127,24 +121,7 @@ export function BePartner() {
           w="110%"
           maxWidth="1264px" 
         >
-          <Carousel
-            plugins={[
-              "infinite",
-              "arrows",
-              "fastSwipe",
-              {
-                resolve: slidesToShowPlugin,
-                options: {
-                  numberOfSlides: 1,
-                },
-                resolve: autoplayPlugin,
-                options: {
-                  interval: 20000,
-                },
-              },
-            ]}
-            animationSpeed={1000}
-          >
+          {/* <Carousel>
             <Testimonial
               name="Fernando Barbalho"
               position="Cientista de Dados do Tesouro Nacional"
@@ -182,7 +159,7 @@ export function BePartner() {
               desenvolvimento da ferramenta, e garantiu a qualidade de dados
               alta como queríamos desde o início.
             </Testimonial>
-          </Carousel>
+          </Carousel> */}
         </HStack>
       }
     </VStack>
