@@ -1,4 +1,4 @@
-import { Swiper } from "swiper/react"  
+import { Swiper } from "swiper/react";
 import { Navigation, Autoplay } from "swiper";
 
 import "swiper/css";

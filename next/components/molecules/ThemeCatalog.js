@@ -28,7 +28,6 @@ function Themes ({ isMobileMod, newRecentDataLakeDataSets, listThemes=[] }) {
   return (
     <Center
       width="95vw"
-      // width="100%" 
       maxWidth="1364px"
     >
       <Carousel 
@@ -91,18 +90,8 @@ function Themes ({ isMobileMod, newRecentDataLakeDataSets, listThemes=[] }) {
 function CardThemes ({ isMobileMod, recentThemes }) {
 
   return (
-    // <VStack
-    //   width="90vw"
-    //   minWidth="370px"
-    //   maxWidth="1284px"
-    //   alignItems="flex-start"
-    //   padding="24px 0"
-    //   margin="48px 0 !important"
-    //   position="relative"
-    // >
     <Center
-      width="95vw"
-      // width="100%"
+      width={isMobileMod ? "100vw" : "70vw"}
       maxWidth="1364px"
       marginY="48px !important"
     >
@@ -112,7 +101,7 @@ function CardThemes ({ isMobileMod, recentThemes }) {
           slidesPerView: isMobileMod ? 1 : 4,
           navigation: true,
           loop: true,
-          autoplay: false,
+          autoplay: true,
         }}
       >
         {recentThemes && recentThemes.map((elm) => (
@@ -145,7 +134,6 @@ function CardThemes ({ isMobileMod, recentThemes }) {
         ))}
       </Carousel>
     </Center>
-    // </VStack>
   )
 }
 

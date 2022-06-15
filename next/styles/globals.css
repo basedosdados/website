@@ -145,12 +145,31 @@ body {
   margin-left: 30px;
 }
 
-.swiper-button-prev::after {
-  color: #DEDFE0;
+.swiper {
+  padding: 0 32px !important;
 }
 
-.swiper-button-next::after {
-  color: #DEDFE0;
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+}
+
+.swiper-button-prev {
+  color: #DEDFE0 !important;
+  background-color: #FFF;
+  left: 0 !important;
+  top: 0 !important;
+  margin-top: 0 !important;
+  height: 100% !important
+}
+
+.swiper-button-next {
+  color: #DEDFE0 !important;
+  background-color: #FFF;
+  right: 0 !important;
+  top: 0 !important;
+  margin-top: 0 !important;
+  height: 100% !important;
 }
 
 .rjsf {
