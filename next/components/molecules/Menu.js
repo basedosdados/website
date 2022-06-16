@@ -174,6 +174,7 @@ export default function Menu({ pages = [] }) {
     Serviços: "/servicos",
     Institucional: {
       Newsletter: "https://info.basedosdados.org/newsletter",
+      Transparência: "/transparencia",
       Carreiras: "https://info.basedosdados.org/carreiras"
     },
     "Quem somos": "/quem-somos",
