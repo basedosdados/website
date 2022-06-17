@@ -6,13 +6,24 @@ import {
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import { useMediaQuery } from "@chakra-ui/react";
 import { getRecentDatalakeDatasetsByTheme } from "../../pages/api/datasets";
 import DatabaseCard from "../organisms/DatabaseCard";
 import Carousel from "../atoms/Carousel";
-import { SwiperSlide } from "swiper/react";
 
-function Themes ({ isMobileMod, newRecentDataLakeDataSets, listThemes=[] }) {
+function Themes ({ responsive, newRecentDataLakeDataSets, listThemes=[] }) {
   const [selectedTheme, setSelectedTheme] = useState()
+
+  const responsiveChange = () => {
+    if(responsive.mobileQuery)
+      return 5
+    if(responsive.baseQuery)
+      return 6
+    if(responsive.lgQuery)
+      return 8
+
+    return 10
+  }
 
   const searchTheme = (elm) => {
     window.open("#theme", "_self")
@@ -33,104 +44,109 @@ function Themes ({ isMobileMod, newRecentDataLakeDataSets, listThemes=[] }) {
       <Carousel 
         settings={{
           spaceBetween: 10,
-          slidesPerView: isMobileMod ? 5 :10,
-          navigation: !isMobileMod && true,
+          slidesPerView: responsiveChange(),
+          navigation: !responsive.mobileQuery && true,
           loop: true,
           autoplay: true,
         }}
       >
         {listThemes && listThemes.map((elm) => (
-          <SwiperSlide>
-            <Center
-              onClick={() => searchTheme(elm)}
-              key={elm.id}
-              cursor="pointer"
-              width={ isMobileMod ? "45px" : "100px" }
-              minWidth={ isMobileMod ? "45px" : "100px" }
-              height={ isMobileMod ? "45px" : "100px" }
-              minHeight={ isMobileMod ? "45px" : "100px" }
-              borderRadius={ isMobileMod ? "8px" : "16px" }
-              backgroundColor={ selectedTheme === elm.name ? "#2B8C4D" : "FFF"}
-              boxShadow="0px 1px 8px 1px rgba(64, 60, 67, 0.16)"
-              _hover={{ transform:"scale(1.1)", backgroundColor:"#2B8C4D" }}
-              transition="all 0.5s"
-              margin="10px 0"
+          <Center
+            onClick={() => searchTheme(elm)}
+            key={elm.id}
+            cursor="pointer"
+            width={ responsive.mobileQuery ? "45px" : "100px" }
+            minWidth={ responsive.mobileQuery ? "45px" : "100px" }
+            height={ responsive.mobileQuery ? "45px" : "100px" }
+            minHeight={ responsive.mobileQuery ? "45px" : "100px" }
+            borderRadius={ responsive.mobileQuery ? "8px" : "16px" }
+            backgroundColor={ selectedTheme === elm.name ? "#2B8C4D" : "FFF"}
+            boxShadow="0px 1px 8px 1px rgba(64, 60, 67, 0.16)"
+            _hover={{ transform:"scale(1.1)", backgroundColor:"#2B8C4D" }}
+            transition="all 0.5s"
+            margin="10px 0"
+          >
+            <Tooltip
+              hasArrow
+              bg="#2A2F38"
+              label={elm.display_name}
+              fontSize="16px"
+              fontWeight="500"
+              padding="5px 16px 6px"
+              marginTop="10px"
+              color="#FFF"
+              borderRadius="6px"
             >
-              <Tooltip
-                hasArrow
-                bg="#2A2F38"
-                label={elm.display_name}
-                fontSize="16px"
-                fontWeight="500"
-                padding="5px 16px 6px"
-                marginTop="10px"
-                color="#FFF"
-                borderRadius="6px"
-              >
-                <Image
-                  width="100%"
-                  padding={ isMobileMod ? "5px" : "10px"}
-                  height="100%"
-                  transition="all 0.5s"
-                  filter={selectedTheme === elm.name ? "invert(1)" :"invert(0.8)"}
-                  _hover={{ filter:"invert(1)"}}
-                  alt={`${elm.name}`}
-                  src={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${elm.name}.svg`}
-                />
-              </Tooltip>
-            </Center>
-          </SwiperSlide>
+              <Image
+                width="100%"
+                padding={ responsive.mobileQuery ? "5px" : "10px"}
+                height="100%"
+                transition="all 0.5s"
+                filter={selectedTheme === elm.name ? "invert(1)" :"invert(0.8)"}
+                _hover={{ filter:"invert(1)"}}
+                alt={`${elm.name}`}
+                src={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${elm.name}.svg`}
+              />
+            </Tooltip>
+          </Center>
         ))}
       </Carousel>
     </Center>
   )
 }
 
+function CardThemes ({ responsive, recentThemes }) {
+  const responsiveChange = () => {
+    if(responsive.mobileQuery)
+      return 1
+    if(responsive.baseQuery)
+      return 2
+    if(responsive.lgQuery)
+      return 3
 
-function CardThemes ({ isMobileMod, recentThemes }) {
+    return 4
+  }
 
   return (
     <Center
-      width={isMobileMod ? "100vw" : "70vw"}
+      width={responsive.mobileQuery ? "100vw" : "100%"}
       maxWidth="1364px"
       marginY="48px !important"
     >
       <Carousel 
         settings={{
           spaceBetween: 10,
-          slidesPerView: isMobileMod ? 1 : 4,
+          slidesPerView: responsiveChange(),
           navigation: true,
           loop: true,
           autoplay: true,
         }}
       >
         {recentThemes && recentThemes.map((elm) => (
-          <SwiperSlide>
-            <DatabaseCard
-              link={`/dataset/${elm.name}`}
-              name={elm.title}
-              organization={elm.organization.title}
-              organizationSlug={elm.organization.name}
-              tags={elm.tags.map((g) => g.name)}
-              size={
-                elm.resources.filter((r) => r.bdm_file_size && r.bdm_file_size > 0)
-                  .length > 0
-                  ? elm.resources.filter((r) => r.bdm_file_size)[0].bdm_file_size
-                  : null
-              }
-              tableNum={
-                elm.resources.filter((r) => r.resource_type === "bdm_table").length
-              }
-              externalLinkNum={
-                elm.resources.filter((r) => r.resource_type === "external_link").length
-              }
-              informationRequestNum={
-                elm.resources.filter((r) => r.resource_type === "information_request").length
-              }
-              updatedSince={elm.metadata_modified}
-              categories={elm.groups.map((g) => [g.name, g.display_name])}
-            />
-          </SwiperSlide>
+          <DatabaseCard
+            link={`/dataset/${elm.name}`}
+            name={elm.title}
+            organization={elm.organization.title}
+            organizationSlug={elm.organization.name}
+            tags={elm.tags.map((g) => g.name)}
+            size={
+              elm.resources.filter((r) => r.bdm_file_size && r.bdm_file_size > 0)
+                .length > 0
+                ? elm.resources.filter((r) => r.bdm_file_size)[0].bdm_file_size
+                : null
+            }
+            tableNum={
+              elm.resources.filter((r) => r.resource_type === "bdm_table").length
+            }
+            externalLinkNum={
+              elm.resources.filter((r) => r.resource_type === "external_link").length
+            }
+            informationRequestNum={
+              elm.resources.filter((r) => r.resource_type === "information_request").length
+            }
+            updatedSince={elm.metadata_modified}
+            categories={elm.groups.map((g) => [g.name, g.display_name])}
+          />
         ))}
       </Carousel>
     </Center>
@@ -140,7 +156,11 @@ function CardThemes ({ isMobileMod, recentThemes }) {
 export default function ThemeCatalog ({ recentDatalakeDatasets, themes }) {
   const [recentThemes, setRecentThemes] = useState([])
   const [listThemes, setListThemes] = useState([])
-  const isMobile = useCheckMobile()
+  
+  const mobileQuery = useCheckMobile()
+  const [baseQuery] = useMediaQuery("(max-width: 938px)")
+  const [lgQuery] = useMediaQuery("(max-width: 1366px)") 
+
 
   useEffect(() => {
     setListThemes(themes)
@@ -162,11 +182,11 @@ export default function ThemeCatalog ({ recentDatalakeDatasets, themes }) {
       <Themes
         listThemes={listThemes}
         newRecentDataLakeDataSets={newRecentDataLake}
-        isMobileMod={isMobile}
+        responsive={{mobileQuery, baseQuery, lgQuery}}
       />
 
       <CardThemes
-        isMobileMod={isMobile}
+        responsive={{mobileQuery, baseQuery, lgQuery}}
         recentThemes={recentThemes}
       />
     </VStack>
