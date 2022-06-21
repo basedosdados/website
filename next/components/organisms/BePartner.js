@@ -126,6 +126,9 @@ export function BePartner() {
             settings={{
               loop: true,
               autoplay: true,
+              pagination: {
+                clickable: true,
+              }
             }}
           >
               <Testimonial

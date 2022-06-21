@@ -164,6 +164,10 @@ body {
   height: 100% !important
 }
 
+.swiper-button-prev::after ,.swiper-button-next::after {
+  font-size: 32px !important;
+}
+
 .swiper-button-next {
   color: #DEDFE0 !important;
   background-color: #FFF;
@@ -171,6 +175,10 @@ body {
   top: 0 !important;
   margin-top: 0 !important;
   height: 100% !important;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #2b8c4d !important;
 }
 
 .rjsf {

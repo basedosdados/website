@@ -16,9 +16,8 @@ function Themes ({
   responsive,
   onSelectTheme,
   selectedTheme=[],
-  listThemes=[]
+  listThemes=[],
  }) {
-
   const responsiveChange = () => {
     if(responsive.mobileQuery)
       return 5
@@ -100,7 +99,7 @@ function Themes ({
   )
 }
 
-function CardThemes ({ responsive, recentDataSets }) {
+function CardThemes ({ responsive, recentDataSets=[], loading }) {
   const responsiveChange = () => {
     if(responsive.mobileQuery)
       return 1
@@ -130,32 +129,40 @@ function CardThemes ({ responsive, recentDataSets }) {
           }
         }}
       >
-        {recentDataSets && recentDataSets.map((elm) => (
-          <DatabaseCard
-            link={`/dataset/${elm.name}`}
-            name={elm.title}
-            organization={elm.organization.title}
-            organizationSlug={elm.organization.name}
-            tags={elm.tags.map((g) => g.name)}
-            size={
-              elm.resources.filter((r) => r.bdm_file_size && r.bdm_file_size > 0)
-                .length > 0
-                ? elm.resources.filter((r) => r.bdm_file_size)[0].bdm_file_size
-                : null
-            }
-            tableNum={
-              elm.resources.filter((r) => r.resource_type === "bdm_table").length
-            }
-            externalLinkNum={
-              elm.resources.filter((r) => r.resource_type === "external_link").length
-            }
-            informationRequestNum={
-              elm.resources.filter((r) => r.resource_type === "information_request").length
-            }
-            updatedSince={elm.metadata_modified}
-            categories={elm.groups.map((g) => [g.name, g.display_name])}
-          />
-        ))}
+        {loading ?
+          new Array(responsiveChange()).fill(0).map(() => (
+            <>
+              <Skeleton width="280px" height="290px" margin="20px 0"/>
+            </>
+          ))
+        :
+          recentDataSets.map((elm) => (
+            <DatabaseCard
+              link={`/dataset/${elm.name}`}
+              name={elm.title}
+              organization={elm.organization.title}
+              organizationSlug={elm.organization.name}
+              tags={elm.tags.map((g) => g.name)}
+              size={
+                elm.resources.filter((r) => r.bdm_file_size && r.bdm_file_size > 0)
+                  .length > 0
+                  ? elm.resources.filter((r) => r.bdm_file_size)[0].bdm_file_size
+                  : null
+              }
+              tableNum={
+                elm.resources.filter((r) => r.resource_type === "bdm_table").length
+              }
+              externalLinkNum={
+                elm.resources.filter((r) => r.resource_type === "external_link").length
+              }
+              informationRequestNum={
+                elm.resources.filter((r) => r.resource_type === "information_request").length
+              }
+              updatedSince={elm.metadata_modified}
+              categories={elm.groups.map((g) => [g.name, g.display_name])}
+            />
+          ))
+        }
       </Carousel>
     </Center>
   )
@@ -165,15 +172,15 @@ export default function ThemeCatalog ({ popularDatalakeDatasets, themes }) {
   const [recentDataSets, setRecentDataSets] = useState([])
   const [listThemes, setListThemes] = useState([])
   const [selectedTheme, setSelectedTheme] = useState([])
+  const [loading, setLoading] = useState(false)
   
   const mobileQuery = useCheckMobile()
   const [baseQuery] = useMediaQuery("(max-width: 938px)")
   const [lgQuery] = useMediaQuery("(max-width: 1366px)") 
 
-
   useEffect(() => {
     setListThemes(themes)
-    popularDatalakeDatasets ? setRecentDataSets(popularDatalakeDatasets) : setRecentDataSets()
+    setRecentDataSets(popularDatalakeDatasets)
   },[popularDatalakeDatasets, themes])
 
   const handleSelectTheme = (elm) => {
@@ -196,9 +203,14 @@ export default function ThemeCatalog ({ popularDatalakeDatasets, themes }) {
   }
 
   const newRecentDataLake = (themes) => {
-    return getRecentDatalakeDatasetsByTheme(themes.toString())
+    setLoading(true)
+    getRecentDatalakeDatasetsByTheme(themes.toString())
       .then(res => {
         setRecentDataSets(res.slice(0,10))
+        setLoading(false)
+      })
+      .catch(() => {
+        setLoading(false)
       })
   }
 
@@ -218,6 +230,7 @@ export default function ThemeCatalog ({ popularDatalakeDatasets, themes }) {
       <CardThemes
         responsive={{mobileQuery, baseQuery, lgQuery}}
         recentDataSets={recentDataSets}
+        loading={loading}
       />
     </VStack>
   )
