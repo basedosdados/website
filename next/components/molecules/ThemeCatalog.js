@@ -3,6 +3,7 @@ import {
   Center,
   Image,
   Tooltip,
+  Skeleton,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
@@ -11,8 +12,12 @@ import { getRecentDatalakeDatasetsByTheme } from "../../pages/api/datasets";
 import DatabaseCard from "../organisms/DatabaseCard";
 import Carousel from "../atoms/Carousel";
 
-function Themes ({ responsive, newRecentDataLakeDataSets, listThemes=[] }) {
-  const [selectedTheme, setSelectedTheme] = useState()
+function Themes ({
+  responsive,
+  onSelectTheme,
+  selectedTheme=[],
+  listThemes=[]
+ }) {
 
   const responsiveChange = () => {
     if(responsive.mobileQuery)
@@ -25,12 +30,8 @@ function Themes ({ responsive, newRecentDataLakeDataSets, listThemes=[] }) {
     return 10
   }
 
-  const searchTheme = (elm) => {
-    window.open("#theme", "_self")
-    setSelectedTheme(elm.name)
-    newRecentDataLakeDataSets({
-      name: elm.name,
-    })
+  const found = (value) => {
+    return selectedTheme.find(res => res === value)
   }
 
   if(listThemes.length === 0)
@@ -47,12 +48,16 @@ function Themes ({ responsive, newRecentDataLakeDataSets, listThemes=[] }) {
           slidesPerView: responsiveChange(),
           navigation: !responsive.mobileQuery && true,
           loop: true,
-          autoplay: true,
+          autoplay:{
+            delay: selectedTheme[0] ? 1000000 : 3000,
+            pauseOnMouseEnter: true,
+            disableOnInteraction: false,
+          }
         }}
       >
         {listThemes && listThemes.map((elm) => (
           <Center
-            onClick={() => searchTheme(elm)}
+            onClick={() => onSelectTheme(elm.name)}
             key={elm.id}
             cursor="pointer"
             width={ responsive.mobileQuery ? "45px" : "100px" }
@@ -60,7 +65,7 @@ function Themes ({ responsive, newRecentDataLakeDataSets, listThemes=[] }) {
             height={ responsive.mobileQuery ? "45px" : "100px" }
             minHeight={ responsive.mobileQuery ? "45px" : "100px" }
             borderRadius={ responsive.mobileQuery ? "8px" : "16px" }
-            backgroundColor={ selectedTheme === elm.name ? "#2B8C4D" : "FFF"}
+            backgroundColor={ found(elm.name) ? "#2B8C4D" : "FFF"}
             boxShadow="0px 1px 8px 1px rgba(64, 60, 67, 0.16)"
             _hover={{ transform:"scale(1.1)", backgroundColor:"#2B8C4D" }}
             transition="all 0.5s"
@@ -82,7 +87,7 @@ function Themes ({ responsive, newRecentDataLakeDataSets, listThemes=[] }) {
                 padding={ responsive.mobileQuery ? "5px" : "10px"}
                 height="100%"
                 transition="all 0.5s"
-                filter={selectedTheme === elm.name ? "invert(1)" :"invert(0.8)"}
+                filter={found(elm.name) ? "invert(1)" :"invert(0.8)"}
                 _hover={{ filter:"invert(1)"}}
                 alt={`${elm.name}`}
                 src={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${elm.name}.svg`}
@@ -95,7 +100,7 @@ function Themes ({ responsive, newRecentDataLakeDataSets, listThemes=[] }) {
   )
 }
 
-function CardThemes ({ responsive, recentThemes }) {
+function CardThemes ({ responsive, recentDataSets }) {
   const responsiveChange = () => {
     if(responsive.mobileQuery)
       return 1
@@ -118,11 +123,14 @@ function CardThemes ({ responsive, recentThemes }) {
           spaceBetween: 10,
           slidesPerView: responsiveChange(),
           navigation: true,
-          loop: true,
-          autoplay: true,
+          autoplay: {
+            delay: 6000,
+            pauseOnMouseEnter: true,
+            disableOnInteraction: false,
+          }
         }}
       >
-        {recentThemes && recentThemes.map((elm) => (
+        {recentDataSets && recentDataSets.map((elm) => (
           <DatabaseCard
             link={`/dataset/${elm.name}`}
             name={elm.title}
@@ -153,9 +161,10 @@ function CardThemes ({ responsive, recentThemes }) {
   )
 }
 
-export default function ThemeCatalog ({ recentDatalakeDatasets, themes }) {
-  const [recentThemes, setRecentThemes] = useState([])
+export default function ThemeCatalog ({ popularDatalakeDatasets, themes }) {
+  const [recentDataSets, setRecentDataSets] = useState([])
   const [listThemes, setListThemes] = useState([])
+  const [selectedTheme, setSelectedTheme] = useState([])
   
   const mobileQuery = useCheckMobile()
   const [baseQuery] = useMediaQuery("(max-width: 938px)")
@@ -164,15 +173,35 @@ export default function ThemeCatalog ({ recentDatalakeDatasets, themes }) {
 
   useEffect(() => {
     setListThemes(themes)
-    recentDatalakeDatasets ? setRecentThemes(recentDatalakeDatasets) : setRecentThemes()
-  },[recentDatalakeDatasets, themes])
+    popularDatalakeDatasets ? setRecentDataSets(popularDatalakeDatasets) : setRecentDataSets()
+  },[popularDatalakeDatasets, themes])
 
-  const newRecentDataLake = (elm) => {
-    return getRecentDatalakeDatasetsByTheme(elm.name)
+  const handleSelectTheme = (elm) => {
+    window.open("#theme", "_self")
+    const newSelectedTheme = [elm, ...selectedTheme]
+    setSelectedTheme(newSelectedTheme)
+
+    const filtedThemes = newSelectedTheme.filter(res => res !== elm)
+
+    if(found(elm)) {
+      setSelectedTheme(filtedThemes)
+      newRecentDataLake(filtedThemes)   
+    } else {
+      newRecentDataLake(newSelectedTheme)
+    }
+  }
+  
+  const found = (value) => {
+    return selectedTheme.find(res => res === value)
+  }
+
+  const newRecentDataLake = (themes) => {
+    return getRecentDatalakeDatasetsByTheme(themes.toString())
       .then(res => {
-        setRecentThemes(res)
+        setRecentDataSets(res.slice(0,10))
       })
   }
+
   return (
     <VStack
       width="100%"
@@ -181,13 +210,14 @@ export default function ThemeCatalog ({ recentDatalakeDatasets, themes }) {
     >
       <Themes
         listThemes={listThemes}
-        newRecentDataLakeDataSets={newRecentDataLake}
+        selectedTheme={selectedTheme}
+        onSelectTheme={handleSelectTheme}
         responsive={{mobileQuery, baseQuery, lgQuery}}
       />
 
       <CardThemes
         responsive={{mobileQuery, baseQuery, lgQuery}}
-        recentThemes={recentThemes}
+        recentDataSets={recentDataSets}
       />
     </VStack>
   )
