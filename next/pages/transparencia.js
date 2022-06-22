@@ -3,6 +3,7 @@ import {
   Flex,
   VStack,
   Stack,
+  Text,
 } from "@chakra-ui/react";
 import Display from "../components/atoms/Display";
 import BigTitle from "../components/atoms/BigTitle";
@@ -41,7 +42,8 @@ export default function Transparencia({ pages }) {
       direction={{ base: "column", lg: "row" }}
       margin="auto"
     >
-      <Stack 
+      <Stack
+        paddingTop={{ base: "0px", lg: "24px" }}
         maxWidth={{ base: "100%", lg: "45%" }}
       >
         <Display 
@@ -52,10 +54,15 @@ export default function Transparencia({ pages }) {
           Nossas contas são transparentes e abertas – como todo o resto.
         </Display>
         <SectionText paddingBottom="20px">
-          Adicionar parágrafo.
+          Somos uma organização não-governamental sem fins lucrativos e <i>open source</i>. A transparência fundamenta todas nossas ações, desde o trabalho com dados públicos até a prestação de contas. Utilizamos os recursos para facilitar o acesso de milhares de pessoas a dados de qualidade. Nesse espaço, você encontra informações referentes às nossas atividades, receitas e despesas. 
         </SectionText>
         <SectionText paddingBottom="20px">
-          Adicionar parágrafo.
+          Em nosso
+          <Link
+            color="#42B0FF"
+            href={`https://drive.google.com/file/d/1JNcr4psQr42EV9mTafn512TD8p87ZP3a/view`}
+          > estatuto  
+          </Link>, estão presentes as diretrizes que regulamentam o funcionamento e o processo de tomada de decisões da organização.       
         </SectionText>
       </Stack>
       <Stack maxWidth={{ base: "100%", lg: "45%" }}>
@@ -77,11 +84,11 @@ export default function Transparencia({ pages }) {
       <Stack 
         order={isMobileMod ? 1 : 0}
         maxWidth={{ base: "100%", lg: "45%" }}
-        width= {{base: "350px", lg: "600px"}}
-        height= {{base: "200px", lg: "450px"}}
+        width={{base: "350px", lg: "600px"}}
+        height={{base: "300px", lg: "450px"}}
       >
         <iframe
-          src="https://perguntas.basedosdados.org/public/question/be7d4328-c30d-411a-b965-3eec277d6254"
+          src="https://perguntas.basedosdados.org/public/question/80ad0ba9-bfa9-4427-96a0-675fb2252b37"
           frameborder="0"
           width="100%"
           height="100%"
@@ -90,15 +97,23 @@ export default function Transparencia({ pages }) {
       </Stack>
       <Stack maxWidth={{ base: "100%", lg: "45%" }}>
         <BigTitle
-          paddingBottom="24px"
+          paddingBottom={{base: "8px", lg: "24px"}}
         >
           Indicador de sobrevida
         </BigTitle>
         <SectionText paddingBottom="20px">
-          Adicionar parágrafo. Adicionar parágrafo. Adicionar parágrafo. Adicionar parágrafo. Adicionar parágrafo.
+          Esse é nosso indicador de sobrevida. Ele mostra o tempo que nossas atividades poderiam se manter caso a arrecadação de recursos financeiros fosse interrompida, considerando as despesas regulares com infraestrutura e equipe, por exemplo. 
         </SectionText>
         <SectionText paddingBottom="20px">
-          Adicionar parágrafo.
+          O indicador evidencia a importância de sua contribuição para a continuidade dos nossos esforços em busca da universalização do acesso a dados públicos.
+        </SectionText>
+        <SectionText paddingBottom="20px">
+          Abaixo, você confere as fontes e destinações dos recursos da organização. Além disso, todos os microdados referentes à contabilidade da BD estão disponíveis no nosso <i>datalake</i> público. Veja
+          <Link
+            color="#42B0FF"
+            href={`https://basedosdados.org/dataset/br-bd-indicadores?bdm_table=contabilidade`}
+          > aqui
+          </Link>.
         </SectionText>
       </Stack>
     </Stack>
@@ -115,11 +130,22 @@ export default function Transparencia({ pages }) {
     >
       <Stack 
         maxWidth={{ base: "100%", lg: "45%" }}
-        width= {{base: "350px", lg: "600px"}}
-        height= {{base: "200px", lg: "450px"}}
+        width={{base: "350px", lg: "600px"}}
+        height={{base: "400px", lg: "450px"}}
       >
+        <Text
+        fontFamily="Ubuntu"
+        fontSize={{base: "16px", lg: "22px"}}
+        fontWeigth="400"
+        letterSpacing={{base: "0.2px", lg: "0.1px"}}
+        minHeight="30px"
+        marginBottom={{base: "0px", lg: "24px"}}
+        color="#252A32"
+        >
+          Receitas acumuladas
+        </Text>
         <iframe
-          src="https://perguntas.basedosdados.org/public/question/be7d4328-c30d-411a-b965-3eec277d6254"
+          src="https://perguntas.basedosdados.org/public/question/c41beae5-94d3-41e2-9161-a12492b0cae0"
           frameborder="0"
           width="100%"
           height="100%"
@@ -128,11 +154,22 @@ export default function Transparencia({ pages }) {
       </Stack>
       <Stack 
         maxWidth={{ base: "100%", lg: "45%" }}
-        width= {{base: "350px", lg: "600px"}}
-        height= {{base: "200px", lg: "450px"}}
+        width={{base: "350px", lg: "600px"}}
+        height={{base: "400px", lg: "450px"}}
       >
+        <Text
+          fontFamily="Ubuntu"
+          fontSize={{base: "16px", lg: "22px"}}
+          fontWeigth="400"
+          letterSpacing={{base: "0.2px", lg: "0.1px"}}
+          minHeight="30px"
+          marginBottom={{base: "0px", lg: "24px"}}
+          color="#252A32"
+        >
+          Despesas acumuladas
+        </Text>
         <iframe
-          src="https://perguntas.basedosdados.org/public/question/be7d4328-c30d-411a-b965-3eec277d6254"
+          src="https://perguntas.basedosdados.org/public/question/312842db-4ea9-455b-be7a-98d96e742ea7"
           frameborder="0"
           width="100%"
           height="100%"
@@ -151,20 +188,20 @@ export default function Transparencia({ pages }) {
     >
       <Stack maxWidth={{ base: "100%", lg: "45%" }}>
         <BigTitle
-          paddingBottom="24px"
+          paddingBottom={{base: "8px", lg: "24px"}}
         >
           Relatórios
         </BigTitle>
         <SectionText paddingBottom="20px">
-          Adicionar parágrafo.
+          Nossos relatórios apresentam todas as atividades empenhadas pela equipe. São diversos projetos que colaboram com a promoção da cultura de transparência, o desenvolvimento socioeconômico e a construção de políticas públicas baseadas em dados e evidências.
         </SectionText> 
       </Stack>
       <Stack 
         maxWidth={{ base: "100%", lg: "45%" }}
-        paddingTop={{ base: "0", lg: "62px" }}
+        paddingTop={{ base: "0", lg: "72px" }}
       >
         <SectionText paddingBottom="20px">
-          Adicionar parágrafo. Adicionar parágrafo. Adicionar parágrafo. Adicionar parágrafo. Adicionar parágrafo.
+          Os documentos reúnem também os demonstrativos financeiros da organização. Explore nossos relatórios e conheça melhor o trabalho desenvolvido nas diferentes frentes de atuação.
         </SectionText> 
       </Stack>   
     </Stack>
@@ -178,8 +215,9 @@ export default function Transparencia({ pages }) {
     >
       <Link 
         color="#42B0FF"
+        href={`https://drive.google.com/drive/folders/1cVs17GoC9bymakozof_kyEhay-hxUCW3`}
       >
-      BD Relatório Anual 2021
+        BD Relatório Anual 2021
       </Link>
     </Stack>
     <Stack
@@ -196,10 +234,11 @@ export default function Transparencia({ pages }) {
         margin="auto"
       >
         <Stack 
+          paddingTop={{ base: "0px", lg: "16px" }}
           maxWidth={{ base: "100%", lg: "45%" }}
         >
           <BigTitle 
-            paddingBottom="24px"
+            paddingBottom={{base: "8px", lg: "24px"}}
             color="#FFF"
           >
             Você também acredita no <p>acesso a dados de qualidade?</p>
@@ -208,7 +247,7 @@ export default function Transparencia({ pages }) {
             paddingBottom="20px"
             color="#FFF"
           >
-            Adicionar parágrafo.
+            Tudo o que fazemos só é possível por conta das pessoas que apoiam o nosso trabalho. Ajude a BD a continuar facilitando o acesso a dados públicos. Com qualquer valor, você contribui para a manutenção dos nossos projetos e a sobrevivência da organização.
           </SectionText>
           <Link _hover={{ opacity:"none" }} target="_blank" href="https://apoia.se/basedosdados">
             <RoundedButton
@@ -222,7 +261,7 @@ export default function Transparencia({ pages }) {
         </Stack>
         <Stack 
           maxWidth={{ base: "100%", lg: "45%" }}
-          paddingTop="40px"
+          paddingTop={{base: "32px", lg: "0px"}}
         >
           <DonationImage
             widthImage={{ base: "90%", lg: "326px"}}
