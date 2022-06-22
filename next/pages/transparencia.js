@@ -88,7 +88,7 @@ export default function Transparencia({ pages }) {
         height={{base: "300px", lg: "450px"}}
       >
         <iframe
-          src="https://perguntas.basedosdados.org/public/question/80ad0ba9-bfa9-4427-96a0-675fb2252b37"
+          src="https://perguntas.basedosdados.org/public/question/80ad0ba9-bfa9-4427-96a0-675fb2252b37#titled=false&bordered=false"
           frameborder="0"
           width="100%"
           height="100%"
@@ -111,7 +111,7 @@ export default function Transparencia({ pages }) {
           Abaixo, você confere as fontes e destinações dos recursos da organização. Além disso, todos os microdados referentes à contabilidade da BD estão disponíveis no nosso <i>datalake</i> público. Veja
           <Link
             color="#42B0FF"
-            href={`https://basedosdados.org/dataset/br-bd-indicadores?bdm_table=contabilidade`}
+            href={`https://basedosdados.org/dataset/br-bd-indicadores?bdm_table=contabilidade#titled=false&bordered=false`}
           > aqui
           </Link>.
         </SectionText>
@@ -145,7 +145,7 @@ export default function Transparencia({ pages }) {
           Receitas acumuladas
         </Text>
         <iframe
-          src="https://perguntas.basedosdados.org/public/question/c41beae5-94d3-41e2-9161-a12492b0cae0"
+          src="https://perguntas.basedosdados.org/public/question/c41beae5-94d3-41e2-9161-a12492b0cae0#titled=false&bordered=false"
           frameborder="0"
           width="100%"
           height="100%"
@@ -169,7 +169,7 @@ export default function Transparencia({ pages }) {
           Despesas acumuladas
         </Text>
         <iframe
-          src="https://perguntas.basedosdados.org/public/question/312842db-4ea9-455b-be7a-98d96e742ea7"
+          src="https://perguntas.basedosdados.org/public/question/312842db-4ea9-455b-be7a-98d96e742ea7#titled=false&bordered=false"
           frameborder="0"
           width="100%"
           height="100%"
