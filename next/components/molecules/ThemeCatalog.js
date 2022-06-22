@@ -1,6 +1,7 @@
 import {
   VStack,
   Center,
+  Box,
   Image,
   Tooltip,
   Skeleton,
@@ -11,6 +12,9 @@ import { useMediaQuery } from "@chakra-ui/react";
 import { getRecentDatalakeDatasetsByTheme } from "../../pages/api/datasets";
 import DatabaseCard from "../organisms/DatabaseCard";
 import Carousel from "../atoms/Carousel";
+import SectionText from "../atoms/SectionText";
+import RemoveIcon from "../../public/img/icons/removeIcon"
+
 
 function Themes ({
   responsive,
@@ -56,14 +60,15 @@ function Themes ({
       >
         {listThemes && listThemes.map((elm) => (
           <Center
+            position="relative"
             onClick={() => onSelectTheme(elm.name)}
             key={elm.id}
             cursor="pointer"
-            width={ responsive.mobileQuery ? "45px" : "100px" }
-            minWidth={ responsive.mobileQuery ? "45px" : "100px" }
-            height={ responsive.mobileQuery ? "45px" : "100px" }
-            minHeight={ responsive.mobileQuery ? "45px" : "100px" }
-            borderRadius={ responsive.mobileQuery ? "8px" : "16px" }
+            width={responsive.mobileQuery ? "45px" : "100px" }
+            minWidth={responsive.mobileQuery ? "45px" : "100px" }
+            height={responsive.mobileQuery ? "45px" : "100px" }
+            minHeight={responsive.mobileQuery ? "45px" : "100px" }
+            borderRadius={responsive.mobileQuery ? "8px" : "16px" }
             backgroundColor={ found(elm.name) ? "#2B8C4D" : "FFF"}
             boxShadow="0px 1px 8px 1px rgba(64, 60, 67, 0.16)"
             _hover={{ transform:"scale(1.1)", backgroundColor:"#2B8C4D" }}
@@ -83,7 +88,7 @@ function Themes ({
             >
               <Image
                 width="100%"
-                padding={ responsive.mobileQuery ? "5px" : "10px"}
+                padding={responsive.mobileQuery ? "5px" : "10px"}
                 height="100%"
                 transition="all 0.5s"
                 filter={found(elm.name) ? "invert(1)" :"invert(0.8)"}
@@ -92,6 +97,16 @@ function Themes ({
                 src={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${elm.name}.svg`}
               />
             </Tooltip>
+            <RemoveIcon
+              display={found(elm.name) ? "flex" : "none"}
+              fill="#42B0FF"
+              widthIcon={responsive.mobileQuery ? "18px" : "30px"}
+              heightIcon={responsive.mobileQuery ? "18px" : "30px"}
+              transition="all 0.5s"
+              position="absolute"
+              top="-1"
+              right="-1"
+            />
           </Center>
         ))}
       </Carousel>
@@ -112,59 +127,78 @@ function CardThemes ({ responsive, recentDataSets=[], loading }) {
   }
 
   return (
-    <Center
+    <Box
       width={responsive.mobileQuery ? "100vw" : "100%"}
       maxWidth="1364px"
-      marginY="48px !important"
+      marginY="48px !important" 
     >
-      <Carousel 
-        settings={{
-          spaceBetween: 10,
-          slidesPerView: responsiveChange(),
-          navigation: true,
-          autoplay: {
-            delay: 6000,
-            pauseOnMouseEnter: true,
-            disableOnInteraction: false,
-          }
-        }}
+      {recentDataSets.length === 0 &&
+        <Center>
+          <SectionText
+            fontSize={responsive.mobileQuery ? "14px" : "18px"}
+            color="#A3A3A3"
+          >Nenhum dataset encontrado com esses temas</SectionText>
+        </Center>
+      }
+      <Center
+        width={responsive.mobileQuery ? "100vw" : "100%"}
       >
-        {loading ?
-          new Array(responsiveChange()).fill(0).map(() => (
-            <>
-              <Skeleton width="280px" height="290px" margin="20px 0"/>
-            </>
-          ))
-        :
-          recentDataSets.map((elm) => (
-            <DatabaseCard
-              link={`/dataset/${elm.name}`}
-              name={elm.title}
-              organization={elm.organization.title}
-              organizationSlug={elm.organization.name}
-              tags={elm.tags.map((g) => g.name)}
-              size={
-                elm.resources.filter((r) => r.bdm_file_size && r.bdm_file_size > 0)
-                  .length > 0
-                  ? elm.resources.filter((r) => r.bdm_file_size)[0].bdm_file_size
-                  : null
-              }
-              tableNum={
-                elm.resources.filter((r) => r.resource_type === "bdm_table").length
-              }
-              externalLinkNum={
-                elm.resources.filter((r) => r.resource_type === "external_link").length
-              }
-              informationRequestNum={
-                elm.resources.filter((r) => r.resource_type === "information_request").length
-              }
-              updatedSince={elm.metadata_modified}
-              categories={elm.groups.map((g) => [g.name, g.display_name])}
-            />
-          ))
-        }
-      </Carousel>
-    </Center>
+        <Carousel 
+          settings={{
+            spaceBetween: 10,
+            slidesPerView: responsiveChange(),
+            navigation: true,
+            autoplay: {
+              delay: 6000,
+              pauseOnMouseEnter: true,
+              disableOnInteraction: false,
+            }
+          }}
+        >
+          {loading ?
+            new Array(responsiveChange()).fill(0).map(() => (
+              <>
+                <Skeleton width="280px" height="290px" margin="20px 0"/>
+              </>
+            ))
+          :
+          recentDataSets.length === 0 ?
+            new Array(responsiveChange()).fill(0).map(() => (
+              <>
+                <Skeleton width="280px" height="290px" margin="20px 0"/>
+              </>
+            ))
+            :
+            recentDataSets.map((elm) => (
+              <DatabaseCard
+                link={`/dataset/${elm.name}`}
+                name={elm.title}
+                organization={elm.organization.title}
+                organizationSlug={elm.organization.name}
+                tags={elm.tags.map((g) => g.name)}
+                size={
+                  elm.resources.filter((r) => r.bdm_file_size && r.bdm_file_size > 0)
+                    .length > 0
+                    ? elm.resources.filter((r) => r.bdm_file_size)[0].bdm_file_size
+                    : null
+                }
+                tableNum={
+                  elm.resources.filter((r) => r.resource_type === "bdm_table").length
+                }
+                externalLinkNum={
+                  elm.resources.filter((r) => r.resource_type === "external_link").length
+                }
+                informationRequestNum={
+                  elm.resources.filter((r) => r.resource_type === "information_request").length
+                }
+                updatedSince={elm.metadata_modified}
+                categories={elm.groups.map((g) => [g.name, g.display_name])}
+              />
+            ))
+          }
+        </Carousel>
+      </Center>
+    </Box>
   )
 }
 
@@ -174,9 +208,14 @@ export default function ThemeCatalog ({ popularDatalakeDatasets, themes }) {
   const [selectedTheme, setSelectedTheme] = useState([])
   const [loading, setLoading] = useState(false)
   
-  const mobileQuery = useCheckMobile()
+  const mobileCheck = useCheckMobile()
+  const [mobileQuery, setMobileQuery] = useState(false)
   const [baseQuery] = useMediaQuery("(max-width: 938px)")
-  const [lgQuery] = useMediaQuery("(max-width: 1366px)") 
+  const [lgQuery] = useMediaQuery("(max-width: 1366px)")
+
+  useEffect(() => {
+    setMobileQuery(mobileCheck)
+  },[])
 
   useEffect(() => {
     setListThemes(themes)
