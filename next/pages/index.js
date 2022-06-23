@@ -3,7 +3,6 @@ import {
   HStack,
   Stack,
   Text,
-  Flex,
   VStack,
   Image as ChakraImage,
 } from "@chakra-ui/react";
@@ -17,7 +16,7 @@ import SectionTitle from "../components/atoms/SectionTitle";
 import SectionLink from "../components/atoms/SectionLink"
 import Typist from "react-typist";
 import {
-  getRecentDatalakeDatasets
+  getPopularDatalakeDatasets
 } from "./api/datasets";
 import { getGroupList } from "./api/groups"
 import { ShadowBox } from "../components/atoms/ShadowBox";
@@ -40,17 +39,17 @@ import Link from "../components/atoms/Link";
 
 export async function getStaticProps(context) {
   const themes = await getGroupList();
-  let recentDatalakeDatasets;
+  let popularDatalakeDatasets;
 
   try {
-    recentDatalakeDatasets = await getRecentDatalakeDatasets();
+    popularDatalakeDatasets = await getPopularDatalakeDatasets();
   } catch {
-    recentDatalakeDatasets = [];
+    popularDatalakeDatasets = [];
   }
 
   return await withPages({
     props: {
-      recentDatalakeDatasets,
+      popularDatalakeDatasets,
       themes  
     },
     revalidate: 60,
@@ -85,7 +84,7 @@ export async function getStaticProps(context) {
 // }
 
 
-function Hero({ recentDatalakeDatasets, themes }) {
+function Hero({ popularDatalakeDatasets, themes }) {
   const [search, setSearch] = useState();
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
@@ -223,7 +222,7 @@ function Hero({ recentDatalakeDatasets, themes }) {
             </Text>
             <ThemeCatalog
               themes={themes}
-              recentDatalakeDatasets={recentDatalakeDatasets}
+              popularDatalakeDatasets={popularDatalakeDatasets}
             />
           </VStack>
         </VStack>
@@ -662,7 +661,7 @@ function GoogleCloud () {
 export default function Home({
   pages,
   popularDatasets,
-  recentDatalakeDatasets,
+  popularDatalakeDatasets,
   themes,
 }) {
   return (
@@ -670,7 +669,7 @@ export default function Home({
       <VStack>
         <GoogleCloud/>
         <Hero
-          recentDatalakeDatasets={recentDatalakeDatasets}
+          popularDatalakeDatasets={popularDatalakeDatasets}
           themes={themes}
         />
       </VStack>
