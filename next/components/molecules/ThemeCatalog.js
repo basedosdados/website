@@ -13,8 +13,7 @@ import { getRecentDatalakeDatasetsByTheme } from "../../pages/api/datasets";
 import DatabaseCard from "../organisms/DatabaseCard";
 import Carousel from "../atoms/Carousel";
 import SectionText from "../atoms/SectionText";
-import RemoveIcon from "../../public/img/icons/removeIcon"
-
+import RemoveIcon from "../../public/img/icons/removeIcon";
 
 function Themes ({
   responsive,
@@ -24,11 +23,13 @@ function Themes ({
  }) {
   const responsiveChange = () => {
     if(responsive.mobileQuery)
-      return 5
+      return 4
     if(responsive.baseQuery)
       return 6
+    if(responsive.mediumQuery)
+      return 9
     if(responsive.lgQuery)
-      return 8
+      return 10
 
     return 10
   }
@@ -43,11 +44,11 @@ function Themes ({
   return (
     <Center
       width="95vw"
-      maxWidth="1364px"
+      maxWidth="1264px"
     >
       <Carousel 
         settings={{
-          spaceBetween: 10,
+          spaceBetween: responsive.mobileQuery ? 20 : 10,
           slidesPerView: responsiveChange(),
           navigation: !responsive.mobileQuery && true,
           loop: true,
@@ -64,10 +65,10 @@ function Themes ({
             onClick={() => onSelectTheme(elm.name)}
             key={elm.id}
             cursor="pointer"
-            width={responsive.mobileQuery ? "45px" : "100px" }
-            minWidth={responsive.mobileQuery ? "45px" : "100px" }
-            height={responsive.mobileQuery ? "45px" : "100px" }
-            minHeight={responsive.mobileQuery ? "45px" : "100px" }
+            width={responsive.mobileQuery ? "65px" : "100px" }
+            minWidth={responsive.mobileQuery ? "65px" : "100px" }
+            height={responsive.mobileQuery ? "65px" : "100px" }
+            minHeight={responsive.mobileQuery ? "65px" : "100px" }
             borderRadius={responsive.mobileQuery ? "8px" : "16px" }
             backgroundColor={ found(elm.name) ? "#2B8C4D" : "FFF"}
             boxShadow="0px 1px 8px 1px rgba(64, 60, 67, 0.16)"
@@ -100,8 +101,8 @@ function Themes ({
             <RemoveIcon
               display={found(elm.name) ? "flex" : "none"}
               fill="#42B0FF"
-              widthIcon={responsive.mobileQuery ? "18px" : "30px"}
-              heightIcon={responsive.mobileQuery ? "18px" : "30px"}
+              widthIcon={responsive.mobileQuery ? "20px" : "30px"}
+              heightIcon={responsive.mobileQuery ? "20px" : "30px"}
               transition="all 0.5s"
               position="absolute"
               top="-1"
@@ -128,16 +129,20 @@ function CardThemes ({ responsive, recentDataSets=[], loading }) {
 
   return (
     <Box
-      width={responsive.mobileQuery ? "100vw" : "100%"}
-      maxWidth="1364px"
+      width={responsive.mobileQuery ? "100vw" : "95%"}
+      maxWidth="1264px"
       marginY="48px !important" 
     >
       {recentDataSets.length === 0 &&
-        <Center>
+        <Center padding="0 40px">
           <SectionText
             fontSize={responsive.mobileQuery ? "14px" : "18px"}
             color="#A3A3A3"
-          >Nenhum dataset encontrado com esses temas</SectionText>
+            textAlign={!responsive.mobileQuery && "center"}
+          >
+            Nenhum conjunto de dados foi encontrado com todos os temas{responsive.mobileQuery? ". " :<br/>}
+            Tente desmarcar algum dos temas
+          </SectionText>
         </Center>
       }
       <Center
@@ -148,6 +153,7 @@ function CardThemes ({ responsive, recentDataSets=[], loading }) {
             spaceBetween: 10,
             slidesPerView: responsiveChange(),
             navigation: true,
+            loop: true,
             autoplay: {
               delay: 6000,
               pauseOnMouseEnter: true,
@@ -211,6 +217,7 @@ export default function ThemeCatalog ({ popularDatalakeDatasets, themes }) {
   const mobileCheck = useCheckMobile()
   const [mobileQuery, setMobileQuery] = useState(false)
   const [baseQuery] = useMediaQuery("(max-width: 938px)")
+  const [mediumQuery] = useMediaQuery("(max-width: 1250px)")
   const [lgQuery] = useMediaQuery("(max-width: 1366px)")
 
   useEffect(() => {
@@ -263,7 +270,7 @@ export default function ThemeCatalog ({ popularDatalakeDatasets, themes }) {
         listThemes={listThemes}
         selectedTheme={selectedTheme}
         onSelectTheme={handleSelectTheme}
-        responsive={{mobileQuery, baseQuery, lgQuery}}
+        responsive={{mobileQuery, baseQuery, mediumQuery, lgQuery}}
       />
 
       <CardThemes
