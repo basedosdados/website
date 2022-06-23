@@ -276,6 +276,8 @@ export default function Transparencia({ pages }) {
           </Link>
         </Stack>
         <Stack 
+          position="relative"
+          left="32px"
           maxWidth={{ base: "100%", lg: "45%" }}
           paddingTop={{base: "32px", lg: "0px"}}
         >
