@@ -31,9 +31,8 @@ export default function Transparencia({ pages }) {
   }, [isMobile])
 
   return (
-  <MainPageTemplate pages={pages} paddingBottom="0px">
-    <Stack 
-      paddingX={{ base: "24px", lg: "0px" }}
+  <MainPageTemplate pages={pages} paddingX="24px" paddingBottom="0">
+    <Stack
       paddingTop={{ base: "80px", lg: "112px" }}
       paddingBottom={{ base: "10px", lg: "32px" }}
       width="100%"
@@ -65,27 +64,40 @@ export default function Transparencia({ pages }) {
           </Link>, estão presentes as diretrizes que regulamentam o funcionamento e o processo de tomada de decisões da organização.       
         </SectionText>
       </Stack>
-      <Stack maxWidth={{ base: "100%", lg: "45%" }}>
+      <Stack 
+        width={isMobileMod ? "100%" : {base: "445px", lg: "569px"}}
+        height={isMobileMod ? "100%" : {base: "356px", lg: "445px"}}
+      >
         <TransparencyImage
-          widthImage={{ base: "95%", lg: "569px"}}
-          heightImage={{ base: "95%", lg: "445px"}}
+          widthImage="100%"
+          heightImage="100%"
         />
       </Stack>
     </Stack>
+
     <Stack
-      paddingX={{ base: "24px", lg: "0px" }}
-      paddingTop={{ base: "80px", lg: "120px" }}
+      paddingTop={isMobileMod ? "80px" : "120px"}
       width="100%"
       maxWidth="1264px"
       justify="space-between"
       direction={{ base: "column", lg: "row" }}
       margin="auto"
     >
+      <Stack
+        display={isMobileMod ? "flex" : "none"}
+        width="100%"
+      >
+        <BigTitle
+          paddingBottom="40px"
+        >
+          Indicador de sobrevida
+        </BigTitle>
+      </Stack>
       <Stack 
-        order={isMobileMod ? 1 : 0}
         maxWidth={{ base: "100%", lg: "45%" }}
-        width={{base: "350px", lg: "600px"}}
-        height={{base: "300px", lg: "450px"}}
+        width={{base: "350px", lg: "450px"}}
+        height={{base: "300px", lg: "375px"}}
+        marginLeft={{base: "0px", lg: "64px"}}
       >
         <iframe
           src="https://perguntas.basedosdados.org/public/question/80ad0ba9-bfa9-4427-96a0-675fb2252b37#titled=false&bordered=false"
@@ -95,8 +107,12 @@ export default function Transparencia({ pages }) {
           allowtransparency
         />
       </Stack>
-      <Stack maxWidth={{ base: "100%", lg: "45%" }}>
+      <Stack 
+        maxWidth={{ base: "100%", lg: "45%" }}
+        paddingTop={{base: "24px", lg: "0px"}}
+      >
         <BigTitle
+          display={isMobileMod ? "none" : "flex"}
           paddingBottom={{base: "8px", lg: "24px"}}
         >
           Indicador de sobrevida
@@ -117,21 +133,21 @@ export default function Transparencia({ pages }) {
         </SectionText>
       </Stack>
     </Stack>
+
     <Stack
       order={isMobileMod ? 0 : 1}
-      paddingX={{ base: "24px", lg: "0px" }}
-      paddingTop={{ base: "80px", lg: "120px" }}
+      paddingTop={{ base: "40px", lg: "160px" }}
       width="100%"
       maxWidth="1264px"
       justify="space-between"
       direction={{ base: "column", lg: "row" }}
       margin="auto"
-      gridGap={{ base: "64px", lg: "0px" }}
+      gridGap={{ base: "40px", lg: "0px" }}
     >
       <Stack 
         maxWidth={{ base: "100%", lg: "45%" }}
-        width={{base: "350px", lg: "600px"}}
-        height={{base: "400px", lg: "450px"}}
+        width={{base: "350px", lg: "650px"}}
+        height={{base: "320px", lg: "400px"}}
       >
         <Text
         fontFamily="Ubuntu"
@@ -154,8 +170,8 @@ export default function Transparencia({ pages }) {
       </Stack>
       <Stack 
         maxWidth={{ base: "100%", lg: "45%" }}
-        width={{base: "350px", lg: "600px"}}
-        height={{base: "400px", lg: "450px"}}
+        width={{base: "350px", lg: "650px"}}
+        height={{base: "320px", lg: "400px"}}
       >
         <Text
           fontFamily="Ubuntu"
@@ -177,9 +193,9 @@ export default function Transparencia({ pages }) {
         />
       </Stack>
     </Stack>
+
     <Stack
-      paddingX={{ base: "24px", lg: "0px" }}
-      paddingTop={{ base: "80px", lg: "120px" }}
+      paddingTop={{ base: "80px", lg: "160px" }}
       width="100%"
       maxWidth="1264px"
       justify="space-between"
@@ -205,10 +221,10 @@ export default function Transparencia({ pages }) {
         </SectionText> 
       </Stack>   
     </Stack>
+
     <Stack
-      paddingX={{ base: "24px", lg: "0px" }}
       paddingTop="16px"
-      paddingBottom={{ base: "64px", lg: "96px" }}
+      paddingBottom={{ base: "80px", lg: "120px" }}
       width="100%"
       maxWidth="1264px"
       margin="auto"
@@ -220,11 +236,11 @@ export default function Transparencia({ pages }) {
         BD Relatório Anual 2021
       </Link>
     </Stack>
+
     <Stack
       backgroundColor="#252A32"
     >
       <Stack
-        paddingX={{ base: "24px", lg: "0px" }}
         paddingTop={{ base: "64px", lg: "80px" }}
         paddingBottom={{ base: "56px", lg: "72px" }}
         width="100%"
@@ -264,6 +280,7 @@ export default function Transparencia({ pages }) {
           paddingTop={{base: "32px", lg: "0px"}}
         >
           <DonationImage
+            paddingRight={{ base: "0px", lg: "120px"}}
             widthImage={{ base: "90%", lg: "326px"}}
             heightImage={{ base: "90%", lg: "307px"}}
           />
