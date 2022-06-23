@@ -131,17 +131,18 @@ function CardThemes ({ responsive, recentDataSets=[], loading }) {
     <Box
       width={responsive.mobileQuery ? "100vw" : "95%"}
       maxWidth="1264px"
-      marginY="48px !important" 
+      margin={responsive.mobileQuery ? "24px 0 48px !important" : "40px 0 48px !important"}
     >
       {recentDataSets.length === 0 &&
         <Center padding="0 40px">
           <SectionText
             fontSize={responsive.mobileQuery ? "14px" : "18px"}
             color="#A3A3A3"
-            textAlign={!responsive.mobileQuery && "center"}
+            textAlign="center"
+            marginBottom={responsive.mobileQuery ? "16px" : "32px"}
           >
-            Nenhum conjunto de dados foi encontrado com todos os temas{responsive.mobileQuery? ". " :<br/>}
-            Tente desmarcar algum dos temas
+            Nenhum conjunto foi encontrado com todos os temas selecionados.
+            Tente desmarcar algum dos temas.
           </SectionText>
         </Center>
       }
