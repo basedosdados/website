@@ -21,18 +21,20 @@ function Themes ({
   selectedTheme=[],
   listThemes=[],
  }) {
-  const responsiveChange = () => {
-    if(responsive.mobileQuery)
-      return 4
-    if(responsive.baseQuery)
-      return 6
-    if(responsive.mediumQuery)
-      return 9
-    if(responsive.lgQuery)
-      return 10
+  const [screenQuery, setScreenQuery] = useState(0)
 
-    return 10
-  }
+  useEffect(() => {
+    if(responsive.mobileQuery)
+      return setScreenQuery(4)
+    if(responsive.baseQuery)
+      return setScreenQuery(6)
+    if(responsive.mediumQuery)
+      return setScreenQuery(9)
+    if(responsive.lgQuery)
+      return setScreenQuery(10)
+
+    return setScreenQuery(10)
+  },[responsive])
 
   const found = (value) => {
     return selectedTheme.find(res => res === value)
@@ -49,7 +51,8 @@ function Themes ({
       <Carousel 
         settings={{
           spaceBetween: responsive.mobileQuery ? 20 : 10,
-          slidesPerView: responsiveChange(),
+          slidesPerView: screenQuery,
+          slidesPerGroup: 2,
           navigation: !responsive.mobileQuery && true,
           loop: true,
           autoplay:{
@@ -116,16 +119,18 @@ function Themes ({
 }
 
 function CardThemes ({ responsive, recentDataSets=[], loading }) {
-  const responsiveChange = () => {
-    if(responsive.mobileQuery)
-      return 1
-    if(responsive.baseQuery)
-      return 2
-    if(responsive.lgQuery)
-      return 3
+  const [screenQuery, setScreenQuery] = useState(0)
 
-    return 4
-  }
+  useEffect(() => {
+    if(responsive.mobileQuery)
+      return setScreenQuery(1)
+    if(responsive.baseQuery)
+      return setScreenQuery(2)
+    if(responsive.lgQuery)
+      return setScreenQuery(3)
+
+    return setScreenQuery(4)
+  },[responsive])
 
   return (
     <Box
@@ -152,7 +157,7 @@ function CardThemes ({ responsive, recentDataSets=[], loading }) {
         <Carousel 
           settings={{
             spaceBetween: 10,
-            slidesPerView: responsiveChange(),
+            slidesPerView: screenQuery,
             navigation: true,
             loop: true,
             autoplay: {
@@ -163,14 +168,14 @@ function CardThemes ({ responsive, recentDataSets=[], loading }) {
           }}
         >
           {loading ?
-            new Array(responsiveChange()).fill(0).map(() => (
+            new Array(screenQuery).fill(0).map(() => (
               <>
                 <Skeleton width="280px" height="290px" margin="20px 0"/>
               </>
             ))
           :
           recentDataSets.length === 0 ?
-            new Array(responsiveChange()).fill(0).map(() => (
+            new Array(screenQuery).fill(0).map(() => (
               <>
                 <Skeleton width="280px" height="290px" margin="20px 0"/>
               </>
