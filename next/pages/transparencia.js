@@ -53,17 +53,12 @@ export default function Transparencia({ pages }) {
           Nossas contas são transparentes e abertas – como todo o resto.
         </Display>
         <SectionText paddingBottom="20px">
-          Somos uma organização não-governamental sem fins lucrativos e <i>open source</i>. A transparência fundamenta todas nossas ações, desde o trabalho com dados públicos até a prestação de contas. Utilizamos os recursos para facilitar o acesso de milhares de pessoas a dados de qualidade. Nesse espaço, você encontra informações referentes às nossas atividades, receitas e despesas. 
+          Somos uma organização não-governamental sem fins lucrativos e <i>open source</i>. A transparência fundamenta todas as nossas ações, desde o trabalho com dados públicos até a prestação de contas. Utilizamos os recursos para facilitar o acesso de milhares de pessoas a dados de qualidade. 
         </SectionText>
         <SectionText paddingBottom="20px">
-          Em nosso
-          <Link
-            color="#42B0FF"
-            href={`https://drive.google.com/file/d/1JNcr4psQr42EV9mTafn512TD8p87ZP3a/view`}
-          > estatuto  
-          </Link>, estão presentes as diretrizes que regulamentam o funcionamento e o processo de tomada de decisões da organização.       
+          Nesse espaço, você encontra informações referentes às nossas atividades, receitas e despesas. Acompanhe de perto como garantimos a sustentabilidade da organização.
         </SectionText>
-      </Stack>
+      </Stack>     
       <Stack 
         width={isMobileMod ? "100%" : {base: "445px", lg: "569px"}}
         height={isMobileMod ? "100%" : {base: "356px", lg: "445px"}}
@@ -124,7 +119,7 @@ export default function Transparencia({ pages }) {
           O indicador evidencia a importância de sua contribuição para a continuidade dos nossos esforços em busca da universalização do acesso a dados públicos.
         </SectionText>
         <SectionText paddingBottom="20px">
-          Abaixo, você confere as fontes e destinações dos recursos da organização. Além disso, todos os microdados referentes à contabilidade da BD estão disponíveis no nosso <i>datalake</i> público. Veja
+          Abaixo, você confere as fontes e destinações dos recursos da organização. Como não poderia deixar de ser, todos os microdados relativos à contabilidade da BD estão disponíveis no nosso <i>datalake</i> público. Veja
           <Link
             color="#42B0FF"
             href={`https://basedosdados.org/dataset/br-bd-indicadores?bdm_table=contabilidade#titled=false&bordered=false`}
@@ -201,12 +196,63 @@ export default function Transparencia({ pages }) {
       justify="space-between"
       direction={{ base: "column", lg: "row" }}
       margin="auto"
+    >  
+      <Stack
+        paddingTop={{ base: "0px", lg: "24px" }}
+        maxWidth={{ base: "100%", lg: "45%" }}
+      >
+        <BigTitle
+          paddingBottom={{base: "16px", lg: "24px"}}
+        >
+          Estatuto Social
+        </BigTitle>
+        <SectionText paddingBottom="20px">
+          Em nosso estatuto, estão presentes as diretrizes que regulamentam o funcionamento e o processo de tomada de decisões da organização, além dos direitos e deveres dos membros e dos conselhos administrativos e fiscais.
+        </SectionText>
+        <SectionText paddingBottom="20px">
+          O documento estabelece também os meios pelos quais sustentamos a iniciativa e os procedimentos relacionados à prestação de contas. É a partir do estatuto que norteamos o aprimoramento das nossas ferramentas e o desenvolvimento de novos projetos para a organização.
+        </SectionText>
+      </Stack>
+      <Stack
+        paddingTop={{ base: "0px", lg: "96px" }}
+        maxWidth={{ base: "100%", lg: "45%" }}
+      >
+        <SectionText paddingBottom="20px">
+          Os membros são pessoas que firmam compromisso com a nossa missão através de pedido por escrito feito ao Conselho de Administração. Uma vez associados, eles possuem direito formal de voto nas questões que direcionam a organização rumo à concretização dos objetivos sociais.
+        </SectionText>
+        <SectionText paddingBottom={{base: "20px", lg: "0px"}}>
+          Os conselhos administrativos e fiscais são renovados através de eleições orientadas pelas regras do estatuto. Esses órgãos são responsáveis pela aprovação dos relatórios anuais de atividades, que posteriormente serão submetidos para apreciação da Assembleia Geral.
+        </SectionText>
+      </Stack>
+    </Stack>
+
+    <Stack
+      paddingTop="16px"
+      width="100%"
+      maxWidth="1264px"
+      margin="auto"
+    >
+      <Link 
+        color="#42B0FF"
+        href={`https://drive.google.com/file/d/1JNcr4psQr42EV9mTafn512TD8p87ZP3a/view`}
+      >
+        BD Estatuto Social
+      </Link>
+    </Stack>
+    
+    <Stack
+      paddingTop={{ base: "60px", lg: "160px" }}
+      width="100%"
+      maxWidth="1264px"
+      justify="space-between"
+      direction={{ base: "column", lg: "row" }}
+      margin="auto"
     >
       <Stack maxWidth={{ base: "100%", lg: "45%" }}>
         <BigTitle
-          paddingBottom={{base: "8px", lg: "24px"}}
+          paddingBottom={{base: "16px", lg: "24px"}}
         >
-          Relatórios
+          Relatórios anuais de atividades
         </BigTitle>
         <SectionText paddingBottom="20px">
           Nossos relatórios apresentam todas as atividades empenhadas pela equipe. São diversos projetos que colaboram com a promoção da cultura de transparência, o desenvolvimento socioeconômico e a construção de políticas públicas baseadas em dados e evidências.
@@ -217,7 +263,7 @@ export default function Transparencia({ pages }) {
         paddingTop={{ base: "0", lg: "72px" }}
       >
         <SectionText paddingBottom="20px">
-          Os documentos reúnem também os demonstrativos financeiros da organização. Explore nossos relatórios e conheça melhor o trabalho desenvolvido nas diferentes frentes de atuação.
+          Os documentos reúnem também as demonstrações de desempenho financeiro da organização. Explore nossos relatórios e conheça melhor o trabalho desenvolvido nas diferentes frentes de atuação.
         </SectionText> 
       </Stack>   
     </Stack>
@@ -239,19 +285,23 @@ export default function Transparencia({ pages }) {
 
     <Stack
       backgroundColor="#252A32"
+      width= "100vw"
+      position="relative"
+      left={isMobileMod ? "-24px" :"-32px"}
+      paddingX={isMobileMod ? "24px" :"32px"}
     >
       <Stack
-        paddingTop={{ base: "64px", lg: "80px" }}
-        paddingBottom={{ base: "56px", lg: "72px" }}
         width="100%"
         maxWidth="1264px"
+        paddingTop={{ base: "64px", lg: "80px" }}
+        paddingBottom={{ base: "56px", lg: "72px" }}
         justify="space-between"
         direction={{ base: "column", lg: "row" }}
         margin="auto"
       >
-        <Stack 
+        <Stack
           paddingTop={{ base: "0px", lg: "16px" }}
-          maxWidth={{ base: "100%", lg: "45%" }}
+          maxWidth={{ base: "100%", lg: "35%" }}
         >
           <BigTitle 
             paddingBottom={{base: "8px", lg: "24px"}}
@@ -276,8 +326,6 @@ export default function Transparencia({ pages }) {
           </Link>
         </Stack>
         <Stack 
-          position="relative"
-          left="32px"
           maxWidth={{ base: "100%", lg: "45%" }}
           paddingTop={{base: "32px", lg: "0px"}}
         >
