@@ -19,8 +19,8 @@ export default function BigTitle({
   return (
     <Heading
       fontFamily="Ubuntu"
-      fontSize={isMobileMod ? "20px" : "28px"}
-      lineHeight={isMobileMod ? "24px" : "40px"}
+      fontSize={isMobileMod ? "24px" : "28px"}
+      lineHeight={isMobileMod ? "34px" : "40px"}
       letterSpacing={isMobileMod ? "0.2px" : "0.1px"}
       color={color}
       fontWeight={fontWeigth}

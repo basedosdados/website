@@ -193,6 +193,13 @@ export default function Footer({ pages }) {
                 Newsletter
               </FooterLink>
               <FooterLink
+                href="https://basedosdados.org/transparencia"
+                color="white"
+                target="_blank"
+              >
+                Transparência
+              </FooterLink>
+              <FooterLink
                 href="https://info.basedosdados.org/carreiras"
                 color="white"
                 target="_blank"
