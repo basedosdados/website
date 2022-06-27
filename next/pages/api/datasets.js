@@ -58,7 +58,7 @@ export function getRecentDatalakeDatasets() {
 export function getRecentDatalakeDatasetsByTheme(id) {
   return axios
     .get(
-      `https://basedosdados.org/api/3/action/bd_dataset_search?q=&page=1&order_by=recent&group=${id}`
+      `/api/3/action/bd_dataset_search?q=&page=1&order_by=popular&group=${id}`
     )
     .then(({ data }) => data.result.datasets);
 }

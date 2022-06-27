@@ -145,24 +145,40 @@ body {
   margin-left: 30px;
 }
 
-.BrainhubCarousel__arrows {
-  background-color: transparent !important;
+.swiper {
+  min-width: 100%;
+  padding: 0 32px !important;
 }
 
-.BrainhubCarousel__arrows {
-  background-color: transparent !important;
+.swiper-slide {
+  display: flex;
+  justify-content: center;
 }
 
-.BrainhubCarousel__arrowLeft {
-  transform: translateX(10px);
+.swiper-button-prev {
+  color: #DEDFE0 !important;
+  background-color: #FFF;
+  left: 0 !important;
+  top: 0 !important;
+  margin-top: 0 !important;
+  height: 100% !important
 }
 
-.BrainhubCarousel__arrowRight {
-  transform: translateX(-10px);
+.swiper-button-prev::after ,.swiper-button-next::after {
+  font-size: 32px !important;
 }
 
-.BrainhubCarousel__arrows span {
-  border-color: #dedfe0 !important;
+.swiper-button-next {
+  color: #DEDFE0 !important;
+  background-color: #FFF;
+  right: 0 !important;
+  top: 0 !important;
+  margin-top: 0 !important;
+  height: 100% !important;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #2b8c4d !important;
 }
 
 .rjsf {
