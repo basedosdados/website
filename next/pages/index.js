@@ -277,7 +277,7 @@ function Products() {
               </Text>
 
               <SectionTitle marginTop="0 !important">Busque dados como quiser</SectionTitle>
-              <SectionText>
+              <SectionText fontSize="16px">
                 São vários filtros para ajudar você a encontrar os dados que necessita.
                 Ao navegar entre centenas de conjuntos de dados disponíveis na plataforma,
                 você pode refinar sua busca por tema, organização, cobertura temporal, nível da observação e mais.
@@ -326,7 +326,7 @@ function Products() {
               </HStack>
               
               <SectionTitle marginTop="0 !important">Acesse dados de qualidade</SectionTitle>
-              <SectionText>
+              <SectionText fontSize="16px">
                 Com as tabelas tratadas do nosso <i>datalake</i> público,
                 você não precisa mais gastar horas limpando bases.
                 Nossa metodologia de padronização permite cruzar facilmente dados de diferentes organizações. Assim, você pode focar no que realmente importa.
@@ -366,7 +366,7 @@ function Products() {
               </Text>
 
               <SectionTitle marginTop="0 !important">Explore na sua linguagem favorita</SectionTitle>
-              <SectionText>
+              <SectionText fontSize="16px">
                 Desenvolvemos pacotes para acesso aos dados tratados em Python, R e linha de comando. Além disso, você pode consultar e filtrar
                 dados usando SQL no editor do nosso <i>datalake</i> público no Google BigQuery.
               </SectionText>
@@ -578,8 +578,6 @@ function Support({ pages }) {
               />
               <SectionText
                 marginLeft="auto"
-                fontWeight="300"
-                fontSize="14px"
                 flex={1}
               >
                 Chave CNPJ<br/>
@@ -592,8 +590,6 @@ function Support({ pages }) {
             </Stack>
             <Stack>
               <SectionText
-                fontWeight="300"
-                fontSize="14px"
                 maxHeight="190px"
                 textAlign="start"
                 lineHeight={{base:"30px", lg:"30px", xl: "40px"}}
