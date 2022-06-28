@@ -227,7 +227,7 @@ export default function Transparencia({ pages }) {
         <Link
           target="_blank"
           color="#42B0FF"
-          href={`https://drive.google.com/file/d/1JNcr4psQr42EV9mTafn512TD8p87ZP3a/view`}
+          href={`https://basedosdados-static.s3.us-east-2.amazonaws.com/pdf/BD_Estatuto_Social.pdf`}
         >
           BD Estatuto Social
         </Link>
@@ -267,7 +267,7 @@ export default function Transparencia({ pages }) {
         <Link
           target="_blank"
           color="#42B0FF"
-          href={`https://drive.google.com/drive/folders/1cVs17GoC9bymakozof_kyEhay-hxUCW3`}
+          href={`https://basedosdados-static.s3.us-east-2.amazonaws.com/pdf/BD_Relatorio_Anual_2021.pdf`}
         >
           BD Relatório Anual 2021
         </Link>
