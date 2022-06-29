@@ -180,7 +180,7 @@ export default function Footer({ pages }) {
             </LinkVStack>
             <LinkVStack title="INSTITUCIONAL">
               <FooterLink
-                href="https://basedosdados.org/quem-somos"
+                href="/quem-somos"
                 color="white"
               >
                 Quem somos
@@ -193,6 +193,12 @@ export default function Footer({ pages }) {
                 Newsletter
               </FooterLink>
               <FooterLink
+                href="/transparencia"
+                color="white"
+              >
+                Transparência
+              </FooterLink>
+              <FooterLink
                 href="https://info.basedosdados.org/carreiras"
                 color="white"
                 target="_blank"
@@ -200,7 +206,7 @@ export default function Footer({ pages }) {
                 Carreiras
               </FooterLink>
               <FooterLink
-                href="https://basedosdados.org/contato"
+                href="/contato"
                 color="white"
               >
                 Contato

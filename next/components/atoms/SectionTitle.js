@@ -20,7 +20,7 @@ export default function SectionTitle({
       fontFamily="Ubuntu"
       fontWeight="400"
       lineHeight="40px"
-      fontSize={isMobileMod ? "16px" : "24px"}
+      fontSize={isMobileMod ? "20px" : "24px"}
       letterSpacing={isMobileMod ? "0.2px" : "0px"}
       color={color}
       {...style}

@@ -100,14 +100,14 @@ function DesktopLinks({ links }) {
                     flexDirection="colunm"
                     _hover={{ opacity: "0.6" }}
                     fontSize="14px"
-                    target="_blank"
+                    target={k === "Transparência" ? null : "_blank"}
                     color="#252A32"
                     fontFamily="Ubuntu"
                     fontWeigth="400"
                     letterSpacing="0.3px"
                     href={v}
                     padding="10px 24px"
-                  >
+                  > 
                     {k}
                   </Link>
                 ))}
@@ -174,6 +174,7 @@ export default function Menu({ pages = [] }) {
     Serviços: "/servicos",
     Institucional: {
       Newsletter: "https://info.basedosdados.org/newsletter",
+      Transparência: "/transparencia",
       Carreiras: "https://info.basedosdados.org/carreiras"
     },
     "Quem somos": "/quem-somos",
