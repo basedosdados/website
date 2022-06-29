@@ -151,10 +151,6 @@ function TableDatasets({
       return empty()
     }
 
-    if(value.length === 0) {
-      return empty()
-    }
-
     if(typeof value === "object") {
       return directoryColumnValue(value)
     }
