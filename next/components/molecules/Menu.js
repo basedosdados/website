@@ -9,13 +9,16 @@ import {
   Divider,
   Avatar,
 } from "@chakra-ui/react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/router"
+import { MenuDropdown } from "./MenuDropdown";
 import RoundedButton from "../atoms/RoundedButton";
 import Link from "../atoms/Link";
-import { useContext, useEffect, useRef, useState } from "react";
 import FarBarsIcon from "../../public/img/icons/farBarsIcon";
 import UserContext from "../../context/user";
-import { MenuDropdown } from "./MenuDropdown";
+import ControlledInput from "../atoms/ControlledInput";
 import BDLogoImage from "../../public/img/logos/bd_logo";
+import SearchIcon from "../../public/img/icons/searchIcon";
 
 function MenuDrawer({ isOpen, onClose, links }) {
   return (
@@ -45,12 +48,90 @@ function MenuDrawer({ isOpen, onClose, links }) {
   );
 }
 
-function DesktopLinks({ links }) {
-  const [search, setSearch] = useState();
-  const userData = useContext(UserContext);
+function SearchInput ({ status }) {
+  const router = useRouter()
+  const { query } = router
+  const timerRef = useRef();
+  const [showSearchInput, setShowSearchInput] = useState(false)
+
+  const [showSearch, setShowSearch] = useState(false)
+  const [search, setSearch] = useState()
+
+  const searchStatus = () => {
+    const newStatus = !showSearch
+    setShowSearch(newStatus)
+    status({
+      status: newStatus
+    })
+  }
+
+  const MouseLeaveEvent = () => {
+    timerRef.current = setTimeout(() => {
+      searchStatus()
+    }, 2000)
+  }
+
+  useEffect(() => {
+    if(query.dataset) {
+      return setShowSearchInput(true)
+    }
+  },[query])
 
   function openSearchLink() {
-    window.open(`/dataset?q=${search}`, "_self");
+    window.open(`/dataset?q=${search}`, "_self")
+  }
+
+  if(!showSearchInput)
+    return null
+  
+  return (
+    <>
+      {!showSearch ? 
+        <SearchIcon 
+          fill="#404245"
+          widthIcon="18px"
+          heightIcon="18px"
+          marginRight="14px !important"
+          cursor="pointer"
+          onClick={searchStatus}
+        />
+      :
+        <ControlledInput
+          value={search}
+          onChange={setSearch}
+          onEnterPress={openSearchLink}
+          alignSelf="center"
+          justifyContent="center"
+          isBorderColor={false}
+          marginRight="10px"
+          onMouseLeave={MouseLeaveEvent}
+          inputStyle={{
+            height: "48px",
+            fontSize: "16px",
+            width: "100%",
+            borderRadius: "16px",
+          }}
+          rightIcon={
+            <SearchIcon 
+              fill="#404245"
+              widthIcon="18px"
+              heightIcon="18px"
+              cursor="pointer"
+              onClick={openSearchLink}
+            />
+          }
+        />
+      }
+    </>
+  )
+}
+
+function DesktopLinks({ links }) {
+  const userData = useContext(UserContext)
+  const [statusSearch, setStatusSearch] = useState(false)
+
+  const searchStatus = (elm) => {
+    setStatusSearch(elm.status)
   }
 
   return (
@@ -130,31 +211,36 @@ function DesktopLinks({ links }) {
           );
         })}
       </HStack>
-      <HStack spacing={8} display={{ base: "none", lg: "flex" }}>
-        {userData ? (
-          <HStack spacing={5}>
-            <Avatar
-              bg="#2B8C4D"
-              name={userData?.fullname}
-              src={userData.image_url}
-            />
-            <Link style={{ fontSize: "12px" }} href={`/user/${userData.name}`}>
-              {userData.fullname}
-            </Link>
-          </HStack>
-        ) : (
-          <>
-            <Link fontSize="14px" fontFamily="Ubuntu" fontWeigth="400" letterSpacing="0.3px" href="/user/login">
-              Entrar
-            </Link>
-            <Link _hover={{ opacity:"none" }} href="/user/register">
-              <RoundedButton height="35px" fontSize="14px" minWidth="110px">
-                Cadastrar
-              </RoundedButton>
-            </Link>
-          </>
-        )}
-      </HStack>
+
+      <SearchInput status={searchStatus}/>
+
+      {!statusSearch &&
+        <HStack spacing={8} display={{ base: "none", lg: "flex" }}>
+          {userData ? (
+            <HStack spacing={5}>
+              <Avatar
+                bg="#2B8C4D"
+                name={userData?.fullname}
+                src={userData.image_url}
+              />
+              <Link style={{ fontSize: "12px" }} href={`/user/${userData.name}`}>
+                {userData.fullname}
+              </Link>
+            </HStack>
+          ) : (
+            <>
+              <Link fontSize="14px" fontFamily="Ubuntu" fontWeigth="400" letterSpacing="0.3px" href="/user/login">
+                Entrar
+              </Link>
+              <Link _hover={{ opacity:"none" }} href="/user/register">
+                <RoundedButton height="35px" fontSize="14px" minWidth="110px">
+                  Cadastrar
+                </RoundedButton>
+              </Link>
+            </>
+          )}
+        </HStack>
+      }
     </HStack>
   );
 }
