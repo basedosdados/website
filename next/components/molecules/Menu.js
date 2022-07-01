@@ -19,6 +19,7 @@ import UserContext from "../../context/user";
 import ControlledInput from "../atoms/ControlledInput";
 import BDLogoImage from "../../public/img/logos/bd_logo";
 import SearchIcon from "../../public/img/icons/searchIcon";
+import CrossIcon from "../../public/img/icons/crossIcon";
 
 function MenuDrawer({ isOpen, onClose, links }) {
   return (
@@ -51,11 +52,10 @@ function MenuDrawer({ isOpen, onClose, links }) {
 function SearchInput ({ status }) {
   const router = useRouter()
   const { query } = router
-  const timerRef = useRef();
   const [showSearchInput, setShowSearchInput] = useState(false)
 
   const [showSearch, setShowSearch] = useState(false)
-  const [search, setSearch] = useState()
+  const [search, setSearch] = useState("")
 
   const searchStatus = () => {
     const newStatus = !showSearch
@@ -63,12 +63,6 @@ function SearchInput ({ status }) {
     status({
       status: newStatus
     })
-  }
-
-  const MouseLeaveEvent = () => {
-    timerRef.current = setTimeout(() => {
-      searchStatus()
-    }, 2000)
   }
 
   useEffect(() => {
@@ -93,31 +87,35 @@ function SearchInput ({ status }) {
           heightIcon="18px"
           marginRight="14px !important"
           cursor="pointer"
+          _hover={{opacity:"0.8"}}
           onClick={searchStatus}
         />
       :
         <ControlledInput
+          flex={2}
+          maxWidth="360px"
           value={search}
           onChange={setSearch}
           onEnterPress={openSearchLink}
+          placeholder="Pesquise dados"
           alignSelf="center"
+          marginLeft="20px !important"
           justifyContent="center"
-          isBorderColor={false}
           marginRight="10px"
-          onMouseLeave={MouseLeaveEvent}
           inputStyle={{
-            height: "48px",
+            height: "40px",
             fontSize: "16px",
             width: "100%",
             borderRadius: "16px",
           }}
           rightIcon={
-            <SearchIcon 
+            <CrossIcon 
               fill="#404245"
-              widthIcon="18px"
-              heightIcon="18px"
+              widthIcon="24px"
+              heightIcon="24px"
               cursor="pointer"
-              onClick={openSearchLink}
+              _hover={{opacity:"0.8"}}
+              onClick={searchStatus}
             />
           }
         />
