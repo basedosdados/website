@@ -55,27 +55,18 @@ from pydantic import ValidationError
 
 
 @toolkit.side_effect_free
+def bd_spatial_coverage_tree(context, data_dict):
+    return {k: v.dict() for k, v in SPATIAL_COVERAGE_AREAS.items()}
+
+
+@toolkit.side_effect_free
 def bd_dataset_schema(context, data_dict):
     return Dataset.schema()
 
 
-def get_spatial_coverage_tree():
-    return {k: v.dict() for k, v in SPATIAL_COVERAGE_AREAS.items()}
-    # return {v.id: v.label["pt"] for k, v in SPATIAL_COVERAGE_AREAS.items()}
-
-
 @toolkit.side_effect_free
 def bd_bdm_table_schema(context, data_dict):
-    return {
-        "schema": BdmTable.schema(),
-        "spatial_coverage_tree": get_spatial_coverage_tree(),
-    }
-
-
-@toolkit.side_effect_free
-def bd_spatial_coverage_tree(context, data_dict):
-    return {v.id: v.label["pt"] for k, v in SPATIAL_COVERAGE_AREAS.items()}
-    # return get_spatial_coverage_tree()
+    return BdmTable.schema()
 
 
 @toolkit.side_effect_free
