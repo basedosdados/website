@@ -173,11 +173,11 @@ export default function Menu({ pages = [] }) {
     },
     Serviços: "/servicos",
     Institucional: {
+      "Quem somos": "/quem-somos",
       Newsletter: "https://info.basedosdados.org/newsletter",
       Transparência: "/transparencia",
       Carreiras: "https://info.basedosdados.org/carreiras"
     },
-    "Quem somos": "/quem-somos",
     Contato: "/contato",
     Apoie: "https://apoia.se/basedosdados",
   };
