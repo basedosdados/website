@@ -146,7 +146,7 @@ function CardThemes ({ responsive, recentDataSets=[], loading }) {
             textAlign="center"
             marginBottom={responsive.mobileQuery ? "16px" : "32px"}
           >
-            Nenhum conjunto foi encontrado com todos os temas selecionados.
+            Nenhum conjunto com todos os temas selecionados foi encontrado.
             Tente desmarcar algum dos temas.
           </SectionText>
         </Center>
