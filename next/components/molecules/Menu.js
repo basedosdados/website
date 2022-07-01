@@ -179,7 +179,7 @@ function DesktopLinks({ links }) {
                     flexDirection="colunm"
                     _hover={{ opacity: "0.6" }}
                     fontSize="14px"
-                    target={k === "Transparência" ? null : "_blank"}
+                    target={k === "Transparência" || "quem-somos" ? null : "_blank"}
                     color="#252A32"
                     fontFamily="Ubuntu"
                     fontWeigth="400"
