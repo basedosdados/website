@@ -14,13 +14,13 @@ function MyApp({ Component, pageProps }) {
         <link rel="icon" type="image/ico" href="/favicon.ico" />
         <link
           rel="image_src"
-          href="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/2022/thumbnail_geral.png"
+          href="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/2022/thumbnail_padrao.png"
         />
         <link rel="stylesheet" href="/vendor/prism.css" data-noprefix />
         <title>Base dos Dados</title>
         <meta
           property="description"
-          content="Baixe dados já limpos, integrados e atualizados de forma extremamente fácil através do nosso datalake público."
+          content="São centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python, R ou Stata."
         />
         <script
           defer
@@ -33,14 +33,14 @@ function MyApp({ Component, pageProps }) {
         <meta name="twitter:creator" content="@basedosdados" />
         <meta
           name="twitter:image"
-          content="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/2022/thumbnail_geral.png"
+          content="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/2022/thumbnail_padrao.png"
           key="twimage"
         />
 
         {/* Open Graph */}
         <meta
           property="og:image"
-          content="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/2022/thumbnail_geral.png"
+          content="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/2022/thumbnail_padrao.png"
           key="ogimage"
         />
         <meta
@@ -51,7 +51,7 @@ function MyApp({ Component, pageProps }) {
         <meta property="og:title" content="Base dos Dados" key="ogtitle" />
         <meta
           property="og:description"
-          content="Baixe dados já limpos, integrados e atualizados de forma extremamente fácil através do nosso datalake público."
+          content="São centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python, R ou Stata."
           key="ogdesc"
         />
         <script

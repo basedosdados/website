@@ -456,7 +456,7 @@ export default function DatasetPage({
   return (
     <MainPageTemplate pages={pages}>
       <Head>
-        <title>{dataset.title} — Base dos Dados</title>
+        <title>{dataset.title} – Base dos Dados</title>
 
         {/* Open Graph */}
         <link
