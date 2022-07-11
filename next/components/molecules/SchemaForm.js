@@ -6,6 +6,7 @@ import { Center, VStack } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import Head from "next/head";
 import { GeoTree } from "./GeoTree";
+import { getSpatialCovarageTree } from "../../pages/api/schemas"
 
 export function SchemaForm({
   data,
@@ -17,6 +18,13 @@ export function SchemaForm({
     return data;
   },
 }) {
+  const [spatialCoverageTree, setSpatialCoverageTree] = useState({})
+  
+  useEffect(() => {
+    getSpatialCovarageTree()
+      .then(res => setSpatialCoverageTree(res))
+  },[])
+
   const toast = useToast();
   let { data: schema = {}, isLoading } = useQuery(
     "schema",
@@ -70,7 +78,7 @@ export function SchemaForm({
           }
       }
   }
-  const fields = {GeoTree: (props) => GeoTree(props, schema)}
+  const fields = {GeoTree: (props) => GeoTree(props, spatialCoverageTree)}
 
   /////
 
