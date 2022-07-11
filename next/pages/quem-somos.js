@@ -280,6 +280,26 @@ export default function QuemSomos({ pages }) {
         paddingBottom="80px"
         margin="auto"
       >
+        <Center
+          width={isMobileMod ? "100%" : "80%"}
+          margin="auto"
+        >
+          <Carousel
+            settings={{
+              spaceBetween: isMobileMod ? 100 : 10,
+              slidesPerView: isMobileMod ? 3 : 6,
+              centeredSlides: isMobileMod ? true : false,
+            }}
+          >
+            <Box backgroundColor="#cecece" minWidth="100px" width="100px" height="100px" borderRadius="10px">Co-fundadores</Box>
+            <Box backgroundColor="#cecece" minWidth="100px" width="100px" height="100px" borderRadius="10px">Root</Box>
+            <Box backgroundColor="#cecece" minWidth="100px" width="100px" height="100px" borderRadius="10px">Infra</Box>
+            <Box backgroundColor="#cecece" minWidth="100px" width="100px" height="100px" borderRadius="10px">Dados</Box>
+            <Box backgroundColor="#cecece" minWidth="100px" width="100px" height="100px" borderRadius="10px">Comunicacao</Box>
+            <Box backgroundColor="#cecece" minWidth="100px" width="100px" height="100px" borderRadius="10px">Website</Box>
+          </Carousel>
+        </Center>
+
         {team["nome-do-time"].map((elm, index) => (
           <TeamBox
             index={index}
