@@ -48,7 +48,7 @@ export function getBdmTableSchema() {
   return axiosInstance
     .get(`/bd_bdm_table_schema`)
     .then(({ data }) => {
-      const schema = data.result.schema;
+      const schema = data.result;
 
       delete schema.properties.id;
       delete schema.properties.position;
@@ -72,9 +72,15 @@ export function getBdmTableSchema() {
       delete schema.properties.compressed_file_size;
       delete schema.required;
 
-      return {schema: schema, spatial_coverage_tree: data.result.spatial_coverage_tree};
+      return schema
     })
     .catch(() => ({}));
+}
+
+export function getSpatialCovarageTree() {
+  return axiosInstance
+    .get(`/bd_spatial_coverage_tree`)
+    .then(({ data }) => { return data.result })
 }
 
 export function getExternalLinkSchema() {
