@@ -11,12 +11,15 @@ import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
 import Display from "../components/atoms/Display";
 import SectionText from "../components/atoms/SectionText";
+import SectionTitle from "../components/atoms/SectionTitle";
+import BigTitle from "../components/atoms/BigTitle";
 import Link from "../components/atoms/Link";
 import Carousel from "../components/atoms/Carousel";
 import WebIcon  from "../public/img/icons/webIcon";
 import TwitterIcon  from "../public/img/icons/twitterIcon";
 import LinkedinIcon  from "../public/img/icons/linkedinIcon";
 import GitIcon  from "../public/img/icons/gitIcon";
+import TrophySvg from "../public/img/trophySvg"
 
 export async function getStaticProps(context) {
   return await withPages();
@@ -34,7 +37,6 @@ const HistoryBox = ({ title, date, text }) => {
     <Box
       display="flex"
       flexDirection="column"
-      padding="48px 0"
     >
       <Box
         backgroundColor="#CECECE"
@@ -73,7 +75,44 @@ const team = {
       twitter:"Adicionar conta do twitter",
       linkedin:"Adicionar conta do linkedin",
       github:"Adicionar usuario Github"
+    },
+    {
+      name:"Adicionar Nome",
+      role:"Adicionar Funcoes",
+      description:"Adicionar Descricao",
+      website:"Adicionar Site",
+      twitter:"Adicionar conta do twitter",
+      linkedin:"Adicionar conta do linkedin",
+      github:"Adicionar usuario Github"
+    },
+    {
+      name:"Adicionar Nome",
+      role:"Adicionar Funcoes",
+      description:"Adicionar Descricao",
+      website:"Adicionar Site",
+      twitter:"Adicionar conta do twitter",
+      linkedin:"Adicionar conta do linkedin",
+      github:"Adicionar usuario Github"
+    },
+    {
+      name:"Adicionar Nome",
+      role:"Adicionar Funcoes",
+      description:"Adicionar Descricao",
+      website:"Adicionar Site",
+      twitter:"Adicionar conta do twitter",
+      linkedin:"Adicionar conta do linkedin",
+      github:"Adicionar usuario Github"
+    },
+    {
+      name:"Adicionar Nome",
+      role:"Adicionar Funcoes",
+      description:"Adicionar Descricao",
+      website:"Adicionar Site",
+      twitter:"Adicionar conta do twitter",
+      linkedin:"Adicionar conta do linkedin",
+      github:"Adicionar usuario Github"
     }
+
   ]
 }
 
@@ -90,7 +129,7 @@ const TeamBox = ({ index, bio }) => {
   const keyIcons = (ref) => {
     let href = ""
 
-    if(ref.website) { href = `https://${ref.website}` }
+    if(ref.website) { href = `${ref.website}` }
     if(ref.twitter) {
       const twitter = ref.twitter.replace(/(https:)\/\/(twitter.com)\//gim, "")
       href = `https://twitter.com/${twitter}`
@@ -164,21 +203,21 @@ export default function QuemSomos({ pages }) {
 
   return (
     <MainPageTemplate pages={pages} paddingX="24px">
-      <Stack
+      {/* <Stack
         paddingTop={{ base: "80px", lg: "0px" }}
         paddingBottom={{ base: "10px", lg: "50px" }}
         width="100%"
         maxWidth="1264px"
-        justify="space-between"
+        justifyContent="space-between"
         direction={{ base: "column", lg: "row" }}
         margin="auto"
       >
         <VStack maxWidth={{ base: "100%", lg: "45%" }}>
           <Box contentAlign="flex-start">
-          <Display 
-                color="#2B8C4D"
-                paddingBottom="24px"
-              >
+            <Display 
+              color="#2B8C4D"
+              paddingBottom="24px"
+            >
               Quem somos
             </Display>
             <SectionText fontSize="14px" fontWeight="300" paddingBottom="20px">
@@ -216,6 +255,68 @@ export default function QuemSomos({ pages }) {
             </Link>
           </Box>
         </VStack>
+      </Stack> */}
+
+      <Stack
+        width="100%"
+        maxWidth="1264px"
+        margin="auto"
+        paddingTop={{ base: "80px", lg: "0px" }}
+        paddingBottom="200px"
+        alignItems="center"
+      >
+        <Display lineHeight="52px" textAlign="center" marginBottom="56px">
+          Facilitamos o acesso a dados<br/> para que a distância entre você e sua análise <br/>seja <a style={{color:"#2B8C4D"}}>apenas uma boa pergunta</a>.
+        </Display>
+        <Text
+          width={isMobileMod ? "100%" : "80%"}
+          fontFamily="ubuntu"
+          fontWeight="300"
+          fontSize="20px"
+          lineHeight="32px"
+          letterSpacing="0.2px"
+          color="#6F6F6F"
+          textAlign="center"
+        >
+          Adicionar subtitle: Milhares de pessoas encontram, baixam, cruzam e analisam dados de um jeito 
+          muito mais fácil com a BD. Vivamus a urna vestibulum, luctus erat vitae, rhoncus ante. 
+        </Text>
+      </Stack>
+
+      <Stack
+        width="100%"
+        maxWidth="1264px"
+        margin="auto"
+        paddingBottom="160px"
+        spacing={0}
+      >
+        <Center marginBottom="80px" flexDirection="column">
+          <TrophySvg width="100px" height="100px" marginBottom="8px"/>
+          <BigTitle>Reconhecimentos</BigTitle>
+        </Center>
+
+        <Stack
+          flexDirection={isMobileMod ? "column" : "row"}
+          justifyContent="space-between"
+          spacing={isMobileMod ? "120px" : "0"}
+        >
+          <Box textAlign="center" maxWidth={isMobileMod ? "100%" : "45%"}>
+            <SectionTitle marginBottom="16px" fontSize="22px">Google Cloud Customer Award</SectionTitle>
+            <SectionText fontSize="16px">O prêmio reconheceu as implementações mais inovadoras e transformadoras do Google Cloud ao redor do mundo. 
+                Fomos a única organização brasileira a receber a premiação na categoria de Impacto Social, que também selecionou outras iniciativas que usam tecnologia para promover mais abertura e transparência. 
+                O anúncio aconteceu no Google Cloud Next'21. 
+            </SectionText>
+            <SectionText fontWeigth="700" fontSize="16px" color="#42B0FF">Veja mais detalhes.</SectionText>
+          </Box>
+
+          <Box textAlign="center" maxWidth={isMobileMod ? "100%" : "45%"}>
+            <SectionTitle marginBottom="16px" fontSize="22px">XXVI Prêmio Tesouro Nacional 2021</SectionTitle>
+            <SectionText fontSize="16px">
+              Conquistamos o 1º lugar na categoria Soluções. O prêmio tem como objetivo expandir as fronteiras do conhecimento em finanças públicas, promovendo a normalização de temas específicos quando tratados consistentemente pela pesquisa científica. Fomos selecionados por conta de nosso trabalho compatibilizando informações de despesas e receitas orçamentárias do Setor Público Brasileiro.
+            </SectionText>
+            <SectionText fontWeigth="700" fontSize="16px" color="#42B0FF">Veja mais detalhes.</SectionText>
+          </Box>
+        </Stack>
       </Stack>
 
       <Stack
@@ -224,7 +325,7 @@ export default function QuemSomos({ pages }) {
         alignItems="center"
         position="relative"
         left={isMobileMod ? "-24px" : "-32px"}
-        marginBottom="160px"
+        paddingBottom="160px"
         bgGradient="linear(#34A15A 62%, #FFF 62%)"
       >
         <Center flexDirection="column">
@@ -239,7 +340,7 @@ export default function QuemSomos({ pages }) {
             fontWeight="300"
             textAlign="center"
             color="#FFF"
-            margin="8px 0 32px"
+            margin="8px 0 88px"
           >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ornare nibh vel ex porta pulvinar. Vivamus a urna vestibulum, luctus.</Text>
         </Center>
       
@@ -273,39 +374,54 @@ export default function QuemSomos({ pages }) {
         </Center>
       </Stack>
 
-      <Stack 
+      <Stack
         width="100%"
         maxWidth="1264px"
-        spacing="100px"
-        paddingBottom="80px"
         margin="auto"
       >
-        <Center
-          width={isMobileMod ? "100%" : "80%"}
-          margin="auto"
-        >
-          <Carousel
-            settings={{
-              spaceBetween: isMobileMod ? 100 : 10,
-              slidesPerView: isMobileMod ? 3 : 6,
-              centeredSlides: isMobileMod ? true : false,
-            }}
-          >
-            <Box backgroundColor="#cecece" minWidth="100px" width="100px" height="100px" borderRadius="10px">Co-fundadores</Box>
-            <Box backgroundColor="#cecece" minWidth="100px" width="100px" height="100px" borderRadius="10px">Root</Box>
-            <Box backgroundColor="#cecece" minWidth="100px" width="100px" height="100px" borderRadius="10px">Infra</Box>
-            <Box backgroundColor="#cecece" minWidth="100px" width="100px" height="100px" borderRadius="10px">Dados</Box>
-            <Box backgroundColor="#cecece" minWidth="100px" width="100px" height="100px" borderRadius="10px">Comunicacao</Box>
-            <Box backgroundColor="#cecece" minWidth="100px" width="100px" height="100px" borderRadius="10px">Website</Box>
-          </Carousel>
+        <Center flexDirection="column" paddingBottom="70px">
+          <BigTitle marginBottom="16px">Adicionar Title</BigTitle>
+          <SectionText fontSize="16px">Adicionar subTitle</SectionText>
+          <SectionText fontSize="16px">Faça parte da equipe você também.</SectionText>
+          <SectionText fontSize="16px" color="#42B0FF" fontWeigth="700">Veja as vagas abertas.</SectionText>
         </Center>
 
-        {team["nome-do-time"].map((elm, index) => (
-          <TeamBox
-            index={index}
-            bio={elm}
-          />
-        ))}
+        <Stack
+          position="relative"
+          gridGap="96px"
+          flexDirection={isMobileMod ? "column" :"row"}
+        >
+          <Box
+            display="flex"
+            height="100%"
+            flexDirection="column"
+            gridGap="16px"
+            position={isMobileMod ? "relative" : "sticky"}
+            top={isMobileMod? "0" : "120px"}
+            z-index="20"
+          >
+            <Text fontSize="16px" color="#6F6F6F" fontFamily="ubuntu" fontWeight="500">Co-fundadores</Text>
+            <Text fontSize="16px" color="#6F6F6F" fontFamily="ubuntu" fontWeight="500">Conselho</Text>
+            <Text fontSize="16px" color="#6F6F6F" fontFamily="ubuntu" fontWeight="500">Administrativo</Text>
+            <Text fontSize="16px" color="#6F6F6F" fontFamily="ubuntu" fontWeight="500" width="max-content">Captação, Projetos e Parcerias</Text>
+            <Text fontSize="16px" color="#6F6F6F" fontFamily="ubuntu" fontWeight="500">Comunicação</Text>
+            <Text fontSize="16px" color="#6F6F6F" fontFamily="ubuntu" fontWeight="500">Dados</Text>
+            <Text fontSize="16px" color="#6F6F6F" fontFamily="ubuntu" fontWeight="500">Infraestrutura</Text>
+            <Text fontSize="16px" color="#6F6F6F" fontFamily="ubuntu" fontWeight="500">Website</Text>
+          </Box>
+
+          <Stack
+            width="100%"
+            spacing="100px"
+          >
+              {team["nome-do-time"].map((elm, index) => (
+                <TeamBox
+                  index={index}
+                  bio={elm}
+                />
+              ))}
+          </Stack>
+        </Stack>
       </Stack>
 
     </MainPageTemplate>
