@@ -16,7 +16,8 @@ import SectionTitle from "../components/atoms/SectionTitle";
 import SectionLink from "../components/atoms/SectionLink"
 import Typist from "react-typist";
 import {
-  getPopularDatalakeDatasets
+  getPopularDatalakeDatasets,
+  getPopularTags
 } from "./api/datasets";
 import { getGroupList } from "./api/groups"
 import { ShadowBox } from "../components/atoms/ShadowBox";
@@ -38,18 +39,20 @@ import RoundedButton from "../components/atoms/RoundedButton";
 import Link from "../components/atoms/Link";
 
 export async function getStaticProps(context) {
-  const themes = await getGroupList();
+  const themes = await getGroupList()
+  const popularTags = await getPopularTags()
   let popularDatalakeDatasets;
 
   try {
-    popularDatalakeDatasets = await getPopularDatalakeDatasets();
+    popularDatalakeDatasets = await getPopularDatalakeDatasets()
   } catch {
-    popularDatalakeDatasets = [];
+    popularDatalakeDatasets = []
   }
 
   return await withPages({
     props: {
       popularDatalakeDatasets,
+      popularTags,
       themes  
     },
     revalidate: 60,
@@ -84,9 +87,10 @@ export async function getStaticProps(context) {
 // }
 
 
-function Hero({ popularDatalakeDatasets, themes }) {
+function Hero({ popularDatalakeDatasets, popularTags, themes }) {
   const [search, setSearch] = useState();
   const [isMobileMod, setIsMobileMod] = useState(false)
+  const [tags, setTags] = useState([])
   const isMobile = useCheckMobile();
 
   useEffect(() => {
@@ -96,6 +100,11 @@ function Hero({ popularDatalakeDatasets, themes }) {
   function openSearchLink() {
     return window.open(`/dataset?q=${search}`, "_self");
   }
+
+  useEffect(() => {
+    const newPopularTags = Object.keys(popularTags)
+    setTags(newPopularTags.slice(0,5))
+  },[popularTags])
 
   return (
     <VStack
@@ -193,9 +202,9 @@ function Hero({ popularDatalakeDatasets, themes }) {
                     Termos populares: 
                   </Text>
                 }
-                <ThemeTag name="lei" />
-                <ThemeTag name="mortalidade" />
-                <ThemeTag name="COVID19" />
+                {tags.map(elm => 
+                  <ThemeTag name={elm} />
+                )}
               </HStack>
             </VStack>
           </VStack>
@@ -656,8 +665,8 @@ function GoogleCloud () {
 
 export default function Home({
   pages,
-  popularDatasets,
   popularDatalakeDatasets,
+  popularTags,
   themes,
 }) {
   return (
@@ -666,6 +675,7 @@ export default function Home({
         <GoogleCloud/>
         <Hero
           popularDatalakeDatasets={popularDatalakeDatasets}
+          popularTags={popularTags}
           themes={themes}
         />
       </VStack>
