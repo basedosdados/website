@@ -2,7 +2,7 @@ import {
   Box,
   Center,
   Stack,
-  VStack,
+  Image,
   Text,
 } from "@chakra-ui/react";
 import React, { useState, useEffect} from "react";
@@ -19,7 +19,7 @@ import WebIcon  from "../public/img/icons/webIcon";
 import TwitterIcon  from "../public/img/icons/twitterIcon";
 import LinkedinIcon  from "../public/img/icons/linkedinIcon";
 import GitIcon  from "../public/img/icons/gitIcon";
-import TrophySvg from "../public/img/trophySvg"
+import TrophySvg from "../public/img/trophySvg";
 
 export async function getStaticProps(context) {
   return await withPages();
@@ -301,6 +301,12 @@ export default function QuemSomos({ pages }) {
           spacing={isMobileMod ? "120px" : "0"}
         >
           <Box textAlign="center" maxWidth={isMobileMod ? "100%" : "45%"}>
+            <Image
+              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/google_cloud.svg"
+              width="140px"
+              height="140px"
+              margin="0 auto 48px"
+            />
             <SectionTitle marginBottom="16px" fontSize="22px">Google Cloud Customer Award</SectionTitle>
             <SectionText fontSize="16px">O prêmio reconheceu as implementações mais inovadoras e transformadoras do Google Cloud ao redor do mundo. 
                 Fomos a única organização brasileira a receber a premiação na categoria de Impacto Social, que também selecionou outras iniciativas que usam tecnologia para promover mais abertura e transparência. 
