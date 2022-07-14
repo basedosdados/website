@@ -13,12 +13,12 @@ import Display from "../components/atoms/Display";
 import SectionText from "../components/atoms/SectionText";
 import SectionTitle from "../components/atoms/SectionTitle";
 import BigTitle from "../components/atoms/BigTitle";
-import Link from "../components/atoms/Link";
 import Carousel from "../components/atoms/Carousel";
 import WebIcon  from "../public/img/icons/webIcon";
 import TwitterIcon  from "../public/img/icons/twitterIcon";
 import LinkedinIcon  from "../public/img/icons/linkedinIcon";
 import GitIcon  from "../public/img/icons/gitIcon";
+import DiscordIcon from "../public/img/icons/discordIcon";
 import TrophySvg from "../public/img/trophySvg";
 
 export async function getStaticProps(context) {
@@ -126,7 +126,7 @@ const TeamBox = ({ index, bio }) => {
 
   const hasLeftSpacing = (index % 2 == 0) ? false : true
 
-  const keyIcons = (ref) => {
+  const iconTeamBox = (ref) => {
     let href = ""
 
     if(ref.website) { href = `${ref.website}` }
@@ -148,6 +148,7 @@ const TeamBox = ({ index, bio }) => {
       widthIcon:"22px",
       heightIcon:"22px",
       fill: "#42B0FF",
+      _hover: {opacity: "0.8"},
       onClick: () => {window.open(href)}
     }
   }
@@ -155,10 +156,10 @@ const TeamBox = ({ index, bio }) => {
   const iconLinks = () => {
     return (
       <Box display="flex" flexDirection="row" gridGap="5px">
-        {bio.website ? <WebIcon {...keyIcons({website: bio.website})}/> : null}
-        {bio.twitter ? <TwitterIcon {...keyIcons({twiiter: bio.twitter})}/> : null}
-        {bio.linkedin ? <LinkedinIcon {...keyIcons({linkedin: bio.linkedin})}/> : null}
-        {bio.github ? <GitIcon {...keyIcons({github: bio.github})}/> : null}
+        {bio.website ? <WebIcon {...iconTeamBox({website: bio.website})}/> : null}
+        {bio.twitter ? <TwitterIcon {...iconTeamBox({twiiter: bio.twitter})}/> : null}
+        {bio.linkedin ? <LinkedinIcon {...iconTeamBox({linkedin: bio.linkedin})}/> : null}
+        {bio.github ? <GitIcon {...iconTeamBox({github: bio.github})}/> : null}
       </Box>
     )
   }
@@ -200,6 +201,19 @@ export default function QuemSomos({ pages }) {
   useEffect(() => {
     setIsMobileMod(isMobile)
   }, [isMobile])
+
+  const keyIcon = (url) => {
+    return {
+      cursor: "pointer",
+      widthIcon:"20px",
+      heightIcon:"20px",
+      fill: "#42B0FF",
+      padding: "8px 12px 8px",
+      boxShadow: "0 1px 0 0 #0000001a",
+      _hover: {opacity: "0.8"},
+      onClick: () => {window.open(url)}
+    }
+  }
 
   return (
     <MainPageTemplate pages={pages} paddingX="24px">
@@ -256,14 +270,26 @@ export default function QuemSomos({ pages }) {
           </Box>
         </VStack>
       </Stack> */}
+      <Stack
+        spacing={0}
+        position="fixed"
+        boxShadow="1px -1px 0 0 #0000001a"
+        top="40%"
+        left="0"
+      >
+        <TwitterIcon {...keyIcon("https://twitter.com/basedosdados")}/>
+        <DiscordIcon {...keyIcon("https://discord.gg/huKWpsVYx4")}/>
+        <GitIcon {...keyIcon("https://github.com/basedosdados")}/>
+        <LinkedinIcon {...keyIcon("https://www.linkedin.com/company/base-dos-dados/mycompany/")}/>
+      </Stack>
 
       <Stack
         width="100%"
         maxWidth="1264px"
         margin="auto"
         paddingTop={{ base: "80px", lg: "0px" }}
-        paddingBottom="200px"
         alignItems="center"
+        paddingBottom="200px"
       >
         <Display lineHeight="52px" textAlign="center" marginBottom="56px">
           Facilitamos o acesso a dados<br/> para que a distância entre você e sua análise <br/>seja <a style={{color:"#2B8C4D"}}>apenas uma boa pergunta</a>.
@@ -316,6 +342,12 @@ export default function QuemSomos({ pages }) {
           </Box>
 
           <Box textAlign="center" maxWidth={isMobileMod ? "100%" : "45%"}>
+            <Image
+              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/premio_tesouro_nacional_2021.png"
+              width="140px"
+              height="140px"
+              margin="0 auto 48px"
+            />
             <SectionTitle marginBottom="16px" fontSize="22px">XXVI Prêmio Tesouro Nacional 2021</SectionTitle>
             <SectionText fontSize="16px">
               Conquistamos o 1º lugar na categoria Soluções. O prêmio tem como objetivo expandir as fronteiras do conhecimento em finanças públicas, promovendo a normalização de temas específicos quando tratados consistentemente pela pesquisa científica. Fomos selecionados por conta de nosso trabalho compatibilizando informações de despesas e receitas orçamentárias do Setor Público Brasileiro.
