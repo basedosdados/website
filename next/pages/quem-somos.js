@@ -7,6 +7,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React, { useState, useEffect} from "react";
+import { useMediaQuery } from "@chakra-ui/react";
 import { MainPageTemplate } from "../components/templates/main";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
@@ -197,6 +198,7 @@ const TeamBox = ({ index, bio }) => {
 export default function QuemSomos({ pages }) {
   const isMobile = useCheckMobile();
   const [isMobileMod, setIsMobileMod] = useState(false)
+  const [mScreen] = useMediaQuery("(max-width: 1390px)")
 
   useEffect(() => {
     setIsMobileMod(isMobile)
@@ -204,14 +206,15 @@ export default function QuemSomos({ pages }) {
 
   const keyIcon = (url) => {
     return {
-      cursor: "pointer",
+      cursor:"pointer",
       widthIcon:"20px",
       heightIcon:"20px",
-      fill: "#42B0FF",
-      padding: "8px 12px 8px",
-      boxShadow: "1px 1px 0 0 #0000001a",
-      _hover: {opacity: "0.8"},
-      onClick: () => {window.open(url)}
+      fill:"#42B0FF",
+      backgroundColor:"#FFF",
+      padding:"8px 12px 8px",
+      boxShadow:"1px 1px 0 0 #0000001a",
+      _hover:{opacity: "0.8"},
+      onClick:() => {window.open(url)}
     }
   }
 
@@ -269,6 +272,7 @@ export default function QuemSomos({ pages }) {
             maxWidth="1264px"
             margin="auto"
             paddingBottom="160px"
+            paddingX={mScreen ? "28px" : "0"}
             spacing={0}
           >
             <Center marginBottom="80px" flexDirection="column">
