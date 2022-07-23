@@ -296,6 +296,14 @@ COLUMNS_FIELD = Field(
     },
 )
 
+N_ROWS_FIELD = Field(
+    title="Número de Linhas da Tabela",
+    yaml_order={
+        "id_before": "columns",
+        "id_after": "metadata_modified",
+    },
+)
+
 METADATA_MODIFIED_FIELD = Field(
     title="Data da Última Modificação dos Metadados",
     yaml_order={

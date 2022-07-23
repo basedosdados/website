@@ -895,3 +895,14 @@ def delete_resource_field(package, resource_type, field):
             package["resources"][i] = updated_resource
 
     return package
+
+
+def create_nrows_field(package):
+
+    for i, resource in enumerate(package["resources"]):
+        if resource["resource_type"] == "bdm_table":
+            if "n_rows" not in resource:
+                resource["n_rows"] = 0
+            package["resources"][i] = resource
+
+    return package
