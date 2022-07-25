@@ -186,7 +186,29 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   const [schemasTeam, setSchemasTeam] = useState([])
   const [people, setPeople] = useState([])
 
-  console.log(filterTeam)
+  useEffect(() => {
+    if(!filterTeam) return null
+    const filterByTeam = (elm) => {
+      if(elm.team === filterTeam) {
+        return elm
+      }
+    }
+    const teamPeople = bdTeam.filter(filterByTeam)
+
+    const filterId = () => teamPeople.map((elm) => {
+      return elm.person_id
+    })
+    
+    const personId = [...new Set(filterId())]
+
+    const filterPeople = () => {
+      return personId.map((elm) => {
+        return bdPeople[elm]
+      })
+    }
+    setPeople(filterPeople())
+      
+  },[filterTeam])
 
   useEffect(() => {
     setPeople(Object.values(bdPeople))
@@ -217,6 +239,15 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
       onClick:() => {window.open(url)}
     }
   }
+
+  const handleSelect = (elm) => {
+    if(filterTeam === elm) {
+      setFilterTeam()
+      return setPeople(Object.values(bdPeople)) 
+    } else {
+      return setFilterTeam(elm)
+    }
+  }  
 
   return (
     <MainPageTemplate pages={pages} paddingX="24px">
@@ -404,12 +435,12 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             {schemasTeam.map((elm) => (
               <Text
                 fontSize="16px"
-                color="#6F6F6F"
+                color={filterTeam === elm ? "#2B8C4D" :"#6F6F6F"}
                 fontFamily="ubuntu"
                 fontWeight="500"
                 width="max-content"
                 cursor="pointer"
-                onClick={() => setFilterTeam(elm)}
+                onClick={() => handleSelect(elm)}
               >
                 {elm}
               </Text>
