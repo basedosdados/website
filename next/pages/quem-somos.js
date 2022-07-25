@@ -11,12 +11,17 @@ import { useMediaQuery } from "@chakra-ui/react";
 import { MainPageTemplate } from "../components/templates/main";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
+import {
+  getBDTeams,
+  getBDPeople
+} from "./api/team";
 import Display from "../components/atoms/Display";
 import SectionText from "../components/atoms/SectionText";
 import SectionTitle from "../components/atoms/SectionTitle";
 import BigTitle from "../components/atoms/BigTitle";
 import Carousel from "../components/atoms/Carousel";
 import WebIcon  from "../public/img/icons/webIcon";
+import EmailIcon  from "../public/img/icons/emailIcon";
 import TwitterIcon  from "../public/img/icons/twitterIcon";
 import LinkedinIcon  from "../public/img/icons/linkedinIcon";
 import GitIcon  from "../public/img/icons/gitIcon";
@@ -24,7 +29,16 @@ import DiscordIcon from "../public/img/icons/discordIcon";
 import TrophySvg from "../public/img/trophySvg";
 
 export async function getStaticProps(context) {
-  return await withPages();
+  const bdTeam = await getBDTeams();
+  const bdPeople = await getBDPeople();
+
+  return await withPages({
+    props: {
+      bdPeople,
+      bdTeam
+    },
+    revalidate: 60,
+  })
 }
 
 const HistoryBox = ({ title, date, text }) => {
@@ -66,61 +80,28 @@ const HistoryBox = ({ title, date, text }) => {
   )
 }
 
-const team = {
-  "nome-do-time" : [
-    {
-      name:"Adicionar Nome",
-      role:"Adicionar Funcoes",
-      description:"Adicionar Descricao",
-      website:"Adicionar Site",
-      twitter:"Adicionar conta do twitter",
-      linkedin:"Adicionar conta do linkedin",
-      github:"Adicionar usuario Github"
-    },
-    {
-      name:"Adicionar Nome",
-      role:"Adicionar Funcoes",
-      description:"Adicionar Descricao",
-      website:"Adicionar Site",
-      twitter:"Adicionar conta do twitter",
-      linkedin:"Adicionar conta do linkedin",
-      github:"Adicionar usuario Github"
-    },
-    {
-      name:"Adicionar Nome",
-      role:"Adicionar Funcoes",
-      description:"Adicionar Descricao",
-      website:"Adicionar Site",
-      twitter:"Adicionar conta do twitter",
-      linkedin:"Adicionar conta do linkedin",
-      github:"Adicionar usuario Github"
-    },
-    {
-      name:"Adicionar Nome",
-      role:"Adicionar Funcoes",
-      description:"Adicionar Descricao",
-      website:"Adicionar Site",
-      twitter:"Adicionar conta do twitter",
-      linkedin:"Adicionar conta do linkedin",
-      github:"Adicionar usuario Github"
-    },
-    {
-      name:"Adicionar Nome",
-      role:"Adicionar Funcoes",
-      description:"Adicionar Descricao",
-      website:"Adicionar Site",
-      twitter:"Adicionar conta do twitter",
-      linkedin:"Adicionar conta do linkedin",
-      github:"Adicionar usuario Github"
-    }
 
-  ]
-}
-
-const TeamBox = ({ index, bio }) => {
+const TeamBox = ({ index, bdTeam, data }) => {
   const isMobile = useCheckMobile();
   const [isMobileMod, setIsMobileMod] = useState(false)
+  const [role, setRole] = useState([])
   
+  useEffect(() => {
+    const filterId = (elm) => {
+      if(elm.person_id === data.id) {
+        return elm.role
+      }
+    }
+    const peopleId = bdTeam.filter(filterId)
+  
+    const filterRole = () => peopleId.map((elm) => {
+      return elm.role
+    })
+
+    return setRole(filterRole())
+  },[bdTeam])
+
+
   useEffect(() => {
     setIsMobileMod(isMobile)
   }, [isMobile])
@@ -131,6 +112,7 @@ const TeamBox = ({ index, bio }) => {
     let href = ""
 
     if(ref.website) { href = `${ref.website}` }
+    if(ref.email) { href = `mailto:${ref.email}` }
     if(ref.twitter) {
       const twitter = ref.twitter.replace(/(https:)\/\/(twitter.com)\//gim, "")
       href = `https://twitter.com/${twitter}`
@@ -157,10 +139,11 @@ const TeamBox = ({ index, bio }) => {
   const iconLinks = () => {
     return (
       <Box display="flex" flexDirection="row" gridGap="5px">
-        {bio.website ? <WebIcon {...iconTeamBox({website: bio.website})}/> : null}
-        {bio.twitter ? <TwitterIcon {...iconTeamBox({twiiter: bio.twitter})}/> : null}
-        {bio.linkedin ? <LinkedinIcon {...iconTeamBox({linkedin: bio.linkedin})}/> : null}
-        {bio.github ? <GitIcon {...iconTeamBox({github: bio.github})}/> : null}
+        {data.website ? <WebIcon {...iconTeamBox({website: data.website})}/> : null}
+        {data.email ? <EmailIcon {...iconTeamBox({email: data.email})}/> : null}
+        {data.twitter ? <TwitterIcon {...iconTeamBox({twitter: data.twitter})}/> : null}
+        {data.linkedin ? <LinkedinIcon {...iconTeamBox({linkedin: data.linkedin})}/> : null}
+        {data.github ? <GitIcon {...iconTeamBox({github: data.github})}/> : null}
       </Box>
     )
   }
@@ -184,21 +167,38 @@ const TeamBox = ({ index, bio }) => {
       />
       <Box display="flex" flexDirection="column">
         <Box marginBottom="8px" display="flex" flexDirection="row">
-          <SectionText fontSize="18px" fontFamily="ubuntu" color="#6F6F6F" marginRight="16px">{bio.name}</SectionText>
+          <SectionText fontSize="18px" fontFamily="ubuntu" color="#6F6F6F" marginRight="16px">{data.name}</SectionText>
           {!isMobileMod && iconLinks()}
         </Box>
-        <SectionText marginBottom="16px" fontSize="18px" fontFamily="ubuntu">{bio.role}</SectionText>
-        <SectionText marginBottom="16px" fontSize="16px">{bio.description}</SectionText>
+        <SectionText marginBottom="16px" fontSize="18px" fontFamily="ubuntu">{role.join(", ")}</SectionText>
+        <SectionText marginBottom="16px" fontSize="16px">{data.description}</SectionText>
         {isMobileMod && iconLinks()}
       </Box>
     </Box>
   )
 }
   
-export default function QuemSomos({ pages }) {
+export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   const isMobile = useCheckMobile();
   const [isMobileMod, setIsMobileMod] = useState(false)
   const [mScreen] = useMediaQuery("(max-width: 1390px)")
+  const [filterTeam, setFilterTeam] = useState("")
+  const [schemasTeam, setSchemasTeam] = useState([])
+  const [people, setPeople] = useState([])
+
+  console.log(filterTeam)
+
+  useEffect(() => {
+    setPeople(Object.values(bdPeople))
+  },[bdPeople])
+  
+  useEffect(() => {
+    const schemasTeam = () => bdTeam.map((elm) => {
+      return elm.team
+    })
+    const newSchemasTeam = schemasTeam()
+    return setSchemasTeam([...new Set(newSchemasTeam)])
+  },[bdTeam])
 
   useEffect(() => {
     setIsMobileMod(isMobile)
@@ -389,6 +389,7 @@ export default function QuemSomos({ pages }) {
         <Stack
           position="relative"
           gridGap="96px"
+          spacing={0}
           flexDirection={isMobileMod ? "column" :"row"}
         >
           <Box
@@ -400,24 +401,30 @@ export default function QuemSomos({ pages }) {
             top={isMobileMod? "0" : "120px"}
             z-index="20"
           >
-            <Text fontSize="16px" color="#6F6F6F" fontFamily="ubuntu" fontWeight="500">Co-fundadores</Text>
-            <Text fontSize="16px" color="#6F6F6F" fontFamily="ubuntu" fontWeight="500">Conselho</Text>
-            <Text fontSize="16px" color="#6F6F6F" fontFamily="ubuntu" fontWeight="500">Administrativo</Text>
-            <Text fontSize="16px" color="#6F6F6F" fontFamily="ubuntu" fontWeight="500" width="max-content">Captação, Projetos e Parcerias</Text>
-            <Text fontSize="16px" color="#6F6F6F" fontFamily="ubuntu" fontWeight="500">Comunicação</Text>
-            <Text fontSize="16px" color="#6F6F6F" fontFamily="ubuntu" fontWeight="500">Dados</Text>
-            <Text fontSize="16px" color="#6F6F6F" fontFamily="ubuntu" fontWeight="500">Infraestrutura</Text>
-            <Text fontSize="16px" color="#6F6F6F" fontFamily="ubuntu" fontWeight="500">Website</Text>
+            {schemasTeam.map((elm) => (
+              <Text
+                fontSize="16px"
+                color="#6F6F6F"
+                fontFamily="ubuntu"
+                fontWeight="500"
+                width="max-content"
+                cursor="pointer"
+                onClick={() => setFilterTeam(elm)}
+              >
+                {elm}
+              </Text>
+            ))}
           </Box>
 
           <Stack
             width="100%"
             spacing="100px"
           >
-            {team["nome-do-time"].map((elm, index) => (
+            {people.map((elm, index) => (
               <TeamBox
                 index={index}
-                bio={elm}
+                data={elm}
+                bdTeam={bdTeam}
               />
             ))}
           </Stack>
