@@ -53,5 +53,5 @@ class BdmTable(_CkanDefaultResource):
     columns                   : Optional[List[BdmColumns]]                                = COLUMNS_FIELD
     metadata_modified         : Optional[datetime]                                        = METADATA_MODIFIED_FIELD #TODO: can we rename this to last_updated and make it a derived field for dataset and all resources?
     title                     : Optional[Str]                                             = TITLE_FIELD
-    n_rows                    : Optional[int]                                             = N_ROWS_FIELD
+    number_rows               : Optional[int]                                             = NUMBER_ROWS_FIELD
     # fmt: on

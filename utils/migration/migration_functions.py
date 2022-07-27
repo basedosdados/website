@@ -1,7 +1,6 @@
 import json
 import os
 import re
-from basedosdados import read_sql
 
 import inflection
 import requests
@@ -894,18 +893,5 @@ def delete_resource_field(package, resource_type, field):
                 if key != field:
                     updated_resource[key] = value
             package["resources"][i] = updated_resource
-
-    return package
-
-
-def migrate_nrows_field(package):
-    for i, resource in enumerate(package["resources"]):
-        if resource["resource_type"] == "bdm_table":
-            if "n_rows" not in resource or resource["n_rows"] == "":
-                dataset_id = resource['dataset_id']
-                table_id = resource['table_id']
-                query = f"SELECT COUNT(*) AS n_rows FROM `basedosdados.{dataset_id}.{table_id}`"
-                n_rows = read_sql(query=query, billing_project_id='basedosdados-dev', from_file=True)['n_rows'].to_list()[0]
-                resource["n_rows"] = n_rows
 
     return package

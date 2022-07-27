@@ -296,7 +296,7 @@ COLUMNS_FIELD = Field(
     },
 )
 
-N_ROWS_FIELD = Field(
+NUMBER_ROWS_FIELD = Field(
     title="Número de Linhas da Tabela",
     yaml_order={
         "id_before": "columns",
