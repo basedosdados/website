@@ -190,12 +190,12 @@ const TeamBox = ({ index, bdTeam, data }) => {
         marginBottom={isMobileMod && "20px"}
       />
       <Box display="flex" flexDirection="column">
-        <Box marginBottom={{ base: "0", lg: "8px" }} display="flex" flexDirection="row">
+        <Box marginBottom={{base: "0", lg: "4px" }} display="flex" flexDirection="row">
           <Text fontSize={{ base: "16px", lg: "18px" }} fontFamily="ubuntu" fontWeight="300" color="#6F6F6F" marginRight="16px">{data.name}</Text>
           {!isMobileMod && iconLinks()}
         </Box>
-        <Text marginBottom={{ base: "8px", lg: "16px" }} fontSize={{ base: "16px", lg: "18px" }} fontFamily="ubuntu" fontWeight="300" color="#252A32">{role.join(", ")}</Text>
-        <SectionText marginBottom={{ base: "8px", lg: "16px" }} fontSize={{ base: "14px", lg: "16px" }}>{data.description}</SectionText>
+        <Text marginBottom={{ base: "8px", lg: "12px" }} fontSize={{ base: "16px", lg: "18px" }} fontFamily="ubuntu" fontWeight="300" color="#252A32">{role.join(", ")}</Text>
+        <SectionText marginBottom="16px" fontSize={{ base: "14px", lg: "16px" }}>{data.description}</SectionText>
         {isMobileMod && iconLinks()}
       </Box>
     </Box>
@@ -324,41 +324,28 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             </Text>
           </Stack>
 
-          <SectionBox
+          <Stack
             paddingTop={{ base: "80px", lg: "304px" }}
             paddingBottom={{ base: "80px", lg: "144px" }}
+            textAlign="center"
+            justifyContent="center"
+            maxWidth={{ base: "100%", lg: "50%" }}
           >
-            <Stack 
-              width={isMobileMod ? "100%" : {base: "445px", lg: "566px"}}
-              height={isMobileMod ? "100%" : {base: "356px", lg: "532.8px"}}
+            <BigTitle 
+              paddingBottom="24px"
             >
-              <Image
-                paddingTop="80px"
-                paddingBottom={{ base: "80px", lg: "0" }}
-                src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/2022/ilustracao_quem_somos.svg"
-              />              
-            </Stack>
-            <Stack
-              paddingTop={{ base: "0px", lg: "24px" }}
-              maxWidth={{ base: "100%", lg: "45%" }}
-            >
-              <BigTitle 
-                paddingBottom="24px"
-                textAlign={{ base: "center", lg: "start" }}
-              >
-                A Base dos Dados
-              </BigTitle>
-              <SectionText fontSize="16px" paddingBottom="20px">
-                Somos uma organização não-governamental sem fins lucrativos e <i>open source</i> que atua para universalizar o acesso a dados de qualidade. Fazemos isso através da criação de ferramentas inovadoras, da produção e difusão do conhecimento e da promoção de uma cultura de transparência e dados abertos.
-              </SectionText>
-              <SectionText fontSize="16px" paddingBottom="20px">
-                Ao quebrar barreiras técnicas para quem já faz e quem quer começar a fazer análise de dados, reunimos uma rede altamente engajada que potencializa o impacto do nosso trabalho. Estamos construindo uma comunidade de pessoas que acreditam no uso inteligente de dados como instrumento para o desenvolvimento socioeconômico e que encontram na BD uma grande aliada.
-              </SectionText>
-              <SectionText fontSize="16px" paddingBottom="20px">
-                O que queremos é aproximar diferentes setores da sociedade de informações que são de interesse coletivo, mas ainda pouco acessíveis para a maioria das pessoas. Acreditamos que ampliar o acesso e uso de dados abertos favorece o aumento da participação social, a melhoria da gestão pública e o aperfeiçoamento da democracia.
-              </SectionText>
-            </Stack>
-          </SectionBox>
+              A Base dos Dados
+            </BigTitle>
+            <SectionText fontSize="16px" paddingBottom="20px">
+              Somos uma organização não-governamental sem fins lucrativos e <i>open source</i> que atua para universalizar o acesso a dados de qualidade. Fazemos isso através da criação de ferramentas inovadoras, da produção e difusão do conhecimento e da promoção de uma cultura de transparência e dados abertos.
+            </SectionText>
+            <SectionText fontSize="16px" paddingBottom="20px">
+              Ao quebrar barreiras técnicas para quem já faz e quem quer começar a fazer análise de dados, reunimos uma rede altamente engajada que potencializa o impacto do nosso trabalho. Estamos construindo uma comunidade de pessoas que acreditam no uso inteligente de dados como instrumento para o desenvolvimento socioeconômico e que encontram na BD uma grande aliada.
+            </SectionText>
+            <SectionText fontSize="16px" paddingBottom="20px">
+              O que queremos é aproximar diferentes setores da sociedade de informações que são de interesse coletivo, mas ainda pouco acessíveis para a maioria das pessoas. Acreditamos que ampliar o acesso e uso de dados abertos favorece o aumento da participação social, a melhoria da gestão pública e o aperfeiçoamento da democracia.
+            </SectionText>
+          </Stack>
 
           <Stack
             width="100%"
@@ -369,12 +356,12 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             spacing={0}
           >
             <Center 
-              paddingBottom={{ base: "56px", lg: "80px" }}
+              paddingBottom={{ base: "56px", lg: "32px" }}
               flexDirection="column"
             >
               <TrophySvg 
-                width={{ base: "80px", lg: "100px" }} 
-                height={{ base: "80px", lg: "100px" }} 
+                width={{ base: "50px", lg: "70px" }} 
+                height={{ base: "50px", lg: "70px" }} 
                 marginBottom="8px"
               />
               <BigTitle>Reconhecimentos</BigTitle>
@@ -485,7 +472,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
               date="SET DE 2020"
               image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_A_happy_sunday.png"
             >
-              Nos últimos três minutos de um domingo de setembro, o GitHub testemunhou o commit que mudaria para sempre a vida de quem trabalha com dados públicos. Criamos a estrutura do nosso <i>datalake</i>, uma ferramenta que faria a alegria de muita gente que já passou tantos domingos limpando bases.
+              Nos últimos três minutos de um domingo de setembro, o GitHub testemunhou o <i>commit</i> que mudaria para sempre a vida de quem trabalha com dados públicos. Criamos a estrutura do nosso <i>datalake</i>, uma ferramenta que faria a alegria de muita gente que já passou tantos domingos limpando bases.
             </HistoryBox>
             <HistoryBox
               title="Nem só de boa vontade..."
@@ -513,7 +500,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
               date="JUN DE 2021"
               image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_Real_oficial.png"
             >
-              Nos tornamos oficialmente o Instituto Base dos Dados (IBD), uma organização sem fins lucrativos, com equipe formal, CNPJ e tudo que tem direito. Um passo importante para consolidar nosso trabalho.
+              Nos tornamos oficialmente o Instituto Base dos Dados, uma organização sem fins lucrativos, com equipe formal, CNPJ e tudo que tem direito. Um passo importante para consolidar nosso trabalho.
             </HistoryBox>
             <HistoryBox
               title="De cara nova"
@@ -564,7 +551,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
           gridGap="96px"
           spacing={0}
           flexDirection={isMobileMod ? "column" :"row"}
-          paddingBottom="22px"
+          paddingBottom="32px"
         >
           <Box
             display="flex"
