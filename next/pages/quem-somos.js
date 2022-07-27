@@ -19,6 +19,7 @@ import Display from "../components/atoms/Display";
 import SectionText from "../components/atoms/SectionText";
 import SectionTitle from "../components/atoms/SectionTitle";
 import BigTitle from "../components/atoms/BigTitle";
+import Link from "../components/atoms/Link";
 import Carousel from "../components/atoms/Carousel";
 import WebIcon  from "../public/img/icons/webIcon";
 import EmailIcon  from "../public/img/icons/emailIcon";
@@ -41,7 +42,24 @@ export async function getStaticProps(context) {
   })
 }
 
-const HistoryBox = ({ title, date, text }) => {
+const SectionBox = ({ children, ...props }) => {
+  return (
+    <Box
+      display="flex"
+      justifyContent="space-between"
+      flexDirection={{ base: "column", lg: "row" }}
+      paddingTop={{ base: "80px", lg: "112px" }}
+      width="100%"
+      maxWidth="1264px"
+      margin="auto"
+      {...props}
+    >
+      {children}
+    </Box>
+  )
+}
+
+const HistoryBox = ({ children, title, date, image }) => {
   const isMobile = useCheckMobile();
   const [isMobileMod, setIsMobileMod] = useState(false)
   
@@ -55,13 +73,17 @@ const HistoryBox = ({ title, date, text }) => {
       flexDirection="column"
     >
       <Box
-        backgroundColor="#CECECE"
         borderRadius="20px"
-        width={isMobileMod ? "90vw" : "500px"}
+        overflow="hidden"
+        width={isMobileMod ? "85vw" : "500px"}
         height={isMobileMod ? "200px" : "300px"}
         boxShadow="0 2px 20px 0 #00000026"
       >
-
+        <Image
+          widht="100%"
+          height="100%"
+          src={image}
+        />
       </Box>
       
       <Box padding={isMobileMod ? "20px 24px 0" :"40px 48px 0"}>
@@ -69,12 +91,14 @@ const HistoryBox = ({ title, date, text }) => {
           fontFamily="ubuntu"
           maxWidth="400px"
           color="#252A32"
-          fontSize="20px"
+          fontSize={{ base: "18px", lg: "20px" }}
           letterSpacing="0.2px"
           marginBottom="8px"
         >{title}</Text>
-        <SectionText fontSize="16px" color="#6F6F6F" marginBottom="16px">{date}</SectionText>
-        <SectionText fontSize="16px" >{text}</SectionText>
+        <SectionText fontSize={{ base: "14px", lg: "16px" }} color="#6F6F6F" marginBottom="16px">{date}</SectionText>
+        <SectionText fontSize={{ base: "14px", lg: "16px" }}>
+          {children}
+        </SectionText>
       </Box>
     </Box>
   )
@@ -99,7 +123,7 @@ const TeamBox = ({ index, bdTeam, data }) => {
     })
 
     return setRole(filterRole())
-  },[bdTeam])
+  },[bdTeam, data])
 
 
   useEffect(() => {
@@ -152,7 +176,7 @@ const TeamBox = ({ index, bdTeam, data }) => {
     <Box
       display="flex"
       flexDirection={isMobileMod ? "column" : "row"}
-      maxWidth="900px"
+      maxWidth="750px"
       marginLeft={isMobileMod ? "" : hasLeftSpacing && "200px !important"}
     >
       <Box
@@ -166,12 +190,12 @@ const TeamBox = ({ index, bdTeam, data }) => {
         marginBottom={isMobileMod && "20px"}
       />
       <Box display="flex" flexDirection="column">
-        <Box marginBottom="8px" display="flex" flexDirection="row">
-          <SectionText fontSize="18px" fontFamily="ubuntu" color="#6F6F6F" marginRight="16px">{data.name}</SectionText>
+        <Box marginBottom={{ base: "0", lg: "8px" }} display="flex" flexDirection="row">
+          <Text fontSize={{ base: "16px", lg: "18px" }} fontFamily="ubuntu" fontWeight="300" color="#6F6F6F" marginRight="16px">{data.name}</Text>
           {!isMobileMod && iconLinks()}
         </Box>
-        <SectionText marginBottom="16px" fontSize="18px" fontFamily="ubuntu">{role.join(", ")}</SectionText>
-        <SectionText marginBottom="16px" fontSize="16px">{data.description}</SectionText>
+        <Text marginBottom={{ base: "8px", lg: "16px" }} fontSize={{ base: "16px", lg: "18px" }} fontFamily="ubuntu" fontWeight="300" color="#252A32">{role.join(", ")}</Text>
+        <SectionText marginBottom={{ base: "8px", lg: "16px" }} fontSize={{ base: "14px", lg: "16px" }}>{data.description}</SectionText>
         {isMobileMod && iconLinks()}
       </Box>
     </Box>
@@ -276,12 +300,15 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             width="100%"
             maxWidth="1264px"
             margin="auto"
-            paddingTop={{ base: "80px", lg: "0px" }}
+            paddingTop={{ base: "80px", lg: "128px" }}
             alignItems="center"
-            paddingBottom="200px"
           >
-            <Display lineHeight="52px" textAlign="center" marginBottom="56px">
-              Facilitamos o acesso a dados<br/> para que a distância entre você e sua análise <br/>seja <a style={{color:"#2B8C4D"}}>apenas uma boa pergunta</a>.
+            <Display 
+              lineHeight={{ base: "40px", lg: "52px" }}
+              textAlign="center" 
+              marginBottom="56px"
+            >
+              Facilitamos o acesso a dados {isMobileMod ? " " : <br/>} para que a distância entre você e sua análise {isMobileMod ? " " : <br/>} seja <a style={{color:"#2B8C4D"}}>apenas uma boa pergunta</a>.
             </Display>
             <Text
               width={isMobileMod ? "100%" : "80%"}
@@ -293,56 +320,109 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
               color="#6F6F6F"
               textAlign="center"
             >
-              Adicionar subtitle: Milhares de pessoas encontram, baixam, cruzam e analisam dados de um jeito 
-              muito mais fácil com a BD. Vivamus a urna vestibulum, luctus erat vitae, rhoncus ante. 
+              Milhares de pessoas encontram, baixam, cruzam e analisam dados {isMobileMod ? " " : <br/>} de uma maneira muito mais prática com a BD.  
             </Text>
           </Stack>
+
+          <SectionBox
+            paddingTop={{ base: "80px", lg: "304px" }}
+            paddingBottom={{ base: "80px", lg: "144px" }}
+          >
+            <Stack 
+              width={isMobileMod ? "100%" : {base: "445px", lg: "566px"}}
+              height={isMobileMod ? "100%" : {base: "356px", lg: "532.8px"}}
+            >
+              <Image
+                paddingTop="80px"
+                paddingBottom={{ base: "80px", lg: "0" }}
+                src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/2022/ilustracao_quem_somos.svg"
+              />              
+            </Stack>
+            <Stack
+              paddingTop={{ base: "0px", lg: "24px" }}
+              maxWidth={{ base: "100%", lg: "45%" }}
+            >
+              <BigTitle 
+                paddingBottom="24px"
+                textAlign={{ base: "center", lg: "start" }}
+              >
+                A Base dos Dados
+              </BigTitle>
+              <SectionText fontSize="16px" paddingBottom="20px">
+                Somos uma organização não-governamental sem fins lucrativos e <i>open source</i> que atua para universalizar o acesso a dados de qualidade. Fazemos isso através da criação de ferramentas inovadoras, da produção e difusão do conhecimento e da promoção de uma cultura de transparência e dados abertos.
+              </SectionText>
+              <SectionText fontSize="16px" paddingBottom="20px">
+                Ao quebrar barreiras técnicas para quem já faz e quem quer começar a fazer análise de dados, reunimos uma rede altamente engajada que potencializa o impacto do nosso trabalho. Estamos construindo uma comunidade de pessoas que acreditam no uso inteligente de dados como instrumento para o desenvolvimento socioeconômico e que encontram na BD uma grande aliada.
+              </SectionText>
+              <SectionText fontSize="16px" paddingBottom="20px">
+                O que queremos é aproximar diferentes setores da sociedade de informações que são de interesse coletivo, mas ainda pouco acessíveis para a maioria das pessoas. Acreditamos que ampliar o acesso e uso de dados abertos favorece o aumento da participação social, a melhoria da gestão pública e o aperfeiçoamento da democracia.
+              </SectionText>
+            </Stack>
+          </SectionBox>
 
           <Stack
             width="100%"
             maxWidth="1264px"
             margin="auto"
-            paddingBottom="160px"
+            paddingBottom={{ base: "80px", lg: "120px" }}
             paddingX={mScreen ? "28px" : "0"}
             spacing={0}
           >
-            <Center marginBottom="80px" flexDirection="column">
-              <TrophySvg width="100px" height="100px" marginBottom="8px"/>
+            <Center 
+              paddingBottom={{ base: "56px", lg: "80px" }}
+              flexDirection="column"
+            >
+              <TrophySvg 
+                width={{ base: "80px", lg: "100px" }} 
+                height={{ base: "80px", lg: "100px" }} 
+                marginBottom="8px"
+              />
               <BigTitle>Reconhecimentos</BigTitle>
             </Center>
 
             <Stack
               flexDirection={isMobileMod ? "column" : "row"}
               justifyContent="space-between"
-              spacing={isMobileMod ? "120px" : "0"}
+              spacing={isMobileMod ? "80px" : "0"}
             >
               <Box textAlign="center" maxWidth={isMobileMod ? "100%" : "45%"}>
                 <Image
                   src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/google_cloud.svg"
-                  width="140px"
-                  height="140px"
-                  margin="0 auto 48px"
+                  width={{ base: "100px", lg: "140px" }}
+                  height={{ base: "100px", lg: "140px" }}
+                  margin={{base: "0 auto 24px", lg: "0 auto 48px"}}
                 />
-                <SectionTitle marginBottom="16px" fontSize="22px">Google Cloud Customer Award</SectionTitle>
-                <SectionText fontSize="16px">O prêmio reconheceu as implementações mais inovadoras e transformadoras do Google Cloud ao redor do mundo. 
+                <SectionTitle 
+                  marginBottom="16px"  
+                  fontSize={{ base: "18px", lg: "22px" }}
+                  letterSpacing={{base: "0.1px", lg: "0.2px"}}
+                >
+                  Google Cloud Customer Award
+                </SectionTitle>
+                <SectionText marginBottom="8px" fontSize="16px">O prêmio reconheceu as implementações mais inovadoras e transformadoras do Google Cloud ao redor do mundo. 
                     Fomos a única organização brasileira a receber a premiação na categoria de Impacto Social, que também selecionou outras iniciativas que usam tecnologia para promover mais abertura e transparência. 
-                    O anúncio aconteceu no Google Cloud Next'21. 
                 </SectionText>
-                <SectionText fontWeigth="700" fontSize="16px" color="#42B0FF">Veja mais detalhes.</SectionText>
+                <Link fontSize="16px" target="_blank" color="#42B0FF" href="https://cloud.google.com/blog/topics/customers/announcing-winners-of-google-cloud-customer-awards">Veja mais detalhes.</Link>
               </Box>
 
               <Box textAlign="center" maxWidth={isMobileMod ? "100%" : "45%"}>
                 <Image
                   src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/premio_tesouro_nacional_2021.png"
-                  width="140px"
-                  height="140px"
-                  margin="0 auto 48px"
+                  width={{ base: "100px", lg: "140px" }}
+                  height={{ base: "100px", lg: "140px" }}
+                  margin={{base: "0 auto 40px", lg: "0 auto 48px"}}
                 />
-                <SectionTitle marginBottom="16px" fontSize="22px">XXVI Prêmio Tesouro Nacional 2021</SectionTitle>
-                <SectionText fontSize="16px">
-                  Conquistamos o 1º lugar na categoria Soluções. O prêmio tem como objetivo expandir as fronteiras do conhecimento em finanças públicas, promovendo a normalização de temas específicos quando tratados consistentemente pela pesquisa científica. Fomos selecionados por conta de nosso trabalho compatibilizando informações de despesas e receitas orçamentárias do Setor Público Brasileiro.
+                <SectionTitle 
+                  marginBottom="16px"  
+                  fontSize={{ base: "18px", lg: "22px" }}
+                  letterSpacing={{base: "0.1px", lg: "0.2px"}}
+                >
+                  XXVI Prêmio Tesouro Nacional 2021
+                </SectionTitle>
+                <SectionText marginBottom="8px" fontSize="16px">
+                  Conquistamos o 1º lugar na categoria Soluções. O prêmio tem como objetivo reconhecer o desenvolvimento de aplicações em ciências de dados e inteligência artificial aplicadas a finanças públicas. Fomos selecionados por conta de nosso trabalho compatibilizando informações de despesas e receitas orçamentárias do Setor Público Brasileiro.
                 </SectionText>
-                <SectionText fontWeigth="700" fontSize="16px" color="#42B0FF">Veja mais detalhes.</SectionText>
+                <Link fontSize="16px" target="_blank" color="#42B0FF" href="https://www.tesourotransparente.gov.br/descubra-explore-crie/crie">Veja mais detalhes.</Link>
               </Box>
             </Stack>
           </Stack>
@@ -356,23 +436,23 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
         alignItems="center"
         position="relative"
         left={isMobileMod ? "-24px" : "-32px"}
-        paddingBottom="160px"
-        bgGradient="linear(#34A15A 62%, #FFF 62%)"
+        paddingBottom={{ base: "80px", lg: "144px" }}
+        bgGradient="linear(#34A15A 45%, #FFF 45%)"
       >
         <Center flexDirection="column">
-          <Display textAlign="center" paddingTop="60px" color="#FFF">
+          <Display textAlign="center" paddingTop="56px" color="#FFF">
             Nossa história
           </Display>
           <Text
             fontFamily="ubuntu"
             maxWidth="650px"
-            fontSize="20px"
-            letterSpacing="0.2px"
+            fontSize={{ base: "18px", lg: "20px" }}
+            letterSpacing={{ base: "0.1px", lg: "0.2px" }}
             fontWeight="300"
             textAlign="center"
             color="#FFF"
-            margin="8px 0 88px"
-          >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ornare nibh vel ex porta pulvinar. Vivamus a urna vestibulum, luctus.</Text>
+            margin="8px 0 48px"
+          >Alguns dos marcos que definiram nossa trajetória até aqui</Text>
         </Center>
       
         <Center
@@ -387,20 +467,82 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             }}
           >
             <HistoryBox
-              title="Adicionar Titulo"
-              date="Adicionar Data"
-              text="Adicionar Texto"
-            />
+              title="Um grande catálogo colaborativo"
+              date="OUT DE 2019"
+              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_Um_grande_catalogo_colaborativo.png"
+            >
+              Nosso co-fundador, Ricardo Dahis, enxergou a necessidade de uma plataforma com capacidade de busca e filtragem de diferentes conjuntos de dados e iniciou esse trabalho lançando o mecanismo de busca da BD.
+            </HistoryBox>
             <HistoryBox
-              title="Adicionar Titulo"
-              date="Adicionar Data"
-              text="Adicionar Texto"
-            />
+              title="O e-mail"
+              date="SET DE 2020"
+              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_O_email.png"
+            >
+              Foi já no primeiro contato de João Carabetta, também co-fundador da BD, com Ricardo Dahis que veio a ambiciosa proposta: estruturar um grande <i>datalake</i> público pelo BigQuery e usar o mecanismo de busca para catalogação das bases e de seus metadados.
+            </HistoryBox>
             <HistoryBox
-              title="Adicionar Titulo"
-              date="Adicionar Data"
-              text="Adicionar Texto"
-            />
+              title="A happy sunday"
+              date="SET DE 2020"
+              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_A_happy_sunday.png"
+            >
+              Nos últimos três minutos de um domingo de setembro, o GitHub testemunhou o commit que mudaria para sempre a vida de quem trabalha com dados públicos. Criamos a estrutura do nosso <i>datalake</i>, uma ferramenta que faria a alegria de muita gente que já passou tantos domingos limpando bases.
+            </HistoryBox>
+            <HistoryBox
+              title="Nem só de boa vontade..."
+              date="SET DE 2020"
+              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_Nem_so_de_boa_vontade.png"
+            >
+              Começamos a receber apoio financeiro de pessoas que acreditam na importância do nosso trabalho. Isso foi fundamental para escalar nossas atividades, afinal, nem só de esforço e boa vontade se faz um bom projeto.
+            </HistoryBox>
+            <HistoryBox
+              title="Funcionário do mês"
+              date="NOV DE 2020"
+              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_Funcionario_do_mes.png"
+            >
+              Abrimos a primeira vaga de engenharia de dados e contratamos a primeira pessoa remunerada para integrar nossa equipe. Aos poucos, esse time foi crescendo e hoje não é mais tão fácil assim ser funcionário(a) do mês.
+            </HistoryBox>
+            <HistoryBox
+              title="A primeira de muitas"
+              date="JAN DE 2021"
+              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_A_primeira_de_muitas.png"
+            >
+              A RAIS foi nossa primeira grande base tratada e disponibilizada no <i>datalake</i> público. Subimos seus assombrosos 260 GB de microdados completos, com informações de 1985 até 2019, possibilitando agregações por município e UF.
+            </HistoryBox>
+            <HistoryBox
+              title="Real oficial"
+              date="JUN DE 2021"
+              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_Real_oficial.png"
+            >
+              Nos tornamos oficialmente o Instituto Base dos Dados (IBD), uma organização sem fins lucrativos, com equipe formal, CNPJ e tudo que tem direito. Um passo importante para consolidar nosso trabalho.
+            </HistoryBox>
+            <HistoryBox
+              title="De cara nova"
+              date="SET DE 2021"
+              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_De_cara_nova.png"
+            >
+              Desenvolver o novo site foi um dos maiores e desafiadores projetos que assumimos. Apesar dos momentos de caos e peças mirabolantes, aos poucos tudo foi se encaixando e tomando a forma de uma plataforma com a nossa cara. Assim, nasceu a primeira versão do novo site da BD, com interface mais intuitiva, design moderno e uma estrutura que facilita ainda mais a experiência dos usuários.
+            </HistoryBox>
+            <HistoryBox
+              title="Um prêmio de peso"
+              date="OUT DE 2021"
+              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_Um_premio_de_peso.png"
+            >
+              Precisamos de muitas mãos para carregar essa conquista. Recebemos o <i>Google Cloud Customer Award</i> na categoria de Impacto Social. O prêmio inédito foi anunciado no evento internacional, <i>Google Cloud Next'21</i>, e tem como objetivo reconhecer as implementações mais inovadoras e transformadoras do Google Cloud ao redor do mundo.
+            </HistoryBox>
+            <HistoryBox
+              title="Chegamos primeiro no tesouro"
+              date="NOV DE 2021"
+              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_Chegamos_primeiro_no_tesouro.png"
+            >
+              Conquistamos o 1º lugar na categoria Soluções do XXVI Prêmio Tesouro Nacional 2021. O prêmio tem como objetivo expandir as fronteiras do conhecimento em finanças públicas, promovendo a normalização de temas específicos quando tratados consistentemente pela pesquisa científica.
+            </HistoryBox>
+            <HistoryBox
+              title="Conquistando o mundo"
+              date="Muito em breve"
+              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_Conquistando_o_mundo.png"
+            >
+              A necessidade de ter um repositório que centralize importantes bases de dados já tratadas e padronizadas não é exclusiva do Brasil. Imagina ter um <i>datalake</i> aberto que permite o acesso e cruzamento de dados de diversos países diferentes? Esse é o futuro da BD.
+            </HistoryBox>
           </Carousel>
         </Center>
       </Stack>
@@ -410,11 +552,11 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
         maxWidth="1264px"
         margin="auto"
       >
-        <Center flexDirection="column" paddingBottom="70px">
-          <BigTitle marginBottom="16px">Adicionar Title</BigTitle>
-          <SectionText fontSize="16px">Adicionar subTitle</SectionText>
+        <Center flexDirection="column" paddingBottom="72px">
+          <BigTitle marginBottom="16px">Uma equipe colaborativa</BigTitle>
+          <SectionText textAlign="center" fontSize="16px">Somos uma rede de pessoas empenhadas em contribuir {isMobileMod ? " " : <br/>} com a transparência e a democratização do acesso a dados.</SectionText>
           <SectionText fontSize="16px">Faça parte da equipe você também.</SectionText>
-          <SectionText fontSize="16px" color="#42B0FF" fontWeigth="700">Veja as vagas abertas.</SectionText>
+          <Link fontSize="16px" target="_blank" color="#42B0FF" href="https://info.basedosdados.org/carreiras">Veja as vagas abertas.</Link>
         </Center>
 
         <Stack
@@ -422,6 +564,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
           gridGap="96px"
           spacing={0}
           flexDirection={isMobileMod ? "column" :"row"}
+          paddingBottom="22px"
         >
           <Box
             display="flex"
@@ -449,7 +592,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
 
           <Stack
             width="100%"
-            spacing="100px"
+            spacing={{ base: "64px", lg: "96px" }}
           >
             {people.map((elm, index) => (
               <TeamBox
