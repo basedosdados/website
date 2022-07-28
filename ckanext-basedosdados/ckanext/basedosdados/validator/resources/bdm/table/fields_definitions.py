@@ -292,7 +292,7 @@ COLUMNS_FIELD = Field(
     ),
     yaml_order={
         "id_before": "partitions",
-        "id_after": "metadata_modified",
+        "id_after": "number_rows",
     },
 )
 
@@ -307,7 +307,7 @@ NUMBER_ROWS_FIELD = Field(
 METADATA_MODIFIED_FIELD = Field(
     title="Data da Última Modificação dos Metadados",
     yaml_order={
-        "id_before": "columns",
+        "id_before": "number_rows",
         "id_after": None,
     },
 )
