@@ -330,7 +330,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             </Display>
             <Text
               width={isMobileMod ? "100%" : "80%"}
-              fontFamily="ubuntu"
+              fontFamily="Lato"
               fontWeight="300"
               fontSize="20px"
               lineHeight="32px"
@@ -354,13 +354,13 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             >
               A Base dos Dados
             </BigTitle>
-            <SectionText fontSize="16px" paddingBottom="20px">
+            <SectionText fontSize={{ base: "16px", lg: "18px" }} paddingBottom="20px">
               Somos uma organização não-governamental sem fins lucrativos e <i>open source</i> que atua para universalizar o acesso a dados de qualidade. Fazemos isso através da criação de ferramentas inovadoras, da produção e difusão do conhecimento e da promoção de uma cultura de transparência e dados abertos.
             </SectionText>
-            <SectionText fontSize="16px" paddingBottom="20px">
+            <SectionText fontSize={{ base: "16px", lg: "18px" }} paddingBottom="20px">
               Ao quebrar barreiras técnicas para quem já faz e quem quer começar a fazer análise de dados, reunimos uma rede altamente engajada que potencializa o impacto do nosso trabalho. Estamos construindo uma comunidade de pessoas que acreditam no uso inteligente de dados como instrumento para o desenvolvimento socioeconômico e que encontram na BD uma grande aliada.
             </SectionText>
-            <SectionText fontSize="16px" paddingBottom="20px">
+            <SectionText fontSize={{ base: "16px", lg: "18px" }} paddingBottom="20px">
               O que queremos é aproximar diferentes setores da sociedade de informações que são de interesse coletivo, mas ainda pouco acessíveis para a maioria das pessoas. Acreditamos que ampliar o acesso e uso de dados abertos favorece o aumento da participação social, a melhoria da gestão pública e o aperfeiçoamento da democracia.
             </SectionText>
           </Stack>
