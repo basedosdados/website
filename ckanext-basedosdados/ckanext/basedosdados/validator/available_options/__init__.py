@@ -15,6 +15,7 @@ from .entity import EntityEnum
 from .language import LanguageEnum
 from .license import LicenseEnum
 from .measurement_unit import MeasurementUnitEnum
+from .people import *
 from .raw_quality_tier import RawQualityTierEnum
 from .resource_type import ResourceTypeEnum
 from .status import StatusEnum

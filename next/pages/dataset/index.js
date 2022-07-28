@@ -702,9 +702,9 @@ export default function SearchPage({
                   setOrder(event.target.value);
                 }}
               >
-                {/* <option value="score">Relevantes</option>  TODO: review this */}
+                <option value="score">Mais relevantes</option>
                 <option value="recent">Mais recentes</option>
-                <option value="popular">Populares</option>
+                <option value="popular">Mais populares</option>
               </Select>
             </Stack>
           </HStack>

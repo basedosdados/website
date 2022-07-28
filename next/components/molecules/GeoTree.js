@@ -4,7 +4,7 @@ export function GeoTree(props, schema) {
     const n_levels = 5;
     let [chosen_levels, set_chosen_levels] = useState(_id_to_levels(props.formData, n_levels));
 
-    let tree = Object.values(schema.spatial_coverage_tree);
+    let tree = Object.values(schema);
     tree.forEach(x => { x.level = x.id.split('.').length - 1; });
 
     let selects = [];

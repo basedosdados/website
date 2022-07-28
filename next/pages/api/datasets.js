@@ -55,6 +55,14 @@ export function getRecentDatalakeDatasets() {
     .then(({ data }) => data.result.datasets);
 }
 
+export function getPopularTags() {
+  return axios
+    .get(
+      `http://ckan:5000/api/3/action/bd_dataset_search`
+    )
+    .then(({ data }) => data.result.tags);
+}
+
 export function getRecentDatalakeDatasetsByTheme(id) {
   return axios
     .get(
