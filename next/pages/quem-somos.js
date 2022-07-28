@@ -5,8 +5,12 @@ import {
   VStack,
   Image,
   Text,
+  Modal,
+  ModalOverlay,
+  ModalContent,
 } from "@chakra-ui/react";
 import React, { useState, useEffect} from "react";
+import { useDisclosure } from "@chakra-ui/hooks";
 import { useMediaQuery } from "@chakra-ui/react";
 import { MainPageTemplate } from "../components/templates/main";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
@@ -62,6 +66,7 @@ const SectionBox = ({ children, ...props }) => {
 const HistoryBox = ({ children, title, date, image }) => {
   const isMobile = useCheckMobile();
   const [isMobileMod, setIsMobileMod] = useState(false)
+  const { isOpen, onOpen, onClose } = useDisclosure()
   
   useEffect(() => {
     setIsMobileMod(isMobile)
@@ -75,9 +80,11 @@ const HistoryBox = ({ children, title, date, image }) => {
       <Box
         borderRadius="20px"
         overflow="hidden"
-        width={isMobileMod ? "85vw" : "500px"}
-        height={isMobileMod ? "200px" : "300px"}
+        width={isMobileMod ? "fit-content" : "500px"}
+        height={isMobileMod ? "100%" : "300px"}
         boxShadow="0 2px 20px 0 #00000026"
+        cursor="pointer"
+        onClick={onOpen}
       >
         <Image
           widht="100%"
@@ -100,6 +107,17 @@ const HistoryBox = ({ children, title, date, image }) => {
           {children}
         </SectionText>
       </Box>
+
+      <Modal isCentered isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay/>
+        <ModalContent marginTop={isMobileMod && "5rem"} marginBottom={isMobileMod && "0"} background="transparent" maxWidth="1000px">
+          <Image
+            widht="100%"
+            height="100%"
+            src={image}
+          />
+        </ModalContent>
+      </Modal>
     </Box>
   )
 }
