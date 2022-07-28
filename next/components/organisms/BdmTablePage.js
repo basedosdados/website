@@ -29,13 +29,13 @@ import DataInformationQuery from "../molecules/DataInformationQuery";
 import StarIcon from "../../public/img/icons/starIcon";
 import FrequencyIcon from "../../public/img/icons/frequencyIcon";
 import PartitionIcon from "../../public/img/icons/partitionIcon";
-import UserIcon from "../../public/img/icons/userIcon"
-import VersionIcon from "../../public/img/icons/versionIcon"
-import EmailIcon from "../../public/img/icons/emailIcon"
-import GitIcon from "../../public/img/icons/gitIcon"
-import CkanIcon from "../../public/img/icons/ckanIcon"
-import WebIcon from "../../public/img/icons/webIcon"
-import TwitterIcon from "../../public/img/icons/twitterIcon"
+import UserIcon from "../../public/img/icons/userIcon";
+import VersionIcon from "../../public/img/icons/versionIcon";
+import EmailIcon from "../../public/img/icons/emailIcon";
+import GitIcon from "../../public/img/icons/gitIcon";
+import CkanIcon from "../../public/img/icons/ckanIcon";
+import WebIcon from "../../public/img/icons/webIcon";
+import TwitterIcon from "../../public/img/icons/twitterIcon";
 
 export function BdmTablePage({
   availableOptionsTranslations,

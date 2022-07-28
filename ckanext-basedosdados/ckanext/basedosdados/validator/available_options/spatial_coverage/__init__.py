@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from typing import List, Dict
 from pydantic import BaseModel, validator
 import pandas
-import importlib.resources
 
 from ..attr_enum import AttrEnum
 

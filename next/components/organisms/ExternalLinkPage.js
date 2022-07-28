@@ -66,6 +66,7 @@ export function ExternalLinkPage({
 
   useEffect(() => {
     const schemaHeaders = { entity: "-", columns : "-" }
+    if(!resource.observation_level) return null
     const valueObservationLevel = resource.observation_level.map((elm) => {
       const values = elm
 
