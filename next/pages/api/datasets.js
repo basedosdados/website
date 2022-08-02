@@ -9,7 +9,7 @@ export function listDatasets() {
 
 export function showDataset(id) {
   return axios
-    .get(`http://ckan:5000/api/3/action/package_show?id=${id}`)
+    .get(`https://basedosdados.org/api/3/action/package_show?id=${id}`)
     .then(({ data }) => data.result);
 }
 
