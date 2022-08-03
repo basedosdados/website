@@ -220,6 +220,7 @@ export default function DataInformationQuery ({ resource }) {
               Copie o código abaixo,
               <Link
                 color="#42B0FF"
+                target="_blank"
                 textDecoration="none"
                 href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${resource.dataset_id}&t=${resource.name}&page=table`}
               > clique aqui
@@ -290,7 +291,7 @@ df <- bd_collect(query)`}
               Criamos um pacote em Stata para você acessar o <i>datalake</i>. Basta rodar o código:
             </SectionText>
 
-            <PrismCodeHighlight language="Stata">
+            <PrismCodeHighlight language="stata">
               {`net install basedosdados, from("https://raw.githubusercontent.com/basedosdados/mais/master/stata-package")
 
 bd_read_table, ///
@@ -411,7 +412,7 @@ bd_read_table, ///
                   width="100%"
                   gridGap="6px"
                   cursor={downloadNotAllowed ? "auto" :"pointer"}
-                  _hover={downloadNotAllowed ? {transform : null} : ""}
+                  _hover={downloadNotAllowed ? {transform : "none"} : ""}
                   onClick={handlerDownload}
                 >
                   <DownloadIcon widthIcon="22px" heightIcon="22px" fill={downloadNotAllowed ? "#C4C4C4" :"#FF8484"}/>
