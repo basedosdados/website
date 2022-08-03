@@ -66,15 +66,6 @@ export async function getStaticProps(context) {
     (r) => r && r?.resource_type === "information_request"
   );
   
-  const getDatasetFileSize = () => {
-    return new Promise((resolve) => {
-      fetch(`https://storage.googleapis.com/basedosdados-public/one-click-download/${resources.dataset_id}/${resources.name}.zip`)
-        .then(res => resolve(res.headers.get("content-length")))
-        .catch(() => resolve(null))
-    }) 
-  }
-  const datasetFileSize = await getDatasetFileSize()
-
   return await withPages({
     props: {
       dataset,
@@ -84,7 +75,6 @@ export async function getStaticProps(context) {
       translations,
       availableOptionsTranslations,
       translationsOptions,
-      datasetFileSize,
       isPlus: isBdPlus(dataset),
     },
     revalidate: 1, //TODO: Increase this timer
