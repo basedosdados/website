@@ -130,6 +130,7 @@ export function BdmTablePage({
     return  setObservationLevel()
 
     if(typeof resource.observation_level === "object") {
+      if(resource.observation_level.length === 0) return setObservationLevel()
       const schemaHeaders = { entity: "-", columns : "-" }
       const valueObservationLevel = resource.observation_level.map((elm) => {
         const values = elm
@@ -271,7 +272,7 @@ export function BdmTablePage({
       <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Cobertura temporal</Subtitle>
         <SectionText>
-          {showTemporalCoverage ? temporalCoverage : "Nenhuma cobertura temporal fornecida"}
+          {showTemporalCoverage ? temporalCoverage : "Nenhuma cobertura temporal fornecida."}
         </SectionText>
       </VStack>
 
@@ -291,7 +292,7 @@ export function BdmTablePage({
           />
         :
           <SectionText>
-            Nenhuma informação de coluna fornecida
+            Nenhuma informação de coluna fornecida.
           </SectionText>
         }
       </VStack>
@@ -301,7 +302,7 @@ export function BdmTablePage({
           Nível da observação
         </Subtitle>
         {!observationLevel ?
-          <SectionText>Não listado</SectionText>
+          <SectionText>Nenhum nível da observação fornecido.</SectionText>
         :
           <SimpleTable
             headers={["Entidade","Colunas Correspondentes"]}
