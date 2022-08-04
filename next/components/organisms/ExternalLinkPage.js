@@ -203,7 +203,7 @@ export function ExternalLinkPage({
           fontSize="14px"
           minWidth="100px"
           color="#FFF"
-          backgroundColor={resource.url ? "#42B0FF" : "#A3A3A3"}
+          backgroundColor={resource.url ? "#42B0FF" : "#C4C4C4"}
           padding="0 20px"
           isDisabled={resource.url ? false : true}
           onClick={() => window.open(resource.url)}
