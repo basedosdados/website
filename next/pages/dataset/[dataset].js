@@ -65,7 +65,7 @@ export async function getStaticProps(context) {
   const informationRequest = resources.filter(
     (r) => r && r?.resource_type === "information_request"
   );
-
+  
   return await withPages({
     props: {
       dataset,

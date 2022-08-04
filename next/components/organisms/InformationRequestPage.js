@@ -183,7 +183,7 @@ export function InformationRequestPage({
               fontSize="14px"
               minWidth="100px"
               color="#FFF"
-              backgroundColor={resource?.url ? "#42B0FF" : "#A3A3A3"}
+              backgroundColor={resource?.url ? "#42B0FF" : "#C4C4C4"}
               padding="0 20px"
               isDisabled={resource?.url ? false : true}
               onClick={() => window.open(resource?.url)}
@@ -198,7 +198,7 @@ export function InformationRequestPage({
               minWidth="100px"
               color={resource?.data_url ? "#42B0FF" : "#FFF"}
               border={resource?.data_url && "2px solid #42B0FF"}
-              backgroundColor={resource?.data_url ? "#FFF" : "#A3A3A3"}
+              backgroundColor={resource?.data_url ? "#FFF" : "#C4C4C4"}
               padding="0 20px"
               isDisabled={resource?.data_url ? false : true}
               onClick={() => window.open(resource?.data_url)}
