@@ -65,54 +65,60 @@ export function ExternalLinkPage({
   },[resource.temporalCoverage])
 
   useEffect(() => {
-    const schemaHeaders = { entity: "-", columns : "-" }
-    if(!resource.observation_level) return null
-    const valueObservationLevel = resource.observation_level.map((elm) => {
-      const values = elm
+    if(resource.observation_level === null)
+    return  setObservationLevel()
 
-      const valueColumn = () => {
-        if(typeof values.columns === "object") {
-          const newColumn = Object.values(values.columns)
-            .map((elm) => {
-              if(!elm) {
-                return "-"
-              } else {
-                return elm
-              }
-            })
-          return {columns : newColumn.toString()}
+    if(typeof resource.observation_level === "object") {
+      if(resource.observation_level.length === 0) return setObservationLevel()
+      const schemaHeaders = { entity: "-", columns : "-" }
+      const valueObservationLevel = resource.observation_level.map((elm) => {
+        const values = elm
+
+        const valueColumn = () => {
+          if(typeof values.columns === "object") {
+            const newColumn = Object.values(values.columns)
+              .map((elm) => {
+                if(!elm) {
+                  return "-"
+                } else {
+                  return elm
+                }
+              })
+            return {columns : newColumn.toString()}
+          }
         }
-      }
 
-      const translationsEntity = () => {
-        if(values.entity) {
-          return {entity : translateField(values.entity, availableOptionsTranslations)}
-        } else {
-          return {entity : "-"}
+        const translationsEntity = () => {
+          if(values.entity) {
+            return {entity : translateField(values.entity, availableOptionsTranslations)}
+          } else {
+            return {entity : "-"}
+          }
         }
+
+        const row = {...schemaHeaders, ...values, ...valueColumn(), ...translationsEntity()}
+        
+        delete row.country
+        delete row.column
+        
+        if(row.entity === "-" && row.columns === "-") {
+          delete row.entity
+          delete row.columns
+          return [""]
+        }
+
+        return Object.values(row)
+      })
+
+      function filterArray(value) {
+        return value.length > 1
       }
+      const newValues = valueObservationLevel.filter(filterArray)
 
-      const row = {...schemaHeaders, ...values, ...valueColumn(), ...translationsEntity()}
-      
-      delete row.country
-      delete row.column
-      
-      if(row.entity === "-" && row.columns === "-") {
-        delete row.entity
-        delete row.columns
-        return [""]
-      }
-
-      return Object.values(row)
-    })
-
-    function filterArray(value) {
-      return value.length > 1
+      setObservationLevel(newValues)
+    } else {
+      setObservationLevel()
     }
-    const newValues = valueObservationLevel.filter(filterArray)
-
-    setObservationLevel(newValues)
-
   },[resource.observation_level])
 
   const AddInfoTextBase = ({title, text, children, ...style}) => {
@@ -277,14 +283,14 @@ export function ExternalLinkPage({
                 marginBottom="8px"
                 color="#252A32"
               >Nível da observação</Text>
-              {observationLevel.length === 0 ? 
-                <SectionText marginRight="4px !important">Não listado</SectionText>
-                :
+              {observationLevel ? 
                 <SimpleTable 
                   headers={["Entidade","Colunas Correspondentes"]}
                   values={Object.values(observationLevel)}
                   valuesTable={{_first:{textTransform: "capitalize"}}}
                 />
+                :
+                <SectionText marginRight="4px !important">Não listado</SectionText>
               }
             </Box>
           </GridItem>
