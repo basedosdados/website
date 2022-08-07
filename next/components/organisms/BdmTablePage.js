@@ -269,14 +269,14 @@ export function BdmTablePage({
         </SectionText>
       </VStack>
       
-      <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
+      <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Cobertura temporal</Subtitle>
         <SectionText>
           {showTemporalCoverage ? temporalCoverage : "Nenhuma cobertura temporal fornecida."}
         </SectionText>
       </VStack>
 
-      <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
+      <VStack width="100%" spacing={5} alignItems="flex-start">
         <Subtitle>
           Colunas
         </Subtitle>
@@ -297,18 +297,18 @@ export function BdmTablePage({
         }
       </VStack>
 
-      <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
+      <VStack width="100%" spacing={5} alignItems="flex-start">
         <Subtitle>
           Nível da observação
         </Subtitle>
-        {!observationLevel ?
-          <SectionText>Nenhum nível da observação fornecido.</SectionText>
-        :
+        {observationLevel ?
           <SimpleTable
             headers={["Entidade","Colunas Correspondentes"]}
             values={Object.values(observationLevel)}
             valuesTable={{_first:{textTransform: "capitalize"}}}
           />
+        :
+          <SectionText>Nenhum nível da observação fornecido.</SectionText>
         }
       </VStack>
 
