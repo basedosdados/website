@@ -1,0 +1,33 @@
+.historyTimeLine :global(.swiper) {
+  min-width: 100% !important;
+  padding: 0 32px !important;
+}
+
+.historyTimeLine :global(.swiper-slide) {
+  display: flex;
+  justify-content: center;
+}
+
+.historyTimeLine :global(.swiper-button-prev), .historyTimeLine :global(.swiper-button-next) {
+  color: #DEDFE0 !important;
+  background-color: rgb(255, 255, 255);
+  top: 0 !important;
+  margin-top: 0 !important;
+  height: 100% !important;
+}
+
+.historyTimeLine :global(.swiper-button-prev) {
+  left: 0 !important;
+}
+
+.historyTimeLine :global(.swiper-button-next) {
+  right: 0 !important;
+}
+
+.historyTimeLine :global(.swiper-button-prev)::after , .historyTimeLine :global(.swiper-button-next)::after {
+  font-size: 32px !important;
+}
+
+.historyTimeLine :global(.swiper-pagination-bullet-active) {
+  background-color: #2b8c4d !important;
+}

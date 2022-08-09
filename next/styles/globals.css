@@ -155,26 +155,24 @@ body {
   justify-content: center;
 }
 
-.swiper-button-prev {
+.swiper-button-prev, .swiper-button-next {
   color: #DEDFE0 !important;
   background-color: #FFF;
-  left: 0 !important;
   top: 0 !important;
   margin-top: 0 !important;
   height: 100% !important
 }
 
-.swiper-button-prev::after ,.swiper-button-next::after {
-  font-size: 32px !important;
+.swiper-button-prev {
+  left: 0 !important;
 }
 
 .swiper-button-next {
-  color: #DEDFE0 !important;
-  background-color: #FFF;
   right: 0 !important;
-  top: 0 !important;
-  margin-top: 0 !important;
-  height: 100% !important;
+}
+
+.swiper-button-prev::after ,.swiper-button-next::after {
+  font-size: 32px !important;
 }
 
 .swiper-pagination-bullet-active {
