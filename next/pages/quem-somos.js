@@ -434,7 +434,6 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
           >Alguns dos marcos que definiram nossa trajetória até aqui</Text>
         </Center>
       
-        ///History time line
         <Center
           width="100%"
           className={styles.historyTimeLine}
@@ -443,7 +442,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             settings={{
               spaceBetween: isMobileMod ? 100 : 400,
               slidesPerView: isMobileMod ? 1 : 3,
-              navigation: true,
+              navigation: !isMobileMod && true,
               centeredSlides: true,
             }}
           >
