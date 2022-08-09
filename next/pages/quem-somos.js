@@ -317,11 +317,40 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
           </Stack>
 
           <Stack
-            paddingTop={{ base: "80px", lg: "304px" }}
+            width="100%"
+            paddingTop="80px"
+            flexDirection={{base: "column", lg: "row"}}
+            spacing={{base: 10, lg: 0}}
+            gridGap="20%"
+            maxWidth="1264px"
+            justifyContent="center"
+          >
+            <Center flexDirection="column">
+              <Text fontFamily="ubuntu" fontWeight="400" fontSize="30px" lineHeight="32px" letterSpacing="0.2px">
+                +104k
+              </Text>
+              <SectionText fontSize="18px">
+                usuários na plataforma 
+              </SectionText>
+            </Center>
+
+            <Center flexDirection="column">
+              <Text fontFamily="ubuntu" fontWeight="400" fontSize="30px" lineHeight="32px" letterSpacing="0.2px">
+                +1MM
+              </Text>
+              <SectionText fontSize="18px">
+                consultas aos dados
+              </SectionText>
+            </Center>
+          </Stack>
+
+          <Stack
+            paddingTop={{ base: "80px", lg: "144px" }}
             paddingBottom={{ base: "80px", lg: "144px" }}
             textAlign="center"
             justifyContent="center"
-            maxWidth={{ base: "100%", lg: "50%" }}
+            maxWidth="1264px"
+            width={{ base: "100%", lg: "50%" }}
           >
             <BigTitle 
               paddingBottom="24px"
