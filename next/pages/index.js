@@ -275,12 +275,12 @@ function Products() {
           >
             <Stack maxWidth={isMobileMod ? "300px" : "430px"}>
               <Text
-               fontFamily="Ubuntu"
-               fontSize="14px"
-               fontWeight="300"
-               color="#6F6F6F"
-               letterSpacing="0.5px"
-               lineHeight="24px"
+                fontFamily="Ubuntu"
+                fontSize="14px"
+                fontWeight="300"
+                color="#6F6F6F"
+                letterSpacing="0.5px"
+                lineHeight="24px"
               >
                 FILTROS
               </Text>

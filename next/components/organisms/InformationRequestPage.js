@@ -68,17 +68,13 @@ export function InformationRequestPage({
   }
 
   function translateField(field, translation) {
-    if(!field)
-      return "Não listado"
+    if(!field) return "Não listado"
       
-    if(typeof field === "boolean") {
-      return field === true ? "Sim" : "Não"
-    }
+    if(typeof field === "boolean") return field === true ? "Sim" : "Não"
 
     if(typeof field === "object") {
-      if(!field){
-        return "Não listado"
-      }
+      if(!field) return "Não listado"
+      
       if(field.length === 0) {
         return "Não listado"
       } else {
