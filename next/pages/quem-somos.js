@@ -32,6 +32,7 @@ import LinkedinIcon  from "../public/img/icons/linkedinIcon";
 import GitIcon  from "../public/img/icons/gitIcon";
 import DiscordIcon from "../public/img/icons/discordIcon";
 import TrophySvg from "../public/img/trophySvg";
+import styles from "../styles/quemSomos.module.css"
 
 export async function getStaticProps(context) {
   const bdTeam = await getBDTeams();
@@ -39,28 +40,11 @@ export async function getStaticProps(context) {
 
   return await withPages({
     props: {
-      bdPeople,
-      bdTeam
+      bdTeam,
+      bdPeople
     },
     revalidate: 60,
   })
-}
-
-const SectionBox = ({ children, ...props }) => {
-  return (
-    <Box
-      display="flex"
-      justifyContent="space-between"
-      flexDirection={{ base: "column", lg: "row" }}
-      paddingTop={{ base: "80px", lg: "112px" }}
-      width="100%"
-      maxWidth="1264px"
-      margin="auto"
-      {...props}
-    >
-      {children}
-    </Box>
-  )
 }
 
 const HistoryBox = ({ children, title, date, image }) => {
@@ -115,6 +99,8 @@ const HistoryBox = ({ children, title, date, image }) => {
             widht="100%"
             height="100%"
             src={image}
+            onClick={onClose}
+            cursor="pointer"
           />
         </ModalContent>
       </Modal>
@@ -122,31 +108,18 @@ const HistoryBox = ({ children, title, date, image }) => {
   )
 }
 
-
-const TeamBox = ({ index, bdTeam, data }) => {
-  const isMobile = useCheckMobile();
-  const [isMobileMod, setIsMobileMod] = useState(false)
+const TeamBox = ({ isMobileMod, index, bdTeam, data }) => {
   const [role, setRole] = useState([])
   
   useEffect(() => {
-    const filterId = (elm) => {
-      if(elm.person_id === data.id) {
-        return elm.role
-      }
-    }
-    const peopleId = bdTeam.filter(filterId)
+    if(bdTeam && data) {
+      const peopleId = bdTeam.filter((elm) => elm.personId === data.id)
+    
+      const getRoleArray = () => peopleId.map((elm) => elm.role)
   
-    const filterRole = () => peopleId.map((elm) => {
-      return elm.role
-    })
-
-    return setRole(filterRole())
-  },[bdTeam, data])
-
-
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
+      return setRole(getRoleArray())
+    }
+  },[bdTeam ,data]) 
 
   const hasLeftSpacing = (index % 2 == 0) ? false : true
 
@@ -208,7 +181,7 @@ const TeamBox = ({ index, bdTeam, data }) => {
         marginBottom={isMobileMod && "20px"}
       />
       <Box display="flex" flexDirection="column">
-        <Box marginBottom={{base: "0", lg: "4px" }} display="flex" flexDirection="row">
+        <Box marginBottom={{ base: "0", lg: "4px" }} display="flex" flexDirection="row">
           <Text fontSize={{ base: "16px", lg: "18px" }} fontFamily="ubuntu" fontWeight="300" color="#6F6F6F" marginRight="16px">{data.name}</Text>
           {!isMobileMod && iconLinks()}
         </Box>
@@ -221,48 +194,49 @@ const TeamBox = ({ index, bdTeam, data }) => {
 }
   
 export default function QuemSomos({ pages, bdTeam, bdPeople }) {
-  const isMobile = useCheckMobile();
+  const isMobile = useCheckMobile()
   const [isMobileMod, setIsMobileMod] = useState(false)
   const [mScreen] = useMediaQuery("(max-width: 1390px)")
+  
+  const [teams, setTeams] = useState([])
+  const [allPeople, setAllPeople] = useState([])
+
   const [filterTeam, setFilterTeam] = useState("")
-  const [schemasTeam, setSchemasTeam] = useState([])
-  const [people, setPeople] = useState([])
+  const [schemasTeam, setSchemasTeam] = useState()
+  const [people, setPeople] = useState()
 
   useEffect(() => {
-    if(!filterTeam) return null
-    const filterByTeam = (elm) => {
-      if(elm.team === filterTeam) {
-        return elm
-      }
-    }
-    const teamPeople = bdTeam.filter(filterByTeam)
+    if(bdTeam) setTeams(bdTeam)
+    if(bdPeople) setAllPeople(bdPeople)
+  },[])
 
-    const filterId = () => teamPeople.map((elm) => {
-      return elm.person_id
-    })
-    
-    const personId = [...new Set(filterId())]
-
-    const filterPeople = () => {
-      return personId.map((elm) => {
-        return bdPeople[elm]
-      })
+  useEffect(() => {
+    if(filterTeam) {
+      filterPeopleByTeam(filterTeam)
     }
-    setPeople(filterPeople())
-      
   },[filterTeam])
 
-  useEffect(() => {
-    setPeople(Object.values(bdPeople))
-  },[bdPeople])
+  const filterPeopleByTeam = (team) => {
+    const teamPeople = teams.filter((elm) => elm.team === team)
+
+    const mapId = () => teamPeople.map((elm) => elm.person_id)
+    
+    const personIdList = Array.from(new Set(mapId()))
+
+    const filterPeople = () => personIdList.map((personId) => allPeople[personId])
+
+    setPeople(filterPeople())
+  }
   
   useEffect(() => {
-    const schemasTeam = () => bdTeam.map((elm) => {
+    const schemasTeam = () => teams.map((elm) => {
       return elm.team
     })
     const newSchemasTeam = schemasTeam()
-    return setSchemasTeam([...new Set(newSchemasTeam)])
-  },[bdTeam])
+    
+    setSchemasTeam(Array.from(new Set(newSchemasTeam)))
+    setPeople(Object.values(allPeople))
+  },[teams, allPeople])
 
   useEffect(() => {
     setIsMobileMod(isMobile)
@@ -285,7 +259,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   const handleSelect = (elm) => {
     if(filterTeam === elm) {
       setFilterTeam()
-      return setPeople(Object.values(bdPeople)) 
+      return setPeople(Object.values(allPeople)) 
     } else {
       return setFilterTeam(elm)
     }
@@ -343,11 +317,40 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
           </Stack>
 
           <Stack
-            paddingTop={{ base: "80px", lg: "304px" }}
+            width="100%"
+            paddingTop="80px"
+            flexDirection={{base: "column", lg: "row"}}
+            spacing={{base: 10, lg: 0}}
+            gridGap="20%"
+            maxWidth="1264px"
+            justifyContent="center"
+          >
+            <Center flexDirection="column">
+              <Text fontFamily="ubuntu" fontWeight="400" fontSize="30px" lineHeight="32px" letterSpacing="0.2px">
+                +104k
+              </Text>
+              <SectionText fontSize="18px">
+                usuários na plataforma 
+              </SectionText>
+            </Center>
+
+            <Center flexDirection="column">
+              <Text fontFamily="ubuntu" fontWeight="400" fontSize="30px" lineHeight="32px" letterSpacing="0.2px">
+                +1MM
+              </Text>
+              <SectionText fontSize="18px">
+                consultas aos dados
+              </SectionText>
+            </Center>
+          </Stack>
+
+          <Stack
+            paddingTop={{ base: "80px", lg: "144px" }}
             paddingBottom={{ base: "80px", lg: "144px" }}
             textAlign="center"
             justifyContent="center"
-            maxWidth={{ base: "100%", lg: "50%" }}
+            maxWidth="1264px"
+            width={{ base: "100%", lg: "50%" }}
           >
             <BigTitle 
               paddingBottom="24px"
@@ -462,13 +465,14 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
       
         <Center
           width="100%"
+          className={styles.historyTimeLine}
         >
           <Carousel
             settings={{
               spaceBetween: isMobileMod ? 100 : 400,
               slidesPerView: isMobileMod ? 1 : 3,
+              navigation: !isMobileMod && true,
               centeredSlides: true,
-              mousewheel: true
             }}
           >
             <HistoryBox
@@ -580,7 +584,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             top={isMobileMod? "0" : "120px"}
             z-index="20"
           >
-            {schemasTeam.map((elm) => (
+            {schemasTeam?.map((elm) => (
               <Text
                 fontSize="16px"
                 color={filterTeam === elm ? "#2B8C4D" :"#6F6F6F"}
@@ -599,11 +603,12 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             width="100%"
             spacing={{ base: "64px", lg: "96px" }}
           >
-            {people.map((elm, index) => (
+            {people?.map((elm, index) => (
               <TeamBox
                 index={index}
                 data={elm}
-                bdTeam={bdTeam}
+                isMobileMod={isMobileMod}
+                bdTeam={teams}
               />
             ))}
           </Stack>

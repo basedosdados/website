@@ -258,8 +258,8 @@ export default function Menu({ pages = [] }) {
     Serviços: "/servicos",
     Institucional: {
       "Quem somos": "/quem-somos",
-      Newsletter: "https://info.basedosdados.org/newsletter",
       Transparência: "/transparencia",
+      Newsletter: "https://info.basedosdados.org/newsletter",
       Carreiras: "https://info.basedosdados.org/carreiras"
     },
     Contato: "/contato",
