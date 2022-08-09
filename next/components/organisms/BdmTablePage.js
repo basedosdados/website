@@ -80,17 +80,13 @@ export function BdmTablePage({
   }
 
   function translateField(field, translation) {
-    if(!field)
-      return "Não listado"
+    if(!field) return "Não listado"
 
-    if(typeof field === "boolean") {
-      return field === true ? "Sim" : "Não"
-    }
+    if(typeof field === "boolean") return field === true ? "Sim" : "Não" 
 
     if(typeof field === "object") {
-      if(!field){
-        return "Não listado"
-      }
+      if(!field) return "Não listado"
+
       if(field.length === 0) {
         return "Não listado"
       } else {
@@ -122,12 +118,10 @@ export function BdmTablePage({
         setShowTemporalCoverage(true)
       }
     }
-
   },[schema, resource])
 
   useEffect(() => {
-    if(resource.observation_level === null)
-    return  setObservationLevel()
+    if(resource.observation_level === null) setObservationLevel()
 
     if(typeof resource.observation_level === "object") {
       if(resource.observation_level.length === 0) return setObservationLevel()
@@ -219,9 +213,9 @@ export function BdmTablePage({
       const twitter = ref.twitter_user.replace(/(https:)\/\/(twitter.com)\//gim, "")
       href = `https://twitter.com/${twitter}`
     }
-    if(ref.email) { href = `mailto:${ref.email}` }
-    if(ref.ckan_user) { href = `/user/${ref.ckan_user}` }
-    if(ref.website) { href = `https://${ref.website}` }
+    if(ref.email) href = `mailto:${ref.email}`
+    if(ref.ckan_user) href = `/user/${ref.ckan_user}`
+    if(ref.website) href = `https://${ref.website}`
 
     return {
       cursor: "pointer",

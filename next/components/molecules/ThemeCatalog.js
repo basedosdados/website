@@ -20,7 +20,7 @@ function Themes ({
   onSelectTheme,
   selectedTheme=[],
   listThemes=[],
- }) {
+}) {
   const [screenQuery, setScreenQuery] = useState(0)
 
   useEffect(() => {
@@ -40,8 +40,7 @@ function Themes ({
     return selectedTheme.find(res => res === value)
   }
 
-  if(listThemes.length === 0)
-    return null
+  if(listThemes.length === 0) return null
 
   return (
     <Center

@@ -66,17 +66,14 @@ function SearchInput ({ status }) {
   }
 
   useEffect(() => {
-    if(query.dataset) {
-      return setShowSearchInput(true)
-    }
+    if(query.dataset) return setShowSearchInput(true)
   },[query])
 
   function openSearchLink() {
     window.open(`/dataset?q=${search}`, "_self")
   }
 
-  if(!showSearchInput)
-    return null
+  if(!showSearchInput) return null
   
   return (
     <>

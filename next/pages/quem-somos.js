@@ -126,8 +126,8 @@ const TeamBox = ({ isMobileMod, index, bdTeam, data }) => {
   const iconTeamBox = (ref) => {
     let href = ""
 
-    if(ref.website) { href = `${ref.website}` }
-    if(ref.email) { href = `mailto:${ref.email}` }
+    if(ref.website) href = `${ref.website}`
+    if(ref.email) href = `mailto:${ref.email}`
     if(ref.twitter) {
       const twitter = ref.twitter.replace(/(https:)\/\/(twitter.com)\//gim, "")
       href = `https://twitter.com/${twitter}`
