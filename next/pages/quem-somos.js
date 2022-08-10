@@ -320,7 +320,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             width="100%"
             paddingTop="80px"
             flexDirection={{base: "column", lg: "row"}}
-            spacing={{base: 10, lg: 0}}
+            spacing={{base: 20, lg: 0}}
             gridGap="20%"
             maxWidth="1264px"
             justifyContent="center"
