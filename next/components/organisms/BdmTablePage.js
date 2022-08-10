@@ -121,7 +121,7 @@ export function BdmTablePage({
   },[schema, resource])
 
   useEffect(() => {
-    if(resource.observation_level === null) setObservationLevel()
+    if(resource.observation_level === null) return setObservationLevel()
 
     if(typeof resource.observation_level === "object") {
       if(resource.observation_level.length === 0) return setObservationLevel()
