@@ -108,19 +108,7 @@ const HistoryBox = ({ children, title, date, image }) => {
   )
 }
 
-const TeamBox = ({ isMobileMod, index, bdTeam, data }) => {
-  const [role, setRole] = useState([])
-  
-  useEffect(() => {
-    if(bdTeam && data) {
-      const peopleId = bdTeam.filter((elm) => elm.personId === data.id)
-    
-      const getRoleArray = () => peopleId.map((elm) => elm.role)
-  
-      return setRole(getRoleArray())
-    }
-  },[bdTeam ,data]) 
-
+const TeamBox = ({ isMobileMod, index, data }) => {
   const hasLeftSpacing = (index % 2 == 0) ? false : true
 
   const iconTeamBox = (ref) => {
@@ -171,7 +159,6 @@ const TeamBox = ({ isMobileMod, index, bdTeam, data }) => {
       marginLeft={isMobileMod ? "" : hasLeftSpacing && "200px !important"}
     >
       <Box
-        backgroundColor="#F0F0F0"
         minWidth="160px"
         maxWidth="160px"
         minHeight="160px"
@@ -179,68 +166,102 @@ const TeamBox = ({ isMobileMod, index, bdTeam, data }) => {
         borderRadius="16px"
         marginRight="32px"
         marginBottom={isMobileMod && "20px"}
-      />
+        overflow="hidden"
+        backgroundColor={!data.photo_url && "#F4F4F4"}
+      >
+        {data.photo_url && <Image src={data.photo_url} width="100%" height="100%"/>}
+      </Box>
       <Box display="flex" flexDirection="column">
         <Box marginBottom={{ base: "0", lg: "4px" }} display="flex" flexDirection="row">
-          <Text fontSize={{ base: "16px", lg: "18px" }} fontFamily="ubuntu" fontWeight="300" color="#6F6F6F" marginRight="16px">{data.name}</Text>
+          <Text
+            fontSize={{ base: "16px", lg: "18px" }}
+            fontFamily="ubuntu"
+            fontWeight="300"
+            color="#6F6F6F"
+            marginRight="16px"
+          >
+            {data.name}
+          </Text>
           {!isMobileMod && iconLinks()}
         </Box>
-        <Text marginBottom={{ base: "8px", lg: "12px" }} fontSize={{ base: "16px", lg: "18px" }} fontFamily="ubuntu" fontWeight="300" color="#252A32">{role.join(", ")}</Text>
+        <Text
+          marginBottom={{ base: "8px", lg: "12px" }}
+          fontSize={{ base: "16px", lg: "18px" }}
+          fontFamily="ubuntu"
+          fontWeight="300"
+          color="#252A32"
+        >
+          {data.role.join(", ")}
+        </Text>
         <SectionText marginBottom="16px" fontSize={{ base: "14px", lg: "16px" }}>{data.description}</SectionText>
         {isMobileMod && iconLinks()}
       </Box>
     </Box>
   )
 }
-  
+
 export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   const isMobile = useCheckMobile()
   const [isMobileMod, setIsMobileMod] = useState(false)
   const [mScreen] = useMediaQuery("(max-width: 1390px)")
-  
-  const [teams, setTeams] = useState([])
-  const [allPeople, setAllPeople] = useState([])
-
-  const [filterTeam, setFilterTeam] = useState("")
-  const [schemasTeam, setSchemasTeam] = useState()
-  const [people, setPeople] = useState()
-
-  useEffect(() => {
-    if(bdTeam) setTeams(bdTeam)
-    if(bdPeople) setAllPeople(bdPeople)
-  },[])
-
-  useEffect(() => {
-    if(filterTeam) {
-      filterPeopleByTeam(filterTeam)
-    }
-  },[filterTeam])
-
-  const filterPeopleByTeam = (team) => {
-    const teamPeople = teams.filter((elm) => elm.team === team)
-
-    const mapId = () => teamPeople.map((elm) => elm.person_id)
-    
-    const personIdList = Array.from(new Set(mapId()))
-
-    const filterPeople = () => personIdList.map((personId) => allPeople[personId])
-
-    setPeople(filterPeople())
-  }
-  
-  useEffect(() => {
-    const schemasTeam = () => teams.map((elm) => {
-      return elm.team
-    })
-    const newSchemasTeam = schemasTeam()
-    
-    setSchemasTeam(Array.from(new Set(newSchemasTeam)))
-    setPeople(Object.values(allPeople))
-  },[teams, allPeople])
 
   useEffect(() => {
     setIsMobileMod(isMobile)
   }, [isMobile])
+
+  const [people, setPeople] = useState()
+  const [filterTeam, setFilterTeam] = useState("")
+
+  const schemasTeam = [
+    "Co-fundadores",
+    "Associados",
+    "Administrativo",
+    "Captação, Parcerias e Projetos",
+    "Comunicação",
+    "Dados",
+    "Infraestrutura",
+    "Website",
+    "Conselho Fiscal"
+  ]
+
+  useEffect(() => {
+    // setPeople(joinPeopleTeam())
+  },[bdTeam, bdPeople])
+
+  // const joinPeopleTeam = () => (Object.values(bdPeople)).map((elm) => {
+  //   const people = elm
+  //   const team = []
+  //   const role = []
+
+  //   const peopleId = bdTeam.filter((elm) => elm.person_id === people.id)
+    
+  //   const getPeopleArray = () => peopleId.map((res) => {
+  //     team.push(res.team)
+  //     role.push(res.role)
+  //   })
+  //   getPeopleArray()
+
+  //   const newTeam = Array.from(new Set(team.filter(Boolean)))
+  //   const newRole = Array.from(new Set(role.filter(Boolean)))
+
+  //   return Object.assign(people, {team : newTeam}, {role : newRole})
+  // })
+
+  useEffect(() => {
+    if(filterTeam) filterPeopleByTeam(filterTeam)
+  },[filterTeam])
+
+  const filterPeopleByTeam = (team) => {
+    const teamPeople = bdTeam.filter((elm) => elm.team === team)
+
+    const mapId = () => teamPeople.map((elm) => elm.person_id)
+    
+    const personIdList = Array.from(new Set(mapId()))
+    
+    const filterPeople = () => personIdList.map((personId) => bdPeople[personId])
+
+    setPeople(filterPeople())
+  }
 
   const keyIcon = (url) => {
     return {
@@ -259,7 +280,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   const handleSelect = (elm) => {
     if(filterTeam === elm) {
       setFilterTeam()
-      return setPeople(Object.values(allPeople)) 
+      return setPeople(joinPeopleTeam()) 
     } else {
       return setFilterTeam(elm)
     }
@@ -276,7 +297,6 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
           spacing={0}
           position="sticky"
           width="fit-content"
-          height="0"
           top="40%"
           left="-32px"
           backgroundColor="#FFF"
@@ -287,7 +307,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
           <LinkedinIcon {...keyIcon("https://www.linkedin.com/company/base-dos-dados/mycompany/")}/>
         </Stack>
 
-        <VStack paddingLeft={isMobileMod ? "0" : "24px"}>
+        <VStack paddingLeft={isMobileMod ? "0" : "24px"} position="relative" top="-145px">
           <Stack
             width="100%"
             maxWidth="1264px"
@@ -608,7 +628,6 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
                 index={index}
                 data={elm}
                 isMobileMod={isMobileMod}
-                bdTeam={teams}
               />
             ))}
           </Stack>
