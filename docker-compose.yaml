@@ -43,7 +43,7 @@ services:
       - CKAN_REDIS_URL=redis://redis:6379/0
       - BETTER_EXCEPTIONS=1
       - WERKZEUG_DEBUG_PIN=off
-    command: ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "wsgi"]
+    command: ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "wsgi"]
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000/"]
       interval: 1m30s
@@ -51,6 +51,8 @@ services:
       retries: 5
       start_period: 30s
     restart: unless-stopped
+    mem_reservation: 2048M
+    cpus: 1.0
 
   datapusher: # Not really used, ckan dependency
     container_name: datapusher
