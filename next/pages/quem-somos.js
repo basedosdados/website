@@ -93,8 +93,13 @@ const HistoryBox = ({ children, title, date, image }) => {
       </Box>
 
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay/>
-        <ModalContent marginTop={isMobileMod && "5rem"} marginBottom={isMobileMod && "0"} background="transparent" maxWidth="1000px">
+        <ModalOverlay backdropFilter="blur(2px)"/>
+        <ModalContent
+          marginTop={isMobileMod && "5rem"}
+          marginBottom={isMobileMod && "0"}
+          background="transparent"
+          maxWidth="1000px"
+        >
           <Image
             widht="100%"
             height="100%"
@@ -108,19 +113,7 @@ const HistoryBox = ({ children, title, date, image }) => {
   )
 }
 
-const TeamBox = ({ isMobileMod, index, bdTeam, data }) => {
-  const [role, setRole] = useState([])
-  
-  useEffect(() => {
-    if(bdTeam && data) {
-      const peopleId = bdTeam.filter((elm) => elm.personId === data.id)
-    
-      const getRoleArray = () => peopleId.map((elm) => elm.role)
-  
-      return setRole(getRoleArray())
-    }
-  },[bdTeam ,data]) 
-
+const TeamBox = ({ isMobileMod, index, data }) => {
   const hasLeftSpacing = (index % 2 == 0) ? false : true
 
   const iconTeamBox = (ref) => {
@@ -171,7 +164,6 @@ const TeamBox = ({ isMobileMod, index, bdTeam, data }) => {
       marginLeft={isMobileMod ? "" : hasLeftSpacing && "200px !important"}
     >
       <Box
-        backgroundColor="#F0F0F0"
         minWidth="160px"
         maxWidth="160px"
         minHeight="160px"
@@ -179,68 +171,145 @@ const TeamBox = ({ isMobileMod, index, bdTeam, data }) => {
         borderRadius="16px"
         marginRight="32px"
         marginBottom={isMobileMod && "20px"}
-      />
+        overflow="hidden"
+        backgroundColor={!data.photo_url && "#F4F4F4"}
+      >
+        {data.photo_url && <Image src={data.photo_url} width="100%" height="100%"/>}
+      </Box>
       <Box display="flex" flexDirection="column">
         <Box marginBottom={{ base: "0", lg: "4px" }} display="flex" flexDirection="row">
-          <Text fontSize={{ base: "16px", lg: "18px" }} fontFamily="ubuntu" fontWeight="300" color="#6F6F6F" marginRight="16px">{data.name}</Text>
+          <Text
+            fontSize={{ base: "16px", lg: "18px" }}
+            fontFamily="ubuntu"
+            fontWeight="300"
+            color="#6F6F6F"
+            marginRight="16px"
+          >
+            {data?.name}
+          </Text>
           {!isMobileMod && iconLinks()}
         </Box>
-        <Text marginBottom={{ base: "8px", lg: "12px" }} fontSize={{ base: "16px", lg: "18px" }} fontFamily="ubuntu" fontWeight="300" color="#252A32">{role.join(", ")}</Text>
-        <SectionText marginBottom="16px" fontSize={{ base: "14px", lg: "16px" }}>{data.description}</SectionText>
+        <Text
+          marginBottom={{ base: "8px", lg: "12px" }}
+          fontSize={{ base: "16px", lg: "18px" }}
+          fontFamily="ubuntu"
+          fontWeight="300"
+          color="#252A32"
+        >
+          {data?.role.join(", ")}
+        </Text>
+        <SectionText marginBottom="16px" fontSize={{ base: "14px", lg: "16px" }}>{data?.description}</SectionText>
         {isMobileMod && iconLinks()}
       </Box>
     </Box>
   )
 }
-  
+
 export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   const isMobile = useCheckMobile()
   const [isMobileMod, setIsMobileMod] = useState(false)
   const [mScreen] = useMediaQuery("(max-width: 1390px)")
-  
-  const [teams, setTeams] = useState([])
+
+  useEffect(() => {
+    setIsMobileMod(isMobile)
+  }, [isMobile])
+
   const [allPeople, setAllPeople] = useState([])
-
+  const [people, setPeople] = useState([])
   const [filterTeam, setFilterTeam] = useState("")
-  const [schemasTeam, setSchemasTeam] = useState()
-  const [people, setPeople] = useState()
+
+  const schemasTeam = [
+    "Co-fundadores",
+    "Associados",
+    "Administrativo",
+    "Captação, Parcerias e Projetos",
+    "Comunicação",
+    "Dados",
+    "Infraestrutura",
+    "Website",
+    "Conselho Fiscal"
+  ]
+
+  const sortingTeam = (array, team = schemasTeam) => {
+    let arraySorting = []
+
+    team.map((personTeam) => {
+      const newPeopleByTeam = array.filter((person) => {
+        const indexTeam = person.team.indexOf(personTeam)
+        if(indexTeam === -1) {
+          return ""
+        } else { 
+          return person.team[indexTeam] === personTeam
+        }
+      })
+
+      newPeopleByTeam.sort(function (a, b) {
+        const compareName = (firstPerson, secondPerson) => firstPerson.name.localeCompare(secondPerson.name)
+        
+        if (a.role[0] === "Presidente") return -3
+        if (a.role[0] === "Diretoria") return -2
+        if (a.role[0] === "Gerente") return -1
+        if (compareName(a, b) > compareName(b, a)) {
+          return 1
+        }
+        if (compareName(a, b) < compareName(b, a)) {
+          return -1
+        }
+        return 0
+      })
+
+      newPeopleByTeam.map((res) => {
+        arraySorting.push(res)
+      })
+
+    })
+    const newArraySorting = [...new Set(arraySorting)]
+    return newArraySorting
+  }
 
   useEffect(() => {
-    if(bdTeam) setTeams(bdTeam)
-    if(bdPeople) setAllPeople(bdPeople)
-  },[])
+    setPeople(sortingTeam(allPeople))
+  },[allPeople])
 
   useEffect(() => {
-    if(filterTeam) {
-      filterPeopleByTeam(filterTeam)
-    }
+    setAllPeople(groupingTeamAndRole(Object.values(bdPeople)))
+  },[bdTeam, bdPeople])
+
+  const groupingTeamAndRole = (array) => array.map((elm) => {
+    const person = elm
+    const team = []
+    const role = []
+
+    const getById = bdTeam.filter((elm) => elm.person_id === person.id)
+
+    if(getById) getById.map((res) => {
+      team.push(res.team)
+      role.push(res.role)
+    })
+
+    const refiningTeam = Array.from(new Set(team.filter(Boolean)))
+    const refiningRole = Array.from(new Set(role.filter(Boolean)))
+
+    return {...person, team : refiningTeam, role : refiningRole}
+  })
+
+  useEffect(() => {
+    if(filterTeam) filterPeopleByTeam(filterTeam)
   },[filterTeam])
 
   const filterPeopleByTeam = (team) => {
-    const teamPeople = teams.filter((elm) => elm.team === team)
+    const teamPeople = bdTeam.filter((elm) => elm.team === team)
 
     const mapId = () => teamPeople.map((elm) => elm.person_id)
     
     const personIdList = Array.from(new Set(mapId()))
 
-    const filterPeople = () => personIdList.map((personId) => allPeople[personId])
+    const filterPeople = () => personIdList.map((personId) => bdPeople[personId])
+      
+    const newGroupPerson = groupingTeamAndRole(filterPeople())
 
-    setPeople(filterPeople())
+    setPeople(sortingTeam(newGroupPerson, [team]))
   }
-  
-  useEffect(() => {
-    const schemasTeam = () => teams.map((elm) => {
-      return elm.team
-    })
-    const newSchemasTeam = schemasTeam()
-    
-    setSchemasTeam(Array.from(new Set(newSchemasTeam)))
-    setPeople(Object.values(allPeople))
-  },[teams, allPeople])
-
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
 
   const keyIcon = (url) => {
     return {
@@ -259,11 +328,11 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   const handleSelect = (elm) => {
     if(filterTeam === elm) {
       setFilterTeam()
-      return setPeople(Object.values(allPeople)) 
+      return setPeople(sortingTeam(allPeople))
     } else {
       return setFilterTeam(elm)
     }
-  }  
+  }
 
   return (
     <MainPageTemplate pages={pages} paddingX="24px">
@@ -276,7 +345,6 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
           spacing={0}
           position="sticky"
           width="fit-content"
-          height="0"
           top="40%"
           left="-32px"
           backgroundColor="#FFF"
@@ -287,7 +355,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
           <LinkedinIcon {...keyIcon("https://www.linkedin.com/company/base-dos-dados/mycompany/")}/>
         </Stack>
 
-        <VStack paddingLeft={isMobileMod ? "0" : "24px"}>
+        <VStack paddingLeft={isMobileMod ? "0" : "24px"} position="relative" top="-145px">
           <Stack
             width="100%"
             maxWidth="1264px"
@@ -357,13 +425,13 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             >
               A Base dos Dados
             </BigTitle>
-            <SectionText fontSize={{ base: "16px", lg: "18px" }} paddingBottom="20px">
+            <SectionText lineHeight="26px" fontSize={{ base: "16px", lg: "18px" }} paddingBottom="20px">
               Somos uma organização não-governamental sem fins lucrativos e <i>open source</i> que atua para universalizar o acesso a dados de qualidade. Fazemos isso através da criação de ferramentas inovadoras, da produção e difusão do conhecimento e da promoção de uma cultura de transparência e dados abertos.
             </SectionText>
-            <SectionText fontSize={{ base: "16px", lg: "18px" }} paddingBottom="20px">
+            <SectionText lineHeight="26px" fontSize={{ base: "16px", lg: "18px" }} paddingBottom="20px">
               Ao quebrar barreiras técnicas para quem já faz e quem quer começar a fazer análise de dados, reunimos uma rede altamente engajada que potencializa o impacto do nosso trabalho. Estamos construindo uma comunidade de pessoas que acreditam no uso inteligente de dados como instrumento para o desenvolvimento socioeconômico e que encontram na BD uma grande aliada.
             </SectionText>
-            <SectionText fontSize={{ base: "16px", lg: "18px" }} paddingBottom="20px">
+            <SectionText lineHeight="26px" fontSize={{ base: "16px", lg: "18px" }} paddingBottom="20px">
               O que queremos é aproximar diferentes setores da sociedade de informações que são de interesse coletivo, mas ainda pouco acessíveis para a maioria das pessoas. Acreditamos que ampliar o acesso e uso de dados abertos favorece o aumento da participação social, a melhoria da gestão pública e o aperfeiçoamento da democracia.
             </SectionText>
           </Stack>
@@ -435,7 +503,6 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             </Stack>
           </Stack>
         </VStack>
-
       </Stack>
 
       <Stack
@@ -608,7 +675,6 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
                 index={index}
                 data={elm}
                 isMobileMod={isMobileMod}
-                bdTeam={teams}
               />
             ))}
           </Stack>
