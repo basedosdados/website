@@ -230,10 +230,10 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   ]
 
   useEffect(() => {
-    setPeople(groupingTeamAndRole())
+    setPeople(groupingTeamAndRole(Object.values(bdPeople)))
   },[bdTeam, bdPeople])
 
-  const groupingTeamAndRole = () => Object.values(bdPeople).map((elm) => {
+  const groupingTeamAndRole = (array) => array.map((elm) => {
     const person = elm
     const team = []
     const role = []
@@ -261,10 +261,10 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
     const mapId = () => teamPeople.map((elm) => elm.person_id)
     
     const personIdList = Array.from(new Set(mapId()))
-    
+
     const filterPeople = () => personIdList.map((personId) => bdPeople[personId])
 
-    setPeople(filterPeople())
+    setPeople(groupingTeamAndRole(filterPeople()))
   }
 
   const keyIcon = (url) => {
@@ -284,7 +284,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   const handleSelect = (elm) => {
     if(filterTeam === elm) {
       setFilterTeam()
-      return setPeople(groupingTeamAndRole())
+      return setPeople(groupingTeamAndRole(Object.values(bdPeople)))
     } else {
       return setFilterTeam(elm)
     }
