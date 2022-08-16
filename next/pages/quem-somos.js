@@ -214,6 +214,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
     setIsMobileMod(isMobile)
   }, [isMobile])
 
+  const [allPeople, setAllPeople] = useState([])
   const [people, setPeople] = useState([])
   const [filterTeam, setFilterTeam] = useState("")
 
@@ -229,8 +230,49 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
     "Conselho Fiscal"
   ]
 
+  const sortingTeam = (array, team = schemasTeam) => {
+    let arraySorting = []
+
+    team.map((personTeam) => {
+      const newPeopleByTeam = array.filter((person) => {
+        const indexTeam = person.team.indexOf(personTeam)
+        if(indexTeam === -1) {
+          return ""
+        } else { 
+          return person.team[indexTeam] === personTeam
+        }
+      })
+
+      newPeopleByTeam.sort(function (a, b) {
+        const compareName = (firstPerson, secondPerson) => firstPerson.name.localeCompare(secondPerson.name)
+        
+        if (a.role[0] === "Presidente") return -3
+        if (a.role[0] === "Diretoria") return -2
+        if (a.role[0] === "Gerente") return -1
+        if (compareName(a, b) > compareName(b, a)) {
+          return 1
+        }
+        if (compareName(a, b) < compareName(b, a)) {
+          return -1
+        }
+        return 0
+      })
+
+      newPeopleByTeam.map((res) => {
+        arraySorting.push(res)
+      })
+
+    })
+    const newArraySorting = [...new Set(arraySorting)]
+    return newArraySorting
+  }
+
   useEffect(() => {
-    setPeople(groupingTeamAndRole(Object.values(bdPeople)))
+    setPeople(sortingTeam(allPeople))
+  },[allPeople])
+
+  useEffect(() => {
+    setAllPeople(groupingTeamAndRole(Object.values(bdPeople)))
   },[bdTeam, bdPeople])
 
   const groupingTeamAndRole = (array) => array.map((elm) => {
@@ -263,8 +305,10 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
     const personIdList = Array.from(new Set(mapId()))
 
     const filterPeople = () => personIdList.map((personId) => bdPeople[personId])
+      
+    const newGroupPerson = groupingTeamAndRole(filterPeople())
 
-    setPeople(groupingTeamAndRole(filterPeople()))
+    setPeople(sortingTeam(newGroupPerson, [team]))
   }
 
   const keyIcon = (url) => {
@@ -284,7 +328,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   const handleSelect = (elm) => {
     if(filterTeam === elm) {
       setFilterTeam()
-      return setPeople(groupingTeamAndRole(Object.values(bdPeople)))
+      return setPeople(sortingTeam(allPeople))
     } else {
       return setFilterTeam(elm)
     }
