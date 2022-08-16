@@ -93,8 +93,13 @@ const HistoryBox = ({ children, title, date, image }) => {
       </Box>
 
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay/>
-        <ModalContent marginTop={isMobileMod && "5rem"} marginBottom={isMobileMod && "0"} background="transparent" maxWidth="1000px">
+        <ModalOverlay backdropFilter="blur(2px)"/>
+        <ModalContent
+          marginTop={isMobileMod && "5rem"}
+          marginBottom={isMobileMod && "0"}
+          background="transparent"
+          maxWidth="1000px"
+        >
           <Image
             widht="100%"
             height="100%"
@@ -180,7 +185,7 @@ const TeamBox = ({ isMobileMod, index, data }) => {
             color="#6F6F6F"
             marginRight="16px"
           >
-            {data.name}
+            {data?.name}
           </Text>
           {!isMobileMod && iconLinks()}
         </Box>
@@ -191,9 +196,9 @@ const TeamBox = ({ isMobileMod, index, data }) => {
           fontWeight="300"
           color="#252A32"
         >
-          {data.role.join(", ")}
+          {data?.role.join(", ")}
         </Text>
-        <SectionText marginBottom="16px" fontSize={{ base: "14px", lg: "16px" }}>{data.description}</SectionText>
+        <SectionText marginBottom="16px" fontSize={{ base: "14px", lg: "16px" }}>{data?.description}</SectionText>
         {isMobileMod && iconLinks()}
       </Box>
     </Box>
@@ -209,7 +214,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
     setIsMobileMod(isMobile)
   }, [isMobile])
 
-  const [people, setPeople] = useState()
+  const [people, setPeople] = useState([])
   const [filterTeam, setFilterTeam] = useState("")
 
   const schemasTeam = [
@@ -225,27 +230,26 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   ]
 
   useEffect(() => {
-    // setPeople(joinPeopleTeam())
+    setPeople(groupingTeamAndRole())
   },[bdTeam, bdPeople])
 
-  // const joinPeopleTeam = () => (Object.values(bdPeople)).map((elm) => {
-  //   const people = elm
-  //   const team = []
-  //   const role = []
+  const groupingTeamAndRole = () => Object.values(bdPeople).map((elm) => {
+    const person = elm
+    const team = []
+    const role = []
 
-  //   const peopleId = bdTeam.filter((elm) => elm.person_id === people.id)
-    
-  //   const getPeopleArray = () => peopleId.map((res) => {
-  //     team.push(res.team)
-  //     role.push(res.role)
-  //   })
-  //   getPeopleArray()
+    const getById = bdTeam.filter((elm) => elm.person_id === person.id)
 
-  //   const newTeam = Array.from(new Set(team.filter(Boolean)))
-  //   const newRole = Array.from(new Set(role.filter(Boolean)))
+    if(getById) getById.map((res) => {
+      team.push(res.team)
+      role.push(res.role)
+    })
 
-  //   return Object.assign(people, {team : newTeam}, {role : newRole})
-  // })
+    const refiningTeam = Array.from(new Set(team.filter(Boolean)))
+    const refiningRole = Array.from(new Set(role.filter(Boolean)))
+
+    return {...person, team : refiningTeam, role : refiningRole}
+  })
 
   useEffect(() => {
     if(filterTeam) filterPeopleByTeam(filterTeam)
@@ -280,11 +284,11 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   const handleSelect = (elm) => {
     if(filterTeam === elm) {
       setFilterTeam()
-      return setPeople(joinPeopleTeam()) 
+      return setPeople(groupingTeamAndRole())
     } else {
       return setFilterTeam(elm)
     }
-  }  
+  }
 
   return (
     <MainPageTemplate pages={pages} paddingX="24px">
@@ -377,13 +381,13 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             >
               A Base dos Dados
             </BigTitle>
-            <SectionText fontSize={{ base: "16px", lg: "18px" }} paddingBottom="20px">
+            <SectionText lineHeight="26px" fontSize={{ base: "16px", lg: "18px" }} paddingBottom="20px">
               Somos uma organização não-governamental sem fins lucrativos e <i>open source</i> que atua para universalizar o acesso a dados de qualidade. Fazemos isso através da criação de ferramentas inovadoras, da produção e difusão do conhecimento e da promoção de uma cultura de transparência e dados abertos.
             </SectionText>
-            <SectionText fontSize={{ base: "16px", lg: "18px" }} paddingBottom="20px">
+            <SectionText lineHeight="26px" fontSize={{ base: "16px", lg: "18px" }} paddingBottom="20px">
               Ao quebrar barreiras técnicas para quem já faz e quem quer começar a fazer análise de dados, reunimos uma rede altamente engajada que potencializa o impacto do nosso trabalho. Estamos construindo uma comunidade de pessoas que acreditam no uso inteligente de dados como instrumento para o desenvolvimento socioeconômico e que encontram na BD uma grande aliada.
             </SectionText>
-            <SectionText fontSize={{ base: "16px", lg: "18px" }} paddingBottom="20px">
+            <SectionText lineHeight="26px" fontSize={{ base: "16px", lg: "18px" }} paddingBottom="20px">
               O que queremos é aproximar diferentes setores da sociedade de informações que são de interesse coletivo, mas ainda pouco acessíveis para a maioria das pessoas. Acreditamos que ampliar o acesso e uso de dados abertos favorece o aumento da participação social, a melhoria da gestão pública e o aperfeiçoamento da democracia.
             </SectionText>
           </Stack>
@@ -455,7 +459,6 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             </Stack>
           </Stack>
         </VStack>
-
       </Stack>
 
       <Stack
