@@ -360,38 +360,42 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             width="100%"
             maxWidth="1264px"
             margin="auto"
-            paddingTop={{ base: "80px", lg: "128px" }}
+            paddingTop={{ base: "80px", lg: "88px" }}
             alignItems="center"
           >
             <Display 
-              lineHeight={{ base: "40px", lg: "52px" }}
+              fontSize={isMobile ? "44px" : "50px"}
+              letterSpacing={isMobileMod ? "0.2px" : "-0.5px"}
+              lineHeight={isMobileMod ? "40px" : "60px"}
               textAlign="center" 
-              marginBottom="56px"
+              marginBottom="32px"
             >
               Facilitamos o acesso a dados {isMobileMod ? " " : <br/>} para que a distância entre você e sua análise {isMobileMod ? " " : <br/>} seja <a style={{color:"#2B8C4D"}}>apenas uma boa pergunta</a>.
             </Display>
             <Text
               width={isMobileMod ? "100%" : "80%"}
-              fontFamily="Lato"
+              fontFamily="Ubuntu"
               fontWeight="300"
-              fontSize="20px"
-              lineHeight="32px"
-              letterSpacing="0.2px"
+              fontSize="24px"
+              lineHeight="34px"
+              letterSpacing="0px"
               color="#6F6F6F"
               textAlign="center"
+              marginTop="0px !important"
             >
-              Milhares de pessoas encontram, baixam, cruzam e analisam dados {isMobileMod ? " " : <br/>} de uma maneira muito mais prática com a BD.  
+              Milhares de pessoas encontram, baixam, cruzam e analisam dados {isMobileMod ? " " : <br/>} de uma maneira muito mais prática com a nossa plataforma.  
             </Text>
           </Stack>
 
           <Stack
             width="100%"
-            paddingTop="80px"
+            paddingTop="88px"
             flexDirection={{base: "column", lg: "row"}}
             spacing={{base: 20, lg: 0}}
             gridGap="20%"
             maxWidth="1264px"
             justifyContent="center"
+            marginTop="0px !important"
           >
             <Center flexDirection="column">
               <Text fontFamily="ubuntu" fontWeight="400" fontSize="30px" lineHeight="32px" letterSpacing="0.2px">
@@ -415,6 +419,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
           <Stack
             paddingTop={{ base: "80px", lg: "144px" }}
             paddingBottom={{ base: "80px", lg: "144px" }}
+            marginTop="0px !important"
             textAlign="center"
             justifyContent="center"
             maxWidth="1264px"
@@ -575,7 +580,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
               date="NOV DE 2020"
               image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_Funcionario_do_mes.png"
             >
-              Abrimos a primeira vaga de engenharia de dados e contratamos a primeira pessoa remunerada para integrar nossa equipe. Aos poucos, esse time foi crescendo e hoje não é mais tão fácil assim ser funcionário(a) do mês.
+              Abrimos a primeira vaga de Assistente de Dados e contratamos a primeira pessoa remunerada para integrar nossa equipe. Aos poucos, esse time foi crescendo e hoje não é mais tão fácil assim ser funcionário(a) do mês.
             </HistoryBox>
             <HistoryBox
               title="A primeira de muitas"
