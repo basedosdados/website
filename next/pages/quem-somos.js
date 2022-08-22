@@ -20,9 +20,8 @@ import {
   getBDPeople
 } from "./api/team";
 import Display from "../components/atoms/Display";
-import SectionText from "../components/atoms/SectionText";
 import SectionTitle from "../components/atoms/SectionTitle";
-import BigTitle from "../components/atoms/BigTitle";
+import BodyText from "../components/atoms/BodyText";
 import Link from "../components/atoms/Link";
 import Carousel from "../components/atoms/Carousel";
 import WebIcon  from "../public/img/icons/webIcon";
@@ -31,7 +30,7 @@ import TwitterIcon  from "../public/img/icons/twitterIcon";
 import LinkedinIcon  from "../public/img/icons/linkedinIcon";
 import GitIcon  from "../public/img/icons/gitIcon";
 import DiscordIcon from "../public/img/icons/discordIcon";
-import TrophySvg from "../public/img/trophySvg";
+import RedirectIcon from "../public/img/icons/redirectIcon"
 import styles from "../styles/quemSomos.module.css"
 
 export async function getStaticProps(context) {
@@ -77,19 +76,20 @@ const HistoryBox = ({ children, title, date, image }) => {
         />
       </Box>
       
-      <Box padding={isMobileMod ? "20px 24px 0" :"40px 48px 0"}>
+      <Box padding={isMobileMod ? "32px 24px 0" :"40px 24px 0"}>
         <Text
           fontFamily="ubuntu"
           maxWidth="400px"
           color="#252A32"
-          fontSize={{ base: "18px", lg: "20px" }}
+          fontSize="20px"
           letterSpacing="0.2px"
           marginBottom="8px"
+          lineHeight="26px"
         >{title}</Text>
-        <SectionText fontSize={{ base: "14px", lg: "16px" }} color="#6F6F6F" marginBottom="16px">{date}</SectionText>
-        <SectionText fontSize={{ base: "14px", lg: "16px" }}>
+        <BodyText fontSize="14px" letterSpacing="0.5px" color="#6F6F6F" marginBottom="16px">{date}</BodyText>
+        <BodyText fontSize="17px" lineHeight="27px">
           {children}
-        </SectionText>
+        </BodyText>
       </Box>
 
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
@@ -177,28 +177,24 @@ const TeamBox = ({ isMobileMod, index, data }) => {
         {data.photo_url && <Image src={data.photo_url} width="100%" height="100%"/>}
       </Box>
       <Box display="flex" flexDirection="column">
-        <Box marginBottom={{ base: "0", lg: "4px" }} display="flex" flexDirection="row">
-          <Text
-            fontSize={{ base: "16px", lg: "18px" }}
-            fontFamily="ubuntu"
-            fontWeight="300"
-            color="#6F6F6F"
+        <Box marginBottom="4px" display="flex" flexDirection="row">
+          <BodyText
+            fontSize="18px"
             marginRight="16px"
           >
             {data?.name}
-          </Text>
+          </BodyText>
           {!isMobileMod && iconLinks()}
         </Box>
-        <Text
-          marginBottom={{ base: "8px", lg: "12px" }}
-          fontSize={{ base: "16px", lg: "18px" }}
-          fontFamily="ubuntu"
-          fontWeight="300"
-          color="#252A32"
+        <BodyText
+          fontSize="16px"
+          fontWeight="400"
+          marginBottom="4px"
+          color="#6F6F6F"
         >
           {data?.role.join(", ")}
-        </Text>
-        <SectionText marginBottom="16px" fontSize={{ base: "14px", lg: "16px" }}>{data?.description}</SectionText>
+        </BodyText>
+        <BodyText fontSize="16px" letterSpacing="0.2px" lineHeight="25px" marginBottom={isMobileMod ? "12px" : "0"}>{data?.description}</BodyText>
         {isMobileMod && iconLinks()}
       </Box>
     </Box>
@@ -355,116 +351,107 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
           <LinkedinIcon {...keyIcon("https://www.linkedin.com/company/base-dos-dados/mycompany/")}/>
         </Stack>
 
-        <VStack paddingLeft={isMobileMod ? "0" : "24px"} position="relative" top="-145px">
+        <VStack paddingLeft={isMobileMod ? "0" : "30px"} position="relative" top="-40px">
           <Stack
             width="100%"
             maxWidth="1264px"
             margin="auto"
-            paddingTop={{ base: "80px", lg: "88px" }}
+            paddingTop={{ base: "112px", lg: "0" }}
             alignItems="center"
           >
             <Display 
-              fontSize={isMobile ? "44px" : "50px"}
-              letterSpacing={isMobileMod ? "0.2px" : "-0.5px"}
-              lineHeight={isMobileMod ? "40px" : "60px"}
+              fontSize={isMobile ? "34px" : "60px"}
+              letterSpacing={isMobileMod ? "-0.5px" : "-1.5px"}
+              lineHeight={isMobileMod ? "40px" : "90px"}
               textAlign="center" 
-              marginBottom="32px"
+              marginBottom={isMobile ? "80px" : "136px"}
             >
-              Facilitamos o acesso a dados {isMobileMod ? " " : <br/>} para que a distância entre você e sua análise {isMobileMod ? " " : <br/>} seja <a style={{color:"#2B8C4D"}}>apenas uma boa pergunta</a>.
+              Facilitamos o acesso a dados {isMobileMod ? " " : <br/>} para que a distância entre você e sua análise{isMobileMod ? " " : <br/>}seja <a style={{color:"#2B8C4D"}}>apenas uma boa pergunta</a>.
             </Display>
-            <Text
-              width={isMobileMod ? "100%" : "80%"}
-              fontFamily="Ubuntu"
-              fontWeight="300"
-              fontSize="24px"
-              lineHeight="34px"
-              letterSpacing="0px"
-              color="#6F6F6F"
-              textAlign="center"
-              marginTop="0px !important"
-            >
-              Milhares de pessoas encontram, baixam, cruzam e analisam dados {isMobileMod ? " " : <br/>} de uma maneira muito mais prática com a nossa plataforma.  
-            </Text>
           </Stack>
 
           <Stack
             width="100%"
-            paddingTop="88px"
             flexDirection={{base: "column", lg: "row"}}
-            spacing={{base: 20, lg: 0}}
-            gridGap="20%"
+            spacing={{base: "40px", lg: "0"}}
+            gridGap="8%"
             maxWidth="1264px"
             justifyContent="center"
             marginTop="0px !important"
+            paddingBottom={isMobileMod ? "0" : "16px"}
           >
             <Center flexDirection="column">
-              <Text fontFamily="ubuntu" fontWeight="400" fontSize="30px" lineHeight="32px" letterSpacing="0.2px">
-                +104k
+              <Text color="#252A32" fontFamily="ubuntu" fontWeight="400" fontSize="26px" letterSpacing="-0.2px">
+                +114 mil
               </Text>
-              <SectionText fontSize="18px">
+              <BodyText>
                 usuários na plataforma 
-              </SectionText>
+              </BodyText>
             </Center>
 
             <Center flexDirection="column">
-              <Text fontFamily="ubuntu" fontWeight="400" fontSize="30px" lineHeight="32px" letterSpacing="0.2px">
-                +1MM
+              <Text color="#252A32" fontFamily="ubuntu" fontWeight="400" fontSize="26px" letterSpacing="-0.2px">
+                +1,3 milhão
               </Text>
-              <SectionText fontSize="18px">
+              <BodyText>
                 consultas aos dados
-              </SectionText>
-            </Center>
+              </BodyText>
+            </Center>   
           </Stack>
 
           <Stack
-            paddingTop={{ base: "80px", lg: "144px" }}
-            paddingBottom={{ base: "80px", lg: "144px" }}
+            paddingTop={{ base: "112px", lg: "144px" }}
+            paddingBottom={{ base: "96px", lg: "104px" }}
             marginTop="0px !important"
             textAlign="center"
             justifyContent="center"
             maxWidth="1264px"
-            width={{ base: "100%", lg: "50%" }}
+            width={{ base: "100%", lg: "650px" }}
           >
-            <BigTitle 
-              paddingBottom="24px"
+            <Display
+              paddingBottom={isMobileMod ? "16px" : "24px" }
+              fontSize={isMobileMod ? "34px" : "50px" }
+              lineHeight={isMobileMod ? "40px" : "54px"}
+              letterSpacing={isMobileMod ? "-0.5px" : "-0.8px" }
             >
               A Base dos Dados
-            </BigTitle>
-            <SectionText lineHeight="26px" fontSize={{ base: "16px", lg: "18px" }} paddingBottom="20px">
+            </Display>
+            <BodyText paddingBottom="20px">
               Somos uma organização não-governamental sem fins lucrativos e <i>open source</i> que atua para universalizar o acesso a dados de qualidade. Fazemos isso através da criação de ferramentas inovadoras, da produção e difusão do conhecimento e da promoção de uma cultura de transparência e dados abertos.
-            </SectionText>
-            <SectionText lineHeight="26px" fontSize={{ base: "16px", lg: "18px" }} paddingBottom="20px">
+            </BodyText>
+            <BodyText paddingBottom="20px">
               Ao quebrar barreiras técnicas para quem já faz e quem quer começar a fazer análise de dados, reunimos uma rede altamente engajada que potencializa o impacto do nosso trabalho. Estamos construindo uma comunidade de pessoas que acreditam no uso inteligente de dados como instrumento para o desenvolvimento socioeconômico e que encontram na BD uma grande aliada.
-            </SectionText>
-            <SectionText lineHeight="26px" fontSize={{ base: "16px", lg: "18px" }} paddingBottom="20px">
+            </BodyText>
+            <BodyText paddingBottom="20px">
               O que queremos é aproximar diferentes setores da sociedade de informações que são de interesse coletivo, mas ainda pouco acessíveis para a maioria das pessoas. Acreditamos que ampliar o acesso e uso de dados abertos favorece o aumento da participação social, a melhoria da gestão pública e o aperfeiçoamento da democracia.
-            </SectionText>
+            </BodyText>
           </Stack>
 
           <Stack
             width="100%"
             maxWidth="1264px"
             margin="auto"
-            paddingBottom={{ base: "80px", lg: "120px" }}
-            paddingX={mScreen ? "28px" : "0"}
+            paddingBottom={{ base: "80px", lg: "104px" }}
             spacing={0}
           >
             <Center 
-              paddingBottom={{ base: "56px", lg: "32px" }}
               flexDirection="column"
             >
-              <TrophySvg 
-                width={{ base: "50px", lg: "70px" }} 
-                height={{ base: "50px", lg: "70px" }} 
-                marginBottom="8px"
-              />
-              <BigTitle>Reconhecimentos</BigTitle>
+              <Display
+                paddingBottom={isMobileMod ? "56px" : "64px" }
+                fontSize={isMobileMod ? "34px" : "50px" }
+                lineHeight={isMobileMod ? "40px" : "54px"}
+                letterSpacing={isMobileMod ? "-0.5px" : "-0.8px" }
+              >
+                Reconhecimentos
+              </Display>
             </Center>
 
             <Stack
               flexDirection={isMobileMod ? "column" : "row"}
               justifyContent="space-between"
               spacing={isMobileMod ? "80px" : "0"}
+              paddingX={isMobileMod ? "0" : "16px"}
             >
               <Box textAlign="center" maxWidth={isMobileMod ? "100%" : "45%"}>
                 <Image
@@ -474,16 +461,37 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
                   margin={{base: "0 auto 24px", lg: "0 auto 48px"}}
                 />
                 <SectionTitle 
-                  marginBottom="16px"  
-                  fontSize={{ base: "18px", lg: "22px" }}
-                  letterSpacing={{base: "0.1px", lg: "0.2px"}}
+                  fontSize={{base: "20px", lg: "24px"}}
+                  fontWeigth="400"
+                  letterSpacing={{base: "0.2px", lg: "0px"}}
+                  marginBottom={{base: "8px", lg: "16px"}}
                 >
                   Google Cloud Customer Award
                 </SectionTitle>
-                <SectionText marginBottom="8px" fontSize="16px">O prêmio reconheceu as implementações mais inovadoras e transformadoras do Google Cloud ao redor do mundo. 
-                    Fomos a única organização brasileira a receber a premiação na categoria de Impacto Social, que também selecionou outras iniciativas que usam tecnologia para promover mais abertura e transparência. 
-                </SectionText>
-                <Link fontSize="16px" target="_blank" color="#42B0FF" href="https://cloud.google.com/blog/topics/customers/announcing-winners-of-google-cloud-customer-awards">Veja mais detalhes.</Link>
+                <BodyText
+                  fontSize="17px"
+                  lineHeight="27px"
+                  letterSpacing="0.1px"
+                  marginBottom="8px"
+                >
+                  O prêmio reconheceu as implementações mais inovadoras e transformadoras do Google Cloud ao redor do mundo. 
+                  Fomos a única organização brasileira a receber a premiação na categoria de Impacto Social, que também selecionou outras iniciativas que usam tecnologia para promover mais abertura e transparência. 
+                </BodyText>
+                <Link
+                  display="flex"
+                  gridGap="8px"
+                  alignItems="center"
+                  justifyContent="center"
+                  fontFamily="Ubuntu"
+                  fontSize="16px"
+                  letterSpacing="0.3px"
+                  target="_blank"
+                  color="#42B0FF"
+                  href="https://cloud.google.com/blog/topics/customers/announcing-winners-of-google-cloud-customer-awards"
+                >
+                  Veja mais detalhes
+                  <RedirectIcon fill="#42B0FF"/>
+                </Link>
               </Box>
 
               <Box textAlign="center" maxWidth={isMobileMod ? "100%" : "45%"}>
@@ -494,16 +502,36 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
                   margin={{base: "0 auto 40px", lg: "0 auto 48px"}}
                 />
                 <SectionTitle 
-                  marginBottom="16px"  
-                  fontSize={{ base: "18px", lg: "22px" }}
-                  letterSpacing={{base: "0.1px", lg: "0.2px"}}
+                  fontSize={{base: "20px", lg: "24px"}}
+                  fontWeigth="400"
+                  letterSpacing={{base: "0.2px", lg: "0px"}}
+                  marginBottom={{base: "8px", lg: "16px"}}
                 >
                   XXVI Prêmio Tesouro Nacional 2021
                 </SectionTitle>
-                <SectionText marginBottom="8px" fontSize="16px">
-                  Conquistamos o 1º lugar na categoria Soluções. O prêmio tem como objetivo reconhecer o desenvolvimento de aplicações em ciências de dados e inteligência artificial aplicadas a finanças públicas. Fomos selecionados por conta de nosso trabalho compatibilizando informações de despesas e receitas orçamentárias do Setor Público Brasileiro.
-                </SectionText>
-                <Link fontSize="16px" target="_blank" color="#42B0FF" href="https://www.tesourotransparente.gov.br/descubra-explore-crie/crie">Veja mais detalhes.</Link>
+                <BodyText 
+                  fontSize="17px"
+                  lineHeight="27px"
+                  letterSpacing="0.1px"
+                  marginBottom="8px"
+                >
+                  Conquistamos o 1º lugar na categoria Soluções do prêmio, que tem como objetivo reconhecer o desenvolvimento de aplicações em ciências de dados e inteligência artificial aplicadas a finanças públicas. Fomos selecionados por conta de nosso trabalho compatibilizando informações de despesas e receitas orçamentárias do Setor Público Brasileiro.
+                </BodyText>
+                <Link
+                  display="flex"
+                  gridGap="8px"
+                  alignItems="center"
+                  justifyContent="center" 
+                  fontFamily="Ubuntu"
+                  fontSize="16px"
+                  letterSpacing="0.3px"
+                  target="_blank"
+                  color="#42B0FF"
+                  href="https://www.tesourotransparente.gov.br/descubra-explore-crie/crie"
+                >
+                  Veja mais detalhes
+                  <RedirectIcon fill="#42B0FF"/>
+                </Link>
               </Box>
             </Stack>
           </Stack>
@@ -516,11 +544,17 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
         alignItems="center"
         position="relative"
         left={isMobileMod ? "-24px" : "-32px"}
-        paddingBottom={{ base: "80px", lg: "144px" }}
-        bgGradient="linear(#34A15A 45%, #FFF 45%)"
+        paddingBottom={{ base: "40px", lg: "104px" }}
+        bgGradient={isMobileMod ? "linear(#34A15A 38%, #FFF 38%)" : "linear(#34A15A 45%, #FFF 45%)"}
       >
         <Center flexDirection="column">
-          <Display textAlign="center" paddingTop="56px" color="#FFF">
+          <Display 
+            padding="56px 0 8px"
+            fontSize={isMobileMod ? "34px" : "50px" }
+            lineHeight={isMobileMod ? "40px" : "54px"}
+            letterSpacing={isMobileMod ? "-0.5px" : "-0.8px" }
+            color="#FFF"
+          >
             Nossa história
           </Display>
           <Text
@@ -634,10 +668,31 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
         margin="auto"
       >
         <Center flexDirection="column" paddingBottom="72px">
-          <BigTitle marginBottom="16px">Uma equipe colaborativa</BigTitle>
-          <SectionText textAlign="center" fontSize="16px">Somos uma rede de pessoas empenhadas em contribuir {isMobileMod ? " " : <br/>} com a transparência e a democratização do acesso a dados.</SectionText>
-          <SectionText fontSize="16px">Faça parte da equipe você também.</SectionText>
-          <Link fontSize="16px" target="_blank" color="#42B0FF" href="https://info.basedosdados.org/carreiras">Veja as vagas abertas.</Link>
+          <Display               
+            paddingBottom="16px"
+            fontSize={isMobileMod ? "34px" : "50px" }
+            lineHeight={isMobileMod ? "40px" : "54px"}
+            letterSpacing={isMobileMod ? "-0.5px" : "-0.8px" }
+            textAlign="center"
+          >
+            Uma equipe colaborativa
+          </Display>
+          <BodyText textAlign="center">Somos uma rede de pessoas empenhadas em contribuir com a {isMobileMod ? " " : <br/>} transparência e a democratização do acesso a dados.</BodyText>
+          <BodyText margin="2px 0">Faça parte da equipe você também.</BodyText>
+          <Link
+            display="flex"
+            gridGap="8px"
+            justifyContent="center"
+            fontFamily="Ubuntu"
+            fontSize="18px"
+            letterSpacing="0.3px"
+            target="_blank"
+            color="#42B0FF"
+            href="https://info.basedosdados.org/carreiras"
+          >
+            Veja as vagas abertas
+            <RedirectIcon fill="#42B0FF" widthIcon="16px" heightIcon="16px" paddingTop="2px"/>
+          </Link>
         </Center>
 
         <Stack
@@ -673,7 +728,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
 
           <Stack
             width="100%"
-            spacing={{ base: "64px", lg: "96px" }}
+            spacing={{ base: "72px", lg: "96px" }}
           >
             {people?.map((elm, index) => (
               <TeamBox
