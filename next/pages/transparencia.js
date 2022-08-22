@@ -10,6 +10,7 @@ import { MainPageTemplate } from "../components/templates/main";
 import Display from "../components/atoms/Display";
 import BigTitle from "../components/atoms/BigTitle";
 import SectionText from "../components/atoms/SectionText";
+import BodyText from "../components/atoms/BodyText";
 import Link from "../components/atoms/Link";
 import RoundedButton from "../components/atoms/RoundedButton";
 import TransparencyImage from "../public/img/transparencyImage";
@@ -33,7 +34,7 @@ export default function Transparencia({ pages }) {
         display="flex"
         justifyContent="space-between"
         flexDirection={{ base: "column", lg: "row" }}
-        paddingTop={{ base: "80px", lg: "112px" }}
+        paddingTop={isMobileMod ? "112px" : "56px"}
         width="100%"
         maxWidth="1264px"
         margin="auto"
@@ -53,6 +54,7 @@ export default function Transparencia({ pages }) {
         maxWidth={{ base: "100%", lg: "45%" }}
         width={{base: "350px", lg: "650px"}}
         height={{base: "320px", lg: "400px"}}
+        marginTop="0 !important"
         {...props}
       >
         {text &&
@@ -60,9 +62,9 @@ export default function Transparencia({ pages }) {
             width="100%"
             fontFamily="Ubuntu"   
             textAlign={isMobileMod ? "start" : "center"}
-            fontSize={{base: "16px", lg: "22px"}}
+            fontSize={{base: "20px", lg: "24px"}}
             fontWeigth="400"
-            letterSpacing={{base: "0.2px", lg: "0.1px"}}
+            letterSpacing={{base: "0.2px", lg: "0"}}
             minHeight="30px"
             marginBottom={{base: "0px", lg: "32px"}}
             color="#252A32"
@@ -84,31 +86,33 @@ export default function Transparencia({ pages }) {
 
   return (
     <MainPageTemplate pages={pages} paddingX="24px" paddingBottom="0">
-      <SectionBox
-        paddingBottom={{ base: "10px", lg: "32px" }}
+      <SectionBox 
+        alignItems="center"
       >
         <Stack
-          paddingTop={{ base: "0px", lg: "24px" }}
           maxWidth={{ base: "100%", lg: "45%" }}
         >
           <Display 
             color="#2B8C4D"
-            paddingBottom="24px"
-            lineHeight={isMobileMod ? "40px" : "52px"}
+            paddingBottom={isMobileMod ? "24px" : "32px" }
+            fontSize={isMobileMod ? "34px" : "50px" }
+            lineHeight={isMobileMod ? "40px" : "54px"}
+            letterSpacing={isMobileMod ? "-0.5px" : "-0.8px" }
           >
-            Nossas contas são transparentes e abertas – como todo o resto.
+            Nossas contas são {isMobileMod ? " " : <br/>} transparentes e abertas {isMobileMod ? " " : <br/>} – como todo o resto.
           </Display>
-          <SectionText fontSize="16px" paddingBottom="20px">
+          <BodyText paddingBottom="20px">
             Somos uma organização não-governamental sem fins lucrativos e <i>open source</i>. A transparência fundamenta todas as nossas ações, desde o trabalho com dados públicos até a prestação de contas. Utilizamos os recursos para facilitar o acesso de milhares de pessoas a dados de qualidade. 
-          </SectionText>
-          <SectionText fontSize="16px" paddingBottom="20px">
+          </BodyText>
+          <BodyText paddingBottom="20px">
             Nesse espaço, você encontra informações referentes às nossas atividades, receitas e despesas. Acompanhe de perto como garantimos a sustentabilidade da organização.
-          </SectionText>
+          </BodyText>
         </Stack>
 
         <Stack 
-          width={isMobileMod ? "100%" : {base: "445px", lg: "569px"}}
-          height={isMobileMod ? "100%" : {base: "356px", lg: "445px"}}
+          width={isMobileMod ? "100%" : {base: "445px", lg: "550px"}}
+          height={isMobileMod ? "100%" : {base: "356px", lg: "430px"}}
+          marginBottom={isMobileMod ? "0" : "104px"}
         >
           <TransparencyImage
             widthImage="100%"
@@ -118,17 +122,18 @@ export default function Transparencia({ pages }) {
       </SectionBox>
 
       <SectionBox
-        paddingTop={ isMobileMod ? "80px" : "120px"}
+        paddingTop={isMobileMod ? "112px" : "104px"}
+        alignItems="center"
       >
         <Stack
           display={isMobileMod ? "flex" : "none"}
           width="100%"
         >
-          <BigTitle
+          <Display
             paddingBottom="40px"
           >
             Indicador de sobrevida
-          </BigTitle>
+          </Display>
         </Stack>
 
         <Stack 
@@ -150,45 +155,39 @@ export default function Transparencia({ pages }) {
           maxWidth={{ base: "100%", lg: "45%" }}
           paddingTop={{base: "24px", lg: "0px"}}
         >
-          <BigTitle
+          <Display
             display={isMobileMod ? "none" : "flex"}
-            paddingBottom={{base: "8px", lg: "24px"}}
+            paddingBottom={{base: "8px", lg: "16px"}}
           >
             Indicador de sobrevida
-          </BigTitle>
-          <SectionText fontSize="16px" paddingBottom="20px">
+          </Display>
+          <BodyText paddingBottom="20px">
             Esse é nosso indicador de sobrevida. Ele mostra o tempo que nossas atividades poderiam se manter caso a arrecadação de recursos financeiros fosse interrompida, considerando as despesas regulares com infraestrutura e equipe, por exemplo. 
-          </SectionText>
-          <SectionText fontSize="16px" paddingBottom="20px">
+          </BodyText>
+          <BodyText paddingBottom="20px">
             O indicador evidencia a importância de sua contribuição para a continuidade dos nossos esforços em busca da universalização do acesso a dados públicos. Abaixo, você confere detalhes sobre as fontes e destinações dos recursos da organização.
-          </SectionText>
+          </BodyText>
         </Stack>
       </SectionBox>
 
       <SectionBox
         flexDirection="column"
-        paddingTop={{ base: "60px", lg: "144px" }}
+        paddingTop={{ base: "112px", lg: "152px" }}
         alignItems={isMobileMod ? "start" : "center"}
       >
-        <BigTitle
+        <Display
           textAlign={isMobileMod ? "start" : "center"}
-          paddingBottom="8px"
+          paddingBottom={isMobileMod ? "12px" : "8px"}
         >
           Dados da contabilidade
-        </BigTitle>
-        <Text
-          fontFamily="ubuntu"
-          fontSize={isMobileMod ? "16px" : "18px"}
+        </Display>
+        <BodyText
           textAlign={isMobileMod ? "start" : "center"}
-          paddingBottom="24px"
-          fontWeight="300"
-          letterSpacing="0.1px"
-          lineHeight={isMobileMod ? "24px" : "26px"}
-          color="#252A32"
+          paddingBottom={isMobileMod ? "20px" : "16px"}
         >
           Como não poderia deixar de ser, todos os microdados{isMobileMod ? " " : <br/>}
           relativos à contabilidade da BD estão disponíveis no <i>datalake</i> público.
-        </Text>
+        </BodyText>
         <RoundedButton
           width="fit-content"
           onClick={() => window.open(
@@ -207,7 +206,7 @@ export default function Transparencia({ pages }) {
         <Stack
           flexDirection={{ base: "column", lg: "row" }}
           justifyContent="center"
-          gridGap={{ base: "40px", lg: "80px" }}
+          gridGap={{ base: "64px", lg: "80px" }}
         >
           <GraphicsBox
             text="Receitas acumuladas"
@@ -227,14 +226,14 @@ export default function Transparencia({ pages }) {
       </SectionBox>
 
       <SectionBox
-        paddingTop={{ base: "80px", lg: "104px" }}
+        paddingTop={{ base: "112px", lg: "104px" }}
         flexDirection="column"
       >
-        <BigTitle
-          paddingBottom={{base: "16px", lg: "32px"}}
+        <Display
+          paddingBottom="16px"
         >
           Estatuto e relatórios 
-        </BigTitle>
+        </Display>
 
         <Stack
           width="100%"
@@ -242,13 +241,13 @@ export default function Transparencia({ pages }) {
           justifyContent="space-between"
           spacing={0}
         >
-          <SectionText maxWidth={isMobileMod ? "100%" : "45%"}  fontSize="16px" paddingBottom="20px">
+          <BodyText paddingBottom="20px" maxWidth={isMobileMod ? "100%" : "45%"}>
             Em nosso estatuto, estão presentes as diretrizes que regulamentam o funcionamento e o processo de tomada de decisões da organização. O documento inclui também os direitos e deveres dos membros e as competências dos conselhos administrativos e fiscais.
-          </SectionText>
+          </BodyText>
         
-          <SectionText maxWidth={isMobileMod ? "100%" : "45%"} fontSize="16px" paddingBottom="20px">
+          <BodyText paddingBottom="20px" maxWidth={isMobileMod ? "100%" : "45%"}>
             Nossos relatórios apresentam todas as atividades empenhadas pela equipe. São diversos projetos que colaboram com a promoção da cultura de transparência, o desenvolvimento socioeconômico e a construção de políticas públicas baseadas em dados e evidências.
-          </SectionText>
+          </BodyText>
         </Stack>
       </SectionBox>
 
@@ -259,7 +258,9 @@ export default function Transparencia({ pages }) {
         margin="auto"
       >
         <Link
-          fontSize="16px"
+          fontFamily="Ubuntu"
+          fontSize="18px"
+          letterSpacing="0.3px"
           target="_blank"
           color="#42B0FF"
           href="https://basedosdados-static.s3.us-east-2.amazonaws.com/pdf/BD_Estatuto_Social.pdf"
@@ -270,13 +271,15 @@ export default function Transparencia({ pages }) {
      
       <Stack
         paddingTop="16px"
-        paddingBottom={{ base: "80px", lg: "120px" }}
+        paddingBottom={{ base: "80px", lg: "104px" }}
         width="100%"
         maxWidth="1264px"
         margin="auto"
       >
         <Link
-          fontSize="16px"
+          fontFamily="Ubuntu"
+          fontSize="18px"
+          letterSpacing="0.3px"
           target="_blank"
           color="#42B0FF"
           href="https://basedosdados-static.s3.us-east-2.amazonaws.com/pdf/BD_Relatorio_Anual_2021.pdf"
@@ -303,26 +306,28 @@ export default function Transparencia({ pages }) {
         >
           <Stack
             paddingTop={{ base: "0px", lg: "16px" }}
-            maxWidth={{ base: "100%", lg: "35%" }}
+            maxWidth={{ base: "100%", lg: "42%" }}
           >
             <BigTitle 
-              paddingBottom={{base: "8px", lg: "24px"}}
+              paddingBottom={{base: "12px", lg: "16px"}}
               color="#FFF"
             >
-              Você também acredita no <p>acesso a dados de qualidade?</p>
+              Você também acredita no {isMobileMod ? " " : <br/>} acesso a dados de qualidade?
             </BigTitle>
-            <SectionText
+            <BodyText 
               fontSize="16px"
+              letterSpacing="0.2px"
+              lineHeight="27px"
               paddingBottom="20px"
               color="#FFF"
             >
               Tudo o que fazemos só é possível por conta das pessoas que apoiam o nosso trabalho. Ajude a BD a continuar facilitando o acesso a dados públicos. Com qualquer valor, você contribui para a manutenção dos nossos projetos e a sobrevivência da organização.
-            </SectionText>
+            </BodyText>
             <RoundedButton
               backgroundColor="#FF8484"
               width="fit-content"
-              height="35px"
-              fontSize="14px"
+              height="40px"
+              fontSize="15px"
               onClick={() => window.open("https://apoia.se/basedosdados", "_blank")}
             >
               Apoie agora
