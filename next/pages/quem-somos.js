@@ -172,9 +172,12 @@ const TeamBox = ({ isMobileMod, index, data }) => {
         marginRight="32px"
         marginBottom={isMobileMod && "20px"}
         overflow="hidden"
-        backgroundColor={!data.photo_url && "#F4F4F4"}
       >
-        {data.photo_url && <Image src={data.photo_url} width="100%" height="100%"/>}
+        <Image
+          src={data.photo_url ? data.photo_url : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
+          width="100%"
+          height="100%"
+        />
       </Box>
       <Box display="flex" flexDirection="column">
         <Box marginBottom="4px" display="flex" flexDirection="row">
@@ -231,27 +234,24 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
 
     team.map((personTeam) => {
       const newPeopleByTeam = array.filter((person) => {
-        const indexTeam = person.team.indexOf(personTeam)
-        if(indexTeam === -1) {
-          return ""
-        } else { 
-          return person.team[indexTeam] === personTeam
-        }
+        const indexTeam = person.team.findIndex((res) => res === personTeam)
+        if(indexTeam > -1) return person.team[indexTeam]
       })
 
       newPeopleByTeam.sort(function (a, b) {
         const compareName = (firstPerson, secondPerson) => firstPerson.name.localeCompare(secondPerson.name)
-        
-        if (a.role[0] === "Presidente") return -3
-        if (a.role[0] === "Diretoria") return -2
-        if (a.role[0] === "Gerente") return -1
-        if (compareName(a, b) > compareName(b, a)) {
-          return 1
-        }
-        if (compareName(a, b) < compareName(b, a)) {
-          return -1
-        }
+
+        if (compareName(a, b) < compareName(b, a)) return -1
+        if (compareName(a, b) > compareName(b, a)) return 1
         return 0
+      })
+
+      newPeopleByTeam.sort(function (a, b) {
+        const indexRole = (level) => a.level.findIndex((res) => res === level)
+
+        if (indexRole("Presidente") > -1) return -4
+        if (indexRole("Diretora Executiva") > -1) return -3
+        if (indexRole("Gerente") > -1) return -2
       })
 
       newPeopleByTeam.map((res) => {
@@ -260,6 +260,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
 
     })
     const newArraySorting = [...new Set(arraySorting)]
+
     return newArraySorting
   }
 
@@ -268,25 +269,41 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   },[allPeople])
 
   useEffect(() => {
-    setAllPeople(groupingTeamAndRole(Object.values(bdPeople)))
+    setAllPeople(groupingTeamAndRole(Object.values(bdPeople)).filter(Boolean))
   },[bdTeam, bdPeople])
 
   const groupingTeamAndRole = (array) => array.map((elm) => {
     const person = elm
     const team = []
     const role = []
+    const level = []
+    const endDate = []
 
     const getById = bdTeam.filter((elm) => elm.person_id === person.id)
 
     if(getById) getById.map((res) => {
       team.push(res.team)
       role.push(res.role)
+      level.push(res.level)
+      endDate.push(res.end_date)
     })
 
-    const refiningTeam = Array.from(new Set(team.filter(Boolean)))
-    const refiningRole = Array.from(new Set(role.filter(Boolean)))
+    const filterArray = (array) => Array.from(new Set(array.filter(Boolean)))
 
-    return {...person, team : refiningTeam, role : refiningRole}
+    const departureDate = filterArray(endDate)
+
+    if(departureDate.length > 0) {
+      const endDate = new Date(departureDate[0])
+      const dateNow = new Date()
+      if(endDate < dateNow) return ""
+    }
+
+    return {
+      ...person,
+      team : filterArray(team),
+      role : filterArray(role),
+      level : filterArray(level),
+    }
   })
 
   useEffect(() => {
@@ -302,7 +319,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
 
     const filterPeople = () => personIdList.map((personId) => bdPeople[personId])
       
-    const newGroupPerson = groupingTeamAndRole(filterPeople())
+    const newGroupPerson = groupingTeamAndRole(filterPeople()).filter(Boolean)
 
     setPeople(sortingTeam(newGroupPerson, [team]))
   }
@@ -322,6 +339,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   }
 
   const handleSelect = (elm) => {
+    window.open("#teams", "_self")
     if(filterTeam === elm) {
       setFilterTeam()
       return setPeople(sortingTeam(allPeople))
@@ -663,6 +681,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
       </Stack>
 
       <Stack
+        id="teams"
         width="100%"
         maxWidth="1264px"
         margin="auto"
