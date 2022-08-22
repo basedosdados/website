@@ -147,7 +147,7 @@ function DesktopLinks({ links }) {
                   backgroundColor="#FF8484"
                   minWidth="80px"
                   height="35px"
-                  fontSize="14px"
+                  fontSize="15px"
                 >
                   Apoie
                 </RoundedButton>
@@ -175,7 +175,7 @@ function DesktopLinks({ links }) {
                     display="flex"
                     flexDirection="colunm"
                     _hover={{ opacity: "0.6" }}
-                    fontSize="14px"
+                    fontSize="15px"
                     target={k === "Transparência" || "quem-somos" ? null : "_blank"}
                     color="#252A32"
                     fontFamily="Ubuntu"
@@ -194,7 +194,7 @@ function DesktopLinks({ links }) {
           return (
             <Link
               _hover={{ opacity: "0.6" }}
-              fontSize="14px"
+              fontSize="15px"
               fontFamily="Ubuntu"
               fontWeigth="400"
               letterSpacing="0.3px"
@@ -224,11 +224,11 @@ function DesktopLinks({ links }) {
             </HStack>
           ) : (
             <>
-              <Link fontSize="14px" fontFamily="Ubuntu" fontWeigth="400" letterSpacing="0.3px" href="/user/login">
+              <Link fontSize="15px" fontFamily="Ubuntu" fontWeigth="400" letterSpacing="0.3px" href="/user/login">
                 Entrar
               </Link>
               <Link _hover={{ opacity:"none" }} href="/user/register">
-                <RoundedButton height="35px" fontSize="14px" minWidth="110px">
+                <RoundedButton height="35px" fontSize="15px" minWidth="110px">
                   Cadastrar
                 </RoundedButton>
               </Link>

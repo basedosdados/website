@@ -1,14 +1,14 @@
-import { Heading } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
-export default function BigTitle({
-  children,
+export default function BodyText({ 
+  children, 
   color = "#252A32",
-  fontWeigth = "500",
+  fontWeigth = "300",
   ...props
 }) {
-  
+
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
 
@@ -17,16 +17,16 @@ export default function BigTitle({
   }, [isMobile])
 
   return (
-    <Heading
-      fontFamily="Ubuntu"
-      fontSize="28px"
-      lineHeight="36px"
-      letterSpacing="0"
+    <Text
+      fontFamily="ubuntu"
+      fontSize={isMobileMod ? "17px" : "18px"}
+      lineHeight={isMobileMod ? "27px" : "28px"}
+      letterSpacing="0.1px"
       color={color}
       fontWeight={fontWeigth}
       {...props}
     >
       {children}
-    </Heading>
+    </Text>
   );
 }

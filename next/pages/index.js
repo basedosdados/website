@@ -136,6 +136,9 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
             marginTop="112px"
           >
             <Display
+              fontSize={isMobileMod ? "32px" : "38px"}
+              letterSpacing={isMobileMod ? "0.2px" : "-0.2px"}
+              lineHeight={isMobileMod ? "40px" : "64px"}
               position="relative"
               zIndex="1"
               flex="2"
@@ -220,7 +223,7 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
               fontFamily="Ubuntu"
               fontSize={isMobileMod ? "16px" : "22px"}
               fontWeigth="400"
-              letterSpacing={isMobileMod ? "0.2px" : "0.1px"}
+              letterSpacing={isMobileMod ? "0.1px" : "0"}
               minHeight="30px"
               marginBottom="24px"
               color="#A3A3A3"
@@ -257,6 +260,9 @@ function Products() {
     >
       <VStack id="support" position="relative" width="95%">
         <Display
+          fontSize={isMobileMod ? "32px" : "38px"}
+          letterSpacing={isMobileMod ? "0.2px" : "-0.2px"}
+          lineHeight={isMobileMod ? "40px" : "64px"}
           position="relative"
           zIndex="1"
           width="100%"
@@ -441,6 +447,9 @@ function Support({ pages }) {
     >
       <VStack id="support" position="relative" width="95%">
         <Display
+          fontSize={isMobileMod ? "32px" : "38px"}
+          letterSpacing={isMobileMod ? "0.2px" : "-0.2px"}
+          lineHeight={isMobileMod ? "40px" : "64px"}
           position="relative"
           zIndex="1"
           width="100%"

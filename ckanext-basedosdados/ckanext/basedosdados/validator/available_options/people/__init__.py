@@ -37,6 +37,9 @@ with importlib.resources.path(
             'nome_pessoa': 'person_name',
             'equipe': 'team',
             'cargo': 'role',
+            'nivel': 'level',
+            'data_inicio' : 'start_date',
+            'data_fim' : 'end_date'
         },
         inplace=True
     )

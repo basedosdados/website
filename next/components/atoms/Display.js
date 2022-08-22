@@ -18,9 +18,9 @@ export default function Display({
   return (
     <Heading
       fontFamily="Ubuntu"
-      fontSize={isMobileMod ? "32px" : "38px"}
-      lineHeight={isMobileMod ? "40px" : "64px"}
-      letterSpacing={isMobileMod ? "0.2px" : "-0.2px"}
+      fontSize={isMobileMod ? "28px" : "34px"}
+      lineHeight={isMobileMod ? "34px" : "40px"}
+      letterSpacing={isMobileMod ? "0" : "-0.5px"}
       fontWeight="500"
       color={color}
       {...props}
