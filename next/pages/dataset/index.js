@@ -626,7 +626,7 @@ export default function SearchPage({
               fontFamily="Ubuntu"
               fontSize="26px"
               fontWeight="400"
-              letterSpacing="0px"
+              letterSpacing="-0.2px"
               color="#252A32"
             >
               {data?.count || "..."} {`conjunto${data?.count > 1 ? "s": ""} encontrado${data?.count > 1 ? "s": ""}`}
