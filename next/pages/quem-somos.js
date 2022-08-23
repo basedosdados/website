@@ -238,7 +238,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
         if(indexTeam > -1) return person.team[indexTeam]
       })
 
-      newPeopleByTeam.sort(function (a, b) {
+      const orderByName = newPeopleByTeam.sort((a, b) => {
         const compareName = (firstPerson, secondPerson) => firstPerson.name.localeCompare(secondPerson.name)
 
         if (compareName(a, b) < compareName(b, a)) return -1
@@ -246,21 +246,24 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
         return 0
       })
 
-      newPeopleByTeam.sort(function (a, b) {
-        const indexRole = (level) => a.level.findIndex((res) => res === level)
+      const orderByLevel = orderByName.sort((a, b) => {
+        const valueLevel = (elm) => {{
+          const levelPerson = elm.level[0]
+          if(levelPerson === "Presidente") return -3
+          if(levelPerson === "Diretora Executiva") return -2
+          if(levelPerson === "Gerente") return -1
+          return 0
+        }}
 
-        if (indexRole("Presidente") > -1) return -4
-        if (indexRole("Diretora Executiva") > -1) return -3
-        if (indexRole("Gerente") > -1) return -2
+        return valueLevel(a) - valueLevel(b)
       })
 
-      newPeopleByTeam.map((res) => {
+      orderByLevel.map((res) => {
         arraySorting.push(res)
       })
-
+      
     })
     const newArraySorting = [...new Set(arraySorting)]
-
     return newArraySorting
   }
 
