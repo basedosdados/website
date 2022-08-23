@@ -2,7 +2,7 @@ more_itertools
 stringcase
 boltons
 cerberus
-git+https://github.com/samuelcolvin/pydantic.git@master
+pydantic
 jsonschema
 typing_extensions
 pytest
