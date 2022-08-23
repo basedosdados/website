@@ -209,8 +209,8 @@ export function ExternalLinkPage({
           isDisabled={resource.url ? false : true}
           onClick={() => window.open(resource.url)}
         >
-          <RedirectIcon marginRight="8px" widthIcon="14px" heightIcon="14px" fill="#FFF"/>
           Acessar fonte original
+          <RedirectIcon margin="0 0 4px 8px" widthIcon="14px" heightIcon="14px" fill="#FFF"/>
         </RoundedButton>
       </VStack>
 
