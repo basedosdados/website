@@ -189,6 +189,7 @@ export default function Transparencia({ pages }) {
           relativos à contabilidade da BD estão disponíveis no <i>datalake</i> público.
         </BodyText>
         <RoundedButton
+          fontSize="15px"
           width="fit-content"
           onClick={() => window.open(
             "https://basedosdados.org/dataset/br-bd-indicadores?bdm_table=contabilidade", "_blank"
@@ -230,7 +231,7 @@ export default function Transparencia({ pages }) {
         flexDirection="column"
       >
         <Display
-          paddingBottom="16px"
+          paddingBottom="24px"
         >
           Estatuto e relatórios 
         </Display>

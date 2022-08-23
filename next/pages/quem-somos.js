@@ -20,7 +20,9 @@ import {
   getBDPeople
 } from "./api/team";
 import Display from "../components/atoms/Display";
+import RoundedButton from "../components/atoms/RoundedButton";
 import SectionTitle from "../components/atoms/SectionTitle";
+import BigTitle from "../components/atoms/BigTitle";
 import BodyText from "../components/atoms/BodyText";
 import Link from "../components/atoms/Link";
 import Carousel from "../components/atoms/Carousel";
@@ -30,8 +32,8 @@ import TwitterIcon  from "../public/img/icons/twitterIcon";
 import LinkedinIcon  from "../public/img/icons/linkedinIcon";
 import GitIcon  from "../public/img/icons/gitIcon";
 import DiscordIcon from "../public/img/icons/discordIcon";
-import RedirectIcon from "../public/img/icons/redirectIcon"
-import styles from "../styles/quemSomos.module.css"
+import RedirectIcon from "../public/img/icons/redirectIcon";
+import styles from "../styles/quemSomos.module.css";
 
 export async function getStaticProps(context) {
   const bdTeam = await getBDTeams();
@@ -238,7 +240,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
         if(indexTeam > -1) return person.team[indexTeam]
       })
 
-      newPeopleByTeam.sort(function (a, b) {
+      const orderByName = newPeopleByTeam.sort((a, b) => {
         const compareName = (firstPerson, secondPerson) => firstPerson.name.localeCompare(secondPerson.name)
 
         if (compareName(a, b) < compareName(b, a)) return -1
@@ -246,21 +248,24 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
         return 0
       })
 
-      newPeopleByTeam.sort(function (a, b) {
-        const indexRole = (level) => a.level.findIndex((res) => res === level)
+      const orderByLevel = orderByName.sort((a, b) => {
+        const valueLevel = (elm) => {{
+          const levelPerson = elm.level[0]
+          if(levelPerson === "Presidente") return -3
+          if(levelPerson === "Diretora Executiva") return -2
+          if(levelPerson === "Gerente") return -1
+          return 0
+        }}
 
-        if (indexRole("Presidente") > -1) return -4
-        if (indexRole("Diretora Executiva") > -1) return -3
-        if (indexRole("Gerente") > -1) return -2
+        return valueLevel(a) - valueLevel(b)
       })
 
-      newPeopleByTeam.map((res) => {
+      orderByLevel.map((res) => {
         arraySorting.push(res)
       })
-
+      
     })
     const newArraySorting = [...new Set(arraySorting)]
-
     return newArraySorting
   }
 
@@ -399,21 +404,21 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             paddingBottom={isMobileMod ? "0" : "16px"}
           >
             <Center flexDirection="column">
-              <Text color="#252A32" fontFamily="ubuntu" fontWeight="400" fontSize="26px" letterSpacing="-0.2px">
+              <Display>
                 +114 mil
-              </Text>
-              <BodyText>
+              </Display>
+              <Text paddingTop="4px" letterSpacing="0.1px" fontSize="20px" fontFamily="Ubuntu" color="#252A32" fontWeight="300">
                 usuários na plataforma 
-              </BodyText>
+              </Text>
             </Center>
 
             <Center flexDirection="column">
-              <Text color="#252A32" fontFamily="ubuntu" fontWeight="400" fontSize="26px" letterSpacing="-0.2px">
+              <Display>
                 +1,3 milhão
-              </Text>
-              <BodyText>
+              </Display>
+              <Text paddingTop="4px" letterSpacing="0.1px" fontSize="20px" fontFamily="Ubuntu" color="#252A32" fontWeight="300">
                 consultas aos dados
-              </BodyText>
+              </Text>
             </Center>   
           </Stack>
 
@@ -452,18 +457,15 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             paddingBottom={{ base: "80px", lg: "104px" }}
             spacing={0}
           >
-            <Center 
-              flexDirection="column"
+            <Display
+              paddingBottom={isMobileMod ? "56px" : "104px" }
+              fontSize={isMobileMod ? "34px" : "50px" }
+              lineHeight={isMobileMod ? "40px" : "54px"}
+              letterSpacing={isMobileMod ? "-0.5px" : "-0.8px" }
+              textAlign="center"
             >
-              <Display
-                paddingBottom={isMobileMod ? "56px" : "64px" }
-                fontSize={isMobileMod ? "34px" : "50px" }
-                lineHeight={isMobileMod ? "40px" : "54px"}
-                letterSpacing={isMobileMod ? "-0.5px" : "-0.8px" }
-              >
-                Reconhecimentos
-              </Display>
-            </Center>
+              Reconhecimentos
+            </Display>
 
             <Stack
               flexDirection={isMobileMod ? "column" : "row"}
@@ -600,7 +602,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             }}
           >
             <HistoryBox
-              title="Um grande catálogo colaborativo"
+              title="Um grande catálogo"
               date="OUT DE 2019"
               image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_Um_grande_catalogo_colaborativo.png"
             >
@@ -686,33 +688,15 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
         maxWidth="1264px"
         margin="auto"
       >
-        <Center flexDirection="column" paddingBottom="72px">
-          <Display               
-            paddingBottom="16px"
-            fontSize={isMobileMod ? "34px" : "50px" }
-            lineHeight={isMobileMod ? "40px" : "54px"}
-            letterSpacing={isMobileMod ? "-0.5px" : "-0.8px" }
-            textAlign="center"
-          >
-            Uma equipe colaborativa
-          </Display>
-          <BodyText textAlign="center">Somos uma rede de pessoas empenhadas em contribuir com a {isMobileMod ? " " : <br/>} transparência e a democratização do acesso a dados.</BodyText>
-          <BodyText margin="2px 0">Faça parte da equipe você também.</BodyText>
-          <Link
-            display="flex"
-            gridGap="8px"
-            justifyContent="center"
-            fontFamily="Ubuntu"
-            fontSize="18px"
-            letterSpacing="0.3px"
-            target="_blank"
-            color="#42B0FF"
-            href="https://info.basedosdados.org/carreiras"
-          >
-            Veja as vagas abertas
-            <RedirectIcon fill="#42B0FF" widthIcon="16px" heightIcon="16px" paddingTop="2px"/>
-          </Link>
-        </Center>
+        <Display
+          paddingBottom={isMobileMod ? "56px" : "104px" }
+          fontSize={isMobileMod ? "34px" : "50px" }
+          lineHeight={isMobileMod ? "40px" : "54px"}
+          letterSpacing={isMobileMod ? "-0.5px" : "-0.8px" }
+          textAlign="center"
+        >
+          Uma equipe colaborativa
+        </Display>
 
         <Stack
           position="relative"
@@ -758,6 +742,38 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             ))}
           </Stack>
         </Stack>
+
+        <Stack
+          width="100%"
+          height="100%"
+          alignItems="center"
+          padding="104px 0 64px"
+        >
+          <Box
+            maxWidth="800px"
+            padding="32px"
+            borderRadius="20px"
+            boxShadow="0 2px 16px 1px rgba(64, 60, 67, 0.16)"
+          >
+            <BigTitle paddingBottom="16px">
+              Venha colaborar com a transparência
+            </BigTitle>
+
+            <BodyText paddingBottom="24px">
+              Faça parte de uma organização que está mudando a maneira de acessar dados.<br/>
+              Reunimos pessoas de várias partes do Brasil, empenhadas em contribuir e trabalhar<br/>
+              por mais transparência pública.
+            </BodyText>
+            <RoundedButton
+              paddingX="20px"
+              fontSize="15px"
+              onClick={() => window.open("https://info.basedosdados.org/carreiras", "_blank")}
+            >
+              Veja as vagas abertas <RedirectIcon fill="#FFF" widthIcon="15px" heightIcon="15px" margin="0 0 2px 8px"/>
+            </RoundedButton>
+          </Box>
+        </Stack>
+
       </Stack>
 
     </MainPageTemplate>
