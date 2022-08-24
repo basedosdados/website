@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+import pathlib
+
+import pandas
+
+PATH = pathlib.Path(__file__).parent.resolve()
+import os
+
+if "BILLING_PROJECT_ID" not in os.environ: raise Exception('Please set a BILLING_PROJECT_ID as an environment variable')
+
+import basedosdados
+
+people = basedosdados.read_sql('''
+    SELECT *
+    FROM `basedosdados-dev.br_bd_indicadores.pessoas`
+''', billing_project_id=os.environ["BILLING_PROJECT_ID"])
+
+teams = basedosdados.read_sql('''
+    SELECT *
+    FROM `basedosdados-dev.br_bd_indicadores.equipes`
+''', billing_project_id=os.environ["BILLING_PROJECT_ID"])
+
+path_people = PATH / 'people.csv'
+path_teams  = PATH / 'teams.csv'
+
+people.to_csv(path_people, index=False)
+teams.to_csv(path_teams, index=False)
+
+print(f'{people.shape[0]} lines saved to {path_people}')
+print(f'{teams.shape[0]} lines saved to {path_teams}')
+print(f'Done')

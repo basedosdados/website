@@ -29,13 +29,13 @@ import DataInformationQuery from "../molecules/DataInformationQuery";
 import StarIcon from "../../public/img/icons/starIcon";
 import FrequencyIcon from "../../public/img/icons/frequencyIcon";
 import PartitionIcon from "../../public/img/icons/partitionIcon";
-import UserIcon from "../../public/img/icons/userIcon"
-import VersionIcon from "../../public/img/icons/versionIcon"
-import EmailIcon from "../../public/img/icons/emailIcon"
-import GitIcon from "../../public/img/icons/gitIcon"
-import CkanIcon from "../../public/img/icons/ckanIcon"
-import WebIcon from "../../public/img/icons/webIcon"
-import TwitterIcon from "../../public/img/icons/twitterIcon"
+import UserIcon from "../../public/img/icons/userIcon";
+import VersionIcon from "../../public/img/icons/versionIcon";
+import EmailIcon from "../../public/img/icons/emailIcon";
+import GitIcon from "../../public/img/icons/gitIcon";
+import CkanIcon from "../../public/img/icons/ckanIcon";
+import WebIcon from "../../public/img/icons/webIcon";
+import TwitterIcon from "../../public/img/icons/twitterIcon";
 
 export function BdmTablePage({
   availableOptionsTranslations,
@@ -80,17 +80,13 @@ export function BdmTablePage({
   }
 
   function translateField(field, translation) {
-    if(!field)
-      return "Não listado"
+    if(!field) return "Não listado"
 
-    if(typeof field === "boolean") {
-      return field === true ? "Sim" : "Não"
-    }
+    if(typeof field === "boolean") return field === true ? "Sim" : "Não" 
 
     if(typeof field === "object") {
-      if(!field){
-        return "Não listado"
-      }
+      if(!field) return "Não listado"
+
       if(field.length === 0) {
         return "Não listado"
       } else {
@@ -122,14 +118,13 @@ export function BdmTablePage({
         setShowTemporalCoverage(true)
       }
     }
-
   },[schema, resource])
 
   useEffect(() => {
-    if(resource.observation_level === null)
-    return  setObservationLevel()
+    if(resource.observation_level === null) return setObservationLevel()
 
     if(typeof resource.observation_level === "object") {
+      if(resource.observation_level.length === 0) return setObservationLevel()
       const schemaHeaders = { entity: "-", columns : "-" }
       const valueObservationLevel = resource.observation_level.map((elm) => {
         const values = elm
@@ -218,9 +213,9 @@ export function BdmTablePage({
       const twitter = ref.twitter_user.replace(/(https:)\/\/(twitter.com)\//gim, "")
       href = `https://twitter.com/${twitter}`
     }
-    if(ref.email) { href = `mailto:${ref.email}` }
-    if(ref.ckan_user) { href = `/user/${ref.ckan_user}` }
-    if(ref.website) { href = `https://${ref.website}` }
+    if(ref.email) href = `mailto:${ref.email}`
+    if(ref.ckan_user) href = `/user/${ref.ckan_user}`
+    if(ref.website) href = `https://${ref.website}`
 
     return {
       cursor: "pointer",
@@ -268,14 +263,14 @@ export function BdmTablePage({
         </SectionText>
       </VStack>
       
-      <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
+      <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Cobertura temporal</Subtitle>
         <SectionText>
-          {showTemporalCoverage ? temporalCoverage : "Nenhuma cobertura temporal fornecida"}
+          {showTemporalCoverage ? temporalCoverage : "Nenhuma cobertura temporal fornecida."}
         </SectionText>
       </VStack>
 
-      <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
+      <VStack width="100%" spacing={5} alignItems="flex-start">
         <Subtitle>
           Colunas
         </Subtitle>
@@ -291,23 +286,23 @@ export function BdmTablePage({
           />
         :
           <SectionText>
-            Nenhuma informação de coluna fornecida
+            Nenhuma informação de coluna fornecida.
           </SectionText>
         }
       </VStack>
 
-      <VStack id="acesso" width="100%" spacing={5} alignItems="flex-start">
+      <VStack width="100%" spacing={5} alignItems="flex-start">
         <Subtitle>
           Nível da observação
         </Subtitle>
-        {!observationLevel ?
-          <SectionText>Não listado</SectionText>
-        :
+        {observationLevel ?
           <SimpleTable
             headers={["Entidade","Colunas Correspondentes"]}
             values={Object.values(observationLevel)}
             valuesTable={{_first:{textTransform: "capitalize"}}}
           />
+        :
+          <SectionText>Nenhum nível da observação fornecido.</SectionText>
         }
       </VStack>
 

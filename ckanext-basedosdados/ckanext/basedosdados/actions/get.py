@@ -39,6 +39,7 @@ from ckanext.basedosdados.validator.available_options.entity import (
     EntityTransportationEnum,
 )
 from ckanext.basedosdados.validator.available_options.spatial_coverage import *
+from ckanext.basedosdados.validator.available_options.people import *
 from ckanext.basedosdados.validator.packages import Dataset
 from ckanext.basedosdados.validator.resources import (
     RESOURCE_TYPES,
@@ -52,6 +53,22 @@ from pydantic import ValidationError
 
 # how to acess the endpoint
 # http://localhost:5000/api/3/action/<function_name>
+
+
+@toolkit.side_effect_free
+def bd_people(context, data_dict):
+    return {
+        row['id']: row.to_dict()
+        for index, row in PEOPLE.iterrows()
+    }
+
+
+@toolkit.side_effect_free
+def bd_teams(context, data_dict):
+    return [
+        row.to_dict()
+        for index, row in TEAMS.iterrows()
+    ]
 
 
 @toolkit.side_effect_free

@@ -35,9 +35,8 @@ function TableDatasets({
     const newValues = values.map((elm) => {
       const values = elm
       const directoryColumn = () => {
-        if(!values.directory_column) {
-          return {directory_column : "Não listado"}
-        }
+        if(!values.directory_column) return {directory_column : "Não listado"}
+        
         if(typeof values.directory_column === "object") {
           const directory = Object.values(values.directory_column)
             .map((elm) => {
@@ -54,9 +53,8 @@ function TableDatasets({
       }
 
       const temporalCoverage = () => {
-        if(!values.temporal_coverage) {
-          return {temporal_coverage : "Não listado"}
-        }
+        if(!values.temporal_coverage) return {temporal_coverage : "Não listado"}
+        
         if(typeof values.temporal_coverage === "object") {
           return {temporal_coverage: getTemporalCoverage(values.temporal_coverage, parentTemporalCoverage)}
         } else {
@@ -97,14 +95,11 @@ function TableDatasets({
   },[values, headers])
 
   function translate(field, translation) {
-    if(typeof field === "boolean") {
-      return field === true ? "Sim" : "Não"
-    }
+    if(typeof field === "boolean") return field === true ? "Sim" : "Não"
 
     if(typeof field === "object") {
-      if(!field){
-        return "Não listado"
-      }
+      if(!field) return "Não listado"
+      
       if(field.length === 0) {
         return "Não listado"
       } else {
@@ -128,9 +123,7 @@ function TableDatasets({
     const newDirectoryColumn = `${value[0]}.${value[1]}:${value[2]}`
     const datasetUrl = value[0].replace(/_/g, "-")
   
-    if (newDirectoryColumn === "Não listado.Não listado:Não listado") {
-      return empty()
-    }
+    if (newDirectoryColumn === "Não listado.Não listado:Não listado") return empty()
 
     return (
       <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
@@ -147,13 +140,9 @@ function TableDatasets({
   }
 
   function valueVerification (value) {
-    if(value === null) {
-      return empty()
-    }
+    if(value === null) return empty()
 
-    if(typeof value === "object") {
-      return directoryColumnValue(value)
-    }
+    if(typeof value === "object") return directoryColumnValue(value)
 
     if(value) {
       if(value === "Não listado"){

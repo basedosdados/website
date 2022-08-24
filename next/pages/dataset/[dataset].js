@@ -65,7 +65,7 @@ export async function getStaticProps(context) {
   const informationRequest = resources.filter(
     (r) => r && r?.resource_type === "information_request"
   );
-
+  
   return await withPages({
     props: {
       dataset,
@@ -493,7 +493,7 @@ export default function DatasetPage({
           align="flex-start"
         >
           <Center
-            paddingTop="10px"
+            paddingTop="4px"
             width="100%"
             minWidth="235px"
             height="100%"

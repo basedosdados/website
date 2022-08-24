@@ -6,7 +6,7 @@ import {
 import { useEffect } from "react";
 import Display from "../components/atoms/Display";
 import Subtitle from "../components/atoms/Subtitle";
-import SectionText from "../components/atoms/SectionText";
+import BodyText from "../components/atoms/BodyText";
 import Link from "../components/atoms/Link";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
@@ -46,59 +46,66 @@ export default function Contato({ pages }) {
       >
         <VStack maxWidth={{ base: "100%", lg: "45%" }}>
           <Box contentAlign="flex-start">
-            <Display 
+            <Display
+              fontSize="34px"
+              lineHeight="40px"
+              letterSpacing="-0.6px" 
               color="#2B8C4D"
-              paddingBottom="24px"
+              paddingBottom="16px"
             >
               Entre em contato
             </Display>
-            <SectionText fontSize="16px" paddingBottom="24px">
+            <BodyText fontSize="16px" letterSpacing="0.2px" paddingBottom="32px">
               Envie sua mensagem no formulário ao lado para falar com nossa equipe.
-            </SectionText>
-            <Subtitle paddingBottom="8px">
+            </BodyText>
+            <Subtitle fontSize="18px" letterSpacing="0.1px" paddingBottom="8px">
               Apoio institucional
             </Subtitle>
-            <SectionText fontSize="16px" paddingBottom="24px">
+            <BodyText fontSize="16px" letterSpacing="0.2px" paddingBottom="32px">
               A Base dos Dados é mantida por meio doações de pessoas que acreditam na transparência e acesso a dados de qualidade. Colabore para o crescimento e fortalecimento da iniciativa.
-            </SectionText>
-            <Subtitle paddingBottom="8px">
+            </BodyText>
+            <Subtitle fontSize="18px" letterSpacing="0.1px" paddingBottom="8px">
               Serviços
             </Subtitle>
-            <SectionText fontSize="16px" paddingBottom="24px">
+            <BodyText fontSize="16px" letterSpacing="0.2px" paddingBottom="32px">
               Fale diretamente com nossa equipe comercial para marcarmos uma conversa e avaliarmos como{" "}
               <Link
                 href="/servicos"
                 textDecoration="none"
+                fontFamily="Ubuntu"
                 color="#42B0FF"
                 fontSize="16px"
+                letterSpacing="0.3px"
               >
                 nossos serviços
               </Link> podem ajudar.
-            </SectionText>
-            <Subtitle paddingBottom="8px">
+            </BodyText>
+            <Subtitle fontSize="18px" letterSpacing="0.1px" paddingBottom="8px">
               Projetos e Parcerias
             </Subtitle>
-            <SectionText fontSize="16px" paddingBottom="24px">
+            <BodyText fontSize="16px" letterSpacing="0.2px" paddingBottom="32px">
               Desenvolvemos projetos e aplicações com outras organizações afins para promover o acesso a dados públicos de qualidade. Estamos sempre abertos a novas ideias.
-            </SectionText>
-            <Subtitle paddingBottom="8px">
+            </BodyText>
+            <Subtitle fontSize="18px" letterSpacing="0.1px" paddingBottom="8px">
               Dados
             </Subtitle>
-            <SectionText fontSize="16px" paddingBottom="24px">
+            <BodyText fontSize="16px" letterSpacing="0.2px" paddingBottom="16px">
               Auxiliamos pessoas e organizações a subirem dados no nosso <i>datalake</i>. Escreva sua proposta para nossa equipe de Dados.
-            </SectionText>
-            <SectionText fontSize="16px" paddingBottom="24px" fontWeigth="500">
+            </BodyText>
+            <BodyText fontSize="16px" letterSpacing="0.2px" fontWeigth="500">
               Dúvidas? Fale com a nossa comunidade no{" "}
               <Link
                 href="https://discord.gg/huKWpsVYx4"
                 textDecoration="none"
+                fontFamily="Ubuntu"
                 color="#42B0FF"
                 target="_blank"
                 fontSize="16px"
+                letterSpacing="0.3px"
               >
                 Discord<a style={{color:"#252A32", fontWeight:"500"}}>.</a>
               </Link>
-            </SectionText>
+            </BodyText>
           </Box>
         </VStack>
         <Stack paddingTop="20px" >

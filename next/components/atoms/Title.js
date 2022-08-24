@@ -12,7 +12,7 @@ export default function Title({
       fontSize="18px"
       lineHeight="22px"
       fontWeigth="700"
-      letterSpacing="0.2px"
+      letterSpacing="0.3px"
       color={color}
       {...style}
     >

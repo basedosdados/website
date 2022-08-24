@@ -108,19 +108,29 @@ export function TextPix ({ title, text }) {
 
 export default function DataInformationQuery ({ resource }) {
   const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}.zip`
-  const queryName = `${resource.dataset_id}.${resource.name}`;
+  const queryName = `${resource.dataset_id}.${resource.name}`
   const { hasCopied, onCopy } = useClipboard("42494318000116")
   const [tabIndex, setTabIndex] = useState(0)
+  const [downloadNotAllowed, setDownloadNotAllowed] = useState(false)
   const [isMobileMod, setIsMobileMod] = useState(false)
-  const isMobile = useCheckMobile();
+  const isMobile = useCheckMobile()
 
   useEffect(() => {
     setIsMobileMod(isMobile)
   },[isMobile])
 
   useEffect(() => {
-    if (window) window.Prism.highlightAll();
+    if (window) window.Prism.highlightAll()
+
+    if(resource.number_rows) {
+      resource.number_rows > 200000 && setDownloadNotAllowed(true)
+    }
   }, [resource])
+
+  const handlerDownload = () => {
+    if(downloadNotAllowed) return null
+    return window.open(downloadUrl) 
+  }
 
   return (
     <VStack
@@ -210,6 +220,7 @@ export default function DataInformationQuery ({ resource }) {
               Copie o código abaixo,
               <Link
                 color="#42B0FF"
+                target="_blank"
                 textDecoration="none"
                 href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${resource.dataset_id}&t=${resource.name}&page=table`}
               > clique aqui
@@ -280,7 +291,7 @@ df <- bd_collect(query)`}
               Criamos um pacote em Stata para você acessar o <i>datalake</i>. Basta rodar o código:
             </SectionText>
 
-            <PrismCodeHighlight language="Stata">
+            <PrismCodeHighlight language="stata">
               {`net install basedosdados, from("https://raw.githubusercontent.com/basedosdados/mais/master/stata-package")
 
 bd_read_table, ///
@@ -303,20 +314,23 @@ bd_read_table, ///
             <SectionText>
               Antes de baixar os dados, apoie você também com uma doação financeira ou <Link color="#42B0FF" href="https://basedosdados.github.io/mais/colab_data/">saiba como contribuir com seu tempo</Link>.
             </SectionText>
-          {/* <DisclaimerBox>
+
+            {downloadNotAllowed &&
+              <DisclaimerBox>
                 <HStack gridGap="8px" alignItems="flex-start">
-                 <ExclamationIcon 
-                   widthIcon="20px"
-                   heightIcon="20px"
-                   fill="#42B0FF"
-                   marginTop="4px"
-                 />
-                 <Box>
-                   <SectionText fontWeigth="700">ATENÇÃO: O tamanho da tabela ultrapassou o limite permitido para download.</SectionText>
-                   <SectionText>Ao clicar em <i>Download dos dados</i>, você baixará apenas uma prévia dos dados. Para acessar a tabela completa, utilize nossos pacotes em Python, R ou Stata.</SectionText>
-                 </Box>
-               </HStack>
-              </DisclaimerBox> */}
+                <ExclamationIcon 
+                  widthIcon="20px"
+                  heightIcon="20px"
+                  fill="#42B0FF"
+                  marginTop="4px"
+                />
+                <Box>
+                  <SectionText fontWeigth="700">ATENÇÃO: O tamanho da tabela ultrapassou o limite permitido para download, de 200.000 linhas.</SectionText>
+                  <SectionText>Para acessar os dados, utilize nosso <i>datalake</i> no BigQuery ou nossos pacotes em Python, R ou Stata.</SectionText>
+                </Box>
+              </HStack>
+              </DisclaimerBox>
+            }
             <VStack
               alignItems={isMobileMod ? "center" :"flex-start"}
               padding={isMobileMod ? "32px 0 24px 0 !important" :"32px 0 24px 40px !important"}
@@ -392,14 +406,16 @@ bd_read_table, ///
                   fontSize="14px"
                   fontWeight="700"
                   backgroundColor="#FFF"
-                  color="#FF8484"
-                  border="1px solid #FF8484"
+                  color={downloadNotAllowed ? "#C4C4C4" :"#FF8484"}
+                  border={downloadNotAllowed ? "1px solid #C4C4C4" :"1px solid #FF8484"}
                   paddingX="30px"
                   width="100%"
                   gridGap="6px"
-                  onClick={() => window.open(downloadUrl)}
+                  cursor={downloadNotAllowed ? "auto" :"pointer"}
+                  _hover={downloadNotAllowed ? {transform : "none"} : ""}
+                  onClick={handlerDownload}
                 >
-                  <DownloadIcon widthIcon="22px" heightIcon="22px" fill="#FF8484"/>
+                  <DownloadIcon widthIcon="22px" heightIcon="22px" fill={downloadNotAllowed ? "#C4C4C4" :"#FF8484"}/>
                   Download dos dados
                 </RoundedButton>
 

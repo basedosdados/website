@@ -590,18 +590,6 @@ export default function SearchPage({
           />
           <CheckboxFilterAccordion
             canSearch={true}
-            isActive={(paramFilters.update_frequency || []).length > 0}
-            choices={updateFrequencies}
-            values={paramFilters.update_frequency}
-            valueField="name"
-            displayField="displayName"
-            fieldName="Frequência de atualização"
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, update_frequency: values })
-            }
-          />
-          <CheckboxFilterAccordion
-            canSearch={true}
             isActive={(paramFilters.raw_quality_tier || []).length > 0}
             choices={rawQualityTiers}
             values={paramFilters.raw_quality_tier}
@@ -610,6 +598,18 @@ export default function SearchPage({
             fieldName="Qualidade da fonte original"
             onChange={(values) =>
               setParamFilters({ ...paramFilters, raw_quality_tier: values })
+            }
+          />
+          <CheckboxFilterAccordion
+            canSearch={true}
+            isActive={(paramFilters.update_frequency || []).length > 0}
+            choices={updateFrequencies}
+            values={paramFilters.update_frequency}
+            valueField="name"
+            displayField="displayName"
+            fieldName="Frequência de atualização"
+            onChange={(values) =>
+              setParamFilters({ ...paramFilters, update_frequency: values })
             }
           />
         </VStack>
@@ -626,7 +626,7 @@ export default function SearchPage({
               fontFamily="Ubuntu"
               fontSize="26px"
               fontWeight="400"
-              letterSpacing="0px"
+              letterSpacing="-0.2px"
               color="#252A32"
             >
               {data?.count || "..."} {`conjunto${data?.count > 1 ? "s": ""} encontrado${data?.count > 1 ? "s": ""}`}

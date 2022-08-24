@@ -1,0 +1,36 @@
+.historyTimeLine :global(.swiper) {
+  padding: 0 !important;
+}
+
+.historyTimeLine :global(.swiper-slide) {
+  display: flex;
+  justify-content: center;
+}
+
+.historyTimeLine :global(.swiper-button-prev), .historyTimeLine :global(.swiper-button-next) {
+  color: #A3A3A3 !important;
+  background-color: transparent;
+  width: 40px !important;
+  top: 20px !important;
+}
+
+.historyTimeLine :global(.swiper-button-prev) {
+  left: 10px !important;
+}
+
+.historyTimeLine :global(.swiper-button-prev)::after , .historyTimeLine :global(.swiper-button-next)::after {
+  font-size: 0px !important;
+  -webkit-transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  transition: all .5s ease;
+}
+
+.historyTimeLine:hover :global(.swiper-button-prev)::after, .historyTimeLine:hover :global(.swiper-button-next)::after {
+  font-size: 32px !important;
+}
+
+@media (max-width: 1000px) {
+  .historyTimeLine :global(.swiper) {
+    padding: 0 32px !important; 
+  }
+}
