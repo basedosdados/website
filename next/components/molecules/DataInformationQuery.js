@@ -111,7 +111,7 @@ export default function DataInformationQuery ({ resource }) {
   const queryName = `${resource.dataset_id}.${resource.name}`
   const { hasCopied, onCopy } = useClipboard("42494318000116")
   const [tabIndex, setTabIndex] = useState(0)
-  const [downloadNotAllowed, setDownloadNotAllowed] = useState(false)
+  const [downloadNotAllowed, setDownloadNotAllowed] = useState(true)
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile()
 
@@ -123,12 +123,12 @@ export default function DataInformationQuery ({ resource }) {
     if (window) window.Prism.highlightAll()
 
     if(resource.number_rows) {
-      resource.number_rows > 200000 && setDownloadNotAllowed(true)
+      resource.number_rows > 200000  ? setDownloadNotAllowed(true) : setDownloadNotAllowed(false)
     }
   }, [resource])
 
   const handlerDownload = () => {
-    if(downloadNotAllowed) return null
+    if(!downloadNotAllowed) return null
     return window.open(downloadUrl) 
   }
 
