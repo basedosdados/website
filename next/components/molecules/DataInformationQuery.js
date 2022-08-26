@@ -128,7 +128,7 @@ export default function DataInformationQuery ({ resource }) {
   }, [resource])
 
   const handlerDownload = () => {
-    if(!downloadNotAllowed) return null
+    if(downloadNotAllowed === true) return null
     return window.open(downloadUrl) 
   }
 
