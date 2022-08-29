@@ -590,18 +590,6 @@ export default function SearchPage({
           />
           <CheckboxFilterAccordion
             canSearch={true}
-            isActive={(paramFilters.raw_quality_tier || []).length > 0}
-            choices={rawQualityTiers}
-            values={paramFilters.raw_quality_tier}
-            valueField="name"
-            displayField="displayName"
-            fieldName="Qualidade da fonte original"
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, raw_quality_tier: values })
-            }
-          />
-          <CheckboxFilterAccordion
-            canSearch={true}
             isActive={(paramFilters.update_frequency || []).length > 0}
             choices={updateFrequencies}
             values={paramFilters.update_frequency}
@@ -610,6 +598,18 @@ export default function SearchPage({
             fieldName="Frequência de atualização"
             onChange={(values) =>
               setParamFilters({ ...paramFilters, update_frequency: values })
+            }
+          />
+          <CheckboxFilterAccordion
+            canSearch={true}
+            isActive={(paramFilters.raw_quality_tier || []).length > 0}
+            choices={rawQualityTiers}
+            values={paramFilters.raw_quality_tier}
+            valueField="name"
+            displayField="displayName"
+            fieldName="Qualidade da fonte original"
+            onChange={(values) =>
+              setParamFilters({ ...paramFilters, raw_quality_tier: values })
             }
           />
         </VStack>
