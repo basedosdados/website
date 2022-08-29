@@ -105,30 +105,34 @@ function AdminButtons({ resource, setResource }) {
   if (!userData?.is_admin) return null;
 
   return (
-    <Stack width="100%">
+    <Stack paddingTop="16px" width="100%">
       <SimpleButton
         isActive={isActive("create_bdm_table")}
         onClick={() => setResource({ resource_type: "create_bdm_table" })}
         margin="0 0 16px !important"
+        justifyContent="space-between"
+        paddingRight="15%"
       >
+        Criar tabela tratada
         <CrossIcon
           fill="currentColor"
-          marginRight="4px"
+          marginLeft="4px"
           rotation="rotate(45deg)"
         />
-        Criar tabela tratada
       </SimpleButton>
       <SimpleButton
         isActive={isActive("create_external_link")}
         onClick={() => setResource({ resource_type: "create_external_link" })}
         margin="0 0 16px !important"
+        justifyContent="space-between"
+        paddingRight="15%"
       >
+        Criar fonte original
         <CrossIcon
           fill="currentColor"
-          marginRight="4px"
+          marginLeft="4px"
           rotation="rotate(45deg)"
         />
-        Criar fonte original
       </SimpleButton>
       <SimpleButton
         isActive={isActive("create_information_request")}
@@ -136,15 +140,16 @@ function AdminButtons({ resource, setResource }) {
           setResource({ resource_type: "create_information_request" })
         }
         borderBottom="1px solid #DEDFE0"
-        paddingBottom="16px"
+        padding="0 15% 24px 0"
         margin="0 !important"
+        justifyContent="space-between"
       >
+        Criar pedido LAI
         <CrossIcon
           fill="currentColor"
-          marginRight="4px"
+          marginLeft="4px"
           rotation="rotate(45deg)"
         />
-        Criar pedido LAI
       </SimpleButton>
     </Stack>
   )
