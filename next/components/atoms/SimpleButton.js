@@ -1,24 +1,29 @@
-import { Button } from "@chakra-ui/react";
+import { Link } from "@chakra-ui/react";
 
-export function SimpleButton({ onClick, children, isActive }) {
+export function SimpleButton({ onClick, children, isActive, ...props }) {
   return (
-    <Button
+    <Link
+      display="flex"
       onClick={onClick}
-      border={isActive ? "2px solid #42B0FF" : "1px solid #DEDFE0"}
-      color={isActive ? "#42B0FF" : null}
-      borderRadius="13px"
+      color={isActive ? "#42B0FF" : "#252A32"}
       width="100%"
-      justifyContent="flex-start"
-      backgroundColor="transparent"
       fontFamily="Ubuntu"
-      fontWeight="700"
-      fontSize="15px"
-      letterSpacing="0.5px"
+      fontWeight="500"
+      fontSize="16px"
+      letterSpacing="0.2px"
+      outline="none"
       _hover={{
-        backgroundColor: "rgba(0,0,0,0.04)",
+        color: "#42B0FF",
+        outline:"none",
+        textDecoration: "none"
       }}
+      _focus={{
+        outline:"none",
+        textDecoration: "none"
+      }}
+      {...props}
     >
       {children}
-    </Button>
-  );
+    </Link>
+  )
 }

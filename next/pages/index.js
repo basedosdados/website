@@ -24,7 +24,7 @@ import { ShadowBox } from "../components/atoms/ShadowBox";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
 import { ThemeTag } from "../components/atoms/ThemeTag";
-import { LinkDash } from "../components/atoms/LinkDash";
+import LinkDash from "../components/atoms/LinkDash";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { BePartner } from "../components/organisms/BePartner";
 import SearchIcon from "../public/img/icons/searchIcon";
@@ -102,6 +102,7 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
   }
 
   useEffect(() => {
+    if(popularTags === null) return ""
     const newPopularTags = Object.keys(popularTags)
     setTags(newPopularTags.slice(0,5))
   },[popularTags])
@@ -193,7 +194,7 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
                   )
                 }
               />
-              <HStack paddingLeft={isMobileMod ? "20px" : "32px"}>
+              <HStack display={tags.length === 0 ? "none" : "flex"} paddingLeft={isMobileMod ? "20px" : "32px"}>
                 {!isMobileMod &&
                   <Text 
                     fontFamily="Ubuntu"
