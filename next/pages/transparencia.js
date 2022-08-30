@@ -269,7 +269,7 @@ export default function Transparencia({ pages }) {
           BD Estatuto Social
         </Link>
       </Stack>
-     
+
       <Stack
         paddingTop="16px"
         paddingBottom={{ base: "80px", lg: "104px" }}
