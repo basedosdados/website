@@ -10,42 +10,9 @@ import { useEffect, useState } from "react";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { MainPageTemplate } from "../components/templates/main";
 import Display from "../components/atoms/Display";
-import { DebouncedControlledInput } from "../components/atoms/ControlledInput";
+import { QuestionFAQ } from "../context/faq";
 import BodyText from "../components/atoms/BodyText";
 import CrossIcon from "../public/img/icons/crossIcon";
-
-const questionsApi = [
-  {
-    question: "Preciso pagar para utilizar a BD?",
-    answer: "Você não precisa pagar para utilizar nenhum serviço oferecido pela Base dos Dados. Porém, para acessar nossos dados você precisa criar um projeto no Google Cloud, um dos serviços que utilizamos, que oferece até 1 Terabyte gratuito por mês para seus usuários. Caso você exceda esse limite, são cobrados 5 dólares por Terabyte de dados que sua consulta irá processar. Ressaltamos que esse limite costuma ser o suficiente, mesmo para análises com bases mais robustas, como a RAIS ou Censo Escolar.",
-    categories: ["Sobre a BD", "Infraestrutura"]
-  },
-  {
-    question: "Pergunta?Pergunta?Pergunta?Pergunta?",
-    answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ornare nibh vel ex porta pulvinar. Vivamus a urna vestibulum, luctus erat vitae, rhoncus ante. Quisque rhoncus risus id sagittis tempus. Maecenas vitae eros velit. Curabitur vehicula eu orci at interdum. Etiam nunc enim, pharetra non vestibulum viverra, varius in justo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ornare nibh vel ex porta pulvinar. Vivamus a urna vestibulum, luctus erat vitae, rhoncus ante. Quisque rhoncus risus id sagittis tempus. Maecenas vitae eros velit. ",
-    categories: ["Dados"]
-  },
-  {
-    question: "Pergunta?Pergunta?Pergunta?Pergunta?",
-    answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ornare nibh vel ex porta pulvinar. Vivamus a urna vestibulum, luctus erat vitae, rhoncus ante. Quisque rhoncus risus id sagittis tempus. Maecenas vitae eros velit. Curabitur vehicula eu orci at interdum. Etiam nunc enim, pharetra non vestibulum viverra, varius in justo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ornare nibh vel ex porta pulvinar. Vivamus a urna vestibulum, luctus erat vitae, rhoncus ante. Quisque rhoncus risus id sagittis tempus. Maecenas vitae eros velit. ",
-    categories: ["LGPD"]
-  },
-  {
-    question: "Pergunta?Pergunta?Pergunta?Pergunta?",
-    answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ornare nibh vel ex porta pulvinar. Vivamus a urna vestibulum, luctus erat vitae, rhoncus ante. Quisque rhoncus risus id sagittis tempus. Maecenas vitae eros velit. Curabitur vehicula eu orci at interdum. Etiam nunc enim, pharetra non vestibulum viverra, varius in justo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ornare nibh vel ex porta pulvinar. Vivamus a urna vestibulum, luctus erat vitae, rhoncus ante. Quisque rhoncus risus id sagittis tempus. Maecenas vitae eros velit. ",
-    categories: ["LGPD"]
-  },
-  {
-    question: "Pergunta?Pergunta?Pergunta?Pergunta?",
-    answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ornare nibh vel ex porta pulvinar. Vivamus a urna vestibulum, luctus erat vitae, rhoncus ante. Quisque rhoncus risus id sagittis tempus. Maecenas vitae eros velit. Curabitur vehicula eu orci at interdum. Etiam nunc enim, pharetra non vestibulum viverra, varius in justo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ornare nibh vel ex porta pulvinar. Vivamus a urna vestibulum, luctus erat vitae, rhoncus ante. Quisque rhoncus risus id sagittis tempus. Maecenas vitae eros velit. ",
-    categories: ["LGPD"]
-  },
-  {
-    question: "Pergunta?Pergunta?Pergunta?Pergunta?",
-    answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ornare nibh vel ex porta pulvinar. Vivamus a urna vestibulum, luctus erat vitae, rhoncus ante. Quisque rhoncus risus id sagittis tempus. Maecenas vitae eros velit. Curabitur vehicula eu orci at interdum. Etiam nunc enim, pharetra non vestibulum viverra, varius in justo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ornare nibh vel ex porta pulvinar. Vivamus a urna vestibulum, luctus erat vitae, rhoncus ante. Quisque rhoncus risus id sagittis tempus. Maecenas vitae eros velit. ",
-    categories: ["Sobre a BD", "Infraestrutura"]
-  },
-]
 
 const QuestionsBox = ({ question, answer }) => {
   const [isActive, setIsActive] = useState(false)
@@ -108,11 +75,10 @@ export default function FAQ({}) {
   const [allQuestions, setAllQuestions] = useState([])
   const [questions, setQuestions] = useState([])
   const [categorySelected, setCategorySelected] = useState("")
-  const [search, setSearch] = useState("")
 
   useEffect(() => {
-    setAllQuestions(questionsApi)
-    setQuestions(questionsApi)
+    setAllQuestions(QuestionFAQ)
+    setQuestions(QuestionFAQ)
   },[])
 
   useEffect(() => {
@@ -159,33 +125,15 @@ export default function FAQ({}) {
         width="100%"
         maxWidth="1264px"
         margin="auto"
+        paddingTop={isMobileMod && "75px"}
         spacing={0}
       >
         <Display
-          paddingBottom={isMobileMod ? "56px" : "64px" }
+          paddingBottom={isMobileMod ? "56px" : "126px" }
           color="#2B8C4D"
         >
           Perguntas Frequentes
         </Display>
-
-        <DebouncedControlledInput
-          value={search}
-          onChange={(res) => setSearch(res)}
-          placeholder="Pesquise"
-          justifyContent="center"
-          inputStyle={{
-            width: "100%",
-            maxWidth: "600px",
-            margin: "0 auto 126px",
-            padding: "20px",
-            borderRadius: "17px",
-            backgroundColor: "#FFF",
-            color: "#6F6F6F",
-            fontSize: "16px",
-            height: "50px",
-            boxShadow: "0 1px 3px 0.5 rgba(100 93 103 /0.16) !important",
-          }}
-        />
 
         <Stack
           width="100%"
