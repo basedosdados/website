@@ -6,15 +6,20 @@ import {
   Tr,
   Th,
   Td,
-  HStack,
   Tooltip,
+  HStack,
+  Stack,
   Box,
-  Center
-} from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+  Center,
+  Text,
+  Input
+} from '@chakra-ui/react';
+import { useState, useEffect } from 'react';
+import FuzzySearch from 'fuzzy-search';
 import { formatJson, getTemporalCoverage } from '../../utils';
-import InfoIcon from '../../public/img/icons/infoIcon'
-import RedirectIcon from '../../public/img/icons/redirectIcon'
+import InfoIcon from '../../public/img/icons/infoIcon';
+import RedirectIcon from '../../public/img/icons/redirectIcon';
+import FilterIcon from '../../public/img/icons/filterIcon';
 
 function TableDatasets({
   headers,
@@ -183,7 +188,7 @@ function TableDatasets({
                 zIndex={1}
               >
                 {tooltip ?
-                  <Box display="flex" gridGap="8px" cursor="pointer">
+                  <Box display="flex" gridGap="8px">
                     {translations ? translate(elm, translations) : elm}
                     <Tooltip
                       hasArrow
@@ -197,7 +202,7 @@ function TableDatasets({
                       borderRadius="6px"
                     >
                       <Center>
-                        <InfoIcon fill="#A3A3A3" tip/>
+                        <InfoIcon cursor="pointer" fill="#A3A3A3" tip/>
                       </Center>
                     </Tooltip>
                   </Box>
@@ -245,17 +250,56 @@ export default function ColumnsDatasets({
   tooltip,
   containerStyle,
 }) {
+  const [filter, setFilter] = useState()
+  const [defaultValues, setDefaultValue] = useState([])
+  const [columnValues, setColumnValues] = useState([])
+
+  useEffect(() => {
+    setDefaultValue(values)
+    setColumnValues(values)
+  },[values]) 
+
+  useEffect(() => {
+    if(filter === "") setColumnValues(defaultValues)
+  },[filter])
+
+  const searcher = new FuzzySearch(defaultValues, headers, {
+    caseSensitive: true
+  })
+  
+  async function checkForEnter(e) {
+    if (e.key === "Enter") {
+      const result = searcher.search(filter)
+      setColumnValues(result)
+    }
+  }
 
   return (
-    <TableDatasets
-      headers={headers}
-      values={values}
-      translations={translations}
-      availableOptionsTranslations={availableOptionsTranslations}
-      translationsOptions={translationsOptions}
-      parentTemporalCoverage={parentTemporalCoverage}
-      tooltip={tooltip}
-      containerStyle={containerStyle}
-    />
+    <Stack width="100%">
+      <HStack spacing={2} alignItems="center">
+        <FilterIcon paddingLeft="24px" fill="#252A32" widthIcon="20px" heightIcon="20px"/>
+        <Text color="#252A32" fontSize="16px" fontWeight="400" fontFamily="ubuntu">Filtro</Text>
+        <Input
+          value={filter}
+          onKeyDown={checkForEnter}
+          onChange={(e) => setFilter(e.target.value)}
+          variant="flushed"
+          marginLeft="16px !important"
+          maxWidth="285px"
+          height="24px"
+          placeholder="Insira o nome ou o valor da propriedade"
+        />
+      </HStack>
+      <TableDatasets
+        headers={headers}
+        values={columnValues}
+        translations={translations}
+        availableOptionsTranslations={availableOptionsTranslations}
+        translationsOptions={translationsOptions}
+        parentTemporalCoverage={parentTemporalCoverage}
+        tooltip={tooltip}
+        containerStyle={containerStyle}
+      />
+    </Stack>
   )
 }
