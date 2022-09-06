@@ -12,7 +12,14 @@ import {
   Box,
   Center,
   Text,
-  Input
+  Input,
+  InputGroup,
+  InputRightElement,
+  InputLeftAddon,
+  Tag,
+  TagLabel,
+  TagCloseButton,
+  Select
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import FuzzySearch from 'fuzzy-search';
@@ -20,6 +27,25 @@ import { formatJson, getTemporalCoverage } from '../../utils';
 import InfoIcon from '../../public/img/icons/infoIcon';
 import RedirectIcon from '../../public/img/icons/redirectIcon';
 import FilterIcon from '../../public/img/icons/filterIcon';
+import SearchIcon from '../../public/img/icons/searchIcon';
+import CrossIcon from '../../public/img/icons/crossIcon';
+
+function translate(field, translation) {
+  if(typeof field === "boolean") return field === true ? "Sim" : "Não"
+
+  if(typeof field === "object") {
+    if(!field) return "Não listado"
+    
+    if(field.length === 0) {
+      return "Não listado"
+    } else {
+      const newJson = JSON.stringify(field)
+      return formatJson(newJson, true)
+    }
+  }
+
+  return translation[field] || field
+}
 
 function TableDatasets({
   headers,
@@ -99,22 +125,7 @@ function TableDatasets({
     
   },[values, headers])
 
-  function translate(field, translation) {
-    if(typeof field === "boolean") return field === true ? "Sim" : "Não"
-
-    if(typeof field === "object") {
-      if(!field) return "Não listado"
-      
-      if(field.length === 0) {
-        return "Não listado"
-      } else {
-        const newJson = JSON.stringify(field)
-        return formatJson(newJson, true)
-      }
-    }
-
-    return translation[field] || field
-  }
+  
 
   const empty = () => {
     return (
@@ -251,27 +262,34 @@ export default function ColumnsDatasets({
   containerStyle,
 }) {
   const [filter, setFilter] = useState()
+  const [headerSelection, setHeaderSelection] = useState("")
   const [defaultValues, setDefaultValue] = useState([])
   const [columnValues, setColumnValues] = useState([])
+  const [tagFilter, setTagFilter] = useState([{header:"name", search: "year"}])
+
+console.log(tagFilter)
 
   useEffect(() => {
     setDefaultValue(values)
     setColumnValues(values)
   },[values]) 
 
-  useEffect(() => {
-    if(filter === "") setColumnValues(defaultValues)
-  },[filter])
-
-  const searcher = new FuzzySearch(defaultValues, headers, {
+  const searcher = new FuzzySearch(defaultValues, headerSelection ? [headerSelection] : headers, {
     caseSensitive: true
   })
   
   async function checkForEnter(e) {
     if (e.key === "Enter") {
-      const result = searcher.search(filter)
-      setColumnValues(result)
+      appliedFilter()
     }
+  }
+
+  const appliedFilter = () => {
+    const result = searcher.search(filter)
+    if(headerSelection) setTagFilter(tagFilter.concat({header: headerSelection ,search: filter }))
+    setColumnValues(result)
+    setHeaderSelection("")
+    if(headerSelection) setFilter("")
   }
 
   return (
@@ -279,17 +297,94 @@ export default function ColumnsDatasets({
       <HStack spacing={2} alignItems="center">
         <FilterIcon paddingLeft="24px" fill="#252A32" widthIcon="20px" heightIcon="20px"/>
         <Text color="#252A32" fontSize="16px" fontWeight="400" fontFamily="ubuntu">Filtro</Text>
-        <Input
-          value={filter}
-          onKeyDown={checkForEnter}
-          onChange={(e) => setFilter(e.target.value)}
-          variant="flushed"
-          marginLeft="16px !important"
-          maxWidth="285px"
-          height="24px"
-          placeholder="Insira o nome ou o valor da propriedade"
-        />
+
+        <Select
+          marginLeft="24px !important"
+          variant="unstyled"
+          width="100%"
+          height="100%"
+          maxWidth="140px"
+          borderRadius="0"
+          fontFamily="ubuntu"
+          fontSize="16px"
+          color={headerSelection ? "#2B8C4D" : "#252A32"}
+          placeholder="Por..."
+          value={headerSelection}
+          onChange={(event) => setHeaderSelection(event.target.value) }
+        >
+          {headers.map((option) =>
+            <option value={option}>{translate(option, translations)}</option>
+          )}
+        </Select>
+
+        <InputGroup
+          border="1px solid #DEDFE0 !important"
+          borderRadius="20px"
+        >
+          {tagFilter.length > 0 && (
+            <InputLeftAddon
+              border="none"
+              backgroundColor="transparent"
+              children={
+                <Box display="flex" flexDirection="row" gridGap="16px" >
+                  {tagFilter.map((elm) => (
+                    <Box display="flex" gridGap="8px">
+                      <Tag>
+                        <TagLabel>{translate(elm.header, translations)}</TagLabel>
+                        <TagCloseButton/>
+                      </Tag>
+                      <Text>{elm.search}</Text>
+                    </Box>
+                  ))}
+                </Box>
+              }
+            />
+          )}
+
+          <Input
+            value={filter}
+            onKeyDown={checkForEnter}
+            onChange={(e) => setFilter(e.target.value)}
+            variant="outline"
+            letterSpacing="0.5px"
+            fontWeight="300"
+            border="none"
+            borderRadius="20px"
+            fontFamily="lato"
+            fontSize="16px"
+            color="#252A32"
+            width="100%"
+            height="40px"
+            placeholder="Insira o nome ou o valor da propriedade"
+          />
+          <InputRightElement
+            children={
+              tagFilter.length < 1 
+              ?
+                <SearchIcon
+                  cursor="pointer"
+                  fill="#D0D0D0"
+                  marginRight="6px"
+                  onClick={() => appliedFilter()}
+                />
+              :
+                <CrossIcon
+                  cursor="pointer"
+                  fill="#D0D0D0"
+                  marginRight="6px"
+                  widthIcon="20px"
+                  heightIcon="20px"
+                  onClick={() => {
+                    setTagFilter([])
+                    setHeaderSelection("")
+                    setColumnValues(defaultValues)
+                    setFilter("")
+                  }}
+                />
+          }/>
+        </InputGroup>
       </HStack>
+
       <TableDatasets
         headers={headers}
         values={columnValues}
