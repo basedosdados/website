@@ -286,30 +286,49 @@ export default function ColumnsDatasets({
 
   const appliedFilter = () => {
     const result = searcher.search(filter)
-    if(headerSelection) setTagFilter(tagFilter.concat({header: headerSelection ,search: filter }))
-    setColumnValues(result)
-    setHeaderSelection("")
-    if(headerSelection) setFilter("")
+    if(headerSelection) {
+      const indexTag= tagFilter.findIndex((res) => res.header === headerSelection)
+      if(indexTag > -1) {
+        removeTagFilter(tagFilter[indexTag], true)
+      } else {
+        setTagFilter(tagFilter.concat({ header: headerSelection, search: filter }))
+        setColumnValues(result)
+        setFilter("")
+        setHeaderSelection("")
+      }
+    } else {
+      setTagFilter(tagFilter.concat({ header: "", search: filter }))
+      setColumnValues(result)
+      setFilter("")
+      setHeaderSelection("")
+    }
   }
-
-  const removeTagFilter = (tag) => {
+  
+  const removeTagFilter = (tag, overwrite) => {
+    let newColumnsValues = []
     const remainingTags = tagFilter.filter(function(elm) {
-      return elm.header != tag
+      if(tag.search && elm.header === tag.header) return elm.search != tag.search
+      return elm.header != tag.header
     })
-    if(remainingTags.length > 1) {
+    if(overwrite) remainingTags.push({ header: headerSelection, search: filter })
+    if(remainingTags.length > 0) {
       remainingTags.map((elm, i) => {
-        const searcherRemainingTags = new FuzzySearch( i === 0 ? defaultValues : columnValues, [elm.header] , {
+        const searcherRemainingTags = new FuzzySearch( 
+          i === 0 ? defaultValues : newColumnsValues, elm.header ? [elm.header] : headers, {
           caseSensitive: true
         })
         const result = searcherRemainingTags.search(elm.search)
-        setColumnValues(result)
+        return newColumnsValues = result
       })
+      setColumnValues(newColumnsValues)
     } else {
       setColumnValues(defaultValues)
     }
+    setFilter("")
     setHeaderSelection("")
     setTagFilter(remainingTags)
   }
+
   return (
     <Stack width="100%">
       <HStack spacing={2} alignItems="center">
@@ -361,7 +380,7 @@ export default function ColumnsDatasets({
                         fontWeight="700"
                       >
                         <TagLabel>{elm.search}</TagLabel>
-                        <TagCloseButton onClick={() => removeTagFilter(elm.header)}/>
+                        <TagCloseButton onClick={() => removeTagFilter(elm, null)}/>
                       </Tag>
                     </Box>
                   ))}
