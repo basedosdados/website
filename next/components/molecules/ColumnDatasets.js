@@ -265,16 +265,16 @@ export default function ColumnsDatasets({
   const [headerSelection, setHeaderSelection] = useState("")
   const [defaultValues, setDefaultValue] = useState([])
   const [columnValues, setColumnValues] = useState([])
-  const [tagFilter, setTagFilter] = useState([{header:"name", search: "year"}])
-
-console.log(tagFilter)
+  const [tagFilter, setTagFilter] = useState([])
 
   useEffect(() => {
     setDefaultValue(values)
     setColumnValues(values)
   },[values]) 
 
-  const searcher = new FuzzySearch(defaultValues, headerSelection ? [headerSelection] : headers, {
+  const searcher = new FuzzySearch(
+    tagFilter.length > 0 ? columnValues : defaultValues,
+    headerSelection ? [headerSelection] : headers, {
     caseSensitive: true
   })
   
@@ -292,12 +292,31 @@ console.log(tagFilter)
     if(headerSelection) setFilter("")
   }
 
+  const removeTagFilter = (tag) => {
+    const remainingTags = tagFilter.filter(function(elm) {
+      return elm.header != tag
+    })
+    if(remainingTags.length > 1) {
+      remainingTags.map((elm, i) => {
+        const searcherRemainingTags = new FuzzySearch( i === 0 ? defaultValues : columnValues, [elm.header] , {
+          caseSensitive: true
+        })
+        const result = searcherRemainingTags.search(elm.search)
+        setColumnValues(result)
+      })
+    } else {
+      setColumnValues(defaultValues)
+    }
+    setHeaderSelection("")
+    setTagFilter(remainingTags)
+  }
   return (
     <Stack width="100%">
       <HStack spacing={2} alignItems="center">
         <FilterIcon paddingLeft="24px" fill="#252A32" widthIcon="20px" heightIcon="20px"/>
-        <Text color="#252A32" fontSize="16px" fontWeight="400" fontFamily="ubuntu">Filtro</Text>
-
+        <Text color="#252A32" fontSize="16px" fontWeight="400" fontFamily="ubuntu">
+          Filtro
+        </Text>
         <Select
           marginLeft="24px !important"
           variant="unstyled"
@@ -328,12 +347,22 @@ console.log(tagFilter)
               children={
                 <Box display="flex" flexDirection="row" gridGap="16px" >
                   {tagFilter.map((elm) => (
-                    <Box display="flex" gridGap="8px">
-                      <Tag>
-                        <TagLabel>{translate(elm.header, translations)}</TagLabel>
-                        <TagCloseButton/>
+                    <Box display="flex" gridGap="8px" alignItems="center" >
+                      <Text fontWeight="300" fontSize="14px" fontFamily="lato">{translate(elm.header, translations)}</Text>
+                      <Tag
+                        whiteSpace="nowrap"
+                        backgroundColor="#2B8C4D"
+                        color="white"
+                        borderRadius="8px"
+                        padding="5px 8px"
+                        cursor="pointer"
+                        fontSize="12px"
+                        fontFamily="ubuntu"
+                        fontWeight="700"
+                      >
+                        <TagLabel>{elm.search}</TagLabel>
+                        <TagCloseButton onClick={() => removeTagFilter(elm.header)}/>
                       </Tag>
-                      <Text>{elm.search}</Text>
                     </Box>
                   ))}
                 </Box>
@@ -357,30 +386,29 @@ console.log(tagFilter)
             height="40px"
             placeholder="Insira o nome ou o valor da propriedade"
           />
-          <InputRightElement
-            children={
-              tagFilter.length < 1 
-              ?
-                <SearchIcon
-                  cursor="pointer"
-                  fill="#D0D0D0"
-                  marginRight="6px"
-                  onClick={() => appliedFilter()}
-                />
-              :
-                <CrossIcon
-                  cursor="pointer"
-                  fill="#D0D0D0"
-                  marginRight="6px"
-                  widthIcon="20px"
-                  heightIcon="20px"
-                  onClick={() => {
-                    setTagFilter([])
-                    setHeaderSelection("")
-                    setColumnValues(defaultValues)
-                    setFilter("")
-                  }}
-                />
+          <InputRightElement children={
+            tagFilter.length < 1 
+            ?
+              <SearchIcon
+                cursor="pointer"
+                fill="#D0D0D0"
+                marginRight="6px"
+                onClick={() => appliedFilter()}
+              />
+            :
+              <CrossIcon
+                cursor="pointer"
+                fill="#D0D0D0"
+                marginRight="6px"
+                widthIcon="20px"
+                heightIcon="20px"
+                onClick={() => {
+                  setTagFilter([])
+                  setHeaderSelection("")
+                  setColumnValues(defaultValues)
+                  setFilter("")
+                }}
+              />
           }/>
         </InputGroup>
       </HStack>
