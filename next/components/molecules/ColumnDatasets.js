@@ -6,15 +6,46 @@ import {
   Tr,
   Th,
   Td,
-  HStack,
   Tooltip,
+  HStack,
+  Stack,
   Box,
-  Center
-} from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+  Center,
+  Text,
+  Input,
+  InputGroup,
+  InputRightElement,
+  InputLeftAddon,
+  Tag,
+  TagLabel,
+  TagCloseButton,
+  Select
+} from '@chakra-ui/react';
+import { useState, useEffect } from 'react';
+import FuzzySearch from 'fuzzy-search';
 import { formatJson, getTemporalCoverage } from '../../utils';
-import InfoIcon from '../../public/img/icons/infoIcon'
-import RedirectIcon from '../../public/img/icons/redirectIcon'
+import InfoIcon from '../../public/img/icons/infoIcon';
+import RedirectIcon from '../../public/img/icons/redirectIcon';
+import FilterIcon from '../../public/img/icons/filterIcon';
+import SearchIcon from '../../public/img/icons/searchIcon';
+import CrossIcon from '../../public/img/icons/crossIcon';
+
+function translate(field, translation) {
+  if(typeof field === "boolean") return field === true ? "Sim" : "Não"
+
+  if(typeof field === "object") {
+    if(!field) return "Não listado"
+    
+    if(field.length === 0) {
+      return "Não listado"
+    } else {
+      const newJson = JSON.stringify(field)
+      return formatJson(newJson, true)
+    }
+  }
+
+  return translation[field] || field
+}
 
 function TableDatasets({
   headers,
@@ -94,22 +125,7 @@ function TableDatasets({
     
   },[values, headers])
 
-  function translate(field, translation) {
-    if(typeof field === "boolean") return field === true ? "Sim" : "Não"
-
-    if(typeof field === "object") {
-      if(!field) return "Não listado"
-      
-      if(field.length === 0) {
-        return "Não listado"
-      } else {
-        const newJson = JSON.stringify(field)
-        return formatJson(newJson, true)
-      }
-    }
-
-    return translation[field] || field
-  }
+  
 
   const empty = () => {
     return (
@@ -183,7 +199,7 @@ function TableDatasets({
                 zIndex={1}
               >
                 {tooltip ?
-                  <Box display="flex" gridGap="8px" cursor="pointer">
+                  <Box display="flex" gridGap="8px">
                     {translations ? translate(elm, translations) : elm}
                     <Tooltip
                       hasArrow
@@ -197,7 +213,7 @@ function TableDatasets({
                       borderRadius="6px"
                     >
                       <Center>
-                        <InfoIcon fill="#A3A3A3" tip/>
+                        <InfoIcon cursor="pointer" fill="#A3A3A3" tip/>
                       </Center>
                     </Tooltip>
                   </Box>
@@ -245,17 +261,187 @@ export default function ColumnsDatasets({
   tooltip,
   containerStyle,
 }) {
+  const [filter, setFilter] = useState()
+  const [headerSelection, setHeaderSelection] = useState("")
+  const [defaultValues, setDefaultValue] = useState([])
+  const [columnValues, setColumnValues] = useState([])
+  const [tagFilter, setTagFilter] = useState([])
+
+  useEffect(() => {
+    setDefaultValue(values)
+    setColumnValues(values)
+  },[values]) 
+
+  const searcher = new FuzzySearch(
+    tagFilter.length > 0 ? columnValues : defaultValues,
+    headerSelection ? [headerSelection] : headers, {
+    caseSensitive: true
+  })
+  
+  async function checkForEnter(e) {
+    if (e.key === "Enter") {
+      appliedFilter()
+    }
+  }
+
+  const appliedFilter = () => {
+    const result = searcher.search(filter)
+    if(headerSelection) {
+      const indexTag= tagFilter.findIndex((res) => res.header === headerSelection)
+      if(indexTag > -1) {
+        removeTagFilter(tagFilter[indexTag], true)
+      } else {
+        setTagFilter(tagFilter.concat({ header: headerSelection, search: filter }))
+        setColumnValues(result)
+        setFilter("")
+        setHeaderSelection("")
+      }
+    } else {
+      setTagFilter(tagFilter.concat({ header: "", search: filter }))
+      setColumnValues(result)
+      setFilter("")
+      setHeaderSelection("")
+    }
+  }
+  
+  const removeTagFilter = (tag, overwrite) => {
+    let newColumnsValues = []
+    const remainingTags = tagFilter.filter(function(elm) {
+      if(tag.search && elm.header === tag.header) return elm.search != tag.search
+      return elm.header != tag.header
+    })
+    if(overwrite) remainingTags.push({ header: headerSelection, search: filter })
+    if(remainingTags.length > 0) {
+      remainingTags.map((elm, i) => {
+        const searcherRemainingTags = new FuzzySearch( 
+          i === 0 ? defaultValues : newColumnsValues, elm.header ? [elm.header] : headers, {
+          caseSensitive: true
+        })
+        const result = searcherRemainingTags.search(elm.search)
+        return newColumnsValues = result
+      })
+      setColumnValues(newColumnsValues)
+    } else {
+      setColumnValues(defaultValues)
+    }
+    setFilter("")
+    setHeaderSelection("")
+    setTagFilter(remainingTags)
+  }
 
   return (
-    <TableDatasets
-      headers={headers}
-      values={values}
-      translations={translations}
-      availableOptionsTranslations={availableOptionsTranslations}
-      translationsOptions={translationsOptions}
-      parentTemporalCoverage={parentTemporalCoverage}
-      tooltip={tooltip}
-      containerStyle={containerStyle}
-    />
+    <Stack width="100%">
+      <HStack spacing={2} alignItems="center">
+        <FilterIcon paddingLeft="24px" fill="#252A32" widthIcon="20px" heightIcon="20px"/>
+        <Text color="#252A32" fontSize="16px" fontWeight="400" fontFamily="ubuntu">
+          Filtro
+        </Text>
+        <Select
+          marginLeft="24px !important"
+          variant="unstyled"
+          width="100%"
+          height="100%"
+          maxWidth="140px"
+          borderRadius="0"
+          fontFamily="ubuntu"
+          fontSize="16px"
+          color={headerSelection ? "#2B8C4D" : "#252A32"}
+          placeholder="Por..."
+          value={headerSelection}
+          onChange={(event) => setHeaderSelection(event.target.value) }
+        >
+          {headers.map((option) =>
+            <option value={option}>{translate(option, translations)}</option>
+          )}
+        </Select>
+
+        <InputGroup
+          border="1px solid #DEDFE0 !important"
+          borderRadius="20px"
+        >
+          {tagFilter.length > 0 && (
+            <InputLeftAddon
+              border="none"
+              backgroundColor="transparent"
+              children={
+                <Box display="flex" flexDirection="row" gridGap="16px" >
+                  {tagFilter.map((elm) => (
+                    <Box display="flex" gridGap="8px" alignItems="center" >
+                      <Text fontWeight="300" fontSize="14px" fontFamily="lato">{translate(elm.header, translations)}</Text>
+                      <Tag
+                        whiteSpace="nowrap"
+                        backgroundColor="#2B8C4D"
+                        color="white"
+                        borderRadius="8px"
+                        padding="5px 8px"
+                        cursor="pointer"
+                        fontSize="12px"
+                        fontFamily="ubuntu"
+                        fontWeight="700"
+                      >
+                        <TagLabel>{elm.search}</TagLabel>
+                        <TagCloseButton onClick={() => removeTagFilter(elm, null)}/>
+                      </Tag>
+                    </Box>
+                  ))}
+                </Box>
+              }
+            />
+          )}
+
+          <Input
+            value={filter}
+            onKeyDown={checkForEnter}
+            onChange={(e) => setFilter(e.target.value)}
+            variant="outline"
+            letterSpacing="0.5px"
+            fontWeight="300"
+            border="none"
+            borderRadius="20px"
+            fontFamily="lato"
+            fontSize="16px"
+            color="#252A32"
+            width="100%"
+            height="40px"
+            placeholder="Insira o nome ou o valor da propriedade"
+          />
+          <InputRightElement children={
+            tagFilter.length < 1 
+            ?
+              <SearchIcon
+                cursor="pointer"
+                fill="#D0D0D0"
+                marginRight="6px"
+                onClick={() => appliedFilter()}
+              />
+            :
+              <CrossIcon
+                cursor="pointer"
+                fill="#D0D0D0"
+                marginRight="6px"
+                widthIcon="20px"
+                heightIcon="20px"
+                onClick={() => {
+                  setTagFilter([])
+                  setHeaderSelection("")
+                  setColumnValues(defaultValues)
+                  setFilter("")
+                }}
+              />
+          }/>
+        </InputGroup>
+      </HStack>
+
+      <TableDatasets
+        headers={headers}
+        values={columnValues}
+        translations={translations}
+        availableOptionsTranslations={availableOptionsTranslations}
+        translationsOptions={translationsOptions}
+        parentTemporalCoverage={parentTemporalCoverage}
+        tooltip={tooltip}
+        containerStyle={containerStyle}
+      />
+    </Stack>
   )
 }

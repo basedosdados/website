@@ -2,7 +2,7 @@ import { Box, Heading } from "@chakra-ui/react";
 
 export function Tag({
   children,
-  fontWeight,
+  fontWeight = "400",
   hover = true,
   fontSize = "12px",
   ...style
@@ -16,7 +16,6 @@ export function Tag({
       {...style}
     >
       <Heading
-        fontWeight="400"
         fontSize={fontSize}
         fontFamily="Ubuntu"
         letterSpacing="0.5px"
