@@ -378,7 +378,7 @@ export default function ColumnsDatasets({
                 border="none"
                 backgroundColor="transparent"
                 children={
-                  <Box display="flex" flexDirection="row" gridGap="16px" >
+                  <Box display="flex" flexDirection="row" gridGap="16px" maxWidth={isMobileMode ? "150px" : "400px"} overflowX="auto">
                     {tagFilter.map((elm) => (
                       <Box display="flex" gridGap={elm.header && "8px"} alignItems="center" >
                         <Text fontWeight="300" fontSize="14px" fontFamily="lato" letterSpacing="0.5px">{translate(elm.header, translations)}</Text>
@@ -417,6 +417,7 @@ export default function ColumnsDatasets({
               fontSize="16px"
               color="#252A32"
               width="100%"
+              minWidth="200px"
               height="40px"
               placeholder="Insira o nome ou o valor da propriedade"
             />
