@@ -20,7 +20,7 @@ import {
   TagLabel,
   TagCloseButton,
   Select,
-  Divider
+  Badge
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import FuzzySearch from 'fuzzy-search';
@@ -340,23 +340,25 @@ export default function ColumnsDatasets({
 
   return (
     <Stack width="100%">
-      <Divider borderColor="#DADADA"/>
-      <HStack flexDirection={isMobileMode ? "column" : "row"}>
-        <HStack spacing={2} flexDirection="row" marginBottom={isMobileMode && "8px"}>
-          <FilterIcon fill="#707783" widthIcon="20px" heightIcon="20px"/>
-          <Text color="#707783" fontSize="16px" fontWeight="400" fontFamily="ubuntu" letterSpacing="0.5px">
+      <HStack position="relative" flexDirection={isMobileMode ? "column" : "row"}>
+        <Badge position="absolute" top="-13px"  variant="solid" backgroundColor="#7EC876">NOVO</Badge>
+        <HStack spacing={2} flexDirection="row" marginBottom={isMobileMode && "8px"} marginLeft="0 !important">
+          <FilterIcon fill="#575757" widthIcon="20px" heightIcon="20px" />
+          <Text color="#575757" fontSize="16px" fontWeight="400" fontFamily="ubuntu" letterSpacing="0.2px">
             Filtrar
           </Text>
           <Select
             marginLeft="24px !important"
             variant="unstyled"
-            width="100%"
+            width="max-content"
+            maxWidth="200px"
             height="100%"
             borderRadius="0"
             fontFamily="ubuntu"
             fontSize="16px"
-            color={headerSelection ? "#2B8C4D" : "#707783"}
-            placeholder="Por..."
+            letterSpacing="0.2px"
+            color={headerSelection ? "#2B8C4D" : "#575757"}
+            placeholder="Todas as propriedades"
             value={headerSelection}
             onChange={(event) => setHeaderSelection(event.target.value) }
           >
@@ -378,7 +380,7 @@ export default function ColumnsDatasets({
                 border="none"
                 backgroundColor="transparent"
                 children={
-                  <Box display="flex" flexDirection="row" gridGap="16px" maxWidth={isMobileMode ? "150px" : "400px"} overflowX="auto">
+                  <Box display="flex" flexDirection="row" gridGap="16px" maxWidth={isMobileMode ? "150px" : "350px"} overflowX="auto">
                     {tagFilter.map((elm) => (
                       <Box display="flex" gridGap={elm.header && "8px"} alignItems="center" >
                         <Text fontWeight="300" fontSize="14px" fontFamily="lato" letterSpacing="0.5px">{translate(elm.header, translations)}</Text>
@@ -420,6 +422,7 @@ export default function ColumnsDatasets({
               minWidth="200px"
               height="40px"
               placeholder="Insira o nome ou o valor da propriedade"
+              _placeholder={{color:"#6F6F6F"}}
             />
             <InputRightElement children={
               tagFilter.length < 1 

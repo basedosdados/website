@@ -5,7 +5,7 @@ import {
 import { useState, useEffect } from "react";
 import LinkDash from "./LinkDash";
 
-export default function ReadMore({ children, textSize = 240 ,isMobileMod}) {
+export default function ReadMore({ children, textSize = 240 ,isMobileMod, ...props}) {
   const [isReadMore, setIsReadMore] = useState(true)
   const text = children
 
@@ -18,7 +18,7 @@ export default function ReadMore({ children, textSize = 240 ,isMobileMod}) {
   }
 
   return (
-    <VStack width="100%" alignItems="flex-start">
+    <VStack width="100%" alignItems="flex-start" {...props}>
       <Text
         fontFamily="Lato"
         fontSize={isMobileMod ? "14px" : "16px"}
