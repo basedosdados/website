@@ -556,7 +556,7 @@ export default function DatasetPage({
               {dataset.title || "Conjunto sem nome"}
             </BigTitle>
 
-            <ReadMore isMobileMod={isMobileMod}>
+            <ReadMore minHeight="70px" isMobileMod={isMobileMod}>
               {dataset.notes || "Nenhuma descrição fornecida."}
             </ReadMore>
 
