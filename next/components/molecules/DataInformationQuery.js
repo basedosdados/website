@@ -107,7 +107,7 @@ export function TextPix ({ title, text }) {
 }
 
 export default function DataInformationQuery ({ resource }) {
-  const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}.zip`
+  const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}/data000000000000.csv.gz`
   const queryName = `${resource.dataset_id}.${resource.name}`
   const { hasCopied, onCopy } = useClipboard("42494318000116")
   const [tabIndex, setTabIndex] = useState(0)
@@ -123,7 +123,7 @@ export default function DataInformationQuery ({ resource }) {
     if (window) window.Prism.highlightAll()
 
     if(resource.number_rows) {
-      resource.number_rows > 200000  ? setDownloadNotAllowed(true) : setDownloadNotAllowed(false)
+      resource.number_rows > 200000 ? setDownloadNotAllowed(true) : setDownloadNotAllowed(false)
     }
   }, [resource])
 
