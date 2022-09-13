@@ -19,10 +19,12 @@ import {
   Tag,
   TagLabel,
   TagCloseButton,
-  Select
+  Select,
+  Divider
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import FuzzySearch from 'fuzzy-search';
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { formatJson, getTemporalCoverage } from '../../utils';
 import InfoIcon from '../../public/img/icons/infoIcon';
 import RedirectIcon from '../../public/img/icons/redirectIcon';
@@ -261,6 +263,13 @@ export default function ColumnsDatasets({
   tooltip,
   containerStyle,
 }) {
+  const isMobile = useCheckMobile();
+  const [isMobileMode, setIsMobileMode] = useState(false)
+
+  useEffect(() => {
+    setIsMobileMode(isMobile)
+  },[isMobile])
+
   const [filter, setFilter] = useState()
   const [headerSelection, setHeaderSelection] = useState("")
   const [defaultValues, setDefaultValue] = useState([])
@@ -331,105 +340,112 @@ export default function ColumnsDatasets({
 
   return (
     <Stack width="100%">
-      <HStack spacing={2} alignItems="center">
-        <FilterIcon paddingLeft="24px" fill="#252A32" widthIcon="20px" heightIcon="20px"/>
-        <Text color="#252A32" fontSize="16px" fontWeight="400" fontFamily="ubuntu">
-          Filtro
-        </Text>
-        <Select
-          marginLeft="24px !important"
-          variant="unstyled"
-          width="100%"
-          height="100%"
-          maxWidth="140px"
-          borderRadius="0"
-          fontFamily="ubuntu"
-          fontSize="16px"
-          color={headerSelection ? "#2B8C4D" : "#252A32"}
-          placeholder="Por..."
-          value={headerSelection}
-          onChange={(event) => setHeaderSelection(event.target.value) }
-        >
-          {headers.map((option) =>
-            <option value={option}>{translate(option, translations)}</option>
-          )}
-        </Select>
-
-        <InputGroup
-          border="1px solid #DEDFE0 !important"
-          borderRadius="20px"
-        >
-          {tagFilter.length > 0 && (
-            <InputLeftAddon
-              border="none"
-              backgroundColor="transparent"
-              children={
-                <Box display="flex" flexDirection="row" gridGap="16px" >
-                  {tagFilter.map((elm) => (
-                    <Box display="flex" gridGap="8px" alignItems="center" >
-                      <Text fontWeight="300" fontSize="14px" fontFamily="lato">{translate(elm.header, translations)}</Text>
-                      <Tag
-                        whiteSpace="nowrap"
-                        backgroundColor="#2B8C4D"
-                        color="white"
-                        borderRadius="8px"
-                        padding="5px 8px"
-                        cursor="pointer"
-                        fontSize="12px"
-                        fontFamily="ubuntu"
-                        fontWeight="700"
-                      >
-                        <TagLabel>{elm.search}</TagLabel>
-                        <TagCloseButton onClick={() => removeTagFilter(elm, null)}/>
-                      </Tag>
-                    </Box>
-                  ))}
-                </Box>
-              }
-            />
-          )}
-
-          <Input
-            value={filter}
-            onKeyDown={checkForEnter}
-            onChange={(e) => setFilter(e.target.value)}
-            variant="outline"
-            letterSpacing="0.5px"
-            fontWeight="300"
-            border="none"
-            borderRadius="20px"
-            fontFamily="lato"
-            fontSize="16px"
-            color="#252A32"
+      <Divider borderColor="#DADADA"/>
+      <HStack flexDirection={isMobileMode ? "column" : "row"}>
+        <HStack spacing={2} flexDirection="row" marginBottom={isMobileMode && "8px"}>
+          <FilterIcon fill="#707783" widthIcon="20px" heightIcon="20px"/>
+          <Text color="#707783" fontSize="16px" fontWeight="400" fontFamily="ubuntu" letterSpacing="0.5px">
+            Filtrar
+          </Text>
+          <Select
+            marginLeft="24px !important"
+            variant="unstyled"
             width="100%"
-            height="40px"
-            placeholder="Insira o nome ou o valor da propriedade"
-          />
-          <InputRightElement children={
-            tagFilter.length < 1 
-            ?
-              <SearchIcon
-                cursor="pointer"
-                fill="#D0D0D0"
-                marginRight="6px"
-                onClick={() => appliedFilter()}
+            height="100%"
+            borderRadius="0"
+            fontFamily="ubuntu"
+            fontSize="16px"
+            color={headerSelection ? "#2B8C4D" : "#707783"}
+            placeholder="Por..."
+            value={headerSelection}
+            onChange={(event) => setHeaderSelection(event.target.value) }
+          >
+            {headers.map((option) =>
+              <option value={option}>{translate(option, translations)}</option>
+            )}
+          </Select>
+        </HStack>
+
+        <Stack width="100%" margin="0 !important">
+          <InputGroup
+            border="1px solid #DEDFE0 !important"
+            padding="1px"
+            _hover={{border: "2px solid #42B0FF !important", padding: "0"}}
+            borderRadius="16px"
+          >
+            {tagFilter.length > 0 && (
+              <InputLeftAddon
+                border="none"
+                backgroundColor="transparent"
+                children={
+                  <Box display="flex" flexDirection="row" gridGap="16px" >
+                    {tagFilter.map((elm) => (
+                      <Box display="flex" gridGap={elm.header && "8px"} alignItems="center" >
+                        <Text fontWeight="300" fontSize="14px" fontFamily="lato" letterSpacing="0.5px">{translate(elm.header, translations)}</Text>
+                        <Tag
+                          whiteSpace="nowrap"
+                          backgroundColor="#2B8C4D"
+                          color="white"
+                          borderRadius="8px"
+                          padding="2px 8px"
+                          letterSpacing="0.5px"
+                          cursor="pointer"
+                          fontSize="12px"
+                          fontFamily="ubuntu"
+                          fontWeight="700"
+                        >
+                          <TagLabel>{elm.search}</TagLabel>
+                          <TagCloseButton onClick={() => removeTagFilter(elm, null)}/>
+                        </Tag>
+                      </Box>
+                    ))}
+                  </Box>
+                }
               />
-            :
-              <CrossIcon
-                cursor="pointer"
-                fill="#D0D0D0"
-                marginRight="6px"
-                widthIcon="20px"
-                heightIcon="20px"
-                onClick={() => {
-                  setTagFilter([])
-                  setHeaderSelection("")
-                  setColumnValues(defaultValues)
-                  setFilter("")
-                }}
-              />
-          }/>
-        </InputGroup>
+            )}
+
+            <Input
+              value={filter}
+              onKeyDown={checkForEnter}
+              onChange={(e) => setFilter(e.target.value)}
+              variant="outline"
+              letterSpacing="0.5px"
+              fontWeight="300"
+              border="none"
+              borderRadius="16px"
+              fontFamily="lato"
+              fontSize="16px"
+              color="#252A32"
+              width="100%"
+              height="40px"
+              placeholder="Insira o nome ou o valor da propriedade"
+            />
+            <InputRightElement children={
+              tagFilter.length < 1 
+              ?
+                <SearchIcon
+                  cursor="pointer"
+                  fill="#D0D0D0"
+                  marginRight="6px"
+                  onClick={() => appliedFilter()}
+                />
+              :
+                <CrossIcon
+                  cursor="pointer"
+                  fill="#D0D0D0"
+                  marginRight="6px"
+                  widthIcon="20px"
+                  heightIcon="20px"
+                  onClick={() => {
+                    setTagFilter([])
+                    setHeaderSelection("")
+                    setColumnValues(defaultValues)
+                    setFilter("")
+                  }}
+                />
+            }/>
+          </InputGroup>
+        </Stack>
       </HStack>
 
       <TableDatasets
