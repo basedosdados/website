@@ -1,21 +1,23 @@
-import { Tag } from "./Tag";
+import { Tag } from "@chakra-ui/react";
 
-export function ThemeTag({ name }) {
+export function ThemeTag({ name, ...style }) {
   return (
-    <a
-      href={`/dataset?tag=${name}`}
+    <Tag
+      position="relative"
+      fontSize="10px"
+      whiteSpace="nowrap"
+      borderRadius="8px"
+      padding="2px 8px"
+      color="#252A32"
+      backgroundColor="#DEDFE0"
+      cursor="pointer"
+      letterSpacing="0.2px"
+      fontWeight="300"
+      onClick={() => window.open(`/dataset?tag=${name}`, "_blank")}
+      fontFamily="ubuntu"
+      {...style}
     >
-      <Tag
-        position="relative"
-        fontSize="10px"
-        whiteSpace="nowrap"
-        borderRadius="7px"
-        padding="5px 6px"
-        color="#252A32"
-        backgroundColor="#DEDFE0"
-      >
-        {name}
-      </Tag>
-    </a>
+      {name}
+    </Tag>
   );
 }
