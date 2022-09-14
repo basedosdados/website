@@ -16,9 +16,6 @@ import {
   InputGroup,
   InputRightElement,
   InputLeftAddon,
-  Tag,
-  TagLabel,
-  TagCloseButton,
   Select,
   Badge
 } from '@chakra-ui/react';
@@ -26,6 +23,7 @@ import { useState, useEffect } from 'react';
 import FuzzySearch from 'fuzzy-search';
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { formatJson, getTemporalCoverage } from '../../utils';
+import Tag from "../atoms/Tag"
 import InfoIcon from '../../public/img/icons/infoIcon';
 import RedirectIcon from '../../public/img/icons/redirectIcon';
 import FilterIcon from '../../public/img/icons/filterIcon';
@@ -385,20 +383,10 @@ export default function ColumnsDatasets({
                       <Box display="flex" gridGap={elm.header && "8px"} alignItems="center" >
                         <Text fontWeight="300" fontSize="14px" fontFamily="lato" letterSpacing="0.5px">{translate(elm.header, translations)}</Text>
                         <Tag
-                          whiteSpace="nowrap"
-                          backgroundColor="#2B8C4D"
-                          color="white"
-                          borderRadius="8px"
-                          padding="2px 8px"
-                          letterSpacing="0.5px"
-                          cursor="pointer"
-                          fontSize="12px"
-                          fontFamily="ubuntu"
                           fontWeight="700"
-                        >
-                          <TagLabel>{elm.search}</TagLabel>
-                          <TagCloseButton onClick={() => removeTagFilter(elm, null)}/>
-                        </Tag>
+                          text={elm.search}
+                          handleClick={() => removeTagFilter(elm, null)}
+                        />
                       </Box>
                     ))}
                   </Box>
