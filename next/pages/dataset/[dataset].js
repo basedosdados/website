@@ -27,7 +27,7 @@ import { isBdPlus, unionArrays, getTemporalCoverage } from "../../utils";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import Link from "../../components/atoms/Link";
 import { SimpleButton } from "../../components/atoms/SimpleButton";
-import { Markdown } from "../../components/atoms/Markdown";
+import ReadMore from "../../components/atoms/ReadMore";
 import {
   getAvailableOptionsTranslations,
   getTranslations,
@@ -49,6 +49,7 @@ import { BaseResourcePage } from "../../components/molecules/BaseResourcePage";
 import GreenTab from "../../components/atoms/GreenTab";
 import DataBaseIcon from "../../public/img/icons/databaseIcon";
 import DocIcon from "../../public/img/icons/docIcon";
+import CrossIcon from "../../public/img/icons/crossIcon";
 
 export async function getStaticProps(context) {
   const dataset = await showDataset(context.params.dataset);
@@ -97,32 +98,61 @@ export async function getStaticPaths(context) {
 function AdminButtons({ resource, setResource }) {
   const userData = useContext(UserContext);
 
-  if (!userData?.is_admin) return <></>;
+  const isActive = (type) => {
+    return resource?.resource_type === type
+  }
+
+  if (!userData?.is_admin) return null;
 
   return (
-    <>
+    <Stack paddingTop="16px" width="100%">
       <SimpleButton
-        isActive={resource?.resource_type === "create_bdm_table"}
+        isActive={isActive("create_bdm_table")}
         onClick={() => setResource({ resource_type: "create_bdm_table" })}
+        margin="0 0 16px !important"
+        justifyContent="space-between"
+        paddingRight="15%"
       >
         Criar tabela tratada
+        <CrossIcon
+          fill="currentColor"
+          marginLeft="4px"
+          rotation="rotate(45deg)"
+        />
       </SimpleButton>
       <SimpleButton
-        isActive={resource?.resource_type === "create_information_request"}
+        isActive={isActive("create_external_link")}
+        onClick={() => setResource({ resource_type: "create_external_link" })}
+        margin="0 0 16px !important"
+        justifyContent="space-between"
+        paddingRight="15%"
+      >
+        Criar fonte original
+        <CrossIcon
+          fill="currentColor"
+          marginLeft="4px"
+          rotation="rotate(45deg)"
+        />
+      </SimpleButton>
+      <SimpleButton
+        isActive={isActive("create_information_request")}
         onClick={() =>
           setResource({ resource_type: "create_information_request" })
         }
+        borderBottom="1px solid #DEDFE0"
+        padding="0 15% 24px 0"
+        margin="0 !important"
+        justifyContent="space-between"
       >
         Criar pedido LAI
+        <CrossIcon
+          fill="currentColor"
+          marginLeft="4px"
+          rotation="rotate(45deg)"
+        />
       </SimpleButton>
-      <SimpleButton
-        isActive={resource?.resource_type === "create_external_link"}
-        onClick={() => setResource({ resource_type: "create_external_link" })}
-      >
-        Criar fonte original
-      </SimpleButton>
-    </>
-  );
+    </Stack>
+  )
 }
 
 function ResourcesPage({
@@ -525,13 +555,10 @@ export default function DatasetPage({
             >
               {dataset.title || "Conjunto sem nome"}
             </BigTitle>
-            <Markdown
-              width={{ base: "90vw", lg: "60vw" }}
-              maxWidth="970px"
-              limit={true}
-            >
+
+            <ReadMore minHeight="70px" isMobileMod={isMobileMod}>
               {dataset.notes || "Nenhuma descrição fornecida."}
-            </Markdown>
+            </ReadMore>
 
             <VStack align="flex-start" spacing={5} paddingTop="20px">
               <VStack align="flex-start">

@@ -1,29 +1,27 @@
-import { Box, Heading } from "@chakra-ui/react";
+import { Tag, TagLabel, TagCloseButton } from "@chakra-ui/react";
 
-export function Tag({
-  children,
-  fontWeight,
-  hover = true,
+export default function TagBase({
+  text,
+  handleClick,
+  fontWeight = "400",
   fontSize = "12px",
   ...style
 }) {
   return (
-    <Box
-      padding="6px"
-      backgroundColor="#F6F6F6"
-      borderRadius="20px"
-      textAlign="center"
+    <Tag
+      backgroundColor="#2B8C4D"
+      color="white"
+      borderRadius="8px"
+      padding="2px 8px"
+      letterSpacing="0.5px"
+      cursor="pointer"
+      fontSize={fontSize}
+      fontFamily="ubuntu"
+      fontWeight={fontWeight}
       {...style}
     >
-      <Heading
-        fontWeight="400"
-        fontSize={fontSize}
-        fontFamily="Ubuntu"
-        letterSpacing="0.5px"
-        fontWeight={fontWeight}
-      >
-        {children}
-      </Heading>
-    </Box>
-  );
+      <TagLabel>{text}</TagLabel>
+      <TagCloseButton onClick={() => handleClick()}/>
+    </Tag>
+  )
 }

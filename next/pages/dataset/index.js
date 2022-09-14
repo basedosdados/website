@@ -34,7 +34,7 @@ import {
 import { withPages } from "../../hooks/pages.hook";
 import { MainPageTemplate } from "../../components/templates/main";
 import { addParametersToCurrentURL, isBdPlus, unionArrays } from "../../utils";
-import { Tag } from "../../components/atoms/Tag";
+import Tag from "../../components/atoms/Tag";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { SchemaForm } from "../../components/molecules/SchemaForm";
@@ -108,7 +108,7 @@ function FilterTags({
   }
 
   return (
-    <>
+    <HStack spacing={3} alignItems="center" flexDirection="row">
       <Text
         fontFamily="Lato"
         letterSpacing="0.5px"
@@ -121,24 +121,16 @@ function FilterTags({
       <Stack direction={{ base: "column", lg: "row" }}>
         {values.map((v) => (
           <Tag
-            whiteSpace="nowrap"
-            onClick={() => {
+            handleClick={() => {
               let newArr = [...values];
               newArr.splice(values.indexOf(v), 1);
               setParamFilters({ ...paramFilters, [fieldName]: newArr });
             }}
-            hover={false}
-            backgroundColor="#2B8C4D"
-            color="white"
-            borderRadius="8px"
-            padding="5px 8px"
-            cursor="pointer"
-          >
-            <b>{translations ? translate(v, translations) : v} x</b>
-          </Tag>
+            text={translations ? translate(v, translations) : v}
+          />
         ))}
       </Stack>
-    </>
+    </HStack>
   );
 }
 
@@ -590,18 +582,6 @@ export default function SearchPage({
           />
           <CheckboxFilterAccordion
             canSearch={true}
-            isActive={(paramFilters.raw_quality_tier || []).length > 0}
-            choices={rawQualityTiers}
-            values={paramFilters.raw_quality_tier}
-            valueField="name"
-            displayField="displayName"
-            fieldName="Qualidade da fonte original"
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, raw_quality_tier: values })
-            }
-          />
-          <CheckboxFilterAccordion
-            canSearch={true}
             isActive={(paramFilters.update_frequency || []).length > 0}
             choices={updateFrequencies}
             values={paramFilters.update_frequency}
@@ -610,6 +590,18 @@ export default function SearchPage({
             fieldName="Frequência de atualização"
             onChange={(values) =>
               setParamFilters({ ...paramFilters, update_frequency: values })
+            }
+          />
+          <CheckboxFilterAccordion
+            canSearch={true}
+            isActive={(paramFilters.raw_quality_tier || []).length > 0}
+            choices={rawQualityTiers}
+            values={paramFilters.raw_quality_tier}
+            valueField="name"
+            displayField="displayName"
+            fieldName="Qualidade da fonte original"
+            onChange={(values) =>
+              setParamFilters({ ...paramFilters, raw_quality_tier: values })
             }
           />
         </VStack>

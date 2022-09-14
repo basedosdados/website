@@ -41,6 +41,7 @@ export function BaseFilterAccordion({
                 _hover={isHovering ? { cursor: "pointer", opacity: "0.6" } : "none"}
                 padding="16px 16px 0 0"
                 marginBottom="8px"
+                cursor="auto"
               >
                 <HStack
                   spacing={2}

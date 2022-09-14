@@ -131,20 +131,6 @@ body {
   color: #dedfe0;
 }
 
-.markdown {
-  word-break: break-word;
-}
-
-.markdown a {
-  text-decoration: underline;
-  color: #3aa1eb;
-}
-
-.markdown ul {
-  margin-top: 10px;
-  margin-left: 30px;
-}
-
 .swiper {
   min-width: 100%;
   padding: 0 32px !important;

@@ -6,15 +6,46 @@ import {
   Tr,
   Th,
   Td,
-  HStack,
   Tooltip,
+  HStack,
+  Stack,
   Box,
-  Center
-} from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+  Center,
+  Text,
+  Input,
+  InputGroup,
+  InputRightElement,
+  InputLeftAddon,
+  Select,
+  Badge
+} from '@chakra-ui/react';
+import { useState, useEffect } from 'react';
+import FuzzySearch from 'fuzzy-search';
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { formatJson, getTemporalCoverage } from '../../utils';
-import InfoIcon from '../../public/img/icons/infoIcon'
-import RedirectIcon from '../../public/img/icons/redirectIcon'
+import Tag from "../atoms/Tag"
+import InfoIcon from '../../public/img/icons/infoIcon';
+import RedirectIcon from '../../public/img/icons/redirectIcon';
+import FilterIcon from '../../public/img/icons/filterIcon';
+import SearchIcon from '../../public/img/icons/searchIcon';
+import CrossIcon from '../../public/img/icons/crossIcon';
+
+function translate(field, translation) {
+  if(typeof field === "boolean") return field === true ? "Sim" : "Não"
+
+  if(typeof field === "object") {
+    if(!field) return "Não listado"
+    
+    if(field.length === 0) {
+      return "Não listado"
+    } else {
+      const newJson = JSON.stringify(field)
+      return formatJson(newJson, true)
+    }
+  }
+
+  return translation[field] || field
+}
 
 function TableDatasets({
   headers,
@@ -94,22 +125,7 @@ function TableDatasets({
     
   },[values, headers])
 
-  function translate(field, translation) {
-    if(typeof field === "boolean") return field === true ? "Sim" : "Não"
-
-    if(typeof field === "object") {
-      if(!field) return "Não listado"
-      
-      if(field.length === 0) {
-        return "Não listado"
-      } else {
-        const newJson = JSON.stringify(field)
-        return formatJson(newJson, true)
-      }
-    }
-
-    return translation[field] || field
-  }
+  
 
   const empty = () => {
     return (
@@ -183,7 +199,7 @@ function TableDatasets({
                 zIndex={1}
               >
                 {tooltip ?
-                  <Box display="flex" gridGap="8px" cursor="pointer">
+                  <Box display="flex" gridGap="8px">
                     {translations ? translate(elm, translations) : elm}
                     <Tooltip
                       hasArrow
@@ -197,7 +213,7 @@ function TableDatasets({
                       borderRadius="6px"
                     >
                       <Center>
-                        <InfoIcon fill="#A3A3A3" tip/>
+                        <InfoIcon cursor="pointer" fill="#A3A3A3" tip/>
                       </Center>
                     </Tooltip>
                   </Box>
@@ -245,17 +261,195 @@ export default function ColumnsDatasets({
   tooltip,
   containerStyle,
 }) {
+  const isMobile = useCheckMobile();
+  const [isMobileMode, setIsMobileMode] = useState(false)
+
+  useEffect(() => {
+    setIsMobileMode(isMobile)
+  },[isMobile])
+
+  const [filter, setFilter] = useState()
+  const [headerSelection, setHeaderSelection] = useState("")
+  const [defaultValues, setDefaultValue] = useState([])
+  const [columnValues, setColumnValues] = useState([])
+  const [tagFilter, setTagFilter] = useState([])
+
+  useEffect(() => {
+    setDefaultValue(values)
+    setColumnValues(values)
+  },[values]) 
+
+  const searcher = new FuzzySearch(
+    tagFilter.length > 0 ? columnValues : defaultValues,
+    headerSelection ? [headerSelection] : headers, {
+    caseSensitive: true
+  })
+  
+  async function checkForEnter(e) {
+    if (e.key === "Enter") {
+      appliedFilter()
+    }
+  }
+
+  const appliedFilter = () => {
+    const result = searcher.search(filter)
+    if(headerSelection) {
+      const indexTag= tagFilter.findIndex((res) => res.header === headerSelection)
+      if(indexTag > -1) {
+        removeTagFilter(tagFilter[indexTag], true)
+      } else {
+        setTagFilter(tagFilter.concat({ header: headerSelection, search: filter }))
+        setColumnValues(result)
+        setFilter("")
+        setHeaderSelection("")
+      }
+    } else {
+      setTagFilter(tagFilter.concat({ header: "", search: filter }))
+      setColumnValues(result)
+      setFilter("")
+      setHeaderSelection("")
+    }
+  }
+  
+  const removeTagFilter = (tag, overwrite) => {
+    let newColumnsValues = []
+    const remainingTags = tagFilter.filter(function(elm) {
+      if(tag.search && elm.header === tag.header) return elm.search != tag.search
+      return elm.header != tag.header
+    })
+    if(overwrite) remainingTags.push({ header: headerSelection, search: filter })
+    if(remainingTags.length > 0) {
+      remainingTags.map((elm, i) => {
+        const searcherRemainingTags = new FuzzySearch( 
+          i === 0 ? defaultValues : newColumnsValues, elm.header ? [elm.header] : headers, {
+          caseSensitive: true
+        })
+        const result = searcherRemainingTags.search(elm.search)
+        return newColumnsValues = result
+      })
+      setColumnValues(newColumnsValues)
+    } else {
+      setColumnValues(defaultValues)
+    }
+    setFilter("")
+    setHeaderSelection("")
+    setTagFilter(remainingTags)
+  }
 
   return (
-    <TableDatasets
-      headers={headers}
-      values={values}
-      translations={translations}
-      availableOptionsTranslations={availableOptionsTranslations}
-      translationsOptions={translationsOptions}
-      parentTemporalCoverage={parentTemporalCoverage}
-      tooltip={tooltip}
-      containerStyle={containerStyle}
-    />
+    <Stack width="100%">
+      <HStack position="relative" flexDirection={isMobileMode ? "column" : "row"}>
+        <Badge position="absolute" top="-13px"  variant="solid" backgroundColor="#7EC876">NOVO</Badge>
+        <HStack spacing={2} flexDirection="row" marginBottom={isMobileMode && "8px"} marginLeft="0 !important">
+          <FilterIcon fill="#575757" widthIcon="20px" heightIcon="20px" />
+          <Text color="#575757" fontSize="16px" fontWeight="400" fontFamily="ubuntu" letterSpacing="0.2px">
+            Filtrar
+          </Text>
+          <Select
+            marginLeft="24px !important"
+            variant="unstyled"
+            width="max-content"
+            maxWidth="200px"
+            height="100%"
+            borderRadius="0"
+            fontFamily="ubuntu"
+            fontSize="16px"
+            letterSpacing="0.2px"
+            color={headerSelection ? "#2B8C4D" : "#575757"}
+            placeholder="Todas as propriedades"
+            value={headerSelection}
+            onChange={(event) => setHeaderSelection(event.target.value) }
+          >
+            {headers.map((option) =>
+              <option value={option}>{translate(option, translations)}</option>
+            )}
+          </Select>
+        </HStack>
+
+        <Stack width="100%" margin="0 !important">
+          <InputGroup
+            border="1px solid #DEDFE0 !important"
+            padding="1px"
+            _hover={{border: "2px solid #42B0FF !important", padding: "0"}}
+            borderRadius="16px"
+          >
+            {tagFilter.length > 0 && (
+              <InputLeftAddon
+                border="none"
+                backgroundColor="transparent"
+                children={
+                  <Box display="flex" flexDirection="row" gridGap="16px" maxWidth={isMobileMode ? "150px" : "350px"} overflowX="auto">
+                    {tagFilter.map((elm) => (
+                      <Box display="flex" gridGap={elm.header && "8px"} alignItems="center" >
+                        <Text fontWeight="300" fontSize="14px" fontFamily="lato" letterSpacing="0.5px">{translate(elm.header, translations)}</Text>
+                        <Tag
+                          fontWeight="700"
+                          text={elm.search}
+                          handleClick={() => removeTagFilter(elm, null)}
+                        />
+                      </Box>
+                    ))}
+                  </Box>
+                }
+              />
+            )}
+
+            <Input
+              value={filter}
+              onKeyDown={checkForEnter}
+              onChange={(e) => setFilter(e.target.value)}
+              variant="outline"
+              letterSpacing="0.5px"
+              fontWeight="300"
+              border="none"
+              borderRadius="16px"
+              fontFamily="lato"
+              fontSize="16px"
+              color="#252A32"
+              width="100%"
+              minWidth="200px"
+              height="40px"
+              placeholder="Insira o nome ou o valor da propriedade"
+              _placeholder={{color:"#6F6F6F"}}
+            />
+            <InputRightElement children={
+              tagFilter.length < 1 
+              ?
+                <SearchIcon
+                  cursor="pointer"
+                  fill="#D0D0D0"
+                  marginRight="6px"
+                  onClick={() => appliedFilter()}
+                />
+              :
+                <CrossIcon
+                  cursor="pointer"
+                  fill="#D0D0D0"
+                  marginRight="6px"
+                  widthIcon="20px"
+                  heightIcon="20px"
+                  onClick={() => {
+                    setTagFilter([])
+                    setHeaderSelection("")
+                    setColumnValues(defaultValues)
+                    setFilter("")
+                  }}
+                />
+            }/>
+          </InputGroup>
+        </Stack>
+      </HStack>
+
+      <TableDatasets
+        headers={headers}
+        values={columnValues}
+        translations={translations}
+        availableOptionsTranslations={availableOptionsTranslations}
+        translationsOptions={translationsOptions}
+        parentTemporalCoverage={parentTemporalCoverage}
+        tooltip={tooltip}
+        containerStyle={containerStyle}
+      />
+    </Stack>
   )
 }
