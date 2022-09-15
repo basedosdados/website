@@ -227,9 +227,32 @@ export default function SearchPage({
         optionsTranslations["Time Unit"][t] + ` (${data.update_frequencies[t]})`,
         value: data.update_frequencies[t],
       }))
-      .sort((a, b) => b.value - a.value)
-    : [];
+      .sort((a, b) => {
+        const valueUpdateFrequencies = (elm) => {{
+          const valueFrequencies = elm.name
+          if(valueFrequencies === "unique") return -16
+          if(valueFrequencies === "hour") return -15
+          if(valueFrequencies === "day") return -14
+          if(valueFrequencies === "week") return -13
+          if(valueFrequencies === "month") return -12
+          if(valueFrequencies === "quarter") return -11
+          if(valueFrequencies === "semester") return -10
+          if(valueFrequencies === "one_year") return -9
+          if(valueFrequencies === "two_years") return -8
+          if(valueFrequencies === "three_years") return -7
+          if(valueFrequencies === "four_years") return -6
+          if(valueFrequencies === "five_years") return -5
+          if(valueFrequencies === "ten_years") return -4
+          if(valueFrequencies === "recurring") return -3
+          if(valueFrequencies === "uncertain") return -2
+          if(valueFrequencies === "other") return -1
+          return 0
+        }}
 
+        return valueUpdateFrequencies(a) - valueUpdateFrequencies(b)
+      })
+    : [];
+console.log(updateFrequencies)
   const rawQualityTiers = data?.raw_quality_tiers
     ? Object.keys(data.raw_quality_tiers)
       .map((t) => ({
@@ -238,7 +261,17 @@ export default function SearchPage({
         optionsTranslations["Raw Quality Tier"][t] + ` (${data.raw_quality_tiers[t]})`,
         value: data.raw_quality_tiers[t],
       }))
-      .sort((a, b) => b.value - a.value)
+      .sort((a, b) => {
+        const valueQualityTiers = (elm) => {{
+          const qualityTiers = elm.name
+          if(qualityTiers === "low") return -3
+          if(qualityTiers === "medium") return -2
+          if(qualityTiers === "high") return -1
+          return 0
+        }}
+
+        return valueQualityTiers(a) - valueQualityTiers(b)
+      })
     : [];
 
   const spatialCoverages = {
