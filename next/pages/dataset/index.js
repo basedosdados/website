@@ -406,6 +406,7 @@ console.log(updateFrequencies)
         }}
         marginTop={isMobileMode && "70px"}
       />
+
       <Stack
         justifyContent="flex-start"
         alignItems="flex-start"
@@ -481,6 +482,7 @@ console.log(updateFrequencies)
               setParamFilters({ ...paramFilters, resource_type: values });
             }}
           />
+
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.group || []).length > 0}
@@ -493,6 +495,7 @@ console.log(updateFrequencies)
               setParamFilters({ ...paramFilters, group: values })
             }
           />
+
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.organization || []).length > 0}
@@ -505,6 +508,7 @@ console.log(updateFrequencies)
               setParamFilters({ ...paramFilters, organization: values })
             }
           />
+
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.tag || []).length > 0}
@@ -517,6 +521,7 @@ console.log(updateFrequencies)
               setParamFilters({ ...paramFilters, tag: values })
             }
           />
+
           <SimpleFilterAccordion
             fieldName="Cobertura espacial"
             isActive={(paramFilters.spatial_coverage || []).length > 0}
@@ -538,6 +543,7 @@ console.log(updateFrequencies)
                   setParamFilters({ ...paramFilters, spatial_coverage: values })
                 }
               />
+
               <CheckboxFilterAccordion
                 canSearch={true}
                 isActive={(paramFilters.spatial_coverage || []).length > 0}
@@ -550,6 +556,7 @@ console.log(updateFrequencies)
                   setParamFilters({ ...paramFilters, spatial_coverage: values })
                 }
               />
+
               <CheckboxFilterAccordion
                 canSearch={true}
                 isActive={(paramFilters.spatial_coverage || []).length > 0}
@@ -562,6 +569,7 @@ console.log(updateFrequencies)
                   setParamFilters({ ...paramFilters, spatial_coverage: values })
                 }
               />
+
               {/* <CheckboxFilterAccordion
                 canSearch={true}
                 isActive={(paramFilters.spatial_coverage || []).length > 0}
@@ -576,6 +584,7 @@ console.log(updateFrequencies)
               /> */}
             </Stack>
           </SimpleFilterAccordion>
+
           <RangeFilterAccordion
             isActive={(paramFilters.temporal_coverage || []).length > 0}
             fieldName="Cobertura temporal"
@@ -601,6 +610,7 @@ console.log(updateFrequencies)
               });
             }}
           />
+
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.entity || []).length > 0}
@@ -613,6 +623,7 @@ console.log(updateFrequencies)
               setParamFilters({ ...paramFilters, entity: values })
             }
           />
+
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.update_frequency || []).length > 0}
@@ -625,6 +636,7 @@ console.log(updateFrequencies)
               setParamFilters({ ...paramFilters, update_frequency: values })
             }
           />
+
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.raw_quality_tier || []).length > 0}
