@@ -373,6 +373,7 @@ export default function SearchPage({
         }}
         marginTop={isMobileMode && "70px"}
       />
+
       <Stack
         justifyContent="flex-start"
         alignItems="flex-start"
@@ -448,6 +449,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, resource_type: values });
             }}
           />
+
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.group || []).length > 0}
@@ -460,6 +462,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, group: values })
             }
           />
+
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.organization || []).length > 0}
@@ -472,6 +475,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, organization: values })
             }
           />
+
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.tag || []).length > 0}
@@ -484,6 +488,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, tag: values })
             }
           />
+
           <SimpleFilterAccordion
             fieldName="Cobertura espacial"
             isActive={(paramFilters.spatial_coverage || []).length > 0}
@@ -505,6 +510,7 @@ export default function SearchPage({
                   setParamFilters({ ...paramFilters, spatial_coverage: values })
                 }
               />
+
               <CheckboxFilterAccordion
                 canSearch={true}
                 isActive={(paramFilters.spatial_coverage || []).length > 0}
@@ -517,6 +523,7 @@ export default function SearchPage({
                   setParamFilters({ ...paramFilters, spatial_coverage: values })
                 }
               />
+
               <CheckboxFilterAccordion
                 canSearch={true}
                 isActive={(paramFilters.spatial_coverage || []).length > 0}
@@ -529,6 +536,7 @@ export default function SearchPage({
                   setParamFilters({ ...paramFilters, spatial_coverage: values })
                 }
               />
+
               {/* <CheckboxFilterAccordion
                 canSearch={true}
                 isActive={(paramFilters.spatial_coverage || []).length > 0}
@@ -543,6 +551,7 @@ export default function SearchPage({
               /> */}
             </Stack>
           </SimpleFilterAccordion>
+
           <RangeFilterAccordion
             isActive={(paramFilters.temporal_coverage || []).length > 0}
             fieldName="Cobertura temporal"
@@ -568,6 +577,7 @@ export default function SearchPage({
               });
             }}
           />
+
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.entity || []).length > 0}
@@ -580,6 +590,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, entity: values })
             }
           />
+
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.update_frequency || []).length > 0}
@@ -592,6 +603,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, update_frequency: values })
             }
           />
+
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.raw_quality_tier || []).length > 0}
