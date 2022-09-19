@@ -9,9 +9,8 @@ import {
   ModalOverlay,
   ModalContent,
 } from "@chakra-ui/react";
-import React, { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { useDisclosure } from "@chakra-ui/hooks";
-import { useMediaQuery } from "@chakra-ui/react";
 import { MainPageTemplate } from "../components/templates/main";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
@@ -212,7 +211,6 @@ const TeamBox = ({ isMobileMod, index, data }) => {
 export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   const isMobile = useCheckMobile()
   const [isMobileMod, setIsMobileMod] = useState(false)
-  const [mScreen] = useMediaQuery("(max-width: 1390px)")
 
   useEffect(() => {
     setIsMobileMod(isMobile)
@@ -756,7 +754,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             maxWidth="800px"
             padding="32px"
             borderRadius="20px"
-            boxShadow="0 2px 16px 1px rgba(64, 60, 67, 0.16)"
+            boxShadow="0 2px 8px 1px rgba(64, 60, 67, 0.16)"
           >
             <BigTitle paddingBottom="16px">
               Venha colaborar com a transparência
