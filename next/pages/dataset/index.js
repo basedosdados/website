@@ -165,6 +165,32 @@ export default function SearchPage({
     setIsMobileMode(isMobile)
   },[isMobile])
 
+  const optionsUpdateFrequencies = {
+    "unique" : "-16",
+    "hour": "-15",
+    "day": "-14",
+    "week": "-13",
+    "month": "-12",
+    "quarter": "-11",
+    "semester": "-10",
+    "one_year": "-9",
+    "two_years": "-8",
+    "three_years": "-7",
+    "four_years": "-6",
+    "five_years": "-5",
+    "ten_years": "-4",
+    "recurring": "-3",
+    "uncertain": "-2",
+    "other": "-1",
+  }
+
+  const optionsRawQualityTiers = {
+    "low" : "-3",
+    "medium": "-2",
+    "high": "-1"
+  }
+
+
   const fieldTranslations = {
     organization: "Organização",
     tag: "Tag",
@@ -227,10 +253,10 @@ export default function SearchPage({
         optionsTranslations["Time Unit"][t] + ` (${data.update_frequencies[t]})`,
         value: data.update_frequencies[t],
       }))
-      .sort((a, b) => b.value - a.value)
+      .sort((a, b) => optionsUpdateFrequencies[a.name] - optionsUpdateFrequencies[b.name])
     : [];
 
-  const rawQualityTiers = data?.raw_quality_tiers
+    const rawQualityTiers = data?.raw_quality_tiers
     ? Object.keys(data.raw_quality_tiers)
       .map((t) => ({
         name: t,
@@ -238,7 +264,7 @@ export default function SearchPage({
         optionsTranslations["Raw Quality Tier"][t] + ` (${data.raw_quality_tiers[t]})`,
         value: data.raw_quality_tiers[t],
       }))
-      .sort((a, b) => b.value - a.value)
+      .sort((a, b) => optionsRawQualityTiers[a.name] - optionsRawQualityTiers[b.name])
     : [];
 
   const spatialCoverages = {
@@ -373,6 +399,7 @@ export default function SearchPage({
         }}
         marginTop={isMobileMode && "70px"}
       />
+
       <Stack
         justifyContent="flex-start"
         alignItems="flex-start"
@@ -448,6 +475,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, resource_type: values });
             }}
           />
+
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.group || []).length > 0}
@@ -460,6 +488,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, group: values })
             }
           />
+
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.organization || []).length > 0}
@@ -472,6 +501,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, organization: values })
             }
           />
+
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.tag || []).length > 0}
@@ -484,6 +514,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, tag: values })
             }
           />
+
           <SimpleFilterAccordion
             fieldName="Cobertura espacial"
             isActive={(paramFilters.spatial_coverage || []).length > 0}
@@ -505,6 +536,7 @@ export default function SearchPage({
                   setParamFilters({ ...paramFilters, spatial_coverage: values })
                 }
               />
+
               <CheckboxFilterAccordion
                 canSearch={true}
                 isActive={(paramFilters.spatial_coverage || []).length > 0}
@@ -517,6 +549,7 @@ export default function SearchPage({
                   setParamFilters({ ...paramFilters, spatial_coverage: values })
                 }
               />
+
               <CheckboxFilterAccordion
                 canSearch={true}
                 isActive={(paramFilters.spatial_coverage || []).length > 0}
@@ -529,6 +562,7 @@ export default function SearchPage({
                   setParamFilters({ ...paramFilters, spatial_coverage: values })
                 }
               />
+
               {/* <CheckboxFilterAccordion
                 canSearch={true}
                 isActive={(paramFilters.spatial_coverage || []).length > 0}
@@ -543,6 +577,7 @@ export default function SearchPage({
               /> */}
             </Stack>
           </SimpleFilterAccordion>
+
           <RangeFilterAccordion
             isActive={(paramFilters.temporal_coverage || []).length > 0}
             fieldName="Cobertura temporal"
@@ -568,6 +603,7 @@ export default function SearchPage({
               });
             }}
           />
+
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.entity || []).length > 0}
@@ -580,6 +616,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, entity: values })
             }
           />
+
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.update_frequency || []).length > 0}
@@ -592,6 +629,7 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, update_frequency: values })
             }
           />
+
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.raw_quality_tier || []).length > 0}

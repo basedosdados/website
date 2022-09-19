@@ -351,7 +351,6 @@ export default function ColumnsDatasets({
             width="max-content"
             maxWidth="200px"
             height="100%"
-            borderRadius="0"
             fontFamily="ubuntu"
             fontSize="16px"
             letterSpacing="0.2px"
