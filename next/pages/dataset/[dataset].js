@@ -47,6 +47,7 @@ import {
 } from "../api/schemas";
 import { BaseResourcePage } from "../../components/molecules/BaseResourcePage";
 import GreenTab from "../../components/atoms/GreenTab";
+import HelpWidget from "../../components/atoms/HelpWidget";
 import DataBaseIcon from "../../public/img/icons/databaseIcon";
 import DocIcon from "../../public/img/icons/docIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
@@ -650,6 +651,15 @@ export default function DatasetPage({
           </TabPanels>
         </Tabs>
       </VStack>
+      <HelpWidget
+        options={[
+          {name:"Help center"},
+          {name:"Support Forum"},
+          {},
+          {name:"Youtube"},
+          {name:"Twitter"},
+        ]}
+      />
     </MainPageTemplate>
   );
 }
