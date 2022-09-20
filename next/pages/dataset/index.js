@@ -19,6 +19,7 @@ import {
   useDisclosure,
   Box,
 } from "@chakra-ui/react";
+import Head from "next/head";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -379,6 +380,15 @@ export default function SearchPage({
 
   return (
     <MainPageTemplate pages={pages}>
+      <Head>
+        <title>Datasets – Base dos Dados</title>
+        <meta
+          property="og:title"
+          content="Datasets – Base dos Dados"
+          key="ogtitle"
+        />
+      </Head>
+
       <NewDatasetModal {...datasetDisclosure} />
       <DebouncedControlledInput
         value={search}

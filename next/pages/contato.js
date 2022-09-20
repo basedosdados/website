@@ -2,7 +2,8 @@ import {
     Box,
     VStack,
     Stack,
-  } from "@chakra-ui/react";
+} from "@chakra-ui/react";
+import Head from "next/head";
 import { useEffect } from "react";
 import Display from "../components/atoms/Display";
 import Subtitle from "../components/atoms/Subtitle";
@@ -35,6 +36,15 @@ export default function Contato({ pages }) {
     
   return (
     <MainPageTemplate pages={pages} paddingX="24px">
+      <Head>
+        <title>Contato – Base dos Dados</title>
+        <meta
+          property="og:title"
+          content="Contato – Base dos Dados"
+          key="ogtitle"
+        />
+      </Head>
+
       <Stack
         gridGap={{base:"40px", lg: "100px"}}
         paddingTop={{ base: "80px", lg: "0px" }}

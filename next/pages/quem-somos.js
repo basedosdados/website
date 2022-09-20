@@ -9,6 +9,7 @@ import {
   ModalOverlay,
   ModalContent,
 } from "@chakra-ui/react";
+import Head from "next/head";
 import { useState, useEffect } from "react";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { MainPageTemplate } from "../components/templates/main";
@@ -356,6 +357,15 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
 
   return (
     <MainPageTemplate pages={pages} paddingX="24px">
+      <Head>
+        <title>Quem Somos – Base dos Dados</title>
+        <meta
+          property="og:title"
+          content="Quem Somos – Base dos Dados"
+          key="ogtitle"
+        />
+      </Head>
+
       <Stack
         position="relative"
         left={isMobileMod ? "0" :"-24px"}
@@ -367,6 +377,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
           width="fit-content"
           top="40%"
           left="-32px"
+          zIndex="1"
           backgroundColor="#FFF"
         >
           <TwitterIcon {...keyIcon("https://twitter.com/basedosdados")} borderTop="1px solid #0000001a"/>
