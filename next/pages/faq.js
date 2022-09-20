@@ -229,25 +229,23 @@ export default function FAQ() {
             width="100%"
             spacing={8}
           >
-            {
-              questions.length === 0 
-              ?
-                <BodyText color="#7D7D7D">
-                  Infelizmente, não encontramos nenhuma pergunta relacionada à sua busca.
-                </BodyText>
-              :
-                questions.map((elm) => 
-                  <QuestionsBox
-                    question={elm.question}
-                    answer={elm.answer}
-                  />
-                )}
+            {questions.length === 0 ?
+              <BodyText color="#7D7D7D">
+                Infelizmente, não encontramos nenhuma pergunta relacionada à sua busca.
+              </BodyText>
+            :
+              questions.map((elm) => 
+                <QuestionsBox
+                  question={elm.question}
+                  answer={elm.answer}
+                />
+            )}
+            <Text marginTop="60px !important" color="#252A32" fontFamily="ubuntu" fontSize="16px" fontWeight="500" lineHeight="16px" letterSpacing="0">
+              Não encontrou sua pergunta? <a style={{color:"#42B0FF"}} href="/contato">Entre em contato</a> com nossa equipe.
+            </Text>
           </Stack>
         </Stack>
 
-        <Text marginTop="60px !important" color="#252A32" fontFamily="ubuntu" fontSize="16px" fontWeight="500" lineHeight="16px" letterSpacing="0">
-          Não encontrou sua pergunta? <a style={{color:"#42B0FF"}} href="/contato">Entre em contato</a> com nossa equipe.
-        </Text>
       </VStack>
     </MainPageTemplate>
   )

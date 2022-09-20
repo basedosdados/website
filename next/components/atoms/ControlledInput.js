@@ -87,7 +87,7 @@ export function DebouncedControlledInput({
         fontFamily="Lato"
         letterSpacing="0.5px"
         fontWeight="300"
-        _placeholder={{ color: "#BDBDBD" }}
+        _placeholder={{ color: "#C4C4C4" }}
         border="1px solid #DEDFE0 !important"
         _focus={isBorderColor && { border:"2px solid #42B0FF !important" }}
         _hover={isBorderColor && { border:"2px solid #42B0FF !important" }}

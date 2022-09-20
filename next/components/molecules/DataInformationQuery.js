@@ -326,7 +326,7 @@ bd_read_table, ///
                 />
                 <Box>
                   <SectionText fontWeigth="700">ATENÇÃO: O tamanho da tabela ultrapassou o limite permitido para download, de 200.000 linhas.</SectionText>
-                  <SectionText>Para acessar os dados, utilize nosso <i>datalake</i> no BigQuery ou nossos pacotes em Python, R ou Stata.</SectionText>
+                  <SectionText>Para acessar os dados, utilize nosso <i>datalake</i> no BigQuery ou nossos pacotes em Python, R e Stata.</SectionText>
                 </Box>
               </HStack>
               </DisclaimerBox>
