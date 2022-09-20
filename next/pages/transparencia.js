@@ -3,6 +3,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
+import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
@@ -86,6 +87,15 @@ export default function Transparencia({ pages }) {
 
   return (
     <MainPageTemplate pages={pages} paddingX="24px" paddingBottom="0">
+      <Head>
+        <title>Transparência – Base dos Dados</title>
+        <meta
+          property="og:title"
+          content="Transparência – Base dos Dados"
+          key="ogtitle"
+        />
+      </Head>
+
       <SectionBox 
         alignItems="center"
       >

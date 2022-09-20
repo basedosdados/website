@@ -6,6 +6,7 @@ import {
   Divider,
   Collapse
 } from "@chakra-ui/react";
+import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { MainPageTemplate } from "../components/templates/main";
@@ -121,6 +122,15 @@ export default function FAQ({}) {
 
   return (
     <MainPageTemplate paddingX="24px">
+      <Head>
+        <title>FAQ – Base dos Dados</title>
+        <meta
+          property="og:title"
+          content="FAQ – Base dos Dados"
+          key="ogtitle"
+        />
+      </Head>
+
       <VStack
         width="100%"
         maxWidth="1264px"

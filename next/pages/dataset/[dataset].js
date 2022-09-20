@@ -506,7 +506,7 @@ export default function DatasetPage({
         />
         <meta
           property="og:title"
-          content={`Base dos Dados - ${dataset.title}`}
+          content={`${dataset.title} – Base dos Dados`}
           key="ogtitle"
         />
         <meta property="og:description" content={dataset.notes} key="ogdesc" />
