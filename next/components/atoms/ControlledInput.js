@@ -17,6 +17,7 @@ export default function ControlledInput({
   inputBackgroundColor = null,
   inputStyle,
   isBorderColor = true,
+  inputElementStyle,
   ...props
 }) {
   async function checkForEnter(e) {
@@ -48,6 +49,7 @@ export default function ControlledInput({
         padding="8px"
         marginRight="5px"
         children={rightIcon}
+        {...inputElementStyle}
       />
       {rightAddon ? <InputRightAddon children={rightAddon} /> : <></>}
     </InputGroup>

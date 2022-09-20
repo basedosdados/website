@@ -250,7 +250,8 @@ export default function Menu({ pages = [] }) {
     Tutoriais: {
       Documentação: "https://basedosdados.github.io/mais/",
       Blog: "https://medium.com/basedosdados",
-      YouTube: "https://www.youtube.com/c/BasedosDados/featured"
+      YouTube: "https://www.youtube.com/c/BasedosDados/featured",
+      FAQ: "/faq"
     },
     Serviços: "/servicos",
     Institucional: {
