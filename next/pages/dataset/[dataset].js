@@ -652,12 +652,19 @@ export default function DatasetPage({
         </Tabs>
       </VStack>
       <HelpWidget
+        tooltip="Ajuda e recursos"
         options={[
-          {name:"Help center"},
-          {name:"Support Forum"},
+          {name:"Perguntas Frequentes", url: "/faq"},
+          {name:"Documentação", url: "https://basedosdados.github.io/mais/"},
+          {name:"Vídeos no YouTube", url: "https://www.youtube.com/c/BasedosDados/featured"},
           {},
-          {name:"Youtube"},
-          {name:"Twitter"},
+          {name:"Como instalar os pacotes da BD", url: "https://basedosdados.github.io/mais/access_data_packages/"},
+          {},
+          {name:"Como citar a BD?"},
+          {name:"O que são diretórios?"},
+          {},
+          {name:"Fale com nossa comunidade no Discord", url: "https://discord.gg/huKWpsVYx4"},
+          {name:"Entre em contato", url: "/contato"},
         ]}
       />
     </MainPageTemplate>
