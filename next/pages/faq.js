@@ -23,6 +23,7 @@ const QuestionsBox = ({ question, answer }) => {
 
   const OpenCloseQuestion = () => {
     setIsActive(!isActive)
+    window.Prism.highlightAll()
   }
 
   return (
@@ -60,7 +61,7 @@ const QuestionsBox = ({ question, answer }) => {
           overflow="hidden"
           transition="all 1s ease"
         >
-          {answer}
+          {answer()}
         </BodyText>
       </Collapse>
       <Divider borderColor="#DEDFE0"/>
@@ -91,7 +92,7 @@ export default function FAQ() {
   },[categorySelected])
 
   const searcher = new FuzzySearch(
-    categorySelected ? questions : allQuestions, ["answer", "question"], {caseSensitive: true}
+    categorySelected ? questions : allQuestions, ["question", "keywords"], {caseSensitive: true}
   )
 
   const filterQuestions = () => {
@@ -247,6 +248,7 @@ export default function FAQ() {
         </Stack>
 
       </VStack>
+      <script key="sql" src="/vendor/prism.js"></script>
     </MainPageTemplate>
   )
 }

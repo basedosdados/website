@@ -88,7 +88,6 @@ export function PrismCodeHighlight({ language, children }) {
         <CopyIcon widthIcon="20px" heightIcon="20px" fill="#707783" marginLeft="5px"/>
       </Button>
     </pre>
-
   )
 }
 
