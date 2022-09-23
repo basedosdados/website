@@ -9,6 +9,7 @@ import {
 import Head from "next/head";
 import FuzzySearch from 'fuzzy-search';
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { MainPageTemplate } from "../components/templates/main";
 import { QuestionFAQ } from "../context/faq";
@@ -17,17 +18,44 @@ import Display from "../components/atoms/Display";
 import BodyText from "../components/atoms/BodyText";
 import CrossIcon from "../public/img/icons/crossIcon";
 import SearchIcon from "../public/img/icons/searchIcon";
+import styles from "../styles/faq.module.css";
 
-const QuestionsBox = ({ question, answer }) => {
+const QuestionsBox = ({ question, answer, id }) => {
   const [isActive, setIsActive] = useState(false)
+  const router = useRouter()
+
+  const scrollFocus = (idElement) => {
+    document.getElementById(idElement).scrollIntoView({block: "center", behavior: "smooth"})
+  }
+
+  useEffect(() => {
+    if(router.asPath === "/faq#directories") {
+      if(id === "directories") setIsActive(true)
+    }
+    if(router.asPath === "/faq#reference") {
+      if(id === "reference") setIsActive(true)
+    }
+  },[id])
+
+  useEffect(() => {
+    if(router.asPath === "/faq#directories") {
+      if(id === "directories") scrollFocus("directories")
+    }
+    if(router.asPath === "/faq#reference") {
+      if(id === "reference") scrollFocus("reference")
+    }
+    
+  },[isActive])
 
   const OpenCloseQuestion = () => {
     setIsActive(!isActive)
+    window.Prism.highlightAll()
   }
 
   return (
     <Stack
       spacing={0} 
+      className={styles.questionContainer}
     >
       <Box
         display="flex"
@@ -60,7 +88,7 @@ const QuestionsBox = ({ question, answer }) => {
           overflow="hidden"
           transition="all 1s ease"
         >
-          {answer}
+          {answer()}
         </BodyText>
       </Collapse>
       <Divider borderColor="#DEDFE0"/>
@@ -91,7 +119,7 @@ export default function FAQ() {
   },[categorySelected])
 
   const searcher = new FuzzySearch(
-    categorySelected ? questions : allQuestions, ["answer", "question"], {caseSensitive: true}
+    categorySelected ? questions : allQuestions, ["question", "keywords"], {caseSensitive: true}
   )
 
   const filterQuestions = () => {
@@ -229,26 +257,26 @@ export default function FAQ() {
             width="100%"
             spacing={8}
           >
-            {
-              questions.length === 0 
-              ?
-                <BodyText color="#7D7D7D">
-                  Infelizmente, não encontramos nenhuma pergunta relacionada à sua busca.
-                </BodyText>
-              :
-                questions.map((elm) => 
-                  <QuestionsBox
-                    question={elm.question}
-                    answer={elm.answer}
-                  />
-                )}
+            {questions.length === 0 ?
+              <BodyText color="#7D7D7D">
+                Infelizmente, não encontramos nenhuma pergunta relacionada à sua busca.
+              </BodyText>
+            :
+              questions.map((elm) => 
+                <QuestionsBox
+                  question={elm.question}
+                  answer={elm.answer}
+                  id={elm.id && elm.id}
+                />
+            )}
+            <Text marginTop="60px !important" color="#252A32" fontFamily="ubuntu" fontSize="16px" fontWeight="500" lineHeight="16px" letterSpacing="0">
+              Não encontrou sua pergunta? <a style={{color:"#42B0FF"}} href="/contato">Entre em contato</a> com nossa equipe.
+            </Text>
           </Stack>
         </Stack>
 
-        <Text marginTop="60px !important" color="#252A32" fontFamily="ubuntu" fontSize="16px" fontWeight="500" lineHeight="16px" letterSpacing="0">
-          Não encontrou sua pergunta? <a style={{color:"#42B0FF"}} href="/contato">Entre em contato</a> com nossa equipe.
-        </Text>
       </VStack>
+      <script key="sql" src="/vendor/prism.js"></script>
     </MainPageTemplate>
   )
 }
