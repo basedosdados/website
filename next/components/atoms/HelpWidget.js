@@ -7,8 +7,17 @@ import {
   Tooltip
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/hooks";
+import { useState, useEffect } from 'react';
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
 export default function HelpWidget({options, tooltip}) {
+  const isMobile = useCheckMobile();
+  const [isMobileMode, setIsMobileMode] = useState(false)
+
+  useEffect(() => {
+    setIsMobileMode(isMobile)
+  },[isMobile])
+
   const { isOpen } = useDisclosure()
 
   const optionsRender = (options) => {
@@ -59,8 +68,8 @@ export default function HelpWidget({options, tooltip}) {
               borderRadius="50%"
               zIndex="11"
               position="fixed"
-              bottom="40px"
-              right="40px"
+              bottom={isMobileMode ? "20px" : "40px"}
+              right={isMobileMode ? "20px" : "40px"}
               fontSize="26px"
               color="#FFF"
               isActive={isOpen}
