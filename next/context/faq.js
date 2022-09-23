@@ -1,3 +1,5 @@
+import CopyIcon from "../public/img/icons/copyIcon"
+
 export const QuestionFAQ = [
   {
     question: "Preciso pagar para acessar os dados da BD?",
@@ -16,7 +18,8 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["Dados"]
+    categories: ["Dados"],
+    keywords: "pagar, custo, gratuito, grátis, mensalidade"
   },
   {
     question: "Os dados da BD são públicos ou privados?",
@@ -33,7 +36,8 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["Dados"]
+    categories: ["Dados"],
+    keywords: "público, privado"
   },
   {
     question: "Quais tipos de dados encontro na BD?",
@@ -46,7 +50,8 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["Dados"]
+    categories: ["Dados"],
+    keywords: "tipo, categoria"
   },
   {
     question: "O que são tabelas tratadas BD+?",
@@ -61,7 +66,8 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["Dados"]
+    categories: ["Dados"],
+    keywords: "tratada, tratado, BD+, tabela, datalake, cruzar, cruzamento, padronização, compatibilização"
   },
   {
     question: "O que são fontes originais?",
@@ -74,7 +80,8 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["Dados"]
+    categories: ["Dados"],
+    keywords: "fonte original, externo"
   },
   {
     question: "O que são pedidos LAI?",
@@ -90,7 +97,8 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["Dados"]
+    categories: ["Dados"],
+    keywords: "LAI, acesso à informação, lei"
   },
   {
     question: "Como acessar as tabelas tratadas BD+?",
@@ -105,7 +113,8 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["Dados"]
+    categories: ["Dados"],
+    keywords: "acesso, consulta, tratada, tratado, BD+, download, baixar, pacote, SQL, BigQuery, Python, R, Stata"
   },
   {
     question: "Como acessar as fontes originais?",
@@ -118,7 +127,8 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["Dados"]
+    categories: ["Dados"],
+    keywords: "acesso, consulta, fonte original, externo"
   },
   {
     question: "Como acessar os pedidos LAI?",
@@ -131,13 +141,14 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["Dados"]
+    categories: ["Dados"],
+    keywords: "acesso, consulta, LAI, acesso à informação, lei"
   },
   {
     question: "O que são diretórios?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="directories" style={{display: "flex", flexDirection: "column"}}>
           <p>
             São tabelas que ligam diversos códigos institucionais e informações de diferentes entidades brasileiras.
             Isso é importante porque resolve o problema de não existir um identificador único para entidades – como UF,
@@ -150,7 +161,9 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["Dados"]
+    categories: ["Dados"],
+    keywords: "diretório, entidade, identificador, chave, primária",
+    id: "directories"
   },
   {
     question: "Os dados da BD são atualizados automaticamente?",
@@ -165,7 +178,8 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["Dados"]
+    categories: ["Dados"],
+    keywords: "atualização, automatização, frequência"
   },
   {
     question: "É possível fazer o download dos dados da BD?",
@@ -180,7 +194,8 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["Dados"]
+    categories: ["Dados"],
+    keywords: "download, baixar, CSV, arquivo"
   },
   {
     question: "Qual é o limite de download dos dados da BD na plataforma?",
@@ -195,7 +210,8 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["Dados"]
+    categories: ["Dados"],
+    keywords: "limite, download, baixar, tamanho, máximo, arquivo"
   },
   {
     question: "Como utilizar os pacotes da BD?",
@@ -211,7 +227,8 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["Dados"]
+    categories: ["Dados"],
+    keywords: "pacote, Python, R, Stata, instalação, documentação"
   },
   {
     question: "O que é nível da observação?",
@@ -228,7 +245,8 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["Dados"]
+    categories: ["Dados"],
+    keywords: "nível, observação, chave, primária"
   },
   {
     question: "O que é o datalake da BD no BigQuery?",
@@ -245,7 +263,8 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["BigQuery"]
+    categories: ["BigQuery"],
+    keywords: "BigQuery, Google, Cloud, datalake, BD+"
   },
   {
     question: "Por que preciso de uma conta no Google Cloud?",
@@ -264,7 +283,8 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["BigQuery"]
+    categories: ["BigQuery"],
+    keywords: "conta, cadastro, BigQuery, Google, Cloud"
   },
   {
     question: "O que acontece se eu exceder o limite mensal de 1 TB gratuito do Google Cloud?",
@@ -279,7 +299,8 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["BigQuery"]
+    categories: ["BigQuery"],
+    keywords: "limite, terabyte, TB, Google, Cloud"
   },
   {
     question: "Como criar um projeto no Google Cloud?",
@@ -287,7 +308,7 @@ export const QuestionFAQ = [
       return (
         <div style={{display: "flex", flexDirection: "column"}}>
           <p>
-            Para criar um projeto no Google Cloud, basta ter um email cadastrado no Google.
+            Para criar um projeto no Google Cloud, basta ter um e-mail cadastrado no Google.
             É necessário ter um projeto seu, mesmo que vazio, para você fazer consultas em nosso <i>datalake</i> público.
           </p>
           
@@ -299,7 +320,8 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["BigQuery"]
+    categories: ["BigQuery"],
+    keywords: "criar, cadastrar, projeto, Google, Cloud"
   },
   {
     question: "Quais as melhores práticas para fazer uma consulta no BigQuery?",
@@ -311,7 +333,7 @@ export const QuestionFAQ = [
             Para verificar uma amostra de todas as variáveis da tabela , use o 
           </p>
 
-          <code className="language-sql" style={{margin: "16px 0"}}>
+          <code className="language-sql" style={{margin: "16px 0", padding: "6px"}}>
             {`SELECT * FROM  dataset.table_name LIMIT 100`}
           </code>
           
@@ -319,7 +341,7 @@ export const QuestionFAQ = [
             <li>
               A primeira dica valiosa é selecionar as colunas que você vai usar.
               O BigQuery funciona usando um modelo colunar, portanto, quanto menos colunas você usar,
-              melhor vai ser o desempenho da sua consulta. Isso significa evitar o clássico <code className="language-sql">SELECT * FROM table_name</code> e
+              melhor vai ser o desempenho da sua consulta. Isso significa evitar o clássico<br/> <code className="language-sql">SELECT * FROM table_name</code> e
               escolher as colunas de seu interesse. Parece chato, mas ajuda muito!
             </li>
             <li>
@@ -336,19 +358,95 @@ export const QuestionFAQ = [
         </div>
       )
     },
-    categories: ["BigQuery"]
+    categories: ["BigQuery"],
+    keywords: "prática, dica, otimização, desempenho, consulta, BigQuery, selecionar, filtrar"
   },
   {
-    question: "",
+    question: "O que são os tipos no BigQuery?",
     answer: function() {
       return (
         <div style={{display: "flex", flexDirection: "column"}}>
           <p>
-            
+            São os tipos de dados do Google Standard SQL.
+            Suas categorias incluem: INTEGER (Inteiro),
+            STRING (Texto), DATE (Data), FLOAT64 (Decimal),
+            GEOGRAPHY (Geográfico), entre outras.
           </p>
         </div>
       )
     },
-    categories: ["BigQuery"]
+    categories: ["BigQuery"],
+    keywords: "tipo, categoria, BigQuery, INTEGER, STRING, DATE, FLOAT, GEOGRAPHY"
+  },
+  {
+    question: "O que são as partições no BigQuery?",
+    answer: function() {
+      return (
+        <div style={{display: "flex", flexDirection: "column"}}>
+          <p>
+            As partições são divisões feitas em uma tabela para facilitar o gerenciamento e a consulta aos dados.
+            Ao segmentar uma tabela grande em partições menores, a quantidade de bytes lidos é reduzida,
+            o que ajuda a controlar os custos e melhora o desempenho da consulta. 
+          </p>
+        </div>
+      )
+    },
+    categories: ["BigQuery"],
+    keywords: "partição, particionamento, otimização, desempenho, BigQuery"
+  },
+  {
+    question: "Como a BD se financia?",
+    answer: function() {
+      return (
+        <div style={{display: "flex", flexDirection: "column"}}>
+          <p>
+            Ao longo dos anos, a BD cresceu com o apoio financeiro de usuários e de pessoas que se identificam com nossa missão.
+            Hoje, contamos também com nossa área de Serviços e Parcerias, criada para garantir a sustentabilidade da organização,
+            de forma a manter e expandir nossos produtos de forma gratuita.
+            A prestação de serviços de dados e a realização de projetos com parceiros vêm sendo chave não só na geração de receita,
+            mas também no fortalecimento da nossa posição de referência na disponibilização de dados de qualidade.
+            Confira mais sobre a contabilidade da organização em nossa página de <a href="https://basedosdados.org/transparencia" target="_blank">Transparência</a>.
+          </p>
+        </div>
+      )
+    },
+    categories: ["Institucional"],
+    keywords: "financiamento, sustentabilidade, contabilidade, serviço, parceria"
+  },
+  {
+    question: "Como citar a BD?",
+    answer: function() {
+      return (
+        <div id="reference" style={{display: "flex", flexDirection: "column"}}>
+          <p>
+            Você pode referenciar de duas maneiras:
+          </p>
+
+          <ul>
+            <li>Apenas com o nome “Base dos Dados” (em português), “Data Basis” (em inglês) ou “Base de los Datos” (em espanhol);</li>
+            <li>A partir do white paper <a href="https://osf.io/preprints/socarxiv/r76yg" target="_blank">Data Basis: Universalizing Access to High-Quality Data</a>.</li>
+          </ul>
+          
+          <div style={{display: "flex", flexDirection: "row", gridGap: "10px"}}>
+            <p id="textReferenceBD" style={{color: "#A3A3A3"}}>
+              Dahis et al. (2022) Data Basis: Universalizing Access to High-Quality Data. Disponível em: {`<osf.io/preprints/socarxiv/r76yg>`}.
+            </p>
+
+            <button
+              onClick={() => {
+                let copyText = "Dahis et al. (2022) Data Basis: Universalizing Access to High-Quality Data. Disponível em: <osf.io/preprints/socarxiv/r76yg>."
+                navigator.clipboard.writeText(copyText)
+              }}
+              style={{display: "flex", alignItems: "center"}}
+            >
+              <CopyIcon/> copiar
+            </button>
+          </div>
+        </div>
+      )
+    },
+    categories: ["Institucional"],
+    keywords: "citar, citação, referência",
+    id: "reference"
   },
 ]
