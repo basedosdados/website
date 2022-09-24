@@ -25,7 +25,11 @@ const QuestionsBox = ({ question, answer, id }) => {
   const router = useRouter()
 
   const scrollFocus = (idElement) => {
-    document.getElementById(idElement).scrollIntoView({block: "center", behavior: "smooth"})
+    const targetElement = document.getElementById(idElement).getBoundingClientRect()
+    const heightScreen = window.innerHeight
+    const positionTarget = targetElement.top
+
+    window.scrollTo(0, positionTarget - (heightScreen/2))
   }
 
   useEffect(() => {
