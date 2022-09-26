@@ -250,7 +250,8 @@ export default function Menu({ pages = [] }) {
     Tutoriais: {
       Documentação: "https://basedosdados.github.io/mais/",
       Blog: "https://medium.com/basedosdados",
-      YouTube: "https://www.youtube.com/c/BasedosDados/featured"
+      YouTube: "https://www.youtube.com/c/BasedosDados/featured",
+      FAQ: "/faq"
     },
     Serviços: "/servicos",
     Institucional: {
@@ -284,7 +285,7 @@ export default function Menu({ pages = [] }) {
         width="100%"
         left="0px"
         backgroundColor="#FFFFFF"
-        padding="16px 30px"
+        padding="16px 28px"
         zIndex="999"
         transition="0.2s"
         as="nav"

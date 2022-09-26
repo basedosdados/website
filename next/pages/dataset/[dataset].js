@@ -47,6 +47,7 @@ import {
 } from "../api/schemas";
 import { BaseResourcePage } from "../../components/molecules/BaseResourcePage";
 import GreenTab from "../../components/atoms/GreenTab";
+import HelpWidget from "../../components/atoms/HelpWidget";
 import DataBaseIcon from "../../public/img/icons/databaseIcon";
 import DocIcon from "../../public/img/icons/docIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
@@ -505,7 +506,7 @@ export default function DatasetPage({
         />
         <meta
           property="og:title"
-          content={`Base dos Dados - ${dataset.title}`}
+          content={`${dataset.title} – Base dos Dados`}
           key="ogtitle"
         />
         <meta property="og:description" content={dataset.notes} key="ogdesc" />
@@ -650,6 +651,22 @@ export default function DatasetPage({
           </TabPanels>
         </Tabs>
       </VStack>
+      <HelpWidget
+        tooltip="Ajuda e recursos"
+        options={[
+          {name:"Perguntas Frequentes", url: "/faq"},
+          {name:"Documentação", url: "https://basedosdados.github.io/mais/"},
+          {name:"Vídeos no YouTube", url: "https://www.youtube.com/c/BasedosDados/featured"},
+          {},
+          {name:"Como instalar os pacotes da BD", url: "https://basedosdados.github.io/mais/access_data_packages/"},
+          {},
+          {name:"Como citar a BD?",  url: "/faq/#reference"},
+          {name:"O que são diretórios?", url: "/faq/#directories"},
+          {},
+          {name:"Fale com nossa comunidade no Discord", url: "https://discord.gg/huKWpsVYx4"},
+          {name:"Entre em contato", url: "/contato"},
+        ]}
+      />
     </MainPageTemplate>
   );
 }
