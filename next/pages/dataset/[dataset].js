@@ -654,14 +654,14 @@ export default function DatasetPage({
       <HelpWidget
         tooltip="Ajuda e recursos"
         options={[
-          {name:"Perguntas Frequentes", url: "/faq"},
+          {name:"Perguntas frequentes", url: "/perguntas-frequentes"},
           {name:"Documentação", url: "https://basedosdados.github.io/mais/"},
           {name:"Vídeos no YouTube", url: "https://www.youtube.com/c/BasedosDados/featured"},
           {},
           {name:"Como instalar os pacotes da BD", url: "https://basedosdados.github.io/mais/access_data_packages/"},
           {},
-          {name:"Como citar a BD?",  url: "/faq/#reference"},
-          {name:"O que são diretórios?", url: "/faq/#directories"},
+          {name:"Como citar a BD?",  url: "/perguntas-frequentes/#reference"},
+          {name:"O que são diretórios?", url: "/perguntas-frequentes/#directories"},
           {},
           {name:"Fale com nossa comunidade no Discord", url: "https://discord.gg/huKWpsVYx4"},
           {name:"Entre em contato", url: "/contato"},

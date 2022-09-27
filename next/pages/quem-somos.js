@@ -364,6 +364,11 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
           content="Quem Somos – Base dos Dados"
           key="ogtitle"
         />
+        <meta
+          property="og:description"
+          content="Conheça a Base dos Dados. Nós facilitamos o acesso a dados para que a distância entre você e sua análise seja apenas uma boa pergunta. Saiba mais sobre a história da organização e sobre a equipe por trás do nosso trabalho."
+          key="ogdesc"
+        />
       </Head>
 
       <Stack

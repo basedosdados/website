@@ -3,6 +3,10 @@
   font-weight: 400;
 }
 
+.questionContainer a:hover {
+  opacity: 0.7;
+}
+
 .questionContainer ul {
   padding-left: 20px;
 }
@@ -12,4 +16,8 @@
 
 .questionContainer li:last-child {
   padding-bottom: 20px;
+}
+
+.questionContainer button:hover {
+  opacity: 0.7;
 }

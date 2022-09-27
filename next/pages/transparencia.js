@@ -94,6 +94,11 @@ export default function Transparencia({ pages }) {
           content="Transparência – Base dos Dados"
           key="ogtitle"
         />
+        <meta
+          property="og:description"
+          content="Utilizamos os recursos para facilitar o acesso de milhares de pessoas a dados de qualidade. Nesse espaço, você encontra informações referentes às nossas atividades, receitas e despesas. Acompanhe de perto como garantimos a sustentabilidade da organização e saiba como você também pode nos apoiar."
+          key="ogdesc"
+        />
       </Head>
 
       <SectionBox 
