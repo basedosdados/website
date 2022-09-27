@@ -248,10 +248,10 @@ export default function Menu({ pages = [] }) {
   const links = {
     Dados: "/dataset",
     Tutoriais: {
+      "Perguntas frequentes": "/perguntas-frequentes",
       Documentação: "https://basedosdados.github.io/mais/",
-      Blog: "https://medium.com/basedosdados",
       YouTube: "https://www.youtube.com/c/BasedosDados/featured",
-      FAQ: "/faq"
+      Blog: "https://medium.com/basedosdados",
     },
     Serviços: "/servicos",
     Institucional: {

@@ -7,7 +7,7 @@ export const QuestionFAQ = [
       return (
         <div style={{display: "flex", flexDirection: "column"}}>
           <p>
-            Você não precisa pagar para utilizar nenhum serviço oferecido pela Base dos Dados.
+            Você não precisa pagar para utilizar nenhum serviço oferecido pela BD.
             Porém, para acessar nossos dados tratados no BigQuery, você precisa criar um projeto no Google Cloud,
             que oferece até 1 Terabyte gratuito por mês para seus usuários. Caso você exceda esse limite,
             são cobrados 5 dólares por Terabyte de dados que sua consulta irá processar.
@@ -314,8 +314,8 @@ export const QuestionFAQ = [
           
           <ol>
             <li>Acesse o <a href="https://console.cloud.google.com/projectselector2/home/dashboard" target="_blank">Google Cloud</a>. Caso for a sua primeira vez, aceite os Termos de Serviços.</li>
-            <li>Clique em Create Project/Criar Projeto. Escolha um nome bacana para o projeto.</li>
-            <li>Clique em Create/Criar.</li>
+            <li>Clique em <i>Create Project/Criar Projeto</i>. Escolha um nome bacana para o projeto.</li>
+            <li>Clique em <i>Create/Criar</i>.</li>
           </ol>
         </div>
       )
@@ -329,8 +329,7 @@ export const QuestionFAQ = [
       return (
         <div style={{display: "flex", flexDirection: "column"}}>
           <p>
-            Quais as melhores práticas para fazer uma consulta no BigQuery?
-            Para verificar uma amostra de todas as variáveis da tabela , use o 
+            Para verificar uma amostra de todas as variáveis da tabela, use: 
           </p>
 
           <code className="language-sql" style={{margin: "16px 0", padding: "6px"}}>
@@ -424,11 +423,11 @@ export const QuestionFAQ = [
 
           <ul>
             <li>Apenas com o nome “Base dos Dados” (em português), “Data Basis” (em inglês) ou “Base de los Datos” (em espanhol);</li>
-            <li>A partir do white paper <a href="https://osf.io/preprints/socarxiv/r76yg" target="_blank">Data Basis: Universalizing Access to High-Quality Data</a>.</li>
+            <li>A partir do <i>white paper</i> <a href="https://osf.io/preprints/socarxiv/r76yg" target="_blank">Data Basis: Universalizing Access to High-Quality Data</a>.</li>
           </ul>
           
-          <div style={{display: "flex", flexDirection: "row", gridGap: "10px"}}>
-            <p id="textReferenceBD" style={{color: "#A3A3A3"}}>
+          <div style={{display: "flex", flexDirection: "row", gridGap: "10px", position: "relative", top:"-18px", left: "18px"}}>
+            <p id="textReferenceBD" style={{fontSize: "16px", color:"#7D7D7D"}}>
               Dahis et al. (2022) Data Basis: Universalizing Access to High-Quality Data. Disponível em: {`<osf.io/preprints/socarxiv/r76yg>`}.
             </p>
 
@@ -437,9 +436,9 @@ export const QuestionFAQ = [
                 let copyText = "Dahis et al. (2022) Data Basis: Universalizing Access to High-Quality Data. Disponível em: <osf.io/preprints/socarxiv/r76yg>."
                 navigator.clipboard.writeText(copyText)
               }}
-              style={{display: "flex", alignItems: "center"}}
+              style={{display: "flex", alignItems: "center", color: "#42B0FF"}}
             >
-              <CopyIcon/> copiar
+              <CopyIcon fill="#42B0FF"/> Copiar
             </button>
           </div>
         </div>

@@ -33,19 +33,19 @@ const QuestionsBox = ({ question, answer, id }) => {
   }
 
   useEffect(() => {
-    if(router.asPath === "/faq#directories") {
+    if(router.asPath === "/perguntas-frequentes#directories") {
       if(id === "directories") setIsActive(true)
     }
-    if(router.asPath === "/faq#reference") {
+    if(router.asPath === "/perguntas-frequentes#reference") {
       if(id === "reference") setIsActive(true)
     }
   },[id])
 
   useEffect(() => {
-    if(router.asPath === "/faq#directories") {
+    if(router.asPath === "/perguntas-frequentes#directories") {
       if(id === "directories") scrollFocus("directories")
     }
-    if(router.asPath === "/faq#reference") {
+    if(router.asPath === "/perguntas-frequentes#reference") {
       if(id === "reference") scrollFocus("reference")
     }
     
@@ -170,11 +170,16 @@ export default function FAQ() {
   return (
     <MainPageTemplate paddingX="24px">
       <Head>
-        <title>FAQ – Base dos Dados</title>
+        <title>Perguntas frequentes – Base dos Dados</title>
         <meta
           property="og:title"
-          content="FAQ – Base dos Dados"
+          content="Perguntas frequentes – Base dos Dados"
           key="ogtitle"
+        />
+        <meta
+          property="og:description"
+          content="Aqui você encontra as respostas para as suas dúvidas sobre a Base dos Dados. Saiba mais sobre nossos dados, como acessá-los pelo BigQuery usando SQL ou com os pacotes Python, R e Stata agora mesmo."
+          key="ogdesc"
         />
       </Head>
 

@@ -43,6 +43,11 @@ export default function Contato({ pages }) {
           content="Contato – Base dos Dados"
           key="ogtitle"
         />
+        <meta
+          property="og:description"
+          content="Entre em contato com nossa equipe."
+          key="ogdesc"
+        />
       </Head>
 
       <Stack
