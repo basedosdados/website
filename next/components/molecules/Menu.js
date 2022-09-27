@@ -104,6 +104,7 @@ function SearchInput ({ status }) {
             fontSize: "16px",
             width: "100%",
             borderRadius: "16px",
+            _placeholder:{color: "#C4C4C4"}
           }}
           rightIcon={
             <CrossIcon 

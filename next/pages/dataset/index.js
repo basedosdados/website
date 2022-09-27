@@ -381,10 +381,10 @@ export default function SearchPage({
   return (
     <MainPageTemplate pages={pages}>
       <Head>
-        <title>Datasets – Base dos Dados</title>
+        <title>Dados – Base dos Dados</title>
         <meta
           property="og:title"
-          content="Datasets – Base dos Dados"
+          content="Dados – Base dos Dados"
           key="ogtitle"
         />
       </Head>

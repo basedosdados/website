@@ -198,6 +198,7 @@ const TeamBox = ({ isMobileMod, index, data }) => {
           fontSize="16px"
           fontWeight="400"
           marginBottom="4px"
+          letterSpacing="0.2px"
           color="#6F6F6F"
         >
           {data?.role.join(", ")}
@@ -739,6 +740,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
                 fontWeight="500"
                 width="max-content"
                 cursor="pointer"
+                letterSpacing="0.2px"
                 onClick={() => handleSelect(elm)}
               >
                 {elm}
