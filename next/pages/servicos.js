@@ -1,5 +1,6 @@
 import { Image } from "@chakra-ui/image";
 import { Box, Flex, HStack, Stack, VStack } from "@chakra-ui/layout";
+import Head from "next/head";
 import BigTitle from "../components/atoms/BigTitle";
 import Link from "../components/atoms/Link";
 import RoundedButton from "../components/atoms/RoundedButton";
@@ -136,6 +137,15 @@ export default function Services({ pages }) {
 
   return (
     <MainPageTemplate pages={pages}>
+      <Head>
+        <title>Serviços – Base dos Dados</title>
+        <meta
+          property="og:title"
+          content="Serviços – Base dos Dados"
+          key="ogtitle"
+        />
+      </Head>
+
       <VStack
         paddingTop={{ base: "50px", lg: "0px" }}
         width="80%"

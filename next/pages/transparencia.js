@@ -3,6 +3,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
+import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
@@ -86,6 +87,20 @@ export default function Transparencia({ pages }) {
 
   return (
     <MainPageTemplate pages={pages} paddingX="24px" paddingBottom="0">
+      <Head>
+        <title>Transparência – Base dos Dados</title>
+        <meta
+          property="og:title"
+          content="Transparência – Base dos Dados"
+          key="ogtitle"
+        />
+        <meta
+          property="og:description"
+          content="Utilizamos os recursos para facilitar o acesso de milhares de pessoas a dados de qualidade. Nesse espaço, você encontra informações referentes às nossas atividades, receitas e despesas. Acompanhe de perto como garantimos a sustentabilidade da organização e saiba como você também pode nos apoiar."
+          key="ogdesc"
+        />
+      </Head>
+
       <SectionBox 
         alignItems="center"
       >
@@ -269,7 +284,7 @@ export default function Transparencia({ pages }) {
           BD Estatuto Social
         </Link>
       </Stack>
-     
+
       <Stack
         paddingTop="16px"
         paddingBottom={{ base: "80px", lg: "104px" }}

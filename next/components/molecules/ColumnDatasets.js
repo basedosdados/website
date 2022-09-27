@@ -409,7 +409,7 @@ export default function ColumnsDatasets({
               minWidth="200px"
               height="40px"
               placeholder="Insira o nome ou o valor da propriedade"
-              _placeholder={{color:"#6F6F6F"}}
+              _placeholder={{color:"#C4C4C4"}}
             />
             <InputRightElement children={
               tagFilter.length < 1 

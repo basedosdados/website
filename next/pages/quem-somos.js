@@ -9,9 +9,9 @@ import {
   ModalOverlay,
   ModalContent,
 } from "@chakra-ui/react";
-import React, { useState, useEffect} from "react";
+import Head from "next/head";
+import { useState, useEffect } from "react";
 import { useDisclosure } from "@chakra-ui/hooks";
-import { useMediaQuery } from "@chakra-ui/react";
 import { MainPageTemplate } from "../components/templates/main";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
@@ -198,6 +198,7 @@ const TeamBox = ({ isMobileMod, index, data }) => {
           fontSize="16px"
           fontWeight="400"
           marginBottom="4px"
+          letterSpacing="0.2px"
           color="#6F6F6F"
         >
           {data?.role.join(", ")}
@@ -212,7 +213,6 @@ const TeamBox = ({ isMobileMod, index, data }) => {
 export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   const isMobile = useCheckMobile()
   const [isMobileMod, setIsMobileMod] = useState(false)
-  const [mScreen] = useMediaQuery("(max-width: 1390px)")
 
   useEffect(() => {
     setIsMobileMod(isMobile)
@@ -358,6 +358,20 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
 
   return (
     <MainPageTemplate pages={pages} paddingX="24px">
+      <Head>
+        <title>Quem Somos – Base dos Dados</title>
+        <meta
+          property="og:title"
+          content="Quem Somos – Base dos Dados"
+          key="ogtitle"
+        />
+        <meta
+          property="og:description"
+          content="Conheça a Base dos Dados. Nós facilitamos o acesso a dados para que a distância entre você e sua análise seja apenas uma boa pergunta. Saiba mais sobre a história da organização e sobre a equipe por trás do nosso trabalho."
+          key="ogdesc"
+        />
+      </Head>
+
       <Stack
         position="relative"
         left={isMobileMod ? "0" :"-24px"}
@@ -369,6 +383,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
           width="fit-content"
           top="40%"
           left="-32px"
+          zIndex="1"
           backgroundColor="#FFF"
         >
           <TwitterIcon {...keyIcon("https://twitter.com/basedosdados")} borderTop="1px solid #0000001a"/>
@@ -725,6 +740,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
                 fontWeight="500"
                 width="max-content"
                 cursor="pointer"
+                letterSpacing="0.2px"
                 onClick={() => handleSelect(elm)}
               >
                 {elm}
@@ -756,7 +772,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             maxWidth="800px"
             padding="32px"
             borderRadius="20px"
-            boxShadow="0 2px 16px 1px rgba(64, 60, 67, 0.16)"
+            boxShadow="0 2px 8px 1px rgba(64, 60, 67, 0.16)"
           >
             <BigTitle paddingBottom="16px">
               Venha colaborar com a transparência

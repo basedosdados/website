@@ -180,7 +180,13 @@ export function Database({
               alignItems={isMobile && "flex-start"}
               spacing={isMobile ? 0 : 5}
             >
-              <HStack spacing={1}>
+              <HStack
+                spacing={1}
+                cursor={tableNum > 0 ? "pointer" : "normal"}
+                onClick={() => {
+                  if(tableNum > 0) return window.location.replace(`${link}?bdm_table`)
+                }}
+              >
                 <DataBaseIcon
                   solid={true}
                   widthIcon="15px"
@@ -205,7 +211,12 @@ export function Database({
                 />
               </HStack>
 
-              <HStack>
+              <HStack
+                cursor={externalLinkNum > 0 ? "pointer" : "normal"}
+                onClick={() => {
+                  if(externalLinkNum > 0) return window.location.replace(`${link}?external_link`)
+                }}
+              >
                 <LinkIcon
                   widthIcon="15px"
                   heightIcon="15px"
@@ -223,7 +234,12 @@ export function Database({
                 </Text>
               </HStack>
 
-              <HStack>
+              <HStack
+                cursor={informationRequestNum > 0 ? "pointer" : "normal"}
+                onClick={() => {
+                  if(informationRequestNum > 0) return window.location.replace(`${link}?information_request`)
+                }}
+              >
                 <InfoIcon
                   widthIcon="15px"
                   heightIcon="15px"

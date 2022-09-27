@@ -104,6 +104,7 @@ function SearchInput ({ status }) {
             fontSize: "16px",
             width: "100%",
             borderRadius: "16px",
+            _placeholder:{color: "#C4C4C4"}
           }}
           rightIcon={
             <CrossIcon 
@@ -248,9 +249,10 @@ export default function Menu({ pages = [] }) {
   const links = {
     Dados: "/dataset",
     Tutoriais: {
+      "Perguntas frequentes": "/perguntas-frequentes",
       Documentação: "https://basedosdados.github.io/mais/",
+      YouTube: "https://www.youtube.com/c/BasedosDados/featured",
       Blog: "https://medium.com/basedosdados",
-      YouTube: "https://www.youtube.com/c/BasedosDados/featured"
     },
     Serviços: "/servicos",
     Institucional: {
@@ -284,7 +286,7 @@ export default function Menu({ pages = [] }) {
         width="100%"
         left="0px"
         backgroundColor="#FFFFFF"
-        padding="16px 30px"
+        padding="16px 28px"
         zIndex="999"
         transition="0.2s"
         as="nav"

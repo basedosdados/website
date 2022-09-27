@@ -51,7 +51,7 @@ code[class*=language-] ::selection,code[class*=language-]::selection,pre[class*=
 
 :not(pre)>code[class*=language-] {
   border-radius:.3em;
-  border:.13em solid #545454;
+  border:.13em solid #252A32;
   box-shadow:1px 1px .3em -.1em #000 inset;
   padding:.15em .2em .05em;
   white-space:normal
