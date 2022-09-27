@@ -345,7 +345,7 @@ export const QuestionFAQ = [
             </li>
             <li>
               Para tabelas grandes, uma boa prática é filtrar os anos e estados de seu interesse com a cláusula <code className="language-sql">WHERE</code>.
-              Como utilizamos o sistema de particionamento, isso vai reduzir drasticamente o custo e a velocidade de processamento.
+              Como utilizamos o sistema de particionamento, isso vai reduzir drasticamente o custo e o tempo de processamento.
             </li>
           </ul>
 
@@ -427,18 +427,20 @@ export const QuestionFAQ = [
           </ul>
           
           <div style={{display: "flex", flexDirection: "row", gridGap: "10px", position: "relative", top:"-18px", left: "18px"}}>
-            <p id="textReferenceBD" style={{fontSize: "16px", color:"#7D7D7D"}}>
+            <p id="textReferenceBD" style={{color:"#7D7D7D"}}>
               Dahis et al. (2022) Data Basis: Universalizing Access to High-Quality Data. Disponível em: {`<osf.io/preprints/socarxiv/r76yg>`}.
             </p>
 
             <button
+              className="button-copy"
               onClick={() => {
                 let copyText = "Dahis et al. (2022) Data Basis: Universalizing Access to High-Quality Data. Disponível em: <osf.io/preprints/socarxiv/r76yg>."
                 navigator.clipboard.writeText(copyText)
               }}
               style={{display: "flex", alignItems: "center", color: "#42B0FF"}}
             >
-              <CopyIcon fill="#42B0FF"/> Copiar
+              <CopyIcon widthIcon="26px" heightIcon="26px" fill="#42B0FF"/>
+              <div className="tooltip-button-copy">Copiar</div>
             </button>
           </div>
         </div>

@@ -18,6 +18,25 @@
   padding-bottom: 20px;
 }
 
-.questionContainer button:hover {
-  opacity: 0.7;
+.questionContainer :global(.button-copy) {
+  position: relative;
+}
+
+.questionContainer :global(.button-copy) :global(.tooltip-button-copy) {
+  display: none;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Lato';
+  width: 80px;
+  bottom: 30px;
+  left: -25px;
+  padding: 3px 8px 6px;
+  border-radius: 6px;
+  color: #FFF;
+  background-color: #2A2F38;
+}
+
+.questionContainer :global(.button-copy:hover) :global(.tooltip-button-copy) {
+  display: flex;
 }

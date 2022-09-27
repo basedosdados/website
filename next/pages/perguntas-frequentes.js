@@ -4,7 +4,7 @@ import {
   Stack,
   Text,
   Divider,
-  Collapse
+  Collapse,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import FuzzySearch from 'fuzzy-search';
@@ -18,6 +18,7 @@ import Display from "../components/atoms/Display";
 import BodyText from "../components/atoms/BodyText";
 import CrossIcon from "../public/img/icons/crossIcon";
 import SearchIcon from "../public/img/icons/searchIcon";
+import ArrowIcon from "../public/img/icons/arrowIcon";
 import styles from "../styles/faq.module.css";
 
 const QuestionsBox = ({ question, answer, id }) => {
@@ -160,6 +161,7 @@ export default function FAQ() {
         fontWeight="500"
         width="max-content"
         cursor="pointer"
+        letterSpacing="0.2px"
         onClick={() => handlerClick(category)}
       >
         {category}
@@ -210,15 +212,15 @@ export default function FAQ() {
             borderRadius: "18px",
             backgroundColor: "#ffffff",
             fontSize: "16px",
-            border: "0px",
-            boxShadow: "0 1px 3px 0.5px rgba(100, 96, 103, 0.16) !important",
+            border: "1px solid #DEDFE0",
+            _placeholder: {color: "#C4C4C4"}
           }}
           inputElementStyle={{
             height: "50px"
           }}
           rightIcon={
             (searchFilter ?
-              <SearchIcon
+              <ArrowIcon 
                 widthIcon="20px"
                 heightIcon="20px"
                 cursor="pointer"
@@ -235,7 +237,12 @@ export default function FAQ() {
                   onClick={() => setQuestions(allQuestions)}
                 />
                 :
-                <></>
+                <SearchIcon
+                  widthIcon="20px"
+                  heightIcon="20px"
+                  cursor="normal"
+                  fill="#D0D0D0"
+                />
               )
             )
           }
