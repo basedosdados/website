@@ -21,7 +21,7 @@ import SearchIcon from "../public/img/icons/searchIcon";
 import ArrowIcon from "../public/img/icons/arrowIcon";
 import styles from "../styles/faq.module.css";
 
-const QuestionsBox = ({ question, answer, id }) => {
+const QuestionsBox = ({ question, answer, id, active }) => {
   const [isActive, setIsActive] = useState(false)
   const router = useRouter()
 
@@ -34,22 +34,15 @@ const QuestionsBox = ({ question, answer, id }) => {
   }
 
   useEffect(() => {
-    if(router.asPath === "/perguntas-frequentes#directories") {
-      if(id === "directories") setIsActive(true)
-    }
-    if(router.asPath === "/perguntas-frequentes#reference") {
-      if(id === "reference") setIsActive(true)
-    }
+    setIsActive(false)
+  },[active])
+
+  useEffect(() => {
+    if(router.asPath === `/perguntas-frequentes#${id}`) setIsActive(true)
   },[id])
 
   useEffect(() => {
-    if(router.asPath === "/perguntas-frequentes#directories") {
-      if(id === "directories") scrollFocus("directories")
-    }
-    if(router.asPath === "/perguntas-frequentes#reference") {
-      if(id === "reference") scrollFocus("reference")
-    }
-    
+    if(router.asPath === `/perguntas-frequentes#${id}`) scrollFocus(id)
   },[isActive])
 
   const OpenCloseQuestion = () => {
@@ -113,6 +106,7 @@ export default function FAQ() {
   const [questions, setQuestions] = useState([])
   const [categorySelected, setCategorySelected] = useState("")
   const [searchFilter, setSearchFilter] = useState("")
+  const [closeQuestion, setCloseQuestion] = useState(false)
 
   useEffect(() => {
     setAllQuestions(QuestionFAQ)
@@ -129,9 +123,10 @@ export default function FAQ() {
 
   const filterQuestions = () => {
     const result = searcher.search(searchFilter)
-    console.log(result)
     setQuestions(result)
     setSearchFilter("")
+    setCloseQuestion(!closeQuestion)
+    window.scrollTo({top: 1})
   }
 
   const filterByCategory = (category) => {
@@ -148,8 +143,12 @@ export default function FAQ() {
       if(elm === categorySelected) {
         setCategorySelected("")
         setQuestions(allQuestions)
+        setCloseQuestion(!closeQuestion)
+        window.scrollTo({top: 1})
       } else {
         setCategorySelected(elm)
+        setCloseQuestion(!closeQuestion)
+        window.scrollTo({top: 1})
       }
     }
 
@@ -251,7 +250,7 @@ export default function FAQ() {
         <Stack
           width="100%"
           position="relative"
-          gridGap="96px"
+          gridGap="120px"
           spacing={0}
           flexDirection={isMobileMod ? "column" :"row"} 
           paddingBottom="32px"
@@ -283,6 +282,7 @@ export default function FAQ() {
                   question={elm.question}
                   answer={elm.answer}
                   id={elm.id && elm.id}
+                  active={closeQuestion}
                 />
             )}
             <Text marginTop="60px !important" color="#252A32" fontFamily="ubuntu" fontSize="16px" fontWeight="500" lineHeight="16px" letterSpacing="0">

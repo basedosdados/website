@@ -9,6 +9,7 @@ import {
 import { useDisclosure } from "@chakra-ui/hooks";
 import { useState, useEffect } from 'react';
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import HelpIcon from "../../public/img/icons/helpIcon"
 
 export default function HelpWidget({options, tooltip}) {
   const isMobile = useCheckMobile();
@@ -70,11 +71,9 @@ export default function HelpWidget({options, tooltip}) {
               position="fixed"
               bottom={isMobileMode ? "20px" : "40px"}
               right={isMobileMode ? "20px" : "40px"}
-              fontSize="26px"
-              color="#FFF"
               isActive={isOpen}
             >
-              ?
+              <HelpIcon justifyContent="center" widthIcon="25px" heightIcon="25px" fill="white"/>
             </MenuButton>
           </Tooltip>
           <MenuList
