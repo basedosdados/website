@@ -51,7 +51,7 @@ from ckanext.basedosdados.validator.resources import (
 )
 from pydantic import ValidationError
 
-from utils import get_consulta_dict, get_users_dict
+from ckanext.basedosdados.actions.utils import get_consulta_dict, get_users_dict
 
 # how to acess the endpoint
 # http://localhost:5000/api/3/action/<function_name>
