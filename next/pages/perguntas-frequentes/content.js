@@ -1,4 +1,4 @@
-import CopyIcon from "../public/img/icons/copyIcon"
+import CopyIcon from "../../public/img/icons/copyIcon"
 
 export const QuestionFAQ = [
   {

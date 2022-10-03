@@ -10,16 +10,16 @@ import Head from "next/head";
 import FuzzySearch from 'fuzzy-search';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useCheckMobile } from "../hooks/useCheckMobile.hook";
-import { MainPageTemplate } from "../components/templates/main";
-import { QuestionFAQ } from "../context/faq";
-import ControlledInput from "../components/atoms/ControlledInput";
-import Display from "../components/atoms/Display";
-import BodyText from "../components/atoms/BodyText";
-import CrossIcon from "../public/img/icons/crossIcon";
-import SearchIcon from "../public/img/icons/searchIcon";
-import ArrowIcon from "../public/img/icons/arrowIcon";
-import styles from "../styles/faq.module.css";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import { MainPageTemplate } from "../../components/templates/main";
+import { QuestionFAQ } from "./content";
+import ControlledInput from "../../components/atoms/ControlledInput";
+import Display from "../../components/atoms/Display";
+import BodyText from "../../components/atoms/BodyText";
+import CrossIcon from "../../public/img/icons/crossIcon";
+import SearchIcon from "../../public/img/icons/searchIcon";
+import ArrowIcon from "../../public/img/icons/arrowIcon";
+import styles from "../../styles/faq.module.css";
 
 const QuestionsBox = ({ question, answer, id, active }) => {
   const [isActive, setIsActive] = useState(false)

@@ -257,7 +257,7 @@ function Products() {
     <VStack
       width={{ base: "90%", lg: "85%" }}
       maxWidth="1264px"
-      margin="0 auto 120px"
+      margin="0 auto 36px"
     >
       <VStack position="relative" width="95%">
         <Display
@@ -455,7 +455,7 @@ function Support({ pages }) {
           zIndex="1"
           width="100%"
           textAlign="center"
-          margin={isMobileMod ? "80px 0px 40px" : "56px 0px 40px"}
+          margin={isMobileMod ? "80px 0px 40px" : "104px 0px 40px"}
         >
           Existimos através do esforço de pessoas {!isMobileMod && <br/>}
           que acreditam no acesso a dados abertos de qualidade.
