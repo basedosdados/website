@@ -717,7 +717,7 @@ def bd_openapi(context, data_dict):
 
 
 @toolkit.side_effect_free
-def bd_analytics(context, data_dict):
+def bd_analytics(context, data_dict=None):
     """ Endpoint for information on analytics
 
     Args:
@@ -730,6 +730,13 @@ def bd_analytics(context, data_dict):
 
     consulta = get_consulta_dict()
     users = get_users_dict()
+
+    # convert values from inner dicts to int (e.g {'2022-01-01': {'count': 12980}} to {'2022-01-01': 12980})
+    for k, v in consulta.items():
+        consulta[k] = int(v["count"])
+
+    for k, v in users.items():
+        users[k] = int(v)
 
     bd_analytics = {'consulta': consulta, 'website_users': users}
 
