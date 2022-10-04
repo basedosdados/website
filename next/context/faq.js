@@ -5,7 +5,7 @@ export const QuestionFAQ = [
     question: "Preciso pagar para acessar os dados da BD?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="do-i-have-to-pay" style={{display: "flex", flexDirection: "column"}}>
           <p>
             Você não precisa pagar para utilizar nenhum serviço oferecido pela BD.
             Porém, para acessar nossos dados tratados no BigQuery, você precisa criar um projeto no Google Cloud,
@@ -19,13 +19,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["Dados"],
-    keywords: "pagar, custo, gratuito, grátis, mensalidade"
+    keywords: "pagar, custo, gratuito, grátis, mensalidade",
+    id: "do-i-have-to-pay"
   },
   {
     question: "Os dados da BD são públicos ou privados?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="public-or-private" style={{display: "flex", flexDirection: "column"}}>
           <p>
             Em sua grande maioria, as bases de dados encontradas em nossa plataforma são públicas,
             porém, também estão listadas algumas bases privadas. Nossa organização não possui fins lucrativos,
@@ -37,13 +38,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["Dados"],
-    keywords: "público, privado"
+    keywords: "público, privado",
+    id: "public-or-private"
   },
   {
     question: "Quais tipos de dados encontro na BD?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="data-resources" style={{display: "flex", flexDirection: "column"}}>
           <p>
             Em nossa plataforma, você encontra três tipos de dados: tabelas tratadas BD+, fontes originais e pedidos LAI.
           </p>
@@ -51,13 +53,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["Dados"],
-    keywords: "tipo, categoria"
+    keywords: "tipo, categoria",
+    id: "data-resources"
   },
   {
     question: "O que são tabelas tratadas BD+?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="bdm-tables" style={{display: "flex", flexDirection: "column"}}>
           <p>
             São tabelas completas, já tratadas e prontas para análise, disponíveis no nosso <i>datalake</i> público.
             A limpeza das tabelas envolve um rigoroso processo de padronização e compatibilização de dados,
@@ -67,13 +70,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["Dados"],
-    keywords: "tratada, tratado, BD+, tabela, datalake, cruzar, cruzamento, padronização, compatibilização"
+    keywords: "tratada, tratado, BD+, tabela, datalake, cruzar, cruzamento, padronização, compatibilização",
+    id: "bdm-tables"
   },
   {
     question: "O que são fontes originais?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="external-links" style={{display: "flex", flexDirection: "column"}}>
           <p>
             São links para páginas externas à plataforma com informações úteis sobre o conjunto de dados.
           </p>
@@ -81,13 +85,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["Dados"],
-    keywords: "fonte original, externo"
+    keywords: "fonte original, externo",
+    id: "external-links"
   },
   {
     question: "O que são pedidos LAI?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="information-requests" style={{display: "flex", flexDirection: "column"}}>
           <p>
             São pedidos feitos através da Lei de Acesso à Informação (LAI).
             A LAI, lei nº 12.527/2011 regulamenta o direito, previsto na Constituição,
@@ -98,13 +103,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["Dados"],
-    keywords: "LAI, acesso à informação, lei"
+    keywords: "LAI, acesso à informação, lei",
+    id: "information-requests"
   },
   {
     question: "Como acessar as tabelas tratadas BD+?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="access-bdm-tables" style={{display: "flex", flexDirection: "column"}}>
           <p>
             Você pode consultar as tabelas tratadas BD+ de diferentes maneiras.
             Além de fazer o download direto na plataforma,
@@ -114,13 +120,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["Dados"],
-    keywords: "acesso, consulta, tratada, tratado, BD+, download, baixar, pacote, SQL, BigQuery, Python, R, Stata"
+    keywords: "acesso, consulta, tratada, tratado, BD+, download, baixar, pacote, SQL, BigQuery, Python, R, Stata",
+    id: "access-bdm-tables"
   },
   {
     question: "Como acessar as fontes originais?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="access-external-links" style={{display: "flex", flexDirection: "column"}}>
           <p>
             Você pode acessar as fontes originais dos dados clicando no botão de redirecionamento para o link externo à plataforma.
           </p>
@@ -128,13 +135,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["Dados"],
-    keywords: "acesso, consulta, fonte original, externo"
+    keywords: "acesso, consulta, fonte original, externo",
+    id: "access-external-links"
   },
   {
     question: "Como acessar os pedidos LAI?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="access-information-requests" style={{display: "flex", flexDirection: "column"}}>
           <p>
             Você pode acessar os pedidos LAI clicando no botão de redirecionamento para o link externo à plataforma.
           </p>
@@ -142,7 +150,8 @@ export const QuestionFAQ = [
       )
     },
     categories: ["Dados"],
-    keywords: "acesso, consulta, LAI, acesso à informação, lei"
+    keywords: "acesso, consulta, LAI, acesso à informação, lei",
+    id: "access-information-requests"
   },
   {
     question: "O que são diretórios?",
@@ -169,7 +178,7 @@ export const QuestionFAQ = [
     question: "Os dados da BD são atualizados automaticamente?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="data-updated" style={{display: "flex", flexDirection: "column"}}>
           <p>
             Alguns dados são atualizados automaticamente e outros não.
             Estamos no esforço de mudar para um fluxo automático todos os
@@ -179,13 +188,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["Dados"],
-    keywords: "atualização, automatização, frequência"
+    keywords: "atualização, automatização, frequência",
+    id: "data-updated"
   },
   {
     question: "É possível fazer o download dos dados da BD?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="download" style={{display: "flex", flexDirection: "column"}}>
           <p>
             Sim, você pode baixar o arquivo CSV completo das tabelas tratadas BD+ direto na plataforma.
             No entanto, tabelas com mais de 200.000 linhas só podem ser acessados através do
@@ -195,13 +205,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["Dados"],
-    keywords: "download, baixar, CSV, arquivo"
+    keywords: "download, baixar, CSV, arquivo",
+    id: "download"
   },
   {
     question: "Qual é o limite de download dos dados da BD na plataforma?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="download-limit" style={{display: "flex", flexDirection: "column"}}>
           <p>
             O limite para download dos dados na nossa plataforma é de 200.000 linhas.
             Para acessar tabelas que ultrapassam esse limite,
@@ -211,13 +222,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["Dados"],
-    keywords: "limite, download, baixar, tamanho, máximo, arquivo"
+    keywords: "limite, download, baixar, tamanho, máximo, arquivo",
+    id: "download-limit"
   },
   {
     question: "Como utilizar os pacotes da BD?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="packages" style={{display: "flex", flexDirection: "column"}}>
           <p>
             Nossos pacotes permitem o acesso ao <i>datalake</i> público direto do seu computador ou ambiente de desenvolvimento.
             Para começar a explorar nossos dados em Python, R ou Stata,
@@ -228,13 +240,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["Dados"],
-    keywords: "pacote, Python, R, Stata, instalação, documentação"
+    keywords: "pacote, Python, R, Stata, instalação, documentação",
+    id: "packages"
   },
   {
     question: "O que é nível da observação?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="level-of-observation" style={{display: "flex", flexDirection: "column"}}>
           <p>
             O nível da observação indica o que representa cada linha da tabela.
             É como se a combinação das colunas que compõem o nível da observação fosse uma chave primária.
@@ -246,13 +259,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["Dados"],
-    keywords: "nível, observação, chave, primária"
+    keywords: "nível, observação, chave, primária",
+    id: "level-of-observation"
   },
   {
     question: "O que é o datalake da BD no BigQuery?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="datalake" style={{display: "flex", flexDirection: "column"}}>
           <p>
             É um banco de dados público hospedado no BigQuery,
             ferramenta potente de armazenamento e análise de dados do Google Cloud,
@@ -264,13 +278,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["BigQuery"],
-    keywords: "BigQuery, Google, Cloud, datalake, BD+"
+    keywords: "BigQuery, Google, Cloud, datalake, BD+",
+    id: "datalake"
   },
   {
     question: "Por que preciso de uma conta no Google Cloud?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="google-account" style={{display: "flex", flexDirection: "column"}}>
           <p>
             Nosso banco de dados público é hospedado no BigQuery,
             uma ferramenta potente de armazenamento e análise de dados do Google Cloud.
@@ -284,13 +299,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["BigQuery"],
-    keywords: "conta, cadastro, BigQuery, Google, Cloud"
+    keywords: "conta, cadastro, BigQuery, Google, Cloud",
+    id: "google-account"
   },
   {
     question: "O que acontece se eu exceder o limite mensal de 1 TB gratuito do Google Cloud?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="data-limit" style={{display: "flex", flexDirection: "column"}}>
           <p>
             Caso você exceda o limite, são cobrados 5 dólares por Terabyte de dados que sua consulta irá processar.
             Mas ressaltamos que o limite de 1 Terabyte do Google costuma ser suficiente,
@@ -300,13 +316,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["BigQuery"],
-    keywords: "limite, terabyte, TB, Google, Cloud"
+    keywords: "limite, terabyte, TB, Google, Cloud",
+    id: "data-limit"
   },
   {
     question: "Como criar um projeto no Google Cloud?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="google-cloud-project" style={{display: "flex", flexDirection: "column"}}>
           <p>
             Para criar um projeto no Google Cloud, basta ter um e-mail cadastrado no Google.
             É necessário ter um projeto seu, mesmo que vazio, para você fazer consultas em nosso <i>datalake</i> público.
@@ -321,13 +338,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["BigQuery"],
-    keywords: "criar, cadastrar, projeto, Google, Cloud"
+    keywords: "criar, cadastrar, projeto, Google, Cloud",
+    id: "google-cloud-project"
   },
   {
     question: "Quais as melhores práticas para fazer uma consulta no BigQuery?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="best-practices-performance" style={{display: "flex", flexDirection: "column"}}>
           <p>
             Para verificar uma amostra de todas as variáveis da tabela, use: 
           </p>
@@ -358,13 +376,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["BigQuery"],
-    keywords: "prática, dica, otimização, desempenho, consulta, BigQuery, selecionar, filtrar"
+    keywords: "prática, dica, otimização, desempenho, consulta, BigQuery, selecionar, filtrar",
+    id: "best-practices-performance"
   },
   {
     question: "O que são os tipos no BigQuery?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="bigquery-types" style={{display: "flex", flexDirection: "column"}}>
           <p>
             São os tipos de dados do Google Standard SQL.
             Suas categorias incluem: INTEGER (Inteiro),
@@ -375,13 +394,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["BigQuery"],
-    keywords: "tipo, categoria, BigQuery, INTEGER, STRING, DATE, FLOAT, GEOGRAPHY"
+    keywords: "tipo, categoria, BigQuery, INTEGER, STRING, DATE, FLOAT, GEOGRAPHY",
+    id: "bigquery-types"
   },
   {
     question: "O que são as partições no BigQuery?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="bigquery-partitions" style={{display: "flex", flexDirection: "column"}}>
           <p>
             As partições são divisões feitas em uma tabela para facilitar o gerenciamento e a consulta aos dados.
             Ao segmentar uma tabela grande em partições menores, a quantidade de bytes lidos é reduzida,
@@ -391,13 +411,14 @@ export const QuestionFAQ = [
       )
     },
     categories: ["BigQuery"],
-    keywords: "partição, particionamento, otimização, desempenho, BigQuery"
+    keywords: "partição, particionamento, otimização, desempenho, BigQuery",
+    id: "bigquery-partitions"
   },
   {
     question: "Como a BD se financia?",
     answer: function() {
       return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div id="financing" style={{display: "flex", flexDirection: "column"}}>
           <p>
             Ao longo dos anos, a BD cresceu com o apoio financeiro de usuários e de pessoas que se identificam com nossa missão.
             Hoje, contamos também com nossa área de Serviços e Parcerias, criada para garantir a sustentabilidade da organização,
@@ -410,7 +431,8 @@ export const QuestionFAQ = [
       )
     },
     categories: ["Institucional"],
-    keywords: "financiamento, sustentabilidade, contabilidade, serviço, parceria"
+    keywords: "financiamento, sustentabilidade, contabilidade, serviço, parceria",
+    id: "financing"
   },
   {
     question: "Como citar a BD?",

@@ -658,7 +658,7 @@ export default function DatasetPage({
           {name:"Documentação", url: "https://basedosdados.github.io/mais/"},
           {name:"Vídeos no YouTube", url: "https://www.youtube.com/c/BasedosDados/featured"},
           {},
-          {name:"Como instalar os pacotes da BD", url: "https://basedosdados.github.io/mais/access_data_packages/"},
+          {name:"Instale os nossos pacotes", url: "https://basedosdados.github.io/mais/access_data_packages/"},
           {},
           {name:"Como citar a BD?",  url: "/perguntas-frequentes/#reference"},
           {name:"O que são diretórios?", url: "/perguntas-frequentes/#directories"},
