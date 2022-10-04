@@ -2,3 +2,24 @@
   color: #42B0FF;
   font-weight: 400;
 }
+
+.body ul {
+  padding-left: 30px;
+}
+
+.body :global(.bodyText) {
+  margin-bottom: 48px;
+}
+
+.body :global(.sectionText) :global(.bodyText) {
+  margin-bottom: 24px;
+}
+
+.body :global(.bigTitle) {
+  font-family: ubuntu;
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 36px;
+  color: #252A32;
+  margin-bottom: 24px;
+}

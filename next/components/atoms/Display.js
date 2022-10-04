@@ -19,7 +19,7 @@ export default function Display({
     <Heading
       fontFamily="Ubuntu"
       fontSize={isMobileMod ? "28px" : "34px"}
-      lineHeight={isMobileMod ? "34px" : "40px"}
+      lineHeight={isMobileMod ? "34px" : "44px"}
       letterSpacing={isMobileMod ? "0" : "-0.5px"}
       fontWeight="500"
       color={color}

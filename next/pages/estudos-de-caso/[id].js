@@ -8,7 +8,7 @@ import {
 import { useState, useEffect } from "react";
 import { MainPageTemplate } from "../../components/templates/main";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import BigTitle from "../../components/atoms/BigTitle";
+import Display from "../../components/atoms/Display";
 import BodyText from "../../components/atoms/BodyText";
 import { CaseStudiesCotent } from "./content";
 import styles from "../../styles/caseStudies.module.css";
@@ -43,14 +43,19 @@ export default function CaseStudies ({ title, about, logo, body }) {
         maxWidth="1264px"
         margin="auto"
       >
-        <BigTitle marginBottom="48px">{title}</BigTitle>
+        <Display
+          paddingTop={isMobileMod && "80px"}
+          marginBottom="48px"
+        >{title}</Display>
         <Box width="100%" height="320px" backgroundColor="#F5F5F6" borderRadius="24px" />
         
         <HStack
           flexDirection={isMobileMod && "column"}
+          spacing={0}
           alignItems="flex-start"
           paddingTop="64px"
           position="relative"
+          gridGap={isMobileMod ? "40px" : "80px"}
         >
           <VStack
             position={isMobileMod ? "relative" : "sticky"}
@@ -62,7 +67,7 @@ export default function CaseStudies ({ title, about, logo, body }) {
           >
             <Box marginBottom="32px" width="275px" height="65px" backgroundColor="#F5F5F6"/>
             <BodyText fontWeight="400">Sobre</BodyText>
-            <BodyText>
+            <BodyText color="#6F6F6F">
               {about}
             </BodyText>
           </VStack>
