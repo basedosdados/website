@@ -5,7 +5,7 @@ cd "$(git rev-parse --show-toplevel)"
 
 # we use some advanced docker features
 # when building so we need to turn this on
-export DOCKER_BUILDKIT=1  
+export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 
 # export CKAN_API_KEY
@@ -16,6 +16,9 @@ not_installed() { ! command -v $1 > /dev/null; return $?; }
 if not_installed git-lfs; then echo please install git-lfs; exit 1; fi;
 if not_installed docker; then echo please install docker; exit 1; fi;
 if not_installed docker-compose; then echo please install docker-compose; exit 1; fi;
+
+# create configs/gcp_credential.json if it doesn't exist
+if [ ! -f configs/gcp_credential.json ]; then echo > configs/gcp_credential.json; fi;
 
 # create empty .env.prod and empty configs/ckan.override.prod.in
 if [ ! -f .env.prod ]; then echo > .env.prod; fi;

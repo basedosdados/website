@@ -74,11 +74,17 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=15s \
 ENV CKAN_STORAGE_PATH=/app/uploads CKAN_INI=/app/configs/ckan.ini
 ENV PIP_NO_PYTHON_VERSION_WARNING=1 PYTHONDONTWRITEBYTECODE=1 PYTHONBREAKPOINT="ipdb.set_trace"
 ENV VIRTUAL_ENV=/venv PATH=/venv/bin:$PATH
+ENV GOOGLE_APPLICATION_CREDENTIALS=/root/.basedosdados/credentials/staging.json
 
 # System dependencies
 RUN --mount=type=cache,target=/var/lib/apt,id=apt_list2 --mount=type=cache,target=/var/cache/apt,id=apt_arch2\
         apt-get update && apt-get install -y libmagic1 libpq-dev libxslt-dev \
                 curl htop vim   # plus some goodies
+
+COPY --from=builder /app/configs/config.toml /root/.basedosdados/config.toml
+COPY --from=builder /app/configs/gcp_credential.json /root/.basedosdados/credentials/staging.json
+COPY --from=builder /app/configs/gcp_credential.json /root/.basedosdados/credentials/prod.json
+RUN mkdir -p ~/.basedosdados/templates
 
 # Get files
 
