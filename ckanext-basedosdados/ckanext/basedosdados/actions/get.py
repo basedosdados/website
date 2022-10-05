@@ -51,6 +51,8 @@ from ckanext.basedosdados.validator.resources import (
 )
 from pydantic import ValidationError
 
+from ckanext.basedosdados.actions.utils import get_consulta_dict, get_users_dict
+
 # how to acess the endpoint
 # http://localhost:5000/api/3/action/<function_name>
 
@@ -712,3 +714,30 @@ def bd_openapi(context, data_dict):
     filepath = filepath / "openapi.json"
     with open(filepath, "r") as file:
         return json.load(file)
+
+
+@toolkit.side_effect_free
+def bd_analytics(context, data_dict=None):
+    """ Endpoint for information on analytics
+
+    Args:
+        context (dict): Context
+        data_dict (dict): Data dictionary
+
+    Returns:
+        dict: Analytics information
+    """
+
+    consulta = get_consulta_dict()
+    users = get_users_dict()
+
+    # convert values from inner dicts to int (e.g {'2022-01-01': {'count': 12980}} to {'2022-01-01': 12980})
+    for k, v in consulta.items():
+        consulta[k] = int(v["count"])
+
+    for k, v in users.items():
+        users[k] = int(v)
+
+    bd_analytics = {'consulta': consulta, 'website_users': users}
+
+    return bd_analytics

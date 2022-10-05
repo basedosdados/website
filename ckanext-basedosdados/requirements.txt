@@ -8,3 +8,8 @@ typing_extensions
 pytest
 jsonref
 pandas
+google-api-python-client
+google-cloud-storage
+basedosdados
+markupsafe==2.0.1
+protobuf==3.20.*
