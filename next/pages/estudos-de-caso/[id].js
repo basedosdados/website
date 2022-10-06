@@ -28,7 +28,7 @@ export async function getStaticPaths(context) {
   }
 }
 
-export default function CaseStudies ({ title, about, logo, body }) {
+export default function CaseStudies ({ title, about, sector, logo, body }) {
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
 
@@ -67,8 +67,13 @@ export default function CaseStudies ({ title, about, logo, body }) {
           >
             <Box marginBottom="32px" width="275px" height="65px" backgroundColor="#F5F5F6"/>
             <BodyText fontWeight="400">Sobre</BodyText>
-            <BodyText color="#6F6F6F">
+            <BodyText paddingBottom="32px" color="#6F6F6F">
               {about}
+            </BodyText>
+
+            <BodyText fontWeight="400">Setor</BodyText>
+            <BodyText color="#6F6F6F">
+              {sector}
             </BodyText>
           </VStack>
 

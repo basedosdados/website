@@ -150,9 +150,10 @@ export const CaseStudiesCotent = [
             de uma estrutura matricial e de metodologia ágil, adotadas pela Fundação
             a partir de 2022. A BD assumiu papel fundamental neste processo,
             apoiando a equipe da Fundação Lemann com formações interativas sobre
-            ferramentas de dados como Metabase e BigQuery, bem como atividades
+            ferramentas de dados como <a href="https://www.metabase.com/" target="_blank">Metabase</a> e
+            <a href="https://cloud.google.com/bigquery" target="_blank">BigQuery</a>, bem como atividades
             formativas para orientar a exploração de conjuntos de dados específicos,
-            como os do Programa Internacional de Avaliação de Estudantes (Pisa). 
+            como os do <a href="https://basedosdados.org/dataset/programme-for-international-student-assessment?external_link=Baixar" target="_blank">Programa Internacional de Avaliação de Estudantes</a> (Pisa). 
           </p>
 
           <p class="bodyText">
@@ -166,7 +167,7 @@ export const CaseStudiesCotent = [
           </p>
 
           <p class="bodyText">
-            Saiba mais sobre a Fundação Lemann aqui.  
+            Saiba mais sobre a Fundação Lemann <a href="https://fundacaolemann.org.br/" target="_blank">aqui</a>.  
           </p>
         </div>
       </div>
