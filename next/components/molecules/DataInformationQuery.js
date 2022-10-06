@@ -346,7 +346,7 @@ bd_read_table, ///
                   textAlign="center"
                   marginBottom="24px"
                 >
-                  <Text color="#FF8484" fontWeight="700" fontFamily="Ubuntu" fontSize="18px">
+                  <Text color="#FF8484" fontWeight="700" fontFamily="Ubuntu" fontSize="18px" letterSpacing="0.3px">
                     Doe agora
                   </Text>
                 </Box>
@@ -412,7 +412,7 @@ bd_read_table, ///
                   _hover={{opacity : "0.8"}}
                   onClick={() => window.open("https://apoia.se/basedosdados", "_blank")}
                 >
-                  <CalendarIcon widthIcon="22px" heightIcon="22px" fill="#FFF"/>
+                  <CalendarIcon widthIcon="26px" heightIcon="26px" fill="#FFF"/>
                   Doar mensalmente
                 </RoundedButton>
                 

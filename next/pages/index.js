@@ -467,7 +467,7 @@ function Support({ pages }) {
           fontFamily="Ubuntu"
           fontSize={isMobileMod ? "16px" : "18px"}
           alignSelf="center"
-          letterSpacing="0.1px"
+          letterSpacing={isMobileMod ? "0.2px" : "0.1px"}
           fontWeight="300"
           margin="0 0 48px !important"
         > Apoie a Base dos Dados você também

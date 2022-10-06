@@ -286,8 +286,16 @@ export default function FAQ() {
                   isMobile={isMobileMod}
                 />
             )}
-            <Text marginTop="60px !important" color="#252A32" fontFamily="ubuntu" fontSize="16px" fontWeight="500" lineHeight="16px" letterSpacing="0">
-              Não encontrou sua pergunta? <a style={{color:"#42B0FF"}} href="/contato">Entre em contato</a> com nossa equipe.
+            <Text
+              marginTop="60px !important"
+              color="#252A32"
+              fontFamily="ubuntu"
+              fontSize="16px"
+              fontWeight="500"
+              lineHeight="16px"
+              letterSpacing="0.2px"
+            >
+              Não encontrou sua pergunta? <a className={styles.link} href="/contato">Entre em contato</a> com nossa equipe.
             </Text>
           </Stack>
         </Stack>

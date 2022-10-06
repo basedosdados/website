@@ -7,7 +7,7 @@ export function DisclaimerBox({ title, text, children, ...style }) {
       display="flex"
       flexDirection="row"
       padding="10px 12px"
-      boxShadow="0 1px 4px 0 rgba(0,0,0, 0.25)"
+      boxShadow="0 1px 4px 0 rgba(0,0,0, 0.15)"
       borderLeft="3px solid #42B0FF"
       borderEndRadius="6px"
       marginTop="24px"

@@ -183,6 +183,7 @@ export function Database({
               <HStack
                 spacing={1}
                 cursor={tableNum > 0 ? "pointer" : "normal"}
+                _hover={tableNum > 0 && {opacity: "0.7"}}
                 onClick={() => {
                   if(tableNum > 0) return window.location.replace(`${link}?bdm_table`)
                 }}
@@ -213,6 +214,7 @@ export function Database({
 
               <HStack
                 cursor={externalLinkNum > 0 ? "pointer" : "normal"}
+                _hover={externalLinkNum > 0 && {opacity: "0.7"}}
                 onClick={() => {
                   if(externalLinkNum > 0) return window.location.replace(`${link}?external_link`)
                 }}
@@ -236,6 +238,7 @@ export function Database({
 
               <HStack
                 cursor={informationRequestNum > 0 ? "pointer" : "normal"}
+                _hover={informationRequestNum > 0 && {opacity: "0.7"}}
                 onClick={() => {
                   if(informationRequestNum > 0) return window.location.replace(`${link}?information_request`)
                 }}
