@@ -29,9 +29,10 @@ jobs:
           url: https://vault.basedosdados.org
           token: ${{ secrets.VAULT_TOKEN }}
           secrets: |
-            secret/data/ckan_credentials    ENV_STAGING         | CKAN_ENV_STAGING ;
-            secret/data/ckan_credentials    INI_STAGING         | CKAN_INI_STAGING ;
-            secret/data/aws_credentials     BD_PRIVATE_SSH_KEY  | AWS_BD_PRIVATE_SSH_KEY
+            secret/data/ckan_credentials                    ENV_PRODUCTION      | CKAN_ENV_PRODUCTION ;
+            secret/data/ckan_credentials                    INI_PRODUCTION      | CKAN_INI_PRODUCTION ;
+            secret/data/aws_credentials                     BD_PRIVATE_SSH_KEY  | AWS_BD_PRIVATE_SSH_KEY ;
+            secret/data/gcp_credentials/basedosdados-dev    GCP_SA              | GCP_SA
 
       - name: Add Secret Files
         env:
@@ -42,7 +43,8 @@ jobs:
           echo "$CKAN_INI_STAGING" > ./configs/ckan.override.prod.ini && \
           mkdir ~/.ssh && \
           echo "$AWS_BD_PRIVATE_SSH_KEY" > ~/.ssh/BD.pem && \
-          chmod 700 ~/.ssh ~/.ssh/BD.pem
+          chmod 700 ~/.ssh ~/.ssh/BD.pem && \
+          echo "$GCP_SA" > ./configs/gcp_credential.json
 
       - name: Deploy Website
         env:
@@ -82,9 +84,10 @@ jobs:
           url: https://vault.basedosdados.org
           token: ${{ secrets.VAULT_TOKEN }}
           secrets: |
-            secret/data/ckan_credentials    ENV_PRODUCTION      | CKAN_ENV_PRODUCTION ;
-            secret/data/ckan_credentials    INI_PRODUCTION      | CKAN_INI_PRODUCTION ;
-            secret/data/aws_credentials     BD_PRIVATE_SSH_KEY  | AWS_BD_PRIVATE_SSH_KEY
+            secret/data/ckan_credentials                    ENV_PRODUCTION      | CKAN_ENV_PRODUCTION ;
+            secret/data/ckan_credentials                    INI_PRODUCTION      | CKAN_INI_PRODUCTION ;
+            secret/data/aws_credentials                     BD_PRIVATE_SSH_KEY  | AWS_BD_PRIVATE_SSH_KEY ;
+            secret/data/gcp_credentials/basedosdados-dev    GCP_SA              | GCP_SA
 
       - name: Add Secret Files
         env:
@@ -95,7 +98,8 @@ jobs:
           echo "$CKAN_INI_PRODUCTION" > ./configs/ckan.override.prod.ini && \
           mkdir ~/.ssh && \
           echo "$AWS_BD_PRIVATE_SSH_KEY" > ~/.ssh/BD.pem && \
-          chmod 700 ~/.ssh ~/.ssh/BD.pem
+          chmod 700 ~/.ssh ~/.ssh/BD.pem && \
+          echo "$GCP_SA" > ./configs/gcp_credential.json
 
       - name: Deploy Website
         env:
