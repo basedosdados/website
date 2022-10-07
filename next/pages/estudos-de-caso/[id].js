@@ -2,12 +2,12 @@ import {
   Stack,
   VStack,
   HStack,
-  Box,
-  Text
+  Image
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { MainPageTemplate } from "../../components/templates/main";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import SectionText from "../../components/atoms/SectionText";
 import Display from "../../components/atoms/Display";
 import BodyText from "../../components/atoms/BodyText";
 import { CaseStudiesCotent } from "./content";
@@ -28,7 +28,15 @@ export async function getStaticPaths(context) {
   }
 }
 
-export default function CaseStudies ({ title, about, sector, logo, body }) {
+export default function CaseStudies ({
+  title,
+  img,
+  imgDescription,
+  logo,
+  about,
+  sector,
+  body
+}) {
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
 
@@ -47,7 +55,27 @@ export default function CaseStudies ({ title, about, sector, logo, body }) {
           paddingTop={isMobileMod && "80px"}
           marginBottom="48px"
         >{title}</Display>
-        <Box width="100%" height="320px" backgroundColor="#F5F5F6" borderRadius="24px" />
+
+        <VStack spacing={0} gridGap="16px">
+          <Image
+            width="fit-content"
+            maxWidth="1264px"
+            height="fit-content"
+            maxHeight="450px"
+            borderRadius="24px"
+            src={img}
+          />
+
+          {imgDescription && 
+            <SectionText
+              width="100%"
+              textAlign="end"
+              color="#6F6F6F"
+            >
+              {imgDescription}
+            </SectionText>
+          }
+        </VStack>
         
         <HStack
           flexDirection={isMobileMod && "column"}
@@ -65,7 +93,7 @@ export default function CaseStudies ({ title, about, sector, logo, body }) {
             maxWidth="400px"
             alignItems="flex-start"
           >
-            <Box marginBottom="32px" width="275px" height="65px" backgroundColor="#F5F5F6"/>
+            <Image marginBottom="32px" width="fit-content" height="fit-content" src={logo}/>
             <BodyText fontWeight="400">Sobre</BodyText>
             <BodyText paddingBottom="32px" color="#6F6F6F">
               {about}

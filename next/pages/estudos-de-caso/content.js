@@ -2,6 +2,9 @@ export const CaseStudiesCotent = [
   {
     id: "fundacao-lemann",
     title: "Fundação Lemann aprimora tomada de decisão e monitoramento de metas com tecnologia de análises e engenharia de dados desenvolvida pela BD",
+    img: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/imagens/estudo_de_caso_flemann.png",
+    imgDescription: "Foto: Samuel Macedo para Fundação Lemann",
+    logo: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/logos/flemann.png",
     about: "Organização que trabalha para garantir educação de qualidade para todas as crianças brasileiras e apoia líderes focados no desenvolvimento social do Brasil.",
     sector: "Educação",
     body: `
@@ -172,6 +175,5 @@ export const CaseStudiesCotent = [
         </div>
       </div>
     `,
-    logo: ""
   },
 ]
