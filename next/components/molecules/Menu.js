@@ -189,7 +189,7 @@ function DesktopLinks({ links }) {
                   </Link>
                 ))}
               </MenuDropdown>
-            );
+            )
           }
 
           return (
@@ -254,7 +254,10 @@ export default function Menu({ pages = [] }) {
       YouTube: "https://www.youtube.com/c/BasedosDados/featured",
       Blog: "https://medium.com/basedosdados",
     },
-    Serviços: "/servicos",
+    Serviços: {
+      Serviços : "/servicos",
+      "Estudos de caso" : "/estudos-de-caso/fundacao-lemann"
+    },
     Institucional: {
       "Quem somos": "/quem-somos",
       Transparência: "/transparencia",

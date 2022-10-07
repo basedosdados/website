@@ -9,21 +9,21 @@ export function MenuDropdown({ title, children, ...style }) {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
 
   const btnMouseEnterEvent = () => {
-    setIsOpenMenu(true);
+    setIsOpenMenu(true)
   }
   const btnMouseLeaveEvent = () => {
     timerRef.current = setTimeout(() => {
-      setIsOpenMenu(false);
-    }, 2000);
+      setIsOpenMenu(false)
+    }, 100)
   }
   const menuListMouseEnterEvent = () => {
-    clearTimeout(timerRef.current);
-    timerRef.current = undefined;
-    setIsOpenMenu(true);
-  };
+    clearTimeout(timerRef.current)
+    timerRef.current = undefined
+    setIsOpenMenu(true)
+  }
   const menuListMouseLeaveEvent = () => {
-    setIsOpenMenu(false);
-  };
+    setIsOpenMenu(false)
+  }
 
   return (
     <Menu isOpen={isOpenMenu}>
@@ -62,5 +62,5 @@ export function MenuDropdown({ title, children, ...style }) {
         {children}
       </MenuList>
     </Menu>
-  );
+  )
 }

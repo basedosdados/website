@@ -125,6 +125,13 @@ export default function Footer({ pages }) {
             </LinkVStack>
             <LinkVStack title="TUTORIAIS">
               <FooterLink
+                href="/perguntas-frequentes"
+                color="white"
+                target="_blank"
+              >
+                Perguntas Frequentes
+              </FooterLink>
+              <FooterLink
                 href="https://basedosdados.github.io/mais/"
                 color="white"
                 target="_blank"

@@ -10,18 +10,18 @@ import Head from "next/head";
 import FuzzySearch from 'fuzzy-search';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useCheckMobile } from "../hooks/useCheckMobile.hook";
-import { MainPageTemplate } from "../components/templates/main";
-import { QuestionFAQ } from "../context/faq";
-import ControlledInput from "../components/atoms/ControlledInput";
-import Display from "../components/atoms/Display";
-import BodyText from "../components/atoms/BodyText";
-import CrossIcon from "../public/img/icons/crossIcon";
-import SearchIcon from "../public/img/icons/searchIcon";
-import ArrowIcon from "../public/img/icons/arrowIcon";
-import styles from "../styles/faq.module.css";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import { MainPageTemplate } from "../../components/templates/main";
+import { QuestionFAQ } from "./content";
+import ControlledInput from "../../components/atoms/ControlledInput";
+import Display from "../../components/atoms/Display";
+import BodyText from "../../components/atoms/BodyText";
+import CrossIcon from "../../public/img/icons/crossIcon";
+import SearchIcon from "../../public/img/icons/searchIcon";
+import ArrowIcon from "../../public/img/icons/arrowIcon";
+import styles from "../../styles/faq.module.css";
 
-const QuestionsBox = ({ question, answer, id, active }) => {
+const QuestionsBox = ({ question, answer, id, active, isMobile }) => {
   const [isActive, setIsActive] = useState(false)
   const router = useRouter()
 
@@ -64,10 +64,10 @@ const QuestionsBox = ({ question, answer, id, active }) => {
       >
         <Text
           fontFamily="ubuntu"
-          fontSize="20px"
+          fontSize={isMobile ? "18px" : "20px"}
           fontWeight="400"
-          lineHeight="22px"
-          letterSpacing="0.2px"
+          lineHeight={isMobile ? "28px" :"22px"}
+          letterSpacing={isMobile ? "0.1px" : "0.2px"}
           color="#252A32"
         >
           {question}
@@ -188,14 +188,14 @@ export default function FAQ() {
         width="100%"
         maxWidth="1264px"
         margin="auto"
-        paddingTop={isMobileMod && "75px"}
+        paddingTop={isMobileMod && "80px  "}
         spacing={0}
       >
         <Display
           paddingBottom={isMobileMod ? "56px" : "66px" }
           color="#2B8C4D"
         >
-          Perguntas Frequentes
+          Perguntas frequentes
         </Display>
 
         <ControlledInput
@@ -250,7 +250,7 @@ export default function FAQ() {
         <Stack
           width="100%"
           position="relative"
-          gridGap="120px"
+          gridGap={isMobileMod ? "64px" : "120px"}
           spacing={0}
           flexDirection={isMobileMod ? "column" :"row"} 
           paddingBottom="32px"
@@ -283,10 +283,19 @@ export default function FAQ() {
                   answer={elm.answer}
                   id={elm.id && elm.id}
                   active={closeQuestion}
+                  isMobile={isMobileMod}
                 />
             )}
-            <Text marginTop="60px !important" color="#252A32" fontFamily="ubuntu" fontSize="16px" fontWeight="500" lineHeight="16px" letterSpacing="0">
-              Não encontrou sua pergunta? <a style={{color:"#42B0FF"}} href="/contato">Entre em contato</a> com nossa equipe.
+            <Text
+              marginTop="60px !important"
+              color="#252A32"
+              fontFamily="ubuntu"
+              fontSize="16px"
+              fontWeight="500"
+              lineHeight="16px"
+              letterSpacing="0.2px"
+            >
+              Não encontrou sua pergunta? <a className={styles.link} href="/contato">Entre em contato</a> com nossa equipe.
             </Text>
           </Stack>
         </Stack>

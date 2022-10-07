@@ -105,6 +105,7 @@ export default function Transparencia({ pages }) {
         alignItems="center"
       >
         <Stack
+          spacing={0}
           maxWidth={{ base: "100%", lg: "45%" }}
         >
           <Display 
@@ -116,10 +117,10 @@ export default function Transparencia({ pages }) {
           >
             Nossas contas são {isMobileMod ? " " : <br/>} transparentes e abertas {isMobileMod ? " " : <br/>} – como todo o resto.
           </Display>
-          <BodyText paddingBottom="20px">
+          <BodyText paddingBottom="24px">
             Somos uma organização não-governamental sem fins lucrativos e <i>open source</i>. A transparência fundamenta todas as nossas ações, desde o trabalho com dados públicos até a prestação de contas. Utilizamos os recursos para facilitar o acesso de milhares de pessoas a dados de qualidade. 
           </BodyText>
-          <BodyText paddingBottom="20px">
+          <BodyText paddingBottom="24px">
             Nesse espaço, você encontra informações referentes às nossas atividades, receitas e despesas. Acompanhe de perto como garantimos a sustentabilidade da organização.
           </BodyText>
         </Stack>
@@ -169,17 +170,18 @@ export default function Transparencia({ pages }) {
         <Stack 
           maxWidth={{ base: "100%", lg: "45%" }}
           paddingTop={{base: "24px", lg: "0px"}}
+          spacing={0}
         >
           <Display
             display={isMobileMod ? "none" : "flex"}
-            paddingBottom={{base: "8px", lg: "16px"}}
+            paddingBottom={{base: "8px", lg: "24px"}}
           >
             Indicador de sobrevida
           </Display>
-          <BodyText paddingBottom="20px">
+          <BodyText paddingBottom="24px">
             Esse é nosso indicador de sobrevida. Ele mostra o tempo que nossas atividades poderiam se manter caso a arrecadação de recursos financeiros fosse interrompida, considerando as despesas regulares com infraestrutura e equipe, por exemplo. 
           </BodyText>
-          <BodyText paddingBottom="20px">
+          <BodyText paddingBottom="24px">
             O indicador evidencia a importância de sua contribuição para a continuidade dos nossos esforços em busca da universalização do acesso a dados públicos. Abaixo, você confere detalhes sobre as fontes e destinações dos recursos da organização.
           </BodyText>
         </Stack>
@@ -187,18 +189,18 @@ export default function Transparencia({ pages }) {
 
       <SectionBox
         flexDirection="column"
-        paddingTop={{ base: "112px", lg: "152px" }}
+        paddingTop={{ base: "88px", lg: "152px" }}
         alignItems={isMobileMod ? "start" : "center"}
       >
         <Display
           textAlign={isMobileMod ? "start" : "center"}
-          paddingBottom={isMobileMod ? "12px" : "8px"}
+          paddingBottom={isMobileMod ? "24px" : "8px"}
         >
           Dados da contabilidade
         </Display>
         <BodyText
           textAlign={isMobileMod ? "start" : "center"}
-          paddingBottom={isMobileMod ? "20px" : "16px"}
+          paddingBottom={isMobileMod ? "24px" : "16px"}
         >
           Como não poderia deixar de ser, todos os microdados{isMobileMod ? " " : <br/>}
           relativos à contabilidade da BD estão disponíveis no <i>datalake</i> público.
@@ -235,7 +237,12 @@ export default function Transparencia({ pages }) {
           />
         </Stack>
 
-        <SectionText marginRight="24px" paddingTop="40px" textAlign={isMobileMod ? "start" : "end"} fontSize={isMobileMod ? "14px" : "16px"}>
+        <SectionText
+          marginRight="24px"
+          paddingTop="40px"
+          textAlign={isMobileMod ? "start" : "end"}
+          fontSize={isMobileMod ? "14px" : "16px"}
+        >
           Veja o painel completo <Link fontSize={isMobileMod ? "14px" : "16px"} target="_blank" color="#42B0FF" href="https://perguntas.basedosdados.org/public/dashboard/ab21da85-bff2-435b-a819-953d785167b4"
           > aqui</Link>.
         </SectionText>
@@ -257,11 +264,11 @@ export default function Transparencia({ pages }) {
           justifyContent="space-between"
           spacing={0}
         >
-          <BodyText paddingBottom="20px" maxWidth={isMobileMod ? "100%" : "45%"}>
+          <BodyText paddingBottom="24px" maxWidth={isMobileMod ? "100%" : "45%"}>
             Em nosso estatuto, estão presentes as diretrizes que regulamentam o funcionamento e o processo de tomada de decisões da organização. O documento inclui também os direitos e deveres dos membros e as competências dos conselhos administrativos e fiscais.
           </BodyText>
         
-          <BodyText paddingBottom="20px" maxWidth={isMobileMod ? "100%" : "45%"}>
+          <BodyText paddingBottom="24px" maxWidth={isMobileMod ? "100%" : "45%"}>
             Nossos relatórios apresentam todas as atividades empenhadas pela equipe. São diversos projetos que colaboram com a promoção da cultura de transparência, o desenvolvimento socioeconômico e a construção de políticas públicas baseadas em dados e evidências.
           </BodyText>
         </Stack>
@@ -323,9 +330,10 @@ export default function Transparencia({ pages }) {
           <Stack
             paddingTop={{ base: "0px", lg: "16px" }}
             maxWidth={{ base: "100%", lg: "42%" }}
+            spacing={0}
           >
             <BigTitle 
-              paddingBottom={{base: "12px", lg: "16px"}}
+              paddingBottom={{base: "20px", lg: "24px"}}
               color="#FFF"
             >
               Você também acredita no {isMobileMod ? " " : <br/>} acesso a dados de qualidade?
@@ -334,7 +342,7 @@ export default function Transparencia({ pages }) {
               fontSize="16px"
               letterSpacing="0.2px"
               lineHeight="27px"
-              paddingBottom="20px"
+              paddingBottom="24px"
               color="#FFF"
             >
               Tudo o que fazemos só é possível por conta das pessoas que apoiam o nosso trabalho. Ajude a BD a continuar facilitando o acesso a dados públicos. Com qualquer valor, você contribui para a manutenção dos nossos projetos e a sobrevivência da organização.
