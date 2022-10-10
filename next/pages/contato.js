@@ -90,7 +90,8 @@ export default function Contato({ pages }) {
                 fontFamily="Ubuntu"
                 color="#42B0FF"
                 fontSize="16px"
-                letterSpacing="0.3px"
+                fontWeigth="500"
+                letterSpacing="0.2px"
               >
                 nossos serviços
               </Link> podem ajudar.
@@ -116,7 +117,8 @@ export default function Contato({ pages }) {
                 color="#42B0FF"
                 target="_blank"
                 fontSize="16px"
-                letterSpacing="0.3px"
+                fontWeigth="500"
+                letterSpacing="0.2px"
               >
                 Discord<a style={{color:"#252A32", fontWeight:"500"}}>.</a>
               </Link>

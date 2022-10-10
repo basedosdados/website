@@ -27,6 +27,7 @@ import GreenTab from "../atoms/GreenTab";
 import RoundedButton from "../atoms/RoundedButton";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import CopyIcon from "../../public/img/icons/copyIcon";
+import CalendarIcon from "../../public/img/icons/calendarIcon";
 import ExclamationIcon from "../../public/img/icons/exclamationIcon";
 import MenuVerticalIcon from "../../public/img/icons/menuVerticalIcon"
 
@@ -345,7 +346,7 @@ bd_read_table, ///
                   textAlign="center"
                   marginBottom="24px"
                 >
-                  <Text color="#FF8484" fontWeight="700" fontFamily="Ubuntu" fontSize="18px">
+                  <Text color="#FF8484" fontWeight="700" fontFamily="Ubuntu" fontSize="18px" letterSpacing="0.3px">
                     Doe agora
                   </Text>
                 </Box>
@@ -397,8 +398,22 @@ bd_read_table, ///
                   onClick={onCopy}
                   opacity={hasCopied && "0.8"}
                 >
-                  <CopyIcon widthIcon="22px" heightIcon="22px" fill="#FFF"/>
+                  <CopyIcon solid widthIcon="22px" heightIcon="22px" fill="#FFF"/>
                   {hasCopied ? "Copiada chave PIX" :"Copiar chave PIX"}
+                </RoundedButton>
+
+                <RoundedButton
+                  fontSize="14px"
+                  fontWeight="700"
+                  backgroundColor="#FF8484"
+                  paddingX="30px"
+                  width="100%"
+                  gridGap="6px"
+                  _hover={{opacity : "0.8"}}
+                  onClick={() => window.open("https://apoia.se/basedosdados", "_blank")}
+                >
+                  <CalendarIcon widthIcon="26px" heightIcon="26px" fill="#FFF"/>
+                  Doar mensalmente
                 </RoundedButton>
                 
                 <RoundedButton
