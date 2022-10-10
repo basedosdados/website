@@ -10,7 +10,7 @@ import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import SectionText from "../../components/atoms/SectionText";
 import Display from "../../components/atoms/Display";
 import BodyText from "../../components/atoms/BodyText";
-import { CaseStudiesCotent } from "./content";
+import { CaseStudiesCotent } from "../../content/caseStudies";
 import styles from "../../styles/caseStudies.module.css";
 
 export async function getStaticProps(context) {

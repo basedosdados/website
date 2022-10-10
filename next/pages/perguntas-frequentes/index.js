@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { MainPageTemplate } from "../../components/templates/main";
-import { QuestionFAQ } from "./content";
+import { QuestionFAQ } from "../../content/FAQ";
 import ControlledInput from "../../components/atoms/ControlledInput";
 import Display from "../../components/atoms/Display";
 import BodyText from "../../components/atoms/BodyText";
@@ -94,7 +94,7 @@ const QuestionsBox = ({ question, answer, id, active, isMobile }) => {
   )
 }
 
-export default function FAQ() {
+export default function FAQ({}) {
   const isMobile = useCheckMobile();
   const [isMobileMod, setIsMobileMod] = useState(false)
   
