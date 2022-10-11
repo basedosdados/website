@@ -1,6 +1,7 @@
 export const CaseStudiesCotent = [
   {
     id: "fundacao-lemann",
+    displayTitle: "Fundação Lemann",
     title: "Fundação Lemann aprimora tomada de decisão e monitoramento de metas com tecnologia de análises e engenharia de dados desenvolvida pela BD",
     img: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/imagens/estudo_de_caso_flemann.png",
     imgDescription: "Foto: Samuel Macedo para Fundação Lemann",
@@ -115,8 +116,8 @@ export const CaseStudiesCotent = [
           <p class="bodyText">
             Isso é possível porque os painéis apresentam visualizações que envolvem
             dados públicos minuciosamente tratados e padronizados pela BD,
-            como o Censo da Educação Básica (INEP), Avaliação Nacional de Alfabetização (ANA),
-            Sistema Nacional de Avaliação da Educação Básica (SAEB), Portal da Transparência (CGU),
+            como o Censo da Educação Básica (Inep), Avaliação Nacional de Alfabetização (ANA),
+            Sistema Nacional de Avaliação da Educação Básica (Saeb), Portal da Transparência (CGU),
             PNAD (IBGE), ESTADIC e MUNIC (IBGE), e mais.
           </p>
 
@@ -125,7 +126,7 @@ export const CaseStudiesCotent = [
             desses importantes indicadores foi com os dados do Sistema de Avaliação da Educação Básica (Saeb).
             Daniel explica como a parceria possibilitou a análise desses dados de maneira
             ágil e prática: “Com apoio da BD pudemos, em tempo recorde, construir uma
-            plataforma de análise dos dados do SAEB 2021. No mesmo dia da divulgação
+            plataforma de análise dos dados do Saeb 2021. No mesmo dia da divulgação
             dos dados da avaliação educacional, os painéis estavam operacionais,
             permitindo aos times dos programas analisar o desempenho das redes de ensino
             com diferentes filtros e recortes.”
