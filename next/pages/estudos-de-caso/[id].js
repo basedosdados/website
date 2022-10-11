@@ -2,15 +2,17 @@ import {
   Stack,
   VStack,
   HStack,
-  Image
+  Image,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import Head from "next/head";
 import { MainPageTemplate } from "../../components/templates/main";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import { CaseStudiesCotent } from "../../content/caseStudies";
 import SectionText from "../../components/atoms/SectionText";
 import Display from "../../components/atoms/Display";
 import BodyText from "../../components/atoms/BodyText";
-import { CaseStudiesCotent } from "../../content/caseStudies";
+import RoundedButton from "../../components/atoms/RoundedButton";
 import styles from "../../styles/caseStudies.module.css";
 
 export async function getStaticProps(context) {
@@ -30,6 +32,7 @@ export async function getStaticPaths(context) {
 
 export default function CaseStudies ({
   title,
+  displayTitle,
   img,
   imgDescription,
   logo,
@@ -46,23 +49,50 @@ export default function CaseStudies ({
 
   return (
     <MainPageTemplate paddingX="24px">
+      <Head>
+        <title>{displayTitle} – Base dos Dados</title>
+        <meta
+          property="og:title"
+          content="Perguntas frequentes – Base dos Dados"
+          key="ogtitle"
+        />
+        <meta
+          property="og:description"
+          content="Aqui você encontra as respostas para as suas dúvidas sobre a Base dos Dados. Saiba mais sobre nossos dados, como acessá-los pelo BigQuery usando SQL ou com os pacotes Python, R e Stata agora mesmo."
+          key="ogdesc"
+        />
+      </Head>
+
       <Stack
         spacing={0}
         maxWidth="1264px"
         margin="auto"
       >
-        <Display
-          paddingTop={isMobileMod && "80px"}
-          marginBottom="48px"
-        >{title}</Display>
+        {isMobileMod &&
+          <Display
+              paddingTop={isMobileMod && "80px"}
+              marginBottom="48px"
+          >{title}</Display>
+        }
+        
+        <VStack position="relative" spacing={0} gridGap="16px">
+          {!isMobileMod &&
+            <Display
+              position="absolute"
+              paddingTop={isMobileMod && "80px"}
+              margin="40px 48px"
+              color="#FFF"
+              zIndex="10"
+            >{title}</Display>
+          }
 
-        <VStack spacing={0} gridGap="16px">
           <Image
+            filter={!isMobileMod && "brightness(0.5)"}
             width="fit-content"
-            maxWidth="1264px"
+            maxWidth="100%"
             height="fit-content"
             maxHeight="450px"
-            borderRadius="24px"
+            borderRadius={isMobileMod ? "12px" : "24px"}
             src={img}
           />
 
@@ -90,19 +120,33 @@ export default function CaseStudies ({
             top={!isMobileMod && "100px"}
             marginBottom={isMobileMod && "32px"}
             spacing={0}
-            maxWidth="400px"
+            maxWidth="300px"
             alignItems="flex-start"
           >
-            <Image marginBottom="32px" width="fit-content" height="fit-content" src={logo}/>
-            <BodyText fontWeight="400">Sobre</BodyText>
-            <BodyText paddingBottom="32px" color="#6F6F6F">
+            <Image
+              marginBottom="32px"
+              width="fit-content"
+              height="fit-content"
+              src={logo}
+            />
+            <BodyText  fontSize="16px" letterSpacing="0.2px" fontWeight="400">Sobre</BodyText>
+            <BodyText paddingBottom="32px" fontSize="16px" letterSpacing="0.2px" color="#6F6F6F">
               {about}
             </BodyText>
 
-            <BodyText fontWeight="400">Setor</BodyText>
-            <BodyText color="#6F6F6F">
+            <BodyText  fontSize="16px" letterSpacing="0.2px" fontWeight="400">Setor</BodyText>
+            <BodyText paddingBottom="48px" fontSize="16px" letterSpacing="0.2px" color="#6F6F6F">
               {sector}
             </BodyText>
+
+            <BodyText paddingBottom="8px">
+              Queremos ajudar você.
+            </BodyText>
+            <RoundedButton
+              onClick={() => window.open("/contato", "_blank")}
+            >
+              Entre em contato
+            </RoundedButton>
           </VStack>
 
           <VStack flex={1}>
