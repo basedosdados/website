@@ -181,6 +181,7 @@ export function getTemporalCoverage(temporalCoverage, parentTemporalCoverage) {
   let years = []
 
   const getYears = (value = "") => {
+    if(typeof value === "object") return value.toString().split(/\(\d+\)/)
     return value.split(/\(\d+\)/)
   }
 
@@ -202,10 +203,7 @@ export function getTemporalCoverage(temporalCoverage, parentTemporalCoverage) {
 
   years = years.sort()
 
-  if (years.length === 0) {
-    return parentYears.join(" - ")
-  }
-
+  if (years.length === 0) return parentYears.join(" - ")
   if (years.length === 1) return years[0]
 
   const min_date = years[0]
