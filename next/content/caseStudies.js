@@ -5,6 +5,7 @@ export const CaseStudiesCotent = [
     title: "Fundação Lemann aprimora tomada de decisão e monitoramento de metas com tecnologia de análises e engenharia de dados desenvolvida pela BD",
     img: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/imagens/estudo_de_caso_flemann.png",
     imgDescription: "Foto: Samuel Macedo para Fundação Lemann",
+    description: "Com mais de 61 redes de ensino apoiadas e mais de 28 mil escolas envolvidas, implementar um fluxo de análise de dados e indicadores foi fundamental para a Fundação Lemann compreender melhor o cenário da educação no Brasil, avaliar os programas apoiados e estabelecer metas estratégicas para potencializar o avanço da educação e o impulsionamento de lideranças no país.",
     logo: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/logos/flemann.png",
     about: "Organização que trabalha para garantir educação de qualidade para todas as crianças brasileiras e apoia líderes focados no desenvolvimento social do Brasil.",
     sector: "Educação",

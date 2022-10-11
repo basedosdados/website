@@ -35,6 +35,7 @@ export default function CaseStudies ({
   displayTitle,
   img,
   imgDescription,
+  description,
   logo,
   about,
   sector,
@@ -53,12 +54,12 @@ export default function CaseStudies ({
         <title>{displayTitle} – Base dos Dados</title>
         <meta
           property="og:title"
-          content="Perguntas frequentes – Base dos Dados"
+          content={`${displayTitle} – Base dos Dados`}
           key="ogtitle"
         />
         <meta
           property="og:description"
-          content="Aqui você encontra as respostas para as suas dúvidas sobre a Base dos Dados. Saiba mais sobre nossos dados, como acessá-los pelo BigQuery usando SQL ou com os pacotes Python, R e Stata agora mesmo."
+          content={`${description}`}
           key="ogdesc"
         />
       </Head>
