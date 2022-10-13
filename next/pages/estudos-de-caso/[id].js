@@ -63,6 +63,11 @@ export default function CaseStudies ({
           key="ogimage"
         />
         <meta
+          name="twitter:image"
+          content={thumbnail}
+          key="twimage"
+        />
+        <meta
           property="og:title"
           content={`${displayTitle} – Base dos Dados`}
           key="ogtitle"
