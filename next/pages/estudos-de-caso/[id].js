@@ -53,6 +53,10 @@ export default function CaseStudies ({
     <MainPageTemplate paddingX="24px">
       <Head>
         <title>{displayTitle} – Base dos Dados</title>
+        <link
+          rel="image_src"
+          href={thumbnail}
+        />
         <meta
           property="og:image"
           content={thumbnail}
