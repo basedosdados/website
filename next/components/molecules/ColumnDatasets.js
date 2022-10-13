@@ -21,6 +21,7 @@ import {
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import FuzzySearch from 'fuzzy-search';
+import Latex from 'react-latex-next';
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { formatJson, getTemporalCoverage } from '../../utils';
 import Tag from "../atoms/Tag"
@@ -29,6 +30,7 @@ import RedirectIcon from '../../public/img/icons/redirectIcon';
 import FilterIcon from '../../public/img/icons/filterIcon';
 import SearchIcon from '../../public/img/icons/searchIcon';
 import CrossIcon from '../../public/img/icons/crossIcon';
+import 'katex/dist/katex.min.css';
 
 function translate(field, translation) {
   if(typeof field === "boolean") return field === true ? "Sim" : "Não"
@@ -67,7 +69,7 @@ function TableDatasets({
       const values = elm
       const directoryColumn = () => {
         if(!values.directory_column) return {directory_column : "Não listado"}
-        
+
         if(typeof values.directory_column === "object") {
           const directory = Object.values(values.directory_column)
             .map((elm) => {
@@ -92,21 +94,33 @@ function TableDatasets({
           return {temporal_coverage : "Não listado"}
         }
       }
-      
+
+      const measurementUnit = () => {
+        if(!values.measurement_unit) return {measurement_unit : "Não listado"}
+        const measurementUnitLatex = () => {
+          const translated = translate(values.measurement_unit, translationsOptions["Measurement Unit"])
+          return (
+            <Latex>{`$${translated}$`}</Latex>
+          )
+        }
+        return {measurement_unit : measurementUnitLatex} 
+      }
+
       const formatting = {
         ...values,
         ...directoryColumn(),
         ...temporalCoverage(),
+        ...measurementUnit()
       }
+
       const row = {...schemaHeaders, ...formatting}
 
       delete row.is_in_staging
       delete row.is_partition
-      
+
       const translations = () => {
         return {
           bigquery_type : translate(row.bigquery_type, translationsOptions["BigQuery Type"]),
-          measurement_unit : translate(row.measurement_unit, translationsOptions["Measurement Unit"]),
           covered_by_dictionary: translate(row.covered_by_dictionary, availableOptionsTranslations),
           has_sensitive_data: translate(row.has_sensitive_data, availableOptionsTranslations),
         }
@@ -159,6 +173,7 @@ function TableDatasets({
     if(value === null) return empty()
 
     if(typeof value === "object") return directoryColumnValue(value)
+    if(typeof value === "function") return value()
 
     if(value) {
       if(value === "Não listado"){
