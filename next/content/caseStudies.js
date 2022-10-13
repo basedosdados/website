@@ -29,7 +29,7 @@ export const CaseStudiesCotent = [
           <li>Mapeamento de escolas com melhor desempenho e equidade racial para replicar boas práticas;</li>
           <li>Acompanhamento e avaliação programas apoiados pela Fundação Lemann;</li>
           <li>Criação de metas estratégicas e viáveis de atuação;</li>
-          <li>Gerar mais autonomia para a equipe da Fundação Lemann na análise de dados.</li>
+          <li>Geração de mais autonomia para a equipe da Fundação Lemann na análise de dados.</li>
         </ul>
 
         <div class="sectionText">
@@ -132,6 +132,16 @@ export const CaseStudiesCotent = [
             permitindo aos times dos programas analisar o desempenho das redes de ensino
             com diferentes filtros e recortes.”
           </p>
+
+          <div class="highlightsBox" style="margin-top: 48px">
+            <p>Os dados dos principais indicadores educacionais tratados pela BD são abertos a todos:</p>
+            <ul>
+              <li><a href="https://basedosdados.org/dataset/br-inep-saeb?bdm_table=dicionario" target="_blank">Sistema de Avaliação da Educação Básica (Saeb)</a></li>
+              <li><a href="https://basedosdados.org/dataset/br-inep-ana?bdm_table=dicionario" target="_blank">Avaliação Nacional de Alfabetização (ANA)</a></li>
+              <li><a href="https://basedosdados.org/dataset/br-ibge-pnad?bdm_table=dicionario" target="_blank">Pesquisa Nacional por Amostra de Domicílios (PNAD)</a></li>
+              <li><a href="https://basedosdados.org/dataset/br-inep-censo-escolar?bdm_table=turma" target="_blank">Censo da Educação Básica</a></li>
+            </ul>
+          </div>
 
           <p class="bodyText">
             Para além dos dados públicos, foram organizados e tratados dados e indicadores
