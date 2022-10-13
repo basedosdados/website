@@ -33,6 +33,7 @@ export async function getStaticPaths(context) {
 export default function CaseStudies ({
   title,
   displayTitle,
+  thumbnail,
   img,
   imgDescription,
   description,
@@ -52,6 +53,11 @@ export default function CaseStudies ({
     <MainPageTemplate paddingX="24px">
       <Head>
         <title>{displayTitle} – Base dos Dados</title>
+        <meta
+          property="og:image"
+          content={thumbnail}
+          key="ogimage"
+        />
         <meta
           property="og:title"
           content={`${displayTitle} – Base dos Dados`}

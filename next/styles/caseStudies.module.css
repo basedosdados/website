@@ -2,6 +2,7 @@
   color: #42B0FF;
   font-weight: 500;
   letter-spacing: 0.1px;
+  cursor: pointer;
 }
 .body a:hover {
   opacity: 0.7;
@@ -53,4 +54,15 @@
   letter-spacing: 0.1px;
   font-size: 18px;
   color: #6F6F6F  ;
+}
+
+.body :global(.highlightsBox) {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 16px;
+  padding: 40px;
+  background-color: #FFF;
+  box-shadow: 0 2px 8px 1px rgba(64, 60, 67, 0.16);
+  border-radius: 20px;
+  margin-bottom: 48px;
 }
