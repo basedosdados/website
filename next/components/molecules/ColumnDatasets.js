@@ -98,9 +98,10 @@ function TableDatasets({
       const measurementUnit = () => {
         if(!values.measurement_unit) return {measurement_unit : "Não listado"}
         const measurementUnitLatex = () => {
-          const translated = translate(values.measurement_unit, translationsOptions["Measurement Unit"])
+          const splitValue = values.measurement_unit.split(/([^a-z])/)
+          const translated = (value) => value.map((elm) =>  translate(elm, translationsOptions["Measurement Unit"]) )
           return (
-            <Latex>{`$${translated}$`}</Latex>
+            <Latex>{`$${translated(splitValue).join("")}$`}</Latex>
           )
         }
         return {measurement_unit : measurementUnitLatex} 

@@ -1,6 +1,6 @@
-import { Button, VStack } from "@chakra-ui/react";
-import { useState } from "react";
-import { SimpleTable } from "../atoms/SimpleTable";
+import { Button, VStack } from '@chakra-ui/react';
+import { useState } from 'react';
+import { SimpleTable } from '../atoms/SimpleTable';
 
 export function ExpandableTable({
   headers,
@@ -16,7 +16,7 @@ export function ExpandableTable({
         values={values}
         containerStyle={containerStyle}
       />
-     );
+    )
 
   return (
     <VStack width="100%" spacing={5}>
@@ -40,5 +40,5 @@ export function ExpandableTable({
         {expanded ? "Ver menos" : "Ver mais"}
       </Button>
     </VStack>
-  );
+  )
 }
