@@ -34,7 +34,7 @@ def get_consulta_dict():
         FROM `basedosdados.br_bd_indicadores.acessos_tabelas_bigquery`
         WHERE ((`basedosdados.br_bd_indicadores.acessos_tabelas_bigquery`.`tipo_usuario` <> 'admin'
             OR `basedosdados.br_bd_indicadores.acessos_tabelas_bigquery`.`tipo_usuario` IS NULL)
-            AND `basedosdados.br_bd_indicadores.acessos_tabelas_bigquery`.`estampa_tempo` >= timestamp "2022-01-01 00:00:00 America/Sao_Paulo")
+            AND `basedosdados.br_bd_indicadores.acessos_tabelas_bigquery`.`estampa_tempo` >= timestamp "2020-01-01 00:00:00 America/Sao_Paulo")
         GROUP BY `estampa_tempo`
         ORDER BY `estampa_tempo` ASC)
 
