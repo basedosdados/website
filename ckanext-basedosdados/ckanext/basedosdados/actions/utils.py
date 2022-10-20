@@ -7,7 +7,7 @@ def get_users_dict():
     """ Get users from Google Cloud Storage """
 
     client = storage.Client()
-    bucket = client.get_bucket('basedosdados-dev')
+    bucket = client.get_bucket('basedosdados')
     blobs = list(bucket.list_blobs(prefix='staging/br_bd_indicadores/website_user/'))
     map_blobs = {}
     for blob in blobs:
