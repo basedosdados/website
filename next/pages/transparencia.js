@@ -179,10 +179,10 @@ export default function Transparencia({ pages }) {
             Indicador de sobrevida
           </Display>
           <BodyText paddingBottom="24px">
-            Esse é nosso indicador de sobrevida. Ele mostra o tempo que nossas atividades poderiam se manter caso a arrecadação de recursos financeiros fosse interrompida, considerando as despesas regulares com infraestrutura e equipe, por exemplo. 
+            Esse é nosso indicador de sobrevida. Ele mostra o tempo que nossas atividades poderiam se manter caso a organização arrecadasse só o que já está planejado e se continuasse gastando como na média dos três meses anteriores. 
           </BodyText>
           <BodyText paddingBottom="24px">
-            O indicador evidencia a importância de sua contribuição para a continuidade dos nossos esforços em busca da universalização do acesso a dados públicos. Abaixo, você confere detalhes sobre as fontes e destinações dos recursos da organização.
+            Abaixo, você confere os detalhes das fontes e destinações de recursos da organização.
           </BodyText>
         </Stack>
       </SectionBox>
