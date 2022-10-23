@@ -107,7 +107,7 @@ export function TextPix ({ title, text }) {
 }
 
 export default function DataInformationQuery ({ resource }) {
-  const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}/data000000000000.csv.gz`
+  const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}/${resource.table_id}.csv.gz`
   const queryName = `${resource.dataset_id}.${resource.name}`
   const { hasCopied, onCopy } = useClipboard("42494318000116")
   const [tabIndex, setTabIndex] = useState(0)
