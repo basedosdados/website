@@ -104,6 +104,7 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
   useEffect(() => {
     if(popularTags === null) return ""
     const newPopularTags = Object.keys(popularTags)
+    if(isMobile) return setTags(newPopularTags.slice(0,3))
     setTags(newPopularTags.slice(0,5))
   },[popularTags])
 

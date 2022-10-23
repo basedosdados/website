@@ -1,5 +1,3 @@
-import { faPen } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ExpandableTable } from "../molecules/ExpandableTable";
 import {
   filterOnlyValidValues,
@@ -62,8 +60,8 @@ export function MetadataPage({
     <BaseResourcePage
       title="Metadados do conjunto"
       removeFunction={async () => {
-        await deleteDataset(dataset);
-        window.history.pushState({}, "", "/dataset");
+        await deleteDataset(dataset)
+        window.history.pushState({}, "", "/dataset")
       }}
       formComponent={
         <SchemaForm
