@@ -101,10 +101,11 @@ function Themes ({
               />
             </Tooltip>
             <RemoveIcon
+              alt="remover tema do filtro"
               display={found(elm.name) ? "flex" : "none"}
               fill="#42B0FF"
-              widthIcon={responsive.mobileQuery ? "20px" : "30px"}
-              heightIcon={responsive.mobileQuery ? "20px" : "30px"}
+              width={responsive.mobileQuery ? "20px" : "30px"}
+              height={responsive.mobileQuery ? "20px" : "30px"}
               transition="all 0.5s"
               position="absolute"
               top="-1"

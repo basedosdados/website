@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { Button } from "@chakra-ui/button";
 import { Menu, MenuButton, MenuList } from "@chakra-ui/menu";
 import { Box } from "@chakra-ui/react"
-import ArrowIcon from "../../public/img/icons/arrowIcon"
+import ChevronIcon from "../../public/img/icons/chevronIcon"
 
 export function MenuDropdown({ title, children, ...style }) {
   const timerRef = useRef();
@@ -43,11 +43,11 @@ export function MenuDropdown({ title, children, ...style }) {
       >
         <Box display="flex">
           {title}
-          <ArrowIcon
-            widthIcon="12px"
+          <ChevronIcon
+            alt=""
+            width="12px"
             marginLeft="6px"
-            chevron={true}
-            rotation={"rotate(90deg)"}
+            transform={"rotate(90deg)"}
           />
         </Box> 
       </MenuButton>

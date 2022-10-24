@@ -178,8 +178,9 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
                 rightIcon={
                   (search ?
                     <ArrowIcon
-                      widthIcon="28px"
-                      heightIcon="28px"
+                      alt=""
+                      width="28px"
+                      height="28px"
                       fill="#252A32"
                       marginRight="20px"
                       cursor="pointer"

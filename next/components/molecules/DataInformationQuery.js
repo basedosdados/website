@@ -412,7 +412,7 @@ bd_read_table, ///
                   _hover={{opacity : "0.8"}}
                   onClick={() => window.open("https://apoia.se/basedosdados", "_blank")}
                 >
-                  <CalendarIcon widthIcon="26px" heightIcon="26px" fill="#FFF"/>
+                  <CalendarIcon alt="doar mensalmente" width="26px" height="26px" fill="#FFF"/>
                   Doar mensalmente
                 </RoundedButton>
                 

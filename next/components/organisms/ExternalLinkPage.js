@@ -252,7 +252,7 @@ export function ExternalLinkPage({
           </GridItem>
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <ApiIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <ApiIcon alt="tabela tem api" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Tem API"
               text={resource.has_api}
