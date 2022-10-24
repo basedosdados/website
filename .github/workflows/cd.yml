@@ -32,7 +32,7 @@ jobs:
             secret/data/ckan_credentials                    ENV_PRODUCTION      | CKAN_ENV_PRODUCTION ;
             secret/data/ckan_credentials                    INI_PRODUCTION      | CKAN_INI_PRODUCTION ;
             secret/data/aws_credentials                     BD_PRIVATE_SSH_KEY  | AWS_BD_PRIVATE_SSH_KEY ;
-            secret/data/gcp_credentials/basedosdados-dev    GCP_SA              | GCP_SA
+            secret/data/gcp_credentials/basedosdados        GCP_SA              | GCP_SA
 
       - name: Add Secret Files
         env:

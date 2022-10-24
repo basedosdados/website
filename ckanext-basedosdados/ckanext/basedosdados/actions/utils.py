@@ -41,7 +41,7 @@ def get_consulta_dict():
         SELECT DATE(estampa_tempo) AS month, count
         From dados
     '''
-    df = read_sql(query=query, billing_project_id='basedosdados-dev', from_file=True)
+    df = read_sql(query=query, billing_project_id='basedosdados', from_file=True)
     # convert month to string
     df['month'] = df['month'].astype(str)
     result = df.set_index('month').to_dict(orient='index')
