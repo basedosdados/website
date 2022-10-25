@@ -26,7 +26,7 @@ import Link from "../atoms/Link";
 import GreenTab from "../atoms/GreenTab";
 import RoundedButton from "../atoms/RoundedButton";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
-import CopyIcon from "../../public/img/icons/copyIcon";
+import { CopyIcon, CopySolidIcon } from "../../public/img/icons/copyIcon";
 import CalendarIcon from "../../public/img/icons/calendarIcon";
 import ExclamationIcon from "../../public/img/icons/exclamationIcon";
 import MenuVerticalIcon from "../../public/img/icons/menuVerticalIcon"
@@ -86,7 +86,7 @@ export function PrismCodeHighlight({ language, children }) {
         _hover={{ backgroundColor:"transparent", opacity:"0.6"}}
       >
         {hasCopied ? "Copiado" : "Copiar"}
-        <CopyIcon widthIcon="20px" heightIcon="20px" fill="#707783" marginLeft="5px"/>
+        <CopyIcon width="20px" height="20px" fill="#707783" marginLeft="5px"/>
       </Button>
     </pre>
   )
@@ -398,7 +398,7 @@ bd_read_table, ///
                   onClick={onCopy}
                   opacity={hasCopied && "0.8"}
                 >
-                  <CopyIcon solid widthIcon="22px" heightIcon="22px" fill="#FFF"/>
+                  <CopySolidIcon width="22px" height="22px" fill="#FFF"/>
                   {hasCopied ? "Copiada chave PIX" :"Copiar chave PIX"}
                 </RoundedButton>
 

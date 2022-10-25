@@ -219,9 +219,10 @@ export default function FAQ({}) {
           }}
           rightIcon={
             (searchFilter ?
-              <ArrowIcon 
-                widthIcon="20px"
-                heightIcon="20px"
+              <ArrowIcon
+                alt=""
+                width="20px"
+                height="20px"
                 cursor="pointer"
                 fill="#D0D0D0"
                 onClick={filterQuestions}

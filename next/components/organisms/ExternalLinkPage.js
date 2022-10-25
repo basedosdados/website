@@ -307,7 +307,7 @@ export function ExternalLinkPage({
           </GridItem>
 
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <CoinIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <CoinIcon width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Gratuito"
               text={resource.is_free}

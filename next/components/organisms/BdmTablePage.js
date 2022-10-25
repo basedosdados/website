@@ -219,8 +219,8 @@ export function BdmTablePage({
 
     return {
       cursor: "pointer",
-      widthIcon:"18px",
-      heightIcon:"18px",
+      width:"18px",
+      height:"18px",
       fill: "#42B0FF",
       onClick: () => {window.open(href)}
     }
