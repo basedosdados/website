@@ -189,6 +189,7 @@ export function Database({
                 }}
               >
                 <DataBaseSolidIcon
+                  alt="tabelas tratadas"
                   width="15px"
                   height="15px"
                   fill={tableNum === 0 ? "#C4C4C4" : "#2B8C4D"}

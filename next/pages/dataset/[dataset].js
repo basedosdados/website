@@ -117,10 +117,12 @@ function AdminButtons({ resource, setResource }) {
       >
         Criar tabela tratada
         <CrossIcon
+          alt=""
           width="18px"
           height="18px"
           fill="currentColor"
           marginLeft="4px"
+          transform="rotate(45deg)"
         />
       </SimpleButton>
       <SimpleButton
@@ -133,10 +135,12 @@ function AdminButtons({ resource, setResource }) {
       >
         Criar fonte original
         <CrossIcon
+          alt=""
           width="18px"
           height="18px"
           fill="currentColor"
           marginLeft="4px"
+          transform="rotate(45deg)"
         />
       </SimpleButton>
       <SimpleButton
@@ -152,10 +156,12 @@ function AdminButtons({ resource, setResource }) {
       >
         Criar pedido LAI
         <CrossIcon
+          alt=""
           width="18px"
           height="18px"
           fill="currentColor"
           marginLeft="4px"
+          transform="rotate(45deg)"
         />
       </SimpleButton>
     </Stack>
@@ -608,6 +614,7 @@ export default function DatasetPage({
           >
             <GreenTab>
               <DataBaseIcon
+                alt="área de dados"
                 width="22px"
                 height="22px"
                 marginRight="6px"

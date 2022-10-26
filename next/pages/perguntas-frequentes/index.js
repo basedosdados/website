@@ -73,6 +73,7 @@ const QuestionsBox = ({ question, answer, id, active, isMobile }) => {
           {question}
         </Text>
         <CrossIcon
+          alt={isActive ? "fecha pergunta" : "abrir pergunta"}
           color="#252A32"
           transform={!isActive && "rotate(45deg)"}
           width="20px"
@@ -230,6 +231,7 @@ export default function FAQ({}) {
               :
               (questions.length < allQuestions.length  ?
                 <CrossIcon
+                  alt="limpar pesquisa"
                   width="22px"
                   height="22px"
                   cursor="pointer"

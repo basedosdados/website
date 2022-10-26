@@ -236,7 +236,7 @@ export function ExternalLinkPage({
           </GridItem>
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <DisplayIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <DisplayIcon alt="disponibilidade" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Disponibilidade"
               text={resource.availability}
@@ -244,7 +244,7 @@ export function ExternalLinkPage({
           </GridItem>
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <DataStructureIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <DataStructureIcon alt="Tem dados estruturados" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Tem dados estruturados"
               text={resource.has_structured_data}
@@ -307,7 +307,7 @@ export function ExternalLinkPage({
           </GridItem>
 
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <CoinIcon width="22px" height="22px" fill="#D0D0D0"/>
+            <CoinIcon alt="é gratuito?" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Gratuito"
               text={resource.is_free}

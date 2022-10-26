@@ -335,11 +335,11 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   const keyIcon = (url) => {
     return {
       cursor:"pointer",
-      widthIcon:"20px",
-      heightIcon:"20px",
+      width:"40px",
+      height:"40px",
       fill:"#42B0FF",
       backgroundColor:"#FFF",
-      padding:"8px 12px 8px",
+      padding:"4px",
       boxShadow:"1px 1px 0 0 #0000001a",
       _hover:{opacity: "0.8"},
       onClick:() => {window.open(url)}
@@ -386,10 +386,10 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
           zIndex="1"
           backgroundColor="#FFF"
         >
-          <TwitterIcon {...keyIcon("https://twitter.com/basedosdados")} borderTop="1px solid #0000001a"/>
-          <DiscordIcon {...keyIcon("https://discord.gg/huKWpsVYx4")}/>
-          <GitIcon {...keyIcon("https://github.com/basedosdados")}/>
-          <LinkedinIcon {...keyIcon("https://www.linkedin.com/company/base-dos-dados/mycompany/")}/>
+          <TwitterIcon alt="twitter basedosdados" {...keyIcon("https://twitter.com/basedosdados")} borderTop="1px solid #0000001a"/>
+          <DiscordIcon alt="comunidade do discord basedosdados" {...keyIcon("https://discord.gg/huKWpsVYx4")}/>
+          <GitIcon alt="repositório github" {...keyIcon("https://github.com/basedosdados")}/>
+          <LinkedinIcon alt="linkedin basedosdados" {...keyIcon("https://www.linkedin.com/company/base-dos-dados/mycompany/")}/>
         </Stack>
 
         <VStack paddingLeft={isMobileMod ? "0" : "30px"} position="relative" top="-40px">

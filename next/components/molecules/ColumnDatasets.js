@@ -438,6 +438,7 @@ export default function ColumnsDatasets({
                 />
               :
                 <CrossIcon
+                  alt="limpar pesquisa"
                   cursor="pointer"
                   fill="#D0D0D0"
                   marginRight="6px"

@@ -107,7 +107,8 @@ function SearchInput ({ status }) {
             _placeholder:{color: "#C4C4C4"}
           }}
           rightIcon={
-            <CrossIcon 
+            <CrossIcon
+              alt="fecha pesquisa"
               fill="#404245"
               width="24px"
               height="24px"

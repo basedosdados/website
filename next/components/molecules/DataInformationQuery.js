@@ -86,7 +86,7 @@ export function PrismCodeHighlight({ language, children }) {
         _hover={{ backgroundColor:"transparent", opacity:"0.6"}}
       >
         {hasCopied ? "Copiado" : "Copiar"}
-        <CopyIcon width="20px" height="20px" fill="#707783" marginLeft="5px"/>
+        <CopyIcon alt="copiar conteúdo" width="20px" height="20px" fill="#707783" marginLeft="5px"/>
       </Button>
     </pre>
   )
@@ -398,7 +398,7 @@ bd_read_table, ///
                   onClick={onCopy}
                   opacity={hasCopied && "0.8"}
                 >
-                  <CopySolidIcon width="22px" height="22px" fill="#FFF"/>
+                  <CopySolidIcon alt="copiar chave PIX" width="22px" height="22px" fill="#FFF"/>
                   {hasCopied ? "Copiada chave PIX" :"Copiar chave PIX"}
                 </RoundedButton>
 

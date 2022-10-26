@@ -204,20 +204,33 @@ export function BdmTablePage({
 
   const keyIcons = (ref) => {
     let href = ""
+    let alt = ""
 
     if(ref.github_user) {
       const github = ref.github_user.replace(/(https:)\/\/(github.com)\//gim, "")
       href = `https://github.com/${github}` 
+      alt = "github basedosdados"
     }
     if(ref.twitter_user) {
       const twitter = ref.twitter_user.replace(/(https:)\/\/(twitter.com)\//gim, "")
       href = `https://twitter.com/${twitter}`
+      alt = "twitter basedosdados"
     }
-    if(ref.email) href = `mailto:${ref.email}`
-    if(ref.ckan_user) href = `/user/${ref.ckan_user}`
-    if(ref.website) href = `https://${ref.website}`
+    if(ref.email) {
+      href = `mailto:${ref.email}`
+      alt= "email do contribuidor"
+    }
+    if(ref.ckan_user) {
+      href = `/user/${ref.ckan_user}`
+      alt = "usuário ckan"
+    }
+    if(ref.website) {
+      href = `https://${ref.website}`
+      alt = "website pessoal"
+    }
 
     return {
+      alt: alt,
       cursor: "pointer",
       width:"18px",
       height:"18px",
