@@ -214,6 +214,7 @@ export function BdmTablePage({
       href = `https://twitter.com/${twitter}`
     }
     if(ref.email) href = `mailto:${ref.email}`
+    if(ref.email === "rdahis@basedosdados.org") return { display: "none" }
     if(ref.ckan_user) href = `/user/${ref.ckan_user}`
     if(ref.website) href = `https://${ref.website}`
 

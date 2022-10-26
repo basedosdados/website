@@ -1,6 +1,5 @@
-from google.cloud import storage
+from google.cloud import storage, bigquery
 import pandas as pd
-from basedosdados import read_sql
 
 
 def get_users_dict():
@@ -28,6 +27,8 @@ def get_users_dict():
 def get_consulta_dict():
     """ Get access statistics from Big Query """
 
+    client = bigquery.Client()
+
     query = '''
         WITH dados AS(
         SELECT timestamp_trunc(`basedosdados.br_bd_indicadores.acessos_tabelas_bigquery`.`estampa_tempo`, month) AS `estampa_tempo`, count(*) AS `count`
@@ -41,7 +42,8 @@ def get_consulta_dict():
         SELECT DATE(estampa_tempo) AS month, count
         From dados
     '''
-    df = read_sql(query=query, billing_project_id='basedosdados-dev', from_file=True)
+    query_job = client.query(query)
+    df = query_job.to_dataframe()
     # convert month to string
     df['month'] = df['month'].astype(str)
     result = df.set_index('month').to_dict(orient='index')
