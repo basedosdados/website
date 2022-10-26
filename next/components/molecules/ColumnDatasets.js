@@ -441,8 +441,8 @@ export default function ColumnsDatasets({
                   cursor="pointer"
                   fill="#D0D0D0"
                   marginRight="6px"
-                  widthIcon="20px"
-                  heightIcon="20px"
+                  width="20px"
+                  height="20px"
                   onClick={() => {
                     setTagFilter([])
                     setHeaderSelection("")

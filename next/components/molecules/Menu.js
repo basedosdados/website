@@ -109,8 +109,8 @@ function SearchInput ({ status }) {
           rightIcon={
             <CrossIcon 
               fill="#404245"
-              widthIcon="24px"
-              heightIcon="24px"
+              width="24px"
+              height="24px"
               cursor="pointer"
               _hover={{opacity:"0.8"}}
               onClick={searchStatus}

@@ -74,9 +74,9 @@ const QuestionsBox = ({ question, answer, id, active, isMobile }) => {
         </Text>
         <CrossIcon
           color="#252A32"
-          rotation={!isActive && "rotate(45deg)"}
-          widthIcon="20px"
-          heightIcon="20px"
+          transform={!isActive && "rotate(45deg)"}
+          width="20px"
+          height="20px"
         />
       </Box>
       <Collapse in={isActive} animateOpacity>
@@ -230,8 +230,8 @@ export default function FAQ({}) {
               :
               (questions.length < allQuestions.length  ?
                 <CrossIcon
-                  widthIcon="22px"
-                  heightIcon="22px"
+                  width="22px"
+                  height="22px"
                   cursor="pointer"
                   fill="#D0D0D0"
                   onClick={() => setQuestions(allQuestions)}

@@ -1,7 +1,7 @@
 import { createIcon } from '@chakra-ui/icons';
 
 export const CopyIcon = createIcon({
-  displayName: "coin",
+  displayName: "copy",
   viewBox: "0 0 22 22",
   path: (
     <path
@@ -12,7 +12,7 @@ export const CopyIcon = createIcon({
 })
 
 export const CopySolidIcon = createIcon({
-  displayName: "coin",
+  displayName: "copysolid",
   viewBox: "0 0 22 22",
   path: (
     <path
