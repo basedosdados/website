@@ -191,7 +191,7 @@ export function ExternalLinkPage({
         <Subtitle>Consulta aos dados</Subtitle>
         <DisclaimerBox width="100%">
           <HStack spacing={0}>
-            <ExclamationIcon widthIcon="20px" heightIcon="20px" fill="#42B0FF"/>
+            <ExclamationIcon alt="atenção" width="20px" height="20px" fill="#42B0FF"/>
             <SectionText display="flex">
               <p style={{margin:"0 4px 0 12px", fontWeight: "bolder", fontFamily: "lato"}}>
                 ATENÇÃO:</p>Estes dados não passaram pela metodologia de tratamento da Base dos Dados.
@@ -228,7 +228,7 @@ export function ExternalLinkPage({
 
         <Grid width="100%" flex={1} templateColumns="repeat(2, 1fr)" gap={6}>
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <LanguageIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <LanguageIcon alt="idioma" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Idioma"
               text={resource.language}
@@ -260,7 +260,7 @@ export function ExternalLinkPage({
           </GridItem>
 
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <FrequencyIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <FrequencyIcon alt="Frequência de atualização" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Frequência de atualização"
               text={resource.update_frequency}
@@ -299,7 +299,7 @@ export function ExternalLinkPage({
           </GridItem>
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <IpIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <IpIcon alt="IP" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Requer IP de algum país"
               text={resource.country_ip_address_required}

@@ -304,12 +304,13 @@ export default function Menu({ pages = [] }) {
         >
           <Box display={{ base: "flex", lg: "none" }}>
             <FarBarsIcon
+              alt="menu de navegação"
               position="fixed"
               top="0"
               left="0"
               margin="20px 0 0 20px"
-              widthIcon="30px"
-              heightIcon="30px"
+              width="30px"
+              height="30px"
               onClick={menuDisclosure.onOpen}
               fill="#616161"
               cursor="pointer"

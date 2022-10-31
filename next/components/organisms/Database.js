@@ -9,14 +9,14 @@ import {
   Center,
   Tooltip,
 } from "@chakra-ui/react";
-import { limitTextSize, getTemporalCoverage } from "../../utils";
+import { getTemporalCoverage } from "../../utils";
 import { CategoryIcon } from "../atoms/CategoryIcon";
 import Title from "../atoms/Title";
 import Link from "../atoms/Link";
 import SectionText from "../atoms/SectionText";
 import { DataBaseSolidIcon } from "../../public/img/icons/databaseIcon";
 import LinkIcon from "../../public/img/icons/linkIcon";
-import InfoIcon from "../../public/img/icons/infoIcon";
+import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
 
@@ -243,9 +243,10 @@ export function Database({
                   if(informationRequestNum > 0) return window.location.replace(`${link}?information_request`)
                 }}
               >
-                <InfoIcon
-                  widthIcon="15px"
-                  heightIcon="15px"
+                <InfoArrowIcon
+                  alt="pedidos Lai"
+                  width="15px"
+                  height="15px"
                   fill={informationRequestNum === 0 ? "#C4C4C4" : "#2B8C4D"}
                 />
                 <Text

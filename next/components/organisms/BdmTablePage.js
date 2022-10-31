@@ -32,7 +32,7 @@ import PartitionIcon from "../../public/img/icons/partitionIcon";
 import UserIcon from "../../public/img/icons/userIcon";
 import VersionIcon from "../../public/img/icons/versionIcon";
 import EmailIcon from "../../public/img/icons/emailIcon";
-import GitIcon from "../../public/img/icons/gitIcon";
+import GithubIcon from "../../public/img/icons/githubIcon";
 import CkanIcon from "../../public/img/icons/ckanIcon";
 import WebIcon from "../../public/img/icons/webIcon";
 import TwitterIcon from "../../public/img/icons/twitterIcon";
@@ -342,7 +342,7 @@ export function BdmTablePage({
           </GridItem>
 
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <FrequencyIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <FrequencyIcon alt="Frequência de atualização" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Frequência de atualização"
               text={resource.update_frequency}
@@ -359,7 +359,7 @@ export function BdmTablePage({
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-            <Box display="block" alignItems="center" gridGap="8px">
+            <Box display="block" gridGap="8px">
               <Text
                 fontFamily="ubuntu"
                 fontSize="14px"
@@ -368,10 +368,10 @@ export function BdmTablePage({
                 marginBottom="8px"
                 color="#252A32"
               >Publicação por</Text>
-              <Box display="flex" gridGap="4px">
+              <Box display="flex" gridGap="4px" alignItems="center">
                 {resource.published_by?.name ? <SectionText marginRight="4px !important">{resource.published_by.name}</SectionText> : <SectionText marginRight="4px !important">Não listado</SectionText>}
                 {resource.published_by?.email && <EmailIcon {...keyIcons({email : resource.published_by.email})}/>}
-                {resource.published_by?.github_user && <GitIcon {...keyIcons({github_user : resource.published_by.github_user})}/>}
+                {resource.published_by?.github_user && <GithubIcon {...keyIcons({github_user : resource.published_by.github_user})}/>}
                 {resource.published_by?.ckan_user && <CkanIcon {...keyIcons({ckan_user : resource.published_by.ckan_user})}/>}
                 {resource.published_by?.website && <WebIcon {...keyIcons({website : resource.published_by.website})}/>}
                 {resource.published_by?.twitter_user && <TwitterIcon {...keyIcons({twitter_user : resource.published_by.twitter_user})}/>}
@@ -381,7 +381,7 @@ export function BdmTablePage({
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-            <Box display="block" alignItems="center" gridGap="8px">
+            <Box display="block" gridGap="8px">
               <Text
                 fontFamily="ubuntu"
                 fontSize="14px"
@@ -390,10 +390,10 @@ export function BdmTablePage({
                 marginBottom="8px"
                 color="#252A32"
               >Tratamento por</Text>
-              <Box display="flex" gridGap="4px">
+              <Box display="flex" gridGap="4px" alignItems="center">
                 {resource.data_cleaned_by?.name ? <SectionText marginRight="4px !important">{resource.data_cleaned_by.name}</SectionText> : <SectionText marginRight="4px !important">Não listado</SectionText>}
                 {resource.data_cleaned_by?.email && <EmailIcon {...keyIcons({email : resource.data_cleaned_by.email})}/>}
-                {resource.data_cleaned_by?.github_user && <GitIcon {...keyIcons({github_user : resource.data_cleaned_by.github_user})}/>}
+                {resource.data_cleaned_by?.github_user && <GithubIcon {...keyIcons({github_user : resource.data_cleaned_by.github_user})}/>}
                 {resource.data_cleaned_by?.ckan_user && <CkanIcon {...keyIcons({ckan_user : resource.data_cleaned_by.ckan_user})}/>}
                 {resource.data_cleaned_by?.website && <WebIcon {...keyIcons({website : resource.data_cleaned_by.website})}/>}
                 {resource.data_cleaned_by?.twitter_user && <TwitterIcon {...keyIcons({twitter_user : resource.data_cleaned_by.twitter_user})}/>}

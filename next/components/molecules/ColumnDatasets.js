@@ -229,7 +229,7 @@ function TableDatasets({
                       borderRadius="6px"
                     >
                       <Center>
-                        <InfoIcon cursor="pointer" fill="#A3A3A3" tip/>
+                        <InfoIcon alt="tip" cursor="pointer" fill="#A3A3A3"/>
                       </Center>
                     </Tooltip>
                   </Box>
@@ -357,7 +357,7 @@ export default function ColumnsDatasets({
       <HStack position="relative" flexDirection={isMobileMode ? "column" : "row"}>
         <Badge position="absolute" top="-13px"  variant="solid" backgroundColor="#7EC876">NOVO</Badge>
         <HStack spacing={2} flexDirection="row" marginBottom={isMobileMode && "8px"} marginLeft="0 !important">
-          <FilterIcon fill="#575757" widthIcon="20px" heightIcon="20px" />
+          <FilterIcon alt="filtrar" fill="#575757" widthI="20px" height="20px" />
           <Text color="#575757" fontSize="16px" fontWeight="400" fontFamily="ubuntu" letterSpacing="0.2px">
             Filtrar
           </Text>

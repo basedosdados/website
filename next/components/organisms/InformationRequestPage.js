@@ -165,7 +165,7 @@ export function InformationRequestPage({
           <Subtitle>Consulta aos dados</Subtitle>
           <DisclaimerBox width="100%">
             <HStack spacing={0}>
-              <ExclamationIcon widthIcon="20px" heightIcon="20px" fill="#42B0FF"/>
+              <ExclamationIcon alt="atenção" width="20px" height="20px" fill="#42B0FF"/>
               <SectionText display="flex">
                 <p style={{margin:"0 4px 0 12px", fontWeight: "bolder", fontFamily: "lato"}}>
                   ATENÇÃO:</p>Estes dados não passaram pela metodologia de tratamento da Base dos Dados.

@@ -30,7 +30,7 @@ import WebIcon  from "../public/img/icons/webIcon";
 import EmailIcon  from "../public/img/icons/emailIcon";
 import TwitterIcon  from "../public/img/icons/twitterIcon";
 import LinkedinIcon  from "../public/img/icons/linkedinIcon";
-import GitIcon  from "../public/img/icons/gitIcon";
+import GithubIcon  from "../public/img/icons/githubIcon";
 import DiscordIcon from "../public/img/icons/discordIcon";
 import RedirectIcon from "../public/img/icons/redirectIcon";
 import styles from "../styles/quemSomos.module.css";
@@ -140,9 +140,10 @@ const TeamBox = ({ isMobileMod, index, data }) => {
     }
 
     return {
+      alt : "",
       cursor: "pointer",
-      widthIcon:"22px",
-      heightIcon:"22px",
+      width:"22px",
+      height:"22px",
       fill: "#42B0FF",
       _hover: {opacity: "0.8"},
       onClick: () => {window.open(href)}
@@ -156,7 +157,7 @@ const TeamBox = ({ isMobileMod, index, data }) => {
         {data.email ? <EmailIcon {...iconTeamBox({email: data.email})}/> : null}
         {data.twitter ? <TwitterIcon {...iconTeamBox({twitter: data.twitter})}/> : null}
         {data.linkedin ? <LinkedinIcon {...iconTeamBox({linkedin: data.linkedin})}/> : null}
-        {data.github ? <GitIcon {...iconTeamBox({github: data.github})}/> : null}
+        {data.github ? <GithubIcon {...iconTeamBox({github: data.github})}/> : null}
       </Box>
     )
   }
@@ -335,11 +336,11 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   const keyIcon = (url) => {
     return {
       cursor:"pointer",
-      width:"40px",
-      height:"40px",
+      width:"35px",
+      height:"35px",
       fill:"#42B0FF",
       backgroundColor:"#FFF",
-      padding:"4px",
+      padding:"6px",
       boxShadow:"1px 1px 0 0 #0000001a",
       _hover:{opacity: "0.8"},
       onClick:() => {window.open(url)}
@@ -388,7 +389,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
         >
           <TwitterIcon alt="twitter basedosdados" {...keyIcon("https://twitter.com/basedosdados")} borderTop="1px solid #0000001a"/>
           <DiscordIcon alt="comunidade do discord basedosdados" {...keyIcon("https://discord.gg/huKWpsVYx4")}/>
-          <GitIcon alt="repositório github" {...keyIcon("https://github.com/basedosdados")}/>
+          <GithubIcon alt="repositório github" {...keyIcon("https://github.com/basedosdados")}/>
           <LinkedinIcon alt="linkedin basedosdados" {...keyIcon("https://www.linkedin.com/company/base-dos-dados/mycompany/")}/>
         </Stack>
 

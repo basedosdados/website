@@ -614,7 +614,7 @@ export default function DatasetPage({
           >
             <GreenTab>
               <DataBaseIcon
-                alt="área de dados"
+                alt="dados"
                 width="22px"
                 height="22px"
                 marginRight="6px"
@@ -624,8 +624,9 @@ export default function DatasetPage({
             </GreenTab>
             <GreenTab>
               <DocIcon
-                widthIcon="24px"
-                heightIcon="24px"
+                alt="metadados"
+                width="24px"
+                height="24px"
                 marginRight="6px"
                 fill={tabIndex === 1 ? "#2B8C4D" :"#C4C4C4"}
               />

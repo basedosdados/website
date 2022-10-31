@@ -318,9 +318,10 @@ bd_read_table, ///
             {downloadNotAllowed &&
               <DisclaimerBox>
                 <HStack gridGap="8px" alignItems="flex-start">
-                <ExclamationIcon 
-                  widthIcon="20px"
-                  heightIcon="20px"
+                <ExclamationIcon
+                  alt="atenção"
+                  width="20px"
+                  height="20px"
                   fill="#42B0FF"
                   marginTop="4px"
                 />
@@ -412,7 +413,7 @@ bd_read_table, ///
                   _hover={{opacity : "0.8"}}
                   onClick={() => window.open("https://apoia.se/basedosdados", "_blank")}
                 >
-                  <CalendarIcon alt="doar mensalmente" width="26px" height="26px" fill="#FFF"/>
+                  <CalendarIcon alt="doar mensalmente" width="20px" height="20px" fill="#FFF"/>
                   Doar mensalmente
                 </RoundedButton>
                 
@@ -429,7 +430,7 @@ bd_read_table, ///
                   _hover={downloadNotAllowed ? {transform : "none"} : ""}
                   onClick={handlerDownload}
                 >
-                  <DownloadIcon widthIcon="22px" heightIcon="22px" fill={downloadNotAllowed ? "#C4C4C4" :"#FF8484"}/>
+                  <DownloadIcon alt="download" width="22px" height="22px" fill={downloadNotAllowed ? "#C4C4C4" :"#FF8484"}/>
                   Download dos dados
                 </RoundedButton>
 
