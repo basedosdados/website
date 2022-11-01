@@ -1,24 +1,14 @@
-import { Icon, Box } from '@chakra-ui/react'
+import { createIcon } from '@chakra-ui/icons';
 
-const MenuVerticalIcon = ({widthIcon, heightIcon ,fill ,...style}) => (
-  <Box 
-    display="flex"
-    alignItems="center"
-    justifyItems="center"
-    position="relative"
-    {...style}
-  >
-    <Icon
-      viewBox="0 0 24 24"
-      width={widthIcon}
-      height={heightIcon}
-      fill={fill}
-    >
-      <path d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z" stroke={fill} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M12 6C12.5523 6 13 5.55228 13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5C11 5.55228 11.4477 6 12 6Z" stroke={fill} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M12 20C12.5523 20 13 19.5523 13 19C13 18.4477 12.5523 18 12 18C11.4477 18 11 18.4477 11 19C11 19.5523 11.4477 20 12 20Z" stroke={fill} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </Icon>
-  </Box>
-)
+const MenuVerticalIcon = createIcon({
+  displayName: "verticalMenu",
+  viewBox: "0 0 17 17",
+  path: (
+    <path
+      fill="current-color"
+      d="M 8.5 10 C 9.5 10 10.5 9 10.5 8 C 10.5 7 9.5 6 8.5 6 C 7.5 6 6.5 7 6.5 8 C 6.5 9 7.5 10 8.5 10 Z M 8.5 4 C 9.5 4 10.5 3 10.5 2 C 10.5 1 9.5 0 8.5 0 C 7.5 0 6.5 1 6.5 2 C 6.5 3 7.5 4 8.5 4 Z M 8.5 17 C 9.5 17 10.5 16 10.5 15 C 10.5 14 9.5 13 8.5 13 C 7.5 13 6.5 14 6.5 15 C 6.5 16 7.5 17 8.5 17 Z"
+    />
+  )
+})
 
 export default MenuVerticalIcon

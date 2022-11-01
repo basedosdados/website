@@ -131,7 +131,7 @@ export function CheckboxFilterAccordion({
               }}
               rightIcon={
                 <Box cursor="pointer">
-                  <SearchIcon fill="#D0D0D0"/>
+                  <SearchIcon alt="pesquisar" fill="#D0D0D0"/>
                 </Box>
               }
             />

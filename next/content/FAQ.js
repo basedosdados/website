@@ -1,4 +1,4 @@
-import CopyIcon from "../public/img/icons/copyIcon"
+import { CopyIcon } from "../public/img/icons/copyIcon"
 
 export const QuestionFAQ = [
   {
@@ -461,7 +461,7 @@ export const QuestionFAQ = [
               }}
               style={{display: "flex", alignItems: "center", color: "#42B0FF"}}
             >
-              <CopyIcon widthIcon="26px" heightIcon="26px" fill="#42B0FF"/>
+              <CopyIcon alt="copiar citação" width="26px" height="26px" fill="#42B0FF"/>
               <div className="tooltip-button-copy">Copiar</div>
             </button>
           </div>

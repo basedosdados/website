@@ -1,23 +1,14 @@
-import { Icon, Box } from '@chakra-ui/react'
+import { createIcon } from '@chakra-ui/icons';
 
-const ExclamationIcon = ({widthIcon, heightIcon ,fill ,...style}) => (
-  <Box 
-    display="flex"
-    alignItems="center"
-    justifyItems="center"
-    position="relative"
-    {...style}
-  >
-    <Icon
-      viewBox="0 0 20 20"
-      width={widthIcon}
-      height={heightIcon}
-    >
-      <circle cx="10" cy="10" r="10" fill={fill}/>
-      <line x1="10.1997" y1="11" x2="10.1997" y2="5" stroke="white" stroke-width="2" stroke-linecap="round"/>
-      <circle cx="10.2" cy="14.7996" r="1.2" fill="white"/>
-    </Icon>
-  </Box>
-)
+const ExclamationIcon = createIcon({
+  displayName: "exclamation",
+  viewBox: "0 0 24 24",
+  path: (
+    <path
+      fill="current-color"
+      d="M11.983,0a12.206,12.206,0,0,0-8.51,3.653A11.8,11.8,0,0,0,0,12.207,11.779,11.779,0,0,0,11.8,24h.214A12.111,12.111,0,0,0,24,11.791h0A11.766,11.766,0,0,0,11.983,0ZM10.5,16.542a1.476,1.476,0,0,1,1.449-1.53h.027a1.527,1.527,0,0,1,1.523,1.47,1.475,1.475,0,0,1-1.449,1.53h-.027A1.529,1.529,0,0,1,10.5,16.542ZM11,12.5v-6a1,1,0,0,1,2,0v6a1,1,0,1,1-2,0Z"
+    />
+  )
+})
 
 export default ExclamationIcon

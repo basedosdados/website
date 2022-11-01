@@ -105,7 +105,7 @@ export function BaseResourcePage({
               onClick={() => setEditing(true)}
               minWidth="132px"
             >
-              <PenIcon widthIcon="20px" heightIcon="20px" fill="#FFF" marginRight="8px"/>
+              <PenIcon alt="" width="20px" height="20px" fill="#FFF" marginRight="8px"/>
               Editar
             </RoundedButton>
 
@@ -114,7 +114,7 @@ export function BaseResourcePage({
               onClick={deleteModalDisclosure.onOpen}
               minWidth="132px"
             >
-              <TrashIcon widthIcon="20px" heightIcon="20px" fill="#FFF" marginRight="8px"/>
+              <TrashIcon alt="" width="20px" height="20px" fill="#FFF" marginRight="8px"/>
               Remover
             </RoundedButton>
           </HStack>
