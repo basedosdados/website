@@ -220,8 +220,8 @@ export function Database({
                 }}
               >
                 <LinkIcon
-                  widthIcon="15px"
-                  heightIcon="15px"
+                  width="15px"
+                  height="15px"
                   fill={externalLinkNum === 0 ? "#C4C4C4" : "#2B8C4D"}
                 />
                 <Text

@@ -326,7 +326,7 @@ export function BdmTablePage({
 
         <Grid width="100%" flex={1} templateColumns="repeat(2, 1fr)" gap={6}>
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <StarIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <StarIcon alt="" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="ID do conjunto"
               text={resource.dataset_id}
@@ -334,7 +334,7 @@ export function BdmTablePage({
           </GridItem>
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <StarIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <StarIcon alt="" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="ID da tabela"
               text={resource.table_id}
@@ -350,7 +350,7 @@ export function BdmTablePage({
           </GridItem>
 
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <PartitionIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <PartitionIcon alt="Partições no BigQuery" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Partições no BigQuery"
               text={resource.partitions}
@@ -358,7 +358,7 @@ export function BdmTablePage({
           </GridItem>
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <UserIcon alt="publicação por" width="22px" height="22px" fill="#D0D0D0"/>
             <Box display="block" gridGap="8px">
               <Text
                 fontFamily="ubuntu"
@@ -380,7 +380,7 @@ export function BdmTablePage({
           </GridItem>
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <UserIcon alt="publicação por" width="22px" height="22px" fill="#D0D0D0"/>
             <Box display="block" gridGap="8px">
               <Text
                 fontFamily="ubuntu"
@@ -402,7 +402,7 @@ export function BdmTablePage({
           </GridItem>
 
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <VersionIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <VersionIcon alt="versão" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Versão"
               text={resource.version}

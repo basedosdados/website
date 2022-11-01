@@ -210,7 +210,7 @@ export function ExternalLinkPage({
           onClick={() => window.open(resource.url)}
         >
           Acessar fonte original
-          <RedirectIcon margin="0 0 4px 8px" widthIcon="14px" heightIcon="14px" fill="#FFF"/>
+          <RedirectIcon alt="hiperlink" marginLeft="8px" width="14px" height="14px" fill="#FFF"/>
         </RoundedButton>
       </VStack>
 
@@ -268,7 +268,7 @@ export function ExternalLinkPage({
           </GridItem>
 
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <ObservationLevelIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <ObservationLevelIcon alt="Nível da observação" width="22px" height="22px" fill="#D0D0D0"/>
             <Box width="100%">
               <Text
                 fontFamily="ubuntu"
@@ -291,7 +291,7 @@ export function ExternalLinkPage({
           </GridItem>
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <RegisterIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <RegisterIcon alt="Requer registro" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Requer registro"
               text={resource.requires_registration}

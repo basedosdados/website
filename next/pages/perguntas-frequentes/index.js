@@ -240,8 +240,9 @@ export default function FAQ({}) {
                 />
                 :
                 <SearchIcon
-                  widthIcon="20px"
-                  heightIcon="20px"
+                  alt="pesquisar"
+                  width="20px"
+                  height="20px"
                   cursor="normal"
                   fill="#D0D0D0"
                 />

@@ -188,8 +188,9 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
                     />
                     :
                     <SearchIcon
-                      widthIcon="28px"
-                      heightIcon="28px"
+                      alt="pesquisar"
+                      width="28px"
+                      height="28px"
                       fill="#252A32"
                       marginRight="25px"
                     />

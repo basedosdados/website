@@ -78,10 +78,11 @@ function SearchInput ({ status }) {
   return (
     <>
       {!showSearch ? 
-        <SearchIcon 
+        <SearchIcon
+          alt="pesquisar"
           fill="#404245"
-          widthIcon="18px"
-          heightIcon="18px"
+          width="18px"
+          height="18px"
           marginRight="14px !important"
           cursor="pointer"
           _hover={{opacity:"0.8"}}

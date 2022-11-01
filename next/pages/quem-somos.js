@@ -530,7 +530,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
                   href="https://cloud.google.com/blog/topics/customers/announcing-winners-of-google-cloud-customer-awards"
                 >
                   Veja mais detalhes
-                  <RedirectIcon fill="#42B0FF"/>
+                  <RedirectIcon alt="hiperlink" fill="#42B0FF"/>
                 </Link>
               </Box>
 
@@ -571,7 +571,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
                   href="https://www.tesourotransparente.gov.br/descubra-explore-crie/crie"
                 >
                   Veja mais detalhes
-                  <RedirectIcon fill="#42B0FF"/>
+                  <RedirectIcon alt="hiperlink" fill="#42B0FF"/>
                 </Link>
               </Box>
             </Stack>
@@ -791,7 +791,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
               fontSize="15px"
               onClick={() => window.open("https://info.basedosdados.org/carreiras", "_blank")}
             >
-              Veja as vagas abertas <RedirectIcon fill="#FFF" widthIcon="15px" heightIcon="15px" margin="0 0 2px 8px"/>
+              Veja as vagas abertas <RedirectIcon alt="vagas basedosdados" fill="#FFF" width="15px" height="15px" marginLeft="8px"/>
             </RoundedButton>
           </Box>
         </Stack>

@@ -184,7 +184,7 @@ export function InformationRequestPage({
               isDisabled={resource?.url ? false : true}
               onClick={() => window.open(resource?.url)}
             >
-              <RedirectIcon marginRight="8px" widthIcon="14px" heightIcon="14px" fill="#FFF"/>
+              <RedirectIcon alt="hiperlink" marginRight="8px" width="14px" height="14px" fill="#FFF"/>
               Acessar dados
             </RoundedButton>
 
@@ -199,7 +199,7 @@ export function InformationRequestPage({
               isDisabled={resource?.data_url ? false : true}
               onClick={() => window.open(resource?.data_url)}
             >
-              <RedirectIcon marginRight="8px" widthIcon="14px" heightIcon="14px" fill={resource?.data_url ? "#42B0FF" : "#FFF"}/>
+              <RedirectIcon alt="hiperlink" marginRight="8px" width="14px" height="14px" fill={resource?.data_url ? "#42B0FF" : "#FFF"}/>
               Acessar pedido
             </RoundedButton>
           </HStack>
@@ -231,7 +231,7 @@ export function InformationRequestPage({
   
           <Grid width="100%" flex={1} templateColumns="repeat(2, 1fr)" gap={6}>
             <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-              <StatusIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+              <StatusIcon alt="estado" width="22px" height="22px" fill="#D0D0D0"/>
               <AddInfoTextBase
                 title="Estado"
                 text={resource.state}
@@ -239,7 +239,7 @@ export function InformationRequestPage({
             </GridItem>
 
             <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-              <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+              <UserIcon alt="Pedido feito por" width="22px" height="22px" fill="#D0D0D0"/>
               <AddInfoTextBase
                 title="Pedido feito por"
                 text={resource.requested_by.name}

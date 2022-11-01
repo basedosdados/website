@@ -186,13 +186,14 @@ export default function DataInformationQuery ({ resource }) {
                 top="2px"
                 as={IconButton}
                 rightIcon={
-                  <MenuVerticalIcon 
-                    widthIcon="20px" 
-                    heightIcon="20px"
+                  <MenuVerticalIcon
+                    alt="menu"
+                    width="20px" 
+                    height="20px"
                     position="relative"
                     right="4px"
                     top="2px"
-                    fill={tabIndex === 4 && "#2B8C4D"}
+                    fill={tabIndex === 4 ? "#2B8C4D" : "#252A32"}
                   />
                 }
                 borderRadius="none"
