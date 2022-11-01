@@ -239,6 +239,21 @@ export function BdmTablePage({
     }
   }
 
+  const publishedOrDataCleanedBy = (resource) => {
+    if(resource.name === "Ricardo Dahis") return <SectionText marginRight="4px !important">Equipe Dados</SectionText>
+
+    return (
+      <>
+        {resource?.name ? <SectionText marginRight="4px !important">{resource.name}</SectionText> : <SectionText marginRight="4px !important">Não listado</SectionText>}
+        {resource?.email && <EmailIcon {...keyIcons({email : resource.email})}/>}
+        {resource?.github_user && <GitIcon {...keyIcons({github_user : resource.github_user})}/>}
+        {resource?.ckan_user && <CkanIcon {...keyIcons({ckan_user : resource.ckan_user})}/>}
+        {resource?.website && <WebIcon {...keyIcons({website : resource.website})}/>}
+        {resource?.twitter_user && <TwitterIcon {...keyIcons({twitter_user : resource.twitter_user})}/>}
+      </>
+    )
+  }
+
   return (
     <BaseResourcePage
       padding={isMobileMod ? "16px 0 0" : "16px 8px 0 0"}
@@ -368,13 +383,8 @@ export function BdmTablePage({
                 marginBottom="8px"
                 color="#252A32"
               >Publicação por</Text>
-              <Box display="flex" gridGap="4px" alignItems="center">
-                {resource.published_by?.name ? <SectionText marginRight="4px !important">{resource.published_by.name}</SectionText> : <SectionText marginRight="4px !important">Não listado</SectionText>}
-                {resource.published_by?.email && <EmailIcon {...keyIcons({email : resource.published_by.email})}/>}
-                {resource.published_by?.github_user && <GithubIcon {...keyIcons({github_user : resource.published_by.github_user})}/>}
-                {resource.published_by?.ckan_user && <CkanIcon {...keyIcons({ckan_user : resource.published_by.ckan_user})}/>}
-                {resource.published_by?.website && <WebIcon {...keyIcons({website : resource.published_by.website})}/>}
-                {resource.published_by?.twitter_user && <TwitterIcon {...keyIcons({twitter_user : resource.published_by.twitter_user})}/>}
+              <Box display="flex" gridGap="4px">
+                {publishedOrDataCleanedBy(resource.published_by)}
               </Box>
             </Box>
           </GridItem>
@@ -390,13 +400,8 @@ export function BdmTablePage({
                 marginBottom="8px"
                 color="#252A32"
               >Tratamento por</Text>
-              <Box display="flex" gridGap="4px" alignItems="center">
-                {resource.data_cleaned_by?.name ? <SectionText marginRight="4px !important">{resource.data_cleaned_by.name}</SectionText> : <SectionText marginRight="4px !important">Não listado</SectionText>}
-                {resource.data_cleaned_by?.email && <EmailIcon {...keyIcons({email : resource.data_cleaned_by.email})}/>}
-                {resource.data_cleaned_by?.github_user && <GithubIcon {...keyIcons({github_user : resource.data_cleaned_by.github_user})}/>}
-                {resource.data_cleaned_by?.ckan_user && <CkanIcon {...keyIcons({ckan_user : resource.data_cleaned_by.ckan_user})}/>}
-                {resource.data_cleaned_by?.website && <WebIcon {...keyIcons({website : resource.data_cleaned_by.website})}/>}
-                {resource.data_cleaned_by?.twitter_user && <TwitterIcon {...keyIcons({twitter_user : resource.data_cleaned_by.twitter_user})}/>}
+              <Box display="flex" gridGap="4px">
+                {publishedOrDataCleanedBy(resource.data_cleaned_by)}
               </Box>
             </Box>
           </GridItem>
