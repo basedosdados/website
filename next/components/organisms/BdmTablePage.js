@@ -32,7 +32,7 @@ import PartitionIcon from "../../public/img/icons/partitionIcon";
 import UserIcon from "../../public/img/icons/userIcon";
 import VersionIcon from "../../public/img/icons/versionIcon";
 import EmailIcon from "../../public/img/icons/emailIcon";
-import GitIcon from "../../public/img/icons/gitIcon";
+import GithubIcon from "../../public/img/icons/githubIcon";
 import CkanIcon from "../../public/img/icons/ckanIcon";
 import WebIcon from "../../public/img/icons/webIcon";
 import TwitterIcon from "../../public/img/icons/twitterIcon";
@@ -204,23 +204,36 @@ export function BdmTablePage({
 
   const keyIcons = (ref) => {
     let href = ""
+    let alt = ""
 
     if(ref.github_user) {
       const github = ref.github_user.replace(/(https:)\/\/(github.com)\//gim, "")
       href = `https://github.com/${github}` 
+      alt = "github basedosdados"
     }
     if(ref.twitter_user) {
       const twitter = ref.twitter_user.replace(/(https:)\/\/(twitter.com)\//gim, "")
       href = `https://twitter.com/${twitter}`
+      alt = "twitter basedosdados"
     }
-    if(ref.email) href = `mailto:${ref.email}`
-    if(ref.ckan_user) href = `/user/${ref.ckan_user}`
-    if(ref.website) href = `https://${ref.website}`
+    if(ref.email) {
+      href = `mailto:${ref.email}`
+      alt= "email do contribuidor"
+    }
+    if(ref.ckan_user) {
+      href = `/user/${ref.ckan_user}`
+      alt = "usuário ckan"
+    }
+    if(ref.website) {
+      href = `https://${ref.website}`
+      alt = "website pessoal"
+    }
 
     return {
+      alt: alt,
       cursor: "pointer",
-      widthIcon:"18px",
-      heightIcon:"18px",
+      width:"18px",
+      height:"18px",
       fill: "#42B0FF",
       onClick: () => {window.open(href)}
     }
@@ -233,7 +246,7 @@ export function BdmTablePage({
       <>
         {resource?.name ? <SectionText marginRight="4px !important">{resource.name}</SectionText> : <SectionText marginRight="4px !important">Não listado</SectionText>}
         {resource?.email && <EmailIcon {...keyIcons({email : resource.email})}/>}
-        {resource?.github_user && <GitIcon {...keyIcons({github_user : resource.github_user})}/>}
+        {resource?.github_user && <GithubIcon {...keyIcons({github_user : resource.github_user})}/>}
         {resource?.ckan_user && <CkanIcon {...keyIcons({ckan_user : resource.ckan_user})}/>}
         {resource?.website && <WebIcon {...keyIcons({website : resource.website})}/>}
         {resource?.twitter_user && <TwitterIcon {...keyIcons({twitter_user : resource.twitter_user})}/>}
@@ -328,7 +341,7 @@ export function BdmTablePage({
 
         <Grid width="100%" flex={1} templateColumns="repeat(2, 1fr)" gap={6}>
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <StarIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <StarIcon alt="" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="ID do conjunto"
               text={resource.dataset_id}
@@ -336,7 +349,7 @@ export function BdmTablePage({
           </GridItem>
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <StarIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <StarIcon alt="" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="ID da tabela"
               text={resource.table_id}
@@ -344,7 +357,7 @@ export function BdmTablePage({
           </GridItem>
 
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <FrequencyIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <FrequencyIcon alt="Frequência de atualização" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Frequência de atualização"
               text={resource.update_frequency}
@@ -352,7 +365,7 @@ export function BdmTablePage({
           </GridItem>
 
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <PartitionIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <PartitionIcon alt="Partições no BigQuery" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Partições no BigQuery"
               text={resource.partitions}
@@ -360,8 +373,8 @@ export function BdmTablePage({
           </GridItem>
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-            <Box display="block" alignItems="center" gridGap="8px">
+            <UserIcon alt="publicação por" width="22px" height="22px" fill="#D0D0D0"/>
+            <Box display="block" gridGap="8px">
               <Text
                 fontFamily="ubuntu"
                 fontSize="14px"
@@ -377,8 +390,8 @@ export function BdmTablePage({
           </GridItem>
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <UserIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
-            <Box display="block" alignItems="center" gridGap="8px">
+            <UserIcon alt="publicação por" width="22px" height="22px" fill="#D0D0D0"/>
+            <Box display="block" gridGap="8px">
               <Text
                 fontFamily="ubuntu"
                 fontSize="14px"
@@ -394,7 +407,7 @@ export function BdmTablePage({
           </GridItem>
 
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <VersionIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <VersionIcon alt="versão" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Versão"
               text={resource.version}

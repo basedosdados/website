@@ -78,10 +78,11 @@ function SearchInput ({ status }) {
   return (
     <>
       {!showSearch ? 
-        <SearchIcon 
+        <SearchIcon
+          alt="pesquisar"
           fill="#404245"
-          widthIcon="18px"
-          heightIcon="18px"
+          width="18px"
+          height="18px"
           marginRight="14px !important"
           cursor="pointer"
           _hover={{opacity:"0.8"}}
@@ -107,10 +108,11 @@ function SearchInput ({ status }) {
             _placeholder:{color: "#C4C4C4"}
           }}
           rightIcon={
-            <CrossIcon 
+            <CrossIcon
+              alt="fecha pesquisa"
               fill="#404245"
-              widthIcon="24px"
-              heightIcon="24px"
+              width="24px"
+              height="24px"
               cursor="pointer"
               _hover={{opacity:"0.8"}}
               onClick={searchStatus}
@@ -303,12 +305,13 @@ export default function Menu({ pages = [] }) {
         >
           <Box display={{ base: "flex", lg: "none" }}>
             <FarBarsIcon
+              alt="menu de navegação"
               position="fixed"
               top="0"
               left="0"
               margin="20px 0 0 20px"
-              widthIcon="30px"
-              heightIcon="30px"
+              width="30px"
+              height="30px"
               onClick={menuDisclosure.onOpen}
               fill="#616161"
               cursor="pointer"

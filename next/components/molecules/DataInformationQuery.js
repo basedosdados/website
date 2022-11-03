@@ -26,7 +26,7 @@ import Link from "../atoms/Link";
 import GreenTab from "../atoms/GreenTab";
 import RoundedButton from "../atoms/RoundedButton";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
-import CopyIcon from "../../public/img/icons/copyIcon";
+import { CopyIcon, CopySolidIcon } from "../../public/img/icons/copyIcon";
 import CalendarIcon from "../../public/img/icons/calendarIcon";
 import ExclamationIcon from "../../public/img/icons/exclamationIcon";
 import MenuVerticalIcon from "../../public/img/icons/menuVerticalIcon"
@@ -86,7 +86,7 @@ export function PrismCodeHighlight({ language, children }) {
         _hover={{ backgroundColor:"transparent", opacity:"0.6"}}
       >
         {hasCopied ? "Copiado" : "Copiar"}
-        <CopyIcon widthIcon="20px" heightIcon="20px" fill="#707783" marginLeft="5px"/>
+        <CopyIcon alt="copiar conteúdo" width="20px" height="20px" fill="#707783" marginLeft="5px"/>
       </Button>
     </pre>
   )
@@ -186,13 +186,14 @@ export default function DataInformationQuery ({ resource }) {
                 top="2px"
                 as={IconButton}
                 rightIcon={
-                  <MenuVerticalIcon 
-                    widthIcon="20px" 
-                    heightIcon="20px"
+                  <MenuVerticalIcon
+                    alt="menu"
+                    width="20px" 
+                    height="20px"
                     position="relative"
                     right="4px"
                     top="2px"
-                    fill={tabIndex === 4 && "#2B8C4D"}
+                    fill={tabIndex === 4 ? "#2B8C4D" : "#252A32"}
                   />
                 }
                 borderRadius="none"
@@ -318,9 +319,10 @@ bd_read_table, ///
             {downloadNotAllowed &&
               <DisclaimerBox>
                 <HStack gridGap="8px" alignItems="flex-start">
-                <ExclamationIcon 
-                  widthIcon="20px"
-                  heightIcon="20px"
+                <ExclamationIcon
+                  alt="atenção"
+                  width="20px"
+                  height="20px"
                   fill="#42B0FF"
                   marginTop="4px"
                 />
@@ -398,7 +400,7 @@ bd_read_table, ///
                   onClick={onCopy}
                   opacity={hasCopied && "0.8"}
                 >
-                  <CopyIcon solid widthIcon="22px" heightIcon="22px" fill="#FFF"/>
+                  <CopySolidIcon alt="copiar chave PIX" width="22px" height="22px" fill="#FFF"/>
                   {hasCopied ? "Copiada chave PIX" :"Copiar chave PIX"}
                 </RoundedButton>
 
@@ -412,7 +414,7 @@ bd_read_table, ///
                   _hover={{opacity : "0.8"}}
                   onClick={() => window.open("https://apoia.se/basedosdados", "_blank")}
                 >
-                  <CalendarIcon widthIcon="26px" heightIcon="26px" fill="#FFF"/>
+                  <CalendarIcon alt="doar mensalmente" width="20px" height="20px" fill="#FFF"/>
                   Doar mensalmente
                 </RoundedButton>
                 
@@ -429,7 +431,7 @@ bd_read_table, ///
                   _hover={downloadNotAllowed ? {transform : "none"} : ""}
                   onClick={handlerDownload}
                 >
-                  <DownloadIcon widthIcon="22px" heightIcon="22px" fill={downloadNotAllowed ? "#C4C4C4" :"#FF8484"}/>
+                  <DownloadIcon alt="download" width="22px" height="22px" fill={downloadNotAllowed ? "#C4C4C4" :"#FF8484"}/>
                   Download dos dados
                 </RoundedButton>
 

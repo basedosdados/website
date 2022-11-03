@@ -73,7 +73,7 @@ export default function HelpWidget({options, tooltip}) {
               right={isMobileMode ? "20px" : "40px"}
               isActive={isOpen}
             >
-              <HelpIcon justifyContent="center" widthIcon="25px" heightIcon="25px" fill="white"/>
+              <HelpIcon justifyContent="center" width="25px" height="25px" fill="white"/>
             </MenuButton>
           </Tooltip>
           <MenuList

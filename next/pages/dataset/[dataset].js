@@ -48,7 +48,7 @@ import {
 import { BaseResourcePage } from "../../components/molecules/BaseResourcePage";
 import GreenTab from "../../components/atoms/GreenTab";
 import HelpWidget from "../../components/atoms/HelpWidget";
-import DataBaseIcon from "../../public/img/icons/databaseIcon";
+import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
 import DocIcon from "../../public/img/icons/docIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
 
@@ -112,13 +112,17 @@ function AdminButtons({ resource, setResource }) {
         onClick={() => setResource({ resource_type: "create_bdm_table" })}
         margin="0 0 16px !important"
         justifyContent="space-between"
+        alignItems="center"
         paddingRight="15%"
       >
         Criar tabela tratada
         <CrossIcon
+          alt=""
+          width="18px"
+          height="18px"
           fill="currentColor"
           marginLeft="4px"
-          rotation="rotate(45deg)"
+          transform="rotate(45deg)"
         />
       </SimpleButton>
       <SimpleButton
@@ -126,13 +130,17 @@ function AdminButtons({ resource, setResource }) {
         onClick={() => setResource({ resource_type: "create_external_link" })}
         margin="0 0 16px !important"
         justifyContent="space-between"
+        alignItems="center"
         paddingRight="15%"
       >
         Criar fonte original
         <CrossIcon
+          alt=""
+          width="18px"
+          height="18px"
           fill="currentColor"
           marginLeft="4px"
-          rotation="rotate(45deg)"
+          transform="rotate(45deg)"
         />
       </SimpleButton>
       <SimpleButton
@@ -144,12 +152,16 @@ function AdminButtons({ resource, setResource }) {
         padding="0 15% 24px 0"
         margin="0 !important"
         justifyContent="space-between"
+        alignItems="center"
       >
         Criar pedido LAI
         <CrossIcon
+          alt=""
+          width="18px"
+          height="18px"
           fill="currentColor"
           marginLeft="4px"
-          rotation="rotate(45deg)"
+          transform="rotate(45deg)"
         />
       </SimpleButton>
     </Stack>
@@ -602,8 +614,9 @@ export default function DatasetPage({
           >
             <GreenTab>
               <DataBaseIcon
-                widthIcon="22px"
-                heightIcon="22px"
+                alt="dados"
+                width="22px"
+                height="22px"
                 marginRight="6px"
                 fill={tabIndex === 0 ? "#2B8C4D" :"#C4C4C4"}
               />
@@ -611,8 +624,9 @@ export default function DatasetPage({
             </GreenTab>
             <GreenTab>
               <DocIcon
-                widthIcon="24px"
-                heightIcon="24px"
+                alt="metadados"
+                width="24px"
+                height="24px"
                 marginRight="6px"
                 fill={tabIndex === 1 ? "#2B8C4D" :"#C4C4C4"}
               />

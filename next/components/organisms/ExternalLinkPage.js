@@ -191,7 +191,7 @@ export function ExternalLinkPage({
         <Subtitle>Consulta aos dados</Subtitle>
         <DisclaimerBox width="100%">
           <HStack spacing={0}>
-            <ExclamationIcon widthIcon="20px" heightIcon="20px" fill="#42B0FF"/>
+            <ExclamationIcon alt="atenção" width="20px" height="20px" fill="#42B0FF"/>
             <SectionText display="flex">
               <p style={{margin:"0 4px 0 12px", fontWeight: "bolder", fontFamily: "lato"}}>
                 ATENÇÃO:</p>Estes dados não passaram pela metodologia de tratamento da Base dos Dados.
@@ -210,7 +210,7 @@ export function ExternalLinkPage({
           onClick={() => window.open(resource.url)}
         >
           Acessar fonte original
-          <RedirectIcon margin="0 0 4px 8px" widthIcon="14px" heightIcon="14px" fill="#FFF"/>
+          <RedirectIcon alt="hiperlink" marginLeft="8px" width="14px" height="14px" fill="#FFF"/>
         </RoundedButton>
       </VStack>
 
@@ -228,7 +228,7 @@ export function ExternalLinkPage({
 
         <Grid width="100%" flex={1} templateColumns="repeat(2, 1fr)" gap={6}>
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <LanguageIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <LanguageIcon alt="idioma" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Idioma"
               text={resource.language}
@@ -236,7 +236,7 @@ export function ExternalLinkPage({
           </GridItem>
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <DisplayIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <DisplayIcon alt="disponibilidade" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Disponibilidade"
               text={resource.availability}
@@ -244,7 +244,7 @@ export function ExternalLinkPage({
           </GridItem>
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <DataStructureIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <DataStructureIcon alt="Tem dados estruturados" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Tem dados estruturados"
               text={resource.has_structured_data}
@@ -252,7 +252,7 @@ export function ExternalLinkPage({
           </GridItem>
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <ApiIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <ApiIcon alt="tabela tem api" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Tem API"
               text={resource.has_api}
@@ -260,7 +260,7 @@ export function ExternalLinkPage({
           </GridItem>
 
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <FrequencyIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <FrequencyIcon alt="Frequência de atualização" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Frequência de atualização"
               text={resource.update_frequency}
@@ -268,7 +268,7 @@ export function ExternalLinkPage({
           </GridItem>
 
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <ObservationLevelIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <ObservationLevelIcon alt="Nível da observação" width="22px" height="22px" fill="#D0D0D0"/>
             <Box width="100%">
               <Text
                 fontFamily="ubuntu"
@@ -291,7 +291,7 @@ export function ExternalLinkPage({
           </GridItem>
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <RegisterIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <RegisterIcon alt="Requer registro" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Requer registro"
               text={resource.requires_registration}
@@ -299,7 +299,7 @@ export function ExternalLinkPage({
           </GridItem>
 
           <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <IpIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <IpIcon alt="IP" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Requer IP de algum país"
               text={resource.country_ip_address_required}
@@ -307,7 +307,7 @@ export function ExternalLinkPage({
           </GridItem>
 
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <CoinIcon widthIcon="22px" heightIcon="22px" fill="#D0D0D0"/>
+            <CoinIcon alt="é gratuito?" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Gratuito"
               text={resource.is_free}

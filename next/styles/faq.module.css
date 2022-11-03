@@ -40,6 +40,8 @@
 
 .questionContainer :global(.button-copy:hover) :global(.tooltip-button-copy) {
   display: flex;
+  position: absolute;
+  left: -60px;
 }
 
 .link {

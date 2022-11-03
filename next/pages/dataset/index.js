@@ -429,10 +429,9 @@ export default function SearchPage({
         >
           <Box display="flex" marginBottom="10px" alignItems="center">
             <FilterIcon
+              alt="filtrar conjuntos"
               width="20px"
-              height="25px"
-              widthIcon="15px"
-              heightIcon="20px"
+              height="20px"
               fill="#252A32"
             />
             <Text

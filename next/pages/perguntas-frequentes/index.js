@@ -73,10 +73,11 @@ const QuestionsBox = ({ question, answer, id, active, isMobile }) => {
           {question}
         </Text>
         <CrossIcon
+          alt={isActive ? "fecha pergunta" : "abrir pergunta"}
           color="#252A32"
-          rotation={!isActive && "rotate(45deg)"}
-          widthIcon="20px"
-          heightIcon="20px"
+          transform={!isActive && "rotate(45deg)"}
+          width="20px"
+          height="20px"
         />
       </Box>
       <Collapse in={isActive} animateOpacity>
@@ -219,9 +220,10 @@ export default function FAQ({}) {
           }}
           rightIcon={
             (searchFilter ?
-              <ArrowIcon 
-                widthIcon="20px"
-                heightIcon="20px"
+              <ArrowIcon
+                alt=""
+                width="20px"
+                height="20px"
                 cursor="pointer"
                 fill="#D0D0D0"
                 onClick={filterQuestions}
@@ -229,16 +231,18 @@ export default function FAQ({}) {
               :
               (questions.length < allQuestions.length  ?
                 <CrossIcon
-                  widthIcon="22px"
-                  heightIcon="22px"
+                  alt="limpar pesquisa"
+                  width="22px"
+                  height="22px"
                   cursor="pointer"
                   fill="#D0D0D0"
                   onClick={() => setQuestions(allQuestions)}
                 />
                 :
                 <SearchIcon
-                  widthIcon="20px"
-                  heightIcon="20px"
+                  alt="pesquisar"
+                  width="20px"
+                  height="20px"
                   cursor="normal"
                   fill="#D0D0D0"
                 />
