@@ -246,7 +246,7 @@ export function BdmTablePage({
       <>
         {resource?.name ? <SectionText marginRight="4px !important">{resource.name}</SectionText> : <SectionText marginRight="4px !important">Não listado</SectionText>}
         {resource?.email && <EmailIcon {...keyIcons({email : resource.email})}/>}
-        {resource?.github_user && <GitIcon {...keyIcons({github_user : resource.github_user})}/>}
+        {resource?.github_user && <GithubIcon {...keyIcons({github_user : resource.github_user})}/>}
         {resource?.ckan_user && <CkanIcon {...keyIcons({ckan_user : resource.ckan_user})}/>}
         {resource?.website && <WebIcon {...keyIcons({website : resource.website})}/>}
         {resource?.twitter_user && <TwitterIcon {...keyIcons({twitter_user : resource.twitter_user})}/>}
