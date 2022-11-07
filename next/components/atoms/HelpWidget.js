@@ -63,6 +63,7 @@ export default function HelpWidget({options, tooltip}) {
             isDisabled={isOpen && true}
           >
             <MenuButton
+              aria-label="Menu de ajuda"
               width="50px"
               height="50px"
               background="#2B8C4D"
@@ -73,7 +74,7 @@ export default function HelpWidget({options, tooltip}) {
               right={isMobileMode ? "20px" : "40px"}
               isActive={isOpen}
             >
-              <HelpIcon justifyContent="center" width="25px" height="25px" fill="white"/>
+              <HelpIcon alt="menu de ajuda" justifyContent="center" width="25px" height="25px" fill="white"/>
             </MenuButton>
           </Tooltip>
           <MenuList
