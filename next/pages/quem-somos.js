@@ -72,6 +72,7 @@ const HistoryBox = ({ children, title, date, image }) => {
         onClick={onOpen}
       >
         <Image
+          alt={title}
           widht="100%"
           height="100%"
           src={image}
@@ -103,6 +104,7 @@ const HistoryBox = ({ children, title, date, image }) => {
           maxWidth="1000px"
         >
           <Image
+            alt={title}
             widht="100%"
             height="100%"
             src={image}
@@ -180,6 +182,7 @@ const TeamBox = ({ isMobileMod, index, data }) => {
         overflow="hidden"
       >
         <Image
+          alt={data?.name || ""}
           src={data.photo_url ? data.photo_url : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
           width="100%"
           height="100%"
@@ -494,6 +497,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             >
               <Box textAlign="center" maxWidth={isMobileMod ? "100%" : "45%"}>
                 <Image
+                  alt="google cloud"
                   src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/google_cloud.svg"
                   width={{ base: "100px", lg: "140px" }}
                   height={{ base: "100px", lg: "140px" }}
@@ -536,6 +540,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
 
               <Box textAlign="center" maxWidth={isMobileMod ? "100%" : "45%"}>
                 <Image
+                  alt="premio tesouro nacional"
                   src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/premio_tesouro_nacional_2021.png"
                   width={{ base: "100px", lg: "140px" }}
                   height={{ base: "100px", lg: "140px" }}

@@ -1,7 +1,9 @@
-import { Box, Heading, HStack, Stack, Text, VStack } from "@chakra-ui/layout";
-import Image from "next/image";
+import { 
+  Heading,
+  HStack,
+  VStack 
+} from "@chakra-ui/layout";
 import { useState } from "react";
-import BigTitle from "../atoms/BigTitle";
 import SectionText from "../atoms/SectionText";
 import SectionTitle from "../atoms/SectionTitle";
 

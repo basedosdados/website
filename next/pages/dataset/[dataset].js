@@ -542,6 +542,7 @@ export default function DatasetPage({
             height="100%"
           >
             <Image
+              alt={dataset.organization.title || ""}
               borderRadius="32px"
               boxShadow="0px 4px 8px rgba(100, 96, 103, 0.16)"
               width={{ base: "25%", lg: "100%" }}

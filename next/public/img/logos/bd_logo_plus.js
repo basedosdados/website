@@ -9,6 +9,7 @@ const BDLogoPlusImage = ({widthImage, heightImage, empty, ...style}) => (
     {...style}
   >
     <Icon
+      alt="bd logo"
       viewBox="0 0 38 12"
       width={widthImage}
       height={heightImage}

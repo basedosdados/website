@@ -9,6 +9,7 @@ const TransparencyImage = ({widthImage = "485px", heightImage="296px", ...style}
     {...style}
   >
     <Icon
+      alt="transparencia"
       viewBox='0 0 569 445'
       width={widthImage}
       height={heightImage}

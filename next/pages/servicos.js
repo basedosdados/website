@@ -64,6 +64,7 @@ function Section({
   listChildren = [],
   listBulletFunc = () => (
     <Image
+      alt=""
       height="30px"
       width="30px"
       src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/Group+122.png"
@@ -100,7 +101,7 @@ function Section({
         marginLeft="5vw"
         flex="2"
       >
-        <Image src={imageUrl} />
+        <Image alt={title} src={imageUrl} />
       </Box>
     </Flex>
   );
@@ -167,7 +168,7 @@ export default function Services({ pages }) {
           {Object.entries(services).map(([k, v]) => (
             <Link href={`#${k}`}>
               <VStack justify="flex-end">
-                <Image marginBottom="15px" height="100px" src={v} />
+                <Image alt="" marginBottom="15px" height="100px" src={v} />
                 <SectionText fontSize="18px" fontWeight="bold">
                   {k}
                 </SectionText>
@@ -274,10 +275,10 @@ export default function Services({ pages }) {
         </BigTitle>
         <Flex paddingBottom="50px" direction={{ base: "column", lg: "row" }}>
           <Box flex="1">
-            <Image src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/grafico_combustiveis_inflacao.png" />
+            <Image alt="grafico combustiveis inflacao" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/grafico_combustiveis_inflacao.png" />
           </Box>
           <Box flex="1">
-            <Image src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/grafico_desligamentos_morte.png" />
+            <Image alt="grafico desligamentos morte" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/grafico_desligamentos_morte.png" />
           </Box>
         </Flex>
         <Section

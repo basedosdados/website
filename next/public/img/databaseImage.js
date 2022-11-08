@@ -9,6 +9,7 @@ const DatabaseImage = ({widthImage = "485px", heightImage="296px", ...style}) =>
     {...style}
   >
     <Icon
+      alt="apoiador database"
       viewBox='0 0 485 296'
       width={widthImage}
       height={heightImage}

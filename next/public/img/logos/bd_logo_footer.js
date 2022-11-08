@@ -9,6 +9,7 @@ const BDLogoFooterImage = ({widthImage = "167px", heightImage="154px", ...style}
     {...style}
   >
     <Icon
+      alt="bd logo"
       viewBox="0 0 167 154"
       width={widthImage}
       height={heightImage}

@@ -97,6 +97,7 @@ function BlogPage({ pages = [] }) {
               zIndex="0"
             >
               <Image
+                alt="fundo rede"
                 priority
                 src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/fundo_rede.png"
                 layout="fill"
