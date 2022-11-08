@@ -9,6 +9,7 @@ const DonationImage = ({widthImage = "326px", heightImage="307px", ...style}) =>
     {...style}
   >
     <Icon
+      alt="apoio"
       viewBox='0 0 326 307'
       width={widthImage}
       height={heightImage}

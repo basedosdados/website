@@ -60,6 +60,7 @@ export function Database({
       >
         <Link _hover={{opacity:"none"}} href={link}>
           <Image
+            alt={organization.title || ""}
             priority
             objectFit="contain"
             maxWidth="115px"
@@ -128,6 +129,7 @@ export function Database({
                       >
                         <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${c[0]}`}>
                           <CategoryIcon
+                            alt={c[0]}
                             size="36px"
                             url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${c[0]}.svg`}
                           />

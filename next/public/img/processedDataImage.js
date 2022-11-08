@@ -9,6 +9,7 @@ const ProcessedDataImage = ({widthImage = "712px", heightImage="401px", ...style
     {...style}
   >
     <Icon
+      alt="processo de padronização"
       viewBox='0 0 712 401'
       width={widthImage}
       height={heightImage}

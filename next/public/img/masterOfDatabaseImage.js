@@ -9,6 +9,7 @@ const MasterOfDatabaseImage = ({widthImage = "485px", heightImage="296px", ...st
     {...style}
   >
     <Icon
+      alt="mestre apoiador"
       viewBox='0 0 485 296'
       width={widthImage}
       height={heightImage}

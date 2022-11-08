@@ -356,7 +356,7 @@ export default function ColumnsDatasets({
     <Stack width="100%">
       <HStack position="relative" flexDirection={isMobileMode ? "column" : "row"}>
         <HStack spacing={2} flexDirection="row" marginBottom={isMobileMode && "8px"} marginLeft="0 !important">
-          <FilterIcon alt="filtrar" fill="#575757" widthI="20px" height="20px" />
+          <FilterIcon alt="filtrar" fill="#575757" height="20px" />
           <Text color="#575757" fontSize="16px" fontWeight="400" fontFamily="ubuntu" letterSpacing="0.2px">
             Filtrar
           </Text>
