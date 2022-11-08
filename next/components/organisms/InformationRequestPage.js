@@ -2,6 +2,7 @@ import {
   VStack,
   HStack,
   Stack,
+  Center,
   Image,
   Box,
   Text,
@@ -9,20 +10,18 @@ import {
   GridItem,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import Subtitle from "../atoms/Subtitle";
 import SectionText from "../atoms/SectionText";
-import {
-  filterOnlyValidValues,
-  formatObjectsInArray,
-  translate,
-  getTemporalCoverage,
-} from "../../utils";
+import { getTemporalCoverage } from "../../utils";
 import { BaseResourcePage } from "../molecules/BaseResourcePage";
 import { deleteResource, updateResource } from "../../pages/api/datasets";
 import { getInformationRequestSchema } from "../../pages/api/schemas";
 import { SchemaForm } from "../molecules/SchemaForm";
 import { DisclaimerBox } from "../molecules/DisclaimerBox";
 import RoundedButton from "../atoms/RoundedButton";
+
+
 import StatusIcon from "../../public/img/icons/statusIcon";
 import UserIcon from "../../public/img/icons/userIcon";
 import ExclamationIcon from "../../public/img/icons/exclamationIcon";
@@ -35,6 +34,13 @@ export function InformationRequestPage({
 }) {
   const [temporalCoverage, setTemporalCoverage] = useState([])
   const [showTemporalCoverage, setShowTemporalCoverage] = useState(false)
+  
+  const isMobile = useCheckMobile();
+  const [isMobileMod, setIsMobileMod] = useState(false)
+
+  useEffect(() => {
+    setIsMobileMod(isMobile)
+  }, [isMobile])
 
   useEffect(() => {
     if(resource.temporal_coverage) {
@@ -93,6 +99,65 @@ export function InformationRequestPage({
     return translation[field] || field
   }
 
+  const partnerships = {
+    "Fiquem Sabendo": {
+      title: "Fiquem Sabendo",
+      description: "Agência de dados públicos independente e especializada na Lei de Acesso à Informação.",
+      url: "https://fiquemsabendo.com.br/",
+      src: "/img/icons/fiquem_sabendo.png"
+    },
+    "Fundação Lemann": {
+      title: "Fundação Lemann",
+      description: "Organização que trabalha para garantir educação de qualidade para todas as crianças brasileiras e apoia líderes focados no desenvolvimento social do Brasil.",
+      url: "https://fundacaolemann.org.br/",
+      src: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/logos/flemann.png"
+    }
+  }
+
+  const PartnershipContainer = ({title, description, url, src }) => {
+
+    return (
+      <HStack margin="10px 0" alignItems="flex-start" gridGap={2}>\
+        <Box
+          display="flex"
+          alignItems="center"
+          backgroundColor="#FFF"
+          boxShadow="0 2px 6px 1px #0000001a"
+          borderRadius="10px"
+          padding="10px"
+          minWidth="100px"
+          minHeight="100px"
+          maxWidth="100px"
+          maxHeight="100px"
+        >
+          <Image
+            alt={title}
+            src={src}
+            width="fit-content"
+            height="fit-content"
+            onClick={() => window.open(url)}
+            cursor="pointer"
+          />
+        </Box>
+
+        <Box>
+          <Text
+            width="100%"
+            onClick={() => window.open(url)}
+            cursor="pointer"
+            marginBottom="4px"
+            fontWeight="bold"
+          >
+            {title}
+          </Text>
+          <SectionText>
+            {description}
+          </SectionText>
+        </Box>
+      </HStack>
+    )
+  }
+
   return (
     <BaseResourcePage
       title={`Número do pedido: ${resource.name}`}
@@ -134,50 +199,42 @@ export function InformationRequestPage({
           <SectionText>
             A disponibilização destes dados é resultado de uma parceria com:
           </SectionText>
-          <HStack margin="10px 0" gridGap={2}>
-            <Image
-              border="1px solid #DEDFE0"
-              borderRadius="10px"
-              src={"/img/icons/fiquem_sabendo.png"}
-              width="80px"
-              height="80px"
-              onClick={() => window.open("https://fiquemsabendo.com.br/")}
-              cursor="pointer"
-            />
-            <Box>
-              <Text
-                width="130px"
-                onClick={() => window.open("https://fiquemsabendo.com.br/")}
-                cursor="pointer"
-                marginBottom="5px"
-                fontWeight="bold"
-              >
-                Fiquem Sabendo
-              </Text>
-              <SectionText>
-                Agência de dados públicos independente e especializada na Lei de Acesso à Informação.
-              </SectionText>
-            </Box>
-          </HStack>
+
+          <PartnershipContainer
+            {...resource.name === "03005.341407/2022-56" ?
+              partnerships["Fundação Lemann"] :
+              partnerships["Fiquem Sabendo"]
+            }
+          />
         </VStack>
 
-        <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
+        <VStack width="100%" marginTop="32px !important" spacing={4} alignItems="flex-start">
           <Subtitle>Consulta aos dados</Subtitle>
           <DisclaimerBox width="100%">
-            <HStack spacing={0}>
-              <ExclamationIcon alt="atenção" width="20px" height="20px" fill="#42B0FF"/>
-              <SectionText display="flex">
-                <p style={{margin:"0 4px 0 12px", fontWeight: "bolder", fontFamily: "lato"}}>
-                  ATENÇÃO:</p>Estes dados não passaram pela metodologia de tratamento da Base dos Dados.
+            <HStack spacing={0} flexDirection={isMobileMod && "column"} alignItems="flex-start">
+              <Center>
+                <ExclamationIcon alt="atenção" width="20px" height="20px" fill="#42B0FF"/>
+                <SectionText margin="0 4px 0 12px" fontWeigth="bolder" fontFamily="lato">ATENÇÃO:</SectionText>
+              </Center>
+              <SectionText display="flex" marginLeft={isMobileMod && "32px !important"}>
+                Estes dados não passaram pela metodologia de tratamento da Base dos Dados.
               </SectionText>
             </HStack>
           </DisclaimerBox>
 
-          <HStack>
+          <HStack
+            width="100%"
+            alignItems="flex-start"
+            flexDirection={isMobileMod && "column"}
+            gridGap={isMobileMod ? "16px" : "8px"}
+            marginTop={isMobileMod && "24px !important"}
+            spacing={0}
+          >
             <RoundedButton
               height="35px"
               fontSize="14px"
-              minWidth="100px"
+              minWidth="180px"
+              width={isMobileMod && "100%"}
               color="#FFF"
               backgroundColor={resource?.url ? "#42B0FF" : "#C4C4C4"}
               padding="0 20px"
@@ -191,7 +248,8 @@ export function InformationRequestPage({
             <RoundedButton
               height="35px"
               fontSize="14px"
-              minWidth="100px"
+              minWidth="180px"
+              width={isMobileMod && "100%"}
               color={resource?.data_url ? "#42B0FF" : "#FFF"}
               border={resource?.data_url && "2px solid #42B0FF"}
               backgroundColor={resource?.data_url ? "#FFF" : "#C4C4C4"}
@@ -211,20 +269,20 @@ export function InformationRequestPage({
           fontFamily="Lato"
           fontSize="16px"
         >
-          <Subtitle marginBottom="8px !important">Descrição</Subtitle>
-          <SectionText>
+          <Subtitle >Descrição</Subtitle>
+          <SectionText marginTop="16px !important">
             {resource.description || "Nenhuma descrição fornecida."}
           </SectionText>
         </VStack>
 
-        <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
+        <VStack width="100%" marginTop="32px !important" spacing={4} alignItems="flex-start">
           <Subtitle>Cobertura temporal</Subtitle>
           <SectionText>
             {showTemporalCoverage ? temporalCoverage : "Nenhuma cobertura temporal fornecida"}
           </SectionText>
         </VStack>
 
-        <VStack width="100%" spacing={5} alignItems="flex-start">
+        <VStack width="100%" marginTop="32px !important" spacing={5} alignItems="flex-start">
           <Stack flex="1" >
             <Subtitle>Informações adicionais</Subtitle>
           </Stack>

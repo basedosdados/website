@@ -8,6 +8,13 @@ import {
 import Image from "next/image";
 import Link from "../atoms/Link";
 import BDLogoFooterImage from "../../public/img/logos/bd_logo_footer";
+import YoutubeIcon from "../../public/img/icons/youtubeIcon";
+import TwitterIcon from "../../public/img/icons/twitterIcon";
+import DiscordIcon from "../../public/img/icons/discordIcon";
+import GithubIcon from "../../public/img/icons/githubIcon";
+import LinkedinIcon from "../../public/img/icons/linkedinIcon";
+import WhatsAppIcon from "../../public/img/icons/whatsAppIcon";
+import TelegramIcon from "../../public/img/icons/telegramIcon";
 
 function LinkVStack({ title, children }) {
   return (
@@ -26,17 +33,21 @@ function LinkVStack({ title, children }) {
   );
 }
 
-function SocialLink({ title, href, src }) {
+function SocialLink({ title, href, children }) {
   return (
     <Link fontFamily="Ubuntu" fontWeigth="300" letterSpacing="0.3px" color="white" href={href} target="_blank">
       <HStack>
-        <Box position="relative" height="20px" width="20px">
-          <Image priority layout="fill" objectFit="contain" src={src} />
-        </Box>
+        {children}
         <Text>{title}</Text>
       </HStack>
     </Link>
   );
+}
+
+const IconKey = {
+  width: "24px",
+  height: "24px",
+  fill: "#FFF"
 }
 
 function FooterLink(props) {
@@ -73,6 +84,7 @@ export default function Footer({ pages }) {
               layout="fill"
             />
           </Box>
+
           <Stack
             direction={{ base: "column", lg: "row" }}
             paddingBottom="100px"
@@ -101,6 +113,7 @@ export default function Footer({ pages }) {
                 Pacotes
               </FooterLink>
             </LinkVStack>
+
             <LinkVStack title="SERVIÇOS">
               <FooterLink 
                 color="white" 
@@ -123,6 +136,7 @@ export default function Footer({ pages }) {
                 Consultoria de dados
               </FooterLink>
             </LinkVStack>
+
             <LinkVStack title="TUTORIAIS">
               <FooterLink
                 href="/perguntas-frequentes"
@@ -150,41 +164,50 @@ export default function Footer({ pages }) {
                 color="white"
                 target="_blank"
                 title="YouTube"
-                src="/img/logos/youtube.png"
-              />
+              >
+                <YoutubeIcon alt="youtube basedosdados" {...IconKey}/>
+              </SocialLink>
             </LinkVStack>
+
             <LinkVStack title="COMUNIDADE">
               <SocialLink
                 href="https://twitter.com/basedosdados"
                 title="Twitter"
-                src="/img/social/twitter.png"
-              />
+              >
+                <TwitterIcon alt="twitter" {...IconKey}/>
+              </SocialLink>
               <SocialLink
                 href="https://discord.gg/huKWpsVYx4"
                 title="Discord"
-                src="/img/social/discord.png"
-              />
+              >
+                <DiscordIcon alt="discord" {...IconKey}/>
+              </SocialLink>
               <SocialLink
                 href="https://github.com/basedosdados"
                 title="GitHub"
-                src="/img/social/github.png"
-              />
+              >
+                <GithubIcon alt="github" {...IconKey}/>
+              </SocialLink>
               <SocialLink
                 href="https://www.linkedin.com/company/base-dos-dados/mycompany/"
                 title="LinkedIn"
-                src="/img/logos/linkedin.png"
-              />
+              >
+                <LinkedinIcon alt="linkedin" {...IconKey}/>
+              </SocialLink>
               <SocialLink
                 href="https://chat.whatsapp.com/CLLFXb1ogPPDomCM6tQT22"
                 title="WhatsApp"
-                src="/img/logos/whatsapp.png"
-              />
+              >
+                <WhatsAppIcon alt="whatsApp" {...IconKey}/>
+              </SocialLink>
               <SocialLink
                 href="https://t.me/joinchat/OKWc3RnClXnq2hq-8o0h_w"
                 title="Telegram"
-                src="/img/logos/telegram.png"
-              />
+              >
+                <TelegramIcon alt="telegram" {...IconKey}/>
+              </SocialLink>
             </LinkVStack>
+
             <LinkVStack title="INSTITUCIONAL">
               <FooterLink
                 href="/quem-somos"
@@ -224,6 +247,7 @@ export default function Footer({ pages }) {
             </LinkVStack>
           </Stack>
         </Stack>
+
         <VStack spacing={4}>
           <HStack
             fontFamily="Ubuntu"

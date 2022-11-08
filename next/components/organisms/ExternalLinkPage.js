@@ -2,6 +2,7 @@ import {
   VStack,
   HStack,
   Stack,
+  Center,
   Box,
   Text,
   Grid,
@@ -187,14 +188,16 @@ export function ExternalLinkPage({
         />
       }
     >
-      <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
+      <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Consulta aos dados</Subtitle>
         <DisclaimerBox width="100%">
-          <HStack spacing={0}>
-            <ExclamationIcon alt="atenção" width="20px" height="20px" fill="#42B0FF"/>
-            <SectionText display="flex">
-              <p style={{margin:"0 4px 0 12px", fontWeight: "bolder", fontFamily: "lato"}}>
-                ATENÇÃO:</p>Estes dados não passaram pela metodologia de tratamento da Base dos Dados.
+          <HStack spacing={0} flexDirection={isMobileMod && "column"} alignItems="flex-start">
+            <Center>
+              <ExclamationIcon alt="atenção" width="20px" height="20px" fill="#42B0FF"/>
+              <SectionText margin="0 4px 0 12px" fontWeigth="bolder" fontFamily="lato">ATENÇÃO:</SectionText>
+            </Center>
+            <SectionText display="flex" marginLeft={isMobileMod && "32px !important"}>
+              Estes dados não passaram pela metodologia de tratamento da Base dos Dados.
             </SectionText>
           </HStack>
         </DisclaimerBox>
@@ -203,6 +206,7 @@ export function ExternalLinkPage({
           height="35px"
           fontSize="14px"
           minWidth="100px"
+          width={isMobileMod && "100%"}
           color="#FFF"
           backgroundColor={resource.url ? "#42B0FF" : "#C4C4C4"}
           padding="0 20px"
@@ -214,7 +218,7 @@ export function ExternalLinkPage({
         </RoundedButton>
       </VStack>
 
-      <VStack id="acesso" width="100%" spacing={4} alignItems="flex-start">
+      <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Cobertura temporal</Subtitle>
         <SectionText>
           {showTemporalCoverage ? temporalCoverage : "Nenhuma cobertura temporal fornecida"}

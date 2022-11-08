@@ -11,10 +11,6 @@ import Subtitle from "../atoms/Subtitle";
 import SectionText from "../atoms/SectionText";
 import ColumnDatasets from "../molecules/ColumnDatasets";
 import {
-  breakNestedObjects,
-  filterOnlyValidValues,
-  formatObjectsInArray,
-  translate,
   formatJson,
   getTemporalCoverage,
 } from "../../utils";
@@ -26,6 +22,7 @@ import { getBdmTableSchema } from "../../pages/api/schemas";
 import { deleteResource, updateResource } from "../../pages/api/datasets";
 import { SimpleTable } from "../atoms/SimpleTable";
 import DataInformationQuery from "../molecules/DataInformationQuery";
+
 import StarIcon from "../../public/img/icons/starIcon";
 import FrequencyIcon from "../../public/img/icons/frequencyIcon";
 import PartitionIcon from "../../public/img/icons/partitionIcon";
@@ -298,7 +295,7 @@ export function BdmTablePage({
         </SectionText>
       </VStack>
 
-      <VStack width="100%" spacing={5} alignItems="flex-start">
+      <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>
           Colunas
         </Subtitle>
@@ -383,7 +380,7 @@ export function BdmTablePage({
                 marginBottom="8px"
                 color="#252A32"
               >Publicação por</Text>
-              <Box display="flex" gridGap="4px">
+              <Box display="flex" alignItems="center" gridGap="4px">
                 {publishedOrDataCleanedBy(resource.published_by)}
               </Box>
             </Box>
@@ -400,7 +397,7 @@ export function BdmTablePage({
                 marginBottom="8px"
                 color="#252A32"
               >Tratamento por</Text>
-              <Box display="flex" gridGap="4px">
+              <Box display="flex" alignItems="center" gridGap="4px">
                 {publishedOrDataCleanedBy(resource.data_cleaned_by)}
               </Box>
             </Box>
