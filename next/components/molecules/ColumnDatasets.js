@@ -284,7 +284,7 @@ export default function ColumnsDatasets({
     setIsMobileMode(isMobile)
   },[isMobile])
 
-  const [filter, setFilter] = useState()
+  const [filter, setFilter] = useState("")
   const [headerSelection, setHeaderSelection] = useState("")
   const [defaultValues, setDefaultValue] = useState([])
   const [columnValues, setColumnValues] = useState([])
@@ -293,6 +293,8 @@ export default function ColumnsDatasets({
   useEffect(() => {
     setDefaultValue(values)
     setColumnValues(values)
+    setTagFilter([])
+    setFilter("")
   },[values]) 
 
   const searcher = new FuzzySearch(
@@ -300,7 +302,7 @@ export default function ColumnsDatasets({
     headerSelection ? [headerSelection] : headers, {
     caseSensitive: true
   })
-  
+
   async function checkForEnter(e) {
     if (e.key === "Enter") {
       appliedFilter()
@@ -308,7 +310,9 @@ export default function ColumnsDatasets({
   }
 
   const appliedFilter = () => {
-    const result = searcher.search(filter)
+    if(filter.trim() === "") return
+
+    const result = searcher.search(filter.trim())
     if(headerSelection) {
       const indexTag= tagFilter.findIndex((res) => res.header === headerSelection)
       if(indexTag > -1) {
