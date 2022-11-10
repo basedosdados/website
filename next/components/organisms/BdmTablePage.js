@@ -236,7 +236,7 @@ export function BdmTablePage({
     }
   }
 
-  const publishedOrDataCleanedBy = (resource) => {
+  const PublishedOrDataCleanedBy = ({ resource }) => {
     if(resource.name === "Ricardo Dahis") return <SectionText marginRight="4px !important">Equipe Dados</SectionText>
 
     return (
@@ -381,7 +381,7 @@ export function BdmTablePage({
                 color="#252A32"
               >Publicação por</Text>
               <Box display="flex" alignItems="center" gridGap="4px">
-                {publishedOrDataCleanedBy(resource.published_by)}
+                <PublishedOrDataCleanedBy resource={resource.published_by}/>
               </Box>
             </Box>
           </GridItem>
@@ -398,7 +398,7 @@ export function BdmTablePage({
                 color="#252A32"
               >Tratamento por</Text>
               <Box display="flex" alignItems="center" gridGap="4px">
-                {publishedOrDataCleanedBy(resource.data_cleaned_by)}
+                <PublishedOrDataCleanedBy resource={resource.data_cleaned_by} />
               </Box>
             </Box>
           </GridItem>
