@@ -37,7 +37,7 @@ export function BoxBigQueryGoogle({ href }) {
     <DisclaimerBox>
       <HStack spacing={0}>
         <Image
-          alt="google bigQuery"
+          alt=""
           width="20px"
           height="20px"
           marginRight="10px"

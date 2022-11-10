@@ -197,10 +197,11 @@ function TableDatasets({
         maxHeight="400px"
         overflowY="auto"
       >
-        <Table position="relative">
-          <Thead>
+        <Table position="relative" role="table">
+          <Thead  role="rowgroup">
             {columnsHeaders.map((elm) => (
               <Th
+                role="row"
                 position="sticky"
                 top="0"
                 padding="8px 24px"
@@ -215,7 +216,7 @@ function TableDatasets({
                 zIndex={1}
               >
                 {tooltip ?
-                  <Box display="flex" gridGap="8px">
+                  <Box display="flex" gridGap="8px" role="columnheader">
                     {translations ? translate(elm, translations) : elm}
                     <Tooltip
                       hasArrow
@@ -234,18 +235,19 @@ function TableDatasets({
                     </Tooltip>
                   </Box>
                   :
-                  <>
+                  <div role="columnheader">
                     {translations ? translate(elm, translations) : elm}
-                  </>
+                  </div>
                 }
               </Th>
             ))}
           </Thead>
-          <Tbody>
+          <Tbody role="rowgroup">
             {columnsValues.map((elm) => (
-              <Tr>
+              <Tr role="row">
                 {elm.map((r) => (
                   <Td
+                    role="cell"
                     padding="10px 24px"
                     fontSize="14px"
                     fontFamily="Lato"
