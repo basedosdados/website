@@ -14,6 +14,7 @@ import DatabaseCard from "../organisms/DatabaseCard";
 import Carousel from "../atoms/Carousel";
 import SectionText from "../atoms/SectionText";
 import RemoveIcon from "../../public/img/icons/removeIcon";
+import styles from "../../styles/themeCatalog.module.css";
 
 function Themes ({
   responsive,
@@ -126,7 +127,7 @@ function CardThemes ({ responsive, recentDataSets=[], loading }) {
       return setScreenQuery(1)
     if(responsive.baseQuery)
       return setScreenQuery(2)
-    if(responsive.lgQuery)
+    if(responsive.mediumQuery)
       return setScreenQuery(3)
 
     return setScreenQuery(4)
@@ -134,7 +135,7 @@ function CardThemes ({ responsive, recentDataSets=[], loading }) {
 
   return (
     <Box
-      width={responsive.mobileQuery ? "100vw" : "95%"}
+      width={responsive.mobileQuery ? "100vw" : "95vw"}
       maxWidth="1264px"
       margin={responsive.mobileQuery ? "24px 0 48px !important" : "40px 0 48px !important"}
     >
@@ -152,6 +153,7 @@ function CardThemes ({ responsive, recentDataSets=[], loading }) {
         </Center>
       }
       <Center
+        className={styles.cards}
         width={responsive.mobileQuery ? "100vw" : "100%"}
       >
         <Carousel 
@@ -280,7 +282,7 @@ export default function ThemeCatalog ({ popularDatalakeDatasets, themes }) {
       />
 
       <CardThemes
-        responsive={{mobileQuery, baseQuery, lgQuery}}
+        responsive={{mobileQuery, baseQuery, mediumQuery, lgQuery}}
         recentDataSets={recentDataSets}
         loading={loading}
       />
