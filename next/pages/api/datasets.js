@@ -80,7 +80,10 @@ export function updateResource(resource) {
 }
 
 export function deleteDataset(dataset) {
-  return axiosInstance.post(`/dataset_purge`, dataset);
+  return axiosInstance.post(`/dataset_purge`, dataset)
+  .catch(function (error) {
+    console.log(error)
+  })
 }
 
 export function deleteResource(resource) {
