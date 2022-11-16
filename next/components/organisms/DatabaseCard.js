@@ -113,8 +113,8 @@ export default function DatabaseCard({
           fontWeight="700"
           letterSpacing="0.3px"
           color="#252A32"
-          minHeight="45px"
-          lineHeight="23px"
+          minHeight="40px"
+          lineHeight="20px"
           textOverflow="ellipsis"
           marginBottom="10px"
           noOfLines={2}
@@ -125,7 +125,7 @@ export default function DatabaseCard({
       <Link href={`/dataset?organization=${organizationSlug}`}>
         <Text
           noOfLines={2}
-          lineHeight="18px"
+          lineHeight="16px"
           textOverflow="ellipsis"
           letterSpacing="0.3px"
           fontFamily="Ubuntu"
@@ -134,6 +134,7 @@ export default function DatabaseCard({
           color="#6F6F6F"
         >{organization}</Text>
       </Link>
+
       <VStack spacing={1} align="flex-start" marginTop="auto">
         <HStack
           width="100%"
