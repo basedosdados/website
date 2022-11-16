@@ -91,11 +91,12 @@ function Themes ({
               borderRadius="6px"
             >
               <Image
+                className={styles.iconTheme}
                 width="100%"
                 padding={responsive.mobileQuery ? "5px" : "10px"}
                 height="100%"
                 transition="all 0.5s"
-                filter={found(elm.name) ? "invert(1)" :"invert(0.8)"}
+                filter={found(elm.name) && "invert(1)"}
                 _hover={{ filter:"invert(1)"}}
                 alt={`${elm.name}`}
                 src={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${elm.name}.svg`}

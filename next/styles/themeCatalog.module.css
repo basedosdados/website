@@ -1,3 +1,7 @@
+.iconTheme {
+  filter: invert(43%) sepia(17%) saturate(1660%) hue-rotate(88deg) brightness(100%) contrast(86%);
+}
+
 .cards :global(.swiper-slide) {
   display: flex;
   justify-content: center;
