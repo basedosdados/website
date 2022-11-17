@@ -197,10 +197,11 @@ function TableDatasets({
         maxHeight="400px"
         overflowY="auto"
       >
-        <Table position="relative">
-          <Thead>
+        <Table position="relative" role="table">
+          <Thead  role="rowgroup">
             {columnsHeaders.map((elm) => (
               <Th
+                role="row"
                 position="sticky"
                 top="0"
                 padding="8px 24px"
@@ -215,7 +216,7 @@ function TableDatasets({
                 zIndex={1}
               >
                 {tooltip ?
-                  <Box display="flex" gridGap="8px">
+                  <Box display="flex" gridGap="8px" role="columnheader">
                     {translations ? translate(elm, translations) : elm}
                     <Tooltip
                       hasArrow
@@ -234,18 +235,19 @@ function TableDatasets({
                     </Tooltip>
                   </Box>
                   :
-                  <>
+                  <div role="columnheader">
                     {translations ? translate(elm, translations) : elm}
-                  </>
+                  </div>
                 }
               </Th>
             ))}
           </Thead>
-          <Tbody>
+          <Tbody role="rowgroup">
             {columnsValues.map((elm) => (
-              <Tr>
+              <Tr role="row">
                 {elm.map((r) => (
                   <Td
+                    role="cell"
                     padding="10px 24px"
                     fontSize="14px"
                     fontFamily="Lato"
@@ -284,7 +286,7 @@ export default function ColumnsDatasets({
     setIsMobileMode(isMobile)
   },[isMobile])
 
-  const [filter, setFilter] = useState()
+  const [filter, setFilter] = useState("")
   const [headerSelection, setHeaderSelection] = useState("")
   const [defaultValues, setDefaultValue] = useState([])
   const [columnValues, setColumnValues] = useState([])
@@ -293,6 +295,8 @@ export default function ColumnsDatasets({
   useEffect(() => {
     setDefaultValue(values)
     setColumnValues(values)
+    setTagFilter([])
+    setFilter("")
   },[values]) 
 
   const searcher = new FuzzySearch(
@@ -300,7 +304,7 @@ export default function ColumnsDatasets({
     headerSelection ? [headerSelection] : headers, {
     caseSensitive: true
   })
-  
+
   async function checkForEnter(e) {
     if (e.key === "Enter") {
       appliedFilter()
@@ -308,7 +312,9 @@ export default function ColumnsDatasets({
   }
 
   const appliedFilter = () => {
-    const result = searcher.search(filter)
+    if(filter.trim() === "") return
+
+    const result = searcher.search(filter.trim())
     if(headerSelection) {
       const indexTag= tagFilter.findIndex((res) => res.header === headerSelection)
       if(indexTag > -1) {
@@ -356,7 +362,7 @@ export default function ColumnsDatasets({
     <Stack width="100%">
       <HStack position="relative" flexDirection={isMobileMode ? "column" : "row"}>
         <HStack spacing={2} flexDirection="row" marginBottom={isMobileMode && "8px"} marginLeft="0 !important">
-          <FilterIcon alt="filtrar" fill="#575757" widthI="20px" height="20px" />
+          <FilterIcon alt="filtrar" fill="#575757" height="20px" />
           <Text color="#575757" fontSize="16px" fontWeight="400" fontFamily="ubuntu" letterSpacing="0.2px">
             Filtrar
           </Text>

@@ -303,9 +303,10 @@ export default function FAQ({}) {
             </Text>
           </Stack>
         </Stack>
-
       </VStack>
-      <script key="sql" src="/vendor/prism.js"></script>
+
+      <script key="sql" src="/vendor/prism.js"/>
+      <link rel="stylesheet" href="/vendor/prism.css" data-noprefix />
     </MainPageTemplate>
   )
 }

@@ -9,6 +9,7 @@ const EnthusiasticImage = ({widthImage = "485px", heightImage="296px", ...style}
     {...style}
   >
     <Icon
+      alt="apoiador entusiasta"
       viewBox='0 0 485 296'
       width={widthImage}
       height={heightImage}

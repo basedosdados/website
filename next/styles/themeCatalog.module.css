@@ -1,0 +1,25 @@
+.iconTheme {
+  filter: invert(43%) sepia(17%) saturate(1660%) hue-rotate(88deg) brightness(100%) contrast(86%);
+}
+
+.cards :global(.swiper-slide) {
+  display: flex;
+  justify-content: center;
+}
+
+.cards :global(.swiper-button-prev), .cards :global(.swiper-button-next) {
+  color: #DEDFE0 !important;
+  width: 30px !important;
+}
+
+
+.cards :global(.swiper-button-prev)::after , .cards :global(.swiper-button-next)::after {
+  font-size: 0px !important;
+  -webkit-transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  transition: all .5s ease;
+}
+
+.cards:hover :global(.swiper-button-prev)::after, .cards:hover :global(.swiper-button-next)::after {
+  font-size: 32px !important;
+}

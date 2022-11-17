@@ -15,7 +15,9 @@ function Testimonial({ children, name, position, src }) {
         alignItems="center"
       >
         <Image
+          alt="aspas"
           width="50px"
+          height="36px"
           src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/%E2%80%9C.png"
         />
       </Stack>
@@ -107,14 +109,14 @@ export function BePartner() {
           justifyContent="center"
           flexWrap="wrap"
         >
-          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/tesouro_nacional.png" />
-          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/ipea.png" />
-          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/alziras.png" />
-          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/fiquem_sabendo.png" />
-          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/bg__lemann.png" />
-          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/rio.png" />
-          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/governosp.png" />
-          <PartnerBox src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/aponte.png" />
+          <PartnerBox alt="tesouro nacional" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/tesouro_nacional.png" />
+          <PartnerBox alt="ipea" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/ipea.png" />
+          <PartnerBox alt="alziras" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/alziras.png" />
+          <PartnerBox alt="fiquem sabendo" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/fiquem_sabendo.png" />
+          <PartnerBox alt="bg lemann" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/bg__lemann.png" />
+          <PartnerBox alt="rio" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/rio.png" />
+          <PartnerBox alt="governosp" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/governosp.png" />
+          <PartnerBox alt="aponte" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/aponte.png" />
         </Stack>
       </Stack>
       {!isMobile &&

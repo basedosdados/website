@@ -36,7 +36,13 @@ export function BoxBigQueryGoogle({ href }) {
   return (
     <DisclaimerBox>
       <HStack spacing={0}>
-        <Image width="20px" height="20px" marginRight="10px" src="https://img.icons8.com/color/48/000000/google-logo.png"/>
+        <Image
+          alt=""
+          width="20px"
+          height="20px"
+          marginRight="10px"
+          src="https://img.icons8.com/color/48/000000/google-logo.png"
+        />
         <SectionText>
           Para usar o BigQuery basta ter uma conta Google. Primeira vez?
           <Link
@@ -358,6 +364,7 @@ bd_read_table, ///
                   spacing={isMobileMod ? 0 : 8}
                 >
                   <Image
+                    alt="QR code contribuição"
                     height="216px"
                     objectFit="contain"
                     border="2px solid #DEDFE0"

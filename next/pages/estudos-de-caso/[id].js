@@ -103,6 +103,7 @@ export default function CaseStudies ({
           }
 
           <Image
+            alt={displayTitle}
             filter={!isMobileMod && "brightness(0.5)"}
             width="fit-content"
             maxWidth="100%"
@@ -140,6 +141,7 @@ export default function CaseStudies ({
             alignItems="flex-start"
           >
             <Image
+              alt={displayTitle}
               marginBottom="32px"
               width="fit-content"
               height="fit-content"

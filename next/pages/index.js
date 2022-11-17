@@ -27,6 +27,9 @@ import { ThemeTag } from "../components/atoms/ThemeTag";
 import LinkDash from "../components/atoms/LinkDash";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { BePartner } from "../components/organisms/BePartner";
+import Link from "../components/atoms/Link";
+import RoundedButton from "../components/atoms/RoundedButton";
+
 import SearchIcon from "../public/img/icons/searchIcon";
 import ArrowIcon from "../public/img/icons/arrowIcon";
 import EnthusiasticImage from "../public/img/enthusiasticImage";
@@ -35,8 +38,6 @@ import MasterOfDatabaseImage from "../public/img/masterOfDatabaseImage";
 import ProductsFiltersImage from "../public/img/productsFiltersImage";
 import ProcessedDataImage from "../public/img/processedDataImage";
 import BDLogoPlusImage from "../public/img/logos/bd_logo_plus"
-import RoundedButton from "../components/atoms/RoundedButton";
-import Link from "../components/atoms/Link";
 
 export async function getStaticProps(context) {
   const themes = await getGroupList()
@@ -167,6 +168,7 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
                 justifyContent="center"
                 isBorderColor={false}
                 inputStyle={{
+                  "aria-label": "Search",
                   padding: "24px 64px 24px 32px",
                   height: "80px",
                   borderRadius: "25px",
@@ -588,17 +590,21 @@ function Support({ pages }) {
           >
             <Stack
               width={{ base: "100%", lg: "initial" }}
+              alignItems={isMobileMod && "center"}
               spacing={10}
               direction={{ base: "column", lg: "row" }}
             >
               <ChakraImage
+                alt="QR code para apoiador"
                 position="relative"
                 top="-5px"
+                width="180px"
                 height="180px"
                 objectFit="contain"
                 src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/bd_qrcode.png"
               />
               <SectionText
+                width="100%"
                 marginLeft="auto"
                 flex={1}
               >
@@ -664,6 +670,7 @@ function GoogleCloud () {
           height={{ base: "200px", lg: "140px", xl: "160px" }}
         >
           <Image
+            alt="gooogle cloud"
             src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/2022/GC_CustomerAwardWinner_SocialImpact+1.png"
             width="227px"
             height="336px"
@@ -699,6 +706,7 @@ export default function Home({
         src="/vendor/terminal.js"
         data-termynal-container="#termynal"
       ></script>
+      <link href="/vendor/terminal.css" rel="stylesheet" />
     </MainPageTemplate>
   );
 }

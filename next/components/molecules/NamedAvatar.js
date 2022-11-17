@@ -25,8 +25,9 @@ export function NamedAvatar({ src, name, position, ...props }) {
           {position}
         </Text>
       </VStack>
-      <Avatar 
-        backgroundColor="white"
+      <Avatar
+        name=""
+        backgroundColor="#FFF"
         height="75px"
         src={src} 
       />

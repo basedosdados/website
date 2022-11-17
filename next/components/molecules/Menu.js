@@ -317,7 +317,7 @@ export default function Menu({ pages = [] }) {
               cursor="pointer"
             />
           </Box>
-          <Link _hover={{opacity:"none"}} href="/">
+          <Link aria-label="Home" _hover={{opacity:"none"}} href="/">
             <BDLogoImage
               transform="translateX(-27%)"
               height="40px"

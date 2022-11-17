@@ -9,6 +9,7 @@ const ProductsFiltersImage = ({widthImage = "714px", heightImage="386px", ...sty
     {...style}
   >
     <Icon
+      alt="filtro de datasets"
       viewBox='0 0 714 386'
       width={widthImage}
       height={heightImage}

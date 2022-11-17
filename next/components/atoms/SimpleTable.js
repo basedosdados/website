@@ -16,15 +16,16 @@ export function SimpleTable({
 }) {
 
   return (
-    <TableContainer 
+    <TableContainer
       width="100%"
       height="100%"
       {...containerStyle}
     >
-      <Table>
-        <Thead>
+      <Table role="table">
+        <Thead role="rowgroup">
           {headers.map((h) => (
             <Th
+              role="row"
               padding="8px 24px"
               fontSize="14px"
               color="#6F6F6F"
@@ -35,15 +36,18 @@ export function SimpleTable({
               textTransform="capitalize"
               boxSizing="content-box"
             >
-              {h}
+              <div role="columnheader">
+                {h}
+              </div>
             </Th>
           ))}
         </Thead>
-        <Tbody>
+        <Tbody role="rowgroup">
           {values.map((h) => (
-            <Tr>
+            <Tr role="row">
               {h.map((r) => (
                 <Td
+                  role="cell"
                   padding="10px 24px"
                   fontSize="14px"
                   fontFamily="Lato"
