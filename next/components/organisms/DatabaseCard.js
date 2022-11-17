@@ -92,7 +92,7 @@ export default function DatabaseCard({
               backgroundColor="#2B8C4D"
               borderRadius="6px"
             >
-              <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${c[0]}`}>
+              <Link overflow="hidden" filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${c[0]}`}>
                 <CategoryIcon
                   alt={c[0]}
                   size="37px"

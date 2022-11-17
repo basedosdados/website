@@ -682,6 +682,7 @@ export default function DatasetPage({
           {name:"Entre em contato", url: "/contato"},
         ]}
       />
+      <link rel="stylesheet" href="/vendor/prism.css" data-noprefix />
     </MainPageTemplate>
   );
 }

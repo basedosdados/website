@@ -17,6 +17,7 @@ function Testimonial({ children, name, position, src }) {
         <Image
           alt="aspas"
           width="50px"
+          height="36px"
           src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/%E2%80%9C.png"
         />
       </Stack>
