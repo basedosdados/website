@@ -168,6 +168,7 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
                 justifyContent="center"
                 isBorderColor={false}
                 inputStyle={{
+                  "aria-label": "Search",
                   padding: "24px 64px 24px 32px",
                   height: "80px",
                   borderRadius: "25px",
@@ -589,6 +590,7 @@ function Support({ pages }) {
           >
             <Stack
               width={{ base: "100%", lg: "initial" }}
+              alignItems={isMobileMod && "center"}
               spacing={10}
               direction={{ base: "column", lg: "row" }}
             >
@@ -596,11 +598,13 @@ function Support({ pages }) {
                 alt="QR code para apoiador"
                 position="relative"
                 top="-5px"
+                width="180px"
                 height="180px"
                 objectFit="contain"
                 src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/bd_qrcode.png"
               />
               <SectionText
+                width="100%"
                 marginLeft="auto"
                 flex={1}
               >
@@ -702,6 +706,7 @@ export default function Home({
         src="/vendor/terminal.js"
         data-termynal-container="#termynal"
       ></script>
+      <link href="/vendor/terminal.css" rel="stylesheet" />
     </MainPageTemplate>
   );
 }
