@@ -4,11 +4,15 @@ import {
   Stack,
   Text,
   VStack,
+  Grid,
+  GridItem,
+  useClipboard,
   Image as ChakraImage,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import ControlledInput from "../components/atoms/ControlledInput";
 import SectionText from "../components/atoms/SectionText";
+import BodyText from "../components/atoms/BodyText";
 import Display from "../components/atoms/Display";
 import { useEffect, useState } from "react";
 import ThemeCatalog from "../components/molecules/ThemeCatalog";
@@ -24,7 +28,6 @@ import { ShadowBox } from "../components/atoms/ShadowBox";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
 import { ThemeTag } from "../components/atoms/ThemeTag";
-import LinkDash from "../components/atoms/LinkDash";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { BePartner } from "../components/organisms/BePartner";
 import Link from "../components/atoms/Link";
@@ -32,6 +35,7 @@ import RoundedButton from "../components/atoms/RoundedButton";
 
 import SearchIcon from "../public/img/icons/searchIcon";
 import ArrowIcon from "../public/img/icons/arrowIcon";
+import { CopySolidIcon } from "../public/img/icons/copyIcon";
 import EnthusiasticImage from "../public/img/enthusiasticImage";
 import DatabaseImage from "../public/img/databaseImage";
 import MasterOfDatabaseImage from "../public/img/masterOfDatabaseImage";
@@ -139,9 +143,9 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
             marginTop="112px"
           >
             <Display
-              fontSize={isMobileMod ? "32px" : "38px"}
-              letterSpacing={isMobileMod ? "0.2px" : "-0.2px"}
-              lineHeight={isMobileMod ? "40px" : "64px"}
+              fontSize={isMobileMod ? "34px" : "60px"}
+              letterSpacing={isMobileMod ? "-0.4px" : "-1.5px"}
+              lineHeight={isMobileMod ? "44px" : "72px"}
               position="relative"
               zIndex="1"
               flex="2"
@@ -150,7 +154,7 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
               marginBottom="16px"
               color="#2B8C4D"
             >
-              Encontre os dados que você precisa
+              Base dos Dados
             </Display>
             <VStack
               maxWidth="650px"
@@ -170,10 +174,10 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
                 inputStyle={{
                   "aria-label": "Search",
                   padding: "24px 64px 24px 32px",
-                  height: "80px",
-                  borderRadius: "25px",
+                  height: isMobileMod ? "50px" :"80px",
+                  borderRadius: isMobileMod ? "20px" : "25px",
                   backgroundColor: "#ffffff",
-                  fontSize: "24px",
+                  fontSize: isMobileMod ? "18px" : "24px",
                   border: "0px",
                   boxShadow: "0 1px 8px 1px rgba(64, 60, 67, 0.16) !important",
                 }}
@@ -181,20 +185,20 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
                   (search ?
                     <ArrowIcon
                       alt=""
-                      width="28px"
-                      height="28px"
+                      width={isMobileMod ? "18px" : "28px"}
+                      height={isMobileMod ? "18px" : "28px"}
                       fill="#252A32"
-                      marginRight="20px"
+                      marginRight={isMobileMod ? "5px" : "20px"}
                       cursor="pointer"
                       onClick={openSearchLink}
                     />
                     :
                     <SearchIcon
                       alt="pesquisar"
-                      width="28px"
-                      height="28px"
+                      width={isMobileMod ? "18px" : "28px"}
+                      height={isMobileMod ? "18px" : "28px"}
                       fill="#252A32"
-                      marginRight="25px"
+                      marginRight={isMobileMod ? "5px" : "25px"}
                     />
                   )
                 }
@@ -206,7 +210,7 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
                     fontSize="13px"
                     fontWeight="300"
                     letterSpacing="0.4px"
-                    color="#252A32"
+                    color="#575757"
                   >
                     Termos populares: 
                   </Text>
@@ -220,19 +224,19 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
 
           <VStack
             margin="0 !important"
-            paddingTop="120px"
+            paddingTop={isMobileMod ? "80px" : "120px"}
             width="100%"
             position="relative"
             id="theme"
           >
             <Text
-              fontFamily="Ubuntu"
               fontSize={isMobileMod ? "16px" : "22px"}
-              fontWeigth="400"
               letterSpacing={isMobileMod ? "0.1px" : "0"}
+              fontFamily="Ubuntu"
+              fontWeight="300"
               minHeight="30px"
-              marginBottom="24px"
-              color="#A3A3A3"
+              marginBottom={isMobileMod ? "8px" : "24px"}
+              color="#575757"
               cursor="pointer"
               onClick={() => window.open("#theme", "_self")}
             >
@@ -435,10 +439,45 @@ function Products() {
   )
 }
 
+export function TextPix ({ title, text }) {
+
+  return (
+    <Box>
+      <BodyText color="#FF8484" letterSpacing="0.3px" fontWeight="500">
+        {title}
+      </BodyText>
+      <BodyText marginBottom="8px">
+        {text}
+      </BodyText>
+    </Box>
+  )
+}
+
+export function StepText ({index, text}) {
+  return (
+    <Box marginBottom="20px !important">
+      <BodyText
+        display="flex"
+        gridGap="8px"
+      >
+        <Text
+          color="#FF8484"
+          fontWeight="500"
+        >
+          {index}
+        </Text>
+        {text}
+      </BodyText>
+    </Box>
+  )
+}
+
 function Support({ pages }) {
   const contactPage = pages.filter((p) => p.Title === "Contato");
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
+
+  const { hasCopied, onCopy } = useClipboard("42494318000116")
 
   useEffect(() => {
     setIsMobileMod(isMobile)
@@ -453,17 +492,15 @@ function Support({ pages }) {
     >
       <VStack id="support" position="relative" width="95%">
         <Display
-          fontSize={isMobileMod ? "32px" : "38px"}
-          letterSpacing={isMobileMod ? "0.2px" : "-0.2px"}
-          lineHeight={isMobileMod ? "40px" : "64px"}
+          letterSpacing={isMobileMod ? "0.2px" : "-0.4px"}
           position="relative"
           zIndex="1"
           width="100%"
           textAlign="center"
-          margin={isMobileMod ? "80px 0px 40px" : "104px 0px 40px"}
+          margin={isMobileMod ? "80px 0px 24px" : "104px 0px 24px"}
         >
-          Existimos através do esforço de pessoas {!isMobileMod && <br/>}
-          que acreditam no acesso a dados abertos de qualidade.
+          Existimos através do esforço de pessoas que {!isMobileMod && <br/>}
+          acreditam no acesso a dados abertos de qualidade.
         </Display>
         <Text
           position="relative"
@@ -480,14 +517,15 @@ function Support({ pages }) {
 
         <Stack
           width="100%"
-          margin="0 0 56px !important"
+          margin="0 0 80px !important"
           justifyContent="center"
           alignItems="center"
           direction={{ base: "column", lg: "row" }}
           gridGap="48px"
         >
           <ShadowBox
-            height="100%"
+            width="266px"
+            height="400px"
             image= {
               <EnthusiasticImage
                 widthImage="100%"
@@ -497,53 +535,66 @@ function Support({ pages }) {
             title="Entusiasta"
             spacing={4}
           >
-            <SectionText
+            <BodyText
               textAlign="center"
+              fontWeigth="300"
+              fontSize="14px"
+              letterSpacing="0.2px"
+              margin="10px 0 24px !important"
+              lineHeight="24px"
             >
-              Bolso apertado? Apenas R$0,50 por dia para ajudar a manter a iniciativa.
-            </SectionText>
-            <Link _hover={{ opacity:"none" }} target="_blank" href="https://apoia.se/basedosdados">
-              <RoundedButton width="200px">
+              Bolso apertado? Apenas R$0,50 por <br/>dia para nos ajudar a manter a iniciativa.
+            </BodyText>
+            <Link _hover={{ opacity:"none" }} margin="0 !important" target="_blank" href="https://apoia.se/basedosdados">
+              <RoundedButton backgroundColor="#FF8484" width="200px">
                   R$ <p style={{fontSize:"24px", margin:"0 5px"}}>15</p>/ mês
               </RoundedButton>
             </Link>
           </ShadowBox>
 
           <ShadowBox
-            height="100%"
-            border="2.5px solid #FF8484"
-            image= {
-              <DatabaseImage
+            width={isMobileMod ? "266px" : "320px"}
+            height={isMobileMod ? "400" : "428px"}
+            image={
+              <DatabaseImage 
                 widthImage="100%"
                 heightImage="100%"
                 backgroundColor="#FF8484"
               />
             }
-            title={
-              <a style={{ color:"#FF8484", fontWeight:"500"}}>
-                <i>Databaser</i>
-              </a>
-            }
+            title="Databaser"
+            titleStyle={{
+              fontSize:"22px",
+              color:"#FF8484",
+              fontWeight:"500",
+              letterSpacing:"0.1px"
+            }}
             spacing={4}
           >
-            <SectionText
+            <BodyText
               display="flex"
               flexDirection="column"
               textAlign="center"
-              color="#252A32 !important"
+              fontSize="16px"
+              margin="16px 0 24px !important"
+              letterSpacing="0.2px"
             >
-              <b>Doe R$ 1 real por dia</b>
-              <p>para fazer <i>databasers</i> felizes.</p>
-            </SectionText>
-            <Link _hover={{ opacity:"none" }} target="_blank" href="https://apoia.se/basedosdados">
-              <RoundedButton backgroundColor="#FF8484" width="200px">
+              <b style={{fontWeight:"500"}}>Doe R$ 1 real por dia</b>
+              <p>para fazer databasers felizes.</p>
+            </BodyText>
+            <Link _hover={{ opacity:"none" }} marginTop="0 !important" target="_blank" href="https://apoia.se/basedosdados">
+              <RoundedButton
+                backgroundColor="#FF8484"
+                width="200px"
+              >
                   R$ <p style={{fontSize:"24px", margin:"0 5px"}}>30</p>/ mês
               </RoundedButton>
             </Link>
           </ShadowBox>
-
+          
           <ShadowBox
-            height="100%"
+            width="266px"
+            height="400px"
             image= {
               <MasterOfDatabaseImage
                 widthImage="100%"
@@ -553,13 +604,18 @@ function Support({ pages }) {
             title="Mestre dos dados"
             spacing={4}
           >
-            <SectionText
+            <BodyText
               textAlign="center"
+              fontWeigth="300"
+              fontSize="14px"
+              letterSpacing="0.2px"
+              margin="10px 0 24px !important"
+              lineHeight="24px"
             >
               Menos de R$2 reais por dia para pouparmos ainda mais seu trabalho.
-            </SectionText>
-            <Link _hover={{ opacity:"none" }} target="_blank" href="https://apoia.se/basedosdados">
-              <RoundedButton width="200px">
+            </BodyText>
+            <Link _hover={{ opacity:"none" }} marginTop="0 !important" target="_blank" href="https://apoia.se/basedosdados">
+              <RoundedButton backgroundColor="#FF8484" width="200px">
                   R$ <p style={{fontSize:"24px", margin:"0 5px"}}>50</p>/ mês
               </RoundedButton>
             </Link>
@@ -571,80 +627,92 @@ function Support({ pages }) {
             width="100%"
             textAlign="center"
             fontFamily="Ubuntu"
-            fontSize={isMobileMod ? "20px" : "24px"}
-            letterSpacing={isMobileMod ? "0.2px" : "0px"}
-            color="#252A32"
+            fontSize="20px"
+            letterSpacing="0.2px"
+            color="#7D7D7D"
             fontWeigth="400"
             lineHeight="32px"
-            paddingBottom="24px"
+            paddingBottom={!isMobileMod && "32px"}
           >
-            Doe via PIX
+            Doe qualquer valor via PIX
           </Text>
-          <Stack
-            justify="space-between"
-            alignItems="flex-start"
+
+          <Grid
+            templateColumns={isMobileMod ? "repeat(1, 3fr)" : "repeat(3, 1fr)"}
+            gridGap={isMobileMod && "40px"}
+            justifyItems="center"
             width="100%"
-            gridGap={10}
-            direction={{ base: "column", lg: "row" }}
-            margin={!isMobileMod && "24px 24px 0px"}
           >
-            <Stack
-              width={{ base: "100%", lg: "initial" }}
-              alignItems={isMobileMod && "center"}
-              spacing={10}
-              direction={{ base: "column", lg: "row" }}
+            <GridItem
+              marginTop={isMobileMod && "32px !important"}
+              justifyContent="center"
+              alignItems="flex-start"
             >
+              <TextPix title="Razão Social" text="Instituto Base dos Dados"/>
+              <TextPix title="CNPJ" text="42494318/0001-16"/>
+              <TextPix title="Banco" text="Stone"/>
+              <Box display="flex" gridGap="48px">
+                <TextPix title="Agência" text="0001"/>
+                <TextPix title="Conta" text="6761821-5"/>
+              </Box>
+            </GridItem>
+
+            <GridItem marginBottom={isMobileMod && "24px"}>
               <ChakraImage
                 alt="QR code para apoiador"
                 position="relative"
                 top="-5px"
-                width="180px"
-                height="180px"
+                width="250px"
+                height="250px"
                 objectFit="contain"
+                boxShadow="0 1.6px 16px rgba(100, 96, 103, 0.16)"
                 src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/bd_qrcode.png"
               />
-              <SectionText
+              <RoundedButton 
+                fontSize="14px"
+                fontWeight="700"
+                backgroundColor="#FF8484"
+                paddingX="30px"
                 width="100%"
-                marginLeft="auto"
-                flex={1}
+                gridGap="6px"
+                onClick={onCopy}
+                opacity={hasCopied && "0.8"}
+                marginTop="32px"
               >
-                Chave CNPJ<br/>
-                <b style={{fontWeight:"500"}}>42494318000116</b> <br/><br/>
-                Banco: <b style={{fontWeight:"500"}}>Stone</b> <br/>
-                Razão Social: <b style={{fontWeight:"500"}}>Instituto Base dos Dados</b> <br/>
-                CNPJ: <b style={{fontWeight:"500"}}>42494318/0001-16</b> <br/>
-                Agência: <b style={{fontWeight:"500"}}>0001</b> | Conta: <b style={{fontWeight:"500"}}>6761821-5</b>
-              </SectionText>
-            </Stack>
-            <Stack>
-              <SectionText
-                maxHeight="190px"
-                textAlign="start"
-                lineHeight={{base:"30px", lg:"30px", xl: "40px"}}
-                flex={1}
-              >
-                1. Abra o app do seu banco<br/>
-                2. Escolha a opção de pagamento com PIX QR Code ou chave<br/>
-                3. Escaneie o QR Code ou digite a chave ao lado<br/>
-                ❤. Faça sua doação!
-              </SectionText>
-            </Stack>
-          </Stack>
-        </Box>
+                <CopySolidIcon alt="copiar chave PIX" width="22px" height="22px" fill="#FFF"/>
+                  {hasCopied ? "Copiada chave PIX" :"Copiar chave PIX"}
+              </RoundedButton>
+            </GridItem>
 
-        <SectionText
-          margin="32px 0 !important"
-        >
-          💰 Gostaria de apoiar institucionalmente a Base dos Dados?
-          <LinkDash
-            dash={false}
-            textDecoration="none"
-            fontWeight="700"
-            fontSize="14px"
-            href="/contato"
-          > Entre em contato conosco.
-          </LinkDash>
-        </SectionText>
+            <GridItem display={isMobileMod && "none"}>
+              <BodyText color="#FF8484" fontWeigth="500" marginBottom="40px">Siga o passo a passo</BodyText>
+              <StepText index="1" text=" Abra o app do seu banco;"/>
+              <StepText index="2" text=" Escolha a opção de pagamento com PIX;"/>
+              <StepText index="3" text=" Escaneie o QR Code ou digite a chave ao lado;"/>
+              <StepText index="❤" text=" Faça sua doação!"/>
+            </GridItem>
+          </Grid>
+
+          <BodyText
+            fontSize="16px"
+            letterSpacing="0.2px"
+            textAlign="center"
+            margin="32px 0 !important"
+          >
+            💰 Gostaria de apoiar a BD institucionalmente?
+            <Link
+              dash={false}
+              fontFamily="ubuntu"
+              textDecoration="none"
+              fontWeigth="500"
+              fontSize="16px"
+              letterSpacing="0.2px"
+              color="#42B0FF"
+              href="/contato"
+            > Entre em contato conosco.
+            </Link>
+          </BodyText>
+        </Box>
       </VStack>
     </VStack>
   );
@@ -670,7 +738,7 @@ function GoogleCloud () {
           height={{ base: "200px", lg: "140px", xl: "160px" }}
         >
           <Image
-            alt="gooogle cloud"
+            alt="google cloud"
             src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/2022/GC_CustomerAwardWinner_SocialImpact+1.png"
             width="227px"
             height="336px"
@@ -702,10 +770,6 @@ export default function Home({
       <BePartner />
       <Products />
       <Support pages={pages} />
-      <script
-        src="/vendor/terminal.js"
-        data-termynal-container="#termynal"
-      ></script>
       <link href="/vendor/terminal.css" rel="stylesheet" />
     </MainPageTemplate>
   );

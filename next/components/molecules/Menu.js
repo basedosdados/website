@@ -178,7 +178,7 @@ function DesktopLinks({ links }) {
                     display="flex"
                     flexDirection="colunm"
                     _hover={{ opacity: "0.6" }}
-                    fontSize="15px"
+                    fontSize="13px"
                     target={k === "Transparência" || "quem-somos" ? null : "_blank"}
                     color="#252A32"
                     fontFamily="Ubuntu"
@@ -253,11 +253,11 @@ export default function Menu({ pages = [] }) {
     Tutoriais: {
       "Perguntas frequentes": "/perguntas-frequentes",
       Documentação: "https://basedosdados.github.io/mais/",
-      YouTube: "https://www.youtube.com/c/BasedosDados/featured",
+      "Vídeos no YouTube": "https://www.youtube.com/c/BasedosDados/featured",
       Blog: "https://medium.com/basedosdados",
     },
     Serviços: {
-      Serviços : "/servicos",
+      "Conheça os serviços" : "/servicos",
       "Estudos de caso" : "/estudos-de-caso/fundacao-lemann"
     },
     Institucional: {

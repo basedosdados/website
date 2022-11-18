@@ -69,6 +69,7 @@ export default function HelpWidget({options, tooltip}) {
               background="#2B8C4D"
               borderRadius="50%"
               zIndex="11"
+              boxShadow="0 1.6px 16px rgba(100, 96, 103, 0.3)"
               position="fixed"
               bottom={isMobileMode ? "20px" : "40px"}
               right={isMobileMode ? "20px" : "40px"}
