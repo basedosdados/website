@@ -1,13 +1,12 @@
 import {
-  Box,
   HStack,
   Stack,
   VStack,
-  Text,
 } from "@chakra-ui/react";
-import Image from "next/image";
+import { useState, useEffect } from "react";
 import Link from "../atoms/Link";
-import BDLogoFooterImage from "../../public/img/logos/bd_logo_footer";
+import BodyText from "../atoms/BodyText"
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import YoutubeIcon from "../../public/img/icons/youtubeIcon";
 import TwitterIcon from "../../public/img/icons/twitterIcon";
 import DiscordIcon from "../../public/img/icons/discordIcon";
@@ -16,49 +15,64 @@ import LinkedinIcon from "../../public/img/icons/linkedinIcon";
 import WhatsAppIcon from "../../public/img/icons/whatsAppIcon";
 import TelegramIcon from "../../public/img/icons/telegramIcon";
 
-function LinkVStack({ title, children }) {
+function SectionCategories({ title, children, ...props }) {
   return (
-    <VStack spacing={5} alignItems="flex-start">
-      <Text 
-        color="#FFFFFF"
-        fontFamily="Ubuntu"
-        fontSize="15px"
-        fontWeight="400"
+    <VStack spacing={0} alignItems="flex-start" {...props}>
+      <BodyText 
+        color="#FFF"
+        fontSize="14px"
+        fontWeigth="300"
         letterSpacing="0.5px"
+        marginBottom="16px"
       >
         {title}
-      </Text>
-      {children}
+      </BodyText>
+      <Stack spacing="10px">
+        {children}
+      </Stack>
     </VStack>
   );
 }
 
-function SocialLink({ title, href, children }) {
-  return (
-    <Link fontFamily="Ubuntu" fontWeigth="300" letterSpacing="0.3px" color="white" href={href} target="_blank">
-      <HStack>
-        {children}
-        <Text>{title}</Text>
-      </HStack>
-    </Link>
-  );
-}
-
 const IconKey = {
-  width: "24px",
-  height: "24px",
+  width: "30px",
+  height: "30px",
   fill: "#FFF"
 }
 
+function SocialLink({ href, icon }) {
+  return (
+    <Link href={href} target="_blank">
+      {icon}
+    </Link>
+  )
+}
+
+
+
 function FooterLink(props) {
-  return <Link fontFamily="Ubuntu" fontWeigth="300" letterSpacing="0.3px" {...props} />;
+  return (
+    <Link
+      fontFamily="ubuntu"
+      fontWeigth="400"
+      letterSpacing="0.3px"
+      color="#FFF"
+      target="_blank"
+      {...props}
+    />
+  )
 }
 
 export default function Footer({ pages }) {
+  const mobileCheck = useCheckMobile()
+  const [isMobileMod, setIsMobileMod] = useState(false)
+  
+  useEffect(() => {
+    setIsMobileMod(mobileCheck)
+  },[])
 
   return (
     <VStack 
-      backgroundColor="#34A15A"
       position="relative"
       zIndex="10"
       width="100%"
@@ -66,7 +80,8 @@ export default function Footer({ pages }) {
     >
       <VStack 
         width="100%"
-        padding="40px 24px"
+        backgroundColor="#34A15A"
+        padding="80px 24px 40px"
         spacing={10}
       >
         <Stack
@@ -75,204 +90,140 @@ export default function Footer({ pages }) {
           maxWidth="1264px"
           justifyContent="space-between"
           direction={{ base: "column", lg: "row" }}
-          spacing={{ base: 10, lg: 20 }}
+          spacing={0}
+          gridGap="24px"
         >
-          <Box minWidth="200px" height="200px" position="relative">
-            <BDLogoFooterImage
-              priority
-              objectFit="contain"
-              layout="fill"
-            />
-          </Box>
+          <BodyText
+            minWidth="240px"
+            fontWeigth="400"
+            fontSize="34px"
+            letterSpacing="-0.4px"
+            color="#FFF"
+            paddingBottom="40px"
+          >Base dos Dados</BodyText>
 
           <Stack
-            direction={{ base: "column", lg: "row" }}
-            paddingBottom="100px"
-            justifyContent="space-around"
+            paddingBottom="40px"
+            display={isMobileMod ? "grid" : "flex"}
+            direction={"row"}
+            gridTemplateColumns={isMobileMod && "1fr 1fr"}
+            gridGap={isMobileMod && "30px"}
             width="100%"
             alignItems="flex-start"
+            justifyContent="flex-end"
+            spacing={isMobileMod ? "0" :"80px"}
             marginLeft="auto"
-            spacing={{ base: 10, lg: 0 }}
           >
-            <LinkVStack title="PRODUTOS">
-              <FooterLink color="white" href="/dataset">
+            <SectionCategories title="PRODUTOS" marginBottom={isMobileMod && "24px !important"}>
+              <FooterLink target="_self" href="/dataset">
                 Mecanismo de busca
               </FooterLink>
-              <FooterLink
-                color="white"
-                href="https://basedosdados.github.io/mais/" // TODO: ir para "Dados" com filtro BD+
-                target="_blank"
-              >
+              <FooterLink href="https://basedosdados.github.io/mais/">
                 Datalake público
               </FooterLink>
-              <FooterLink
-                color="white"
-                href="https://basedosdados.github.io/mais/access_data_packages/"
-                target="_blank"
-              >
+              <FooterLink href="https://basedosdados.github.io/mais/access_data_packages/">
                 Pacotes
               </FooterLink>
-            </LinkVStack>
+            </SectionCategories>
 
-            <LinkVStack title="SERVIÇOS">
-              <FooterLink 
-                color="white" 
-                href="/servicos#Captura de dados"
-              >
+            <SectionCategories title="SERVIÇOS" marginBottom={isMobileMod && "24px !important"}>
+              <FooterLink target="_self" href="/servicos#Captura de dados">
                 Captura de dados
               </FooterLink>
-              <FooterLink
-                color="white"
-                href="/servicos#Análise de dados"
-                target="_blank"
-              >
+              <FooterLink href="/servicos#Análise de dados">
                 Análise de dados
               </FooterLink>
-              <FooterLink
-                color="white"
-                href="/servicos#Consultoria de dados"
-                target="_blank"
-              >
+              <FooterLink href="/servicos#Consultoria de dados">
                 Consultoria de dados
               </FooterLink>
-            </LinkVStack>
-
-            <LinkVStack title="TUTORIAIS">
-              <FooterLink
-                href="/perguntas-frequentes"
-                color="white"
-                target="_blank"
-              >
-                Perguntas Frequentes
+              <FooterLink href="/estudos-de-caso/fundacao-lemannservicos#Consultoria de dados">
+                Estudos de caso
               </FooterLink>
-              <FooterLink
-                href="https://basedosdados.github.io/mais/"
-                color="white"
-                target="_blank"
-              >
+            </SectionCategories>
+
+            <SectionCategories title="TUTORIAIS" marginBottom={isMobileMod && "24px !important"}>
+              <FooterLink href="/perguntas-frequentes">
+                Perguntas frequentes
+              </FooterLink>
+              <FooterLink href="https://basedosdados.github.io/mais/">
                 Documentação
               </FooterLink>
-              <FooterLink
-                href="https://medium.com/basedosdados"
-                color="white"
-                target="_blank"
-              >
-                Blog
+              <FooterLink href="https://www.youtube.com/watch?v=nGM2OwTUY_M&list=PLu5pyM8QY6hg3GpNCyCtSS3sUi4Jo8Pir">
+                Vídeos no YouTube
               </FooterLink>
-              <SocialLink
-                href="https://www.youtube.com/c/BasedosDados/featured"
-                color="white"
-                target="_blank"
-                title="YouTube"
-              >
-                <YoutubeIcon alt="youtube basedosdados" {...IconKey}/>
-              </SocialLink>
-            </LinkVStack>
+            </SectionCategories>
 
-            <LinkVStack title="COMUNIDADE">
-              <SocialLink
-                href="https://twitter.com/basedosdados"
-                title="Twitter"
-              >
-                <TwitterIcon alt="twitter" {...IconKey}/>
-              </SocialLink>
-              <SocialLink
-                href="https://discord.gg/huKWpsVYx4"
-                title="Discord"
-              >
-                <DiscordIcon alt="discord" {...IconKey}/>
-              </SocialLink>
-              <SocialLink
-                href="https://github.com/basedosdados"
-                title="GitHub"
-              >
-                <GithubIcon alt="github" {...IconKey}/>
-              </SocialLink>
-              <SocialLink
-                href="https://www.linkedin.com/company/base-dos-dados/mycompany/"
-                title="LinkedIn"
-              >
-                <LinkedinIcon alt="linkedin" {...IconKey}/>
-              </SocialLink>
-              <SocialLink
-                href="https://chat.whatsapp.com/CLLFXb1ogPPDomCM6tQT22"
-                title="WhatsApp"
-              >
-                <WhatsAppIcon alt="whatsApp" {...IconKey}/>
-              </SocialLink>
-              <SocialLink
-                href="https://t.me/joinchat/OKWc3RnClXnq2hq-8o0h_w"
-                title="Telegram"
-              >
-                <TelegramIcon alt="telegram" {...IconKey}/>
-              </SocialLink>
-            </LinkVStack>
-
-            <LinkVStack title="INSTITUCIONAL">
-              <FooterLink
-                href="/quem-somos"
-                color="white"
-              >
+            <SectionCategories title="INSTITUCIONAL" marginBottom={isMobileMod && "24px !important"}>
+              <FooterLink target="_self" href="/quem-somos">
                 Quem somos
               </FooterLink>
-              <FooterLink
-                href="/transparencia"
-                color="white"
-              >
+              <FooterLink target="_self" href="/transparencia">
                 Transparência
               </FooterLink>
-              <FooterLink
-                href="https://info.basedosdados.org/newsletter"
-                color="white"
-                target="_blank"
-              >
+              <FooterLink href="https://info.basedosdados.org/newsletter">
                 Newsletter
               </FooterLink>
-              <FooterLink
-                href="https://info.basedosdados.org/carreiras"
-                color="white"
-                target="_blank"
-              >
+              <FooterLink href="https://info.basedosdados.org/carreiras">
                 Carreiras
               </FooterLink>
-              <FooterLink
-                href="/contato"
-                color="white"
-              >
+              <FooterLink target="_self" href="/contato">
                 Contato
               </FooterLink>
               <Link fontWeigth="700" color="white" href="/#support">
                 Apoie o projeto
               </Link>
-            </LinkVStack>
+            </SectionCategories>
           </Stack>
         </Stack>
+      </VStack>
 
-        <VStack spacing={4}>
+      <HStack
+        width="100%"
+        height={isMobileMod ? "100%" :"76px"}
+        backgroundColor="#2B8C4D"
+        padding="30px"
+      >
+        <HStack
+          width="100%"
+          maxWidth="1264px"
+          margin="0 auto"
+          justifyContent="space-between"
+          flexDirection={isMobileMod && "column-reverse"}
+        >
           <HStack
-            fontFamily="Ubuntu"
-            fontWeight="300"
-            color="white"
-            letterSpacing="0.3px"
+            spacing={isMobileMod ? 0 : 4}
+            textAlign="center"
+            maxWidth="1264px"
+            flexDirection={isMobileMod && "column"}
+            alignItems="flex-start"
+            marginTop={isMobileMod && "16px"}
           >
-            <Text>® 2022 Base dos Dados</Text>
+            <BodyText color="#FFF" fontSize="16px" letterSpacing="0.2px">® 2022 Base dos Dados</BodyText>
             {/* <Text>|</Text> // TODO: Não existem essas páginas ainda!
             <Link color="white">Termos de uso</Link>
             <Text>|</Text>
             <Link color="white">Política de privacidade</Link> */}
+            <BodyText
+              color="#FFF"
+              fontSize="12px"
+              letterSpacing="0.2px"
+            >
+              Ícones adaptados de Freepik e disponíveis em Storyset e
+              Flaticon.
+            </BodyText>
           </HStack>
-          <Text
-            color="white"
-            fontSize="10px"
-            fontFamily="Ubuntu"
-            fontWeight="300"
-            letterSpacing="0.2px"
-          >
-            Ícones adaptados de Freepik e disponíveis em Storyset e
-            Flaticon.
-          </Text>
-        </VStack>
-      </VStack>
+
+          <HStack spacing={4}>
+            <SocialLink title="Twitter" href="https://twitter.com/basedosdados" icon={<TwitterIcon alt="twitter da BD" {...IconKey}/>}/>
+            <SocialLink title="Discord" href="https://discord.gg/huKWpsVYx4" icon={<DiscordIcon alt="discord da BD" {...IconKey}/>}/>
+            <SocialLink title="GitHub" href="https://github.com/basedosdados" icon={<GithubIcon alt="github da BD" {...IconKey}/>}/>
+            <SocialLink title="LinkedIn" href="https://www.linkedin.com/company/base-dos-dados/mycompany/" icon={<LinkedinIcon alt="linkedin da BD" {...IconKey}/>}/>
+            <SocialLink title="YouTube" href="https://www.youtube.com/basedosdados" icon={<YoutubeIcon alt="youtube basedosdados" {...IconKey}/>}/>
+            <SocialLink title="WhatsApp" href="https://chat.whatsapp.com/CLLFXb1ogPPDomCM6tQT22" icon={<WhatsAppIcon alt="whatsApp da BD"{...IconKey}/>}/>
+            <SocialLink title="Telegram" href="https://t.me/joinchat/OKWc3RnClXnq2hq-8o0h_w" icon={<TelegramIcon alt="telegram da BD" {...IconKey}/>}/>
+          </HStack>
+        </HStack>
+      </HStack>
     </VStack>
   );
 }

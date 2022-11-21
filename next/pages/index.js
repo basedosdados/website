@@ -409,6 +409,7 @@ function Products() {
                 borderRadius={isMobileMod ? "8px" :"12px"}
                 filter="drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.4))"
                 maxHeight={{ base: "none", md: "200px" }}
+                minHeight={{ base: "200px", md: "none" }}
                 padding={{ base: "60px 20px", lg: "60px 30px" }}
                 fontSize={{ base: "12px", lg: "inherit" }}
                 id="termynal"
