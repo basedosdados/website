@@ -304,7 +304,7 @@ export function BdmTablePage({
             translations={translations.bdm_columns}
             availableOptionsTranslations={availableOptionsTranslations}
             translationsOptions={translationsOptions}
-            parentTemporalCoverage={resource?.temporal_coverage}
+            parentTemporalCoverage={resource?.temporal_coverage || ""}
             tooltip={tooltip} 
             headers={columnsHeaders}
             values={columnsValues}
