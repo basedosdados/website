@@ -105,7 +105,6 @@ function SearchInput ({ status }) {
             fontSize: "16px",
             width: "100%",
             borderRadius: "16px",
-            _placeholder:{color: "#C4C4C4"}
           }}
           rightIcon={
             <CrossIcon
@@ -125,6 +124,9 @@ function SearchInput ({ status }) {
 }
 
 function DesktopLinks({ links }) {
+  const router = useRouter()
+  const { route } = router
+
   const userData = useContext(UserContext)
   const [statusSearch, setStatusSearch] = useState(false)
 
@@ -139,6 +141,7 @@ function DesktopLinks({ links }) {
       display={{ base: "none", lg: "flex" }}
       position={{ base: "relative", lg: "initial" }}
       gap="24px"
+      marginLeft={route === "/" && "0px !important"}
     >
       <HStack width="100%" flex="3" spacing={7}>
         {Object.entries(links).map(([k, v]) => {
@@ -244,6 +247,9 @@ function DesktopLinks({ links }) {
 }
 
 export default function Menu({ pages = [] }) {
+  const router = useRouter()
+  const { route } = router
+
   const menuDisclosure = useDisclosure();
   const divRef = useRef();
   const userData = useContext(UserContext);
@@ -299,6 +305,7 @@ export default function Menu({ pages = [] }) {
         <HStack
           justifyContent={{ base: "center", lg: "flex-start" }}
           width="100%"
+          height="40px"
           maxWidth="1264px"
           margin="0 auto"
           spacing={6}
@@ -317,17 +324,21 @@ export default function Menu({ pages = [] }) {
               cursor="pointer"
             />
           </Box>
-          <Link aria-label="Home" _hover={{opacity:"none"}} href="/">
-            <BDLogoImage
-              transform="translateX(-27%)"
-              height="40px"
-              widthImage="80px"
-            />
-          </Link>
+          {route === "/" ?
+            ""
+          :
+            <Link aria-label="Home" _hover={{opacity:"none"}} href="/">
+              <BDLogoImage
+                transform="translateX(-27%)"
+                height="40px"
+                widthImage="80px"
+              />
+            </Link>
+          }
           <Avatar
             bg="#2B8C4D"
             position="fixed"
-            right="30px"
+            right="24px"
             height="40px"
             width="40px"
             display={{ base: "flex", lg: "none" }}

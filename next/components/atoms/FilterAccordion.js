@@ -14,7 +14,6 @@ import {
 import { useEffect, useState } from "react";
 import ControlledInput from "./ControlledInput";
 import SectionText from "./SectionText";
-import Title from "./Title";
 import SearchIcon from "../../public/img/icons/searchIcon"
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
 
@@ -130,9 +129,7 @@ export function CheckboxFilterAccordion({
                 borderRadius: "16px",
               }}
               rightIcon={
-                <Box cursor="pointer">
-                  <SearchIcon alt="pesquisar" fill="#D0D0D0"/>
-                </Box>
+                <SearchIcon alt="pesquisar" fill="#D0D0D0" cursor="pointer"/>
               }
             />
           </VStack>

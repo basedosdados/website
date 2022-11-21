@@ -36,6 +36,7 @@ import RoundedButton from "../components/atoms/RoundedButton";
 import SearchIcon from "../public/img/icons/searchIcon";
 import ArrowIcon from "../public/img/icons/arrowIcon";
 import { CopySolidIcon } from "../public/img/icons/copyIcon";
+import BDLogoImage from "../public/img/logos/bd_logo";
 import EnthusiasticImage from "../public/img/enthusiasticImage";
 import DatabaseImage from "../public/img/databaseImage";
 import MasterOfDatabaseImage from "../public/img/masterOfDatabaseImage";
@@ -115,12 +116,12 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
 
   return (
     <VStack
-        alignItems="center"
-        width="100%"
-        padding="0px 10%"
-        marginTop="56px"
-        zIndex="10"
-        position="relative"
+      alignItems="center"
+      width="100%"
+      padding="0px 10%"
+      marginTop="56px"
+      zIndex="10"
+      position="relative"
     >
       <VStack
         position="relative"
@@ -140,31 +141,24 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
             width="100%"
             marginStart="0px !important"
             direction="column"
-            marginTop="112px"
+            marginTop={isMobileMod ? "64px" : "112px"}
           >
-            <Display
-              fontSize={isMobileMod ? "34px" : "60px"}
-              letterSpacing={isMobileMod ? "-0.4px" : "-1.5px"}
-              lineHeight={isMobileMod ? "44px" : "72px"}
-              position="relative"
-              zIndex="1"
-              flex="2"
-              textAlign="center"
-              marginStart="0px !important"
-              marginBottom="16px"
-              color="#2B8C4D"
-            >
-              Base dos Dados
-            </Display>
+            <BDLogoImage 
+              widthImage={isMobileMod ? "160px" : "230px"}
+              heightImage={isMobileMod ? "75px" : "108px"}
+              marginBottom="24px"
+            />
             <VStack
               maxWidth="650px"
-              width="100%"
+              width={isMobileMod ? "100vw" : "100%"}
+              paddingX={isMobileMod && "24px"}
               spacing={4}
               alignItems="flex-start"
               flex="3"
             >
               <ControlledInput
                 value={search}
+                placeholder="Pesquise dados"
                 width="100%"
                 onChange={setSearch}
                 onEnterPress={openSearchLink}
@@ -173,11 +167,13 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
                 isBorderColor={false}
                 inputStyle={{
                   "aria-label": "Search",
-                  padding: "24px 64px 24px 32px",
+                  fontFamily: "ubuntu",
+                  padding: isMobileMod ? "24px 48px 24px 20px " : "24px 64px 24px 32px",
                   height: isMobileMod ? "50px" :"80px",
                   borderRadius: isMobileMod ? "20px" : "25px",
                   backgroundColor: "#ffffff",
-                  fontSize: isMobileMod ? "18px" : "24px",
+                  fontSize: isMobileMod ? "18px" : "22px",
+                  letterSpacing: isMobileMod? "0.1px" : "0",
                   border: "0px",
                   boxShadow: "0 1px 8px 1px rgba(64, 60, 67, 0.16) !important",
                 }}
@@ -188,7 +184,7 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
                       width={isMobileMod ? "18px" : "28px"}
                       height={isMobileMod ? "18px" : "28px"}
                       fill="#252A32"
-                      marginRight={isMobileMod ? "5px" : "20px"}
+                      marginRight={isMobileMod ? "10px" : "20px"}
                       cursor="pointer"
                       onClick={openSearchLink}
                     />
@@ -198,7 +194,7 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
                       width={isMobileMod ? "18px" : "28px"}
                       height={isMobileMod ? "18px" : "28px"}
                       fill="#252A32"
-                      marginRight={isMobileMod ? "5px" : "25px"}
+                      marginRight={isMobileMod ? "10px" : "25px"}
                     />
                   )
                 }
@@ -377,6 +373,7 @@ function Products() {
             flexDirection={isMobileMod && "column"}
             justifyContent="center"
             gridGap={isMobileMod ? "100px" : "160px"}
+            spacing={0}
           >
             <Stack maxWidth={isMobileMod ? "300px" : "430px"}>
               <Text
