@@ -35,8 +35,8 @@ function SectionCategories({ title, children, ...props }) {
 }
 
 const IconKey = {
-  width: "30px",
-  height: "30px",
+  width: "24px",
+  height: "24px",
   fill: "#FFF"
 }
 
@@ -213,7 +213,7 @@ export default function Footer({ pages }) {
             </BodyText>
           </HStack>
 
-          <HStack spacing={4}>
+          <HStack spacing={3}>
             <SocialLink title="Twitter" href="https://twitter.com/basedosdados" icon={<TwitterIcon alt="twitter da BD" {...IconKey}/>}/>
             <SocialLink title="Discord" href="https://discord.gg/huKWpsVYx4" icon={<DiscordIcon alt="discord da BD" {...IconKey}/>}/>
             <SocialLink title="GitHub" href="https://github.com/basedosdados" icon={<GithubIcon alt="github da BD" {...IconKey}/>}/>

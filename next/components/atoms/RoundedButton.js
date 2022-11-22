@@ -16,7 +16,7 @@ export default function RoundedButton({
       _active={{backgroundColor:"none"}}
       onClick={onClick}
       fontFamily="Ubuntu"
-      borderRadius="68.6364px"
+      borderRadius="30px"
       boxShadow="0px 0.5px 0px 0px rgba(64, 60, 67, 0.16)"
       letterSpacing="0.5px"
       _hover={{
