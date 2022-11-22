@@ -7,8 +7,8 @@ import {
   Skeleton,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { useMediaQuery } from "@chakra-ui/react";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { getRecentDatalakeDatasetsByTheme } from "../../pages/api/datasets";
 import DatabaseCard from "../organisms/DatabaseCard";
 import Carousel from "../atoms/Carousel";

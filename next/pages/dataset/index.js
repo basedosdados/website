@@ -479,7 +479,7 @@ export default function SearchPage({
             values={paramFilters.resource_type}
             valueField="key"
             displayField="name"
-            fieldName="Forma de consulta"
+            fieldName="Conjuntos com"
             onChange={(values) => {
               setParamFilters({ ...paramFilters, resource_type: values });
             }}

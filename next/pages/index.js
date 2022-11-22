@@ -9,29 +9,30 @@ import {
   useClipboard,
   Image as ChakraImage,
 } from "@chakra-ui/react";
-import Image from "next/image";
-import ControlledInput from "../components/atoms/ControlledInput";
-import SectionText from "../components/atoms/SectionText";
-import BodyText from "../components/atoms/BodyText";
-import Display from "../components/atoms/Display";
 import { useEffect, useState } from "react";
-import ThemeCatalog from "../components/molecules/ThemeCatalog";
-import SectionTitle from "../components/atoms/SectionTitle";
-import SectionLink from "../components/atoms/SectionLink"
 import Typist from "react-typist";
+import Image from "next/image";
 import {
   getPopularDatalakeDatasets,
   getPopularTags
 } from "./api/datasets";
 import { getGroupList } from "./api/groups"
-import { ShadowBox } from "../components/atoms/ShadowBox";
-import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
-import { ThemeTag } from "../components/atoms/ThemeTag";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
-import { BePartner } from "../components/organisms/BePartner";
+import { useMediaQuery } from "@chakra-ui/react";
+import BodyText from "../components/atoms/BodyText";
+import ControlledInput from "../components/atoms/ControlledInput";
+import Display from "../components/atoms/Display";
 import Link from "../components/atoms/Link";
+import SectionText from "../components/atoms/SectionText";
+import SectionTitle from "../components/atoms/SectionTitle";
+import SectionLink from "../components/atoms/SectionLink"
+import { ShadowBox } from "../components/atoms/ShadowBox";
 import RoundedButton from "../components/atoms/RoundedButton";
+import { ThemeTag } from "../components/atoms/ThemeTag";
+import ThemeCatalog from "../components/molecules/ThemeCatalog";
+import { BePartner } from "../components/organisms/BePartner";
+import { MainPageTemplate } from "../components/templates/main";
 
 import SearchIcon from "../public/img/icons/searchIcon";
 import ArrowIcon from "../public/img/icons/arrowIcon";
@@ -98,6 +99,7 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
   const [isMobileMod, setIsMobileMod] = useState(false)
   const [tags, setTags] = useState([])
   const isMobile = useCheckMobile();
+  const [mediumQuery] = useMediaQuery("(max-width: 1366px)")
 
   useEffect(() => {
     setIsMobileMod(isMobile)
@@ -141,11 +143,14 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
             width="100%"
             marginStart="0px !important"
             direction="column"
-            marginTop={isMobileMod ? "64px" : "112px"}
+            marginTop={
+              isMobileMod ? "64px" : 
+              mediumQuery ? "16px" : "80px"
+            }
           >
             <BDLogoImage 
-              widthImage={isMobileMod ? "160px" : "230px"}
-              heightImage={isMobileMod ? "75px" : "108px"}
+              widthImage={isMobileMod ? "160px" : "200px"}
+              heightImage={isMobileMod ? "75px" : "94px"}
               marginBottom="24px"
             />
             <VStack
@@ -441,10 +446,10 @@ export function TextPix ({ title, text }) {
 
   return (
     <Box>
-      <BodyText color="#FF8484" letterSpacing="0.3px" fontWeight="500">
+      <BodyText fontSize="16px" letterSpacing="0.2px" color="#FF8484" fontWeight="500">
         {title}
       </BodyText>
-      <BodyText marginBottom="8px">
+      <BodyText fontSize="16px" letterSpacing="0.2px" marginBottom="8px">
         {text}
       </BodyText>
     </Box>
@@ -455,6 +460,7 @@ export function StepText ({index, text}) {
   return (
     <Box marginBottom="20px !important">
       <BodyText
+        fontSize="16px" letterSpacing="0.2px"
         display="flex"
         gridGap="8px"
       >
@@ -667,7 +673,7 @@ function Support({ pages }) {
                 src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/bd_qrcode.png"
               />
               <RoundedButton 
-                fontSize="14px"
+                fontSize="15px"
                 fontWeight="700"
                 backgroundColor="#FF8484"
                 paddingX="30px"
@@ -683,7 +689,7 @@ function Support({ pages }) {
             </GridItem>
 
             <GridItem display={isMobileMod && "none"}>
-              <BodyText color="#FF8484" fontWeigth="500" marginBottom="40px">Siga o passo a passo</BodyText>
+              <BodyText letterSpacing="0.2px" fontSize="16px" color="#FF8484" fontWeigth="500" marginBottom="24px">Siga o passo a passo</BodyText>
               <StepText index="1" text=" Abra o app do seu banco;"/>
               <StepText index="2" text=" Escolha a opção de pagamento com PIX;"/>
               <StepText index="3" text=" Escaneie o QR Code ou digite a chave ao lado;"/>
