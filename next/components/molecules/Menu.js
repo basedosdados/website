@@ -28,7 +28,6 @@ import SearchIcon from "../../public/img/icons/searchIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
 
 function MenuDrawer({ isOpen, onClose, links }) {
-console.log(Object.entries(links))
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
       <DrawerOverlay />
