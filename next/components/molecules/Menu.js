@@ -6,42 +6,103 @@ import {
   DrawerOverlay,
   DrawerContent,
   useDisclosure,
-  Divider,
   Avatar,
+  Text,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon
 } from "@chakra-ui/react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router"
-import { MenuDropdown } from "./MenuDropdown";
-import RoundedButton from "../atoms/RoundedButton";
-import Link from "../atoms/Link";
-import FarBarsIcon from "../../public/img/icons/farBarsIcon";
 import UserContext from "../../context/user";
+import { MenuDropdown } from "./MenuDropdown";
 import ControlledInput from "../atoms/ControlledInput";
+import Link from "../atoms/Link";
+import RoundedButton from "../atoms/RoundedButton";
+
 import BDLogoImage from "../../public/img/logos/bd_logo";
+import FarBarsIcon from "../../public/img/icons/farBarsIcon";
 import SearchIcon from "../../public/img/icons/searchIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
 
 function MenuDrawer({ isOpen, onClose, links }) {
+console.log(Object.entries(links))
   return (
-    <Drawer isOpen={isOpen} placement="top" onClose={onClose}>
+    <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
       <DrawerOverlay />
-      <DrawerContent padding="30px 30px 30px 30px">
-        <VStack alignItems="center" width="100%" spacing={5}>
-          {Object.entries(links).map(([k, v]) => {
-            if (typeof v === "object") {
-              return Object.entries(v).map(([k, v]) => (
-                <>
-                  <Link fontFamily="Ubuntu" fontWeigth="400" href={v}>{k}</Link>
-                  <Divider />
-                </>
-              ));
+      <DrawerContent padding="24px">
+        <BDLogoImage
+          widthImage="65px"
+          heightImage="30px"
+          marginBottom="24px"
+          onClick={() => window.open("/", "_self")}
+        />
+        <VStack alignItems="flex-start" width="100%" spacing="16px">
+          {Object.entries(links).map(([key, elm]) => {
+            if (typeof elm === "object") {
+              return (
+                <Accordion allowToggle width="100%">
+                  <AccordionItem borderWidth="0 !important">
+                    <AccordionButton
+                      padding={0}
+                      _hover={{background: "none"}}
+                      justifyContent="space-between"
+                    >
+                      <Text
+                        fontSize="20px"
+                        fontFamily="Ubuntu"
+                        fontWeigth="400"
+                        color="#252A32"
+                      >
+                        {key}
+                      </Text>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  <AccordionPanel
+                    display="flex"
+                    flexDirection="column"
+                    gridGap="13px"
+                    padding="16px 0 2px"
+                  >
+                    {Object.entries(elm).map(([route, link]) => (
+                      <Link
+                        fontSize="16px"
+                        fontFamily="Ubuntu"
+                        fontWeigth="300"
+                        href={link}
+                      >{route}</Link>
+                    ))}
+                  </AccordionPanel>
+                  </AccordionItem>
+                </Accordion>
+              )
+            } else {
+              if(key === "Apoie") {
+                return (
+                  <RoundedButton
+                    backgroundColor="#FF8484"
+                    minWidth="120px"
+                    height="38px"
+                    fontSize="20px"
+                    onClick={() => window.open(elm, "_blank")}
+                  >
+                    {key}
+                  </RoundedButton>
+                )
+              } else {
+                return (
+                  <Link
+                    fontSize="20px"
+                    fontFamily="Ubuntu"
+                    fontWeigth="400"
+                    href={elm}
+                  >{key}
+                  </Link>
+                )
+              }
             }
-            return (
-              <>
-                <Link fontFamily="Ubuntu" fontWeigth="400" href={v}>{k}</Link>
-                <Divider />
-              </>
-            );
           })}
         </VStack>
       </DrawerContent>

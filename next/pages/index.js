@@ -549,7 +549,12 @@ function Support({ pages }) {
             >
               Bolso apertado? Apenas R$0,50 por <br/>dia para nos ajudar a manter a iniciativa.
             </BodyText>
-            <Link _hover={{ opacity:"none" }} margin="0 !important" target="_blank" href="https://apoia.se/basedosdados">
+            <Link
+              _hover={{ opacity:"none" }}
+              margin="0 !important"
+              target="_blank"
+              href="https://apoia.se/support/basedosdados/new/15"
+            >
               <RoundedButton backgroundColor="#FF8484" width="200px">
                   R$ <p style={{fontSize:"24px", margin:"0 5px"}}>15</p>/ mês
               </RoundedButton>
@@ -586,7 +591,12 @@ function Support({ pages }) {
               <b style={{fontWeight:"500"}}>Doe R$ 1 real por dia</b>
               <p>para fazer databasers felizes.</p>
             </BodyText>
-            <Link _hover={{ opacity:"none" }} marginTop="0 !important" target="_blank" href="https://apoia.se/basedosdados">
+            <Link
+              _hover={{ opacity:"none" }}
+              marginTop="0 !important"
+              target="_blank"
+              href="https://apoia.se/support/basedosdados/new/30"
+            >
               <RoundedButton
                 backgroundColor="#FF8484"
                 width="200px"
@@ -618,7 +628,12 @@ function Support({ pages }) {
             >
               Menos de R$2 reais por dia para pouparmos ainda mais seu trabalho.
             </BodyText>
-            <Link _hover={{ opacity:"none" }} marginTop="0 !important" target="_blank" href="https://apoia.se/basedosdados">
+            <Link
+              _hover={{ opacity:"none" }}
+              marginTop="0 !important"
+              target="_blank"
+              href="https://apoia.se/support/basedosdados/new/50"
+            >
               <RoundedButton backgroundColor="#FF8484" width="200px">
                   R$ <p style={{fontSize:"24px", margin:"0 5px"}}>50</p>/ mês
               </RoundedButton>
