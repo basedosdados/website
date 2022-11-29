@@ -5,7 +5,7 @@ export default function Link({
   href,
   target,
   color = "#252A32",
-  fontWeigth = "700",
+  fontWeight = "700",
   ...props
 }) {
   return (
@@ -17,7 +17,7 @@ export default function Link({
       letterSpacing="0.5px"
       color={color}
       _hover={{ textDecoration: "none", opacity:"0.6" }}
-      fontWeight={fontWeigth}
+      fontWeight={fontWeight}
       {...props}
     >
       {children}

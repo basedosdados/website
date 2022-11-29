@@ -90,7 +90,7 @@ export default function Contato({ pages }) {
                 fontFamily="Ubuntu"
                 color="#42B0FF"
                 fontSize="16px"
-                fontWeigth="500"
+                fontWeight="500"
                 letterSpacing="0.2px"
               >
                 nossos serviços
@@ -108,7 +108,7 @@ export default function Contato({ pages }) {
             <BodyText fontSize="16px" letterSpacing="0.2px" paddingBottom="16px">
               Auxiliamos pessoas e organizações a subirem dados no nosso <i>datalake</i>. Escreva sua proposta para nossa equipe de Dados.
             </BodyText>
-            <BodyText fontSize="16px" letterSpacing="0.2px" fontWeigth="500">
+            <BodyText fontSize="16px" letterSpacing="0.2px" fontWeight="500">
               Dúvidas? Fale com a nossa comunidade no{" "}
               <Link
                 href="https://discord.gg/huKWpsVYx4"
@@ -117,7 +117,7 @@ export default function Contato({ pages }) {
                 color="#42B0FF"
                 target="_blank"
                 fontSize="16px"
-                fontWeigth="500"
+                fontWeight="500"
                 letterSpacing="0.2px"
               >
                 Discord<a style={{color:"#252A32", fontWeight:"500"}}>.</a>

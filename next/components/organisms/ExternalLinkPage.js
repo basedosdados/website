@@ -194,7 +194,7 @@ export function ExternalLinkPage({
           <HStack spacing={0} flexDirection={isMobileMod && "column"} alignItems="flex-start">
             <Center>
               <ExclamationIcon alt="atenção" width="20px" height="20px" fill="#42B0FF"/>
-              <SectionText margin="0 4px 0 12px" fontWeigth="bolder" fontFamily="lato">ATENÇÃO:</SectionText>
+              <SectionText margin="0 4px 0 12px" fontWeight="bolder" fontFamily="lato">ATENÇÃO:</SectionText>
             </Center>
             <SectionText display="flex" marginLeft={isMobileMod && "32px !important"}>
               Estes dados não passaram pela metodologia de tratamento da Base dos Dados.
