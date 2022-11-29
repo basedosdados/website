@@ -4,7 +4,7 @@ export default function SectionText({
   children, 
   color = "#252A32",
   fontSize="14px",
-  fontWeigth = "300",
+  fontWeight = "300",
   ...props
 }) {
 
@@ -15,7 +15,7 @@ export default function SectionText({
       letterSpacing="0.5px"
       color={color}
       fontSize={fontSize}
-      fontWeight={fontWeigth}
+      fontWeight={fontWeight}
       {...props}
     >
       {children}

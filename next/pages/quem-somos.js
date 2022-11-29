@@ -505,7 +505,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
                 />
                 <SectionTitle 
                   fontSize={{base: "20px", lg: "24px"}}
-                  fontWeigth="400"
+                  fontWeight="400"
                   letterSpacing={{base: "0.2px", lg: "0px"}}
                   marginBottom={{base: "8px", lg: "16px"}}
                 >
@@ -527,7 +527,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
                   justifyContent="center"
                   fontFamily="Ubuntu"
                   fontSize="16px"
-                  fontWeigth="500"
+                  fontWeight="500"
                   letterSpacing="0.2px"
                   target="_blank"
                   color="#42B0FF"
@@ -548,7 +548,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
                 />
                 <SectionTitle 
                   fontSize={{base: "20px", lg: "24px"}}
-                  fontWeigth="400"
+                  fontWeight="400"
                   letterSpacing={{base: "0.2px", lg: "0px"}}
                   marginBottom={{base: "8px", lg: "16px"}}
                 >
@@ -569,7 +569,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
                   justifyContent="center" 
                   fontFamily="Ubuntu"
                   fontSize="16px"
-                  fontWeigth="500"
+                  fontWeight="500"
                   letterSpacing="0.2px"
                   target="_blank"
                   color="#42B0FF"

@@ -42,7 +42,7 @@ function MenuDrawer({ isOpen, onClose, links }) {
           {Object.entries(links).map(([key, elm]) => {
             if (typeof elm === "object") {
               return (
-                <Accordion allowToggle width="100%">
+                <Accordion key={key} allowToggle width="100%">
                   <AccordionItem borderWidth="0 !important">
                     <AccordionButton
                       padding={0}
@@ -52,7 +52,7 @@ function MenuDrawer({ isOpen, onClose, links }) {
                       <Text
                         fontSize="20px"
                         fontFamily="Ubuntu"
-                        fontWeigth="400"
+                        fontWeight="400"
                         color="#252A32"
                       >
                         {key}
@@ -67,9 +67,10 @@ function MenuDrawer({ isOpen, onClose, links }) {
                   >
                     {Object.entries(elm).map(([route, link]) => (
                       <Link
+                        key={route}
                         fontSize="16px"
                         fontFamily="Ubuntu"
-                        fontWeigth="300"
+                        fontWeight="300"
                         href={link}
                       >{route}</Link>
                     ))}
@@ -81,6 +82,7 @@ function MenuDrawer({ isOpen, onClose, links }) {
               if(key === "Apoie") {
                 return (
                   <RoundedButton
+                    key={key}
                     backgroundColor="#FF8484"
                     minWidth="120px"
                     height="38px"
@@ -93,9 +95,10 @@ function MenuDrawer({ isOpen, onClose, links }) {
               } else {
                 return (
                   <Link
+                    key={key}
                     fontSize="20px"
                     fontFamily="Ubuntu"
-                    fontWeigth="400"
+                    fontWeight="400"
                     href={elm}
                   >{key}
                   </Link>
@@ -207,7 +210,7 @@ function DesktopLinks({ links }) {
         {Object.entries(links).map(([k, v]) => {
           if (k === "Apoie")
             return (
-              <a href={v} target="_blank">
+              <a key={k} href={v} target="_blank">
                 <RoundedButton
                   colorScheme="red"
                   backgroundColor="#FF8484"
@@ -223,13 +226,14 @@ function DesktopLinks({ links }) {
           if (typeof v === "object") {
             return (
               <MenuDropdown
+                key={k}
                 title={k}
                 marginLeft="-25px"
                 marginTop="10px"
                 minWidth="180px"
                 borderColor="#FFF"
                 fontFamily="Ubuntu"
-                fontWeigth="400"
+                fontWeight="400"
                 letterSpacing="0.3px"
                 borderRadius="10px"
                 _first={{ paddingTop: "10px"}}
@@ -238,6 +242,7 @@ function DesktopLinks({ links }) {
               >
                 {Object.entries(v).map(([k, v]) => (
                   <Link
+                    key={k}
                     display="flex"
                     flexDirection="colunm"
                     _hover={{ opacity: "0.6" }}
@@ -245,7 +250,7 @@ function DesktopLinks({ links }) {
                     target={k === "Transparência" || "quem-somos" ? null : "_blank"}
                     color="#252A32"
                     fontFamily="Ubuntu"
-                    fontWeigth="400"
+                    fontWeight="400"
                     letterSpacing="0.3px"
                     href={v}
                     padding="10px 24px"
@@ -259,10 +264,11 @@ function DesktopLinks({ links }) {
 
           return (
             <Link
+              key={k}
               _hover={{ opacity: "0.6" }}
               fontSize="15px"
               fontFamily="Ubuntu"
-              fontWeigth="400"
+              fontWeight="400"
               letterSpacing="0.3px"
               href={v}
               target={v.startsWith("https") ? "_blank" : null}
@@ -290,7 +296,7 @@ function DesktopLinks({ links }) {
             </HStack>
           ) : (
             <>
-              <Link fontSize="15px" fontFamily="Ubuntu" fontWeigth="400" letterSpacing="0.3px" href="/user/login">
+              <Link fontSize="15px" fontFamily="Ubuntu" fontWeight="400" letterSpacing="0.3px" href="/user/login">
                 Entrar
               </Link>
               <Link _hover={{ opacity:"none" }} href="/user/register">

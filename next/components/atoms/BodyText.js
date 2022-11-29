@@ -5,7 +5,7 @@ import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 export default function BodyText({ 
   children, 
   color = "#252A32",
-  fontWeigth = "300",
+  fontWeight = "300",
   ...props
 }) {
 
@@ -23,7 +23,7 @@ export default function BodyText({
       lineHeight={isMobileMod ? "27px" : "28px"}
       letterSpacing="0.1px"
       color={color}
-      fontWeight={fontWeigth}
+      fontWeight={fontWeight}
       {...props}
     >
       {children}

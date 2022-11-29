@@ -64,7 +64,7 @@ export default function Transparencia({ pages }) {
             fontFamily="Ubuntu"   
             textAlign={isMobileMod ? "start" : "center"}
             fontSize={{base: "20px", lg: "24px"}}
-            fontWeigth="400"
+            fontWeight="400"
             letterSpacing={{base: "0.2px", lg: "0"}}
             minHeight="30px"
             marginBottom={{base: "0px", lg: "32px"}}

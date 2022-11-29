@@ -105,7 +105,7 @@ export function TextPix ({ title, text }) {
       <Text color="#FF8484" letterSpacing="0.3px" fontSize="14px" fontWeight="700" fontFamily="ubuntu">
         {title}
       </Text>
-      <SectionText fontWeigth="500">
+      <SectionText fontWeight="500">
         {text}
       </SectionText>
     </Box>
@@ -333,7 +333,7 @@ bd_read_table, ///
                   marginTop="4px"
                 />
                 <Box>
-                  <SectionText fontWeigth="700">ATENÇÃO: O tamanho da tabela ultrapassou o limite permitido para download, de 200.000 linhas.</SectionText>
+                  <SectionText fontWeight="700">ATENÇÃO: O tamanho da tabela ultrapassou o limite permitido para download, de 200.000 linhas.</SectionText>
                   <SectionText>Para acessar os dados, utilize nosso <i>datalake</i> no BigQuery ou nossos pacotes em Python, R e Stata.</SectionText>
                 </Box>
               </HStack>

@@ -21,7 +21,7 @@ function SectionCategories({ title, children, ...props }) {
       <BodyText 
         color="#FFF"
         fontSize="14px"
-        fontWeigth="300"
+        fontWeight="300"
         letterSpacing="0.5px"
         marginBottom="16px"
       >
@@ -54,7 +54,7 @@ function FooterLink(props) {
   return (
     <Link
       fontFamily="ubuntu"
-      fontWeigth="400"
+      fontWeight="400"
       letterSpacing="0.3px"
       color="#FFF"
       target="_blank"
@@ -95,7 +95,7 @@ export default function Footer({ pages }) {
         >
           <BodyText
             minWidth="240px"
-            fontWeigth="400"
+            fontWeight="400"
             fontSize="34px"
             letterSpacing="-0.4px"
             color="#FFF"
@@ -169,7 +169,7 @@ export default function Footer({ pages }) {
               <FooterLink target="_self" href="/contato">
                 Contato
               </FooterLink>
-              <Link fontWeigth="700" color="white" href="/#support">
+              <Link fontWeight="700" color="white" href="/#support">
                 Apoie o projeto
               </Link>
             </SectionCategories>

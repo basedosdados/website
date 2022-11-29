@@ -53,7 +53,7 @@ export function ShadowBox({
         <Text
           fontFamily="Ubuntu"
           fontSize="20px"
-          fontWeigth="400"
+          fontWeight="400"
           letterSpacing="0.1px"
           color="#252A32"
           {...titleStyle}

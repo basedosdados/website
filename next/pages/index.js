@@ -66,34 +66,6 @@ export async function getStaticProps(context) {
   });
 }
 
-// function HeroText({ children, iconUrl, height = "100px" }) {
-//   return (
-//     <VStack alignItems="center" justifyContent="center" maxWidth="400px">
-//       <Flex justify="baseline" align="baseline" width="100%" height="130px">
-//         <Flex
-//           margin="auto"
-//           width="100%"
-//           height={height}
-//           marginBottom="20px"
-//           position="relative"
-//           justify="baseline"
-//           align="baseline"
-//         >
-//           <Image
-//             loading="eager"
-//             priority
-//             objectFit="contain"
-//             layout="fill"
-//             src={iconUrl}
-//           />
-//         </Flex>
-//       </Flex>
-//       {children}
-//     </VStack>
-//   );
-// }
-
-
 function Hero({ popularDatalakeDatasets, popularTags, themes }) {
   const [search, setSearch] = useState();
   const [isMobileMod, setIsMobileMod] = useState(false)
@@ -541,7 +513,7 @@ function Support({ pages }) {
           >
             <BodyText
               textAlign="center"
-              fontWeigth="300"
+              fontWeight="300"
               fontSize="14px"
               letterSpacing="0.2px"
               margin="10px 0 24px !important"
@@ -620,7 +592,7 @@ function Support({ pages }) {
           >
             <BodyText
               textAlign="center"
-              fontWeigth="300"
+              fontWeight="300"
               fontSize="14px"
               letterSpacing="0.2px"
               margin="10px 0 24px !important"
@@ -649,7 +621,7 @@ function Support({ pages }) {
             fontSize="20px"
             letterSpacing="0.2px"
             color="#7D7D7D"
-            fontWeigth="400"
+            fontWeight="400"
             lineHeight="32px"
             paddingBottom={!isMobileMod && "32px"}
           >
@@ -704,7 +676,7 @@ function Support({ pages }) {
             </GridItem>
 
             <GridItem display={isMobileMod && "none"}>
-              <BodyText letterSpacing="0.2px" fontSize="16px" color="#FF8484" fontWeigth="500" marginBottom="24px">Siga o passo a passo</BodyText>
+              <BodyText letterSpacing="0.2px" fontSize="16px" color="#FF8484" fontWeight="500" marginBottom="24px">Siga o passo a passo</BodyText>
               <StepText index="1" text=" Abra o app do seu banco;"/>
               <StepText index="2" text=" Escolha a opção de pagamento com PIX;"/>
               <StepText index="3" text=" Escaneie o QR Code ou digite a chave ao lado;"/>
@@ -723,7 +695,7 @@ function Support({ pages }) {
               dash={false}
               fontFamily="ubuntu"
               textDecoration="none"
-              fontWeigth="500"
+              fontWeight="500"
               fontSize="16px"
               letterSpacing="0.2px"
               color="#42B0FF"
