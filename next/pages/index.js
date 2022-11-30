@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Typist from "react-typist";
-import Image from "next/image";
 import {
   getPopularDatalakeDatasets,
   getPopularTags
@@ -710,33 +709,30 @@ function Support({ pages }) {
 }
 
 function GoogleCloud () {
+  const [baseQuery] = useMediaQuery("(max-width: 1090px)")
+
   return (
     <Stack
       width="100%"
       maxWidth="1264px"
-      height={{base: "100%" , lg: "0"}}
+      height={baseQuery ? "100%" : "0"}
       alignItems="center"
-      paddingX={{base: "0" , lg: "30px", xl: "0"}}
-      order={{base: 1 , lg: 0}}
+      paddingX={baseQuery ? "0" : {lg: "30px", xl: "0"}}
+      order={baseQuery ? 1 : 0}
     >
       <Stack
         width="100%"
-        alignItems={{base:"center", lg:"flex-end"}}
-        marginBottom={{base:"140px", lg:"0"}}
+        alignItems={baseQuery ? "center" : "flex-end"}
+        marginBottom={baseQuery ? "95px" : "0"}
       >
-        <Box
-          width={{ base: "200px", lg: "140px", xl: "160px" }}
-          height={{ base: "200px", lg: "140px", xl: "160px" }}
-        >
-          <Image
-            alt="google cloud"
-            src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/2022/GC_CustomerAwardWinner_SocialImpact+1.png"
-            width="227px"
-            height="336px"
-            loading="eager"
-            priority
-          />
-        </Box>
+        <ChakraImage
+          alt="google cloud"
+          src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/2022/GC_CustomerAwardWinner_SocialImpact+1.png"
+          width="171px"
+          height="245px"
+          loading="eager"
+          priority
+        />
       </Stack>
     </Stack>
   )
