@@ -715,15 +715,15 @@ function GoogleCloud () {
     <Stack
       width="100%"
       maxWidth="1264px"
-      height={baseQuery ? "100%" : "0"}
+      height={baseQuery ? "100%" : {base: "100%" , lg: "0"}}
       alignItems="center"
-      paddingX={baseQuery ? "0" : {lg: "30px", xl: "0"}}
-      order={baseQuery ? 1 : 0}
+      paddingX={{base: "0" , lg: "30px", xl: "0"}}
+      order={baseQuery ? 1 : {base: 1 , lg: 0}}
     >
       <Stack
         width="100%"
-        alignItems={baseQuery ? "center" : "flex-end"}
-        marginBottom={baseQuery ? "95px" : "0"}
+        alignItems={baseQuery ? "center" : {base:"center", lg:"flex-end"}}
+        marginBottom={{base:"95px", lg:"0"}}
       >
         <ChakraImage
           alt="google cloud"
