@@ -70,6 +70,9 @@ GROUPS_FIELD = Field(
             "Quais temas caracterizam a base?",
             "Opções: escolher dessa lista -> https://basedosdados.org/api/3/action/group_list",
             "Importante: preencher com a chave, e não o valor."
+            "Exemplos:",
+            "    - economia",
+            "    - esportes"
         ]
     ),
     yaml_order={
@@ -84,7 +87,10 @@ TAGS_FIELD = Field(
         [
             "Quais etiquetas caracterizam a base?",
             "Opções: escolher dessa lista -> https://basedosdados.org/api/3/action/tag_list",
-            "Exemplos: fertilidade, preco, desmatamento.",
+            "Exemplos:"
+            "    - fertilidade",
+            "    - preco",
+            "    - desmatamento",
             "Caso crie etiquetas novas, as regras são:",
             "   - letras minúsculas",
             "   - sem acentos",
