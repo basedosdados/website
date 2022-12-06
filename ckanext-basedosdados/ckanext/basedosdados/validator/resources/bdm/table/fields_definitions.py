@@ -94,7 +94,12 @@ TEMPORAL_COVERAGE_FIELD = Field(
         [
             "Anos cobertos pela tabela.",
             "Preencher como lista de intervalos.",
-            "Exemplos: ['1995(1)2019'], ['2002(2)2010', '2016', '2020'].",
+            "Exemplos:",
+            "    - 1995(1)2019",
+            "Caso a cobertura não seja contínua.",
+            "    - 2002(2)2010",
+            "    - 2016",
+            "    - 2020",
         ]
     ),
     yaml_order={
@@ -122,6 +127,15 @@ OBSERVATION_LEVEL_FIELD = Field(
     description=to_line(
         [
             "Nível de observação da tabela: o que representa cada linha.",
+            "Opções em 'https://basedosdados.org/api/3/action/bd_available_options'",
+            "Exemplos:",
+            "    - entity: year",
+            "      columns:",
+            "          - ano",           
+            "    - entity: state",
+            "      columns:",
+            "          - sigla_uf",
+            
         ]
     ),
     yaml_order={
@@ -143,7 +157,7 @@ VERSION_FIELD = Field(
     description=to_line(
         [
             "Versão da tabela. Seguindo o padrão de semantic versioning.",
-            "Exemplo: v1.1.3",
+            "Exemplos: v1.0, v1.1.3",
         ]
     ),
     yaml_order={
