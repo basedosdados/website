@@ -273,7 +273,6 @@ export default function ThemeCatalog ({ popularDatalakeDatasets, themes }) {
     <VStack
       width="100%"
       alignItems="center"
-      gap="50px"
     >
       <Themes
         listThemes={listThemes}

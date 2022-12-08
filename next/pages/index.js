@@ -81,6 +81,11 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
   }
 
   useEffect(() => {
+    if(isMobile) return null
+    return document.getElementById("searchDatabases").focus()
+  },[])
+
+  useEffect(() => {
     if(popularTags === null) return ""
     const newPopularTags = Object.keys(popularTags)
     if(isMobile) return setTags(newPopularTags.slice(0,3))
@@ -134,7 +139,7 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
             >
               <ControlledInput
                 value={search}
-                placeholder="Pesquise dados"
+                placeholder={isMobileMod ? "Encontre os dados" : "Encontre os dados que você precisa"}
                 width="100%"
                 onChange={setSearch}
                 onEnterPress={openSearchLink}
@@ -143,6 +148,7 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
                 isBorderColor={false}
                 inputStyle={{
                   "aria-label": "Search",
+                  id: "searchDatabases",
                   fontFamily: "ubuntu",
                   padding: isMobileMod ? "24px 48px 24px 20px " : "24px 64px 24px 32px",
                   height: isMobileMod ? "50px" :"80px",
@@ -745,7 +751,7 @@ export default function Home({
   themes,
 }) {
   return (
-    <MainPageTemplate backgroundColor="#FFFFFF" pages={pages}>
+    <MainPageTemplate id="home" backgroundColor="#FFFFFF" pages={pages}>
       <VStack>
         <GoogleCloud/>
         <Hero

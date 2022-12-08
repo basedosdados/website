@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import Link from "../atoms/Link";
 import BodyText from "../atoms/BodyText"
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
+
 import YoutubeIcon from "../../public/img/icons/youtubeIcon";
 import TwitterIcon from "../../public/img/icons/twitterIcon";
 import DiscordIcon from "../../public/img/icons/discordIcon";
@@ -47,8 +48,6 @@ function SocialLink({ href, icon }) {
     </Link>
   )
 }
-
-
 
 function FooterLink(props) {
   return (
@@ -142,9 +141,6 @@ export default function Footer({ pages }) {
             </SectionCategories>
 
             <SectionCategories title="TUTORIAIS" marginBottom={isMobileMod && "24px !important"}>
-              <FooterLink href="/perguntas-frequentes">
-                Perguntas frequentes
-              </FooterLink>
               <FooterLink href="https://basedosdados.github.io/mais/">
                 Documentação
               </FooterLink>
@@ -169,6 +165,9 @@ export default function Footer({ pages }) {
               <FooterLink target="_self" href="/contato">
                 Contato
               </FooterLink>
+              <FooterLink href="/perguntas-frequentes">
+                Perguntas frequentes
+              </FooterLink>
               <Link fontWeight="700" color="white" href="/#support">
                 Apoie o projeto
               </Link>
@@ -189,6 +188,8 @@ export default function Footer({ pages }) {
           margin="0 auto"
           justifyContent="space-between"
           flexDirection={isMobileMod && "column-reverse"}
+          alignItems="flex-start"
+          spacing={0}
         >
           <HStack
             spacing={isMobileMod ? 0 : 4}

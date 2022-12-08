@@ -119,7 +119,7 @@ export default function FAQ({}) {
   },[categorySelected])
 
   const searcher = new FuzzySearch(
-    categorySelected ? questions : allQuestions, ["question", "keywords"], {caseSensitive: true}
+    categorySelected ? questions : allQuestions, ["question", "keywords"], {sort: true}
   )
 
   const filterQuestions = () => {

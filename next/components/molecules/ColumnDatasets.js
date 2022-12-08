@@ -302,7 +302,7 @@ export default function ColumnsDatasets({
   const searcher = new FuzzySearch(
     tagFilter.length > 0 ? columnValues : defaultValues,
     headerSelection ? [headerSelection] : headers, {
-    caseSensitive: true
+    sort: true
   })
 
   async function checkForEnter(e) {
@@ -344,7 +344,7 @@ export default function ColumnsDatasets({
       remainingTags.map((elm, i) => {
         const searcherRemainingTags = new FuzzySearch( 
           i === 0 ? defaultValues : newColumnsValues, elm.header ? [elm.header] : headers, {
-          caseSensitive: true
+          sort: true
         })
         const result = searcherRemainingTags.search(elm.search)
         return newColumnsValues = result
