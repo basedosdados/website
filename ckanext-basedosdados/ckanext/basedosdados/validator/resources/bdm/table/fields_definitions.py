@@ -137,7 +137,7 @@ OBSERVATION_LEVEL_FIELD = Field(
             "Exemplos:",
             "    - entity: year",
             "      columns:",
-            "          - ano",           
+            "          - ano",
             "    - country: br",
             "      entity: state",
             "      columns:",
@@ -164,7 +164,7 @@ VERSION_FIELD = Field(
     description=to_line(
         [
             "Versão da tabela. Seguindo o padrão de semantic versioning.",
-            "Exemplos: v1.0, v1.1.3",,
+            "Exemplos: v1.0, v1.1.3",
         ]
     ),
     yaml_order={
