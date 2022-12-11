@@ -39,7 +39,6 @@ class BdmTable(_CkanDefaultResource):
     published_by              : Optional[PublishedBy]                                     = PUBLISHED_BY_FIELD
     data_cleaned_by           : Optional[DataCleanedBy]                                   = DATA_CLEANED_BY_FIELD
     data_cleaning_description : Optional[Str]                                             = DATA_CLEANING_DESCRIPTION_FIELD
-    data_cleaning_code_url    : Optional[Str]                                             = DATA_CLEANING_CODE_URL_FIELD
     partner_organization      : Optional[PartnerOrganization]                             = PARTNER_ORGANIZATION_FIELD
     raw_files_url             : Optional[Str]                                             = RAW_FILES_URL_FIELD
     auxiliary_files_url       : Optional[Str]                                             = AUXILIARY_FILES_URL_FIELD
