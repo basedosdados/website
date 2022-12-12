@@ -123,7 +123,9 @@ export default function FAQ({}) {
   )
 
   const filterQuestions = () => {
-    const result = searcher.search(searchFilter)
+    if(searchFilter.trim() === "") return setSearchFilter("")
+
+    const result = searcher.search(searchFilter.trim())
     setQuestions(result)
     setSearchFilter("")
     setCloseQuestion(!closeQuestion)
