@@ -12,7 +12,8 @@ import {
   AccordionItem,
   AccordionButton,
   AccordionPanel,
-  AccordionIcon
+  AccordionIcon,
+  useBoolean
 } from "@chakra-ui/react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router"
@@ -26,11 +27,12 @@ import BDLogoImage from "../../public/img/logos/bd_logo";
 import FarBarsIcon from "../../public/img/icons/farBarsIcon";
 import SearchIcon from "../../public/img/icons/searchIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
+import RedirectIcon from "../../public/img/icons/redirectIcon";
 
 function MenuDrawer({ isOpen, onClose, links }) {
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
-      <DrawerOverlay />
+      <DrawerOverlay backdropFilter="blur(2px)"/>
       <DrawerContent padding="24px">
         <BDLogoImage
           widthImage="65px"
@@ -84,7 +86,7 @@ function MenuDrawer({ isOpen, onClose, links }) {
                   <RoundedButton
                     key={key}
                     backgroundColor="#FF8484"
-                    minWidth="120px"
+                    minWidth="100px"
                     height="38px"
                     fontSize="20px"
                     onClick={() => window.open(elm, "_blank")}
@@ -187,14 +189,38 @@ function SearchInput ({ status }) {
 }
 
 function DesktopLinks({ links }) {
-  const router = useRouter()
-  const { route } = router
-
   const userData = useContext(UserContext)
   const [statusSearch, setStatusSearch] = useState(false)
 
   const searchStatus = (elm) => {
     setStatusSearch(elm.status)
+  }
+
+  const LinkMenuDropDown = ({ url, text }) => {
+    const [flag, setFlag] = useBoolean()
+
+    return (
+      <Link
+        display="flex"
+        flexDirection="colunm"
+        _hover={{ opacity: "0.6" }}
+        fontSize="14px"
+        target={text === "Transparência" || "quem-somos" ? null : "_blank"}
+        color="#252A32"
+        fontFamily="Ubuntu"
+        fontWeight="400"
+        letterSpacing="0.3px"
+        href={url}
+        padding="10px 24px"
+        alignItems="center"
+        justifyContent="space-between"
+        onMouseEnter={setFlag.on}
+        onMouseLeave={setFlag.off}
+      > 
+        {text}
+        {flag && url.slice(0,4) === "http" && <RedirectIcon marginLeft="8px" width="16px" height="16px"/>}
+      </Link>
+    )
   }
 
   return (
@@ -204,7 +230,7 @@ function DesktopLinks({ links }) {
       display={{ base: "none", lg: "flex" }}
       position={{ base: "relative", lg: "initial" }}
       gap="24px"
-      marginLeft={route === "/" && "0px !important"}
+      marginLeft="32px !important"
     >
       <HStack width="100%" flex="3" spacing={7}>
         {Object.entries(links).map(([k, v]) => {
@@ -230,7 +256,7 @@ function DesktopLinks({ links }) {
                 title={k}
                 marginLeft="-25px"
                 marginTop="10px"
-                minWidth="180px"
+                minWidth="202px"
                 borderColor="#FFF"
                 fontFamily="Ubuntu"
                 fontWeight="400"
@@ -241,22 +267,11 @@ function DesktopLinks({ links }) {
                 boxShadow= "0 1px 8px 1px rgba(64, 60, 67, 0.16)"
               >
                 {Object.entries(v).map(([k, v]) => (
-                  <Link
+                  <LinkMenuDropDown
                     key={k}
-                    display="flex"
-                    flexDirection="colunm"
-                    _hover={{ opacity: "0.6" }}
-                    fontSize="14px"
-                    target={k === "Transparência" || "quem-somos" ? null : "_blank"}
-                    color="#252A32"
-                    fontFamily="Ubuntu"
-                    fontWeight="400"
-                    letterSpacing="0.3px"
-                    href={v}
-                    padding="10px 24px"
-                  > 
-                    {k}
-                  </Link>
+                    url={v}
+                    text={k}
+                  />
                 ))}
               </MenuDropdown>
             )
@@ -313,6 +328,8 @@ function DesktopLinks({ links }) {
 }
 
 export default function Menu({ pages = [] }) {
+  const [isShowLogoHome, setIsShowLogoHome] = useState(false)
+
   const router = useRouter()
   const { route } = router
 
@@ -323,7 +340,6 @@ export default function Menu({ pages = [] }) {
   const links = {
     Dados: "/dataset",
     Tutoriais: {
-      "Perguntas frequentes": "/perguntas-frequentes",
       Documentação: "https://basedosdados.github.io/mais/",
       "Vídeos no YouTube": "https://www.youtube.com/c/BasedosDados/featured",
       Blog: "https://medium.com/basedosdados",
@@ -336,7 +352,8 @@ export default function Menu({ pages = [] }) {
       "Quem somos": "/quem-somos",
       Transparência: "/transparencia",
       Newsletter: "https://info.basedosdados.org/newsletter",
-      Carreiras: "https://info.basedosdados.org/carreiras"
+      Carreiras: "https://info.basedosdados.org/carreiras",
+      "Perguntas frequentes": "/perguntas-frequentes",
     },
     Contato: "/contato",
     Apoie: "https://apoia.se/basedosdados",
@@ -344,14 +361,16 @@ export default function Menu({ pages = [] }) {
 
   useEffect(() => {
     document.addEventListener("scroll", () => {
-      if (!divRef.current || !divRef.current.style) return;
+      if (window.scrollY >= 425) setIsShowLogoHome(true)
+      if (window.scrollY <= 425) setIsShowLogoHome(false)
 
+      if (!divRef.current || !divRef.current.style) return;
       if (window.scrollY <= 30) divRef.current.style.boxShadow = "none";
       else
         divRef.current.style.boxShadow =
           "0px 1px 8px 1px rgba(64, 60, 67, 0.16)";
     });
-  }, [divRef.current]);
+  }, [divRef.current])
 
   return (
     <>
@@ -390,17 +409,21 @@ export default function Menu({ pages = [] }) {
               cursor="pointer"
             />
           </Box>
-          {route === "/" ?
-            ""
-          :
-            <Link aria-label="Home" _hover={{opacity:"none"}} href="/">
-              <BDLogoImage
-                transform="translateX(-27%)"
-                height="40px"
-                widthImage="80px"
-              />
-            </Link>
-          }
+
+          <Link
+            aria-label="Home"
+            width={route === "/" ? isShowLogoHome ? "88px" :"0" : "88px"}
+            _hover={{opacity:"none"}}
+            href={route === "/" ? "/#home" : "/"}
+            marginLeft="0 !important"
+            transition="all 0.5s"
+            overflow="hidden"
+          >
+            <BDLogoImage
+              widthImage="80px"
+            />
+          </Link>
+
           <Avatar
             bg="#2B8C4D"
             position="fixed"

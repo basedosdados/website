@@ -119,11 +119,13 @@ export default function FAQ({}) {
   },[categorySelected])
 
   const searcher = new FuzzySearch(
-    categorySelected ? questions : allQuestions, ["question", "keywords"], {caseSensitive: true}
+    categorySelected ? questions : allQuestions, ["question", "keywords"], {sort: true}
   )
 
   const filterQuestions = () => {
-    const result = searcher.search(searchFilter)
+    if(searchFilter.trim() === "") return setSearchFilter("")
+
+    const result = searcher.search(searchFilter.trim())
     setQuestions(result)
     setSearchFilter("")
     setCloseQuestion(!closeQuestion)
