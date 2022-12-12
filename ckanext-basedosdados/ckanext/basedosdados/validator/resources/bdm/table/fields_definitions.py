@@ -79,7 +79,12 @@ SPATIAL_COVERAGE_FIELD = Field(
         [
             "As máximas unidades espaciais que a tabela cobre.",
             "Exemplo:",
-            "  - sa.br",
+            "   - sa.br",
+            " ",
+            "   - sa.br.sp",
+            " ",
+            "   - world",
+
         ]
     ),
     yaml_order={
@@ -93,8 +98,12 @@ TEMPORAL_COVERAGE_FIELD = Field(
     description=to_line(
         [
             "Anos cobertos pela tabela.",
-            "Preencher como lista de intervalos.",
-            "Exemplos: ['1995(1)2019'], ['2002(2)2010', '2016', '2020'].",
+            "Exemplos:",
+            "    - 1995(1)2019",
+            "Caso a cobertura não seja contínua:",
+            "    - 2002(2)2010",
+            "    - 2016",
+            "    - 2020",
         ]
     ),
     yaml_order={
@@ -122,6 +131,18 @@ OBSERVATION_LEVEL_FIELD = Field(
     description=to_line(
         [
             "Nível de observação da tabela: o que representa cada linha.",
+            "A combinação das colunas aqui deve construir uma chave única da tabela"
+            "Opções de entity em 'https://basedosdados.org/api/3/action/bd_available_options'",
+            "Caso a entidade seja espacial incluir a informação de 'country' "
+            "Exemplos:",
+            "    - entity: year",
+            "      columns:",
+            "          - ano",
+            "    - country: br",
+            "      entity: state",
+            "      columns:",
+            "          - sigla_uf",
+
         ]
     ),
     yaml_order={
@@ -143,7 +164,7 @@ VERSION_FIELD = Field(
     description=to_line(
         [
             "Versão da tabela. Seguindo o padrão de semantic versioning.",
-            "Exemplo: v1.1.3",
+            "Exemplos: v1.0, v1.1.3",
         ]
     ),
     yaml_order={
@@ -191,7 +212,7 @@ DATA_CLEANING_DESCRIPTION_FIELD = Field(
 
 DATA_CLEANING_CODE_URL_FIELD = Field(
     title="Url do Código de Limpeza dos Dados",
-    description=to_line(["Url do código de limpeza dos dados."]),
+    description=to_line(["Url do código de limpeza dos dados do github."]),
     yaml_order={
         "id_before": "data_cleaning_description",
         "id_after": "partner_organization",
@@ -285,8 +306,6 @@ COLUMNS_FIELD = Field(
             "Adicionar todas as colunas manualmente pode ser bastante cansativo, por isso, quando",
             "inicializando este arquivo de configuração, você pode apontar a função para uma amostra de dados que",
             "preencherá automaticamente as colunas.",
-            "Algumas colunas existirão apenas na tabela final, você as construirá em `publish.sql`.",
-            "Para esses, defina is_in_staging como False.",
             "Além disso, você deve adicionar as colunas de partição aqui e definir is_partition como True.",
         ]
     ),
