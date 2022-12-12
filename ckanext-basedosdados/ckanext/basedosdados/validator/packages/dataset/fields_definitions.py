@@ -45,6 +45,8 @@ ORGANIZATION_FIELD = Field(
         [
             "Qual organização disponibiliza os dados originais?",
             "Opções: escolher dessa lista -> https://basedosdados.org/api/3/action/organization_list",
+            "Se a organização não estiver na lista acima ou o nome não estiver conforme o manual de estilo", 
+            "criar ou renomear a organização em https://basedosdados.org/organization/",
             "Exemplos: br-ibge, br-tse, br-rj-gov"
         ]
     ),
@@ -84,7 +86,10 @@ TAGS_FIELD = Field(
         [
             "Quais etiquetas caracterizam a base?",
             "Opções: escolher dessa lista -> https://basedosdados.org/api/3/action/tag_list",
-            "Exemplos: fertilidade, preco, desmatamento.",
+            "Exemplos:",
+            "   - fertilidade",
+            "   - preco",
+            "   - desmatamento",
             "Caso crie etiquetas novas, as regras são:",
             "   - letras minúsculas",
             "   - sem acentos",
