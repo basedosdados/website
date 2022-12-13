@@ -205,7 +205,7 @@ function DesktopLinks({ links }) {
         flexDirection="colunm"
         _hover={{ opacity: "0.6" }}
         fontSize="14px"
-        target={text === "Transparência" || "quem-somos" ? null : "_blank"}
+        target={url.slice(0,4) === "http" ? "_blank" : "_self"}
         color="#252A32"
         fontFamily="Ubuntu"
         fontWeight="400"
