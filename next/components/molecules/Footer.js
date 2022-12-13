@@ -135,7 +135,7 @@ export default function Footer({ pages }) {
               <FooterLink href="/servicos#Consultoria de dados">
                 Consultoria de dados
               </FooterLink>
-              <FooterLink href="/estudos-de-caso/fundacao-lemannservicos#Consultoria de dados">
+              <FooterLink href="/estudos-de-caso/fundacao-lemann">
                 Estudos de caso
               </FooterLink>
             </SectionCategories>
