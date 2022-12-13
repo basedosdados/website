@@ -6,42 +6,107 @@ import {
   DrawerOverlay,
   DrawerContent,
   useDisclosure,
-  Divider,
   Avatar,
+  Text,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  useBoolean
 } from "@chakra-ui/react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router"
-import { MenuDropdown } from "./MenuDropdown";
-import RoundedButton from "../atoms/RoundedButton";
-import Link from "../atoms/Link";
-import FarBarsIcon from "../../public/img/icons/farBarsIcon";
 import UserContext from "../../context/user";
+import { MenuDropdown } from "./MenuDropdown";
 import ControlledInput from "../atoms/ControlledInput";
+import Link from "../atoms/Link";
+import RoundedButton from "../atoms/RoundedButton";
+
 import BDLogoImage from "../../public/img/logos/bd_logo";
+import FarBarsIcon from "../../public/img/icons/farBarsIcon";
 import SearchIcon from "../../public/img/icons/searchIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
+import RedirectIcon from "../../public/img/icons/redirectIcon";
 
 function MenuDrawer({ isOpen, onClose, links }) {
   return (
-    <Drawer isOpen={isOpen} placement="top" onClose={onClose}>
-      <DrawerOverlay />
-      <DrawerContent padding="30px 30px 30px 30px">
-        <VStack alignItems="center" width="100%" spacing={5}>
-          {Object.entries(links).map(([k, v]) => {
-            if (typeof v === "object") {
-              return Object.entries(v).map(([k, v]) => (
-                <>
-                  <Link fontFamily="Ubuntu" fontWeigth="400" href={v}>{k}</Link>
-                  <Divider />
-                </>
-              ));
+    <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+      <DrawerOverlay backdropFilter="blur(2px)"/>
+      <DrawerContent padding="24px">
+        <BDLogoImage
+          widthImage="65px"
+          heightImage="30px"
+          marginBottom="24px"
+          onClick={() => window.open("/", "_self")}
+        />
+        <VStack alignItems="flex-start" width="100%" spacing="16px">
+          {Object.entries(links).map(([key, elm]) => {
+            if (typeof elm === "object") {
+              return (
+                <Accordion key={key} allowToggle width="100%">
+                  <AccordionItem borderWidth="0 !important">
+                    <AccordionButton
+                      padding={0}
+                      _hover={{background: "none"}}
+                      justifyContent="space-between"
+                    >
+                      <Text
+                        fontSize="20px"
+                        fontFamily="Ubuntu"
+                        fontWeight="400"
+                        color="#252A32"
+                      >
+                        {key}
+                      </Text>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  <AccordionPanel
+                    display="flex"
+                    flexDirection="column"
+                    gridGap="13px"
+                    padding="16px 0 2px"
+                  >
+                    {Object.entries(elm).map(([route, link]) => (
+                      <Link
+                        key={route}
+                        fontSize="16px"
+                        fontFamily="Ubuntu"
+                        fontWeight="300"
+                        href={link}
+                      >{route}</Link>
+                    ))}
+                  </AccordionPanel>
+                  </AccordionItem>
+                </Accordion>
+              )
+            } else {
+              if(key === "Apoie") {
+                return (
+                  <RoundedButton
+                    key={key}
+                    backgroundColor="#FF8484"
+                    minWidth="100px"
+                    height="38px"
+                    fontSize="20px"
+                    onClick={() => window.open(elm, "_blank")}
+                  >
+                    {key}
+                  </RoundedButton>
+                )
+              } else {
+                return (
+                  <Link
+                    key={key}
+                    fontSize="20px"
+                    fontFamily="Ubuntu"
+                    fontWeight="400"
+                    href={elm}
+                  >{key}
+                  </Link>
+                )
+              }
             }
-            return (
-              <>
-                <Link fontFamily="Ubuntu" fontWeigth="400" href={v}>{k}</Link>
-                <Divider />
-              </>
-            );
           })}
         </VStack>
       </DrawerContent>
@@ -105,7 +170,6 @@ function SearchInput ({ status }) {
             fontSize: "16px",
             width: "100%",
             borderRadius: "16px",
-            _placeholder:{color: "#C4C4C4"}
           }}
           rightIcon={
             <CrossIcon
@@ -132,6 +196,33 @@ function DesktopLinks({ links }) {
     setStatusSearch(elm.status)
   }
 
+  const LinkMenuDropDown = ({ url, text }) => {
+    const [flag, setFlag] = useBoolean()
+
+    return (
+      <Link
+        display="flex"
+        flexDirection="colunm"
+        _hover={{ opacity: "0.6" }}
+        fontSize="14px"
+        target={url.slice(0,4) === "http" ? "_blank" : "_self"}
+        color="#252A32"
+        fontFamily="Ubuntu"
+        fontWeight="400"
+        letterSpacing="0.3px"
+        href={url}
+        padding="10px 24px"
+        alignItems="center"
+        justifyContent="space-between"
+        onMouseEnter={setFlag.on}
+        onMouseLeave={setFlag.off}
+      > 
+        {text}
+        {flag && url.slice(0,4) === "http" && <RedirectIcon marginLeft="8px" width="16px" height="16px"/>}
+      </Link>
+    )
+  }
+
   return (
     <HStack
       justifyContent="space-between"
@@ -139,12 +230,13 @@ function DesktopLinks({ links }) {
       display={{ base: "none", lg: "flex" }}
       position={{ base: "relative", lg: "initial" }}
       gap="24px"
+      marginLeft="32px !important"
     >
       <HStack width="100%" flex="3" spacing={7}>
         {Object.entries(links).map(([k, v]) => {
           if (k === "Apoie")
             return (
-              <a href={v} target="_blank">
+              <a key={k} href={v} target="_blank">
                 <RoundedButton
                   colorScheme="red"
                   backgroundColor="#FF8484"
@@ -160,13 +252,14 @@ function DesktopLinks({ links }) {
           if (typeof v === "object") {
             return (
               <MenuDropdown
+                key={k}
                 title={k}
                 marginLeft="-25px"
                 marginTop="10px"
-                minWidth="180px"
+                minWidth="202px"
                 borderColor="#FFF"
                 fontFamily="Ubuntu"
-                fontWeigth="400"
+                fontWeight="400"
                 letterSpacing="0.3px"
                 borderRadius="10px"
                 _first={{ paddingTop: "10px"}}
@@ -174,21 +267,11 @@ function DesktopLinks({ links }) {
                 boxShadow= "0 1px 8px 1px rgba(64, 60, 67, 0.16)"
               >
                 {Object.entries(v).map(([k, v]) => (
-                  <Link
-                    display="flex"
-                    flexDirection="colunm"
-                    _hover={{ opacity: "0.6" }}
-                    fontSize="15px"
-                    target={k === "Transparência" || "quem-somos" ? null : "_blank"}
-                    color="#252A32"
-                    fontFamily="Ubuntu"
-                    fontWeigth="400"
-                    letterSpacing="0.3px"
-                    href={v}
-                    padding="10px 24px"
-                  > 
-                    {k}
-                  </Link>
+                  <LinkMenuDropDown
+                    key={k}
+                    url={v}
+                    text={k}
+                  />
                 ))}
               </MenuDropdown>
             )
@@ -196,10 +279,11 @@ function DesktopLinks({ links }) {
 
           return (
             <Link
+              key={k}
               _hover={{ opacity: "0.6" }}
               fontSize="15px"
               fontFamily="Ubuntu"
-              fontWeigth="400"
+              fontWeight="400"
               letterSpacing="0.3px"
               href={v}
               target={v.startsWith("https") ? "_blank" : null}
@@ -227,7 +311,7 @@ function DesktopLinks({ links }) {
             </HStack>
           ) : (
             <>
-              <Link fontSize="15px" fontFamily="Ubuntu" fontWeigth="400" letterSpacing="0.3px" href="/user/login">
+              <Link fontSize="15px" fontFamily="Ubuntu" fontWeight="400" letterSpacing="0.3px" href="/user/login">
                 Entrar
               </Link>
               <Link _hover={{ opacity:"none" }} href="/user/register">
@@ -244,6 +328,11 @@ function DesktopLinks({ links }) {
 }
 
 export default function Menu({ pages = [] }) {
+  const [isShowLogoHome, setIsShowLogoHome] = useState(false)
+
+  const router = useRouter()
+  const { route } = router
+
   const menuDisclosure = useDisclosure();
   const divRef = useRef();
   const userData = useContext(UserContext);
@@ -251,20 +340,20 @@ export default function Menu({ pages = [] }) {
   const links = {
     Dados: "/dataset",
     Tutoriais: {
-      "Perguntas frequentes": "/perguntas-frequentes",
       Documentação: "https://basedosdados.github.io/mais/",
-      YouTube: "https://www.youtube.com/c/BasedosDados/featured",
+      "Vídeos no YouTube": "https://www.youtube.com/c/BasedosDados/featured",
       Blog: "https://medium.com/basedosdados",
     },
     Serviços: {
-      Serviços : "/servicos",
+      "Conheça os serviços" : "/servicos",
       "Estudos de caso" : "/estudos-de-caso/fundacao-lemann"
     },
     Institucional: {
       "Quem somos": "/quem-somos",
       Transparência: "/transparencia",
       Newsletter: "https://info.basedosdados.org/newsletter",
-      Carreiras: "https://info.basedosdados.org/carreiras"
+      Carreiras: "https://info.basedosdados.org/carreiras",
+      "Perguntas frequentes": "/perguntas-frequentes",
     },
     Contato: "/contato",
     Apoie: "https://apoia.se/basedosdados",
@@ -272,14 +361,16 @@ export default function Menu({ pages = [] }) {
 
   useEffect(() => {
     document.addEventListener("scroll", () => {
-      if (!divRef.current || !divRef.current.style) return;
+      if (window.scrollY >= 425) setIsShowLogoHome(true)
+      if (window.scrollY <= 425) setIsShowLogoHome(false)
 
+      if (!divRef.current || !divRef.current.style) return;
       if (window.scrollY <= 30) divRef.current.style.boxShadow = "none";
       else
         divRef.current.style.boxShadow =
           "0px 1px 8px 1px rgba(64, 60, 67, 0.16)";
     });
-  }, [divRef.current]);
+  }, [divRef.current])
 
   return (
     <>
@@ -299,6 +390,7 @@ export default function Menu({ pages = [] }) {
         <HStack
           justifyContent={{ base: "center", lg: "flex-start" }}
           width="100%"
+          height="40px"
           maxWidth="1264px"
           margin="0 auto"
           spacing={6}
@@ -317,17 +409,25 @@ export default function Menu({ pages = [] }) {
               cursor="pointer"
             />
           </Box>
-          <Link aria-label="Home" _hover={{opacity:"none"}} href="/">
+
+          <Link
+            aria-label="Home"
+            width={route === "/" ? isShowLogoHome ? "88px" :"0" : "88px"}
+            _hover={{opacity:"none"}}
+            href={route === "/" ? "/#home" : "/"}
+            marginLeft="0 !important"
+            transition="all 0.5s"
+            overflow="hidden"
+          >
             <BDLogoImage
-              transform="translateX(-27%)"
-              height="40px"
               widthImage="80px"
             />
           </Link>
+
           <Avatar
             bg="#2B8C4D"
             position="fixed"
-            right="30px"
+            right="24px"
             height="40px"
             width="40px"
             display={{ base: "flex", lg: "none" }}

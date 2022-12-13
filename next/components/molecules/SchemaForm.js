@@ -19,7 +19,7 @@ export function SchemaForm({
   },
 }) {
   const [spatialCoverageTree, setSpatialCoverageTree] = useState({})
-  
+
   useEffect(() => {
     getSpatialCovarageTree()
       .then(res => setSpatialCoverageTree(res))
@@ -67,22 +67,22 @@ export function SchemaForm({
     setData(prepareData({ ...data }));
   }, [data]);
 
-
-
   //// Geo stuff
 
   const uiSchema = {
-      spatial_coverage:{
-          items: {
-          'ui:field' : 'GeoTree'
-          }
+    spatial_coverage:{
+      items: {
+      'ui:field' : 'GeoTree'
       }
+    },
+    number_rows: {"ui:widget": "hidden"}
   }
   const fields = {GeoTree: (props) => GeoTree(props, spatialCoverageTree)}
 
   /////
 
   if (schema.schema === undefined) schema = {schema: schema} // TODO: remove this after changing all endpoints
+
   return (
     <>
       {isLoading ? (

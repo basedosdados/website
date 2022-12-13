@@ -34,7 +34,7 @@ export function MenuDropdown({ title, children, ...style }) {
         onMouseLeave={btnMouseLeaveEvent}
         as={Button}
         fontFamily="Ubuntu"
-        fontSize="14px"
+        fontSize="15px"
         letterSpacing="0.3px"
         _active={{ backgroundColor: "transparent" }}
         padding="0px"

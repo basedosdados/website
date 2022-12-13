@@ -119,11 +119,13 @@ export default function FAQ({}) {
   },[categorySelected])
 
   const searcher = new FuzzySearch(
-    categorySelected ? questions : allQuestions, ["question", "keywords"], {caseSensitive: true}
+    categorySelected ? questions : allQuestions, ["question", "keywords"], {sort: true}
   )
 
   const filterQuestions = () => {
-    const result = searcher.search(searchFilter)
+    if(searchFilter.trim() === "") return setSearchFilter("")
+
+    const result = searcher.search(searchFilter.trim())
     setQuestions(result)
     setSearchFilter("")
     setCloseQuestion(!closeQuestion)
@@ -212,8 +214,7 @@ export default function FAQ({}) {
             borderRadius: "18px",
             backgroundColor: "#ffffff",
             fontSize: "16px",
-            border: "1px solid #DEDFE0",
-            _placeholder: {color: "#C4C4C4"}
+            border: "1px solid #DEDFE0 !important",
           }}
           inputElementStyle={{
             height: "50px"
@@ -225,7 +226,7 @@ export default function FAQ({}) {
                 width="20px"
                 height="20px"
                 cursor="pointer"
-                fill="#D0D0D0"
+                fill="#252A32"
                 onClick={filterQuestions}
               />
               :
@@ -235,7 +236,7 @@ export default function FAQ({}) {
                   width="22px"
                   height="22px"
                   cursor="pointer"
-                  fill="#D0D0D0"
+                  fill="#252A32"
                   onClick={() => setQuestions(allQuestions)}
                 />
                 :

@@ -5,7 +5,7 @@ import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 export default function Subtitle({
   children,
   color = "#252A32",
-  fontWeigth = "400",
+  fontWeight = "400",
   ...props
 }) {
   const [isMobileMod, setIsMobileMod] = useState(false)
@@ -21,7 +21,7 @@ export default function Subtitle({
       fontSize={isMobileMod ? "16px" : "18px"}
       letterSpacing={isMobileMod ? "0.2px" : "0.1px"}
       color={color}
-      fontWeight={fontWeigth}
+      fontWeight={fontWeight}
       {...props}
     >
       {children}

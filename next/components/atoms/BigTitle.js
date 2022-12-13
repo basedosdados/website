@@ -5,7 +5,7 @@ import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 export default function BigTitle({
   children,
   color = "#252A32",
-  fontWeigth = "500",
+  fontWeight = "500",
   ...props
 }) {
   
@@ -23,7 +23,7 @@ export default function BigTitle({
       lineHeight="36px"
       letterSpacing="0"
       color={color}
-      fontWeight={fontWeigth}
+      fontWeight={fontWeight}
       {...props}
     >
       {children}
