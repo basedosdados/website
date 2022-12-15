@@ -215,6 +215,7 @@ export default function FAQ({}) {
             backgroundColor: "#ffffff",
             fontSize: "16px",
             border: "1px solid #DEDFE0 !important",
+            _placeholder:{ color: "#6F6F6F" }
           }}
           inputElementStyle={{
             height: "50px"
