@@ -10,7 +10,6 @@ import {
   HStack,
   Stack,
   Box,
-  Center,
   Text,
   Input,
   InputGroup,
@@ -139,8 +138,6 @@ function TableDatasets({
     
   },[values, headers])
 
-  
-
   const empty = () => {
     return (
       <p style={{margin:"0", fontWeight:"500", color:"#C4C4C4"}}>
@@ -187,6 +184,71 @@ function TableDatasets({
     }
   }
 
+  const TableHeader = ({ hander, ...props }) => {
+    return (
+      <Th
+        role="row"
+        position="sticky"
+        top="0"
+        padding="8px 24px"
+        fontSize="14px"
+        color="#6F6F6F"
+        background="#F6F6F6"
+        fontWeight="500"
+        fontFamily="Ubuntu"
+        letterSpacing="0.4px"
+        textTransform="capitalize"
+        boxSizing="content-box"
+        boxShadow="0 0 0 1px #EAEAEA"
+        zIndex={1}
+        {...props}
+      >
+        {tooltip ?
+          <Box display="flex" gridGap="8px" alignItems="end"  role="columnheader">
+            {translations ? translate(hander, translations) : hander}
+            <Tooltip
+              hasArrow
+              bg="#2A2F38"
+              label={tooltip[hander]}
+              fontSize="16px"
+              fontWeight="500"
+              padding="5px 15px"
+              marginTop="8px"
+              color="#FFF"
+              borderRadius="6px"
+            >
+              <InfoIcon alt="tip" cursor="pointer" fill="#A3A3A3"/>
+            </Tooltip>
+          </Box>
+          :
+          <div role="columnheader">
+            {translations ? translate(hander, translations) : hander}
+          </div>
+        }
+      </Th>
+    )
+  }
+
+  const TableValue = ({ value, ...props }) => {
+    return (
+      <Td
+        role="cell"
+        padding="10px 24px"
+        fontSize="14px"
+        fontFamily="Lato"
+        letterSpacing="0.5px"
+        color="#000000a8"
+        borderColor="#EAEAEA"
+        _first={{
+          color:"#252A32"
+        }}
+        {...props}
+      >
+        {valueVerification(value)}
+      </Td>
+    )
+  }
+
   return (
     <HStack
       width="100%"
@@ -198,67 +260,34 @@ function TableDatasets({
         overflowY="auto"
       >
         <Table position="relative" role="table">
-          <Thead  role="rowgroup">
-            {columnsHeaders.map((elm) => (
-              <Th
-                role="row"
-                position="sticky"
-                top="0"
-                padding="8px 24px"
-                fontSize="14px"
-                color="#6F6F6F"
-                background="#F6F6F6"
-                fontWeight="500"
-                fontFamily="Ubuntu"
-                letterSpacing="0.4px"
-                textTransform="capitalize"
-                boxSizing="content-box"
-                zIndex={1}
-              >
-                {tooltip ?
-                  <Box display="flex" gridGap="8px" role="columnheader">
-                    {translations ? translate(elm, translations) : elm}
-                    <Tooltip
-                      hasArrow
-                      bg="#2A2F38"
-                      label={tooltip[elm]}
-                      fontSize="16px"
-                      fontWeight="500"
-                      padding="5px 15px"
-                      marginTop="8px"
-                      color="#FFF"
-                      borderRadius="6px"
-                    >
-                      <Center>
-                        <InfoIcon alt="tip" cursor="pointer" fill="#A3A3A3"/>
-                      </Center>
-                    </Tooltip>
-                  </Box>
-                  :
-                  <div role="columnheader">
-                    {translations ? translate(elm, translations) : elm}
-                  </div>
-                }
-              </Th>
+          <Thead role="rowgroup" position="relative">
+            <TableHeader
+              hander={columnsHeaders[0]}
+              zIndex={4}
+              backgroundColor="#F6F6F6"
+              left="0"
+            />
+            {columnsHeaders.map((elm, i) => (
+              i != 0 && <TableHeader hander={elm}/>
             ))}
           </Thead>
-          <Tbody role="rowgroup">
+          <Tbody role="rowgroup" position="relative">
             {columnsValues.map((elm) => (
               <Tr role="row">
-                {elm.map((r) => (
-                  <Td
-                    role="cell"
-                    padding="10px 24px"
-                    fontSize="14px"
-                    fontFamily="Lato"
-                    letterSpacing="0.5px"
-                    color="#000000a8"
-                    _first={{
-                      color:"#252A32"
-                    }}
-                  >
-                    {valueVerification(r)}
-                  </Td>
+                <TableValue
+                  backgroundColor="#FFF"
+                  value={elm[0]}
+                  position="sticky"
+                  left="0"
+                  zIndex={2}
+                  boxShadow="0 0 0 1px #EAEAEA"
+                />
+                {elm.map((r, i) => (
+                  i != 0 &&
+                  <TableValue
+                    value={r}
+                    position="relative"
+                  />
                 ))}
               </Tr>
             ))}
