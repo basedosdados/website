@@ -199,7 +199,6 @@ function TableDatasets({
         letterSpacing="0.4px"
         textTransform="capitalize"
         boxSizing="content-box"
-        boxShadow="1px 0 0 1px #EAEAEA"
         zIndex={1}
         {...props}
       >
@@ -266,7 +265,6 @@ function TableDatasets({
               zIndex={4}
               backgroundColor="#F6F6F6"
               left="0"
-              boxShadow="0 0 0 1px #EAEAEA"
             />
             {columnsHeaders.map((elm, i) => (
               i != 0 && <TableHeader hander={elm}/>
@@ -276,12 +274,11 @@ function TableDatasets({
             {columnsValues.map((elm) => (
               <Tr role="row">
                 <TableValue
-                  backgroundColor="#FFF"
                   value={elm[0]}
                   position="sticky"
                   left="0"
                   zIndex={2}
-                  boxShadow="0 0 0 1px #EAEAEA"
+                  background= "linear-gradient(to left,#EAEAEA, #EAEAEA 1px, #FFF 1px, #FFF 100%)"
                 />
                 {elm.map((r, i) => (
                   i != 0 &&
