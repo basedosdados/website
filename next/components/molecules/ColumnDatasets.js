@@ -199,7 +199,7 @@ function TableDatasets({
         letterSpacing="0.4px"
         textTransform="capitalize"
         boxSizing="content-box"
-        boxShadow="0 0 0 1px #EAEAEA"
+        boxShadow="1px 0 0 1px #EAEAEA"
         zIndex={1}
         {...props}
       >
@@ -266,6 +266,7 @@ function TableDatasets({
               zIndex={4}
               backgroundColor="#F6F6F6"
               left="0"
+              boxShadow="0 0 0 1px #EAEAEA"
             />
             {columnsHeaders.map((elm, i) => (
               i != 0 && <TableHeader hander={elm}/>
@@ -459,7 +460,7 @@ export default function ColumnsDatasets({
               minWidth="200px"
               height="40px"
               placeholder="Insira o nome ou o valor da propriedade"
-              _placeholder={{color:"#C4C4C4"}}
+              _placeholder={{color:"#6F6F6F"}}
             />
             <InputRightElement children={
               tagFilter.length < 1 

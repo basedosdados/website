@@ -72,7 +72,7 @@ function Themes ({
             minWidth={responsive.mobileQuery ? "65px" : "100px" }
             height={responsive.mobileQuery ? "65px" : "100px" }
             minHeight={responsive.mobileQuery ? "65px" : "100px" }
-            borderRadius={responsive.mobileQuery ? "8px" : "16px" }
+            borderRadius={responsive.mobileQuery ? "12px" : "16px" }
             backgroundColor={ found(elm.name) ? "#2B8C4D" : "FFF"}
             boxShadow="0px 1px 8px 1px rgba(64, 60, 67, 0.16)"
             _hover={{ transform:"scale(1.1)", backgroundColor:"#2B8C4D" }}
