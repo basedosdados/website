@@ -406,6 +406,7 @@ export default function SearchPage({
           fontSize: "16px",
           height: "50px",
           boxShadow: "0 1px 3px 0.5 rgba(100 93 103 /0.16) !important",
+          _placeholder:{color:"#6F6F6F"}
         }}
         marginTop={isMobileMode && "70px"}
       />
