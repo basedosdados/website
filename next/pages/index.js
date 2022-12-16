@@ -158,7 +158,7 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
                   letterSpacing: isMobileMod? "0.1px" : "0",
                   border: "0px",
                   boxShadow: "0 1px 8px 1px rgba(64, 60, 67, 0.16) !important",
-                  _placeholder:isMobileMod && {color:"#6F6F6F"}
+                  _placeholder:isMobileMod ? {color:"#6F6F6F !important"} : {color: "#A3A3A3"}
                 }}
                 rightIcon={
                   (search ?
