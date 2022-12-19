@@ -152,12 +152,13 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
                   fontFamily: "ubuntu",
                   padding: isMobileMod ? "24px 48px 24px 20px " : "24px 64px 24px 32px",
                   height: isMobileMod ? "50px" :"80px",
-                  borderRadius: isMobileMod ? "20px" : "25px",
+                  borderRadius: isMobileMod ? "18px" : "25px",
                   backgroundColor: "#ffffff",
                   fontSize: isMobileMod ? "18px" : "22px",
                   letterSpacing: isMobileMod? "0.1px" : "0",
                   border: "0px",
                   boxShadow: "0 1px 8px 1px rgba(64, 60, 67, 0.16) !important",
+                  _placeholder:isMobileMod ? {color:"#6F6F6F !important"} : {color: "#A3A3A3"}
                 }}
                 rightIcon={
                   (search ?
