@@ -68,6 +68,7 @@ export function DebouncedControlledInput({
   inputBackgroundColor = null,
   inputStyle,
   isBorderColor = true,
+  inputElementStyle,
   ...props
 }) {
   const [_value, _setValue] = useState(value);
@@ -104,6 +105,7 @@ export function DebouncedControlledInput({
         padding="8px"
         marginRight="5px"
         children={rightIcon}
+        {...inputElementStyle}
       />
       {rightAddon ? <InputRightAddon children={rightAddon} /> : <></>}
     </InputGroup>
