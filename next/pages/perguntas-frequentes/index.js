@@ -14,13 +14,12 @@ import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { QuestionFAQ } from "../../content/FAQ";
 import { MainPageTemplate } from "../../components/templates/main";
 
-import ControlledInput from "../../components/atoms/ControlledInput";
+import { DebouncedControlledInput } from "../../components/atoms/ControlledInput";
 import Display from "../../components/atoms/Display";
 import BodyText from "../../components/atoms/BodyText";
 
 import CrossIcon from "../../public/img/icons/crossIcon";
 import SearchIcon from "../../public/img/icons/searchIcon";
-import ArrowIcon from "../../public/img/icons/arrowIcon";
 import styles from "../../styles/faq.module.css";
 
 const QuestionsBox = ({ question, answer, id, active, isMobile }) => {
@@ -117,29 +116,36 @@ export default function FAQ({}) {
   },[])
 
   useEffect(() => {
-    if(categorySelected) return filterByCategory(categorySelected)
+    if(categorySelected) return setQuestions(filterByCategory(categorySelected))
   },[categorySelected])
 
   const searcher = new FuzzySearch(
     categorySelected ? questions : allQuestions, ["question", "keywords"], {sort: true}
   )
 
-  const filterQuestions = () => {
+  useEffect(() => {
     if(searchFilter.trim() === "") return setSearchFilter("")
 
     const result = searcher.search(searchFilter.trim())
     setQuestions(result)
-    setSearchFilter("")
     setCloseQuestion(!closeQuestion)
     window.scrollTo({top: 1})
-  }
+  },[searchFilter])
 
   const filterByCategory = (category) => {
     const filtedCategory = allQuestions.filter((elm) => {
       const indexCategory = elm.categories.findIndex((res) => res === category)
       if(indexCategory > -1) return elm.categories[indexCategory]
     })
-    setQuestions(filtedCategory)
+    return filtedCategory
+  }
+
+  const cleanFilter = () => {
+    setSearchFilter("")
+
+    if(categorySelected) return setQuestions(filterByCategory(categorySelected))
+
+    setQuestions(allQuestions)
   }
 
   const CategoryText = ({ category }) => {
@@ -203,10 +209,9 @@ export default function FAQ({}) {
           Perguntas frequentes
         </Display>
 
-        <ControlledInput
+        <DebouncedControlledInput
           value={searchFilter}
-          onChange={setSearchFilter}
-          onEnterPress={filterQuestions}
+          onChange={(val) => setSearchFilter(val)}
           paddingBottom={isMobileMod ? "56px" : "126px" }
           maxWidth="600px"
           placeholder="Pesquise"
@@ -220,37 +225,26 @@ export default function FAQ({}) {
             _placeholder:{ color: "#6F6F6F" }
           }}
           inputElementStyle={{
-            height: "50px"
+            height: "48px"
           }}
           rightIcon={
             (searchFilter ?
-              <ArrowIcon
-                alt=""
-                width="20px"
-                height="20px"
+              <CrossIcon
+                alt="limpar pesquisa"
+                width="22px"
+                height="22px"
                 cursor="pointer"
                 fill="#252A32"
-                onClick={filterQuestions}
+                onClick={() => cleanFilter()}
               />
               :
-              (questions.length < allQuestions.length  ?
-                <CrossIcon
-                  alt="limpar pesquisa"
-                  width="22px"
-                  height="22px"
-                  cursor="pointer"
-                  fill="#252A32"
-                  onClick={() => setQuestions(allQuestions)}
-                />
-                :
-                <SearchIcon
-                  alt="pesquisar"
-                  width="20px"
-                  height="20px"
-                  cursor="normal"
-                  fill="#D0D0D0"
-                />
-              )
+              <SearchIcon
+                alt="pesquisar"
+                width="20px"
+                height="20px"
+                cursor="normal"
+                fill="#D0D0D0"
+              />
             )
           }
         />
