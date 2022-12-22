@@ -11,11 +11,13 @@ import FuzzySearch from 'fuzzy-search';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { MainPageTemplate } from "../../components/templates/main";
 import { QuestionFAQ } from "../../content/FAQ";
+import { MainPageTemplate } from "../../components/templates/main";
+
 import { DebouncedControlledInput } from "../../components/atoms/ControlledInput";
 import Display from "../../components/atoms/Display";
 import BodyText from "../../components/atoms/BodyText";
+
 import CrossIcon from "../../public/img/icons/crossIcon";
 import SearchIcon from "../../public/img/icons/searchIcon";
 import styles from "../../styles/faq.module.css";

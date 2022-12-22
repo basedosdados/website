@@ -6,7 +6,6 @@ import {
   Divider,
   Stack,
   Select,
-  Image,
   Skeleton,
   Flex,
   Button,
@@ -24,31 +23,37 @@ import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { createDataset, searchDatasets } from "../api/datasets";
-import { DebouncedControlledInput } from "../../components/atoms/ControlledInput";
-import { Database } from "../../components/organisms/Database";
-import {
-  SimpleFilterAccordion,
-  CheckboxFilterAccordion,
-  RangeFilterAccordion,
-} from "../../components/atoms/FilterAccordion";
-import { withPages } from "../../hooks/pages.hook";
-import { MainPageTemplate } from "../../components/templates/main";
-import { addParametersToCurrentURL, isBdPlus, unionArrays } from "../../utils";
-import Tag from "../../components/atoms/Tag";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { SchemaForm } from "../../components/molecules/SchemaForm";
-import { getDatasetSchema } from "../api/schemas";
-import { getUser } from "../api/user";
+import { createDataset, searchDatasets } from "../api/datasets";
 import {
   getAvailableOptionsTranslations,
   getTranslationsOptions,
   getTranslations,
 } from "../api/translations";
-import FilterIcon from "../../public/img/icons/filterIcon";
+import { getDatasetSchema } from "../api/schemas";
+import { getUser } from "../api/user";
+import { withPages } from "../../hooks/pages.hook";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import { addParametersToCurrentURL, isBdPlus, unionArrays } from "../../utils";
+
+import { DebouncedControlledInput } from "../../components/atoms/ControlledInput";
+import {
+  SimpleFilterAccordion,
+  CheckboxFilterAccordion,
+  RangeFilterAccordion,
+} from "../../components/atoms/FilterAccordion";
+import Tag from "../../components/atoms/Tag";
+import BodyText from "../../components/atoms/BodyText";
+import Display from "../../components/atoms/Display";
+import RoundedButton from "../../components/atoms/RoundedButton";
+import { SchemaForm } from "../../components/molecules/SchemaForm";
+import { Database } from "../../components/organisms/Database";
+import { MainPageTemplate } from "../../components/templates/main";
+
+import FilterIcon from "../../public/img/icons/filterIcon";
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
+import NotFoundImage from "../../public/img/notFoundImage";
 
 export async function getStaticProps(context) {
   const translations = await getTranslations();
@@ -166,6 +171,73 @@ export default function SearchPage({
     setIsMobileMode(isMobile)
   },[isMobile])
 
+  const DataProposalBox = ({image, display, text, bodyText}) => {
+    return (
+      <Stack alignItems="center" width="100%" spacing={0}>
+        {image && 
+          <NotFoundImage
+            transform={!isMobileMode && "translateX(-36px)"}
+            widthImage="100%"
+            heightImage="100%"
+            marginBottom="24px"
+            marginTop={isMobileMode && "24px"}
+          />
+        }
+        {display &&
+          <Display
+          width="100%"
+          fontSize="50px"
+          textAlign="center"
+          lineHeight="54px"
+          letterSpacing="-0.8px"
+          marginBottom="24px !important"
+          >{display}</Display>
+        }
+        <Text
+          fontFamily="ubuntu"
+          fontWeight="400"
+          fontSize="20px"
+          lineHeight="23px"
+          letterSpacing="0.2px"
+          marginBottom="8px !important"
+          textAlign="center"
+        >
+          {text}
+        </Text>
+        <BodyText
+          fontSize="18px"
+          lineHeight="28px"
+          textAlign="center"
+        >
+          {bodyText}
+        </BodyText>
+        <HStack
+          width="100%"
+          marginTop="24px !important"
+          spacing={isMobileMode ? 0 : "8px"}
+          justifyContent="center"
+          alignItems={isMobileMode && "center"}
+          flexDirection={isMobileMode && "column"}
+          gridGap={isMobileMode && "16px"}
+        >
+          <RoundedButton
+            minWidth="240px"
+            padding="10px 24px"
+            onClick={() => window.open("https://discord.gg/Ec7tfBaTVV", "_blank")}
+          >Fazer uma proposta</RoundedButton>
+          <RoundedButton
+            minWidth="240px"
+            backgroundColor="#FFF"
+            border="1px solid #42B0FF"
+            color="#42B0FF"
+            padding="10px 24px"
+            onClick={() => window.open("https://github.com/orgs/basedosdados/projects/17", "_blank")}
+          >Ver roadmap de dados</RoundedButton>
+        </HStack>
+      </Stack>
+    )
+  }
+
   const optionsUpdateFrequencies = {
     "unique" : "-16",
     "hour": "-15",
@@ -191,15 +263,14 @@ export default function SearchPage({
     "high": "-1"
   }
 
-
   const fieldTranslations = {
     organization: "Organização",
-    tag: "Tag",
+    tag: "Etiqueta",
     group: "Tema",
-    resource_type: "Forma de consulta",
+    resource_type: "Conjuntos com",
     spatial_coverage: "Cobertura espacial",
     temporal_coverage: "Cobertura temporal",
-    entity: "Entidade",
+    entity: "Nível da observação",
     update_frequency: "Frequência de atualização",
     raw_quality_tier: "Qualidade da fonte original",
   };
@@ -412,8 +483,6 @@ export default function SearchPage({
       />
 
       <Stack
-        justifyContent="flex-start"
-        alignItems="flex-start"
         spacing={isMobileMode ? 10 : 0}
         width="90%"
         maxWidth="1264px"
@@ -425,6 +494,7 @@ export default function SearchPage({
           alignItems="flex-start"
           minWidth={{ base: "100%", lg: "320px" }}
           maxWidth={{ base: "100%", lg: "320px" }}
+          borderRight={isMobileMode ? "" : "1px solid #DEDFE0"}
           padding={isMobileMode ? "" : "0 20px 0 0"}
           key={filterKey}
         >
@@ -658,177 +728,204 @@ export default function SearchPage({
           overflow="hidden"
           width="100%"
           paddingLeft={isMobileMode ? "" : "40px"}
-          borderLeft={isMobileMode ? "" : "1px solid #DEDFE0"}
         >
-          <Flex width="100%" justify="center" align="baseline">
-            <Heading
-              width="100%"
-              fontFamily="Ubuntu"
-              fontSize="26px"
-              fontWeight="400"
-              letterSpacing="-0.2px"
-              color="#252A32"
-            >
-              {data?.count || "..."} {`conjunto${data?.count > 1 ? "s": ""} encontrado${data?.count > 1 ? "s": ""}`}
-              {search ? " para " + search : ""}
-            </Heading>
-            {userData?.is_admin ? (
-              <Button
-                w="170px"
-                backgroundColor="#42B0FF"
-                colorScheme="blue"
-                onClick={datasetDisclosure.onOpen}
-                leftIcon={
-                  <Icon>
-                    <FontAwesomeIcon icon={faPlus} />
-                  </Icon>
-                }
-                marginLeft="auto"
-              >
-                Criar Conjunto
-              </Button>
-            ) : (
-              <></>
-            )}
-          </Flex>
-          <Stack
-            overflow="auto"
-            width="90vw"
-            margin="16px 0px 24px !important"
-            whiteSpace="nowrap"
-            spacing={3}
-            direction={{ base: "column", lg: "row" }}
-          >
-            {Object.entries(paramFilters)
-              .filter(([k, v]) => v.length > 0)
-              .map(([k, values]) => (
-                <FilterTags
-                  translations={availableOptionsTranslations}
-                  label={fieldTranslations[k]}
-                  fieldName={k}
-                  values={
-                    k === "temporal_coverage"
-                      ? [`${values[0]}-${values[values.length - 1]}`]
-                      : values
-                  }
-                  paramFilters={paramFilters}
-                  setParamFilters={setParamFilters}
-                />
-              ))}
-          </Stack>
-          <HStack
-            fontFamily="Lato"
-            letterSpacing="0.5px"
-            fontWeight="300"
-            fontSize="16px"
-            color="#6F6F6F"
-          >
-            <Stack
-              alignItems="center"
-              direction="row"
-              spacing="8px"
-            >
-              <Text whiteSpace="nowrap">Ordenar:</Text>
-              <Select
-                fontFamily="Lato"
-                minWidth="150px"
-                color="#252A32"
-                borderRadius="16px"
-                focusBorderColor="#42B0FF"
-                border="1px solid #DEDFE0"
-                height="40px"
-                value={order}
-                onChange={(event) => {
-                  setOrder(event.target.value);
-                }}
-              >
-                <option value="score">Mais relevantes</option>
-                <option value="recent">Mais recentes</option>
-                <option value="popular">Mais populares</option>
-              </Select>
-            </Stack>
-          </HStack>
-          <VStack
-            width="100%"
-            alignItems="flex-start"
-            spacing={3}
-            padding="28px 0px"
-          >
-            {isLoading
-              ? new Array(10).fill(0).map(() => (
-                <>
-                  <Skeleton width="100%" height="130px" /> <Divider />
-                </>
-              ))
-              : (data?.datasets || []).map((d) => (
-                <>
-                  <Database
-                    link={`/dataset/${d.name}`}
-                    name={d.title || "Conjunto sem nome"}
-                    image={
-                      "https://basedosdados.org/uploads/group/" +
-                      d.organization.image_url
-                    }
-                    organization={d.organization}
-                    tags={d.tags.map((g) => g.name)}
-                    size={
-                      d.resources.filter((r) => r.bdm_file_size).length > 0
-                        ? d.resources.filter((r) => r.bdm_file_size)[0]
-                          .bdm_file_size
-                        : null
-                    }
-                    temporalCoverage={unionArrays(
-                      d.resources
-                        .filter((r) => r?.temporal_coverage?.length)
-                        .map((r) => r.temporal_coverage)
-                    ).sort()}
-                    tableNum={
-                      d.resources.filter(
-                        (r) => r.resource_type === "bdm_table"
-                      ).length
-                    }
-                    externalLinkNum={
-                      d.resources.filter(
-                        (r) => r.resource_type === "external_link"
-                      ).length
-                    }
-                    informationRequestNum={
-                      d.resources.filter(
-                        (r) => r.resource_type === "information_request"
-                      ).length
-                    }
-                    updatedSince={d.metadata_modified}
-                    updatedAuthor="Ricardo Dahis"
-                    categories={d.groups.map((g) => [g.name, g.display_name])}
-                    spatialCoverage={null}
-                    updateFrequency={
-                      d.resources.filter((r) => r.update_frequency).length >
-                        0
-                        ? d.resources.filter((r) => r.update_frequency)[0]
-                          .update_frequency
-                        : null
-                    }
-                    isPlus={isBdPlus(d)}
-                  />
-                  <Divider border="0" borderBottom="1px solid #DEDFE0" opacity={1}/>
-                </>
-              ))}
-            <ReactPaginate
-              previousLabel={isMobileMode ? "<" : "Anterior"}
-              nextLabel={isMobileMode ? ">" : "Próxima"}
-              breakLabel={"..."}
-              breakClassName={"break-me"}
-              forcePage={page - 1}
-              pageCount={pageSize}
-              marginPagesDisplayed={isMobileMode ? 0 : 1}
-              pageRangeDisplayed={isMobileMode ? 0 : 2}
-              onPageChange={(data) => {
-                setPage(data.selected + 1);
-              }}
-              containerClassName={"pagination"}
-              activeClassName={"active"}
+          {data?.datasets.length === 0 ?
+            <DataProposalBox 
+              image= {true}
+              display= "Ooops..."
+              text= "Infelizmente não encontramos nenhum conjunto para sua busca."
+              bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
             />
-          </VStack>
+          :
+          <>
+            <Flex width="100%" justify="center" align="baseline">
+              <Heading
+                width="100%"
+                fontFamily="Ubuntu"
+                fontSize="26px"
+                fontWeight="400"
+                letterSpacing="-0.2px"
+                color="#252A32"
+              >
+                {data?.count || "..."} {`conjunto${data?.count > 1 ? "s": ""} encontrado${data?.count > 1 ? "s": ""}`}
+                {search ? " para " + search : ""}
+              </Heading>
+
+              {userData?.is_admin && 
+                <Button
+                  w="170px"
+                  backgroundColor="#42B0FF"
+                  colorScheme="blue"
+                  onClick={datasetDisclosure.onOpen}
+                  leftIcon={
+                    <Icon>
+                      <FontAwesomeIcon icon={faPlus} />
+                    </Icon>
+                  }
+                  marginLeft="auto"
+                >
+                  Criar Conjunto
+                </Button>
+              }
+            </Flex>
+
+            <Stack
+              overflow="auto"
+              width="100%"
+              flexWrap="wrap"
+              gridGap={3}
+              margin="16px 0px 24px !important"
+              whiteSpace="nowrap"
+              spacing={0}
+              direction={{ base: "column", lg: "row" }}
+            >
+              {Object.entries(paramFilters)
+                .filter(([k, v]) => v.length > 0)
+                .map(([k, values]) => (
+                  <FilterTags
+                    translations={availableOptionsTranslations}
+                    label={fieldTranslations[k]}
+                    fieldName={k}
+                    values={
+                      k === "temporal_coverage"
+                        ? [`${values[0]}-${values[values.length - 1]}`]
+                        : values
+                    }
+                    paramFilters={paramFilters}
+                    setParamFilters={setParamFilters}
+                  />
+                ))}
+            </Stack>
+
+            <HStack
+              fontFamily="Lato"
+              letterSpacing="0.5px"
+              fontWeight="300"
+              fontSize="16px"
+              color="#6F6F6F"
+            >
+              <Stack
+                alignItems="center"
+                direction="row"
+                spacing="8px"
+              >
+                <Text whiteSpace="nowrap">Ordenar:</Text>
+                <Select
+                  fontFamily="Lato"
+                  minWidth="150px"
+                  color="#252A32"
+                  borderRadius="16px"
+                  focusBorderColor="#42B0FF"
+                  border="1px solid #DEDFE0"
+                  height="40px"
+                  value={order}
+                  onChange={(event) => {
+                    setOrder(event.target.value);
+                  }}
+                >
+                  <option value="score">Mais relevantes</option>
+                  <option value="recent">Mais recentes</option>
+                  <option value="popular">Mais populares</option>
+                </Select>
+              </Stack>
+            </HStack>
+
+            <VStack
+              width="100%"
+              alignItems="flex-start"
+              spacing={3}
+              padding="28px 0px"
+            >
+              {isLoading
+                ? new Array(10).fill(0).map(() => (
+                  <>
+                    <Skeleton width="100%" height="130px" /> <Divider />
+                  </>
+                ))
+                : (data?.datasets || []).map((d) => (
+                  <>
+                    <Database
+                      link={`/dataset/${d.name}`}
+                      name={d.title || "Conjunto sem nome"}
+                      image={
+                        "https://basedosdados.org/uploads/group/" +
+                        d.organization.image_url
+                      }
+                      organization={d.organization}
+                      tags={d.tags.map((g) => g.name)}
+                      size={
+                        d.resources.filter((r) => r.bdm_file_size).length > 0
+                          ? d.resources.filter((r) => r.bdm_file_size)[0]
+                            .bdm_file_size
+                          : null
+                      }
+                      temporalCoverage={unionArrays(
+                        d.resources
+                          .filter((r) => r?.temporal_coverage?.length)
+                          .map((r) => r.temporal_coverage)
+                      ).sort()}
+                      tableNum={
+                        d.resources.filter(
+                          (r) => r.resource_type === "bdm_table"
+                        ).length
+                      }
+                      externalLinkNum={
+                        d.resources.filter(
+                          (r) => r.resource_type === "external_link"
+                        ).length
+                      }
+                      informationRequestNum={
+                        d.resources.filter(
+                          (r) => r.resource_type === "information_request"
+                        ).length
+                      }
+                      updatedSince={d.metadata_modified}
+                      updatedAuthor="Ricardo Dahis"
+                      categories={d.groups.map((g) => [g.name, g.display_name])}
+                      spatialCoverage={null}
+                      updateFrequency={
+                        d.resources.filter((r) => r.update_frequency).length >
+                          0
+                          ? d.resources.filter((r) => r.update_frequency)[0]
+                            .update_frequency
+                          : null
+                      }
+                      isPlus={isBdPlus(d)}
+                    />
+                    <Divider border="0" borderBottom="1px solid #DEDFE0" opacity={1}/>
+                  </>
+                ))}
+              <ReactPaginate
+                previousLabel={isMobileMode ? "<" : "Anterior"}
+                nextLabel={isMobileMode ? ">" : "Próxima"}
+                breakLabel={"..."}
+                breakClassName={"break-me"}
+                forcePage={page - 1}
+                pageCount={pageSize}
+                marginPagesDisplayed={isMobileMode ? 0 : 1}
+                pageRangeDisplayed={isMobileMode ? 0 : 2}
+                onPageChange={(data) => {
+                  setPage(data.selected + 1);
+                }}
+                containerClassName={"pagination"}
+                activeClassName={"active"}
+              />
+            </VStack>
+            
+            {pageSize === 1 &&
+              <DataProposalBox 
+                text= "Ainda não encontrou o que está procurando?"
+                bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
+              />
+            }
+            {page >= 2 &&
+              <DataProposalBox 
+                text= "Ainda não encontrou o que está procurando?"
+                bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
+              />
+            }
+          </>
+          }
           )
         </VStack>
       </Stack>
