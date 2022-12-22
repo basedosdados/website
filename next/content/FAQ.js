@@ -263,6 +263,23 @@ export const QuestionFAQ = [
     id: "level-of-observation"
   },
   {
+    question: "Onde eu posso sugerir a inclusão de novos dados na plataforma?",
+    answer: function() {
+      return (
+        <div id="data-proposal">
+          <p>
+            É muito importante saber quais dados a nossa comunidade precisa para que a equipe adicione os conjuntos solicitados no processo de priorização de dados.
+            Temos um canal no Discord preparado para receber suas propostas e sugestões, basta você seguir os passos indicados
+            lá. Acesse por <a href="https://discord.gg/Ec7tfBaTVV" target="_blank"> aqui</a>.
+          </p>
+        </div>
+      )
+    },
+    categories: ["Dados"],
+    keywords: "inclusão, solicitação, proposta, sugestão",
+    id: "data-proposal"
+  },
+  {
     question: "O que é o datalake da BD no BigQuery?",
     answer: function() {
       return (
