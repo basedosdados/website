@@ -102,7 +102,7 @@ body {
   list-style-type: none;
   display: flex;
   align-self: center;
-  padding-top: 5px;
+  padding-top: 36px;
 }
 
 .pagination li {

@@ -5,6 +5,7 @@ import {
   Text,
   Grid,
   GridItem,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import Subtitle from "../atoms/Subtitle";
@@ -33,6 +34,8 @@ import GithubIcon from "../../public/img/icons/githubIcon";
 import CkanIcon from "../../public/img/icons/ckanIcon";
 import WebIcon from "../../public/img/icons/webIcon";
 import TwitterIcon from "../../public/img/icons/twitterIcon";
+import FileIcon from "../../public/img/icons/fileIcon";
+import InfoIcon from "../../public/img/icons/infoIcon";
 
 export function BdmTablePage({
   availableOptionsTranslations,
@@ -180,7 +183,7 @@ export function BdmTablePage({
     resource.spatial_coverage = resource.spatial_coverage.sort();
   }
 
-  const AddInfoTextBase = ({title, text, children, ...style}) => {
+  const AddInfoTextBase = ({title, text, info, children, ...style}) => {
     return (
       <Box display="block" alignItems="center" gridGap="8px" {...style}>
         <Text
@@ -190,7 +193,30 @@ export function BdmTablePage({
           letterSpacing="0.3px"
           marginBottom="8px"
           color="#252A32"
-        >{title}</Text>
+        >{title}
+          {info &&
+            <Tooltip
+              label={info}
+              hasArrow
+              bg="#2A2F38"
+              fontSize="16px"
+              fontWeight="500"
+              padding="10px 16px"
+              marginTop="8px"
+              color="#FFF"
+              borderRadius="6px"
+            >
+              <InfoIcon
+                alt="tip"
+                marginLeft="8px"
+                cursor="pointer"
+                fill="#A3A3A3"
+                width="16px"
+                height="16px"
+              />
+            </Tooltip>
+          }
+        </Text>
         <SectionText>
           {translateField(text, availableOptionsTranslations)}
         </SectionText>
@@ -365,6 +391,9 @@ export function BdmTablePage({
             <PartitionIcon alt="Partições no BigQuery" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Partições no BigQuery"
+              info="As partições são divisões feitas em uma tabela para facilitar o gerenciamento e a consulta aos dados.
+              Ao segmentar uma tabela grande em partições menores, a quantidade de bytes lidos é reduzida,
+              o que ajuda a controlar os custos e melhora o desempenho da consulta."
               text={resource.partitions}
             />
           </GridItem>
@@ -408,6 +437,15 @@ export function BdmTablePage({
             <AddInfoTextBase
               title="Versão"
               text={resource.version}
+            />
+          </GridItem>
+
+          <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
+            <FileIcon alt="Arquivos auxiliares" width="22px" height="22px" fill="#D0D0D0"/>
+            <AddInfoTextBase
+              title="Arquivos auxiliares"
+              info="Os arquivos dão mais contexto e ajudam a entender melhor os dados disponíveis.
+              Podem incluir notas técnicas, descrições de coleta e amostragem, etc."
             />
           </GridItem>
         </Grid>

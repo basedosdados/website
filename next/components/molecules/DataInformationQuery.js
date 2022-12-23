@@ -418,7 +418,6 @@ bd_read_table, ///
                   paddingX="30px"
                   width="100%"
                   gridGap="6px"
-                  _hover={{opacity : "0.8"}}
                   onClick={() => window.open("https://apoia.se/basedosdados", "_blank")}
                 >
                   <CalendarIcon alt="doar mensalmente" width="20px" height="20px" fill="#FFF"/>
