@@ -211,7 +211,7 @@ function TableDatasets({
               label={tooltip[hander]}
               fontSize="16px"
               fontWeight="500"
-              padding="5px 15px"
+              padding="5px 16px 6px"
               marginTop="8px"
               color="#FFF"
               borderRadius="6px"
