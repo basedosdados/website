@@ -173,7 +173,7 @@ export default function SearchPage({
 
   const DataProposalBox = ({image, display, text, bodyText}) => {
     return (
-      <Stack alignItems="center" width="100%" spacing={0}>
+      <Stack alignItems="center" width="100%" spacing={0} marginTop={!display && "24px !important"}>
         {image && 
           <NotFoundImage
             transform={!isMobileMode && "translateX(-36px)"}
@@ -196,16 +196,16 @@ export default function SearchPage({
         <Text
           fontFamily="ubuntu"
           fontWeight="400"
-          fontSize="20px"
+          fontSize={display ? "20px" : "16px"}
           lineHeight="23px"
           letterSpacing="0.2px"
-          marginBottom="8px !important"
+          marginBottom="0 !important"
           textAlign="center"
         >
           {text}
         </Text>
         <BodyText
-          fontSize="18px"
+          fontSize={display ? "18px" : "16px"}
           lineHeight="28px"
           textAlign="center"
         >
@@ -213,19 +213,21 @@ export default function SearchPage({
         </BodyText>
         <HStack
           width="100%"
-          marginTop="24px !important"
-          spacing={isMobileMode ? 0 : "8px"}
+          marginTop={display ? "24px !important" : "16px !important"}
+          spacing={isMobileMode ? 0 : "16px"}
           justifyContent="center"
           alignItems={isMobileMode && "center"}
           flexDirection={isMobileMode && "column"}
           gridGap={isMobileMode && "16px"}
         >
           <RoundedButton
+            fontSize="15px"
             minWidth="240px"
             padding="10px 24px"
             onClick={() => window.open("https://discord.gg/Ec7tfBaTVV", "_blank")}
           >Fazer uma proposta</RoundedButton>
           <RoundedButton
+            fontSize="15px"
             minWidth="240px"
             backgroundColor="#FFF"
             border="1px solid #42B0FF"
