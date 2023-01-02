@@ -2,8 +2,9 @@ import {
   Stack,
   VStack,
   HStack,
-  Image,
+  Box
 } from "@chakra-ui/react";
+import Image from 'next/image';
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import { MainPageTemplate } from "../../components/templates/main";
@@ -102,16 +103,21 @@ export default function CaseStudies ({
             >{title}</Display>
           }
 
-          <Image
-            alt={displayTitle}
-            filter={!isMobileMod && "brightness(0.5)"}
-            width="fit-content"
-            maxWidth="100%"
-            height="fit-content"
-            maxHeight="450px"
+          <Box
+            position="relative"
+            width="100%"
+            height="450px"
+            overflow="hidden"
             borderRadius={isMobileMod ? "12px" : "24px"}
-            src={img}
-          />
+            filter={!isMobileMod && "brightness(0.5)"}
+          >
+            <Image
+              alt={displayTitle}
+              src={img}
+              layout="fill"
+              objectFit="cover"
+            />
+          </Box>
 
           {imgDescription && 
             <SectionText
@@ -140,13 +146,21 @@ export default function CaseStudies ({
             maxWidth="300px"
             alignItems="flex-start"
           >
-            <Image
-              alt={displayTitle}
+            <Box
+              position="relative"
+              width="100%"
+              height="85px"
+              overflow="hidden"
               marginBottom="32px"
-              width="fit-content"
-              height="fit-content"
-              src={logo}
-            />
+            >
+              <Image
+                alt={displayTitle}
+                src={logo.img}
+                width={logo.width}
+                height={logo.height}
+              />
+            </Box>
+
             <BodyText  fontSize="16px" letterSpacing="0.2px" fontWeight="400">Sobre</BodyText>
             <BodyText paddingBottom="32px" fontSize="16px" letterSpacing="0.2px" color="#6F6F6F">
               {about}
