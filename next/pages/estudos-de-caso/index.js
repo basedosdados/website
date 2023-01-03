@@ -1,13 +1,24 @@
 import {
   Stack,
+  Box
 } from "@chakra-ui/react";
 import Head from "next/head";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+
 import Display from "../../components/atoms/Display";
 import SectionTitle from "../../components/atoms/SectionTitle";
+import BodyText from "../../components/atoms/BodyText";
+import Link from "../../components/atoms/Link";
 import { MainPageTemplate } from "../../components/templates/main";
+import { CaseStudiesPaged } from "../../content/caseStudies";
 
 export default function CaseStudies ({}) {
+  const [CaseStudiesPages, setCaseStudiesPages] = useState([])
   
+  useEffect(() => {
+    setCaseStudiesPages(CaseStudiesPaged())
+  },[])
 
   return (
     <MainPageTemplate paddingX="24px">
@@ -42,10 +53,74 @@ export default function CaseStudies ({}) {
           Descubra por que as instituições ... a Base dos Dados 
         </SectionTitle>
 
-        {/* filtror */}
+        {/* filtro */}
 
-        <Stack spacing="32px">
+        <Stack
+          flexWrap="wrap"
+          flexDirection="row"
+          gridGap="32px"
+          spacing={0}
+          marginBottom="120px !important"
+        >
+          {CaseStudiesPages.length > 0 && 
+          CaseStudiesPages.map(elm => 
+            <Stack
+              key={elm.id}
+              width="400px"
+              spacing={0}
+            >
+              {/* Imagem banner */}
+              <Box
+                position="relative"
+                width="400px"
+                height="145px"
+                overflow="hidden"
+                borderRadius="16px"
+                marginBottom="24px"
+              >
+                <Image
+                  alt={elm.displayTitle}
+                  src={elm.img}
+                  layout="fill"
+                  objectFit="cover"
+                />
+              </Box>
 
+              {/* Imagem logo */}
+              <Box
+                position="relative"
+                width="100%"
+                height="45px"
+                overflow="hidden"
+                marginBottom="16px !important"
+              >
+                <Image
+                  alt={elm.displayTitle}
+                  src={elm.logo.img}
+                  width={elm.logo.width/2}
+                  height={elm.logo.height/2}
+                />
+              </Box>
+
+              <BodyText marginBottom="18px !important">
+                {elm.about}
+              </BodyText>
+
+              <Link
+                fontFamily="ubuntu"
+                fontWeight="500"
+                letterSpacing="0.1px"
+                fontSize="18px"
+                lineHeight="20px"
+                target="_self"
+                href={`/estudos-de-caso/${elm.id}`}
+                color="#42B0FF"
+                marginBottom="40px !important"
+              >
+                Leia o estudo de caso
+              </Link>
+            </Stack>
+          )}
         </Stack>
       </Stack>
     </MainPageTemplate>
