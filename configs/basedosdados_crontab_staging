@@ -1,2 +1,0 @@
-# Restore database backup from s3
-@weekly $HOME/basedosdados/restore_database_backup_from_s3.sh

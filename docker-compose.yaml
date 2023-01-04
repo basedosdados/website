@@ -1,112 +1,13 @@
-# docker-compose build && docker-compose up -d
-# If "docker-compose logs ckan" shows DB not ready, run "docker-compose restart ckan" a few times.
-
-version: "3.5"
+version: '3'
 
 services:
-  nginx:
-    image: nginx
-    ports:
-      - 80:80
-    depends_on:
-      - ckan
-      - next
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/"]
-      interval: 1m30s
-      timeout: 30s
-      retries: 5
-      start_period: 30s
-    restart: unless-stopped
-
-  ckan:
-    container_name: ckan
-    image: "bdd/ckan${VTAG}"
-    links:
-      - db
-      - solr
-      - redis
-    depends_on:
-      - db
-    environment:
-      # Defaults work with linked containers, change to use own Postgres, SolR, Redis or Datapusher
-      # TODO: remove these env vars if they are in production.ini
-      - CKAN_SQLALCHEMY_URL=postgresql://ckan:${POSTGRES_PASSWORD}@db/ckan
-      - CKAN_DATASTORE_WRITE_URL=postgresql://ckan:${POSTGRES_PASSWORD}@db/datastore
-      - CKAN_DATASTORE_READ_URL=postgresql://datastore_ro:${DATASTORE_READONLY_PASSWORD}@db/datastore
-      - CKAN_SOLR_URL=http://solr:8983/solr/ckan
-      - CKAN_DATAPUSHER_URL=http://datapusher:8800
-      - CKAN_SITE_URL=${CKAN_SITE_URL}
-      # - CKAN_MAX_UPLOAD_SIZE_MB=${CKAN_MAX_UPLOAD_SIZE_MB}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
-      - CKAN_REDIS_URL=redis://redis:6379/0
-      - BETTER_EXCEPTIONS=1
-      - WERKZEUG_DEBUG_PIN=off
-    command: ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "wsgi"]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
-      interval: 1m30s
-      timeout: 30s
-      retries: 5
-      start_period: 30s
-    restart: unless-stopped
-    mem_reservation: 2048M
-    cpus: 1.0
-
-  datapusher: # Not really used, ckan dependency
-    container_name: datapusher
-    image: clementmouchet/datapusher
-    ports:
-      - "8800:8800"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8800/"]
-      interval: 1m30s
-      timeout: 30s
-      retries: 5
-      start_period: 30s
-    restart: unless-stopped
-
-  db:
-    container_name: db
-    image: bdd/db
-    ports:
-      - 5432:5432
-    environment:
-      - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_USER=ckan
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "ckan"]
-      interval: 1m30s
-      timeout: 30s
-      retries: 5
-      start_period: 30s
-    restart: unless-stopped
-
-  solr:
-    container_name: solr
-    image: bdd/solr
-    # TODO: add healthcheck
-    restart: unless-stopped
-
-  redis: # Not really used, ckan dependency
-    container_name: redis
-    image: redis:latest
-    healthcheck:
-      test: ["CMD", "redis-cli","ping"]
-      interval: 1m30s
-      timeout: 30s
-      retries: 5
-      start_period: 30s
-    restart: unless-stopped
-
   next:
-    image: "bdd/next${VTAG}"
-    container_name: next
+    build:
+      context: next
+      dockerfile: Dockerfile
     ports:
-      - "3000:3000"
-    depends_on:
-      - ckan
-    # TODO: add healthcheck
-    restart: unless-stopped
+      - 3000:3000
+    volumes:
+      - ./next:/app
+    command: >
+      sh -c "yarn install && yarn run dev"

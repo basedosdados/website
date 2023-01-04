@@ -3,13 +3,13 @@ import { axiosInstance } from "../../axios";
 
 export function listDatasets() {
   return axios
-    .get(`http://ckan:5000/api/3/action/package_list`)
+    .get(`https://staging.basedosdados.org/api/3/action/package_list`)
     .then(({ data }) => data.result);
 }
 
 export function showDataset(id) {
   return axios
-    .get(`http://ckan:5000/api/3/action/package_show?id=${id}`)
+    .get(`https://staging.basedosdados.org/api/3/action/package_show?id=${id}`)
     .then(({ data }) => data.result);
 }
 
@@ -42,7 +42,7 @@ export function searchDatasets({
 export function getPopularDatalakeDatasets() {
   return axios
     .get(
-      `http://ckan:5000/api/3/action/bd_dataset_search?q=&page=1&order_by=popular&resource_type=bdm_table`
+      `https://staging.basedosdados.org/api/3/action/bd_dataset_search?q=&page=1&order_by=popular&resource_type=bdm_table`
     )
     .then(({ data }) => data.result.datasets);
 }
@@ -50,7 +50,7 @@ export function getPopularDatalakeDatasets() {
 export function getRecentDatalakeDatasets() {
   return axios
     .get(
-      `http://ckan:5000/api/3/action/bd_dataset_search?q=&page=1&order_by=recent&resource_type=bdm_table`
+      `https://staging.basedosdados.org/api/3/action/bd_dataset_search?q=&page=1&order_by=recent&resource_type=bdm_table`
     )
     .then(({ data }) => data.result.datasets);
 }
@@ -58,7 +58,7 @@ export function getRecentDatalakeDatasets() {
 export function getPopularTags() {
   return axios
     .get(
-      `http://ckan:5000/api/3/action/bd_dataset_search`
+      `https://staging.basedosdados.org/api/3/action/bd_dataset_search`
     )
     .then(({ data }) => data.result.tags);
 }
