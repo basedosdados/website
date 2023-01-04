@@ -451,6 +451,71 @@ export default function SearchPage({
     setPage(1);
   }, [paramFilters, search, order]);
 
+  const DatabaseCard = ({
+    name,
+    title,
+    imageUrl,
+    organization,
+    tags,
+    resources,
+    updatedSince,
+    groups,
+    isPlus
+  }) => {
+    const [urlImage, setUrlImage] = useState("")
+
+    useEffect(() => {
+      imageUrl.startsWith("https://") ? setUrlImage(imageUrl) : setUrlImage("https://basedosdados.org/uploads/group/" + imageUrl)
+    },[])
+
+    return (
+      <Database
+        link={`/dataset/${name}`}
+        name={title || "Conjunto sem nome"}
+        image={urlImage}
+        organization={organization}
+        tags={tags.map((g) => g.name)}
+        size={
+          resources.filter((r) => r.bdm_file_size).length > 0
+            ? resources.filter((r) => r.bdm_file_size)[0]
+              .bdm_file_size
+            : null
+        }
+        temporalCoverage={unionArrays(
+          resources.filter((r) => r?.temporal_coverage?.length)
+            .map((r) => r.temporal_coverage)
+        ).sort()}
+        tableNum={
+          resources.filter(
+            (r) => r.resource_type === "bdm_table"
+          ).length
+        }
+        externalLinkNum={
+          resources.filter(
+            (r) => r.resource_type === "external_link"
+          ).length
+        }
+        informationRequestNum={
+          resources.filter(
+            (r) => r.resource_type === "information_request"
+          ).length
+        }
+        updatedSince={updatedSince}
+        updatedAuthor="Ricardo Dahis"
+        categories={groups.map((g) => [g.name, g.display_name])}
+        spatialCoverage={null}
+        updateFrequency={
+          resources.filter((r) => r.update_frequency).length >
+            0
+            ? resources.filter((r) => r.update_frequency)[0]
+              .update_frequency
+            : null
+        }
+        isPlus={isBdPlus(isPlus)}
+      />
+    )
+  }
+
   return (
     <MainPageTemplate pages={pages}>
       <Head>
@@ -846,53 +911,16 @@ export default function SearchPage({
                 ))
                 : (data?.datasets || []).map((d) => (
                   <>
-                    <Database
-                      link={`/dataset/${d.name}`}
-                      name={d.title || "Conjunto sem nome"}
-                      image={
-                        "https://basedosdados.org/uploads/group/" +
-                        d.organization.image_url
-                      }
+                    <DatabaseCard 
+                      name={d.name}
+                      title={d.title}
+                      imageUrl={d.organization.image_url}
                       organization={d.organization}
-                      tags={d.tags.map((g) => g.name)}
-                      size={
-                        d.resources.filter((r) => r.bdm_file_size).length > 0
-                          ? d.resources.filter((r) => r.bdm_file_size)[0]
-                            .bdm_file_size
-                          : null
-                      }
-                      temporalCoverage={unionArrays(
-                        d.resources
-                          .filter((r) => r?.temporal_coverage?.length)
-                          .map((r) => r.temporal_coverage)
-                      ).sort()}
-                      tableNum={
-                        d.resources.filter(
-                          (r) => r.resource_type === "bdm_table"
-                        ).length
-                      }
-                      externalLinkNum={
-                        d.resources.filter(
-                          (r) => r.resource_type === "external_link"
-                        ).length
-                      }
-                      informationRequestNum={
-                        d.resources.filter(
-                          (r) => r.resource_type === "information_request"
-                        ).length
-                      }
+                      tags={d.tags}
+                      resources={d.resources}
                       updatedSince={d.metadata_modified}
-                      updatedAuthor="Ricardo Dahis"
-                      categories={d.groups.map((g) => [g.name, g.display_name])}
-                      spatialCoverage={null}
-                      updateFrequency={
-                        d.resources.filter((r) => r.update_frequency).length >
-                          0
-                          ? d.resources.filter((r) => r.update_frequency)[0]
-                            .update_frequency
-                          : null
-                      }
-                      isPlus={isBdPlus(d)}
+                      groups={d.groups}
+                      isPlus={d}
                     />
                     <Divider border="0" borderBottom="1px solid #DEDFE0" opacity={1}/>
                   </>
