@@ -47,11 +47,11 @@ build_config() {
     cp configs/basedosdados_crontab build/basedosdados_crontab
     cp configs/bashrc build/
 
-    if [[ $HOST == "ec2-user@staging.basedosdados.org" ]]; then
-        cp utils/restore_database_backup_from_s3.sh build/restore_database_backup_from_s3.sh && \
-        chmod +x build/restore_database_backup_from_s3.sh
-        cat configs/basedosdados_crontab_staging >> build/basedosdados_crontab
-    fi
+    # if [[ $HOST == "ec2-user@staging.basedosdados.org" ]]; then
+    #     cp utils/restore_database_backup_from_s3.sh build/restore_database_backup_from_s3.sh && \
+    #     chmod +x build/restore_database_backup_from_s3.sh
+    #     cat configs/basedosdados_crontab_staging >> build/basedosdados_crontab
+    # fi
 }
 
 send() {
