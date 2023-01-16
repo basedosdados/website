@@ -5,13 +5,14 @@ on:
     workflows: ["CI"]
     types:
       - completed
+  workflow_dispatch:
 
 env:
   IMAGE_NAME_STAGING: ghcr.io/basedosdados/website:staging
 
 jobs:
   deploy-staging:
-    if: github.ref_name == 'nextjs'
+    # if: github.ref_name == 'nextjs'
     name: Deploy Staging
     runs-on: ubuntu-latest
     environment:
@@ -21,6 +22,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3.3.0
+        with:
+          ref: nextjs
 
       - name: Import Secrets
         id: import_secrets

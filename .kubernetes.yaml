@@ -37,11 +37,11 @@ spec:
             periodSeconds: 10
           resources:
             requests:
-              cpu: 10m
-              memory: 10Mi
+              cpu: 500m
+              memory: 2048Mi
             limits:
-              cpu: 20m
-              memory: 50Mi
+              cpu: 1000m
+              memory: 4096Mi
       restartPolicy: Always
 ---
 # Service
