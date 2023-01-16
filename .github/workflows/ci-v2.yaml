@@ -22,6 +22,7 @@ jobs:
           node-version: 16
           cache: 'npm'
           cache-dependency-path: next/package-lock.json
+      - run: npm ci --prefix next
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
