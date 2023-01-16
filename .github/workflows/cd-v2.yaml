@@ -11,7 +11,7 @@ env:
 
 jobs:
   deploy-staging:
-    if: github.ref_name == 'nextjs'
+    # if: github.ref_name == 'nextjs'
     name: Deploy Staging
     runs-on: ubuntu-latest
     environment:
