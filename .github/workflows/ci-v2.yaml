@@ -26,8 +26,8 @@ jobs:
       - name: Build and push staging tagged image
         uses: docker/build-push-action@v2
         with:
-          context: .
-          file: ./next/Dockerfile
+          context: next
+          file: Dockerfile
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:staging
