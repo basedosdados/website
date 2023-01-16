@@ -24,6 +24,7 @@ spec:
       containers:
         - name: website-nextjs-staging
           image: gcr.io/PROJECT_ID/IMAGE_NAME:TAG
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
           envFrom:
@@ -37,11 +38,11 @@ spec:
             periodSeconds: 10
           resources:
             requests:
-              cpu: 500m
-              memory: 2048Mi
-            limits:
               cpu: 1000m
-              memory: 4096Mi
+              memory: 2G
+            # limits:
+            #   cpu: 2000m
+            #   memory: 4G
       restartPolicy: Always
 ---
 # Service
