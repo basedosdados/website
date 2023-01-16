@@ -5,6 +5,7 @@ on:
     workflows: ["CI"]
     types:
       - completed
+  workflow_dispatch:
 
 env:
   IMAGE_NAME_STAGING: ghcr.io/basedosdados/website:staging
