@@ -2,12 +2,11 @@ version: '3'
 
 services:
   next:
+    container_name: nextjs
     build:
       context: next
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - ${NEXT_PORT}:3000
     volumes:
       - ./next:/app
-    command: >
-      sh -c "yarn install && yarn run dev"
