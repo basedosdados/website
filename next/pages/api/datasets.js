@@ -19,7 +19,7 @@ export function searchDatasets({
   page = 1,
   paramFilters = {},
 }) {
-  let url = `/bd_dataset_search?q=${search}&page=${page}`;
+  let url = `https://staging.basedosdados.org/api/3/action/bd_dataset_search?q=${search}&page=${page}`;
   let entries = Object.entries(paramFilters);
 
   if (search == null) return { count: 0, results: [] };
