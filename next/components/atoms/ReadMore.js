@@ -5,7 +5,7 @@ import {
 import { useState, useEffect } from "react";
 import LinkDash from "./LinkDash";
 
-export default function ReadMore({ children, textSize = 240 ,isMobileMod, ...props}) {
+export default function ReadMore({ children, textSize = 240, isMobileMod, ...props}) {
   const [isReadMore, setIsReadMore] = useState(true)
   const text = children
 

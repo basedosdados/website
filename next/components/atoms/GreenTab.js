@@ -22,5 +22,5 @@ export default function GreenTab({ children, ...style }) {
     >
       {children}
     </Tab>
-  );
+  )
 }

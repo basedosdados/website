@@ -80,7 +80,7 @@ export function InformationRequestPage({
 
     if(typeof field === "object") {
       if(!field) return "Não listado"
-      
+
       if(field.length === 0) {
         return "Não listado"
       } else {
@@ -114,10 +114,15 @@ export function InformationRequestPage({
     }
   }
 
-  const PartnershipContainer = ({title, description, url, src }) => {
+  const PartnershipContainer = ({
+    title,
+    description,
+    url,
+    src
+  }) => {
 
     return (
-      <HStack margin="10px 0" alignItems="flex-start" gridGap={2}>\
+      <HStack margin="10px 0" alignItems="flex-start" gridGap={2}>
         <Box
           display="flex"
           alignItems="center"
@@ -169,12 +174,10 @@ export function InformationRequestPage({
           loadSchemaFunction={getInformationRequestSchema}
           schemaName="Pedidos LAI"
           prepareData={(data) => {
-            data.country_ip_address_required =
-              data.country_ip_address_required || [];
+            data.country_ip_address_required = data.country_ip_address_required || [];
             data.maintainer = data.maintainer || "";
             data.maintainer_email = data.maintainer_email || "";
             data.resource_type = "information_request";
-
             return data;
           }}
         />
@@ -300,7 +303,7 @@ export function InformationRequestPage({
               <UserIcon alt="Pedido feito por" width="22px" height="22px" fill="#D0D0D0"/>
               <AddInfoTextBase
                 title="Pedido feito por"
-                text={resource.requested_by.name}
+                text={resource.requested_by?.name || "Não listado"}
               />
             </GridItem>
           </Grid>
