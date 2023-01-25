@@ -29,19 +29,19 @@ import CrossIcon from "../../../public/img/icons/crossIcon";
 import {
   getListDatasets,
   getShowDataset,
-  getOrganization,
+  getOrganizationById,
   getInformationRequest
 } from "../../api/new/datasets";
 import { withPages } from "../../../hooks/pages.hook";
 
 export async function getStaticProps(context) {
   const dataset = await getShowDataset(context.params.dataset)
-  const organization = await getOrganization(dataset.organization)
+  const organizationById = await getOrganizationById(dataset.organization.slug)
 
   return await withPages({
     props: {
       dataset,
-      organization
+      organizationById
     },
     revalidate: 1,
   })
@@ -60,14 +60,14 @@ export async function getStaticPaths(context) {
 
 export default function DatasetPage ({
   dataset,
-  organization
+  organizationById
 }) {
   const [tabIndex, setTabIndex] = useState(0)
-
+console.log(dataset)
   return (
     <MainPageTemplate>
       <Head>
-        <title>{dataset.name_pt} – Base dos Dados</title>
+        <title>{dataset.namePt} – Base dos Dados</title>
 
         <link
           rel="image_src"
@@ -85,7 +85,7 @@ export default function DatasetPage ({
         />
         <meta
           property="og:title"
-          content={`${dataset.name_pt} – Base dos Dados`}
+          content={`${dataset.namePt} – Base dos Dados`}
           key="ogtitle"
         />
         {/* <meta property="og:description" content={dataset.notes} key="ogdesc" /> */}
@@ -122,7 +122,7 @@ export default function DatasetPage ({
               maxWidth="970px"
               paddingBottom="8px"
             >
-              {dataset.name_pt || "Conjunto sem nome"}
+              {dataset.namePt || "Conjunto sem nome"}
             </BigTitle>
 
             <ReadMore minHeight="70px" isMobileMod={isMobileMod()}>
@@ -134,12 +134,12 @@ export default function DatasetPage ({
                 <Subtitle>Organização</Subtitle>
                 <Link
                   marginTop="4px !important"
-                  href={`/dataset?organization=${organization.slug}`}
+                  href={`/dataset?organization=${organizationById.website}`}
                 >
                   <SectionText
                     fontSize={isMobileMod() ? "14px" : "16px"}
                   >
-                    {organization.name_pt}
+                    {organizationById.namePt || organizationById.nameEn}
                   </SectionText>
                 </Link>
               </VStack>
@@ -206,10 +206,10 @@ export default function DatasetPage ({
 
             {dataset.id === "br-ibge-ipca" &&
               <TabPanel padding="0px">
-                <DashboardsPage
+                {/* <DashboardsPage
                   dataset={dataset}
                   availableOptionsTranslations={availableOptionsTranslations}
-                />
+                /> */}
               </TabPanel>
             }
           </TabPanels>

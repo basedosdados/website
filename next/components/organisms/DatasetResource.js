@@ -2,9 +2,16 @@ import {
   Stack,
   VStack
 } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
+
 import { SimpleButton } from "../atoms/SimpleButton";
 import { FilterAccordion } from "../atoms/FilterAccordion";
+
+import {
+  getInformationRequest
+} from "../../pages/api/new/datasets";
 
 import CrossIcon from "../../public/img/icons/crossIcon";
 
@@ -73,10 +80,39 @@ function AdminButtons() {
   )
 }
 
+export async function getStaticProps() {
+
+}
+
 export default function DatasetResource({
   dataset
 }) {
-console.log(dataset)
+  const router = useRouter()
+  const { query } = router
+  const [tables, setTables] = useState([])
+  const [rawDataSources, setRawDataSources] = useState([])
+  const [informationRequests, setInformationRequests] = useState([])
+  const [ currentData, setCurrentData ] = useState({})
+
+  const pushQuery = (key, value) => {
+    router.push({
+      pathname: `/dataset/v2/${query.dataset}`,
+      query: { [key]: value }
+    },
+      undefined, { shallow: true }
+    )
+  }
+
+  useEffect(() => {
+    const dataset_tables = dataset.tables.edges.map((elm) => elm.node)
+    const raw_data_sources = dataset.rawDataSources.edges.map((elm) => elm.node)
+    const information_request = dataset.informationRequests.edges.map((elm) => elm.node)
+
+    setTables(dataset_tables)
+    setRawDataSources(raw_data_sources)
+    setInformationRequests(information_request)
+  },[dataset])
+
   return (
     <Stack
       paddingTop="24px"
@@ -94,46 +130,55 @@ console.log(dataset)
       >
         <AdminButtons/>
 
-        {dataset?.tables.length > 0 &&
+        {tables?.length > 0 &&
           <FilterAccordion
             alwaysOpen={true}
-            choices={dataset.tables}
-            value={dataset.tables.slug}
+            choices={tables}
+            value={tables.slug}
             valueField="slug"
-            displayField="name_pt"
+            displayField="namePt"
             fieldName="Tabelas tratadas"
             bdPlus={true}
             isHovering={false}
+            onChange={(id) => {
+              pushQuery("bdm_tables", slug)
+            }}
             // onChange
             // onToggle
             // isOpen
           />
         }
 
-        {dataset?.raw_data_sources.length > 0 &&
+        {rawDataSources?.length > 0 &&
           <FilterAccordion
             alwaysOpen={true}
-            choices={dataset.raw_data_sources}
-            value={dataset.raw_data_sources.slug}
+            choices={rawDataSources}
+            value={rawDataSources.slug}
             valueField="slug"
-            displayField="name_pt"
+            displayField="namePt"
             fieldName="Fontes originais"
             isHovering={false}
+            onChange={(id) => {
+              pushQuery("raw_data_sources", slug)
+            }}
             // onChange
             // onToggle
             // isOpen
           />
         }
 
-        {dataset?.information_requests.length > 0 &&
+        {informationRequests?.length > 0 &&
           <FilterAccordion
             alwaysOpen={true}
-            choices={dataset.information_requests}
-            value={dataset.information_requests.slug}
+            choices={informationRequests}
+            value={informationRequests.slug}
             valueField="slug"
-            displayField="name_pt"
+            displayField="namePt"
             fieldName="Pedidos LAI"
             isHovering={false}
+            onChange={(id) => {
+              pushQuery("information_request", slug)
+            }}
             // onChange
             // onToggle
             // isOpen
