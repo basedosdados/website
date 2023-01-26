@@ -2,20 +2,41 @@ import axios from "axios";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL
 
-export function getListDatasets() {
-  return axios
-    .get(`https://staging.backend.dados.rio/api/v1/public/datasets/`)
-    .then(({ data }) => data.results);
+export async function getListDatasets() {
+  const res = await axios({
+    url: baseUrl,
+    method: "POST",
+    data: {
+      query: `
+      query {
+        allDataset {
+          edges {
+            node {
+              _id
+            }
+          }
+        }
+      }
+      `
+    },
+    variables: null
+  })
+  try {
+    const data = res.data.data.allDataset.edges.map((res) => res.node._id)
+    return data
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 export async function getShowDataset(id) {
   const res = await axios({
     url: baseUrl,
-    method: "post",
+    method: "POST",
     data: {
       query: `
       query {
-        allDataset (slug: "${id}"){
+        allDataset (id: "${id}") {
           edges {
             node {
               id
@@ -23,11 +44,16 @@ export async function getShowDataset(id) {
               namePt
               nameEn
               organization {
+                _id
                 slug
+                namePt
+                nameEn
+                website
               }
               informationRequests {
                 edges {
                   node {
+                    _id
                     slug
                     namePt
                     nameEn
@@ -37,6 +63,7 @@ export async function getShowDataset(id) {
               rawDataSources {
                 edges {
                   node {
+                    _id
                     slug
                     namePt
                     nameEn
@@ -46,6 +73,7 @@ export async function getShowDataset(id) {
               tables {
                 edges {
                   node {
+                    _id
                     slug
                     namePt
                     nameEn
@@ -68,73 +96,10 @@ export async function getShowDataset(id) {
   }
 }
 
-export async function getAllOrganization() {
-  const res = await axios({
-    url: baseUrl,
-    method: "post",
-    data: {
-      query: `
-      query {
-        allOrganization {
-          edges {
-            node {
-              _id
-              slug
-              namePt
-              nameEn
-              website
-            }
-          }
-        }
-      }
-      `,
-      variables: null
-    }
-  })
-  try {
-    const data = res.data.data.allOrganization.edges
-    return data
-  } catch (error) {
-    console.error(error)
-  }
-}
-
-
-export async function getOrganizationById(id) {
-  const res = await axios({
-    url: baseUrl,
-    method: "post",
-    data: {
-      query: `
-      query {
-        allOrganization (slug: "${id}"){
-          edges {
-            node {
-              _id
-              slug
-              namePt
-              nameEn
-              website
-            }
-          }
-        }
-      }
-      `,
-      variables: null
-    }
-  })
-  try {
-    const data = res.data.data.allOrganization.edges[0].node
-    return data
-  } catch (error) {
-    console.error(error)
-  }
-}
-
 export async function getInformationRequest(id) {
   const res = await axios({
     url: baseUrl,
-    method: "post",
+    method: "POST",
     data: {
       query: `
       query {

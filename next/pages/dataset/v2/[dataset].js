@@ -29,19 +29,17 @@ import CrossIcon from "../../../public/img/icons/crossIcon";
 import {
   getListDatasets,
   getShowDataset,
-  getOrganizationById,
   getInformationRequest
 } from "../../api/new/datasets";
+
 import { withPages } from "../../../hooks/pages.hook";
 
 export async function getStaticProps(context) {
   const dataset = await getShowDataset(context.params.dataset)
-  const organizationById = await getOrganizationById(dataset.organization.slug)
 
   return await withPages({
     props: {
       dataset,
-      organizationById
     },
     revalidate: 1,
   })
@@ -52,7 +50,7 @@ export async function getStaticPaths(context) {
 
   return {
     paths: datasets.map((res) => ({
-      params: { dataset: res.id }
+      params: { dataset: res }
     })),
     fallback: "blocking"
   }
@@ -60,10 +58,9 @@ export async function getStaticPaths(context) {
 
 export default function DatasetPage ({
   dataset,
-  organizationById
 }) {
   const [tabIndex, setTabIndex] = useState(0)
-console.log(dataset)
+
   return (
     <MainPageTemplate>
       <Head>
@@ -134,12 +131,12 @@ console.log(dataset)
                 <Subtitle>Organização</Subtitle>
                 <Link
                   marginTop="4px !important"
-                  href={`/dataset?organization=${organizationById.website}`}
+                  href={`/dataset?organization=${dataset.organization.website}`}
                 >
                   <SectionText
                     fontSize={isMobileMod() ? "14px" : "16px"}
                   >
-                    {organizationById.namePt || organizationById.nameEn}
+                    {dataset.organization.namePt || dataset.organization.nameEn}
                   </SectionText>
                 </Link>
               </VStack>

@@ -1,6 +1,6 @@
 import {
   Stack,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -8,6 +8,8 @@ import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 
 import { SimpleButton } from "../atoms/SimpleButton";
 import { FilterAccordion } from "../atoms/FilterAccordion";
+
+import InformationRequestPage from "../organisms/new/InformationRequestPage";
 
 import {
   getInformationRequest
@@ -92,7 +94,7 @@ export default function DatasetResource({
   const [tables, setTables] = useState([])
   const [rawDataSources, setRawDataSources] = useState([])
   const [informationRequests, setInformationRequests] = useState([])
-  const [ currentData, setCurrentData ] = useState({})
+  const [currentData, setCurrentData] = useState({})
 
   const pushQuery = (key, value) => {
     router.push({
@@ -102,6 +104,14 @@ export default function DatasetResource({
       undefined, { shallow: true }
     )
   }
+
+  // console.log(query)
+
+  useEffect(() => {
+    if(query.bdm_tables) return console.log(0)
+    if(query.raw_data_sources) return console.log(1)
+    if(query.information_request) return console.log(2)
+  },[query])
 
   useEffect(() => {
     const dataset_tables = dataset.tables.edges.map((elm) => elm.node)
@@ -134,18 +144,16 @@ export default function DatasetResource({
           <FilterAccordion
             alwaysOpen={true}
             choices={tables}
-            value={tables.slug}
-            valueField="slug"
+            value={query.bdm_tables}
+            valueField="_id"
             displayField="namePt"
             fieldName="Tabelas tratadas"
             bdPlus={true}
             isHovering={false}
             onChange={(id) => {
-              pushQuery("bdm_tables", slug)
+              pushQuery("bdm_tables", id)
             }}
-            // onChange
             // onToggle
-            // isOpen
           />
         }
 
@@ -153,17 +161,15 @@ export default function DatasetResource({
           <FilterAccordion
             alwaysOpen={true}
             choices={rawDataSources}
-            value={rawDataSources.slug}
-            valueField="slug"
+            value={query.raw_data_sources}
+            valueField="_id"
             displayField="namePt"
             fieldName="Fontes originais"
             isHovering={false}
             onChange={(id) => {
-              pushQuery("raw_data_sources", slug)
+              pushQuery("raw_data_sources", id)
             }}
-            // onChange
             // onToggle
-            // isOpen
           />
         }
 
@@ -171,17 +177,38 @@ export default function DatasetResource({
           <FilterAccordion
             alwaysOpen={true}
             choices={informationRequests}
-            value={informationRequests.slug}
-            valueField="slug"
+            value={query.information_request}
+            valueField="_id"
             displayField="namePt"
             fieldName="Pedidos LAI"
             isHovering={false}
             onChange={(id) => {
-              pushQuery("information_request", slug)
+              pushQuery("information_request", id)
             }}
-            // onChange
             // onToggle
-            // isOpen
+          />
+        }
+      </VStack>
+      <VStack
+        width="100%"
+        overflow="hidden"
+        marginLeft={{base:"0", lg: "32px !important", xl: "40px !important"}}
+        alignItems="flex-start"
+        flex="1"
+      >
+        {query.bdm_tables &&
+          <InformationRequestPage
+            resource={currentData}
+          />
+        }
+        {query.raw_data_sources &&
+          <InformationRequestPage
+            resource={currentData}
+          />
+        }
+        {query.information_request &&
+          <InformationRequestPage
+            resource={currentData}
           />
         }
       </VStack>
