@@ -103,14 +103,16 @@ export async function getInformationRequest(id) {
     data: {
       query: `
       query {
-        allOrganization (slug: "${id}"){
+        allInformationrequest (id: "${id}"){
           edges {
             node {
               _id
-              slug
               namePt
               nameEn
-              website
+              description
+              rawDataUrl
+              auxiliaryFilesUrl
+              architectureUrl
             }
           }
         }
@@ -120,7 +122,7 @@ export async function getInformationRequest(id) {
     }
   })
   try {
-    const data = res.data.data.allOrganization.edges[0].node
+    const data = res.data.data.allInformationrequest.edges[0].node
     return data
   } catch (error) {
     console.error(error)

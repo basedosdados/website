@@ -265,6 +265,8 @@ export function FilterAccordion({
   isActive = false,
   isHovering,
 }) {
+  if(choices.length < 1) return null
+
   return (
     <BaseFilterAccordion
       isOpen={alwaysOpen ? alwaysOpen : isOpen}

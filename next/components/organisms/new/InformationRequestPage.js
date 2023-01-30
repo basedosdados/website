@@ -10,41 +10,55 @@ import {
   GridItem,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { isMobileMod } from "../../../hooks/useCheckMobile.hook";
+import { useCheckMobile } from "../../../hooks/useCheckMobile.hook";
 import Subtitle from "../../atoms/Subtitle";
 import SectionText from "../../atoms/SectionText";
 import { getTemporalCoverage } from "../../../utils";
-import { BaseResourcePage } from "../../molecules/BaseResourcePage";
+import BaseResourcePage from "../../molecules/new/BaseResourcePage";
 import { deleteResource, updateResource } from "../../../pages/api/datasets";
 import { getInformationRequestSchema } from "../../../pages/api/schemas";
 import { SchemaForm } from "../../molecules/SchemaForm";
 import { DisclaimerBox } from "../../molecules/DisclaimerBox";
 import RoundedButton from "../../atoms/RoundedButton";
 
+import {
+  getInformationRequest
+} from "../../../pages/api/new/datasets";
+
 import StatusIcon from "../../../public/img/icons/statusIcon";
 import UserIcon from "../../../public/img/icons/userIcon";
 import ExclamationIcon from "../../../public/img/icons/exclamationIcon";
 import RedirectIcon from "../../../public/img/icons/redirectIcon";
 
-export default function InformationRequestPage({
-  translations,
-  resource,
-  availableOptionsTranslations,
-}) {
+export default function InformationRequestPage({ id }) {
   const [temporalCoverage, setTemporalCoverage] = useState([])
   const [showTemporalCoverage, setShowTemporalCoverage] = useState(false)
-  
-  useEffect(() => {
-    if(resource.temporal_coverage) {
-      if(resource.temporal_coverage.length === 0) {
-        setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
-        setShowTemporalCoverage(false)
-      } else {
-        setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
-        setShowTemporalCoverage(true)
-      }
+  const [resource, setResource] = useState({})
+
+  const featchInformationRequest = async () => {
+    try {
+      const result = await getInformationRequest(id)
+      return setResource(result)
+    } catch (error) {
+      console.error(error)
     }
-  },[resource.temporalCoverage])
+  }
+
+  useEffect(() => {
+    featchInformationRequest()
+  },[])
+
+  // useEffect(() => {
+  //   if(resource.temporal_coverage) {
+  //     if(resource.temporal_coverage.length === 0) {
+  //       setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
+  //       setShowTemporalCoverage(false)
+  //     } else {
+  //       setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
+  //       setShowTemporalCoverage(true)
+  //     }
+  //   }
+  // },[resource.temporalCoverage])
 
   const AddInfoTextBase = ({title, text, children, ...style}) => {
     return (
@@ -58,7 +72,7 @@ export default function InformationRequestPage({
           color="#252A32"
         >{title}</Text>
         <SectionText>
-          {/* {translateField(text, availableOptionsTranslations)} */}
+          {text}
         </SectionText>
         {children}
       </Box>
@@ -155,25 +169,27 @@ export default function InformationRequestPage({
     )
   }
 
+  if(resource === undefined || Object.keys(resource).length === 0) return null
+
   return (
     <BaseResourcePage
-      title={`Número do pedido: ${resource.name}`}
-      removeFunction={() => deleteResource(resource)}
-      formComponent={
-        <SchemaForm
-          data={resource}
-          updateFunction={updateResource}
-          loadSchemaFunction={getInformationRequestSchema}
-          schemaName="Pedidos LAI"
-          prepareData={(data) => {
-            data.country_ip_address_required = data.country_ip_address_required || [];
-            data.maintainer = data.maintainer || "";
-            data.maintainer_email = data.maintainer_email || "";
-            data.resource_type = "information_request";
-            return data;
-          }}
-        />
-      }
+      title={`Número do pedido: ${resource?.namePt}`}
+      // removeFunction={() => deleteResource(resource)}
+      // formComponent={
+      //   <SchemaForm
+      //     data={resource}
+      //     updateFunction={updateResource}
+      //     loadSchemaFunction={getInformationRequestSchema}
+      //     schemaName="Pedidos LAI"
+      //     prepareData={(data) => {
+      //       data.country_ip_address_required = data.country_ip_address_required || [];
+      //       data.maintainer = data.maintainer || "";
+      //       data.maintainer_email = data.maintainer_email || "";
+      //       data.resource_type = "information_request";
+      //       return data;
+      //     }}
+      //   />
+      // }
     >
       <VStack 
         marginTop="0 !important" 
@@ -206,12 +222,19 @@ export default function InformationRequestPage({
         <VStack width="100%" marginTop="32px !important" spacing={4} alignItems="flex-start">
           <Subtitle>Consulta aos dados</Subtitle>
           <DisclaimerBox width="100%">
-            <HStack spacing={0} flexDirection={isMobileMod() && "column"} alignItems="flex-start">
+            <HStack
+              spacing={0}
+              flexDirection={useCheckMobile() && "column"}
+              alignItems="flex-start"
+            >
               <Center>
                 <ExclamationIcon alt="atenção" width="20px" height="20px" fill="#42B0FF"/>
                 <SectionText margin="0 4px 0 12px" fontWeight="bolder" fontFamily="lato">ATENÇÃO:</SectionText>
               </Center>
-              <SectionText display="flex" marginLeft={isMobileMod() && "32px !important"}>
+              <SectionText
+                display="flex"
+                marginLeft={useCheckMobile() && "32px !important"}
+              >
                 Estes dados não passaram pela metodologia de tratamento da Base dos Dados.
               </SectionText>
             </HStack>
@@ -220,16 +243,16 @@ export default function InformationRequestPage({
           <HStack
             width="100%"
             alignItems="flex-start"
-            flexDirection={isMobileMod() && "column"}
-            gridGap={isMobileMod() ? "16px" : "8px"}
-            marginTop={isMobileMod() && "24px !important"}
+            flexDirection={useCheckMobile() && "column"}
+            gridGap={useCheckMobile() ? "16px" : "8px"}
+            marginTop={useCheckMobile() && "24px !important"}
             spacing={0}
           >
             <RoundedButton
               height="35px"
               fontSize="14px"
               minWidth="180px"
-              width={isMobileMod() && "100%"}
+              width={useCheckMobile() && "100%"}
               color="#FFF"
               backgroundColor={resource?.url ? "#42B0FF" : "#C4C4C4"}
               padding="0 20px"
@@ -244,7 +267,7 @@ export default function InformationRequestPage({
               height="35px"
               fontSize="14px"
               minWidth="180px"
-              width={isMobileMod() && "100%"}
+              width={useCheckMobile() && "100%"}
               color={resource?.data_url ? "#42B0FF" : "#FFF"}
               border={resource?.data_url && "2px solid #42B0FF"}
               backgroundColor={resource?.data_url ? "#FFF" : "#C4C4C4"}

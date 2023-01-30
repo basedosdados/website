@@ -11,10 +11,6 @@ import { FilterAccordion } from "../atoms/FilterAccordion";
 
 import InformationRequestPage from "../organisms/new/InformationRequestPage";
 
-import {
-  getInformationRequest
-} from "../../pages/api/new/datasets";
-
 import CrossIcon from "../../public/img/icons/crossIcon";
 
 function AdminButtons() {
@@ -94,7 +90,6 @@ export default function DatasetResource({
   const [tables, setTables] = useState([])
   const [rawDataSources, setRawDataSources] = useState([])
   const [informationRequests, setInformationRequests] = useState([])
-  const [currentData, setCurrentData] = useState({})
 
   const pushQuery = (key, value) => {
     router.push({
@@ -105,14 +100,6 @@ export default function DatasetResource({
     )
   }
 
-  // console.log(query)
-
-  useEffect(() => {
-    if(query.bdm_tables) return console.log(0)
-    if(query.raw_data_sources) return console.log(1)
-    if(query.information_request) return console.log(2)
-  },[query])
-
   useEffect(() => {
     const dataset_tables = dataset.tables.edges.map((elm) => elm.node)
     const raw_data_sources = dataset.rawDataSources.edges.map((elm) => elm.node)
@@ -122,6 +109,16 @@ export default function DatasetResource({
     setRawDataSources(raw_data_sources)
     setInformationRequests(information_request)
   },[dataset])
+
+  function SwitchResource({route}) {
+    if (route.hasOwnProperty("bdm_tables"))
+      return <InformationRequestPage id={route.bdm_tables}/>
+    if (route.hasOwnProperty("raw_data_sources"))
+      return <InformationRequestPage id={route.raw_data_sources}/>
+    if (route.hasOwnProperty("information_request"))
+      return <InformationRequestPage id={route.information_request}/>
+    return null
+  }
 
   return (
     <Stack
@@ -140,54 +137,45 @@ export default function DatasetResource({
       >
         <AdminButtons/>
 
-        {tables?.length > 0 &&
-          <FilterAccordion
-            alwaysOpen={true}
-            choices={tables}
-            value={query.bdm_tables}
-            valueField="_id"
-            displayField="namePt"
-            fieldName="Tabelas tratadas"
-            bdPlus={true}
-            isHovering={false}
-            onChange={(id) => {
-              pushQuery("bdm_tables", id)
-            }}
-            // onToggle
-          />
-        }
+        <FilterAccordion
+          alwaysOpen={true}
+          choices={tables}
+          value={query.bdm_tables}
+          valueField="_id"
+          displayField="namePt"
+          fieldName="Tabelas tratadas"
+          bdPlus={true}
+          isHovering={false}
+          onChange={(id) => {
+            pushQuery("bdm_tables", id)
+          }}
+        />
 
-        {rawDataSources?.length > 0 &&
-          <FilterAccordion
-            alwaysOpen={true}
-            choices={rawDataSources}
-            value={query.raw_data_sources}
-            valueField="_id"
-            displayField="namePt"
-            fieldName="Fontes originais"
-            isHovering={false}
-            onChange={(id) => {
-              pushQuery("raw_data_sources", id)
-            }}
-            // onToggle
-          />
-        }
+        <FilterAccordion
+          alwaysOpen={true}
+          choices={rawDataSources}
+          value={query.raw_data_sources}
+          valueField="_id"
+          displayField="namePt"
+          fieldName="Fontes originais"
+          isHovering={false}
+          onChange={(id) => {
+            pushQuery("raw_data_sources", id)
+          }}
+        />
 
-        {informationRequests?.length > 0 &&
-          <FilterAccordion
-            alwaysOpen={true}
-            choices={informationRequests}
-            value={query.information_request}
-            valueField="_id"
-            displayField="namePt"
-            fieldName="Pedidos LAI"
-            isHovering={false}
-            onChange={(id) => {
-              pushQuery("information_request", id)
-            }}
-            // onToggle
-          />
-        }
+        <FilterAccordion
+          alwaysOpen={true}
+          choices={informationRequests}
+          value={query.information_request}
+          valueField="_id"
+          displayField="namePt"
+          fieldName="Pedidos LAI"
+          isHovering={false}
+          onChange={(id) => {
+            pushQuery("information_request", id)
+          }}
+        />
       </VStack>
       <VStack
         width="100%"
@@ -196,21 +184,7 @@ export default function DatasetResource({
         alignItems="flex-start"
         flex="1"
       >
-        {query.bdm_tables &&
-          <InformationRequestPage
-            resource={currentData}
-          />
-        }
-        {query.raw_data_sources &&
-          <InformationRequestPage
-            resource={currentData}
-          />
-        }
-        {query.information_request &&
-          <InformationRequestPage
-            resource={currentData}
-          />
-        }
+        <SwitchResource route={query}/>
       </VStack>
     </Stack>
   )
