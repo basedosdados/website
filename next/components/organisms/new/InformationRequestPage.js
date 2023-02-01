@@ -13,13 +13,13 @@ import { useEffect, useState } from "react";
 import { useCheckMobile } from "../../../hooks/useCheckMobile.hook";
 import Subtitle from "../../atoms/Subtitle";
 import SectionText from "../../atoms/SectionText";
-import { getTemporalCoverage } from "../../../utils";
+import RoundedButton from "../../atoms/RoundedButton";
 import BaseResourcePage from "../../molecules/new/BaseResourcePage";
+import { DisclaimerBox } from "../../molecules/DisclaimerBox";
+import { SchemaForm } from "../../molecules/SchemaForm";
+import { getTemporalCoverage } from "../../../utils";
 import { deleteResource, updateResource } from "../../../pages/api/datasets";
 import { getInformationRequestSchema } from "../../../pages/api/schemas";
-import { SchemaForm } from "../../molecules/SchemaForm";
-import { DisclaimerBox } from "../../molecules/DisclaimerBox";
-import RoundedButton from "../../atoms/RoundedButton";
 
 import {
   getInformationRequest
@@ -173,7 +173,7 @@ export default function InformationRequestPage({ id }) {
 
   return (
     <BaseResourcePage
-      title={`Número do pedido: ${resource?.namePt}`}
+      title={`Número do pedido: ${resource?.namePt || resource?.nameEn}`}
       // removeFunction={() => deleteResource(resource)}
       // formComponent={
       //   <SchemaForm
@@ -212,7 +212,7 @@ export default function InformationRequestPage({ id }) {
           </SectionText>
 
           <PartnershipContainer
-            {...resource.name === "03005.341407/2022-56" ?
+            {...resource?.namePt === "03005.341407/2022-56" ?
               partnerships["Fundação Lemann"] :
               partnerships["Fiquem Sabendo"]
             }
@@ -254,10 +254,10 @@ export default function InformationRequestPage({ id }) {
               minWidth="180px"
               width={useCheckMobile() && "100%"}
               color="#FFF"
-              backgroundColor={resource?.url ? "#42B0FF" : "#C4C4C4"}
+              backgroundColor={resource?.rawDataUrl ? "#42B0FF" : "#C4C4C4"}
               padding="0 20px"
-              isDisabled={resource?.url ? false : true}
-              onClick={() => window.open(resource?.url)}
+              isDisabled={resource?.rawDataUrl ? false : true}
+              onClick={() => window.open(resource?.rawDataUrl)}
             >
               <RedirectIcon alt="hiperlink" marginRight="8px" width="14px" height="14px" fill="#FFF"/>
               Acessar dados
@@ -268,14 +268,14 @@ export default function InformationRequestPage({ id }) {
               fontSize="14px"
               minWidth="180px"
               width={useCheckMobile() && "100%"}
-              color={resource?.data_url ? "#42B0FF" : "#FFF"}
-              border={resource?.data_url && "2px solid #42B0FF"}
-              backgroundColor={resource?.data_url ? "#FFF" : "#C4C4C4"}
+              color={resource?.rawDataUrl ? "#42B0FF" : "#FFF"}
+              border={resource?.rawDataUrl && "2px solid #42B0FF"}
+              backgroundColor={resource?.rawDataUrl ? "#FFF" : "#C4C4C4"}
               padding="0 20px"
-              isDisabled={resource?.data_url ? false : true}
-              onClick={() => window.open(resource?.data_url)}
+              isDisabled={resource?.rawDataUrl ? false : true}
+              onClick={() => window.open(resource?.rawDataUrl)}
             >
-              <RedirectIcon alt="hiperlink" marginRight="8px" width="14px" height="14px" fill={resource?.data_url ? "#42B0FF" : "#FFF"}/>
+              <RedirectIcon alt="hiperlink" marginRight="8px" width="14px" height="14px" fill={resource?.rawDataUrl ? "#42B0FF" : "#FFF"}/>
               Acessar pedido
             </RoundedButton>
           </HStack>
@@ -310,7 +310,7 @@ export default function InformationRequestPage({ id }) {
               <StatusIcon alt="estado" width="22px" height="22px" fill="#D0D0D0"/>
               <AddInfoTextBase
                 title="Estado"
-                text={resource.state}
+                text={resource.state || "Não listado"}
               />
             </GridItem>
 

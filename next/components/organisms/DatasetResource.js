@@ -1,6 +1,9 @@
 import {
   Stack,
   VStack,
+  Center,
+  Skeleton,
+  Spinner,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -10,6 +13,7 @@ import { SimpleButton } from "../atoms/SimpleButton";
 import { FilterAccordion } from "../atoms/FilterAccordion";
 
 import InformationRequestPage from "../organisms/new/InformationRequestPage";
+import RawDataSourcesPage from "./new/RawDataSourcesPage";
 
 import CrossIcon from "../../public/img/icons/crossIcon";
 
@@ -114,10 +118,21 @@ export default function DatasetResource({
     if (route.hasOwnProperty("bdm_tables"))
       return <InformationRequestPage id={route.bdm_tables}/>
     if (route.hasOwnProperty("raw_data_sources"))
-      return <InformationRequestPage id={route.raw_data_sources}/>
+      return <RawDataSourcesPage id={route.raw_data_sources}/>
     if (route.hasOwnProperty("information_request"))
       return <InformationRequestPage id={route.information_request}/>
-    return null
+    return (
+      <Center width="100%" height="100%">
+        <Spinner
+          width="180px"
+          height="180px"
+          borderWidth="6px"
+          color="#2B8C4D"
+          emptyColor="#CECECE"
+          speed="1s"
+        />
+      </Center>
+    )
   }
 
   return (

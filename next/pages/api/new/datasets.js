@@ -96,6 +96,39 @@ export async function getShowDataset(id) {
   }
 }
 
+export async function getRawDataSources(id) {
+  const res = await axios({
+    url: baseUrl,
+    method: "POST",
+    data: {
+      query: `
+      query {
+        allRawdatasource (id: "${id}"){
+          edges {
+            node {
+              _id
+              namePt
+              nameEn
+              description
+              rawDataUrl
+              auxiliaryFilesUrl
+              architectureUrl
+            }
+          }
+        }
+      }
+      `,
+      variables: null
+    }
+  })
+  try {
+    const data = res.data.data.allRawdatasource.edges[0].node
+    return data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 export async function getInformationRequest(id) {
   const res = await axios({
     url: baseUrl,

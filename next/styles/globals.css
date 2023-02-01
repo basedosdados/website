@@ -85,12 +85,6 @@ body {
   border-color: #2b8c4d !important;
 }
 
-.chakra-skeleton {
-  background-color: #F0F0F0 !important;
-  border-radius: 12px !important;
-  animation: gray-scale 1s infinite !important;
-}
-
 @keyframes gray-scale {
   50% {
     -webkit-filter: brightness(98%); 

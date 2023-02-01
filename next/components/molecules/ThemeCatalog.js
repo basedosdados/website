@@ -172,9 +172,14 @@ function CardThemes ({ responsive, recentDataSets=[], loading }) {
         >
           {loading ?
             new Array(screenQuery).fill(0).map(() => (
-              <>
-                <Skeleton width="280px" height="290px" margin="20px 0"/>
-              </>
+              <Skeleton
+                width="280px"
+                height="290px"
+                margin="20px 0"
+                borderRadius="12px"
+                startColor="#F0F0F0"
+                endColor="#F0F0F0"
+              />
             ))
           :
           recentDataSets.length === 0 ?

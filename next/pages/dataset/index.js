@@ -905,9 +905,16 @@ export default function SearchPage({
             >
               {isLoading
                 ? new Array(10).fill(0).map(() => (
-                  <>
-                    <Skeleton width="100%" height="130px" /> <Divider />
-                  </>
+                    <>
+                      <Skeleton
+                        width="100%"
+                        height="130px"
+                        borderRadius="12px"
+                        startColor="#F0F0F0"
+                        endColor="#F0F0F0"
+                      />
+                      <Divider />
+                    </>
                 ))
                 : (data?.datasets || []).map((d) => (
                   <>
