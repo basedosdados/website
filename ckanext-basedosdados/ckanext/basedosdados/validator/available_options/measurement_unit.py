@@ -17,11 +17,12 @@ class MeasurementUnitEnum(AttrEnum):
     acre        = {"label": "acre"}
 
     # mass
-    ton      = {"label": "tonelada"}
-    kilogram = {"label": "kg"}
-    gram     = {"label": "g"}
-    miligram = {"label": "mg"}
-    ounce    = {"label": "onça"}
+    ton       = {"label": "tonelada"}
+    kilogram  = {"label": "kg"}
+    gram      = {"label": "g"}
+    miligram  = {"label": "mg"}
+    microgram = {"label": "ug"}
+    ounce     = {"label": "onça"}
 
     # volume
     gallon   = {"label": "galão"}
@@ -42,6 +43,9 @@ class MeasurementUnitEnum(AttrEnum):
     megavolt       = {"label": "mV"}
     gigavolt       = {"label": "gV"}
     teravolt       = {"label": "tV"}
+    calorie        = {"label": "cal"}
+    kilocalorie    = {"label": "kcal"}
+
     
     # people
     person    = {"label": "pessoa"}
