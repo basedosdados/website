@@ -32,6 +32,7 @@ class MeasurementUnitEnum(AttrEnum):
     boe      = {"label": "barril de óleo equivalente"}
     toe      = {"label": "tonelada de óleo equivalente"}
 
+
     # energy
     watt           = {"label": "W"}
     kilowatt       = {"label": "kW"}
