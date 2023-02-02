@@ -29,7 +29,6 @@ import CrossIcon from "../../../public/img/icons/crossIcon";
 import {
   getListDatasets,
   getShowDataset,
-  getInformationRequest
 } from "../../api/new/datasets";
 
 import { withPages } from "../../../hooks/pages.hook";

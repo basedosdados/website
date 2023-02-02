@@ -60,7 +60,7 @@ export default function RawDataSourcesPage({
 
   useEffect(() => {
     featchRawDataSources()
-  },[])
+  },[id])
 
   const TemporalCoverage = () => {
     const temporal = resource?.temporal_coverage

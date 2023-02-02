@@ -11,9 +11,11 @@ import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 
 import { SimpleButton } from "../atoms/SimpleButton";
 import { FilterAccordion } from "../atoms/FilterAccordion";
+import { LoadingSpin } from "../atoms/Loading";
 
-import InformationRequestPage from "../organisms/new/InformationRequestPage";
+import BdmTablePage from "./new/BdmTablePage";
 import RawDataSourcesPage from "./new/RawDataSourcesPage";
+import InformationRequestPage from "../organisms/new/InformationRequestPage";
 
 import CrossIcon from "../../public/img/icons/crossIcon";
 
@@ -116,23 +118,12 @@ export default function DatasetResource({
 
   function SwitchResource({route}) {
     if (route.hasOwnProperty("bdm_tables"))
-      return <InformationRequestPage id={route.bdm_tables}/>
+      return <BdmTablePage id={route.bdm_tables}/>
     if (route.hasOwnProperty("raw_data_sources"))
       return <RawDataSourcesPage id={route.raw_data_sources}/>
     if (route.hasOwnProperty("information_request"))
       return <InformationRequestPage id={route.information_request}/>
-    return (
-      <Center width="100%" height="100%">
-        <Spinner
-          width="180px"
-          height="180px"
-          borderWidth="6px"
-          color="#2B8C4D"
-          emptyColor="#CECECE"
-          speed="1s"
-        />
-      </Center>
-    )
+    return <LoadingSpin />
   }
 
   return (

@@ -46,7 +46,7 @@ export default function InformationRequestPage({ id }) {
 
   useEffect(() => {
     featchInformationRequest()
-  },[])
+  },[id])
 
   // useEffect(() => {
   //   if(resource.temporal_coverage) {
