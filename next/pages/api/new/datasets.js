@@ -41,8 +41,10 @@ export async function getShowDataset(id) {
             node {
               _id
               slug
+              name
               namePt
               nameEn
+              description
               organization {
                 _id
                 slug
@@ -156,12 +158,52 @@ export async function getRawDataSources(id) {
           edges {
             node {
               _id
+              name
               namePt
               nameEn
               description
               rawDataUrl
               auxiliaryFilesUrl
-              architectureUrl
+              languages {
+                edges {
+                  node {
+                    name
+                    namePt
+                    nameEn
+                  }
+                }
+              }
+              availability {
+                name
+                namePt
+                nameEn
+              }
+              coverages {
+                edges {
+                  node {
+                    temporalCoverage
+                  }
+                }
+              }
+              languages {
+                edges {
+                  node {
+                    id
+                  }
+                }
+              }
+              license {
+                name
+                namePt
+                nameEn
+              }
+              updateFrequency {
+                timeUnit {
+                  name
+                  namePt
+                  nameEn
+                }
+              }
             }
           }
         }
@@ -189,12 +231,24 @@ export async function getInformationRequest(id) {
           edges {
             node {
               _id
+              name
               namePt
               nameEn
+              status {
+                namePt
+                nameEn
+              }
+              coverages {
+                edges {
+                  node {
+                    temporalCoverage
+                  }
+                }
+              }
               description
+              observations
               rawDataUrl
               auxiliaryFilesUrl
-              architectureUrl
             }
           }
         }

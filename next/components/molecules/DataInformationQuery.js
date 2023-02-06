@@ -379,10 +379,10 @@ bd_read_table, ///
                   >
                     <TextPix title="Razão Social" text="Instituto Base dos Dados"/>
                     <TextPix title="CNPJ" text="42494318/0001-16"/>
-                    <TextPix title="Banco" text="Stone"/>
+                    <TextPix title="Banco" text="PagSeguro"/>
                     <Box display="flex" gridGap="48px">
                       <TextPix title="Agência" text="0001"/>
-                      <TextPix title="Conta" text="6761821-5"/>
+                      <TextPix title="Conta" text="31401653-6"/>
                     </Box>
                   </VStack>
                 </HStack>

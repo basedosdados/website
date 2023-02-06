@@ -49,7 +49,7 @@ export default function RawDataSourcesPage({
 }) {
   const [resource, setResource] = useState({})
 
-  const featchRawDataSources = async () => {
+const featchRawDataSources = async () => {
     try {
       const result = await getRawDataSources(id)
       return setResource(result)
@@ -62,17 +62,29 @@ export default function RawDataSourcesPage({
     featchRawDataSources()
   },[id])
 
+  const Languages = () => {
+    const array = []
+
+    resource?.languages?.edges.map((elm) => {
+      array.push(elm.node.namePt || elm.node.nameEn)
+    })
+
+    if(array.length === 0) return "Não listado"
+    return array.join(", ").toString()
+  }
+
   const TemporalCoverage = () => {
-    const temporal = resource?.temporal_coverage
-    if(temporal && temporal.length > 0) return getTemporalCoverage(temporal)
+    // const temporal = resource?.temporal_coverage
+    // if(temporal && temporal.length > 0) return getTemporalCoverage(temporal)
     return "Nenhuma cobertura temporal fornecida"
   }
 
   const ObservationLevel = () => {
     const notFound = <SectionText marginRight="4px !important">Não listado</SectionText>
 
-    if(!resource?.observation_level) return notFound
-    if(resource?.observation_level === null) return notFound
+    return notFound
+    // if(!resource?.observation_level) return notFound
+    // if(resource?.observation_level === null) return notFound
 
     // if(typeof resource.observation_level === "object") {
     //   if(resource.observation_level.length === 0) return setObservationLevel()
@@ -152,35 +164,9 @@ export default function RawDataSourcesPage({
     )
   }
 
-  // function translateField(field, translation) {
-  //   if(!field) return "Não listado"
-      
-  //   if(typeof field === "boolean") return field === true ? "Sim" : "Não"
-
-  //   if(typeof field === "object") {
-  //     if(!field) return "Não listado"
-      
-  //     if(field.length === 0) {
-  //       return "Não listado"
-  //     } else {
-  //       if(Array.isArray(field)) {
-  //         const newValues = field.map((elm) => {
-  //           return translateField(elm, availableOptionsTranslations)
-  //         })
-  //         return formatJson(JSON.stringify(newValues), true)
-  //       } else {
-  //         const newJson = JSON.stringify(field)
-  //         return formatJson(newJson, true)
-  //       }
-  //     }
-  //   }
-
-  //   return translation[field] || field
-  // }
-
   return (
     <BaseResourcePage
-      title={resource?.namePT || resource?.nameEn}
+      title={resource?.namePt || resource?.nameEn}
       // removeFunction={() => deleteResource(resource)}
       // formComponent={
       //   <SchemaForm
@@ -247,7 +233,7 @@ export default function RawDataSourcesPage({
             <LanguageIcon alt="idioma" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Idioma"
-              text={resource?.language || "Não listado"}
+              text={Languages()}
             />
           </GridItem>
 
@@ -255,7 +241,11 @@ export default function RawDataSourcesPage({
             <DisplayIcon alt="disponibilidade" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Disponibilidade"
-              text={resource?.availability || "Não listado"}
+              text={
+                resource?.availability?.namePt ||
+                resource?.availability?.nameEn ||
+                "Não listado"
+              }
             />
           </GridItem>
 
@@ -263,7 +253,7 @@ export default function RawDataSourcesPage({
             <DataStructureIcon alt="Tem dados estruturados" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Tem dados estruturados"
-              text={resource?.has_structured_data || "Não listado"}
+              // text={resource?.has_structured_data || "Não listado"}
             />
           </GridItem>
 
@@ -271,7 +261,7 @@ export default function RawDataSourcesPage({
             <ApiIcon alt="tabela tem api" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Tem API"
-              text={resource?.has_api || "Não listado"}
+              // text={resource?.has_api || "Não listado"}
             />
           </GridItem>
 
@@ -279,7 +269,11 @@ export default function RawDataSourcesPage({
             <FrequencyIcon alt="Frequência de atualização" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Frequência de atualização"
-              text={resource?.update_frequency || "Não listado"}
+              text={
+                resource?.updateFrequency?.timeUnit?.namePt ||
+                resource?.updateFrequency?.timeUnit?.nameEn ||
+                "Não listado"
+              }
             />
           </GridItem>
 
@@ -302,7 +296,7 @@ export default function RawDataSourcesPage({
             <RegisterIcon alt="Requer registro" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Requer registro"
-              text={resource?.requires_registration || "Não listado"}
+              // text={resource?.requires_registration || "Não listado"}
             />
           </GridItem>
 
@@ -310,7 +304,7 @@ export default function RawDataSourcesPage({
             <IpIcon alt="IP" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Requer IP de algum país"
-              text={resource?.country_ip_address_required || "Não listado"}
+              // text={resource?.country_ip_address_required || "Não listado"}
             />
           </GridItem>
 
@@ -318,7 +312,7 @@ export default function RawDataSourcesPage({
             <CoinIcon alt="é gratuito?" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Gratuito"
-              text={resource?.is_free || "Não listado"}
+              // text={resource?.is_free || "Não listado"}
             />
           </GridItem>
         </Grid>

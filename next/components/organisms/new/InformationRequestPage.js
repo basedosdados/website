@@ -16,10 +16,9 @@ import SectionText from "../../atoms/SectionText";
 import RoundedButton from "../../atoms/RoundedButton";
 import BaseResourcePage from "../../molecules/new/BaseResourcePage";
 import { DisclaimerBox } from "../../molecules/DisclaimerBox";
+
 import { SchemaForm } from "../../molecules/SchemaForm";
-import { getTemporalCoverage } from "../../../utils";
 import { deleteResource, updateResource } from "../../../pages/api/datasets";
-import { getInformationRequestSchema } from "../../../pages/api/schemas";
 
 import {
   getInformationRequest
@@ -31,8 +30,6 @@ import ExclamationIcon from "../../../public/img/icons/exclamationIcon";
 import RedirectIcon from "../../../public/img/icons/redirectIcon";
 
 export default function InformationRequestPage({ id }) {
-  const [temporalCoverage, setTemporalCoverage] = useState([])
-  const [showTemporalCoverage, setShowTemporalCoverage] = useState(false)
   const [resource, setResource] = useState({})
 
   const featchInformationRequest = async () => {
@@ -47,18 +44,6 @@ export default function InformationRequestPage({ id }) {
   useEffect(() => {
     featchInformationRequest()
   },[id])
-
-  // useEffect(() => {
-  //   if(resource.temporal_coverage) {
-  //     if(resource.temporal_coverage.length === 0) {
-  //       setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
-  //       setShowTemporalCoverage(false)
-  //     } else {
-  //       setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
-  //       setShowTemporalCoverage(true)
-  //     }
-  //   }
-  // },[resource.temporalCoverage])
 
   const AddInfoTextBase = ({title, text, children, ...style}) => {
     return (
@@ -78,32 +63,6 @@ export default function InformationRequestPage({ id }) {
       </Box>
     )
   }
-
-  // function translateField(field, translation) {
-  //   if(!field) return "Não listado"
-      
-  //   if(typeof field === "boolean") return field === true ? "Sim" : "Não"
-
-  //   if(typeof field === "object") {
-  //     if(!field) return "Não listado"
-
-  //     if(field.length === 0) {
-  //       return "Não listado"
-  //     } else {
-  //       if(Array.isArray(field)) {
-  //         const newValues = field.map((elm) => {
-  //           return translateField(elm, availableOptionsTranslations)
-  //         })
-  //         return formatJson(JSON.stringify(newValues), true)
-  //       } else {
-  //         const newJson = JSON.stringify(field)
-  //         return formatJson(newJson, true)
-  //       }
-  //     }
-  //   }
-
-  //   return translation[field] || field
-  // }
 
   const partnerships = {
     "Fiquem Sabendo": {
@@ -248,36 +207,38 @@ export default function InformationRequestPage({ id }) {
             marginTop={useCheckMobile() && "24px !important"}
             spacing={0}
           >
-            <RoundedButton
-              height="35px"
-              fontSize="14px"
-              minWidth="180px"
-              width={useCheckMobile() && "100%"}
-              color="#FFF"
-              backgroundColor={resource?.rawDataUrl ? "#42B0FF" : "#C4C4C4"}
-              padding="0 20px"
-              isDisabled={resource?.rawDataUrl ? false : true}
-              onClick={() => window.open(resource?.rawDataUrl)}
-            >
-              <RedirectIcon alt="hiperlink" marginRight="8px" width="14px" height="14px" fill="#FFF"/>
-              Acessar dados
-            </RoundedButton>
+            <a href={resource?.rawDataUrl} target="_blank">
+              <RoundedButton
+                height="35px"
+                fontSize="14px"
+                minWidth="180px"
+                width={useCheckMobile() && "100%"}
+                color="#FFF"
+                backgroundColor={resource?.rawDataUrl ? "#42B0FF" : "#C4C4C4"}
+                padding="0 20px"
+                isDisabled={resource?.rawDataUrl ? false : true}
+              >
+                <RedirectIcon alt="hiperlink" marginRight="8px" width="14px" height="14px" fill="#FFF"/>
+                Acessar dados
+                </RoundedButton>
+            </a>
 
-            <RoundedButton
-              height="35px"
-              fontSize="14px"
-              minWidth="180px"
-              width={useCheckMobile() && "100%"}
-              color={resource?.rawDataUrl ? "#42B0FF" : "#FFF"}
-              border={resource?.rawDataUrl && "2px solid #42B0FF"}
-              backgroundColor={resource?.rawDataUrl ? "#FFF" : "#C4C4C4"}
-              padding="0 20px"
-              isDisabled={resource?.rawDataUrl ? false : true}
-              onClick={() => window.open(resource?.rawDataUrl)}
-            >
-              <RedirectIcon alt="hiperlink" marginRight="8px" width="14px" height="14px" fill={resource?.rawDataUrl ? "#42B0FF" : "#FFF"}/>
-              Acessar pedido
-            </RoundedButton>
+            <a href={resource?.auxiliaryFilesUrl} target="_blank">
+              <RoundedButton
+                height="35px"
+                fontSize="14px"
+                minWidth="180px"
+                width={useCheckMobile() && "100%"}
+                color={resource?.auxiliaryFilesUrl ? "#42B0FF" : "#FFF"}
+                border={resource?.auxiliaryFilesUrl && "2px solid #42B0FF"}
+                backgroundColor={resource?.auxiliaryFilesUrl ? "#FFF" : "#C4C4C4"}
+                padding="0 20px"
+                isDisabled={resource?.auxiliaryFilesUrl ? false : true}
+              >
+                <RedirectIcon alt="hiperlink" marginRight="8px" width="14px" height="14px" fill={resource?.auxiliaryFilesUrl ? "#42B0FF" : "#FFF"}/>
+                Acessar pedido
+              </RoundedButton>
+            </a>
           </HStack>
         </VStack>
 
@@ -289,14 +250,14 @@ export default function InformationRequestPage({ id }) {
         >
           <Subtitle >Descrição</Subtitle>
           <SectionText marginTop="16px !important">
-            {resource.description || "Nenhuma descrição fornecida."}
+            {resource?.description || "Nenhuma descrição fornecida."}
           </SectionText>
         </VStack>
 
         <VStack width="100%" marginTop="32px !important" spacing={4} alignItems="flex-start">
           <Subtitle>Cobertura temporal</Subtitle>
           <SectionText>
-            {showTemporalCoverage ? temporalCoverage : "Nenhuma cobertura temporal fornecida"}
+            {resource?.coverages.edges[0].node.temporalCoverage || "Nenhuma cobertura temporal fornecida"}
           </SectionText>
         </VStack>
 
@@ -310,7 +271,7 @@ export default function InformationRequestPage({ id }) {
               <StatusIcon alt="estado" width="22px" height="22px" fill="#D0D0D0"/>
               <AddInfoTextBase
                 title="Estado"
-                text={resource.state || "Não listado"}
+                text={resource?.status.namePt || resource?.status.nameEn || "Não listado"}
               />
             </GridItem>
 

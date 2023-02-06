@@ -63,7 +63,7 @@ export default function DatasetPage ({
   return (
     <MainPageTemplate>
       <Head>
-        <title>{dataset.namePt} – Base dos Dados</title>
+        <title>{dataset.namePt || dataset.nameEn} – Base dos Dados</title>
 
         <link
           rel="image_src"
@@ -81,11 +81,10 @@ export default function DatasetPage ({
         />
         <meta
           property="og:title"
-          content={`${dataset.namePt} – Base dos Dados`}
+          content={`${dataset.namePt || dataset.nameEn} – Base dos Dados`}
           key="ogtitle"
         />
-        {/* <meta property="og:description" content={dataset.notes} key="ogdesc" /> */}
-        <meta property="og:description" content="bbbbbbbbb" key="ogdesc" />
+        <meta property="og:description" content={dataset.description} key="ogdesc" />
       </Head>
 
       <VStack
@@ -118,11 +117,11 @@ export default function DatasetPage ({
               maxWidth="970px"
               paddingBottom="8px"
             >
-              {dataset.namePt || "Conjunto sem nome"}
+              {dataset.namePt || dataset.nameEn || "Conjunto sem nome"}
             </BigTitle>
 
             <ReadMore minHeight="70px" isMobileMod={isMobileMod()}>
-              {dataset?.notes || "Nenhuma descrição fornecida."}
+              {dataset?.description || "Nenhuma descrição fornecida."}
             </ReadMore>
 
             <VStack align="flex-start" spacing={5} paddingTop="20px">
@@ -187,7 +186,7 @@ export default function DatasetPage ({
               />
               Metadados
             </GreenTab>
-            {dataset.id === "br-ibge-ipca" && <GreenTab>Painéis</GreenTab>}
+            {dataset?.slug === "br-ibge-ipca" && <GreenTab>Painéis</GreenTab>}
           </TabList>
           <TabPanels>
             <TabPanel padding="0px">
@@ -200,7 +199,7 @@ export default function DatasetPage ({
 
             </TabPanel>
 
-            {dataset.id === "br-ibge-ipca" &&
+            {dataset?.slug === "br-ibge-ipca" &&
               <TabPanel padding="0px">
                 {/* <DashboardsPage
                   dataset={dataset}
