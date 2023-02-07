@@ -1,6 +1,6 @@
 import axios from "axios";
+import { API_URL } from "../../../configs";
 
-const baseUrl = process.env.NEXT_PUBLIC_API_URL
 const tokenEndpoint = `https://staging.backend.dados.rio/api/token/`
 
 async function getToken() {

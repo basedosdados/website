@@ -13,37 +13,46 @@ import { useEffect, useState } from "react";
 import { useCheckMobile } from "../../../hooks/useCheckMobile.hook";
 import Subtitle from "../../atoms/Subtitle";
 import SectionText from "../../atoms/SectionText";
-import RoundedButton from "../../atoms/RoundedButton";
-import BaseResourcePage from "../../molecules/new/BaseResourcePage";
-import { DisclaimerBox } from "../../molecules/DisclaimerBox";
-
-import { SchemaForm } from "../../molecules/SchemaForm";
+import { getTemporalCoverage } from "../../../utils";
+import { BaseResourcePage } from "../../molecules/old/BaseResourcePage";
 import { deleteResource, updateResource } from "../../../pages/api/datasets";
+import { getInformationRequestSchema } from "../../pages/api/schemas";
+import { SchemaForm } from "../../molecules/SchemaForm";
+import { DisclaimerBox } from "../../molecules/DisclaimerBox";
+import RoundedButton from "../../atoms/RoundedButton";
 
-import {
-  getInformationRequest
-} from "../../../pages/api/new/datasets";
 
 import StatusIcon from "../../../public/img/icons/statusIcon";
 import UserIcon from "../../../public/img/icons/userIcon";
 import ExclamationIcon from "../../../public/img/icons/exclamationIcon";
 import RedirectIcon from "../../../public/img/icons/redirectIcon";
 
-export default function InformationRequestPage({ id }) {
-  const [resource, setResource] = useState({})
-
-  const featchInformationRequest = async () => {
-    try {
-      const result = await getInformationRequest(id)
-      return setResource(result)
-    } catch (error) {
-      console.error(error)
-    }
-  }
+export function InformationRequestPage({
+  translations,
+  resource,
+  availableOptionsTranslations,
+}) {
+  const [temporalCoverage, setTemporalCoverage] = useState([])
+  const [showTemporalCoverage, setShowTemporalCoverage] = useState(false)
+  
+  const isMobile = useCheckMobile();
+  const [isMobileMod, setIsMobileMod] = useState(false)
 
   useEffect(() => {
-    featchInformationRequest()
-  },[id])
+    setIsMobileMod(isMobile)
+  }, [isMobile])
+
+  useEffect(() => {
+    if(resource.temporal_coverage) {
+      if(resource.temporal_coverage.length === 0) {
+        setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
+        setShowTemporalCoverage(false)
+      } else {
+        setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
+        setShowTemporalCoverage(true)
+      }
+    }
+  },[resource.temporalCoverage])
 
   const AddInfoTextBase = ({title, text, children, ...style}) => {
     return (
@@ -57,11 +66,37 @@ export default function InformationRequestPage({ id }) {
           color="#252A32"
         >{title}</Text>
         <SectionText>
-          {text}
+          {translateField(text, availableOptionsTranslations)}
         </SectionText>
         {children}
       </Box>
     )
+  }
+
+  function translateField(field, translation) {
+    if(!field) return "Não listado"
+      
+    if(typeof field === "boolean") return field === true ? "Sim" : "Não"
+
+    if(typeof field === "object") {
+      if(!field) return "Não listado"
+
+      if(field.length === 0) {
+        return "Não listado"
+      } else {
+        if(Array.isArray(field)) {
+          const newValues = field.map((elm) => {
+            return translateField(elm, availableOptionsTranslations)
+          })
+          return formatJson(JSON.stringify(newValues), true)
+        } else {
+          const newJson = JSON.stringify(field)
+          return formatJson(newJson, true)
+        }
+      }
+    }
+
+    return translation[field] || field
   }
 
   const partnerships = {
@@ -128,27 +163,25 @@ export default function InformationRequestPage({ id }) {
     )
   }
 
-  if(resource === undefined || Object.keys(resource).length === 0) return null
-
   return (
     <BaseResourcePage
-      title={`Número do pedido: ${resource?.namePt || resource?.nameEn}`}
-      // removeFunction={() => deleteResource(resource)}
-      // formComponent={
-      //   <SchemaForm
-      //     data={resource}
-      //     updateFunction={updateResource}
-      //     loadSchemaFunction={getInformationRequestSchema}
-      //     schemaName="Pedidos LAI"
-      //     prepareData={(data) => {
-      //       data.country_ip_address_required = data.country_ip_address_required || [];
-      //       data.maintainer = data.maintainer || "";
-      //       data.maintainer_email = data.maintainer_email || "";
-      //       data.resource_type = "information_request";
-      //       return data;
-      //     }}
-      //   />
-      // }
+      title={`Número do pedido: ${resource.name}`}
+      removeFunction={() => deleteResource(resource)}
+      formComponent={
+        <SchemaForm
+          data={resource}
+          updateFunction={updateResource}
+          loadSchemaFunction={getInformationRequestSchema}
+          schemaName="Pedidos LAI"
+          prepareData={(data) => {
+            data.country_ip_address_required = data.country_ip_address_required || [];
+            data.maintainer = data.maintainer || "";
+            data.maintainer_email = data.maintainer_email || "";
+            data.resource_type = "information_request";
+            return data;
+          }}
+        />
+      }
     >
       <VStack 
         marginTop="0 !important" 
@@ -171,7 +204,7 @@ export default function InformationRequestPage({ id }) {
           </SectionText>
 
           <PartnershipContainer
-            {...resource?.namePt === "03005.341407/2022-56" ?
+            {...resource.name === "03005.341407/2022-56" ?
               partnerships["Fundação Lemann"] :
               partnerships["Fiquem Sabendo"]
             }
@@ -181,19 +214,12 @@ export default function InformationRequestPage({ id }) {
         <VStack width="100%" marginTop="32px !important" spacing={4} alignItems="flex-start">
           <Subtitle>Consulta aos dados</Subtitle>
           <DisclaimerBox width="100%">
-            <HStack
-              spacing={0}
-              flexDirection={useCheckMobile() && "column"}
-              alignItems="flex-start"
-            >
+            <HStack spacing={0} flexDirection={isMobileMod && "column"} alignItems="flex-start">
               <Center>
                 <ExclamationIcon alt="atenção" width="20px" height="20px" fill="#42B0FF"/>
                 <SectionText margin="0 4px 0 12px" fontWeight="bolder" fontFamily="lato">ATENÇÃO:</SectionText>
               </Center>
-              <SectionText
-                display="flex"
-                marginLeft={useCheckMobile() && "32px !important"}
-              >
+              <SectionText display="flex" marginLeft={isMobileMod && "32px !important"}>
                 Estes dados não passaram pela metodologia de tratamento da Base dos Dados.
               </SectionText>
             </HStack>
@@ -202,43 +228,41 @@ export default function InformationRequestPage({ id }) {
           <HStack
             width="100%"
             alignItems="flex-start"
-            flexDirection={useCheckMobile() && "column"}
-            gridGap={useCheckMobile() ? "16px" : "8px"}
-            marginTop={useCheckMobile() && "24px !important"}
+            flexDirection={isMobileMod && "column"}
+            gridGap={isMobileMod ? "16px" : "8px"}
+            marginTop={isMobileMod && "24px !important"}
             spacing={0}
           >
-            <a href={resource?.rawDataUrl} target="_blank">
-              <RoundedButton
-                height="35px"
-                fontSize="14px"
-                minWidth="180px"
-                width={useCheckMobile() && "100%"}
-                color="#FFF"
-                backgroundColor={resource?.rawDataUrl ? "#42B0FF" : "#C4C4C4"}
-                padding="0 20px"
-                isDisabled={resource?.rawDataUrl ? false : true}
-              >
-                <RedirectIcon alt="hiperlink" marginRight="8px" width="14px" height="14px" fill="#FFF"/>
-                Acessar dados
-                </RoundedButton>
-            </a>
+            <RoundedButton
+              height="35px"
+              fontSize="14px"
+              minWidth="180px"
+              width={isMobileMod && "100%"}
+              color="#FFF"
+              backgroundColor={resource?.url ? "#42B0FF" : "#C4C4C4"}
+              padding="0 20px"
+              isDisabled={resource?.url ? false : true}
+              onClick={() => window.open(resource?.url)}
+            >
+              <RedirectIcon alt="hiperlink" marginRight="8px" width="14px" height="14px" fill="#FFF"/>
+              Acessar dados
+            </RoundedButton>
 
-            <a href={resource?.auxiliaryFilesUrl} target="_blank">
-              <RoundedButton
-                height="35px"
-                fontSize="14px"
-                minWidth="180px"
-                width={useCheckMobile() && "100%"}
-                color={resource?.auxiliaryFilesUrl ? "#42B0FF" : "#FFF"}
-                border={resource?.auxiliaryFilesUrl && "2px solid #42B0FF"}
-                backgroundColor={resource?.auxiliaryFilesUrl ? "#FFF" : "#C4C4C4"}
-                padding="0 20px"
-                isDisabled={resource?.auxiliaryFilesUrl ? false : true}
-              >
-                <RedirectIcon alt="hiperlink" marginRight="8px" width="14px" height="14px" fill={resource?.auxiliaryFilesUrl ? "#42B0FF" : "#FFF"}/>
-                Acessar pedido
-              </RoundedButton>
-            </a>
+            <RoundedButton
+              height="35px"
+              fontSize="14px"
+              minWidth="180px"
+              width={isMobileMod && "100%"}
+              color={resource?.data_url ? "#42B0FF" : "#FFF"}
+              border={resource?.data_url && "2px solid #42B0FF"}
+              backgroundColor={resource?.data_url ? "#FFF" : "#C4C4C4"}
+              padding="0 20px"
+              isDisabled={resource?.data_url ? false : true}
+              onClick={() => window.open(resource?.data_url)}
+            >
+              <RedirectIcon alt="hiperlink" marginRight="8px" width="14px" height="14px" fill={resource?.data_url ? "#42B0FF" : "#FFF"}/>
+              Acessar pedido
+            </RoundedButton>
           </HStack>
         </VStack>
 
@@ -250,14 +274,14 @@ export default function InformationRequestPage({ id }) {
         >
           <Subtitle >Descrição</Subtitle>
           <SectionText marginTop="16px !important">
-            {resource?.description || "Nenhuma descrição fornecida."}
+            {resource.description || "Nenhuma descrição fornecida."}
           </SectionText>
         </VStack>
 
         <VStack width="100%" marginTop="32px !important" spacing={4} alignItems="flex-start">
           <Subtitle>Cobertura temporal</Subtitle>
           <SectionText>
-            {resource?.coverages.edges[0].node.temporalCoverage || "Nenhuma cobertura temporal fornecida"}
+            {showTemporalCoverage ? temporalCoverage : "Nenhuma cobertura temporal fornecida"}
           </SectionText>
         </VStack>
 
@@ -271,7 +295,7 @@ export default function InformationRequestPage({ id }) {
               <StatusIcon alt="estado" width="22px" height="22px" fill="#D0D0D0"/>
               <AddInfoTextBase
                 title="Estado"
-                text={resource?.status.namePt || resource?.status.nameEn || "Não listado"}
+                text={resource.state}
               />
             </GridItem>
 

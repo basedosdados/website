@@ -13,12 +13,14 @@ import Head from "next/head";
 import { useState, useEffect } from "react";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { MainPageTemplate } from "../components/templates/main";
-import { useCheckMobile } from "../hooks/useCheckMobile.hook";
+import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
-import {
-  getBDTeams,
-  getBDPeople
-} from "./api/team";
+
+// import {
+//   getBDTeams,
+//   getBDPeople
+// } from "./api/team";
+
 import Display from "../components/atoms/Display";
 import RoundedButton from "../components/atoms/RoundedButton";
 import SectionTitle from "../components/atoms/SectionTitle";
@@ -35,27 +37,21 @@ import DiscordIcon from "../public/img/icons/discordIcon";
 import RedirectIcon from "../public/img/icons/redirectIcon";
 import styles from "../styles/quemSomos.module.css";
 
-export async function getStaticProps(context) {
-  const bdTeam = await getBDTeams();
-  const bdPeople = await getBDPeople();
+// export async function getStaticProps(context) {
+//   const bdTeam = await getBDTeams();
+//   const bdPeople = await getBDPeople();
 
-  return await withPages({
-    props: {
-      bdTeam,
-      bdPeople
-    },
-    revalidate: 60,
-  })
-}
+//   return await withPages({
+//     props: {
+//       bdTeam,
+//       bdPeople
+//     },
+//     revalidate: 60,
+//   })
+// }
 
 const HistoryBox = ({ children, title, date, image }) => {
-  const isMobile = useCheckMobile();
-  const [isMobileMod, setIsMobileMod] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
-  
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
 
   return (
     <Box
@@ -65,8 +61,8 @@ const HistoryBox = ({ children, title, date, image }) => {
       <Box
         borderRadius="20px"
         overflow="hidden"
-        width={isMobileMod ? "fit-content" : "500px"}
-        height={isMobileMod ? "100%" : "300px"}
+        width={isMobileMod() ? "fit-content" : "500px"}
+        height={isMobileMod() ? "100%" : "300px"}
         boxShadow="0 2px 20px 0 #00000026"
         cursor="pointer"
         onClick={onOpen}
@@ -79,7 +75,7 @@ const HistoryBox = ({ children, title, date, image }) => {
         />
       </Box>
       
-      <Box padding={isMobileMod ? "32px 24px 0" :"40px 24px 0"}>
+      <Box padding={isMobileMod() ? "32px 24px 0" :"40px 24px 0"}>
         <Text
           fontFamily="ubuntu"
           maxWidth="400px"
@@ -98,8 +94,8 @@ const HistoryBox = ({ children, title, date, image }) => {
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
         <ModalOverlay backdropFilter="blur(2px)"/>
         <ModalContent
-          marginTop={isMobileMod && "5rem"}
-          marginBottom={isMobileMod && "0"}
+          marginTop={isMobileMod() && "5rem"}
+          marginBottom={isMobileMod() && "0"}
           background="transparent"
           maxWidth="1000px"
         >
@@ -117,7 +113,7 @@ const HistoryBox = ({ children, title, date, image }) => {
   )
 }
 
-const TeamBox = ({ isMobileMod, index, data }) => {
+const TeamBox = ({ index, data }) => {
   const hasLeftSpacing = (index % 2 == 0) ? false : true
 
   const iconTeamBox = (ref) => {
@@ -167,9 +163,9 @@ const TeamBox = ({ isMobileMod, index, data }) => {
   return (
     <Box
       display="flex"
-      flexDirection={isMobileMod ? "column" : "row"}
+      flexDirection={isMobileMod() ? "column" : "row"}
       maxWidth="750px"
-      marginLeft={isMobileMod ? "" : hasLeftSpacing && "200px !important"}
+      marginLeft={isMobileMod() ? "" : hasLeftSpacing && "200px !important"}
     >
       <Box
         minWidth="160px"
@@ -178,7 +174,7 @@ const TeamBox = ({ isMobileMod, index, data }) => {
         maxHeight="160px"
         borderRadius="16px"
         marginRight="32px"
-        marginBottom={isMobileMod && "20px"}
+        marginBottom={isMobileMod() && "20px"}
         overflow="hidden"
       >
         <Image
@@ -196,7 +192,7 @@ const TeamBox = ({ isMobileMod, index, data }) => {
           >
             {data?.name}
           </BodyText>
-          {!isMobileMod && iconLinks()}
+          {!isMobileMod() && iconLinks()}
         </Box>
         <BodyText
           fontSize="16px"
@@ -207,21 +203,14 @@ const TeamBox = ({ isMobileMod, index, data }) => {
         >
           {data?.role.join(", ")}
         </BodyText>
-        <BodyText fontSize="16px" letterSpacing="0.2px" lineHeight="25px" marginBottom={isMobileMod ? "12px" : "0"}>{data?.description}</BodyText>
-        {isMobileMod && iconLinks()}
+        <BodyText fontSize="16px" letterSpacing="0.2px" lineHeight="25px" marginBottom={isMobileMod() ? "12px" : "0"}>{data?.description}</BodyText>
+        {isMobileMod() && iconLinks()}
       </Box>
     </Box>
   )
 }
 
 export default function QuemSomos({ pages, bdTeam, bdPeople }) {
-  const isMobile = useCheckMobile()
-  const [isMobileMod, setIsMobileMod] = useState(false)
-
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
-
   const [allPeople, setAllPeople] = useState([])
   const [people, setPeople] = useState([])
   const [filterTeam, setFilterTeam] = useState("")
@@ -276,13 +265,13 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
     return newArraySorting
   }
 
-  useEffect(() => {
-    setPeople(sortingTeam(allPeople))
-  },[allPeople])
+  // useEffect(() => {
+  //   setPeople(sortingTeam(allPeople))
+  // },[allPeople])
 
-  useEffect(() => {
-    setAllPeople(groupingTeamAndRole(Object.values(bdPeople)).filter(Boolean))
-  },[bdTeam, bdPeople])
+  // useEffect(() => {
+  //   setAllPeople(groupingTeamAndRole(Object.values(bdPeople)).filter(Boolean))
+  // },[bdTeam, bdPeople])
 
   const groupingTeamAndRole = (array) => array.map((elm) => {
     const person = elm
@@ -378,10 +367,10 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
 
       <Stack
         position="relative"
-        left={isMobileMod ? "0" :"-24px"}
+        left={isMobileMod() ? "0" :"-24px"}
       >
         <Stack
-          display={isMobileMod ? "none" :"flex"}
+          display={isMobileMod() ? "none" :"flex"}
           spacing={0}
           position="sticky"
           width="fit-content"
@@ -396,7 +385,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
           <LinkedinIcon alt="linkedin basedosdados" {...keyIcon("https://www.linkedin.com/company/base-dos-dados/mycompany/")}/>
         </Stack>
 
-        <VStack paddingLeft={isMobileMod ? "0" : "30px"} position="relative" top="-40px">
+        <VStack paddingLeft={isMobileMod() ? "0" : "30px"} position="relative" top="-40px">
           <Stack
             width="100%"
             maxWidth="1264px"
@@ -405,13 +394,13 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             alignItems="center"
           >
             <Display 
-              fontSize={isMobile ? "34px" : "60px"}
-              letterSpacing={isMobileMod ? "-0.5px" : "-1.5px"}
-              lineHeight={isMobileMod ? "40px" : "90px"}
+              fontSize={isMobileMod() ? "34px" : "60px"}
+              letterSpacing={isMobileMod() ? "-0.5px" : "-1.5px"}
+              lineHeight={isMobileMod() ? "40px" : "90px"}
               textAlign="center" 
-              marginBottom={isMobile ? "80px" : "136px"}
+              marginBottom={isMobileMod() ? "80px" : "136px"}
             >
-              Facilitamos o acesso a dados {isMobileMod ? " " : <br/>} para que a distância entre você e sua análise{isMobileMod ? " " : <br/>}seja <a style={{color:"#2B8C4D"}}>apenas uma boa pergunta</a>.
+              Facilitamos o acesso a dados {isMobileMod() ? " " : <br/>} para que a distância entre você e sua análise{isMobileMod() ? " " : <br/>}seja <a style={{color:"#2B8C4D"}}>apenas uma boa pergunta</a>.
             </Display>
           </Stack>
 
@@ -423,7 +412,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             maxWidth="1264px"
             justifyContent="center"
             marginTop="0px !important"
-            paddingBottom={isMobileMod ? "0" : "16px"}
+            paddingBottom={isMobileMod() ? "0" : "16px"}
           >
             <Center flexDirection="column">
               <Display>
@@ -454,10 +443,10 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             width={{ base: "100%", lg: "650px" }}
           >
             <Display
-              paddingBottom={isMobileMod ? "16px" : "24px" }
-              fontSize={isMobileMod ? "34px" : "50px" }
-              lineHeight={isMobileMod ? "40px" : "54px"}
-              letterSpacing={isMobileMod ? "-0.5px" : "-0.8px" }
+              paddingBottom={isMobileMod() ? "16px" : "24px" }
+              fontSize={isMobileMod() ? "34px" : "50px" }
+              lineHeight={isMobileMod() ? "40px" : "54px"}
+              letterSpacing={isMobileMod() ? "-0.5px" : "-0.8px" }
             >
               A Base dos Dados
             </Display>
@@ -480,22 +469,22 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             spacing={0}
           >
             <Display
-              paddingBottom={isMobileMod ? "56px" : "104px" }
-              fontSize={isMobileMod ? "34px" : "50px" }
-              lineHeight={isMobileMod ? "40px" : "54px"}
-              letterSpacing={isMobileMod ? "-0.5px" : "-0.8px" }
+              paddingBottom={isMobileMod() ? "56px" : "104px" }
+              fontSize={isMobileMod() ? "34px" : "50px" }
+              lineHeight={isMobileMod() ? "40px" : "54px"}
+              letterSpacing={isMobileMod() ? "-0.5px" : "-0.8px" }
               textAlign="center"
             >
               Reconhecimentos
             </Display>
 
             <Stack
-              flexDirection={isMobileMod ? "column" : "row"}
+              flexDirection={isMobileMod() ? "column" : "row"}
               justifyContent="space-between"
-              spacing={isMobileMod ? "80px" : "0"}
-              paddingX={isMobileMod ? "0" : "16px"}
+              spacing={isMobileMod() ? "80px" : "0"}
+              paddingX={isMobileMod() ? "0" : "16px"}
             >
-              <Box textAlign="center" maxWidth={isMobileMod ? "100%" : "45%"}>
+              <Box textAlign="center" maxWidth={isMobileMod() ? "100%" : "45%"}>
                 <Image
                   alt="google cloud"
                   src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/google_cloud.svg"
@@ -538,7 +527,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
                 </Link>
               </Box>
 
-              <Box textAlign="center" maxWidth={isMobileMod ? "100%" : "45%"}>
+              <Box textAlign="center" maxWidth={isMobileMod() ? "100%" : "45%"}>
                 <Image
                   alt="premio tesouro nacional"
                   src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/premio_tesouro_nacional_2021.png"
@@ -589,16 +578,16 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
         height="100%"
         alignItems="center"
         position="relative"
-        left={isMobileMod ? "-24px" : "-32px"}
+        left={isMobileMod() ? "-24px" : "-32px"}
         paddingBottom={{ base: "40px", lg: "104px" }}
-        bgGradient={isMobileMod ? "linear(#34A15A 38%, #FFF 38%)" : "linear(#34A15A 45%, #FFF 45%)"}
+        bgGradient={isMobileMod() ? "linear(#34A15A 38%, #FFF 38%)" : "linear(#34A15A 45%, #FFF 45%)"}
       >
         <Center flexDirection="column">
           <Display 
             padding="56px 0 8px"
-            fontSize={isMobileMod ? "34px" : "50px" }
-            lineHeight={isMobileMod ? "40px" : "54px"}
-            letterSpacing={isMobileMod ? "-0.5px" : "-0.8px" }
+            fontSize={isMobileMod() ? "34px" : "50px" }
+            lineHeight={isMobileMod() ? "40px" : "54px"}
+            letterSpacing={isMobileMod() ? "-0.5px" : "-0.8px" }
             color="#FFF"
           >
             Nossa história
@@ -621,9 +610,9 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
         >
           <Carousel
             settings={{
-              spaceBetween: isMobileMod ? 100 : 400,
-              slidesPerView: isMobileMod ? 1 : 3,
-              navigation: !isMobileMod && true,
+              spaceBetween: isMobileMod() ? 100 : 400,
+              slidesPerView: isMobileMod() ? 1 : 3,
+              navigation: !isMobileMod() && true,
               centeredSlides: true,
             }}
           >
@@ -715,10 +704,10 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
         margin="auto"
       >
         <Display
-          paddingBottom={isMobileMod ? "56px" : "104px" }
-          fontSize={isMobileMod ? "34px" : "50px" }
-          lineHeight={isMobileMod ? "40px" : "54px"}
-          letterSpacing={isMobileMod ? "-0.5px" : "-0.8px" }
+          paddingBottom={isMobileMod() ? "56px" : "104px" }
+          fontSize={isMobileMod() ? "34px" : "50px" }
+          lineHeight={isMobileMod() ? "40px" : "54px"}
+          letterSpacing={isMobileMod() ? "-0.5px" : "-0.8px" }
           textAlign="center"
         >
           Uma equipe colaborativa
@@ -728,7 +717,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
           position="relative"
           gridGap="96px"
           spacing={0}
-          flexDirection={isMobileMod ? "column" :"row"}
+          flexDirection={isMobileMod() ? "column" :"row"}
           paddingBottom="32px"
         >
           <Box
@@ -736,8 +725,8 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
             height="100%"
             flexDirection="column"
             gridGap="16px"
-            position={isMobileMod ? "relative" : "sticky"}
-            top={isMobileMod? "0" : "120px"}
+            position={isMobileMod() ? "relative" : "sticky"}
+            top={isMobileMod()? "0" : "120px"}
             z-index="20"
           >
             {schemasTeam?.map((elm) => (
@@ -764,7 +753,6 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
               <TeamBox
                 index={index}
                 data={elm}
-                isMobileMod={isMobileMod}
               />
             ))}
           </Stack>

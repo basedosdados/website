@@ -1,6 +1,8 @@
 import axios from "axios";
 
-export const baseUrl = `/api/3/action`;
+// export const baseUrl = `/api/3/action`;
+// export const baseUrl = `https://staging.backend.dados.rio/api/`
+export const baseUrl = `https://basedosdados.org/api/3/action`;
 
 export const axiosInstance = axios.create({
   baseURL: baseUrl,

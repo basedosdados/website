@@ -9,51 +9,57 @@ import {
   GridItem
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import {
-  filterOnlyValidValues,
-  formatObjectsInArray,
-  translate,
-  formatJson,
-  getTemporalCoverage
-} from "../../../utils";
-import { useCheckMobile } from "../../../hooks/useCheckMobile.hook";
-import { SimpleTable } from "../../atoms/SimpleTable";
-import SectionText from "../../atoms/SectionText";
-import Subtitle from "../../atoms/Subtitle";
-import RoundedButton from "../../atoms/RoundedButton";
-import { BaseResourcePage } from "../../molecules/BaseResourcePage";
-import { DisclaimerBox } from "../../molecules/DisclaimerBox";
-import { SchemaForm } from "../../molecules/SchemaForm";
 
-import { deleteResource, updateResource } from "../../../pages/api/datasets";
-import { getExternalLinkSchema } from "../../../pages/api/schemas";
+// import {
+//   filterOnlyValidValues,
+//   formatObjectsInArray,
+//   translate,
+//   formatJson,
+//   getTemporalCoverage
+// } from "../../utils";
+
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import { SimpleTable } from "../atoms/SimpleTable";
+import SectionText from "../atoms/SectionText";
+import Subtitle from "../atoms/Subtitle";
+import RoundedButton from "../atoms/RoundedButton";
+import BaseResourcePage from "../molecules/BaseResourcePage";
+import { DisclaimerBox } from "../molecules/DisclaimerBox";
+import FourOhFour from "../templates/404";
+
+// import { SchemaForm } from "../../molecules/SchemaForm";
+
+// import { deleteResource, updateResource } from "../../../pages/api/datasets";
+// import { getExternalLinkSchema } from "../../../pages/api/schemas";
 
 import {
   getRawDataSources
-} from "../../../pages/api/new/datasets";
+} from "../../pages/api/datasets";
 
-import RedirectIcon from "../../../public/img/icons/redirectIcon"
-import LanguageIcon from "../../../public/img/icons/languageIcon";
-import DisplayIcon from "../../../public/img/icons/displayIcon";
-import DataStructureIcon from "../../../public/img/icons/dataStructureIcon";
-import ApiIcon from "../../../public/img/icons/apiIcon";
-import FrequencyIcon from "../../../public/img/icons/frequencyIcon";
-import ObservationLevelIcon from "../../../public/img/icons/observationLevelIcon";
-import RegisterIcon from "../../../public/img/icons/registerIcon";
-import IpIcon from "../../../public/img/icons/ipIcon";
-import CoinIcon from "../../../public/img/icons/coinIcon";
-import ExclamationIcon from "../../../public/img/icons/exclamationIcon";
+import RedirectIcon from "../../public/img/icons/redirectIcon"
+import LanguageIcon from "../../public/img/icons/languageIcon";
+import DisplayIcon from "../../public/img/icons/displayIcon";
+import DataStructureIcon from "../../public/img/icons/dataStructureIcon";
+import ApiIcon from "../../public/img/icons/apiIcon";
+import FrequencyIcon from "../../public/img/icons/frequencyIcon";
+import ObservationLevelIcon from "../../public/img/icons/observationLevelIcon";
+import RegisterIcon from "../../public/img/icons/registerIcon";
+import IpIcon from "../../public/img/icons/ipIcon";
+import CoinIcon from "../../public/img/icons/coinIcon";
+import ExclamationIcon from "../../public/img/icons/exclamationIcon";
 
 export default function RawDataSourcesPage({
   id
 }) {
   const [resource, setResource] = useState({})
+  const [isError, setIsError] = useState("")
 
-const featchRawDataSources = async () => {
+  const featchRawDataSources = async () => {
     try {
       const result = await getRawDataSources(id)
       return setResource(result)
     } catch (error) {
+      setIsError(error)
       console.error(error)
     }
   }
@@ -66,7 +72,7 @@ const featchRawDataSources = async () => {
     const array = []
 
     resource?.languages?.edges.map((elm) => {
-      array.push(elm.node.namePt || elm.node.nameEn)
+      array.push(elm.node.name)
     })
 
     if(array.length === 0) return "Não listado"
@@ -164,9 +170,11 @@ const featchRawDataSources = async () => {
     )
   }
 
+  if(isError.length > 0) return <FourOhFour/>
+
   return (
     <BaseResourcePage
-      title={resource?.namePt || resource?.nameEn}
+      title={resource?.name}
       // removeFunction={() => deleteResource(resource)}
       // formComponent={
       //   <SchemaForm
@@ -241,11 +249,7 @@ const featchRawDataSources = async () => {
             <DisplayIcon alt="disponibilidade" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Disponibilidade"
-              text={
-                resource?.availability?.namePt ||
-                resource?.availability?.nameEn ||
-                "Não listado"
-              }
+              text={resource?.availability?.name || "Não listado"}
             />
           </GridItem>
 
@@ -269,11 +273,7 @@ const featchRawDataSources = async () => {
             <FrequencyIcon alt="Frequência de atualização" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Frequência de atualização"
-              text={
-                resource?.updateFrequency?.timeUnit?.namePt ||
-                resource?.updateFrequency?.timeUnit?.nameEn ||
-                "Não listado"
-              }
+              text={resource?.updateFrequency?.timeUnit?.name || "Não listado"}
             />
           </GridItem>
 

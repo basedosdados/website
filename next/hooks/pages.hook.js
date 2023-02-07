@@ -1,7 +1,7 @@
-import { getPages } from "../pages/api/pages";
+// import { getPages } from "../pages/api/pages";
 
 export async function withPages(staticProps = null) {
-  let { data: pages } = await getPages();
+  // let { data: pages } = await getPages();
 
   if (staticProps == null) {
     staticProps = {
@@ -14,7 +14,7 @@ export async function withPages(staticProps = null) {
     staticProps.props = {};
   }
 
-  staticProps.props.pages = pages;
+  // staticProps.props.pages = pages;
 
   return staticProps;
 }

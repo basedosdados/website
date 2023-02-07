@@ -18,11 +18,15 @@ import {
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { BaseResourcePage } from "../molecules/BaseResourcePage";
 import { SchemaForm } from "../molecules/SchemaForm";
-import { getBdmColumnsSchema } from '../../pages/api/schemas';
-import { getBdmTableSchema } from "../../pages/api/schemas";
-import { deleteResource, updateResource } from "../../pages/api/datasets";
+// import { getBdmColumnsSchema } from '../../../pages/api/schemas';
+// import { getBdmTableSchema } from "../../../pages/api/schemas";
+// import { deleteResource, updateResource } from "../../pages/api/datasets";
 import { SimpleTable } from "../atoms/SimpleTable";
 import DataInformationQuery from "../molecules/DataInformationQuery";
+
+import {
+  getBdmTable
+} from "../../pages/api/datasets"
 
 import StarIcon from "../../public/img/icons/starIcon";
 import FrequencyIcon from "../../public/img/icons/frequencyIcon";
@@ -37,15 +41,7 @@ import TwitterIcon from "../../public/img/icons/twitterIcon";
 import FileIcon from "../../public/img/icons/fileIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 
-export function BdmTablePage({
-  availableOptionsTranslations,
-  translationsOptions,
-  translations,
-  datasetName,
-  resource,
-}) {
-  const isMobile = useCheckMobile();
-  const [isMobileMod, setIsMobileMod] = useState(false)
+export default function BdmTablePage({ id }) {
   const [showColumns, setShowColumns] = useState(false)
   const [showTemporalCoverage, setShowTemporalCoverage] = useState(false)
   const [schema, setSchema] = useState({})
@@ -53,6 +49,20 @@ export function BdmTablePage({
   const [columnsValues, setColumnsValues] = useState([])
   const [temporalCoverage, setTemporalCoverage] = useState([])
   const [observationLevel, setObservationLevel] = useState([])
+  const [resource, setResource] = useState({})
+
+  const feathBdmTable = async () => {
+    try {
+      const result = await getBdmTable(id)
+      return setResource(result)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    feathBdmTable()
+  },[id])
 
   const tooltip = {
     name: "Nome da coluna.",
@@ -67,10 +77,6 @@ export function BdmTablePage({
   }
 
   useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
-
-  useEffect(() => {
     fetchSchema()
   },[])
   
@@ -79,109 +85,109 @@ export function BdmTablePage({
     setSchema(columnsSchema)
   }
 
-  function translateField(field, translation) {
-    if(!field) return "Não listado"
+  // function translateField(field, translation) {
+  //   if(!field) return "Não listado"
 
-    if(typeof field === "boolean") return field === true ? "Sim" : "Não" 
+  //   if(typeof field === "boolean") return field === true ? "Sim" : "Não" 
 
-    if(typeof field === "object") {
-      if(!field) return "Não listado"
+  //   if(typeof field === "object") {
+  //     if(!field) return "Não listado"
 
-      if(field.length === 0) {
-        return "Não listado"
-      } else {
-        const newJson = JSON.stringify(field)
-        return formatJson(newJson, true)
-      }
-    }
+  //     if(field.length === 0) {
+  //       return "Não listado"
+  //     } else {
+  //       const newJson = JSON.stringify(field)
+  //       return formatJson(newJson, true)
+  //     }
+  //   }
 
-    return translation[field] || field
-  }
+  //   return translation[field] || field
+  // }
 
-  useEffect(() => {
-    setColumnsHeaders(Object.keys(schema))
-    if(resource.columns) {
-      if(resource.columns.length === 0) {
-        setColumnsValues(resource.columns)
-        setShowColumns(false)
-      } else {
-        setColumnsValues(resource.columns)
-        setShowColumns(true)
-      }
-    }
-    if(resource.temporal_coverage) {
-      if(resource.temporal_coverage.length === 0) {
-        setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
-        setShowTemporalCoverage(false)
-      } else {
-        setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
-        setShowTemporalCoverage(true)
-      }
-    }
-  },[schema, resource])
+  // useEffect(() => {
+  //   setColumnsHeaders(Object.keys(schema))
+  //   if(resource.columns) {
+  //     if(resource.columns.length === 0) {
+  //       setColumnsValues(resource.columns)
+  //       setShowColumns(false)
+  //     } else {
+  //       setColumnsValues(resource.columns)
+  //       setShowColumns(true)
+  //     }
+  //   }
+  //   if(resource.temporal_coverage) {
+  //     if(resource.temporal_coverage.length === 0) {
+  //       setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
+  //       setShowTemporalCoverage(false)
+  //     } else {
+  //       setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
+  //       setShowTemporalCoverage(true)
+  //     }
+  //   }
+  // },[schema, resource])
 
-  useEffect(() => {
-    if(resource.observation_level === null) return setObservationLevel()
+  // useEffect(() => {
+  //   if(resource.observation_level === null) return setObservationLevel()
 
-    if(typeof resource.observation_level === "object") {
-      if(resource.observation_level.length === 0) return setObservationLevel()
-      const schemaHeaders = { entity: "-", columns : "-" }
-      const valueObservationLevel = resource.observation_level.map((elm) => {
-        const values = elm
+  //   if(typeof resource.observation_level === "object") {
+  //     if(resource.observation_level.length === 0) return setObservationLevel()
+  //     const schemaHeaders = { entity: "-", columns : "-" }
+  //     const valueObservationLevel = resource.observation_level.map((elm) => {
+  //       const values = elm
 
-        const valueColumn = () => {
-          if(typeof values.columns === "object") {
-            const newColumn = Object.values(values.columns)
-              .map((elm) => {
-                if(!elm) {
-                  return "-"
-                } else {
-                  return elm
-                }
-              })
-            return {columns : newColumn.toString()}
-          }
-        }
+  //       const valueColumn = () => {
+  //         if(typeof values.columns === "object") {
+  //           const newColumn = Object.values(values.columns)
+  //             .map((elm) => {
+  //               if(!elm) {
+  //                 return "-"
+  //               } else {
+  //                 return elm
+  //               }
+  //             })
+  //           return {columns : newColumn.toString()}
+  //         }
+  //       }
 
-        const translationsEntity = () => {
-          if(values.entity) {
-            return {entity : translateField(values.entity, availableOptionsTranslations)}
-          } else {
-            return {entity : "-"}
-          }
-        }
+  //       const translationsEntity = () => {
+  //         if(values.entity) {
+  //           return {entity : translateField(values.entity, availableOptionsTranslations)}
+  //         } else {
+  //           return {entity : "-"}
+  //         }
+  //       }
 
-        const row = {...schemaHeaders, ...values, ...valueColumn(), ...translationsEntity()}
+  //       const row = {...schemaHeaders, ...values, ...valueColumn(), ...translationsEntity()}
         
-        delete row.country
-        delete row.column
+  //       delete row.country
+  //       delete row.column
         
-        if(row.entity === "-" && row.columns === "-") {
-          delete row.entity
-          delete row.columns
-          return [""]
-        }
+  //       if(row.entity === "-" && row.columns === "-") {
+  //         delete row.entity
+  //         delete row.columns
+  //         return [""]
+  //       }
 
-        return Object.values(row)
-      })
+  //       return Object.values(row)
+  //     })
 
-      function filterArray(value) {
-        return value.length > 1
-      }
-      const newValues = valueObservationLevel.filter(filterArray)
+  //     function filterArray(value) {
+  //       return value.length > 1
+  //     }
+  //     const newValues = valueObservationLevel.filter(filterArray)
 
-      setObservationLevel(newValues)
-    } else {
-      setObservationLevel()
-    }
-  },[resource.observation_level])
+  //     setObservationLevel(newValues)
+  //   } else {
+  //     setObservationLevel()
+  //   }
+  // },[resource.observation_level])
 
-  if (
-    resource.spatial_coverage &&
-    typeof resource.spatial_coverage === "array"
-  ) {
-    resource.spatial_coverage = resource.spatial_coverage.sort();
-  }
+  // if (
+  //   resource.spatial_coverage &&
+  //   typeof resource.spatial_coverage === "array"
+  // ) {
+  //   resource.spatial_coverage = resource.spatial_coverage.sort();
+  // }
 
   const AddInfoTextBase = ({title, text, info, children, ...style}) => {
     return (
@@ -218,7 +224,7 @@ export function BdmTablePage({
           }
         </Text>
         <SectionText>
-          {translateField(text, availableOptionsTranslations)}
+          {text}
         </SectionText>
         {children}
       </Box>
@@ -279,35 +285,35 @@ export function BdmTablePage({
 
   return (
     <BaseResourcePage
-      padding={isMobileMod ? "16px 0 0" : "16px 8px 0 0"}
-      editLink={`/resource/edit/${resource.id}`}
-      title={`${resource.name}`}
-      removeFunction={() => deleteResource(resource)}
-      formComponent={
-        <SchemaForm
-          data={resource}
-          schemaName="Tabela BD+"
-          loadSchemaFunction={getBdmTableSchema}
-          updateFunction={updateResource}
-          prepareData={(data) => {
-            data.observation_level = data.observation_level || [];
-            data.published_by.github_user = data.published_by.github_user || "";
-            data.published_by.ckan_user = data.published_by.ckan_user || "";
-            data.data_cleaned_by.github_user =
-              data.data_cleaned_by.github_user || "";
-            data.data_cleaned_by.ckan_user =
-              data.data_cleaned_by.ckan_user || "";
-            data.data_cleaned_by.website = data.data_cleaned_by.website || "";
-            data.resource_type = "bdm_table";
+      padding={useCheckMobile() ? "16px 0 0" : "16px 8px 0 0"}
+      editLink={`/resource/edit/${resource?.id}`}
+      title={`${resource?.name}`}
+      // removeFunction={() => deleteResource(resource)}
+      // formComponent={
+      //   <SchemaForm
+      //     data={resource}
+      //     schemaName="Tabela BD+"
+      //     loadSchemaFunction={getBdmTableSchema}
+      //     updateFunction={updateResource}
+      //     prepareData={(data) => {
+      //       data.observation_level = data.observation_level || [];
+      //       data.published_by.github_user = data.published_by.github_user || "";
+      //       data.published_by.ckan_user = data.published_by.ckan_user || "";
+      //       data.data_cleaned_by.github_user =
+      //         data.data_cleaned_by.github_user || "";
+      //       data.data_cleaned_by.ckan_user =
+      //         data.data_cleaned_by.ckan_user || "";
+      //       data.data_cleaned_by.website = data.data_cleaned_by.website || "";
+      //       data.resource_type = "bdm_table";
 
-            return data;
-          }}
-        />
-      }
+      //       return data;
+      //     }}
+      //   />
+      // }
     >
-      <DataInformationQuery resource={resource} />
+      {/* <DataInformationQuery resource={resource} /> */}
 
-      <VStack width="100%" spacing={4} alignItems="flex-start">
+      {/* <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Descrição</Subtitle>
         <SectionText>
           {resource.description || "Nenhuma descrição fornecida."}
@@ -363,7 +369,7 @@ export function BdmTablePage({
         </Stack>
 
         <Grid width="100%" flex={1} templateColumns="repeat(2, 1fr)" gap={6}>
-          <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
+          <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <StarIcon alt="" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="ID do conjunto"
@@ -371,7 +377,7 @@ export function BdmTablePage({
             />
           </GridItem>
 
-          <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
+          <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <StarIcon alt="" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="ID da tabela"
@@ -398,7 +404,7 @@ export function BdmTablePage({
             />
           </GridItem>
 
-          <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
+          <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <UserIcon alt="publicação por" width="22px" height="22px" fill="#D0D0D0"/>
             <Box display="block" gridGap="8px">
               <Text
@@ -415,7 +421,7 @@ export function BdmTablePage({
             </Box>
           </GridItem>
 
-          <GridItem colSpan={isMobileMod && 2} display="flex" alignItems="flex-start" gridGap="8px">
+          <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <UserIcon alt="publicação por" width="22px" height="22px" fill="#D0D0D0"/>
             <Box display="block" gridGap="8px">
               <Text
@@ -450,7 +456,7 @@ export function BdmTablePage({
           </GridItem>
         </Grid>
 
-      </VStack>
+      </VStack> */}
     </BaseResourcePage>
   );
 }

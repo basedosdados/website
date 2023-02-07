@@ -11,13 +11,15 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Typist from "react-typist";
-import {
-  getPopularDatalakeDatasets,
-  getPopularTags
-} from "./api/datasets";
-import { getGroupList } from "./api/groups"
+
+// import {
+//   getPopularDatalakeDatasets,
+//   getPopularTags
+// } from "./api/datasets";
+// import { getGroupList } from "./api/groups"
+
 import { withPages } from "../hooks/pages.hook";
-import { useCheckMobile } from "../hooks/useCheckMobile.hook";
+import { isMobile ,isMobileMod } from "../hooks/useCheckMobile.hook";
 import { useMediaQuery } from "@chakra-ui/react";
 import BodyText from "../components/atoms/BodyText";
 import ControlledInput from "../components/atoms/ControlledInput";
@@ -44,37 +46,31 @@ import ProductsFiltersImage from "../public/img/productsFiltersImage";
 import ProcessedDataImage from "../public/img/processedDataImage";
 import BDLogoPlusImage from "../public/img/logos/bd_logo_plus"
 
-export async function getStaticProps(context) {
-  const themes = await getGroupList()
-  const popularTags = await getPopularTags()
-  let popularDatalakeDatasets;
+// export async function getStaticProps(context) {
+//   const themes = await getGroupList()
+//   const popularTags = await getPopularTags()
+//   let popularDatalakeDatasets;
 
-  try {
-    popularDatalakeDatasets = await getPopularDatalakeDatasets()
-  } catch {
-    popularDatalakeDatasets = []
-  }
+//   try {
+//     popularDatalakeDatasets = await getPopularDatalakeDatasets()
+//   } catch {
+//     popularDatalakeDatasets = []
+//   }
 
-  return await withPages({
-    props: {
-      popularDatalakeDatasets,
-      popularTags,
-      themes  
-    },
-    revalidate: 60,
-  });
-}
+//   return await withPages({
+//     props: {
+//       popularDatalakeDatasets,
+//       popularTags,
+//       themes  
+//     },
+//     revalidate: 60,
+//   });
+// }
 
 function Hero({ popularDatalakeDatasets, popularTags, themes }) {
   const [search, setSearch] = useState();
-  const [isMobileMod, setIsMobileMod] = useState(false)
   const [tags, setTags] = useState([])
-  const isMobile = useCheckMobile();
   const [mediumQuery] = useMediaQuery("(max-width: 1366px)")
-
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
 
   function openSearchLink() {
     return window.open(`/dataset?q=${search}`, "_self");
@@ -87,6 +83,7 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
 
   useEffect(() => {
     if(popularTags === null) return ""
+    if(popularTags === undefined) return ""
     const newPopularTags = Object.keys(popularTags)
     if(isMobile) return setTags(newPopularTags.slice(0,3))
     setTags(newPopularTags.slice(0,5))
@@ -120,26 +117,26 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
             marginStart="0px !important"
             direction="column"
             marginTop={
-              isMobileMod ? "64px" : 
+              isMobileMod() ? "64px" : 
               mediumQuery ? "16px" : "80px"
             }
           >
             <BDLogoImage 
-              widthImage={isMobileMod ? "160px" : "200px"}
-              heightImage={isMobileMod ? "75px" : "94px"}
+              widthImage={isMobileMod() ? "160px" : "200px"}
+              heightImage={isMobileMod() ? "75px" : "94px"}
               marginBottom="24px"
             />
             <VStack
               maxWidth="650px"
-              width={isMobileMod ? "100vw" : "100%"}
-              paddingX={isMobileMod && "24px"}
+              width={isMobileMod() ? "100vw" : "100%"}
+              paddingX={isMobileMod() && "24px"}
               spacing={4}
               alignItems="flex-start"
               flex="3"
             >
               <ControlledInput
                 value={search}
-                placeholder={isMobileMod ? "Encontre os dados" : "Encontre os dados que você precisa"}
+                placeholder={isMobileMod() ? "Encontre os dados" : "Encontre os dados que você precisa"}
                 width="100%"
                 onChange={setSearch}
                 onEnterPress={openSearchLink}
@@ -150,40 +147,40 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
                   "aria-label": "Search",
                   id: "searchDatabases",
                   fontFamily: "ubuntu",
-                  padding: isMobileMod ? "24px 48px 24px 20px " : "24px 64px 24px 32px",
-                  height: isMobileMod ? "50px" :"80px",
-                  borderRadius: isMobileMod ? "18px" : "25px",
+                  padding: isMobileMod() ? "24px 48px 24px 20px " : "24px 64px 24px 32px",
+                  height: isMobileMod() ? "50px" :"80px",
+                  borderRadius: isMobileMod() ? "18px" : "25px",
                   backgroundColor: "#ffffff",
-                  fontSize: isMobileMod ? "18px" : "22px",
-                  letterSpacing: isMobileMod? "0.1px" : "0",
+                  fontSize: isMobileMod() ? "18px" : "22px",
+                  letterSpacing: isMobileMod()? "0.1px" : "0",
                   border: "0px",
                   boxShadow: "0 1px 8px 1px rgba(64, 60, 67, 0.16) !important",
-                  _placeholder:isMobileMod ? {color:"#6F6F6F !important"} : {color: "#A3A3A3"}
+                  _placeholder:isMobileMod() ? {color:"#6F6F6F !important"} : {color: "#A3A3A3"}
                 }}
                 rightIcon={
                   (search ?
                     <ArrowIcon
                       alt=""
-                      width={isMobileMod ? "18px" : "28px"}
-                      height={isMobileMod ? "18px" : "28px"}
+                      width={isMobileMod() ? "18px" : "28px"}
+                      height={isMobileMod() ? "18px" : "28px"}
                       fill="#252A32"
-                      marginRight={isMobileMod ? "10px" : "20px"}
+                      marginRight={isMobileMod() ? "10px" : "20px"}
                       cursor="pointer"
                       onClick={openSearchLink}
                     />
                     :
                     <SearchIcon
                       alt="pesquisar"
-                      width={isMobileMod ? "18px" : "28px"}
-                      height={isMobileMod ? "18px" : "28px"}
+                      width={isMobileMod() ? "18px" : "28px"}
+                      height={isMobileMod() ? "18px" : "28px"}
                       fill="#252A32"
-                      marginRight={isMobileMod ? "10px" : "25px"}
+                      marginRight={isMobileMod() ? "10px" : "25px"}
                     />
                   )
                 }
               />
-              <HStack display={tags.length === 0 ? "none" : "flex"} paddingLeft={isMobileMod ? "20px" : "32px"}>
-                {!isMobileMod &&
+              <HStack display={tags.length === 0 ? "none" : "flex"} paddingLeft={isMobileMod() ? "20px" : "32px"}>
+                {!isMobileMod() &&
                   <Text 
                     fontFamily="Ubuntu"
                     fontSize="13px"
@@ -203,18 +200,18 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
 
           <VStack
             margin="0 !important"
-            paddingTop={isMobileMod ? "80px" : "120px"}
+            paddingTop={isMobileMod() ? "80px" : "120px"}
             width="100%"
             position="relative"
             id="theme"
           >
             <Text
-              fontSize={isMobileMod ? "16px" : "22px"}
-              letterSpacing={isMobileMod ? "0.1px" : "0"}
+              fontSize={isMobileMod() ? "16px" : "22px"}
+              letterSpacing={isMobileMod() ? "0.1px" : "0"}
               fontFamily="Ubuntu"
               fontWeight="300"
               minHeight="30px"
-              marginBottom={isMobileMod ? "8px" : "24px"}
+              marginBottom={isMobileMod() ? "8px" : "24px"}
               color="#575757"
               cursor="pointer"
               onClick={() => window.open("#theme", "_self")}
@@ -234,12 +231,6 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
 
 function Products() {
   const [typistKey, setTypistKey] = useState(0);
-  const [isMobileMod, setIsMobileMod] = useState(false)
-  const isMobile = useCheckMobile();
-
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
 
   return (
     <VStack
@@ -249,26 +240,26 @@ function Products() {
     >
       <VStack position="relative" width="95%">
         <Display
-          fontSize={isMobileMod ? "32px" : "38px"}
-          letterSpacing={isMobileMod ? "0.2px" : "-0.2px"}
-          lineHeight={isMobileMod ? "40px" : "64px"}
+          fontSize={isMobileMod() ? "32px" : "38px"}
+          letterSpacing={isMobileMod() ? "0.2px" : "-0.2px"}
+          lineHeight={isMobileMod() ? "40px" : "64px"}
           position="relative"
           zIndex="1"
           width="100%"
           textAlign="center"
           margin="80px 0px"
         >
-          Facilitamos o trabalho para que a distância {!isMobileMod && <br/>}
+          Facilitamos o trabalho para que a distância {!isMobileMod() && <br/>}
           entre você e sua análise seja <span style={{color:"#2B8C4D"}}>apenas uma boa pergunta</span>.
         </Display>
 
-        <VStack spacing={isMobileMod ? 8 : 120}>
+        <VStack spacing={isMobileMod() ? 8 : 120}>
           <HStack
-            flexDirection={isMobileMod && "column"}
+            flexDirection={isMobileMod() && "column"}
             justifyContent="center"
-            gridGap={isMobileMod ? "0" : "160px"}
+            gridGap={isMobileMod() ? "0" : "160px"}
           >
-            <Stack maxWidth={isMobileMod ? "300px" : "430px"}>
+            <Stack maxWidth={isMobileMod() ? "300px" : "430px"}>
               <Text
                 fontFamily="Ubuntu"
                 fontSize="14px"
@@ -297,20 +288,20 @@ function Products() {
 
             <Stack>
               <ProductsFiltersImage
-                widthImage={isMobileMod ? "300px" : "550px"}
-                heightImage={isMobileMod && "250px"}
+                widthImage={isMobileMod() ? "300px" : "550px"}
+                heightImage={isMobileMod() && "250px"}
               />
             </Stack>
           </HStack>
 
           <HStack
-            flexDirection={isMobileMod && "column"}
+            flexDirection={isMobileMod() && "column"}
             justifyContent="center"
-            gridGap={isMobileMod ? "0" : "160px"}
+            gridGap={isMobileMod() ? "0" : "160px"}
           >
             <Stack 
-              order={isMobileMod ? 0 : 1}
-              maxWidth={isMobileMod ? "300px" : "430px"}
+              order={isMobileMod() ? 0 : 1}
+              maxWidth={isMobileMod() ? "300px" : "430px"}
             >
               <HStack spacing={1}>
                 <Text
@@ -344,21 +335,21 @@ function Products() {
               </SectionLink>
             </Stack>
 
-            <Stack order={isMobileMod ? 1 : 0}>
+            <Stack order={isMobileMod() ? 1 : 0}>
               <ProcessedDataImage
-                widthImage={isMobileMod ? "300px" : "550px"}
-                heightImage={isMobileMod && "250px"}
+                widthImage={isMobileMod() ? "300px" : "550px"}
+                heightImage={isMobileMod() && "250px"}
               />
             </Stack>
           </HStack>
 
           <HStack
-            flexDirection={isMobileMod && "column"}
+            flexDirection={isMobileMod() && "column"}
             justifyContent="center"
-            gridGap={isMobileMod ? "100px" : "160px"}
+            gridGap={isMobileMod() ? "100px" : "160px"}
             spacing={0}
           >
-            <Stack maxWidth={isMobileMod ? "300px" : "430px"}>
+            <Stack maxWidth={isMobileMod() ? "300px" : "430px"}>
               <Text
                 fontFamily="Ubuntu"
                 fontSize="14px"
@@ -385,11 +376,11 @@ function Products() {
             </Stack>
 
             <Stack
-              maxWidth={isMobileMod ? "320px" : "550px"}
-              minWidth={isMobileMod ? "320px" : "550px"}
+              maxWidth={isMobileMod() ? "320px" : "550px"}
+              minWidth={isMobileMod() ? "320px" : "550px"}
             >
               <Box
-                borderRadius={isMobileMod ? "8px" :"12px"}
+                borderRadius={isMobileMod() ? "8px" :"12px"}
                 filter="drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.4))"
                 maxHeight={{ base: "none", md: "200px" }}
                 minHeight={{ base: "200px", md: "none" }}
@@ -455,16 +446,8 @@ export function StepText ({index, text}) {
 }
 
 function Support({ pages }) {
-  const contactPage = pages.filter((p) => p.Title === "Contato");
-  const [isMobileMod, setIsMobileMod] = useState(false)
-  const isMobile = useCheckMobile();
-
+  // const contactPage = pages.filter((p) => p.Title === "Contato");
   const { hasCopied, onCopy } = useClipboard("42494318000116")
-
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
-
 
   return (
     <VStack
@@ -474,14 +457,14 @@ function Support({ pages }) {
     >
       <VStack id="support" position="relative" width="95%">
         <Display
-          letterSpacing={isMobileMod ? "0.2px" : "-0.4px"}
+          letterSpacing={isMobileMod() ? "0.2px" : "-0.4px"}
           position="relative"
           zIndex="1"
           width="100%"
           textAlign="center"
-          margin={isMobileMod ? "80px 0px 24px" : "104px 0px 24px"}
+          margin={isMobileMod() ? "80px 0px 24px" : "104px 0px 24px"}
         >
-          Existimos através do esforço de pessoas que {!isMobileMod && <br/>}
+          Existimos através do esforço de pessoas que {!isMobileMod() && <br/>}
           acreditam no acesso a dados abertos de qualidade.
         </Display>
         <Text
@@ -489,9 +472,9 @@ function Support({ pages }) {
           zIndex="1"
           color="#6F6F6F"
           fontFamily="Ubuntu"
-          fontSize={isMobileMod ? "16px" : "18px"}
+          fontSize={isMobileMod() ? "16px" : "18px"}
           alignSelf="center"
-          letterSpacing={isMobileMod ? "0.2px" : "0.1px"}
+          letterSpacing={isMobileMod() ? "0.2px" : "0.1px"}
           fontWeight="300"
           margin="0 0 48px !important"
         > Apoie a Base dos Dados você também
@@ -540,8 +523,8 @@ function Support({ pages }) {
           </ShadowBox>
 
           <ShadowBox
-            width={isMobileMod ? "266px" : "320px"}
-            height={isMobileMod ? "400" : "428px"}
+            width={isMobileMod() ? "266px" : "320px"}
+            height={isMobileMod() ? "400" : "428px"}
             image={
               <DatabaseImage 
                 widthImage="100%"
@@ -629,19 +612,19 @@ function Support({ pages }) {
             color="#7D7D7D"
             fontWeight="400"
             lineHeight="32px"
-            paddingBottom={!isMobileMod && "32px"}
+            paddingBottom={!isMobileMod() && "32px"}
           >
             Doe qualquer valor via PIX
           </Text>
 
           <Grid
-            templateColumns={isMobileMod ? "repeat(1, 3fr)" : "repeat(3, 1fr)"}
-            gridGap={isMobileMod && "40px"}
+            templateColumns={isMobileMod() ? "repeat(1, 3fr)" : "repeat(3, 1fr)"}
+            gridGap={isMobileMod() && "40px"}
             justifyItems="center"
             width="100%"
           >
             <GridItem
-              marginTop={isMobileMod && "32px !important"}
+              marginTop={isMobileMod() && "32px !important"}
               justifyContent="center"
               alignItems="flex-start"
             >
@@ -654,7 +637,7 @@ function Support({ pages }) {
               </Box>
             </GridItem>
 
-            <GridItem marginBottom={isMobileMod && "24px"}>
+            <GridItem marginBottom={isMobileMod() && "24px"}>
               <ChakraImage
                 alt="QR code para apoiador"
                 position="relative"
@@ -681,7 +664,7 @@ function Support({ pages }) {
               </RoundedButton>
             </GridItem>
 
-            <GridItem display={isMobileMod && "none"}>
+            <GridItem display={isMobileMod() && "none"}>
               <BodyText letterSpacing="0.2px" fontSize="16px" color="#FF8484" fontWeight="500" marginBottom="24px">Siga o passo a passo</BodyText>
               <StepText index="1" text=" Abra o app do seu banco;"/>
               <StepText index="2" text=" Escolha a opção de pagamento com PIX;"/>

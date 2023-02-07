@@ -6,7 +6,7 @@ import { Center, VStack } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import Head from "next/head";
 import { GeoTree } from "./GeoTree";
-import { getSpatialCovarageTree } from "../../pages/api/schemas"
+// import { getSpatialCovarageTree } from "../../pages/api/schemas"
 
 export function SchemaForm({
   data,

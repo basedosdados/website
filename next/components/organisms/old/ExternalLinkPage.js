@@ -15,28 +15,28 @@ import {
   translate,
   formatJson,
   getTemporalCoverage
-} from "../../utils";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { BaseResourcePage } from "../molecules/BaseResourcePage";
-import { deleteResource, updateResource } from "../../pages/api/datasets";
+} from "../../../utils";
+import { useCheckMobile } from "../../../hooks/useCheckMobile.hook";
+import { BaseResourcePage } from "../../molecules/old/BaseResourcePage";
+import { deleteResource, updateResource } from "../../../pages/api/datasets";
 import { getExternalLinkSchema } from "../../pages/api/schemas";
-import { SchemaForm } from "../molecules/SchemaForm";
-import { SimpleTable } from "../atoms/SimpleTable";
-import { DisclaimerBox } from "../molecules/DisclaimerBox";
-import SectionText from "../atoms/SectionText";
-import Subtitle from "../atoms/Subtitle";
-import RoundedButton from "../atoms/RoundedButton";
-import RedirectIcon from "../../public/img/icons/redirectIcon"
-import LanguageIcon from "../../public/img/icons/languageIcon";
-import DisplayIcon from "../../public/img/icons/displayIcon";
-import DataStructureIcon from "../../public/img/icons/dataStructureIcon";
-import ApiIcon from "../../public/img/icons/apiIcon";
-import FrequencyIcon from "../../public/img/icons/frequencyIcon";
-import ObservationLevelIcon from "../../public/img/icons/observationLevelIcon";
-import RegisterIcon from "../../public/img/icons/registerIcon";
-import IpIcon from "../../public/img/icons/ipIcon";
-import CoinIcon from "../../public/img/icons/coinIcon";
-import ExclamationIcon from "../../public/img/icons/exclamationIcon";
+import { SchemaForm } from "../../molecules/SchemaForm";
+import { SimpleTable } from "../../atoms/SimpleTable";
+import { DisclaimerBox } from "../../molecules/DisclaimerBox";
+import SectionText from "../../atoms/SectionText";
+import Subtitle from "../../atoms/Subtitle";
+import RoundedButton from "../../atoms/RoundedButton";
+import RedirectIcon from "../../../public/img/icons/redirectIcon"
+import LanguageIcon from "../../../public/img/icons/languageIcon";
+import DisplayIcon from "../../../public/img/icons/displayIcon";
+import DataStructureIcon from "../../../public/img/icons/dataStructureIcon";
+import ApiIcon from "../../../public/img/icons/apiIcon";
+import FrequencyIcon from "../../../public/img/icons/frequencyIcon";
+import ObservationLevelIcon from "../../../public/img/icons/observationLevelIcon";
+import RegisterIcon from "../../../public/img/icons/registerIcon";
+import IpIcon from "../../../public/img/icons/ipIcon";
+import CoinIcon from "../../../public/img/icons/coinIcon";
+import ExclamationIcon from "../../../public/img/icons/exclamationIcon";
 
 export function ExternalLinkPage({
   translations,

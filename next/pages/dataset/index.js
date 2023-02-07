@@ -25,16 +25,18 @@ import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { createDataset, searchDatasets } from "../api/datasets";
-import {
-  getAvailableOptionsTranslations,
-  getTranslationsOptions,
-  getTranslations,
-} from "../api/translations";
-import { getDatasetSchema } from "../api/schemas";
-import { getUser } from "../api/user";
+
+// import { createDataset, searchDatasets } from "../api/datasets";
+// import {
+//   getAvailableOptionsTranslations,
+//   getTranslationsOptions,
+//   getTranslations,
+// } from "../api/translations";
+// import { getDatasetSchema } from "../api/schemas";
+// import { getUser } from "../api/user";
+
 import { withPages } from "../../hooks/pages.hook";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 import { addParametersToCurrentURL, isBdPlus, unionArrays } from "../../utils";
 
 import { DebouncedControlledInput } from "../../components/atoms/ControlledInput";
@@ -55,19 +57,19 @@ import FilterIcon from "../../public/img/icons/filterIcon";
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
 import NotFoundImage from "../../public/img/notFoundImage";
 
-export async function getStaticProps(context) {
-  const translations = await getTranslations();
-  const availableOptionsTranslations = await getAvailableOptionsTranslations();
-  const optionsTranslations = await getTranslationsOptions();
-  return withPages({
-    revalidate: 60, //TODO: Increase this timer
-    props: {
-      translations,
-      availableOptionsTranslations,
-      optionsTranslations,
-    },
-  });
-}
+// export async function getStaticProps(context) {
+//   const translations = await getTranslations();
+//   const availableOptionsTranslations = await getAvailableOptionsTranslations();
+//   const optionsTranslations = await getTranslationsOptions();
+//   return withPages({
+//     revalidate: 60, //TODO: Increase this timer
+//     props: {
+//       translations,
+//       availableOptionsTranslations,
+//       optionsTranslations,
+//     },
+//   });
+// }
 
 function NewDatasetModal({ isOpen, onClose }) {
   return (
@@ -83,8 +85,8 @@ function NewDatasetModal({ isOpen, onClose }) {
         <ModalBody padding="20px 20px">
           <SchemaForm
             schemaName="Dataset"
-            loadSchemaFunction={getDatasetSchema}
-            updateFunction={createDataset}
+            // loadSchemaFunction={getDatasetSchema}
+            // updateFunction={createDataset}
             prepareData={(d) => {
               d.private = false;
 
@@ -147,10 +149,8 @@ export default function SearchPage({
   optionsTranslations,
 }) {
   const { query } = useRouter();
-  const isMobile = useCheckMobile();
-  const [isMobileMode, setIsMobileMode] = useState(false)
   const datasetDisclosure = useDisclosure();
-  const { data: userData = null } = useQuery("user", getUser);
+  // const { data: userData = null } = useQuery("user", getUser);
   const [order, setOrder] = useState("score");
   const [search, setSearch] = useState("");
   const [paramFilters, setParamFilters] = useState({});
@@ -167,20 +167,16 @@ export default function SearchPage({
     }
   );
 
-  useEffect(() => {
-    setIsMobileMode(isMobile)
-  },[isMobile])
-
   const DataProposalBox = ({image, display, text, bodyText}) => {
     return (
       <Stack alignItems="center" width="100%" spacing={0} marginTop={!display && "24px !important"}>
         {image && 
           <NotFoundImage
-            transform={!isMobileMode && "translateX(-36px)"}
+            transform={!isMobileMod() && "translateX(-36px)"}
             widthImage="100%"
             heightImage="100%"
             marginBottom="24px"
-            marginTop={isMobileMode && "24px"}
+            marginTop={isMobileMod() && "24px"}
           />
         }
         {display &&
@@ -214,11 +210,11 @@ export default function SearchPage({
         <HStack
           width="100%"
           marginTop={display ? "24px !important" : "16px !important"}
-          spacing={isMobileMode ? 0 : "16px"}
+          spacing={isMobileMod() ? 0 : "16px"}
           justifyContent="center"
-          alignItems={isMobileMode && "center"}
-          flexDirection={isMobileMode && "column"}
-          gridGap={isMobileMode && "16px"}
+          alignItems={isMobileMod() && "center"}
+          flexDirection={isMobileMod() && "column"}
+          gridGap={isMobileMod() && "16px"}
         >
           <RoundedButton
             fontSize="15px"
@@ -531,7 +527,7 @@ export default function SearchPage({
       <DebouncedControlledInput
         value={search}
         onChange={(val) => setSearch(val)}
-        placeholder={isMobileMode ? "Palavras-chave, instituições ou temas" :"Pesquise palavras-chave, instituições ou temas"}
+        placeholder={isMobileMod() ? "Palavras-chave, instituições ou temas" :"Pesquise palavras-chave, instituições ou temas"}
         justifyContent="center"
         inputStyle={{
           width: "90%",
@@ -546,11 +542,11 @@ export default function SearchPage({
           boxShadow: "0 1px 3px 0.5 rgba(100 93 103 /0.16) !important",
           _placeholder:{color:"#6F6F6F"}
         }}
-        marginTop={isMobileMode && "70px"}
+        marginTop={isMobileMod() && "70px"}
       />
 
       <Stack
-        spacing={isMobileMode ? 10 : 0}
+        spacing={isMobileMod() ? 10 : 0}
         width="90%"
         maxWidth="1264px"
         margin="auto"
@@ -561,8 +557,8 @@ export default function SearchPage({
           alignItems="flex-start"
           minWidth={{ base: "100%", lg: "320px" }}
           maxWidth={{ base: "100%", lg: "320px" }}
-          borderRight={isMobileMode ? "" : "1px solid #DEDFE0"}
-          padding={isMobileMode ? "" : "0 20px 0 0"}
+          borderRight={isMobileMod() ? "" : "1px solid #DEDFE0"}
+          padding={isMobileMod() ? "" : "0 20px 0 0"}
           key={filterKey}
         >
           <Box display="flex" marginBottom="10px" alignItems="center">
@@ -794,7 +790,7 @@ export default function SearchPage({
           alignItems="flex-start"
           overflow="hidden"
           width="100%"
-          paddingLeft={isMobileMode ? "" : "40px"}
+          paddingLeft={isMobileMod() ? "" : "40px"}
         >
           {data?.datasets.length === 0 ?
             <DataProposalBox 
@@ -818,7 +814,7 @@ export default function SearchPage({
                 {search ? " para " + search : ""}
               </Heading>
 
-              {userData?.is_admin && 
+              {/* {userData?.is_admin && 
                 <Button
                   w="170px"
                   backgroundColor="#42B0FF"
@@ -833,7 +829,7 @@ export default function SearchPage({
                 >
                   Criar Conjunto
                 </Button>
-              }
+              } */}
             </Flex>
 
             <Stack
@@ -933,14 +929,14 @@ export default function SearchPage({
                   </>
                 ))}
               <ReactPaginate
-                previousLabel={isMobileMode ? "<" : "Anterior"}
-                nextLabel={isMobileMode ? ">" : "Próxima"}
+                previousLabel={isMobileMod() ? "<" : "Anterior"}
+                nextLabel={isMobileMod() ? ">" : "Próxima"}
                 breakLabel={"..."}
                 breakClassName={"break-me"}
                 forcePage={page - 1}
                 pageCount={pageSize}
-                marginPagesDisplayed={isMobileMode ? 0 : 1}
-                pageRangeDisplayed={isMobileMode ? 0 : 2}
+                marginPagesDisplayed={isMobileMod() ? 0 : 1}
+                pageRangeDisplayed={isMobileMod() ? 0 : 2}
                 onPageChange={(data) => {
                   setPage(data.selected + 1);
                 }}

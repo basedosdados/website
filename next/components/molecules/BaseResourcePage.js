@@ -1,9 +1,3 @@
-import { Button } from "@chakra-ui/button";
-import { Flex, HStack, VStack } from "@chakra-ui/layout";
-import { useContext, useEffect, useState } from "react";
-import Head from "next/head";
-import Title from "../atoms/Title";
-import UserContext from "../../context/user";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -12,13 +6,26 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
 } from "@chakra-ui/modal";
+import {
+  HStack,
+  VStack,
+  Flex,
+  Button
+} from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/hooks";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import Head from "next/head";
+import { useContext, useEffect, useState } from "react";
+
+import UserContext from "../../context/user";
+import { isMobileMod } from "../../hooks/useCheckMobile.hook";
+
+import Title from "../atoms/Title";
 import RoundedButton from "../atoms/RoundedButton";
+
 import PenIcon from "../../public/img/icons/penIcon";
 import TrashIcon from "../../public/img/icons/trashIcon";
 
-export function BaseResourcePage({
+export default function BaseResourcePage({
   title,
   children,
   removeFunction,
@@ -29,13 +36,6 @@ export function BaseResourcePage({
   const [editing, setEditing] = useState(false);
   const deleteModalDisclosure = useDisclosure();
   const userData = useContext(UserContext);
-
-  const [isMobileMod, setIsMobileMod] = useState(false)
-  const isMobile = useCheckMobile()
-
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
 
   useEffect(() => {
     if (forceForm) return setEditing(true);
@@ -52,6 +52,16 @@ export function BaseResourcePage({
       spacing={8}
       {...style}
     >
+      {editing &&
+        <Head>
+          <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+            integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+            crossorigin="anonymous"
+          />
+        </Head>
+      }
       <AlertDialog
         isOpen={deleteModalDisclosure.isOpen}
         onClose={deleteModalDisclosure.onClose}
@@ -94,11 +104,11 @@ export function BaseResourcePage({
         >
           {(editing ? "Editando " : "") + title}
         </Title>
-        {userData?.is_admin && formComponent && !editing ? (
+        {userData?.is_admin && formComponent && !editing &&
           <HStack
-            width={isMobileMod ? "100%" : "80%"}
-            marginTop={isMobileMod && "24px"}
-            justifyContent={isMobileMod ? "flex-start" : "flex-end"}
+            width={isMobileMod() ? "100%" : "80%"}
+            marginTop={isMobileMod() && "24px"}
+            justifyContent={isMobileMod() ? "flex-start" : "flex-end"}
             alignContent="flex-end"
           >
             <RoundedButton
@@ -118,23 +128,9 @@ export function BaseResourcePage({
               Remover
             </RoundedButton>
           </HStack>
-        ) : (
-          <></>
-        )}
+        }
       </Flex>
       {editing ? formComponent : children}
-      {editing ? (
-        <Head>
-          <link
-            rel="stylesheet"
-            href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-            integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
-            crossorigin="anonymous"
-          />
-        </Head>
-      ) : (
-        <></>
-      )}
     </VStack>
-  );
+  )
 }

@@ -13,9 +13,9 @@ import { SimpleButton } from "../atoms/SimpleButton";
 import { FilterAccordion } from "../atoms/FilterAccordion";
 import { LoadingSpin } from "../atoms/Loading";
 
-import BdmTablePage from "./new/BdmTablePage";
-import RawDataSourcesPage from "./new/RawDataSourcesPage";
-import InformationRequestPage from "../organisms/new/InformationRequestPage";
+import BdmTablePage from "./BdmTablePage";
+import RawDataSourcesPage from "./RawDataSourcesPage";
+import InformationRequestPage from "./InformationRequestPage";
 
 import CrossIcon from "../../public/img/icons/crossIcon";
 
@@ -99,7 +99,7 @@ export default function DatasetResource({
 
   const pushQuery = (key, value) => {
     router.push({
-      pathname: `/dataset/v2/${query.dataset}`,
+      pathname: `/dataset/${query.dataset}`,
       query: { [key]: value }
     },
       undefined, { shallow: true }
@@ -148,7 +148,7 @@ export default function DatasetResource({
           choices={tables}
           value={query.bdm_tables}
           valueField="_id"
-          displayField="namePt"
+          displayField="name"
           fieldName="Tabelas tratadas"
           bdPlus={true}
           isHovering={false}
@@ -162,7 +162,7 @@ export default function DatasetResource({
           choices={rawDataSources}
           value={query.raw_data_sources}
           valueField="_id"
-          displayField="namePt"
+          displayField="name"
           fieldName="Fontes originais"
           isHovering={false}
           onChange={(id) => {
@@ -175,7 +175,7 @@ export default function DatasetResource({
           choices={informationRequests}
           value={query.information_request}
           valueField="_id"
-          displayField="namePt"
+          displayField="name"
           fieldName="Pedidos LAI"
           isHovering={false}
           onChange={(id) => {
