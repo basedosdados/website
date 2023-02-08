@@ -7,8 +7,8 @@ import {
 } from "../../utils";
 import { BaseResourcePage } from "../molecules/BaseResourcePage";
 import { SchemaForm } from "../molecules/SchemaForm";
-import { deleteDataset, updateDataset } from "../../pages/api/datasets";
-import { getDatasetSchema } from "../../pages/api/schemas";
+// import { deleteDataset, updateDataset } from "../../pages/api/datasets";
+// import { getDatasetSchema } from "../../pages/api/schemas";
 
 export function MetadataPage({
   translations,

@@ -13,12 +13,12 @@ import { useContext, useState, useEffect } from "react";
 import { useRouter } from "next/router"
 import { MainPageTemplate } from "../../../components/templates/main";
 import { withPages } from "../../../hooks/pages.hook";
-import {
-  createResource,
-  listDatasets,
-  showDataset,
-  updateResource,
-} from "../../api/datasets";
+// import {
+//   createResource,
+//   listDatasets,
+//   showDataset,
+//   updateResource,
+// } from "../../api/datasets";
 import BigTitle from "../../../components/atoms/BigTitle";
 import Subtitle from "../../../components/atoms/Subtitle";
 import SectionText from "../../../components/atoms/SectionText";
@@ -28,23 +28,23 @@ import { useCheckMobile } from "../../../hooks/useCheckMobile.hook";
 import Link from "../../../components/atoms/Link";
 import { SimpleButton } from "../../../components/atoms/SimpleButton";
 import ReadMore from "../../../components/atoms/ReadMore";
-import {
-  getAvailableOptionsTranslations,
-  getTranslations,
-  getTranslationsOptions
-} from "../api/translations";
-import { ExternalLinkPage } from "../../components/organisms/ExternalLinkPage";
-import { BdmTablePage } from "../../../components/organisms/BdmTablePage";
-import { InformationRequestPage } from "../../../components/organisms/InformationRequestPage";
+// import {
+//   getAvailableOptionsTranslations,
+//   getTranslations,
+//   getTranslationsOptions
+// } from "../api/translations";
+// import { ExternalLinkPage } from "../../components/organisms/ExternalLinkPage";
+// import { BdmTablePage } from "../../../components/organisms/BdmTablePage";
+// import { InformationRequestPage } from "../../../components/organisms/InformationRequestPage";
 import { MetadataPage } from "../../../components/organisms/MetadataPage";
 import { DashboardsPage } from "../../../components/organisms/DashboardsPage";
 import UserContext from "../../../context/user";
 import { SchemaForm } from "../../../components/molecules/SchemaForm";
-import {
-  getBdmTableSchema,
-  getExternalLinkSchema,
-  getInformationRequestSchema,
-} from "../api/schemas";
+// import {
+//   getBdmTableSchema,
+//   getExternalLinkSchema,
+//   getInformationRequestSchema,
+// } from "../api/schemas";
 import { BaseResourcePage } from "../../../components/molecules/BaseResourcePage";
 import GreenTab from "../../../components/atoms/GreenTab";
 import HelpWidget from "../../../components/atoms/HelpWidget";
@@ -52,49 +52,49 @@ import { DataBaseIcon } from "../../../public/img/icons/databaseIcon";
 import DocIcon from "../../../public/img/icons/docIcon";
 import CrossIcon from "../../../public/img/icons/crossIcon";
 
-export async function getStaticProps(context) {
-  const dataset = await showDataset(context.params.dataset);
-  const translations = await getTranslations();
-  const availableOptionsTranslations = await getAvailableOptionsTranslations();
-  const translationsOptions = await getTranslationsOptions();
-  const resources = dataset?.resources || [];
-  const bdmTables = resources.filter(
-    (r) => r && r?.resource_type === "bdm_table"
-  );
-  const externalLinks = resources.filter(
-    (r) => r && r?.resource_type === "external_link"
-  );
-  const informationRequest = resources.filter(
-    (r) => r && r?.resource_type === "information_request"
-  );
+// export async function getStaticProps(context) {
+//   const dataset = await showDataset(context.params.dataset);
+//   const translations = await getTranslations();
+//   const availableOptionsTranslations = await getAvailableOptionsTranslations();
+//   const translationsOptions = await getTranslationsOptions();
+//   const resources = dataset?.resources || [];
+//   const bdmTables = resources.filter(
+//     (r) => r && r?.resource_type === "bdm_table"
+//   );
+//   const externalLinks = resources.filter(
+//     (r) => r && r?.resource_type === "external_link"
+//   );
+//   const informationRequest = resources.filter(
+//     (r) => r && r?.resource_type === "information_request"
+//   );
   
-  return await withPages({
-    props: {
-      dataset,
-      bdmTables,
-      externalLinks,
-      informationRequest,
-      translations,
-      availableOptionsTranslations,
-      translationsOptions,
-      isPlus: isBdPlus(dataset),
-    },
-    revalidate: 1, //TODO: Increase this timer
-  });
-}
+//   return await withPages({
+//     props: {
+//       dataset,
+//       bdmTables,
+//       externalLinks,
+//       informationRequest,
+//       translations,
+//       availableOptionsTranslations,
+//       translationsOptions,
+//       isPlus: isBdPlus(dataset),
+//     },
+//     revalidate: 1, //TODO: Increase this timer
+//   });
+// }
 
-export async function getStaticPaths(context) {
-  let datasets = await listDatasets();
+// export async function getStaticPaths(context) {
+//   let datasets = await listDatasets();
 
-  return {
-    paths: datasets
-      .filter((d) => d != "br-me-siconfi") // TODO: Fix the dataset and remove this line
-      .map((d) => ({
-        params: { dataset: d },
-      })),
-    fallback: "blocking",
-  };
-}
+//   return {
+//     paths: datasets
+//       .filter((d) => d != "br-me-siconfi") // TODO: Fix the dataset and remove this line
+//       .map((d) => ({
+//         params: { dataset: d },
+//       })),
+//     fallback: "blocking",
+//   };
+// }
 
 function AdminButtons({ resource, setResource }) {
   const userData = useContext(UserContext);
@@ -520,6 +520,8 @@ export default function DatasetPage({
       />
     )
   }
+
+  return null
 
   return (
     <MainPageTemplate pages={pages}>
