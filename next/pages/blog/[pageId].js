@@ -8,32 +8,34 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import BigTitle from "../../components/atoms/BigTitle";
-import { getPages } from "../api/pages";
+// import { getPages } from "../api/pages";
 import { useEffect, useState } from "react";
 import showdown from "showdown";
 import { MainPageTemplate } from "../../components/templates/main";
 
-export async function getStaticProps(context) {
-  let { data: pages } = await getPages();
+// export async function getStaticProps(context) {
+//   let { data: pages } = await getPages();
 
-  return {
-    props: {
-      pages,
-    },
-    revalidate: 60, //TODO: Increase this timer
-  };
-}
+//   return {
+//     props: {
+//       pages,
+//     },
+//     revalidate: 60, //TODO: Increase this timer
+//   };
+// }
 
-export async function getStaticPaths(context) {
-  let { data: pages } = await getPages();
+// export async function getStaticPaths(context) {
+//   let { data: pages } = await getPages();
 
-  return {
-    paths: pages.map((p) => ({
-      params: { pageId: p.id.toString() },
-    })),
-    fallback: "blocking",
-  };
-}
+//   return {
+//     paths: pages.map((p) => ({
+//       params: { pageId: p.id.toString() },
+//     })),
+//     fallback: "blocking",
+//   };
+// }
+
+return null
 
 function BlogPage({ pages = [] }) {
   const router = useRouter();
