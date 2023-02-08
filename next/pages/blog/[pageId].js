@@ -35,8 +35,6 @@ import { MainPageTemplate } from "../../components/templates/main";
 //   };
 // }
 
-return null
-
 function BlogPage({ pages = [] }) {
   const router = useRouter();
   const [converter, _] = useState(new showdown.Converter());
@@ -76,6 +74,8 @@ function BlogPage({ pages = [] }) {
         </Center>
       </MainPageTemplate>
     );
+
+  return null
 
   return (
     <MainPageTemplate pages={pages}>
