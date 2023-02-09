@@ -45,7 +45,7 @@ import { SchemaForm } from "../../../components/molecules/SchemaForm";
 //   getExternalLinkSchema,
 //   getInformationRequestSchema,
 // } from "../api/schemas";
-import { BaseResourcePage } from "../../../components/molecules/BaseResourcePage";
+// import { BaseResourcePage } from "../../../components/molecules/BaseResourcePage";
 import GreenTab from "../../../components/atoms/GreenTab";
 import HelpWidget from "../../../components/atoms/HelpWidget";
 import { DataBaseIcon } from "../../../public/img/icons/databaseIcon";
@@ -457,7 +457,7 @@ function ResourcesPage({
         alignItems="flex-start"
         flex="1"
       >
-        {getResourcePage()}
+        {/* {getResourcePage()} */}
       </VStack>
     </Stack>
   );
