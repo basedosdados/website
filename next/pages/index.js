@@ -19,7 +19,7 @@ import Typist from "react-typist";
 // import { getGroupList } from "./api/groups"
 
 import { withPages } from "../hooks/pages.hook";
-import { isMobile ,isMobileMod } from "../hooks/useCheckMobile.hook";
+import { useCheckMobile ,isMobileMod } from "../hooks/useCheckMobile.hook";
 import { useMediaQuery } from "@chakra-ui/react";
 import BodyText from "../components/atoms/BodyText";
 import ControlledInput from "../components/atoms/ControlledInput";
@@ -77,7 +77,7 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
   }
 
   useEffect(() => {
-    if(isMobile) return null
+    if(useCheckMobile()) return null
     return document.getElementById("searchDatabases").focus()
   },[])
 
@@ -85,7 +85,7 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
     if(popularTags === null) return ""
     if(popularTags === undefined) return ""
     const newPopularTags = Object.keys(popularTags)
-    if(isMobile) return setTags(newPopularTags.slice(0,3))
+    if(useCheckMobile()) return setTags(newPopularTags.slice(0,3))
     setTags(newPopularTags.slice(0,5))
   },[popularTags])
 
