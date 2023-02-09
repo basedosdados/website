@@ -9,7 +9,7 @@ import {
 import React, { useState, useEffect } from "react";
 import { useMediaQuery } from "@chakra-ui/react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { getRecentDatalakeDatasetsByTheme } from "../../pages/api/datasets";
+// import { getRecentDatalakeDatasetsByTheme } from "../../pages/api/datasets";
 import DatabaseCard from "../organisms/DatabaseCard";
 import Carousel from "../atoms/Carousel";
 import SectionText from "../atoms/SectionText";
@@ -264,7 +264,8 @@ export default function ThemeCatalog ({ popularDatalakeDatasets, themes }) {
 
   const newRecentDataLake = (themes) => {
     setLoading(true)
-    getRecentDatalakeDatasetsByTheme(themes.toString())
+    // getRecentDatalakeDatasetsByTheme(themes.toString())
+    getRecentDatalakeDatasetsByTheme("")
       .then(res => {
         setRecentDataSets(res.slice(0,10))
         setLoading(false)

@@ -504,6 +504,8 @@ export default function DatasetPage({
       imageUrl.startsWith("https://") ? setUrlImage(imageUrl) : setUrlImage("https://basedosdados.org/uploads/group/" + imageUrl)
     },[])
 
+    return null
+
     return (
       <Image
         alt={dataset.organization.title || ""}

@@ -15,6 +15,9 @@ export function MetadataPage({
   dataset,
   availableOptionsTranslations,
 }) {
+
+  return null
+
   const _dataset = { ...dataset };
   const unionResourceFields = [
     "spatial_coverage",
