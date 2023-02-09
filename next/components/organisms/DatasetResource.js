@@ -84,10 +84,6 @@ function AdminButtons() {
   )
 }
 
-export async function getStaticProps() {
-
-}
-
 export default function DatasetResource({
   dataset
 }) {

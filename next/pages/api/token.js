@@ -1,19 +1,18 @@
 import axios from "axios";
-// import { API_URL } from "../../../configs";
 
-const API_URL="https://staging.backend.dados.rio/api/v1/graphql"
+const API_URL= process.env.NEXT_PUBLIC_API_URL
 const tokenEndpoint = `https://staging.backend.dados.rio/api/token/`
 
-async function getToken() {
+async function getToken({user, password}) {
   const res = await axios({
-    url: baseUrl,
+    url: API_URL,
     method: "POST",
     data: {
       query: `
       mutation {
         tokenAuth(
-            username: "staging_admin",
-            password: "H612e6xHF$ph%xuk",
+            username: ${user},
+            password: ${password},
         ) {
             payload,
             refreshExpiresIn,
