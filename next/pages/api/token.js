@@ -1,9 +1,8 @@
 import axios from "axios";
 
-// const API_URL= process.env.NEXT_PUBLIC_API_URL
-const API_URL= "https://staging.backend.dados.rio/api/v1/graphql"
+const API_URL= process.env.NEXT_PUBLIC_API_URL
 
-const tokenEndpoint = `https://staging.backend.dados.rio/api/token/`
+const tokenEndpoint = `${API_URL}/token/`
 
 async function getToken({user, password}) {
   const res = await axios({
