@@ -22,6 +22,7 @@ import { ImageOrganization } from "../../components/atoms/ImageOrganization";
 import DatasetResource from "../../components/organisms/DatasetResource";
 import { MainPageTemplate } from "../../components/templates/main";
 
+import FourOhFour from "../../components/templates/404";
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
 import DocIcon from "../../public/img/icons/docIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
@@ -34,7 +35,12 @@ import {
 import { withPages } from "../../hooks/pages.hook";
 
 export async function getStaticProps(context) {
-  const dataset = await getShowDataset(context.params.dataset)
+  let dataset = {}
+  try {
+    dataset = await getShowDataset(context.params.dataset) || null
+  } catch (error) {
+    console.log(error)
+  }
 
   return await withPages({
     props: {
@@ -59,6 +65,8 @@ export default function DatasetPage ({
   dataset,
 }) {
   const [tabIndex, setTabIndex] = useState(0)
+
+  if(dataset === null) return <FourOhFour height="100vh"/>
 
   return (
     <MainPageTemplate>
