@@ -16,7 +16,7 @@ import {
   getTemporalCoverage,
 } from "../../utils";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { BaseResourcePage } from "../molecules/BaseResourcePage";
+import BaseResourcePage from "../molecules/BaseResourcePage";
 import { SchemaForm } from "../molecules/SchemaForm";
 // import { getBdmColumnsSchema } from '../../../pages/api/schemas';
 // import { getBdmTableSchema } from "../../../pages/api/schemas";
@@ -42,6 +42,8 @@ import FileIcon from "../../public/img/icons/fileIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 
 export default function BdmTablePage({ id }) {
+  return (<div>aaaaaaaaaaaaa</div>)
+
   const [showColumns, setShowColumns] = useState(false)
   const [showTemporalCoverage, setShowTemporalCoverage] = useState(false)
   const [schema, setSchema] = useState({})
