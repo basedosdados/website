@@ -10,19 +10,19 @@ import Head from "next/head";
 import FuzzySearch from 'fuzzy-search';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { QuestionFAQ } from "../../content/FAQ";
-import { MainPageTemplate } from "../../components/templates/main";
+import { isMobileMod } from "../hooks/useCheckMobile.hook";
+import { QuestionFAQ } from "../content/FAQ";
+import { MainPageTemplate } from "../components/templates/main";
 
-import { DebouncedControlledInput } from "../../components/atoms/ControlledInput";
-import Display from "../../components/atoms/Display";
-import BodyText from "../../components/atoms/BodyText";
+import { DebouncedControlledInput } from "../components/atoms/ControlledInput";
+import Display from "../components/atoms/Display";
+import BodyText from "../components/atoms/BodyText";
 
-import CrossIcon from "../../public/img/icons/crossIcon";
-import SearchIcon from "../../public/img/icons/searchIcon";
-import styles from "../../styles/faq.module.css";
+import CrossIcon from "../public/img/icons/crossIcon";
+import SearchIcon from "../public/img/icons/searchIcon";
+import styles from "../styles/faq.module.css";
 
-const QuestionsBox = ({ question, answer, id, active, isMobile }) => {
+const QuestionsBox = ({ question, answer, id, active }) => {
   const [isActive, setIsActive] = useState(false)
   const router = useRouter()
 
@@ -65,10 +65,10 @@ const QuestionsBox = ({ question, answer, id, active, isMobile }) => {
       >
         <Text
           fontFamily="ubuntu"
-          fontSize={isMobile ? "18px" : "20px"}
+          fontSize={isMobileMod() ? "18px" : "20px"}
           fontWeight="400"
-          lineHeight={isMobile ? "28px" :"22px"}
-          letterSpacing={isMobile ? "0.1px" : "0.2px"}
+          lineHeight={isMobileMod() ? "28px" :"22px"}
+          letterSpacing={isMobileMod() ? "0.1px" : "0.2px"}
           color="#252A32"
         >
           {question}
@@ -97,13 +97,6 @@ const QuestionsBox = ({ question, answer, id, active, isMobile }) => {
 }
 
 export default function FAQ({}) {
-  const isMobile = useCheckMobile();
-  const [isMobileMod, setIsMobileMod] = useState(false)
-  
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
-  
   const [allQuestions, setAllQuestions] = useState([])
   const [questions, setQuestions] = useState([])
   const [categorySelected, setCategorySelected] = useState("")
@@ -199,11 +192,11 @@ export default function FAQ({}) {
         width="100%"
         maxWidth="1264px"
         margin="auto"
-        paddingTop={isMobileMod && "80px  "}
+        paddingTop={isMobileMod() && "80px"}
         spacing={0}
       >
         <Display
-          paddingBottom={isMobileMod ? "56px" : "66px" }
+          paddingBottom={isMobileMod() ? "56px" : "66px" }
           color="#2B8C4D"
         >
           Perguntas frequentes
@@ -212,7 +205,7 @@ export default function FAQ({}) {
         <DebouncedControlledInput
           value={searchFilter}
           onChange={(val) => setSearchFilter(val)}
-          paddingBottom={isMobileMod ? "56px" : "126px" }
+          paddingBottom={isMobileMod() ? "56px" : "126px" }
           maxWidth="600px"
           placeholder="Pesquise"
           inputStyle={{
@@ -252,9 +245,9 @@ export default function FAQ({}) {
         <Stack
           width="100%"
           position="relative"
-          gridGap={isMobileMod ? "64px" : "120px"}
+          gridGap={isMobileMod() ? "64px" : "120px"}
           spacing={0}
-          flexDirection={isMobileMod ? "column" :"row"} 
+          flexDirection={isMobileMod() ? "column" :"row"} 
           paddingBottom="32px"
         >
           <Box
@@ -262,8 +255,8 @@ export default function FAQ({}) {
             height="100%"
             flexDirection="column"
             gridGap="16px"
-            position={isMobileMod ? "relative" : "sticky"}
-            top={isMobileMod? "0" : "120px"}
+            position={isMobileMod() ? "relative" : "sticky"}
+            top={isMobileMod()? "0" : "120px"}
           >
             <CategoryText category="Dados"/>
             <CategoryText category="BigQuery"/>
@@ -285,7 +278,6 @@ export default function FAQ({}) {
                   answer={elm.answer}
                   id={elm.id && elm.id}
                   active={closeQuestion}
-                  isMobile={isMobileMod}
                 />
             )}
             <Text

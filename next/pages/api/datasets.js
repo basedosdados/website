@@ -103,27 +103,9 @@ export async function getBdmTable(id) {
           edges {
             node {
               _id
-              createdAt
-              updatedAt
+              slug
               name
               description
-              isDirectory
-              dataCleanedDescription
-              dataCleanedCodeUrl
-              rawDataUrl
-              auxiliaryFilesUrl
-              architectureUrl
-              sourceBucketName
-              uncompressedFileSize
-              compressedFileSize
-              numberOfRows
-              columns {
-                edges{
-                  node {
-                    _id
-                  }
-                }
-              }
             }
           }
         }

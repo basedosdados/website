@@ -23,6 +23,7 @@ import { SchemaForm } from "../molecules/SchemaForm";
 // import { deleteResource, updateResource } from "../../pages/api/datasets";
 import { SimpleTable } from "../atoms/SimpleTable";
 import DataInformationQuery from "../molecules/DataInformationQuery";
+import FourOhFour from "../templates/404";
 
 import {
   getBdmTable
@@ -42,22 +43,21 @@ import FileIcon from "../../public/img/icons/fileIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 
 export default function BdmTablePage({ id }) {
-  return (<div>aaaaaaaaaaaaa</div>)
+  const [resource, setResource] = useState({})
+  const [isError, setIsError] = useState({})
 
   const [showColumns, setShowColumns] = useState(false)
-  const [showTemporalCoverage, setShowTemporalCoverage] = useState(false)
   const [schema, setSchema] = useState({})
   const [columnsHeaders, setColumnsHeaders] = useState([])
   const [columnsValues, setColumnsValues] = useState([])
-  const [temporalCoverage, setTemporalCoverage] = useState([])
   const [observationLevel, setObservationLevel] = useState([])
-  const [resource, setResource] = useState({})
 
   const feathBdmTable = async () => {
     try {
       const result = await getBdmTable(id)
       return setResource(result)
     } catch (error) {
+      setIsError(error)
       console.error(error)
     }
   }
@@ -78,14 +78,14 @@ export default function BdmTablePage({ id }) {
     observations: "Descreve processos de tratamentos realizados na coluna que precisam ser evidenciados."
   }
 
-  useEffect(() => {
-    fetchSchema()
-  },[])
+  // useEffect(() => {
+  //   fetchSchema()
+  // },[])
   
-  async function fetchSchema()  {
-    const columnsSchema = await getBdmColumnsSchema()
-    setSchema(columnsSchema)
-  }
+  // async function fetchSchema()  {
+  //   const columnsSchema = await getBdmColumnsSchema()
+  //   setSchema(columnsSchema)
+  // }
 
   // function translateField(field, translation) {
   //   if(!field) return "Não listado"
@@ -105,28 +105,6 @@ export default function BdmTablePage({ id }) {
 
   //   return translation[field] || field
   // }
-
-  // useEffect(() => {
-  //   setColumnsHeaders(Object.keys(schema))
-  //   if(resource.columns) {
-  //     if(resource.columns.length === 0) {
-  //       setColumnsValues(resource.columns)
-  //       setShowColumns(false)
-  //     } else {
-  //       setColumnsValues(resource.columns)
-  //       setShowColumns(true)
-  //     }
-  //   }
-  //   if(resource.temporal_coverage) {
-  //     if(resource.temporal_coverage.length === 0) {
-  //       setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
-  //       setShowTemporalCoverage(false)
-  //     } else {
-  //       setTemporalCoverage(getTemporalCoverage(resource.temporal_coverage))
-  //       setShowTemporalCoverage(true)
-  //     }
-  //   }
-  // },[schema, resource])
 
   // useEffect(() => {
   //   if(resource.observation_level === null) return setObservationLevel()
@@ -195,6 +173,8 @@ export default function BdmTablePage({ id }) {
     return (
       <Box display="block" alignItems="center" gridGap="8px" {...style}>
         <Text
+          display="flex"
+          alignItems="center"
           fontFamily="ubuntu"
           fontSize="14px"
           fontWeight="400" 
@@ -285,11 +265,19 @@ export default function BdmTablePage({ id }) {
     )
   }
 
+  const TemporalCoverage = () => {
+    // const temporal = resource?.temporal_coverage
+    // if(temporal && temporal.length > 0) return getTemporalCoverage(temporal)
+    return "Nenhuma cobertura temporal fornecida"
+  }
+
+  if(isError?.message?.length > 0) return <FourOhFour/>
+
   return (
     <BaseResourcePage
       padding={useCheckMobile() ? "16px 0 0" : "16px 8px 0 0"}
-      editLink={`/resource/edit/${resource?.id}`}
-      title={`${resource?.name}`}
+      // editLink={`/resource/edit/${resource?.id}`}
+      title={resource?.name}
       // removeFunction={() => deleteResource(resource)}
       // formComponent={
       //   <SchemaForm
@@ -313,9 +301,9 @@ export default function BdmTablePage({ id }) {
       //   />
       // }
     >
-      {/* <DataInformationQuery resource={resource} /> */}
+      <DataInformationQuery resource={resource}/>
 
-      {/* <VStack width="100%" spacing={4} alignItems="flex-start">
+      <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Descrição</Subtitle>
         <SectionText>
           {resource.description || "Nenhuma descrição fornecida."}
@@ -325,11 +313,11 @@ export default function BdmTablePage({ id }) {
       <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Cobertura temporal</Subtitle>
         <SectionText>
-          {showTemporalCoverage ? temporalCoverage : "Nenhuma cobertura temporal fornecida."}
+          <TemporalCoverage/>
         </SectionText>
       </VStack>
 
-      <VStack width="100%" spacing={4} alignItems="flex-start">
+      {/* <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>
           Colunas
         </Subtitle>
@@ -348,9 +336,9 @@ export default function BdmTablePage({ id }) {
             Nenhuma informação de coluna fornecida.
           </SectionText>
         }
-      </VStack>
+      </VStack> */}
 
-      <VStack width="100%" spacing={5} alignItems="flex-start">
+      {/* <VStack width="100%" spacing={5} alignItems="flex-start">
         <Subtitle>
           Nível da observação
         </Subtitle>
@@ -363,7 +351,7 @@ export default function BdmTablePage({ id }) {
         :
           <SectionText>Nenhum nível da observação fornecido.</SectionText>
         }
-      </VStack>
+      </VStack> */}
 
       <VStack width="100%" spacing={5} alignItems="flex-start">
         <Stack flex="1" >
@@ -375,7 +363,7 @@ export default function BdmTablePage({ id }) {
             <StarIcon alt="" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="ID do conjunto"
-              text={resource.dataset_id}
+              text={resource?._id || "Não listado"}
             />
           </GridItem>
 
@@ -383,7 +371,7 @@ export default function BdmTablePage({ id }) {
             <StarIcon alt="" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="ID da tabela"
-              text={resource.table_id}
+              text={resource?.table_id || "Não listado"}
             />
           </GridItem>
 
@@ -391,7 +379,7 @@ export default function BdmTablePage({ id }) {
             <FrequencyIcon alt="Frequência de atualização" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Frequência de atualização"
-              text={resource.update_frequency}
+              text={resource?.update_frequency || "Não listado"}
             />
           </GridItem>
 
@@ -402,7 +390,7 @@ export default function BdmTablePage({ id }) {
               info="As partições são divisões feitas em uma tabela para facilitar o gerenciamento e a consulta aos dados.
               Ao segmentar uma tabela grande em partições menores, a quantidade de bytes lidos é reduzida,
               o que ajuda a controlar os custos e melhora o desempenho da consulta."
-              text={resource.partitions}
+              text={resource?.partitions || "Não listado"}
             />
           </GridItem>
 
@@ -418,7 +406,9 @@ export default function BdmTablePage({ id }) {
                 color="#252A32"
               >Publicação por</Text>
               <Box display="flex" alignItems="center" gridGap="4px">
-                <PublishedOrDataCleanedBy resource={resource.published_by}/>
+                <PublishedOrDataCleanedBy
+                  resource={resource?.published_by || "Não listado"}
+                />
               </Box>
             </Box>
           </GridItem>
@@ -435,7 +425,9 @@ export default function BdmTablePage({ id }) {
                 color="#252A32"
               >Tratamento por</Text>
               <Box display="flex" alignItems="center" gridGap="4px">
-                <PublishedOrDataCleanedBy resource={resource.data_cleaned_by} />
+                <PublishedOrDataCleanedBy
+                  resource={resource?.data_cleaned_by || "Não listado"}
+                />
               </Box>
             </Box>
           </GridItem>
@@ -444,7 +436,7 @@ export default function BdmTablePage({ id }) {
             <VersionIcon alt="versão" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Versão"
-              text={resource.version}
+              text={resource?.version || "Não listado"}
             />
           </GridItem>
 
@@ -457,8 +449,7 @@ export default function BdmTablePage({ id }) {
             />
           </GridItem>
         </Grid>
-
-      </VStack> */}
+      </VStack>
     </BaseResourcePage>
   );
 }

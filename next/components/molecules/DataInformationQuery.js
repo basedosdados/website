@@ -18,21 +18,22 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { DisclaimerBox } from "./DisclaimerBox";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import Subtitle from "../atoms/Subtitle";
-import SectionText from "../atoms/SectionText";
+import { isMobileMod } from "../../hooks/useCheckMobile.hook";
+
 import Link from "../atoms/Link";
 import GreenTab from "../atoms/GreenTab";
+import SectionText from "../atoms/SectionText";
+import Subtitle from "../atoms/Subtitle";
 import RoundedButton from "../atoms/RoundedButton";
-import DownloadIcon from "../../public/img/icons/downloadIcon";
-import { CopyIcon, CopySolidIcon } from "../../public/img/icons/copyIcon";
+import { DisclaimerBox } from "./DisclaimerBox";
+
 import CalendarIcon from "../../public/img/icons/calendarIcon";
+import { CopyIcon, CopySolidIcon } from "../../public/img/icons/copyIcon";
+import DownloadIcon from "../../public/img/icons/downloadIcon";
 import ExclamationIcon from "../../public/img/icons/exclamationIcon";
 import MenuVerticalIcon from "../../public/img/icons/menuVerticalIcon"
 
 export function BoxBigQueryGoogle({ href }) {
-
   return (
     <DisclaimerBox>
       <HStack spacing={0}>
@@ -99,10 +100,15 @@ export function PrismCodeHighlight({ language, children }) {
 }
 
 export function TextPix ({ title, text }) {
-
   return (
     <Box>
-      <Text color="#FF8484" letterSpacing="0.3px" fontSize="14px" fontWeight="700" fontFamily="ubuntu">
+      <Text
+        color="#FF8484"
+        letterSpacing="0.3px"
+        fontSize="14px"
+        fontWeight="700"
+        fontFamily="ubuntu"
+      >
         {title}
       </Text>
       <SectionText fontWeight="500">
@@ -114,19 +120,13 @@ export function TextPix ({ title, text }) {
 
 export default function DataInformationQuery ({ resource }) {
   const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}/${resource.table_id}.csv.gz`
-  const queryName = `${resource.dataset_id}.${resource.name}`
+  const queryName = `${resource._id}.${resource.slug}`
   const { hasCopied, onCopy } = useClipboard("42494318000116")
   const [tabIndex, setTabIndex] = useState(0)
   const [downloadNotAllowed, setDownloadNotAllowed] = useState(true)
-  const [isMobileMod, setIsMobileMod] = useState(false)
-  const isMobile = useCheckMobile()
 
   useEffect(() => {
-    setIsMobileMod(isMobile)
-  },[isMobile])
-
-  useEffect(() => {
-    if (window) window.Prism.highlightAll()
+    if (window) window?.Prism?.highlightAll()
 
     if(resource.number_rows) {
       resource.number_rows > 200000 ? setDownloadNotAllowed(true) : setDownloadNotAllowed(false)
@@ -155,7 +155,7 @@ export default function DataInformationQuery ({ resource }) {
           padding="0px"
           fontFamily="Ubuntu !important"
           borderBottom= "2px solid #DEDFE0 !important"
-          justifyContent={isMobileMod && "space-around"}
+          justifyContent={isMobileMod() && "space-around"}
         >
           <GreenTab
             fontSize="16px"
@@ -185,7 +185,7 @@ export default function DataInformationQuery ({ resource }) {
           >
             Stata
           </GreenTab>
-          {isMobileMod ?
+          {isMobileMod() ?
             <Menu>
               <MenuButton
                 variant="unstyled"
@@ -340,8 +340,8 @@ bd_read_table, ///
               </DisclaimerBox>
             }
             <VStack
-              alignItems={isMobileMod ? "center" :"flex-start"}
-              padding={isMobileMod ? "32px 0 24px 0 !important" :"32px 0 24px 40px !important"}
+              alignItems={isMobileMod() ? "center" :"flex-start"}
+              padding={isMobileMod() ? "32px 0 24px 0 !important" :"32px 0 24px 40px !important"}
               margin="24px 4px 0"
               direction="column"
               height="100%"
@@ -350,7 +350,7 @@ bd_read_table, ///
             >
               <HStack marginBottom="32px" spacing={0} alignItems="flex-start" flexDirection="column">
                 <Box
-                  width={isMobileMod ? "100%" : "216px" }
+                  width={isMobileMod() ? "100%" : "216px" }
                   textAlign="center"
                   marginBottom="24px"
                 >
@@ -360,8 +360,8 @@ bd_read_table, ///
                 </Box>
 
                 <HStack 
-                  flexDirection={isMobileMod && "column"}
-                  spacing={isMobileMod ? 0 : 8}
+                  flexDirection={isMobileMod() && "column"}
+                  spacing={isMobileMod() ? 0 : 8}
                 >
                   <Image
                     alt="QR code contribuição"
@@ -373,7 +373,7 @@ bd_read_table, ///
                   />
 
                   <VStack
-                    marginTop={isMobileMod && "32px !important"}
+                    marginTop={isMobileMod() && "32px !important"}
                     justifyContent="center"
                     alignItems="flex-start"
                   >
@@ -393,9 +393,9 @@ bd_read_table, ///
               </HStack>
 
               <HStack
-                spacing={!isMobileMod && 6}
-                flexDirection={isMobileMod && "column"}
-                gridGap={isMobileMod && "16px"}
+                spacing={!isMobileMod() && 6}
+                flexDirection={isMobileMod() && "column"}
+                gridGap={isMobileMod() && "16px"}
               >
                 <RoundedButton
                   fontSize="14px"
@@ -440,7 +440,6 @@ bd_read_table, ///
                   <DownloadIcon alt="download" width="22px" height="22px" fill={downloadNotAllowed ? "#C4C4C4" :"#FF8484"}/>
                   Download dos dados
                 </RoundedButton>
-
               </HStack>
             </VStack>
           </TabPanel>

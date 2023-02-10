@@ -52,7 +52,7 @@ export default function RawDataSourcesPage({
   id
 }) {
   const [resource, setResource] = useState({})
-  const [isError, setIsError] = useState("")
+  const [isError, setIsError] = useState({})
 
   const featchRawDataSources = async () => {
     try {
@@ -170,7 +170,7 @@ export default function RawDataSourcesPage({
     )
   }
 
-  if(isError.length > 0) return <FourOhFour/>
+  if(isError?.message?.length > 0) return <FourOhFour/>
 
   return (
     <BaseResourcePage

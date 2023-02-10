@@ -32,7 +32,7 @@ import RedirectIcon from "../../public/img/icons/redirectIcon";
 
 export default function InformationRequestPage({ id }) {
   const [resource, setResource] = useState({})
-  const [isError, setIsError] = useState("")
+  const [isError, setIsError] = useState({})
 
   const featchInformationRequest = async () => {
     try {
@@ -132,7 +132,7 @@ export default function InformationRequestPage({ id }) {
   }
 
   if(resource === undefined || Object.keys(resource).length === 0) return null
-  if(isError.length > 0) return <FourOhFour />
+  if(isError?.message?.length > 0) return <FourOhFour />
 
   return (
     <BaseResourcePage

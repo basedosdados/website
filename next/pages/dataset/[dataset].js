@@ -8,6 +8,7 @@ import {
   TabPanels
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Head from "next/head";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 
@@ -65,6 +66,8 @@ export default function DatasetPage ({
   dataset,
 }) {
   const [tabIndex, setTabIndex] = useState(0)
+  const router = useRouter()
+  const { query } = router
 
   if(dataset === null) return <FourOhFour height="100vh"/>
 
@@ -137,7 +140,7 @@ export default function DatasetPage ({
                 <Subtitle>Organização</Subtitle>
                 <Link
                   marginTop="4px !important"
-                  href={`/dataset?organization=${dataset.organization.website}`}
+                  href={`/dataset?organization=${dataset.organization.name}`}
                 >
                   <SectionText
                     fontSize={isMobileMod() ? "14px" : "16px"}
@@ -235,7 +238,11 @@ export default function DatasetPage ({
           {name:"Entre em contato", url: "/contato"},
         ]}
       />
-      <link rel="stylesheet" href="/vendor/prism.css" data-noprefix />
+
+      <Stack display={query?.hasOwnProperty("bdm_tables") !== "none"}>
+        <script key="sql" src="/vendor/prism.js"/>
+        <link rel="stylesheet" href="/vendor/prism.css" data-noprefix />
+      </Stack>
     </MainPageTemplate>
   )
 }
