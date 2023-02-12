@@ -11,6 +11,10 @@ jobs:
     if: github.ref_name == 'nextjs'
     name: Release Docker Staging
     runs-on: ubuntu-latest
+    environment:
+      name: stagingv2
+    env:
+      NEXT_PUBLIC_API_URL: ${{ env.NEXT_PUBLIC_API_URL }}
 
     steps:
       - name: Checkout
