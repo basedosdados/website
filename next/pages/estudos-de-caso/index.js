@@ -1,6 +1,7 @@
 import {
   Stack,
-  Box
+  Box,
+  Skeleton
 } from "@chakra-ui/react";
 import Head from "next/head";
 import Image from "next/image";
@@ -78,12 +79,16 @@ export default function CaseStudies ({}) {
                 borderRadius="16px"
                 marginBottom="24px"
               >
-                <Image
-                  alt={elm.displayTitle}
-                  src={elm.img}
-                  layout="fill"
-                  objectFit="cover"
-                />
+                {elm?.img.length > 0 ?
+                  <Image
+                    alt={elm.displayTitle}
+                    src={elm.img}
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                  :
+                  <Skeleton width="100%" height="100%"/>
+                }
               </Box>
 
               {/* Imagem logo */}
@@ -94,12 +99,16 @@ export default function CaseStudies ({}) {
                 overflow="hidden"
                 marginBottom="16px !important"
               >
-                <Image
-                  alt={elm.displayTitle}
-                  src={elm.logo.img}
-                  width={elm.logo.width/2}
-                  height={elm.logo.height/2}
-                />
+                {elm?.logo.img.length > 0 ?
+                  <Image
+                    alt={elm.displayTitle}
+                    src={elm.logo.img}
+                    width={elm.logo.width/2}
+                    height={elm.logo.height/2}
+                  />
+                  :
+                  <Skeleton width="120px" height="100%"/>
+                }
               </Box>
 
               <BodyText marginBottom="18px !important">

@@ -2,7 +2,8 @@ import {
   Stack,
   VStack,
   HStack,
-  Box
+  Box,
+  Skeleton,
 } from "@chakra-ui/react";
 import Image from 'next/image';
 import { useState, useEffect } from "react";
@@ -111,12 +112,16 @@ export default function CaseStudies ({
             borderRadius={isMobileMod ? "12px" : "24px"}
             filter={!isMobileMod && "brightness(0.5)"}
           >
-            <Image
-              alt={displayTitle}
-              src={img}
-              layout="fill"
-              objectFit="cover"
-            />
+            {img.length > 0 ?
+              <Image
+                alt={displayTitle}
+                src={img}
+                layout="fill"
+                objectFit="cover"
+              />
+            :
+              <Skeleton width="100%" height="100%"/>
+            }
           </Box>
 
           {imgDescription && 
@@ -153,12 +158,16 @@ export default function CaseStudies ({
               overflow="hidden"
               marginBottom="32px"
             >
-              <Image
-                alt={displayTitle}
-                src={logo.img}
-                width={logo.width}
-                height={logo.height}
-              />
+              {logo?.img.length > 0 ?
+                <Image
+                  alt={displayTitle}
+                  src={logo.img}
+                  width={logo.width}
+                  height={logo.height}
+                />
+              :
+                <Skeleton width="245px" height="85px"/>
+              }
             </Box>
 
             <BodyText  fontSize="16px" letterSpacing="0.2px" fontWeight="400">Sobre</BodyText>
