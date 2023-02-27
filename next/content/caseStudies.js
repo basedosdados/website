@@ -28,6 +28,7 @@ export const CaseStudiesCotent = [
       height: 85
     },
     about: "Organização que trabalha para garantir educação de qualidade para todas as crianças brasileiras e apoia líderes focados no desenvolvimento social do Brasil.",
+    resume: "Com mais de 61 redes de ensino apoiadas e mais de 28 mil escolas envolvidas, implementar um fluxo de análise de dados e indicadores foi fundamental para a Fundação Lemann com...",
     sector: "Educação",
     body: `
       <div>
@@ -211,65 +212,73 @@ export const CaseStudiesCotent = [
   {
     id: "siga-o-dinheiro",
     displayTitle: "Siga o Dinheiro",
-    thumbnail: "",
+    thumbnail: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/thumbnails/thumbnail_estudo_de_caso_jota.png",
     title: "Plataforma traz mais transparência para a prestação de contas de candidaturas e partidos nas Eleições 2022",
-    img: "",
-    imgDescription: "",
-    description: "",
+    img: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/imagens/estudo_de_caso_jota.png",
+    imgDescription: "Foto: Tribunal Superior Eleitoral (TSE)",
+    description: "Criada pela BD em parceria com o JOTA, empresa de jornalismo e tecnologia, a plataforma Siga o Dinheiro auxiliou população e imprensa no monitoramento do financiamento de campanhas eleitorais nas eleições de 2022. O projeto se tornou uma importante ferramenta para a transparência pública e o combate à corrupção no processo eleitoral.",
     logo: {
-      img: "",
-      width: 245,
+      img: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/logos/jota.svg",
+      width: 222,
       height: 85
     },
-    about: "Empresa de jornalismo e tecnologia para tomadores de decisão que tem como missão tornar as instituições brasileiras mais transparentes e previsíveis",
+    about: "Empresa de jornalismo e tecnologia para tomadores de decisão que tem como missão tornar as instituições brasileiras mais transparentes e previsíveis.",
+    resume: "Criada pela BD em parceria com o JOTA, empresa de jornalismo e tecnologia, a plataforma Siga o Dinheiro auxiliou população e imprensa no monitoramento do financiamento de campan...",
     sector: "Política",
     body: `
       <div>
-        <p class="bigTitle">Resultados da parceria</p>
-        <ul style="margin-bottom: 48px">
-          <li>Fornecimento de dados atualizados para coberturas jornalísticas das eleições e acompanhamento da sociedade;</li>
-          <li>Produção de análises qualificadas sobre a prestação de contas nas eleições;</li>  
-          <li>Dados de despesas e receitas das eleições para apuração de mais de 20 reportagens publicadas em 5 veículos de comunicação diferentesp;</li>
-        </ul>
-
         <p class="bodyText">
-          Criada pela Base dos Dados em parceria com o JOTA, empresa de jornalismo e tecnologia,
-          a plataforma Siga o Dinheiro auxiliou população e imprensa no monitoramento do
+          Criada pela BD em parceria com o JOTA, empresa de jornalismo e tecnologia,
+          a plataforma <a href="https://sigaodinheiro.org/" target="_blank">Siga o Dinheiro</a> auxiliou população e imprensa no monitoramento do
           financiamento de campanhas eleitorais nas eleições de 2022. O projeto se tornou
           uma importante ferramenta para a transparência pública e o combate à corrupção no
           processo eleitoral.
         </p>
 
-        <p class="bigTitle">Siga o Dinheiro na apuração jornalística</p>
+        <p class="bigTitle">Resultados da parceria</p>
+        <ul style="margin-bottom: 48px">
+          <li>Fornecimento de dados atualizados para coberturas jornalísticas das eleições e acompanhamento da sociedade;</li>
+          <li>Produção de análises qualificadas sobre a prestação de contas nas eleições;</li>  
+          <li>Dados de despesas e receitas das eleições para apuração de mais de 20 reportagens publicadas em 5 veículos de comunicação diferentes.</li>
+        </ul>
+
+        <p class="bigTitle" style="margin-top: 48px">Siga o Dinheiro na apuração jornalística</p>
 
         <div class="sectionText">
           <p class="bodyText">
-            O projeto Siga o Dinheiro foi fundamental para mapear desigualdades e
+            O projeto <a href="https://sigaodinheiro.org/" target="_blank">Siga o Dinheiro</a> foi fundamental para mapear desigualdades e
             inconsistências no financiamento das eleições de 2022. A ferramenta
             foi utilizada na apuração de mais de 20 reportagens com temas como as
-            diferenças raciais e de gênero no financiamento de campanhas,
-            o efeito da tecnologia no financiamento eleitoral, lacunas nas prestações de contas,
-            candidatos que receberam mais recursos para suas campanhas, entre outros.
-            Para Kalleo Coura, editor executivo do JOTA em São Paulo,
+            <a href="https://www.jota.info/eleicoes/candidatos-brancos-a-camara-tiveram-em-media-o-dobro-de-recursos-dos-pretos-05102022" target="_blank">diferenças raciais e de gênero no financiamento de campanhas</a>,
+            <a href="https://www.jota.info/opiniao-e-analise/colunas/siga-o-dinheiro/o-efeito-da-tecnologia-sobre-o-financiamento-eleitoral-30082022" target="_blank">o efeito da tecnologia no financiamento eleitoral</a>,
+            <a href="https://www.jota.info/eleicoes/contas-de-campanha-mostravam-que-candidato-a-deputado-teria-recebido-r-400-milhoes-30082022" target="_blank">lacunas nas prestações de contas</a>,
+            <a href="https://www.jota.info/eleicoes/quem-sao-os-candidatos-a-deputado-que-mais-receberam-recursos-de-campanha-10092022" target="_blank">candidatos que receberam mais recursos para suas campanhas</a>,
+            entre outros. Para Kalleo Coura, editor executivo do JOTA em São Paulo,
             “os dados das prestações de contas das campanhas foram organizados de forma
             simples e intuitiva nos painéis da plataforma, o que possibilitou identificar
             inconsistências e tendências interessantes”.
           </p>
 
+          <div class="contentImgCenter" style="margin: 48px 0">
+            <a href="https://sigaodinheiro.org/#desigualdades" target="_blank">
+              <img alt="seção "desigualdades” do painel Siga o Dinheiro" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/paineis/painel_siga_o_dinheiro.png">
+            </a>
+          </div>
+
           <p class="bodyText">
             O painel facilitou a apuração de reportagens que deixam explícitas as profundas
             desigualdades na distribuição de recursos para campanhas. Com filtros que permitem
             explorar a proporção de receitas e despesas entre os diferentes perfis de candidaturas,
-            o painel possibilitou análises que identificaram a falta de recursos para candidaturas
-            indígenas – 30% das candidaturas não receberam nenhum recurso para suas campanhas – e a
-            disparidade entre os recursos destinados a candidatos brancos e pretos,
+            o painel possibilitou análises que identificaram a <a href="https://www.jota.info/eleicoes/30-das-candidatas-indigenas-a-camara-nao-receberam-recursos-para-campanha-30092022" target="_blank">falta de recursos para candidaturas indígenas </a>
+            – 30% das candidaturas não receberam nenhum recurso para suas campanhas – e a
+            <a href="https://www.jota.info/eleicoes/candidatos-brancos-a-camara-tiveram-em-media-o-dobro-de-recursos-dos-pretos-05102022" target="_blank"> disparidade entre os recursos destinados a candidatos brancos e pretos</a>,
             com o primeiro grupo acumulando o dobro no financiamento.
           </p>
         </div>
 
         <div class="citationBox" style="margin-top: 48px">
           <p>
-            “Durante a corrida eleitoral, foi substancial ter acesso à visualização da Siga o Dinheiro,
+            “Durante a corrida eleitoral, foi substancial ter acesso à visualização do Siga o Dinheiro,
             que usou dados abertos da Justiça Eleitoral que nem sempre seriam facilmente combinados e
             cruzados para produzir conteúdo de interesse público. Na cobertura, essas informações
             ajudaram a embasar reportagens sobre os candidatos que mais receberam investimentos
@@ -288,15 +297,15 @@ export const CaseStudiesCotent = [
           <p class="bodyText">
             Além de ajudar a identificar tendências do financiamento das campanhas para cargos federais,
             a possibilidade de criar recortes regionais facilitou o acompanhamento dos gastos em estados
-            como Roraima, por exemplo. A ferramenta ajudou também na identificação de irregularidades
+            como <a href="https://folhabv.com.br/noticia/ELEIcOES-2022/ELEIcOES-2022/Saiba-quem-recebeu-os-valores-mais-altos-para-fazer-campanha-em-RR/90559" target="_blank">Roraima</a>, por exemplo. A ferramenta ajudou também na identificação de irregularidades
             e erros nas prestações de contas de candidatos e partidos. Foi o caso do Partido Socialista
-            Brasileiro (PSB), que declarou uma receita de mais de R$ 400 milhões do Fundo Especial de
-            Financiamento de Campanha do sindicalista Zé Francisco, o que o colocaria na primeira
+            Brasileiro (PSB), que declarou uma <a href="https://www.jota.info/eleicoes/contas-de-campanha-mostravam-que-candidato-a-deputado-teria-recebido-r-400-milhoes-30082022" target="_blank">receita de mais de R$ 400 milhões do Fundo Especial de
+            Financiamento de Campanha do sindicalista Zé Francisco</a>, o que o colocaria na primeira
             posição entre os candidatos que mais receberam recursos públicos em toda a eleição de 2022.
           </p>
         </div>
 
-        <p class="bigTitle">Tecnologia de ponta trabalhando pela transparência e acessibilidade</p>
+        <p class="bigTitle" style="margin-top: 48px">Tecnologia de ponta trabalhando pela transparência e acessibilidade</p>
         <div class="sectionText">
           <p class="bodyText">
             O painel foi desenvolvido através da combinação de técnicas de extração automatizada e de
@@ -313,7 +322,7 @@ export const CaseStudiesCotent = [
           </p>
 
           <p class="bodyText">
-            Acesse os dados atualizados das eleições brasileiras.
+            Acesse os dados atualizados das <a href="https://basedosdados.org/dataset/br-tse-eleicoes?bdm_table=bens_candidato" target="_blank">eleições brasileiras</a>.
           </p>
         </div>
       </div>

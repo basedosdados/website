@@ -8,9 +8,11 @@ import {
 import Image from 'next/image';
 import { useState, useEffect } from "react";
 import Head from "next/head";
+
 import { MainPageTemplate } from "../../components/templates/main";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { CaseStudiesCotent } from "../../content/caseStudies";
+import Link from "../../components/atoms/Link";
 import SectionText from "../../components/atoms/SectionText";
 import Display from "../../components/atoms/Display";
 import BodyText from "../../components/atoms/BodyText";
@@ -86,6 +88,15 @@ export default function CaseStudies ({
         maxWidth="1264px"
         margin="auto"
       >
+        <Link
+          marginBottom="48px"
+          color="#42B0FF"
+          fontWeight="500"
+          fontFamily="ubuntu"
+          fontSize="16px"
+          width="fit-content"
+          href={"/estudos-de-caso"}
+        >{`<< Voltar`}</Link>
         {isMobileMod &&
           <Display
               paddingTop={isMobileMod && "80px"}

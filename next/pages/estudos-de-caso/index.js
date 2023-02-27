@@ -6,6 +6,7 @@ import {
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
 import Display from "../../components/atoms/Display";
 import SectionTitle from "../../components/atoms/SectionTitle";
@@ -16,7 +17,14 @@ import { CaseStudiesPaged } from "../../content/caseStudies";
 
 export default function CaseStudies ({}) {
   const [CaseStudiesPages, setCaseStudiesPages] = useState([])
+  const [isMobileMode, setIsMobileMode] = useState(false)
   
+  const isMobile = useCheckMobile()
+
+  useEffect(() => {
+    setIsMobileMode(isMobile)
+  },[isMobile])
+
   useEffect(() => {
     setCaseStudiesPages(CaseStudiesPaged())
   },[])
@@ -35,23 +43,25 @@ export default function CaseStudies ({}) {
       <Stack
         maxWidth="1264px"
         margin="auto"
+        paddingTop={isMobileMode && "80px"}
         spacing={0}
       >
         <Display
-          fontSize="60px"
-          letterSpacing="-1.5px"
+          fontSize={isMobileMode ? "34px" : "60px"}
+          letterSpacing={isMobileMode ? "-0.4px" : "-1.5px"}
           lineHeight="72px"
           textAlign="center"
           marginBottom="16px"
         >
-          Estudos de caso
+          Nossas soluções
         </Display>
         <SectionTitle
           color="#575757"
           textAlign="center"
-          marginBottom="112px !important"
+          marginBottom={isMobileMode ? "80px !important" : "112px !important"}
+          lineHeight={isMobileMode ? "32px" : "40px"}
         >
-          Descubra por que as instituições ... a Base dos Dados 
+          Descubra por que as instituições escolhem inovar com a Base dos Dados
         </SectionTitle>
 
         {/* filtro */}
@@ -62,6 +72,7 @@ export default function CaseStudies ({}) {
           gridGap="32px"
           spacing={0}
           marginBottom="120px !important"
+          justifyContent={isMobileMode && "center"}
         >
           {CaseStudiesPages.length > 0 && 
           CaseStudiesPages.map(elm => 
@@ -73,7 +84,7 @@ export default function CaseStudies ({}) {
               {/* Imagem banner */}
               <Box
                 position="relative"
-                width="400px"
+                width={isMobileMode ? "100%" : "400px"}
                 height="145px"
                 overflow="hidden"
                 borderRadius="16px"
@@ -112,7 +123,7 @@ export default function CaseStudies ({}) {
               </Box>
 
               <BodyText marginBottom="18px !important">
-                {elm.about}
+                {elm.resume}
               </BodyText>
 
               <Link
