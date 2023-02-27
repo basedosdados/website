@@ -2,13 +2,17 @@ import {
   Stack,
   VStack,
   HStack,
-  Image,
+  Box,
+  Skeleton,
 } from "@chakra-ui/react";
+import Image from 'next/image';
 import { useState, useEffect } from "react";
 import Head from "next/head";
+
 import { MainPageTemplate } from "../../components/templates/main";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { CaseStudiesCotent } from "../../content/caseStudies";
+import Link from "../../components/atoms/Link";
 import SectionText from "../../components/atoms/SectionText";
 import Display from "../../components/atoms/Display";
 import BodyText from "../../components/atoms/BodyText";
@@ -84,6 +88,15 @@ export default function CaseStudies ({
         maxWidth="1264px"
         margin="auto"
       >
+        <Link
+          marginBottom="48px"
+          color="#42B0FF"
+          fontWeight="500"
+          fontFamily="ubuntu"
+          fontSize="16px"
+          width="fit-content"
+          href={"/estudos-de-caso"}
+        >{`<< Voltar`}</Link>
         {isMobileMod &&
           <Display
               paddingTop={isMobileMod && "80px"}
@@ -102,16 +115,25 @@ export default function CaseStudies ({
             >{title}</Display>
           }
 
-          <Image
-            alt={displayTitle}
-            filter={!isMobileMod && "brightness(0.5)"}
-            width="fit-content"
-            maxWidth="100%"
-            height="fit-content"
-            maxHeight="450px"
+          <Box
+            position="relative"
+            width="100%"
+            height="450px"
+            overflow="hidden"
             borderRadius={isMobileMod ? "12px" : "24px"}
-            src={img}
-          />
+            filter={!isMobileMod && "brightness(0.5)"}
+          >
+            {img.length > 0 ?
+              <Image
+                alt={displayTitle}
+                src={img}
+                layout="fill"
+                objectFit="cover"
+              />
+            :
+              <Skeleton width="100%" height="100%"/>
+            }
+          </Box>
 
           {imgDescription && 
             <SectionText
@@ -140,13 +162,25 @@ export default function CaseStudies ({
             maxWidth="300px"
             alignItems="flex-start"
           >
-            <Image
-              alt={displayTitle}
+            <Box
+              position="relative"
+              width="100%"
+              height="85px"
+              overflow="hidden"
               marginBottom="32px"
-              width="fit-content"
-              height="fit-content"
-              src={logo}
-            />
+            >
+              {logo?.img.length > 0 ?
+                <Image
+                  alt={displayTitle}
+                  src={logo.img}
+                  width={logo.width}
+                  height={logo.height}
+                />
+              :
+                <Skeleton width="245px" height="85px"/>
+              }
+            </Box>
+
             <BodyText  fontSize="16px" letterSpacing="0.2px" fontWeight="400">Sobre</BodyText>
             <BodyText paddingBottom="32px" fontSize="16px" letterSpacing="0.2px" color="#6F6F6F">
               {about}
