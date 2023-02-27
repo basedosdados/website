@@ -496,6 +496,31 @@ export default function DatasetPage({
     }
   }
 
+  const ImageOrganization = () => {
+    const [urlImage, setUrlImage] = useState("")
+    const imageUrl = dataset.organization.image_url
+
+    useEffect(() => {
+      imageUrl.startsWith("https://") ? setUrlImage(imageUrl) : setUrlImage("https://basedosdados.org/uploads/group/" + imageUrl)
+    },[])
+
+    return (
+      <Image
+        alt={dataset.organization.title || ""}
+        borderRadius="32px"
+        boxShadow="0px 4px 8px rgba(100, 96, 103, 0.16)"
+        width={{ base: "25%", lg: "100%" }}
+        minWidth="250px"
+        maxWidth="250px"
+        minHeight="250px"
+        maxHeight="250px"
+        height={{ base: "25%", lg: "100%" }}
+        objectFit="contain"
+        src={urlImage}
+      />
+    )
+  }
+
   return (
     <MainPageTemplate pages={pages}>
       <Head>
@@ -541,22 +566,7 @@ export default function DatasetPage({
             minWidth="235px"
             height="100%"
           >
-            <Image
-              alt={dataset.organization.title || ""}
-              borderRadius="32px"
-              boxShadow="0px 4px 8px rgba(100, 96, 103, 0.16)"
-              width={{ base: "25%", lg: "100%" }}
-              minWidth="250px"
-              maxWidth="250px"
-              minHeight="250px"
-              maxHeight="250px"
-              height={{ base: "25%", lg: "100%" }}
-              objectFit="contain"
-              src={
-                "https://basedosdados.org/uploads/group/" +
-                dataset.organization.image_url
-              }
-            />
+            <ImageOrganization/>
           </Center>
           <VStack spacing={0} align="flex-start" width="100%">
             <BigTitle

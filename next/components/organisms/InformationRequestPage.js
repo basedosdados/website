@@ -300,7 +300,7 @@ export function InformationRequestPage({
               <UserIcon alt="Pedido feito por" width="22px" height="22px" fill="#D0D0D0"/>
               <AddInfoTextBase
                 title="Pedido feito por"
-                text={resource.requested_by.name}
+                text={resource.requested_by?.name || "Não listado"}
               />
             </GridItem>
           </Grid>
