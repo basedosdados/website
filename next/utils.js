@@ -210,3 +210,11 @@ export function getTemporalCoverage(temporalCoverage, parentTemporalCoverage) {
   const max_date = years[years.length-1]
   return `${min_date} - ${max_date}`
 }
+
+export function removeEmptyFields (obj) {
+  return Object.fromEntries(
+    Object.entries(obj)
+      .filter(([_, v]) => v != null)
+      .map(([k, v]) => [k, v === Object(v) ? removeEmptyFields(v) : v])
+  )
+}

@@ -136,7 +136,7 @@ export default function InformationRequestPage({ id }) {
 
   return (
     <BaseResourcePage
-      title={`Número do pedido: ${resource?.name}`}
+      title={`Número do pedido: ${resource?.slug}`}
       // removeFunction={() => deleteResource(resource)}
       // formComponent={
       //   <SchemaForm
@@ -175,7 +175,7 @@ export default function InformationRequestPage({ id }) {
           </SectionText>
 
           <PartnershipContainer
-            {...resource?.name === "03005.341407/2022-56" ?
+            {...resource?.slug === "03005.341407/2022-56" ?
               partnerships["Fundação Lemann"] :
               partnerships["Fiquem Sabendo"]
             }
@@ -211,35 +211,35 @@ export default function InformationRequestPage({ id }) {
             marginTop={useCheckMobile() && "24px !important"}
             spacing={0}
           >
-            <a href={resource?.rawDataUrl} target="_blank">
+            <a href={resource?.dataUrl} target="_blank">
               <RoundedButton
                 height="35px"
                 fontSize="14px"
                 minWidth="180px"
                 width={useCheckMobile() && "100%"}
                 color="#FFF"
-                backgroundColor={resource?.rawDataUrl ? "#42B0FF" : "#C4C4C4"}
+                backgroundColor={resource?.dataUrl ? "#42B0FF" : "#C4C4C4"}
                 padding="0 20px"
-                isDisabled={resource?.rawDataUrl ? false : true}
+                isDisabled={resource?.dataUrl ? false : true}
               >
                 <RedirectIcon alt="hiperlink" marginRight="8px" width="14px" height="14px" fill="#FFF"/>
                 Acessar dados
                 </RoundedButton>
             </a>
 
-            <a href={resource?.auxiliaryFilesUrl} target="_blank">
+            <a href={resource?.url} target="_blank">
               <RoundedButton
                 height="35px"
                 fontSize="14px"
                 minWidth="180px"
                 width={useCheckMobile() && "100%"}
-                color={resource?.auxiliaryFilesUrl ? "#42B0FF" : "#FFF"}
-                border={resource?.auxiliaryFilesUrl && "2px solid #42B0FF"}
-                backgroundColor={resource?.auxiliaryFilesUrl ? "#FFF" : "#C4C4C4"}
+                color={resource?.url ? "#42B0FF" : "#FFF"}
+                border={resource?.url && "2px solid #42B0FF"}
+                backgroundColor={resource?.url ? "#FFF" : "#C4C4C4"}
                 padding="0 20px"
-                isDisabled={resource?.auxiliaryFilesUrl ? false : true}
+                isDisabled={resource?.url ? false : true}
               >
-                <RedirectIcon alt="hiperlink" marginRight="8px" width="14px" height="14px" fill={resource?.auxiliaryFilesUrl ? "#42B0FF" : "#FFF"}/>
+                <RedirectIcon alt="hiperlink" marginRight="8px" width="14px" height="14px" fill={resource?.url ? "#42B0FF" : "#FFF"}/>
                 Acessar pedido
               </RoundedButton>
             </a>
@@ -254,7 +254,7 @@ export default function InformationRequestPage({ id }) {
         >
           <Subtitle >Descrição</Subtitle>
           <SectionText marginTop="16px !important">
-            {resource?.description || "Nenhuma descrição fornecida."}
+            {resource?.observations || "Nenhuma descrição fornecida."}
           </SectionText>
         </VStack>
 

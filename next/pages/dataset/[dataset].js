@@ -69,7 +69,7 @@ export default function DatasetPage ({
   const router = useRouter()
   const { query } = router
 
-  if(dataset === null) return <FourOhFour height="100vh"/>
+  if(Object.keys(dataset).length === 0) return (<MainPageTemplate><FourOhFour/></MainPageTemplate>)
 
   return (
     <MainPageTemplate>
@@ -140,12 +140,12 @@ export default function DatasetPage ({
                 <Subtitle>Organização</Subtitle>
                 <Link
                   marginTop="4px !important"
-                  href={`/dataset?organization=${dataset.organization.name}`}
+                  href={`/dataset?organization=${dataset?.organization?.name || ""}`}
                 >
                   <SectionText
                     fontSize={isMobileMod() ? "14px" : "16px"}
                   >
-                    {dataset.organization.name}
+                    {dataset?.organization?.name || "Não listado"}
                   </SectionText>
                 </Link>
               </VStack>

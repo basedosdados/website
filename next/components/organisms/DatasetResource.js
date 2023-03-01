@@ -103,9 +103,9 @@ export default function DatasetResource({
   }
 
   useEffect(() => {
-    const dataset_tables = dataset.tables.edges.map((elm) => elm.node)
-    const raw_data_sources = dataset.rawDataSources.edges.map((elm) => elm.node)
-    const information_request = dataset.informationRequests.edges.map((elm) => elm.node)
+    const dataset_tables = dataset?.tables?.edges.map((elm) => elm.node) || []
+    const raw_data_sources = dataset?.rawDataSources?.edges.map((elm) => elm.node) || []
+    const information_request = dataset?.informationRequests?.edges.map((elm) => elm.node) || []
 
     setTables(dataset_tables)
     setRawDataSources(raw_data_sources)
@@ -171,7 +171,7 @@ export default function DatasetResource({
           choices={informationRequests}
           value={query.information_request}
           valueField="_id"
-          displayField="name"
+          displayField="slug"
           fieldName="Pedidos LAI"
           isHovering={false}
           onChange={(id) => {
@@ -179,6 +179,7 @@ export default function DatasetResource({
           }}
         />
       </VStack>
+
       <VStack
         width="100%"
         overflow="hidden"

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { removeEmptyFields } from "../../utils";
 
 const API_URL= process.env.NEXT_PUBLIC_API_URL
 
@@ -54,7 +55,6 @@ export async function getShowDataset(id) {
                   node {
                     _id
                     slug
-                    name
                   }
                 }
               }
@@ -62,7 +62,6 @@ export async function getShowDataset(id) {
                 edges {
                   node {
                     _id
-                    slug
                     name
                   }
                 }
@@ -71,8 +70,8 @@ export async function getShowDataset(id) {
                 edges {
                   node {
                     _id
-                    slug
                     name
+                    slug
                   }
                 }
               }
@@ -192,7 +191,15 @@ export async function getInformationRequest(id) {
           edges {
             node {
               _id
-              name
+              slug
+              url
+              dataUrl
+              origin
+              observations
+              updateFrequency {
+                _id
+                number
+              }
               status {
                 _id
                 name
@@ -201,14 +208,33 @@ export async function getInformationRequest(id) {
                 edges {
                   node {
                     _id
-                    temporalCoverage
+                    datetimeRanges {
+                      edges {
+                        node {
+                          _id
+                          startYear
+                          startSemester
+                          startQuarter
+                          startMonth
+                          startDay
+                          startHour
+                          startMinute
+                          startSecond
+                          endYear
+                          endSemester
+                          endQuarter
+                          endMonth
+                          endDay
+                          endHour
+                          endMinute
+                          endSecond
+                          interval
+                        }
+                      }
+                    } 
                   }
                 }
               }
-              description
-              observations
-              rawDataUrl
-              auxiliaryFilesUrl
             }
           }
         }
@@ -219,7 +245,8 @@ export async function getInformationRequest(id) {
   })
   try {
     const data = res.data.data.allInformationrequest.edges[0].node
-    return data
+
+    return removeEmptyFields(data)
   } catch (error) {
     console.error(error)
   }
