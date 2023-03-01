@@ -211,7 +211,7 @@ export const CaseStudiesCotent = [
   },
   {
     id: "jota",
-    displayTitle: "Siga o Dinheiro",
+    displayTitle: "JOTA",
     thumbnail: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/thumbnails/thumbnail_estudo_de_caso_jota.png",
     title: "Plataforma traz mais transparência para a prestação de contas de candidaturas e partidos nas Eleições 2022",
     img: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/imagens/estudo_de_caso_jota.png",
