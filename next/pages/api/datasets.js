@@ -1,5 +1,5 @@
 import axios from "axios";
-import { removeEmptyFields } from "../../utils";
+import { cleanGraphQLResponse } from "../../utils";
 
 const API_URL= process.env.NEXT_PUBLIC_API_URL
 
@@ -245,8 +245,7 @@ export async function getInformationRequest(id) {
   })
   try {
     const data = res.data.data.allInformationrequest.edges[0].node
-
-    return removeEmptyFields(data)
+    return cleanGraphQLResponse(data)
   } catch (error) {
     console.error(error)
   }

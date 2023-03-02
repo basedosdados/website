@@ -211,10 +211,73 @@ export function getTemporalCoverage(temporalCoverage, parentTemporalCoverage) {
   return `${min_date} - ${max_date}`
 }
 
-export function removeEmptyFields (obj) {
+export const cleanGraphQLResponse = (input) => {
+  if (!input) return null
+
+  const isPrimitiveType = (test) => {
+    return test !== Object(test)
+  }
+
+  if (isPrimitiveType(input)) return input
+
+  const output = {}
+  const isObject = (obj) => {
+    return obj !== null && typeof obj === 'object' && !Array.isArray(obj)
+  }
+
+  Object.keys(input).forEach((key) => {
+    if (input[key] && input[key].edges) {
+      output[key] = input[key].edges.map((edge) =>
+        cleanGraphQLResponse(edge.node),
+      )
+    } else if (isObject(input[key])) {
+      output[key] = cleanGraphQLResponse(input[key])
+    } else if (key !== '__typename') {
+      output[key] = input[key]
+    }
+  })
+
+  return removeEmpty(output)
+}
+
+export function removeEmpty(obj) {
   return Object.fromEntries(
     Object.entries(obj)
       .filter(([_, v]) => v != null)
-      .map(([k, v]) => [k, v === Object(v) ? removeEmptyFields(v) : v])
-  )
+      .map(([k, v]) => [k, v === Object(v) ? removeEmpty(v) : v])
+  );
+}
+
+export const temporalCoverageTranscript = (value, text) => {
+  if(!value) return text
+
+  const startDate = () => {
+    const array = []
+
+    if(value.startSecond) array.push(value.startSecond)
+    if(value.startMinute) array.push(value.startMinute)
+    if(value.startHour) array.push(value.startHour)
+    if(value.startDay) array.push(value.startDay)
+    if(value.startMonth) array.push(value.startMonth)
+    if(value.startYear) array.push(value.startYear)
+
+    array.reverse()
+    return array.join("-")
+  }
+
+  const endDate = () => {
+    const array = []
+
+    if(value.endSecond) array.push(value.endSecond)
+    if(value.endMinute) array.push(value.endMinute)
+    if(value.endHour) array.push(value.endHour)
+    if(value.endDay) array.push(value.endDay)
+    if(value.endMonth) array.push(value.endMonth)
+    if(value.endYear) array.push(value.endYear)
+
+    array.reverse()
+    return array.join("-")
+  }
+
+  return `${startDate()} - ${endDate()}`
 }

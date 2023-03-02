@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import { temporalCoverageTranscript } from "../../utils";
 import Subtitle from "../atoms/Subtitle";
 import SectionText from "../atoms/SectionText";
 import RoundedButton from "../atoms/RoundedButton";
@@ -261,7 +262,7 @@ export default function InformationRequestPage({ id }) {
         <VStack width="100%" marginTop="32px !important" spacing={4} alignItems="flex-start">
           <Subtitle>Cobertura temporal</Subtitle>
           <SectionText>
-            {resource?.coverages.edges[0].node.temporalCoverage || "Nenhuma cobertura temporal fornecida"}
+            {temporalCoverageTranscript(resource?.coverages?.[0]?.datetimeRanges?.[0], "Nenhuma cobertura temporal fornecida")}
           </SectionText>
         </VStack>
 
@@ -283,7 +284,7 @@ export default function InformationRequestPage({ id }) {
               <UserIcon alt="Pedido feito por" width="22px" height="22px" fill="#D0D0D0"/>
               <AddInfoTextBase
                 title="Pedido feito por"
-                text={resource.requested_by?.name || "Não listado"}
+                text={resource?.requestedBy?.name || "Não listado"}
               />
             </GridItem>
           </Grid>
