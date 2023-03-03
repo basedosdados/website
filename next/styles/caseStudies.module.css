@@ -53,7 +53,8 @@
   font-weight: 300;
   letter-spacing: 0.1px;
   font-size: 18px;
-  color: #6F6F6F  ;
+  line-height: 28px;
+  color: #6F6F6F;
 }
 
 .body :global(.highlightsBox) {
