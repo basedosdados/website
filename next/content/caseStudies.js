@@ -230,7 +230,7 @@ export const CaseStudiesCotent = [
         <p class="bodyText">
           Criada pela BD em parceria com o JOTA, empresa de jornalismo e tecnologia, a plataforma
           <a href="https://sigaodinheiro.org/" target="_blank">Siga o Dinheiro</a> auxiliou população e imprensa no monitoramento das despesas
-          e receitas de campanhas eleitorais nas eleições de 2022. O projeto se tornou uma
+          e receitas de campanhas nas eleições de 2022. O projeto se tornou uma
           importante ferramenta para a transparência pública e o combate à corrupção no processo
           eleitoral.
         </p>
