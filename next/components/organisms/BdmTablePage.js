@@ -62,6 +62,8 @@ export default function BdmTablePage({ id }) {
     }
   }
 
+  console.log(resource)
+
   useEffect(() => {
     feathBdmTable()
   },[id])
@@ -276,8 +278,8 @@ export default function BdmTablePage({ id }) {
   return (
     <BaseResourcePage
       padding={useCheckMobile() ? "16px 0 0" : "16px 8px 0 0"}
-      // editLink={`/resource/edit/${resource?.id}`}
       title={resource?.name}
+      // editLink={`/resource/edit/${resource?.id}`}
       // removeFunction={() => deleteResource(resource)}
       // formComponent={
       //   <SchemaForm

@@ -49,6 +49,8 @@ export default function InformationRequestPage({ id }) {
     featchInformationRequest()
   },[id])
 
+  console.log(resource)
+
   const AddInfoTextBase = ({title, text, children, ...style}) => {
     return (
       <Box display="block" alignItems="center" gridGap="8px" {...style}>

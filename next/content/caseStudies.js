@@ -28,7 +28,7 @@ export const CaseStudiesCotent = [
       height: 85
     },
     about: "Organização que trabalha para garantir educação de qualidade para todas as crianças brasileiras e apoia líderes focados no desenvolvimento social do Brasil.",
-    resume: "Com mais de 61 redes de ensino apoiadas e mais de 28 mil escolas envolvidas, implementar um fluxo de análise de dados e indicadores foi fundamental para a Fundação Lemann com...",
+    resume: "Com mais de 61 redes de ensino apoiadas e mais de 28 mil escolas envolvidas, implementar um fluxo de análise de dados e indicadores foi fundamental para a Fundação Lemann compreender melhor o cenário da educação no Brasil, avaliar os programas apoiados e estabelecer metas estratégicas para potencializar o avanço da educação e o impulsionamento de lideranças no país. A BD trouxe soluções práticas para tornar isso possível, com a reestruturação da arquitetura dos dados utilizados pela Fundação, tratamento e disponibilização de novas bases de dados em um repositório online, análise das informações coletadas e construção de painéis interativos atualizados automaticamente.",
     sector: "Educação",
     body: `
       <div>
@@ -211,7 +211,7 @@ export const CaseStudiesCotent = [
   },
   {
     id: "jota",
-    displayTitle: "Jota",
+    displayTitle: "JOTA",
     thumbnail: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/thumbnails/thumbnail_estudo_de_caso_jota.png",
     title: "Plataforma traz mais transparência para a prestação de contas de candidaturas e partidos nas Eleições 2022",
     img: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/imagens/estudo_de_caso_jota.png",
@@ -223,16 +223,16 @@ export const CaseStudiesCotent = [
       height: 85
     },
     about: "Empresa de jornalismo e tecnologia para tomadores de decisão que tem como missão tornar as instituições brasileiras mais transparentes e previsíveis.",
-    resume: "Criada pela BD em parceria com o JOTA, empresa de jornalismo e tecnologia, a plataforma Siga o Dinheiro auxiliou população e imprensa no monitoramento do financiamento de campan...",
+    resume: "Criada pela BD em parceria com o JOTA, empresa de jornalismo e tecnologia, a plataforma Siga o Dinheiro auxiliou população e imprensa no monitoramento do financiamento de campanhas eleitorais nas eleições de 2022. O projeto se tornou uma importante ferramenta para a transparência pública e o combate à corrupção no processo eleitoral.",
     sector: "Política",
     body: `
       <div>
         <p class="bodyText">
-          Criada pela BD em parceria com o JOTA, empresa de jornalismo e tecnologia,
-          a plataforma <a href="https://sigaodinheiro.org/" target="_blank">Siga o Dinheiro</a> auxiliou população e imprensa no monitoramento do
-          financiamento de campanhas eleitorais nas eleições de 2022. O projeto se tornou
-          uma importante ferramenta para a transparência pública e o combate à corrupção no
-          processo eleitoral.
+          Criada pela BD em parceria com o JOTA, empresa de jornalismo e tecnologia, a plataforma
+          <a href="https://sigaodinheiro.org/" target="_blank">Siga o Dinheiro</a> auxiliou população e imprensa no monitoramento das despesas
+          e receitas de campanhas eleitorais nas eleições de 2022. O projeto se tornou uma
+          importante ferramenta para a transparência pública e o combate à corrupção no processo
+          eleitoral.
         </p>
 
         <p class="bigTitle">Resultados da parceria</p>
@@ -241,6 +241,13 @@ export const CaseStudiesCotent = [
           <li>Produção de análises qualificadas sobre a prestação de contas nas eleições;</li>  
           <li>Dados de despesas e receitas das eleições para apuração de mais de 20 reportagens publicadas em 5 veículos de comunicação diferentes.</li>
         </ul>
+
+        <p class="bodyText">
+          Construído com tecnologia de ponta para extrair e organizar automaticamente as informações
+          do Tribunal Superior Eleitoral (TSE), o painel traz dados atualizados sobre
+          o financiamento das eleições. A plataforma permite a seleção de diversos recortes a partir
+          de filtros geográficos, raciais, de gênero e muito mais.
+        </p>
 
         <p class="bigTitle" style="margin-top: 48px">Siga o Dinheiro na apuração jornalística</p>
 
@@ -269,10 +276,10 @@ export const CaseStudiesCotent = [
             O painel facilitou a apuração de reportagens que deixam explícitas as profundas
             desigualdades na distribuição de recursos para campanhas. Com filtros que permitem
             explorar a proporção de receitas e despesas entre os diferentes perfis de candidaturas,
-            o painel possibilitou análises que identificaram a <a href="https://www.jota.info/eleicoes/30-das-candidatas-indigenas-a-camara-nao-receberam-recursos-para-campanha-30092022" target="_blank">falta de recursos para candidaturas indígenas </a>
-            – 30% das candidaturas não receberam nenhum recurso para suas campanhas – e a
-            <a href="https://www.jota.info/eleicoes/candidatos-brancos-a-camara-tiveram-em-media-o-dobro-de-recursos-dos-pretos-05102022" target="_blank"> disparidade entre os recursos destinados a candidatos brancos e pretos</a>,
-            com o primeiro grupo acumulando o dobro no financiamento.
+            o painel possibilitou análises que identificaram a falta de recursos para candidaturas indígenas 
+            – <a href="https://www.jota.info/eleicoes/30-das-candidatas-indigenas-a-camara-nao-receberam-recursos-para-campanha-30092022" target="_blank"> 30% das candidaturas não receberam nenhum recurso para suas campanhas</a>
+            – e a disparidade entre os recursos destinados a candidatos brancos e pretos,
+            com o <a href="https://www.jota.info/eleicoes/candidatos-brancos-a-camara-tiveram-em-media-o-dobro-de-recursos-dos-pretos-05102022" target="_blank"> primeiro grupo acumulando o dobro no financiamento</a>.
           </p>
         </div>
 
@@ -296,8 +303,8 @@ export const CaseStudiesCotent = [
         <div class="sectionText">
           <p class="bodyText">
             Além de ajudar a identificar tendências do financiamento das campanhas para cargos federais,
-            a possibilidade de criar recortes regionais facilitou o acompanhamento dos gastos em estados
-            como <a href="https://folhabv.com.br/noticia/ELEIcOES-2022/ELEIcOES-2022/Saiba-quem-recebeu-os-valores-mais-altos-para-fazer-campanha-em-RR/90559" target="_blank">Roraima</a>, por exemplo. A ferramenta ajudou também na identificação de irregularidades
+            a possibilidade de criar recortes regionais facilitou o <a href="https://folhabv.com.br/noticia/ELEIcOES-2022/ELEIcOES-2022/Saiba-quem-recebeu-os-valores-mais-altos-para-fazer-campanha-em-RR/90559" target="_blank">acompanhamento dos gastos em estados
+            como Roraima</a>, por exemplo. A ferramenta ajudou também na identificação de irregularidades
             e erros nas prestações de contas de candidatos e partidos. Foi o caso do Partido Socialista
             Brasileiro (PSB), que declarou uma <a href="https://www.jota.info/eleicoes/contas-de-campanha-mostravam-que-candidato-a-deputado-teria-recebido-r-400-milhoes-30082022" target="_blank">receita de mais de R$ 400 milhões do Fundo Especial de
             Financiamento de Campanha do sindicalista Zé Francisco</a>, o que o colocaria na primeira

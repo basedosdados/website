@@ -88,19 +88,21 @@ export default function CaseStudies ({
         maxWidth="1264px"
         margin="auto"
       >
-        <Link
-          marginBottom="48px"
-          color="#42B0FF"
-          fontWeight="500"
-          fontFamily="ubuntu"
-          fontSize="16px"
-          width="fit-content"
-          href={"/estudos-de-caso"}
-        >{`<< Voltar`}</Link>
+        {!isMobileMod &&
+          <Link
+            marginBottom="48px"
+            color="#42B0FF"
+            fontWeight="500"
+            fontFamily="ubuntu"
+            fontSize="16px"
+            width="fit-content"
+            href={"/estudos-de-caso"}
+          >{`<< Voltar`}</Link>
+        }
+
         {isMobileMod &&
           <Display
-              paddingTop={isMobileMod && "80px"}
-              marginBottom="48px"
+            margin="80px 0 48px !important"
           >{title}</Display>
         }
         
@@ -118,10 +120,10 @@ export default function CaseStudies ({
           <Box
             position="relative"
             width="100%"
-            height="450px"
+            height={isMobileMod ? "145px" : "450px"}
             overflow="hidden"
             borderRadius={isMobileMod ? "12px" : "24px"}
-            filter={!isMobileMod && "brightness(0.5)"}
+            filter={!isMobileMod && "brightness(0.4)"}
           >
             {img.length > 0 ?
               <Image

@@ -105,6 +105,76 @@ export async function getBdmTable(id) {
               slug
               name
               description
+              coverages {
+                edges {
+                  node {
+                    _id
+                    datetimeRanges {
+                      edges {
+                        node {
+                          _id
+                          startYear
+                          startSemester
+                          startQuarter
+                          startMonth
+                          startDay
+                          startHour
+                          startMinute
+                          startSecond
+                          endYear
+                          endSemester
+                          endQuarter
+                          endMonth
+                          endDay
+                          endHour
+                          endMinute
+                          endSecond
+                          interval
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              license {
+                _id
+                name
+                url
+              }
+              updateFrequency {
+                _id
+                number
+                entity {
+                  _id
+                  name
+                }
+              }
+              pipeline {
+                _id
+                githubUrl
+              }
+              isDirectory
+              dataCleaningDescription
+              dataCleaningCodeUrl
+              rawDataUrl
+              auxiliaryFilesUrl
+              architectureUrl
+              sourceBucketName
+              uncompressedFileSize
+              compressedFileSize
+              numberRows
+              numberColumns
+              observationLevel {
+                edges {
+                  node {
+                    _id
+                    entity {
+                      _id
+                      name
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -115,7 +185,7 @@ export async function getBdmTable(id) {
   })
   try {
     const data = res.data.data.allTable.edges[0].node
-    return data
+    return cleanGraphQLResponse(data)
   } catch (error) {
     console.error(error)
   }
@@ -128,14 +198,13 @@ export async function getRawDataSources(id) {
     data: {
       query: `
       query {
-        allRawdatasource (id: "${id}"){
+        allRawdatasource (id: "${id}") {
           edges {
             node {
               _id
               name
               description
-              rawDataUrl
-              auxiliaryFilesUrl
+              url
               languages {
                 edges {
                   node {
@@ -148,20 +217,72 @@ export async function getRawDataSources(id) {
                 _id
                 name
               }
+              containsStructureData
+              containsApi
+              updateFrequency {
+                _id
+                entity {
+                  _id
+                  name
+                }
+                number
+              }
+              entities {
+                edges {
+                  node {
+                    _id
+                    name
+                  }
+                }
+              }
+              requiredRegistration
+              areaIpAddressRequired {
+                edges {
+                  node {
+                    _id
+                    name
+                  }
+                }
+              }
+              isFree
+              license {
+                _id
+                url
+                name
+              }
               coverages {
                 edges {
                   node {
                     _id
-                    temporalCoverage
+                    area {
+                      _id
+                      name
+                    }
+                    datetimeRanges {
+                      edges {
+                        node {
+                          _id
+                          startYear
+                          startSemester
+                          startQuarter
+                          startMonth
+                          startDay
+                          startHour
+                          startMinute
+                          startSecond
+                          endYear
+                          endSemester
+                          endQuarter
+                          endMonth
+                          endDay
+                          endHour
+                          endMinute
+                          endSecond
+                          interval
+                        }
+                      }
+                    }
                   }
-                }
-              }
-              license {
-                name
-              }
-              updateFrequency {
-                timeUnit {
-                  name
                 }
               }
             }
@@ -174,7 +295,7 @@ export async function getRawDataSources(id) {
   })
   try {
     const data = res.data.data.allRawdatasource.edges[0].node
-    return data
+    return cleanGraphQLResponse(data)
   } catch (error) {
     console.error(error)
   }

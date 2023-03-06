@@ -8,9 +8,9 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
+import BodyText from "../../components/atoms/BodyText";
 import Display from "../../components/atoms/Display";
 import SectionTitle from "../../components/atoms/SectionTitle";
-import BodyText from "../../components/atoms/BodyText";
 import Link from "../../components/atoms/Link";
 import { MainPageTemplate } from "../../components/templates/main";
 import { CaseStudiesPaged } from "../../content/caseStudies";
@@ -49,9 +49,9 @@ export default function CaseStudies ({}) {
         <Display
           fontSize={isMobileMode ? "34px" : "60px"}
           letterSpacing={isMobileMode ? "-0.4px" : "-1.5px"}
-          lineHeight="72px"
+          lineHeight={isMobileMode ? "44px" : "72px"}
           textAlign="center"
-          marginBottom="16px"
+          marginBottom={isMobileMode ? "8px" : "16px"}
         >
           Nossas soluções
         </Display>
@@ -123,7 +123,7 @@ export default function CaseStudies ({}) {
               </Box>
 
               <BodyText marginBottom="18px !important">
-                {elm.resume}
+                {elm.resume.slice(0,isMobileMode ? 160 :175)+"..."}
               </BodyText>
 
               <Link

@@ -19,6 +19,8 @@ import { useState, useEffect } from "react";
 // } from "../../utils";
 
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import { temporalCoverageTranscript } from "../../utils";
+
 import { SimpleTable } from "../atoms/SimpleTable";
 import SectionText from "../atoms/SectionText";
 import Subtitle from "../atoms/Subtitle";
@@ -64,25 +66,47 @@ export default function RawDataSourcesPage({
     }
   }
 
+  console.log(resource)
+
   useEffect(() => {
     featchRawDataSources()
   },[id])
 
   const Languages = () => {
+    if(resource?.languages === undefined || Object.keys(resource?.languages).length === 0) return "Não listado"
+
     const array = []
 
-    resource?.languages?.edges.map((elm) => {
-      array.push(elm.node.name)
+    resource?.languages?.map((elm) => {
+      array.push(elm.name)
     })
 
     if(array.length === 0) return "Não listado"
     return array.join(", ").toString()
   }
 
-  const TemporalCoverage = () => {
-    // const temporal = resource?.temporal_coverage
-    // if(temporal && temporal.length > 0) return getTemporalCoverage(temporal)
-    return "Nenhuma cobertura temporal fornecida"
+  const TrueOrFalse = (value) => {
+    switch (value) {
+      case true:
+        return "Sim"
+        break;
+      case false:
+        return "Não"
+        break;
+      default:
+        return "Não listado"
+        break;
+    }
+  }
+
+  const UpdateFrequency = () => {
+    const value = resource?.updateFrequency
+    if(value === undefined) return "Não listado"
+
+    if(value?.number >= 0 && value?.entity?.name) return `${value.number} ${value.entity.name}`
+    if(value?.entity?.name) return `${value.entity.name}`
+
+    return "Não listado"
   }
 
   const ObservationLevel = () => {
@@ -214,10 +238,10 @@ export default function RawDataSourcesPage({
           minWidth="100px"
           width={useCheckMobile() && "100%"}
           color="#FFF"
-          backgroundColor={resource?.rawDataUrl ? "#42B0FF" : "#C4C4C4"}
+          backgroundColor={resource?.url ? "#42B0FF" : "#C4C4C4"}
           padding="0 20px"
-          isDisabled={resource?.rawDataUrl ? false : true}
-          onClick={() => window.open(resource?.rawDataUrl)}
+          isDisabled={resource?.url ? false : true}
+          onClick={() => window.open(resource?.url)}
         >
           Acessar fonte original
           <RedirectIcon alt="hiperlink" marginLeft="8px" width="14px" height="14px" fill="#FFF"/>
@@ -225,9 +249,16 @@ export default function RawDataSourcesPage({
       </VStack>
 
       <VStack width="100%" spacing={4} alignItems="flex-start">
+        <Subtitle>Descrição</Subtitle>
+        <SectionText>
+          {resource.description || "Nenhuma descrição fornecida."}
+        </SectionText>
+      </VStack>
+
+      <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Cobertura temporal</Subtitle>
         <SectionText>
-          <TemporalCoverage/>
+          {temporalCoverageTranscript(resource?.coverages?.[0]?.datetimeRanges?.[0], "Nenhuma cobertura temporal fornecida")}
         </SectionText>
       </VStack>
 
@@ -257,7 +288,7 @@ export default function RawDataSourcesPage({
             <DataStructureIcon alt="Tem dados estruturados" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Tem dados estruturados"
-              // text={resource?.has_structured_data || "Não listado"}
+              text={TrueOrFalse(resource?.containsStructureData)}
             />
           </GridItem>
 
@@ -265,7 +296,7 @@ export default function RawDataSourcesPage({
             <ApiIcon alt="tabela tem api" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Tem API"
-              // text={resource?.has_api || "Não listado"}
+              text={TrueOrFalse(resource?.containsApi)}
             />
           </GridItem>
 
@@ -273,7 +304,7 @@ export default function RawDataSourcesPage({
             <FrequencyIcon alt="Frequência de atualização" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Frequência de atualização"
-              text={resource?.updateFrequency?.timeUnit?.name || "Não listado"}
+              text={UpdateFrequency()}
             />
           </GridItem>
 
@@ -296,7 +327,7 @@ export default function RawDataSourcesPage({
             <RegisterIcon alt="Requer registro" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Requer registro"
-              // text={resource?.requires_registration || "Não listado"}
+              text={TrueOrFalse(resource?.requiredRegistration)}
             />
           </GridItem>
 
@@ -304,7 +335,7 @@ export default function RawDataSourcesPage({
             <IpIcon alt="IP" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Requer IP de algum país"
-              // text={resource?.country_ip_address_required || "Não listado"}
+              text={resource?.areaIpAddressRequired?.[0].name || "Não listado"}
             />
           </GridItem>
 
@@ -312,7 +343,7 @@ export default function RawDataSourcesPage({
             <CoinIcon alt="é gratuito?" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Gratuito"
-              // text={resource?.is_free || "Não listado"}
+              text={TrueOrFalse(resource?.isFree)}
             />
           </GridItem>
         </Grid>
