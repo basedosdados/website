@@ -21,8 +21,14 @@ import { useState, useEffect } from 'react';
 import FuzzySearch from 'fuzzy-search';
 import Latex from 'react-latex-next';
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { formatJson, getTemporalCoverage } from '../../utils';
-import Tag from "../atoms/Tag"
+import { getTemporalCoverage } from '../../utils';
+import SectionText from '../atoms/SectionText';
+import Tag from "../atoms/Tag";
+
+import {
+  getColumnsBdmTable
+} from "../../pages/api/datasets";
+
 import InfoIcon from '../../public/img/icons/infoIcon';
 import RedirectIcon from '../../public/img/icons/redirectIcon';
 import FilterIcon from '../../public/img/icons/filterIcon';
@@ -30,31 +36,10 @@ import SearchIcon from '../../public/img/icons/searchIcon';
 import CrossIcon from '../../public/img/icons/crossIcon';
 import 'katex/dist/katex.min.css';
 
-function translate(field, translation) {
-  if(typeof field === "boolean") return field === true ? "Sim" : "Não"
-
-  if(typeof field === "object") {
-    if(!field) return "Não listado"
-    
-    if(field.length === 0) {
-      return "Não listado"
-    } else {
-      const newJson = JSON.stringify(field)
-      return formatJson(newJson, true)
-    }
-  }
-
-  return translation[field] || field
-}
-
 function TableDatasets({
   headers,
   values,
-  translations,
-  availableOptionsTranslations,
-  translationsOptions,
   parentTemporalCoverage,
-  tooltip,
   containerStyle,
 }) {
   const [columnsHeaders, setColumnsHeaders] = useState([])
@@ -97,7 +82,7 @@ function TableDatasets({
         if(!values.measurement_unit) return {measurement_unit : "Não listado"}
         const measurementUnitLatex = () => {
           const splitValue = values.measurement_unit.split(/([^a-z])/)
-          const translated = (value) => value.map((elm) =>  translate(elm, translationsOptions["Measurement Unit"]) )
+          const translated = (value) => value.map((elm) =>  elm)
           return (
             <Latex>{`$${translated(splitValue).join("")}$`}</Latex>
           )
@@ -117,15 +102,7 @@ function TableDatasets({
       delete row.is_in_staging
       delete row.is_partition
 
-      const translations = () => {
-        return {
-          bigquery_type : translate(row.bigquery_type, translationsOptions["BigQuery Type"]),
-          covered_by_dictionary: translate(row.covered_by_dictionary, availableOptionsTranslations),
-          has_sensitive_data: translate(row.has_sensitive_data, availableOptionsTranslations),
-        }
-      }
-
-      const translatedRow = {...row,...translations()}
+      const translatedRow = {...row}
 
       return Object.values(translatedRow)
     })
@@ -137,6 +114,18 @@ function TableDatasets({
     setColumnsValues(newValues)
     
   },[values, headers])
+
+  const tooltip = {
+    name: "Nome da coluna.",
+    bigquery_type: "Tipo de dado no BigQuery — categorias: INTEGER (Inteiro), STRING (Texto), DATE (Data), FLOAT64 (Decimal), GEOGRAPHY (Geográfico).",
+    description: "Descrição dos dados da coluna.",
+    temporal_coverage: "Data inicial e final de cobertura dos dados. Pode variar entre colunas, de acordo com a disponibilidade nos dados originais.",
+    covered_by_dictionary: "Indica se a coluna possui categorias descritas na tabela 'dicionario', explicando o significado das suas chaves e valores — ex: 'sexo' possui os valores 0 e 1 na coluna, e, no dicionario, você irá encontrar 'sexo' com as categorias (chave: 1 - valor: Feminino), (chave: 0 - valor: Masculino).",
+    directory_column: "Caso preenchida, indica que a coluna é chave primária de uma entidade — ex: id_municipio = chave primária de municípios. Isso significa que a coluna é igual em todos os conjuntos do datalake. Informações centralizadas da entidade se encontram no diretório conforme: [diretorio].[tabela]:[coluna].",
+    measurement_unit: "Unidade de medida da coluna — ex: km, m2, kg.",
+    has_sensitive_data: "Indica se a coluna possui dados sensíveis — ex: CPF identificado, dados de conta bancária, etc.",
+    observations: "Descreve processos de tratamentos realizados na coluna que precisam ser evidenciados."
+  }
 
   const empty = () => {
     return (
@@ -204,7 +193,7 @@ function TableDatasets({
       >
         {tooltip ?
           <Box display="flex" gridGap="8px" alignItems="end"  role="columnheader">
-            {translations ? translate(hander, translations) : hander}
+            {hander}
             <Tooltip
               hasArrow
               bg="#2A2F38"
@@ -221,7 +210,7 @@ function TableDatasets({
           </Box>
           :
           <div role="columnheader">
-            {translations ? translate(hander, translations) : hander}
+            {hander}
           </div>
         }
       </Th>
@@ -297,15 +286,32 @@ function TableDatasets({
 }
 
 export default function ColumnsDatasets({
+  tableId,
   headers,
   values,
-  translations,
-  availableOptionsTranslations,
-  translationsOptions,  
   parentTemporalCoverage,
   tooltip,
   containerStyle,
 }) {
+  const [resource, setResource] = useState({})
+  const [isError, setIsError] = useState({})
+
+  const featchColumns = async () => {
+    try {
+      const result = await getColumnsBdmTable(tableId)
+      return setResource(result)
+    } catch (error) {
+      setIsError(error)
+      console.error(error)
+    }
+  }
+
+  console.log(resource)
+
+  useEffect(() => {
+    featchColumns()
+  },[tableId])
+
   const isMobile = useCheckMobile();
   const [isMobileMode, setIsMobileMode] = useState(false)
 
@@ -385,6 +391,9 @@ export default function ColumnsDatasets({
     setTagFilter(remainingTags)
   }
 
+  if(isError?.message?.length > 0) return <SectionText> Nenhuma informação foi encontrada. </SectionText>
+  return <SectionText> Nenhuma informação de coluna fornecida. </SectionText>
+
   return (
     <Stack width="100%">
       <HStack position="relative" flexDirection={isMobileMode ? "column" : "row"}>
@@ -408,7 +417,7 @@ export default function ColumnsDatasets({
             onChange={(event) => setHeaderSelection(event.target.value) }
           >
             {headers.map((option) =>
-              <option value={option}>{translate(option, translations)}</option>
+              <option value={option}>{option}</option>
             )}
           </Select>
         </HStack>
@@ -428,7 +437,7 @@ export default function ColumnsDatasets({
                   <Box display="flex" flexDirection="row" gridGap="16px" maxWidth={isMobileMode ? "150px" : "350px"} overflowX="auto">
                     {tagFilter.map((elm) => (
                       <Box display="flex" gridGap={elm.header && "8px"} alignItems="center" >
-                        <Text fontWeight="300" fontSize="14px" fontFamily="lato" letterSpacing="0.5px">{translate(elm.header, translations)}</Text>
+                        <Text fontWeight="300" fontSize="14px" fontFamily="lato" letterSpacing="0.5px">{elm.header}</Text>
                         <Tag
                           fontWeight="700"
                           text={elm.search}
@@ -492,9 +501,6 @@ export default function ColumnsDatasets({
       <TableDatasets
         headers={headers}
         values={columnValues}
-        translations={translations}
-        availableOptionsTranslations={availableOptionsTranslations}
-        translationsOptions={translationsOptions}
         parentTemporalCoverage={parentTemporalCoverage}
         tooltip={tooltip}
         containerStyle={containerStyle}

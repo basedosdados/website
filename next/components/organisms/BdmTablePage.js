@@ -13,7 +13,7 @@ import SectionText from "../atoms/SectionText";
 import ColumnDatasets from "../molecules/ColumnDatasets";
 import {
   formatJson,
-  getTemporalCoverage,
+  temporalCoverageTranscript
 } from "../../utils";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import BaseResourcePage from "../molecules/BaseResourcePage";
@@ -46,12 +46,6 @@ export default function BdmTablePage({ id }) {
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState({})
 
-  const [showColumns, setShowColumns] = useState(false)
-  const [schema, setSchema] = useState({})
-  const [columnsHeaders, setColumnsHeaders] = useState([])
-  const [columnsValues, setColumnsValues] = useState([])
-  const [observationLevel, setObservationLevel] = useState([])
-
   const feathBdmTable = async () => {
     try {
       const result = await getBdmTable(id)
@@ -67,109 +61,6 @@ export default function BdmTablePage({ id }) {
   useEffect(() => {
     feathBdmTable()
   },[id])
-
-  const tooltip = {
-    name: "Nome da coluna.",
-    bigquery_type: "Tipo de dado no BigQuery — categorias: INTEGER (Inteiro), STRING (Texto), DATE (Data), FLOAT64 (Decimal), GEOGRAPHY (Geográfico).",
-    description: "Descrição dos dados da coluna.",
-    temporal_coverage: "Data inicial e final de cobertura dos dados. Pode variar entre colunas, de acordo com a disponibilidade nos dados originais.",
-    covered_by_dictionary: "Indica se a coluna possui categorias descritas na tabela 'dicionario', explicando o significado das suas chaves e valores — ex: 'sexo' possui os valores 0 e 1 na coluna, e, no dicionario, você irá encontrar 'sexo' com as categorias (chave: 1 - valor: Feminino), (chave: 0 - valor: Masculino).",
-    directory_column: "Caso preenchida, indica que a coluna é chave primária de uma entidade — ex: id_municipio = chave primária de municípios. Isso significa que a coluna é igual em todos os conjuntos do datalake. Informações centralizadas da entidade se encontram no diretório conforme: [diretorio].[tabela]:[coluna].",
-    measurement_unit: "Unidade de medida da coluna — ex: km, m2, kg.",
-    has_sensitive_data: "Indica se a coluna possui dados sensíveis — ex: CPF identificado, dados de conta bancária, etc.",
-    observations: "Descreve processos de tratamentos realizados na coluna que precisam ser evidenciados."
-  }
-
-  // useEffect(() => {
-  //   fetchSchema()
-  // },[])
-  
-  // async function fetchSchema()  {
-  //   const columnsSchema = await getBdmColumnsSchema()
-  //   setSchema(columnsSchema)
-  // }
-
-  // function translateField(field, translation) {
-  //   if(!field) return "Não listado"
-
-  //   if(typeof field === "boolean") return field === true ? "Sim" : "Não" 
-
-  //   if(typeof field === "object") {
-  //     if(!field) return "Não listado"
-
-  //     if(field.length === 0) {
-  //       return "Não listado"
-  //     } else {
-  //       const newJson = JSON.stringify(field)
-  //       return formatJson(newJson, true)
-  //     }
-  //   }
-
-  //   return translation[field] || field
-  // }
-
-  // useEffect(() => {
-  //   if(resource.observation_level === null) return setObservationLevel()
-
-  //   if(typeof resource.observation_level === "object") {
-  //     if(resource.observation_level.length === 0) return setObservationLevel()
-  //     const schemaHeaders = { entity: "-", columns : "-" }
-  //     const valueObservationLevel = resource.observation_level.map((elm) => {
-  //       const values = elm
-
-  //       const valueColumn = () => {
-  //         if(typeof values.columns === "object") {
-  //           const newColumn = Object.values(values.columns)
-  //             .map((elm) => {
-  //               if(!elm) {
-  //                 return "-"
-  //               } else {
-  //                 return elm
-  //               }
-  //             })
-  //           return {columns : newColumn.toString()}
-  //         }
-  //       }
-
-  //       const translationsEntity = () => {
-  //         if(values.entity) {
-  //           return {entity : translateField(values.entity, availableOptionsTranslations)}
-  //         } else {
-  //           return {entity : "-"}
-  //         }
-  //       }
-
-  //       const row = {...schemaHeaders, ...values, ...valueColumn(), ...translationsEntity()}
-        
-  //       delete row.country
-  //       delete row.column
-        
-  //       if(row.entity === "-" && row.columns === "-") {
-  //         delete row.entity
-  //         delete row.columns
-  //         return [""]
-  //       }
-
-  //       return Object.values(row)
-  //     })
-
-  //     function filterArray(value) {
-  //       return value.length > 1
-  //     }
-  //     const newValues = valueObservationLevel.filter(filterArray)
-
-  //     setObservationLevel(newValues)
-  //   } else {
-  //     setObservationLevel()
-  //   }
-  // },[resource.observation_level])
-
-  // if (
-  //   resource.spatial_coverage &&
-  //   typeof resource.spatial_coverage === "array"
-  // ) {
-  //   resource.spatial_coverage = resource.spatial_coverage.sort();
-  // }
 
   const AddInfoTextBase = ({title, text, info, children, ...style}) => {
     return (
@@ -267,10 +158,14 @@ export default function BdmTablePage({ id }) {
     )
   }
 
-  const TemporalCoverage = () => {
-    // const temporal = resource?.temporal_coverage
-    // if(temporal && temporal.length > 0) return getTemporalCoverage(temporal)
-    return "Nenhuma cobertura temporal fornecida"
+  const UpdateFrequency = () => {
+    const value = resource?.updateFrequency
+    if(value === undefined) return "Não listado"
+
+    if(value?.number >= 0 && value?.entity?.name) return `${value.number} ${value.entity.name}`
+    if(value?.entity?.name) return `${value.entity.name}`
+
+    return "Não listado"
   }
 
   if(isError?.message?.length > 0) return <FourOhFour/>
@@ -315,30 +210,16 @@ export default function BdmTablePage({ id }) {
       <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Cobertura temporal</Subtitle>
         <SectionText>
-          <TemporalCoverage/>
+          {temporalCoverageTranscript(resource?.coverages?.[0]?.datetimeRanges?.[0], "Nenhuma cobertura temporal fornecida")}
         </SectionText>
       </VStack>
 
-      {/* <VStack width="100%" spacing={4} alignItems="flex-start">
+      <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>
           Colunas
         </Subtitle>
-        {showColumns ?
-          <ColumnDatasets
-            translations={translations.bdm_columns}
-            availableOptionsTranslations={availableOptionsTranslations}
-            translationsOptions={translationsOptions}
-            parentTemporalCoverage={resource?.temporal_coverage || ""}
-            tooltip={tooltip} 
-            headers={columnsHeaders}
-            values={columnsValues}
-          />
-        :
-          <SectionText>
-            Nenhuma informação de coluna fornecida.
-          </SectionText>
-        }
-      </VStack> */}
+        <ColumnDatasets tableId={resource?._id} />
+      </VStack>
 
       {/* <VStack width="100%" spacing={5} alignItems="flex-start">
         <Subtitle>
@@ -365,7 +246,7 @@ export default function BdmTablePage({ id }) {
             <StarIcon alt="" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="ID do conjunto"
-              text={resource?._id || "Não listado"}
+              text={resource?.dataset?._id || "Não listado"}
             />
           </GridItem>
 
@@ -373,7 +254,7 @@ export default function BdmTablePage({ id }) {
             <StarIcon alt="" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="ID da tabela"
-              text={resource?.table_id || "Não listado"}
+              text={resource?._id || "Não listado"}
             />
           </GridItem>
 
@@ -381,7 +262,7 @@ export default function BdmTablePage({ id }) {
             <FrequencyIcon alt="Frequência de atualização" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Frequência de atualização"
-              text={resource?.update_frequency || "Não listado"}
+              text={UpdateFrequency()}
             />
           </GridItem>
 
@@ -392,10 +273,11 @@ export default function BdmTablePage({ id }) {
               info="As partições são divisões feitas em uma tabela para facilitar o gerenciamento e a consulta aos dados.
               Ao segmentar uma tabela grande em partições menores, a quantidade de bytes lidos é reduzida,
               o que ajuda a controlar os custos e melhora o desempenho da consulta."
-              text={resource?.partitions || "Não listado"}
+              text={resource?.partition || "Não listado"}
             />
           </GridItem>
 
+          {/* Publicação por ausente */}
           <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <UserIcon alt="publicação por" width="22px" height="22px" fill="#D0D0D0"/>
             <Box display="block" gridGap="8px">
@@ -415,6 +297,7 @@ export default function BdmTablePage({ id }) {
             </Box>
           </GridItem>
 
+          {/* Tratamento por ausente */}
           <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <UserIcon alt="publicação por" width="22px" height="22px" fill="#D0D0D0"/>
             <Box display="block" gridGap="8px">
@@ -434,6 +317,7 @@ export default function BdmTablePage({ id }) {
             </Box>
           </GridItem>
 
+          {/* version ausente */}
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
             <VersionIcon alt="versão" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
@@ -448,6 +332,7 @@ export default function BdmTablePage({ id }) {
               title="Arquivos auxiliares"
               info="Os arquivos dão mais contexto e ajudam a entender melhor os dados disponíveis.
               Podem incluir notas técnicas, descrições de coleta e amostragem, etc."
+              text={resource?.auxiliaryFilesUrl || "Não listado"}
             />
           </GridItem>
         </Grid>

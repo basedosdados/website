@@ -119,8 +119,8 @@ export function TextPix ({ title, text }) {
 }
 
 export default function DataInformationQuery ({ resource }) {
-  const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.dataset_id}/${resource.name}/${resource.table_id}.csv.gz`
-  const queryName = `${resource._id}.${resource.slug}`
+  // const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${resource?.dataset?._id}/${resource?.name}/${resource?._id}.csv.gz`
+  const queryName = `${resource?.dataset?._id}.${resource?._id}`
   const { hasCopied, onCopy } = useClipboard("42494318000116")
   const [tabIndex, setTabIndex] = useState(0)
   const [downloadNotAllowed, setDownloadNotAllowed] = useState(true)
@@ -128,14 +128,14 @@ export default function DataInformationQuery ({ resource }) {
   useEffect(() => {
     if (window) window?.Prism?.highlightAll()
 
-    if(resource.number_rows) {
-      resource.number_rows > 200000 ? setDownloadNotAllowed(true) : setDownloadNotAllowed(false)
+    if(resource?.numberRows) {
+      resource?.numberRows > 200000 ? setDownloadNotAllowed(true) : setDownloadNotAllowed(false)
     }
   }, [resource])
 
   const handlerDownload = () => {
     if(downloadNotAllowed === true) return null
-    return window.open(downloadUrl) 
+    return window.open(resource?.rawDataUrl)
   }
 
   return (
@@ -229,7 +229,7 @@ export default function DataInformationQuery ({ resource }) {
                 color="#42B0FF"
                 target="_blank"
                 textDecoration="none"
-                href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${resource.dataset_id}&t=${resource.name}&page=table`}
+                href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${resource?.dataset?._id}&t=${resource?._id}&page=table`}
               > clique aqui
               </Link> para ir ao <i>datalake</i> no BigQuery e cole no Editor de Consultas:
             </SectionText>
@@ -255,8 +255,8 @@ export default function DataInformationQuery ({ resource }) {
               {`import basedosdados as bd
 
 # Para carregar o dado direto no pandas
-df = bd.read_table(dataset_id='${resource.dataset_id}',
-table_id='${resource.name}',
+df = bd.read_table(dataset_id='${resource?.dataset?._id}',
+table_id='${resource?._id}',
 billing_project_id="<YOUR_PROJECT_ID>")`}
             </PrismCodeHighlight>
 
@@ -303,8 +303,8 @@ df <- bd_collect(query)`}
 
 bd_read_table, ///
     path("<PATH>") ///
-    dataset_id("${resource.dataset_id}") ///
-    table_id("${resource.table_id}") ///
+    dataset_id("${resource?.dataset?._id}") ///
+    table_id("${resource?._id}") ///
     billing_project_id("<PROJECT_ID>")`}
             </PrismCodeHighlight>
 

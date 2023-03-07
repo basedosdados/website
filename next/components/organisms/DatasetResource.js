@@ -137,7 +137,7 @@ export default function DatasetResource({
         justify="flex-start"
         borderRight={!isMobileMod() && "1px solid #DEDFE0"}
       >
-        <AdminButtons/>
+        {/* <AdminButtons/> */}
 
         <FilterAccordion
           alwaysOpen={true}
