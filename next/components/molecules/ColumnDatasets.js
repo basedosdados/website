@@ -21,7 +21,7 @@ import { useState, useEffect } from 'react';
 import FuzzySearch from 'fuzzy-search';
 import Latex from 'react-latex-next';
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { getTemporalCoverage } from '../../utils';
+import { temporalCoverageTranscript } from '../../utils';
 import SectionText from '../atoms/SectionText';
 import Tag from "../atoms/Tag";
 
@@ -36,96 +36,32 @@ import SearchIcon from '../../public/img/icons/searchIcon';
 import CrossIcon from '../../public/img/icons/crossIcon';
 import 'katex/dist/katex.min.css';
 
-function TableDatasets({
-  headers,
-  values,
-  parentTemporalCoverage,
-  containerStyle,
-}) {
+function TableDatasets({ headers, values }) {
   const [columnsHeaders, setColumnsHeaders] = useState([])
   const [columnsValues, setColumnsValues] = useState([])
 
   useEffect(() => {
-    const schemaHeaders = headers.reduce((obj, cur) => (
-      {...obj, [cur]: "Não listado"}), {})
+    // const measurementUnit = () => {
+    //   if(!values.measurement_unit) return {measurement_unit : "Não listado"}
+    //   const measurementUnitLatex = () => {
+    //     const splitValue = values.measurement_unit.split(/([^a-z])/)
+    //     const translated = (value) => value.map((elm) =>  elm)
+    //     return (
+    //       <Latex>{`$${translated(splitValue).join("")}$`}</Latex>
+    //     )
+    //   }
+    //   return {measurement_unit : measurementUnitLatex} 
+    // }
+
     const newValues = values.map((elm) => {
-      const values = elm
-      const directoryColumn = () => {
-        if(!values.directory_column) return {directory_column : "Não listado"}
-
-        if(typeof values.directory_column === "object") {
-          const directory = Object.values(values.directory_column)
-            .map((elm) => {
-              if(!elm) {
-                return "Não listado"
-              } else {
-                return elm
-              }
-            })
-            return { directory_column : directory }
-        } else {
-          return {directory_column : "Não listado"}
-        }
-      }
-
-      const temporalCoverage = () => {
-        if(!values.temporal_coverage) return {temporal_coverage : "Não listado"}
-        
-        if(typeof values.temporal_coverage === "object") {
-          return {temporal_coverage: getTemporalCoverage(values.temporal_coverage, parentTemporalCoverage)}
-        } else {
-          return {temporal_coverage : "Não listado"}
-        }
-      }
-
-      const measurementUnit = () => {
-        if(!values.measurement_unit) return {measurement_unit : "Não listado"}
-        const measurementUnitLatex = () => {
-          const splitValue = values.measurement_unit.split(/([^a-z])/)
-          const translated = (value) => value.map((elm) =>  elm)
-          return (
-            <Latex>{`$${translated(splitValue).join("")}$`}</Latex>
-          )
-        }
-        return {measurement_unit : measurementUnitLatex} 
-      }
-
-      const formatting = {
-        ...values,
-        ...directoryColumn(),
-        ...temporalCoverage(),
-        ...measurementUnit()
-      }
-
-      const row = {...schemaHeaders, ...formatting}
-
-      delete row.is_in_staging
-      delete row.is_partition
-
-      const translatedRow = {...row}
-
-      return Object.values(translatedRow)
+      delete elm.node._id
+      return elm
     })
 
-    delete schemaHeaders.is_in_staging
-    delete schemaHeaders.is_partition
-
-    setColumnsHeaders(Object.keys(schemaHeaders))
+    setColumnsHeaders(Object.keys(headers))
     setColumnsValues(newValues)
-    
   },[values, headers])
 
-  const tooltip = {
-    name: "Nome da coluna.",
-    bigquery_type: "Tipo de dado no BigQuery — categorias: INTEGER (Inteiro), STRING (Texto), DATE (Data), FLOAT64 (Decimal), GEOGRAPHY (Geográfico).",
-    description: "Descrição dos dados da coluna.",
-    temporal_coverage: "Data inicial e final de cobertura dos dados. Pode variar entre colunas, de acordo com a disponibilidade nos dados originais.",
-    covered_by_dictionary: "Indica se a coluna possui categorias descritas na tabela 'dicionario', explicando o significado das suas chaves e valores — ex: 'sexo' possui os valores 0 e 1 na coluna, e, no dicionario, você irá encontrar 'sexo' com as categorias (chave: 1 - valor: Feminino), (chave: 0 - valor: Masculino).",
-    directory_column: "Caso preenchida, indica que a coluna é chave primária de uma entidade — ex: id_municipio = chave primária de municípios. Isso significa que a coluna é igual em todos os conjuntos do datalake. Informações centralizadas da entidade se encontram no diretório conforme: [diretorio].[tabela]:[coluna].",
-    measurement_unit: "Unidade de medida da coluna — ex: km, m2, kg.",
-    has_sensitive_data: "Indica se a coluna possui dados sensíveis — ex: CPF identificado, dados de conta bancária, etc.",
-    observations: "Descreve processos de tratamentos realizados na coluna que precisam ser evidenciados."
-  }
 
   const empty = () => {
     return (
@@ -135,32 +71,35 @@ function TableDatasets({
     )
   }
 
-  const directoryColumnValue = (value) => {
-    const newDirectoryColumn = `${value[0]}.${value[1]}:${value[2]}`
-    const datasetUrl = value[0].replace(/_/g, "-")
+  // const directoryColumnValue = (value) => {
+  //   const newDirectoryColumn = `${value[0]}.${value[1]}:${value[2]}`
+  //   const datasetUrl = value[0].replace(/_/g, "-")
   
-    if (newDirectoryColumn === "Não listado.Não listado:Não listado") return empty()
+  //   if (newDirectoryColumn === "Não listado.Não listado:Não listado") return empty()
 
-    return (
-      <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
-        {newDirectoryColumn}
-        <a target={"_blank"} href={`/dataset/${datasetUrl}?bdm_table=${value[1]}`}>
-          <RedirectIcon
-            alt="hiperlink"
-            fill="#42B0FF"
-            cursor="pointer" 
-            _hover={{opacity:0.7}}
-          />
-        </a> 
-      </div>
-    )
-  }
+  //   return (
+  //     <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
+  //       {newDirectoryColumn}
+  //       <a target={"_blank"} href={`/dataset/${datasetUrl}?bdm_table=${value[1]}`}>
+  //         <RedirectIcon
+  //           alt="hiperlink"
+  //           fill="#42B0FF"
+  //           cursor="pointer" 
+  //           _hover={{opacity:0.7}}
+  //         />
+  //       </a> 
+  //     </div>
+  //   )
+  // }
 
   function valueVerification (value) {
     if(value === null) return empty()
 
-    if(typeof value === "object") return directoryColumnValue(value)
+    if(typeof value === "object") return temporalCoverageTranscript(value, "Não listado")
     if(typeof value === "function") return value()
+
+    if(value === true) return "Sim"
+    if(value === false) return "Não"
 
     if(value) {
       if(value === "Não listado"){
@@ -173,7 +112,9 @@ function TableDatasets({
     }
   }
 
-  const TableHeader = ({ hander, ...props }) => {
+  const TableHeader = ({ header, ...props }) => {
+    if(header === undefined) return null
+
     return (
       <Th
         role="row"
@@ -191,36 +132,53 @@ function TableDatasets({
         zIndex={1}
         {...props}
       >
-        {tooltip ?
-          <Box display="flex" gridGap="8px" alignItems="end"  role="columnheader">
-            {hander}
-            <Tooltip
-              hasArrow
-              bg="#2A2F38"
-              label={tooltip[hander]}
-              fontSize="16px"
-              fontWeight="500"
-              padding="5px 16px 6px"
-              marginTop="8px"
-              color="#FFF"
-              borderRadius="6px"
-            >
-              <InfoIcon alt="tip" cursor="pointer" fill="#A3A3A3"/>
-            </Tooltip>
-          </Box>
-          :
-          <div role="columnheader">
-            {hander}
-          </div>
-        }
+        <Box display="flex" gridGap="8px" alignItems="end"  role="columnheader">
+          {headers[header].pt}
+          <Tooltip
+            hasArrow
+            bg="#2A2F38"
+            label={headers[header].tooltip}
+            fontSize="16px"
+            fontWeight="500"
+            padding="5px 16px 6px"
+            marginTop="8px"
+            color="#FFF"
+            borderRadius="6px"
+          >
+            <InfoIcon alt="tip" cursor="pointer" fill="#A3A3A3"/>
+          </Tooltip>
+        </Box>
       </Th>
     )
+  }
+
+  const TreatmentValues = (value) => {
+    const objectValue = value.node
+    let data = []
+
+    switch (objectValue) {
+      case objectValue.name: data.push(
+        <TableValue
+          value={elm?.node?.name}
+          position="sticky"
+          left="0"
+          zIndex={2}
+          background= "linear-gradient(to left,#EAEAEA, #EAEAEA 1px, #FFF 1px, #FFF 100%)"
+        />)
+      break;
+    
+      default:
+        break;
+    }
+
+    return data.map(elm => <TableValue {...elm}/>)
   }
 
   const TableValue = ({ value, ...props }) => {
     return (
       <Td
         role="cell"
+        position="relative"
         padding="10px 24px"
         fontSize="14px"
         fontFamily="Lato"
@@ -232,16 +190,13 @@ function TableDatasets({
         }}
         {...props}
       >
-        {valueVerification(value)}
+        {value}
       </Td>
     )
   }
 
   return (
-    <HStack
-      width="100%"
-      {...containerStyle}
-    >
+    <HStack width="100%" >
       <TableContainer
         height="100%"
         maxHeight="400px"
@@ -250,32 +205,26 @@ function TableDatasets({
         <Table position="relative" role="table">
           <Thead role="rowgroup" position="relative">
             <TableHeader
-              hander={columnsHeaders[0]}
+              header={columnsHeaders[0]}
               zIndex={4}
               backgroundColor="#F6F6F6"
               left="0"
             />
             {columnsHeaders.map((elm, i) => (
-              i != 0 && <TableHeader hander={elm}/>
+              i != 0 && <TableHeader header={elm}/>
             ))}
           </Thead>
           <Tbody role="rowgroup" position="relative">
-            {columnsValues.map((elm) => (
+            {columnsValues.length > 0 && columnsValues.map((elm) => (
               <Tr role="row">
-                <TableValue
-                  value={elm[0]}
+                {/* <TableValue
+                  value={elm?.node?.name}
                   position="sticky"
                   left="0"
                   zIndex={2}
                   background= "linear-gradient(to left,#EAEAEA, #EAEAEA 1px, #FFF 1px, #FFF 100%)"
-                />
-                {elm.map((r, i) => (
-                  i != 0 &&
-                  <TableValue
-                    value={r}
-                    position="relative"
-                  />
-                ))}
+                /> */}
+                {TreatmentValues(elm)}
               </Tr>
             ))}
           </Tbody>
@@ -285,14 +234,7 @@ function TableDatasets({
   )
 }
 
-export default function ColumnsDatasets({
-  tableId,
-  headers,
-  values,
-  parentTemporalCoverage,
-  tooltip,
-  containerStyle,
-}) {
+export default function ColumnsDatasets({ tableId }) {
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState({})
 
@@ -306,18 +248,48 @@ export default function ColumnsDatasets({
     }
   }
 
-  console.log(resource)
-
   useEffect(() => {
     featchColumns()
   },[tableId])
 
-  const isMobile = useCheckMobile();
-  const [isMobileMode, setIsMobileMode] = useState(false)
-
-  useEffect(() => {
-    setIsMobileMode(isMobile)
-  },[isMobile])
+  const headers = {
+    name: {
+      pt: "Nome",
+      tooltip:"Nome da coluna."
+    },
+    bigqueryType: {
+      pt: "Tipo No BigQuery",
+      tooltip:"Tipo de dado no BigQuery — categorias: INTEGER (Inteiro), STRING (Texto), DATE (Data), FLOAT64 (Decimal), GEOGRAPHY (Geográfico)."
+    },
+    description: {
+      pt: "Descrição",
+      tooltip:"Descrição dos dados da coluna."
+    },
+    datetimeRanges: {
+      pt: "Cobertura Temporal",
+      tooltip:"Data inicial e final de cobertura dos dados. Pode variar entre colunas, de acordo com a disponibilidade nos dados originais."
+    },
+    coveredByDictionary: {
+      pt: "Coberta Por Um Dicionário",
+      tooltip:"Indica se a coluna possui categorias descritas na tabela 'dicionario', explicando o significado das suas chaves e valores — ex: 'sexo' possui os valores 0 e 1 na coluna, e, no dicionario, você irá encontrar 'sexo' com as categorias (chave: 1 - valor: Feminino), (chave: 0 - valor: Masculino)."
+    },
+    directoryPrimaryKey: {
+      pt: "Coluna Correspondente Nos Diretórios",
+      tooltip:"Caso preenchida, indica que a coluna é chave primária de uma entidade — ex: id_municipio = chave primária de municípios. Isso significa que a coluna é igual em todos os conjuntos do datalake. Informações centralizadas da entidade se encontram no diretório conforme: [diretorio].[tabela]:[coluna]."
+    },
+    measurementUnit: {
+      pt: "Unidade De Medida",
+      tooltip:"Unidade de medida da coluna — ex: km, m2, kg."
+    },
+    containsSensitiveData: {
+      pt: "Contém Dados Sensíveis (LGPD)",
+      tooltip:"Indica se a coluna possui dados sensíveis — ex: CPF identificado, dados de conta bancária, etc."
+    },
+    observations: {
+      pt: "Observações",
+      tooltip:"Descreve processos de tratamentos realizados na coluna que precisam ser evidenciados."
+    }
+  }
 
   const [filter, setFilter] = useState("")
   const [headerSelection, setHeaderSelection] = useState("")
@@ -325,18 +297,18 @@ export default function ColumnsDatasets({
   const [columnValues, setColumnValues] = useState([])
   const [tagFilter, setTagFilter] = useState([])
 
-  useEffect(() => {
-    setDefaultValue(values)
-    setColumnValues(values)
-    setTagFilter([])
-    setFilter("")
-  },[values]) 
+  // useEffect(() => {
+  //   setDefaultValue(resource)
+  //   setColumnValues(resource)
+  //   setTagFilter([])
+  //   setFilter("")
+  // },[resource]) 
 
-  const searcher = new FuzzySearch(
-    tagFilter.length > 0 ? columnValues : defaultValues,
-    headerSelection ? [headerSelection] : headers, {
-    sort: true
-  })
+  // const searcher = new FuzzySearch(
+  //   tagFilter.length > 0 ? columnValues : defaultValues,
+  //   headerSelection ? [headerSelection] : headers, {
+  //   sort: true
+  // })
 
   async function checkForEnter(e) {
     if (e.key === "Enter") {
@@ -392,12 +364,12 @@ export default function ColumnsDatasets({
   }
 
   if(isError?.message?.length > 0) return <SectionText> Nenhuma informação foi encontrada. </SectionText>
-  return <SectionText> Nenhuma informação de coluna fornecida. </SectionText>
+  if(resource === undefined || Object.keys(resource).length === 0) return <SectionText> Nenhuma informação de coluna fornecida. </SectionText>
 
   return (
     <Stack width="100%">
-      <HStack position="relative" flexDirection={isMobileMode ? "column" : "row"}>
-        <HStack spacing={2} flexDirection="row" marginBottom={isMobileMode && "8px"} marginLeft="0 !important">
+      <HStack position="relative" flexDirection={useCheckMobile() ? "column" : "row"}>
+        {/* <HStack spacing={2} flexDirection="row" marginBottom={useCheckMobile() && "8px"} marginLeft="0 !important">
           <FilterIcon alt="filtrar" fill="#575757" height="20px" />
           <Text color="#575757" fontSize="16px" fontWeight="400" fontFamily="ubuntu" letterSpacing="0.2px">
             Filtrar
@@ -420,9 +392,9 @@ export default function ColumnsDatasets({
               <option value={option}>{option}</option>
             )}
           </Select>
-        </HStack>
+        </HStack> */}
 
-        <Stack width="100%" margin="0 !important">
+        {/* <Stack width="100%" margin="0 !important">
           <InputGroup
             border="1px solid #DEDFE0 !important"
             padding="1px"
@@ -434,7 +406,7 @@ export default function ColumnsDatasets({
                 border="none"
                 backgroundColor="transparent"
                 children={
-                  <Box display="flex" flexDirection="row" gridGap="16px" maxWidth={isMobileMode ? "150px" : "350px"} overflowX="auto">
+                  <Box display="flex" flexDirection="row" gridGap="16px" maxWidth={useCheckMobile() ? "150px" : "350px"} overflowX="auto">
                     {tagFilter.map((elm) => (
                       <Box display="flex" gridGap={elm.header && "8px"} alignItems="center" >
                         <Text fontWeight="300" fontSize="14px" fontFamily="lato" letterSpacing="0.5px">{elm.header}</Text>
@@ -495,16 +467,10 @@ export default function ColumnsDatasets({
                 />
             }/>
           </InputGroup>
-        </Stack>
+        </Stack> */}
       </HStack>
 
-      <TableDatasets
-        headers={headers}
-        values={columnValues}
-        parentTemporalCoverage={parentTemporalCoverage}
-        tooltip={tooltip}
-        containerStyle={containerStyle}
-      />
+      <TableDatasets headers={headers} values={resource} />
     </Stack>
   )
 }
