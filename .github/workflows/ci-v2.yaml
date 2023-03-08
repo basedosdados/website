@@ -11,7 +11,7 @@ jobs:
     name: Release Docker Staging
     runs-on: ubuntu-latest
     environment:
-      name: stagingv2
+      name: development
     env:
       NEXT_PORT: ${{ vars.NEXT_PORT }}
       NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
