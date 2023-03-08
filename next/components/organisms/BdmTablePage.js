@@ -56,8 +56,6 @@ export default function BdmTablePage({ id }) {
     }
   }
 
-  console.log(resource)
-
   useEffect(() => {
     feathBdmTable()
   },[id])
