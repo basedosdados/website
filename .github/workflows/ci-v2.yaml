@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - nextjs
-  workflow_dispatch:
 
 jobs:
   release-docker-staging:
@@ -14,7 +13,10 @@ jobs:
     environment:
       name: stagingv2
     env:
-      NEXT_PUBLIC_API_URL: ${{ env.NEXT_PUBLIC_API_URL }}
+      NEXT_PORT: ${{ vars.NEXT_PORT }}
+      NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+      NEXT_PUBLIC_SITE_NAME: ${{ vars.NEXT_PUBLIC_SITE_NAME }}
+      NODE_ENV: ${{ vars.NODE_ENV }}
 
     steps:
       - name: Checkout
