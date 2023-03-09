@@ -336,5 +336,5 @@ export default function BdmTablePage({ id }) {
         </Grid>
       </VStack>
     </BaseResourcePage>
-  );
+  )
 }

@@ -41,18 +41,6 @@ function TableDatasets({ headers, values }) {
   const [columnsValues, setColumnsValues] = useState([])
 
   useEffect(() => {
-    // const measurementUnit = () => {
-    //   if(!values.measurement_unit) return {measurement_unit : "Não listado"}
-    //   const measurementUnitLatex = () => {
-    //     const splitValue = values.measurement_unit.split(/([^a-z])/)
-    //     const translated = (value) => value.map((elm) =>  elm)
-    //     return (
-    //       <Latex>{`$${translated(splitValue).join("")}$`}</Latex>
-    //     )
-    //   }
-    //   return {measurement_unit : measurementUnitLatex} 
-    // }
-
     const newValues = values.map((elm) => {
       delete elm.node._id
       return elm
@@ -91,6 +79,19 @@ function TableDatasets({ headers, values }) {
   //     </div>
   //   )
   // }
+
+  const measurementUnit = (value) => {
+    if(!value) return null
+
+    const measurementUnitLatex = () => {
+      const splitValue = value.split(/([^a-z])/)
+      const translated = (value) => value.map((elm) =>  elm)
+      return (
+        <Latex>{`$${translated(splitValue).join("")}$`}</Latex>
+      )
+    }
+    return measurementUnitLatex
+  }
 
   function valueVerification (value) {
     if(value === null) return empty()
@@ -153,25 +154,20 @@ function TableDatasets({ headers, values }) {
   }
 
   const TreatmentValues = (value) => {
-    const objectValue = value.node
+    const objectValue = value?.node
     let data = []
 
-    switch (objectValue) {
-      case objectValue.name: data.push(
-        <TableValue
-          value={elm?.node?.name}
-          position="sticky"
-          left="0"
-          zIndex={2}
-          background= "linear-gradient(to left,#EAEAEA, #EAEAEA 1px, #FFF 1px, #FFF 100%)"
-        />)
-      break;
-    
-      default:
-        break;
-    }
+    data.push({ value: objectValue.name, style:{position:"sticky", left:"0", zIndex:2, background:"linear-gradient(to left,#EAEAEA, #EAEAEA 1px, #FFF 1px, #FFF 100%)"}});
+    data.push({ value: objectValue.bigqueryType.name, style:{textTransform: "capitalize"}})
+    data.push({ value: objectValue.description})
+    data.push({ value: objectValue?.coverages?.edges[0]?.node?.datetimeRanges?.edges[0]?.node})
+    data.push({ value: objectValue.coveredByDictionary})
+    data.push({ value: objectValue.directoryPrimaryKey})
+    data.push({ value: measurementUnit(objectValue.measurementUnit)})
+    data.push({ value: objectValue.containsSensitiveData})
+    data.push({ value: objectValue.observations})
 
-    return data.map(elm => <TableValue {...elm}/>)
+    return data.map(elm => <TableValue value={valueVerification(elm.value)} {...elm.style} />)
   }
 
   const TableValue = ({ value, ...props }) => {
@@ -217,13 +213,6 @@ function TableDatasets({ headers, values }) {
           <Tbody role="rowgroup" position="relative">
             {columnsValues.length > 0 && columnsValues.map((elm) => (
               <Tr role="row">
-                {/* <TableValue
-                  value={elm?.node?.name}
-                  position="sticky"
-                  left="0"
-                  zIndex={2}
-                  background= "linear-gradient(to left,#EAEAEA, #EAEAEA 1px, #FFF 1px, #FFF 100%)"
-                /> */}
                 {TreatmentValues(elm)}
               </Tr>
             ))}
