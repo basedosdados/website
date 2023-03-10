@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
+import { temporalCoverageTranscript } from "../../utils";
 
 import BigTitle from "../../components/atoms/BigTitle";
 import Subtitle from "../../components/atoms/Subtitle";
@@ -21,6 +22,7 @@ import ReadMore from "../../components/atoms/ReadMore";
 import HelpWidget from "../../components/atoms/HelpWidget";
 import { ImageOrganization } from "../../components/atoms/ImageOrganization";
 import DatasetResource from "../../components/organisms/DatasetResource";
+import { MetadataPage } from "../../components/organisms/MetadataPage";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import FourOhFour from "../../components/templates/404";
@@ -42,7 +44,7 @@ export async function getStaticProps(context) {
   } catch (error) {
     console.log(error)
   }
-
+console.log(`${dataset} aqui esta`)
   return await withPages({
     props: {
       dataset,
@@ -65,11 +67,12 @@ export async function getStaticPaths(context) {
 export default function DatasetPage ({
   dataset,
 }) {
+
+  if(dataset === null || Object.keys(dataset).length === 0) return (<MainPageTemplate><FourOhFour/></MainPageTemplate>)
+
   const [tabIndex, setTabIndex] = useState(0)
   const router = useRouter()
   const { query } = router
-
-  if(Object.keys(dataset).length === 0) return (<MainPageTemplate><FourOhFour/></MainPageTemplate>)
 
   return (
     <MainPageTemplate>
@@ -156,10 +159,7 @@ export default function DatasetPage ({
                   marginTop="4px !important"
                   fontSize={isMobileMod() ? "14px" : "16px"}
                 >
-                  {/*
-                    importante prepara uma nova validacao para o temporalCoverage
-                    {validateTemporalCoverage()}
-                  */}
+                  {temporalCoverageTranscript(dataset?.coverages?.[0]?.datetimeRanges?.[0], "Nenhuma cobertura temporal fornecida")}
                 </SectionText>
               </VStack>
             </VStack>
@@ -187,7 +187,7 @@ export default function DatasetPage ({
               />
               Dados
             </GreenTab>
-            <GreenTab>
+            {/* <GreenTab>
               <DocIcon
                 alt="metadados"
                 width="24px"
@@ -196,7 +196,7 @@ export default function DatasetPage ({
                 fill={tabIndex === 1 ? "#2B8C4D" :"#C4C4C4"}
               />
               Metadados
-            </GreenTab>
+            </GreenTab> */}
             {dataset?.slug === "br-ibge-ipca" && <GreenTab>Painéis</GreenTab>}
           </TabList>
           <TabPanels>
@@ -206,9 +206,12 @@ export default function DatasetPage ({
               />
             </TabPanel>
 
+            {/* 
+              // precisa retrabalhar o MetadataPage
             <TabPanel padding="0px" pt="20px">
-
-            </TabPanel>
+              <MetadataPage/>
+            </TabPanel> 
+            */}
 
             {dataset?.slug === "br-ibge-ipca" &&
               <TabPanel padding="0px">

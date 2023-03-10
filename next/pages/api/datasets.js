@@ -23,7 +23,7 @@ export async function getListDatasets() {
     variables: null
   })
   try {
-    const data = res.data.data.allDataset.edges.map((res) => res.node._id)
+    const data = res?.data?.data?.allDataset?.edges.map((res) => res?.node?._id)
     return data
   } catch (error) {
     console.error(error)
@@ -44,6 +44,22 @@ export async function getShowDataset(id) {
               slug
               name
               description
+              themes {
+                edges {
+                  node {
+                    _id
+                    name
+                  }
+                }
+              }
+              tags {
+                edges {
+                  node {
+                    _id
+                    name
+                  }
+                }
+              }
               organization {
                 _id
                 slug
@@ -84,7 +100,7 @@ export async function getShowDataset(id) {
     }
   })
   try {
-    const data = res.data.data.allDataset.edges[0].node
+    const data = res?.data?.data?.allDataset?.edges[0]?.node
     return data
   } catch (error) {
     console.error(error)
@@ -187,7 +203,7 @@ export async function getBdmTable(id) {
     }
   })
   try {
-    const data = res.data.data.allTable.edges[0].node
+    const data = res?.data?.data?.allTable?.edges[0]?.node
     return cleanGraphQLResponse(data)
   } catch (error) {
     console.error(error)
@@ -264,7 +280,7 @@ export async function getColumnsBdmTable(id) {
     variables: null
   })
   try {
-    const data = res.data.data.allTable.edges[0].node.columns.edges
+    const data = res?.data?.data?.allTable?.edges[0]?.node?.columns?.edges
     return data
   } catch (error) {
     console.error(error)
@@ -374,7 +390,7 @@ export async function getRawDataSources(id) {
     }
   })
   try {
-    const data = res.data.data.allRawdatasource.edges[0].node
+    const data = res?.data?.data?.allRawdatasource?.edges[0]?.node
     return cleanGraphQLResponse(data)
   } catch (error) {
     console.error(error)
@@ -445,7 +461,7 @@ export async function getInformationRequest(id) {
     }
   })
   try {
-    const data = res.data.data.allInformationrequest.edges[0].node
+    const data = res?.data?.data?.allInformationrequest?.edges[0]?.node
     return cleanGraphQLResponse(data)
   } catch (error) {
     console.error(error)

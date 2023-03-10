@@ -118,7 +118,7 @@ export default function RawDataSourcesPage({
     )
   }
 
-  if(isError?.message?.length > 0) return <FourOhFour/>
+  if(isError?.message?.length > 0 || resource === null || Object.keys(resource).length < 0) return <FourOhFour/>
 
   return (
     <BaseResourcePage title={resource?.name} >

@@ -130,8 +130,7 @@ export default function InformationRequestPage({ id }) {
     )
   }
 
-  if(resource === undefined || Object.keys(resource).length === 0) return null
-  if(isError?.message?.length > 0) return <FourOhFour />
+  if(isError?.message?.length > 0 || resource === null || Object.keys(resource).length < 0) return <FourOhFour/>
 
   return (
     <BaseResourcePage title={`Número do pedido: ${resource?.slug}`} >
@@ -256,7 +255,7 @@ export default function InformationRequestPage({ id }) {
               <StatusIcon alt="estado" width="22px" height="22px" fill="#D0D0D0"/>
               <AddInfoTextBase
                 title="Estado"
-                text={resource?.status.name || "Não listado"}
+                text={resource?.status?.name || "Não listado"}
               />
             </GridItem>
 
