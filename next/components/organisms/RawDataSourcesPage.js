@@ -9,15 +9,6 @@ import {
   GridItem
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-
-// import {
-//   filterOnlyValidValues,
-//   formatObjectsInArray,
-//   translate,
-//   formatJson,
-//   getTemporalCoverage
-// } from "../../utils";
-
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { temporalCoverageTranscript } from "../../utils";
 
@@ -28,11 +19,6 @@ import RoundedButton from "../atoms/RoundedButton";
 import BaseResourcePage from "../molecules/BaseResourcePage";
 import { DisclaimerBox } from "../molecules/DisclaimerBox";
 import FourOhFour from "../templates/404";
-
-// import { SchemaForm } from "../../molecules/SchemaForm";
-
-// import { deleteResource, updateResource } from "../../../pages/api/datasets";
-// import { getExternalLinkSchema } from "../../../pages/api/schemas";
 
 import {
   getRawDataSources
@@ -65,8 +51,6 @@ export default function RawDataSourcesPage({
       console.error(error)
     }
   }
-
-  console.log(resource)
 
   useEffect(() => {
     featchRawDataSources()
@@ -113,66 +97,6 @@ export default function RawDataSourcesPage({
     const notFound = <SectionText marginRight="4px !important">Não listado</SectionText>
 
     return notFound
-    // if(!resource?.observation_level) return notFound
-    // if(resource?.observation_level === null) return notFound
-
-    // if(typeof resource.observation_level === "object") {
-    //   if(resource.observation_level.length === 0) return setObservationLevel()
-    //   const schemaHeaders = { entity: "-", columns : "-" }
-    //   const valueObservationLevel = resource.observation_level.map((elm) => {
-    //     const values = elm
-
-    //     const valueColumn = () => {
-    //       if(typeof values.columns === "object") {
-    //         const newColumn = Object.values(values.columns)
-    //           .map((elm) => {
-    //             if(!elm) {
-    //               return "-"
-    //             } else {
-    //               return elm
-    //             }
-    //           })
-    //         return {columns : newColumn.toString()}
-    //       }
-    //     }
-
-    //     const translationsEntity = () => {
-    //       if(values.entity) {
-    //         return {entity : translateField(values.entity, availableOptionsTranslations)}
-    //       } else {
-    //         return {entity : "-"}
-    //       }
-    //     }
-
-    //     const row = {...schemaHeaders, ...values, ...valueColumn(), ...translationsEntity()}
-        
-    //     delete row.country
-    //     delete row.column
-        
-    //     if(row.entity === "-" && row.columns === "-") {
-    //       delete row.entity
-    //       delete row.columns
-    //       return [""]
-    //     }
-
-    //     return Object.values(row)
-    //   })
-
-    //   function filterArray(value) {
-    //     return value.length > 1
-    //   }
-    //   const newValues = valueObservationLevel.filter(filterArray)
-
-    //   newValues
-    // }
-
-    //  return (
-    //   <SimpleTable 
-    //     headers={["Entidade","Colunas Correspondentes"]}
-    //     values={Object.values(observationLevel)}
-    //     valuesTable={{_first:{textTransform: "capitalize"}}}
-    //   />
-    // )
   }
 
   const AddInfoTextBase = ({title, text, children, ...style}) => {
@@ -197,27 +121,7 @@ export default function RawDataSourcesPage({
   if(isError?.message?.length > 0) return <FourOhFour/>
 
   return (
-    <BaseResourcePage
-      title={resource?.name}
-      // removeFunction={() => deleteResource(resource)}
-      // formComponent={
-      //   <SchemaForm
-      //     data={resource}
-      //     updateFunction={updateResource}
-      //     loadSchemaFunction={getExternalLinkSchema}
-      //     schemaName="Fonte original"
-      //     prepareData={(data) => {
-      //       data.country_ip_address_required =
-      //         data.country_ip_address_required || [];
-      //       data.maintainer = data.maintainer || "";
-      //       data.maintainer_email = data.maintainer_email || "";
-      //       data.resource_type = "external_link";
-
-      //       return data;
-      //     }}
-      //   />
-      // }
-    >
+    <BaseResourcePage title={resource?.name} >
       <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Consulta aos dados</Subtitle>
         <DisclaimerBox width="100%">

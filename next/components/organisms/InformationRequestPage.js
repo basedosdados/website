@@ -19,9 +19,6 @@ import BaseResourcePage from "../molecules/BaseResourcePage";
 import { DisclaimerBox } from "../molecules/DisclaimerBox";
 import FourOhFour from "../templates/404";
 
-// import { SchemaForm } from "../../molecules/SchemaForm";
-// import { deleteResource, updateResource } from "../../../pages/api/datasets";
-
 import {
   getInformationRequest
 } from "../../pages/api/datasets";
@@ -49,7 +46,6 @@ export default function InformationRequestPage({ id }) {
     featchInformationRequest()
   },[id])
 
-  console.log(resource)
 
   const AddInfoTextBase = ({title, text, children, ...style}) => {
     return (
@@ -138,25 +134,7 @@ export default function InformationRequestPage({ id }) {
   if(isError?.message?.length > 0) return <FourOhFour />
 
   return (
-    <BaseResourcePage
-      title={`Número do pedido: ${resource?.slug}`}
-      // removeFunction={() => deleteResource(resource)}
-      // formComponent={
-      //   <SchemaForm
-      //     data={resource}
-      //     updateFunction={updateResource}
-      //     loadSchemaFunction={getInformationRequestSchema}
-      //     schemaName="Pedidos LAI"
-      //     prepareData={(data) => {
-      //       data.country_ip_address_required = data.country_ip_address_required || [];
-      //       data.maintainer = data.maintainer || "";
-      //       data.maintainer_email = data.maintainer_email || "";
-      //       data.resource_type = "information_request";
-      //       return data;
-      //     }}
-      //   />
-      // }
-    >
+    <BaseResourcePage title={`Número do pedido: ${resource?.slug}`} >
       <VStack 
         marginTop="0 !important" 
         width="100%" 

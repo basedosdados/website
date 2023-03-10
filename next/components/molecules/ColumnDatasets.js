@@ -41,7 +41,7 @@ function TableDatasets({ headers, values }) {
   const [columnsValues, setColumnsValues] = useState([])
 
   useEffect(() => {
-    const newValues = values.map((elm) => {
+    const newValues = values?.map((elm) => {
       delete elm.node._id
       return elm
     })
@@ -94,7 +94,7 @@ function TableDatasets({ headers, values }) {
   }
 
   function valueVerification (value) {
-    if(value === null) return empty()
+    if(value === null || value === undefined) return empty()
 
     if(typeof value === "object") return temporalCoverageTranscript(value, "Não listado")
     if(typeof value === "function") return value()
@@ -157,8 +157,8 @@ function TableDatasets({ headers, values }) {
     const objectValue = value?.node
     let data = []
 
-    data.push({ value: objectValue.name, style:{position:"sticky", left:"0", zIndex:2, background:"linear-gradient(to left,#EAEAEA, #EAEAEA 1px, #FFF 1px, #FFF 100%)"}});
-    data.push({ value: objectValue.bigqueryType.name, style:{textTransform: "capitalize"}})
+    data.push({ value: objectValue.name, style:{position:"sticky", left:"0", zIndex:2, background:"linear-gradient(to left,#EAEAEA, #EAEAEA 2px, #FFF 2px, #FFF 100%)"}});
+    data.push({ value: objectValue.bigqueryType.name, style:{textTransform: "uppercase"}})
     data.push({ value: objectValue.description})
     data.push({ value: objectValue?.coverages?.edges[0]?.node?.datetimeRanges?.edges[0]?.node})
     data.push({ value: objectValue.coveredByDictionary})
@@ -211,7 +211,7 @@ function TableDatasets({ headers, values }) {
             ))}
           </Thead>
           <Tbody role="rowgroup" position="relative">
-            {columnsValues.length > 0 && columnsValues.map((elm) => (
+            {columnsValues?.length > 0 && columnsValues.map((elm) => (
               <Tr role="row">
                 {TreatmentValues(elm)}
               </Tr>
@@ -280,85 +280,13 @@ export default function ColumnsDatasets({ tableId }) {
     }
   }
 
-  const [filter, setFilter] = useState("")
-  const [headerSelection, setHeaderSelection] = useState("")
-  const [defaultValues, setDefaultValue] = useState([])
-  const [columnValues, setColumnValues] = useState([])
-  const [tagFilter, setTagFilter] = useState([])
-
-  // useEffect(() => {
-  //   setDefaultValue(resource)
-  //   setColumnValues(resource)
-  //   setTagFilter([])
-  //   setFilter("")
-  // },[resource]) 
-
-  // const searcher = new FuzzySearch(
-  //   tagFilter.length > 0 ? columnValues : defaultValues,
-  //   headerSelection ? [headerSelection] : headers, {
-  //   sort: true
-  // })
-
-  async function checkForEnter(e) {
-    if (e.key === "Enter") {
-      appliedFilter()
-    }
-  }
-
-  const appliedFilter = () => {
-    if(filter.trim() === "") return
-
-    const result = searcher.search(filter.trim())
-    if(headerSelection) {
-      const indexTag= tagFilter.findIndex((res) => res.header === headerSelection)
-      if(indexTag > -1) {
-        removeTagFilter(tagFilter[indexTag], true)
-      } else {
-        setTagFilter(tagFilter.concat({ header: headerSelection, search: filter }))
-        setColumnValues(result)
-        setFilter("")
-        setHeaderSelection("")
-      }
-    } else {
-      setTagFilter(tagFilter.concat({ header: "", search: filter }))
-      setColumnValues(result)
-      setFilter("")
-      setHeaderSelection("")
-    }
-  }
-  
-  const removeTagFilter = (tag, overwrite) => {
-    let newColumnsValues = []
-    const remainingTags = tagFilter.filter(function(elm) {
-      if(tag.search && elm.header === tag.header) return elm.search != tag.search
-      return elm.header != tag.header
-    })
-    if(overwrite) remainingTags.push({ header: headerSelection, search: filter })
-    if(remainingTags.length > 0) {
-      remainingTags.map((elm, i) => {
-        const searcherRemainingTags = new FuzzySearch( 
-          i === 0 ? defaultValues : newColumnsValues, elm.header ? [elm.header] : headers, {
-          sort: true
-        })
-        const result = searcherRemainingTags.search(elm.search)
-        return newColumnsValues = result
-      })
-      setColumnValues(newColumnsValues)
-    } else {
-      setColumnValues(defaultValues)
-    }
-    setFilter("")
-    setHeaderSelection("")
-    setTagFilter(remainingTags)
-  }
-
   if(isError?.message?.length > 0) return <SectionText> Nenhuma informação foi encontrada. </SectionText>
   if(resource === undefined || Object.keys(resource).length === 0) return <SectionText> Nenhuma informação de coluna fornecida. </SectionText>
 
   return (
     <Stack width="100%">
-      <HStack position="relative" flexDirection={useCheckMobile() ? "column" : "row"}>
-        {/* <HStack spacing={2} flexDirection="row" marginBottom={useCheckMobile() && "8px"} marginLeft="0 !important">
+      {/* <HStack position="relative" flexDirection={useCheckMobile() ? "column" : "row"}>
+        <HStack spacing={2} flexDirection="row" marginBottom={useCheckMobile() && "8px"} marginLeft="0 !important">
           <FilterIcon alt="filtrar" fill="#575757" height="20px" />
           <Text color="#575757" fontSize="16px" fontWeight="400" fontFamily="ubuntu" letterSpacing="0.2px">
             Filtrar
@@ -377,13 +305,13 @@ export default function ColumnsDatasets({ tableId }) {
             value={headerSelection}
             onChange={(event) => setHeaderSelection(event.target.value) }
           >
-            {headers.map((option) =>
-              <option value={option}>{option}</option>
+            {Object.keys(headers).map((option) =>
+              <option value={option}>{headers?.[option]?.pt}</option>
             )}
           </Select>
-        </HStack> */}
+        </HStack>
 
-        {/* <Stack width="100%" margin="0 !important">
+        <Stack width="100%" margin="0 !important">
           <InputGroup
             border="1px solid #DEDFE0 !important"
             padding="1px"
@@ -456,8 +384,8 @@ export default function ColumnsDatasets({ tableId }) {
                 />
             }/>
           </InputGroup>
-        </Stack> */}
-      </HStack>
+        </Stack>
+      </HStack> */}
 
       <TableDatasets headers={headers} values={resource} />
     </Stack>

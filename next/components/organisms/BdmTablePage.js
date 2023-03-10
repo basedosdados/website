@@ -17,10 +17,6 @@ import {
 } from "../../utils";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import BaseResourcePage from "../molecules/BaseResourcePage";
-import { SchemaForm } from "../molecules/SchemaForm";
-// import { getBdmColumnsSchema } from '../../../pages/api/schemas';
-// import { getBdmTableSchema } from "../../../pages/api/schemas";
-// import { deleteResource, updateResource } from "../../pages/api/datasets";
 import { SimpleTable } from "../atoms/SimpleTable";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import FourOhFour from "../templates/404";
@@ -172,29 +168,6 @@ export default function BdmTablePage({ id }) {
     <BaseResourcePage
       padding={useCheckMobile() ? "16px 0 0" : "16px 8px 0 0"}
       title={resource?.name}
-      // editLink={`/resource/edit/${resource?.id}`}
-      // removeFunction={() => deleteResource(resource)}
-      // formComponent={
-      //   <SchemaForm
-      //     data={resource}
-      //     schemaName="Tabela BD+"
-      //     loadSchemaFunction={getBdmTableSchema}
-      //     updateFunction={updateResource}
-      //     prepareData={(data) => {
-      //       data.observation_level = data.observation_level || [];
-      //       data.published_by.github_user = data.published_by.github_user || "";
-      //       data.published_by.ckan_user = data.published_by.ckan_user || "";
-      //       data.data_cleaned_by.github_user =
-      //         data.data_cleaned_by.github_user || "";
-      //       data.data_cleaned_by.ckan_user =
-      //         data.data_cleaned_by.ckan_user || "";
-      //       data.data_cleaned_by.website = data.data_cleaned_by.website || "";
-      //       data.resource_type = "bdm_table";
-
-      //       return data;
-      //     }}
-      //   />
-      // }
     >
       <DataInformationQuery resource={resource}/>
 
@@ -219,20 +192,12 @@ export default function BdmTablePage({ id }) {
         <ColumnDatasets tableId={resource?._id} />
       </VStack>
 
-      {/* <VStack width="100%" spacing={5} alignItems="flex-start">
+      <VStack width="100%" spacing={5} alignItems="flex-start">
         <Subtitle>
           Nível da observação
         </Subtitle>
-        {observationLevel ?
-          <SimpleTable
-            headers={["Entidade","Colunas Correspondentes"]}
-            values={Object.values(observationLevel)}
-            valuesTable={{_first:{textTransform: "capitalize"}}}
-          />
-        :
-          <SectionText>Nenhum nível da observação fornecido.</SectionText>
-        }
-      </VStack> */}
+        <SectionText>Nenhum nível da observação fornecido.</SectionText>
+      </VStack>
 
       <VStack width="100%" spacing={5} alignItems="flex-start">
         <Stack flex="1" >
