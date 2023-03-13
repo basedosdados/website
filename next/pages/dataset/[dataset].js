@@ -11,7 +11,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
-import { temporalCoverageTranscript } from "../../utils";
 
 import BigTitle from "../../components/atoms/BigTitle";
 import Subtitle from "../../components/atoms/Subtitle";
@@ -21,6 +20,7 @@ import GreenTab from "../../components/atoms/GreenTab";
 import ReadMore from "../../components/atoms/ReadMore";
 import HelpWidget from "../../components/atoms/HelpWidget";
 import { ImageOrganization } from "../../components/atoms/ImageOrganization";
+import TemporalCoverage from "../../components/atoms/TemporalCoverageDisplay";
 import DatasetResource from "../../components/organisms/DatasetResource";
 import { MetadataPage } from "../../components/organisms/MetadataPage";
 import { MainPageTemplate } from "../../components/templates/main";
@@ -44,7 +44,7 @@ export async function getStaticProps(context) {
   } catch (error) {
     console.log(error)
   }
-console.log(`${dataset} aqui esta`)
+
   return await withPages({
     props: {
       dataset,
@@ -159,7 +159,10 @@ export default function DatasetPage ({
                   marginTop="4px !important"
                   fontSize={isMobileMod() ? "14px" : "16px"}
                 >
-                  {temporalCoverageTranscript(dataset?.coverages?.[0]?.datetimeRanges?.[0], "Nenhuma cobertura temporal fornecida")}
+                  <TemporalCoverage
+                    value={dataset?.coverages?.[0]?.datetimeRanges?.[0]}
+                    text="Nenhuma cobertura temporal fornecida"
+                  />
                 </SectionText>
               </VStack>
             </VStack>

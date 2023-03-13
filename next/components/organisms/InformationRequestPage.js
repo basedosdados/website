@@ -11,10 +11,10 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { temporalCoverageTranscript } from "../../utils";
 import Subtitle from "../atoms/Subtitle";
 import SectionText from "../atoms/SectionText";
 import RoundedButton from "../atoms/RoundedButton";
+import TemporalCoverage from "../atoms/TemporalCoverageDisplay";
 import BaseResourcePage from "../molecules/BaseResourcePage";
 import { DisclaimerBox } from "../molecules/DisclaimerBox";
 import FourOhFour from "../templates/404";
@@ -241,7 +241,10 @@ export default function InformationRequestPage({ id }) {
         <VStack width="100%" marginTop="32px !important" spacing={4} alignItems="flex-start">
           <Subtitle>Cobertura temporal</Subtitle>
           <SectionText>
-            {temporalCoverageTranscript(resource?.coverages?.[0]?.datetimeRanges?.[0], "Nenhuma cobertura temporal fornecida")}
+            <TemporalCoverage
+              value={resource?.coverages?.[0]?.datetimeRanges?.[0]}
+              text="Nenhuma cobertura temporal fornecida"
+            />
           </SectionText>
         </VStack>
 

@@ -176,41 +176,6 @@ export function formatJson(json, replace) {
   return newJson;
 }
 
-export function getTemporalCoverage(temporalCoverage, parentTemporalCoverage) {
-  if (temporalCoverage.length === 0 || !temporalCoverage) return ""
-  let years = []
-
-  const getYears = (value = "") => {
-    if(typeof value === "object") return value.toString().split(/\(\d+\)/)
-    return value.split(/\(\d+\)/)
-  }
-
-  const parentYears = getYears(parentTemporalCoverage)
-
-  temporalCoverage.forEach((interval) => {
-    const itens = getYears(interval)
-    itens
-      .map((year, i) => {
-        if (!year) {
-          return (parentYears[i] || "").trim()
-        }
-
-        return year.trim()
-      })
-      .filter(year => !!year)
-      .forEach(year => years.push(year))
-  })
-
-  years = years.sort()
-
-  if (years.length === 0) return parentYears.join(" - ")
-  if (years.length === 1) return years[0]
-
-  const min_date = years[0]
-  const max_date = years[years.length-1]
-  return `${min_date} - ${max_date}`
-}
-
 export const cleanGraphQLResponse = (input) => {
   if (!input) return null
 
@@ -246,38 +211,4 @@ export function removeEmpty(obj) {
       .filter(([_, v]) => v != null)
       .map(([k, v]) => [k, v === Object(v) ? removeEmpty(v) : v])
   );
-}
-
-export const temporalCoverageTranscript = (value, text) => {
-  if(!value) return text
-
-  const startDate = () => {
-    const array = []
-
-    if(value.startSecond) array.push(value.startSecond)
-    if(value.startMinute) array.push(value.startMinute)
-    if(value.startHour) array.push(value.startHour)
-    if(value.startDay) array.push(value.startDay)
-    if(value.startMonth) array.push(value.startMonth)
-    if(value.startYear) array.push(value.startYear)
-
-    array.reverse()
-    return array.join("-")
-  }
-
-  const endDate = () => {
-    const array = []
-
-    if(value.endSecond) array.push(value.endSecond)
-    if(value.endMinute) array.push(value.endMinute)
-    if(value.endHour) array.push(value.endHour)
-    if(value.endDay) array.push(value.endDay)
-    if(value.endMonth) array.push(value.endMonth)
-    if(value.endYear) array.push(value.endYear)
-
-    array.reverse()
-    return array.join("-")
-  }
-
-  return `${startDate()} - ${endDate()}`
 }

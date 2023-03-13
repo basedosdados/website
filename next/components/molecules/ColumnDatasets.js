@@ -21,9 +21,9 @@ import { useState, useEffect } from 'react';
 import FuzzySearch from 'fuzzy-search';
 import Latex from 'react-latex-next';
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { temporalCoverageTranscript } from '../../utils';
 import SectionText from '../atoms/SectionText';
 import Tag from "../atoms/Tag";
+import TemporalCoverage from "../atoms/TemporalCoverageDisplay";
 
 import {
   getColumnsBdmTable
@@ -96,7 +96,6 @@ function TableDatasets({ headers, values }) {
   function valueVerification (value) {
     if(value === null || value === undefined) return empty()
 
-    if(typeof value === "object") return temporalCoverageTranscript(value, "Não listado")
     if(typeof value === "function") return value()
 
     if(value === true) return "Sim"
@@ -153,7 +152,7 @@ function TableDatasets({ headers, values }) {
     )
   }
 
-  const TreatmentValues = (value) => {
+  function TreatmentValues({ value }) {
     const objectValue = value?.node
     let data = []
 
@@ -167,10 +166,14 @@ function TableDatasets({ headers, values }) {
     data.push({ value: objectValue.containsSensitiveData})
     data.push({ value: objectValue.observations})
 
-    return data.map(elm => <TableValue value={valueVerification(elm.value)} {...elm.style} />)
+    return data.map((elm, i) => 
+      <TableValue {...elm.style}>
+        {i===3 ? <TemporalCoverage value={elm.value} tex="Não listado"/>
+        : valueVerification(elm.value)}
+      </TableValue>)
   }
 
-  const TableValue = ({ value, ...props }) => {
+  function TableValue({children, ...props}) {
     return (
       <Td
         role="cell"
@@ -186,7 +189,7 @@ function TableDatasets({ headers, values }) {
         }}
         {...props}
       >
-        {value}
+        {children}
       </Td>
     )
   }
@@ -213,7 +216,7 @@ function TableDatasets({ headers, values }) {
           <Tbody role="rowgroup" position="relative">
             {columnsValues?.length > 0 && columnsValues.map((elm) => (
               <Tr role="row">
-                {TreatmentValues(elm)}
+                <TreatmentValues value={elm}/>
               </Tr>
             ))}
           </Tbody>

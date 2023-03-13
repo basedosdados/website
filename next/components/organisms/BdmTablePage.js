@@ -8,16 +8,13 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import Subtitle from "../atoms/Subtitle";
-import SectionText from "../atoms/SectionText";
-import ColumnDatasets from "../molecules/ColumnDatasets";
-import {
-  formatJson,
-  temporalCoverageTranscript
-} from "../../utils";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import BaseResourcePage from "../molecules/BaseResourcePage";
+import SectionText from "../atoms/SectionText";
 import { SimpleTable } from "../atoms/SimpleTable";
+import Subtitle from "../atoms/Subtitle";
+import TemporalCoverage from "../atoms/TemporalCoverageDisplay";
+import ColumnDatasets from "../molecules/ColumnDatasets";
+import BaseResourcePage from "../molecules/BaseResourcePage";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import FourOhFour from "../templates/404";
 
@@ -181,7 +178,10 @@ export default function BdmTablePage({ id }) {
       <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Cobertura temporal</Subtitle>
         <SectionText>
-          {temporalCoverageTranscript(resource?.coverages?.[0]?.datetimeRanges?.[0], "Nenhuma cobertura temporal fornecida")}
+          <TemporalCoverage
+            value={resource?.coverages?.[0]?.datetimeRanges?.[0]}
+            text="Nenhuma cobertura temporal fornecida"
+          />
         </SectionText>
       </VStack>
 
