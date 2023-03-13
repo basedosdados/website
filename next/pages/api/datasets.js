@@ -62,36 +62,6 @@ export async function getAllDatasets(offset) {
                 edges {
                   node {
                     _id
-                    coverages {
-                      edges {
-                        node {
-                          datetimeRanges {
-                            edges {
-                              node {
-                                _id
-                                startYear
-                                startSemester
-                                startQuarter
-                                startMonth
-                                startDay
-                                startHour
-                                startMinute
-                                startSecond
-                                endYear
-                                endSemester
-                                endQuarter
-                                endMonth
-                                endDay
-                                endHour
-                                endMinute
-                                endSecond
-                                interval
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
                   }
                 }
               }
@@ -99,36 +69,6 @@ export async function getAllDatasets(offset) {
                 edges {
                   node {
                     _id
-                    coverages {
-                      edges {
-                        node {
-                          datetimeRanges {
-                            edges {
-                              node {
-                                _id
-                                startYear
-                                startSemester
-                                startQuarter
-                                startMonth
-                                startDay
-                                startHour
-                                startMinute
-                                startSecond
-                                endYear
-                                endSemester
-                                endQuarter
-                                endMonth
-                                endDay
-                                endHour
-                                endMinute
-                                endSecond
-                                interval
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
                   }
                 }
               }
@@ -136,36 +76,6 @@ export async function getAllDatasets(offset) {
                 edges {
                   node {
                     _id
-                    coverages {
-                      edges{
-                        node {
-                          datetimeRanges {
-                            edges {
-                              node {
-                                _id
-                                startYear
-                                startSemester
-                                startQuarter
-                                startMonth
-                                startDay
-                                startHour
-                                startMinute
-                                startSecond
-                                endYear
-                                endSemester
-                                endQuarter
-                                endMonth
-                                endDay
-                                endHour
-                                endMinute
-                                endSecond
-                                interval
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
                   }
                 }
               }
@@ -226,36 +136,6 @@ export async function getShowDataset(id) {
                   node {
                     _id
                     slug
-                    coverages {
-                      edges {
-                        node {
-                          datetimeRanges {
-                            edges {
-                              node {
-                                _id
-                                startYear
-                                startSemester
-                                startQuarter
-                                startMonth
-                                startDay
-                                startHour
-                                startMinute
-                                startSecond
-                                endYear
-                                endSemester
-                                endQuarter
-                                endMonth
-                                endDay
-                                endHour
-                                endMinute
-                                endSecond
-                                interval
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
                   }
                 }
               }
@@ -264,36 +144,6 @@ export async function getShowDataset(id) {
                   node {
                     _id
                     name
-                    coverages {
-                      edges {
-                        node {
-                          datetimeRanges {
-                            edges {
-                              node {
-                                _id
-                                startYear
-                                startSemester
-                                startQuarter
-                                startMonth
-                                startDay
-                                startHour
-                                startMinute
-                                startSecond
-                                endYear
-                                endSemester
-                                endQuarter
-                                endMonth
-                                endDay
-                                endHour
-                                endMinute
-                                endSecond
-                                interval
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
                   }
                 }
               }
@@ -303,36 +153,6 @@ export async function getShowDataset(id) {
                     _id
                     name
                     slug
-                    coverages {
-                      edges{
-                        node {
-                          datetimeRanges {
-                            edges {
-                              node {
-                                _id
-                                startYear
-                                startSemester
-                                startQuarter
-                                startMonth
-                                startDay
-                                startHour
-                                startMinute
-                                startSecond
-                                endYear
-                                endSemester
-                                endQuarter
-                                endMonth
-                                endDay
-                                endHour
-                                endMinute
-                                endSecond
-                                interval
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
                   }
                 }
               }
