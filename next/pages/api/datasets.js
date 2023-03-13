@@ -30,6 +30,161 @@ export async function getListDatasets() {
   }
 }
 
+export async function getAllDatasets(offset) {
+  const res = await axios({
+    url: API_URL,
+    method: "POST",
+    data: {
+      query: `
+      query {
+        allDataset (first: 10, offset: ${offset || 0}){
+          edges {
+            node {
+              _id
+              slug
+              name
+              themes {
+                edges {
+                  node {
+                    _id
+                    slug
+                    name
+                  }
+                }
+              }
+              organization {
+                _id
+                slug
+                name
+                website
+              }
+              informationRequests {
+                edges {
+                  node {
+                    _id
+                    coverages {
+                      edges {
+                        node {
+                          datetimeRanges {
+                            edges {
+                              node {
+                                _id
+                                startYear
+                                startSemester
+                                startQuarter
+                                startMonth
+                                startDay
+                                startHour
+                                startMinute
+                                startSecond
+                                endYear
+                                endSemester
+                                endQuarter
+                                endMonth
+                                endDay
+                                endHour
+                                endMinute
+                                endSecond
+                                interval
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              rawDataSources {
+                edges {
+                  node {
+                    _id
+                    coverages {
+                      edges {
+                        node {
+                          datetimeRanges {
+                            edges {
+                              node {
+                                _id
+                                startYear
+                                startSemester
+                                startQuarter
+                                startMonth
+                                startDay
+                                startHour
+                                startMinute
+                                startSecond
+                                endYear
+                                endSemester
+                                endQuarter
+                                endMonth
+                                endDay
+                                endHour
+                                endMinute
+                                endSecond
+                                interval
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              tables {
+                edges {
+                  node {
+                    _id
+                    coverages {
+                      edges{
+                        node {
+                          datetimeRanges {
+                            edges {
+                              node {
+                                _id
+                                startYear
+                                startSemester
+                                startQuarter
+                                startMonth
+                                startDay
+                                startHour
+                                startMinute
+                                startSecond
+                                endYear
+                                endSemester
+                                endQuarter
+                                endMonth
+                                endDay
+                                endHour
+                                endMinute
+                                endSecond
+                                interval
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      `,
+      variables: null
+    }
+  })
+  try {
+    const data = res?.data?.data?.allDataset?.edges
+    return data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 export async function getShowDataset(id) {
   const res = await axios({
     url: API_URL,

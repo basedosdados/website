@@ -49,10 +49,7 @@ export default function TemporalCoverage ({
   //   endYear: "2023",
   // }
 
-  if(!value) return text
-  if(startDate === null && endDate === null) return text
-
-  const TextDate = ({value}) => {
+  const TextDate = ({ value }) => {
     return (
       <Text
         color="#252A32"
@@ -66,7 +63,10 @@ export default function TemporalCoverage ({
         {value}
       </Text>
     ) 
-  } 
+  }
+
+  if(!value) return <TextDate value={text}/>
+  if(startDate === null && endDate === null) return <TextDate value={text}/>
 
   function Dates ({ dates, ...props }) {
     const yearMonthDay = []

@@ -4,7 +4,7 @@ import {
 import { useState, useEffect } from "react";
 import ImageDefault from "../../public/img/imageDefault";
 
-export const ImageOrganization = ({title, image}) => {
+export const ImageOrganization = ({title, image, ...props}) => {
   const [urlImage, setUrlImage] = useState("")
 
   const settingsImage = {
@@ -18,6 +18,8 @@ export const ImageOrganization = ({title, image}) => {
     maxHeight:"250px",
     height:{ base: "25%", lg: "100%" },
     objectFit:"contain",
+    widthImage:"100%",
+    heightImage:"100%"
   }
 
   useEffect(() => {
@@ -25,12 +27,13 @@ export const ImageOrganization = ({title, image}) => {
     image.startsWith("https://") ? setUrlImage(image) : setUrlImage("https://basedosdados.org/uploads/group/" + image)
   },[])
 
-  if(!urlImage) return <ImageDefault {...settingsImage} overflow="hidden"/>
+  if(!urlImage) return <ImageDefault {...settingsImage} {...props} overflow="hidden"/>
 
   return (
     <Image
       src={urlImage}
       {...settingsImage}
+      {...props}
     />
   )
 }

@@ -23,17 +23,11 @@ import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-// import { createDataset, searchDatasets } from "../api/datasets";
-// import {
-//   getAvailableOptionsTranslations,
-//   getTranslationsOptions,
-//   getTranslations,
-// } from "../api/translations";
-// import { getDatasetSchema } from "../api/schemas";
-// import { getUser } from "../api/user";
+import { getAllDatasets } from "../api/datasets";
 
 import { withPages } from "../../hooks/pages.hook";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
@@ -57,19 +51,21 @@ import FilterIcon from "../../public/img/icons/filterIcon";
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
 import NotFoundImage from "../../public/img/notFoundImage";
 
-// export async function getStaticProps(context) {
-//   const translations = await getTranslations();
-//   const availableOptionsTranslations = await getAvailableOptionsTranslations();
-//   const optionsTranslations = await getTranslationsOptions();
-//   return withPages({
-//     revalidate: 60, //TODO: Increase this timer
-//     props: {
-//       translations,
-//       availableOptionsTranslations,
-//       optionsTranslations,
-//     },
-//   });
-// }
+export async function getStaticProps(context) {
+  let datasets = []
+  try {
+    datasets = await getAllDatasets() || null
+  } catch (error) {
+    console.log(error)
+  }
+
+  return await withPages({
+    props: {
+      datasets
+    },
+    revalidate: 1,
+  })
+}
 
 function NewDatasetModal({ isOpen, onClose }) {
   return (
@@ -100,7 +96,7 @@ function NewDatasetModal({ isOpen, onClose }) {
         </ModalBody>
       </ModalContent>
     </Modal>
-  );
+  )
 }
 
 function FilterTags({
@@ -139,33 +135,29 @@ function FilterTags({
         ))}
       </Stack>
     </HStack>
-  );
+  )
 }
 
-export default function SearchPage({
-  pages,
-  availableOptionsTranslations,
-  translations,
-  optionsTranslations,
-}) {
-  const { query } = useRouter();
-  const datasetDisclosure = useDisclosure();
-  // const { data: userData = null } = useQuery("user", getUser);
-  const [order, setOrder] = useState("score");
-  const [search, setSearch] = useState("");
-  const [paramFilters, setParamFilters] = useState({});
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(0);
-  const [filterKey, setFilterKey] = useState(0);
-  const { data, isLoading } = useQuery(
-    ["datasets", search, order, paramFilters, page],
-    () => searchDatasets({ search, sort: order, page, paramFilters }),
-    {
-      onSuccess(data) {
-        setPageSize(Math.ceil(data.count / 10));
-      },
-    }
-  );
+export default function SearchPage({ pages, datasets }) {
+  // const { query } = useRouter()
+  const datasetDisclosure = useDisclosure()
+  // const { data: userData = null } = useQuery("user", getUser)
+  // const [order, setOrder] = useState("score")
+  // const [search, setSearch] = useState("")
+  // const [paramFilters, setParamFilters] = useState({})
+  // const [filterKey, setFilterKey] = useState(0)
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(0)
+  const [isLoading, setIsLoading] = useState(false)
+  // const { data, isLoading } = useQuery(
+  //   ["datasets", search, order, paramFilters, page],
+  //   () => searchDatasets({ search, sort: order, page, paramFilters }),
+  //   {
+  //     onSuccess(data) {
+  //       setPageSize(Math.ceil(data.count / 10))
+  //     },
+  //   }
+  // )
 
   const DataProposalBox = ({image, display, text, bodyText}) => {
     return (
@@ -273,241 +265,190 @@ export default function SearchPage({
     raw_quality_tier: "Qualidade da fonte original",
   };
 
-  const organizations = data?.organizations
-    ? Object.keys(data?.organizations)
-      .map((t) => ({
-        name: t,
-        displayName:
-          data.organizations_display_names[t] + ` (${data.organizations[t]})`,
-        value: data.organizations[t],
-      }))
-      .sort((a, b) => b.value - a.value)
-    : [];
+  //<>
+  // const organizations = data?.organizations
+  //   ? Object.keys(data?.organizations)
+  //     .map((t) => ({
+  //       name: t,
+  //       displayName:
+  //         data.organizations_display_names[t] + ` (${data.organizations[t]})`,
+  //       value: data.organizations[t],
+  //     }))
+  //     .sort((a, b) => b.value - a.value)
+  //   : [];
 
-  const groups = data?.groups
-    ? Object.keys(data?.groups)
-      .map((t) => ({
-        name: t,
-        displayName: data.groups_display_names[t] + ` (${data.groups[t]})`,
-        value: data.groups[t],
-      }))
-      .sort((a, b) => b.value - a.value)
-    : [];
+  // const groups = data?.groups
+  //   ? Object.keys(data?.groups)
+  //     .map((t) => ({
+  //       name: t,
+  //       displayName: data.groups_display_names[t] + ` (${data.groups[t]})`,
+  //       value: data.groups[t],
+  //     }))
+  //     .sort((a, b) => b.value - a.value)
+  //   : [];
 
-  const tags = data?.tags
-    ? Object.keys(data.tags)
-      .map((t) => ({
-        name: t,
-        displayName: t + ` (${data.tags[t]})`,
-        value: data.tags[t],
-      }))
-      .sort((a, b) => b.value - a.value)
-    : [];
+  // const tags = data?.tags
+  //   ? Object.keys(data.tags)
+  //     .map((t) => ({
+  //       name: t,
+  //       displayName: t + ` (${data.tags[t]})`,
+  //       value: data.tags[t],
+  //     }))
+  //     .sort((a, b) => b.value - a.value)
+  //   : [];
 
-  const entities = data?.entities
-    ? Object.keys(data.entities)
-      .map((t) => ({
-        name: t,
-        displayName:
-        optionsTranslations["Entity"][t] + ` (${data.entities[t]})`,
-        value: data.entities[t],
-      }))
-      .sort((a, b) => b.value - a.value)
-    : [];
+  // const entities = data?.entities
+  //   ? Object.keys(data.entities)
+  //     .map((t) => ({
+  //       name: t,
+  //       displayName:
+  //       optionsTranslations["Entity"][t] + ` (${data.entities[t]})`,
+  //       value: data.entities[t],
+  //     }))
+  //     .sort((a, b) => b.value - a.value)
+  //   : [];
 
-  const updateFrequencies = data?.update_frequencies
-    ? Object.keys(data.update_frequencies)
-      .map((t) => ({
-        name: t,
-        displayName:
-        optionsTranslations["Time Unit"][t] + ` (${data.update_frequencies[t]})`,
-        value: data.update_frequencies[t],
-      }))
-      .sort((a, b) => optionsUpdateFrequencies[a.name] - optionsUpdateFrequencies[b.name])
-    : [];
+  // const updateFrequencies = data?.update_frequencies
+  //   ? Object.keys(data.update_frequencies)
+  //     .map((t) => ({
+  //       name: t,
+  //       displayName:
+  //       optionsTranslations["Time Unit"][t] + ` (${data.update_frequencies[t]})`,
+  //       value: data.update_frequencies[t],
+  //     }))
+  //     .sort((a, b) => optionsUpdateFrequencies[a.name] - optionsUpdateFrequencies[b.name])
+  //   : [];
 
-    const rawQualityTiers = data?.raw_quality_tiers
-    ? Object.keys(data.raw_quality_tiers)
-      .map((t) => ({
-        name: t,
-        displayName:
-        optionsTranslations["Raw Quality Tier"][t] + ` (${data.raw_quality_tiers[t]})`,
-        value: data.raw_quality_tiers[t],
-      }))
-      .sort((a, b) => optionsRawQualityTiers[a.name] - optionsRawQualityTiers[b.name])
-    : [];
+  //   const rawQualityTiers = data?.raw_quality_tiers
+  //   ? Object.keys(data.raw_quality_tiers)
+  //     .map((t) => ({
+  //       name: t,
+  //       displayName:
+  //       optionsTranslations["Raw Quality Tier"][t] + ` (${data.raw_quality_tiers[t]})`,
+  //       value: data.raw_quality_tiers[t],
+  //     }))
+  //     .sort((a, b) => optionsRawQualityTiers[a.name] - optionsRawQualityTiers[b.name])
+  //   : [];
 
-  const spatialCoverages = {
-    continent: data?.spatial_coverage_continent
-      ? Object.keys(data.spatial_coverage_continent)
-        .map((t) => ({
-          name: t,
-          displayName:
-          optionsTranslations["Spatial Coverage"][t] +
-            ` (${data.spatial_coverage_continent[t]})`,
-          value: data.spatial_coverage_continent[t],
-        }))
-        .sort((a, b) => b.value - a.value)
-      : [],
-    country: data?.spatial_coverage_country
-      ? Object.keys(data.spatial_coverage_country)
-        .map((t) => ({
-          name: t,
-          displayName:
-          optionsTranslations["Spatial Coverage"][t] + ` (${data.spatial_coverage_country[t]})`,
-          value: data.spatial_coverage_country[t],
-        }))
-        .sort((a, b) => b.value - a.value)
-      : [],
-    admin1: data?.spatial_coverage_admin1
-      ? Object.keys(data.spatial_coverage_admin1)
-        .map((t) => ({
-          name: t,
-          displayName:
-          optionsTranslations["Spatial Coverage"][t] +
-            ` (${data.spatial_coverage_admin1[t]})`,
-          value: data.spatial_coverage_admin1[t],
-        }))
-        .sort((a, b) => b.value - a.value)
-      : [],
-    /*
-    admin2: data?.spatial_coverage_admin2
-      ? Object.keys(data.spatial_coverage_admin2)
-        .map((t) => ({
-          name: t,
-          displayName:
-            optionsTranslations["Spatial Coverage"][t] +
-            ` (${data.spatial_coverage_admin2[t]})`,
-          value: data.spatial_coverage_admin2[t],
-        }))
-        .sort((a, b) => b.value - a.value)
-      : [],
-    */
-  };
+  // const spatialCoverages = {
+  //   continent: data?.spatial_coverage_continent
+  //     ? Object.keys(data.spatial_coverage_continent)
+  //       .map((t) => ({
+  //         name: t,
+  //         displayName:
+  //         optionsTranslations["Spatial Coverage"][t] +
+  //           ` (${data.spatial_coverage_continent[t]})`,
+  //         value: data.spatial_coverage_continent[t],
+  //       }))
+  //       .sort((a, b) => b.value - a.value)
+  //     : [],
+  //   country: data?.spatial_coverage_country
+  //     ? Object.keys(data.spatial_coverage_country)
+  //       .map((t) => ({
+  //         name: t,
+  //         displayName:
+  //         optionsTranslations["Spatial Coverage"][t] + ` (${data.spatial_coverage_country[t]})`,
+  //         value: data.spatial_coverage_country[t],
+  //       }))
+  //       .sort((a, b) => b.value - a.value)
+  //     : [],
+  //   admin1: data?.spatial_coverage_admin1
+  //     ? Object.keys(data.spatial_coverage_admin1)
+  //       .map((t) => ({
+  //         name: t,
+  //         displayName:
+  //         optionsTranslations["Spatial Coverage"][t] +
+  //           ` (${data.spatial_coverage_admin1[t]})`,
+  //         value: data.spatial_coverage_admin1[t],
+  //       }))
+  //       .sort((a, b) => b.value - a.value)
+  //     : [],
+  //   /*
+  //   admin2: data?.spatial_coverage_admin2
+  //     ? Object.keys(data.spatial_coverage_admin2)
+  //       .map((t) => ({
+  //         name: t,
+  //         displayName:
+  //           optionsTranslations["Spatial Coverage"][t] +
+  //           ` (${data.spatial_coverage_admin2[t]})`,
+  //         value: data.spatial_coverage_admin2[t],
+  //       }))
+  //       .sort((a, b) => b.value - a.value)
+  //     : [],
+  //   */
+  // }
 
-  // Loads filter from URL
-  useEffect(() => {
-    if (query.q) setSearch(decodeURI(query.q));
-    if (query.order_by) setOrder(decodeURI(query.order_by));
+  // useEffect(() => {
+  //   if (query.q) setSearch(decodeURI(query.q));
+  //   if (query.order_by) setOrder(decodeURI(query.order_by));
 
-    if (query.temporal_coverage) {
-      const [start, end] = query.temporal_coverage
-        .split("-")
-        .map((v) => parseFloat(v));
-      setParamFilters({
-        ...paramFilters,
-        temporal_coverage: new Array(end - start).map((_, i) => start + i),
-      });
-    }
+  //   if (query.temporal_coverage) {
+  //     const [start, end] = query.temporal_coverage
+  //       .split("-")
+  //       .map((v) => parseFloat(v));
+  //     setParamFilters({
+  //       ...paramFilters,
+  //       temporal_coverage: new Array(end - start).map((_, i) => start + i),
+  //     });
+  //   }
 
-    setParamFilters({
-      ...paramFilters,
-      tag: query.tag ? query.tag.split(",") : [],
-      organization: query.organization ? query.organization.split(",") : [],
-      group: query.group ? query.group.split(',') : [],
-      resource_type: query.resource_type ? query.resource_type.split(",") : [],
-      spatial_coverage: query.spatial_coverage ? query.spatial_coverage.split(",") : [],
-      temporal_coverage: query.temporal_coverage ? query.temporal_coverage.split("-") : [],
-      entity: query.entity ? query.entity.split(",") : [],
-    });
+  //   setParamFilters({
+  //     ...paramFilters,
+  //     tag: query.tag ? query.tag.split(",") : [],
+  //     organization: query.organization ? query.organization.split(",") : [],
+  //     group: query.group ? query.group.split(',') : [],
+  //     resource_type: query.resource_type ? query.resource_type.split(",") : [],
+  //     spatial_coverage: query.spatial_coverage ? query.spatial_coverage.split(",") : [],
+  //     temporal_coverage: query.temporal_coverage ? query.temporal_coverage.split("-") : [],
+  //     entity: query.entity ? query.entity.split(",") : [],
+  //   });
 
-    setFilterKey(filterKey + 1);
-  }, [
-    query.resource_type,
-    query.tag,
-    query.organization,
-    query.group,
-    query.q,
-    query.bdPlus,
-    query.order,
-    query.spatial_coverage,
-    query.temporal_coverage,
-    query.entity,
-  ]);
+  //   setFilterKey(filterKey + 1);
+  // }, [
+  //   query.resource_type,
+  //   query.tag,
+  //   query.organization,
+  //   query.group,
+  //   query.q,
+  //   query.bdPlus,
+  //   query.order,
+  //   query.spatial_coverage,
+  //   query.temporal_coverage,
+  //   query.entity,
+  // ])
 
-  useEffect(() => {
-    const paramObj = { ...paramFilters, order_by: order, q: search };
+  // useEffect(() => {
+  //   const paramObj = { ...paramFilters, order_by: order, q: search };
 
-    Object.keys(paramObj).forEach((p) => {
-      const value = paramObj[p];
+  //   Object.keys(paramObj).forEach((p) => {
+  //     const value = paramObj[p];
 
-      if (value?.length === 0 || value === "") delete paramObj[p];
-    });
+  //     if (value?.length === 0 || value === "") delete paramObj[p];
+  //   });
 
-    // Only add 2000-2005 to url instead of 2000,2001,2002,2003,2004,2005 which can cause error 414
-    if (
-      paramFilters.temporal_coverage &&
-      paramFilters.temporal_coverage.length
-    ) {
-      paramObj.temporal_coverage = `${paramObj.temporal_coverage[0]}-${paramObj.temporal_coverage[paramObj.temporal_coverage.length - 1]
-        }`;
-    }
+  //   // Only add 2000-2005 to url instead of 2000,2001,2002,2003,2004,2005 which can cause error 414
+  //   if (
+  //     paramFilters.temporal_coverage &&
+  //     paramFilters.temporal_coverage.length
+  //   ) {
+  //     paramObj.temporal_coverage = `${paramObj.temporal_coverage[0]}-${paramObj.temporal_coverage[paramObj.temporal_coverage.length - 1]
+  //       }`;
+  //   }
 
-    addParametersToCurrentURL(paramObj);
-    setPage(1);
-  }, [paramFilters, search, order]);
+  //   addParametersToCurrentURL(paramObj);
+  //   setPage(1);
+  // }, [paramFilters, search, order]);
 
-  const DatabaseCard = ({
-    name,
-    title,
-    imageUrl,
-    organization,
-    tags,
-    resources,
-    updatedSince,
-    groups,
-    isPlus
-  }) => {
-    const [urlImage, setUrlImage] = useState("")
-
-    useEffect(() => {
-      imageUrl.startsWith("https://") ? setUrlImage(imageUrl) : setUrlImage("https://basedosdados.org/uploads/group/" + imageUrl)
-    },[])
-
+  const DatabaseCard = ({ data }) => {
     return (
       <Database
-        link={`/dataset/${name}`}
-        name={title || "Conjunto sem nome"}
-        image={urlImage}
-        organization={organization}
-        tags={tags.map((g) => g.name)}
-        size={
-          resources.filter((r) => r.bdm_file_size).length > 0
-            ? resources.filter((r) => r.bdm_file_size)[0]
-              .bdm_file_size
-            : null
-        }
-        temporalCoverage={unionArrays(
-          resources.filter((r) => r?.temporal_coverage?.length)
-            .map((r) => r.temporal_coverage)
-        ).sort()}
-        tableNum={
-          resources.filter(
-            (r) => r.resource_type === "bdm_table"
-          ).length
-        }
-        externalLinkNum={
-          resources.filter(
-            (r) => r.resource_type === "external_link"
-          ).length
-        }
-        informationRequestNum={
-          resources.filter(
-            (r) => r.resource_type === "information_request"
-          ).length
-        }
-        updatedSince={updatedSince}
-        updatedAuthor="Ricardo Dahis"
-        categories={groups.map((g) => [g.name, g.display_name])}
-        spatialCoverage={null}
-        updateFrequency={
-          resources.filter((r) => r.update_frequency).length >
-            0
-            ? resources.filter((r) => r.update_frequency)[0]
-              .update_frequency
-            : null
-        }
-        isPlus={isBdPlus(isPlus)}
+        id={data._id}
+        name={data?.name || "Conjunto sem nome"}
+        organization={data?.organization}
+        bdmTable={data?.tables}
+        rawDataSources={data?.rawDataSources}
+        informationRequests={data?.informationRequests}
+        themes={data?.themes}
       />
     )
   }
@@ -523,8 +464,11 @@ export default function SearchPage({
         />
       </Head>
 
-      <NewDatasetModal {...datasetDisclosure} />
-      <DebouncedControlledInput
+      {/* modal para a criacao de datasets */}
+      {/* <NewDatasetModal {...datasetDisclosure} />*/}
+
+      {/* input search datasets */}
+      {/* <DebouncedControlledInput
         value={search}
         onChange={(val) => setSearch(val)}
         placeholder={isMobileMod() ? "Palavras-chave, instituições ou temas" :"Pesquise palavras-chave, instituições ou temas"}
@@ -543,7 +487,7 @@ export default function SearchPage({
           _placeholder:{color:"#6F6F6F"}
         }}
         marginTop={isMobileMod() && "70px"}
-      />
+      /> */}
 
       <Stack
         spacing={isMobileMod() ? 10 : 0}
@@ -552,7 +496,7 @@ export default function SearchPage({
         margin="auto"
         direction={{ base: "column", lg: "row" }}
       >
-        <VStack
+        {/*<VStack
           justifyContent="flex-start"
           alignItems="flex-start"
           minWidth={{ base: "100%", lg: "320px" }}
@@ -706,7 +650,8 @@ export default function SearchPage({
                 }
               />
 
-              {/* <CheckboxFilterAccordion
+              Filter null
+              <CheckboxFilterAccordion
                 canSearch={true}
                 isActive={(paramFilters.spatial_coverage || []).length > 0}
                 choices={[...spatialCoverages.admin2]}
@@ -717,7 +662,7 @@ export default function SearchPage({
                 onChange={(values) =>
                   setParamFilters({ ...paramFilters, spatial_coverage: values })
                 }
-              /> */}
+              /> 
             </Stack>
           </SimpleFilterAccordion>
 
@@ -785,14 +730,15 @@ export default function SearchPage({
               setParamFilters({ ...paramFilters, raw_quality_tier: values })
             }
           />
-        </VStack>
+        </VStack> */}
+
         <VStack
           alignItems="flex-start"
           overflow="hidden"
           width="100%"
           paddingLeft={isMobileMod() ? "" : "40px"}
         >
-          {data?.datasets.length === 0 ?
+          {datasets?.length === 0 ?
             <DataProposalBox 
               image= {true}
               display= "Ooops..."
@@ -802,7 +748,7 @@ export default function SearchPage({
           :
           <>
             <Flex width="100%" justify="center" align="baseline">
-              <Heading
+              {/* <Heading
                 width="100%"
                 fontFamily="Ubuntu"
                 fontSize="26px"
@@ -812,8 +758,9 @@ export default function SearchPage({
               >
                 {data?.count || "..."} {`conjunto${data?.count > 1 ? "s": ""} encontrado${data?.count > 1 ? "s": ""}`}
                 {search ? " para " + search : ""}
-              </Heading>
+              </Heading> */}
 
+              {/* Button create dataset */}
               {/* {userData?.is_admin && 
                 <Button
                   w="170px"
@@ -832,7 +779,8 @@ export default function SearchPage({
               } */}
             </Flex>
 
-            <Stack
+            {/* Tags container */}
+            {/* <Stack
               overflow="auto"
               width="100%"
               flexWrap="wrap"
@@ -858,9 +806,10 @@ export default function SearchPage({
                     setParamFilters={setParamFilters}
                   />
                 ))}
-            </Stack>
+            </Stack> */}
 
-            <HStack
+            {/* Order container */}
+            {/* <HStack
               fontFamily="Lato"
               letterSpacing="0.5px"
               fontWeight="300"
@@ -891,7 +840,7 @@ export default function SearchPage({
                   <option value="popular">Mais populares</option>
                 </Select>
               </Stack>
-            </HStack>
+            </HStack> */}
 
             <VStack
               width="100%"
@@ -912,19 +861,9 @@ export default function SearchPage({
                       <Divider />
                     </>
                 ))
-                : (data?.datasets || []).map((d) => (
+                : (datasets || []).map((res) => (
                   <>
-                    <DatabaseCard 
-                      name={d.name}
-                      title={d.title}
-                      imageUrl={d.organization.image_url}
-                      organization={d.organization}
-                      tags={d.tags}
-                      resources={d.resources}
-                      updatedSince={d.metadata_modified}
-                      groups={d.groups}
-                      isPlus={d}
-                    />
+                    <DatabaseCard data={res.node} />
                     <Divider border="0" borderBottom="1px solid #DEDFE0" opacity={1}/>
                   </>
                 ))}
@@ -944,7 +883,7 @@ export default function SearchPage({
                 activeClassName={"active"}
               />
             </VStack>
-            
+
             {pageSize === 1 &&
               <DataProposalBox 
                 text= "Ainda não encontrou o que está procurando?"
@@ -957,9 +896,7 @@ export default function SearchPage({
                 bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
               />
             }
-          </>
-          }
-          )
+          </>})
         </VStack>
       </Stack>
       <script
@@ -967,5 +904,5 @@ export default function SearchPage({
         data-termynal-container="#termynal"
       ></script>
     </MainPageTemplate>
-  );
+  )
 }
