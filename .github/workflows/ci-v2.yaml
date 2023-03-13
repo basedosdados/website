@@ -37,7 +37,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: next
-          file: Dockerfile
+          file: next/Dockerfile
           push: true
           tags: ${{ env.IMAGE_NAME }}
           build-args: |
