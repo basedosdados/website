@@ -867,7 +867,7 @@ export default function SearchPage({ pages, datasets }) {
                     <Divider border="0" borderBottom="1px solid #DEDFE0" opacity={1}/>
                   </>
                 ))}
-              <ReactPaginate
+              {/* <ReactPaginate
                 previousLabel={isMobileMod() ? "<" : "Anterior"}
                 nextLabel={isMobileMod() ? ">" : "Próxima"}
                 breakLabel={"..."}
@@ -881,10 +881,10 @@ export default function SearchPage({ pages, datasets }) {
                 }}
                 containerClassName={"pagination"}
                 activeClassName={"active"}
-              />
+              /> */}
             </VStack>
 
-            {pageSize === 1 &&
+            {/* {pageSize === 1 &&
               <DataProposalBox 
                 text= "Ainda não encontrou o que está procurando?"
                 bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
@@ -895,7 +895,7 @@ export default function SearchPage({ pages, datasets }) {
                 text= "Ainda não encontrou o que está procurando?"
                 bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
               />
-            }
+            } */}
           </>})
         </VStack>
       </Stack>
