@@ -36,8 +36,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: nextjs
-          file: nextjs/Dockerfile
+          context: next
+          file: Dockerfile
           push: true
           tags: ${{ env.IMAGE_NAME }}
           build-args: |
