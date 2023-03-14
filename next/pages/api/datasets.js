@@ -188,6 +188,7 @@ export async function getBdmTable(id) {
               description
               dataset {
                 _id
+                slug
               }
               coverages {
                 edges {
@@ -329,6 +330,14 @@ export async function getColumnsBdmTable(id) {
                     directoryPrimaryKey {
                       _id
                       name
+                      table {
+                        _id
+                        slug
+                        dataset {
+                          _id
+                          slug
+                        }
+                      }
                     }
                     measurementUnit
                     containsSensitiveData

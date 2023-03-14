@@ -120,7 +120,7 @@ export function TextPix ({ title, text }) {
 
 export default function DataInformationQuery ({ resource }) {
   // const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${resource?.dataset?._id}/${resource?.name}/${resource?._id}.csv.gz`
-  const queryName = `${resource?.dataset?._id}.${resource?._id}`
+  const queryName = `${resource?.dataset?.slug}.${resource?.slug}`
   const { hasCopied, onCopy } = useClipboard("42494318000116")
   const [tabIndex, setTabIndex] = useState(0)
   const [downloadNotAllowed, setDownloadNotAllowed] = useState(true)
@@ -255,8 +255,8 @@ export default function DataInformationQuery ({ resource }) {
               {`import basedosdados as bd
 
 # Para carregar o dado direto no pandas
-df = bd.read_table(dataset_id='${resource?.dataset?._id}',
-table_id='${resource?._id}',
+df = bd.read_table(dataset_id='${resource?.dataset?.slug}',
+table_id='${resource?.slug}',
 billing_project_id="<YOUR_PROJECT_ID>")`}
             </PrismCodeHighlight>
 
@@ -303,8 +303,8 @@ df <- bd_collect(query)`}
 
 bd_read_table, ///
     path("<PATH>") ///
-    dataset_id("${resource?.dataset?._id}") ///
-    table_id("${resource?._id}") ///
+    dataset_id("${resource?.dataset?.slug}") ///
+    table_id("${resource?.slug}") ///
     billing_project_id("<PROJECT_ID>")`}
             </PrismCodeHighlight>
 

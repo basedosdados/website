@@ -59,40 +59,6 @@ function TableDatasets({ headers, values }) {
     )
   }
 
-  // const directoryColumnValue = (value) => {
-  //   const newDirectoryColumn = `${value[0]}.${value[1]}:${value[2]}`
-  //   const datasetUrl = value[0].replace(/_/g, "-")
-  
-  //   if (newDirectoryColumn === "Não listado.Não listado:Não listado") return empty()
-
-  //   return (
-  //     <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
-  //       {newDirectoryColumn}
-  //       <a target={"_blank"} href={`/dataset/${datasetUrl}?bdm_table=${value[1]}`}>
-  //         <RedirectIcon
-  //           alt="hiperlink"
-  //           fill="#42B0FF"
-  //           cursor="pointer" 
-  //           _hover={{opacity:0.7}}
-  //         />
-  //       </a> 
-  //     </div>
-  //   )
-  // }
-
-  const measurementUnit = (value) => {
-    if(!value) return null
-
-    const measurementUnitLatex = () => {
-      const splitValue = value.split(/([^a-z])/)
-      const translated = (value) => value.map((elm) =>  elm)
-      return (
-        <Latex>{`$${translated(splitValue).join("")}$`}</Latex>
-      )
-    }
-    return measurementUnitLatex
-  }
-
   function valueVerification (value) {
     if(value === null || value === undefined) return empty()
 
@@ -110,6 +76,41 @@ function TableDatasets({ headers, values }) {
     } else {
       return empty()
     }
+  }
+
+  const directoryColumnValue = (value) => {
+    const dataset = value?.table?.dataset
+    const table = value?.table
+    const newDirectoryColumn = `${dataset?.slug}.${table?.slug}:${value?.name}`
+  
+    if (newDirectoryColumn === "undefined.undefined:undefined") return empty()
+
+    return (
+      <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
+        {newDirectoryColumn}
+        <a target={"_blank"} href={`/dataset/${dataset?._id}?bdm_tables=${table?._id}`}>
+          <RedirectIcon
+            alt="hiperlink"
+            fill="#42B0FF"
+            cursor="pointer" 
+            _hover={{opacity:0.7}}
+          />
+        </a> 
+      </div>
+    )
+  }
+
+  const measurementUnit = (value) => {
+    if(!value) return null
+
+    const measurementUnitLatex = () => {
+      const splitValue = value.split(/([^a-z])/)
+      const translated = (value) => value.map((elm) =>  elm)
+      return (
+        <Latex>{`$${translated(splitValue).join("")}$`}</Latex>
+      )
+    }
+    return measurementUnitLatex
   }
 
   const TableHeader = ({ header, ...props }) => {
@@ -161,7 +162,7 @@ function TableDatasets({ headers, values }) {
     data.push({ value: objectValue.description})
     data.push({ value: objectValue?.coverages?.edges[0]?.node?.datetimeRanges?.edges[0]?.node})
     data.push({ value: objectValue.coveredByDictionary})
-    data.push({ value: objectValue.directoryPrimaryKey})
+    data.push({ value: directoryColumnValue(objectValue.directoryPrimaryKey)})
     data.push({ value: measurementUnit(objectValue.measurementUnit)})
     data.push({ value: objectValue.containsSensitiveData})
     data.push({ value: objectValue.observations})
@@ -170,7 +171,8 @@ function TableDatasets({ headers, values }) {
       <TableValue {...elm.style}>
         {i===3 ? <TemporalCoverage value={elm.value} tex="Não listado"/>
         : valueVerification(elm.value)}
-      </TableValue>)
+      </TableValue>
+    )
   }
 
   function TableValue({children, ...props}) {
