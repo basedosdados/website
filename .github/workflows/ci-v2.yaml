@@ -33,7 +33,13 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and publish
-        run: |
-          docker build -t $IMAGE_NAME --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
-          docker push $IMAGE_NAME
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: next
+          file: next/Dockerfile
+          push: true
+          tags: ${{ env.IMAGE_NAME }}
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }}
+
