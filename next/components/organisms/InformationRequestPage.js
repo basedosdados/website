@@ -133,7 +133,7 @@ export default function InformationRequestPage({ id }) {
   if(isError?.message?.length > 0 || resource === null || Object.keys(resource).length < 0) return <FourOhFour/>
 
   return (
-    <BaseResourcePage title={`Número do pedido: ${resource?.slug}`} >
+    <BaseResourcePage title={`Número do pedido: ${resource?.number}`} >
       <VStack 
         marginTop="0 !important" 
         width="100%" 
@@ -155,7 +155,7 @@ export default function InformationRequestPage({ id }) {
           </SectionText>
 
           <PartnershipContainer
-            {...resource?.slug === "03005.341407/2022-56" ?
+            {...resource?.number === "03005.341407/2022-56" ?
               partnerships["Fundação Lemann"] :
               partnerships["Fiquem Sabendo"]
             }

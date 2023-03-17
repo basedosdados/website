@@ -135,7 +135,7 @@ export async function getShowDataset(id) {
                 edges {
                   node {
                     _id
-                    slug
+                    number
                   }
                 }
               }
@@ -482,7 +482,7 @@ export async function getInformationRequest(id) {
           edges {
             node {
               _id
-              slug
+              number
               url
               dataUrl
               origin

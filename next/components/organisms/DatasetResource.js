@@ -171,7 +171,7 @@ export default function DatasetResource({
           choices={informationRequests}
           value={query.information_request}
           valueField="_id"
-          displayField="slug"
+          displayField="number"
           fieldName="Pedidos LAI"
           isHovering={false}
           onChange={(id) => {
