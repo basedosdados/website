@@ -56,12 +56,12 @@ export default function RawDataSourcesPage({
     featchRawDataSources()
   },[id])
 
-  const Languages = () => {
-    if(resource?.languages === undefined || Object.keys(resource?.languages).length === 0) return "Não listado"
+  const ObjectValues = (value) => {
+    if(value === undefined || Object.keys(value).length === 0) return "Não listado"
 
     const array = []
 
-    resource?.languages?.map((elm) => {
+    Object.values(value).map((elm) => {
       array.push(elm.name)
     })
 
@@ -179,7 +179,7 @@ export default function RawDataSourcesPage({
             <LanguageIcon alt="idioma" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Idioma"
-              text={Languages()}
+              text={ObjectValues(resource?.languages)}
             />
           </GridItem>
 
@@ -242,7 +242,7 @@ export default function RawDataSourcesPage({
             <IpIcon alt="IP" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Requer IP de algum país"
-              text={resource?.areaIpAddressRequired?.[0].name || "Não listado"}
+              text={ObjectValues(resource?.areaIpAddressRequired)}
             />
           </GridItem>
 

@@ -37,7 +37,7 @@ export async function getAllDatasets(offset) {
     data: {
       query: `
       query {
-        allDataset (first: 10, offset: ${offset || 0}){
+        allDataset (first: 50, offset: ${offset || 0}){
           edges {
             node {
               _id
