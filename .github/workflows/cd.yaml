@@ -42,7 +42,7 @@ jobs:
           context: next
           file: next/Dockerfile
           push: true
-          tags: ${{ env.IMAGE_NAME:$GITHUB_SHA }}
+          tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
           build-args: |
             NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }}
 
