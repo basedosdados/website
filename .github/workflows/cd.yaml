@@ -1,0 +1,84 @@
+name: CD2
+
+on:
+  push:
+    branches:
+      - nextjs
+
+env:
+  IMAGE_NAME_DEVELOPMENT: ghcr.io/basedosdados/website:development
+
+jobs:
+  build-container-development:
+    if: github.ref_name == 'nextjs'
+    name: Build and publish container image for development environment
+    runs-on: ubuntu-latest
+    environment:
+      name: development
+      url: https://development.basedosdados.org
+    env:
+      NEXT_PORT: ${{ vars.NEXT_PORT }}
+      NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+      NEXT_PUBLIC_SITE_NAME: ${{ vars.NEXT_PUBLIC_SITE_NAME }}
+      NODE_ENV: ${{ vars.NODE_ENV }}
+      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:development
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: nextjs
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: next
+          file: next/Dockerfile
+          push: true
+          tags: ${{ env.IMAGE_NAME:$GITHUB_SHA }}
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }}
+
+      - name: Import Secrets
+        id: import_secrets
+        uses: hashicorp/vault-action@v2.4.1
+        with:
+          url: https://vault.basedosdados.org
+          token: ${{ secrets.VAULT_TOKEN }}
+          secrets: |
+            secret/data/gcp_credentials/basedosdados-dev    GCP_SA_KEY_BASE64 | GCP_SA_KEY_BASE64 ;
+            secret/data/gcp_credentials/basedosdados-dev    GCP_PROJECT_ID    | GCP_PROJECT_ID ;
+            secret/data/gcp_credentials/basedosdados-dev    GKE_CLUSTER_NAME  | GKE_CLUSTER_NAME ;
+            secret/data/gcp_credentials/basedosdados-dev    GKE_CLUSTER_ZONE  | GKE_CLUSTER_ZONE ;
+
+      - name: Setup Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v0.2.1
+        with:
+          service_account_key: ${{ steps.import_secrets.outputs.GCP_SA_KEY_BASE64 }}
+          project_id: ${{ steps.import_secrets.outputs.GCP_PROJECT_ID }}
+          export_default_credentials: true
+
+      - name: Get GKE credentials
+        uses: google-github-actions/get-gke-credentials@v0.2.1
+        with:
+          cluster_name: ${{ steps.import_secrets.outputs.GKE_CLUSTER_NAME }}
+          location: ${{ steps.import_secrets.outputs.GKE_CLUSTER_ZONE }}
+          credentials: ${{ steps.import_secrets.outputs.GCP_SA_KEY_BASE64 }}
+
+      - name: Set up Kustomize
+        run: |-
+          curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+          chmod u+x ./kustomize
+
+      - name: Deploy
+        run: |-
+          ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE_NAME:TAG=$IMAGE_NAME_DEVELOPMENT:$GITHUB_SHA
+          ./kustomize build . | kubectl apply -f -
+          kubectl rollout status -w -n website deployment/website-nextjs-staging
