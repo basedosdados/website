@@ -861,13 +861,15 @@ export default function SearchPage({ pages, datasets }) {
                       <Divider />
                     </>
                 ))
-                : (datasets || []).map((res) => (
+                :
+                (datasets || []).map((res) => (
                   <>
                     <DatabaseCard data={res.node} />
                     <Divider border="0" borderBottom="1px solid #DEDFE0" opacity={1}/>
                   </>
-                ))}
-              {/* <ReactPaginate
+                ))
+              }
+              <ReactPaginate
                 previousLabel={isMobileMod() ? "<" : "Anterior"}
                 nextLabel={isMobileMod() ? ">" : "Próxima"}
                 breakLabel={"..."}
@@ -881,7 +883,7 @@ export default function SearchPage({ pages, datasets }) {
                 }}
                 containerClassName={"pagination"}
                 activeClassName={"active"}
-              /> */}
+              />
             </VStack>
 
             {/* {pageSize === 1 &&

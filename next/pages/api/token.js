@@ -15,9 +15,9 @@ async function getToken({user, password}) {
             username: ${user},
             password: ${password},
         ) {
-            payload,
-            refreshExpiresIn,
-            token
+          payload,
+          refreshExpiresIn,
+          token
         }
     }`
     }
