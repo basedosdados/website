@@ -57,6 +57,7 @@ export async function getAllDatasets(offset) {
                 slug
                 name
                 website
+                picture
               }
               informationRequests {
                 edges {
@@ -130,6 +131,7 @@ export async function getShowDataset(id) {
                 slug
                 name
                 website
+                picture
               }
               informationRequests {
                 edges {
@@ -249,7 +251,7 @@ export async function getBdmTable(id) {
               compressedFileSize
               numberRows
               numberColumns
-              observationLevel {
+              observationLevels {
                 edges {
                   node {
                     _id
@@ -397,11 +399,14 @@ export async function getRawDataSources(id) {
                 }
                 number
               }
-              entities {
+              observationLevels {
                 edges {
                   node {
                     _id
-                    name
+                    entity {
+                      _id
+                      name
+                    }
                   }
                 }
               }

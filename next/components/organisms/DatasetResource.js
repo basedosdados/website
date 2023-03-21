@@ -114,9 +114,9 @@ export default function DatasetResource({
     const queryParams = new URLSearchParams(window.location.search)
 
     if(queryParams.toString().length === 0) {
-      if(dataset_tables.length > 0) pushQuery("bdm_tables", dataset_tables[0]._id)
-      if(raw_data_sources.length > 0) pushQuery("raw_data_sources", raw_data_sources[0]._id)
-      if(information_request.length > 0) pushQuery("information_request", information_request[0]._id)
+      if(dataset_tables.length > 0) return pushQuery("bdm_tables", dataset_tables[0]._id)
+      if(raw_data_sources.length > 0) return pushQuery("raw_data_sources", raw_data_sources[0]._id)
+      if(information_request.length > 0) return pushQuery("information_request", information_request[0]._id)
     }
   },[dataset])
 
