@@ -139,16 +139,16 @@ function FilterTags({
 }
 
 export default function SearchPage({ pages, datasets }) {
+  const [resource, setResource] = useState(datasets)
+  const [page, setPage] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
   // const { query } = useRouter()
-  const datasetDisclosure = useDisclosure()
+  // const datasetDisclosure = useDisclosure()
   // const { data: userData = null } = useQuery("user", getUser)
   // const [order, setOrder] = useState("score")
   // const [search, setSearch] = useState("")
   // const [paramFilters, setParamFilters] = useState({})
   // const [filterKey, setFilterKey] = useState(0)
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(0)
-  const [isLoading, setIsLoading] = useState(false)
   // const { data, isLoading } = useQuery(
   //   ["datasets", search, order, paramFilters, page],
   //   () => searchDatasets({ search, sort: order, page, paramFilters }),
@@ -158,6 +158,17 @@ export default function SearchPage({ pages, datasets }) {
   //     },
   //   }
   // )
+
+  async function getDatasets(page = 1) {
+    const res = await getAllDatasets((page - 1)*10)
+    setResource(res)
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+    setIsLoading(true)
+    getDatasets(page)
+  }, [page])
 
   const DataProposalBox = ({image, display, text, bodyText}) => {
     return (
@@ -442,7 +453,7 @@ export default function SearchPage({ pages, datasets }) {
   const DatabaseCard = ({ data }) => {
     return (
       <Database
-        id={data._id}
+        id={data.slug}
         name={data?.name || "Conjunto sem nome"}
         organization={data?.organization}
         bdmTable={data?.tables}
@@ -738,7 +749,7 @@ export default function SearchPage({ pages, datasets }) {
           width="100%"
           paddingLeft={isMobileMod() ? "" : "40px"}
         >
-          {datasets?.length === 0 ?
+          {resource?.edges.length === 0 ?
             <DataProposalBox 
               image= {true}
               display= "Ooops..."
@@ -748,7 +759,7 @@ export default function SearchPage({ pages, datasets }) {
           :
           <>
             <Flex width="100%" justify="center" align="baseline">
-              {/* <Heading
+              <Heading
                 width="100%"
                 fontFamily="Ubuntu"
                 fontSize="26px"
@@ -756,9 +767,9 @@ export default function SearchPage({ pages, datasets }) {
                 letterSpacing="-0.2px"
                 color="#252A32"
               >
-                {data?.count || "..."} {`conjunto${data?.count > 1 ? "s": ""} encontrado${data?.count > 1 ? "s": ""}`}
-                {search ? " para " + search : ""}
-              </Heading> */}
+                {resource?.totalCount || "..."} {`conjunto${resource?.totalCount > 1 ? "s": ""} encontrado${resource?.totalCount > 1 ? "s": ""}`}
+                {/* {search ? " para " + search : ""} */}
+              </Heading>
 
               {/* Button create dataset */}
               {/* {userData?.is_admin && 
@@ -853,7 +864,7 @@ export default function SearchPage({ pages, datasets }) {
                     <>
                       <Skeleton
                         width="100%"
-                        height="130px"
+                        height="148px"
                         borderRadius="12px"
                         startColor="#F0F0F0"
                         endColor="#F0F0F0"
@@ -862,7 +873,7 @@ export default function SearchPage({ pages, datasets }) {
                     </>
                 ))
                 :
-                (datasets || []).map((res) => (
+                (resource?.edges || []).map((res) => (
                   <>
                     <DatabaseCard data={res.node} />
                     <Divider border="0" borderBottom="1px solid #DEDFE0" opacity={1}/>
@@ -875,18 +886,21 @@ export default function SearchPage({ pages, datasets }) {
                 breakLabel={"..."}
                 breakClassName={"break-me"}
                 forcePage={page - 1}
-                pageCount={pageSize}
+                pageCount={Math.ceil(resource.totalCount / 10)}
                 marginPagesDisplayed={isMobileMod() ? 0 : 1}
                 pageRangeDisplayed={isMobileMod() ? 0 : 2}
                 onPageChange={(data) => {
-                  setPage(data.selected + 1);
+                  setPage(data.selected + 1)
                 }}
                 containerClassName={"pagination"}
                 activeClassName={"active"}
+                pageClassName={isLoading && "disabled"}
+                previousClassName={isLoading && "disabled"}
+                nextClassName={isLoading && "disabled"}
               />
             </VStack>
 
-            {/* {pageSize === 1 &&
+            {resource.totalCount === 1 &&
               <DataProposalBox 
                 text= "Ainda não encontrou o que está procurando?"
                 bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
@@ -897,7 +911,7 @@ export default function SearchPage({ pages, datasets }) {
                 text= "Ainda não encontrou o que está procurando?"
                 bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
               />
-            } */}
+            }
           </>})
         </VStack>
       </Stack>

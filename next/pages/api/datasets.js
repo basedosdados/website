@@ -37,7 +37,8 @@ export async function getAllDatasets(offset) {
     data: {
       query: `
       query {
-        allDataset (first: 50, offset: ${offset || 0}){
+        allDataset (first: 10, offset: ${offset || 0}){
+          totalCount
           edges {
             node {
               _id
@@ -58,11 +59,16 @@ export async function getAllDatasets(offset) {
                 name
                 website
                 picture
+                area {
+                  _id
+                  slug
+                }
               }
               informationRequests {
                 edges {
                   node {
                     _id
+                    number
                   }
                 }
               }
@@ -77,6 +83,7 @@ export async function getAllDatasets(offset) {
                 edges {
                   node {
                     _id
+                    slug
                   }
                 }
               }
@@ -89,21 +96,21 @@ export async function getAllDatasets(offset) {
     }
   })
   try {
-    const data = res?.data?.data?.allDataset?.edges
+    const data = res?.data?.data?.allDataset
     return data
   } catch (error) {
     console.error(error)
   }
 }
 
-export async function getShowDataset(id) {
+export async function getShowDataset(slug) {
   const res = await axios({
     url: API_URL,
     method: "POST",
     data: {
       query: `
       query {
-        allDataset (id: "${id}") {
+        allDataset (slug: "${slug}") {
           edges {
             node {
               _id
@@ -174,14 +181,14 @@ export async function getShowDataset(id) {
   }
 }
 
-export async function getBdmTable(id) {
+export async function getBdmTable(slug) {
   const res = await axios({
     url: API_URL,
     method: "POST",
     data: {
       query: `
       query {
-        allTable (id: "${id}") {
+        allTable (slug: "${slug}") {
           edges {
             node {
               _id
@@ -476,14 +483,14 @@ export async function getRawDataSources(id) {
   }
 }
 
-export async function getInformationRequest(id) {
+export async function getInformationRequest(number) {
   const res = await axios({
     url: API_URL,
     method: "POST",
     data: {
       query: `
       query {
-        allInformationrequest (id: "${id}"){
+        allInformationrequest (number: "${number}"){
           edges {
             node {
               _id

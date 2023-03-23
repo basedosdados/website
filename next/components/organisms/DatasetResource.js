@@ -114,17 +114,17 @@ export default function DatasetResource({
     const queryParams = new URLSearchParams(window.location.search)
 
     if(queryParams.toString().length === 0) {
-      if(dataset_tables.length > 0) return pushQuery("bdm_tables", dataset_tables[0]._id)
-      if(raw_data_sources.length > 0) return pushQuery("raw_data_sources", raw_data_sources[0]._id)
-      if(information_request.length > 0) return pushQuery("information_request", information_request[0]._id)
+      if(dataset_tables.length > 0) return pushQuery("table", dataset_tables[0]?.slug)
+      if(raw_data_sources.length > 0) return pushQuery("raw_data_source", raw_data_sources[0]?._id)
+      if(information_request.length > 0) return pushQuery("information_request", information_request[0]?.number)
     }
   },[dataset])
 
   function SwitchResource({route}) {
-    if (route.hasOwnProperty("bdm_tables"))
-      return <BdmTablePage id={route.bdm_tables}/>
-    if (route.hasOwnProperty("raw_data_sources"))
-      return <RawDataSourcesPage id={route.raw_data_sources}/>
+    if (route.hasOwnProperty("table"))
+      return <BdmTablePage slug={route.table}/>
+    if (route.hasOwnProperty("raw_data_source"))
+      return <RawDataSourcesPage id={route.raw_data_source}/>
     if (route.hasOwnProperty("information_request"))
       return <InformationRequestPage id={route.information_request}/>
     return <LoadingSpin />
@@ -150,27 +150,27 @@ export default function DatasetResource({
         <FilterAccordion
           alwaysOpen={true}
           choices={tables}
-          value={query.bdm_tables}
-          valueField="_id"
+          value={query.table}
+          valueField="slug"
           displayField="name"
           fieldName="Tabelas tratadas"
           bdPlus={true}
           isHovering={false}
           onChange={(id) => {
-            pushQuery("bdm_tables", id)
+            pushQuery("table", id)
           }}
         />
 
         <FilterAccordion
           alwaysOpen={true}
           choices={rawDataSources}
-          value={query.raw_data_sources}
+          value={query.raw_data_source}
           valueField="_id"
           displayField="name"
           fieldName="Fontes originais"
           isHovering={false}
           onChange={(id) => {
-            pushQuery("raw_data_sources", id)
+            pushQuery("raw_data_source", id)
           }}
         />
 
@@ -178,7 +178,7 @@ export default function DatasetResource({
           alwaysOpen={true}
           choices={informationRequests}
           value={query.information_request}
-          valueField="_id"
+          valueField="number"
           displayField="number"
           fieldName="Pedidos LAI"
           isHovering={false}

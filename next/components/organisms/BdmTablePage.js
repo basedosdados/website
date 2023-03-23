@@ -35,13 +35,13 @@ import TwitterIcon from "../../public/img/icons/twitterIcon";
 import FileIcon from "../../public/img/icons/fileIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 
-export default function BdmTablePage({ id }) {
+export default function BdmTablePage({ slug }) {
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState({})
 
   const feathBdmTable = async () => {
     try {
-      const result = await getBdmTable(id)
+      const result = await getBdmTable(slug)
       return setResource(result)
     } catch (error) {
       setIsError(error)
@@ -51,7 +51,7 @@ export default function BdmTablePage({ id }) {
 
   useEffect(() => {
     feathBdmTable()
-  },[id])
+  },[slug])
 
   const AddInfoTextBase = ({title, text, info, children, ...style}) => {
     return (

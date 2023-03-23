@@ -28,13 +28,13 @@ import UserIcon from "../../public/img/icons/userIcon";
 import ExclamationIcon from "../../public/img/icons/exclamationIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
-export default function InformationRequestPage({ id }) {
+export default function InformationRequestPage({ number }) {
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState({})
 
   const featchInformationRequest = async () => {
     try {
-      const result = await getInformationRequest(id)
+      const result = await getInformationRequest(number)
       return setResource(result)
     } catch (error) {
       setIsError(error)
@@ -44,7 +44,7 @@ export default function InformationRequestPage({ id }) {
 
   useEffect(() => {
     featchInformationRequest()
-  },[id])
+  },[number])
 
 
   const AddInfoTextBase = ({title, text, children, ...style}) => {

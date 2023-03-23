@@ -123,6 +123,11 @@ body {
 .pagination .disabled a {
   cursor: default !important;
   color: #dedfe0;
+  pointer-events: none;
+}
+
+.pagination .active a{
+  color: white;
 }
 
 .swiper {

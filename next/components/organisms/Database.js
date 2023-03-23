@@ -175,86 +175,83 @@ export function Database({
               alignItems={useCheckMobile() && "flex-start"}
               spacing={useCheckMobile() ? 0 : 5}
             >
-              <HStack
-                spacing={1}
-                cursor={tableNum.length > 0 ? "pointer" : "normal"}
-                _hover={tableNum.length > 0 && {opacity: "0.7"}}
-                onClick={() => {
-                  if(tableNum.length > 0) return window.location.replace(`/dataset/${id}?bdm_table`)
-                }}
-              >
-                <DataBaseSolidIcon
-                  alt="tabelas tratadas"
-                  width="15px"
-                  height="15px"
-                  fill={tableNum.length === 0 ? "#C4C4C4" : "#2B8C4D"}
-                />
-                <Text
-                  marginLeft="8px !important"
-                  whiteSpace="nowrap"
-                  color={tableNum.length === 0 ? "#C4C4C4" : "#2B8C4D"}
-                  fontSize="16px"
-                  fontWeight="500"
-                  letterSpacing="0px"
-                  fontFamily="Ubuntu"
+              <a href={tableNum.length > 0 && `/dataset/${id}?table=${tableNum[0]?.slug}`}>
+                <HStack
+                  spacing={1}
+                  cursor={tableNum.length > 0 ? "pointer" : "normal"}
+                  _hover={tableNum.length > 0 && {opacity: "0.7"}}
                 >
-                  {tableNum.length}{" "}
-                  {tableNum.length === 1 ? "tabela tratada" : "tabelas tratadas"}
-                </Text>
-                <BDLogoPlusImage
-                  widthImage="38px"
-                  empty={tableNum.length === 0}
-                />
-              </HStack>
+                  <DataBaseSolidIcon
+                    alt="tabelas tratadas"
+                    width="15px"
+                    height="15px"
+                    fill={tableNum.length === 0 ? "#C4C4C4" : "#2B8C4D"}
+                  />
+                  <Text
+                    marginLeft="8px !important"
+                    whiteSpace="nowrap"
+                    color={tableNum.length === 0 ? "#C4C4C4" : "#2B8C4D"}
+                    fontSize="16px"
+                    fontWeight="500"
+                    letterSpacing="0px"
+                    fontFamily="Ubuntu"
+                  >
+                    {tableNum.length}{" "}
+                    {tableNum.length === 1 ? "tabela tratada" : "tabelas tratadas"}
+                  </Text>
+                  <BDLogoPlusImage
+                    widthImage="38px"
+                    empty={tableNum.length === 0}
+                  />
+                </HStack>
+              </a>
+              
+              <a href={externalLinkNum.length > 0 && `/dataset/${id}?raw_data_source=${externalLinkNum[0]?._id}`}>
+                <HStack
+                  cursor={externalLinkNum.length > 0 ? "pointer" : "normal"}
+                  _hover={externalLinkNum.length > 0 && {opacity: "0.7"}}
+                >
+                  <LinkIcon
+                    width="15px"
+                    height="15px"
+                    fill={externalLinkNum.length === 0 ? "#C4C4C4" : "#2B8C4D"}
+                  />
+                  <Text
+                    color={externalLinkNum.length === 0 ? "#C4C4C4" : "#2B8C4D"}
+                    fontSize="16px"
+                    fontWeight="500"
+                    letterSpacing="0px"
+                    fontFamily="Ubuntu"
+                  >
+                    {externalLinkNum.length}{" "}
+                    {externalLinkNum.length === 1 ? "fonte original" : "fontes originais"}
+                  </Text>
+                </HStack>
+              </a>
 
-              <HStack
-                cursor={externalLinkNum.length > 0 ? "pointer" : "normal"}
-                _hover={externalLinkNum.length > 0 && {opacity: "0.7"}}
-                onClick={() => {
-                  if(externalLinkNum.length > 0) return window.location.replace(`/dataset/${id}?external_link`)
-                }}
-              >
-                <LinkIcon
-                  width="15px"
-                  height="15px"
-                  fill={externalLinkNum.length === 0 ? "#C4C4C4" : "#2B8C4D"}
-                />
-                <Text
-                  color={externalLinkNum.length === 0 ? "#C4C4C4" : "#2B8C4D"}
-                  fontSize="16px"
-                  fontWeight="500"
-                  letterSpacing="0px"
-                  fontFamily="Ubuntu"
+              <a href={informationRequestNum.length > 0 && `/dataset/${id}?information_request=${informationRequestNum[0]?.number}`}>
+                <HStack
+                  cursor={informationRequestNum.length > 0 ? "pointer" : "normal"}
+                  _hover={informationRequestNum.length > 0 && {opacity: "0.7"}}
                 >
-                  {externalLinkNum.length}{" "}
-                  {externalLinkNum.length === 1 ? "fonte original" : "fontes originais"}
-                </Text>
-              </HStack>
-
-              <HStack
-                cursor={informationRequestNum.length > 0 ? "pointer" : "normal"}
-                _hover={informationRequestNum.length > 0 && {opacity: "0.7"}}
-                onClick={() => {
-                  if(informationRequestNum.length > 0) return window.location.replace(`/dataset/${id}?information_request`)
-                }}
-              >
-                <InfoArrowIcon
-                  alt="pedidos Lai"
-                  width="15px"
-                  height="15px"
-                  fill={informationRequestNum.length === 0 ? "#C4C4C4" : "#2B8C4D"}
-                />
-                <Text
-                  color={informationRequestNum.length === 0 ? "#C4C4C4" : "#2B8C4D"}
-                  fontSize="16px"
-                  fontWeight="500"
-                  letterSpacing="0px"
-                  fontFamily="Ubuntu"
-                >
-                  {informationRequestNum.length}{" "}
-                  {informationRequestNum.length === 1 ? "pedido LAI" : "pedidos LAI"}
-                </Text>
-              </HStack>
+                  <InfoArrowIcon
+                    alt="pedidos Lai"
+                    width="15px"
+                    height="15px"
+                    fill={informationRequestNum.length === 0 ? "#C4C4C4" : "#2B8C4D"}
+                  />
+                  <Text
+                    color={informationRequestNum.length === 0 ? "#C4C4C4" : "#2B8C4D"}
+                    fontSize="16px"
+                    fontWeight="500"
+                    letterSpacing="0px"
+                    fontFamily="Ubuntu"
+                  >
+                    {informationRequestNum.length}{" "}
+                    {informationRequestNum.length === 1 ? "pedido LAI" : "pedidos LAI"}
+                  </Text>
+                </HStack>
+              </a>
             </HStack>
           </VStack>
         </VStack>
