@@ -36,9 +36,7 @@ import IpIcon from "../../public/img/icons/ipIcon";
 import CoinIcon from "../../public/img/icons/coinIcon";
 import ExclamationIcon from "../../public/img/icons/exclamationIcon";
 
-export default function RawDataSourcesPage({
-  id
-}) {
+export default function RawDataSourcesPage({ id }) {
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState({})
 
@@ -84,19 +82,36 @@ export default function RawDataSourcesPage({
   }
 
   const UpdateFrequency = () => {
-    const value = resource?.updateFrequency
-    if(value === undefined) return "Não listado"
+    const value = resource?.updates?.[0]
+    if(value === undefined || Object.keys(value).length === 0) return "Não listado"
 
-    if(value?.number >= 0 && value?.entity?.name) return `${value.number} ${value.entity.name}`
+    if(value?.frequency >= 0 && value?.entity?.name) return `${value.frequency} ${value.entity.name}`
     if(value?.entity?.name) return `${value.entity.name}`
 
     return "Não listado"
   }
 
   const ObservationLevel = () => {
-    const notFound = <SectionText marginRight="4px !important">Não listado</SectionText>
+    const notFound = <SectionText marginRight="4px !important">Nenhum nível da observação fornecido.</SectionText>
+    if(resource?.observationLevels === undefined || Object.keys(resource?.observationLevels).length === 0) return notFound
 
-    return notFound
+    let array = []
+    const keys = Object.keys(resource?.observationLevels)
+
+    keys.forEach((elm) => {
+      const value = resource?.observationLevels[elm]
+
+      const newValue = [value?.entity?.name || <Empty/>, value?.columns[0]?.name || <Empty/>]
+      array.push(newValue)
+    })
+
+    return (
+      <SimpleTable
+        headers={["Entidade","Colunas Correspondentes"]}
+        values={array}
+        valuesTable={{_first:{textTransform: "capitalize"}}}
+      />
+    )
   }
 
   const AddInfoTextBase = ({title, text, children, ...style}) => {
@@ -121,7 +136,10 @@ export default function RawDataSourcesPage({
   if(isError?.message?.length > 0 || resource === null || Object.keys(resource).length < 0) return <FourOhFour/>
 
   return (
-    <BaseResourcePage title={resource?.name} >
+    <BaseResourcePage
+      padding={useCheckMobile() ? "16px 0 0" : "16px 8px 0 0"}
+      title={resource?.name}
+    >
       <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Consulta aos dados</Subtitle>
         <DisclaimerBox width="100%">

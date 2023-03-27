@@ -35,13 +35,13 @@ import TwitterIcon from "../../public/img/icons/twitterIcon";
 import FileIcon from "../../public/img/icons/fileIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 
-export default function BdmTablePage({ slug }) {
+export default function BdmTablePage({ id }) {
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState({})
 
   const feathBdmTable = async () => {
     try {
-      const result = await getBdmTable(slug)
+      const result = await getBdmTable(id)
       return setResource(result)
     } catch (error) {
       setIsError(error)
@@ -51,7 +51,7 @@ export default function BdmTablePage({ slug }) {
 
   useEffect(() => {
     feathBdmTable()
-  },[slug])
+  },[id])
 
   const AddInfoTextBase = ({title, text, info, children, ...style}) => {
     return (
@@ -135,28 +135,58 @@ export default function BdmTablePage({ slug }) {
   }
 
   const PublishedOrDataCleanedBy = ({ resource }) => {
-    if(resource.name === "Ricardo Dahis") return <SectionText marginRight="4px !important">Equipe Dados</SectionText>
+    if(resource.firstName === "Ricardo" &&  resource.lastName === "Dahis") return <SectionText marginRight="4px !important">Equipe Dados</SectionText>
 
     return (
       <>
-        {resource?.name ? <SectionText marginRight="4px !important">{resource.name}</SectionText> : <SectionText marginRight="4px !important">Não listado</SectionText>}
+        {resource?.firstName && resource?.lastName ? <SectionText marginRight="4px !important">{`${resource.firstName} ${resource.lastName}`}</SectionText> : <SectionText marginRight="4px !important">Não listado</SectionText>}
         {resource?.email && <EmailIcon {...keyIcons({email : resource.email})}/>}
-        {resource?.github_user && <GithubIcon {...keyIcons({github_user : resource.github_user})}/>}
-        {resource?.ckan_user && <CkanIcon {...keyIcons({ckan_user : resource.ckan_user})}/>}
+        {resource?.github && <GithubIcon {...keyIcons({github_user : resource.github})}/>}
         {resource?.website && <WebIcon {...keyIcons({website : resource.website})}/>}
-        {resource?.twitter_user && <TwitterIcon {...keyIcons({twitter_user : resource.twitter_user})}/>}
+        {resource?.twitter && <TwitterIcon {...keyIcons({twitter_user : resource.twitter_user})}/>}
       </>
     )
   }
 
   const UpdateFrequency = () => {
-    const value = resource?.updateFrequency
-    if(value === undefined) return "Não listado"
+    const value = resource?.updates?.[0]
+    if(value === undefined || Object.keys(value).length === 0) return "Não listado"
 
-    if(value?.number >= 0 && value?.entity?.name) return `${value.number} ${value.entity.name}`
+    if(value?.frequency >= 0 && value?.entity?.name) return `${value.frequency} ${value.entity.name}`
     if(value?.entity?.name) return `${value.entity.name}`
 
     return "Não listado"
+  }
+
+  const Empty = () => {
+    return (
+      <p style={{margin:"0", fontWeight:"500", color:"#C4C4C4"}}>
+        Não listado
+      </p>
+    )
+  }
+
+  const ObservationLevel = () => {
+    const notFound = <SectionText marginRight="4px !important">Nenhum nível da observação fornecido.</SectionText>
+    if(resource?.observationLevels === undefined || Object.keys(resource?.observationLevels).length === 0) return notFound
+
+    let array = []
+    const keys = Object.keys(resource?.observationLevels)
+
+    keys.forEach((elm) => {
+      const value = resource?.observationLevels[elm]
+
+      const newValue = [value?.entity?.name || <Empty/>, value?.columns[0]?.name || <Empty/>]
+      array.push(newValue)
+    })
+
+    return (
+      <SimpleTable
+        headers={["Entidade","Colunas Correspondentes"]}
+        values={array}
+        valuesTable={{_first:{textTransform: "capitalize"}}}
+      />
+    )
   }
 
   if(isError?.message?.length > 0 || resource === null || Object.keys(resource).length < 0) return <FourOhFour/>
@@ -196,7 +226,7 @@ export default function BdmTablePage({ slug }) {
         <Subtitle>
           Nível da observação
         </Subtitle>
-        <SectionText>Nenhum nível da observação fornecido.</SectionText>
+        <ObservationLevel/>
       </VStack>
 
       <VStack width="100%" spacing={5} alignItems="flex-start">
@@ -240,7 +270,6 @@ export default function BdmTablePage({ slug }) {
             />
           </GridItem>
 
-          {/* Publicação por ausente */}
           <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <UserIcon alt="publicação por" width="22px" height="22px" fill="#D0D0D0"/>
             <Box display="block" gridGap="8px">
@@ -254,13 +283,12 @@ export default function BdmTablePage({ slug }) {
               >Publicação por</Text>
               <Box display="flex" alignItems="center" gridGap="4px">
                 <PublishedOrDataCleanedBy
-                  resource={resource?.published_by || "Não listado"}
+                  resource={resource?.publishedBy || "Não listado"}
                 />
               </Box>
             </Box>
           </GridItem>
 
-          {/* Tratamento por ausente */}
           <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
             <UserIcon alt="publicação por" width="22px" height="22px" fill="#D0D0D0"/>
             <Box display="block" gridGap="8px">
@@ -274,7 +302,7 @@ export default function BdmTablePage({ slug }) {
               >Tratamento por</Text>
               <Box display="flex" alignItems="center" gridGap="4px">
                 <PublishedOrDataCleanedBy
-                  resource={resource?.data_cleaned_by || "Não listado"}
+                  resource={resource?.dataCleanedBy || "Não listado"}
                 />
               </Box>
             </Box>

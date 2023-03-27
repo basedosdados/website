@@ -28,13 +28,13 @@ import UserIcon from "../../public/img/icons/userIcon";
 import ExclamationIcon from "../../public/img/icons/exclamationIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
-export default function InformationRequestPage({ number }) {
+export default function InformationRequestPage({ id }) {
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState({})
 
   const featchInformationRequest = async () => {
     try {
-      const result = await getInformationRequest(number)
+      const result = await getInformationRequest(id)
       return setResource(result)
     } catch (error) {
       setIsError(error)
@@ -44,7 +44,7 @@ export default function InformationRequestPage({ number }) {
 
   useEffect(() => {
     featchInformationRequest()
-  },[number])
+  },[id])
 
 
   const AddInfoTextBase = ({title, text, children, ...style}) => {
@@ -133,7 +133,10 @@ export default function InformationRequestPage({ number }) {
   if(isError?.message?.length > 0 || resource === null || Object.keys(resource).length < 0) return <FourOhFour/>
 
   return (
-    <BaseResourcePage title={`Número do pedido: ${resource?.number}`} >
+    <BaseResourcePage
+      padding={useCheckMobile() ? "16px 0 0" : "16px 8px 0 0"}
+      title={`Número do pedido: ${resource?.number}`}
+    >
       <VStack 
         marginTop="0 !important" 
         width="100%" 
@@ -266,7 +269,7 @@ export default function InformationRequestPage({ number }) {
               <UserIcon alt="Pedido feito por" width="22px" height="22px" fill="#D0D0D0"/>
               <AddInfoTextBase
                 title="Pedido feito por"
-                text={resource?.requestedBy?.name || "Não listado"}
+                text={`${resource?.startedBy?.firstName} ${resource?.startedBy?.lastName}` || "Não listado"}
               />
             </GridItem>
           </Grid>

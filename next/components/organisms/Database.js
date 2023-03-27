@@ -175,7 +175,7 @@ export function Database({
               alignItems={useCheckMobile() && "flex-start"}
               spacing={useCheckMobile() ? 0 : 5}
             >
-              <a href={tableNum.length > 0 && `/dataset/${id}?table=${tableNum[0]?.slug}`}>
+              <a href={tableNum.length > 0 && `/dataset/${id}?table=${tableNum[0]?._id}`}>
                 <HStack
                   spacing={1}
                   cursor={tableNum.length > 0 ? "pointer" : "normal"}
@@ -229,7 +229,7 @@ export function Database({
                 </HStack>
               </a>
 
-              <a href={informationRequestNum.length > 0 && `/dataset/${id}?information_request=${informationRequestNum[0]?.number}`}>
+              <a href={informationRequestNum.length > 0 && `/dataset/${id}?information_request=${informationRequestNum[0]?._id}`}>
                 <HStack
                   cursor={informationRequestNum.length > 0 ? "pointer" : "normal"}
                   _hover={informationRequestNum.length > 0 && {opacity: "0.7"}}

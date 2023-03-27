@@ -114,15 +114,15 @@ export default function DatasetResource({
     const queryParams = new URLSearchParams(window.location.search)
 
     if(queryParams.toString().length === 0) {
-      if(dataset_tables.length > 0) return pushQuery("table", dataset_tables[0]?.slug)
+      if(dataset_tables.length > 0) return pushQuery("table", dataset_tables[0]?._id)
       if(raw_data_sources.length > 0) return pushQuery("raw_data_source", raw_data_sources[0]?._id)
-      if(information_request.length > 0) return pushQuery("information_request", information_request[0]?.number)
+      if(information_request.length > 0) return pushQuery("information_request", information_request[0]?._id)
     }
   },[dataset])
 
   function SwitchResource({route}) {
     if (route.hasOwnProperty("table"))
-      return <BdmTablePage slug={route.table}/>
+      return <BdmTablePage id={route.table}/>
     if (route.hasOwnProperty("raw_data_source"))
       return <RawDataSourcesPage id={route.raw_data_source}/>
     if (route.hasOwnProperty("information_request"))
@@ -151,7 +151,7 @@ export default function DatasetResource({
           alwaysOpen={true}
           choices={tables}
           value={query.table}
-          valueField="slug"
+          valueField="_id"
           displayField="name"
           fieldName="Tabelas tratadas"
           bdPlus={true}
@@ -178,7 +178,7 @@ export default function DatasetResource({
           alwaysOpen={true}
           choices={informationRequests}
           value={query.information_request}
-          valueField="number"
+          valueField="_id"
           displayField="number"
           fieldName="Pedidos LAI"
           isHovering={false}

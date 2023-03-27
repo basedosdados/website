@@ -200,7 +200,7 @@ export default function DatasetPage ({
               />
               Metadados
             </GreenTab> */}
-            {dataset?.slug === "br-ibge-ipca" && <GreenTab>Painéis</GreenTab>}
+            {dataset?.slug === "br_ibge_ipca" && <GreenTab>Painéis</GreenTab>}
           </TabList>
           <TabPanels>
             <TabPanel padding="0px">
@@ -216,7 +216,7 @@ export default function DatasetPage ({
             </TabPanel> 
             */}
 
-            {dataset?.slug === "br-ibge-ipca" &&
+            {dataset?.slug === "br_ibge_ipca" &&
               <TabPanel padding="0px">
                 {/* <DashboardsPage
                   dataset={dataset}
@@ -245,7 +245,7 @@ export default function DatasetPage ({
         ]}
       />
 
-      <Stack display={query?.hasOwnProperty("bdm_tables") !== "none"}>
+      <Stack display={query?.hasOwnProperty("table") !== "none"}>
         <script key="sql" src="/vendor/prism.js"/>
         <link rel="stylesheet" href="/vendor/prism.css" data-noprefix />
       </Stack>

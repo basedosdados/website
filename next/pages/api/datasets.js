@@ -103,14 +103,14 @@ export async function getAllDatasets(offset) {
   }
 }
 
-export async function getShowDataset(slug) {
+export async function getShowDataset(id) {
   const res = await axios({
     url: API_URL,
     method: "POST",
     data: {
       query: `
       query {
-        allDataset (slug: "${slug}") {
+        allDataset (id: "${id}") {
           edges {
             node {
               _id
@@ -181,14 +181,14 @@ export async function getShowDataset(slug) {
   }
 }
 
-export async function getBdmTable(slug) {
+export async function getBdmTable(id) {
   const res = await axios({
     url: API_URL,
     method: "POST",
     data: {
       query: `
       query {
-        allTable (slug: "${slug}") {
+        allTable (id: "${id}") {
           edges {
             node {
               _id
@@ -235,12 +235,22 @@ export async function getBdmTable(slug) {
                 name
                 url
               }
-              updateFrequency {
-                _id
-                number
-                entity {
-                  _id
-                  name
+              updates {
+                edges {
+                  node {
+                    _id
+                    frequency
+                    lag
+                    latest
+                    entity {
+                      _id
+                      name
+                      category {
+                        _id
+                        name
+                      }
+                    }
+                  }
                 }
               }
               pipeline {
@@ -258,10 +268,36 @@ export async function getBdmTable(slug) {
               compressedFileSize
               numberRows
               numberColumns
+              publishedBy {
+                _id
+                firstName
+                lastName
+                website
+                twitter
+                github
+                email
+              }
+              dataCleanedBy {
+                _id
+                firstName
+                lastName
+                website
+                twitter
+                github
+                email
+              }
               observationLevels {
                 edges {
                   node {
                     _id
+                    columns {
+                      edges {
+                        node {
+                          _id
+                          name
+                        }
+                      }
+                    }
                     entity {
                       _id
                       name
@@ -398,18 +434,36 @@ export async function getRawDataSources(id) {
               }
               containsStructureData
               containsApi
-              updateFrequency {
-                _id
-                entity {
-                  _id
-                  name
+              updates {
+                edges {
+                  node {
+                    _id
+                    frequency
+                    lag
+                    latest
+                    entity {
+                      _id
+                      name
+                      category {
+                        _id
+                        name
+                      }
+                    }
+                  }
                 }
-                number
               }
               observationLevels {
                 edges {
                   node {
                     _id
+                    columns {
+                      edges {
+                        node {
+                          _id
+                          name
+                        }
+                      }
+                    }
                     entity {
                       _id
                       name
@@ -483,25 +537,43 @@ export async function getRawDataSources(id) {
   }
 }
 
-export async function getInformationRequest(number) {
+export async function getInformationRequest(id) {
   const res = await axios({
     url: API_URL,
     method: "POST",
     data: {
       query: `
       query {
-        allInformationrequest (number: "${number}"){
+        allInformationrequest (id: "${id}"){
           edges {
             node {
               _id
               number
               url
               dataUrl
-              origin
               observations
-              updateFrequency {
-                _id
-                number
+              startedBy {
+                id
+                firstName
+                lastName
+              }
+              updates {
+                edges {
+                  node {
+                    _id
+                    frequency
+                    lag
+                    latest
+                    entity {
+                      _id
+                      name
+                      category {
+                        _id
+                        name
+                      }
+                    }
+                  }
+                }
               }
               status {
                 _id

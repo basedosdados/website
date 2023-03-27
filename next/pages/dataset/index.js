@@ -453,7 +453,7 @@ export default function SearchPage({ pages, datasets }) {
   const DatabaseCard = ({ data }) => {
     return (
       <Database
-        id={data.slug}
+        id={data._id}
         name={data?.name || "Conjunto sem nome"}
         organization={data?.organization}
         bdmTable={data?.tables}
