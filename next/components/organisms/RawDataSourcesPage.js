@@ -91,6 +91,14 @@ export default function RawDataSourcesPage({ id }) {
     return "Não listado"
   }
 
+  const Empty = () => {
+    return (
+      <p style={{margin:"0", fontWeight:"500", color:"#C4C4C4"}}>
+        Não listado
+      </p>
+    )
+  }
+
   const ObservationLevel = () => {
     const notFound = <SectionText marginRight="4px !important">Nenhum nível da observação fornecido.</SectionText>
     if(resource?.observationLevels === undefined || Object.keys(resource?.observationLevels).length === 0) return notFound
