@@ -119,11 +119,23 @@ export function TextPix ({ title, text }) {
 }
 
 export default function DataInformationQuery ({ resource }) {
-  // const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${resource?.dataset?._id}/${resource?.name}/${resource?._id}.csv.gz`
-  const queryName = `${resource?.dataset?.slug}.${resource?.slug}`
+  const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${organizationQuery("_")}_${resource?.dataset?.slug}/${resource?.slug}/${resource?.slug}.csv.gz`
+  const queryBQ = `${organizationQuery(".")}.${resource?.dataset?.slug}`
   const { hasCopied, onCopy } = useClipboard("42494318000116")
   const [tabIndex, setTabIndex] = useState(0)
   const [downloadNotAllowed, setDownloadNotAllowed] = useState(true)
+
+  function organizationQuery(join) {
+    let areaOrganization = resource?.dataset?.organization?.area?.slug
+    const organization = resource?.dataset?.organization?.slug
+
+    if(areaOrganization === "sa_br") areaOrganization = "br"
+    if(areaOrganization === "world") areaOrganization = "mundo"
+
+    if(areaOrganization !== undefined) return `${areaOrganization}${join}${organization}`
+
+    return organization
+  }
 
   useEffect(() => {
     if (window) window?.Prism?.highlightAll()
@@ -134,8 +146,9 @@ export default function DataInformationQuery ({ resource }) {
   }, [resource])
 
   const handlerDownload = () => {
-    if(downloadNotAllowed === true) return null
-    return window.open(resource?.rawDataUrl)
+    if(!downloadNotAllowed === true) return null
+
+    return window.open(downloadUrl)
   }
 
   return (
@@ -229,13 +242,13 @@ export default function DataInformationQuery ({ resource }) {
                 color="#42B0FF"
                 target="_blank"
                 textDecoration="none"
-                href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${resource?.dataset?._id}&t=${resource?._id}&page=table`}
+                href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${organizationQuery("_")}_${resource?.dataset?.slug}&t=${resource.slug}&page=table`}
               > clique aqui
               </Link> para ir ao <i>datalake</i> no BigQuery e cole no Editor de Consultas:
             </SectionText>
 
             <PrismCodeHighlight language="sql">
-              {`SELECT * FROM \`basedosdados.${queryName}\` LIMIT 100`}
+              {`SELECT * FROM \`basedosdados.${queryBQ}\` LIMIT 100`}
             </PrismCodeHighlight>
 
             <BoxBigQueryGoogle
@@ -281,7 +294,7 @@ library("basedosdados")
 set_billing_id("<YOUR_PROJECT_ID>")
 
 # Para carregar o dado direto no R
-query <- bdplyr("${queryName}")
+query <- bdplyr("${queryBQ}")
 df <- bd_collect(query)`}
             </PrismCodeHighlight>
 

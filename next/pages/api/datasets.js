@@ -198,6 +198,14 @@ export async function getBdmTable(id) {
               dataset {
                 _id
                 slug
+                organization {
+                  _id
+                  slug
+                  area {
+                    _id
+                    slug
+                  }
+                }
               }
               coverages {
                 edges {
