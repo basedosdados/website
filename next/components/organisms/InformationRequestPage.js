@@ -17,7 +17,7 @@ import RoundedButton from "../atoms/RoundedButton";
 import TemporalCoverage from "../atoms/TemporalCoverageDisplay";
 import BaseResourcePage from "../molecules/BaseResourcePage";
 import { DisclaimerBox } from "../molecules/DisclaimerBox";
-import FourOhFour from "../templates/404";
+import FourOFour from "../templates/404";
 
 import {
   getInformationRequest
@@ -130,7 +130,7 @@ export default function InformationRequestPage({ id }) {
     )
   }
 
-  if(isError?.message?.length > 0 || resource === null || Object.keys(resource).length < 0) return <FourOhFour/>
+  if(isError?.message?.length > 0 || resource === null || Object.keys(resource).length < 0) return <FourOFour/>
 
   return (
     <BaseResourcePage

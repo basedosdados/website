@@ -2,9 +2,9 @@ import {
   Center,
   Text
 } from "@chakra-ui/react";
-import FourOhFourImage from "../../public/img/fourOhFour";
+import FourOFourImage from "../../public/img/fourOFour";
 
-export default function FourOhFour({ children, ...props }) {
+export default function FourOFour({ children, ...props }) {
   return (
     <Center
       width="100%"
@@ -13,7 +13,7 @@ export default function FourOhFour({ children, ...props }) {
       flexDirection="column"
       {...props}
     >
-      <FourOhFourImage
+      <FourOFourImage
         transform="translateX(-26px)"
         widthImage="320px"
         heightImage="320px"

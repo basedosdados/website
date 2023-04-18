@@ -25,7 +25,7 @@ import DatasetResource from "../../components/organisms/DatasetResource";
 import { MetadataPage } from "../../components/organisms/MetadataPage";
 import { MainPageTemplate } from "../../components/templates/main";
 
-import FourOhFour from "../../components/templates/404";
+import FourOFour from "../../components/templates/404";
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
 import DocIcon from "../../public/img/icons/docIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
@@ -68,7 +68,7 @@ export default function DatasetPage ({
   dataset,
 }) {
 
-  if(dataset === null || Object.keys(dataset).length === 0) return (<MainPageTemplate><FourOhFour/></MainPageTemplate>)
+  if(dataset === null || Object.keys(dataset).length === 0) return (<MainPageTemplate><FourOFour/></MainPageTemplate>)
 
   const [tabIndex, setTabIndex] = useState(0)
   const router = useRouter()

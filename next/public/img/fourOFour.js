@@ -1,6 +1,6 @@
 import { Icon, Box } from '@chakra-ui/react'
 
-const FourOhFour = ({widthImage = "256px", heightImage="187px", ...style}) => (
+const FourOFour = ({widthImage = "256px", heightImage="187px", ...style}) => (
   <Box 
     display="flex"
     alignItems="center"
@@ -79,4 +79,4 @@ const FourOhFour = ({widthImage = "256px", heightImage="187px", ...style}) => (
   </Box>
 )
 
-export default FourOhFour
+export default FourOFour

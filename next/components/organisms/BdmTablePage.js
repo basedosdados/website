@@ -16,7 +16,7 @@ import TemporalCoverage from "../atoms/TemporalCoverageDisplay";
 import ColumnDatasets from "../molecules/ColumnDatasets";
 import BaseResourcePage from "../molecules/BaseResourcePage";
 import DataInformationQuery from "../molecules/DataInformationQuery";
-import FourOhFour from "../templates/404";
+import FourOFour from "../templates/404";
 
 import {
   getBdmTable
@@ -189,7 +189,7 @@ export default function BdmTablePage({ id }) {
     )
   }
 
-  if(isError?.message?.length > 0 || resource === null || Object.keys(resource).length < 0) return <FourOhFour/>
+  if(isError?.message?.length > 0 || resource === null || Object.keys(resource).length < 0) return <FourOFour/>
 
   return (
     <BaseResourcePage
