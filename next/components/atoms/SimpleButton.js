@@ -1,6 +1,6 @@
 import { Link } from "@chakra-ui/react";
 
-export function SimpleButton({ onClick, children, isActive, ...props }) {
+export default function SimpleButton({ onClick, children, isActive, ...props }) {
   return (
     <Link
       display="flex"

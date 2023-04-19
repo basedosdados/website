@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 
-import { SimpleButton } from "../atoms/SimpleButton";
+import SimpleButton from "../atoms/SimpleButton";
 import { FilterAccordion } from "../atoms/FilterAccordion";
 import { LoadingSpin } from "../atoms/Loading";
 
