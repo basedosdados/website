@@ -7,6 +7,7 @@ import {
 import { useState } from "react";
 import Input from "../../components/atoms/SimpleInput";
 import Button from "../../components/atoms/RoundedButton";
+import ButtonSimple from "../../components/atoms/SimpleButton";
 import { MainPageTemplate } from "../../components/templates/main";
 
 export default function Login() {
@@ -45,42 +46,62 @@ export default function Login() {
         display="flex"
         justifyContent="center"
         width="450px"
-        height="500px"
+        height="100%"
         padding="40px"
         boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
       >
-          <FormControl isInvalid={!!errors.email}>
-            <FormLabel>Email</FormLabel>
-            <Input
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="exemple@email.com"
-            />
-            <FormErrorMessage>{errors.email}</FormErrorMessage>
-          </FormControl>
+        <FormControl isInvalid={!!errors.email}>
+          <FormLabel
+            color="#252A32"
+            fontFamily="ubuntu"
+            letterSpacing="0.2px"
+            lineHeight="24px"
+          > Email</FormLabel>
+          <Input
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            placeholder="exemple@email.com"
+          />
+          <FormErrorMessage>{errors.email}</FormErrorMessage>
+        </FormControl>
 
-          <FormControl isInvalid={!!errors.password}>
-            <FormLabel>Senha</FormLabel>
-            <Input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              placeholder="Entre com sua senha"
-            />
-            <FormErrorMessage>{errors.password}</FormErrorMessage>
-          </FormControl>
+        <FormControl isInvalid={!!errors.password}>
+          <FormLabel
+            color="#252A32"
+            fontFamily="ubuntu"
+            letterSpacing="0.2px"
+            lineHeight="24px"
+          > Senha</FormLabel>
+          <Input
+            type="password"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            placeholder="Entre com sua senha"
+          />
+          <FormErrorMessage>{errors.password}</FormErrorMessage>
+        </FormControl>
 
-          <Button
-            onClick={(e) => handleSubmit(e)}
-            borderRadius="8px"
-            marginTop="24px !important"
-          >
-            Entrar
-          </Button>
+        <Stack>
+          <ButtonSimple
+            justifyContent="end"
+            fontWeight="400"
+            color="#42B0FF"
+            _hover={{opacity: "0.6"}}
+          >Esqueceu a senha?
+          </ButtonSimple>
+        </Stack>
+
+        <Button
+          onClick={(e) => handleSubmit(e)}
+          borderRadius="8px"
+          marginTop="24px !important"
+        >
+          Entrar
+        </Button>
       </Stack>
     </MainPageTemplate>
   )
