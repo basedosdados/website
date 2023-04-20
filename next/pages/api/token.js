@@ -2,26 +2,23 @@ import axios from "axios";
 
 const API_URL= process.env.NEXT_PUBLIC_API_URL
 
-export async function getToken({ user, password }) {
-  const res = await axios({
-    url: API_URL,
-    method: "POST",
-    data: {
-      query: `
-      mutation {
-        tokenAuth(
-            email: ${user},
-            password: ${password},
-        ) {
-          payload,
-          refreshExpiresIn,
-          token
-        }
-    }`
-    }
-  })
+export async function getToken({ email, password }) {
   try {
-    const data = res.data.data.tokenAuth
+    const res = await axios({
+      url: API_URL,
+      method: "POST",
+      data: {
+        query: `
+        mutation {
+          tokenAuth ( email: "${email}", password: "${password}" ) {
+            payload,
+            refreshExpiresIn,
+            token
+          }
+        }`
+      }
+    })
+    const data = res.data
     return data
   } catch (error) {
     console.error(error)
@@ -35,10 +32,10 @@ export async function validateToken({ token }) {
     data: {
       query: `
       mutation {
-        verifyToken ( token: ${token} ) {
+        verifyToken ( token: "${token}" ) {
           payload,
         }
-    }`
+      }`
     }
   })
   try {
@@ -56,12 +53,12 @@ export async function refreshToken({ token }) {
     data: {
       query: `
       mutation {
-        refreshToken ( token: ${token} ) {
+        refreshToken ( token: "${token}" ) {
           payload,
           refreshExpiresIn,
           token
         }
-    }`
+      }`
     }
   })
   try {

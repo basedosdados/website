@@ -39,7 +39,7 @@ export default function BdmTablePage({ id }) {
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState({})
 
-  const feathBdmTable = async () => {
+  const fetchBdmTable = async () => {
     try {
       const result = await getBdmTable(id)
       return setResource(result)
@@ -50,7 +50,7 @@ export default function BdmTablePage({ id }) {
   }
 
   useEffect(() => {
-    feathBdmTable()
+    fetchBdmTable()
   },[id])
 
   const AddInfoTextBase = ({title, text, info, children, ...style}) => {
