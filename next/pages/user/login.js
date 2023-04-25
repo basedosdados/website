@@ -51,7 +51,7 @@ export default function Login() {
 
   const fetchToken = async ({ email, password }) => {
     const result = await getToken({email, password})
-    if(result?.errors.length > 0) return setErrors({login:"Email ou senha inválida"})
+    if(result?.errors?.length > 0) return setErrors({login:"Email ou senha inválida"})
 
     localStorage.setItem("token_user", result.data.tokenAuth.token)
   }
