@@ -8,11 +8,12 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 
-import { getToken } from "../api/token";
+import { getToken } from "../api/user";
 
 import Input from "../../components/atoms/SimpleInput";
 import Button from "../../components/atoms/RoundedButton";
 import ButtonSimple from "../../components/atoms/SimpleButton";
+import SectionText from "../../components/atoms/SectionText";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
@@ -49,8 +50,10 @@ export default function Login() {
   }
 
   const fetchToken = async ({ email, password }) => {
-    const result = await getToken(email, password)
+    const result = await getToken({email, password})
     if(result?.errors.length > 0) return setErrors({login:"Email ou senha inválida"})
+
+    localStorage.setItem("token_user", result.data.tokenAuth.token)
   }
 
   return (
@@ -70,6 +73,7 @@ export default function Login() {
             fontFamily="lato"
             borderRadius="8px"
             padding="8px"
+            marginBottom="24px"
           >
             <AlertIcon />
             {errors.login}
@@ -133,12 +137,33 @@ export default function Login() {
 
         <Stack>
           <ButtonSimple
-            justifyContent="end"
+            justifyContent="start"
             fontWeight="400"
             color="#42B0FF"
             _hover={{opacity: "0.6"}}
+            onClick={() => window.open("./password-recovery", "_self")}
           >Esqueceu a senha?
           </ButtonSimple>
+
+          <SectionText
+            width="100%"
+            display="flex"
+            flexDirection="row"
+            fontWeight="500"
+            fontSize="14px"
+            fontFamily="ubuntu"
+          >
+            Não tem uma conta?
+            <ButtonSimple
+              width="none"
+              justifyContent="start"
+              color="#42B0FF"
+              _hover={{opacity: "0.6"}}
+              marginLeft="2px"
+              onClick={() => window.open("./register", "_self")}
+            >{" "}cadastre-se
+            </ButtonSimple>
+          </SectionText>
         </Stack>
 
         <Button
