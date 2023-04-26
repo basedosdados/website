@@ -6,6 +6,7 @@ class MeasurementUnitEnum(AttrEnum):
     
     # distance
     kilometer   = {"label": "km"}
+    decameter   = {"label": "dam"}
     meter       = {"label": "m"}
     centimeter  = {"label": "cm"}
     mile        = {"label": "mi"}
@@ -31,8 +32,6 @@ class MeasurementUnitEnum(AttrEnum):
     barrel   = {"label": "barril"}
     boe      = {"label": "barril de óleo equivalente"}
     toe      = {"label": "tonelada de óleo equivalente"}
-
-
     # energy
     watt           = {"label": "W"}
     kilowatt       = {"label": "kW"}
