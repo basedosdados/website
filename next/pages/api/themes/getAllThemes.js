@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL= process.env.NEXT_PUBLIC_API_URL
 
-export async function getAllOrganization() {
+export default async function getAllThemes() {
   try {
     const res = await axios({
       url: API_URL,
@@ -10,13 +10,11 @@ export async function getAllOrganization() {
       data: {
         query: `
         query {
-          allOrganization {
+          allTheme {
             edges {
               node {
-                _id
                 slug
                 name
-                website
               }
             }
           }
@@ -25,7 +23,7 @@ export async function getAllOrganization() {
         variables: null
       }
     })
-    const data = res.data.data.allOrganization.edges
+    const data = res?.data?.data?.allTheme?.edges
     return data
   } catch (error) {
     console.error(error)

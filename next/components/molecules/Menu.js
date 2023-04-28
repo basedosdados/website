@@ -347,7 +347,7 @@ export default function Menu({ pages = [] }) {
     },
     Serviços: {
       "Conheça os serviços" : "/servicos",
-      "Estudos de caso" : "/estudos-de-caso/fundacao-lemann"
+      "Estudos de caso" : "/estudos-de-caso"
     },
     Institucional: {
       "Quem somos": "/quem-somos",

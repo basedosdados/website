@@ -22,10 +22,7 @@ export default function DatabaseCard({
   tableNum,
   externalLinkNum,
   informationRequestNum,
-  updatedSince,
-  updatedAuthor,
   link,
-  isPlus = false,
 }) {
   const isMobile = useCheckMobile();
   const databaseInfo = [];
@@ -47,7 +44,7 @@ export default function DatabaseCard({
       color={tableNum === 0 ? "#C4C4C4" : "#42B0FF" }
       cursor="pointer"
       onClick={() => {
-        if(tableNum > 1) window.open(`${link}?bdm_table`)
+        if(tableNum > 1) window.open(`${link}?table`)
       }}
       _hover={tableNum > 1 && {opacity : "0.7"}}
     >
@@ -74,7 +71,7 @@ export default function DatabaseCard({
   return (
     <Card
       icons={[
-        ...categories.slice(0, Math.min(3, categories.length)).map((c) => (
+        ...categories.map((c) => (
           <Tooltip
             hasArrow
             bg="#2A2F38"
@@ -165,7 +162,7 @@ export default function DatabaseCard({
               cursor={databaseInfo[1] && "pointer"}
               _hover={databaseInfo[1] && {opacity : "0.7"}}
               onClick={() => {
-                  if(databaseInfo[1]) window.open(`${link}?external_link`)
+                  if(databaseInfo[1]) window.open(`${link}?raw_data_source`)
                 }
               }
             >

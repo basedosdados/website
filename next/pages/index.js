@@ -12,11 +12,12 @@ import {
 import { useEffect, useState } from "react";
 import Typist from "react-typist";
 
+import { getAllThemes, getAllDatasets } from "./api/themes";
+
 // import {
 //   getPopularDatalakeDatasets,
 //   getPopularTags
 // } from "./api/datasets";
-// import { getGroupList } from "./api/groups"
 
 import { withPages } from "../hooks/pages.hook";
 import { useCheckMobile ,isMobileMod } from "../hooks/useCheckMobile.hook";
@@ -46,8 +47,9 @@ import ProductsFiltersImage from "../public/img/productsFiltersImage";
 import ProcessedDataImage from "../public/img/processedDataImage";
 import BDLogoPlusImage from "../public/img/logos/bd_logo_plus"
 
-// export async function getStaticProps(context) {
-//   const themes = await getGroupList()
+export async function getStaticProps(context) {
+  const themes = await getAllThemes()
+  const datasets = await getAllDatasets()
 //   const popularTags = await getPopularTags()
 //   let popularDatalakeDatasets;
 
@@ -57,17 +59,18 @@ import BDLogoPlusImage from "../public/img/logos/bd_logo_plus"
 //     popularDatalakeDatasets = []
 //   }
 
-//   return await withPages({
-//     props: {
+  return await withPages({
+    props: {
 //       popularDatalakeDatasets,
 //       popularTags,
-//       themes  
-//     },
-//     revalidate: 60,
-//   });
-// }
+      datasets,
+      themes  
+    },
+    revalidate: 60,
+  });
+}
 
-function Hero({ popularDatalakeDatasets, popularTags, themes }) {
+function Hero({ datasets, popularTags, themes }) {
   const [search, setSearch] = useState();
   const [tags, setTags] = useState([])
   const [mediumQuery] = useMediaQuery("(max-width: 1366px)")
@@ -220,7 +223,7 @@ function Hero({ popularDatalakeDatasets, popularTags, themes }) {
             </Text>
             <ThemeCatalog
               themes={themes}
-              popularDatalakeDatasets={popularDatalakeDatasets}
+              datasets={datasets}
             />
           </VStack>
         </VStack>
@@ -730,7 +733,7 @@ function GoogleCloud () {
 
 export default function Home({
   pages,
-  popularDatalakeDatasets,
+  datasets,
   popularTags,
   themes,
 }) {
@@ -739,7 +742,7 @@ export default function Home({
       <VStack>
         <GoogleCloud/>
         <Hero
-          popularDatalakeDatasets={popularDatalakeDatasets}
+          datasets={datasets}
           popularTags={popularTags}
           themes={themes}
         />

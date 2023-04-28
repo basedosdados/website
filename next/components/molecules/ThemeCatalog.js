@@ -9,10 +9,12 @@ import {
 import React, { useState, useEffect } from "react";
 import { useMediaQuery } from "@chakra-ui/react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+
 // import { getRecentDatalakeDatasetsByTheme } from "../../pages/api/datasets";
-import DatabaseCard from "../organisms/DatabaseCard";
+
 import Carousel from "../atoms/Carousel";
 import SectionText from "../atoms/SectionText";
+import DatabaseCard from "../organisms/DatabaseCard";
 import RemoveIcon from "../../public/img/icons/removeIcon";
 import styles from "../../styles/themeCatalog.module.css";
 
@@ -65,15 +67,15 @@ function Themes ({
         {listThemes && listThemes.map((elm) => (
           <Center
             position="relative"
-            onClick={() => onSelectTheme(elm.name)}
-            key={elm.id}
+            // onClick={() => onSelectTheme(elm.node.name)}
+            key={elm.node._id}
             cursor="pointer"
             width={responsive.mobileQuery ? "65px" : "100px" }
             minWidth={responsive.mobileQuery ? "65px" : "100px" }
             height={responsive.mobileQuery ? "65px" : "100px" }
             minHeight={responsive.mobileQuery ? "65px" : "100px" }
             borderRadius={responsive.mobileQuery ? "12px" : "16px" }
-            backgroundColor={ found(elm.name) ? "#2B8C4D" : "FFF"}
+            backgroundColor={ found(elm.node.name) ? "#2B8C4D" : "FFF"}
             boxShadow="0px 1px 8px 1px rgba(64, 60, 67, 0.16)"
             _hover={{ transform:"scale(1.1)", backgroundColor:"#2B8C4D" }}
             transition="all 0.5s"
@@ -82,7 +84,7 @@ function Themes ({
             <Tooltip
               hasArrow
               bg="#2A2F38"
-              label={elm.display_name}
+              label={elm.node.name}
               fontSize="16px"
               fontWeight="500"
               padding="5px 16px 6px"
@@ -96,15 +98,15 @@ function Themes ({
                 padding={responsive.mobileQuery ? "5px" : "10px"}
                 height="100%"
                 transition="all 0.5s"
-                filter={found(elm.name) && "invert(1)"}
+                filter={found(elm.node.name) && "invert(1)"}
                 _hover={{ filter:"invert(1)"}}
-                alt={`${elm.name}`}
-                src={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${elm.name}.svg`}
+                alt={`${elm.node.name}`}
+                src={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${elm.node.slug}.svg`}
               />
             </Tooltip>
             <RemoveIcon
               alt="remover tema do filtro"
-              display={found(elm.name) ? "flex" : "none"}
+              display={found(elm.node.name) ? "flex" : "none"}
               fill="#42B0FF"
               width={responsive.mobileQuery ? "20px" : "30px"}
               height={responsive.mobileQuery ? "20px" : "30px"}
@@ -120,7 +122,8 @@ function Themes ({
   )
 }
 
-function CardThemes ({ responsive, recentDataSets=[], loading }) {
+function CardThemes ({ responsive, datasetsCards=[], loading }) {
+  console.log(datasetsCards)
   const [screenQuery, setScreenQuery] = useState(0)
 
   useEffect(() => {
@@ -140,7 +143,7 @@ function CardThemes ({ responsive, recentDataSets=[], loading }) {
       maxWidth="1264px"
       margin={responsive.mobileQuery ? "24px 0 48px !important" : "40px 0 48px !important"}
     >
-      {recentDataSets.length === 0 &&
+      {datasetsCards.length === 0 &&
         <Center padding="0 40px">
           <SectionText
             fontSize={responsive.mobileQuery ? "14px" : "18px"}
@@ -182,37 +185,30 @@ function CardThemes ({ responsive, recentDataSets=[], loading }) {
               />
             ))
           :
-          recentDataSets.length === 0 ?
+          datasetsCards.length === 0 ?
             new Array(screenQuery).fill(0).map(() => (
               <>
                 <Skeleton width="280px" height="290px" margin="20px 0"/>
               </>
             ))
             :
-            recentDataSets.map((elm) => (
+            datasetsCards.map((elm) => (
               <DatabaseCard
-                link={`/dataset/${elm.name}`}
-                name={elm.title}
-                organization={elm.organization.title}
-                organizationSlug={elm.organization.name}
-                tags={elm.tags.map((g) => g.name)}
-                size={
-                  elm.resources.filter((r) => r.bdm_file_size && r.bdm_file_size > 0)
-                    .length > 0
-                    ? elm.resources.filter((r) => r.bdm_file_size)[0].bdm_file_size
-                    : null
-                }
-                tableNum={
-                  elm.resources.filter((r) => r.resource_type === "bdm_table").length
-                }
-                externalLinkNum={
-                  elm.resources.filter((r) => r.resource_type === "external_link").length
-                }
-                informationRequestNum={
-                  elm.resources.filter((r) => r.resource_type === "information_request").length
-                }
-                updatedSince={elm.metadata_modified}
-                categories={elm.groups.map((g) => [g.name, g.display_name])}
+                link={`/dataset/${elm.node._id}`}
+                name={elm.node.name}
+                organization={elm.node.organization.name}
+                organizationSlug={elm.node.organization.slug}
+                tags={elm.node.tags.edges.map((g) => g.node.name)}
+                // size={
+                //   elm.resources.filter((r) => r.bdm_file_size && r.bdm_file_size > 0)
+                //     .length > 0
+                //     ? elm.resources.filter((r) => r.bdm_file_size)[0].bdm_file_size
+                //     : null
+                // }
+                tableNum={elm.node.tables.edges.length}
+                externalLinkNum={elm.node.rawDataSources.edges.length}
+                informationRequestNum={elm.node.informationRequests.edges.length}
+                categories={elm.node.themes.edges.map((g) => [g.node.slug, g.node.name])}
               />
             ))
           }
@@ -222,10 +218,13 @@ function CardThemes ({ responsive, recentDataSets=[], loading }) {
   )
 }
 
-export default function ThemeCatalog ({ popularDatalakeDatasets, themes }) {
-  const [recentDataSets, setRecentDataSets] = useState([])
+export default function ThemeCatalog ({ datasets, themes }) {
+  console.log(themes)
+  console.log(datasets)
+
+  const [datasetsCards, setDatasetsCards] = useState([])
   const [listThemes, setListThemes] = useState([])
-  const [selectedTheme, setSelectedTheme] = useState([])
+  // const [selectedTheme, setSelectedTheme] = useState([])
   const [loading, setLoading] = useState(false)
   
   const mobileCheck = useCheckMobile()
@@ -240,40 +239,40 @@ export default function ThemeCatalog ({ popularDatalakeDatasets, themes }) {
 
   useEffect(() => {
     setListThemes(themes)
-    setRecentDataSets(popularDatalakeDatasets)
-  },[popularDatalakeDatasets, themes])
+    setDatasetsCards(datasets)
+  },[datasets, themes])
 
-  const handleSelectTheme = (elm) => {
-    window.open("#theme", "_self")
-    const newSelectedTheme = [elm, ...selectedTheme]
-    setSelectedTheme(newSelectedTheme)
+  // const handleSelectTheme = (elm) => {
+  //   window.open("#theme", "_self")
+  //   const newSelectedTheme = [elm, ...selectedTheme]
+  //   setSelectedTheme(newSelectedTheme)
 
-    const filtedThemes = newSelectedTheme.filter(res => res !== elm)
+  //   const filtedThemes = newSelectedTheme.filter(res => res !== elm)
 
-    if(found(elm)) {
-      setSelectedTheme(filtedThemes)
-      newRecentDataLake(filtedThemes)   
-    } else {
-      newRecentDataLake(newSelectedTheme)
-    }
-  }
+  //   if(found(elm)) {
+  //     setSelectedTheme(filtedThemes)
+  //     newRecentDataLake(filtedThemes)   
+  //   } else {
+  //     newRecentDataLake(newSelectedTheme)
+  //   }
+  // }
   
-  const found = (value) => {
-    return selectedTheme.find(res => res === value)
-  }
+  // const found = (value) => {
+  //   return selectedTheme.find(res => res === value)
+  // }
 
-  const newRecentDataLake = (themes) => {
-    setLoading(true)
-    // getRecentDatalakeDatasetsByTheme(themes.toString())
-    getRecentDatalakeDatasetsByTheme("")
-      .then(res => {
-        setRecentDataSets(res.slice(0,10))
-        setLoading(false)
-      })
-      .catch(() => {
-        setLoading(false)
-      })
-  }
+  // const newRecentDataLake = (themes) => {
+  //   setLoading(true)
+  //   // getRecentDatalakeDatasetsByTheme(themes.toString())
+  //   getRecentDatalakeDatasetsByTheme("")
+  //     .then(res => {
+  //       setDatasets(res.slice(0,10))
+  //       setLoading(false)
+  //     })
+  //     .catch(() => {
+  //       setLoading(false)
+  //     })
+  // }
 
   return (
     <VStack
@@ -282,15 +281,15 @@ export default function ThemeCatalog ({ popularDatalakeDatasets, themes }) {
     >
       <Themes
         listThemes={listThemes}
-        selectedTheme={selectedTheme}
-        onSelectTheme={handleSelectTheme}
+        // selectedTheme={selectedTheme}
+        // onSelectTheme={handleSelectTheme}
         responsive={{mobileQuery, baseQuery, mediumQuery, lgQuery}}
       />
 
       <CardThemes
+        datasetsCards={datasetsCards}
+        // loading={loading}
         responsive={{mobileQuery, baseQuery, mediumQuery, lgQuery}}
-        recentDataSets={recentDataSets}
-        loading={loading}
       />
     </VStack>
   )

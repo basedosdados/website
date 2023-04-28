@@ -5,6 +5,7 @@ import {
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import InternalServerError from "../500";
 
 import Input from "../../components/atoms/SimpleInput";
 import Button from "../../components/atoms/RoundedButton";
@@ -58,7 +59,7 @@ export default function Register() {
     }
   }
 
-  return null
+  return <InternalServerError/>
 
   return (
     <MainPageTemplate display="flex" justifyContent="center">
