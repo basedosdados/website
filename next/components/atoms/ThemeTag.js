@@ -13,11 +13,12 @@ export function ThemeTag({ name, ...style }) {
       cursor="pointer"
       letterSpacing="0.2px"
       fontWeight="300"
-      onClick={() => window.open(`/dataset?tag=${name}`, "_blank")}
       fontFamily="ubuntu"
       {...style}
     >
-      {name}
+      <a href={`/dataset?tag=${name}`} target="_blank">
+        {name}
+      </a>
     </Tag>
   );
 }

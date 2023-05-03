@@ -123,7 +123,6 @@ function Themes ({
 }
 
 function CardThemes ({ responsive, datasetsCards=[], loading }) {
-  console.log(datasetsCards)
   const [screenQuery, setScreenQuery] = useState(0)
 
   useEffect(() => {
@@ -194,21 +193,14 @@ function CardThemes ({ responsive, datasetsCards=[], loading }) {
             :
             datasetsCards.map((elm) => (
               <DatabaseCard
-                link={`/dataset/${elm.node._id}`}
                 name={elm.node.name}
-                organization={elm.node.organization.name}
-                organizationSlug={elm.node.organization.slug}
-                tags={elm.node.tags.edges.map((g) => g.node.name)}
-                // size={
-                //   elm.resources.filter((r) => r.bdm_file_size && r.bdm_file_size > 0)
-                //     .length > 0
-                //     ? elm.resources.filter((r) => r.bdm_file_size)[0].bdm_file_size
-                //     : null
-                // }
-                tableNum={elm.node.tables.edges.length}
-                externalLinkNum={elm.node.rawDataSources.edges.length}
-                informationRequestNum={elm.node.informationRequests.edges.length}
                 categories={elm.node.themes.edges.map((g) => [g.node.slug, g.node.name])}
+                organization={elm.node.organization}
+                tags={elm.node.tags.edges.map((g) => g.node.name)}
+                tables={elm.node.tables.edges}
+                rawDataSources={elm.node.rawDataSources.edges}
+                informationRequests={elm.node.informationRequests.edges}
+                link={`/dataset/${elm.node._id}`}
               />
             ))
           }
@@ -219,9 +211,6 @@ function CardThemes ({ responsive, datasetsCards=[], loading }) {
 }
 
 export default function ThemeCatalog ({ datasets, themes }) {
-  console.log(themes)
-  console.log(datasets)
-
   const [datasetsCards, setDatasetsCards] = useState([])
   const [listThemes, setListThemes] = useState([])
   // const [selectedTheme, setSelectedTheme] = useState([])

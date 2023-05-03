@@ -16,24 +16,14 @@ export default function DatabaseCard({
   name,
   categories = [{}],
   organization,
-  organizationSlug,
   tags,
-  size,
-  tableNum,
-  externalLinkNum,
-  informationRequestNum,
+  tables,
+  rawDataSources,
+  informationRequests,
   link,
 }) {
   const isMobile = useCheckMobile();
   const databaseInfo = [];
-  let sizeLabel;
-
-  if (size) {
-    if (size < 1000000) sizeLabel = Math.round(size / 1024) + " kb";
-    else if (size >= 1000000)
-      sizeLabel = Math.round(size / (1024 * 1024)) + " mb";
-    else sizeLabel = Math.round(size / (1024 * 1024 * 1024)) + " gb";
-  }
 
   databaseInfo.push(
     <HStack
@@ -41,30 +31,33 @@ export default function DatabaseCard({
       fontFamily="Ubuntu"
       fontSize="14px"
       letterSpacing="0.3px"
-      color={tableNum === 0 ? "#C4C4C4" : "#42B0FF" }
-      cursor="pointer"
-      onClick={() => {
-        if(tableNum > 1) window.open(`${link}?table`)
-      }}
-      _hover={tableNum > 1 && {opacity : "0.7"}}
+      color={tables.length === 0 ? "#C4C4C4" : "#42B0FF" }
+      cursor={tables.length > 0 ? "pointer" : "default"}
+      _hover={tables.length > 0 && {opacity : "0.7"}}
     >
-      <b>{tableNum === 1 ? tableNum + " tabela tratada" : tableNum + " tabelas tratadas"}</b>
-      <BDLogoPlusImage
-        widthImage="38px"
-        marginLeft="5px !important"
-        empty={tableNum === 0}
-      />
+      <a href={tables.length > 0 && `${link}?table=${tables[0]?.node?._id}`} target="_blank" style={{display: "flex"}}>
+        <b>{tables.length === 1 ?
+          "1 tabela tratada"
+        : 
+          `${tables.length} tabelas tratadas`
+        }</b>
+        <BDLogoPlusImage
+          widthImage="38px"
+          marginLeft="5px !important"
+          empty={tables.length === 0}
+        />
+      </a>
     </HStack>
-  );
+  )
 
-  if (externalLinkNum) {
+  if (rawDataSources.length > 0) {
     databaseInfo.push(
-      externalLinkNum === 1 ? externalLinkNum + " fonte original" : externalLinkNum + " fontes originais"
+      rawDataSources.length === 1 ? "1 fonte original" : `${rawDataSources.length} fontes originais`
     )
   }
-  if (informationRequestNum) {
+  if (informationRequests.length > 0) {
     databaseInfo.push(
-      informationRequestNum === 1 ? informationRequestNum + " pedido LAI" : informationRequestNum + " pedidos LAI"
+      informationRequests.length === 1 ? "1 pedido LAI" : `${informationRequests.length} pedidos LAI`
     )
   }
 
@@ -89,7 +82,13 @@ export default function DatabaseCard({
               backgroundColor="#2B8C4D"
               borderRadius="6px"
             >
-              <Link overflow="hidden" filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${c[0]}`}>
+              <Link
+                overflow="hidden"
+                filter="invert(1)"
+                _hover={{ opacity: "none" }}
+                href={`/dataset?group=${c[0]}`}
+                target="_blank"
+              >
                 <CategoryIcon
                   alt={c[0]}
                   size="37px"
@@ -119,7 +118,7 @@ export default function DatabaseCard({
           {name}
         </Text>
       </Link>
-      <Link href={`/dataset?organization=${organizationSlug}`}>
+      <Link href={`/dataset?organization=${organization.slug}`}>
         <Text
           noOfLines={2}
           lineHeight="16px"
@@ -129,7 +128,7 @@ export default function DatabaseCard({
           fontSize="12px"
           fontWeight="400"
           color="#6F6F6F"
-        >{organization}</Text>
+        >{organization.name}</Text>
       </Link>
 
       <VStack spacing={1} align="flex-start" marginTop="auto">
@@ -139,7 +138,7 @@ export default function DatabaseCard({
           className="no-scrollbar"
           margin="0 0 20px"
         >
-          {tags.slice(0, tags.length > isMobile ? 2 : 3 ? isMobile ? 2 : 3 : tags.length).map((t) => (
+          {tags.map((t) => (
             <ThemeTag name={t} />
           ))}
         </HStack>
@@ -153,22 +152,27 @@ export default function DatabaseCard({
             {databaseInfo[0]}
           </Text>
           <HStack>
-            <Text
-              fontFamily="Ubuntu"
-              fontSize="12px"
-              fontWeight="400"
-              letterSpacing="0.3px"
-              color={databaseInfo[1] ? "#252A32" : "#C4C4C4"}
-              cursor={databaseInfo[1] && "pointer"}
-              _hover={databaseInfo[1] && {opacity : "0.7"}}
-              onClick={() => {
-                  if(databaseInfo[1]) window.open(`${link}?raw_data_source`)
-                }
-              }
+            <a
+              href={rawDataSources.length > 0 && `${link}?raw_data_source=${rawDataSources[0]?.node?._id}`}
+              target="_blank"
             >
-              {databaseInfo[1] ? databaseInfo[1] : "0 fontes originais"}
-            </Text>
+              <Text
+                fontFamily="Ubuntu"
+                fontSize="12px"
+                fontWeight="400"
+                letterSpacing="0.3px"
+                color={databaseInfo[1] ? "#252A32" : "#C4C4C4"}
+                cursor={databaseInfo[1] && "pointer"}
+                _hover={databaseInfo[1] && {opacity : "0.7"}}
+              >
+                {databaseInfo[1] ? databaseInfo[1] : "0 fontes originais"}
+              </Text>
+            </a>
             <Text color="#DEDFE0">•</Text>
+            <a
+              href={informationRequests.length > 0 && `${link}?information_request=${informationRequests[0]?.node?._id}`}
+              target="_blank"
+            >
               <Text
                 fontFamily="Ubuntu"
                 fontSize="12px"
@@ -177,12 +181,10 @@ export default function DatabaseCard({
                 color={databaseInfo[2] ? "#252A32" : "#C4C4C4"}
                 cursor={databaseInfo[2] && "pointer"}
                 _hover={databaseInfo[2] && {opacity : "0.7"}}
-                onClick={() => {
-                  if(databaseInfo[2]) window.open(`${link}?information_request`)}
-                }
               >
                 {databaseInfo[2] ? databaseInfo[2] : "0 pedidos LAI"}
               </Text>
+            </a>
           </HStack>
       </VStack>
     </Card>

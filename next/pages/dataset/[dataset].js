@@ -119,7 +119,7 @@ export default function DatasetPage ({
             minWidth="235px"
             height="100%"
           >
-            <ImageOrganization/>
+            <ImageOrganization image={dataset?.organization?.picture}/>
           </Center>
 
           <VStack spacing={0} align="flex-start" width="100%">

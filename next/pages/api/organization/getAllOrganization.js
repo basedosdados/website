@@ -17,6 +17,7 @@ export default async function getAllOrganization() {
                 slug
                 name
                 website
+                picture
               }
             }
           }

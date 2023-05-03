@@ -1,12 +1,9 @@
 import {
   Image
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
 import ImageDefault from "../../public/img/imageDefault";
 
 export const ImageOrganization = ({title, image, ...props}) => {
-  const [urlImage, setUrlImage] = useState("")
-
   const settingsImage = {
     alt: title || "",
     borderRadius:"32px",
@@ -22,16 +19,11 @@ export const ImageOrganization = ({title, image, ...props}) => {
     heightImage:"100%"
   }
 
-  useEffect(() => {
-    if(!image) return 
-    image.startsWith("https://") ? setUrlImage(image) : setUrlImage("https://basedosdados.org/uploads/group/" + image)
-  },[])
-
-  if(!urlImage) return <ImageDefault {...settingsImage} {...props} overflow="hidden"/>
+  if(!image) return <ImageDefault {...settingsImage} {...props} overflow="hidden"/>
 
   return (
     <Image
-      src={urlImage}
+      src={image.startsWith("https://") ? image : `https://basedosdados.org/uploads/group/${image}`}
       {...settingsImage}
       {...props}
     />
