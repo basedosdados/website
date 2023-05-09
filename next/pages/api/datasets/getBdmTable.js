@@ -1,7 +1,7 @@
 import axios from "axios";
 import { cleanGraphQLResponse } from "../../../utils";
 
-const API_URL= process.env.NEXT_PUBLIC_API_URL
+const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
 export default async function getBdmTable(id) {
   try {

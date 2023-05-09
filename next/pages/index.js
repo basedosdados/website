@@ -12,13 +12,6 @@ import {
 import { useEffect, useState } from "react";
 import Typist from "react-typist";
 
-import { getAllThemes, getAllDatasets } from "./api/themes";
-
-// import {
-//   getPopularDatalakeDatasets,
-//   getPopularTags
-// } from "./api/datasets";
-
 import { withPages } from "../hooks/pages.hook";
 import { useCheckMobile ,isMobileMod } from "../hooks/useCheckMobile.hook";
 import { useMediaQuery } from "@chakra-ui/react";
@@ -47,30 +40,7 @@ import ProductsFiltersImage from "../public/img/productsFiltersImage";
 import ProcessedDataImage from "../public/img/processedDataImage";
 import BDLogoPlusImage from "../public/img/logos/bd_logo_plus"
 
-export async function getStaticProps(context) {
-  const themes = await getAllThemes()
-  const datasets = await getAllDatasets()
-//   const popularTags = await getPopularTags()
-//   let popularDatalakeDatasets;
-
-//   try {
-//     popularDatalakeDatasets = await getPopularDatalakeDatasets()
-//   } catch {
-//     popularDatalakeDatasets = []
-//   }
-
-  return await withPages({
-    props: {
-//       popularDatalakeDatasets,
-//       popularTags,
-      datasets,
-      themes  
-    },
-    revalidate: 60,
-  });
-}
-
-function Hero({ datasets, popularTags, themes }) {
+function Hero() {
   const [search, setSearch] = useState();
   const [tags, setTags] = useState([])
   const [mediumQuery] = useMediaQuery("(max-width: 1366px)")
@@ -79,18 +49,6 @@ function Hero({ datasets, popularTags, themes }) {
     return window.open(`/dataset?q=${search}`, "_self");
   }
 
-  useEffect(() => {
-    if(useCheckMobile()) return null
-    return document.getElementById("searchDatabases").focus()
-  },[])
-
-  useEffect(() => {
-    if(popularTags === null) return ""
-    if(popularTags === undefined) return ""
-    const newPopularTags = Object.keys(popularTags)
-    if(useCheckMobile()) return setTags(newPopularTags.slice(0,3))
-    setTags(newPopularTags.slice(0,5))
-  },[popularTags])
 
   return (
     <VStack
@@ -221,10 +179,7 @@ function Hero({ datasets, popularTags, themes }) {
             >
               Busque por tema
             </Text>
-            <ThemeCatalog
-              themes={themes}
-              datasets={datasets}
-            />
+            <ThemeCatalog/>
           </VStack>
         </VStack>
       </VStack>
@@ -449,7 +404,6 @@ export function StepText ({index, text}) {
 }
 
 function Support({ pages }) {
-  // const contactPage = pages.filter((p) => p.Title === "Contato");
   const { hasCopied, onCopy } = useClipboard("42494318000116")
 
   return (
@@ -701,52 +655,12 @@ function Support({ pages }) {
   );
 }
 
-function GoogleCloud () {
-  const [baseQuery] = useMediaQuery("(max-width: 1090px)")
-
-  return (
-    <Stack
-      width="100%"
-      maxWidth="1264px"
-      height={baseQuery ? "100%" : {base: "100%" , lg: "0"}}
-      alignItems="center"
-      paddingX={{base: "0" , lg: "30px", xl: "0"}}
-      order={baseQuery ? 1 : {base: 1 , lg: 0}}
-    >
-      <Stack
-        width="100%"
-        alignItems={baseQuery ? "center" : {base:"center", lg:"flex-end"}}
-        marginBottom={{base:"95px", lg:"0"}}
-      >
-        <ChakraImage
-          alt="google cloud"
-          src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/2022/GC_CustomerAwardWinner_SocialImpact+1.png"
-          width="171px"
-          height="245px"
-          loading="eager"
-          priority
-        />
-      </Stack>
-    </Stack>
-  )
-}
-
 export default function Home({
   pages,
-  datasets,
-  popularTags,
-  themes,
 }) {
   return (
     <MainPageTemplate id="home" backgroundColor="#FFFFFF" pages={pages}>
-      <VStack>
-        <GoogleCloud/>
-        <Hero
-          datasets={datasets}
-          popularTags={popularTags}
-          themes={themes}
-        />
-      </VStack>
+      <Hero/>
       <BePartner />
       <Products />
       <Support pages={pages} />

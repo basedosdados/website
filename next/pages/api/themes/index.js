@@ -1,4 +1,9 @@
 import getAllThemes from "./getAllThemes";
-import getAllDatasets from "./getDatasets";
+import getAllDatasets from "./getAllDatasets";
+import getDatasetsByThemes from "./getDatasetsByThemes"
 
-export { getAllThemes, getAllDatasets }
+export {
+  getAllThemes,
+  getAllDatasets,
+  getDatasetsByThemes
+}

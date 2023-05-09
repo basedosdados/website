@@ -31,33 +31,37 @@ export default function DatabaseCard({
       fontFamily="Ubuntu"
       fontSize="14px"
       letterSpacing="0.3px"
-      color={tables.length === 0 ? "#C4C4C4" : "#42B0FF" }
-      cursor={tables.length > 0 ? "pointer" : "default"}
-      _hover={tables.length > 0 && {opacity : "0.7"}}
+      color={tables.number === 0 ? "#C4C4C4" : "#42B0FF" }
+      cursor={tables.number > 0 ? "pointer" : "default"}
+      _hover={tables.number > 0 && {opacity : "0.7"}}
     >
-      <a href={tables.length > 0 && `${link}?table=${tables[0]?.node?._id}`} target="_blank" style={{display: "flex"}}>
-        <b>{tables.length === 1 ?
+      <a href={tables.number > 0 && `${link}?table=${tables.id}`} target="_blank" style={{display: "flex"}}>
+        <b>{tables.number === 1 ?
           "1 tabela tratada"
         : 
-          `${tables.length} tabelas tratadas`
+          `${tables.number} tabelas tratadas`
         }</b>
         <BDLogoPlusImage
           widthImage="38px"
           marginLeft="5px !important"
-          empty={tables.length === 0}
+          empty={tables.number === 0}
         />
       </a>
     </HStack>
   )
 
-  if (rawDataSources.length > 0) {
+  if (rawDataSources.number > 0) {
     databaseInfo.push(
-      rawDataSources.length === 1 ? "1 fonte original" : `${rawDataSources.length} fontes originais`
+      rawDataSources.number === 1 ?
+      "1 fonte original" :
+      `${rawDataSources.number} fontes originais`
     )
   }
-  if (informationRequests.length > 0) {
+  if (informationRequests.number > 0) {
     databaseInfo.push(
-      informationRequests.length === 1 ? "1 pedido LAI" : `${informationRequests.length} pedidos LAI`
+      informationRequests.number === 1 ?
+      "1 pedido LAI" :
+      `${informationRequests.number} pedidos LAI`
     )
   }
 
@@ -153,7 +157,7 @@ export default function DatabaseCard({
           </Text>
           <HStack>
             <a
-              href={rawDataSources.length > 0 && `${link}?raw_data_source=${rawDataSources[0]?.node?._id}`}
+              href={rawDataSources.length > 0 && `${link}?raw_data_source=${rawDataSources.id}`}
               target="_blank"
             >
               <Text
@@ -170,7 +174,7 @@ export default function DatabaseCard({
             </a>
             <Text color="#DEDFE0">•</Text>
             <a
-              href={informationRequests.length > 0 && `${link}?information_request=${informationRequests[0]?.node?._id}`}
+              href={informationRequests.length > 0 && `${link}?information_request=${informationRequests.id}`}
               target="_blank"
             >
               <Text

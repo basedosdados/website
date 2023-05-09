@@ -10,7 +10,11 @@ import React, { useState, useEffect } from "react";
 import { useMediaQuery } from "@chakra-ui/react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
-// import { getRecentDatalakeDatasetsByTheme } from "../../pages/api/datasets";
+import { 
+  getAllThemes,
+  getAllDatasets,
+  getDatasetsByThemes
+} from "../../pages/api/themes/index"
 
 import Carousel from "../atoms/Carousel";
 import SectionText from "../atoms/SectionText";
@@ -67,7 +71,7 @@ function Themes ({
         {listThemes && listThemes.map((elm) => (
           <Center
             position="relative"
-            // onClick={() => onSelectTheme(elm.node.name)}
+            onClick={() => onSelectTheme(elm.node.slug)}
             key={elm.node._id}
             cursor="pointer"
             width={responsive.mobileQuery ? "65px" : "100px" }
@@ -193,14 +197,26 @@ function CardThemes ({ responsive, datasetsCards=[], loading }) {
             :
             datasetsCards.map((elm) => (
               <DatabaseCard
-                name={elm.node.name}
-                categories={elm.node.themes.edges.map((g) => [g.node.slug, g.node.name])}
-                organization={elm.node.organization}
-                tags={elm.node.tags.edges.map((g) => g.node.name)}
-                tables={elm.node.tables.edges}
-                rawDataSources={elm.node.rawDataSources.edges}
-                informationRequests={elm.node.informationRequests.edges}
-                link={`/dataset/${elm.node._id}`}
+                name={elm.name}
+                categories={elm.themes.slice(0,6).map((g) => [g.slug, g.name])}
+                organization={{
+                  name:elm.organization,
+                  slug:elm.organization_slug
+                }}
+                tags={elm.tags.slice(0,3).map((g) => g.name)}
+                tables={{
+                  id: elm.first_table_id,
+                  number: elm.n_bdm_tables
+                }}
+                rawDataSources={{
+                  id: elm.first_original_source_id,
+                  number: elm.n_original_sources
+                }}
+                informationRequests={{
+                  id: elm.first_lai_id,
+                  number: elm.n_lais
+                }}
+                link={`/dataset/${elm.id}`}
               />
             ))
           }
@@ -210,58 +226,59 @@ function CardThemes ({ responsive, datasetsCards=[], loading }) {
   )
 }
 
-export default function ThemeCatalog ({ datasets, themes }) {
-  const [datasetsCards, setDatasetsCards] = useState([])
+export default function ThemeCatalog () {
   const [listThemes, setListThemes] = useState([])
-  // const [selectedTheme, setSelectedTheme] = useState([])
+  const [defaultDatasetsCards, setDefaultDatasetCards] = useState([])
+
+  const [datasetsCards, setDatasetsCards] = useState([])
+  const [selectedTheme, setSelectedTheme] = useState([])
   const [loading, setLoading] = useState(false)
-  
+
   const mobileCheck = useCheckMobile()
   const [mobileQuery, setMobileQuery] = useState(false)
   const [baseQuery] = useMediaQuery("(max-width: 938px)")
   const [mediumQuery] = useMediaQuery("(max-width: 1250px)")
   const [lgQuery] = useMediaQuery("(max-width: 1366px)")
-
+  
   useEffect(() => {
     setMobileQuery(mobileCheck)
+    fetchDatasets()
+    fetchThemes()
   },[])
 
-  useEffect(() => {
+  const fetchDatasets = async () => {
+    const defaultDataset = await getAllDatasets()
+    setDefaultDatasetCards(defaultDataset)
+  }
+
+  const fetchThemes = async () => {
+    const themes = await getAllThemes()
     setListThemes(themes)
-    setDatasetsCards(datasets)
-  },[datasets, themes])
+  }
 
-  // const handleSelectTheme = (elm) => {
-  //   window.open("#theme", "_self")
-  //   const newSelectedTheme = [elm, ...selectedTheme]
-  //   setSelectedTheme(newSelectedTheme)
+  const handleSelectTheme = async (elm) => {
+    setLoading(true)
+    window.open("#theme", "_self")
 
-  //   const filtedThemes = newSelectedTheme.filter(res => res !== elm)
+    const newSelectedTheme = [elm, ...selectedTheme]
+    setSelectedTheme(newSelectedTheme)
+console.log(newSelectedTheme)
+    const filtedThemes = newSelectedTheme.filter(res => res !== elm)
 
-  //   if(found(elm)) {
-  //     setSelectedTheme(filtedThemes)
-  //     newRecentDataLake(filtedThemes)   
-  //   } else {
-  //     newRecentDataLake(newSelectedTheme)
-  //   }
-  // }
-  
-  // const found = (value) => {
-  //   return selectedTheme.find(res => res === value)
-  // }
+    if(found(elm)) {
+      setSelectedTheme(filtedThemes)
+      const result = await getDatasetsByThemes(newSelectedTheme)
+      setDatasetsCards(result)
+    } else {
+      setDatasetsCards([])
+    }
 
-  // const newRecentDataLake = (themes) => {
-  //   setLoading(true)
-  //   // getRecentDatalakeDatasetsByTheme(themes.toString())
-  //   getRecentDatalakeDatasetsByTheme("")
-  //     .then(res => {
-  //       setDatasets(res.slice(0,10))
-  //       setLoading(false)
-  //     })
-  //     .catch(() => {
-  //       setLoading(false)
-  //     })
-  // }
+    setLoading(false)
+  }
+
+  const found = (value) => {
+    return selectedTheme.find(res => res === value)
+  }
 
   return (
     <VStack
@@ -270,14 +287,18 @@ export default function ThemeCatalog ({ datasets, themes }) {
     >
       <Themes
         listThemes={listThemes}
-        // selectedTheme={selectedTheme}
-        // onSelectTheme={handleSelectTheme}
+        selectedTheme={selectedTheme}
+        onSelectTheme={handleSelectTheme}
         responsive={{mobileQuery, baseQuery, mediumQuery, lgQuery}}
       />
 
       <CardThemes
-        datasetsCards={datasetsCards}
-        // loading={loading}
+        datasetsCards={
+          datasetsCards.length === 0 ?
+          defaultDatasetsCards :
+          datasetsCards
+        }
+        loading={loading}
         responsive={{mobileQuery, baseQuery, mediumQuery, lgQuery}}
       />
     </VStack>

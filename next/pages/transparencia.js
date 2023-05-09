@@ -294,6 +294,24 @@ export default function Transparencia({ pages }) {
 
       <Stack
         paddingTop="16px"
+        width="100%"
+        maxWidth="1264px"
+        margin="auto"
+      >
+        <Link
+          fontFamily="Ubuntu"
+          fontSize="18px"
+          letterSpacing="0.3px"
+          target="_blank"
+          color="#42B0FF"
+          href="https://basedosdados-static.s3.us-east-2.amazonaws.com/pdf/BD_Relatorio_Anual_2022.pdf"
+        >
+          BD Relatório Anual 2022
+        </Link>
+      </Stack>
+
+      <Stack
+        paddingTop="16px"
         paddingBottom={{ base: "80px", lg: "104px" }}
         width="100%"
         maxWidth="1264px"
