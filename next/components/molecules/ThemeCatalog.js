@@ -79,7 +79,7 @@ function Themes ({
             height={responsive.mobileQuery ? "65px" : "100px" }
             minHeight={responsive.mobileQuery ? "65px" : "100px" }
             borderRadius={responsive.mobileQuery ? "12px" : "16px" }
-            backgroundColor={ found(elm.node.name) ? "#2B8C4D" : "FFF"}
+            backgroundColor={ found(elm.node.slug) ? "#2B8C4D" : "FFF"}
             boxShadow="0px 1px 8px 1px rgba(64, 60, 67, 0.16)"
             _hover={{ transform:"scale(1.1)", backgroundColor:"#2B8C4D" }}
             transition="all 0.5s"
@@ -102,7 +102,7 @@ function Themes ({
                 padding={responsive.mobileQuery ? "5px" : "10px"}
                 height="100%"
                 transition="all 0.5s"
-                filter={found(elm.node.name) && "invert(1)"}
+                filter={found(elm.node.slug) && "invert(1)"}
                 _hover={{ filter:"invert(1)"}}
                 alt={`${elm.node.name}`}
                 src={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${elm.node.slug}.svg`}
@@ -110,7 +110,7 @@ function Themes ({
             </Tooltip>
             <RemoveIcon
               alt="remover tema do filtro"
-              display={found(elm.node.name) ? "flex" : "none"}
+              display={found(elm.node.slug) ? "flex" : "none"}
               fill="#42B0FF"
               width={responsive.mobileQuery ? "20px" : "30px"}
               height={responsive.mobileQuery ? "20px" : "30px"}
@@ -128,7 +128,6 @@ function Themes ({
 
 function CardThemes ({ responsive, datasetsCards=[], loading }) {
   const [screenQuery, setScreenQuery] = useState(0)
-
   useEffect(() => {
     if(responsive.mobileQuery)
       return setScreenQuery(1)
@@ -168,7 +167,7 @@ function CardThemes ({ responsive, datasetsCards=[], loading }) {
             spaceBetween: 10,
             slidesPerView: screenQuery,
             navigation: true,
-            loop: true,
+            loop: screenQuery < datasetsCards.length ? true : false,
             autoplay: {
               delay: 6000,
               pauseOnMouseEnter: true,
@@ -191,7 +190,12 @@ function CardThemes ({ responsive, datasetsCards=[], loading }) {
           datasetsCards.length === 0 ?
             new Array(screenQuery).fill(0).map(() => (
               <>
-                <Skeleton width="280px" height="290px" margin="20px 0"/>
+                <Skeleton
+                  width="280px"
+                  height="290px"
+                  margin="20px 0"
+                  borderRadius="12px"
+                />
               </>
             ))
             :
@@ -239,7 +243,7 @@ export default function ThemeCatalog () {
   const [baseQuery] = useMediaQuery("(max-width: 938px)")
   const [mediumQuery] = useMediaQuery("(max-width: 1250px)")
   const [lgQuery] = useMediaQuery("(max-width: 1366px)")
-  
+
   useEffect(() => {
     setMobileQuery(mobileCheck)
     fetchDatasets()
@@ -256,28 +260,28 @@ export default function ThemeCatalog () {
     setListThemes(themes)
   }
 
+  const found = (value) => {
+    return selectedTheme.find(res => res === value)
+  }
+
   const handleSelectTheme = async (elm) => {
     setLoading(true)
     window.open("#theme", "_self")
-
     const newSelectedTheme = [elm, ...selectedTheme]
     setSelectedTheme(newSelectedTheme)
-console.log(newSelectedTheme)
-    const filtedThemes = newSelectedTheme.filter(res => res !== elm)
+
+    const filteredThemes = newSelectedTheme.filter(res => res !== elm)
 
     if(found(elm)) {
-      setSelectedTheme(filtedThemes)
-      const result = await getDatasetsByThemes(newSelectedTheme)
+      setSelectedTheme(filteredThemes)
+      const result = await getDatasetsByThemes(filteredThemes)
       setDatasetsCards(result)
     } else {
-      setDatasetsCards([])
+      const result = await getDatasetsByThemes(newSelectedTheme)
+      setDatasetsCards(result)
     }
 
     setLoading(false)
-  }
-
-  const found = (value) => {
-    return selectedTheme.find(res => res === value)
   }
 
   return (
@@ -294,7 +298,7 @@ console.log(newSelectedTheme)
 
       <CardThemes
         datasetsCards={
-          datasetsCards.length === 0 ?
+          selectedTheme.length === 0 ?
           defaultDatasetsCards :
           datasetsCards
         }
