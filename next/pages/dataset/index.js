@@ -156,7 +156,7 @@ export default function SearchPage({ pages, datasets }) {
     if(fetchApi) clearTimeout(fetchApi)
 
     const fetchFunc = setTimeout(() => {
-      getDatasets({q:query?.p, page: query?.page})
+      getDatasets({q:query?.q, page: query?.page})
     }, 400)
 
     setFetchApi(fetchFunc)
