@@ -27,7 +27,7 @@ import TemporalCoverage from "../atoms/TemporalCoverageDisplay";
 
 import {
   getColumnsBdmTable
-} from "../../pages/api/datasets";
+} from "../../pages/api/datasets/index";
 
 import InfoIcon from '../../public/img/icons/infoIcon';
 import RedirectIcon from '../../public/img/icons/redirectIcon';

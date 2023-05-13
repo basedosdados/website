@@ -26,16 +26,11 @@ export function Database({
   id,
   name,
   organization,
-  bdmTable,
+  tables,
   rawDataSources,
   informationRequests,
-  themes,
+  themes = [],
 }) {
-
-  let tableNum = bdmTable.edges.map((elm) => elm.node) || []
-  let externalLinkNum = rawDataSources.edges.map((elm) => elm.node) || []
-  let informationRequestNum = informationRequests.edges.map((elm) => elm.node) || []
-  let arrayThemes = themes.edges.map((elm) => elm.node) || []
 
   return (
     <VStack
@@ -52,7 +47,7 @@ export function Database({
         height="100%"
         spacing={6}
       >
-        <Link _hover={{opacity:"none"}}>
+        <Link href={`/dataset/${id}`} _hover={{opacity:"none"}}>
           <ImageOrganization
             title={organization.name}
             image={organization.picture}
@@ -100,11 +95,11 @@ export function Database({
                   margin={useCheckMobile() ? "16px 0px 0px !important" : "0px 0px 0px 28px !important"}
                   spacing={2}
                 >
-                  {arrayThemes.slice(0, Math.min(3, arrayThemes.length)).map((elm) => (
+                  {themes.map((elm) => (
                     <Tooltip
                       hasArrow
                       bg="#2A2F38"
-                      label={elm.name}
+                      label={elm[1]}
                       fontSize="16px"
                       fontWeight="500"
                       padding="5px 16px 6px"
@@ -118,11 +113,11 @@ export function Database({
                         padding="4px"
                         borderRadius="6px"
                       >
-                        <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${elm.slug}`}>
+                        <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${elm[0]}`}>
                           <CategoryIcon
-                            alt={elm.slug}
+                            alt={elm[0]}
                             size="36px"
-                            url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${elm.slug}.svg`}
+                            url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${elm[0]}.svg`}
                           />
                         </Link>
                       </Center>
@@ -174,80 +169,80 @@ export function Database({
               alignItems={useCheckMobile() && "flex-start"}
               spacing={useCheckMobile() ? 0 : 5}
             >
-              <a href={tableNum.length > 0 && `/dataset/${id}?table=${tableNum[0]?._id}`}>
+              <a href={tables.number > 0 && `/dataset/${id}?table=${tables.id}`}>
                 <HStack
                   spacing={1}
-                  cursor={tableNum.length > 0 ? "pointer" : "normal"}
-                  _hover={tableNum.length > 0 && {opacity: "0.7"}}
+                  cursor={tables.number > 0 ? "pointer" : "normal"}
+                  _hover={tables.number > 0 && {opacity: "0.7"}}
                 >
                   <DataBaseSolidIcon
                     alt="tabelas tratadas"
                     width="15px"
                     height="15px"
-                    fill={tableNum.length === 0 ? "#C4C4C4" : "#2B8C4D"}
+                    fill={tables.number === 0 ? "#C4C4C4" : "#2B8C4D"}
                   />
                   <Text
                     marginLeft="8px !important"
                     whiteSpace="nowrap"
-                    color={tableNum.length === 0 ? "#C4C4C4" : "#2B8C4D"}
+                    color={tables.number === 0 ? "#C4C4C4" : "#2B8C4D"}
                     fontSize="16px"
                     fontWeight="500"
                     letterSpacing="0px"
                     fontFamily="Ubuntu"
                   >
-                    {tableNum.length}{" "}
-                    {tableNum.length === 1 ? "tabela tratada" : "tabelas tratadas"}
+                    {tables.number}{" "}
+                    {tables.number === 1 ? "tabela tratada" : "tabelas tratadas"}
                   </Text>
                   <BDLogoPlusImage
                     widthImage="38px"
-                    empty={tableNum.length === 0}
+                    empty={tables.number === 0}
                   />
                 </HStack>
               </a>
               
-              <a href={externalLinkNum.length > 0 && `/dataset/${id}?raw_data_source=${externalLinkNum[0]?._id}`}>
+              <a href={rawDataSources.number > 0 && `/dataset/${id}?raw_data_source=${rawDataSources.id}`}>
                 <HStack
-                  cursor={externalLinkNum.length > 0 ? "pointer" : "normal"}
-                  _hover={externalLinkNum.length > 0 && {opacity: "0.7"}}
+                  cursor={rawDataSources.number > 0 ? "pointer" : "normal"}
+                  _hover={rawDataSources.number > 0 && {opacity: "0.7"}}
                 >
                   <LinkIcon
                     width="15px"
                     height="15px"
-                    fill={externalLinkNum.length === 0 ? "#C4C4C4" : "#2B8C4D"}
+                    fill={rawDataSources.number === 0 ? "#C4C4C4" : "#2B8C4D"}
                   />
                   <Text
-                    color={externalLinkNum.length === 0 ? "#C4C4C4" : "#2B8C4D"}
+                    color={rawDataSources.number === 0 ? "#C4C4C4" : "#2B8C4D"}
                     fontSize="16px"
                     fontWeight="500"
                     letterSpacing="0px"
                     fontFamily="Ubuntu"
                   >
-                    {externalLinkNum.length}{" "}
-                    {externalLinkNum.length === 1 ? "fonte original" : "fontes originais"}
+                    {rawDataSources.number}{" "}
+                    {rawDataSources.number === 1 ? "fonte original" : "fontes originais"}
                   </Text>
                 </HStack>
               </a>
 
-              <a href={informationRequestNum.length > 0 && `/dataset/${id}?information_request=${informationRequestNum[0]?._id}`}>
+              <a href={informationRequests.number > 0 && `/dataset/${id}?information_request=${informationRequests.id}`}>
                 <HStack
-                  cursor={informationRequestNum.length > 0 ? "pointer" : "normal"}
-                  _hover={informationRequestNum.length > 0 && {opacity: "0.7"}}
+                  cursor={informationRequests.number > 0 ? "pointer" : "normal"}
+                  _hover={informationRequests.number > 0 && {opacity: "0.7"}}
                 >
                   <InfoArrowIcon
                     alt="pedidos Lai"
                     width="15px"
                     height="15px"
-                    fill={informationRequestNum.length === 0 ? "#C4C4C4" : "#2B8C4D"}
+                    fill={informationRequests.number === 0 ? "#C4C4C4" : "#2B8C4D"}
                   />
                   <Text
-                    color={informationRequestNum.length === 0 ? "#C4C4C4" : "#2B8C4D"}
+                    color={informationRequests.number === 0 ? "#C4C4C4" : "#2B8C4D"}
                     fontSize="16px"
                     fontWeight="500"
                     letterSpacing="0px"
                     fontFamily="Ubuntu"
                   >
-                    {informationRequestNum.length}{" "}
-                    {informationRequestNum.length === 1 ? "pedido LAI" : "pedidos LAI"}
+                    {informationRequests.number}{" "}
+                    {informationRequests.number === 1 ? "pedido LAI" : "pedidos LAI"}
                   </Text>
                 </HStack>
               </a>

@@ -22,7 +22,7 @@ import FourOFour from "../templates/404";
 
 import {
   getRawDataSources
-} from "../../pages/api/datasets";
+} from "../../pages/api/datasets/index";
 
 import RedirectIcon from "../../public/img/icons/redirectIcon"
 import LanguageIcon from "../../public/img/icons/languageIcon";

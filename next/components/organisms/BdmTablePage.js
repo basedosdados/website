@@ -20,7 +20,7 @@ import FourOFour from "../templates/404";
 
 import {
   getBdmTable
-} from "../../pages/api/datasets"
+} from "../../pages/api/datasets/index"
 
 import StarIcon from "../../public/img/icons/starIcon";
 import FrequencyIcon from "../../public/img/icons/frequencyIcon";

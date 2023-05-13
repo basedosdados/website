@@ -21,7 +21,7 @@ import FourOFour from "../templates/404";
 
 import {
   getInformationRequest
-} from "../../pages/api/datasets";
+} from "../../pages/api/datasets/index";
 
 import StatusIcon from "../../public/img/icons/statusIcon";
 import UserIcon from "../../public/img/icons/userIcon";

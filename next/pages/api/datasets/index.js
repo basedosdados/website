@@ -1,4 +1,4 @@
-import getAllDatasets from "./getAllDatasets";
+import getSearchDatasets from "./getSearchDatasets";
 import getBdmTable from "./getBdmTable";
 import getColumnsBdmTable from "./getColumnsBdmTable";
 import getInformationRequest from "./getInformationRequest";
@@ -7,7 +7,7 @@ import getRawDataSources from "./getRawDataSources";
 import getShowDataset from "./getShowDataset";
 
 export {
-  getAllDatasets,
+  getSearchDatasets,
   getBdmTable,
   getColumnsBdmTable,
   getInformationRequest,

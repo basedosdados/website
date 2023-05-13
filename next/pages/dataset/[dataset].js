@@ -33,7 +33,7 @@ import CrossIcon from "../../public/img/icons/crossIcon";
 import {
   getListDatasets,
   getShowDataset,
-} from "../api/datasets";
+} from "../api/datasets/index";
 
 import { withPages } from "../../hooks/pages.hook";
 

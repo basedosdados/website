@@ -27,9 +27,8 @@ import { useQuery } from "react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-import { getAllDatasets } from "../api/datasets";
+import { getSearchDatasets } from "../api/datasets/index";
 
-import { withPages } from "../../hooks/pages.hook";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 import { addParametersToCurrentURL, isBdPlus, unionArrays } from "../../utils";
 
@@ -50,22 +49,6 @@ import { MainPageTemplate } from "../../components/templates/main";
 import FilterIcon from "../../public/img/icons/filterIcon";
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
 import NotFoundImage from "../../public/img/notFoundImage";
-
-export async function getStaticProps(context) {
-  let datasets = []
-  try {
-    datasets = await getAllDatasets() || null
-  } catch (error) {
-    console.log(error)
-  }
-
-  return await withPages({
-    props: {
-      datasets
-    },
-    revalidate: 1,
-  })
-}
 
 function NewDatasetModal({ isOpen, onClose }) {
   return (
@@ -139,10 +122,12 @@ function FilterTags({
 }
 
 export default function SearchPage({ pages, datasets }) {
-  const [resource, setResource] = useState(datasets)
-  const [page, setPage] = useState(1)
-  const [isLoading, setIsLoading] = useState(false)
-  // const { query } = useRouter()
+  const [fetchApi, setFetchApi] = useState(null)
+  const [showEmptyState, setShowEmptyState] = useState(false)
+  const [resource, setResource] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const { query } = useRouter()
+
   // const datasetDisclosure = useDisclosure()
   // const { data: userData = null } = useQuery("user", getUser)
   // const [order, setOrder] = useState("score")
@@ -159,16 +144,23 @@ export default function SearchPage({ pages, datasets }) {
   //   }
   // )
 
-  async function getDatasets(page = 1) {
-    const res = await getAllDatasets((page - 1)*10)
-    setResource(res)
+  async function getDatasets({q, page}) {
+    setIsLoading(true)
+    const res = await getSearchDatasets({q:q, page:page})
     setIsLoading(false)
+    setShowEmptyState(true)
+    setResource(res)
   }
 
   useEffect(() => {
-    setIsLoading(true)
-    getDatasets(page)
-  }, [page])
+    if(fetchApi) clearTimeout(fetchApi)
+
+    const fetchFunc = setTimeout(() => {
+      getDatasets({q:query?.p, page: query?.page})
+    }, 400)
+
+    setFetchApi(fetchFunc)
+  }, [query])
 
   const DataProposalBox = ({image, display, text, bodyText}) => {
     return (
@@ -453,13 +445,27 @@ export default function SearchPage({ pages, datasets }) {
   const DatabaseCard = ({ data }) => {
     return (
       <Database
-        id={data._id}
+        id={data.id}
+        themes={data?.themes.slice(0,6).map((g) => [g.slug, g.name])}
         name={data?.name || "Conjunto sem nome"}
-        organization={data?.organization}
-        bdmTable={data?.tables}
-        rawDataSources={data?.rawDataSources}
-        informationRequests={data?.informationRequests}
-        themes={data?.themes}
+        organization={{
+          name: data?.organization,
+          slug: data?.organization_slug,
+          website: data?.organization_website,
+          image: data?.organization_picture
+        }}
+        tables={{
+          id: data?.first_table_id,
+          number: data?.n_bdm_tables
+        }}
+        rawDataSources={{
+          id: data?.first_original_source_id,
+          number: data?.n_original_sources
+        }}
+        informationRequests={{
+          id: data?.first_lai_id,
+          number: data?.n_lais
+        }}
       />
     )
   }
@@ -749,7 +755,7 @@ export default function SearchPage({ pages, datasets }) {
           width="100%"
           paddingLeft={isMobileMod() ? "" : "40px"}
         >
-          {resource?.edges.length === 0 ?
+          {showEmptyState && !resource?.results ?
             <DataProposalBox 
               image= {true}
               display= "Ooops..."
@@ -767,7 +773,7 @@ export default function SearchPage({ pages, datasets }) {
                 letterSpacing="-0.2px"
                 color="#252A32"
               >
-                {resource?.totalCount || "..."} {`conjunto${resource?.totalCount > 1 ? "s": ""} encontrado${resource?.totalCount > 1 ? "s": ""}`}
+                {resource?.count || "..."} {`conjunto${resource?.count > 1 ? "s": ""} encontrado${resource?.count > 1 ? "s": ""}`}
                 {/* {search ? " para " + search : ""} */}
               </Heading>
 
@@ -873,20 +879,20 @@ export default function SearchPage({ pages, datasets }) {
                     </>
                 ))
                 :
-                (resource?.edges || []).map((res) => (
+                (resource?.results || []).map((res) => (
                   <>
-                    <DatabaseCard data={res.node} />
+                    <DatabaseCard data={res} />
                     <Divider border="0" borderBottom="1px solid #DEDFE0" opacity={1}/>
                   </>
                 ))
               }
-              <ReactPaginate
+              {/* <ReactPaginate
                 previousLabel={isMobileMod() ? "<" : "Anterior"}
                 nextLabel={isMobileMod() ? ">" : "Próxima"}
                 breakLabel={"..."}
                 breakClassName={"break-me"}
                 forcePage={page - 1}
-                pageCount={Math.ceil(resource.totalCount / 10)}
+                pageCount={Math.ceil(resource.count / 10)}
                 marginPagesDisplayed={isMobileMod() ? 0 : 1}
                 pageRangeDisplayed={isMobileMod() ? 0 : 2}
                 onPageChange={(data) => {
@@ -897,10 +903,10 @@ export default function SearchPage({ pages, datasets }) {
                 pageClassName={isLoading && "disabled"}
                 previousClassName={isLoading && "disabled"}
                 nextClassName={isLoading && "disabled"}
-              />
+              /> */}
             </VStack>
 
-            {resource.totalCount === 1 &&
+            {/* {resource.count === 1 &&
               <DataProposalBox 
                 text= "Ainda não encontrou o que está procurando?"
                 bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
@@ -911,7 +917,7 @@ export default function SearchPage({ pages, datasets }) {
                 text= "Ainda não encontrou o que está procurando?"
                 bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
               />
-            }
+            } */}
           </>})
         </VStack>
       </Stack>

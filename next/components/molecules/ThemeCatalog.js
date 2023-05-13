@@ -126,7 +126,7 @@ function Themes ({
   )
 }
 
-function CardThemes ({ responsive, datasetsCards=[], loading }) {
+function CardThemes ({ responsive, datasetsCards, loading }) {
   const [screenQuery, setScreenQuery] = useState(0)
   useEffect(() => {
     if(responsive.mobileQuery)
@@ -145,7 +145,7 @@ function CardThemes ({ responsive, datasetsCards=[], loading }) {
       maxWidth="1264px"
       margin={responsive.mobileQuery ? "24px 0 48px !important" : "40px 0 48px !important"}
     >
-      {!loading && datasetsCards.length === 0 &&
+      {!loading && !datasetsCards &&
         <Center padding="0 40px">
           <SectionText
             fontSize={responsive.mobileQuery ? "14px" : "18px"}
@@ -167,7 +167,7 @@ function CardThemes ({ responsive, datasetsCards=[], loading }) {
             spaceBetween: 10,
             slidesPerView: screenQuery,
             navigation: true,
-            loop: screenQuery < datasetsCards.length ? true : false,
+            loop: screenQuery < !datasetsCards ? true : false,
             autoplay: {
               delay: 6000,
               pauseOnMouseEnter: true,
@@ -187,7 +187,7 @@ function CardThemes ({ responsive, datasetsCards=[], loading }) {
               />
             ))
           :
-          datasetsCards.length === 0 ?
+          !datasetsCards ?
             new Array(screenQuery).fill(0).map(() => (
               <>
                 <Skeleton
@@ -233,10 +233,11 @@ function CardThemes ({ responsive, datasetsCards=[], loading }) {
 export default function ThemeCatalog () {
   const [listThemes, setListThemes] = useState([])
   const [defaultDatasetsCards, setDefaultDatasetCards] = useState([])
+  const [fetchThemesTimeout, setFetchThemesTimeout] = useState(null)
 
   const [datasetsCards, setDatasetsCards] = useState([])
   const [selectedTheme, setSelectedTheme] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const mobileCheck = useCheckMobile()
   const [mobileQuery, setMobileQuery] = useState(false)
@@ -246,9 +247,16 @@ export default function ThemeCatalog () {
 
   useEffect(() => {
     setMobileQuery(mobileCheck)
-    fetchDatasets()
-    fetchThemes()
+    fetchData()
   },[])
+
+  const fetchData = async () => {
+    const promises = []
+    promises.push(fetchThemes())
+    promises.push(fetchDatasets())
+    await Promise.all(promises)
+    setLoading(false)
+  }
 
   const fetchDatasets = async () => {
     const defaultDataset = await getAllDatasets()
@@ -260,28 +268,30 @@ export default function ThemeCatalog () {
     setListThemes(themes)
   }
 
-  const found = (value) => {
-    return selectedTheme.find(res => res === value)
-  }
+  useEffect(() => {
+    if(selectedTheme.length > 0) {
+      if(fetchThemesTimeout) clearTimeout(fetchThemesTimeout)
+      setLoading(true)
 
-  const handleSelectTheme = async (elm) => {
-    setLoading(true)
-    window.open("#theme", "_self")
-    const newSelectedTheme = [elm, ...selectedTheme]
-    setSelectedTheme(newSelectedTheme)
-
-    const filteredThemes = newSelectedTheme.filter(res => res !== elm)
-
-    if(found(elm)) {
-      setSelectedTheme(filteredThemes)
-      const result = await getDatasetsByThemes(filteredThemes)
-      setDatasetsCards(result)
-    } else {
-      const result = await getDatasetsByThemes(newSelectedTheme)
-      setDatasetsCards(result)
+      const fetchFunc = setTimeout(() => {
+        getDatasetsByThemes(selectedTheme)
+        .then(res => {
+          setDatasetsCards(res)
+          setLoading(false)
+        })
+      }, 500)
+      
+      setFetchThemesTimeout(fetchFunc)
     }
+  },[selectedTheme])
 
-    setLoading(false)
+  const handleSelectTheme = (elm) => {
+    window.open("#theme", "_self")
+    if(selectedTheme.includes(elm)) {
+      setSelectedTheme(selectedTheme.filter(res => res !== elm))
+    } else {
+      setSelectedTheme([elm, ...selectedTheme])
+    }
   }
 
   return (
