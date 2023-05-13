@@ -16,10 +16,10 @@ import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
 
-// import {
-//   getBDTeams,
-//   getBDPeople
-// } from "./api/team";
+import {
+  getTeams,
+  getPeople
+} from "./api/team";
 
 import Display from "../components/atoms/Display";
 import RoundedButton from "../components/atoms/RoundedButton";
@@ -37,18 +37,18 @@ import DiscordIcon from "../public/img/icons/discordIcon";
 import RedirectIcon from "../public/img/icons/redirectIcon";
 import styles from "../styles/quemSomos.module.css";
 
-// export async function getStaticProps(context) {
-//   const bdTeam = await getBDTeams();
-//   const bdPeople = await getBDPeople();
+export async function getStaticProps(context) {
+  const bdTeam = await getTeams();
+  const bdPeople = await getPeople();
 
-//   return await withPages({
-//     props: {
-//       bdTeam,
-//       bdPeople
-//     },
-//     revalidate: 60,
-//   })
-// }
+  return await withPages({
+    props: {
+      bdTeam,
+      bdPeople
+    },
+    revalidate: 60,
+  })
+}
 
 const HistoryBox = ({ children, title, date, image }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -265,13 +265,13 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
     return newArraySorting
   }
 
-  // useEffect(() => {
-  //   setPeople(sortingTeam(allPeople))
-  // },[allPeople])
+  useEffect(() => {
+    setPeople(sortingTeam(allPeople))
+  },[allPeople])
 
-  // useEffect(() => {
-  //   setAllPeople(groupingTeamAndRole(Object.values(bdPeople)).filter(Boolean))
-  // },[bdTeam, bdPeople])
+  useEffect(() => {
+    setAllPeople(groupingTeamAndRole(Object.values(bdPeople)).filter(Boolean))
+  },[bdTeam, bdPeople])
 
   const groupingTeamAndRole = (array) => array.map((elm) => {
     const person = elm
