@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import LoadingSpin from "../atoms/Loading";
 import Subtitle from "../atoms/Subtitle";
 import SectionText from "../atoms/SectionText";
 import RoundedButton from "../atoms/RoundedButton";
@@ -29,17 +30,19 @@ import ExclamationIcon from "../../public/img/icons/exclamationIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
 export default function InformationRequestPage({ id }) {
+  const [isLoading, setIsLoading] = useState(true)
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState({})
 
   const featchInformationRequest = async () => {
     try {
       const result = await getInformationRequest(id)
-      return setResource(result)
+      setResource(result)
     } catch (error) {
       setIsError(error)
       console.error(error)
     }
+    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -131,6 +134,8 @@ export default function InformationRequestPage({ id }) {
   }
 
   if(isError?.message?.length > 0 || resource === null || Object.keys(resource).length < 0) return <FourOFour/>
+
+  if(isLoading) return <LoadingSpin />
 
   return (
     <BaseResourcePage

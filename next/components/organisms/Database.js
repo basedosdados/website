@@ -47,10 +47,10 @@ export function Database({
         height="100%"
         spacing={6}
       >
-        <Link href={`/dataset/${id}`} _hover={{opacity:"none"}}>
+        <Link _hover={{opacity:"none"}}>
           <ImageOrganization
             title={organization.name}
-            image={organization.picture}
+            image={organization.image}
             maxWidth="115px"
             maxHeight="115px"
             minWidth="115px"

@@ -11,7 +11,6 @@ import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 
 import SimpleButton from "../atoms/SimpleButton";
 import { FilterAccordion } from "../atoms/FilterAccordion";
-import { LoadingSpin } from "../atoms/Loading";
 
 import BdmTablePage from "./BdmTablePage";
 import RawDataSourcesPage from "./RawDataSourcesPage";
@@ -118,16 +117,13 @@ export default function DatasetResource({
       if(raw_data_sources.length > 0) return pushQuery("raw_data_source", raw_data_sources[0]?._id)
       if(information_request.length > 0) return pushQuery("information_request", information_request[0]?._id)
     }
-  },[dataset])
+  },[])
 
-  function SwitchResource({route}) {
-    if (route.hasOwnProperty("table"))
-      return <BdmTablePage id={route.table}/>
-    if (route.hasOwnProperty("raw_data_source"))
-      return <RawDataSourcesPage id={route.raw_data_source}/>
-    if (route.hasOwnProperty("information_request"))
-      return <InformationRequestPage id={route.information_request}/>
-    return <LoadingSpin />
+  function SwitchResource ({route}) {
+    if (route.hasOwnProperty("table")) return <BdmTablePage id={route.table}/>
+    if (route.hasOwnProperty("raw_data_source")) return <RawDataSourcesPage id={route.raw_data_source}/>
+    if (route.hasOwnProperty("information_request")) return <InformationRequestPage id={route.information_request}/>
+    return null
   }
 
   return (

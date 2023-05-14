@@ -2,19 +2,12 @@ import {
   Center,
   Spinner
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
 
-export function LoadingSpin ({
+export default function LoadingSpin ({
   isLoading = true,
   ...props
 }) {
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    setLoading(isLoading)
-  },[isLoading])
-
-  if(loading) return null
+  if(!isLoading) return null
 
   return (
     <Center

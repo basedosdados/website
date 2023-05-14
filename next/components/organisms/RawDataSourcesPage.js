@@ -11,6 +11,7 @@ import {
 import { useState, useEffect } from "react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
+import LoadingSpin from "../atoms/Loading";
 import { SimpleTable } from "../atoms/SimpleTable";
 import SectionText from "../atoms/SectionText";
 import Subtitle from "../atoms/Subtitle";
@@ -37,17 +38,19 @@ import CoinIcon from "../../public/img/icons/coinIcon";
 import ExclamationIcon from "../../public/img/icons/exclamationIcon";
 
 export default function RawDataSourcesPage({ id }) {
+  const [isLoading, setIsLoading] = useState(true)
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState({})
 
   const featchRawDataSources = async () => {
     try {
       const result = await getRawDataSources(id)
-      return setResource(result)
+      setResource(result)
     } catch (error) {
       setIsError(error)
       console.error(error)
     }
+    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -142,6 +145,8 @@ export default function RawDataSourcesPage({ id }) {
   }
 
   if(isError?.message?.length > 0 || resource === null || Object.keys(resource).length < 0) return <FourOFour/>
+
+  if(isLoading) return <LoadingSpin />
 
   return (
     <BaseResourcePage

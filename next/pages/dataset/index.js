@@ -128,10 +128,6 @@ export default function SearchPage({ pages }) {
 
   // const datasetDisclosure = useDisclosure()
   // const [order, setOrder] = useState("score")
-  // const [search, setSearch] = useState("")
-  // const [paramFilters, setParamFilters] = useState({})
-  // const [filterKey, setFilterKey] = useState(0)
-
 
   async function getDatasets({q, page}) {
     setIsLoading(true)
@@ -258,6 +254,7 @@ export default function SearchPage({ pages }) {
     raw_quality_tier: "Qualidade da fonte original",
   };
 
+  // campos de filtros 
   //<>
   // const organizations = data?.organizations
   //   ? Object.keys(data?.organizations)
@@ -418,7 +415,7 @@ export default function SearchPage({ pages }) {
         onChange={(value) => {
           router.push({
             pathname: router.pathname,
-            query: {...query, q: value, page: 1 }
+            query: {...query, q: value, page: value !== query.q ? 1 : query.page }
           })
         }}
         placeholder={useCheckMobile() ? "Palavras-chave, instituições ou temas" :"Pesquise palavras-chave, instituições ou temas"}
@@ -707,7 +704,7 @@ export default function SearchPage({ pages }) {
                 color="#252A32"
               >
                 {resource?.count || "..."} {`conjunto${resource?.count > 1 ? "s": ""} encontrado${resource?.count > 1 ? "s": ""}`}
-                {/* {search ? " para " + search : ""} */}
+                {query.q ? ` para ${query.q}` : ""}
               </Heading>
 
               {/* Button create dataset */}

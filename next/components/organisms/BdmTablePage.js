@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import SectionText from "../atoms/SectionText";
 import { SimpleTable } from "../atoms/SimpleTable";
+import LoadingSpin from "../atoms/Loading";
 import Subtitle from "../atoms/Subtitle";
 import TemporalCoverage from "../atoms/TemporalCoverageDisplay";
 import ColumnDatasets from "../molecules/ColumnDatasets";
@@ -36,22 +37,24 @@ import FileIcon from "../../public/img/icons/fileIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 
 export default function BdmTablePage({ id }) {
+  const [isLoading, setIsLoading] = useState(true)
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState({})
 
   const fetchBdmTable = async () => {
     try {
       const result = await getBdmTable(id)
-      return setResource(result)
+      setResource(result)
     } catch (error) {
       setIsError(error)
       console.error(error)
     }
+    setIsLoading(false)
   }
 
   useEffect(() => {
     fetchBdmTable()
-  },[id])
+  }, [id])
 
   const AddInfoTextBase = ({title, text, info, children, ...style}) => {
     return (
@@ -190,6 +193,8 @@ export default function BdmTablePage({ id }) {
   }
 
   if(isError?.message?.length > 0 || resource === null || Object.keys(resource).length < 0) return <FourOFour/>
+
+  if(isLoading) return <LoadingSpin />
 
   return (
     <BaseResourcePage
