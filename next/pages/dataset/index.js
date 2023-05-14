@@ -371,67 +371,6 @@ export default function SearchPage({ pages }) {
   //   */
   // }
 
-  // useEffect(() => {
-  //   if (query.q) setSearch(decodeURI(query.q));
-  //   if (query.order_by) setOrder(decodeURI(query.order_by));
-
-  //   if (query.temporal_coverage) {
-  //     const [start, end] = query.temporal_coverage
-  //       .split("-")
-  //       .map((v) => parseFloat(v));
-  //     setParamFilters({
-  //       ...paramFilters,
-  //       temporal_coverage: new Array(end - start).map((_, i) => start + i),
-  //     });
-  //   }
-
-  //   setParamFilters({
-  //     ...paramFilters,
-  //     tag: query.tag ? query.tag.split(",") : [],
-  //     organization: query.organization ? query.organization.split(",") : [],
-  //     group: query.group ? query.group.split(',') : [],
-  //     resource_type: query.resource_type ? query.resource_type.split(",") : [],
-  //     spatial_coverage: query.spatial_coverage ? query.spatial_coverage.split(",") : [],
-  //     temporal_coverage: query.temporal_coverage ? query.temporal_coverage.split("-") : [],
-  //     entity: query.entity ? query.entity.split(",") : [],
-  //   });
-
-  //   setFilterKey(filterKey + 1);
-  // }, [
-  //   query.resource_type,
-  //   query.tag,
-  //   query.organization,
-  //   query.group,
-  //   query.q,
-  //   query.bdPlus,
-  //   query.order,
-  //   query.spatial_coverage,
-  //   query.temporal_coverage,
-  //   query.entity,
-  // ])
-
-  // useEffect(() => {
-  //   const paramObj = { ...paramFilters, order_by: order, q: search };
-
-  //   Object.keys(paramObj).forEach((p) => {
-  //     const value = paramObj[p];
-
-  //     if (value?.length === 0 || value === "") delete paramObj[p];
-  //   });
-
-  //   // Only add 2000-2005 to url instead of 2000,2001,2002,2003,2004,2005 which can cause error 414
-  //   if (
-  //     paramFilters.temporal_coverage &&
-  //     paramFilters.temporal_coverage.length
-  //   ) {
-  //     paramObj.temporal_coverage = `${paramObj.temporal_coverage[0]}-${paramObj.temporal_coverage[paramObj.temporal_coverage.length - 1]
-  //       }`;
-  //   }
-
-  //   addParametersToCurrentURL(paramObj);
-  //   setPage(1);
-  // }, [paramFilters, search, order]);
-
   const DatabaseCard = ({ data }) => {
     return (
       <Database
@@ -474,11 +413,15 @@ export default function SearchPage({ pages }) {
       {/* modal para a criacao de datasets */}
       {/* <NewDatasetModal {...datasetDisclosure} />*/}
 
-      {/* input search datasets */}
-      {/* <DebouncedControlledInput
-        value={search}
-        onChange={(val) => setSearch(val)}
-        placeholder={isMobileMod() ? "Palavras-chave, instituições ou temas" :"Pesquise palavras-chave, instituições ou temas"}
+      <DebouncedControlledInput
+        value={query.q}
+        onChange={(value) => {
+          router.push({
+            pathname: router.pathname,
+            query: {...query, q: value, page: 1 }
+          })
+        }}
+        placeholder={useCheckMobile() ? "Palavras-chave, instituições ou temas" :"Pesquise palavras-chave, instituições ou temas"}
         justifyContent="center"
         inputStyle={{
           width: "90%",
@@ -493,8 +436,8 @@ export default function SearchPage({ pages }) {
           boxShadow: "0 1px 3px 0.5 rgba(100 93 103 /0.16) !important",
           _placeholder:{color:"#6F6F6F"}
         }}
-        marginTop={isMobileMod() && "70px"}
-      /> */}
+        marginTop={useCheckMobile() && "70px"}
+      />
 
       <Stack
         spacing={isMobileMod() ? 10 : 0}
@@ -743,7 +686,7 @@ export default function SearchPage({ pages }) {
           alignItems="flex-start"
           overflow="hidden"
           width="100%"
-          paddingLeft={isMobileMod() ? "" : "40px"}
+          // paddingLeft={isMobileMod() ? "" : "40px"}
         >
           {showEmptyState && !resource?.results ?
             <DataProposalBox 
