@@ -22,14 +22,10 @@ import Head from "next/head";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
 import { getSearchDatasets } from "../api/datasets/index";
 
-import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 import { addParametersToCurrentURL, isBdPlus, unionArrays } from "../../utils";
 
 import { DebouncedControlledInput } from "../../components/atoms/ControlledInput";
@@ -121,32 +117,26 @@ function FilterTags({
   )
 }
 
-export default function SearchPage({ pages, datasets }) {
+export default function SearchPage({ pages }) {
   const [fetchApi, setFetchApi] = useState(null)
   const [showEmptyState, setShowEmptyState] = useState(false)
   const [resource, setResource] = useState([])
+  const [pageInfo, setPageInfo] = useState({})
   const [isLoading, setIsLoading] = useState(true)
-  const { query } = useRouter()
+  const router =  useRouter()
+  const query = router.query
 
   // const datasetDisclosure = useDisclosure()
-  // const { data: userData = null } = useQuery("user", getUser)
   // const [order, setOrder] = useState("score")
   // const [search, setSearch] = useState("")
   // const [paramFilters, setParamFilters] = useState({})
   // const [filterKey, setFilterKey] = useState(0)
-  // const { data, isLoading } = useQuery(
-  //   ["datasets", search, order, paramFilters, page],
-  //   () => searchDatasets({ search, sort: order, page, paramFilters }),
-  //   {
-  //     onSuccess(data) {
-  //       setPageSize(Math.ceil(data.count / 10))
-  //     },
-  //   }
-  // )
+
 
   async function getDatasets({q, page}) {
     setIsLoading(true)
     const res = await getSearchDatasets({q:q, page:page})
+    setPageInfo({page: page, count: res.count})
     setIsLoading(false)
     setShowEmptyState(true)
     setResource(res)
@@ -886,38 +876,42 @@ export default function SearchPage({ pages, datasets }) {
                   </>
                 ))
               }
-              {/* <ReactPaginate
-                previousLabel={isMobileMod() ? "<" : "Anterior"}
-                nextLabel={isMobileMod() ? ">" : "Próxima"}
-                breakLabel={"..."}
-                breakClassName={"break-me"}
-                forcePage={page - 1}
-                pageCount={Math.ceil(resource.count / 10)}
-                marginPagesDisplayed={isMobileMod() ? 0 : 1}
-                pageRangeDisplayed={isMobileMod() ? 0 : 2}
-                onPageChange={(data) => {
-                  setPage(data.selected + 1)
-                }}
-                containerClassName={"pagination"}
-                activeClassName={"active"}
-                pageClassName={isLoading && "disabled"}
-                previousClassName={isLoading && "disabled"}
-                nextClassName={isLoading && "disabled"}
-              /> */}
+              {showEmptyState &&
+                <ReactPaginate
+                  previousLabel={useCheckMobile() ? "<" : "Anterior"}
+                  nextLabel={useCheckMobile() ? ">" : "Próxima"}
+                  breakLabel={"..."}
+                  breakClassName={"break-me"}
+                  forcePage={pageInfo.page - 1 || 0}
+                  pageCount={Math.ceil(pageInfo.count / 10)}
+                  marginPagesDisplayed={useCheckMobile() ? 0 : 1}
+                  pageRangeDisplayed={useCheckMobile() ? 0 : 2}
+                  onPageChange={(newPage) => {
+                    router.push({
+                      pathname: router.pathname,
+                      query: {...query, page: newPage.selected + 1}
+                    })
+                  }}
+                  containerClassName={"pagination"}
+                  activeClassName={"active"}
+                  pageClassName={isLoading && "disabled"}
+                  previousClassName={isLoading && "disabled"}
+                  nextClassName={isLoading && "disabled"}
+                />
+              }
             </VStack>
-
-            {/* {resource.count === 1 &&
+            {pageInfo?.count === 1 &&
               <DataProposalBox 
                 text= "Ainda não encontrou o que está procurando?"
                 bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
               />
             }
-            {page >= 2 &&
+            {pageInfo.page >= 2 &&
               <DataProposalBox 
                 text= "Ainda não encontrou o que está procurando?"
                 bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
               />
-            } */}
+            }
           </>})
         </VStack>
       </Stack>
