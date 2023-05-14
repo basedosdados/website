@@ -14,7 +14,6 @@ import { useState, useEffect } from "react";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
-import { withPages } from "../hooks/pages.hook";
 
 import {
   getTeams,
@@ -36,19 +35,6 @@ import GithubIcon  from "../public/img/icons/githubIcon";
 import DiscordIcon from "../public/img/icons/discordIcon";
 import RedirectIcon from "../public/img/icons/redirectIcon";
 import styles from "../styles/quemSomos.module.css";
-
-export async function getStaticProps(context) {
-  const bdTeam = await getTeams();
-  const bdPeople = await getPeople();
-
-  return await withPages({
-    props: {
-      bdTeam,
-      bdPeople
-    },
-    revalidate: 60,
-  })
-}
 
 const HistoryBox = ({ children, title, date, image }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -210,7 +196,7 @@ const TeamBox = ({ index, data }) => {
   )
 }
 
-export default function QuemSomos({ pages, bdTeam, bdPeople }) {
+export default function QuemSomos() {
   const [allPeople, setAllPeople] = useState([])
   const [people, setPeople] = useState([])
   const [filterTeam, setFilterTeam] = useState("")
@@ -270,8 +256,8 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   },[allPeople])
 
   useEffect(() => {
-    setAllPeople(groupingTeamAndRole(Object.values(bdPeople)).filter(Boolean))
-  },[bdTeam, bdPeople])
+    setAllPeople(groupingTeamAndRole(Object.values(getPeople)).filter(Boolean))
+  },[])
 
   const groupingTeamAndRole = (array) => array.map((elm) => {
     const person = elm
@@ -280,7 +266,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
     const level = []
     const endDate = []
 
-    const getById = bdTeam.filter((elm) => elm.person_id === person.id)
+    const getById = getTeams.filter((elm) => elm.person_id === person.id)
 
     if(getById) getById.map((res) => {
       team.push(res.team)
@@ -312,13 +298,13 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   },[filterTeam])
 
   const filterPeopleByTeam = (team) => {
-    const teamPeople = bdTeam.filter((elm) => elm.team === team)
+    const teamPeople = getTeams.filter((elm) => elm.team === team)
 
     const mapId = () => teamPeople.map((elm) => elm.person_id)
     
     const personIdList = Array.from(new Set(mapId()))
 
-    const filterPeople = () => personIdList.map((personId) => bdPeople[personId])
+    const filterPeople = () => personIdList.map((personId) => getPeople[personId])
       
     const newGroupPerson = groupingTeamAndRole(filterPeople()).filter(Boolean)
 
@@ -350,7 +336,7 @@ export default function QuemSomos({ pages, bdTeam, bdPeople }) {
   }
 
   return (
-    <MainPageTemplate pages={pages} paddingX="24px">
+    <MainPageTemplate paddingX="24px">
       <Head>
         <title>Quem Somos – Base dos Dados</title>
         <meta
