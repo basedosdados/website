@@ -374,6 +374,7 @@ export default function SearchPage({ pages }) {
         id={data.id}
         themes={data?.themes.slice(0,6).map((g) => [g.slug, g.name])}
         name={data?.name || "Conjunto sem nome"}
+        temporalCoverageText={data?.temporal_coverage}
         organization={{
           name: data?.organization,
           slug: data?.organization_slug,

@@ -17,6 +17,7 @@ export default async function getShowDataset(id) {
                 slug
                 name
                 description
+                coverage
                 themes {
                   edges {
                     node {

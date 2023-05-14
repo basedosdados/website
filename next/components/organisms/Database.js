@@ -25,6 +25,7 @@ import { DataBaseSolidIcon } from "../../public/img/icons/databaseIcon";
 export function Database({
   id,
   name,
+  temporalCoverageText,
   organization,
   tables,
   rawDataSources,
@@ -156,7 +157,7 @@ export function Database({
                 >
                   <SectionText color="#6F6F6F">Cobertura temporal:</SectionText>
                   <TemporalCoverage
-                    text="Nenhuma cobertura temporal fornecida"
+                    text={ temporalCoverageText ? temporalCoverageText : "Nenhuma cobertura temporal fornecida"}
                     textSettings={{color: "#6F6F6F", fontWeight:"400"}}
                   />
                 </HStack>

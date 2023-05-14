@@ -49,7 +49,6 @@ function Hero() {
     return window.open(`/dataset?q=${search}`, "_self");
   }
 
-
   return (
     <VStack
       alignItems="center"

@@ -160,8 +160,8 @@ export default function DatasetPage ({
                   fontSize={isMobileMod() ? "14px" : "16px"}
                 >
                   <TemporalCoverage
-                    value={dataset?.coverages?.[0]?.datetimeRanges?.[0]}
-                    text="Nenhuma cobertura temporal fornecida"
+                    // value={dataset?.coverages?.[0]?.datetimeRanges?.[0]}
+                    text={dataset.coverage ? dataset.coverage :"Nenhuma cobertura temporal fornecida"}
                   />
                 </SectionText>
               </VStack>
