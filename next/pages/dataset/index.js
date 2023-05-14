@@ -142,7 +142,7 @@ export default function SearchPage({ pages }) {
     if(fetchApi) clearTimeout(fetchApi)
 
     const fetchFunc = setTimeout(() => {
-      getDatasets({q:query?.q, page: query?.page})
+      getDatasets({q:query?.q, page: query?.page || 1})
     }, 400)
 
     setFetchApi(fetchFunc)
@@ -396,6 +396,27 @@ export default function SearchPage({ pages }) {
     )
   }
 
+  const SearchQuery = (value) => {
+    if(query.page && value === undefined) {
+      router.push({
+        pathname: router.pathname,
+        query: {...query, page: value !== query.q ? 1 : query.page}
+      })
+    }
+    if(value && query.page === undefined) {
+      router.push({
+        pathname: router.pathname,
+        query: {...query, q: value}
+      })
+    }  
+    if(value && query.page) {
+      router.push({
+        pathname: router.pathname,
+        query: {...query, q: value, page: value !== query.q ? 1 : query.page }
+      })
+    }
+  }
+
   return (
     <MainPageTemplate pages={pages}>
       <Head>
@@ -412,12 +433,7 @@ export default function SearchPage({ pages }) {
 
       <DebouncedControlledInput
         value={query.q}
-        onChange={(value) => {
-          router.push({
-            pathname: router.pathname,
-            query: {...query, q: value, page: value !== query.q ? 1 : query.page }
-          })
-        }}
+        onChange={(value) => SearchQuery(value)}
         placeholder={useCheckMobile() ? "Palavras-chave, instituições ou temas" :"Pesquise palavras-chave, instituições ou temas"}
         justifyContent="center"
         inputStyle={{
@@ -829,7 +845,7 @@ export default function SearchPage({ pages }) {
                   onPageChange={(newPage) => {
                     router.push({
                       pathname: router.pathname,
-                      query: {...query, page: newPage.selected + 1}
+                      query: {...query, page: newPage.selected + 1 || 1}
                     })
                   }}
                   containerClassName={"pagination"}
