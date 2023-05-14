@@ -75,10 +75,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - basedosdados.org
+        - stagingv2.basedosdados.org
       secretName: website-nextjs-staging-tls
   rules:
-    - host: basedosdados.org
+    - host: stagingv2.basedosdados.org
       http:
         paths:
           - path: /
