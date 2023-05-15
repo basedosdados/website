@@ -268,7 +268,7 @@ export default function DataInformationQuery ({ resource }) {
               {`import basedosdados as bd
 
 # Para carregar o dado direto no pandas
-df = bd.read_table(dataset_id='${organizationQuery("_")}_${resource?.dataset?.slug}}',
+df = bd.read_table(dataset_id='${organizationQuery("_")}_${resource?.dataset?.slug}',
 table_id='${resource?.slug}',
 billing_project_id="<YOUR_PROJECT_ID>")`}
             </PrismCodeHighlight>
@@ -316,7 +316,7 @@ df <- bd_collect(query)`}
 
 bd_read_table, ///
     path("<PATH>") ///
-    dataset_id("${organizationQuery("_")}_${resource?.dataset?.slug}}") ///
+    dataset_id("${organizationQuery("_")}_${resource?.dataset?.slug}") ///
     table_id("${resource?.slug}") ///
     billing_project_id("<PROJECT_ID>")`}
             </PrismCodeHighlight>
