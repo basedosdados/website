@@ -297,7 +297,7 @@ function DesktopLinks({ links }) {
 
       <SearchInput status={searchStatus}/>
 
-      {/* {!statusSearch &&
+      {!statusSearch &&
         <HStack spacing={8} display={{ base: "none", lg: "flex" }}>
           {userData ? (
             <HStack spacing={5}>
@@ -323,7 +323,7 @@ function DesktopLinks({ links }) {
             </>
           )}
         </HStack>
-      } */}
+      }
     </HStack>
   );
 }

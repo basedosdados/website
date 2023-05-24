@@ -132,7 +132,7 @@ export default function SearchPage({ pages }) {
   async function getDatasets({q, page}) {
     setIsLoading(true)
     const res = await getSearchDatasets({q:q, page:page})
-    setPageInfo({page: page, count: res.count})
+    setPageInfo({page: page, count: res?.count})
     setIsLoading(false)
     setShowEmptyState(true)
     setResource(res)

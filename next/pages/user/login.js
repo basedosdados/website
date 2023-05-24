@@ -54,6 +54,18 @@ export default function Login() {
     if(result?.errors?.length > 0) return setErrors({login:"Email ou senha inválida"})
 
     localStorage.setItem("token_user", result.data.tokenAuth.token)
+    window.open("/", "_self")
+  }
+
+  const LabelTextForm = ({ text }) => {
+    return (
+      <FormLabel
+        color="#252A32"
+        fontFamily="ubuntu"
+        letterSpacing="0.2px"
+        lineHeight="24px"
+      >{text}</FormLabel>
+    )
   }
 
   return (
@@ -80,12 +92,7 @@ export default function Login() {
           </Alert>
         }
         <FormControl isInvalid={!!errors.email || !!errors.login}>
-          <FormLabel
-            color="#252A32"
-            fontFamily="ubuntu"
-            letterSpacing="0.2px"
-            lineHeight="24px"
-          > Email</FormLabel>
+          <LabelTextForm text="Email"/>
           <Input
             id="email"
             name="email"
@@ -97,12 +104,7 @@ export default function Login() {
         </FormControl>
 
         <FormControl isInvalid={!!errors.password || !!errors.login}>
-          <FormLabel
-            color="#252A32"
-            fontFamily="ubuntu"
-            letterSpacing="0.2px"
-            lineHeight="24px"
-          > Senha</FormLabel>
+          <LabelTextForm text="Senha"/>
           <Input
             type={showPassword ? "password" : "text"}
             id="password"
