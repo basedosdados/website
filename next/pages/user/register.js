@@ -8,7 +8,6 @@ import {
   ListItem
 } from "@chakra-ui/react";
 import { useState } from "react";
-import InternalServerError from "../500";
 
 import { registerAccount, getToken } from "../api/token";
 
@@ -54,9 +53,9 @@ export default function Register() {
 
   const handleSubmit = (e) => {
     const regexPassword = {}
+    const validationErrors = {}
     e.preventDefault()
 
-    let validationErrors = {}
     if (!formData.userName) {
       validationErrors.userName = "O nome de usuário é necessário"
     }
@@ -68,7 +67,8 @@ export default function Register() {
     }
     if (!formData.email) {
       validationErrors.email = "O email é necessário"
-    } else if (!/^\S+@\S+$/.test(formData.email)) {
+    } 
+    if (!/^\S+@\S+$/.test(formData.email)) {
       validationErrors.email = "Email inválido"
     }
     if(!/^.{8,}$/.test(formData.password)) {
@@ -87,7 +87,7 @@ export default function Register() {
       validationErrors.password = "A senha é necessária"
     }
     if (!formData.confirmPassword) {
-      validationErrors.confirmPassword = "Confirma a senha é necessário"
+      validationErrors.confirmPassword = "Confirmar a senha é necessário"
     }
     if(formData.confirmPassword !== formData.password) {
       validationErrors.confirmPassword = "As senhas tem que ser iguais"
@@ -241,7 +241,7 @@ export default function Register() {
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleInputChange}
-            placeholder="Entre com senha novamente"
+            placeholder="Entre com sua senha novamente"
             styleElmRight={{
               width: "50px",
               height: "48px",
