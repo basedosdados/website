@@ -7,6 +7,7 @@ import {
   ListItem
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 import Input from "../../components/atoms/SimpleInput";
 import Button from "../../components/atoms/RoundedButton";
@@ -15,6 +16,9 @@ import { MainPageTemplate } from "../../components/templates/main";
 import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 
 export default function PasswordRecovery() {
+  const router =  useRouter()
+  const query = router.query
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -106,91 +110,97 @@ export default function PasswordRecovery() {
         padding="40px"
         boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
       >
-        <FormControl isInvalid={!!errors.email}>
-          <LabelTextForm text="Email"/>
-          <Input
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            placeholder="exemple@email.com"
-          />
-          <FormErrorMessage>{errors.email}</FormErrorMessage>
-        </FormControl>
+        {!query.id && !query.token &&
+          <FormControl isInvalid={!!errors.email}>
+            <LabelTextForm text="Email"/>
+            <Input
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="exemple@email.com"
+            />
+            <FormErrorMessage>{errors.email}</FormErrorMessage>
+          </FormControl>
+        }
 
-        <FormControl isInvalid={!!errors.password}>
-          <LabelTextForm text="Nova senha"/>
-          <Input
-            type={showPassword ? "password" : "text"}
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleInputChange}
-            placeholder="Entre com sua senha"
-            styleElmRight={{
-              width: "50px",
-              height: "48px",
-              cursor: "pointer",
-              onClick: () => setShowPassword(!showPassword)
-            }}
-            elmRight={showPassword ?
-              <EyeOffIcon
-                alt="esconder senha"
-                width="26px"
-                height="26px"
-                fill="#D0D0D0"
-              />
-            :
-              <EyeIcon
-                alt="exibir senhar"
-                width="26px"
-                height="26px"
-                fill="#D0D0D0"
-              />
-            }
-          />
-          <UnorderedList>
-            <ListItem color={errors?.regexPassword?.amount ? "#E53E3E" :"#A3A3A3"} fontSize="14px" marginTop="8px">Ter no mínimo 8 caracteres</ListItem>
-            <ListItem color={errors?.regexPassword?.uppercaseLowercase ? "#E53E3E" :"#A3A3A3"} fontSize="14px">Pelo menos uma letra maiúscula e minúscula</ListItem>
-            <ListItem color={errors?.regexPassword?.number ? "#E53E3E" :"#A3A3A3"} fontSize="14px">Um dígito</ListItem>
-            <ListItem color={errors?.regexPassword?.special ? "#E53E3E" :"#A3A3A3"} fontSize="14px">E um caractere especial</ListItem>
-          </UnorderedList>
-          <FormErrorMessage>{errors.password}</FormErrorMessage>
-        </FormControl>
+        {query.id && query.token && 
+        <>
+          <FormControl isInvalid={!!errors.password}>
+            <LabelTextForm text="Nova senha"/>
+            <Input
+              type={showPassword ? "password" : "text"}
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              placeholder="Entre com sua senha"
+              styleElmRight={{
+                width: "50px",
+                height: "48px",
+                cursor: "pointer",
+                onClick: () => setShowPassword(!showPassword)
+              }}
+              elmRight={showPassword ?
+                <EyeOffIcon
+                  alt="esconder senha"
+                  width="26px"
+                  height="26px"
+                  fill="#D0D0D0"
+                />
+              :
+                <EyeIcon
+                  alt="exibir senhar"
+                  width="26px"
+                  height="26px"
+                  fill="#D0D0D0"
+                />
+              }
+            />
+            <UnorderedList>
+              <ListItem color={errors?.regexPassword?.amount ? "#E53E3E" :"#A3A3A3"} fontSize="14px" marginTop="8px">Ter no mínimo 8 caracteres</ListItem>
+              <ListItem color={errors?.regexPassword?.uppercaseLowercase ? "#E53E3E" :"#A3A3A3"} fontSize="14px">Pelo menos uma letra maiúscula e minúscula</ListItem>
+              <ListItem color={errors?.regexPassword?.number ? "#E53E3E" :"#A3A3A3"} fontSize="14px">Um dígito</ListItem>
+              <ListItem color={errors?.regexPassword?.special ? "#E53E3E" :"#A3A3A3"} fontSize="14px">E um caractere especial</ListItem>
+            </UnorderedList>
+            <FormErrorMessage>{errors.password}</FormErrorMessage>
+          </FormControl>
 
-        <FormControl isInvalid={!!errors.confirmPassword}>
-          <LabelTextForm text="Confirme sua senha novamente"/>
-          <Input
-            type={showConfirmPassword ? "password" : "text"}
-            id="confirmPassword"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleInputChange}
-            placeholder="Entre com sua senha novamente"
-            styleElmRight={{
-              width: "50px",
-              height: "48px",
-              cursor: "pointer",
-              onClick: () => setShowConfirmPassword(!showConfirmPassword)
-            }}
-            elmRight={showConfirmPassword ?
-              <EyeOffIcon
-                alt="esconder senha"
-                width="26px"
-                height="26px"
-                fill="#D0D0D0"
-              />
-            :
-              <EyeIcon
-                alt="exibir senhar"
-                width="26px"
-                height="26px"
-                fill="#D0D0D0"
-              />
-            }
-          />
-          <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>
-        </FormControl>
+          <FormControl isInvalid={!!errors.confirmPassword}>
+            <LabelTextForm text="Confirme sua senha novamente"/>
+            <Input
+              type={showConfirmPassword ? "password" : "text"}
+              id="confirmPassword"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleInputChange}
+              placeholder="Entre com sua senha novamente"
+              styleElmRight={{
+                width: "50px",
+                height: "48px",
+                cursor: "pointer",
+                onClick: () => setShowConfirmPassword(!showConfirmPassword)
+              }}
+              elmRight={showConfirmPassword ?
+                <EyeOffIcon
+                  alt="esconder senha"
+                  width="26px"
+                  height="26px"
+                  fill="#D0D0D0"
+                />
+              :
+                <EyeIcon
+                  alt="exibir senhar"
+                  width="26px"
+                  height="26px"
+                  fill="#D0D0D0"
+                />
+              }
+            />
+            <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>
+          </FormControl>
+        </>
+        }
 
         <Button
           onClick={(e) => handleSubmit(e)}
