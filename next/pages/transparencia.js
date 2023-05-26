@@ -209,7 +209,7 @@ export default function Transparencia({ pages }) {
           fontSize="15px"
           width="fit-content"
           onClick={() => window.open(
-            "https://basedosdados.org/dataset/br-bd-indicadores?bdm_table=contabilidade", "_blank"
+            "https://basedosdados.org/dataset/8b6c07fd-af78-44ad-8408-da57e6a0b3d4?table=26480073-cb94-41e2-9dfa-6b4ea76da9d9", "_blank"
           )}
         >
           Acesse
