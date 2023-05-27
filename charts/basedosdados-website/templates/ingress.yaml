@@ -1,0 +1,27 @@
+{{- if .Values.website.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.website.name }}-ingress
+  labels:
+    app.kubernetes.io/component: basedosdados-website
+    app.kubernetes.io/name: {{ .Values.website.name }}
+  annotations:
+    {{- toYaml .Values.website.ingress.annotations | nindent 4 }}
+spec:
+  rules:
+    - host: {{ .Values.website.ingress.host | quote }}
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: "{{ .Values.website.name }}-service"
+              port:
+                number: 80
+  {{- with .Values.website.ingress.tls }}
+  tls:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}
