@@ -5,13 +5,14 @@ on:
     workflows: ["Release Docker Image (Development)"]
     types:
       - completed
+  workflow_dispatch:
 
 env:
   IMAGE_NAME: ghcr.io/basedosdados/website:development
 
 jobs:
   deploy-development:
-    if: ${{ github.event.workflow_run.conclusion }} == 'success'
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}  || ${{ github.event_name == 'workflow_dispatch' }}
     name: Deploy (Development)
     runs-on: ubuntu-latest
     environment:
