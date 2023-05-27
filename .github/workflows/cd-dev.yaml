@@ -1,0 +1,91 @@
+name: Deploy (Development)
+
+on:
+  workflow_run:
+    workflows: ["Release Docker Image (Development)"]
+    types:
+      - completed
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: ghcr.io/basedosdados/website:development
+
+jobs:
+  deploy-development:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}  || ${{ github.event_name == 'workflow_dispatch' }}
+    name: Deploy (Development)
+    runs-on: ubuntu-latest
+    environment:
+      name: development
+      url: https://development.basedosdados.org
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.3.0
+        with:
+          ref: development
+
+      - name: Import Secrets
+        id: import_secrets
+        uses: hashicorp/vault-action@v2.4.1
+        with:
+          url: https://vault.basedosdados.org
+          token: ${{ secrets.VAULT_TOKEN }}
+          secrets: |
+            secret/data/gcp_credentials/basedosdados-dev    GCP_SA_KEY_BASE64 | GCP_SA_KEY_BASE64 ;
+            secret/data/gcp_credentials/basedosdados-dev    GCP_PROJECT_ID    | GCP_PROJECT_ID ;
+            secret/data/gcp_credentials/basedosdados-dev    GKE_CLUSTER_NAME  | GKE_CLUSTER_NAME ;
+            secret/data/gcp_credentials/basedosdados-dev    GKE_CLUSTER_ZONE  | GKE_CLUSTER_ZONE ;
+
+      - name: Setup Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v0.2.1
+        with:
+          service_account_key: ${{ steps.import_secrets.outputs.GCP_SA_KEY_BASE64 }}
+          project_id: ${{ steps.import_secrets.outputs.GCP_PROJECT_ID }}
+          export_default_credentials: true
+
+      - name: Get GKE credentials
+        uses: google-github-actions/get-gke-credentials@v0.2.1
+        with:
+          cluster_name: ${{ steps.import_secrets.outputs.GKE_CLUSTER_NAME }}
+          location: ${{ steps.import_secrets.outputs.GKE_CLUSTER_ZONE }}
+          credentials: ${{ steps.import_secrets.outputs.GCP_SA_KEY_BASE64 }}
+
+      - name: Write values.yaml file
+        run: |
+          cat << EOF > values.yaml
+          website:
+            name: "basedosdados-website-development"
+            image:
+              name: "ghcr.io/basedosdados/website"
+              tag: "development"
+              pullPolicy: "Always"
+            replicas: 1
+            resources:
+              requests:
+                cpu: 100m
+                memory: 500Mi
+              limits:
+                cpu: 500m
+                memory: 1Gi
+            env: []
+            envFrom:
+              - secretRef:
+                  name: basedosdados-website-development
+            ingress:
+              enabled: true
+              host: "development.basedosdados.org"
+              annotations:
+                cert-manager.io/issuer: "letsencrypt-production"
+                kubernetes.io/ingress.class: nginx
+                nginx.ingress.kubernetes.io/rewrite-target: /
+                nginx.ingress.kubernetes.io/ssl-redirect: "true"
+              tls:
+                - hosts:
+                    - "development.basedosdados.org"
+                  secretName: "development-basedosdados-org-tls"
+          EOF
+
+      - name: Deploy using Helm
+        run: |
+          helm upgrade --install basedosdados-website-development charts/basedosdados-website/. -n website -f values.yaml --wait
