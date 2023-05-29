@@ -120,7 +120,9 @@ function FilterTags({
 export default function SearchPage({ pages }) {
   const [fetchApi, setFetchApi] = useState(null)
   const [showEmptyState, setShowEmptyState] = useState(false)
-  const [resource, setResource] = useState([])
+  const [resource, setResource] = useState([ ])
+  const [aggregations, setAggregations] = useState({})
+  const [count, setCount] = useState(0)
   const [pageInfo, setPageInfo] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const router =  useRouter()
@@ -132,10 +134,12 @@ export default function SearchPage({ pages }) {
   async function getDatasets({q, page}) {
     setIsLoading(true)
     const res = await getSearchDatasets({q:q, page:page})
-    setPageInfo({page: page, count: res.count})
+    setPageInfo({page: page, count: res?.count})
     setIsLoading(false)
     setShowEmptyState(true)
-    setResource(res)
+    setResource(res.results)
+    setAggregations(res.aggregations)
+    setCount(res.count)
   }
 
   useEffect(() => {
@@ -372,18 +376,13 @@ export default function SearchPage({ pages }) {
     return (
       <Database
         id={data.id}
-        themes={data?.themes.slice(0,6).map((g) => [g.slug, g.name])}
+        themes={data?.themes}
         name={data?.name || "Conjunto sem nome"}
         temporalCoverageText={data?.temporal_coverage}
-        organization={{
-          name: data?.organization,
-          slug: data?.organization_slug,
-          website: data?.organization_website,
-          image: data?.organization_picture
-        }}
+        organization={data.organization[0]}
         tables={{
-          id: data?.first_table_id,
-          number: data?.n_bdm_tables
+          id: data?.tables?.[0]?.id,
+          number: data?.tables?.length
         }}
         rawDataSources={{
           id: data?.first_original_source_id,
@@ -702,7 +701,7 @@ export default function SearchPage({ pages }) {
           width="100%"
           // paddingLeft={isMobileMod() ? "" : "40px"}
         >
-          {showEmptyState && !resource?.results ?
+          {showEmptyState && !resource ?
             <DataProposalBox 
               image= {true}
               display= "Ooops..."
@@ -720,7 +719,7 @@ export default function SearchPage({ pages }) {
                 letterSpacing="-0.2px"
                 color="#252A32"
               >
-                {resource?.count || "..."} {`conjunto${resource?.count > 1 ? "s": ""} encontrado${resource?.count > 1 ? "s": ""}`}
+                {count || "..."} {`conjunto${count > 1 ? "s": ""} encontrado${count > 1 ? "s": ""}`}
                 {query.q ? ` para ${query.q}` : ""}
               </Heading>
 
@@ -826,7 +825,7 @@ export default function SearchPage({ pages }) {
                     </>
                 ))
                 :
-                (resource?.results || []).map((res) => (
+                (resource || []).map((res) => (
                   <>
                     <DatabaseCard data={res} />
                     <Divider border="0" borderBottom="1px solid #DEDFE0" opacity={1}/>
