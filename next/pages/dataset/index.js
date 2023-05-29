@@ -256,121 +256,7 @@ export default function SearchPage({ pages }) {
     entity: "Nível da observação",
     update_frequency: "Frequência de atualização",
     raw_quality_tier: "Qualidade da fonte original",
-  };
-
-  // campos de filtros 
-  //<>
-  // const organizations = data?.organizations
-  //   ? Object.keys(data?.organizations)
-  //     .map((t) => ({
-  //       name: t,
-  //       displayName:
-  //         data.organizations_display_names[t] + ` (${data.organizations[t]})`,
-  //       value: data.organizations[t],
-  //     }))
-  //     .sort((a, b) => b.value - a.value)
-  //   : [];
-
-  // const groups = data?.groups
-  //   ? Object.keys(data?.groups)
-  //     .map((t) => ({
-  //       name: t,
-  //       displayName: data.groups_display_names[t] + ` (${data.groups[t]})`,
-  //       value: data.groups[t],
-  //     }))
-  //     .sort((a, b) => b.value - a.value)
-  //   : [];
-
-  // const tags = data?.tags
-  //   ? Object.keys(data.tags)
-  //     .map((t) => ({
-  //       name: t,
-  //       displayName: t + ` (${data.tags[t]})`,
-  //       value: data.tags[t],
-  //     }))
-  //     .sort((a, b) => b.value - a.value)
-  //   : [];
-
-  // const entities = data?.entities
-  //   ? Object.keys(data.entities)
-  //     .map((t) => ({
-  //       name: t,
-  //       displayName:
-  //       optionsTranslations["Entity"][t] + ` (${data.entities[t]})`,
-  //       value: data.entities[t],
-  //     }))
-  //     .sort((a, b) => b.value - a.value)
-  //   : [];
-
-  // const updateFrequencies = data?.update_frequencies
-  //   ? Object.keys(data.update_frequencies)
-  //     .map((t) => ({
-  //       name: t,
-  //       displayName:
-  //       optionsTranslations["Time Unit"][t] + ` (${data.update_frequencies[t]})`,
-  //       value: data.update_frequencies[t],
-  //     }))
-  //     .sort((a, b) => optionsUpdateFrequencies[a.name] - optionsUpdateFrequencies[b.name])
-  //   : [];
-
-  //   const rawQualityTiers = data?.raw_quality_tiers
-  //   ? Object.keys(data.raw_quality_tiers)
-  //     .map((t) => ({
-  //       name: t,
-  //       displayName:
-  //       optionsTranslations["Raw Quality Tier"][t] + ` (${data.raw_quality_tiers[t]})`,
-  //       value: data.raw_quality_tiers[t],
-  //     }))
-  //     .sort((a, b) => optionsRawQualityTiers[a.name] - optionsRawQualityTiers[b.name])
-  //   : [];
-
-  // const spatialCoverages = {
-  //   continent: data?.spatial_coverage_continent
-  //     ? Object.keys(data.spatial_coverage_continent)
-  //       .map((t) => ({
-  //         name: t,
-  //         displayName:
-  //         optionsTranslations["Spatial Coverage"][t] +
-  //           ` (${data.spatial_coverage_continent[t]})`,
-  //         value: data.spatial_coverage_continent[t],
-  //       }))
-  //       .sort((a, b) => b.value - a.value)
-  //     : [],
-  //   country: data?.spatial_coverage_country
-  //     ? Object.keys(data.spatial_coverage_country)
-  //       .map((t) => ({
-  //         name: t,
-  //         displayName:
-  //         optionsTranslations["Spatial Coverage"][t] + ` (${data.spatial_coverage_country[t]})`,
-  //         value: data.spatial_coverage_country[t],
-  //       }))
-  //       .sort((a, b) => b.value - a.value)
-  //     : [],
-  //   admin1: data?.spatial_coverage_admin1
-  //     ? Object.keys(data.spatial_coverage_admin1)
-  //       .map((t) => ({
-  //         name: t,
-  //         displayName:
-  //         optionsTranslations["Spatial Coverage"][t] +
-  //           ` (${data.spatial_coverage_admin1[t]})`,
-  //         value: data.spatial_coverage_admin1[t],
-  //       }))
-  //       .sort((a, b) => b.value - a.value)
-  //     : [],
-  //   /*
-  //   admin2: data?.spatial_coverage_admin2
-  //     ? Object.keys(data.spatial_coverage_admin2)
-  //       .map((t) => ({
-  //         name: t,
-  //         displayName:
-  //           optionsTranslations["Spatial Coverage"][t] +
-  //           ` (${data.spatial_coverage_admin2[t]})`,
-  //         value: data.spatial_coverage_admin2[t],
-  //       }))
-  //       .sort((a, b) => b.value - a.value)
-  //     : [],
-  //   */
-  // }
+  }
 
   const DatabaseCard = ({ data }) => {
     return (
@@ -453,20 +339,19 @@ export default function SearchPage({ pages }) {
       />
 
       <Stack
-        spacing={isMobileMod() ? 10 : 0}
+        spacing={useCheckMobile() ? 10 : 0}
         width="90%"
         maxWidth="1264px"
         margin="auto"
         direction={{ base: "column", lg: "row" }}
       >
-        {/*<VStack
+        <VStack
           justifyContent="flex-start"
           alignItems="flex-start"
           minWidth={{ base: "100%", lg: "320px" }}
           maxWidth={{ base: "100%", lg: "320px" }}
-          borderRight={isMobileMod() ? "" : "1px solid #DEDFE0"}
-          padding={isMobileMod() ? "" : "0 20px 0 0"}
-          key={filterKey}
+          borderRight={useCheckMobile() ? "" : "1px solid #DEDFE0"}
+          padding={useCheckMobile() ? "" : "0 20px 0 0"}
         >
           <Box display="flex" marginBottom="10px" alignItems="center">
             <FilterIcon
@@ -489,7 +374,7 @@ export default function SearchPage({ pages }) {
             </Text>
           </Box>
 
-          <CheckboxFilterAccordion
+          {/* <CheckboxFilterAccordion
             isActive={(paramFilters.resource_type || []).length > 0}
             alwaysOpen
             choices={[
@@ -524,22 +409,22 @@ export default function SearchPage({ pages }) {
             onChange={(values) => {
               setParamFilters({ ...paramFilters, resource_type: values });
             }}
-          />
+          /> */}
 
           <CheckboxFilterAccordion
             canSearch={true}
-            isActive={(paramFilters.group || []).length > 0}
-            choices={groups}
-            values={paramFilters.group}
-            valueField="name"
-            displayField="displayName"
+            // isActive={(paramFilters.group || []).length > 0}
+            choices={aggregations?.themes}
+            values={aggregations?.themes}
+            valueField="key"
+            displayField="name"
             fieldName="Tema"
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, group: values })
-            }
+            // onChange={(values) =>
+            //   setParamFilters({ ...paramFilters, group: values })
+            // }
           />
 
-          <CheckboxFilterAccordion
+          {/* <CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.organization || []).length > 0}
             choices={organizations}
@@ -692,14 +577,14 @@ export default function SearchPage({ pages }) {
             onChange={(values) =>
               setParamFilters({ ...paramFilters, raw_quality_tier: values })
             }
-          />
-        </VStack> */}
+          /> */}
+        </VStack>
 
         <VStack
           alignItems="flex-start"
           overflow="hidden"
           width="100%"
-          // paddingLeft={isMobileMod() ? "" : "40px"}
+          paddingLeft={isMobileMod() ? "" : "40px !important"}
         >
           {showEmptyState && !resource ?
             <DataProposalBox 
