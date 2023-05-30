@@ -118,6 +118,8 @@ function FilterTags({
 }
 
 export default function SearchPage({ pages }) {
+  const router =  useRouter()
+  const query = router.query
   const [fetchApi, setFetchApi] = useState(null)
   const [showEmptyState, setShowEmptyState] = useState(false)
   const [resource, setResource] = useState([ ])
@@ -125,8 +127,6 @@ export default function SearchPage({ pages }) {
   const [count, setCount] = useState(0)
   const [pageInfo, setPageInfo] = useState({})
   const [isLoading, setIsLoading] = useState(true)
-  const router =  useRouter()
-  const query = router.query
 
   // const datasetDisclosure = useDisclosure()
   // const [order, setOrder] = useState("score")
@@ -137,6 +137,7 @@ export default function SearchPage({ pages }) {
     setPageInfo({page: page, count: res?.count})
     setIsLoading(false)
     setShowEmptyState(true)
+    if(res === undefined) return router.push({pathname:"500"})
     setResource(res.results)
     setAggregations(res.aggregations)
     setCount(res.count)
@@ -283,19 +284,19 @@ export default function SearchPage({ pages }) {
   }
 
   const SearchQuery = (value) => {
-    if(query.page && value === undefined) {
+    if(query.page && value === undefined || "") {
       router.push({
         pathname: router.pathname,
         query: {...query, page: value !== query.q ? 1 : query.page}
       })
     }
-    if(value && query.page === undefined) {
+    if(value || value === "" && query.page === undefined) {
       router.push({
         pathname: router.pathname,
         query: {...query, q: value}
       })
     }  
-    if(value && query.page) {
+    if(value || value === "" && query.page) {
       router.push({
         pathname: router.pathname,
         query: {...query, q: value, page: value !== query.q ? 1 : query.page }
@@ -319,7 +320,7 @@ export default function SearchPage({ pages }) {
 
       <DebouncedControlledInput
         value={query.q}
-        onChange={(value) => SearchQuery(value)}
+        onChange={(value) => { SearchQuery(value) }}
         placeholder={useCheckMobile() ? "Palavras-chave, instituições ou temas" :"Pesquise palavras-chave, instituições ou temas"}
         justifyContent="center"
         inputStyle={{
@@ -411,8 +412,8 @@ export default function SearchPage({ pages }) {
             }}
           /> */}
 
-          {/* <CheckboxFilterAccordion
-            // canSearch={true}
+          <CheckboxFilterAccordion
+            canSearch={true}
             // isActive={(paramFilters.group || []).length > 0}
             choices={aggregations?.themes}
             values={aggregations?.themes}
@@ -422,35 +423,35 @@ export default function SearchPage({ pages }) {
             // onChange={(values) =>
             //   setParamFilters({ ...paramFilters, group: values })
             // }
-          /> */}
-
-          {/* <CheckboxFilterAccordion
-            canSearch={true}
-            isActive={(paramFilters.organization || []).length > 0}
-            choices={organizations}
-            values={paramFilters.organization}
-            valueField="name"
-            displayField="displayName"
-            fieldName="Organização"
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, organization: values })
-            }
           />
 
           <CheckboxFilterAccordion
             canSearch={true}
-            isActive={(paramFilters.tag || []).length > 0}
-            choices={tags}
-            valueField="name"
-            displayField="displayName"
-            fieldName="Etiqueta"
-            values={paramFilters.tag}
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, tag: values })
-            }
+            // isActive={(paramFilters.organization || []).length > 0}
+            choices={aggregations?.organizations}
+            values={aggregations?.organizations}
+            valueField="key"
+            displayField="name"
+            fieldName="Organização"
+            // onChange={(values) =>
+            //   setParamFilters({ ...paramFilters, organization: values })
+            // }
           />
 
-          <SimpleFilterAccordion
+          <CheckboxFilterAccordion
+            canSearch={true}
+            // isActive={(paramFilters.tag || []).length > 0}
+            choices={aggregations?.tags}
+            values={aggregations?.tags}
+            valueField="key"
+            displayField="name"
+            fieldName="Etiqueta"
+            // onChange={(values) =>
+            //   setParamFilters({ ...paramFilters, tag: values })
+            // }
+          />
+
+          {/* <SimpleFilterAccordion
             fieldName="Cobertura espacial"
             isActive={(paramFilters.spatial_coverage || []).length > 0}
             styleChildren={{
@@ -538,22 +539,22 @@ export default function SearchPage({ pages }) {
                 .map((_, i) => start + i),
               });
             }}
-          />
+          /> */
 
           <CheckboxFilterAccordion
             canSearch={true}
-            isActive={(paramFilters.entity || []).length > 0}
-            choices={entities}
-            values={paramFilters.entity}
-            valueField="name"
-            displayField="displayName"
+            // isActive={(paramFilters.entity || []).length > 0}
+            choices={aggregations?.observation_levels}
+            values={aggregations?.observation_levels}
+            valueField="key"
+            displayField="name"
             fieldName="Nível da observação"
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, entity: values })
-            }
+            // onChange={(values) =>
+            //   setParamFilters({ ...paramFilters, entity: values })
+            // }
           />
 
-          <CheckboxFilterAccordion
+          /*<CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.update_frequency || []).length > 0}
             choices={updateFrequencies}
