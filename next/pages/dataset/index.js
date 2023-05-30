@@ -268,7 +268,7 @@ export default function SearchPage({ pages }) {
         organization={data.organization[0]}
         tables={{
           id: data?.tables?.[0]?.id,
-          number: data?.tables?.length
+          number: data?.n_bdm_tables
         }}
         rawDataSources={{
           id: data?.first_original_source_id,
@@ -411,8 +411,8 @@ export default function SearchPage({ pages }) {
             }}
           /> */}
 
-          <CheckboxFilterAccordion
-            canSearch={true}
+          {/* <CheckboxFilterAccordion
+            // canSearch={true}
             // isActive={(paramFilters.group || []).length > 0}
             choices={aggregations?.themes}
             values={aggregations?.themes}
@@ -422,7 +422,7 @@ export default function SearchPage({ pages }) {
             // onChange={(values) =>
             //   setParamFilters({ ...paramFilters, group: values })
             // }
-          />
+          /> */}
 
           {/* <CheckboxFilterAccordion
             canSearch={true}
