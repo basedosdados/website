@@ -118,6 +118,8 @@ function FilterTags({
 }
 
 export default function SearchPage({ pages }) {
+  const router =  useRouter()
+  const query = router.query
   const [fetchApi, setFetchApi] = useState(null)
   const [showEmptyState, setShowEmptyState] = useState(false)
   const [resource, setResource] = useState([ ])
@@ -125,8 +127,6 @@ export default function SearchPage({ pages }) {
   const [count, setCount] = useState(0)
   const [pageInfo, setPageInfo] = useState({})
   const [isLoading, setIsLoading] = useState(true)
-  const router =  useRouter()
-  const query = router.query
 
   // const datasetDisclosure = useDisclosure()
   // const [order, setOrder] = useState("score")
@@ -283,19 +283,19 @@ export default function SearchPage({ pages }) {
   }
 
   const SearchQuery = (value) => {
-    if(query.page && value === undefined) {
+    if(query.page && value === undefined || "") {
       router.push({
         pathname: router.pathname,
         query: {...query, page: value !== query.q ? 1 : query.page}
       })
     }
-    if(value && query.page === undefined) {
+    if(value || value === "" && query.page === undefined) {
       router.push({
         pathname: router.pathname,
         query: {...query, q: value}
       })
     }  
-    if(value && query.page) {
+    if(value || value === "" && query.page) {
       router.push({
         pathname: router.pathname,
         query: {...query, q: value, page: value !== query.q ? 1 : query.page }
@@ -319,7 +319,7 @@ export default function SearchPage({ pages }) {
 
       <DebouncedControlledInput
         value={query.q}
-        onChange={(value) => SearchQuery(value)}
+        onChange={(value) => { SearchQuery(value) }}
         placeholder={useCheckMobile() ? "Palavras-chave, instituições ou temas" :"Pesquise palavras-chave, instituições ou temas"}
         justifyContent="center"
         inputStyle={{
