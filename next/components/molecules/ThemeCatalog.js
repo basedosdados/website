@@ -201,24 +201,21 @@ function CardThemes ({ responsive, datasetsCards, loading }) {
             :
             datasetsCards.map((elm) => (
               <DatabaseCard
-                name={elm.name}
-                categories={elm.themes.slice(0,6).map((g) => [g.slug, g.name])}
-                organization={{
-                  name:elm.organization,
-                  slug:elm.organization_slug
-                }}
-                tags={elm.tags.slice(0,3).map((g) => g.name)}
+                name={elm?.name}
+                categories={elm?.themes}
+                organization={elm?.organization[0]}
+                tags={elm?.tags}
                 tables={{
-                  id: elm.first_table_id,
-                  number: elm.n_bdm_tables
+                  id: elm?.tables?.[0]?.id,
+                  number: elm?.n_bdm_tables
                 }}
                 rawDataSources={{
-                  id: elm.first_original_source_id,
-                  number: elm.n_original_sources
+                  id: elm?.first_original_source_id,
+                  number: elm?.n_original_sources
                 }}
                 informationRequests={{
-                  id: elm.first_lai_id,
-                  number: elm.n_lais
+                  id: elm?.first_lai_id,
+                  number: elm?.n_lais
                 }}
                 link={`/dataset/${elm.id}`}
               />
