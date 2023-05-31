@@ -69,9 +69,7 @@ export default function DatasetPage ({
   const isDatasetEmpty = dataset === null || Object.keys(dataset).length === 0
 
   useEffect(() => {
-    if(isDatasetEmpty) return router.push({
-      pathname:`${process.env.NEXT_PUBLIC_API_URL}/dataset_redirect?dataset=${query.dataset}`
-    })
+    if(isDatasetEmpty) return router.push(`${process.env.NEXT_PUBLIC_API_URL}/dataset_redirect?dataset=${query.dataset}`)
   }, [])
 
   if(isDatasetEmpty) return <MainPageTemplate><FourOFour/></MainPageTemplate>
