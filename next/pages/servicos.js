@@ -1,5 +1,13 @@
+import {
+  Box,
+  Flex,
+  HStack,
+  Stack,
+  VStack
+} from "@chakra-ui/layout";
+import Display from "../components/atoms/Display";
+import BodyText from "../components/atoms/BodyText";
 import { Image } from "@chakra-ui/image";
-import { Box, Flex, HStack, Stack, VStack } from "@chakra-ui/layout";
 import Head from "next/head";
 import BigTitle from "../components/atoms/BigTitle";
 import Link from "../components/atoms/Link";
@@ -10,6 +18,8 @@ import { KnowOurServices } from "../components/molecules/KnowOurServices";
 import { NamedAvatar } from "../components/molecules/NamedAvatar";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
+import { isMobileMod } from "../hooks/useCheckMobile.hook";
+import BDLogoProImage from "../public/img/logos/bd_logo_pro"
 
 export async function getStaticProps(context) {
   return await withPages();
@@ -126,6 +136,49 @@ function BorderBox({ title, children }) {
   );
 }
 
+function BDPro () {
+  return (
+    <Stack
+      width={{ base: "90%", lg: "85%" }}
+      maxWidth="1264px"
+      margin={isMobileMod ? "80px auto 40px" :"0 auto 180px"}
+      alignItems="center"
+    >
+      <BDLogoProImage
+        widthImage="240px"
+        heightImage="60px"
+        marginBottom="24px"
+      />
+      <Display
+        fontSize={isMobileMod ? "48px" : "90px"}
+        letterSpacing="-2.5px"
+        lineHeight={isMobileMod ? "54px" : "108px"}
+        textAlign="center"
+        margin="0 0 24px !important"
+      > 
+      A sua plataforma {!isMobileMod() &&<br/>} avançada de dados
+      </Display>
+      <BodyText
+        fontWeight="400"
+        fontSize={isMobileMod ? "18px" : "28px"}
+        lineHeight={isMobileMod ? "24px" : "44px"}
+        textAlign="center"
+        margin="0 0 24px !important"
+      >
+        Assine agora o nosso datalake privado para ter acesso aos {!isMobileMod() &&<br/>} dados mais valiosos para você e sua organização
+      </BodyText>
+      <RoundedButton
+        margin="0 !important"
+        backgroundColor="#8A7500"
+      >
+        <a href="https://info.basedosdados.org/bd-pro" target="_blank">
+          Assine a BD Pro
+        </a>
+      </RoundedButton>
+    </Stack>
+  )
+}
+
 export default function Services({ pages }) {
   const services = {
     "Captura de dados":
@@ -146,6 +199,8 @@ export default function Services({ pages }) {
           key="ogtitle"
         />
       </Head>
+
+      <BDPro/>
 
       <VStack
         paddingTop={{ base: "50px", lg: "0px" }}

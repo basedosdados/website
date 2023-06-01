@@ -6,6 +6,7 @@ import {
 import { useState } from "react";
 import SectionText from "../atoms/SectionText";
 import SectionTitle from "../atoms/SectionTitle";
+import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 
 export function KnowOurServices({ ...props }) {
   const [currentTab, setCurrentTab] = useState("1. Demanda");
@@ -50,6 +51,7 @@ export function KnowOurServices({ ...props }) {
         boxShadow="0px 2px 5px 1px rgba(0, 0, 0, 0.25)"
         borderRadius="15px"
         spacing={10}
+        flexDirection={isMobileMod && "column"}
         zIndex="10"
         position="relative"
         backgroundColor="white"
