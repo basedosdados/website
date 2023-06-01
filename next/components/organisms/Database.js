@@ -51,7 +51,7 @@ export function Database({
         <Link _hover={{opacity:"none"}}>
           <ImageOrganization
             title={organization.name}
-            image={organization.image}
+            image={organization?.picture || organization?.image}
             maxWidth="115px"
             maxHeight="115px"
             minWidth="115px"
@@ -96,11 +96,11 @@ export function Database({
                   margin={useCheckMobile() ? "16px 0px 0px !important" : "0px 0px 0px 28px !important"}
                   spacing={2}
                 >
-                  {themes.map((elm) => (
+                  {themes.slice(0,6).map((elm) => (
                     <Tooltip
                       hasArrow
                       bg="#2A2F38"
-                      label={elm[1]}
+                      label={elm.name}
                       fontSize="16px"
                       fontWeight="500"
                       padding="5px 16px 6px"
@@ -114,11 +114,11 @@ export function Database({
                         padding="4px"
                         borderRadius="6px"
                       >
-                        <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${elm[0]}`}>
+                        <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${elm.slug}`}>
                           <CategoryIcon
-                            alt={elm[0]}
+                            alt={elm.name}
                             size="36px"
-                            url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${elm[0]}.svg`}
+                            url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${elm.slug}.svg`}
                           />
                         </Link>
                       </Center>

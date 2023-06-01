@@ -14,9 +14,9 @@ import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
 export default function DatabaseCard({
   name,
-  categories = [{}],
+  categories = [],
   organization,
-  tags,
+  tags = [],
   tables,
   rawDataSources,
   informationRequests,
@@ -67,12 +67,12 @@ export default function DatabaseCard({
 
   return (
     <Card
-      icons={[
-        ...categories.map((c) => (
+      icons={categories.length !== 0 && [
+        ...categories.slice(0,6).map((c) => (
           <Tooltip
             hasArrow
             bg="#2A2F38"
-            label={c[1]}
+            label={c.name}
             fontSize="16px"
             fontWeight="500"
             padding="5px 16px 6px"
@@ -90,14 +90,14 @@ export default function DatabaseCard({
                 overflow="hidden"
                 filter="invert(1)"
                 _hover={{ opacity: "none" }}
-                href={`/dataset?group=${c[0]}`}
+                href={`/dataset?group=${c.slug}`}
                 target="_blank"
               >
                 <CategoryIcon
-                  alt={c[0]}
+                  alt={c.name}
                   size="37px"
                   padding="4px"
-                  url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${c[0]}.svg`}
+                  url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${c.slug}.svg`}
                 />
               </Link>
             </Center>
@@ -142,54 +142,56 @@ export default function DatabaseCard({
           className="no-scrollbar"
           margin="0 0 20px"
         >
-          {tags.map((t) => (
-            <ThemeTag name={t} />
+          {tags.length !== 0 && tags.slice(0,3).map((t) => (
+            <ThemeTag name={t.name}/>
           ))}
         </HStack>
-          <Text
-            fontFamily="Ubuntu"
-            fontSize="12px"
-            fontWeight="400"
-            letterSpacing="0.3px"
-            color="#252A32"
+
+        <Text
+          fontFamily="Ubuntu"
+          fontSize="12px"
+          fontWeight="400"
+          letterSpacing="0.3px"
+          color="#252A32"
+        >
+          {databaseInfo[0]}
+        </Text>
+
+        <HStack>
+          <a
+            href={rawDataSources.length > 0 && `${link}?raw_data_source=${rawDataSources.id}`}
+            target="_blank"
           >
-            {databaseInfo[0]}
-          </Text>
-          <HStack>
-            <a
-              href={rawDataSources.length > 0 && `${link}?raw_data_source=${rawDataSources.id}`}
-              target="_blank"
+            <Text
+              fontFamily="Ubuntu"
+              fontSize="12px"
+              fontWeight="400"
+              letterSpacing="0.3px"
+              color={databaseInfo[1] ? "#252A32" : "#C4C4C4"}
+              cursor={databaseInfo[1] && "pointer"}
+              _hover={databaseInfo[1] && {opacity : "0.7"}}
             >
-              <Text
-                fontFamily="Ubuntu"
-                fontSize="12px"
-                fontWeight="400"
-                letterSpacing="0.3px"
-                color={databaseInfo[1] ? "#252A32" : "#C4C4C4"}
-                cursor={databaseInfo[1] && "pointer"}
-                _hover={databaseInfo[1] && {opacity : "0.7"}}
-              >
-                {databaseInfo[1] ? databaseInfo[1] : "0 fontes originais"}
-              </Text>
-            </a>
-            <Text color="#DEDFE0">•</Text>
-            <a
-              href={informationRequests.length > 0 && `${link}?information_request=${informationRequests.id}`}
-              target="_blank"
+              {databaseInfo[1] ? databaseInfo[1] : "0 fontes originais"}
+            </Text>
+          </a>
+          <Text color="#DEDFE0">•</Text>
+          <a
+            href={informationRequests.length > 0 && `${link}?information_request=${informationRequests.id}`}
+            target="_blank"
+          >
+            <Text
+              fontFamily="Ubuntu"
+              fontSize="12px"
+              fontWeight="400"
+              letterSpacing="0.3px"
+              color={databaseInfo[2] ? "#252A32" : "#C4C4C4"}
+              cursor={databaseInfo[2] && "pointer"}
+              _hover={databaseInfo[2] && {opacity : "0.7"}}
             >
-              <Text
-                fontFamily="Ubuntu"
-                fontSize="12px"
-                fontWeight="400"
-                letterSpacing="0.3px"
-                color={databaseInfo[2] ? "#252A32" : "#C4C4C4"}
-                cursor={databaseInfo[2] && "pointer"}
-                _hover={databaseInfo[2] && {opacity : "0.7"}}
-              >
-                {databaseInfo[2] ? databaseInfo[2] : "0 pedidos LAI"}
-              </Text>
-            </a>
-          </HStack>
+              {databaseInfo[2] ? databaseInfo[2] : "0 pedidos LAI"}
+            </Text>
+          </a>
+        </HStack>
       </VStack>
     </Card>
   );

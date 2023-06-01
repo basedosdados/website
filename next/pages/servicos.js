@@ -1,5 +1,13 @@
+import {
+  Box,
+  Flex,
+  HStack,
+  Stack,
+  VStack
+} from "@chakra-ui/layout";
+import Display from "../components/atoms/Display";
+import BodyText from "../components/atoms/BodyText";
 import { Image } from "@chakra-ui/image";
-import { Box, Flex, HStack, Stack, VStack } from "@chakra-ui/layout";
 import Head from "next/head";
 import BigTitle from "../components/atoms/BigTitle";
 import Link from "../components/atoms/Link";
@@ -10,6 +18,8 @@ import { KnowOurServices } from "../components/molecules/KnowOurServices";
 import { NamedAvatar } from "../components/molecules/NamedAvatar";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
+import { isMobileMod } from "../hooks/useCheckMobile.hook";
+import BDLogoProImage from "../public/img/logos/bd_logo_pro"
 
 export async function getStaticProps(context) {
   return await withPages();
@@ -126,6 +136,52 @@ function BorderBox({ title, children }) {
   );
 }
 
+function BDPro () {
+  return (
+    <Stack
+      width={{ base: "90%", lg: "85%" }}
+      maxWidth="1264px"
+      margin={isMobileMod() ? "80px auto 54px" :"80px auto 180px"}
+      alignItems="center"
+    >
+      <BDLogoProImage
+        widthImage={isMobileMod() ? "120px" : "240px"}
+        heightImage={isMobileMod() ? "30px" : "60px"}
+        marginBottom={isMobileMod() ? "24px" : "40px"}
+      />
+      <Display
+        fontSize={isMobileMod() ? "34px" : "90px"}
+        letterSpacing={isMobileMod() ? "-0.4px" : "-2.25px"}
+        lineHeight={isMobileMod() ? "44px" : "108px"}
+        textAlign="center"
+        margin="0 0 24px !important"
+      > 
+      A sua plataforma {!isMobileMod() &&<br/>} avançada de dados
+      </Display>
+      <BodyText
+        fontWeight="400"
+        fontSize={isMobileMod() ? "18px" : "28px"}
+        lineHeight={isMobileMod() ? "24px" : "44px"}
+        letterSpacing={isMobileMod() ? "0.1px" : "-0.1px"}
+        textAlign="center"
+        margin={isMobileMod() ? "0 0 24px !important" : "0 0 40px !important"}
+      >
+        Conheça agora o nosso datalake privado para ter acesso aos {!isMobileMod() &&<br/>} dados mais valiosos para você e sua organização
+      </BodyText>
+      <RoundedButton
+        fontSize={!isMobileMod() && "24px"}
+        padding={!isMobileMod() && "32px"}
+        margin="0 !important"
+        backgroundColor="#8A7500"
+      >
+        <a href="https://info.basedosdados.org/bd-pro" target="_blank">
+          Conheça a BD Pro
+        </a>
+      </RoundedButton>
+    </Stack>
+  )
+}
+
 export default function Services({ pages }) {
   const services = {
     "Captura de dados":
@@ -147,13 +203,15 @@ export default function Services({ pages }) {
         />
       </Head>
 
+      {/* <BDPro/> */}
+
       <VStack
         paddingTop={{ base: "50px", lg: "0px" }}
         width="80%"
         margin="auto"
       >
         <BigTitle textAlign="center" maxWidth="100%" paddingBottom="20px">
-          Conheça nossos serviços
+          Nossos serviços
         </BigTitle>
         <SectionText fontFamily="Ubuntu" paddingBottom="40px">
           A Base dos Dados é a especialista que ajuda você ou sua equipe a
