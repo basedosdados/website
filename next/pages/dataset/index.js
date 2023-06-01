@@ -265,9 +265,14 @@ export default function SearchPage({ pages }) {
         themes={data?.themes}
         name={data?.name || "Conjunto sem nome"}
         temporalCoverageText={data?.temporal_coverage}
-        organization={data.organization[0]}
+        organization={data.organization[0] || {
+          name: data?.organization,
+          slug: data?.organization_slug,
+          website: data?.organization_website,
+          image: data?.organization_picture
+        }}
         tables={{
-          id: data?.tables?.[0]?.id,
+          id: data?.tables?.[0]?.id || data?.first_table_id,
           number: data?.n_bdm_tables
         }}
         rawDataSources={{
