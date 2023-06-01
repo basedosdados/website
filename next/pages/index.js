@@ -662,6 +662,7 @@ function BDEdu () {
   if(currentDate > closeDate) return null
   return (
     <Stack
+      id="edu" 
       width={{ base: "90%", lg: "85%" }}
       maxWidth="1264px"
       margin="40px auto 36px"

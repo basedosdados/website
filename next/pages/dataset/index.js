@@ -346,6 +346,7 @@ export default function SearchPage({ pages }) {
         direction={{ base: "column", lg: "row" }}
       >
         <VStack
+          display="none"
           justifyContent="flex-start"
           alignItems="flex-start"
           minWidth={{ base: "100%", lg: "320px" }}
@@ -584,7 +585,7 @@ export default function SearchPage({ pages }) {
           alignItems="flex-start"
           overflow="hidden"
           width="100%"
-          paddingLeft={isMobileMod() ? "" : "40px !important"}
+          // paddingLeft={isMobileMod() ? "" : "40px !important"}
         >
           {showEmptyState && !resource ?
             <DataProposalBox 
