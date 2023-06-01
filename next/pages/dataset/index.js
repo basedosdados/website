@@ -137,9 +137,9 @@ export default function SearchPage({ pages }) {
     setPageInfo({page: page, count: res?.count})
     setIsLoading(false)
     setShowEmptyState(true)
-    setResource(res.results || [])
-    setAggregations(res.aggregations)
-    setCount(res.count)
+    setResource(res?.results || null)
+    setAggregations(res?.aggregations)
+    setCount(res?.count)
   }
 
   useEffect(() => {
@@ -592,7 +592,7 @@ export default function SearchPage({ pages }) {
           width="100%"
           // paddingLeft={isMobileMod() ? "" : "40px !important"}
         >
-          {showEmptyState && !resource || resource.length === 0 ?
+          {showEmptyState && !resource ?
             <DataProposalBox 
               image= {true}
               display= "Ooops..."
