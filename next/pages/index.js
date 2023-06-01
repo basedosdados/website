@@ -41,6 +41,8 @@ import ProcessedDataImage from "../public/img/processedDataImage";
 import BDLogoPlusImage from "../public/img/logos/bd_logo_plus";
 import BDLogoEduImage from "../public/img/logos/bd_logo_edu";
 
+import FourOrFourTemplate from "../components/templates/404";
+
 function Hero() {
   const [search, setSearch] = useState();
   const [tags, setTags] = useState([])
@@ -699,6 +701,14 @@ function BDEdu () {
 export default function Home({
   pages,
 }) {
+
+  return <FourOrFourTemplate>
+    <Display textAlign="center">
+      Estamos em manutenção.
+      <br/>Novidades em breve.
+    </Display>
+  </FourOrFourTemplate>
+
   return (
     <MainPageTemplate id="home" backgroundColor="#FFFFFF" pages={pages}>
       <Hero />
