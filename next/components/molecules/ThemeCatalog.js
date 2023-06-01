@@ -203,10 +203,13 @@ function CardThemes ({ responsive, datasetsCards, loading }) {
               <DatabaseCard
                 name={elm?.name}
                 categories={elm?.themes}
-                organization={elm?.organization[0]}
+                organization={elm?.organization[0] || {
+                  name:elm.organization,
+                  slug:elm.organization_slug
+                }}
                 tags={elm?.tags}
                 tables={{
-                  id: elm?.tables?.[0]?.id,
+                  id: elm?.tables?.[0]?.id || elm?.first_table_id,
                   number: elm?.n_bdm_tables
                 }}
                 rawDataSources={{

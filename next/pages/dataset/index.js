@@ -122,7 +122,7 @@ export default function SearchPage({ pages }) {
   const query = router.query
   const [fetchApi, setFetchApi] = useState(null)
   const [showEmptyState, setShowEmptyState] = useState(false)
-  const [resource, setResource] = useState([ ])
+  const [resource, setResource] = useState([])
   const [aggregations, setAggregations] = useState({})
   const [count, setCount] = useState(0)
   const [pageInfo, setPageInfo] = useState({})
@@ -137,7 +137,7 @@ export default function SearchPage({ pages }) {
     setPageInfo({page: page, count: res?.count})
     setIsLoading(false)
     setShowEmptyState(true)
-    setResource(res.results)
+    setResource(res.results || [])
     setAggregations(res.aggregations)
     setCount(res.count)
   }
@@ -265,9 +265,14 @@ export default function SearchPage({ pages }) {
         themes={data?.themes}
         name={data?.name || "Conjunto sem nome"}
         temporalCoverageText={data?.temporal_coverage}
-        organization={data.organization[0]}
+        organization={data.organization[0] || {
+          name: data?.organization,
+          slug: data?.organization_slug,
+          website: data?.organization_website,
+          image: data?.organization_picture
+        }}
         tables={{
-          id: data?.tables?.[0]?.id,
+          id: data?.tables?.[0]?.id || data?.first_table_id,
           number: data?.n_bdm_tables
         }}
         rawDataSources={{
@@ -587,7 +592,7 @@ export default function SearchPage({ pages }) {
           width="100%"
           // paddingLeft={isMobileMod() ? "" : "40px !important"}
         >
-          {showEmptyState && !resource ?
+          {showEmptyState && !resource || resource.length === 0 ?
             <DataProposalBox 
               image= {true}
               display= "Ooops..."
