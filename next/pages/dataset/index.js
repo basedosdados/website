@@ -122,7 +122,7 @@ export default function SearchPage({ pages }) {
   const query = router.query
   const [fetchApi, setFetchApi] = useState(null)
   const [showEmptyState, setShowEmptyState] = useState(false)
-  const [resource, setResource] = useState([ ])
+  const [resource, setResource] = useState([])
   const [aggregations, setAggregations] = useState({})
   const [count, setCount] = useState(0)
   const [pageInfo, setPageInfo] = useState({})
@@ -137,7 +137,7 @@ export default function SearchPage({ pages }) {
     setPageInfo({page: page, count: res?.count})
     setIsLoading(false)
     setShowEmptyState(true)
-    setResource(res.results)
+    setResource(res.results || [])
     setAggregations(res.aggregations)
     setCount(res.count)
   }
@@ -587,7 +587,7 @@ export default function SearchPage({ pages }) {
           width="100%"
           // paddingLeft={isMobileMod() ? "" : "40px !important"}
         >
-          {showEmptyState && !resource ?
+          {showEmptyState && !resource || resource.length === 0 ?
             <DataProposalBox 
               image= {true}
               display= "Ooops..."

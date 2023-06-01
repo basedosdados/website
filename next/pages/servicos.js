@@ -203,7 +203,7 @@ export default function Services({ pages }) {
         />
       </Head>
 
-      <BDPro/>
+      {/* <BDPro/> */}
 
       <VStack
         paddingTop={{ base: "50px", lg: "0px" }}
