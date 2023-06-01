@@ -165,14 +165,14 @@ function BDPro () {
         textAlign="center"
         margin="0 0 24px !important"
       >
-        Assine agora o nosso datalake privado para ter acesso aos {!isMobileMod() &&<br/>} dados mais valiosos para você e sua organização
+        Conheça agora o nosso datalake privado para ter acesso aos {!isMobileMod() &&<br/>} dados mais valiosos para você e sua organização
       </BodyText>
       <RoundedButton
         margin="0 !important"
         backgroundColor="#8A7500"
       >
         <a href="https://info.basedosdados.org/bd-pro" target="_blank">
-          Assine a BD Pro
+          Conheça a BD Pro
         </a>
       </RoundedButton>
     </Stack>

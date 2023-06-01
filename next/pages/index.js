@@ -656,7 +656,7 @@ function Support({ pages }) {
 }
 
 function BDEdu () {
-  const closeDate = new Date(2023,5,13)
+  const closeDate = new Date(2023,5,14)
   const currentDate = new Date()
 
   if(currentDate > closeDate) return null
