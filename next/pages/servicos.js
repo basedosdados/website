@@ -141,7 +141,7 @@ function BDPro () {
     <Stack
       width={{ base: "90%", lg: "85%" }}
       maxWidth="1264px"
-      margin={isMobileMod ? "80px auto 40px" :"0 auto 180px"}
+      margin={isMobileMod ? "0 auto 40px" :"0 auto 180px"}
       alignItems="center"
     >
       <BDLogoProImage
