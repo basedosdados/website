@@ -350,7 +350,7 @@ export default function Menu({}) {
 
   const links = {
     Dados: "/dataset",
-    Serviços: [
+    Soluções: [
       {icon: <BDLogoProImage widthImage="54px"/>, name: "Dados exclusivos", href: "https://info.basedosdados.org/bd-pro"},
       {icon: <BDLogoEduImage widthImage="54px"/>, name: "Curso de dados", href: "https://info.basedosdados.org/bd-edu"},
       {},
@@ -358,7 +358,7 @@ export default function Menu({}) {
       {},
       {name: "Estudos de caso", href: "/estudos-de-caso"}
     ],
-    Soluções: [
+    Tutoriais: [
       {name: "Documentação", href: "https://basedosdados.github.io/mais/"},
       {name: "Vídeos no YouTube", href: "https://www.youtube.com/c/BasedosDados/featured"},
       {name: "Blog", href: "https://medium.com/basedosdados"}

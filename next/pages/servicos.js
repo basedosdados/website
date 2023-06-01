@@ -141,18 +141,18 @@ function BDPro () {
     <Stack
       width={{ base: "90%", lg: "85%" }}
       maxWidth="1264px"
-      margin={isMobileMod ? "0 auto 40px" :"0 auto 180px"}
+      margin={isMobileMod() ? "80px auto 54px" :"80px auto 180px"}
       alignItems="center"
     >
       <BDLogoProImage
-        widthImage="240px"
-        heightImage="60px"
-        marginBottom="24px"
+        widthImage={isMobileMod() ? "120px" : "240px"}
+        heightImage={isMobileMod() ? "30px" : "60px"}
+        marginBottom={isMobileMod() ? "24px" : "40px"}
       />
       <Display
-        fontSize={isMobileMod ? "48px" : "90px"}
-        letterSpacing="-2.5px"
-        lineHeight={isMobileMod ? "54px" : "108px"}
+        fontSize={isMobileMod() ? "34px" : "90px"}
+        letterSpacing={isMobileMod() ? "-0.4px" : "-2.25px"}
+        lineHeight={isMobileMod() ? "44px" : "108px"}
         textAlign="center"
         margin="0 0 24px !important"
       > 
@@ -160,14 +160,17 @@ function BDPro () {
       </Display>
       <BodyText
         fontWeight="400"
-        fontSize={isMobileMod ? "18px" : "28px"}
-        lineHeight={isMobileMod ? "24px" : "44px"}
+        fontSize={isMobileMod() ? "18px" : "28px"}
+        lineHeight={isMobileMod() ? "24px" : "44px"}
+        letterSpacing={isMobileMod() ? "0.1px" : "-0.1px"}
         textAlign="center"
-        margin="0 0 24px !important"
+        margin={isMobileMod() ? "0 0 24px !important" : "0 0 40px !important"}
       >
         Conheça agora o nosso datalake privado para ter acesso aos {!isMobileMod() &&<br/>} dados mais valiosos para você e sua organização
       </BodyText>
       <RoundedButton
+        fontSize={!isMobileMod() && "24px"}
+        padding={!isMobileMod() && "32px"}
         margin="0 !important"
         backgroundColor="#8A7500"
       >
@@ -208,7 +211,7 @@ export default function Services({ pages }) {
         margin="auto"
       >
         <BigTitle textAlign="center" maxWidth="100%" paddingBottom="20px">
-          Conheça nossos serviços
+          Nossos serviços
         </BigTitle>
         <SectionText fontFamily="Ubuntu" paddingBottom="40px">
           A Base dos Dados é a especialista que ajuda você ou sua equipe a

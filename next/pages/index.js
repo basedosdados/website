@@ -665,7 +665,7 @@ function BDEdu () {
       id="edu" 
       width={{ base: "90%", lg: "85%" }}
       maxWidth="1264px"
-      margin="40px auto 36px"
+      margin="104px auto"
       alignItems="center"
     >
       <BDLogoEduImage
