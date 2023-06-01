@@ -203,7 +203,9 @@ function CardThemes ({ responsive, datasetsCards, loading }) {
               <DatabaseCard
                 name={elm?.name}
                 categories={elm?.themes}
-                organization={elm?.organization[0] || {
+                organization={
+                  typeof elm.organization === "object" ?
+                  elm?.organization[0] : {
                   name:elm.organization,
                   slug:elm.organization_slug
                 }}
