@@ -373,7 +373,7 @@ export default function Menu({}) {
     Contato: "/contato",
     Button: [
       {
-        name: "Assine a BD Pro",
+        name: "Conheça a BD Pro",
         href: "https://info.basedosdados.org/bd-pro",
         color: "#8A7500"
       }
