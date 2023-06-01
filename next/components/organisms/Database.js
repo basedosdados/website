@@ -51,7 +51,7 @@ export function Database({
         <Link _hover={{opacity:"none"}}>
           <ImageOrganization
             title={organization.name}
-            image={organization.picture}
+            image={organization?.picture || organization?.image}
             maxWidth="115px"
             maxHeight="115px"
             minWidth="115px"
