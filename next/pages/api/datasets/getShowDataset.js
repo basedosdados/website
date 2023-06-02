@@ -63,6 +63,7 @@ export default async function getShowDataset(id) {
                       _id
                       name
                       slug
+                      isClosed
                     }
                   }
                 }

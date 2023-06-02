@@ -18,7 +18,7 @@ import Subtitle from "../atoms/Subtitle";
 import RoundedButton from "../atoms/RoundedButton";
 import TemporalCoverage from "../atoms/TemporalCoverageDisplay";
 import BaseResourcePage from "../molecules/BaseResourcePage";
-import { DisclaimerBox } from "../molecules/DisclaimerBox";
+import DisclaimerBox from "../molecules/DisclaimerBox";
 import FourOFour from "../templates/404";
 
 import {

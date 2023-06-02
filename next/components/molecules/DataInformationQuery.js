@@ -25,13 +25,14 @@ import GreenTab from "../atoms/GreenTab";
 import SectionText from "../atoms/SectionText";
 import Subtitle from "../atoms/Subtitle";
 import RoundedButton from "../atoms/RoundedButton";
-import { DisclaimerBox } from "./DisclaimerBox";
+import DisclaimerBox from "./DisclaimerBox";
 
 import CalendarIcon from "../../public/img/icons/calendarIcon";
 import { CopyIcon, CopySolidIcon } from "../../public/img/icons/copyIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import ExclamationIcon from "../../public/img/icons/exclamationIcon";
-import MenuVerticalIcon from "../../public/img/icons/menuVerticalIcon"
+import MenuVerticalIcon from "../../public/img/icons/menuVerticalIcon";
+import ProIcon from "../../public/img/icons/proIcon";
 
 export function BoxBigQueryGoogle({ href }) {
   return (
@@ -51,6 +52,34 @@ export function BoxBigQueryGoogle({ href }) {
             color="#42B0FF"
             href={href}
           > Siga o passo a passo.
+          </Link>
+        </SectionText>
+      </HStack>
+    </DisclaimerBox>
+  )
+}
+
+export function BoxBDPro({}) {
+  return (
+    <DisclaimerBox
+      width="100%"
+      marginTop="16px !important"
+      borderColor="#8A7500"
+    >
+      <HStack spacing={0}>
+        <ProIcon
+          alt="pro"
+          widthImage="28px"
+          heightImage="16px"
+          marginRight="10px"
+        />
+        <SectionText>
+          Esta tabela só pode ser acessada por assinantes <b>BD Pro</b>. 
+          <Link
+            target="_blank"
+            color="#42B0FF"
+            href="https://info.basedosdados.org/bd-pro"
+          > Conheça agora as vantagens da assinatura.
           </Link>
         </SectionText>
       </HStack>
@@ -158,6 +187,7 @@ export default function DataInformationQuery ({ resource }) {
       width="100%"
     >
       <Subtitle>Consulta aos dados</Subtitle>
+      {resource?.isClosed && <BoxBDPro/>}
       <Tabs
         paddingTop="16px"
         width={{ base: "90vw", lg: "100%" }}
