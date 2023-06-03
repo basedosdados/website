@@ -145,7 +145,7 @@ function CardThemes ({ responsive, datasetsCards, loading }) {
       maxWidth="1264px"
       margin={responsive.mobileQuery ? "24px 0 48px !important" : "40px 0 48px !important"}
     >
-      {!loading && !datasetsCards &&
+      {!loading && !datasetsCards || datasetsCards.length === 0 &&
         <Center padding="0 40px">
           <SectionText
             fontSize={responsive.mobileQuery ? "14px" : "18px"}
@@ -187,7 +187,7 @@ function CardThemes ({ responsive, datasetsCards, loading }) {
               />
             ))
           :
-          !datasetsCards ?
+          !datasetsCards || datasetsCards.length === 0 ?
             new Array(screenQuery).fill(0).map(() => (
               <>
                 <Skeleton
@@ -203,10 +203,15 @@ function CardThemes ({ responsive, datasetsCards, loading }) {
               <DatabaseCard
                 name={elm?.name}
                 categories={elm?.themes}
-                organization={elm?.organization[0]}
+                organization={
+                  typeof elm.organization === "object" ?
+                  elm?.organization[0] : {
+                  name:elm.organization,
+                  slug:elm.organization_slug
+                }}
                 tags={elm?.tags}
                 tables={{
-                  id: elm?.tables?.[0]?.id,
+                  id: elm?.tables?.[0]?.id || elm?.first_table_id,
                   number: elm?.n_bdm_tables
                 }}
                 rawDataSources={{
