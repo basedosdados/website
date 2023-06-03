@@ -22,7 +22,7 @@ import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
 import { DataBaseSolidIcon } from "../../public/img/icons/databaseIcon";
 
-export function Database({
+export default function Database({
   id,
   name,
   temporalCoverageText,

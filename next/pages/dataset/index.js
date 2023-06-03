@@ -39,7 +39,7 @@ import BodyText from "../../components/atoms/BodyText";
 import Display from "../../components/atoms/Display";
 import RoundedButton from "../../components/atoms/RoundedButton";
 import { SchemaForm } from "../../components/molecules/SchemaForm";
-import { Database } from "../../components/organisms/Database";
+import Database from "../../components/organisms/Database";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import FilterIcon from "../../public/img/icons/filterIcon";
