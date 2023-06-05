@@ -122,7 +122,8 @@ export default function SearchPage({ pages }) {
   const query = router.query
   const [fetchApi, setFetchApi] = useState(null)
   const [showEmptyState, setShowEmptyState] = useState(false)
-  const [resource, setResource] = useState([ ])
+  const [resource, setResource] = useState([])
+  const [selectedFilters, setSelectedFilters] = useState([])
   const [aggregations, setAggregations] = useState({})
   const [count, setCount] = useState(0)
   const [pageInfo, setPageInfo] = useState({})
@@ -152,6 +153,19 @@ export default function SearchPage({ pages }) {
 
     setFetchApi(fetchFunc)
   }, [query])
+
+  const handleSelectFilter = (elm) => {
+    const newArray = [...selectedFilters]
+    const indice = newArray.findIndex(arr => arr[0] === elm[0] && arr[1] === elm[1]);
+
+    if (indice === -1) {
+      newArray.push(elm)
+    } else {
+      newArray.splice(indice, 1)
+    }
+
+    setSelectedFilters(newArray)
+  }
 
   const DataProposalBox = ({image, display, text, bodyText}) => {
     return (
@@ -304,6 +318,10 @@ export default function SearchPage({ pages }) {
     }
   }
 
+  const validateActiveFilterAccordin = (text) => {
+    return selectedFilters.map((elm) => elm[0] === text).find(res => res === true)
+  }
+
   return (
     <MainPageTemplate pages={pages}>
       <Head>
@@ -375,12 +393,12 @@ export default function SearchPage({ pages }) {
             </Text>
           </Box>
 
-          {/* <CheckboxFilterAccordion
-            isActive={(paramFilters.resource_type || []).length > 0}
+          <CheckboxFilterAccordion
+            isActive={validateActiveFilterAccordin("datasets_with")}
             alwaysOpen
             choices={[
               {
-                key: "bdm_table",
+                key: "bdm_tables",
                 name: (
                   <HStack whiteSpace="nowrap">
                     <div>Tabelas tratadas</div>
@@ -388,67 +406,66 @@ export default function SearchPage({ pages }) {
                       marginLeft="5px !important"
                       widthImage="40px"
                     />
-                    <div>{`(${data?.resource_bdm_table_count || "0"})`}</div>
+                    <div>{`(${aggregations?.contains_tables || "0"})`}</div>
                   </HStack>
                 ),
               },
               {
-                key: "external_link",
-                name: `Fontes originais (${data?.resource_external_link_count || "0"
-                  })`,
+                key: "tables_pro",
+                name: (
+                  <HStack whiteSpace="nowrap">
+                    <div>Tabelas tratadas</div>
+                    <BDLogoPlusImage
+                      marginLeft="5px !important"
+                      widthImage="40px"
+                    />
+                    <div>{`(${aggregations?.is_closed || "0"})`}</div>
+                  </HStack>
+                ),
+              },
+              {
+                key: "raw_data_sources",
+                name: `Fontes originais (${aggregations?.contains_raw_data_sources || "0"})`,
               },
               {
                 key: "information_request",
-                name: `Pedidos LAI (${data?.resource_information_request_count || "0"
-                  })`,
+                name: `Pedidos LAI (${aggregations?.contains_information_requests || "0"})`,
               },
             ]}
-            values={paramFilters.resource_type}
             valueField="key"
             displayField="name"
             fieldName="Conjuntos com"
-            onChange={(values) => {
-              setParamFilters({ ...paramFilters, resource_type: values });
-            }}
-          /> */}
+            onChange={(value) => handleSelectFilter(["datasets_with",`${value}`])}
+          />
 
           <CheckboxFilterAccordion
             canSearch={true}
-            // isActive={(paramFilters.group || []).length > 0}
+            isActive={validateActiveFilterAccordin("theme")}
             choices={aggregations?.themes}
-            values={aggregations?.themes}
             valueField="key"
             displayField="name"
             fieldName="Tema"
-            // onChange={(values) =>
-            //   setParamFilters({ ...paramFilters, group: values })
-            // }
+            onChange={(value) => handleSelectFilter(["theme",`${value}`])}
           />
 
           <CheckboxFilterAccordion
             canSearch={true}
-            // isActive={(paramFilters.organization || []).length > 0}
+            isActive={validateActiveFilterAccordin("organization")}
             choices={aggregations?.organizations}
-            values={aggregations?.organizations}
             valueField="key"
             displayField="name"
-            fieldName="Organização"
-            // onChange={(values) =>
-            //   setParamFilters({ ...paramFilters, organization: values })
-            // }
+            fieldName="Organizações"
+            onChange={(value) => handleSelectFilter(["organization",`${value}`])}
           />
 
           <CheckboxFilterAccordion
             canSearch={true}
-            // isActive={(paramFilters.tag || []).length > 0}
+            isActive={validateActiveFilterAccordin("tag")}
             choices={aggregations?.tags}
-            values={aggregations?.tags}
             valueField="key"
             displayField="name"
             fieldName="Etiqueta"
-            // onChange={(values) =>
-            //   setParamFilters({ ...paramFilters, tag: values })
-            // }
+            onChange={(value) => handleSelectFilter(["tag",`${value}`])}
           />
 
           {/* <SimpleFilterAccordion
@@ -543,15 +560,12 @@ export default function SearchPage({ pages }) {
 
           <CheckboxFilterAccordion
             canSearch={true}
-            // isActive={(paramFilters.entity || []).length > 0}
+            isActive={validateActiveFilterAccordin("observation_level")}
             choices={aggregations?.observation_levels}
-            values={aggregations?.observation_levels}
             valueField="key"
             displayField="name"
             fieldName="Nível da observação"
-            // onChange={(values) =>
-            //   setParamFilters({ ...paramFilters, entity: values })
-            // }
+            onChange={(value) => handleSelectFilter(["observation_level",`${value}`])}
           />
 
           /*<CheckboxFilterAccordion
