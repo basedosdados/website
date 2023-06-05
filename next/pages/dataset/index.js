@@ -44,6 +44,7 @@ import { MainPageTemplate } from "../../components/templates/main";
 
 import FilterIcon from "../../public/img/icons/filterIcon";
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
+import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import NotFoundImage from "../../public/img/notFoundImage";
 
 function NewDatasetModal({ isOpen, onClose }) {
@@ -373,7 +374,6 @@ export default function SearchPage({ pages }) {
         direction={{ base: "column", lg: "row" }}
       >
         <VStack
-          display="none"
           justifyContent="flex-start"
           alignItems="flex-start"
           minWidth={{ base: "100%", lg: "320px" }}
@@ -424,9 +424,9 @@ export default function SearchPage({ pages }) {
                 name: (
                   <HStack whiteSpace="nowrap">
                     <div>Tabelas tratadas</div>
-                    <BDLogoPlusImage
+                    <BDLogoProImage
                       marginLeft="5px !important"
-                      widthImage="40px"
+                      widthImage="52px"
                     />
                     <div>{`(${aggregations?.is_closed || "0"})`}</div>
                   </HStack>
@@ -608,7 +608,7 @@ export default function SearchPage({ pages }) {
           alignItems="flex-start"
           overflow="hidden"
           width="100%"
-          // paddingLeft={isMobileMod() ? "" : "40px !important"}
+          paddingLeft={isMobileMod() ? "" : "40px !important"}
         >
           {showEmptyState && !resource ?
             <DataProposalBox 
