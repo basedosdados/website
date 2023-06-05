@@ -39,7 +39,7 @@ import BodyText from "../../components/atoms/BodyText";
 import Display from "../../components/atoms/Display";
 import RoundedButton from "../../components/atoms/RoundedButton";
 import { SchemaForm } from "../../components/molecules/SchemaForm";
-import { Database } from "../../components/organisms/Database";
+import Database from "../../components/organisms/Database";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import FilterIcon from "../../public/img/icons/filterIcon";
@@ -139,9 +139,9 @@ export default function SearchPage({ pages }) {
     setIsLoading(false)
     setShowEmptyState(true)
     if(res === undefined) return router.push({pathname:"500"})
-    setResource(res.results)
-    setAggregations(res.aggregations)
-    setCount(res.count)
+    setResource(res?.results || null)
+    setAggregations(res?.aggregations)
+    setCount(res?.count)
   }
 
   useEffect(() => {
@@ -274,15 +274,23 @@ export default function SearchPage({ pages }) {
   }
 
   const DatabaseCard = ({ data }) => {
+    const organizationTypeof = typeof data.organization === "object"
+
     return (
       <Database
         id={data.id}
         themes={data?.themes}
         name={data?.name || "Conjunto sem nome"}
         temporalCoverageText={data?.temporal_coverage}
-        organization={data.organization[0]}
+        organization={organizationTypeof ?
+          data.organization[0] : {
+          name: data?.organization,
+          slug: data?.organization_slug,
+          website: data?.organization_website,
+          image: data?.organization_picture
+        }}
         tables={{
-          id: data?.tables?.[0]?.id,
+          id: data?.tables?.[0]?.id || data?.first_table_id,
           number: data?.n_bdm_tables
         }}
         rawDataSources={{
@@ -365,6 +373,7 @@ export default function SearchPage({ pages }) {
         direction={{ base: "column", lg: "row" }}
       >
         <VStack
+          display="none"
           justifyContent="flex-start"
           alignItems="flex-start"
           minWidth={{ base: "100%", lg: "320px" }}
@@ -599,7 +608,7 @@ export default function SearchPage({ pages }) {
           alignItems="flex-start"
           overflow="hidden"
           width="100%"
-          paddingLeft={isMobileMod() ? "" : "40px !important"}
+          // paddingLeft={isMobileMod() ? "" : "40px !important"}
         >
           {showEmptyState && !resource ?
             <DataProposalBox 

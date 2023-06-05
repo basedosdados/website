@@ -16,6 +16,7 @@ import ControlledInput from "./ControlledInput";
 import SectionText from "./SectionText";
 import SearchIcon from "../../public/img/icons/searchIcon"
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
+import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 
 
 export function BaseFilterAccordion({
@@ -26,6 +27,7 @@ export function BaseFilterAccordion({
   isActive = false,
   onChange = () => { },
   bdPlus = null,
+  bdPro = false,
   alwaysOpen = false,
   isHovering = true
 }) {
@@ -58,14 +60,19 @@ export function BaseFilterAccordion({
                   >
                     {fieldName}
                   </Box>
-                  {bdPlus ? (
+                  {bdPlus &&
                     <BDLogoPlusImage
                       widthImage="45px"
                       marginLeft="5px !important"
                     />
-                  ) : (
-                    <></>
-                  )}
+                  }
+                  {bdPro && 
+                    <BDLogoProImage
+                      widthImage="58px"
+                      heightImage="16px"
+                      marginLeft="5px !important"
+                    />
+                  }
                 </HStack>
                 {!alwaysOpen ? <AccordionIcon color={isActive ? "#2B8C4D" : null} marginLeft="auto" fontSize="18px" /> : <></>}
               </AccordionButton>
@@ -265,6 +272,7 @@ export function FilterAccordion({
   onToggle,
   value,
   bdPlus = null,
+  bdPro = false,
   valueField = "id",
   displayField = "display_name",
   isOpen = null,
@@ -283,6 +291,7 @@ export function FilterAccordion({
       isHovering={isHovering}
       overflowX="hidden"
       bdPlus={bdPlus}
+      bdPro={bdPro}
       fieldName={fieldName}
     >
       <VStack

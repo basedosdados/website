@@ -18,6 +18,7 @@ export default async function getBdmTable(id) {
                 slug
                 name
                 description
+                isClosed
                 dataset {
                   _id
                   slug

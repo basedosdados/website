@@ -22,7 +22,7 @@ import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
 import { DataBaseSolidIcon } from "../../public/img/icons/databaseIcon";
 
-export function Database({
+export default function Database({
   id,
   name,
   temporalCoverageText,
@@ -51,7 +51,7 @@ export function Database({
         <Link _hover={{opacity:"none"}}>
           <ImageOrganization
             title={organization.name}
-            image={organization.picture}
+            image={organization?.picture || organization?.image}
             maxWidth="115px"
             maxHeight="115px"
             minWidth="115px"

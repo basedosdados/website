@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import Typist from "react-typist";
 
 import { withPages } from "../hooks/pages.hook";
-import { useCheckMobile ,isMobileMod } from "../hooks/useCheckMobile.hook";
+import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { useMediaQuery } from "@chakra-ui/react";
 import BodyText from "../components/atoms/BodyText";
 import ControlledInput from "../components/atoms/ControlledInput";
@@ -38,7 +38,8 @@ import DatabaseImage from "../public/img/databaseImage";
 import MasterOfDatabaseImage from "../public/img/masterOfDatabaseImage";
 import ProductsFiltersImage from "../public/img/productsFiltersImage";
 import ProcessedDataImage from "../public/img/processedDataImage";
-import BDLogoPlusImage from "../public/img/logos/bd_logo_plus"
+import BDLogoPlusImage from "../public/img/logos/bd_logo_plus";
+import BDLogoEduImage from "../public/img/logos/bd_logo_edu";
 
 function Hero() {
   const [search, setSearch] = useState();
@@ -654,12 +655,55 @@ function Support({ pages }) {
   );
 }
 
+function BDEdu () {
+  const closeDate = new Date(2023,5,14)
+  const currentDate = new Date()
+
+  if(currentDate > closeDate) return null
+  return (
+    <Stack
+      id="edu" 
+      width={{ base: "90%", lg: "85%" }}
+      maxWidth="1264px"
+      margin="104px auto"
+      alignItems="center"
+    >
+      <BDLogoEduImage
+        widthImage="225px"
+        heightImage="54px"
+        marginBottom="24px"
+      />
+      <Display
+        textAlign="center"
+        margin="0 0 24px !important"
+      > Venha aprender com quem é referência {!isMobileMod() &&<br/>} em disponibilizar dados públicos no Brasil
+      </Display>
+      <BodyText
+        textAlign="center"
+        margin="0 0 24px !important"
+      >
+        Com nosso curso você pode ir mais longe na sua pesquisa, profissão, ou organização.
+      </BodyText>
+      <RoundedButton
+        margin="0 !important"
+        backgroundColor="#8262D1"
+      >
+        <a href="https://info.basedosdados.org/bd-edu" target="_blank">
+          Aproveite o preço promocional
+        </a>
+      </RoundedButton>
+    </Stack>
+  )
+}
+
 export default function Home({
   pages,
 }) {
+
   return (
     <MainPageTemplate id="home" backgroundColor="#FFFFFF" pages={pages}>
-      <Hero/>
+      <Hero />
+      <BDEdu />
       <BePartner />
       <Products />
       <Support pages={pages} />
