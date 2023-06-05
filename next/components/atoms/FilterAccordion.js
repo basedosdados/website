@@ -110,7 +110,21 @@ export function CheckboxFilterAccordion({
   isOpen = null,
   canSearch = false,
 }) {
+  const [options , setOptions] = useState([])
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    setOptions(choices)
+  }, [choices])
+
+  useEffect(() => {
+    const allOptions = choices
+    if(search === "" || undefined) return setOptions(choices)
+    const result = allOptions.filter((c) =>
+      c[displayField].toLowerCase().indexOf(search.toLowerCase()) != -1
+    )
+    setOptions(result)
+  }, [search])
 
   return (
     <BaseFilterAccordion
@@ -121,7 +135,7 @@ export function CheckboxFilterAccordion({
       overflowX="hidden"
       alwaysOpen={alwaysOpen}
     >
-      <CheckboxGroup onChange={(val) => onChange(val)} value={values} >
+      <CheckboxGroup>
         {canSearch &&
           <VStack padding="15px 0 10px" width="100%" alignItems="center">
             <ControlledInput
@@ -148,23 +162,19 @@ export function CheckboxFilterAccordion({
           width="100%"
           padding="8px 0"
         >
-          {canSearch ? 
-            choices.filter((c) =>
-              c[displayField].toLowerCase().indexOf(search.toLowerCase()) != -1
-            )
-            :
-            choices.map((c) => (
-              <Checkbox
-                fontFamily="Lato"
-                value={c[valueField]}
-                color="#7D7D7D"
-                colorScheme="green"
-                letterSpacing="0.5px"
-              >
-                {c[displayField]}
-              </Checkbox>
-            ))
-          }
+          {options.length > 0 && options.map((c) => (
+            <Checkbox
+              key={c[valueField]}
+              fontFamily="Lato"
+              value={c[valueField]}
+              color="#7D7D7D"
+              colorScheme="green"
+              letterSpacing="0.5px"
+              onChange={(e) => { onChange(e.target.value)}} 
+            >
+              {c[displayField]} {`(${c["count"]})`}
+            </Checkbox>
+          ))}
         </VStack>
       </CheckboxGroup>
     </BaseFilterAccordion>

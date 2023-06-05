@@ -145,7 +145,7 @@ function CardThemes ({ responsive, datasetsCards, loading }) {
       maxWidth="1264px"
       margin={responsive.mobileQuery ? "24px 0 48px !important" : "40px 0 48px !important"}
     >
-      {!loading && !datasetsCards &&
+      {!loading && !datasetsCards || datasetsCards?.length === 0 &&
         <Center padding="0 40px">
           <SectionText
             fontSize={responsive.mobileQuery ? "14px" : "18px"}
@@ -187,7 +187,7 @@ function CardThemes ({ responsive, datasetsCards, loading }) {
               />
             ))
           :
-          !datasetsCards ?
+          !datasetsCards || datasetsCards.length === 0 ?
             new Array(screenQuery).fill(0).map(() => (
               <>
                 <Skeleton
