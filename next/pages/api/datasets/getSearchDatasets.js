@@ -2,9 +2,7 @@ import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/search/`
 
-export default async function getSearchDatasets({q, filter, page}) {
-  let query = []
-
+export default async function getSearchDatasets({q, filter = [], page}) {
   const searchString = () => {
     if(q) return `q=${q}&`
     return ""
@@ -16,16 +14,20 @@ export default async function getSearchDatasets({q, filter, page}) {
   }
 
   const filters = () => {
-    if(filter != undefined || null) return null
-    if(filter) return (
+    const queryFilter = []
+    if(filter === undefined || null) return ""
+    
+    if(filter.length > 0) (
       filter.forEach(([k, v]) => {
-        query.push(`${k}=${v}&`)
+        queryFilter.push(`${k}=${v}&`)
       })
     )
+    
+    return queryFilter.join("")
   }
 
   try {
-    const res = await axios.get(`${API_URL}?${searchString()}${pageState()}`)
+    const res = await axios.get(`${API_URL}?${searchString()}${filters()}${pageState()}`)
     return res.data
   } catch (error) {
     console.error(error)

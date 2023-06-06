@@ -133,9 +133,9 @@ export default function SearchPage({ pages }) {
   // const datasetDisclosure = useDisclosure()
   // const [order, setOrder] = useState("score")
 
-  async function getDatasets({q, page}) {
+  async function getDatasets({q, filters, page}) {
     setIsLoading(true)
-    const res = await getSearchDatasets({q:q, page:page})
+    const res = await getSearchDatasets({q:q, filter: filters, page:page})
     setPageInfo({page: page, count: res?.count})
     setIsLoading(false)
     setShowEmptyState(true)
@@ -149,11 +149,11 @@ export default function SearchPage({ pages }) {
     if(fetchApi) clearTimeout(fetchApi)
 
     const fetchFunc = setTimeout(() => {
-      getDatasets({q:query?.q, page: query?.page || 1})
+      getDatasets({q:query?.q, filters: selectedFilters, page: query?.page || 1})
     }, 400)
 
     setFetchApi(fetchFunc)
-  }, [query])
+  }, [query, selectedFilters])
 
   const handleSelectFilter = (elm) => {
     const newArray = [...selectedFilters]
