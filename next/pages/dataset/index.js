@@ -149,7 +149,7 @@ export default function SearchPage({ pages }) {
     if(fetchApi) clearTimeout(fetchApi)
 
     const fetchFunc = setTimeout(() => {
-      getDatasets({q:query?.q, filters: selectedFilters, page: query?.page || 1})
+      getDatasets({q: query?.q, filters: selectedFilters, page: query?.page || 1})
     }, 400)
 
     setFetchApi(fetchFunc)
@@ -407,19 +407,6 @@ export default function SearchPage({ pages }) {
             alwaysOpen
             choices={[
               {
-                key: "bdm_tables",
-                name: (
-                  <HStack whiteSpace="nowrap">
-                    <div>Tabelas tratadas</div>
-                    <BDLogoPlusImage
-                      marginLeft="5px !important"
-                      widthImage="40px"
-                    />
-                    <div>{`(${aggregations?.contains_tables || "0"})`}</div>
-                  </HStack>
-                ),
-              },
-              {
                 key: "tables_pro",
                 name: (
                   <HStack whiteSpace="nowrap">
@@ -429,6 +416,19 @@ export default function SearchPage({ pages }) {
                       widthImage="52px"
                     />
                     <div>{`(${aggregations?.is_closed || "0"})`}</div>
+                  </HStack>
+                ),
+              },
+              {
+                key: "bdm_tables",
+                name: (
+                  <HStack whiteSpace="nowrap">
+                    <div>Tabelas tratadas</div>
+                    <BDLogoPlusImage
+                      marginLeft="5px !important"
+                      widthImage="40px"
+                    />
+                    <div>{`(${aggregations?.contains_tables || "0"})`}</div>
                   </HStack>
                 ),
               },
