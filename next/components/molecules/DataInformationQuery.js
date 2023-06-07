@@ -148,8 +148,10 @@ export function TextPix ({ title, text }) {
 }
 
 export default function DataInformationQuery ({ resource }) {
-  const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${organizationQuery("_")}_${resource?.dataset?.slug}/${resource?.slug}/${resource?.slug}.csv.gz`
-  const queryBQ = `${organizationQuery("_")}_${resource?.dataset?.slug}.${resource?.slug}`
+  const gcpDatasetID = resource?.cloudTables[0]?.gcpDatasetId
+  const gcpTableId = resource?.cloudTables[0]?.gcpTableId
+  const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${gcpDatasetID}/${gcpTableId}/${gcpTableId}.csv.gz`
+  const queryBQ = `${gcpDatasetID}.${gcpTableId}`
   const { hasCopied, onCopy } = useClipboard("42494318000116")
   const [tabIndex, setTabIndex] = useState(0)
   const [downloadNotAllowed, setDownloadNotAllowed] = useState(true)
@@ -175,7 +177,7 @@ export default function DataInformationQuery ({ resource }) {
   }, [resource])
 
   const handlerDownload = () => {
-    if(!downloadNotAllowed === true) return null
+    if(downloadNotAllowed === true) return null
 
     return window.open(downloadUrl)
   }
@@ -272,7 +274,7 @@ export default function DataInformationQuery ({ resource }) {
                 color="#42B0FF"
                 target="_blank"
                 textDecoration="none"
-                href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${organizationQuery("_")}_${resource?.dataset?.slug}&t=${resource.slug}&page=table`}
+                href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${gcpDatasetID}&t=${gcpTableId}&page=table`}
               > clique aqui
               </Link> para ir ao <i>datalake</i> no BigQuery e cole no Editor de Consultas:
             </SectionText>
@@ -298,8 +300,8 @@ export default function DataInformationQuery ({ resource }) {
               {`import basedosdados as bd
 
 # Para carregar o dado direto no pandas
-df = bd.read_table(dataset_id='${organizationQuery("_")}_${resource?.dataset?.slug}',
-table_id='${resource?.slug}',
+df = bd.read_table(dataset_id='${gcpDatasetID}',
+table_id='${gcpTableId}',
 billing_project_id="<YOUR_PROJECT_ID>")`}
             </PrismCodeHighlight>
 
@@ -346,8 +348,8 @@ df <- bd_collect(query)`}
 
 bd_read_table, ///
     path("<PATH>") ///
-    dataset_id("${organizationQuery("_")}_${resource?.dataset?.slug}") ///
-    table_id("${resource?.slug}") ///
+    dataset_id("${gcpDatasetID}") ///
+    table_id("${gcpTableId}") ///
     billing_project_id("<PROJECT_ID>")`}
             </PrismCodeHighlight>
 
@@ -365,7 +367,7 @@ bd_read_table, ///
               Antes de baixar os dados, apoie você também com uma doação financeira ou <Link color="#42B0FF" href="https://basedosdados.github.io/mais/colab_data/">saiba como contribuir com seu tempo</Link>.
             </SectionText>
 
-            {downloadNotAllowed &&
+            {!downloadNotAllowed &&
               <DisclaimerBox>
                 <HStack gridGap="8px" alignItems="flex-start">
                 <ExclamationIcon
@@ -471,16 +473,16 @@ bd_read_table, ///
                   fontSize="14px"
                   fontWeight="700"
                   backgroundColor="#FFF"
-                  color={downloadNotAllowed ? "#C4C4C4" :"#FF8484"}
-                  border={downloadNotAllowed ? "1px solid #C4C4C4" :"1px solid #FF8484"}
+                  color={!downloadNotAllowed ? "#C4C4C4" :"#FF8484"}
+                  border={!downloadNotAllowed ? "1px solid #C4C4C4" :"1px solid #FF8484"}
                   paddingX="30px"
                   width="100%"
                   gridGap="6px"
-                  cursor={downloadNotAllowed ? "auto" :"pointer"}
-                  _hover={downloadNotAllowed ? {transform : "none"} : ""}
+                  cursor={!downloadNotAllowed ? "auto" :"pointer"}
+                  _hover={!downloadNotAllowed ? {transform : "none"} : ""}
                   onClick={handlerDownload}
                 >
-                  <DownloadIcon alt="download" width="22px" height="22px" fill={downloadNotAllowed ? "#C4C4C4" :"#FF8484"}/>
+                  <DownloadIcon alt="download" width="22px" height="22px" fill={!downloadNotAllowed ? "#C4C4C4" :"#FF8484"}/>
                   Download dos dados
                 </RoundedButton>
               </HStack>
