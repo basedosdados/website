@@ -166,7 +166,7 @@ function BDPro () {
         textAlign="center"
         margin={isMobileMod() ? "0 0 24px !important" : "0 0 40px !important"}
       >
-        Conheça agora o nosso datalake privado para ter acesso aos {!isMobileMod() &&<br/>} dados mais valiosos para você e sua organização
+        Assine agora o nosso datalake privado para ter acesso aos {!isMobileMod() &&<br/>} dados mais valiosos para você e sua organização
       </BodyText>
       <RoundedButton
         fontSize={!isMobileMod() && "24px"}
@@ -175,7 +175,7 @@ function BDPro () {
         backgroundColor="#8A7500"
       >
         <a href="https://info.basedosdados.org/bd-pro" target="_blank">
-          Conheça a BD Pro
+          Assine a BD Pro
         </a>
       </RoundedButton>
     </Stack>
@@ -203,7 +203,7 @@ export default function Services({ pages }) {
         />
       </Head>
 
-      {/* <BDPro/> */}
+      <BDPro/>
 
       <VStack
         paddingTop={{ base: "50px", lg: "0px" }}
