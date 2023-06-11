@@ -145,19 +145,53 @@ export default function SearchPage({ pages }) {
     setCount(res?.count)
   }
 
+  function flattenArray(arr) {
+    let result = []
+
+    for (let i = 0; i < arr.length; i++) {
+      if (Array.isArray(arr[i][1])) {
+        for (let j = 0; j < arr[i][1].length; j++) {
+          result.push([arr[i][0], arr[i][1][j]])
+        }
+      } else {
+        result.push(arr[i])
+      }
+    }
+  
+    return result
+  }
+
+  const fetchFilter = (obj) => {
+    const objQuery = Object.entries(obj)
+    
+    const filterQueryFilters = (id) => {
+      const indice = objQuery.findIndex(arr => arr[0] === id)
+      if (indice != -1) objQuery.splice(indice, 1)
+    }
+    filterQueryFilters("q")
+    filterQueryFilters("page")
+
+    return flattenArray(objQuery)
+  }
+
   useEffect(() => {
     if(fetchApi) clearTimeout(fetchApi)
 
     const fetchFunc = setTimeout(() => {
-      getDatasets({q:query?.q, filters: selectedFilters, page: query?.page || 1})
+      getDatasets({
+        q: query?.q,
+        filters: fetchFilter(query),
+        page: query?.page || 1
+      })
     }, 400)
 
+    setSelectedFilters(fetchFilter(query))
     setFetchApi(fetchFunc)
-  }, [query, selectedFilters])
+  }, [query])
 
   const handleSelectFilter = (elm) => {
     const newArray = [...selectedFilters]
-    const indice = newArray.findIndex(arr => arr[0] === elm[0] && arr[1] === elm[1]);
+    const indice = newArray.findIndex(arr => arr[0] === elm[0] && arr[1] === elm[1])
 
     if (indice === -1) {
       newArray.push(elm)
@@ -165,7 +199,44 @@ export default function SearchPage({ pages }) {
       newArray.splice(indice, 1)
     }
 
-    setSelectedFilters(newArray)
+    let objectQuery = []
+
+    newArray.map(res => {
+      const [key, value] = res
+      objectQuery.push({[key] : value})
+    })
+
+    const queryParams = objectQuery.reduce((accumulator, elm) => {
+      for (const key in elm) {
+        if (accumulator.hasOwnProperty(key)) {
+          if (Array.isArray(accumulator[key])) {
+            accumulator[key].push(elm[key])
+          } else {
+            accumulator[key] = [accumulator[key], elm[key]]
+          }
+        } else {
+          accumulator[key] = elm[key]
+        }
+      }
+      return accumulator
+    }, {})
+
+    router.push({
+      pathname: router.pathname,
+      query: {
+        q: query.q,
+        ...queryParams || "",        
+        page: query.page
+      }
+    })
+  }
+
+  const valuesCheckedFilter = (filter) => {
+    const objQuery = Object.entries(query)
+    const found = objQuery.find(elm => elm[0] === filter)
+    if(!found) return []
+    if(typeof found[1] === "object") return found?.[1]
+    return [found?.[1]]
   }
 
   const DataProposalBox = ({image, display, text, bodyText}) => {
@@ -407,19 +478,6 @@ export default function SearchPage({ pages }) {
             alwaysOpen
             choices={[
               {
-                key: "bdm_tables",
-                name: (
-                  <HStack whiteSpace="nowrap">
-                    <div>Tabelas tratadas</div>
-                    <BDLogoPlusImage
-                      marginLeft="5px !important"
-                      widthImage="40px"
-                    />
-                    <div>{`(${aggregations?.contains_tables || "0"})`}</div>
-                  </HStack>
-                ),
-              },
-              {
                 key: "tables_pro",
                 name: (
                   <HStack whiteSpace="nowrap">
@@ -429,6 +487,19 @@ export default function SearchPage({ pages }) {
                       widthImage="52px"
                     />
                     <div>{`(${aggregations?.is_closed || "0"})`}</div>
+                  </HStack>
+                ),
+              },
+              {
+                key: "bdm_tables",
+                name: (
+                  <HStack whiteSpace="nowrap">
+                    <div>Tabelas tratadas</div>
+                    <BDLogoPlusImage
+                      marginLeft="5px !important"
+                      widthImage="40px"
+                    />
+                    <div>{`(${aggregations?.contains_tables || "0"})`}</div>
                   </HStack>
                 ),
               },
@@ -454,6 +525,7 @@ export default function SearchPage({ pages }) {
             valueField="key"
             displayField="name"
             fieldName="Tema"
+            valuesChecked={valuesCheckedFilter("theme")}
             onChange={(value) => handleSelectFilter(["theme",`${value}`])}
           />
 
@@ -464,6 +536,7 @@ export default function SearchPage({ pages }) {
             valueField="key"
             displayField="name"
             fieldName="Organizações"
+            valuesChecked={valuesCheckedFilter("organization")}
             onChange={(value) => handleSelectFilter(["organization",`${value}`])}
           />
 

@@ -102,7 +102,7 @@ export function CheckboxFilterAccordion({
   choices = [],
   onChange,
   onToggle,
-  values,
+  valuesChecked = [],
   alwaysOpen = false,
   valueField = "id",
   displayField = "name",
@@ -135,7 +135,7 @@ export function CheckboxFilterAccordion({
       overflowX="hidden"
       alwaysOpen={alwaysOpen}
     >
-      <CheckboxGroup>
+      <CheckboxGroup defaultValue={valuesChecked}>
         {canSearch &&
           <VStack padding="15px 0 10px" width="100%" alignItems="center">
             <ControlledInput
@@ -172,7 +172,7 @@ export function CheckboxFilterAccordion({
               letterSpacing="0.5px"
               onChange={(e) => { onChange(e.target.value)}} 
             >
-              {c[displayField]} {`(${c["count"]})`}
+              {c[displayField]} {c["count"] && `(${c["count"]})`}
             </Checkbox>
           ))}
         </VStack>

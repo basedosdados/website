@@ -16,7 +16,6 @@ export default async function getSearchDatasets({q, filter = [], page}) {
   const filters = () => {
     const queryFilter = []
     if(filter === undefined || null) return ""
-    
     if(filter.length > 0) (
       filter.forEach(([k, v]) => {
         queryFilter.push(`${k}=${v}&`)
