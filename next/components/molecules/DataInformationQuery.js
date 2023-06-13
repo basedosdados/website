@@ -230,7 +230,8 @@ export default function DataInformationQuery ({ resource }) {
           >
             Stata
           </GreenTab>
-          {isMobileMod() ?
+          {resource?.isClosed ? <></> :
+            isMobileMod() ?
             <Menu>
               <MenuButton
                 variant="unstyled"
@@ -261,24 +262,28 @@ export default function DataInformationQuery ({ resource }) {
               letterSpacing="0.2px"
             >
               Download
-            </GreenTab>
-          }
+            </GreenTab>}
         </TabList>
         <TabPanels>
           <TabPanel padding="0">
-            <SectionText
-              margin="24px 0 16px"
-            >
-              Copie o código abaixo,
-              <Link
-                color="#42B0FF"
-                target="_blank"
-                textDecoration="none"
-                href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${gcpDatasetID}&t=${gcpTableId}&page=table`}
-              > clique aqui
-              </Link> para ir ao <i>datalake</i> no BigQuery e cole no Editor de Consultas:
-            </SectionText>
-
+            {resource?.isClosed ?
+              <SectionText margin="24px 0 16px">
+                Com uma assinatura BD Pro válida, copie o código abaixo e cole no Editor de Consultas no BigQuery:
+              </SectionText>
+                :
+              <SectionText
+                margin="24px 0 16px"
+              >
+                Copie o código abaixo,
+                <Link
+                  color="#42B0FF"
+                  target="_blank"
+                  textDecoration="none"
+                  href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${gcpDatasetID}&t=${gcpTableId}&page=table`}
+                > clique aqui
+                </Link> para ir ao <i>datalake</i> no BigQuery e cole no Editor de Consultas:
+              </SectionText>
+            }
             <PrismCodeHighlight language="sql">
               {`SELECT * FROM \`basedosdados.${queryBQ}\` LIMIT 100`}
             </PrismCodeHighlight>
