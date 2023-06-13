@@ -497,7 +497,7 @@ export default function SearchPage({ pages }) {
                     />
                   </HStack>
                 ),
-                count: aggregations?.contains_open_tables_counts?.filter(elm => elm.key === 1)[0]?.count || 0
+                count: aggregations?.contains_open_tables?.filter(elm => elm.key === 1)[0]?.count || 0
               },
               {
                 key: "raw_data_sources",
