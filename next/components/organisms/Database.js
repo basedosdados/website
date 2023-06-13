@@ -20,6 +20,7 @@ import TemporalCoverage from "../atoms/TemporalCoverageDisplay";
 import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
+import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import { DataBaseSolidIcon } from "../../public/img/icons/databaseIcon";
 
 export default function Database({
@@ -28,10 +29,81 @@ export default function Database({
   temporalCoverageText,
   organization,
   tables,
+  tablesClosed,
   rawDataSources,
   informationRequests,
   themes = [],
 }) {
+
+  const TablesOpen = () => {
+    return (
+      <a href={tables.number > 0 && `/dataset/${id}?table=${tables.id}`}>
+        <HStack
+          spacing={1}
+          cursor={tables.number > 0 ? "pointer" : "normal"}
+          _hover={tables.number > 0 && {opacity: "0.7"}}
+        >
+          <DataBaseSolidIcon
+            alt="tabelas tratadas"
+            width="15px"
+            height="15px"
+            fill={tables.number === 0 ? "#C4C4C4" : "#2B8C4D"}
+          />
+          <Text
+            marginLeft="8px !important"
+            whiteSpace="nowrap"
+            color={tables.number === 0 ? "#C4C4C4" : "#2B8C4D"}
+            fontSize="16px"
+            fontWeight="500"
+            letterSpacing="0px"
+            fontFamily="Ubuntu"
+          >
+            {tables.number}{" "}
+            {tables.number === 1 ? "tabela tratada" : "tabelas tratadas"}
+          </Text>
+          <BDLogoPlusImage
+            widthImage="38px"
+            empty={tables.number === 0}
+          />
+        </HStack>
+      </a>
+    )
+  }
+
+  const TablesClosed = () => {
+    return (
+      <a href={tablesClosed.number > 0 && `/dataset/${id}?table=${tablesClosed.id}`}>
+        <HStack
+          spacing={1}
+          cursor={tablesClosed.number > 0 ? "pointer" : "normal"}
+          _hover={tablesClosed.number > 0 && {opacity: "0.7"}}
+        >
+          <DataBaseSolidIcon
+            alt="tabelas tratadas"
+            width="15px"
+            height="15px"
+            fill={tablesClosed.number === 0 ? "#C4C4C4" : "#2B8C4D"}
+          />
+          <Text
+            marginLeft="8px !important"
+            whiteSpace="nowrap"
+            color={tablesClosed.number === 0 ? "#C4C4C4" : "#2B8C4D"}
+            fontSize="16px"
+            fontWeight="500"
+            letterSpacing="0px"
+            fontFamily="Ubuntu"
+          >
+            {tablesClosed.number}{" "}
+            {tablesClosed.number === 1 ? "tabela tratada" : "tabelas tratadas"}
+          </Text>
+          <BDLogoProImage
+            widthImage="48px"
+            empty={tablesClosed.number === 0}
+          />
+        </HStack>
+      </a>
+    )
+  }
 
   return (
     <VStack
@@ -170,37 +242,22 @@ export default function Database({
               alignItems={useCheckMobile() && "flex-start"}
               spacing={useCheckMobile() ? 0 : 5}
             >
-              <a href={tables.number > 0 && `/dataset/${id}?table=${tables.id}`}>
-                <HStack
-                  spacing={1}
-                  cursor={tables.number > 0 ? "pointer" : "normal"}
-                  _hover={tables.number > 0 && {opacity: "0.7"}}
-                >
-                  <DataBaseSolidIcon
-                    alt="tabelas tratadas"
-                    width="15px"
-                    height="15px"
-                    fill={tables.number === 0 ? "#C4C4C4" : "#2B8C4D"}
-                  />
-                  <Text
-                    marginLeft="8px !important"
-                    whiteSpace="nowrap"
-                    color={tables.number === 0 ? "#C4C4C4" : "#2B8C4D"}
-                    fontSize="16px"
-                    fontWeight="500"
-                    letterSpacing="0px"
-                    fontFamily="Ubuntu"
-                  >
-                    {tables.number}{" "}
-                    {tables.number === 1 ? "tabela tratada" : "tabelas tratadas"}
-                  </Text>
-                  <BDLogoPlusImage
-                    widthImage="38px"
-                    empty={tables.number === 0}
-                  />
-                </HStack>
-              </a>
-              
+              {tables.number > 0 ?
+                  <>
+                    <TablesOpen/>
+                    {tablesClosed.number > 0 &&
+                      <TablesClosed/>
+                    }
+                  </>
+                :
+                  <>
+                    {tablesClosed.number > 0 &&
+                      <TablesClosed/>
+                    }
+                    <TablesOpen/>
+                  </>
+              }
+
               <a href={rawDataSources.number > 0 && `/dataset/${id}?raw_data_source=${rawDataSources.id}`}>
                 <HStack
                   cursor={rawDataSources.number > 0 ? "pointer" : "normal"}

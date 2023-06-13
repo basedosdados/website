@@ -40,6 +40,7 @@ export default async function getBdmTable(id) {
                     }
                   }
                 }
+                version
                 coverages {
                   edges {
                     node {
