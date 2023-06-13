@@ -313,7 +313,6 @@ export default function BdmTablePage({ id }) {
             </Box>
           </GridItem>
 
-          {/* version ausente */}
           <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
             <VersionIcon alt="versão" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase

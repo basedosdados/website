@@ -172,7 +172,7 @@ export function CheckboxFilterAccordion({
               letterSpacing="0.5px"
               onChange={(e) => { onChange(e.target.value)}} 
             >
-              {c[displayField]} {c["count"] && `(${c["count"]})`}
+              {c[displayField]} {c["count"] ? `(${c["count"]})` : `(0)`}
             </Checkbox>
           ))}
         </VStack>

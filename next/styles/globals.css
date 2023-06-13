@@ -65,6 +65,9 @@ body {
 
 .chakra-checkbox__label {
   font-size: 14px !important;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
 }
 
 .chakra-checkbox__control {
