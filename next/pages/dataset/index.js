@@ -145,19 +145,53 @@ export default function SearchPage({ pages }) {
     setCount(res?.count)
   }
 
+  function flattenArray(arr) {
+    let result = []
+
+    for (let i = 0; i < arr.length; i++) {
+      if (Array.isArray(arr[i][1])) {
+        for (let j = 0; j < arr[i][1].length; j++) {
+          result.push([arr[i][0], arr[i][1][j]])
+        }
+      } else {
+        result.push(arr[i])
+      }
+    }
+  
+    return result
+  }
+
+  const fetchFilter = (obj) => {
+    const objQuery = Object.entries(obj)
+    
+    const filterQueryFilters = (id) => {
+      const indice = objQuery.findIndex(arr => arr[0] === id)
+      if (indice != -1) objQuery.splice(indice, 1)
+    }
+    filterQueryFilters("q")
+    filterQueryFilters("page")
+
+    return flattenArray(objQuery)
+  }
+
   useEffect(() => {
     if(fetchApi) clearTimeout(fetchApi)
 
     const fetchFunc = setTimeout(() => {
-      getDatasets({q:query?.q, filters: selectedFilters, page: query?.page || 1})
+      getDatasets({
+        q: query?.q,
+        filters: fetchFilter(query),
+        page: query?.page || 1
+      })
     }, 400)
 
+    setSelectedFilters(fetchFilter(query))
     setFetchApi(fetchFunc)
-  }, [query, selectedFilters])
+  }, [query])
 
   const handleSelectFilter = (elm) => {
     const newArray = [...selectedFilters]
-    const indice = newArray.findIndex(arr => arr[0] === elm[0] && arr[1] === elm[1]);
+    const indice = newArray.findIndex(arr => arr[0] === elm[0] && arr[1] === elm[1])
 
     if (indice === -1) {
       newArray.push(elm)
@@ -165,7 +199,44 @@ export default function SearchPage({ pages }) {
       newArray.splice(indice, 1)
     }
 
-    setSelectedFilters(newArray)
+    let objectQuery = []
+
+    newArray.map(res => {
+      const [key, value] = res
+      objectQuery.push({[key] : value})
+    })
+
+    const queryParams = objectQuery.reduce((accumulator, elm) => {
+      for (const key in elm) {
+        if (accumulator.hasOwnProperty(key)) {
+          if (Array.isArray(accumulator[key])) {
+            accumulator[key].push(elm[key])
+          } else {
+            accumulator[key] = [accumulator[key], elm[key]]
+          }
+        } else {
+          accumulator[key] = elm[key]
+        }
+      }
+      return accumulator
+    }, {})
+
+    router.push({
+      pathname: router.pathname,
+      query: {
+        q: query.q,
+        ...queryParams || "",        
+        page: query.page
+      }
+    })
+  }
+
+  const valuesCheckedFilter = (filter) => {
+    const objQuery = Object.entries(query)
+    const found = objQuery.find(elm => elm[0] === filter)
+    if(!found) return []
+    if(typeof found[1] === "object") return found?.[1]
+    return [found?.[1]]
   }
 
   const DataProposalBox = ({image, display, text, bodyText}) => {
@@ -283,24 +354,22 @@ export default function SearchPage({ pages }) {
         themes={data?.themes}
         name={data?.name || "Conjunto sem nome"}
         temporalCoverageText={data?.temporal_coverage}
-        organization={organizationTypeof ?
-          data.organization[0] : {
-          name: data?.organization,
-          slug: data?.organization_slug,
-          website: data?.organization_website,
-          image: data?.organization_picture
-        }}
+        organization={data.organization[0]}
         tables={{
-          id: data?.tables?.[0]?.id || data?.first_table_id,
-          number: data?.n_bdm_tables
+          id: data?.first_table_id,
+          number: data?.n_open_tables
+        }}
+        tablesClosed={{
+          id: data?.first_closed_table_id,
+          number: data?.n_closed_tables
         }}
         rawDataSources={{
-          id: data?.first_original_source_id,
-          number: data?.n_original_sources
+          id: data?.first_raw_data_source_id,
+          number: data?.n_raw_data_sources
         }}
         informationRequests={{
-          id: data?.first_lai_id,
-          number: data?.n_lais
+          id: data?.first_information_request_id,
+          number: data?.n_information_requests
         }}
       />
     )
@@ -361,6 +430,7 @@ export default function SearchPage({ pages }) {
           fontSize: "16px",
           height: "50px",
           boxShadow: "0 1px 3px 0.5 rgba(100 93 103 /0.16) !important",
+          marginTop: `${useCheckMobile() && "70px"}`,
           _placeholder:{color:"#6F6F6F"}
         }}
         marginTop={useCheckMobile() && "70px"}
@@ -403,47 +473,48 @@ export default function SearchPage({ pages }) {
           </Box>
 
           <CheckboxFilterAccordion
-            isActive={validateActiveFilterAccordin("datasets_with")}
-            alwaysOpen
+            alwaysOpen= {isLoading ? false : true}
             choices={[
               {
-                key: "bdm_tables",
-                name: (
-                  <HStack whiteSpace="nowrap">
-                    <div>Tabelas tratadas</div>
-                    <BDLogoPlusImage
-                      marginLeft="5px !important"
-                      widthImage="40px"
-                    />
-                    <div>{`(${aggregations?.contains_tables || "0"})`}</div>
-                  </HStack>
-                ),
-              },
-              {
-                key: "tables_pro",
+                key: "closed_tables",
                 name: (
                   <HStack whiteSpace="nowrap">
                     <div>Tabelas tratadas</div>
                     <BDLogoProImage
-                      marginLeft="5px !important"
                       widthImage="52px"
                     />
-                    <div>{`(${aggregations?.is_closed || "0"})`}</div>
                   </HStack>
                 ),
+                count: aggregations?.contains_closed_tables?.filter(elm => elm.key === 1)[0]?.count || 0
+              },
+              {
+                key: "open_tables",
+                name: (
+                  <HStack whiteSpace="nowrap">
+                    <div>Tabelas tratadas</div>
+                    <BDLogoPlusImage
+                      widthImage="40px"
+                    />
+                  </HStack>
+                ),
+                count: aggregations?.contains_open_tables?.filter(elm => elm.key === 1)[0]?.count || 0
               },
               {
                 key: "raw_data_sources",
-                name: `Fontes originais (${aggregations?.contains_raw_data_sources || "0"})`,
+                name: `Fontes originais`,
+                count: aggregations?.contains_raw_data_sources?.filter(elm => elm.key === 1)[0]?.count || 0
               },
               {
-                key: "information_request",
-                name: `Pedidos LAI (${aggregations?.contains_information_requests || "0"})`,
+                key: "information_requests",
+                name: `Pedidos LAI`,
+                count: aggregations?.contains_information_requests?.filter(elm => elm.key === 1)[0]?.count || 0
               },
             ]}
+            isActive={validateActiveFilterAccordin("datasets_with")}
             valueField="key"
             displayField="name"
             fieldName="Conjuntos com"
+            valuesChecked={valuesCheckedFilter("datasets_with")}
             onChange={(value) => handleSelectFilter(["datasets_with",`${value}`])}
           />
 
@@ -454,6 +525,7 @@ export default function SearchPage({ pages }) {
             valueField="key"
             displayField="name"
             fieldName="Tema"
+            valuesChecked={valuesCheckedFilter("theme")}
             onChange={(value) => handleSelectFilter(["theme",`${value}`])}
           />
 
@@ -464,6 +536,7 @@ export default function SearchPage({ pages }) {
             valueField="key"
             displayField="name"
             fieldName="Organizações"
+            valuesChecked={valuesCheckedFilter("organization")}
             onChange={(value) => handleSelectFilter(["organization",`${value}`])}
           />
 
@@ -474,6 +547,7 @@ export default function SearchPage({ pages }) {
             valueField="key"
             displayField="name"
             fieldName="Etiqueta"
+            valuesChecked={valuesCheckedFilter("tag")}
             onChange={(value) => handleSelectFilter(["tag",`${value}`])}
           />
 
@@ -574,6 +648,7 @@ export default function SearchPage({ pages }) {
             valueField="key"
             displayField="name"
             fieldName="Nível da observação"
+            valuesChecked={valuesCheckedFilter("observation_level")}
             onChange={(value) => handleSelectFilter(["observation_level",`${value}`])}
           />
 

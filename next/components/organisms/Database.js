@@ -20,6 +20,7 @@ import TemporalCoverage from "../atoms/TemporalCoverageDisplay";
 import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
+import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import { DataBaseSolidIcon } from "../../public/img/icons/databaseIcon";
 
 export default function Database({
@@ -28,10 +29,148 @@ export default function Database({
   temporalCoverageText,
   organization,
   tables,
+  tablesClosed,
   rawDataSources,
   informationRequests,
   themes = [],
 }) {
+
+  const TablesOpen = () => {
+    let tablesNumber = tables.number
+    if(tables.number === undefined) tablesNumber = 0
+
+    return (
+      <a href={tablesNumber > 0 && `/dataset/${id}?table=${tables.id}`}>
+        <HStack
+          spacing={1}
+          cursor={tablesNumber > 0 ? "pointer" : "normal"}
+          _hover={tablesNumber > 0 && {opacity: "0.7"}}
+        >
+          <DataBaseSolidIcon
+            alt="tabelas tratadas"
+            width="15px"
+            height="15px"
+            fill={tablesNumber === 0 ? "#C4C4C4" : "#2B8C4D"}
+          />
+          <Text
+            marginLeft="8px !important"
+            whiteSpace="nowrap"
+            color={tablesNumber === 0 ? "#C4C4C4" : "#2B8C4D"}
+            fontSize="16px"
+            fontWeight="500"
+            letterSpacing="0px"
+            fontFamily="Ubuntu"
+          >
+            {tablesNumber}{" "}
+            {tablesNumber === 1 ? "tabela tratada" : "tabelas tratadas"}
+          </Text>
+          <BDLogoPlusImage
+            widthImage="38px"
+            empty={tablesNumber === 0}
+          />
+        </HStack>
+      </a>
+    )
+  }
+
+  const TablesClosed = () => {
+    let tablesNumber = tablesClosed.number
+    if(tablesClosed.number === undefined) tablesNumber = 0
+
+    return (
+      <a href={tablesNumber > 0 && `/dataset/${id}?table=${tablesClosed.id}`}>
+        <HStack
+          spacing={1}
+          cursor={tablesNumber > 0 ? "pointer" : "normal"}
+          _hover={tablesNumber > 0 && {opacity: "0.7"}}
+        >
+          <DataBaseSolidIcon
+            alt="tabelas tratadas"
+            width="15px"
+            height="15px"
+            fill={tablesNumber === 0 ? "#C4C4C4" : "#2B8C4D"}
+          />
+          <Text
+            marginLeft="8px !important"
+            whiteSpace="nowrap"
+            color={tablesNumber === 0 ? "#C4C4C4" : "#2B8C4D"}
+            fontSize="16px"
+            fontWeight="500"
+            letterSpacing="0px"
+            fontFamily="Ubuntu"
+          >
+            {tablesNumber}{" "}
+            {tablesNumber === 1 ? "tabela tratada" : "tabelas tratadas"}
+          </Text>
+          <BDLogoProImage
+            widthImage="48px"
+            empty={tablesNumber === 0}
+          />
+        </HStack>
+      </a>
+    )
+  }
+
+  const RawDataSources = () => {
+    let rawDataSourcesNumber = rawDataSources.number
+    if(rawDataSources.number === undefined) rawDataSourcesNumber = 0
+
+    return (
+      <a href={rawDataSourcesNumber > 0 && `/dataset/${id}?raw_data_source=${rawDataSources.id}`}>
+        <HStack
+          cursor={rawDataSourcesNumber > 0 ? "pointer" : "normal"}
+          _hover={rawDataSourcesNumber > 0 && {opacity: "0.7"}}
+        >
+          <LinkIcon
+            width="15px"
+            height="15px"
+            fill={rawDataSourcesNumber === 0 ? "#C4C4C4" : "#2B8C4D"}
+          />
+          <Text
+            color={rawDataSourcesNumber === 0 ? "#C4C4C4" : "#2B8C4D"}
+            fontSize="16px"
+            fontWeight="500"
+            letterSpacing="0px"
+            fontFamily="Ubuntu"
+          >
+            {rawDataSourcesNumber}{" "}
+            {rawDataSourcesNumber === 1 ? "fonte original" : "fontes originais"}
+          </Text>
+        </HStack>
+      </a>
+    )
+  }
+
+  const InformationRequest = () => {
+    let informationRequestsNumber = informationRequests.number
+    if(informationRequests.number === undefined) informationRequestsNumber = 0
+
+    return (
+      <a href={informationRequestsNumber > 0 && `/dataset/${id}?information_request=${informationRequests.id}`}>
+        <HStack
+          cursor={informationRequestsNumber > 0 ? "pointer" : "normal"}
+          _hover={informationRequestsNumber > 0 && {opacity: "0.7"}}
+        >
+          <InfoArrowIcon
+            alt="pedidos Lai"
+            width="15px"
+            height="15px"
+            fill={informationRequestsNumber === 0 ? "#C4C4C4" : "#2B8C4D"}
+          />
+          <Text
+            color={informationRequestsNumber === 0 ? "#C4C4C4" : "#2B8C4D"}
+            fontSize="16px"
+            fontWeight="500"
+            letterSpacing="0px"
+            fontFamily="Ubuntu"
+          >
+            {informationRequestsNumber}{" "}
+            {informationRequestsNumber === 1 ? "pedido LAI" : "pedidos LAI"}
+          </Text>
+        </HStack>
+      </a>
+    )
+  }
 
   return (
     <VStack
@@ -170,83 +309,15 @@ export default function Database({
               alignItems={useCheckMobile() && "flex-start"}
               spacing={useCheckMobile() ? 0 : 5}
             >
-              <a href={tables.number > 0 && `/dataset/${id}?table=${tables.id}`}>
-                <HStack
-                  spacing={1}
-                  cursor={tables.number > 0 ? "pointer" : "normal"}
-                  _hover={tables.number > 0 && {opacity: "0.7"}}
-                >
-                  <DataBaseSolidIcon
-                    alt="tabelas tratadas"
-                    width="15px"
-                    height="15px"
-                    fill={tables.number === 0 ? "#C4C4C4" : "#2B8C4D"}
-                  />
-                  <Text
-                    marginLeft="8px !important"
-                    whiteSpace="nowrap"
-                    color={tables.number === 0 ? "#C4C4C4" : "#2B8C4D"}
-                    fontSize="16px"
-                    fontWeight="500"
-                    letterSpacing="0px"
-                    fontFamily="Ubuntu"
-                  >
-                    {tables.number}{" "}
-                    {tables.number === 1 ? "tabela tratada" : "tabelas tratadas"}
-                  </Text>
-                  <BDLogoPlusImage
-                    widthImage="38px"
-                    empty={tables.number === 0}
-                  />
-                </HStack>
-              </a>
-              
-              <a href={rawDataSources.number > 0 && `/dataset/${id}?raw_data_source=${rawDataSources.id}`}>
-                <HStack
-                  cursor={rawDataSources.number > 0 ? "pointer" : "normal"}
-                  _hover={rawDataSources.number > 0 && {opacity: "0.7"}}
-                >
-                  <LinkIcon
-                    width="15px"
-                    height="15px"
-                    fill={rawDataSources.number === 0 ? "#C4C4C4" : "#2B8C4D"}
-                  />
-                  <Text
-                    color={rawDataSources.number === 0 ? "#C4C4C4" : "#2B8C4D"}
-                    fontSize="16px"
-                    fontWeight="500"
-                    letterSpacing="0px"
-                    fontFamily="Ubuntu"
-                  >
-                    {rawDataSources.number}{" "}
-                    {rawDataSources.number === 1 ? "fonte original" : "fontes originais"}
-                  </Text>
-                </HStack>
-              </a>
+        
+              {tablesClosed.number > 0 &&
+                <TablesClosed/>
+              }
+              <TablesOpen/>
 
-              <a href={informationRequests.number > 0 && `/dataset/${id}?information_request=${informationRequests.id}`}>
-                <HStack
-                  cursor={informationRequests.number > 0 ? "pointer" : "normal"}
-                  _hover={informationRequests.number > 0 && {opacity: "0.7"}}
-                >
-                  <InfoArrowIcon
-                    alt="pedidos Lai"
-                    width="15px"
-                    height="15px"
-                    fill={informationRequests.number === 0 ? "#C4C4C4" : "#2B8C4D"}
-                  />
-                  <Text
-                    color={informationRequests.number === 0 ? "#C4C4C4" : "#2B8C4D"}
-                    fontSize="16px"
-                    fontWeight="500"
-                    letterSpacing="0px"
-                    fontFamily="Ubuntu"
-                  >
-                    {informationRequests.number}{" "}
-                    {informationRequests.number === 1 ? "pedido LAI" : "pedidos LAI"}
-                  </Text>
-                </HStack>
-              </a>
+              <RawDataSources/>
+
+              <InformationRequest/>
             </HStack>
           </VStack>
         </VStack>

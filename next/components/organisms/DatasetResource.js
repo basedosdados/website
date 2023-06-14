@@ -147,12 +147,12 @@ export default function DatasetResource({
 
         <FilterAccordion
           alwaysOpen={true}
-          choices={tables.bdmais || []}
+          choices={tables.bdpro || []}
           value={query.table}
           valueField="_id"
           displayField="name"
           fieldName="Tabelas tratadas"
-          bdPlus={true}
+          bdPro={true}
           isHovering={false}
           onChange={(id) => {
             pushQuery("table", id)
@@ -161,12 +161,12 @@ export default function DatasetResource({
 
         <FilterAccordion
           alwaysOpen={true}
-          choices={tables.bdpro || []}
+          choices={tables.bdmais || []}
           value={query.table}
           valueField="_id"
           displayField="name"
           fieldName="Tabelas tratadas"
-          bdPro={true}
+          bdPlus={true}
           isHovering={false}
           onChange={(id) => {
             pushQuery("table", id)

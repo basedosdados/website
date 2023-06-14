@@ -31,6 +31,16 @@ export default async function getBdmTable(id) {
                     }
                   }
                 }
+                cloudTables{
+                  edges{
+                    node{
+                      gcpTableId
+                      gcpDatasetId
+                      gcpProjectId
+                    }
+                  }
+                }
+                version
                 coverages {
                   edges {
                     node {
