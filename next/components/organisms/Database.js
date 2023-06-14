@@ -242,21 +242,11 @@ export default function Database({
               alignItems={useCheckMobile() && "flex-start"}
               spacing={useCheckMobile() ? 0 : 5}
             >
-              {tables.number > 0 ?
-                  <>
-                    <TablesOpen/>
-                    {tablesClosed.number > 0 &&
-                      <TablesClosed/>
-                    }
-                  </>
-                :
-                  <>
-                    {tablesClosed.number > 0 &&
-                      <TablesClosed/>
-                    }
-                    <TablesOpen/>
-                  </>
+        
+              {tablesClosed.number > 0 &&
+                <TablesClosed/>
               }
+              <TablesOpen/>
 
               <a href={rawDataSources.number > 0 && `/dataset/${id}?raw_data_source=${rawDataSources.id}`}>
                 <HStack
