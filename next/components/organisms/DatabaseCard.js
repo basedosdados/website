@@ -38,32 +38,6 @@ export default function DatabaseCard({
       letterSpacing="0.3px"
       spacing={2}
     >
-      {tablesClosed.number < 0 ? <></> :
-        <Stack
-          margin="0 !important"
-          cursor={tables?.number > 0 ? "pointer" : "default"}
-          _hover={tables?.number === undefined ||tables?.number > 0 && {opacity : "0.7"}}
-          color={tables?.number === undefined || tables?.number === 0? "#C4C4C4" : "#42B0FF"}
-        >
-          <a
-            href={tables?.number > 0 && `${link}?table=${tables?.id}`}
-            target="_blank"
-            style={{display: "flex"}}
-          >
-            <b>{tables?.number === 1 ?
-              "1 tabela tratada"
-            : 
-              `${tables?.number || 0} tabelas tratadas`
-            }</b>
-            <BDLogoPlusImage
-              widthImage="38px"
-              marginLeft="5px !important"
-              empty={tables?.number === 0}
-            />
-          </a>
-        </Stack>
-      }
-      
       {tablesClosed.number > 0 &&
         <Stack
           margin="0 !important"
@@ -86,6 +60,32 @@ export default function DatabaseCard({
               widthImage="50px"
               marginLeft="5px !important"
               empty={tablesClosed.number === 0}
+            />
+          </a>
+        </Stack>
+      }
+
+      {tablesClosed.number < 0 ? <></> :
+        <Stack
+          margin="0 !important"
+          cursor={tables?.number > 0 ? "pointer" : "default"}
+          _hover={tables?.number === undefined ||tables?.number > 0 && {opacity : "0.7"}}
+          color={tables?.number === undefined || tables?.number === 0? "#C4C4C4" : "#42B0FF"}
+        >
+          <a
+            href={tables?.number > 0 && `${link}?table=${tables?.id}`}
+            target="_blank"
+            style={{display: "flex"}}
+          >
+            <b>{tables?.number === 1 ?
+              "1 tabela tratada"
+            : 
+              `${tables?.number || 0} tabelas tratadas`
+            }</b>
+            <BDLogoPlusImage
+              widthImage="38px"
+              marginLeft="5px !important"
+              empty={tables?.number === 0}
             />
           </a>
         </Stack>
