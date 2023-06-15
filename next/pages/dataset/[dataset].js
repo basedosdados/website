@@ -38,12 +38,7 @@ import {
 import { withPages } from "../../hooks/pages.hook";
 
 export async function getStaticProps(context) {
-  let dataset = {}
-  try {
-    dataset = await getShowDataset(context.params.dataset) || null
-  } catch (error) {
-    console.log(error)
-  }
+  const dataset = await getShowDataset(context.params.dataset) || null
 
   return await withPages({
     props: {
@@ -67,12 +62,17 @@ export async function getStaticPaths(context) {
 export default function DatasetPage ({
   dataset,
 }) {
-
-  if(dataset === null || Object.keys(dataset).length === 0) return (<MainPageTemplate><FourOFour/></MainPageTemplate>)
-
-  const [tabIndex, setTabIndex] = useState(0)
   const router = useRouter()
   const { query } = router
+  const [tabIndex, setTabIndex] = useState(0)
+
+  const isDatasetEmpty = dataset === null || Object.keys(dataset).length === 0
+
+  useEffect(() => {
+    if(isDatasetEmpty) return router.push(`${process.env.NEXT_PUBLIC_API_URL}/dataset_redirect?dataset=${query.dataset}`)
+  }, [])
+
+  if(isDatasetEmpty) return <MainPageTemplate><FourOFour/></MainPageTemplate>
 
   return (
     <MainPageTemplate>
@@ -143,7 +143,7 @@ export default function DatasetPage ({
                 <Subtitle>Organização</Subtitle>
                 <Link
                   marginTop="4px !important"
-                  href={`/dataset?organization=${dataset?.organization?.name || ""}`}
+                  href={`/dataset?organization=${dataset?.organization?.slug || ""}`}
                 >
                   <SectionText
                     fontSize={isMobileMod() ? "14px" : "16px"}

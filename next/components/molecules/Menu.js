@@ -13,7 +13,8 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-  useBoolean
+  useBoolean,
+  Divider
 } from "@chakra-ui/react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router"
@@ -23,6 +24,8 @@ import ControlledInput from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
 
+import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
+import BDLogoEduImage from "../../public/img/logos/bd_logo_edu";
 import BDLogoImage from "../../public/img/logos/bd_logo";
 import FarBarsIcon from "../../public/img/icons/farBarsIcon";
 import SearchIcon from "../../public/img/icons/searchIcon";
@@ -42,6 +45,19 @@ function MenuDrawer({ isOpen, onClose, links }) {
         />
         <VStack alignItems="flex-start" width="100%" spacing="16px">
           {Object.entries(links).map(([key, elm]) => {
+            if(key === "Button")
+              return elm.map(b => 
+                <RoundedButton
+                  key={b.name}
+                  backgroundColor={b.color}
+                  minWidth="100px"
+                  height="38px"
+                  fontSize="20px"
+                  onClick={() => window.open(b.href, "_blank")}
+                >
+                  {b.name}
+                </RoundedButton>
+              )
             if (typeof elm === "object") {
               return (
                 <Accordion key={key} allowToggle width="100%">
@@ -67,45 +83,36 @@ function MenuDrawer({ isOpen, onClose, links }) {
                     gridGap="13px"
                     padding="16px 0 2px"
                   >
-                    {Object.entries(elm).map(([route, link]) => (
-                      <Link
-                        key={route}
-                        fontSize="16px"
-                        fontFamily="Ubuntu"
-                        fontWeight="300"
-                        href={link}
-                      >{route}</Link>
-                    ))}
+                    {elm.map((c) => {
+                      if(c.name === undefined) return null
+
+                      return (
+                        <Link
+                          key={c.name}
+                          display="flex"
+                          gap="16px"
+                          fontSize="16px"
+                          fontFamily="Ubuntu"
+                          fontWeight="300"
+                          href={c.href}
+                        >{c.icon && c.icon} {c.name}</Link>
+                      )
+                    })}
                   </AccordionPanel>
                   </AccordionItem>
                 </Accordion>
               )
             } else {
-              if(key === "Apoie") {
-                return (
-                  <RoundedButton
-                    key={key}
-                    backgroundColor="#FF8484"
-                    minWidth="100px"
-                    height="38px"
-                    fontSize="20px"
-                    onClick={() => window.open(elm, "_blank")}
-                  >
-                    {key}
-                  </RoundedButton>
-                )
-              } else {
-                return (
-                  <Link
-                    key={key}
-                    fontSize="20px"
-                    fontFamily="Ubuntu"
-                    fontWeight="400"
-                    href={elm}
-                  >{key}
-                  </Link>
-                )
-              }
+              return (
+                <Link
+                  key={key}
+                  fontSize="20px"
+                  fontFamily="Ubuntu"
+                  fontWeight="400"
+                  href={elm}
+                >{key}
+                </Link>
+              )
             }
           })}
         </VStack>
@@ -197,8 +204,10 @@ function DesktopLinks({ links }) {
     setStatusSearch(elm.status)
   }
 
-  const LinkMenuDropDown = ({ url, text }) => {
+  const LinkMenuDropDown = ({ url, text, icon }) => {
     const [flag, setFlag] = useBoolean()
+
+    if(url === undefined && text === undefined) return <Divider marginBottom="10px" padding="10px 0 0" borderColor="#DEDFE0"/>
 
     return (
       <Link
@@ -212,14 +221,15 @@ function DesktopLinks({ links }) {
         fontWeight="400"
         letterSpacing="0.3px"
         href={url}
-        padding="10px 24px"
+        padding="10px 0"
         alignItems="center"
-        justifyContent="space-between"
+        gap="16px"
         onMouseEnter={setFlag.on}
         onMouseLeave={setFlag.off}
       > 
+        {icon && icon}
         {text}
-        {flag && url.slice(0,4) === "http" && <RedirectIcon marginLeft="8px" width="16px" height="16px"/>}
+        <RedirectIcon fill={flag && url.slice(0,4) === "http" ? "#A3A3A3" : "transparent"} marginLeft="auto" width="16px" height="16px"/>
       </Link>
     )
   }
@@ -235,20 +245,20 @@ function DesktopLinks({ links }) {
     >
       <HStack width="100%" flex="3" spacing={7}>
         {Object.entries(links).map(([k, v]) => {
-          if (k === "Apoie")
-            return (
-              <a key={k} href={v} target="_blank">
+          if (k === "Button")
+            return v.map(b => (
+              <a key={b.name} href={b.href} target="_blank">
                 <RoundedButton
                   colorScheme="red"
-                  backgroundColor="#FF8484"
+                  backgroundColor={b.color}
                   minWidth="80px"
                   height="35px"
                   fontSize="15px"
                 >
-                  Apoie
+                  {b.name}
                 </RoundedButton>
               </a>
-            );
+            ))
 
           if (typeof v === "object") {
             return (
@@ -263,15 +273,17 @@ function DesktopLinks({ links }) {
                 fontWeight="400"
                 letterSpacing="0.3px"
                 borderRadius="10px"
+                padding="32px"
                 _first={{ paddingTop: "10px"}}
                 _last={{ paddingBottom: "10px"}}
                 boxShadow= "0 1px 8px 1px rgba(64, 60, 67, 0.16)"
               >
-                {Object.entries(v).map(([k, v]) => (
+                {v.map((elm) => (
                   <LinkMenuDropDown
-                    key={k}
-                    url={v}
-                    text={k}
+                    key={elm.name}
+                    url={elm?.href}
+                    text={elm.name}
+                    icon={elm?.icon}
                   />
                 ))}
               </MenuDropdown>
@@ -328,36 +340,44 @@ function DesktopLinks({ links }) {
   );
 }
 
-export default function Menu({ pages = [] }) {
-  const [isShowLogoHome, setIsShowLogoHome] = useState(false)
-
+export default function Menu({}) {
   const router = useRouter()
   const { route } = router
-
   const menuDisclosure = useDisclosure();
   const divRef = useRef();
   const userData = useContext(UserContext);
+  const [isShowLogoHome, setIsShowLogoHome] = useState(false)
 
   const links = {
     Dados: "/dataset",
-    Tutoriais: {
-      Documentação: "https://basedosdados.github.io/mais/",
-      "Vídeos no YouTube": "https://www.youtube.com/c/BasedosDados/featured",
-      Blog: "https://medium.com/basedosdados",
-    },
-    Serviços: {
-      "Conheça os serviços" : "/servicos",
-      "Estudos de caso" : "/estudos-de-caso"
-    },
-    Institucional: {
-      "Quem somos": "/quem-somos",
-      Transparência: "/transparencia",
-      Newsletter: "https://info.basedosdados.org/newsletter",
-      Carreiras: "https://info.basedosdados.org/carreiras",
-      "Perguntas frequentes": "/perguntas-frequentes",
-    },
+    Soluções: [
+      {icon: <BDLogoProImage widthImage="54px"/>, name: "Dados exclusivos", href: "https://info.basedosdados.org/bd-pro"},
+      {icon: <BDLogoEduImage widthImage="54px"/>, name: "Curso de dados", href: "https://info.basedosdados.org/bd-edu"},
+      {},
+      {name: "Serviços", href: "/servicos"},
+      {},
+      {name: "Estudos de caso", href: "/estudos-de-caso"}
+    ],
+    Tutoriais: [
+      {name: "Documentação", href: "https://basedosdados.github.io/mais/"},
+      {name: "Vídeos no YouTube", href: "https://www.youtube.com/c/BasedosDados/featured"},
+      {name: "Blog", href: "https://medium.com/basedosdados"}
+    ],
+    Institucional: [
+      {name: "Quem somos", href: "/quem-somos"},
+      {name: "Transparência", href: "/transparencia"},
+      {name: "Newsletter", href: "https://info.basedosdados.org/newsletter"},
+      {name: "Carreiras", href: "https://info.basedosdados.org/carreiras"},
+      {name: "Perguntas frequentes", href: "/perguntas-frequentes"},
+    ],
     Contato: "/contato",
-    Apoie: "https://apoia.se/basedosdados",
+    Button: [
+      {
+        name: "Assine a BD Pro",
+        href: "https://info.basedosdados.org/bd-pro",
+        color: "#8A7500"
+      }
+    ]
   };
 
   useEffect(() => {
@@ -425,7 +445,7 @@ export default function Menu({ pages = [] }) {
             />
           </Link>
 
-          <Avatar
+          {/* <Avatar
             bg="#2B8C4D"
             position="fixed"
             right="24px"
@@ -434,7 +454,7 @@ export default function Menu({ pages = [] }) {
             display={{ base: "flex", lg: "none" }}
             src={userData?.image_url}
             name={userData?.fullname}
-          />
+          /> */}
           <DesktopLinks links={links} />
         </HStack>
       </Box>

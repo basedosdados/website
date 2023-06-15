@@ -18,6 +18,7 @@ export default async function getBdmTable(id) {
                 slug
                 name
                 description
+                isClosed
                 dataset {
                   _id
                   slug
@@ -30,6 +31,16 @@ export default async function getBdmTable(id) {
                     }
                   }
                 }
+                cloudTables{
+                  edges{
+                    node{
+                      gcpTableId
+                      gcpDatasetId
+                      gcpProjectId
+                    }
+                  }
+                }
+                version
                 coverages {
                   edges {
                     node {
