@@ -3,7 +3,8 @@ import {
   VStack,
   Center,
   Text,
-  Tooltip
+  Tooltip,
+  Stack
 } from "@chakra-ui/react";
 import { Card } from "../molecules/Card";
 import { CategoryIcon } from "../atoms/CategoryIcon";
@@ -11,6 +12,7 @@ import Link from "../atoms/Link";
 import { ThemeTag } from "../atoms/ThemeTag";
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 
 export default function DatabaseCard({
   name,
@@ -18,6 +20,7 @@ export default function DatabaseCard({
   organization,
   tags = [],
   tables,
+  tablesClosed,
   rawDataSources,
   informationRequests,
   link,
@@ -27,26 +30,66 @@ export default function DatabaseCard({
 
   databaseInfo.push(
     <HStack
+      flexDirection="column"
+      alignItems="flex-start"
       whiteSpace="nowrap"
       fontFamily="Ubuntu"
       fontSize="14px"
       letterSpacing="0.3px"
-      color={tables.number === 0 ? "#C4C4C4" : "#42B0FF" }
-      cursor={tables.number > 0 ? "pointer" : "default"}
-      _hover={tables.number > 0 && {opacity : "0.7"}}
+      spacing={2}
     >
-      <a href={tables.number > 0 && `${link}?table=${tables.id}`} target="_blank" style={{display: "flex"}}>
-        <b>{tables.number === 1 ?
-          "1 tabela tratada"
-        : 
-          `${tables.number} tabelas tratadas`
-        }</b>
-        <BDLogoPlusImage
-          widthImage="38px"
-          marginLeft="5px !important"
-          empty={tables.number === 0}
-        />
-      </a>
+      {tablesClosed.number > 0 &&
+        <Stack
+          margin="0 !important"
+          cursor={tablesClosed?.number > 0 ? "pointer" : "default"}
+          _hover={tablesClosed?.number === undefined ||tablesClosed?.number > 0 && {opacity : "0.7"}}
+          color={tablesClosed?.number === undefined || tablesClosed?.number === 0? "#C4C4C4" : "#8A7500" }
+        >
+          <a
+            
+            href={tablesClosed.number > 0 && `${link}?table=${tablesClosed.id}`}
+            target="_blank"
+            style={{display: "flex"}}
+          >
+            <b>{tablesClosed.number === 1 ?
+              "1 tabela tratada"
+            : 
+              `${tablesClosed?.number || 0} tabelas tratadas`
+            }</b>
+            <BDLogoProImage
+              widthImage="50px"
+              marginLeft="5px !important"
+              empty={tablesClosed.number === 0}
+            />
+          </a>
+        </Stack>
+      }
+
+      {tablesClosed.number < 0 ? <></> :
+        <Stack
+          margin="0 !important"
+          cursor={tables?.number > 0 ? "pointer" : "default"}
+          _hover={tables?.number === undefined ||tables?.number > 0 && {opacity : "0.7"}}
+          color={tables?.number === undefined || tables?.number === 0? "#C4C4C4" : "#42B0FF"}
+        >
+          <a
+            href={tables?.number > 0 && `${link}?table=${tables?.id}`}
+            target="_blank"
+            style={{display: "flex"}}
+          >
+            <b>{tables?.number === 1 ?
+              "1 tabela tratada"
+            : 
+              `${tables?.number || 0} tabelas tratadas`
+            }</b>
+            <BDLogoPlusImage
+              widthImage="38px"
+              marginLeft="5px !important"
+              empty={tables?.number === 0}
+            />
+          </a>
+        </Stack>
+      }
     </HStack>
   )
 
@@ -90,7 +133,7 @@ export default function DatabaseCard({
                 overflow="hidden"
                 filter="invert(1)"
                 _hover={{ opacity: "none" }}
-                href={`/dataset?group=${c.slug}`}
+                href={`/dataset?theme=${c.slug}`}
                 target="_blank"
               >
                 <CategoryIcon
@@ -140,7 +183,7 @@ export default function DatabaseCard({
           width="100%"
           overflowX="auto"
           className="no-scrollbar"
-          margin="0 0 20px"
+          margin="8px 0 20px"
         >
           {tags.length !== 0 && tags.slice(0,3).map((t) => (
             <ThemeTag name={t.name}/>

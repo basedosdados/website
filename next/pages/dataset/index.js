@@ -39,11 +39,12 @@ import BodyText from "../../components/atoms/BodyText";
 import Display from "../../components/atoms/Display";
 import RoundedButton from "../../components/atoms/RoundedButton";
 import { SchemaForm } from "../../components/molecules/SchemaForm";
-import { Database } from "../../components/organisms/Database";
+import Database from "../../components/organisms/Database";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import FilterIcon from "../../public/img/icons/filterIcon";
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
+import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import NotFoundImage from "../../public/img/notFoundImage";
 
 function NewDatasetModal({ isOpen, onClose }) {
@@ -123,6 +124,7 @@ export default function SearchPage({ pages }) {
   const [fetchApi, setFetchApi] = useState(null)
   const [showEmptyState, setShowEmptyState] = useState(false)
   const [resource, setResource] = useState([])
+  const [selectedFilters, setSelectedFilters] = useState([])
   const [aggregations, setAggregations] = useState({})
   const [count, setCount] = useState(0)
   const [pageInfo, setPageInfo] = useState({})
@@ -131,26 +133,111 @@ export default function SearchPage({ pages }) {
   // const datasetDisclosure = useDisclosure()
   // const [order, setOrder] = useState("score")
 
-  async function getDatasets({q, page}) {
+  async function getDatasets({q, filters, page}) {
     setIsLoading(true)
-    const res = await getSearchDatasets({q:q, page:page})
+    const res = await getSearchDatasets({q:q, filter: filters, page:page})
     setPageInfo({page: page, count: res?.count})
     setIsLoading(false)
     setShowEmptyState(true)
+    if(res === undefined) return router.push({pathname:"500"})
     setResource(res?.results || null)
     setAggregations(res?.aggregations)
     setCount(res?.count)
+  }
+
+  function flattenArray(arr) {
+    let result = []
+
+    for (let i = 0; i < arr.length; i++) {
+      if (Array.isArray(arr[i][1])) {
+        for (let j = 0; j < arr[i][1].length; j++) {
+          result.push([arr[i][0], arr[i][1][j]])
+        }
+      } else {
+        result.push(arr[i])
+      }
+    }
+  
+    return result
+  }
+
+  const fetchFilter = (obj) => {
+    const objQuery = Object.entries(obj)
+    
+    const filterQueryFilters = (id) => {
+      const indice = objQuery.findIndex(arr => arr[0] === id)
+      if (indice != -1) objQuery.splice(indice, 1)
+    }
+    filterQueryFilters("q")
+    filterQueryFilters("page")
+
+    return flattenArray(objQuery)
   }
 
   useEffect(() => {
     if(fetchApi) clearTimeout(fetchApi)
 
     const fetchFunc = setTimeout(() => {
-      getDatasets({q:query?.q, page: query?.page || 1})
+      getDatasets({
+        q: query?.q,
+        filters: fetchFilter(query),
+        page: query?.page || 1
+      })
     }, 400)
 
+    setSelectedFilters(fetchFilter(query))
     setFetchApi(fetchFunc)
   }, [query])
+
+  const handleSelectFilter = (elm) => {
+    const newArray = [...selectedFilters]
+    const indice = newArray.findIndex(arr => arr[0] === elm[0] && arr[1] === elm[1])
+
+    if (indice === -1) {
+      newArray.push(elm)
+    } else {
+      newArray.splice(indice, 1)
+    }
+
+    let objectQuery = []
+
+    newArray.map(res => {
+      const [key, value] = res
+      objectQuery.push({[key] : value})
+    })
+
+    const queryParams = objectQuery.reduce((accumulator, elm) => {
+      for (const key in elm) {
+        if (accumulator.hasOwnProperty(key)) {
+          if (Array.isArray(accumulator[key])) {
+            accumulator[key].push(elm[key])
+          } else {
+            accumulator[key] = [accumulator[key], elm[key]]
+          }
+        } else {
+          accumulator[key] = elm[key]
+        }
+      }
+      return accumulator
+    }, {})
+
+    router.push({
+      pathname: router.pathname,
+      query: {
+        q: query.q,
+        ...queryParams || "",        
+        page: 1
+      }
+    })
+  }
+
+  const valuesCheckedFilter = (filter) => {
+    const objQuery = Object.entries(query)
+    const found = objQuery.find(elm => elm[0] === filter)
+    if(!found) return []
+    if(typeof found[1] === "object") return found?.[1]
+    return [found?.[1]]
+  }
 
   const DataProposalBox = ({image, display, text, bodyText}) => {
     return (
@@ -267,24 +354,22 @@ export default function SearchPage({ pages }) {
         themes={data?.themes}
         name={data?.name || "Conjunto sem nome"}
         temporalCoverageText={data?.temporal_coverage}
-        organization={organizationTypeof ?
-          data.organization[0] : {
-          name: data?.organization,
-          slug: data?.organization_slug,
-          website: data?.organization_website,
-          image: data?.organization_picture
-        }}
+        organization={data.organization[0]}
         tables={{
-          id: data?.tables?.[0]?.id || data?.first_table_id,
-          number: data?.n_bdm_tables
+          id: data?.first_table_id,
+          number: data?.n_open_tables
+        }}
+        tablesClosed={{
+          id: data?.first_closed_table_id,
+          number: data?.n_closed_tables
         }}
         rawDataSources={{
-          id: data?.first_original_source_id,
-          number: data?.n_original_sources
+          id: data?.first_raw_data_source_id,
+          number: data?.n_raw_data_sources
         }}
         informationRequests={{
-          id: data?.first_lai_id,
-          number: data?.n_lais
+          id: data?.first_information_request_id,
+          number: data?.n_information_requests
         }}
       />
     )
@@ -309,6 +394,10 @@ export default function SearchPage({ pages }) {
         query: {...query, q: value, page: value !== query.q ? 1 : query.page }
       })
     }
+  }
+
+  const validateActiveFilterAccordin = (text) => {
+    return selectedFilters.map((elm) => elm[0] === text).find(res => res === true)
   }
 
   return (
@@ -341,6 +430,7 @@ export default function SearchPage({ pages }) {
           fontSize: "16px",
           height: "50px",
           boxShadow: "0 1px 3px 0.5 rgba(100 93 103 /0.16) !important",
+          marginTop: `${useCheckMobile() && "70px"}`,
           _placeholder:{color:"#6F6F6F"}
         }}
         marginTop={useCheckMobile() && "70px"}
@@ -354,7 +444,6 @@ export default function SearchPage({ pages }) {
         direction={{ base: "column", lg: "row" }}
       >
         <VStack
-          display="none"
           justifyContent="flex-start"
           alignItems="flex-start"
           minWidth={{ base: "100%", lg: "320px" }}
@@ -383,83 +472,86 @@ export default function SearchPage({ pages }) {
             </Text>
           </Box>
 
-          {/* <CheckboxFilterAccordion
-            isActive={(paramFilters.resource_type || []).length > 0}
-            alwaysOpen
+          <CheckboxFilterAccordion
+            alwaysOpen= {isLoading ? false : true}
             choices={[
               {
-                key: "bdm_table",
+                key: "closed_tables",
+                name: (
+                  <HStack whiteSpace="nowrap">
+                    <div>Tabelas tratadas</div>
+                    <BDLogoProImage
+                      widthImage="52px"
+                    />
+                  </HStack>
+                ),
+                count: aggregations?.contains_closed_tables?.filter(elm => elm.key === 1)[0]?.count || 0
+              },
+              {
+                key: "open_tables",
                 name: (
                   <HStack whiteSpace="nowrap">
                     <div>Tabelas tratadas</div>
                     <BDLogoPlusImage
-                      marginLeft="5px !important"
                       widthImage="40px"
                     />
-                    <div>{`(${data?.resource_bdm_table_count || "0"})`}</div>
                   </HStack>
                 ),
+                count: aggregations?.contains_open_tables?.filter(elm => elm.key === 1)[0]?.count || 0
               },
               {
-                key: "external_link",
-                name: `Fontes originais (${data?.resource_external_link_count || "0"
-                  })`,
+                key: "raw_data_sources",
+                name: `Fontes originais`,
+                count: aggregations?.contains_raw_data_sources?.filter(elm => elm.key === 1)[0]?.count || 0
               },
               {
-                key: "information_request",
-                name: `Pedidos LAI (${data?.resource_information_request_count || "0"
-                  })`,
+                key: "information_requests",
+                name: `Pedidos LAI`,
+                count: aggregations?.contains_information_requests?.filter(elm => elm.key === 1)[0]?.count || 0
               },
             ]}
-            values={paramFilters.resource_type}
+            isActive={validateActiveFilterAccordin("datasets_with")}
             valueField="key"
             displayField="name"
             fieldName="Conjuntos com"
-            onChange={(values) => {
-              setParamFilters({ ...paramFilters, resource_type: values });
-            }}
-          /> */}
-
-          {/* <CheckboxFilterAccordion
-            // canSearch={true}
-            // isActive={(paramFilters.group || []).length > 0}
-            choices={aggregations?.themes}
-            values={aggregations?.themes}
-            valueField="key"
-            displayField="name"
-            fieldName="Tema"
-            // onChange={(values) =>
-            //   setParamFilters({ ...paramFilters, group: values })
-            // }
-          /> */}
-
-          {/* <CheckboxFilterAccordion
-            canSearch={true}
-            isActive={(paramFilters.organization || []).length > 0}
-            choices={organizations}
-            values={paramFilters.organization}
-            valueField="name"
-            displayField="displayName"
-            fieldName="Organização"
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, organization: values })
-            }
+            valuesChecked={valuesCheckedFilter("datasets_with")}
+            onChange={(value) => handleSelectFilter(["datasets_with",`${value}`])}
           />
 
           <CheckboxFilterAccordion
             canSearch={true}
-            isActive={(paramFilters.tag || []).length > 0}
-            choices={tags}
-            valueField="name"
-            displayField="displayName"
-            fieldName="Etiqueta"
-            values={paramFilters.tag}
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, tag: values })
-            }
+            isActive={validateActiveFilterAccordin("theme")}
+            choices={aggregations?.themes}
+            valueField="key"
+            displayField="name"
+            fieldName="Tema"
+            valuesChecked={valuesCheckedFilter("theme")}
+            onChange={(value) => handleSelectFilter(["theme",`${value}`])}
           />
 
-          <SimpleFilterAccordion
+          <CheckboxFilterAccordion
+            canSearch={true}
+            isActive={validateActiveFilterAccordin("organization")}
+            choices={aggregations?.organizations}
+            valueField="key"
+            displayField="name"
+            fieldName="Organizações"
+            valuesChecked={valuesCheckedFilter("organization")}
+            onChange={(value) => handleSelectFilter(["organization",`${value}`])}
+          />
+
+          <CheckboxFilterAccordion
+            canSearch={true}
+            isActive={validateActiveFilterAccordin("tag")}
+            choices={aggregations?.tags}
+            valueField="key"
+            displayField="name"
+            fieldName="Etiqueta"
+            valuesChecked={valuesCheckedFilter("tag")}
+            onChange={(value) => handleSelectFilter(["tag",`${value}`])}
+          />
+
+          {/* <SimpleFilterAccordion
             fieldName="Cobertura espacial"
             isActive={(paramFilters.spatial_coverage || []).length > 0}
             styleChildren={{
@@ -547,22 +639,20 @@ export default function SearchPage({ pages }) {
                 .map((_, i) => start + i),
               });
             }}
-          />
+          /> */
 
           <CheckboxFilterAccordion
             canSearch={true}
-            isActive={(paramFilters.entity || []).length > 0}
-            choices={entities}
-            values={paramFilters.entity}
-            valueField="name"
-            displayField="displayName"
+            isActive={validateActiveFilterAccordin("observation_level")}
+            choices={aggregations?.observation_levels}
+            valueField="key"
+            displayField="name"
             fieldName="Nível da observação"
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, entity: values })
-            }
+            valuesChecked={valuesCheckedFilter("observation_level")}
+            onChange={(value) => handleSelectFilter(["observation_level",`${value}`])}
           />
 
-          <CheckboxFilterAccordion
+          /*<CheckboxFilterAccordion
             canSearch={true}
             isActive={(paramFilters.update_frequency || []).length > 0}
             choices={updateFrequencies}
@@ -593,7 +683,7 @@ export default function SearchPage({ pages }) {
           alignItems="flex-start"
           overflow="hidden"
           width="100%"
-          // paddingLeft={isMobileMod() ? "" : "40px !important"}
+          paddingLeft={isMobileMod() ? "" : "40px !important"}
         >
           {showEmptyState && !resource ?
             <DataProposalBox 

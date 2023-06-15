@@ -351,7 +351,7 @@ export default function Menu({}) {
   const links = {
     Dados: "/dataset",
     Soluções: [
-      // {icon: <BDLogoProImage widthImage="54px"/>, name: "Dados exclusivos", href: "https://info.basedosdados.org/bd-pro"},
+      {icon: <BDLogoProImage widthImage="54px"/>, name: "Dados exclusivos", href: "https://info.basedosdados.org/bd-pro"},
       {icon: <BDLogoEduImage widthImage="54px"/>, name: "Curso de dados", href: "https://info.basedosdados.org/bd-edu"},
       {},
       {name: "Serviços", href: "/servicos"},
@@ -371,13 +371,13 @@ export default function Menu({}) {
       {name: "Perguntas frequentes", href: "/perguntas-frequentes"},
     ],
     Contato: "/contato",
-    // Button: [
-    //   {
-    //     name: "Conheça a BD Pro",
-    //     href: "https://info.basedosdados.org/bd-pro",
-    //     color: "#8A7500"
-    //   }
-    // ]
+    Button: [
+      {
+        name: "Assine a BD Pro",
+        href: "https://info.basedosdados.org/bd-pro",
+        color: "#8A7500"
+      }
+    ]
   };
 
   useEffect(() => {

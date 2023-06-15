@@ -143,7 +143,7 @@ export default function DatasetPage ({
                 <Subtitle>Organização</Subtitle>
                 <Link
                   marginTop="4px !important"
-                  href={`/dataset?organization=${dataset?.organization?.name || ""}`}
+                  href={`/dataset?organization=${dataset?.organization?.slug || ""}`}
                 >
                   <SectionText
                     fontSize={isMobileMod() ? "14px" : "16px"}

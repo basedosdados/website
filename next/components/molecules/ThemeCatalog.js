@@ -126,7 +126,7 @@ function Themes ({
   )
 }
 
-function CardThemes ({ responsive, datasetsCards, loading }) {
+function CardThemes ({ responsive, datasetsCards = [], loading }) {
   const [screenQuery, setScreenQuery] = useState(0)
   useEffect(() => {
     if(responsive.mobileQuery)
@@ -145,7 +145,7 @@ function CardThemes ({ responsive, datasetsCards, loading }) {
       maxWidth="1264px"
       margin={responsive.mobileQuery ? "24px 0 48px !important" : "40px 0 48px !important"}
     >
-      {!loading && !datasetsCards &&
+      {!loading && datasetsCards?.length === 0 &&
         <Center padding="0 40px">
           <SectionText
             fontSize={responsive.mobileQuery ? "14px" : "18px"}
@@ -187,7 +187,7 @@ function CardThemes ({ responsive, datasetsCards, loading }) {
               />
             ))
           :
-          !datasetsCards ?
+          datasetsCards.length === 0 ?
             new Array(screenQuery).fill(0).map(() => (
               <>
                 <Skeleton
@@ -203,24 +203,23 @@ function CardThemes ({ responsive, datasetsCards, loading }) {
               <DatabaseCard
                 name={elm?.name}
                 categories={elm?.themes}
-                organization={
-                  typeof elm.organization === "object" ?
-                  elm?.organization[0] : {
-                  name:elm.organization,
-                  slug:elm.organization_slug
-                }}
+                organization={elm?.organization[0]}
                 tags={elm?.tags}
                 tables={{
-                  id: elm?.tables?.[0]?.id || elm?.first_table_id,
-                  number: elm?.n_bdm_tables
+                  id: elm?.first_table_id,
+                  number: elm?.n_open_tables
+                }}
+                tablesClosed={{
+                  id: elm?.first_closed_table_id,
+                  number: elm?.n_closed_tables
                 }}
                 rawDataSources={{
-                  id: elm?.first_original_source_id,
-                  number: elm?.n_original_sources
+                  id: elm?.first_raw_data_source_id,
+                  number: elm?.n_raw_data_sources
                 }}
                 informationRequests={{
-                  id: elm?.first_lai_id,
-                  number: elm?.n_lais
+                  id: elm?.first_information_request_id,
+                  number: elm?.n_information_requests
                 }}
                 link={`/dataset/${elm.id}`}
               />

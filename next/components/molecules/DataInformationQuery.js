@@ -25,13 +25,14 @@ import GreenTab from "../atoms/GreenTab";
 import SectionText from "../atoms/SectionText";
 import Subtitle from "../atoms/Subtitle";
 import RoundedButton from "../atoms/RoundedButton";
-import { DisclaimerBox } from "./DisclaimerBox";
+import DisclaimerBox from "./DisclaimerBox";
 
 import CalendarIcon from "../../public/img/icons/calendarIcon";
 import { CopyIcon, CopySolidIcon } from "../../public/img/icons/copyIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import ExclamationIcon from "../../public/img/icons/exclamationIcon";
-import MenuVerticalIcon from "../../public/img/icons/menuVerticalIcon"
+import MenuVerticalIcon from "../../public/img/icons/menuVerticalIcon";
+import ProIcon from "../../public/img/icons/proIcon";
 
 export function BoxBigQueryGoogle({ href }) {
   return (
@@ -51,6 +52,34 @@ export function BoxBigQueryGoogle({ href }) {
             color="#42B0FF"
             href={href}
           > Siga o passo a passo.
+          </Link>
+        </SectionText>
+      </HStack>
+    </DisclaimerBox>
+  )
+}
+
+export function BoxBDPro({}) {
+  return (
+    <DisclaimerBox
+      width="100%"
+      marginTop="16px !important"
+      borderColor="#8A7500"
+    >
+      <HStack spacing={0}>
+        <ProIcon
+          alt="pro"
+          widthImage="28px"
+          heightImage="16px"
+          marginRight="10px"
+        />
+        <SectionText>
+          Esta tabela só pode ser acessada por assinantes <b>BD Pro</b>. 
+          <Link
+            target="_blank"
+            color="#42B0FF"
+            href="https://info.basedosdados.org/bd-pro"
+          > Conheça agora as vantagens da assinatura.
           </Link>
         </SectionText>
       </HStack>
@@ -119,8 +148,10 @@ export function TextPix ({ title, text }) {
 }
 
 export default function DataInformationQuery ({ resource }) {
-  const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${organizationQuery("_")}_${resource?.dataset?.slug}/${resource?.slug}/${resource?.slug}.csv.gz`
-  const queryBQ = `${organizationQuery("_")}_${resource?.dataset?.slug}.${resource?.slug}`
+  const gcpDatasetID = resource?.cloudTables[0]?.gcpDatasetId
+  const gcpTableId = resource?.cloudTables[0]?.gcpTableId
+  const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${gcpDatasetID}/${gcpTableId}/${gcpTableId}.csv.gz`
+  const queryBQ = `${gcpDatasetID}.${gcpTableId}`
   const { hasCopied, onCopy } = useClipboard("42494318000116")
   const [tabIndex, setTabIndex] = useState(0)
   const [downloadNotAllowed, setDownloadNotAllowed] = useState(true)
@@ -146,7 +177,7 @@ export default function DataInformationQuery ({ resource }) {
   }, [resource])
 
   const handlerDownload = () => {
-    if(!downloadNotAllowed === true) return null
+    if(downloadNotAllowed === true) return null
 
     return window.open(downloadUrl)
   }
@@ -158,6 +189,7 @@ export default function DataInformationQuery ({ resource }) {
       width="100%"
     >
       <Subtitle>Consulta aos dados</Subtitle>
+      {resource?.isClosed && <BoxBDPro/>}
       <Tabs
         paddingTop="16px"
         width={{ base: "90vw", lg: "100%" }}
@@ -198,7 +230,8 @@ export default function DataInformationQuery ({ resource }) {
           >
             Stata
           </GreenTab>
-          {isMobileMod() ?
+          {resource?.isClosed ? <></> :
+            isMobileMod() ?
             <Menu>
               <MenuButton
                 variant="unstyled"
@@ -229,24 +262,28 @@ export default function DataInformationQuery ({ resource }) {
               letterSpacing="0.2px"
             >
               Download
-            </GreenTab>
-          }
+            </GreenTab>}
         </TabList>
         <TabPanels>
           <TabPanel padding="0">
-            <SectionText
-              margin="24px 0 16px"
-            >
-              Copie o código abaixo,
-              <Link
-                color="#42B0FF"
-                target="_blank"
-                textDecoration="none"
-                href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${organizationQuery("_")}_${resource?.dataset?.slug}&t=${resource.slug}&page=table`}
-              > clique aqui
-              </Link> para ir ao <i>datalake</i> no BigQuery e cole no Editor de Consultas:
-            </SectionText>
-
+            {resource?.isClosed ?
+              <SectionText margin="24px 0 16px">
+                Com uma assinatura BD Pro válida, copie o código abaixo e cole no Editor de Consultas no BigQuery:
+              </SectionText>
+                :
+              <SectionText
+                margin="24px 0 16px"
+              >
+                Copie o código abaixo,
+                <Link
+                  color="#42B0FF"
+                  target="_blank"
+                  textDecoration="none"
+                  href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${gcpDatasetID}&t=${gcpTableId}&page=table`}
+                > clique aqui
+                </Link> para ir ao <i>datalake</i> no BigQuery e cole no Editor de Consultas:
+              </SectionText>
+            }
             <PrismCodeHighlight language="sql">
               {`SELECT * FROM \`basedosdados.${queryBQ}\` LIMIT 100`}
             </PrismCodeHighlight>
@@ -268,8 +305,8 @@ export default function DataInformationQuery ({ resource }) {
               {`import basedosdados as bd
 
 # Para carregar o dado direto no pandas
-df = bd.read_table(dataset_id='${organizationQuery("_")}_${resource?.dataset?.slug}',
-table_id='${resource?.slug}',
+df = bd.read_table(dataset_id='${gcpDatasetID}',
+table_id='${gcpTableId}',
 billing_project_id="<YOUR_PROJECT_ID>")`}
             </PrismCodeHighlight>
 
@@ -316,8 +353,8 @@ df <- bd_collect(query)`}
 
 bd_read_table, ///
     path("<PATH>") ///
-    dataset_id("${organizationQuery("_")}_${resource?.dataset?.slug}") ///
-    table_id("${resource?.slug}") ///
+    dataset_id("${gcpDatasetID}") ///
+    table_id("${gcpTableId}") ///
     billing_project_id("<PROJECT_ID>")`}
             </PrismCodeHighlight>
 
@@ -335,7 +372,7 @@ bd_read_table, ///
               Antes de baixar os dados, apoie você também com uma doação financeira ou <Link color="#42B0FF" href="https://basedosdados.github.io/mais/colab_data/">saiba como contribuir com seu tempo</Link>.
             </SectionText>
 
-            {downloadNotAllowed &&
+            {!downloadNotAllowed &&
               <DisclaimerBox>
                 <HStack gridGap="8px" alignItems="flex-start">
                 <ExclamationIcon
@@ -441,16 +478,16 @@ bd_read_table, ///
                   fontSize="14px"
                   fontWeight="700"
                   backgroundColor="#FFF"
-                  color={downloadNotAllowed ? "#C4C4C4" :"#FF8484"}
-                  border={downloadNotAllowed ? "1px solid #C4C4C4" :"1px solid #FF8484"}
+                  color={!downloadNotAllowed ? "#C4C4C4" :"#FF8484"}
+                  border={!downloadNotAllowed ? "1px solid #C4C4C4" :"1px solid #FF8484"}
                   paddingX="30px"
                   width="100%"
                   gridGap="6px"
-                  cursor={downloadNotAllowed ? "auto" :"pointer"}
-                  _hover={downloadNotAllowed ? {transform : "none"} : ""}
+                  cursor={!downloadNotAllowed ? "auto" :"pointer"}
+                  _hover={!downloadNotAllowed ? {transform : "none"} : ""}
                   onClick={handlerDownload}
                 >
-                  <DownloadIcon alt="download" width="22px" height="22px" fill={downloadNotAllowed ? "#C4C4C4" :"#FF8484"}/>
+                  <DownloadIcon alt="download" width="22px" height="22px" fill={!downloadNotAllowed ? "#C4C4C4" :"#FF8484"}/>
                   Download dos dados
                 </RoundedButton>
               </HStack>
