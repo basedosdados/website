@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import Link from "../atoms/Link";
 import SectionText from "../atoms/SectionText";
 import { SimpleTable } from "../atoms/SimpleTable";
 import LoadingSpin from "../atoms/Loading";
@@ -35,6 +36,7 @@ import WebIcon from "../../public/img/icons/webIcon";
 import TwitterIcon from "../../public/img/icons/twitterIcon";
 import FileIcon from "../../public/img/icons/fileIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
+import DownloadIcon from "../../public/img/icons/downloadIcon";
 
 export default function BdmTablePage({ id }) {
   const [isLoading, setIsLoading] = useState(true)
@@ -327,8 +329,25 @@ export default function BdmTablePage({ id }) {
               title="Arquivos auxiliares"
               info="Os arquivos dão mais contexto e ajudam a entender melhor os dados disponíveis.
               Podem incluir notas técnicas, descrições de coleta e amostragem, etc."
-              text={resource?.auxiliaryFilesUrl || "Não listado"}
-            />
+              text={!resource?.auxiliaryFilesUrl && "Não listado"}
+            >
+              {resource?.auxiliaryFilesUrl &&
+                <Link
+                  color="#42B0FF"
+                  href={resource?.auxiliaryFilesUrl}
+                >
+                  Download dos arquivos
+                  <DownloadIcon
+                    alt="tip"
+                    marginLeft="8px"
+                    cursor="pointer"
+                    fill="#42B0FF"
+                    width="18px"
+                    height="18px"
+                  />
+                </Link>
+              }
+            </AddInfoTextBase>
           </GridItem>
         </Grid>
       </VStack>

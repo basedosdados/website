@@ -253,7 +253,7 @@ export default function Database({
                         padding="4px"
                         borderRadius="6px"
                       >
-                        <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?group=${elm.slug}`}>
+                        <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?theme=${elm.slug}`}>
                           <CategoryIcon
                             alt={elm.name}
                             size="36px"
@@ -273,7 +273,7 @@ export default function Database({
               >
                 <HStack pb={{ base: 1, lg: 0 }}>
                   <SectionText color="#6F6F6F">Organização:</SectionText>
-                  <Link href={`/dataset?organization=${organization?.name}`}>
+                  <Link href={`/dataset?organization=${organization?.slug}`}>
                     <SectionText
                       color="#6F6F6F"
                       fontWeight="400"

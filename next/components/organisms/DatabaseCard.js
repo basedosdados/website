@@ -133,7 +133,7 @@ export default function DatabaseCard({
                 overflow="hidden"
                 filter="invert(1)"
                 _hover={{ opacity: "none" }}
-                href={`/dataset?group=${c.slug}`}
+                href={`/dataset?theme=${c.slug}`}
                 target="_blank"
               >
                 <CategoryIcon

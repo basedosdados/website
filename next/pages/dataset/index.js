@@ -226,7 +226,7 @@ export default function SearchPage({ pages }) {
       query: {
         q: query.q,
         ...queryParams || "",        
-        page: query.page
+        page: 1
       }
     })
   }
