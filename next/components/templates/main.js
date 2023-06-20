@@ -12,7 +12,6 @@ export function MainPageTemplate({
   backgroundColor = "#FFFFFF",
   ...style
 }) {
-  // const { data = null, isLoading } = useQuery("user", getUser);
 
   return (
     // <UserContext.Provider value={data}>

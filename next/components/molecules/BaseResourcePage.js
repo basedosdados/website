@@ -16,7 +16,6 @@ import { useDisclosure } from "@chakra-ui/hooks";
 import Head from "next/head";
 import { useContext, useEffect, useState } from "react";
 
-import UserContext from "../../context/user";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 
 import Title from "../atoms/Title";
@@ -35,7 +34,7 @@ export default function BaseResourcePage({
 }) {
   const [editing, setEditing] = useState(false);
   const deleteModalDisclosure = useDisclosure();
-  const userData = useContext(UserContext);
+  const userData = {}
 
   useEffect(() => {
     if (forceForm) return setEditing(true);

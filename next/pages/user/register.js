@@ -5,11 +5,16 @@ import {
   FormLabel,
   FormErrorMessage,
   UnorderedList,
-  ListItem
+  ListItem,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverCloseButton,
+  PopoverHeader,
 } from "@chakra-ui/react";
 import { useState } from "react";
 
-import { registerAccount, getToken } from "../api/token";
+import { registerAccount, getToken } from "../api/user";
 
 import Input from "../../components/atoms/SimpleInput";
 import Button from "../../components/atoms/RoundedButton";
@@ -41,6 +46,7 @@ export default function Register() {
     },
     confirmPassword: ""
   })
+  const [tokenAdmin, setTokenAdmin] = useState("")
   const [showPassword, setShowPassword] = useState(true)
   const [showConfirmPassword, setShowConfirmPassword] = useState(true)
 
@@ -102,7 +108,7 @@ export default function Register() {
   }
 
   const fetchRegister = async ({ userName, firstName, lastName, email, password }) => {
-    const result = await registerAccount({userName, firstName, lastName, email, password})
+    const result = await registerAccount({userName, firstName, lastName, email, password}, tokenAdmin)
 
     let arrayErrors = {}
     if(result?.errors?.length > 0) {
@@ -116,8 +122,8 @@ export default function Register() {
     if(result?.errors?.length === 0) {
       const acess = await getToken({email, password})
 
-      if(acess?.errors?.length > 0) return 
-      localStorage.setItem("token_user", acess.data.tokenAuth.token)
+      if(acess?.errors?.length > 0) return
+
       window.open("/", "_self")
     }
   }
@@ -135,6 +141,19 @@ export default function Register() {
 
   return (
     <MainPageTemplate display="flex" justifyContent="center">
+      <Stack position="relative" left="-20px">
+        <Popover>
+          <PopoverTrigger>
+            <Button>Token Admin</Button>
+          </PopoverTrigger>
+          <PopoverContent top="40px" padding="20px">
+            <PopoverCloseButton/>
+            <PopoverHeader>Token Admin</PopoverHeader>
+            <Input value={tokenAdmin} onChange={(e) => setTokenAdmin(e.target.value)}/>
+          </PopoverContent>
+        </Popover>
+      </Stack>
+
       <Stack
         display="flex"
         justifyContent="center"

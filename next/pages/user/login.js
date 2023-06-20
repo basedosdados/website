@@ -4,11 +4,15 @@ import {
   FormLabel,
   FormErrorMessage,
   Alert,
-  AlertIcon
+  AlertIcon,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import cookies from 'js-cookie';
 
-import { getToken } from "../api/token";
+import {
+  getToken,
+  getUser
+} from "../api/user";
 
 import Input from "../../components/atoms/SimpleInput";
 import Button from "../../components/atoms/RoundedButton";
@@ -53,7 +57,10 @@ export default function Login() {
     const result = await getToken({email, password})
     if(result?.errors?.length > 0) return setErrors({login:"Email ou senha inválida"})
 
-    localStorage.setItem("token_user", result.data.tokenAuth.token)
+    const userData = await getUser(result.tokenAuth.payload.email)
+
+    cookies.set('user', JSON.stringify(userData));
+    
     window.open("/", "_self")
   }
 

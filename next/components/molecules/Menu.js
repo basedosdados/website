@@ -18,7 +18,6 @@ import {
 } from "@chakra-ui/react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router"
-import UserContext from "../../context/user";
 import { MenuDropdown } from "./MenuDropdown";
 import ControlledInput from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
@@ -197,7 +196,7 @@ function SearchInput ({ status }) {
 }
 
 function DesktopLinks({ links }) {
-  const userData = useContext(UserContext)
+  const userData = {}
   const [statusSearch, setStatusSearch] = useState(false)
 
   const searchStatus = (elm) => {
@@ -345,7 +344,7 @@ export default function Menu({}) {
   const { route } = router
   const menuDisclosure = useDisclosure();
   const divRef = useRef();
-  const userData = useContext(UserContext);
+  const userData = {};
   const [isShowLogoHome, setIsShowLogoHome] = useState(false)
 
   const links = {
