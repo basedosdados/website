@@ -14,6 +14,7 @@ export default async function getUser(email) {
               edges {
                 node {
                   isAdmin
+                  isActive
                   picture
                   username
                   firstName
