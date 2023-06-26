@@ -16,7 +16,7 @@ import {
   useBoolean,
   Divider
 } from "@chakra-ui/react";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router"
 import { MenuDropdown } from "./MenuDropdown";
 import ControlledInput from "../atoms/ControlledInput";

@@ -60,7 +60,7 @@ export default function Login() {
     const userData = await getUser(result.tokenAuth.payload.email)
 
     cookies.set('user', JSON.stringify(userData));
-    
+
     window.open("/", "_self")
   }
 

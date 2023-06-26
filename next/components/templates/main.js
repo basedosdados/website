@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
-import { useQuery } from "react-query";
 import UserContext from "../../context/user";
+// import { useQuery } from "react-query";
 // import { getUser } from "../../pages/api/user";
 import SiteHead from "../atoms/SiteHead";
 import Footer from "../molecules/Footer";
