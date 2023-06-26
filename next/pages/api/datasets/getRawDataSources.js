@@ -30,7 +30,7 @@ export default async function getRawDataSources(id) {
                   _id
                   name
                 }
-                containsStructureData
+                containsStructuredData
                 containsApi
                 updates {
                   edges {
