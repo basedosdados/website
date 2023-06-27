@@ -1,12 +1,16 @@
+import cookies from "js-cookie";
 import { isJWTInvalid } from "../utils";
 
-export default function authUser(context) {
+export default function authUser(context, destiny) {
   const { req } = context
 
   if (isJWTInvalid(req.cookies.token)) {
+    cookies.remove('user', { path: '/' })
+    cookies.remove('token', { path: '/' })
+
     return {
       redirect: {
-        destination: '/user/login',
+        destination: destiny,
         permanent: false,
       },
     }
