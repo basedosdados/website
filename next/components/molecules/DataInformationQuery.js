@@ -154,7 +154,7 @@ export default function DataInformationQuery ({ resource }) {
   const queryBQ = `${gcpDatasetID}.${gcpTableId}`
   const { hasCopied, onCopy } = useClipboard("42494318000116")
   const [tabIndex, setTabIndex] = useState(0)
-  const [downloadNotAllowed, setDownloadNotAllowed] = useState(true)
+  const [downloadNotAllowed, setDownloadNotAllowed] = useState(false)
 
   function organizationQuery(join) {
     let areaOrganization = resource?.dataset?.organization?.area?.slug
@@ -171,13 +171,13 @@ export default function DataInformationQuery ({ resource }) {
   useEffect(() => {
     if (window) window?.Prism?.highlightAll()
 
-    if(resource?.numberRows) {
-      resource?.numberRows > 200000 ? setDownloadNotAllowed(true) : setDownloadNotAllowed(false)
+    if(resource?.numberRows || resource?.numberRows === 0) {
+      resource?.numberRows || 0 > 200000 ? setDownloadNotAllowed(false) : setDownloadNotAllowed(true)
     }
   }, [resource])
 
   const handlerDownload = () => {
-    if(downloadNotAllowed === true) return null
+    if(downloadNotAllowed === false) return null
 
     return window.open(downloadUrl)
   }
@@ -372,7 +372,7 @@ bd_read_table, ///
               Antes de baixar os dados, apoie você também com uma doação financeira ou <Link color="#42B0FF" href="https://basedosdados.github.io/mais/colab_data/">saiba como contribuir com seu tempo</Link>.
             </SectionText>
 
-            {!downloadNotAllowed &&
+            {downloadNotAllowed &&
               <DisclaimerBox>
                 <HStack gridGap="8px" alignItems="flex-start">
                 <ExclamationIcon
@@ -478,16 +478,16 @@ bd_read_table, ///
                   fontSize="14px"
                   fontWeight="700"
                   backgroundColor="#FFF"
-                  color={!downloadNotAllowed ? "#C4C4C4" :"#FF8484"}
-                  border={!downloadNotAllowed ? "1px solid #C4C4C4" :"1px solid #FF8484"}
+                  color={downloadNotAllowed ? "#FF8484" :"#C4C4C4"}
+                  border={downloadNotAllowed ? "1px solid #FF8484" :"1px solid #C4C4C4"}
                   paddingX="30px"
                   width="100%"
                   gridGap="6px"
-                  cursor={!downloadNotAllowed ? "auto" :"pointer"}
-                  _hover={!downloadNotAllowed ? {transform : "none"} : ""}
+                  cursor={downloadNotAllowed ? "pointer" :"auto"}
+                  _hover={!downloadNotAllowed ? {transform : "none"} : "" }
                   onClick={handlerDownload}
                 >
-                  <DownloadIcon alt="download" width="22px" height="22px" fill={!downloadNotAllowed ? "#C4C4C4" :"#FF8484"}/>
+                  <DownloadIcon alt="download" width="22px" height="22px" fill={downloadNotAllowed ? "#FF8484" :"#C4C4C4"}/>
                   Download dos dados
                 </RoundedButton>
               </HStack>

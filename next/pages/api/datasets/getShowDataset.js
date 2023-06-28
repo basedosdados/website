@@ -46,6 +46,7 @@ export default async function getShowDataset(id) {
                     node {
                       _id
                       number
+                      order
                     }
                   }
                 }
@@ -54,6 +55,7 @@ export default async function getShowDataset(id) {
                     node {
                       _id
                       name
+                      order
                     }
                   }
                 }
@@ -64,6 +66,7 @@ export default async function getShowDataset(id) {
                       name
                       slug
                       isClosed
+                      order
                     }
                   }
                 }
