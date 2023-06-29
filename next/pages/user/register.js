@@ -46,7 +46,6 @@ export default function Register() {
     },
     confirmPassword: ""
   })
-  const [tokenAdmin, setTokenAdmin] = useState("")
   const [showPassword, setShowPassword] = useState(true)
   const [showConfirmPassword, setShowConfirmPassword] = useState(true)
 
@@ -108,7 +107,7 @@ export default function Register() {
   }
 
   const fetchRegister = async ({ userName, firstName, lastName, email, password }) => {
-    const result = await registerAccount({userName, firstName, lastName, email, password}, tokenAdmin)
+    const result = await registerAccount({userName, firstName, lastName, email, password})
 
     let arrayErrors = {}
     if(result?.errors?.length > 0) {
@@ -141,19 +140,6 @@ export default function Register() {
 
   return (
     <MainPageTemplate display="flex" justifyContent="center">
-      <Stack position="relative" left="-20px">
-        <Popover>
-          <PopoverTrigger>
-            <Button>Token Admin</Button>
-          </PopoverTrigger>
-          <PopoverContent top="40px" padding="20px">
-            <PopoverCloseButton/>
-            <PopoverHeader>Token Admin</PopoverHeader>
-            <Input value={tokenAdmin} onChange={(e) => setTokenAdmin(e.target.value)}/>
-          </PopoverContent>
-        </Popover>
-      </Stack>
-
       <Stack
         display="flex"
         justifyContent="center"

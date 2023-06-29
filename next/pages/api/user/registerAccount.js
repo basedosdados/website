@@ -8,14 +8,13 @@ export default async function registerAccount({
   lastName,
   email,
   password,
-},tokenAdmin
-) {
+}) {
   try {
     const res = await axios({
       url: API_URL,
       method: "POST",
       headers: {
-        Authorization: `Bearer ${tokenAdmin}`
+        Authorization: `Bearer `
       },
       data: {
         query: `
