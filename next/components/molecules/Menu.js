@@ -324,14 +324,14 @@ function DesktopLinks({ links }) {
             </HStack>
           ) : (
             <>
-              <Link fontSize="15px" fontFamily="Ubuntu" fontWeight="400" letterSpacing="0.3px" href="/user/login">
+              {/* <Link fontSize="15px" fontFamily="Ubuntu" fontWeight="400" letterSpacing="0.3px" href="/user/login">
                 Entrar
               </Link>
               <Link _hover={{ opacity:"none" }} href="/user/register">
                 <RoundedButton height="35px" fontSize="15px" minWidth="110px">
                   Cadastrar
                 </RoundedButton>
-              </Link>
+              </Link> */}
             </>
           )}
         </HStack>
