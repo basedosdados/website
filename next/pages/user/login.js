@@ -153,15 +153,15 @@ export default function Login() {
           <FormErrorMessage>{errors.password}</FormErrorMessage>
         </FormControl>
 
-        <Stack>
-          <ButtonSimple
+        <Stack paddingTop="16px">
+          {/* <ButtonSimple
             justifyContent="start"
             fontWeight="400"
             color="#42B0FF"
             _hover={{opacity: "0.6"}}
             onClick={() => window.open("./password-recovery", "_self")}
           >Esqueceu a senha?
-          </ButtonSimple>
+          </ButtonSimple> */}
 
           <SectionText
             width="100%"

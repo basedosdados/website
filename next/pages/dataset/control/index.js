@@ -10,6 +10,7 @@ import {
 import { useState, useEffect } from 'react';
 import { MainPageTemplate } from "../../../components/templates/main";
 import authUser from "../../../middlewares/authUser";
+import SelectList from "../../../components/molecules/SelectList";
 import RoundedButton from "../../../components/atoms/RoundedButton";
 import LoadingSpin from "../../../components/atoms/Loading";
 
@@ -42,8 +43,6 @@ export default function Control() {
   const [formData, setFormData] = useState({
     slug: "",
     name: "",
-    nameEn: "",
-    nameEs: "",
     description: "",
     organization: "",
     themes: "",
@@ -104,11 +103,8 @@ export default function Control() {
   return (
     <MainPageTemplate paddingX="24px">
       <Stack
-        gridGap={{base:"40px", lg: "100px"}}
-        paddingTop={{ base: "80px", lg: "0px" }}
         width="100%"
         maxWidth="1264px"
-        justifyContent="center"
         direction={{ base: "column", lg: "row" }}
         margin="auto"
       >
@@ -117,8 +113,10 @@ export default function Control() {
           style={{
             display: "flex",
             flexDirection: "column",
-            width: "500px",
-            gap: "20px"
+            width: "600px",
+            gap: "20px",
+            color: "#252A32",
+            fontFamily: "Lato"
           }}
         >
           <Stack flexDirection="row" gap="8px" spacing={0}>
@@ -130,18 +128,6 @@ export default function Control() {
             <FormControl isRequired>
               <FormLabel>Name</FormLabel>
               <Input name="name" value={formData.name} onChange={handleChange} />
-            </FormControl>
-          </Stack>
-
-          <Stack flexDirection="row" gap="8px" spacing={0}>
-            <FormControl>
-              <FormLabel>NameEn</FormLabel>
-              <Input name="nameEn" value={formData.nameEn} onChange={handleChange} />
-            </FormControl>
-
-            <FormControl>
-              <FormLabel>NameES</FormLabel>
-              <Input name="nameEs" value={formData.nameEs} onChange={handleChange} />
             </FormControl>
           </Stack>
 
@@ -172,18 +158,7 @@ export default function Control() {
 
           <FormControl isRequired>
             <FormLabel>Themes</FormLabel>
-            <Select
-              name="themes"
-              value={formData.themes}
-              onChange={handleChange}
-            >
-              {themes.map((elm) => {
-                  return (
-                    <option value={elm?.node?._id}>{elm?.node?.name}</option>
-                  )
-                })
-              }
-            </Select>
+            <SelectList list={themes} hasNode={true}/>
           </FormControl>
 
           <FormControl>
