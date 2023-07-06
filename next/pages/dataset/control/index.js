@@ -163,18 +163,7 @@ export default function Control() {
 
           <FormControl>
             <FormLabel>Tags</FormLabel>
-            <Select
-              name="tag"
-              value={formData.tags}
-              onChange={handleChange}
-            >
-              {tags.map((elm) => {
-                  return (
-                    <option value={elm?.node?._id}>{elm?.node?.name}</option>
-                  )
-                })
-              }
-            </Select>
+            <SelectList list={tags} hasNode={true}/>
           </FormControl>
 
           <FormControl>

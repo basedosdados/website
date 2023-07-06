@@ -30,6 +30,7 @@ export default function SimpleInput({
         placeholder={placeholder}
         fontFamily="Lato"
         fontWeight="300"
+        color="#252A32"
         border="1px solid #DEDFE0 !important"
         _placeholder={{ color: "#A3A3A3" }}
         _focus={{border:"2px solid #42B0FF !important" }}
