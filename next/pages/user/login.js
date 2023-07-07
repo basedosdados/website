@@ -4,11 +4,15 @@ import {
   FormLabel,
   FormErrorMessage,
   Alert,
-  AlertIcon
+  AlertIcon,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import cookies from 'js-cookie';
 
-import { getToken } from "../api/token";
+import {
+  getToken,
+  getUser
+} from "../api/user";
 
 import Input from "../../components/atoms/SimpleInput";
 import Button from "../../components/atoms/RoundedButton";
@@ -30,9 +34,7 @@ export default function Login() {
     }))
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
+  const handleSubmit = () => {
     let validationErrors = {}
     if (!formData.email) {
       validationErrors.email = "O email é necessário"
@@ -51,10 +53,16 @@ export default function Login() {
 
   const fetchToken = async ({ email, password }) => {
     const result = await getToken({email, password})
-    if(result?.errors?.length > 0) return setErrors({login:"Email ou senha inválida"})
 
-    localStorage.setItem("token_user", result.data.tokenAuth.token)
-    window.open("/", "_self")
+    if(result?.tokenAuth === null || result?.errors?.length > 0) return setErrors({login:"Email ou senha inválida"}) 
+
+    try {
+      const userData = await getUser(result.tokenAuth.payload.email)
+      cookies.set('user', JSON.stringify(userData));
+      window.open("/", "_self")
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const LabelTextForm = ({ text }) => {
@@ -66,6 +74,12 @@ export default function Login() {
         lineHeight="24px"
       >{text}</FormLabel>
     )
+  }
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSubmit()
+    }
   }
 
   return (
@@ -98,6 +112,7 @@ export default function Login() {
             name="email"
             value={formData.email}
             onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
             placeholder="exemple@email.com"
           />
           <FormErrorMessage>{errors.email}</FormErrorMessage>
@@ -111,6 +126,7 @@ export default function Login() {
             name="password"
             value={formData.password}
             onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
             placeholder="Entre com sua senha"
             styleElmRight={{
               width: "50px",
@@ -137,15 +153,15 @@ export default function Login() {
           <FormErrorMessage>{errors.password}</FormErrorMessage>
         </FormControl>
 
-        <Stack>
-          <ButtonSimple
+        <Stack paddingTop="16px">
+          {/* <ButtonSimple
             justifyContent="start"
             fontWeight="400"
             color="#42B0FF"
             _hover={{opacity: "0.6"}}
             onClick={() => window.open("./password-recovery", "_self")}
           >Esqueceu a senha?
-          </ButtonSimple>
+          </ButtonSimple> */}
 
           <SectionText
             width="100%"
@@ -169,7 +185,7 @@ export default function Login() {
         </Stack>
 
         <Button
-          onClick={(e) => handleSubmit(e)}
+          onClick={handleSubmit}
           borderRadius="8px"
           marginTop="24px !important"
         >

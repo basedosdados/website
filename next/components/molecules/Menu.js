@@ -16,10 +16,10 @@ import {
   useBoolean,
   Divider
 } from "@chakra-ui/react";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router"
-import UserContext from "../../context/user";
 import { MenuDropdown } from "./MenuDropdown";
+import cookies from "js-cookie";
 import ControlledInput from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
@@ -197,8 +197,10 @@ function SearchInput ({ status }) {
 }
 
 function DesktopLinks({ links }) {
-  const userData = useContext(UserContext)
   const [statusSearch, setStatusSearch] = useState(false)
+
+  let userData = cookies.get("user") || null
+  if(userData !== null) userData = JSON.parse(cookies.get("user"))
 
   const searchStatus = (elm) => {
     setStatusSearch(elm.status)
@@ -315,11 +317,15 @@ function DesktopLinks({ links }) {
             <HStack spacing={5}>
               <Avatar
                 bg="#2B8C4D"
-                name={userData?.fullname}
-                src={userData.image_url}
+                name={userData?.firstName}
+                src={userData.picture}
               />
-              <Link style={{ fontSize: "12px" }} href={`/user/${userData.name}`}>
-                {userData.fullname}
+              <Link
+                fontSize="14px"
+                textTransform="capitalize"
+                href={`/user/${userData.username}`}
+              >
+                {userData.username}
               </Link>
             </HStack>
           ) : (
@@ -344,9 +350,11 @@ export default function Menu({}) {
   const router = useRouter()
   const { route } = router
   const menuDisclosure = useDisclosure();
-  const divRef = useRef();
-  const userData = useContext(UserContext);
+  const divRef = useRef()
   const [isShowLogoHome, setIsShowLogoHome] = useState(false)
+
+  let userData = cookies.get("user") || null
+  if(userData !== null) userData = JSON.parse(cookies.get("user"))
 
   const links = {
     Dados: "/dataset",
@@ -445,16 +453,17 @@ export default function Menu({}) {
             />
           </Link>
 
-          {/* <Avatar
+          <Avatar
             bg="#2B8C4D"
+            color="#FFF"
             position="fixed"
             right="24px"
             height="40px"
             width="40px"
             display={{ base: "flex", lg: "none" }}
-            src={userData?.image_url}
-            name={userData?.fullname}
-          /> */}
+            src={userData?.picture}
+            name={userData?.username}
+          />
           <DesktopLinks links={links} />
         </HStack>
       </Box>
