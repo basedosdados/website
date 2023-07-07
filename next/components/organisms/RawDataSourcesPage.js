@@ -186,7 +186,7 @@ export default function RawDataSourcesPage({ id }) {
       <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Descrição</Subtitle>
         <SectionText>
-          {resource.description || "Nenhuma descrição fornecida."}
+          {resource?.description || "Nenhuma descrição fornecida."}
         </SectionText>
       </VStack>
 
@@ -226,7 +226,7 @@ export default function RawDataSourcesPage({ id }) {
             <DataStructureIcon alt="Tem dados estruturados" width="22px" height="22px" fill="#D0D0D0"/>
             <AddInfoTextBase
               title="Tem dados estruturados"
-              text={TrueOrFalse(resource?.containsStructureData)}
+              text={TrueOrFalse(resource?.containsStructuredData)}
             />
           </GridItem>
 

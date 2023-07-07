@@ -19,6 +19,7 @@ export default async function getColumnsBdmTable(id) {
                     node {
                       _id
                       name
+                      order
                       bigqueryType {
                         name
                       }

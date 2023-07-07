@@ -40,6 +40,16 @@ function TableDatasets({ headers, values }) {
   const [columnsHeaders, setColumnsHeaders] = useState([])
   const [columnsValues, setColumnsValues] = useState([])
 
+  function sortElements(a, b) {
+    if (a.node.order < b.node.order) {
+      return -1
+    }
+    if (a.node.order > b.node.order) {
+      return 1
+    }
+    return 0
+  }
+
   useEffect(() => {
     const newValues = values?.map((elm) => {
       delete elm.node._id
@@ -47,7 +57,7 @@ function TableDatasets({ headers, values }) {
     })
 
     setColumnsHeaders(Object.keys(headers))
-    setColumnsValues(newValues)
+    setColumnsValues(newValues.sort(sortElements))
   },[values, headers])
 
 

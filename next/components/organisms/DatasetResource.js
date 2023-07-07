@@ -103,6 +103,16 @@ export default function DatasetResource({
     )
   }
 
+  function sortElements(a, b) {
+    if (a.order < b.order) {
+      return -1
+    }
+    if (a.order > b.order) {
+      return 1
+    }
+    return 0
+  }
+
   useEffect(() => {
     const dataset_tables = dataset?.tables?.edges.map((elm) => elm.node) || []
     const bdmaisFilter = dataset_tables.filter(elm => elm.isClosed !== true)
@@ -110,9 +120,9 @@ export default function DatasetResource({
     const raw_data_sources = dataset?.rawDataSources?.edges.map((elm) => elm.node) || []
     const information_request = dataset?.informationRequests?.edges.map((elm) => elm.node) || []
 
-    setTables({bdmais:bdmaisFilter, bdpro: bdproFilter})
-    setRawDataSources(raw_data_sources)
-    setInformationRequests(information_request)
+    setTables({bdmais:bdmaisFilter.sort(sortElements), bdpro: bdproFilter.sort(sortElements)})
+    setRawDataSources(raw_data_sources.sort(sortElements))
+    setInformationRequests(information_request.sort(sortElements))
 
     const queryParams = new URLSearchParams(window.location.search)
 
