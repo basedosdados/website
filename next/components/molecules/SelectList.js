@@ -9,7 +9,11 @@ import FuzzySearch from 'fuzzy-search';
 import ChevronIcon from "../../public/img/icons/chevronIcon";
 import SimpleInput from "../atoms/SimpleInput";
 
-export default function SelectList({list, hasNode}) {
+export default function SelectList({
+  list,
+  onChange,
+  hasNode
+}) {
   const defaultList = list
   const [defaultNewList, setDefaultNewList] = useState([])
   const [selected, setSelected] = useState({})
@@ -68,6 +72,7 @@ export default function SelectList({list, hasNode}) {
     const result = [...defaultNewList, selected].sort(sortName)
     setNewList(result)
     setDefaultNewList(result)
+    onChange(result)
     clearInputs()
   }
 
@@ -78,12 +83,14 @@ export default function SelectList({list, hasNode}) {
     setNewList(newArray)
     setDefaultNewList(newArray)
     setListOptions([...listOptions, selected].sort(sortName))
+    onChange(newArray)
     clearInputs()
   }
 
   const removeAll = () => {
     setListOptions(defaultList)
     setNewList([])
+    onChange([])
     clearInputs()
   }
 

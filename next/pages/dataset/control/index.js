@@ -12,6 +12,7 @@ import { MainPageTemplate } from "../../../components/templates/main";
 import authUser from "../../../middlewares/authUser";
 import SelectList from "../../../components/molecules/SelectList";
 import RoundedButton from "../../../components/atoms/RoundedButton";
+import SelectSearch from "../../../components/atoms/SelectSearch";
 import LoadingSpin from "../../../components/atoms/Loading";
 
 import {
@@ -40,31 +41,19 @@ export default function Control() {
   const [themes, setThemes] = useState([])
   const [tags, setTags] = useState([])
   const [status, setStatus] = useState([])
+  const [selectedThemes, setSelectedThemes] = useState([])
+  const [selectedTags, setSelectedTags] = useState([])
   const [formData, setFormData] = useState({
     slug: "",
     name: "",
     description: "",
     organization: "",
-    themes: "",
-    tags: "",
+    themes: [],
+    tags: [],
     version: "",
     status: "",
     isClosed: false,
   });
-
-  useEffect(() => {
-    fetchData()
-  },[])
-
-  const fetchData = async () => {
-    const promises = []
-    promises.push(fetchOrganizations())
-    promises.push(fetchThemes())
-    promises.push(fetchTags())
-    promises.push(fetchStatus())
-    await Promise.all(promises)
-    setIsLoading(false)
-  }
 
   const fetchOrganizations = async () => {
     const allOrganizations = await getAllOrganizations()
@@ -86,6 +75,32 @@ export default function Control() {
     setStatus(allStatus)
   }
 
+  const fetchData = async () => {
+    const promises = []
+    promises.push(fetchOrganizations())
+    promises.push(fetchThemes())
+    promises.push(fetchTags())
+    promises.push(fetchStatus())
+    await Promise.all(promises)
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+    fetchData()
+  },[])
+
+  useEffect(() => {
+    if(selectedThemes.length === 0) return setFormData({...formData, themes: []})
+    const result = selectedThemes.map((elm) => {return(elm.node._id)})
+    setFormData({...formData, themes: result})
+  },[selectedThemes])
+
+  useEffect(() => {
+    if(selectedTags.length === 0) return setFormData({...formData, tags: []})
+    const result = selectedTags.map((elm) => {return(elm.node._id)})
+    setFormData({...formData, tags: result})
+  },[selectedTags])
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
     setFormData((prevData) => ({
@@ -98,8 +113,8 @@ export default function Control() {
 
   }
 
-    
   if(isLoading) return <MainPageTemplate paddingX="24px" height="600px"><LoadingSpin /></MainPageTemplate>
+
   return (
     <MainPageTemplate paddingX="24px">
       <Stack
@@ -142,28 +157,30 @@ export default function Control() {
 
           <FormControl isRequired>
             <FormLabel>Organization</FormLabel>
-            <Select
-              name="organizations"
+            <SelectSearch 
+              name="organization"
               value={formData.organization}
-              onChange={handleChange}
-            >
-              {organizations.map((elm) => {
-                  return (
-                    <option value={elm?.node?._id}>{elm?.node?.name}</option>
-                  )
-                })
-              }
-            </Select>
+              onChange={(e) => setFormData({...formData, organization: e})}
+              options={organizations}
+            />
           </FormControl>
 
           <FormControl isRequired>
             <FormLabel>Themes</FormLabel>
-            <SelectList list={themes} hasNode={true}/>
+            <SelectList
+              list={themes}
+              hasNode={true}
+              onChange={(e) => setSelectedThemes(e)}
+            />
           </FormControl>
 
           <FormControl>
             <FormLabel>Tags</FormLabel>
-            <SelectList list={tags} hasNode={true}/>
+            <SelectList
+              list={tags}
+              hasNode={true}
+              onChange={(e) => setSelectedTags(e)}
+            />
           </FormControl>
 
           <FormControl>
