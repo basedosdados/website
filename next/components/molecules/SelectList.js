@@ -89,6 +89,7 @@ export default function SelectList({
 
   const removeAll = () => {
     setListOptions(defaultList)
+    setDefaultNewList([])
     setNewList([])
     onChange([])
     clearInputs()

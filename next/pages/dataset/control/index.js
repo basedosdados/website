@@ -16,6 +16,10 @@ import SelectSearch from "../../../components/atoms/SelectSearch";
 import LoadingSpin from "../../../components/atoms/Loading";
 
 import {
+  postDataset
+} from "../../api/datasets"
+
+import {
   getAllOrganizations
 } from "../../api/organizations";
 
@@ -43,6 +47,7 @@ export default function Control() {
   const [status, setStatus] = useState([])
   const [selectedThemes, setSelectedThemes] = useState([])
   const [selectedTags, setSelectedTags] = useState([])
+  const [errors, setErrors] = useState({})
   const [formData, setFormData] = useState({
     slug: "",
     name: "",
@@ -50,7 +55,7 @@ export default function Control() {
     organization: "",
     themes: [],
     tags: [],
-    version: "",
+    version: 0,
     status: "",
     isClosed: false,
   });
@@ -91,13 +96,13 @@ export default function Control() {
 
   useEffect(() => {
     if(selectedThemes.length === 0) return setFormData({...formData, themes: []})
-    const result = selectedThemes.map((elm) => {return(elm.node._id)})
+    const result = selectedThemes.map((elm) => {return(`"${elm.node._id}"`)})
     setFormData({...formData, themes: result})
   },[selectedThemes])
 
   useEffect(() => {
     if(selectedTags.length === 0) return setFormData({...formData, tags: []})
-    const result = selectedTags.map((elm) => {return(elm.node._id)})
+    const result = selectedTags.map((elm) => {return(`"${elm.node._id}"`)})
     setFormData({...formData, tags: result})
   },[selectedTags])
 
@@ -109,8 +114,18 @@ export default function Control() {
     }))
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    const result = await postDataset(formData)
 
+    // let arrayErrors = {}
+    if(result?.errors?.length > 0) {
+      console.log(result.errors)
+      // result.errors.map((elm) => {
+      //   if(elm.field === "username") arrayErrors = ({...arrayErrors, userName: elm.messages})
+      //   if(elm.field === "email") arrayErrors = ({...arrayErrors, email: elm.messages})
+      // })
+    }
+    // setErrors(arrayErrors)
   }
 
   if(isLoading) return <MainPageTemplate paddingX="24px" height="600px"><LoadingSpin /></MainPageTemplate>
@@ -123,16 +138,13 @@ export default function Control() {
         direction={{ base: "column", lg: "row" }}
         margin="auto"
       >
-        <form
-          onSubmit={handleSubmit}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "600px",
-            gap: "20px",
-            color: "#252A32",
-            fontFamily: "Lato"
-          }}
+        <Stack
+          display="flex"
+          flexDirection="column"
+          width="600px"
+          gap="20px"
+          color="#252A32"
+          fontFamily="Lato"
         >
           <Stack flexDirection="row" gap="8px" spacing={0}>
             <FormControl isRequired>
@@ -165,8 +177,11 @@ export default function Control() {
             />
           </FormControl>
 
-          <FormControl isRequired>
-            <FormLabel>Themes</FormLabel>
+          <FormControl>
+            <div style={{display: "flex", flexDirection: "row", gap: "4px"}}>
+              <FormLabel marginRight={0}>Themes</FormLabel>
+              <span style={{color: "#E53E3E"}}>*</span>
+            </div>
             <SelectList
               list={themes}
               hasNode={true}
@@ -200,6 +215,7 @@ export default function Control() {
               value={formData.status}
               onChange={handleChange}
             >
+              <option value={""}>...</option>
               {status.map((elm) => {
                   return (
                     <option value={elm?.node?._id}>{elm?.node?.name}</option>
@@ -226,9 +242,10 @@ export default function Control() {
             margin="0 auto"
             width="200px"
             type="submit"
+            onClick={() => handleSubmit()}
           >Enviar
           </RoundedButton>
-        </form>
+        </Stack>
       </Stack>
     </MainPageTemplate>
   )
