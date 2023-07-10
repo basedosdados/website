@@ -2,6 +2,7 @@ import {
   Stack,
   FormControl,
   FormLabel,
+  FormErrorMessage,
   Input,
   Textarea,
   Select,
@@ -115,7 +116,16 @@ export default function Control() {
   }
 
   const handleSubmit = async () => {
+    let validationErrors = {}
+console.log(formData.themes.length === 0)
+    if(!formData.slug) validationErrors.slug = "O slug é obrigatório"
+    if(!formData.name) validationErrors.name = "O name é obrigatório"
+    if(!formData.organization) validationErrors.organization = "A organization é obrigatório"
+    if(!formData.themes.length == 0) validationErrors.themes = "Os themes são obrigatórios"
+
     const result = await postDataset(formData)
+
+    setErrors(validationErrors)
 
     // let arrayErrors = {}
     if(result?.errors?.length > 0) {
@@ -147,14 +157,16 @@ export default function Control() {
           fontFamily="Lato"
         >
           <Stack flexDirection="row" gap="8px" spacing={0}>
-            <FormControl isRequired>
+            <FormControl isRequired isInvalid={!!errors.slug}>
               <FormLabel>Slug</FormLabel>
               <Input name="slug" value={formData.slug} onChange={handleChange} />
+              <FormErrorMessage>{errors.slug}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isRequired>
+            <FormControl isRequired isInvalid={!!errors.name}>
               <FormLabel>Name</FormLabel>
               <Input name="name" value={formData.name} onChange={handleChange} />
+              <FormErrorMessage>{errors.name}</FormErrorMessage>
             </FormControl>
           </Stack>
 
@@ -167,7 +179,7 @@ export default function Control() {
             />
           </FormControl>
 
-          <FormControl isRequired>
+          <FormControl isRequired isInvalid={!!errors.organization}>
             <FormLabel>Organization</FormLabel>
             <SelectSearch 
               name="organization"
@@ -175,9 +187,10 @@ export default function Control() {
               onChange={(e) => setFormData({...formData, organization: e})}
               options={organizations}
             />
+            <FormErrorMessage>{errors.organization}</FormErrorMessage>
           </FormControl>
 
-          <FormControl>
+          <FormControl isInvalid={!!errors.themes}>
             <div style={{display: "flex", flexDirection: "row", gap: "4px"}}>
               <FormLabel marginRight={0}>Themes</FormLabel>
               <span style={{color: "#E53E3E"}}>*</span>
@@ -187,6 +200,7 @@ export default function Control() {
               hasNode={true}
               onChange={(e) => setSelectedThemes(e)}
             />
+            <p>{errors.themes}</p>
           </FormControl>
 
           <FormControl>
@@ -243,7 +257,8 @@ export default function Control() {
             width="200px"
             type="submit"
             onClick={() => handleSubmit()}
-          >Enviar
+          >
+            Criar
           </RoundedButton>
         </Stack>
       </Stack>

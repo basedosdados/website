@@ -57,7 +57,7 @@ export default function SelectSearch({
         position="absolute"
         zIndex={10}
         backgroundColor="#FFF"
-        top="70px"
+        top="75px"
         display={isOpen ? "block" : "none"}
         width="100%"
         height="fit-content"
