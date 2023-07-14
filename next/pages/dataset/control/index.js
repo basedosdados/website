@@ -7,8 +7,14 @@ import {
   Textarea,
   Select,
   Checkbox,
+  Text,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription
 } from "@chakra-ui/react";
 import { useState, useEffect } from 'react';
+import { useRouter } from "next/router";
 import { MainPageTemplate } from "../../../components/templates/main";
 import authUser from "../../../middlewares/authUser";
 import SelectList from "../../../components/molecules/SelectList";
@@ -17,7 +23,8 @@ import SelectSearch from "../../../components/atoms/SelectSearch";
 import LoadingSpin from "../../../components/atoms/Loading";
 
 import {
-  postDataset
+  postDataset,
+  getDatasetEdit
 } from "../../api/datasets"
 
 import {
@@ -41,6 +48,9 @@ export function getServerSideProps(context) {
 }
 
 export default function Control() {
+  const router = useRouter()
+  const { query } = router
+
   const [isLoading, setIsLoading] = useState(true)
   const [organizations, setOrganizations] = useState([])
   const [themes, setThemes] = useState([])
@@ -48,6 +58,7 @@ export default function Control() {
   const [status, setStatus] = useState([])
   const [selectedThemes, setSelectedThemes] = useState([])
   const [selectedTags, setSelectedTags] = useState([])
+  const [isSuccess, setIsSuccess] = useState({})
   const [errors, setErrors] = useState({})
   const [formData, setFormData] = useState({
     slug: "",
@@ -60,6 +71,27 @@ export default function Control() {
     status: "",
     isClosed: false,
   });
+
+  const fetchDataset = async (id) => {
+    if(!id) return 
+    const datasetData = await getDatasetEdit(id)
+
+    setFormData({
+      slug: datasetData?.slug || "",
+      name: datasetData?.name || "",
+      description: datasetData?.description || "",
+      organization: datasetData?.organization?._id || "",
+      themes: datasetData?.themes?.edges|| [],
+      tags: datasetData?.tags?.edges|| [],
+      version: datasetData?.version || 0,
+      status: datasetData?.status?._id || "",
+      isClosed: datasetData?.isClosed || false,
+    })
+  }
+
+  useEffect(() => {
+    fetchDataset(query.dataset)
+  },[query])
 
   const fetchOrganizations = async () => {
     const allOrganizations = await getAllOrganizations()
@@ -96,16 +128,24 @@ export default function Control() {
   },[])
 
   useEffect(() => {
-    if(selectedThemes.length === 0) return setFormData({...formData, themes: []})
-    const result = selectedThemes.map((elm) => {return(`"${elm.node._id}"`)})
-    setFormData({...formData, themes: result})
-  },[selectedThemes])
+    let newFormData = formData
 
-  useEffect(() => {
-    if(selectedTags.length === 0) return setFormData({...formData, tags: []})
-    const result = selectedTags.map((elm) => {return(`"${elm.node._id}"`)})
-    setFormData({...formData, tags: result})
-  },[selectedTags])
+    if(selectedThemes.length === 0) {
+      newFormData = {...newFormData, themes: []}
+    } else {
+      const result = selectedThemes.map((elm) => {return(`"${elm.node._id}"`)})
+      newFormData = {...newFormData, themes: result}
+    }
+
+    if(selectedTags.length === 0) {
+      newFormData = {...newFormData, tags: []}
+    } else {
+      const result = selectedTags.map((elm) => {return(`"${elm.node._id}"`)})
+      newFormData = {...newFormData, tags: result}
+    }
+
+    setFormData(newFormData)
+  },[selectedThemes, selectedTags])
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -117,25 +157,25 @@ export default function Control() {
 
   const handleSubmit = async () => {
     let validationErrors = {}
-console.log(formData.themes.length === 0)
+
     if(!formData.slug) validationErrors.slug = "O slug é obrigatório"
     if(!formData.name) validationErrors.name = "O name é obrigatório"
-    if(!formData.organization) validationErrors.organization = "A organization é obrigatório"
-    if(!formData.themes.length == 0) validationErrors.themes = "Os themes são obrigatórios"
+    if(!formData.organization) validationErrors.organization = "A organization é obrigatória"
+    if(formData.themes.length == 0) validationErrors.themes = "Os themes são obrigatórios"
+    if(!formData.status) validationErrors.status = "Recomendamos que insira um status "
 
-    const result = await postDataset(formData)
+    if(Object.keys(validationErrors).length > 0) return setErrors(validationErrors)
 
-    setErrors(validationErrors)
+    if(query.dataset) {
+      const result = await postDataset(formData, query.dataset)
 
-    // let arrayErrors = {}
-    if(result?.errors?.length > 0) {
-      console.log(result.errors)
-      // result.errors.map((elm) => {
-      //   if(elm.field === "username") arrayErrors = ({...arrayErrors, userName: elm.messages})
-      //   if(elm.field === "email") arrayErrors = ({...arrayErrors, email: elm.messages})
-      // })
+      if(result === undefined) return setIsSuccess({notSuccess: true})
+      setIsSuccess({success: true, datasetId: result})
+    } else {
+      const result = await postDataset(formData)
+      if(result === undefined) return setIsSuccess({notSuccess: true})
+      setIsSuccess({success: true, datasetId: result})
     }
-    // setErrors(arrayErrors)
   }
 
   if(isLoading) return <MainPageTemplate paddingX="24px" height="600px"><LoadingSpin /></MainPageTemplate>
@@ -146,6 +186,7 @@ console.log(formData.themes.length === 0)
         width="100%"
         maxWidth="1264px"
         direction={{ base: "column", lg: "row" }}
+        justifyContent="center"
         margin="auto"
       >
         <Stack
@@ -190,24 +231,29 @@ console.log(formData.themes.length === 0)
             <FormErrorMessage>{errors.organization}</FormErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={!!errors.themes}>
+          <FormControl>
             <div style={{display: "flex", flexDirection: "row", gap: "4px"}}>
               <FormLabel marginRight={0}>Themes</FormLabel>
               <span style={{color: "#E53E3E"}}>*</span>
             </div>
             <SelectList
+              value={formData.themes}
               list={themes}
-              hasNode={true}
               onChange={(e) => setSelectedThemes(e)}
+              error={!!errors.themes}
             />
-            <p>{errors.themes}</p>
+            <Text
+              color="#E53E3E"
+              fontSize="14px"
+              marginTop="8px"
+            >{errors.themes}</Text>
           </FormControl>
 
           <FormControl>
             <FormLabel>Tags</FormLabel>
             <SelectList
+              value={formData.tags}
               list={tags}
-              hasNode={true}
               onChange={(e) => setSelectedTags(e)}
             />
           </FormControl>
@@ -222,7 +268,7 @@ console.log(formData.themes.length === 0)
             />
           </FormControl>
 
-          <FormControl>
+          <FormControl isRequired isInvalid={!!errors.status}>
             <FormLabel>Status</FormLabel>
             <Select
               name="status"
@@ -237,6 +283,7 @@ console.log(formData.themes.length === 0)
                 })
               }
             </Select>
+            <FormErrorMessage>{errors.status}</FormErrorMessage>
           </FormControl>
 
           <FormControl
@@ -260,6 +307,63 @@ console.log(formData.themes.length === 0)
           >
             Criar
           </RoundedButton>
+
+          {isSuccess?.success &&
+            <Alert
+              status="success"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+              textAlign="center"
+            >
+              <AlertIcon
+                width="40px"
+                height="40px"
+                marginRight={0}
+              />
+              <AlertTitle
+                margin="16px 0 8px"
+                fontSize="18px"
+              >
+                Dataset {query.dataset ? "atualizado" : "criado"} com sucesso! 
+              </AlertTitle>
+              <AlertDescription >
+                O que gostaria de fazer agora?
+              </AlertDescription>
+
+              <Stack
+                marginTop="16px"
+                spacing={0}
+                gap="10px"
+              >
+                <RoundedButton onClick={() => window.open(`/dataset/${isSuccess?.datasetId}`)}>
+                  Acessar página web
+                </RoundedButton>
+              </Stack>
+            </Alert>
+          }
+
+          {isSuccess.notSuccess &&
+            <Alert
+              status="error"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+              textAlign="center"
+            >
+              <AlertIcon
+                width="40px"
+                height="40px"
+                marginRight={0}
+              />
+              <AlertTitle
+                margin="16px 0 8px"
+                fontSize="18px"
+              >
+                Error ao {query.dataset ? "atualizar" : "criar"} dataset! 
+              </AlertTitle>
+            </Alert>
+          }
         </Stack>
       </Stack>
     </MainPageTemplate>

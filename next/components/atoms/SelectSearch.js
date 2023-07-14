@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from "react";
 import FuzzySearch from "fuzzy-search";
 
 export default function SelectSearch({
+  value,
   onChange,
   options = [],
   hasNode = true
@@ -16,6 +17,14 @@ export default function SelectSearch({
   const [optionsArray, setOptionsArray] = useState(options)
   const [inputValue, setInputValue] = useState("")
   const [isOpen, setIsOpen] = useState(false);
+
+  if(value !== "" && inputValue == "") {
+    const findOption = () => {
+      if(hasNode) return options.find((option) => option.node._id === value)
+      return options.find((option) => option._id === value)
+    }
+    setInputValue(hasNode ? findOption().node.name : findOption().name)
+  }
 
   const mouseEnterEvent = () => {
     setIsOpen(true)
