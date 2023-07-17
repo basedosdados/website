@@ -171,9 +171,8 @@ export default function DataInformationQuery ({ resource }) {
   useEffect(() => {
     if (window) window?.Prism?.highlightAll()
 
-    if(resource?.numberRows || resource?.numberRows === 0) {
-      resource?.numberRows || 0 > 200000 ? setDownloadNotAllowed(false) : setDownloadNotAllowed(true)
-    }
+    if(resource?.numberRows === 0) return setDownloadNotAllowed(false)
+    if(resource?.numberRows) return resource?.numberRows > 200000 ? setDownloadNotAllowed(false) : setDownloadNotAllowed(true)
   }, [resource])
 
   const handlerDownload = () => {
