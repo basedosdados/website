@@ -5,6 +5,7 @@ import {
   AccordionButton,
   AccordionIcon,
   AccordionPanel,
+  Box,
 } from "@chakra-ui/react";
 import { useState, useEffect } from 'react';
 import { useRouter } from "next/router";
@@ -12,6 +13,7 @@ import { MainPageTemplate } from "../../../components/templates/main";
 import authUser from "../../../middlewares/authUser";
 import LoadingSpin from "../../../components/atoms/Loading";
 import PostDatasetForm from "../../../components/organisms/PostDatasetForm";
+import PostTableForm from "../../../components/organisms/PostTableForm";
 
 import {
   getAllOrganizations
@@ -42,6 +44,7 @@ export default function Control() {
   const [themes, setThemes] = useState([])
   const [tags, setTags] = useState([])
   const [status, setStatus] = useState([])
+  const [accordionItens, setAccordionItens] = useState([1])
 
   const fetchOrganizations = async () => {
     const allOrganizations = await getAllOrganizations()
@@ -77,6 +80,17 @@ export default function Control() {
     fetchData()
   },[])
 
+
+  const handleAccordionOpen = (index) => {
+    const itensOpens = accordionItens.includes(index)
+    
+    if (itensOpens) {
+      setAccordionItens((prevState) => prevState.filter((item) => item !== index))
+    } else {
+      setAccordionItens((prevState) => [...prevState, index])
+    }
+  }
+
   if(isLoading) return <MainPageTemplate paddingX="24px" height="600px"><LoadingSpin /></MainPageTemplate>
 
   return (
@@ -97,10 +111,33 @@ export default function Control() {
           />
         }
         {query.dataset &&
-          <Accordion defaultIndex={[0]} allowMultiple>
-            <AccordionItem>
-              <AccordionButton width="600px" fontSize="16px" color="#252A32">
-                Dataset
+          <Accordion
+            defaultIndex={accordionItens}
+            allowMultiple
+            width="100%"
+            maxWidth="632px"
+          >
+            <AccordionItem border={0}>
+              <AccordionButton
+                width="632px"
+                fontSize="16px"
+                color="#252A32"
+                _hover={{
+                  backgroundColor:"transparent",
+                  color:"#42B0FF",
+                  opacity: "0.8"
+                }}
+                onClick={() => handleAccordionOpen(0)}
+              >
+                <Box
+                  flex={1}
+                  textAlign="left"
+                  fontFamily="ubuntu"
+                  fontWeight="500"
+                  color={accordionItens.find((elm) => elm === 0) === 0 && "#42B0FF"}
+                >
+                  Dataset
+                </Box>
                 <AccordionIcon />
               </AccordionButton>
               <AccordionPanel>
@@ -113,46 +150,31 @@ export default function Control() {
               </AccordionPanel>
             </AccordionItem>
             
-            <AccordionItem>
-              <AccordionButton width="600px" fontSize="16px" color="#252A32">
-                Table
+            <AccordionItem border={0}>
+              <AccordionButton
+                width="632px"
+                fontSize="16px"
+                color="#252A32"
+                _hover={{
+                  backgroundColor:"transparent",
+                  color:"#42B0FF",
+                  opacity: "0.8"
+                }}
+                onClick={() => handleAccordionOpen(1)}
+              >
+                <Box
+                  flex={1}
+                  textAlign="left"
+                  fontFamily="ubuntu"
+                  fontWeight="500"
+                  color={accordionItens.find((elm) => elm === 1) === 1 && "#42B0FF"}
+                >
+                  Tables
+                </Box>
                 <AccordionIcon />
               </AccordionButton>
               <AccordionPanel>
-                <PostDatasetForm
-                  organizations={organizations}
-                  themes={themes}
-                  tags={tags}
-                  status={status}
-                />
-              </AccordionPanel>
-            </AccordionItem>
-
-            <AccordionItem>
-              <AccordionButton width="600px" fontSize="16px" color="#252A32">
-                Raw Data Source
-                <AccordionIcon />
-              </AccordionButton>
-              <AccordionPanel>
-                <PostDatasetForm
-                  organizations={organizations}
-                  themes={themes}
-                  tags={tags}
-                  status={status}
-                />
-              </AccordionPanel>
-            </AccordionItem>
-
-            <AccordionItem>
-              <AccordionButton width="600px" fontSize="16px" color="#252A32">
-                Information Request
-                <AccordionIcon />
-              </AccordionButton>
-              <AccordionPanel>
-                <PostDatasetForm
-                  organizations={organizations}
-                  themes={themes}
-                  tags={tags}
+                <PostTableForm
                   status={status}
                 />
               </AccordionPanel>
