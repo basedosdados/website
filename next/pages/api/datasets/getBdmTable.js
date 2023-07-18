@@ -110,6 +110,7 @@ export default async function getBdmTable(id) {
                 compressedFileSize
                 numberRows
                 numberColumns
+                partitions
                 publishedBy {
                   _id
                   firstName

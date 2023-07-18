@@ -114,7 +114,7 @@ export default function SelectList({
       setDefaultNewList(value)
       onChange(value)
     }
-  },[])
+  },[value])
 
   const removeAll = () => {
     setListOptions(defaultList)
