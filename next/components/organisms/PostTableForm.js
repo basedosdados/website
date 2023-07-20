@@ -1,22 +1,15 @@
 import {
   Stack,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  Input,
-  Textarea,
-  Select,
-  Checkbox,
-  Text,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionIcon,
+  AccordionPanel,
+  Box,
+  Text
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react"
-import { useRouter } from "next/router";
-import RoundedButton from "../atoms/RoundedButton";
-import SelectSearch from "../atoms/SelectSearch";
+import FormTable from "../molecules/FormTable";
 import LoadingSpin from "../atoms/Loading";
 
 import {
@@ -24,39 +17,43 @@ import {
 } from "../../pages/api/user"
 
 import {
-  postDataset,
-  getDatasetEdit
-} from "../../pages/api/datasets"
+  getAllLicenses
+} from "../../pages/api/license"
+
+import {
+  getAllPipeline
+} from "../../pages/api/pipeline"
 
 export default function PostTableForm({
-  status
+  status,
+  organizations
 }) {
-  const router = useRouter()
-  const { query } = router
-  
+  const [accordionItens, setAccordionItens] = useState([0])
   const [isLoading, setIsLoading] = useState(true)
   const [allUser, setAllUser] = useState([])
-  const [isSuccess, setIsSuccess] = useState({})
-  const [errors, setErrors] = useState({})
-  const [formData, setFormData] = useState({
-    slug: "",
-    name: "",
-    description: "",
-    version: 0,
-    publishedBy: "",
-    dataCleanedBy: "",
-    status: "",
-    isClosed: false,
-  })
+  const [allLicenses, setAllLicenses] = useState([])
+  const [allPipeline, setAllPipeline] = useState([])
 
   const fetchUsers = async () => {
     const getUsers = await getAllUsers()
     setAllUser(getUsers)
   }
 
+  const fetchLicenses = async () => {
+    const getLicenses = await getAllLicenses()
+    setAllLicenses(getLicenses)
+  }
+
+  const fetchPipeline = async () => {
+    const getPipeline = await getAllPipeline()
+    setAllPipeline(getPipeline)
+  }
+
   const fetchData = async () => {
     const promises = []
     promises.push(fetchUsers())
+    promises.push(fetchLicenses())
+    promises.push(fetchPipeline())
     await Promise.all(promises)
     setIsLoading(false)
   }
@@ -65,258 +62,65 @@ export default function PostTableForm({
     fetchData()
   },[])
 
-  const fetchDataset = async (id) => {
-    if(!id) return 
-    const datasetData = await getDatasetEdit(id)
-
-    setFormData({
-      slug: datasetData?.slug || "",
-      name: datasetData?.name || "",
-      description: datasetData?.description || "",
-      version: datasetData?.version || 0,
-      status: datasetData?.status?._id || "",
-      isClosed: datasetData?.isClosed || false,
-    })
-  }
-
-  useEffect(() => {
-    fetchDataset(query.table)
-  },[query.table])
-
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: type === 'checkbox' ? checked : value
-    }))
-  }
-
-  const handleSubmit = async () => {
-    let validationErrors = {}
-
-    if(Object.keys(validationErrors).length > 0) return setErrors(validationErrors)
-
-    if(query.table) {
-      const result = await postDataset(formData, query.table)
-
-      if(result === undefined) return setIsSuccess({notSuccess: true})
-      setIsSuccess({success: true, datasetId: result})
+  const handleAccordionOpen = (index) => {
+    const itensOpens = accordionItens.includes(index)
+    
+    if (itensOpens) {
+      setAccordionItens((prevState) => prevState.filter((item) => item !== index))
     } else {
-      const result = await postDataset(formData)
-      if(result === undefined) return setIsSuccess({notSuccess: true})
-      setIsSuccess({success: true, datasetId: result})
+      setAccordionItens((prevState) => [...prevState, index])
     }
   }
 
   if(isLoading) return <LoadingSpin/>
 
   return (
-    <Stack
-      display="flex"
-      flexDirection="column"
-      width="600px"
-      gap="20px"
-      color="#252A32"
-      fontFamily="Lato"
-    >
-      <Stack flexDirection="row" gap="8px" spacing={0}>
-        <FormControl isRequired isInvalid={!!errors.slug}>
-          <FormLabel>Slug</FormLabel>
-          <Input name="slug" value={formData.slug} onChange={handleChange} />
-          <FormErrorMessage>{errors.slug}</FormErrorMessage>
-        </FormControl>
-
-        <FormControl isRequired isInvalid={!!errors.name}>
-          <FormLabel>Name</FormLabel>
-          <Input name="name" value={formData.name} onChange={handleChange} />
-          <FormErrorMessage>{errors.name}</FormErrorMessage>
-        </FormControl>
-      </Stack>
-
-      <FormControl>
-        <FormLabel>Description</FormLabel>
-        <Textarea
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-        />
-      </FormControl>
-
-      <Stack flexDirection="row" gap="8px" spacing={0}>
-        <FormControl >
-          <FormLabel>Status</FormLabel>
-          <Select
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-          >
-            <option value={""}>...</option>
-            {status.map((elm) => {
-                return (
-                  <option value={elm?.node?._id}>{elm?.node?.name}</option>
-                )
-              })
-            }
-          </Select>
-        </FormControl>
-
-        <FormControl >
-          <FormLabel>License</FormLabel>
-          {/* <SelectSearch 
-            name="license"
-            value={formData.license}
-            onChange={(e) => setFormData({...formData, license: e})}
-            options={licenses}
-          /> */}
-        </FormControl>
-      </Stack>
-
-      <Stack flexDirection="row" gap="8px" spacing={0}>
-        <FormControl >
-          <FormLabel>Partner organization</FormLabel>
-          {/* <SelectSearch 
-            name="partner organization"
-            value={formData.partnerOrganization}
-            onChange={(e) => setFormData({...formData, partnerOrganization: e})}
-            options={status}
-          /> */}
-        </FormControl>
-
-        <FormControl >
-          <FormLabel>Pipeline</FormLabel>
-          {/* <SelectSearch 
-            name="pipeline"
-            value={formData.pipeline}
-            onChange={(e) => setFormData({...formData, pipeline: e})}
-            options={pipelines}
-          /> */}
-        </FormControl>
-      </Stack>
-
-      <FormControl width="50%">
-        <FormLabel>Is directory</FormLabel>
-        <Select
-          name="isDirectory"
-          value={formData.isDirectory}
-          onChange={handleChange}
-        >
-          <option value={""}>Desconhecido</option>
-          <option value={""}>Sim</option>
-          <option value={""}>Não</option>
-        </Select>
-      </FormControl>
-
-      <Stack flexDirection="row" gap="8px" spacing={0}>
-        <FormControl >
-          <FormLabel>Published by</FormLabel>
-          <SelectSearch 
-            name="publishedBy"
-            value={formData.publishedBy}
-            onChange={(e) => setFormData({...formData, publishedBy: e})}
-            options={allUser}
-            keyId="email"
-            displayName="email"
-          />
-        </FormControl>
-
-        <FormControl >
-          <FormLabel>Data cleaned by</FormLabel>
-          <SelectSearch
-            name="dataCleanedBy"
-            value={formData.dataCleanedBy}
-            onChange={(e) => setFormData({...formData, dataCleanedBy: e})}
-            options={allUser}
-            keyId="email"
-            displayName="email"
-          />
-        </FormControl>
-      </Stack>
-
-      <FormControl
-        display="flex"
-        flexDirection="row"
-        gap="8px"
+    <Stack>
+      <Accordion
+        defaultIndex={accordionItens}
+        allowMultiple
+        width="100%"
+        transform={"translateX(20px)"}
       >
-        <FormLabel margin="0 !important">Is Closed?</FormLabel>
-        <Checkbox
-          name="isClosed"
-          checked={formData.isClosed}
-          onChange={handleChange}
-        />
-      </FormControl>
-
-      <RoundedButton
-        margin="0 auto"
-        width="200px"
-        type="submit"
-        onClick={() => handleSubmit()}
-      >
-        Adicionar
-      </RoundedButton>
-
-      {isSuccess?.success &&
-        <Alert
-          status="success"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          textAlign="center"
-        >
-          <AlertIcon
-            width="40px"
-            height="40px"
-            marginRight={0}
-          />
-          <AlertTitle
-            margin="16px 0 8px"
-            fontSize="18px"
+        <AccordionItem border={0}>
+          <AccordionButton
+            width="632px"
+            fontSize="16px"
+            color="#252A32"
+            _hover={{
+              backgroundColor:"transparent",
+              color:"#42B0FF",
+              opacity: "0.8"
+            }}
+            onClick={() => handleAccordionOpen(0)}
           >
-            Dataset {query.table ? "atualizado" : "criado"} com sucesso! 
-          </AlertTitle>
-          <AlertDescription >
-            O que gostaria de fazer agora?
-          </AlertDescription>
-
-          <Stack
-            marginTop="16px"
-            flexDirection="row"
-            spacing={0}
-            gap="10px"
-          >
-            <RoundedButton onClick={() => window.open(`/dataset/${isSuccess?.datasetId}`)}>
-              Acessar página web
-            </RoundedButton>
-            {!query.table &&
-              <RoundedButton onClick={() => window.open(`/dataset/control?dataset=${isSuccess?.datasetId}`, "_self")}>
-                Continuar editando
-              </RoundedButton>
-            }
-          </Stack>
-        </Alert>
-      }
-
-      {isSuccess.notSuccess &&
-        <Alert
-          status="error"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          textAlign="center"
-        >
-          <AlertIcon
-            width="40px"
-            height="40px"
-            marginRight={0}
-          />
-          <AlertTitle
-            margin="16px 0 8px"
-            fontSize="18px"
-          >
-            Error ao {query.table ? "atualizar" : "criar"} dataset! 
-          </AlertTitle>
-        </Alert>
-      }
+            <Box
+              flex={1}
+              textAlign="left"
+              fontFamily="ubuntu"
+              fontWeight="400"
+              color={accordionItens.find((elm) => elm === 0) === 0 && "#42B0FF"}
+            >
+              Criar Table
+            </Box>
+            <Text
+              fontSize="20px"
+              fontWeight="500"
+              transition="all 0.2s"
+              transform={accordionItens.find((elm) => elm === 0) === 0 && "rotate(45deg)"}
+            >+</Text>
+          </AccordionButton>
+          <AccordionPanel>
+            <FormTable
+              status={status}
+              organizations={organizations}
+              users={allUser}
+              licenses={allLicenses}
+              pipeline={allPipeline}
+            />
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
     </Stack>
   )
 }

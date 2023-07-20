@@ -115,7 +115,9 @@ export default function Control() {
             defaultIndex={accordionItens}
             allowMultiple
             width="100%"
-            maxWidth="632px"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
           >
             <AccordionItem border={0}>
               <AccordionButton
@@ -150,7 +152,9 @@ export default function Control() {
               </AccordionPanel>
             </AccordionItem>
             
-            <AccordionItem border={0}>
+            <AccordionItem
+              border={0}
+            >
               <AccordionButton
                 width="632px"
                 fontSize="16px"
@@ -161,6 +165,7 @@ export default function Control() {
                   opacity: "0.8"
                 }}
                 onClick={() => handleAccordionOpen(1)}
+                margin="0 auto"
               >
                 <Box
                   flex={1}
@@ -175,6 +180,7 @@ export default function Control() {
               </AccordionButton>
               <AccordionPanel>
                 <PostTableForm
+                  organizations={organizations}
                   status={status}
                 />
               </AccordionPanel>
