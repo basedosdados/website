@@ -13,6 +13,7 @@ export default async function getAllUsers() {
             allAccount {
               edges {
                 node {
+                  id
                   email
                 }
               }

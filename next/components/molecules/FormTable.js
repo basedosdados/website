@@ -13,8 +13,13 @@ import {
   AlertDescription,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react"
+import { useRouter } from "next/router";
 import RoundedButton from "../atoms/RoundedButton";
 import SelectSearch from "../atoms/SelectSearch";
+
+import {
+  postTable
+} from "../../pages/api/tables"
 
 export default function FormTable({
   status,
@@ -23,6 +28,9 @@ export default function FormTable({
   licenses,
   pipeline
 }) {
+  const router = useRouter()
+  const { query } = router
+
   const [isSuccess, setIsSuccess] = useState({})
   const [errors, setErrors] = useState({})
   const [formData, setFormData] = useState({
@@ -33,7 +41,7 @@ export default function FormTable({
     license: "",
     partnerOrganization: "",
     pipeline: "",
-    isDirectory: "",
+    isDirectory: false,
     publishedBy: "",
     dataCleanedBy: "",
     dataCleaningDescription: "",
@@ -62,16 +70,9 @@ export default function FormTable({
 
     if(Object.keys(validationErrors).length > 0) return setErrors(validationErrors)
 
-    if(query.table) {
-      const result = await postDataset(formData, query.table)
-
-      if(result === undefined) return setIsSuccess({notSuccess: true})
-      setIsSuccess({success: true, datasetId: result})
-    } else {
-      const result = await postDataset(formData)
-      if(result === undefined) return setIsSuccess({notSuccess: true})
-      setIsSuccess({success: true, datasetId: result})
-    }
+    const result = await postTable(formData, query.dataset)
+    if(result === undefined) return setIsSuccess({notSuccess: true})
+    setIsSuccess({success: true, datasetId: result})
   }
 
   return (
@@ -107,7 +108,7 @@ export default function FormTable({
       </FormControl>
 
       <Stack flexDirection="row" gap="8px" spacing={0}>
-        <FormControl >
+        <FormControl isRequired>
           <FormLabel>Status</FormLabel>
           <Select
             name="status"
@@ -124,7 +125,7 @@ export default function FormTable({
           </Select>
         </FormControl>
 
-        <FormControl >
+        <FormControl isRequired>
           <FormLabel>License</FormLabel>
           <SelectSearch 
             name="license"
@@ -147,7 +148,7 @@ export default function FormTable({
           />
         </FormControl>
 
-        <FormControl >
+        <FormControl isRequired>
           <FormLabel>Pipeline</FormLabel>
           <SelectSearch 
             name="pipeline"
@@ -166,26 +167,26 @@ export default function FormTable({
           value={formData.isDirectory}
           onChange={handleChange}
         >
-          <option value={"Desconhecido"}>Desconhecido</option>
-          <option value={"Sim"}>Sim</option>
-          <option value={"Não"}>Não</option>
+          <option value={null}>Desconhecido</option>
+          <option value={true}>Sim</option>
+          <option value={false}>Não</option>
         </Select>
       </FormControl>
 
       <Stack flexDirection="row" gap="8px" spacing={0}>
-        <FormControl >
+        <FormControl>
           <FormLabel>Published by</FormLabel>
           <SelectSearch 
             name="publishedBy"
             value={formData.publishedBy}
             onChange={(e) => setFormData({...formData, publishedBy: e})}
             options={users}
-            keyId="email"
+            keyId="id"
             displayName="email"
           />
         </FormControl>
 
-        <FormControl >
+        <FormControl>
           <FormLabel>Data cleaned by</FormLabel>
           <SelectSearch
             name="dataCleanedBy"
@@ -311,7 +312,7 @@ export default function FormTable({
             margin="16px 0 8px"
             fontSize="18px"
           >
-            Dataset {query.table ? "atualizado" : "criado"} com sucesso! 
+            Table {query.table ? "atualizado" : "criado"} com sucesso! 
           </AlertTitle>
           <AlertDescription >
             O que gostaria de fazer agora?
@@ -352,7 +353,7 @@ export default function FormTable({
             margin="16px 0 8px"
             fontSize="18px"
           >
-            Error ao {query.table ? "atualizar" : "criar"} dataset! 
+            Error ao {query.table ? "atualizar" : "criar"} table! 
           </AlertTitle>
         </Alert>
       }

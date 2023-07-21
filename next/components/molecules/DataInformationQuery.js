@@ -371,7 +371,7 @@ bd_read_table, ///
               Antes de baixar os dados, apoie você também com uma doação financeira ou <Link color="#42B0FF" href="https://basedosdados.github.io/mais/colab_data/">saiba como contribuir com seu tempo</Link>.
             </SectionText>
 
-            {downloadNotAllowed &&
+            {!downloadNotAllowed &&
               <DisclaimerBox>
                 <HStack gridGap="8px" alignItems="flex-start">
                 <ExclamationIcon
