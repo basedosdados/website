@@ -18,10 +18,12 @@ import RoundedButton from "../atoms/RoundedButton";
 import SelectSearch from "../atoms/SelectSearch";
 
 import {
-  postTable
+  postTable,
+  getTableEdit
 } from "../../pages/api/tables"
 
 export default function FormTable({
+  id,
   status,
   organizations,
   users,
@@ -57,6 +59,39 @@ export default function FormTable({
     isClosed: false,
   })
 
+  const fetchTable = async (id) => {
+    if(!id) return 
+    const tableData = await getTableEdit(id)
+
+    setFormData({
+      slug: tableData?.slug || "",
+      name: tableData?.name || "",
+      description: tableData?.description || "",
+      status: tableData?.status || "",
+      license: tableData?.license || "",
+      partnerOrganization: tableData?.partnerOrganization || "",
+      pipeline: tableData?.pipeline || "",
+      isDirectory: tableData?.isDirectory || false,
+      publishedBy: tableData?.publishedBy || "",
+      dataCleanedBy: tableData?.dataCleanedBy || "",
+      dataCleaningDescription: tableData?.dataCleaningDescription || "",
+      dataCleaningCodeUrl: tableData?.dataCleaningCodeUrl || "",
+      rawDataUrl: tableData?.rawDataUrl || "",
+      auxiliaryFilesUrl: tableData?.auxiliaryFilesUrl || "",
+      architectureUrl: tableData?.architectureUrl || "",
+      sourceBucketName: tableData?.sourceBucketName || "",
+      uncompressedFileSize: tableData?.uncompressedFileSize || 0,
+      compressedFileSize: tableData?.compressedFileSize || 0,
+      numberRows: tableData?.numberRows || 0,
+      numberColumns: tableData?.numberColumns || 0,
+      isClosed: tableData?.isClosed || false,
+    })
+  }
+
+  useEffect(() => {
+    fetchTable(query.table)
+  },[query.table === id])
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
     setFormData((prevData) => ({
@@ -68,11 +103,26 @@ export default function FormTable({
   const handleSubmit = async () => {
     let validationErrors = {}
 
+    if(!formData.slug) validationErrors.slug = "O slug é obrigatório"
+    if(!formData.name) validationErrors.name = "O name é obrigatório"
+    if(formData.dataCleaningCodeUrl !== "") {
+      if(!formData.dataCleaningCodeUrl.startsWith("https")) validationErrors.dataCleaningCodeUrl = "Insira uma url válida"
+    }
+    if(formData.rawDataUrl !== "") {
+      if(!formData.rawDataUrl.startsWith("https")) validationErrors.rawDataUrl = "Insira uma url válida"
+    }
+    if(formData.auxiliaryFilesUrl !== "") {
+      if(!formData.auxiliaryFilesUrl.startsWith("https")) validationErrors.auxiliaryFilesUrl = "Insira uma url válida"
+    }
+    if(formData.architectureUrl !== "") {
+      if(!formData.architectureUrl.startsWith("https")) validationErrors.architectureUrl = "Insira uma url válida"
+    }
+
     if(Object.keys(validationErrors).length > 0) return setErrors(validationErrors)
 
     const result = await postTable(formData, query.dataset)
     if(result === undefined) return setIsSuccess({notSuccess: true})
-    setIsSuccess({success: true, datasetId: result})
+    setIsSuccess({success: true, tableId: result})
   }
 
   return (
@@ -208,24 +258,28 @@ export default function FormTable({
         />
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!!errors.dataCleaningCodeUrl}>
         <FormLabel>Data cleaning code url</FormLabel>
         <Input name="dataCleaningCodeUrl" value={formData.dataCleaningCodeUrl} onChange={handleChange} />
+        <FormErrorMessage>{errors.dataCleaningCodeUrl}</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!!errors.rawDataUrl}>
         <FormLabel>Raw data url</FormLabel>
         <Input name="rawDataUrl" value={formData.rawDataUrl} onChange={handleChange} />
+        <FormErrorMessage>{errors.rawDataUrl}</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!!errors.auxiliaryFilesUrl}>
         <FormLabel>Auxiliary files url</FormLabel>
         <Input name="auxiliaryFilesUrl" value={formData.auxiliaryFilesUrl} onChange={handleChange} />
+        <FormErrorMessage>{errors.auxiliaryFilesUrl}</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!!errors.architectureUrl}>
         <FormLabel>Architecture url</FormLabel>
         <Input name="architectureUrl" value={formData.architectureUrl} onChange={handleChange} />
+        <FormErrorMessage>{errors.architectureUrl}</FormErrorMessage>
       </FormControl>
 
       <FormControl>
@@ -327,11 +381,18 @@ export default function FormTable({
             <RoundedButton onClick={() => window.open(`/dataset/${isSuccess?.datasetId}`)}>
               Acessar página web
             </RoundedButton>
-            {!query.table &&
-              <RoundedButton onClick={() => window.open(`/dataset/control?dataset=${isSuccess?.datasetId}`, "_self")}>
-                Continuar editando
-              </RoundedButton>
-            }
+
+            <RoundedButton onClick={() => {
+              router.push({
+                pathname: router.pathname,
+                query: {
+                  ...query,
+                  table: isSuccess.tableId
+                }
+              })}}
+            >
+              Continuar editando
+            </RoundedButton>
           </Stack>
         </Alert>
       }

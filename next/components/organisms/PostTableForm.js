@@ -9,8 +9,13 @@ import {
   Text
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react"
+import { useRouter } from "next/router";
 import FormTable from "../molecules/FormTable";
 import LoadingSpin from "../atoms/Loading";
+
+import {
+  getAllTableInDataset
+} from "../../pages/api/tables"
 
 import {
   getAllUsers
@@ -28,11 +33,15 @@ export default function PostTableForm({
   status,
   organizations
 }) {
-  const [accordionItens, setAccordionItens] = useState([0])
+  const router = useRouter()
+  const { query } = router
+
+  const [accordionItens, setAccordionItens] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [allUser, setAllUser] = useState([])
   const [allLicenses, setAllLicenses] = useState([])
   const [allPipeline, setAllPipeline] = useState([])
+  const [tables, setTables] = useState([])
 
   const fetchUsers = async () => {
     const getUsers = await getAllUsers()
@@ -49,11 +58,17 @@ export default function PostTableForm({
     setAllPipeline(getPipeline)
   }
 
+  const fetchAllTable = async (dataset) => {
+    const getAllTable = await getAllTableInDataset(dataset)
+    setTables(getAllTable)
+  }
+
   const fetchData = async () => {
     const promises = []
     promises.push(fetchUsers())
     promises.push(fetchLicenses())
     promises.push(fetchPipeline())
+    if(query.dataset) promises.push(fetchAllTable(query.dataset))
     await Promise.all(promises)
     setIsLoading(false)
   }
@@ -68,7 +83,7 @@ export default function PostTableForm({
     if (itensOpens) {
       setAccordionItens((prevState) => prevState.filter((item) => item !== index))
     } else {
-      setAccordionItens((prevState) => [...prevState, index])
+      setAccordionItens([index])
     }
   }
 
@@ -78,9 +93,9 @@ export default function PostTableForm({
     <Stack>
       <Accordion
         defaultIndex={accordionItens}
-        allowMultiple
         width="100%"
         transform={"translateX(20px)"}
+        allowToggle
       >
         <AccordionItem border={0}>
           <AccordionButton
@@ -104,6 +119,8 @@ export default function PostTableForm({
               Criar Table
             </Box>
             <Text
+              position="relative"
+              left="-4px"
               fontSize="20px"
               fontWeight="500"
               transition="all 0.2s"
@@ -120,6 +137,59 @@ export default function PostTableForm({
             />
           </AccordionPanel>
         </AccordionItem>
+
+        {tables && tables.map((table, i) => 
+          <AccordionItem border={0}>
+            <AccordionButton
+              width="632px"
+              fontSize="16px"
+              color="#252A32"
+              _hover={{
+                backgroundColor:"transparent",
+                color:"#42B0FF",
+                opacity: "0.8"
+              }}
+              onClick={() => {
+                handleAccordionOpen(i+1)
+                if(query.table === table.node._id) return (
+                  router.push({
+                    pathname: router.pathname,
+                    query: { dataset: query.dataset}
+                  })
+                )
+                router.push({
+                  pathname: router.pathname,
+                  query: {
+                    ...query,
+                    table: table.node._id
+                  }
+                })
+              }}
+            >
+              <Box
+                flex={1}
+                textAlign="left"
+                fontFamily="ubuntu"
+                fontWeight="400"
+                color={accordionItens.find((elm) => elm === i+1) === i+1 && "#42B0FF"}
+              >
+                {table.node.name}
+              </Box>
+              <AccordionIcon/>
+            </AccordionButton>
+            <AccordionPanel>
+              <FormTable
+                id={table.node._id}
+                status={status}
+                organizations={organizations}
+                users={allUser}
+                licenses={allLicenses}
+                pipeline={allPipeline}
+              />
+            </AccordionPanel>
+          </AccordionItem>
+          )
+        }
       </Accordion>
     </Stack>
   )
