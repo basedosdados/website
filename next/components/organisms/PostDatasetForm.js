@@ -11,7 +11,14 @@ import {
   Alert,
   AlertIcon,
   AlertTitle,
-  AlertDescription
+  AlertDescription,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  useDisclosure
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react"
 import { useRouter } from "next/router";
@@ -21,7 +28,8 @@ import SelectSearch from "../atoms/SelectSearch";
 
 import {
   postDataset,
-  getDatasetEdit
+  getDatasetEdit,
+  deleteDataset
 } from "../../pages/api/datasets"
 
 export default function PostDatasetForm({
@@ -33,6 +41,7 @@ export default function PostDatasetForm({
   const router = useRouter()
   const { query } = router
 
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedThemes, setSelectedThemes] = useState([])
   const [selectedTags, setSelectedTags] = useState([])
   const [isSuccess, setIsSuccess] = useState({})
@@ -119,6 +128,16 @@ export default function PostDatasetForm({
       if(result === undefined) return setIsSuccess({notSuccess: true})
       setIsSuccess({success: true, datasetId: result})
     }
+  }
+
+  const handleDelete = async () => {
+    const result = await deleteDataset(query.dataset)
+
+    if(result === false) {
+      setIsSuccess({notDelete: true})
+      onClose()
+    }
+    if(result === true) window.open("/dataset", "_self")
   }
 
   return (
@@ -232,14 +251,45 @@ export default function PostDatasetForm({
         />
       </FormControl>
 
-      <RoundedButton
+      <Stack
+        flexDirection="row"
+        gap="24px"
         margin="0 auto"
-        width="200px"
-        type="submit"
-        onClick={() => handleSubmit()}
+        spacing={0}
       >
-        {query.dataset ? "Atualizar" : "Criar"}
-      </RoundedButton>
+        <RoundedButton
+          width="200px"
+          type="submit"
+          onClick={() => handleSubmit()}
+        >
+          {query.dataset ? "Atualizar" : "Criar"}
+        </RoundedButton>
+
+        {query.dataset &&
+          <RoundedButton
+            margin="0 auto"
+            width="200px"
+            backgroundColor="#E44748"
+            onClick={onOpen}
+          >
+            Deletar
+          </RoundedButton>
+        }
+      </Stack>
+
+      <Modal isCentered isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Deletar dataset</ModalHeader>
+          <ModalBody>
+            Você tem certeza em deletar esse dataset? Uma vez deletado, todas as informações dele e de Table e Columns serão excluídas em consequência.
+          </ModalBody>
+          <ModalFooter gap="8px">
+            <RoundedButton onClick={onClose}> Cancelar </RoundedButton>
+            <RoundedButton backgroundColor="#E44748" onClick={() => handleDelete()}>Deletar</RoundedButton>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
       {isSuccess?.success &&
         <Alert
@@ -300,6 +350,28 @@ export default function PostDatasetForm({
             fontSize="18px"
           >
             Error ao {query.dataset ? "atualizar" : "criar"} dataset! 
+          </AlertTitle>
+        </Alert>
+      }
+
+      {isSuccess.notDelete &&
+        <Alert
+          status="error"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          textAlign="center"
+        >
+          <AlertIcon
+            width="40px"
+            height="40px"
+            marginRight={0}
+          />
+          <AlertTitle
+            margin="16px 0 8px"
+            fontSize="18px"
+          >
+            Error ao deletar dataset! 
           </AlertTitle>
         </Alert>
       }

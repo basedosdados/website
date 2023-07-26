@@ -11,6 +11,13 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  useDisclosure
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react"
 import { useRouter } from "next/router";
@@ -19,7 +26,8 @@ import SelectSearch from "../atoms/SelectSearch";
 
 import {
   postTable,
-  getTableEdit
+  getTableEdit,
+  deleteTable
 } from "../../pages/api/tables"
 
 export default function FormTable({
@@ -33,6 +41,7 @@ export default function FormTable({
   const router = useRouter()
   const { query } = router
 
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const [isSuccess, setIsSuccess] = useState({})
   const [errors, setErrors] = useState({})
   const [formData, setFormData] = useState({
@@ -124,6 +133,17 @@ export default function FormTable({
     if(result === undefined) return setIsSuccess({notSuccess: true})
     setIsSuccess({success: true, tableId: result})
   }
+
+  const handleDelete = async () => {
+    const result = await deleteTable(query.table)
+
+    if(result === false) {
+      setIsSuccess({notDelete: true})
+      onClose()
+    }
+    if(result === true) window.location.reload()
+  }
+
 
   return (
     <Stack
@@ -340,14 +360,46 @@ export default function FormTable({
         />
       </FormControl>
 
-      <RoundedButton
+      <Stack
+        flexDirection="row"
+        gap="24px"
         margin="0 auto"
-        width="200px"
-        type="submit"
-        onClick={() => handleSubmit()}
+        spacing={0}
       >
-        Adicionar
-      </RoundedButton>
+        <RoundedButton
+          margin="0 auto"
+          width="200px"
+          type="submit"
+          onClick={() => handleSubmit()}
+        >
+          {query.table ? "Atualizar" : "Adicionar"}
+        </RoundedButton>
+
+        {query.table &&
+          <RoundedButton
+            margin="0 auto"
+            width="200px"
+            backgroundColor="#E44748"
+            onClick={onOpen}
+          >
+            Deletar
+          </RoundedButton>
+        }
+      </Stack>
+
+      <Modal isCentered isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Deletar table</ModalHeader>
+          <ModalBody>
+            Você tem certeza em deletar esse table? Uma vez deletada, todas as informações dele e de Columns serão excluídas em consequência.
+          </ModalBody>
+          <ModalFooter gap="8px">
+            <RoundedButton onClick={onClose}> Cancelar </RoundedButton>
+            <RoundedButton backgroundColor="#E44748" onClick={() => handleDelete()}>Deletar</RoundedButton>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
       {isSuccess?.success &&
         <Alert
@@ -382,7 +434,7 @@ export default function FormTable({
               Acessar página web
             </RoundedButton>
 
-            <RoundedButton onClick={() => {
+            <RoundedButton onClicdatasetk={() => {
               router.push({
                 pathname: router.pathname,
                 query: {
@@ -415,6 +467,28 @@ export default function FormTable({
             fontSize="18px"
           >
             Error ao {query.table ? "atualizar" : "criar"} table! 
+          </AlertTitle>
+        </Alert>
+      }
+
+      {isSuccess.notDelete &&
+        <Alert
+          status="error"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          textAlign="center"
+        >
+          <AlertIcon
+            width="40px"
+            height="40px"
+            marginRight={0}
+          />
+          <AlertTitle
+            margin="16px 0 8px"
+            fontSize="18px"
+          >
+            Error ao deletar tabble! 
           </AlertTitle>
         </Alert>
       }
