@@ -25,6 +25,7 @@ import { useRouter } from "next/router";
 import SelectList from "../molecules/SelectList";
 import RoundedButton from "../atoms/RoundedButton";
 import SelectSearch from "../atoms/SelectSearch";
+import LoadingSpin from "../atoms/Loading";
 
 import {
   postDataset,
@@ -46,33 +47,33 @@ export default function PostDatasetForm({
   const [selectedTags, setSelectedTags] = useState([])
   const [isSuccess, setIsSuccess] = useState({})
   const [errors, setErrors] = useState({})
-  const [formData, setFormData] = useState({
-    slug: "",
-    name: "",
-    description: "",
-    organization: "",
-    themes: [],
-    tags: [],
-    version: 0,
-    status: "",
-    isClosed: false,
-  })
+  const [isLoading, setIsLoading] = useState(true)
+
+  const valueFormData = (data) => {
+    return {
+      slug: data ? data?.slug || "" :"",
+      name: data ? data?.name || "": "",
+      description: data ? data?.description || "" : "",
+      organization: data ? data?.organization?._id || "" :"",
+      themes: data ? data?.themes?.edges|| [] :[],
+      tags: data ? data?.tags?.edges|| [] :[],
+      version: data ? data?.version || 0 : 0,
+      status: data ? data?.status?._id || "" : "",
+      isClosed: data ? data?.isClosed || false : false,
+    }
+  }
+  const [formData, setFormData] = useState(valueFormData())
+
+  useEffect(() => {
+    if(!query.dataset) setIsLoading(false)
+  }, [])
 
   const fetchDataset = async (id) => {
     if(!id) return 
     const datasetData = await getDatasetEdit(id)
 
-    setFormData({
-      slug: datasetData?.slug || "",
-      name: datasetData?.name || "",
-      description: datasetData?.description || "",
-      organization: datasetData?.organization?._id || "",
-      themes: datasetData?.themes?.edges|| [],
-      tags: datasetData?.tags?.edges|| [],
-      version: datasetData?.version || 0,
-      status: datasetData?.status?._id || "",
-      isClosed: datasetData?.isClosed || false,
-    })
+    setFormData(valueFormData(datasetData))
+    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -139,6 +140,8 @@ export default function PostDatasetForm({
     }
     if(result === true) window.open("/dataset", "_self")
   }
+
+  if(isLoading) return <LoadingSpin/>
 
   return (
     <Stack

@@ -23,6 +23,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/router";
 import RoundedButton from "../atoms/RoundedButton";
 import SelectSearch from "../atoms/SelectSearch";
+import LoadingSpin from "../atoms/Loading";
 
 import {
   postTable,
@@ -44,62 +45,50 @@ export default function FormTable({
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isSuccess, setIsSuccess] = useState({})
   const [errors, setErrors] = useState({})
-  const [formData, setFormData] = useState({
-    slug: "",
-    name: "",
-    description: "",
-    status: "",
-    license: "",
-    partnerOrganization: "",
-    pipeline: "",
-    isDirectory: false,
-    publishedBy: "",
-    dataCleanedBy: "",
-    dataCleaningDescription: "",
-    dataCleaningCodeUrl: "",
-    rawDataUrl: "",
-    auxiliaryFilesUrl: "",
-    architectureUrl: "",
-    sourceBucketName: "",
-    uncompressedFileSize: 0,
-    compressedFileSize: 0,
-    numberRows: 0,
-    numberColumns: 0,
-    isClosed: false,
-  })
+  const [isLoading, setIsLoading] = useState(true)
+
+  const valueFormData = (data) => {
+    return {
+      slug: data ? data?.slug || "" : "",
+      name: data ? data?.name || "" : "",
+      description: data ? data?.description || "" : "",
+      status: data ? data?.status || "" : "",
+      license: data ? data?.license || "" : "",
+      partnerOrganization: data ? data?.partnerOrganization || "" : "",
+      pipeline: data ? data?.pipeline || "" : "",
+      isDirectory: data ? data?.isDirectory || false : false,
+      publishedBy: data ? data?.publishedBy || "" : "",
+      dataCleanedBy: data ? data?.dataCleanedBy || "" : "",
+      dataCleaningDescription: data ? data?.dataCleaningDescription || "" : "",
+      dataCleaningCodeUrl: data ? data?.dataCleaningCodeUrl || "" : "",
+      rawDataUrl: data ? data?.rawDataUrl || "" : "",
+      auxiliaryFilesUrl: data ? data?.auxiliaryFilesUrl || "" : "",
+      architectureUrl: data ? data?.architectureUrl || "" : "",
+      sourceBucketName: data ? data?.sourceBucketName || "" : "",
+      uncompressedFileSize: data ? data?.uncompressedFileSize || 0 : 0,
+      compressedFileSize: data ? data?.compressedFileSize || 0 : 0,
+      numberRows: data ? data?.numberRows || 0 : 0,
+      numberColumns: data ? data?.numberColumns || 0 : 0,
+      isClosed: data ? data?.isClosed || false : false,
+    }
+  }
+  const [formData, setFormData] = useState(valueFormData())
 
   const fetchTable = async (id) => {
     if(!id) return 
     const tableData = await getTableEdit(id)
 
-    setFormData({
-      slug: tableData?.slug || "",
-      name: tableData?.name || "",
-      description: tableData?.description || "",
-      status: tableData?.status || "",
-      license: tableData?.license || "",
-      partnerOrganization: tableData?.partnerOrganization || "",
-      pipeline: tableData?.pipeline || "",
-      isDirectory: tableData?.isDirectory || false,
-      publishedBy: tableData?.publishedBy || "",
-      dataCleanedBy: tableData?.dataCleanedBy || "",
-      dataCleaningDescription: tableData?.dataCleaningDescription || "",
-      dataCleaningCodeUrl: tableData?.dataCleaningCodeUrl || "",
-      rawDataUrl: tableData?.rawDataUrl || "",
-      auxiliaryFilesUrl: tableData?.auxiliaryFilesUrl || "",
-      architectureUrl: tableData?.architectureUrl || "",
-      sourceBucketName: tableData?.sourceBucketName || "",
-      uncompressedFileSize: tableData?.uncompressedFileSize || 0,
-      compressedFileSize: tableData?.compressedFileSize || 0,
-      numberRows: tableData?.numberRows || 0,
-      numberColumns: tableData?.numberColumns || 0,
-      isClosed: tableData?.isClosed || false,
-    })
+    setFormData(valueFormData(tableData))
+    setIsLoading(false)
   }
 
   useEffect(() => {
-    fetchTable(query.table)
-  },[query.table === id])
+    if(id === "create") {
+      setFormData(valueFormData())
+      setIsLoading(false)
+    } 
+    if(query.table) fetchTable(query.table)
+  }, [])
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -144,6 +133,7 @@ export default function FormTable({
     if(result === true) window.location.reload()
   }
 
+  if(isLoading) return <LoadingSpin/>
 
   return (
     <Stack
@@ -197,36 +187,36 @@ export default function FormTable({
 
         <FormControl isRequired>
           <FormLabel>License</FormLabel>
-          <SelectSearch 
+          {/* <SelectSearch 
             name="license"
             value={formData.license}
             onChange={(e) => setFormData({...formData, license: e})}
             options={licenses}
             displayName="slug"
-          />
+          /> */}
         </FormControl>
       </Stack>
 
       <Stack flexDirection="row" gap="8px" spacing={0}>
         <FormControl >
           <FormLabel>Partner organization</FormLabel>
-          <SelectSearch 
+          {/* <SelectSearch 
             name="partner organization"
             value={formData.partnerOrganization}
             onChange={(e) => setFormData({...formData, partnerOrganization: e})}
             options={organizations}
-          />
+          /> */}
         </FormControl>
 
         <FormControl isRequired>
           <FormLabel>Pipeline</FormLabel>
-          <SelectSearch 
+          {/* <SelectSearch 
             name="pipeline"
             value={formData.pipeline}
             onChange={(e) => setFormData({...formData, pipeline: e})}
             options={pipeline}
             displayName="githubUrl"
-          />
+          /> */}
         </FormControl>
       </Stack>
 
@@ -246,26 +236,26 @@ export default function FormTable({
       <Stack flexDirection="row" gap="8px" spacing={0}>
         <FormControl>
           <FormLabel>Published by</FormLabel>
-          <SelectSearch 
+          {/* <SelectSearch 
             name="publishedBy"
             value={formData.publishedBy}
             onChange={(e) => setFormData({...formData, publishedBy: e})}
             options={users}
             keyId="id"
             displayName="email"
-          />
+          /> */}
         </FormControl>
 
         <FormControl>
           <FormLabel>Data cleaned by</FormLabel>
-          <SelectSearch
+          {/* <SelectSearch
             name="dataCleanedBy"
             value={formData.dataCleanedBy}
             onChange={(e) => setFormData({...formData, dataCleanedBy: e})}
             options={users}
             keyId="email"
             displayName="email"
-          />
+          /> */}
         </FormControl>
       </Stack>
 
@@ -367,7 +357,6 @@ export default function FormTable({
         spacing={0}
       >
         <RoundedButton
-          margin="0 auto"
           width="200px"
           type="submit"
           onClick={() => handleSubmit()}

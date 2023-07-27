@@ -79,7 +79,7 @@ export default function PostTableForm({
 
   const handleAccordionOpen = (index) => {
     const itensOpens = accordionItens.includes(index)
-    
+
     if (itensOpens) {
       setAccordionItens((prevState) => prevState.filter((item) => item !== index))
     } else {
@@ -107,7 +107,13 @@ export default function PostTableForm({
               color:"#42B0FF",
               opacity: "0.8"
             }}
-            onClick={() => handleAccordionOpen(0)}
+            onClick={() => {
+              router.push({
+                pathname: router.pathname,
+                query: { dataset: query.dataset}
+              })
+              handleAccordionOpen(0)
+            }}
           >
             <Box
               flex={1}
@@ -128,13 +134,16 @@ export default function PostTableForm({
             >+</Text>
           </AccordionButton>
           <AccordionPanel>
-            <FormTable
-              status={status}
-              organizations={organizations}
-              users={allUser}
-              licenses={allLicenses}
-              pipeline={allPipeline}
-            />
+            {accordionItens[0] === 0 &&
+              <FormTable
+                id="create"
+                status={status}
+                organizations={organizations}
+                users={allUser}
+                licenses={allLicenses}
+                pipeline={allPipeline}
+              />
+            }
           </AccordionPanel>
         </AccordionItem>
 
@@ -178,14 +187,16 @@ export default function PostTableForm({
               <AccordionIcon/>
             </AccordionButton>
             <AccordionPanel>
-              <FormTable
-                id={table.node._id}
-                status={status}
-                organizations={organizations}
-                users={allUser}
-                licenses={allLicenses}
-                pipeline={allPipeline}
-              />
+              {accordionItens[0] === i+1 &&
+                <FormTable
+                  id={table.node._id}
+                  status={status}
+                  organizations={organizations}
+                  users={allUser}
+                  licenses={allLicenses}
+                  pipeline={allPipeline}
+                />
+              }
             </AccordionPanel>
           </AccordionItem>
           )

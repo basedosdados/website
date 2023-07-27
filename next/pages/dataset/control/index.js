@@ -80,7 +80,6 @@ export default function Control() {
     fetchData()
   },[])
 
-
   const handleAccordionOpen = (index) => {
     const itensOpens = accordionItens.includes(index)
     
