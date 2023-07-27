@@ -6,6 +6,8 @@ import getListDatasets from "./getListDatasets";
 import getRawDataSources from "./getRawDataSources";
 import getShowDataset from "./getShowDataset";
 import postDataset from "./postDataset";
+import getDatasetEdit from "./getDatasetEdit";
+import deleteDataset from "./deleteDataset";
 
 export {
   getSearchDatasets,
@@ -16,4 +18,6 @@ export {
   getRawDataSources,
   getShowDataset,
   postDataset,
+  getDatasetEdit,
+  deleteDataset
 }

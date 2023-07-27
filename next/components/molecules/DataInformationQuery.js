@@ -171,9 +171,8 @@ export default function DataInformationQuery ({ resource }) {
   useEffect(() => {
     if (window) window?.Prism?.highlightAll()
 
-    if(resource?.numberRows || resource?.numberRows === 0) {
-      resource?.numberRows || 0 > 200000 ? setDownloadNotAllowed(false) : setDownloadNotAllowed(true)
-    }
+    if(resource?.numberRows === 0) return setDownloadNotAllowed(false)
+    if(resource?.numberRows) return resource?.numberRows > 200000 ? setDownloadNotAllowed(false) : setDownloadNotAllowed(true)
   }, [resource])
 
   const handlerDownload = () => {
@@ -372,7 +371,7 @@ bd_read_table, ///
               Antes de baixar os dados, apoie você também com uma doação financeira ou <Link color="#42B0FF" href="https://basedosdados.github.io/mais/colab_data/">saiba como contribuir com seu tempo</Link>.
             </SectionText>
 
-            {downloadNotAllowed &&
+            {!downloadNotAllowed &&
               <DisclaimerBox>
                 <HStack gridGap="8px" alignItems="flex-start">
                 <ExclamationIcon

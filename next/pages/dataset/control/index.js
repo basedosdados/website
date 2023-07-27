@@ -1,23 +1,19 @@
 import {
   Stack,
-  FormControl,
-  FormLabel,
-  Input,
-  Textarea,
-  Select,
-  Checkbox,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionIcon,
+  AccordionPanel,
+  Box,
 } from "@chakra-ui/react";
 import { useState, useEffect } from 'react';
+import { useRouter } from "next/router";
 import { MainPageTemplate } from "../../../components/templates/main";
 import authUser from "../../../middlewares/authUser";
-import SelectList from "../../../components/molecules/SelectList";
-import RoundedButton from "../../../components/atoms/RoundedButton";
-import SelectSearch from "../../../components/atoms/SelectSearch";
 import LoadingSpin from "../../../components/atoms/Loading";
-
-import {
-  postDataset
-} from "../../api/datasets"
+import PostDatasetForm from "../../../components/organisms/PostDatasetForm";
+import PostTableForm from "../../../components/organisms/PostTableForm";
 
 import {
   getAllOrganizations
@@ -40,25 +36,15 @@ export function getServerSideProps(context) {
 }
 
 export default function Control() {
+  const router = useRouter()
+  const { query } = router
+
   const [isLoading, setIsLoading] = useState(true)
   const [organizations, setOrganizations] = useState([])
   const [themes, setThemes] = useState([])
   const [tags, setTags] = useState([])
   const [status, setStatus] = useState([])
-  const [selectedThemes, setSelectedThemes] = useState([])
-  const [selectedTags, setSelectedTags] = useState([])
-  const [errors, setErrors] = useState({})
-  const [formData, setFormData] = useState({
-    slug: "",
-    name: "",
-    description: "",
-    organization: "",
-    themes: [],
-    tags: [],
-    version: 0,
-    status: "",
-    isClosed: false,
-  });
+  const [accordionItens, setAccordionItens] = useState([1])
 
   const fetchOrganizations = async () => {
     const allOrganizations = await getAllOrganizations()
@@ -94,38 +80,14 @@ export default function Control() {
     fetchData()
   },[])
 
-  useEffect(() => {
-    if(selectedThemes.length === 0) return setFormData({...formData, themes: []})
-    const result = selectedThemes.map((elm) => {return(`"${elm.node._id}"`)})
-    setFormData({...formData, themes: result})
-  },[selectedThemes])
-
-  useEffect(() => {
-    if(selectedTags.length === 0) return setFormData({...formData, tags: []})
-    const result = selectedTags.map((elm) => {return(`"${elm.node._id}"`)})
-    setFormData({...formData, tags: result})
-  },[selectedTags])
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: type === 'checkbox' ? checked : value
-    }))
-  }
-
-  const handleSubmit = async () => {
-    const result = await postDataset(formData)
-
-    // let arrayErrors = {}
-    if(result?.errors?.length > 0) {
-      console.log(result.errors)
-      // result.errors.map((elm) => {
-      //   if(elm.field === "username") arrayErrors = ({...arrayErrors, userName: elm.messages})
-      //   if(elm.field === "email") arrayErrors = ({...arrayErrors, email: elm.messages})
-      // })
+  const handleAccordionOpen = (index) => {
+    const itensOpens = accordionItens.includes(index)
+    
+    if (itensOpens) {
+      setAccordionItens((prevState) => prevState.filter((item) => item !== index))
+    } else {
+      setAccordionItens((prevState) => [...prevState, index])
     }
-    // setErrors(arrayErrors)
   }
 
   if(isLoading) return <MainPageTemplate paddingX="24px" height="600px"><LoadingSpin /></MainPageTemplate>
@@ -136,116 +98,94 @@ export default function Control() {
         width="100%"
         maxWidth="1264px"
         direction={{ base: "column", lg: "row" }}
+        justifyContent="center"
         margin="auto"
       >
-        <Stack
-          display="flex"
-          flexDirection="column"
-          width="600px"
-          gap="20px"
-          color="#252A32"
-          fontFamily="Lato"
-        >
-          <Stack flexDirection="row" gap="8px" spacing={0}>
-            <FormControl isRequired>
-              <FormLabel>Slug</FormLabel>
-              <Input name="slug" value={formData.slug} onChange={handleChange} />
-            </FormControl>
-
-            <FormControl isRequired>
-              <FormLabel>Name</FormLabel>
-              <Input name="name" value={formData.name} onChange={handleChange} />
-            </FormControl>
-          </Stack>
-
-          <FormControl>
-            <FormLabel>Description</FormLabel>
-            <Textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-            />
-          </FormControl>
-
-          <FormControl isRequired>
-            <FormLabel>Organization</FormLabel>
-            <SelectSearch 
-              name="organization"
-              value={formData.organization}
-              onChange={(e) => setFormData({...formData, organization: e})}
-              options={organizations}
-            />
-          </FormControl>
-
-          <FormControl>
-            <div style={{display: "flex", flexDirection: "row", gap: "4px"}}>
-              <FormLabel marginRight={0}>Themes</FormLabel>
-              <span style={{color: "#E53E3E"}}>*</span>
-            </div>
-            <SelectList
-              list={themes}
-              hasNode={true}
-              onChange={(e) => setSelectedThemes(e)}
-            />
-          </FormControl>
-
-          <FormControl>
-            <FormLabel>Tags</FormLabel>
-            <SelectList
-              list={tags}
-              hasNode={true}
-              onChange={(e) => setSelectedTags(e)}
-            />
-          </FormControl>
-
-          <FormControl>
-            <FormLabel>Version</FormLabel>
-            <Input
-              type="number"
-              name="version"
-              value={formData.version}
-              onChange={handleChange}
-            />
-          </FormControl>
-
-          <FormControl>
-            <FormLabel>Status</FormLabel>
-            <Select
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-            >
-              <option value={""}>...</option>
-              {status.map((elm) => {
-                  return (
-                    <option value={elm?.node?._id}>{elm?.node?.name}</option>
-                  )
-                })
-              }
-            </Select>
-          </FormControl>
-
-          <FormControl
+        {!query.dataset &&
+          <PostDatasetForm
+            organizations={organizations}
+            themes={themes}
+            tags={tags}
+            status={status}
+          />
+        }
+        {query.dataset &&
+          <Accordion
+            defaultIndex={accordionItens}
+            allowMultiple
+            width="100%"
             display="flex"
-            flexDirection="row"
-            gap="8px"
+            flexDirection="column"
+            alignItems="center"
           >
-            <FormLabel margin="0 !important">Is Closed?</FormLabel>
-            <Checkbox
-              name="isClosed"
-              checked={formData.isClosed}
-              onChange={handleChange}
-            />
-          </FormControl>
-
-          <RoundedButton
-            margin="0 auto"
-            width="200px"
-            type="submit"
-            onClick={() => handleSubmit()}
-          >Enviar
-          </RoundedButton>
-        </Stack>
+            <AccordionItem border={0}>
+              <AccordionButton
+                width="632px"
+                fontSize="16px"
+                color="#252A32"
+                _hover={{
+                  backgroundColor:"transparent",
+                  color:"#42B0FF",
+                  opacity: "0.8"
+                }}
+                onClick={() => handleAccordionOpen(0)}
+              >
+                <Box
+                  flex={1}
+                  textAlign="left"
+                  fontFamily="ubuntu"
+                  fontWeight="500"
+                  color={accordionItens.find((elm) => elm === 0) === 0 && "#42B0FF"}
+                >
+                  Dataset
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel>
+                <PostDatasetForm
+                  organizations={organizations}
+                  themes={themes}
+                  tags={tags}
+                  status={status}
+                />
+              </AccordionPanel>
+            </AccordionItem>
+            
+            <AccordionItem
+              border={0}
+            >
+              <AccordionButton
+                width="632px"
+                fontSize="16px"
+                color="#252A32"
+                _hover={{
+                  backgroundColor:"transparent",
+                  color:"#42B0FF",
+                  opacity: "0.8"
+                }}
+                onClick={() => handleAccordionOpen(1)}
+                margin="0 auto"
+              >
+                <Box
+                  flex={1}
+                  textAlign="left"
+                  fontFamily="ubuntu"
+                  fontWeight="500"
+                  color={accordionItens.find((elm) => elm === 1) === 1 && "#42B0FF"}
+                >
+                  Tables
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel>
+                <PostTableForm
+                  organizations={organizations}
+                  status={status}
+                />
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+        }
       </Stack>
     </MainPageTemplate>
   )

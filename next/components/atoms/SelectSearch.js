@@ -8,7 +8,10 @@ import { useState, useEffect, useRef } from "react";
 import FuzzySearch from "fuzzy-search";
 
 export default function SelectSearch({
+  value,
   onChange,
+  keyId = "_id",
+  displayName = "name",
   options = [],
   hasNode = true
 }) {
@@ -16,6 +19,14 @@ export default function SelectSearch({
   const [optionsArray, setOptionsArray] = useState(options)
   const [inputValue, setInputValue] = useState("")
   const [isOpen, setIsOpen] = useState(false);
+
+  if(value !== "" && inputValue == "") {
+    const findOption = () => {
+      if(hasNode) return options.find((option) => option.node[`${keyId}`] === value)
+      return options.find((option) => option[`${keyId}`] === value)
+    }
+    setInputValue(hasNode ? findOption().node[`${displayName}`] : findOption()[`${displayName}`])
+  }
 
   const mouseEnterEvent = () => {
     setIsOpen(true)
@@ -35,7 +46,7 @@ export default function SelectSearch({
   }
 
   const searcher = new FuzzySearch(
-    options, hasNode ? ["node.name"] : ["name"], {sort: true}
+    options, hasNode ? [`node.${displayName}`] : [`${displayName}`], {sort: true}
   )
 
   useEffect(() => {
@@ -57,7 +68,7 @@ export default function SelectSearch({
         position="absolute"
         zIndex={10}
         backgroundColor="#FFF"
-        top="70px"
+        top="75px"
         display={isOpen ? "block" : "none"}
         width="100%"
         height="fit-content"
@@ -82,13 +93,13 @@ export default function SelectSearch({
             <Text
               cursor="pointer"
               onClick={() => {
-                setInputValue(hasNode ? elm.node.name : elm.name)
+                setInputValue(hasNode ? elm.node[`${displayName}`] : elm[`${displayName}`])
                 setIsOpen(false)
-                onChange(hasNode ? elm.node._id : elm._id)
+                onChange(hasNode ? elm.node[`${keyId}`] : elm[`${keyId}`])
               }}
-              value={hasNode ? elm.node._id : elm._id}
+              value={hasNode ? elm.node[`${keyId}`] : elm[`${keyId}`]}
             >
-              {hasNode ? elm.node.name : elm.name}
+              {hasNode ? elm.node[`${displayName}`] : elm[`${displayName}`]}
             </Text>
           )
         })}

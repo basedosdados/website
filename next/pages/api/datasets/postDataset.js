@@ -14,7 +14,7 @@ export default async function postDataset({
   version,
   status,
   isClosed
-}) {
+}, id) {
   try {
     const res = await axios({
       method: 'POST',
@@ -27,6 +27,7 @@ export default async function postDataset({
         mutation {
           CreateUpdateDataset (input:
             {
+              ${id ? `id: "${id}"` : ""} 
               slug: "${slug}"
               name: "${name}"
               description: "${description}"

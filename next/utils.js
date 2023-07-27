@@ -216,19 +216,19 @@ export function removeEmpty(obj) {
 }
 
 export function isJWTInvalid(token) {
-  if (!token) return true;
+  if (!token) return true
 
   try {
-    const secret = process.env.JWT_SECRET;
-    const decoded = jwt.verify(token, secret);
+    const secret = process.env.JWT_SECRET
+    const decoded = jwt.verify(token, secret)
     if (decoded.email) {
-      return false;
+      return false
     }
 
     return true;
   } catch (error) {
     console.log(error)
 
-    return true;
+    return true
   }
 }

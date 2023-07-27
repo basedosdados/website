@@ -41,9 +41,7 @@ export default function Login() {
     } else if (!/^\S+@\S+$/.test(formData.email)) {
       validationErrors.email = "Email inválido"
     }
-    if (!formData.password) {
-      validationErrors.password = "A senha é necessária"
-    }
+    if (!formData.password) validationErrors.password = "A senha é necessária"
     setErrors(validationErrors)
 
     if (Object.keys(validationErrors).length === 0) {

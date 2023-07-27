@@ -10,12 +10,16 @@ import ChevronIcon from "../../public/img/icons/chevronIcon";
 import SimpleInput from "../atoms/SimpleInput";
 
 export default function SelectList({
+  value,
   list,
   onChange,
-  hasNode
+  hasNode = true,
+  error = false,
+  ...props
 }) {
   const defaultList = list
   const [defaultNewList, setDefaultNewList] = useState([])
+  const [defaultSearchList, setDefaultSearchList] = useState()
   const [selected, setSelected] = useState({})
   const [listOptions, setListOptions] = useState(defaultList)
   const [newList, setNewList] = useState([])
@@ -28,7 +32,7 @@ export default function SelectList({
   }
 
   const searcherDefaultList = new FuzzySearch(
-    defaultList, hasNode ? ["node.name"] : ["name"], {sort: true}
+    defaultSearchList, hasNode ? ["node.name"] : ["name"], {sort: true}
   )
 
   const searcherNewList = new FuzzySearch(
@@ -36,11 +40,13 @@ export default function SelectList({
   )
 
   useEffect(() => {
+    if(inputAddList === "") return
     const result = searcherDefaultList.search(inputAddList)
     setListOptions(result)
   }, [inputAddList])
 
   useEffect(() => {
+    if(inputNewList === "") return
     const result = searcherNewList.search(inputNewList)
     setNewList(result)
   }, [inputNewList])
@@ -65,10 +71,11 @@ export default function SelectList({
   }
 
   const addItem = () => {
-    if(selected == null) return null
+    if(selected === null || Object.keys(selected).length === 0) return null
     const newArray = listOptions.filter(res => res !== selected)
 
     setListOptions(newArray)
+    setDefaultSearchList(newArray)
     const result = [...defaultNewList, selected].sort(sortName)
     setNewList(result)
     setDefaultNewList(result)
@@ -77,19 +84,42 @@ export default function SelectList({
   }
 
   const removeItem = () => {
-    if(selected == null) return null
+    if(selected === null || Object.keys(selected).length === 0) return null
     const newArray = defaultNewList.filter(res => res !== selected)
 
     setNewList(newArray)
     setDefaultNewList(newArray)
     setListOptions([...listOptions, selected].sort(sortName))
+    setDefaultSearchList([...listOptions, selected].sort(sortName))
     onChange(newArray)
     clearInputs()
   }
 
+  useEffect(() => {
+    if(value.length > 0 && newList.length === 0 ) {
+      const subtractedArray = hasNode ?
+      listOptions
+        .filter(obj1 => !value
+          .some(obj2 => obj2?.node?._id === obj1?.node?._id
+        ))
+      :
+      listOptions
+        .filter(obj1 => !value
+          .some(obj2 => obj2?.id === obj1?.id
+        ))
+
+      setListOptions(subtractedArray)
+      setDefaultSearchList(subtractedArray)
+      setNewList(value)
+      setDefaultNewList(value)
+      onChange(value)
+    }
+  },[value])
+
   const removeAll = () => {
     setListOptions(defaultList)
     setDefaultNewList([])
+    setDefaultSearchList([])
     setNewList([])
     onChange([])
     clearInputs()
@@ -103,8 +133,10 @@ export default function SelectList({
       padding="20px"
       border="2px solid #FAFAFA"
       spacing={0}
+      borderRadius="8px"
       color="#252A32"
       fontFamily="Lato"
+      {...props}
     >
       <Stack
         flex={1}
@@ -178,7 +210,9 @@ export default function SelectList({
         flex={1}
         height="300px"
         padding="8px"
+        borderRadius="8px"
         border="2px solid #FAFAFA"
+        borderColor={error && "#E53E3E"}
       >
         <SimpleInput
           height="40px"
