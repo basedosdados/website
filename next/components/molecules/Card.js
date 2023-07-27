@@ -1,6 +1,10 @@
-import { Box, HStack, Flex } from "@chakra-ui/react";
+import {
+  Box,
+  HStack,
+  Flex
+} from "@chakra-ui/react";
 
-export function Card({
+export default function Card({
   children,
   icons = [],
   spacing = 5,
@@ -40,5 +44,5 @@ export function Card({
         {children}
       </Flex>
     </Box>
-  );
+  )
 }
