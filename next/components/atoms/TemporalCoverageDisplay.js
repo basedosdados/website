@@ -1,4 +1,5 @@
 import {
+  Stack,
   Center,
   Text
 } from "@chakra-ui/react";
@@ -96,5 +97,64 @@ export default function TemporalCoverage ({
     <Center>
       <Dates dates={startDate}/> - <Dates dates={endDate} margin="0 0 0 10px"/>
     </Center>
+  )
+}
+
+export function TemporalCoverageString({
+  value,
+  iconSettings = {width: "18px", height: "18px", fill: "#D0D0D0"},
+  textSettings = {}
+}) {
+
+  let pieces = value.split(" - ")
+  let dataStart = pieces[0]
+  let dataEnd = pieces[1]
+
+  const TextData = ({textSettings, string}) => {
+    return (
+      <Text
+        color="#252A32"
+        fontSize="14px"
+        lineHeight="24px"
+        letterSpacing="0.5px"
+        fontWeight="300"
+        fontFamily="Lato"
+        {...textSettings}
+      >
+        {string}
+      </Text>
+    )
+  }
+
+  return (
+    <Stack
+      flexDirection="row"
+      alignItems="center"
+      gap="8px"
+      spacing={0}
+    >
+      <Center>
+        <CalendarComunIcon
+          position="relative"
+          top="-1px"
+          margin="0 6px 0 0"
+          width="18px"
+          height="18px"
+          {...iconSettings}
+        />
+        <TextData textSettings={textSettings} string={dataStart}/>
+      </Center> <span>-</span> <Center>
+        <CalendarComunIcon
+          position="relative"
+          top="-1px"
+          margin="0 6px 0 0"
+          width="18px"
+          height="18px"
+          {...iconSettings}
+        />
+        <TextData textSettings={textSettings} string={dataEnd}/>
+      </Center>
+    </Stack>
+    
   )
 }

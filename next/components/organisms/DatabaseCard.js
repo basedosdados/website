@@ -151,6 +151,13 @@ export default function DatabaseCard({
           {tags.length !== 0 && tags.slice(0,3).map((t) => (
             <ThemeTag
               name={t.name}
+              display="block"
+              alignText="center"
+              whiteSpace="nowrap"
+              overflow="hidden"
+              minHeight="0"
+              padding="6px 8px"
+              textOverflow="ellipsis"
             />
           ))}
         </HStack>
@@ -165,7 +172,11 @@ export default function DatabaseCard({
           {databaseInfo[0]}
         </Text>
 
-        <HStack>
+        <HStack
+          spacing={0}
+          justifyContent="space-between"
+          width="220px"
+        >
           <a
             href={rawDataSources.length > 0 && `${link}?raw_data_source=${rawDataSources.id}`}
             target="_blank"

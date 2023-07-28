@@ -15,12 +15,10 @@ import Title from "../atoms/Title";
 import Link from "../atoms/Link";
 import SectionText from "../atoms/SectionText";
 import { ImageOrganization } from "../atoms/ImageOrganization";
-import TemporalCoverage from "../atoms/TemporalCoverageDisplay";
+import { TemporalCoverageString } from "../atoms/TemporalCoverageDisplay";
 
 import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";
-import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
-import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import { DataBaseSolidIcon } from "../../public/img/icons/databaseIcon";
 
 export default function Database({
@@ -29,13 +27,12 @@ export default function Database({
   temporalCoverageText,
   organization,
   tables,
-  tablesClosed,
   rawDataSources,
   informationRequests,
   themes = [],
 }) {
 
-  const TablesOpen = () => {
+  const Tables = () => {
     let tablesNumber = tables.number
     if(tables.number === undefined) tablesNumber = 0
 
@@ -64,48 +61,6 @@ export default function Database({
             {tablesNumber}{" "}
             {tablesNumber === 1 ? "tabela tratada" : "tabelas tratadas"}
           </Text>
-          <BDLogoPlusImage
-            widthImage="38px"
-            empty={tablesNumber === 0}
-          />
-        </HStack>
-      </a>
-    )
-  }
-
-  const TablesClosed = () => {
-    let tablesNumber = tablesClosed.number
-    if(tablesClosed.number === undefined) tablesNumber = 0
-
-    return (
-      <a href={tablesNumber > 0 && `/dataset/${id}?table=${tablesClosed.id}`}>
-        <HStack
-          spacing={1}
-          cursor={tablesNumber > 0 ? "pointer" : "normal"}
-          _hover={tablesNumber > 0 && {opacity: "0.7"}}
-        >
-          <DataBaseSolidIcon
-            alt="tabelas tratadas"
-            width="15px"
-            height="15px"
-            fill={tablesNumber === 0 ? "#C4C4C4" : "#2B8C4D"}
-          />
-          <Text
-            marginLeft="8px !important"
-            whiteSpace="nowrap"
-            color={tablesNumber === 0 ? "#C4C4C4" : "#2B8C4D"}
-            fontSize="16px"
-            fontWeight="500"
-            letterSpacing="0px"
-            fontFamily="Ubuntu"
-          >
-            {tablesNumber}{" "}
-            {tablesNumber === 1 ? "tabela tratada" : "tabelas tratadas"}
-          </Text>
-          <BDLogoProImage
-            widthImage="48px"
-            empty={tablesNumber === 0}
-          />
         </HStack>
       </a>
     )
@@ -233,6 +188,7 @@ export default function Database({
                 <HStack
                   justifyContent={{ base: "flex-start", lg: "flex-end" }}
                   margin={useCheckMobile() ? "16px 0px 0px !important" : "0px 0px 0px 28px !important"}
+                  height="36px"
                   spacing={2}
                 >
                   {themes.slice(0,6).map((elm) => (
@@ -295,8 +251,8 @@ export default function Database({
                   pb={{ base: 1, lg: 0 }}
                 >
                   <SectionText color="#6F6F6F">Cobertura temporal:</SectionText>
-                  <TemporalCoverage
-                    text={ temporalCoverageText ? temporalCoverageText : "Nenhuma cobertura temporal fornecida"}
+                  <TemporalCoverageString
+                    value={ temporalCoverageText ? temporalCoverageText : "Nenhuma cobertura temporal fornecida"}
                     textSettings={{color: "#6F6F6F", fontWeight:"400"}}
                   />
                 </HStack>
@@ -309,14 +265,8 @@ export default function Database({
               alignItems={useCheckMobile() && "flex-start"}
               spacing={useCheckMobile() ? 0 : 5}
             >
-        
-              {tablesClosed.number > 0 &&
-                <TablesClosed/>
-              }
-              <TablesOpen/>
-
+              <Tables/>
               <RawDataSources/>
-
               <InformationRequest/>
             </HStack>
           </VStack>
