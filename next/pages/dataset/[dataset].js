@@ -20,7 +20,7 @@ import GreenTab from "../../components/atoms/GreenTab";
 import ReadMore from "../../components/atoms/ReadMore";
 import HelpWidget from "../../components/atoms/HelpWidget";
 import { ImageOrganization } from "../../components/atoms/ImageOrganization";
-import TemporalCoverage from "../../components/atoms/TemporalCoverageDisplay";
+import { TemporalCoverageString } from "../../components/atoms/TemporalCoverageDisplay";
 import DatasetResource from "../../components/organisms/DatasetResource";
 import { MetadataPage } from "../../components/organisms/MetadataPage";
 import { MainPageTemplate } from "../../components/templates/main";
@@ -159,9 +159,8 @@ export default function DatasetPage ({
                   marginTop="4px !important"
                   fontSize={isMobileMod() ? "14px" : "16px"}
                 >
-                  <TemporalCoverage
-                    // value={dataset?.coverages?.[0]?.datetimeRanges?.[0]}
-                    text={dataset.coverage ? dataset.coverage :"Nenhuma cobertura temporal fornecida"}
+                  <TemporalCoverageString
+                    value={dataset.coverage ? dataset.coverage :"Nenhuma cobertura temporal fornecida"}
                   />
                 </SectionText>
               </VStack>

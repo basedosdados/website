@@ -1,13 +1,14 @@
 import {
   Stack,
   Center,
-  Text
+  Text,
+  Progress
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { CalendarComunIcon } from "../../public/img/icons/calendarIcon";
 import TimeIcon from "../../public/img/icons/timeIcon";
 
-export default function TemporalCoverage ({
+export function TemporalCoverage ({
   value,
   text,
   iconSettings = {width: "18px", height: "18px", fill: "#D0D0D0"},
@@ -95,7 +96,7 @@ export default function TemporalCoverage ({
 
   return (
     <Center>
-      <Dates dates={startDate}/> - <Dates dates={endDate} margin="0 0 0 10px"/>
+      <Dates dates={startDate}/> ─ <Dates dates={endDate} margin="0 0 0 10px"/>
     </Center>
   )
 }
@@ -155,6 +156,23 @@ export function TemporalCoverageString({
         <TextData textSettings={textSettings} string={dataEnd}/>
       </Center>
     </Stack>
-    
+  )
+}
+
+export function TemporalCoverageBar () {
+
+  return (
+    <Stack 
+      position="relative"  
+      width="600px"
+    >
+      <Progress
+        value={80}
+        position='absolute'
+        height='3px'
+        width='full'
+        top='10px'
+      />
+    </Stack>
   )
 }
