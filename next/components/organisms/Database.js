@@ -275,6 +275,7 @@ export default function Database({
                       textOverflow="ellipsis"
                     >
                       {contains.free && "Grátis"} {contains.free && contains.pro && "e"} {contains.pro && "Pro"}
+                      {!contains.free && !contains.pro && "Não listado"}
                     </SectionText>
                 </HStack>
               </Stack>
