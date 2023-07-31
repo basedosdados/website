@@ -29,6 +29,7 @@ export default function Database({
   tables,
   rawDataSources,
   informationRequests,
+  contains,
   themes = [],
 }) {
 
@@ -146,10 +147,10 @@ export default function Database({
           <ImageOrganization
             title={organization.name}
             image={organization?.picture || organization?.image}
-            maxWidth="115px"
-            maxHeight="115px"
-            minWidth="115px"
-            minHeight="115px"
+            maxWidth="138px"
+            maxHeight="138px"
+            minWidth="138px"
+            minHeight="138px"
             borderRadius="10px"
             backgroundColor="#eee"
           />
@@ -255,6 +256,26 @@ export default function Database({
                     value={ temporalCoverageText ? temporalCoverageText : "Nenhuma cobertura temporal fornecida"}
                     textSettings={{color: "#6F6F6F", fontWeight:"400"}}
                   />
+                </HStack>
+              </Stack>
+              <Stack
+                direction={{ base: "column", lg: "row" }}
+                spacing={{ base: 0, lg: 5 }}
+              >
+                <HStack
+                  spacing={2}
+                  align="flex-start"
+                  pb={{ base: 1, lg: 0 }}
+                >
+                  <SectionText color="#6F6F6F">Recursos:</SectionText>
+                  <SectionText
+                      color="#6F6F6F"
+                      fontWeight="400"
+                      noOfLines={1}
+                      textOverflow="ellipsis"
+                    >
+                      {contains.free && "Grátis"} {contains.free && contains.pro && "e"} {contains.pro && "Pro"}
+                    </SectionText>
                 </HStack>
               </Stack>
             </VStack>

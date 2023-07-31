@@ -331,6 +331,11 @@ export default function SearchPage({ pages }) {
           id: data?.first_information_request_id,
           number: data?.n_information_requests
         }}
+        contains={{
+          // trocar por contains_open_data futuramente
+          free: data?.contains_open_tables,
+          pro: data?.contains_closed_data
+        }}
       />
     )
   }

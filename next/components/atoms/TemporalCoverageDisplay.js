@@ -143,7 +143,7 @@ export function TemporalCoverageString({
           {...iconSettings}
         />
         <TextData textSettings={textSettings} string={dataStart}/>
-      </Center> <span>-</span> <Center>
+      </Center> <span style={{color: "#A3A3A3"}}>─</span> <Center>
         <CalendarComunIcon
           position="relative"
           top="-1px"
