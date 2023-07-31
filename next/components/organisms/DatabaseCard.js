@@ -6,13 +6,11 @@ import {
   Tooltip,
   Stack
 } from "@chakra-ui/react";
-import { Card } from "../molecules/Card";
+import Card from "../molecules/Card";
 import { CategoryIcon } from "../atoms/CategoryIcon";
 import Link from "../atoms/Link";
 import { ThemeTag } from "../atoms/ThemeTag";
-import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 
 export default function DatabaseCard({
   name,
@@ -20,7 +18,6 @@ export default function DatabaseCard({
   organization,
   tags = [],
   tables,
-  tablesClosed,
   rawDataSources,
   informationRequests,
   link,
@@ -28,49 +25,22 @@ export default function DatabaseCard({
   const isMobile = useCheckMobile();
   const databaseInfo = [];
 
-  databaseInfo.push(
-    <HStack
-      flexDirection="column"
-      alignItems="flex-start"
-      whiteSpace="nowrap"
-      fontFamily="Ubuntu"
-      fontSize="14px"
-      letterSpacing="0.3px"
-      spacing={2}
-    >
-      {tablesClosed.number > 0 &&
-        <Stack
-          margin="0 !important"
-          cursor={tablesClosed?.number > 0 ? "pointer" : "default"}
-          _hover={tablesClosed?.number === undefined ||tablesClosed?.number > 0 && {opacity : "0.7"}}
-          color={tablesClosed?.number === undefined || tablesClosed?.number === 0? "#C4C4C4" : "#8A7500" }
-        >
-          <a
-            
-            href={tablesClosed.number > 0 && `${link}?table=${tablesClosed.id}`}
-            target="_blank"
-            style={{display: "flex"}}
-          >
-            <b>{tablesClosed.number === 1 ?
-              "1 tabela tratada"
-            : 
-              `${tablesClosed?.number || 0} tabelas tratadas`
-            }</b>
-            <BDLogoProImage
-              widthImage="50px"
-              marginLeft="5px !important"
-              empty={tablesClosed.number === 0}
-            />
-          </a>
-        </Stack>
-      }
-
-      {tablesClosed.number < 0 ? <></> :
+  if(tables.number > 0) {
+    databaseInfo.push(
+      <HStack
+        flexDirection="column"
+        alignItems="flex-start"
+        whiteSpace="nowrap"
+        fontFamily="Ubuntu"
+        fontSize="14px"
+        letterSpacing="0.3px"
+        spacing={2}
+      >
         <Stack
           margin="0 !important"
           cursor={tables?.number > 0 ? "pointer" : "default"}
           _hover={tables?.number === undefined ||tables?.number > 0 && {opacity : "0.7"}}
-          color={tables?.number === undefined || tables?.number === 0? "#C4C4C4" : "#42B0FF"}
+          color={tables?.number === undefined || tables?.number === 0? "#C4C4C4" : "#2B8C4D"}
         >
           <a
             href={tables?.number > 0 && `${link}?table=${tables?.id}`}
@@ -82,16 +52,11 @@ export default function DatabaseCard({
             : 
               `${tables?.number || 0} tabelas tratadas`
             }</b>
-            <BDLogoPlusImage
-              widthImage="38px"
-              marginLeft="5px !important"
-              empty={tables?.number === 0}
-            />
           </a>
         </Stack>
-      }
-    </HStack>
-  )
+      </HStack>
+    )
+  }
 
   if (rawDataSources.number > 0) {
     databaseInfo.push(
@@ -180,13 +145,20 @@ export default function DatabaseCard({
 
       <VStack spacing={1} align="flex-start" marginTop="auto">
         <HStack
-          width="100%"
-          overflowX="auto"
-          className="no-scrollbar"
-          margin="8px 0 20px"
+          width="230px"
+          margin="8px 0 16px"
         >
           {tags.length !== 0 && tags.slice(0,3).map((t) => (
-            <ThemeTag name={t.name}/>
+            <ThemeTag
+              name={t.name}
+              display="block"
+              alignText="center"
+              whiteSpace="nowrap"
+              overflow="hidden"
+              minHeight="0"
+              padding="6px 8px"
+              textOverflow="ellipsis"
+            />
           ))}
         </HStack>
 
@@ -200,7 +172,11 @@ export default function DatabaseCard({
           {databaseInfo[0]}
         </Text>
 
-        <HStack>
+        <HStack
+          spacing={0}
+          justifyContent="space-between"
+          width="220px"
+        >
           <a
             href={rawDataSources.length > 0 && `${link}?raw_data_source=${rawDataSources.id}`}
             target="_blank"
@@ -237,5 +213,5 @@ export default function DatabaseCard({
         </HStack>
       </VStack>
     </Card>
-  );
+  )
 }

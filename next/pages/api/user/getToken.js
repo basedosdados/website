@@ -1,4 +1,5 @@
 import axios from "axios";
+import cookies from 'js-cookie';
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
@@ -18,7 +19,8 @@ export default async function getToken({ email, password }) {
         }`
       }
     })
-    const data = res.data
+    const data = res.data?.data
+    cookies.set('token', data?.tokenAuth?.token)
     return data
   } catch (error) {
     console.error(error)

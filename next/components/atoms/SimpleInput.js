@@ -10,6 +10,7 @@ export default function SimpleInput({
   type,
   value,
   onChange,
+  onKeyDown,
   placeholder,
   elmLeft = null,
   elmRight = null,
@@ -24,10 +25,12 @@ export default function SimpleInput({
       <Input
         type={type}
         value={value}
+        onKeyDown={onKeyDown}
         onChange={onChange}
         placeholder={placeholder}
         fontFamily="Lato"
         fontWeight="300"
+        color="#252A32"
         border="1px solid #DEDFE0 !important"
         _placeholder={{ color: "#A3A3A3" }}
         _focus={{border:"2px solid #42B0FF !important" }}

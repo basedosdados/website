@@ -8,25 +8,18 @@ import {
   Select,
   Skeleton,
   Flex,
-  Button,
-  Icon,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalCloseButton,
-  ModalBody,
-  useDisclosure,
   Box,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import cookies from "js-cookie";
 import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
-import { getSearchDatasets } from "../api/datasets/index";
-
-import { addParametersToCurrentURL, isBdPlus, unionArrays } from "../../utils";
+import {
+  getSearchDatasets
+} from "../api/datasets/index";
 
 import { DebouncedControlledInput } from "../../components/atoms/ControlledInput";
 import {
@@ -46,38 +39,6 @@ import FilterIcon from "../../public/img/icons/filterIcon";
 import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import NotFoundImage from "../../public/img/notFoundImage";
-
-function NewDatasetModal({ isOpen, onClose }) {
-  return (
-    <Modal
-      size="2xl"
-      closeOnOverlayClick={false}
-      isOpen={isOpen}
-      onClose={onClose}
-    >
-      <ModalOverlay zIndex="999" />
-      <ModalContent zIndex="9999">
-        <ModalCloseButton />
-        <ModalBody padding="20px 20px">
-          <SchemaForm
-            schemaName="Dataset"
-            // loadSchemaFunction={getDatasetSchema}
-            // updateFunction={createDataset}
-            prepareData={(d) => {
-              d.private = false;
-
-              return d;
-            }}
-            onSuccess={(data) => {
-              const name = data.result.name;
-              window.open("/dataset/" + name, "_self");
-            }}
-          />
-        </ModalBody>
-      </ModalContent>
-    </Modal>
-  )
-}
 
 function FilterTags({
   label,
@@ -130,7 +91,10 @@ export default function SearchPage({ pages }) {
   const [pageInfo, setPageInfo] = useState({})
   const [isLoading, setIsLoading] = useState(true)
 
-  // const datasetDisclosure = useDisclosure()
+  let userData = cookies.get("user") || null
+  if(userData !== null) userData = JSON.parse(cookies.get("user"))
+
+
   // const [order, setOrder] = useState("score")
 
   async function getDatasets({q, filters, page}) {
@@ -353,15 +317,11 @@ export default function SearchPage({ pages }) {
         id={data.id}
         themes={data?.themes}
         name={data?.name || "Conjunto sem nome"}
-        temporalCoverageText={data?.temporal_coverage}
+        temporalCoverageText={data?.temporal_coverage[0] || ""}
         organization={data.organization[0]}
         tables={{
           id: data?.first_table_id,
-          number: data?.n_open_tables
-        }}
-        tablesClosed={{
-          id: data?.first_closed_table_id,
-          number: data?.n_closed_tables
+          number: data?.n_tables
         }}
         rawDataSources={{
           id: data?.first_raw_data_source_id,
@@ -370,6 +330,11 @@ export default function SearchPage({ pages }) {
         informationRequests={{
           id: data?.first_information_request_id,
           number: data?.n_information_requests
+        }}
+        contains={{
+          // trocar por contains_open_data futuramente
+          free: data?.contains_open_tables,
+          pro: data?.contains_closed_data
         }}
       />
     )
@@ -410,9 +375,6 @@ export default function SearchPage({ pages }) {
           key="ogtitle"
         />
       </Head>
-
-      {/* modal para a criacao de datasets */}
-      {/* <NewDatasetModal {...datasetDisclosure} />*/}
 
       <DebouncedControlledInput
         value={query.q}
@@ -707,23 +669,17 @@ export default function SearchPage({ pages }) {
                 {query.q ? ` para ${query.q}` : ""}
               </Heading>
 
-              {/* Button create dataset */}
-              {/* {userData?.is_admin && 
-                <Button
-                  w="170px"
-                  backgroundColor="#42B0FF"
-                  colorScheme="blue"
-                  onClick={datasetDisclosure.onOpen}
-                  leftIcon={
-                    <Icon>
-                      <FontAwesomeIcon icon={faPlus} />
-                    </Icon>
-                  }
+              {userData?.isAdmin && 
+                <RoundedButton
+                  width="fit-content"
+                  padding="20px"
+                  onClick={() => window.open("/dataset/control", "_self")}
                   marginLeft="auto"
+                  _hover={{transform: "none", opacity: "0.8"}}
                 >
                   Criar Conjunto
-                </Button>
-              } */}
+                </RoundedButton>
+              }
             </Flex>
 
             {/* Tags container */}
@@ -852,7 +808,7 @@ export default function SearchPage({ pages }) {
                 bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
               />
             }
-          </>})
+          </>}
         </VStack>
       </Stack>
       <script

@@ -7,13 +7,14 @@ export default async function registerAccount({
   firstName,
   lastName,
   email,
-  password
+  password,
 }) {
   try {
     const res = await axios({
       url: API_URL,
       method: "POST",
       headers: {
+        Authorization: `Bearer `
       },
       data: {
         query: `

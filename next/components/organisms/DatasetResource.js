@@ -1,12 +1,10 @@
 import {
   Stack,
   VStack,
-  Center,
-  Skeleton,
-  Spinner,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import cookies from "js-cookie";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 
 import SimpleButton from "../atoms/SimpleButton";
@@ -19,6 +17,10 @@ import InformationRequestPage from "./InformationRequestPage";
 import CrossIcon from "../../public/img/icons/crossIcon";
 
 function AdminButtons() {
+  let userData = cookies.get("user") || null
+  if(userData !== null) userData = JSON.parse(cookies.get("user"))
+
+  if(!userData?.isAdmin) return null
 
   return (
     <Stack paddingTop="16px" width="100%">
@@ -153,7 +155,7 @@ export default function DatasetResource({
         justify="flex-start"
         borderRight={!isMobileMod() && "1px solid #DEDFE0"}
       >
-        {/* <AdminButtons/> */}
+        <AdminButtons/>
 
         <FilterAccordion
           alwaysOpen={true}
