@@ -15,8 +15,8 @@ export default function Card({
     <Box
       width="280px"
       minWidth="280px"
-      height="290px"
-      minHeight="290px"
+      height="320px"
+      minHeight="320px"
       boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
       _hover={{ boxShadow:"0px 7px 19px 1px rgb(64 60 67 / 16%)" }}
       backgroundColor="#FFFFFF"
