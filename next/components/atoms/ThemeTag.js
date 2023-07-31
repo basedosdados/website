@@ -16,7 +16,7 @@ export function ThemeTag({ name, ...style }) {
       fontFamily="ubuntu"
       {...style}
     >
-      <a href={`/dataset?tag=${name}`} target="_blank">
+      <a href={`/dataset?tag=${name.toLowerCase()}`} target="_blank">
         {name}
       </a>
     </Tag>

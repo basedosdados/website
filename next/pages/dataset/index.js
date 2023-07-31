@@ -317,15 +317,11 @@ export default function SearchPage({ pages }) {
         id={data.id}
         themes={data?.themes}
         name={data?.name || "Conjunto sem nome"}
-        temporalCoverageText={data?.temporal_coverage}
+        temporalCoverageText={data?.temporal_coverage[0] || ""}
         organization={data.organization[0]}
         tables={{
           id: data?.first_table_id,
-          number: data?.n_open_tables
-        }}
-        tablesClosed={{
-          id: data?.first_closed_table_id,
-          number: data?.n_closed_tables
+          number: data?.n_tables
         }}
         rawDataSources={{
           id: data?.first_raw_data_source_id,
@@ -334,6 +330,11 @@ export default function SearchPage({ pages }) {
         informationRequests={{
           id: data?.first_information_request_id,
           number: data?.n_information_requests
+        }}
+        contains={{
+          // trocar por contains_open_data futuramente
+          free: data?.contains_open_tables,
+          pro: data?.contains_closed_data
         }}
       />
     )
