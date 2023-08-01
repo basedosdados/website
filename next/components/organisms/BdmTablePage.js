@@ -212,7 +212,13 @@ export default function BdmTablePage({ id }) {
         </SectionText>
       </VStack>
       
-      <VStack width="100%" spacing={4} alignItems="flex-start">
+      <VStack
+        width="100%"
+        maxWidth="600px"
+        paddingRight="40px"
+        spacing={4}
+        alignItems="flex-start"
+      >
         <Subtitle>Cobertura temporal</Subtitle>
         <TemporalCoverageBar/>
       </VStack>

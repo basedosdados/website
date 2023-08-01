@@ -2,9 +2,12 @@ import {
   Stack,
   Center,
   Text,
-  Progress
+  Progress,
+  Box,
+  Badge
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import { CalendarComunIcon } from "../../public/img/icons/calendarIcon";
 import TimeIcon from "../../public/img/icons/timeIcon";
 
@@ -159,20 +162,143 @@ export function TemporalCoverageString({
   )
 }
 
-export function TemporalCoverageBar () {
+export function TemporalCoverageBar ({
+  value,
+  text
+}) {
+
+  let dataStart = 2000
+  let dataEnd = 2021
+  let dataEndPro = 2023
+
+  const TextData = ({ string }) => {
+    return (
+      <Text
+        color="#252A32"
+        fontSize="14px"
+        lineHeight="24px"
+        letterSpacing="0.5px"
+        fontWeight="300"
+        fontFamily="Lato"
+      >
+        {string}
+      </Text>
+    )
+  }
 
   return (
     <Stack 
       position="relative"  
-      width="600px"
+      width="100%"
+      margin="50px 0 80px !important"
+      spacing={0}
     >
       <Progress
-        value={80}
-        position='absolute'
-        height='3px'
-        width='full'
-        top='10px'
+        value={useCheckMobile() ? 54 :73}
+        height="3px"
+        marginLeft="10px"
+        width="100%"
+        backgroundColor="#9C8400"
+        colorScheme="greenBD"
       />
+
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="flex-start"
+        position="absolute"
+        top="-7px"
+        gap="12px"
+      >
+        <Box
+          width="18px"
+          height="18px"
+          borderRadius="50%"
+          backgroundColor="#2B8C4D"
+        />
+        <Center position="relative" left="-1px">
+          <CalendarComunIcon
+            position="relative"
+            top="-1px"
+            margin="0 6px 0 0"
+            width="20px"
+            height="20px"
+            fill="#2B8C4D"
+          />
+          <TextData string={dataStart}/>
+        </Center>
+      </Box>
+
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        position="absolute"
+        left={useCheckMobile() ? "45%" : "70%"}
+        top="-41px"
+        gap="12px"
+      >
+        <Badge
+          backgroundColor="#D5E6DC"
+          color="#1C703A"
+          padding="2px 10px"
+          borderRadius="12px"
+        >GRÁTIS</Badge>
+        <Box
+          width="18px"
+          height="18px"
+          borderRadius="50%"
+          backgroundColor="#2B8C4D"
+        />
+        <Center>
+          <CalendarComunIcon
+            position="relative"
+            top="-1px"
+            margin="0 6px 0 0"
+            width="20px"
+            height="20px"
+            fill="#2B8C4D"
+          />
+          <TextData string={dataEnd}/>
+        </Center>
+      </Box>
+
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        position="absolute"
+        left="96%"
+        top="-41px"
+        gap="12px"
+      >
+        <Badge
+          backgroundColor="#FAEEAE"
+          color="#7D6A00"
+          padding="2px 10px"
+          borderRadius="12px"
+        >PRO</Badge>
+        <Box
+          width="18px"
+          height="18px"
+          borderRadius="50%"
+          backgroundColor="#9C8400"
+        />
+        <Center
+          position="relative"
+          left={useCheckMobile() && "-20px"}
+        >
+          <CalendarComunIcon
+            position="relative"
+            top="-1px"
+            margin="0 6px 0 0"
+            width="20px"
+            height="20px"
+            fill="#9C8400"
+          />
+          <TextData string={dataEndPro}/>
+        </Center>
+      </Box>
     </Stack>
   )
 }
