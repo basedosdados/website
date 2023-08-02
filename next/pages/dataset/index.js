@@ -332,8 +332,7 @@ export default function SearchPage({ pages }) {
           number: data?.n_information_requests
         }}
         contains={{
-          // trocar por contains_open_data futuramente
-          free: data?.contains_open_tables,
+          free: data?.contains_open_data,
           pro: data?.contains_closed_data
         }}
       />
