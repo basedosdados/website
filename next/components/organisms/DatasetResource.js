@@ -90,7 +90,7 @@ export default function DatasetResource({
 }) {
   const router = useRouter()
   const { query } = router
-  const [tables, setTables] = useState({})
+  const [tables, setTables] = useState([])
   const [rawDataSources, setRawDataSources] = useState([])
   const [informationRequests, setInformationRequests] = useState([])
 
@@ -115,12 +115,10 @@ export default function DatasetResource({
 
   useEffect(() => {
     const dataset_tables = dataset?.tables?.edges.map((elm) => elm.node) || []
-    const bdmaisFilter = dataset_tables.filter(elm => elm.isClosed !== true)
-    const bdproFilter = dataset_tables.filter((elm) => elm.isClosed === true)
     const raw_data_sources = dataset?.rawDataSources?.edges.map((elm) => elm.node) || []
     const information_request = dataset?.informationRequests?.edges.map((elm) => elm.node) || []
 
-    setTables({bdmais:bdmaisFilter.sort(sortElements), bdpro: bdproFilter.sort(sortElements)})
+    setTables(dataset_tables.sort(sortElements))
     setRawDataSources(raw_data_sources.sort(sortElements))
     setInformationRequests(information_request.sort(sortElements))
 
@@ -159,26 +157,11 @@ export default function DatasetResource({
 
         <FilterAccordion
           alwaysOpen={true}
-          choices={tables.bdpro || []}
+          choices={tables}
           value={query.table}
           valueField="_id"
           displayField="name"
           fieldName="Tabelas tratadas"
-          bdPro={true}
-          isHovering={false}
-          onChange={(id) => {
-            pushQuery("table", id)
-          }}
-        />
-
-        <FilterAccordion
-          alwaysOpen={true}
-          choices={tables.bdmais || []}
-          value={query.table}
-          valueField="_id"
-          displayField="name"
-          fieldName="Tabelas tratadas"
-          bdPlus={true}
           isHovering={false}
           onChange={(id) => {
             pushQuery("table", id)

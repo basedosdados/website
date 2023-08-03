@@ -437,28 +437,9 @@ export default function SearchPage({ pages }) {
             alwaysOpen= {isLoading ? false : true}
             choices={[
               {
-                key: "closed_tables",
-                name: (
-                  <HStack whiteSpace="nowrap">
-                    <div>Tabelas tratadas</div>
-                    <BDLogoProImage
-                      widthImage="52px"
-                    />
-                  </HStack>
-                ),
-                count: aggregations?.contains_closed_tables?.filter(elm => elm.key === 1)[0]?.count || 0
-              },
-              {
-                key: "open_tables",
-                name: (
-                  <HStack whiteSpace="nowrap">
-                    <div>Tabelas tratadas</div>
-                    <BDLogoPlusImage
-                      widthImage="40px"
-                    />
-                  </HStack>
-                ),
-                count: aggregations?.contains_open_tables?.filter(elm => elm.key === 1)[0]?.count || 0
+                key: "tables",
+                name: "Tabelas tratadas",
+                count: aggregations?.contains_tables?.filter(elm => elm.key === 1)[0]?.count || 0
               },
               {
                 key: "raw_data_sources",
@@ -477,6 +458,28 @@ export default function SearchPage({ pages }) {
             fieldName="Conjuntos com"
             valuesChecked={valuesCheckedFilter("datasets_with")}
             onChange={(value) => handleSelectFilter(["datasets_with",`${value}`])}
+          />
+
+          <CheckboxFilterAccordion
+            alwaysOpen= {isLoading ? false : true}
+            choices={[
+              {
+                key: "open_data",
+                name: "Grátis",
+                count: aggregations?.contains_open_data?.filter(elm => elm.key === 1)[0]?.count || 0
+              },
+              {
+                key: "closed_data",
+                name: "Pro",
+                count: aggregations?.contains_closed_data?.filter(elm => elm.key === 1)[0]?.count || 0
+              }
+            ]}
+            isActive={validateActiveFilterAccordin("contains")}
+            valueField="key"
+            displayField="name"
+            fieldName="Recursos"
+            valuesChecked={valuesCheckedFilter("contains")}
+            onChange={(value) => handleSelectFilter(["contains",`${value}`])}
           />
 
           <CheckboxFilterAccordion
