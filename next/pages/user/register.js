@@ -5,11 +5,16 @@ import {
   FormLabel,
   FormErrorMessage,
   UnorderedList,
-  ListItem
+  ListItem,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverCloseButton,
+  PopoverHeader,
 } from "@chakra-ui/react";
 import { useState } from "react";
 
-import { registerAccount, getToken } from "../api/token";
+import { registerAccount, getToken } from "../api/user";
 
 import Input from "../../components/atoms/SimpleInput";
 import Button from "../../components/atoms/RoundedButton";
@@ -116,8 +121,8 @@ export default function Register() {
     if(result?.errors?.length === 0) {
       const acess = await getToken({email, password})
 
-      if(acess?.errors?.length > 0) return 
-      localStorage.setItem("token_user", acess.data.tokenAuth.token)
+      if(acess?.errors?.length > 0) return
+
       window.open("/", "_self")
     }
   }

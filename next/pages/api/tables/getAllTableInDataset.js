@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-export default async function getAllThemes() {
+export default async function getAllTableInDataset(dataset) {
   try {
     const res = await axios({
       url: API_URL,
@@ -10,11 +10,10 @@ export default async function getAllThemes() {
       data: {
         query: `
         query {
-          allTheme {
+          allTable (dataset_Id: "${dataset}"){
             edges {
               node {
                 _id
-                slug
                 name
               }
             }
@@ -24,7 +23,7 @@ export default async function getAllThemes() {
         variables: null
       }
     })
-    const data = res?.data?.data?.allTheme?.edges
+    const data = res?.data?.data?.allTable?.edges
     return data
   } catch (error) {
     console.error(error)
