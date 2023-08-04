@@ -364,6 +364,23 @@ export default function SearchPage({ pages }) {
     return selectedFilters.map((elm) => elm[0] === text).find(res => res === true)
   }
 
+  const validateActiveSetsWith = (text) => {
+    return selectedFilters.map((elm) => 
+        elm[1] === "tables"
+      ||elm[1] === "raw_data_sources"
+      ||elm[1] === "information_requests").find(
+      res => res === true
+    )
+  }
+
+  const validateActiveResource = (text) => {
+    return selectedFilters.map((elm) => 
+        elm[1] === "open_data"
+      ||elm[1] === "closed_data").find(
+      res => res === true
+    )
+  }
+
   return (
     <MainPageTemplate pages={pages}>
       <Head>
@@ -452,12 +469,12 @@ export default function SearchPage({ pages }) {
                 count: aggregations?.contains_information_requests?.filter(elm => elm.key === 1)[0]?.count || 0
               },
             ]}
-            isActive={validateActiveFilterAccordin("datasets_with")}
+            isActive={validateActiveSetsWith("contains")}
             valueField="key"
             displayField="name"
             fieldName="Conjuntos com"
-            valuesChecked={valuesCheckedFilter("datasets_with")}
-            onChange={(value) => handleSelectFilter(["datasets_with",`${value}`])}
+            valuesChecked={valuesCheckedFilter("contains")}
+            onChange={(value) => handleSelectFilter(["contains",`${value}`])}
           />
 
           <CheckboxFilterAccordion
@@ -474,7 +491,7 @@ export default function SearchPage({ pages }) {
                 count: aggregations?.contains_closed_data?.filter(elm => elm.key === 1)[0]?.count || 0
               }
             ]}
-            isActive={validateActiveFilterAccordin("contains")}
+            isActive={validateActiveResource("contains")}
             valueField="key"
             displayField="name"
             fieldName="Recursos"
