@@ -44,7 +44,7 @@ export default function Control() {
   const [themes, setThemes] = useState([])
   const [tags, setTags] = useState([])
   const [status, setStatus] = useState([])
-  const [accordionItens, setAccordionItens] = useState([1])
+  const [accordionItens, setAccordionItens] = useState([0])
 
   const fetchOrganizations = async () => {
     const allOrganizations = await getAllOrganizations()

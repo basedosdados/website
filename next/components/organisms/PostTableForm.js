@@ -148,7 +148,7 @@ export default function PostTableForm({
         </AccordionItem>
 
         {tables && tables.map((table, i) => 
-          <AccordionItem border={0}>
+          <AccordionItem key={i} border={0}>
             <AccordionButton
               width="632px"
               fontSize="16px"
