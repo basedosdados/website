@@ -90,6 +90,10 @@ export default function Control() {
     }
   }
 
+  useEffect(() => {
+    if(query.table) setAccordionItens([1])
+  }, [query])
+
   if(isLoading) return <MainPageTemplate paddingX="24px" height="600px"><LoadingSpin /></MainPageTemplate>
 
   return (
