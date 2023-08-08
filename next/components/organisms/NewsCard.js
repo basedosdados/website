@@ -1,5 +1,5 @@
-import { Card } from "../molecules/Card";
 import { VStack } from "@chakra-ui/react";
+import Card from "../molecules/Card";
 import Image from "next/image";
 import Subtitle from "../atoms/Subtitle";
 import Title from "../atoms/Title";

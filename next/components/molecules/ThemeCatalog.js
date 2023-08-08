@@ -206,12 +206,8 @@ function CardThemes ({ responsive, datasetsCards = [], loading }) {
                 organization={elm?.organization[0]}
                 tags={elm?.tags}
                 tables={{
-                  id: elm?.first_table_id,
-                  number: elm?.n_open_tables
-                }}
-                tablesClosed={{
-                  id: elm?.first_closed_table_id,
-                  number: elm?.n_closed_tables
+                  id: elm?.first_table_id || elm?.first_closed_table_id,
+                  number: elm?.n_tables
                 }}
                 rawDataSources={{
                   id: elm?.first_raw_data_source_id,
