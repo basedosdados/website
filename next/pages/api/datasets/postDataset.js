@@ -30,6 +30,7 @@ export default async function postDataset({
               ${id ? `id: "${id}"` : ""} 
               slug: "${slug}"
               name: "${name}"
+              namePt: "${name}"
               description: "${description}"
               organization: "${organization}"
               themes: [${themes}]

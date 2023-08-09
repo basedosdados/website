@@ -43,6 +43,7 @@ export default async function postTable({
               dataset: "${dataset}",
               slug: "${slug}"
               name: "${name}"
+              namePt: "${name}"
               description: "${description}"
               status: "${status}",
               license: "${license}",

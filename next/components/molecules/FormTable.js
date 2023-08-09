@@ -143,7 +143,7 @@ export default function FormTable({
       setFormData(valueFormData())
       setIsLoading(false)
     }
-
+    
     if(query.table) fetchTable(query.table)
   }, [id, query])
 
@@ -282,74 +282,83 @@ export default function FormTable({
         />
       </FormControl>
 
-      <FormControl isInvalid={!!errors.dataCleaningCodeUrl}>
-        <FormLabel>Data cleaning code url</FormLabel>
-        <Input name="dataCleaningCodeUrl" value={formData.dataCleaningCodeUrl} onChange={handleChange} />
-        <FormErrorMessage>{errors.dataCleaningCodeUrl}</FormErrorMessage>
-      </FormControl>
+      <Stack flexDirection="row" gap="8px" spacing={0}>
+        <FormControl isInvalid={!!errors.dataCleaningCodeUrl}>
+          <FormLabel>Data cleaning code url</FormLabel>
+          <Input name="dataCleaningCodeUrl" value={formData.dataCleaningCodeUrl} onChange={handleChange} />
+          <FormErrorMessage>{errors.dataCleaningCodeUrl}</FormErrorMessage>
+        </FormControl>
 
-      <FormControl isInvalid={!!errors.rawDataUrl}>
-        <FormLabel>Raw data url</FormLabel>
-        <Input name="rawDataUrl" value={formData.rawDataUrl} onChange={handleChange} />
-        <FormErrorMessage>{errors.rawDataUrl}</FormErrorMessage>
-      </FormControl>
+        <FormControl isInvalid={!!errors.rawDataUrl}>
+          <FormLabel>Raw data url</FormLabel>
+          <Input name="rawDataUrl" value={formData.rawDataUrl} onChange={handleChange} />
+          <FormErrorMessage>{errors.rawDataUrl}</FormErrorMessage>
+        </FormControl>
+      </Stack>
 
-      <FormControl isInvalid={!!errors.auxiliaryFilesUrl}>
-        <FormLabel>Auxiliary files url</FormLabel>
-        <Input name="auxiliaryFilesUrl" value={formData.auxiliaryFilesUrl} onChange={handleChange} />
-        <FormErrorMessage>{errors.auxiliaryFilesUrl}</FormErrorMessage>
-      </FormControl>
+      <Stack flexDirection="row" gap="8px" spacing={0}>
+        <FormControl isInvalid={!!errors.auxiliaryFilesUrl}>
+          <FormLabel>Auxiliary files url</FormLabel>
+          <Input name="auxiliaryFilesUrl" value={formData.auxiliaryFilesUrl} onChange={handleChange} />
+          <FormErrorMessage>{errors.auxiliaryFilesUrl}</FormErrorMessage>
+        </FormControl>
 
-      <FormControl isInvalid={!!errors.architectureUrl}>
-        <FormLabel>Architecture url</FormLabel>
-        <Input name="architectureUrl" value={formData.architectureUrl} onChange={handleChange} />
-        <FormErrorMessage>{errors.architectureUrl}</FormErrorMessage>
-      </FormControl>
+        <FormControl isInvalid={!!errors.architectureUrl}>
+          <FormLabel>Architecture url</FormLabel>
+          <Input name="architectureUrl" value={formData.architectureUrl} onChange={handleChange} />
+          <FormErrorMessage>{errors.architectureUrl}</FormErrorMessage>
+        </FormControl>
+      </Stack>
+
 
       <FormControl>
         <FormLabel>Source bucket name</FormLabel>
         <Input name="sourceBucketName" value={formData.sourceBucketName} onChange={handleChange} />
       </FormControl>
 
-      <FormControl>
-        <FormLabel>Uncompressed file size</FormLabel>
-        <Input
-          type="number"
-          name="uncompressedFileSize"
-          value={formData.uncompressedFileSize}
-          onChange={handleChange}
-        />
-      </FormControl>
+      <Stack flexDirection="row" gap="8px" spacing={0}>
+        <FormControl>
+          <FormLabel>Uncompressed file size</FormLabel>
+          <Input
+            type="number"
+            name="uncompressedFileSize"
+            value={formData.uncompressedFileSize}
+            onChange={handleChange}
+          />
+        </FormControl>
 
-      <FormControl>
-        <FormLabel>Compressed file size</FormLabel>
-        <Input
-          type="number"
-          name="compressedFileSize"
-          value={formData.compressedFileSize}
-          onChange={handleChange}
-        />
-      </FormControl>
+        <FormControl>
+          <FormLabel>Compressed file size</FormLabel>
+          <Input
+            type="number"
+            name="compressedFileSize"
+            value={formData.compressedFileSize}
+            onChange={handleChange}
+          />
+        </FormControl>
+      </Stack>
 
-      <FormControl>
-        <FormLabel>Number rows</FormLabel>
-        <Input
-          type="number"
-          name="numberRows"
-          value={formData.numberRows}
-          onChange={handleChange}
-        />
-      </FormControl>
+      <Stack flexDirection="row" gap="8px" spacing={0}>
+        <FormControl>
+          <FormLabel>Number rows</FormLabel>
+          <Input
+            type="number"
+            name="numberRows"
+            value={formData.numberRows}
+            onChange={handleChange}
+          />
+        </FormControl>
 
-      <FormControl>
-        <FormLabel>Number columns</FormLabel>
-        <Input
-          type="numberRows"
-          name="version"
-          value={formData.numberColumns}
-          onChange={handleChange}
-        />
-      </FormControl>
+        <FormControl>
+          <FormLabel>Number columns</FormLabel>
+          <Input
+            type="numberRows"
+            name="version"
+            value={formData.numberColumns}
+            onChange={handleChange}
+          />
+        </FormControl>
+      </Stack>
 
       <FormControl
         display="flex"
