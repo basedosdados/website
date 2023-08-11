@@ -14,7 +14,7 @@ import SectionText from "../atoms/SectionText";
 import { SimpleTable } from "../atoms/SimpleTable";
 import LoadingSpin from "../atoms/Loading";
 import Subtitle from "../atoms/Subtitle";
-import TemporalCoverage from "../atoms/TemporalCoverageDisplay";
+import { TemporalCoverageBar } from "../atoms/TemporalCoverageDisplay";
 import ColumnDatasets from "../molecules/ColumnDatasets";
 import BaseResourcePage from "../molecules/BaseResourcePage";
 import DataInformationQuery from "../molecules/DataInformationQuery";
@@ -212,14 +212,15 @@ export default function BdmTablePage({ id }) {
         </SectionText>
       </VStack>
       
-      <VStack width="100%" spacing={4} alignItems="flex-start">
+      <VStack
+        width="100%"
+        maxWidth="600px"
+        paddingRight="40px"
+        spacing={4}
+        alignItems="flex-start"
+      >
         <Subtitle>Cobertura temporal</Subtitle>
-        <SectionText>
-          <TemporalCoverage
-            value={resource?.coverages?.[0]?.datetimeRanges?.[0]}
-            text="Nenhuma cobertura temporal fornecida"
-          />
-        </SectionText>
+        <TemporalCoverageBar value={resource?.fullCoverage}/>
       </VStack>
 
       <VStack width="100%" spacing={4} alignItems="flex-start">
