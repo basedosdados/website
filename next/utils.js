@@ -1,5 +1,3 @@
-import jwt from 'jsonwebtoken';
-
 export function filterOnlyValidValues(obj, validValues = null) {
   return Object.entries(obj).filter(
     ([k, v]) =>
@@ -213,22 +211,4 @@ export function removeEmpty(obj) {
       .filter(([_, v]) => v != null)
       .map(([k, v]) => [k, v === Object(v) ? removeEmpty(v) : v])
   );
-}
-
-export function isJWTInvalid(token) {
-  if (!token) return true
-
-  try {
-    const secret = process.env.JWT_SECRET
-    const decoded = jwt.verify(token, secret)
-    if (decoded.email) {
-      return false
-    }
-
-    return true;
-  } catch (error) {
-    console.log(error)
-
-    return true
-  }
 }

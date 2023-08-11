@@ -23,7 +23,7 @@ import Latex from 'react-latex-next';
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import SectionText from '../atoms/SectionText';
 import Tag from "../atoms/Tag";
-import TemporalCoverage from "../atoms/TemporalCoverageDisplay";
+import { TemporalCoverage } from "../atoms/TemporalCoverageDisplay";
 
 import {
   getColumnsBdmTable
