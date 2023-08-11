@@ -1,5 +1,23 @@
 import cookies from "js-cookie";
-import { isJWTInvalid } from "../utils";
+import { validateToken } from "../pages/api/user";
+
+async function isJWTInvalid(token) {
+  if (!token) return true
+
+  try {
+    const decoded = await validateToken(token)
+    if (decoded?.payload?.email) {
+      return false
+    }
+
+    return true;
+  } catch (error) {
+    console.log(error)
+
+    return true
+  }
+}
+
 
 export default async function authUser(context, destiny) {
   const { req, res } = context
