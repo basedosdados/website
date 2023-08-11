@@ -445,18 +445,6 @@ export default function FormTable({
             <RoundedButton onClick={() => window.open(`/dataset/${isSuccess?.datasetId}`)}>
               Acessar página web
             </RoundedButton>
-
-            <RoundedButton onClicdatasetk={() => {
-              router.push({
-                pathname: router.pathname,
-                query: {
-                  ...query,
-                  table: isSuccess.tableId
-                }
-              })}}
-            >
-              Continuar editando
-            </RoundedButton>
           </Stack>
         </Alert>
       }
