@@ -53,12 +53,12 @@ export default function FormTable({
       name: data ? data?.name || "" : "",
       description: data ? data?.description || "" : "",
       status: data ? data?.status || "" : "",
-      license: data ? data?.license || "" : "",
-      partnerOrganization: data ? data?.partnerOrganization || "" : "",
-      pipeline: data ? data?.pipeline || "" : "",
+      license: data ? data?.license?._id || "" : "",
+      partnerOrganization: data ? data?.partnerOrganization?._id || "" : "",
+      pipeline: data ? data?.pipeline?._id || "" : "",
       isDirectory: data ? data?.isDirectory || false : false,
-      publishedBy: data ? data?.publishedBy || "" : "",
-      dataCleanedBy: data ? data?.dataCleanedBy || "" : "",
+      publishedBy: data ? data?.publishedBy?.id || "" : "",
+      dataCleanedBy: data ? data?.dataCleanedBy?.id || "" : "",
       dataCleaningDescription: data ? data?.dataCleaningDescription || "" : "",
       dataCleaningCodeUrl: data ? data?.dataCleaningCodeUrl || "" : "",
       rawDataUrl: data ? data?.rawDataUrl || "" : "",
@@ -81,14 +81,6 @@ export default function FormTable({
     setFormData(valueFormData(tableData))
     setIsLoading(false)
   }
-
-  useEffect(() => {
-    if(id === "create") {
-      setFormData(valueFormData())
-      setIsLoading(false)
-    } 
-    if(query.table) fetchTable(query.table)
-  }, [])
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -118,9 +110,22 @@ export default function FormTable({
 
     if(Object.keys(validationErrors).length > 0) return setErrors(validationErrors)
 
-    const result = await postTable(formData, query.dataset)
-    if(result === undefined) return setIsSuccess({notSuccess: true})
-    setIsSuccess({success: true, tableId: result})
+    const newFormData = formData
+
+    if(formData.publishedBy) newFormData.publishedBy = newFormData.publishedBy.replace(new RegExp('\\bAccountNode:\\b', 'gi'), '')
+    if(formData.dataCleanedBy) newFormData.dataCleanedBy = newFormData.dataCleanedBy.replace(new RegExp('\\bAccountNode:\\b', 'gi'), '')
+
+    if(query.table) {
+      const result = await postTable(newFormData, query.dataset, query.table)
+
+      if(result === undefined) return setIsSuccess({notSuccess: true})
+      setIsSuccess({success: true, tableId: result})
+    } else {
+      const result = await postTable(newFormData, query.dataset)
+
+      if(result === undefined) return setIsSuccess({notSuccess: true})
+      setIsSuccess({success: true, tableId: result})
+    }
   }
 
   const handleDelete = async () => {
@@ -132,6 +137,15 @@ export default function FormTable({
     }
     if(result === true) window.location.reload()
   }
+
+  useEffect(() => {
+    if(id === "create") {
+      setFormData(valueFormData())
+      setIsLoading(false)
+    }
+    
+    if(query.table) fetchTable(query.table)
+  }, [id, query])
 
   if(isLoading) return <LoadingSpin/>
 
@@ -185,38 +199,38 @@ export default function FormTable({
           </Select>
         </FormControl>
 
-        <FormControl isRequired>
+        <FormControl>
           <FormLabel>License</FormLabel>
-          {/* <SelectSearch 
+          <SelectSearch 
             name="license"
             value={formData.license}
             onChange={(e) => setFormData({...formData, license: e})}
             options={licenses}
             displayName="slug"
-          /> */}
+          />
         </FormControl>
       </Stack>
 
       <Stack flexDirection="row" gap="8px" spacing={0}>
         <FormControl >
           <FormLabel>Partner organization</FormLabel>
-          {/* <SelectSearch 
+          <SelectSearch 
             name="partner organization"
             value={formData.partnerOrganization}
             onChange={(e) => setFormData({...formData, partnerOrganization: e})}
             options={organizations}
-          /> */}
+          />
         </FormControl>
 
-        <FormControl isRequired>
+        <FormControl>
           <FormLabel>Pipeline</FormLabel>
-          {/* <SelectSearch 
+          <SelectSearch 
             name="pipeline"
             value={formData.pipeline}
             onChange={(e) => setFormData({...formData, pipeline: e})}
             options={pipeline}
             displayName="githubUrl"
-          /> */}
+          />
         </FormControl>
       </Stack>
 
@@ -236,26 +250,26 @@ export default function FormTable({
       <Stack flexDirection="row" gap="8px" spacing={0}>
         <FormControl>
           <FormLabel>Published by</FormLabel>
-          {/* <SelectSearch 
+          <SelectSearch 
             name="publishedBy"
             value={formData.publishedBy}
             onChange={(e) => setFormData({...formData, publishedBy: e})}
             options={users}
             keyId="id"
             displayName="email"
-          /> */}
+          />
         </FormControl>
 
         <FormControl>
           <FormLabel>Data cleaned by</FormLabel>
-          {/* <SelectSearch
+          <SelectSearch
             name="dataCleanedBy"
             value={formData.dataCleanedBy}
             onChange={(e) => setFormData({...formData, dataCleanedBy: e})}
             options={users}
-            keyId="email"
+            keyId="id"
             displayName="email"
-          /> */}
+          />
         </FormControl>
       </Stack>
 
@@ -268,74 +282,83 @@ export default function FormTable({
         />
       </FormControl>
 
-      <FormControl isInvalid={!!errors.dataCleaningCodeUrl}>
-        <FormLabel>Data cleaning code url</FormLabel>
-        <Input name="dataCleaningCodeUrl" value={formData.dataCleaningCodeUrl} onChange={handleChange} />
-        <FormErrorMessage>{errors.dataCleaningCodeUrl}</FormErrorMessage>
-      </FormControl>
+      <Stack flexDirection="row" gap="8px" spacing={0}>
+        <FormControl isInvalid={!!errors.dataCleaningCodeUrl}>
+          <FormLabel>Data cleaning code url</FormLabel>
+          <Input name="dataCleaningCodeUrl" value={formData.dataCleaningCodeUrl} onChange={handleChange} />
+          <FormErrorMessage>{errors.dataCleaningCodeUrl}</FormErrorMessage>
+        </FormControl>
 
-      <FormControl isInvalid={!!errors.rawDataUrl}>
-        <FormLabel>Raw data url</FormLabel>
-        <Input name="rawDataUrl" value={formData.rawDataUrl} onChange={handleChange} />
-        <FormErrorMessage>{errors.rawDataUrl}</FormErrorMessage>
-      </FormControl>
+        <FormControl isInvalid={!!errors.rawDataUrl}>
+          <FormLabel>Raw data url</FormLabel>
+          <Input name="rawDataUrl" value={formData.rawDataUrl} onChange={handleChange} />
+          <FormErrorMessage>{errors.rawDataUrl}</FormErrorMessage>
+        </FormControl>
+      </Stack>
 
-      <FormControl isInvalid={!!errors.auxiliaryFilesUrl}>
-        <FormLabel>Auxiliary files url</FormLabel>
-        <Input name="auxiliaryFilesUrl" value={formData.auxiliaryFilesUrl} onChange={handleChange} />
-        <FormErrorMessage>{errors.auxiliaryFilesUrl}</FormErrorMessage>
-      </FormControl>
+      <Stack flexDirection="row" gap="8px" spacing={0}>
+        <FormControl isInvalid={!!errors.auxiliaryFilesUrl}>
+          <FormLabel>Auxiliary files url</FormLabel>
+          <Input name="auxiliaryFilesUrl" value={formData.auxiliaryFilesUrl} onChange={handleChange} />
+          <FormErrorMessage>{errors.auxiliaryFilesUrl}</FormErrorMessage>
+        </FormControl>
 
-      <FormControl isInvalid={!!errors.architectureUrl}>
-        <FormLabel>Architecture url</FormLabel>
-        <Input name="architectureUrl" value={formData.architectureUrl} onChange={handleChange} />
-        <FormErrorMessage>{errors.architectureUrl}</FormErrorMessage>
-      </FormControl>
+        <FormControl isInvalid={!!errors.architectureUrl}>
+          <FormLabel>Architecture url</FormLabel>
+          <Input name="architectureUrl" value={formData.architectureUrl} onChange={handleChange} />
+          <FormErrorMessage>{errors.architectureUrl}</FormErrorMessage>
+        </FormControl>
+      </Stack>
+
 
       <FormControl>
         <FormLabel>Source bucket name</FormLabel>
         <Input name="sourceBucketName" value={formData.sourceBucketName} onChange={handleChange} />
       </FormControl>
 
-      <FormControl>
-        <FormLabel>Uncompressed file size</FormLabel>
-        <Input
-          type="number"
-          name="uncompressedFileSize"
-          value={formData.uncompressedFileSize}
-          onChange={handleChange}
-        />
-      </FormControl>
+      <Stack flexDirection="row" gap="8px" spacing={0}>
+        <FormControl>
+          <FormLabel>Uncompressed file size</FormLabel>
+          <Input
+            type="number"
+            name="uncompressedFileSize"
+            value={formData.uncompressedFileSize}
+            onChange={handleChange}
+          />
+        </FormControl>
 
-      <FormControl>
-        <FormLabel>Compressed file size</FormLabel>
-        <Input
-          type="number"
-          name="compressedFileSize"
-          value={formData.compressedFileSize}
-          onChange={handleChange}
-        />
-      </FormControl>
+        <FormControl>
+          <FormLabel>Compressed file size</FormLabel>
+          <Input
+            type="number"
+            name="compressedFileSize"
+            value={formData.compressedFileSize}
+            onChange={handleChange}
+          />
+        </FormControl>
+      </Stack>
 
-      <FormControl>
-        <FormLabel>Number rows</FormLabel>
-        <Input
-          type="number"
-          name="numberRows"
-          value={formData.numberRows}
-          onChange={handleChange}
-        />
-      </FormControl>
+      <Stack flexDirection="row" gap="8px" spacing={0}>
+        <FormControl>
+          <FormLabel>Number rows</FormLabel>
+          <Input
+            type="number"
+            name="numberRows"
+            value={formData.numberRows}
+            onChange={handleChange}
+          />
+        </FormControl>
 
-      <FormControl>
-        <FormLabel>Number columns</FormLabel>
-        <Input
-          type="numberRows"
-          name="version"
-          value={formData.numberColumns}
-          onChange={handleChange}
-        />
-      </FormControl>
+        <FormControl>
+          <FormLabel>Number columns</FormLabel>
+          <Input
+            type="numberRows"
+            name="version"
+            value={formData.numberColumns}
+            onChange={handleChange}
+          />
+        </FormControl>
+      </Stack>
 
       <FormControl
         display="flex"
@@ -421,18 +444,6 @@ export default function FormTable({
           >
             <RoundedButton onClick={() => window.open(`/dataset/${isSuccess?.datasetId}`)}>
               Acessar página web
-            </RoundedButton>
-
-            <RoundedButton onClicdatasetk={() => {
-              router.push({
-                pathname: router.pathname,
-                query: {
-                  ...query,
-                  table: isSuccess.tableId
-                }
-              })}}
-            >
-              Continuar editando
             </RoundedButton>
           </Stack>
         </Alert>

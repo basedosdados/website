@@ -1,7 +1,8 @@
-import "../styles/globals.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Head from "next/head";
+import themeBD from "../styles/themeBD";
+import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
   const queryClient = new QueryClient({
@@ -80,7 +81,7 @@ function MyApp({ Component, pageProps }) {
           }}
         ></script>
       </Head>
-      <ChakraProvider>
+      <ChakraProvider theme={themeBD}>
         <Component {...pageProps} />
       </ChakraProvider>
       {/*<!-- Google Tag Manager (noscript) -->*/}
