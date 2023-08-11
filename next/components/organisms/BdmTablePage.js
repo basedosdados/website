@@ -220,7 +220,7 @@ export default function BdmTablePage({ id }) {
         alignItems="flex-start"
       >
         <Subtitle>Cobertura temporal</Subtitle>
-        <TemporalCoverageBar/>
+        <TemporalCoverageBar value={resource?.fullCoverage}/>
       </VStack>
 
       <VStack width="100%" spacing={4} alignItems="flex-start">

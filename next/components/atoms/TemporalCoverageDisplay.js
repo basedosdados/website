@@ -162,14 +162,7 @@ export function TemporalCoverageString({
   )
 }
 
-export function TemporalCoverageBar ({
-  value,
-  text
-}) {
-
-  let dataStart = 2000
-  let dataEnd = 2021
-  let dataEndPro = 2023
+export function TemporalCoverageBar ({ value }) {
 
   const TextData = ({ string }) => {
     return (
@@ -186,6 +179,53 @@ export function TemporalCoverageBar ({
     )
   }
 
+  if(!value) return <TextData string="Não Listado"/>
+
+  const temporalCoverageObj = JSON.parse(value)
+
+  let dataStart = ""
+  let dataIntermediate = ""
+  let dataEnd = ""
+
+  if(temporalCoverageObj.length === 3) {
+    dataStart = temporalCoverageObj[0]
+    dataIntermediate = temporalCoverageObj[1]
+    dataEnd = temporalCoverageObj[2]
+  }
+  if(temporalCoverageObj.length === 2) {
+    dataStart = temporalCoverageObj[0]
+    dataEnd = temporalCoverageObj[1]
+  }
+
+  const BadgeContainer = ({ value }) => {
+    const toogleTag = value === "open"
+
+    return (
+      <Badge
+        position="absolute"
+        backgroundColor={toogleTag ? "#D5E6DC" : "#FAEEAE" }
+        color={toogleTag ? "#1C703A" : "#7D6A00" }
+        padding="2px 10px"
+        borderRadius="12px"
+      >{!toogleTag ? "GRÁTIS" : "PRO"}</Badge>
+    )
+  }
+
+  const showDataTime = (value) => {
+    if(value === "") return "Não listado"
+
+    let year = value.year || ""
+    let month = value.month || ""
+    let day = value.day || ""
+    let hour = value.hour || ""
+    let minute = value.minute || ""
+    let second = value.second || ""
+
+    const string = `${year && year}${month && -month}${day && -day}`
+
+    return string
+  }
+
   return (
     <Stack 
       position="relative"  
@@ -194,12 +234,12 @@ export function TemporalCoverageBar ({
       spacing={0}
     >
       <Progress
-        value={useCheckMobile() ? 54 :73}
+        value={temporalCoverageObj.length === 2 ? 100 : useCheckMobile() ? 54 :70}
         height="3px"
         marginLeft="10px"
         width="100%"
         backgroundColor="#9C8400"
-        colorScheme="greenBD"
+        colorScheme={temporalCoverageObj[0]?.type === "closed" ? "yellowPro" : "greenBD"}
       />
 
       <Box
@@ -214,7 +254,7 @@ export function TemporalCoverageBar ({
           width="18px"
           height="18px"
           borderRadius="50%"
-          backgroundColor="#2B8C4D"
+          backgroundColor={dataStart?.type === "open" ? "#2B8C4D" : "#9C8400"}
         />
         <Center position="relative" left="-1px">
           <CalendarComunIcon
@@ -223,70 +263,72 @@ export function TemporalCoverageBar ({
             margin="0 6px 0 0"
             width="20px"
             height="20px"
-            fill="#2B8C4D"
+            fill={dataStart?.type === "open" ? "#2B8C4D" : "#9C8400"}
           />
-          <TextData string={dataStart}/>
+          <TextData string={showDataTime(dataStart)}/>
         </Center>
       </Box>
 
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        position="absolute"
-        left={useCheckMobile() ? "45%" : "70%"}
-        top="-41px"
-        gap="12px"
-      >
-        <Badge
-          backgroundColor="#D5E6DC"
-          color="#1C703A"
-          padding="2px 10px"
-          borderRadius="12px"
-        >GRÁTIS</Badge>
+      {dataIntermediate !== "" &&
         <Box
-          width="18px"
-          height="18px"
-          borderRadius="50%"
-          backgroundColor="#2B8C4D"
-        />
-        <Center>
-          <CalendarComunIcon
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          position="absolute"
+          left={useCheckMobile() ? "54%" : "70%"}
+          top="-41px"
+          gap="12px"
+        >
+          <Box
             position="relative"
-            top="-1px"
-            margin="0 6px 0 0"
-            width="20px"
-            height="20px"
-            fill="#2B8C4D"
+            top="34px"
+            width="18px"
+            height="18px"
+            borderRadius="50%"
+            backgroundColor={dataIntermediate?.type === "open" ? "#2B8C4D" : "#9C8400"}
           />
-          <TextData string={dataEnd}/>
-        </Center>
-      </Box>
+          <BadgeContainer value={dataIntermediate?.type}/>
+          <Center
+            position="absolute"
+            top="64px"
+            minWidth="120px"
+          >
+            <CalendarComunIcon
+              position="relative"
+              top="-1px"
+              margin="0 6px 0 0"
+              width="20px"
+              height="20px"
+              fill={dataIntermediate?.type === "open" ? "#2B8C4D" : "#9C8400"}
+            />
+            <TextData string={showDataTime(dataIntermediate)}/>
+          </Center>
+        </Box>
+      }
 
       <Box
         display="flex"
         flexDirection="column"
         alignItems="center"
         position="absolute"
-        left="96%"
+        left="99%"
         top="-41px"
         gap="12px"
       >
-        <Badge
-          backgroundColor="#FAEEAE"
-          color="#7D6A00"
-          padding="2px 10px"
-          borderRadius="12px"
-        >PRO</Badge>
         <Box
+          position="relative"
+          top="34px"
           width="18px"
           height="18px"
           borderRadius="50%"
-          backgroundColor="#9C8400"
+          backgroundColor={dataEnd?.type === "open" ? "#2B8C4D" : "#9C8400"}
         />
+        <BadgeContainer value={dataEnd?.type}/>
         <Center
-          position="relative"
-          left={useCheckMobile() && "-20px"}
+          minWidth="120px"
+          position="absolute"
+          top="64px"
+          left={useCheckMobile() && "-68px"}
         >
           <CalendarComunIcon
             position="relative"
@@ -294,9 +336,9 @@ export function TemporalCoverageBar ({
             margin="0 6px 0 0"
             width="20px"
             height="20px"
-            fill="#9C8400"
+            fill={dataEnd?.type === "open" ? "#2B8C4D" : "#9C8400"}
           />
-          <TextData string={dataEndPro}/>
+          <TextData string={showDataTime(dataEnd)}/>
         </Center>
       </Box>
     </Stack>
