@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import { validateToken } from "../next/pages/api/user"
 
 export function filterOnlyValidValues(obj, validValues = null) {
   return Object.entries(obj).filter(
@@ -215,13 +215,12 @@ export function removeEmpty(obj) {
   );
 }
 
-export function isJWTInvalid(token) {
+export async function isJWTInvalid(token) {
   if (!token) return true
 
   try {
-    const secret = process.env.JWT_SECRET
-    const decoded = jwt.verify(token, secret)
-    if (decoded.email) {
+    const decoded = await validateToken(token)
+    if (decoded?.payload?.email) {
       return false
     }
 
