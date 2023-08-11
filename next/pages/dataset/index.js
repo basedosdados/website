@@ -332,8 +332,7 @@ export default function SearchPage({ pages }) {
           number: data?.n_information_requests
         }}
         contains={{
-          // trocar por contains_open_data futuramente
-          free: data?.contains_open_tables,
+          free: data?.contains_open_data,
           pro: data?.contains_closed_data
         }}
       />
@@ -363,6 +362,23 @@ export default function SearchPage({ pages }) {
 
   const validateActiveFilterAccordin = (text) => {
     return selectedFilters.map((elm) => elm[0] === text).find(res => res === true)
+  }
+
+  const validateActiveSetsWith = (text) => {
+    return selectedFilters.map((elm) => 
+        elm[1] === "tables"
+      ||elm[1] === "raw_data_sources"
+      ||elm[1] === "information_requests").find(
+      res => res === true
+    )
+  }
+
+  const validateActiveResource = (text) => {
+    return selectedFilters.map((elm) => 
+        elm[1] === "open_data"
+      ||elm[1] === "closed_data").find(
+      res => res === true
+    )
   }
 
   return (
@@ -438,28 +454,9 @@ export default function SearchPage({ pages }) {
             alwaysOpen= {isLoading ? false : true}
             choices={[
               {
-                key: "closed_tables",
-                name: (
-                  <HStack whiteSpace="nowrap">
-                    <div>Tabelas tratadas</div>
-                    <BDLogoProImage
-                      widthImage="52px"
-                    />
-                  </HStack>
-                ),
-                count: aggregations?.contains_closed_tables?.filter(elm => elm.key === 1)[0]?.count || 0
-              },
-              {
-                key: "open_tables",
-                name: (
-                  <HStack whiteSpace="nowrap">
-                    <div>Tabelas tratadas</div>
-                    <BDLogoPlusImage
-                      widthImage="40px"
-                    />
-                  </HStack>
-                ),
-                count: aggregations?.contains_open_tables?.filter(elm => elm.key === 1)[0]?.count || 0
+                key: "tables",
+                name: "Tabelas tratadas",
+                count: aggregations?.contains_tables?.filter(elm => elm.key === 1)[0]?.count || 0
               },
               {
                 key: "raw_data_sources",
@@ -472,12 +469,34 @@ export default function SearchPage({ pages }) {
                 count: aggregations?.contains_information_requests?.filter(elm => elm.key === 1)[0]?.count || 0
               },
             ]}
-            isActive={validateActiveFilterAccordin("datasets_with")}
+            isActive={validateActiveSetsWith("contains")}
             valueField="key"
             displayField="name"
             fieldName="Conjuntos com"
-            valuesChecked={valuesCheckedFilter("datasets_with")}
-            onChange={(value) => handleSelectFilter(["datasets_with",`${value}`])}
+            valuesChecked={valuesCheckedFilter("contains")}
+            onChange={(value) => handleSelectFilter(["contains",`${value}`])}
+          />
+
+          <CheckboxFilterAccordion
+            alwaysOpen= {isLoading ? false : true}
+            choices={[
+              {
+                key: "open_data",
+                name: "Grátis",
+                count: aggregations?.contains_open_data?.filter(elm => elm.key === 1)[0]?.count || 0
+              },
+              {
+                key: "closed_data",
+                name: "Pro",
+                count: aggregations?.contains_closed_data?.filter(elm => elm.key === 1)[0]?.count || 0
+              }
+            ]}
+            isActive={validateActiveResource("contains")}
+            valueField="key"
+            displayField="name"
+            fieldName="Recursos"
+            valuesChecked={valuesCheckedFilter("contains")}
+            onChange={(value) => handleSelectFilter(["contains",`${value}`])}
           />
 
           <CheckboxFilterAccordion

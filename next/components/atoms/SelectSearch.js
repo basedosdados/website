@@ -18,7 +18,7 @@ export default function SelectSearch({
   const timerRef = useRef();
   const [optionsArray, setOptionsArray] = useState(options)
   const [inputValue, setInputValue] = useState("")
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
 
   if(value !== "" && inputValue == "") {
     const findOption = () => {
