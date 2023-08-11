@@ -180,6 +180,7 @@ export function TemporalCoverageBar ({ value }) {
   }
 
   if(!value) return <TextData string="Não Listado"/>
+  if(value === "[]") return <TextData string="Não Listado"/>
 
   const temporalCoverageObj = JSON.parse(value)
 
@@ -207,7 +208,7 @@ export function TemporalCoverageBar ({ value }) {
         color={toogleTag ? "#1C703A" : "#7D6A00" }
         padding="2px 10px"
         borderRadius="12px"
-      >{!toogleTag ? "GRÁTIS" : "PRO"}</Badge>
+      >{toogleTag ? "GRÁTIS" : "PRO"}</Badge>
     )
   }
 
