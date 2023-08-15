@@ -318,7 +318,7 @@ export function FilterAccordion({
               _hover={c[valueField] === value ? "none" : {  opacity: "0.6" , fontWeight: "500" }}
               padding="8px 24px"
               transform="translateX(-10px)"
-              zIndex="100"
+              zIndex="98"
               position="relative"
               width="100%"
               onClick={() => onChange(c[valueField])}

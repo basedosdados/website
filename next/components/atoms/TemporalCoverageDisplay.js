@@ -5,12 +5,14 @@ import {
   Progress,
   Box,
   Badge,
-  Tooltip
+  Tooltip,
+  useBoolean,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Children } from "react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import { CalendarComunIcon } from "../../public/img/icons/calendarIcon";
 import TimeIcon from "../../public/img/icons/timeIcon";
+import RedirectIcon from "../../public/img/icons/redirectIcon";
 
 export function TemporalCoverage ({
   value,
@@ -171,7 +173,7 @@ export function TemporalCoverageString({
 
 export function TemporalCoverageBar ({ value }) {
 
-  const TextData = ({ string }) => {
+  const TextData = ({ string, ...style }) => {
     return (
       <Text
         color="#252A32"
@@ -180,6 +182,7 @@ export function TemporalCoverageBar ({ value }) {
         letterSpacing="0.5px"
         fontWeight="300"
         fontFamily="Lato"
+        {...style}
       >
         {string}
       </Text>
@@ -206,12 +209,13 @@ export function TemporalCoverageBar ({ value }) {
     dataEnd = temporalCoverageObj[1]
   }
 
-  const checkoutBdpro = () => {
-    if(dataEnd?.type === "open") return 
-    window.open("https://checkout.stripe.com/c/pay/cs_live_b1X57nypBhDvPo2za6vY5IRu3QTg78OCHJ7QtRrx6mKRK4Do4i0kXxspyG#fidkdWxOYHwnPyd1blppbHNgWjA0SHJUfGtGTm5GSUh3XFJcY0tyZEhxdDJQTFBgb1dHZG48cDY9PGRXYkNOUFBUZDVSNWJuQTVgdEc0M0l3RFJgaFNLX0FDZHdRaURwb21iNXMwYz1hY0lINTVQd1E0bG5OVicpJ3VpbGtuQH11anZgYUxhJz8nNDFuMnBpZ09APExAM0kzPXJ%2FJyknd2BjYHd3YHdKd2xibGsnPydtcXF1dj8qKmxrY2orZ2R2YGFqdmFkYWp2K2p3YipnYSh1d2oneCUl", "_blank")
+  const checkoutBdpro = (value) => {
+    if(value === "open") return 
+    window.open("https://buy.stripe.com/14k7ulbJE9IE6L68wz", "_blank")
   }
 
   const BadgeContainer = ({ value, ...props }) => {
+    const [flag, setFlag] = useBoolean()
     const toogleTag = value === "open"
 
     return (
@@ -221,9 +225,26 @@ export function TemporalCoverageBar ({ value }) {
         color={toogleTag ? "#1C703A" : "#7D6A00" }
         padding="2px 10px"
         borderRadius="12px"
-        onClick={() => checkoutBdpro()}
-        _hover={{opacity: 0.7}}
-      >{toogleTag ? "GRÁTIS" : "PRO"}</Badge>
+        onClick={() => checkoutBdpro(value)}
+        _hover={toogleTag ? "" : {opacity: 0.7}}
+        onMouseEnter={setFlag.on}
+        onMouseLeave={setFlag.off}
+        cursor="pointer"
+      >{toogleTag ? 
+        "GRÁTIS" :
+        <Box
+          display="flex"
+          alignItems="center"
+          gap="4px"
+        >PRO
+          <RedirectIcon
+            display={flag ? "flex" : "none"}
+            position="relative"
+            top="-1px"
+            fill="#7D6A00"
+          />
+        </Box>}
+      </Badge>
     )
   }
 
@@ -242,6 +263,66 @@ export function TemporalCoverageBar ({ value }) {
     return string
   }
 
+  const TooltipContent = ({children, text, firstValue, lastValue}) => {
+
+    return (
+      <Tooltip
+          label={
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+            >
+              {text}
+              <Box display="flex" gap="12px" marginTop="6px">
+                <Center
+                  position="relative"
+                  left="-1px"
+                >
+                  <CalendarComunIcon
+                    position="relative"
+                    top="-1px"
+                    margin="0 6px 0 0"
+                    width="20px"
+                    height="20px"
+                    fill="#A3A3A3"
+                  />
+                  <TextData string={showDataTime(firstValue)} color="#FFF" fontWeight="400"/>
+                </Center> ─
+                <Center
+                  position="relative"
+                  left="-1px"
+                >
+                  <CalendarComunIcon
+                    position="relative"
+                    top="-1px"
+                    margin="0 6px 0 0"
+                    width="20px"
+                    height="20px"
+                    fill="#A3A3A3"
+                  />
+                  <TextData string={showDataTime(lastValue)} color="#FFF" fontWeight="400"/>
+                </Center>
+              </Box>
+            </Box>
+          }
+          hasArrow
+          bg="#2A2F38"
+          fontSize="16px"
+          fontWeight="400"
+          padding="5px 16px 6px"
+          marginTop="10px"
+          color="#FFF"
+          borderRadius="6px"
+          placement="top"
+          top="-4px"
+          fontFamily="lato"
+        >
+          {children}
+        </Tooltip>
+    )
+  }
+
   return (
     <Stack 
       position="relative"  
@@ -258,39 +339,72 @@ export function TemporalCoverageBar ({ value }) {
         colorScheme={temporalCoverageObj[0]?.type === "closed" ? "yellowPro" : "greenBD"}
       />
 
-      <Tooltip
-        label="Acesso liberado"
-        hasArrow
-        bg="#2A2F38"
-        fontSize="16px"
-        fontWeight="500"
-        padding="5px 16px 6px"
-        marginTop="10px"
-        color="#FFF"
-        borderRadius="6px"
-        placement="top"
-        left="-22px"
-        top="-4px"
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="flex-start"
+        position="absolute"
+        top="-7px"
+        gap="12px"
       >
         <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="flex-start"
-          position="absolute"
-          top="-7px"
-          gap="12px"
-          cursor="pointer"
+          width="16px"
+          height="16px"
+          borderRadius="50%"
+          backgroundColor={dataStart?.type === "open" ? "#2B8C4D" : "#9C8400"}
+        />
+        <Center
+          position="relative"
+          left="-1px"
         >
-          <Box
-            width="16px"
-            height="16px"
-            borderRadius="50%"
-            backgroundColor={dataStart?.type === "open" ? "#2B8C4D" : "#9C8400"}
-          />
-          <Center
+          <CalendarComunIcon
             position="relative"
-            left="-1px"
-            _hover={{opacity: 0.7}}
+            top="-1px"
+            margin="0 6px 0 0"
+            width="20px"
+            height="20px"
+            fill={dataStart?.type === "open" ? "#2B8C4D" : "#9C8400"}
+          />
+          <TextData string={showDataTime(dataStart)}/>
+        </Center>
+      </Box>
+
+      {dataIntermediate !== "" &&
+        <Box
+          display="flex"
+        >
+          <TooltipContent
+            text="Acesso liberado entre"
+            firstValue={dataStart}
+            lastValue={dataIntermediate}
+          >
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              position="absolute"
+              left={useCheckMobile() ? "54%" : "70%"}
+              top="-41px"
+              gap="12px"
+            >
+              <Box
+                position="relative"
+                top="34px"
+                width="16px"
+                height="16px"
+                borderRadius="50%"
+                cursor="pointer"
+                backgroundColor={dataIntermediate?.type === "open" ? "#2B8C4D" : "#9C8400"}
+              />
+
+              <BadgeContainer value={dataIntermediate?.type}/>
+            </Box>
+          </TooltipContent>
+          <Center
+            position="absolute"
+            left={useCheckMobile() ? "36%" : "60%"}
+            top="24px"
+            minWidth="120px"
           >
             <CalendarComunIcon
               position="relative"
@@ -298,36 +412,29 @@ export function TemporalCoverageBar ({ value }) {
               margin="0 6px 0 0"
               width="20px"
               height="20px"
-              fill={dataStart?.type === "open" ? "#2B8C4D" : "#9C8400"}
+              fill={dataIntermediate?.type === "open" ? "#2B8C4D" : "#9C8400"}
             />
-            <TextData string={showDataTime(dataStart)}/>
+            <TextData string={showDataTime(dataIntermediate)}/>
           </Center>
         </Box>
-      </Tooltip>
+      }
 
-      {dataIntermediate !== "" &&
-        <Tooltip
-          label="Acesso liberado"
-          hasArrow
-          bg="#2A2F38"
-          fontSize="16px"
-          fontWeight="500"
-          padding="5px 16px 6px"
-          marginTop="10px"
-          color="#FFF"
-          borderRadius="6px"
-          placement="top"
-          top="30px"
+      <Box
+        display="flex"
+        >
+        <TooltipContent
+          text={dataEnd?.type === "open" ? "Acesso liberado entre" : "Assine a BD Pro para liberar entre"}
+          firstValue={dataEnd?.type === "open" ? dataStart : dataIntermediate}
+          lastValue={dataEnd}
         >
           <Box
             display="flex"
             flexDirection="column"
             alignItems="center"
             position="absolute"
-            left={useCheckMobile() ? "54%" : "70%"}
+            left="99%"
             top="-41px"
             gap="12px"
-            cursor="pointer"
           >
             <Box
               position="relative"
@@ -335,86 +442,32 @@ export function TemporalCoverageBar ({ value }) {
               width="16px"
               height="16px"
               borderRadius="50%"
-              backgroundColor={dataIntermediate?.type === "open" ? "#2B8C4D" : "#9C8400"}
+              cursor="pointer"
+              backgroundColor={dataEnd?.type === "open" ? "#2B8C4D" : "#9C8400"}
+              onClick={() => checkoutBdpro(dataEnd?.type)}
             />
 
-            <BadgeContainer value={dataIntermediate?.type}/>
-
-            <Center
-              position="absolute"
-              top="64px"
-              minWidth="120px"
-              _hover={{opacity: 0.7}}
-            >
-              <CalendarComunIcon
-                position="relative"
-                top="-1px"
-                margin="0 6px 0 0"
-                width="20px"
-                height="20px"
-                fill={dataIntermediate?.type === "open" ? "#2B8C4D" : "#9C8400"}
-              />
-              <TextData string={showDataTime(dataIntermediate)}/>
-            </Center>
+            <BadgeContainer value={dataEnd?.type}/>
           </Box>
-        </Tooltip>
-      }
-
-      <Tooltip
-        label={dataEnd?.type === "open" ? "Acesso liberado" : "Faça o upgrade para liberar"}
-        hasArrow
-        bg="#2A2F38"
-        fontSize="16px"
-        fontWeight="500"
-        padding="5px 16px 6px"
-        marginTop="10px"
-        color="#FFF"
-        borderRadius="6px"
-        placement="top"
-        top="30px"
-      >
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
+        </TooltipContent>
+        <Center
           position="absolute"
-          left="99%"
-          top="-41px"
-          gap="12px"
-          cursor="pointer"
+          top="24px"
+          minWidth="120px"
+          left={useCheckMobile() ? "75%" : "90%"}
+          onClick={() => checkoutBdpro(dataEnd?.type)}
         >
-          <Box
+          <CalendarComunIcon
             position="relative"
-            top="34px"
-            width="16px"
-            height="16px"
-            borderRadius="50%"
-            backgroundColor={dataEnd?.type === "open" ? "#2B8C4D" : "#9C8400"}
-            onClick={() => checkoutBdpro()}
+            top="-1px"
+            margin="0 6px 0 0"
+            width="20px"
+            height="20px"
+            fill={dataEnd?.type === "open" ? "#2B8C4D" : "#9C8400"}
           />
-
-          <BadgeContainer value={dataEnd?.type}/>
-
-          <Center
-            minWidth="120px"
-            position="absolute"
-            top="64px"
-            left={useCheckMobile() && "-68px"}
-            onClick={() => checkoutBdpro()}
-            _hover={{opacity: 0.7}}
-          >
-            <CalendarComunIcon
-              position="relative"
-              top="-1px"
-              margin="0 6px 0 0"
-              width="20px"
-              height="20px"
-              fill={dataEnd?.type === "open" ? "#2B8C4D" : "#9C8400"}
-            />
-            <TextData string={showDataTime(dataEnd)}/>
-          </Center>
-        </Box>
-      </Tooltip>
+          <TextData string={showDataTime(dataEnd)}/>
+        </Center>
+      </Box>
     </Stack>
   )
 }

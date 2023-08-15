@@ -90,7 +90,6 @@ export default function SearchPage({ pages }) {
   let userData = cookies.get("user") || null
   if(userData !== null) userData = JSON.parse(cookies.get("user"))
 
-
   // const [order, setOrder] = useState("score")
 
   async function getDatasets({q, filters, page}) {
@@ -201,7 +200,12 @@ export default function SearchPage({ pages }) {
 
   const DataProposalBox = ({image, display, text, bodyText}) => {
     return (
-      <Stack alignItems="center" width="100%" spacing={0} marginTop={!display && "24px !important"}>
+      <Stack
+        alignItems="center"
+        width="100%"
+        spacing={0}
+        marginTop={!display && "24px !important"}
+      >
         {image && 
           <NotFoundImage
             transform={!isMobileMod() && "translateX(-36px)"}
@@ -391,7 +395,7 @@ export default function SearchPage({ pages }) {
       <DebouncedControlledInput
         value={query.q}
         onChange={(value) => { SearchQuery(value) }}
-        placeholder={useCheckMobile() ? "Palavras-chave, instituições ou temas" :"Pesquise palavras-chave, instituições ou temas"}
+        placeholder={isMobileMod() ? "Palavras-chave, instituições ou temas" :"Pesquise palavras-chave, instituições ou temas"}
         justifyContent="center"
         inputStyle={{
           width: "90%",
@@ -404,14 +408,13 @@ export default function SearchPage({ pages }) {
           fontSize: "16px",
           height: "50px",
           boxShadow: "0 1px 3px 0.5 rgba(100 93 103 /0.16) !important",
-          marginTop: `${useCheckMobile() && "70px"}`,
           _placeholder:{color:"#6F6F6F"}
         }}
-        marginTop={useCheckMobile() && "70px"}
+        marginTop={{ base: isMobileMod() ? "160px" : "140px", lg: "46px" }}
       />
 
       <Stack
-        spacing={useCheckMobile() ? 10 : 0}
+        spacing={isMobileMod() ? 10 : 0}
         width="90%"
         maxWidth="1264px"
         margin="auto"
@@ -422,8 +425,8 @@ export default function SearchPage({ pages }) {
           alignItems="flex-start"
           minWidth={{ base: "100%", lg: "320px" }}
           maxWidth={{ base: "100%", lg: "320px" }}
-          borderRight={useCheckMobile() ? "" : "1px solid #DEDFE0"}
-          padding={useCheckMobile() ? "" : "0 20px 0 0"}
+          borderRight={isMobileMod() ? "" : "1px solid #DEDFE0"}
+          padding={isMobileMod() ? "" : "0 20px 0 0"}
         >
           <Box display="flex" marginBottom="10px" alignItems="center">
             <FilterIcon
