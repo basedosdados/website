@@ -5,7 +5,6 @@ import {
   Text,
   Divider,
   Stack,
-  Select,
   Skeleton,
   Flex,
   Box,
@@ -31,13 +30,10 @@ import Tag from "../../components/atoms/Tag";
 import BodyText from "../../components/atoms/BodyText";
 import Display from "../../components/atoms/Display";
 import RoundedButton from "../../components/atoms/RoundedButton";
-import { SchemaForm } from "../../components/molecules/SchemaForm";
 import Database from "../../components/organisms/Database";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import FilterIcon from "../../public/img/icons/filterIcon";
-import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
-import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import NotFoundImage from "../../public/img/notFoundImage";
 
 function FilterTags({
@@ -217,12 +213,12 @@ export default function SearchPage({ pages }) {
         }
         {display &&
           <Display
-          width="100%"
-          fontSize="50px"
-          textAlign="center"
-          lineHeight="54px"
-          letterSpacing="-0.8px"
-          marginBottom="24px !important"
+            width="100%"
+            fontSize="50px"
+            textAlign="center"
+            lineHeight="54px"
+            letterSpacing="-0.8px"
+            marginBottom="24px !important"
           >{display}</Display>
         }
         <Text

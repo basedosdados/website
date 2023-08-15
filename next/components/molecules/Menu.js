@@ -23,6 +23,7 @@ import cookies from "js-cookie";
 import ControlledInput from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
+import SectionText from "../atoms/SectionText";
 
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import BDLogoEduImage from "../../public/img/logos/bd_logo_edu";
@@ -196,7 +197,7 @@ function SearchInput ({ status }) {
   )
 }
 
-function DesktopLinks({ links }) {
+function DesktopLinks({ links, position = false, path }) {
   const [statusSearch, setStatusSearch] = useState(false)
 
   let userData = cookies.get("user") || null
@@ -243,7 +244,12 @@ function DesktopLinks({ links }) {
       display={{ base: "none", lg: "flex" }}
       position={{ base: "relative", lg: "initial" }}
       gap="24px"
-      marginLeft="32px !important"
+      transition="1s"
+      marginLeft={
+        path === "/" ?
+        !position ? "0 !important" : "32px !important"
+        : "32px !important"
+      }
     >
       <HStack width="100%" flex="3" spacing={7}>
         {Object.entries(links).map(([k, v]) => {
@@ -351,7 +357,7 @@ export default function Menu({}) {
   const { route } = router
   const menuDisclosure = useDisclosure();
   const divRef = useRef()
-  const [isShowLogoHome, setIsShowLogoHome] = useState(false)
+  const [isScrollDown, setIsScrollDown] = useState(false)
 
   let userData = cookies.get("user") || null
   if(userData !== null) userData = JSON.parse(cookies.get("user"))
@@ -379,19 +385,13 @@ export default function Menu({}) {
       {name: "Perguntas frequentes", href: "/perguntas-frequentes"},
     ],
     Contato: "/contato",
-    Button: [
-      {
-        name: "Assine a BD Pro",
-        href: "https://info.basedosdados.org/bd-pro",
-        color: "#8A7500"
-      }
-    ]
+    Button: []
   };
 
   useEffect(() => {
     document.addEventListener("scroll", () => {
-      if (window.scrollY >= 425) setIsShowLogoHome(true)
-      if (window.scrollY <= 425) setIsShowLogoHome(false)
+      if (window.scrollY >= 425) setIsScrollDown(true)
+      if (window.scrollY <= 425) setIsScrollDown(false)
 
       if (!divRef.current || !divRef.current.style) return;
       if (window.scrollY <= 30) divRef.current.style.boxShadow = "none";
@@ -403,6 +403,32 @@ export default function Menu({}) {
 
   return (
     <>
+      <Link
+        position="fixed"
+        backgroundColor="#252A32"
+        width="100%"
+        height={isScrollDown ? "0" : "40px"}
+        transition="0.8s"
+        fontSize="15px"
+        lineHeight="16px"
+        letterSpacing="0.3px"
+        color="#FFF"
+        fontWeight="400"
+        fontFamily="ubuntu"
+        _hover={{opacity: 0.9}}
+        overflow="hidden"
+        zIndex={98}
+        href="https://info.basedosdados.org/bd-pro"
+        target="_blank"
+      >
+        <Box
+          maxWidth="1264px"
+          cursor="pointer"
+          margin="12px auto"
+        >
+          Conheça o plano Pro: Diversos dados de alta frequência atualizados para você explorar. Acesse agora a versão Beta.
+        </Box>
+      </Link>
       <MenuDrawer links={links} {...menuDisclosure} />
       <Box
         ref={divRef}
@@ -412,8 +438,9 @@ export default function Menu({}) {
         left="0px"
         backgroundColor="#FFFFFF"
         padding="16px 28px"
-        zIndex="999"
-        transition="0.2s"
+        marginTop={isScrollDown ? "0" : "40px"}
+        zIndex="99"
+        transition="0.8s"
         as="nav"
       >
         <HStack
@@ -441,11 +468,15 @@ export default function Menu({}) {
 
           <Link
             aria-label="Home"
-            width={route === "/" ? isShowLogoHome ? "88px" :"0" : "88px"}
+            width={
+              route === "/" ?
+              isScrollDown ? "88px" : "0"
+              : "88px"
+            }
             _hover={{opacity:"none"}}
             href={route === "/" ? "/#home" : "/"}
             marginLeft="0 !important"
-            transition="all 0.5s"
+            transition="0.8s"
             overflow="hidden"
           >
             <BDLogoImage
@@ -464,7 +495,7 @@ export default function Menu({}) {
             src={userData?.picture}
             name={userData?.username}
           />
-          <DesktopLinks links={links} />
+          <DesktopLinks links={links} position={isScrollDown} path={route}/>
         </HStack>
       </Box>
     </>
