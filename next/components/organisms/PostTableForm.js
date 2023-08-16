@@ -60,7 +60,7 @@ export default function PostTableForm({
 
   const fetchAllTable = async (dataset) => {
     const getAllTable = await getAllTableInDataset(dataset)
-    setTables(getAllTable)
+    setTables(getAllTable || [])
   }
 
   const fetchData = async () => {
@@ -88,11 +88,15 @@ export default function PostTableForm({
   }
 
   useEffect(() => {
-    const index = tables.findIndex(item => item.node._id === query.table)+1
+    if(query.table === "create") return setAccordionItens(0) 
 
-    if(query.table) setAccordionItens(index)
-    if(tables.length === 0) setAccordionItens(0)
-  }, [tables ,query])
+    if(tables?.length === 0) {
+      setAccordionItens(0)
+    } else {
+      const index = tables.findIndex(item => item.node._id === query.table)+1
+      if(!!query.table) setAccordionItens(index)
+    }
+  }, [tables, query])
 
   if(isLoading) return <LoadingSpin/>
 

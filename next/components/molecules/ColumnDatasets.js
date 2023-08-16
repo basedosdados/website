@@ -22,6 +22,7 @@ import FuzzySearch from 'fuzzy-search';
 import Latex from 'react-latex-next';
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import SectionText from '../atoms/SectionText';
+import LoadingSpin from '../atoms/Loading'
 import Tag from "../atoms/Tag";
 import { TemporalCoverage } from "../atoms/TemporalCoverageDisplay";
 
@@ -241,15 +242,18 @@ function TableDatasets({ headers, values }) {
 export default function ColumnsDatasets({ tableId }) {
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
 
   const featchColumns = async () => {
+    setIsLoading(true)
     try {
       const result = await getColumnsBdmTable(tableId)
-      return setResource(result)
+      setResource(result)
     } catch (error) {
       setIsError(error)
       console.error(error)
     }
+    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -294,6 +298,8 @@ export default function ColumnsDatasets({ tableId }) {
       tooltip:"Descreve processos de tratamentos realizados na coluna que precisam ser evidenciados."
     }
   }
+
+  if(isLoading) return <LoadingSpin/>
 
   if(isError?.message?.length > 0) return <SectionText> Nenhuma informação foi encontrada. </SectionText>
   if(resource === undefined || Object.keys(resource).length === 0) return <SectionText> Nenhuma informação de coluna fornecida. </SectionText>
@@ -402,7 +408,10 @@ export default function ColumnsDatasets({ tableId }) {
         </Stack>
       </HStack> */}
 
-      <TableDatasets headers={headers} values={resource} />
+      <TableDatasets
+        headers={headers}
+        values={resource}
+      />
     </Stack>
   )
 }
