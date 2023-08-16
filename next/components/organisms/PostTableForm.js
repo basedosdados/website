@@ -36,7 +36,7 @@ export default function PostTableForm({
   const router = useRouter()
   const { query } = router
 
-  const [accordionItens, setAccordionItens] = useState([])
+  const [accordionItens, setAccordionItens] = useState(-1)
   const [isLoading, setIsLoading] = useState(true)
   const [allUser, setAllUser] = useState([])
   const [allLicenses, setAllLicenses] = useState([])
@@ -60,7 +60,7 @@ export default function PostTableForm({
 
   const fetchAllTable = async (dataset) => {
     const getAllTable = await getAllTableInDataset(dataset)
-    setTables(getAllTable)
+    setTables(getAllTable || [])
   }
 
   const fetchData = async () => {
@@ -78,14 +78,25 @@ export default function PostTableForm({
   },[])
 
   const handleAccordionOpen = (index) => {
-    const itensOpens = accordionItens.includes(index)
+    const hasSelected = index === accordionItens
 
-    if (itensOpens) {
-      setAccordionItens((prevState) => prevState.filter((item) => item !== index))
+    if (hasSelected) {
+      setAccordionItens(-1)
     } else {
-      setAccordionItens([index])
+      setAccordionItens(index)
     }
   }
+
+  useEffect(() => {
+    if(query.table === "create") return setAccordionItens(0) 
+
+    if(tables?.length === 0) {
+      setAccordionItens(0)
+    } else {
+      const index = tables.findIndex(item => item.node._id === query.table)+1
+      if(!!query.table) setAccordionItens(index)
+    }
+  }, [tables, query])
 
   if(isLoading) return <LoadingSpin/>
 
@@ -120,7 +131,7 @@ export default function PostTableForm({
               textAlign="left"
               fontFamily="ubuntu"
               fontWeight="400"
-              color={accordionItens.find((elm) => elm === 0) === 0 && "#42B0FF"}
+              color={accordionItens === 0 && "#42B0FF"}
             >
               Criar Table
             </Box>
@@ -130,11 +141,11 @@ export default function PostTableForm({
               fontSize="20px"
               fontWeight="500"
               transition="all 0.2s"
-              transform={accordionItens.find((elm) => elm === 0) === 0 && "rotate(45deg)"}
+              transform={accordionItens === 0 && "rotate(45deg)"}
             >+</Text>
           </AccordionButton>
           <AccordionPanel>
-            {accordionItens[0] === 0 &&
+            {accordionItens === 0 &&
               <FormTable
                 id="create"
                 status={status}
@@ -148,7 +159,7 @@ export default function PostTableForm({
         </AccordionItem>
 
         {tables && tables.map((table, i) => 
-          <AccordionItem border={0}>
+          <AccordionItem key={i} border={0}>
             <AccordionButton
               width="632px"
               fontSize="16px"
@@ -180,14 +191,14 @@ export default function PostTableForm({
                 textAlign="left"
                 fontFamily="ubuntu"
                 fontWeight="400"
-                color={accordionItens.find((elm) => elm === i+1) === i+1 && "#42B0FF"}
+                color={accordionItens === i+1 && "#42B0FF"}
               >
                 {table.node.name}
               </Box>
               <AccordionIcon/>
             </AccordionButton>
             <AccordionPanel>
-              {accordionItens[0] === i+1 &&
+              {accordionItens === i+1 &&
                 <FormTable
                   id={table.node._id}
                   status={status}

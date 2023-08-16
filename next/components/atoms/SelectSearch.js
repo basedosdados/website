@@ -18,15 +18,18 @@ export default function SelectSearch({
   const timerRef = useRef();
   const [optionsArray, setOptionsArray] = useState(options)
   const [inputValue, setInputValue] = useState("")
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
 
-  if(value !== "" && inputValue == "") {
-    const findOption = () => {
-      if(hasNode) return options.find((option) => option.node[`${keyId}`] === value)
-      return options.find((option) => option[`${keyId}`] === value)
+  useEffect(() => {
+    if(value !== "" && inputValue == "") {
+      const findOption = () => {
+        if(hasNode) return options.find((option) => option.node[`${keyId}`] === value)
+        return options.find((option) => option[`${keyId}`] === value)
+      }
+      setInputValue(hasNode ? findOption().node[`${displayName}`] : findOption()[`${displayName}`])
     }
-    setInputValue(hasNode ? findOption().node[`${displayName}`] : findOption()[`${displayName}`])
-  }
+    if(value === "") setInputValue("")
+  }, [value])
 
   const mouseEnterEvent = () => {
     setIsOpen(true)

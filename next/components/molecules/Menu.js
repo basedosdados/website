@@ -14,15 +14,17 @@ import {
   AccordionPanel,
   AccordionIcon,
   useBoolean,
-  Divider
+  Divider,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router"
 import { MenuDropdown } from "./MenuDropdown";
 import cookies from "js-cookie";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import ControlledInput from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
+import SectionText from "../atoms/SectionText";
 
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import BDLogoEduImage from "../../public/img/logos/bd_logo_edu";
@@ -196,7 +198,7 @@ function SearchInput ({ status }) {
   )
 }
 
-function DesktopLinks({ links }) {
+function DesktopLinks({ links, position = false, path }) {
   const [statusSearch, setStatusSearch] = useState(false)
 
   let userData = cookies.get("user") || null
@@ -243,7 +245,12 @@ function DesktopLinks({ links }) {
       display={{ base: "none", lg: "flex" }}
       position={{ base: "relative", lg: "initial" }}
       gap="24px"
-      marginLeft="32px !important"
+      transition="1s"
+      marginLeft={
+        path === "/" ?
+        !position ? "0 !important" : "32px !important"
+        : "32px !important"
+      }
     >
       <HStack width="100%" flex="3" spacing={7}>
         {Object.entries(links).map(([k, v]) => {
@@ -351,7 +358,10 @@ export default function Menu({}) {
   const { route } = router
   const menuDisclosure = useDisclosure();
   const divRef = useRef()
-  const [isShowLogoHome, setIsShowLogoHome] = useState(false)
+  const bannerRef = useRef()
+  const [isScrollDown, setIsScrollDown] = useState(false)
+  const [menuMobileMargin, setMenuMobileMargin] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
 
   let userData = cookies.get("user") || null
   if(userData !== null) userData = JSON.parse(cookies.get("user"))
@@ -379,19 +389,13 @@ export default function Menu({}) {
       {name: "Perguntas frequentes", href: "/perguntas-frequentes"},
     ],
     Contato: "/contato",
-    Button: [
-      {
-        name: "Assine a BD Pro",
-        href: "https://info.basedosdados.org/bd-pro",
-        color: "#8A7500"
-      }
-    ]
+    Button: []
   };
 
   useEffect(() => {
     document.addEventListener("scroll", () => {
-      if (window.scrollY >= 425) setIsShowLogoHome(true)
-      if (window.scrollY <= 425) setIsShowLogoHome(false)
+      if (window.scrollY >= 425) setIsScrollDown(true)
+      if (window.scrollY <= 425) setIsScrollDown(false)
 
       if (!divRef.current || !divRef.current.style) return;
       if (window.scrollY <= 30) divRef.current.style.boxShadow = "none";
@@ -401,9 +405,50 @@ export default function Menu({}) {
     });
   }, [divRef.current])
 
+  useEffect(() => {
+    const marginTopMenuMobile = bannerRef.current.clientHeight
+    if(useCheckMobile()) setIsMobile(true)
+    setMenuMobileMargin(marginTopMenuMobile)
+  }, [bannerRef.current])
+
   return (
     <>
+      <Box
+        ref={bannerRef}
+        position="fixed"
+        backgroundColor="#252A32"
+        width="100%"
+        height={isScrollDown ? "0" : "fit-content"}
+        padding={{ base: isMobile ? "12px 24px" : "12px 45px", lg: "12px 28px" }}
+        overflow="hidden"
+        zIndex={98}
+      >
+        <Link
+          width="100%"
+          transition="0.5s"
+          fontSize="15px"
+          lineHeight={useCheckMobile() ? "20px" : "16px"}
+          letterSpacing="0.3px"
+          color="#FFF"
+          fontWeight="400"
+          fontFamily="ubuntu"
+          _hover={{opacity: 1}}
+          href="https://info.basedosdados.org/bd-pro"
+          target="_blank"
+        >
+          <Box
+            maxWidth="1264px"
+            cursor="pointer"
+            margin="0 auto"
+            _hover={{opacity: 0.7}}
+          >
+            Assine a BD Pro e tenha acesso a conjuntos exclusivos e dados com alta frequência de atualização. Versão Beta já disponível <RedirectIcon position="relative" top="-2px" left="4px" fill="#FFF"/>
+          </Box>
+        </Link>
+      </Box>
+
       <MenuDrawer links={links} {...menuDisclosure} />
+
       <Box
         ref={divRef}
         position="fixed"
@@ -412,8 +457,9 @@ export default function Menu({}) {
         left="0px"
         backgroundColor="#FFFFFF"
         padding="16px 28px"
-        zIndex="999"
-        transition="0.2s"
+        marginTop={isScrollDown ? "0" : { base: `${menuMobileMargin}px` , lg: "40px" }}
+        zIndex="99"
+        transition="0.5s"
         as="nav"
       >
         <HStack
@@ -427,7 +473,7 @@ export default function Menu({}) {
           <Box display={{ base: "flex", lg: "none" }}>
             <FarBarsIcon
               alt="menu de navegação"
-              position="fixed"
+              position="absolute"
               top="0"
               left="0"
               margin="20px 0 0 20px"
@@ -441,11 +487,15 @@ export default function Menu({}) {
 
           <Link
             aria-label="Home"
-            width={route === "/" ? isShowLogoHome ? "88px" :"0" : "88px"}
+            width={
+              route === "/" ?
+              isScrollDown ? "88px" : "0"
+              : "88px"
+            }
             _hover={{opacity:"none"}}
             href={route === "/" ? "/#home" : "/"}
             marginLeft="0 !important"
-            transition="all 0.5s"
+            transition="0.5s"
             overflow="hidden"
           >
             <BDLogoImage
@@ -464,7 +514,7 @@ export default function Menu({}) {
             src={userData?.picture}
             name={userData?.username}
           />
-          <DesktopLinks links={links} />
+          <DesktopLinks links={links} position={isScrollDown} path={route}/>
         </HStack>
       </Box>
     </>

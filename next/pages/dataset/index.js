@@ -5,7 +5,6 @@ import {
   Text,
   Divider,
   Stack,
-  Select,
   Skeleton,
   Flex,
   Box,
@@ -31,13 +30,10 @@ import Tag from "../../components/atoms/Tag";
 import BodyText from "../../components/atoms/BodyText";
 import Display from "../../components/atoms/Display";
 import RoundedButton from "../../components/atoms/RoundedButton";
-import { SchemaForm } from "../../components/molecules/SchemaForm";
 import Database from "../../components/organisms/Database";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import FilterIcon from "../../public/img/icons/filterIcon";
-import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
-import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import NotFoundImage from "../../public/img/notFoundImage";
 
 function FilterTags({
@@ -93,7 +89,6 @@ export default function SearchPage({ pages }) {
 
   let userData = cookies.get("user") || null
   if(userData !== null) userData = JSON.parse(cookies.get("user"))
-
 
   // const [order, setOrder] = useState("score")
 
@@ -205,7 +200,12 @@ export default function SearchPage({ pages }) {
 
   const DataProposalBox = ({image, display, text, bodyText}) => {
     return (
-      <Stack alignItems="center" width="100%" spacing={0} marginTop={!display && "24px !important"}>
+      <Stack
+        alignItems="center"
+        width="100%"
+        spacing={0}
+        marginTop={!display && "24px !important"}
+      >
         {image && 
           <NotFoundImage
             transform={!isMobileMod() && "translateX(-36px)"}
@@ -217,12 +217,12 @@ export default function SearchPage({ pages }) {
         }
         {display &&
           <Display
-          width="100%"
-          fontSize="50px"
-          textAlign="center"
-          lineHeight="54px"
-          letterSpacing="-0.8px"
-          marginBottom="24px !important"
+            width="100%"
+            fontSize="50px"
+            textAlign="center"
+            lineHeight="54px"
+            letterSpacing="-0.8px"
+            marginBottom="24px !important"
           >{display}</Display>
         }
         <Text
@@ -395,7 +395,7 @@ export default function SearchPage({ pages }) {
       <DebouncedControlledInput
         value={query.q}
         onChange={(value) => { SearchQuery(value) }}
-        placeholder={useCheckMobile() ? "Palavras-chave, instituições ou temas" :"Pesquise palavras-chave, instituições ou temas"}
+        placeholder={isMobileMod() ? "Palavras-chave, instituições ou temas" :"Pesquise palavras-chave, instituições ou temas"}
         justifyContent="center"
         inputStyle={{
           width: "90%",
@@ -408,14 +408,13 @@ export default function SearchPage({ pages }) {
           fontSize: "16px",
           height: "50px",
           boxShadow: "0 1px 3px 0.5 rgba(100 93 103 /0.16) !important",
-          marginTop: `${useCheckMobile() && "70px"}`,
           _placeholder:{color:"#6F6F6F"}
         }}
-        marginTop={useCheckMobile() && "70px"}
+        marginTop={{ base: isMobileMod() ? "160px" : "140px", lg: "46px" }}
       />
 
       <Stack
-        spacing={useCheckMobile() ? 10 : 0}
+        spacing={isMobileMod() ? 10 : 0}
         width="90%"
         maxWidth="1264px"
         margin="auto"
@@ -426,8 +425,8 @@ export default function SearchPage({ pages }) {
           alignItems="flex-start"
           minWidth={{ base: "100%", lg: "320px" }}
           maxWidth={{ base: "100%", lg: "320px" }}
-          borderRight={useCheckMobile() ? "" : "1px solid #DEDFE0"}
-          padding={useCheckMobile() ? "" : "0 20px 0 0"}
+          borderRight={isMobileMod() ? "" : "1px solid #DEDFE0"}
+          padding={isMobileMod() ? "" : "0 20px 0 0"}
         >
           <Box display="flex" marginBottom="10px" alignItems="center">
             <FilterIcon
@@ -692,7 +691,7 @@ export default function SearchPage({ pages }) {
                 <RoundedButton
                   width="fit-content"
                   padding="20px"
-                  onClick={() => window.open("/dataset/control", "_self")}
+                  onClick={() => window.open("/dataset/edit", "_self")}
                   marginLeft="auto"
                   _hover={{transform: "none", opacity: "0.8"}}
                 >

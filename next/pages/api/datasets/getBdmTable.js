@@ -72,6 +72,7 @@ export default async function getBdmTable(id) {
                     }
                   }
                 }
+                fullCoverage
                 license {
                   _id
                   name

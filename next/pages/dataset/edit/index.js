@@ -44,7 +44,7 @@ export default function Control() {
   const [themes, setThemes] = useState([])
   const [tags, setTags] = useState([])
   const [status, setStatus] = useState([])
-  const [accordionItens, setAccordionItens] = useState([1])
+  const [accordionItens, setAccordionItens] = useState([0])
 
   const fetchOrganizations = async () => {
     const allOrganizations = await getAllOrganizations()
@@ -89,6 +89,10 @@ export default function Control() {
       setAccordionItens((prevState) => [...prevState, index])
     }
   }
+
+  useEffect(() => {
+    if(!!query.table) return setAccordionItens([1])
+  }, [query])
 
   if(isLoading) return <MainPageTemplate paddingX="24px" height="600px"><LoadingSpin /></MainPageTemplate>
 

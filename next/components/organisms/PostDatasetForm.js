@@ -327,7 +327,7 @@ export default function PostDatasetForm({
               Acessar página web
             </RoundedButton>
             {!query.dataset &&
-              <RoundedButton onClick={() => window.open(`/dataset/control?dataset=${isSuccess?.datasetId}`, "_self")}>
+              <RoundedButton onClick={() => window.open(`/dataset/edit?dataset=${isSuccess?.datasetId}`, "_self")}>
                 Continuar editando
               </RoundedButton>
             }

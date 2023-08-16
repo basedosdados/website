@@ -1,13 +1,20 @@
 import {
   Stack,
   Center,
-  Text
+  Text,
+  Progress,
+  Box,
+  Badge,
+  Tooltip,
+  useBoolean,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Children } from "react";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import { CalendarComunIcon } from "../../public/img/icons/calendarIcon";
 import TimeIcon from "../../public/img/icons/timeIcon";
+import RedirectIcon from "../../public/img/icons/redirectIcon";
 
-export default function TemporalCoverage ({
+export function TemporalCoverage ({
   value,
   text,
   iconSettings = {width: "18px", height: "18px", fill: "#D0D0D0"},
@@ -95,7 +102,7 @@ export default function TemporalCoverage ({
 
   return (
     <Center>
-      <Dates dates={startDate}/> - <Dates dates={endDate} margin="0 0 0 10px"/>
+      <Dates dates={startDate}/> ─ <Dates dates={endDate} margin="0 0 0 10px"/>
     </Center>
   )
 }
@@ -133,28 +140,349 @@ export function TemporalCoverageString({
       gap="8px"
       spacing={0}
     >
-      <Center>
-        <CalendarComunIcon
-          position="relative"
-          top="-1px"
-          margin="0 6px 0 0"
-          width="18px"
-          height="18px"
-          {...iconSettings}
-        />
-        <TextData textSettings={textSettings} string={dataStart}/>
-      </Center> <span style={{color: "#A3A3A3"}}>─</span> <Center>
-        <CalendarComunIcon
-          position="relative"
-          top="-1px"
-          margin="0 6px 0 0"
-          width="18px"
-          height="18px"
-          {...iconSettings}
-        />
-        <TextData textSettings={textSettings} string={dataEnd}/>
-      </Center>
+      {value === "" ?
+        <span style={{color: "#A3A3A3"}}>─</span>
+      :
+        <>
+          <Center>
+            <CalendarComunIcon
+              position="relative"
+              top="-1px"
+              margin="0 6px 0 0"
+              width="18px"
+              height="18px"
+              {...iconSettings}
+            />
+            <TextData textSettings={textSettings} string={dataStart}/>
+          </Center> <span style={{color: "#A3A3A3"}}>─</span> <Center>
+            <CalendarComunIcon
+              position="relative"
+              top="-1px"
+              margin="0 6px 0 0"
+              width="18px"
+              height="18px"
+              {...iconSettings}
+            />
+            <TextData textSettings={textSettings} string={dataEnd}/>
+          </Center>
+        </>
+      }
     </Stack>
-    
+  )
+}
+
+export function TemporalCoverageBar ({ value }) {
+  const [flag, setFlag] = useBoolean()
+
+  const TextData = ({ string, ...style }) => {
+    return (
+      <Text
+        color="#252A32"
+        fontSize="14px"
+        lineHeight="24px"
+        letterSpacing="0.5px"
+        fontWeight="300"
+        fontFamily="Lato"
+        {...style}
+      >
+        {string}
+      </Text>
+    )
+  }
+
+  if(!value) return <TextData string="Não Listado"/>
+  if(value === "[]") return <TextData string="Não Listado"/>
+
+  const temporalCoverageObj = JSON.parse(value)
+
+  let dataStart = ""
+  let dataIntermediate = ""
+  let dataEnd = ""
+
+  if(temporalCoverageObj.length === 3) {
+    dataStart = temporalCoverageObj[0]
+    dataIntermediate = temporalCoverageObj[1]
+    dataEnd = temporalCoverageObj[2]
+  }
+
+  if(temporalCoverageObj.length === 2) {
+    dataStart = temporalCoverageObj[0]
+    dataEnd = temporalCoverageObj[1]
+  }
+
+  const checkoutBdpro = (value) => {
+    if(value === "open") return 
+    window.open("https://buy.stripe.com/14k7ulbJE9IE6L68wz", "_blank")
+  }
+
+  const BadgeContainer = ({
+    value,
+    bool = false,
+    mouseOn = null,
+    mouseOff = null,
+    ...props
+  }) => {
+    const toggleTag = value === "open"
+
+    return (
+      <Badge
+        position="absolute"          
+        backgroundColor={toggleTag ? "#D5E6DC" : "#FAEEAE" }
+        color={toggleTag ? "#1C703A" : "#7D6A00" }
+        padding="2px 10px"
+        borderRadius="12px"
+        onClick={() => checkoutBdpro(value)}
+        _hover={toggleTag ? "" : {opacity: 0.7}}
+        opacity={bool && 0.7}
+        onMouseEnter={mouseOn}
+        onMouseLeave={mouseOff}
+        cursor="pointer"
+      >{toggleTag ? 
+        "GRÁTIS" :
+        <Box
+          display="flex"
+          alignItems="center"
+          gap="4px"
+        >PRO
+          <RedirectIcon
+            display={bool ? "flex" : "none"}
+            position="relative"
+            top="-1px"
+            fill="#7D6A00"
+          />
+        </Box>}
+      </Badge>
+    )
+  }
+
+  const showDataTime = (value) => {
+    if(value === "") return "Não listado"
+
+    let year = value.year || ""
+    let month = value.month || ""
+    let day = value.day || ""
+    let hour = value.hour || ""
+    let minute = value.minute || ""
+    let second = value.second || ""
+
+    const string = `${year && year}${month && -month}${day && -day}`
+
+    return string
+  }
+
+  const TooltipContent = ({children, text, firstValue, lastValue, ...props}) => {
+
+    return (
+      <Tooltip
+        label={
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+          >
+            {text}
+            <Box display="flex" gap="12px" marginTop="6px">
+              <Center
+                position="relative"
+                left="-1px"
+              >
+                <CalendarComunIcon
+                  position="relative"
+                  top="-1px"
+                  margin="0 6px 0 0"
+                  width="20px"
+                  height="20px"
+                  fill="#A3A3A3"
+                />
+                <TextData string={showDataTime(firstValue)} color="#FFF" fontWeight="400"/>
+              </Center> ─
+              <Center
+                position="relative"
+                left="-1px"
+              >
+                <CalendarComunIcon
+                  position="relative"
+                  top="-1px"
+                  margin="0 6px 0 0"
+                  width="20px"
+                  height="20px"
+                  fill="#A3A3A3"
+                />
+                <TextData string={showDataTime(lastValue)} color="#FFF" fontWeight="400"/>
+              </Center>
+            </Box>
+          </Box>
+        }
+        hasArrow
+        bg="#2A2F38"
+        fontSize="16px"
+        fontWeight="400"
+        padding="5px 16px 6px"
+        marginTop="10px"
+        color="#FFF"
+        borderRadius="6px"
+        placement="top"
+        top="-4px"
+        fontFamily="lato"
+        {...props}
+      >
+        {children}
+      </Tooltip>
+    )
+  }
+
+  return (
+    <Stack 
+      position="relative"  
+      width="100%"
+      margin="50px 0 80px !important"
+      spacing={0}
+    >
+      <Progress
+        value={temporalCoverageObj.length === 2 ? 100 : useCheckMobile() ? 54 :70}
+        height="3px"
+        marginLeft="10px"
+        width="100%"
+        backgroundColor="#9C8400"
+        colorScheme={temporalCoverageObj[0]?.type === "closed" ? "yellowPro" : "greenBD"}
+      />
+
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="flex-start"
+        position="absolute"
+        top="-7px"
+        gap="12px"
+      >
+        <Box
+          width="16px"
+          height="16px"
+          borderRadius="50%"
+          backgroundColor={dataStart?.type === "open" ? "#2B8C4D" : "#9C8400"}
+        />
+        <Center
+          position="relative"
+          left="-1px"
+        >
+          <CalendarComunIcon
+            position="relative"
+            top="-1px"
+            margin="0 6px 0 0"
+            width="20px"
+            height="20px"
+            fill={dataStart?.type === "open" ? "#2B8C4D" : "#9C8400"}
+          />
+          <TextData string={showDataTime(dataStart)}/>
+        </Center>
+      </Box>
+
+      {dataIntermediate !== "" &&
+        <Box
+          display="flex"
+        >
+          <TooltipContent
+            text="Acesso liberado entre"
+            firstValue={dataStart}
+            lastValue={dataIntermediate}
+          >
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              position="absolute"
+              left={useCheckMobile() ? "54%" : "70%"}
+              top="-41px"
+              gap="12px"
+            >
+              <Box
+                position="relative"
+                top="34px"
+                width="16px"
+                height="16px"
+                borderRadius="50%"
+                cursor="pointer"
+                backgroundColor={dataIntermediate?.type === "open" ? "#2B8C4D" : "#9C8400"}
+              />
+
+              <BadgeContainer value={dataIntermediate?.type}/>
+            </Box>
+          </TooltipContent>
+          <Center
+            position="absolute"
+            left={useCheckMobile() ? "36%" : "60%"}
+            top="24px"
+            minWidth="120px"
+          >
+            <CalendarComunIcon
+              position="relative"
+              top="-1px"
+              margin="0 6px 0 0"
+              width="20px"
+              height="20px"
+              fill={dataIntermediate?.type === "open" ? "#2B8C4D" : "#9C8400"}
+            />
+            <TextData string={showDataTime(dataIntermediate)}/>
+          </Center>
+        </Box>
+      }
+
+      <Box
+        display="flex"
+      >
+        <TooltipContent
+          text={dataEnd?.type === "open" ? "Acesso liberado entre" : "Assine a BD Pro para liberar entre"}
+          firstValue={dataEnd?.type === "open" ? dataStart : dataEnd?.type === "closed" ? dataStart : dataIntermediate}
+          lastValue={dataEnd}
+          isOpen={flag}
+        >
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            position="absolute"
+            left="99%"
+            top="-41px"
+            gap="12px"
+          >
+            <Box
+              position="relative"
+              top="34px"
+              width="16px"
+              height="16px"
+              borderRadius="50%"
+              cursor="pointer"
+              backgroundColor={dataEnd?.type === "open" ? "#2B8C4D" : "#9C8400"}
+              onClick={() => checkoutBdpro(dataEnd?.type)}
+              onMouseEnter={setFlag.on}
+              onMouseLeave={setFlag.off}
+            />
+
+            <BadgeContainer
+              value={dataEnd?.type}
+              bool={flag}
+              mouseOn={setFlag.on}
+              mouseOff={setFlag.off}
+            />
+          </Box>
+        </TooltipContent>
+        <Center
+          position="absolute"
+          top="24px"
+          minWidth="120px"
+          left={useCheckMobile() ? "75%" : "90%"}
+        >
+          <CalendarComunIcon
+            position="relative"
+            top="-1px"
+            margin="0 6px 0 0"
+            width="20px"
+            height="20px"
+            fill={dataEnd?.type === "open" ? "#2B8C4D" : "#9C8400"}
+          />
+          <TextData string={showDataTime(dataEnd)}/>
+        </Center>
+      </Box>
+    </Stack>
   )
 }
