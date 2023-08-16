@@ -151,7 +151,7 @@ export default function Database({
             maxHeight="138px"
             minWidth="138px"
             minHeight="138px"
-            borderRadius="10px"
+            borderRadius="16px"
             backgroundColor="#eee"
           />
         </Link>
@@ -253,7 +253,7 @@ export default function Database({
                 >
                   <SectionText color="#6F6F6F">Cobertura temporal:</SectionText>
                   <TemporalCoverageString
-                    value={ temporalCoverageText ? temporalCoverageText : "Nenhuma cobertura temporal fornecida"}
+                    value={ temporalCoverageText ? temporalCoverageText : ""}
                     textSettings={{color: "#6F6F6F", fontWeight:"400"}}
                   />
                 </HStack>

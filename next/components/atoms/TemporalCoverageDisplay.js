@@ -4,12 +4,15 @@ import {
   Text,
   Progress,
   Box,
-  Badge
+  Badge,
+  Tooltip,
+  useBoolean,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Children } from "react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import { CalendarComunIcon } from "../../public/img/icons/calendarIcon";
 import TimeIcon from "../../public/img/icons/timeIcon";
+import RedirectIcon from "../../public/img/icons/redirectIcon";
 
 export function TemporalCoverage ({
   value,
@@ -137,34 +140,40 @@ export function TemporalCoverageString({
       gap="8px"
       spacing={0}
     >
-      <Center>
-        <CalendarComunIcon
-          position="relative"
-          top="-1px"
-          margin="0 6px 0 0"
-          width="18px"
-          height="18px"
-          {...iconSettings}
-        />
-        <TextData textSettings={textSettings} string={dataStart}/>
-      </Center> <span style={{color: "#A3A3A3"}}>─</span> <Center>
-        <CalendarComunIcon
-          position="relative"
-          top="-1px"
-          margin="0 6px 0 0"
-          width="18px"
-          height="18px"
-          {...iconSettings}
-        />
-        <TextData textSettings={textSettings} string={dataEnd}/>
-      </Center>
+      {value === "" ?
+        <span style={{color: "#A3A3A3"}}>─</span>
+      :
+        <>
+          <Center>
+            <CalendarComunIcon
+              position="relative"
+              top="-1px"
+              margin="0 6px 0 0"
+              width="18px"
+              height="18px"
+              {...iconSettings}
+            />
+            <TextData textSettings={textSettings} string={dataStart}/>
+          </Center> <span style={{color: "#A3A3A3"}}>─</span> <Center>
+            <CalendarComunIcon
+              position="relative"
+              top="-1px"
+              margin="0 6px 0 0"
+              width="18px"
+              height="18px"
+              {...iconSettings}
+            />
+            <TextData textSettings={textSettings} string={dataEnd}/>
+          </Center>
+        </>
+      }
     </Stack>
   )
 }
 
 export function TemporalCoverageBar ({ value }) {
 
-  const TextData = ({ string }) => {
+  const TextData = ({ string, ...style }) => {
     return (
       <Text
         color="#252A32"
@@ -173,6 +182,7 @@ export function TemporalCoverageBar ({ value }) {
         letterSpacing="0.5px"
         fontWeight="300"
         fontFamily="Lato"
+        {...style}
       >
         {string}
       </Text>
@@ -193,22 +203,48 @@ export function TemporalCoverageBar ({ value }) {
     dataIntermediate = temporalCoverageObj[1]
     dataEnd = temporalCoverageObj[2]
   }
+
   if(temporalCoverageObj.length === 2) {
     dataStart = temporalCoverageObj[0]
     dataEnd = temporalCoverageObj[1]
   }
 
-  const BadgeContainer = ({ value }) => {
+  const checkoutBdpro = (value) => {
+    if(value === "open") return 
+    window.open("https://buy.stripe.com/14k7ulbJE9IE6L68wz", "_blank")
+  }
+
+  const BadgeContainer = ({ value, ...props }) => {
+    const [flag, setFlag] = useBoolean()
     const toogleTag = value === "open"
 
     return (
       <Badge
-        position="absolute"
+        position="absolute"          
         backgroundColor={toogleTag ? "#D5E6DC" : "#FAEEAE" }
         color={toogleTag ? "#1C703A" : "#7D6A00" }
         padding="2px 10px"
         borderRadius="12px"
-      >{toogleTag ? "GRÁTIS" : "PRO"}</Badge>
+        onClick={() => checkoutBdpro(value)}
+        _hover={toogleTag ? "" : {opacity: 0.7}}
+        onMouseEnter={setFlag.on}
+        onMouseLeave={setFlag.off}
+        cursor="pointer"
+      >{toogleTag ? 
+        "GRÁTIS" :
+        <Box
+          display="flex"
+          alignItems="center"
+          gap="4px"
+        >PRO
+          <RedirectIcon
+            display={flag ? "flex" : "none"}
+            position="relative"
+            top="-1px"
+            fill="#7D6A00"
+          />
+        </Box>}
+      </Badge>
     )
   }
 
@@ -225,6 +261,66 @@ export function TemporalCoverageBar ({ value }) {
     const string = `${year && year}${month && -month}${day && -day}`
 
     return string
+  }
+
+  const TooltipContent = ({children, text, firstValue, lastValue}) => {
+
+    return (
+      <Tooltip
+          label={
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+            >
+              {text}
+              <Box display="flex" gap="12px" marginTop="6px">
+                <Center
+                  position="relative"
+                  left="-1px"
+                >
+                  <CalendarComunIcon
+                    position="relative"
+                    top="-1px"
+                    margin="0 6px 0 0"
+                    width="20px"
+                    height="20px"
+                    fill="#A3A3A3"
+                  />
+                  <TextData string={showDataTime(firstValue)} color="#FFF" fontWeight="400"/>
+                </Center> ─
+                <Center
+                  position="relative"
+                  left="-1px"
+                >
+                  <CalendarComunIcon
+                    position="relative"
+                    top="-1px"
+                    margin="0 6px 0 0"
+                    width="20px"
+                    height="20px"
+                    fill="#A3A3A3"
+                  />
+                  <TextData string={showDataTime(lastValue)} color="#FFF" fontWeight="400"/>
+                </Center>
+              </Box>
+            </Box>
+          }
+          hasArrow
+          bg="#2A2F38"
+          fontSize="16px"
+          fontWeight="400"
+          padding="5px 16px 6px"
+          marginTop="10px"
+          color="#FFF"
+          borderRadius="6px"
+          placement="top"
+          top="-4px"
+          fontFamily="lato"
+        >
+          {children}
+        </Tooltip>
+    )
   }
 
   return (
@@ -252,12 +348,15 @@ export function TemporalCoverageBar ({ value }) {
         gap="12px"
       >
         <Box
-          width="18px"
-          height="18px"
+          width="16px"
+          height="16px"
           borderRadius="50%"
           backgroundColor={dataStart?.type === "open" ? "#2B8C4D" : "#9C8400"}
         />
-        <Center position="relative" left="-1px">
+        <Center
+          position="relative"
+          left="-1px"
+        >
           <CalendarComunIcon
             position="relative"
             top="-1px"
@@ -273,25 +372,38 @@ export function TemporalCoverageBar ({ value }) {
       {dataIntermediate !== "" &&
         <Box
           display="flex"
-          flexDirection="column"
-          alignItems="center"
-          position="absolute"
-          left={useCheckMobile() ? "54%" : "70%"}
-          top="-41px"
-          gap="12px"
         >
-          <Box
-            position="relative"
-            top="34px"
-            width="18px"
-            height="18px"
-            borderRadius="50%"
-            backgroundColor={dataIntermediate?.type === "open" ? "#2B8C4D" : "#9C8400"}
-          />
-          <BadgeContainer value={dataIntermediate?.type}/>
+          <TooltipContent
+            text="Acesso liberado entre"
+            firstValue={dataStart}
+            lastValue={dataIntermediate}
+          >
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              position="absolute"
+              left={useCheckMobile() ? "54%" : "70%"}
+              top="-41px"
+              gap="12px"
+            >
+              <Box
+                position="relative"
+                top="34px"
+                width="16px"
+                height="16px"
+                borderRadius="50%"
+                cursor="pointer"
+                backgroundColor={dataIntermediate?.type === "open" ? "#2B8C4D" : "#9C8400"}
+              />
+
+              <BadgeContainer value={dataIntermediate?.type}/>
+            </Box>
+          </TooltipContent>
           <Center
             position="absolute"
-            top="64px"
+            left={useCheckMobile() ? "36%" : "60%"}
+            top="24px"
             minWidth="120px"
           >
             <CalendarComunIcon
@@ -309,27 +421,41 @@ export function TemporalCoverageBar ({ value }) {
 
       <Box
         display="flex"
-        flexDirection="column"
-        alignItems="center"
-        position="absolute"
-        left="99%"
-        top="-41px"
-        gap="12px"
-      >
-        <Box
-          position="relative"
-          top="34px"
-          width="18px"
-          height="18px"
-          borderRadius="50%"
-          backgroundColor={dataEnd?.type === "open" ? "#2B8C4D" : "#9C8400"}
-        />
-        <BadgeContainer value={dataEnd?.type}/>
+        >
+        <TooltipContent
+          text={dataEnd?.type === "open" ? "Acesso liberado entre" : "Assine a BD Pro para liberar entre"}
+          firstValue={dataEnd?.type === "open" ? dataStart : dataIntermediate}
+          lastValue={dataEnd}
+        >
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            position="absolute"
+            left="99%"
+            top="-41px"
+            gap="12px"
+          >
+            <Box
+              position="relative"
+              top="34px"
+              width="16px"
+              height="16px"
+              borderRadius="50%"
+              cursor="pointer"
+              backgroundColor={dataEnd?.type === "open" ? "#2B8C4D" : "#9C8400"}
+              onClick={() => checkoutBdpro(dataEnd?.type)}
+            />
+
+            <BadgeContainer value={dataEnd?.type}/>
+          </Box>
+        </TooltipContent>
         <Center
-          minWidth="120px"
           position="absolute"
-          top="64px"
-          left={useCheckMobile() && "-68px"}
+          top="24px"
+          minWidth="120px"
+          left={useCheckMobile() ? "75%" : "90%"}
+          onClick={() => checkoutBdpro(dataEnd?.type)}
         >
           <CalendarComunIcon
             position="relative"

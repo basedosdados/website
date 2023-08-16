@@ -59,34 +59,6 @@ export function BoxBigQueryGoogle({ href }) {
   )
 }
 
-export function BoxBDPro({}) {
-  return (
-    <DisclaimerBox
-      width="100%"
-      marginTop="16px !important"
-      borderColor="#8A7500"
-    >
-      <HStack spacing={0}>
-        <ProIcon
-          alt="pro"
-          widthImage="28px"
-          heightImage="16px"
-          marginRight="10px"
-        />
-        <SectionText>
-          Esta tabela só pode ser acessada por assinantes <b>BD Pro</b>. 
-          <Link
-            target="_blank"
-            color="#42B0FF"
-            href="https://info.basedosdados.org/bd-pro"
-          > Conheça agora as vantagens da assinatura.
-          </Link>
-        </SectionText>
-      </HStack>
-    </DisclaimerBox>
-  )
-}
-
 export function PrismCodeHighlight({ language, children }) {
   const { hasCopied, onCopy } = useClipboard(children)
 
@@ -188,7 +160,6 @@ export default function DataInformationQuery ({ resource }) {
       width="100%"
     >
       <Subtitle>Consulta aos dados</Subtitle>
-      {resource?.isClosed && <BoxBDPro/>}
       <Tabs
         paddingTop="16px"
         width={{ base: "90vw", lg: "100%" }}

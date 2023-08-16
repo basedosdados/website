@@ -102,7 +102,7 @@ export default function DatasetPage ({
       </Head>
 
       <VStack
-        paddingTop={{ base: "50px", lg: "0px" }}
+        paddingTop={{ base: isMobileMod() ? "160px" : "140px", lg: "0" }}
         margin="auto"
         width={{ base: "90vw", lg: "80vw" }}
         maxWidth="1264px"
@@ -160,7 +160,7 @@ export default function DatasetPage ({
                   fontSize={isMobileMod() ? "14px" : "16px"}
                 >
                   <TemporalCoverageString
-                    value={dataset.coverage ? dataset.coverage :"Nenhuma cobertura temporal fornecida"}
+                    value={dataset.coverage ? dataset.coverage :""}
                   />
                 </SectionText>
               </VStack>
