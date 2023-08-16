@@ -442,7 +442,7 @@ export default function Menu({}) {
             margin="0 auto"
             _hover={{opacity: 0.7}}
           >
-            Assine o Plano Pro e tenha acesso a conjuntos exclusivos e dados com alta frequência de atualização. Versão Beta já disponível <RedirectIcon position="relative" top="-2px" left="4px" fill="#FFF"/>
+            Assine a BD Pro e tenha acesso a conjuntos exclusivos e dados com alta frequência de atualização. Versão Beta já disponível <RedirectIcon position="relative" top="-2px" left="4px" fill="#FFF"/>
           </Box>
         </Link>
       </Box>

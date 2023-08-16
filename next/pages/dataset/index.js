@@ -691,7 +691,7 @@ export default function SearchPage({ pages }) {
                 <RoundedButton
                   width="fit-content"
                   padding="20px"
-                  onClick={() => window.open("/dataset/control", "_self")}
+                  onClick={() => window.open("/dataset/edit", "_self")}
                   marginLeft="auto"
                   _hover={{transform: "none", opacity: "0.8"}}
                 >

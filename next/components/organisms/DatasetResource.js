@@ -16,7 +16,7 @@ import InformationRequestPage from "./InformationRequestPage";
 
 import CrossIcon from "../../public/img/icons/crossIcon";
 
-function AdminButtons() {
+function AdminButtons({ datasetId }) {
   let userData = cookies.get("user") || null
   if(userData !== null) userData = JSON.parse(cookies.get("user"))
 
@@ -25,8 +25,7 @@ function AdminButtons() {
   return (
     <Stack paddingTop="16px" width="100%">
       <SimpleButton
-        // isActive={isActive("create_bdm_table")}
-        // onClick={() => setResource({ resource_type: "create_bdm_table" })}
+        onClick={() => window.open(`/dataset/edit?dataset=${datasetId}&table=create`, "_self")}
         margin="0 0 16px !important"
         justifyContent="space-between"
         alignItems="center"
@@ -43,8 +42,7 @@ function AdminButtons() {
         />
       </SimpleButton>
       <SimpleButton
-        // isActive={isActive("create_external_link")}
-        // onClick={() => setResource({ resource_type: "create_external_link" })}
+        // onClick={}
         margin="0 0 16px !important"
         justifyContent="space-between"
         alignItems="center"
@@ -61,7 +59,6 @@ function AdminButtons() {
         />
       </SimpleButton>
       <SimpleButton
-        // isActive={isActive("create_information_request")}
         // onClick={() =>
         //   setResource({ resource_type: "create_information_request" })
         // }
@@ -153,7 +150,9 @@ export default function DatasetResource({
         justify="flex-start"
         borderRight={!isMobileMod() && "1px solid #DEDFE0"}
       >
-        <AdminButtons/>
+        <AdminButtons
+          datasetId={query.dataset}
+        />
 
         <FilterAccordion
           alwaysOpen={true}
