@@ -15,6 +15,8 @@ export default async function postDataset({
   status,
   isClosed
 }, id) {
+  const newDescription = description.replaceAll('\n', '\\n')
+
   try {
     const res = await axios({
       method: 'POST',
@@ -27,11 +29,12 @@ export default async function postDataset({
         mutation {
           CreateUpdateDataset (input:
             {
-              ${id ? `id: "${id}"` : ""} 
+              ${id ? `id: "${id}"` : ""}
               slug: "${slug}"
               name: "${name}"
               namePt: "${name}"
-              description: "${description}"
+              description: "${newDescription}"
+              descriptionPt: "${newDescription}"
               organization: "${organization}"
               themes: [${themes}]
               ${tags.length > 0 ? `tags: [${tags}]` : ""}

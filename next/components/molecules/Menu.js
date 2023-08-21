@@ -423,18 +423,17 @@ export default function Menu({}) {
         overflow="hidden"
         zIndex={98}
       >
-        <Link
+        <Text
           width="100%"
           transition="0.5s"
           fontSize="15px"
-          lineHeight={useCheckMobile() ? "20px" : "16px"}
           letterSpacing="0.3px"
           color="#FFF"
           fontWeight="400"
           fontFamily="ubuntu"
           _hover={{opacity: 1}}
-          href="https://info.basedosdados.org/bd-pro"
-          target="_blank"
+          lineHeight={useCheckMobile() ? "20px" : "16px"}
+          onClick={() => window.open("https://info.basedosdados.org/bd-pro", "_blank")}
         >
           <Box
             maxWidth="1264px"
@@ -444,7 +443,7 @@ export default function Menu({}) {
           >
             Assine a BD Pro e tenha acesso a conjuntos exclusivos e dados com alta frequência de atualização. Versão Beta já disponível <RedirectIcon position="relative" top="-2px" left="4px" fill="#FFF"/>
           </Box>
-        </Link>
+        </Text>
       </Box>
 
       <MenuDrawer links={links} {...menuDisclosure} />
