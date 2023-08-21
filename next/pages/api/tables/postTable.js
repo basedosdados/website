@@ -28,6 +28,9 @@ export default async function postTable({
   isClosed,
 }, dataset, id) {
   try {
+    const newDescription = description.replaceAll('\n', '\\n')
+    const newDataCleaningDescription = dataCleaningDescription.replaceAll('\n', '\\n')
+
     const res = await axios({
       method: 'POST',
       url: API_URL,
@@ -44,7 +47,8 @@ export default async function postTable({
               slug: "${slug}"
               name: "${name}"
               namePt: "${name}"
-              description: "${description}"
+              description: "${newDescription}"
+              descriptionPt: "${newDescription}"
               status: "${status}",
               license: "${license}",
               partnerOrganization: "${partnerOrganization}",
@@ -52,7 +56,7 @@ export default async function postTable({
               isDirectory: ${isDirectory},
               publishedBy: "${publishedBy}",
               dataCleanedBy: "${dataCleanedBy}",
-              dataCleaningDescription: "${dataCleaningDescription}",
+              dataCleaningDescription: "${newDataCleaningDescription}",
               dataCleaningCodeUrl: "${dataCleaningCodeUrl}",
               rawDataUrl: "${rawDataUrl}",
               auxiliaryFilesUrl: "${auxiliaryFilesUrl}",
