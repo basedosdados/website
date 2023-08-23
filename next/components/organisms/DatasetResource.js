@@ -115,9 +115,9 @@ export default function DatasetResource({
     const raw_data_sources = dataset?.rawDataSources?.edges.map((elm) => elm.node) || []
     const information_request = dataset?.informationRequests?.edges.map((elm) => elm.node) || []
 
-    setTables(dataset_tables.sort(sortElements))
-    setRawDataSources(raw_data_sources.sort(sortElements))
-    setInformationRequests(information_request.sort(sortElements))
+    setTables(dataset_tables.filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements))
+    setRawDataSources(raw_data_sources.filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements))
+    setInformationRequests(information_request.filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements))
 
     const queryParams = new URLSearchParams(window.location.search)
 
