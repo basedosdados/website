@@ -1,11 +1,13 @@
-import postTable from "./postTable";
-import getAllTableInDataset from "./getAllTableInDataset";
-import getTableEdit from "./getTableEdit";
 import deleteTable from "./deleteTable";
+import getAllTableInDataset from "./getAllTableInDataset";
+import getBdmTable from "./getBdmTable"
+import getTableEdit from "./getTableEdit";
+import postTable from "./postTable";
 
 export {
-  postTable,
+  deleteTable,
   getAllTableInDataset,
+  getBdmTable,
   getTableEdit,
-  deleteTable
+  postTable,
 }
