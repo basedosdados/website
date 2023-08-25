@@ -376,6 +376,7 @@ export default function Menu({}) {
       {},
       {name: "Estudos de caso", href: "/estudos-de-caso"}
     ],
+    "Preços": "/precos",
     Tutoriais: [
       {name: "Documentação", href: "https://basedosdados.github.io/mais/"},
       {name: "Vídeos no YouTube", href: "https://www.youtube.com/c/BasedosDados/featured"},
