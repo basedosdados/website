@@ -128,7 +128,7 @@ export default function Price() {
             letterSpacing="0.2px"
             fontWeight="400"
             marginBottom="24px"
-          >inclui {nubmerOfPerson} pessoa</BodyText>
+          >inclui {nubmerOfPerson} pessoa{nubmerOfPerson >= 2 && "s"}</BodyText>
 
           <Box
             display={isMobileMod() && !personConfig.text ? "none" :"flex"}
@@ -297,12 +297,13 @@ export default function Price() {
       </Head>
 
       <Stack
-        gridGap={{base:"40px", lg: "100px"}}
+        gridGap={{base:"40px", lg: "64px"}}
         paddingTop={isMobileMod() ? "160px" : "90px"}
         width="100%"
         maxWidth="1264px"
         flexDirection="column"
         margin="auto"
+        spacing={0}
       >
         <Display
           width="100%"
@@ -343,7 +344,7 @@ export default function Price() {
               {name: "Até 1TB de processamento", tooltip: "Limite mensal gratuito oferecido pelo Google Cloud."}
             ]}
             button={{
-              text: "Começar",
+              text: "Explorar recursos",
               href: "/dataset",
               target: "_self",
               color: "#FFF",
