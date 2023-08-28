@@ -47,6 +47,10 @@ export default async function getShowDataset(id) {
                       _id
                       number
                       order
+                      status {
+                        _id
+                        slug
+                      }
                     }
                   }
                 }
@@ -56,6 +60,10 @@ export default async function getShowDataset(id) {
                       _id
                       name
                       order
+                      status {
+                        _id
+                        slug
+                      }
                     }
                   }
                 }
@@ -67,6 +75,10 @@ export default async function getShowDataset(id) {
                       slug
                       isClosed
                       order
+                      status {
+                        _id
+                        slug
+                      }
                     }
                   }
                 }

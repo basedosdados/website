@@ -12,6 +12,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <QueryClientProvider client={queryClient}>
       <Head>
+        {process.env.NEXT_PUBLIC_INDEX === "true" ? "" : <meta name="robots" content="noindex"/>}
         <link rel="icon" type="image/ico" href="/favicon.ico" />
         <link
           rel="image_src"

@@ -79,7 +79,9 @@ export default function FormTable({
     const tableData = await getTableEdit(id)
 
     setFormData(valueFormData(tableData))
-    setIsLoading(false)
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 1000)
   }
 
   const handleChange = (e) => {
@@ -141,7 +143,9 @@ export default function FormTable({
   useEffect(() => {
     if(id === "create") {
       setFormData(valueFormData())
-      setIsLoading(false)
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 1000)
     }
     
     if(query.table) fetchTable(query.table)
@@ -442,7 +446,7 @@ export default function FormTable({
             spacing={0}
             gap="10px"
           >
-            <RoundedButton onClick={() => window.open(`/dataset/${isSuccess?.datasetId}`)}>
+            <RoundedButton onClick={() => window.open(`/dataset/${query.dataset}?table=${isSuccess?.tableId}`)}>
               Acessar página web
             </RoundedButton>
           </Stack>
