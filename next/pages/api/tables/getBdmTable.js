@@ -113,7 +113,6 @@ export default async function getBdmTable(id) {
                 numberColumns
                 partitions
                 publishedBy {
-                  _id
                   firstName
                   lastName
                   website
@@ -122,7 +121,6 @@ export default async function getBdmTable(id) {
                   email
                 }
                 dataCleanedBy {
-                  _id
                   firstName
                   lastName
                   website
