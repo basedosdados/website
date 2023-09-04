@@ -212,7 +212,7 @@ export function TemporalCoverageBar ({ value }) {
 
   const checkoutBdpro = (value) => {
     if(value === "open") return 
-    window.open("https://buy.stripe.com/14k7ulbJE9IE6L68wz", "_blank")
+    window.open("https://buy.stripe.com/8wM01TeVQ3kg0mIeV4", "_blank")
   }
 
   const BadgeContainer = ({
