@@ -100,7 +100,8 @@ export default function Price() {
             flexDirection="row"
             height="50px"
             alignItems="center"
-            marginBottom="24px"
+            // marginBottom="24px"
+            marginBottom="40px"
           >
             <Text
               color="#252A32"
@@ -122,20 +123,20 @@ export default function Price() {
               fontFamily="Ubuntu"
             >/mês</Text>
           </Box>
-          <BodyText
+          {/* <BodyText
             fontSize="16px"
             lineHeight="16px"
             letterSpacing="0.2px"
             fontWeight="400"
             marginBottom="24px"
-          >inclui {nubmerOfPerson} pessoa{nubmerOfPerson >= 2 && "s"}</BodyText>
+          >inclui {nubmerOfPerson} pessoa{nubmerOfPerson >= 2 && "s"}</BodyText> */}
 
           <Box
             display={isMobileMod() && !personConfig.text ? "none" :"flex"}
             flexDirection="row"
             justifyContent="space-between"
-            height="40px"
-            marginBottom="40px"
+            // height="40px"
+            // marginBottom="40px"
           >
             {personConfig.text &&
             <>
@@ -330,8 +331,7 @@ export default function Price() {
             title="BD Grátis"
             subTitle={<BodyText>Para você descobrir o potencial da <br/>plataforma de dados</BodyText>}
             personConfig={{
-              price: "0",
-              person: 1,
+              price: "0"
             }}
             textResource="Recursos:"
             resources={[
@@ -356,21 +356,17 @@ export default function Price() {
             colorBanner="#9C8400"
             title="BD Pro"
             badge="Beta"
-            subTitle={<BodyText>Para você ou sua equipe avançarem <br/>nas análises de dados</BodyText>}
+            subTitle={<BodyText>Para você ter acesso aos<br/> dados mais atualizados</BodyText>}
             personConfig={{
-              price: "250",
-              person: 2,
-              text: <p>R$ 50/mês<br/> por pessoa adicional</p>
+              price: "47"
             }}
             textResource="Todos os recursos da BD Grátis, mais:"
             resources={[
               {name: "Dezenas de bases de alta frequência atualizadas"},
-              {name: "Cashback para processamento", tooltip: "Oferecemos até R$50 de reembolso para eventuais custos que ultrapassem o limite mensal gratuito de 1TB de processamento do Google Cloud."},
-              {name: "Suporte prioritário"},
             ]}
             button={{
               text: "Iniciar teste grátis",
-              href: "https://buy.stripe.com/14k7ulbJE9IE6L68wz"
+              href: "https://buy.stripe.com/8wM01TeVQ3kg0mIeV4"
             }}
           />
         </Stack>
