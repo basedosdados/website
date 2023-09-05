@@ -378,7 +378,7 @@ export default function Price() {
             personConfig={{
               price: "350"
             }}
-            textResource="Todos os recursos da BD Pro mais:"
+            textResource="Todos os recursos da BD Pro, mais:"
             resources={[
               {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
             ]}
