@@ -318,7 +318,7 @@ export default function Price() {
 
         <Stack
           display={isMobileMod() ? "flex" : "grid"}
-          gridTemplateColumns="repeat(2, 440px)"
+          gridTemplateColumns="repeat(3, 440px)"
           gridTemplateRows="1fr"
           justifyContent="center"
           justifyItems="center"
@@ -367,6 +367,24 @@ export default function Price() {
             button={{
               text: "Iniciar teste grátis",
               href: "https://buy.stripe.com/8wM01TeVQ3kg0mIeV4"
+            }}
+          />
+
+          <CardPrice
+            colorBanner="#252A32"
+            title="BD Pro Empresas"
+            badge="Beta"
+            subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade nas decisões</BodyText>}
+            personConfig={{
+              price: "350"
+            }}
+            textResource="Todos os recursos da BD Pro mais:"
+            resources={[
+              {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
+            ]}
+            button={{
+              text: "Assine já",
+              href: "https://buy.stripe.com/00g4i93d8f2Y5H24gr"
             }}
           />
         </Stack>
