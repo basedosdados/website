@@ -374,7 +374,7 @@ export default function Price() {
             colorBanner="#252A32"
             title="BD Pro Empresas"
             badge="Beta"
-            subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade nas decisões</BodyText>}
+            subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
             personConfig={{
               price: "350"
             }}
