@@ -292,7 +292,7 @@ export default function Price() {
         />
         <meta
           property="og:description"
-          content="Compare os planos da Base dos Dados: Grátis e Pro. Com a BD Pro, você ou sua equipe tem acesso a todos os recursos avançados que a nossa plataforma de dados oferece a partir de R$250/mês."
+          content="Compare os planos da Base dos Dados: Grátis, Pro e Empresas. Com a BD Pro você conta com recursos avançados da nossa plataforma, dados de alta frequência e conjuntos exclusivos a partir de R$47/mês."
           key="ogdesc"
         />
       </Head>
