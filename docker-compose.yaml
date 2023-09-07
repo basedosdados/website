@@ -14,3 +14,6 @@ services:
       - ${NEXT_PORT}:3000
     volumes:
       - ./next:/app
+      - /app/.next
+      - /app/node_modules
+    command: "npm run dev"
