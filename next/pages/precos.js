@@ -5,6 +5,13 @@ import {
   Tooltip,
   Badge,
   Button,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import Head from "next/head";
@@ -13,7 +20,8 @@ import BigTitle from "../components/atoms/BigTitle"
 import BodyText from "../components/atoms/BodyText";
 import RoundedButton from "../components/atoms/RoundedButton";
 import { MainPageTemplate } from "../components/templates/main";
-import { isMobileMod } from "../hooks/useCheckMobile.hook"
+import { isMobileMod } from "../hooks/useCheckMobile.hook";
+import ServiceTermsBDPro from "../content/serviceTermsBDPro";
 
 import CheckIcon from "../public/img/icons/checkIcon";
 import CrossIcon from "../public/img/icons/crossIcon";
@@ -28,8 +36,10 @@ export default function Price() {
     personConfig,
     textResource,
     resources = [],
-    button
+    button,
+    hasServiceTerms= false
   }) => {
+    const { isOpen, onOpen, onClose } = useDisclosure()
     const [nubmerOfPerson, setNubmerOfPerson] = useState(personConfig.person)
     const [priceValue, setPriceValue] = useState(personConfig.price)
 
@@ -57,6 +67,22 @@ export default function Price() {
         padding="40px 24px"
         textAlign="center"
       >
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent maxWidth="800px !important">
+            <ModalHeader>Termos de serviço</ModalHeader>
+            <ModalBody>
+              <ServiceTermsBDPro/>
+            </ModalBody>
+
+            <ModalFooter>
+              <Button colorScheme='blue' mr={3} onClick={onClose}>
+                Fechar
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+
         <Box
           height="fit-content"
         >
@@ -267,15 +293,51 @@ export default function Price() {
             })}
           </Box>
 
-          <RoundedButton
-            width="100%"
-            color={button.colorText || "#FFF"}
-            backgroundColor={button.color || "#42B0FF"}
-            onClick={() => window.open(button.href, button.target || "_blank")}
-            border={button.color && `1px solid ${button.colorText}`}
+          <Box
+            display="flex"
+            flexDirection="column"
+            gap="16px"
           >
-            {button.text}
-          </RoundedButton>
+            <RoundedButton
+              width="100%"
+              color={button.colorText || "#FFF"}
+              backgroundColor={button.color || "#42B0FF"}
+              onClick={() => window.open(button.href, button.target || "_blank")}
+              border={button.color && `1px solid ${button.colorText}`}
+            >
+              {button.text}
+            </RoundedButton>
+
+            <Text
+              display="flex"
+              flexDirection="row"
+              justifyContent="center"
+              color="#252A32"
+              fontSize="14px"
+              fontWeight="400"
+              fontHeight="27px"
+              letterSpacing="0.3px"
+              fontFamily="Ubuntu"
+              height="20px"
+              textAlign="center"
+            >
+              {hasServiceTerms &&
+                <Text 
+                  display="flex"
+                  flexDirection="row"
+                >Sobre os
+                  <Text
+                    color="#42B0FF"
+                    cursor="pointer"
+                    _hover={{opacity: 0.7}}
+                    marginLeft="6px"
+                    onClick={onOpen}
+                  >termos de serviço</Text>
+                  .
+                </Text>
+              }
+            </Text>
+          </Box>
         </Box>
       </Box>
     )
@@ -366,8 +428,9 @@ export default function Price() {
             ]}
             button={{
               text: "Iniciar teste grátis",
-              href: "https://buy.stripe.com/8wM01TeVQ3kg0mIeV4"
+              href: "https://buy.stripe.com/8wM01TeVQ3kg0mIeV4?locale=pt"
             }}
+            hasServiceTerms
           />
 
           <CardPrice
@@ -384,8 +447,9 @@ export default function Price() {
             ]}
             button={{
               text: "Assine já",
-              href: "https://buy.stripe.com/00g4i93d8f2Y5H24gr"
+              href: "https://buy.stripe.com/00g4i93d8f2Y5H24gr?locale=pt"
             }}
+            hasServiceTerms
           />
         </Stack>
       </Stack>
