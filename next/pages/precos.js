@@ -42,6 +42,7 @@ export default function Price() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [nubmerOfPerson, setNubmerOfPerson] = useState(personConfig.person)
     const [priceValue, setPriceValue] = useState(personConfig.price)
+    const [linkStripe, setLinkStripe] = useState("")
 
     const addRemovePersonPrice = (action) => {
       if(action === "add") {
@@ -67,7 +68,11 @@ export default function Price() {
         padding="40px 24px"
         textAlign="center"
       >
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          scrollBehavior="inside"
+        >
           <ModalOverlay />
           <ModalContent maxWidth="800px !important">
             <ModalHeader>Termos de serviço</ModalHeader>
@@ -76,9 +81,21 @@ export default function Price() {
             </ModalBody>
 
             <ModalFooter>
-              <Button colorScheme='blue' mr={3} onClick={onClose}>
-                Fechar
-              </Button>
+              {linkStripe === "" ?
+                <RoundedButton onClick={onClose} borderRadius="12px">
+                  Fechar
+                </RoundedButton>
+              :  
+                <RoundedButton onClick={() => {
+                    onClose()
+                    window.open(linkStripe, "_blank")
+                    setLinkStripe("")
+                  }}
+                  borderRadius="12px"
+                >
+                  Concordar
+                </RoundedButton>
+              }
             </ModalFooter>
           </ModalContent>
         </Modal>
@@ -302,7 +319,10 @@ export default function Price() {
               width="100%"
               color={button.colorText || "#FFF"}
               backgroundColor={button.color || "#42B0FF"}
-              onClick={() => window.open(button.href, button.target || "_blank")}
+              onClick={() => {
+                onOpen()
+                setLinkStripe(button.href)
+              }}
               border={button.color && `1px solid ${button.colorText}`}
             >
               {button.text}
@@ -325,13 +345,16 @@ export default function Price() {
                 <Text 
                   display="flex"
                   flexDirection="row"
-                >Sobre os
+                >Leia os
                   <Text
                     color="#42B0FF"
                     cursor="pointer"
                     _hover={{opacity: 0.7}}
                     marginLeft="6px"
-                    onClick={onOpen}
+                    onClick={() => {
+                      onOpen()
+                      setLinkStripe("")
+                    }}
                   >termos de serviço</Text>
                   .
                 </Text>
