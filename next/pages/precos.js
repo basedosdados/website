@@ -80,22 +80,25 @@ export default function Price() {
               <ServiceTermsBDPro/>
             </ModalBody>
 
-            <ModalFooter>
-              {linkStripe === "" ?
-                <RoundedButton onClick={onClose} borderRadius="12px">
+            <ModalFooter gap="16px">
+                <RoundedButton
+                  onClick={onClose}
+                  backgroundColor={linkStripe !== "" ? "#FFF" : "#42B0FF"}
+                  color={linkStripe !== "" ? "#42B0FF" : "#FFF"}
+                  border={linkStripe !== "" && "1px solid #42B0FF"}
+                >
                   Fechar
                 </RoundedButton>
-              :  
-                <RoundedButton onClick={() => {
-                    onClose()
-                    window.open(linkStripe, "_blank")
-                    setLinkStripe("")
-                  }}
-                  borderRadius="12px"
-                >
-                  Concordar
-                </RoundedButton>
-              }
+                {linkStripe !== "" &&
+                  <RoundedButton onClick={() => {
+                      onClose()
+                      window.open(linkStripe, "_blank")
+                      setLinkStripe("")
+                    }}
+                  >
+                    Concordar
+                  </RoundedButton>
+                }
             </ModalFooter>
           </ModalContent>
         </Modal>
