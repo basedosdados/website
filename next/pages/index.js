@@ -42,7 +42,7 @@ import BDLogoPlusImage from "../public/img/logos/bd_logo_plus";
 import BDLogoEduImage from "../public/img/logos/bd_logo_edu";
 
 function Hero() {
-  const [search, setSearch] = useState();
+  const [search, setSearch] = useState("");
   const [tags, setTags] = useState([])
   const [mediumQuery] = useMediaQuery("(max-width: 1366px)")
 
