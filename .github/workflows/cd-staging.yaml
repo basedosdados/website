@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: development
-      url: https://homologation.basedosdados.org
+      url: https://staging.basedosdados.org
 
     steps:
       - name: Checkout
@@ -74,7 +74,7 @@ jobs:
                   name: basedosdados-website-staging
             ingress:
               enabled: true
-              host: "homologation.basedosdados.org"
+              host: "staging.basedosdados.org"
               annotations:
                 cert-manager.io/issuer: "letsencrypt-production"
                 kubernetes.io/ingress.class: nginx
@@ -82,8 +82,8 @@ jobs:
                 nginx.ingress.kubernetes.io/ssl-redirect: "true"
               tls:
                 - hosts:
-                    - "homologation.basedosdados.org"
-                  secretName: "homologation-basedosdados-org-tls"
+                    - "staging.basedosdados.org"
+                  secretName: "staging-basedosdados-org-tls"
           EOF
 
       - name: Deploy using Helm
