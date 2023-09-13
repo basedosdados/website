@@ -16,8 +16,10 @@ import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
 
 import {
-  getTeams,
-  getPeople
+  // getTeams,
+  // getPeople,
+  getAllPeople,
+  getCareerPeople
 } from "./api/team";
 
 import Display from "../components/atoms/Display";
@@ -35,6 +37,16 @@ import GithubIcon  from "../public/img/icons/githubIcon";
 import DiscordIcon from "../public/img/icons/discordIcon";
 import RedirectIcon from "../public/img/icons/redirectIcon";
 import styles from "../styles/quemSomos.module.css";
+
+export async function getServerSideProps() {
+  const data = await getAllPeople()
+
+  return {
+    props: {
+      data,
+    },
+  }
+}
 
 const HistoryBox = ({ children, title, date, image }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -99,8 +111,23 @@ const HistoryBox = ({ children, title, date, image }) => {
   )
 }
 
-const TeamBox = ({ index, data }) => {
+const TeamBox = ({
+  index,
+  data,
+  name,
+  picture,
+  description,
+  website,
+  email,
+  twitter,
+  linkedin,
+  github,
+  career
+}) => {
   const hasLeftSpacing = (index % 2 == 0) ? false : true
+
+  const role = career[0]?.node.role
+  console.log(career)
 
   const iconTeamBox = (ref) => {
     let href = ""
@@ -134,14 +161,14 @@ const TeamBox = ({ index, data }) => {
     }
   }
 
-  const iconLinks = () => {
+  const IconLinks = () => {
     return (
       <Box display="flex" flexDirection="row" gridGap="5px">
-        {data.website ? <WebIcon {...iconTeamBox({website: data.website})}/> : null}
-        {data.email ? <EmailIcon {...iconTeamBox({email: data.email})}/> : null}
-        {data.twitter ? <TwitterIcon {...iconTeamBox({twitter: data.twitter})}/> : null}
-        {data.linkedin ? <LinkedinIcon {...iconTeamBox({linkedin: data.linkedin})}/> : null}
-        {data.github ? <GithubIcon {...iconTeamBox({github: data.github})}/> : null}
+        {website ? <WebIcon {...iconTeamBox({website: website})}/> : null}
+        {email ? <EmailIcon {...iconTeamBox({email: email})}/> : null}
+        {twitter ? <TwitterIcon {...iconTeamBox({twitter: twitter})}/> : null}
+        {linkedin ? <LinkedinIcon {...iconTeamBox({linkedin: linkedin})}/> : null}
+        {github ? <GithubIcon {...iconTeamBox({github: github})}/> : null}
       </Box>
     )
   }
@@ -164,8 +191,8 @@ const TeamBox = ({ index, data }) => {
         overflow="hidden"
       >
         <Image
-          alt={data?.name || ""}
-          src={data.photo_url ? data.photo_url : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
+          alt={name}
+          src={picture ? picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
           width="100%"
           height="100%"
         />
@@ -176,10 +203,11 @@ const TeamBox = ({ index, data }) => {
             fontSize="18px"
             marginRight="16px"
           >
-            {data?.name}
+            {name}
           </BodyText>
-          {!isMobileMod() && iconLinks()}
+          {!isMobileMod() && <IconLinks/>}
         </Box>
+
         <BodyText
           fontSize="16px"
           fontWeight="400"
@@ -187,18 +215,27 @@ const TeamBox = ({ index, data }) => {
           letterSpacing="0.2px"
           color="#6F6F6F"
         >
-          {data?.role.join(", ")}
+          {/* {data?.role.join(", ")} */}
+          {role}
         </BodyText>
-        <BodyText fontSize="16px" letterSpacing="0.2px" lineHeight="25px" marginBottom={isMobileMod() ? "12px" : "0"}>{data?.description}</BodyText>
+
+        <BodyText
+          fontSize="16px"
+          letterSpacing="0.2px"
+          lineHeight="25px"
+          marginBottom={isMobileMod() ? "12px" : "0"}
+        >
+          {description}
+        </BodyText>
         {isMobileMod() && iconLinks()}
       </Box>
     </Box>
   )
 }
 
-export default function QuemSomos() {
-  const [allPeople, setAllPeople] = useState([])
-  const [people, setPeople] = useState([])
+export default function QuemSomos({ data }) {
+  const [allPeople, setAllPeople] = useState(data)
+  const [people, setPeople] = useState(data)
   const [filterTeam, setFilterTeam] = useState("")
 
   const schemasTeam = [
@@ -251,13 +288,14 @@ export default function QuemSomos() {
     return newArraySorting
   }
 
-  useEffect(() => {
-    setPeople(sortingTeam(allPeople))
-  },[allPeople])
+  // useEffect(() => {
+  //   setPeople(sortingTeam(allPeople))
+  // },[allPeople])
 
-  useEffect(() => {
-    setAllPeople(groupingTeamAndRole(Object.values(getPeople)).filter(Boolean))
-  },[])
+  // useEffect(() => {
+  //   // setAllPeople(groupingTeamAndRole(Object.values(getPeople)).filter(Boolean))
+  //   setAllPeople([])
+  // },[])
 
   const groupingTeamAndRole = (array) => array.map((elm) => {
     const person = elm
@@ -266,7 +304,8 @@ export default function QuemSomos() {
     const level = []
     const endDate = []
 
-    const getById = getTeams.filter((elm) => elm.person_id === person.id)
+    // const getById = getTeams.filter((elm) => elm.person_id === person.id)
+    const getById= []
 
     if(getById) getById.map((res) => {
       team.push(res.team)
@@ -298,14 +337,16 @@ export default function QuemSomos() {
   },[filterTeam])
 
   const filterPeopleByTeam = (team) => {
-    const teamPeople = getTeams.filter((elm) => elm.team === team)
+    // const teamPeople = getTeams.filter((elm) => elm.team === team)
+    const teamPeople = []
 
     const mapId = () => teamPeople.map((elm) => elm.person_id)
     
     const personIdList = Array.from(new Set(mapId()))
 
-    const filterPeople = () => personIdList.map((personId) => getPeople[personId])
-      
+    // const filterPeople = () => personIdList.map((personId) => getPeople[personId])
+    const filterPeople = []
+
     const newGroupPerson = groupingTeamAndRole(filterPeople()).filter(Boolean)
 
     setPeople(sortingTeam(newGroupPerson, [team]))
@@ -737,8 +778,18 @@ export default function QuemSomos() {
           >
             {people?.map((elm, index) => (
               <TeamBox
+                key={index}
                 index={index}
                 data={elm}
+                name={`${elm.node.firstName} ${elm.node.lastName}`}
+                picture={elm.node.picture}
+                description={elm.node.description}
+                website={elm.node.website}
+                email={elm.node.email}
+                twitter={elm.node.twitter}
+                linkedin={elm.node.linkedin}
+                github={elm.node.github}
+                career={elm.node.careerSet.edges}
               />
             ))}
           </Stack>
