@@ -10,7 +10,7 @@ export default async function getAllPeople() {
       data: {
         query: `
         query {
-          allAccount (profile: A_1){
+          allAccount {
             edges {
               node {
                 firstName
@@ -22,7 +22,8 @@ export default async function getAllPeople() {
                 linkedin
                 github
                 picture
-                careerSet {
+                isActiveStaff
+                careers {
                   edges {
                     node {
                       _id
@@ -40,7 +41,8 @@ export default async function getAllPeople() {
         `
       }
     })
-    const data = res?.data?.data?.allAccount?.edges
+    const result = res?.data?.data?.allAccount?.edges
+    const data = result.filter(item => item.node.isActiveStaff === 'true')
     return data
   } catch (error) {
     console.error(error)

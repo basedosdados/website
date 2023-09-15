@@ -10,7 +10,7 @@ export default async function getCareerPeople(team) {
       data: {
         query: `
         query {
-          allAccount (career_Team: "${team}"){
+          allAccount (careers_Team: "${team}"){
             edges {
               node {
                 firstName
@@ -22,7 +22,7 @@ export default async function getCareerPeople(team) {
                 linkedin
                 github
                 picture
-                careerSet {
+                careers {
                   edges {
                     node {
                       _id

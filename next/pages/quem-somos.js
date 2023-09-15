@@ -16,10 +16,9 @@ import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
 
 import {
-  // getTeams,
-  // getPeople,
   getAllPeople,
-  getCareerPeople
+  getCareerPeople,
+  getAllTeams
 } from "./api/team";
 
 import Display from "../components/atoms/Display";
@@ -40,10 +39,12 @@ import styles from "../styles/quemSomos.module.css";
 
 export async function getServerSideProps() {
   const data = await getAllPeople()
+  const teams = await getAllTeams()
 
   return {
     props: {
       data,
+      teams
     },
   }
 }
@@ -126,8 +127,11 @@ const TeamBox = ({
 }) => {
   const hasLeftSpacing = (index % 2 == 0) ? false : true
 
-  const role = career[0]?.node.role
-  console.log(career)
+  const role = () => {
+    const roles = []
+    career.map((elm) => roles.push(elm.node.role))
+    return roles.filter((elm) => elm.length > 0).join(", ")
+  }
 
   const iconTeamBox = (ref) => {
     let href = ""
@@ -215,8 +219,7 @@ const TeamBox = ({
           letterSpacing="0.2px"
           color="#6F6F6F"
         >
-          {/* {data?.role.join(", ")} */}
-          {role}
+          {role()}
         </BodyText>
 
         <BodyText
@@ -233,8 +236,8 @@ const TeamBox = ({
   )
 }
 
-export default function QuemSomos({ data }) {
-  const [allPeople, setAllPeople] = useState(data)
+export default function QuemSomos({ data, teams }) {
+  const [allPeople] = useState(data)
   const [people, setPeople] = useState(data)
   const [filterTeam, setFilterTeam] = useState("")
 
@@ -250,108 +253,6 @@ export default function QuemSomos({ data }) {
     "Conselho Fiscal"
   ]
 
-  const sortingTeam = (array, team = schemasTeam) => {
-    let arraySorting = []
-
-    team.map((personTeam) => {
-      const newPeopleByTeam = array.filter((person) => {
-        const indexTeam = person.team.findIndex((res) => res === personTeam)
-        if(indexTeam > -1) return person.team[indexTeam]
-      })
-
-      const orderByName = newPeopleByTeam.sort((a, b) => {
-        const compareName = (firstPerson, secondPerson) => firstPerson.name.localeCompare(secondPerson.name)
-
-        if (compareName(a, b) < compareName(b, a)) return -1
-        if (compareName(a, b) > compareName(b, a)) return 1
-        return 0
-      })
-
-      const orderByLevel = orderByName.sort((a, b) => {
-        const valueLevel = (elm) => {{
-          const levelPerson = elm.level[0]
-          if(levelPerson === "Presidente") return -3
-          if(levelPerson === "Diretora Executiva") return -2
-          if(levelPerson === "Gerente") return -1
-          return 0
-        }}
-
-        return valueLevel(a) - valueLevel(b)
-      })
-
-      orderByLevel.map((res) => {
-        arraySorting.push(res)
-      })
-      
-    })
-    const newArraySorting = [...new Set(arraySorting)]
-    return newArraySorting
-  }
-
-  // useEffect(() => {
-  //   setPeople(sortingTeam(allPeople))
-  // },[allPeople])
-
-  // useEffect(() => {
-  //   // setAllPeople(groupingTeamAndRole(Object.values(getPeople)).filter(Boolean))
-  //   setAllPeople([])
-  // },[])
-
-  const groupingTeamAndRole = (array) => array.map((elm) => {
-    const person = elm
-    const team = []
-    const role = []
-    const level = []
-    const endDate = []
-
-    // const getById = getTeams.filter((elm) => elm.person_id === person.id)
-    const getById= []
-
-    if(getById) getById.map((res) => {
-      team.push(res.team)
-      role.push(res.role)
-      level.push(res.level)
-      endDate.push(res.end_date)
-    })
-
-    const filterArray = (array) => Array.from(new Set(array.filter(Boolean)))
-
-    const departureDate = filterArray(endDate)
-
-    if(departureDate.length > 0) {
-      const endDate = new Date(departureDate[0])
-      const dateNow = new Date()
-      if(endDate < dateNow) return ""
-    }
-
-    return {
-      ...person,
-      team : filterArray(team),
-      role : filterArray(role),
-      level : filterArray(level),
-    }
-  })
-
-  useEffect(() => {
-    if(filterTeam) filterPeopleByTeam(filterTeam)
-  },[filterTeam])
-
-  const filterPeopleByTeam = (team) => {
-    // const teamPeople = getTeams.filter((elm) => elm.team === team)
-    const teamPeople = []
-
-    const mapId = () => teamPeople.map((elm) => elm.person_id)
-    
-    const personIdList = Array.from(new Set(mapId()))
-
-    // const filterPeople = () => personIdList.map((personId) => getPeople[personId])
-    const filterPeople = []
-
-    const newGroupPerson = groupingTeamAndRole(filterPeople()).filter(Boolean)
-
-    setPeople(sortingTeam(newGroupPerson, [team]))
-  }
-
   const keyIcon = (url) => {
     return {
       cursor:"pointer",
@@ -366,13 +267,15 @@ export default function QuemSomos({ data }) {
     }
   }
 
-  const handleSelect = (elm) => {
+  const handleSelect = async (elm) => {
     window.open("#teams", "_self")
     if(filterTeam === elm) {
-      setFilterTeam()
-      return setPeople(sortingTeam(allPeople))
+      setFilterTeam("")
+      return setPeople(allPeople)
     } else {
-      return setFilterTeam(elm)
+      setFilterTeam(elm)
+      const result = await getCareerPeople(elm)
+      setPeople(result)
     }
   }
 
@@ -756,7 +659,7 @@ export default function QuemSomos({ data }) {
             top={isMobileMod()? "0" : "120px"}
             z-index="20"
           >
-            {schemasTeam?.map((elm) => (
+            {teams?.map((elm) => (
               <Text
                 fontSize="16px"
                 color={filterTeam === elm ? "#2B8C4D" :"#6F6F6F"}
@@ -789,7 +692,7 @@ export default function QuemSomos({ data }) {
                 twitter={elm.node.twitter}
                 linkedin={elm.node.linkedin}
                 github={elm.node.github}
-                career={elm.node.careerSet.edges}
+                career={elm.node.careers.edges}
               />
             ))}
           </Stack>
@@ -825,9 +728,7 @@ export default function QuemSomos({ data }) {
             </RoundedButton>
           </Box>
         </Stack>
-
       </Stack>
-
     </MainPageTemplate>
   )
 }

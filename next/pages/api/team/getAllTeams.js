@@ -9,13 +9,29 @@ export default async function getAllTeams() {
       method: "POST",
       data: {
         query: `
-        query {
-        
-        }
+          query {
+            allCareer {
+              edges {
+                node {
+                  team
+                }
+              }
+            }
+          }
         `
       }
     })
-    const data = res?.data?.data?.allBdgroup?.edges
+    const result = res?.data?.data?.allCareer?.edges
+    const teamsSet = new Set()
+
+    result.forEach(item => {
+      const team = item.node.team.trim()
+      if (team !== "") {
+        teamsSet.add(team)
+      }
+    })
+
+    const data = Array.from(teamsSet)
     return data
   } catch (error) {
     console.error(error)
