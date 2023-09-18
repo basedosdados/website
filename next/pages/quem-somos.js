@@ -18,7 +18,6 @@ import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import {
   getAllPeople,
   getCareerPeople,
-  getAllTeams
 } from "./api/team";
 
 import Display from "../components/atoms/Display";
@@ -39,12 +38,10 @@ import styles from "../styles/quemSomos.module.css";
 
 export async function getServerSideProps() {
   const data = await getAllPeople()
-  const teams = await getAllTeams()
 
   return {
     props: {
-      data,
-      teams
+      data
     },
   }
 }
@@ -236,9 +233,49 @@ const TeamBox = ({
   )
 }
 
-export default function QuemSomos({ data, teams }) {
-  const [allPeople] = useState(data)
-  const [people, setPeople] = useState(data)
+export default function QuemSomos({ data }) {
+
+  const sortPeople = (array) => {
+    const sortPeopleArray = array
+
+    function compareByRole(a, b) {
+      const rolesA = a.node.careers.edges.map(edge => edge.node.role.toLowerCase())
+      const rolesB = b.node.careers.edges.map(edge => edge.node.role.toLowerCase())
+
+      function getRoleScore(role) {
+        switch (role) {
+          case "presidente":
+            return 1;
+          case "diretora executiva":
+            return 2;
+          case "co-fundador":
+            return 3;
+          case "associado":
+            return 4;
+          case "gerente":
+            return 5;
+          default:
+            return 6;
+        }
+      }
+
+      const sortedRolesA = rolesA.sort((x, y) => getRoleScore(x) - getRoleScore(y))
+      const sortedRolesB = rolesB.sort((x, y) => getRoleScore(x) - getRoleScore(y))
+
+      if (getRoleScore(sortedRolesA[0]) < getRoleScore(sortedRolesB[0])) {
+        return -1
+      } else if (getRoleScore(sortedRolesA[0]) > getRoleScore(sortedRolesB[0])) {
+        return 1
+      }
+      return 0
+    }
+    
+    const data = sortPeopleArray.sort(compareByRole)
+    return data
+  }
+
+  const [allPeople] = useState(sortPeople(data))
+  const [people, setPeople] = useState(sortPeople(data))
   const [filterTeam, setFilterTeam] = useState("")
 
   const schemasTeam = [
@@ -248,8 +285,7 @@ export default function QuemSomos({ data, teams }) {
     "Captação, Parcerias e Projetos",
     "Comunicação",
     "Dados",
-    "Infraestrutura",
-    "Website",
+    "Plataforma",
     "Conselho Fiscal"
   ]
 
@@ -275,7 +311,7 @@ export default function QuemSomos({ data, teams }) {
     } else {
       setFilterTeam(elm)
       const result = await getCareerPeople(elm)
-      setPeople(result)
+      setPeople(sortPeople(result))
     }
   }
 
@@ -659,7 +695,7 @@ export default function QuemSomos({ data, teams }) {
             top={isMobileMod()? "0" : "120px"}
             z-index="20"
           >
-            {teams?.map((elm) => (
+            {schemasTeam?.map((elm) => (
               <Text
                 fontSize="16px"
                 color={filterTeam === elm ? "#2B8C4D" :"#6F6F6F"}
