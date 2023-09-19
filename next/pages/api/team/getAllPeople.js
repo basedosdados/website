@@ -10,7 +10,7 @@ export default async function getAllPeople() {
       data: {
         query: `
         query {
-          allAccount {
+          allAccount (profile: A_1){
             edges {
               node {
                 firstName
@@ -36,13 +36,13 @@ export default async function getAllPeople() {
                 }
               }
             }
+            edgeCount
           }
         }
         `
       }
     })
-    const result = res?.data?.data?.allAccount?.edges
-    const data = result.filter(item => item.node.isActiveStaff === 'true')
+    const data = res?.data?.data?.allAccount?.edges
     return data
   } catch (error) {
     console.error(error)
