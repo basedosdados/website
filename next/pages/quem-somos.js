@@ -109,9 +109,25 @@ const HistoryBox = ({ children, title, date, image }) => {
   )
 }
 
+function getRoleScore(role) {
+  switch (role) {
+    case "presidente":
+      return 1;
+    case "diretora executiva":
+      return 2;
+    case "co-fundador":
+      return 3;
+    case "associado":
+      return 4;
+    case "gerente":
+      return 5;
+    default:
+      return 6;
+  }
+}
+
 const TeamBox = ({
   index,
-  data,
   name,
   picture,
   description,
@@ -127,6 +143,7 @@ const TeamBox = ({
   const role = () => {
     const roles = []
     career.map((elm) => roles.push(elm.node.role))
+    roles.sort((a, b) => getRoleScore(a.toLowerCase()) - getRoleScore(b.toLowerCase()))
     return roles.filter((elm) => elm.length > 0).join(", ")
   }
 
@@ -242,23 +259,6 @@ export default function QuemSomos({ data }) {
       const rolesA = a.node.careers.edges.map(edge => edge.node.role.toLowerCase())
       const rolesB = b.node.careers.edges.map(edge => edge.node.role.toLowerCase())
 
-      function getRoleScore(role) {
-        switch (role) {
-          case "presidente":
-            return 1;
-          case "diretora executiva":
-            return 2;
-          case "co-fundador":
-            return 3;
-          case "associado":
-            return 4;
-          case "gerente":
-            return 5;
-          default:
-            return 6;
-        }
-      }
-
       const sortedRolesA = rolesA.sort((x, y) => getRoleScore(x) - getRoleScore(y))
       const sortedRolesB = rolesB.sort((x, y) => getRoleScore(x) - getRoleScore(y))
 
@@ -269,7 +269,7 @@ export default function QuemSomos({ data }) {
       }
       return 0
     }
-    
+
     const data = sortPeopleArray.sort(compareByRole)
     return data
   }
@@ -719,7 +719,6 @@ export default function QuemSomos({ data }) {
               <TeamBox
                 key={index}
                 index={index}
-                data={elm}
                 name={`${elm.node.firstName} ${elm.node.lastName}`}
                 picture={elm.node.picture}
                 description={elm.node.description}
