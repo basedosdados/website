@@ -271,7 +271,20 @@ export default function QuemSomos({ data }) {
     }
 
     const data = sortPeopleArray.sort(compareByRole)
-    return data
+
+    function removeDuplicates(array) {
+      const conjunto = new Set()
+      return array.filter(obj => {
+        const objetoString = JSON.stringify(obj)
+        if (!conjunto.has(objetoString)) {
+          conjunto.add(objetoString)
+          return true
+        }
+        return false
+      })
+    }
+
+    return removeDuplicates(data)
   }
 
   const [allPeople] = useState(sortPeople(data))
