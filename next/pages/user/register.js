@@ -34,12 +34,7 @@ export default function Register() {
     firstName: "",
     email: "",
     password: "",
-    regexPassword: {
-      amount: false,
-      uppercaseLowercase: false,
-      number: false,
-      special: false
-    },
+    regexPassword: {},
     confirmPassword: ""
   })
   const [showPassword, setShowPassword] = useState(true)
@@ -85,7 +80,7 @@ export default function Register() {
       validationErrors.confirmPassword = "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente."
     }
 
-    if (Object.keys(regexPassword).length != 0) validationErrors.regexPassword = regexPassword
+    validationErrors.regexPassword = regexPassword
     setErrors(validationErrors)
 
     if (Object.keys(validationErrors).length === 0) {
@@ -156,12 +151,13 @@ export default function Register() {
               value={formData.firstName}
               onChange={handleInputChange}
               placeholder="Insira seu nome"
+              fontFamily="ubuntu"
               height="40px"
               fontSize="14px"
               borderRadius="16px"
               _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
             />
-            <FormErrorMessage color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
               <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.firstName}
             </FormErrorMessage>
           </FormControl>
@@ -174,12 +170,13 @@ export default function Register() {
               value={formData.lastName}
               onChange={handleInputChange}
               placeholder="Insira seu sobrenome (opcional)"
+              fontFamily="ubuntu"
               height="40px"
               fontSize="14px"
               borderRadius="16px"
               _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
             />
-            <FormErrorMessage color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
               <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.lastName}
             </FormErrorMessage>
           </FormControl>
@@ -192,12 +189,13 @@ export default function Register() {
               value={formData.email}
               onChange={handleInputChange}
               placeholder="Insira seu e-mail"
+              fontFamily="ubuntu"
               height="40px"
               fontSize="14px"
               borderRadius="16px"
               _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
             />
-            <FormErrorMessage color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
               <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.email}
             </FormErrorMessage>
           </FormControl>
@@ -211,6 +209,7 @@ export default function Register() {
               value={formData.password}
               onChange={handleInputChange}
               placeholder="Crie uma senha"
+              fontFamily="ubuntu"
               height="40px"
               fontSize="14px"
               borderRadius="16px"
@@ -239,7 +238,7 @@ export default function Register() {
             />
             <Text 
               margin="8px 0"
-              color= {errors.regexPassword ? "#D93B3B" : "#7D7D7D"}
+              color= {Object.keys(errors.regexPassword).length > 0 ? "#D93B3B" : "#7D7D7D"}
               fontFamily= "Ubuntu"
               fontSize= "12px"
               fontWeight= "400"
@@ -249,8 +248,8 @@ export default function Register() {
               flexDirection="row"
               gap="4px"
               alignItems="flex-start"
-            ><Exclamation width="14px" height="14px" fill="#D93B3B" display={errors.regexPassword ? "flex" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
-            <UnorderedList fontFamily="Ubuntu" position="relative" left="2px">
+            ><Exclamation width="14px" height="14px" fill="#D93B3B" display={Object.keys(errors.regexPassword).length > 0 ? "flex" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
+            <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
               <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>Ter no mínimo 8 caracteres</ListItem>
               <ListItem fontSize="12px" color={errors?.regexPassword?.uppercaseLowercase ? "#D93B3B" :"#7D7D7D"}>Pelo menos uma letra maiúscula e minúscula</ListItem>
               <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>Um dígito</ListItem>
@@ -267,6 +266,7 @@ export default function Register() {
               value={formData.confirmPassword}
               onChange={handleInputChange}
               placeholder="Insira a senha novamente"
+              fontFamily="ubuntu"
               height="40px"
               fontSize="14px"
               borderRadius="16px"
@@ -293,7 +293,7 @@ export default function Register() {
                 />
               }
             />
-            <FormErrorMessage color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
               <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.confirmPassword}
             </FormErrorMessage>
           </FormControl>
