@@ -1,10 +1,9 @@
 import {
+  Box,
   Stack,
   FormControl,
   FormLabel,
   FormErrorMessage,
-  Alert,
-  AlertIcon,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import cookies from 'js-cookie';
@@ -14,12 +13,15 @@ import {
   getUser
 } from "../api/user";
 
+import Display from "../../components/atoms/Display";
 import Input from "../../components/atoms/SimpleInput";
 import Button from "../../components/atoms/RoundedButton";
 import ButtonSimple from "../../components/atoms/SimpleButton";
 import SectionText from "../../components/atoms/SectionText";
+import { isMobileMod } from "../../hooks/useCheckMobile.hook"
 import { MainPageTemplate } from "../../components/templates/main";
 
+import Exclamation from "../../public/img/icons/exclamationIcon";
 import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 
 export default function Login() {
@@ -37,11 +39,11 @@ export default function Login() {
   const handleSubmit = () => {
     let validationErrors = {}
     if (!formData.email) {
-      validationErrors.email = "O email é necessário"
+      validationErrors.email = "Por favor, insira um endereço de e-mail válido."
     } else if (!/^\S+@\S+$/.test(formData.email)) {
-      validationErrors.email = "Email inválido"
+      validationErrors.email = "Por favor, insira um endereço de e-mail válido."
     }
-    if (!formData.password) validationErrors.password = "A senha é necessária"
+    if (!formData.password) validationErrors.password = "Por favor, insira a senha."
     setErrors(validationErrors)
 
     if (Object.keys(validationErrors).length === 0) {
@@ -52,7 +54,7 @@ export default function Login() {
   const fetchToken = async ({ email, password }) => {
     const result = await getToken({email: email, password: password})
 
-    if(result?.tokenAuth === null || result?.errors?.length > 0) return setErrors({login:"Email ou senha inválida"}) 
+    if(result?.tokenAuth === null || result?.errors?.length > 0) return setErrors({login:"E-mail ou senha incorretos."}) 
 
     try {
       const userData = await getUser(result.tokenAuth.payload.email)
@@ -63,13 +65,16 @@ export default function Login() {
     }
   }
 
-  const LabelTextForm = ({ text }) => {
+  const LabelTextForm = ({ text, ...props }) => {
     return (
       <FormLabel
         color="#252A32"
         fontFamily="ubuntu"
         letterSpacing="0.2px"
-        lineHeight="24px"
+        fontSize="16px"
+        fontWeight="400"
+        lineHeight="16px"
+        {...props}
       >{text}</FormLabel>
     )
   }
@@ -85,39 +90,76 @@ export default function Login() {
       <Stack
         display="flex"
         justifyContent="center"
-        width="450px"
+        width="320px"
         height="100%"
-        padding="40px"
-        boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
+        marginTop={isMobileMod() ? "150px" : "50px"}
+        marginX="27px"
+        spacing={0}
       >
+        <Display
+          fontSize={isMobileMod() ? "34px" : "60px"}
+          lineHeight={isMobileMod() ? "44px" : "72px"}
+          letterSpacing={isMobileMod() ? "-0.4px" : "-1.5px"}
+          marginBottom="40px"
+          textAlign="center"
+        >Faça login</Display>
+
         {errors.login && 
-          <Alert
-            status="error"
-            fontSize="14px"
-            fontFamily="lato"
-            borderRadius="8px"
-            padding="8px"
-            marginBottom="24px"
+          <Box
+            display="flex"
+            flexDirection="row"
+            gap="8px"
+            alignItems="center"
+            fontSize="12px"
+            fontFamily="ubuntu"
+            marginBottom="24px !important"
+            color="#D93B3B"
           >
-            <AlertIcon />
+            <Exclamation fill="#D93B3B"/>
             {errors.login}
-          </Alert>
+          </Box>
         }
-        <FormControl isInvalid={!!errors.email || !!errors.login}>
-          <LabelTextForm text="Email"/>
+
+        <FormControl isInvalid={!!errors.email} marginBottom="24px !important">
+          <LabelTextForm text="E-mail"/>
           <Input
             id="email"
             name="email"
             value={formData.email}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            placeholder="exemple@email.com"
+            placeholder="Insira seu e-mail"
+            fontFamily="ubuntu"
+            height="40px"
+            fontSize="14px"
+            borderRadius="16px"
+            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
           />
-          <FormErrorMessage>{errors.email}</FormErrorMessage>
+          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.email}
+          </FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.password || !!errors.login}>
-          <LabelTextForm text="Senha"/>
+        <FormControl isInvalid={!!errors.password} marginBottom="24px !important">
+          <Box
+            display="flex"
+            flexDirection="row"
+            width="100%"
+            marginBottom="8px"
+          >
+            <LabelTextForm text="Senha" margin="0 !important"/>
+            <ButtonSimple
+              fontWeight="700"
+              color="#42B0FF"
+              letterSpacing="0.3px"
+              fontSize="14px"
+              justifyContent="end"
+              _hover={{opacity: "0.6"}}
+              onClick={() => window.open("./password-recovery", "_self")}
+            >Esqueceu a senha?
+            </ButtonSimple>
+          </Box>
+
           <Input
             type={showPassword ? "password" : "text"}
             id="password"
@@ -125,70 +167,67 @@ export default function Login() {
             value={formData.password}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            placeholder="Entre com sua senha"
+            placeholder="Insira sua senha"
+            fontFamily="ubuntu"
+            height="40px"
+            fontSize="14px"
+            borderRadius="16px"
+            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
             styleElmRight={{
               width: "50px",
-              height: "48px",
+              height: "40px",
               cursor: "pointer",
               onClick: () => setShowPassword(!showPassword)
             }}
             elmRight={showPassword ?
               <EyeOffIcon
                 alt="esconder senha"
-                width="26px"
-                height="26px"
+                width="20px"
+                height="20px"
                 fill="#D0D0D0"
               />
             :
               <EyeIcon
                 alt="exibir senhar"
-                width="26px"
-                height="26px"
+                width="20px"
+                height="20px"
                 fill="#D0D0D0"
               />
             }
           />
-          <FormErrorMessage>{errors.password}</FormErrorMessage>
+          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.password}
+          </FormErrorMessage>
         </FormControl>
-
-        <Stack paddingTop="16px">
-          {/* <ButtonSimple
-            justifyContent="start"
-            fontWeight="400"
-            color="#42B0FF"
-            _hover={{opacity: "0.6"}}
-            onClick={() => window.open("./password-recovery", "_self")}
-          >Esqueceu a senha?
-          </ButtonSimple> */}
-
-          <SectionText
-            width="100%"
-            display="flex"
-            flexDirection="row"
-            fontWeight="500"
-            fontSize="14px"
-            fontFamily="ubuntu"
-          >
-            Não tem uma conta?
-            <ButtonSimple
-              width="none"
-              justifyContent="start"
-              color="#42B0FF"
-              _hover={{opacity: "0.6"}}
-              marginLeft="2px"
-              onClick={() => window.open("./register", "_self")}
-            >{" "}cadastre-se
-            </ButtonSimple>
-          </SectionText>
-        </Stack>
 
         <Button
           onClick={handleSubmit}
-          borderRadius="8px"
-          marginTop="24px !important"
+          borderRadius="30px"
+          marginBottom="24px !important"
         >
           Entrar
         </Button>
+
+        <SectionText
+          width="100%"
+          display="flex"
+          flexDirection="row"
+          justifyContent="center"
+          fontWeight="500"
+          fontSize="14px"
+          fontFamily="ubuntu"
+        >
+          Não tem uma conta?
+          <ButtonSimple
+            width="none"
+            justifyContent="start"
+            color="#42B0FF"
+            _hover={{opacity: "0.6"}}
+            marginLeft="2px"
+            onClick={() => window.open("./register", "_self")}
+          >{" "}cadastre-se
+          </ButtonSimple>.
+        </SectionText>
       </Stack>
     </MainPageTemplate>
   )
