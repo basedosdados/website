@@ -1,214 +1,102 @@
 import {
   Stack,
+  Text,
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  UnorderedList,
-  ListItem
+  Input
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { useRouter } from "next/router";
 
-import Input from "../../components/atoms/SimpleInput";
+import Display from "../../components/atoms/Display";
+import Link from "../../components/atoms/Link";
 import Button from "../../components/atoms/RoundedButton";
+import { isMobileMod } from "../../hooks/useCheckMobile.hook"
 import { MainPageTemplate } from "../../components/templates/main";
 
-import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
+import { EmailRecoveryImage } from "../../public/img/emailImage";
 
 export default function PasswordRecovery() {
-  const router =  useRouter()
-  const query = router.query
-
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    confirmPassword: ""
-  })
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-    regexPassword: {
-      amount: false,
-      uppercaseLowercase: false,
-      number: false,
-      special: false
-    },
-    confirmPassword: ""
-  })
-  const [showPassword, setShowPassword] = useState(true)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(true)
-
-  const handleInputChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }))
-  }
-
-  const handleSubmit = (e) => {
-    const regexPassword = {}
-    const validationErrors = {}
-    e.preventDefault()
-
-    if (!formData.email) {
-      validationErrors.email = "O email é necessário"
-    } 
-    if (!/^\S+@\S+$/.test(formData.email)) {
-      validationErrors.email = "Email inválido"
-    }
-    if(!/^.{8,}$/.test(formData.password)) {
-      regexPassword = {...regexPassword, amount: true}
-    }
-    if(!/([a-z].*[A-Z])|([A-Z].*[a-z])/.test(formData.password)) {
-      regexPassword = {...regexPassword, uppercaseLowercase: true}
-    }
-    if(!/(?=.*?[0-9])/.test(formData.password)) {
-      regexPassword = {...regexPassword, number: true}
-    }
-    if(!/(?=.*?[#?!@$%^&*-])/.test(formData.password)) {
-      regexPassword = {...regexPassword, special: true}
-    }
-    if (!formData.password) {
-      validationErrors.password = "A senha é necessária"
-    }
-    if (!formData.confirmPassword) {
-      validationErrors.confirmPassword = "Confirmar a senha é necessário"
-    }
-    if(formData.confirmPassword !== formData.password) {
-      validationErrors.confirmPassword = "As senhas tem que ser iguais"
-    }
-
-    if (Object.keys(regexPassword).length != 0) validationErrors.regexPassword = regexPassword
-    setErrors(validationErrors)
-
-    if (Object.keys(validationErrors).length === 0) {
-      fetchPasswordRecovery(formData)
-    }
-  }
-
-  const fetchPasswordRecovery = async ({}) => {
-  }
-
-  const LabelTextForm = ({ text }) => {
-    return (
-      <FormLabel
-        color="#252A32"
-        fontFamily="ubuntu"
-        letterSpacing="0.2px"
-        lineHeight="24px"
-      >{text}</FormLabel>
-    )
-  }
+  const [email, setEmail] = useState("")
 
   return (
     <MainPageTemplate display="flex" justifyContent="center">
       <Stack
         display="flex"
         justifyContent="center"
-        width="450px"
+        width="510px"
         height="100%"
-        padding="40px"
-        boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
+        marginTop={isMobileMod() ? "150px" : "50px"}
+        marginX="27px"
+        spacing="40px"
+        alignItems="center"
       >
-        {!query.id && !query.token &&
-          <FormControl isInvalid={!!errors.email}>
-            <LabelTextForm text="Email"/>
-            <Input
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="exemple@email.com"
-            />
-            <FormErrorMessage>{errors.email}</FormErrorMessage>
-          </FormControl>
-        }
+        <EmailRecoveryImage justifyContent="center" marginBottom="8px"/>
 
-        {query.id && query.token && 
-        <>
-          <FormControl isInvalid={!!errors.password}>
-            <LabelTextForm text="Nova senha"/>
-            <Input
-              type={showPassword ? "password" : "text"}
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              placeholder="Entre com sua senha"
-              styleElmRight={{
-                width: "50px",
-                height: "48px",
-                cursor: "pointer",
-                onClick: () => setShowPassword(!showPassword)
-              }}
-              elmRight={showPassword ?
-                <EyeOffIcon
-                  alt="esconder senha"
-                  width="26px"
-                  height="26px"
-                  fill="#D0D0D0"
-                />
-              :
-                <EyeIcon
-                  alt="exibir senhar"
-                  width="26px"
-                  height="26px"
-                  fill="#D0D0D0"
-                />
-              }
-            />
-            <UnorderedList>
-              <ListItem color={errors?.regexPassword?.amount ? "#E53E3E" :"#A3A3A3"} fontSize="14px" marginTop="8px">Ter no mínimo 8 caracteres</ListItem>
-              <ListItem color={errors?.regexPassword?.uppercaseLowercase ? "#E53E3E" :"#A3A3A3"} fontSize="14px">Pelo menos uma letra maiúscula e minúscula</ListItem>
-              <ListItem color={errors?.regexPassword?.number ? "#E53E3E" :"#A3A3A3"} fontSize="14px">Um dígito</ListItem>
-              <ListItem color={errors?.regexPassword?.special ? "#E53E3E" :"#A3A3A3"} fontSize="14px">E um caractere especial</ListItem>
-            </UnorderedList>
-            <FormErrorMessage>{errors.password}</FormErrorMessage>
-          </FormControl>
+        <Display
+          fontSize={isMobileMod() ? "28px" : "34px"}
+          lineHeight={isMobileMod() ? "16px" : "44px"}
+          letterSpacing={isMobileMod() ? "0" : "-0.4px"}
+          fontWeith="500"
+          textAlign="center"
+        >Redefina sua senha</Display>
 
-          <FormControl isInvalid={!!errors.confirmPassword}>
-            <LabelTextForm text="Confirme sua senha novamente"/>
-            <Input
-              type={showConfirmPassword ? "password" : "text"}
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleInputChange}
-              placeholder="Entre com sua senha novamente"
-              styleElmRight={{
-                width: "50px",
-                height: "48px",
-                cursor: "pointer",
-                onClick: () => setShowConfirmPassword(!showConfirmPassword)
-              }}
-              elmRight={showConfirmPassword ?
-                <EyeOffIcon
-                  alt="esconder senha"
-                  width="26px"
-                  height="26px"
-                  fill="#D0D0D0"
-                />
-              :
-                <EyeIcon
-                  alt="exibir senhar"
-                  width="26px"
-                  height="26px"
-                  fill="#D0D0D0"
-                />
-              }
-            />
-            <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>
-          </FormControl>
-        </>
-        }
+        <Text
+          textAlign="center"
+          color= "#7D7D7D"
+          fontFamily= "Ubuntu"
+          fontSize= "16px"
+          fontWeight= "400"
+          lineHeight= "24px"
+          letterSpacing= "0.2px"
+        >
+          Insira o endereço de e-mail que você usou para cadastrar sua conta. Enviaremos as instruções para você redefinir sua senha.
+        </Text>
+
+        <FormControl
+          fontFamily="ubuntu"
+          color="#252A32"
+          fontSize="16px"
+          fontWeight="400"
+          lineHeight="16px"
+          letterSpacing="0.2px"
+        >
+          <FormLabel fontWeight="400">E-mail</FormLabel>
+          <Input
+            type="email"
+            placeholder="Insira seu e-mail"
+            _placeholder={{color:"#DEDFE0"}}
+            _focus={{border:"2px solid #42B0FF !important" }}
+            _hover={{border:"2px solid #42B0FF !important" }}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            padding="8px 12px 8px 16px"
+            borderRadius="16px"
+            fontSize="14px"
+            lineHeight="27px"
+            letterSpacing="0.3px"
+            border="1px solid #DEDFE0 !important"
+          />
+        </FormControl>
 
         <Button
-          onClick={(e) => handleSubmit(e)}
-          borderRadius="8px"
-          marginTop="24px !important"
+          onClick={() => console.log("evento")}
+          borderRadius="30px"
+          width="fit-content"
         >
-          Confirmar
+          Enviar e-mail de redefinição
         </Button>
+
+        <Text
+          textAlign="center"
+          color= "#252A32"
+          fontFamily= "Ubuntu"
+          fontSize= "14px"
+          fontWeight= "400"
+          lineHeight= "27px"
+          letterSpacing= "0.3px"
+        >
+          Se ainda precisar de ajuda, <Link fontFamily="ubuntu" color="#42B0FF" href="/contato">entre em contato</Link>.
+        </Text>
       </Stack>
     </MainPageTemplate>
   )
