@@ -330,7 +330,7 @@ export default function Register() {
           letterSpacing= "0.3px"
           marginTop="24px !important"
         >
-          Já tem uma conta? <Link color="#42B0FF" href="/user/login">Faça login</Link>.
+          Já tem uma conta? <Link fontFamily="ubuntu" color="#42B0FF" href="/user/login">Faça login</Link>.
         </Text>
       </Stack>
     </MainPageTemplate>

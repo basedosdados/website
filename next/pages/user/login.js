@@ -225,7 +225,7 @@ export default function Login() {
             _hover={{opacity: "0.6"}}
             marginLeft="2px"
             onClick={() => window.open("./register", "_self")}
-          >{" "}cadastre-se
+          >{" "}Cadastre-se
           </ButtonSimple>.
         </SectionText>
       </Stack>
