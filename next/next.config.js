@@ -3,7 +3,7 @@ module.exports = {
     disableStaticImages: true,
     domains: [
       "basedosdados.org",
-      "basedosdados-static.s3.us-east-2.amazonaws.com"
+      "storage.googleapis.com/basedosdados-website",
     ]
   },
   output: "standalone",

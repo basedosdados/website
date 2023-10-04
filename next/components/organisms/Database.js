@@ -214,7 +214,7 @@ export default function Database({
                           <CategoryIcon
                             alt={elm.name}
                             size="36px"
-                            url={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${elm.slug}.svg`}
+                            url={`https://storage.googleapis.com/basedosdados-website/category_icons/2022/icone_${elm.slug}.svg`}
                           />
                         </Link>
                       </Center>
