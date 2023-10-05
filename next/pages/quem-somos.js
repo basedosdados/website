@@ -121,6 +121,8 @@ function getRoleScore(role) {
       return 4;
     case "gerente":
       return 5;
+    case "membro do conselho fiscal":
+      return 10;
     default:
       return 6;
   }
@@ -251,7 +253,6 @@ const TeamBox = ({
 }
 
 export default function QuemSomos({ data }) {
-
   const sortPeople = (array) => {
     const sortPeopleArray = array
 
@@ -284,7 +285,7 @@ export default function QuemSomos({ data }) {
       })
     }
 
-    return removeDuplicates(data)
+    return removeDuplicates(data).filter(obj => obj.node.firstName !== "API User" && obj.node.firstName !== "Staging")
   }
 
   const [allPeople] = useState(sortPeople(data))
