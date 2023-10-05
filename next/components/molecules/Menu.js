@@ -6,7 +6,6 @@ import {
   DrawerOverlay,
   DrawerContent,
   useDisclosure,
-  Avatar,
   Text,
   Accordion,
   AccordionItem,
@@ -15,16 +14,20 @@ import {
   AccordionIcon,
   useBoolean,
   Divider,
+  Image,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router"
-import { MenuDropdown } from "./MenuDropdown";
 import cookies from "js-cookie";
+import { MenuDropdown } from "./MenuDropdown";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import ControlledInput from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
-import SectionText from "../atoms/SectionText";
 
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import BDLogoEduImage from "../../public/img/logos/bd_logo_edu";
@@ -121,6 +124,100 @@ function MenuDrawer({ isOpen, onClose, links }) {
       </DrawerContent>
     </Drawer>
   );
+}
+
+function MenuUser ({ userData }) {
+  const timerRef = useRef();
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
+
+  const btnMouseEnterEvent = () => {
+    setIsOpenMenu(true)
+  }
+  const btnMouseLeaveEvent = () => {
+    timerRef.current = setTimeout(() => {
+      setIsOpenMenu(false)
+    }, 100)
+  }
+  const menuListMouseEnterEvent = () => {
+    clearTimeout(timerRef.current)
+    timerRef.current = undefined
+    setIsOpenMenu(true)
+  }
+  const menuListMouseLeaveEvent = () => {
+    setIsOpenMenu(false)
+  }
+
+  if(useCheckMobile()) {
+    return (
+      <Box
+        cursor="pointer"
+        position="fixed"
+        right="24px"
+        height="40px"
+        width="40px"
+        borderRadius="50%"
+        overflow="hidden"
+        display={{ base: "flex", lg: "none" }}
+      >
+        <Image
+          display={{ base: "flex", lg: "none" }}
+          alt=""
+          width="100%"
+          height="100%"
+          src={userData?.picture ? userData.picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
+        />
+      </Box>
+    )
+  } else {
+    return (
+      <Menu
+        isOpen={isOpenMenu}
+        boxShadow="0 1.6px 16px 0 rgba(100, 96, 103, 0.16)"
+      >
+        <MenuButton
+          onClick={btnMouseEnterEvent}
+          onMouseLeave={btnMouseLeaveEvent}
+        >
+          <Box
+            cursor="pointer"
+            height="40px"
+            width="40px"
+            borderRadius="50%"
+            overflow="hidden"
+            display={{ base: "none", lg: "flex" }}
+          >
+            <Image
+              alt=""
+              width="100%"
+              height="100%"
+              display={{ base: "none", lg: "flex" }}
+              src={userData?.picture ? userData.picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
+            />
+          </Box>
+        </MenuButton>
+        <MenuList
+          width="260px"
+          borderWidth={0}
+          onMouseEnter={menuListMouseEnterEvent}
+          onMouseLeave={menuListMouseLeaveEvent}
+        >
+          <MenuItem
+            display="flex"
+            flexDirection="column"
+            padding="16px 0"
+          >
+            <p>
+              {userData?.username}
+            </p>
+            <p>
+              {userData?.email}
+            </p>
+          </MenuItem>
+        </MenuList>
+      </Menu>
+    )
+  }
+
 }
 
 function SearchInput ({ status }) {
@@ -321,30 +418,17 @@ function DesktopLinks({ links, position = false, path }) {
       {!statusSearch &&
         <HStack spacing={8} display={{ base: "none", lg: "flex" }}>
           {userData ? (
-            <HStack spacing={5}>
-              <Avatar
-                bg="#2B8C4D"
-                name={userData?.firstName}
-                src={userData.picture}
-              />
-              <Link
-                fontSize="14px"
-                textTransform="capitalize"
-                href={`/user/${userData.username}`}
-              >
-                {userData.username}
-              </Link>
-            </HStack>
+            <MenuUser />
           ) : (
             <>
               <Link fontSize="15px" fontFamily="Ubuntu" fontWeight="400" letterSpacing="0.3px" href="/user/login">
                 Entrar
               </Link>
-              {/* <Link _hover={{ opacity:"none" }} href="/user/register">
+              <Link _hover={{ opacity:"none" }} href="/user/register">
                 <RoundedButton height="35px" fontSize="15px" minWidth="110px">
                   Cadastrar
                 </RoundedButton>
-              </Link> */}
+              </Link>
             </>
           )}
         </HStack>
@@ -353,7 +437,7 @@ function DesktopLinks({ links, position = false, path }) {
   );
 }
 
-export default function Menu({}) {
+export default function MenuNav({}) {
   const router = useRouter()
   const { route } = router
   const menuDisclosure = useDisclosure();
@@ -503,18 +587,11 @@ export default function Menu({}) {
             />
           </Link>
 
-          <Avatar
-            bg="#2B8C4D"
-            color="#FFF"
-            position="fixed"
-            right="24px"
-            height="40px"
-            width="40px"
-            display={{ base: "flex", lg: "none" }}
-            src={userData?.picture}
-            name={userData?.username}
-          />
           <DesktopLinks links={links} position={isScrollDown} path={route}/>
+
+          {useCheckMobile() && userData &&
+            <MenuUser userData={userData}/>
+          }
         </HStack>
       </Box>
     </>
