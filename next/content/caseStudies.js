@@ -1,5 +1,5 @@
 export function CaseStudiesPaged() {
-  const CaseStudiesResumed = CaseStudiesCotent
+  const CaseStudiesResumed = CaseStudiesContent
 
   CaseStudiesResumed.map((elm) => {
     delete elm.thumbnail
@@ -13,7 +13,7 @@ export function CaseStudiesPaged() {
   return CaseStudiesResumed
 }
 
-export const CaseStudiesCotent = [
+export const CaseStudiesContent = [
   {
     id: "fundacao-lemann",
     displayTitle: "Fundação Lemann",
@@ -157,10 +157,10 @@ export const CaseStudiesCotent = [
           <div class="highlightsBox" style="margin-top: 48px">
             <p>Os dados dos principais indicadores educacionais tratados pela BD são abertos a todos:</p>
             <ul>
-              <li><a href="https://basedosdados.org/dataset/br-inep-saeb?bdm_table=dicionario" target="_blank">Sistema de Avaliação da Educação Básica (Saeb)</a></li>
-              <li><a href="https://basedosdados.org/dataset/br-inep-ana?bdm_table=dicionario" target="_blank">Avaliação Nacional de Alfabetização (ANA)</a></li>
-              <li><a href="https://basedosdados.org/dataset/br-ibge-pnad?bdm_table=dicionario" target="_blank">Pesquisa Nacional por Amostra de Domicílios (PNAD)</a></li>
-              <li><a href="https://basedosdados.org/dataset/br-inep-censo-escolar?bdm_table=turma" target="_blank">Censo da Educação Básica</a></li>
+              <li><a href="https://basedosdados.org/dataset/e083c9a2-1cee-4342-bedc-535cbad6f3cd?table=0308fbe0-270c-4135-9115-ea1100f400f6" target="_blank">Sistema de Avaliação da Educação Básica (Saeb)</a></li>
+              <li><a href="https://basedosdados.org/dataset/140554cd-8062-4c9c-80fa-363cee3603e3?table=99597e72-0796-4de3-8542-f4fd8f3ccfa4" target="_blank">Avaliação Nacional de Alfabetização (ANA)</a></li>
+              <li><a href="https://basedosdados.org/dataset/0cde957f-1b58-425a-b6cd-ba1208515537?table=83062c5c-6b1f-4d54-8cf2-9f541e835bf0" target="_blank">Pesquisa Nacional por Amostra de Domicílios (PNAD)</a></li>
+              <li><a href="https://basedosdados.org/dataset/dae21af4-4b6a-42f4-b94a-4c2061ea9de5?table=62f7bef8-36f3-4c9b-bc79-882a2ebbed8f" target="_blank">Censo da Educação Básica</a></li>
             </ul>
           </div>
 
@@ -329,7 +329,7 @@ export const CaseStudiesCotent = [
           </p>
 
           <p class="bodyText">
-            Acesse os dados atualizados das <a href="https://basedosdados.org/dataset/br-tse-eleicoes?bdm_table=bens_candidato" target="_blank">eleições brasileiras</a>.
+            Acesse os dados atualizados das <a href="https://basedosdados.org/dataset/eef764df-bde8-4905-b115-6fc23b6ba9d6?table=2e204854-e453-4257-9fef-5e10f3ff1f56" target="_blank">eleições brasileiras</a>.
           </p>
         </div>
       </div>
