@@ -287,7 +287,7 @@ function Products() {
 
               <SectionLink
                 marginTop="24px !important"
-                href={"/dataset?resource_type=bdm_table&order_by=score"}
+                href={"/dataset?contains=tables"}
               >
                 Veja os dados disponíveis
               </SectionLink>
