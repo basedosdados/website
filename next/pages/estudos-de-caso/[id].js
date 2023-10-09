@@ -11,7 +11,7 @@ import Head from "next/head";
 
 import { MainPageTemplate } from "../../components/templates/main";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { CaseStudiesCotent } from "../../content/caseStudies";
+import { CaseStudiesContent } from "../../content/caseStudies";
 import Link from "../../components/atoms/Link";
 import SectionText from "../../components/atoms/SectionText";
 import Display from "../../components/atoms/Display";
@@ -21,13 +21,13 @@ import styles from "../../styles/caseStudies.module.css";
 
 export async function getStaticProps(context) {
   return {
-    props : CaseStudiesCotent.find((res) => res.id === context.params.id)
+    props : CaseStudiesContent.find((res) => res.id === context.params.id)
   } 
 }
 
 export async function getStaticPaths(context) {
   return {
-    paths: CaseStudiesCotent.map((elm) => {
+    paths: CaseStudiesContent.map((elm) => {
       return {params: { id : elm.id }}
     }),
     fallback: false

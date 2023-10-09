@@ -60,7 +60,7 @@ export const QuestionFAQ = [
     question: "O que são tabelas tratadas BD+?",
     answer: function() {
       return (
-        <div id="bdm-tables" style={{display: "flex", flexDirection: "column"}}>
+        <div id="tables" style={{display: "flex", flexDirection: "column"}}>
           <p>
             São tabelas completas, já tratadas e prontas para análise, disponíveis no nosso <i>datalake</i> público.
             A limpeza das tabelas envolve um rigoroso processo de padronização e compatibilização de dados,
@@ -71,7 +71,7 @@ export const QuestionFAQ = [
     },
     categories: ["Dados"],
     keywords: "tratada, tratado, BD+, tabela, datalake, cruzar, cruzamento, padronização, compatibilização",
-    id: "bdm-tables"
+    id: "tables"
   },
   {
     question: "O que são fontes originais?",
@@ -110,7 +110,7 @@ export const QuestionFAQ = [
     question: "Como acessar as tabelas tratadas BD+?",
     answer: function() {
       return (
-        <div id="access-bdm-tables" style={{display: "flex", flexDirection: "column"}}>
+        <div id="access-tables" style={{display: "flex", flexDirection: "column"}}>
           <p>
             Você pode consultar as tabelas tratadas BD+ de diferentes maneiras.
             Além de fazer o download direto na plataforma,
@@ -121,7 +121,7 @@ export const QuestionFAQ = [
     },
     categories: ["Dados"],
     keywords: "acesso, consulta, tratada, tratado, BD+, download, baixar, pacote, SQL, BigQuery, Python, R, Stata",
-    id: "access-bdm-tables"
+    id: "access-tables"
   },
   {
     question: "Como acessar as fontes originais?",

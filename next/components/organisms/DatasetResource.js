@@ -111,13 +111,13 @@ export default function DatasetResource({
   }
 
   useEffect(() => {
-    const dataset_tables = dataset?.tables?.edges.map((elm) => elm.node) || []
-    const raw_data_sources = dataset?.rawDataSources?.edges.map((elm) => elm.node) || []
-    const information_request = dataset?.informationRequests?.edges.map((elm) => elm.node) || []
+    const dataset_tables = dataset?.tables?.edges.map((elm) => elm.node).filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []
+    const raw_data_sources = dataset?.rawDataSources?.edges.map((elm) => elm.node).filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []
+    const information_request = dataset?.informationRequests?.edges.map((elm) => elm.node).filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []
 
-    setTables(dataset_tables.filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements))
-    setRawDataSources(raw_data_sources.filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements))
-    setInformationRequests(information_request.filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements))
+    setTables(dataset_tables)
+    setRawDataSources(raw_data_sources)
+    setInformationRequests(information_request)
 
     const queryParams = new URLSearchParams(window.location.search)
 
