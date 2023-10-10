@@ -8,16 +8,21 @@ import {
   FormErrorMessage,
   Input,
   Image,
-  Tooltip
+  Tooltip,
+  HStack
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { MainPageTemplate } from "../../components/templates/main";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 import BigTitle from "../../components/atoms/BigTitle";
 import SectionTitle from "../../components/atoms/SectionTitle";
+import RoundedButton from "../../components/atoms/RoundedButton";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import PenIcon from "../../public/img/icons/penIcon";
+import GithubIcon from "../../public/img/icons/githubIcon";
+import TwitterIcon from "../../public/img/icons/twitterIcon";
+import LinkedinIcon from "../../public/img/icons/linkedinIcon";
 
 export default function UserPage() {
   const [sectionSelected, setSectionSelected] = useState(0)
@@ -64,6 +69,7 @@ export default function UserPage() {
           justifyContent="space-between"
           spacing={0}
           gap="80px"
+          marginBottom="80px !important"
         >
           <Stack
             width="fit-content"
@@ -107,8 +113,8 @@ export default function UserPage() {
               spacing={0}
               gap="80px"
             >
-              <Stack spacing={0} flex={1}>
-                <FormControl isInvalid={!!errors.username} marginBottom="24px !important">
+              <Stack spacing="24px" flex={1}>
+                <FormControl isInvalid={!!errors.username}>
                   <LabelTextForm text="Username"/>
                   <Input
                     id="username"
@@ -126,7 +132,7 @@ export default function UserPage() {
                   </FormErrorMessage>
                 </FormControl>
 
-                <FormControl isInvalid={!!errors.firstName} marginBottom="24px !important">
+                <FormControl isInvalid={!!errors.firstName}>
                   <LabelTextForm text="Nome"/>
                   <Input
                     id="firstName"
@@ -144,7 +150,7 @@ export default function UserPage() {
                   </FormErrorMessage>
                 </FormControl>
 
-                <FormControl isInvalid={!!errors.email} marginBottom="24px !important">
+                <FormControl isInvalid={!!errors.email}>
                   <LabelTextForm text="Sobrenome"/>
                   <Input
                     id="lastName"
@@ -161,6 +167,87 @@ export default function UserPage() {
                     <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.lastName}
                   </FormErrorMessage>
                 </FormControl>
+
+                <FormControl isInvalid={!!errors.website}>
+                  <LabelTextForm text="Url"/>
+                  <Input
+                    id="website"
+                    name="website"
+                    value={formData.website}
+                    placeholder="Insira seu endereço URL"
+                    fontFamily="ubuntu"
+                    height="40px"
+                    fontSize="14px"
+                    borderRadius="16px"
+                    _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+                  />
+                  <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+                    <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.website}
+                  </FormErrorMessage>
+                </FormControl>
+                
+                <Stack>
+                  <LabelTextForm text="Redes sociais"/>
+
+                  <HStack spacing="8px" margin="0 0 8px 0 !important">
+                    <GithubIcon width="24px" height="24px" fill="#D0D0D0"/>
+                    <Input
+                      id="github"
+                      name="github"
+                      value={formData.github}
+                      placeholder="Link para o perfil no GitHub"
+                      fontFamily="ubuntu"
+                      height="40px"
+                      fontSize="14px"
+                      borderRadius="16px"
+                    />
+                  </HStack>
+
+                  <HStack spacing="8px" margin="0 0 8px 0 !important">
+                    <TwitterIcon width="24px" height="24px" fill="#D0D0D0"/>
+                    <Input
+                      id="twitter"
+                      name="twitter"
+                      value={formData.twitter}
+                      placeholder="Link para o perfil no Twitter"
+                      fontFamily="ubuntu"
+                      height="40px"
+                      fontSize="14px"
+                      borderRadius="16px"
+                    />
+                  </HStack>
+
+                  <HStack spacing="8px"  margin="0 !important">
+                    <LinkedinIcon width="24px" height="24px" fill="#D0D0D0"/>
+                    <Input
+                      id="linkedin"
+                      name="linkedin"
+                      value={formData.linkedin}
+                      placeholder="Link para o perfil no Linkedin"
+                      fontFamily="ubuntu"
+                      height="40px"
+                      fontSize="14px"
+                      borderRadius="16px"
+                    />
+                  </HStack>
+                </Stack>
+
+                <Text
+                  fontFamily="ubuntu"
+                  fontSize="12px"
+                  fontWeight="400"
+                  lineHeight="16px"
+                  letterSpacing="0.3px"
+                  color="#7D7D7D"
+                >
+                  Ao preencher os campos desta página, você nos dá consentimento para compartilhar essas informações onde quer que o seu perfil de usuário apareça.
+                </Text>
+
+                <RoundedButton
+                  width="fit-content"
+                >
+                  Atualizar perfil
+                </RoundedButton>
               </Stack>
 
               <Box
@@ -179,6 +266,7 @@ export default function UserPage() {
                   alignItems="center"
                   justifyContent="center"
                   position="absolute"
+                  cursor="pointer"
                   bottom="10px"
                   left="10px"
                   width="32px"
@@ -190,13 +278,16 @@ export default function UserPage() {
                     hasArrow
                     bg="#2A2F38"
                     label="Editar"
-                    fontSize="16px"
-                    fontWeight="500"
+                    fontSize="14px"
+                    fontWeight="400"
+                    letterSpacing="0.5px"
+                    lineHeight="24px"
                     padding="5px 16px 6px"
                     marginTop="10px"
                     color="#FFF"
                     borderRadius="6px"
                     minWidth="96px"
+                    textAlign="center"
                   >
                     <PenIcon
                       width="22px"
