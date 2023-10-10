@@ -10,7 +10,7 @@ export default async function getCareerPeople(team) {
       data: {
         query: `
         query {
-          allAccount (careers_Team: "${team}"){
+          allAccount (careers_Team: "${team}", profile: A_1){
             edges {
               node {
                 firstName
