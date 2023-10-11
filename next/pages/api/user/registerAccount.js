@@ -3,9 +3,8 @@ import axios from "axios";
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
 export default async function registerAccount({
-  userName,
   firstName,
-  lastName,
+  lastName = "",
   email,
   password,
 }) {
@@ -21,7 +20,7 @@ export default async function registerAccount({
         mutation {
           CreateUpdateAccount (input:
             {
-              username : "${userName}"
+              username : "${email}"
               email: "${email}"
               firstName: "${firstName}"
               lastName: "${lastName}"

@@ -16,8 +16,8 @@ import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
 
 import {
-  getTeams,
-  getPeople
+  getAllPeople,
+  getCareerPeople,
 } from "./api/team";
 
 import Display from "../components/atoms/Display";
@@ -35,6 +35,16 @@ import GithubIcon  from "../public/img/icons/githubIcon";
 import DiscordIcon from "../public/img/icons/discordIcon";
 import RedirectIcon from "../public/img/icons/redirectIcon";
 import styles from "../styles/quemSomos.module.css";
+
+export async function getServerSideProps() {
+  const data = await getAllPeople()
+
+  return {
+    props: {
+      data
+    },
+  }
+}
 
 const HistoryBox = ({ children, title, date, image }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -99,8 +109,45 @@ const HistoryBox = ({ children, title, date, image }) => {
   )
 }
 
-const TeamBox = ({ index, data }) => {
+function getRoleScore(role) {
+  switch (role) {
+    case "presidente":
+      return 1;
+    case "diretora executiva":
+      return 2;
+    case "co-fundador":
+      return 3;
+    case "associado":
+      return 4;
+    case "gerente":
+      return 5;
+    case "membro do conselho fiscal":
+      return 10;
+    default:
+      return 6;
+  }
+}
+
+const TeamBox = ({
+  index,
+  name,
+  picture,
+  description,
+  website,
+  email,
+  twitter,
+  linkedin,
+  github,
+  career
+}) => {
   const hasLeftSpacing = (index % 2 == 0) ? false : true
+
+  const role = () => {
+    const roles = []
+    career.map((elm) => roles.push(elm.node.role))
+    roles.sort((a, b) => getRoleScore(a.toLowerCase()) - getRoleScore(b.toLowerCase()))
+    return roles.filter((elm) => elm.length > 0).join(", ")
+  }
 
   const iconTeamBox = (ref) => {
     let href = ""
@@ -134,14 +181,14 @@ const TeamBox = ({ index, data }) => {
     }
   }
 
-  const iconLinks = () => {
+  const IconLinks = () => {
     return (
       <Box display="flex" flexDirection="row" gridGap="5px">
-        {data.website ? <WebIcon {...iconTeamBox({website: data.website})}/> : null}
-        {data.email ? <EmailIcon {...iconTeamBox({email: data.email})}/> : null}
-        {data.twitter ? <TwitterIcon {...iconTeamBox({twitter: data.twitter})}/> : null}
-        {data.linkedin ? <LinkedinIcon {...iconTeamBox({linkedin: data.linkedin})}/> : null}
-        {data.github ? <GithubIcon {...iconTeamBox({github: data.github})}/> : null}
+        {website ? <WebIcon {...iconTeamBox({website: website})}/> : null}
+        {email ? <EmailIcon {...iconTeamBox({email: email})}/> : null}
+        {twitter ? <TwitterIcon {...iconTeamBox({twitter: twitter})}/> : null}
+        {linkedin ? <LinkedinIcon {...iconTeamBox({linkedin: linkedin})}/> : null}
+        {github ? <GithubIcon {...iconTeamBox({github: github})}/> : null}
       </Box>
     )
   }
@@ -164,8 +211,8 @@ const TeamBox = ({ index, data }) => {
         overflow="hidden"
       >
         <Image
-          alt={data?.name || ""}
-          src={data.photo_url ? data.photo_url : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
+          alt={name}
+          src={picture ? picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
           width="100%"
           height="100%"
         />
@@ -176,10 +223,11 @@ const TeamBox = ({ index, data }) => {
             fontSize="18px"
             marginRight="16px"
           >
-            {data?.name}
+            {name}
           </BodyText>
-          {!isMobileMod() && iconLinks()}
+          {!isMobileMod() && <IconLinks/>}
         </Box>
+
         <BodyText
           fontSize="16px"
           fontWeight="400"
@@ -187,18 +235,61 @@ const TeamBox = ({ index, data }) => {
           letterSpacing="0.2px"
           color="#6F6F6F"
         >
-          {data?.role.join(", ")}
+          {role()}
         </BodyText>
-        <BodyText fontSize="16px" letterSpacing="0.2px" lineHeight="25px" marginBottom={isMobileMod() ? "12px" : "0"}>{data?.description}</BodyText>
+
+        <BodyText
+          fontSize="16px"
+          letterSpacing="0.2px"
+          lineHeight="25px"
+          marginBottom={isMobileMod() ? "12px" : "0"}
+        >
+          {description}
+        </BodyText>
         {isMobileMod() && iconLinks()}
       </Box>
     </Box>
   )
 }
 
-export default function QuemSomos() {
-  const [allPeople, setAllPeople] = useState([])
-  const [people, setPeople] = useState([])
+export default function QuemSomos({ data }) {
+  const sortPeople = (array) => {
+    const sortPeopleArray = array
+
+    function compareByRole(a, b) {
+      const rolesA = a.node.careers.edges.map(edge => edge.node.role.toLowerCase())
+      const rolesB = b.node.careers.edges.map(edge => edge.node.role.toLowerCase())
+
+      const sortedRolesA = rolesA.sort((x, y) => getRoleScore(x) - getRoleScore(y))
+      const sortedRolesB = rolesB.sort((x, y) => getRoleScore(x) - getRoleScore(y))
+
+      if (getRoleScore(sortedRolesA[0]) < getRoleScore(sortedRolesB[0])) {
+        return -1
+      } else if (getRoleScore(sortedRolesA[0]) > getRoleScore(sortedRolesB[0])) {
+        return 1
+      }
+      return 0
+    }
+
+    const data = sortPeopleArray.sort(compareByRole)
+
+    function removeDuplicates(array) {
+      const conjunto = new Set()
+      return array.filter(obj => {
+        const objetoString = JSON.stringify(obj)
+        if (!conjunto.has(objetoString)) {
+          conjunto.add(objetoString)
+          return true
+        }
+        return false
+      })
+    }
+
+    return removeDuplicates(data).filter(obj => obj.node.firstName !== "API User" && obj.node.firstName !== "Staging")
+  }
+
+  const [allPeople] = useState(sortPeople(data))
+  const [people, setPeople] = useState(sortPeople(data))
   const [filterTeam, setFilterTeam] = useState("")
 
   const schemasTeam = [
@@ -208,108 +299,9 @@ export default function QuemSomos() {
     "Captação, Parcerias e Projetos",
     "Comunicação",
     "Dados",
-    "Infraestrutura",
-    "Website",
+    "Plataforma",
     "Conselho Fiscal"
   ]
-
-  const sortingTeam = (array, team = schemasTeam) => {
-    let arraySorting = []
-
-    team.map((personTeam) => {
-      const newPeopleByTeam = array.filter((person) => {
-        const indexTeam = person.team.findIndex((res) => res === personTeam)
-        if(indexTeam > -1) return person.team[indexTeam]
-      })
-
-      const orderByName = newPeopleByTeam.sort((a, b) => {
-        const compareName = (firstPerson, secondPerson) => firstPerson.name.localeCompare(secondPerson.name)
-
-        if (compareName(a, b) < compareName(b, a)) return -1
-        if (compareName(a, b) > compareName(b, a)) return 1
-        return 0
-      })
-
-      const orderByLevel = orderByName.sort((a, b) => {
-        const valueLevel = (elm) => {{
-          const levelPerson = elm.level[0]
-          if(levelPerson === "Presidente") return -3
-          if(levelPerson === "Diretora Executiva") return -2
-          if(levelPerson === "Gerente") return -1
-          return 0
-        }}
-
-        return valueLevel(a) - valueLevel(b)
-      })
-
-      orderByLevel.map((res) => {
-        arraySorting.push(res)
-      })
-      
-    })
-    const newArraySorting = [...new Set(arraySorting)]
-    return newArraySorting
-  }
-
-  useEffect(() => {
-    setPeople(sortingTeam(allPeople))
-  },[allPeople])
-
-  useEffect(() => {
-    setAllPeople(groupingTeamAndRole(Object.values(getPeople)).filter(Boolean))
-  },[])
-
-  const groupingTeamAndRole = (array) => array.map((elm) => {
-    const person = elm
-    const team = []
-    const role = []
-    const level = []
-    const endDate = []
-
-    const getById = getTeams.filter((elm) => elm.person_id === person.id)
-
-    if(getById) getById.map((res) => {
-      team.push(res.team)
-      role.push(res.role)
-      level.push(res.level)
-      endDate.push(res.end_date)
-    })
-
-    const filterArray = (array) => Array.from(new Set(array.filter(Boolean)))
-
-    const departureDate = filterArray(endDate)
-
-    if(departureDate.length > 0) {
-      const endDate = new Date(departureDate[0])
-      const dateNow = new Date()
-      if(endDate < dateNow) return ""
-    }
-
-    return {
-      ...person,
-      team : filterArray(team),
-      role : filterArray(role),
-      level : filterArray(level),
-    }
-  })
-
-  useEffect(() => {
-    if(filterTeam) filterPeopleByTeam(filterTeam)
-  },[filterTeam])
-
-  const filterPeopleByTeam = (team) => {
-    const teamPeople = getTeams.filter((elm) => elm.team === team)
-
-    const mapId = () => teamPeople.map((elm) => elm.person_id)
-    
-    const personIdList = Array.from(new Set(mapId()))
-
-    const filterPeople = () => personIdList.map((personId) => getPeople[personId])
-      
-    const newGroupPerson = groupingTeamAndRole(filterPeople()).filter(Boolean)
-
-    setPeople(sortingTeam(newGroupPerson, [team]))
-  }
 
   const keyIcon = (url) => {
     return {
@@ -325,13 +317,15 @@ export default function QuemSomos() {
     }
   }
 
-  const handleSelect = (elm) => {
+  const handleSelect = async (elm) => {
     window.open("#teams", "_self")
     if(filterTeam === elm) {
-      setFilterTeam()
-      return setPeople(sortingTeam(allPeople))
+      setFilterTeam("")
+      return setPeople(allPeople)
     } else {
-      return setFilterTeam(elm)
+      setFilterTeam(elm)
+      const result = await getCareerPeople(elm)
+      setPeople(sortPeople(result))
     }
   }
 
@@ -737,8 +731,17 @@ export default function QuemSomos() {
           >
             {people?.map((elm, index) => (
               <TeamBox
+                key={index}
                 index={index}
-                data={elm}
+                name={`${elm.node.firstName} ${elm.node.lastName}`}
+                picture={elm.node.picture}
+                description={elm.node.description}
+                website={elm.node.website}
+                email={elm.node.email}
+                twitter={elm.node.twitter}
+                linkedin={elm.node.linkedin}
+                github={elm.node.github}
+                career={elm.node.careers.edges}
               />
             ))}
           </Stack>
@@ -774,9 +777,7 @@ export default function QuemSomos() {
             </RoundedButton>
           </Box>
         </Stack>
-
       </Stack>
-
     </MainPageTemplate>
   )
 }

@@ -42,7 +42,7 @@ import BDLogoPlusImage from "../public/img/logos/bd_logo_plus";
 import BDLogoEduImage from "../public/img/logos/bd_logo_edu";
 
 function Hero() {
-  const [search, setSearch] = useState();
+  const [search, setSearch] = useState("");
   const [tags, setTags] = useState([])
   const [mediumQuery] = useMediaQuery("(max-width: 1366px)")
 
@@ -287,7 +287,7 @@ function Products() {
 
               <SectionLink
                 marginTop="24px !important"
-                href={"/dataset?resource_type=bdm_table&order_by=score"}
+                href={"/dataset?contains=tables"}
               >
                 Veja os dados disponíveis
               </SectionLink>

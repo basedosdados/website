@@ -140,7 +140,6 @@ export default function BdmTablePage({ id }) {
   }
 
   const PublishedOrDataCleanedBy = ({ resource }) => {
-    if(resource.firstName === "Ricardo" &&  resource.lastName === "Dahis") return <SectionText marginRight="4px !important">Equipe Dados</SectionText>
 
     return (
       <>

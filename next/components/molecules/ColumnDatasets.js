@@ -99,7 +99,7 @@ function TableDatasets({ headers, values }) {
     return (
       <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
         {newDirectoryColumn}
-        <a target={"_blank"} href={`/dataset/${dataset?._id}?bdm_tables=${table?._id}`}>
+        <a target={"_blank"} href={`/dataset/${dataset?._id}?table=${table?._id}`}>
           <RedirectIcon
             alt="hiperlink"
             fill="#42B0FF"
