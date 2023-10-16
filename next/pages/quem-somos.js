@@ -246,7 +246,7 @@ const TeamBox = ({
         >
           {description}
         </BodyText>
-        {isMobileMod() && iconLinks()}
+        {isMobileMod() && <IconLinks/>}
       </Box>
     </Box>
   )
