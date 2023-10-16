@@ -22,7 +22,6 @@ export default async function getAllPeople() {
                 linkedin
                 github
                 picture
-                isActiveStaff
                 careers {
                   edges {
                     node {
