@@ -9,7 +9,8 @@ import {
   Input,
   Image,
   Tooltip,
-  HStack
+  HStack,
+  Checkbox
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { MainPageTemplate } from "../../components/templates/main";
@@ -166,6 +167,20 @@ export default function UserPage() {
                   <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
                     <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.lastName}
                   </FormErrorMessage>
+                </FormControl>
+
+                <FormControl>
+                  <LabelTextForm text="E-mail"/>
+                  <Checkbox
+                    color="#7D7D7D"
+                    fontFamily="Ubuntu"
+                    fontSize="14px"
+                    fontWeight="400"
+                    lineHeight="27px"
+                    letterSpacing="0.3px"
+                  >
+                    Tornar o e-mail de acesso à sua conta visível para o público.
+                  </Checkbox>
                 </FormControl>
 
                 <FormControl isInvalid={!!errors.website}>
