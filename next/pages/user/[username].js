@@ -26,6 +26,8 @@ import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 import BigTitle from "../../components/atoms/BigTitle";
 import SectionTitle from "../../components/atoms/SectionTitle";
 import RoundedButton from "../../components/atoms/RoundedButton";
+import ButtonSimple from "../../components/atoms/SimpleButton";
+import InputForm from "../../components/atoms/SimpleInput"
 import Link from "../../components/atoms/Link";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
@@ -33,6 +35,9 @@ import PenIcon from "../../public/img/icons/penIcon";
 import GithubIcon from "../../public/img/icons/githubIcon";
 import TwitterIcon from "../../public/img/icons/twitterIcon";
 import LinkedinIcon from "../../public/img/icons/linkedinIcon";
+import { EmailConfirmImage } from "../../public/img/emailImage";
+import ChevronIcon from "../../public/img/icons/chevronIcon";
+import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 
 const LabelTextForm = ({ text, ...props }) => {
   return (
@@ -78,7 +83,6 @@ const ExtraInfoTextForm = ({children, ...props}) => {
 }
 
 const ModalGeneral = ({
-  title,
   children,
   isOpen,
   onClose
@@ -86,16 +90,23 @@ const ModalGeneral = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered margin="24px !important">
       <ModalOverlay/>
-      <ModalContent>
-        <ModalHeader>{title}</ModalHeader>
-        <ModalCloseButton />
-
-        <ModalBody>
+      <ModalContent
+        margin="24px"
+        minWidth={isMobileMod() ? "" : "536px"}
+        boxSizing="content-box"
+        padding="32px"
+        borderRadius="20px"
+      >
+        <ModalHeader padding="0">
           {children[0]}
+        </ModalHeader>
+
+        <ModalBody padding="0">
+          {children[1]}
         </ModalBody>
 
-        <ModalFooter>
-          {children[1]}
+        <ModalFooter padding="0" width={isMobileMod() ? "100%" : "auto"}>
+          {children[2]}
         </ModalFooter>
       </ModalContent>
     </Modal>
@@ -330,17 +341,236 @@ const ProfileConfiguration = () => {
 const Account = () => {
   const emailModal = useDisclosure()
   const eraseModalAccount = useDisclosure()
+  const [emailSent, setEmailSent] = useState(false)
+  const [showPassword, setShowPassword] = useState(true)
+  const [formData, setFormData] = useState({ email: "", password: "" })
+  const [errors, setErrors] = useState({ email: "", password: ""})
 
   return (
     <Stack spacing="24px">
       <ModalGeneral
-        title="Alterar e-mail"
         isOpen={emailModal.isOpen}
         onClose={emailModal.onClose}
       >
-        <Text>aaaaa</Text>
-        <Text>bbbbb</Text>
+        {emailSent ?
+          <Stack spacing={0} marginBottom="16px">
+            <Stack spacing={0} flexDirection="row" onClick={() => setEmailSent(false)}>
+              <ChevronIcon
+                position="relative"
+                fill="#42B0FF"
+                width="14px"
+                height="14px"
+                transform="rotate(180deg)"
+                top="2px"
+              />
+              <Text
+                cursor="pointer"
+                color="#42B0FF"
+                fontFamily="Ubuntu"
+                fontSize="16px"
+                fontWeight="400"
+                lineHeight="16px"
+                letterSpacing="0.2px"
+                marginLeft="8px !important"
+              >Voltar</Text>
+            </Stack>
+              
+            <ModalCloseButton
+              fontSize="14px"
+              top="24px"
+              right="26px"
+              _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+              onClick={() => {
+                setEmailSent(false)
+                emailModal.onClose()
+              }}
+            />
+          </Stack>
+          :
+          <Stack spacing={0} marginBottom="16px">
+            <SectionTitle
+              lineHeight="40px"
+            >Alterar e-mail</SectionTitle>
+            <ModalCloseButton
+              fontSize="14px"
+              top="34px"
+              right="26px"
+              _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+            />
+          </Stack>
+        }
+
+        {emailSent ?
+          <Stack spacing="24px" textAlign="center">
+            <EmailConfirmImage justifyContent="center"/>
+
+            <SectionTitle
+              lineHeight="40px"
+            >Confirme seu endereço de e-mail</SectionTitle>
+            <ExtraInfoTextForm
+              fontSize="16px"
+              letterSpacing="0.2px"
+            >Enviamos uma confirmação de e-mail para</ExtraInfoTextForm>
+            <TitleTextForm>dadinho@basedosdados.org</TitleTextForm>
+            <ExtraInfoTextForm
+              fontSize="16px"
+              letterSpacing="0.2px"
+              lineHeight="24px"
+            >Confira sua caixa de entrada e siga as <br/>
+instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm>
+          </Stack>
+          :
+          <Stack spacing="24px">
+            <ExtraInfoTextForm fontSize="16px" lineHeight="24px" letterSpacing="0.2px">
+              Insira o seu novo endereço de e-mail. Enviaremos as instruções para você completar a alteração.
+            </ExtraInfoTextForm>
+
+            <FormControl isInvalid={!!errors.email}>
+              <LabelTextForm text="Novo e-mail"/>
+              <InputForm
+                id="email"
+                name="email"
+                value={formData.email}
+                // onChange={handleInputChange}
+                // onKeyDown={handleKeyDown}
+                placeholder="Insira seu e-mail"
+                fontFamily="ubuntu"
+                height="40px"
+                fontSize="14px"
+                borderRadius="16px"
+                _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+              />
+              <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+                <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.email}
+              </FormErrorMessage>
+            </FormControl>
+            
+            <FormControl isInvalid={!!errors.password} marginBottom="24px !important">
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  width="100%"
+                  marginBottom="8px"
+                >
+                  <LabelTextForm text="Senha" margin="0 !important"/>
+                  <ButtonSimple
+                    fontWeight="700"
+                    color="#42B0FF"
+                    letterSpacing="0.3px"
+                    fontSize="14px"
+                    justifyContent="end"
+                    _hover={{opacity: "0.6"}}
+                    onClick={() => window.open("./password-recovery", "_self")}
+                  >Esqueceu a senha?
+                  </ButtonSimple>
+                </Box>
+
+                <InputForm
+                  type={showPassword ? "password" : "text"}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  // onChange={handleInputChange}
+                  // onKeyDown={handleKeyDown}
+                  placeholder="Insira sua senha"
+                  fontFamily="ubuntu"
+                  height="40px"
+                  fontSize="14px"
+                  borderRadius="16px"
+                  _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+                  styleElmRight={{
+                    width: "50px",
+                    height: "40px",
+                    cursor: "pointer",
+                    onClick: () => setShowPassword(!showPassword)
+                  }}
+                  elmRight={showPassword ?
+                    <EyeOffIcon
+                      alt="esconder senha"
+                      width="20px"
+                      height="20px"
+                      fill="#D0D0D0"
+                    />
+                  :
+                    <EyeIcon
+                      alt="exibir senhar"
+                      width="20px"
+                      height="20px"
+                      fill="#D0D0D0"
+                    />
+                  }
+                />
+                <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+                  <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.password}
+                </FormErrorMessage>
+            </FormControl>
+          </Stack>
+        }
+
+        {emailSent ?
+          <></>
+          :
+          <RoundedButton
+            borderRadius="30px"
+            _hover={{transform: "none", opacity: 0.8}}
+            onClick={() => setEmailSent(true)}
+          >
+            Enviar e-mail
+          </RoundedButton>
+        }
       </ModalGeneral>
+
+      <ModalGeneral
+        isOpen={eraseModalAccount.isOpen}
+        onClose={eraseModalAccount.onClose}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <SectionTitle
+            lineHeight="40px"
+          >Tem certeza que deseja deletar sua conta?</SectionTitle>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", color:"#FF8484"}}
+          />
+        </Stack>
+
+        <Stack spacing="24px" marginBottom="16px">
+          <ExtraInfoTextForm fontSize="16px" lineHeight="24px" letterSpacing="0.2px">
+          Após deletar sua conta, todos os dados serão permanentemente removidos e não poderão ser recuperados. 
+          </ExtraInfoTextForm>
+        </Stack>
+
+        <Stack
+          flexDirection={isMobileMod() ? "column" : "row"}
+          spacing={0}
+          gap="24px"
+          width={isMobileMod() ? "100%" : "fit-content"}
+        >
+          <RoundedButton
+            borderRadius="30px"
+            backgroundColor="#FFF"
+            border="1px solid #FF8484"
+            color="#FF8484"
+            width={isMobileMod() ? "100%" : "fit-content"}
+            _hover={{transform: "none", opacity: 0.8}}
+            onClick={() => eraseModalAccount.onClose()}
+          >
+            Cancelar
+          </RoundedButton>
+
+          <RoundedButton
+            borderRadius="30px"
+            backgroundColor="#FF8484"
+            width={isMobileMod() ? "100%" : "fit-content"}
+            _hover={{transform: "none", opacity: 0.8}}
+          >
+            Deletar
+          </RoundedButton>
+        </Stack>
+      </ModalGeneral>
+
       <Box>
         <TitleTextForm>E-mail</TitleTextForm>
         <Text
@@ -372,6 +602,8 @@ const Account = () => {
           fontSize="16px"
           lineHeight="30px"
           letterSpacing="0.2px"
+          href="/contato"
+          target="_self"
         >Entre em contato</Link>
       </Box>
 
@@ -381,6 +613,7 @@ const Account = () => {
         <RoundedButton
           width={isMobileMod() ? "100%" :"fit-content"}
           backgroundColor="#FF8484"
+          onClick={() => eraseModalAccount.onOpen()}
         >Deletar minha conta</RoundedButton>
       </Box>
     </Stack>

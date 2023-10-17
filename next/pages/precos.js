@@ -74,7 +74,7 @@ export default function Price() {
           scrollBehavior="inside"
         >
           <ModalOverlay />
-          <ModalContent maxWidth="800px !important">
+          <ModalContent maxWidth="800px !important" margin="24px">
             <ModalHeader>Termos de serviço</ModalHeader>
             <ModalBody>
               <ServiceTermsBDPro/>
