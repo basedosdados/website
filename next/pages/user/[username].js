@@ -18,7 +18,9 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  ModalFooter
+  ModalFooter,
+  UnorderedList,
+  ListItem
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { MainPageTemplate } from "../../components/templates/main";
@@ -35,7 +37,7 @@ import PenIcon from "../../public/img/icons/penIcon";
 import GithubIcon from "../../public/img/icons/githubIcon";
 import TwitterIcon from "../../public/img/icons/twitterIcon";
 import LinkedinIcon from "../../public/img/icons/linkedinIcon";
-import { EmailConfirmImage } from "../../public/img/emailImage";
+import { EmailConfirmImage, EmailRecoveryImage } from "../../public/img/emailImage";
 import ChevronIcon from "../../public/img/icons/chevronIcon";
 import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 
@@ -446,63 +448,63 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
             </FormControl>
             
             <FormControl isInvalid={!!errors.password} marginBottom="24px !important">
-                <Box
-                  display="flex"
-                  flexDirection="row"
-                  width="100%"
-                  marginBottom="8px"
-                >
-                  <LabelTextForm text="Senha" margin="0 !important"/>
-                  <ButtonSimple
-                    fontWeight="700"
-                    color="#42B0FF"
-                    letterSpacing="0.3px"
-                    fontSize="14px"
-                    justifyContent="end"
-                    _hover={{opacity: "0.6"}}
-                    onClick={() => window.open("./password-recovery", "_self")}
-                  >Esqueceu a senha?
-                  </ButtonSimple>
-                </Box>
-
-                <InputForm
-                  type={showPassword ? "password" : "text"}
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  // onChange={handleInputChange}
-                  // onKeyDown={handleKeyDown}
-                  placeholder="Insira sua senha"
-                  fontFamily="ubuntu"
-                  height="40px"
+              <Box
+                display="flex"
+                flexDirection="row"
+                width="100%"
+                marginBottom="8px"
+              >
+                <LabelTextForm text="Senha" margin="0 !important"/>
+                <ButtonSimple
+                  fontWeight="700"
+                  color="#42B0FF"
+                  letterSpacing="0.3px"
                   fontSize="14px"
-                  borderRadius="16px"
-                  _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
-                  styleElmRight={{
-                    width: "50px",
-                    height: "40px",
-                    cursor: "pointer",
-                    onClick: () => setShowPassword(!showPassword)
-                  }}
-                  elmRight={showPassword ?
-                    <EyeOffIcon
-                      alt="esconder senha"
-                      width="20px"
-                      height="20px"
-                      fill="#D0D0D0"
-                    />
-                  :
-                    <EyeIcon
-                      alt="exibir senhar"
-                      width="20px"
-                      height="20px"
-                      fill="#D0D0D0"
-                    />
-                  }
-                />
-                <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
-                  <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.password}
-                </FormErrorMessage>
+                  justifyContent="end"
+                  _hover={{opacity: "0.6"}}
+                  onClick={() => window.open("./password-recovery", "_self")}
+                >Esqueceu a senha?
+                </ButtonSimple>
+              </Box>
+
+              <InputForm
+                type={showPassword ? "password" : "text"}
+                id="password"
+                name="password"
+                value={formData.password}
+                // onChange={handleInputChange}
+                // onKeyDown={handleKeyDown}
+                placeholder="Insira sua senha"
+                fontFamily="ubuntu"
+                height="40px"
+                fontSize="14px"
+                borderRadius="16px"
+                _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+                styleElmRight={{
+                  width: "50px",
+                  height: "40px",
+                  cursor: "pointer",
+                  onClick: () => setShowPassword(!showPassword)
+                }}
+                elmRight={showPassword ?
+                  <EyeOffIcon
+                    alt="esconder senha"
+                    width="20px"
+                    height="20px"
+                    fill="#D0D0D0"
+                  />
+                :
+                  <EyeIcon
+                    alt="exibir senhar"
+                    width="20px"
+                    height="20px"
+                    fill="#D0D0D0"
+                  />
+                }
+              />
+              <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+                <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.password}
+              </FormErrorMessage>
             </FormControl>
           </Stack>
         }
@@ -620,8 +622,247 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
   )
 }
 
+const NewPassword = () => {
+  const newPasswordModal = useDisclosure()
+  const [formData, setFormData] = useState({
+    password: "",
+    newPassword: "",
+    confirmPassword: ""
+  })
+  const [errors, setErrors] = useState({
+    password: "",
+    newPassword: "",
+    regexPassword: {},
+    confirmPassword: ""
+  })
+  const [showPassword, setShowPassword] = useState(true)
+  const [showNewPassword, setShowNewPassword] = useState(true)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(true)
+
+  return (
+    <Stack spacing="24px" maxWidth="480px">
+      <ModalGeneral
+        isOpen={newPasswordModal.isOpen}
+        onClose={newPasswordModal.onClose}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+          />
+        </Stack>
+        <Stack spacing="24px" alignItems="center" textAlign="center" marginBottom="24px">
+          <EmailRecoveryImage/>
+          <SectionTitle
+            lineHeight="40px"
+          >Sua senha foi alterada com sucesso</SectionTitle>
+          <ExtraInfoTextForm
+              fontSize="16px"
+              letterSpacing="0.2px"
+              lineHeight="24px"
+            >Agora você pode utilizar a nova senha para acessar sua<br/> conta na Base dos Dados.</ExtraInfoTextForm>
+        </Stack>
+
+        <Stack
+          flexDirection={isMobileMod() ? "column" : "row"}
+          spacing={0}
+          justifyContent="center"
+          gap="24px"
+          width="100%"
+        >
+          <RoundedButton
+            borderRadius="30px"
+            backgroundColor="#FFF"
+            border="1px solid #42B0FF"
+            color="#42B0FF"
+            width={isMobileMod() ? "100%" : "fit-content"}
+            _hover={{transform: "none", opacity: 0.8}}
+            onClick={() => eraseModalAccount.onClose()}
+          >
+            Continuar nas configurações
+          </RoundedButton>
+
+          <RoundedButton
+            borderRadius="30px"
+            width={isMobileMod() ? "100%" : "fit-content"}
+            _hover={{transform: "none", opacity: 0.8}}
+          >
+            Ir para a página inicial
+          </RoundedButton>
+        </Stack>
+      </ModalGeneral>
+      <FormControl isInvalid={!!errors.password}>
+        <Box
+          display="flex"
+          flexDirection="row"
+          width="100%"
+          marginBottom="8px"
+        >
+          <LabelTextForm width="100%" text="Senha atual" margin="0 !important"/>
+          <ButtonSimple
+            fontWeight="700"
+            color="#42B0FF"
+            letterSpacing="0.3px"
+            fontSize="14px"
+            justifyContent="end"
+            _hover={{opacity: "0.6"}}
+            onClick={() => window.open("./password-recovery", "_self")}
+          >Esqueceu a senha?
+          </ButtonSimple>
+        </Box>
+        <InputForm
+          type={showPassword ? "password" : "text"}
+          id="password"
+          name="password"
+          value={formData.password}
+          // onChange={handleInputChange}
+          placeholder="Insira a senha atual"
+          fontFamily="ubuntu"
+          height="40px"
+          fontSize="14px"
+          borderRadius="16px"
+          _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+          styleElmRight={{
+            width: "50px",
+            height: "40px",
+            cursor: "pointer",
+            onClick: () => setShowPassword(!showPassword)
+          }}
+          elmRight={showPassword ?
+            <EyeOffIcon
+              alt="esconder senha"
+              width="20px"
+              height="20px"
+              fill="#D0D0D0"
+            />
+          :
+            <EyeIcon
+              alt="exibir senhar"
+              width="20px"
+              height="20px"
+              fill="#D0D0D0"
+            />
+          }
+        />
+        <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+          <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.password}
+        </FormErrorMessage>
+      </FormControl>
+
+      <FormControl isInvalid={!!errors.newPassword}>
+        <LabelTextForm text="Nova Senha" />
+        <InputForm
+          type={showNewPassword ? "password" : "text"}
+          id="password"
+          name="password"
+          value={formData.newPassword}
+          // onChange={handleInputChange}
+          placeholder="Crie uma nova senha"
+          fontFamily="ubuntu"
+          height="40px"
+          fontSize="14px"
+          borderRadius="16px"
+          _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+          styleElmRight={{
+            width: "50px",
+            height: "40px",
+            cursor: "pointer",
+            onClick: () => setShowNewPassword(!showNewPassword)
+          }}
+          elmRight={showNewPassword ?
+            <EyeOffIcon
+              alt="esconder senha"
+              width="20px"
+              height="20px"
+              fill="#D0D0D0"
+            />
+          :
+            <EyeIcon
+              alt="exibir senhar"
+              width="20px"
+              height="20px"
+              fill="#D0D0D0"
+            />
+          }
+        />
+        <Text 
+          margin="8px 0"
+          color= {Object.keys(errors.regexPassword).length > 0 ? "#D93B3B" : "#7D7D7D"}
+          fontFamily= "Ubuntu"
+          fontSize= "12px"
+          fontWeight= "400"
+          lineHeight= "16px"
+          letterSpacing= "0.3px"
+          display="flex"
+          flexDirection="row"
+          gap="4px"
+          alignItems="flex-start"
+        ><Exclamation width="14px" height="14px" fill="#D93B3B" display={Object.keys(errors.regexPassword).length > 0 ? "flex" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
+        <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
+          <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>Ter no mínimo 8 caracteres</ListItem>
+          <ListItem fontSize="12px" color={errors?.regexPassword?.uppercaseLowercase ? "#D93B3B" :"#7D7D7D"}>Pelo menos uma letra maiúscula e minúscula</ListItem>
+          <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>Um dígito</ListItem>
+          <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>E um caractere especial</ListItem>
+        </UnorderedList>
+      </FormControl>
+
+      <FormControl isInvalid={!!errors.confirmPassword}>
+        <LabelTextForm text="Confirme a nova senha" />
+        <InputForm
+          type={showConfirmPassword ? "password" : "text"}
+          id="confirmPassword"
+          name="confirmPassword"
+          value={formData.confirmPassword}
+          // onChange={handleInputChange}
+          placeholder="Insira a senha novamente"
+          fontFamily="ubuntu"
+          height="40px"
+          fontSize="14px"
+          borderRadius="16px"
+          _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+          styleElmRight={{
+            width: "50px",
+            height: "40px",
+            cursor: "pointer",
+            onClick: () => setShowConfirmPassword(!showConfirmPassword)
+          }}
+          elmRight={showConfirmPassword ?
+            <EyeOffIcon
+              alt="esconder senha"
+              width="20px"
+              height="20px"
+              fill="#D0D0D0"
+            />
+          :
+            <EyeIcon
+              alt="exibir senhar"
+              width="20px"
+              height="20px"
+              fill="#D0D0D0"
+            />
+          }
+        />
+        <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+          <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.confirmPassword}
+        </FormErrorMessage>
+      </FormControl>
+
+      <RoundedButton
+        borderRadius="30px"
+        _hover={{transform: "none", opacity: 0.8}}
+        width="fit-content"
+        onClick={() => newPasswordModal.onOpen()}
+      >
+        Atualizar senha
+      </RoundedButton>
+    </Stack>
+  )
+}
+
 export default function UserPage() {
-  const [sectionSelected, setSectionSelected] = useState(1)
+  const [sectionSelected, setSectionSelected] = useState(2)
 
   const choices = [
     "Perfil público",
@@ -691,6 +932,7 @@ export default function UserPage() {
 
             {sectionSelected === 0 && <ProfileConfiguration/>}
             {sectionSelected === 1 && <Account/>}
+            {sectionSelected === 2 && <NewPassword/>}
           </Stack>
         </Stack>
       </Stack>
