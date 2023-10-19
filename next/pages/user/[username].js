@@ -20,7 +20,15 @@ import {
   ModalBody,
   ModalFooter,
   UnorderedList,
-  ListItem
+  ListItem,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+  Badge,
+  Grid,
+  GridItem
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { MainPageTemplate } from "../../components/templates/main";
@@ -40,6 +48,8 @@ import LinkedinIcon from "../../public/img/icons/linkedinIcon";
 import { EmailConfirmImage, EmailRecoveryImage } from "../../public/img/emailImage";
 import ChevronIcon from "../../public/img/icons/chevronIcon";
 import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
+import CheckIcon from "../../public/img/icons/checkIcon";
+import CrossIcon from "../../public/img/icons/crossIcon";
 
 const LabelTextForm = ({ text, ...props }) => {
   return (
@@ -271,7 +281,9 @@ const ProfileConfiguration = () => {
         </Text>
 
         <RoundedButton
-          width="fit-content"
+          borderRadius="30px"
+          width={isMobileMod() ? "100%" : "fit-content"}
+          _hover={{transform: "none", opacity: 0.8}}
         >
           Atualizar perfil
         </RoundedButton>
@@ -679,7 +691,7 @@ const NewPassword = () => {
             color="#42B0FF"
             width={isMobileMod() ? "100%" : "fit-content"}
             _hover={{transform: "none", opacity: 0.8}}
-            onClick={() => eraseModalAccount.onClose()}
+            onClick={() => newPasswordModal.onClose()}
           >
             Continuar nas configurações
           </RoundedButton>
@@ -688,6 +700,7 @@ const NewPassword = () => {
             borderRadius="30px"
             width={isMobileMod() ? "100%" : "fit-content"}
             _hover={{transform: "none", opacity: 0.8}}
+            onClick={() => window.open("/", "_self")}
           >
             Ir para a página inicial
           </RoundedButton>
@@ -702,6 +715,7 @@ const NewPassword = () => {
         >
           <LabelTextForm width="100%" text="Senha atual" margin="0 !important"/>
           <ButtonSimple
+            display={isMobileMod() ? "none" : "flex"}
             fontWeight="700"
             color="#42B0FF"
             letterSpacing="0.3px"
@@ -749,6 +763,17 @@ const NewPassword = () => {
         <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
           <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.password}
         </FormErrorMessage>
+        <ButtonSimple
+          display={isMobileMod() ? "flex" : "none"}
+          fontWeight="400"
+          color="#42B0FF"
+          letterSpacing="0.3px"
+          fontSize="12px"
+          _hover={{opacity: "0.6"}}
+          marginTop="8px"
+          onClick={() => window.open("./password-recovery", "_self")}
+        >Esqueceu a senha?
+        </ButtonSimple>
       </FormControl>
 
       <FormControl isInvalid={!!errors.newPassword}>
@@ -861,15 +886,321 @@ const NewPassword = () => {
   )
 }
 
+const PlansAndPayment = () => {
+  const TabContent = ({children}) => {
+
+    return (
+      <Tab
+        fontFamily="ubuntu"
+        fontSize="16px"
+        fontWeight="400"
+        letterSpacing="0.2px"
+        lineHeight="24px"
+        color="#252A32"
+        padding="0 8px 11px"
+        _hover={{
+          borderBottom: "3px solid #D0D0D0"
+        }}
+        _selected={{
+          color: "#2B8C4D",
+          fontWeight: "700",
+          borderBottom: "3px solid #2B8C4D",
+          pointerEvents: "none"
+        }}
+      >
+        {children}
+      </Tab>
+    )
+  }
+
+  return (
+    <Stack>
+      <Tabs isLazy>
+        <TabList
+          borderBottom= "2px solid #DEDFE0 !important"
+        >
+          <TabContent>Planos</TabContent>
+          <TabContent>Pagamento</TabContent>
+        </TabList>
+        <TabPanels>
+          <TabPanel padding="32px 0 0">
+            <Stack spacing="40px">
+              <Stack spacing={0} flexDirection="row" width="100%" justifyContent="space-between">
+                <Stack spacing="8px">
+                  <Badge
+                    width="fit-content"
+                    padding="4px 5px"
+                    textTransform="none"
+                    borderRadius="6px"
+                    backgroundColor="#DEDFE0"
+                    color="#252A32"
+                    fontSize="10px"
+                    fontFamily="ubuntu"
+                    fontWeight="300"
+                    letterSpacing="0.2px"
+                  >Plano atual</Badge>
+                  <Text
+                    color="#252A32"
+                    fontFamily="Ubuntu"
+                    fontSize="28px"
+                    fontWeight="500"
+                    lineHeight="36px"
+                  >BD Grátis</Text>
+                </Stack>
+                <Stack spacing={0} gap="24px" flexDirection="row">
+                  <RoundedButton
+                    borderRadius="30px"
+                    backgroundColor="#FFF"
+                    border="1px solid #42B0FF"
+                    color="#42B0FF"
+                    width={isMobileMod() ? "100%" : "fit-content"}
+                    _hover={{transform: "none", opacity: 0.8}}
+                  >Compare os planos</RoundedButton>
+                  <RoundedButton
+                    borderRadius="30px"
+                    width={isMobileMod() ? "100%" : "fit-content"}
+                    _hover={{transform: "none", opacity: 0.8}}
+                  >Faça o upgrade</RoundedButton>
+                </Stack>
+              </Stack>
+
+              <Stack spacing={0} gap="64px" flexDirection="row">
+                <Stack minWidth="350px" spacing="8px">
+                  <Text
+                    color="#7D7D7D"
+                    fontFamily="Ubuntu"
+                    fontSize="16px"
+                    fontWeight="400"
+                    lineHeight="16px"
+                    letterSpacing="0.2px"
+                    marginBottom="8px"
+                  >Inclui</Text>
+                  <Box display="flex" alignItems="center">
+                    <CheckIcon fill="#2B8C4D" width="24px" height="24px" marginRight="8px"/>
+                    <Text
+                      color="#252A32"
+                      fontFamily="Ubuntu"
+                      fontSize="16px"
+                      fontWeight="400"
+                      lineHeight="16px"
+                      letterSpacing="0.2px"
+                    >Feature 1</Text>
+                  </Box>
+
+                  <Box display="flex" alignItems="center">
+                    <CheckIcon fill="#2B8C4D" width="24px" height="24px" marginRight="8px"/>
+                    <Text
+                      color="#252A32"
+                      fontFamily="Ubuntu"
+                      fontSize="16px"
+                      fontWeight="400"
+                      lineHeight="16px"
+                      letterSpacing="0.2px"
+                    >Feature 2</Text>
+                  </Box>
+                  <Box display="flex" alignItems="center">
+                    <CheckIcon fill="#2B8C4D" width="24px" height="24px" marginRight="8px"/>
+                    <Text
+                      color="#252A32"
+                      fontFamily="Ubuntu"
+                      fontSize="16px"
+                      fontWeight="400"
+                      lineHeight="16px"
+                      letterSpacing="0.2px"
+                    >Feature 3</Text>
+                  </Box>
+                </Stack>
+
+                <Stack spacing="8px">
+                  <Text
+                    color="#7D7D7D"
+                    fontFamily="Ubuntu"
+                    fontSize="16px"
+                    fontWeight="400"
+                    lineHeight="16px"
+                    letterSpacing="0.2px"
+                    marginBottom="8px"
+                  >Não inclui</Text>
+                  <Box display="flex" alignItems="center">
+                    <CrossIcon fill="#FF8484" width="24px" height="24px" marginRight="8px"/>
+                    <Text
+                      color="#252A32"
+                      fontFamily="Ubuntu"
+                      fontSize="16px"
+                      fontWeight="400"
+                      lineHeight="16px"
+                      letterSpacing="0.2px"
+                    >Feature 1</Text>
+                  </Box>
+
+                  <Box display="flex" alignItems="center">
+                    <CrossIcon fill="#FF8484" width="24px" height="24px" marginRight="8px"/>
+                    <Text
+                      color="#252A32"
+                      fontFamily="Ubuntu"
+                      fontSize="16px"
+                      fontWeight="400"
+                      lineHeight="16px"
+                      letterSpacing="0.2px"
+                    >Feature 2</Text>
+                  </Box>
+                  <Box display="flex" alignItems="center">
+                    <CrossIcon fill="#FF8484" width="24px" height="24px" marginRight="8px"/>
+                    <Text
+                      color="#252A32"
+                      fontFamily="Ubuntu"
+                      fontSize="16px"
+                      fontWeight="400"
+                      lineHeight="16px"
+                      letterSpacing="0.2px"
+                    >Feature 3</Text>
+                  </Box>
+
+                  <ButtonSimple
+                    color="#42B0FF"
+                    fontSize="14px"
+                    fontWeight="700"
+                    letterSpacing="0.3px"
+                    _hover={{opacity: 0.7}}
+                    marginTop="16px !important"
+                  >
+                    Veja tudo e compare os planos
+                  </ButtonSimple>
+                </Stack>
+              </Stack>
+            </Stack>
+          </TabPanel>
+
+          <TabPanel>
+
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    </Stack>
+  )
+}
+
+const Accesses = () => {
+
+  return (
+    <Stack spacing="24px">
+      <Stack alignItems="end">
+        <Tooltip
+          hasArrow
+          top="-10px"
+          placement="top"
+          bg="#2A2F38"
+          label="Disponível apenas no plano BD Empresas"
+          fontSize="14px"
+          fontWeight="400"
+          fontFamily="Lato"
+          padding="5px 16px 6px"
+          letterSpacing="0.5px"
+          lineHeight="24px"
+          color="#FFF"
+          borderRadius="6px"
+        >
+          <Box width={isMobileMod() ? "100%" : "fit-content"}>
+            <RoundedButton
+              borderRadius="30px"
+              width={isMobileMod() ? "100%" : "fit-content"}
+              _hover={{transform: "none", opacity: 0.8}}
+            >Adicionar usuário</RoundedButton>
+          </Box>
+        </Tooltip>
+      </Stack>
+
+      <Grid templateColumns="3fr 1fr">
+        <GridItem
+          backgroundColor="#F6F6F6"
+          padding="8px 24px"
+          color="#6F6F6F"
+          fontFamily="Ubuntu"
+          fontSize="16px"
+          fontWeight="400"
+          lineHeight="16px"
+          letterSpacing="0.2px"
+        >Usuário</GridItem>
+        <GridItem
+          backgroundColor="#F6F6F6"
+          padding="8px 24px"
+          color="#6F6F6F"
+          fontFamily="Ubuntu"
+          fontSize="16px"
+          fontWeight="400"
+          lineHeight="16px"
+          letterSpacing="0.2px"
+        >Acesso</GridItem>
+
+        <GridItem
+          height="54px"
+          padding="24px"
+          boxSizing="content-box"
+          borderBottom="1px solid #DEDFE0"
+        >
+          <Stack spacing={0} gap="24px" flexDirection="row" alignItems="center">
+            <Box
+              width="36px"
+              height="36px"
+              borderRadius="50%"
+              overflow="hidden"
+            >
+              <Image width="100%" height="100%" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"/>
+            </Box>
+            <Box>
+              <Text
+                color="#252A32"
+                fontFamily="Ubuntu"
+                fontSize="14px"
+                fontWeight="400"
+                lineHeight="27px"
+                letterSpacing="0.3px"
+              >Dadinho</Text>
+              <Text
+                color="#6F6F6F"
+                fontFamily="Ubuntu"
+                fontSize="14px"
+                fontWeight="400"
+                lineHeight="27px"
+                letterSpacing="0.3px"
+              >dadinho@basedosdados.org</Text>
+            </Box>
+          </Stack>
+        </GridItem>
+        <GridItem
+          height="54px"
+          padding="24px"
+          boxSizing="content-box"
+          borderBottom="1px solid #DEDFE0"
+        >
+          <Box display="flex" height="100%" alignItems="center">
+            <Text
+              color="#6F6F6F"
+              fontFamily="Ubuntu"
+              fontSize="14px"
+              fontWeight="400"
+              lineHeight="27px"
+              letterSpacing="0.3px"
+            >
+              Administrador
+            </Text>
+          </Box>
+        </GridItem>
+
+      </Grid>
+    </Stack>
+  )
+}
+
 export default function UserPage() {
-  const [sectionSelected, setSectionSelected] = useState(2)
+  const [sectionSelected, setSectionSelected] = useState(4)
 
   const choices = [
-    "Perfil público",
-    "Conta",
-    "Senha",
-    "Planos e pagamento",
-    "Acessos",
+    {bar: "Perfil público", title: "Perfil público"},
+    {bar: "Conta", title: "Conta"},
+    {bar: "Senha", title: "Alterar senha"},
+    {bar: "Planos e pagamento", title: "Planos e pagamento"},
+    {bar: "Acessos", title: "Gerenciar acessos"},
   ]
 
   return (
@@ -916,7 +1247,7 @@ export default function UserPage() {
                   width="100%"
                   onClick={() => setSectionSelected(index)}
                 >
-                  {section}
+                  {section.bar}
                 </Text>
               </Box>
             ))}
@@ -927,12 +1258,14 @@ export default function UserPage() {
             maxWidth="800px"
             spacing={0}
           >
-            <SectionTitle marginBottom="8px">{choices[sectionSelected]}</SectionTitle>
+            <SectionTitle marginBottom="8px">{choices[sectionSelected].title}</SectionTitle>
             <Divider marginBottom={isMobileMod() ? "40px !important" : "32px !important"} borderColor="#DEDFE0"/>
 
             {sectionSelected === 0 && <ProfileConfiguration/>}
             {sectionSelected === 1 && <Account/>}
             {sectionSelected === 2 && <NewPassword/>}
+            {sectionSelected === 3 && <PlansAndPayment/>}
+            {sectionSelected === 4 && <Accesses/>}
           </Stack>
         </Stack>
       </Stack>

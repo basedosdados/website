@@ -4,6 +4,7 @@ import { Tab } from "@chakra-ui/tabs";
 export default function GreenTab({ children, ...style }) {
   return (
     <Tab
+      fontFamily="ubuntu"
       fontSize="18px"
       fontWeight="400"
       letterSpacing="0.1px"
