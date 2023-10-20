@@ -1,5 +1,6 @@
 import {
   Box,
+  Stack,
   HStack,
   VStack,
   Drawer,
@@ -126,9 +127,61 @@ function MenuDrawer({ isOpen, onClose, links }) {
   );
 }
 
-function MenuUser ({ userData }) {
-  const timerRef = useRef();
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
+function MenuDrawerUser({ isOpen, onClose}) {
+
+  return (
+    <Drawer isOpen={isOpen} onClose={onClose}>
+      <DrawerOverlay backdropFilter="blur(2px)"/>
+      <DrawerContent padding="16px">
+        <BDLogoImage
+          widthImage="65px"
+          heightImage="30px"
+          marginBottom="24px"
+          onClick={() => window.open("/", "_self")}
+        />
+
+        <Stack spacing={0} justifyContent="center" alignItems="center">
+          <Box
+            width="48px"
+            height="48px"
+            borderRadius="50%"
+            overflow="hidden"
+          >
+            <Image
+              display={{ base: "flex", lg: "none" }}
+              alt=""
+              width="100%"
+              height="100%"
+              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"
+            />
+          </Box>
+          <Text
+            color="#252A32"
+            fontFamily="Ubuntu"
+            fontSize="14px"
+            fontWeight="400"
+            lineHeight="27px"
+            letterSpacing="0.3px"
+          >Dadinho</Text>
+          <Text
+            color="#6F6F6F"
+            fontFamily="Ubuntu"
+            fontSize="14px"
+            fontWeight="400"
+            lineHeight="27px"
+            letterSpacing="0.3px"
+          >dadinho@basedosdados.org</Text>
+        </Stack>
+
+        
+      </DrawerContent>
+    </Drawer>
+  )
+}
+
+function MenuUser ({ userData, onOpen, onClose }) {
+  const timerRef = useRef()
+  const [isOpenMenu, setIsOpenMenu] = useState(false)
 
   const btnMouseEnterEvent = () => {
     setIsOpenMenu(true)
@@ -158,6 +211,7 @@ function MenuUser ({ userData }) {
         borderRadius="50%"
         overflow="hidden"
         display={{ base: "flex", lg: "none" }}
+        onClick={() => onOpen()}
       >
         <Image
           display={{ base: "flex", lg: "none" }}
@@ -440,7 +494,8 @@ function DesktopLinks({ links, position = false, path }) {
 export default function MenuNav({}) {
   const router = useRouter()
   const { route } = router
-  const menuDisclosure = useDisclosure();
+  const menuDisclosure = useDisclosure()
+  const menuUserMobile = useDisclosure()
   const divRef = useRef()
   const bannerRef = useRef()
   const [isScrollDown, setIsScrollDown] = useState(false)
@@ -590,8 +645,9 @@ export default function MenuNav({}) {
           <DesktopLinks links={links} position={isScrollDown} path={route}/>
 
           {useCheckMobile() && userData &&
-            <MenuUser userData={userData}/>
+            <MenuUser userData={userData} onOpen={menuUserMobile.onOpen} onClose={menuUserMobile.onClose}/>
           }
+          <MenuDrawerUser isOpen={menuUserMobile.isOpen} onClose={menuUserMobile.onClose}/>
         </HStack>
       </Box>
     </>

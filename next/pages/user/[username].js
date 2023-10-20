@@ -1193,7 +1193,7 @@ const Accesses = () => {
 }
 
 export default function UserPage() {
-  const [sectionSelected, setSectionSelected] = useState(4)
+  const [sectionSelected, setSectionSelected] = useState(0)
 
   const choices = [
     {bar: "Perfil público", title: "Perfil público"},
