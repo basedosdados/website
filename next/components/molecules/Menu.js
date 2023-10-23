@@ -37,6 +37,7 @@ import FarBarsIcon from "../../public/img/icons/farBarsIcon";
 import SearchIcon from "../../public/img/icons/searchIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
+import SettingsIcon from "../../public/img/icons/settingsIcon";
 
 function MenuDrawer({ isOpen, onClose, links }) {
   return (
@@ -128,6 +129,15 @@ function MenuDrawer({ isOpen, onClose, links }) {
 }
 
 function MenuDrawerUser({ isOpen, onClose}) {
+  const router = useRouter()
+
+  const links = [
+    {name: "Perfil público", value: "profile"},
+    {name: "Conta", value: "account"},
+    {name: "Senha", value: "new_password"},
+    {name: "Planos e pagamento", value: "plans_and_payment"},
+    {name: "Acessos", value: "accesses"},
+  ]
 
   return (
     <Drawer isOpen={isOpen} onClose={onClose}>
@@ -140,12 +150,13 @@ function MenuDrawerUser({ isOpen, onClose}) {
           onClick={() => window.open("/", "_self")}
         />
 
-        <Stack spacing={0} justifyContent="center" alignItems="center">
+        <Stack spacing={0} justifyContent="center" alignItems="center" padding="16px 0" marginBottom="24px">
           <Box
             width="48px"
             height="48px"
             borderRadius="50%"
             overflow="hidden"
+            marginBottom="10px"
           >
             <Image
               display={{ base: "flex", lg: "none" }}
@@ -173,7 +184,54 @@ function MenuDrawerUser({ isOpen, onClose}) {
           >dadinho@basedosdados.org</Text>
         </Stack>
 
-        
+        <Accordion allowToggle width="100%" defaultIndex={0}>
+          <AccordionItem borderWidth="0 !important">
+            <AccordionButton
+              padding="16px 0"
+              _hover={{background: "none"}}
+              justifyContent="space-between"
+            >
+              <Stack spacing={0} flexDirection="row" gap="8px">
+                <SettingsIcon fill="#D0D0D0" width="16px" height="16px"/>
+                <Text
+                  fontSize="16px"
+                  fontFamily="Ubuntu"
+                  fontWeight="400"
+                  lineHeight="16px"
+                  letterSpacing="0.2px"
+                  color="#252A32"
+                >
+                  Configurações
+                </Text>
+              </Stack>
+              <AccordionIcon />
+            </AccordionButton>
+          <AccordionPanel
+            display="flex"
+            flexDirection="column"
+            gridGap="10px"
+            padding="8px 0 0 24px"
+          >
+            {links.map((elm, index) => {
+              return (
+                <Link
+                  key={index}
+                  color="#575757"
+                  fontSize="14px"
+                  fontFamily="Ubuntu"
+                  fontWeight="400"
+                  lineHeight="27px"
+                  letterSpacing="0.3px"
+                  onClick={() => {
+                    onClose()
+                    router.push({pathname: "/user/dev", query: elm.value})}
+                  }
+                >{elm.name}</Link>
+              )
+            })}
+          </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
       </DrawerContent>
     </Drawer>
   )
@@ -226,25 +284,23 @@ function MenuUser ({ userData, onOpen, onClose }) {
     return (
       <Menu
         isOpen={isOpenMenu}
-        boxShadow="0 1.6px 16px 0 rgba(100, 96, 103, 0.16)"
+        autoSelect={false}
+        placement="bottom"
       >
         <MenuButton
           onClick={btnMouseEnterEvent}
           onMouseLeave={btnMouseLeaveEvent}
         >
           <Box
-            cursor="pointer"
             height="40px"
             width="40px"
             borderRadius="50%"
             overflow="hidden"
-            display={{ base: "none", lg: "flex" }}
           >
             <Image
               alt=""
               width="100%"
               height="100%"
-              display={{ base: "none", lg: "flex" }}
               src={userData?.picture ? userData.picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
             />
           </Box>
@@ -252,20 +308,78 @@ function MenuUser ({ userData, onOpen, onClose }) {
         <MenuList
           width="260px"
           borderWidth={0}
+          padding={0}
+          boxShadow="0 1.6px 16px 0 rgba(100, 96, 103, 0.16)"
           onMouseEnter={menuListMouseEnterEvent}
           onMouseLeave={menuListMouseLeaveEvent}
         >
           <MenuItem
             display="flex"
             flexDirection="column"
-            padding="16px 0"
+            cursor="default"
+            width="100%"
+            textAlign="center"
+            alignItems="center"
+            padding="16px"
+            _hover={{ backgroundColor: "transparent"}}
           >
-            <p>
-              {userData?.username}
-            </p>
-            <p>
-              {userData?.email}
-            </p>
+            <Box
+              height="48px"
+              width="48px"
+              borderRadius="50%"
+              overflow="hidden"
+              marginBottom="10px"
+            >
+              <Image
+                alt=""
+                width="100%"
+                height="100%"
+                display={{ base: "none", lg: "flex" }}
+                src={userData?.picture ? userData.picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
+              />
+            </Box>
+            <Text
+              color="#252A32"
+              fontFamily="Ubuntu"
+              fontSize="12px"
+              fontWeight="400"
+              lineHeight="16px"
+              letterSpacing="0.3px"
+            >
+              Dadinho
+            </Text>
+            <Text
+              color="#6F6F6F"
+              fontFamily="Ubuntu"
+              fontSize="12px"
+              fontWeight="400"
+              lineHeight="16px"
+              letterSpacing="0.3px"
+            >
+              dadinho@basedosdados.org
+            </Text>
+          </MenuItem>
+
+          <MenuItem
+            display="flex"
+            flexDirection="row"
+            alignItems="start"
+            gap="8px"
+            padding="16px"
+            _hover={{ backgroundColor: "transparent", opacity: "0.6" }}
+            onClick={() => window.open("/user/dev", "_self")}
+          >
+            <SettingsIcon fill="#D0D0D0" width="16px" height="16px"/>
+            <Text
+              color="#252A32"
+              fontFamily="Ubuntu"
+              fontSize="12px"
+              fontWeight="400"
+              lineHeight="16px"
+              letterSpacing="0.3px"
+            >
+              Configurações
+            </Text>
           </MenuItem>
         </MenuList>
       </Menu>

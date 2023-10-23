@@ -31,6 +31,7 @@ import {
   GridItem
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { MainPageTemplate } from "../../components/templates/main";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 import BigTitle from "../../components/atoms/BigTitle";
@@ -1193,15 +1194,31 @@ const Accesses = () => {
 }
 
 export default function UserPage() {
+  const router = useRouter()
+  const { query } = router
   const [sectionSelected, setSectionSelected] = useState(0)
 
   const choices = [
-    {bar: "Perfil público", title: "Perfil público"},
-    {bar: "Conta", title: "Conta"},
-    {bar: "Senha", title: "Alterar senha"},
-    {bar: "Planos e pagamento", title: "Planos e pagamento"},
-    {bar: "Acessos", title: "Gerenciar acessos"},
+    {bar: "Perfil público", title: "Perfil público", value: "profile", index: 0},
+    {bar: "Conta", title: "Conta", value: "account", index: 1},
+    {bar: "Senha", title: "Alterar senha", value: "new_password", index: 2},
+    {bar: "Planos e pagamento", title: "Planos e pagamento", value: "plans_and_payment", index: 3},
+    {bar: "Acessos", title: "Gerenciar acessos", value: "accesses", index: 4},
   ]
+
+  useEffect(() => {
+    const key = Object.keys(query)
+    const removeElem = key.indexOf("username")
+    if (removeElem !== -1) key.splice(removeElem, 1)
+
+    if (key.length === 0) return
+
+    for (const elements of choices) {
+      if (elements.value === key[0]) {
+        setSectionSelected(elements.index)
+      }
+    }
+  }, [query])
 
   return (
     <MainPageTemplate paddingX="24px">
@@ -1245,7 +1262,7 @@ export default function UserPage() {
                   _hover={sectionSelected === index ? "none" : {  opacity: "0.6" , fontWeight: "500" }}
                   padding="0 24px"
                   width="100%"
-                  onClick={() => setSectionSelected(index)}
+                  onClick={() => router.push({pathname: "/user/dev", query: section.value})}
                 >
                   {section.bar}
                 </Text>
