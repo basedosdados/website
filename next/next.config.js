@@ -1,5 +1,6 @@
 module.exports = {
   images: {
+    unoptimized: true,
     disableStaticImages: true,
     domains: [
       "basedosdados.org",

@@ -236,7 +236,7 @@ export default function Services({ pages }) {
         </Stack>
         <Section
           title="Captura de dados"
-          imageUrl="https://storage.googleapis.com/basedosdados-website/images/ilustracao-captura-dados-2.png"
+          imageUrl="https://storage.googleapis.com/basedosdados-website/images/ilustracao_captura_dados_2.png"
           listTitle="Principais vantagens"
           paddingBottom="50px"
           listChildren={[
@@ -299,7 +299,7 @@ export default function Services({ pages }) {
         </Stack>
         <Section
           title="Análise de dados"
-          imageUrl="https://storage.googleapis.com/basedosdados-website/images/ilustracao-analises.png"
+          imageUrl="https://storage.googleapis.com/basedosdados-website/images/ilustracao_analises.png"
           listTitle="Exemplos de perguntas que podemos responder:"
           paddingBottom="50px"
           listChildren={[
@@ -333,7 +333,7 @@ export default function Services({ pages }) {
         </BigTitle>
         <Flex paddingBottom="50px" direction={{ base: "column", lg: "row" }}>
           <Box flex="1">
-            <Image alt="grafico combustiveis inflacao" src="https://storage.googleapis.com/basedosdados-website/images/grafico-combustiveis-inflacao.png" />
+            <Image alt="grafico combustiveis inflacao" src="https://storage.googleapis.com/basedosdados-website/images/grafico_combustiveis_inflacao.png" />
           </Box>
           <Box flex="1">
             <Image alt="grafico desligamentos morte" src="https://storage.googleapis.com/basedosdados-website/images/grafico_desligamentos_morte.png" />
@@ -341,7 +341,7 @@ export default function Services({ pages }) {
         </Flex>
         <Section
           title="Consultoria de dados"
-          imageUrl="https://storage.googleapis.com/basedosdados-website/images/ilustracao-mentoria.png"
+          imageUrl="https://storage.googleapis.com/basedosdados-website/images/ilustracao_mentoria.png"
           listTitle="Principais vantagens:"
           paddingBottom="50px"
           listChildren={[

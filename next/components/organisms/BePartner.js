@@ -18,7 +18,7 @@ function Testimonial({ children, name, position, src }) {
           alt="aspas"
           width="50px"
           height="36px"
-          src="https://storage.googleapis.com/basedosdados-website/images/%E2%80%9C.png"
+          src="https://storage.googleapis.com/basedosdados-website/images/quote.png"
         />
       </Stack>
       <Text
