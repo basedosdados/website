@@ -603,7 +603,7 @@ function Support({ pages }) {
                 height="250px"
                 objectFit="contain"
                 boxShadow="0 1.6px 16px rgba(100, 96, 103, 0.16)"
-                src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/bd_qrcode.png"
+                src="https://storage.googleapis.com/basedosdados-website/images/bd_qrcode.png"
               />
               <RoundedButton 
                 fontSize="15px"
