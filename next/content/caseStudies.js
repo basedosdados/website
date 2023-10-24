@@ -17,13 +17,13 @@ export const CaseStudiesContent = [
   {
     id: "fundacao-lemann",
     displayTitle: "Fundação Lemann",
-    thumbnail: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/thumbnails/thumbnail_estudo_de_caso_flemann.png",
+    thumbnail: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/thumbnails/thumbnail_estudo_de_caso_flemann.png",
     title: "Fundação Lemann aprimora tomada de decisão e monitoramento de metas com tecnologia de análises e engenharia de dados desenvolvida pela BD",
-    img: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/imagens/estudo_de_caso_flemann.png",
+    img: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/imagens/estudo_de_caso_flemann.png",
     imgDescription: "Foto: Samuel Macedo para Fundação Lemann",
     description: "Com mais de 61 redes de ensino apoiadas e mais de 28 mil escolas envolvidas, implementar um fluxo de análise de dados e indicadores foi fundamental para a Fundação Lemann compreender melhor o cenário da educação no Brasil, avaliar os programas apoiados e estabelecer metas estratégicas para potencializar o avanço da educação e o impulsionamento de lideranças no país.",
     logo: {
-      img: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/logos/flemann.png",
+      img: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/logos/flemann.png",
       width: 245,
       height: 85
     },
@@ -212,13 +212,13 @@ export const CaseStudiesContent = [
   {
     id: "jota",
     displayTitle: "JOTA",
-    thumbnail: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/thumbnails/thumbnail_estudo_de_caso_jota.png",
+    thumbnail: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/thumbnails/thumbnail_estudo_de_caso_jota.png",
     title: "Plataforma traz mais transparência para a prestação de contas de candidaturas e partidos nas Eleições 2022",
-    img: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/imagens/estudo_de_caso_jota.png",
+    img: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/imagens/estudo_de_caso_jota.png",
     imgDescription: "Foto: Tribunal Superior Eleitoral (TSE)",
     description: "Criada pela BD em parceria com o JOTA, empresa de jornalismo e tecnologia, a plataforma Siga o Dinheiro auxiliou população e imprensa no monitoramento do financiamento de campanhas eleitorais nas eleições de 2022. O projeto se tornou uma importante ferramenta para a transparência pública e o combate à corrupção no processo eleitoral.",
     logo: {
-      img: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/logos/jota.svg",
+      img: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/logos/jota.svg",
       width: 222,
       height: 85
     },
@@ -268,7 +268,7 @@ export const CaseStudiesContent = [
 
           <div class="contentImgCenter" style="margin: 48px 0">
             <a href="https://sigaodinheiro.org/#desigualdades" target="_blank">
-              <img alt="seção "desigualdades” do painel Siga o Dinheiro" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/paineis/painel_siga_o_dinheiro.png">
+              <img alt="seção "desigualdades” do painel Siga o Dinheiro" src="https://storage.googleapis.com/basedosdados-website/estudos_de_caso/paineis/painel_siga_o_dinheiro.png">
             </a>
           </div>
 

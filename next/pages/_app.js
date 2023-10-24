@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps }) {
         <link rel="icon" type="image/ico" href="/favicon.ico" />
         <link
           rel="image_src"
-          href="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/2022/thumbnail_padrao.png"
+          href="https://storage.googleapis.com/basedosdados-website/thumbnails/2022/thumbnail_padrao.png"
         />
 
         <title>Base dos Dados</title>
@@ -35,14 +35,14 @@ function MyApp({ Component, pageProps }) {
         <meta name="twitter:creator" content="@basedosdados" />
         <meta
           name="twitter:image"
-          content="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/2022/thumbnail_padrao.png"
+          content="https://storage.googleapis.com/basedosdados-website/thumbnails/2022/thumbnail_padrao.png"
           key="twimage"
         />
 
         {/* Open Graph */}
         <meta
           property="og:image"
-          content="https://basedosdados-static.s3.us-east-2.amazonaws.com/thumbnails/2022/thumbnail_padrao.png"
+          content="https://storage.googleapis.com/basedosdados-website/thumbnails/2022/thumbnail_padrao.png"
           key="ogimage"
         />
         <meta

@@ -105,7 +105,7 @@ function Themes ({
                 filter={found(elm.node.slug) && "invert(1)"}
                 _hover={{ filter:"invert(1)"}}
                 alt={`${elm.node.name}`}
-                src={`https://basedosdados-static.s3.us-east-2.amazonaws.com/category_icons/2022/icone_${elm.node.slug}.svg`}
+                src={`https://storage.googleapis.com/basedosdados-website/category_icons/2022/icone_${elm.node.slug}.svg`}
               />
             </Tooltip>
             <RemoveIcon

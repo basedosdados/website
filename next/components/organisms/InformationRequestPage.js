@@ -80,7 +80,7 @@ export default function InformationRequestPage({ id }) {
       title: "Fundação Lemann",
       description: "Organização que trabalha para garantir educação de qualidade para todas as crianças brasileiras e apoia líderes focados no desenvolvimento social do Brasil.",
       url: "https://fundacaolemann.org.br/",
-      src: "https://basedosdados-static.s3.us-east-2.amazonaws.com/estudos_de_caso/logos/flemann.png"
+      src: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/logos/flemann.png"
     }
   }
 
