@@ -389,7 +389,7 @@ bd_read_table, ///
                     objectFit="contain"
                     border="2px solid #DEDFE0"
                     borderRadius="5px"
-                    src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/bd_qrcode.png"
+                    src="https://storage.googleapis.com/basedosdados-website/images/bd_qrcode.png"
                   />
 
                   <VStack

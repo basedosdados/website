@@ -77,7 +77,7 @@ function Section({
       alt=""
       height="30px"
       width="30px"
-      src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/Group+122.png"
+      src="https://storage.googleapis.com/basedosdados-website/images/group+122.png"
     />
   ),
   ...props
@@ -185,11 +185,11 @@ function BDPro () {
 export default function Services({ pages }) {
   const services = {
     "Captura de dados":
-      "https://basedosdados-static.s3.us-east-2.amazonaws.com/images/cloud.png",
+      "https://storage.googleapis.com/basedosdados-website/images/cloud.png",
     "Análise de dados":
-      "https://basedosdados-static.s3.us-east-2.amazonaws.com/images/bar.png",
+      "https://storage.googleapis.com/basedosdados-website/images/bar.png",
     "Consultoria de dados":
-      "https://basedosdados-static.s3.us-east-2.amazonaws.com/images/lightbulb.png",
+      "https://storage.googleapis.com/basedosdados-website/images/lightbulb.png",
   };
 
   return (
@@ -236,7 +236,7 @@ export default function Services({ pages }) {
         </Stack>
         <Section
           title="Captura de dados"
-          imageUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/ilustracao_captura_dados-2.png"
+          imageUrl="https://storage.googleapis.com/basedosdados-website/images/ilustracao_captura_dados_2.png"
           listTitle="Principais vantagens"
           paddingBottom="50px"
           listChildren={[
@@ -299,7 +299,7 @@ export default function Services({ pages }) {
         </Stack>
         <Section
           title="Análise de dados"
-          imageUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/ilustracao_analises.png"
+          imageUrl="https://storage.googleapis.com/basedosdados-website/images/ilustracao_analises.png"
           listTitle="Exemplos de perguntas que podemos responder:"
           paddingBottom="50px"
           listChildren={[
@@ -333,15 +333,15 @@ export default function Services({ pages }) {
         </BigTitle>
         <Flex paddingBottom="50px" direction={{ base: "column", lg: "row" }}>
           <Box flex="1">
-            <Image alt="grafico combustiveis inflacao" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/grafico_combustiveis_inflacao.png" />
+            <Image alt="grafico combustiveis inflacao" src="https://storage.googleapis.com/basedosdados-website/images/grafico_combustiveis_inflacao.png" />
           </Box>
           <Box flex="1">
-            <Image alt="grafico desligamentos morte" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/grafico_desligamentos_morte.png" />
+            <Image alt="grafico desligamentos morte" src="https://storage.googleapis.com/basedosdados-website/images/grafico_desligamentos_morte.png" />
           </Box>
         </Flex>
         <Section
           title="Consultoria de dados"
-          imageUrl="https://basedosdados-static.s3.us-east-2.amazonaws.com/images/ilustracao_mentoria.png"
+          imageUrl="https://storage.googleapis.com/basedosdados-website/images/ilustracao_mentoria.png"
           listTitle="Principais vantagens:"
           paddingBottom="50px"
           listChildren={[

@@ -212,7 +212,7 @@ const TeamBox = ({
       >
         <Image
           alt={name}
-          src={picture ? picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
+          src={picture ? picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
           width="100%"
           height="100%"
         />
@@ -467,7 +467,7 @@ export default function QuemSomos({ data }) {
               <Box textAlign="center" maxWidth={isMobileMod() ? "100%" : "45%"}>
                 <Image
                   alt="google cloud"
-                  src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/google_cloud.svg"
+                  src="https://storage.googleapis.com/basedosdados-website/logos/2022/google_cloud.svg"
                   width={{ base: "100px", lg: "140px" }}
                   height={{ base: "100px", lg: "140px" }}
                   margin={{base: "0 auto 24px", lg: "0 auto 48px"}}
@@ -510,7 +510,7 @@ export default function QuemSomos({ data }) {
               <Box textAlign="center" maxWidth={isMobileMod() ? "100%" : "45%"}>
                 <Image
                   alt="premio tesouro nacional"
-                  src="https://basedosdados-static.s3.us-east-2.amazonaws.com/logos/2022/premio_tesouro_nacional_2021.png"
+                  src="https://storage.googleapis.com/basedosdados-website/logos/2022/premio_tesouro_nacional_2021.png"
                   width={{ base: "100px", lg: "140px" }}
                   height={{ base: "100px", lg: "140px" }}
                   margin={{base: "0 auto 40px", lg: "0 auto 48px"}}
@@ -599,77 +599,77 @@ export default function QuemSomos({ data }) {
             <HistoryBox
               title="Um grande catálogo"
               date="OUT DE 2019"
-              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_Um_grande_catalogo_colaborativo.png"
+              image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_um_grande_catalogo_colaborativo.png"
             >
               Nosso co-fundador, Ricardo Dahis, enxergou a necessidade de uma plataforma com capacidade de busca e filtragem de diferentes conjuntos de dados e iniciou esse trabalho lançando o mecanismo de busca da BD.
             </HistoryBox>
             <HistoryBox
               title="O e-mail"
               date="SET DE 2020"
-              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_O_email.png"
+              image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_o_email.png"
             >
               Foi já no primeiro contato de João Carabetta, também co-fundador da BD, com Ricardo Dahis que veio a ambiciosa proposta: estruturar um grande <i>datalake</i> público pelo BigQuery e usar o mecanismo de busca para catalogação das bases e de seus metadados.
             </HistoryBox>
             <HistoryBox
               title="A happy sunday"
               date="SET DE 2020"
-              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_A_happy_sunday.png"
+              image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_a_happy_sunday.png"
             >
               Nos últimos três minutos de um domingo de setembro, o GitHub testemunhou o <i>commit</i> que mudaria para sempre a vida de quem trabalha com dados públicos. Criamos a estrutura do nosso <i>datalake</i>, uma ferramenta que faria a alegria de muita gente que já passou tantos domingos limpando bases.
             </HistoryBox>
             <HistoryBox
               title="Nem só de boa vontade..."
               date="SET DE 2020"
-              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_Nem_so_de_boa_vontade.png"
+              image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_nem_so_de_boa_vontade.png"
             >
               Começamos a receber apoio financeiro de pessoas que acreditam na importância do nosso trabalho. Isso foi fundamental para escalar nossas atividades, afinal, nem só de esforço e boa vontade se faz um bom projeto.
             </HistoryBox>
             <HistoryBox
               title="Funcionário do mês"
               date="NOV DE 2020"
-              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_Funcionario_do_mes.png"
+              image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_funcionario_do_mes.png"
             >
               Abrimos a primeira vaga de Assistente de Dados e contratamos a primeira pessoa remunerada para integrar nossa equipe. Aos poucos, esse time foi crescendo e hoje não é mais tão fácil assim ser funcionário(a) do mês.
             </HistoryBox>
             <HistoryBox
               title="A primeira de muitas"
               date="JAN DE 2021"
-              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_A_primeira_de_muitas.png"
+              image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_a_primeira_de_muitas.png"
             >
               A RAIS foi nossa primeira grande base tratada e disponibilizada no <i>datalake</i> público. Subimos seus assombrosos 260 GB de microdados completos, com informações de 1985 até 2019, possibilitando agregações por município e UF.
             </HistoryBox>
             <HistoryBox
               title="Real oficial"
               date="JUN DE 2021"
-              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_Real_oficial.png"
+              image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_real_oficial.png"
             >
               Nos tornamos oficialmente o Instituto Base dos Dados, uma organização sem fins lucrativos, com equipe formal, CNPJ e tudo que tem direito. Um passo importante para consolidar nosso trabalho.
             </HistoryBox>
             <HistoryBox
               title="De cara nova"
               date="SET DE 2021"
-              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_De_cara_nova.png"
+              image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_de_cara_nova.png"
             >
               Desenvolver o novo site foi um dos maiores e desafiadores projetos que assumimos. Apesar dos momentos de caos e peças mirabolantes, aos poucos tudo foi se encaixando e tomando a forma de uma plataforma com a nossa cara. Assim, nasceu a primeira versão do novo site da BD, com interface mais intuitiva, design moderno e uma estrutura que facilita ainda mais a experiência dos usuários.
             </HistoryBox>
             <HistoryBox
               title="Um prêmio de peso"
               date="OUT DE 2021"
-              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_Um_premio_de_peso.png"
+              image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_um_premio_de_peso.png"
             >
               Precisamos de muitas mãos para carregar essa conquista. Recebemos o <i>Google Cloud Customer Award</i> na categoria de Impacto Social. O prêmio inédito foi anunciado no evento internacional, <i>Google Cloud Next'21</i>, e tem como objetivo reconhecer as implementações mais inovadoras e transformadoras do Google Cloud ao redor do mundo.
             </HistoryBox>
             <HistoryBox
               title="Chegamos primeiro no tesouro"
               date="NOV DE 2021"
-              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_Chegamos_primeiro_no_tesouro.png"
+              image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_chegamos_primeiro_no_tesouro.png"
             >
               Conquistamos o 1º lugar na categoria Soluções do XXVI Prêmio Tesouro Nacional 2021. O prêmio tem como objetivo expandir as fronteiras do conhecimento em finanças públicas, promovendo a normalização de temas específicos quando tratados consistentemente pela pesquisa científica.
             </HistoryBox>
             <HistoryBox
               title="Conquistando o mundo"
               date="Muito em breve"
-              image="https://basedosdados-static.s3.us-east-2.amazonaws.com/historia/nossa_historia_Conquistando_o_mundo.png"
+              image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_conquistando_o_mundo.png"
             >
               A necessidade de ter um repositório que centralize importantes bases de dados já tratadas e padronizadas não é exclusiva do Brasil. Imagina ter um <i>datalake</i> aberto que permite o acesso e cruzamento de dados de diversos países diferentes? Esse é o futuro da BD.
             </HistoryBox>

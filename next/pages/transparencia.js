@@ -286,7 +286,7 @@ export default function Transparencia({ pages }) {
           letterSpacing="0.3px"
           target="_blank"
           color="#42B0FF"
-          href="https://basedosdados-static.s3.us-east-2.amazonaws.com/pdf/BD_Estatuto_Social.pdf"
+          href="https://storage.googleapis.com/basedosdados-website/pdf/bd_estatuto_social.pdf"
         >
           BD Estatuto Social
         </Link>
@@ -304,7 +304,7 @@ export default function Transparencia({ pages }) {
           letterSpacing="0.3px"
           target="_blank"
           color="#42B0FF"
-          href="https://basedosdados-static.s3.us-east-2.amazonaws.com/pdf/BD_Relatorio_Anual_2022.pdf"
+          href="https://storage.googleapis.com/basedosdados-website/pdf/bd_relatorio_anual_2022.pdf"
         >
           BD Relatório Anual 2022
         </Link>
@@ -323,7 +323,7 @@ export default function Transparencia({ pages }) {
           letterSpacing="0.3px"
           target="_blank"
           color="#42B0FF"
-          href="https://basedosdados-static.s3.us-east-2.amazonaws.com/pdf/BD_Relatorio_Anual_2021.pdf"
+          href="https://storage.googleapis.com/basedosdados-website/pdf/bd_relatorio_anual_2021.pdf"
         >
           BD Relatório Anual 2021
         </Link>

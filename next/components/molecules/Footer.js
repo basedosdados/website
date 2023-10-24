@@ -123,6 +123,12 @@ export default function Footer({ pages }) {
               <FooterLink href="https://basedosdados.github.io/mais/access_data_packages/">
                 Pacotes
               </FooterLink>
+              <FooterLink href="https://info.basedosdados.org/bd-pro">
+                BD Pro
+              </FooterLink>
+              <FooterLink href="https://info.basedosdados.org/bd-edu">
+                BD Edu
+              </FooterLink>
             </SectionCategories>
 
             <SectionCategories title="SERVIÇOS" marginBottom={isMobileMod && "24px !important"}>
@@ -199,7 +205,7 @@ export default function Footer({ pages }) {
             alignItems="flex-start"
             marginTop={isMobileMod && "16px"}
           >
-            <BodyText color="#FFF" fontSize="16px" letterSpacing="0.2px">® 2022 Base dos Dados</BodyText>
+            <BodyText color="#FFF" fontSize="16px" letterSpacing="0.2px">® 2023 Base dos Dados</BodyText>
             {/* <Text>|</Text> // TODO: Não existem essas páginas ainda!
             <Link color="white">Termos de uso</Link>
             <Text>|</Text>
