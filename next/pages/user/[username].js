@@ -40,6 +40,8 @@ import RoundedButton from "../../components/atoms/RoundedButton";
 import ButtonSimple from "../../components/atoms/SimpleButton";
 import InputForm from "../../components/atoms/SimpleInput"
 import Link from "../../components/atoms/Link";
+import BodyText from "../../components/atoms/BodyText";
+import { CardPrice } from "../precos"
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import PenIcon from "../../public/img/icons/penIcon";
@@ -98,7 +100,8 @@ const ExtraInfoTextForm = ({children, ...props}) => {
 const ModalGeneral = ({
   children,
   isOpen,
-  onClose
+  onClose,
+  propsModalContent
 }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered margin="24px !important">
@@ -109,6 +112,7 @@ const ModalGeneral = ({
         boxSizing="content-box"
         padding="32px"
         borderRadius="20px"
+        {...propsModalContent}
       >
         <ModalHeader padding="0">
           {children[0]}
@@ -888,8 +892,9 @@ const NewPassword = () => {
 }
 
 const PlansAndPayment = () => {
-  const TabContent = ({children}) => {
+  const PlansModal = useDisclosure()
 
+  const TabContent = ({children}) => {
     return (
       <Tab
         fontFamily="ubuntu"
@@ -916,6 +921,98 @@ const PlansAndPayment = () => {
 
   return (
     <Stack>
+      <ModalGeneral
+        isOpen={PlansModal.isOpen}
+        onClose={PlansModal.onClose}
+        propsModalContent={{maxWidth: "fit-content"}}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <SectionTitle lineHeight="40px">
+            Compare os planos
+          </SectionTitle>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+          />
+        </Stack>
+        <Stack
+          display={isMobileMod() ? "flex" : "grid"}
+          gridTemplateColumns="repeat(3, 320px)"
+          gridTemplateRows="1fr"
+          justifyContent="center"
+          justifyItems="center"
+          gap="20px"
+          spacing={0}
+        >
+          <CardPrice
+            colorBanner="#2B8C4D"
+            title="BD Grátis"
+            subTitle={<BodyText>Para você descobrir o potencial da plataforma de dados</BodyText>}
+            personConfig={{
+              price: "0"
+            }}
+            textResource="Recursos:"
+            resources={[
+              {name: "Tabelas tratadas"},
+              {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
+              {name: "Acesso em nuvem"},
+              {name: "Acesso via SQL, Python, R e Stata"},
+              {name: "Integração com ferramentas BI"},
+              {name: "Download até 200.000 linhas"},
+              {name: "Até 1TB de processamento", tooltip: "Limite mensal gratuito oferecido pelo Google Cloud."}
+            ]}
+            button={{
+              text: "Explorar recursos",
+              href: "/dataset",
+              target: "_self",
+              noHasModal: true,
+              color: "#FFF",
+              colorText: "#42B0FF"
+            }}
+          />
+
+          <CardPrice
+            colorBanner="#9C8400"
+            title="BD Pro"
+            badge="Beta"
+            subTitle={<BodyText>Para você ter acesso aos<br/> dados mais atualizados</BodyText>}
+            personConfig={{
+              price: "47"
+            }}
+            textResource="Todos os recursos da BD Grátis, mais:"
+            resources={[
+              {name: "Dezenas de bases de alta frequência atualizadas"},
+            ]}
+            button={{
+              text: "Iniciar teste grátis",
+              href: "https://buy.stripe.com/8wM01TeVQ3kg0mIeV4?locale=pt"
+            }}
+            hasServiceTerms
+          />
+
+          <CardPrice
+            colorBanner="#252A32"
+            title="BD Empresas"
+            badge="Beta"
+            subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
+            personConfig={{
+              price: "350"
+            }}
+            textResource="Todos os recursos da BD Pro, mais:"
+            resources={[
+              {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
+            ]}
+            button={{
+              text: "Assine já",
+              href: "https://buy.stripe.com/00g4i93d8f2Y5H24gr?locale=pt"
+            }}
+            hasServiceTerms
+          />
+        </Stack>
+      </ModalGeneral>
+
       <Tabs isLazy>
         <TabList
           borderBottom= "2px solid #DEDFE0 !important"
@@ -956,6 +1053,7 @@ const PlansAndPayment = () => {
                     color="#42B0FF"
                     width={isMobileMod() ? "100%" : "fit-content"}
                     _hover={{transform: "none", opacity: 0.8}}
+                    onClick={() => PlansModal.onOpen()}
                   >Compare os planos</RoundedButton>
                   <RoundedButton
                     borderRadius="30px"
@@ -1064,6 +1162,7 @@ const PlansAndPayment = () => {
                     letterSpacing="0.3px"
                     _hover={{opacity: 0.7}}
                     marginTop="16px !important"
+                    onClick={() => PlansModal.onOpen()}
                   >
                     Veja tudo e compare os planos
                   </ButtonSimple>
