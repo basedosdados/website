@@ -64,8 +64,11 @@ export default function Register() {
     if(!/^.{8,}$/.test(formData.password)) {
       regexPassword = {...regexPassword, amount: true}
     }
-    if(!/([a-z].*[A-Z])|([A-Z].*[a-z])/.test(formData.password)) {
-      regexPassword = {...regexPassword, uppercaseLowercase: true}
+    if(!/[A-Z]/.test(formData.password)) {
+      regexPassword = {...regexPassword, upperCase: true}
+    }
+    if(!/[a-z]/.test(formData.password)) {
+      regexPassword = {...regexPassword, lowerCase: true}
     }
     if(!/(?=.*?[0-9])/.test(formData.password)) {
       regexPassword = {...regexPassword, number: true}
@@ -250,15 +253,16 @@ export default function Register() {
               alignItems="flex-start"
             ><Exclamation width="14px" height="14px" fill="#D93B3B" display={Object.keys(errors.regexPassword).length > 0 ? "flex" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
             <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
-              <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>Ter no mínimo 8 caracteres</ListItem>
-              <ListItem fontSize="12px" color={errors?.regexPassword?.uppercaseLowercase ? "#D93B3B" :"#7D7D7D"}>Pelo menos uma letra maiúscula e minúscula</ListItem>
+              <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>8 caracteres</ListItem>
+              <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>Uma letra maiúscula</ListItem>
+              <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>Uma letra minúscula</ListItem>
               <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>Um dígito</ListItem>
-              <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>E um caractere especial</ListItem>
+              <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial</ListItem>
             </UnorderedList>
           </FormControl>
 
           <FormControl isInvalid={!!errors.confirmPassword}>
-            <LabelTextForm text="Senha novamente" />
+            <LabelTextForm text="Confirme a senha" />
             <Input
               type={showConfirmPassword ? "password" : "text"}
               id="confirmPassword"

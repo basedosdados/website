@@ -361,7 +361,7 @@ export const CardPrice = ({
                     onOpen()
                     setLinkStripe("")
                   }}
-                >Termos de serviço</Text>
+                >Termos de Serviços</Text>
                 .
               </Text>
             }
@@ -477,7 +477,7 @@ export default function Price() {
               {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
             ]}
             button={{
-              text: "Assine já",
+              text: "Iniciar teste grátis",
               href: "https://buy.stripe.com/00g4i93d8f2Y5H24gr?locale=pt"
             }}
             hasServiceTerms

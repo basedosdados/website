@@ -64,7 +64,7 @@ export default function PasswordRecovery() {
           <Input
             type="email"
             placeholder="Insira seu e-mail"
-            _placeholder={{color:"#DEDFE0"}}
+            _placeholder={{color: "#A3A3A3"}}
             _focus={{border:"2px solid #42B0FF !important" }}
             _hover={{border:"2px solid #42B0FF !important" }}
             value={email}

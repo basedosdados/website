@@ -155,6 +155,7 @@ const ProfileConfiguration = () => {
             height="40px"
             fontSize="14px"
             borderRadius="16px"
+            _placeholder={{color: "#A3A3A3"}}
             _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
           />
           <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
@@ -173,6 +174,7 @@ const ProfileConfiguration = () => {
             height="40px"
             fontSize="14px"
             borderRadius="16px"
+            _placeholder={{color: "#A3A3A3"}}
             _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
           />
           <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
@@ -191,6 +193,7 @@ const ProfileConfiguration = () => {
             height="40px"
             fontSize="14px"
             borderRadius="16px"
+            _placeholder={{color: "#A3A3A3"}}
             _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
           />
           <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
@@ -213,7 +216,7 @@ const ProfileConfiguration = () => {
         </FormControl>
 
         <FormControl isInvalid={!!errors.website}>
-          <LabelTextForm text="Url"/>
+          <LabelTextForm text="URL"/>
           <Input
             id="website"
             name="website"
@@ -223,6 +226,7 @@ const ProfileConfiguration = () => {
             height="40px"
             fontSize="14px"
             borderRadius="16px"
+            _placeholder={{color: "#A3A3A3"}}
             _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
           />
           <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
@@ -244,6 +248,7 @@ const ProfileConfiguration = () => {
               height="40px"
               fontSize="14px"
               borderRadius="16px"
+              _placeholder={{color: "#A3A3A3"}}
             />
           </HStack>
 
@@ -258,6 +263,7 @@ const ProfileConfiguration = () => {
               height="40px"
               fontSize="14px"
               borderRadius="16px"
+              _placeholder={{color: "#A3A3A3"}}
             />
           </HStack>
 
@@ -267,11 +273,12 @@ const ProfileConfiguration = () => {
               id="linkedin"
               name="linkedin"
               value={formData.linkedin}
-              placeholder="Link para o perfil no Linkedin"
+              placeholder="Link para o perfil no LinkedIn"
               fontFamily="ubuntu"
               height="40px"
               fontSize="14px"
               borderRadius="16px"
+              _placeholder={{color: "#A3A3A3"}}
             />
           </HStack>
         </Stack>
@@ -833,10 +840,11 @@ const NewPassword = () => {
           alignItems="flex-start"
         ><Exclamation width="14px" height="14px" fill="#D93B3B" display={Object.keys(errors.regexPassword).length > 0 ? "flex" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
         <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
-          <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>Ter no mínimo 8 caracteres</ListItem>
-          <ListItem fontSize="12px" color={errors?.regexPassword?.uppercaseLowercase ? "#D93B3B" :"#7D7D7D"}>Pelo menos uma letra maiúscula e minúscula</ListItem>
+          <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>8 caracteres</ListItem>
+          <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>Uma letra maiúscula</ListItem>
+          <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>Uma letra minúscula</ListItem>
           <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>Um dígito</ListItem>
-          <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>E um caractere especial</ListItem>
+          <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial</ListItem>
         </UnorderedList>
       </FormControl>
 
@@ -1026,7 +1034,7 @@ const PlansAndPayment = () => {
               {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
             ]}
             button={{
-              text: "Assine já",
+              text: "Iniciar teste grátis",
               href: "https://buy.stripe.com/00g4i93d8f2Y5H24gr?locale=pt"
             }}
             hasServiceTerms
