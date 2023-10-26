@@ -94,6 +94,7 @@ const HistoryBox = ({ children, title, date, image }) => {
           marginBottom={isMobileMod() && "0"}
           background="transparent"
           maxWidth="1000px"
+          margin="24px"
         >
           <Image
             alt={title}
