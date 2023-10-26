@@ -53,6 +53,7 @@ import ChevronIcon from "../../public/img/icons/chevronIcon";
 import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
+import InfoIcon from "../../public/img/icons/infoIcon";
 
 const LabelTextForm = ({ text, ...props }) => {
   return (
@@ -101,10 +102,11 @@ const ModalGeneral = ({
   children,
   isOpen,
   onClose,
+  isCentered = true,
   propsModalContent
 }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered margin="24px !important">
+    <Modal isOpen={isOpen} onClose={onClose} isCentered={isCentered} margin="24px !important">
       <ModalOverlay/>
       <ModalContent
         margin="24px"
@@ -894,6 +896,24 @@ const NewPassword = () => {
 const PlansAndPayment = () => {
   const PlansModal = useDisclosure()
 
+  const resources={
+    "bdGratis" : [
+    {name: "Tabelas tratadas"},
+    {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
+    {name: "Acesso em nuvem"},
+    {name: "Acesso via SQL, Python, R e Stata"},
+    {name: "Integração com ferramentas BI"},
+    {name: "Download até 200.000 linhas"},
+    {name: "Até 1TB de processamento", tooltip: "Limite mensal gratuito oferecido pelo Google Cloud."}],
+    "bdPro" : [
+      {name: "Dezenas de bases de alta frequência atualizadas"}
+    ],
+    "bdEmpresas" : [
+      {name: "Acesso para 10 contas"},
+      {name: "Suporte prioritário via email e Discord"}
+    ]
+  }
+
   const TabContent = ({children}) => {
     return (
       <Tab
@@ -925,6 +945,7 @@ const PlansAndPayment = () => {
         isOpen={PlansModal.isOpen}
         onClose={PlansModal.onClose}
         propsModalContent={{maxWidth: "fit-content"}}
+        isCentered={isMobileMod() ? false : true}
       >
         <Stack spacing={0} marginBottom="16px">
           <SectionTitle lineHeight="40px">
@@ -1023,8 +1044,13 @@ const PlansAndPayment = () => {
         <TabPanels>
           <TabPanel padding="32px 0 0">
             <Stack spacing="40px">
-              <Stack spacing={0} flexDirection="row" width="100%" justifyContent="space-between">
-                <Stack spacing="8px">
+              <Stack
+                spacing={0}
+                flexDirection={isMobileMod() ? "column" : "row"}
+                width="100%"
+                justifyContent="space-between"
+              >
+                <Stack spacing="8px" marginBottom={isMobileMod() ? "16px" : "0"}>
                   <Badge
                     width="fit-content"
                     padding="4px 5px"
@@ -1045,7 +1071,11 @@ const PlansAndPayment = () => {
                     lineHeight="36px"
                   >BD Grátis</Text>
                 </Stack>
-                <Stack spacing={0} gap="24px" flexDirection="row">
+                <Stack
+                  spacing={0}
+                  gap="24px"
+                  flexDirection={isMobileMod() ? "column" : "row"}
+                >
                   <RoundedButton
                     borderRadius="30px"
                     backgroundColor="#FFF"
@@ -1063,7 +1093,11 @@ const PlansAndPayment = () => {
                 </Stack>
               </Stack>
 
-              <Stack spacing={0} gap="64px" flexDirection="row">
+              <Stack
+                spacing={0}
+                gap="64px"
+                flexDirection={isMobileMod() ? "column" : "row"}
+              >
                 <Stack minWidth="350px" spacing="8px">
                   <Text
                     color="#7D7D7D"
@@ -1074,40 +1108,38 @@ const PlansAndPayment = () => {
                     letterSpacing="0.2px"
                     marginBottom="8px"
                   >Inclui</Text>
-                  <Box display="flex" alignItems="center">
-                    <CheckIcon fill="#2B8C4D" width="24px" height="24px" marginRight="8px"/>
-                    <Text
-                      color="#252A32"
-                      fontFamily="Ubuntu"
-                      fontSize="16px"
-                      fontWeight="400"
-                      lineHeight="16px"
-                      letterSpacing="0.2px"
-                    >Feature 1</Text>
-                  </Box>
-
-                  <Box display="flex" alignItems="center">
-                    <CheckIcon fill="#2B8C4D" width="24px" height="24px" marginRight="8px"/>
-                    <Text
-                      color="#252A32"
-                      fontFamily="Ubuntu"
-                      fontSize="16px"
-                      fontWeight="400"
-                      lineHeight="16px"
-                      letterSpacing="0.2px"
-                    >Feature 2</Text>
-                  </Box>
-                  <Box display="flex" alignItems="center">
-                    <CheckIcon fill="#2B8C4D" width="24px" height="24px" marginRight="8px"/>
-                    <Text
-                      color="#252A32"
-                      fontFamily="Ubuntu"
-                      fontSize="16px"
-                      fontWeight="400"
-                      lineHeight="16px"
-                      letterSpacing="0.2px"
-                    >Feature 3</Text>
-                  </Box>
+                  {resources.bdGratis.map((elm, index) => {
+                    return (
+                      <Box key={index} display="flex" alignItems="center">
+                        <CheckIcon fill="#2B8C4D" width="24px" height="24px" marginRight="8px"/>
+                        <Text
+                          color="#252A32"
+                          fontFamily="Ubuntu"
+                          fontSize="16px"
+                          fontWeight="400"
+                          lineHeight="16px"
+                          letterSpacing="0.2px"
+                        >{elm.name}</Text>
+                        {elm.tooltip &&
+                          <Tooltip
+                            hasArrow
+                            placement="top"
+                            bg="#2A2F38"
+                            label={elm.tooltip}
+                            fontSize="14px"
+                            fontWeight="400"
+                            padding="5px 16px 6px"
+                            letterSpacing="0.5px"
+                            lineHeight="24px"
+                            color="#FFF"
+                            borderRadius="6px"
+                          >
+                            <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3" marginLeft="16px"/>
+                          </Tooltip>
+                        }
+                      </Box>
+                    )
+                  })}
                 </Stack>
 
                 <Stack spacing="8px">
@@ -1120,40 +1152,70 @@ const PlansAndPayment = () => {
                     letterSpacing="0.2px"
                     marginBottom="8px"
                   >Não inclui</Text>
-                  <Box display="flex" alignItems="center">
-                    <CrossIcon fill="#FF8484" width="24px" height="24px" marginRight="8px"/>
-                    <Text
-                      color="#252A32"
-                      fontFamily="Ubuntu"
-                      fontSize="16px"
-                      fontWeight="400"
-                      lineHeight="16px"
-                      letterSpacing="0.2px"
-                    >Feature 1</Text>
-                  </Box>
-
-                  <Box display="flex" alignItems="center">
-                    <CrossIcon fill="#FF8484" width="24px" height="24px" marginRight="8px"/>
-                    <Text
-                      color="#252A32"
-                      fontFamily="Ubuntu"
-                      fontSize="16px"
-                      fontWeight="400"
-                      lineHeight="16px"
-                      letterSpacing="0.2px"
-                    >Feature 2</Text>
-                  </Box>
-                  <Box display="flex" alignItems="center">
-                    <CrossIcon fill="#FF8484" width="24px" height="24px" marginRight="8px"/>
-                    <Text
-                      color="#252A32"
-                      fontFamily="Ubuntu"
-                      fontSize="16px"
-                      fontWeight="400"
-                      lineHeight="16px"
-                      letterSpacing="0.2px"
-                    >Feature 3</Text>
-                  </Box>
+                  {resources.bdPro.map((elm, index) => {
+                    return (
+                      <Box key={index} display="flex" alignItems="center">
+                        <CrossIcon fill="#FF8484" width="24px" height="24px" marginRight="8px"/>
+                        <Text
+                          color="#252A32"
+                          fontFamily="Ubuntu"
+                          fontSize="16px"
+                          fontWeight="400"
+                          lineHeight="24px"
+                          letterSpacing="0.2px"
+                        >{elm.name}</Text>
+                        {elm.tooltip &&
+                          <Tooltip
+                            hasArrow
+                            placement="top"
+                            bg="#2A2F38"
+                            label={elm.tooltip}
+                            fontSize="14px"
+                            fontWeight="400"
+                            padding="5px 16px 6px"
+                            letterSpacing="0.5px"
+                            lineHeight="24px"
+                            color="#FFF"
+                            borderRadius="6px"
+                          >
+                            <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3"/>
+                          </Tooltip>
+                        }
+                      </Box>
+                    )
+                  })}
+                  {resources.bdEmpresas.map((elm, index) => {
+                    return (
+                      <Box key={index} display="flex" alignItems="center">
+                        <CrossIcon fill="#FF8484" width="24px" height="24px" marginRight="8px"/>
+                        <Text
+                          color="#252A32"
+                          fontFamily="Ubuntu"
+                          fontSize="16px"
+                          fontWeight="400"
+                          lineHeight="24px"
+                          letterSpacing="0.2px"
+                        >{elm.name}</Text>
+                        {elm.tooltip &&
+                          <Tooltip
+                            hasArrow
+                            placement="top"
+                            bg="#2A2F38"
+                            label={elm.tooltip}
+                            fontSize="14px"
+                            fontWeight="400"
+                            padding="5px 16px 6px"
+                            letterSpacing="0.5px"
+                            lineHeight="24px"
+                            color="#FFF"
+                            borderRadius="6px"
+                          >
+                            <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3"/>
+                          </Tooltip>
+                        }
+                      </Box>
+                    )
+                  })}
 
                   <ButtonSimple
                     color="#42B0FF"
@@ -1204,89 +1266,111 @@ const Accesses = () => {
             <RoundedButton
               borderRadius="30px"
               width={isMobileMod() ? "100%" : "fit-content"}
-              _hover={{transform: "none", opacity: 0.8}}
+              _hover={{transform: "none"}}
+              backgroundColor="#C4C4C4"
             >Adicionar usuário</RoundedButton>
           </Box>
         </Tooltip>
       </Stack>
 
-      <Grid templateColumns="3fr 1fr">
-        <GridItem
-          backgroundColor="#F6F6F6"
-          padding="8px 24px"
-          color="#6F6F6F"
-          fontFamily="Ubuntu"
-          fontSize="16px"
-          fontWeight="400"
-          lineHeight="16px"
-          letterSpacing="0.2px"
-        >Usuário</GridItem>
-        <GridItem
-          backgroundColor="#F6F6F6"
-          padding="8px 24px"
-          color="#6F6F6F"
-          fontFamily="Ubuntu"
-          fontSize="16px"
-          fontWeight="400"
-          lineHeight="16px"
-          letterSpacing="0.2px"
-        >Acesso</GridItem>
+      <Grid templateColumns={isMobileMod() ? "1fr 1fr" : "3fr 1fr"}>
+        <GridItem>
+          <Text
+            backgroundColor="#F6F6F6"
+            padding={isMobileMod() ? "8px 0 8px 16px" : "8px 24px"}
+            color="#6F6F6F"
+            fontFamily="Ubuntu"
+            fontSize="16px"
+            fontWeight="400"
+            lineHeight="16px"
+            letterSpacing="0.2px"
+          >Usuário</Text>
+        </GridItem>
+        <GridItem>
+          <Text
+            backgroundColor="#F6F6F6"
+            padding={isMobileMod() ? "8px 16px" : "8px 24px"}
+            color="#6F6F6F"
+            fontFamily="Ubuntu"
+            fontSize="16px"
+            fontWeight="400"
+            lineHeight="16px"
+            letterSpacing="0.2px"
+            width="100%"
+          >Acesso</Text>
+        </GridItem>
 
         <GridItem
-          height="54px"
-          padding="24px"
-          boxSizing="content-box"
+          overflow="hidden"
+          padding={isMobileMod() ? "24px 0" : "24px"}
           borderBottom="1px solid #DEDFE0"
         >
-          <Stack spacing={0} gap="24px" flexDirection="row" alignItems="center">
+          <Stack
+            width="100%"
+            position="relative"
+            overflow="hidden"
+            flexDir="column"
+            spacing={0}
+            paddingLeft={isMobileMod() ? "16px" : "0"}
+            flexDirection="row"
+            alignItems={isMobileMod() ? "stretch" : "stretch"}
+            height="54px"
+          >
             <Box
+              position="absolute"
               width="36px"
+              minWidth="36px"
               height="36px"
+              minHeight="36px"
               borderRadius="50%"
               overflow="hidden"
+              top="9px"
             >
               <Image width="100%" height="100%" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"/>
             </Box>
-            <Box>
-              <Text
-                color="#252A32"
-                fontFamily="Ubuntu"
-                fontSize="14px"
-                fontWeight="400"
-                lineHeight="27px"
-                letterSpacing="0.3px"
-              >Dadinho</Text>
-              <Text
-                color="#6F6F6F"
-                fontFamily="Ubuntu"
-                fontSize="14px"
-                fontWeight="400"
-                lineHeight="27px"
-                letterSpacing="0.3px"
-              >dadinho@basedosdados.org</Text>
-            </Box>
-          </Stack>
-        </GridItem>
-        <GridItem
-          height="54px"
-          padding="24px"
-          boxSizing="content-box"
-          borderBottom="1px solid #DEDFE0"
-        >
-          <Box display="flex" height="100%" alignItems="center">
             <Text
+              marginLeft={isMobileMod() ? "44px !important" : "60px !important"}
+              color="#252A32"
+              fontFamily="Ubuntu"
+              fontSize="14px"
+              fontWeight="400"
+              lineHeight="27px"
+              letterSpacing="0.3px"
+              height="27px"
+              isTruncated
+            >Dadinho</Text>
+            <Text
+              marginLeft={isMobileMod() ? "44px !important" : "60px !important"}
               color="#6F6F6F"
               fontFamily="Ubuntu"
               fontSize="14px"
               fontWeight="400"
               lineHeight="27px"
               letterSpacing="0.3px"
-            >
-              Administrador
-            </Text>
-          </Box>
+              height="27px"
+              isTruncated
+            >dadinho@basedosdados.org</Text>
+          </Stack>
         </GridItem>
 
+        <GridItem
+          display="flex"
+          alignItems="center"
+          width="100%"
+          padding={isMobileMod() ? "24px 16px" : "24px"}
+          borderBottom="1px solid #DEDFE0"
+        >
+          <Text
+            color="#6F6F6F"
+            fontFamily="Ubuntu"
+            fontSize="14px"
+            fontWeight="400"
+            lineHeight="27px"
+            letterSpacing="0.3px"
+          >
+            Administrador
+          </Text>
+        </GridItem>
       </Grid>
     </Stack>
   )
@@ -1337,7 +1421,8 @@ export default function UserPage() {
           justifyContent="space-between"
           spacing={0}
           gap="80px"
-          marginBottom={isMobileMod() ? "" : "80px !important"}
+          width="100%"
+          marginBottom={isMobileMod() ? "0px" : "80px !important"}
         >
           <Stack
             display={isMobileMod() ? "none" : "flex"}
