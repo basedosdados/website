@@ -589,7 +589,7 @@ function DesktopLinks({ links, position = false, path }) {
             <MenuUser />
           ) : (
             <>
-              {/* <Link fontSize="15px" fontFamily="Ubuntu" fontWeight="400" letterSpacing="0.3px" href="/user/login">
+              <Link fontSize="15px" fontFamily="Ubuntu" fontWeight="400" letterSpacing="0.3px" href="/user/login">
                 Entrar
               </Link>
               <Link _hover={{ opacity:"none" }} href="/user/register">
@@ -765,5 +765,5 @@ export default function MenuNav({}) {
         </HStack>
       </Box>
     </>
-  );
+  )
 }
