@@ -25,7 +25,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router"
 import cookies from "js-cookie";
 import { MenuDropdown } from "./MenuDropdown";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
+import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import ControlledInput from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
@@ -40,6 +40,8 @@ import RedirectIcon from "../../public/img/icons/redirectIcon";
 import SettingsIcon from "../../public/img/icons/settingsIcon";
 
 function MenuDrawer({ isOpen, onClose, links }) {
+  let userData = cookies.get("user") || null
+
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
       <DrawerOverlay backdropFilter="blur(2px)"/>
@@ -123,6 +125,31 @@ function MenuDrawer({ isOpen, onClose, links }) {
             }
           })}
         </VStack>
+
+        {userData ?
+          <></>
+          :
+          <Stack display={isMobileMod() ? "flex" : "none"} marginTop="auto" gap="16px">
+            <RoundedButton
+              backgroundColor="#FFF"
+              border="2px solid #42B0FF"
+              color="#42B0FF"
+              height="38px"
+              fontSize="20px"
+              onClick={() => window.open("/user/login", "_self")}
+            >
+              Entrar
+            </RoundedButton>
+            <RoundedButton
+              backgroundColor="#42B0FF"
+              height="38px"
+              fontSize="20px"
+              onClick={() => window.open("/user/register", "_self")}
+            >
+              Cadastrar
+            </RoundedButton>
+          </Stack>
+        }
       </DrawerContent>
     </Drawer>
   );
