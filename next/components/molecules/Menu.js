@@ -130,6 +130,8 @@ function MenuDrawer({ isOpen, onClose, links }) {
 
 function MenuDrawerUser({ isOpen, onClose}) {
   const router = useRouter()
+  let userData = cookies.get("user") || null
+  if(userData !== null) userData = JSON.parse(cookies.get("user"))
 
   const links = [
     {name: "Perfil público", value: "profile"},
@@ -163,7 +165,7 @@ function MenuDrawerUser({ isOpen, onClose}) {
               alt=""
               width="100%"
               height="100%"
-              src="https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"
+              src={userData?.picture ? userData?.picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
             />
           </Box>
           <Text
@@ -173,7 +175,7 @@ function MenuDrawerUser({ isOpen, onClose}) {
             fontWeight="400"
             lineHeight="27px"
             letterSpacing="0.3px"
-          >Dadinho</Text>
+          >{userData?.username ? userData?.username : "Dadinho"}</Text>
           <Text
             color="#6F6F6F"
             fontFamily="Ubuntu"
@@ -181,7 +183,7 @@ function MenuDrawerUser({ isOpen, onClose}) {
             fontWeight="400"
             lineHeight="27px"
             letterSpacing="0.3px"
-          >dadinho@basedosdados.org</Text>
+          >{userData?.email ? userData?.email : "dadinho@basedosdados.org"}</Text>
         </Stack>
 
         <Accordion allowToggle width="100%" defaultIndex={0}>
@@ -346,7 +348,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
               lineHeight="16px"
               letterSpacing="0.3px"
             >
-              Dadinho
+              {userData?.username ? userData?.username : "dadinho"}
             </Text>
             <Text
               color="#6F6F6F"
@@ -356,7 +358,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
               lineHeight="16px"
               letterSpacing="0.3px"
             >
-              dadinho@basedosdados.org
+              {userData?.email ? userData?.email : "dadinho@basedosdados.org"}
             </Text>
           </MenuItem>
 
@@ -586,7 +588,7 @@ function DesktopLinks({ links, position = false, path }) {
       {!statusSearch &&
         <HStack spacing={8} display={{ base: "none", lg: "flex" }}>
           {userData ? (
-            <MenuUser />
+            <MenuUser userData={userData}/>
           ) : (
             <>
               <Link fontSize="15px" fontFamily="Ubuntu" fontWeight="400" letterSpacing="0.3px" href="/user/login">
@@ -625,7 +627,7 @@ export default function MenuNav({}) {
       {icon: <BDLogoProImage widthImage="54px"/>, name: "Dados exclusivos", href: "https://info.basedosdados.org/bd-pro"},
       {icon: <BDLogoEduImage widthImage="54px"/>, name: "Curso de dados", href: "https://info.basedosdados.org/bd-edu"},
       {},
-      {name: "Serviços", href: "/servicos"},
+      {name: "Serviço", href: "/servicos"},
       {},
       {name: "Estudos de caso", href: "/estudos-de-caso"}
     ],
