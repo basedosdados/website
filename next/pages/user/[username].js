@@ -133,8 +133,15 @@ const ModalGeneral = ({
 }
 
 const ProfileConfiguration = () => {
-  const [formData, setFormData] = useState({ username: "", firstName: "" , lastName: "", picture: "" })
-  const [errors, setErrors] = useState({ username: "", firstName: "" , lastName: "" })
+  const [formData, setFormData] = useState({ firstName: "" , lastName: "", picture: "" })
+  const [errors, setErrors] = useState({ firstName: "" , lastName: "" })
+
+  const handleInputChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }))
+  }
 
   return (
     <Stack
@@ -144,31 +151,13 @@ const ProfileConfiguration = () => {
       gap={isMobileMod() ? "40px" : "80px"}
     >
       <Stack spacing="24px" flex={1}>
-        <FormControl isInvalid={!!errors.username}>
-          <LabelTextForm text="Username"/>
-          <Input
-            id="username"
-            name="username"
-            value={formData.username}
-            placeholder="Insira seu username"
-            fontFamily="ubuntu"
-            height="40px"
-            fontSize="14px"
-            borderRadius="16px"
-            _placeholder={{color: "#A3A3A3"}}
-            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
-          />
-          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
-            <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.username}
-          </FormErrorMessage>
-        </FormControl>
-
         <FormControl isInvalid={!!errors.firstName}>
           <LabelTextForm text="Nome"/>
           <Input
             id="firstName"
             name="firstName"
-            value={formData.name}
+            value={formData.firstName}
+            onChange={handleInputChange}
             placeholder="Insira seu nome"
             fontFamily="ubuntu"
             height="40px"
@@ -188,6 +177,7 @@ const ProfileConfiguration = () => {
             id="lastName"
             name="lastName"
             value={formData.lastName}
+            onChange={handleInputChange}
             placeholder="Insira seu sobrenome"
             fontFamily="ubuntu"
             height="40px"
@@ -221,6 +211,7 @@ const ProfileConfiguration = () => {
             id="website"
             name="website"
             value={formData.website}
+            onChange={handleInputChange}
             placeholder="Insira seu endereço URL"
             fontFamily="ubuntu"
             height="40px"
@@ -243,6 +234,7 @@ const ProfileConfiguration = () => {
               id="github"
               name="github"
               value={formData.github}
+              onChange={handleInputChange}
               placeholder="Link para o perfil no GitHub"
               fontFamily="ubuntu"
               height="40px"
@@ -258,6 +250,7 @@ const ProfileConfiguration = () => {
               id="twitter"
               name="twitter"
               value={formData.twitter}
+              onChange={handleInputChange}
               placeholder="Link para o perfil no Twitter"
               fontFamily="ubuntu"
               height="40px"
@@ -273,6 +266,7 @@ const ProfileConfiguration = () => {
               id="linkedin"
               name="linkedin"
               value={formData.linkedin}
+              onChange={handleInputChange}
               placeholder="Link para o perfil no LinkedIn"
               fontFamily="ubuntu"
               height="40px"
@@ -297,7 +291,10 @@ const ProfileConfiguration = () => {
         <RoundedButton
           borderRadius="30px"
           width={isMobileMod() ? "100%" : "fit-content"}
-          _hover={{transform: "none", opacity: 0.8}}
+          // _hover={{transform: "none", opacity: 0.8}}
+          _hover={{transform: "none"}}
+          backgroundColor="#C4C4C4"
+          cursor="default"
         >
           Atualizar perfil
         </RoundedButton>
@@ -330,13 +327,15 @@ const ProfileConfiguration = () => {
             alignItems="center"
             justifyContent="center"
             position="absolute"
-            cursor="pointer"
+            // cursor="pointer"
+            cursor="default"
             bottom="10px"
             left="10px"
             width="32px"
             height="32px"
             borderRadius="50%"
-            backgroundColor="#2B8C4D"
+            backgroundColor="#C4C4C4"
+            // backgroundColor="#2B8C4D"
           >
             <Tooltip
               hasArrow
@@ -373,6 +372,13 @@ const Account = () => {
   const [showPassword, setShowPassword] = useState(true)
   const [formData, setFormData] = useState({ email: "", password: "" })
   const [errors, setErrors] = useState({ email: "", password: ""})
+
+  const handleInputChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }))
+  }
 
   return (
     <Stack spacing="24px">
@@ -459,8 +465,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
                 id="email"
                 name="email"
                 value={formData.email}
-                // onChange={handleInputChange}
-                // onKeyDown={handleKeyDown}
+                onChange={handleInputChange}
                 placeholder="Insira seu e-mail"
                 fontFamily="ubuntu"
                 height="40px"
@@ -472,7 +477,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
                 <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.email}
               </FormErrorMessage>
             </FormControl>
-            
+
             <FormControl isInvalid={!!errors.password} marginBottom="24px !important">
               <Box
                 display="flex"
@@ -498,8 +503,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
                 id="password"
                 name="password"
                 value={formData.password}
-                // onChange={handleInputChange}
-                // onKeyDown={handleKeyDown}
+                onChange={handleInputChange}
                 placeholder="Insira sua senha"
                 fontFamily="ubuntu"
                 height="40px"
@@ -590,9 +594,12 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
 
           <RoundedButton
             borderRadius="30px"
-            backgroundColor="#FF8484"
+            // backgroundColor="#FF8484"
+            cursor="default"
+            backgroundColor="#C4C4C4"
             width={isMobileMod() ? "100%" : "fit-content"}
-            _hover={{transform: "none", opacity: 0.8}}
+            // _hover={{transform: "none", opacity: 0.8}}
+            _hover={{transform: "none"}}
           >
             Deletar
           </RoundedButton>
@@ -619,6 +626,27 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
           onClick={() => emailModal.onOpen()}
         >Alterar e-mail</Link>
       </Box>
+
+      {/* <Box>
+        <TitleTextForm>Nome de usuário</TitleTextForm>
+        <Text
+          color="#6F6F6F"
+          fontFamily="Ubuntu"
+          fontSize="14px"
+          fontWeight="400"
+          lineHeight="27px"
+          letterSpacing="0.3px"
+        >dadinho</Text>
+        <Link
+          color="#42B0FF"
+          fontFamily="ubuntu"
+          fontWeight="500"
+          fontSize="16px"
+          lineHeight="30px"
+          letterSpacing="0.2px"
+          onClick={() => emailModal.onOpen()}
+        >Alterar nome de usuário</Link>
+      </Box> */}
 
       <Box>
         <TitleTextForm>Exportar dados da conta</TitleTextForm>
@@ -664,6 +692,13 @@ const NewPassword = () => {
   const [showPassword, setShowPassword] = useState(true)
   const [showNewPassword, setShowNewPassword] = useState(true)
   const [showConfirmPassword, setShowConfirmPassword] = useState(true)
+
+  const handleInputChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }))
+  }
 
   return (
     <Stack spacing="24px" maxWidth="480px">
@@ -720,6 +755,7 @@ const NewPassword = () => {
           </RoundedButton>
         </Stack>
       </ModalGeneral>
+
       <FormControl isInvalid={!!errors.password}>
         <Box
           display="flex"
@@ -745,7 +781,7 @@ const NewPassword = () => {
           id="password"
           name="password"
           value={formData.password}
-          // onChange={handleInputChange}
+          onChange={handleInputChange}
           placeholder="Insira a senha atual"
           fontFamily="ubuntu"
           height="40px"
@@ -794,10 +830,10 @@ const NewPassword = () => {
         <LabelTextForm text="Nova Senha" />
         <InputForm
           type={showNewPassword ? "password" : "text"}
-          id="password"
-          name="password"
+          id="newPassword"
+          name="newPassword"
           value={formData.newPassword}
-          // onChange={handleInputChange}
+          onChange={handleInputChange}
           placeholder="Crie uma nova senha"
           fontFamily="ubuntu"
           height="40px"
@@ -855,7 +891,7 @@ const NewPassword = () => {
           id="confirmPassword"
           name="confirmPassword"
           value={formData.confirmPassword}
-          // onChange={handleInputChange}
+          onChange={handleInputChange}
           placeholder="Insira a senha novamente"
           fontFamily="ubuntu"
           height="40px"
@@ -922,7 +958,7 @@ const PlansAndPayment = () => {
     ]
   }
 
-  const TabContent = ({children}) => {
+  const TabContent = ({children, ...props}) => {
     return (
       <Tab
         fontFamily="ubuntu"
@@ -941,6 +977,7 @@ const PlansAndPayment = () => {
           borderBottom: "3px solid #2B8C4D",
           pointerEvents: "none"
         }}
+        {...props}
       >
         {children}
       </Tab>
@@ -1047,7 +1084,10 @@ const PlansAndPayment = () => {
           borderBottom= "2px solid #DEDFE0 !important"
         >
           <TabContent>Planos</TabContent>
-          <TabContent>Pagamento</TabContent>
+          <TabContent
+            color="#A3A3A3"
+            pointerEvents="none"
+          >Pagamento</TabContent>
         </TabList>
         <TabPanels>
           <TabPanel padding="32px 0 0">
@@ -1096,7 +1136,10 @@ const PlansAndPayment = () => {
                   <RoundedButton
                     borderRadius="30px"
                     width={isMobileMod() ? "100%" : "fit-content"}
-                    _hover={{transform: "none", opacity: 0.8}}
+                    // _hover={{transform: "none", opacity: 0.8}}
+                    cursor="default"
+                    backgroundColor="#C4C4C4"
+                    _hover={{transform: "none"}}
                   >Faça o upgrade</RoundedButton>
                 </Stack>
               </Stack>
@@ -1275,6 +1318,7 @@ const Accesses = () => {
               borderRadius="30px"
               width={isMobileMod() ? "100%" : "fit-content"}
               _hover={{transform: "none"}}
+              cursor="default"
               backgroundColor="#C4C4C4"
             >Adicionar usuário</RoundedButton>
           </Box>
