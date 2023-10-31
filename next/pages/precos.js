@@ -361,7 +361,7 @@ export const CardPrice = ({
                     onOpen()
                     setLinkStripe("")
                   }}
-                >Termos de Serviços</Text>
+                >Termos de Serviço</Text>
                 .
               </Text>
             }
