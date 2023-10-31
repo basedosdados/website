@@ -19,13 +19,18 @@ export default function PasswordRecovery() {
   const [email, setEmail] = useState("")
 
   return (
-    <MainPageTemplate display="flex" justifyContent="center">
+    <MainPageTemplate
+      display="flex"
+      justifyContent="center"
+      paddingTop="72px"
+      cleanTemplate
+    >
       <Stack
         display="flex"
         justifyContent="center"
         width="510px"
         height="100%"
-        marginTop={isMobileMod() ? "150px" : "50px"}
+        marginTop="50px"
         marginX="27px"
         spacing="40px"
         alignItems="center"

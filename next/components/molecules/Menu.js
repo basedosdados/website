@@ -38,6 +38,7 @@ import SearchIcon from "../../public/img/icons/searchIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 import SettingsIcon from "../../public/img/icons/settingsIcon";
+import SignOutIcon from "../../public/img/icons/signOutIcon";
 
 function MenuDrawer({ isOpen, onClose, links }) {
   let userData = cookies.get("user") || null
@@ -62,6 +63,7 @@ function MenuDrawer({ isOpen, onClose, links }) {
                   minWidth="100px"
                   height="38px"
                   fontSize="20px"
+                  borderRadius="30px"
                   onClick={() => window.open(b.href, "_blank")}
                 >
                   {b.name}
@@ -135,6 +137,7 @@ function MenuDrawer({ isOpen, onClose, links }) {
               border="2px solid #42B0FF"
               color="#42B0FF"
               height="38px"
+              borderRadius="30px"
               fontSize="20px"
               onClick={() => window.open("/user/login", "_self")}
             >
@@ -143,6 +146,7 @@ function MenuDrawer({ isOpen, onClose, links }) {
             <RoundedButton
               backgroundColor="#42B0FF"
               height="38px"
+              borderRadius="30px"
               fontSize="20px"
               onClick={() => window.open("/user/register", "_self")}
             >
@@ -261,6 +265,33 @@ function MenuDrawerUser({ isOpen, onClose}) {
           </AccordionPanel>
           </AccordionItem>
         </Accordion>
+
+        <Divider margin="24px 0" borderColor="#DEDFE0"/>
+
+        <Stack
+          spacing={0}
+          flexDirection="row"
+          padding="16px 0"
+          alignItems="center"
+          onClick={() => {
+            cookies.remove('user', { path: '/' })
+            cookies.remove('token', { path: '/' })
+            window.open("/", "_self")
+          }}
+        >
+          <SignOutIcon width="20px" height="20px" fill="#D0D0D0"/>
+          <Text
+            color="#252A32"
+            fontFamily="Ubuntu"
+            fontSize="16px"
+            fontWeight="400"
+            lineHeight="16px"
+            letterSpacing="0.2px"
+            marginLeft="8px !important"
+          >
+            Sair
+          </Text>
+        </Stack>
       </DrawerContent>
     </Drawer>
   )
@@ -297,11 +328,9 @@ function MenuUser ({ userData, onOpen, onClose }) {
         width="40px"
         borderRadius="50%"
         overflow="hidden"
-        display={{ base: "flex", lg: "none" }}
         onClick={() => onOpen()}
       >
         <Image
-          display={{ base: "flex", lg: "none" }}
           alt=""
           width="100%"
           height="100%"
@@ -410,6 +439,32 @@ function MenuUser ({ userData, onOpen, onClose }) {
               Configurações
             </Text>
           </MenuItem>
+          <Divider borderColor="#DEDFE0"/>
+          <MenuItem
+            display="flex"
+            flexDirection="row"
+            alignItems="start"
+            gap="8px"
+            padding="16px"
+            _hover={{ backgroundColor: "transparent", opacity: "0.6" }}
+            onClick={() => {
+              cookies.remove('user', { path: '/' })
+              cookies.remove('token', { path: '/' })
+              window.open("/", "_self")}
+            }
+          >
+            <SignOutIcon width="20px" height="20px" fill="#D0D0D0"/>
+            <Text
+              color="#252A32"
+              fontFamily="Ubuntu"
+              fontSize="12px"
+              fontWeight="400"
+              lineHeight="16px"
+              letterSpacing="0.3px"
+            >
+              Sair
+            </Text>
+          </MenuItem>
         </MenuList>
       </Menu>
     )
@@ -492,7 +547,99 @@ function SearchInput ({ status }) {
   )
 }
 
-function DesktopLinks({ links, position = false, path }) {
+function SearchInputUser () {
+  const [search, setSearch] = useState("")
+  const [showSearch, setShowSearch] = useState(false)
+
+  function openSearchLink() {
+    window.open(`/dataset?q=${search}`, "_self")
+  }
+
+  // if(isMobileMod()) return (
+  //   <Stack spacing={0} marginLeft="auto !important" paddingRight="60px">
+  //     <SearchIcon
+  //       display={showSearch ? "none" : "flex"}
+  //       right="100px"
+  //       alt="pesquisar"
+  //       fill="#D0D0D0"
+  //       width="18px"
+  //       height="18px"
+  //       cursor="pointer"
+  //       _hover={{opacity:"0.8"}}
+  //       onClick={() => setShowSearch(true)}
+  //     />
+  //     <Box transition="1s" overflow="hidden" width={showSearch ? "100%" : "0"} maxWidth="160px">
+  //       <ControlledInput
+  //         maxWidth="480px"
+  //         width="480px"
+  //         value={search}
+  //         onChange={setSearch}
+  //         onEnterPress={openSearchLink}
+  //         placeholder="Pesquise dados"
+  //         alignSelf="center"
+  //         justifyContent="center"
+  //         inputStyle={{
+  //           height: "40px",
+  //           fontSize: "16px",
+  //           width: "100%",
+  //           fontFamily: "Lato",
+  //           borderRadius: "14px",
+  //           _placeholder:{color: "#6F6F6F"}
+  //         }}
+  //         rightIcon={
+  //           <SearchIcon
+  //             alt="pesquisar"
+  //             fill="#D0D0D0"
+  //             width="18px"
+  //             height="18px"
+  //             cursor="pointer"
+  //             _hover={{opacity:"0.8"}}
+  //             onClick={() => openSearchLink()}
+  //           />
+  //         }
+  //       />
+  //     </Box>
+  //   </Stack>
+  // )
+
+  if(isMobileMod()) return null
+
+  return (
+    <Stack spacing={0}>
+      <ControlledInput
+        maxWidth="480px"
+        width="480px"
+        value={search}
+        onChange={setSearch}
+        onEnterPress={openSearchLink}
+        placeholder="Pesquise dados"
+        alignSelf="center"
+        justifyContent="center"
+        inputStyle={{
+          height: "40px",
+          fontSize: "16px",
+          width: "100%",
+          fontFamily: "Lato",
+          borderRadius: "14px",
+          _placeholder:{color: "#6F6F6F"}
+        }}
+        rightIcon={
+          <SearchIcon
+            alt="pesquisar"
+            fill="#D0D0D0"
+            width="18px"
+            height="18px"
+            cursor="pointer"
+            _hover={{opacity:"0.8"}}
+            onClick={() => openSearchLink()}
+          />
+        }
+      />
+    </Stack>
+  )
+}
+
+function DesktopLinks({ links, position = false, path, userTemplate = false }) {
   const [statusSearch, setStatusSearch] = useState(false)
 
   let userData = cookies.get("user") || null
@@ -534,9 +681,9 @@ function DesktopLinks({ links, position = false, path }) {
 
   return (
     <HStack
+      display={{ base: "none", lg: "flex" }}
       justifyContent="space-between"
       width="100%"
-      display={{ base: "none", lg: "flex" }}
       position={{ base: "relative", lg: "initial" }}
       gap="24px"
       transition="1s"
@@ -546,7 +693,7 @@ function DesktopLinks({ links, position = false, path }) {
         : "32px !important"
       }
     >
-      <HStack width="100%" flex="3" spacing={7}>
+      <HStack display={userTemplate ? "none" : "flex"} width="100%" flex="3" spacing={7}>
         {Object.entries(links).map(([k, v]) => {
           if (k === "Button")
             return v.map(b => (
@@ -557,6 +704,7 @@ function DesktopLinks({ links, position = false, path }) {
                   minWidth="80px"
                   height="35px"
                   fontSize="15px"
+                  borderRadius="30px"
                 >
                   {b.name}
                 </RoundedButton>
@@ -611,18 +759,34 @@ function DesktopLinks({ links, position = false, path }) {
       </HStack>
 
       <SearchInput status={searchStatus}/>
+      {userTemplate && !isMobileMod() && <SearchInputUser />}
 
       {!statusSearch &&
         <HStack spacing={8} display={{ base: "none", lg: "flex" }}>
           {userData ? (
-            <MenuUser userData={userData}/>
+            <HStack spacing="20px">
+              <RoundedButton
+                display={isMobileMod() ? "none" : "flex"}
+                backgroundColor="#FFF"
+                border="2px solid #42B0FF"
+                color="#42B0FF"
+                height="40px"
+                fontWeight="700"
+                borderRadius="30px"
+                fontSize="15px"
+                onClick={() => window.open("/precos", "_self")}
+              >
+                BD Pro
+              </RoundedButton>
+              <MenuUser userData={userData}/>
+            </HStack>
           ) : (
             <>
               <Link fontSize="15px" fontFamily="Ubuntu" fontWeight="400" letterSpacing="0.3px" href="/user/login">
                 Entrar
               </Link>
               <Link _hover={{ opacity:"none" }} href="/user/register">
-                <RoundedButton height="35px" fontSize="15px" minWidth="110px">
+                <RoundedButton height="35px" fontSize="15px" minWidth="110px" borderRadius="30px">
                   Cadastrar
                 </RoundedButton>
               </Link>
@@ -634,7 +798,7 @@ function DesktopLinks({ links, position = false, path }) {
   );
 }
 
-export default function MenuNav({}) {
+export default function MenuNav({ simpleTemplate = false, userTemplate = false }) {
   const router = useRouter()
   const { route } = router
   const menuDisclosure = useDisclosure()
@@ -697,6 +861,7 @@ export default function MenuNav({}) {
   return (
     <>
       <Box
+        display={simpleTemplate || userTemplate ? "none" : "block"}
         ref={bannerRef}
         position="fixed"
         backgroundColor="#252A32"
@@ -739,20 +904,20 @@ export default function MenuNav({}) {
         left="0px"
         backgroundColor="#FFFFFF"
         padding="16px 28px"
-        marginTop={isScrollDown ? "0" : { base: `${menuMobileMargin}px` , lg: "40px" }}
+        marginTop={simpleTemplate || userTemplate ? "0" : isScrollDown ? "0" : { base: `${menuMobileMargin}px` , lg: "40px" }}
         zIndex="99"
         transition="0.5s"
         as="nav"
       >
         <HStack
-          justifyContent={{ base: "center", lg: "flex-start" }}
+          justifyContent={simpleTemplate || userTemplate ? "flex-start" : { base: "center", lg: "flex-start" }}
           width="100%"
           height="40px"
           maxWidth="1264px"
           margin="0 auto"
           spacing={6}
         >
-          <Box display={{ base: "flex", lg: "none" }}>
+          <Box display={simpleTemplate || userTemplate ? "none" : { base: "flex", lg: "none" }}>
             <FarBarsIcon
               alt="menu de navegação"
               position="absolute"
@@ -785,7 +950,13 @@ export default function MenuNav({}) {
             />
           </Link>
 
-          <DesktopLinks links={links} position={isScrollDown} path={route}/>
+          {simpleTemplate ?
+            <></>  
+            :
+            <DesktopLinks links={links} position={isScrollDown} path={route} userTemplate={userTemplate}/>
+          }
+
+          {userTemplate && isMobileMod() && <SearchInputUser />}
 
           {useCheckMobile() && userData &&
             <MenuUser userData={userData} onOpen={menuUserMobile.onOpen} onClose={menuUserMobile.onClose}/>

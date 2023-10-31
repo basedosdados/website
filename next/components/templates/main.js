@@ -10,6 +10,8 @@ export function MainPageTemplate({
   pages,
   children,
   backgroundColor = "#FFFFFF",
+  cleanTemplate = false,
+  userTemplate = false,
   ...style
 }) {
 
@@ -18,11 +20,11 @@ export function MainPageTemplate({
     <UserContext.Provider>
       <Box backgroundColor={backgroundColor}>
         <SiteHead />
-        <Menu pages={pages} />
+        <Menu pages={pages} simpleTemplate={cleanTemplate} userTemplate={userTemplate}/>
         <Box paddingTop={{ base: "30px", lg: "120px" }} paddingBottom="50px" {...style}>
           {children}
         </Box>
-        <Footer pages={pages} />
+        <Footer pages={pages} ocult={cleanTemplate || userTemplate}/>
       </Box>
     </UserContext.Provider>
   );

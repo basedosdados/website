@@ -1456,9 +1456,9 @@ export default function UserPage() {
   }, [query])
 
   return (
-    <MainPageTemplate paddingX="24px">
+    <MainPageTemplate padding="70px 24px 50px !important" userTemplate>
       <Stack
-        paddingTop={isMobileMod() ? "120px" : "50px"}
+        paddingTop="50px"
         width="100%"
         maxWidth="1264px"
         flexDirection="column"
