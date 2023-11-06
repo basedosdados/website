@@ -1429,6 +1429,8 @@ const Accesses = () => {
 }
 
 export default function UserPage() {
+  return null
+
   const router = useRouter()
   const { query } = router
   const [sectionSelected, setSectionSelected] = useState(0)

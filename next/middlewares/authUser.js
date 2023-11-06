@@ -22,8 +22,8 @@ async function isJWTInvalid(token) {
 export default async function authUser(context, destiny) {
   const { req, res } = context
 
-  const invalidToken = await isJWTInvalid(req.cookies.token)
-  // const invalidToken = true
+  // const invalidToken = await isJWTInvalid(req.cookies.token)
+  const invalidToken = true
 
   if (invalidToken) {
     cookies.remove('user', { path: '/' })
