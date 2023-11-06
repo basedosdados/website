@@ -132,7 +132,7 @@ function MenuDrawer({ isOpen, onClose, links }) {
           <></>
           :
           <Stack display={isMobileMod() ? "flex" : "none"} marginTop="auto" gap="16px">
-            <RoundedButton
+            {/* <RoundedButton
               backgroundColor="#FFF"
               border="2px solid #42B0FF"
               color="#42B0FF"
@@ -151,7 +151,7 @@ function MenuDrawer({ isOpen, onClose, links }) {
               onClick={() => window.open("/user/register", "_self")}
             >
               Cadastrar
-            </RoundedButton>
+            </RoundedButton> */}
           </Stack>
         }
       </DrawerContent>
@@ -782,14 +782,14 @@ function DesktopLinks({ links, position = false, path, userTemplate = false }) {
             </HStack>
           ) : (
             <>
-              <Link fontSize="15px" fontFamily="Ubuntu" fontWeight="400" letterSpacing="0.3px" href="/user/login">
+              {/* <Link fontSize="15px" fontFamily="Ubuntu" fontWeight="400" letterSpacing="0.3px" href="/user/login">
                 Entrar
               </Link>
               <Link _hover={{ opacity:"none" }} href="/user/register">
                 <RoundedButton height="35px" fontSize="15px" minWidth="110px" borderRadius="30px">
                   Cadastrar
                 </RoundedButton>
-              </Link>
+              </Link> */}
             </>
           )}
         </HStack>
