@@ -19,13 +19,18 @@ export default function PasswordRecovery() {
   const [email, setEmail] = useState("")
 
   return (
-    <MainPageTemplate display="flex" justifyContent="center">
+    <MainPageTemplate
+      display="flex"
+      justifyContent="center"
+      paddingTop="72px"
+      cleanTemplate
+    >
       <Stack
         display="flex"
         justifyContent="center"
         width="510px"
         height="100%"
-        marginTop={isMobileMod() ? "150px" : "50px"}
+        marginTop="50px"
         marginX="27px"
         spacing="40px"
         alignItems="center"
@@ -64,7 +69,7 @@ export default function PasswordRecovery() {
           <Input
             type="email"
             placeholder="Insira seu e-mail"
-            _placeholder={{color:"#DEDFE0"}}
+            _placeholder={{color: "#A3A3A3"}}
             _focus={{border:"2px solid #42B0FF !important" }}
             _hover={{border:"2px solid #42B0FF !important" }}
             value={email}

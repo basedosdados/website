@@ -52,7 +52,7 @@ export default function Login() {
   }
 
   const fetchToken = async ({ email, password }) => {
-    const result = await getToken({email: "email", password: "password"})
+    const result = await getToken({email: email, password: password})
 
     if(result?.tokenAuth === null || result?.errors?.length > 0) return setErrors({login:"E-mail ou senha incorretos."}) 
 
@@ -86,13 +86,18 @@ export default function Login() {
   }
 
   return (
-    <MainPageTemplate display="flex" justifyContent="center">
+    <MainPageTemplate
+      display="flex"
+      justifyContent="center"
+      paddingTop="72px"
+      cleanTemplate
+    >
       <Stack
         display="flex"
         justifyContent="center"
         width="320px"
         height="100%"
-        marginTop={isMobileMod() ? "150px" : "50px"}
+        marginTop="50px"
         marginX="27px"
         spacing={0}
       >
@@ -220,6 +225,7 @@ export default function Login() {
           Não tem uma conta?
           <ButtonSimple
             width="none"
+            fontSize="14px"
             justifyContent="start"
             color="#42B0FF"
             _hover={{opacity: "0.6"}}

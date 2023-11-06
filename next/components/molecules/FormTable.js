@@ -404,8 +404,8 @@ export default function FormTable({
       </Stack>
 
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
+        <ModalOverlay/>
+        <ModalContent margin="24px">
           <ModalHeader>Deletar table</ModalHeader>
           <ModalBody>
             Você tem certeza em deletar esse table? Uma vez deletada, todas as informações dele e de Columns serão excluídas em consequência.
