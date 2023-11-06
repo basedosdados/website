@@ -62,7 +62,7 @@ function FooterLink(props) {
   )
 }
 
-export default function Footer({ pages }) {
+export default function Footer({ pages, ocult = false }) {
   const mobileCheck = useCheckMobile()
   const [isMobileMod, setIsMobileMod] = useState(false)
   
@@ -70,8 +70,10 @@ export default function Footer({ pages }) {
     setIsMobileMod(mobileCheck)
   },[])
 
+  if(ocult === true) return null
+
   return (
-    <VStack 
+    <VStack
       position="relative"
       zIndex="10"
       width="100%"

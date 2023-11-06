@@ -282,7 +282,7 @@ export default function PostDatasetForm({
 
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent margin="24px">
           <ModalHeader>Deletar dataset</ModalHeader>
           <ModalBody>
             Você tem certeza em deletar esse dataset? Uma vez deletado, todas as informações dele e de Table e Columns serão excluídas em consequência.

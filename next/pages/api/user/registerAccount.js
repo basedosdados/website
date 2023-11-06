@@ -5,6 +5,7 @@ const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 export default async function registerAccount({
   firstName,
   lastName = "",
+  username,
   email,
   password,
 }) {
@@ -20,7 +21,7 @@ export default async function registerAccount({
         mutation {
           CreateUpdateAccount (input:
             {
-              username : "${email}"
+              username : "${username}"
               email: "${email}"
               firstName: "${firstName}"
               lastName: "${lastName}"

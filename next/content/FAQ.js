@@ -347,7 +347,7 @@ export const QuestionFAQ = [
           </p>
           
           <ol>
-            <li>Acesse o <a href="https://console.cloud.google.com/projectselector2/home/dashboard" target="_blank">Google Cloud</a>. Caso for a sua primeira vez, aceite os Termos de Serviços.</li>
+            <li>Acesse o <a href="https://console.cloud.google.com/projectselector2/home/dashboard" target="_blank">Google Cloud</a>. Caso for a sua primeira vez, aceite os Termos de Serviço.</li>
             <li>Clique em <i>Create Project/Criar Projeto</i>. Escolha um nome bacana para o projeto.</li>
             <li>Clique em <i>Create/Criar</i>.</li>
           </ol>
