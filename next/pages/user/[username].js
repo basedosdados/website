@@ -41,7 +41,8 @@ import ButtonSimple from "../../components/atoms/SimpleButton";
 import InputForm from "../../components/atoms/SimpleInput"
 import Link from "../../components/atoms/Link";
 import BodyText from "../../components/atoms/BodyText";
-import { CardPrice } from "../precos"
+import { CardPrice } from "../precos";
+import PaymentSystem from "../../components/organisms/paymentSystem";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import PenIcon from "../../public/img/icons/penIcon";
@@ -1079,15 +1080,12 @@ const PlansAndPayment = () => {
         </Stack>
       </ModalGeneral>
 
-      <Tabs isLazy>
+      <Tabs isLazy defaultIndex={1}>
         <TabList
           borderBottom= "2px solid #DEDFE0 !important"
         >
           <TabContent>Planos</TabContent>
-          <TabContent
-            color="#A3A3A3"
-            pointerEvents="none"
-          >Pagamento</TabContent>
+          <TabContent>Pagamento</TabContent>
         </TabList>
         <TabPanels>
           <TabPanel padding="32px 0 0">
@@ -1285,7 +1283,7 @@ const PlansAndPayment = () => {
           </TabPanel>
 
           <TabPanel>
-
+            <PaymentSystem />
           </TabPanel>
         </TabPanels>
       </Tabs>
@@ -1431,7 +1429,7 @@ const Accesses = () => {
 export default function UserPage() {
   const router = useRouter()
   const { query } = router
-  const [sectionSelected, setSectionSelected] = useState(0)
+  const [sectionSelected, setSectionSelected] = useState(3)
 
   const choices = [
     {bar: "Perfil público", title: "Perfil público", value: "profile", index: 0},
