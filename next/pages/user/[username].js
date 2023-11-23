@@ -321,7 +321,7 @@ const ProfileConfiguration = () => {
             borderRadius="50%"
             overflow="hidden"
           >
-            <Image width="100%" height="100%" src={formData?.picture ? formData.picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}/>
+            <Image width="100%" height="100%" src={formData?.picture ? formData.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}/>
           </Box>
           <Box
             display="flex"
@@ -1376,7 +1376,7 @@ const Accesses = () => {
               overflow="hidden"
               top="9px"
             >
-              <Image width="100%" height="100%" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"/>
+              <Image width="100%" height="100%" src="https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"/>
             </Box>
             <Text
               marginLeft={isMobileMod() ? "44px !important" : "60px !important"}

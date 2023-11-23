@@ -196,7 +196,7 @@ function MenuDrawerUser({ isOpen, onClose}) {
               alt=""
               width="100%"
               height="100%"
-              src={userData?.picture ? userData?.picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
+              src={userData?.picture ? userData?.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
             />
           </Box>
           <Text
@@ -334,7 +334,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
           alt=""
           width="100%"
           height="100%"
-          src={userData?.picture ? userData.picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
+          src={userData?.picture ? userData.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
         />
       </Box>
     )
@@ -359,7 +359,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
               alt=""
               width="100%"
               height="100%"
-              src={userData?.picture ? userData.picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
+              src={userData?.picture ? userData.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
             />
           </Box>
         </MenuButton>
@@ -393,7 +393,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
                 width="100%"
                 height="100%"
                 display={{ base: "none", lg: "flex" }}
-                src={userData?.picture ? userData.picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
+                src={userData?.picture ? userData.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
               />
             </Box>
             <Text
