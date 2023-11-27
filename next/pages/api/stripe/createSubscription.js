@@ -1,11 +1,13 @@
 import axios from "axios";
 import cookies from "js-cookie";
+import { refreshToken } from "../user";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-let token = cookies.get("token") || ""
-
 export default async function createSubscription( priceId ) {
+  refreshToken()
+  let token = cookies.get("token") || ""
+
   try {
     const res = await axios({
       url: API_URL,
