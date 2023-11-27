@@ -7,13 +7,7 @@ let token = cookies.get("token") || ""
 let userData = cookies.get("user") || null
 if(userData !== null) userData = JSON.parse(cookies.get("user"))
 
-export default async function createCustomer({
-  country,
-  state,
-  city,
-  line,
-  postalCode
-}) {
+export default async function createCustomer() {
   try {
     const res = await axios({
       url: API_URL,
@@ -28,13 +22,6 @@ export default async function createCustomer({
             input: {
               name: "${userData.firstName} ${userData.lastName || ""}"
               email: "${userData.email}"
-              address: {
-                country: "${country}"
-                state: "${state}"
-                city: "${city}"
-                line: "${line}"
-                postalCode: "${postalCode}"
-              }
             }
           ) {
             customer {

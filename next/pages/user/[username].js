@@ -42,7 +42,7 @@ import InputForm from "../../components/atoms/SimpleInput"
 import Link from "../../components/atoms/Link";
 import BodyText from "../../components/atoms/BodyText";
 import { CardPrice } from "../precos";
-import PaymentSystem from "../../components/organisms/paymentSystem";
+import PaymentSystem from "../../components/organisms/PaymentSystem";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import PenIcon from "../../public/img/icons/penIcon";
