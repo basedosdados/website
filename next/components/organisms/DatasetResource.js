@@ -4,8 +4,8 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import cookies from "js-cookie";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
+import { getUserDataJson } from "../../utils";
 
 import SimpleButton from "../atoms/SimpleButton";
 import { FilterAccordion } from "../atoms/FilterAccordion";
@@ -17,8 +17,7 @@ import InformationRequestPage from "./InformationRequestPage";
 import CrossIcon from "../../public/img/icons/crossIcon";
 
 function AdminButtons({ datasetId }) {
-  let userData = cookies.get("user") || null
-  if(userData !== null) userData = JSON.parse(cookies.get("user"))
+  let userData = getUserDataJson()
 
   if(!userData?.isAdmin) return null
 

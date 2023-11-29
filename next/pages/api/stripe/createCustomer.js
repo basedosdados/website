@@ -1,11 +1,11 @@
 import axios from "axios";
 import cookies from "js-cookie";
 import { refreshToken } from "../user";
+import { getUserDataJson } from "../../../utils";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-let userData = cookies.get("user") || null
-if(userData !== null) userData = JSON.parse(cookies.get("user"))
+let userData = getUserDataJson()
 
 export default async function createCustomer() {
   refreshToken()

@@ -3,7 +3,7 @@ import {
   Text,
 } from "@chakra-ui/react"
 import { useState, useEffect } from 'react';
-import { loadStripe} from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import {
   Elements,
   PaymentElement,

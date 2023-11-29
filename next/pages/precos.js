@@ -81,24 +81,24 @@ export const CardPrice = ({
           </ModalBody>
 
           <ModalFooter gap="16px">
-              <RoundedButton
-                onClick={onClose}
-                backgroundColor={linkStripe !== "" ? "#FFF" : "#42B0FF"}
-                color={linkStripe !== "" ? "#42B0FF" : "#FFF"}
-                border={linkStripe !== "" && "1px solid #42B0FF"}
+            <RoundedButton
+              onClick={onClose}
+              backgroundColor={linkStripe !== "" ? "#FFF" : "#42B0FF"}
+              color={linkStripe !== "" ? "#42B0FF" : "#FFF"}
+              border={linkStripe !== "" && "1px solid #42B0FF"}
+            >
+              Fechar
+            </RoundedButton>
+            {linkStripe !== "" &&
+              <RoundedButton onClick={() => {
+                  onClose()
+                  window.open(linkStripe, "_blank")
+                  setLinkStripe("")
+                }}
               >
-                Fechar
+                Concordar
               </RoundedButton>
-              {linkStripe !== "" &&
-                <RoundedButton onClick={() => {
-                    onClose()
-                    window.open(linkStripe, "_blank")
-                    setLinkStripe("")
-                  }}
-                >
-                  Concordar
-                </RoundedButton>
-              }
+            }
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -323,6 +323,7 @@ export const CardPrice = ({
             color={button.colorText || "#FFF"}
             backgroundColor={button.color || "#42B0FF"}
             onClick={() => {
+              if(button.onClick) return button.onClick()
               if(button?.noHasModal) return window.open(button.href, "_self")
               onOpen()
               setLinkStripe(button.href)

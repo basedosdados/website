@@ -29,6 +29,7 @@ import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import ControlledInput from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
+import { getUserDataJson } from "../../utils";
 
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import BDLogoEduImage from "../../public/img/logos/bd_logo_edu";
@@ -41,7 +42,7 @@ import SettingsIcon from "../../public/img/icons/settingsIcon";
 import SignOutIcon from "../../public/img/icons/signOutIcon";
 
 function MenuDrawer({ isOpen, onClose, links }) {
-  let userData = cookies.get("user") || null
+  let userData = getUserDataJson()
 
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
@@ -161,8 +162,7 @@ function MenuDrawer({ isOpen, onClose, links }) {
 
 function MenuDrawerUser({ isOpen, onClose}) {
   const router = useRouter()
-  let userData = cookies.get("user") || null
-  if(userData !== null) userData = JSON.parse(cookies.get("user"))
+  let userData = getUserDataJson()
 
   const links = [
     {name: "Perfil público", value: "profile"},
@@ -274,7 +274,7 @@ function MenuDrawerUser({ isOpen, onClose}) {
           padding="16px 0"
           alignItems="center"
           onClick={() => {
-            cookies.remove('user', { path: '/' })
+            cookies.remove('userBD', { path: '/' })
             cookies.remove('token', { path: '/' })
             window.open("/", "_self")
           }}
@@ -404,7 +404,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
               lineHeight="16px"
               letterSpacing="0.3px"
             >
-              {userData?.username ? userData?.username : "dadinho"}
+              {userData?.username ? userData?.username : ""}
             </Text>
             <Text
               color="#6F6F6F"
@@ -414,7 +414,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
               lineHeight="16px"
               letterSpacing="0.3px"
             >
-              {userData?.email ? userData?.email : "dadinho@basedosdados.org"}
+              {userData?.email ? userData?.email : ""}
             </Text>
           </MenuItem>
 
@@ -448,7 +448,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
             padding="16px"
             _hover={{ backgroundColor: "transparent", opacity: "0.6" }}
             onClick={() => {
-              cookies.remove('user', { path: '/' })
+              cookies.remove('userBD', { path: '/' })
               cookies.remove('token', { path: '/' })
               window.open("/", "_self")}
             }
@@ -642,8 +642,7 @@ function SearchInputUser () {
 function DesktopLinks({ links, position = false, path, userTemplate = false }) {
   const [statusSearch, setStatusSearch] = useState(false)
 
-  let userData = cookies.get("user") || null
-  if(userData !== null) userData = JSON.parse(cookies.get("user"))
+  let userData = getUserDataJson()
 
   const searchStatus = (elm) => {
     setStatusSearch(elm.status)
@@ -809,8 +808,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   const [menuMobileMargin, setMenuMobileMargin] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
 
-  let userData = cookies.get("user") || null
-  if(userData !== null) userData = JSON.parse(cookies.get("user"))
+  let userData = getUserDataJson()
 
   const links = {
     Dados: "/dataset",

@@ -22,7 +22,7 @@ export default async function refreshToken() {
   try {
     const data = res.data.data
     if(res.data.errors.length > 0) {
-      cookies.remove('user', { path: '/' })
+      cookies.remove('userBD', { path: '/' })
       cookies.remove('token', { path: '/' })
 
       return window.open("/user/login", "_self")
