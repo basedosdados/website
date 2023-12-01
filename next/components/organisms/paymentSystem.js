@@ -33,19 +33,22 @@ const PaymentForm = () => {
     
     const data = await stripe.confirmPayment({
       elements,
-      redirect: 'if_required',
-      // confirmParams: {
-      //   return_url: "https://google.com"
-      // }
+      // redirect: 'if_required',
+      confirmParams: {
+        return_url: "/"
+      }
     })
   }
 
   return (
-    <VStack spacing={0} alignItems="start">
+    <VStack
+      spacing={0}
+      alignItems="start"
+    >
       <form onSubmit={handlerSubmit}>
         <PaymentElement />
 
-        <Button type="submit" marginTop="20px !important">Pagar</Button>
+        <Button width="100%" type="submit" marginTop="20px !important">Iniciar inscrição</Button>
       </form>
 
       {messages && <Text marginTop="20px !important">{messages}</Text>}
@@ -92,7 +95,6 @@ export default function PaymentSystem() {
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
           <AddressElement options={{mode:'billing'}}/>
-          <br/>
           <PaymentForm />
         </Elements>
       )}

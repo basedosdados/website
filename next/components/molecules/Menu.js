@@ -764,19 +764,21 @@ function DesktopLinks({ links, position = false, path, userTemplate = false }) {
         <HStack spacing={8} display={{ base: "none", lg: "flex" }}>
           {userData ? (
             <HStack spacing="20px">
-              <RoundedButton
-                display={isMobileMod() ? "none" : "flex"}
-                backgroundColor="#FFF"
-                border="2px solid #42B0FF"
-                color="#42B0FF"
-                height="40px"
-                fontWeight="700"
-                borderRadius="30px"
-                fontSize="15px"
-                onClick={() => window.open("/precos", "_self")}
-              >
-                BD Pro
-              </RoundedButton>
+              {userData?.currentSubscriptionStatus[0] !== "active" &&
+                <RoundedButton
+                  display={isMobileMod() ? "none" : "flex"}
+                  backgroundColor="#FFF"
+                  border="2px solid #42B0FF"
+                  color="#42B0FF"
+                  height="40px"
+                  fontWeight="700"
+                  borderRadius="30px"
+                  fontSize="15px"
+                  onClick={() => window.open(`/user/${userData.username}?plans_and_payment`, "_self")}
+                >
+                  BD Pro
+                </RoundedButton>
+              }
               <MenuUser userData={userData}/>
             </HStack>
           ) : (
