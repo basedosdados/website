@@ -38,6 +38,7 @@ import Link from "../../components/atoms/Link";
 import BodyText from "../../components/atoms/BodyText";
 import { CardPrice } from "../precos";
 import PaymentSystem from "../../components/organisms/PaymentSystem";
+import { getUserDataJson } from "../../utils";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import PenIcon from "../../public/img/icons/penIcon";
@@ -933,30 +934,111 @@ const NewPassword = () => {
   )
 }
 
-const PlansAndPayment = () => {
+const PlansAndPayment = ({ userData }) => {
   const [plan, setPlan] = useState({})
   const PlansModal = useDisclosure()
+  const CancelModalPlan = useDisclosure()
 
   useEffect(() => {
     setPlan({})
   }, [PlansModal.isOpen === false])
 
   const resources={
-    "bdGratis" : [
-    {name: "Tabelas tratadas"},
-    {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
-    {name: "Acesso em nuvem"},
-    {name: "Acesso via SQL, Python, R e Stata"},
-    {name: "Integração com ferramentas BI"},
-    {name: "Download até 200.000 linhas"},
-    {name: "Até 1TB de processamento", tooltip: "Limite mensal gratuito oferecido pelo Google Cloud."}],
-    "bdPro" : [
-      {name: "Dezenas de bases de alta frequência atualizadas"}
-    ],
-    "bdEmpresas" : [
-      {name: "Acesso para 10 contas"},
-      {name: "Suporte prioritário via email e Discord"}
-    ]
+    "BD Gratis" : {
+      title: "BD Grátis",
+      buttons: [{text:"Comparar planos", onClick: () => PlansModal.onOpen()}, {text:"Alterar plano", onClick: () => PlansModal.onOpen()}],
+      resources : [{name: "Tabelas tratadas"},
+      {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
+      {name: "Acesso em nuvem"},
+      {name: "Acesso via SQL, Python, R e Stata"},
+      {name: "Integração com ferramentas BI"},
+      {name: "Download até 200.000 linhas"},
+      {name: "Até 1TB de processamento", tooltip: "Limite mensal gratuito oferecido pelo Google Cloud."}]
+    },
+    "BD Pro Completo" : {
+      title: "BD Pro",
+      buttons : [{text:"Cancelar plano", onClick: () => CancelModalPlan.onOpen()}, {text:"Alterar plano", onClick: () => PlansModal.onOpen()}],
+      resources : [{name: "Dezenas de bases de alta frequência atualizadas"}]
+    },
+    "BD Empresas" : {
+      title: "BD Empresas",
+      buttons : [{text:"Cancelar plano", onClick: () => CancelModalPlan.onOpen()}, {text:"Alterar plano", onClick: () => PlansModal.onOpen()}],
+      resources : [{name: "Acesso para 10 contas"},
+      {name: "Suporte prioritário via email e Discord"}]}
+  }
+
+  const planActive = userData?.currentSubscription.length > 0
+  const defaultResource = resources["BD Gratis"]
+  const planResource = resources[userData?.currentSubscription]
+
+  const controlResource  = () => {
+    return planActive ? planResource : defaultResource
+  }
+
+  const IncludesFeature = ({ elm, index }) => {
+    return (
+      <Box key={index} display="flex" alignItems="center">
+        <CheckIcon fill="#2B8C4D" width="24px" height="24px" marginRight="8px"/>
+        <Text
+          color="#252A32"
+          fontFamily="Ubuntu"
+          fontSize="16px"
+          fontWeight="400"
+          lineHeight="16px"
+          letterSpacing="0.2px"
+        >{elm.name}</Text>
+        {elm.tooltip &&
+          <Tooltip
+            hasArrow
+            placement="top"
+            bg="#2A2F38"
+            label={elm.tooltip}
+            fontSize="14px"
+            fontWeight="400"
+            padding="5px 16px 6px"
+            letterSpacing="0.5px"
+            lineHeight="24px"
+            color="#FFF"
+            borderRadius="6px"
+          >
+            <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3" marginLeft="16px"/>
+          </Tooltip>
+        }
+      </Box>
+    )
+  }
+
+  const NotIncludesFeature = ({ elm, index }) => {
+    return (
+      <Box key={index} display="flex" alignItems="center">
+        <CrossIcon fill="#FF8484" width="24px" height="24px" marginRight="8px"/>
+        <Text
+          color="#252A32"
+          fontFamily="Ubuntu"
+          fontSize="16px"
+          fontWeight="400"
+          lineHeight="24px"
+          letterSpacing="0.2px"
+        >{elm.name}</Text>
+        {elm.tooltip &&
+          <Tooltip
+            hasArrow
+            placement="top"
+            bg="#2A2F38"
+            label={elm.tooltip}
+            fontSize="14px"
+            fontWeight="400"
+            padding="5px 16px 6px"
+            letterSpacing="0.5px"
+            lineHeight="24px"
+            color="#FFF"
+            borderRadius="6px"
+          >
+            <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3"/>
+          </Tooltip>
+        }
+      </Box>
+    )
   }
 
   return (
@@ -969,7 +1051,7 @@ const PlansAndPayment = () => {
       >
         <Stack spacing={0} marginBottom="16px">
           <SectionTitle lineHeight="40px" height="40px">
-            {plan.plan ? "" : "Compare os planos"}
+            {plan.plan ? "Pagamento" : "Compare os planos"}
           </SectionTitle>
           <ModalCloseButton
             fontSize="14px"
@@ -981,15 +1063,18 @@ const PlansAndPayment = () => {
 
         {plan.plan ?
           <Stack
-            display={isMobileMod() ? "flex" : "grid"}
-            gridTemplateColumns="repeat(3, 320px)"
-            gridTemplateRows="1fr"
+            display="flex"
+            flexDirection={isMobileMod() ? "column" :"row"}
             justifyContent="center"
             justifyItems="center"
+            width="100%"
+            minWidth="300px"
+            maxWidth="625px"
+            minHeight="400px"
             gap="20px"
             spacing={0}
           >
-            {plan.plan && <PaymentSystem />}
+            <PaymentSystem />
           </Stack>
           :
           <Stack
@@ -1070,6 +1155,60 @@ const PlansAndPayment = () => {
         }
       </ModalGeneral>
 
+      <ModalGeneral
+        isOpen={CancelModalPlan.isOpen}
+        onClose={CancelModalPlan.onClose}
+        propsModalContent={{maxWidth: "fit-content"}}
+        isCentered={isMobileMod() ? false : true}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <SectionTitle lineHeight="40px" height="40px">
+            Tem certeza que deseja cancelar seu plano?
+          </SectionTitle>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+          />
+        </Stack>
+
+        <Stack spacing="24px" marginBottom="16px">
+          <ExtraInfoTextForm fontSize="16px" lineHeight="24px" letterSpacing="0.2px">
+            Após o cancelamento, você perderá acesso aos recursos exclusivos do plano atual. 
+          </ExtraInfoTextForm>
+        </Stack>
+
+        <Stack
+          flexDirection={isMobileMod() ? "column" : "row"}
+          spacing={0}
+          gap="24px"
+          width={isMobileMod() ? "100%" : "fit-content"}
+        >
+          <RoundedButton
+            borderRadius="30px"
+            backgroundColor="#FFF"
+            border="1px solid #FF8484"
+            color="#FF8484"
+            width={isMobileMod() ? "100%" : "fit-content"}
+            _hover={{transform: "none", opacity: 0.8}}
+            onClick={() => CancelModalPlan.onClose()}
+          >
+            Voltar
+          </RoundedButton>
+
+          <RoundedButton
+            borderRadius="30px"
+            backgroundColor="#FF8484"
+            width={isMobileMod() ? "100%" : "fit-content"}
+            _hover={{transform: "none", opacity: 0.8}}
+            onClick={() => CancelModalPlan.onClose()}
+          >
+            Cancelar o plano
+          </RoundedButton>
+        </Stack>
+      </ModalGeneral>
+
       <Stack spacing="40px">
         <Stack
           spacing={0}
@@ -1096,8 +1235,9 @@ const PlansAndPayment = () => {
               fontSize="28px"
               fontWeight="500"
               lineHeight="36px"
-            >BD Grátis</Text>
+            >{controlResource().title}</Text>
           </Stack>
+
           <Stack
             spacing={0}
             gap="24px"
@@ -1110,14 +1250,16 @@ const PlansAndPayment = () => {
               color="#42B0FF"
               width={isMobileMod() ? "100%" : "fit-content"}
               _hover={{transform: "none", opacity: 0.8}}
-              onClick={() => PlansModal.onOpen()}
-            >Comparar planos</RoundedButton>
+              onClick={() => controlResource().buttons[0].onClick()}
+            >{controlResource().buttons[0].text}
+            </RoundedButton>
             <RoundedButton
               borderRadius="30px"
               width={isMobileMod() ? "100%" : "fit-content"}
               _hover={{transform: "none", opacity: 0.8}}
-              onClick={() => PlansModal.onOpen()}
-            >Alterar plano</RoundedButton>
+              onClick={() => controlResource().buttons[1].onClick()}
+            >{controlResource().buttons[1].text}
+            </RoundedButton>
           </Stack>
         </Stack>
 
@@ -1136,126 +1278,82 @@ const PlansAndPayment = () => {
               letterSpacing="0.2px"
               marginBottom="8px"
             >Inclui</Text>
-            {resources.bdGratis.map((elm, index) => {
-              return (
-                <Box key={index} display="flex" alignItems="center">
-                  <CheckIcon fill="#2B8C4D" width="24px" height="24px" marginRight="8px"/>
-                  <Text
-                    color="#252A32"
-                    fontFamily="Ubuntu"
-                    fontSize="16px"
-                    fontWeight="400"
-                    lineHeight="16px"
-                    letterSpacing="0.2px"
-                  >{elm.name}</Text>
-                  {elm.tooltip &&
-                    <Tooltip
-                      hasArrow
-                      placement="top"
-                      bg="#2A2F38"
-                      label={elm.tooltip}
-                      fontSize="14px"
-                      fontWeight="400"
-                      padding="5px 16px 6px"
-                      letterSpacing="0.5px"
-                      lineHeight="24px"
-                      color="#FFF"
-                      borderRadius="6px"
-                    >
-                      <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3" marginLeft="16px"/>
-                    </Tooltip>
-                  }
-                </Box>
-              )
+            {defaultResource.resources.map((elm, index) => {
+              return <IncludesFeature elm={elm} index={index}/>
             })}
+            {userData?.currentSubscription[0] === "BD Pro Completo" && 
+              planResource.resources.map((elm, index) => {
+                return <IncludesFeature elm={elm} index={index}/>
+              })
+            }
+            {userData?.currentSubscription[0] === "BD Empresas" &&
+              <>
+                {resources["BD Pro Completo"].resources.map((elm, index) => {
+                  return <IncludesFeature elm={elm} index={index}/>
+                })}
+                {planResource.resources.map((elm, index) => {
+                  return <IncludesFeature elm={elm} index={index}/>
+                })}
+              </>
+            }
+
+            {userData?.currentSubscription[0] === "BD Empresas" &&
+              <ButtonSimple
+                color="#42B0FF"
+                fontSize="14px"
+                fontWeight="700"
+                letterSpacing="0.3px"
+                _hover={{opacity: 0.7}}
+                marginTop="16px !important"
+                onClick={() => PlansModal.onOpen()}
+              >
+                Veja tudo e compare os planos
+              </ButtonSimple>
+            }
           </Stack>
 
           <Stack spacing="8px">
-            <Text
-              color="#7D7D7D"
-              fontFamily="Ubuntu"
-              fontSize="16px"
-              fontWeight="400"
-              lineHeight="16px"
-              letterSpacing="0.2px"
-              marginBottom="8px"
-            >Não inclui</Text>
-            {resources.bdPro.map((elm, index) => {
-              return (
-                <Box key={index} display="flex" alignItems="center">
-                  <CrossIcon fill="#FF8484" width="24px" height="24px" marginRight="8px"/>
-                  <Text
-                    color="#252A32"
-                    fontFamily="Ubuntu"
-                    fontSize="16px"
-                    fontWeight="400"
-                    lineHeight="24px"
-                    letterSpacing="0.2px"
-                  >{elm.name}</Text>
-                  {elm.tooltip &&
-                    <Tooltip
-                      hasArrow
-                      placement="top"
-                      bg="#2A2F38"
-                      label={elm.tooltip}
-                      fontSize="14px"
-                      fontWeight="400"
-                      padding="5px 16px 6px"
-                      letterSpacing="0.5px"
-                      lineHeight="24px"
-                      color="#FFF"
-                      borderRadius="6px"
-                    >
-                      <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3"/>
-                    </Tooltip>
-                  }
-                </Box>
-              )
-            })}
-            {resources.bdEmpresas.map((elm, index) => {
-              return (
-                <Box key={index} display="flex" alignItems="center">
-                  <CrossIcon fill="#FF8484" width="24px" height="24px" marginRight="8px"/>
-                  <Text
-                    color="#252A32"
-                    fontFamily="Ubuntu"
-                    fontSize="16px"
-                    fontWeight="400"
-                    lineHeight="24px"
-                    letterSpacing="0.2px"
-                  >{elm.name}</Text>
-                  {elm.tooltip &&
-                    <Tooltip
-                      hasArrow
-                      placement="top"
-                      bg="#2A2F38"
-                      label={elm.tooltip}
-                      fontSize="14px"
-                      fontWeight="400"
-                      padding="5px 16px 6px"
-                      letterSpacing="0.5px"
-                      lineHeight="24px"
-                      color="#FFF"
-                      borderRadius="6px"
-                    >
-                      <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3"/>
-                    </Tooltip>
-                  }
-                </Box>
-              )
-            })}
+            {userData?.currentSubscription[0] !== "BD Empresas" &&
+              <Text
+                color="#7D7D7D"
+                fontFamily="Ubuntu"
+                fontSize="16px"
+                fontWeight="400"
+                lineHeight="16px"
+                letterSpacing="0.2px"
+                marginBottom="8px"
+              >Não inclui</Text>}
 
-            <ButtonSimple
-              color="#42B0FF"
-              fontSize="14px"
-              fontWeight="700"
-              letterSpacing="0.3px"
-              _hover={{opacity: 0.7}}
-              marginTop="16px !important"
-              onClick={() => PlansModal.onOpen()}
-            >
-              Veja tudo e compare os planos
-            </ButtonSimple>
+              {!planActive && 
+                <>
+                  {resources["BD Pro Completo"].resources.map((elm, index) => {
+                    return <NotIncludesFeature  elm={elm} index={index}/>
+                  })}
+                  {resources["BD Empresas"].resources.map((elm, index) => {
+                    return <NotIncludesFeature  elm={elm} index={index}/>
+                  })}
+                </>
+              }
+
+              {userData?.currentSubscription[0] === "BD Pro Completo" &&
+                resources["BD Empresas"].resources.map((elm, index) => {
+                  return <NotIncludesFeature  elm={elm} index={index}/>
+                })
+              }
+
+            {userData?.currentSubscription[0] !== "BD Empresas" &&
+              <ButtonSimple
+                color="#42B0FF"
+                fontSize="14px"
+                fontWeight="700"
+                letterSpacing="0.3px"
+                _hover={{opacity: 0.7}}
+                marginTop="16px !important"
+                onClick={() => PlansModal.onOpen()}
+              >
+                Veja tudo e compare os planos
+              </ButtonSimple>
+            }
           </Stack>
         </Stack>
       </Stack>
@@ -1399,9 +1497,10 @@ const Accesses = () => {
 }
 
 export default function UserPage() {
+  let userData = getUserDataJson()
   const router = useRouter()
   const { query } = router
-  const [sectionSelected, setSectionSelected] = useState(3)
+  const [sectionSelected, setSectionSelected] = useState(0)
 
   const choices = [
     {bar: "Perfil público", title: "Perfil público", value: "profile", index: 0},
@@ -1487,7 +1586,7 @@ export default function UserPage() {
             {sectionSelected === 0 && <ProfileConfiguration/>}
             {sectionSelected === 1 && <Account/>}
             {sectionSelected === 2 && <NewPassword/>}
-            {sectionSelected === 3 && <PlansAndPayment/>}
+            {sectionSelected === 3 && <PlansAndPayment userData={userData}/>}
             {sectionSelected === 4 && <Accesses/>}
           </Stack>
         </Stack>
