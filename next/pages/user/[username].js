@@ -29,6 +29,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { MainPageTemplate } from "../../components/templates/main";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
+import { removeSubscription } from "../api/stripe"
 import BigTitle from "../../components/atoms/BigTitle";
 import SectionTitle from "../../components/atoms/SectionTitle";
 import RoundedButton from "../../components/atoms/RoundedButton";
@@ -1041,6 +1042,10 @@ const PlansAndPayment = ({ userData }) => {
     )
   }
 
+  const cancelSubscripetion = async () => {
+    const result = await removeSubscription()
+  }
+
   return (
     <Stack>
       <ModalGeneral
@@ -1126,9 +1131,17 @@ const PlansAndPayment = ({ userData }) => {
                 {name: "Dezenas de bases de alta frequência atualizadas"},
               ]}
               button={{
-                text: "Iniciar teste grátis",
-                onClick: () => setPlan({plan: "BD Pro"})
-                // href: "https://buy.stripe.com/8wM01TeVQ3kg0mIeV4?locale=pt"
+                text: `${userData?.currentSubscription[0] === "BD Pro Completo" ? "Plano atual" : "Iniciar teste grátis"}`,
+                onClick: userData?.currentSubscription[0] === "BD Pro Completo" ? () => {} : () => setPlan({plan: "BD Pro"}),
+                styles: 
+                  userData?.currentSubscription[0] === "BD Pro Completo" && {
+                    color: "#252A32",
+                    backgroundColor: "#FFF",
+                    boxShadow: "none",
+                    cursor: "default",
+                    _hover: {transform: "none"},
+                    fontWeight: "400"
+                  }
               }}
               hasServiceTerms
             />
@@ -1202,7 +1215,7 @@ const PlansAndPayment = ({ userData }) => {
             backgroundColor="#FF8484"
             width={isMobileMod() ? "100%" : "fit-content"}
             _hover={{transform: "none", opacity: 0.8}}
-            onClick={() => CancelModalPlan.onClose()}
+            onClick={() => cancelSubscripetion()}
           >
             Cancelar o plano
           </RoundedButton>
