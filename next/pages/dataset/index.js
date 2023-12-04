@@ -13,8 +13,8 @@ import Head from "next/head";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import cookies from "js-cookie";
 import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import { getUserDataJson } from "../../utils";
 
 import {
   getSearchDatasets
@@ -87,8 +87,7 @@ export default function SearchPage({ pages }) {
   const [pageInfo, setPageInfo] = useState({})
   const [isLoading, setIsLoading] = useState(true)
 
-  let userData = cookies.get("user") || null
-  if(userData !== null) userData = JSON.parse(cookies.get("user"))
+  let userData = getUserDataJson()
 
   // const [order, setOrder] = useState("score")
 

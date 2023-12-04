@@ -20,6 +20,8 @@ export default async function getUser(email) {
                   firstName
                   lastName
                   email
+                  currentSubscription
+                  currentSubscriptionStatus
                 }
               }
             }

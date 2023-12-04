@@ -13,9 +13,6 @@ export default async function registerAccount({
     const res = await axios({
       url: API_URL,
       method: "POST",
-      headers: {
-        Authorization: `Bearer `
-      },
       data: {
         query: `
         mutation {

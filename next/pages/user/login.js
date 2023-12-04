@@ -58,7 +58,7 @@ export default function Login() {
 
     try {
       const userData = await getUser(result.tokenAuth.payload.email)
-      cookies.set('user', JSON.stringify(userData));
+      cookies.set('userBD', JSON.stringify(userData))
       window.open("/", "_self")
     } catch (error) {
       console.error(error)

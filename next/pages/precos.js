@@ -22,6 +22,7 @@ import RoundedButton from "../components/atoms/RoundedButton";
 import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import ServiceTermsBDPro from "../content/serviceTermsBDPro";
+import { getUserDataJson } from "../utils"
 
 import CheckIcon from "../public/img/icons/checkIcon";
 import CrossIcon from "../public/img/icons/crossIcon";
@@ -81,24 +82,24 @@ export const CardPrice = ({
           </ModalBody>
 
           <ModalFooter gap="16px">
-              <RoundedButton
-                onClick={onClose}
-                backgroundColor={linkStripe !== "" ? "#FFF" : "#42B0FF"}
-                color={linkStripe !== "" ? "#42B0FF" : "#FFF"}
-                border={linkStripe !== "" && "1px solid #42B0FF"}
+            <RoundedButton
+              onClick={onClose}
+              backgroundColor={linkStripe !== "" ? "#FFF" : "#42B0FF"}
+              color={linkStripe !== "" ? "#42B0FF" : "#FFF"}
+              border={linkStripe !== "" && "1px solid #42B0FF"}
+            >
+              Fechar
+            </RoundedButton>
+            {linkStripe !== "" &&
+              <RoundedButton onClick={() => {
+                  onClose()
+                  window.open(linkStripe, "_blank")
+                  setLinkStripe("")
+                }}
               >
-                Fechar
+                Concordar
               </RoundedButton>
-              {linkStripe !== "" &&
-                <RoundedButton onClick={() => {
-                    onClose()
-                    window.open(linkStripe, "_blank")
-                    setLinkStripe("")
-                  }}
-                >
-                  Concordar
-                </RoundedButton>
-              }
+            }
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -323,11 +324,13 @@ export const CardPrice = ({
             color={button.colorText || "#FFF"}
             backgroundColor={button.color || "#42B0FF"}
             onClick={() => {
+              if(button.onClick) return button.onClick()
               if(button?.noHasModal) return window.open(button.href, "_self")
               onOpen()
               setLinkStripe(button.href)
             }}
             border={button.color && `1px solid ${button.colorText}`}
+            {...button.styles}
           >
             {button.text}
           </RoundedButton>
@@ -373,6 +376,8 @@ export const CardPrice = ({
 }
 
 export default function Price() {
+  let userData = getUserDataJson()
+
   return (
     <MainPageTemplate paddingX="24px">
       <Head>
@@ -458,8 +463,17 @@ export default function Price() {
               {name: "Dezenas de bases de alta frequência atualizadas"},
             ]}
             button={{
-              text: "Iniciar teste grátis",
-              href: "https://buy.stripe.com/8wM01TeVQ3kg0mIeV4?locale=pt"
+              text: `${userData?.currentSubscription[0] === "BD Pro Completo" ? "Plano atual" : "Iniciar teste grátis"}`,
+              onClick: userData?.currentSubscription[0] === "BD Pro Completo" ? () => {} : () => setPlan({plan: "BD Pro"}),
+              styles: 
+                userData?.currentSubscription[0] === "BD Pro Completo" && {
+                  color: "#252A32",
+                  backgroundColor: "#FFF",
+                  boxShadow: "none",
+                  cursor: "default",
+                  _hover: {transform: "none"},
+                  fontWeight: "400"
+                }
             }}
             hasServiceTerms
           />

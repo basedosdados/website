@@ -21,11 +21,6 @@ import {
   ModalFooter,
   UnorderedList,
   ListItem,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
   Badge,
   Grid,
   GridItem
@@ -34,6 +29,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { MainPageTemplate } from "../../components/templates/main";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
+import { removeSubscription } from "../api/stripe"
 import BigTitle from "../../components/atoms/BigTitle";
 import SectionTitle from "../../components/atoms/SectionTitle";
 import RoundedButton from "../../components/atoms/RoundedButton";
@@ -41,7 +37,9 @@ import ButtonSimple from "../../components/atoms/SimpleButton";
 import InputForm from "../../components/atoms/SimpleInput"
 import Link from "../../components/atoms/Link";
 import BodyText from "../../components/atoms/BodyText";
-import { CardPrice } from "../precos"
+import { CardPrice } from "../precos";
+import PaymentSystem from "../../components/organisms/PaymentSystem";
+import { getUserDataJson } from "../../utils";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import PenIcon from "../../public/img/icons/penIcon";
@@ -320,7 +318,7 @@ const ProfileConfiguration = () => {
             borderRadius="50%"
             overflow="hidden"
           >
-            <Image width="100%" height="100%" src={formData?.picture ? formData.picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}/>
+            <Image width="100%" height="100%" src={formData?.picture ? formData.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}/>
           </Box>
           <Box
             display="flex"
@@ -937,51 +935,115 @@ const NewPassword = () => {
   )
 }
 
-const PlansAndPayment = () => {
+const PlansAndPayment = ({ userData }) => {
+  const [plan, setPlan] = useState({})
   const PlansModal = useDisclosure()
+  const CancelModalPlan = useDisclosure()
+
+  useEffect(() => {
+    setPlan({})
+  }, [PlansModal.isOpen === false])
 
   const resources={
-    "bdGratis" : [
-    {name: "Tabelas tratadas"},
-    {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
-    {name: "Acesso em nuvem"},
-    {name: "Acesso via SQL, Python, R e Stata"},
-    {name: "Integração com ferramentas BI"},
-    {name: "Download até 200.000 linhas"},
-    {name: "Até 1TB de processamento", tooltip: "Limite mensal gratuito oferecido pelo Google Cloud."}],
-    "bdPro" : [
-      {name: "Dezenas de bases de alta frequência atualizadas"}
-    ],
-    "bdEmpresas" : [
-      {name: "Acesso para 10 contas"},
-      {name: "Suporte prioritário via email e Discord"}
-    ]
+    "BD Gratis" : {
+      title: "BD Grátis",
+      buttons: [{text:"Comparar planos", onClick: () => PlansModal.onOpen()}, {text:"Alterar plano", onClick: () => PlansModal.onOpen()}],
+      resources : [{name: "Tabelas tratadas"},
+      {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
+      {name: "Acesso em nuvem"},
+      {name: "Acesso via SQL, Python, R e Stata"},
+      {name: "Integração com ferramentas BI"},
+      {name: "Download até 200.000 linhas"},
+      {name: "Até 1TB de processamento", tooltip: "Limite mensal gratuito oferecido pelo Google Cloud."}]
+    },
+    "BD Pro Completo" : {
+      title: "BD Pro",
+      buttons : [{text:"Cancelar plano", onClick: () => CancelModalPlan.onOpen()}, {text:"Alterar plano", onClick: () => PlansModal.onOpen()}],
+      resources : [{name: "Dezenas de bases de alta frequência atualizadas"}]
+    },
+    "BD Empresas" : {
+      title: "BD Empresas",
+      buttons : [{text:"Cancelar plano", onClick: () => CancelModalPlan.onOpen()}, {text:"Alterar plano", onClick: () => PlansModal.onOpen()}],
+      resources : [{name: "Acesso para 10 contas"},
+      {name: "Suporte prioritário via email e Discord"}]}
   }
 
-  const TabContent = ({children, ...props}) => {
+  const planActive = userData?.currentSubscription.length > 0
+  const defaultResource = resources["BD Gratis"]
+  const planResource = resources[userData?.currentSubscription]
+
+  const controlResource  = () => {
+    return planActive ? planResource : defaultResource
+  }
+
+  const IncludesFeature = ({ elm, index }) => {
     return (
-      <Tab
-        fontFamily="ubuntu"
-        fontSize="16px"
-        fontWeight="400"
-        letterSpacing="0.2px"
-        lineHeight="24px"
-        color="#252A32"
-        padding="0 8px 11px"
-        _hover={{
-          borderBottom: "3px solid #D0D0D0"
-        }}
-        _selected={{
-          color: "#2B8C4D",
-          fontWeight: "700",
-          borderBottom: "3px solid #2B8C4D",
-          pointerEvents: "none"
-        }}
-        {...props}
-      >
-        {children}
-      </Tab>
+      <Box key={index} display="flex" alignItems="center">
+        <CheckIcon fill="#2B8C4D" width="24px" height="24px" marginRight="8px"/>
+        <Text
+          color="#252A32"
+          fontFamily="Ubuntu"
+          fontSize="16px"
+          fontWeight="400"
+          lineHeight="16px"
+          letterSpacing="0.2px"
+        >{elm.name}</Text>
+        {elm.tooltip &&
+          <Tooltip
+            hasArrow
+            placement="top"
+            bg="#2A2F38"
+            label={elm.tooltip}
+            fontSize="14px"
+            fontWeight="400"
+            padding="5px 16px 6px"
+            letterSpacing="0.5px"
+            lineHeight="24px"
+            color="#FFF"
+            borderRadius="6px"
+          >
+            <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3" marginLeft="16px"/>
+          </Tooltip>
+        }
+      </Box>
     )
+  }
+
+  const NotIncludesFeature = ({ elm, index }) => {
+    return (
+      <Box key={index} display="flex" alignItems="center">
+        <CrossIcon fill="#FF8484" width="24px" height="24px" marginRight="8px"/>
+        <Text
+          color="#252A32"
+          fontFamily="Ubuntu"
+          fontSize="16px"
+          fontWeight="400"
+          lineHeight="24px"
+          letterSpacing="0.2px"
+        >{elm.name}</Text>
+        {elm.tooltip &&
+          <Tooltip
+            hasArrow
+            placement="top"
+            bg="#2A2F38"
+            label={elm.tooltip}
+            fontSize="14px"
+            fontWeight="400"
+            padding="5px 16px 6px"
+            letterSpacing="0.5px"
+            lineHeight="24px"
+            color="#FFF"
+            borderRadius="6px"
+          >
+            <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3"/>
+          </Tooltip>
+        }
+      </Box>
+    )
+  }
+
+  const cancelSubscripetion = async () => {
+    const result = await removeSubscription()
   }
 
   return (
@@ -993,8 +1055,8 @@ const PlansAndPayment = () => {
         isCentered={isMobileMod() ? false : true}
       >
         <Stack spacing={0} marginBottom="16px">
-          <SectionTitle lineHeight="40px">
-            Compare os planos
+          <SectionTitle lineHeight="40px" height="40px">
+            {plan.plan ? "Pagamento" : "Compare os planos"}
           </SectionTitle>
           <ModalCloseButton
             fontSize="14px"
@@ -1003,292 +1065,311 @@ const PlansAndPayment = () => {
             _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
           />
         </Stack>
+
+        {plan.plan ?
+          <Stack
+            display="flex"
+            flexDirection={isMobileMod() ? "column" :"row"}
+            justifyContent="center"
+            justifyItems="center"
+            width="100%"
+            minWidth="300px"
+            maxWidth="625px"
+            minHeight="400px"
+            gap="20px"
+            spacing={0}
+          >
+            <PaymentSystem />
+          </Stack>
+          :
+          <Stack
+            display={isMobileMod() ? "flex" : "grid"}
+            gridTemplateColumns="repeat(3, 320px)"
+            gridTemplateRows="1fr"
+            justifyContent="center"
+            justifyItems="center"
+            gap="20px"
+            spacing={0}
+          >
+            <CardPrice
+              colorBanner="#2B8C4D"
+              title="BD Grátis"
+              subTitle={<BodyText>Para você descobrir o potencial da plataforma de dados</BodyText>}
+              personConfig={{
+                price: "0"
+              }}
+              textResource="Recursos:"
+              resources={[
+                {name: "Tabelas tratadas"},
+                {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
+                {name: "Acesso em nuvem"},
+                {name: "Acesso via SQL, Python, R e Stata"},
+                {name: "Integração com ferramentas BI"},
+                {name: "Download até 200.000 linhas"},
+                {name: "Até 1TB de processamento", tooltip: "Limite mensal gratuito oferecido pelo Google Cloud."}
+              ]}
+              button={{
+                text: "Explorar recursos",
+                href: "/dataset",
+                target: "_self",
+                noHasModal: true,
+                color: "#FFF",
+                colorText: "#42B0FF"
+              }}
+            />
+
+            <CardPrice
+              colorBanner="#9C8400"
+              title="BD Pro"
+              badge="Beta"
+              subTitle={<BodyText>Para você ter acesso aos<br/> dados mais atualizados</BodyText>}
+              personConfig={{
+                price: "47"
+              }}
+              textResource="Todos os recursos da BD Grátis, mais:"
+              resources={[
+                {name: "Dezenas de bases de alta frequência atualizadas"},
+              ]}
+              button={{
+                text: `${userData?.currentSubscription[0] === "BD Pro Completo" ? "Plano atual" : "Iniciar teste grátis"}`,
+                onClick: userData?.currentSubscription[0] === "BD Pro Completo" ? () => {} : () => setPlan({plan: "BD Pro"}),
+                styles: 
+                  userData?.currentSubscription[0] === "BD Pro Completo" && {
+                    color: "#252A32",
+                    backgroundColor: "#FFF",
+                    boxShadow: "none",
+                    cursor: "default",
+                    _hover: {transform: "none"},
+                    fontWeight: "400"
+                  }
+              }}
+              hasServiceTerms
+            />
+
+            <CardPrice
+              colorBanner="#252A32"
+              title="BD Empresas"
+              badge="Beta"
+              subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
+              personConfig={{
+                price: "350"
+              }}
+              textResource="Todos os recursos da BD Pro, mais:"
+              resources={[
+                {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
+              ]}
+              button={{
+                text: "Iniciar teste grátis",
+                href: "https://buy.stripe.com/00g4i93d8f2Y5H24gr?locale=pt"
+              }}
+              hasServiceTerms
+            />
+          </Stack>
+        }
+      </ModalGeneral>
+
+      <ModalGeneral
+        isOpen={CancelModalPlan.isOpen}
+        onClose={CancelModalPlan.onClose}
+        propsModalContent={{maxWidth: "fit-content"}}
+        isCentered={isMobileMod() ? false : true}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <SectionTitle lineHeight="40px" height="40px">
+            Tem certeza que deseja cancelar seu plano?
+          </SectionTitle>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+          />
+        </Stack>
+
+        <Stack spacing="24px" marginBottom="16px">
+          <ExtraInfoTextForm fontSize="16px" lineHeight="24px" letterSpacing="0.2px">
+            Após o cancelamento, você perderá acesso aos recursos exclusivos do plano atual. 
+          </ExtraInfoTextForm>
+        </Stack>
+
         <Stack
-          display={isMobileMod() ? "flex" : "grid"}
-          gridTemplateColumns="repeat(3, 320px)"
-          gridTemplateRows="1fr"
-          justifyContent="center"
-          justifyItems="center"
-          gap="20px"
+          flexDirection={isMobileMod() ? "column" : "row"}
           spacing={0}
+          gap="24px"
+          width={isMobileMod() ? "100%" : "fit-content"}
         >
-          <CardPrice
-            colorBanner="#2B8C4D"
-            title="BD Grátis"
-            subTitle={<BodyText>Para você descobrir o potencial da plataforma de dados</BodyText>}
-            personConfig={{
-              price: "0"
-            }}
-            textResource="Recursos:"
-            resources={[
-              {name: "Tabelas tratadas"},
-              {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
-              {name: "Acesso em nuvem"},
-              {name: "Acesso via SQL, Python, R e Stata"},
-              {name: "Integração com ferramentas BI"},
-              {name: "Download até 200.000 linhas"},
-              {name: "Até 1TB de processamento", tooltip: "Limite mensal gratuito oferecido pelo Google Cloud."}
-            ]}
-            button={{
-              text: "Explorar recursos",
-              href: "/dataset",
-              target: "_self",
-              noHasModal: true,
-              color: "#FFF",
-              colorText: "#42B0FF"
-            }}
-          />
+          <RoundedButton
+            borderRadius="30px"
+            backgroundColor="#FFF"
+            border="1px solid #FF8484"
+            color="#FF8484"
+            width={isMobileMod() ? "100%" : "fit-content"}
+            _hover={{transform: "none", opacity: 0.8}}
+            onClick={() => CancelModalPlan.onClose()}
+          >
+            Voltar
+          </RoundedButton>
 
-          <CardPrice
-            colorBanner="#9C8400"
-            title="BD Pro"
-            badge="Beta"
-            subTitle={<BodyText>Para você ter acesso aos<br/> dados mais atualizados</BodyText>}
-            personConfig={{
-              price: "47"
-            }}
-            textResource="Todos os recursos da BD Grátis, mais:"
-            resources={[
-              {name: "Dezenas de bases de alta frequência atualizadas"},
-            ]}
-            button={{
-              text: "Iniciar teste grátis",
-              href: "https://buy.stripe.com/8wM01TeVQ3kg0mIeV4?locale=pt"
-            }}
-            hasServiceTerms
-          />
-
-          <CardPrice
-            colorBanner="#252A32"
-            title="BD Empresas"
-            badge="Beta"
-            subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
-            personConfig={{
-              price: "350"
-            }}
-            textResource="Todos os recursos da BD Pro, mais:"
-            resources={[
-              {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
-            ]}
-            button={{
-              text: "Iniciar teste grátis",
-              href: "https://buy.stripe.com/00g4i93d8f2Y5H24gr?locale=pt"
-            }}
-            hasServiceTerms
-          />
+          <RoundedButton
+            borderRadius="30px"
+            backgroundColor="#FF8484"
+            width={isMobileMod() ? "100%" : "fit-content"}
+            _hover={{transform: "none", opacity: 0.8}}
+            onClick={() => cancelSubscripetion()}
+          >
+            Cancelar o plano
+          </RoundedButton>
         </Stack>
       </ModalGeneral>
 
-      <Tabs isLazy>
-        <TabList
-          borderBottom= "2px solid #DEDFE0 !important"
+      <Stack spacing="40px">
+        <Stack
+          spacing={0}
+          flexDirection={isMobileMod() ? "column" : "row"}
+          width="100%"
+          justifyContent="space-between"
         >
-          <TabContent>Planos</TabContent>
-          <TabContent
-            color="#A3A3A3"
-            pointerEvents="none"
-          >Pagamento</TabContent>
-        </TabList>
-        <TabPanels>
-          <TabPanel padding="32px 0 0">
-            <Stack spacing="40px">
-              <Stack
-                spacing={0}
-                flexDirection={isMobileMod() ? "column" : "row"}
-                width="100%"
-                justifyContent="space-between"
+          <Stack spacing="8px" marginBottom={isMobileMod() ? "16px" : "0"}>
+            <Badge
+              width="fit-content"
+              padding="4px 5px"
+              textTransform="none"
+              borderRadius="6px"
+              backgroundColor="#DEDFE0"
+              color="#252A32"
+              fontSize="10px"
+              fontFamily="ubuntu"
+              fontWeight="300"
+              letterSpacing="0.2px"
+            >Plano atual</Badge>
+            <Text
+              color="#252A32"
+              fontFamily="Ubuntu"
+              fontSize="28px"
+              fontWeight="500"
+              lineHeight="36px"
+            >{controlResource().title}</Text>
+          </Stack>
+
+          <Stack
+            spacing={0}
+            gap="24px"
+            flexDirection={isMobileMod() ? "column" : "row"}
+          >
+            <RoundedButton
+              borderRadius="30px"
+              backgroundColor="#FFF"
+              border="1px solid #42B0FF"
+              color="#42B0FF"
+              width={isMobileMod() ? "100%" : "fit-content"}
+              _hover={{transform: "none", opacity: 0.8}}
+              onClick={() => controlResource().buttons[0].onClick()}
+            >{controlResource().buttons[0].text}
+            </RoundedButton>
+            <RoundedButton
+              borderRadius="30px"
+              width={isMobileMod() ? "100%" : "fit-content"}
+              _hover={{transform: "none", opacity: 0.8}}
+              onClick={() => controlResource().buttons[1].onClick()}
+            >{controlResource().buttons[1].text}
+            </RoundedButton>
+          </Stack>
+        </Stack>
+
+        <Stack
+          spacing={0}
+          gap="64px"
+          flexDirection={isMobileMod() ? "column" : "row"}
+        >
+          <Stack minWidth="350px" spacing="8px">
+            <Text
+              color="#7D7D7D"
+              fontFamily="Ubuntu"
+              fontSize="16px"
+              fontWeight="400"
+              lineHeight="16px"
+              letterSpacing="0.2px"
+              marginBottom="8px"
+            >Inclui</Text>
+            {defaultResource.resources.map((elm, index) => {
+              return <IncludesFeature elm={elm} index={index}/>
+            })}
+            {userData?.currentSubscription[0] === "BD Pro Completo" && 
+              planResource.resources.map((elm, index) => {
+                return <IncludesFeature elm={elm} index={index}/>
+              })
+            }
+            {userData?.currentSubscription[0] === "BD Empresas" &&
+              <>
+                {resources["BD Pro Completo"].resources.map((elm, index) => {
+                  return <IncludesFeature elm={elm} index={index}/>
+                })}
+                {planResource.resources.map((elm, index) => {
+                  return <IncludesFeature elm={elm} index={index}/>
+                })}
+              </>
+            }
+
+            {userData?.currentSubscription[0] === "BD Empresas" &&
+              <ButtonSimple
+                color="#42B0FF"
+                fontSize="14px"
+                fontWeight="700"
+                letterSpacing="0.3px"
+                _hover={{opacity: 0.7}}
+                marginTop="16px !important"
+                onClick={() => PlansModal.onOpen()}
               >
-                <Stack spacing="8px" marginBottom={isMobileMod() ? "16px" : "0"}>
-                  <Badge
-                    width="fit-content"
-                    padding="4px 5px"
-                    textTransform="none"
-                    borderRadius="6px"
-                    backgroundColor="#DEDFE0"
-                    color="#252A32"
-                    fontSize="10px"
-                    fontFamily="ubuntu"
-                    fontWeight="300"
-                    letterSpacing="0.2px"
-                  >Plano atual</Badge>
-                  <Text
-                    color="#252A32"
-                    fontFamily="Ubuntu"
-                    fontSize="28px"
-                    fontWeight="500"
-                    lineHeight="36px"
-                  >BD Grátis</Text>
-                </Stack>
-                <Stack
-                  spacing={0}
-                  gap="24px"
-                  flexDirection={isMobileMod() ? "column" : "row"}
-                >
-                  <RoundedButton
-                    borderRadius="30px"
-                    backgroundColor="#FFF"
-                    border="1px solid #42B0FF"
-                    color="#42B0FF"
-                    width={isMobileMod() ? "100%" : "fit-content"}
-                    _hover={{transform: "none", opacity: 0.8}}
-                    onClick={() => PlansModal.onOpen()}
-                  >Compare os planos</RoundedButton>
-                  <RoundedButton
-                    borderRadius="30px"
-                    width={isMobileMod() ? "100%" : "fit-content"}
-                    // _hover={{transform: "none", opacity: 0.8}}
-                    cursor="default"
-                    backgroundColor="#C4C4C4"
-                    _hover={{transform: "none"}}
-                  >Faça o upgrade</RoundedButton>
-                </Stack>
-              </Stack>
+                Veja tudo e compare os planos
+              </ButtonSimple>
+            }
+          </Stack>
 
-              <Stack
-                spacing={0}
-                gap="64px"
-                flexDirection={isMobileMod() ? "column" : "row"}
+          <Stack spacing="8px">
+            {userData?.currentSubscription[0] !== "BD Empresas" &&
+              <Text
+                color="#7D7D7D"
+                fontFamily="Ubuntu"
+                fontSize="16px"
+                fontWeight="400"
+                lineHeight="16px"
+                letterSpacing="0.2px"
+                marginBottom="8px"
+              >Não inclui</Text>}
+
+              {!planActive && 
+                <>
+                  {resources["BD Pro Completo"].resources.map((elm, index) => {
+                    return <NotIncludesFeature  elm={elm} index={index}/>
+                  })}
+                  {resources["BD Empresas"].resources.map((elm, index) => {
+                    return <NotIncludesFeature  elm={elm} index={index}/>
+                  })}
+                </>
+              }
+
+              {userData?.currentSubscription[0] === "BD Pro Completo" &&
+                resources["BD Empresas"].resources.map((elm, index) => {
+                  return <NotIncludesFeature  elm={elm} index={index}/>
+                })
+              }
+
+            {userData?.currentSubscription[0] !== "BD Empresas" &&
+              <ButtonSimple
+                color="#42B0FF"
+                fontSize="14px"
+                fontWeight="700"
+                letterSpacing="0.3px"
+                _hover={{opacity: 0.7}}
+                marginTop="16px !important"
+                onClick={() => PlansModal.onOpen()}
               >
-                <Stack minWidth="350px" spacing="8px">
-                  <Text
-                    color="#7D7D7D"
-                    fontFamily="Ubuntu"
-                    fontSize="16px"
-                    fontWeight="400"
-                    lineHeight="16px"
-                    letterSpacing="0.2px"
-                    marginBottom="8px"
-                  >Inclui</Text>
-                  {resources.bdGratis.map((elm, index) => {
-                    return (
-                      <Box key={index} display="flex" alignItems="center">
-                        <CheckIcon fill="#2B8C4D" width="24px" height="24px" marginRight="8px"/>
-                        <Text
-                          color="#252A32"
-                          fontFamily="Ubuntu"
-                          fontSize="16px"
-                          fontWeight="400"
-                          lineHeight="16px"
-                          letterSpacing="0.2px"
-                        >{elm.name}</Text>
-                        {elm.tooltip &&
-                          <Tooltip
-                            hasArrow
-                            placement="top"
-                            bg="#2A2F38"
-                            label={elm.tooltip}
-                            fontSize="14px"
-                            fontWeight="400"
-                            padding="5px 16px 6px"
-                            letterSpacing="0.5px"
-                            lineHeight="24px"
-                            color="#FFF"
-                            borderRadius="6px"
-                          >
-                            <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3" marginLeft="16px"/>
-                          </Tooltip>
-                        }
-                      </Box>
-                    )
-                  })}
-                </Stack>
-
-                <Stack spacing="8px">
-                  <Text
-                    color="#7D7D7D"
-                    fontFamily="Ubuntu"
-                    fontSize="16px"
-                    fontWeight="400"
-                    lineHeight="16px"
-                    letterSpacing="0.2px"
-                    marginBottom="8px"
-                  >Não inclui</Text>
-                  {resources.bdPro.map((elm, index) => {
-                    return (
-                      <Box key={index} display="flex" alignItems="center">
-                        <CrossIcon fill="#FF8484" width="24px" height="24px" marginRight="8px"/>
-                        <Text
-                          color="#252A32"
-                          fontFamily="Ubuntu"
-                          fontSize="16px"
-                          fontWeight="400"
-                          lineHeight="24px"
-                          letterSpacing="0.2px"
-                        >{elm.name}</Text>
-                        {elm.tooltip &&
-                          <Tooltip
-                            hasArrow
-                            placement="top"
-                            bg="#2A2F38"
-                            label={elm.tooltip}
-                            fontSize="14px"
-                            fontWeight="400"
-                            padding="5px 16px 6px"
-                            letterSpacing="0.5px"
-                            lineHeight="24px"
-                            color="#FFF"
-                            borderRadius="6px"
-                          >
-                            <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3"/>
-                          </Tooltip>
-                        }
-                      </Box>
-                    )
-                  })}
-                  {resources.bdEmpresas.map((elm, index) => {
-                    return (
-                      <Box key={index} display="flex" alignItems="center">
-                        <CrossIcon fill="#FF8484" width="24px" height="24px" marginRight="8px"/>
-                        <Text
-                          color="#252A32"
-                          fontFamily="Ubuntu"
-                          fontSize="16px"
-                          fontWeight="400"
-                          lineHeight="24px"
-                          letterSpacing="0.2px"
-                        >{elm.name}</Text>
-                        {elm.tooltip &&
-                          <Tooltip
-                            hasArrow
-                            placement="top"
-                            bg="#2A2F38"
-                            label={elm.tooltip}
-                            fontSize="14px"
-                            fontWeight="400"
-                            padding="5px 16px 6px"
-                            letterSpacing="0.5px"
-                            lineHeight="24px"
-                            color="#FFF"
-                            borderRadius="6px"
-                          >
-                            <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3"/>
-                          </Tooltip>
-                        }
-                      </Box>
-                    )
-                  })}
-
-                  <ButtonSimple
-                    color="#42B0FF"
-                    fontSize="14px"
-                    fontWeight="700"
-                    letterSpacing="0.3px"
-                    _hover={{opacity: 0.7}}
-                    marginTop="16px !important"
-                    onClick={() => PlansModal.onOpen()}
-                  >
-                    Veja tudo e compare os planos
-                  </ButtonSimple>
-                </Stack>
-              </Stack>
-            </Stack>
-          </TabPanel>
-
-          <TabPanel>
-
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+                Veja tudo e compare os planos
+              </ButtonSimple>
+            }
+          </Stack>
+        </Stack>
+      </Stack>
     </Stack>
   )
 }
@@ -1378,7 +1459,7 @@ const Accesses = () => {
               overflow="hidden"
               top="9px"
             >
-              <Image width="100%" height="100%" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"/>
+              <Image width="100%" height="100%" src="https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"/>
             </Box>
             <Text
               marginLeft={isMobileMod() ? "44px !important" : "60px !important"}
@@ -1429,6 +1510,7 @@ const Accesses = () => {
 }
 
 export default function UserPage() {
+  let userData = getUserDataJson()
   const router = useRouter()
   const { query } = router
   const [sectionSelected, setSectionSelected] = useState(0)
@@ -1517,7 +1599,7 @@ export default function UserPage() {
             {sectionSelected === 0 && <ProfileConfiguration/>}
             {sectionSelected === 1 && <Account/>}
             {sectionSelected === 2 && <NewPassword/>}
-            {sectionSelected === 3 && <PlansAndPayment/>}
+            {sectionSelected === 3 && <PlansAndPayment userData={userData}/>}
             {sectionSelected === 4 && <Accesses/>}
           </Stack>
         </Stack>

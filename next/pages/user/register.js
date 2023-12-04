@@ -87,11 +87,11 @@ export default function Register() {
     setErrors(validationErrors)
 
     if (Object.keys(validationErrors).length === 0) {
-      fetchRegister(formData)
+      createRegister(formData)
     }
   }
 
-  const fetchRegister = async ({ firstName, lastName, email, password }) => {
+  const createRegister = async ({ firstName, lastName, email, password }) => {
     const result = await registerAccount({ firstName, lastName, email, password })
 
     let arrayErrors = {}

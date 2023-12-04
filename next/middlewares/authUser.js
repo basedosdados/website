@@ -26,7 +26,7 @@ export default async function authUser(context, destiny) {
   // const invalidToken = true
 
   if (invalidToken) {
-    cookies.remove('user', { path: '/' })
+    cookies.remove('userBD', { path: '/' })
     cookies.remove('token', { path: '/' })
 
     res.setHeader('Set-Cookie', [

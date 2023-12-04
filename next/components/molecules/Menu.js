@@ -29,6 +29,7 @@ import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import ControlledInput from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
+import { getUserDataJson } from "../../utils";
 
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import BDLogoEduImage from "../../public/img/logos/bd_logo_edu";
@@ -41,7 +42,7 @@ import SettingsIcon from "../../public/img/icons/settingsIcon";
 import SignOutIcon from "../../public/img/icons/signOutIcon";
 
 function MenuDrawer({ isOpen, onClose, links }) {
-  let userData = cookies.get("user") || null
+  let userData = getUserDataJson()
 
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
@@ -161,8 +162,7 @@ function MenuDrawer({ isOpen, onClose, links }) {
 
 function MenuDrawerUser({ isOpen, onClose}) {
   const router = useRouter()
-  let userData = cookies.get("user") || null
-  if(userData !== null) userData = JSON.parse(cookies.get("user"))
+  let userData = getUserDataJson()
 
   const links = [
     {name: "Perfil público", value: "profile"},
@@ -196,7 +196,7 @@ function MenuDrawerUser({ isOpen, onClose}) {
               alt=""
               width="100%"
               height="100%"
-              src={userData?.picture ? userData?.picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
+              src={userData?.picture ? userData?.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
             />
           </Box>
           <Text
@@ -274,7 +274,7 @@ function MenuDrawerUser({ isOpen, onClose}) {
           padding="16px 0"
           alignItems="center"
           onClick={() => {
-            cookies.remove('user', { path: '/' })
+            cookies.remove('userBD', { path: '/' })
             cookies.remove('token', { path: '/' })
             window.open("/", "_self")
           }}
@@ -334,7 +334,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
           alt=""
           width="100%"
           height="100%"
-          src={userData?.picture ? userData.picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
+          src={userData?.picture ? userData.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
         />
       </Box>
     )
@@ -359,7 +359,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
               alt=""
               width="100%"
               height="100%"
-              src={userData?.picture ? userData.picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
+              src={userData?.picture ? userData.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
             />
           </Box>
         </MenuButton>
@@ -393,7 +393,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
                 width="100%"
                 height="100%"
                 display={{ base: "none", lg: "flex" }}
-                src={userData?.picture ? userData.picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}
+                src={userData?.picture ? userData.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
               />
             </Box>
             <Text
@@ -404,7 +404,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
               lineHeight="16px"
               letterSpacing="0.3px"
             >
-              {userData?.username ? userData?.username : "dadinho"}
+              {userData?.username ? userData?.username : ""}
             </Text>
             <Text
               color="#6F6F6F"
@@ -414,7 +414,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
               lineHeight="16px"
               letterSpacing="0.3px"
             >
-              {userData?.email ? userData?.email : "dadinho@basedosdados.org"}
+              {userData?.email ? userData?.email : ""}
             </Text>
           </MenuItem>
 
@@ -448,7 +448,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
             padding="16px"
             _hover={{ backgroundColor: "transparent", opacity: "0.6" }}
             onClick={() => {
-              cookies.remove('user', { path: '/' })
+              cookies.remove('userBD', { path: '/' })
               cookies.remove('token', { path: '/' })
               window.open("/", "_self")}
             }
@@ -642,8 +642,7 @@ function SearchInputUser () {
 function DesktopLinks({ links, position = false, path, userTemplate = false }) {
   const [statusSearch, setStatusSearch] = useState(false)
 
-  let userData = cookies.get("user") || null
-  if(userData !== null) userData = JSON.parse(cookies.get("user"))
+  let userData = getUserDataJson()
 
   const searchStatus = (elm) => {
     setStatusSearch(elm.status)
@@ -765,19 +764,21 @@ function DesktopLinks({ links, position = false, path, userTemplate = false }) {
         <HStack spacing={8} display={{ base: "none", lg: "flex" }}>
           {userData ? (
             <HStack spacing="20px">
-              <RoundedButton
-                display={isMobileMod() ? "none" : "flex"}
-                backgroundColor="#FFF"
-                border="2px solid #42B0FF"
-                color="#42B0FF"
-                height="40px"
-                fontWeight="700"
-                borderRadius="30px"
-                fontSize="15px"
-                onClick={() => window.open("/precos", "_self")}
-              >
-                BD Pro
-              </RoundedButton>
+              {userData?.currentSubscriptionStatus[0] !== "active" &&
+                <RoundedButton
+                  display={isMobileMod() ? "none" : "flex"}
+                  backgroundColor="#FFF"
+                  border="2px solid #42B0FF"
+                  color="#42B0FF"
+                  height="40px"
+                  fontWeight="700"
+                  borderRadius="30px"
+                  fontSize="15px"
+                  onClick={() => window.open(`/user/${userData.username}?plans_and_payment`, "_self")}
+                >
+                  BD Pro
+                </RoundedButton>
+              }
               <MenuUser userData={userData}/>
             </HStack>
           ) : (
@@ -809,8 +810,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   const [menuMobileMargin, setMenuMobileMargin] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
 
-  let userData = cookies.get("user") || null
-  if(userData !== null) userData = JSON.parse(cookies.get("user"))
+  let userData = getUserDataJson()
 
   const links = {
     Dados: "/dataset",
