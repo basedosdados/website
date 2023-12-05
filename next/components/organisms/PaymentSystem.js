@@ -19,6 +19,9 @@ import {
   createSubscription
 } from "../../pages/api/stripe";
 
+console.log(process.env)
+console.log(process.env.NEXT_PUBLIC_KEY_STRIPE)
+
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_KEY_STRIPE)
 
 const PaymentForm = () => {
