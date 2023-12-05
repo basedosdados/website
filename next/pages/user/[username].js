@@ -968,7 +968,7 @@ const PlansAndPayment = ({ userData }) => {
       {name: "Suporte prioritário via email e Discord"}]}
   }
 
-  const planActive = userData?.currentSubscription.length > 0
+  const planActive = userData?.currentSubscription.length > 0 && userData?.currentSubscription[0] ==! undefined
   const defaultResource = resources["BD Gratis"]
   const planResource = resources[userData?.currentSubscription]
 
