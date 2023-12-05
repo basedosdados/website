@@ -15,7 +15,9 @@ RUN \
 # Rebuild the source code only when needed
 FROM node:18.17.0-alpine AS builder
 ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_KEY_STRIPE
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_KEY_STRIPE=$NEXT_PUBLIC_KEY_STRIPE
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .

@@ -44,3 +44,4 @@ jobs:
           tags: ${{ env.IMAGE_NAME }}
           build-args: |
             NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_KEY_STRIPE=${{ env.NEXT_PUBLIC_KEY_STRIPE }}
