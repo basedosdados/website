@@ -19,7 +19,7 @@ import {
   createSubscription
 } from "../../pages/api/stripe";
 
-const stripePromise = loadStripe(`${process.env.NEXT_PUBLIC_KEY_STRIPE}`)
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_KEY_STRIPE)
 
 const PaymentForm = () => {
   const stripe = useStripe()
