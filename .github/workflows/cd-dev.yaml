@@ -68,9 +68,7 @@ jobs:
               limits:
                 cpu: 500m
                 memory: 1Gi
-            env:
-              - name: "NEXT_PUBLIC_KEY_STRIPE"
-                value: "${{ secrets.NEXT_PUBLIC_KEY_STRIPE }}"
+            env: []
             envFrom:
               - secretRef:
                   name: basedosdados-website-development
