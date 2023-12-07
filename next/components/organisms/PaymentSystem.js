@@ -24,19 +24,16 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_KEY_STRIPE)
 const PaymentForm = () => {
   const stripe = useStripe()
   const elements = useElements()
-  const [messages, setMessages] = useState("")
 
   const handlerSubmit = async (e) => {
     e.preventDefault()
 
-    setMessages(`${messages}<br />Submitting payment...`)
-    
     const data = await stripe.confirmPayment({
       elements,
-      // redirect: 'if_required',
-      confirmParams: {
-        return_url: "/"
-      }
+      redirect: 'if_required',
+      // confirmParams: {
+      //   return_url: "/"
+      // }
     })
   }
 
@@ -50,8 +47,6 @@ const PaymentForm = () => {
 
         <Button width="100%" type="submit" marginTop="20px !important">Iniciar inscrição</Button>
       </form>
-
-      {messages && <Text marginTop="20px !important">{messages}</Text>}
     </VStack>
   )
 }
