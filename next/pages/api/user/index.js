@@ -4,6 +4,7 @@ import validateToken from "./validateToken";
 import registerAccount from "./registerAccount";
 import getUser from "./getUser";
 import getAllUsers from "./getAllUsers";
+import getFullUser from "./getFullUser"
 
 export {
   getToken,
@@ -11,5 +12,6 @@ export {
   validateToken,
   registerAccount,
   getUser,
-  getAllUsers
+  getAllUsers,
+  getFullUser
 }

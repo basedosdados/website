@@ -463,10 +463,10 @@ export default function Price() {
               {name: "Dezenas de bases de alta frequência atualizadas"},
             ]}
             button={{
-              text: `${userData?.currentSubscription[0] === "BD Pro Completo" ? "Plano atual" : "Iniciar teste grátis"}`,
-              onClick: userData?.currentSubscription[0] === "BD Pro Completo" ? () => {} : () => setPlan({plan: "BD Pro"}),
+              text: `${userData?.proSubscription === "bd_pro" ? "Plano atual" : "Iniciar teste grátis"}`,
+              onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => setPlan({plan: "BD Pro"}),
               styles: 
-                userData?.currentSubscription[0] === "BD Pro Completo" && {
+                userData?.proSubscription === "bd_pro" && {
                   color: "#252A32",
                   backgroundColor: "#FFF",
                   boxShadow: "none",
@@ -480,7 +480,7 @@ export default function Price() {
 
           <CardPrice
             colorBanner="#252A32"
-            title="BD Empresas"
+            title="BD Pro Empresas"
             badge="Beta"
             subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
             personConfig={{

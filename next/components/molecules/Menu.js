@@ -764,7 +764,7 @@ function DesktopLinks({ links, position = false, path, userTemplate = false }) {
         <HStack spacing={8} display={{ base: "none", lg: "flex" }}>
           {userData ? (
             <HStack spacing="20px">
-              {userData?.currentSubscriptionStatus[0] !== "active" &&
+              {userData?.proSubscriptionStatus !== "active" &&
                 <RoundedButton
                   display={isMobileMod() ? "none" : "flex"}
                   backgroundColor="#FFF"

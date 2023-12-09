@@ -6,7 +6,6 @@ import {
   FormControl,
   FormLabel,
   FormErrorMessage,
-  Input,
   Image,
   Tooltip,
   HStack,
@@ -41,6 +40,10 @@ import { CardPrice } from "../precos";
 import PaymentSystem from "../../components/organisms/PaymentSystem";
 import { getUserDataJson } from "../../utils";
 
+import {
+  getFullUser
+} from "../api/user"
+
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import PenIcon from "../../public/img/icons/penIcon";
 import GithubIcon from "../../public/img/icons/githubIcon";
@@ -52,6 +55,16 @@ import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
+
+export async function getServerSideProps() {
+  const fullUser = await getFullUser("") || null
+
+  return {
+    props: {
+      fullUser
+    }
+  }
+}
 
 const LabelTextForm = ({ text, ...props }) => {
   return (
@@ -130,7 +143,7 @@ const ModalGeneral = ({
   )
 }
 
-const ProfileConfiguration = () => {
+const ProfileConfiguration = ({ fullUser }) => {
   const [formData, setFormData] = useState({ firstName: "" , lastName: "", picture: "" })
   const [errors, setErrors] = useState({ firstName: "" , lastName: "" })
 
@@ -151,7 +164,7 @@ const ProfileConfiguration = () => {
       <Stack spacing="24px" flex={1}>
         <FormControl isInvalid={!!errors.firstName}>
           <LabelTextForm text="Nome"/>
-          <Input
+          <InputForm
             id="firstName"
             name="firstName"
             value={formData.firstName}
@@ -171,7 +184,7 @@ const ProfileConfiguration = () => {
 
         <FormControl isInvalid={!!errors.email}>
           <LabelTextForm text="Sobrenome"/>
-          <Input
+          <InputForm
             id="lastName"
             name="lastName"
             value={formData.lastName}
@@ -205,7 +218,7 @@ const ProfileConfiguration = () => {
 
         <FormControl isInvalid={!!errors.website}>
           <LabelTextForm text="URL"/>
-          <Input
+          <InputForm
             id="website"
             name="website"
             value={formData.website}
@@ -228,7 +241,7 @@ const ProfileConfiguration = () => {
 
           <HStack spacing="8px" margin="0 0 8px 0 !important">
             <GithubIcon width="24px" height="24px" fill="#D0D0D0"/>
-            <Input
+            <InputForm
               id="github"
               name="github"
               value={formData.github}
@@ -244,7 +257,7 @@ const ProfileConfiguration = () => {
 
           <HStack spacing="8px" margin="0 0 8px 0 !important">
             <TwitterIcon width="24px" height="24px" fill="#D0D0D0"/>
-            <Input
+            <InputForm
               id="twitter"
               name="twitter"
               value={formData.twitter}
@@ -260,7 +273,7 @@ const ProfileConfiguration = () => {
 
           <HStack spacing="8px"  margin="0 !important">
             <LinkedinIcon width="24px" height="24px" fill="#D0D0D0"/>
-            <Input
+            <InputForm
               id="linkedin"
               name="linkedin"
               value={formData.linkedin}
@@ -289,10 +302,7 @@ const ProfileConfiguration = () => {
         <RoundedButton
           borderRadius="30px"
           width={isMobileMod() ? "100%" : "fit-content"}
-          // _hover={{transform: "none", opacity: 0.8}}
-          _hover={{transform: "none"}}
-          backgroundColor="#C4C4C4"
-          cursor="default"
+          _hover={{transform: "none", opacity: 0.8}}
         >
           Atualizar perfil
         </RoundedButton>
@@ -718,10 +728,10 @@ const NewPassword = () => {
             lineHeight="40px"
           >Sua senha foi alterada com sucesso</SectionTitle>
           <ExtraInfoTextForm
-              fontSize="16px"
-              letterSpacing="0.2px"
-              lineHeight="24px"
-            >Agora você pode utilizar a nova senha para acessar sua<br/> conta na Base dos Dados.</ExtraInfoTextForm>
+            fontSize="16px"
+            letterSpacing="0.2px"
+            lineHeight="24px"
+          >Agora você pode utilizar a nova senha para acessar sua<br/> conta na Base dos Dados.</ExtraInfoTextForm>
         </Stack>
 
         <Stack
@@ -956,21 +966,21 @@ const PlansAndPayment = ({ userData }) => {
       {name: "Download até 200.000 linhas"},
       {name: "Até 1TB de processamento", tooltip: "Limite mensal gratuito oferecido pelo Google Cloud."}]
     },
-    "BD Pro Completo" : {
+    "bd_pro" : {
       title: "BD Pro",
       buttons : [{text:"Cancelar plano", onClick: () => CancelModalPlan.onOpen()}, {text:"Alterar plano", onClick: () => PlansModal.onOpen()}],
       resources : [{name: "Dezenas de bases de alta frequência atualizadas"}]
     },
-    "BD Empresas" : {
-      title: "BD Empresas",
+    "bd_pro_empresas" : {
+      title: "BD Pro Empresas",
       buttons : [{text:"Cancelar plano", onClick: () => CancelModalPlan.onOpen()}, {text:"Alterar plano", onClick: () => PlansModal.onOpen()}],
       resources : [{name: "Acesso para 10 contas"},
       {name: "Suporte prioritário via email e Discord"}]}
   }
 
-  const planActive = userData?.currentSubscription.length > 0 && userData?.currentSubscription[0] ==! undefined
+  const planActive = userData?.proSubscriptionStatus === "active"
   const defaultResource = resources["BD Gratis"]
-  const planResource = resources[userData?.currentSubscription]
+  const planResource = resources[userData?.proSubscription]
 
   const controlResource  = () => {
     return planActive ? planResource : defaultResource
@@ -1079,7 +1089,7 @@ const PlansAndPayment = ({ userData }) => {
             gap="20px"
             spacing={0}
           >
-            <PaymentSystem />
+            <PaymentSystem userData={userData}/>
           </Stack>
           :
           <Stack
@@ -1131,10 +1141,10 @@ const PlansAndPayment = ({ userData }) => {
                 {name: "Dezenas de bases de alta frequência atualizadas"},
               ]}
               button={{
-                text: `${userData?.currentSubscription[0] === "BD Pro Completo" ? "Plano atual" : "Iniciar teste grátis"}`,
-                onClick: userData?.currentSubscription[0] === "BD Pro Completo" ? () => {} : () => setPlan({plan: "BD Pro"}),
+                text: `${userData?.proSubscription === "bd_pro" ? "Plano atual" : "Iniciar teste grátis"}`,
+                onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => setPlan({plan: "BD Pro"}),
                 styles: 
-                  userData?.currentSubscription[0] === "BD Pro Completo" && {
+                  userData?.proSubscription === "bd_pro" && {
                     color: "#252A32",
                     backgroundColor: "#FFF",
                     boxShadow: "none",
@@ -1148,7 +1158,7 @@ const PlansAndPayment = ({ userData }) => {
 
             <CardPrice
               colorBanner="#252A32"
-              title="BD Empresas"
+              title="BD Pro Empresas"
               badge="Beta"
               subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
               personConfig={{
@@ -1294,14 +1304,14 @@ const PlansAndPayment = ({ userData }) => {
             {defaultResource.resources.map((elm, index) => {
               return <IncludesFeature elm={elm} index={index}/>
             })}
-            {userData?.currentSubscription[0] === "BD Pro Completo" && 
+            {userData?.proSubscription === "bd_pro" && 
               planResource.resources.map((elm, index) => {
                 return <IncludesFeature elm={elm} index={index}/>
               })
             }
-            {userData?.currentSubscription[0] === "BD Empresas" &&
+            {userData?.proSubscription === "bd_pro_empresas" &&
               <>
-                {resources["BD Pro Completo"].resources.map((elm, index) => {
+                {resources["bd_pro"].resources.map((elm, index) => {
                   return <IncludesFeature elm={elm} index={index}/>
                 })}
                 {planResource.resources.map((elm, index) => {
@@ -1310,7 +1320,7 @@ const PlansAndPayment = ({ userData }) => {
               </>
             }
 
-            {userData?.currentSubscription[0] === "BD Empresas" &&
+            {userData?.proSubscription === "bd_pro_empresas" &&
               <ButtonSimple
                 color="#42B0FF"
                 fontSize="14px"
@@ -1326,7 +1336,7 @@ const PlansAndPayment = ({ userData }) => {
           </Stack>
 
           <Stack spacing="8px">
-            {userData?.currentSubscription[0] !== "BD Empresas" &&
+            {userData?.proSubscription !== "bd_pro_empresas" &&
               <Text
                 color="#7D7D7D"
                 fontFamily="Ubuntu"
@@ -1339,22 +1349,22 @@ const PlansAndPayment = ({ userData }) => {
 
               {!planActive && 
                 <>
-                  {resources["BD Pro Completo"].resources.map((elm, index) => {
+                  {resources["bd_pro"].resources.map((elm, index) => {
                     return <NotIncludesFeature  elm={elm} index={index}/>
                   })}
-                  {resources["BD Empresas"].resources.map((elm, index) => {
+                  {resources["bd_pro_empresas"].resources.map((elm, index) => {
                     return <NotIncludesFeature  elm={elm} index={index}/>
                   })}
                 </>
               }
 
-              {userData?.currentSubscription[0] === "BD Pro Completo" &&
-                resources["BD Empresas"].resources.map((elm, index) => {
+              {userData?.proSubscription === "bd_pro" &&
+                resources["bd_pro_empresas"].resources.map((elm, index) => {
                   return <NotIncludesFeature  elm={elm} index={index}/>
                 })
               }
 
-            {userData?.currentSubscription[0] !== "BD Empresas" &&
+            {userData?.proSubscription !== "bd_pro_empresas" &&
               <ButtonSimple
                 color="#42B0FF"
                 fontSize="14px"
@@ -1509,7 +1519,7 @@ const Accesses = () => {
   )
 }
 
-export default function UserPage() {
+export default function UserPage({ fullUser }) {
   let userData = getUserDataJson()
   const router = useRouter()
   const { query } = router
@@ -1596,7 +1606,7 @@ export default function UserPage() {
             <SectionTitle marginBottom="8px">{choices[sectionSelected].title}</SectionTitle>
             <Divider marginBottom={isMobileMod() ? "40px !important" : "32px !important"} borderColor="#DEDFE0"/>
 
-            {sectionSelected === 0 && <ProfileConfiguration/>}
+            {sectionSelected === 0 && <ProfileConfiguration fullUser={fullUser}/>}
             {sectionSelected === 1 && <Account/>}
             {sectionSelected === 2 && <NewPassword/>}
             {sectionSelected === 3 && <PlansAndPayment userData={userData}/>}
