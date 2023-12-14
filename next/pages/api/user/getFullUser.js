@@ -13,8 +13,10 @@ export default async function getFullUser(email) {
             allAccount (email : "${email}"){
               edges {
                 node {
+                  id
                   isAdmin
                   isActive
+                  isEmailVisible
                   picture
                   username
                   firstName

@@ -24,8 +24,7 @@ export default async function refreshToken() {
     if(res.data.errors.length > 0) {
       cookies.remove('userBD', { path: '/' })
       cookies.remove('token', { path: '/' })
-
-      return window.open("/user/login", "_self")
+      return res.data
     } 
     cookies.set('token', data?.refreshToken?.token)
     return data

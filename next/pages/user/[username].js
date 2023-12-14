@@ -38,9 +38,10 @@ import Link from "../../components/atoms/Link";
 import BodyText from "../../components/atoms/BodyText";
 import { CardPrice } from "../precos";
 import PaymentSystem from "../../components/organisms/PaymentSystem";
-import { getUserDataJson } from "../../utils";
+import { getUserDataJson, checkUserInfo, cleanUserInfo } from "../../utils";
 
 import {
+  updateProfile,
   getFullUser
 } from "../api/user"
 
@@ -56,8 +57,33 @@ import CheckIcon from "../../public/img/icons/checkIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 
-export async function getServerSideProps() {
-  const fullUser = await getFullUser("") || null
+export async function getServerSideProps(context) {
+  const { req } = context
+  let user = null
+
+  if(req.cookies.userBD) user = JSON.parse(req.cookies.userBD)
+
+  if (checkUserInfo(user)) {
+    return {
+      redirect: {
+        destination: "/user/login",
+        permanent: false,
+      }
+    }
+  }
+
+  const fullUser = await getFullUser(user?.email)
+
+  if(fullUser?.errors?.length > 0) {
+    cleanUserInfo()
+
+    return {
+      redirect: {
+        destination: "/user/login",
+        permanent: false,
+      }
+    }
+  }
 
   return {
     props: {
@@ -144,14 +170,47 @@ const ModalGeneral = ({
 }
 
 const ProfileConfiguration = ({ fullUser }) => {
-  const [formData, setFormData] = useState({ firstName: "" , lastName: "", picture: "" })
-  const [errors, setErrors] = useState({ firstName: "" , lastName: "" })
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    isEmailVisible: false,
+    picture: "",
+    website: "",
+    github: "",
+    twitter: "",
+    linkedin: ""
+  })
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+  })
+
+  useEffect(() => {
+    setFormData({
+      firstName: fullUser?.firstName,
+      lastName: fullUser?.lastName || "",
+      isEmailVisible: fullUser?.isEmailVisible,
+      picture: fullUser?.picture || "",
+      website: fullUser?.website || "",
+      github: fullUser?.github || "",
+      twitter: fullUser?.twitter || "",
+      linkedin: fullUser?.linkedin || ""
+    })
+  }, [fullUser])
 
   const handleInputChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }))
+  }
+
+  const handleUpdateProfile = async () => {
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(fullUser?.id)
+    const form = {...formData, id: id}
+
+    const result = await updateProfile(form)
   }
 
   return (
@@ -182,7 +241,7 @@ const ProfileConfiguration = ({ fullUser }) => {
           </FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.email}>
+        <FormControl isInvalid={!!errors.lastName}>
           <LabelTextForm text="Sobrenome"/>
           <InputForm
             id="lastName"
@@ -205,6 +264,10 @@ const ProfileConfiguration = ({ fullUser }) => {
         <FormControl>
           <LabelTextForm text="E-mail"/>
           <Checkbox
+            id="isEmailVisible"
+            name="isEmailVisible"
+            value={formData.isEmailVisible}
+            onChange={handleInputChange}
             color="#7D7D7D"
             fontFamily="Ubuntu"
             fontSize="14px"
@@ -303,6 +366,7 @@ const ProfileConfiguration = ({ fullUser }) => {
           borderRadius="30px"
           width={isMobileMod() ? "100%" : "fit-content"}
           _hover={{transform: "none", opacity: 0.8}}
+          onClick={() => handleUpdateProfile()}
         >
           Atualizar perfil
         </RoundedButton>
@@ -335,15 +399,13 @@ const ProfileConfiguration = ({ fullUser }) => {
             alignItems="center"
             justifyContent="center"
             position="absolute"
-            // cursor="pointer"
-            cursor="default"
+            cursor="pointer"
             bottom="10px"
             left="10px"
             width="32px"
             height="32px"
             borderRadius="50%"
-            backgroundColor="#C4C4C4"
-            // backgroundColor="#2B8C4D"
+            backgroundColor="#2B8C4D"
           >
             <Tooltip
               hasArrow

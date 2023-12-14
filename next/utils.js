@@ -220,3 +220,18 @@ export function getUserDataJson() {
 
   return userData
 }
+
+export function checkUserInfo(user) {
+  if(user === "undefined" || user === null) {
+    cookies.remove('userBD', { path: '/' })
+    cookies.remove('token', { path: '/' })
+    return true
+  }
+  return false
+}
+
+export function cleanUserInfo() {
+  cookies.remove('userBD', { path: '/' })
+  cookies.remove('token', { path: '/' })
+  return true
+}

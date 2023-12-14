@@ -8,7 +8,9 @@ const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 let userData = getUserDataJson()
 
 export default async function removeSubscription() {
-  refreshToken()
+  const refresh = await refreshToken()
+  if(refresh?.errors.length > 0) return {error: "failed to revalidate the token"}
+
   let token = cookies.get("token") || ""
 
   try {
