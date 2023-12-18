@@ -11,7 +11,12 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
+import cookies from "js-cookie";
 import Button from "../atoms/RoundedButton";
+
+import {
+  getUser
+} from "../../pages/api/user"
 
 import {
   getPrices,
@@ -21,7 +26,7 @@ import {
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_KEY_STRIPE)
 
-const PaymentForm = () => {
+const PaymentForm = ({ userData }) => {
   const stripe = useStripe()
   const elements = useElements()
 
@@ -35,6 +40,10 @@ const PaymentForm = () => {
       //   return_url: "/"
       // }
     })
+
+    const user = await getUser(userData?.email)
+    cookies.set('userBD', JSON.stringify(user))
+    window.open(`/user/${user?.username}?plans_and_payment`, "_self")
   }
 
   return (
@@ -51,7 +60,7 @@ const PaymentForm = () => {
   )
 }
 
-export default function PaymentSystem() {
+export default function PaymentSystem({ userData }) {
   const [clientSecret, setClientSecret] = useState("")
 
   const appearance = {
@@ -90,7 +99,7 @@ export default function PaymentSystem() {
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
           <AddressElement options={{mode:'billing'}}/>
-          <PaymentForm />
+          <PaymentForm userData={userData}/>
         </Elements>
       )}
     </>

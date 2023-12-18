@@ -125,7 +125,8 @@ export default function BdmTablePage({ id }) {
       alt = "usuário ckan"
     }
     if(ref.website) {
-      href = `https://${ref.website}`
+      const website = ref.website.replace(/(https?:)\/\//gim, "")
+      href = `https://${website}`
       alt = "website pessoal"
     }
 

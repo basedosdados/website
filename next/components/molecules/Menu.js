@@ -257,7 +257,7 @@ function MenuDrawerUser({ isOpen, onClose}) {
                   letterSpacing="0.3px"
                   onClick={() => {
                     onClose()
-                    router.push({pathname: "/user/dev", query: elm.value})}
+                    router.push({pathname: `/user/${userData.username}`, query: elm.value})}
                   }
                 >{elm.name}</Link>
               )
@@ -425,7 +425,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
             gap="8px"
             padding="16px"
             _hover={{ backgroundColor: "transparent", opacity: "0.6" }}
-            onClick={() => window.open("/user/dev", "_self")}
+            onClick={() => window.open(`/user/${userData.username}`, "_self")}
           >
             <SettingsIcon fill="#D0D0D0" width="16px" height="16px"/>
             <Text
@@ -764,7 +764,7 @@ function DesktopLinks({ links, position = false, path, userTemplate = false }) {
         <HStack spacing={8} display={{ base: "none", lg: "flex" }}>
           {userData ? (
             <HStack spacing="20px">
-              {userData?.currentSubscriptionStatus[0] !== "active" &&
+              {userData?.proSubscriptionStatus !== "active" &&
                 <RoundedButton
                   display={isMobileMod() ? "none" : "flex"}
                   backgroundColor="#FFF"
