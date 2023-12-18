@@ -22,18 +22,21 @@ import {
   ListItem,
   Badge,
   Grid,
-  GridItem
+  GridItem,
+  Skeleton,
+  SkeletonCircle,
+  SkeletonText
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { MainPageTemplate } from "../../components/templates/main";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
-import { removeSubscription } from "../api/stripe"
+import { removeSubscription } from "../api/stripe";
 import BigTitle from "../../components/atoms/BigTitle";
 import SectionTitle from "../../components/atoms/SectionTitle";
 import RoundedButton from "../../components/atoms/RoundedButton";
 import ButtonSimple from "../../components/atoms/SimpleButton";
-import InputForm from "../../components/atoms/SimpleInput"
+import InputForm from "../../components/atoms/SimpleInput";
 import Link from "../../components/atoms/Link";
 import BodyText from "../../components/atoms/BodyText";
 import { CardPrice } from "../precos";
@@ -41,9 +44,9 @@ import PaymentSystem from "../../components/organisms/PaymentSystem";
 import { getUserDataJson, checkUserInfo, cleanUserInfo } from "../../utils";
 
 import {
+  getFullUser,
   updateProfile,
-  getFullUser
-} from "../api/user"
+} from "../api/user";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import PenIcon from "../../public/img/icons/penIcon";
@@ -92,7 +95,7 @@ export async function getServerSideProps(context) {
   }
 }
 
-const LabelTextForm = ({ text, ...props }) => {
+function LabelTextForm ({ text, ...props }) {
   return (
     <FormLabel
       color="#252A32"
@@ -106,7 +109,7 @@ const LabelTextForm = ({ text, ...props }) => {
   )
 }
 
-const TitleTextForm = ({ children, ...props }) => {
+function TitleTextForm ({ children, ...props }) {
   return (
     <Text
       color="#252A32"
@@ -121,7 +124,24 @@ const TitleTextForm = ({ children, ...props }) => {
   )
 }
 
-const ExtraInfoTextForm = ({children, ...props}) => {
+function SkStack ({ isLoaded, children, ...props }) {
+  return (
+    <Skeleton
+      height="40px"
+      width="100%"
+      borderRadius="12px"
+      startColor="#F0F0F0"
+      endColor="#F3F3F3"
+      isLoaded={isLoaded}
+      fadeDuration={2}
+      {...props}
+    >
+      {children}
+    </Skeleton>
+  )
+}
+
+function ExtraInfoTextForm ({children, ...props}) {
   return (
     <Text
       color="#7D7D7D"
@@ -135,13 +155,13 @@ const ExtraInfoTextForm = ({children, ...props}) => {
   )
 }
 
-const ModalGeneral = ({
+function ModalGeneral ({
   children,
   isOpen,
   onClose,
   isCentered = true,
   propsModalContent
-}) => {
+}) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered={isCentered} margin="24px !important">
       <ModalOverlay/>
@@ -169,48 +189,64 @@ const ModalGeneral = ({
   )
 }
 
-const ProfileConfiguration = ({ fullUser }) => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    isEmailVisible: false,
-    picture: "",
-    website: "",
-    github: "",
-    twitter: "",
-    linkedin: ""
-  })
-  const [errors, setErrors] = useState({
-    firstName: "",
-    lastName: "",
-  })
+// Sections Of User Page
+const ProfileConfiguration = ({ userInfo }) => {
+  const [isLoading, setIsLoading] = useState(true)
+  const [formData, setFormData] = useState({})
+  const [errors, setErrors] = useState({})
 
   useEffect(() => {
-    setFormData({
-      firstName: fullUser?.firstName,
-      lastName: fullUser?.lastName || "",
-      isEmailVisible: fullUser?.isEmailVisible,
-      picture: fullUser?.picture || "",
-      website: fullUser?.website || "",
-      github: fullUser?.github || "",
-      twitter: fullUser?.twitter || "",
-      linkedin: fullUser?.linkedin || ""
-    })
-  }, [fullUser])
+    if(Object.keys(userInfo).length === 0) return null
 
-  const handleInputChange = (e) => {
+    setFormData({
+      firstName: userInfo?.firstName,
+      lastName: userInfo?.lastName || "",
+      isEmailVisible: userInfo?.isEmailVisible,
+      picture: userInfo?.picture || "",
+      website: userInfo?.website || "",
+      github: userInfo?.github || "",
+      twitter: userInfo?.twitter || "",
+      linkedin: userInfo?.linkedin || ""
+    })
+
+    setTimeout(() => {
+      setIsLoading(false)
+    }, [1000])
+  }, [userInfo])
+
+  function handleInputChange (e) {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }))
   }
 
-  const handleUpdateProfile = async () => {
+  function handleCheckboxChange (e) {
+    setFormData((prevState) => ({
+      ...prevState,
+      isEmailVisible: !formData.isEmailVisible
+    }))
+  }
+
+  async function handleUpdateProfile () {
+    setIsLoading(true)
+    const validationErrors = {}
+
+    if (!formData.firstName) {
+      validationErrors.firstName = "Seu nome é um campo obrigatorio."
+    }
+    setErrors(validationErrors)
+
+    if (Object.keys(validationErrors).length > 0) return
+
     const reg = new RegExp("(?<=:).*")
-    const [ id ] = reg.exec(fullUser?.id)
+    const [ id ] = reg.exec(userInfo?.id)
     const form = {...formData, id: id}
 
     const result = await updateProfile(form)
+
+    if(result?.errors?.length === 0) return location.reload(true)
+    setIsLoading(false)
   }
 
   return (
@@ -223,131 +259,147 @@ const ProfileConfiguration = ({ fullUser }) => {
       <Stack spacing="24px" flex={1}>
         <FormControl isInvalid={!!errors.firstName}>
           <LabelTextForm text="Nome"/>
-          <InputForm
-            id="firstName"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleInputChange}
-            placeholder="Insira seu nome"
-            fontFamily="ubuntu"
-            height="40px"
-            fontSize="14px"
-            borderRadius="16px"
-            _placeholder={{color: "#A3A3A3"}}
-            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
-          />
+          <SkStack isLoaded={!isLoading}>
+            <InputForm
+              id="firstName"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleInputChange}
+              placeholder="Insira seu nome"
+              fontFamily="ubuntu"
+              height="40px"
+              fontSize="14px"
+              borderRadius="16px"
+              _placeholder={{color: "#A3A3A3"}}
+              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+            />
+          </SkStack>
           <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
             <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.firstName}
           </FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.lastName}>
+        <FormControl>
           <LabelTextForm text="Sobrenome"/>
-          <InputForm
-            id="lastName"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleInputChange}
-            placeholder="Insira seu sobrenome"
-            fontFamily="ubuntu"
-            height="40px"
-            fontSize="14px"
-            borderRadius="16px"
-            _placeholder={{color: "#A3A3A3"}}
-            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
-          />
-          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
-            <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.lastName}
-          </FormErrorMessage>
+          <SkStack isLoaded={!isLoading}>
+            <InputForm
+              id="lastName"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleInputChange}
+              placeholder="Insira seu sobrenome"
+              fontFamily="ubuntu"
+              height="40px"
+              fontSize="14px"
+              borderRadius="16px"
+              _placeholder={{color: "#A3A3A3"}}
+              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+            />
+          </SkStack>
         </FormControl>
 
         <FormControl>
           <LabelTextForm text="E-mail"/>
-          <Checkbox
-            id="isEmailVisible"
-            name="isEmailVisible"
-            value={formData.isEmailVisible}
-            onChange={handleInputChange}
-            color="#7D7D7D"
-            fontFamily="Ubuntu"
-            fontSize="14px"
-            fontWeight="400"
-            lineHeight="20px"
-            letterSpacing="0.3px"
+          <SkeletonText
+            isLoaded={!isLoading}
+            fadeDuration={2}
+            height="20px"
+            width="100%"
+            noOfLines={2}
+            startColor="#F0F0F0"
+            endColor="#F3F3F3"
           >
-            Tornar o e-mail de acesso à sua conta visível para o público.
-          </Checkbox>
+            <Checkbox
+              id="isEmailVisible"
+              name="isEmailVisible"
+              defaultChecked={formData.isEmailVisible}
+              checked={formData.isEmailVisible}
+              onChange={handleCheckboxChange}
+              color="#7D7D7D"
+              fontFamily="Ubuntu"
+              fontSize="14px"
+              fontWeight="400"
+              lineHeight="20px"
+              letterSpacing="0.3px"
+            >
+              Tornar o e-mail de acesso à sua conta visível para o público.
+            </Checkbox>
+          </SkeletonText>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.website}>
+        <FormControl>
           <LabelTextForm text="URL"/>
-          <InputForm
-            id="website"
-            name="website"
-            value={formData.website}
-            onChange={handleInputChange}
-            placeholder="Insira seu endereço URL"
-            fontFamily="ubuntu"
-            height="40px"
-            fontSize="14px"
-            borderRadius="16px"
-            _placeholder={{color: "#A3A3A3"}}
-            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
-          />
-          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
-            <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.website}
-          </FormErrorMessage>
+          <SkStack isLoaded={!isLoading}>
+            <InputForm
+              id="website"
+              name="website"
+              value={formData.website}
+              onChange={handleInputChange}
+              placeholder="Insira seu endereço URL"
+              fontFamily="ubuntu"
+              height="40px"
+              fontSize="14px"
+              borderRadius="16px"
+              _placeholder={{color: "#A3A3A3"}}
+              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+            />
+          </SkStack>
         </FormControl>
         
         <Stack>
           <LabelTextForm text="Redes sociais"/>
-
           <HStack spacing="8px" margin="0 0 8px 0 !important">
             <GithubIcon width="24px" height="24px" fill="#D0D0D0"/>
-            <InputForm
-              id="github"
-              name="github"
-              value={formData.github}
-              onChange={handleInputChange}
-              placeholder="Link para o perfil no GitHub"
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _placeholder={{color: "#A3A3A3"}}
-            />
+            <SkStack isLoaded={!isLoading}>
+              <InputForm
+                id="github"
+                name="github"
+                value={formData.github}
+                onChange={handleInputChange}
+                placeholder="Link para o perfil no GitHub"
+                fontFamily="ubuntu"
+                height="40px"
+                fontSize="14px"
+                borderRadius="16px"
+                _placeholder={{color: "#A3A3A3"}}
+              />
+            </SkStack>
           </HStack>
 
           <HStack spacing="8px" margin="0 0 8px 0 !important">
             <TwitterIcon width="24px" height="24px" fill="#D0D0D0"/>
-            <InputForm
-              id="twitter"
-              name="twitter"
-              value={formData.twitter}
-              onChange={handleInputChange}
-              placeholder="Link para o perfil no Twitter"
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _placeholder={{color: "#A3A3A3"}}
-            />
+            <SkStack isLoaded={!isLoading}>
+              <InputForm
+                id="twitter"
+                name="twitter"
+                value={formData.twitter}
+                onChange={handleInputChange}
+                placeholder="Link para o perfil no Twitter"
+                fontFamily="ubuntu"
+                height="40px"
+                fontSize="14px"
+                borderRadius="16px"
+                _placeholder={{color: "#A3A3A3"}}
+              />
+            </SkStack>
           </HStack>
 
           <HStack spacing="8px"  margin="0 !important">
             <LinkedinIcon width="24px" height="24px" fill="#D0D0D0"/>
-            <InputForm
-              id="linkedin"
-              name="linkedin"
-              value={formData.linkedin}
-              onChange={handleInputChange}
-              placeholder="Link para o perfil no LinkedIn"
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _placeholder={{color: "#A3A3A3"}}
-            />
+            <SkStack isLoaded={!isLoading}>
+              <InputForm
+                id="linkedin"
+                name="linkedin"
+                value={formData.linkedin}
+                onChange={handleInputChange}
+                placeholder="Link para o perfil no LinkedIn"
+                fontFamily="ubuntu"
+                height="40px"
+                fontSize="14px"
+                borderRadius="16px"
+                _placeholder={{color: "#A3A3A3"}}
+              />
+            </SkStack>
           </HStack>
         </Stack>
 
@@ -383,65 +435,90 @@ const ProfileConfiguration = ({ fullUser }) => {
           letterSpacing="0.1px"
         >Foto de perfil</SectionTitle>
 
-        <Box
+        <SkeletonCircle
           position="relative"
-          width="200px"
           height="200px"
-        > 
+          width="200px"
+          startColor="#F0F0F0"
+          endColor="#F3F3F3"
+          isLoaded={!isLoading}
+          fadeDuration={2}
+        >
           <Box
-            borderRadius="50%"
-            overflow="hidden"
-          >
-            <Image width="100%" height="100%" src={formData?.picture ? formData.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}/>
+            position="relative"
+            width="200px"
+            height="200px"
+          > 
+              <Box
+                borderRadius="50%"
+                overflow="hidden"
+              >
+                <Image width="100%" height="100%" src={formData?.picture ? formData.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}/>
+              </Box>
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                position="absolute"
+                cursor="pointer"
+                bottom="10px"
+                left="10px"
+                width="32px"
+                height="32px"
+                borderRadius="50%"
+                // backgroundColor="#2B8C4D"
+                backgroundColor="#C4C4C4"
+                pointerEvents="none"
+              >
+                <Tooltip
+                  hasArrow
+                  bg="#2A2F38"
+                  label="Editar"
+                  fontSize="14px"
+                  fontWeight="400"
+                  letterSpacing="0.5px"
+                  lineHeight="24px"
+                  padding="5px 16px 6px"
+                  marginTop="10px"
+                  color="#FFF"
+                  borderRadius="6px"
+                  minWidth="96px"
+                  textAlign="center"
+                >
+                  <PenIcon
+                    width="22px"
+                    height="22px"
+                    fill="#FFF"
+                  />
+                </Tooltip>
+              </Box>
           </Box>
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            position="absolute"
-            cursor="pointer"
-            bottom="10px"
-            left="10px"
-            width="32px"
-            height="32px"
-            borderRadius="50%"
-            backgroundColor="#2B8C4D"
-          >
-            <Tooltip
-              hasArrow
-              bg="#2A2F38"
-              label="Editar"
-              fontSize="14px"
-              fontWeight="400"
-              letterSpacing="0.5px"
-              lineHeight="24px"
-              padding="5px 16px 6px"
-              marginTop="10px"
-              color="#FFF"
-              borderRadius="6px"
-              minWidth="96px"
-              textAlign="center"
-            >
-              <PenIcon
-                width="22px"
-                height="22px"
-                fill="#FFF"
-              />
-            </Tooltip>
-          </Box>
-        </Box>
+        </SkeletonCircle>
       </Stack>
     </Stack>
   )
 }
 
-const Account = () => {
+const Account = ({ userInfo }) => {
   const emailModal = useDisclosure()
   const eraseModalAccount = useDisclosure()
   const [emailSent, setEmailSent] = useState(false)
   const [showPassword, setShowPassword] = useState(true)
-  const [formData, setFormData] = useState({ email: "", password: "" })
-  const [errors, setErrors] = useState({ email: "", password: ""})
+  const [formData, setFormData] = useState({})
+  const [errors, setErrors] = useState({})
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    if(Object.keys(userInfo).length === 0) return null
+
+    setFormData({
+      username: userInfo?.username,
+    })
+
+    setTimeout(() => {
+      setIsLoading(false)
+    }, [1000])
+  }, [userInfo])
 
   const handleInputChange = (e) => {
     setFormData((prevState) => ({
@@ -676,7 +753,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
         </Stack>
       </ModalGeneral>
 
-      <Box>
+      {/* <Box>
         <TitleTextForm>E-mail</TitleTextForm>
         <Text
           color="#6F6F6F"
@@ -685,7 +762,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
           fontWeight="400"
           lineHeight="27px"
           letterSpacing="0.3px"
-        >meuemail@gmail.com</Text>
+        >{userInfo.email}</Text>
         <Link
           color="#42B0FF"
           fontFamily="ubuntu"
@@ -695,7 +772,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
           letterSpacing="0.2px"
           onClick={() => emailModal.onOpen()}
         >Alterar e-mail</Link>
-      </Box>
+      </Box> */}
 
       {/* <Box>
         <TitleTextForm>Nome de usuário</TitleTextForm>
@@ -717,6 +794,28 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
           onClick={() => emailModal.onOpen()}
         >Alterar nome de usuário</Link>
       </Box> */}
+
+      {/* <FormControl isInvalid={!!errors.firstName}>
+        <LabelTextForm text="Nome de usuário"/>
+        <SkStack isLoaded={!isLoading} maxWidth="400px">
+          <InputForm
+            id="username"
+            name="username"
+            value={formData.username}
+            onChange={handleInputChange}
+            fontFamily="ubuntu"
+            height="40px"
+            fontSize="14px"
+            borderRadius="16px"
+            maxWidth="400px"
+            _placeholder={{color: "#A3A3A3"}}
+            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+          />
+        </SkStack>
+        <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+          <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.firstName}
+        </FormErrorMessage>
+      </FormControl> */}
 
       <Box>
         <TitleTextForm>Exportar dados da conta</TitleTextForm>
@@ -746,7 +845,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
   )
 }
 
-const NewPassword = () => {
+const NewPassword = ({ userInfo }) => {
   const newPasswordModal = useDisclosure()
   const [formData, setFormData] = useState({
     password: "",
@@ -768,6 +867,10 @@ const NewPassword = () => {
       ...prevState,
       [e.target.name]: e.target.value,
     }))
+  }
+
+  const submitNewPassword = () => {
+    newPasswordModal.onOpen()
   }
 
   return (
@@ -810,7 +913,7 @@ const NewPassword = () => {
             color="#42B0FF"
             width={isMobileMod() ? "100%" : "fit-content"}
             _hover={{transform: "none", opacity: 0.8}}
-            onClick={() => newPasswordModal.onClose()}
+            onClick={() => window.open(`/user/${userInfo.username}`, "_self")}
           >
             Continuar nas configurações
           </RoundedButton>
@@ -999,7 +1102,7 @@ const NewPassword = () => {
         borderRadius="30px"
         _hover={{transform: "none", opacity: 0.8}}
         width="fit-content"
-        onClick={() => newPasswordModal.onOpen()}
+        onClick={() => submitNewPassword()}
       >
         Atualizar senha
       </RoundedButton>
@@ -1580,12 +1683,18 @@ const Accesses = () => {
     </Stack>
   )
 }
+// Sections Of User Page
 
 export default function UserPage({ fullUser }) {
   let userData = getUserDataJson()
   const router = useRouter()
   const { query } = router
+  const [userInfo, setUserInfo] = useState({})
   const [sectionSelected, setSectionSelected] = useState(0)
+
+  useEffect(() => {
+    setUserInfo(fullUser)
+  }, [fullUser])
 
   const choices = [
     {bar: "Perfil público", title: "Perfil público", value: "profile", index: 0},
@@ -1636,9 +1745,7 @@ export default function UserPage({ fullUser }) {
           >
             {choices.map((section, index) => (
               <Box
-                borderLeft={
-                  sectionSelected === index ? "3px solid #2B8C4D" : "transparent"
-                }
+                borderLeft={ sectionSelected === index ? "3px solid #2B8C4D" : "transparent" }
                 width="100%"
               >
                 <Text
@@ -1652,7 +1759,7 @@ export default function UserPage({ fullUser }) {
                   _hover={sectionSelected === index ? "none" : {  opacity: "0.6" , fontWeight: "500" }}
                   padding="0 24px"
                   width="100%"
-                  onClick={() => router.push({pathname: "/user/dev", query: section.value})}
+                  onClick={() => router.push({pathname: `/user/${userInfo.username}`, query: section.value})}
                 >
                   {section.bar}
                 </Text>
@@ -1668,9 +1775,9 @@ export default function UserPage({ fullUser }) {
             <SectionTitle marginBottom="8px">{choices[sectionSelected].title}</SectionTitle>
             <Divider marginBottom={isMobileMod() ? "40px !important" : "32px !important"} borderColor="#DEDFE0"/>
 
-            {sectionSelected === 0 && <ProfileConfiguration fullUser={fullUser}/>}
-            {sectionSelected === 1 && <Account/>}
-            {sectionSelected === 2 && <NewPassword/>}
+            {sectionSelected === 0 && <ProfileConfiguration userInfo={userInfo}/>}
+            {sectionSelected === 1 && <Account userInfo={userInfo}/>}
+            {sectionSelected === 2 && <NewPassword userInfo={userInfo}/>}
             {sectionSelected === 3 && <PlansAndPayment userData={userData}/>}
             {sectionSelected === 4 && <Accesses/>}
           </Stack>

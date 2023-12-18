@@ -154,7 +154,7 @@ const TeamBox = ({
     let href = ""
 
     if(ref.website) {
-      const website = ref.website.replace(/(https:)\/\//gim, "")
+      const website = ref.website.replace(/(https?:)\/\//gim, "")
       href = `https://${website}`
     }
     if(ref.email) href = `mailto:${ref.email}`

@@ -1,16 +1,9 @@
 import axios from "axios";
 import cookies from "js-cookie";
-import { refreshToken } from "../user";
-import { getUserDataJson } from "../../../utils";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-let userData = getUserDataJson()
-
-export default async function removeSubscription() {
-  const refresh = await refreshToken()
-  if(refresh?.errors.length > 0) return {error: "failed to revalidate the token"}
-
+export default async function removeSubscription({ id }) {
   let token = cookies.get("token") || ""
 
   try {
@@ -23,7 +16,7 @@ export default async function removeSubscription() {
       data: {
         query: `
         mutation {
-          deleteStripeSubscription (subscriptionId: 74)
+          deleteStripeSubscription (subscriptionId: ${id})
           {
             errors
           }

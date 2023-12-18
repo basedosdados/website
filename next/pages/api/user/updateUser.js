@@ -3,7 +3,11 @@ import cookies from "js-cookie";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-export default async function createSubscription( priceId ) {
+export default async function updateUser({
+  id,
+  email,
+  username,
+}) {
   let token = cookies.get("token") || ""
 
   try {
@@ -16,17 +20,23 @@ export default async function createSubscription( priceId ) {
       data: {
         query: `
         mutation {
-          createStripeSubscription (priceId: ${priceId}) {
-            subscription {
-              id
-              clientSecret
+          CreateUpdateAccount (input:
+            {
+              id: "${id}"
+              email: "${email}"
+              username: "${username}"
+            }  
+          )
+          {
+            errors {
+              field,
+              messages
             }
           }
-        }
-        `
+        }`
       }
     })
-    const data = res?.data?.data?.createStripeSubscription?.subscription
+    const data = res.data.data.CreateUpdateAccount
     return data
   } catch (error) {
     console.error(error)

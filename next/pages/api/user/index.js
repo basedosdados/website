@@ -6,6 +6,7 @@ import getUser from "./getUser";
 import getAllUsers from "./getAllUsers";
 import getFullUser from "./getFullUser";
 import updateProfile from "./updateProfile";
+import updateUser from "./updateUser";
 
 export {
   getToken,
@@ -15,5 +16,6 @@ export {
   getUser,
   getAllUsers,
   getFullUser,
-  updateProfile
+  updateProfile,
+  updateUser
 }
