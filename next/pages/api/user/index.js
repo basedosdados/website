@@ -1,4 +1,5 @@
 import getToken from "./getToken";
+import getSimpleToken from "./getSimpleToken";
 import refreshToken from "./refreshToken";
 import validateToken from "./validateToken";
 import registerAccount from "./registerAccount";
@@ -7,9 +8,11 @@ import getAllUsers from "./getAllUsers";
 import getFullUser from "./getFullUser";
 import updateProfile from "./updateProfile";
 import updateUser from "./updateUser";
+import updatePassword from "./updatePassword";
 
 export {
   getToken,
+  getSimpleToken,
   refreshToken,
   validateToken,
   registerAccount,
@@ -17,5 +20,6 @@ export {
   getAllUsers,
   getFullUser,
   updateProfile,
-  updateUser
+  updateUser,
+  updatePassword
 }

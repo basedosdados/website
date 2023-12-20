@@ -29,6 +29,7 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import cookies from 'js-cookie';
 import { MainPageTemplate } from "../../components/templates/main";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 import { removeSubscription } from "../api/stripe";
@@ -44,8 +45,11 @@ import PaymentSystem from "../../components/organisms/PaymentSystem";
 import { getUserDataJson, checkUserInfo, cleanUserInfo } from "../../utils";
 
 import {
+  getSimpleToken,
   getFullUser,
   updateProfile,
+  refreshToken,
+  updatePassword
 } from "../api/user";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
@@ -852,12 +856,8 @@ const NewPassword = ({ userInfo }) => {
     newPassword: "",
     confirmPassword: ""
   })
-  const [errors, setErrors] = useState({
-    password: "",
-    newPassword: "",
-    regexPassword: {},
-    confirmPassword: ""
-  })
+  const [errors, setErrors] = useState({})
+
   const [showPassword, setShowPassword] = useState(true)
   const [showNewPassword, setShowNewPassword] = useState(true)
   const [showConfirmPassword, setShowConfirmPassword] = useState(true)
@@ -869,7 +869,59 @@ const NewPassword = ({ userInfo }) => {
     }))
   }
 
-  const submitNewPassword = () => {
+  async function submitNewPassword() {
+    const regexPassword = {}
+    const validationErrors = {}
+
+    if(formData.password !== "" && formData.password === formData.newPassword) {
+      validationErrors.newPassword = "A nova senha tem quer ser diferente da atual"
+    }
+    if(!/^.{8,}$/.test(formData.newPassword)) {
+      regexPassword = {...regexPassword, amount: true}
+    }
+    if(!/[A-Z]/.test(formData.newPassword)) {
+      regexPassword = {...regexPassword, upperCase: true}
+    }
+    if(!/[a-z]/.test(formData.newPassword)) {
+      regexPassword = {...regexPassword, lowerCase: true}
+    }
+    if(!/(?=.*?[0-9])/.test(formData.newPassword)) {
+      regexPassword = {...regexPassword, number: true}
+    }
+    if(!/(?=.*?[#?!@$%^&*-])/.test(formData.newPassword)) {
+      regexPassword = {...regexPassword, special: true}
+    }
+    if (!formData.confirmPassword) {
+      validationErrors.confirmPassword = "Confirmar a senha é necessário"
+    }
+    if(formData.confirmPassword !== formData.newPassword) {
+      validationErrors.confirmPassword = "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente."
+    }
+
+    if(Object.keys(regexPassword).length > 0) validationErrors.regexPassword = regexPassword
+
+    if(formData.password === "") {
+      validationErrors.password = "Confirmar a senha atual é necessário"
+    }
+
+    let getTokenPassword
+    if(formData.password !== "") {
+      getTokenPassword = await getSimpleToken({email: userInfo.email, password: formData.password})
+      if(getTokenPassword?.tokenAuth === null || result?.errors?.length > 0) {
+        validationErrors.password = "Senha incorreta"
+      }
+    }
+    setErrors(validationErrors)
+
+    if (Object.keys(validationErrors).length > 0) return
+
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(userInfo?.id)
+    const form = {id: id, password: formData.newPassword, token: getTokenPassword?.tokenAuth?.token}
+
+    const result = await updatePassword(form)
+    setFormData({})
+
     newPasswordModal.onOpen()
   }
 
@@ -999,7 +1051,7 @@ const NewPassword = ({ userInfo }) => {
         </ButtonSimple>
       </FormControl>
 
-      <FormControl isInvalid={!!errors.newPassword}>
+      <FormControl isInvalid={!!errors.newPassword || !!errors.regexPassword}>
         <LabelTextForm text="Nova Senha" />
         <InputForm
           type={showNewPassword ? "password" : "text"}
@@ -1037,7 +1089,7 @@ const NewPassword = ({ userInfo }) => {
         />
         <Text 
           margin="8px 0"
-          color= {Object.keys(errors.regexPassword).length > 0 ? "#D93B3B" : "#7D7D7D"}
+          color= { errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#D93B3B" : "#7D7D7D" : "#7D7D7D" }
           fontFamily= "Ubuntu"
           fontSize= "12px"
           fontWeight= "400"
@@ -1047,7 +1099,7 @@ const NewPassword = ({ userInfo }) => {
           flexDirection="row"
           gap="4px"
           alignItems="flex-start"
-        ><Exclamation width="14px" height="14px" fill="#D93B3B" display={Object.keys(errors.regexPassword).length > 0 ? "flex" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
+        ><Exclamation width="14px" height="14px" fill="#D93B3B" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
         <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
           <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>8 caracteres</ListItem>
           <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>Uma letra maiúscula</ListItem>
@@ -1055,6 +1107,11 @@ const NewPassword = ({ userInfo }) => {
           <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>Um dígito</ListItem>
           <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial</ListItem>
         </UnorderedList>
+        {errors.newPassword &&
+          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.newPassword}
+          </FormErrorMessage>
+        }
       </FormControl>
 
       <FormControl isInvalid={!!errors.confirmPassword}>
@@ -1691,6 +1748,21 @@ export default function UserPage({ fullUser }) {
   const { query } = router
   const [userInfo, setUserInfo] = useState({})
   const [sectionSelected, setSectionSelected] = useState(0)
+
+  async function refreshTokenValidate() {
+    const result = await refreshToken()
+
+    if(result?.data?.refreshToken?.token) return cookies.set('token', result.data.refreshToken.token)
+    if(result?.errors?.length > 0) {
+      cookies.remove('userBD', { path: '/' })
+      cookies.remove('token', { path: '/' })
+      window.open("/user/login", "_self")
+    }
+  }
+
+  useEffect(() => {
+    refreshTokenValidate()
+  }, [])
 
   useEffect(() => {
     setUserInfo(fullUser)
