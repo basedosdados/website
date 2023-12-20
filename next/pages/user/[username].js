@@ -901,14 +901,14 @@ const NewPassword = ({ userInfo }) => {
     if(Object.keys(regexPassword).length > 0) validationErrors.regexPassword = regexPassword
 
     if(formData.password === "") {
-      validationErrors.password = "Confirmar a senha atual é necessário"
+      validationErrors.password = "Por favor, insira a senha."
     }
 
     let getTokenPassword
     if(formData.password !== "") {
       getTokenPassword = await getSimpleToken({email: userInfo.email, password: formData.password})
       if(getTokenPassword?.tokenAuth === null || result?.errors?.length > 0) {
-        validationErrors.password = "Senha incorreta"
+        validationErrors.password = "A senha está incorreta. Por favor, tente novamente."
       }
     }
     setErrors(validationErrors)
