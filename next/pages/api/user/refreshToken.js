@@ -20,13 +20,7 @@ export default async function refreshToken() {
     }
   })
   try {
-    const data = res.data.data
-    if(res.data.errors.length > 0) {
-      cookies.remove('userBD', { path: '/' })
-      cookies.remove('token', { path: '/' })
-      return res.data
-    } 
-    cookies.set('token', data?.refreshToken?.token)
+    const data = res.data
     return data
   } catch (error) {
     console.error(error)
