@@ -5,8 +5,8 @@ const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
 export default async function updateUser({
   id,
-  email,
-  username,
+  email = "",
+  username = "",
 }) {
   let token = cookies.get("token") || ""
 
@@ -23,8 +23,8 @@ export default async function updateUser({
           CreateUpdateAccount (input:
             {
               id: "${id}"
-              email: "${email}"
-              username: "${username}"
+              ${email === "" ? "" : `email: "${email}"`}
+              ${username === "" ? "" : `username: "${username}"`}
             }  
           )
           {

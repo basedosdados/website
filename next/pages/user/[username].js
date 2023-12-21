@@ -49,7 +49,8 @@ import {
   getFullUser,
   updateProfile,
   refreshToken,
-  updatePassword
+  updatePassword,
+  updateUser
 } from "../api/user";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
@@ -505,30 +506,34 @@ const ProfileConfiguration = ({ userInfo }) => {
 
 const Account = ({ userInfo }) => {
   const emailModal = useDisclosure()
+  const usernameModal = useDisclosure()
   const eraseModalAccount = useDisclosure()
   const [emailSent, setEmailSent] = useState(false)
   const [showPassword, setShowPassword] = useState(true)
+
   const [formData, setFormData] = useState({})
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    if(Object.keys(userInfo).length === 0) return null
-
-    setFormData({
-      username: userInfo?.username,
-    })
-
-    setTimeout(() => {
-      setIsLoading(false)
-    }, [1000])
-  }, [userInfo])
 
   const handleInputChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }))
+  }
+
+  async function submitUpdate() {
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(userInfo?.id)
+    const form = {id: id, username: formData.username}
+
+    const result = await updateUser(form)
+
+    if(result?.errors?.length === 0) return location.reload(true)
+
+    if(result?.errors?.length > 0) {
+      setErrors({username: "Nome de usuário inválido ou já existe uma conta com este nome de usuário."})
+    }
   }
 
   return (
@@ -704,6 +709,50 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
       </ModalGeneral>
 
       <ModalGeneral
+        isOpen={usernameModal.isOpen}
+        onClose={usernameModal.onClose}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <SectionTitle
+            lineHeight="40px"
+          >Alterar nome de usuário</SectionTitle>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+          />
+        </Stack>
+
+        <FormControl isInvalid={!!errors.username}>
+          <LabelTextForm text="Novo nome de usuário"/>
+          <InputForm
+            id="username"
+            name="username"
+            value={formData.username}
+            onChange={handleInputChange}
+            fontFamily="ubuntu"
+            height="40px"
+            fontSize="14px"
+            borderRadius="16px"
+            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+          />
+          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.username}
+          </FormErrorMessage>
+        </FormControl>
+
+        <RoundedButton
+          marginTop="16px"
+          borderRadius="30px"
+          _hover={{transform: "none", opacity: 0.8}}
+          onClick={() => submitUpdate(formData)}
+        >
+          Atualizar nome de usuário
+        </RoundedButton>
+      </ModalGeneral>
+
+      <ModalGeneral
         isOpen={eraseModalAccount.isOpen}
         onClose={eraseModalAccount.onClose}
       >
@@ -778,7 +827,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
         >Alterar e-mail</Link>
       </Box> */}
 
-      {/* <Box>
+      <Box>
         <TitleTextForm>Nome de usuário</TitleTextForm>
         <Text
           color="#6F6F6F"
@@ -787,7 +836,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
           fontWeight="400"
           lineHeight="27px"
           letterSpacing="0.3px"
-        >dadinho</Text>
+        >{userInfo.username}</Text>
         <Link
           color="#42B0FF"
           fontFamily="ubuntu"
@@ -795,31 +844,9 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
           fontSize="16px"
           lineHeight="30px"
           letterSpacing="0.2px"
-          onClick={() => emailModal.onOpen()}
-        >Alterar nome de usuário</Link>
-      </Box> */}
-
-      {/* <FormControl isInvalid={!!errors.firstName}>
-        <LabelTextForm text="Nome de usuário"/>
-        <SkStack isLoaded={!isLoading} maxWidth="400px">
-          <InputForm
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleInputChange}
-            fontFamily="ubuntu"
-            height="40px"
-            fontSize="14px"
-            borderRadius="16px"
-            maxWidth="400px"
-            _placeholder={{color: "#A3A3A3"}}
-            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
-          />
-        </SkStack>
-        <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
-          <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.firstName}
-        </FormErrorMessage>
-      </FormControl> */}
+          onClick={() => usernameModal.onOpen()}
+        >Alterar Nome de usuário</Link>
+      </Box>
 
       <Box>
         <TitleTextForm>Exportar dados da conta</TitleTextForm>
@@ -901,14 +928,14 @@ const NewPassword = ({ userInfo }) => {
     if(Object.keys(regexPassword).length > 0) validationErrors.regexPassword = regexPassword
 
     if(formData.password === "") {
-      validationErrors.password = "Confirmar a senha atual é necessário"
+      validationErrors.password = "Por favor, insira a senha."
     }
 
     let getTokenPassword
     if(formData.password !== "") {
       getTokenPassword = await getSimpleToken({email: userInfo.email, password: formData.password})
       if(getTokenPassword?.tokenAuth === null || result?.errors?.length > 0) {
-        validationErrors.password = "Senha incorreta"
+        validationErrors.password = "A senha está incorreta. Por favor, tente novamente."
       }
     }
     setErrors(validationErrors)
@@ -1606,8 +1633,7 @@ const PlansAndPayment = ({ userData }) => {
   )
 }
 
-const Accesses = () => {
-
+const Accesses = ({ userInfo }) => {
   return (
     <Stack spacing="24px">
       <Stack alignItems="end">
@@ -1691,7 +1717,7 @@ const Accesses = () => {
               overflow="hidden"
               top="9px"
             >
-              <Image width="100%" height="100%" src="https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"/>
+              <Image width="100%" height="100%" src={userInfo?.picture ? userInfo?.picture :"https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}/>
             </Box>
             <Text
               marginLeft={isMobileMod() ? "44px !important" : "60px !important"}
@@ -1703,7 +1729,7 @@ const Accesses = () => {
               letterSpacing="0.3px"
               height="27px"
               isTruncated
-            >Dadinho</Text>
+            >{userInfo?.username}</Text>
             <Text
               marginLeft={isMobileMod() ? "44px !important" : "60px !important"}
               color="#6F6F6F"
@@ -1714,7 +1740,7 @@ const Accesses = () => {
               letterSpacing="0.3px"
               height="27px"
               isTruncated
-            >dadinho@basedosdados.org</Text>
+            >{userInfo?.email}</Text>
           </Stack>
         </GridItem>
 
@@ -1851,7 +1877,7 @@ export default function UserPage({ fullUser }) {
             {sectionSelected === 1 && <Account userInfo={userInfo}/>}
             {sectionSelected === 2 && <NewPassword userInfo={userInfo}/>}
             {sectionSelected === 3 && <PlansAndPayment userData={userData}/>}
-            {sectionSelected === 4 && <Accesses/>}
+            {sectionSelected === 4 && <Accesses userInfo={userInfo}/>}
           </Stack>
         </Stack>
       </Stack>
