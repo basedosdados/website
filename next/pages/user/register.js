@@ -9,9 +9,7 @@ import {
   Text
 } from "@chakra-ui/react";
 import { useState } from "react";
-import cookies from "js-cookie";
-
-import { registerAccount, getToken } from "../api/user";
+import { registerAccount } from "../api/user";
 
 import Input from "../../components/atoms/SimpleInput";
 import Button from "../../components/atoms/RoundedButton";
@@ -110,12 +108,8 @@ export default function Register() {
     setErrors(arrayErrors)
 
     if(result?.errors?.length === 0) {
-      const acess = await getToken({email, password})
-      cookies.remove('token', { path: '/' })
-
-      if(acess?.errors?.length > 0) return
-
-      window.open("/", "_self")
+      localStorage.setItem('registration_email_bd', `${email}`)
+      window.open("/user/check-email", "_self")
     }
   }
 

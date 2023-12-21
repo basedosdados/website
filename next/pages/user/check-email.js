@@ -14,11 +14,11 @@ export default function CheckEmail() {
   const [email, setEmail] = useState("")
 
   useEffect(() => {
-
+    setEmail(localStorage.getItem("registration_email_bd") || "")
   }, [])
 
   return (
-    <MainPageTemplate display="flex" justifyContent="center">
+    <MainPageTemplate display="flex" justifyContent="center" cleanTemplate>
       <Stack
         display="flex"
         justifyContent="center"
@@ -61,7 +61,7 @@ export default function CheckEmail() {
             lineHeight= "16px"
             letterSpacing= "0.2px"
           >
-            seuemail@gmail.com
+            {email}
           </Text>
         </Stack>
 
