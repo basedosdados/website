@@ -1,7 +1,6 @@
 import {
   Stack,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
 import { activeAccount } from "../api/user";
 
 import Display from "../../components/atoms/Display";

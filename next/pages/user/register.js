@@ -108,7 +108,7 @@ export default function Register() {
     setErrors(arrayErrors)
 
     if(result?.errors?.length === 0) {
-      localStorage.setItem('registration_email_bd', `${email}`)
+      sessionStorage.setItem('registration_email_bd', `${email}`)
       window.open("/user/check-email", "_self")
     }
   }

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/account/activate`
+const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/account/account_activate_confirm`
 
 export default async function activeAccount(
   id,

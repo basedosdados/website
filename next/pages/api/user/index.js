@@ -10,6 +10,7 @@ import updateProfile from "./updateProfile";
 import updateUser from "./updateUser";
 import updatePassword from "./updatePassword";
 import activeAccount from "./activeAccount";
+import deleteAccount from "./deleteAccount";
 
 export {
   getToken,
@@ -23,5 +24,6 @@ export {
   updateProfile,
   updateUser,
   updatePassword,
-  activeAccount
+  activeAccount,
+  deleteAccount,
 }

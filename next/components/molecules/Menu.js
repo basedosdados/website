@@ -206,7 +206,7 @@ function MenuDrawerUser({ isOpen, onClose}) {
             fontWeight="400"
             lineHeight="27px"
             letterSpacing="0.3px"
-          >{userData?.username ? userData?.username : "Dadinho"}</Text>
+          >{userData?.username || ""}</Text>
           <Text
             color="#6F6F6F"
             fontFamily="Ubuntu"
@@ -214,7 +214,7 @@ function MenuDrawerUser({ isOpen, onClose}) {
             fontWeight="400"
             lineHeight="27px"
             letterSpacing="0.3px"
-          >{userData?.email ? userData?.email : "dadinho@basedosdados.org"}</Text>
+          >{userData?.email || ""}</Text>
         </Stack>
 
         <Accordion allowToggle width="100%" defaultIndex={0}>
