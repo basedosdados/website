@@ -17,7 +17,9 @@ export default function CheckEmail() {
   const [forwardingDisabled, setForwardingDisabled] = useState(false)
 
   useEffect(() => {
-    setEmail(sessionStorage.getItem("registration_email_bd") || "")
+    const res = sessionStorage.getItem("registration_email_bd") || "" 
+    if(res === "") return window.open("/", "_self")
+    setEmail(res)
   }, [])
 
   useEffect(() => { 

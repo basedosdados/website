@@ -559,7 +559,7 @@ const Account = ({ userInfo }) => {
       if(result?.errors?.length === 0) {
         cookies.remove('userBD', { path: '/' })
         cookies.remove('token', { path: '/' })
-        window.open("/", "_self")
+        return window.open("/", "_self")
       }
     }
   }
