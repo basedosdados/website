@@ -45,12 +45,14 @@ import PaymentSystem from "../../components/organisms/PaymentSystem";
 import { getUserDataJson, checkUserInfo, cleanUserInfo } from "../../utils";
 
 import {
+  getUser,
   getSimpleToken,
   getFullUser,
   updateProfile,
   refreshToken,
   updatePassword,
-  updateUser
+  updateUser,
+  deleteAccount
 } from "../api/user";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
@@ -508,12 +510,16 @@ const Account = ({ userInfo }) => {
   const emailModal = useDisclosure()
   const usernameModal = useDisclosure()
   const eraseModalAccount = useDisclosure()
+  const [confirmationWord, setConfirmationWord] = useState("")
   const [emailSent, setEmailSent] = useState(false)
   const [showPassword, setShowPassword] = useState(true)
 
-  const [formData, setFormData] = useState({})
+  const [formData, setFormData] = useState({username: ""})
   const [errors, setErrors] = useState({})
-  const [isLoading, setIsLoading] = useState(true)
+
+  const handleSpaceKey = (e) => {
+    if(e.key === " ") { e.preventDefault() }
+  }
 
   const handleInputChange = (e) => {
     setFormData((prevState) => ({
@@ -523,18 +529,42 @@ const Account = ({ userInfo }) => {
   }
 
   async function submitUpdate() {
+    if(formData.username === "") return setErrors({username: "Nome de usuário inválido."})
+    if(formData.username.includes(" ")) return setErrors({username: "Nome de usuário não pode conter espaços."})
+
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(userInfo?.id)
     const form = {id: id, username: formData.username}
 
     const result = await updateUser(form)
 
-    if(result?.errors?.length === 0) return location.reload(true)
+    if(result?.errors?.length === 0) {
+      const userData = await getUser(userInfo.email)
+      cookies.set('userBD', JSON.stringify(userData))
+      window.open(`/user/${formData.username}`, "_self")
+    }
 
     if(result?.errors?.length > 0) {
       setErrors({username: "Nome de usuário inválido ou já existe uma conta com este nome de usuário."})
     }
   }
+
+  async function eraseAccount(string) {
+    if(string = "consciente e desejo excluir minha conta") {
+      const reg = new RegExp("(?<=:).*")
+      const [ id ] = reg.exec(userInfo.id)
+
+      const result = await deleteAccount(id)
+
+      if(result?.errors?.length === 0) {
+        cookies.remove('userBD', { path: '/' })
+        cookies.remove('token', { path: '/' })
+        return window.open("/", "_self")
+      }
+    }
+  }
+
+  const stringConfirm = confirmationWord === "consciente e desejo excluir minha conta"
 
   return (
     <Stack spacing="24px">
@@ -731,6 +761,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
             name="username"
             value={formData.username}
             onChange={handleInputChange}
+            onKeyDown={handleSpaceKey}
             fontFamily="ubuntu"
             height="40px"
             fontSize="14px"
@@ -755,6 +786,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
       <ModalGeneral
         isOpen={eraseModalAccount.isOpen}
         onClose={eraseModalAccount.onClose}
+        propsModalContent={{minWidth:isMobileMod() ? "" : "620px !important"}}
       >
         <Stack spacing={0} marginBottom="16px">
           <SectionTitle
@@ -765,6 +797,10 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
             top="34px"
             right="26px"
             _hover={{backgroundColor: "transparent", color:"#FF8484"}}
+            onClick={() => {
+              eraseModalAccount.onClose()
+              setConfirmationWord("")
+            }}
           />
         </Stack>
 
@@ -772,6 +808,28 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
           <ExtraInfoTextForm fontSize="16px" lineHeight="24px" letterSpacing="0.2px">
           Após deletar sua conta, todos os dados serão permanentemente removidos e não poderão ser recuperados. 
           </ExtraInfoTextForm>
+
+          <FormControl isInvalid={!!errors.firstName}>
+            <FormLabel
+              color="#252A32"
+              fontFamily="ubuntu"
+              letterSpacing="0.2px"
+              fontSize="16px"
+              fontWeight="400"
+              lineHeight="16px"
+              userSelect="none"
+            >Por favor, confirme escrevendo: "consciente e desejo excluir minha conta" abaixo.</FormLabel>
+            <InputForm
+              value={confirmationWord}
+              onChange={(e) => setConfirmationWord(e.target.value)}
+              fontFamily="ubuntu"
+              height="40px"
+              fontSize="14px"
+              borderRadius="16px"
+              _placeholder={{color: "#A3A3A3"}}
+              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+            />
+          </FormControl>
         </Stack>
 
         <Stack
@@ -787,19 +845,21 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
             color="#FF8484"
             width={isMobileMod() ? "100%" : "fit-content"}
             _hover={{transform: "none", opacity: 0.8}}
-            onClick={() => eraseModalAccount.onClose()}
+            onClick={() => {
+              eraseModalAccount.onClose()
+              setConfirmationWord("")
+            }}
           >
             Cancelar
           </RoundedButton>
 
           <RoundedButton
             borderRadius="30px"
-            // backgroundColor="#FF8484"
-            cursor="default"
-            backgroundColor="#C4C4C4"
+            backgroundColor={stringConfirm ? "#FF8484" : "#C4C4C4"}
+            cursor={stringConfirm ? "pointer" : "default"}
             width={isMobileMod() ? "100%" : "fit-content"}
-            // _hover={{transform: "none", opacity: 0.8}}
-            _hover={{transform: "none"}}
+            _hover={stringConfirm ? {transform: "none", opacity: 0.8} : {transform: "none", pointerEvents: "none"}}
+            onClick={() => eraseAccount(confirmationWord)}
           >
             Deletar
           </RoundedButton>

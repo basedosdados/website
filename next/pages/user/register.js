@@ -101,14 +101,14 @@ export default function Register() {
     let arrayErrors = {}
     if(result?.errors?.length > 0) {
       result.errors.map((elm) => {
-        if(elm.field === "email") arrayErrors = ({...arrayErrors, email: elm.messages})
+        if(elm.field === "email") arrayErrors = ({...arrayErrors, email: "Conta com este email já existe."})
         if(elm.field === "username") arrayErrors = ({...arrayErrors, username: "Conta com este nome de usuário já existe."})
       })
     }
     setErrors(arrayErrors)
 
     if(result?.errors?.length === 0) {
-      localStorage.setItem('registration_email_bd', `${email}`)
+      sessionStorage.setItem('registration_email_bd', `${email}`)
       window.open("/user/check-email", "_self")
     }
   }

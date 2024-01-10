@@ -3,9 +3,14 @@ import {
   Text,
   FormControl,
   FormLabel,
-  Input
+  FormErrorMessage,
+  Input,
+  UnorderedList,
+  ListItem
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import InputForm from "../../components/atoms/SimpleInput";
 
 import Display from "../../components/atoms/Display";
 import Link from "../../components/atoms/Link";
@@ -14,9 +19,302 @@ import { isMobileMod } from "../../hooks/useCheckMobile.hook"
 import { MainPageTemplate } from "../../components/templates/main";
 
 import { EmailRecoveryImage } from "../../public/img/emailImage";
+import Exclamation from "../../public/img/icons/exclamationIcon";
+import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 
-export default function PasswordRecovery() {
+export async function getServerSideProps(context) {
+  const { query } = context
+  let confirmed = false
+
+  if(query.q !== undefined && query.p !== undefined) confirmed = true
+
+  let uid = query?.q || ""
+  let confirmToken = query?.p || ""
+
+  return {
+    props: {
+      confirmed,
+      uid,
+      confirmToken
+    }
+  }
+}
+
+export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
   const [email, setEmail] = useState("")
+  const [error, setError] = useState("")
+  const [count, setCount] = useState(0)
+  const [forwardingDisabled, setForwardingDisabled] = useState(false)
+
+  const [formData, setFormData] = useState({
+    password: "",
+    confirmPassword: ""
+  })
+  const [errors, setErrors] = useState({})
+  const [showPassword, setShowPassword] = useState(true)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(true)
+
+  useEffect(() => { 
+    if(count > 0) {
+      const time = setTimeout(() => {
+        setCount(count - 1)
+      }, 1000)
+      return () => clearTimeout(time)
+    } else {
+      setForwardingDisabled(false)
+    }
+  }, [count])
+
+  async function handleEmailPasswordRecovery(value) {
+    if(value === "") return null
+
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if(!regexEmail.test(value)) return setError("Endereço de e-mail inválido.")
+
+    const API_URL = `${process.env.NEXT_PUBLIC_API_URL}`
+
+    const getIdUser = await axios({
+      url: `${API_URL}/api/v1/graphql`,
+      method: "POST",
+      data: {
+        query: `query { allAccount (email: "${value}") {edges{node{id}}} }`
+      }
+    })
+    if(getIdUser.data.data.allAccount.edges.length === 0) return setError("Endereço de e-mail inválido.")
+
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(getIdUser?.data?.data?.allAccount?.edges[0]?.node?.id)
+
+    try {
+      await axios.post(`${API_URL}/account/password_reset/${btoa(id)}/`)
+      setError("")
+      setForwardingDisabled(true)
+      setCount(60)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleInputChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }))
+  }
+
+  const handleSpaceKey = (e) => {
+    if(e.key === " ") { e.preventDefault() }
+  }
+
+  async function submitNewPassword() {
+    let regexPassword = {}
+    let validationErrors = {}
+
+    if(!/^.{8,}$/.test(formData.password)) {
+      regexPassword = {...regexPassword, amount: true}
+    }
+    if(!/[A-Z]/.test(formData.password)) {
+      regexPassword = {...regexPassword, upperCase: true}
+    }
+    if(!/[a-z]/.test(formData.password)) {
+      regexPassword = {...regexPassword, lowerCase: true}
+    }
+    if(!/(?=.*?[0-9])/.test(formData.password)) {
+      regexPassword = {...regexPassword, number: true}
+    }
+    if(!/(?=.*?[#?!@$%^&*-])/.test(formData.password)) {
+      regexPassword = {...regexPassword, special: true}
+    }
+    if (!formData.confirmPassword) {
+      validationErrors.confirmPassword = "Confirmar a senha é necessário"
+    }
+    if(formData.confirmPassword !== formData.password) {
+      validationErrors.confirmPassword = "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente."
+    }
+
+    if(Object.keys(regexPassword).length > 0) validationErrors.regexPassword = regexPassword
+    console.log(validationErrors)
+
+    if(formData.password === "") {
+      validationErrors.password = "Por favor, insira a senha."
+    }
+
+    setErrors(validationErrors)
+
+    if (Object.keys(validationErrors).length > 0) return null
+
+    const API_URL= `${process.env.NEXT_PUBLIC_API_URL}`
+
+    const options = {
+      method: "POST",
+      url: `${API_URL}/account/password_reset_confirm/${uid}/${confirmToken}/`,
+      data: {"password":`${formData.password}`}
+    }
+
+    try {
+      const res = await axios.request(options)
+      if(res.status === 200) return window.open("/user/login", "_self")
+    } catch (error) {
+      window.open("/user/password-recovery", "_self")
+    }
+  }
+
+  function LabelTextForm ({ text, ...props }) {
+    return (
+      <FormLabel
+        color="#252A32"
+        fontFamily="ubuntu"
+        letterSpacing="0.2px"
+        fontSize="16px"
+        fontWeight="400"
+        lineHeight="16px"
+        {...props}
+      >{text}</FormLabel>
+    )
+  }
+
+  if(confirmed) return (
+    <MainPageTemplate
+      display="flex"
+      justifyContent="center"
+      paddingTop="72px"
+      cleanTemplate
+    >
+      <Stack
+        display="flex"
+        justifyContent="center"
+        width="510px"
+        height="100%"
+        marginTop="50px"
+        marginX="27px"
+        spacing="40px"
+        alignItems="center"
+      >
+        <EmailRecoveryImage justifyContent="center" marginBottom="8px"/>
+
+        <Display
+          fontSize={isMobileMod() ? "28px" : "34px"}
+          lineHeight={isMobileMod() ? "16px" : "44px"}
+          letterSpacing={isMobileMod() ? "0" : "-0.4px"}
+          fontWeith="500"
+          textAlign="center"
+        >Redefina sua nova senha</Display>
+
+        <FormControl isInvalid={!!errors.password || !!errors.regexPassword}>
+          <LabelTextForm text="Nova Senha" />
+          <InputForm
+            type={showPassword ? "password" : "text"}
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            placeholder="Crie uma nova senha"
+            fontFamily="ubuntu"
+            height="40px"
+            fontSize="14px"
+            borderRadius="16px"
+            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+            styleElmRight={{
+              width: "50px",
+              height: "40px",
+              cursor: "pointer",
+              onClick: () => setShowPassword(!showPassword)
+            }}
+            elmRight={showPassword ?
+              <EyeOffIcon
+                alt="esconder senha"
+                width="20px"
+                height="20px"
+                fill="#D0D0D0"
+              />
+            :
+              <EyeIcon
+                alt="exibir senhar"
+                width="20px"
+                height="20px"
+                fill="#D0D0D0"
+              />
+            }
+          />
+          <Text 
+            margin="8px 0"
+            color= { errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#D93B3B" : "#7D7D7D" : "#7D7D7D" }
+            fontFamily= "Ubuntu"
+            fontSize= "12px"
+            fontWeight= "400"
+            lineHeight= "16px"
+            letterSpacing= "0.3px"
+            display="flex"
+            flexDirection="row"
+            gap="4px"
+            alignItems="flex-start"
+          ><Exclamation width="14px" height="14px" fill="#D93B3B" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
+          <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
+            <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>8 caracteres</ListItem>
+            <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>Uma letra maiúscula</ListItem>
+            <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>Uma letra minúscula</ListItem>
+            <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>Um dígito</ListItem>
+            <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial</ListItem>
+          </UnorderedList>
+          {errors.password &&
+            <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+              <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.password}
+            </FormErrorMessage>
+          }
+        </FormControl>
+
+        <FormControl isInvalid={!!errors.confirmPassword}>
+          <LabelTextForm text="Confirme a nova senha" />
+          <InputForm
+            type={showConfirmPassword ? "password" : "text"}
+            id="confirmPassword"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleInputChange}
+            placeholder="Insira a senha novamente"
+            fontFamily="ubuntu"
+            height="40px"
+            fontSize="14px"
+            borderRadius="16px"
+            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+            styleElmRight={{
+              width: "50px",
+              height: "40px",
+              cursor: "pointer",
+              onClick: () => setShowConfirmPassword(!showConfirmPassword)
+            }}
+            elmRight={showConfirmPassword ?
+              <EyeOffIcon
+                alt="esconder senha"
+                width="20px"
+                height="20px"
+                fill="#D0D0D0"
+              />
+            :
+              <EyeIcon
+                alt="exibir senhar"
+                width="20px"
+                height="20px"
+                fill="#D0D0D0"
+              />
+            }
+          />
+          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.confirmPassword}
+          </FormErrorMessage>
+        </FormControl>
+
+        <Button
+          borderRadius="30px"
+          _hover={{transform: "none", opacity: 0.8}}
+          width="fit-content"
+          onClick={() => submitNewPassword()}
+        >
+          Atualizar senha
+        </Button>
+      </Stack>
+    </MainPageTemplate>
+  )
 
   return (
     <MainPageTemplate
@@ -64,6 +362,7 @@ export default function PasswordRecovery() {
           fontWeight="400"
           lineHeight="16px"
           letterSpacing="0.2px"
+          isInvalid={!!error}
         >
           <FormLabel fontWeight="400">E-mail</FormLabel>
           <Input
@@ -73,6 +372,7 @@ export default function PasswordRecovery() {
             _focus={{border:"2px solid #42B0FF !important" }}
             _hover={{border:"2px solid #42B0FF !important" }}
             value={email}
+            onKeyDown={handleSpaceKey}
             onChange={(e) => setEmail(e.target.value)}
             padding="8px 12px 8px 16px"
             borderRadius="16px"
@@ -81,14 +381,21 @@ export default function PasswordRecovery() {
             letterSpacing="0.3px"
             border="1px solid #DEDFE0 !important"
           />
+          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <Exclamation marginTop="4px" fill="#D93B3B"/>{error}
+          </FormErrorMessage>
         </FormControl>
 
         <Button
-          onClick={() => console.log("evento")}
+          cursor={forwardingDisabled ? "default" : "pointer"}
+          _hover={{opacity:forwardingDisabled ? 1 : 0.7, transform: forwardingDisabled ? "none" : "translateY(-3px)"}}
+          backgroundColor={forwardingDisabled ? "#C4C4C4" : "#42B0FF"}
+          pointerEvents={forwardingDisabled ? "none" : ""}
           borderRadius="30px"
           width="fit-content"
+          onClick={() => handleEmailPasswordRecovery(email)}
         >
-          Enviar e-mail de redefinição
+          {forwardingDisabled ? `Espere ${count} segundos...` :"Enviar e-mail de redefinição"}
         </Button>
 
         <Text
