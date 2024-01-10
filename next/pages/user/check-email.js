@@ -35,7 +35,7 @@ export default function CheckEmail() {
 
   async function handleEmailConfirm() {
     if(email === "") return null
-    const API_URL= `${process.env.NEXT_PUBLIC_API_URL}`
+    const API_URL = `${process.env.NEXT_PUBLIC_API_URL}`
 
     const getIdUser = await axios({
       url: `${API_URL}/api/v1/graphql`,
@@ -121,6 +121,7 @@ export default function CheckEmail() {
           <Text
             cursor={forwardingDisabled ? "default" : "pointer"}
             _hover={{opacity:forwardingDisabled ? 1 : 0.7}}
+            pointerEvents={forwardingDisabled ? "none" : ""}
             textAlign="center"
             fontFamily="ubuntu"
             color={forwardingDisabled ? "#252A32" : "#42B0FF"}
