@@ -464,7 +464,6 @@ export default function Price() {
             ]}
             button={{
               text: `${userData?.proSubscription === "bd_pro" ? "Plano atual" : "Iniciar teste grátis"}`,
-              onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => setPlan({plan: "BD Pro"}),
               styles: 
                 userData?.proSubscription === "bd_pro" && {
                   color: "#252A32",

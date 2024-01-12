@@ -3,6 +3,7 @@ import {
   Box,
   Text,
   Divider,
+  Input,
   FormControl,
   FormLabel,
   FormErrorMessage,
@@ -25,7 +26,12 @@ import {
   GridItem,
   Skeleton,
   SkeletonCircle,
-  SkeletonText
+  SkeletonText,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  PopoverArrow 
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
@@ -43,6 +49,7 @@ import BodyText from "../../components/atoms/BodyText";
 import { CardPrice } from "../precos";
 import PaymentSystem from "../../components/organisms/PaymentSystem";
 import { getUserDataJson, checkUserInfo, cleanUserInfo } from "../../utils";
+import ImageCrop from "../../components/molecules/ImgCrop";
 
 import {
   getUser,
@@ -201,6 +208,10 @@ const ProfileConfiguration = ({ userInfo }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [formData, setFormData] = useState({})
   const [errors, setErrors] = useState({})
+  const menuAvatar = useDisclosure()
+  const pictureModal = useDisclosure()
+  const [picture, setPicture] = useState(null)
+  const [fileInputKey, setFileInputKey] = useState(Date.now())
 
   useEffect(() => {
     if(Object.keys(userInfo).length === 0) return null
@@ -256,6 +267,30 @@ const ProfileConfiguration = ({ userInfo }) => {
     setIsLoading(false)
   }
 
+  const handleImageChange = (event) => {
+    const input = event.target
+
+    if (input.files && input.files[0]) {
+      const fileType = input.files[0].type
+      if (fileType === 'image/png' || fileType === 'image/jpeg' || fileType === 'image/jpg') {
+        const reader = new FileReader()
+        reader.onload = function (e) {
+          setPicture(e.target.result)
+        }
+        pictureModal.onOpen()
+        reader.readAsDataURL(input.files[0])
+      } else {
+        setPicture(null)
+        input.value = ""
+      }
+    }
+  }
+
+  useEffect(() => {
+    setPicture(null)
+    setFileInputKey(Date.now())
+  }, [pictureModal.isOpen === false])
+
   return (
     <Stack
       flexDirection={isMobileMod() ? "column-reverse" : "row"}
@@ -263,6 +298,46 @@ const ProfileConfiguration = ({ userInfo }) => {
       spacing={0}
       gap={isMobileMod() ? "40px" : "80px"}
     >
+      <ModalGeneral
+        isOpen={pictureModal.isOpen}
+        onClose={pictureModal.onClose}
+      >
+        <></>
+
+        <Stack
+          margin="24px"
+          overflow="hidden"
+        >
+          {!!picture && <ImageCrop src={picture}/>}
+        </Stack>
+
+        <Stack
+          flexDirection={isMobileMod() ? "column" : "row"}
+          spacing={0}
+          gap="24px"
+          width={isMobileMod() ? "100%" : "fit-content"}
+        >
+          <RoundedButton
+            borderRadius="30px"
+            backgroundColor="#FFF"
+            border="1px solid #FF8484"
+            color="#FF8484"
+            width={isMobileMod() ? "100%" : "fit-content"}
+            _hover={{transform: "none", opacity: 0.8}}
+            onClick={() => pictureModal.onClose()}
+          >
+            Cancelar
+          </RoundedButton>
+          <RoundedButton
+            marginTop="16px"
+            borderRadius="30px"
+            _hover={{transform: "none", opacity: 0.8}}
+          >
+            Salvar
+          </RoundedButton>
+        </Stack>
+      </ModalGeneral>
+
       <Stack spacing="24px" flex={1}>
         <FormControl isInvalid={!!errors.firstName}>
           <LabelTextForm text="Nome"/>
@@ -462,43 +537,92 @@ const ProfileConfiguration = ({ userInfo }) => {
               >
                 <Image width="100%" height="100%" src={formData?.picture ? formData.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}/>
               </Box>
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                position="absolute"
-                cursor="pointer"
-                bottom="10px"
-                left="10px"
-                width="32px"
-                height="32px"
-                borderRadius="50%"
-                // backgroundColor="#2B8C4D"
-                backgroundColor="#C4C4C4"
-                pointerEvents="none"
+
+              <Popover
+                returnFocusOnClose={false}
+                isOpen={menuAvatar.isOpen}
+                onClose={menuAvatar.onClose}
               >
-                <Tooltip
-                  hasArrow
-                  bg="#2A2F38"
-                  label="Editar"
-                  fontSize="14px"
-                  fontWeight="400"
-                  letterSpacing="0.5px"
-                  lineHeight="24px"
-                  padding="5px 16px 6px"
-                  marginTop="10px"
-                  color="#FFF"
-                  borderRadius="6px"
-                  minWidth="96px"
-                  textAlign="center"
+                <PopoverTrigger>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    position="absolute"
+                    cursor="pointer"
+                    bottom="10px"
+                    left="10px"
+                    width="32px"
+                    height="32px"
+                    borderRadius="50%"
+                    backgroundColor="#2B8C4D"
+                    onClick={() => { menuAvatar.onOpen() }}
+                  >
+                    <Tooltip
+                      hasArrow
+                      isDisabled={menuAvatar.isOpen}
+                      bg="#2A2F38"
+                      label="Editar"
+                      fontSize="14px"
+                      fontWeight="400"
+                      letterSpacing="0.5px"
+                      lineHeight="24px"
+                      padding="5px 16px 6px"
+                      marginTop="10px"
+                      color="#FFF"
+                      borderRadius="6px"
+                      minWidth="96px"
+                      textAlign="center"
+                    >
+                      <PenIcon
+                        width="22px"
+                        height="22px"
+                        fill="#FFF"
+                      />
+                    </Tooltip>
+                  </Box>
+                </PopoverTrigger>
+                <PopoverContent
+                  maxWidth="160px"
+                  boxShadow="0 1.6px 16px 0 rgba(100, 96, 103, 0.16) !important"
                 >
-                  <PenIcon
-                    width="22px"
-                    height="22px"
-                    fill="#FFF"
-                  />
-                </Tooltip>
-              </Box>
+                  <PopoverArrow/>
+                  <PopoverBody
+                    padding="8px 24px"
+                    zIndex="1000000 !important"
+                  >
+                    <FormControl>
+                      <FormLabel
+                        cursor="pointer"
+                        fontFamily="Lato"
+                        fontSize="14px"
+                        letterSpacing="0.5px"
+                        fontWeight="400"
+                        color="#252A32"
+                        margin="0"
+                        _hover={{ color: "#42B0FF" }}
+                      >Atualizar a foto</FormLabel>
+                      <Input
+                        key={fileInputKey}
+                        display="none"
+                        type="file"
+                        accept=".png, .jpg, .jpeg"
+                        onChange={handleImageChange}
+                      />
+                    </FormControl>
+
+                    <Text
+                      cursor="pointer"
+                      fontFamily="Lato"
+                      fontSize="14px"
+                      letterSpacing="0.5px"
+                      fontWeight="400"
+                      color="#252A32"
+                      _hover={{ color: "#42B0FF" }}
+                    >Remover foto</Text>
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
           </Box>
         </SkeletonCircle>
       </Stack>
@@ -673,6 +797,10 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
               >
                 <LabelTextForm text="Senha" margin="0 !important"/>
                 <ButtonSimple
+                  position="relative"
+                  top="-2px"
+                  width="fit-content"
+                  marginLeft="auto !important"
                   fontWeight="700"
                   color="#42B0FF"
                   letterSpacing="0.3px"
@@ -1078,6 +1206,10 @@ const NewPassword = ({ userInfo }) => {
           <LabelTextForm width="100%" text="Senha atual" margin="0 !important"/>
           <ButtonSimple
             display={isMobileMod() ? "none" : "flex"}
+            position="relative"
+            top="-2px"
+            width="inherit"
+            marginLeft="auto !important"
             fontWeight="700"
             color="#42B0FF"
             letterSpacing="0.3px"

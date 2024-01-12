@@ -154,6 +154,10 @@ export default function Login() {
           >
             <LabelTextForm text="Senha" margin="0 !important"/>
             <ButtonSimple
+              position="relative"
+              top="-2px"
+              width="fit-content"
+              marginLeft="auto !important"
               fontWeight="700"
               color="#42B0FF"
               letterSpacing="0.3px"
