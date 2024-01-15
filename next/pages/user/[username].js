@@ -298,45 +298,11 @@ const ProfileConfiguration = ({ userInfo }) => {
       spacing={0}
       gap={isMobileMod() ? "40px" : "80px"}
     >
-      <ModalGeneral
+      <ImageCrop
         isOpen={pictureModal.isOpen}
         onClose={pictureModal.onClose}
-      >
-        <></>
-
-        <Stack
-          margin="24px"
-          overflow="hidden"
-        >
-          {!!picture && <ImageCrop src={picture}/>}
-        </Stack>
-
-        <Stack
-          flexDirection={isMobileMod() ? "column" : "row"}
-          spacing={0}
-          gap="24px"
-          width={isMobileMod() ? "100%" : "fit-content"}
-        >
-          <RoundedButton
-            borderRadius="30px"
-            backgroundColor="#FFF"
-            border="1px solid #FF8484"
-            color="#FF8484"
-            width={isMobileMod() ? "100%" : "fit-content"}
-            _hover={{transform: "none", opacity: 0.8}}
-            onClick={() => pictureModal.onClose()}
-          >
-            Cancelar
-          </RoundedButton>
-          <RoundedButton
-            marginTop="16px"
-            borderRadius="30px"
-            _hover={{transform: "none", opacity: 0.8}}
-          >
-            Salvar
-          </RoundedButton>
-        </Stack>
-      </ModalGeneral>
+        src={picture}
+      />
 
       <Stack spacing="24px" flex={1}>
         <FormControl isInvalid={!!errors.firstName}>
