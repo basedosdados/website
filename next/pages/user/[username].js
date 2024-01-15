@@ -302,6 +302,8 @@ const ProfileConfiguration = ({ userInfo }) => {
         isOpen={pictureModal.isOpen}
         onClose={pictureModal.onClose}
         src={picture}
+        id={userInfo.id}
+        username={userInfo.username}
       />
 
       <Stack spacing="24px" flex={1}>

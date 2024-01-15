@@ -11,6 +11,11 @@ import {
 import { useState, useEffect, useRef } from 'react';
 import ReactCrop from 'react-image-crop';
 import { isMobileMod } from '../../hooks/useCheckMobile.hook';
+
+import {
+  updatePictureProfile
+} from '../../pages/api/user'
+
 import SectionTitle from '../atoms/SectionTitle';
 import RoundedButton from '../atoms/RoundedButton';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -19,11 +24,10 @@ export default function CropImage ({
   isOpen,
   onClose,
   src,
+  id,
+  username
 }) {
   const imgRef = useRef(null)
-  const blobUrlRef = useRef(null)
-  const hiddenAnchorRef = useRef(null)
-
   const [completedCrop, setCompletedCrop] = useState()
   const [crop, setCrop] = useState()
 
@@ -32,7 +36,7 @@ export default function CropImage ({
     setCompletedCrop()
   }, [!!isOpen])
 
-  async function onDownloadCropClick() {
+  async function handlerUpdatePicture() {
     const image = imgRef.current
 
     if (!image || !completedCrop) return null
@@ -63,16 +67,21 @@ export default function CropImage ({
       offscreen.height,
     )
 
-    const blob = await offscreen.convertToBlob({
-      type: "image/png",
+    const picture = await new Promise((resolve) => {
+      offscreen.convertToBlob({
+        type: "image/png",
+      }).then((pic) => {
+        resolve(pic)
+      })
     })
 
-    if (blobUrlRef.current) {
-      URL.revokeObjectURL(blobUrlRef.current);
-    }
-    blobUrlRef.current = URL.createObjectURL(blob)
-    hiddenAnchorRef.current.href = blobUrlRef.current
-    hiddenAnchorRef.current.click()
+    const filePic = new File([picture], `${username}.png`, {type: "image/png"})
+
+    const reg = new RegExp("(?<=:).*")
+    const [ uid ] = reg.exec(id)
+
+    const res = await updatePictureProfile(uid, filePic)
+    if(res?.status === 200) window.location.reload()
   }
 
   return (
@@ -147,17 +156,10 @@ export default function CropImage ({
               marginTop="16px"
               borderRadius="30px"
               _hover={{transform: "none", opacity: 0.8}}
-              onClick={() => onDownloadCropClick()}
+              onClick={() => handlerUpdatePicture()}
             >
               Salvar
             </RoundedButton>
-            <a
-              download
-              ref={hiddenAnchorRef}
-              style={{ display: 'none' }}
-            >
-              Hidden download
-            </a>
           </Stack>
         </ModalFooter>
       </ModalContent>
