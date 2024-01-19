@@ -6,7 +6,7 @@ import {
 import BodyText from "../components/atoms/BodyText";
 import SectionText from "../components/atoms/SectionText";
 
-export default function ServiceTermsBDPro() {
+export default function ServiceTerms() {
 
   return (
     <VStack

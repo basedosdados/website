@@ -371,7 +371,7 @@ export default function QuemSomos({ data }) {
             width="100%"
             maxWidth="1264px"
             margin="auto"
-            paddingTop={{ base: "112px", lg: "0" }}
+            paddingTop={{ base: "150px", lg: "0" }}
             alignItems="center"
           >
             <Display 

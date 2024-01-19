@@ -133,7 +133,6 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
     }
 
     if(Object.keys(regexPassword).length > 0) validationErrors.regexPassword = regexPassword
-    console.log(validationErrors)
 
     if(formData.password === "") {
       validationErrors.password = "Por favor, insira a senha."

@@ -21,7 +21,7 @@ import BodyText from "../components/atoms/BodyText";
 import RoundedButton from "../components/atoms/RoundedButton";
 import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
-import ServiceTermsBDPro from "../content/serviceTermsBDPro";
+import ServiceTerms from "../content/serviceTerms";
 import { getUserDataJson } from "../utils"
 
 import CheckIcon from "../public/img/icons/checkIcon";
@@ -78,7 +78,7 @@ export const CardPrice = ({
         <ModalContent maxWidth="800px !important" margin="24px">
           <ModalHeader>Termos de serviço</ModalHeader>
           <ModalBody>
-            <ServiceTermsBDPro/>
+            <ServiceTerms/>
           </ModalBody>
 
           <ModalFooter gap="16px">
@@ -147,7 +147,6 @@ export const CardPrice = ({
           flexDirection="row"
           height="50px"
           alignItems="center"
-          // marginBottom="24px"
           marginBottom="40px"
         >
           <Text
@@ -170,20 +169,11 @@ export const CardPrice = ({
             fontFamily="Ubuntu"
           >/mês</Text>
         </Box>
-        {/* <BodyText
-          fontSize="16px"
-          lineHeight="16px"
-          letterSpacing="0.2px"
-          fontWeight="400"
-          marginBottom="24px"
-        >inclui {nubmerOfPerson} pessoa{nubmerOfPerson >= 2 && "s"}</BodyText> */}
-
+        
         <Box
           display={isMobileMod() && !personConfig.text ? "none" :"flex"}
           flexDirection="row"
           justifyContent="space-between"
-          // height="40px"
-          // marginBottom="40px"
         >
           {personConfig.text &&
           <>
@@ -463,17 +453,8 @@ export default function Price() {
               {name: "Dezenas de bases de alta frequência atualizadas"},
             ]}
             button={{
-              text: `${userData?.proSubscription === "bd_pro" ? "Plano atual" : "Iniciar teste grátis"}`,
-              onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => setPlan({plan: "BD Pro"}),
-              styles: 
-                userData?.proSubscription === "bd_pro" && {
-                  color: "#252A32",
-                  backgroundColor: "#FFF",
-                  boxShadow: "none",
-                  cursor: "default",
-                  _hover: {transform: "none"},
-                  fontWeight: "400"
-                }
+              text: `Iniciar teste grátis`,
+              href: "https://buy.stripe.com/8wM01TeVQ3kg0mIeV4?locale=pt"
             }}
             hasServiceTerms
           />

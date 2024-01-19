@@ -11,6 +11,8 @@ import updateUser from "./updateUser";
 import updatePassword from "./updatePassword";
 import activeAccount from "./activeAccount";
 import deleteAccount from "./deleteAccount";
+import updatePictureProfile from "./updatePictureProfile";
+import deletePictureProfile from "./deletePictureProfile";
 
 export {
   getToken,
@@ -26,4 +28,6 @@ export {
   updatePassword,
   activeAccount,
   deleteAccount,
+  updatePictureProfile,
+  deletePictureProfile
 }

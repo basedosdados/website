@@ -1,10 +1,13 @@
 import {
   Stack,
+  VStack
 } from "@chakra-ui/react";
 import { activeAccount } from "../api/user";
 
 import Display from "../../components/atoms/Display";
-import { isMobileMod } from "../../hooks/useCheckMobile.hook"
+import RoundedButton from "../../components/atoms/RoundedButton";
+import SectionText from "../../components/atoms/SectionText";
+import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import { EmailConfirmImage, EmailRecoveryImage } from "../../public/img/emailImage";
@@ -28,7 +31,7 @@ export default function ActiveAccount({ data }) {
       <Stack
         display="flex"
         justifyContent="center"
-        width="510px"
+        width="570px"
         height="100%"
         marginTop={isMobileMod() ? "150px" : "50px"}
         marginX="27px"
@@ -42,21 +45,44 @@ export default function ActiveAccount({ data }) {
         }
 
         {data === 200 ?
-          <Display
-            fontSize={isMobileMod() ? "28px" : "34px"}
-            lineHeight={isMobileMod() ? "36px" : "44px"}
-            letterSpacing={isMobileMod() ? "0" : "-0.4px"}
-            fontWeith="500"
-            textAlign="center"
-          >Conta ativa</Display>
+          <VStack spacing={4}>
+            <Display
+              fontSize={isMobileMod() ? "28px" : "34px"}
+              lineHeight={isMobileMod() ? "36px" : "44px"}
+              letterSpacing={isMobileMod() ? "0" : "-0.4px"}
+              fontWeith="500"
+              textAlign="center"
+            >Conta ativa</Display>
+
+            <SectionText>Parabéns! Sua conta foi ativada com sucesso. Agora você faz parte da nossa comunidade.</SectionText>
+            <SectionText>Agradecemos por se juntar a nós. Estamos aqui para ajudar no que precisar.</SectionText>
+            <SectionText>Bem-vindo(a)!</SectionText>
+
+            <RoundedButton
+              borderRadius="30px"
+              onClick={() => window.open("/user/login", "_self")}
+            >
+              Logar na conta
+            </RoundedButton>
+          </VStack>
         :
-          <Display
-            fontSize={isMobileMod() ? "28px" : "34px"}
-            lineHeight={isMobileMod() ? "36px" : "44px"}
-            letterSpacing={isMobileMod() ? "0" : "-0.4px"}
-            fontWeith="500"
-            textAlign="center"
-          >Algo deu errado</Display>
+          <VStack spacing={4}>
+            <Display
+              fontSize={isMobileMod() ? "28px" : "34px"}
+              lineHeight={isMobileMod() ? "36px" : "44px"}
+              letterSpacing={isMobileMod() ? "0" : "-0.4px"}
+              fontWeith="500"
+              textAlign="center"
+            >Algo deu errado</Display>
+
+            <SectionText textAlign="center">Lamentamos informar que ocorreu um problema durante a ativação da sua conta. Pedimos desculpas pela inconveniência.</SectionText>
+            <RoundedButton
+              borderRadius="30px"
+              onClick={() => window.open("/contato", "_self")}
+            >
+              Entrar em contato
+            </RoundedButton>
+          </VStack>
         }
       </Stack>
     </MainPageTemplate>
