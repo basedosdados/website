@@ -660,7 +660,7 @@ const Account = ({ userInfo }) => {
   }
 
   async function eraseAccount(string) {
-    if(string = "consciente e desejo excluir minha conta") {
+    if(string = "deletar minha conta") {
       const reg = new RegExp("(?<=:).*")
       const [ id ] = reg.exec(userInfo.id)
 
@@ -674,7 +674,7 @@ const Account = ({ userInfo }) => {
     }
   }
 
-  const stringConfirm = confirmationWord === "consciente e desejo excluir minha conta"
+  const stringConfirm = confirmationWord === "deletar minha conta"
 
   return (
     <Stack spacing="24px">
@@ -932,7 +932,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
               fontWeight="400"
               lineHeight="16px"
               userSelect="none"
-            >Por favor, confirme escrevendo: "consciente e desejo excluir minha conta" abaixo.</FormLabel>
+            >Por favor, confirme escrevendo: "deletar minha conta" abaixo.</FormLabel>
             <InputForm
               value={confirmationWord}
               onChange={(e) => setConfirmationWord(e.target.value)}
@@ -947,7 +947,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
         </Stack>
 
         <Stack
-          flexDirection={isMobileMod() ? "column" : "row"}
+          flexDirection={isMobileMod() ? "column-reverse" : "row"}
           spacing={0}
           gap="24px"
           width={isMobileMod() ? "100%" : "fit-content"}
@@ -972,7 +972,8 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
             backgroundColor={stringConfirm ? "#FF8484" : "#C4C4C4"}
             cursor={stringConfirm ? "pointer" : "default"}
             width={isMobileMod() ? "100%" : "fit-content"}
-            _hover={stringConfirm ? {transform: "none", opacity: 0.8} : {transform: "none", pointerEvents: "none"}}
+            _hover={stringConfirm ? {transform: "none", opacity: 0.8} : {transform: "none"}}
+            pointerEvents={stringConfirm ? "default" : "none"}
             onClick={() => eraseAccount(confirmationWord)}
           >
             Deletar
@@ -1019,7 +1020,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
           lineHeight="30px"
           letterSpacing="0.2px"
           onClick={() => usernameModal.onOpen()}
-        >Alterar Nome de usuário</Link>
+        >Alterar nome de usuário</Link>
       </Box>
 
       <Box>
@@ -1153,7 +1154,7 @@ const NewPassword = ({ userInfo }) => {
         </Stack>
 
         <Stack
-          flexDirection={isMobileMod() ? "column" : "row"}
+          flexDirection={isMobileMod() ? "column-reverse" : "row"}
           spacing={0}
           justifyContent="center"
           gap="24px"
@@ -1257,7 +1258,7 @@ const NewPassword = ({ userInfo }) => {
       </FormControl>
 
       <FormControl isInvalid={!!errors.newPassword || !!errors.regexPassword}>
-        <LabelTextForm text="Nova Senha" />
+        <LabelTextForm text="Nova senha"/>
         <InputForm
           type={showNewPassword ? "password" : "text"}
           id="newPassword"
@@ -1630,7 +1631,7 @@ const PlansAndPayment = ({ userData }) => {
         </Stack>
 
         <Stack
-          flexDirection={isMobileMod() ? "column" : "row"}
+          flexDirection={isMobileMod() ? "column-reverse" : "row"}
           spacing={0}
           gap="24px"
           width={isMobileMod() ? "100%" : "fit-content"}
@@ -1691,7 +1692,7 @@ const PlansAndPayment = ({ userData }) => {
           <Stack
             spacing={0}
             gap="24px"
-            flexDirection={isMobileMod() ? "column" : "row"}
+            flexDirection={isMobileMod() ? "column-reverse" : "row"}
           >
             <RoundedButton
               borderRadius="30px"

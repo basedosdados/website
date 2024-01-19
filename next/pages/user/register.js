@@ -347,7 +347,7 @@ export default function Register() {
           letterSpacing= "0.3px"
           marginTop="16px !important"
         >
-          Ao clicar em “Cadastrar” acima, você confirma que leu, compreendeu e aceita os Termos de uso e Políticas de privacidade da Base dos Dados.
+          Ao clicar em “Cadastrar” acima, você confirma que leu, compreendeu e aceita os <Link fontSize="12px" fontFamily="ubuntu" color="#42B0FF" href="/termos-e-privacidade" target="_blank">Termos de Serviço</Link> e <Link fontSize="12px" fontFamily="ubuntu" color="#42B0FF" href="/termos-e-privacidade" target="_blank">Políticas de Privacidade</Link> da Base dos Dados.
         </Text>
 
         <Text
