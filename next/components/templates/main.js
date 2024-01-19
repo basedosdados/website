@@ -5,6 +5,7 @@ import UserContext from "../../context/user";
 import SiteHead from "../atoms/SiteHead";
 import Footer from "../molecules/Footer";
 import Menu from "../molecules/Menu";
+import Cookies from "../molecules/Cookies"
 
 export function MainPageTemplate({
   pages,
@@ -25,6 +26,7 @@ export function MainPageTemplate({
           {children}
         </Box>
         <Footer pages={pages} ocult={cleanTemplate || userTemplate}/>
+        <Cookies/>
       </Box>
     </UserContext.Provider>
   );

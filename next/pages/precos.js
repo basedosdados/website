@@ -21,7 +21,8 @@ import BodyText from "../components/atoms/BodyText";
 import RoundedButton from "../components/atoms/RoundedButton";
 import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
-import ServiceTermsBDPro from "../content/serviceTermsBDPro";
+import ServiceTerms from "../content/serviceTerms";
+import { getUserDataJson } from "../utils"
 
 import CheckIcon from "../public/img/icons/checkIcon";
 import CrossIcon from "../public/img/icons/crossIcon";
@@ -77,28 +78,28 @@ export const CardPrice = ({
         <ModalContent maxWidth="800px !important" margin="24px">
           <ModalHeader>Termos de serviço</ModalHeader>
           <ModalBody>
-            <ServiceTermsBDPro/>
+            <ServiceTerms/>
           </ModalBody>
 
           <ModalFooter gap="16px">
-              <RoundedButton
-                onClick={onClose}
-                backgroundColor={linkStripe !== "" ? "#FFF" : "#42B0FF"}
-                color={linkStripe !== "" ? "#42B0FF" : "#FFF"}
-                border={linkStripe !== "" && "1px solid #42B0FF"}
+            <RoundedButton
+              onClick={onClose}
+              backgroundColor={linkStripe !== "" ? "#FFF" : "#42B0FF"}
+              color={linkStripe !== "" ? "#42B0FF" : "#FFF"}
+              border={linkStripe !== "" && "1px solid #42B0FF"}
+            >
+              Fechar
+            </RoundedButton>
+            {linkStripe !== "" &&
+              <RoundedButton onClick={() => {
+                  onClose()
+                  window.open(linkStripe, "_blank")
+                  setLinkStripe("")
+                }}
               >
-                Fechar
+                Concordar
               </RoundedButton>
-              {linkStripe !== "" &&
-                <RoundedButton onClick={() => {
-                    onClose()
-                    window.open(linkStripe, "_blank")
-                    setLinkStripe("")
-                  }}
-                >
-                  Concordar
-                </RoundedButton>
-              }
+            }
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -146,7 +147,6 @@ export const CardPrice = ({
           flexDirection="row"
           height="50px"
           alignItems="center"
-          // marginBottom="24px"
           marginBottom="40px"
         >
           <Text
@@ -169,20 +169,11 @@ export const CardPrice = ({
             fontFamily="Ubuntu"
           >/mês</Text>
         </Box>
-        {/* <BodyText
-          fontSize="16px"
-          lineHeight="16px"
-          letterSpacing="0.2px"
-          fontWeight="400"
-          marginBottom="24px"
-        >inclui {nubmerOfPerson} pessoa{nubmerOfPerson >= 2 && "s"}</BodyText> */}
-
+        
         <Box
           display={isMobileMod() && !personConfig.text ? "none" :"flex"}
           flexDirection="row"
           justifyContent="space-between"
-          // height="40px"
-          // marginBottom="40px"
         >
           {personConfig.text &&
           <>
@@ -323,11 +314,13 @@ export const CardPrice = ({
             color={button.colorText || "#FFF"}
             backgroundColor={button.color || "#42B0FF"}
             onClick={() => {
+              if(button.onClick) return button.onClick()
               if(button?.noHasModal) return window.open(button.href, "_self")
               onOpen()
               setLinkStripe(button.href)
             }}
             border={button.color && `1px solid ${button.colorText}`}
+            {...button.styles}
           >
             {button.text}
           </RoundedButton>
@@ -373,6 +366,8 @@ export const CardPrice = ({
 }
 
 export default function Price() {
+  let userData = getUserDataJson()
+
   return (
     <MainPageTemplate paddingX="24px">
       <Head>
@@ -458,7 +453,7 @@ export default function Price() {
               {name: "Dezenas de bases de alta frequência atualizadas"},
             ]}
             button={{
-              text: "Iniciar teste grátis",
+              text: `Iniciar teste grátis`,
               href: "https://buy.stripe.com/8wM01TeVQ3kg0mIeV4?locale=pt"
             }}
             hasServiceTerms
@@ -466,7 +461,7 @@ export default function Price() {
 
           <CardPrice
             colorBanner="#252A32"
-            title="BD Empresas"
+            title="BD Pro Empresas"
             badge="Beta"
             subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
             personConfig={{

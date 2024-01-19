@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import BigTitle from "../../components/atoms/BigTitle";
 // import { getPages } from "../api/pages";
 import { useEffect, useState } from "react";
-import showdown from "showdown";
+// import showdown from "showdown";
 import { MainPageTemplate } from "../../components/templates/main";
 
 // export async function getStaticProps(context) {
@@ -37,7 +37,7 @@ import { MainPageTemplate } from "../../components/templates/main";
 
 function BlogPage({ pages = [] }) {
   const router = useRouter();
-  const [converter, _] = useState(new showdown.Converter());
+  // const [converter, _] = useState(new showdown.Converter());
   const [leftColumnHtml, setLeftColumnHtml] = useState("");
   const [rightColumnHtml, setRightColumnHtml] = useState("");
   const [data, setData] = useState(null);

@@ -43,7 +43,7 @@ export default function CaseStudies ({}) {
       <Stack
         maxWidth="1264px"
         margin="auto"
-        paddingTop={isMobileMode && "80px"}
+        paddingTop={isMobileMode && "120px"}
         spacing={0}
       >
         <Display

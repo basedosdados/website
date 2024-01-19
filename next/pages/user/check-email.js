@@ -3,6 +3,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 import Display from "../../components/atoms/Display";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook"
@@ -12,13 +13,52 @@ import { EmailConfirmImage } from "../../public/img/emailImage";
 
 export default function CheckEmail() {
   const [email, setEmail] = useState("")
+  const [count, setCount] = useState(0)
+  const [forwardingDisabled, setForwardingDisabled] = useState(false)
 
   useEffect(() => {
-
+    const res = sessionStorage.getItem("registration_email_bd") || "" 
+    if(res === "") return window.open("/", "_self")
+    setEmail(res)
   }, [])
 
+  useEffect(() => { 
+    if(count > 0) {
+      const time = setTimeout(() => {
+        setCount(count - 1)
+      }, 1000)
+      return () => clearTimeout(time)
+    } else {
+      setForwardingDisabled(false)
+    }
+  }, [count])
+
+  async function handleEmailConfirm() {
+    if(email === "") return null
+    const API_URL = `${process.env.NEXT_PUBLIC_API_URL}`
+
+    const getIdUser = await axios({
+      url: `${API_URL}/api/v1/graphql`,
+      method: "POST",
+      data: {
+        query: `query { allAccount (email: "${email}") {edges{node{id}}} }`
+      }
+    })
+
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(getIdUser?.data?.data?.allAccount?.edges[0]?.node?.id)
+
+    try {
+      await axios.post(`${API_URL}/account/account_activate/${btoa(id)}/`)
+      setForwardingDisabled(true)
+      setCount(60)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
-    <MainPageTemplate display="flex" justifyContent="center">
+    <MainPageTemplate display="flex" justifyContent="center" cleanTemplate>
       <Stack
         display="flex"
         justifyContent="center"
@@ -61,7 +101,7 @@ export default function CheckEmail() {
             lineHeight= "16px"
             letterSpacing= "0.2px"
           >
-            seuemail@gmail.com
+            {email}
           </Text>
         </Stack>
 
@@ -79,16 +119,18 @@ export default function CheckEmail() {
           </Text>
 
           <Text
-            cursor="pointer"
-            _hover={{opacity:0.7}}
+            cursor={forwardingDisabled ? "default" : "pointer"}
+            _hover={{opacity:forwardingDisabled ? 1 : 0.7}}
+            pointerEvents={forwardingDisabled ? "none" : ""}
             textAlign="center"
             fontFamily="ubuntu"
-            color="#42B0FF"
+            color={forwardingDisabled ? "#252A32" : "#42B0FF"}
             fontSize="16px"
             fontWeight="500"
             lineHeight="30px"
             letterSpacing="0.2px"
-          >Reenviar e-mail</Text>
+            onClick={() => handleEmailConfirm()}
+          >{forwardingDisabled ? `Espere ${count} segundos...` :"Reenviar e-mail"}</Text>
         </Stack>
       </Stack>
     </MainPageTemplate>

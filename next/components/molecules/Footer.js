@@ -176,6 +176,9 @@ export default function Footer({ pages, ocult = false }) {
               <FooterLink href="/perguntas-frequentes">
                 Perguntas frequentes
               </FooterLink>
+              <FooterLink target="_self" href="/termos-e-privacidade">
+                Termos e Privacidade
+              </FooterLink>
               <Link fontWeight="700" color="white" href="/#support">
                 Apoie o projeto
               </Link>

@@ -9,12 +9,12 @@ import {
   useClipboard,
   Image as ChakraImage,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import Typist from "react-typist";
+import { useState } from "react";
+import { useMediaQuery } from "@chakra-ui/react";
+// import Typist from "react-typist";
 
 import { withPages } from "../hooks/pages.hook";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
-import { useMediaQuery } from "@chakra-ui/react";
 import BodyText from "../components/atoms/BodyText";
 import ControlledInput from "../components/atoms/ControlledInput";
 import Display from "../components/atoms/Display";
@@ -350,7 +350,7 @@ function Products() {
                 data-ty-lineDelay="700"
                 width="100%"
               >
-                <Typist
+                {/* <Typist
                   key={typistKey}
                   onTypingDone={() => setTypistKey(typistKey + 1)}
                 >
@@ -359,7 +359,7 @@ function Products() {
                   <Typist.Delay ms={500} />
                   <span>{">"} install.packages("basedosdados")</span>
                   <Typist.Backspace count={30} delay={1000} />
-                </Typist>
+                </Typist> */}
               </Box>
             </Stack>
           </HStack>

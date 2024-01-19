@@ -1,0 +1,3 @@
+.containerImageCroped :global(.ReactCrop__child-wrapper img) {
+  min-width: 100%;
+}

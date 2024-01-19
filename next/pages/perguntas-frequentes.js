@@ -142,7 +142,6 @@ export default function FAQ({}) {
   }
 
   const CategoryText = ({ category }) => {
-
     function handlerClick(elm) {
       if(elm === categorySelected) {
         setCategorySelected("")
@@ -192,7 +191,7 @@ export default function FAQ({}) {
         width="100%"
         maxWidth="1264px"
         margin="auto"
-        paddingTop={isMobileMod() && "80px"}
+        paddingTop={isMobileMod() && "140px"}
         spacing={0}
       >
         <Display
