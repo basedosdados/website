@@ -43,7 +43,6 @@ export default async function updatePictureProfile(
     const data = res 
     return data
   } catch (error) {
-    console.error(error)
     return error
   }
 }

@@ -10,22 +10,26 @@ import {
 } from '@chakra-ui/react';
 import { useState, useEffect, useRef } from 'react';
 import ReactCrop from 'react-image-crop';
+import cookies from 'js-cookie';
 import { isMobileMod } from '../../hooks/useCheckMobile.hook';
 
 import {
+  getUser,
   updatePictureProfile
 } from '../../pages/api/user'
 
 import SectionTitle from '../atoms/SectionTitle';
 import RoundedButton from '../atoms/RoundedButton';
 import 'react-image-crop/dist/ReactCrop.css';
+import styles from "../../styles/imgCrop.module.css";
 
 export default function CropImage ({
   isOpen,
   onClose,
   src,
   id,
-  username
+  username,
+  email
 }) {
   const imgRef = useRef(null)
   const [completedCrop, setCompletedCrop] = useState()
@@ -67,21 +71,47 @@ export default function CropImage ({
       offscreen.height,
     )
 
+    const maxSizeKB = 1000
+    let quality = 1.0
+    const maxIterations = 10
+
+    for (let i = 0; i < maxIterations; i++) {
+      const tempCanvas = document.createElement('canvas')
+      tempCanvas.width = offscreen.width
+      tempCanvas.height = offscreen.height
+      const tempCtx = tempCanvas.getContext('2d')
+      tempCtx.drawImage(offscreen, 0, 0)
+
+      const compressedDataUrl = tempCanvas.toDataURL("image/jpeg", quality)
+      const sizeKB = compressedDataUrl.length / 1024
+
+      if (sizeKB <= maxSizeKB) {
+        break;
+      }
+
+      quality -= 0.1
+    }
+
     const picture = await new Promise((resolve) => {
       offscreen.convertToBlob({
-        type: "image/png",
+        type: "image/jpeg",
+        quality
       }).then((pic) => {
         resolve(pic)
       })
     })
 
-    const filePic = new File([picture], `${username}.png`, {type: "image/png"})
+    const filePic = new File([picture], `${username}.jpeg`, {type: "image/jpeg"})
 
     const reg = new RegExp("(?<=:).*")
     const [ uid ] = reg.exec(id)
 
     const res = await updatePictureProfile(uid, filePic)
-    if(res?.status === 200) window.location.reload()
+    if(res?.status === 200) {
+      const userData = await getUser(email)
+      cookies.set('userBD', JSON.stringify(userData))
+      window.location.reload()
+    }
   }
 
   return (
@@ -105,6 +135,7 @@ export default function CropImage ({
               lineHeight="40px"
             >Corte sua nova foto de perfil</SectionTitle>
             <ModalCloseButton
+              display={isMobileMod() ? "none" : "flex"}
               fontSize="14px"
               top="24px"
               right="26px"
@@ -116,6 +147,7 @@ export default function CropImage ({
 
         <ModalBody padding="0">
           <Stack
+            className={styles.containerImageCroped}
             margin="24px 0"
             overflow="hidden"
           >
@@ -144,8 +176,8 @@ export default function CropImage ({
             <RoundedButton
               borderRadius="30px"
               backgroundColor="#FFF"
-              border="1px solid #FF8484"
-              color="#FF8484"
+              border="1px solid #42B0FF"
+              color="#42B0FF"
               width={isMobileMod() ? "100%" : "fit-content"}
               _hover={{transform: "none", opacity: 0.8}}
               onClick={onClose}

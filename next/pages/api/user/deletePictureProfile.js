@@ -3,7 +3,7 @@ import cookies from "js-cookie";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-export default async function deleteAccount(id) {
+export default async function deletePictureProfile(id) {
   let token = cookies.get("token") || ""
 
   try {
@@ -16,11 +16,13 @@ export default async function deleteAccount(id) {
       data: {
         query: `
         mutation {
-          DeleteAccount (id: "${id}") { ok }
+          DeleteAccountPictureMutation (id: "${id}") {
+            ok
+          }
         }`
       }
     })
-    const data = res.data.data.DeleteAccount
+    const data = res?.data?.data?.DeleteAccountPictureMutation
     return data
   } catch (error) {
     console.error(error)

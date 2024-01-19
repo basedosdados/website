@@ -59,7 +59,9 @@ import {
   refreshToken,
   updatePassword,
   updateUser,
-  deleteAccount
+  deleteAccount,
+  updatePictureProfile,
+  deletePictureProfile
 } from "../api/user";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
@@ -286,6 +288,19 @@ const ProfileConfiguration = ({ userInfo }) => {
     }
   }
 
+  async function hanlderRemovePicture() {
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(userInfo.id)
+
+    const res = await deletePictureProfile(id)
+
+    if(res?.ok === true) {
+      const userData = await getUser(userInfo.email)
+      cookies.set('userBD', JSON.stringify(userData))
+      window.location.reload()
+    }
+  }
+
   useEffect(() => {
     setPicture(null)
     setFileInputKey(Date.now())
@@ -304,6 +319,7 @@ const ProfileConfiguration = ({ userInfo }) => {
         src={picture}
         id={userInfo.id}
         username={userInfo.username}
+        email={userInfo.email}
       />
 
       <Stack spacing="24px" flex={1}>
@@ -580,6 +596,7 @@ const ProfileConfiguration = ({ userInfo }) => {
                     </FormControl>
 
                     <Text
+                      paddingTop="8px"
                       cursor="pointer"
                       fontFamily="Lato"
                       fontSize="14px"
@@ -587,6 +604,7 @@ const ProfileConfiguration = ({ userInfo }) => {
                       fontWeight="400"
                       color="#252A32"
                       _hover={{ color: "#42B0FF" }}
+                      onClick={() => hanlderRemovePicture()}
                     >Remover foto</Text>
                   </PopoverBody>
                 </PopoverContent>
@@ -648,7 +666,7 @@ const Account = ({ userInfo }) => {
 
       const result = await deleteAccount(id)
 
-      if(result?.errors?.length === 0) {
+      if(result?.ok === true) {
         cookies.remove('userBD', { path: '/' })
         cookies.remove('token', { path: '/' })
         return window.open("/", "_self")
