@@ -1949,6 +1949,7 @@ const Accesses = ({ userInfo }) => {
 
 export default function UserPage({ fullUser }) {
   let userData = getUserDataJson()
+
   const router = useRouter()
   const { query } = router
   const [userInfo, setUserInfo] = useState({})
