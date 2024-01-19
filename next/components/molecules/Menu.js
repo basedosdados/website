@@ -834,6 +834,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       {name: "Newsletter", href: "https://info.basedosdados.org/newsletter"},
       {name: "Carreiras", href: "https://info.basedosdados.org/carreiras"},
       {name: "Perguntas frequentes", href: "/perguntas-frequentes"},
+      {name: "Termos e Políticas", href: "/termos_e_politicas"},
     ],
     Contato: "/contato",
     Button: []

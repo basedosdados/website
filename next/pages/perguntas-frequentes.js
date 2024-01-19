@@ -142,7 +142,6 @@ export default function FAQ({}) {
   }
 
   const CategoryText = ({ category }) => {
-
     function handlerClick(elm) {
       if(elm === categorySelected) {
         setCategorySelected("")
