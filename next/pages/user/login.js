@@ -59,7 +59,7 @@ export default function Login() {
   }
 
   const fetchToken = async ({ email, password }) => {
-    const result = await getToken({email: "email", password: "password"})
+    const result = await getToken({email: email, password: password})
 
     if(result?.tokenAuth === null || result?.errors?.length > 0) return setErrors({login:"E-mail ou senha incorretos."}) 
 
