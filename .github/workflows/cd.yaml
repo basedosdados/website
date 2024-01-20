@@ -60,7 +60,7 @@ jobs:
               name: "ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}"
               tag: "production"
               pullPolicy: "Always"
-            replicas: 1
+            replicas: 2
             resources:
               requests:
                 cpu: 100m
