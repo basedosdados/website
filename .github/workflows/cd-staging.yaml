@@ -11,19 +11,19 @@ env:
   IMAGE_NAME: ghcr.io/basedosdados/website:staging
 
 jobs:
-  deploy-development:
+  deploy-staging:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}  || ${{ github.event_name == 'workflow_dispatch' }}
-    name: Deploy (Development)
+    name: Deploy (Staging)
     runs-on: ubuntu-latest
     environment:
-      name: development
+      name: staging
       url: https://staging.basedosdados.org
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3.3.0
         with:
-          ref: development
+          ref: staging
 
       - name: Import Secrets
         id: import_secrets
@@ -60,7 +60,7 @@ jobs:
               name: "ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}"
               tag: "staging"
               pullPolicy: "Always"
-            replicas: 2
+            replicas: 1
             resources:
               requests:
                 cpu: 100m
