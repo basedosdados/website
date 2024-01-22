@@ -5,7 +5,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import Head from "next/head";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { isMobileMod, useCheckMobile } from "../hooks/useCheckMobile.hook";
 import Display from "../components/atoms/Display";
 import BodyText from "../components/atoms/BodyText";
@@ -16,7 +17,37 @@ import ServiceTerms from "../content/serviceTerms";
 import PrivacyPolicy from "../content/privacyPolicy";
 
 export default function TermsAndPolitics() {
+  const router = useRouter()
+  const { query } = router
   const [sectionSelected, setSectionSelected] = useState("")
+
+  function movedScroll(value) {
+    window.scrollTo({
+      top: value,
+      behavior: 'smooth',
+    })
+  }
+
+  useEffect(() => {
+    const id = query?.section
+    let targetElement = ""
+
+    if(id === "terms") {
+      targetElement = document.getElementById("Termos de Serviço BD Pro")
+      setSectionSelected("Termos de Serviço BD Pro")
+      movedScroll(useCheckMobile() ? 210 : 80)
+    }
+    if(id === "privacy") {
+      targetElement = document.getElementById("Políticas de Privacidade")
+      setSectionSelected("Políticas de Privacidade")
+      movedScroll(targetElement?.offsetTop+120)
+    }
+    if(id === "cookies") {
+      targetElement = document.getElementById("Cookies")
+      setSectionSelected("Cookies")
+      movedScroll(targetElement.offsetTop+120)
+    }
+  },[query?.section])
 
   const SectionText = ({ section }) => {
     function handlerClick(elm) {
@@ -28,21 +59,20 @@ export default function TermsAndPolitics() {
         const targetElement = document.getElementById(elm)
 
         if (targetElement) {
-          if(targetElement.id === "Termos de Serviço") {
-            window.scrollTo({
-              top: useCheckMobile() ? 210 : 80,
-              behavior: 'smooth',
-            })
+          if(targetElement.id === "Termos de Serviço BD Pro") {
+            movedScroll(useCheckMobile() ? 210 : 80)
           } else {
-            window.scrollTo({
-              top: targetElement.offsetTop+120,
-              behavior: 'smooth',
-            })
+            movedScroll(targetElement?.offsetTop+120)
           }
         }
+        router.push({
+          pathname: router.pathname,
+          query: { section: targetElement.getAttribute("name")}
+        })
       }
     }
 
+    
     return (
       <Text
         fontSize="16px"
@@ -105,7 +135,7 @@ export default function TermsAndPolitics() {
             position={isMobileMod() ? "relative" : "sticky"}
             top={isMobileMod()? "0" : "120px"}
           >
-            <SectionText section="Termos de Serviço"/>
+            <SectionText section="Termos de Serviço BD Pro"/>
             <SectionText section="Políticas de Privacidade"/>
             <SectionText section="Cookies"/>
           </Box>
@@ -115,7 +145,8 @@ export default function TermsAndPolitics() {
             spacing="80px"
           >
             <VStack
-              id="Termos de Serviço"
+              id="Termos de Serviço BD Pro"
+              name="terms"
               width="100%"
               spacing={8}
               alignItems="flex-start"
@@ -126,12 +157,13 @@ export default function TermsAndPolitics() {
                 lineHeight="40px"
                 fontWeight="400"
                 color="#252A32"
-              >Termos de Serviço</Text>
+              >Termos de Serviço BD Pro</Text>
               <ServiceTerms/>
             </VStack>
 
             <VStack
               id="Políticas de Privacidade"
+              name="privacy"
               width="100%"
               spacing={8}
               alignItems="flex-start"
@@ -148,6 +180,7 @@ export default function TermsAndPolitics() {
 
             <VStack
               id="Cookies"
+              name="cookies"
               width="100%"
               spacing={8}
               alignItems="flex-start"
