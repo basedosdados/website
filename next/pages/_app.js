@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import Head from "next/head";
 import themeBD from "../styles/themeBD";
 import "../styles/globals.css";
+import "../styles/fonts.css";
 
 function MyApp({ Component, pageProps }) {
   const queryClient = new QueryClient({

@@ -8,14 +8,12 @@ export default async function updateProfile({
   firstName,
   lastName =  "",
   isEmailVisible = false,
-  // picture,
   website = "",
   github = "",
   twitter = "",
   linkedin = ""
 }) {
   let token = cookies.get("token") || ""
-  // picture: "${picture}"
 
   try {
     const res = await axios({
