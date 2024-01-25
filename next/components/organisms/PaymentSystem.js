@@ -58,7 +58,7 @@ const PaymentForm = ({ userData }) => {
   )
 }
 
-export default function PaymentSystem({ userData }) {
+export default function PaymentSystem({ userData, plan }) {
   const [clientSecret, setClientSecret] = useState("")
 
   const appearance = {

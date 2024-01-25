@@ -60,9 +60,12 @@ import {
   updatePassword,
   updateUser,
   deleteAccount,
-  updatePictureProfile,
   deletePictureProfile
 } from "../api/user";
+
+import {
+  getSubscriptionActive
+} from "../api/stripe"
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import PenIcon from "../../public/img/icons/penIcon";
@@ -1374,14 +1377,10 @@ const NewPassword = ({ userInfo }) => {
 }
 
 const PlansAndPayment = ({ userData }) => {
-  const [plan, setPlan] = useState({})
+  const [plan, setPlan] = useState("")
   const PaymentModal = useDisclosure()
   const PlansModal = useDisclosure()
   const CancelModalPlan = useDisclosure()
-
-  useEffect(() => {
-    setPlan({})
-  }, [PaymentModal.isOpen === false])
 
   const resources={
     "BD Gratis" : {
@@ -1482,7 +1481,9 @@ const PlansAndPayment = ({ userData }) => {
   }
 
   const cancelSubscripetion = async () => {
-    const result = await removeSubscription()
+    const subs = await getSubscriptionActive(userData.email)
+    const result = await removeSubscription(subs[0]?.node._id)
+    window.location.reload()
   }
 
   return (
@@ -1518,7 +1519,7 @@ const PlansAndPayment = ({ userData }) => {
           gap="20px"
           spacing={0}
         >
-          <PaymentSystem userData={userData}/>
+          <PaymentSystem userData={userData} plan={plan}/>
         </Stack>
       </ModalGeneral>
 
@@ -1591,7 +1592,7 @@ const PlansAndPayment = ({ userData }) => {
             button={{
               text: `${userData?.proSubscription === "bd_pro" ? "Plano atual" : "Iniciar teste grátis"}`,
               onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => {
-                setPlan({plan: "BD Pro"})
+                setPlan("bd_pro")
                 PlansModal.onClose()
                 PaymentModal.onOpen()
               },
@@ -1621,8 +1622,21 @@ const PlansAndPayment = ({ userData }) => {
               {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
             ]}
             button={{
-              text: "Iniciar teste grátis",
-              href: "https://buy.stripe.com/00g4i93d8f2Y5H24gr?locale=pt"
+              text: `${userData?.proSubscription === "bd_pro_empresas" ? "Plano atual" : "Iniciar teste grátis"}`,
+              onClick: userData?.proSubscription === "bd_pro_empresas" ? () => {} : () => {
+                setPlan("bd_pro_empresas")
+                PlansModal.onClose()
+                PaymentModal.onOpen()
+              },
+              styles: 
+              userData?.proSubscription === "bd_pro_empresas" && {
+                color: "#252A32",
+                backgroundColor: "#FFF",
+                boxShadow: "none",
+                cursor: "default",
+                _hover: {transform: "none"},
+                fontWeight: "400"
+              }
             }}
             hasServiceTerms
           />
@@ -1971,8 +1985,6 @@ const Accesses = ({ userInfo }) => {
 // Sections Of User Page
 
 export default function UserPage({ fullUser }) {
-  let userData = getUserDataJson()
-
   const router = useRouter()
   const { query } = router
   const [userInfo, setUserInfo] = useState({})
@@ -1981,7 +1993,11 @@ export default function UserPage({ fullUser }) {
   async function refreshTokenValidate() {
     const result = await refreshToken()
 
-    if(result?.data?.refreshToken?.token) return cookies.set('token', result.data.refreshToken.token)
+    if(result?.data?.refreshToken?.token) {
+      const userData = await getUser(fullUser.email)
+      cookies.set('userBD', JSON.stringify(userData))
+      cookies.set('token', result.data.refreshToken.token)
+    }
     if(result?.errors?.length > 0) {
       cookies.remove('userBD', { path: '/' })
       cookies.remove('token', { path: '/' })
@@ -2080,7 +2096,7 @@ export default function UserPage({ fullUser }) {
             {sectionSelected === 0 && <ProfileConfiguration userInfo={userInfo}/>}
             {sectionSelected === 1 && <Account userInfo={userInfo}/>}
             {sectionSelected === 2 && <NewPassword userInfo={userInfo}/>}
-            {sectionSelected === 3 && <PlansAndPayment userData={userData}/>}
+            {sectionSelected === 3 && <PlansAndPayment userData={userInfo}/>}
             {sectionSelected === 4 && <Accesses userInfo={userInfo}/>}
           </Stack>
         </Stack>
