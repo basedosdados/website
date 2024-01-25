@@ -3,7 +3,7 @@ import cookies from "js-cookie";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-export default async function removeSubscription({ id }) {
+export default async function removeSubscription(id) {
   let token = cookies.get("token") || ""
 
   try {
@@ -16,9 +16,11 @@ export default async function removeSubscription({ id }) {
       data: {
         query: `
         mutation {
-          deleteStripeSubscription (subscriptionId: ${id})
-          {
+          deleteStripeSubscription (subscriptionId: "${id}"){
             errors
+            subscription {
+              id
+            }
           }
         }
         `

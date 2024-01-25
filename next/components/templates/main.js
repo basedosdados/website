@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import UserContext from "../../context/user";
+// import UserContext from "../../context/user";
 // import { useQuery } from "react-query";
 // import { getUser } from "../../pages/api/user";
 import SiteHead from "../atoms/SiteHead";
@@ -18,16 +18,19 @@ export function MainPageTemplate({
 
   return (
     // <UserContext.Provider value={data}>
-    <UserContext.Provider>
       <Box backgroundColor={backgroundColor}>
         <SiteHead />
         <Menu pages={pages} simpleTemplate={cleanTemplate} userTemplate={userTemplate}/>
-        <Box paddingTop={{ base: "30px", lg: "120px" }} paddingBottom="50px" {...style}>
+        <Box
+          paddingTop={{ base: "30px", lg: "120px" }}
+          paddingBottom="50px"
+          {...style}
+        >
           {children}
         </Box>
         <Footer pages={pages} ocult={cleanTemplate || userTemplate}/>
         <Cookies/>
       </Box>
-    </UserContext.Provider>
+    // </UserContext.Provider>
   );
 }
