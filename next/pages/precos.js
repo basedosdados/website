@@ -309,21 +309,34 @@ export const CardPrice = ({
           flexDirection="column"
           gap="16px"
         >
-          <RoundedButton
-            width="100%"
-            color={button.colorText || "#FFF"}
-            backgroundColor={button.color || "#42B0FF"}
-            onClick={() => {
-              if(button.onClick) return button.onClick()
-              if(button?.noHasModal) return window.open(button.href, "_self")
-              onOpen()
-              setLinkStripe(button.href)
-            }}
-            border={button.color && `1px solid ${button.colorText}`}
-            {...button.styles}
-          >
-            {button.text}
-          </RoundedButton>
+          {button.isCurrentPlan ?
+            <Text 
+              width="100%"
+              textAlign="center"
+              color="#252A32"
+              cursor="default"
+              fontWeight="400"
+              fontFamily="Ubuntu"
+            >
+              {button.text}
+            </Text>
+          :
+            <RoundedButton
+              width="100%"
+              color={button.colorText || "#FFF"}
+              backgroundColor={button.color || "#42B0FF"}
+              onClick={() => {
+                if(button.onClick) return button.onClick()
+                if(button?.noHasModal) return window.open(button.href, "_self")
+                onOpen()
+                setLinkStripe(button.href)
+              }}
+              border={button.color && `1px solid ${button.colorText}`}
+              {...button.styles}
+            >
+              {button.text}
+            </RoundedButton>
+          }
 
           <Text
             display="flex"
@@ -367,6 +380,9 @@ export const CardPrice = ({
 
 export default function Price() {
   let userData = getUserDataJson()
+
+  const ifBDPro = userData?.proSubscription === "bd_pro"
+  const ifBDProEmp = userData?.proSubscription === "bd_pro_empresas"
 
   return (
     <MainPageTemplate paddingX="24px">
@@ -453,8 +469,10 @@ export default function Price() {
               {name: "Dezenas de bases de alta frequência atualizadas"},
             ]}
             button={{
-              text: `Iniciar teste grátis`,
-              href: "https://buy.stripe.com/8wM01TeVQ3kg0mIeV4?locale=pt"
+              text: ifBDPro ? "Plano atual" : `Iniciar teste grátis`,
+              href: userData === null ? "/user/login" :`/user/${userData.username}?plans_and_payment`,
+              isCurrentPlan: ifBDPro ? true : false,
+              noHasModal: true
             }}
             hasServiceTerms
           />
@@ -472,8 +490,10 @@ export default function Price() {
               {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
             ]}
             button={{
-              text: "Iniciar teste grátis",
-              href: "https://buy.stripe.com/00g4i93d8f2Y5H24gr?locale=pt"
+              text: ifBDProEmp ? "Plano atual" : "Iniciar teste grátis",
+              href: userData === null ? "/user/login" :`/user/${userData.username}?plans_and_payment`,
+              isCurrentPlan: ifBDProEmp ? true : false,
+              noHasModal: true
             }}
             hasServiceTerms
           />

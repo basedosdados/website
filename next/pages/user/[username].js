@@ -1377,7 +1377,7 @@ const NewPassword = ({ userInfo }) => {
 }
 
 const PlansAndPayment = ({ userData }) => {
-  const [plan, setPlan] = useState("")
+  const [plan, setPlan] = useState({})
   const PaymentModal = useDisclosure()
   const PlansModal = useDisclosure()
   const CancelModalPlan = useDisclosure()
@@ -1483,7 +1483,9 @@ const PlansAndPayment = ({ userData }) => {
   const cancelSubscripetion = async () => {
     const subs = await getSubscriptionActive(userData.email)
     const result = await removeSubscription(subs[0]?.node._id)
-    window.location.reload()
+    setTimeout(() => {
+      window.location.reload()
+    }, 2000)
   }
 
   return (
@@ -1494,7 +1496,9 @@ const PlansAndPayment = ({ userData }) => {
         isCentered={isMobileMod() ? false : true}
         propsModalContent={{
           minWidth: "fit-content",
-          maxWidth: "fit-content"
+          maxWidth: "fit-content",
+          maxHeight: isMobileMod() ? "100%" : "700px",
+          overflowY: "auto"
         }}
       >
         <Stack spacing={0} marginBottom="16px">
@@ -1592,19 +1596,11 @@ const PlansAndPayment = ({ userData }) => {
             button={{
               text: `${userData?.proSubscription === "bd_pro" ? "Plano atual" : "Iniciar teste grátis"}`,
               onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => {
-                setPlan("bd_pro")
+                setPlan({slug:"bd_pro", slots: "0"})
                 PlansModal.onClose()
                 PaymentModal.onOpen()
               },
-              styles: 
-                userData?.proSubscription === "bd_pro" && {
-                  color: "#252A32",
-                  backgroundColor: "#FFF",
-                  boxShadow: "none",
-                  cursor: "default",
-                  _hover: {transform: "none"},
-                  fontWeight: "400"
-                }
+              isCurrentPlan: userData?.proSubscription === "bd_pro" ? true : false,
             }}
             hasServiceTerms
           />
@@ -1624,19 +1620,11 @@ const PlansAndPayment = ({ userData }) => {
             button={{
               text: `${userData?.proSubscription === "bd_pro_empresas" ? "Plano atual" : "Iniciar teste grátis"}`,
               onClick: userData?.proSubscription === "bd_pro_empresas" ? () => {} : () => {
-                setPlan("bd_pro_empresas")
+                setPlan({slug:"bd_pro_empresas", slots: "10"})
                 PlansModal.onClose()
                 PaymentModal.onOpen()
               },
-              styles: 
-              userData?.proSubscription === "bd_pro_empresas" && {
-                color: "#252A32",
-                backgroundColor: "#FFF",
-                boxShadow: "none",
-                cursor: "default",
-                _hover: {transform: "none"},
-                fontWeight: "400"
-              }
+              isCurrentPlan: userData?.proSubscription === "bd_pro_empresas" ? true : false,
             }}
             hasServiceTerms
           />

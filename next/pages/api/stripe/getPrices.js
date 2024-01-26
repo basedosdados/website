@@ -16,6 +16,8 @@ export default async function getPrices() {
                 _id
                 amount
                 productName
+                productSlug
+                productSlots
               }
             }
           }

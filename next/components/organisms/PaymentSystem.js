@@ -14,6 +14,7 @@ import {
 } from "@stripe/react-stripe-js";
 import cookies from "js-cookie";
 import Button from "../atoms/RoundedButton";
+import styles from "../../styles/paymentSystem.module.css";
 
 import {
   getUser
@@ -41,7 +42,7 @@ const PaymentForm = ({ userData }) => {
 
     const user = await getUser(userData?.email)
     cookies.set('userBD', JSON.stringify(user))
-    window.open(`/user/${user?.username}?plans_and_payment`, "_self")
+    window.location.reload()
   }
 
   return (
@@ -49,10 +50,15 @@ const PaymentForm = ({ userData }) => {
       spacing={0}
       alignItems="start"
     >
-      <form onSubmit={handlerSubmit}>
-        <PaymentElement />
+      <form
+        className={styles.content}
+        onSubmit={handlerSubmit}
+      >
+        <AddressElement options={{mode:'billing'}}/>
 
-        <Button width="100%" type="submit" marginTop="20px !important">Iniciar inscrição</Button>
+        <PaymentElement className={styles.payment}/>
+
+        <Button width="100%" type="submit" marginTop="6px !important">Iniciar inscrição</Button>
       </form>
     </VStack>
   )
@@ -93,10 +99,10 @@ export default function PaymentSystem({ userData, plan }) {
     fonts: [{ cssSrc: 'https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap' }],
   }
 
-  const customerCreatPost = async () => {
+  const customerCreatPost = async (id) => {
     let secret = ""
 
-    const subscriptionCreate = await createSubscription("19")
+    const subscriptionCreate = await createSubscription(id)
     if(subscriptionCreate?.clientSecret) {
       secret = subscriptionCreate?.clientSecret
     }
@@ -104,15 +110,31 @@ export default function PaymentSystem({ userData, plan }) {
 
     const result = await createCustomer()
     if(result?.id) {
-      const subscriptionCreate = await createSubscription("19")
+      const subscriptionCreate = await createSubscription(id)
       secret = subscriptionCreate?.clientSecret
     }
 
     return setClientSecret(secret)
   }
 
+  async function customerCreat(plan) {
+    const prices = await getPrices()
+
+    const findPlan = (slug, slots) => {
+      const foundPlan = prices.find(p => {
+        return p.node.productSlug === slug && p.node.productSlots === slots
+      })
+
+      return foundPlan ? foundPlan.node : null
+    }
+
+    const idPlan = findPlan(plan.slug, plan.slots)?._id
+
+    customerCreatPost(idPlan)
+  }
+
   useEffect(() => {
-    customerCreatPost()
+    customerCreat(plan)
   }, [])
 
   const SkeletonBox = ({ type, ...props }) => {
@@ -133,11 +155,6 @@ export default function PaymentSystem({ userData, plan }) {
       <SkeletonBox type="text"/>
       <SkeletonBox type="box"/>
       
-      <Stack flexDirection="row" spacing={0} gap="8px" marginBottom="16px !important">
-        <SkeletonBox type="smallBox"/>
-        <SkeletonBox type="smallBox"/>
-      </Stack>
-
       <SkeletonBox type="text"/>
       <SkeletonBox type="box"/>
 
@@ -158,7 +175,6 @@ export default function PaymentSystem({ userData, plan }) {
 
   return (
     <Elements options={options} stripe={stripePromise}>
-      <AddressElement options={{mode:'billing'}}/>
       <PaymentForm userData={userData}/>
     </Elements>
   )
