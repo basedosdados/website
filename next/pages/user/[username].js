@@ -60,9 +60,12 @@ import {
   updatePassword,
   updateUser,
   deleteAccount,
-  updatePictureProfile,
   deletePictureProfile
 } from "../api/user";
+
+import {
+  getSubscriptionActive
+} from "../api/stripe"
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import PenIcon from "../../public/img/icons/penIcon";
@@ -1375,12 +1378,9 @@ const NewPassword = ({ userInfo }) => {
 
 const PlansAndPayment = ({ userData }) => {
   const [plan, setPlan] = useState({})
+  const PaymentModal = useDisclosure()
   const PlansModal = useDisclosure()
   const CancelModalPlan = useDisclosure()
-
-  useEffect(() => {
-    setPlan({})
-  }, [PlansModal.isOpen === false])
 
   const resources={
     "BD Gratis" : {
@@ -1481,20 +1481,29 @@ const PlansAndPayment = ({ userData }) => {
   }
 
   const cancelSubscripetion = async () => {
-    const result = await removeSubscription()
+    const subs = await getSubscriptionActive(userData.email)
+    const result = await removeSubscription(subs[0]?.node._id)
+    setTimeout(() => {
+      window.location.reload()
+    }, 2000)
   }
 
   return (
     <Stack>
       <ModalGeneral
-        isOpen={PlansModal.isOpen}
-        onClose={PlansModal.onClose}
-        propsModalContent={{maxWidth: "fit-content"}}
+        isOpen={PaymentModal.isOpen}
+        onClose={PaymentModal.onClose}
         isCentered={isMobileMod() ? false : true}
+        propsModalContent={{
+          minWidth: "fit-content",
+          maxWidth: "fit-content",
+          maxHeight: isMobileMod() ? "100%" : "700px",
+          overflowY: "auto"
+        }}
       >
         <Stack spacing={0} marginBottom="16px">
           <SectionTitle lineHeight="40px" height="40px">
-            {plan.plan ? "Pagamento" : "Compare os planos"}
+            Pagamento
           </SectionTitle>
           <ModalCloseButton
             fontSize="14px"
@@ -1504,106 +1513,122 @@ const PlansAndPayment = ({ userData }) => {
           />
         </Stack>
 
-        {plan.plan ?
-          <Stack
-            display="flex"
-            flexDirection={isMobileMod() ? "column" :"row"}
-            justifyContent="center"
-            justifyItems="center"
-            width="100%"
-            minWidth="300px"
-            maxWidth="625px"
-            minHeight="400px"
-            gap="20px"
-            spacing={0}
-          >
-            <PaymentSystem userData={userData}/>
-          </Stack>
-          :
-          <Stack
-            display={isMobileMod() ? "flex" : "grid"}
-            gridTemplateColumns="repeat(3, 320px)"
-            gridTemplateRows="1fr"
-            justifyContent="center"
-            justifyItems="center"
-            gap="20px"
-            spacing={0}
-          >
-            <CardPrice
-              colorBanner="#2B8C4D"
-              title="BD Grátis"
-              subTitle={<BodyText>Para você descobrir o potencial da plataforma de dados</BodyText>}
-              personConfig={{
-                price: "0"
-              }}
-              textResource="Recursos:"
-              resources={[
-                {name: "Tabelas tratadas"},
-                {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
-                {name: "Acesso em nuvem"},
-                {name: "Acesso via SQL, Python, R e Stata"},
-                {name: "Integração com ferramentas BI"},
-                {name: "Download até 200.000 linhas"},
-                {name: "Até 1TB de processamento", tooltip: "Limite mensal gratuito oferecido pelo Google Cloud."}
-              ]}
-              button={{
-                text: "Explorar recursos",
-                href: "/dataset",
-                target: "_self",
-                noHasModal: true,
-                color: "#FFF",
-                colorText: "#42B0FF"
-              }}
-            />
+        <Stack
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          justifyItems="center"
+          width="fit-content"
+          minWidth="292px"
+          gap="20px"
+          spacing={0}
+        >
+          <PaymentSystem userData={userData} plan={plan}/>
+        </Stack>
+      </ModalGeneral>
 
-            <CardPrice
-              colorBanner="#9C8400"
-              title="BD Pro"
-              badge="Beta"
-              subTitle={<BodyText>Para você ter acesso aos<br/> dados mais atualizados</BodyText>}
-              personConfig={{
-                price: "47"
-              }}
-              textResource="Todos os recursos da BD Grátis, mais:"
-              resources={[
-                {name: "Dezenas de bases de alta frequência atualizadas"},
-              ]}
-              button={{
-                text: `${userData?.proSubscription === "bd_pro" ? "Plano atual" : "Iniciar teste grátis"}`,
-                onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => setPlan({plan: "BD Pro"}),
-                styles: 
-                  userData?.proSubscription === "bd_pro" && {
-                    color: "#252A32",
-                    backgroundColor: "#FFF",
-                    boxShadow: "none",
-                    cursor: "default",
-                    _hover: {transform: "none"},
-                    fontWeight: "400"
-                  }
-              }}
-              hasServiceTerms
-            />
+      <ModalGeneral
+        isOpen={PlansModal.isOpen}
+        onClose={PlansModal.onClose}
+        propsModalContent={{maxWidth: "fit-content"}}
+        isCentered={isMobileMod() ? false : true}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <SectionTitle lineHeight="40px" height="40px">
+            Compare os planos
+          </SectionTitle>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+          />
+        </Stack>
 
-            <CardPrice
-              colorBanner="#252A32"
-              title="BD Pro Empresas"
-              badge="Beta"
-              subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
-              personConfig={{
-                price: "350"
-              }}
-              textResource="Todos os recursos da BD Pro, mais:"
-              resources={[
-                {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
-              ]}
-              button={{
-                text: "Iniciar teste grátis",
-                href: "https://buy.stripe.com/00g4i93d8f2Y5H24gr?locale=pt"
-              }}
-              hasServiceTerms
-            />
-          </Stack>
-        }
+        <Stack
+          display={isMobileMod() ? "flex" : "grid"}
+          gridTemplateColumns="repeat(3, 320px)"
+          gridTemplateRows="1fr"
+          justifyContent="center"
+          justifyItems="center"
+          gap="20px"
+          spacing={0}
+        >
+          <CardPrice
+            colorBanner="#2B8C4D"
+            title="BD Grátis"
+            subTitle={<BodyText>Para você descobrir o potencial da plataforma de dados</BodyText>}
+            personConfig={{
+              price: "0"
+            }}
+            textResource="Recursos:"
+            resources={[
+              {name: "Tabelas tratadas"},
+              {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
+              {name: "Acesso em nuvem"},
+              {name: "Acesso via SQL, Python, R e Stata"},
+              {name: "Integração com ferramentas BI"},
+              {name: "Download até 200.000 linhas"},
+              {name: "Até 1TB de processamento", tooltip: "Limite mensal gratuito oferecido pelo Google Cloud."}
+            ]}
+            button={{
+              text: "Explorar recursos",
+              href: "/dataset",
+              target: "_self",
+              noHasModal: true,
+              color: "#FFF",
+              colorText: "#42B0FF"
+            }}
+          />
+
+          <CardPrice
+            colorBanner="#9C8400"
+            title="BD Pro"
+            badge="Beta"
+            subTitle={<BodyText>Para você ter acesso aos<br/> dados mais atualizados</BodyText>}
+            personConfig={{
+              price: "47"
+            }}
+            textResource="Todos os recursos da BD Grátis, mais:"
+            resources={[
+              {name: "Dezenas de bases de alta frequência atualizadas"},
+            ]}
+            button={{
+              text: `${userData?.proSubscription === "bd_pro" ? "Plano atual" : "Iniciar teste grátis"}`,
+              onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => {
+                setPlan({slug:"bd_pro", slots: "0"})
+                PlansModal.onClose()
+                PaymentModal.onOpen()
+              },
+              isCurrentPlan: userData?.proSubscription === "bd_pro" ? true : false,
+            }}
+            hasServiceTerms
+          />
+
+          <CardPrice
+            colorBanner="#252A32"
+            title="BD Pro Empresas"
+            badge="Beta"
+            subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
+            personConfig={{
+              price: "350"
+            }}
+            textResource="Todos os recursos da BD Pro, mais:"
+            resources={[
+              {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
+            ]}
+            button={{
+              text: `${userData?.proSubscription === "bd_pro_empresas" ? "Plano atual" : "Iniciar teste grátis"}`,
+              onClick: userData?.proSubscription === "bd_pro_empresas" ? () => {} : () => {
+                setPlan({slug:"bd_pro_empresas", slots: "10"})
+                PlansModal.onClose()
+                PaymentModal.onOpen()
+              },
+              isCurrentPlan: userData?.proSubscription === "bd_pro_empresas" ? true : false,
+            }}
+            hasServiceTerms
+          />
+        </Stack>
       </ModalGeneral>
 
       <ModalGeneral
@@ -1730,20 +1755,20 @@ const PlansAndPayment = ({ userData }) => {
               marginBottom="8px"
             >Inclui</Text>
             {defaultResource.resources.map((elm, index) => {
-              return <IncludesFeature elm={elm} index={index}/>
+              return <IncludesFeature elm={elm} index={index} key={index}/>
             })}
             {userData?.proSubscription === "bd_pro" && 
               planResource.resources.map((elm, index) => {
-                return <IncludesFeature elm={elm} index={index}/>
+                return <IncludesFeature elm={elm} index={index} key={index}/>
               })
             }
             {userData?.proSubscription === "bd_pro_empresas" &&
               <>
                 {resources["bd_pro"].resources.map((elm, index) => {
-                  return <IncludesFeature elm={elm} index={index}/>
+                  return <IncludesFeature elm={elm} index={index} key={index}/>
                 })}
                 {planResource.resources.map((elm, index) => {
-                  return <IncludesFeature elm={elm} index={index}/>
+                  return <IncludesFeature elm={elm} index={index} key={index}/>
                 })}
               </>
             }
@@ -1778,17 +1803,17 @@ const PlansAndPayment = ({ userData }) => {
               {!planActive && 
                 <>
                   {resources["bd_pro"].resources.map((elm, index) => {
-                    return <NotIncludesFeature  elm={elm} index={index}/>
+                    return <NotIncludesFeature  elm={elm} index={index} key={index}/>
                   })}
                   {resources["bd_pro_empresas"].resources.map((elm, index) => {
-                    return <NotIncludesFeature  elm={elm} index={index}/>
+                    return <NotIncludesFeature  elm={elm} index={index} key={index}/>
                   })}
                 </>
               }
 
               {userData?.proSubscription === "bd_pro" &&
                 resources["bd_pro_empresas"].resources.map((elm, index) => {
-                  return <NotIncludesFeature  elm={elm} index={index}/>
+                  return <NotIncludesFeature  elm={elm} index={index} key={index}/>
                 })
               }
 
@@ -1948,8 +1973,6 @@ const Accesses = ({ userInfo }) => {
 // Sections Of User Page
 
 export default function UserPage({ fullUser }) {
-  let userData = getUserDataJson()
-
   const router = useRouter()
   const { query } = router
   const [userInfo, setUserInfo] = useState({})
@@ -1958,7 +1981,11 @@ export default function UserPage({ fullUser }) {
   async function refreshTokenValidate() {
     const result = await refreshToken()
 
-    if(result?.data?.refreshToken?.token) return cookies.set('token', result.data.refreshToken.token)
+    if(result?.data?.refreshToken?.token) {
+      const userData = await getUser(fullUser.email)
+      cookies.set('userBD', JSON.stringify(userData))
+      cookies.set('token', result.data.refreshToken.token)
+    }
     if(result?.errors?.length > 0) {
       cookies.remove('userBD', { path: '/' })
       cookies.remove('token', { path: '/' })
@@ -2023,6 +2050,7 @@ export default function UserPage({ fullUser }) {
           >
             {choices.map((section, index) => (
               <Box
+                key={index}
                 borderLeft={ sectionSelected === index ? "3px solid #2B8C4D" : "transparent" }
                 width="100%"
               >
@@ -2056,7 +2084,7 @@ export default function UserPage({ fullUser }) {
             {sectionSelected === 0 && <ProfileConfiguration userInfo={userInfo}/>}
             {sectionSelected === 1 && <Account userInfo={userInfo}/>}
             {sectionSelected === 2 && <NewPassword userInfo={userInfo}/>}
-            {sectionSelected === 3 && <PlansAndPayment userData={userData}/>}
+            {sectionSelected === 3 && <PlansAndPayment userData={userInfo}/>}
             {sectionSelected === 4 && <Accesses userInfo={userInfo}/>}
           </Stack>
         </Stack>
