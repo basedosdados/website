@@ -25,7 +25,7 @@ export default function ConfirmCookies() {
 
   const handleConfirm = () => {
     cookies.set("cookieAccepted", "true",{ expires: 366 })
-    setIsOpen(false)
+    window.location.reload()
   }
 
   if(!isOpen) return null

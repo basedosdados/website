@@ -194,8 +194,9 @@ export default function Register() {
           <FormControl isInvalid={!!errors.email}>
             <LabelTextForm text="E-mail" />
             <Input
-              id="email"
+              id="username"
               name="email"
+              type="email"
               value={formData.email}
               onChange={handleInputChange}
               placeholder="Insira seu e-mail"
@@ -213,8 +214,10 @@ export default function Register() {
           <FormControl isInvalid={!!errors.username} >
             <LabelTextForm text="Nome de usuário"/>
             <Input
-              id="username"
+              id="user"
               name="username"
+              type="text"
+              autoComplete="off"
               value={formData.username}
               onChange={handleInputChange}
               placeholder="Insira seu nome de usuário"
