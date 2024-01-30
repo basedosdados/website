@@ -135,8 +135,10 @@ export default function Login() {
         <FormControl isInvalid={!!errors.email} marginBottom="24px !important">
           <LabelTextForm text="E-mail"/>
           <Input
-            id="email"
+            id="username"
             name="email"
+            type="email"
+            autoComplete="email"
             value={formData.email}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}

@@ -1222,6 +1222,7 @@ const NewPassword = ({ userInfo }) => {
           fontSize="14px"
           borderRadius="16px"
           _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+          autoComplete="off"
           styleElmRight={{
             width: "50px",
             height: "40px",

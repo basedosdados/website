@@ -9,7 +9,10 @@ import {
   ModalCloseButton
 } from '@chakra-ui/react';
 import { useState, useEffect, useRef } from 'react';
-import ReactCrop from 'react-image-crop';
+import ReactCrop, {
+  centerCrop,
+  makeAspectCrop
+} from 'react-image-crop';
 import cookies from 'js-cookie';
 import { isMobileMod } from '../../hooks/useCheckMobile.hook';
 
@@ -35,8 +38,27 @@ export default function CropImage ({
   const [completedCrop, setCompletedCrop] = useState()
   const [crop, setCrop] = useState()
 
+  function onImageLoad(e) {
+    const { naturalWidth: width, naturalHeight: height } = e.currentTarget
+  
+    const nCrop = centerCrop(
+      makeAspectCrop(
+        {
+          unit: '%',
+          width: 90,
+        },
+        1 / 1,
+        width,
+        height
+      ),
+      width,
+      height
+    )
+  
+    setCrop(nCrop)
+  }
+
   useEffect(() => {
-    setCrop()
     setCompletedCrop()
   }, [!!isOpen])
 
@@ -160,7 +182,7 @@ export default function CropImage ({
                 keepSelection={true}
                 circularCrop
               >
-                <img ref={imgRef} src={src}/>
+                <img ref={imgRef} src={src} onLoad={onImageLoad}/>
               </ReactCrop>
             }
           </Stack>

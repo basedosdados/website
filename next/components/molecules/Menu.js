@@ -523,12 +523,13 @@ function SearchInput ({ status }) {
           marginLeft="20px !important"
           justifyContent="center"
           marginRight="10px"
+          autoComplete="off"
           inputStyle={{
             height: "40px",
             fontSize: "16px",
             width: "100%",
             borderRadius: "16px",
-            _placeholder:{color: "#6F6F6F"}
+            _placeholder:{color: "#6F6F6F"},
           }}
           rightIcon={
             <CrossIcon
@@ -615,6 +616,7 @@ function SearchInputUser () {
         placeholder="Pesquise dados"
         alignSelf="center"
         justifyContent="center"
+        autoComplete="off"
         inputStyle={{
           height: "40px",
           fontSize: "16px",
