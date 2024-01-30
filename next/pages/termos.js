@@ -92,7 +92,7 @@ export default function TermsAndPolitics() {
   return (
     <MainPageTemplate paddingX="24px">
       <Head>
-        <title>Termos e Privacidade – Base dos Dados</title>
+        <title>Termos – Base dos Dados</title>
         <meta
           property="og:title"
           content="Termos e Privacidade – Base dos Dados"
@@ -116,7 +116,7 @@ export default function TermsAndPolitics() {
           paddingBottom={isMobileMod() ? "56px" : "66px" }
           color="#2B8C4D"
         >
-          Termos e Privacidade
+          Termos
         </Display>
 
         <Stack

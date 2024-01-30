@@ -64,7 +64,7 @@ export default function ConfirmCookies() {
         marginBottom="8px"
         color="#252A42"
       >
-        Os cookies são essenciais para a funcionalidade completa de nossa plataforma. Ao continuar, você concorda com o uso desses cookies para garantir uma experiência de usuário eficaz. Veja mais sobre nossas <Link color="#42B0FF" href="/termos-e-privacidade?section=cookies" target="_blank">Política de Cookies</Link>
+        Os cookies são essenciais para a funcionalidade completa de nossa plataforma. Ao continuar, você concorda com o uso desses cookies para garantir uma experiência de usuário eficaz. Veja mais sobre nossas <Link color="#42B0FF" href="/termos?section=cookies" target="_blank">Política de Cookies</Link>
       </Text>
 
       <Box width="100%" display="flex" >

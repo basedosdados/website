@@ -654,7 +654,7 @@ const Account = ({ userInfo }) => {
     if(result?.errors?.length === 0) {
       const userData = await getUser(userInfo.email)
       cookies.set('userBD', JSON.stringify(userData))
-      window.open(`/user/${formData.username}`, "_self")
+      window.open(`/user/${formData.username}?account`, "_self")
     }
 
     if(result?.errors?.length > 0) {
@@ -1378,15 +1378,22 @@ const NewPassword = ({ userInfo }) => {
 }
 
 const PlansAndPayment = ({ userData }) => {
+  const [checkBDPro, setCheckBDPro] = useState(false)
+  const [checkBDProE, setCheckBDProE] = useState(false)
   const [plan, setPlan] = useState({})
   const PaymentModal = useDisclosure()
   const PlansModal = useDisclosure()
   const CancelModalPlan = useDisclosure()
 
+  useEffect(() => {
+    setCheckBDPro(false)
+    setCheckBDProE(false)
+  }, [PlansModal.isOpen === false])
+
   const resources={
     "BD Gratis" : {
       title: "BD Grátis",
-      buttons: [{text:"Comparar planos", onClick: () => PlansModal.onOpen()}, {text:"Alterar plano", onClick: () => PlansModal.onOpen()}],
+      buttons: [{text:"Comparar planos", onClick: () => PlansModal.onOpen()}],
       resources : [{name: "Tabelas tratadas"},
       {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
       {name: "Acesso em nuvem"},
@@ -1397,12 +1404,12 @@ const PlansAndPayment = ({ userData }) => {
     },
     "bd_pro" : {
       title: "BD Pro",
-      buttons : [{text:"Cancelar plano", onClick: () => CancelModalPlan.onOpen()}, {text:"Alterar plano", onClick: () => PlansModal.onOpen()}],
+      buttons : [{text:"Cancelar plano", onClick: () => CancelModalPlan.onOpen()}],
       resources : [{name: "Dezenas de bases de alta frequência atualizadas"}]
     },
     "bd_pro_empresas" : {
       title: "BD Pro Empresas",
-      buttons : [{text:"Cancelar plano", onClick: () => CancelModalPlan.onOpen()}, {text:"Alterar plano", onClick: () => PlansModal.onOpen()}],
+      buttons : [{text:"Cancelar plano", onClick: () => CancelModalPlan.onOpen()}],
       resources : [{name: "Acesso para 10 contas"},
       {name: "Suporte prioritário via email e Discord"}]}
   }
@@ -1504,7 +1511,7 @@ const PlansAndPayment = ({ userData }) => {
       >
         <Stack spacing={0} marginBottom="16px">
           <SectionTitle lineHeight="40px" height="40px">
-            Pagamento
+            Assinatura
           </SectionTitle>
           <ModalCloseButton
             fontSize="14px"
@@ -1595,7 +1602,7 @@ const PlansAndPayment = ({ userData }) => {
               {name: "Dezenas de bases de alta frequência atualizadas"},
             ]}
             button={{
-              text: `${userData?.proSubscription === "bd_pro" ? "Plano atual" : "Iniciar teste grátis"}`,
+              text: `${userData?.proSubscription === "bd_pro" ? "Plano atual" : "Assinar"}`,
               onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => {
                 setPlan({slug:"bd_pro", slots: "0"})
                 PlansModal.onClose()
@@ -1603,7 +1610,9 @@ const PlansAndPayment = ({ userData }) => {
               },
               isCurrentPlan: userData?.proSubscription === "bd_pro" ? true : false,
             }}
-            hasServiceTerms
+            checkTerms
+            checked={checkBDPro}
+            onChangeChecked={() => setCheckBDPro(!checkBDPro)}
           />
 
           <CardPrice
@@ -1619,7 +1628,7 @@ const PlansAndPayment = ({ userData }) => {
               {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
             ]}
             button={{
-              text: `${userData?.proSubscription === "bd_pro_empresas" ? "Plano atual" : "Iniciar teste grátis"}`,
+              text: `${userData?.proSubscription === "bd_pro_empresas" ? "Plano atual" : "Assinar"}`,
               onClick: userData?.proSubscription === "bd_pro_empresas" ? () => {} : () => {
                 setPlan({slug:"bd_pro_empresas", slots: "10"})
                 PlansModal.onClose()
@@ -1627,7 +1636,9 @@ const PlansAndPayment = ({ userData }) => {
               },
               isCurrentPlan: userData?.proSubscription === "bd_pro_empresas" ? true : false,
             }}
-            hasServiceTerms
+            checkTerms
+            checked={checkBDProE}
+            onChangeChecked={() => setCheckBDProE(!checkBDProE)}
           />
         </Stack>
       </ModalGeneral>
@@ -1730,13 +1741,13 @@ const PlansAndPayment = ({ userData }) => {
               onClick={() => controlResource().buttons[0].onClick()}
             >{controlResource().buttons[0].text}
             </RoundedButton>
-            <RoundedButton
+            {/* <RoundedButton
               borderRadius="30px"
               width={isMobileMod() ? "100%" : "fit-content"}
               _hover={{transform: "none", opacity: 0.8}}
               onClick={() => controlResource().buttons[1].onClick()}
             >{controlResource().buttons[1].text}
-            </RoundedButton>
+            </RoundedButton> */}
           </Stack>
         </Stack>
 
@@ -2007,8 +2018,8 @@ export default function UserPage({ fullUser }) {
     {bar: "Conta", title: "Conta", value: "account", index: 1},
     {bar: "Senha", title: "Alterar senha", value: "new_password", index: 2},
     {bar: "Planos e pagamento", title: "Planos e pagamento", value: "plans_and_payment", index: 3},
-    {bar: "Acessos", title: "Gerenciar acessos", value: "accesses", index: 4},
   ]
+  // {bar: "Acessos", title: "Gerenciar acessos", value: "accesses", index: 4},
 
   useEffect(() => {
     const key = Object.keys(query)
@@ -2086,7 +2097,7 @@ export default function UserPage({ fullUser }) {
             {sectionSelected === 1 && <Account userInfo={userInfo}/>}
             {sectionSelected === 2 && <NewPassword userInfo={userInfo}/>}
             {sectionSelected === 3 && <PlansAndPayment userData={userInfo}/>}
-            {sectionSelected === 4 && <Accesses userInfo={userInfo}/>}
+            {/* {sectionSelected === 4 && <Accesses userInfo={userInfo}/>} */}
           </Stack>
         </Stack>
       </Stack>
