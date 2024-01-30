@@ -9,8 +9,7 @@ import {
   Text
 } from "@chakra-ui/react";
 import { useState } from "react";
-
-import { registerAccount, getToken } from "../api/user";
+import { registerAccount } from "../api/user";
 
 import Input from "../../components/atoms/SimpleInput";
 import Button from "../../components/atoms/RoundedButton";
@@ -26,12 +25,14 @@ export default function Register() {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
+    username: "",
     email: "",
     password: "",
     confirmPassword: ""
   })
   const [errors, setErrors] = useState({
     firstName: "",
+    username: "",
     email: "",
     password: "",
     regexPassword: {},
@@ -54,6 +55,9 @@ export default function Register() {
 
     if (!formData.firstName) {
       validationErrors.firstName = "Por favor, insira seu nome."
+    }
+    if (!formData.username) {
+      validationErrors.username = "Nome de usuário inválido ou já existe uma conta com este nome de usuário"
     }
     if (!formData.email) {
       validationErrors.email = "Endereço de e-mail inválido ou já existe uma conta com este e-mail."
@@ -83,31 +87,29 @@ export default function Register() {
       validationErrors.confirmPassword = "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente."
     }
 
-    validationErrors.regexPassword = regexPassword
+    if(Object.keys(regexPassword).length > 0) validationErrors.regexPassword = regexPassword
     setErrors(validationErrors)
 
     if (Object.keys(validationErrors).length === 0) {
-      fetchRegister(formData)
+      createRegister(formData)
     }
   }
 
-  const fetchRegister = async ({ firstName, lastName, email, password }) => {
-    const result = await registerAccount({ firstName, lastName, email, password })
+  const createRegister = async ({ firstName, lastName, username, email, password }) => {
+    const result = await registerAccount({ firstName, lastName, username, email, password })
 
     let arrayErrors = {}
     if(result?.errors?.length > 0) {
       result.errors.map((elm) => {
-        if(elm.field === "email") arrayErrors = ({...arrayErrors, email: elm.messages})
+        if(elm.field === "email") arrayErrors = ({...arrayErrors, email: "Conta com este email já existe."})
+        if(elm.field === "username") arrayErrors = ({...arrayErrors, username: "Conta com este nome de usuário já existe."})
       })
     }
     setErrors(arrayErrors)
 
     if(result?.errors?.length === 0) {
-      const acess = await getToken({email, password})
-
-      if(acess?.errors?.length > 0) return
-
-      window.open("/", "_self")
+      sessionStorage.setItem('registration_email_bd', `${email}`)
+      window.open("/user/check-email", "_self")
     }
   }
 
@@ -192,8 +194,9 @@ export default function Register() {
           <FormControl isInvalid={!!errors.email}>
             <LabelTextForm text="E-mail" />
             <Input
-              id="email"
+              id="username"
               name="email"
+              type="email"
               value={formData.email}
               onChange={handleInputChange}
               placeholder="Insira seu e-mail"
@@ -205,6 +208,27 @@ export default function Register() {
             />
             <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
               <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.email}
+            </FormErrorMessage>
+          </FormControl>
+
+          <FormControl isInvalid={!!errors.username} >
+            <LabelTextForm text="Nome de usuário"/>
+            <Input
+              id="user"
+              name="username"
+              type="text"
+              autoComplete="off"
+              value={formData.username}
+              onChange={handleInputChange}
+              placeholder="Insira seu nome de usuário"
+              fontFamily="ubuntu"
+              height="40px"
+              fontSize="14px"
+              borderRadius="16px"
+              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+            />
+            <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+              <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.username}
             </FormErrorMessage>
           </FormControl>
 
@@ -246,7 +270,7 @@ export default function Register() {
             />
             <Text 
               margin="8px 0"
-              color= {Object.keys(errors.regexPassword).length > 0 ? "#D93B3B" : "#7D7D7D"}
+              color= { errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#D93B3B" : "#7D7D7D" : "#7D7D7D" }
               fontFamily= "Ubuntu"
               fontSize= "12px"
               fontWeight= "400"
@@ -256,7 +280,7 @@ export default function Register() {
               flexDirection="row"
               gap="4px"
               alignItems="flex-start"
-            ><Exclamation width="14px" height="14px" fill="#D93B3B" display={Object.keys(errors.regexPassword).length > 0 ? "flex" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
+            ><Exclamation width="14px" height="14px" fill="#D93B3B" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
             <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
               <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>8 caracteres</ListItem>
               <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>Uma letra maiúscula</ListItem>
@@ -326,7 +350,7 @@ export default function Register() {
           letterSpacing= "0.3px"
           marginTop="16px !important"
         >
-          Ao clicar em “Cadastrar” acima, você confirma que leu, compreendeu e aceita os Termos de uso e Políticas de privacidade da Base dos Dados.
+          Ao clicar em “Cadastrar” acima, você confirma que leu, compreendeu e aceita os <Link fontSize="12px" fontFamily="ubuntu" color="#42B0FF" href="/termos?section=terms" target="_blank">Termos de Serviço</Link> e <Link fontSize="12px" fontFamily="ubuntu" color="#42B0FF" href="/termos?section=privacy" target="_blank">Políticas de Privacidade</Link> da Base dos Dados.
         </Text>
 
         <Text

@@ -6,7 +6,7 @@ import {
 import BodyText from "../components/atoms/BodyText";
 import SectionText from "../components/atoms/SectionText";
 
-export default function ServiceTermsBDPro() {
+export default function ServiceTerms() {
 
   return (
     <VStack
@@ -47,8 +47,9 @@ export default function ServiceTermsBDPro() {
       >
         <BodyText fontWeight="500">3. Pagamento e Assinaturas</BodyText>
         <Box>
-          <SectionText>3.1. Ao se inscrever em nossos serviços, você concorda em pagar a taxa mensal especificada. O pagamento será processado automaticamente a cada mês, a menos que você cancele sua assinatura antes da data de renovação, devidamente explicita na contratação do serviço.</SectionText>
-          <SectionText>3.2. Os preços e os métodos de pagamento estão sujeitos a alterações a critério exclusivo da Base dos Dados. As alterações de preço ou de métodos de pagamento serão notificadas com antecedência.</SectionText>
+          <SectionText>3.1. Ao fazer a assinatura, você concorda em pagar a taxa mensal especificada. O pagamento será processado automaticamente a cada mês, a menos que você cancele sua assinatura antes da data de renovação, devidamente explicita na contratação do serviço.</SectionText>
+          <SectionText>3.2. Ao fazer a assinatura, você concorda que seus dados sejam utilizados na criação e manutenção de usuários na plataforma de pagamentos Stripe.</SectionText>
+          <SectionText>3.3. Os preços e os métodos de pagamento estão sujeitos a alterações a critério exclusivo da Base dos Dados. As alterações de preço ou de métodos de pagamento serão notificadas com antecedência.</SectionText>
         </Box>
       </VStack>
 

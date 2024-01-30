@@ -18,6 +18,7 @@ export default function ControlledInput({
   inputStyle,
   isBorderColor = true,
   inputElementStyle,
+  autoComplete,
   ...props
 }) {
   async function checkForEnter(e) {
@@ -43,6 +44,7 @@ export default function ControlledInput({
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
+        autoComplete={autoComplete}
         {...inputStyle}
       />
       <InputRightElement

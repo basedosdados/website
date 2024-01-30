@@ -25,6 +25,7 @@ export default function ReadMore({ children, textSize = 240, isMobileMod, ...pro
         fontWeight="300"
         lineHeight="24px"
         letterSpacing="0.5px"
+        whiteSpace="pre-line"
         color="#252A32"
       >
         {isReadMore ? text.slice(0, textSize)+"..." : text}

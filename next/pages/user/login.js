@@ -5,7 +5,7 @@ import {
   FormLabel,
   FormErrorMessage,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import cookies from 'js-cookie';
 
 import {
@@ -28,6 +28,13 @@ export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" })
   const [errors, setErrors] = useState({ email: "", password: "", login: ""})
   const [showPassword, setShowPassword] = useState(true)
+  const [cookiesConfirm, setCookiesConfirm] = useState(false)
+
+  useEffect(() => {
+    const res = cookies.get("cookieAccepted")
+
+    if(!!res && res == "true") setCookiesConfirm(true)
+  }, [])
 
   const handleInputChange = (e) => {
     setFormData((prevState) => ({
@@ -52,13 +59,13 @@ export default function Login() {
   }
 
   const fetchToken = async ({ email, password }) => {
-    const result = await getToken({email: "email", password: "password"})
+    const result = await getToken({email: email, password: password})
 
     if(result?.tokenAuth === null || result?.errors?.length > 0) return setErrors({login:"E-mail ou senha incorretos."}) 
 
     try {
       const userData = await getUser(result.tokenAuth.payload.email)
-      cookies.set('user', JSON.stringify(userData));
+      cookies.set('userBD', JSON.stringify(userData))
       window.open("/", "_self")
     } catch (error) {
       console.error(error)
@@ -128,8 +135,10 @@ export default function Login() {
         <FormControl isInvalid={!!errors.email} marginBottom="24px !important">
           <LabelTextForm text="E-mail"/>
           <Input
-            id="email"
+            id="username"
             name="email"
+            type="email"
+            autoComplete="email"
             value={formData.email}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
@@ -154,6 +163,10 @@ export default function Login() {
           >
             <LabelTextForm text="Senha" margin="0 !important"/>
             <ButtonSimple
+              position="relative"
+              top="-2px"
+              width="fit-content"
+              marginLeft="auto !important"
               fontWeight="700"
               color="#42B0FF"
               letterSpacing="0.3px"
@@ -209,9 +222,16 @@ export default function Login() {
           onClick={handleSubmit}
           borderRadius="30px"
           marginBottom="24px !important"
+          backgroundColor={cookiesConfirm ? "#42B0FF" : "#C4C4C4"}
+          cursor={cookiesConfirm ? "pointer" : "default"}
+          pointerEvents={cookiesConfirm ? "default" : "none"}
         >
           Entrar
         </Button>
+
+        <SectionText textAlign="center" display={!cookiesConfirm ? "flex" : "none"} marginBottom="24px !important">
+          Para efetuar o login em nossa plataforma, é necessário permitir o uso dos nossos cookies.
+        </SectionText>
 
         <SectionText
           width="100%"

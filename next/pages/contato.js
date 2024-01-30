@@ -52,7 +52,7 @@ export default function Contato({ pages }) {
 
       <Stack
         gridGap={{base:"40px", lg: "100px"}}
-        paddingTop={{ base: "80px", lg: "0px" }}
+        paddingTop={{ base: "120px", lg: "0px" }}
         width="100%"
         maxWidth="1264px"
         justify="space-between"

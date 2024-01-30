@@ -2,34 +2,28 @@ import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-export default async function registerAccount({
-  firstName,
-  lastName = "",
-  username,
-  email,
+export default async function updatePassword({
+  id,
   password,
+  token
 }) {
   try {
     const res = await axios({
       url: API_URL,
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
       data: {
         query: `
         mutation {
           CreateUpdateAccount (input:
             {
-              username : "${username}"
-              email: "${email}"
-              firstName: "${firstName}"
-              lastName: "${lastName}"
+              id: "${id}"
               password: "${password}"
             }  
           )
           {
-            account {
-              id,
-              email
-            }
             errors {
               field,
               messages

@@ -12,6 +12,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Checkbox,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import Head from "next/head";
@@ -21,7 +22,8 @@ import BodyText from "../components/atoms/BodyText";
 import RoundedButton from "../components/atoms/RoundedButton";
 import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
-import ServiceTermsBDPro from "../content/serviceTermsBDPro";
+import ServiceTerms from "../content/serviceTerms";
+import { getUserDataJson } from "../utils";
 
 import CheckIcon from "../public/img/icons/checkIcon";
 import CrossIcon from "../public/img/icons/crossIcon";
@@ -36,7 +38,10 @@ export const CardPrice = ({
   textResource,
   resources = [],
   button,
-  hasServiceTerms= false
+  hasServiceTerms= false,
+  checkTerms= false,
+  checked,
+  onChangeChecked
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [nubmerOfPerson, setNubmerOfPerson] = useState(personConfig.person)
@@ -77,28 +82,28 @@ export const CardPrice = ({
         <ModalContent maxWidth="800px !important" margin="24px">
           <ModalHeader>Termos de serviço</ModalHeader>
           <ModalBody>
-            <ServiceTermsBDPro/>
+            <ServiceTerms/>
           </ModalBody>
 
           <ModalFooter gap="16px">
-              <RoundedButton
-                onClick={onClose}
-                backgroundColor={linkStripe !== "" ? "#FFF" : "#42B0FF"}
-                color={linkStripe !== "" ? "#42B0FF" : "#FFF"}
-                border={linkStripe !== "" && "1px solid #42B0FF"}
+            <RoundedButton
+              onClick={onClose}
+              backgroundColor={linkStripe !== "" ? "#FFF" : "#42B0FF"}
+              color={linkStripe !== "" ? "#42B0FF" : "#FFF"}
+              border={linkStripe !== "" && "1px solid #42B0FF"}
+            >
+              Fechar
+            </RoundedButton>
+            {linkStripe !== "" &&
+              <RoundedButton onClick={() => {
+                  onClose()
+                  window.open(linkStripe, "_blank")
+                  setLinkStripe("")
+                }}
               >
-                Fechar
+                Concordar
               </RoundedButton>
-              {linkStripe !== "" &&
-                <RoundedButton onClick={() => {
-                    onClose()
-                    window.open(linkStripe, "_blank")
-                    setLinkStripe("")
-                  }}
-                >
-                  Concordar
-                </RoundedButton>
-              }
+            }
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -146,7 +151,6 @@ export const CardPrice = ({
           flexDirection="row"
           height="50px"
           alignItems="center"
-          // marginBottom="24px"
           marginBottom="40px"
         >
           <Text
@@ -169,20 +173,11 @@ export const CardPrice = ({
             fontFamily="Ubuntu"
           >/mês</Text>
         </Box>
-        {/* <BodyText
-          fontSize="16px"
-          lineHeight="16px"
-          letterSpacing="0.2px"
-          fontWeight="400"
-          marginBottom="24px"
-        >inclui {nubmerOfPerson} pessoa{nubmerOfPerson >= 2 && "s"}</BodyText> */}
-
+        
         <Box
           display={isMobileMod() && !personConfig.text ? "none" :"flex"}
           flexDirection="row"
           justifyContent="space-between"
-          // height="40px"
-          // marginBottom="40px"
         >
           {personConfig.text &&
           <>
@@ -318,54 +313,141 @@ export const CardPrice = ({
           flexDirection="column"
           gap="16px"
         >
-          <RoundedButton
-            width="100%"
-            color={button.colorText || "#FFF"}
-            backgroundColor={button.color || "#42B0FF"}
-            onClick={() => {
-              if(button?.noHasModal) return window.open(button.href, "_self")
-              onOpen()
-              setLinkStripe(button.href)
-            }}
-            border={button.color && `1px solid ${button.colorText}`}
-          >
-            {button.text}
-          </RoundedButton>
+          {button.isCurrentPlan ?
+            <Text 
+              width="100%"
+              textAlign="center"
+              color="#252A32"
+              cursor="default"
+              fontWeight="400"
+              fontFamily="Ubuntu"
+            >
+              {button.text}
+            </Text>
+          :
+            checkTerms ?
+            <RoundedButton
+              width="100%"
+              color="#FFF"
+              backgroundColor={checked ? "#42B0FF" : "#C4C4C4"}
+              pointerEvents={checked ? "default" : "none"}
+              onClick={() => {
+                if(button.onClick) return button.onClick()
+                if(button?.noHasModal) return window.open(button.href, "_self")
+                onOpen()
+                setLinkStripe(button.href)
+              }}
+              border={button.color && `1px solid ${button.colorText}`}
+              {...button.styles}
+            >
+              {button.text}
+            </RoundedButton>
+            :
+            <RoundedButton
+              width="100%"
+              color={button.colorText || "#FFF"}
+              backgroundColor={button.color || "#42B0FF"}
+              onClick={() => {
+                if(button.onClick) return button.onClick()
+                if(button?.noHasModal) return window.open(button.href, "_self")
+                onOpen()
+                setLinkStripe(button.href)
+              }}
+              border={button.color && `1px solid ${button.colorText}`}
+              {...button.styles}
+            >
+              {button.text}
+            </RoundedButton>
+          }
 
-          <Text
-            display="flex"
-            flexDirection="row"
-            justifyContent="center"
-            color="#252A32"
-            fontSize="14px"
-            fontWeight="400"
-            fontHeight="27px"
-            letterSpacing="0.3px"
-            fontFamily="Ubuntu"
-            height="20px"
-            textAlign="center"
-          >
-            {hasServiceTerms &&
-              <Text 
-                display="flex"
-                flexDirection="row"
-              >Leia os
-                <Text
-                  color="#42B0FF"
-                  cursor="pointer"
-                  _hover={{opacity: 0.7}}
-                  marginLeft="6px"
-                  fontWeight="700"
-                  letterSpacing="0.5px"
-                  onClick={() => {
-                    onOpen()
-                    setLinkStripe("")
-                  }}
-                >Termos de Serviço</Text>
-                .
-              </Text>
-            }
-          </Text>
+          {hasServiceTerms &&
+            <Text 
+              display="flex"
+              flexDirection="row"
+              justifyContent="center"
+              color="#252A32"
+              fontSize="14px"
+              fontWeight="400"
+              fontHeight="27px"
+              letterSpacing="0.3px"
+              fontFamily="Ubuntu"
+              height="20px"
+              textAlign="center"
+            >Leia os
+              <Text
+                color="#42B0FF"
+                cursor="pointer"
+                _hover={{opacity: 0.7}}
+                marginLeft="6px"
+                fontWeight="700"
+                letterSpacing="0.5px"
+                onClick={() => {
+                  onOpen()
+                  setLinkStripe("")
+                }}
+              >Termos de Serviço</Text>
+              .
+            </Text>
+          }
+
+          {checkTerms &&
+            <Stack>
+              <Checkbox
+                checked={checked}
+                onChange={onChangeChecked}
+                justifyContent="center"
+              >
+                <Stack spacing={0} alignItems="center">
+                  <Text
+                    display="flex"
+                    flexDirection="row"
+                    justifyContent="center"
+                    color="#252A32"
+                    fontSize="14px"
+                    fontWeight="400"
+                    fontHeight="27px"
+                    letterSpacing="0.3px"
+                    fontFamily="Ubuntu"
+                    height="20px"
+                    textAlign="center"
+                  >Eu li e concordo com os
+                  </Text>
+
+                    <Text
+                      width="fit-content"
+                      color="#42B0FF"
+                      cursor="pointer"
+                      _hover={{opacity: 0.7}}
+                      marginLeft="6px"
+                      fontWeight="700"
+                      letterSpacing="0.5px"
+                      href="/termos?section=terms"
+                      target="_blank"
+                      wordBreak="break-all"
+                    >
+                      Termos de Serviço
+                    </Text>
+                    e 
+                    <Text
+                      display="flex"
+                      flexDirection="row"
+                      width="fit-content"
+                      color="#42B0FF"
+                      cursor="pointer"
+                      _hover={{opacity: 0.7}}
+                      marginLeft="6px"
+                      fontWeight="700"
+                      letterSpacing="0.5px"
+                      href="/termos?section=privacy"
+                      target="_blank"
+                    >
+                      Políticas de Privacidade
+                      <Text marginLeft="1px !important" color="#252A32">.</Text>
+                    </Text>
+                </Stack>
+              </Checkbox>
+            </Stack>
+          }
         </Box>
       </Box>
     </Box>
@@ -373,6 +455,11 @@ export const CardPrice = ({
 }
 
 export default function Price() {
+  let userData = getUserDataJson()
+
+  const ifBDPro = userData?.proSubscription === "bd_pro"
+  const ifBDProEmp = userData?.proSubscription === "bd_pro_empresas"
+
   return (
     <MainPageTemplate paddingX="24px">
       <Head>
@@ -458,15 +545,17 @@ export default function Price() {
               {name: "Dezenas de bases de alta frequência atualizadas"},
             ]}
             button={{
-              text: "Iniciar teste grátis",
-              href: "https://buy.stripe.com/8wM01TeVQ3kg0mIeV4?locale=pt"
+              text: ifBDPro ? "Plano atual" : `Iniciar teste grátis`,
+              href: userData === null ? "/user/login" :`/user/${userData.username}?plans_and_payment`,
+              isCurrentPlan: ifBDPro ? true : false,
+              noHasModal: true
             }}
             hasServiceTerms
           />
 
           <CardPrice
             colorBanner="#252A32"
-            title="BD Empresas"
+            title="BD Pro Empresas"
             badge="Beta"
             subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
             personConfig={{
@@ -477,8 +566,10 @@ export default function Price() {
               {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
             ]}
             button={{
-              text: "Iniciar teste grátis",
-              href: "https://buy.stripe.com/00g4i93d8f2Y5H24gr?locale=pt"
+              text: ifBDProEmp ? "Plano atual" : "Iniciar teste grátis",
+              href: userData === null ? "/user/login" :`/user/${userData.username}?plans_and_payment`,
+              isCurrentPlan: ifBDProEmp ? true : false,
+              noHasModal: true
             }}
             hasServiceTerms
           />

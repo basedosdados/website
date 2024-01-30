@@ -1,3 +1,5 @@
+import cookies from 'js-cookie';
+
 export function filterOnlyValidValues(obj, validValues = null) {
   return Object.entries(obj).filter(
     ([k, v]) =>
@@ -205,4 +207,31 @@ export function removeEmpty(obj) {
       .filter(([_, v]) => v != null)
       .map(([k, v]) => [k, v === Object(v) ? removeEmpty(v) : v])
   );
+}
+
+export function getUserDataJson() {
+  let userData = cookies.get("userBD") || null
+
+  if(userData !== null && userData !== "undefined") userData = JSON.parse(userData)
+  if(userData === "undefined" || userData === null) {
+    cookies.remove('userBD', { path: '/' })
+    cookies.remove('token', { path: '/' })
+  }
+
+  return userData
+}
+
+export function checkUserInfo(user) {
+  if(user === "undefined" || user === null) {
+    cookies.remove('userBD', { path: '/' })
+    cookies.remove('token', { path: '/' })
+    return true
+  }
+  return false
+}
+
+export function cleanUserInfo() {
+  cookies.remove('userBD', { path: '/' })
+  cookies.remove('token', { path: '/' })
+  return true
 }

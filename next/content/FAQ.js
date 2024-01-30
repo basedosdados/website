@@ -2,6 +2,47 @@ import { CopyIcon } from "../public/img/icons/copyIcon"
 
 export const QuestionFAQ = [
   {
+    question: "O que é a BD Pro?",
+    answer: function() {
+      return (
+        <div id="what-is-bd-pro" style={{display: "flex", flexDirection: "column"}}>
+          <p>
+          A BD Pro é uma assinatura de dados exclusivos, com valor de mercado e de alta frequência.
+          Ela é construída e mantida pela Base dos Dados, uma instituição sem fins lucrativos que 
+          tem como missão democratizar o acesso a dados no Brasil.
+          </p>
+          <p>
+          A assinatura Pro conta com todas a funcionalidades já existentes no data lake original da Base dos Dados, 
+          mas com acesso exclusivo a dezenas de conjuntos de dados priorizados para solucionar problemas e te ajudar em sua equipe, 
+          organização ou pesquisa. Além disso, a assinatura oferece acesso à versão mais atualizada de algumas das nossas principais tabelas, 
+          como do CNES, dados de CNPJ, do Brasileirão, dentre muitas outras. 
+          </p>
+        </div>
+      )
+    },
+    categories: ["BD Pro"],
+    keywords: "bd pro, assinatura, dados exclusivos, pagar, custo, gratuito, grátis, mensalidade",
+    id: "what-is-bd-pro"
+  },
+  {
+    question: "Quais bases tenho acesso?",
+    answer: function() {
+      return (
+        <div id="what-datasets-do-i-have-access-to" style={{display: "flex", flexDirection: "column"}}>
+          <p>
+          Você pode acompanhar os dados que já temos disponíveis <a href="https://basedosdados.org/dataset?contains=tables">aqui</a>!
+          </p>
+          <p>
+          Acompanhe as próximas bases que serão tratadas e disponibilizadas no nosso roadmap de dados <a href="https://coda.io/@base-dos-dados/faq-bd-pro/roadmap-de-dados-12">aqui</a>.
+          </p>
+        </div>
+      )
+    },
+    categories: ["BD Pro"],
+    keywords: "bd pro, assinatura, dados exclusivos, acesso, mensalidade",
+    id: "what-datasets-do-i-have-access-to"
+  },
+  {
     question: "Preciso pagar para acessar os dados da BD?",
     answer: function() {
       return (

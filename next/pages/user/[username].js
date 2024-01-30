@@ -3,10 +3,10 @@ import {
   Box,
   Text,
   Divider,
+  Input,
   FormControl,
   FormLabel,
   FormErrorMessage,
-  Input,
   Image,
   Tooltip,
   HStack,
@@ -21,27 +21,51 @@ import {
   ModalFooter,
   UnorderedList,
   ListItem,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
   Badge,
   Grid,
-  GridItem
+  GridItem,
+  Skeleton,
+  SkeletonCircle,
+  SkeletonText,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  PopoverArrow 
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import cookies from 'js-cookie';
 import { MainPageTemplate } from "../../components/templates/main";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
+import { removeSubscription } from "../api/stripe";
 import BigTitle from "../../components/atoms/BigTitle";
 import SectionTitle from "../../components/atoms/SectionTitle";
 import RoundedButton from "../../components/atoms/RoundedButton";
 import ButtonSimple from "../../components/atoms/SimpleButton";
-import InputForm from "../../components/atoms/SimpleInput"
+import InputForm from "../../components/atoms/SimpleInput";
 import Link from "../../components/atoms/Link";
 import BodyText from "../../components/atoms/BodyText";
-import { CardPrice } from "../precos"
+import { CardPrice } from "../precos";
+import PaymentSystem from "../../components/organisms/PaymentSystem";
+import { getUserDataJson, checkUserInfo, cleanUserInfo } from "../../utils";
+import ImageCrop from "../../components/molecules/ImgCrop";
+
+import {
+  getUser,
+  getSimpleToken,
+  getFullUser,
+  updateProfile,
+  refreshToken,
+  updatePassword,
+  updateUser,
+  deleteAccount,
+  deletePictureProfile
+} from "../api/user";
+
+import {
+  getSubscriptionActive
+} from "../api/stripe"
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import PenIcon from "../../public/img/icons/penIcon";
@@ -55,7 +79,42 @@ import CheckIcon from "../../public/img/icons/checkIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 
-const LabelTextForm = ({ text, ...props }) => {
+export async function getServerSideProps(context) {
+  const { req } = context
+  let user = null
+
+  if(req.cookies.userBD) user = JSON.parse(req.cookies.userBD)
+
+  if (checkUserInfo(user)) {
+    return {
+      redirect: {
+        destination: "/user/login",
+        permanent: false,
+      }
+    }
+  }
+
+  const fullUser = await getFullUser(user?.email)
+
+  if(fullUser?.errors?.length > 0) {
+    cleanUserInfo()
+
+    return {
+      redirect: {
+        destination: "/user/login",
+        permanent: false,
+      }
+    }
+  }
+
+  return {
+    props: {
+      fullUser
+    }
+  }
+}
+
+function LabelTextForm ({ text, ...props }) {
   return (
     <FormLabel
       color="#252A32"
@@ -69,7 +128,7 @@ const LabelTextForm = ({ text, ...props }) => {
   )
 }
 
-const TitleTextForm = ({ children, ...props }) => {
+function TitleTextForm ({ children, ...props }) {
   return (
     <Text
       color="#252A32"
@@ -84,7 +143,24 @@ const TitleTextForm = ({ children, ...props }) => {
   )
 }
 
-const ExtraInfoTextForm = ({children, ...props}) => {
+function SkStack ({ isLoaded, children, ...props }) {
+  return (
+    <Skeleton
+      height="40px"
+      width="100%"
+      borderRadius="12px"
+      startColor="#F0F0F0"
+      endColor="#F3F3F3"
+      isLoaded={isLoaded}
+      fadeDuration={2}
+      {...props}
+    >
+      {children}
+    </Skeleton>
+  )
+}
+
+function ExtraInfoTextForm ({children, ...props}) {
   return (
     <Text
       color="#7D7D7D"
@@ -98,13 +174,13 @@ const ExtraInfoTextForm = ({children, ...props}) => {
   )
 }
 
-const ModalGeneral = ({
+function ModalGeneral ({
   children,
   isOpen,
   onClose,
   isCentered = true,
   propsModalContent
-}) => {
+}) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered={isCentered} margin="24px !important">
       <ModalOverlay/>
@@ -132,16 +208,106 @@ const ModalGeneral = ({
   )
 }
 
-const ProfileConfiguration = () => {
-  const [formData, setFormData] = useState({ firstName: "" , lastName: "", picture: "" })
-  const [errors, setErrors] = useState({ firstName: "" , lastName: "" })
+// Sections Of User Page
+const ProfileConfiguration = ({ userInfo }) => {
+  const [isLoading, setIsLoading] = useState(true)
+  const [formData, setFormData] = useState({})
+  const [errors, setErrors] = useState({})
+  const menuAvatar = useDisclosure()
+  const pictureModal = useDisclosure()
+  const [picture, setPicture] = useState(null)
+  const [fileInputKey, setFileInputKey] = useState(Date.now())
 
-  const handleInputChange = (e) => {
+  useEffect(() => {
+    if(Object.keys(userInfo).length === 0) return null
+
+    setFormData({
+      firstName: userInfo?.firstName,
+      lastName: userInfo?.lastName || "",
+      isEmailVisible: userInfo?.isEmailVisible,
+      picture: userInfo?.picture || "",
+      website: userInfo?.website || "",
+      github: userInfo?.github || "",
+      twitter: userInfo?.twitter || "",
+      linkedin: userInfo?.linkedin || ""
+    })
+
+    setTimeout(() => {
+      setIsLoading(false)
+    }, [1000])
+  }, [userInfo])
+
+  function handleInputChange (e) {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }))
   }
+
+  function handleCheckboxChange (e) {
+    setFormData((prevState) => ({
+      ...prevState,
+      isEmailVisible: !formData.isEmailVisible
+    }))
+  }
+
+  async function handleUpdateProfile () {
+    setIsLoading(true)
+    const validationErrors = {}
+
+    if (!formData.firstName) {
+      validationErrors.firstName = "Seu nome é um campo obrigatorio."
+    }
+    setErrors(validationErrors)
+
+    if (Object.keys(validationErrors).length > 0) return
+
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(userInfo?.id)
+    const form = {...formData, id: id}
+
+    const result = await updateProfile(form)
+
+    if(result?.errors?.length === 0) return location.reload(true)
+    setIsLoading(false)
+  }
+
+  const handleImageChange = (event) => {
+    const input = event.target
+
+    if (input.files && input.files[0]) {
+      const fileType = input.files[0].type
+      if (fileType === 'image/png' || fileType === 'image/jpeg' || fileType === 'image/jpg') {
+        const reader = new FileReader()
+        reader.onload = function (e) {
+          setPicture(e.target.result)
+        }
+        pictureModal.onOpen()
+        reader.readAsDataURL(input.files[0])
+      } else {
+        setPicture(null)
+        input.value = ""
+      }
+    }
+  }
+
+  async function hanlderRemovePicture() {
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(userInfo.id)
+
+    const res = await deletePictureProfile(id)
+
+    if(res?.ok === true) {
+      const userData = await getUser(userInfo.email)
+      cookies.set('userBD', JSON.stringify(userData))
+      window.location.reload()
+    }
+  }
+
+  useEffect(() => {
+    setPicture(null)
+    setFileInputKey(Date.now())
+  }, [pictureModal.isOpen === false])
 
   return (
     <Stack
@@ -150,130 +316,159 @@ const ProfileConfiguration = () => {
       spacing={0}
       gap={isMobileMod() ? "40px" : "80px"}
     >
+      <ImageCrop
+        isOpen={pictureModal.isOpen}
+        onClose={pictureModal.onClose}
+        src={picture}
+        id={userInfo.id}
+        username={userInfo.username}
+        email={userInfo.email}
+      />
+
       <Stack spacing="24px" flex={1}>
         <FormControl isInvalid={!!errors.firstName}>
           <LabelTextForm text="Nome"/>
-          <Input
-            id="firstName"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleInputChange}
-            placeholder="Insira seu nome"
-            fontFamily="ubuntu"
-            height="40px"
-            fontSize="14px"
-            borderRadius="16px"
-            _placeholder={{color: "#A3A3A3"}}
-            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
-          />
+          <SkStack isLoaded={!isLoading}>
+            <InputForm
+              id="firstName"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleInputChange}
+              placeholder="Insira seu nome"
+              fontFamily="ubuntu"
+              height="40px"
+              fontSize="14px"
+              borderRadius="16px"
+              _placeholder={{color: "#A3A3A3"}}
+              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+            />
+          </SkStack>
           <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
             <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.firstName}
           </FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.email}>
+        <FormControl>
           <LabelTextForm text="Sobrenome"/>
-          <Input
-            id="lastName"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleInputChange}
-            placeholder="Insira seu sobrenome"
-            fontFamily="ubuntu"
-            height="40px"
-            fontSize="14px"
-            borderRadius="16px"
-            _placeholder={{color: "#A3A3A3"}}
-            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
-          />
-          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
-            <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.lastName}
-          </FormErrorMessage>
+          <SkStack isLoaded={!isLoading}>
+            <InputForm
+              id="lastName"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleInputChange}
+              placeholder="Insira seu sobrenome"
+              fontFamily="ubuntu"
+              height="40px"
+              fontSize="14px"
+              borderRadius="16px"
+              _placeholder={{color: "#A3A3A3"}}
+              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+            />
+          </SkStack>
         </FormControl>
 
         <FormControl>
           <LabelTextForm text="E-mail"/>
-          <Checkbox
-            color="#7D7D7D"
-            fontFamily="Ubuntu"
-            fontSize="14px"
-            fontWeight="400"
-            lineHeight="20px"
-            letterSpacing="0.3px"
+          <SkeletonText
+            isLoaded={!isLoading}
+            fadeDuration={2}
+            height="20px"
+            width="100%"
+            noOfLines={2}
+            startColor="#F0F0F0"
+            endColor="#F3F3F3"
           >
-            Tornar o e-mail de acesso à sua conta visível para o público.
-          </Checkbox>
+            <Checkbox
+              id="isEmailVisible"
+              name="isEmailVisible"
+              defaultChecked={formData.isEmailVisible}
+              checked={formData.isEmailVisible}
+              onChange={handleCheckboxChange}
+              color="#7D7D7D"
+              fontFamily="Ubuntu"
+              fontSize="14px"
+              fontWeight="400"
+              lineHeight="20px"
+              letterSpacing="0.3px"
+            >
+              Tornar o e-mail de acesso à sua conta visível para o público.
+            </Checkbox>
+          </SkeletonText>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.website}>
+        <FormControl>
           <LabelTextForm text="URL"/>
-          <Input
-            id="website"
-            name="website"
-            value={formData.website}
-            onChange={handleInputChange}
-            placeholder="Insira seu endereço URL"
-            fontFamily="ubuntu"
-            height="40px"
-            fontSize="14px"
-            borderRadius="16px"
-            _placeholder={{color: "#A3A3A3"}}
-            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
-          />
-          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
-            <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.website}
-          </FormErrorMessage>
+          <SkStack isLoaded={!isLoading}>
+            <InputForm
+              id="website"
+              name="website"
+              value={formData.website}
+              onChange={handleInputChange}
+              placeholder="Insira seu endereço URL"
+              fontFamily="ubuntu"
+              height="40px"
+              fontSize="14px"
+              borderRadius="16px"
+              _placeholder={{color: "#A3A3A3"}}
+              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+            />
+          </SkStack>
         </FormControl>
         
         <Stack>
           <LabelTextForm text="Redes sociais"/>
-
           <HStack spacing="8px" margin="0 0 8px 0 !important">
             <GithubIcon width="24px" height="24px" fill="#D0D0D0"/>
-            <Input
-              id="github"
-              name="github"
-              value={formData.github}
-              onChange={handleInputChange}
-              placeholder="Link para o perfil no GitHub"
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _placeholder={{color: "#A3A3A3"}}
-            />
+            <SkStack isLoaded={!isLoading}>
+              <InputForm
+                id="github"
+                name="github"
+                value={formData.github}
+                onChange={handleInputChange}
+                placeholder="Link para o perfil no GitHub"
+                fontFamily="ubuntu"
+                height="40px"
+                fontSize="14px"
+                borderRadius="16px"
+                _placeholder={{color: "#A3A3A3"}}
+              />
+            </SkStack>
           </HStack>
 
           <HStack spacing="8px" margin="0 0 8px 0 !important">
             <TwitterIcon width="24px" height="24px" fill="#D0D0D0"/>
-            <Input
-              id="twitter"
-              name="twitter"
-              value={formData.twitter}
-              onChange={handleInputChange}
-              placeholder="Link para o perfil no Twitter"
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _placeholder={{color: "#A3A3A3"}}
-            />
+            <SkStack isLoaded={!isLoading}>
+              <InputForm
+                id="twitter"
+                name="twitter"
+                value={formData.twitter}
+                onChange={handleInputChange}
+                placeholder="Link para o perfil no Twitter"
+                fontFamily="ubuntu"
+                height="40px"
+                fontSize="14px"
+                borderRadius="16px"
+                _placeholder={{color: "#A3A3A3"}}
+              />
+            </SkStack>
           </HStack>
 
           <HStack spacing="8px"  margin="0 !important">
             <LinkedinIcon width="24px" height="24px" fill="#D0D0D0"/>
-            <Input
-              id="linkedin"
-              name="linkedin"
-              value={formData.linkedin}
-              onChange={handleInputChange}
-              placeholder="Link para o perfil no LinkedIn"
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _placeholder={{color: "#A3A3A3"}}
-            />
+            <SkStack isLoaded={!isLoading}>
+              <InputForm
+                id="linkedin"
+                name="linkedin"
+                value={formData.linkedin}
+                onChange={handleInputChange}
+                placeholder="Link para o perfil no LinkedIn"
+                fontFamily="ubuntu"
+                height="40px"
+                fontSize="14px"
+                borderRadius="16px"
+                _placeholder={{color: "#A3A3A3"}}
+              />
+            </SkStack>
           </HStack>
         </Stack>
 
@@ -291,10 +486,8 @@ const ProfileConfiguration = () => {
         <RoundedButton
           borderRadius="30px"
           width={isMobileMod() ? "100%" : "fit-content"}
-          // _hover={{transform: "none", opacity: 0.8}}
-          _hover={{transform: "none"}}
-          backgroundColor="#C4C4C4"
-          cursor="default"
+          _hover={{transform: "none", opacity: 0.8}}
+          onClick={() => handleUpdateProfile()}
         >
           Atualizar perfil
         </RoundedButton>
@@ -311,67 +504,135 @@ const ProfileConfiguration = () => {
           letterSpacing="0.1px"
         >Foto de perfil</SectionTitle>
 
-        <Box
+        <SkeletonCircle
           position="relative"
-          width="200px"
           height="200px"
-        > 
+          width="200px"
+          startColor="#F0F0F0"
+          endColor="#F3F3F3"
+          isLoaded={!isLoading}
+          fadeDuration={2}
+        >
           <Box
-            borderRadius="50%"
-            overflow="hidden"
-          >
-            <Image width="100%" height="100%" src={formData?.picture ? formData.picture : "https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"}/>
+            position="relative"
+            width="200px"
+            height="200px"
+          > 
+              <Box
+                borderRadius="50%"
+                overflow="hidden"
+              >
+                <Image width="100%" height="100%" src={formData?.picture ? formData.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}/>
+              </Box>
+
+              <Popover
+                returnFocusOnClose={false}
+                isOpen={menuAvatar.isOpen}
+                onClose={menuAvatar.onClose}
+              >
+                <PopoverTrigger>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    position="absolute"
+                    cursor="pointer"
+                    bottom="10px"
+                    left="10px"
+                    width="32px"
+                    height="32px"
+                    borderRadius="50%"
+                    backgroundColor="#2B8C4D"
+                    onClick={() => { menuAvatar.onOpen() }}
+                  >
+                    <Tooltip
+                      hasArrow
+                      isDisabled={menuAvatar.isOpen}
+                      bg="#2A2F38"
+                      label="Editar"
+                      fontSize="14px"
+                      fontWeight="400"
+                      letterSpacing="0.5px"
+                      lineHeight="24px"
+                      padding="5px 16px 6px"
+                      marginTop="10px"
+                      color="#FFF"
+                      borderRadius="6px"
+                      minWidth="96px"
+                      textAlign="center"
+                    >
+                      <PenIcon
+                        width="22px"
+                        height="22px"
+                        fill="#FFF"
+                      />
+                    </Tooltip>
+                  </Box>
+                </PopoverTrigger>
+                <PopoverContent
+                  maxWidth="160px"
+                  boxShadow="0 1.6px 16px 0 rgba(100, 96, 103, 0.16) !important"
+                >
+                  <PopoverArrow/>
+                  <PopoverBody
+                    padding="8px 24px"
+                    zIndex="1000000 !important"
+                  >
+                    <FormControl>
+                      <FormLabel
+                        cursor="pointer"
+                        fontFamily="Lato"
+                        fontSize="14px"
+                        letterSpacing="0.5px"
+                        fontWeight="400"
+                        color="#252A32"
+                        margin="0"
+                        _hover={{ color: "#42B0FF" }}
+                      >Atualizar a foto</FormLabel>
+                      <Input
+                        key={fileInputKey}
+                        display="none"
+                        type="file"
+                        accept=".png, .jpg, .jpeg"
+                        onChange={handleImageChange}
+                      />
+                    </FormControl>
+
+                    <Text
+                      paddingTop="8px"
+                      cursor="pointer"
+                      fontFamily="Lato"
+                      fontSize="14px"
+                      letterSpacing="0.5px"
+                      fontWeight="400"
+                      color="#252A32"
+                      _hover={{ color: "#42B0FF" }}
+                      onClick={() => hanlderRemovePicture()}
+                    >Remover foto</Text>
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
           </Box>
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            position="absolute"
-            // cursor="pointer"
-            cursor="default"
-            bottom="10px"
-            left="10px"
-            width="32px"
-            height="32px"
-            borderRadius="50%"
-            backgroundColor="#C4C4C4"
-            // backgroundColor="#2B8C4D"
-          >
-            <Tooltip
-              hasArrow
-              bg="#2A2F38"
-              label="Editar"
-              fontSize="14px"
-              fontWeight="400"
-              letterSpacing="0.5px"
-              lineHeight="24px"
-              padding="5px 16px 6px"
-              marginTop="10px"
-              color="#FFF"
-              borderRadius="6px"
-              minWidth="96px"
-              textAlign="center"
-            >
-              <PenIcon
-                width="22px"
-                height="22px"
-                fill="#FFF"
-              />
-            </Tooltip>
-          </Box>
-        </Box>
+        </SkeletonCircle>
       </Stack>
     </Stack>
   )
 }
 
-const Account = () => {
+const Account = ({ userInfo }) => {
   const emailModal = useDisclosure()
+  const usernameModal = useDisclosure()
   const eraseModalAccount = useDisclosure()
+  const [confirmationWord, setConfirmationWord] = useState("")
   const [emailSent, setEmailSent] = useState(false)
   const [showPassword, setShowPassword] = useState(true)
-  const [formData, setFormData] = useState({ email: "", password: "" })
-  const [errors, setErrors] = useState({ email: "", password: ""})
+
+  const [formData, setFormData] = useState({username: ""})
+  const [errors, setErrors] = useState({})
+
+  const handleSpaceKey = (e) => {
+    if(e.key === " ") { e.preventDefault() }
+  }
 
   const handleInputChange = (e) => {
     setFormData((prevState) => ({
@@ -379,6 +640,44 @@ const Account = () => {
       [e.target.name]: e.target.value,
     }))
   }
+
+  async function submitUpdate() {
+    if(formData.username === "") return setErrors({username: "Nome de usuário inválido."})
+    if(formData.username.includes(" ")) return setErrors({username: "Nome de usuário não pode conter espaços."})
+
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(userInfo?.id)
+    const form = {id: id, username: formData.username}
+
+    const result = await updateUser(form)
+
+    if(result?.errors?.length === 0) {
+      const userData = await getUser(userInfo.email)
+      cookies.set('userBD', JSON.stringify(userData))
+      window.open(`/user/${formData.username}?account`, "_self")
+    }
+
+    if(result?.errors?.length > 0) {
+      setErrors({username: "Nome de usuário inválido ou já existe uma conta com este nome de usuário."})
+    }
+  }
+
+  async function eraseAccount(string) {
+    if(string = "deletar minha conta") {
+      const reg = new RegExp("(?<=:).*")
+      const [ id ] = reg.exec(userInfo.id)
+
+      const result = await deleteAccount(id)
+
+      if(result?.ok === true) {
+        cookies.remove('userBD', { path: '/' })
+        cookies.remove('token', { path: '/' })
+        return window.open("/", "_self")
+      }
+    }
+  }
+
+  const stringConfirm = confirmationWord === "deletar minha conta"
 
   return (
     <Stack spacing="24px">
@@ -487,6 +786,10 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
               >
                 <LabelTextForm text="Senha" margin="0 !important"/>
                 <ButtonSimple
+                  position="relative"
+                  top="-2px"
+                  width="fit-content"
+                  marginLeft="auto !important"
                   fontWeight="700"
                   color="#42B0FF"
                   letterSpacing="0.3px"
@@ -553,8 +856,54 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
       </ModalGeneral>
 
       <ModalGeneral
+        isOpen={usernameModal.isOpen}
+        onClose={usernameModal.onClose}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <SectionTitle
+            lineHeight="40px"
+          >Alterar nome de usuário</SectionTitle>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+          />
+        </Stack>
+
+        <FormControl isInvalid={!!errors.username}>
+          <LabelTextForm text="Novo nome de usuário"/>
+          <InputForm
+            id="username"
+            name="username"
+            value={formData.username}
+            onChange={handleInputChange}
+            onKeyDown={handleSpaceKey}
+            fontFamily="ubuntu"
+            height="40px"
+            fontSize="14px"
+            borderRadius="16px"
+            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+          />
+          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.username}
+          </FormErrorMessage>
+        </FormControl>
+
+        <RoundedButton
+          marginTop="16px"
+          borderRadius="30px"
+          _hover={{transform: "none", opacity: 0.8}}
+          onClick={() => submitUpdate(formData)}
+        >
+          Atualizar nome de usuário
+        </RoundedButton>
+      </ModalGeneral>
+
+      <ModalGeneral
         isOpen={eraseModalAccount.isOpen}
         onClose={eraseModalAccount.onClose}
+        propsModalContent={{minWidth:isMobileMod() ? "" : "620px !important"}}
       >
         <Stack spacing={0} marginBottom="16px">
           <SectionTitle
@@ -565,6 +914,10 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
             top="34px"
             right="26px"
             _hover={{backgroundColor: "transparent", color:"#FF8484"}}
+            onClick={() => {
+              eraseModalAccount.onClose()
+              setConfirmationWord("")
+            }}
           />
         </Stack>
 
@@ -572,10 +925,32 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
           <ExtraInfoTextForm fontSize="16px" lineHeight="24px" letterSpacing="0.2px">
           Após deletar sua conta, todos os dados serão permanentemente removidos e não poderão ser recuperados. 
           </ExtraInfoTextForm>
+
+          <FormControl isInvalid={!!errors.firstName}>
+            <FormLabel
+              color="#252A32"
+              fontFamily="ubuntu"
+              letterSpacing="0.2px"
+              fontSize="16px"
+              fontWeight="400"
+              lineHeight="16px"
+              userSelect="none"
+            >Por favor, confirme escrevendo: "deletar minha conta" abaixo.</FormLabel>
+            <InputForm
+              value={confirmationWord}
+              onChange={(e) => setConfirmationWord(e.target.value)}
+              fontFamily="ubuntu"
+              height="40px"
+              fontSize="14px"
+              borderRadius="16px"
+              _placeholder={{color: "#A3A3A3"}}
+              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+            />
+          </FormControl>
         </Stack>
 
         <Stack
-          flexDirection={isMobileMod() ? "column" : "row"}
+          flexDirection={isMobileMod() ? "column-reverse" : "row"}
           spacing={0}
           gap="24px"
           width={isMobileMod() ? "100%" : "fit-content"}
@@ -587,26 +962,29 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
             color="#FF8484"
             width={isMobileMod() ? "100%" : "fit-content"}
             _hover={{transform: "none", opacity: 0.8}}
-            onClick={() => eraseModalAccount.onClose()}
+            onClick={() => {
+              eraseModalAccount.onClose()
+              setConfirmationWord("")
+            }}
           >
             Cancelar
           </RoundedButton>
 
           <RoundedButton
             borderRadius="30px"
-            // backgroundColor="#FF8484"
-            cursor="default"
-            backgroundColor="#C4C4C4"
+            backgroundColor={stringConfirm ? "#FF8484" : "#C4C4C4"}
+            cursor={stringConfirm ? "pointer" : "default"}
             width={isMobileMod() ? "100%" : "fit-content"}
-            // _hover={{transform: "none", opacity: 0.8}}
-            _hover={{transform: "none"}}
+            _hover={stringConfirm ? {transform: "none", opacity: 0.8} : {transform: "none"}}
+            pointerEvents={stringConfirm ? "default" : "none"}
+            onClick={() => eraseAccount(confirmationWord)}
           >
             Deletar
           </RoundedButton>
         </Stack>
       </ModalGeneral>
 
-      <Box>
+      {/* <Box>
         <TitleTextForm>E-mail</TitleTextForm>
         <Text
           color="#6F6F6F"
@@ -615,7 +993,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
           fontWeight="400"
           lineHeight="27px"
           letterSpacing="0.3px"
-        >meuemail@gmail.com</Text>
+        >{userInfo.email}</Text>
         <Link
           color="#42B0FF"
           fontFamily="ubuntu"
@@ -625,9 +1003,9 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
           letterSpacing="0.2px"
           onClick={() => emailModal.onOpen()}
         >Alterar e-mail</Link>
-      </Box>
+      </Box> */}
 
-      {/* <Box>
+      <Box>
         <TitleTextForm>Nome de usuário</TitleTextForm>
         <Text
           color="#6F6F6F"
@@ -636,7 +1014,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
           fontWeight="400"
           lineHeight="27px"
           letterSpacing="0.3px"
-        >dadinho</Text>
+        >{userInfo.username}</Text>
         <Link
           color="#42B0FF"
           fontFamily="ubuntu"
@@ -644,9 +1022,9 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
           fontSize="16px"
           lineHeight="30px"
           letterSpacing="0.2px"
-          onClick={() => emailModal.onOpen()}
+          onClick={() => usernameModal.onOpen()}
         >Alterar nome de usuário</Link>
-      </Box> */}
+      </Box>
 
       <Box>
         <TitleTextForm>Exportar dados da conta</TitleTextForm>
@@ -676,19 +1054,15 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
   )
 }
 
-const NewPassword = () => {
+const NewPassword = ({ userInfo }) => {
   const newPasswordModal = useDisclosure()
   const [formData, setFormData] = useState({
     password: "",
     newPassword: "",
     confirmPassword: ""
   })
-  const [errors, setErrors] = useState({
-    password: "",
-    newPassword: "",
-    regexPassword: {},
-    confirmPassword: ""
-  })
+  const [errors, setErrors] = useState({})
+
   const [showPassword, setShowPassword] = useState(true)
   const [showNewPassword, setShowNewPassword] = useState(true)
   const [showConfirmPassword, setShowConfirmPassword] = useState(true)
@@ -698,6 +1072,62 @@ const NewPassword = () => {
       ...prevState,
       [e.target.name]: e.target.value,
     }))
+  }
+
+  async function submitNewPassword() {
+    const regexPassword = {}
+    const validationErrors = {}
+
+    if(formData.password !== "" && formData.password === formData.newPassword) {
+      validationErrors.newPassword = "A nova senha tem quer ser diferente da atual"
+    }
+    if(!/^.{8,}$/.test(formData.newPassword)) {
+      regexPassword = {...regexPassword, amount: true}
+    }
+    if(!/[A-Z]/.test(formData.newPassword)) {
+      regexPassword = {...regexPassword, upperCase: true}
+    }
+    if(!/[a-z]/.test(formData.newPassword)) {
+      regexPassword = {...regexPassword, lowerCase: true}
+    }
+    if(!/(?=.*?[0-9])/.test(formData.newPassword)) {
+      regexPassword = {...regexPassword, number: true}
+    }
+    if(!/(?=.*?[#?!@$%^&*-])/.test(formData.newPassword)) {
+      regexPassword = {...regexPassword, special: true}
+    }
+    if (!formData.confirmPassword) {
+      validationErrors.confirmPassword = "Confirmar a senha é necessário"
+    }
+    if(formData.confirmPassword !== formData.newPassword) {
+      validationErrors.confirmPassword = "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente."
+    }
+
+    if(Object.keys(regexPassword).length > 0) validationErrors.regexPassword = regexPassword
+
+    if(formData.password === "") {
+      validationErrors.password = "Por favor, insira a senha."
+    }
+
+    let getTokenPassword
+    if(formData.password !== "") {
+      getTokenPassword = await getSimpleToken({email: userInfo.email, password: formData.password})
+      if(getTokenPassword?.tokenAuth === null || result?.errors?.length > 0) {
+        validationErrors.password = "A senha está incorreta. Por favor, tente novamente."
+      }
+    }
+    setErrors(validationErrors)
+
+    if (Object.keys(validationErrors).length > 0) return
+
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(userInfo?.id)
+    const form = {id: id, password: formData.newPassword, token: getTokenPassword?.tokenAuth?.token}
+
+    const result = await updatePassword(form)
+    setFormData({})
+
+    newPasswordModal.onOpen()
   }
 
   return (
@@ -720,14 +1150,14 @@ const NewPassword = () => {
             lineHeight="40px"
           >Sua senha foi alterada com sucesso</SectionTitle>
           <ExtraInfoTextForm
-              fontSize="16px"
-              letterSpacing="0.2px"
-              lineHeight="24px"
-            >Agora você pode utilizar a nova senha para acessar sua<br/> conta na Base dos Dados.</ExtraInfoTextForm>
+            fontSize="16px"
+            letterSpacing="0.2px"
+            lineHeight="24px"
+          >Agora você pode utilizar a nova senha para acessar sua<br/> conta na Base dos Dados.</ExtraInfoTextForm>
         </Stack>
 
         <Stack
-          flexDirection={isMobileMod() ? "column" : "row"}
+          flexDirection={isMobileMod() ? "column-reverse" : "row"}
           spacing={0}
           justifyContent="center"
           gap="24px"
@@ -740,7 +1170,7 @@ const NewPassword = () => {
             color="#42B0FF"
             width={isMobileMod() ? "100%" : "fit-content"}
             _hover={{transform: "none", opacity: 0.8}}
-            onClick={() => newPasswordModal.onClose()}
+            onClick={() => window.open(`/user/${userInfo.username}`, "_self")}
           >
             Continuar nas configurações
           </RoundedButton>
@@ -766,6 +1196,10 @@ const NewPassword = () => {
           <LabelTextForm width="100%" text="Senha atual" margin="0 !important"/>
           <ButtonSimple
             display={isMobileMod() ? "none" : "flex"}
+            position="relative"
+            top="-2px"
+            width="inherit"
+            marginLeft="auto !important"
             fontWeight="700"
             color="#42B0FF"
             letterSpacing="0.3px"
@@ -788,6 +1222,7 @@ const NewPassword = () => {
           fontSize="14px"
           borderRadius="16px"
           _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+          autoComplete="off"
           styleElmRight={{
             width: "50px",
             height: "40px",
@@ -826,8 +1261,8 @@ const NewPassword = () => {
         </ButtonSimple>
       </FormControl>
 
-      <FormControl isInvalid={!!errors.newPassword}>
-        <LabelTextForm text="Nova Senha" />
+      <FormControl isInvalid={!!errors.newPassword || !!errors.regexPassword}>
+        <LabelTextForm text="Nova senha"/>
         <InputForm
           type={showNewPassword ? "password" : "text"}
           id="newPassword"
@@ -864,7 +1299,7 @@ const NewPassword = () => {
         />
         <Text 
           margin="8px 0"
-          color= {Object.keys(errors.regexPassword).length > 0 ? "#D93B3B" : "#7D7D7D"}
+          color= { errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#D93B3B" : "#7D7D7D" : "#7D7D7D" }
           fontFamily= "Ubuntu"
           fontSize= "12px"
           fontWeight= "400"
@@ -874,7 +1309,7 @@ const NewPassword = () => {
           flexDirection="row"
           gap="4px"
           alignItems="flex-start"
-        ><Exclamation width="14px" height="14px" fill="#D93B3B" display={Object.keys(errors.regexPassword).length > 0 ? "flex" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
+        ><Exclamation width="14px" height="14px" fill="#D93B3B" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
         <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
           <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>8 caracteres</ListItem>
           <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>Uma letra maiúscula</ListItem>
@@ -882,6 +1317,11 @@ const NewPassword = () => {
           <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>Um dígito</ListItem>
           <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial</ListItem>
         </UnorderedList>
+        {errors.newPassword &&
+          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.newPassword}
+          </FormErrorMessage>
+        }
       </FormControl>
 
       <FormControl isInvalid={!!errors.confirmPassword}>
@@ -929,7 +1369,7 @@ const NewPassword = () => {
         borderRadius="30px"
         _hover={{transform: "none", opacity: 0.8}}
         width="fit-content"
-        onClick={() => newPasswordModal.onOpen()}
+        onClick={() => submitNewPassword()}
       >
         Atualizar senha
       </RoundedButton>
@@ -937,55 +1377,164 @@ const NewPassword = () => {
   )
 }
 
-const PlansAndPayment = () => {
+const PlansAndPayment = ({ userData }) => {
+  const [checkBDPro, setCheckBDPro] = useState(false)
+  const [checkBDProE, setCheckBDProE] = useState(false)
+  const [plan, setPlan] = useState({})
+  const PaymentModal = useDisclosure()
   const PlansModal = useDisclosure()
+  const CancelModalPlan = useDisclosure()
+
+  useEffect(() => {
+    setCheckBDPro(false)
+    setCheckBDProE(false)
+  }, [PlansModal.isOpen === false])
 
   const resources={
-    "bdGratis" : [
-    {name: "Tabelas tratadas"},
-    {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
-    {name: "Acesso em nuvem"},
-    {name: "Acesso via SQL, Python, R e Stata"},
-    {name: "Integração com ferramentas BI"},
-    {name: "Download até 200.000 linhas"},
-    {name: "Até 1TB de processamento", tooltip: "Limite mensal gratuito oferecido pelo Google Cloud."}],
-    "bdPro" : [
-      {name: "Dezenas de bases de alta frequência atualizadas"}
-    ],
-    "bdEmpresas" : [
-      {name: "Acesso para 10 contas"},
-      {name: "Suporte prioritário via email e Discord"}
-    ]
+    "BD Gratis" : {
+      title: "BD Grátis",
+      buttons: [{text:"Comparar planos", onClick: () => PlansModal.onOpen()}],
+      resources : [{name: "Tabelas tratadas"},
+      {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
+      {name: "Acesso em nuvem"},
+      {name: "Acesso via SQL, Python, R e Stata"},
+      {name: "Integração com ferramentas BI"},
+      {name: "Download até 200.000 linhas"},
+      {name: "Até 1TB de processamento", tooltip: "Limite mensal gratuito oferecido pelo Google Cloud."}]
+    },
+    "bd_pro" : {
+      title: "BD Pro",
+      buttons : [{text:"Cancelar plano", onClick: () => CancelModalPlan.onOpen()}],
+      resources : [{name: "Dezenas de bases de alta frequência atualizadas"}]
+    },
+    "bd_pro_empresas" : {
+      title: "BD Pro Empresas",
+      buttons : [{text:"Cancelar plano", onClick: () => CancelModalPlan.onOpen()}],
+      resources : [{name: "Acesso para 10 contas"},
+      {name: "Suporte prioritário via email e Discord"}]}
   }
 
-  const TabContent = ({children, ...props}) => {
+  const planActive = userData?.proSubscriptionStatus === "active"
+  const defaultResource = resources["BD Gratis"]
+  const planResource = resources[userData?.proSubscription]
+
+  const controlResource  = () => {
+    return planActive ? planResource : defaultResource
+  }
+
+  const IncludesFeature = ({ elm, index }) => {
     return (
-      <Tab
-        fontFamily="ubuntu"
-        fontSize="16px"
-        fontWeight="400"
-        letterSpacing="0.2px"
-        lineHeight="24px"
-        color="#252A32"
-        padding="0 8px 11px"
-        _hover={{
-          borderBottom: "3px solid #D0D0D0"
-        }}
-        _selected={{
-          color: "#2B8C4D",
-          fontWeight: "700",
-          borderBottom: "3px solid #2B8C4D",
-          pointerEvents: "none"
-        }}
-        {...props}
-      >
-        {children}
-      </Tab>
+      <Box key={index} display="flex" alignItems="center">
+        <CheckIcon fill="#2B8C4D" width="24px" height="24px" marginRight="8px"/>
+        <Text
+          color="#252A32"
+          fontFamily="Ubuntu"
+          fontSize="16px"
+          fontWeight="400"
+          lineHeight="16px"
+          letterSpacing="0.2px"
+        >{elm.name}</Text>
+        {elm.tooltip &&
+          <Tooltip
+            hasArrow
+            placement="top"
+            bg="#2A2F38"
+            label={elm.tooltip}
+            fontSize="14px"
+            fontWeight="400"
+            padding="5px 16px 6px"
+            letterSpacing="0.5px"
+            lineHeight="24px"
+            color="#FFF"
+            borderRadius="6px"
+          >
+            <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3" marginLeft="16px"/>
+          </Tooltip>
+        }
+      </Box>
     )
+  }
+
+  const NotIncludesFeature = ({ elm, index }) => {
+    return (
+      <Box key={index} display="flex" alignItems="center">
+        <CrossIcon fill="#FF8484" width="24px" height="24px" marginRight="8px"/>
+        <Text
+          color="#252A32"
+          fontFamily="Ubuntu"
+          fontSize="16px"
+          fontWeight="400"
+          lineHeight="24px"
+          letterSpacing="0.2px"
+        >{elm.name}</Text>
+        {elm.tooltip &&
+          <Tooltip
+            hasArrow
+            placement="top"
+            bg="#2A2F38"
+            label={elm.tooltip}
+            fontSize="14px"
+            fontWeight="400"
+            padding="5px 16px 6px"
+            letterSpacing="0.5px"
+            lineHeight="24px"
+            color="#FFF"
+            borderRadius="6px"
+          >
+            <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3"/>
+          </Tooltip>
+        }
+      </Box>
+    )
+  }
+
+  const cancelSubscripetion = async () => {
+    const subs = await getSubscriptionActive(userData.email)
+    const result = await removeSubscription(subs[0]?.node._id)
+    setTimeout(() => {
+      window.location.reload()
+    }, 2000)
   }
 
   return (
     <Stack>
+      <ModalGeneral
+        isOpen={PaymentModal.isOpen}
+        onClose={PaymentModal.onClose}
+        isCentered={isMobileMod() ? false : true}
+        propsModalContent={{
+          minWidth: "fit-content",
+          maxWidth: "fit-content",
+          maxHeight: isMobileMod() ? "100%" : "700px",
+          overflowY: "auto"
+        }}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <SectionTitle lineHeight="40px" height="40px">
+            Assinatura
+          </SectionTitle>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+          />
+        </Stack>
+
+        <Stack
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          justifyItems="center"
+          width="fit-content"
+          minWidth="292px"
+          gap="20px"
+          spacing={0}
+        >
+          <PaymentSystem userData={userData} plan={plan}/>
+        </Stack>
+      </ModalGeneral>
+
       <ModalGeneral
         isOpen={PlansModal.isOpen}
         onClose={PlansModal.onClose}
@@ -993,7 +1542,7 @@ const PlansAndPayment = () => {
         isCentered={isMobileMod() ? false : true}
       >
         <Stack spacing={0} marginBottom="16px">
-          <SectionTitle lineHeight="40px">
+          <SectionTitle lineHeight="40px" height="40px">
             Compare os planos
           </SectionTitle>
           <ModalCloseButton
@@ -1003,6 +1552,7 @@ const PlansAndPayment = () => {
             _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
           />
         </Stack>
+
         <Stack
           display={isMobileMod() ? "flex" : "grid"}
           gridTemplateColumns="repeat(3, 320px)"
@@ -1052,15 +1602,22 @@ const PlansAndPayment = () => {
               {name: "Dezenas de bases de alta frequência atualizadas"},
             ]}
             button={{
-              text: "Iniciar teste grátis",
-              href: "https://buy.stripe.com/8wM01TeVQ3kg0mIeV4?locale=pt"
+              text: `${userData?.proSubscription === "bd_pro" ? "Plano atual" : "Assinar"}`,
+              onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => {
+                setPlan({slug:"bd_pro", slots: "0"})
+                PlansModal.onClose()
+                PaymentModal.onOpen()
+              },
+              isCurrentPlan: userData?.proSubscription === "bd_pro" ? true : false,
             }}
-            hasServiceTerms
+            checkTerms
+            checked={checkBDPro}
+            onChangeChecked={() => setCheckBDPro(!checkBDPro)}
           />
 
           <CardPrice
             colorBanner="#252A32"
-            title="BD Empresas"
+            title="BD Pro Empresas"
             badge="Beta"
             subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
             personConfig={{
@@ -1071,230 +1628,228 @@ const PlansAndPayment = () => {
               {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
             ]}
             button={{
-              text: "Iniciar teste grátis",
-              href: "https://buy.stripe.com/00g4i93d8f2Y5H24gr?locale=pt"
+              text: `${userData?.proSubscription === "bd_pro_empresas" ? "Plano atual" : "Assinar"}`,
+              onClick: userData?.proSubscription === "bd_pro_empresas" ? () => {} : () => {
+                setPlan({slug:"bd_pro_empresas", slots: "10"})
+                PlansModal.onClose()
+                PaymentModal.onOpen()
+              },
+              isCurrentPlan: userData?.proSubscription === "bd_pro_empresas" ? true : false,
             }}
-            hasServiceTerms
+            checkTerms
+            checked={checkBDProE}
+            onChangeChecked={() => setCheckBDProE(!checkBDProE)}
           />
         </Stack>
       </ModalGeneral>
 
-      <Tabs isLazy>
-        <TabList
-          borderBottom= "2px solid #DEDFE0 !important"
+      <ModalGeneral
+        isOpen={CancelModalPlan.isOpen}
+        onClose={CancelModalPlan.onClose}
+        propsModalContent={{maxWidth: "fit-content"}}
+        isCentered={isMobileMod() ? false : true}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <SectionTitle lineHeight="40px" height="40px">
+            Tem certeza que deseja cancelar seu plano?
+          </SectionTitle>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+          />
+        </Stack>
+
+        <Stack spacing="24px" marginBottom="16px">
+          <ExtraInfoTextForm fontSize="16px" lineHeight="24px" letterSpacing="0.2px">
+            Após o cancelamento, você perderá acesso aos recursos exclusivos do plano atual. 
+          </ExtraInfoTextForm>
+        </Stack>
+
+        <Stack
+          flexDirection={isMobileMod() ? "column-reverse" : "row"}
+          spacing={0}
+          gap="24px"
+          width={isMobileMod() ? "100%" : "fit-content"}
         >
-          <TabContent>Planos</TabContent>
-          <TabContent
-            color="#A3A3A3"
-            pointerEvents="none"
-          >Pagamento</TabContent>
-        </TabList>
-        <TabPanels>
-          <TabPanel padding="32px 0 0">
-            <Stack spacing="40px">
-              <Stack
-                spacing={0}
-                flexDirection={isMobileMod() ? "column" : "row"}
-                width="100%"
-                justifyContent="space-between"
+          <RoundedButton
+            borderRadius="30px"
+            backgroundColor="#FFF"
+            border="1px solid #FF8484"
+            color="#FF8484"
+            width={isMobileMod() ? "100%" : "fit-content"}
+            _hover={{transform: "none", opacity: 0.8}}
+            onClick={() => CancelModalPlan.onClose()}
+          >
+            Voltar
+          </RoundedButton>
+
+          <RoundedButton
+            borderRadius="30px"
+            backgroundColor="#FF8484"
+            width={isMobileMod() ? "100%" : "fit-content"}
+            _hover={{transform: "none", opacity: 0.8}}
+            onClick={() => cancelSubscripetion()}
+          >
+            Cancelar o plano
+          </RoundedButton>
+        </Stack>
+      </ModalGeneral>
+
+      <Stack spacing="40px">
+        <Stack
+          spacing={0}
+          flexDirection={isMobileMod() ? "column" : "row"}
+          width="100%"
+          justifyContent="space-between"
+        >
+          <Stack spacing="8px" marginBottom={isMobileMod() ? "16px" : "0"}>
+            <Badge
+              width="fit-content"
+              padding="4px 5px"
+              textTransform="none"
+              borderRadius="6px"
+              backgroundColor="#DEDFE0"
+              color="#252A32"
+              fontSize="10px"
+              fontFamily="ubuntu"
+              fontWeight="300"
+              letterSpacing="0.2px"
+            >Plano atual</Badge>
+            <Text
+              color="#252A32"
+              fontFamily="Ubuntu"
+              fontSize="28px"
+              fontWeight="500"
+              lineHeight="36px"
+            >{controlResource().title}</Text>
+          </Stack>
+
+          <Stack
+            spacing={0}
+            gap="24px"
+            flexDirection={isMobileMod() ? "column-reverse" : "row"}
+          >
+            <RoundedButton
+              borderRadius="30px"
+              backgroundColor="#FFF"
+              border="1px solid #42B0FF"
+              color="#42B0FF"
+              width={isMobileMod() ? "100%" : "fit-content"}
+              _hover={{transform: "none", opacity: 0.8}}
+              onClick={() => controlResource().buttons[0].onClick()}
+            >{controlResource().buttons[0].text}
+            </RoundedButton>
+            {/* <RoundedButton
+              borderRadius="30px"
+              width={isMobileMod() ? "100%" : "fit-content"}
+              _hover={{transform: "none", opacity: 0.8}}
+              onClick={() => controlResource().buttons[1].onClick()}
+            >{controlResource().buttons[1].text}
+            </RoundedButton> */}
+          </Stack>
+        </Stack>
+
+        <Stack
+          spacing={0}
+          gap="64px"
+          flexDirection={isMobileMod() ? "column" : "row"}
+        >
+          <Stack minWidth="350px" spacing="8px">
+            <Text
+              color="#7D7D7D"
+              fontFamily="Ubuntu"
+              fontSize="16px"
+              fontWeight="400"
+              lineHeight="16px"
+              letterSpacing="0.2px"
+              marginBottom="8px"
+            >Inclui</Text>
+            {defaultResource.resources.map((elm, index) => {
+              return <IncludesFeature elm={elm} index={index} key={index}/>
+            })}
+            {userData?.proSubscription === "bd_pro" && 
+              planResource.resources.map((elm, index) => {
+                return <IncludesFeature elm={elm} index={index} key={index}/>
+              })
+            }
+            {userData?.proSubscription === "bd_pro_empresas" &&
+              <>
+                {resources["bd_pro"].resources.map((elm, index) => {
+                  return <IncludesFeature elm={elm} index={index} key={index}/>
+                })}
+                {planResource.resources.map((elm, index) => {
+                  return <IncludesFeature elm={elm} index={index} key={index}/>
+                })}
+              </>
+            }
+
+            {userData?.proSubscription === "bd_pro_empresas" &&
+              <ButtonSimple
+                color="#42B0FF"
+                fontSize="14px"
+                fontWeight="700"
+                letterSpacing="0.3px"
+                _hover={{opacity: 0.7}}
+                marginTop="16px !important"
+                onClick={() => PlansModal.onOpen()}
               >
-                <Stack spacing="8px" marginBottom={isMobileMod() ? "16px" : "0"}>
-                  <Badge
-                    width="fit-content"
-                    padding="4px 5px"
-                    textTransform="none"
-                    borderRadius="6px"
-                    backgroundColor="#DEDFE0"
-                    color="#252A32"
-                    fontSize="10px"
-                    fontFamily="ubuntu"
-                    fontWeight="300"
-                    letterSpacing="0.2px"
-                  >Plano atual</Badge>
-                  <Text
-                    color="#252A32"
-                    fontFamily="Ubuntu"
-                    fontSize="28px"
-                    fontWeight="500"
-                    lineHeight="36px"
-                  >BD Grátis</Text>
-                </Stack>
-                <Stack
-                  spacing={0}
-                  gap="24px"
-                  flexDirection={isMobileMod() ? "column" : "row"}
-                >
-                  <RoundedButton
-                    borderRadius="30px"
-                    backgroundColor="#FFF"
-                    border="1px solid #42B0FF"
-                    color="#42B0FF"
-                    width={isMobileMod() ? "100%" : "fit-content"}
-                    _hover={{transform: "none", opacity: 0.8}}
-                    onClick={() => PlansModal.onOpen()}
-                  >Compare os planos</RoundedButton>
-                  <RoundedButton
-                    borderRadius="30px"
-                    width={isMobileMod() ? "100%" : "fit-content"}
-                    // _hover={{transform: "none", opacity: 0.8}}
-                    cursor="default"
-                    backgroundColor="#C4C4C4"
-                    _hover={{transform: "none"}}
-                  >Faça o upgrade</RoundedButton>
-                </Stack>
-              </Stack>
+                Veja tudo e compare os planos
+              </ButtonSimple>
+            }
+          </Stack>
 
-              <Stack
-                spacing={0}
-                gap="64px"
-                flexDirection={isMobileMod() ? "column" : "row"}
+          <Stack spacing="8px">
+            {userData?.proSubscription !== "bd_pro_empresas" &&
+              <Text
+                color="#7D7D7D"
+                fontFamily="Ubuntu"
+                fontSize="16px"
+                fontWeight="400"
+                lineHeight="16px"
+                letterSpacing="0.2px"
+                marginBottom="8px"
+              >Não inclui</Text>}
+
+              {!planActive && 
+                <>
+                  {resources["bd_pro"].resources.map((elm, index) => {
+                    return <NotIncludesFeature  elm={elm} index={index} key={index}/>
+                  })}
+                  {resources["bd_pro_empresas"].resources.map((elm, index) => {
+                    return <NotIncludesFeature  elm={elm} index={index} key={index}/>
+                  })}
+                </>
+              }
+
+              {userData?.proSubscription === "bd_pro" &&
+                resources["bd_pro_empresas"].resources.map((elm, index) => {
+                  return <NotIncludesFeature  elm={elm} index={index} key={index}/>
+                })
+              }
+
+            {userData?.proSubscription !== "bd_pro_empresas" &&
+              <ButtonSimple
+                color="#42B0FF"
+                fontSize="14px"
+                fontWeight="700"
+                letterSpacing="0.3px"
+                _hover={{opacity: 0.7}}
+                marginTop="16px !important"
+                onClick={() => PlansModal.onOpen()}
               >
-                <Stack minWidth="350px" spacing="8px">
-                  <Text
-                    color="#7D7D7D"
-                    fontFamily="Ubuntu"
-                    fontSize="16px"
-                    fontWeight="400"
-                    lineHeight="16px"
-                    letterSpacing="0.2px"
-                    marginBottom="8px"
-                  >Inclui</Text>
-                  {resources.bdGratis.map((elm, index) => {
-                    return (
-                      <Box key={index} display="flex" alignItems="center">
-                        <CheckIcon fill="#2B8C4D" width="24px" height="24px" marginRight="8px"/>
-                        <Text
-                          color="#252A32"
-                          fontFamily="Ubuntu"
-                          fontSize="16px"
-                          fontWeight="400"
-                          lineHeight="16px"
-                          letterSpacing="0.2px"
-                        >{elm.name}</Text>
-                        {elm.tooltip &&
-                          <Tooltip
-                            hasArrow
-                            placement="top"
-                            bg="#2A2F38"
-                            label={elm.tooltip}
-                            fontSize="14px"
-                            fontWeight="400"
-                            padding="5px 16px 6px"
-                            letterSpacing="0.5px"
-                            lineHeight="24px"
-                            color="#FFF"
-                            borderRadius="6px"
-                          >
-                            <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3" marginLeft="16px"/>
-                          </Tooltip>
-                        }
-                      </Box>
-                    )
-                  })}
-                </Stack>
-
-                <Stack spacing="8px">
-                  <Text
-                    color="#7D7D7D"
-                    fontFamily="Ubuntu"
-                    fontSize="16px"
-                    fontWeight="400"
-                    lineHeight="16px"
-                    letterSpacing="0.2px"
-                    marginBottom="8px"
-                  >Não inclui</Text>
-                  {resources.bdPro.map((elm, index) => {
-                    return (
-                      <Box key={index} display="flex" alignItems="center">
-                        <CrossIcon fill="#FF8484" width="24px" height="24px" marginRight="8px"/>
-                        <Text
-                          color="#252A32"
-                          fontFamily="Ubuntu"
-                          fontSize="16px"
-                          fontWeight="400"
-                          lineHeight="24px"
-                          letterSpacing="0.2px"
-                        >{elm.name}</Text>
-                        {elm.tooltip &&
-                          <Tooltip
-                            hasArrow
-                            placement="top"
-                            bg="#2A2F38"
-                            label={elm.tooltip}
-                            fontSize="14px"
-                            fontWeight="400"
-                            padding="5px 16px 6px"
-                            letterSpacing="0.5px"
-                            lineHeight="24px"
-                            color="#FFF"
-                            borderRadius="6px"
-                          >
-                            <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3"/>
-                          </Tooltip>
-                        }
-                      </Box>
-                    )
-                  })}
-                  {resources.bdEmpresas.map((elm, index) => {
-                    return (
-                      <Box key={index} display="flex" alignItems="center">
-                        <CrossIcon fill="#FF8484" width="24px" height="24px" marginRight="8px"/>
-                        <Text
-                          color="#252A32"
-                          fontFamily="Ubuntu"
-                          fontSize="16px"
-                          fontWeight="400"
-                          lineHeight="24px"
-                          letterSpacing="0.2px"
-                        >{elm.name}</Text>
-                        {elm.tooltip &&
-                          <Tooltip
-                            hasArrow
-                            placement="top"
-                            bg="#2A2F38"
-                            label={elm.tooltip}
-                            fontSize="14px"
-                            fontWeight="400"
-                            padding="5px 16px 6px"
-                            letterSpacing="0.5px"
-                            lineHeight="24px"
-                            color="#FFF"
-                            borderRadius="6px"
-                          >
-                            <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3"/>
-                          </Tooltip>
-                        }
-                      </Box>
-                    )
-                  })}
-
-                  <ButtonSimple
-                    color="#42B0FF"
-                    fontSize="14px"
-                    fontWeight="700"
-                    letterSpacing="0.3px"
-                    _hover={{opacity: 0.7}}
-                    marginTop="16px !important"
-                    onClick={() => PlansModal.onOpen()}
-                  >
-                    Veja tudo e compare os planos
-                  </ButtonSimple>
-                </Stack>
-              </Stack>
-            </Stack>
-          </TabPanel>
-
-          <TabPanel>
-
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+                Veja tudo e compare os planos
+              </ButtonSimple>
+            }
+          </Stack>
+        </Stack>
+      </Stack>
     </Stack>
   )
 }
 
-const Accesses = () => {
-
+const Accesses = ({ userInfo }) => {
   return (
     <Stack spacing="24px">
       <Stack alignItems="end">
@@ -1378,7 +1933,7 @@ const Accesses = () => {
               overflow="hidden"
               top="9px"
             >
-              <Image width="100%" height="100%" src="https://basedosdados-static.s3.us-east-2.amazonaws.com/equipe/sem_foto.png"/>
+              <Image width="100%" height="100%" src={userInfo?.picture ? userInfo?.picture :"https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}/>
             </Box>
             <Text
               marginLeft={isMobileMod() ? "44px !important" : "60px !important"}
@@ -1390,7 +1945,7 @@ const Accesses = () => {
               letterSpacing="0.3px"
               height="27px"
               isTruncated
-            >Dadinho</Text>
+            >{userInfo?.username}</Text>
             <Text
               marginLeft={isMobileMod() ? "44px !important" : "60px !important"}
               color="#6F6F6F"
@@ -1401,7 +1956,7 @@ const Accesses = () => {
               letterSpacing="0.3px"
               height="27px"
               isTruncated
-            >dadinho@basedosdados.org</Text>
+            >{userInfo?.email}</Text>
           </Stack>
         </GridItem>
 
@@ -1427,21 +1982,44 @@ const Accesses = () => {
     </Stack>
   )
 }
+// Sections Of User Page
 
-export default function UserPage() {
-  return null
-
+export default function UserPage({ fullUser }) {
   const router = useRouter()
   const { query } = router
+  const [userInfo, setUserInfo] = useState({})
   const [sectionSelected, setSectionSelected] = useState(0)
+
+  async function refreshTokenValidate() {
+    const result = await refreshToken()
+
+    if(result?.data?.refreshToken?.token) {
+      const userData = await getUser(fullUser.email)
+      cookies.set('userBD', JSON.stringify(userData))
+      cookies.set('token', result.data.refreshToken.token)
+    }
+    if(result?.errors?.length > 0) {
+      cookies.remove('userBD', { path: '/' })
+      cookies.remove('token', { path: '/' })
+      window.open("/user/login", "_self")
+    }
+  }
+
+  useEffect(() => {
+    refreshTokenValidate()
+  }, [])
+
+  useEffect(() => {
+    setUserInfo(fullUser)
+  }, [fullUser])
 
   const choices = [
     {bar: "Perfil público", title: "Perfil público", value: "profile", index: 0},
     {bar: "Conta", title: "Conta", value: "account", index: 1},
     {bar: "Senha", title: "Alterar senha", value: "new_password", index: 2},
     {bar: "Planos e pagamento", title: "Planos e pagamento", value: "plans_and_payment", index: 3},
-    {bar: "Acessos", title: "Gerenciar acessos", value: "accesses", index: 4},
   ]
+  // {bar: "Acessos", title: "Gerenciar acessos", value: "accesses", index: 4},
 
   useEffect(() => {
     const key = Object.keys(query)
@@ -1484,9 +2062,8 @@ export default function UserPage() {
           >
             {choices.map((section, index) => (
               <Box
-                borderLeft={
-                  sectionSelected === index ? "3px solid #2B8C4D" : "transparent"
-                }
+                key={index}
+                borderLeft={ sectionSelected === index ? "3px solid #2B8C4D" : "transparent" }
                 width="100%"
               >
                 <Text
@@ -1500,7 +2077,7 @@ export default function UserPage() {
                   _hover={sectionSelected === index ? "none" : {  opacity: "0.6" , fontWeight: "500" }}
                   padding="0 24px"
                   width="100%"
-                  onClick={() => router.push({pathname: "/user/dev", query: section.value})}
+                  onClick={() => router.push({pathname: `/user/${userInfo.username}`, query: section.value})}
                 >
                   {section.bar}
                 </Text>
@@ -1516,11 +2093,11 @@ export default function UserPage() {
             <SectionTitle marginBottom="8px">{choices[sectionSelected].title}</SectionTitle>
             <Divider marginBottom={isMobileMod() ? "40px !important" : "32px !important"} borderColor="#DEDFE0"/>
 
-            {sectionSelected === 0 && <ProfileConfiguration/>}
-            {sectionSelected === 1 && <Account/>}
-            {sectionSelected === 2 && <NewPassword/>}
-            {sectionSelected === 3 && <PlansAndPayment/>}
-            {sectionSelected === 4 && <Accesses/>}
+            {sectionSelected === 0 && <ProfileConfiguration userInfo={userInfo}/>}
+            {sectionSelected === 1 && <Account userInfo={userInfo}/>}
+            {sectionSelected === 2 && <NewPassword userInfo={userInfo}/>}
+            {sectionSelected === 3 && <PlansAndPayment userData={userInfo}/>}
+            {/* {sectionSelected === 4 && <Accesses userInfo={userInfo}/>} */}
           </Stack>
         </Stack>
       </Stack>

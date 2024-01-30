@@ -18,6 +18,7 @@ jobs:
       NEXT_PORT: ${{ vars.NEXT_PORT }}
       NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
       NEXT_PUBLIC_SITE_NAME: ${{ vars.NEXT_PUBLIC_SITE_NAME }}
+      NEXT_PUBLIC_KEY_STRIPE: ${{ secrets.NEXT_PUBLIC_KEY_STRIPE }}
       NODE_ENV: ${{ vars.NODE_ENV }}
       IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:development
 
@@ -43,3 +44,4 @@ jobs:
           tags: ${{ env.IMAGE_NAME }}
           build-args: |
             NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_KEY_STRIPE=${{ env.NEXT_PUBLIC_KEY_STRIPE }}
