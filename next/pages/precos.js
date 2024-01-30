@@ -12,6 +12,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Checkbox,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import Head from "next/head";
@@ -22,7 +23,7 @@ import RoundedButton from "../components/atoms/RoundedButton";
 import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import ServiceTerms from "../content/serviceTerms";
-import { getUserDataJson } from "../utils"
+import { getUserDataJson } from "../utils";
 
 import CheckIcon from "../public/img/icons/checkIcon";
 import CrossIcon from "../public/img/icons/crossIcon";
@@ -37,7 +38,10 @@ export const CardPrice = ({
   textResource,
   resources = [],
   button,
-  hasServiceTerms= false
+  hasServiceTerms= false,
+  checkTerms= false,
+  checked,
+  onChangeChecked
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [nubmerOfPerson, setNubmerOfPerson] = useState(personConfig.person)
@@ -321,6 +325,24 @@ export const CardPrice = ({
               {button.text}
             </Text>
           :
+            checkTerms ?
+            <RoundedButton
+              width="100%"
+              color="#FFF"
+              backgroundColor={checked ? "#42B0FF" : "#C4C4C4"}
+              pointerEvents={checked ? "default" : "none"}
+              onClick={() => {
+                if(button.onClick) return button.onClick()
+                if(button?.noHasModal) return window.open(button.href, "_self")
+                onOpen()
+                setLinkStripe(button.href)
+              }}
+              border={button.color && `1px solid ${button.colorText}`}
+              {...button.styles}
+            >
+              {button.text}
+            </RoundedButton>
+            :
             <RoundedButton
               width="100%"
               color={button.colorText || "#FFF"}
@@ -338,40 +360,94 @@ export const CardPrice = ({
             </RoundedButton>
           }
 
-          <Text
-            display="flex"
-            flexDirection="row"
-            justifyContent="center"
-            color="#252A32"
-            fontSize="14px"
-            fontWeight="400"
-            fontHeight="27px"
-            letterSpacing="0.3px"
-            fontFamily="Ubuntu"
-            height="20px"
-            textAlign="center"
-          >
-            {hasServiceTerms &&
-              <Text 
-                display="flex"
-                flexDirection="row"
-              >Leia os
-                <Text
-                  color="#42B0FF"
-                  cursor="pointer"
-                  _hover={{opacity: 0.7}}
-                  marginLeft="6px"
-                  fontWeight="700"
-                  letterSpacing="0.5px"
-                  onClick={() => {
-                    onOpen()
-                    setLinkStripe("")
-                  }}
-                >Termos de Serviço</Text>
-                .
-              </Text>
-            }
-          </Text>
+          {hasServiceTerms &&
+            <Text 
+              display="flex"
+              flexDirection="row"
+              justifyContent="center"
+              color="#252A32"
+              fontSize="14px"
+              fontWeight="400"
+              fontHeight="27px"
+              letterSpacing="0.3px"
+              fontFamily="Ubuntu"
+              height="20px"
+              textAlign="center"
+            >Leia os
+              <Text
+                color="#42B0FF"
+                cursor="pointer"
+                _hover={{opacity: 0.7}}
+                marginLeft="6px"
+                fontWeight="700"
+                letterSpacing="0.5px"
+                onClick={() => {
+                  onOpen()
+                  setLinkStripe("")
+                }}
+              >Termos de Serviço</Text>
+              .
+            </Text>
+          }
+
+          {checkTerms &&
+            <Stack>
+              <Checkbox
+                checked={checked}
+                onChange={onChangeChecked}
+                justifyContent="center"
+              >
+                <Stack spacing={0} alignItems="center">
+                  <Text
+                    display="flex"
+                    flexDirection="row"
+                    justifyContent="center"
+                    color="#252A32"
+                    fontSize="14px"
+                    fontWeight="400"
+                    fontHeight="27px"
+                    letterSpacing="0.3px"
+                    fontFamily="Ubuntu"
+                    height="20px"
+                    textAlign="center"
+                  >Eu li e concordo com os
+                  </Text>
+
+                    <Text
+                      width="fit-content"
+                      color="#42B0FF"
+                      cursor="pointer"
+                      _hover={{opacity: 0.7}}
+                      marginLeft="6px"
+                      fontWeight="700"
+                      letterSpacing="0.5px"
+                      href="/termos?section=terms"
+                      target="_blank"
+                      wordBreak="break-all"
+                    >
+                      Termos de Serviço
+                    </Text>
+                    e 
+                    <Text
+                      display="flex"
+                      flexDirection="row"
+                      width="fit-content"
+                      color="#42B0FF"
+                      cursor="pointer"
+                      _hover={{opacity: 0.7}}
+                      marginLeft="6px"
+                      fontWeight="700"
+                      letterSpacing="0.5px"
+                      href="/termos?section=privacy"
+                      target="_blank"
+                    >
+                      Políticas de Privacidade
+                      <Text marginLeft="1px !important" color="#252A32">.</Text>
+                    </Text>
+                </Stack>
+              </Checkbox>
+            </Stack>
+          }
         </Box>
       </Box>
     </Box>

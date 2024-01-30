@@ -169,8 +169,8 @@ function MenuDrawerUser({ isOpen, onClose}) {
     {name: "Conta", value: "account"},
     {name: "Senha", value: "new_password"},
     {name: "Planos e pagamento", value: "plans_and_payment"},
-    {name: "Acessos", value: "accesses"},
   ]
+  // {name: "Acessos", value: "accesses"},
 
   return (
     <Drawer isOpen={isOpen} onClose={onClose}>
