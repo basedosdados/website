@@ -656,7 +656,7 @@ function Support({ pages }) {
 }
 
 function BDEdu () {
-  const closeDate = new Date(2024, 1, 5)
+  const closeDate = new Date(2024, 1, 6)
   const currentDate = new Date()
 
   if(currentDate > closeDate) return null
@@ -703,7 +703,7 @@ export default function Home({
   return (
     <MainPageTemplate id="home" backgroundColor="#FFFFFF" pages={pages}>
       <Hero />
-      <BDEdu />
+      {/* <BDEdu /> */}
       <BePartner />
       <Products />
       <Support pages={pages} />
