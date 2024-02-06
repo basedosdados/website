@@ -180,7 +180,7 @@ export default function Footer({ pages, ocult = false }) {
                 Termos de Serviço
               </FooterLink>
               <FooterLink target="_self" href="termos?section=privacy">
-                Política Privacidade
+                Política de Privacidade
               </FooterLink>
               <Link fontWeight="700" color="white" href="/#support">
                 Apoie o projeto

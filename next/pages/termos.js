@@ -89,6 +89,19 @@ export default function TermsAndPolitics() {
     )
   }
 
+  const SecText = ({ children, ...props }) => {
+    return (
+      <SText
+        fontFamily="ubuntu"
+        fontSize="18px"
+        color="#6F6F6F"
+        {...props}
+      >
+        {children}
+      </SText>
+    )
+  }
+
   return (
     <MainPageTemplate paddingX="24px">
       <Head>
@@ -182,32 +195,34 @@ export default function TermsAndPolitics() {
               id="Cookies"
               name="cookies"
               width="100%"
-              spacing={8}
+              spacing={0}
               alignItems="flex-start"
             >
               <Text
                 fontFamily="Ubuntu"
-                fontSize="24px"
+                fontSize="28px"
                 lineHeight="40px"
-                fontWeight="400"
+                fontWeight="500"
                 color="#252A32"
               >Cookies</Text>
+
               <VStack
                 width="100%"
-                spacing={4}
+                spacing="8px"
                 alignItems="flex-start"
+                marginTop="8px !important"
               >
-                <SText fontSize="16px">Olá! Queremos informar que este site utiliza cookies. Esses pequenos arquivos são necessários para garantir o funcionamento adequado do site, melhorar o desempenho e personalizar a experiência de navegação.</SText>
+                <SecText>Utilizamos cookies essenciais para o funcionamento da plataforma. Esses cookies são necessários para garantir o funcionamento adequado do site, melhorar o desempenho e personalizar a experiência de navegação.</SecText>
 
-                <BodyText fontWeight="500">O que são Cookies?</BodyText>
-                <SText>Cookies são pedaços de dados que ajudam o site a lembrar suas preferências e tornar a navegação mais eficiente.</SText>
+                <BodyText marginTop="40px !important" fontSize="18px" fontWeight="700">O que são Cookies</BodyText>
+                <SecText>Cookies são pedaços de dados que ajudam o site a lembrar suas preferências e tornar a navegação mais eficiente.</SecText>
 
-                <BodyText fontWeight="500">Como Usamos Cookies?</BodyText>
-                <SText><b>Desempenho:</b> Garantimos que o site funcione como deveria.</SText>
-                <SText><b>Melhoria:</b> Coletamos dados para melhorar continuamente nosso conteúdo e funcionalidades.</SText>
-                <SText><b>Personalização:</b> Adaptamos o conteúdo para suas preferências, como idioma e região.</SText>
+                <BodyText marginTop="40px !important" fontSize="18px" fontWeight="700">Como Usamos Cookies</BodyText>
+                <SecText>Desempenho: Garantimos que o site funcione como deveria.</SecText>
+                <SecText>Melhoria: Coletamos dados para melhorar continuamente nosso conteúdo e funcionalidades.</SecText>
+                <SecText>Personalização: Adaptamos o conteúdo para suas preferências, como idioma e região.</SecText>
 
-                <BodyText fontWeight="500">Cookies usados:</BodyText>
+                <BodyText marginTop="40px !important" fontSize="18px" fontWeight="700">Cookies usados</BodyText>
 
                 <Stack
                   maxWidth="100%"
@@ -227,9 +242,9 @@ export default function TermsAndPolitics() {
                   />
                 </Stack>
 
-                <BodyText fontWeight="500">Controle de Privacidade:</BodyText>
-                <SText>Ao continuar a usar nosso site, você concorda com o uso desse cookie. Se preferir não usá-lo, recomendamos que ajuste as configurações do seu navegador. No entanto, isso afetará sua capacidade de fazer login e acessar áreas restritas.</SText>
-                <SText>Estamos aqui para ajudar. Se tiver alguma dúvida sobre esse cookie ou qualquer outra questão de privacidade, entre em contato conosco.</SText>
+                <BodyText marginTop="40px !important" fontSize="18px" fontWeight="700">Controle de Privacidade</BodyText>
+                <SecText>Ao continuar a usar nosso site, você concorda com o uso desse cookie. Se preferir não usá-lo, recomendamos que ajuste as configurações do seu navegador. No entanto, isso afetará sua capacidade de fazer login e acessar áreas restritas.</SecText>
+                <SecText>Estamos aqui para ajudar. Se tiver alguma dúvida sobre esse cookie ou qualquer outra questão de privacidade, entre em contato conosco.</SecText>
               </VStack>
             </VStack>
           </Stack>
