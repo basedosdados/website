@@ -122,7 +122,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
     if(!/(?=.*?[0-9])/.test(formData.password)) {
       regexPassword = {...regexPassword, number: true}
     }
-    if(!/(?=.*?[#?!@$%^&*-])/.test(formData.password)) {
+    if(!/^[!@#?!%^&*-_+=,:;<>,.?|]*$/.test(formData.password)) {
       regexPassword = {...regexPassword, special: true}
     }
     if (!formData.confirmPassword) {
@@ -256,7 +256,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
             <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial</ListItem>
           </UnorderedList>
           {errors.password &&
-            <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
               <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.password}
             </FormErrorMessage>
           }
@@ -298,7 +298,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
               />
             }
           />
-          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
             <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.confirmPassword}
           </FormErrorMessage>
         </FormControl>
@@ -380,7 +380,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
             letterSpacing="0.3px"
             border="1px solid #DEDFE0 !important"
           />
-          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
             <Exclamation marginTop="4px" fill="#D93B3B"/>{error}
           </FormErrorMessage>
         </FormControl>

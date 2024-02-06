@@ -343,7 +343,7 @@ const ProfileConfiguration = ({ userInfo }) => {
               _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
             />
           </SkStack>
-          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
             <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.firstName}
           </FormErrorMessage>
         </FormControl>
@@ -772,7 +772,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
                 borderRadius="16px"
                 _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
               />
-              <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
                 <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.email}
               </FormErrorMessage>
             </FormControl>
@@ -835,7 +835,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
                   />
                 }
               />
-              <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
                 <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.password}
               </FormErrorMessage>
             </FormControl>
@@ -885,7 +885,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
             borderRadius="16px"
             _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
           />
-          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
             <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.username}
           </FormErrorMessage>
         </FormControl>
@@ -1093,7 +1093,7 @@ const NewPassword = ({ userInfo }) => {
     if(!/(?=.*?[0-9])/.test(formData.newPassword)) {
       regexPassword = {...regexPassword, number: true}
     }
-    if(!/(?=.*?[#?!@$%^&*-])/.test(formData.newPassword)) {
+    if(!/^[!@#?!%^&*-_+=,:;<>,.?|]*$/.test(formData.newPassword)) {
       regexPassword = {...regexPassword, special: true}
     }
     if (!formData.confirmPassword) {
@@ -1245,7 +1245,7 @@ const NewPassword = ({ userInfo }) => {
             />
           }
         />
-        <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+        <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
           <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.password}
         </FormErrorMessage>
         <ButtonSimple
@@ -1316,9 +1316,12 @@ const NewPassword = ({ userInfo }) => {
           <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>Uma letra minúscula</ListItem>
           <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>Um dígito</ListItem>
           <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial</ListItem>
+          {/*
+            ^[!@#?!%^&*-_+=,:;<>,.?|]*$
+          */}
         </UnorderedList>
         {errors.newPassword &&
-          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
             <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.newPassword}
           </FormErrorMessage>
         }
@@ -1360,7 +1363,7 @@ const NewPassword = ({ userInfo }) => {
             />
           }
         />
-        <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+        <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
           <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.confirmPassword}
         </FormErrorMessage>
       </FormControl>
@@ -1378,17 +1381,10 @@ const NewPassword = ({ userInfo }) => {
 }
 
 const PlansAndPayment = ({ userData }) => {
-  const [checkBDPro, setCheckBDPro] = useState(false)
-  const [checkBDProE, setCheckBDProE] = useState(false)
   const [plan, setPlan] = useState({})
   const PaymentModal = useDisclosure()
   const PlansModal = useDisclosure()
   const CancelModalPlan = useDisclosure()
-
-  useEffect(() => {
-    setCheckBDPro(false)
-    setCheckBDProE(false)
-  }, [PlansModal.isOpen === false])
 
   const resources={
     "BD Gratis" : {
@@ -1592,7 +1588,6 @@ const PlansAndPayment = ({ userData }) => {
           <CardPrice
             colorBanner="#9C8400"
             title="BD Pro"
-            badge="Beta"
             subTitle={<BodyText>Para você ter acesso aos<br/> dados mais atualizados</BodyText>}
             personConfig={{
               price: "47"
@@ -1610,9 +1605,6 @@ const PlansAndPayment = ({ userData }) => {
               },
               isCurrentPlan: userData?.proSubscription === "bd_pro" ? true : false,
             }}
-            checkTerms
-            checked={checkBDPro}
-            onChangeChecked={() => setCheckBDPro(!checkBDPro)}
           />
 
           <CardPrice
@@ -1636,9 +1628,6 @@ const PlansAndPayment = ({ userData }) => {
               },
               isCurrentPlan: userData?.proSubscription === "bd_pro_empresas" ? true : false,
             }}
-            checkTerms
-            checked={checkBDProE}
-            onChangeChecked={() => setCheckBDProE(!checkBDProE)}
           />
         </Stack>
       </ModalGeneral>
@@ -1785,7 +1774,7 @@ const PlansAndPayment = ({ userData }) => {
               </>
             }
 
-            {userData?.proSubscription === "bd_pro_empresas" &&
+            {userData?.proSubscriptionStatus !== "active" &&
               <ButtonSimple
                 color="#42B0FF"
                 fontSize="14px"
@@ -1829,7 +1818,7 @@ const PlansAndPayment = ({ userData }) => {
                 })
               }
 
-            {userData?.proSubscription !== "bd_pro_empresas" &&
+            {userData?.proSubscriptionStatus !== "active" &&
               <ButtonSimple
                 color="#42B0FF"
                 fontSize="14px"
