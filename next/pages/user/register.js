@@ -77,7 +77,7 @@ export default function Register() {
     if(!/(?=.*?[0-9])/.test(formData.password)) {
       regexPassword = {...regexPassword, number: true}
     }
-    if(!/(?=.*?[#?!@$%^&*-])/.test(formData.password)) {
+    if(!/[!@#?!%&*]/.test(formData.password)) {
       regexPassword = {...regexPassword, special: true}
     }
     if (!formData.confirmPassword) {
@@ -167,7 +167,7 @@ export default function Register() {
               borderRadius="16px"
               _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
             />
-            <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
               <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.firstName}
             </FormErrorMessage>
           </FormControl>
@@ -186,7 +186,7 @@ export default function Register() {
               borderRadius="16px"
               _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
             />
-            <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
               <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.lastName}
             </FormErrorMessage>
           </FormControl>
@@ -206,7 +206,7 @@ export default function Register() {
               borderRadius="16px"
               _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
             />
-            <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
               <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.email}
             </FormErrorMessage>
           </FormControl>
@@ -227,7 +227,7 @@ export default function Register() {
               borderRadius="16px"
               _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
             />
-            <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
               <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.username}
             </FormErrorMessage>
           </FormControl>
@@ -286,7 +286,7 @@ export default function Register() {
               <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>Uma letra maiúscula</ListItem>
               <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>Uma letra minúscula</ListItem>
               <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>Um dígito</ListItem>
-              <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial</ListItem>
+              <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial, dentre ! @ # ? ! % & *</ListItem>
             </UnorderedList>
           </FormControl>
 
@@ -326,7 +326,7 @@ export default function Register() {
                 />
               }
             />
-            <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
               <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.confirmPassword}
             </FormErrorMessage>
           </FormControl>

@@ -2,19 +2,12 @@ import {
   Box,
   Stack,
   Text,
+  Link,
   Tooltip,
   Badge,
   Button,
-  useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Checkbox,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import Display from "../components/atoms/Display";
 import BigTitle from "../components/atoms/BigTitle"
@@ -22,7 +15,6 @@ import BodyText from "../components/atoms/BodyText";
 import RoundedButton from "../components/atoms/RoundedButton";
 import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
-import ServiceTerms from "../content/serviceTerms";
 import { getUserDataJson } from "../utils";
 
 import CheckIcon from "../public/img/icons/checkIcon";
@@ -38,15 +30,9 @@ export const CardPrice = ({
   textResource,
   resources = [],
   button,
-  hasServiceTerms= false,
-  checkTerms= false,
-  checked,
-  onChangeChecked
 }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const [nubmerOfPerson, setNubmerOfPerson] = useState(personConfig.person)
   const [priceValue, setPriceValue] = useState(personConfig.price)
-  const [linkStripe, setLinkStripe] = useState("")
 
   const addRemovePersonPrice = (action) => {
     if(action === "add") {
@@ -73,41 +59,6 @@ export const CardPrice = ({
       padding="40px 24px"
       textAlign="center"
     >
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        scrollBehavior="inside"
-      >
-        <ModalOverlay />
-        <ModalContent maxWidth="800px !important" margin="24px">
-          <ModalHeader>Termos de serviço</ModalHeader>
-          <ModalBody>
-            <ServiceTerms/>
-          </ModalBody>
-
-          <ModalFooter gap="16px">
-            <RoundedButton
-              onClick={onClose}
-              backgroundColor={linkStripe !== "" ? "#FFF" : "#42B0FF"}
-              color={linkStripe !== "" ? "#42B0FF" : "#FFF"}
-              border={linkStripe !== "" && "1px solid #42B0FF"}
-            >
-              Fechar
-            </RoundedButton>
-            {linkStripe !== "" &&
-              <RoundedButton onClick={() => {
-                  onClose()
-                  window.open(linkStripe, "_blank")
-                  setLinkStripe("")
-                }}
-              >
-                Concordar
-              </RoundedButton>
-            }
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-
       <Box
         height="fit-content"
       >
@@ -314,10 +265,14 @@ export const CardPrice = ({
           gap="16px"
         >
           {button.isCurrentPlan ?
-            <Text 
+            <Text
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
               width="100%"
+              height="40px"
               textAlign="center"
-              color="#252A32"
+              color="#7D7D7D"
               cursor="default"
               fontWeight="400"
               fontFamily="Ubuntu"
@@ -325,33 +280,13 @@ export const CardPrice = ({
               {button.text}
             </Text>
           :
-            checkTerms ?
             <RoundedButton
-              width="100%"
-              color="#FFF"
-              backgroundColor={checked ? "#42B0FF" : "#C4C4C4"}
-              pointerEvents={checked ? "default" : "none"}
-              onClick={() => {
-                if(button.onClick) return button.onClick()
-                if(button?.noHasModal) return window.open(button.href, "_self")
-                onOpen()
-                setLinkStripe(button.href)
-              }}
-              border={button.color && `1px solid ${button.colorText}`}
-              {...button.styles}
-            >
-              {button.text}
-            </RoundedButton>
-            :
-            <RoundedButton
-              width="100%"
+              width="100%"              
               color={button.colorText || "#FFF"}
               backgroundColor={button.color || "#42B0FF"}
               onClick={() => {
                 if(button.onClick) return button.onClick()
-                if(button?.noHasModal) return window.open(button.href, "_self")
-                onOpen()
-                setLinkStripe(button.href)
+                return window.open(button.href, "_self")
               }}
               border={button.color && `1px solid ${button.colorText}`}
               {...button.styles}
@@ -360,94 +295,32 @@ export const CardPrice = ({
             </RoundedButton>
           }
 
-          {hasServiceTerms &&
-            <Text 
-              display="flex"
-              flexDirection="row"
-              justifyContent="center"
-              color="#252A32"
-              fontSize="14px"
-              fontWeight="400"
-              fontHeight="27px"
-              letterSpacing="0.3px"
-              fontFamily="Ubuntu"
-              height="20px"
-              textAlign="center"
-            >Leia os
-              <Text
-                color="#42B0FF"
-                cursor="pointer"
-                _hover={{opacity: 0.7}}
-                marginLeft="6px"
-                fontWeight="700"
-                letterSpacing="0.5px"
-                onClick={() => {
-                  onOpen()
-                  setLinkStripe("")
-                }}
-              >Termos de Serviço</Text>
-              .
-            </Text>
-          }
-
-          {checkTerms &&
-            <Stack>
-              <Checkbox
-                checked={checked}
-                onChange={onChangeChecked}
-                justifyContent="center"
-              >
-                <Stack spacing={0} alignItems="center">
-                  <Text
-                    display="flex"
-                    flexDirection="row"
-                    justifyContent="center"
-                    color="#252A32"
-                    fontSize="14px"
-                    fontWeight="400"
-                    fontHeight="27px"
-                    letterSpacing="0.3px"
-                    fontFamily="Ubuntu"
-                    height="20px"
-                    textAlign="center"
-                  >Eu li e concordo com os
-                  </Text>
-
-                    <Text
-                      width="fit-content"
-                      color="#42B0FF"
-                      cursor="pointer"
-                      _hover={{opacity: 0.7}}
-                      marginLeft="6px"
-                      fontWeight="700"
-                      letterSpacing="0.5px"
-                      href="/termos?section=terms"
-                      target="_blank"
-                      wordBreak="break-all"
-                    >
-                      Termos de Serviço
-                    </Text>
-                    e 
-                    <Text
-                      display="flex"
-                      flexDirection="row"
-                      width="fit-content"
-                      color="#42B0FF"
-                      cursor="pointer"
-                      _hover={{opacity: 0.7}}
-                      marginLeft="6px"
-                      fontWeight="700"
-                      letterSpacing="0.5px"
-                      href="/termos?section=privacy"
-                      target="_blank"
-                    >
-                      Políticas de Privacidade
-                      <Text marginLeft="1px !important" color="#252A32">.</Text>
-                    </Text>
-                </Stack>
-              </Checkbox>
-            </Stack>
-          }
+          <Text 
+            display="flex"
+            flexDirection="row"
+            justifyContent="center"
+            color="#252A32"
+            fontSize="14px"
+            fontWeight="400"
+            fontHeight="27px"
+            letterSpacing="0.3px"
+            fontFamily="Ubuntu"
+            height="20px"
+            textAlign="center"
+          >Leia os
+            <Link
+              fontFamily="ubuntu"
+              color="#42B0FF"
+              cursor="pointer"
+              _hover={{opacity: 0.7}}
+              marginLeft="6px"
+              fontWeight="700"
+              letterSpacing="0.5px"
+              href="/termos?section=terms"
+              target="_blank"
+            >Termos de Serviço</Link>
+            .
+          </Text>
         </Box>
       </Box>
     </Box>
@@ -455,10 +328,20 @@ export const CardPrice = ({
 }
 
 export default function Price() {
-  let userData = getUserDataJson()
+  const [userData, setUserData] = useState({})
+  const [ifBDPro, setIfBDPro] = useState(false)
+  const [ifBDProEmp, setIfBDProEmp] = useState(false)
 
-  const ifBDPro = userData?.proSubscription === "bd_pro"
-  const ifBDProEmp = userData?.proSubscription === "bd_pro_empresas"
+  async function userInfo() {
+    const res = getUserDataJson()
+    setUserData(res)
+    setIfBDPro(res?.proSubscription === "bd_pro")
+    setIfBDProEmp(res?.proSubscription === "bd_pro_empresas")
+  }
+
+  useEffect(() => {
+    userInfo()
+  },[])
 
   return (
     <MainPageTemplate paddingX="24px">
@@ -526,7 +409,6 @@ export default function Price() {
               text: "Explorar recursos",
               href: "/dataset",
               target: "_self",
-              noHasModal: true,
               color: "#FFF",
               colorText: "#42B0FF"
             }}
@@ -535,7 +417,6 @@ export default function Price() {
           <CardPrice
             colorBanner="#9C8400"
             title="BD Pro"
-            badge="Beta"
             subTitle={<BodyText>Para você ter acesso aos<br/> dados mais atualizados</BodyText>}
             personConfig={{
               price: "47"
@@ -546,11 +427,9 @@ export default function Price() {
             ]}
             button={{
               text: ifBDPro ? "Plano atual" : `Iniciar teste grátis`,
-              href: userData === null ? "/user/login" :`/user/${userData.username}?plans_and_payment`,
+              href: userData === null ? "/user/login?p=plans" :`/user/${userData.username}?plans_and_payment`,
               isCurrentPlan: ifBDPro ? true : false,
-              noHasModal: true
             }}
-            hasServiceTerms
           />
 
           <CardPrice
@@ -567,11 +446,9 @@ export default function Price() {
             ]}
             button={{
               text: ifBDProEmp ? "Plano atual" : "Iniciar teste grátis",
-              href: userData === null ? "/user/login" :`/user/${userData.username}?plans_and_payment`,
+              href: userData === null ? "/user/login?p=plans" :`/user/${userData.username}?plans_and_payment`,
               isCurrentPlan: ifBDProEmp ? true : false,
-              noHasModal: true
             }}
-            hasServiceTerms
           />
         </Stack>
       </Stack>

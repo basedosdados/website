@@ -6,6 +6,7 @@ import {
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import cookies from 'js-cookie';
 
 import {
@@ -25,16 +26,11 @@ import Exclamation from "../../public/img/icons/exclamationIcon";
 import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 
 export default function Login() {
+  const router = useRouter()
+  const { query } = router
   const [formData, setFormData] = useState({ email: "", password: "" })
   const [errors, setErrors] = useState({ email: "", password: "", login: ""})
   const [showPassword, setShowPassword] = useState(true)
-  const [cookiesConfirm, setCookiesConfirm] = useState(false)
-
-  useEffect(() => {
-    const res = cookies.get("cookieAccepted")
-
-    if(!!res && res == "true") setCookiesConfirm(true)
-  }, [])
 
   const handleInputChange = (e) => {
     setFormData((prevState) => ({
@@ -66,6 +62,7 @@ export default function Login() {
     try {
       const userData = await getUser(result.tokenAuth.payload.email)
       cookies.set('userBD', JSON.stringify(userData))
+      if(query.p === "plans") return window.open(`/user/${userData.username}?plans_and_payment`, "_self")
       window.open("/", "_self")
     } catch (error) {
       console.error(error)
@@ -149,7 +146,7 @@ export default function Login() {
             borderRadius="16px"
             _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
           />
-          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
             <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.email}
           </FormErrorMessage>
         </FormControl>
@@ -213,25 +210,19 @@ export default function Login() {
               />
             }
           />
-          <FormErrorMessage fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
             <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.password}
           </FormErrorMessage>
         </FormControl>
 
         <Button
-          onClick={handleSubmit}
+          onClick={() => handleSubmit()}
           borderRadius="30px"
           marginBottom="24px !important"
-          backgroundColor={cookiesConfirm ? "#42B0FF" : "#C4C4C4"}
-          cursor={cookiesConfirm ? "pointer" : "default"}
-          pointerEvents={cookiesConfirm ? "default" : "none"}
+          backgroundColor="#42B0FF"
         >
           Entrar
         </Button>
-
-        <SectionText textAlign="center" display={!cookiesConfirm ? "flex" : "none"} marginBottom="24px !important">
-          Para efetuar o login em nossa plataforma, é necessário permitir o uso dos nossos cookies.
-        </SectionText>
 
         <SectionText
           width="100%"
@@ -247,6 +238,7 @@ export default function Login() {
             width="none"
             fontSize="14px"
             justifyContent="start"
+            fontWeight="700"
             color="#42B0FF"
             _hover={{opacity: "0.6"}}
             marginLeft="2px"

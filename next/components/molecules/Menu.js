@@ -766,21 +766,6 @@ function DesktopLinks({ links, position = false, path, userTemplate = false }) {
         <HStack spacing={8} display={{ base: "none", lg: "flex" }}>
           {userData ? (
             <HStack spacing="20px">
-              {userData?.proSubscriptionStatus !== "active" &&
-                <RoundedButton
-                  display={isMobileMod() ? "none" : "flex"}
-                  backgroundColor="#FFF"
-                  border="2px solid #42B0FF"
-                  color="#42B0FF"
-                  height="40px"
-                  fontWeight="700"
-                  borderRadius="30px"
-                  fontSize="15px"
-                  onClick={() => window.open(`/user/${userData.username}?plans_and_payment`, "_self")}
-                >
-                  BD Pro
-                </RoundedButton>
-              }
               <MenuUser userData={userData}/>
             </HStack>
           ) : (
@@ -811,8 +796,16 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   const [isScrollDown, setIsScrollDown] = useState(false)
   const [menuMobileMargin, setMenuMobileMargin] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
+  const [userData, setUserData] = useState({})
 
-  let userData = getUserDataJson()
+  async function userInfo() {
+    const res = getUserDataJson()
+    setUserData(res)
+  }
+
+  useEffect(() => {
+    userInfo()
+  }, [])
 
   const links = {
     Dados: "/dataset",
@@ -863,7 +856,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   return (
     <>
       <Box
-        display={simpleTemplate || userTemplate ? "none" : "block"}
+        display={!!userData?.email || simpleTemplate || userTemplate ? "none" : "block"}
         ref={bannerRef}
         position="fixed"
         backgroundColor="#252A32"
@@ -906,20 +899,20 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         left="0px"
         backgroundColor="#FFFFFF"
         padding="16px 28px"
-        marginTop={simpleTemplate || userTemplate ? "0" : isScrollDown ? "0" : { base: `${menuMobileMargin}px` , lg: "40px" }}
+        marginTop={!!userData?.email || simpleTemplate || userTemplate ? "0" : isScrollDown ? "0" : { base: `${menuMobileMargin}px` , lg: "40px" }}
         zIndex="99"
         transition="0.5s"
         as="nav"
       >
         <HStack
-          justifyContent={simpleTemplate || userTemplate ? "flex-start" : { base: "center", lg: "flex-start" }}
+          justifyContent={!!userData?.email || simpleTemplate || userTemplate ? "flex-start" : { base: "center", lg: "flex-start" }}
           width="100%"
           height="40px"
           maxWidth="1264px"
           margin="0 auto"
           spacing={6}
         >
-          <Box display={simpleTemplate || userTemplate ? "none" : { base: "flex", lg: "none" }}>
+          <Box display={!!userData?.email || simpleTemplate || userTemplate ? "none" : { base: "flex", lg: "none" }}>
             <FarBarsIcon
               alt="menu de navegação"
               position="absolute"
