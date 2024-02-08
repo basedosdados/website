@@ -1093,7 +1093,7 @@ const NewPassword = ({ userInfo }) => {
     if(!/(?=.*?[0-9])/.test(formData.newPassword)) {
       regexPassword = {...regexPassword, number: true}
     }
-    if(!/^[!@#?!%^&*-_+=,:;<>,.?|]*$/.test(formData.newPassword)) {
+    if(!/[!@#?!%&*]/.test(formData.newPassword)) {
       regexPassword = {...regexPassword, special: true}
     }
     if (!formData.confirmPassword) {
@@ -1125,7 +1125,11 @@ const NewPassword = ({ userInfo }) => {
     const form = {id: id, password: formData.newPassword, token: getTokenPassword?.tokenAuth?.token}
 
     const result = await updatePassword(form)
-    setFormData({})
+    setFormData({
+      password: "",
+      newPassword: "",
+      confirmPassword: ""
+    })
 
     newPasswordModal.onOpen()
   }
@@ -1315,10 +1319,7 @@ const NewPassword = ({ userInfo }) => {
           <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>Uma letra maiúscula</ListItem>
           <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>Uma letra minúscula</ListItem>
           <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>Um dígito</ListItem>
-          <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial</ListItem>
-          {/*
-            ^[!@#?!%^&*-_+=,:;<>,.?|]*$
-          */}
+          <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial, dentre ! @ # ? ! % & *</ListItem>
         </UnorderedList>
         {errors.newPassword &&
           <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">

@@ -77,7 +77,7 @@ export default function Register() {
     if(!/(?=.*?[0-9])/.test(formData.password)) {
       regexPassword = {...regexPassword, number: true}
     }
-    if(!/^[!@#?!%^&*-_+=,:;<>,.?|]*$/.test(formData.password)) {
+    if(!/[!@#?!%&*]/.test(formData.password)) {
       regexPassword = {...regexPassword, special: true}
     }
     if (!formData.confirmPassword) {
@@ -286,7 +286,7 @@ export default function Register() {
               <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>Uma letra maiúscula</ListItem>
               <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>Uma letra minúscula</ListItem>
               <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>Um dígito</ListItem>
-              <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial</ListItem>
+              <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial, dentre ! @ # ? ! % & *</ListItem>
             </UnorderedList>
           </FormControl>
 
