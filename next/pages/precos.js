@@ -338,6 +338,7 @@ export default function Price() {
     setIfBDPro(res?.proSubscription === "bd_pro")
     setIfBDProEmp(res?.proSubscription === "bd_pro_empresas")
   }
+
   useEffect(() => {
     userInfo()
   },[])
