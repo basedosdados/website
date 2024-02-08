@@ -51,7 +51,7 @@ export default function ConfirmCookies() {
           lineHeight="40px"
           fontWeight="500"
           color="#252A32"
-        >Nossos Cookies</Text>
+        >Nossos cookies</Text>
 
         <CloseButton
           _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
@@ -64,7 +64,9 @@ export default function ConfirmCookies() {
         marginBottom="8px"
         color="#252A42"
       >
-        Os cookies são essenciais para a funcionalidade completa de nossa plataforma. Ao continuar, você concorda com o uso desses cookies para garantir uma experiência de usuário eficaz. Veja mais sobre nossas <Link color="#42B0FF" href="/termos?section=cookies" target="_blank">Política de Cookies</Link>
+        Utilizamos cookies essenciais para o funcionamento da plataforma.
+
+        Veja mais sobre nossa <Link fontFamily="ubuntu" fontSize="16px" color="#42B0FF" href="/termos?section=cookies" target="_blank">Política de Cookies</Link>.
       </Text>
 
       <Box width="100%" display="flex" >
@@ -75,7 +77,7 @@ export default function ConfirmCookies() {
           onClick={() => handleConfirm()}
           marginLeft="auto"
         >
-          Concordo
+          Aceitar cookies
         </RoundedButton>
       </Box>
     </Box>

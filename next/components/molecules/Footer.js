@@ -170,17 +170,14 @@ export default function Footer({ pages, ocult = false }) {
               <FooterLink href="https://info.basedosdados.org/carreiras">
                 Carreiras
               </FooterLink>
-              <FooterLink target="_self" href="/contato">
-                Contato
-              </FooterLink>
               <FooterLink href="/perguntas-frequentes">
                 Perguntas frequentes
               </FooterLink>
-              <FooterLink target="_self" href="/termos?section=terms">
-                Termos de Serviço
+              <FooterLink target="_self" href="/termos">
+                Termos e Privacidade
               </FooterLink>
-              <FooterLink target="_self" href="termos?section=privacy">
-                Política Privacidade
+              <FooterLink target="_self" href="/contato">
+                Contato
               </FooterLink>
               <Link fontWeight="700" color="white" href="/#support">
                 Apoie o projeto

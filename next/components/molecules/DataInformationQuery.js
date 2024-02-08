@@ -25,14 +25,13 @@ import GreenTab from "../atoms/GreenTab";
 import SectionText from "../atoms/SectionText";
 import Subtitle from "../atoms/Subtitle";
 import RoundedButton from "../atoms/RoundedButton";
+
 import DisclaimerBox from "./DisclaimerBox";
 
-import CalendarIcon from "../../public/img/icons/calendarIcon";
-import { CopyIcon, CopySolidIcon } from "../../public/img/icons/copyIcon";
+import { CopyIcon } from "../../public/img/icons/copyIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import ExclamationIcon from "../../public/img/icons/exclamationIcon";
 import MenuVerticalIcon from "../../public/img/icons/menuVerticalIcon";
-import ProIcon from "../../public/img/icons/proIcon";
 
 export function BoxBigQueryGoogle({ href }) {
   return (
@@ -100,45 +99,13 @@ export function PrismCodeHighlight({ language, children }) {
   )
 }
 
-export function TextPix ({ title, text }) {
-  return (
-    <Box>
-      <Text
-        color="#FF8484"
-        letterSpacing="0.3px"
-        fontSize="14px"
-        fontWeight="700"
-        fontFamily="ubuntu"
-      >
-        {title}
-      </Text>
-      <SectionText fontWeight="500">
-        {text}
-      </SectionText>
-    </Box>
-  )
-}
-
 export default function DataInformationQuery ({ resource }) {
   const gcpDatasetID = resource?.cloudTables[0]?.gcpDatasetId
   const gcpTableId = resource?.cloudTables[0]?.gcpTableId
   const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${gcpDatasetID}/${gcpTableId}/${gcpTableId}.csv.gz`
   const queryBQ = `${gcpDatasetID}.${gcpTableId}`
-  const { hasCopied, onCopy } = useClipboard("42494318000116")
   const [tabIndex, setTabIndex] = useState(0)
   const [downloadNotAllowed, setDownloadNotAllowed] = useState(false)
-
-  function organizationQuery(join) {
-    let areaOrganization = resource?.dataset?.organization?.area?.slug
-    const organization = resource?.dataset?.organization?.slug
-
-    if(areaOrganization === "sa_br") areaOrganization = "br"
-    if(areaOrganization === "world") areaOrganization = "mundo"
-
-    if(areaOrganization !== undefined) return `${areaOrganization}${join}${organization}`
-
-    return organization
-  }
 
   useEffect(() => {
     if (window) window?.Prism?.highlightAll()
@@ -343,13 +310,15 @@ bd_read_table, ///
             </SectionText>
 
             {!downloadNotAllowed &&
-              <DisclaimerBox>
+              <DisclaimerBox
+                borderColor="#D93B3B"
+              >
                 <HStack gridGap="8px" alignItems="flex-start">
                 <ExclamationIcon
                   alt="atenção"
                   width="20px"
                   height="20px"
-                  fill="#42B0FF"
+                  fill="#D93B3B"
                   marginTop="4px"
                 />
                 <Box>
@@ -359,109 +328,23 @@ bd_read_table, ///
               </HStack>
               </DisclaimerBox>
             }
-            <VStack
-              alignItems={isMobileMod() ? "center" :"flex-start"}
-              padding={isMobileMod() ? "32px 0 24px 0 !important" :"32px 0 24px 40px !important"}
-              margin="24px 4px 0"
-              direction="column"
-              height="100%"
-              boxShadow="0 1px 8px 1px rgba(100, 96, 103, 0.16)"
-              borderRadius="6px"
+
+            <RoundedButton
+              marginTop="24px"
+              fontSize="14px"
+              fontWeight="700"
+              color="#FFF"
+              backgroundColor={downloadNotAllowed ? "#42B0FF" :"#C4C4C4"}
+              paddingX="30px"
+              width="fit-content"
+              gridGap="6px"
+              cursor={downloadNotAllowed ? "pointer" :"default"}
+              _hover={!downloadNotAllowed ? {transform : "none"} : "" }
+              onClick={() => handlerDownload()}
             >
-              <HStack marginBottom="32px" spacing={0} alignItems="flex-start" flexDirection="column">
-                <Box
-                  width={isMobileMod() ? "100%" : "216px" }
-                  textAlign="center"
-                  marginBottom="24px"
-                >
-                  <Text color="#FF8484" fontWeight="700" fontFamily="Ubuntu" fontSize="18px" letterSpacing="0.3px">
-                    Doe agora
-                  </Text>
-                </Box>
-
-                <HStack 
-                  flexDirection={isMobileMod() && "column"}
-                  spacing={isMobileMod() ? 0 : 8}
-                >
-                  <Image
-                    alt="QR code contribuição"
-                    height="216px"
-                    objectFit="contain"
-                    border="2px solid #DEDFE0"
-                    borderRadius="5px"
-                    src="https://storage.googleapis.com/basedosdados-website/images/bd_qrcode.png"
-                  />
-
-                  <VStack
-                    marginTop={isMobileMod() && "32px !important"}
-                    justifyContent="center"
-                    alignItems="flex-start"
-                  >
-                    <TextPix title="Razão Social" text="Instituto Base dos Dados"/>
-                    <TextPix title="CNPJ" text="42494318/0001-16"/>
-                    <TextPix title="Banco" text="PagSeguro"/>
-                    <Box display="flex" gridGap="48px">
-                      <TextPix title="Agência" text="0001"/>
-                      <TextPix title="Conta" text="31401653-6"/>
-                    </Box>
-                  </VStack>
-                </HStack>
-
-                <Stack spacing={5} >
-                  
-                </Stack>
-              </HStack>
-
-              <HStack
-                spacing={!isMobileMod() && 6}
-                flexDirection={isMobileMod() && "column"}
-                gridGap={isMobileMod() && "16px"}
-              >
-                <RoundedButton
-                  fontSize="14px"
-                  fontWeight="700"
-                  backgroundColor="#FF8484"
-                  paddingX="30px"
-                  width="100%"
-                  gridGap="6px"
-                  onClick={onCopy}
-                  opacity={hasCopied && "0.8"}
-                >
-                  <CopySolidIcon alt="copiar chave PIX" width="22px" height="22px" fill="#FFF"/>
-                  {hasCopied ? "Copiada chave PIX" :"Copiar chave PIX"}
-                </RoundedButton>
-
-                <RoundedButton
-                  fontSize="14px"
-                  fontWeight="700"
-                  backgroundColor="#FF8484"
-                  paddingX="30px"
-                  width="100%"
-                  gridGap="6px"
-                  onClick={() => window.open("https://apoia.se/basedosdados", "_blank")}
-                >
-                  <CalendarIcon alt="doar mensalmente" width="20px" height="20px" fill="#FFF"/>
-                  Doar mensalmente
-                </RoundedButton>
-                
-                <RoundedButton
-                  fontSize="14px"
-                  fontWeight="700"
-                  backgroundColor="#FFF"
-                  color={downloadNotAllowed ? "#FF8484" :"#C4C4C4"}
-                  border={downloadNotAllowed ? "1px solid #FF8484" :"1px solid #C4C4C4"}
-                  paddingX="30px"
-                  width="100%"
-                  gridGap="6px"
-                  cursor={downloadNotAllowed ? "pointer" :"auto"}
-                  _hover={!downloadNotAllowed ? {transform : "none"} : "" }
-                  onClick={handlerDownload}
-                >
-                  <DownloadIcon alt="download" width="22px" height="22px" fill={downloadNotAllowed ? "#FF8484" :"#C4C4C4"}/>
-                  Download dos dados
-                </RoundedButton>
-              </HStack>
-            </VStack>
+              <DownloadIcon alt="download" width="22px" height="22px" fill="#FFF"/>
+              Download dos dados
+            </RoundedButton>
           </TabPanel>
         </TabPanels>
       </Tabs>
