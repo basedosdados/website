@@ -51,7 +51,7 @@ export default function PrivacyPolicy() {
         alignItems="start"
         gap="8px"
       >
-        <SecText>Bem-vindo à Base dos Dados ("Nós", "Nosso" ou "Nossos"). Comprometemo-nos a proteger e respeitar sua privacidade e cumprir todas as obrigações estabelecidas na Lei Geral de Proteção de Dados ("LGPD").</SecText>
+        <SecText>Base dos Dados ("Nós", "Nosso" ou "Nossos"). Comprometemo-nos a proteger e respeitar sua privacidade e cumprir todas as obrigações estabelecidas na Lei Geral de Proteção de Dados ("LGPD").</SecText>
         <SecText>Esta Política de Privacidade descreve como coletamos, usamos, compartilhamos e protegemos suas informações pessoais. Ao acessar ou usar nossos serviços, você concorda com os termos e práticas descritos nesta Política de Privacidade.</SecText>
       </VStack>
 
@@ -93,8 +93,6 @@ export default function PrivacyPolicy() {
         <TitleText>3. Cookies e Tecnologias Semelhantes</TitleText>
 
         <VStack
-          id="Cookies"
-          name="cookies"
           width="100%"
           spacing={0}
           alignItems="flex-start"
@@ -105,12 +103,9 @@ export default function PrivacyPolicy() {
             alignItems="flex-start"
             marginTop="8px !important"
           >
-            <SecText>3.1. Utilizamos cookies essenciais para o funcionamento da plataforma. Esses cookies são necessários para garantir o funcionamento adequado do site, melhorar o desempenho e personalizar a experiência de navegação.</SecText>
-            <SecText>O que são Cookies: Cookies são pedaços de dados que ajudam o site a lembrar suas preferências e tornar a navegação mais eficiente.</SecText>
-            <SecText>3.2. Desempenho: Garantimos que o site funcione como deveria.</SecText>
-            <SecText>3.3. Melhoria: Coletamos dados para melhorar continuamente nosso conteúdo e funcionalidades.</SecText>
-            <SecText>3.4. Personalização: Adaptamos o conteúdo para suas preferências, como idioma e região.</SecText>
-            <SecText>3.5. Cookies usados:</SecText>
+            <SecText>3.1. Cookies são pedaços de dados que ajudam o site a lembrar suas preferências e tornar a navegação mais eficiente. Utilizamos cookies essenciais para o funcionamento da plataforma.</SecText>
+            <SecText>3.2. Esses cookies são necessários para garantir o funcionamento adequado do site, melhorar o desempenho e personalizar a experiência de navegação, como idioma e região.</SecText>
+            <SecText>3.3. Cookies usados:</SecText>
 
             <Stack
               maxWidth="100%"
@@ -121,8 +116,6 @@ export default function PrivacyPolicy() {
                 }}
                 headers={["Nome do Cookie", "Retenção", "Finalidade"]}
                 values={[[
-                  "cookieAccepted", "1 ano", "Este cookie é usado para armazenar a decisão de aceite de cookies dos nossos serviços. É utilizado para ocultar o popup de confirmação ou notificar o usuário quando os termos de uso forem alterados no futuro. Sem ele, você não conseguirá fazer login."
-                ],[
                   "userBD", "7 dias", "Quando você faz login em nosso site, esse cookie especial é criado para armazenar suas informações básicas. Esse cookie é essencial para permitir que você permaneça logado e acesse as áreas protegidas do site. Sem ele, você não conseguirá fazer login."
                 ],[
                   "token", "7 dias", "Ao realizar o login em nosso site, esse cookie especial é criado para armazenar seu token de acesso. Este token não apenas permite que você permaneça logado, mas também atua como um guardião para garantir a integridade de suas configurações e informações pessoais."
@@ -130,11 +123,10 @@ export default function PrivacyPolicy() {
               />
             </Stack>
 
-            <SecText>3.6. Ao continuar a usar nosso site, você concorda com o uso desse cookie. Se preferir não usá-lo, recomendamos que ajuste as configurações do seu navegador. No entanto, isso afetará sua capacidade de fazer login e acessar áreas restritas.</SecText>
+            <SecText>3.4. Ao continuar a usar nosso site, você concorda com o uso desse cookie. Se preferir não usá-lo, recomendamos que ajuste as configurações do seu navegador. No entanto, isso afetará sua capacidade de fazer login e acessar áreas restritas.</SecText>
             <SecText>Estamos aqui para ajudar. Se tiver alguma dúvida sobre esse cookie ou qualquer outra questão de privacidade, entre em contato conosco.</SecText>
           </VStack>
         </VStack>
-        {/* <SecText>3.1. Utilizamos cookies e outras tecnologias semelhantes para coletar informações de uso e facilitar sua experiência de navegação em nossos serviços. Você pode gerenciar suas preferências de cookies nas configurações do seu navegador.</SecText> */}
       </VStack>
 
       <VStack
