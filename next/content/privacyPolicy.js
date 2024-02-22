@@ -103,7 +103,7 @@ export default function PrivacyPolicy() {
             alignItems="flex-start"
             marginTop="8px !important"
           >
-            <SecText>3.1. Cookies são pedaços de dados que ajudam o site a lembrar suas preferências e tornar a navegação mais eficiente. Utilizamos cookies essenciais para o funcionamento da plataforma.</SecText>
+            <SecText>3.1. Cookies são pedaços de dados que ajudam o site a lembrar suas preferências e tornar a navegação mais eficiente.</SecText>
             <SecText>3.2. Esses cookies são necessários para garantir o funcionamento adequado do site, melhorar o desempenho e personalizar a experiência de navegação, como idioma e região.</SecText>
             <SecText>3.3. Cookies usados:</SecText>
 
@@ -116,15 +116,15 @@ export default function PrivacyPolicy() {
                 }}
                 headers={["Nome do Cookie", "Retenção", "Finalidade"]}
                 values={[[
-                  "userBD", "7 dias", "Quando você faz login em nosso site, esse cookie especial é criado para armazenar suas informações básicas. Esse cookie é essencial para permitir que você permaneça logado e acesse as áreas protegidas do site. Sem ele, você não conseguirá fazer login."
+                  "userBD", "7 dias", "Ao realizar o login em nosso site, esse cookie especial é criado para armazenar suas informações básicas. Esse cookie é essencial para permitir que você permaneça logado e acesse as áreas protegidas do site. Sem ele, você não conseguirá fazer login."
                 ],[
                   "token", "7 dias", "Ao realizar o login em nosso site, esse cookie especial é criado para armazenar seu token de acesso. Este token não apenas permite que você permaneça logado, mas também atua como um guardião para garantir a integridade de suas configurações e informações pessoais."
                 ]]}
               />
             </Stack>
 
-            <SecText>3.4. Ao continuar a usar nosso site, você concorda com o uso desse cookie. Se preferir não usá-lo, recomendamos que ajuste as configurações do seu navegador. No entanto, isso afetará sua capacidade de fazer login e acessar áreas restritas.</SecText>
-            <SecText>Estamos aqui para ajudar. Se tiver alguma dúvida sobre esse cookie ou qualquer outra questão de privacidade, entre em contato conosco.</SecText>
+            <SecText>3.4. Ao continuar a usar nosso site, você concorda com o uso desses cookies. Se preferir não usá-los, recomendamos que ajuste as configurações do seu navegador. No entanto, isso afetará sua capacidade de fazer login e acessar áreas restritas.</SecText>
+            <SecText>Se tiver alguma dúvida sobre esses cookies ou qualquer outra questão de privacidade, entre em contato conosco através do endereço de e-mail contato@basedosdados.org.</SecText>
           </VStack>
         </VStack>
       </VStack>

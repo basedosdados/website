@@ -2,6 +2,7 @@ import {
   Stack,
   VStack,
   Skeleton,
+  Text
 } from "@chakra-ui/react"
 import { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
@@ -12,13 +13,9 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import cookies from "js-cookie";
 import Button from "../atoms/RoundedButton";
 import styles from "../../styles/paymentSystem.module.css";
 
-import {
-  getUser
-} from "../../pages/api/user"
 
 import {
   getPrices,
@@ -28,7 +25,7 @@ import {
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_KEY_STRIPE)
 
-const PaymentForm = ({ userData }) => {
+const PaymentForm = ({ onSucess }) => {
   const stripe = useStripe()
   const elements = useElements()
 
@@ -40,9 +37,7 @@ const PaymentForm = ({ userData }) => {
       redirect: 'if_required',
     })
 
-    const user = await getUser(userData?.email)
-    cookies.set('userBD', JSON.stringify(user))
-    window.location.reload()
+    if(data?.paymentIntent?.status === "succeeded") return onSucess()
   }
 
   return (
@@ -64,7 +59,7 @@ const PaymentForm = ({ userData }) => {
   )
 }
 
-export default function PaymentSystem({ userData, plan }) {
+export default function PaymentSystem({ userData, plan, onSucess }) {
   const [clientSecret, setClientSecret] = useState("")
 
   const appearance = {
@@ -175,7 +170,7 @@ export default function PaymentSystem({ userData, plan }) {
 
   return (
     <Elements options={options} stripe={stripePromise}>
-      <PaymentForm userData={userData}/>
+      <PaymentForm userData={userData} onSucess={onSucess}/>
     </Elements>
   )
 }

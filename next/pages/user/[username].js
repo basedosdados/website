@@ -78,6 +78,7 @@ import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
+import stylesPS from "../../styles/paymentSystem.module.css";
 
 export async function getServerSideProps(context) {
   const { req } = context
@@ -179,7 +180,8 @@ function ModalGeneral ({
   isOpen,
   onClose,
   isCentered = true,
-  propsModalContent
+  propsModalContent,
+  classNameBody
 }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered={isCentered} margin="24px !important">
@@ -196,7 +198,7 @@ function ModalGeneral ({
           {children[0]}
         </ModalHeader>
 
-        <ModalBody padding="0">
+        <ModalBody padding="0" className={classNameBody}>
           {children[1]}
         </ModalBody>
 
@@ -1384,6 +1386,7 @@ const NewPassword = ({ userInfo }) => {
 const PlansAndPayment = ({ userData }) => {
   const [plan, setPlan] = useState({})
   const PaymentModal = useDisclosure()
+  const SucessPaymentModal = useDisclosure()
   const PlansModal = useDisclosure()
   const CancelModalPlan = useDisclosure()
 
@@ -1493,9 +1496,23 @@ const PlansAndPayment = ({ userData }) => {
     }, 2000)
   }
 
+  const openModalSucess = () => {
+    PaymentModal.onClose()
+    SucessPaymentModal.onOpen()
+  }
+
+  async function closeModalSucess() {
+    const user = await getUser(userData?.email)
+    cookies.set('userBD', JSON.stringify(user))
+    setTimeout(() => {
+      window.location.reload()
+    },[5000])
+  }
+
   return (
     <Stack>
       <ModalGeneral
+        classNameBody={stylesPS.modal}
         isOpen={PaymentModal.isOpen}
         onClose={PaymentModal.onClose}
         isCentered={isMobileMod() ? false : true}
@@ -1503,7 +1520,6 @@ const PlansAndPayment = ({ userData }) => {
           minWidth: "fit-content",
           maxWidth: "fit-content",
           maxHeight: isMobileMod() ? "100%" : "700px",
-          overflowY: "auto"
         }}
       >
         <Stack spacing={0} marginBottom="16px">
@@ -1528,7 +1544,35 @@ const PlansAndPayment = ({ userData }) => {
           gap="20px"
           spacing={0}
         >
-          <PaymentSystem userData={userData} plan={plan}/>
+          <PaymentSystem
+            userData={userData}
+            plan={plan}
+            onSucess={() => openModalSucess()}
+          />
+        </Stack>
+      </ModalGeneral>
+
+      <ModalGeneral
+        isOpen={SucessPaymentModal.isOpen}
+        onClose={() => closeModalSucess()}
+        isCentered={isMobileMod() ? false : true}
+      >
+        <Stack spacing={0} marginBottom="16px">
+        </Stack>
+
+        <Stack
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          justifyItems="center"
+          width="fit-content"
+          minWidth="292px"
+          gap="20px"
+          spacing={0}
+        >
+          <Text>
+            Sucesso!
+          </Text>
         </Stack>
       </ModalGeneral>
 

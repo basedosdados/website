@@ -3,3 +3,14 @@
   flex-direction: column;
   gap: 14px;
 }
+
+.modal {
+  overflow-y: auto;
+  width: 304px;
+  scroll-margin-left: 20px;
+}
+
+.modal::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
