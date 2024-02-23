@@ -2,37 +2,16 @@ import { CopyIcon } from "../public/img/icons/copyIcon"
 
 export const QuestionFAQ = [
   {
-    question: "Preciso pagar para acessar os dados da BD?",
-    answer: function() {
-      return (
-        <div id="do-i-have-to-pay" style={{display: "flex", flexDirection: "column"}}>
-          <p>
-            Você não precisa pagar para utilizar nenhum serviço oferecido pela BD.
-            Porém, para acessar nossos dados tratados no BigQuery, você precisa criar um projeto no Google Cloud,
-            que oferece até 1 Terabyte gratuito por mês para seus usuários. Caso você exceda esse limite,
-            são cobrados 5 dólares por Terabyte de dados que sua consulta irá processar.
-            Ressaltamos que esse limite costuma ser o suficiente, mesmo para análises com bases mais robustas,
-            como a RAIS ou Censo Escolar. Para controlar os custos e otimizar sua consulta,
-            confira nossas dicas de boas práticas na seção sobre BigQuery.
-          </p>
-        </div>
-      )
-    },
-    categories: ["Dados"],
-    keywords: "pagar, custo, gratuito, grátis, mensalidade",
-    id: "do-i-have-to-pay"
-  },
-  {
     question: "Os dados da BD são públicos ou privados?",
     answer: function() {
       return (
         <div id="public-or-private" style={{display: "flex", flexDirection: "column"}}>
           <p>
-            Em sua grande maioria, as bases de dados encontradas em nossa plataforma são públicas,
-            porém, também estão listadas algumas bases privadas. Nossa organização não possui fins lucrativos,
-            portanto, não comercializamos a listagem de bases em nossa plataforma.
-            Acreditamos ser útil listar conjuntos de dados privados,
-            uma vez que as pessoas podem ter interesse em adquirí-las ao encontrá-las em nosso site.
+          Em sua grande maioria, as bases de dados encontradas em nossa plataforma são públicas.
+          Porém, também estão listadas algumas bases privadas.
+          Nossa organização não possui fins lucrativos, portanto, não comercializamos a listagem de bases em nossa plataforma.
+          Acreditamos ser útil listar conjuntos de dados privados, uma vez que as pessoas podem ter interesse em
+          adquirí-las ao encontrá-las em nosso site.
           </p>
         </div>
       )
@@ -42,12 +21,65 @@ export const QuestionFAQ = [
     id: "public-or-private"
   },
   {
+    question: "Preciso pagar para acessar os dados da BD?",
+    answer: function() {
+      return (
+        <div id="do-i-have-to-pay" style={{display: "flex", flexDirection: "column"}}>
+          <p>
+          O acesso à maioria dos dados oferecidos pela BD é grátis. Só em dois casos pode ser necessário pagamento. São esses:
+          </p>
+          <p>
+          1. Alguns dados fazem parte dos nossos planos avançados, Pro e Empresas, como indicado nas páginas das tabelas. Nesse caso é necessário uma assinatura para acessar os dados.
+          </p>
+          <p>
+          2. Uma forma de acessar nossos dados é através do BigQuery, no Google Cloud, que oferece até 1 Terabyte gratuito por mês para seus usuários. Ressaltamos que esse limite costuma ser o suficiente, mesmo para análises com bases mais robustas, como a RAIS ou Censo Escolar. Caso você ultrapasse esse limite, o BigQuery cobra 5 dólares por terabyte de dados que sua consulta irá processar.
+          </p>
+        </div>
+      )
+    },
+    categories: ["Dados"],
+    keywords: "pagar, custo, gratuito, grátis, mensalidade",
+    id: "do-i-have-to-pay"
+  },
+  {
+    question: "É possível fazer o download dos dados da BD?",
+    answer: function() {
+      return (
+        <div id="download" style={{display: "flex", flexDirection: "column"}}>
+          <p>
+          Sim, você pode baixar o arquivo CSV completo das tabelas tratadas direto na plataforma.
+          No entanto, tabelas com mais de 200.000 linhas só podem ser acessados através do nosso data lake no BigQuery ou dos nossos pacotes em Python, R e Stata.
+          </p>
+        </div>
+      )
+    },
+    categories: ["Dados"],
+    keywords: "download, baixar, CSV, arquivo",
+    id: "download"
+  },
+  {
+    question: "Qual é o limite de download dos dados da BD na plataforma?",
+    answer: function() {
+      return (
+        <div id="download-limit" style={{display: "flex", flexDirection: "column"}}>
+          <p>
+            O limite para download dos dados na nossa plataforma é de 200.000 linhas.
+            Para acessar tabelas que ultrapassam esse limite, utilize nosso <i>datalake</i> no BigQuery ou nossos pacotes em Python, R e Stata.
+          </p>
+        </div>
+      )
+    },
+    categories: ["Dados"],
+    keywords: "limite, download, baixar, tamanho, máximo, arquivo",
+    id: "download-limit"
+  },
+  {
     question: "Quais tipos de dados encontro na BD?",
     answer: function() {
       return (
         <div id="data-resources" style={{display: "flex", flexDirection: "column"}}>
           <p>
-            Em nossa plataforma, você encontra três tipos de dados: tabelas tratadas BD+, fontes originais e pedidos LAI.
+          Em nossa plataforma, você encontra três tipos de dados: tabelas tratadas, fontes originais e pedidos LAI.
           </p>
         </div>
       )
@@ -57,14 +89,13 @@ export const QuestionFAQ = [
     id: "data-resources"
   },
   {
-    question: "O que são tabelas tratadas BD+?",
+    question: "O que são tabelas tratadas?",
     answer: function() {
       return (
         <div id="tables" style={{display: "flex", flexDirection: "column"}}>
           <p>
-            São tabelas completas, já tratadas e prontas para análise, disponíveis no nosso <i>datalake</i> público.
-            A limpeza das tabelas envolve um rigoroso processo de padronização e compatibilização de dados,
-            o que permite que o cruzamento de tabelas de diferentes instituições e temas seja tão simples quanto qualquer outra consulta.
+          São tabelas prontas para análise, disponíveis via SQL, Python, R ou Stata.
+          O processo de tratamento das tabelas envolve a padronização de nomes de variáveis e compatibilização de códigos, o que permite que o cruzamento de tabelas de diferentes instituições e temas seja tão simples quanto qualquer outra consulta.
           </p>
         </div>
       )
@@ -79,7 +110,9 @@ export const QuestionFAQ = [
       return (
         <div id="external-links" style={{display: "flex", flexDirection: "column"}}>
           <p>
-            São links para páginas externas à plataforma com informações úteis sobre o conjunto de dados.
+          São links para páginas externas à plataforma com informações úteis sobre o conjunto de dados.
+          A maioria destes são dados que ainda não disponibilizamos na BD como tabelas tratadas.
+          Tentamos sempre fornecer o caminho mais próximo possível à fonte para baixar os dados originais.
           </p>
         </div>
       )
@@ -107,7 +140,7 @@ export const QuestionFAQ = [
     id: "information-requests"
   },
   {
-    question: "Como acessar as tabelas tratadas BD+?",
+    question: "Como acessar as tabelas tratadas?",
     answer: function() {
       return (
         <div id="access-tables" style={{display: "flex", flexDirection: "column"}}>
@@ -180,9 +213,9 @@ export const QuestionFAQ = [
       return (
         <div id="data-updated" style={{display: "flex", flexDirection: "column"}}>
           <p>
-            Alguns dados são atualizados automaticamente e outros não.
-            Estamos no esforço de mudar para um fluxo automático todos os
-            conjuntos que são atualizados com uma frequência maior que mensalmente.
+          Alguns dados são atualizados automaticamente e outros não.
+          Temos um compromisso de atualizar automaticamente qualquer base de frequência mensal ou maior.
+          Esses dados de alta frequência estão disponíveis nos nossos planos avançados, Pro e Empresas.
           </p>
         </div>
       )
@@ -190,40 +223,6 @@ export const QuestionFAQ = [
     categories: ["Dados"],
     keywords: "atualização, automatização, frequência",
     id: "data-updated"
-  },
-  {
-    question: "É possível fazer o download dos dados da BD?",
-    answer: function() {
-      return (
-        <div id="download" style={{display: "flex", flexDirection: "column"}}>
-          <p>
-            Sim, você pode baixar o arquivo CSV completo das tabelas tratadas BD+ direto na plataforma.
-            No entanto, tabelas com mais de 200.000 linhas só podem ser acessados através do
-            nosso <i>datalake</i> no BigQuery ou dos nossos pacotes em Python, R e Stata.
-          </p>
-        </div>
-      )
-    },
-    categories: ["Dados"],
-    keywords: "download, baixar, CSV, arquivo",
-    id: "download"
-  },
-  {
-    question: "Qual é o limite de download dos dados da BD na plataforma?",
-    answer: function() {
-      return (
-        <div id="download-limit" style={{display: "flex", flexDirection: "column"}}>
-          <p>
-            O limite para download dos dados na nossa plataforma é de 200.000 linhas.
-            Para acessar tabelas que ultrapassam esse limite,
-            utilize nosso <i>datalake</i> no BigQuery ou nossos pacotes em Python, R e Stata.
-          </p>
-        </div>
-      )
-    },
-    categories: ["Dados"],
-    keywords: "limite, download, baixar, tamanho, máximo, arquivo",
-    id: "download-limit"
   },
   {
     question: "Como utilizar os pacotes da BD?",
@@ -278,6 +277,73 @@ export const QuestionFAQ = [
     categories: ["Dados"],
     keywords: "inclusão, solicitação, proposta, sugestão",
     id: "data-proposal"
+  },
+  {
+    question: "O que são os planos Pro e Empresas?",
+    answer: function() {
+      return (
+        <div id="subscriptions">
+          <p>
+          Além do plano gratuito, a BD conta com planos avançados: Pro, para usuários individuais, e Empresas, para até 10 usuários de uma mesma organização.
+          Nesses planos estão disponíveis além dos dados já existentes no data lake público da BD, dezenas de conjuntos de dados exclusivos priorizados para solucionar problemas e te ajudar em sua equipe, organização ou pesquisa.
+          Além de conjuntos de dados exclusivos, os planos oferecem acesso à à versão mais atualizada de algumas das nossas principais tabelas, como do CNES, dados de CNPJ, do Brasileirão, dentre muitas outras.
+          </p>
+        </div>
+      )
+    },
+    categories: ["Planos Pagos"],
+    keywords: "pro, empresas, assinatura, dados exclusivos, pagar, custo, gratuito, grátis, mensalidade",
+    id: "subscriptions"
+  },
+  {
+    question: "Quais dados tenho acesso com os planos pagos?",
+    answer: function() {
+      return (
+        <div id="subscriptions-data">
+          <p>
+          A assinatura dá acesso a dados de alta frequência atualizados.
+          Esses podem às vezes ser um subconjunto de uma tabela tratada maior, ou ser uma tabela tratada inteira.
+          Nosso mecanismo de busca e páginas específicas de conjuntos indicam o que é disponível gratuitamente e o que está coberto pela assinatura dos planos pagos.
+          </p>
+        </div>
+      )
+    },
+    categories: ["Planos Pagos"],
+    keywords: "pro, empresas, assinatura, dados exclusivos, pagar, custo, gratuito, grátis, mensalidade",
+    id: "subscriptions-data"
+  },
+  {
+    question: "Como os dados da BD Pro são atualizados?",
+    answer: function() {
+      return (
+        <div id="subscriptions-data-update">
+          <p>
+          Todos os dados disponíveis na BD Pro são atualizados automaticamente via nossa tecnologia de gerência de fluxos.
+          A BD usa o que há de mais moderno em engenharia de dados para garantir a mais alta qualidade e consistência no que disponibilizamos.
+          </p>
+        </div>
+      )
+    },
+    categories: ["Planos Pagos"],
+    keywords: "pro, empresas, assinatura, dados exclusivos, atualizacao",
+    id: "subscriptions-data-update"
+  },
+  {
+    question: "Quanto custa uma assinatura BD Pro?",
+    answer: function() {
+      return (
+        <div id="subscriptions-prices">
+          <p>
+          Atualmente temos dois planos.
+          O plano Pro custa R$47 por mês, dando acesso a todos os dados de alta frequência atualizados para um único usuário.
+          O plano Empresas custa R$350 por mês, incluindo acesso para 10 contas e suporte prioritário com nossa equipe.
+          </p>
+        </div>
+      )
+    },
+    categories: ["Planos Pagos"],
+    keywords: "pro, empresas, assinatura, preco",
+    id: "subscriptions-prices"
   },
   {
     question: "O que é o datalake da BD no BigQuery?",
@@ -432,16 +498,76 @@ export const QuestionFAQ = [
     id: "bigquery-partitions"
   },
   {
+    question: "O que é a BD Lab?",
+    answer: function() {
+      return (
+        <div id="bd-lab" style={{display: "flex", flexDirection: "column"}}>
+          <p>
+          A BD Lab é nosso braço de serviços, parcerias e projetos.
+          É pela BD Lab que interagimos com outras organizações, provendo nossa expertise acumulada em tecnologia e dados.
+          Enxergamos esses projetos como componente indispensável da nossa missão de promover o uso de dados para a promoção do bem-estar social.
+          </p>
+        </div>
+      )
+    },
+    categories: ["BD Lab"],
+    keywords: "bd lab, consultoria, projeto",
+    id: "bd-lab"
+  },
+  {
+    question: "Como surgiu a BD Lab?",
+    answer: function() {
+      return (
+        <div id="bd-lab-origin" style={{display: "flex", flexDirection: "column"}}>
+          <p>
+          A BD Lab foi criada para garantir a sustentabilidade da organização, de forma a manter e expandir nossos produtos de forma gratuita.
+          A prestação de serviços de dados e a realização de projetos com parceiros vêm sendo chave não só na geração de receita, mas também no fortalecimento da nossa posição de referência na disponibilização de dados de qualidade.
+          </p>
+        </div>
+      )
+    },
+    categories: ["BD Lab"],
+    keywords: "bd lab, consultoria, projeto, origem",
+    id: "bd-lab-origin"
+  },
+  {
+    question: "O que é a BD Edu?",
+    answer: function() {
+      return (
+        <div id="bd-edu" style={{display: "flex", flexDirection: "column"}}>
+          <p>
+          A BD Edu é nosso braço de formação, ensino e cursos.
+          </p>
+        </div>
+      )
+    },
+    categories: ["BD Edu"],
+    keywords: "bd edu, educacao, formacao, curso",
+    id: "bd-edu"
+  },
+  {
+    question: "A BD é uma empresa?",
+    answer: function() {
+      return (
+        <div id="legal-nature" style={{display: "flex", flexDirection: "column"}}>
+          <p>
+          Não. A BD é constituída como uma associação sem fins lucrativos chamada “Instituto Base dos Dados” com sede no Rio de Janeiro e com CNPJ 42.494.318/0001-16.
+          </p>
+        </div>
+      )
+    },
+    categories: ["Institucional"],
+    keywords: "natureza legal, empresa, ong, lucro",
+    id: "legal-nature"
+  },
+  {
     question: "Como a BD se financia?",
     answer: function() {
       return (
         <div id="financing" style={{display: "flex", flexDirection: "column"}}>
           <p>
             Ao longo dos anos, a BD cresceu com o apoio financeiro de usuários e de pessoas que se identificam com nossa missão.
-            Hoje, contamos também com nossa área de Serviços e Parcerias, criada para garantir a sustentabilidade da organização,
-            de forma a manter e expandir nossos produtos de forma gratuita.
-            A prestação de serviços de dados e a realização de projetos com parceiros vêm sendo chave não só na geração de receita,
-            mas também no fortalecimento da nossa posição de referência na disponibilização de dados de qualidade.
+            Hoje, contamos também com nossa área de Serviços e Parcerias (BD Lab) e nossos planos de acesso a dados exclusivos de alta frequência atualizados (BD Pro).
             Confira mais sobre a contabilidade da organização em nossa página de <a href="https://basedosdados.org/transparencia" target="_blank">Transparência</a>.
           </p>
         </div>
@@ -488,5 +614,27 @@ export const QuestionFAQ = [
     categories: ["Institucional"],
     keywords: "citar, citação, referência",
     id: "reference"
+  },
+  {
+    question: "Como a BD coleta dados pessoais?",
+    answer: function() {
+      return (
+        <div id="personal-data" style={{display: "flex", flexDirection: "column"}}>
+          <p>
+          Coletamos informações pessoais que você nos fornece diretamente ao usar nossos serviços.
+          Isso pode incluir seu nome, endereço de e-mail, informações de pagamento e outras informações que você escolher compartilhar conosco.
+          Também coletamos informações de forma automática, através de cookies, incluindo dados de uso, endereço IP, tipo de navegador, e informações sobre o dispositivo que você usa para acessar nossos serviços.
+          </p>
+          <p>
+          Utilizamos suas informações pessoais para fornecer e melhorar nossos serviços, incluindo o processamento de pagamentos, o fornecimento de suporte ao cliente e a personalização da experiência do usuário.
+          Não venderemos, alugaremos ou compartilharemos suas informações pessoais com terceiros não afiliados sem o seu consentimento explícito.
+          Para mais informações, acesse nossos Termos de Uso e Políticas de Privacidade <a href="http://basedosdados.org/termos" target="_blank">aqui</a>.
+          </p>
+        </div>
+      )
+    },
+    categories: ["Institucional"],
+    keywords: "privacidade, uso, lgpd",
+    id: "personal-data"
   },
 ]
