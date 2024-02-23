@@ -90,11 +90,6 @@ export default function TermsAndPolitics() {
           content="Termos e Privacidade – Base dos Dados"
           key="ogtitle"
         />
-        {/* <meta
-          property="og:description"
-          content=""
-          key="ogdesc"
-        /> */}
       </Head>
 
       <VStack
