@@ -173,7 +173,7 @@ export default function Footer({ pages, ocult = false }) {
               <FooterLink href="/perguntas-frequentes">
                 Perguntas frequentes
               </FooterLink>
-              <FooterLink target="_self" href="/termos">
+              <FooterLink target="_self" href="/termos-e-privacidade">
                 Termos e Privacidade
               </FooterLink>
               <FooterLink target="_self" href="/contato">
@@ -210,11 +210,7 @@ export default function Footer({ pages, ocult = false }) {
             alignItems="flex-start"
             marginTop={isMobileMod && "16px"}
           >
-            <BodyText color="#FFF" fontSize="16px" letterSpacing="0.2px">® 2023 Base dos Dados</BodyText>
-            {/* <Text>|</Text> // TODO: Não existem essas páginas ainda!
-            <Link color="white">Termos de uso</Link>
-            <Text>|</Text>
-            <Link color="white">Política de privacidade</Link> */}
+            <BodyText color="#FFF" fontSize="16px" letterSpacing="0.2px">® 2024 Base dos Dados</BodyText>
             <BodyText
               color="#FFF"
               fontSize="12px"

@@ -66,7 +66,7 @@ export default function ConfirmCookies() {
       >
         Utilizamos cookies essenciais para o funcionamento da plataforma.
 
-        Veja mais sobre nossa <Link fontFamily="ubuntu" fontSize="16px" color="#42B0FF" href="/termos?section=cookies" target="_blank">Política de Cookies</Link>.
+        Veja mais sobre nossa <Link fontFamily="ubuntu" fontSize="16px" color="#42B0FF" href="/termos-e-privacidade?section=cookies" target="_blank">Política de Cookies</Link>.
       </Text>
 
       <Box width="100%" display="flex" >

@@ -316,7 +316,7 @@ export const CardPrice = ({
               marginLeft="6px"
               fontWeight="700"
               letterSpacing="0.5px"
-              href="/termos?section=terms"
+              href="/termos-e-privacidade?section=terms"
               target="_blank"
             >Termos de Serviço</Link>
             .
