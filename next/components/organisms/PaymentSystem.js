@@ -25,7 +25,7 @@ import {
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_KEY_STRIPE)
 
-const PaymentForm = ({ onSucess }) => {
+const PaymentForm = ({ onSucess, onErro }) => {
   const stripe = useStripe()
   const elements = useElements()
 
@@ -37,6 +37,7 @@ const PaymentForm = ({ onSucess }) => {
       redirect: 'if_required',
     })
 
+    if(data?.error?.code === "card_declined") return onErro()
     if(data?.paymentIntent?.status === "succeeded") return onSucess()
   }
 
@@ -59,7 +60,7 @@ const PaymentForm = ({ onSucess }) => {
   )
 }
 
-export default function PaymentSystem({ userData, plan, onSucess }) {
+export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
   const [clientSecret, setClientSecret] = useState("")
 
   const appearance = {
@@ -170,7 +171,7 @@ export default function PaymentSystem({ userData, plan, onSucess }) {
 
   return (
     <Elements options={options} stripe={stripePromise}>
-      <PaymentForm userData={userData} onSucess={onSucess}/>
+      <PaymentForm userData={userData} onSucess={onSucess} onErro={onErro}/>
     </Elements>
   )
 }

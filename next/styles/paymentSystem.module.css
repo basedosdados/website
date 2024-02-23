@@ -2,12 +2,20 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  padding: 0 5px;
 }
 
 .modal {
   overflow-y: auto;
-  width: 304px;
+  width: 306px;
   scroll-margin-left: 20px;
+}
+
+@media (max-width: 600px) {
+  .modal {
+    overflow-y: initial;
+    width: 300px;
+  }
 }
 
 .modal::-webkit-scrollbar {
