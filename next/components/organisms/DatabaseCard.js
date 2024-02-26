@@ -43,7 +43,7 @@ export default function DatabaseCard({
           color={tables?.number === undefined || tables?.number === 0? "#C4C4C4" : "#2B8C4D"}
         >
           <a
-            href={tables?.number > 0 && `${link}?table=${tables?.id}`}
+            href={tables?.number > 0 ? `${link}?table=${tables?.id}` : ""}
             target="_blank"
             style={{display: "flex"}}
           >
@@ -152,7 +152,7 @@ export default function DatabaseCard({
             <ThemeTag
               name={t.name}
               display="block"
-              alignText="center"
+              aligntext="center"
               whiteSpace="nowrap"
               overflow="hidden"
               minHeight="0"
@@ -177,39 +177,35 @@ export default function DatabaseCard({
           justifyContent="space-between"
           width="220px"
         >
-          <a
-            href={rawDataSources.length > 0 && `${link}?raw_data_source=${rawDataSources.id}`}
+          <Link
             target="_blank"
+            href={rawDataSources.number > 0 ? `${link}?raw_data_source=${rawDataSources.id}` : ""}
+            pointerEvents={rawDataSources.number > 0 ? "default" : "none"}
+            fontFamily="Ubuntu"
+            fontSize="12px"
+            fontWeight="400"
+            letterSpacing="0.3px"
+            color={databaseInfo[1] ? "#252A32" : "#C4C4C4"}
+            cursor={databaseInfo[1] && "pointer"}
+            _hover={databaseInfo[1] && {opacity : "0.7"}}
           >
-            <Text
-              fontFamily="Ubuntu"
-              fontSize="12px"
-              fontWeight="400"
-              letterSpacing="0.3px"
-              color={databaseInfo[1] ? "#252A32" : "#C4C4C4"}
-              cursor={databaseInfo[1] && "pointer"}
-              _hover={databaseInfo[1] && {opacity : "0.7"}}
-            >
-              {databaseInfo[1] ? databaseInfo[1] : "0 fontes originais"}
-            </Text>
-          </a>
+            {databaseInfo[1] ? databaseInfo[1] : "0 fontes originais"}
+          </Link>
           <Text color="#DEDFE0">•</Text>
-          <a
-            href={informationRequests.length > 0 && `${link}?information_request=${informationRequests.id}`}
+          <Link
             target="_blank"
+            href={informationRequests.number > 0 ? `${link}?information_request=${informationRequests.id}` : ""}
+            pointerEvents={informationRequests.number > 0 ? "default" : "none"}
+            fontFamily="Ubuntu"
+            fontSize="12px"
+            fontWeight="400"
+            letterSpacing="0.3px"
+            color={databaseInfo[2] ? "#252A32" : "#C4C4C4"}
+            cursor={databaseInfo[2] && "pointer"}
+            _hover={databaseInfo[2] && {opacity : "0.7"}}
           >
-            <Text
-              fontFamily="Ubuntu"
-              fontSize="12px"
-              fontWeight="400"
-              letterSpacing="0.3px"
-              color={databaseInfo[2] ? "#252A32" : "#C4C4C4"}
-              cursor={databaseInfo[2] && "pointer"}
-              _hover={databaseInfo[2] && {opacity : "0.7"}}
-            >
-              {databaseInfo[2] ? databaseInfo[2] : "0 pedidos LAI"}
-            </Text>
-          </a>
+            {databaseInfo[2] ? databaseInfo[2] : "0 pedidos LAI"}
+          </Link>
         </HStack>
       </VStack>
     </Card>

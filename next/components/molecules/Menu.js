@@ -650,13 +650,14 @@ function DesktopLinks({ links, position = false, path, userTemplate = false }) {
     setStatusSearch(elm.status)
   }
 
-  const LinkMenuDropDown = ({ url, text, icon }) => {
+  const LinkMenuDropDown = ({ key, url, text, icon }) => {
     const [flag, setFlag] = useBoolean()
 
     if(url === undefined && text === undefined) return <Divider marginBottom="10px" padding="10px 0 0" borderColor="#DEDFE0"/>
 
     return (
       <Link
+        key={key}
         display="flex"
         flexDirection="colunm"
         _hover={{ opacity: "0.6" }}
@@ -948,7 +949,12 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
           {simpleTemplate ?
             <></>  
             :
-            <DesktopLinks links={links} position={isScrollDown} path={route} userTemplate={userTemplate}/>
+            <DesktopLinks
+              links={links}
+              position={isScrollDown}
+              path={route}
+              userTemplate={userTemplate}
+            />
           }
 
           {userTemplate && isMobileMod() && <SearchInputUser />}

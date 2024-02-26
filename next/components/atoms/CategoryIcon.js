@@ -5,7 +5,6 @@ export function CategoryIcon({ url, active, size = "50px", ...style }) {
     <Image
       width={size}
       height={size}
-      priority={true}
       border="0px"
       src={url}
       {...style}
