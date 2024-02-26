@@ -39,11 +39,6 @@ export default function TermsAndPolitics() {
       setSectionSelected("Políticas de Privacidade")
       movedScroll(targetElement?.offsetTop+120)
     }
-    if(id === "cookies") {
-      targetElement = document.getElementById("Cookies")
-      setSectionSelected("Cookies")
-      movedScroll(targetElement.offsetTop+120)
-    }
   },[query?.section])
 
   const SectionText = ({ section }) => {
@@ -95,11 +90,6 @@ export default function TermsAndPolitics() {
           content="Termos e Privacidade – Base dos Dados"
           key="ogtitle"
         />
-        {/* <meta
-          property="og:description"
-          content=""
-          key="ogdesc"
-        /> */}
       </Head>
 
       <VStack
@@ -134,7 +124,6 @@ export default function TermsAndPolitics() {
           >
             <SectionText section="Termos de Serviço"/>
             <SectionText section="Políticas de Privacidade"/>
-            <SectionText section="Cookies"/>
           </Box>
 
           <Stack

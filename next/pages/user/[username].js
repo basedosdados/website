@@ -31,7 +31,8 @@ import {
   PopoverTrigger,
   PopoverContent,
   PopoverBody,
-  PopoverArrow 
+  PopoverArrow,
+  Spinner
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
@@ -64,7 +65,8 @@ import {
 } from "../api/user";
 
 import {
-  getSubscriptionActive
+  getSubscriptionActive,
+  getUserGetSubscription
 } from "../api/stripe"
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
@@ -78,6 +80,9 @@ import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
+import SucessIcon from "../../public/img/icons/sucessIcon";
+import ErrIcon from "../../public/img/icons/errIcon";
+import stylesPS from "../../styles/paymentSystem.module.css";
 
 export async function getServerSideProps(context) {
   const { req } = context
@@ -179,14 +184,15 @@ function ModalGeneral ({
   isOpen,
   onClose,
   isCentered = true,
-  propsModalContent
+  propsModalContent,
+  classNameBody
 }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered={isCentered} margin="24px !important">
       <ModalOverlay/>
       <ModalContent
         margin="24px"
-        minWidth={isMobileMod() ? "" : "536px"}
+        minWidth={isMobileMod() ? "auto" : "536px"}
         boxSizing="content-box"
         padding="32px"
         borderRadius="20px"
@@ -196,7 +202,7 @@ function ModalGeneral ({
           {children[0]}
         </ModalHeader>
 
-        <ModalBody padding="0">
+        <ModalBody padding="0" className={classNameBody}>
           {children[1]}
         </ModalBody>
 
@@ -907,7 +913,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
       >
         <Stack spacing={0} marginBottom="16px">
           <SectionTitle
-            lineHeight="40px"
+            lineHeight={isMobileMod() ? "32px" : "40px"}
           >Tem certeza que deseja deletar sua conta?</SectionTitle>
           <ModalCloseButton
             fontSize="14px"
@@ -1148,6 +1154,7 @@ const NewPassword = ({ userInfo }) => {
             _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
           />
         </Stack>
+
         <Stack spacing="24px" alignItems="center" textAlign="center" marginBottom="24px">
           <EmailRecoveryImage/>
           <SectionTitle
@@ -1384,8 +1391,13 @@ const NewPassword = ({ userInfo }) => {
 const PlansAndPayment = ({ userData }) => {
   const [plan, setPlan] = useState({})
   const PaymentModal = useDisclosure()
+  const SucessPaymentModal = useDisclosure()
+  const ErroPaymentModal = useDisclosure()
   const PlansModal = useDisclosure()
   const CancelModalPlan = useDisclosure()
+  const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingH, setIsLoadingH] = useState(false)
+  const [isLoadingCanSub, setIsLoadingCanSub] = useState(false)
 
   const resources={
     "BD Gratis" : {
@@ -1485,25 +1497,68 @@ const PlansAndPayment = ({ userData }) => {
     )
   }
 
-  const cancelSubscripetion = async () => {
+  const openModalSucess = () => {
+    PaymentModal.onClose()
+    SucessPaymentModal.onOpen()
+  }
+
+  const openModalErro = () => {
+    PaymentModal.onClose()
+    ErroPaymentModal.onOpen()
+  }
+
+  async function cancelSubscripetion() {
     const subs = await getSubscriptionActive(userData.email)
     const result = await removeSubscription(subs[0]?.node._id)
-    setTimeout(() => {
-      window.location.reload()
-    }, 2000)
+
+    do {
+      const statusSub = await getUserGetSubscription(userData?.email)
+      if(statusSub?.proSubscriptionStatus !== "active") {
+        break
+      }
+      await new Promise (resolve => setTimeout(resolve ,1000))
+    } while (true)
+
+    const user = await getUser(userData?.email)
+    cookies.set('userBD', JSON.stringify(user))
+    window.location.reload()
   }
+
+  async function closeModalSucess() {
+    do {
+      const statusSub = await getUserGetSubscription(userData?.email)
+      if(statusSub?.proSubscriptionStatus === "active") {
+        break
+      }
+      await new Promise (resolve => setTimeout(resolve ,1000))
+    } while (true)
+
+    const user = await getUser(userData?.email)
+    cookies.set('userBD', JSON.stringify(user))
+
+    if(isLoadingH === true) return window.open("/", "_self")
+    window.location.reload()
+  }
+
+  useEffect(() => {
+    if(isLoading === true || isLoadingH === true) closeModalSucess()
+    if(isLoadingCanSub === true) cancelSubscripetion()
+  }, [isLoading, isLoadingH, isLoadingCanSub]) 
 
   return (
     <Stack>
+      <Box display={isLoading || isLoadingH ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
+
       <ModalGeneral
+        classNameBody={stylesPS.modal}
         isOpen={PaymentModal.isOpen}
         onClose={PaymentModal.onClose}
         isCentered={isMobileMod() ? false : true}
         propsModalContent={{
           minWidth: "fit-content",
           maxWidth: "fit-content",
-          maxHeight: isMobileMod() ? "100%" : "700px",
-          overflowY: "auto"
+          maxHeight: isMobileMod() ? "fit-content" : "700px",
+          margin: "24px 0"
         }}
       >
         <Stack spacing={0} marginBottom="16px">
@@ -1528,7 +1583,182 @@ const PlansAndPayment = ({ userData }) => {
           gap="20px"
           spacing={0}
         >
-          <PaymentSystem userData={userData} plan={plan}/>
+          <PaymentSystem
+            userData={userData}
+            plan={plan}
+            onSucess={() => openModalSucess()}
+            onErro={() => openModalErro()}
+          />
+        </Stack>
+      </ModalGeneral>
+
+      <ModalGeneral
+        isOpen={SucessPaymentModal.isOpen}
+        onClose={() => setIsLoading(true)}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <Box height="24px"/>
+          <ModalCloseButton
+            fontSize="14px"
+            top="28px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+          />
+        </Stack>
+
+        <Stack
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyItems="center"
+          width="100%"
+          minWidth="292px"
+          gap="24px"
+          marginBottom="24px"
+          spacing={0}
+        >
+          <SucessIcon
+            width="90px"
+            height="64px"
+            fill="#34A15A"
+          />
+          <Text
+            fontFamily="Ubuntu"
+            fontWeight="400"
+            fontSize="24px"
+            lineHeight="40px"
+            color="#252A32"
+          >
+            Parabéns!
+          </Text>
+          <Text
+            fontFamily="Ubuntu"
+            fontWeight="400"
+            fontSize="16px"
+            lineHeight="22px"
+            textAlign="center"
+            letterSpacing="0.2px"
+            color="#7D7D7D"
+          >
+            Seu pagamento foi efetuado com sucesso e seu plano foi atualizado.
+          </Text>
+        </Stack>
+
+        <Stack
+          flexDirection={isMobileMod() ? "column-reverse" : "row"}
+          spacing={0}
+          gap="24px"
+          width="100%"
+        >
+          <RoundedButton
+            borderRadius="30px"
+            backgroundColor="#FFF"
+            border="1px solid #42B0FF"
+            color="#42B0FF"
+            width="inherit"
+            _hover={{transform: "none", opacity: 0.8}}
+            onClick={() => setIsLoading(true)}
+          >
+            {isLoading ?
+              <Spinner/>
+              :
+              "Continuar nas configurações"
+            }
+          </RoundedButton>
+
+          <RoundedButton
+            borderRadius="30px"
+            width="inherit"
+            _hover={{transform: "none", opacity: 0.8}}
+            onClick={() => setIsLoadingH(true)}
+          >
+            {isLoadingH ?
+              <Spinner/>
+              :
+              "Ir para a página inicial"
+            }
+          </RoundedButton>
+        </Stack>
+      </ModalGeneral>
+
+      <ModalGeneral
+        isOpen={ErroPaymentModal.isOpen}
+        onClose={ErroPaymentModal.onClose}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <Box height="24px"/>
+          <ModalCloseButton
+            fontSize="14px"
+            top="28px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+          />
+        </Stack>
+
+        <Stack
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyItems="center"
+          width="100%"
+          minWidth="292px"
+          gap="24px"
+          marginBottom="24px"
+          spacing={0}
+        >
+          <ErrIcon
+            width="90px"
+            height="64px"
+            fill="#FF8484"
+          />
+          <Text
+            fontFamily="Ubuntu"
+            fontWeight="400"
+            fontSize="24px"
+            lineHeight="40px"
+            color="#252A32"
+          >
+            O pagamento falhou
+          </Text>
+          <Text
+            fontFamily="Ubuntu"
+            fontWeight="400"
+            fontSize="16px"
+            lineHeight="22px"
+            textAlign="center"
+            letterSpacing="0.2px"
+            color="#7D7D7D"
+          >
+            Houve um problema ao processar seu pagamento.
+            Por favor, verifique se as informações estão corretas ou tente novamente mais tarde.
+            Se esta mensagem continuar a ser exibida,
+            <Link color="#42B0FF"
+              fontFamily="ubuntu"
+              fontWeight="600"
+              fontSize="16px"
+              lineHeight="30px"
+              letterSpacing="0.2px"
+              href="/contato"
+              target="_self"
+              marginLeft="2px"
+              >entre em contato</Link>
+            .
+          </Text>
+        </Stack>
+
+        <Stack
+          width="100%"
+          alignItems="center"
+          spacing={0}
+        >
+          <RoundedButton
+            borderRadius="30px"
+            width="fit-content"
+            _hover={{transform: "none", opacity: 0.8}}
+            onClick={() => ErroPaymentModal.onClose()}
+          >
+            Entendi
+          </RoundedButton>
         </Stack>
       </ModalGeneral>
 
@@ -1637,10 +1867,13 @@ const PlansAndPayment = ({ userData }) => {
         isOpen={CancelModalPlan.isOpen}
         onClose={CancelModalPlan.onClose}
         propsModalContent={{maxWidth: "fit-content"}}
-        isCentered={isMobileMod() ? false : true}
       >
-        <Stack spacing={0} marginBottom="16px">
-          <SectionTitle lineHeight="40px" height="40px">
+        <Stack
+          spacing={0}
+          marginBottom="16px"
+          height={isMobileMod() ? "100%" : "fit-content"}
+        >
+          <SectionTitle lineHeight={isMobileMod() ? "32px" : "40px"}>
             Tem certeza que deseja cancelar seu plano?
           </SectionTitle>
           <ModalCloseButton
@@ -1678,11 +1911,15 @@ const PlansAndPayment = ({ userData }) => {
           <RoundedButton
             borderRadius="30px"
             backgroundColor="#FF8484"
-            width={isMobileMod() ? "100%" : "fit-content"}
+            width={isMobileMod() ? "100%" : ""}
             _hover={{transform: "none", opacity: 0.8}}
-            onClick={() => cancelSubscripetion()}
+            onClick={() => setIsLoadingCanSub(true)}
           >
-            Cancelar o plano
+            {isLoadingCanSub ?
+              <Spinner />
+            :
+              "Cancelar o plano"
+            }
           </RoundedButton>
         </Stack>
       </ModalGeneral>
@@ -1731,13 +1968,6 @@ const PlansAndPayment = ({ userData }) => {
               onClick={() => controlResource().buttons[0].onClick()}
             >{controlResource().buttons[0].text}
             </RoundedButton>
-            {/* <RoundedButton
-              borderRadius="30px"
-              width={isMobileMod() ? "100%" : "fit-content"}
-              _hover={{transform: "none", opacity: 0.8}}
-              onClick={() => controlResource().buttons[1].onClick()}
-            >{controlResource().buttons[1].text}
-            </RoundedButton> */}
           </Stack>
         </Stack>
 
