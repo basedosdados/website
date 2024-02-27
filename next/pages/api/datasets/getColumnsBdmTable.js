@@ -24,36 +24,7 @@ export default async function getColumnsBdmTable(id) {
                         name
                       }
                       description
-                      coverages {
-                        edges {
-                          node {
-                            datetimeRanges {
-                              edges {
-                                node {
-                                  _id
-                                  startYear
-                                  startSemester
-                                  startQuarter
-                                  startMonth
-                                  startDay
-                                  startHour
-                                  startMinute
-                                  startSecond
-                                  endYear
-                                  endSemester
-                                  endQuarter
-                                  endMonth
-                                  endDay
-                                  endHour
-                                  endMinute
-                                  endSecond
-                                  interval
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
+                      coverage
                       coveredByDictionary
                       directoryPrimaryKey {
                         _id
