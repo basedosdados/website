@@ -235,3 +235,10 @@ export function cleanUserInfo() {
   cookies.remove('token', { path: '/' })
   return true
 }
+
+export function triggerGAEvent(category, action) {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    'event': `${category}.${action}`,
+  });
+}

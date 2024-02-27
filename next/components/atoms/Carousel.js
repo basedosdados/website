@@ -10,9 +10,9 @@ import "swiper/css/autoplay";
 export default function Carousel({ settings, children }) {
   return (
     <Swiper modules={[Navigation, Pagination, Autoplay, Mousewheel]} {...settings}>
-      {children && children.map((elm)=> {
+      {children && children.map((elm, i)=> {
         return (
-          <SwiperSlide>
+          <SwiperSlide key={i}>
             {elm}
           </SwiperSlide>
         )

@@ -29,7 +29,10 @@ import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import ControlledInput from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
-import { getUserDataJson } from "../../utils";
+import { 
+  getUserDataJson,
+  triggerGAEvent
+} from "../../utils";
 
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import BDLogoEduImage from "../../public/img/logos/bd_logo_edu";
@@ -493,6 +496,8 @@ function SearchInput ({ status }) {
   },[query])
 
   function openSearchLink() {
+    triggerGAEvent("search", search)
+    triggerGAEvent("search_menu", search)
     window.open(`/dataset?q=${search}`, "_self")
   }
 
@@ -553,6 +558,8 @@ function SearchInputUser () {
   const [showSearch, setShowSearch] = useState(false)
 
   function openSearchLink() {
+    triggerGAEvent("search", search)
+    triggerGAEvent("search_menu", search)
     window.open(`/dataset?q=${search}`, "_self")
   }
 
@@ -650,13 +657,14 @@ function DesktopLinks({ links, position = false, path, userTemplate = false }) {
     setStatusSearch(elm.status)
   }
 
-  const LinkMenuDropDown = ({ url, text, icon }) => {
+  const LinkMenuDropDown = ({ key, url, text, icon }) => {
     const [flag, setFlag] = useBoolean()
 
     if(url === undefined && text === undefined) return <Divider marginBottom="10px" padding="10px 0 0" borderColor="#DEDFE0"/>
 
     return (
       <Link
+        key={key}
         display="flex"
         flexDirection="colunm"
         _hover={{ opacity: "0.6" }}
@@ -948,7 +956,12 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
           {simpleTemplate ?
             <></>  
             :
-            <DesktopLinks links={links} position={isScrollDown} path={route} userTemplate={userTemplate}/>
+            <DesktopLinks
+              links={links}
+              position={isScrollDown}
+              path={route}
+              userTemplate={userTemplate}
+            />
           }
 
           {userTemplate && isMobileMod() && <SearchInputUser />}
