@@ -9,6 +9,7 @@ import {
 import React, { useState, useEffect } from "react";
 import { useMediaQuery } from "@chakra-ui/react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import { triggerGAEvent } from "../../utils";
 
 import { 
   getAllThemes,
@@ -283,6 +284,8 @@ export default function ThemeCatalog () {
   },[selectedTheme])
 
   const handleSelectTheme = (elm) => {
+    triggerGAEvent("theme_home", elm)
+    triggerGAEvent("theme", elm)
     window.open("#theme", "_self")
     if(selectedTheme.includes(elm)) {
       setSelectedTheme(selectedTheme.filter(res => res !== elm))

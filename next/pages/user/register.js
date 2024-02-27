@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { registerAccount } from "../api/user";
+import { triggerGAEvent } from "../../utils";
 
 import Input from "../../components/atoms/SimpleInput";
 import Button from "../../components/atoms/RoundedButton";
@@ -49,6 +50,8 @@ export default function Register() {
   }
 
   const handleSubmit = (e) => {
+    triggerGAEvent("user", "register_try")
+
     const regexPassword = {}
     const validationErrors = {}
     e.preventDefault()
@@ -92,6 +95,9 @@ export default function Register() {
 
     if (Object.keys(validationErrors).length === 0) {
       createRegister(formData)
+      triggerGAEvent("user", "register_success")
+    } else {
+      triggerGAEvent("user", "register_err")
     }
   }
 

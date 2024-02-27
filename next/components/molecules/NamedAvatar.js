@@ -16,7 +16,7 @@ export function NamedAvatar({ src, name, position, ...props }) {
         </Text>
         <Text
           fontFamily="Ubuntu"
-          fontSiz="14px"
+          fontSize="14px"
           fontWeight="300"
           color="#252A32"
           paddingTop="4px"

@@ -11,8 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useMediaQuery } from "@chakra-ui/react";
-// import Typist from "react-typist";
-
 import { withPages } from "../hooks/pages.hook";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import BodyText from "../components/atoms/BodyText";
@@ -28,6 +26,7 @@ import { ThemeTag } from "../components/atoms/ThemeTag";
 import ThemeCatalog from "../components/molecules/ThemeCatalog";
 import { BePartner } from "../components/organisms/BePartner";
 import { MainPageTemplate } from "../components/templates/main";
+import { triggerGAEvent } from "../utils";
 
 import SearchIcon from "../public/img/icons/searchIcon";
 import ArrowIcon from "../public/img/icons/arrowIcon";
@@ -47,6 +46,8 @@ function Hero() {
   const [mediumQuery] = useMediaQuery("(max-width: 1366px)")
 
   function openSearchLink() {
+    triggerGAEvent("search", search)
+    triggerGAEvent("search_home", search)
     return window.open(`/dataset?q=${search}`, "_self");
   }
 
@@ -344,10 +345,7 @@ function Products() {
                 minHeight={{ base: "200px", md: "none" }}
                 padding={{ base: "60px 20px", lg: "60px 30px" }}
                 fontSize={{ base: "12px", lg: "inherit" }}
-                id="termynal"
-                data-termynal
-                data-ty-typeDelay="40"
-                data-ty-lineDelay="700"
+                
                 width="100%"
               >
                 {/* <Typist
@@ -638,7 +636,6 @@ function Support({ pages }) {
           >
             💰 Gostaria de apoiar a BD institucionalmente?
             <Link
-              dash={false}
               fontFamily="ubuntu"
               textDecoration="none"
               fontWeight="500"
