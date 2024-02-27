@@ -29,7 +29,10 @@ import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import ControlledInput from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
-import { getUserDataJson } from "../../utils";
+import { 
+  getUserDataJson,
+  triggerGAEvent
+} from "../../utils";
 
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import BDLogoEduImage from "../../public/img/logos/bd_logo_edu";
@@ -493,6 +496,8 @@ function SearchInput ({ status }) {
   },[query])
 
   function openSearchLink() {
+    triggerGAEvent("search", search)
+    triggerGAEvent("search_menu", search)
     window.open(`/dataset?q=${search}`, "_self")
   }
 
@@ -553,6 +558,8 @@ function SearchInputUser () {
   const [showSearch, setShowSearch] = useState(false)
 
   function openSearchLink() {
+    triggerGAEvent("search", search)
+    triggerGAEvent("search_menu", search)
     window.open(`/dataset?q=${search}`, "_self")
   }
 

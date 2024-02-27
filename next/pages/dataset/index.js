@@ -14,7 +14,10 @@ import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { getUserDataJson } from "../../utils";
+import { 
+  getUserDataJson,
+  triggerGAEvent
+} from "../../utils";
 
 import {
   getSearchDatasets
@@ -94,6 +97,10 @@ export default function SearchPage({ pages }) {
   async function getDatasets({q, filters, page}) {
     setIsLoading(true)
     const res = await getSearchDatasets({q:q, filter: filters, page:page})
+    if(q) {
+      triggerGAEvent("search", q)
+      triggerGAEvent("search_dataset", q)
+    }
     setPageInfo({page: page, count: res?.count})
     setIsLoading(false)
     setShowEmptyState(true)
@@ -153,6 +160,8 @@ export default function SearchPage({ pages }) {
 
     if (indice === -1) {
       newArray.push(elm)
+      triggerGAEvent("theme_dataset", elm[1])
+      triggerGAEvent("theme", elm[1])
     } else {
       newArray.splice(indice, 1)
     }

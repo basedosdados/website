@@ -26,6 +26,7 @@ import { ThemeTag } from "../components/atoms/ThemeTag";
 import ThemeCatalog from "../components/molecules/ThemeCatalog";
 import { BePartner } from "../components/organisms/BePartner";
 import { MainPageTemplate } from "../components/templates/main";
+import { triggerGAEvent } from "../utils";
 
 import SearchIcon from "../public/img/icons/searchIcon";
 import ArrowIcon from "../public/img/icons/arrowIcon";
@@ -45,6 +46,8 @@ function Hero() {
   const [mediumQuery] = useMediaQuery("(max-width: 1366px)")
 
   function openSearchLink() {
+    triggerGAEvent("search", search)
+    triggerGAEvent("search_home", search)
     return window.open(`/dataset?q=${search}`, "_self");
   }
 
