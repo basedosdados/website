@@ -97,10 +97,6 @@ export default function SearchPage({ pages }) {
   async function getDatasets({q, filters, page}) {
     setIsLoading(true)
     const res = await getSearchDatasets({q:q, filter: filters, page:page})
-    if(q) {
-      triggerGAEvent("search", q)
-      triggerGAEvent("search_dataset", q)
-    }
     setPageInfo({page: page, count: res?.count})
     setIsLoading(false)
     setShowEmptyState(true)
@@ -348,6 +344,10 @@ export default function SearchPage({ pages }) {
   }
 
   const SearchQuery = (value) => {
+    if(value) {
+      triggerGAEvent("search", value)
+      triggerGAEvent("search_dataset", value)
+    }
     if(query.page && value === undefined || "") {
       router.push({
         pathname: router.pathname,
