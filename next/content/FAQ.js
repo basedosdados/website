@@ -536,7 +536,9 @@ export const QuestionFAQ = [
       return (
         <div id="bd-edu" style={{display: "flex", flexDirection: "column"}}>
           <p>
-          A BD Edu é nosso braço de formação, ensino e cursos.
+          A BD Edu é nosso braço de educação, com a missão de capacitar pessoas para resolver problemas com dados.
+          Já prestamos serviços de formação para organizações como Vetor Brasil, Souk Analytics e ProForest, além de nossos cursos abertos ao público.
+          Oferecemos cursos ao vivo e assíncronos e todo o valor arrecadado é revertido em investimento na Base dos Dados.
           </p>
         </div>
       )
@@ -544,6 +546,86 @@ export const QuestionFAQ = [
     categories: ["BD Edu"],
     keywords: "bd edu, educacao, formacao, curso",
     id: "bd-edu"
+  },
+  {
+    question: "Quais cursos a BD Edu oferece?",
+    answer: function() {
+      return (
+        <div id="bd-edu-courses" style={{display: "flex", flexDirection: "column"}}>
+          <p>
+          Atualmente oferecemos cursos de análises de dados com ferramentas importantes para o mercado, como SQL, Python, editores de planilhas e Google Cloud.
+          Porém, nossa equipe é capacitada para desenvolver cursos sob demanda e temos trabalhado para lançar novos modelos de formações.
+          </p>
+        </div>
+      )
+    },
+    categories: ["BD Edu"],
+    keywords: "bd edu, educacao, formacao, curso",
+    id: "bd-edu-courses"
+  },
+  {
+    question: "Os cursos da BD possuem certificado?",
+    answer: function() {
+      return (
+        <div id="bd-edu-certificates" style={{display: "flex", flexDirection: "column"}}>
+          <p>
+          Sim, sempre que um curso é concluído nós emitimos um certificado oficial da BD constando as informações pessoais do aluno e sobre o curso.
+          O certificado é verificável e pode ser compartilhado nas redes ou anexado ao seu currículo.
+          </p>
+        </div>
+      )
+    },
+    categories: ["BD Edu"],
+    keywords: "bd edu, educacao, formacao, curso, certificado",
+    id: "bd-edu-certificates"
+  },
+  {
+    question: "Tenho dúvidas sobre os cursos da BD Edu, existe um canal especializado para contato?",
+    answer: function() {
+      return (
+        <div id="bd-edu-contact" style={{display: "flex", flexDirection: "column"}}>
+          <p>
+          Sim, você pode tirar suas dúvidas pelo email <a href="mailto:suporte.bdedu@basedosdados.org" target="_blank">suporte.bdedu@basedosdados.org</a>.
+          Nossa equipe faz a checagem diária para prestar o melhor suporte possível.
+          </p>
+        </div>
+      )
+    },
+    categories: ["BD Edu"],
+    keywords: "bd edu, educacao, formacao, curso, certificado",
+    id: "bd-edu-contact"
+  },
+  {
+    question: "Qual plataforma é utilizada para as atividades dos cursos da BD Edu?",
+    answer: function() {
+      return (
+        <div id="bd-edu-platform" style={{display: "flex", flexDirection: "column"}}>
+          <p>
+          Utilizamos a plataforma coda.io, que funciona como um editor de documentos que combina recursos de planilhas, apresentações, processadores de texto e aplicativos.
+          Por lá temos nossa Área do Aluno(a), onde é possível encontrar o cronograma, links para as aulas ao vivo, aulas gravadas, página de submissão de exercício, fórum de dúvidas, materiais extras e mais.
+          </p>
+        </div>
+      )
+    },
+    categories: ["BD Edu"],
+    keywords: "bd edu, educacao, formacao, curso, plataforma",
+    id: "bd-edu-platform"
+  },
+  {
+    question: "Quem organiza e ministra os cursos da BD Edu?",
+    answer: function() {
+      return (
+        <div id="bd-edu-teacher" style={{display: "flex", flexDirection: "column"}}>
+          <p>
+          Nossos cursos são desenvolvidos e revisados por especialistas que trabalham na equipe da Base dos Dados.
+          Você pode checar o perfil de todos em nossa <a href="https://basedosdados.org/quem-somos" target="_blank">página institucional</a>.
+          </p>
+        </div>
+      )
+    },
+    categories: ["BD Edu"],
+    keywords: "bd edu, educacao, formacao, curso, suporte",
+    id: "bd-edu-teacher"
   },
   {
     question: "A BD é uma empresa?",
