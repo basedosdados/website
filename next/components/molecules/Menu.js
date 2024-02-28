@@ -496,7 +496,6 @@ function SearchInput ({ status }) {
   },[query])
 
   function openSearchLink() {
-    triggerGAEvent("search", search)
     triggerGAEvent("search_menu", search)
     window.open(`/dataset?q=${search}`, "_self")
   }
@@ -558,7 +557,6 @@ function SearchInputUser () {
   const [showSearch, setShowSearch] = useState(false)
 
   function openSearchLink() {
-    triggerGAEvent("search", search)
     triggerGAEvent("search_menu", search)
     window.open(`/dataset?q=${search}`, "_self")
   }
