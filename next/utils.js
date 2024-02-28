@@ -239,6 +239,7 @@ export function cleanUserInfo() {
 export function triggerGAEvent(category, action) {
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({
-    'event': `${category}.${action}`,
+    'event': `${category}`,
+    'value': `${action}`
   });
 }
