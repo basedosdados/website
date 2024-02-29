@@ -50,7 +50,7 @@ export default function Register() {
   }
 
   const handleSubmit = (e) => {
-    triggerGAEvent("user", "register_try")
+    triggerGAEvent("user_register", "register_try")
 
     const regexPassword = {}
     const validationErrors = {}
@@ -95,9 +95,9 @@ export default function Register() {
 
     if (Object.keys(validationErrors).length === 0) {
       createRegister(formData)
-      triggerGAEvent("user", "register_success")
+      triggerGAEvent("user_register", "register_success")
     } else {
-      triggerGAEvent("user", "register_err")
+      triggerGAEvent("user_register", "register_err")
     }
   }
 
