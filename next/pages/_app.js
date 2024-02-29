@@ -13,9 +13,6 @@ function MyApp({ Component, pageProps }) {
   return (
     <QueryClientProvider client={queryClient}>
       <Head>
-        {/* <meta/> para não noindex ambientes de development e staging */}
-          <meta name="robots" content="noindex"/>
-        {/* <meta/> para não noindex ambientes de development e staging */}
         <link rel="icon" type="image/ico" href="/favicon.ico" />
         <link
           rel="image_src"
