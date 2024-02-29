@@ -189,8 +189,6 @@ function Hero() {
 }
 
 function Products() {
-  const [typistKey, setTypistKey] = useState(0);
-
   return (
     <VStack
       width={{ base: "90%", lg: "85%" }}
@@ -337,27 +335,39 @@ function Products() {
             <Stack
               maxWidth={isMobileMod() ? "320px" : "550px"}
               minWidth={isMobileMod() ? "320px" : "550px"}
+              height="100%"
             >
               <Box
-                borderRadius={isMobileMod() ? "8px" :"12px"}
-                filter="drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.4))"
-                maxHeight={{ base: "none", md: "200px" }}
-                minHeight={{ base: "200px", md: "none" }}
-                padding={{ base: "60px 20px", lg: "60px 30px" }}
-                fontSize={{ base: "12px", lg: "inherit" }}
-                
+                borderRadius="16px"
+                backgroundColor="#252A32"
                 width="100%"
+                height="100%"
+                fontFamily="Consolas"
               >
-                {/* <Typist
-                  key={typistKey}
-                  onTypingDone={() => setTypistKey(typistKey + 1)}
+                <Box display="flex" flexDirection="row" position="relative" padding="6px 12px" alignItems="center">
+                  <Box display="flex" flexDirection="row" gap="8px" position="absolute">
+                    <Box width="14px" height="14px" borderRadius="50%" backgroundColor="#d9515c"/>
+                    <Box width="14px" height="14px" borderRadius="50%" backgroundColor="#f5c036"/>
+                    <Box width="14px" height="14px" borderRadius="50%" backgroundColor="#3dc93f"/>
+                  </Box>
+                  <Text fontSize="18px" width="100%" textAlign="center" color="#a2a2a2">bash</Text>
+                </Box>
+                <Box
+                  display="flex"
+                  height="180px"
                 >
-                  <span>$ pip install basedosdados</span>
-                  <Typist.Backspace count={30} delay={1000} />
-                  <Typist.Delay ms={500} />
-                  <span>{">"} install.packages("basedosdados")</span>
-                  <Typist.Backspace count={30} delay={1000} />
-                </Typist> */}
+                  <Text
+                    display="flex"
+                    flexDirection="row"
+                    gap="10px"
+                    fontSize="18px"
+                    color="#eeeeee"
+                    paddingX="36px"
+                    marginTop="50px"
+                  >
+                    <Text color="#a1a1a1">$</Text> pip install basedosdados
+                  </Text>
+                </Box>
               </Box>
             </Stack>
           </HStack>
