@@ -653,7 +653,7 @@ function Support({ pages }) {
 }
 
 function BDEdu () {
-  const closeDate = new Date(2024, 1, 6)
+  const closeDate = new Date(2024, 2, 26)
   const currentDate = new Date()
 
   if(currentDate > closeDate) return null
@@ -685,7 +685,7 @@ function BDEdu () {
         margin="0 !important"
         backgroundColor="#8262D1"
       >
-        <a href="https://info.basedosdados.org/bd-edu-py" target="_blank">
+        <a href="https://info.basedosdados.org/bd-edu-python" target="_blank">
           Aproveite o preço promocional
         </a>
       </RoundedButton>

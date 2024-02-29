@@ -156,8 +156,10 @@ export default function SearchPage({ pages }) {
 
     if (indice === -1) {
       newArray.push(elm)
-      triggerGAEvent("theme_dataset", elm[1])
-      triggerGAEvent("theme", elm[1])
+      if(elm[0] === "theme") {
+        triggerGAEvent("theme_dataset", elm[1])
+        triggerGAEvent("theme", elm[1])
+      }
     } else {
       newArray.splice(indice, 1)
     }
