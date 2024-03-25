@@ -710,7 +710,7 @@ export default function Home({
   return (
     <MainPageTemplate id="home" backgroundColor="#FFFFFF" pages={pages}>
       <Hero />
-      <BDEdu />
+      {/* <BDEdu /> */}
       <BePartner />
       <Products />
       <Support pages={pages} />
