@@ -59,15 +59,14 @@ function MyApp({ Component, pageProps }) {
           content="São centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python, R ou Stata."
           key="ogdesc"
         />
-        {/* <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=UA-203687587-1%22%3E"
-        ></script> */}
         <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-8WFE4K8RZX"
         ></script>
-        
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=GTM-5NWMN98"
+        ></script>
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
