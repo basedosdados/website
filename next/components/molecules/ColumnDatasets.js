@@ -171,7 +171,7 @@ function TableDatasets({ headers, values }) {
     data.push({ value: objectValue.name, style:{position:"sticky", left:"0", zIndex:2, background:"linear-gradient(to left,#EAEAEA, #EAEAEA 2px, #FFF 2px, #FFF 100%)"}});
     data.push({ value: objectValue.bigqueryType.name, style:{textTransform: "uppercase"}})
     data.push({ value: objectValue.description})
-    data.push({ value: objectValue?.coverages?.edges[0]?.node?.datetimeRanges?.edges[0]?.node})
+    data.push({ value: objectValue.coverage})
     data.push({ value: objectValue.coveredByDictionary})
     data.push({ value: directoryColumnValue(objectValue.directoryPrimaryKey)})
     data.push({ value: measurementUnit(objectValue.measurementUnit)})
@@ -180,8 +180,7 @@ function TableDatasets({ headers, values }) {
 
     return data.map((elm, i) => 
       <TableValue {...elm.style}>
-        {i===3 ? <TemporalCoverage value={elm.value} tex="Não listado"/>
-        : valueVerification(elm.value)}
+        {i===3 ? <TemporalCoverage value={elm.value} tex="Não listado"/> : valueVerification(elm.value)}
       </TableValue>
     )
   }
