@@ -20,42 +20,13 @@ export function TemporalCoverage ({
   iconSettings = {width: "18px", height: "18px", fill: "#D0D0D0"},
   textSettings = {}
 }) {
-  const [startDate, setStartDate] = useState({})
-  const [endDate, setEndDate] = useState({})
+  const [startDate, setStartDate] = useState("")
+  const [endDate, setEndDate] = useState("")
 
   useEffect(() => {
-    setStartDate({    
-      second:value?.startSecond,
-      minute:value?.startMinute,
-      hour:value?.startHour,
-      day:value?.startDay,
-      month:value?.startMonth,
-      year:value?.startYear
-    })
-    setEndDate({    
-      second:value?.endSecond,
-      minute:value?.endMinute,
-      hour:value?.endHour,
-      day:value?.endDay,
-      month:value?.endMonth,
-      year:value?.endYear
-    })
+    setStartDate(value?.start)
+    setEndDate(value?.end)
   },[value])
-
-  // value = {
-  //   startSecond: "30",
-  //   startMinute: "24",
-  //   startHour: "20",
-  //   startDay: "12",
-  //   startMonth: "12",
-  //   startYear: "2022",
-  //   endSecond: "0",
-  //   endMinute: "48",
-  //   endHour: "8",
-  //   endDay: "24",
-  //   endMonth: "6",
-  //   endYear: "2023",
-  // }
 
   const TextDate = ({ value }) => {
     return (
@@ -76,33 +47,19 @@ export function TemporalCoverage ({
   if(!value) return <TextDate value={text}/>
   if(startDate === null && endDate === null) return <TextDate value={text}/>
 
-  function Dates ({ dates, ...props }) {
-    const yearMonthDay = []
-    const hourMinuteSecond = []
-
-    if(dates.second) hourMinuteSecond.push(`${dates.second}s`)
-    if(dates.minute) hourMinuteSecond.push(`${dates.minute}min`)
-    if(dates.hour) hourMinuteSecond.push(`${dates.hour}h`)
-    if(dates.day) yearMonthDay.push(dates.day)
-    if(dates.month) yearMonthDay.push(dates.month)
-    if(dates.year) yearMonthDay.push(dates.year)
-
-    yearMonthDay.reverse()
-    hourMinuteSecond.reverse()
-
-    if(dates === null) return ""
+  function Dates ({ date, ...props }) {
+    if(date === null) return ""
 
     return (
       <Center marginRight="10px" {...props}>
-        <CalendarComunIcon {...iconSettings} marginRight="6px"/> <TextDate value={yearMonthDay.join("-")}/>
-        {hourMinuteSecond.length > 0 && <><TimeIcon {...iconSettings} margin="0 6px 0 8px"/> <TextDate value={hourMinuteSecond.join(" ")}/></>}
+        <CalendarComunIcon {...iconSettings} marginRight="6px"/> <TextDate value={date}/>
       </Center>
     )
   }
 
   return (
     <Center>
-      <Dates dates={startDate}/> ─ <Dates dates={endDate} margin="0 0 0 10px"/>
+      <Dates date={startDate}/> ─ <Dates date={endDate} margin="0 0 0 10px"/>
     </Center>
   )
 }
@@ -114,8 +71,8 @@ export function TemporalCoverageString({
 }) {
 
   let pieces = value.split(" - ")
-  let dataStart = pieces[0]
-  let dataEnd = pieces[1]
+  let dateStart = pieces[0]
+  let dateEnd = pieces[1]
 
   const TextData = ({textSettings, string}) => {
     return (
@@ -153,7 +110,7 @@ export function TemporalCoverageString({
               height="18px"
               {...iconSettings}
             />
-            <TextData textSettings={textSettings} string={dataStart}/>
+            <TextData textSettings={textSettings} string={dateStart}/>
           </Center> <span style={{color: "#A3A3A3"}}>─</span> <Center>
             <CalendarComunIcon
               position="relative"
@@ -163,7 +120,7 @@ export function TemporalCoverageString({
               height="18px"
               {...iconSettings}
             />
-            <TextData textSettings={textSettings} string={dataEnd}/>
+            <TextData textSettings={textSettings} string={dateEnd}/>
           </Center>
         </>
       }
@@ -190,24 +147,24 @@ export function TemporalCoverageBar ({ value }) {
     )
   }
 
+  value = !!value ? Object.values(value) : null
+
   if(!value) return <TextData string="Não Listado"/>
-  if(value === "[]") return <TextData string="Não Listado"/>
+  if(!value.length) return <TextData string="Não Listado"/>
 
-  const temporalCoverageObj = JSON.parse(value)
+  let dateStart = ""
+  let dateMid = ""
+  let dateEnd = ""
 
-  let dataStart = ""
-  let dataIntermediate = ""
-  let dataEnd = ""
-
-  if(temporalCoverageObj.length === 3) {
-    dataStart = temporalCoverageObj[0]
-    dataIntermediate = temporalCoverageObj[1]
-    dataEnd = temporalCoverageObj[2]
+  if (value.length === 2) {
+    dateStart = value[0]
+    dateEnd = value[1]
   }
 
-  if(temporalCoverageObj.length === 2) {
-    dataStart = temporalCoverageObj[0]
-    dataEnd = temporalCoverageObj[1]
+  if (value.length === 3) {
+    dateStart = value[0]
+    dateMid = value[1]
+    dateEnd = value[2]
   }
 
   const checkoutBdpro = (value) => {
@@ -255,23 +212,7 @@ export function TemporalCoverageBar ({ value }) {
     )
   }
 
-  const showDataTime = (value) => {
-    if(value === "") return "Não listado"
-
-    let year = value.year || ""
-    let month = value.month || ""
-    let day = value.day || ""
-    let hour = value.hour || ""
-    let minute = value.minute || ""
-    let second = value.second || ""
-
-    const string = `${year && year}${month && -month}${day && -day}`
-
-    return string
-  }
-
   const TooltipContent = ({children, text, firstValue, lastValue, ...props}) => {
-
     return (
       <Tooltip
         label={
@@ -294,7 +235,7 @@ export function TemporalCoverageBar ({ value }) {
                   height="20px"
                   fill="#A3A3A3"
                 />
-                <TextData string={showDataTime(firstValue)} color="#FFF" fontWeight="400"/>
+                <TextData string={firstValue?.date} color="#FFF" fontWeight="400"/>
               </Center> ─
               <Center
                 position="relative"
@@ -308,7 +249,7 @@ export function TemporalCoverageBar ({ value }) {
                   height="20px"
                   fill="#A3A3A3"
                 />
-                <TextData string={showDataTime(lastValue)} color="#FFF" fontWeight="400"/>
+                <TextData string={lastValue?.date} color="#FFF" fontWeight="400"/>
               </Center>
             </Box>
           </Box>
@@ -339,12 +280,12 @@ export function TemporalCoverageBar ({ value }) {
       spacing={0}
     >
       <Progress
-        value={temporalCoverageObj.length === 2 ? 100 : useCheckMobile() ? 54 :70}
+        value={value.length === 2 ? 100 : useCheckMobile() ? 54 :70}
         height="3px"
         marginLeft="10px"
         width="100%"
         backgroundColor="#9C8400"
-        colorScheme={temporalCoverageObj[0]?.type === "closed" ? "yellowPro" : "greenBD"}
+        colorScheme={dateStart?.type === "closed" ? "yellowPro" : "greenBD"}
       />
 
       <Box
@@ -359,7 +300,7 @@ export function TemporalCoverageBar ({ value }) {
           width="16px"
           height="16px"
           borderRadius="50%"
-          backgroundColor={dataStart?.type === "open" ? "#2B8C4D" : "#9C8400"}
+          backgroundColor={dateStart?.type === "open" ? "#2B8C4D" : "#9C8400"}
         />
         <Center
           position="relative"
@@ -371,20 +312,20 @@ export function TemporalCoverageBar ({ value }) {
             margin="0 6px 0 0"
             width="20px"
             height="20px"
-            fill={dataStart?.type === "open" ? "#2B8C4D" : "#9C8400"}
+            fill={dateStart?.type === "open" ? "#2B8C4D" : "#9C8400"}
           />
-          <TextData string={showDataTime(dataStart)}/>
+          <TextData string={dateStart?.date}/>
         </Center>
       </Box>
 
-      {dataIntermediate !== "" &&
+      {dateMid !== "" &&
         <Box
           display="flex"
         >
           <TooltipContent
             text="Acesso liberado entre"
-            firstValue={dataStart}
-            lastValue={dataIntermediate}
+            firstValue={dateStart}
+            lastValue={dateMid}
           >
             <Box
               display="flex"
@@ -402,10 +343,10 @@ export function TemporalCoverageBar ({ value }) {
                 height="16px"
                 borderRadius="50%"
                 cursor="pointer"
-                backgroundColor={dataIntermediate?.type === "open" ? "#2B8C4D" : "#9C8400"}
+                backgroundColor={dateMid?.type === "open" ? "#2B8C4D" : "#9C8400"}
               />
 
-              <BadgeContainer value={dataIntermediate?.type}/>
+              <BadgeContainer value={dateMid?.type}/>
             </Box>
           </TooltipContent>
           <Center
@@ -420,9 +361,9 @@ export function TemporalCoverageBar ({ value }) {
               margin="0 6px 0 0"
               width="20px"
               height="20px"
-              fill={dataIntermediate?.type === "open" ? "#2B8C4D" : "#9C8400"}
+              fill={dateMid?.type === "open" ? "#2B8C4D" : "#9C8400"}
             />
-            <TextData string={showDataTime(dataIntermediate)}/>
+            <TextData string={dateMid?.date}/>
           </Center>
         </Box>
       }
@@ -431,9 +372,9 @@ export function TemporalCoverageBar ({ value }) {
         display="flex"
       >
         <TooltipContent
-          text={dataEnd?.type === "open" ? "Acesso liberado entre" : "Assine a BD Pro para liberar entre"}
-          firstValue={dataEnd?.type === "open" ? dataStart : dataEnd?.type === "closed" ? dataStart : dataIntermediate}
-          lastValue={dataEnd}
+          text={dateEnd?.type === "open" ? "Acesso liberado entre" : "Assine a BD Pro para liberar entre"}
+          firstValue={dateEnd?.type === "open" ? dateStart : dateEnd?.type === "closed" ? dateStart : dateMid}
+          lastValue={dateEnd}
           isOpen={flag}
         >
           <Box
@@ -452,14 +393,14 @@ export function TemporalCoverageBar ({ value }) {
               height="16px"
               borderRadius="50%"
               cursor="pointer"
-              backgroundColor={dataEnd?.type === "open" ? "#2B8C4D" : "#9C8400"}
-              onClick={() => checkoutBdpro(dataEnd?.type)}
+              backgroundColor={dateEnd?.type === "open" ? "#2B8C4D" : "#9C8400"}
+              onClick={() => checkoutBdpro(dateEnd?.type)}
               onMouseEnter={setFlag.on}
               onMouseLeave={setFlag.off}
             />
 
             <BadgeContainer
-              value={dataEnd?.type}
+              value={dateEnd?.type}
               bool={flag}
               mouseOn={setFlag.on}
               mouseOff={setFlag.off}
@@ -478,9 +419,9 @@ export function TemporalCoverageBar ({ value }) {
             margin="0 6px 0 0"
             width="20px"
             height="20px"
-            fill={dataEnd?.type === "open" ? "#2B8C4D" : "#9C8400"}
+            fill={dateEnd?.type === "open" ? "#2B8C4D" : "#9C8400"}
           />
-          <TextData string={showDataTime(dataEnd)}/>
+          <TextData string={dateEnd?.date}/>
         </Center>
       </Box>
     </Stack>
