@@ -257,9 +257,11 @@ export default function FAQ({}) {
             position={isMobileMod() ? "relative" : "sticky"}
             top={isMobileMod()? "0" : "120px"}
           >
-            <CategoryText category="BD Pro"/>
             <CategoryText category="Dados"/>
+            <CategoryText category="Planos Pagos"/>
             <CategoryText category="BigQuery"/>
+            <CategoryText category="BD Lab"/>
+            <CategoryText category="BD Edu"/>
             <CategoryText category="Institucional"/>
           </Box>
 
