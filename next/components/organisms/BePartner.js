@@ -1,5 +1,11 @@
-import { Image } from "@chakra-ui/image";
-import { Stack, VStack, Text, Center, Box } from "@chakra-ui/layout";
+import {
+  Stack,
+  VStack,
+  Text,
+  Center,
+  Box,
+  Image
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { NamedAvatar } from "../molecules/NamedAvatar";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";

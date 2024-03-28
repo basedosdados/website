@@ -3,11 +3,11 @@ import {
   Flex,
   HStack,
   Stack,
-  VStack
-} from "@chakra-ui/layout";
+  VStack,
+  Image
+} from "@chakra-ui/react";
 import Display from "../components/atoms/Display";
 import BodyText from "../components/atoms/BodyText";
-import { Image } from "@chakra-ui/image";
 import Head from "next/head";
 import BigTitle from "../components/atoms/BigTitle";
 import Link from "../components/atoms/Link";

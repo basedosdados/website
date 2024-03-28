@@ -1,4 +1,4 @@
-import { Stack } from "@chakra-ui/layout";
+import { Stack } from "@chakra-ui/react";
 import SectionText from "../atoms/SectionText";
 
 export default function DisclaimerBox({ title, text, children, ...style }) {

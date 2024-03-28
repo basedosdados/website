@@ -1,7 +1,11 @@
 import React, { useRef, useState } from "react";
-import { Button } from "@chakra-ui/button";
-import { Menu, MenuButton, MenuList } from "@chakra-ui/menu";
-import { Box } from "@chakra-ui/react"
+import {
+  Box,
+  Menu,
+  MenuButton,
+  MenuList,
+  Button
+} from "@chakra-ui/react"
 import ChevronIcon from "../../public/img/icons/chevronIcon"
 
 export function MenuDropdown({ title, children, ...style }) {

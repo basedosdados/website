@@ -2,7 +2,7 @@ import {
   Heading,
   HStack,
   VStack 
-} from "@chakra-ui/layout";
+} from "@chakra-ui/react";
 import { useState } from "react";
 import SectionText from "../atoms/SectionText";
 import SectionTitle from "../atoms/SectionTitle";
