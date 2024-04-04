@@ -32,6 +32,7 @@ export default async function updatePassword({
         }`
       }
     })
+
     const data = res.data.data.CreateUpdateAccount
     return data
   } catch (error) {

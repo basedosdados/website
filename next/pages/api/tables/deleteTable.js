@@ -23,6 +23,7 @@ export default async function deleteTable(id) {
         `
       }
     })
+
     const data = res.data.data.DeleteTable.ok
     return data
   } catch (error) {

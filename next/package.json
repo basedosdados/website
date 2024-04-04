@@ -18,6 +18,7 @@
     "@stripe/react-stripe-js": "^2.3.1",
     "@stripe/stripe-js": "^2.1.11",
     "axios": "^1.6.2",
+    "cookie-parser": "^1.4.6",
     "framer-motion": "^4.1.17",
     "fuzzy-search": "^3.2.1",
     "js-cookie": "^3.0.5",

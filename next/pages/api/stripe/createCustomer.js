@@ -1,13 +1,12 @@
 import axios from "axios";
-import cookies from "js-cookie";
-import { getUserDataJson } from "../../../utils";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-let userData = getUserDataJson()
-
-export default async function createCustomer() {
-  let token = cookies.get("token") || ""
+async function createCustomer(token, userBD) {
+  function trimName() {
+    const name = userBD.firstName + userBD?.lastName || ""
+    return name.replace(/\s+/g, ' ').trim()
+  }
 
   try {
     const res = await axios({
@@ -21,8 +20,8 @@ export default async function createCustomer() {
         mutation {
           createStripeCustomer (
             input: {
-              name: "${userData.firstName} ${userData.lastName || ""}"
-              email: "${userData.email}"
+              name: "${trimName()}"
+              email: "${userBD.email}"
             }
           ) {
             customer {
@@ -33,9 +32,18 @@ export default async function createCustomer() {
         `
       }
     })
+
     const data = res?.data?.data?.createStripeCustomer?.customer
     return data
   } catch (error) {
     console.error(error)
   }
+}
+
+export default async function handler(req, res) {
+  const token = req.cookies.token
+  const userBD = req.cookies.userBD
+
+  const result = await createCustomer(token, userBD)
+  res.status(200).json(result)
 }

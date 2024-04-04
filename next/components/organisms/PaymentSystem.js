@@ -19,8 +19,6 @@ import styles from "../../styles/paymentSystem.module.css";
 
 import {
   getPrices,
-  createCustomer,
-  createSubscription
 } from "../../pages/api/stripe";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_KEY_STRIPE)
@@ -98,15 +96,20 @@ export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
   const customerCreatPost = async (id) => {
     let secret = ""
 
-    const subscriptionCreate = await createSubscription(id)
+    const subscriptionCreate = await fetch(`/api/stripe/createSubscription?id=${id}`, {method: "GET"})
+      .then(res => res.json())
+
     if(subscriptionCreate?.clientSecret) {
       secret = subscriptionCreate?.clientSecret
     }
     if(secret !== "") return setClientSecret(secret)
 
-    const result = await createCustomer()
+    const result = await fetch(`/api/stripe/createCustomer`, {method: "GET"})
+      .then(res => res.json())
+
     if(result?.id) {
-      const subscriptionCreate = await createSubscription(id)
+      const subscriptionCreate = await fetch(`/api/stripe/createSubscription?id=${id}`, {method: "GET"})
+        .then(res => res.json())
       secret = subscriptionCreate?.clientSecret
     }
 

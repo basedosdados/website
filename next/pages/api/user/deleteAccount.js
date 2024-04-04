@@ -20,6 +20,7 @@ export default async function deleteAccount(id) {
         }`
       }
     })
+
     const data = res.data.data.DeleteAccount
     return data
   } catch (error) {

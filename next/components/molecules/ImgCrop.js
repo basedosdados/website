@@ -18,8 +18,9 @@ import { isMobileMod } from '../../hooks/useCheckMobile.hook';
 
 import {
   getUser,
-  updatePictureProfile
 } from '../../pages/api/user'
+
+import updatePictureProfile from '../../pages/api/user/updatePictureProfile'
 
 import SectionTitle from '../atoms/SectionTitle';
 import RoundedButton from '../atoms/RoundedButton';

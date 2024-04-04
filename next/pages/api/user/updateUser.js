@@ -1,15 +1,12 @@
 import axios from "axios";
-import cookies from "js-cookie";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-export default async function updateUser({
+async function updateUser({
   id,
-  email = "",
   username = "",
-}) {
-  let token = cookies.get("token") || ""
-
+}, token
+) {
   try {
     const res = await axios({
       url: API_URL,
@@ -23,7 +20,6 @@ export default async function updateUser({
           CreateUpdateAccount (input:
             {
               id: "${id}"
-              ${email === "" ? "" : `email: "${email}"`}
               ${username === "" ? "" : `username: "${username}"`}
             }  
           )
@@ -36,9 +32,22 @@ export default async function updateUser({
         }`
       }
     })
+
     const data = res.data.data.CreateUpdateAccount
     return data
   } catch (error) {
     console.error(error)
   }
+}
+
+export default async function handler(req, res) {
+  const token = req.cookies.token
+
+  const object = {
+    id: req.query.id,
+    username: req.query.username
+  }
+
+  const result = await updateUser(object, token)
+  res.status(200).json(result)
 }

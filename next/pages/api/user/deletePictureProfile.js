@@ -1,11 +1,8 @@
 import axios from "axios";
-import cookies from "js-cookie";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-export default async function deletePictureProfile(id) {
-  let token = cookies.get("token") || ""
-
+async function deletePictureProfile(id, token) {
   try {
     const res = await axios({
       url: API_URL,
@@ -22,9 +19,17 @@ export default async function deletePictureProfile(id) {
         }`
       }
     })
+
     const data = res?.data?.data?.DeleteAccountPictureMutation
     return data
   } catch (error) {
     console.error(error)
   }
+}
+
+export default async function handler(req, res) {
+  const token = req.cookies.token
+
+  const result = await deletePictureProfile(req.query.id, token)
+  res.status(200).json(result)
 }

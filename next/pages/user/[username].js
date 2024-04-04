@@ -39,7 +39,6 @@ import { useRouter } from "next/router";
 import cookies from 'js-cookie';
 import { MainPageTemplate } from "../../components/templates/main";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
-import { removeSubscription } from "../api/stripe";
 import BigTitle from "../../components/atoms/BigTitle";
 import SectionTitle from "../../components/atoms/SectionTitle";
 import RoundedButton from "../../components/atoms/RoundedButton";
@@ -56,12 +55,9 @@ import {
   getUser,
   getSimpleToken,
   getFullUser,
-  updateProfile,
   refreshToken,
   updatePassword,
-  updateUser,
   deleteAccount,
-  deletePictureProfile
 } from "../api/user";
 
 import {
@@ -272,7 +268,17 @@ const ProfileConfiguration = ({ userInfo }) => {
     const [ id ] = reg.exec(userInfo?.id)
     const form = {...formData, id: id}
 
-    const result = await updateProfile(form)
+    const result = await fetch(`/api/user/updateProfile?
+      id=${form.id}
+      &firstName=${form?.firstName}
+      &lastName=${form?.lastName}
+      &isEmailVisible=${form?.isEmailVisible}
+      &website=${form?.website}
+      &github=${form?.github}
+      &twitter=${form?.twitter}
+      &linkedin=${form?.linkedin}`
+      , {method: "GET"})
+        .then(res => res.json())
 
     if(result?.errors?.length === 0) return location.reload(true)
     setIsLoading(false)
@@ -301,7 +307,8 @@ const ProfileConfiguration = ({ userInfo }) => {
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(userInfo.id)
 
-    const res = await deletePictureProfile(id)
+    const res = await fetch(`/api/user/deletePictureProfile?id=${id}`, {method: "GET"})
+      .then(res => res.json())
 
     if(res?.ok === true) {
       const userData = await getUser(userInfo.email)
@@ -655,7 +662,8 @@ const Account = ({ userInfo }) => {
     const [ id ] = reg.exec(userInfo?.id)
     const form = {id: id, username: formData.username}
 
-    const result = await updateUser(form)
+    const result = await fetch(`/api/user/updateUser?id=${form.id}&username=${form.username}`, {method: "GET"})
+      .then(res => res.json())
 
     if(result?.errors?.length === 0) {
       const userData = await getUser(userInfo.email)
@@ -1509,7 +1517,8 @@ const PlansAndPayment = ({ userData }) => {
 
   async function cancelSubscripetion() {
     const subs = await getSubscriptionActive(userData.email)
-    const result = await removeSubscription(subs[0]?.node._id)
+    const result = await fetch(`/api/stripe/removeSubscription?id=${subs[0]?.node._id}`, {method: "GET"})
+      .then(res => res.json())
 
     do {
       const statusSub = await getUserGetSubscription(userData?.email)
