@@ -5,7 +5,7 @@ const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 async function updateProfile({
   id,
   firstName,
-  lastName =  "",
+  lastName = "",
   isEmailVisible = false,
   website = "",
   github = "",
@@ -55,18 +55,28 @@ async function updateProfile({
 export default async function handler(req, res) {
   const token = req.cookies.token
 
+  const { p, f, l, e, w, g, t, li } = req.query
+
   const object = {
-    id:req.query.id,
-    username:req.query.username,
-    firstNam:req.query.firstName,
-    lastNam:req.query.lastName,
-    isEmailVisibl:req.query.isEmailVisible,
-    websit:req.query.website,
-    githu:req.query.github,
-    twitte:req.query.twitter,
-    linkedi:req.query.linkedin,
+    id:atob(p),
+    firstName:atob(f),
+    lastName:atob(l),
+    isEmailVisible:atob(e),
+    website:atob(w),
+    github:atob(g),
+    twitter:atob(t),
+    linkedin:atob(li),
   }
 
-  const result = await updateProfile(object, token)
+  function replaceNullsWithEmpty(obj) {
+    for (let [key, value] of Object.entries(obj)) {
+      if (value === "null" || value === null) {
+        obj[key] = ""
+      }
+    }
+    return obj
+  }
+
+  const result = await updateProfile(replaceNullsWithEmpty(object), token)
   res.status(200).json(result)
 }

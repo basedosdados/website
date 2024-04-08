@@ -34,6 +34,6 @@ async function createSubscription(id, token) {
 export default async function handler(req, res) {
   const token = req.cookies.token
 
-  const result = await createSubscription(req.query.id, token)
+  const result = await createSubscription(atob(req.query.p), token)
   res.status(200).json(result)
 }

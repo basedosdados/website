@@ -30,6 +30,6 @@ async function deletePictureProfile(id, token) {
 export default async function handler(req, res) {
   const token = req.cookies.token
 
-  const result = await deletePictureProfile(req.query.id, token)
+  const result = await deletePictureProfile(atob(req.query.p), token)
   res.status(200).json(result)
 }

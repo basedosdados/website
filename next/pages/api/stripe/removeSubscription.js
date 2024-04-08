@@ -34,6 +34,6 @@ async function removeSubscription(id, token) {
 export default async function handler(req, res) {
   const token = req.cookies.token
 
-  const result = await removeSubscription(req.query.id, token)
+  const result = await removeSubscription(atob(req.query.p), token)
   res.status(200).json(result)
 }

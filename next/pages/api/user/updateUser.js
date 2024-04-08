@@ -44,8 +44,8 @@ export default async function handler(req, res) {
   const token = req.cookies.token
 
   const object = {
-    id: req.query.id,
-    username: req.query.username
+    id: atob(req.query.p),
+    username: atob(req.query.q)
   }
 
   const result = await updateUser(object, token)

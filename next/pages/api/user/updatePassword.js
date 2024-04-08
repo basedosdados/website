@@ -2,11 +2,11 @@ import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-export default async function updatePassword({
+async function updatePassword({
   id,
   password,
-  token
-}) {
+},token
+) {
   try {
     const res = await axios({
       url: API_URL,
@@ -39,3 +39,16 @@ export default async function updatePassword({
     console.error(error)
   }
 }
+
+export default async function handler(req, res) {
+  const token = req.cookies.token
+
+  const object = {
+    id: atob(req.query.b),
+    password: atob(req.query.p)
+  }
+
+  const result = await updatePassword(object, token)
+  res.status(200).json(result)
+}
+

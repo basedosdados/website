@@ -56,8 +56,6 @@ import {
   getSimpleToken,
   getFullUser,
   refreshToken,
-  updatePassword,
-  deleteAccount,
 } from "../api/user";
 
 import {
@@ -214,6 +212,7 @@ function ModalGeneral ({
 const ProfileConfiguration = ({ userInfo }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [formData, setFormData] = useState({})
+  const [pictureProfile, setPictureProfile] = useState("")
   const [errors, setErrors] = useState({})
   const menuAvatar = useDisclosure()
   const pictureModal = useDisclosure()
@@ -227,12 +226,13 @@ const ProfileConfiguration = ({ userInfo }) => {
       firstName: userInfo?.firstName,
       lastName: userInfo?.lastName || "",
       isEmailVisible: userInfo?.isEmailVisible,
-      picture: userInfo?.picture || "",
       website: userInfo?.website || "",
       github: userInfo?.github || "",
       twitter: userInfo?.twitter || "",
       linkedin: userInfo?.linkedin || ""
     })
+
+    setPictureProfile(userInfo?.picture || "")
 
     setTimeout(() => {
       setIsLoading(false)
@@ -260,28 +260,33 @@ const ProfileConfiguration = ({ userInfo }) => {
     if (!formData.firstName) {
       validationErrors.firstName = "Seu nome é um campo obrigatorio."
     }
+    if (formData.website) {
+      if(!formData.website.startsWith("http")) validationErrors.website = "Informe uma URL válida."
+    }
+
     setErrors(validationErrors)
 
-    if (Object.keys(validationErrors).length > 0) return
-
-    const reg = new RegExp("(?<=:).*")
-    const [ id ] = reg.exec(userInfo?.id)
-    const form = {...formData, id: id}
-
-    const result = await fetch(`/api/user/updateProfile?
-      id=${form.id}
-      &firstName=${form?.firstName}
-      &lastName=${form?.lastName}
-      &isEmailVisible=${form?.isEmailVisible}
-      &website=${form?.website}
-      &github=${form?.github}
-      &twitter=${form?.twitter}
-      &linkedin=${form?.linkedin}`
-      , {method: "GET"})
-        .then(res => res.json())
-
-    if(result?.errors?.length === 0) return location.reload(true)
-    setIsLoading(false)
+    if (Object.keys(validationErrors).length > 0) {
+      return setIsLoading(false)
+    } else {
+      const reg = new RegExp("(?<=:).*")
+      const [ id ] = reg.exec(userInfo?.id)
+      const form = {...formData, id: id}
+  
+      try {
+        const result = await fetch(`/api/user/updateProfile?p=${btoa(form.id)}&f=${btoa(form.firstName)}&l=${btoa(form?.lastName || "null")}&e=${btoa(form?.isEmailVisible || "false")}&w=${btoa(form?.website || "null")}&g=${btoa(form?.github || "null")}&t=${btoa(form?.twitter || "null")}&li=${btoa(form?.linkedin || "null")}`, { method: "GET" })
+          .then(res => res.json())
+  
+        if(result.errors.length > 0) {
+          result.errors.map((elm) => {
+            console.error(`Campo ${elm.field}: ${elm.messages}`)
+          })
+        }
+      } catch (error) {
+        console.error(error)
+      }
+      setIsLoading(false)
+    }
   }
 
   const handleImageChange = (event) => {
@@ -307,7 +312,7 @@ const ProfileConfiguration = ({ userInfo }) => {
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(userInfo.id)
 
-    const res = await fetch(`/api/user/deletePictureProfile?id=${id}`, {method: "GET"})
+    const res = await fetch(`/api/user/deletePictureProfile?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
 
     if(res?.ok === true) {
@@ -409,7 +414,7 @@ const ProfileConfiguration = ({ userInfo }) => {
           </SkeletonText>
         </FormControl>
 
-        <FormControl>
+        <FormControl isInvalid={!!errors.website}>
           <LabelTextForm text="URL"/>
           <SkStack isLoaded={!isLoading}>
             <InputForm
@@ -426,6 +431,9 @@ const ProfileConfiguration = ({ userInfo }) => {
               _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
             />
           </SkStack>
+          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.website}
+          </FormErrorMessage>
         </FormControl>
         
         <Stack>
@@ -535,7 +543,11 @@ const ProfileConfiguration = ({ userInfo }) => {
                 borderRadius="50%"
                 overflow="hidden"
               >
-                <Image width="100%" height="100%" src={formData?.picture ? formData.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}/>
+                <Image
+                  src={pictureProfile ? pictureProfile : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
+                  width="100%"
+                  height="100%"
+                />
               </Box>
 
               <Popover
@@ -662,7 +674,7 @@ const Account = ({ userInfo }) => {
     const [ id ] = reg.exec(userInfo?.id)
     const form = {id: id, username: formData.username}
 
-    const result = await fetch(`/api/user/updateUser?id=${form.id}&username=${form.username}`, {method: "GET"})
+    const result = await fetch(`/api/user/updateUser?p=${btoa(form.id)}&q=${btoa(form.username)}`, {method: "GET"})
       .then(res => res.json())
 
     if(result?.errors?.length === 0) {
@@ -681,7 +693,8 @@ const Account = ({ userInfo }) => {
       const reg = new RegExp("(?<=:).*")
       const [ id ] = reg.exec(userInfo.id)
 
-      const result = await deleteAccount(id)
+      const result = await fetch(`/api/user/deleteAccount?p=${btoa(id)}`, {method: "GET"})
+        .then(res => res.json())
 
       if(result?.ok === true) {
         cookies.remove('userBD', { path: '/' })
@@ -1136,9 +1149,10 @@ const NewPassword = ({ userInfo }) => {
 
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(userInfo?.id)
-    const form = {id: id, password: formData.newPassword, token: getTokenPassword?.tokenAuth?.token}
 
-    const result = await updatePassword(form)
+    const result = await fetch(`/api/user/updatePassword?b=${btoa(id)}&p=${btoa(formData.newPassword)}`, {method: "GET"})
+      .then(res => res.json())
+
     setFormData({
       password: "",
       newPassword: "",
@@ -1517,7 +1531,7 @@ const PlansAndPayment = ({ userData }) => {
 
   async function cancelSubscripetion() {
     const subs = await getSubscriptionActive(userData.email)
-    const result = await fetch(`/api/stripe/removeSubscription?id=${subs[0]?.node._id}`, {method: "GET"})
+    const result = await fetch(`/api/stripe/removeSubscription?p=${btoa(subs[0]?.node._id)}`, {method: "GET"})
       .then(res => res.json())
 
     do {

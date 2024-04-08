@@ -6,9 +6,7 @@ import registerAccount from "./registerAccount";
 import getUser from "./getUser";
 import getAllUsers from "./getAllUsers";
 import getFullUser from "./getFullUser";
-import updatePassword from "./updatePassword";
 import activeAccount from "./activeAccount";
-import deleteAccount from "./deleteAccount";
 
 export {
   getToken,
@@ -19,7 +17,5 @@ export {
   getUser,
   getAllUsers,
   getFullUser,
-  updatePassword,
   activeAccount,
-  deleteAccount,
 }

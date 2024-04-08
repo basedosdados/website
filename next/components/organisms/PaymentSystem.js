@@ -96,7 +96,7 @@ export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
   const customerCreatPost = async (id) => {
     let secret = ""
 
-    const subscriptionCreate = await fetch(`/api/stripe/createSubscription?id=${id}`, {method: "GET"})
+    const subscriptionCreate = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
 
     if(subscriptionCreate?.clientSecret) {
@@ -108,7 +108,7 @@ export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
       .then(res => res.json())
 
     if(result?.id) {
-      const subscriptionCreate = await fetch(`/api/stripe/createSubscription?id=${id}`, {method: "GET"})
+      const subscriptionCreate = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}`, {method: "GET"})
         .then(res => res.json())
       secret = subscriptionCreate?.clientSecret
     }
