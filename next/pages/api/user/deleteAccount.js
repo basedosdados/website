@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-async function deleteAccount(id) {
+async function deleteAccount(id, token) {
   try {
     const res = await axios({
       url: API_URL,
@@ -18,7 +18,7 @@ async function deleteAccount(id) {
       }
     })
 
-    const data = res.data.data.DeleteAccount
+    const data = res?.data?.data?.DeleteAccount
     return data
   } catch (error) {
     console.error(error)
