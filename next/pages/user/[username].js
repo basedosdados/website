@@ -53,16 +53,9 @@ import {
 } from "../../components/molecules/uiUserPage";
 
 import {
-  getUser,
   getSimpleToken,
-  getFullUser,
   refreshToken,
 } from "../api/user";
-
-import {
-  getSubscriptionActive,
-  getUserGetSubscription
-} from "../api/stripe"
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import PenIcon from "../../public/img/icons/penIcon";
@@ -94,7 +87,8 @@ export async function getServerSideProps(context) {
     }
   }
 
-  const fullUser = await getFullUser(user?.email)
+  const fullUser = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/getFullUser?p=${btoa(user?.email)}`, {method: "GET"})
+    .then(res => res.json())
 
   if(fullUser?.errors?.length > 0) {
     cleanUserInfo()
@@ -237,7 +231,8 @@ const ProfileConfiguration = ({ userInfo }) => {
       .then(res => res.json())
 
     if(res?.ok === true) {
-      const userData = await getUser(userInfo.email)
+      const userData = await fetch(`/api/user/getUser?p=${btoa(userInfo.email)}`, {method: "GET"})
+        .then(res => res.json())
       cookies.set('userBD', JSON.stringify(userData))
       window.location.reload()
     }
@@ -614,7 +609,8 @@ const Account = ({ userInfo }) => {
       .then(res => res.json())
 
     if(result?.errors?.length === 0) {
-      const userData = await getUser(userInfo.email)
+      const userData = await fetch(`/api/user/getUser?p=${btoa(userInfo.email)}`, {method: "GET"})
+        .then(res => res.json())
       cookies.set('userBD', JSON.stringify(userData))
       window.open(`/user/${formData.username}?account`, "_self")
     }
@@ -1470,33 +1466,38 @@ const PlansAndPayment = ({ userData }) => {
   }
 
   async function cancelSubscripetion() {
-    const subs = await getSubscriptionActive(userData.email)
+    const subs = await fetch(`/api/stripe/getSubscriptionActive?p=${btoa(userData.email)}`, {method: "GET"})
+      .then(res => res.json())
     const result = await fetch(`/api/stripe/removeSubscription?p=${btoa(subs[0]?.node._id)}`, {method: "GET"})
       .then(res => res.json())
 
     do {
-      const statusSub = await getUserGetSubscription(userData?.email)
+      const statusSub = await fetch(`/api/stripe/getUserGetSubscription?p=${btoa(userData.email)}`, {method: "GET"})
+        .then(res => res.json())
       if(statusSub?.proSubscriptionStatus !== "active") {
         break
       }
       await new Promise (resolve => setTimeout(resolve ,1000))
     } while (true)
 
-    const user = await getUser(userData?.email)
+    const user = await fetch(`/api/user/getUser?p=${btoa(userInfo.email)}`, {method: "GET"})
+      .then(res => res.json())
     cookies.set('userBD', JSON.stringify(user))
     window.location.reload()
   }
 
   async function closeModalSucess() {
     do {
-      const statusSub = await getUserGetSubscription(userData?.email)
+      const statusSub = await fetch(`/api/stripe/getUserGetSubscription?p=${btoa(userData.email)}`, {method: "GET"})
+        .then(res => res.json())
       if(statusSub?.proSubscriptionStatus === "active") {
         break
       }
       await new Promise (resolve => setTimeout(resolve ,1000))
     } while (true)
 
-    const user = await getUser(userData?.email)
+    const user = await fetch(`/api/user/getUser?p=${btoa(userInfo.email)}`, {method: "GET"})
+      .then(res => res.json())
     cookies.set('userBD', JSON.stringify(user))
 
     if(isLoadingH === true) return window.open("/", "_self")
@@ -2177,7 +2178,8 @@ export default function UserPage({ fullUser }) {
     const result = await refreshToken()
 
     if(result?.data?.refreshToken?.token) {
-      const userData = await getUser(fullUser.email)
+      const userData = await fetch(`/api/user/getUser?p=${btoa(fullUser.email)}`, {method: "GET"})
+        .then(res => res.json())
       cookies.set('userBD', JSON.stringify(userData))
       cookies.set('token', result.data.refreshToken.token)
     }

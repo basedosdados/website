@@ -18,10 +18,6 @@ import {
 } from "../../pages/api/tables"
 
 import {
-  getAllUsers
-} from "../../pages/api/user"
-
-import {
   getAllLicenses
 } from "../../pages/api/license"
 
@@ -44,7 +40,8 @@ export default function PostTableForm({
   const [tables, setTables] = useState([])
 
   const fetchUsers = async () => {
-    const getUsers = await getAllUsers()
+    const getUsers = await fetch(`/api/user/getAllUsers`, {method: "GET"})
+      .then(res => res.json())
     setAllUser(getUsers)
   }
 

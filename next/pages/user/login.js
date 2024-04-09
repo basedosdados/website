@@ -11,7 +11,6 @@ import cookies from 'js-cookie';
 
 import {
   getToken,
-  getUser
 } from "../api/user";
 
 import Display from "../../components/atoms/Display";
@@ -60,7 +59,8 @@ export default function Login() {
     if(result?.tokenAuth === null || result?.errors?.length > 0) return setErrors({login:"E-mail ou senha incorretos."}) 
 
     try {
-      const userData = await getUser(result.tokenAuth.payload.email)
+      const userData = await fetch(`/api/user/getUser?p=${btoa(result.tokenAuth.payload.email)}`, {method: "GET"})
+        .then(res => res.json())
       cookies.set('userBD', JSON.stringify(userData))
       if(query.p === "plans") return window.open(`/user/${userData.username}?plans_and_payment`, "_self")
       window.open("/", "_self")

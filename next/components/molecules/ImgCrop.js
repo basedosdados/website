@@ -16,10 +16,6 @@ import ReactCrop, {
 import cookies from 'js-cookie';
 import { isMobileMod } from '../../hooks/useCheckMobile.hook';
 
-import {
-  getUser,
-} from '../../pages/api/user'
-
 import updatePictureProfile from '../../pages/api/user/updatePictureProfile'
 
 import SectionTitle from '../atoms/SectionTitle';
@@ -131,7 +127,8 @@ export default function CropImage ({
 
     const res = await updatePictureProfile(uid, filePic)
     if(res?.status === 200) {
-      const userData = await getUser(email)
+      const userData = await fetch(`/api/user/getUser?p=${btoa(email)}`, { method: "GET" })
+        .then(res => res.json())
       cookies.set('userBD', JSON.stringify(userData))
       window.location.reload()
     }

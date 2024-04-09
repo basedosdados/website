@@ -37,16 +37,11 @@ export default function CheckEmail() {
     if(email === "") return null
     const API_URL = `${process.env.NEXT_PUBLIC_API_URL}`
 
-    const getIdUser = await axios({
-      url: `${API_URL}/api/v1/graphql`,
-      method: "POST",
-      data: {
-        query: `query { allAccount (email: "${email}") {edges{node{id}}} }`
-      }
-    })
+    const getIdUser = await fetch(`/api/user/getIdUser?p=${btoa(email)}`, {method: "GET"})
+      .then(res => res.json())
 
     const reg = new RegExp("(?<=:).*")
-    const [ id ] = reg.exec(getIdUser?.data?.data?.allAccount?.edges[0]?.node?.id)
+    const [ id ] = reg.exec(getIdUser?.edges[0]?.node?.id)
 
     try {
       await axios.post(`${API_URL}/account/account_activate/${btoa(id)}/`)
