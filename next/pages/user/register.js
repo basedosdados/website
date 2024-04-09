@@ -9,14 +9,14 @@ import {
   Text
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { registerAccount } from "../api/user";
 import { triggerGAEvent } from "../../utils";
 
 import Input from "../../components/atoms/SimpleInput";
 import Button from "../../components/atoms/RoundedButton";
 import Display from "../../components/atoms/Display";
 import { MainPageTemplate } from "../../components/templates/main";
-import { isMobileMod } from "../../hooks/useCheckMobile.hook"
+import { isMobileMod } from "../../hooks/useCheckMobile.hook";
+import { cleanString } from "../../utils";
 
 import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 import Exclamation from "../../public/img/icons/exclamationIcon";
@@ -59,8 +59,14 @@ export default function Register() {
     if (!formData.firstName) {
       validationErrors.firstName = "Por favor, insira seu nome."
     }
+    if(/\s/.test(formData.firstName)) {
+      validationErrors.firstName = "O Primeiro nome não pode haver espaçamento."
+    }
     if (!formData.username) {
-      validationErrors.username = "Nome de usuário inválido ou já existe uma conta com este nome de usuário"
+      validationErrors.username = "Nome de usuário inválido ou já existe uma conta com este nome de usuário."
+    }
+    if(/\s/.test(formData.username)) {
+      validationErrors.username = "Nome de usuário não pode haver espaçamento."
     }
     if (!formData.email) {
       validationErrors.email = "Endereço de e-mail inválido ou já existe uma conta com este e-mail."
@@ -84,7 +90,11 @@ export default function Register() {
       regexPassword = {...regexPassword, special: true}
     }
     if (!formData.confirmPassword) {
-      validationErrors.confirmPassword = "Confirmar a senha é necessário"
+      validationErrors.confirmPassword = "Confirmar a senha é necessário."
+    }
+    if(/\s/.test(formData.confirmPassword)) {
+      validationErrors.password = "As senhas inseridas não podem conter espaçamentos."
+      validationErrors.confirmPassword = "As senhas inseridas não podem conter espaçamentos."
     }
     if(formData.confirmPassword !== formData.password) {
       validationErrors.confirmPassword = "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente."
@@ -94,7 +104,13 @@ export default function Register() {
     setErrors(validationErrors)
 
     if (Object.keys(validationErrors).length === 0) {
-      createRegister(formData)
+      createRegister({
+        firstName: cleanString(formData.firstName),
+        lastName: cleanString(formData?.lastName) || "null",
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+      })
       triggerGAEvent("user_register", "register_success")
     } else {
       triggerGAEvent("user_register", "register_err")
@@ -102,20 +118,25 @@ export default function Register() {
   }
 
   const createRegister = async ({ firstName, lastName, username, email, password }) => {
-    const result = await registerAccount({ firstName, lastName, username, email, password })
+    try {
+      const result = await fetch(`/api/user/registerAccount?f=${btoa(firstName)}&l=${btoa(lastName)}&u=${btoa(username)}&e=${btoa(email)}&p=${btoa(password)}`, { method: "GET" })
+        .then(res => res.json())
 
-    let arrayErrors = {}
-    if(result?.errors?.length > 0) {
-      result.errors.map((elm) => {
-        if(elm.field === "email") arrayErrors = ({...arrayErrors, email: "Conta com este email já existe."})
-        if(elm.field === "username") arrayErrors = ({...arrayErrors, username: "Conta com este nome de usuário já existe."})
-      })
-    }
-    setErrors(arrayErrors)
+      let arrayErrors = {}
+      if(result?.errors?.length > 0) {
+        result.errors.map((elm) => {
+          if(elm.field === "email") arrayErrors = ({...arrayErrors, email: "Conta com este email já existe."})
+          if(elm.field === "username") arrayErrors = ({...arrayErrors, username: "Conta com este nome de usuário já existe."})
+        })
+      }
+      setErrors(arrayErrors)
 
-    if(result?.errors?.length === 0) {
-      sessionStorage.setItem('registration_email_bd', `${email}`)
-      window.open("/user/check-email", "_self")
+      if(result?.errors?.length === 0) {
+        sessionStorage.setItem('registration_email_bd', `${email}`)
+        window.open("/user/check-email", "_self")
+      }
+    } catch (error) {
+      console.error(error)
     }
   }
 

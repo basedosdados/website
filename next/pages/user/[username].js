@@ -12,19 +12,12 @@ import {
   HStack,
   Checkbox,
   useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
   ModalCloseButton,
-  ModalBody,
-  ModalFooter,
   UnorderedList,
   ListItem,
   Badge,
   Grid,
   GridItem,
-  Skeleton,
   SkeletonCircle,
   SkeletonText,
   Popover,
@@ -48,8 +41,16 @@ import Link from "../../components/atoms/Link";
 import BodyText from "../../components/atoms/BodyText";
 import { CardPrice } from "../precos";
 import PaymentSystem from "../../components/organisms/PaymentSystem";
-import { getUserDataJson, checkUserInfo, cleanUserInfo } from "../../utils";
+import { checkUserInfo, cleanUserInfo } from "../../utils";
 import ImageCrop from "../../components/molecules/ImgCrop";
+
+import {
+  LabelTextForm,
+  TitleTextForm,
+  SkStack,
+  ExtraInfoTextForm,
+  ModalGeneral
+} from "../../components/molecules/uiUserPage";
 
 import {
   getUser,
@@ -113,101 +114,6 @@ export async function getServerSideProps(context) {
   }
 }
 
-function LabelTextForm ({ text, ...props }) {
-  return (
-    <FormLabel
-      color="#252A32"
-      fontFamily="ubuntu"
-      letterSpacing="0.2px"
-      fontSize="16px"
-      fontWeight="400"
-      lineHeight="16px"
-      {...props}
-    >{text}</FormLabel>
-  )
-}
-
-function TitleTextForm ({ children, ...props }) {
-  return (
-    <Text
-      color="#252A32"
-      fontFamily="ubuntu"
-      letterSpacing="0.2px"
-      fontSize="16px"
-      fontWeight="400"
-      lineHeight="16px"
-      marginBottom="8px"
-      {...props}
-    >{children}</Text>
-  )
-}
-
-function SkStack ({ isLoaded, children, ...props }) {
-  return (
-    <Skeleton
-      height="40px"
-      width="100%"
-      borderRadius="12px"
-      startColor="#F0F0F0"
-      endColor="#F3F3F3"
-      isLoaded={isLoaded}
-      fadeDuration={2}
-      {...props}
-    >
-      {children}
-    </Skeleton>
-  )
-}
-
-function ExtraInfoTextForm ({children, ...props}) {
-  return (
-    <Text
-      color="#7D7D7D"
-      fontFamily="ubuntu"
-      letterSpacing="0.3px"
-      fontSize="12px"
-      fontWeight="400"
-      lineHeight="16px"
-      {...props}
-    >{children}</Text>
-  )
-}
-
-function ModalGeneral ({
-  children,
-  isOpen,
-  onClose,
-  isCentered = true,
-  propsModalContent,
-  classNameBody
-}) {
-  return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered={isCentered} margin="24px !important">
-      <ModalOverlay/>
-      <ModalContent
-        margin="24px"
-        minWidth={isMobileMod() ? "auto" : "536px"}
-        boxSizing="content-box"
-        padding="32px"
-        borderRadius="20px"
-        {...propsModalContent}
-      >
-        <ModalHeader padding="0">
-          {children[0]}
-        </ModalHeader>
-
-        <ModalBody padding="0" className={classNameBody}>
-          {children[1]}
-        </ModalBody>
-
-        <ModalFooter padding="0" width={isMobileMod() ? "100%" : "auto"}>
-          {children[2]}
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
-  )
-}
-
 // Sections Of User Page
 const ProfileConfiguration = ({ userInfo }) => {
   const [isLoading, setIsLoading] = useState(true)
@@ -259,6 +165,21 @@ const ProfileConfiguration = ({ userInfo }) => {
 
     if (!formData.firstName) {
       validationErrors.firstName = "Seu nome é um campo obrigatorio."
+    }
+    if(/\s/.test(formData.firstName)) {
+      validationErrors.firstName = "O Primeiro nome não pode haver espaçamento."
+    }
+    if(/\s/.test(formData.website)) {
+      validationErrors.website = "Não pode haver espaçamento nesse campo."
+    }
+    if(/\s/.test(formData.github)) {
+      validationErrors.github = "Não pode haver espaçamento nesse campo."
+    }
+    if(/\s/.test(formData.twitter)) {
+      validationErrors.twitter = "Não pode haver espaçamento nesse campo."
+    }
+    if(/\s/.test(formData.linkedin)) {
+      validationErrors.linkedin = "Não pode haver espaçamento nesse campo."
     }
     if (formData.website) {
       if(!formData.website.startsWith("http")) validationErrors.website = "Informe uma URL válida."
@@ -438,59 +359,74 @@ const ProfileConfiguration = ({ userInfo }) => {
         
         <Stack>
           <LabelTextForm text="Redes sociais"/>
-          <HStack spacing="8px" margin="0 0 8px 0 !important">
-            <GithubIcon width="24px" height="24px" fill="#D0D0D0"/>
-            <SkStack isLoaded={!isLoading}>
-              <InputForm
-                id="github"
-                name="github"
-                value={formData.github}
-                onChange={handleInputChange}
-                placeholder="Link para o perfil no GitHub"
-                fontFamily="ubuntu"
-                height="40px"
-                fontSize="14px"
-                borderRadius="16px"
-                _placeholder={{color: "#A3A3A3"}}
-              />
-            </SkStack>
-          </HStack>
+          <FormControl isInvalid={!!errors.github}>
+            <HStack spacing="8px" margin="0 0 8px 0 !important">
+              <GithubIcon width="24px" height="24px" fill="#D0D0D0"/>
+              <SkStack isLoaded={!isLoading}>
+                <InputForm
+                  id="github"
+                  name="github"
+                  value={formData.github}
+                  onChange={handleInputChange}
+                  placeholder="Link para o perfil no GitHub"
+                  fontFamily="ubuntu"
+                  height="40px"
+                  fontSize="14px"
+                  borderRadius="16px"
+                  _placeholder={{color: "#A3A3A3"}}
+                />
+              </SkStack>
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+                <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.github}
+              </FormErrorMessage>
+            </HStack>
+          </FormControl>
 
-          <HStack spacing="8px" margin="0 0 8px 0 !important">
-            <TwitterIcon width="24px" height="24px" fill="#D0D0D0"/>
-            <SkStack isLoaded={!isLoading}>
-              <InputForm
-                id="twitter"
-                name="twitter"
-                value={formData.twitter}
-                onChange={handleInputChange}
-                placeholder="Link para o perfil no Twitter"
-                fontFamily="ubuntu"
-                height="40px"
-                fontSize="14px"
-                borderRadius="16px"
-                _placeholder={{color: "#A3A3A3"}}
-              />
-            </SkStack>
-          </HStack>
+          <FormControl isInvalid={!!errors.twitter}>
+            <HStack spacing="8px" margin="0 0 8px 0 !important">
+              <TwitterIcon width="24px" height="24px" fill="#D0D0D0"/>
+              <SkStack isLoaded={!isLoading}>
+                <InputForm
+                  id="twitter"
+                  name="twitter"
+                  value={formData.twitter}
+                  onChange={handleInputChange}
+                  placeholder="Link para o perfil no Twitter"
+                  fontFamily="ubuntu"
+                  height="40px"
+                  fontSize="14px"
+                  borderRadius="16px"
+                  _placeholder={{color: "#A3A3A3"}}
+                />
+              </SkStack>
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+                <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.twitter}
+              </FormErrorMessage>
+            </HStack>
+          </FormControl>
 
-          <HStack spacing="8px"  margin="0 !important">
-            <LinkedinIcon width="24px" height="24px" fill="#D0D0D0"/>
-            <SkStack isLoaded={!isLoading}>
-              <InputForm
-                id="linkedin"
-                name="linkedin"
-                value={formData.linkedin}
-                onChange={handleInputChange}
-                placeholder="Link para o perfil no LinkedIn"
-                fontFamily="ubuntu"
-                height="40px"
-                fontSize="14px"
-                borderRadius="16px"
-                _placeholder={{color: "#A3A3A3"}}
-              />
-            </SkStack>
-          </HStack>
+          <FormControl isInvalid={!!errors.linkedin}>
+            <HStack spacing="8px"  margin="0 !important">
+              <LinkedinIcon width="24px" height="24px" fill="#D0D0D0"/>
+              <SkStack isLoaded={!isLoading}>
+                <InputForm
+                  id="linkedin"
+                  name="linkedin"
+                  value={formData.linkedin}
+                  onChange={handleInputChange}
+                  placeholder="Link para o perfil no LinkedIn"
+                  fontFamily="ubuntu"
+                  height="40px"
+                  fontSize="14px"
+                  borderRadius="16px"
+                  _placeholder={{color: "#A3A3A3"}}
+                />
+              </SkStack>
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+                <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.linkedin}
+              </FormErrorMessage>
+            </HStack>
+          </FormControl>
         </Stack>
 
         <Text
@@ -1125,6 +1061,10 @@ const NewPassword = ({ userInfo }) => {
     }
     if (!formData.confirmPassword) {
       validationErrors.confirmPassword = "Confirmar a senha é necessário"
+    }
+    if(/\s/.test(formData.confirmPassword)) {
+      validationErrors.newPassword = "As senhas inseridas não podem conter espaçamentos."
+      validationErrors.confirmPassword = "As senhas inseridas não podem conter espaçamentos."
     }
     if(formData.confirmPassword !== formData.newPassword) {
       validationErrors.confirmPassword = "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente."

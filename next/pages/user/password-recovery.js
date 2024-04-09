@@ -128,6 +128,10 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
     if (!formData.confirmPassword) {
       validationErrors.confirmPassword = "Confirmar a senha é necessário"
     }
+    if(/\s/.test(formData.confirmPassword)) {
+      validationErrors.password = "As senhas inseridas não podem conter espaçamentos."
+      validationErrors.confirmPassword = "As senhas inseridas não podem conter espaçamentos."
+    }
     if(formData.confirmPassword !== formData.password) {
       validationErrors.confirmPassword = "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente."
     }

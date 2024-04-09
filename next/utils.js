@@ -243,3 +243,10 @@ export function triggerGAEvent(category, action) {
     'value': `${action}`
   });
 }
+
+export function cleanString(string) {
+  const newString = string.trim()
+  const returnString = newString.replace(/\s+/g, ' ')
+
+  return returnString
+}
