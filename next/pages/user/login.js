@@ -5,13 +5,9 @@ import {
   FormLabel,
   FormErrorMessage,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import cookies from 'js-cookie';
-
-import {
-  getToken,
-} from "../api/user";
 
 import Display from "../../components/atoms/Display";
 import Input from "../../components/atoms/SimpleInput";
@@ -38,7 +34,7 @@ export default function Login() {
     }))
   }
 
-  const handleSubmit = () => {
+  async function handleSubmit() {
     let validationErrors = {}
     if (!formData.email) {
       validationErrors.email = "Por favor, insira um endereço de e-mail válido."
@@ -53,13 +49,13 @@ export default function Login() {
     }
   }
 
-  const fetchToken = async ({ email, password }) => {
-    const result = await getToken({email: email, password: password})
-
-    if(result?.tokenAuth === null || result?.errors?.length > 0) return setErrors({login:"E-mail ou senha incorretos."}) 
+  async function fetchToken({ email, password }) {
+    const result = await fetch(`/api/user/getToken?a=${btoa(email)}&q=${btoa(password)}`, {method: "GET"})
+      .then(res => res.json())
+    if(result === "err") return setErrors({login:"E-mail ou senha incorretos."}) 
 
     try {
-      const userData = await fetch(`/api/user/getUser?p=${btoa(result.tokenAuth.payload.email)}`, {method: "GET"})
+      const userData = await fetch(`/api/user/getUser?p=${btoa(email)}`, {method: "GET"})
         .then(res => res.json())
       cookies.set('userBD', JSON.stringify(userData))
       if(query.p === "plans") return window.open(`/user/${userData.username}?plans_and_payment`, "_self")

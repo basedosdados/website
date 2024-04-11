@@ -52,11 +52,6 @@ import {
   ModalGeneral
 } from "../../components/molecules/uiUserPage";
 
-import {
-  getSimpleToken,
-  refreshToken,
-} from "../api/user";
-
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import PenIcon from "../../public/img/icons/penIcon";
 import GithubIcon from "../../public/img/icons/githubIcon";
@@ -90,7 +85,7 @@ export async function getServerSideProps(context) {
   const fullUser = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/getFullUser?p=${btoa(user?.email)}`, {method: "GET"})
     .then(res => res.json())
 
-  if(fullUser?.errors?.length > 0) {
+  if(fullUser.errors) {
     cleanUserInfo()
 
     return {
@@ -100,6 +95,31 @@ export async function getServerSideProps(context) {
       }
     }
   }
+
+  const validateToken = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/validateToken`, {method: "GET"})
+    .then(res => res.json())
+
+  if(validateToken === "err") {
+    const refreshToken = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/refreshToken`, {method: "GET"})
+      .then(res => res.json())
+
+    if(refreshToken === "err") {
+      cookies.remove('userBD', { path: '/' })
+      cookies.remove('token', { path: '/' })
+
+      return {
+        redirect: {
+          destination: "/user/login",
+          permanent: false,
+        }
+      }
+    }
+  }
+
+  const userData = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/getUser?p=${btoa(fullUser.email)}`, {method: "GET"})
+    .then(res => res.json())
+
+  cookies.set('userBD', JSON.stringify(userData))
 
   return {
     props: {
@@ -1072,10 +1092,10 @@ const NewPassword = ({ userInfo }) => {
       validationErrors.password = "Por favor, insira a senha."
     }
 
-    let getTokenPassword
     if(formData.password !== "") {
-      getTokenPassword = await getSimpleToken({email: userInfo.email, password: formData.password})
-      if(getTokenPassword?.tokenAuth === null || result?.errors?.length > 0) {
+      const result = await fetch(`/api/user/getToken?a=${btoa(userInfo.email)}&q=${btoa(formData.password)}&s=${"true"}`, {method: "GET"})
+        .then(res => res.json())
+      if(result === "err") {
         validationErrors.password = "A senha está incorreta. Por favor, tente novamente."
       }
     }
@@ -2173,26 +2193,6 @@ export default function UserPage({ fullUser }) {
   const { query } = router
   const [userInfo, setUserInfo] = useState({})
   const [sectionSelected, setSectionSelected] = useState(0)
-
-  async function refreshTokenValidate() {
-    const result = await refreshToken()
-
-    if(result?.data?.refreshToken?.token) {
-      const userData = await fetch(`/api/user/getUser?p=${btoa(fullUser.email)}`, {method: "GET"})
-        .then(res => res.json())
-      cookies.set('userBD', JSON.stringify(userData))
-      cookies.set('token', result.data.refreshToken.token)
-    }
-    if(result?.errors?.length > 0) {
-      cookies.remove('userBD', { path: '/' })
-      cookies.remove('token', { path: '/' })
-      window.open("/user/login", "_self")
-    }
-  }
-
-  useEffect(() => {
-    refreshTokenValidate()
-  }, [])
 
   useEffect(() => {
     setUserInfo(fullUser)

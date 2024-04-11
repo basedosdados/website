@@ -2,8 +2,6 @@ import {
   Stack,
   VStack
 } from "@chakra-ui/react";
-import { activeAccount } from "../api/user";
-
 import Display from "../../components/atoms/Display";
 import RoundedButton from "../../components/atoms/RoundedButton";
 import SectionText from "../../components/atoms/SectionText";
@@ -15,8 +13,9 @@ import { EmailConfirmImage, EmailRecoveryImage } from "../../public/img/emailIma
 export async function getServerSideProps(context) {
   const { query } = context
 
-  const result = await activeAccount(query.q, query.p)
-  const data = result?.status || ""
+  const result = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/activeAccount?q=${query.q}&p=${query.p}`, { method: "GET" })
+    .then(res => res.json())
+  const data = result
 
   return {
     props: {
@@ -38,13 +37,13 @@ export default function ActiveAccount({ data }) {
         spacing="40px"
         alignItems="center"
       >
-        {data === 200 ?
+        {data?.success === true ?
           <EmailConfirmImage justifyContent="center" marginBottom="8px"/>
         :
           <EmailRecoveryImage justifyContent="center" marginBottom="8px"/>
         }
 
-        {data === 200 ?
+        {data?.success === true ?
           <VStack spacing={4}>
             <Display
               fontSize={isMobileMod() ? "28px" : "34px"}
