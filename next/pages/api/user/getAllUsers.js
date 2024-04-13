@@ -8,9 +8,9 @@ async function getAllUsers() {
     const res = await axios({
       url: API_URL,
       method: "POST",
-      // headers: {
-      //   Authorization: `Bearer ${AUTH_TOKEN_FRONT}`
-      // },
+      headers: {
+        Authorization: `Bearer ${AUTH_TOKEN_FRONT}`
+      },
       data: {
         query: `
           query {

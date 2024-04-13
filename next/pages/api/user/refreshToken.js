@@ -20,6 +20,7 @@ async function refreshToken(token) {
   })
   try {
     const data = res.data?.data
+    if (data?.refreshToken === null) return "err"
     return data
   } catch (error) {
     console.error(error)
@@ -28,14 +29,9 @@ async function refreshToken(token) {
 }
 
 export default async function handler(req, res) {
-  const token = req.cookies.token
-
   try {
-    const result = await refreshToken(token)
-    if(result === "err") {
-      res.status(500).json("err")
-      return
-    }
+    const result = await refreshToken(atob(req.query.p))
+    if(result === "err") return res.status(500).json("err")
 
     res.setHeader('Set-Cookie', serialize('token', result.refreshToken.token, {
       maxAge: 60 * 60 * 24 * 7,

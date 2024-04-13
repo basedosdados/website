@@ -1,20 +1,19 @@
 import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
-const AUTH_TOKEN_FRONT= process.env.AUTH_TOKEN_FRONT
 
-async function getSubscriptionActive(email) {
+async function getSubscriptionActive(id, token) {
   try {
     const res = await axios({
       url: API_URL,
       method: "POST",
-      // headers: {
-      //   Authorization: `Bearer ${AUTH_TOKEN_FRONT}`
-      // },
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
       data: {
         query: `
           query {
-            allAccount (email : "${email}"){
+            allAccount (id : "${id}"){
               edges {
                 node {
                   internalSubscription (isActive: true){
@@ -39,6 +38,8 @@ async function getSubscriptionActive(email) {
 }
 
 export default async function handler(req, res) {
-  const result = await getSubscriptionActive(atob(req.query.p))
+  const token = req.cookies.token
+
+  const result = await getSubscriptionActive(atob(req.query.p), token)
   res.status(200).json(result)
 }

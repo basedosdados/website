@@ -55,7 +55,7 @@ export default function Login() {
     if(result === "err") return setErrors({login:"E-mail ou senha incorretos."}) 
 
     try {
-      const userData = await fetch(`/api/user/getUser?p=${btoa(email)}`, {method: "GET"})
+      const userData = await fetch(`/api/user/getFullUser?p=${btoa(email)}`, {method: "GET"})
         .then(res => res.json())
       cookies.set('userBD', JSON.stringify(userData))
       if(query.p === "plans") return window.open(`/user/${userData.username}?plans_and_payment`, "_self")

@@ -30,6 +30,7 @@ import {
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import cookies from 'js-cookie';
+import { serialize } from 'cookie';
 import { MainPageTemplate } from "../../components/templates/main";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 import BigTitle from "../../components/atoms/BigTitle";
@@ -41,7 +42,6 @@ import Link from "../../components/atoms/Link";
 import BodyText from "../../components/atoms/BodyText";
 import { CardPrice } from "../precos";
 import PaymentSystem from "../../components/organisms/PaymentSystem";
-import { checkUserInfo, cleanUserInfo } from "../../utils";
 import ImageCrop from "../../components/molecules/ImgCrop";
 
 import {
@@ -68,12 +68,14 @@ import ErrIcon from "../../public/img/icons/errIcon";
 import stylesPS from "../../styles/paymentSystem.module.css";
 
 export async function getServerSideProps(context) {
-  const { req } = context
+  const { req, res } = context
   let user = null
 
   if(req.cookies.userBD) user = JSON.parse(req.cookies.userBD)
 
-  if (checkUserInfo(user)) {
+  if (user === null || Object.keys(user).length < 0) {
+    res.setHeader('Set-Cookie', serialize('token', '', {maxAge: -1, path: '/', }))
+
     return {
       redirect: {
         destination: "/user/login",
@@ -82,11 +84,12 @@ export async function getServerSideProps(context) {
     }
   }
 
-  const fullUser = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/getFullUser?p=${btoa(user?.email)}`, {method: "GET"})
-    .then(res => res.json())
+  const fullUserResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/getFullUser?p=${btoa(user?.email)}`, {method: "GET"})
+  const fullUser = await fullUserResponse.json()
 
   if(fullUser.errors) {
-    cleanUserInfo()
+    res.setHeader('Set-Cookie', serialize('token', '', {maxAge: -1, path: '/', }))
+    res.setHeader('Set-Cookie', serialize('userBD', '', { maxAge: -1, path: '/', }))
 
     return {
       redirect: {
@@ -96,16 +99,17 @@ export async function getServerSideProps(context) {
     }
   }
 
-  const validateToken = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/validateToken`, {method: "GET"})
-    .then(res => res.json())
+  const validateTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/validateToken?p=${btoa(req.cookies.token)}`, {method: "GET"})
+  const validateToken = await validateTokenResponse.json()
 
-  if(validateToken === "err") {
-    const refreshToken = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/refreshToken`, {method: "GET"})
-      .then(res => res.json())
+
+    if(validateToken === "err") {
+      const refreshTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/refreshToken?p=${btoa(req.cookies.token)}`, {method: "GET"})
+      const refreshToken = await refreshTokenResponse.json()
 
     if(refreshToken === "err") {
-      cookies.remove('userBD', { path: '/' })
-      cookies.remove('token', { path: '/' })
+      res.setHeader('Set-Cookie', serialize('token', '', {maxAge: -1, path: '/', }))
+      res.setHeader('Set-Cookie', serialize('userBD', '', { maxAge: -1, path: '/', }))
 
       return {
         redirect: {
@@ -116,10 +120,8 @@ export async function getServerSideProps(context) {
     }
   }
 
-  const userData = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/getUser?p=${btoa(fullUser.email)}`, {method: "GET"})
-    .then(res => res.json())
-
-  cookies.set('userBD', JSON.stringify(userData))
+  const userDataString = JSON.stringify(fullUser)
+  res.setHeader('Set-Cookie', serialize('userBD', userDataString, { maxAge: 60 * 60 * 24 * 7, path: '/'}))
 
   return {
     props: {
@@ -251,7 +253,7 @@ const ProfileConfiguration = ({ userInfo }) => {
       .then(res => res.json())
 
     if(res?.ok === true) {
-      const userData = await fetch(`/api/user/getUser?p=${btoa(userInfo.email)}`, {method: "GET"})
+      const userData = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
         .then(res => res.json())
       cookies.set('userBD', JSON.stringify(userData))
       window.location.reload()
@@ -625,11 +627,11 @@ const Account = ({ userInfo }) => {
     const [ id ] = reg.exec(userInfo?.id)
     const form = {id: id, username: formData.username}
 
-    const result = await fetch(`/api/user/updateUser?p=${btoa(form.id)}&q=${btoa(form.username)}`, {method: "GET"})
+    const result = await fetch(`/api/user/updateUser?p=${btoa(id)}&q=${btoa(form.username)}`, {method: "GET"})
       .then(res => res.json())
 
     if(result?.errors?.length === 0) {
-      const userData = await fetch(`/api/user/getUser?p=${btoa(userInfo.email)}`, {method: "GET"})
+      const userData = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
         .then(res => res.json())
       cookies.set('userBD', JSON.stringify(userData))
       window.open(`/user/${formData.username}?account`, "_self")
@@ -1486,13 +1488,16 @@ const PlansAndPayment = ({ userData }) => {
   }
 
   async function cancelSubscripetion() {
-    const subs = await fetch(`/api/stripe/getSubscriptionActive?p=${btoa(userData.email)}`, {method: "GET"})
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(userData.id)
+
+    const subs = await fetch(`/api/stripe/getSubscriptionActive?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
     const result = await fetch(`/api/stripe/removeSubscription?p=${btoa(subs[0]?.node._id)}`, {method: "GET"})
       .then(res => res.json())
 
     do {
-      const statusSub = await fetch(`/api/stripe/getUserGetSubscription?p=${btoa(userData.email)}`, {method: "GET"})
+      const statusSub = await fetch(`/api/stripe/getUserGetSubscription?p=${btoa(id)}`, {method: "GET"})
         .then(res => res.json())
       if(statusSub?.proSubscriptionStatus !== "active") {
         break
@@ -1500,15 +1505,18 @@ const PlansAndPayment = ({ userData }) => {
       await new Promise (resolve => setTimeout(resolve ,1000))
     } while (true)
 
-    const user = await fetch(`/api/user/getUser?p=${btoa(userInfo.email)}`, {method: "GET"})
+    const user = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
     cookies.set('userBD', JSON.stringify(user))
     window.location.reload()
   }
 
   async function closeModalSucess() {
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(userData.id)
+
     do {
-      const statusSub = await fetch(`/api/stripe/getUserGetSubscription?p=${btoa(userData.email)}`, {method: "GET"})
+      const statusSub = await fetch(`/api/stripe/getUserGetSubscription?p=${btoa(id)}`, {method: "GET"})
         .then(res => res.json())
       if(statusSub?.proSubscriptionStatus === "active") {
         break
@@ -1516,7 +1524,7 @@ const PlansAndPayment = ({ userData }) => {
       await new Promise (resolve => setTimeout(resolve ,1000))
     } while (true)
 
-    const user = await fetch(`/api/user/getUser?p=${btoa(userInfo.email)}`, {method: "GET"})
+    const user = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
     cookies.set('userBD', JSON.stringify(user))
 

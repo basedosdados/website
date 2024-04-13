@@ -1,16 +1,16 @@
 import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
-// const AUTH_TOKEN_FRONT= process.env.AUTH_TOKEN_FRONT
+const AUTH_TOKEN_FRONT= process.env.AUTH_TOKEN_FRONT
 
 async function getCareerPeople(team) {
   try {
     const res = await axios({
       url: API_URL,
       method: "POST",
-      // headers: {
-      //   Authorization: `Bearer ${AUTH_TOKEN_FRONT}`
-      // },
+      headers: {
+        Authorization: `Bearer ${AUTH_TOKEN_FRONT}`
+      },
       data: {
         query: `
         query {

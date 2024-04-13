@@ -17,7 +17,7 @@ async function validateToken(token) {
   })
   try {
     const data = res.data.data
-    if (data?.errors) return "err"
+    if (data?.verifyToken === null) return "err"
     return data.verifyToken
   } catch (error) {
     console.error(error)
@@ -26,10 +26,8 @@ async function validateToken(token) {
 }
 
 export default async function handler(req, res) {
-  const token = req.cookies.token
-
   try {
-    const result = await validateToken(token)
+    const result = await validateToken(atob(req.query.p))
     if(result === "err") {
       res.status(500).json("err")
       return

@@ -29,7 +29,6 @@ export default function CropImage ({
   src,
   id,
   username,
-  email
 }) {
   const imgRef = useRef(null)
   const [completedCrop, setCompletedCrop] = useState()
@@ -127,7 +126,7 @@ export default function CropImage ({
 
     const res = await updatePictureProfile(uid, filePic)
     if(res?.status === 200) {
-      const userData = await fetch(`/api/user/getUser?p=${btoa(email)}`, { method: "GET" })
+      const userData = await fetch(`/api/user/getUser?p=${btoa(uid)}`, { method: "GET" })
         .then(res => res.json())
       cookies.set('userBD', JSON.stringify(userData))
       window.location.reload()
