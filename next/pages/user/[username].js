@@ -219,6 +219,9 @@ const ProfileConfiguration = ({ userInfo }) => {
             console.error(`Campo ${elm.field}: ${elm.messages}`)
           })
         }
+        const userData = await fetch(`/api/user/getUser?p=${btoa(id)}`, { method: "GET" })
+          .then(res => res.json())
+        cookies.set('userBD', JSON.stringify(userData))
       } catch (error) {
         console.error(error)
       }
