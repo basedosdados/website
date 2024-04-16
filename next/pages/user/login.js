@@ -54,15 +54,13 @@ export default function Login() {
       .then(res => res.json())
     if(result.error) return setErrors({login:"E-mail ou senha incorretos."}) 
 
-    try {
-      const userData = await fetch(`/api/user/getUser?p=${btoa(result.id)}`, {method: "GET"})
-        .then(res => res.json())
-      cookies.set('userBD', JSON.stringify(userData))
-      if(query.p === "plans") return window.open(`/user/${userData.username}?plans_and_payment`, "_self")
-      // window.open("/", "_self")
-    } catch (error) {
-      console.error(error)
-    }
+    const userData = await fetch(`/api/user/getUser?p=${btoa(result.id)}`, {method: "GET"})
+      .then(res => res.json())
+    if(userData.error) return setErrors({login:"Não foi possível conectar ao servidor. Tente novamente mais tarde."}) 
+
+    cookies.set('userBD', JSON.stringify(userData))
+    if(query.p === "plans") return window.open(`/user/${userData.username}?plans_and_payment`, "_self")
+    window.open("/", "_self")
   }
 
   const LabelTextForm = ({ text, ...props }) => {
