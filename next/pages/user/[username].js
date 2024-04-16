@@ -103,11 +103,11 @@ export async function getServerSideProps(context) {
   const validateToken = await validateTokenResponse.json()
 
 
-    if(validateToken === "err") {
+    if(validateToken.error) {
       const refreshTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/refreshToken?p=${btoa(req.cookies.token)}`, {method: "GET"})
       const refreshToken = await refreshTokenResponse.json()
 
-    if(refreshToken === "err") {
+    if(refreshToken.error) {
       res.setHeader('Set-Cookie', serialize('token', '', {maxAge: -1, path: '/', }))
       res.setHeader('Set-Cookie', serialize('userBD', '', { maxAge: -1, path: '/', }))
 
@@ -133,6 +133,7 @@ export async function getServerSideProps(context) {
 // Sections Of User Page
 const ProfileConfiguration = ({ userInfo }) => {
   const [isLoading, setIsLoading] = useState(true)
+  const [isImgLoading, setIsImgLoading] = useState(false)
   const [formData, setFormData] = useState({})
   const [pictureProfile, setPictureProfile] = useState("")
   const [errors, setErrors] = useState({})
@@ -160,6 +161,10 @@ const ProfileConfiguration = ({ userInfo }) => {
       setIsLoading(false)
     }, [1000])
   }, [userInfo])
+
+  useEffect(() => {
+    setIsImgLoading(isLoading)
+  }, [isLoading])
 
   function handleInputChange (e) {
     setFormData((prevState) => ({
@@ -249,6 +254,8 @@ const ProfileConfiguration = ({ userInfo }) => {
   }
 
   async function hanlderRemovePicture() {
+    setIsImgLoading(true)
+    menuAvatar.onClose()
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(userInfo.id)
 
@@ -275,6 +282,8 @@ const ProfileConfiguration = ({ userInfo }) => {
       spacing={0}
       gap={isMobileMod() ? "40px" : "80px"}
     >
+      <Box display={isImgLoading ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
+
       <ImageCrop
         isOpen={pictureModal.isOpen}
         onClose={pictureModal.onClose}
@@ -465,8 +474,13 @@ const ProfileConfiguration = ({ userInfo }) => {
           width={isMobileMod() ? "100%" : "fit-content"}
           _hover={{transform: "none", opacity: 0.8}}
           onClick={() => handleUpdateProfile()}
+          isDisabled={isLoading}
         >
-          Atualizar perfil
+          {isLoading ?
+            <Spinner />
+          :
+            "Atualizar perfil"
+          }
         </RoundedButton>
       </Stack>
 
@@ -487,7 +501,7 @@ const ProfileConfiguration = ({ userInfo }) => {
           width="200px"
           startColor="#F0F0F0"
           endColor="#F3F3F3"
-          isLoaded={!isLoading}
+          isLoaded={!isImgLoading}
           fadeDuration={2}
         >
           <Box
@@ -604,6 +618,7 @@ const Account = ({ userInfo }) => {
   const emailModal = useDisclosure()
   const usernameModal = useDisclosure()
   const eraseModalAccount = useDisclosure()
+  const [isLoading, setIsLoading] = useState(false)
   const [confirmationWord, setConfirmationWord] = useState("")
   const [emailSent, setEmailSent] = useState(false)
   const [showPassword, setShowPassword] = useState(true)
@@ -623,9 +638,11 @@ const Account = ({ userInfo }) => {
   }
 
   async function submitUpdate() {
+    setErrors({})
     if(formData.username === "") return setErrors({username: "Nome de usuário inválido."})
     if(formData.username.includes(" ")) return setErrors({username: "Nome de usuário não pode conter espaços."})
-
+    setIsLoading(true)
+    
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(userInfo?.id)
     const form = {id: id, username: formData.username}
@@ -642,11 +659,13 @@ const Account = ({ userInfo }) => {
 
     if(result?.errors?.length > 0) {
       setErrors({username: "Nome de usuário inválido ou já existe uma conta com este nome de usuário."})
+      setIsLoading(false)
     }
   }
 
   async function eraseAccount(string) {
     if(string = "deletar minha conta") {
+      setIsLoading(true)
       const reg = new RegExp("(?<=:).*")
       const [ id ] = reg.exec(userInfo.id)
 
@@ -658,6 +677,7 @@ const Account = ({ userInfo }) => {
         cookies.remove('token', { path: '/' })
         return window.open("/", "_self")
       }
+      setIsLoading(false)
     }
   }
 
@@ -665,6 +685,8 @@ const Account = ({ userInfo }) => {
 
   return (
     <Stack spacing="24px">
+      <Box display={isLoading ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
+
       <ModalGeneral
         isOpen={emailModal.isOpen}
         onClose={emailModal.onClose}
@@ -879,8 +901,13 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
           borderRadius="30px"
           _hover={{transform: "none", opacity: 0.8}}
           onClick={() => submitUpdate(formData)}
+          isDisabled={isLoading}
         >
-          Atualizar nome de usuário
+          {isLoading ?
+            <Spinner />
+          :
+            "Atualizar nome de usuário"
+          }
         </RoundedButton>
       </ModalGeneral>
 
@@ -962,8 +989,13 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
             _hover={stringConfirm ? {transform: "none", opacity: 0.8} : {transform: "none"}}
             pointerEvents={stringConfirm ? "default" : "none"}
             onClick={() => eraseAccount(confirmationWord)}
+            isDisabled={isLoading}
           >
-            Deletar
+            {isLoading ?
+              <Spinner />
+            :
+              "Deletar"
+            }
           </RoundedButton>
         </Stack>
       </ModalGeneral>
@@ -1100,7 +1132,7 @@ const NewPassword = ({ userInfo }) => {
     if(formData.password !== "") {
       const result = await fetch(`/api/user/getToken?a=${btoa(userInfo.email)}&q=${btoa(formData.password)}&s=${"true"}`, {method: "GET"})
         .then(res => res.json())
-      if(result === "err") {
+      if(result.error) {
         validationErrors.password = "A senha está incorreta. Por favor, tente novamente."
       }
     }

@@ -11,16 +11,17 @@ async function getToken(email, password) {
       data: {
         query: `
         mutation {
-          tokenAuth ( email: "${email}", password: "${password}" ) {
-            payload,
-            refreshExpiresIn,
+          authToken (input: { email: "${email}", password: "${password}" }) {
+            user {
+              email
+              id
+            }
             token
           }
         }`
       }
     })
-    const data = res.data?.data
-    if (data.errors || data.tokenAuth === null) return "err"
+    const data = res.data
     return data
   } catch (error) {
     console.error(error)
@@ -32,23 +33,18 @@ export default async function handler(req, res) {
   const { a, q } = req.query
   const simple = req.query.s || false
 
-  try {
-    const result = await getToken(atob(a), atob(q))
-    if(result === "err") {
-      res.status(500).json("err")
-      return
-    }
+  const result = await getToken(atob(a), atob(q))
 
-    if(simple === false) {
-      res.setHeader('Set-Cookie', serialize('token', result.tokenAuth.token, {
-        maxAge: 60 * 60 * 24 * 7,
-        path: '/'
-      }))
-    }
+  if(result.errors) return res.status(500).json({error: result.errors})
+  if(result === "err") return res.status(500).json({error: "err"})
+  if(result.data.authToken === null) return res.status(500).json({error: "err"})
 
-    res.status(200).json({ success: true })
-  } catch (error) {
-    console.error(error)
-    res.status(500).json("err")
+  if(simple === false) {
+    res.setHeader('Set-Cookie', serialize('token', result.data.authToken.token, {
+      maxAge: 60 * 60 * 24 * 7,
+      path: '/'
+    }))
   }
+
+  res.status(200).json(result.data.authToken.user)
 }

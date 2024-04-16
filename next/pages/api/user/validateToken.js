@@ -16,9 +16,8 @@ async function validateToken(token) {
     }
   })
   try {
-    const data = res.data.data
-    if (data?.verifyToken === null) return "err"
-    return data.verifyToken
+    const data = res.data
+    return data
   } catch (error) {
     console.error(error)
     return "err"
@@ -26,16 +25,11 @@ async function validateToken(token) {
 }
 
 export default async function handler(req, res) {
-  try {
-    const result = await validateToken(atob(req.query.p))
-    if(result === "err") {
-      res.status(500).json("err")
-      return
-    }
+  const result = await validateToken(atob(req.query.p))
 
-    res.status(200).json({ success: true })
-  } catch (error) {
-    console.error(error)
-    res.status(500).json("err")
-  }
+  if(result.errors) return res.status(500).json({error: result.errors})
+  if(result === "err") return res.status(500).json({error: "err"})
+  if(result.data.verifyToken === null) return res.status(500).json({error: "err"})
+
+  res.status(200).json({ success: true })
 }

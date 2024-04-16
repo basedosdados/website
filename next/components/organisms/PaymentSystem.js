@@ -2,7 +2,6 @@ import {
   Stack,
   VStack,
   Skeleton,
-  Text
 } from "@chakra-ui/react"
 import { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
@@ -15,7 +14,6 @@ import {
 } from "@stripe/react-stripe-js";
 import Button from "../atoms/RoundedButton";
 import styles from "../../styles/paymentSystem.module.css";
-
 
 import {
   getPrices,

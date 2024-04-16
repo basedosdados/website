@@ -52,14 +52,14 @@ export default function Login() {
   async function fetchToken({ email, password }) {
     const result = await fetch(`/api/user/getToken?a=${btoa(email)}&q=${btoa(password)}`, {method: "GET"})
       .then(res => res.json())
-    if(result === "err") return setErrors({login:"E-mail ou senha incorretos."}) 
+    if(result.error) return setErrors({login:"E-mail ou senha incorretos."}) 
 
     try {
-      const userData = await fetch(`/api/user/getFullUser?p=${btoa(email)}`, {method: "GET"})
+      const userData = await fetch(`/api/user/getUser?p=${btoa(result.id)}`, {method: "GET"})
         .then(res => res.json())
       cookies.set('userBD', JSON.stringify(userData))
       if(query.p === "plans") return window.open(`/user/${userData.username}?plans_and_payment`, "_self")
-      window.open("/", "_self")
+      // window.open("/", "_self")
     } catch (error) {
       console.error(error)
     }

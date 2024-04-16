@@ -7,8 +7,10 @@ async function getUser(id, token) {
     const res = await axios({
       url: API_URL,
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`
+      config: {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       },
       data: {
         query: `
@@ -40,16 +42,21 @@ async function getUser(id, token) {
         `
       }
     })
-    const data = res.data?.data?.allAccount?.edges[0]?.node
+    const data = res.data
     return data
   } catch (error) {
     console.error(error)
+    return "err"
   }
 }
 
 export default async function handler(req, res) {
   const token = req.cookies.token
-
+  
   const result = await getUser(atob(req.query.p), token)
-  res.status(200).json(result)
+
+  if(result.errors) return res.status(500).json({error: result.errors})
+  if(result === "err") return res.status(500).json({error: "err"})
+
+  res.status(200).json(result?.allAccount?.edges[0]?.node)
 }

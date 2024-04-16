@@ -19,8 +19,7 @@ async function refreshToken(token) {
     }
   })
   try {
-    const data = res.data?.data
-    if (data?.refreshToken === null) return "err"
+    const data = res.data
     return data
   } catch (error) {
     console.error(error)
@@ -29,18 +28,16 @@ async function refreshToken(token) {
 }
 
 export default async function handler(req, res) {
-  try {
-    const result = await refreshToken(atob(req.query.p))
-    if(result === "err") return res.status(500).json("err")
+  const result = await refreshToken(atob(req.query.p))
 
-    res.setHeader('Set-Cookie', serialize('token', result.refreshToken.token, {
-      maxAge: 60 * 60 * 24 * 7,
-      path: '/'
-    }))
+  if(result.errors) return res.status(500).json({error: result.errors})
+  if(result === "err") return res.status(500).json({error: "err"})
+  if(result.data.refreshToken === null) return res.status(500).json({error: "err"})
 
-    res.status(200).json({ success: true })
-  } catch (error) {
-    console.error(error)
-    res.status(500).json("err")
-  }
+  res.setHeader('Set-Cookie', serialize('token', result.data.refreshToken.token, {
+    maxAge: 60 * 60 * 24 * 7,
+    path: '/'
+  }))
+
+  res.status(200).json({ success: true })
 }

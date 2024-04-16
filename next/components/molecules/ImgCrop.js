@@ -6,7 +6,8 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  ModalCloseButton
+  ModalCloseButton,
+  Spinner
 } from '@chakra-ui/react';
 import { useState, useEffect, useRef } from 'react';
 import ReactCrop, {
@@ -33,6 +34,7 @@ export default function CropImage ({
   const imgRef = useRef(null)
   const [completedCrop, setCompletedCrop] = useState()
   const [crop, setCrop] = useState()
+  const [isLoading, setIsLoading] = useState(false)
 
   function onImageLoad(e) {
     const { naturalWidth: width, naturalHeight: height } = e.currentTarget
@@ -59,6 +61,7 @@ export default function CropImage ({
   }, [!!isOpen])
 
   async function handlerUpdatePicture() {
+    setIsLoading(true)
     const image = imgRef.current
 
     if (!image || !completedCrop) return null
@@ -200,6 +203,7 @@ export default function CropImage ({
               width={isMobileMod() ? "100%" : "fit-content"}
               _hover={{transform: "none", opacity: 0.8}}
               onClick={onClose}
+              isDisabled={isLoading}
             >
               Cancelar
             </RoundedButton>
@@ -208,8 +212,13 @@ export default function CropImage ({
               borderRadius="30px"
               _hover={{transform: "none", opacity: 0.8}}
               onClick={() => handlerUpdatePicture()}
+              isDisabled={isLoading}
             >
-              Salvar
+              {isLoading ?
+                <Spinner />
+              :
+                "Salvar"
+              }
             </RoundedButton>
           </Stack>
         </ModalFooter>
