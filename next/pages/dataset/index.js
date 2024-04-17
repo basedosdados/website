@@ -316,15 +316,13 @@ export default function SearchPage({ pages }) {
   }
 
   const DatabaseCard = ({ data }) => {
-    const organizationTypeof = typeof data.organization === "object"
-
     return (
       <Database
         id={data.id}
         themes={data?.themes}
         name={data?.name || "Conjunto sem nome"}
-        temporalCoverageText={data?.temporal_coverage[0] || ""}
-        organization={data.organization[0]}
+        temporalCoverageText={data?.temporal_coverages[0] || ""}
+        organization={data.organizations[0]}
         tables={{
           id: data?.first_table_id,
           number: data?.n_tables
