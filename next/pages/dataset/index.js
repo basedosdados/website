@@ -673,7 +673,7 @@ export default function SearchPage({ pages }) {
           width="100%"
           paddingLeft={isMobileMod() ? "" : "40px !important"}
         >
-          {showEmptyState && !resource ?
+          {showEmptyState && resource.length === 0 ?
             <DataProposalBox 
               image= {true}
               display= "Ooops..."
