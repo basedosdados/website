@@ -22,21 +22,17 @@ async function updatePassword({
               id: "${id}"
               password: "${password}"
             }  
-          )
-          {
-            errors {
-              field,
-              messages
-            }
+          ) {
+            clientMutationId
           }
         }`
       }
     })
-
-    const data = res.data.data.CreateUpdateAccount
+    const data = res.data
     return data
   } catch (error) {
     console.error(error)
+    return "err"
   }
 }
 
@@ -47,8 +43,12 @@ export default async function handler(req, res) {
     id: atob(req.query.b),
     password: atob(req.query.p)
   }
-
   const result = await updatePassword(object, token)
-  res.status(200).json(result)
+
+  if(result.errors) return res.status(500).json({error: result.errors})
+  if(result === "err") return res.status(500).json({error: "err"})
+  if(result.data.CreateUpdateAccount === null) return res.status(500).json({error: "err"})
+
+  res.status(200).json({ success: true })
 }
 

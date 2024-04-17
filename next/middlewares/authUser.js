@@ -7,8 +7,7 @@ async function isJWTInvalid() {
 
     return decoded.success
   } catch (error) {
-    console.log(error)
-
+    console.error(error)
     return true
   }
 }

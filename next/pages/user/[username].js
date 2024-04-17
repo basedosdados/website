@@ -84,24 +84,8 @@ export async function getServerSideProps(context) {
     }
   }
 
-  const fullUserResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/getFullUser?p=${btoa(user?.email)}`, {method: "GET"})
-  const fullUser = await fullUserResponse.json()
-
-  if(fullUser.errors) {
-    res.setHeader('Set-Cookie', serialize('token', '', {maxAge: -1, path: '/', }))
-    res.setHeader('Set-Cookie', serialize('userBD', '', { maxAge: -1, path: '/', }))
-
-    return {
-      redirect: {
-        destination: "/user/login",
-        permanent: false,
-      }
-    }
-  }
-
   const validateTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/validateToken?p=${btoa(req.cookies.token)}`, {method: "GET"})
   const validateToken = await validateTokenResponse.json()
-
 
     if(validateToken.error) {
       const refreshTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/refreshToken?p=${btoa(req.cookies.token)}`, {method: "GET"})
@@ -120,12 +104,30 @@ export async function getServerSideProps(context) {
     }
   }
 
-  const userDataString = JSON.stringify(fullUser)
+  const reg = new RegExp("(?<=:).*")
+  const [ id ] = reg.exec(user.id)
+
+  const getUserResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/getUser?p=${btoa(id)}&q=${btoa(req.cookies.token)}`, {method: "GET"})
+  const getUser = await getUserResponse.json()
+
+  if(getUser.errors) {
+    res.setHeader('Set-Cookie', serialize('token', '', {maxAge: -1, path: '/', }))
+    res.setHeader('Set-Cookie', serialize('userBD', '', { maxAge: -1, path: '/', }))
+
+    return {
+      redirect: {
+        destination: "/user/login",
+        permanent: false,
+      }
+    }
+  }
+
+  const userDataString = JSON.stringify(getUser)
   res.setHeader('Set-Cookie', serialize('userBD', userDataString, { maxAge: 60 * 60 * 24 * 7, path: '/'}))
 
   return {
     props: {
-      fullUser
+      getUser
     }
   }
 }
@@ -1078,6 +1080,7 @@ const NewPassword = ({ userInfo }) => {
     confirmPassword: ""
   })
   const [errors, setErrors] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
 
   const [showPassword, setShowPassword] = useState(true)
   const [showNewPassword, setShowNewPassword] = useState(true)
@@ -1091,6 +1094,7 @@ const NewPassword = ({ userInfo }) => {
   }
 
   async function submitNewPassword() {
+    setIsLoading(true)
     const regexPassword = {}
     const validationErrors = {}
 
@@ -1138,25 +1142,31 @@ const NewPassword = ({ userInfo }) => {
     }
     setErrors(validationErrors)
 
-    if (Object.keys(validationErrors).length > 0) return
+    if (Object.keys(validationErrors).length > 0) {
+      setIsLoading(false)
+    } else {
+      const reg = new RegExp("(?<=:).*")
+      const [ id ] = reg.exec(userInfo?.id)
+  
+      const result = await fetch(`/api/user/updatePassword?b=${btoa(id)}&p=${btoa(formData.newPassword)}`, {method: "GET"})
+        .then(res => res.json())
 
-    const reg = new RegExp("(?<=:).*")
-    const [ id ] = reg.exec(userInfo?.id)
-
-    const result = await fetch(`/api/user/updatePassword?b=${btoa(id)}&p=${btoa(formData.newPassword)}`, {method: "GET"})
-      .then(res => res.json())
-
-    setFormData({
-      password: "",
-      newPassword: "",
-      confirmPassword: ""
-    })
-
-    newPasswordModal.onOpen()
+      if(result?.ok === true) {
+        setFormData({
+          password: "",
+          newPassword: "",
+          confirmPassword: ""
+        })
+        newPasswordModal.onOpen()
+      }
+    }
+    setIsLoading(false)
   }
 
   return (
     <Stack spacing="24px" maxWidth="480px">
+      <Box display={isLoading ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
+
       <ModalGeneral
         isOpen={newPasswordModal.isOpen}
         onClose={newPasswordModal.onClose}
@@ -1396,8 +1406,13 @@ const NewPassword = ({ userInfo }) => {
         _hover={{transform: "none", opacity: 0.8}}
         width="fit-content"
         onClick={() => submitNewPassword()}
+        isDisabled={isLoading}
       >
-        Atualizar senha
+        {isLoading ?
+          <Spinner />
+          :
+          "Atualizar senha"
+        }
       </RoundedButton>
     </Stack>
   )
@@ -2231,15 +2246,15 @@ const Accesses = ({ userInfo }) => {
 }
 // Sections Of User Page
 
-export default function UserPage({ fullUser }) {
+export default function UserPage({ getUser }) {
   const router = useRouter()
   const { query } = router
   const [userInfo, setUserInfo] = useState({})
   const [sectionSelected, setSectionSelected] = useState(0)
 
   useEffect(() => {
-    setUserInfo(fullUser)
-  }, [fullUser])
+    setUserInfo(getUser)
+  }, [getUser])
 
   const choices = [
     {bar: "Perfil público", title: "Perfil público", value: "profile", index: 0},

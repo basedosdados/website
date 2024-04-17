@@ -13,7 +13,7 @@ async function getSubscriptionActive(id, token) {
       data: {
         query: `
           query {
-            allAccount (id : "${id}"){
+            allAccount (id: "${id}"){
               edges {
                 node {
                   internalSubscription (isActive: true){
