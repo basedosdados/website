@@ -59,9 +59,6 @@ export default function Register() {
     if (!formData.firstName) {
       validationErrors.firstName = "Por favor, insira seu nome."
     }
-    if(/\s/.test(formData.firstName)) {
-      validationErrors.firstName = "O Primeiro nome não pode haver espaçamento."
-    }
     if (!formData.username) {
       validationErrors.username = "Nome de usuário inválido ou já existe uma conta com este nome de usuário."
     }

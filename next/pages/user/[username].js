@@ -43,6 +43,7 @@ import BodyText from "../../components/atoms/BodyText";
 import { CardPrice } from "../precos";
 import PaymentSystem from "../../components/organisms/PaymentSystem";
 import ImageCrop from "../../components/molecules/ImgCrop";
+import { cleanString } from "../../utils";
 
 import {
   LabelTextForm,
@@ -189,9 +190,6 @@ const ProfileConfiguration = ({ userInfo }) => {
     if (!formData.firstName) {
       validationErrors.firstName = "Seu nome é um campo obrigatorio."
     }
-    if(/\s/.test(formData.firstName)) {
-      validationErrors.firstName = "O Primeiro nome não pode haver espaçamento."
-    }
     if(/\s/.test(formData.website)) {
       validationErrors.website = "Não pode haver espaçamento nesse campo."
     }
@@ -215,23 +213,20 @@ const ProfileConfiguration = ({ userInfo }) => {
     } else {
       const reg = new RegExp("(?<=:).*")
       const [ id ] = reg.exec(userInfo?.id)
-      const form = {...formData, id: id}
-  
-      try {
-        const result = await fetch(`/api/user/updateProfile?p=${btoa(form.id)}&f=${btoa(form.firstName)}&l=${btoa(form?.lastName || "null")}&e=${btoa(form?.isEmailVisible || "false")}&w=${btoa(form?.website || "null")}&g=${btoa(form?.github || "null")}&t=${btoa(form?.twitter || "null")}&li=${btoa(form?.linkedin || "null")}`, { method: "GET" })
-          .then(res => res.json())
-  
-        if(result.errors.length > 0) {
-          result.errors.map((elm) => {
-            console.error(`Campo ${elm.field}: ${elm.messages}`)
-          })
-        }
-        const userData = await fetch(`/api/user/getUser?p=${btoa(id)}`, { method: "GET" })
-          .then(res => res.json())
-        cookies.set('userBD', JSON.stringify(userData))
-      } catch (error) {
-        console.error(error)
+      const form = {...formData, id: id }
+
+      const result = await fetch(`/api/user/updateProfile?p=${btoa(form.id)}&f=${btoa(cleanString(form.firstName))}&l=${btoa(cleanString(form?.lastName || "") || "null")}&e=${btoa(form?.isEmailVisible || "false")}&w=${btoa(form?.website || "null")}&g=${btoa(form?.github || "null")}&t=${btoa(form?.twitter || "null")}&li=${btoa(form?.linkedin || "null")}`, { method: "GET" })
+        .then(res => res.json())
+
+      if(result.errors.length > 0) {
+        result.errors.map((elm) => {
+          console.error(`Campo ${elm.field}: ${elm.messages}`)
+        })
       }
+
+      const userData = await fetch(`/api/user/getUser?p=${btoa(id)}`, { method: "GET" })
+        .then(res => res.json())
+      cookies.set('userBD', JSON.stringify(userData))
       setIsLoading(false)
     }
   }
