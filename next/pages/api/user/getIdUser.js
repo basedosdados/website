@@ -15,14 +15,19 @@ async function getIdUser(email) {
         query: `query { allAccount (email: "${email}") {edges{node{id}}} }`
       }
     })
-    const data = res.data?.data?.allAccount
+    const data = res.data
     return data
   } catch (error) {
     console.error(error)
+    return "err"
   }
 }
 
 export default async function handler(req, res) {
   const result = await getIdUser(atob(req.query.p))
-  res.status(200).json(result)
+
+  if(result.errors) return res.status(500).json({error: result.errors})
+  if(result === "err") return res.status(500).json({error: "err"})
+
+  res.status(200).json(result?.data?.allAccount?.edges[0]?.node)
 }

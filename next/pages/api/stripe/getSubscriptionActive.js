@@ -30,16 +30,20 @@ async function getSubscriptionActive(id, token) {
         `
       }
     })
-    const data = res.data?.data?.allAccount?.edges[0]?.node?.internalSubscription?.edges
+    const data = res.data
     return data
   } catch (error) {
     console.error(error)
+    return "err"
   }
 }
 
 export default async function handler(req, res) {
   const token = req.cookies.token
-
   const result = await getSubscriptionActive(atob(req.query.p), token)
-  res.status(200).json(result)
+
+  if(result.errors) return res.status(500).json({error: result.errors})
+  if(result === "err") return res.status(500).json({error: "err"})
+
+  res.status(200).json(result?.data?.allAccount?.edges[0]?.node?.internalSubscription?.edges)
 }

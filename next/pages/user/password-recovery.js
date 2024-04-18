@@ -76,10 +76,10 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
     const getIdUser = await fetch(`/api/user/getIdUser?p=${btoa(value)}`, {method: "GET"})
       .then(res => res.json())
 
-    if(getIdUser.edges.length === 0) return setError("Endereço de e-mail inválido.")
+    if(getIdUser.error) return setError("Endereço de e-mail inválido.")
 
     const reg = new RegExp("(?<=:).*")
-    const [ id ] = reg.exec(getIdUser?.edges[0]?.node?.id)
+    const [ id ] = reg.exec(getIdUser?.id)
 
     try {
       await axios.post(`${API_URL}/account/password_reset/${btoa(id)}/`)

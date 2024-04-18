@@ -1547,7 +1547,7 @@ const PlansAndPayment = ({ userData }) => {
       .then(res => res.json())
 
     do {
-      const statusSub = await fetch(`/api/stripe/getUserGetSubscription?p=${btoa(id)}`, {method: "GET"})
+      const statusSub = await fetch(`/api/stripe/userGetSubscription?p=${btoa(id)}`, {method: "GET"})
         .then(res => res.json())
       if(statusSub?.proSubscriptionStatus !== "active") {
         break
@@ -1566,7 +1566,7 @@ const PlansAndPayment = ({ userData }) => {
     const [ id ] = reg.exec(userData.id)
 
     do {
-      const statusSub = await fetch(`/api/stripe/getUserGetSubscription?p=${btoa(id)}`, {method: "GET"})
+      const statusSub = await fetch(`/api/stripe/userGetSubscription?p=${btoa(id)}`, {method: "GET"})
         .then(res => res.json())
       if(statusSub?.proSubscriptionStatus === "active") {
         break

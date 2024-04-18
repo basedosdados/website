@@ -40,16 +40,14 @@ export default function CheckEmail() {
     const getIdUser = await fetch(`/api/user/getIdUser?p=${btoa(email)}`, {method: "GET"})
       .then(res => res.json())
 
-    const reg = new RegExp("(?<=:).*")
-    const [ id ] = reg.exec(getIdUser?.edges[0]?.node?.id)
+    if(getIdUser.error) return
 
-    try {
-      await axios.post(`${API_URL}/account/account_activate/${btoa(id)}/`)
-      setForwardingDisabled(true)
-      setCount(60)
-    } catch (error) {
-      console.error(error)
-    }
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(getIdUser?.id)
+
+    await axios.post(`${API_URL}/account/account_activate/${btoa(id)}/`)
+    setForwardingDisabled(true)
+    setCount(60)
   }
 
   return (

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-async function getUserGetSubscription(id, token) {
+async function userGetSubscription(id, token) {
   try {
     const res = await axios({
       url: API_URL,
@@ -35,8 +35,7 @@ async function getUserGetSubscription(id, token) {
 
 export default async function handler(req, res) {
   const token = req.cookies.token
-
-  const result = await getUserGetSubscription(atob(req.query.p), token)
+  const result = await userGetSubscription(atob(req.query.p), token)
 
   if(result.errors) return res.status(500).json({error: result.errors})
   if(result === "err") return res.status(500).json({error: "err"})
