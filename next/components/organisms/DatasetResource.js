@@ -5,81 +5,11 @@ import {
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
-import { getUserDataJson } from "../../utils";
 
-import SimpleButton from "../atoms/SimpleButton";
 import { FilterAccordion } from "../atoms/FilterAccordion";
-
 import BdmTablePage from "./BdmTablePage";
 import RawDataSourcesPage from "./RawDataSourcesPage";
 import InformationRequestPage from "./InformationRequestPage";
-
-import CrossIcon from "../../public/img/icons/crossIcon";
-
-function AdminButtons({ datasetId }) {
-  let userData = getUserDataJson()
-
-  if(!userData?.isAdmin) return null
-
-  return (
-    <Stack paddingTop="16px" width="100%">
-      <SimpleButton
-        onClick={() => window.open(`/dataset/edit?dataset=${datasetId}&table=create`, "_self")}
-        margin="0 0 16px !important"
-        justifyContent="space-between"
-        alignItems="center"
-        paddingRight="15%"
-      >
-        Criar tabela tratada
-        <CrossIcon
-          alt=""
-          width="18px"
-          height="18px"
-          fill="currentColor"
-          marginLeft="4px"
-          transform="rotate(45deg)"
-        />
-      </SimpleButton>
-      <SimpleButton
-        // onClick={}
-        margin="0 0 16px !important"
-        justifyContent="space-between"
-        alignItems="center"
-        paddingRight="15%"
-      >
-        Criar fonte original
-        <CrossIcon
-          alt=""
-          width="18px"
-          height="18px"
-          fill="currentColor"
-          marginLeft="4px"
-          transform="rotate(45deg)"
-        />
-      </SimpleButton>
-      <SimpleButton
-        // onClick={() =>
-        //   setResource({ resource_type: "create_information_request" })
-        // }
-        borderBottom="1px solid #DEDFE0"
-        padding="0 15% 24px 0"
-        margin="0 !important"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        Criar pedido LAI
-        <CrossIcon
-          alt=""
-          width="18px"
-          height="18px"
-          fill="currentColor"
-          marginLeft="4px"
-          transform="rotate(45deg)"
-        />
-      </SimpleButton>
-    </Stack>
-  )
-}
 
 export default function DatasetResource({
   dataset
@@ -149,10 +79,6 @@ export default function DatasetResource({
         justify="flex-start"
         borderRight={!isMobileMod() && "1px solid #DEDFE0"}
       >
-        <AdminButtons
-          datasetId={query.dataset}
-        />
-
         <FilterAccordion
           alwaysOpen={true}
           choices={tables}

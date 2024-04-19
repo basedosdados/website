@@ -15,11 +15,35 @@ import BodyText from "../components/atoms/BodyText";
 import RoundedButton from "../components/atoms/RoundedButton";
 import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
-import { getUserDataJson } from "../utils";
 
 import CheckIcon from "../public/img/icons/checkIcon";
 import CrossIcon from "../public/img/icons/crossIcon";
 import InfoIcon from '../public/img/icons/infoIcon';
+
+export async function getServerSideProps(context) {
+  const { req, res } = context
+  let user = null
+
+  if(req.cookies.userBD) user = JSON.parse(req.cookies.userBD)
+
+  if (user === null || Object.keys(user).length < 0) {
+    return {
+      props: {
+        username: null,
+        isBDPro: false,
+        isBDEmp: false
+      }
+    }
+  }
+
+  return {
+    props: {
+      username: user.username,
+      isBDPro: user?.proSubscription === "bd_pro",
+      isBDEmp: user?.proSubscription === "bd_pro_empresas"
+    }
+  }
+}
 
 export const CardPrice = ({
   colorBanner,
@@ -327,22 +351,7 @@ export const CardPrice = ({
   )
 }
 
-export default function Price() {
-  const [userData, setUserData] = useState({})
-  const [ifBDPro, setIfBDPro] = useState(false)
-  const [ifBDProEmp, setIfBDProEmp] = useState(false)
-
-  async function userInfo() {
-    const res = getUserDataJson()
-    setUserData(res)
-    setIfBDPro(res?.proSubscription === "bd_pro")
-    setIfBDProEmp(res?.proSubscription === "bd_pro_empresas")
-  }
-
-  useEffect(() => {
-    userInfo()
-  },[])
-
+export default function Price({ username ,isBDPro, isBDEmp }) {
   return (
     <MainPageTemplate paddingX="24px">
       <Head>
@@ -426,9 +435,9 @@ export default function Price() {
               {name: "Dezenas de bases de alta frequência atualizadas"},
             ]}
             button={{
-              text: ifBDPro ? "Plano atual" : `Iniciar teste grátis`,
-              href: userData === null ? "/user/login?p=plans" :`/user/${userData.username}?plans_and_payment`,
-              isCurrentPlan: ifBDPro ? true : false,
+              text: isBDPro ? "Plano atual" : `Iniciar teste grátis`,
+              href: username === null ? "/user/login?p=plans" :`/user/${username}?plans_and_payment`,
+              isCurrentPlan: isBDPro,
             }}
           />
 
@@ -445,9 +454,9 @@ export default function Price() {
               {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
             ]}
             button={{
-              text: ifBDProEmp ? "Plano atual" : "Iniciar teste grátis",
-              href: userData === null ? "/user/login?p=plans" :`/user/${userData.username}?plans_and_payment`,
-              isCurrentPlan: ifBDProEmp ? true : false,
+              text: isBDEmp ? "Plano atual" : "Iniciar teste grátis",
+              href: username === null ? "/user/login?p=plans" :`/user/${username}?plans_and_payment`,
+              isCurrentPlan: isBDEmp,
             }}
           />
         </Stack>

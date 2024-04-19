@@ -21,7 +21,7 @@ import {
   MenuList,
   MenuItem
 } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { useRouter } from "next/router"
 import cookies from "js-cookie";
 import { MenuDropdown } from "./MenuDropdown";
@@ -29,10 +29,7 @@ import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import ControlledInput from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
-import { 
-  getUserDataJson,
-  triggerGAEvent
-} from "../../utils";
+import { triggerGAEvent } from "../../utils";
 
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import BDLogoEduImage from "../../public/img/logos/bd_logo_edu";
@@ -44,9 +41,7 @@ import RedirectIcon from "../../public/img/icons/redirectIcon";
 import SettingsIcon from "../../public/img/icons/settingsIcon";
 import SignOutIcon from "../../public/img/icons/signOutIcon";
 
-function MenuDrawer({ isOpen, onClose, links }) {
-  let userData = getUserDataJson()
-
+function MenuDrawer({ userData, isOpen, onClose, links }) {
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
       <DrawerOverlay backdropFilter="blur(2px)"/>
@@ -163,9 +158,8 @@ function MenuDrawer({ isOpen, onClose, links }) {
   );
 }
 
-function MenuDrawerUser({ isOpen, onClose}) {
+function MenuDrawerUser({ userData, isOpen, onClose}) {
   const router = useRouter()
-  let userData = getUserDataJson()
 
   const links = [
     {name: "Perfil público", value: "profile"},
@@ -646,10 +640,8 @@ function SearchInputUser () {
   )
 }
 
-function DesktopLinks({ links, position = false, path, userTemplate = false }) {
+function DesktopLinks({ userData, links, position = false, path, userTemplate = false }) {
   const [statusSearch, setStatusSearch] = useState(false)
-
-  let userData = getUserDataJson()
 
   const searchStatus = (elm) => {
     setStatusSearch(elm.status)
@@ -792,9 +784,11 @@ function DesktopLinks({ links, position = false, path, userTemplate = false }) {
   );
 }
 
-export default function MenuNav({ simpleTemplate = false, userTemplate = false }) {
+export default function MenuNav({userInfoMenu, simpleTemplate = false, userTemplate = false }) {
   const router = useRouter()
   const { route } = router
+  const userBD = useMemo(() => cookies.get("userBD") || null, [cookies])
+
   const menuDisclosure = useDisclosure()
   const menuUserMobile = useDisclosure()
   const divRef = useRef()
@@ -802,16 +796,21 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   const [isScrollDown, setIsScrollDown] = useState(false)
   const [menuMobileMargin, setMenuMobileMargin] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
-  const [userData, setUserData] = useState({})
-
-  async function userInfo() {
-    const res = getUserDataJson()
-    setUserData(res)
-  }
+  const [userData, setUserData] = useState(null)
 
   useEffect(() => {
-    userInfo()
-  }, [])
+    let userInfo = userBD
+    if(userInfo !== null && userInfo !== "undefined") {
+      const res = JSON.parse(userInfo)
+      setUserData({
+        email: res.email,
+        username: res.username,
+        picture: res.picture || "",
+      })
+    } else {
+      setUserData(null)
+    }
+  }, [userBD])
 
   const links = {
     Dados: "/dataset",
@@ -895,7 +894,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         </Text>
       </Box>
 
-      <MenuDrawer links={links} {...menuDisclosure} />
+      <MenuDrawer userData={userData} links={links} {...menuDisclosure} />
 
       <Box
         ref={divRef}
@@ -955,6 +954,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
             <></>  
             :
             <DesktopLinks
+              userData={userData}
               links={links}
               position={isScrollDown}
               path={route}
@@ -965,9 +965,17 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
           {userTemplate && isMobileMod() && <SearchInputUser />}
 
           {useCheckMobile() && userData &&
-            <MenuUser userData={userData} onOpen={menuUserMobile.onOpen} onClose={menuUserMobile.onClose}/>
+            <MenuUser
+              userData={userData}
+              onOpen={menuUserMobile.onOpen}
+              onClose={menuUserMobile.onClose}
+            />
           }
-          <MenuDrawerUser isOpen={menuUserMobile.isOpen} onClose={menuUserMobile.onClose}/>
+          <MenuDrawerUser 
+            userData={userData}
+            isOpen={menuUserMobile.isOpen}
+            onClose={menuUserMobile.onClose}
+          />
         </HStack>
       </Box>
     </>

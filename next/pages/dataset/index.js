@@ -14,10 +14,7 @@ import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { 
-  getUserDataJson,
-  triggerGAEvent
-} from "../../utils";
+import { triggerGAEvent } from "../../utils";
 
 import {
   getSearchDatasets
@@ -89,8 +86,6 @@ export default function SearchPage({ pages }) {
   const [count, setCount] = useState(0)
   const [pageInfo, setPageInfo] = useState({})
   const [isLoading, setIsLoading] = useState(true)
-
-  let userData = getUserDataJson()
 
   // const [order, setOrder] = useState("score")
 
@@ -694,18 +689,6 @@ export default function SearchPage({ pages }) {
                 {count || "..."} {`conjunto${count > 1 ? "s": ""} encontrado${count > 1 ? "s": ""}`}
                 {query.q ? ` para ${query.q}` : ""}
               </Heading>
-
-              {userData?.isAdmin && 
-                <RoundedButton
-                  width="fit-content"
-                  padding="20px"
-                  onClick={() => window.open("/dataset/edit", "_self")}
-                  marginLeft="auto"
-                  _hover={{transform: "none", opacity: "0.8"}}
-                >
-                  Criar Conjunto
-                </RoundedButton>
-              }
             </Flex>
 
             {/* Tags container */}

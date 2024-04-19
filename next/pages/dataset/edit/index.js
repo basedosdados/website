@@ -32,7 +32,14 @@ import {
 } from "../../api/status";
 
 export function getServerSideProps(context) {
-  return authUser(context, "/user/login")
+  // return authUser(context, "/user/login")
+
+  return {
+    redirect: {
+      destination: "/",
+      permanent: false,
+    }
+  }
 }
 
 export default function Control() {

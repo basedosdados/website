@@ -27,9 +27,9 @@ async function validateToken(token) {
 export default async function handler(req, res) {
   const result = await validateToken(atob(req.query.p))
 
-  if(result.errors) return res.status(500).json({error: result.errors})
-  if(result === "err") return res.status(500).json({error: "err"})
-  if(result.data.verifyToken === null) return res.status(500).json({error: "err"})
+  if(result.errors) return res.status(500).json({error: result.errors, success: false })
+  if(result === "err") return res.status(500).json({error: "err", success: false })
+  if(result.data.verifyToken === null) return res.status(500).json({error: "err", success: false})
 
   res.status(200).json({ success: true })
 }

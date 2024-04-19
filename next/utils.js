@@ -209,18 +209,6 @@ export function removeEmpty(obj) {
   );
 }
 
-export function getUserDataJson() {
-  let userData = cookies.get("userBD") || null
-
-  if(userData !== null && userData !== "undefined") userData = JSON.parse(userData)
-  if(userData === "undefined" || userData === null) {
-    cookies.remove('userBD', { path: '/' })
-    cookies.remove('token', { path: '/' })
-  }
-
-  return userData
-}
-
 export function triggerGAEvent(category, action) {
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({
