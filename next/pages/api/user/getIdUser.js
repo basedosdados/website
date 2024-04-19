@@ -1,15 +1,20 @@
 import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
-const AUTH_TOKEN_FRONT= process.env.AUTH_TOKEN_FRONT
 
 async function getIdUser(email) {
+  const token = await axios({
+    url: API_URL,
+    method: "POST",
+    data: { query: ` mutation { authToken (input: { email: "${process.env.AUTH_EMAIL_ACCESS}", password: "${process.env.AUTH_PASSWORD_ACCESS}" }) { token } }` }
+  })
+
   try {
     const res = await axios({
       url: API_URL,
       method: "POST",
       headers: {
-        Authorization: `Bearer ${AUTH_TOKEN_FRONT}`
+        Authorization: `Bearer ${token.data.data.authToken.token}`
       },
       data: {
         query: `query { allAccount (email: "${email}") {edges{node{id}}} }`

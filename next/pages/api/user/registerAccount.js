@@ -38,10 +38,11 @@ async function registerAccount({
         }`
       }
     })
-    const data = res?.data?.data?.CreateUpdateAccount
+    const data = res.data
     return data
   } catch (error) {
     console.error(error)
+    return "err"
   }
 }
 
@@ -66,5 +67,10 @@ export default async function handler(req, res) {
   }
 
   const result = await registerAccount(replaceNullsWithEmpty(object))
-  res.status(200).json(result)
+
+  if(result.errors) return res.status(500).json({error: result.errors, success: false })
+  if(result === "err") return res.status(500).json({error: "err", success: false })
+  if(result.data.CreateUpdateAccount === null) return res.status(500).json({error: "err", success: false})
+
+  res.status(200).json({ success: true })
 }
