@@ -13,7 +13,7 @@ import { EmailConfirmImage, EmailRecoveryImage } from "../../public/img/emailIma
 export async function getServerSideProps(context) {
   const { query } = context
 
-  const result = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/activeAccount?q=${query.q}&p=${query.p}`, { method: "GET" })
+  const result = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/activeAccount?q=${query.q}&p=${query.p}`, { method: "GET" })
     .then(res => res.json())
   const data = result
 

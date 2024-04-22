@@ -6,7 +6,7 @@ async function getAllPeople() {
   const token = await axios({
     url: API_URL,
     method: "POST",
-    data: { query: ` mutation { authToken (input: { email: "${process.env.AUTH_EMAIL_ACCESS}", password: "${process.env.AUTH_PASSWORD_ACCESS}" }) { token } }` }
+    data: { query: ` mutation { authToken (input: { email: "${process.env.BACKEND_AUTH_EMAIL}", password: "${process.env.BACKEND_AUTH_PASSWORD}" }) { token } }` }
   })
 
   try {

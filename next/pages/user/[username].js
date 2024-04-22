@@ -85,11 +85,11 @@ export async function getServerSideProps(context) {
     }
   }
 
-  const validateTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/validateToken?p=${btoa(req.cookies.token)}`, {method: "GET"})
+  const validateTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/validateToken?p=${btoa(req.cookies.token)}`, {method: "GET"})
   const validateToken = await validateTokenResponse.json()
 
     if(validateToken.error) {
-      const refreshTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/refreshToken?p=${btoa(req.cookies.token)}`, {method: "GET"})
+      const refreshTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/refreshToken?p=${btoa(req.cookies.token)}`, {method: "GET"})
       const refreshToken = await refreshTokenResponse.json()
 
     if(refreshToken.error) {
@@ -108,7 +108,7 @@ export async function getServerSideProps(context) {
   const reg = new RegExp("(?<=:).*")
   const [ id ] = reg.exec(user.id)
 
-  const getUserResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/getUser?p=${btoa(id)}&q=${btoa(req.cookies.token)}`, {method: "GET"})
+  const getUserResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/getUser?p=${btoa(id)}&q=${btoa(req.cookies.token)}`, {method: "GET"})
   const getUser = await getUserResponse.json()
 
   if(getUser.errors) {
