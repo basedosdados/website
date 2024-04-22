@@ -2,27 +2,22 @@ import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-async function userGetSubscription(id, token) {
+async function getIdUser(email) {
+  const token = await axios({
+    url: API_URL,
+    method: "POST",
+    data: { query: ` mutation { authToken (input: { email: "${process.env.AUTH_EMAIL_ACCESS}", password: "${process.env.AUTH_PASSWORD_ACCESS}" }) { token } }` }
+  })
+
   try {
     const res = await axios({
       url: API_URL,
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token.data.data.authToken.token}`
       },
       data: {
-        query: `
-          query {
-            allAccount (id: "${id}"){
-              edges {
-                node {
-                  email
-                  proSubscriptionStatus
-                }
-              }
-            }
-          }
-        `
+        query: `query { allAccount (email: "${email}") {edges{node{id}}} }`
       }
     })
     const data = res.data
@@ -34,8 +29,7 @@ async function userGetSubscription(id, token) {
 }
 
 export default async function handler(req, res) {
-  const token = req.cookies.token
-  const result = await userGetSubscription(atob(req.query.p), token)
+  const result = await getIdUser(atob(req.query.p))
 
   if(result.errors) return res.status(500).json({error: result.errors})
   if(result === "err") return res.status(500).json({error: "err"})

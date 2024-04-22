@@ -3,7 +3,7 @@ https://prismjs.com/download.html#themes=prism-twilight&languages=markup+css+cli
 code[class*=language-], pre[class*=language-] {
   color:#fff;
   background:0 0;
-  font-family:Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;
+  font-family: Monaco,'Andale Mono','Ubuntu Mono',monospace;
   font-size:1em;
   text-align:left;
   text-shadow:0 -.1em .2em #000;

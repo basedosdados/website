@@ -81,6 +81,7 @@ export default async function postTable({
         `
       }
     })
+
     const data = res.data.data.CreateUpdateTable.table._id
     return data
   } catch (error) {

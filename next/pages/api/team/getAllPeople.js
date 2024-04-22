@@ -2,11 +2,20 @@ import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-export default async function getAllPeople() {
+async function getAllPeople() {
+  const token = await axios({
+    url: API_URL,
+    method: "POST",
+    data: { query: ` mutation { authToken (input: { email: "${process.env.AUTH_EMAIL_ACCESS}", password: "${process.env.AUTH_PASSWORD_ACCESS}" }) { token } }` }
+  })
+
   try {
     const res = await axios({
       url: API_URL,
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${token.data.data.authToken.token}`
+      },
       data: {
         query: `
         query {
@@ -41,9 +50,15 @@ export default async function getAllPeople() {
         `
       }
     })
+
     const data = res?.data?.data?.allAccount?.edges
     return data
   } catch (error) {
     console.error(error)
   }
+}
+
+export default async function handler(req, res) {
+  const result = await getAllPeople()
+  res.status(200).json(result)
 }
