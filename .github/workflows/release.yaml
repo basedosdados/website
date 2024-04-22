@@ -45,3 +45,6 @@ jobs:
           build-args: |
             NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }}
             NEXT_PUBLIC_KEY_STRIPE=${{ env.NEXT_PUBLIC_KEY_STRIPE }}
+            NEXT_PUBLIC_BASE_URL_FRONTEND=${{ env.NEXT_PUBLIC_BASE_URL_FRONTEND }}
+            BACKEND_AUTH_EMAIL=${{ secrets.BACKEND_AUTH_EMAIL }}
+            BACKEND_AUTH_PASSWORD=${{ secrets.BACKEND_AUTH_PASSWORD }}
