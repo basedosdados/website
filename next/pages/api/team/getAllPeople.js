@@ -50,7 +50,6 @@ async function getAllPeople() {
         `
       }
     })
-
     const data = res?.data?.data?.allAccount?.edges
     return data
   } catch (error) {
