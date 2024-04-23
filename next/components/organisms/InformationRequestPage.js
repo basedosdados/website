@@ -69,69 +69,6 @@ export default function InformationRequestPage({ id }) {
     )
   }
 
-  const partnerships = {
-    "Fiquem Sabendo": {
-      title: "Fiquem Sabendo",
-      description: "Agência de dados públicos independente e especializada na Lei de Acesso à Informação.",
-      url: "https://fiquemsabendo.com.br/",
-      src: "/img/icons/fiquem_sabendo.png"
-    },
-    "Fundação Lemann": {
-      title: "Fundação Lemann",
-      description: "Organização que trabalha para garantir educação de qualidade para todas as crianças brasileiras e apoia líderes focados no desenvolvimento social do Brasil.",
-      url: "https://fundacaolemann.org.br/",
-      src: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/logos/flemann.png"
-    }
-  }
-
-  const PartnershipContainer = ({
-    title,
-    description,
-    url,
-    src
-  }) => {
-
-    return (
-      <HStack margin="10px 0" alignItems="flex-start" gridGap={2}>
-        <Box
-          display="flex"
-          alignItems="center"
-          backgroundColor="#FFF"
-          boxShadow="0 2px 6px 1px #0000001a"
-          borderRadius="10px"
-          padding="10px"
-          minWidth="100px"
-          minHeight="100px"
-          maxWidth="100px"
-          maxHeight="100px"
-        >
-          <Image
-            alt={title}
-            src={src}
-            width="fit-content"
-            height="fit-content"
-            onClick={() => window.open(url)}
-            cursor="pointer"
-          />
-        </Box>
-
-        <Box>
-          <Text
-            width="100%"
-            onClick={() => window.open(url)}
-            cursor="pointer"
-            marginBottom="4px"
-            fontWeight="bold"
-          >
-            {title}
-          </Text>
-          <SectionText>
-            {description}
-          </SectionText>
-        </Box>
-      </HStack>
-    )
-  }
 
   if(isError?.message?.length > 0 || resource === null || Object.keys(resource).length < 0) return <FourOFour/>
 
@@ -149,27 +86,6 @@ export default function InformationRequestPage({ id }) {
         spacing={4} 
         alignItems="flex-start"
       >
-        <VStack
-          alignItems="flex-start"
-          borderRadius="10px"
-          marginTop="20px"
-          color="#252A32"
-          fontFamily="Lato"
-          fontSize="16px"
-          spacing={5}
-        >
-          <SectionText>
-            A disponibilização destes dados é resultado de uma parceria com:
-          </SectionText>
-
-          <PartnershipContainer
-            {...resource?.number === "03005.341407/2022-56" ?
-              partnerships["Fundação Lemann"] :
-              partnerships["Fiquem Sabendo"]
-            }
-          />
-        </VStack>
-
         <VStack width="100%" marginTop="32px !important" spacing={4} alignItems="flex-start">
           <Subtitle>Consulta aos dados</Subtitle>
           <DisclaimerBox width="100%">
