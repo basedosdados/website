@@ -6,7 +6,7 @@ async function getCareerPeople(team) {
   const token = await axios({
     url: API_URL,
     method: "POST",
-    data: { query: ` mutation { authToken (input: { email: "${process.env.BACKEND_AUTH_EMAIL}", password: "${process.env.BACKEND_AUTH_PASSWORD}" }) { token } }` }
+    data: { query: ` mutation { authToken (input: { email: "${process.env.BACKEND_AUTH_EMAIL.trim()}", password: "${process.env.BACKEND_AUTH_PASSWORD.trim()}" }) { token } }` }
   })
 
   try {
