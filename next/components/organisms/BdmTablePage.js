@@ -204,7 +204,7 @@ export default function BdmTablePage({ id }) {
 
       <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Descrição</Subtitle>
-        <SectionText>
+        <SectionText whiteSpace="pre-wrap">
           {resource.description || "Nenhuma descrição fornecida."}
         </SectionText>
       </VStack>

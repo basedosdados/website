@@ -56,7 +56,7 @@ function Hero() {
       alignItems="center"
       width="100%"
       padding="0px 10%"
-      marginTop="56px"
+      marginTop="50px"
       zIndex="10"
       position="relative"
     >

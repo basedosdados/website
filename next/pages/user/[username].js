@@ -1442,7 +1442,7 @@ const PlansAndPayment = ({ userData }) => {
       resources : [{name: "Dezenas de bases de alta frequência atualizadas"}]
     },
     "bd_pro_empresas" : {
-      title: "BD Pro Empresas",
+      title: "BD Empresas",
       buttons : [{text:"Cancelar plano", onClick: () => CancelModalPlan.onOpen()}],
       resources : [{name: "Acesso para 10 contas"},
       {name: "Suporte prioritário via email e Discord"}]}
@@ -1877,8 +1877,7 @@ const PlansAndPayment = ({ userData }) => {
 
           <CardPrice
             colorBanner="#252A32"
-            title="BD Pro Empresas"
-            badge="Beta"
+            title="BD Empresas"
             subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
             personConfig={{
               price: "350"

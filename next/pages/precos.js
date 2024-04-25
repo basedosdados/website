@@ -370,7 +370,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
 
       <Stack
         gridGap={{base:"40px", lg: "64px"}}
-        paddingTop={isMobileMod() ? "160px" : "90px"}
+        paddingTop="90px"
         width="100%"
         maxWidth="1264px"
         flexDirection="column"
@@ -443,8 +443,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
 
           <CardPrice
             colorBanner="#252A32"
-            title="BD Pro Empresas"
-            badge="Beta"
+            title="BD Empresas"
             subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
             personConfig={{
               price: "350"

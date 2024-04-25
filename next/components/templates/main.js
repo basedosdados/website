@@ -17,7 +17,7 @@ export function MainPageTemplate({
       <SiteHead />
       <Menu pages={pages} simpleTemplate={cleanTemplate} userTemplate={userTemplate}/>
       <Box
-        paddingTop={{ base: "30px", lg: "120px" }}
+        paddingTop="72px"
         paddingBottom="50px"
         {...style}
       >

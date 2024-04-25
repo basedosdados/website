@@ -413,7 +413,7 @@ export default function SearchPage({ pages }) {
           boxShadow: "0 1px 3px 0.5 rgba(100 93 103 /0.16) !important",
           _placeholder:{color:"#6F6F6F"}
         }}
-        marginTop={{ base: isMobileMod() ? "160px" : "140px", lg: "46px" }}
+        marginTop={isMobileMod() ? "60px" : "46px" }
       />
 
       <Stack
