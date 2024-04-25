@@ -20,10 +20,6 @@ import BaseResourcePage from "../molecules/BaseResourcePage";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import FourOFour from "../templates/404";
 
-import {
-  getBdmTable
-} from "../../pages/api/tables/index"
-
 import StarIcon from "../../public/img/icons/starIcon";
 import FrequencyIcon from "../../public/img/icons/frequencyIcon";
 import PartitionIcon from "../../public/img/icons/partitionIcon";
@@ -45,7 +41,8 @@ export default function BdmTablePage({ id }) {
 
   const fetchBdmTable = async () => {
     try {
-      const result = await getBdmTable(id)
+      const result = await fetch(`/api/tables/getBdmTable?p=${btoa(id)}`, { method: "GET" })
+        .then(res => res.json())
       setResource(result)
     } catch (error) {
       setIsError(error)

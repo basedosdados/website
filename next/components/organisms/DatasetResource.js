@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 
 import { FilterAccordion } from "../atoms/FilterAccordion";
+
 import BdmTablePage from "./BdmTablePage";
 import RawDataSourcesPage from "./RawDataSourcesPage";
 import InformationRequestPage from "./InformationRequestPage";
