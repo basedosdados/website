@@ -12,19 +12,12 @@ import {
   HStack,
   Checkbox,
   useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
   ModalCloseButton,
-  ModalBody,
-  ModalFooter,
   UnorderedList,
   ListItem,
   Badge,
   Grid,
   GridItem,
-  Skeleton,
   SkeletonCircle,
   SkeletonText,
   Popover,
@@ -37,9 +30,9 @@ import {
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import cookies from 'js-cookie';
+import { serialize } from 'cookie';
 import { MainPageTemplate } from "../../components/templates/main";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
-import { removeSubscription } from "../api/stripe";
 import BigTitle from "../../components/atoms/BigTitle";
 import SectionTitle from "../../components/atoms/SectionTitle";
 import RoundedButton from "../../components/atoms/RoundedButton";
@@ -49,25 +42,16 @@ import Link from "../../components/atoms/Link";
 import BodyText from "../../components/atoms/BodyText";
 import { CardPrice } from "../precos";
 import PaymentSystem from "../../components/organisms/PaymentSystem";
-import { getUserDataJson, checkUserInfo, cleanUserInfo } from "../../utils";
 import ImageCrop from "../../components/molecules/ImgCrop";
+import { cleanString } from "../../utils";
 
 import {
-  getUser,
-  getSimpleToken,
-  getFullUser,
-  updateProfile,
-  refreshToken,
-  updatePassword,
-  updateUser,
-  deleteAccount,
-  deletePictureProfile
-} from "../api/user";
-
-import {
-  getSubscriptionActive,
-  getUserGetSubscription
-} from "../api/stripe"
+  LabelTextForm,
+  TitleTextForm,
+  SkStack,
+  ExtraInfoTextForm,
+  ModalGeneral
+} from "../../components/molecules/uiUserPage";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import PenIcon from "../../public/img/icons/penIcon";
@@ -85,24 +69,13 @@ import ErrIcon from "../../public/img/icons/errIcon";
 import stylesPS from "../../styles/paymentSystem.module.css";
 
 export async function getServerSideProps(context) {
-  const { req } = context
+  const { req, res } = context
   let user = null
 
   if(req.cookies.userBD) user = JSON.parse(req.cookies.userBD)
 
-  if (checkUserInfo(user)) {
-    return {
-      redirect: {
-        destination: "/user/login",
-        permanent: false,
-      }
-    }
-  }
-
-  const fullUser = await getFullUser(user?.email)
-
-  if(fullUser?.errors?.length > 0) {
-    cleanUserInfo()
+  if (user === null || Object.keys(user).length < 0) {
+    res.setHeader('Set-Cookie', serialize('token', '', {maxAge: -1, path: '/', }))
 
     return {
       redirect: {
@@ -111,113 +84,61 @@ export async function getServerSideProps(context) {
       }
     }
   }
+
+  const validateTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/validateToken?p=${btoa(req.cookies.token)}`, {method: "GET"})
+  const validateToken = await validateTokenResponse.json()
+
+    if(validateToken.error) {
+      const refreshTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/refreshToken?p=${btoa(req.cookies.token)}`, {method: "GET"})
+      const refreshToken = await refreshTokenResponse.json()
+
+    if(refreshToken.error) {
+      res.setHeader('Set-Cookie', serialize('token', '', {maxAge: -1, path: '/', }))
+      res.setHeader('Set-Cookie', serialize('userBD', '', { maxAge: -1, path: '/', }))
+
+      return {
+        redirect: {
+          destination: "/user/login",
+          permanent: false,
+        }
+      }
+    }
+  }
+
+  const reg = new RegExp("(?<=:).*")
+  const [ id ] = reg.exec(user.id)
+
+  const getUserResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/getUser?p=${btoa(id)}&q=${btoa(req.cookies.token)}`, {method: "GET"})
+  const getUser = await getUserResponse.json()
+
+  if(getUser.errors) {
+    res.setHeader('Set-Cookie', serialize('token', '', {maxAge: -1, path: '/', }))
+    res.setHeader('Set-Cookie', serialize('userBD', '', { maxAge: -1, path: '/', }))
+
+    return {
+      redirect: {
+        destination: "/user/login",
+        permanent: false,
+      }
+    }
+  }
+
+  const userDataString = JSON.stringify(getUser)
+  res.setHeader('Set-Cookie', serialize('userBD', userDataString, { maxAge: 60 * 60 * 24 * 7, path: '/'}))
 
   return {
     props: {
-      fullUser
+      getUser
     }
   }
-}
-
-function LabelTextForm ({ text, ...props }) {
-  return (
-    <FormLabel
-      color="#252A32"
-      fontFamily="ubuntu"
-      letterSpacing="0.2px"
-      fontSize="16px"
-      fontWeight="400"
-      lineHeight="16px"
-      {...props}
-    >{text}</FormLabel>
-  )
-}
-
-function TitleTextForm ({ children, ...props }) {
-  return (
-    <Text
-      color="#252A32"
-      fontFamily="ubuntu"
-      letterSpacing="0.2px"
-      fontSize="16px"
-      fontWeight="400"
-      lineHeight="16px"
-      marginBottom="8px"
-      {...props}
-    >{children}</Text>
-  )
-}
-
-function SkStack ({ isLoaded, children, ...props }) {
-  return (
-    <Skeleton
-      height="40px"
-      width="100%"
-      borderRadius="12px"
-      startColor="#F0F0F0"
-      endColor="#F3F3F3"
-      isLoaded={isLoaded}
-      fadeDuration={2}
-      {...props}
-    >
-      {children}
-    </Skeleton>
-  )
-}
-
-function ExtraInfoTextForm ({children, ...props}) {
-  return (
-    <Text
-      color="#7D7D7D"
-      fontFamily="ubuntu"
-      letterSpacing="0.3px"
-      fontSize="12px"
-      fontWeight="400"
-      lineHeight="16px"
-      {...props}
-    >{children}</Text>
-  )
-}
-
-function ModalGeneral ({
-  children,
-  isOpen,
-  onClose,
-  isCentered = true,
-  propsModalContent,
-  classNameBody
-}) {
-  return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered={isCentered} margin="24px !important">
-      <ModalOverlay/>
-      <ModalContent
-        margin="24px"
-        minWidth={isMobileMod() ? "auto" : "536px"}
-        boxSizing="content-box"
-        padding="32px"
-        borderRadius="20px"
-        {...propsModalContent}
-      >
-        <ModalHeader padding="0">
-          {children[0]}
-        </ModalHeader>
-
-        <ModalBody padding="0" className={classNameBody}>
-          {children[1]}
-        </ModalBody>
-
-        <ModalFooter padding="0" width={isMobileMod() ? "100%" : "auto"}>
-          {children[2]}
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
-  )
 }
 
 // Sections Of User Page
 const ProfileConfiguration = ({ userInfo }) => {
   const [isLoading, setIsLoading] = useState(true)
+  const [isImgLoading, setIsImgLoading] = useState(false)
   const [formData, setFormData] = useState({})
+  const [pictureProfile, setPictureProfile] = useState("")
   const [errors, setErrors] = useState({})
   const menuAvatar = useDisclosure()
   const pictureModal = useDisclosure()
@@ -231,17 +152,22 @@ const ProfileConfiguration = ({ userInfo }) => {
       firstName: userInfo?.firstName,
       lastName: userInfo?.lastName || "",
       isEmailVisible: userInfo?.isEmailVisible,
-      picture: userInfo?.picture || "",
       website: userInfo?.website || "",
       github: userInfo?.github || "",
       twitter: userInfo?.twitter || "",
       linkedin: userInfo?.linkedin || ""
     })
 
+    setPictureProfile(userInfo?.picture || "")
+
     setTimeout(() => {
       setIsLoading(false)
     }, [1000])
   }, [userInfo])
+
+  useEffect(() => {
+    setIsImgLoading(isLoading)
+  }, [isLoading])
 
   function handleInputChange (e) {
     setFormData((prevState) => ({
@@ -264,18 +190,45 @@ const ProfileConfiguration = ({ userInfo }) => {
     if (!formData.firstName) {
       validationErrors.firstName = "Seu nome é um campo obrigatorio."
     }
+    if(/\s/.test(formData.website)) {
+      validationErrors.website = "Não pode haver espaçamento nesse campo."
+    }
+    if(/\s/.test(formData.github)) {
+      validationErrors.github = "Não pode haver espaçamento nesse campo."
+    }
+    if(/\s/.test(formData.twitter)) {
+      validationErrors.twitter = "Não pode haver espaçamento nesse campo."
+    }
+    if(/\s/.test(formData.linkedin)) {
+      validationErrors.linkedin = "Não pode haver espaçamento nesse campo."
+    }
+    if (formData.website) {
+      if(!formData.website.startsWith("http")) validationErrors.website = "Informe uma URL válida."
+    }
+
     setErrors(validationErrors)
 
-    if (Object.keys(validationErrors).length > 0) return
+    if (Object.keys(validationErrors).length > 0) {
+      return setIsLoading(false)
+    } else {
+      const reg = new RegExp("(?<=:).*")
+      const [ id ] = reg.exec(userInfo?.id)
+      const form = {...formData, id: id }
 
-    const reg = new RegExp("(?<=:).*")
-    const [ id ] = reg.exec(userInfo?.id)
-    const form = {...formData, id: id}
+      const result = await fetch(`/api/user/updateProfile?p=${btoa(form.id)}&f=${btoa(cleanString(form.firstName))}&l=${btoa(cleanString(form?.lastName || "") || "null")}&e=${btoa(form?.isEmailVisible || "false")}&w=${btoa(form?.website || "null")}&g=${btoa(form?.github || "null")}&t=${btoa(form?.twitter || "null")}&li=${btoa(form?.linkedin || "null")}`, { method: "GET" })
+        .then(res => res.json())
 
-    const result = await updateProfile(form)
+      if(result.errors.length > 0) {
+        result.errors.map((elm) => {
+          console.error(`Campo ${elm.field}: ${elm.messages}`)
+        })
+      }
 
-    if(result?.errors?.length === 0) return location.reload(true)
-    setIsLoading(false)
+      const userData = await fetch(`/api/user/getUser?p=${btoa(id)}`, { method: "GET" })
+        .then(res => res.json())
+      cookies.set('userBD', JSON.stringify(userData))
+      setIsLoading(false)
+    }
   }
 
   const handleImageChange = (event) => {
@@ -298,13 +251,17 @@ const ProfileConfiguration = ({ userInfo }) => {
   }
 
   async function hanlderRemovePicture() {
+    setIsImgLoading(true)
+    menuAvatar.onClose()
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(userInfo.id)
 
-    const res = await deletePictureProfile(id)
+    const res = await fetch(`/api/user/deletePictureProfile?p=${btoa(id)}`, {method: "GET"})
+      .then(res => res.json())
 
     if(res?.ok === true) {
-      const userData = await getUser(userInfo.email)
+      const userData = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
+        .then(res => res.json())
       cookies.set('userBD', JSON.stringify(userData))
       window.location.reload()
     }
@@ -322,6 +279,8 @@ const ProfileConfiguration = ({ userInfo }) => {
       spacing={0}
       gap={isMobileMod() ? "40px" : "80px"}
     >
+      <Box display={isImgLoading ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
+
       <ImageCrop
         isOpen={pictureModal.isOpen}
         onClose={pictureModal.onClose}
@@ -402,7 +361,7 @@ const ProfileConfiguration = ({ userInfo }) => {
           </SkeletonText>
         </FormControl>
 
-        <FormControl>
+        <FormControl isInvalid={!!errors.website}>
           <LabelTextForm text="URL"/>
           <SkStack isLoaded={!isLoading}>
             <InputForm
@@ -419,63 +378,81 @@ const ProfileConfiguration = ({ userInfo }) => {
               _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
             />
           </SkStack>
+          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+            <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.website}
+          </FormErrorMessage>
         </FormControl>
         
         <Stack>
           <LabelTextForm text="Redes sociais"/>
-          <HStack spacing="8px" margin="0 0 8px 0 !important">
-            <GithubIcon width="24px" height="24px" fill="#D0D0D0"/>
-            <SkStack isLoaded={!isLoading}>
-              <InputForm
-                id="github"
-                name="github"
-                value={formData.github}
-                onChange={handleInputChange}
-                placeholder="Link para o perfil no GitHub"
-                fontFamily="ubuntu"
-                height="40px"
-                fontSize="14px"
-                borderRadius="16px"
-                _placeholder={{color: "#A3A3A3"}}
-              />
-            </SkStack>
-          </HStack>
+          <FormControl isInvalid={!!errors.github}>
+            <HStack spacing="8px" margin="0 0 8px 0 !important">
+              <GithubIcon width="24px" height="24px" fill="#D0D0D0"/>
+              <SkStack isLoaded={!isLoading}>
+                <InputForm
+                  id="github"
+                  name="github"
+                  value={formData.github}
+                  onChange={handleInputChange}
+                  placeholder="Link para o perfil no GitHub"
+                  fontFamily="ubuntu"
+                  height="40px"
+                  fontSize="14px"
+                  borderRadius="16px"
+                  _placeholder={{color: "#A3A3A3"}}
+                />
+              </SkStack>
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+                <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.github}
+              </FormErrorMessage>
+            </HStack>
+          </FormControl>
 
-          <HStack spacing="8px" margin="0 0 8px 0 !important">
-            <TwitterIcon width="24px" height="24px" fill="#D0D0D0"/>
-            <SkStack isLoaded={!isLoading}>
-              <InputForm
-                id="twitter"
-                name="twitter"
-                value={formData.twitter}
-                onChange={handleInputChange}
-                placeholder="Link para o perfil no Twitter"
-                fontFamily="ubuntu"
-                height="40px"
-                fontSize="14px"
-                borderRadius="16px"
-                _placeholder={{color: "#A3A3A3"}}
-              />
-            </SkStack>
-          </HStack>
+          <FormControl isInvalid={!!errors.twitter}>
+            <HStack spacing="8px" margin="0 0 8px 0 !important">
+              <TwitterIcon width="24px" height="24px" fill="#D0D0D0"/>
+              <SkStack isLoaded={!isLoading}>
+                <InputForm
+                  id="twitter"
+                  name="twitter"
+                  value={formData.twitter}
+                  onChange={handleInputChange}
+                  placeholder="Link para o perfil no Twitter"
+                  fontFamily="ubuntu"
+                  height="40px"
+                  fontSize="14px"
+                  borderRadius="16px"
+                  _placeholder={{color: "#A3A3A3"}}
+                />
+              </SkStack>
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+                <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.twitter}
+              </FormErrorMessage>
+            </HStack>
+          </FormControl>
 
-          <HStack spacing="8px"  margin="0 !important">
-            <LinkedinIcon width="24px" height="24px" fill="#D0D0D0"/>
-            <SkStack isLoaded={!isLoading}>
-              <InputForm
-                id="linkedin"
-                name="linkedin"
-                value={formData.linkedin}
-                onChange={handleInputChange}
-                placeholder="Link para o perfil no LinkedIn"
-                fontFamily="ubuntu"
-                height="40px"
-                fontSize="14px"
-                borderRadius="16px"
-                _placeholder={{color: "#A3A3A3"}}
-              />
-            </SkStack>
-          </HStack>
+          <FormControl isInvalid={!!errors.linkedin}>
+            <HStack spacing="8px"  margin="0 !important">
+              <LinkedinIcon width="24px" height="24px" fill="#D0D0D0"/>
+              <SkStack isLoaded={!isLoading}>
+                <InputForm
+                  id="linkedin"
+                  name="linkedin"
+                  value={formData.linkedin}
+                  onChange={handleInputChange}
+                  placeholder="Link para o perfil no LinkedIn"
+                  fontFamily="ubuntu"
+                  height="40px"
+                  fontSize="14px"
+                  borderRadius="16px"
+                  _placeholder={{color: "#A3A3A3"}}
+                />
+              </SkStack>
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
+                <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.linkedin}
+              </FormErrorMessage>
+            </HStack>
+          </FormControl>
         </Stack>
 
         <Text
@@ -494,8 +471,13 @@ const ProfileConfiguration = ({ userInfo }) => {
           width={isMobileMod() ? "100%" : "fit-content"}
           _hover={{transform: "none", opacity: 0.8}}
           onClick={() => handleUpdateProfile()}
+          isDisabled={isLoading}
         >
-          Atualizar perfil
+          {isLoading ?
+            <Spinner />
+          :
+            "Atualizar perfil"
+          }
         </RoundedButton>
       </Stack>
 
@@ -516,7 +498,7 @@ const ProfileConfiguration = ({ userInfo }) => {
           width="200px"
           startColor="#F0F0F0"
           endColor="#F3F3F3"
-          isLoaded={!isLoading}
+          isLoaded={!isImgLoading}
           fadeDuration={2}
         >
           <Box
@@ -528,7 +510,11 @@ const ProfileConfiguration = ({ userInfo }) => {
                 borderRadius="50%"
                 overflow="hidden"
               >
-                <Image width="100%" height="100%" src={formData?.picture ? formData.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}/>
+                <Image
+                  src={pictureProfile ? pictureProfile : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
+                  width="100%"
+                  height="100%"
+                />
               </Box>
 
               <Popover
@@ -629,6 +615,7 @@ const Account = ({ userInfo }) => {
   const emailModal = useDisclosure()
   const usernameModal = useDisclosure()
   const eraseModalAccount = useDisclosure()
+  const [isLoading, setIsLoading] = useState(false)
   const [confirmationWord, setConfirmationWord] = useState("")
   const [emailSent, setEmailSent] = useState(false)
   const [showPassword, setShowPassword] = useState(true)
@@ -648,38 +635,46 @@ const Account = ({ userInfo }) => {
   }
 
   async function submitUpdate() {
+    setErrors({})
     if(formData.username === "") return setErrors({username: "Nome de usuário inválido."})
     if(formData.username.includes(" ")) return setErrors({username: "Nome de usuário não pode conter espaços."})
-
+    setIsLoading(true)
+    
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(userInfo?.id)
     const form = {id: id, username: formData.username}
 
-    const result = await updateUser(form)
+    const result = await fetch(`/api/user/updateUser?p=${btoa(id)}&q=${btoa(form.username)}`, {method: "GET"})
+      .then(res => res.json())
 
     if(result?.errors?.length === 0) {
-      const userData = await getUser(userInfo.email)
+      const userData = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
+        .then(res => res.json())
       cookies.set('userBD', JSON.stringify(userData))
       window.open(`/user/${formData.username}?account`, "_self")
     }
 
     if(result?.errors?.length > 0) {
       setErrors({username: "Nome de usuário inválido ou já existe uma conta com este nome de usuário."})
+      setIsLoading(false)
     }
   }
 
   async function eraseAccount(string) {
     if(string = "deletar minha conta") {
+      setIsLoading(true)
       const reg = new RegExp("(?<=:).*")
       const [ id ] = reg.exec(userInfo.id)
 
-      const result = await deleteAccount(id)
+      const result = await fetch(`/api/user/deleteAccount?p=${btoa(id)}`, {method: "GET"})
+        .then(res => res.json())
 
       if(result?.ok === true) {
         cookies.remove('userBD', { path: '/' })
         cookies.remove('token', { path: '/' })
         return window.open("/", "_self")
       }
+      setIsLoading(false)
     }
   }
 
@@ -687,6 +682,8 @@ const Account = ({ userInfo }) => {
 
   return (
     <Stack spacing="24px">
+      <Box display={isLoading ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
+
       <ModalGeneral
         isOpen={emailModal.isOpen}
         onClose={emailModal.onClose}
@@ -901,8 +898,13 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
           borderRadius="30px"
           _hover={{transform: "none", opacity: 0.8}}
           onClick={() => submitUpdate(formData)}
+          isDisabled={isLoading}
         >
-          Atualizar nome de usuário
+          {isLoading ?
+            <Spinner />
+          :
+            "Atualizar nome de usuário"
+          }
         </RoundedButton>
       </ModalGeneral>
 
@@ -984,8 +986,13 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
             _hover={stringConfirm ? {transform: "none", opacity: 0.8} : {transform: "none"}}
             pointerEvents={stringConfirm ? "default" : "none"}
             onClick={() => eraseAccount(confirmationWord)}
+            isDisabled={isLoading}
           >
-            Deletar
+            {isLoading ?
+              <Spinner />
+            :
+              "Deletar"
+            }
           </RoundedButton>
         </Stack>
       </ModalGeneral>
@@ -1068,6 +1075,7 @@ const NewPassword = ({ userInfo }) => {
     confirmPassword: ""
   })
   const [errors, setErrors] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
 
   const [showPassword, setShowPassword] = useState(true)
   const [showNewPassword, setShowNewPassword] = useState(true)
@@ -1081,6 +1089,7 @@ const NewPassword = ({ userInfo }) => {
   }
 
   async function submitNewPassword() {
+    setIsLoading(true)
     const regexPassword = {}
     const validationErrors = {}
 
@@ -1105,6 +1114,10 @@ const NewPassword = ({ userInfo }) => {
     if (!formData.confirmPassword) {
       validationErrors.confirmPassword = "Confirmar a senha é necessário"
     }
+    if(/\s/.test(formData.confirmPassword)) {
+      validationErrors.newPassword = "As senhas inseridas não podem conter espaçamentos."
+      validationErrors.confirmPassword = "As senhas inseridas não podem conter espaçamentos."
+    }
     if(formData.confirmPassword !== formData.newPassword) {
       validationErrors.confirmPassword = "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente."
     }
@@ -1115,33 +1128,40 @@ const NewPassword = ({ userInfo }) => {
       validationErrors.password = "Por favor, insira a senha."
     }
 
-    let getTokenPassword
     if(formData.password !== "") {
-      getTokenPassword = await getSimpleToken({email: userInfo.email, password: formData.password})
-      if(getTokenPassword?.tokenAuth === null || result?.errors?.length > 0) {
+      const result = await fetch(`/api/user/getToken?a=${btoa(userInfo.email)}&q=${btoa(formData.password)}&s=${"true"}`, {method: "GET"})
+        .then(res => res.json())
+      if(result.error) {
         validationErrors.password = "A senha está incorreta. Por favor, tente novamente."
       }
     }
     setErrors(validationErrors)
 
-    if (Object.keys(validationErrors).length > 0) return
+    if (Object.keys(validationErrors).length > 0) {
+      setIsLoading(false)
+    } else {
+      const reg = new RegExp("(?<=:).*")
+      const [ id ] = reg.exec(userInfo?.id)
+  
+      const result = await fetch(`/api/user/updatePassword?b=${btoa(id)}&p=${btoa(formData.newPassword)}`, {method: "GET"})
+        .then(res => res.json())
 
-    const reg = new RegExp("(?<=:).*")
-    const [ id ] = reg.exec(userInfo?.id)
-    const form = {id: id, password: formData.newPassword, token: getTokenPassword?.tokenAuth?.token}
-
-    const result = await updatePassword(form)
-    setFormData({
-      password: "",
-      newPassword: "",
-      confirmPassword: ""
-    })
-
-    newPasswordModal.onOpen()
+      if(result?.ok === true) {
+        setFormData({
+          password: "",
+          newPassword: "",
+          confirmPassword: ""
+        })
+        newPasswordModal.onOpen()
+      }
+    }
+    setIsLoading(false)
   }
 
   return (
     <Stack spacing="24px" maxWidth="480px">
+      <Box display={isLoading ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
+
       <ModalGeneral
         isOpen={newPasswordModal.isOpen}
         onClose={newPasswordModal.onClose}
@@ -1381,8 +1401,13 @@ const NewPassword = ({ userInfo }) => {
         _hover={{transform: "none", opacity: 0.8}}
         width="fit-content"
         onClick={() => submitNewPassword()}
+        isDisabled={isLoading}
       >
-        Atualizar senha
+        {isLoading ?
+          <Spinner />
+          :
+          "Atualizar senha"
+        }
       </RoundedButton>
     </Stack>
   )
@@ -1417,7 +1442,7 @@ const PlansAndPayment = ({ userData }) => {
       resources : [{name: "Dezenas de bases de alta frequência atualizadas"}]
     },
     "bd_pro_empresas" : {
-      title: "BD Pro Empresas",
+      title: "BD Empresas",
       buttons : [{text:"Cancelar plano", onClick: () => CancelModalPlan.onOpen()}],
       resources : [{name: "Acesso para 10 contas"},
       {name: "Suporte prioritário via email e Discord"}]}
@@ -1508,32 +1533,44 @@ const PlansAndPayment = ({ userData }) => {
   }
 
   async function cancelSubscripetion() {
-    const subs = await getSubscriptionActive(userData.email)
-    const result = await removeSubscription(subs[0]?.node._id)
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(userData.id)
+
+    const subs = await fetch(`/api/stripe/getSubscriptionActive?p=${btoa(id)}`, {method: "GET"})
+      .then(res => res.json())
+    const result = await fetch(`/api/stripe/removeSubscription?p=${btoa(subs[0]?.node._id)}`, {method: "GET"})
+      .then(res => res.json())
 
     do {
-      const statusSub = await getUserGetSubscription(userData?.email)
+      const statusSub = await fetch(`/api/stripe/userGetSubscription?p=${btoa(id)}`, {method: "GET"})
+        .then(res => res.json())
       if(statusSub?.proSubscriptionStatus !== "active") {
         break
       }
       await new Promise (resolve => setTimeout(resolve ,1000))
     } while (true)
 
-    const user = await getUser(userData?.email)
+    const user = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
+      .then(res => res.json())
     cookies.set('userBD', JSON.stringify(user))
     window.location.reload()
   }
 
   async function closeModalSucess() {
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(userData.id)
+
     do {
-      const statusSub = await getUserGetSubscription(userData?.email)
+      const statusSub = await fetch(`/api/stripe/userGetSubscription?p=${btoa(id)}`, {method: "GET"})
+        .then(res => res.json())
       if(statusSub?.proSubscriptionStatus === "active") {
         break
       }
       await new Promise (resolve => setTimeout(resolve ,1000))
     } while (true)
 
-    const user = await getUser(userData?.email)
+    const user = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
+      .then(res => res.json())
     cookies.set('userBD', JSON.stringify(user))
 
     if(isLoadingH === true) return window.open("/", "_self")
@@ -1840,8 +1877,7 @@ const PlansAndPayment = ({ userData }) => {
 
           <CardPrice
             colorBanner="#252A32"
-            title="BD Pro Empresas"
-            badge="Beta"
+            title="BD Empresas"
             subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
             personConfig={{
               price: "350"
@@ -2204,34 +2240,15 @@ const Accesses = ({ userInfo }) => {
 }
 // Sections Of User Page
 
-export default function UserPage({ fullUser }) {
+export default function UserPage({ getUser }) {
   const router = useRouter()
   const { query } = router
   const [userInfo, setUserInfo] = useState({})
   const [sectionSelected, setSectionSelected] = useState(0)
 
-  async function refreshTokenValidate() {
-    const result = await refreshToken()
-
-    if(result?.data?.refreshToken?.token) {
-      const userData = await getUser(fullUser.email)
-      cookies.set('userBD', JSON.stringify(userData))
-      cookies.set('token', result.data.refreshToken.token)
-    }
-    if(result?.errors?.length > 0) {
-      cookies.remove('userBD', { path: '/' })
-      cookies.remove('token', { path: '/' })
-      window.open("/user/login", "_self")
-    }
-  }
-
   useEffect(() => {
-    refreshTokenValidate()
-  }, [])
-
-  useEffect(() => {
-    setUserInfo(fullUser)
-  }, [fullUser])
+    setUserInfo(getUser)
+  }, [getUser])
 
   const choices = [
     {bar: "Perfil público", title: "Perfil público", value: "profile", index: 0},

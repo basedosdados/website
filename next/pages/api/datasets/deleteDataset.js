@@ -23,6 +23,7 @@ export default async function deleteDataset(id) {
         `
       }
     })
+
     const data = res.data.data.DeleteDataset.ok
     return data
   } catch (error) {

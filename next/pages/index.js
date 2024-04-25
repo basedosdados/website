@@ -56,7 +56,7 @@ function Hero() {
       alignItems="center"
       width="100%"
       padding="0px 10%"
-      marginTop="56px"
+      marginTop="50px"
       zIndex="10"
       position="relative"
     >
@@ -271,10 +271,6 @@ function Products() {
                 >
                   TABELAS TRATADAS
                 </Text>
-
-                <BDLogoPlusImage
-                  widthImage="40px"
-                />
               </HStack>
               
               <SectionTitle marginTop="0 !important">Acesse dados de qualidade</SectionTitle>
@@ -342,7 +338,6 @@ function Products() {
                 backgroundColor="#252A32"
                 width="100%"
                 height="100%"
-                fontFamily="Consolas"
               >
                 <Box display="flex" flexDirection="row" position="relative" padding="6px 12px" alignItems="center">
                   <Box display="flex" flexDirection="row" gap="8px" position="absolute">

@@ -85,9 +85,8 @@ export default function CaseStudies ({
 
       <Stack
         spacing={0}
-        paddingTop={isMobileMod && "40px"}
         maxWidth="1264px"
-        margin="auto"
+        margin="50px auto auto"
       >
         {!isMobileMod &&
           <Link
@@ -103,7 +102,7 @@ export default function CaseStudies ({
 
         {isMobileMod &&
           <Display
-            margin="80px 0 48px !important"
+            margin="0 0 48px !important"
           >{title}</Display>
         }
         

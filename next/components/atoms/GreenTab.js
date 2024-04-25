@@ -1,5 +1,5 @@
 import React from "react";
-import { Tab } from "@chakra-ui/tabs";
+import { Tab } from "@chakra-ui/react";
 
 export default function GreenTab({ children, ...style }) {
   return (

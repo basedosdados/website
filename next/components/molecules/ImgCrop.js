@@ -6,7 +6,8 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  ModalCloseButton
+  ModalCloseButton,
+  Spinner
 } from '@chakra-ui/react';
 import { useState, useEffect, useRef } from 'react';
 import ReactCrop, {
@@ -16,10 +17,7 @@ import ReactCrop, {
 import cookies from 'js-cookie';
 import { isMobileMod } from '../../hooks/useCheckMobile.hook';
 
-import {
-  getUser,
-  updatePictureProfile
-} from '../../pages/api/user'
+import updatePictureProfile from '../../pages/api/user/updatePictureProfile'
 
 import SectionTitle from '../atoms/SectionTitle';
 import RoundedButton from '../atoms/RoundedButton';
@@ -32,11 +30,11 @@ export default function CropImage ({
   src,
   id,
   username,
-  email
 }) {
   const imgRef = useRef(null)
   const [completedCrop, setCompletedCrop] = useState()
   const [crop, setCrop] = useState()
+  const [isLoading, setIsLoading] = useState(false)
 
   function onImageLoad(e) {
     const { naturalWidth: width, naturalHeight: height } = e.currentTarget
@@ -63,6 +61,7 @@ export default function CropImage ({
   }, [!!isOpen])
 
   async function handlerUpdatePicture() {
+    setIsLoading(true)
     const image = imgRef.current
 
     if (!image || !completedCrop) return null
@@ -130,7 +129,8 @@ export default function CropImage ({
 
     const res = await updatePictureProfile(uid, filePic)
     if(res?.status === 200) {
-      const userData = await getUser(email)
+      const userData = await fetch(`/api/user/getUser?p=${btoa(uid)}`, { method: "GET" })
+        .then(res => res.json())
       cookies.set('userBD', JSON.stringify(userData))
       window.location.reload()
     }
@@ -203,6 +203,7 @@ export default function CropImage ({
               width={isMobileMod() ? "100%" : "fit-content"}
               _hover={{transform: "none", opacity: 0.8}}
               onClick={onClose}
+              isDisabled={isLoading}
             >
               Cancelar
             </RoundedButton>
@@ -211,8 +212,13 @@ export default function CropImage ({
               borderRadius="30px"
               _hover={{transform: "none", opacity: 0.8}}
               onClick={() => handlerUpdatePicture()}
+              isDisabled={isLoading}
             >
-              Salvar
+              {isLoading ?
+                <Spinner />
+              :
+                "Salvar"
+              }
             </RoundedButton>
           </Stack>
         </ModalFooter>

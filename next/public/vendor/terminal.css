@@ -18,7 +18,7 @@
   background: var(--color-bg);
   color: var(--color-text);
   font-size: 18px;
-  font-family: "Fira Mono", Consolas, Menlo, Monaco, "Courier New", Courier,
+  font-family: "Fira Mono", Menlo, Monaco, "Courier New", Courier,
     monospace;
   border-radius: 10px;
   padding: 75px 45px 35px;

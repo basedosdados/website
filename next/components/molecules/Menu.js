@@ -21,7 +21,7 @@ import {
   MenuList,
   MenuItem
 } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { useRouter } from "next/router"
 import cookies from "js-cookie";
 import { MenuDropdown } from "./MenuDropdown";
@@ -29,10 +29,7 @@ import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import ControlledInput from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
-import { 
-  getUserDataJson,
-  triggerGAEvent
-} from "../../utils";
+import { triggerGAEvent } from "../../utils";
 
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import BDLogoEduImage from "../../public/img/logos/bd_logo_edu";
@@ -44,9 +41,7 @@ import RedirectIcon from "../../public/img/icons/redirectIcon";
 import SettingsIcon from "../../public/img/icons/settingsIcon";
 import SignOutIcon from "../../public/img/icons/signOutIcon";
 
-function MenuDrawer({ isOpen, onClose, links }) {
-  let userData = getUserDataJson()
-
+function MenuDrawer({ userData, isOpen, onClose, links }) {
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
       <DrawerOverlay backdropFilter="blur(2px)"/>
@@ -163,9 +158,8 @@ function MenuDrawer({ isOpen, onClose, links }) {
   );
 }
 
-function MenuDrawerUser({ isOpen, onClose}) {
+function MenuDrawerUser({ userData, isOpen, onClose}) {
   const router = useRouter()
-  let userData = getUserDataJson()
 
   const links = [
     {name: "Perfil público", value: "profile"},
@@ -646,10 +640,8 @@ function SearchInputUser () {
   )
 }
 
-function DesktopLinks({ links, position = false, path, userTemplate = false }) {
+function DesktopLinks({ userData, links, position = false, path, userTemplate = false }) {
   const [statusSearch, setStatusSearch] = useState(false)
-
-  let userData = getUserDataJson()
 
   const searchStatus = (elm) => {
     setStatusSearch(elm.status)
@@ -795,23 +787,27 @@ function DesktopLinks({ links, position = false, path, userTemplate = false }) {
 export default function MenuNav({ simpleTemplate = false, userTemplate = false }) {
   const router = useRouter()
   const { route } = router
+  const userBD = useMemo(() => cookies.get("userBD") || null, [cookies])
+
   const menuDisclosure = useDisclosure()
   const menuUserMobile = useDisclosure()
   const divRef = useRef()
-  const bannerRef = useRef()
   const [isScrollDown, setIsScrollDown] = useState(false)
-  const [menuMobileMargin, setMenuMobileMargin] = useState(0)
-  const [isMobile, setIsMobile] = useState(false)
-  const [userData, setUserData] = useState({})
-
-  async function userInfo() {
-    const res = getUserDataJson()
-    setUserData(res)
-  }
+  const [userData, setUserData] = useState(null)
 
   useEffect(() => {
-    userInfo()
-  }, [])
+    let userInfo = userBD
+    if(userInfo !== null && userInfo !== "undefined") {
+      const res = JSON.parse(userInfo)
+      setUserData({
+        email: res.email,
+        username: res.username,
+        picture: res.picture || "",
+      })
+    } else {
+      setUserData(null)
+    }
+  }, [userBD])
 
   const links = {
     Dados: "/dataset",
@@ -842,8 +838,8 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
 
   useEffect(() => {
     document.addEventListener("scroll", () => {
-      if (window.scrollY >= 425) setIsScrollDown(true)
-      if (window.scrollY <= 425) setIsScrollDown(false)
+      if (window.scrollY >= 225) setIsScrollDown(true)
+      if (window.scrollY <= 225) setIsScrollDown(false)
 
       if (!divRef.current || !divRef.current.style) return;
       if (window.scrollY <= 30) divRef.current.style.boxShadow = "none";
@@ -853,49 +849,9 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     });
   }, [divRef.current])
 
-  useEffect(() => {
-    const marginTopMenuMobile = bannerRef.current.clientHeight
-    if(useCheckMobile()) setIsMobile(true)
-    setMenuMobileMargin(marginTopMenuMobile)
-  }, [bannerRef.current])
-
   return (
     <>
-      <Box
-        display={!!userData?.email || simpleTemplate || userTemplate ? "none" : "block"}
-        ref={bannerRef}
-        position="fixed"
-        backgroundColor="#252A32"
-        width="100%"
-        height={isScrollDown ? "0" : "fit-content"}
-        padding={{ base: isMobile ? "12px 24px" : "12px 45px", lg: "12px 28px" }}
-        overflow="hidden"
-        zIndex={98}
-      >
-        <Text
-          width="100%"
-          transition="0.5s"
-          fontSize="15px"
-          letterSpacing="0.3px"
-          color="#FFF"
-          fontWeight="400"
-          fontFamily="ubuntu"
-          _hover={{opacity: 1}}
-          lineHeight={useCheckMobile() ? "20px" : "16px"}
-          onClick={() => window.open("https://info.basedosdados.org/bd-pro", "_blank")}
-        >
-          <Box
-            maxWidth="1264px"
-            cursor="pointer"
-            margin="0 auto"
-            _hover={{opacity: 0.7}}
-          >
-            Assine a BD Pro e tenha acesso a conjuntos exclusivos e dados com alta frequência de atualização. Versão Beta já disponível <RedirectIcon position="relative" top="-2px" left="4px" fill="#FFF"/>
-          </Box>
-        </Text>
-      </Box>
-
-      <MenuDrawer links={links} {...menuDisclosure} />
+      <MenuDrawer userData={userData} links={links} {...menuDisclosure} />
 
       <Box
         ref={divRef}
@@ -905,20 +861,19 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         left="0px"
         backgroundColor="#FFFFFF"
         padding="16px 28px"
-        marginTop={!!userData?.email || simpleTemplate || userTemplate ? "0" : isScrollDown ? "0" : { base: `${menuMobileMargin}px` , lg: "40px" }}
         zIndex="99"
         transition="0.5s"
         as="nav"
       >
         <HStack
-          justifyContent={!!userData?.email || simpleTemplate || userTemplate ? "flex-start" : { base: "center", lg: "flex-start" }}
+          justifyContent={simpleTemplate || userTemplate ? "flex-start" : { base: "center", lg: "flex-start" }}
           width="100%"
           height="40px"
           maxWidth="1264px"
           margin="0 auto"
           spacing={6}
         >
-          <Box display={!!userData?.email || simpleTemplate || userTemplate ? "none" : { base: "flex", lg: "none" }}>
+          <Box display={simpleTemplate || userTemplate ? "none" : { base: "flex", lg: "none" }}>
             <FarBarsIcon
               alt="menu de navegação"
               position="absolute"
@@ -955,6 +910,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
             <></>  
             :
             <DesktopLinks
+              userData={userData}
               links={links}
               position={isScrollDown}
               path={route}
@@ -965,9 +921,17 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
           {userTemplate && isMobileMod() && <SearchInputUser />}
 
           {useCheckMobile() && userData &&
-            <MenuUser userData={userData} onOpen={menuUserMobile.onOpen} onClose={menuUserMobile.onClose}/>
+            <MenuUser
+              userData={userData}
+              onOpen={menuUserMobile.onOpen}
+              onClose={menuUserMobile.onClose}
+            />
           }
-          <MenuDrawerUser isOpen={menuUserMobile.isOpen} onClose={menuUserMobile.onClose}/>
+          <MenuDrawerUser 
+            userData={userData}
+            isOpen={menuUserMobile.isOpen}
+            onClose={menuUserMobile.onClose}
+          />
         </HStack>
       </Box>
     </>

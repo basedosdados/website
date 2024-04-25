@@ -73,17 +73,13 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
 
     const API_URL = `${process.env.NEXT_PUBLIC_API_URL}`
 
-    const getIdUser = await axios({
-      url: `${API_URL}/api/v1/graphql`,
-      method: "POST",
-      data: {
-        query: `query { allAccount (email: "${value}") {edges{node{id}}} }`
-      }
-    })
-    if(getIdUser.data.data.allAccount.edges.length === 0) return setError("Endereço de e-mail inválido.")
+    const getIdUser = await fetch(`/api/user/getIdUser?p=${btoa(value)}`, {method: "GET"})
+      .then(res => res.json())
+
+    if(getIdUser.error) return setError("Endereço de e-mail inválido.")
 
     const reg = new RegExp("(?<=:).*")
-    const [ id ] = reg.exec(getIdUser?.data?.data?.allAccount?.edges[0]?.node?.id)
+    const [ id ] = reg.exec(getIdUser?.id)
 
     try {
       await axios.post(`${API_URL}/account/password_reset/${btoa(id)}/`)
@@ -127,6 +123,10 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
     }
     if (!formData.confirmPassword) {
       validationErrors.confirmPassword = "Confirmar a senha é necessário"
+    }
+    if(/\s/.test(formData.confirmPassword)) {
+      validationErrors.password = "As senhas inseridas não podem conter espaçamentos."
+      validationErrors.confirmPassword = "As senhas inseridas não podem conter espaçamentos."
     }
     if(formData.confirmPassword !== formData.password) {
       validationErrors.confirmPassword = "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente."

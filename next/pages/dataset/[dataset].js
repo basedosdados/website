@@ -102,8 +102,7 @@ export default function DatasetPage ({
       </Head>
 
       <VStack
-        paddingTop={{ base: isMobileMod() ? "160px" : "140px", lg: "0" }}
-        margin="auto"
+        margin="40px auto auto"
         width={{ base: "90vw", lg: "80vw" }}
         maxWidth="1264px"
       >
