@@ -15,11 +15,6 @@ import { useDisclosure } from "@chakra-ui/hooks";
 import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
 
-import {
-  getAllPeople,
-  getCareerPeople,
-} from "./api/team";
-
 import Display from "../components/atoms/Display";
 import RoundedButton from "../components/atoms/RoundedButton";
 import SectionTitle from "../components/atoms/SectionTitle";
@@ -37,7 +32,9 @@ import RedirectIcon from "../public/img/icons/redirectIcon";
 import styles from "../styles/quemSomos.module.css";
 
 export async function getServerSideProps() {
-  const data = await getAllPeople()
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/team/getAllPeople`, {method: "GET"})
+    .then(res => res.json())
+  const data = response
 
   return {
     props: {
@@ -325,7 +322,8 @@ export default function QuemSomos({ data }) {
       return setPeople(allPeople)
     } else {
       setFilterTeam(elm)
-      const result = await getCareerPeople(elm)
+      const result = await fetch(`/api/team/getCareerPeople?team=${elm}`, {method: "GET"})
+        .then(res => res.json())
       setPeople(sortPeople(result))
     }
   }

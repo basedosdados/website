@@ -209,37 +209,17 @@ export function removeEmpty(obj) {
   );
 }
 
-export function getUserDataJson() {
-  let userData = cookies.get("userBD") || null
-
-  if(userData !== null && userData !== "undefined") userData = JSON.parse(userData)
-  if(userData === "undefined" || userData === null) {
-    cookies.remove('userBD', { path: '/' })
-    cookies.remove('token', { path: '/' })
-  }
-
-  return userData
-}
-
-export function checkUserInfo(user) {
-  if(user === "undefined" || user === null) {
-    cookies.remove('userBD', { path: '/' })
-    cookies.remove('token', { path: '/' })
-    return true
-  }
-  return false
-}
-
-export function cleanUserInfo() {
-  cookies.remove('userBD', { path: '/' })
-  cookies.remove('token', { path: '/' })
-  return true
-}
-
 export function triggerGAEvent(category, action) {
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({
     'event': `${category}`,
     'value': `${action}`
   });
+}
+
+export function cleanString(string) {
+  const newString = string.trim()
+  const returnString = newString.replace(/\s+/g, ' ')
+
+  return returnString
 }

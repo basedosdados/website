@@ -3,7 +3,7 @@ import { cleanGraphQLResponse } from "../../../utils";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-export default async function getBdmTable(id) {
+async function getBdmTable(id) {
   try {
     const res = await axios({
       url: API_URL,
@@ -112,22 +112,8 @@ export default async function getBdmTable(id) {
                 numberRows
                 numberColumns
                 partitions
-                publishedBy {
-                  firstName
-                  lastName
-                  website
-                  twitter
-                  github
-                  email
-                }
-                dataCleanedBy {
-                  firstName
-                  lastName
-                  website
-                  twitter
-                  github
-                  email
-                }
+                publishedByInfo
+                dataCleanedByInfo
                 observationLevels {
                   edges {
                     node {
@@ -155,9 +141,19 @@ export default async function getBdmTable(id) {
         variables: null
       }
     })
-    const data = res?.data?.data?.allTable?.edges[0]?.node
-    return cleanGraphQLResponse(data)
+    const data = res.data
+    return data
   } catch (error) {
     console.error(error)
+    return "err"
   }
+}
+
+export default async function handler(req, res) {
+  const result = await getBdmTable(req.query.p)
+
+  if(result.errors) return res.status(500).json({error: result.errors})
+  if(result === "err") return res.status(500).json({error: "err"})
+
+  res.status(200).json(cleanGraphQLResponse(result?.data?.allTable?.edges[0]?.node))
 }

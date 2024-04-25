@@ -1,5 +1,9 @@
-import { Avatar } from "@chakra-ui/avatar";
-import { HStack, Text, VStack } from "@chakra-ui/layout";
+import { 
+  Avatar,
+  HStack,
+  Text,
+  VStack
+} from "@chakra-ui/react";
 
 export function NamedAvatar({ src, name, position, ...props }) {
   return (

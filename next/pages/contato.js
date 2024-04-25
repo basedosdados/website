@@ -52,12 +52,11 @@ export default function Contato({ pages }) {
 
       <Stack
         gridGap={{base:"40px", lg: "100px"}}
-        paddingTop={{ base: "120px", lg: "0px" }}
         width="100%"
         maxWidth="1264px"
         justify="space-between"
         direction={{ base: "column", lg: "row" }}
-        margin="auto"
+        margin="50px auto auto"
       >
         <VStack maxWidth={{ base: "100%", lg: "45%" }}>
           <Box contentAlign="flex-start">

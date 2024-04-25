@@ -1,19 +1,13 @@
 import cookies from "js-cookie";
-import { validateToken } from "../pages/api/user";
 
-async function isJWTInvalid(token) {
-  if (!token) return true
-
+async function isJWTInvalid() {
   try {
-    const decoded = await validateToken(token)
-    if (decoded?.payload?.email) {
-      return false
-    }
+    const decoded = await fetch(`/api/user/validateToken`, {method: "GET"})
+      .then(res => res.json())
 
-    return true;
+    return decoded.success
   } catch (error) {
-    console.log(error)
-
+    console.error(error)
     return true
   }
 }
@@ -22,7 +16,7 @@ async function isJWTInvalid(token) {
 export default async function authUser(context, destiny) {
   const { req, res } = context
 
-  const invalidToken = await isJWTInvalid(req.cookies.token)
+  const invalidToken = await isJWTInvalid()
 
   if (invalidToken) {
     cookies.remove('userBD', { path: '/' })

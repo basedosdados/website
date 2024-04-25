@@ -1,20 +1,18 @@
 import axios from "axios";
-import cookies from "js-cookie";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-export default async function updateProfile({
+async function updateProfile({
   id,
   firstName,
-  lastName =  "",
+  lastName = "",
   isEmailVisible = false,
   website = "",
   github = "",
   twitter = "",
   linkedin = ""
-}) {
-  let token = cookies.get("token") || ""
-
+}, token
+) {
   try {
     const res = await axios({
       url: API_URL,
@@ -46,9 +44,39 @@ export default async function updateProfile({
         }`
       }
     })
-    const data = res.data.data.CreateUpdateAccount
+
+    const data = res?.data?.data?.CreateUpdateAccount
     return data
   } catch (error) {
     console.error(error)
   }
+}
+
+export default async function handler(req, res) {
+  const token = req.cookies.token
+
+  const { p, f, l, e, w, g, t, li } = req.query
+
+  const object = {
+    id:atob(p),
+    firstName:atob(f),
+    lastName:atob(l),
+    isEmailVisible:atob(e),
+    website:atob(w),
+    github:atob(g),
+    twitter:atob(t),
+    linkedin:atob(li),
+  }
+
+  function replaceNullsWithEmpty(obj) {
+    for (let [key, value] of Object.entries(obj)) {
+      if (value === "null" || value === null) {
+        obj[key] = ""
+      }
+    }
+    return obj
+  }
+
+  const result = await updateProfile(replaceNullsWithEmpty(object), token)
+  res.status(200).json(result)
 }

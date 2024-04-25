@@ -14,10 +14,7 @@ import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { 
-  getUserDataJson,
-  triggerGAEvent
-} from "../../utils";
+import { triggerGAEvent } from "../../utils";
 
 import {
   getSearchDatasets
@@ -89,8 +86,6 @@ export default function SearchPage({ pages }) {
   const [count, setCount] = useState(0)
   const [pageInfo, setPageInfo] = useState({})
   const [isLoading, setIsLoading] = useState(true)
-
-  let userData = getUserDataJson()
 
   // const [order, setOrder] = useState("score")
 
@@ -316,15 +311,13 @@ export default function SearchPage({ pages }) {
   }
 
   const DatabaseCard = ({ data }) => {
-    const organizationTypeof = typeof data.organization === "object"
-
     return (
       <Database
         id={data.id}
         themes={data?.themes}
         name={data?.name || "Conjunto sem nome"}
-        temporalCoverageText={data?.temporal_coverage[0] || ""}
-        organization={data.organization[0]}
+        temporalCoverageText={data?.temporal_coverages[0] || ""}
+        organization={data.organizations[0]}
         tables={{
           id: data?.first_table_id,
           number: data?.n_tables
@@ -420,7 +413,7 @@ export default function SearchPage({ pages }) {
           boxShadow: "0 1px 3px 0.5 rgba(100 93 103 /0.16) !important",
           _placeholder:{color:"#6F6F6F"}
         }}
-        marginTop={{ base: isMobileMod() ? "160px" : "140px", lg: "46px" }}
+        marginTop={isMobileMod() ? "60px" : "46px" }
       />
 
       <Stack
@@ -496,7 +489,7 @@ export default function SearchPage({ pages }) {
               },
               {
                 key: "closed_data",
-                name: "Pro",
+                name: "Pagos",
                 count: aggregations?.contains_closed_data?.filter(elm => elm.key === 1)[0]?.count || 0
               }
             ]}
@@ -675,7 +668,7 @@ export default function SearchPage({ pages }) {
           width="100%"
           paddingLeft={isMobileMod() ? "" : "40px !important"}
         >
-          {showEmptyState && !resource ?
+          {showEmptyState && resource.length === 0 ?
             <DataProposalBox 
               image= {true}
               display= "Ooops..."
@@ -696,18 +689,6 @@ export default function SearchPage({ pages }) {
                 {count || "..."} {`conjunto${count > 1 ? "s": ""} encontrado${count > 1 ? "s": ""}`}
                 {query.q ? ` para ${query.q}` : ""}
               </Heading>
-
-              {userData?.isAdmin && 
-                <RoundedButton
-                  width="fit-content"
-                  padding="20px"
-                  onClick={() => window.open("/dataset/edit", "_self")}
-                  marginLeft="auto"
-                  _hover={{transform: "none", opacity: "0.8"}}
-                >
-                  Criar Conjunto
-                </RoundedButton>
-              }
             </Flex>
 
             {/* Tags container */}

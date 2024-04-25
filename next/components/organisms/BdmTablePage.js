@@ -20,10 +20,6 @@ import BaseResourcePage from "../molecules/BaseResourcePage";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import FourOFour from "../templates/404";
 
-import {
-  getBdmTable
-} from "../../pages/api/tables/index"
-
 import StarIcon from "../../public/img/icons/starIcon";
 import FrequencyIcon from "../../public/img/icons/frequencyIcon";
 import PartitionIcon from "../../public/img/icons/partitionIcon";
@@ -45,7 +41,8 @@ export default function BdmTablePage({ id }) {
 
   const fetchBdmTable = async () => {
     try {
-      const result = await getBdmTable(id)
+      const result = await fetch(`/api/tables/getBdmTable?p=${id}`, { method: "GET" })
+        .then(res => res.json())
       setResource(result)
     } catch (error) {
       setIsError(error)
@@ -207,7 +204,7 @@ export default function BdmTablePage({ id }) {
 
       <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Descrição</Subtitle>
-        <SectionText>
+        <SectionText whiteSpace="pre-wrap">
           {resource.description || "Nenhuma descrição fornecida."}
         </SectionText>
       </VStack>
@@ -291,7 +288,7 @@ export default function BdmTablePage({ id }) {
               >Publicação por</Text>
               <Box display="flex" alignItems="center" gridGap="4px">
                 <PublishedOrDataCleanedBy
-                  resource={resource?.publishedBy || "Não listado"}
+                  resource={resource?.publishedByInfo || "Não listado"}
                 />
               </Box>
             </Box>
@@ -310,7 +307,7 @@ export default function BdmTablePage({ id }) {
               >Tratamento por</Text>
               <Box display="flex" alignItems="center" gridGap="4px">
                 <PublishedOrDataCleanedBy
-                  resource={resource?.dataCleanedBy || "Não listado"}
+                  resource={resource?.dataCleanedByInfo || "Não listado"}
                 />
               </Box>
             </Box>

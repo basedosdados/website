@@ -204,7 +204,7 @@ function CardThemes ({ responsive, datasetsCards = [], loading }) {
               <DatabaseCard
                 name={elm?.name}
                 categories={elm?.themes}
-                organization={elm?.organization[0]}
+                organization={elm?.organizations?.[0]}
                 tags={elm?.tags}
                 tables={{
                   id: elm?.first_table_id || elm?.first_closed_table_id,

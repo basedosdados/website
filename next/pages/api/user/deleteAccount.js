@@ -1,11 +1,8 @@
 import axios from "axios";
-import cookies from "js-cookie";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-export default async function deleteAccount(id) {
-  let token = cookies.get("token") || ""
-
+async function deleteAccount(id, token) {
   try {
     const res = await axios({
       url: API_URL,
@@ -20,9 +17,17 @@ export default async function deleteAccount(id) {
         }`
       }
     })
-    const data = res.data.data.DeleteAccount
+
+    const data = res?.data?.data?.DeleteAccount
     return data
   } catch (error) {
     console.error(error)
   }
+}
+
+export default async function handler(req, res) {
+  const token = req.cookies.token
+
+  const result = await deleteAccount(atob(req.query.p), token)
+  res.status(200).json(result)
 }

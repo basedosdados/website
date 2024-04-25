@@ -5,14 +5,9 @@ import {
   FormLabel,
   FormErrorMessage,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import cookies from 'js-cookie';
-
-import {
-  getToken,
-  getUser
-} from "../api/user";
 
 import Display from "../../components/atoms/Display";
 import Input from "../../components/atoms/SimpleInput";
@@ -39,7 +34,7 @@ export default function Login() {
     }))
   }
 
-  const handleSubmit = () => {
+  async function handleSubmit() {
     let validationErrors = {}
     if (!formData.email) {
       validationErrors.email = "Por favor, insira um endereço de e-mail válido."
@@ -54,19 +49,18 @@ export default function Login() {
     }
   }
 
-  const fetchToken = async ({ email, password }) => {
-    const result = await getToken({email: email, password: password})
+  async function fetchToken({ email, password }) {
+    const result = await fetch(`/api/user/getToken?a=${btoa(email)}&q=${btoa(password)}`, {method: "GET"})
+      .then(res => res.json())
+    if(result.error) return setErrors({login:"E-mail ou senha incorretos."}) 
 
-    if(result?.tokenAuth === null || result?.errors?.length > 0) return setErrors({login:"E-mail ou senha incorretos."}) 
+    const userData = await fetch(`/api/user/getUser?p=${btoa(result.id)}`, {method: "GET"})
+      .then(res => res.json())
+    if(userData.error) return setErrors({login:"Não foi possível conectar ao servidor. Tente novamente mais tarde."}) 
 
-    try {
-      const userData = await getUser(result.tokenAuth.payload.email)
-      cookies.set('userBD', JSON.stringify(userData))
-      if(query.p === "plans") return window.open(`/user/${userData.username}?plans_and_payment`, "_self")
-      window.open("/", "_self")
-    } catch (error) {
-      console.error(error)
-    }
+    cookies.set('userBD', JSON.stringify(userData))
+    if(query.p === "plans") return window.open(`/user/${userData.username}?plans_and_payment`, "_self")
+    window.open("/", "_self")
   }
 
   const LabelTextForm = ({ text, ...props }) => {

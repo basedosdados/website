@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 // import Form from "@rjsf/core";
-import { CircularProgress } from "@chakra-ui/progress";
-import { Center, VStack } from "@chakra-ui/layout";
+import {
+  CircularProgress,
+  Center,
+  VStack,
+} from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/toast";
 import Head from "next/head";
 import { GeoTree } from "./GeoTree";

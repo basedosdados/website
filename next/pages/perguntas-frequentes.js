@@ -190,8 +190,7 @@ export default function FAQ({}) {
       <VStack
         width="100%"
         maxWidth="1264px"
-        margin="auto"
-        paddingTop={isMobileMod() && "140px"}
+        margin="50px auto auto"
         spacing={0}
       >
         <Display
