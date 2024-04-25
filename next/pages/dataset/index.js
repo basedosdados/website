@@ -489,7 +489,7 @@ export default function SearchPage({ pages }) {
               },
               {
                 key: "closed_data",
-                name: "Pro",
+                name: "Pagos",
                 count: aggregations?.contains_closed_data?.filter(elm => elm.key === 1)[0]?.count || 0
               }
             ]}

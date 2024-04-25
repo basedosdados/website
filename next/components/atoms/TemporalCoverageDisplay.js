@@ -200,7 +200,7 @@ export function TemporalCoverageBar ({ value }) {
           display="flex"
           alignItems="center"
           gap="4px"
-        >PRO
+        >PAGO
           <RedirectIcon
             display={bool ? "flex" : "none"}
             position="relative"
@@ -372,7 +372,7 @@ export function TemporalCoverageBar ({ value }) {
         display="flex"
       >
         <TooltipContent
-          text={dateEnd?.type === "open" ? "Acesso liberado entre" : "Assine a BD Pro para liberar entre"}
+          text={dateEnd?.type === "open" ? "Acesso liberado entre" : "Assine a BD PAGO para liberar entre"}
           firstValue={dateEnd?.type === "open" ? dateStart : dateEnd?.type === "closed" ? dateStart : dateMid}
           lastValue={dateEnd}
           isOpen={flag}
