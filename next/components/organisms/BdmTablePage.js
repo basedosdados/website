@@ -41,7 +41,7 @@ export default function BdmTablePage({ id }) {
 
   const fetchBdmTable = async () => {
     try {
-      const result = await fetch(`/api/tables/getBdmTable?p=${btoa(id)}`, { method: "GET" })
+      const result = await fetch(`/api/tables/getBdmTable?p=${id}`, { method: "GET" })
         .then(res => res.json())
       setResource(result)
     } catch (error) {
@@ -288,7 +288,7 @@ export default function BdmTablePage({ id }) {
               >Publicação por</Text>
               <Box display="flex" alignItems="center" gridGap="4px">
                 <PublishedOrDataCleanedBy
-                  resource={resource?.publishedBy || "Não listado"}
+                  resource={resource?.publishedByInfo || "Não listado"}
                 />
               </Box>
             </Box>
@@ -307,7 +307,7 @@ export default function BdmTablePage({ id }) {
               >Tratamento por</Text>
               <Box display="flex" alignItems="center" gridGap="4px">
                 <PublishedOrDataCleanedBy
-                  resource={resource?.dataCleanedBy || "Não listado"}
+                  resource={resource?.dataCleanedByInfo || "Não listado"}
                 />
               </Box>
             </Box>
