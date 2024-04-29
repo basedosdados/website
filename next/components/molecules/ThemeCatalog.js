@@ -5,6 +5,7 @@ import {
   Image,
   Tooltip,
   Skeleton,
+  SkeletonText
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { useMediaQuery } from "@chakra-ui/react";
@@ -24,10 +25,11 @@ import RemoveIcon from "../../public/img/icons/removeIcon";
 import styles from "../../styles/themeCatalog.module.css";
 
 function Themes ({
+  loading,
   responsive,
   onSelectTheme,
   selectedTheme=[],
-  listThemes=[],
+  listThemes,
 }) {
   const [screenQuery, setScreenQuery] = useState(0)
 
@@ -48,11 +50,10 @@ function Themes ({
     return selectedTheme.find(res => res === value)
   }
 
-  if(listThemes.length === 0) return null
-
   return (
     <Center
       width="95vw"
+      height="120px"
       maxWidth="1264px"
     >
       <Carousel 
@@ -69,61 +70,118 @@ function Themes ({
           }
         }}
       >
-        {listThemes && listThemes.map((elm) => (
-          <Center
-            position="relative"
-            onClick={() => onSelectTheme(elm.node.slug)}
-            key={elm.node._id}
-            cursor="pointer"
-            width={responsive.mobileQuery ? "65px" : "100px" }
-            minWidth={responsive.mobileQuery ? "65px" : "100px" }
-            height={responsive.mobileQuery ? "65px" : "100px" }
-            minHeight={responsive.mobileQuery ? "65px" : "100px" }
-            borderRadius={responsive.mobileQuery ? "12px" : "16px" }
-            backgroundColor={ found(elm.node.slug) ? "#2B8C4D" : "FFF"}
-            boxShadow="0px 1px 8px 1px rgba(64, 60, 67, 0.16)"
-            _hover={{ transform:"scale(1.1)", backgroundColor:"#2B8C4D" }}
-            transition="all 0.5s"
-            margin="10px 0"
-          >
-            <Tooltip
-              hasArrow
-              bg="#2A2F38"
-              label={elm.node.name}
-              fontSize="16px"
-              fontWeight="500"
-              padding="5px 16px 6px"
-              marginTop="10px"
-              color="#FFF"
-              borderRadius="6px"
-            >
-              <Image
-                className={styles.iconTheme}
-                width="100%"
-                padding={responsive.mobileQuery ? "5px" : "10px"}
-                height="100%"
-                transition="all 0.5s"
-                filter={found(elm.node.slug) && "invert(1)"}
-                _hover={{ filter:"invert(1)"}}
-                alt={`${elm.node.name}`}
-                src={`https://storage.googleapis.com/basedosdados-website/category_icons/2022/icone_${elm.node.slug}.svg`}
-              />
-            </Tooltip>
-            <RemoveIcon
-              alt="remover tema do filtro"
-              display={found(elm.node.slug) ? "flex" : "none"}
-              fill="#42B0FF"
-              width={responsive.mobileQuery ? "20px" : "30px"}
-              height={responsive.mobileQuery ? "20px" : "30px"}
-              transition="all 0.5s"
-              position="absolute"
-              top="-1"
-              right="-1"
+        {loading ?
+          new Array(screenQuery).fill(0).map(() => (
+            <Skeleton
+              position="relative"
+              margin="10px 0"
+              startColor="#F0F0F0" endColor="#CECECE"
+              width={responsive.mobileQuery ? "65px" : "100px" }
+              minWidth={responsive.mobileQuery ? "65px" : "100px" }
+              height={responsive.mobileQuery ? "65px" : "100px" }
+              minHeight={responsive.mobileQuery ? "65px" : "100px" }
+              borderRadius={responsive.mobileQuery ? "12px" : "16px" }
             />
-          </Center>
-        ))}
+          ))
+          :
+          listThemes ?
+            listThemes.map((elm) => (
+              <Center
+                position="relative"
+                onClick={() => onSelectTheme(elm.node.slug)}
+                key={elm.node._id}
+                cursor="pointer"
+                width={responsive.mobileQuery ? "65px" : "100px" }
+                minWidth={responsive.mobileQuery ? "65px" : "100px" }
+                height={responsive.mobileQuery ? "65px" : "100px" }
+                minHeight={responsive.mobileQuery ? "65px" : "100px" }
+                borderRadius={responsive.mobileQuery ? "12px" : "16px" }
+                backgroundColor={ found(elm.node.slug) ? "#2B8C4D" : "FFF"}
+                boxShadow="0px 1px 8px 1px rgba(64, 60, 67, 0.16)"
+                _hover={{ transform:"scale(1.1)", backgroundColor:"#2B8C4D" }}
+                transition="all 0.5s"
+                margin="10px 0"
+              >
+                <Tooltip
+                  hasArrow
+                  bg="#2A2F38"
+                  label={elm.node.name}
+                  fontSize="16px"
+                  fontWeight="500"
+                  padding="5px 16px 6px"
+                  marginTop="10px"
+                  color="#FFF"
+                  borderRadius="6px"
+                >
+                  <Image
+                    className={styles.iconTheme}
+                    width="100%"
+                    padding={responsive.mobileQuery ? "5px" : "10px"}
+                    height="100%"
+                    transition="all 0.5s"
+                    filter={found(elm.node.slug) && "invert(1)"}
+                    _hover={{ filter:"invert(1)"}}
+                    alt={`${elm.node.name}`}
+                    src={`https://storage.googleapis.com/basedosdados-website/category_icons/2022/icone_${elm.node.slug}.svg`}
+                  />
+                </Tooltip>
+                <RemoveIcon
+                  alt="remover tema do filtro"
+                  display={found(elm.node.slug) ? "flex" : "none"}
+                  fill="#42B0FF"
+                  width={responsive.mobileQuery ? "20px" : "30px"}
+                  height={responsive.mobileQuery ? "20px" : "30px"}
+                  transition="all 0.5s"
+                  position="absolute"
+                  top="-1"
+                  right="-1"
+                />
+              </Center>
+            ))
+          :
+          new Array(screenQuery).fill(0).map(() => (
+            <Skeleton
+              position="relative"
+              margin="10px 0"
+              startColor="#F0F0F0" endColor="#CECECE"
+              width={responsive.mobileQuery ? "65px" : "100px" }
+              minWidth={responsive.mobileQuery ? "65px" : "100px" }
+              height={responsive.mobileQuery ? "65px" : "100px" }
+              minHeight={responsive.mobileQuery ? "65px" : "100px" }
+              borderRadius={responsive.mobileQuery ? "12px" : "16px" }
+            />
+          ))
+        }
       </Carousel>
     </Center>
+  )
+}
+
+const SkeletonWaitCard = () => {
+  return (
+    <Box
+      width="280px"
+      height="320px"
+      margin="20px 0"
+      borderRadius="12px"
+      backgroundColor="#FFF"
+      boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
+      padding="29px 25px 25px 25px"
+    >
+      <Box display="flex" flexDirection="row" gap="8px" marginBottom="16px">
+        <Skeleton width="30px" height="30px" borderRadius="6px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton width="30px" height="30px" borderRadius="6px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton width="30px" height="30px" borderRadius="6px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+      </Box>
+      <SkeletonText noOfLines={2} spacing="4" startColor="#F0F0F0" endColor="#F0F0F0"/>
+      <SkeletonText marginTop="20px" noOfLines={1} startColor="#F0F0F0" endColor="#F0F0F0"/>
+      <Box display="flex" flexDirection="row" gap="8px" marginTop="72px">
+        <Skeleton width="30%" height="24px" borderRadius="6px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton width="30%" height="24px" borderRadius="6px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton width="30%" height="24px" borderRadius="6px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+      </Box>
+      <SkeletonText marginTop="26px" noOfLines={2} spacing="4" startColor="#F0F0F0" endColor="#F0F0F0"/>
+    </Box>
   )
 }
 
@@ -178,26 +236,12 @@ function CardThemes ({ responsive, datasetsCards = [], loading }) {
         >
           {loading ?
             new Array(screenQuery).fill(0).map(() => (
-              <Skeleton
-                width="280px"
-                height="290px"
-                margin="20px 0"
-                borderRadius="12px"
-                startColor="#F0F0F0"
-                endColor="#F0F0F0"
-              />
+              <SkeletonWaitCard />
             ))
           :
           datasetsCards.length === 0 ?
             new Array(screenQuery).fill(0).map(() => (
-              <>
-                <Skeleton
-                  width="280px"
-                  height="290px"
-                  margin="20px 0"
-                  borderRadius="12px"
-                />
-              </>
+              <SkeletonWaitCard />
             ))
             :
             datasetsCards.map((elm) => (
@@ -236,6 +280,7 @@ export default function ThemeCatalog () {
   const [datasetsCards, setDatasetsCards] = useState([])
   const [selectedTheme, setSelectedTheme] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadingTheme, setLoadingTheme] = useState(true)
 
   const mobileCheck = useCheckMobile()
   const [mobileQuery, setMobileQuery] = useState(false)
@@ -254,6 +299,7 @@ export default function ThemeCatalog () {
     promises.push(fetchDatasets())
     await Promise.all(promises)
     setLoading(false)
+    setLoadingTheme(false)
   }
 
   const fetchDatasets = async () => {
@@ -300,6 +346,7 @@ export default function ThemeCatalog () {
       alignItems="center"
     >
       <Themes
+        loading={loadingTheme}
         listThemes={listThemes}
         selectedTheme={selectedTheme}
         onSelectTheme={handleSelectTheme}
