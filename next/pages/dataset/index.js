@@ -134,7 +134,7 @@ export default function SearchPage({ pages }) {
 
   useEffect(() => {
     if(fetchApi) clearTimeout(fetchApi)
-
+    setCount()
     const fetchFunc = setTimeout(() => {
       getDatasets({
         q: query?.q,
