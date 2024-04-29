@@ -411,8 +411,6 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
               {name: "Acesso em nuvem"},
               {name: "Acesso via SQL, Python, R e Stata"},
               {name: "Integração com ferramentas BI"},
-              {name: "Download até 200.000 linhas"},
-              {name: "Até 1TB de processamento", tooltip: "Limite mensal gratuito oferecido pelo Google Cloud."}
             ]}
             button={{
               text: "Explorar recursos",

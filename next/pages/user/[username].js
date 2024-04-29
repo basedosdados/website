@@ -1432,9 +1432,7 @@ const PlansAndPayment = ({ userData }) => {
       {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
       {name: "Acesso em nuvem"},
       {name: "Acesso via SQL, Python, R e Stata"},
-      {name: "Integração com ferramentas BI"},
-      {name: "Download até 200.000 linhas"},
-      {name: "Até 1TB de processamento", tooltip: "Limite mensal gratuito oferecido pelo Google Cloud."}]
+      {name: "Integração com ferramentas BI"},]
     },
     "bd_pro" : {
       title: "BD Pro",
@@ -1840,8 +1838,6 @@ const PlansAndPayment = ({ userData }) => {
               {name: "Acesso em nuvem"},
               {name: "Acesso via SQL, Python, R e Stata"},
               {name: "Integração com ferramentas BI"},
-              {name: "Download até 200.000 linhas"},
-              {name: "Até 1TB de processamento", tooltip: "Limite mensal gratuito oferecido pelo Google Cloud."}
             ]}
             button={{
               text: "Explorar recursos",
