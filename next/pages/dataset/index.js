@@ -6,8 +6,10 @@ import {
   Divider,
   Stack,
   Skeleton,
+  SkeletonText,
   Flex,
   Box,
+  Spinner
 } from "@chakra-ui/react";
 import Head from "next/head";
 import ReactPaginate from "react-paginate";
@@ -384,6 +386,75 @@ export default function SearchPage({ pages }) {
     )
   }
 
+  const SkeletonWaitCard = () => {
+    return (
+      <Box
+        display="flex"
+        flexDirection="row"
+        gap="24px"
+        width="100%"
+        height="172px"
+        paddingY="16px"
+        borderRadius="12px"
+        backgroundColor="#FFF"
+      >
+        <Skeleton
+          minWidth="138px"
+          minHeight="138px"
+          borderRadius="16px"
+          startColor="#F0F0F0"
+          endColor="#F0F0F0"
+        />
+
+        <Box display="flex" width="100%" flexDirection="column" gap="8px">
+          <SkeletonText noOfLines={2} spacing="4" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <SkeletonText marginTop="26px" noOfLines={3} spacing="3" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <SkeletonText marginTop="10px" noOfLines={1} spacing="0" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        </Box>
+
+        <Box display="flex" flexDirection="row" gap="8px">
+          <Skeleton width="36px" height="36px" borderRadius="6px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <Skeleton width="36px" height="36px" borderRadius="6px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <Skeleton width="36px" height="36px" borderRadius="6px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        </Box>
+      </Box>
+    )
+  }
+
+  const SkeletonWaitCardMobile = () => {
+    return (
+      <Box
+        display="flex"
+        flexDirection="column"
+        gap="24px"
+        width="100%"
+        height="100%"
+        paddingY="16px"
+        borderRadius="12px"
+        backgroundColor="#FFF"
+      >
+        <Skeleton
+          width="138px"
+          height="138px"
+          borderRadius="16px"
+          startColor="#F0F0F0"
+          endColor="#F0F0F0"
+        />
+        <SkeletonText noOfLines={2} spacing="4" startColor="#F0F0F0" endColor="#F0F0F0"/>
+
+        <Box display="flex" flexDirection="row" gap="8px">
+          <Skeleton width="36px" height="36px" borderRadius="6px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <Skeleton width="36px" height="36px" borderRadius="6px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <Skeleton width="36px" height="36px" borderRadius="6px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        </Box>
+
+        <Box display="flex" width="100%" flexDirection="column" gap="8px">
+          <SkeletonText marginTop="6px" noOfLines={6} spacing="3" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        </Box>
+      </Box>
+    )
+  }
+
   return (
     <MainPageTemplate pages={pages}>
       <Head>
@@ -686,7 +757,13 @@ export default function SearchPage({ pages }) {
                 letterSpacing="-0.2px"
                 color="#252A32"
               >
-                {count || "..."} {`conjunto${count > 1 ? "s": ""} encontrado${count > 1 ? "s": ""}`}
+                {count ?
+                    `${count} conjunto${count > 1 ? "s": ""} encontrado${count > 1 ? "s": ""}`
+                  :
+                  <Box display="flex" flexDirection="row" gap="8px" alignItems="center">
+                    <Spinner color="#252A32"/> <Text>encontrando conjuntos</Text>
+                  </Box>
+                } 
                 {query.q ? ` para ${query.q}` : ""}
               </Heading>
             </Flex>
@@ -762,16 +839,14 @@ export default function SearchPage({ pages }) {
             >
               {isLoading
                 ? new Array(10).fill(0).map(() => (
-                    <>
-                      <Skeleton
-                        width="100%"
-                        height="148px"
-                        borderRadius="12px"
-                        startColor="#F0F0F0"
-                        endColor="#F0F0F0"
-                      />
-                      <Divider />
-                    </>
+                  <>
+                    {useCheckMobile() ?
+                      <SkeletonWaitCardMobile />
+                    :
+                      <SkeletonWaitCard />
+                    }
+                    <Divider />
+                  </>
                 ))
                 :
                 (resource || []).map((res) => (
