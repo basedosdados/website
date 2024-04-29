@@ -280,6 +280,7 @@ export default function ThemeCatalog () {
   const [datasetsCards, setDatasetsCards] = useState([])
   const [selectedTheme, setSelectedTheme] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadingTheme, setLoadingTheme] = useState(true)
 
   const mobileCheck = useCheckMobile()
   const [mobileQuery, setMobileQuery] = useState(false)
@@ -298,6 +299,7 @@ export default function ThemeCatalog () {
     promises.push(fetchDatasets())
     await Promise.all(promises)
     setLoading(false)
+    setLoadingTheme(false)
   }
 
   const fetchDatasets = async () => {
@@ -344,7 +346,7 @@ export default function ThemeCatalog () {
       alignItems="center"
     >
       <Themes
-        loading={loading}
+        loading={loadingTheme}
         listThemes={listThemes}
         selectedTheme={selectedTheme}
         onSelectTheme={handleSelectTheme}
