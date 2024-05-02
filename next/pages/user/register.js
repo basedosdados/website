@@ -108,7 +108,6 @@ export default function Register() {
         email: formData.email,
         password: formData.password,
       })
-      triggerGAEvent("user_register", "register_success")
     } else {
       triggerGAEvent("user_register", "register_err")
     }
@@ -130,6 +129,7 @@ export default function Register() {
 
       if(result?.errors?.length === 0) {
         sessionStorage.setItem('registration_email_bd', `${email}`)
+        triggerGAEvent("user_register", "register_success")
         window.open("/user/check-email", "_self")
       }
     } catch (error) {

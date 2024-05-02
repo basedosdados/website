@@ -59,8 +59,12 @@ export default function Login() {
     if(userData.error) return setErrors({login:"Não foi possível conectar ao servidor. Tente novamente mais tarde."}) 
 
     cookies.set('userBD', JSON.stringify(userData))
-    if(query.p === "plans") return window.open(`/user/${userData.username}?plans_and_payment`, "_self")
-    window.open("/", "_self")
+    if(query.p === "plans") {
+      if(query.q) return window.open(`/user/${userData.username}?plans_and_payment&q=${query.q}`, "_self")
+      return window.open(`/user/${userData.username}?plans_and_payment&p=plans`, "_self")
+    } else {
+      return window.open("/", "_self")
+    }
   }
 
   const LabelTextForm = ({ text, ...props }) => {
