@@ -14,7 +14,7 @@ import SectionText from "../atoms/SectionText";
 import { SimpleTable } from "../atoms/SimpleTable";
 import LoadingSpin from "../atoms/Loading";
 import Subtitle from "../atoms/Subtitle";
-import { TemporalCoverageBar } from "../atoms/TemporalCoverageDisplay";
+import { TemporalCoverageBar } from "../molecules/TemporalCoverageDisplay";
 import ColumnDatasets from "../molecules/ColumnDatasets";
 import BaseResourcePage from "../molecules/BaseResourcePage";
 import DataInformationQuery from "../molecules/DataInformationQuery";
