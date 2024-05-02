@@ -28,6 +28,7 @@ import RoundedButton from "../atoms/RoundedButton";
 
 import DisclaimerBox from "./DisclaimerBox";
 
+import { triggerGAEvent } from "../../utils";
 import { CopyIcon } from "../../public/img/icons/copyIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import ExclamationIcon from "../../public/img/icons/exclamationIcon";
@@ -90,16 +91,16 @@ export function PrismCodeHighlight({ language, children }) {
         fontFamily="Lato"
         fontWeight="500"
         backgroundColor="transparent"
-        _hover={{ backgroundColor:"transparent", opacity:"0.6"}}
+        _hover={{ backgroundColor: "transparent", opacity: "0.6" }}
       >
         {hasCopied ? "Copiado" : "Copiar"}
-        <CopyIcon alt="copiar conteúdo" width="20px" height="20px" fill="#707783" marginLeft="5px"/>
+        <CopyIcon alt="copiar conteúdo" width="20px" height="20px" fill="#707783" marginLeft="5px" />
       </Button>
     </pre>
   )
 }
 
-export default function DataInformationQuery ({ resource }) {
+export default function DataInformationQuery({ resource }) {
   const gcpDatasetID = resource?.cloudTables[0]?.gcpDatasetId
   const gcpTableId = resource?.cloudTables[0]?.gcpTableId
   const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${gcpDatasetID}/${gcpTableId}/${gcpTableId}.csv.gz`
@@ -110,14 +111,20 @@ export default function DataInformationQuery ({ resource }) {
   useEffect(() => {
     if (window) window?.Prism?.highlightAll()
 
-    if(resource?.numberRows === 0) return setDownloadNotAllowed(false)
-    if(resource?.numberRows) return resource?.numberRows > 200000 ? setDownloadNotAllowed(false) : setDownloadNotAllowed(true)
+    if (resource?.numberRows === 0) return setDownloadNotAllowed(false)
+    if (resource?.numberRows) return resource?.numberRows > 200000 ? setDownloadNotAllowed(false) : setDownloadNotAllowed(true)
   }, [resource])
 
   const handlerDownload = () => {
-    if(downloadNotAllowed === false) return null
+    if (downloadNotAllowed === false) return null
 
     return window.open(downloadUrl)
+  }
+
+  const handleIndexes = (index) => {
+    const categoryValues = ["SQL", "Python", "R", "Stata", "Download"];
+    setTabIndex(index);
+    triggerGAEvent("category_click", categoryValues[index]);
   }
 
   return (
@@ -130,13 +137,13 @@ export default function DataInformationQuery ({ resource }) {
       <Tabs
         paddingTop="16px"
         width={{ base: "90vw", lg: "100%" }}
-        onChange={(index) => setTabIndex(index)}
+        onChange={(index) => handleIndexes(index)}
         index={tabIndex}
       >
         <TabList
           padding="0px"
           fontFamily="Ubuntu !important"
-          borderBottom= "2px solid #DEDFE0 !important"
+          borderBottom="2px solid #DEDFE0 !important"
           justifyContent={isMobileMod() && "space-around"}
         >
           <GreenTab
@@ -169,37 +176,37 @@ export default function DataInformationQuery ({ resource }) {
           </GreenTab>
           {resource?.isClosed ? <></> :
             isMobileMod() ?
-            <Menu>
-              <MenuButton
-                variant="unstyled"
-                top="2px"
-                as={IconButton}
-                rightIcon={
-                  <MenuVerticalIcon
-                    alt="menu"
-                    width="20px" 
-                    height="20px"
-                    position="relative"
-                    right="4px"
-                    top="2px"
-                    fill={tabIndex === 4 ? "#2B8C4D" : "#252A32"}
-                  />
-                }
-                borderRadius="none"
-                borderBottom={tabIndex === 4 &&"3px solid #2B8C4D"}
-              />
-              <MenuList>
-                <MenuItem _focus={{backgroundColor: "#FFF"}} onClick={() => setTabIndex(4)}>Download</MenuItem>
-              </MenuList>
-            </Menu>
-            :
-            <GreenTab
-              fontSize="16px"
-              paddingBottom="8px !important"
-              letterSpacing="0.2px"
-            >
-              Download
-            </GreenTab>}
+              <Menu>
+                <MenuButton
+                  variant="unstyled"
+                  top="2px"
+                  as={IconButton}
+                  rightIcon={
+                    <MenuVerticalIcon
+                      alt="menu"
+                      width="20px"
+                      height="20px"
+                      position="relative"
+                      right="4px"
+                      top="2px"
+                      fill={tabIndex === 4 ? "#2B8C4D" : "#252A32"}
+                    />
+                  }
+                  borderRadius="none"
+                  borderBottom={tabIndex === 4 && "3px solid #2B8C4D"}
+                />
+                <MenuList>
+                  <MenuItem _focus={{ backgroundColor: "#FFF" }} onClick={() => handleIndexes(4)}>Download</MenuItem>
+                </MenuList>
+              </Menu>
+              :
+              <GreenTab
+                fontSize="16px"
+                paddingBottom="8px !important"
+                letterSpacing="0.2px"
+              >
+                Download
+              </GreenTab>}
         </TabList>
         <TabPanels>
           <TabPanel padding="0">
@@ -207,7 +214,7 @@ export default function DataInformationQuery ({ resource }) {
               <SectionText margin="24px 0 16px">
                 Com uma assinatura BD Pro válida, copie o código abaixo e cole no Editor de Consultas no BigQuery:
               </SectionText>
-                :
+              :
               <SectionText
                 margin="24px 0 16px"
               >
@@ -314,18 +321,18 @@ bd_read_table, ///
                 borderColor="#D93B3B"
               >
                 <HStack gridGap="8px" alignItems="flex-start">
-                <ExclamationIcon
-                  alt="atenção"
-                  width="20px"
-                  height="20px"
-                  fill="#D93B3B"
-                  marginTop="4px"
-                />
-                <Box>
-                  <SectionText fontWeight="700">ATENÇÃO: O tamanho da tabela ultrapassou o limite permitido para download, de 200.000 linhas.</SectionText>
-                  <SectionText>Para acessar os dados, utilize nosso <i>datalake</i> no BigQuery ou nossos pacotes em Python, R e Stata.</SectionText>
-                </Box>
-              </HStack>
+                  <ExclamationIcon
+                    alt="atenção"
+                    width="20px"
+                    height="20px"
+                    fill="#D93B3B"
+                    marginTop="4px"
+                  />
+                  <Box>
+                    <SectionText fontWeight="700">ATENÇÃO: O tamanho da tabela ultrapassou o limite permitido para download, de 200.000 linhas.</SectionText>
+                    <SectionText>Para acessar os dados, utilize nosso <i>datalake</i> no BigQuery ou nossos pacotes em Python, R e Stata.</SectionText>
+                  </Box>
+                </HStack>
               </DisclaimerBox>
             }
 
@@ -334,15 +341,15 @@ bd_read_table, ///
               fontSize="14px"
               fontWeight="700"
               color="#FFF"
-              backgroundColor={downloadNotAllowed ? "#42B0FF" :"#C4C4C4"}
+              backgroundColor={downloadNotAllowed ? "#42B0FF" : "#C4C4C4"}
               paddingX="30px"
               width="fit-content"
               gridGap="6px"
-              cursor={downloadNotAllowed ? "pointer" :"default"}
-              _hover={!downloadNotAllowed ? {transform : "none"} : "" }
+              cursor={downloadNotAllowed ? "pointer" : "default"}
+              _hover={!downloadNotAllowed ? { transform: "none" } : ""}
               onClick={() => handlerDownload()}
             >
-              <DownloadIcon alt="download" width="22px" height="22px" fill="#FFF"/>
+              <DownloadIcon alt="download" width="22px" height="22px" fill="#FFF" />
               Download dos dados
             </RoundedButton>
           </TabPanel>
