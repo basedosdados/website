@@ -10,11 +10,15 @@ function MyApp({ Component, pageProps }) {
     cacheTime: 0,
   });
 
+  const local = process.env.NEXT_PUBLIC_BASE_URL_FRONTEND
+
   return (
     <QueryClientProvider client={queryClient}>
       <Head>
         {/* <meta/> para não noindex ambientes de development e staging */}
-        <meta name="robots" content="noindex" />
+        {local === "https://basedosdados.org" ? null: (
+          <meta name="robots" content="noindex" />
+        )}
         {/* <meta/> para não noindex ambientes de development e staging */}
         <link rel="icon" type="image/ico" href="/favicon.ico" />
         <link
@@ -59,57 +63,67 @@ function MyApp({ Component, pageProps }) {
           content="São centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python, R ou Stata."
           key="ogdesc"
         />
+
         {/* <!-- Google Tag Manager --> */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-5NWMN98');`,
-          }}
-        ></script>
+        {local === "https://staging.basedosdados.org" || local === "https://basedosdados.org" ? (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','GTM-5NWMN98');`,
+            }}
+          ></script>
+        ) : null}
         {/* <!-- End Google Tag Manager --> */}
 
         {/* TAG GTM DEVELOPMENT */}
         {/* <!-- Google Tag Manager --> */}
-        {/* <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl+ '&gtm_auth=JqCpoVwQlMgubUGPVq7Z9g&gtm_preview=env-10&gtm_cookies_win=x';f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-5NWMN98');`,
-          }}
-        ></script> */}
+        {local === "https://development.basedosdados.org" &&
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl+ '&gtm_auth=JqCpoVwQlMgubUGPVq7Z9g&gtm_preview=env-10&gtm_cookies_win=x';f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','GTM-5NWMN98');`,
+            }}
+          ></script>
+        }
         {/* <!-- End Google Tag Manager --> */}
         {/* FIM DA TAG DEVELOPMENT */}
-
       </Head>
+
       <ChakraProvider theme={themeBD}>
         <Component {...pageProps} />
       </ChakraProvider>
+
       {/*<!-- Google Tag Manager (noscript) -->*/}
-      <noscript>
-        <iframe
-          src="https://www.googletagmanager.com/ns.html?id=GTM-5NWMN98"
-          height="0"
-          width="0"
-          style={{ display: "none", visibility: "hidden" }}
-        ></iframe>
-      </noscript>
+      {local === "https://staging.basedosdados.org" || local === "https://basedosdados.org" ? (
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-5NWMN98"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          ></iframe>
+        </noscript>
+      ) : null}
       {/*<!-- End Google Tag Manager (noscript) -->*/}
 
       {/* TAG GTM DEVELOPMENT  */}
       {/* <!-- Google Tag Manager (noscript) --> */}
-      {/* <noscript>
-        <iframe
-          src="https://www.googletagmanager.com/ns.html?id=GTM-5NWMN98&gtm_auth=JqCpoVwQlMgubUGPVq7Z9g&gtm_preview=env-10&gtm_cookies_win=x"
-          height="0"
-          width="0"
-          style={{ display: "none", visibility: "hidden" }}
-        ></iframe>
-      </noscript> */}
+      {local === "https://development.basedosdados.org" &&
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-5NWMN98&gtm_auth=JqCpoVwQlMgubUGPVq7Z9g&gtm_preview=env-10&gtm_cookies_win=x"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          ></iframe>
+        </noscript>
+      }
       {/* <!-- End Google Tag Manager (noscript) --> */}
       {/* FIM DA TAG DEVELOPMENT */}
 
