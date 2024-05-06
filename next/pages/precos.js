@@ -46,7 +46,6 @@ export async function getServerSideProps(context) {
 }
 
 export const CardPrice = ({
-  colorBanner,
   title,
   badge,
   subTitle,
@@ -86,15 +85,6 @@ export const CardPrice = ({
       <Box
         height="fit-content"
       >
-        <Box
-          position="absolute"
-          borderRadius="16px 16px 0 0"
-          height="8px"
-          width="100%"
-          top="0"
-          left="0"
-          backgroundColor={colorBanner}
-        />
         <Box
           display="flex"
           flexDirection="row"
@@ -251,7 +241,7 @@ export const CardPrice = ({
                 <CheckIcon 
                   width="24px"
                   height="24px"
-                  fill="#42B0FF"
+                  fill="#2B8C4D"
                 />
                 <BodyText
                   fontSize="16px"
@@ -398,7 +388,6 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
           spacing={0}
         >
           <CardPrice
-            colorBanner="#2B8C4D"
             title="BD Grátis"
             subTitle={<BodyText>Para você descobrir o potencial da plataforma de dados</BodyText>}
             personConfig={{
@@ -422,7 +411,6 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
           />
 
           <CardPrice
-            colorBanner="#9C8400"
             title="BD Pro"
             subTitle={<BodyText>Para você ter acesso aos<br/> dados mais atualizados</BodyText>}
             personConfig={{
@@ -434,13 +422,12 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
             ]}
             button={{
               text: isBDPro ? "Plano atual" : `Iniciar teste grátis`,
-              href: username === null ? "/user/login?p=plans" :`/user/${username}?plans_and_payment`,
+              href: username === null ? "/user/login?p=plans&q=pro" :`/user/${username}?plans_and_payment&q=pro`,
               isCurrentPlan: isBDPro,
             }}
           />
 
           <CardPrice
-            colorBanner="#252A32"
             title="BD Empresas"
             subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
             personConfig={{
@@ -452,7 +439,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
             ]}
             button={{
               text: isBDEmp ? "Plano atual" : "Iniciar teste grátis",
-              href: username === null ? "/user/login?p=plans" :`/user/${username}?plans_and_payment`,
+              href: username === null ? "/user/login?p=plans&q=empresas" :`/user/${username}?plans_and_payment&q=empresas`,
               isCurrentPlan: isBDEmp,
             }}
           />

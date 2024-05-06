@@ -1414,15 +1414,26 @@ const NewPassword = ({ userInfo }) => {
 }
 
 const PlansAndPayment = ({ userData }) => {
+  const router = useRouter()
+  const { query } = router
+
   const [plan, setPlan] = useState({})
   const PaymentModal = useDisclosure()
   const SucessPaymentModal = useDisclosure()
   const ErroPaymentModal = useDisclosure()
   const PlansModal = useDisclosure()
   const CancelModalPlan = useDisclosure()
+  const AlertChangePlanModal  = useDisclosure()
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingH, setIsLoadingH] = useState(false)
   const [isLoadingCanSub, setIsLoadingCanSub] = useState(false)
+
+  useEffect(() => {
+    if(userData.proSubscriptionStatus === "active") return AlertChangePlanModal.onOpen()
+    if(query.q === "pro") setPlan({title: "BD Pro", slug:"bd_pro", slots: "0"})
+    if(query.q === "empresas") setPlan({title: "BD Empresas", slug:"bd_pro_empresas", slots: "10"})
+    PaymentModal.onOpen()
+  }, [query])
 
   const resources={
     "BD Gratis" : {
@@ -1551,7 +1562,7 @@ const PlansAndPayment = ({ userData }) => {
     const user = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
     cookies.set('userBD', JSON.stringify(user))
-    window.location.reload()
+    window.open(`/user/${userData.username}?plans_and_payment`, "_self")
   }
 
   async function closeModalSucess() {
@@ -1572,7 +1583,7 @@ const PlansAndPayment = ({ userData }) => {
     cookies.set('userBD', JSON.stringify(user))
 
     if(isLoadingH === true) return window.open("/", "_self")
-    window.location.reload()
+    window.open(`/user/${userData.username}?plans_and_payment`, "_self")
   }
 
   useEffect(() => {
@@ -1598,7 +1609,7 @@ const PlansAndPayment = ({ userData }) => {
       >
         <Stack spacing={0} marginBottom="16px">
           <SectionTitle lineHeight="40px" height="40px">
-            Assinatura
+            Assinatura {plan.title}
           </SectionTitle>
           <ModalCloseButton
             fontSize="14px"
@@ -1825,7 +1836,6 @@ const PlansAndPayment = ({ userData }) => {
           spacing={0}
         >
           <CardPrice
-            colorBanner="#2B8C4D"
             title="BD Grátis"
             subTitle={<BodyText>Para você descobrir o potencial da plataforma de dados</BodyText>}
             personConfig={{
@@ -1850,7 +1860,6 @@ const PlansAndPayment = ({ userData }) => {
           />
 
           <CardPrice
-            colorBanner="#9C8400"
             title="BD Pro"
             subTitle={<BodyText>Para você ter acesso aos<br/> dados mais atualizados</BodyText>}
             personConfig={{
@@ -1863,7 +1872,7 @@ const PlansAndPayment = ({ userData }) => {
             button={{
               text: `${userData?.proSubscription === "bd_pro" ? "Plano atual" : "Assinar"}`,
               onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => {
-                setPlan({slug:"bd_pro", slots: "0"})
+                setPlan({title: "BD Pro", slug:"bd_pro", slots: "0"})
                 PlansModal.onClose()
                 PaymentModal.onOpen()
               },
@@ -1872,7 +1881,6 @@ const PlansAndPayment = ({ userData }) => {
           />
 
           <CardPrice
-            colorBanner="#252A32"
             title="BD Empresas"
             subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
             personConfig={{
@@ -1885,13 +1893,57 @@ const PlansAndPayment = ({ userData }) => {
             button={{
               text: `${userData?.proSubscription === "bd_pro_empresas" ? "Plano atual" : "Assinar"}`,
               onClick: userData?.proSubscription === "bd_pro_empresas" ? () => {} : () => {
-                setPlan({slug:"bd_pro_empresas", slots: "10"})
+                setPlan({title: "BD Empresas", slug:"bd_pro_empresas", slots: "10"})
                 PlansModal.onClose()
                 PaymentModal.onOpen()
               },
               isCurrentPlan: userData?.proSubscription === "bd_pro_empresas" ? true : false,
             }}
           />
+        </Stack>
+      </ModalGeneral>
+
+      <ModalGeneral
+        isOpen={AlertChangePlanModal.isOpen}
+        onClose={AlertChangePlanModal.onClose}
+        propsModalContent={{maxWidth: "500px"}}
+      >
+        <Stack
+          spacing={0}
+          marginBottom="16px"
+          height={isMobileMod() ? "100%" : "fit-content"}
+        >
+          <SectionTitle lineHeight={isMobileMod() ? "32px" : "40px"}>
+            Alteração de planos
+          </SectionTitle>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+          />
+        </Stack>
+
+        <Stack spacing="24px" marginBottom="16px">
+          <ExtraInfoTextForm fontSize="16px" lineHeight="24px" letterSpacing="0.2px">
+            Para prosseguir com a assinatura do novo plano, é necessário primeiro cancelar sua assinatura atual. Por favor, faça o cancelamento da sua assinatura atual e, em seguida, você poderá iniciar o processo de assinatura do novo plano.
+          </ExtraInfoTextForm>
+        </Stack>
+
+        <Stack
+          flexDirection={isMobileMod() ? "column-reverse" : "row"}
+          spacing={0}
+          gap="24px"
+          width={isMobileMod() ? "100%" : "fit-content"}
+        >
+          <RoundedButton
+            borderRadius="30px"
+            width={isMobileMod() ? "100%" : ""}
+            _hover={{transform: "none", opacity: 0.8}}
+            onClick={() => AlertChangePlanModal.onClose()}
+          >
+            Entendi
+          </RoundedButton>
         </Stack>
       </ModalGeneral>
 
