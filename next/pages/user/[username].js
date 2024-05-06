@@ -1423,21 +1423,16 @@ const PlansAndPayment = ({ userData }) => {
   const ErroPaymentModal = useDisclosure()
   const PlansModal = useDisclosure()
   const CancelModalPlan = useDisclosure()
+  const AlertChangePlanModal  = useDisclosure()
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingH, setIsLoadingH] = useState(false)
   const [isLoadingCanSub, setIsLoadingCanSub] = useState(false)
 
   useEffect(() => {
-    if(query.q === "pro") {
-      if(userData.proSubscriptionStatus === "active") return CancelModalPlan.onOpen()
-      setPlan({title: "BD Pro", slug:"bd_pro", slots: "0"})
-      PaymentModal.onOpen()
-    }
-    if(query.q === "empresas") {
-      if(userData.proSubscriptionStatus === "active") return CancelModalPlan.onOpen()
-      setPlan({title: "BD Empresas", slug:"bd_pro_empresas", slots: "10"})
-      PaymentModal.onOpen()
-    }
+    if(userData.proSubscriptionStatus === "active") return AlertChangePlanModal.onOpen()
+    if(query.q === "pro") setPlan({title: "BD Pro", slug:"bd_pro", slots: "0"})
+    if(query.q === "empresas") setPlan({title: "BD Empresas", slug:"bd_pro_empresas", slots: "10"})
+    PaymentModal.onOpen()
   }, [query])
 
   const resources={
@@ -1905,6 +1900,50 @@ const PlansAndPayment = ({ userData }) => {
               isCurrentPlan: userData?.proSubscription === "bd_pro_empresas" ? true : false,
             }}
           />
+        </Stack>
+      </ModalGeneral>
+
+      <ModalGeneral
+        isOpen={AlertChangePlanModal.isOpen}
+        onClose={AlertChangePlanModal.onClose}
+        propsModalContent={{maxWidth: "500px"}}
+      >
+        <Stack
+          spacing={0}
+          marginBottom="16px"
+          height={isMobileMod() ? "100%" : "fit-content"}
+        >
+          <SectionTitle lineHeight={isMobileMod() ? "32px" : "40px"}>
+            Alteração de planos
+          </SectionTitle>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+          />
+        </Stack>
+
+        <Stack spacing="24px" marginBottom="16px">
+          <ExtraInfoTextForm fontSize="16px" lineHeight="24px" letterSpacing="0.2px">
+            Para prosseguir com a assinatura do novo plano, é necessário primeiro cancelar sua assinatura atual. Por favor, faça o cancelamento da sua assinatura atual e, em seguida, você poderá iniciar o processo de assinatura do novo plano.
+          </ExtraInfoTextForm>
+        </Stack>
+
+        <Stack
+          flexDirection={isMobileMod() ? "column-reverse" : "row"}
+          spacing={0}
+          gap="24px"
+          width={isMobileMod() ? "100%" : "fit-content"}
+        >
+          <RoundedButton
+            borderRadius="30px"
+            width={isMobileMod() ? "100%" : ""}
+            _hover={{transform: "none", opacity: 0.8}}
+            onClick={() => AlertChangePlanModal.onClose()}
+          >
+            Entendi
+          </RoundedButton>
         </Stack>
       </ModalGeneral>
 
