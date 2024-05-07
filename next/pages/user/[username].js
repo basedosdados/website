@@ -1155,7 +1155,7 @@ const NewPassword = ({ userInfo }) => {
       const result = await fetch(`/api/user/updatePassword?b=${btoa(id)}&p=${btoa(formData.newPassword)}`, {method: "GET"})
         .then(res => res.json())
 
-      if(result?.ok === true) {
+      if(result?.success === true) {
         setFormData({
           password: "",
           newPassword: "",
