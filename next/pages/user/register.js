@@ -37,24 +37,25 @@ export default function Register() {
     email: "",
     password: "",
     regexPassword: {},
-    confirmPassword: ""
+    confirmPassword: "",
+    register: ""
   })
   const [showPassword, setShowPassword] = useState(true)
   const [showConfirmPassword, setShowConfirmPassword] = useState(true)
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e, field) => {
     setFormData((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [field]: e.target.value,
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (event) => {
+    event.preventDefault()
     triggerGAEvent("user_register", "register_try")
 
     const regexPassword = {}
     const validationErrors = {}
-    e.preventDefault()
 
     if (!formData.firstName) {
       validationErrors.firstName = "Por favor, insira seu nome."
@@ -119,6 +120,9 @@ export default function Register() {
         .then(res => res.json())
 
       let arrayErrors = {}
+      if(result?.success === false) {
+        arrayErrors = ({register: "Error ao tentar se cadastrar, tente novamente mais tarde!"})
+      }
       if(result?.errors?.length > 0) {
         result.errors.map((elm) => {
           if(elm.field === "email") arrayErrors = ({...arrayErrors, email: "Conta com este email já existe."})
@@ -173,196 +177,209 @@ export default function Register() {
           textAlign="center"
         >Cadastre-se</Display>
 
-        <VStack
-          spacing={0}
-          gap="24px"
-        >
-          <FormControl isInvalid={!!errors.firstName} >
-            <LabelTextForm text="Nome"/>
-            <Input
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleInputChange}
-              placeholder="Insira seu nome"
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
-            />
-            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
-              <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.firstName}
-            </FormErrorMessage>
-          </FormControl>
+        <form onSubmit={handleSubmit}>
+          <VStack
+            spacing={0}
+            gap="24px"
+          >
+            <FormControl isInvalid={!!errors.firstName} >
+              <LabelTextForm text="Nome"/>
+              <Input
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
+                onChange={(e) => handleInputChange(e, "firstName")}
+                placeholder="Insira seu nome"
+                fontFamily="ubuntu"
+                height="40px"
+                fontSize="14px"
+                borderRadius="16px"
+                _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+              />
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
+                <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.firstName}
+              </FormErrorMessage>
+            </FormControl>
 
-          <FormControl isInvalid={!!errors.lastName}>
-            <LabelTextForm text="Sobrenome"/>
-            <Input
-              id="lastName"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              placeholder="Insira seu sobrenome (opcional)"
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
-            />
-            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
-              <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.lastName}
-            </FormErrorMessage>
-          </FormControl>
+            <FormControl isInvalid={!!errors.lastName}>
+              <LabelTextForm text="Sobrenome"/>
+              <Input
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
+                onChange={(e) => handleInputChange(e, "lastName")}
+                placeholder="Insira seu sobrenome (opcional)"
+                fontFamily="ubuntu"
+                height="40px"
+                fontSize="14px"
+                borderRadius="16px"
+                _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+              />
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
+                <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.lastName}
+              </FormErrorMessage>
+            </FormControl>
 
-          <FormControl isInvalid={!!errors.email}>
-            <LabelTextForm text="E-mail" />
-            <Input
-              id="username"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="Insira seu e-mail"
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
-            />
-            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
-              <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.email}
-            </FormErrorMessage>
-          </FormControl>
+            <FormControl isInvalid={!!errors.email}>
+              <LabelTextForm text="E-mail" />
+              <Input
+                id="username"
+                name="username"
+                type="email"
+                autoComplete="username"
+                value={formData.email}
+                onChange={(e) => handleInputChange(e, "email")}
+                placeholder="Insira seu e-mail"
+                fontFamily="ubuntu"
+                height="40px"
+                fontSize="14px"
+                borderRadius="16px"
+                _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+              />
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
+                <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.email}
+              </FormErrorMessage>
+            </FormControl>
 
-          <FormControl isInvalid={!!errors.username} >
-            <LabelTextForm text="Nome de usuário"/>
-            <Input
-              id="user"
-              name="username"
-              type="text"
-              autoComplete="off"
-              value={formData.username}
-              onChange={handleInputChange}
-              placeholder="Insira seu nome de usuário"
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
-            />
-            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
-              <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.username}
-            </FormErrorMessage>
-          </FormControl>
+            <FormControl isInvalid={!!errors.username} >
+              <LabelTextForm text="Nome de usuário"/>
+              <Input
+                id="user"
+                name="user"
+                type="text"
+                autoComplete="off"
+                value={formData.username}
+                onChange={(e) => handleInputChange(e, "username")}
+                placeholder="Insira seu nome de usuário"
+                fontFamily="ubuntu"
+                height="40px"
+                fontSize="14px"
+                borderRadius="16px"
+                _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+              />
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
+                <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.username}
+              </FormErrorMessage>
+            </FormControl>
 
-          <FormControl isInvalid={!!errors.password}>
-            <LabelTextForm text="Senha" />
-            <Input
-              type={showPassword ? "password" : "text"}
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              placeholder="Crie uma senha"
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
-              styleElmRight={{
-                width: "50px",
-                height: "40px",
-                cursor: "pointer",
-                onClick: () => setShowPassword(!showPassword)
-              }}
-              elmRight={showPassword ?
-                <EyeOffIcon
-                  alt="esconder senha"
-                  width="20px"
-                  height="20px"
-                  fill="#D0D0D0"
-                />
-              :
-                <EyeIcon
-                  alt="exibir senhar"
-                  width="20px"
-                  height="20px"
-                  fill="#D0D0D0"
-                />
-              }
-            />
-            <Text 
-              margin="8px 0"
-              color= { errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#D93B3B" : "#7D7D7D" : "#7D7D7D" }
-              fontFamily= "Ubuntu"
-              fontSize= "12px"
-              fontWeight= "400"
-              lineHeight= "16px"
-              letterSpacing= "0.3px"
-              display="flex"
-              flexDirection="row"
-              gap="4px"
-              alignItems="flex-start"
-            ><Exclamation width="14px" height="14px" fill="#D93B3B" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
-            <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
-              <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>8 caracteres</ListItem>
-              <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>Uma letra maiúscula</ListItem>
-              <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>Uma letra minúscula</ListItem>
-              <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>Um dígito</ListItem>
-              <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial, dentre ! @ # ? ! % & *</ListItem>
-            </UnorderedList>
-          </FormControl>
+            <FormControl isInvalid={!!errors.password}>
+              <LabelTextForm text="Senha" />
+              <Input
+                type={showPassword ? "password" : "text"}
+                id="password"
+                name="password"
+                autoComplete="current-password"
+                value={formData.password}
+                onChange={(e) => handleInputChange(e, "password")}
+                placeholder="Crie uma senha"
+                fontFamily="ubuntu"
+                height="40px"
+                fontSize="14px"
+                borderRadius="16px"
+                _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+                styleElmRight={{
+                  width: "50px",
+                  height: "40px",
+                  cursor: "pointer",
+                  onClick: () => setShowPassword(!showPassword)
+                }}
+                elmRight={showPassword ?
+                  <EyeOffIcon
+                    alt="esconder senha"
+                    width="20px"
+                    height="20px"
+                    fill="#D0D0D0"
+                  />
+                :
+                  <EyeIcon
+                    alt="exibir senhar"
+                    width="20px"
+                    height="20px"
+                    fill="#D0D0D0"
+                  />
+                }
+              />
+              <Text 
+                margin="8px 0"
+                color= { errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#D93B3B" : "#7D7D7D" : "#7D7D7D" }
+                fontFamily= "Ubuntu"
+                fontSize= "12px"
+                fontWeight= "400"
+                lineHeight= "16px"
+                letterSpacing= "0.3px"
+                display="flex"
+                flexDirection="row"
+                gap="4px"
+                alignItems="flex-start"
+              ><Exclamation width="14px" height="14px" fill="#D93B3B" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
+              <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
+                <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>8 caracteres</ListItem>
+                <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>Uma letra maiúscula</ListItem>
+                <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>Uma letra minúscula</ListItem>
+                <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>Um dígito</ListItem>
+                <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial, dentre ! @ # ? ! % & *</ListItem>
+              </UnorderedList>
+            </FormControl>
 
-          <FormControl isInvalid={!!errors.confirmPassword}>
-            <LabelTextForm text="Confirme a senha" />
-            <Input
-              type={showConfirmPassword ? "password" : "text"}
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleInputChange}
-              placeholder="Insira a senha novamente"
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
-              styleElmRight={{
-                width: "50px",
-                height: "40px",
-                cursor: "pointer",
-                onClick: () => setShowConfirmPassword(!showConfirmPassword)
-              }}
-              elmRight={showConfirmPassword ?
-                <EyeOffIcon
-                  alt="esconder senha"
-                  width="20px"
-                  height="20px"
-                  fill="#D0D0D0"
-                />
-              :
-                <EyeIcon
-                  alt="exibir senhar"
-                  width="20px"
-                  height="20px"
-                  fill="#D0D0D0"
-                />
-              }
-            />
-            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
-              <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.confirmPassword}
-            </FormErrorMessage>
-          </FormControl>
-        </VStack>
+            <FormControl isInvalid={!!errors.confirmPassword}>
+              <LabelTextForm text="Confirme a senha" />
+              <Input
+                type={showConfirmPassword ? "password" : "text"}
+                id="confirmPassword"
+                name="password"
+                autoComplete="current-password"
+                value={formData.confirmPassword}
+                onChange={(e) => handleInputChange(e, "confirmPassword")}
+                placeholder="Insira a senha novamente"
+                fontFamily="ubuntu"
+                height="40px"
+                fontSize="14px"
+                borderRadius="16px"
+                _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+                styleElmRight={{
+                  width: "50px",
+                  height: "40px",
+                  cursor: "pointer",
+                  onClick: () => setShowConfirmPassword(!showConfirmPassword)
+                }}
+                elmRight={showConfirmPassword ?
+                  <EyeOffIcon
+                    alt="esconder senha"
+                    width="20px"
+                    height="20px"
+                    fill="#D0D0D0"
+                  />
+                :
+                  <EyeIcon
+                    alt="exibir senhar"
+                    width="20px"
+                    height="20px"
+                    fill="#D0D0D0"
+                  />
+                }
+              />
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
+                <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.confirmPassword}
+              </FormErrorMessage>
+            </FormControl>
+          </VStack>
 
-        <Button
-          onClick={(e) => handleSubmit(e)}
-          borderRadius="30px"
-          marginTop="24px !important"
-        >
-          Cadastrar
-        </Button>
+          <Button
+            type="submit"
+            width="100%"
+            borderRadius="30px"
+            marginTop="24px !important"
+            backgroundColor={errors?.register ? "#D93B3B" : "#42B0FF"}
+          >
+            Cadastrar
+          </Button>
+        </form>
+
+        {errors?.register &&
+          <Text fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
+            <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.register}
+          </Text>
+        }
 
         <Text
           textAlign="center"

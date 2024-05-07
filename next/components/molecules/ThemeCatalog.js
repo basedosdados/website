@@ -71,8 +71,9 @@ function Themes ({
         }}
       >
         {loading ?
-          new Array(screenQuery).fill(0).map(() => (
+          new Array(screenQuery).fill(0).map((elm, i) => (
             <Skeleton
+              key={i}
               position="relative"
               margin="10px 0"
               startColor="#F0F0F0" endColor="#CECECE"
@@ -87,9 +88,9 @@ function Themes ({
           listThemes ?
             listThemes.map((elm) => (
               <Center
+                key={elm.node._id}
                 position="relative"
                 onClick={() => onSelectTheme(elm.node.slug)}
-                key={elm.node._id}
                 cursor="pointer"
                 width={responsive.mobileQuery ? "65px" : "100px" }
                 minWidth={responsive.mobileQuery ? "65px" : "100px" }
@@ -139,8 +140,9 @@ function Themes ({
               </Center>
             ))
           :
-          new Array(screenQuery).fill(0).map(() => (
+          new Array(screenQuery).fill(0).map((elm, i) => (
             <Skeleton
+              key={i}
               position="relative"
               margin="10px 0"
               startColor="#F0F0F0" endColor="#CECECE"
@@ -235,17 +237,18 @@ function CardThemes ({ responsive, datasetsCards = [], loading }) {
           }}
         >
           {loading ?
-            new Array(screenQuery).fill(0).map(() => (
-              <SkeletonWaitCard />
+            new Array(screenQuery).fill(0).map((elm, i) => (
+              <SkeletonWaitCard key={i}/>
             ))
           :
           datasetsCards.length === 0 ?
-            new Array(screenQuery).fill(0).map(() => (
-              <SkeletonWaitCard />
+            new Array(screenQuery).fill(0).map((elm, i) => (
+              <SkeletonWaitCard key={i}/>
             ))
             :
-            datasetsCards.map((elm) => (
+            datasetsCards.map((elm, i) => (
               <DatabaseCard
+                key={i}
                 name={elm?.name}
                 categories={elm?.themes}
                 organization={elm?.organizations?.[0]}

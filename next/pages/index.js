@@ -153,8 +153,8 @@ function Hero() {
                     Termos populares: 
                   </Text>
                 }
-                {tags.map(elm => 
-                  <ThemeTag name={elm} />
+                {tags.map((elm, i) => 
+                  <ThemeTag name={elm} key={i}/>
                 )}
               </HStack>
             </VStack>

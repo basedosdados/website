@@ -24,7 +24,7 @@ import {
 import { useEffect, useRef, useState, useMemo } from "react";
 import { useRouter } from "next/router"
 import cookies from "js-cookie";
-import { MenuDropdown } from "./MenuDropdown";
+import MenuDropdown from "./MenuDropdown";
 import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import ControlledInput from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
@@ -54,7 +54,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
         />
         <VStack alignItems="flex-start" width="100%" spacing="16px">
           {Object.entries(links).map(([key, elm]) => {
-            if(key === "Button")
+            if(key === "Button") {
               return elm.map(b => 
                 <RoundedButton
                   key={b.name}
@@ -68,6 +68,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                   {b.name}
                 </RoundedButton>
               )
+            }
             if (typeof elm === "object") {
               return (
                 <Accordion key={key} allowToggle width="100%">
@@ -647,14 +648,13 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
     setStatusSearch(elm.status)
   }
 
-  const LinkMenuDropDown = ({ key, url, text, icon }) => {
+  function LinkMenuDropDown ({ url, text, icon }) {
     const [flag, setFlag] = useBoolean()
 
     if(url === undefined && text === undefined) return <Divider marginBottom="10px" padding="10px 0 0" borderColor="#DEDFE0"/>
 
     return (
       <Link
-        key={key}
         display="flex"
         flexDirection="colunm"
         _hover={{ opacity: "0.6" }}
@@ -693,10 +693,10 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
       }
     >
       <HStack display={userTemplate ? "none" : "flex"} width="100%" flex="3" spacing={7}>
-        {Object.entries(links).map(([k, v]) => {
-          if (k === "Button")
-            return v.map(b => (
-              <a key={b.name} href={b.href} target="_blank">
+        {Object.entries(links).map(([k, v], i) => {
+          if (k === "Button") {
+            return v.map((b, j) => (
+              <a key={`button-${j}`} href={b.href} target="_blank">
                 <RoundedButton
                   colorScheme="red"
                   backgroundColor={b.color}
@@ -709,11 +709,12 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
                 </RoundedButton>
               </a>
             ))
+          }
 
           if (typeof v === "object") {
             return (
               <MenuDropdown
-                key={k}
+                key={i}
                 title={k}
                 marginLeft="-25px"
                 marginTop="10px"
@@ -728,11 +729,11 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
                 _last={{ paddingBottom: "10px"}}
                 boxShadow= "0 1px 8px 1px rgba(64, 60, 67, 0.16)"
               >
-                {v.map((elm) => (
+                {v.map((elm, j) => (
                   <LinkMenuDropDown
-                    key={elm.name}
+                    key={`link-${i}-${j}`}
                     url={elm?.href}
-                    text={elm.name}
+                    text={elm?.name}
                     icon={elm?.icon}
                   />
                 ))}
@@ -742,7 +743,7 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
 
           return (
             <Link
-              key={k}
+              key={`link-${i}`}
               _hover={{ opacity: "0.6" }}
               fontSize="15px"
               fontFamily="Ubuntu"
@@ -753,7 +754,7 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
             >
               {k}
             </Link>
-          );
+          )
         })}
       </HStack>
 
@@ -851,7 +852,11 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
 
   return (
     <>
-      <MenuDrawer userData={userData} links={links} {...menuDisclosure} />
+      <MenuDrawer
+        userData={userData}
+        links={links}
+        {...menuDisclosure}
+      />
 
       <Box
         ref={divRef}

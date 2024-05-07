@@ -10,7 +10,6 @@ import Card from "../molecules/Card";
 import { CategoryIcon } from "../atoms/CategoryIcon";
 import Link from "../atoms/Link";
 import { ThemeTag } from "../atoms/ThemeTag";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
 export default function DatabaseCard({
   name,
@@ -22,8 +21,7 @@ export default function DatabaseCard({
   informationRequests,
   link,
 }) {
-  const isMobile = useCheckMobile();
-  const databaseInfo = [];
+  const databaseInfo = []
 
   if(tables.number > 0) {
     databaseInfo.push(
@@ -76,8 +74,9 @@ export default function DatabaseCard({
   return (
     <Card
       icons={categories.length !== 0 && [
-        ...categories.slice(0,6).map((c) => (
+        ...categories.slice(0,6).map((c,i) => (
           <Tooltip
+            key={i}
             hasArrow
             bg="#2A2F38"
             label={c.name}
@@ -148,8 +147,9 @@ export default function DatabaseCard({
           width="230px"
           margin="8px 0 16px"
         >
-          {tags.length !== 0 && tags.slice(0,3).map((t) => (
+          {tags.length !== 0 && tags.slice(0,3).map((t, i) => (
             <ThemeTag
+              key={i}
               name={t.name}
               display="block"
               aligntext="center"
