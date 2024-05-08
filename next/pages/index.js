@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useMediaQuery } from "@chakra-ui/react";
-import { withPages } from "../hooks/pages.hook";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import BodyText from "../components/atoms/BodyText";
 import ControlledInput from "../components/atoms/ControlledInput";
@@ -28,6 +27,11 @@ import { BePartner } from "../components/organisms/BePartner";
 import { MainPageTemplate } from "../components/templates/main";
 import { triggerGAEvent } from "../utils";
 
+import {
+  getAllThemes,
+  getAllDatasets
+} from "./api/themes/index"
+
 import SearchIcon from "../public/img/icons/searchIcon";
 import ArrowIcon from "../public/img/icons/arrowIcon";
 import { CopySolidIcon } from "../public/img/icons/copyIcon";
@@ -37,10 +41,26 @@ import DatabaseImage from "../public/img/databaseImage";
 import MasterOfDatabaseImage from "../public/img/masterOfDatabaseImage";
 import ProductsFiltersImage from "../public/img/productsFiltersImage";
 import ProcessedDataImage from "../public/img/processedDataImage";
-import BDLogoPlusImage from "../public/img/logos/bd_logo_plus";
 import BDLogoEduImage from "../public/img/logos/bd_logo_edu";
 
-function Hero() {
+export async function getStaticProps() {
+  const themes = await getAllThemes()
+  const defaultDataset = await getAllDatasets()
+
+  let dataThemeCatalog = {
+    themes: themes,
+    defaultDataset: defaultDataset
+  }
+
+  return {
+    props: {
+      dataThemeCatalog
+    },
+    revalidate: 30
+  }
+}
+
+function Hero({ dataThemeCatalog }) {
   const [search, setSearch] = useState("");
   const [tags, setTags] = useState([])
   const [mediumQuery] = useMediaQuery("(max-width: 1366px)")
@@ -180,7 +200,7 @@ function Hero() {
             >
               Busque por tema
             </Text>
-            <ThemeCatalog/>
+            <ThemeCatalog data={dataThemeCatalog}/>
           </VStack>
         </VStack>
       </VStack>
@@ -406,7 +426,7 @@ export function StepText ({index, text}) {
   )
 }
 
-function Support({ pages }) {
+function Support() {
   const { hasCopied, onCopy } = useClipboard("42494318000116")
 
   return (
@@ -698,17 +718,14 @@ function BDEdu () {
   )
 }
 
-export default function Home({
-  pages,
-}) {
-
+export default function Home({ dataThemeCatalog }) {
   return (
-    <MainPageTemplate id="home" backgroundColor="#FFFFFF" pages={pages}>
-      <Hero />
+    <MainPageTemplate id="home" backgroundColor="#FFFFFF">
+      <Hero dataThemeCatalog={dataThemeCatalog}/>
       {/* <BDEdu /> */}
       <BePartner />
       <Products />
-      <Support pages={pages} />
+      <Support />
       <link href="/vendor/terminal.css" rel="stylesheet" />
     </MainPageTemplate>
   );

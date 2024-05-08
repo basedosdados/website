@@ -63,7 +63,7 @@ function BlogPage({ pages = [] }) {
 
   if (!data)
     return (
-      <MainPageTemplate pages={pages}>
+      <MainPageTemplate>
         <Center
           minHeight="600px"
           width="100%"
@@ -78,7 +78,7 @@ function BlogPage({ pages = [] }) {
   return null
 
   return (
-    <MainPageTemplate pages={pages}>
+    <MainPageTemplate>
       <VStack
         alignItems="center"
         width="100%"

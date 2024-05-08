@@ -21,7 +21,8 @@ import styles from "../../styles/caseStudies.module.css";
 
 export async function getStaticProps(context) {
   return {
-    props : CaseStudiesContent.find((res) => res.id === context.params.id)
+    props : CaseStudiesContent.find((res) => res.id === context.params.id),
+    revalidate: 30
   } 
 }
 
