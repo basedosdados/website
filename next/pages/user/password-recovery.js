@@ -91,10 +91,10 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
     }
   }
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e, field) => {
     setFormData((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [field]: e.target.value,
     }))
   }
 
@@ -102,7 +102,9 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
     if(e.key === " ") { e.preventDefault() }
   }
 
-  async function submitNewPassword() {
+  async function handleSubmit(event) {
+    event.preventDefault()
+
     let regexPassword = {}
     let validationErrors = {}
 
@@ -195,122 +197,134 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
           fontSize={isMobileMod() ? "28px" : "34px"}
           lineHeight={isMobileMod() ? "16px" : "44px"}
           letterSpacing={isMobileMod() ? "0" : "-0.4px"}
-          fontWeith="500"
+          fontweith="500"
           textAlign="center"
         >Redefina sua nova senha</Display>
 
-        <FormControl isInvalid={!!errors.password || !!errors.regexPassword}>
-          <LabelTextForm text="Nova Senha" />
-          <InputForm
-            type={showPassword ? "password" : "text"}
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleInputChange}
-            placeholder="Crie uma nova senha"
-            fontFamily="ubuntu"
-            height="40px"
-            fontSize="14px"
-            borderRadius="16px"
-            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
-            styleElmRight={{
-              width: "50px",
-              height: "40px",
-              cursor: "pointer",
-              onClick: () => setShowPassword(!showPassword)
-            }}
-            elmRight={showPassword ?
-              <EyeOffIcon
-                alt="esconder senha"
-                width="20px"
-                height="20px"
-                fill="#D0D0D0"
-              />
-            :
-              <EyeIcon
-                alt="exibir senhar"
-                width="20px"
-                height="20px"
-                fill="#D0D0D0"
-              />
-            }
-          />
-          <Text 
-            margin="8px 0"
-            color= { errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#D93B3B" : "#7D7D7D" : "#7D7D7D" }
-            fontFamily= "Ubuntu"
-            fontSize= "12px"
-            fontWeight= "400"
-            lineHeight= "16px"
-            letterSpacing= "0.3px"
-            display="flex"
-            flexDirection="row"
-            gap="4px"
-            alignItems="flex-start"
-          ><Exclamation width="14px" height="14px" fill="#D93B3B" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
-          <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
-            <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>8 caracteres</ListItem>
-            <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>Uma letra maiúscula</ListItem>
-            <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>Uma letra minúscula</ListItem>
-            <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>Um dígito</ListItem>
-            <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial, dentre ! @ # ? ! % & *</ListItem>
-          </UnorderedList>
-          {errors.password &&
-            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
-              <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.password}
-            </FormErrorMessage>
-          }
-        </FormControl>
-
-        <FormControl isInvalid={!!errors.confirmPassword}>
-          <LabelTextForm text="Confirme a nova senha" />
-          <InputForm
-            type={showConfirmPassword ? "password" : "text"}
-            id="confirmPassword"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleInputChange}
-            placeholder="Insira a senha novamente"
-            fontFamily="ubuntu"
-            height="40px"
-            fontSize="14px"
-            borderRadius="16px"
-            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
-            styleElmRight={{
-              width: "50px",
-              height: "40px",
-              cursor: "pointer",
-              onClick: () => setShowConfirmPassword(!showConfirmPassword)
-            }}
-            elmRight={showConfirmPassword ?
-              <EyeOffIcon
-                alt="esconder senha"
-                width="20px"
-                height="20px"
-                fill="#D0D0D0"
-              />
-            :
-              <EyeIcon
-                alt="exibir senhar"
-                width="20px"
-                height="20px"
-                fill="#D0D0D0"
-              />
-            }
-          />
-          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
-            <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.confirmPassword}
-          </FormErrorMessage>
-        </FormControl>
-
-        <Button
-          borderRadius="30px"
-          _hover={{transform: "none", opacity: 0.8}}
-          width="fit-content"
-          onClick={() => submitNewPassword()}
+        <form
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%"
+          }}
+          onSubmit={handleSubmit}
         >
-          Atualizar senha
-        </Button>
+          <FormControl isInvalid={!!errors.password || !!errors.regexPassword}>
+            <LabelTextForm text="Nova Senha" />
+            <InputForm
+              type={showPassword ? "password" : "text"}
+              id="password"
+              name="password"
+              autoComplete="new-password"
+              value={formData.password}
+              onChange={(e) => handleInputChange(e, "password")}
+              placeholder="Crie uma nova senha"
+              fontFamily="ubuntu"
+              height="40px"
+              fontSize="14px"
+              borderRadius="16px"
+              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+              styleElmRight={{
+                width: "50px",
+                height: "40px",
+                cursor: "pointer",
+                onClick: () => setShowPassword(!showPassword)
+              }}
+              elmRight={showPassword ?
+                <EyeOffIcon
+                  alt="esconder senha"
+                  width="20px"
+                  height="20px"
+                  fill="#D0D0D0"
+                />
+              :
+                <EyeIcon
+                  alt="exibir senhar"
+                  width="20px"
+                  height="20px"
+                  fill="#D0D0D0"
+                />
+              }
+            />
+            <Text 
+              margin="8px 0"
+              color= { errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#D93B3B" : "#7D7D7D" : "#7D7D7D" }
+              fontFamily= "Ubuntu"
+              fontSize= "12px"
+              fontWeight= "400"
+              lineHeight= "16px"
+              letterSpacing= "0.3px"
+              display="flex"
+              flexDirection="row"
+              gap="4px"
+              alignItems="flex-start"
+            ><Exclamation width="14px" height="14px" fill="#D93B3B" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
+            <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
+              <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>8 caracteres</ListItem>
+              <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>Uma letra maiúscula</ListItem>
+              <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>Uma letra minúscula</ListItem>
+              <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>Um dígito</ListItem>
+              <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial, dentre ! @ # ? ! % & *</ListItem>
+            </UnorderedList>
+            {errors.password &&
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
+                <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.password}
+              </FormErrorMessage>
+            }
+          </FormControl>
+
+          <FormControl marginTop="40px" isInvalid={!!errors.confirmPassword}>
+            <LabelTextForm text="Confirme a nova senha" />
+            <InputForm
+              type={showConfirmPassword ? "password" : "text"}
+              id="confirmPassword"
+              name="confirmPassword"
+              autoComplete="new-password"
+              value={formData.confirmPassword}
+              onChange={(e) => handleInputChange(e, "confirmPassword")}
+              placeholder="Insira a senha novamente"
+              fontFamily="ubuntu"
+              height="40px"
+              fontSize="14px"
+              borderRadius="16px"
+              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+              styleElmRight={{
+                width: "50px",
+                height: "40px",
+                cursor: "pointer",
+                onClick: () => setShowConfirmPassword(!showConfirmPassword)
+              }}
+              elmRight={showConfirmPassword ?
+                <EyeOffIcon
+                  alt="esconder senha"
+                  width="20px"
+                  height="20px"
+                  fill="#D0D0D0"
+                />
+              :
+                <EyeIcon
+                  alt="exibir senhar"
+                  width="20px"
+                  height="20px"
+                  fill="#D0D0D0"
+                />
+              }
+            />
+            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
+              <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.confirmPassword}
+            </FormErrorMessage>
+          </FormControl>
+
+          <Button
+            type="submit"
+            borderRadius="30px"
+            margin="40px auto 0"
+            _hover={{transform: "none", opacity: 0.8}}
+            width="fit-content"
+          >
+            Atualizar senha
+          </Button>
+        </form>
       </Stack>
     </MainPageTemplate>
   )
@@ -338,7 +352,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
           fontSize={isMobileMod() ? "28px" : "34px"}
           lineHeight={isMobileMod() ? "16px" : "44px"}
           letterSpacing={isMobileMod() ? "0" : "-0.4px"}
-          fontWeith="500"
+          fontweith="500"
           textAlign="center"
         >Redefina sua senha</Display>
 

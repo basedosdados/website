@@ -18,11 +18,12 @@ export default function SimpleInput({
   styleElmRight,
   ...props
 }) {
-  
+
   return (
     <InputGroup>
       {elmLeft && <InputLeftElement children={elmLeft} {...styleElmLeft}/>}
       <Input
+        id={id}
         type={type}
         value={value}
         onKeyDown={onKeyDown}

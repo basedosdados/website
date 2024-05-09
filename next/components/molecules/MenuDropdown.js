@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react"
 import ChevronIcon from "../../public/img/icons/chevronIcon"
 
-export function MenuDropdown({ title, children, ...style }) {
+export default function MenuDropdown({ title, children, ...style }) {
   const timerRef = useRef();
   const [isOpenMenu, setIsOpenMenu] = useState(false);
 

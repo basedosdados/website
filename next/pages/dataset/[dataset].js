@@ -20,7 +20,7 @@ import GreenTab from "../../components/atoms/GreenTab";
 import ReadMore from "../../components/atoms/ReadMore";
 import HelpWidget from "../../components/atoms/HelpWidget";
 import { ImageOrganization } from "../../components/atoms/ImageOrganization";
-import { TemporalCoverageString } from "../../components/atoms/TemporalCoverageDisplay";
+import { TemporalCoverageString } from "../../components/molecules/TemporalCoverageDisplay";
 import DatasetResource from "../../components/organisms/DatasetResource";
 import { MetadataPage } from "../../components/organisms/MetadataPage";
 import { MainPageTemplate } from "../../components/templates/main";
