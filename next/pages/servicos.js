@@ -2,20 +2,23 @@ import {
   Stack,
   VStack,
   Image,
+  Box,
+  Skeleton
 } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import ImageNext from "next/image";
+import Head from "next/head";
+import { CaseStudiesPaged } from "../content/caseStudies";
 import Display from "../components/atoms/Display";
 import BodyText from "../components/atoms/BodyText";
-import Head from "next/head";
-import BigTitle from "../components/atoms/BigTitle";
 import Link from "../components/atoms/Link";
 import RoundedButton from "../components/atoms/RoundedButton";
 import SectionText from "../components/atoms/SectionText";
 import SectionTitle from "../components/atoms/SectionTitle";
-import { KnowOurServices } from "../components/molecules/KnowOurServices";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
-import { isMobileMod } from "../hooks/useCheckMobile.hook";
-import BDLogoProImage from "../public/img/logos/bd_logo_pro"
+import { isMobileMod, useCheckMobile } from "../hooks/useCheckMobile.hook";
+import BDLogoLabImage from "../public/img/logos/bd_logo_lab"
 
 import CheckIcon from "../public/img/icons/checkIcon";
 
@@ -64,25 +67,6 @@ function FixedBottomBar() {
   );
 }
 
-function BorderBox({ title, children }) {
-  return (
-    <VStack
-      textAlign="center"
-      borderRadius="18px"
-      padding="25px"
-      boxShadow="0 2px 16px 0 rgba(100, 96, 103, 0.16)"
-      width="350px"
-      height="230px"
-      spacing={4}
-    >
-      <SectionTitle fontSize="16px">{title}</SectionTitle>
-      <SectionText fontWeight="300" fontSize="14px" textAlign="center">
-        {children}
-      </SectionText>
-    </VStack>
-  );
-}
-
 function Slogan () {
   return (
     <Stack
@@ -93,7 +77,7 @@ function Slogan () {
       margin={isMobileMod() ? "0 auto 60px" :"0 auto 100px"}
       alignItems="center"
     >
-      <BDLogoProImage
+      <BDLogoLabImage
         widthImage={isMobileMod() ? "120px" : "240px"}
         heightImage={isMobileMod() ? "30px" : "60px"}
         marginBottom={isMobileMod() ? "24px" : "40px"}
@@ -134,6 +118,170 @@ function BoxBenefits ({ benefits, children }) {
   )
 }
 
+function BorderBox({ title, children }) {
+  return (
+    <VStack
+      textAlign="center"
+      borderRadius="18px"
+      padding="25px"
+      boxShadow="0 2px 16px 0 rgba(100, 96, 103, 0.16)"
+      width="350px"
+      height="230px"
+      spacing={4}
+    >
+      <SectionTitle fontSize="16px">{title}</SectionTitle>
+      <SectionText fontWeight="300" fontSize="14px" textAlign="center">
+        {children}
+      </SectionText>
+    </VStack>
+  )
+}
+
+function WorkflowBox({ order, title, subtitle, children}) {
+  const hasLeftSpacing = (order % 2 == 0) ? false : true
+
+  return (
+    <VStack
+      maxWidth="620px"
+      textAlign="center"
+      borderRadius="18px"
+      padding="25px"
+      boxShadow="0 2px 16px 0 rgba(100, 96, 103, 0.16)"
+      margin={
+        isMobileMod() ? "40px 0 0 0 !important" :
+        hasLeftSpacing ?
+          "40px auto 0 250px !important"
+        : 
+          "40px 250px 0 auto !important"
+      }
+      spacing={0}
+    >
+      <SectionTitle fontSize="20px" fontWeight="500" color="#2B8C4D">{title}</SectionTitle>
+      <SectionTitle fontSize="16px" fontWeight="500">{subtitle}</SectionTitle>
+      <SectionText fontWeight="300" fontSize="14px" textAlign="center">
+        {children}
+      </SectionText>
+    </VStack>
+  )
+}
+
+function CaseStudies ({}) {
+  const [CaseStudiesPages, setCaseStudiesPages] = useState([])
+
+  useEffect(() => {
+    setCaseStudiesPages(CaseStudiesPaged())
+  },[])
+
+  return (
+    <Stack
+      maxWidth="1264px"
+      margin="0 auto"
+      spacing={0}
+    >
+      <Display
+        fontSize={useCheckMobile() ? "34px" : "60px"}
+        letterSpacing={useCheckMobile() ? "-0.4px" : "-1.5px"}
+        lineHeight={useCheckMobile() ? "44px" : "72px"}
+        textAlign="center"
+        marginBottom={useCheckMobile() ? "8px" : "16px"}
+      >
+        Nossas soluções
+      </Display>
+      <SectionTitle
+        color="#575757"
+        textAlign="center"
+        marginBottom={useCheckMobile() ? "80px !important" : "112px !important"}
+        lineHeight={useCheckMobile() ? "32px" : "40px"}
+      >
+        Descubra por que as instituições escolhem inovar com a Base dos Dados
+      </SectionTitle>
+
+      <Stack
+        flexWrap="wrap"
+        flexDirection="row"
+        gridGap="32px"
+        spacing={0}
+        justifyContent={useCheckMobile() && "center"}
+      >
+        {CaseStudiesPages.length > 0 && 
+        CaseStudiesPages.map(elm => 
+          <Stack
+            key={elm.id}
+            width="400px"
+            spacing={0}
+          >
+            {/* Imagem banner */}
+            <Box
+              position="relative"
+              width={useCheckMobile() ? "100%" : "400px"}
+              height="145px"
+              overflow="hidden"
+              borderRadius="16px"
+              marginBottom="24px"
+            >
+              {elm?.img.length > 0 ?
+                <ImageNext
+                  alt={elm.displayTitle}
+                  src={elm.img}
+                  layout="fill"
+                  objectFit="cover"
+                />
+                :
+                <Skeleton width="100%" height="100%"/>
+              }
+            </Box>
+
+            {/* Imagem logo */}
+            <Box
+              position="relative"
+              width="100%"
+              height="45px"
+              overflow="hidden"
+              marginBottom="16px !important"
+            >
+              {elm?.logo.img.length > 0 ?
+                <ImageNext
+                  alt={elm.displayTitle}
+                  src={elm.logo.img}
+                  width={elm.logo.width/2}
+                  height={elm.logo.height/2}
+                />
+                :
+                <Skeleton width="120px" height="100%"/>
+              }
+            </Box>
+
+            <BodyText
+              marginBottom="18px !important"
+              minHeight="110px"
+              maxHeight="110px"
+              overflow="hidden"
+              whiteSpace="nowrap"
+              textOverflow="ellipsis"
+            >
+              {elm.resume.slice(0,useCheckMobile() ? 160 :175)+"..."}
+            </BodyText>
+
+            <Link
+              fontFamily="ubuntu"
+              fontWeight="500"
+              letterSpacing="0.1px"
+              fontSize="18px"
+              lineHeight="20px"
+              target="_self"
+              href={`/estudos-de-caso/${elm.id}`}
+              color="#42B0FF"
+              marginBottom="40px !important"
+            >
+              Leia o estudo de caso
+            </Link>
+          </Stack>
+        )}
+      </Stack>
+    </Stack>
+  )
+}
+
 export default function Services() {
   const services = {
     "Captura de dados":
@@ -161,12 +309,12 @@ export default function Services() {
         justifyContent="center"
         width="100%"
         maxWidth="1264px"
-        margin="0 auto 140px"
+        margin="0 auto 100px"
         direction={{ base: "column", lg: "row" }}
         gap="120px"
       >
         {Object.entries(services).map(([k, v]) => (
-          <Link href={`#${k}`}>
+          <Link href={`#${k}`} key={v}>
             <VStack justify="flex-end">
               <Image alt="" marginBottom="15px" height="100px" src={v} />
               <SectionText fontSize="20px" fontWeight="bold">
@@ -176,7 +324,9 @@ export default function Services() {
           </Link>
         ))}
       </Stack>
-      
+
+      <CaseStudies />
+
       <VStack
         id="Captura de dados"
         width="100%"
@@ -353,17 +503,46 @@ export default function Services() {
       </VStack>
 
       <VStack
+        width="100%"
         maxWidth="1264px"
         margin="auto"
+        padding="100px 0 40px"
+        textAlign="center"
+        spacing={0}
       >
-        <BigTitle paddingTop="80px" paddingBottom="10px" color="#2B8C4D">
+        <Display paddingBottom="24px" >
           Nosso fluxo de trabalho
-        </BigTitle>
-        <SectionText paddingBottom="50px">
+        </Display>
+        <BodyText maxWidth="800px">
           Uma mesma metodologia de trabalho para todos os serviços, pautada na
           satisfação dos clientes e na primazia pela qualidade.
-        </SectionText>
-        <KnowOurServices paddingBottom="50px" />
+        </BodyText>
+
+        <Stack spacing={0} width="100%">
+          <WorkflowBox order={1} title="Demanda" subtitle="Identificação de demandas e necessidades do cliente">
+            Trabalhamos colaborativamente para compreender as reais necessidades por trás dos pedidos de nossos clientes. O trabalho de descoberta compreende discussões sobre os objetivos do projeto ou o uso dos dados a serem capturados e analisados. É nesta etapa que fica claro para nossa equipe e para os clientes o objetivo final do serviço.
+          </WorkflowBox>
+
+          <WorkflowBox order={2} title="Planejamento" subtitle="Alinhamento de expectativas de negócio, engenharia ou capacitação">
+            O segundo passo é entender qual a melhor forma de entregarmos o valor que você precisa. Não trabalhamos com propostas genéricas. Cada projeto é pensado e orientado 100% para as demandas dos clientes, seja no formato de entrega de dados, análises ou capacitações específicas.
+          </WorkflowBox>
+
+          <WorkflowBox order={3} title="Orçamento" subtitle="Orçamento transparente e simplificado">
+            Uma vez alinhado o escopo, formato e expectativas, entregamos uma
+            proposta de orçamento completamente transparente. Para isso,
+            consideramos fatores como a quantidade e complexidade de{" "}
+            <i>datasets</i>, trabalho necessário, tamanho da equipe e urgência.
+            Tudo explícito de forma direta e em conformidade com o que foi
+            determinado até então.
+          </WorkflowBox>
+
+          <WorkflowBox order={4} title="Execução" subtitle="Execução ágil e entrega de valor">
+            Por fim, nossa entrega é comprometida com prazos e, sobretudo,
+            qualidade. A comunicação é constante durante toda execução.
+            Trabalhando de forma <i>lean</i> e com profissionais experientes na
+            área, nossa equipe preza pela satisfação de nossos clientes.
+          </WorkflowBox>
+        </Stack>
       </VStack>
 
       {/* <FixedBottomBar /> */}
