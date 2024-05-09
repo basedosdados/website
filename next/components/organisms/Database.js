@@ -15,7 +15,7 @@ import Title from "../atoms/Title";
 import Link from "../atoms/Link";
 import SectionText from "../atoms/SectionText";
 import { ImageOrganization } from "../atoms/ImageOrganization";
-import { TemporalCoverageString } from "../atoms/TemporalCoverageDisplay";
+import { TemporalCoverageString } from "../molecules/TemporalCoverageDisplay";
 
 import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";

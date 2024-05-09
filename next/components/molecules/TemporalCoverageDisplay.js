@@ -11,7 +11,6 @@ import {
 import { useState, useEffect, Children } from "react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import { CalendarComunIcon } from "../../public/img/icons/calendarIcon";
-import TimeIcon from "../../public/img/icons/timeIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
 export function TemporalCoverage ({
@@ -215,11 +214,13 @@ export function TemporalCoverageBar ({ value }) {
   const TooltipContent = ({children, text, firstValue, lastValue, ...props}) => {
     return (
       <Tooltip
+        maxWidth={500}
         label={
           <Box
             display="flex"
             flexDirection="column"
             alignItems="center"
+            textAlign="center"
           >
             {text}
             <Box display="flex" gap="12px" marginTop="6px">
@@ -372,7 +373,7 @@ export function TemporalCoverageBar ({ value }) {
         display="flex"
       >
         <TooltipContent
-          text={dateEnd?.type === "open" ? "Acesso liberado entre" : "Assine a BD PAGO para liberar entre"}
+          text={dateEnd?.type === "open" ? "Acesso liberado entre" : "Assine um dos planos pagos da BD para liberar entre"}
           firstValue={dateEnd?.type === "open" ? dateStart : dateEnd?.type === "closed" ? dateStart : dateMid}
           lastValue={dateEnd}
           isOpen={flag}

@@ -24,7 +24,7 @@ import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import SectionText from '../atoms/SectionText';
 import LoadingSpin from '../atoms/Loading'
 import Tag from "../atoms/Tag";
-import { TemporalCoverage } from "../atoms/TemporalCoverageDisplay";
+import { TemporalCoverage } from "./TemporalCoverageDisplay";
 
 import {
   getColumnsBdmTable

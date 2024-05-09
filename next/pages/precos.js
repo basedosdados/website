@@ -46,7 +46,6 @@ export async function getServerSideProps(context) {
 }
 
 export const CardPrice = ({
-  colorBanner,
   title,
   badge,
   subTitle,
@@ -87,15 +86,6 @@ export const CardPrice = ({
         height="fit-content"
       >
         <Box
-          position="absolute"
-          borderRadius="16px 16px 0 0"
-          height="8px"
-          width="100%"
-          top="0"
-          left="0"
-          backgroundColor={colorBanner}
-        />
-        <Box
           display="flex"
           flexDirection="row"
           gap="8px"
@@ -132,7 +122,7 @@ export const CardPrice = ({
             color="#252A32"
             fontSize="50px"
             fontWeight="500"
-            fontHeight="54px"
+            lineHeight="54px"
             letterSpacing="-0.8px"
             fontFamily="Ubuntu"
           >R$ {priceValue}</Text>
@@ -143,7 +133,7 @@ export const CardPrice = ({
             color="#252A32"
             fontSize="18px"
             fontWeight="700"
-            fontHeight="22px"
+            lineHeight="22px"
             letterSpacing="0.3px"
             fontFamily="Ubuntu"
           >/mês</Text>
@@ -229,7 +219,7 @@ export const CardPrice = ({
             color="#6F6F6F"
             fontSize="14px"
             fontWeight="400"
-            fontHeight="27px"
+            lineHeight="27px"
             letterSpacing="0.3px"
             fontFamily="Ubuntu"
             marginBottom="16px"
@@ -251,7 +241,7 @@ export const CardPrice = ({
                 <CheckIcon 
                   width="24px"
                   height="24px"
-                  fill="#42B0FF"
+                  fill="#2B8C4D"
                 />
                 <BodyText
                   fontSize="16px"
@@ -326,7 +316,7 @@ export const CardPrice = ({
             color="#252A32"
             fontSize="14px"
             fontWeight="400"
-            fontHeight="27px"
+            lineHeight="27px"
             letterSpacing="0.3px"
             fontFamily="Ubuntu"
             height="20px"
@@ -398,7 +388,6 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
           spacing={0}
         >
           <CardPrice
-            colorBanner="#2B8C4D"
             title="BD Grátis"
             subTitle={<BodyText>Para você descobrir o potencial da plataforma de dados</BodyText>}
             personConfig={{
@@ -422,7 +411,6 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
           />
 
           <CardPrice
-            colorBanner="#9C8400"
             title="BD Pro"
             subTitle={<BodyText>Para você ter acesso aos<br/> dados mais atualizados</BodyText>}
             personConfig={{
@@ -434,13 +422,12 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
             ]}
             button={{
               text: isBDPro ? "Plano atual" : `Iniciar teste grátis`,
-              href: username === null ? "/user/login?p=plans" :`/user/${username}?plans_and_payment`,
+              href: username === null ? "/user/login?p=plans&q=pro" :`/user/${username}?plans_and_payment&q=pro`,
               isCurrentPlan: isBDPro,
             }}
           />
 
           <CardPrice
-            colorBanner="#252A32"
             title="BD Empresas"
             subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
             personConfig={{
@@ -452,7 +439,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
             ]}
             button={{
               text: isBDEmp ? "Plano atual" : "Iniciar teste grátis",
-              href: username === null ? "/user/login?p=plans" :`/user/${username}?plans_and_payment`,
+              href: username === null ? "/user/login?p=plans&q=empresas" :`/user/${username}?plans_and_payment&q=empresas`,
               isCurrentPlan: isBDEmp,
             }}
           />

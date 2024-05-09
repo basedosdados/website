@@ -79,9 +79,6 @@ export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
       ".Input:hover": {
         border: "2px solid #42B0FF",
       },
-      ".Input--selected": {
-        border: "2px solid #42B0FF",
-      }
     }
   }
 
