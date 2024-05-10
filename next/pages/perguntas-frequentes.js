@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { QuestionFAQ } from "../content/FAQ";
 import { MainPageTemplate } from "../components/templates/main";
+import { withPages } from "../hooks/pages.hook";
 
 import { DebouncedControlledInput } from "../components/atoms/ControlledInput";
 import Display from "../components/atoms/Display";
@@ -21,6 +22,10 @@ import BodyText from "../components/atoms/BodyText";
 import CrossIcon from "../public/img/icons/crossIcon";
 import SearchIcon from "../public/img/icons/searchIcon";
 import styles from "../styles/faq.module.css";
+
+export async function getStaticProps() {
+  return await withPages()
+}
 
 const QuestionsBox = ({ question, answer, id, active }) => {
   const [isActive, setIsActive] = useState(false)

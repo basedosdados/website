@@ -62,7 +62,7 @@ function FooterLink(props) {
   )
 }
 
-export default function Footer({ pages, ocult = false }) {
+export default function Footer({ ocult = false }) {
   const mobileCheck = useCheckMobile()
   const [isMobileMod, setIsMobileMod] = useState(false)
   
@@ -211,14 +211,6 @@ export default function Footer({ pages, ocult = false }) {
             marginTop={isMobileMod && "16px"}
           >
             <BodyText color="#FFF" fontSize="16px" letterSpacing="0.2px">® 2024 Base dos Dados</BodyText>
-            <BodyText
-              color="#FFF"
-              fontSize="12px"
-              letterSpacing="0.2px"
-            >
-              Ícones adaptados de Freepik e disponíveis em Storyset e
-              Flaticon.
-            </BodyText>
           </HStack>
 
           <HStack spacing={3}>

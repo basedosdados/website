@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../../utils";
+import { withPages } from "../../hooks/pages.hook";
 
 import {
   getSearchDatasets
@@ -37,6 +38,10 @@ import { MainPageTemplate } from "../../components/templates/main";
 
 import FilterIcon from "../../public/img/icons/filterIcon";
 import NotFoundImage from "../../public/img/notFoundImage";
+
+export async function getStaticProps() {
+  return await withPages()
+}
 
 function FilterTags({
   label,
@@ -77,7 +82,7 @@ function FilterTags({
   )
 }
 
-export default function SearchPage({ pages }) {
+export default function SearchPage() {
   const router =  useRouter()
   const query = router.query
   const [fetchApi, setFetchApi] = useState(null)
@@ -456,7 +461,7 @@ export default function SearchPage({ pages }) {
   }
 
   return (
-    <MainPageTemplate pages={pages}>
+    <MainPageTemplate>
       <Head>
         <title>Dados – Base dos Dados</title>
         <meta

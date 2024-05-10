@@ -12,6 +12,11 @@ import Display from "../components/atoms/Display";
 import { MainPageTemplate } from "../components/templates/main";
 import ServiceTerms from "../content/serviceTerms";
 import PrivacyPolicy from "../content/privacyPolicy";
+import { withPages } from "../hooks/pages.hook";
+
+export async function getStaticProps() {
+  return await withPages()
+}
 
 export default function TermsAndPolitics() {
   const router = useRouter()
