@@ -33,7 +33,7 @@ function FixedBottomBar() {
       bottom="0px"
       width="100%"
       padding="10px 20px"
-      height="70px"
+      height={isMobileMod() ? "90px" : "70px"}
       backgroundColor="#3AA1EB"
       justify="center"
       align="center"
@@ -49,7 +49,7 @@ function FixedBottomBar() {
         position={{ base: "initial", lg: "fixed" }}
         bottom="14px"
         right="20%"
-        href="/blog/1/"
+        href="/contato"
         textDecoration="none !important"
       >
         <RoundedButton
@@ -64,7 +64,7 @@ function FixedBottomBar() {
         </RoundedButton>
       </Link>
     </Stack>
-  );
+  )
 }
 
 function Slogan () {
@@ -106,13 +106,15 @@ function Slogan () {
 
 function BoxBenefits ({ benefits, children }) {
   return (
-    <Stack flexDirection="row" spacing={0} gap="10px">
-      <CheckIcon 
-        width="28px"
-        height="28px"
-        fill="#2B8C4D"
-      />
-      {benefits && <BodyText fontWeight="500">{benefits}:</BodyText>}
+    <Stack flexDirection={benefits ? isMobileMod() ? "column" : "row" : "row"} spacing={0} gap="10px">
+      <Box display="flex" flexDirection="row" justifyContent="center">
+        <CheckIcon 
+          width="28px"
+          height="28px"
+          fill="#2B8C4D"
+        />
+        {benefits && <BodyText fontWeight="500">{benefits}:</BodyText>}
+      </Box>
       <BodyText>{children}</BodyText>
     </Stack>
   )
@@ -174,8 +176,9 @@ function CaseStudies ({}) {
 
   return (
     <Stack
+      width="100%"
       maxWidth="1264px"
-      margin="0 auto"
+      margin="0 auto !important"
       spacing={0}
     >
       <Display
@@ -255,11 +258,10 @@ function CaseStudies ({}) {
               marginBottom="18px !important"
               minHeight="110px"
               maxHeight="110px"
+              textAlign="justify"
               overflow="hidden"
-              whiteSpace="nowrap"
-              textOverflow="ellipsis"
             >
-              {elm.resume.slice(0,useCheckMobile() ? 160 :175)+"..."}
+              {elm.resume.slice(0,useCheckMobile() ? 160 :178)+"..."}
             </BodyText>
 
             <Link
@@ -293,7 +295,7 @@ export default function Services() {
   }
 
   return (
-    <MainPageTemplate paddingX="24px">
+    <MainPageTemplate>
       <Head>
         <title>Serviços – Base dos Dados</title>
         <meta
@@ -303,249 +305,256 @@ export default function Services() {
         />
       </Head>
 
-      <Slogan/>
-
       <Stack
-        justifyContent="center"
-        width="100%"
-        maxWidth="1264px"
-        margin="0 auto 100px"
-        direction={{ base: "column", lg: "row" }}
-        gap="120px"
+        spacing={0}
+        paddingX="24px"
+        margin="0 auto"
+        alignItems="center"
       >
-        {Object.entries(services).map(([k, v]) => (
-          <Link href={`#${k}`} key={v}>
-            <VStack justify="flex-end">
-              <Image alt="" marginBottom="15px" height="100px" src={v} />
-              <SectionText fontSize="20px" fontWeight="bold">
-                {k}
-              </SectionText>
-            </VStack>
-          </Link>
-        ))}
+        <Slogan/>
+
+        <Stack
+          justifyContent="center"
+          width="100%"
+          maxWidth="1264px"
+          margin="0 auto 100px !important"
+          direction={{ base: "column", lg: "row" }}
+          gap="120px"
+        >
+          {Object.entries(services).map(([k, v]) => (
+            <Link href={`#${k}`} key={v}>
+              <VStack justify="flex-end">
+                <Image alt="" marginBottom="15px" height="100px" src={v} />
+                <SectionText fontSize="20px" fontWeight="bold">
+                  {k}
+                </SectionText>
+              </VStack>
+            </Link>
+          ))}
+        </Stack>
+
+        <CaseStudies />
+
+        <VStack
+          id="Captura de dados"
+          width="100%"
+          maxWidth="1264px"
+          padding="100px 0 40px"
+          margin="auto"
+          textAlign="center"
+          spacing={0}
+        >
+          <Display paddingBottom="24px" >
+            Captura de dados
+          </Display>
+
+          <BodyText maxWidth="800px" paddingBottom="8px" fontWeight="500" marginTop="0">
+            Capturamos e disponibilizamos dados sob demanda com rapidez, escala e baixo custo.
+          </BodyText>
+          <BodyText maxWidth="800px">
+            Você não precisa se preocupar em criar e manter uma infraestrutura
+            própria ou escrever códigos - nós cuidamos disso. Tudo é feito
+            seguindo a metodologia de tratamento e padronização da Base dos Dados,
+            e conforme as melhores práticas de engenharia de dados do mercado. As
+            tabelas tratadas podem ser disponibilizadas com exclusividade ou serem
+            públicas.
+          </BodyText>
+
+          <Stack paddingTop="40px">
+            <BodyText fontWeight="700">Principais vantagens</BodyText>
+            <BoxBenefits benefits="Rapidez">
+              Mesmo <i>queries</i> muito complexas demoram apenas minutos para serem processadas.
+            </BoxBenefits>
+            <BoxBenefits benefits="Escala">
+              Nosso <i>datalake</i> escala magicamente para hexabytes se necessário.
+            </BoxBenefits>
+            <BoxBenefits benefits="Baixo custo">
+              Todo usuário possui 1TB gratuito por mês para consulta aos dados.
+            </BoxBenefits>
+          </Stack>
+
+          <Stack paddingTop="40px" spacing="40px">
+            <BodyText fontWeight="700">Nosso trabalho com engenharia de dados</BodyText>
+
+            <Stack
+              justifyContent="space-between"
+              width="100%"
+              direction={{ base: "column", lg: "row" }}
+              align="center"
+            >
+              <BorderBox title="Tecnologia de ponta">
+                Utilizando da infraestrutura do <i>Google Cloud Platform</i>, uma
+                das maiores plataformas de armazenamento e processamento de dados,
+                garantimos a segurança e a confiabilidade do nosso trabalho.
+              </BorderBox>
+              <BorderBox title="Flexibilidade">
+                Seja envios pontuais, atualizações recorrentes, acesso via{" "}
+                <i>API</i>, ou conexão com plataformas de <i>BI</i>, entregamos a
+                solução que você precisa de forma ágil e completa.
+              </BorderBox>
+              <BorderBox
+                title={
+                  <>
+                    <i>Frameworks</i> reconhecidos
+                  </>
+                }
+              >
+                Com <i>frameworks</i> e sistemas de gestão de dados tais como{" "}
+                <i>CKAN</i>, garantimos a qualidade e a organização do seu sistema
+                de dados sem gerar qualquer preocupação para sua equipe.
+              </BorderBox>
+            </Stack>
+          </Stack>
+        </VStack>
+
+        <VStack
+          id="Análise de dados"
+          width="100%"
+          maxWidth="1264px"
+          padding="100px 0 40px"
+          margin="auto"
+          textAlign="center"
+          spacing={0}
+        >
+          <Display paddingBottom="24px" >
+            Análise de dados
+          </Display>
+
+          <BodyText maxWidth="900px" paddingBottom="8px" fontWeight="500" marginTop="0">
+            Construímos análises, relatórios e indicadores essenciais para sua pesquisa ou tomada de decisão.
+          </BodyText>
+          <BodyText maxWidth="800px">
+            As informações e <i>insights</i> são geradas a partir de diversos
+            conjuntos de dados já tratados no nosso <i>datalake</i> público
+            atrelado à <i>expertise</i> da nossa equipe de Dados. E mais:
+            utilizamos nossa metodologia padrão de tratamento para que você também
+            possa cruzar esses dados com quaisquer outras bases disponíveis no{" "}
+            <i>datalake</i>.
+          </BodyText>
+
+          <Stack paddingTop="40px">
+            <BodyText fontWeight="700">Exemplos de perguntas que podemos responder</BodyText>
+            <BoxBenefits>
+              Como vem evoluindo a economia brasileira, com indicadores detalhados mensais por setor?
+            </BoxBenefits>
+            <BoxBenefits>
+              Quais escolas terão <i>performance</i> acima da média do estado em matemática no ano que vem?
+            </BoxBenefits>
+            <BoxBenefits>
+              Quantas vezes o Diário Oficial da União publica sobre certo tema a cada dia?
+            </BoxBenefits>
+          </Stack>
+        </VStack>
+
+        <VStack
+          id="Consultoria de dados"
+          width="100%"
+          maxWidth="1264px"
+          padding="100px 0 40px"
+          margin="auto"
+          textAlign="center"
+          spacing={0}
+        >
+          <Display paddingBottom="24px" >
+            Consultoria de dados
+          </Display>
+
+          <BodyText maxWidth="900px" paddingBottom="8px" fontWeight="500" marginTop="0">
+            Orientamos como aplicar a nossa metodologia de limpeza, estruturação e padronização de dados
+          </BodyText>
+          <BodyText maxWidth="800px">
+            No seu projeto ou organização através de workshops e materiais
+            exclusivos. Reproduzir nosso processo de tratamento em seu próprio
+            banco de dados pode poupar horas de trabalho de sua equipe ao
+            consultar, manipular ou atualizar as informações.
+          </BodyText>
+
+          <Stack paddingTop="40px">
+            <BodyText fontWeight="700">Principais vantagens</BodyText>
+            <BoxBenefits>
+              Experiência em construir infraestruturas capazes de suportar milhares de acessos mensais.
+            </BoxBenefits>
+            <BoxBenefits>
+              Flexibilidade para projetos remotos em qualquer lugar do país.
+            </BoxBenefits>
+            <BoxBenefits>
+              Equipe diversa e com <i>expertise</i> em diferentes áreas do conhecimento e dados.
+            </BoxBenefits>
+          </Stack>
+
+          <Stack paddingTop="40px" spacing="40px">
+            <BodyText fontWeight="700">Frentes de atuação</BodyText>
+
+            <Stack
+              justifyContent="space-between"
+              width="100%"
+              direction={{ base: "column", lg: "row" }}
+              align="center"
+            >
+              <BorderBox title="Infraestrutura">
+                Mentoria para equipes de engenharia de dados que buscam estruturar
+                processos de manutenção de dados, seus próprios <i>datalakes</i> ou
+                ainda alavancarem-se utilizando a infraestrutura da Base dos Dados.
+              </BorderBox>
+              <BorderBox title="Análise">
+                Workshops práticos, mostrando como funciona o <i>datalake</i> da
+                Base dos Dados e ensinando como explorar dados públicos para
+                matérias jornalísticas ou pesquisas científicas.
+              </BorderBox>
+              <BorderBox title="Programação">
+                Programas personalizados de ensino para utilizar pacotes de Python e
+                R da Base dos Dados, além de mentoria de SQL para construir análises
+                rápidas e escaláveis direto na nuvem.
+              </BorderBox>
+            </Stack>
+          </Stack>
+        </VStack>
+
+        <VStack
+          width="100%"
+          maxWidth="1264px"
+          margin="auto"
+          padding="100px 0 40px"
+          textAlign="center"
+          spacing={0}
+        >
+          <Display paddingBottom="24px" >
+            Nosso fluxo de trabalho
+          </Display>
+          <BodyText maxWidth="800px">
+            Uma mesma metodologia de trabalho para todos os serviços, pautada na
+            satisfação dos clientes e na primazia pela qualidade.
+          </BodyText>
+
+          <Stack spacing={0} width="100%">
+            <WorkflowBox order={1} title="Demanda" subtitle="Identificação de demandas e necessidades do cliente">
+              Trabalhamos colaborativamente para compreender as reais necessidades por trás dos pedidos de nossos clientes. O trabalho de descoberta compreende discussões sobre os objetivos do projeto ou o uso dos dados a serem capturados e analisados. É nesta etapa que fica claro para nossa equipe e para os clientes o objetivo final do serviço.
+            </WorkflowBox>
+
+            <WorkflowBox order={2} title="Planejamento" subtitle="Alinhamento de expectativas de negócio, engenharia ou capacitação">
+              O segundo passo é entender qual a melhor forma de entregarmos o valor que você precisa. Não trabalhamos com propostas genéricas. Cada projeto é pensado e orientado 100% para as demandas dos clientes, seja no formato de entrega de dados, análises ou capacitações específicas.
+            </WorkflowBox>
+
+            <WorkflowBox order={3} title="Orçamento" subtitle="Orçamento transparente e simplificado">
+              Uma vez alinhado o escopo, formato e expectativas, entregamos uma
+              proposta de orçamento completamente transparente. Para isso,
+              consideramos fatores como a quantidade e complexidade de{" "}
+              <i>datasets</i>, trabalho necessário, tamanho da equipe e urgência.
+              Tudo explícito de forma direta e em conformidade com o que foi
+              determinado até então.
+            </WorkflowBox>
+
+            <WorkflowBox order={4} title="Execução" subtitle="Execução ágil e entrega de valor">
+              Por fim, nossa entrega é comprometida com prazos e, sobretudo,
+              qualidade. A comunicação é constante durante toda execução.
+              Trabalhando de forma <i>lean</i> e com profissionais experientes na
+              área, nossa equipe preza pela satisfação de nossos clientes.
+            </WorkflowBox>
+          </Stack>
+        </VStack>
       </Stack>
 
-      <CaseStudies />
-
-      <VStack
-        id="Captura de dados"
-        width="100%"
-        maxWidth="1264px"
-        padding="100px 0 40px"
-        margin="auto"
-        textAlign="center"
-        spacing={0}
-      >
-        <Display paddingBottom="24px" >
-          Captura de dados
-        </Display>
-
-        <BodyText maxWidth="800px" paddingBottom="8px" fontWeight="500" marginTop="0">
-          Capturamos e disponibilizamos dados sob demanda com rapidez, escala e baixo custo.
-        </BodyText>
-        <BodyText maxWidth="800px">
-          Você não precisa se preocupar em criar e manter uma infraestrutura
-          própria ou escrever códigos - nós cuidamos disso. Tudo é feito
-          seguindo a metodologia de tratamento e padronização da Base dos Dados,
-          e conforme as melhores práticas de engenharia de dados do mercado. As
-          tabelas tratadas podem ser disponibilizadas com exclusividade ou serem
-          públicas.
-        </BodyText>
-
-        <Stack paddingTop="40px">
-          <BodyText fontWeight="700">Principais vantagens</BodyText>
-          <BoxBenefits benefits="Rapidez">
-            Mesmo <i>queries</i> muito complexas demoram apenas minutos para serem processadas.
-          </BoxBenefits>
-          <BoxBenefits benefits="Escala">
-            Nosso <i>datalake</i> escala magicamente para hexabytes se necessário.
-          </BoxBenefits>
-          <BoxBenefits benefits="Baixo custo">
-            Todo usuário possui 1TB gratuito por mês para consulta aos dados.
-          </BoxBenefits>
-        </Stack>
-
-        <Stack paddingTop="40px" spacing="40px">
-          <BodyText fontWeight="700">Nosso trabalho com engenharia de dados</BodyText>
-
-          <Stack
-            justifyContent="space-between"
-            width="100%"
-            direction={{ base: "column", lg: "row" }}
-            align="center"
-          >
-            <BorderBox title="Tecnologia de ponta">
-              Utilizando da infraestrutura do <i>Google Cloud Platform</i>, uma
-              das maiores plataformas de armazenamento e processamento de dados,
-              garantimos a segurança e a confiabilidade do nosso trabalho.
-            </BorderBox>
-            <BorderBox title="Flexibilidade">
-              Seja envios pontuais, atualizações recorrentes, acesso via{" "}
-              <i>API</i>, ou conexão com plataformas de <i>BI</i>, entregamos a
-              solução que você precisa de forma ágil e completa.
-            </BorderBox>
-            <BorderBox
-              title={
-                <>
-                  <i>Frameworks</i> reconhecidos
-                </>
-              }
-            >
-              Com <i>frameworks</i> e sistemas de gestão de dados tais como{" "}
-              <i>CKAN</i>, garantimos a qualidade e a organização do seu sistema
-              de dados sem gerar qualquer preocupação para sua equipe.
-            </BorderBox>
-          </Stack>
-        </Stack>
-      </VStack>
-
-      <VStack
-        id="Análise de dados"
-        width="100%"
-        maxWidth="1264px"
-        padding="100px 0 40px"
-        margin="auto"
-        textAlign="center"
-        spacing={0}
-      >
-        <Display paddingBottom="24px" >
-          Análise de dados
-        </Display>
-
-        <BodyText maxWidth="900px" paddingBottom="8px" fontWeight="500" marginTop="0">
-          Construímos análises, relatórios e indicadores essenciais para sua pesquisa ou tomada de decisão.
-        </BodyText>
-        <BodyText maxWidth="800px">
-          As informações e <i>insights</i> são geradas a partir de diversos
-          conjuntos de dados já tratados no nosso <i>datalake</i> público
-          atrelado à <i>expertise</i> da nossa equipe de Dados. E mais:
-          utilizamos nossa metodologia padrão de tratamento para que você também
-          possa cruzar esses dados com quaisquer outras bases disponíveis no{" "}
-          <i>datalake</i>.
-        </BodyText>
-
-        <Stack paddingTop="40px">
-          <BodyText fontWeight="700">Exemplos de perguntas que podemos responder</BodyText>
-          <BoxBenefits>
-            Como vem evoluindo a economia brasileira, com indicadores detalhados mensais por setor?
-          </BoxBenefits>
-          <BoxBenefits>
-            Quais escolas terão <i>performance</i> acima da média do estado em matemática no ano que vem?
-          </BoxBenefits>
-          <BoxBenefits>
-            Quantas vezes o Diário Oficial da União publica sobre certo tema a cada dia?
-          </BoxBenefits>
-        </Stack>
-      </VStack>
-
-      <VStack
-        id="Consultoria de dados"
-        width="100%"
-        maxWidth="1264px"
-        padding="100px 0 40px"
-        margin="auto"
-        textAlign="center"
-        spacing={0}
-      >
-        <Display paddingBottom="24px" >
-          Consultoria de dados
-        </Display>
-
-        <BodyText maxWidth="900px" paddingBottom="8px" fontWeight="500" marginTop="0">
-          Orientamos como aplicar a nossa metodologia de limpeza, estruturação e padronização de dados
-        </BodyText>
-        <BodyText maxWidth="800px">
-          No seu projeto ou organização através de workshops e materiais
-          exclusivos. Reproduzir nosso processo de tratamento em seu próprio
-          banco de dados pode poupar horas de trabalho de sua equipe ao
-          consultar, manipular ou atualizar as informações.
-        </BodyText>
-
-        <Stack paddingTop="40px">
-          <BodyText fontWeight="700">Principais vantagens</BodyText>
-          <BoxBenefits>
-            Experiência em construir infraestruturas capazes de suportar milhares de acessos mensais.
-          </BoxBenefits>
-          <BoxBenefits>
-            Flexibilidade para projetos remotos em qualquer lugar do país.
-          </BoxBenefits>
-          <BoxBenefits>
-            Equipe diversa e com <i>expertise</i> em diferentes áreas do conhecimento e dados.
-          </BoxBenefits>
-        </Stack>
-
-        <Stack paddingTop="40px" spacing="40px">
-          <BodyText fontWeight="700">Frentes de atuação</BodyText>
-
-          <Stack
-            justifyContent="space-between"
-            width="100%"
-            direction={{ base: "column", lg: "row" }}
-            align="center"
-          >
-            <BorderBox title="Infraestrutura">
-              Mentoria para equipes de engenharia de dados que buscam estruturar
-              processos de manutenção de dados, seus próprios <i>datalakes</i> ou
-              ainda alavancarem-se utilizando a infraestrutura da Base dos Dados.
-            </BorderBox>
-            <BorderBox title="Análise">
-              Workshops práticos, mostrando como funciona o <i>datalake</i> da
-              Base dos Dados e ensinando como explorar dados públicos para
-              matérias jornalísticas ou pesquisas científicas.
-            </BorderBox>
-            <BorderBox title="Programação">
-              Programas personalizados de ensino para utilizar pacotes de Python e
-              R da Base dos Dados, além de mentoria de SQL para construir análises
-              rápidas e escaláveis direto na nuvem.
-            </BorderBox>
-          </Stack>
-        </Stack>
-      </VStack>
-
-      <VStack
-        width="100%"
-        maxWidth="1264px"
-        margin="auto"
-        padding="100px 0 40px"
-        textAlign="center"
-        spacing={0}
-      >
-        <Display paddingBottom="24px" >
-          Nosso fluxo de trabalho
-        </Display>
-        <BodyText maxWidth="800px">
-          Uma mesma metodologia de trabalho para todos os serviços, pautada na
-          satisfação dos clientes e na primazia pela qualidade.
-        </BodyText>
-
-        <Stack spacing={0} width="100%">
-          <WorkflowBox order={1} title="Demanda" subtitle="Identificação de demandas e necessidades do cliente">
-            Trabalhamos colaborativamente para compreender as reais necessidades por trás dos pedidos de nossos clientes. O trabalho de descoberta compreende discussões sobre os objetivos do projeto ou o uso dos dados a serem capturados e analisados. É nesta etapa que fica claro para nossa equipe e para os clientes o objetivo final do serviço.
-          </WorkflowBox>
-
-          <WorkflowBox order={2} title="Planejamento" subtitle="Alinhamento de expectativas de negócio, engenharia ou capacitação">
-            O segundo passo é entender qual a melhor forma de entregarmos o valor que você precisa. Não trabalhamos com propostas genéricas. Cada projeto é pensado e orientado 100% para as demandas dos clientes, seja no formato de entrega de dados, análises ou capacitações específicas.
-          </WorkflowBox>
-
-          <WorkflowBox order={3} title="Orçamento" subtitle="Orçamento transparente e simplificado">
-            Uma vez alinhado o escopo, formato e expectativas, entregamos uma
-            proposta de orçamento completamente transparente. Para isso,
-            consideramos fatores como a quantidade e complexidade de{" "}
-            <i>datasets</i>, trabalho necessário, tamanho da equipe e urgência.
-            Tudo explícito de forma direta e em conformidade com o que foi
-            determinado até então.
-          </WorkflowBox>
-
-          <WorkflowBox order={4} title="Execução" subtitle="Execução ágil e entrega de valor">
-            Por fim, nossa entrega é comprometida com prazos e, sobretudo,
-            qualidade. A comunicação é constante durante toda execução.
-            Trabalhando de forma <i>lean</i> e com profissionais experientes na
-            área, nossa equipe preza pela satisfação de nossos clientes.
-          </WorkflowBox>
-        </Stack>
-      </VStack>
-
-      {/* <FixedBottomBar /> */}
+      <FixedBottomBar />
     </MainPageTemplate>
   )
 }
