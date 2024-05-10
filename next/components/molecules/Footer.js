@@ -143,7 +143,7 @@ export default function Footer({ ocult = false }) {
               <FooterLink href="/servicos#Consultoria de dados">
                 Consultoria de dados
               </FooterLink>
-              <FooterLink href="/estudos-de-caso">
+              <FooterLink href="/servicos#Estudos de caso">
                 Estudos de caso
               </FooterLink>
             </SectionCategories>

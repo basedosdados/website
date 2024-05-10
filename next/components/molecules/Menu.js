@@ -816,7 +816,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     Soluções: [
       {icon: <BDLogoProImage widthImage="54px"/>, name: "Dados exclusivos", href: "https://info.basedosdados.org/bd-pro"},
       {icon: <BDLogoEduImage widthImage="54px"/>, name: "Curso de dados", href: "https://info.basedosdados.org/bd-edu-python"},
-      {icon: <BDLogoLabImage widthImage="54px"/>, name: "Serviço", href: "/servicos"},
+      {icon: <BDLogoLabImage widthImage="54px"/>, name: "Serviços", href: "/servicos"},
     ],
     "Preços": "/precos",
     Tutoriais: [

@@ -176,8 +176,10 @@ function CaseStudies ({}) {
 
   return (
     <Stack
+      id="Estudos de caso"
       width="100%"
       maxWidth="1264px"
+      paddingTop="100px"
       margin="0 auto !important"
       spacing={0}
     >
@@ -317,7 +319,7 @@ export default function Services() {
           justifyContent="center"
           width="100%"
           maxWidth="1264px"
-          margin="0 auto 100px !important"
+          margin="0 auto !important"
           direction={{ base: "column", lg: "row" }}
           gap="120px"
         >
@@ -399,8 +401,7 @@ export default function Services() {
                   </>
                 }
               >
-                Com <i>frameworks</i> e sistemas de gestão de dados tais como{" "}
-                <i>CKAN</i>, garantimos a qualidade e a organização do seu sistema
+                Com <i>frameworks</i> e sistemas de gestão de dados, garantimos a qualidade e a organização do seu sistema
                 de dados sem gerar qualquer preocupação para sua equipe.
               </BorderBox>
             </Stack>
