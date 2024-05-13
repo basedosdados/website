@@ -53,6 +53,7 @@ async function getAllPeople() {
         `
       }
     })
+    if(res?.data?.errors) return {status: "err_getTeam_2"}
     const data = res?.data?.data?.allAccount?.edges
     return data
   } catch (error) {
@@ -65,6 +66,7 @@ export default async function handler(req, res) {
 
   if(result?.status === "err_getTeam_0") return res.status(500).json([])
   if(result?.status === "err_getTeam_1") return res.status(500).json([])
+  if(result?.status === "err_getTeam_2") return res.status(500).json([])
 
   res.status(200).json(result)
 }

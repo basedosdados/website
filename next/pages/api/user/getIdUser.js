@@ -23,6 +23,7 @@ async function getIdUser(email) {
         query: `query { allAccount (email: "${email}") {edges{node{id}}} }`
       }
     })
+    if(res?.data?.errors) return {status: "err_getId_2"}
     const data = res.data
     return data
   } catch (error) {
@@ -36,6 +37,8 @@ export default async function handler(req, res) {
 
   if(result?.status === "err_getId_0") return res.status(500).json({error: true})
   if(result?.status === "err_getId_1") return res.status(500).json({error: true})
+  if(result?.status === "err_getId_2") return res.status(500).json({error: true})
+
   if(result.errors) return res.status(500).json({error: result.errors})
   if(result === "err") return res.status(500).json({error: "err"})
   if(result?.data?.allAccount?.edges.length === 0) return res.status(500).json({error: "err"})

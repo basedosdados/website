@@ -52,6 +52,7 @@ async function getCareerPeople(team) {
         `
       }
     })
+    if(res?.data?.errors) return {status: "err_getCareer_2"}
     const data = res?.data?.data?.allAccount?.edges
     return data
   } catch (error) {
@@ -65,6 +66,7 @@ export default async function handler(req, res) {
 
   if(result?.status === "err_getCareer_0") return res.status(500).json([])
   if(result?.status === "err_getCareer_1") return res.status(500).json([])
+  if(result?.status === "err_getCareer_2") return res.status(500).json([])
   if(result.errors) return res.status(500).json({error: result.errors})
   if(result === "err") return res.status(500).json({error: "err"})
 
