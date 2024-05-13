@@ -298,6 +298,7 @@ export default function QuemSomos({ data }) {
     "Comunicação",
     "Dados",
     "Plataforma",
+    "BD Edu",
     "Conselho Fiscal"
   ]
 
