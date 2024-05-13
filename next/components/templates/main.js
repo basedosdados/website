@@ -4,7 +4,6 @@ import Footer from "../molecules/Footer";
 import Menu from "../molecules/Menu";
 
 export function MainPageTemplate({
-  pages,
   children,
   backgroundColor = "#FFFFFF",
   cleanTemplate = false,
@@ -15,7 +14,7 @@ export function MainPageTemplate({
   return (
     <Box backgroundColor={backgroundColor}>
       <SiteHead />
-      <Menu pages={pages} simpleTemplate={cleanTemplate} userTemplate={userTemplate}/>
+      <Menu simpleTemplate={cleanTemplate} userTemplate={userTemplate}/>
       <Box
         paddingTop="72px"
         paddingBottom="50px"
@@ -23,7 +22,7 @@ export function MainPageTemplate({
       >
         {children}
       </Box>
-      <Footer pages={pages} ocult={cleanTemplate || userTemplate}/>
+      <Footer ocult={cleanTemplate || userTemplate}/>
     </Box>
   );
 }

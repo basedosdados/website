@@ -33,6 +33,7 @@ import { triggerGAEvent } from "../../utils";
 
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import BDLogoEduImage from "../../public/img/logos/bd_logo_edu";
+import BDLogoLabImage from "../../public/img/logos/bd_logo_lab";
 import BDLogoImage from "../../public/img/logos/bd_logo";
 import FarBarsIcon from "../../public/img/icons/farBarsIcon";
 import SearchIcon from "../../public/img/icons/searchIcon";
@@ -815,10 +816,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     Soluções: [
       {icon: <BDLogoProImage widthImage="54px"/>, name: "Dados exclusivos", href: "https://info.basedosdados.org/bd-pro"},
       {icon: <BDLogoEduImage widthImage="54px"/>, name: "Curso de dados", href: "https://info.basedosdados.org/bd-edu-python"},
-      {},
-      {name: "Serviço", href: "/servicos"},
-      {},
-      {name: "Estudos de caso", href: "/estudos-de-caso"}
+      {icon: <BDLogoLabImage widthImage="54px"/>, name: "Serviços", href: "/servicos"},
     ],
     "Preços": "/precos",
     Tutoriais: [

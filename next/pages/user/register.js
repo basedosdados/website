@@ -22,6 +22,12 @@ import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import Link from "../../components/atoms/Link";
 
+import { withPages } from "../../hooks/pages.hook";
+
+export async function getStaticProps() {
+  return await withPages()
+}
+
 export default function Register() {
   const [formData, setFormData] = useState({
     firstName: "",

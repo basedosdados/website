@@ -12,11 +12,7 @@ import { useMediaQuery } from "@chakra-ui/react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../../utils";
 
-import { 
-  getAllThemes,
-  getAllDatasets,
-  getDatasetsByThemes
-} from "../../pages/api/themes/index"
+import { getDatasetsByThemes } from "../../pages/api/themes/index"
 
 import Carousel from "../atoms/Carousel";
 import SectionText from "../atoms/SectionText";
@@ -275,7 +271,7 @@ function CardThemes ({ responsive, datasetsCards = [], loading }) {
   )
 }
 
-export default function ThemeCatalog () {
+export default function ThemeCatalog ({ data }) {
   const [listThemes, setListThemes] = useState([])
   const [defaultDatasetsCards, setDefaultDatasetCards] = useState([])
   const [fetchThemesTimeout, setFetchThemesTimeout] = useState(null)
@@ -293,27 +289,11 @@ export default function ThemeCatalog () {
 
   useEffect(() => {
     setMobileQuery(mobileCheck)
-    fetchData()
-  },[])
-
-  const fetchData = async () => {
-    const promises = []
-    promises.push(fetchThemes())
-    promises.push(fetchDatasets())
-    await Promise.all(promises)
+    setListThemes(data.themes)
+    setDefaultDatasetCards(data.defaultDataset)
     setLoading(false)
     setLoadingTheme(false)
-  }
-
-  const fetchDatasets = async () => {
-    const defaultDataset = await getAllDatasets()
-    setDefaultDatasetCards(defaultDataset)
-  }
-
-  const fetchThemes = async () => {
-    const themes = await getAllThemes()
-    setListThemes(themes)
-  }
+  },[data])
 
   useEffect(() => {
     if(selectedTheme.length > 0) {
