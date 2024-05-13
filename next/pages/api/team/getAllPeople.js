@@ -64,9 +64,9 @@ async function getAllPeople() {
 export default async function handler(req, res) {
   const result = await getAllPeople()
 
-  if(result?.status === "err_getTeam_0") return res.status(500).json([])
-  if(result?.status === "err_getTeam_1") return res.status(500).json([])
-  if(result?.status === "err_getTeam_2") return res.status(500).json([])
+  if(result?.status === "err_getTeam_0") return res.status(401).json([])
+  if(result?.status === "err_getTeam_1") return res.status(401).json([])
+  if(result?.status === "err_getTeam_2") return res.status(401).json([])
 
   res.status(200).json(result)
 }
