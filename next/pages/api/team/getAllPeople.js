@@ -9,6 +9,9 @@ async function getAllPeople() {
     data: { query: ` mutation { authToken (input: { email: "${process.env.BACKEND_AUTH_EMAIL.trim()}", password: "${process.env.BACKEND_AUTH_PASSWORD.trim()}" }) { token } }` }
   })
 
+  if(token?.data.errors) return ({status: "err_getTeam_0"})
+  if(token?.data?.data?.authToken === null) return ({status: "err_getTeam_1"})
+
   try {
     const res = await axios({
       url: API_URL,
@@ -59,5 +62,9 @@ async function getAllPeople() {
 
 export default async function handler(req, res) {
   const result = await getAllPeople()
+
+  if(result?.status === "err_getTeam_0") return res.status(500).json([])
+  if(result?.status === "err_getTeam_1") return res.status(500).json([])
+
   res.status(200).json(result)
 }
