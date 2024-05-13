@@ -128,7 +128,7 @@ export default function Footer({ ocult = false }) {
               <FooterLink href="https://info.basedosdados.org/bd-pro">
                 BD Pro
               </FooterLink>
-              <FooterLink href="https://info.basedosdados.org/bd-edu-python">
+              <FooterLink href="https://info.basedosdados.org/bd-edu-sql">
                 BD Edu
               </FooterLink>
             </SectionCategories>

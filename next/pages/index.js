@@ -710,7 +710,7 @@ function BDEdu () {
         margin="0 !important"
         backgroundColor="#8262D1"
       >
-        <a href="https://info.basedosdados.org/bd-edu-python" target="_blank">
+        <a href="https://info.basedosdados.org/bd-edu-sql" target="_blank">
           Aproveite o preço promocional
         </a>
       </RoundedButton>
