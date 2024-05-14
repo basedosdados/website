@@ -265,6 +265,7 @@ export default function QuemSomos({ data }) {
   const [filterTeam, setFilterTeam] = useState("")
 
   useEffect(() => {
+    if(data.errors) return console.error(data.errors)
     if(data.length === 0) return
     setAllPeople(sortPeople(data))
     setPeople(sortPeople(data))
