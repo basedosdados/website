@@ -42,7 +42,7 @@ export async function getServerSideProps() {
     data = result
   } catch (error) {
     console.error(error)
-    data = []
+    data = {errors: "Erro no fetch da Equipe"}
   }
 
   return {
