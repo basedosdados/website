@@ -34,16 +34,8 @@ import RedirectIcon from "../public/img/icons/redirectIcon";
 import styles from "../styles/quemSomos.module.css";
 
 export async function getServerSideProps() {
-  let data
-
-  try {
-    const response = await fetch(`https://development.basedosdados.org/api/team/getAllPeople`, {method: "GET"})
-    result = await response.json()
-    data = result
-  } catch (error) {
-    console.error(error)
-    data = {errors: "Erro no fetch da Equipe"}
-  }
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/team/getAllPeople`, {method: "GET"})
+  const data = await response.json()
 
   return {
     props: {
@@ -718,7 +710,7 @@ export default function QuemSomos({ data }) {
           Uma equipe colaborativa
         </Display>
 
-        {data.length !== 0 ?
+        {allPeople.length !== 0 ?
           <Stack
             position="relative"
             gridGap="96px"

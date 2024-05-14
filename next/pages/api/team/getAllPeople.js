@@ -9,7 +9,7 @@ async function getAllPeople() {
     data: { query: ` mutation { authToken (input: { email: "${process.env.BACKEND_AUTH_EMAIL.trim()}", password: "${process.env.BACKEND_AUTH_PASSWORD.trim()}" }) { token } }` }
   })
 
-  if(token?.data.errors) return ({status: "err_getTeam_0", errors: token.data.errors})
+  if(token?.data.errors) return ({status: "err_getTeam_0", errors: token.data.errors[0].message})
   if(token?.data?.data?.authToken === null) return ({status: "err_getTeam_1"})
 
   try {
@@ -53,7 +53,7 @@ async function getAllPeople() {
         `
       }
     })
-    if(res?.data?.errors) return {status: "err_getTeam_2", errors: res.data.errors}
+    if(res?.data?.errors) return {status: "err_getTeam_2", errors: res.data.errors[0].message}
     const data = res?.data?.data?.allAccount?.edges
     return data
   } catch (error) {
