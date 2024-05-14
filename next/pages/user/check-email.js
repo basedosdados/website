@@ -68,7 +68,7 @@ export default function CheckEmail() {
           fontSize={isMobileMod() ? "28px" : "34px"}
           lineHeight={isMobileMod() ? "36px" : "44px"}
           letterSpacing={isMobileMod() ? "0" : "-0.4px"}
-          fontWeith="500"
+          fontweith="500"
           textAlign="center"
         >Confirme seu endereço de e-mail</Display>
 
