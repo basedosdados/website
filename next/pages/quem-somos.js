@@ -37,7 +37,7 @@ export async function getServerSideProps() {
   let data
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/team/getAllPeople`, {method: "GET"})
+    const response = await fetch(`https://development.basedosdados.org/api/team/getAllPeople`, {method: "GET"})
     result = await response.json()
     data = result
   } catch (error) {
@@ -265,10 +265,15 @@ export default function QuemSomos({ data }) {
   const [filterTeam, setFilterTeam] = useState("")
 
   useEffect(() => {
-    if(data.errors) return console.error(data.errors)
     if(data.length === 0) return
-    setAllPeople(sortPeople(data))
-    setPeople(sortPeople(data))
+    if(data.errors) {
+      console.error(data.errors)
+      setAllPeople([])
+      setPeople([])
+    } else {
+      setAllPeople(sortPeople(data))
+      setPeople(sortPeople(data))
+    }
   }, [data])
 
   const sortPeople = (array) => {
