@@ -22,6 +22,8 @@ import BigTitle from "../components/atoms/BigTitle";
 import BodyText from "../components/atoms/BodyText";
 import Link from "../components/atoms/Link";
 import Carousel from "../components/atoms/Carousel";
+
+import InternalError from "../public/img/internalError";
 import WebIcon  from "../public/img/icons/webIcon";
 import EmailIcon  from "../public/img/icons/emailIcon";
 import TwitterIcon  from "../public/img/icons/twitterIcon";
@@ -33,8 +35,7 @@ import styles from "../styles/quemSomos.module.css";
 
 export async function getServerSideProps() {
   const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/team/getAllPeople`, {method: "GET"})
-    .then(res => res.json())
-  const data = response
+  const data = await response.json()
 
   return {
     props: {
@@ -251,6 +252,22 @@ const TeamBox = ({
 }
 
 export default function QuemSomos({ data }) {
+  const [allPeople, setAllPeople] = useState([])
+  const [people, setPeople] = useState([])
+  const [filterTeam, setFilterTeam] = useState("")
+
+  useEffect(() => {
+    if(data.length === 0) return
+    if(data.errors) {
+      console.error(data.errors)
+      setAllPeople([])
+      setPeople([])
+    } else {
+      setAllPeople(sortPeople(data))
+      setPeople(sortPeople(data))
+    }
+  }, [data])
+
   const sortPeople = (array) => {
     const sortPeopleArray = array
 
@@ -285,10 +302,6 @@ export default function QuemSomos({ data }) {
 
     return removeDuplicates(data).filter(obj => obj.node.firstName !== "API User" && obj.node.firstName !== "Staging")
   }
-
-  const [allPeople] = useState(sortPeople(data))
-  const [people, setPeople] = useState(sortPeople(data))
-  const [filterTeam, setFilterTeam] = useState("")
 
   const schemasTeam = [
     "Co-fundadores",
@@ -325,6 +338,10 @@ export default function QuemSomos({ data }) {
       setFilterTeam(elm)
       const result = await fetch(`/api/team/getCareerPeople?team=${elm}`, {method: "GET"})
         .then(res => res.json())
+      if(result.length === 0) {
+        setFilterTeam("")
+        return setPeople(allPeople)
+      } 
       setPeople(sortPeople(result))
     }
   }
@@ -693,59 +710,69 @@ export default function QuemSomos({ data }) {
           Uma equipe colaborativa
         </Display>
 
-        <Stack
-          position="relative"
-          gridGap="96px"
-          spacing={0}
-          flexDirection={isMobileMod() ? "column" :"row"}
-          paddingBottom="32px"
-        >
-          <Box
-            display="flex"
-            height="100%"
-            flexDirection="column"
-            gridGap="16px"
-            position={isMobileMod() ? "relative" : "sticky"}
-            top={isMobileMod()? "0" : "120px"}
-            z-index="20"
-          >
-            {schemasTeam?.map((elm) => (
-              <Text
-                fontSize="16px"
-                color={filterTeam === elm ? "#2B8C4D" :"#6F6F6F"}
-                fontFamily="ubuntu"
-                fontWeight="500"
-                width="max-content"
-                cursor="pointer"
-                letterSpacing="0.2px"
-                onClick={() => handleSelect(elm)}
-              >
-                {elm}
-              </Text>
-            ))}
-          </Box>
-
+        {data.length > 1 ?
           <Stack
-            width="100%"
-            spacing={{ base: "72px", lg: "96px" }}
+            position="relative"
+            gridGap="96px"
+            spacing={0}
+            flexDirection={isMobileMod() ? "column" :"row"}
+            paddingBottom="32px"
           >
-            {people?.map((elm, index) => (
-              <TeamBox
-                key={index}
-                index={index}
-                name={`${elm.node.firstName} ${elm.node.lastName}`}
-                picture={elm.node.picture}
-                description={elm.node.description}
-                website={elm.node.website}
-                email={elm.node.email}
-                twitter={elm.node.twitter}
-                linkedin={elm.node.linkedin}
-                github={elm.node.github}
-                career={elm.node.careers.edges}
-              />
-            ))}
+            <Box
+              display="flex"
+              height="100%"
+              flexDirection="column"
+              gridGap="16px"
+              position={isMobileMod() ? "relative" : "sticky"}
+              top={isMobileMod()? "0" : "120px"}
+              z-index="20"
+            >
+              {schemasTeam?.map((elm, i) => (
+                <Text
+                  key={i}
+                  fontSize="16px"
+                  color={filterTeam === elm ? "#2B8C4D" :"#6F6F6F"}
+                  fontFamily="ubuntu"
+                  fontWeight="500"
+                  width="max-content"
+                  cursor="pointer"
+                  letterSpacing="0.2px"
+                  onClick={() => handleSelect(elm)}
+                >
+                  {elm}
+                </Text>
+              ))}
+            </Box>
+
+            <Stack
+              width="100%"
+              spacing={{ base: "72px", lg: "96px" }}
+            >
+              {people?.map((elm, index) => (
+                <TeamBox
+                  key={index}
+                  index={index}
+                  name={`${elm.node.firstName} ${elm.node.lastName}`}
+                  picture={elm.node.picture}
+                  description={elm.node.description}
+                  website={elm.node.website}
+                  email={elm.node.email}
+                  twitter={elm.node.twitter}
+                  linkedin={elm.node.linkedin}
+                  github={elm.node.github}
+                  career={elm.node.careers.edges}
+                />
+              ))}
+            </Stack>
           </Stack>
-        </Stack>
+        :
+          <Stack justifyContent="center" alignItems="center">
+            <InternalError
+              widthImage="300"
+              heightImage="300"
+            />
+          </Stack>
+        }
 
         <Stack
           width="100%"

@@ -9,6 +9,9 @@ async function getCareerPeople(team) {
     data: { query: ` mutation { authToken (input: { email: "${process.env.BACKEND_AUTH_EMAIL.trim()}", password: "${process.env.BACKEND_AUTH_PASSWORD.trim()}" }) { token } }` }
   })
 
+  if(token?.data.errors) return ({status: "err_getCareer_0"})
+  if(token?.data?.data?.authToken === null) return ({status: "err_getCareer_1"})
+
   try {
     const res = await axios({
       url: API_URL,
@@ -49,6 +52,7 @@ async function getCareerPeople(team) {
         `
       }
     })
+    if(res?.data?.errors) return {status: "err_getCareer_2"}
     const data = res?.data?.data?.allAccount?.edges
     return data
   } catch (error) {
@@ -60,6 +64,9 @@ async function getCareerPeople(team) {
 export default async function handler(req, res) {
   const result = await getCareerPeople(req.query.team)
 
+  if(result?.status === "err_getCareer_0") return res.status(500).json([])
+  if(result?.status === "err_getCareer_1") return res.status(500).json([])
+  if(result?.status === "err_getCareer_2") return res.status(500).json([])
   if(result.errors) return res.status(500).json({error: result.errors})
   if(result === "err") return res.status(500).json({error: "err"})
 
