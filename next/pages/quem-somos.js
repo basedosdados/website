@@ -41,6 +41,7 @@ export async function getServerSideProps() {
     result = await response.json()
     data = result
   } catch (error) {
+    console.error(error)
     data = []
   }
 
