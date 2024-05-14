@@ -17,10 +17,10 @@ import RoundedButton from "../components/atoms/RoundedButton";
 import TransparencyImage from "../public/img/transparencyImage";
 import DonationImage from "../public/img/donationImage";
 
-export async function getStaticProps(context) {
-  return await withPages();
+export async function getStaticProps() {
+  return await withPages()
 }
-  
+
 export default function Transparencia({ pages }) {
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
@@ -86,7 +86,7 @@ export default function Transparencia({ pages }) {
   }
 
   return (
-    <MainPageTemplate pages={pages} paddingX="24px" paddingBottom="0">
+    <MainPageTemplate paddingX="24px" paddingBottom="0">
       <Head>
         <title>Transparência – Base dos Dados</title>
         <meta

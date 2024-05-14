@@ -12,8 +12,8 @@ import Link from "../components/atoms/Link";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
     
-export async function getStaticProps(context) {
-  return await withPages();
+export async function getStaticProps() {
+  return await withPages()
 }
 
 export default function Contato({ pages }) {
@@ -35,7 +35,7 @@ export default function Contato({ pages }) {
   },[])
     
   return (
-    <MainPageTemplate pages={pages} paddingX="24px">
+    <MainPageTemplate paddingX="24px">
       <Head>
         <title>Contato – Base dos Dados</title>
         <meta

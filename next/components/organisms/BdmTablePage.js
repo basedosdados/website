@@ -27,7 +27,6 @@ import UserIcon from "../../public/img/icons/userIcon";
 import VersionIcon from "../../public/img/icons/versionIcon";
 import EmailIcon from "../../public/img/icons/emailIcon";
 import GithubIcon from "../../public/img/icons/githubIcon";
-import CkanIcon from "../../public/img/icons/ckanIcon";
 import WebIcon from "../../public/img/icons/webIcon";
 import TwitterIcon from "../../public/img/icons/twitterIcon";
 import FileIcon from "../../public/img/icons/fileIcon";
@@ -116,10 +115,6 @@ export default function BdmTablePage({ id }) {
     if(ref.email) {
       href = `mailto:${ref.email}`
       alt= "email do contribuidor"
-    }
-    if(ref.ckan_user) {
-      href = `/user/${ref.ckan_user}`
-      alt = "usuário ckan"
     }
     if(ref.website) {
       const website = ref.website.replace(/(https?:)\/\//gim, "")

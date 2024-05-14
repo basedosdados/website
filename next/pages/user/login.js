@@ -20,6 +20,12 @@ import { MainPageTemplate } from "../../components/templates/main";
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 
+import { withPages } from "../../hooks/pages.hook";
+
+export async function getStaticProps() {
+  return await withPages()
+}
+
 export default function Login() {
   const router = useRouter()
   const { query } = router
