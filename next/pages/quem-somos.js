@@ -253,6 +253,16 @@ const TeamBox = ({
 }
 
 export default function QuemSomos({ data }) {
+  const [allPeople, setAllPeople] = useState([])
+  const [people, setPeople] = useState([])
+  const [filterTeam, setFilterTeam] = useState("")
+
+  useEffect(() => {
+    if(data.length === 0) return
+    setAllPeople(sortPeople(data))
+    setPeople(sortPeople(data))
+  }, [data])
+
   const sortPeople = (array) => {
     const sortPeopleArray = array
 
@@ -287,10 +297,6 @@ export default function QuemSomos({ data }) {
 
     return removeDuplicates(data).filter(obj => obj.node.firstName !== "API User" && obj.node.firstName !== "Staging")
   }
-
-  const [allPeople] = useState(sortPeople(data))
-  const [people, setPeople] = useState(sortPeople(data))
-  const [filterTeam, setFilterTeam] = useState("")
 
   const schemasTeam = [
     "Co-fundadores",
