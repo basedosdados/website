@@ -710,7 +710,7 @@ export default function QuemSomos({ data }) {
           Uma equipe colaborativa
         </Display>
 
-        {allPeople.length !== 0 ?
+        {data.length > 1 ?
           <Stack
             position="relative"
             gridGap="96px"
