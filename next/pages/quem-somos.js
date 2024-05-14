@@ -34,10 +34,9 @@ import RedirectIcon from "../public/img/icons/redirectIcon";
 import styles from "../styles/quemSomos.module.css";
 
 export async function getServerSideProps() {
-  // const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/team/getAllPeople`, {method: "GET"})
-  //   .then(res => res.json())
-  // const data = response
-  const data = []
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/team/getAllPeople`, {method: "GET"})
+    .then(res => res.json())
+  const data = response
 
   return {
     props: {
