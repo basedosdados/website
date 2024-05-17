@@ -78,7 +78,7 @@ export function DebouncedControlledInput({
 
   useEffect(() => {
     clearTimeout(_timeout);
-    _setTimeout(setTimeout(() => onChange(_value), 200));
+    _setTimeout(setTimeout(() => onChange(_value), 1000));
   }, [_value]);
 
   useEffect(() => {

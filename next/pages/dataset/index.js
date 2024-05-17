@@ -91,21 +91,20 @@ export default function SearchPage() {
   const [selectedFilters, setSelectedFilters] = useState([])
   const [aggregations, setAggregations] = useState({})
   const [count, setCount] = useState(0)
-  const [pageInfo, setPageInfo] = useState({})
+  const [pageInfo, setPageInfo] = useState({page: 0, count: 0})
   const [isLoading, setIsLoading] = useState(true)
 
   // const [order, setOrder] = useState("score")
 
   async function getDatasets({q, filters, page}) {
-    setIsLoading(true)
     const res = await getSearchDatasets({q:q, filter: filters, page:page})
-    setPageInfo({page: page, count: res?.count})
-    setIsLoading(false)
-    setShowEmptyState(true)
     if(res === undefined) return router.push({pathname:"500"})
+    if(res?.count === 0) setShowEmptyState(true)
+    setPageInfo({page: page, count: res?.count})
     setResource(res?.results || null)
     setAggregations(res?.aggregations)
     setCount(res?.count)
+    setIsLoading(false)
   }
 
   function flattenArray(arr) {
@@ -139,14 +138,17 @@ export default function SearchPage() {
 
   useEffect(() => {
     if(fetchApi) clearTimeout(fetchApi)
-    setCount()
+    setIsLoading(true)
+    setCount(0)
+    setShowEmptyState(false)
+
     const fetchFunc = setTimeout(() => {
       getDatasets({
         q: query?.q,
         filters: fetchFilter(query),
         page: query?.page || 1
       })
-    }, 400)
+    }, 1000)
 
     setSelectedFilters(fetchFilter(query))
     setFetchApi(fetchFunc)
@@ -744,17 +746,21 @@ export default function SearchPage() {
           width="100%"
           paddingLeft={isMobileMod() ? "" : "40px !important"}
         >
-          {showEmptyState && resource.length === 0 ?
+          {showEmptyState &&
             <DataProposalBox 
               image= {true}
               display= "Ooops..."
               text= "Infelizmente não encontramos nenhum conjunto para sua busca."
               bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
             />
-          :
-          <>
+          }
+
+          {!showEmptyState &&
             <Flex width="100%" justify="center" align="baseline">
               <Heading
+                display="flex"
+                flexDirection={useCheckMobile() ? "column" : {base: "column", lg:"row"}}
+                gap="6px"
                 width="100%"
                 fontFamily="Ubuntu"
                 fontSize="26px"
@@ -763,147 +769,145 @@ export default function SearchPage() {
                 color="#252A32"
               >
                 {count ?
-                    `${count} conjunto${count > 1 ? "s": ""} encontrado${count > 1 ? "s": ""}`
+                    `${count} conjunto${count > 1 ? "s": ""} encontrado${count > 1 ? "s": ""} para ${query.q}`
                   :
-                  <Box display="flex" flexDirection="row" gap="8px" alignItems="center">
-                    <Spinner color="#252A32"/> <Text>encontrando conjuntos</Text>
+                  <Box width="fit-content" display="flex" flexDirection="row" gap="8px" alignItems="center">
+                    <Spinner color="#252A32"/> <Text>encontrando conjuntos {query.q ? ` para ${query.q}` : ""}</Text>
                   </Box>
-                } 
-                {query.q ? ` para ${query.q}` : ""}
+                }
               </Heading>
             </Flex>
+          }
 
-            {/* Tags container */}
-            {/* <Stack
-              overflow="auto"
-              width="100%"
-              flexWrap="wrap"
-              gridGap={3}
-              margin="16px 0px 24px !important"
-              whiteSpace="nowrap"
-              spacing={0}
-              direction={{ base: "column", lg: "row" }}
-            >
-              {Object.entries(paramFilters)
-                .filter(([k, v]) => v.length > 0)
-                .map(([k, values]) => (
-                  <FilterTags
-                    translations={availableOptionsTranslations}
-                    label={fieldTranslations[k]}
-                    fieldName={k}
-                    values={
-                      k === "temporal_coverage"
-                        ? [`${values[0]}-${values[values.length - 1]}`]
-                        : values
-                    }
-                    paramFilters={paramFilters}
-                    setParamFilters={setParamFilters}
-                  />
-                ))}
-            </Stack> */}
-
-            {/* Order container */}
-            {/* <HStack
-              fontFamily="Lato"
-              letterSpacing="0.5px"
-              fontWeight="300"
-              fontSize="16px"
-              color="#6F6F6F"
-            >
-              <Stack
-                alignItems="center"
-                direction="row"
-                spacing="8px"
-              >
-                <Text whiteSpace="nowrap">Ordenar:</Text>
-                <Select
-                  fontFamily="Lato"
-                  minWidth="150px"
-                  color="#252A32"
-                  borderRadius="16px"
-                  focusBorderColor="#42B0FF"
-                  border="1px solid #DEDFE0"
-                  height="40px"
-                  value={order}
-                  onChange={(event) => {
-                    setOrder(event.target.value);
-                  }}
-                >
-                  <option value="score">Mais relevantes</option>
-                  <option value="recent">Mais recentes</option>
-                  <option value="popular">Mais populares</option>
-                </Select>
-              </Stack>
-            </HStack> */}
-
-            <VStack
-              width="100%"
-              alignItems="flex-start"
-              spacing={3}
-              padding="28px 0px"
-            >
-              {isLoading
-                ? new Array(10).fill(0).map(() => (
-                  <>
-                    {useCheckMobile() ?
-                      <SkeletonWaitCardMobile />
-                    :
-                      <SkeletonWaitCard />
-                    }
-                    <Divider />
-                  </>
-                ))
-                :
-                (resource || []).map((res) => (
-                  <>
-                    <DatabaseCard data={res} />
-                    <Divider border="0" borderBottom="1px solid #DEDFE0" opacity={1}/>
-                  </>
-                ))
-              }
-              {showEmptyState &&
-                <ReactPaginate
-                  previousLabel={useCheckMobile() ? "<" : "Anterior"}
-                  nextLabel={useCheckMobile() ? ">" : "Próxima"}
-                  breakLabel={"..."}
-                  breakClassName={"break-me"}
-                  forcePage={pageInfo.page - 1 || 0}
-                  pageCount={Math.ceil(pageInfo.count / 10)}
-                  marginPagesDisplayed={useCheckMobile() ? 0 : 1}
-                  pageRangeDisplayed={useCheckMobile() ? 0 : 2}
-                  onPageChange={(newPage) => {
-                    router.push({
-                      pathname: router.pathname,
-                      query: {...query, page: newPage.selected + 1 || 1}
-                    })
-                  }}
-                  containerClassName={"pagination"}
-                  activeClassName={"active"}
-                  pageClassName={isLoading && "disabled"}
-                  previousClassName={isLoading && "disabled"}
-                  nextClassName={isLoading && "disabled"}
+          {/* Tags container */}
+          {/* <Stack
+            overflow="auto"
+            width="100%"
+            flexWrap="wrap"
+            gridGap={3}
+            margin="16px 0px 24px !important"
+            whiteSpace="nowrap"
+            spacing={0}
+            direction={{ base: "column", lg: "row" }}
+          >
+            {Object.entries(paramFilters)
+              .filter(([k, v]) => v.length > 0)
+              .map(([k, values]) => (
+                <FilterTags
+                  translations={availableOptionsTranslations}
+                  label={fieldTranslations[k]}
+                  fieldName={k}
+                  values={
+                    k === "temporal_coverage"
+                      ? [`${values[0]}-${values[values.length - 1]}`]
+                      : values
+                  }
+                  paramFilters={paramFilters}
+                  setParamFilters={setParamFilters}
                 />
-              }
-            </VStack>
-            {pageInfo?.count === 1 &&
-              <DataProposalBox 
-                text= "Ainda não encontrou o que está procurando?"
-                bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
+              ))}
+          </Stack> */}
+
+          {/* Order container */}
+          {/* <HStack
+            fontFamily="Lato"
+            letterSpacing="0.5px"
+            fontWeight="300"
+            fontSize="16px"
+            color="#6F6F6F"
+          >
+            <Stack
+              alignItems="center"
+              direction="row"
+              spacing="8px"
+            >
+              <Text whiteSpace="nowrap">Ordenar:</Text>
+              <Select
+                fontFamily="Lato"
+                minWidth="150px"
+                color="#252A32"
+                borderRadius="16px"
+                focusBorderColor="#42B0FF"
+                border="1px solid #DEDFE0"
+                height="40px"
+                value={order}
+                onChange={(event) => {
+                  setOrder(event.target.value);
+                }}
+              >
+                <option value="score">Mais relevantes</option>
+                <option value="recent">Mais recentes</option>
+                <option value="popular">Mais populares</option>
+              </Select>
+            </Stack>
+          </HStack> */}
+
+          <VStack
+            width="100%"
+            alignItems="flex-start"
+            spacing={3}
+            padding="28px 0px"
+          >
+            {isLoading
+              ? new Array(10).fill(0).map((e, i) => (
+                <Box display="flex" flexDirection="column" width="100%" key={i}>
+                  {useCheckMobile() ?
+                    <SkeletonWaitCardMobile />
+                  :
+                    <SkeletonWaitCard />
+                  }
+                  <Divider />
+                </Box>
+              ))
+              :
+              (resource || []).map((res, i) => (
+                <Box display="flex" flexDirection="column" width="100%" key={i}>
+                  <DatabaseCard data={res} />
+                  <Divider border="0" borderBottom="1px solid #DEDFE0" opacity={1}/>
+                </Box>
+              ))
+            }
+
+            {!showEmptyState &&
+              <ReactPaginate
+                previousLabel={useCheckMobile() ? "<" : "Anterior"}
+                nextLabel={useCheckMobile() ? ">" : "Próxima"}
+                breakLabel={"..."}
+                breakClassName={"break-me"}
+                forcePage={pageInfo.page - 1 || 0}
+                pageCount={Math.ceil(pageInfo.count / 10) || 1}
+                marginPagesDisplayed={useCheckMobile() ? 0 : 1}
+                pageRangeDisplayed={useCheckMobile() ? 0 : 2}
+                onPageChange={(newPage) => {
+                  router.push({
+                    pathname: router.pathname,
+                    query: {...query, page: newPage.selected + 1 || 1}
+                  })
+                }}
+                containerClassName={"pagination"}
+                activeClassName={"active"}
+                pageClassName={isLoading && "disabled"}
+                previousClassName={isLoading && "disabled"}
+                nextClassName={isLoading && "disabled"}
               />
             }
-            {pageInfo.page >= 2 &&
-              <DataProposalBox 
-                text= "Ainda não encontrou o que está procurando?"
-                bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
-              />
-            }
-          </>}
+          </VStack>
+
+          {pageInfo?.count >=1 && pageInfo?.count <=10 &&
+            <DataProposalBox 
+              text= "Ainda não encontrou o que está procurando?"
+              bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
+            />
+          }
+
+          {pageInfo.page >= 2 &&
+            <DataProposalBox 
+              text= "Ainda não encontrou o que está procurando?"
+              bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
+            />
+          }
         </VStack>
       </Stack>
-      <script
-        src="/vendor/terminal.js"
-        data-termynal-container="#termynal"
-      ></script>
     </MainPageTemplate>
   )
 }
