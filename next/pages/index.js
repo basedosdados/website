@@ -730,3 +730,19 @@ export default function Home({ dataThemeCatalog }) {
     </MainPageTemplate>
   );
 }
+
+/**
+ * Next-Logger Setup
+ * a.k.a force dependency injection
+ * beware, as it works only with Next.js 12
+ * https://stackoverflow.com/questions/71422446
+ * https://github.com/sainsburys-tech/next-logger/issues/13
+ */
+const requiredStandaloneDependencies = [
+  "next-logger",
+]
+export const config = {
+  unstable_includeFiles: requiredStandaloneDependencies.map(
+      (dep) => `node_modules/${dep}/**/*.+(js|json)`
+  ),
+};

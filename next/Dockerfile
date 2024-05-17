@@ -36,6 +36,7 @@ FROM node:18.17.0-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
+ENV NODE_OPTIONS '-r next-logger'
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
@@ -58,4 +59,4 @@ EXPOSE 3000
 
 ENV PORT 3000
 
-CMD ["node", "server.js"]
+CMD ["server.js"]
