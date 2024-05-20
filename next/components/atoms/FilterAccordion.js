@@ -32,7 +32,7 @@ export function BaseFilterAccordion({
   isHovering = true
 }) {
   return (
-    <Accordion ex allowToggle width="100%">
+    <Accordion allowToggle width="100%">
       <AccordionItem border="0px">
         {({ isExpanded }) => (
           <>
@@ -342,7 +342,7 @@ export function SimpleFilterAccordion({
   styleChildren
 }) {
   return (
-    <Accordion ex allowToggle width="100%">
+    <Accordion allowToggle width="100%">
       <AccordionItem border="0px">
         {({ isExpanded }) => (
           <>

@@ -192,8 +192,9 @@ export default function Database({
                   height="36px"
                   spacing={2}
                 >
-                  {themes.slice(0,6).map((elm) => (
+                  {themes.slice(0,6).map((elm, i) => (
                     <Tooltip
+                      key={i}
                       hasArrow
                       bg="#2A2F38"
                       label={elm.name}
