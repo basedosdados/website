@@ -137,7 +137,7 @@ export default function Register() {
       }
       setErrors(arrayErrors)
 
-      if(result?.errors?.length === 0) {
+      if(result?.success === true) {
         sessionStorage.setItem('registration_email_bd', `${email}`)
         triggerGAEvent("user_register", "register_success")
         window.open("/user/check-email", "_self")
