@@ -12,5 +12,3 @@ services:
       - .env
     ports:
       - ${NEXT_PORT}:3000
-    volumes:
-      - ./next:/app

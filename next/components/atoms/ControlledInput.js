@@ -73,12 +73,16 @@ export function DebouncedControlledInput({
   inputElementStyle,
   ...props
 }) {
+  const [skipFirstDebounced, setSkipFirstDebounced] = useState(true)
   const [_value, _setValue] = useState(value);
   const [_timeout, _setTimeout] = useState(null);
 
   useEffect(() => {
     clearTimeout(_timeout);
-    _setTimeout(setTimeout(() => onChange(_value), 1000));
+    _setTimeout(setTimeout(() => {
+      if(!skipFirstDebounced) onChange(_value)
+      setSkipFirstDebounced(false)
+    }, 1000));
   }, [_value]);
 
   useEffect(() => {

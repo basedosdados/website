@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "NODE_OPTIONS='-r next-logger' next start"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.7",
@@ -23,6 +23,7 @@
     "fuzzy-search": "^3.2.1",
     "js-cookie": "^3.0.5",
     "next": "^12.3.4",
+    "next-logger": "4.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-image-crop": "^11.0.4",
