@@ -94,7 +94,43 @@ export default function SearchPage() {
   const [pageInfo, setPageInfo] = useState({page: 0, count: 0})
   const [isLoading, setIsLoading] = useState(true)
 
-  // const [order, setOrder] = useState("score")
+  useEffect(() => {
+    if(fetchApi) clearTimeout(fetchApi)
+    setIsLoading(true)
+    setCount(0)
+    setShowEmptyState(false)
+
+    const fetchFunc = setTimeout(() => {
+      getDatasets({
+        q: query?.q === undefined ? "" : query?.q || "",
+        filters: fetchFilter(query),
+        page: query?.page || 1
+      })
+    }, 1000)
+
+    setSelectedFilters(fetchFilter(query))
+    setFetchApi(fetchFunc)
+  }, [query])
+
+  async function handleSearch (value) {
+    let newQuery = {...query}
+    if (value) value.replace(/\s+/g, ' ').trim()
+    if (newQuery.page) delete newQuery?.page
+    if (value === "") {
+      delete newQuery?.q
+      router.push({
+        pathname: router.pathname,
+        query: {...newQuery}
+      })
+    } else {
+      triggerGAEvent("search", value)
+      triggerGAEvent("search_dataset", value)
+      router.push({
+        pathname: router.pathname,
+        query: {...newQuery, q: value }
+      })
+    }
+  }
 
   async function getDatasets({q, filters, page}) {
     const res = await getSearchDatasets({q:q, filter: filters, page:page})
@@ -119,7 +155,7 @@ export default function SearchPage() {
         result.push(arr[i])
       }
     }
-  
+
     return result
   }
 
@@ -135,24 +171,6 @@ export default function SearchPage() {
 
     return flattenArray(objQuery)
   }
-
-  useEffect(() => {
-    if(fetchApi) clearTimeout(fetchApi)
-    setIsLoading(true)
-    setCount(0)
-    setShowEmptyState(false)
-
-    const fetchFunc = setTimeout(() => {
-      getDatasets({
-        q: query?.q,
-        filters: fetchFilter(query),
-        page: query?.page || 1
-      })
-    }, 1000)
-
-    setSelectedFilters(fetchFilter(query))
-    setFetchApi(fetchFunc)
-  }, [query])
 
   const handleSelectFilter = (elm) => {
     const newArray = [...selectedFilters]
@@ -193,8 +211,8 @@ export default function SearchPage() {
     router.push({
       pathname: router.pathname,
       query: {
-        q: query.q,
-        ...queryParams || "",        
+        ...(query.q ? { q: query.q } : {}),
+        ...(queryParams || {}),
         page: 1
       }
     })
@@ -347,31 +365,6 @@ export default function SearchPage() {
     )
   }
 
-  const SearchQuery = (value) => {
-    if(value) {
-      triggerGAEvent("search", value)
-      triggerGAEvent("search_dataset", value)
-    }
-    if(query.page && value === undefined || "") {
-      router.push({
-        pathname: router.pathname,
-        query: {...query, page: value !== query.q ? 1 : query.page}
-      })
-    }
-    if(value || value === "" && query.page === undefined) {
-      router.push({
-        pathname: router.pathname,
-        query: {...query, q: value}
-      })
-    }  
-    if(value || value === "" && query.page) {
-      router.push({
-        pathname: router.pathname,
-        query: {...query, q: value, page: value !== query.q ? 1 : query.page }
-      })
-    }
-  }
-
   const validateActiveFilterAccordin = (text) => {
     return selectedFilters.map((elm) => elm[0] === text).find(res => res === true)
   }
@@ -474,8 +467,8 @@ export default function SearchPage() {
       </Head>
 
       <DebouncedControlledInput
-        value={query.q}
-        onChange={(value) => { SearchQuery(value) }}
+        value={query?.q || ""}
+        onChange={(value) => handleSearch(value)}
         placeholder={isMobileMod() ? "Palavras-chave, instituições ou temas" :"Pesquise palavras-chave, instituições ou temas"}
         justifyContent="center"
         inputStyle={{
@@ -612,96 +605,6 @@ export default function SearchPage() {
             onChange={(value) => handleSelectFilter(["tag",`${value}`])}
           />
 
-          {/* <SimpleFilterAccordion
-            fieldName="Cobertura espacial"
-            isActive={(paramFilters.spatial_coverage || []).length > 0}
-            styleChildren={{
-              marginLeft:"16px !important",
-              width:"95%"
-            }}
-          >
-            <Stack width="100%">
-              <CheckboxFilterAccordion
-                canSearch={true}
-                isActive={(paramFilters.spatial_coverage || []).length > 0}
-                choices={[...spatialCoverages.continent]}
-                values={paramFilters.spatial_coverage}
-                valueField="name"
-                displayField="displayName"
-                fieldName="Continente"
-                onChange={(values) =>
-                  setParamFilters({ ...paramFilters, spatial_coverage: values })
-                }
-              />
-
-              <CheckboxFilterAccordion
-                canSearch={true}
-                isActive={(paramFilters.spatial_coverage || []).length > 0}
-                choices={[...spatialCoverages.country]}
-                values={paramFilters.spatial_coverage}
-                valueField="name"
-                displayField="displayName"
-                fieldName="País"
-                onChange={(values) =>
-                  setParamFilters({ ...paramFilters, spatial_coverage: values })
-                }
-              />
-
-              <CheckboxFilterAccordion
-                canSearch={true}
-                isActive={(paramFilters.spatial_coverage || []).length > 0}
-                choices={[...spatialCoverages.admin1]}
-                values={paramFilters.spatial_coverage}
-                valueField="name"
-                displayField="displayName"
-                fieldName="UF"
-                onChange={(values) =>
-                  setParamFilters({ ...paramFilters, spatial_coverage: values })
-                }
-              />
-
-              Filter null
-              <CheckboxFilterAccordion
-                canSearch={true}
-                isActive={(paramFilters.spatial_coverage || []).length > 0}
-                choices={[...spatialCoverages.admin2]}
-                values={paramFilters.spatial_coverage}
-                valueField="name"
-                displayField="displayName"
-                fieldName="Município"
-                onChange={(values) =>
-                  setParamFilters({ ...paramFilters, spatial_coverage: values })
-                }
-              /> 
-            </Stack>
-          </SimpleFilterAccordion>
-
-          <RangeFilterAccordion
-            isActive={(paramFilters.temporal_coverage || []).length > 0}
-            fieldName="Cobertura temporal"
-            minValue={(paramFilters.temporal_coverage || [])[0]}
-            maxValue={
-              (paramFilters.temporal_coverage || [])[
-                (paramFilters.temporal_coverage || []).length - 1
-              ]
-            }
-            onChange={(val) => {
-              if (val.min < 0 || !val.min || val.max < 0 || !val.max || val.min > val.max)
-                return;
-              
-              const start = parseInt(Math.max(val.min, 0));
-              const range =
-                Math.max((val.max - val.min), 0) + 1;
-
-              setParamFilters({
-                ...paramFilters,
-                temporal_coverage: new Array(range)
-                .fill(0)
-                .map((_, i) => start + i),
-              });
-            }}
-          /> */
-
           <CheckboxFilterAccordion
             canSearch={true}
             isActive={validateActiveFilterAccordin("observation_level")}
@@ -712,32 +615,6 @@ export default function SearchPage() {
             valuesChecked={valuesCheckedFilter("observation_level")}
             onChange={(value) => handleSelectFilter(["observation_level",`${value}`])}
           />
-
-          /*<CheckboxFilterAccordion
-            canSearch={true}
-            isActive={(paramFilters.update_frequency || []).length > 0}
-            choices={updateFrequencies}
-            values={paramFilters.update_frequency}
-            valueField="name"
-            displayField="displayName"
-            fieldName="Frequência de atualização"
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, update_frequency: values })
-            }
-          />
-
-          <CheckboxFilterAccordion
-            canSearch={true}
-            isActive={(paramFilters.raw_quality_tier || []).length > 0}
-            choices={rawQualityTiers}
-            values={paramFilters.raw_quality_tier}
-            valueField="name"
-            displayField="displayName"
-            fieldName="Qualidade da fonte original"
-            onChange={(values) =>
-              setParamFilters({ ...paramFilters, raw_quality_tier: values })
-            }
-          /> */}
         </VStack>
 
         <VStack
@@ -769,78 +646,15 @@ export default function SearchPage() {
                 color="#252A32"
               >
                 {count ?
-                    `${count} conjunto${count > 1 ? "s": ""} encontrado${count > 1 ? "s": ""} para ${query.q}`
+                    `${count} conjunto${count > 1 ? "s": ""} encontrado${count > 1 ? "s": ""} ${!!query.q ? ` para ${query.q}` : ""}`
                   :
                   <Box width="fit-content" display="flex" flexDirection="row" gap="8px" alignItems="center">
-                    <Spinner color="#252A32"/> <Text>encontrando conjuntos {query.q ? ` para ${query.q}` : ""}</Text>
+                    <Spinner color="#252A32"/> <Text>encontrando conjuntos {!!query.q ? ` para ${query.q}` : ""}</Text>
                   </Box>
                 }
               </Heading>
             </Flex>
           }
-
-          {/* Tags container */}
-          {/* <Stack
-            overflow="auto"
-            width="100%"
-            flexWrap="wrap"
-            gridGap={3}
-            margin="16px 0px 24px !important"
-            whiteSpace="nowrap"
-            spacing={0}
-            direction={{ base: "column", lg: "row" }}
-          >
-            {Object.entries(paramFilters)
-              .filter(([k, v]) => v.length > 0)
-              .map(([k, values]) => (
-                <FilterTags
-                  translations={availableOptionsTranslations}
-                  label={fieldTranslations[k]}
-                  fieldName={k}
-                  values={
-                    k === "temporal_coverage"
-                      ? [`${values[0]}-${values[values.length - 1]}`]
-                      : values
-                  }
-                  paramFilters={paramFilters}
-                  setParamFilters={setParamFilters}
-                />
-              ))}
-          </Stack> */}
-
-          {/* Order container */}
-          {/* <HStack
-            fontFamily="Lato"
-            letterSpacing="0.5px"
-            fontWeight="300"
-            fontSize="16px"
-            color="#6F6F6F"
-          >
-            <Stack
-              alignItems="center"
-              direction="row"
-              spacing="8px"
-            >
-              <Text whiteSpace="nowrap">Ordenar:</Text>
-              <Select
-                fontFamily="Lato"
-                minWidth="150px"
-                color="#252A32"
-                borderRadius="16px"
-                focusBorderColor="#42B0FF"
-                border="1px solid #DEDFE0"
-                height="40px"
-                value={order}
-                onChange={(event) => {
-                  setOrder(event.target.value);
-                }}
-              >
-                <option value="score">Mais relevantes</option>
-                <option value="recent">Mais recentes</option>
-                <option value="popular">Mais populares</option>
-              </Select>
-            </Stack>
-          </HStack> */}
 
           <VStack
             width="100%"
