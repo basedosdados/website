@@ -9,8 +9,8 @@ async function getIdUser(email) {
     data: { query: ` mutation { authToken (input: { email: "${process.env.BACKEND_AUTH_EMAIL.trim()}", password: "${process.env.BACKEND_AUTH_PASSWORD.trim()}" }) { token } }` }
   })
 
-  if(token?.data.errors) return ({status: "err_getId_0"})
-  if(token?.data?.data?.authToken === null) return ({status: "err_getId_1"})
+  if(token?.data.errors) return ({status: "err_get_0", errors: token.data.errors[0].message})
+  if(token?.data?.data?.authToken === null) return ({status: "err_get_1"})
 
   try {
     const res = await axios({
@@ -20,10 +20,10 @@ async function getIdUser(email) {
         Authorization: `Bearer ${token.data.data.authToken.token}`
       },
       data: {
-        query: `query { allAccount (email: "${email}") {edges{node{id}}} }`
+        query: `query { allAccount (email: "${email}") {edges{node{ id, isActive }}} }`
       }
     })
-    if(res?.data?.errors) return {status: "err_getId_2"}
+    if(res?.data?.errors) return {status: "err_get_2", errors: res.data.errors[0].message}
     const data = res.data
     return data
   } catch (error) {
@@ -35,9 +35,9 @@ async function getIdUser(email) {
 export default async function handler(req, res) {
   const result = await getIdUser(atob(req.query.p))
 
-  if(result?.status === "err_getId_0") return res.status(500).json({error: true})
-  if(result?.status === "err_getId_1") return res.status(500).json({error: true})
-  if(result?.status === "err_getId_2") return res.status(500).json({error: true})
+  if(result?.status === "err_get_0") return res.status(500).json({error: result.errors})
+  if(result?.status === "err_get_1") return res.status(500).json({error: "Erro na geração do token"})
+  if(result?.status === "err_get_2") return res.status(500).json({error: result.errors})
 
   if(result.errors) return res.status(500).json({error: result.errors})
   if(result === "err") return res.status(500).json({error: "err"})
