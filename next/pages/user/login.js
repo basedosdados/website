@@ -5,6 +5,7 @@ import {
   FormLabel,
   FormErrorMessage,
 } from "@chakra-ui/react";
+import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import cookies from 'js-cookie';
@@ -60,7 +61,19 @@ export default function Login() {
   async function fetchToken({ email, password }) {
     const result = await fetch(`/api/user/getToken?a=${btoa(email)}&q=${btoa(password)}`, {method: "GET"})
       .then(res => res.json())
-    if(result.error) return setErrors({login:"E-mail ou senha incorretos."}) 
+    if(result.error) {
+      const hasActive = await fetch(`/api/user/getIdUser?p=${btoa(email)}`, {method: "GET"})
+        .then(res => res.json())
+      if(hasActive.isActive === false)  {
+        const reg = new RegExp("(?<=:).*")
+        const [ id ] = reg.exec(hasActive.id)
+
+        sessionStorage.setItem('registration_email_bd', `${email}`)
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/account/account_activate/${btoa(id)}/`)
+        return window.open("/user/check-email?e=1", "_self")
+      }
+      return setErrors({login:"E-mail ou senha incorretos."})
+    }
 
     const userData = await fetch(`/api/user/getUser?p=${btoa(result.id)}`, {method: "GET"})
       .then(res => res.json())
