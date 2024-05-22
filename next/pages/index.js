@@ -117,8 +117,7 @@ function Hero({ dataThemeCatalog }) {
               flex="3"
             >
               <ControlledInput
-                value={search}
-                placeholder={isMobileMod() ? "Encontre os dados" : "Encontre os dados que você precisa"}
+                value={search}                placeholder={isMobileMod() ? t("Find the data") : t("Find the data you need")}
                 width="100%"
                 onChange={setSearch}
                 onEnterPress={openSearchLink}
@@ -152,7 +151,7 @@ function Hero({ dataThemeCatalog }) {
                     />
                     :
                     <SearchIcon
-                      alt="pesquisar"
+                      alt={t("search")}
                       width={isMobileMod() ? "18px" : "28px"}
                       height={isMobileMod() ? "18px" : "28px"}
                       fill="#252A32"
@@ -170,7 +169,7 @@ function Hero({ dataThemeCatalog }) {
                     letterSpacing="0.4px"
                     color="#575757"
                   >
-                    Termos populares: 
+                    {t("Popular terms:")}
                   </Text>
                 }
                 {tags.map((elm, i) => 
@@ -198,7 +197,7 @@ function Hero({ dataThemeCatalog }) {
               cursor="pointer"
               onClick={() => window.open("#theme", "_self")}
             >
-              Busque por tema
+              {t("Search by theme")}
             </Text>
             <ThemeCatalog data={dataThemeCatalog}/>
           </VStack>
@@ -226,7 +225,7 @@ function Products() {
           textAlign="center"
           margin="80px 0px"
         >
-          Facilitamos o trabalho para que a distância {!isMobileMod() && <br/>}
+          Facilitamos o trabalho para que a distância {!isMobileMod() && <br/>} {/*TODO: i18n */}
           entre você e sua análise seja <span style={{color:"#2B8C4D"}}>apenas uma boa pergunta</span>.
         </Display>
 
@@ -245,21 +244,19 @@ function Products() {
                 letterSpacing="0.5px"
                 lineHeight="24px"
               >
-                FILTROS
+                {t("FILTERS")}
               </Text>
 
-              <SectionTitle marginTop="0 !important">Busque dados como quiser</SectionTitle>
+              <SectionTitle marginTop="0 !important">{t("Search data as you wish")}</SectionTitle>
               <SectionText fontSize="16px">
-                São vários filtros para ajudar você a encontrar os dados que necessita.
-                Ao navegar entre centenas de conjuntos de dados disponíveis na plataforma,
-                você pode refinar sua busca por tema, organização, cobertura temporal, nível da observação e mais.
+                {t("There are several filters to help you find the data you need.....")}
               </SectionText>
 
               <SectionLink
                 marginTop="24px !important"
                 href={"/dataset"}
               >
-                Comece sua pesquisa
+                {t("Start your search")}
               </SectionLink>
             </Stack>
 
@@ -289,22 +286,20 @@ function Products() {
                   letterSpacing="0.5px"
                   lineHeight="24px"
                 >
-                  TABELAS TRATADAS
+                  {t("PROCESSED TABLES")}
                 </Text>
               </HStack>
               
-              <SectionTitle marginTop="0 !important">Acesse dados de qualidade</SectionTitle>
+              <SectionTitle marginTop="0 !important">{t("Access quality data")}</SectionTitle>
               <SectionText fontSize="16px">
-                Com as tabelas tratadas do nosso <i>datalake</i> público,
-                você não precisa mais gastar horas limpando bases.
-                Nossa metodologia de padronização permite cruzar facilmente dados de diferentes organizações. Assim, você pode focar no que realmente importa.
+                {t("With the processed tables from our public datalake.....")}
               </SectionText>
 
               <SectionLink
                 marginTop="24px !important"
                 href={"/dataset?contains=tables"}
               >
-                Veja os dados disponíveis
+                {t("See available databases")}
               </SectionLink>
             </Stack>
 
@@ -331,20 +326,19 @@ function Products() {
                 letterSpacing="0.5px"
                 lineHeight="24px"
               >
-                PACOTES
+                {t("PACKAGES")}
               </Text>
 
-              <SectionTitle marginTop="0 !important">Explore na sua linguagem favorita</SectionTitle>
+              <SectionTitle marginTop="0 !important">{t("Explore in your favorite language")}</SectionTitle>
               <SectionText fontSize="16px">
-                Desenvolvemos pacotes para acesso aos dados tratados em Python, R e linha de comando. Além disso, você pode consultar e filtrar
-                dados usando SQL no editor do nosso <i>datalake</i> público no Google BigQuery.
+                {t("We have developed packages for accessing processed data in Python.....")}
               </SectionText>
 
               <SectionLink
                 marginTop="24px !important"
                 href={"https://basedosdados.github.io/mais/"}
               >
-                Saiba como acessar
+                {t("Learn how to access")}
               </SectionLink>
             </Stack>
 
@@ -430,6 +424,7 @@ export function StepText ({index, text}) {
 function Support() {
   const { hasCopied, onCopy } = useClipboard("42494318000116")
 
+  // TODO: i18n
   return (
     <VStack
       spacing={20}
@@ -445,8 +440,8 @@ function Support() {
           textAlign="center"
           margin={isMobileMod() ? "80px 0px 24px" : "104px 0px 24px"}
         >
-          Existimos através do esforço de pessoas que {!isMobileMod() && <br/>}
-          acreditam no acesso a dados abertos de qualidade.
+          {t('We exist through the effort of people who')} {!isMobileMod() && <br/>}
+          {t('believe in access to quality open data.')}
         </Display>
         <Text
           position="relative"
@@ -458,7 +453,7 @@ function Support() {
           letterSpacing={isMobileMod() ? "0.2px" : "0.1px"}
           fontWeight="300"
           margin="0 0 48px !important"
-        > Apoie a Base dos Dados você também
+        > {t('Please support Base dos Dados')}
         </Text>
 
         <Stack
@@ -478,7 +473,7 @@ function Support() {
                 heightImage="100%"
               />
             }
-            title="Entusiasta"
+            title={t("Enthusiast")}
             spacing={4}
           >
             <BodyText
@@ -705,14 +700,14 @@ function BDEdu () {
         textAlign="center"
         margin="0 0 24px !important"
       >
-        Com nosso curso você pode ir mais longe na sua pesquisa, profissão, ou organização.
+        {t('With our course, you can go further in your research, profession, or organization.')}
       </BodyText>
       <RoundedButton
         margin="0 !important"
         backgroundColor="#8262D1"
       >
         <a href="https://info.basedosdados.org/bd-edu-sql" target="_blank">
-          Aproveite o preço promocional
+          {t('Take advantage of the promotional price')}
         </a>
       </RoundedButton>
     </Stack>
