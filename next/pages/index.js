@@ -42,8 +42,10 @@ import MasterOfDatabaseImage from "../public/img/masterOfDatabaseImage";
 import ProductsFiltersImage from "../public/img/productsFiltersImage";
 import ProcessedDataImage from "../public/img/processedDataImage";
 import BDLogoEduImage from "../public/img/logos/bd_logo_edu";
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-export async function getStaticProps() {
+export async function getStaticProps({locale}) {
   const themes = await getAllThemes()
   const defaultDataset = await getAllDatasets()
 
@@ -54,7 +56,8 @@ export async function getStaticProps() {
 
   return {
     props: {
-      dataThemeCatalog
+      dataThemeCatalog,
+      ...(await serverSideTranslations(locale, [ 'index', ])),
     },
     revalidate: 30
   }
@@ -64,6 +67,7 @@ function Hero({ dataThemeCatalog }) {
   const [search, setSearch] = useState("");
   const [tags, setTags] = useState([])
   const [mediumQuery] = useMediaQuery("(max-width: 1366px)")
+  const { t } = useTranslation('index')
 
   function openSearchLink() {
     triggerGAEvent("search", search)
@@ -208,6 +212,7 @@ function Hero({ dataThemeCatalog }) {
 }
 
 function Products() {
+  const { t } = useTranslation('index')
   return (
     <VStack
       width={{ base: "90%", lg: "85%" }}
@@ -423,6 +428,7 @@ export function StepText ({index, text}) {
 
 function Support() {
   const { hasCopied, onCopy } = useClipboard("42494318000116")
+  const { t } = useTranslation('index')
 
   // TODO: i18n
   return (
