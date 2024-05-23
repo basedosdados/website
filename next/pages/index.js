@@ -57,7 +57,7 @@ export async function getStaticProps({locale}) {
   return {
     props: {
       dataThemeCatalog,
-      ...(await serverSideTranslations(locale, [ 'index', ])),
+      ...(await serverSideTranslations(locale, [ 'index', 'common' ])),
     },
     revalidate: 30
   }
@@ -121,7 +121,8 @@ function Hero({ dataThemeCatalog }) {
               flex="3"
             >
               <ControlledInput
-                value={search}                placeholder={isMobileMod() ? t("Find the data") : t("Find the data you need")}
+                value={search}
+                placeholder={isMobileMod() ? t("Find the data") : t("Find the data you need")}
                 width="100%"
                 onChange={setSearch}
                 onEnterPress={openSearchLink}
