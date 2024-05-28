@@ -40,6 +40,7 @@ import ButtonSimple from "../../components/atoms/SimpleButton";
 import InputForm from "../../components/atoms/SimpleInput";
 import Link from "../../components/atoms/Link";
 import BodyText from "../../components/atoms/BodyText";
+import Toggle from "../../components/atoms/Toggle";
 import { CardPrice } from "../precos";
 import PaymentSystem from "../../components/organisms/PaymentSystem";
 import ImageCrop from "../../components/molecules/ImgCrop";
@@ -1441,6 +1442,9 @@ const PlansAndPayment = ({ userData }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingH, setIsLoadingH] = useState(false)
   const [isLoadingCanSub, setIsLoadingCanSub] = useState(false)
+  const [toggleAnual, setToggleAnual] = useState(false)
+  const [priceBDPro, setPriceBDPro] = useState("47")
+  const [priceBDEmp, setPriceBDEmp] = useState("350")
 
   useEffect(() => {
     if(query.q === "pro") {
@@ -1454,6 +1458,16 @@ const PlansAndPayment = ({ userData }) => {
       PaymentModal.onOpen()
     }
   }, [query])
+
+  useEffect(() => {
+    if(toggleAnual === true) {
+      setPriceBDPro("37")
+      setPriceBDEmp("280")
+    } else {
+      setPriceBDPro("47")
+      setPriceBDEmp("350")
+    }
+  }, [toggleAnual])
 
   const resources={
     "BD Gratis" : {
@@ -1835,7 +1849,7 @@ const PlansAndPayment = ({ userData }) => {
         isCentered={isMobileMod() ? false : true}
       >
         <Stack spacing={0} marginBottom="16px">
-          <SectionTitle lineHeight="40px" height="40px">
+          <SectionTitle lineHeight="40px" height="40px" textAlign="center">
             Compare os planos
           </SectionTitle>
           <ModalCloseButton
@@ -1845,6 +1859,35 @@ const PlansAndPayment = ({ userData }) => {
             _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
           />
         </Stack>
+
+        <Box
+          display="flex"
+          width="100%"
+          flexDirection="row"
+          justifyContent="center"
+          alignitems="center"
+          gap="8px"
+          marginBottom="40px"
+        >
+          <Toggle
+            value={toggleAnual}
+            onChange={() => setToggleAnual(!toggleAnual)}
+          />
+          <Text
+            gap="8px"
+            fontFamily="Ubuntu"
+            fontWeight="400"
+            fontSize="18px"
+            lineHeight="24px"
+            display="flex"
+            alignItems="center"
+            textAlign="center"
+            letterSpacing="0.1px"
+            color="#252A32"
+          >
+            Desconto anual <Text color="#2B8C4D">Economize 20%</Text>
+          </Text>
+        </Box>
 
         <Stack
           display={isMobileMod() ? "flex" : "grid"}
@@ -1858,9 +1901,7 @@ const PlansAndPayment = ({ userData }) => {
           <CardPrice
             title="BD Grátis"
             subTitle={<BodyText>Para você descobrir o potencial da plataforma de dados</BodyText>}
-            personConfig={{
-              price: "0"
-            }}
+            price={"0"}
             textResource="Recursos:"
             resources={[
               {name: "Tabelas tratadas"},
@@ -1882,9 +1923,8 @@ const PlansAndPayment = ({ userData }) => {
           <CardPrice
             title="BD Pro"
             subTitle={<BodyText>Para você ter acesso aos<br/> dados mais atualizados</BodyText>}
-            personConfig={{
-              price: "47"
-            }}
+            price={priceBDPro}
+            anualPlan={toggleAnual}
             textResource="Todos os recursos da BD Grátis, mais:"
             resources={[
               {name: "Dezenas de bases de alta frequência atualizadas"},
@@ -1903,9 +1943,8 @@ const PlansAndPayment = ({ userData }) => {
           <CardPrice
             title="BD Empresas"
             subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
-            personConfig={{
-              price: "350"
-            }}
+            price={priceBDEmp}
+            anualPlan={toggleAnual}
             textResource="Todos os recursos da BD Pro, mais:"
             resources={[
               {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
