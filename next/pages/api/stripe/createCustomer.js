@@ -3,8 +3,10 @@ import axios from "axios";
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
 async function createCustomer(token, userBD) {
+  const user = JSON.parse(userBD)
+
   function trimName() {
-    const name = userBD.firstName + userBD?.lastName || ""
+    const name = user.firstName + user?.lastName || ""
     return name.replace(/\s+/g, ' ').trim()
   }
 
@@ -21,7 +23,7 @@ async function createCustomer(token, userBD) {
           createStripeCustomer (
             input: {
               name: "${trimName()}"
-              email: "${userBD.email}"
+              email: "${user.email}"
             }
           ) {
             customer {
