@@ -1570,6 +1570,10 @@ const PlansAndPayment = ({ userData }) => {
     const result = await fetch(`/api/stripe/removeSubscription?p=${btoa(subs[0]?.node._id)}`, {method: "GET"})
       .then(res => res.json())
 
+    if(result?.success === false) {
+      setIsLoadingCanSub(false)
+    }
+
     do {
       const statusSub = await fetch(`/api/stripe/userGetSubscription?p=${btoa(id)}`, {method: "GET"})
         .then(res => res.json())
