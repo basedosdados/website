@@ -326,7 +326,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
         </Display>
 
         <Box
-          display="flex"
+          display="none"
           width="100%"
           flexDirection="row"
           justifyContent="center"

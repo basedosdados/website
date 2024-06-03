@@ -1581,6 +1581,7 @@ const PlansAndPayment = ({ userData }) => {
 
     const subs = await fetch(`/api/stripe/getSubscriptionActive?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
+
     const result = await fetch(`/api/stripe/removeSubscription?p=${btoa(subs[0]?.node._id)}`, {method: "GET"})
       .then(res => res.json())
 
@@ -1859,7 +1860,7 @@ const PlansAndPayment = ({ userData }) => {
         }}
         isCentered={isMobileMod() ? false : true}
       >
-        <Stack spacing={0}>
+        <Stack spacing={0} marginBottom="16px">
           <SectionTitle lineHeight="40px" height="40px" textAlign={isMobileMod() ? "start" :"center"}>
             Compare os planos
           </SectionTitle>
@@ -1871,7 +1872,7 @@ const PlansAndPayment = ({ userData }) => {
           />
 
           <Box
-            display="flex"
+            display="none"
             width="100%"
             flexDirection="row"
             justifyContent="center"
