@@ -36,8 +36,8 @@ export default async function handler(req, res) {
   const result = await removeSubscription(atob(req.query.p), token)
 
   if(result.errors) return res.status(500).json({error: result.errors})
-  if(result?.data?.deleteStripeSubscription.errors.length > 0) return res.status(500).json({error: result.data.deleteStripeSubscription.errors, success: false })
+  if(result?.data?.deleteStripeSubscription?.errors.length > 0) return res.status(500).json({error: result.data.deleteStripeSubscription.errors, success: false })
   if(result === "err") return res.status(500).json({error: "err"})
 
-  res.status(200).json(result?.data?.deleteStripeSubscription.subscription)
+  if(result?.data?.deleteStripeSubscription === null) return res.status(200).json({success: true})
 }

@@ -5,7 +5,6 @@ import {
   Link,
   Tooltip,
   Badge,
-  Button,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Head from "next/head";
@@ -13,11 +12,11 @@ import Display from "../components/atoms/Display";
 import BigTitle from "../components/atoms/BigTitle"
 import BodyText from "../components/atoms/BodyText";
 import RoundedButton from "../components/atoms/RoundedButton";
+import Toggle from "../components/atoms/Toggle";
 import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
 
 import CheckIcon from "../public/img/icons/checkIcon";
-import CrossIcon from "../public/img/icons/crossIcon";
 import InfoIcon from '../public/img/icons/infoIcon';
 
 export async function getServerSideProps(context) {
@@ -49,27 +48,12 @@ export const CardPrice = ({
   title,
   badge,
   subTitle,
-  personConfig,
+  price,
+  anualPlan = false,
   textResource,
   resources = [],
   button,
 }) => {
-  const [nubmerOfPerson, setNubmerOfPerson] = useState(personConfig.person)
-  const [priceValue, setPriceValue] = useState(personConfig.price)
-
-  const addRemovePersonPrice = (action) => {
-    if(action === "add") {
-      const personAdd = nubmerOfPerson + 1
-      setNubmerOfPerson(personAdd)
-      setPriceValue(150 + 50 * personAdd)
-    }
-    if(action === "remove") {
-      const personRemove = nubmerOfPerson - 1
-      setNubmerOfPerson(personRemove)
-      setPriceValue(150 + 50 * personRemove)
-    }
-  }
-
   return (
     <Box
       display="flex"
@@ -113,96 +97,46 @@ export const CardPrice = ({
         <Box
           justifyContent="center"
           display="flex"
-          flexDirection="row"
-          height="50px"
+          flexDirection="column"
           alignItems="center"
           marginBottom="40px"
         >
-          <Text
-            color="#252A32"
-            fontSize="50px"
-            fontWeight="500"
-            lineHeight="54px"
-            letterSpacing="-0.8px"
-            fontFamily="Ubuntu"
-          >R$ {priceValue}</Text>
-          <Text
-            position="relative"
-            top="16px"
-            right="-4px"
-            color="#252A32"
-            fontSize="18px"
-            fontWeight="700"
-            lineHeight="22px"
-            letterSpacing="0.3px"
-            fontFamily="Ubuntu"
-          >/mês</Text>
-        </Box>
-        
-        <Box
-          display={isMobileMod() && !personConfig.text ? "none" :"flex"}
-          flexDirection="row"
-          justifyContent="space-between"
-        >
-          {personConfig.text &&
-          <>
+          <Box
+            display="flex"
+            flexDirection="row"
+            height="50px"
+            alignItems="center"
+          >
             <Text
               color="#252A32"
-              fontFamily="ubuntu"
-              fontSize="14px"
-              fontStyle="normal"
-              fontWeight="400"
-              lineHeight="20px"
+              fontSize="50px"
+              fontWeight="500"
+              lineHeight="54px"
+              letterSpacing="-0.8px"
+              fontFamily="Ubuntu"
+            >R$ {price}</Text>
+            <Text
+              position="relative"
+              top="16px"
+              right="-4px"
+              color="#252A32"
+              fontSize="18px"
+              fontWeight="700"
+              lineHeight="22px"
               letterSpacing="0.3px"
-              textAlign="initial"
-            >
-              {personConfig.text}
-            </Text>
+              fontFamily="Ubuntu"
+            >/mês</Text>
+          </Box>
 
-            <Box
-              display="flex"
-              flexDirection="row"
-              border="1px solid #DEDFE0"
-              overflow="hidden"
-              borderRadius="12px"
-              height="40px"
-            >
-              <Button
-                width="40px"
-                height="100%"
-                backgroundColor="#FFF"
-                borderRadius="0"
-                borderRight="1px solid #DEDFE0"
-                _hover={{backgroundColor: "#FFF", opacity: "0.6", color: "#42B0FF"}}
-                fontFamily="Ubuntu"
-                onClick={() => addRemovePersonPrice("remove")}
-                isDisabled={nubmerOfPerson === 2}
-                >–</Button>
-              <Text
-                width="50px"
-                height="100%"
-                color="#252A32"
-                fontFamily="Lato"
-                fontSize="16px"
-                fontStyle="normal"
-                fontWeight="400"
-                lineHeight="24px"
-                letterSpacing="0.5px"
-                padding="7px 20px 9px"
-              >{nubmerOfPerson - personConfig.person}</Text>
-              <Button
-                width="40px"
-                height="100%"
-                backgroundColor="#FFF"
-                borderRadius="0"
-                borderLeft="1px solid #DEDFE0"
-                _hover={{backgroundColor: "#FFF", opacity: "0.6", fill:"#42B0FF"}}
-                fontFamily="Ubuntu"
-                onClick={() => addRemovePersonPrice("add")}
-                isDisabled={nubmerOfPerson === 5}
-                ><CrossIcon height="14px" width="14px" transform="rotate(45deg)"/></Button>
-            </Box>
-          </>
+          {anualPlan && 
+            <Text
+              fontFamily="Ubuntu"
+              fontWeight="400"
+              fontSize="14px"
+              lineHeight="27px"
+              color="#71757A"
+              marginTop="24px"
+            >{(price*12).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 })} cobrado uma vez no ano</Text>
           }
         </Box>
       </Box>
@@ -342,6 +276,20 @@ export const CardPrice = ({
 }
 
 export default function Price({ username ,isBDPro, isBDEmp }) {
+  const [toggleAnual, setToggleAnual] = useState(false)
+  const [priceBDPro, setPriceBDPro] = useState("47")
+  const [priceBDEmp, setPriceBDEmp] = useState("350")
+
+  useEffect(() => {
+    if(toggleAnual === true) {
+      setPriceBDPro("37")
+      setPriceBDEmp("280")
+    } else {
+      setPriceBDPro("47")
+      setPriceBDEmp("350")
+    }
+  }, [toggleAnual])
+
   return (
     <MainPageTemplate paddingX="24px">
       <Head>
@@ -359,7 +307,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
       </Head>
 
       <Stack
-        gridGap={{base:"40px", lg: "64px"}}
+        gridGap="40px"
         paddingTop="90px"
         width="100%"
         maxWidth="1264px"
@@ -377,6 +325,34 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
           Compare os planos
         </Display>
 
+        <Box
+          display="none"
+          width="100%"
+          flexDirection="row"
+          justifyContent="center"
+          alignitems="center"
+          gap="8px"
+        >
+          <Toggle
+            value={toggleAnual}
+            onChange={() => setToggleAnual(!toggleAnual)}
+          />
+          <Text
+            gap="8px"
+            fontFamily="Ubuntu"
+            fontWeight="400"
+            fontSize="18px"
+            lineHeight="24px"
+            display="flex"
+            alignItems="center"
+            textAlign="center"
+            letterSpacing="0.1px"
+            color="#252A32"
+          >
+            Desconto anual <Text color="#2B8C4D">Economize 20%</Text>
+          </Text>
+        </Box>
+
         <Stack
           display={isMobileMod() ? "flex" : "grid"}
           gridTemplateColumns="repeat(3, 320px)"
@@ -390,9 +366,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
           <CardPrice
             title="BD Grátis"
             subTitle={<BodyText>Para você descobrir o potencial da plataforma de dados</BodyText>}
-            personConfig={{
-              price: "0"
-            }}
+            price={"0"}
             textResource="Recursos:"
             resources={[
               {name: "Tabelas tratadas"},
@@ -413,9 +387,8 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
           <CardPrice
             title="BD Pro"
             subTitle={<BodyText>Para você ter acesso aos<br/> dados mais atualizados</BodyText>}
-            personConfig={{
-              price: "47"
-            }}
+            price={priceBDPro}
+            anualPlan={toggleAnual}
             textResource="Todos os recursos da BD Grátis, mais:"
             resources={[
               {name: "Dezenas de bases de alta frequência atualizadas"},
@@ -430,9 +403,8 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
           <CardPrice
             title="BD Empresas"
             subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
-            personConfig={{
-              price: "350"
-            }}
+            price={priceBDEmp}
+            anualPlan={toggleAnual}
             textResource="Todos os recursos da BD Pro, mais:"
             resources={[
               {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
