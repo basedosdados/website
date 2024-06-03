@@ -76,11 +76,18 @@ export function ModalGeneral ({
   isOpen,
   onClose,
   isCentered = true,
+  propsModal,
   propsModalContent,
   classNameBody
 }) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered={isCentered} margin="24px !important">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      isCentered={isCentered}
+      margin="24px !important"
+      {...propsModal}
+    >
       <ModalOverlay/>
       <ModalContent
         margin="24px"
