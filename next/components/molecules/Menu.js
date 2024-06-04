@@ -471,47 +471,80 @@ function MenuUser ({ userData, onOpen, onClose }) {
 }
 
 function SearchInputUser ({ user }) {
+  const inputMobileRef = useRef(null)
   const [search, setSearch] = useState("")
   const [showInput, setShowInput] = useState(false)
 
   function openSearchLink() {
-    if(search.trim() === "") return console.log("nada")
+    if(search.trim() === "") return
     triggerGAEvent("search_menu", search.trim())
     window.open(`/dataset?q=${search.trim()}`, "_self")
   }
 
+  const handleClickOutside = (event) => {
+    if (inputMobileRef.current && !inputMobileRef.current.contains(event.target)) {
+      setShowInput(false);
+    }
+  }
+
+  useEffect(() => {
+    if (showInput) {
+      document.addEventListener('click', handleClickOutside)
+    } else {
+      document.removeEventListener('click', handleClickOutside)
+    }
+    
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [showInput])
+
   if (isMobileMod()) return (
     <Stack spacing={0} width="100%" marginRight={user ? "60px !important" : "0"}>
-      <ControlledInput
+      <Stack
         display={showInput ? "flex" :"none"}
-        width="100%"
-        value={search}
-        onChange={setSearch}
-        onEnterPress={openSearchLink}
-        placeholder="Pesquise dados"
-        alignSelf="center"
-        justifyContent="center"
-        autoComplete="off"
-        inputStyle={{
-          height: "40px",
-          fontSize: "16px",
-          width: "100%",
-          fontFamily: "Lato",
-          borderRadius: "14px",
-          _placeholder:{color: "#6F6F6F"}
-        }}
-        rightIcon={
-          <SearchIcon
-            alt="pesquisar"
-            fill="#9D9FA3"
-            width="18px"
-            height="18px"
-            cursor="pointer"
-            _hover={{opacity:"0.8"}}
-            onClick={() => openSearchLink()}
-          />
-        }
-      />
+        position="absolute"
+        top="0"
+        left="0"
+        backgroundColor="#FFF"
+        width="100vw"
+        height="72px"
+        padding="16px 20px"
+        zIndex={99}
+      >
+        <ControlledInput
+          width="100%"
+          value={search}
+          onChange={setSearch}
+          onEnterPress={openSearchLink}
+          placeholder="Pesquise dados"
+          alignSelf="center"
+          justifyContent="center"
+          autoComplete="off"
+          inputStyle={{
+            ref: inputMobileRef,
+            onFocus: () => setShowInput(true),
+            onBlur: () => setShowInput(false),
+            height: "40px",
+            fontSize: "16px",
+            width: "100%",
+            fontFamily: "Lato",
+            borderRadius: "14px",
+            _placeholder:{color: "#6F6F6F"}
+          }}
+          rightIcon={
+            <SearchIcon
+              alt="pesquisar"
+              fill="#9D9FA3"
+              width="18px"
+              height="18px"
+              cursor="pointer"
+              _hover={{opacity:"0.8"}}
+              onClick={() => openSearchLink()}
+            />
+          }
+        />
+      </Stack>
 
       <SearchIcon
         display={showInput ? "none" : "flex"}
@@ -522,7 +555,12 @@ function SearchInputUser ({ user }) {
         marginLeft="auto !important"
         cursor="pointer"
         _hover={{opacity:"0.8"}}
-        onClick={() => setShowInput(true) }
+        onClick={() => {
+          setShowInput(true)
+          setTimeout(() => {
+            inputMobileRef.current.focus()
+          }, 0)
+        }}
       />
     </Stack>
   )
