@@ -19,16 +19,13 @@ import Link from "../../components/atoms/Link";
 import GreenTab from "../../components/atoms/GreenTab";
 import ReadMore from "../../components/atoms/ReadMore";
 import HelpWidget from "../../components/atoms/HelpWidget";
+import DatasetResource from "../../components/organisms/DatasetResource";
 import { ImageOrganization } from "../../components/atoms/ImageOrganization";
 import { TemporalCoverageString } from "../../components/molecules/TemporalCoverageDisplay";
-import DatasetResource from "../../components/organisms/DatasetResource";
-import { MetadataPage } from "../../components/organisms/MetadataPage";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import FourOFour from "../../components/templates/404";
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
-import DocIcon from "../../public/img/icons/docIcon";
-import CrossIcon from "../../public/img/icons/crossIcon";
 
 import {
   getListDatasets,
@@ -72,10 +69,10 @@ export default function DatasetPage ({
     if(isDatasetEmpty) return router.push(`${process.env.NEXT_PUBLIC_API_URL}/dataset_redirect?dataset=${query.dataset}`)
   }, [])
 
-  if(isDatasetEmpty) return <MainPageTemplate><FourOFour/></MainPageTemplate>
+  if(isDatasetEmpty) return <MainPageTemplate userTemplate><FourOFour/></MainPageTemplate>
 
   return (
-    <MainPageTemplate>
+    <MainPageTemplate userTemplate>
       <Head>
         <title>{dataset.name} – Base dos Dados</title>
 
@@ -188,16 +185,7 @@ export default function DatasetPage ({
               />
               Dados
             </GreenTab>
-            {/* <GreenTab>
-              <DocIcon
-                alt="metadados"
-                width="24px"
-                height="24px"
-                marginRight="6px"
-                fill={tabIndex === 1 ? "#2B8C4D" :"#C4C4C4"}
-              />
-              Metadados
-            </GreenTab> */}
+
             {dataset?.slug === "br_ibge_ipca" && <GreenTab>Painéis</GreenTab>}
           </TabList>
           <TabPanels>
@@ -206,13 +194,6 @@ export default function DatasetPage ({
                 dataset={dataset}
               />
             </TabPanel>
-
-            {/* 
-              // precisa retrabalhar o MetadataPage
-            <TabPanel padding="0px" pt="20px">
-              <MetadataPage/>
-            </TabPanel> 
-            */}
 
             {dataset?.slug === "br_ibge_ipca" &&
               <TabPanel padding="0px">
