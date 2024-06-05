@@ -106,7 +106,7 @@ export default function Login() {
     <MainPageTemplate
       display="flex"
       justifyContent="center"
-      paddingTop="72px"
+      paddingTop="70px"
       cleanTemplate
     >
       <Stack

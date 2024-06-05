@@ -509,7 +509,7 @@ function SearchInputUser ({ user }) {
         left="0"
         backgroundColor="#FFF"
         width="100vw"
-        height="72px"
+        height="70px"
         padding="16px 20px"
         zIndex={99}
       >
@@ -726,6 +726,12 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   const [isScrollDown, setIsScrollDown] = useState(false)
   const [userData, setUserData] = useState(null)
 
+  function maxWidthDataset() {
+    console.log(route)
+    if (route === "/dataset" || route === "/dataset/[dataset]") return "1440px"
+    return "1264px"
+  }
+
   useEffect(() => {
     let userInfo = userBD
     if(userInfo !== null && userInfo !== "undefined") {
@@ -762,7 +768,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     ],
     Contato: "/contato",
     Button: []
-  };
+  }
 
   useEffect(() => {
     document.addEventListener("scroll", () => {
@@ -792,7 +798,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         width="100%"
         left="0px"
         backgroundColor="#FFFFFF"
-        padding={isMobileMod() ? "16px 20px" : "16px 24px"}
+        padding={isMobileMod() ? "15px 20px" : "15px 24px"}
         zIndex="99"
         transition="0.5s"
         as="nav"
@@ -801,7 +807,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
           justifyContent={simpleTemplate || userTemplate ? "flex-start" : { base: "center", lg: "flex-start" }}
           width="100%"
           height="40px"
-          maxWidth="1264px"
+          maxWidth={maxWidthDataset()}
           margin="0 auto"
           spacing={6}
         >
