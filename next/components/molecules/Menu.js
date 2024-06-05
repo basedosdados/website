@@ -26,7 +26,7 @@ import { useRouter } from "next/router"
 import cookies from "js-cookie";
 import MenuDropdown from "./MenuDropdown";
 import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook"
-import ControlledInput from "../atoms/ControlledInput";
+import { ControlledInputMenu } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
 import { triggerGAEvent } from "../../utils";
@@ -474,6 +474,7 @@ function SearchInputUser ({ user }) {
   const inputMobileRef = useRef(null)
   const [search, setSearch] = useState("")
   const [showInput, setShowInput] = useState(false)
+  const [inputFocus, setInputFocus] = useState(false)
 
   function openSearchLink() {
     if(search.trim() === "") return
@@ -512,34 +513,23 @@ function SearchInputUser ({ user }) {
         padding="16px 20px"
         zIndex={99}
       >
-        <ControlledInput
+        <ControlledInputMenu
           width="100%"
           value={search}
           onChange={setSearch}
           onEnterPress={openSearchLink}
+          refInput={inputMobileRef}
+          inputFocus={showInput}
+          changeInputFocus={setShowInput}
           placeholder="Pesquise dados"
-          alignSelf="center"
-          justifyContent="center"
-          autoComplete="off"
-          inputStyle={{
-            ref: inputMobileRef,
-            onFocus: () => setShowInput(true),
-            onBlur: () => setShowInput(false),
-            height: "40px",
-            fontSize: "16px",
-            width: "100%",
-            fontFamily: "Lato",
-            borderRadius: "14px",
-            _placeholder:{color: "#6F6F6F"}
-          }}
-          rightIcon={
+          fill="#464A51"
+          fillHover="#878A8E"
+          icon={
             <SearchIcon
               alt="pesquisar"
-              fill="#9D9FA3"
-              width="18px"
-              height="18px"
+              width="16.8px"
+              height="16.8px"
               cursor="pointer"
-              _hover={{opacity:"0.8"}}
               onClick={() => openSearchLink()}
             />
           }
@@ -549,7 +539,7 @@ function SearchInputUser ({ user }) {
       <SearchIcon
         display={showInput ? "none" : "flex"}
         alt="pesquisar"
-        fill="#9D9FA3"
+        fill="#464A51"
         width="18px"
         height="18px"
         marginLeft="auto !important"
@@ -567,32 +557,21 @@ function SearchInputUser ({ user }) {
 
   return (
     <Stack spacing={0}>
-      <ControlledInput
-        maxWidth="480px"
-        width="480px"
+      <ControlledInputMenu
         value={search}
         onChange={setSearch}
         onEnterPress={openSearchLink}
+        inputFocus={inputFocus}
+        changeInputFocus={setInputFocus}
         placeholder="Pesquise dados"
-        alignSelf="center"
-        justifyContent="center"
-        autoComplete="off"
-        inputStyle={{
-          height: "40px",
-          fontSize: "16px",
-          width: "100%",
-          fontFamily: "Lato",
-          borderRadius: "14px",
-          _placeholder:{color: "#6F6F6F"}
-        }}
-        rightIcon={
+        fill="#464A51"
+        fillHover="#878A8E"
+        icon={
           <SearchIcon
             alt="pesquisar"
-            fill="#9D9FA3"
-            width="18px"
-            height="18px"
+            width="16.8px"
+            height="16.8px"
             cursor="pointer"
-            _hover={{opacity:"0.8"}}
             onClick={() => openSearchLink()}
           />
         }
@@ -642,8 +621,8 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
       transition="1s"
       marginLeft={
         path === "/" ?
-        !position ? "0 !important" : "32px !important"
-        : "32px !important"
+        !position ? "0 !important" : "28px !important"
+        : "28px !important"
       }
     >
       <HStack display={userTemplate ? "none" : "flex"} width="100%" flex="3" spacing={7}>
