@@ -6,25 +6,14 @@ import {
   MenuDivider,
   Tooltip
 } from "@chakra-ui/react";
-import { useDisclosure } from "@chakra-ui/hooks";
-import { useState, useEffect } from 'react';
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import HelpIcon from "../../public/img/icons/helpIcon"
 
 export default function HelpWidget({options, tooltip}) {
-  const isMobile = useCheckMobile();
-  const [isMobileMode, setIsMobileMode] = useState(false)
-
-  useEffect(() => {
-    setIsMobileMode(isMobile)
-  },[isMobile])
-
-  const { isOpen } = useDisclosure()
-
   const optionsRender = (options) => {
-    return options.map((option) => {
+    return options.map((option, i) => {
       if(option.name){ return (
         <MenuItem
+          key={i}
           letterSpacing="0.3px"
           lineHeight="16px"
           fontWeight="400"
@@ -39,7 +28,7 @@ export default function HelpWidget({options, tooltip}) {
         >
           {option.name}
         </MenuItem>)
-      } else { return <MenuDivider margin="0 0 14px"/> }
+      } else { return <MenuDivider key={i} margin="0 0 14px"/> }
     })
   }
 
@@ -71,9 +60,8 @@ export default function HelpWidget({options, tooltip}) {
               zIndex="11"
               boxShadow="0 1.6px 16px rgba(100, 96, 103, 0.3)"
               position="fixed"
-              bottom={isMobileMode ? "20px" : "40px"}
-              right={isMobileMode ? "20px" : "40px"}
-              isActive={isOpen}
+              bottom={{ base: "20px", lg: "40px" }}
+              right={{ base: "20px", lg: "40px" }}
             >
               <HelpIcon alt="menu de ajuda" justifyContent="center" width="25px" height="25px" fill="white"/>
             </MenuButton>

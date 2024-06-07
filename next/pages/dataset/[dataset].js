@@ -105,11 +105,11 @@ export default function DatasetPage ({ dataset }) {
         spacing={0}
       >
         <Grid
-          templateColumns="300px 1fr"
+          templateColumns={{ base: "1fr", lg: "300px 1fr" }}
           gap="24px"
           paddingY="24px"
         >
-          <GridItem>
+          <GridItem display="flex" justifyContent="center" >
             <Image
               src={dataset?.organization?.picture ? dataset?.organization?.picture : `https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png`}
               objectFit="cover"
@@ -118,7 +118,7 @@ export default function DatasetPage ({ dataset }) {
               borderRadius="16px"
             />
           </GridItem>
-          
+
           <GridItem>
             <Grid
               templateColumns="1fr 1fr"
@@ -129,7 +129,7 @@ export default function DatasetPage ({ dataset }) {
                   width="100%"
                   overflow="hidden"
                   textOverflow="ellipsis"
-                  whiteSpace="nowrap"
+                  whiteSpace={{base: "inherit", lg:"nowrap"}}
                   fontFamily="Roboto"
                   fontWeight="500"
                   lineHeight="42px"
@@ -144,7 +144,7 @@ export default function DatasetPage ({ dataset }) {
                 </ReadMore>
               </GridItem>
 
-              <GridItem>
+              <GridItem colSpan={{ base: 2, lg: 1 }}>
                 <Text
                   fontFamily="Roboto"
                   fontWeight="500"
@@ -166,7 +166,7 @@ export default function DatasetPage ({ dataset }) {
                 </Text>
               </GridItem>
 
-              <GridItem>
+              <GridItem colSpan={{ base: 2, lg: 1 }}>
                 <Text
                   fontFamily="Roboto"
                   fontWeight="500"
@@ -209,7 +209,6 @@ export default function DatasetPage ({ dataset }) {
                 width="18px"
                 height="18px"
                 marginRight="6px"
-                fill={tabIndex === 0 ? "#2B8C4D" :"#71757A"}
               />
               Dados
             </GreenTab>
@@ -220,7 +219,6 @@ export default function DatasetPage ({ dataset }) {
                 width="28px"
                 height="24px"
                 marginRight="2px"
-                fill={tabIndex === 1 ? "#2B8C4D" :"#71757A"}
               />
               Cruzamento
             </GreenTab>
@@ -263,10 +261,10 @@ export default function DatasetPage ({ dataset }) {
         ]}
       />
 
-      <Stack display={query?.hasOwnProperty("table") !== "none"}>
+      {/* <Stack display={query?.hasOwnProperty("table") !== "none"}>
         <script key="sql" src="/vendor/prism.js"/>
         <link rel="stylesheet" href="/vendor/prism.css" data-noprefix />
-      </Stack>
+      </Stack> */}
     </MainPageTemplate>
   )
 }
