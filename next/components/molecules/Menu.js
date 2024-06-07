@@ -727,7 +727,6 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   const [userData, setUserData] = useState(null)
 
   function maxWidthDataset() {
-    console.log(route)
     if (route === "/dataset" || route === "/dataset/[dataset]") return "1440px"
     return "1264px"
   }

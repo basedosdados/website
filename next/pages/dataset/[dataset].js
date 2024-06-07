@@ -1,11 +1,14 @@
 import {
   VStack,
   Stack,
-  Center,
   Tabs,
   TabList,
   TabPanel,
-  TabPanels
+  TabPanels,
+  Grid,
+  GridItem,
+  Image,
+  Text
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
@@ -13,15 +16,11 @@ import Head from "next/head";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 
 import BigTitle from "../../components/atoms/BigTitle";
-import Subtitle from "../../components/atoms/Subtitle";
-import SectionText from "../../components/atoms/SectionText";
 import Link from "../../components/atoms/Link";
 import GreenTab from "../../components/atoms/GreenTab";
 import ReadMore from "../../components/atoms/ReadMore";
 import HelpWidget from "../../components/atoms/HelpWidget";
 import DatasetResource from "../../components/organisms/DatasetResource";
-import { ImageOrganization } from "../../components/atoms/ImageOrganization";
-import { TemporalCoverageString } from "../../components/molecules/TemporalCoverageDisplay";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import FourOFour from "../../components/templates/404";
@@ -56,9 +55,7 @@ export async function getStaticPaths(context) {
   }
 }
 
-export default function DatasetPage ({
-  dataset,
-}) {
+export default function DatasetPage ({ dataset }) {
   const router = useRouter()
   const { query } = router
   const [tabIndex, setTabIndex] = useState(0)
@@ -99,72 +96,99 @@ export default function DatasetPage ({
       </Head>
 
       <VStack
-        margin="40px auto auto"
-        width={{ base: "90vw", lg: "80vw" }}
-        maxWidth="1264px"
+        maxWidth="1440px"
+        marginX="auto"
+        boxSizing="content-box"
+        padding="24px"
+        overflow="auto"
       >
-        <Stack
-          direction={{ base: "column", lg: "row" }}
-          marginRight="auto"
-          spacing={10}
-          align="flex-start"
+        <Grid
+          templateColumns="300px 1fr"
+          gap="24px"
         >
-          <Center
-            paddingTop="4px"
-            width="100%"
-            minWidth="235px"
-            height="100%"
-          >
-            <ImageOrganization image={dataset?.organization?.picture}/>
-          </Center>
-
-          <VStack spacing={0} align="flex-start" width="100%">
-            <BigTitle
-              overflow="hidden"
-              textOverflow="ellipsis"
-              whiteSpace="nowrap"
-              width={{ base: "90vw", lg: "60vw" }}
-              maxWidth="970px"
-              paddingBottom="8px"
+          <GridItem>
+            <Image
+              src={dataset?.organization?.picture.startsWith("https://") ? dataset?.organization?.picture : `https://basedosdados.org/uploads/group/${image}`}
+              objectFit="cover"
+            />
+          </GridItem>
+          
+          <GridItem>
+            <Grid
+              templateColumns="1fr 1fr"
+              gap="16px"
             >
-              {dataset.name || "Conjunto sem nome"}
-            </BigTitle>
-
-            <ReadMore minHeight="70px" isMobileMod={isMobileMod()}>
-              {dataset?.description || "Nenhuma descrição fornecida."}
-            </ReadMore>
-
-            <VStack align="flex-start" spacing={5} paddingTop="20px">
-              <VStack align="flex-start">
-                <Subtitle>Organização</Subtitle>
-                <Link
-                  marginTop="4px !important"
-                  href={`/dataset?organization=${dataset?.organization?.slug || ""}`}
+              <GridItem colSpan={2}>
+                <BigTitle
+                  width="100%"
+                  overflow="hidden"
+                  textOverflow="ellipsis"
+                  whiteSpace="nowrap"
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  lineHeight="42px"
                 >
-                  <SectionText
-                    fontSize={isMobileMod() ? "14px" : "16px"}
+                  {dataset.name || "Conjunto sem nome"}
+                </BigTitle>
+              </GridItem>
+
+              <GridItem colSpan={2}>
+                <ReadMore>
+                  {dataset?.description || "Nenhuma descrição fornecida."}
+                </ReadMore>
+              </GridItem>
+
+              <GridItem>
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="18px"
+                  lineHeight="28px"
+                  color="#252A32"
+                  marginBottom="8px"
+                >
+                  Cobertura temporal do conjunto
+                </Text>
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#464A51"
+                >
+                  {dataset.coverage || "Nenhuma cobertura temporal fornecida."}
+                </Text>
+              </GridItem>
+
+              <GridItem>
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="18px"
+                  lineHeight="28px"
+                  color="#252A32"
+                  marginBottom="8px"
+                >
+                  Organização
+                </Text>
+                <Link href={`/dataset?organization=${dataset?.organization?.slug || ""}`}>
+                  <Text
+                    fontFamily="Roboto"
+                    fontWeight="400"
+                    fontSize="14px"
+                    lineHeight="20px"
+                    color="#464A51"
                   >
-                    {dataset?.organization?.name || "Não listado"}
-                  </SectionText>
+                    {dataset?.organization?.name || "Nenhuma organização fornecida."}
+                  </Text>
                 </Link>
-              </VStack>
-
-              <VStack align="flex-start">
-                <Subtitle>Cobertura temporal</Subtitle>
-                <SectionText
-                  marginTop="4px !important"
-                  fontSize={isMobileMod() ? "14px" : "16px"}
-                >
-                  <TemporalCoverageString
-                    value={dataset.coverage ? dataset.coverage :""}
-                  />
-                </SectionText>
-              </VStack>
-            </VStack>
-          </VStack>
-        </Stack>
+              </GridItem>
+            </Grid>
+          </GridItem>
+        </Grid>
 
         <Tabs
+          display={"none"}
           onChange={(index) => setTabIndex(index)}
           isLazy
           paddingTop="32px"
