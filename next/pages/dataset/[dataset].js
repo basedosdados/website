@@ -3,17 +3,17 @@ import {
   Stack,
   Tabs,
   TabList,
+  TabIndicator,
   TabPanel,
   TabPanels,
   Grid,
   GridItem,
   Image,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 
 import BigTitle from "../../components/atoms/BigTitle";
 import Link from "../../components/atoms/Link";
@@ -25,6 +25,7 @@ import { MainPageTemplate } from "../../components/templates/main";
 
 import FourOFour from "../../components/templates/404";
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
+import CrossingIcon from "../../public/img/icons/crossingIcon";
 
 import {
   getListDatasets,
@@ -99,24 +100,29 @@ export default function DatasetPage ({ dataset }) {
         maxWidth="1440px"
         marginX="auto"
         boxSizing="content-box"
-        padding="24px"
         overflow="auto"
+        paddingX="24px"
+        spacing={0}
       >
         <Grid
           templateColumns="300px 1fr"
           gap="24px"
+          paddingY="24px"
         >
           <GridItem>
             <Image
-              src={dataset?.organization?.picture.startsWith("https://") ? dataset?.organization?.picture : `https://basedosdados.org/uploads/group/${image}`}
+              src={dataset?.organization?.picture ? dataset?.organization?.picture : `https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png`}
               objectFit="cover"
+              width="300px"
+              height="182px"
+              borderRadius="16px"
             />
           </GridItem>
           
           <GridItem>
             <Grid
               templateColumns="1fr 1fr"
-              gap="16px"
+              gap="8px"
             >
               <GridItem colSpan={2}>
                 <BigTitle
@@ -132,8 +138,8 @@ export default function DatasetPage ({ dataset }) {
                 </BigTitle>
               </GridItem>
 
-              <GridItem colSpan={2}>
-                <ReadMore>
+              <GridItem colSpan={2} minHeight="60px" marginBottom="8px">
+                <ReadMore id="readLessDataset">
                   {dataset?.description || "Nenhuma descrição fornecida."}
                 </ReadMore>
               </GridItem>
@@ -188,30 +194,45 @@ export default function DatasetPage ({ dataset }) {
         </Grid>
 
         <Tabs
-          display={"none"}
           onChange={(index) => setTabIndex(index)}
+          variant="unstyled"
           isLazy
-          paddingTop="32px"
-          width={{ base: "90vw", lg: "100%" }}
+          width="100%"
         >
           <TabList
             padding="0px"
-            fontFamily="ubuntu !important"
             borderBottom= "2px solid #DEDFE0 !important"
           >
             <GreenTab>
               <DataBaseIcon
                 alt="dados"
-                width="22px"
-                height="22px"
+                width="18px"
+                height="18px"
                 marginRight="6px"
-                fill={tabIndex === 0 ? "#2B8C4D" :"#C4C4C4"}
+                fill={tabIndex === 0 ? "#2B8C4D" :"#71757A"}
               />
               Dados
             </GreenTab>
 
-            {dataset?.slug === "br_ibge_ipca" && <GreenTab>Painéis</GreenTab>}
+            <GreenTab>
+              <CrossingIcon
+                alt="cruzamento"
+                width="28px"
+                height="24px"
+                marginRight="2px"
+                fill={tabIndex === 1 ? "#2B8C4D" :"#71757A"}
+              />
+              Cruzamento
+            </GreenTab>
           </TabList>
+
+          <TabIndicator
+            marginTop="-4px"
+            height="3px"
+            bg="#2B8C4D"
+            borderRadius="100"
+          />
+
           <TabPanels>
             <TabPanel padding="0px">
               <DatasetResource
@@ -219,14 +240,8 @@ export default function DatasetPage ({ dataset }) {
               />
             </TabPanel>
 
-            {dataset?.slug === "br_ibge_ipca" &&
-              <TabPanel padding="0px">
-                {/* <DashboardsPage
-                  dataset={dataset}
-                  availableOptionsTranslations={availableOptionsTranslations}
-                /> */}
-              </TabPanel>
-            }
+            <TabPanel padding="0px">
+            </TabPanel>
           </TabPanels>
         </Tabs>
       </VStack>

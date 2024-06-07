@@ -6,7 +6,7 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 
-export default function ReadMore({ children, ...props}) {
+export default function ReadMore({ children, id, ...props}) {
   const [isReadMore, setIsReadMore] = useState(false)
   const [isOverflowing, setIsOverflowing] = useState(false)
   const textRef = useRef(null)
@@ -14,7 +14,7 @@ export default function ReadMore({ children, ...props}) {
   const modifiedChildren = `
     ${children}
     <span
-      id="readLessDiscription"
+      id="${id}"
       style="
         cursor: pointer;
         color: #0068C5;
@@ -39,7 +39,7 @@ export default function ReadMore({ children, ...props}) {
   }, [children])
 
   useEffect(() => {
-    const readLess = document.getElementById("readLessDiscription")
+    const readLess = document.getElementById(id)
     if (readLess) readLess.addEventListener('click', toggleReadMore)
     return () => { if (readLess) readLess.removeEventListener('click', toggleReadMore)}
   }, [isReadMore])
@@ -47,7 +47,7 @@ export default function ReadMore({ children, ...props}) {
   const toggleReadMore = () => {
     setIsReadMore(!isReadMore)
   }
-console.log(isReadMore)
+
   return (
     <Flex position="relative" {...props} >
       <Text
@@ -89,7 +89,7 @@ console.log(isReadMore)
           bottom="0"
           right="0"
         >
-          <Text color="#464A51">...</Text>Ler mais
+          <Text color="#464A51" marginRight="4px">...</Text>Ler mais
         </Text>
       }
     </Flex>
