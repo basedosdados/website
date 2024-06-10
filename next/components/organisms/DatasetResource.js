@@ -137,11 +137,12 @@ export default function DatasetResource({
     <Stack
       paddingTop="32px"
       direction={{ base: "column", lg: "row" }}
+      gap="24px"
       spacing={0}
       width="100%"
     >
       <Stack
-        width={{base: "100%", lg: "300px"}}
+        minWidth={{base: "100%", lg: "272px"}}
         spacing={0}
       >
         <ContentFilter
@@ -173,11 +174,7 @@ export default function DatasetResource({
         />
       </Stack>
 
-      <VStack
-        flex="1"
-      >
-        {/* <SwitchResource route={query}/> */}
-      </VStack>
+      <SwitchResource route={query}/>
     </Stack>
   )
 }

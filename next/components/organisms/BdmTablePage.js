@@ -6,17 +6,19 @@ import {
   Grid,
   GridItem,
   Tooltip,
+  Skeleton,
+  SkeletonText
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import Link from "../atoms/Link";
 import SectionText from "../atoms/SectionText";
 import { SimpleTable } from "../atoms/SimpleTable";
+import ReadMore from "../atoms/ReadMore";
 import LoadingSpin from "../atoms/Loading";
 import Subtitle from "../atoms/Subtitle";
 import { TemporalCoverageBar } from "../molecules/TemporalCoverageDisplay";
 import ColumnDatasets from "../molecules/ColumnDatasets";
-import BaseResourcePage from "../molecules/BaseResourcePage";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import FourOFour from "../templates/404";
 
@@ -36,22 +38,31 @@ import DownloadIcon from "../../public/img/icons/downloadIcon";
 export default function BdmTablePage({ id }) {
   const [isLoading, setIsLoading] = useState(true)
   const [resource, setResource] = useState({})
-  const [isError, setIsError] = useState({})
-
-  const fetchBdmTable = async () => {
-    try {
-      const result = await fetch(`/api/tables/getBdmTable?p=${id}`, { method: "GET" })
-        .then(res => res.json())
-      setResource(result)
-    } catch (error) {
-      setIsError(error)
-      console.error(error)
-    }
-    setIsLoading(false)
-  }
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
-    fetchBdmTable()
+    const fetchData = async () => {
+      setIsLoading(true)
+      try {
+        const response = await fetch(`/api/tables/getBdmTable?p=${id}`, { method: "GET" })
+        const result = await response.json()
+
+        if (result.success) {
+          setResource(result.resource)
+          setIsError(false)
+        } else {
+          console.error(result.error)
+          setIsError(true)
+        }
+      } catch (error) {
+        console.error("Fetch error: ", error)
+        setIsError(true)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
   }, [id])
 
   const AddInfoTextBase = ({title, text, info, children, ...style}) => {
@@ -186,50 +197,107 @@ export default function BdmTablePage({ id }) {
     )
   }
 
-  if(isError?.message?.length > 0 || resource === null || Object.keys(resource).length < 0) return <FourOFour/>
+  const StackSkeleton = ({ children, ...props }) => {
+    return (
+      <Skeleton
+        startColor="#F0F0F0"
+        endColor="#F3F3F3"
+        borderRadius="6px"
+        height="36px"
+        width="100%"
+        isLoaded={!isLoading}
+        {...props}
+      >
+        {children}
+      </Skeleton>
+    )
+  }
 
-  if(isLoading) return <LoadingSpin />
+  if(isError) return <FourOFour/>
+
+  console.log(resource)
 
   return (
-    <BaseResourcePage
-      padding={useCheckMobile() ? "16px 0 0" : "16px 8px 0 0"}
-      title={resource?.name}
+    <Stack
+      flex={1}
+      overflow="hidden"
+      paddingLeft={{base: "0", lg: "24px"}}
+      spacing={0}
     >
-      <DataInformationQuery resource={resource}/>
+      <StackSkeleton>
+        <Text
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="24px"
+          lineHeight="36px"
+          color="#252A32"
+          width="100%"
+          overflow="hidden"
+          textOverflow="ellipsis"
+          whiteSpace="nowrap"
+        >
+          {resource?.name}
+        </Text>
+      </StackSkeleton>
 
-      <VStack width="100%" spacing={4} alignItems="flex-start">
+      <SkeletonText
+        startColor="#F0F0F0"
+        endColor="#F3F3F3"
+        borderRadius="6px"
+        width="100%"
+        minHeight="60px"
+        spacing="6px"
+        skeletonHeight="16px"
+        noOfLines={3}
+        marginTop="8px !important"
+        marginBottom="40px !important"
+        isLoaded={!isLoading}
+      >
+        <ReadMore id="readLessTable">
+          {resource?.description || "Não fornecido"}
+        </ReadMore>
+      </SkeletonText>
+
+      <Stack spacing={0}>
+        <StackSkeleton height="20px">
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="18px"
+            lineHeight="20px"
+            color="#252A32"
+          >
+            Cobertura temporal
+          </Text>
+        </StackSkeleton>
+        <TemporalCoverageBar value={resource?.fullCoverage}/>
+      </Stack>
+
+      {/* <DataInformationQuery resource={resource}/> */}
+
+      {/* <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>Descrição</Subtitle>
         <SectionText whiteSpace="pre-wrap">
           {resource.description || "Nenhuma descrição fornecida."}
         </SectionText>
-      </VStack>
+      </VStack> */}
       
-      <VStack
-        width="100%"
-        maxWidth="600px"
-        paddingRight="40px"
-        spacing={4}
-        alignItems="flex-start"
-      >
-        <Subtitle>Cobertura temporal</Subtitle>
-        <TemporalCoverageBar value={resource?.fullCoverage}/>
-      </VStack>
 
-      <VStack width="100%" spacing={4} alignItems="flex-start">
+      {/* <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>
           Colunas
         </Subtitle>
         <ColumnDatasets tableId={resource?._id} />
-      </VStack>
+      </VStack> */}
 
-      <VStack width="100%" spacing={5} alignItems="flex-start">
+      {/* <VStack width="100%" spacing={5} alignItems="flex-start">
         <Subtitle>
           Nível da observação
         </Subtitle>
         <ObservationLevel/>
-      </VStack>
+      </VStack> */}
 
-      <VStack width="100%" spacing={5} alignItems="flex-start">
+      {/* <VStack width="100%" spacing={5} alignItems="flex-start">
         <Stack flex="1" >
           <Subtitle>Informações adicionais</Subtitle>
         </Stack>
@@ -343,7 +411,7 @@ export default function BdmTablePage({ id }) {
             </AddInfoTextBase>
           </GridItem>
         </Grid>
-      </VStack>
-    </BaseResourcePage>
+      </VStack> */}
+    </Stack>
   )
 }

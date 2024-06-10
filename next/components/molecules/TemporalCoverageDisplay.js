@@ -1,14 +1,14 @@
 import {
   Stack,
+  HStack,
   Center,
   Text,
-  Progress,
   Box,
   Badge,
   Tooltip,
   useBoolean,
 } from "@chakra-ui/react";
-import { useState, useEffect, Children } from "react";
+import { useState, useEffect } from "react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import { CalendarComunIcon } from "../../public/img/icons/calendarIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
@@ -274,54 +274,38 @@ export function TemporalCoverageBar ({ value }) {
   }
 
   return (
-    <Stack 
+    <HStack 
       position="relative"  
-      width="100%"
-      margin="50px 0 80px !important"
+      width="350px"
+      margin="8px 0 40px !important"
       spacing={0}
     >
-      <Progress
-        value={value.length === 2 ? 100 : useCheckMobile() ? 54 :70}
-        height="3px"
-        marginLeft="10px"
-        width="100%"
-        backgroundColor="#9C8400"
-        colorScheme={dateStart?.type === "closed" ? "yellowPro" : "greenBD"}
-      />
-
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="flex-start"
-        position="absolute"
-        top="-7px"
-        gap="12px"
-      >
+      <Box flex={3}>
         <Box
-          width="16px"
-          height="16px"
-          borderRadius="50%"
-          backgroundColor={dateStart?.type === "open" ? "#2B8C4D" : "#9C8400"}
-        />
-        <Center
-          position="relative"
-          left="-1px"
+          width="100%"
+          height="24px"
+          backgroundColor="#D5E8DB"
+          // backgroundColor={dateStart?.type === "open" ? "#2B8C4D" : "#9C8400"}
+        
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="12px"
+          lineHeight="20px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          textAlign="center"
+          letterSpacing="0.2px"
+          color="#2B8C4D"
         >
-          <CalendarComunIcon
-            position="relative"
-            top="-1px"
-            margin="0 6px 0 0"
-            width="20px"
-            height="20px"
-            fill={dateStart?.type === "open" ? "#2B8C4D" : "#9C8400"}
-          />
-          <TextData string={dateStart?.date}/>
-        </Center>
+          GRÁTIS
+        </Box>
+        <TextData string={dateStart?.date}/>
       </Box>
 
       {dateMid !== "" &&
         <Box
-          display="flex"
+          display="none"
         >
           <TooltipContent
             text="Acesso liberado entre"
@@ -356,23 +340,36 @@ export function TemporalCoverageBar ({ value }) {
             top="24px"
             minWidth="120px"
           >
-            <CalendarComunIcon
-              position="relative"
-              top="-1px"
-              margin="0 6px 0 0"
-              width="20px"
-              height="20px"
-              fill={dateMid?.type === "open" ? "#2B8C4D" : "#9C8400"}
-            />
             <TextData string={dateMid?.date}/>
           </Center>
         </Box>
       }
 
-      <Box
-        display="flex"
-      >
-        <TooltipContent
+      <Box flex={2}>
+        <Box
+          width="100%"
+          height="24px"
+          backgroundColor="#E4F2FF"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="12px"
+          lineHeight="20px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          textAlign="center"
+          letterSpacing="0.2px"
+          color="#0068C5"
+          gap="10px"
+        >
+          PAGO
+          <RedirectIcon
+            width="12px"
+            height="12px"
+            fill="#0068C5"
+          />
+        </Box>
+        {/* <TooltipContent
           text={dateEnd?.type === "open" ? "Acesso liberado entre" : "Assine um dos planos pagos da BD para liberar entre"}
           firstValue={dateEnd?.type === "open" ? dateStart : dateEnd?.type === "closed" ? dateStart : dateMid}
           lastValue={dateEnd}
@@ -407,24 +404,9 @@ export function TemporalCoverageBar ({ value }) {
               mouseOff={setFlag.off}
             />
           </Box>
-        </TooltipContent>
-        <Center
-          position="absolute"
-          top="24px"
-          minWidth="120px"
-          left={useCheckMobile() ? "75%" : "90%"}
-        >
-          <CalendarComunIcon
-            position="relative"
-            top="-1px"
-            margin="0 6px 0 0"
-            width="20px"
-            height="20px"
-            fill={dateEnd?.type === "open" ? "#2B8C4D" : "#9C8400"}
-          />
-          <TextData string={dateEnd?.date}/>
-        </Center>
+        </TooltipContent> */}
+        <TextData string={dateEnd?.date}/>
       </Box>
-    </Stack>
+    </HStack>
   )
 }
