@@ -215,8 +215,6 @@ export default function BdmTablePage({ id }) {
 
   if(isError) return <FourOFour/>
 
-  console.log(resource)
-
   return (
     <Stack
       flex={1}
@@ -258,7 +256,7 @@ export default function BdmTablePage({ id }) {
         </ReadMore>
       </SkeletonText>
 
-      <Stack spacing={0}>
+      <Stack spacing="8px">
         <StackSkeleton height="20px">
           <Text
             fontFamily="Roboto"
@@ -270,7 +268,10 @@ export default function BdmTablePage({ id }) {
             Cobertura temporal
           </Text>
         </StackSkeleton>
-        <TemporalCoverageBar value={resource?.fullCoverage}/>
+
+        <StackSkeleton height="46px" width="350px">
+          <TemporalCoverageBar value={resource?.fullCoverage}/>
+        </StackSkeleton>
       </Stack>
 
       {/* <DataInformationQuery resource={resource}/> */}
