@@ -64,7 +64,7 @@ export default function ReadMore({ children, id, ...props}) {
         color="#464A51"
       >
         {isOverflowing ?
-          <Text dangerouslySetInnerHTML={{ __html: modifiedChildren.trim() }}/>
+          <span dangerouslySetInnerHTML={{ __html: modifiedChildren.trim() }}/>
           :
           children
         }
@@ -85,7 +85,7 @@ export default function ReadMore({ children, id, ...props}) {
           bottom="0"
           right="0"
         >
-          <Text color="#464A51" marginRight="4px">...</Text>Ler mais
+          <span style={{color:"#464A51", marginRight:"4px"}}>...</span>Ler mais
         </Text>
       }
     </Flex>
