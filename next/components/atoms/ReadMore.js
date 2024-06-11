@@ -1,6 +1,4 @@
 import {
-  VStack,
-  Box,
   Flex,
   Text,
 } from "@chakra-ui/react";
@@ -12,7 +10,8 @@ export default function ReadMore({ children, id, ...props}) {
   const textRef = useRef(null)
 
   const modifiedChildren = `
-    ${children}
+    ${children.trim()}
+
     <span
       id="${id}"
       style="
@@ -23,13 +22,11 @@ export default function ReadMore({ children, id, ...props}) {
         font-weight: 400;
         line-height: 20px;
         background-color: #FFF;
+        margin-left: 4px;
       "
       onmouseover="this.style.color='rgba(0, 104, 197, 0.8)'"
       onmouseout="this.style.color='#0068C5'"
-    >
-      <span style="color:#464A51">...</span>Ler menos
-    </span>
-  `
+    >Ler menos</span>`
 
   useEffect(() => {
     if (textRef.current) {
@@ -55,8 +52,7 @@ export default function ReadMore({ children, id, ...props}) {
         display="-webkit-box"
         overflow="hidden"
         textOverflow="ellipsis"
-        whiteSpace="normal"
-        textAlign="justify"
+        whiteSpace={isReadMore ? "break-spaces" : "normal"}
         sx={{
           WebkitLineClamp: isReadMore ? "unset" : 3,
           WebkitBoxOrient: "vertical",
@@ -68,7 +64,7 @@ export default function ReadMore({ children, id, ...props}) {
         color="#464A51"
       >
         {isOverflowing ?
-          <Box dangerouslySetInnerHTML={{ __html: modifiedChildren }} />
+          <Text dangerouslySetInnerHTML={{ __html: modifiedChildren.trim() }}/>
           :
           children
         }
