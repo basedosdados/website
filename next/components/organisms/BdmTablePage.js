@@ -1,5 +1,6 @@
 import {
   VStack,
+  HStack,
   Stack,
   Box,
   Text,
@@ -7,7 +8,8 @@ import {
   GridItem,
   Tooltip,
   Skeleton,
-  SkeletonText
+  SkeletonText,
+  Divider
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
@@ -136,23 +138,39 @@ export default function BdmTablePage({ id }) {
     return {
       alt: alt,
       cursor: "pointer",
-      width:"18px",
-      height:"18px",
-      fill: "#42B0FF",
+      width:"20px",
+      height:"20px",
+      fill: "#0068C5",
       onClick: () => {window.open(href)}
     }
   }
 
   const PublishedOrDataCleanedBy = ({ resource }) => {
-
     return (
-      <>
-        {resource?.firstName && resource?.lastName ? <SectionText marginRight="4px !important">{`${resource.firstName} ${resource.lastName}`}</SectionText> : <SectionText marginRight="4px !important">Não listado</SectionText>}
+      <HStack spacing="4px">
+        {resource?.firstName && resource?.lastName ?
+          <Text
+            marginRight="4px !important"
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="14px"
+            lineHeight="20px"
+            color="#464A51"
+          >
+            {`${resource.firstName} ${resource.lastName}`}
+          </Text>
+          :
+          <Text
+            marginRight="4px !important"
+          >
+            Não listado
+          </Text>
+        }
         {resource?.email && <EmailIcon {...keyIcons({email : resource.email})}/>}
         {resource?.github && <GithubIcon {...keyIcons({github_user : resource.github})}/>}
         {resource?.website && <WebIcon {...keyIcons({website : resource.website})}/>}
         {resource?.twitter && <TwitterIcon {...keyIcons({twitter_user : resource.twitter_user})}/>}
-      </>
+      </HStack>
     )
   }
 
@@ -257,7 +275,7 @@ export default function BdmTablePage({ id }) {
       </SkeletonText>
 
       <Stack spacing="8px">
-        <StackSkeleton height="20px">
+        <StackSkeleton width="160px" height="20px">
           <Text
             fontFamily="Roboto"
             fontWeight="500"
@@ -277,14 +295,6 @@ export default function BdmTablePage({ id }) {
       {/* <DataInformationQuery resource={resource}/> */}
 
       {/* <VStack width="100%" spacing={4} alignItems="flex-start">
-        <Subtitle>Descrição</Subtitle>
-        <SectionText whiteSpace="pre-wrap">
-          {resource.description || "Nenhuma descrição fornecida."}
-        </SectionText>
-      </VStack> */}
-      
-
-      {/* <VStack width="100%" spacing={4} alignItems="flex-start">
         <Subtitle>
           Colunas
         </Subtitle>
@@ -298,121 +308,159 @@ export default function BdmTablePage({ id }) {
         <ObservationLevel/>
       </VStack> */}
 
-      {/* <VStack width="100%" spacing={5} alignItems="flex-start">
-        <Stack flex="1" >
-          <Subtitle>Informações adicionais</Subtitle>
-        </Stack>
+      <Divider marginY="40px !important" borderColor="#DEDFE0"/>
 
-        <Grid width="100%" flex={1} templateColumns="repeat(2, 1fr)" gap={6}>
-          <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <StarIcon alt="" width="22px" height="22px" fill="#D0D0D0"/>
-            <AddInfoTextBase
-              title="ID do conjunto"
-              text={resource?.dataset?._id || "Não listado"}
-            />
-          </GridItem>
+      <StackSkeleton width="190px" height="20px" marginBottom="20px !important">
+        <Text
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="18px"
+          lineHeight="20px"
+          color="#252A32"
+        >
+          Informações adicionais
+        </Text>
+      </StackSkeleton>
 
-          <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <StarIcon alt="" width="22px" height="22px" fill="#D0D0D0"/>
-            <AddInfoTextBase
-              title="ID da tabela"
-              text={resource?._id || "Não listado"}
-            />
-          </GridItem>
+      <SkeletonText
+        startColor="#F0F0F0"
+        endColor="#F3F3F3"
+        borderRadius="6px"
+        width="200px"
+        minHeight="40px"
+        spacing="4px"
+        skeletonHeight="16px"
+        noOfLines={2}
+        marginBottom="24px !important"
+        isLoaded={!isLoading}
+      >
+        <Text
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="14px"
+          lineHeight="20px"
+          color="#252A32"
+        >Publicação por</Text>
+        <PublishedOrDataCleanedBy
+          resource={resource?.publishedByInfo || "Não listado"}
+        />
+      </SkeletonText>
 
-          <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <FrequencyIcon alt="Frequência de atualização" width="22px" height="22px" fill="#D0D0D0"/>
-            <AddInfoTextBase
-              title="Frequência de atualização"
-              text={UpdateFrequency()}
-            />
-          </GridItem>
+      <SkeletonText
+        startColor="#F0F0F0"
+        endColor="#F3F3F3"
+        borderRadius="6px"
+        width="200px"
+        minHeight="40px"
+        spacing="4px"
+        skeletonHeight="16px"
+        noOfLines={2}
+        marginBottom="24px !important"
+        isLoaded={!isLoading}
+      >
+        <Text
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="14px"
+          lineHeight="20px"
+          color="#252A32"
+        >Tratamento por</Text>
+        <PublishedOrDataCleanedBy
+          resource={resource?.dataCleanedByInfo || "Não listado"}
+        />
+      </SkeletonText>
 
-          <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <PartitionIcon alt="Partições no BigQuery" width="22px" height="22px" fill="#D0D0D0"/>
-            <AddInfoTextBase
-              title="Partições no BigQuery"
-              info="As partições são divisões feitas em uma tabela para facilitar o gerenciamento e a consulta aos dados.
-              Ao segmentar uma tabela grande em partições menores, a quantidade de bytes lidos é reduzida,
-              o que ajuda a controlar os custos e melhora o desempenho da consulta."
-              text={resource?.partitions || "Não listado"}
-            />
-          </GridItem>
-
-          <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <UserIcon alt="publicação por" width="22px" height="22px" fill="#D0D0D0"/>
-            <Box display="block" gridGap="8px">
-              <Text
-                fontFamily="ubuntu"
-                fontSize="14px"
-                fontWeight="400" 
-                letterSpacing="0.3px"
-                marginBottom="8px"
-                color="#252A32"
-              >Publicação por</Text>
-              <Box display="flex" alignItems="center" gridGap="4px">
-                <PublishedOrDataCleanedBy
-                  resource={resource?.publishedByInfo || "Não listado"}
-                />
-              </Box>
-            </Box>
-          </GridItem>
-
-          <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <UserIcon alt="publicação por" width="22px" height="22px" fill="#D0D0D0"/>
-            <Box display="block" gridGap="8px">
-              <Text
-                fontFamily="ubuntu"
-                fontSize="14px"
-                fontWeight="400" 
-                letterSpacing="0.3px"
-                marginBottom="8px"
-                color="#252A32"
-              >Tratamento por</Text>
-              <Box display="flex" alignItems="center" gridGap="4px">
-                <PublishedOrDataCleanedBy
-                  resource={resource?.dataCleanedByInfo || "Não listado"}
-                />
-              </Box>
-            </Box>
-          </GridItem>
-
-          <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <VersionIcon alt="versão" width="22px" height="22px" fill="#D0D0D0"/>
-            <AddInfoTextBase
-              title="Versão"
-              text={resource?.version || "Não listado"}
-            />
-          </GridItem>
-
-          <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <FileIcon alt="Arquivos auxiliares" width="22px" height="22px" fill="#D0D0D0"/>
-            <AddInfoTextBase
-              title="Arquivos auxiliares"
-              info="Os arquivos dão mais contexto e ajudam a entender melhor os dados disponíveis.
-              Podem incluir notas técnicas, descrições de coleta e amostragem, etc."
-              text={!resource?.auxiliaryFilesUrl && "Não listado"}
-            >
-              {resource?.auxiliaryFilesUrl &&
-                <Link
-                  color="#42B0FF"
-                  href={resource?.auxiliaryFilesUrl}
-                >
-                  Download dos arquivos
-                  <DownloadIcon
-                    alt="tip"
-                    marginLeft="8px"
-                    cursor="pointer"
-                    fill="#42B0FF"
-                    width="18px"
-                    height="18px"
-                  />
-                </Link>
-              }
-            </AddInfoTextBase>
-          </GridItem>
-        </Grid>
-      </VStack> */}
+      <SkeletonText
+        startColor="#F0F0F0"
+        endColor="#F3F3F3"
+        borderRadius="6px"
+        width="200px"
+        minHeight="40px"
+        spacing="2px"
+        skeletonHeight="18px"
+        noOfLines={2}
+        marginBottom="24px !important"
+        isLoaded={!isLoading}
+      >
+        <Text
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="14px"
+          lineHeight="20px"
+          color="#252A32"
+        >Versão</Text>
+        <Text
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="14px"
+          lineHeight="20px"
+          color="#464A51"
+        >{resource?.version || "Não listado"}</Text>
+      </SkeletonText>
     </Stack>
   )
 }
+
+  {/* <Grid width="100%" flex={1} templateColumns="repeat(2, 1fr)" gap={6}>
+      <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
+        <StarIcon alt="" width="22px" height="22px" fill="#D0D0D0"/>
+        <AddInfoTextBase
+          title="ID do conjunto"
+          text={resource?.dataset?._id || "Não listado"}
+        />
+      </GridItem>
+
+      <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
+        <StarIcon alt="" width="22px" height="22px" fill="#D0D0D0"/>
+        <AddInfoTextBase
+          title="ID da tabela"
+          text={resource?._id || "Não listado"}
+        />
+      </GridItem>
+
+      <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
+        <FrequencyIcon alt="Frequência de atualização" width="22px" height="22px" fill="#D0D0D0"/>
+        <AddInfoTextBase
+          title="Frequência de atualização"
+          text={UpdateFrequency()}
+        />
+      </GridItem>
+
+      <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
+        <PartitionIcon alt="Partições no BigQuery" width="22px" height="22px" fill="#D0D0D0"/>
+        <AddInfoTextBase
+          title="Partições no BigQuery"
+          info="As partições são divisões feitas em uma tabela para facilitar o gerenciamento e a consulta aos dados.
+          Ao segmentar uma tabela grande em partições menores, a quantidade de bytes lidos é reduzida,
+          o que ajuda a controlar os custos e melhora o desempenho da consulta."
+          text={resource?.partitions || "Não listado"}
+        />
+      </GridItem>
+
+      <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
+        <FileIcon alt="Arquivos auxiliares" width="22px" height="22px" fill="#D0D0D0"/>
+        <AddInfoTextBase
+          title="Arquivos auxiliares"
+          info="Os arquivos dão mais contexto e ajudam a entender melhor os dados disponíveis.
+          Podem incluir notas técnicas, descrições de coleta e amostragem, etc."
+          text={!resource?.auxiliaryFilesUrl && "Não listado"}
+        >
+          {resource?.auxiliaryFilesUrl &&
+            <Link
+              color="#42B0FF"
+              href={resource?.auxiliaryFilesUrl}
+            >
+              Download dos arquivos
+              <DownloadIcon
+                alt="tip"
+                marginLeft="8px"
+                cursor="pointer"
+                fill="#42B0FF"
+                width="18px"
+                height="18px"
+              />
+            </Link>
+          }
+        </AddInfoTextBase>
+      </GridItem>
+  </Grid> */}
