@@ -164,7 +164,8 @@ export function TemporalCoverageBar ({ value }) {
     <HStack 
       position="relative"  
       width="350px"
-      marginBottom="40px !important"
+      height="65px"
+      alignItems="normal"
       spacing={0}
     >
       <Tooltip

@@ -70,7 +70,7 @@ export default function DatasetPage ({ dataset }) {
   if(isDatasetEmpty) return <MainPageTemplate userTemplate><FourOFour/></MainPageTemplate>
 
   return (
-    <MainPageTemplate userTemplate>
+    <MainPageTemplate userTemplate footerTemplate="simple">
       <Head>
         <title>{dataset.name} – Base dos Dados</title>
 

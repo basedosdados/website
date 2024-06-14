@@ -41,42 +41,20 @@ async function getBdmTable(id) {
                   }
                 }
                 version
-                coverages {
+                fullCoverage
+                rawDataSource {
                   edges {
                     node {
-                      _id
-                      datetimeRanges {
+                      updates{
                         edges {
                           node {
-                            _id
-                            startYear
-                            startSemester
-                            startQuarter
-                            startMonth
-                            startDay
-                            startHour
-                            startMinute
-                            startSecond
-                            endYear
-                            endSemester
-                            endQuarter
-                            endMonth
-                            endDay
-                            endHour
-                            endMinute
-                            endSecond
-                            interval
+                            latest
                           }
                         }
                       }
+                      lastUpdatedAt
                     }
                   }
-                }
-                fullCoverage
-                license {
-                  _id
-                  name
-                  url
                 }
                 updates {
                   edges {
@@ -88,29 +66,15 @@ async function getBdmTable(id) {
                       entity {
                         _id
                         name
-                        category {
-                          _id
-                          name
-                        }
                       }
                     }
                   }
                 }
-                pipeline {
-                  _id
-                  githubUrl
-                }
                 isDirectory
-                dataCleaningDescription
-                dataCleaningCodeUrl
                 rawDataUrl
                 auxiliaryFilesUrl
-                architectureUrl
-                sourceBucketName
                 uncompressedFileSize
-                compressedFileSize
                 numberRows
-                numberColumns
                 partitions
                 publishedByInfo
                 dataCleanedByInfo

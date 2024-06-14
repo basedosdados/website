@@ -8,6 +8,7 @@ export function MainPageTemplate({
   backgroundColor = "#FFFFFF",
   cleanTemplate = false,
   userTemplate = false,
+  footerTemplate = "default",
   ...style
 }) {
 
@@ -22,7 +23,7 @@ export function MainPageTemplate({
       >
         {children}
       </Box>
-      <Footer ocult={cleanTemplate || userTemplate}/>
+      <Footer template={footerTemplate} ocult={cleanTemplate || userTemplate}/>
     </Box>
   );
 }
