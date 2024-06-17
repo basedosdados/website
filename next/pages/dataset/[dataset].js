@@ -261,11 +261,6 @@ export default function DatasetPage ({ dataset }) {
           {name:"Entre em contato", url: "/contato"},
         ]}
       />
-
-      {/* <Stack display={query?.hasOwnProperty("table") !== "none"}>
-        <script key="sql" src="/vendor/prism.js"/>
-        <link rel="stylesheet" href="/vendor/prism.css" data-noprefix />
-      </Stack> */}
     </MainPageTemplate>
   )
 }
