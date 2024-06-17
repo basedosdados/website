@@ -19,6 +19,7 @@ import { SimpleTable } from "../atoms/SimpleTable";
 import ReadMore from "../atoms/ReadMore";
 import LoadingSpin from "../atoms/Loading";
 import Subtitle from "../atoms/Subtitle";
+import { formatBytes } from "../../utils";
 import { TemporalCoverageBar } from "../molecules/TemporalCoverageDisplay";
 import ColumnDatasets from "../molecules/ColumnDatasets";
 import DataInformationQuery from "../molecules/DataInformationQuery";
@@ -67,46 +68,47 @@ export default function BdmTablePage({ id }) {
     fetchData()
   }, [id])
 
-  const AddInfoTextBase = ({title, text, info, children, ...style}) => {
+  const TooltipText = ({ text, info, ...props }) => {
     return (
-      <Box display="block" alignItems="center" gridGap="8px" {...style}>
+      <Box>
         <Text
           display="flex"
+          flexDirection="row"
           alignItems="center"
-          fontFamily="ubuntu"
-          fontSize="14px"
-          fontWeight="400" 
-          letterSpacing="0.3px"
-          marginBottom="8px"
+          gridGap="8px"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="18px"
+          lineHeight="20px"
           color="#252A32"
-        >{title}
-          {info &&
-            <Tooltip
-              label={info}
-              hasArrow
-              bg="#2A2F38"
-              fontSize="16px"
-              fontWeight="500"
-              padding="10px 16px"
-              marginTop="8px"
-              color="#FFF"
-              borderRadius="6px"
-            >
-              <InfoIcon
-                alt="tip"
-                marginLeft="8px"
-                cursor="pointer"
-                fill="#A3A3A3"
-                width="16px"
-                height="16px"
-              />
-            </Tooltip>
-          }
-        </Text>
-        <SectionText>
+        >
           {text}
-        </SectionText>
-        {children}
+          <Tooltip
+            label={info}
+            hasArrow
+            padding="16px"
+            backgroundColor="#252A32"
+            boxSizing="border-box"
+            borderRadius="8px"
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="14px"
+            lineHeight="20px"
+            textAlign="center"
+            color="#FFFFFF"
+            placement="top"
+            maxWidth="300px"
+            {...props}
+          >
+            <InfoIcon
+              alt="tip"
+              cursor="pointer"
+              fill="#878A8E"
+              width="16px"
+              height="16px"
+            />
+          </Tooltip>
+        </Text>
       </Box>
     )
   }
@@ -162,8 +164,13 @@ export default function BdmTablePage({ id }) {
           :
           <Text
             marginRight="4px !important"
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="14px"
+            lineHeight="20px"
+            color="#464A51"
           >
-            Não listado
+            Não informado
           </Text>
         }
         {resource?.email && <EmailIcon {...keyIcons({email : resource.email})}/>}
@@ -174,20 +181,10 @@ export default function BdmTablePage({ id }) {
     )
   }
 
-  const UpdateFrequency = () => {
-    const value = resource?.updates?.[0]
-    if(value === undefined || Object.keys(value).length === 0) return "Não listado"
-
-    if(value?.frequency >= 0 && value?.entity?.name) return `${value.frequency} ${value.entity.name}`
-    if(value?.entity?.name) return `${value.entity.name}`
-
-    return "Não listado"
-  }
-
   const Empty = () => {
     return (
       <p style={{margin:"0", fontWeight:"500", color:"#C4C4C4"}}>
-        Não listado
+        Não informado
       </p>
     )
   }
@@ -240,19 +237,34 @@ export default function BdmTablePage({ id }) {
       paddingLeft={{base: "0", lg: "24px"}}
       spacing={0}
     >
-      <StackSkeleton>
+      <StackSkeleton
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        gap="8px"
+      >
         <Text
           fontFamily="Roboto"
           fontWeight="500"
           fontSize="24px"
           lineHeight="36px"
           color="#252A32"
-          width="100%"
+          width="fit-content"
           overflow="hidden"
           textOverflow="ellipsis"
           whiteSpace="nowrap"
         >
           {resource?.name}
+        </Text>
+        <Text
+          display={resource?.uncompressedFileSize}
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="12px"
+          lineHeight="18px"
+          color="#71757A"
+        >
+          {`(${formatBytes(resource.uncompressedFileSize)})`}
         </Text>
       </StackSkeleton>
 
@@ -274,7 +286,7 @@ export default function BdmTablePage({ id }) {
         </ReadMore>
       </SkeletonText>
 
-      <Stack spacing="8px">
+      <Stack spacing="12px" marginBottom="40px !important">
         <StackSkeleton width="160px" height="20px">
           <Text
             fontFamily="Roboto"
@@ -287,26 +299,242 @@ export default function BdmTablePage({ id }) {
           </Text>
         </StackSkeleton>
 
-        <StackSkeleton height="46px" width="350px">
+        <StackSkeleton
+          width="350px"
+          height={!isLoading ? "fit-content" : "65px"}
+        >
           <TemporalCoverageBar value={resource?.fullCoverage}/>
         </StackSkeleton>
       </Stack>
 
-      {/* <DataInformationQuery resource={resource}/> */}
+      <Stack spacing="12px" marginBottom="40px !important">
+        <StackSkeleton width="160px" height="20px">
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="18px"
+            lineHeight="20px"
+            color="#252A32"
+          >
+            Acesso oas dados
+          </Text>
+        </StackSkeleton>
 
-      {/* <VStack width="100%" spacing={4} alignItems="flex-start">
-        <Subtitle>
-          Colunas
-        </Subtitle>
-        <ColumnDatasets tableId={resource?._id} />
-      </VStack> */}
+        <Box
+          border="1px solid #DEDFE0"
+          borderRadius="16px"
+        >
+          {/* <DataInformationQuery resource={resource}/> */}
 
-      {/* <VStack width="100%" spacing={5} alignItems="flex-start">
-        <Subtitle>
-          Nível da observação
-        </Subtitle>
-        <ObservationLevel/>
-      </VStack> */}
+        </Box>
+        {/* <ColumnDatasets tableId={resource?._id} /> */}
+      </Stack>
+
+      <Stack marginBottom="40px !important">
+        <StackSkeleton width="300px" height="20px">
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="18px"
+            lineHeight="20px"
+            color="#252A32"
+          >
+            Frequência de atualização dos dados
+          </Text>
+        </StackSkeleton>
+
+        <SkeletonText
+          startColor="#F0F0F0"
+          endColor="#F3F3F3"
+          borderRadius="6px"
+          width="500px"
+          spacing="11px"
+          skeletonHeight="18px"
+          noOfLines={3}
+          marginTop="12px !important"
+          isLoaded={!isLoading}
+        >
+          <Text
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="14px"
+            lineHeight="20px"
+            color="#464A51"
+          >
+            Não informado : Última vez que atualizamos na BD
+          </Text>
+          <Text
+            marginTop="8px !important"
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="14px"
+            lineHeight="20px"
+            color="#464A51"
+          >
+            Não informado : Última vez que atualizaram na fonte original
+          </Text>
+          <Text
+            marginTop="8px !important"
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="14px"
+            lineHeight="20px"
+            color="#464A51"
+          >
+            Não informado : Última vez que verificamos a fonte original
+          </Text>
+        </SkeletonText>
+      </Stack>
+
+      <Stack marginBottom="40px !important">
+        <StackSkeleton width="205px" height="20px">
+          <TooltipText
+            text="Partições no BigQuery"
+            info="As partições são divisões feitas em uma tabela para facilitar o gerenciamento e a consulta aos dados. Ao segmentar uma tabela grande em partições menores, a quantidade de bytes lidos é reduzida, o que ajuda a controlar os custos e melhora o desempenho da consulta."
+          />
+        </StackSkeleton>
+        <StackSkeleton height="20px" width={resource?.partitions ? "100%" : "200px"} marginTop="12px !important" >
+          <Text
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="14px"
+            lineHeight="20px"
+            color="#464A51"
+          >
+            {resource?.partitions ? resource.partitions :"Não informado"}
+          </Text>
+        </StackSkeleton>
+      </Stack>
+
+      <Stack marginBottom="40px !important">
+        <StackSkeleton width="190px" height="20px">
+          <TooltipText
+            text="Nível da observação"
+            info="indica qual a menor granularidade possível de análise com aquele dado. Por exemplo, uma tabela com nível da observação de estado permite que façamos uma análise no país (por ser mais amplo que estado), mas não uma análise por município (que já seria um recorte mais específico)."
+          />
+        </StackSkeleton>
+        <SkeletonText
+          startColor="#F0F0F0"
+          endColor="#F3F3F3"
+          borderRadius="6px"
+          width="200px"
+          spacing="6px"
+          skeletonHeight="16px"
+          noOfLines={2}
+          marginTop="12px !important"
+          isLoaded={!isLoading}
+        >
+          <Text
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="14px"
+            lineHeight="20px"
+            color="#464A51"
+          >
+            Não informado
+          </Text>
+          {/* <ObservationLevel/> */}
+        </SkeletonText>       
+      </Stack>
+
+      <Stack marginBottom="40px !important">
+        <StackSkeleton width="180px" height="20px">
+          <TooltipText
+            text="Arquivos auxiliares"
+            info="Os arquivos dão mais contexto e ajudam a entender melhor os dados disponíveis. Podem incluir notas técnicas, descrições de coleta e amostragem, etc."
+          />
+        </StackSkeleton>
+        <StackSkeleton
+          width="178px"
+          height="24px"
+          marginTop="12px !important"
+        >
+          <Text
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="14px"
+            lineHeight="20px"
+            color="#464A51"
+          >
+            {resource?.auxiliaryFilesUrl ?
+              <Text
+                as="a"
+                display="flex"
+                flexDirection="row"
+                gap="8px"
+                alignItems="center"
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="14px"
+                lineHeight="20px"
+                color="#0068C5"
+                fill="#0068C5"
+                _hover={{
+                  fill: "#4F9ADC",
+                  color: "#4F9ADC"
+                }}
+                href={resource.auxiliaryFilesUrl}
+              >
+                Download dos arquivos
+                <DownloadIcon
+                  width="24px"
+                  height="24px"
+                />
+              </Text>
+            :
+              "Não informado"
+            }
+          </Text>  
+        </StackSkeleton>
+      </Stack>
+
+      <Stack>
+        <StackSkeleton width="155px" height="20px">
+          <TooltipText
+            text="Fontes originais"
+            info="São links para páginas externas à plataforma com informações úteis sobre o conjunto de dados. Tentamos sempre fornecer o caminho mais próximo possível à fonte para baixar os dados originais."
+          />
+        </StackSkeleton>
+
+        <StackSkeleton
+          height="20px"
+          width="132px"
+          marginTop="12px !important"
+        >
+          <Text
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="14px"
+            lineHeight="20px"
+            color="#464A51"
+          >
+            {resource?.rawDataUrl ? 
+              <Text
+                as="a"
+                display="flex"
+                flexDirection="row"
+                gap="8px"
+                alignItems="center"
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="14px"
+                lineHeight="20px"
+                color="#0068C5"
+                fill="#0068C5"
+                _hover={{
+                  fill: "#4F9ADC",
+                  color: "#4F9ADC"
+                }}
+                href={resource.rawDataUrl}
+              >
+                Microdados originais
+              </Text>
+            :
+              "Não informado"
+            }
+          </Text>
+        </StackSkeleton> 
+      </Stack>
 
       <Divider marginY="40px !important" borderColor="#DEDFE0"/>
 
@@ -326,7 +554,7 @@ export default function BdmTablePage({ id }) {
         startColor="#F0F0F0"
         endColor="#F3F3F3"
         borderRadius="6px"
-        width="200px"
+        width={resource?.publishedByInfo ? "100%" :"200px"}
         minHeight="40px"
         spacing="4px"
         skeletonHeight="16px"
@@ -342,7 +570,7 @@ export default function BdmTablePage({ id }) {
           color="#252A32"
         >Publicação por</Text>
         <PublishedOrDataCleanedBy
-          resource={resource?.publishedByInfo || "Não listado"}
+          resource={resource?.publishedByInfo || "Não informado"}
         />
       </SkeletonText>
 
@@ -350,7 +578,7 @@ export default function BdmTablePage({ id }) {
         startColor="#F0F0F0"
         endColor="#F3F3F3"
         borderRadius="6px"
-        width="200px"
+        width={resource?.dataCleanedByInfo ? "100%" : "200px"}
         minHeight="40px"
         spacing="4px"
         skeletonHeight="16px"
@@ -366,7 +594,7 @@ export default function BdmTablePage({ id }) {
           color="#252A32"
         >Tratamento por</Text>
         <PublishedOrDataCleanedBy
-          resource={resource?.dataCleanedByInfo || "Não listado"}
+          resource={resource?.dataCleanedByInfo || "Não informado"}
         />
       </SkeletonText>
 
@@ -374,9 +602,9 @@ export default function BdmTablePage({ id }) {
         startColor="#F0F0F0"
         endColor="#F3F3F3"
         borderRadius="6px"
-        width="200px"
+        width={resource?.version ? "100%" : "80px"}
         minHeight="40px"
-        spacing="2px"
+        spacing="4px"
         skeletonHeight="18px"
         noOfLines={2}
         marginBottom="24px !important"
@@ -395,72 +623,8 @@ export default function BdmTablePage({ id }) {
           fontSize="14px"
           lineHeight="20px"
           color="#464A51"
-        >{resource?.version || "Não listado"}</Text>
+        >{resource?.version || "Não informado"}</Text>
       </SkeletonText>
     </Stack>
   )
 }
-
-  {/* <Grid width="100%" flex={1} templateColumns="repeat(2, 1fr)" gap={6}>
-      <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
-        <StarIcon alt="" width="22px" height="22px" fill="#D0D0D0"/>
-        <AddInfoTextBase
-          title="ID do conjunto"
-          text={resource?.dataset?._id || "Não listado"}
-        />
-      </GridItem>
-
-      <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
-        <StarIcon alt="" width="22px" height="22px" fill="#D0D0D0"/>
-        <AddInfoTextBase
-          title="ID da tabela"
-          text={resource?._id || "Não listado"}
-        />
-      </GridItem>
-
-      <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-        <FrequencyIcon alt="Frequência de atualização" width="22px" height="22px" fill="#D0D0D0"/>
-        <AddInfoTextBase
-          title="Frequência de atualização"
-          text={UpdateFrequency()}
-        />
-      </GridItem>
-
-      <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-        <PartitionIcon alt="Partições no BigQuery" width="22px" height="22px" fill="#D0D0D0"/>
-        <AddInfoTextBase
-          title="Partições no BigQuery"
-          info="As partições são divisões feitas em uma tabela para facilitar o gerenciamento e a consulta aos dados.
-          Ao segmentar uma tabela grande em partições menores, a quantidade de bytes lidos é reduzida,
-          o que ajuda a controlar os custos e melhora o desempenho da consulta."
-          text={resource?.partitions || "Não listado"}
-        />
-      </GridItem>
-
-      <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-        <FileIcon alt="Arquivos auxiliares" width="22px" height="22px" fill="#D0D0D0"/>
-        <AddInfoTextBase
-          title="Arquivos auxiliares"
-          info="Os arquivos dão mais contexto e ajudam a entender melhor os dados disponíveis.
-          Podem incluir notas técnicas, descrições de coleta e amostragem, etc."
-          text={!resource?.auxiliaryFilesUrl && "Não listado"}
-        >
-          {resource?.auxiliaryFilesUrl &&
-            <Link
-              color="#42B0FF"
-              href={resource?.auxiliaryFilesUrl}
-            >
-              Download dos arquivos
-              <DownloadIcon
-                alt="tip"
-                marginLeft="8px"
-                cursor="pointer"
-                fill="#42B0FF"
-                width="18px"
-                height="18px"
-              />
-            </Link>
-          }
-        </AddInfoTextBase>
-      </GridItem>
-  </Grid> */}
