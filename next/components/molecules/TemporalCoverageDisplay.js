@@ -213,37 +213,49 @@ export function TemporalCoverageBar ({ value }) {
             <Box position="absolute" width="100%">
               <Box
                 position="absolute"
-                width="8px"
-                height="8px"
-                backgroundColor="#2B8C4D"
-                borderRadius="50%"
+                display="flex"
+                alignItems="start"
+                flexDirection="column"
                 left={0}
-                bottom="-5px"
-              />
-              <TextData
-                position="absolute"
-                left={0}
-                bottom="-30px"
-                string={values?.["0"]}
-              />
+                top="-3px"
+              >
+                <Box
+                  width="8px"
+                  height="8px"
+                  backgroundColor="#2B8C4D"
+                  borderRadius="50%"
+                />
+                <TextData
+                  position="absolute"
+                  top="14px"
+                  width="max-content"
+                  string={values?.["0"]}
+                />
+              </Box>
             </Box>
 
             <Box position="absolute" width="100%">
               <Box
                 position="absolute"
-                width="8px"
-                height="8px"
-                backgroundColor="#2B8C4D"
-                borderRadius="50%"
+                display="flex"
+                alignItems="center"
+                flexDirection="column"
                 right={0}
-                bottom="-5px"
-              />
-              <TextData
-                position="absolute"
-                right={0}
-                bottom="-30px"
-                string={values?.["1"]}
-              />
+                top="-3px"
+              >
+                <Box
+                  width="8px"
+                  height="8px"
+                  backgroundColor="#2B8C4D"
+                  borderRadius="50%"
+                />
+                <TextData
+                  position="absolute"
+                  top="14px"
+                  width="max-content"
+                  string={values?.["1"]}
+                />
+              </Box>
             </Box>
           </Box>
         </Box>
@@ -310,37 +322,49 @@ export function TemporalCoverageBar ({ value }) {
             <Box position="absolute" width="100%" display={values?.["2"] ? "" : "none"}>
               <Box
                 position="absolute"
-                width="8px"
-                height="8px"
-                backgroundColor="#0068C5"
-                borderRadius="50%"
+                display="flex"
+                alignItems="start"
+                flexDirection="column"
                 left={0}
-                bottom="-5px"
-              />
-              <TextData
-                position="absolute"
-                left={0}
-                bottom="-30px"
-                string={values?.["2"]}
-              />
+                top="-3px"
+              >
+                <Box
+                  width="8px"
+                  height="8px"
+                  backgroundColor="#0068C5"
+                  borderRadius="50%"
+                />
+                <TextData
+                  position="absolute"
+                  top="14px"
+                  width="max-content"
+                  string={values?.["2"]}
+                />
+              </Box>
             </Box>
 
             <Box position="absolute" width="100%">
               <Box
                 position="absolute"
-                width="8px"
-                height="8px"
-                backgroundColor="#0068C5"
-                borderRadius="50%"
+                display="flex"
+                alignItems="center"
+                flexDirection="column"
                 right={0}
-                bottom="-5px"
-              />
-              <TextData
-                position="absolute"
-                right={0}
-                bottom="-30px"
-                string={values?.["3"]}
-              />
+                top="-3px"
+              >
+                <Box
+                  width="8px"
+                  height="8px"
+                  backgroundColor="#0068C5"
+                  borderRadius="50%"
+                />
+                <TextData
+                  position="absolute"
+                  top="14px"
+                  width="max-content"
+                  string={values?.["3"]}
+                />
+              </Box>
             </Box>
           </Box>
         </Box>

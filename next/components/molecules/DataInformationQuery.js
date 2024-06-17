@@ -129,11 +129,9 @@ export default function DataInformationQuery({ resource }) {
 
   return (
     <VStack
-      spacing={-1}
       alignItems="flex-start"
       width="100%"
     >
-      <Subtitle>Consulta aos dados</Subtitle>
       <Tabs
         paddingTop="16px"
         width={{ base: "90vw", lg: "100%" }}
