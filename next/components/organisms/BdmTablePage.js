@@ -324,7 +324,7 @@ export default function BdmTablePage({ id }) {
           border="1px solid #DEDFE0"
           borderRadius="16px"
         >
-          {/* <DataInformationQuery resource={resource}/> */}
+          <DataInformationQuery resource={resource}/>
 
         </Box>
         {/* <ColumnDatasets tableId={resource?._id} /> */}

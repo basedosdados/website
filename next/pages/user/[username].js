@@ -65,7 +65,7 @@ import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
-import SucessIcon from "../../public/img/icons/sucessIcon";
+import { SuccessIcon } from "../../public/img/icons/successIcon";
 import ErrIcon from "../../public/img/icons/errIcon";
 import stylesPS from "../../styles/paymentSystem.module.css";
 
@@ -1702,7 +1702,7 @@ const PlansAndPayment = ({ userData }) => {
           marginBottom="24px"
           spacing={0}
         >
-          <SucessIcon
+          <SuccessIcon
             width="90px"
             height="64px"
             fill="#34A15A"
