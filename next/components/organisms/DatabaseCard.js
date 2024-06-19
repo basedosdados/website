@@ -163,6 +163,7 @@ export default function DatabaseCard({
         </HStack>
 
         <Text
+          as="div"
           fontFamily="Ubuntu"
           fontSize="12px"
           fontWeight="400"
