@@ -1,39 +1,26 @@
 import {
-  VStack,
   HStack,
   Stack,
   Box,
   Text,
-  Grid,
-  GridItem,
-  Tooltip,
   Skeleton,
   SkeletonText,
-  Divider
+  Divider,
+  Tooltip
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import Link from "../atoms/Link";
 import SectionText from "../atoms/SectionText";
 import { SimpleTable } from "../atoms/SimpleTable";
 import ReadMore from "../atoms/ReadMore";
-import LoadingSpin from "../atoms/Loading";
-import Subtitle from "../atoms/Subtitle";
 import { formatBytes } from "../../utils";
 import { TemporalCoverageBar } from "../molecules/TemporalCoverageDisplay";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import FourOFour from "../templates/404";
 
-import StarIcon from "../../public/img/icons/starIcon";
-import FrequencyIcon from "../../public/img/icons/frequencyIcon";
-import PartitionIcon from "../../public/img/icons/partitionIcon";
-import UserIcon from "../../public/img/icons/userIcon";
-import VersionIcon from "../../public/img/icons/versionIcon";
 import EmailIcon from "../../public/img/icons/emailIcon";
 import GithubIcon from "../../public/img/icons/githubIcon";
 import WebIcon from "../../public/img/icons/webIcon";
 import TwitterIcon from "../../public/img/icons/twitterIcon";
-import FileIcon from "../../public/img/icons/fileIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 
@@ -74,7 +61,7 @@ export default function BdmTablePage({ id }) {
           display="flex"
           flexDirection="row"
           alignItems="center"
-          gridGap="8px"
+          gap="8px"
           fontFamily="Roboto"
           fontWeight="500"
           fontSize="18px"
@@ -182,9 +169,15 @@ export default function BdmTablePage({ id }) {
 
   const Empty = () => {
     return (
-      <p style={{margin:"0", fontWeight:"500", color:"#C4C4C4"}}>
+      <Text
+        fontFamily="Roboto"
+        fontWeight="400"
+        fontSize="14px"
+        lineHeight="20px"
+        color="#464A51"
+      >
         Não informado
-      </p>
+      </Text>
     )
   }
 
@@ -340,15 +333,9 @@ export default function BdmTablePage({ id }) {
           </Text>
         </StackSkeleton>
 
-        <Box
-          border="1px solid #DEDFE0"
-          borderRadius="16px"
-        >
-          <DataInformationQuery
-            resource={resource}
-          />
-        </Box>
-        {/* <ColumnDatasets tableId={resource?._id} /> */}
+        <DataInformationQuery
+          resource={resource}
+        />
       </Stack>
 
       <Stack marginBottom="40px !important">
@@ -375,7 +362,7 @@ export default function BdmTablePage({ id }) {
           marginTop="12px !important"
           isLoaded={!isLoading}
         >
-          <Text
+          <Box
             display="flex"
             flexDirection="row"
             gap="8px"
@@ -391,7 +378,7 @@ export default function BdmTablePage({ id }) {
               "Não informado"
             } : Última vez que atualizamos na BD
             {resource?.updates?.[0]?.entity?.slug &&
-              <Box
+              <Text
                 backgroundColor="#EEEEEE"
                 padding="2px 4px"
                 borderRadius="4px"
@@ -402,9 +389,9 @@ export default function BdmTablePage({ id }) {
                 color="#252A32"
               >
                 {formatUpdate(resource.updates[0].entity.slug)}
-              </Box>
+              </Text>
             }
-          </Text>
+          </Box>
           <Text
             marginTop="8px !important"
             fontFamily="Roboto"
