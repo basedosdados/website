@@ -214,7 +214,7 @@ export default function DatasetPage ({ dataset }) {
               Dados
             </GreenTab>
 
-            <GreenTab>
+            <GreenTab display="none">
               <CrossingIcon
                 alt="cruzamento"
                 width="28px"

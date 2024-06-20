@@ -179,7 +179,7 @@ function TableDatasets({ headers, values }) {
     data.push({ value: objectValue.observations})
 
     return data.map((elm, i) => 
-      <TableValue {...elm.style}>
+      <TableValue key={i} {...elm.style}>
         {i===3 ? <TemporalCoverage value={elm.value} tex="Não listado"/> : valueVerification(elm.value)}
       </TableValue>
     )
@@ -222,12 +222,12 @@ function TableDatasets({ headers, values }) {
               left="0"
             />
             {columnsHeaders.map((elm, i) => (
-              i != 0 && <TableHeader header={elm}/>
+              i != 0 && <TableHeader key={i} header={elm}/>
             ))}
           </Thead>
           <Tbody role="rowgroup" position="relative">
-            {columnsValues?.length > 0 && columnsValues.map((elm) => (
-              <Tr role="row">
+            {columnsValues?.length > 0 && columnsValues.map((elm, i) => (
+              <Tr role="row" key={i}>
                 <TreatmentValues value={elm}/>
               </Tr>
             ))}
@@ -298,114 +298,16 @@ export default function ColumnsDatasets({ tableId }) {
     }
   }
 
-  if(isLoading) return <LoadingSpin/>
+  if(isLoading) return (
+    <LoadingSpin/>
+  )
 
   if(isError?.message?.length > 0) return <SectionText> Nenhuma informação foi encontrada. </SectionText>
   if(resource === undefined || Object.keys(resource).length === 0) return <SectionText> Nenhuma informação de coluna fornecida. </SectionText>
 
   return (
     <Stack width="100%">
-      {/* <HStack position="relative" flexDirection={useCheckMobile() ? "column" : "row"}>
-        <HStack spacing={2} flexDirection="row" marginBottom={useCheckMobile() && "8px"} marginLeft="0 !important">
-          <FilterIcon alt="filtrar" fill="#575757" height="20px" />
-          <Text color="#575757" fontSize="16px" fontWeight="400" fontFamily="ubuntu" letterSpacing="0.2px">
-            Filtrar
-          </Text>
-          <Select
-            marginLeft="24px !important"
-            variant="unstyled"
-            width="max-content"
-            maxWidth="200px"
-            height="100%"
-            fontFamily="ubuntu"
-            fontSize="16px"
-            letterSpacing="0.2px"
-            color={headerSelection ? "#2B8C4D" : "#575757"}
-            placeholder="Todas as propriedades"
-            value={headerSelection}
-            onChange={(event) => setHeaderSelection(event.target.value) }
-          >
-            {Object.keys(headers).map((option) =>
-              <option value={option}>{headers?.[option]?.pt}</option>
-            )}
-          </Select>
-        </HStack>
-
-        <Stack width="100%" margin="0 !important">
-          <InputGroup
-            border="1px solid #DEDFE0 !important"
-            padding="1px"
-            _hover={{border: "2px solid #42B0FF !important", padding: "0"}}
-            borderRadius="16px"
-          >
-            {tagFilter.length > 0 && (
-              <InputLeftAddon
-                border="none"
-                backgroundColor="transparent"
-                children={
-                  <Box display="flex" flexDirection="row" gridGap="16px" maxWidth={useCheckMobile() ? "150px" : "350px"} overflowX="auto">
-                    {tagFilter.map((elm) => (
-                      <Box display="flex" gridGap={elm.header && "8px"} alignItems="center" >
-                        <Text fontWeight="300" fontSize="14px" fontFamily="lato" letterSpacing="0.5px">{elm.header}</Text>
-                        <Tag
-                          fontWeight="700"
-                          text={elm.search}
-                          handleClick={() => removeTagFilter(elm, null)}
-                        />
-                      </Box>
-                    ))}
-                  </Box>
-                }
-              />
-            )}
-
-            <Input
-              value={filter}
-              onKeyDown={checkForEnter}
-              onChange={(e) => setFilter(e.target.value)}
-              variant="outline"
-              letterSpacing="0.5px"
-              fontWeight="300"
-              border="none"
-              borderRadius="16px"
-              fontFamily="lato"
-              fontSize="16px"
-              color="#252A32"
-              width="100%"
-              minWidth="200px"
-              height="40px"
-              placeholder="Insira o nome ou o valor da propriedade"
-              _placeholder={{color:"#6F6F6F"}}
-            />
-            <InputRightElement children={
-              tagFilter.length < 1 
-              ?
-                <SearchIcon
-                  alt="pesquisar"
-                  cursor="pointer"
-                  fill="#D0D0D0"
-                  marginRight="6px"
-                  onClick={() => appliedFilter()}
-                />
-              :
-                <CrossIcon
-                  alt="limpar pesquisa"
-                  cursor="pointer"
-                  fill="#D0D0D0"
-                  marginRight="6px"
-                  width="20px"
-                  height="20px"
-                  onClick={() => {
-                    setTagFilter([])
-                    setHeaderSelection("")
-                    setColumnValues(defaultValues)
-                    setFilter("")
-                  }}
-                />
-            }/>
-          </InputGroup>
-        </Stack>
-      </HStack> */}
+      <Box borderRadius="16px" height="48px" backgroundColor="#EEEEEE"/>
 
       <TableDatasets
         headers={headers}

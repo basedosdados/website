@@ -21,7 +21,6 @@ import LoadingSpin from "../atoms/Loading";
 import Subtitle from "../atoms/Subtitle";
 import { formatBytes } from "../../utils";
 import { TemporalCoverageBar } from "../molecules/TemporalCoverageDisplay";
-import ColumnDatasets from "../molecules/ColumnDatasets";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import FourOFour from "../templates/404";
 
@@ -228,6 +227,26 @@ export default function BdmTablePage({ id }) {
     )
   }
 
+  const formatDate = (value) => {
+    const date = new Date(value);
+    const formattedDate = date.getFullYear()+"-"+String(date.getMonth() + 1).padStart(2, "0")+"-"+String(date.getDate()).padStart(2, "0")
+    return formattedDate
+  }
+
+  const formatUpdate = (value) => {
+    if (value === "second") return "Atualização por segundo"
+    if (value === "minute") return "Atualização minutal"
+    if (value === "hour") return "Atualização por hora"
+    if (value === "day") return "Atualização diária"
+    if (value === "week") return "Atualização semanal"
+    if (value === "month") return "Atualização mensal"
+    if (value === "bimester") return "Atualização bimestral"
+    if (value === "quarter") return "Atualização trimestral"
+    if (value === "semester") return "Atualização semestral"
+    if (value === "year") return "Atualização anual"
+    return value
+  }
+
   if(isError) return <FourOFour/>
 
   return (
@@ -256,16 +275,17 @@ export default function BdmTablePage({ id }) {
         >
           {resource?.name}
         </Text>
-        <Text
-          display={resource?.uncompressedFileSize}
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="12px"
-          lineHeight="18px"
-          color="#71757A"
-        >
-          {`(${formatBytes(resource.uncompressedFileSize)})`}
-        </Text>
+        {resource?.uncompressedFileSize &&
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="12px"
+            lineHeight="18px"
+            color="#71757A"
+          >
+            {`(${formatBytes(resource.uncompressedFileSize)})`}
+          </Text>
+        }
       </StackSkeleton>
 
       <SkeletonText
@@ -324,8 +344,9 @@ export default function BdmTablePage({ id }) {
           border="1px solid #DEDFE0"
           borderRadius="16px"
         >
-          <DataInformationQuery resource={resource}/>
-
+          <DataInformationQuery
+            resource={resource}
+          />
         </Box>
         {/* <ColumnDatasets tableId={resource?._id} /> */}
       </Stack>
@@ -347,21 +368,42 @@ export default function BdmTablePage({ id }) {
           startColor="#F0F0F0"
           endColor="#F3F3F3"
           borderRadius="6px"
-          width="500px"
+          width={!isLoading ? "100%" : "500px"}
           spacing="11px"
           skeletonHeight="18px"
-          noOfLines={3}
+          noOfLines={2}
           marginTop="12px !important"
           isLoaded={!isLoading}
         >
           <Text
+            display="flex"
+            flexDirection="row"
+            gap="8px"
             fontFamily="Roboto"
             fontWeight="400"
             fontSize="14px"
             lineHeight="20px"
             color="#464A51"
           >
-            Não informado : Última vez que atualizamos na BD
+            {resource?.updates?.[0]?.latest ?
+              formatDate(resource.updates[0].latest)
+              :
+              "Não informado"
+            } : Última vez que atualizamos na BD
+            {resource?.updates?.[0]?.entity?.slug &&
+              <Box
+                backgroundColor="#EEEEEE"
+                padding="2px 4px"
+                borderRadius="4px"
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="12px"
+                lineHeight="18px"
+                color="#252A32"
+              >
+                {formatUpdate(resource.updates[0].entity.slug)}
+              </Box>
+            }
           </Text>
           <Text
             marginTop="8px !important"
@@ -371,9 +413,14 @@ export default function BdmTablePage({ id }) {
             lineHeight="20px"
             color="#464A51"
           >
-            Não informado : Última vez que atualizaram na fonte original
+            {resource?.rawDataSource?.[0]?.updates?.[0]?.latest ?
+              formatDate(resource.rawDataSource[0].updates[0].latest)
+              :
+              "Não informado"
+            } : Última vez que atualizaram na fonte original
           </Text>
           <Text
+            display="none"
             marginTop="8px !important"
             fontFamily="Roboto"
             fontWeight="400"
@@ -508,9 +555,10 @@ export default function BdmTablePage({ id }) {
             lineHeight="20px"
             color="#464A51"
           >
-            {resource?.rawDataUrl ? 
+            {resource?.rawDataSource?.[0]?._id && resource?.rawDataSource?.[0]?.dataset?._id ? 
               <Text
                 as="a"
+                target="_blank"
                 display="flex"
                 flexDirection="row"
                 gap="8px"
@@ -525,9 +573,9 @@ export default function BdmTablePage({ id }) {
                   fill: "#4F9ADC",
                   color: "#4F9ADC"
                 }}
-                href={resource.rawDataUrl}
+                href={`/dataset/${resource.rawDataSource[0].dataset._id}?raw_data_source=${resource.rawDataSource[0]._id}`}
               >
-                Microdados originais
+                {resource.rawDataSource[0].name}
               </Text>
             :
               "Não informado"
@@ -602,7 +650,7 @@ export default function BdmTablePage({ id }) {
         startColor="#F0F0F0"
         endColor="#F3F3F3"
         borderRadius="6px"
-        width={resource?.version ? "100%" : "80px"}
+        width={resource?.version ? "100%" : "100px"}
         minHeight="40px"
         spacing="4px"
         skeletonHeight="18px"

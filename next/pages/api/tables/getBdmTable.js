@@ -45,14 +45,19 @@ async function getBdmTable(id) {
                 rawDataSource {
                   edges {
                     node {
-                      updates{
+                      _id
+                      name
+                      dataset {
+                        _id
+                      }
+                      updates {
                         edges {
                           node {
+                            _id
                             latest
                           }
                         }
                       }
-                      lastUpdatedAt
                     }
                   }
                 }
@@ -65,13 +70,12 @@ async function getBdmTable(id) {
                       latest
                       entity {
                         _id
-                        name
+                        slug
                       }
                     }
                   }
                 }
                 isDirectory
-                rawDataUrl
                 auxiliaryFilesUrl
                 uncompressedFileSize
                 numberRows
