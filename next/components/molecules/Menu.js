@@ -26,7 +26,7 @@ import { useRouter } from "next/router"
 import cookies from "js-cookie";
 import MenuDropdown from "./MenuDropdown";
 import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook"
-import { ControlledInputMenu } from "../atoms/ControlledInput";
+import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
 import { triggerGAEvent } from "../../utils";
@@ -513,7 +513,7 @@ function SearchInputUser ({ user }) {
         padding="16px 20px"
         zIndex={99}
       >
-        <ControlledInputMenu
+        <ControlledInputSimple
           width="100%"
           value={search}
           onChange={setSearch}
@@ -557,7 +557,7 @@ function SearchInputUser ({ user }) {
 
   return (
     <Stack spacing={0}>
-      <ControlledInputMenu
+      <ControlledInputSimple
         value={search}
         onChange={setSearch}
         onEnterPress={openSearchLink}

@@ -15,6 +15,7 @@ import { useState, useEffect } from 'react';
 import FuzzySearch from 'fuzzy-search';
 import Latex from 'react-latex-next';
 import LoadingSpin from '../atoms/Loading';
+import { ControlledInputSimple } from '../atoms/ControlledInput';
 
 import {
   getColumnsBdmTable
@@ -31,6 +32,9 @@ export default function ColumnsDatasets({ tableId }) {
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [search, setSearch] = useState("")
+  const [inputFocus, setInputFocus] = useState(false)
+
 
   useEffect(() => {
     const featchColumns = async () => {
@@ -259,7 +263,25 @@ export default function ColumnsDatasets({ tableId }) {
 
   return (
     <Stack width="100%">
-      <Box borderRadius="16px" height="48px" backgroundColor="#EEEEEE"/>
+      <ControlledInputSimple
+        value={search}
+        onChange={setSearch}
+        inputFocus={inputFocus}
+        changeInputFocus={setInputFocus}
+        placeholder="Pesquisar colunas"
+        fill="#464A51"
+        fillHover="#878A8E"
+        height="48px"
+        maxWidth="100%"
+        width="100%"
+        icon={
+          <SearchIcon
+            alt="pesquisar"
+            width="16.8px"
+            height="16.8px"
+          />
+        }
+      />
 
       <TableContainer
         height="100%"
@@ -275,7 +297,7 @@ export default function ColumnsDatasets({ tableId }) {
               <TableHeader
                 header={headers[0]}
                 zIndex={5}
-                left="0"
+                left={{base: "none", lg:"0"}}
               />
               {headers.map((elm, i) => (
                 i != 0 && <TableHeader key={i} header={elm}/>
@@ -292,7 +314,7 @@ export default function ColumnsDatasets({ tableId }) {
               >
                 <TableValue
                   position="sticky"
-                  left="0"
+                  left={{base: "none", lg:"0"}}
                   zIndex="4"
                   backgroundColor="#FFF"
                 >

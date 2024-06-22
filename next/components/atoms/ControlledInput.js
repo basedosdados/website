@@ -118,7 +118,7 @@ export function DebouncedControlledInput({
   );
 }
 
-export function ControlledInputMenu({
+export function ControlledInputSimple({
   refInput = null,
   placeholder,
   value,
@@ -174,7 +174,8 @@ export function ControlledInputMenu({
         color="#464A51"
         _hover={{
           border:"2px solid transparent !important",
-          backgroundColor: "#F3F3F3",
+          backgroundColor:"#F3F3F3",
+          color:"#878A8E",
           _placeholder:{color: "#878A8E"}
         }}
         _focus={{
