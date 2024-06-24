@@ -10,6 +10,7 @@ import {
   Stack,
   Box,
   Text,
+  Skeleton,
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import FuzzySearch from 'fuzzy-search';
@@ -28,13 +29,71 @@ import SearchIcon from '../../public/img/icons/searchIcon';
 import CrossIcon from '../../public/img/icons/crossIcon';
 import 'katex/dist/katex.min.css';
 
+function SearchColumn({ isLoaded, resource, columns }) {
+  const [inputFocus, setInputFocus] = useState(false)
+  const [skipFirstDebounced, setSkipFirstDebounced] = useState(true)
+  const [search, setSearch] = useState("")
+  const [value, setValue] = useState("")
+  const [_timeout, _setTimeout] = useState(null)
+
+  useEffect(() => {
+    clearTimeout(_timeout)
+    isLoaded(true)
+    if(value.trim() === "") {
+      isLoaded(false)
+      return columns(resource)
+    }
+
+    _setTimeout(setTimeout(() => {
+      if(!skipFirstDebounced) {
+        const result = searcherColumn.search(search.trim())
+        if(result.length > 0) {
+          columns(result)
+        } else {
+          columns(resource)
+        }
+      }
+      setSkipFirstDebounced(false)
+      isLoaded(false)
+    }, 500))
+  }, [value])
+
+  useEffect(() => {
+    setValue(search)
+  }, [search])
+
+  const searcherColumn = new FuzzySearch (
+    resource, ["node.name", "node.description"], {sort: true}
+  )
+
+  return (
+    <ControlledInputSimple
+      value={search}
+      onChange={setSearch}
+      inputFocus={inputFocus}
+      changeInputFocus={setInputFocus}
+      placeholder="Pesquisar colunas"
+      fill="#464A51"
+      fillHover="#878A8E"
+      height="48px"
+      maxWidth="100%"
+      width="100%"
+      icon={
+        <SearchIcon
+          alt="pesquisar"
+          width="16.8px"
+          height="16.8px"
+        />
+      }
+    />
+  )
+}
+
 export default function ColumnsDatasets({ tableId }) {
   const [resource, setResource] = useState({})
+  const [columns, setColumns] = useState({})
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [search, setSearch] = useState("")
-  const [inputFocus, setInputFocus] = useState(false)
-
 
   useEffect(() => {
     const featchColumns = async () => {
@@ -44,6 +103,7 @@ export default function ColumnsDatasets({ tableId }) {
 
         if(result) {
           setResource(result.sort(sortElements))
+          setColumns(result.sort(sortElements))
           setIsLoading(false)
         }
 
@@ -156,7 +216,7 @@ export default function ColumnsDatasets({ tableId }) {
     )
   }
 
-  const TableHeader = ({ header, ...props }) => {
+  function TableHeader({ header, ...props }) {
     return (
       <Th
         role="row"
@@ -251,7 +311,6 @@ export default function ColumnsDatasets({ tableId }) {
     )
   }
 
-  if(isLoading) return ( <LoadingSpin/> )
   if(isError) return (
     <Stack justifyContent="center" alignItems="center">
       <InternalError
@@ -263,124 +322,119 @@ export default function ColumnsDatasets({ tableId }) {
 
   return (
     <Stack width="100%">
-      <ControlledInputSimple
-        value={search}
-        onChange={setSearch}
-        inputFocus={inputFocus}
-        changeInputFocus={setInputFocus}
-        placeholder="Pesquisar colunas"
-        fill="#464A51"
-        fillHover="#878A8E"
-        height="48px"
-        maxWidth="100%"
-        width="100%"
-        icon={
-          <SearchIcon
-            alt="pesquisar"
-            width="16.8px"
-            height="16.8px"
-          />
-        }
+      <SearchColumn
+        resource={resource}
+        columns={setColumns}
+        isLoaded={setIsLoading}
       />
 
-      <TableContainer
+      <Skeleton
+        startColor="#F0F0F0"
+        endColor="#F3F3F3"
+        borderRadius="6px"
         height="100%"
-        maxHeight="400px"
-        overflowY="auto"
-        border="2px solid #DEDFE0"
-        borderBottom="0px"
-        borderRadius="16px"
+        width="100%"
+        isLoaded={!isLoading}
       >
-        <Table position="relative" role="table">
-          <Thead role="rowgroup" position="relative">
-            <Tr>
-              <TableHeader
-                header={headers[0]}
-                zIndex={5}
-                left={{base: "none", lg:"0"}}
-              />
-              {headers.map((elm, i) => (
-                i != 0 && <TableHeader key={i} header={elm}/>
-              ))}
-            </Tr>
-          </Thead>
-
-          <Tbody role="rowgroup" position="relative">
-            {resource.length > 0 && resource.map((elm,i) => (
-              <Tr
-                key={i}
-                role="row"
-                borderBottom="2px solid #DEDFE0"
-              >
-                <TableValue
-                  position="sticky"
+        <TableContainer
+          height="100%"
+          maxHeight="400px"
+          overflowY="auto"
+          border="1px solid #DEDFE0"
+          borderBottom="0px"
+          borderRadius="16px"
+        >
+          <Table position="relative" role="table">
+            <Thead role="rowgroup" position="relative">
+              <Tr>
+                <TableHeader
+                  header={headers[0]}
+                  zIndex={5}
                   left={{base: "none", lg:"0"}}
-                  zIndex="4"
-                  backgroundColor="#FFF"
-                >
-                  {elm?.node?.name ? elm.node.name : "Não informado"}
-                  <Box
-                    position="absolute"
-                    right="0"
-                    top="0"
-                    height="100%"
-                    width="1px"
-                    backgroundColor="#DEDFE0"
-                  />
-                </TableValue>
-
-                <TableValue>
-                  {
-                    elm?.node?.coveredByDictionary === true ? "Sim" :
-                    elm?.node?.directoryPrimaryKey?._id ? "Sim" :
-                    elm?.node?.coveredByDictionary === false ? "Não"
-                    :
-                    "Não informado"
-                  }
-                </TableValue>
-
-                <TableValue>
-                  {elm?.node?.description ? elm.node.description : "Não informado"}
-                </TableValue>
-
-                <TableValue>
-                  {elm?.node?.bigqueryType?.name ? elm.node.bigqueryType.name : "Não informado"}
-                </TableValue>
-
-                <TableValue>
-                  {elm?.node?.coverage?.start && elm?.node?.coverage?.end ?
-                    elm.node.coverage.start +" - "+ elm.node.coverage.end
-                    :
-                    "Não informado"
-                  }
-                </TableValue>
-
-                <TableValue>
-                  {elm?.node?.measurementUnit ?
-                    measurementUnit(elm.node.measurementUnit)
-                    :
-                    "Não informado"
-                  }
-                </TableValue>
-
-                <TableValue>
-                  {
-                    elm?.node?.containsSensitiveData === true ? "Sim"
-                    :
-                    elm?.node?.containsSensitiveData === false ? "Não"
-                    :
-                    "Não informado"
-                  }
-                </TableValue>
-
-                <TableValue>
-                  {elm?.node?.observations ? elm.node.observations : "Não informado"}
-                </TableValue>
+                />
+                {headers.map((elm, i) => (
+                  i != 0 && <TableHeader key={i} header={elm}/>
+                ))}
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
+            </Thead>
+
+            <Tbody role="rowgroup" position="relative">
+              {columns.length > 0 && columns.map((elm,i) => (
+                <Tr
+                  key={i}
+                  role="row"
+                  borderBottom="1px solid #DEDFE0"
+                >
+                  <TableValue
+                    position="sticky"
+                    left={{base: "none", lg:"0"}}
+                    zIndex="4"
+                    backgroundColor="#FFF"
+                  >
+                    {elm?.node?.name ? elm.node.name : "Não informado"}
+                    <Box
+                      position="absolute"
+                      right="0"
+                      top="0"
+                      height="100%"
+                      width="1px"
+                      backgroundColor="#DEDFE0"
+                    />
+                  </TableValue>
+
+                  <TableValue>
+                    {
+                      elm?.node?.coveredByDictionary === true ? "Sim" :
+                      elm?.node?.directoryPrimaryKey?._id ? "Sim" :
+                      elm?.node?.coveredByDictionary === false ? "Não"
+                      :
+                      "Não informado"
+                    }
+                  </TableValue>
+
+                  <TableValue>
+                    {elm?.node?.description ? elm.node.description : "Não informado"}
+                  </TableValue>
+
+                  <TableValue>
+                    {elm?.node?.bigqueryType?.name ? elm.node.bigqueryType.name : "Não informado"}
+                  </TableValue>
+
+                  <TableValue>
+                    {elm?.node?.coverage?.start && elm?.node?.coverage?.end ?
+                      elm.node.coverage.start +" - "+ elm.node.coverage.end
+                      :
+                      "Não informado"
+                    }
+                  </TableValue>
+
+                  <TableValue>
+                    {elm?.node?.measurementUnit ?
+                      measurementUnit(elm.node.measurementUnit)
+                      :
+                      "Não informado"
+                    }
+                  </TableValue>
+
+                  <TableValue>
+                    {
+                      elm?.node?.containsSensitiveData === true ? "Sim"
+                      :
+                      elm?.node?.containsSensitiveData === false ? "Não"
+                      :
+                      "Não informado"
+                    }
+                  </TableValue>
+
+                  <TableValue>
+                    {elm?.node?.observations ? elm.node.observations : "Não informado"}
+                  </TableValue>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </Skeleton>
     </Stack>
   )
 }
