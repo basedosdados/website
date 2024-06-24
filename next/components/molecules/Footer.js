@@ -88,7 +88,7 @@ export default function Footer({ template, ocult = false }) {
     >
       <VStack
         width="100%"
-        height="96px"
+        height={{base: "100%", lg: "96px"}}
         justifyContent="center"
         backgroundColor="#EEEEEE"
       >
@@ -96,11 +96,12 @@ export default function Footer({ template, ocult = false }) {
           width="100%"
           maxWidth="1440px"
           justifyContent="center"
-          direction="row"
+          direction={{base: "column-reverse", lg: "row"}}
           spacing={0}
-          gridGap="40px"
+          gridGap={{base: "8px", lg: "40px"}}
+          padding={{base: "24px", lg: "0"}}
         >
-          <TextFooterSimple>
+          <TextFooterSimple textAlign="center">
             ® 2024 Base dos Dados
           </TextFooterSimple>
           <TextFooterSimple as="a" href="/termos-e-privacidade?section=terms" _hover={{ opacity: "0.8" }}>
