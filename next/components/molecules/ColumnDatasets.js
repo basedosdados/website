@@ -10,7 +10,8 @@ import {
   Stack,
   Box,
   Text,
-  Skeleton
+  Skeleton,
+  transform
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import FuzzySearch from 'fuzzy-search';
@@ -31,7 +32,6 @@ import 'katex/dist/katex.min.css';
 
 function SearchColumn({ isLoaded, resource, columns }) {
   const [inputFocus, setInputFocus] = useState(false)
-  const [skipFirstDebounced, setSkipFirstDebounced] = useState(true)
   const [search, setSearch] = useState("")
   const [value, setValue] = useState("")
   const [_timeout, _setTimeout] = useState(null)
@@ -45,15 +45,12 @@ function SearchColumn({ isLoaded, resource, columns }) {
     }
 
     _setTimeout(setTimeout(() => {
-      if(!skipFirstDebounced) {
-        const result = searcherColumn.search(search.trim())
-        if(result.length > 0) {
-          columns(result)
-        } else {
-          columns(resource)
-        }
+      const result = searcherColumn.search(search.trim())
+      if(result.length > 0) {
+        columns(result)
+      } else {
+        columns(resource)
       }
-      setSkipFirstDebounced(false)
       isLoaded(false)
     }, 500))
   }, [value])
@@ -94,6 +91,7 @@ export default function ColumnsDatasets({ tableId }) {
   const [columns, setColumns] = useState({})
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isSearchLoading, setIsSearchLoading] = useState(true)
 
   useEffect(() => {
     const featchColumns = async () => {
@@ -105,6 +103,7 @@ export default function ColumnsDatasets({ tableId }) {
           setResource(result.sort(sortElements))
           setColumns(result.sort(sortElements))
           setIsLoading(false)
+          setIsSearchLoading(false)
         }
 
       } catch (error) {
@@ -302,6 +301,7 @@ export default function ColumnsDatasets({ tableId }) {
         lineHeight="20px"
         color="#464A51"
         backgroundColor="#FFF"
+        borderColor="#DEDFE0"
         textTransform="none"
         letterSpacing="inherit"
         {...props}
@@ -322,11 +322,20 @@ export default function ColumnsDatasets({ tableId }) {
 
   return (
     <Stack width="100%">
-      <SearchColumn
-        resource={resource}
-        columns={setColumns}
-        isLoaded={setIsLoading}
-      />
+      <Skeleton
+        startColor="#F0F0F0"
+        endColor="#F3F3F3"
+        borderRadius="14px"
+        height="40px"
+        width="100%"
+        isLoaded={!isSearchLoading}
+      >
+        <SearchColumn
+          resource={resource}
+          columns={setColumns}
+          isLoaded={setIsLoading}
+        />
+      </Skeleton>
 
       <Skeleton
         startColor="#F0F0F0"
@@ -353,15 +362,20 @@ export default function ColumnsDatasets({ tableId }) {
                   top="0"
                   boxSizing="content-box"
                   alignItems="center"
+                  border="none !important"
                   backgroundColor="#F7F7F7"
                   padding="0 !important"
-                  left={{base: "none", lg:"0"}}
                   zIndex={5}
                 >
                   <Box
                     padding="14px 22px 14px 30px"
                   >
-                    <Checkbox/>
+                    <Checkbox
+                      icon={{
+                        variant:"lessCheck",
+                        viewBox:"0 0 20 20",
+                      }}
+                    />
                   </Box>
                   <Box
                     position="absolute"

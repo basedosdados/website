@@ -73,6 +73,11 @@ body {
   box-shadow: none !important;
 }
 
+.chakra-checkbox__control[data-checked] {
+  width: 100%;
+  height: 100%;
+}
+
 @keyframes gray-scale {
   50% {
     -webkit-filter: brightness(98%); 
