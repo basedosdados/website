@@ -11,7 +11,6 @@ import {
   Box,
   Text,
   Skeleton,
-  transform
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import FuzzySearch from 'fuzzy-search';
@@ -27,7 +26,6 @@ import InternalError from '../../public/img/internalError'
 import InfoIcon from '../../public/img/icons/infoIcon';
 import RedirectIcon from '../../public/img/icons/redirectIcon';
 import SearchIcon from '../../public/img/icons/searchIcon';
-import CrossIcon from '../../public/img/icons/crossIcon';
 import 'katex/dist/katex.min.css';
 
 function SearchColumn({ isLoaded, resource, columns }) {
@@ -86,12 +84,32 @@ function SearchColumn({ isLoaded, resource, columns }) {
   )
 }
 
-export default function ColumnsDatasets({ tableId }) {
+export default function ColumnsDatasets({ tableId, checkedColumns, onChangeCheckedColumns }) {
   const [resource, setResource] = useState({})
   const [columns, setColumns] = useState({})
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isSearchLoading, setIsSearchLoading] = useState(true)
+
+  const isChecked = (columnSlug) => checkedColumns.includes(columnSlug)
+
+  const handleCheckboxChange = (columnSlug) => {
+    if (isChecked(columnSlug)) {
+      onChangeCheckedColumns(checkedColumns.filter(slug => slug !== columnSlug))
+    } else {
+      onChangeCheckedColumns([...checkedColumns, columnSlug])
+    }
+  }
+
+  const handleMasterCheckboxChange = () => {
+    const allColumnSlugs = resource.map(column => column.node.name)
+
+    if (checkedColumns.length === allColumnSlugs.length) {
+      onChangeCheckedColumns([])
+    } else {
+      onChangeCheckedColumns(allColumnSlugs)
+    }
+  }
 
   useEffect(() => {
     const featchColumns = async () => {
@@ -102,6 +120,7 @@ export default function ColumnsDatasets({ tableId }) {
         if(result) {
           setResource(result.sort(sortElements))
           setColumns(result.sort(sortElements))
+          onChangeCheckedColumns(result.sort(sortElements).map(column => column.node.name))
           setIsLoading(false)
           setIsSearchLoading(false)
         }
@@ -367,10 +386,10 @@ export default function ColumnsDatasets({ tableId }) {
                   padding="0 !important"
                   zIndex={5}
                 >
-                  <Box
-                    padding="14px 22px 14px 30px"
-                  >
+                  <Box padding="14px 22px 14px 30px" >
                     <Checkbox
+                      isChecked={checkedColumns.length === resource.length}
+                      onChange={handleMasterCheckboxChange}
                       icon={{
                         variant:"lessCheck",
                         viewBox:"0 0 20 20",
@@ -405,13 +424,25 @@ export default function ColumnsDatasets({ tableId }) {
                   role="row"
                   borderBottom="1px solid #DEDFE0"
                 >
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    padding="14px 22px 14px 30px"
+                  <Td
+                    role="cell"
+                    position="relative"
+                    padding="0 !important"
+                    backgroundColor="#FFF"
+                    borderColor="#DEDFE0"
                   >
-                    <Checkbox/>
-                  </Box>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      padding="14px 22px 14px 30px"
+                    >
+                      <Checkbox
+                        isChecked={isChecked(elm.node.name)}
+                        onChange={() => handleCheckboxChange(elm.node.name)}
+                      />
+                    </Box>
+                  </Td>
+
                   <TableValue
                     position="sticky"
                     left={{base: "none", lg:"0"}}

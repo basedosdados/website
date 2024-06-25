@@ -21,7 +21,11 @@ import GreenTab from "../atoms/GreenTab";
 import SectionText from "../atoms/SectionText";
 import Toggle from "../atoms/Toggle";
 import RoundedButton from "../atoms/RoundedButton";
-import ColumnDatasets from "./ColumnDatasets";
+import ColumnsDatasets from "./ColumnsDatasets";
+
+import {
+  getBigTableQuery
+} from "../../pages/api/tables"
 
 import { DisclaimerBox, AlertDiscalimerBox} from "./DisclaimerBox";
 
@@ -75,6 +79,9 @@ export function PrismCodeHighlight({ language, children }) {
 export default function DataInformationQuery({ resource }) {
   const [tabIndex, setTabIndex] = useState(0)
   const [downloadNotAllowed, setDownloadNotAllowed] = useState(false)
+  const [checkedColumns, setCheckedColumns] = useState([])
+  const [sqlCode, setSqlCode] = useState("")
+  const [isLoading, setIsLoading] = useState(true)
 
   let gcpDatasetID
   let gcpTableId
@@ -97,6 +104,23 @@ export default function DataInformationQuery({ resource }) {
       }
     }
   }, [resource])
+
+
+  useEffect(() => {
+    if(resource._id === undefined) return
+    setIsLoading(true)
+
+    setSqlCode("")
+    if (checkedColumns.length === 0) return setIsLoading(false)
+
+    async function sqlCodeString() {
+      const result = await getBigTableQuery(resource._id, checkedColumns)
+      setSqlCode(result)
+      setIsLoading(false)
+    }
+
+    if(tabIndex === 0) sqlCodeString()
+  }, [resource._id, checkedColumns, tabIndex])
 
   const handlerDownload = () => {
     if (downloadNotAllowed === false) return null
@@ -164,8 +188,10 @@ export default function DataInformationQuery({ resource }) {
               Selecione as colunas que você deseja acessar:
             </Text>
 
-            <ColumnDatasets
+            <ColumnsDatasets
               tableId={resource._id}
+              checkedColumns={checkedColumns}
+              onChangeCheckedColumns={setCheckedColumns}
             />
 
             <Box display="flex" flexDirection="row" gap="8px" alignItems="center">
@@ -209,12 +235,14 @@ export default function DataInformationQuery({ resource }) {
               </Tooltip>
             </Box>
 
-            <AlertDiscalimerBox
-              type="warning"
-              text={`Cuidado para não ultrapassar o limite de processamento gratuito do BigQuery.
+            {checkedColumns.length > 0 &&
+              <AlertDiscalimerBox
+                type="warning"
+                text={`Cuidado para não ultrapassar o limite de processamento gratuito do BigQuery.
   Para otimizar a consulta, você pode selecionar menos colunas ou adicionar filtros no BigQuery.`}
-            >
-            </AlertDiscalimerBox>
+              >
+              </AlertDiscalimerBox>
+            }
           </Box>
 
           <TabPanels>
@@ -236,57 +264,82 @@ export default function DataInformationQuery({ resource }) {
                 No editor de consultas do BigQuery, digite a seguinte instrução:
               </Text>
 
-              <AlertDiscalimerBox
-                type="info"
-              >
-                Primeira vez usando o BigQuery?
-                <Text
-                  marginLeft="4px"
-                  as="a"
-                  target="_blank"
-                  href="https://basedosdados.github.io/mais/access_data_bq/#primeiros-passos"
-                  color="#0068C5"
-                  _hover={{color: "#4F9ADC"}}
+              {checkedColumns.length === 0 ?
+                <AlertDiscalimerBox
+                  type="error"
                 >
-                  Siga o passo a passo.
-                </Text>
-              </AlertDiscalimerBox>
-
-              <Box
-                display="flex"
-                flexDirection="row"
-                justifyContent="flex-end"
-                alignItems="center"
-                padding="2px"
-                backgroundColor="#2B8C4D"
-                borderRadius="10px"
-              >
-                <Box
-                  as="a"
-                  href="https://console.cloud.google.com/"
-                  target="_blank"
-                  display="flex"
-                  alignItems="center"
-                  height="40px"
-                  borderRadius="8px"
-                  backgroundColor="#FFF"
-                  padding="8px 16px"
-                  cursor="pointer"
-                  color="#2B8C4D"
-                  _hover={{
-                    color:"#80BA94"
-                  }}
-                >
-                  <Text
-                    fontFamily="Roboto"
-                    fontWeight="500"
-                    fontSize="14px"
-                    lineHeight="20px"
+                  Por favor, selecione acima as colunas que você deseja acessar.
+                </AlertDiscalimerBox>
+                :
+                <>
+                  <AlertDiscalimerBox
+                    type="info"
                   >
-                    Acesse o BigQuery
-                  </Text>
-                </Box>
-              </Box>
+                    Primeira vez usando o BigQuery?
+                    <Text
+                      marginLeft="4px"
+                      as="a"
+                      target="_blank"
+                      href="https://basedosdados.github.io/mais/access_data_bq/#primeiros-passos"
+                      color="#0068C5"
+                      _hover={{color: "#4F9ADC"}}
+                    >
+                      Siga o passo a passo.
+                    </Text>
+                  </AlertDiscalimerBox>
+
+                  <Box
+                    display="flex"
+                    flexDirection="row"
+                    justifyContent="flex-end"
+                    alignItems="center"
+                    padding="2px"
+                    backgroundColor="#2B8C4D"
+                    borderRadius="10px"
+                  >
+                    <Box
+                      as="a"
+                      href="https://console.cloud.google.com/"
+                      target="_blank"
+                      display="flex"
+                      alignItems="center"
+                      height="40px"
+                      borderRadius="8px"
+                      backgroundColor="#FFF"
+                      padding="8px 16px"
+                      cursor="pointer"
+                      color="#2B8C4D"
+                      _hover={{
+                        color:"#80BA94"
+                      }}
+                    >
+                      <Text
+                        fontFamily="Roboto"
+                        fontWeight="500"
+                        fontSize="14px"
+                        lineHeight="20px"
+                      >
+                        Acesse o BigQuery
+                      </Text>
+                    </Box>
+                  </Box>
+
+                  <Box>
+                    <Text
+                      display="flex"
+                      overflow="hidden"
+                      whiteSpace="break-spaces"
+                      fontFamily="Roboto"
+                      fontSize="14px"
+                      fontWeight="400"
+                      lineHeight="20px"
+                      color="#252A32"
+                    >
+                      {sqlCode}
+                    </Text>
+                  </Box>
+                </>
+              }
               {/* {resource?.isClosed ?
                 <SectionText margin="24px 0 16px">
                   Com uma assinatura BD Pro válida, copie o código abaixo e cole no Editor de Consultas no BigQuery:
