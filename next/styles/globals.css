@@ -65,29 +65,12 @@ body {
   scrollbar-width: none; /* Firefox */
 }
 
-.chakra-checkbox__label {
-  font-size: 14px !important;
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-}
-
 .chakra-checkbox__control {
-  padding: 5px !important;
-  width: 20px !important;
-  height: 20px !important;
-  border-width: 3px !important;
-  border-radius: 4px !important;
-  border-color: #DEDFE0 !important;
+  border-width: 0px !important;
 }
 
 .chakra-checkbox__control[data-focus] {
   box-shadow: none !important;
-}
-
-.chakra-checkbox__control[data-checked] {
-  background: #2b8c4d !important;
-  border-color: #2b8c4d !important;
 }
 
 @keyframes gray-scale {

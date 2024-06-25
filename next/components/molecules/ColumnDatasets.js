@@ -10,13 +10,13 @@ import {
   Stack,
   Box,
   Text,
-  Skeleton,
+  Skeleton
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import FuzzySearch from 'fuzzy-search';
 import Latex from 'react-latex-next';
-import LoadingSpin from '../atoms/Loading';
 import { ControlledInputSimple } from '../atoms/ControlledInput';
+import Checkbox from '../atoms/Checkbox';
 
 import {
   getColumnsBdmTable
@@ -347,11 +347,37 @@ export default function ColumnsDatasets({ tableId }) {
           <Table position="relative" role="table">
             <Thead role="rowgroup" position="relative">
               <Tr>
+                <Th
+                  role="row"
+                  position="sticky"
+                  top="0"
+                  boxSizing="content-box"
+                  alignItems="center"
+                  backgroundColor="#F7F7F7"
+                  padding="0 !important"
+                  left={{base: "none", lg:"0"}}
+                  zIndex={5}
+                >
+                  <Box
+                    padding="14px 22px 14px 30px"
+                  >
+                    <Checkbox/>
+                  </Box>
+                  <Box
+                    position="absolute"
+                    bottom="0"
+                    height="1px"
+                    width="100%"
+                    backgroundColor="#DEDFE0"
+                  />
+                </Th>
+
                 <TableHeader
                   header={headers[0]}
                   zIndex={5}
                   left={{base: "none", lg:"0"}}
                 />
+
                 {headers.map((elm, i) => (
                   i != 0 && <TableHeader key={i} header={elm}/>
                 ))}
@@ -365,6 +391,13 @@ export default function ColumnsDatasets({ tableId }) {
                   role="row"
                   borderBottom="1px solid #DEDFE0"
                 >
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    padding="14px 22px 14px 30px"
+                  >
+                    <Checkbox/>
+                  </Box>
                   <TableValue
                     position="sticky"
                     left={{base: "none", lg:"0"}}

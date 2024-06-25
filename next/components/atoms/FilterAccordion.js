@@ -4,13 +4,13 @@ import {
   AccordionIcon,
   AccordionItem,
   Box,
-  Checkbox,
   CheckboxGroup,
   VStack,
   Text,
   HStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import Checkbox from "../atoms/Checkbox";
 import ControlledInput from "./ControlledInput";
 import SectionText from "./SectionText";
 import SearchIcon from "../../public/img/icons/searchIcon"
@@ -162,17 +162,26 @@ export function CheckboxFilterAccordion({
           padding="8px 0"
         >
           {options.length > 0 && options.map((c) => (
-            <Checkbox
+            <label
               key={c[valueField]}
-              fontFamily="Lato"
-              value={c[valueField]}
-              color="#7D7D7D"
-              colorScheme="green"
-              letterSpacing="0.5px"
-              onChange={(e) => { onChange(e.target.value)}} 
+              style={{
+                display:"flex",
+                flexDirection:"row",
+                gap:"8px",
+                cursor:"pointer",
+                alignItems:"center",
+                color:"#7D7D7D",
+                fontFamily:"Lato",
+                letterSpacing:"0.5px",
+              }}
             >
+              <Checkbox
+                value={c[valueField]}
+                onChange={(e) => { onChange(e.target.value)}} 
+              />
+
               {c[displayField]} {c["count"] ? `(${c["count"]})` : `(0)`}
-            </Checkbox>
+            </label>
           ))}
         </VStack>
       </CheckboxGroup>

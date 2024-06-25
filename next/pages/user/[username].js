@@ -10,7 +10,6 @@ import {
   Image,
   Tooltip,
   HStack,
-  Checkbox,
   useDisclosure,
   ModalCloseButton,
   UnorderedList,
@@ -33,6 +32,7 @@ import cookies from 'js-cookie';
 import { serialize } from 'cookie';
 import { MainPageTemplate } from "../../components/templates/main";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
+import Checkbox from "../../components/atoms/Checkbox";
 import BigTitle from "../../components/atoms/BigTitle";
 import SectionTitle from "../../components/atoms/SectionTitle";
 import RoundedButton from "../../components/atoms/RoundedButton";
@@ -352,21 +352,30 @@ const ProfileConfiguration = ({ userInfo }) => {
             startColor="#F0F0F0"
             endColor="#F3F3F3"
           >
-            <Checkbox
-              id="isEmailVisible"
-              name="isEmailVisible"
-              defaultChecked={formData.isEmailVisible}
-              checked={formData.isEmailVisible}
-              onChange={handleCheckboxChange}
-              color="#7D7D7D"
-              fontFamily="Ubuntu"
-              fontSize="14px"
-              fontWeight="400"
-              lineHeight="20px"
-              letterSpacing="0.3px"
+            <label
+              style={{
+                display:"flex",
+                flexDirection:"row",
+                gap:"8px",
+                cursor:"pointer",
+                alignItems:"center",
+                color:"#7D7D7D",
+                fontFamily:"Ubuntu",
+                fontSize:"14px",
+                fontWeight:"400",
+                lineHeight:"20px",
+                letterSpacing:"0.3px",
+              }}
             >
+              <Checkbox
+                id="isEmailVisible"
+                name="isEmailVisible"
+                defaultChecked={formData.isEmailVisible}
+                checked={formData.isEmailVisible}
+                onChange={handleCheckboxChange}
+              />
               Tornar o e-mail de acesso à sua conta visível para o público.
-            </Checkbox>
+            </label>
           </SkeletonText>
         </FormControl>
 
