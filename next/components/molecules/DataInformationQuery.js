@@ -7,12 +7,12 @@ import {
   TabPanels,
   TabIndicator,
   Text,
-  Image,
   Box,
   useClipboard,
   Button,
   HStack,
-  Tooltip
+  Tooltip,
+  Skeleton
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 import hljs from "highlight.js/lib/core";
@@ -26,20 +26,21 @@ import GreenTab from "../atoms/GreenTab";
 import SectionText from "../atoms/SectionText";
 import Toggle from "../atoms/Toggle";
 import RoundedButton from "../atoms/RoundedButton";
-import ColumnsDatasets from "./ColumnsDatasets";
+import ColumnsTable from "./ColumnsTable";
+import { DisclaimerBox, AlertDiscalimerBox} from "./DisclaimerBox";
+import { triggerGAEvent } from "../../utils";
 
 import {
   getBigTableQuery
 } from "../../pages/api/tables"
 
-import { DisclaimerBox, AlertDiscalimerBox} from "./DisclaimerBox";
 
-import { triggerGAEvent } from "../../utils";
 import { CopyIcon } from "../../public/img/icons/copyIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import ExclamationIcon from "../../public/img/icons/exclamationIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
-
+import ChevronIcon from "../../public/img/icons/chevronIcon";
+import CheckIcon from "../../public/img/icons/checkIcon";
 
 export function CodeHighlight({ language, children }) {
   const textRef = useRef(null)
@@ -51,15 +52,18 @@ export function CodeHighlight({ language, children }) {
 
   useEffect(() => {
     if(language === "sql") hljs.registerLanguage("sql", sqlHighlight)
-    if(language === "python") hljs.registerLanguage("python", sqlHighlight)
-    if(language === "r") hljs.registerLanguage("r", sqlHighlight)
+    if(language === "python") hljs.registerLanguage("python", pythonHighlight)
+    if(language === "r") hljs.registerLanguage("r", rHighlight)
 
     const highlighted = hljs.highlight(children, { language:language }).value
     setHighlightedCode(highlighted)
   }, [children, language])
 
   useEffect(() => {
+    if (language === "r") return
     if (textRef.current) {
+      setIsOverflowing(false)
+      setIsExpanded(true)
       const { clientHeight } = textRef.current
       setIsOverflowing(clientHeight > 190)
       if(clientHeight > 190) setIsExpanded(false)
@@ -74,14 +78,14 @@ export function CodeHighlight({ language, children }) {
       width="100%"
       borderRadius="8px"
       backgroundColor="#23241F"
-      padding="22px 16px"
     >
       <Box
         display="flex"
         justifyContent="space-between"
         width="100%"
         overflow="hidden"
-        height={isExpanded ? "auto" : "190px"}
+        padding="22px 16px"
+        height={isExpanded ? "auto" : language === "r" ? "100%" : "190px"}
       >
         <Text
           as="code"
@@ -91,34 +95,74 @@ export function CodeHighlight({ language, children }) {
           dangerouslySetInnerHTML={{ __html: highlightedCode }}
         />
 
-        <Button
+        <Box
+          cursor="pointer"
           height="20px"
-          minWidth="100px"
-          padding="0 0 0 10px"
+          padding="0 12px"
           onClick={onCopy}
-          color="#707783"
           fontFamily="Roboto"
           fontWeight="500"
-          backgroundColor="transparent"
-          _hover={{ backgroundColor: "transparent", opacity: "0.6" }}
+          fontSize="12px"
+          lineHeight="18px"
+          letterSpacing="0.1px"
+          color="#878A8E"
+          fill="#878A8E"
+          _hover={{
+            fill:"#71757A",
+            color:"#71757A",
+          }}
         >
           {hasCopied ? "Copiado" : "Copiar"}
-          <CopyIcon alt="copiar conteúdo" width="20px" height="20px" fill="#707783" marginLeft="5px" />
-        </Button>
+          {hasCopied ? 
+            <CheckIcon
+              alt="copiado conteúdo"
+              width="24px"
+              height="24px"
+              marginLeft="5px"
+            />
+          :
+            <CopyIcon
+              alt="copiar conteúdo"
+              width="24px"
+              height="24px"
+              marginLeft="5px"
+            />
+          }
+        </Box>
       </Box>
 
       {isOverflowing && (
         <Box
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
+          cursor="pointer"
+          gap="8px"
           width="100%"
-          height="40px"
           padding="12px 16px"
-          color="#FFF"
+          borderTop="1px solid #464A51"
+          onClick={() => setIsExpanded(!isExpanded)}
+          fill="#71757A"
+          color="#71757A"
+          _hover={{
+            fill:"#878A8E",
+            color:"#878A8E"
+          }}
         >
+          <ChevronIcon
+            alt="expandir/recoler código"
+            width="24px"
+            height="24px"
+            transform={isExpanded ? "rotate(-90deg)" : "rotate(90deg)"}
+          />
           <Text
-            cursor="pointer"
-            onClick={() => setIsExpanded(!isExpanded)}
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="12px"
+            lineHeight="18px"
+            letterSpacing="0.1px"
           >
-            {isExpanded ? "Reduzir" : "Expandir"}
+            {isExpanded ? "Recolher" : "Expandir"}
           </Text>
         </Box>
       )}
@@ -131,7 +175,8 @@ export default function DataInformationQuery({ resource }) {
   const [downloadNotAllowed, setDownloadNotAllowed] = useState(false)
   const [checkedColumns, setCheckedColumns] = useState([])
   const [sqlCode, setSqlCode] = useState("")
-  const [isLoading, setIsLoading] = useState(true)
+  const [hasLoadingColumns, setHasLoadingColumns] = useState(false)
+  const [isLoadingCode, setIsLoadingCode] = useState(false)
 
   let gcpDatasetID
   let gcpTableId
@@ -156,14 +201,13 @@ export default function DataInformationQuery({ resource }) {
 
   useEffect(() => {
     if(resource._id === undefined) return
-    setIsLoading(true)
-
+    setIsLoadingCode(true)
     setSqlCode("")
-    if (checkedColumns.length === 0) return setIsLoading(false)
 
     async function sqlCodeString() {
       const result = await getBigTableQuery(resource._id, checkedColumns)
       setSqlCode(result)
+      setIsLoadingCode(false)
     }
 
     if(tabIndex === 0) sqlCodeString()
@@ -179,6 +223,11 @@ export default function DataInformationQuery({ resource }) {
     const categoryValues = ["SQL", "Python", "R", "Stata", "Download"];
     setTabIndex(index);
     triggerGAEvent("category_click", categoryValues[index]);
+  }
+
+  function templateColumns() {
+    if(tabIndex === 0) return "checks"
+    if(tabIndex === 3) return "download"
   }
 
   return (
@@ -197,13 +246,14 @@ export default function DataInformationQuery({ resource }) {
         overflow="hidden"
       >
         <TabList
+          pointerEvents={hasLoadingColumns ? "none" : "default"}
           padding="8px 24px 0"
           borderBottom="2px solid #DEDFE0 !important"
         >
           <GreenTab>SQL</GreenTab>
           <GreenTab>Python</GreenTab>
           <GreenTab>R</GreenTab>
-          <GreenTab>Stata</GreenTab>
+          {/* <GreenTab>Stata</GreenTab> */}
           <GreenTab>Download</GreenTab>
         </TabList>
 
@@ -225,23 +275,39 @@ export default function DataInformationQuery({ resource }) {
             width="100%"
             gap="16px"
           >
-            <Text
-              fontFamily="Roboto"
-              fontWeight="400"
-              fontSize="14px"
-              lineHeight="20px"
-              color="#252A32"
+            <Skeleton
+              startColor="#F0F0F0"
+              endColor="#F3F3F3"
+              borderRadius="6px"
+              height="20px"
+              width="fit-content"
+              isLoaded={!hasLoadingColumns}
             >
-              Selecione as colunas que você deseja acessar:
-            </Text>
+              <Text
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="14px"
+                color="#252A32"
+              >
+                Selecione as colunas que você deseja acessar:
+              </Text>
+            </Skeleton>
 
-            <ColumnsDatasets
+            <ColumnsTable
               tableId={resource._id}
               checkedColumns={checkedColumns}
               onChangeCheckedColumns={setCheckedColumns}
+              hasLoading={hasLoadingColumns}
+              setHasLoading={setHasLoadingColumns}
+              template={templateColumns()}
             />
 
-            <Box display="flex" flexDirection="row" gap="8px" alignItems="center">
+            <Box
+              display="none"
+              flexDirection="row"
+              gap="8px"
+              alignItems="center"
+            >
               <label
                 style={{
                   display:"flex",
@@ -283,33 +349,50 @@ export default function DataInformationQuery({ resource }) {
             </Box>
 
             {checkedColumns.length > 0 &&
-              <AlertDiscalimerBox
-                type="warning"
-                text={`Cuidado para não ultrapassar o limite de processamento gratuito do BigQuery.
-  Para otimizar a consulta, você pode selecionar menos colunas ou adicionar filtros no BigQuery.`}
+              <Skeleton
+                startColor="#F0F0F0"
+                endColor="#F3F3F3"
+                borderRadius="6px"
+                height="100%"
+                width="100%"
+                isLoaded={!hasLoadingColumns}
               >
-              </AlertDiscalimerBox>
+                <AlertDiscalimerBox
+                  type="warning"
+                  text={`Cuidado para não ultrapassar o limite de processamento gratuito do BigQuery.
+Para otimizar a consulta, você pode selecionar menos colunas ou adicionar filtros no BigQuery.`}
+                />
+              </Skeleton>
             }
           </Box>
 
           <TabPanels>
             <TabPanel
               id="SQL_section"
-              display="flex"
+              display={!hasLoadingColumns ? "flex" : "none"}
               flexDirection="column"
               gap="16px"
               marginTop="40px"
               padding={0}
             >
-              <Text
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="14px"
-                lineHeight="20px"
-                color="#252A32"
+              <Skeleton
+                startColor="#F0F0F0"
+                endColor="#F3F3F3"
+                borderRadius="6px"
+                height="20px"
+                width="fit-content"
+                isLoaded={!hasLoadingColumns}
               >
-                No editor de consultas do BigQuery, digite a seguinte instrução:
-              </Text>
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#252A32"
+                >
+                  No editor de consultas do BigQuery, digite a seguinte instrução:
+                </Text>
+              </Skeleton>
 
               {checkedColumns.length === 0 ?
                 <AlertDiscalimerBox
@@ -319,9 +402,7 @@ export default function DataInformationQuery({ resource }) {
                 </AlertDiscalimerBox>
                 :
                 <>
-                  <AlertDiscalimerBox
-                    type="info"
-                  >
+                  <AlertDiscalimerBox type="info" >
                     Primeira vez usando o BigQuery?
                     <Text
                       marginLeft="4px"
@@ -370,10 +451,19 @@ export default function DataInformationQuery({ resource }) {
                       </Text>
                     </Box>
                   </Box>
-
-                  <CodeHighlight language="sql">
-                    {sqlCode}
-                  </CodeHighlight>
+                  
+                  <Skeleton
+                    startColor="#F0F0F0"
+                    endColor="#F3F3F3"
+                    borderRadius="10px"
+                    height="100%"
+                    width="100%"
+                    isLoaded={!isLoadingCode}
+                  >
+                    <CodeHighlight language="sql">
+                      {sqlCode}
+                    </CodeHighlight>
+                  </Skeleton>
                 </>
               }
               {/* {resource?.isClosed ?
@@ -399,32 +489,62 @@ export default function DataInformationQuery({ resource }) {
               </PrismCodeHighlight> */}
             </TabPanel>
 
-            <TabPanel padding="0">
+            <TabPanel
+              id="python_section"
+              display={!hasLoadingColumns ? "flex" : "none"}
+              flexDirection="column"
+              gap="16px"
+              marginTop="40px"
+              padding={0}
+            >
+              <Text
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="14px"
+                lineHeight="20px"
+                color="#252A32"
+              >
+                No terminal do Python, digite a seguinte instrução:
+              </Text>
+
+              <AlertDiscalimerBox type="info" >
+                Primeira vez usando o pacote Python?
+                <Text
+                  marginLeft="4px"
+                  as="a"
+                  target="_blank"
+                  href="https://basedosdados.github.io/mais/api_reference_python/"
+                  color="#0068C5"
+                  _hover={{color: "#4F9ADC"}}
+                >
+                  Siga o passo a passo.
+                </Text>
+              </AlertDiscalimerBox>
+
+              <CodeHighlight language="python">{`import basedosdados as bd
+
+# Para carregar o dado direto no pandas
+df = bd.read_table(dataset_id='${gcpDatasetID}',
+table_id='${gcpTableId}',
+billing_project_id="<YOUR_PROJECT_ID>")`}
+              </CodeHighlight>
+
               {/* <SectionText
                 margin="24px 0 16px"
               >
                 Criamos um pacote em Python para você acessar o <i>datalake</i>. Basta rodar o código:
-              </SectionText>
-
-              <PrismCodeHighlight language="python">
-                {`import basedosdados as bd
-
-  # Para carregar o dado direto no pandas
-  df = bd.read_table(dataset_id='${gcpDatasetID}',
-  table_id='${gcpTableId}',
-  billing_project_id="<YOUR_PROJECT_ID>")`}
-              </PrismCodeHighlight> */}
+              </SectionText>*/}
             </TabPanel>
 
-            <TabPanel padding="0">
-              {/* <SectionText
-                margin="24px 0 16px"
-              >
-                Criamos um pacote em R para você acessar o <i>datalake</i>. Basta rodar o código:
-              </SectionText>
-
-              <PrismCodeHighlight language="R">
-                {`install.packages("basedosdados")
+            <TabPanel
+              id="r_section"
+              display={!hasLoadingColumns ? "flex" : "none"}
+              flexDirection="column"
+              gap="16px"
+              marginTop="40px"
+              padding={0}
+            >
+              <CodeHighlight language="r">{`install.packages("basedosdados")
   library("basedosdados")
 
   # Defina o seu projeto no Google Cloud
@@ -433,11 +553,17 @@ export default function DataInformationQuery({ resource }) {
   # Para carregar o dado direto no R
   query <- bdplyr("${queryBQ}")
   df <- bd_collect(query)`}
-              </PrismCodeHighlight> */}
+            </CodeHighlight>
+
+              {/* <SectionText
+                margin="24px 0 16px"
+              >
+                Criamos um pacote em R para você acessar o <i>datalake</i>. Basta rodar o código:
+              </SectionText>*/}
             </TabPanel>
 
-            <TabPanel padding="0">
-              {/* <SectionText
+            {/* <TabPanel padding="0">
+              <SectionText
                 margin="24px 0 16px"
               >
                 Criamos um pacote em Stata para você acessar o <i>datalake</i>. Basta rodar o código:
@@ -451,8 +577,8 @@ export default function DataInformationQuery({ resource }) {
       dataset_id("${gcpDatasetID}") ///
       table_id("${gcpTableId}") ///
       billing_project_id("<PROJECT_ID>")`}
-              </PrismCodeHighlight> */}
-            </TabPanel>
+              </PrismCodeHighlight>
+            </TabPanel> */}
 
             <TabPanel padding="0">
               <SectionText marginTop="24px">

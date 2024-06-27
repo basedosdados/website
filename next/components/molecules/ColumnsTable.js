@@ -84,7 +84,13 @@ function SearchColumn({ isLoaded, resource, columns }) {
   )
 }
 
-export default function ColumnsDatasets({ tableId, checkedColumns, onChangeCheckedColumns }) {
+export default function ColumnsTable({
+  tableId,
+  checkedColumns,
+  onChangeCheckedColumns,
+  setHasLoading,
+  template = "default"
+}) {
   const [resource, setResource] = useState({})
   const [columns, setColumns] = useState({})
   const [isError, setIsError] = useState(false)
@@ -113,7 +119,9 @@ export default function ColumnsDatasets({ tableId, checkedColumns, onChangeCheck
 
   useEffect(() => {
     const featchColumns = async () => {
+      setHasLoading(true)
       setIsLoading(true)
+
       try {
         const result = await getColumnsBdmTable(tableId)
 
@@ -121,8 +129,9 @@ export default function ColumnsDatasets({ tableId, checkedColumns, onChangeCheck
           setResource(result.sort(sortElements))
           setColumns(result.sort(sortElements))
           onChangeCheckedColumns(result.sort(sortElements).map(column => column.node.name))
-          setIsLoading(false)
+          setHasLoading(false)
           setIsSearchLoading(false)
+          setIsLoading(false)
         }
 
       } catch (error) {
@@ -139,17 +148,18 @@ export default function ColumnsDatasets({ tableId, checkedColumns, onChangeCheck
       pt: "Nome",
       tooltip:"Nome da coluna."
     },
-    // {
-    //   pt: "Coberta Por Um Dicionário",
-    //   tooltip:"Indica se a coluna possui categorias descritas na tabela 'dicionario', explicando o significado das suas chaves e valores — ex: 'sexo' possui os valores 0 e 1 na coluna, e, no dicionario, você irá encontrar 'sexo' com as categorias (chave: 1 - valor: Feminino), (chave: 0 - valor: Masculino)."
-    // },
-    // {
-    //   pt: "Coluna Correspondente Nos Diretórios",
-    //   tooltip:"Caso preenchida, indica que a coluna é chave primária de uma entidade — ex: id_municipio = chave primária de municípios. Isso significa que a coluna é igual em todos os conjuntos do datalake. Informações centralizadas da entidade se encontram no diretório conforme: [diretorio].[tabela]:[coluna]."
-    // },
     {
-      pt: "Precisa de tradução",
-      tooltip:"A coluna possui códigos institucionais a serem traduzidos."
+      pt: 
+        template === "download" ?
+        "Tabela de tradução"
+        :
+        "Precisa de tradução"
+      ,
+      tooltip:
+        template === "download" ?
+        "Para traduzir os códigos institucionais da tabela você precisa utilizar as tabelas de dicionário e diretórios, dependendo de qual coluna você quiser usar."
+        :
+        "A coluna possui códigos institucionais a serem traduzidos."
     },
     {
       pt: "Descrição",
@@ -375,35 +385,37 @@ export default function ColumnsDatasets({ tableId, checkedColumns, onChangeCheck
           <Table position="relative" role="table">
             <Thead role="rowgroup" position="relative">
               <Tr>
-                <Th
-                  role="row"
-                  position="sticky"
-                  top="0"
-                  boxSizing="content-box"
-                  alignItems="center"
-                  border="none !important"
-                  backgroundColor="#F7F7F7"
-                  padding="0 !important"
-                  zIndex={5}
-                >
-                  <Box padding="14px 22px 14px 30px" >
-                    <Checkbox
-                      isChecked={checkedColumns.length === resource.length}
-                      onChange={handleMasterCheckboxChange}
-                      icon={{
-                        variant:"lessCheck",
-                        viewBox:"0 0 20 20",
-                      }}
+                {template === "checks" &&
+                  <Th
+                    role="row"
+                    position="sticky"
+                    top="0"
+                    boxSizing="content-box"
+                    alignItems="center"
+                    border="none !important"
+                    backgroundColor="#F7F7F7"
+                    padding="0 !important"
+                    zIndex={5}
+                  >
+                    <Box padding="14px 22px 14px 30px" >
+                      <Checkbox
+                        isChecked={checkedColumns.length === resource.length}
+                        onChange={handleMasterCheckboxChange}
+                        icon={{
+                          variant:"lessCheck",
+                          viewBox:"0 0 20 20",
+                        }}
+                      />
+                    </Box>
+                    <Box
+                      position="absolute"
+                      bottom="0"
+                      height="1px"
+                      width="100%"
+                      backgroundColor="#DEDFE0"
                     />
-                  </Box>
-                  <Box
-                    position="absolute"
-                    bottom="0"
-                    height="1px"
-                    width="100%"
-                    backgroundColor="#DEDFE0"
-                  />
-                </Th>
+                  </Th>
+                }
 
                 <TableHeader
                   header={headers[0]}
@@ -424,24 +436,26 @@ export default function ColumnsDatasets({ tableId, checkedColumns, onChangeCheck
                   role="row"
                   borderBottom="1px solid #DEDFE0"
                 >
-                  <Td
-                    role="cell"
-                    position="relative"
-                    padding="0 !important"
-                    backgroundColor="#FFF"
-                    borderColor="#DEDFE0"
-                  >
-                    <Box
-                      display="flex"
-                      alignItems="center"
-                      padding="14px 22px 14px 30px"
+                  {template === "checks" &&
+                    <Td
+                      role="cell"
+                      position="relative"
+                      padding="0 !important"
+                      backgroundColor="#FFF"
+                      borderColor="#DEDFE0"
                     >
-                      <Checkbox
-                        isChecked={isChecked(elm.node.name)}
-                        onChange={() => handleCheckboxChange(elm.node.name)}
-                      />
-                    </Box>
-                  </Td>
+                      <Box
+                        display="flex"
+                        alignItems="center"
+                        padding="14px 22px 14px 30px"
+                      >
+                        <Checkbox
+                          isChecked={isChecked(elm.node.name)}
+                          onChange={() => handleCheckboxChange(elm.node.name)}
+                        />
+                      </Box>
+                    </Td>
+                  }
 
                   <TableValue
                     position="sticky"
