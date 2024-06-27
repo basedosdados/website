@@ -14,7 +14,12 @@ import {
   HStack,
   Tooltip
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import hljs from "highlight.js/lib/core";
+import sqlHighlight from "highlight.js/lib/languages/sql";
+import pythonHighlight from "highlight.js/lib/languages/python";
+import rHighlight from "highlight.js/lib/languages/r";
+import 'highlight.js/styles/monokai-sublime.css'
 
 import Link from "../atoms/Link";
 import GreenTab from "../atoms/GreenTab";
@@ -35,44 +40,89 @@ import DownloadIcon from "../../public/img/icons/downloadIcon";
 import ExclamationIcon from "../../public/img/icons/exclamationIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 
-export function PrismCodeHighlight({ language, children }) {
+
+export function CodeHighlight({ language, children }) {
+  const textRef = useRef(null)
+  const [isOverflowing, setIsOverflowing] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(true)
+
+  const [highlightedCode, setHighlightedCode] = useState("")
   const { hasCopied, onCopy } = useClipboard(children)
 
-  return (
-    <pre
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        gap: "20px",
-        flexDirection: "row",
-        width: "100%",
-        padding: "10px",
-        borderRadius: "6px",
-        whiteSpace: "break-spaces",
-        wordBreak: "break-all",
-      }}
-    >
-      <code
-        className={`language-${language}`}
-      >
-        {children}
-      </code>
+  useEffect(() => {
+    if(language === "sql") hljs.registerLanguage("sql", sqlHighlight)
+    if(language === "python") hljs.registerLanguage("python", sqlHighlight)
+    if(language === "r") hljs.registerLanguage("r", sqlHighlight)
 
-      <Button
-        height="20px"
-        minWidth="100px"
-        padding="0 0 0 10px"
-        onClick={onCopy}
-        color="#707783"
-        fontFamily="Lato"
-        fontWeight="500"
-        backgroundColor="transparent"
-        _hover={{ backgroundColor: "transparent", opacity: "0.6" }}
+    const highlighted = hljs.highlight(children, { language:language }).value
+    setHighlightedCode(highlighted)
+  }, [children, language])
+
+  useEffect(() => {
+    if (textRef.current) {
+      const { clientHeight } = textRef.current
+      setIsOverflowing(clientHeight > 190)
+      if(clientHeight > 190) setIsExpanded(false)
+    }
+  }, [highlightedCode])
+
+  return (
+    <Box
+      display="flex"
+      gap="20px"
+      flexDirection="column"
+      width="100%"
+      borderRadius="8px"
+      backgroundColor="#23241F"
+      padding="22px 16px"
+    >
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        width="100%"
+        overflow="hidden"
+        height={isExpanded ? "auto" : "190px"}
       >
-        {hasCopied ? "Copiado" : "Copiar"}
-        <CopyIcon alt="copiar conteúdo" width="20px" height="20px" fill="#707783" marginLeft="5px" />
-      </Button>
-    </pre>
+        <Text
+          as="code"
+          ref={textRef}
+          whiteSpace="break-spaces"
+          className={`hljs ${language}`}
+          dangerouslySetInnerHTML={{ __html: highlightedCode }}
+        />
+
+        <Button
+          height="20px"
+          minWidth="100px"
+          padding="0 0 0 10px"
+          onClick={onCopy}
+          color="#707783"
+          fontFamily="Roboto"
+          fontWeight="500"
+          backgroundColor="transparent"
+          _hover={{ backgroundColor: "transparent", opacity: "0.6" }}
+        >
+          {hasCopied ? "Copiado" : "Copiar"}
+          <CopyIcon alt="copiar conteúdo" width="20px" height="20px" fill="#707783" marginLeft="5px" />
+        </Button>
+      </Box>
+
+      {isOverflowing && (
+        <Box
+          width="100%"
+          height="40px"
+          padding="12px 16px"
+          color="#FFF"
+        >
+          <Text
+            cursor="pointer"
+            onClick={() => setIsExpanded(!isExpanded)}
+          >
+            {isExpanded ? "Reduzir" : "Expandir"}
+          </Text>
+        </Box>
+      )}
+    </Box>
   )
 }
 
@@ -89,8 +139,6 @@ export default function DataInformationQuery({ resource }) {
   let queryBQ
 
   useEffect(() => {
-    if (window) window?.Prism?.highlightAll()
-
     if (resource?.numberRows === 0) return setDownloadNotAllowed(false)
     if (resource?.numberRows) return resource?.numberRows > 200000 ? setDownloadNotAllowed(false) : setDownloadNotAllowed(true)
 
@@ -116,7 +164,6 @@ export default function DataInformationQuery({ resource }) {
     async function sqlCodeString() {
       const result = await getBigTableQuery(resource._id, checkedColumns)
       setSqlCode(result)
-      setIsLoading(false)
     }
 
     if(tabIndex === 0) sqlCodeString()
@@ -324,20 +371,9 @@ export default function DataInformationQuery({ resource }) {
                     </Box>
                   </Box>
 
-                  <Box>
-                    <Text
-                      display="flex"
-                      overflow="hidden"
-                      whiteSpace="break-spaces"
-                      fontFamily="Roboto"
-                      fontSize="14px"
-                      fontWeight="400"
-                      lineHeight="20px"
-                      color="#252A32"
-                    >
-                      {sqlCode}
-                    </Text>
-                  </Box>
+                  <CodeHighlight language="sql">
+                    {sqlCode}
+                  </CodeHighlight>
                 </>
               }
               {/* {resource?.isClosed ?
