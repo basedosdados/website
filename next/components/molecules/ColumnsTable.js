@@ -89,7 +89,7 @@ export default function ColumnsTable({
   checkedColumns,
   onChangeCheckedColumns,
   setHasLoading,
-  template = "default"
+  template
 }) {
   const [resource, setResource] = useState({})
   const [columns, setColumns] = useState({})
@@ -128,7 +128,6 @@ export default function ColumnsTable({
         if(result) {
           setResource(result.sort(sortElements))
           setColumns(result.sort(sortElements))
-          onChangeCheckedColumns(result.sort(sortElements).map(column => column.node.name))
           setHasLoading(false)
           setIsSearchLoading(false)
           setIsLoading(false)
