@@ -4,14 +4,13 @@ import {
   AccordionIcon,
   AccordionItem,
   Box,
-  Checkbox,
   CheckboxGroup,
   VStack,
   Text,
-  Image,
   HStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import Checkbox from "../atoms/Checkbox";
 import ControlledInput from "./ControlledInput";
 import SectionText from "./SectionText";
 import SearchIcon from "../../public/img/icons/searchIcon"
@@ -163,17 +162,26 @@ export function CheckboxFilterAccordion({
           padding="8px 0"
         >
           {options.length > 0 && options.map((c) => (
-            <Checkbox
+            <label
               key={c[valueField]}
-              fontFamily="Lato"
-              value={c[valueField]}
-              color="#7D7D7D"
-              colorScheme="green"
-              letterSpacing="0.5px"
-              onChange={(e) => { onChange(e.target.value)}} 
+              style={{
+                display:"flex",
+                flexDirection:"row",
+                gap:"8px",
+                cursor:"pointer",
+                alignItems:"center",
+                color:"#7D7D7D",
+                fontFamily:"Lato",
+                letterSpacing:"0.5px",
+              }}
             >
+              <Checkbox
+                value={c[valueField]}
+                onChange={(e) => { onChange(e.target.value)}} 
+              />
+
               {c[displayField]} {c["count"] ? `(${c["count"]})` : `(0)`}
-            </Checkbox>
+            </label>
           ))}
         </VStack>
       </CheckboxGroup>
@@ -260,73 +268,6 @@ export function RangeFilterAccordion({
         ) : (
           <></>
         )}
-      </VStack>
-    </BaseFilterAccordion>
-  );
-}
-
-export function FilterAccordion({
-  fieldName,
-  choices,
-  onChange,
-  onToggle,
-  value,
-  bdPlus = null,
-  bdPro = false,
-  valueField = "id",
-  displayField = "display_name",
-  isOpen = null,
-  alwaysOpen = false,
-  isActive = false,
-  isHovering,
-}) {
-  if(choices.length < 1) return null
-
-  return (
-    <BaseFilterAccordion
-      isOpen={alwaysOpen ? alwaysOpen : isOpen}
-      alwaysOpen={alwaysOpen}
-      isActive={isActive}
-      onChange={onToggle}
-      isHovering={isHovering}
-      overflowX="hidden"
-      bdPlus={bdPlus}
-      bdPro={bdPro}
-      fieldName={fieldName}
-    >
-      <VStack
-        width="100%"
-        spacing={1}
-        overflowX="hidden !important"
-        alignItems="flex-start"
-      >
-        {choices.map((c) => (
-          <Box
-            borderLeft={
-              c[valueField] === value ? "3px solid #2B8C4D" : "transparent"
-            }
-            width="100%"
-          >
-            <Text
-              fontFamily="Ubuntu"
-              fontSize="14px"
-              lineHeight="16px"
-              letterSpacing="0.2px"
-              cursor="pointer"
-              fontWeight={c[valueField] === value ? "500" : "400"}
-              color={c[valueField] === value ? "#2B8C4D" : "#7D7D7D"}
-              _hover={c[valueField] === value ? "none" : {  opacity: "0.6" , fontWeight: "500" }}
-              padding="8px 24px"
-              transform="translateX(-10px)"
-              zIndex="98"
-              position="relative"
-              width="100%"
-              onClick={() => onChange(c[valueField])}
-            >
-              {c[displayField]}
-            </Text>
-          </Box>
-        ))}
       </VStack>
     </BaseFilterAccordion>
   );

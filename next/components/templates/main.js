@@ -8,6 +8,7 @@ export function MainPageTemplate({
   backgroundColor = "#FFFFFF",
   cleanTemplate = false,
   userTemplate = false,
+  footerTemplate = "default",
   ...style
 }) {
 
@@ -16,13 +17,13 @@ export function MainPageTemplate({
       <SiteHead />
       <Menu simpleTemplate={cleanTemplate} userTemplate={userTemplate}/>
       <Box
-        paddingTop="72px"
+        paddingTop="70px"
         paddingBottom="50px"
         {...style}
       >
         {children}
       </Box>
-      <Footer ocult={cleanTemplate || userTemplate}/>
+      <Footer template={footerTemplate} ocult={cleanTemplate || userTemplate}/>
     </Box>
   );
 }

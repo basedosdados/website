@@ -26,7 +26,7 @@ import { useRouter } from "next/router"
 import cookies from "js-cookie";
 import MenuDropdown from "./MenuDropdown";
 import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook"
-import ControlledInput from "../atoms/ControlledInput";
+import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
 import { triggerGAEvent } from "../../utils";
@@ -37,7 +37,6 @@ import BDLogoLabImage from "../../public/img/logos/bd_logo_lab";
 import BDLogoImage from "../../public/img/logos/bd_logo";
 import FarBarsIcon from "../../public/img/icons/farBarsIcon";
 import SearchIcon from "../../public/img/icons/searchIcon";
-import CrossIcon from "../../public/img/icons/crossIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 import SettingsIcon from "../../public/img/icons/settingsIcon";
 import SignOutIcon from "../../public/img/icons/signOutIcon";
@@ -322,7 +321,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
       <Box
         cursor="pointer"
         position="fixed"
-        right="24px"
+        right="20px"
         height="40px"
         width="40px"
         borderRadius="50%"
@@ -471,169 +470,108 @@ function MenuUser ({ userData, onOpen, onClose }) {
 
 }
 
-function SearchInput ({ status }) {
-  const router = useRouter()
-  const { query } = router
-  const [showSearchInput, setShowSearchInput] = useState(false)
-
-  const [showSearch, setShowSearch] = useState(false)
+function SearchInputUser ({ user }) {
+  const inputMobileRef = useRef(null)
   const [search, setSearch] = useState("")
+  const [showInput, setShowInput] = useState(false)
+  const [inputFocus, setInputFocus] = useState(false)
 
-  const searchStatus = () => {
-    const newStatus = !showSearch
-    setShowSearch(newStatus)
-    status({
-      status: newStatus
-    })
+  function openSearchLink() {
+    if(search.trim() === "") return
+    triggerGAEvent("search_menu", search.trim())
+    window.open(`/dataset?q=${search.trim()}`, "_self")
+  }
+
+  const handleClickOutside = (event) => {
+    if (inputMobileRef.current && !inputMobileRef.current.contains(event.target)) {
+      setShowInput(false);
+    }
   }
 
   useEffect(() => {
-    if(query.dataset) return setShowSearchInput(true)
-  },[query])
+    if (showInput) {
+      document.addEventListener('click', handleClickOutside)
+    } else {
+      document.removeEventListener('click', handleClickOutside)
+    }
+    
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [showInput])
 
-  function openSearchLink() {
-    triggerGAEvent("search_menu", search)
-    window.open(`/dataset?q=${search}`, "_self")
-  }
-
-  if(!showSearchInput) return null
-  
-  return (
-    <>
-      {!showSearch ? 
-        <SearchIcon
-          alt="pesquisar"
-          fill="#404245"
-          width="18px"
-          height="18px"
-          marginRight="14px !important"
-          cursor="pointer"
-          _hover={{opacity:"0.8"}}
-          onClick={searchStatus}
-        />
-      :
-        <ControlledInput
-          flex={2}
-          maxWidth="360px"
+  if (isMobileMod()) return (
+    <Stack spacing={0} width="100%" marginRight={user ? "60px !important" : "0"}>
+      <Stack
+        display={showInput ? "flex" :"none"}
+        position="absolute"
+        top="0"
+        left="0"
+        backgroundColor="#FFF"
+        width="100vw"
+        height="70px"
+        padding="16px 20px"
+        zIndex={99}
+      >
+        <ControlledInputSimple
+          width="100%"
           value={search}
           onChange={setSearch}
           onEnterPress={openSearchLink}
+          refInput={inputMobileRef}
+          inputFocus={showInput}
+          changeInputFocus={setShowInput}
           placeholder="Pesquise dados"
-          alignSelf="center"
-          marginLeft="20px !important"
-          justifyContent="center"
-          marginRight="10px"
-          autoComplete="off"
-          inputStyle={{
-            height: "40px",
-            fontSize: "16px",
-            width: "100%",
-            borderRadius: "16px",
-            _placeholder:{color: "#6F6F6F"},
-          }}
-          rightIcon={
-            <CrossIcon
-              alt="fecha pesquisa"
-              fill="#404245"
-              width="24px"
-              height="24px"
+          fill="#464A51"
+          fillHover="#878A8E"
+          icon={
+            <SearchIcon
+              alt="pesquisar"
+              width="16.8px"
+              height="16.8px"
               cursor="pointer"
-              _hover={{opacity:"0.8"}}
-              onClick={searchStatus}
+              onClick={() => openSearchLink()}
             />
           }
         />
-      }
-    </>
+      </Stack>
+
+      <SearchIcon
+        display={showInput ? "none" : "flex"}
+        alt="pesquisar"
+        fill="#464A51"
+        width="18px"
+        height="18px"
+        marginLeft="auto !important"
+        cursor="pointer"
+        _hover={{opacity:"0.8"}}
+        onClick={() => {
+          setShowInput(true)
+          setTimeout(() => {
+            inputMobileRef.current.focus()
+          }, 0)
+        }}
+      />
+    </Stack>
   )
-}
-
-function SearchInputUser () {
-  const [search, setSearch] = useState("")
-  const [showSearch, setShowSearch] = useState(false)
-
-  function openSearchLink() {
-    triggerGAEvent("search_menu", search)
-    window.open(`/dataset?q=${search}`, "_self")
-  }
-
-  // if(isMobileMod()) return (
-  //   <Stack spacing={0} marginLeft="auto !important" paddingRight="60px">
-  //     <SearchIcon
-  //       display={showSearch ? "none" : "flex"}
-  //       right="100px"
-  //       alt="pesquisar"
-  //       fill="#D0D0D0"
-  //       width="18px"
-  //       height="18px"
-  //       cursor="pointer"
-  //       _hover={{opacity:"0.8"}}
-  //       onClick={() => setShowSearch(true)}
-  //     />
-  //     <Box transition="1s" overflow="hidden" width={showSearch ? "100%" : "0"} maxWidth="160px">
-  //       <ControlledInput
-  //         maxWidth="480px"
-  //         width="480px"
-  //         value={search}
-  //         onChange={setSearch}
-  //         onEnterPress={openSearchLink}
-  //         placeholder="Pesquise dados"
-  //         alignSelf="center"
-  //         justifyContent="center"
-  //         inputStyle={{
-  //           height: "40px",
-  //           fontSize: "16px",
-  //           width: "100%",
-  //           fontFamily: "Lato",
-  //           borderRadius: "14px",
-  //           _placeholder:{color: "#6F6F6F"}
-  //         }}
-  //         rightIcon={
-  //           <SearchIcon
-  //             alt="pesquisar"
-  //             fill="#D0D0D0"
-  //             width="18px"
-  //             height="18px"
-  //             cursor="pointer"
-  //             _hover={{opacity:"0.8"}}
-  //             onClick={() => openSearchLink()}
-  //           />
-  //         }
-  //       />
-  //     </Box>
-  //   </Stack>
-  // )
-
-  if(isMobileMod()) return null
 
   return (
     <Stack spacing={0}>
-      <ControlledInput
-        maxWidth="480px"
-        width="480px"
+      <ControlledInputSimple
         value={search}
         onChange={setSearch}
         onEnterPress={openSearchLink}
+        inputFocus={inputFocus}
+        changeInputFocus={setInputFocus}
         placeholder="Pesquise dados"
-        alignSelf="center"
-        justifyContent="center"
-        autoComplete="off"
-        inputStyle={{
-          height: "40px",
-          fontSize: "16px",
-          width: "100%",
-          fontFamily: "Lato",
-          borderRadius: "14px",
-          _placeholder:{color: "#6F6F6F"}
-        }}
-        rightIcon={
+        fill="#464A51"
+        fillHover="#878A8E"
+        icon={
           <SearchIcon
             alt="pesquisar"
-            fill="#D0D0D0"
-            width="18px"
-            height="18px"
+            width="16.8px"
+            height="16.8px"
             cursor="pointer"
-            _hover={{opacity:"0.8"}}
             onClick={() => openSearchLink()}
           />
         }
@@ -643,12 +581,6 @@ function SearchInputUser () {
 }
 
 function DesktopLinks({ userData, links, position = false, path, userTemplate = false }) {
-  const [statusSearch, setStatusSearch] = useState(false)
-
-  const searchStatus = (elm) => {
-    setStatusSearch(elm.status)
-  }
-
   function LinkMenuDropDown ({ url, text, icon }) {
     const [flag, setFlag] = useBoolean()
 
@@ -689,8 +621,8 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
       transition="1s"
       marginLeft={
         path === "/" ?
-        !position ? "0 !important" : "32px !important"
-        : "32px !important"
+        !position ? "0 !important" : "28px !important"
+        : "28px !important"
       }
     >
       <HStack display={userTemplate ? "none" : "flex"} width="100%" flex="3" spacing={7}>
@@ -759,31 +691,28 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
         })}
       </HStack>
 
-      <SearchInput status={searchStatus}/>
-      {userTemplate && !isMobileMod() && <SearchInputUser />}
+      {userTemplate && !isMobileMod() && <SearchInputUser user={userData !== null}/>}
 
-      {!statusSearch &&
-        <HStack spacing={8} display={{ base: "none", lg: "flex" }}>
-          {userData ? (
-            <HStack spacing="20px">
-              <MenuUser userData={userData}/>
-            </HStack>
-          ) : (
-            <>
-              <Link fontSize="15px" fontFamily="Ubuntu" fontWeight="400" letterSpacing="0.3px" href="/user/login">
-                Entrar
-              </Link>
-              <Link _hover={{ opacity:"none" }} href="/user/register">
-                <RoundedButton height="35px" fontSize="15px" minWidth="110px" borderRadius="30px">
-                  Cadastrar
-                </RoundedButton>
-              </Link>
-            </>
-          )}
-        </HStack>
-      }
+      <HStack spacing={8} display={{ base: "none", lg: "flex" }}>
+        {userData ? (
+          <HStack spacing="20px">
+            <MenuUser userData={userData}/>
+          </HStack>
+        ) : (
+          <>
+            <Link fontSize="15px" fontFamily="Ubuntu" fontWeight="400" letterSpacing="0.3px" href="/user/login">
+              Entrar
+            </Link>
+            <Link _hover={{ opacity:"none" }} href="/user/register">
+              <RoundedButton height="35px" fontSize="15px" minWidth="110px" borderRadius="30px">
+                Cadastrar
+              </RoundedButton>
+            </Link>
+          </>
+        )}
+      </HStack>
     </HStack>
-  );
+  )
 }
 
 export default function MenuNav({ simpleTemplate = false, userTemplate = false }) {
@@ -796,6 +725,11 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   const divRef = useRef()
   const [isScrollDown, setIsScrollDown] = useState(false)
   const [userData, setUserData] = useState(null)
+
+  function maxWidthDataset() {
+    if (route === "/dataset" || route === "/dataset/[dataset]") return "1440px"
+    return "1264px"
+  }
 
   useEffect(() => {
     let userInfo = userBD
@@ -833,7 +767,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     ],
     Contato: "/contato",
     Button: []
-  };
+  }
 
   useEffect(() => {
     document.addEventListener("scroll", () => {
@@ -863,7 +797,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         width="100%"
         left="0px"
         backgroundColor="#FFFFFF"
-        padding="16px 28px"
+        padding={isMobileMod() ? "15px 20px" : "15px 24px"}
         zIndex="99"
         transition="0.5s"
         as="nav"
@@ -872,7 +806,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
           justifyContent={simpleTemplate || userTemplate ? "flex-start" : { base: "center", lg: "flex-start" }}
           width="100%"
           height="40px"
-          maxWidth="1264px"
+          maxWidth={maxWidthDataset()}
           margin="0 auto"
           spacing={6}
         >
@@ -883,6 +817,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
               top="0"
               left="0"
               margin="20px 0 0 20px"
+              marginRight="auto"
               width="30px"
               height="30px"
               onClick={menuDisclosure.onOpen}
@@ -895,8 +830,13 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
             aria-label="Home"
             width={
               route === "/" ?
-              isScrollDown ? "88px" : "0"
-              : "88px"
+              isScrollDown ? "80px" : "0"
+              : "80px"
+            }
+            minWidth={
+              route === "/" ?
+              isScrollDown ? "80px" : "0"
+              : "80px"
             }
             _hover={{opacity:"none"}}
             href={route === "/" ? "/#home" : "/"}
@@ -921,7 +861,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
             />
           }
 
-          {userTemplate && isMobileMod() && <SearchInputUser />}
+          {userTemplate && isMobileMod() && <SearchInputUser user={userData !== null}/>}
 
           {useCheckMobile() && userData &&
             <MenuUser

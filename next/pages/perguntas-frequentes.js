@@ -53,12 +53,11 @@ const QuestionsBox = ({ question, answer, id, active }) => {
 
   const OpenCloseQuestion = () => {
     setIsActive(!isActive)
-    window.Prism.highlightAll()
   }
 
   return (
     <Stack
-      spacing={0} 
+      spacing={0}
       className={styles.questionContainer}
     >
       <Box
@@ -278,8 +277,9 @@ export default function FAQ({}) {
                 Infelizmente, não encontramos nenhuma pergunta relacionada à sua busca.
               </BodyText>
             :
-              questions.map((elm) => 
+              questions.map((elm, i) => 
                 <QuestionsBox
+                  key={i}
                   question={elm.question}
                   answer={elm.answer}
                   id={elm.id && elm.id}
@@ -300,9 +300,6 @@ export default function FAQ({}) {
           </Stack>
         </Stack>
       </VStack>
-
-      <script key="sql" src="/vendor/prism.js"/>
-      <link rel="stylesheet" href="/vendor/prism.css" data-noprefix />
     </MainPageTemplate>
   )
 }

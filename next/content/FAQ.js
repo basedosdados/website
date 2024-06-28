@@ -433,7 +433,7 @@ export const QuestionFAQ = [
             Para verificar uma amostra de todas as variáveis da tabela, use: 
           </p>
 
-          <code className="language-sql" style={{margin: "16px 0", padding: "6px"}}>
+          <code style={{margin: "16px 0", padding: "6px"}}>
             {`SELECT * FROM  dataset.table_name LIMIT 100`}
           </code>
           
@@ -441,11 +441,11 @@ export const QuestionFAQ = [
             <li>
               A primeira dica valiosa é selecionar as colunas que você vai usar.
               O BigQuery funciona usando um modelo colunar, portanto, quanto menos colunas você usar,
-              melhor vai ser o desempenho da sua consulta. Isso significa evitar o clássico<br/> <code className="language-sql">SELECT * FROM table_name</code> e
+              melhor vai ser o desempenho da sua consulta. Isso significa evitar o clássico<br/> <code>SELECT * FROM table_name</code> e
               escolher as colunas de seu interesse. Parece chato, mas ajuda muito!
             </li>
             <li>
-              Para tabelas grandes, uma boa prática é filtrar os anos e estados de seu interesse com a cláusula <code className="language-sql">WHERE</code>.
+              Para tabelas grandes, uma boa prática é filtrar os anos e estados de seu interesse com a cláusula <code>WHERE</code>.
               Como utilizamos o sistema de particionamento, isso vai reduzir drasticamente o custo e o tempo de processamento.
             </li>
           </ul>

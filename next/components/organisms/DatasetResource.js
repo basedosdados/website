@@ -1,12 +1,13 @@
 import {
   Stack,
   VStack,
+  Box,
+  HStack,
+  Divider,
+  Text
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { isMobileMod } from "../../hooks/useCheckMobile.hook";
-
-import { FilterAccordion } from "../atoms/FilterAccordion";
 
 import BdmTablePage from "./BdmTablePage";
 import RawDataSourcesPage from "./RawDataSourcesPage";
@@ -65,70 +66,115 @@ export default function DatasetResource({
     return null
   }
 
+  function ContentFilter({
+    fieldName,
+    choices,
+    onChange,
+    value,
+    hasDivider = true
+  }) {
+    if(choices.length < 1) return null
+
+    return (
+      <Box>
+        <Divider
+          display={hasDivider ? "flex" : "none"}
+          marginY="24px"
+          borderColor="#DEDFE0"
+        />
+
+        <Text
+          paddingLeft="15px"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="14px"
+          lineHeight="20px"
+          color="#252A32"
+          marginBottom="8px"
+        >
+          {fieldName}
+        </Text>
+
+        <Box>
+          {choices.map((elm, i) => (
+            <HStack
+              key={i}
+              spacing="4px"
+              cursor="pointer"
+            >
+              <Box 
+                width="3px"
+                height="24px"
+                backgroundColor={elm._id === value && "#2B8C4D"}
+                borderRadius="10px"
+              />
+              <Text
+                width="100%"
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="14px"
+                lineHeight="20px"
+                color={elm._id === value ? "#2B8C4D" : "#71757A"}
+                backgroundColor={elm._id === value && "#F7F7F7"}
+                _hover={{
+                  backgroundColor:"#F7F7F7",
+                  color: "#9D9FA3"
+                }}
+                borderRadius="8px"
+                padding="6px 8px"
+                onClick={() => onChange(elm._id)}
+              >
+                {elm.name || elm.number}
+              </Text>
+            </HStack>
+          ))}
+        </Box>
+      </Box>
+    )
+  }
+
   return (
     <Stack
-      paddingTop="24px"
+      paddingTop="32px"
       direction={{ base: "column", lg: "row" }}
-      spacing={4}
+      gap="24px"
+      spacing={0}
       width="100%"
     >
-      <VStack
-        minWidth={{ base: "100%", lg: "250px" }}
-        maxWidth={{ base: "100%", lg: "250px" }}
-        spacing={2}
-        align="flex-start"
-        justify="flex-start"
-        borderRight={!isMobileMod() && "1px solid #DEDFE0"}
+      <Stack
+        minWidth={{base: "100%", lg: "272px"}}
+        spacing={0}
       >
-        <FilterAccordion
-          alwaysOpen={true}
+        <ContentFilter
+          fieldName="Tabelas tratadas"
           choices={tables}
           value={query.table}
-          valueField="_id"
-          displayField="name"
-          fieldName="Tabelas tratadas"
-          isHovering={false}
           onChange={(id) => {
             pushQuery("table", id)
           }}
+          hasDivider={false}
         />
 
-        <FilterAccordion
-          alwaysOpen={true}
+        <ContentFilter
+          fieldName="Fontes originais"
           choices={rawDataSources}
           value={query.raw_data_source}
-          valueField="_id"
-          displayField="name"
-          fieldName="Fontes originais"
-          isHovering={false}
           onChange={(id) => {
             pushQuery("raw_data_source", id)
           }}
         />
 
-        <FilterAccordion
-          alwaysOpen={true}
+        <ContentFilter
+          fieldName="Pedidos LAI"
           choices={informationRequests}
           value={query.information_request}
-          valueField="_id"
-          displayField="number"
-          fieldName="Pedidos LAI"
-          isHovering={false}
           onChange={(id) => {
             pushQuery("information_request", id)
           }}
         />
-      </VStack>
+      </Stack>
 
-      <VStack
-        width="100%"
-        overflow="hidden"
-        marginLeft={{base:"0", lg: "32px !important", xl: "40px !important"}}
-        alignItems="flex-start"
-        flex="1"
-      >
-        <SwitchResource route={query}/>
-      </VStack>
+      <SwitchResource route={query}/>
     </Stack>
   )
 }

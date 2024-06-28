@@ -1,34 +1,31 @@
 import {
   VStack,
   Stack,
-  Center,
   Tabs,
   TabList,
+  TabIndicator,
   TabPanel,
-  TabPanels
+  TabPanels,
+  Grid,
+  GridItem,
+  Image,
+  Text,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 
 import BigTitle from "../../components/atoms/BigTitle";
-import Subtitle from "../../components/atoms/Subtitle";
-import SectionText from "../../components/atoms/SectionText";
 import Link from "../../components/atoms/Link";
 import GreenTab from "../../components/atoms/GreenTab";
 import ReadMore from "../../components/atoms/ReadMore";
 import HelpWidget from "../../components/atoms/HelpWidget";
-import { ImageOrganization } from "../../components/atoms/ImageOrganization";
-import { TemporalCoverageString } from "../../components/molecules/TemporalCoverageDisplay";
 import DatasetResource from "../../components/organisms/DatasetResource";
-import { MetadataPage } from "../../components/organisms/MetadataPage";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import FourOFour from "../../components/templates/404";
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
-import DocIcon from "../../public/img/icons/docIcon";
-import CrossIcon from "../../public/img/icons/crossIcon";
+import CrossingIcon from "../../public/img/icons/crossingIcon";
 
 import {
   getListDatasets,
@@ -59,9 +56,7 @@ export async function getStaticPaths(context) {
   }
 }
 
-export default function DatasetPage ({
-  dataset,
-}) {
+export default function DatasetPage ({ dataset }) {
   const router = useRouter()
   const { query } = router
   const [tabIndex, setTabIndex] = useState(0)
@@ -72,10 +67,10 @@ export default function DatasetPage ({
     if(isDatasetEmpty) return router.push(`${process.env.NEXT_PUBLIC_API_URL}/dataset_redirect?dataset=${query.dataset}`)
   }, [])
 
-  if(isDatasetEmpty) return <MainPageTemplate><FourOFour/></MainPageTemplate>
+  if(isDatasetEmpty) return <MainPageTemplate userTemplate><FourOFour/></MainPageTemplate>
 
   return (
-    <MainPageTemplate>
+    <MainPageTemplate userTemplate footerTemplate="simple">
       <Head>
         <title>{dataset.name} – Base dos Dados</title>
 
@@ -102,104 +97,141 @@ export default function DatasetPage ({
       </Head>
 
       <VStack
-        margin="40px auto auto"
-        width={{ base: "90vw", lg: "80vw" }}
-        maxWidth="1264px"
+        maxWidth="1440px"
+        marginX="auto"
+        boxSizing="content-box"
+        overflow="auto"
+        paddingX="24px"
+        spacing={0}
       >
-        <Stack
-          direction={{ base: "column", lg: "row" }}
-          marginRight="auto"
-          spacing={10}
-          align="flex-start"
+        <Grid
+          templateColumns={{ base: "1fr", lg: "300px 1fr" }}
+          width="100%"
+          gap="24px"
+          paddingY="24px"
         >
-          <Center
-            paddingTop="4px"
-            width="100%"
-            minWidth="235px"
-            height="100%"
-          >
-            <ImageOrganization image={dataset?.organization?.picture}/>
-          </Center>
+          <GridItem display="flex" justifyContent="center" >
+            <Image
+              src={dataset?.organization?.picture ? dataset?.organization?.picture : `https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png`}
+              objectFit="cover"
+              width="300px"
+              height="182px"
+              borderRadius="16px"
+            />
+          </GridItem>
 
-          <VStack spacing={0} align="flex-start" width="100%">
-            <BigTitle
-              overflow="hidden"
-              textOverflow="ellipsis"
-              whiteSpace="nowrap"
-              width={{ base: "90vw", lg: "60vw" }}
-              maxWidth="970px"
-              paddingBottom="8px"
+          <GridItem>
+            <Grid
+              templateColumns="1fr 1fr"
+              gap="8px"
             >
-              {dataset.name || "Conjunto sem nome"}
-            </BigTitle>
-
-            <ReadMore minHeight="70px" isMobileMod={isMobileMod()}>
-              {dataset?.description || "Nenhuma descrição fornecida."}
-            </ReadMore>
-
-            <VStack align="flex-start" spacing={5} paddingTop="20px">
-              <VStack align="flex-start">
-                <Subtitle>Organização</Subtitle>
-                <Link
-                  marginTop="4px !important"
-                  href={`/dataset?organization=${dataset?.organization?.slug || ""}`}
+              <GridItem colSpan={2}>
+                <BigTitle
+                  width="100%"
+                  overflow="hidden"
+                  textOverflow="ellipsis"
+                  whiteSpace={{base: "inherit", lg:"nowrap"}}
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  lineHeight="42px"
                 >
-                  <SectionText
-                    fontSize={isMobileMod() ? "14px" : "16px"}
+                  {dataset.name || "Conjunto sem nome"}
+                </BigTitle>
+              </GridItem>
+
+              <GridItem colSpan={2} minHeight="60px" marginBottom="8px">
+                <ReadMore id="readLessDataset">
+                  {dataset?.description || "Nenhuma descrição fornecida."}
+                </ReadMore>
+              </GridItem>
+
+              <GridItem colSpan={{ base: 2, lg: 1 }}>
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="18px"
+                  lineHeight="28px"
+                  color="#252A32"
+                  marginBottom="8px"
+                >
+                  Cobertura temporal do conjunto
+                </Text>
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#464A51"
+                >
+                  {dataset.coverage || "Nenhuma cobertura temporal fornecida."}
+                </Text>
+              </GridItem>
+
+              <GridItem colSpan={{ base: 2, lg: 1 }}>
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="18px"
+                  lineHeight="28px"
+                  color="#252A32"
+                  marginBottom="8px"
+                >
+                  Organização
+                </Text>
+                <Link href={`/dataset?organization=${dataset?.organization?.slug || ""}`}>
+                  <Text
+                    fontFamily="Roboto"
+                    fontWeight="400"
+                    fontSize="14px"
+                    lineHeight="20px"
+                    color="#464A51"
                   >
-                    {dataset?.organization?.name || "Não listado"}
-                  </SectionText>
+                    {dataset?.organization?.name || "Nenhuma organização fornecida."}
+                  </Text>
                 </Link>
-              </VStack>
-
-              <VStack align="flex-start">
-                <Subtitle>Cobertura temporal</Subtitle>
-                <SectionText
-                  marginTop="4px !important"
-                  fontSize={isMobileMod() ? "14px" : "16px"}
-                >
-                  <TemporalCoverageString
-                    value={dataset.coverage ? dataset.coverage :""}
-                  />
-                </SectionText>
-              </VStack>
-            </VStack>
-          </VStack>
-        </Stack>
+              </GridItem>
+            </Grid>
+          </GridItem>
+        </Grid>
 
         <Tabs
           onChange={(index) => setTabIndex(index)}
+          variant="unstyled"
           isLazy
-          paddingTop="32px"
-          width={{ base: "90vw", lg: "100%" }}
+          width="100%"
         >
           <TabList
             padding="0px"
-            fontFamily="ubuntu !important"
             borderBottom= "2px solid #DEDFE0 !important"
           >
             <GreenTab>
               <DataBaseIcon
                 alt="dados"
-                width="22px"
-                height="22px"
+                width="18px"
+                height="18px"
                 marginRight="6px"
-                fill={tabIndex === 0 ? "#2B8C4D" :"#C4C4C4"}
               />
               Dados
             </GreenTab>
-            {/* <GreenTab>
-              <DocIcon
-                alt="metadados"
-                width="24px"
+
+            <GreenTab display="none">
+              <CrossingIcon
+                alt="cruzamento"
+                width="28px"
                 height="24px"
-                marginRight="6px"
-                fill={tabIndex === 1 ? "#2B8C4D" :"#C4C4C4"}
+                marginRight="2px"
               />
-              Metadados
-            </GreenTab> */}
-            {dataset?.slug === "br_ibge_ipca" && <GreenTab>Painéis</GreenTab>}
+              Cruzamento
+            </GreenTab>
           </TabList>
+
+          <TabIndicator
+            marginTop="-4px"
+            height="3px"
+            bg="#2B8C4D"
+            borderRadius="100"
+          />
+
           <TabPanels>
             <TabPanel padding="0px">
               <DatasetResource
@@ -207,21 +239,8 @@ export default function DatasetPage ({
               />
             </TabPanel>
 
-            {/* 
-              // precisa retrabalhar o MetadataPage
-            <TabPanel padding="0px" pt="20px">
-              <MetadataPage/>
-            </TabPanel> 
-            */}
-
-            {dataset?.slug === "br_ibge_ipca" &&
-              <TabPanel padding="0px">
-                {/* <DashboardsPage
-                  dataset={dataset}
-                  availableOptionsTranslations={availableOptionsTranslations}
-                /> */}
-              </TabPanel>
-            }
+            <TabPanel padding="0px">
+            </TabPanel>
           </TabPanels>
         </Tabs>
       </VStack>
@@ -242,11 +261,6 @@ export default function DatasetPage ({
           {name:"Entre em contato", url: "/contato"},
         ]}
       />
-
-      <Stack display={query?.hasOwnProperty("table") !== "none"}>
-        <script key="sql" src="/vendor/prism.js"/>
-        <link rel="stylesheet" href="/vendor/prism.css" data-noprefix />
-      </Stack>
     </MainPageTemplate>
   )
 }

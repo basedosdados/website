@@ -38,14 +38,6 @@ function isNumeric(str) {
   return true;
 }
 
-export function limitTextSize(text, size) {
-  if (text.length > size) {
-    return text.slice(0, size) + "...";
-  }
-
-  return text;
-}
-
 export function translate(keyTranslations, valueTranslations, object) {
   const formatObject = (value) => {
     if(typeof value === "object") {
@@ -222,4 +214,18 @@ export function cleanString(string) {
   const returnString = newString.replace(/\s+/g, ' ')
 
   return returnString
+}
+
+export function formatBytes(bytes) {
+  if (bytes < 1024) {
+    return `${bytes}B`
+  } else if (bytes < 1024 * 1024) {
+    return `${(bytes / 1024).toFixed(2)} KB`
+  } else if (bytes < 1024 * 1024 * 1024) {
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`
+  } else if (bytes < 1024 * 1024 * 1024 * 1024) {
+    return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`
+  } else {
+    return `${(bytes / (1024 * 1024 * 1024 * 1024)).toFixed(2)} TB`
+  }
 }

@@ -18,13 +18,8 @@ export default async function getColumnsBdmTable(id) {
                   edges {
                     node {
                       _id
-                      name
                       order
-                      bigqueryType {
-                        name
-                      }
-                      description
-                      coverage
+                      name
                       coveredByDictionary
                       directoryPrimaryKey {
                         _id
@@ -38,6 +33,11 @@ export default async function getColumnsBdmTable(id) {
                           }
                         }
                       }
+                      description
+                      bigqueryType {
+                        name
+                      }
+                      coverage
                       measurementUnit
                       containsSensitiveData
                       observations
