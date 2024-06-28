@@ -14,13 +14,13 @@ export default function HelpWidget({options, tooltip}) {
       if(option.name){ return (
         <MenuItem
           key={i}
-          letterSpacing="0.3px"
-          lineHeight="16px"
+          letterSpacing="0.1px"
+          lineHeight="18px"
           fontWeight="400"
           fontSize="12px"
-          fontFamily="ubuntu"
-          backgroundColor="#FFF"
+          fontFamily="Roboto"
           color="#252A32"
+          backgroundColor="#FFF"
           padding="0 16px 10px"
           _focus={{backgroundColor: "transparent"}}
           _hover={{backgroundColor: "transparent", opacity: "0.6"}}
@@ -39,12 +39,12 @@ export default function HelpWidget({options, tooltip}) {
           <Tooltip 
             backgroundColor="#FFF"
             borderRadius="8px"
-            color="#252A32"
-            fontSize="12px"
+            letterSpacing="0.1px"
+            lineHeight="18px"
             fontWeight="400"
-            fontFamily="ubuntu"
-            lineHeight="16px"
-            letterSpacing="0.3px"
+            fontSize="12px"
+            fontFamily="Roboto"
+            color="#252A32"
             padding="8px 12px"
             boxShadow="0 2px 16px rgba(0, 0, 0, 0.16)"
             placement="top-start"

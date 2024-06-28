@@ -169,9 +169,10 @@ export default function DataInformationQuery({ resource }) {
   const [downloadNotAllowed, setDownloadNotAllowed] = useState(false)
   const [checkedColumns, setCheckedColumns] = useState([])
   const [sqlCode, setSqlCode] = useState("")
-  const [hasLoadingColumns, setHasLoadingColumns] = useState(false)
+  const [hasLoadingColumns, setHasLoadingColumns] = useState(true)
   const [isLoadingCode, setIsLoadingCode] = useState(false)
   const [hasLoadingResponse, setHasLoadingResponse] = useState(false)
+  const [insufficientChecks, setInsufficientChecks] = useState(false)
 
   let gcpDatasetID
   let gcpTableId
@@ -197,6 +198,7 @@ export default function DataInformationQuery({ resource }) {
     setIsLoadingCode(true)
     setHasLoadingResponse(false)
     setSqlCode("")
+    setInsufficientChecks(false)
   }, [resource._id, checkedColumns, tabIndex])
 
   useEffect(() => {
@@ -318,51 +320,61 @@ export default function DataInformationQuery({ resource }) {
               template={tabIndex === 3 ? "download" : "checks"}
             />
 
-            <Box
-              display="none"
-              flexDirection="row"
-              gap="8px"
-              alignItems="center"
+            <Skeleton
+              display={tabIndex === 3 ? "none" : "flex"}
+              startColor="#F0F0F0"
+              endColor="#F3F3F3"
+              borderRadius="6px"
+              height="34px"
+              width="fit-content"
+              isLoaded={!hasLoadingColumns}
             >
-              <label
-                style={{
-                  display:"flex",
-                  flexDirection:"row",
-                  alignItems:"center",
-                  gap:"16px",
-                  fontFamily:"Roboto",
-                  fontWeight:"400",
-                  fontSize:"14px",
-                  lineHeight:"20px",
-                  color:"#252A32"
-                }}>
-                <Toggle /><Text>Traduzir códigos institucionais</Text>
-              </label>
-              <Tooltip
-                label="Por exemplo, traduzir o código “2927408” por “Salvador-BA”"
-                hasArrow
-                padding="16px"
-                backgroundColor="#252A32"
-                boxSizing="border-box"
-                borderRadius="8px"
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="14px"
-                lineHeight="20px"
-                textAlign="center"
-                color="#FFFFFF"
-                placement="top"
-                maxWidth="180px"
+              <Box
+                display="flex"
+                flexDirection="row"
+                gap="8px"
+                alignItems="center"
               >
-                <InfoIcon
-                  alt="tip"
-                  cursor="pointer"
-                  fill="#878A8E"
-                  width="16px"
-                  height="16px"
-                />
-              </Tooltip>
-            </Box>
+                <label
+                  style={{
+                    display:"flex",
+                    flexDirection:"row",
+                    alignItems:"center",
+                    gap:"16px",
+                    fontFamily:"Roboto",
+                    fontWeight:"400",
+                    fontSize:"14px",
+                    lineHeight:"20px",
+                    color:"#252A32"
+                  }}>
+                  <Toggle /><Text>Traduzir códigos institucionais</Text>
+                </label>
+                <Tooltip
+                  label="Por exemplo, traduzir o código “2927408” por “Salvador-BA”"
+                  hasArrow
+                  padding="16px"
+                  backgroundColor="#252A32"
+                  boxSizing="border-box"
+                  borderRadius="8px"
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  textAlign="center"
+                  color="#FFFFFF"
+                  placement="top"
+                  maxWidth="180px"
+                >
+                  <InfoIcon
+                    alt="tip"
+                    cursor="pointer"
+                    fill="#878A8E"
+                    width="16px"
+                    height="16px"
+                  />
+                </Tooltip>
+              </Box>
+            </Skeleton>
 
             {checkedColumns.length > 0 &&
               <Skeleton
@@ -382,6 +394,23 @@ Para otimizar a consulta, você pode selecionar menos colunas ou adicionar filtr
               </Skeleton>
             }
 
+            {insufficientChecks &&
+              <Skeleton
+                display={tabIndex === 3 ? "none" : ""}
+                startColor="#F0F0F0"
+                endColor="#F3F3F3"
+                borderRadius="6px"
+                height="100%"
+                width="100%"
+                isLoaded={!hasLoadingColumns}
+              >
+                <AlertDiscalimerBox
+                  type="error"
+                  text={`Por favor, selecione acima as colunas que você deseja acessar.`}
+                />
+              </Skeleton>
+            }
+
             <Skeleton
               display={tabIndex !== 3 ? "flex" : "none"}
               startColor="#F0F0F0"
@@ -391,52 +420,34 @@ Para otimizar a consulta, você pode selecionar menos colunas ou adicionar filtr
               width="fit-content"
               isLoaded={!hasLoadingColumns}
             >
-              <Tooltip
-                label="Por favor, selecione acima as colunas que você deseja acessar"
-                hasArrow
-                padding="16px"
-                backgroundColor="#252A32"
-                boxSizing="border-box"
+              <Box
+                as="button"
+                onClick={() => {
+                  if(checkedColumns.length === 0) return setInsufficientChecks(true)
+                  setHasLoadingResponse(true)
+                }}
+                target="_blank"
+                display="flex"
+                alignItems="center"
+                height="40px"
+                width="fit-content"
                 borderRadius="8px"
+                backgroundColor="#2B8C4D"
+                padding="8px 16px"
+                cursor="pointer"
+                color="#FFF"
+                fill="#FFF"
                 fontFamily="Roboto"
-                fontWeight="400"
+                fontWeight="500"
                 fontSize="14px"
+                gap="8px"
                 lineHeight="20px"
-                textAlign="center"
-                color="#FFFFFF"
-                placement="top"
-                maxWidth="180px"
-                isDisabled={checkedColumns.length === 0 ? false : true}
+                _hover={{
+                  backgroundColor:"#80BA94"
+                }}
               >
-                <Box
-                  as="button"
-                  onClick={() => {
-                    if(checkedColumns.length === 0) return
-                    setHasLoadingResponse(true)
-                  }}
-                  target="_blank"
-                  display="flex"
-                  alignItems="center"
-                  height="40px"
-                  width="fit-content"
-                  borderRadius="8px"
-                  backgroundColor={checkedColumns.length === 0 ? "#ACAEB1" : "#2B8C4D"}
-                  padding="8px 16px"
-                  cursor={checkedColumns.length === 0 ? "default" : "pointer"}
-                  color="#FFF"
-                  fill="#FFF"
-                  fontFamily="Roboto"
-                  fontWeight="500"
-                  fontSize="14px"
-                  gap="8px"
-                  lineHeight="20px"
-                  _hover={{
-                    backgroundColor: checkedColumns.length === 0 ? "#ACAEB1" : "#80BA94"
-                  }}
-                >
-                  Gerar consulta
-                </Box>
-              </Tooltip>
+                Gerar consulta
+              </Box>
             </Skeleton>
           </Box>
 
@@ -720,7 +731,7 @@ read_sql(query, billing_project_id = get_billing_id())
               display={!hasLoadingColumns ? "flex" : "none"}
               flexDirection="column"
               gap="16px"
-              marginTop="40px"
+              marginTop="16px"
               padding={0}
             >
               {downloadNotAllowed ?
@@ -750,7 +761,6 @@ read_sql(query, billing_project_id = get_billing_id())
               <Box
                 as="button"
                 onClick={() => handlerDownload()}
-                target="_blank"
                 display="flex"
                 alignItems="center"
                 height="40px"

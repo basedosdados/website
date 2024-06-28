@@ -88,13 +88,14 @@ export default function ColumnsTable({
   tableId,
   checkedColumns,
   onChangeCheckedColumns,
+  hasLoading,
   setHasLoading,
   template
 }) {
   const [resource, setResource] = useState({})
   const [columns, setColumns] = useState({})
   const [isError, setIsError] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [isSearchLoading, setIsSearchLoading] = useState(true)
 
   const isChecked = (columnSlug) => checkedColumns.includes(columnSlug)
@@ -118,9 +119,10 @@ export default function ColumnsTable({
   }
 
   useEffect(() => {
+    if(tableId === undefined) return
+
     const featchColumns = async () => {
       setHasLoading(true)
-      setIsLoading(true)
 
       try {
         const result = await getColumnsBdmTable(tableId)
@@ -130,7 +132,6 @@ export default function ColumnsTable({
           setColumns(result.sort(sortElements))
           setHasLoading(false)
           setIsSearchLoading(false)
-          setIsLoading(false)
         }
 
       } catch (error) {
@@ -141,6 +142,10 @@ export default function ColumnsTable({
 
     featchColumns()
   },[tableId])
+
+  useEffect(() => {
+    setIsLoading(hasLoading)
+  }, [hasLoading])
 
   const headers = [
     {
@@ -349,7 +354,7 @@ export default function ColumnsTable({
   )
 
   return (
-    <Stack width="100%">
+    <Stack width="100%" gap="16px" spacing={0}>
       <Skeleton
         startColor="#F0F0F0"
         endColor="#F3F3F3"

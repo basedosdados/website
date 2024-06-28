@@ -6,13 +6,12 @@ import {
   Skeleton,
   SkeletonText,
   Divider,
-  Tooltip
+  Tooltip,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import SectionText from "../atoms/SectionText";
-import { SimpleTable } from "../atoms/SimpleTable";
 import ReadMore from "../atoms/ReadMore";
 import { formatBytes } from "../../utils";
+import ObservationLevel from "../atoms/ObservationLevelTable";
 import { TemporalCoverageBar } from "../molecules/TemporalCoverageDisplay";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import FourOFour from "../templates/404";
@@ -164,43 +163,6 @@ export default function BdmTablePage({ id }) {
         {resource?.website && <WebIcon {...keyIcons({website : resource.website})}/>}
         {resource?.twitter && <TwitterIcon {...keyIcons({twitter_user : resource.twitter_user})}/>}
       </HStack>
-    )
-  }
-
-  const Empty = () => {
-    return (
-      <Text
-        fontFamily="Roboto"
-        fontWeight="400"
-        fontSize="14px"
-        lineHeight="20px"
-        color="#464A51"
-      >
-        Não informado
-      </Text>
-    )
-  }
-
-  const ObservationLevel = () => {
-    const notFound = <SectionText marginRight="4px !important">Nenhum nível da observação fornecido.</SectionText>
-    if(resource?.observationLevels === undefined || Object.keys(resource?.observationLevels).length === 0) return notFound
-
-    let array = []
-    const keys = Object.keys(resource?.observationLevels)
-
-    keys.forEach((elm) => {
-      const value = resource?.observationLevels[elm]
-
-      const newValue = [value?.entity?.name || <Empty/>, value?.columns[0]?.name || <Empty/>]
-      array.push(newValue)
-    })
-
-    return (
-      <SimpleTable
-        headers={["Entidade","Colunas Correspondentes"]}
-        values={array}
-        valuesTable={{_first:{textTransform: "capitalize"}}}
-      />
     )
   }
 
@@ -447,28 +409,29 @@ export default function BdmTablePage({ id }) {
             info="indica qual a menor granularidade possível de análise com aquele dado. Por exemplo, uma tabela com nível da observação de estado permite que façamos uma análise no país (por ser mais amplo que estado), mas não uma análise por município (que já seria um recorte mais específico)."
           />
         </StackSkeleton>
-        <SkeletonText
+
+        <Skeleton
           startColor="#F0F0F0"
           endColor="#F3F3F3"
-          borderRadius="6px"
-          width="200px"
-          spacing="6px"
-          skeletonHeight="16px"
-          noOfLines={2}
-          marginTop="12px !important"
+          borderRadius="16px"
+          height="100%"
+          width="800px"
           isLoaded={!isLoading}
         >
-          <Text
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="14px"
-            lineHeight="20px"
-            color="#464A51"
-          >
-            Não informado
-          </Text>
-          {/* <ObservationLevel/> */}
-        </SkeletonText>       
+          {resource?.observationLevels && Object.keys(resource?.observationLevels).length > 0 ?
+            <ObservationLevel resource={resource}/>
+          :
+            <Text
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              lineHeight="20px"
+              color="#464A51"
+            >
+              Não informado
+            </Text>
+          }
+        </Skeleton>       
       </Stack>
 
       <Stack marginBottom="40px !important">

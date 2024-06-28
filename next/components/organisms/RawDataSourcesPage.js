@@ -1,64 +1,55 @@
 import {
-  VStack,
-  HStack,
   Stack,
-  Center,
   Box,
   Text,
-  Grid,
-  GridItem
+  Skeleton,
+  SkeletonText,
+  Tooltip,
+  Divider
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
-import LoadingSpin from "../atoms/Loading";
-import { SimpleTable } from "../atoms/SimpleTable";
-import SectionText from "../atoms/SectionText";
-import Subtitle from "../atoms/Subtitle";
-import RoundedButton from "../atoms/RoundedButton";
+import ReadMore from "../atoms/ReadMore";
+import ObservationLevel from "../atoms/ObservationLevelTable";
 import { TemporalCoverage } from "../molecules/TemporalCoverageDisplay";
-import BaseResourcePage from "../molecules/BaseResourcePage";
-import { DisclaimerBox } from "../molecules/DisclaimerBox";
+import { AlertDiscalimerBox } from "../molecules/DisclaimerBox";
 import FourOFour from "../templates/404";
 
-import {
-  getRawDataSources
-} from "../../pages/api/datasets/index";
-
 import RedirectIcon from "../../public/img/icons/redirectIcon"
-import LanguageIcon from "../../public/img/icons/languageIcon";
-import DisplayIcon from "../../public/img/icons/displayIcon";
-import DataStructureIcon from "../../public/img/icons/dataStructureIcon";
-import ApiIcon from "../../public/img/icons/apiIcon";
-import FrequencyIcon from "../../public/img/icons/frequencyIcon";
-import ObservationLevelIcon from "../../public/img/icons/observationLevelIcon";
-import RegisterIcon from "../../public/img/icons/registerIcon";
-import IpIcon from "../../public/img/icons/ipIcon";
-import CoinIcon from "../../public/img/icons/coinIcon";
-import ExclamationIcon from "../../public/img/icons/exclamationIcon";
+import InfoIcon from "../../public/img/icons/infoIcon";
 
 export default function RawDataSourcesPage({ id }) {
   const [isLoading, setIsLoading] = useState(true)
   const [resource, setResource] = useState({})
-  const [isError, setIsError] = useState({})
-
-  const featchRawDataSources = async () => {
-    try {
-      const result = await getRawDataSources(id)
-      setResource(result)
-    } catch (error) {
-      setIsError(error)
-      console.error(error)
-    }
-    setIsLoading(false)
-  }
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
+    const featchRawDataSources = async () => {
+      setIsLoading(true)
+      try {
+        const response = await fetch(`/api/datasets/getRawDataSources?p=${id}`, { method: "GET" })
+        const result = await response.json()
+
+        if (result.success) {
+          setResource(result.resource)
+          setIsError(false)
+        } else {
+          console.error(result.error)
+          setIsError(true)
+        }
+      } catch (error) {
+        console.error("Fetch error: ", error)
+        setIsError(true)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
     featchRawDataSources()
   },[id])
 
   const ObjectValues = (value) => {
-    if(value === undefined || Object.keys(value).length === 0) return "Não listado"
+    if(value === undefined || Object.keys(value).length === 0) return "Não informado"
 
     const array = []
 
@@ -66,7 +57,7 @@ export default function RawDataSourcesPage({ id }) {
       array.push(elm.name)
     })
 
-    if(array.length === 0) return "Não listado"
+    if(array.length === 0) return "Não informado"
     return array.join(", ").toString()
   }
 
@@ -79,213 +70,342 @@ export default function RawDataSourcesPage({ id }) {
         return "Não"
         break;
       default:
-        return "Não listado"
+        return "Não informado"
         break;
     }
   }
 
   const UpdateFrequency = () => {
     const value = resource?.updates?.[0]
-    if(value === undefined || Object.keys(value).length === 0) return "Não listado"
+    if(value === undefined || Object.keys(value).length === 0) return "Não informado"
 
     if(value?.frequency >= 0 && value?.entity?.name) return `${value.frequency} ${value.entity.name}`
     if(value?.entity?.name) return `${value.entity.name}`
 
-    return "Não listado"
+    return "Não informado"
   }
 
-  const Empty = () => {
+  const TooltipText = ({ text, info, ...props }) => {
     return (
-      <p style={{margin:"0", fontWeight:"500", color:"#C4C4C4"}}>
-        Não listado
-      </p>
-    )
-  }
-
-  const ObservationLevel = () => {
-    const notFound = <SectionText marginRight="4px !important">Nenhum nível da observação fornecido.</SectionText>
-    if(resource?.observationLevels === undefined || Object.keys(resource?.observationLevels).length === 0) return notFound
-
-    let array = []
-    const keys = Object.keys(resource?.observationLevels)
-
-    keys.forEach((elm) => {
-      const value = resource?.observationLevels[elm]
-
-      const newValue = [value?.entity?.name || <Empty/>, value?.columns[0]?.name || <Empty/>]
-      array.push(newValue)
-    })
-
-    return (
-      <SimpleTable
-        headers={["Entidade","Colunas Correspondentes"]}
-        values={array}
-        valuesTable={{_first:{textTransform: "capitalize"}}}
-      />
-    )
-  }
-
-  const AddInfoTextBase = ({title, text, children, ...style}) => {
-    return (
-      <Box display="block" alignItems="center" gridGap="8px" {...style}>
+      <Box>
         <Text
-          fontFamily="ubuntu"
-          fontSize="14px"
-          fontWeight="400" 
-          letterSpacing="0.3px"
-          marginBottom="8px"
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
+          gap="8px"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="18px"
+          lineHeight="20px"
           color="#252A32"
-        >{title}</Text>
-        <SectionText>
+          {...props}
+        >
           {text}
-        </SectionText>
-        {children}
+          <Tooltip
+            label={info}
+            hasArrow
+            padding="16px"
+            backgroundColor="#252A32"
+            boxSizing="border-box"
+            borderRadius="8px"
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="14px"
+            lineHeight="20px"
+            textAlign="center"
+            color="#FFFFFF"
+            placement="top"
+            maxWidth="300px"
+          >
+            <InfoIcon
+              alt="tip"
+              cursor="pointer"
+              fill="#878A8E"
+              width="16px"
+              height="16px"
+            />
+          </Tooltip>
+        </Text>
       </Box>
     )
   }
 
-  if(isError?.message?.length > 0 || resource === null || Object.keys(resource).length < 0) return <FourOFour/>
+  const StackSkeleton = ({ children, ...props }) => {
+    return (
+      <Skeleton
+        startColor="#F0F0F0"
+        endColor="#F3F3F3"
+        borderRadius="6px"
+        height="36px"
+        width="100%"
+        isLoaded={!isLoading}
+        {...props}
+      >
+        {children}
+      </Skeleton>
+    )
+  }
 
-  if(isLoading) return <LoadingSpin />
+  const AddInfoTextBase = ({ title, text, ...props }) => {
+    return (
+      <SkeletonText
+        startColor="#F0F0F0"
+        endColor="#F3F3F3"
+        borderRadius="6px"
+        minHeight="40px"
+        width="100%"
+        spacing="4px"
+        skeletonHeight="18px"
+        noOfLines={2}
+        marginBottom="24px !important"
+        isLoaded={!isLoading}
+        {...props}
+      >
+        <Text
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="14px"
+          lineHeight="20px"
+          color="#252A32"
+        >{title}</Text>
+        <Text
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="14px"
+          lineHeight="20px"
+          color="#464A51"
+        >{text || "Não informado"}</Text>
+      </SkeletonText>
+    )
+  }
+
+  if(isError) return <FourOFour/>
 
   return (
-    <BaseResourcePage
-      padding={useCheckMobile() ? "16px 0 0" : "16px 8px 0 0"}
-      title={resource?.name}
+    <Stack
+      flex={1}
+      overflow="hidden"
+      paddingLeft={{base: "0", lg: "24px"}}
+      spacing={0}
     >
-      <VStack width="100%" spacing={4} alignItems="flex-start">
-        <Subtitle>Consulta aos dados</Subtitle>
-        <DisclaimerBox width="100%">
-          <HStack spacing={0} flexDirection={useCheckMobile() && "column"} alignItems="flex-start">
-            <Center>
-              <ExclamationIcon alt="atenção" width="20px" height="20px" fill="#42B0FF"/>
-              <SectionText margin="0 4px 0 12px" fontWeight="bolder" fontFamily="lato">ATENÇÃO:</SectionText>
-            </Center>
-            <SectionText display="flex" marginLeft={useCheckMobile() && "32px !important"}>
-              Estes dados não passaram pela metodologia de tratamento da Base dos Dados.
-            </SectionText>
-          </HStack>
-        </DisclaimerBox>
+      <StackSkeleton
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        gap="8px"
+      >
+        <Text
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="24px"
+          lineHeight="36px"
+          color="#252A32"
+          width="fit-content"
+          overflow="hidden"
+          textOverflow="ellipsis"
+          whiteSpace="nowrap"
+        >
+          {resource?.name}
+        </Text>
+      </StackSkeleton>
 
-        <RoundedButton
-          height="35px"
-          fontSize="14px"
-          minWidth="100px"
-          width={useCheckMobile() && "100%"}
+      <StackSkeleton
+        height="56px"
+        marginTop="8px !important"
+      >
+        <AlertDiscalimerBox>
+          Estes dados não passaram pela metodologia de tratamento da Base dos Dados.
+        </AlertDiscalimerBox>
+      </StackSkeleton>
+
+      <StackSkeleton
+        width="fit-content"
+        height="40px"
+        marginTop="8px !important"
+        marginBottom="40px !important"
+      >
+        <Box
+          as="a"
+          href={resource?.url}
+          target="_blank"
+          display="flex"
+          alignItems="center"
+          height="40px"
+          width="fit-content"
+          borderRadius="8px"
+          backgroundColor={resource?.url ? "#0D99FC" : "#ACAEB1"}
+          padding="8px 16px"
+          cursor={resource?.url ? "pointer" : "default"}
           color="#FFF"
-          backgroundColor={resource?.url ? "#42B0FF" : "#C4C4C4"}
-          padding="0 20px"
-          isDisabled={resource?.url ? false : true}
-          onClick={() => window.open(resource?.url)}
+          fill="#FFF"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="14px"
+          gap="8px"
+          lineHeight="20px"
+          _hover={{
+            opacity: resource?.url ? "0.7" : "1"
+          }}
         >
           Acessar fonte original
-          <RedirectIcon alt="hiperlink" marginLeft="8px" width="14px" height="14px" fill="#FFF"/>
-        </RoundedButton>
-      </VStack>
+          <RedirectIcon
+            width="16px"
+            height="16px"
+          />
+        </Box>
+      </StackSkeleton>
 
-      <VStack width="100%" spacing={4} alignItems="flex-start">
-        <Subtitle>Descrição</Subtitle>
-        <SectionText>
-          {resource?.description || "Nenhuma descrição fornecida."}
-        </SectionText>
-      </VStack>
+      <Stack spacing="12px" marginBottom="40px !important">
+        <StackSkeleton width="160px" height="20px">
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="18px"
+            lineHeight="20px"
+            color="#252A32"
+          >
+            Descrição
+          </Text>
+        </StackSkeleton>
 
-      <VStack width="100%" spacing={4} alignItems="flex-start">
-        <Subtitle>Cobertura temporal</Subtitle>
-        <SectionText>
-          <TemporalCoverage
+        <SkeletonText
+          startColor="#F0F0F0"
+          endColor="#F3F3F3"
+          borderRadius="6px"
+          width="100%"
+          minHeight="60px"
+          spacing="6px"
+          skeletonHeight="16px"
+          noOfLines={3}
+          marginTop="8px !important"
+          isLoaded={!isLoading}
+        >
+          <ReadMore id="readLessRawDescription">
+            {resource?.description || "Não fornecido"}
+          </ReadMore>
+        </SkeletonText>
+      </Stack>
+
+      <Stack spacing="12px">
+        <StackSkeleton width="160px" height="20px">
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="18px"
+            lineHeight="20px"
+            color="#252A32"
+          >
+            Cobertura temporal
+          </Text>
+        </StackSkeleton>
+
+        <StackSkeleton
+          width="350px"
+          height="24px"
+          alignItems="start"
+        >
+          <Text
+            fontFamily="Roboto"
+            fontSize="14px"
+            fontWeight="400"
+            lineHeight="20px"
+            color="#464A51"
+          >
+            Não informado
+          </Text>
+          {/* <TemporalCoverage
             value={resource?.coverages?.[0]?.datetimeRanges?.[0]}
             text="Nenhuma cobertura temporal fornecida"
+          /> */}
+        </StackSkeleton>
+      </Stack>
+
+      <Divider marginY="40px !important" borderColor="#DEDFE0"/>
+
+      <StackSkeleton width="190px" height="20px" marginBottom="20px !important">
+        <Text
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="18px"
+          lineHeight="20px"
+          color="#252A32"
+        >
+          Informações adicionais
+        </Text>
+      </StackSkeleton>
+
+      <AddInfoTextBase
+        title="Idioma"
+        text={ObjectValues(resource?.languages)}
+      />
+
+      <AddInfoTextBase
+        title="Disponibilidade"
+        text={resource?.availability?.name}
+      />
+
+      <AddInfoTextBase
+        title="Tem dados estruturados"
+        text={TrueOrFalse(resource?.containsStructuredData)}
+      />
+
+      <AddInfoTextBase
+        title="Tem API"
+        text={TrueOrFalse(resource?.containsApi)}
+      />
+
+      <AddInfoTextBase
+        title="Frequência de atualização"
+        text={UpdateFrequency()}
+      />
+
+      <Stack marginBottom="24px !important">
+        <StackSkeleton width="190px" height="20px">
+          <TooltipText
+            text="Nível da observação"
+            info="indica qual a menor granularidade possível de análise com aquele dado. Por exemplo, uma tabela com nível da observação de estado permite que façamos uma análise no país (por ser mais amplo que estado), mas não uma análise por município (que já seria um recorte mais específico)."
+            fontSize="14px"
           />
-        </SectionText>
-      </VStack>
+        </StackSkeleton>
 
-      <VStack width="100%" spacing={5} alignItems="flex-start">
-        <Stack flex="1" >
-          <Subtitle>Informações adicionais</Subtitle>
-        </Stack>
+        <Skeleton
+          startColor="#F0F0F0"
+          endColor="#F3F3F3"
+          borderRadius="16px"
+          height="100%"
+          width="800px"
+          isLoaded={!isLoading}
+        >
+          {resource?.observationLevels && Object.keys(resource?.observationLevels).length > 0 ?
+            <ObservationLevel resource={resource}/>
+          :
+            <Text
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              lineHeight="20px"
+              color="#464A51"
+            >
+              Não informado
+            </Text>
+          }
+        </Skeleton>       
+      </Stack>
 
-        <Grid width="100%" flex={1} templateColumns="repeat(2, 1fr)" gap={6}>
-          <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <LanguageIcon alt="idioma" width="22px" height="22px" fill="#D0D0D0"/>
-            <AddInfoTextBase
-              title="Idioma"
-              text={ObjectValues(resource?.languages)}
-            />
-          </GridItem>
+      <AddInfoTextBase
+        title="Requer registro"
+        text={TrueOrFalse(resource?.requiredRegistration)}
+      />
 
-          <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <DisplayIcon alt="disponibilidade" width="22px" height="22px" fill="#D0D0D0"/>
-            <AddInfoTextBase
-              title="Disponibilidade"
-              text={resource?.availability?.name || "Não listado"}
-            />
-          </GridItem>
+      <AddInfoTextBase
+        title="Requer IP de algum país"
+        text={ObjectValues(resource?.areaIpAddressRequired)}
+      />
 
-          <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <DataStructureIcon alt="Tem dados estruturados" width="22px" height="22px" fill="#D0D0D0"/>
-            <AddInfoTextBase
-              title="Tem dados estruturados"
-              text={TrueOrFalse(resource?.containsStructuredData)}
-            />
-          </GridItem>
-
-          <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <ApiIcon alt="tabela tem api" width="22px" height="22px" fill="#D0D0D0"/>
-            <AddInfoTextBase
-              title="Tem API"
-              text={TrueOrFalse(resource?.containsApi)}
-            />
-          </GridItem>
-
-          <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <FrequencyIcon alt="Frequência de atualização" width="22px" height="22px" fill="#D0D0D0"/>
-            <AddInfoTextBase
-              title="Frequência de atualização"
-              text={UpdateFrequency()}
-            />
-          </GridItem>
-
-          <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <ObservationLevelIcon alt="Nível da observação" width="22px" height="22px" fill="#D0D0D0"/>
-            <Box width="100%">
-              <Text
-                fontFamily="ubuntu"
-                fontSize="14px"
-                fontWeight="400" 
-                letterSpacing="0.3px"
-                marginBottom="8px"
-                color="#252A32"
-              >Nível da observação</Text>
-              <ObservationLevel/>
-            </Box>
-          </GridItem>
-
-          <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <RegisterIcon alt="Requer registro" width="22px" height="22px" fill="#D0D0D0"/>
-            <AddInfoTextBase
-              title="Requer registro"
-              text={TrueOrFalse(resource?.requiredRegistration)}
-            />
-          </GridItem>
-
-          <GridItem colSpan={useCheckMobile() && 2} display="flex" alignItems="flex-start" gridGap="8px">
-            <IpIcon alt="IP" width="22px" height="22px" fill="#D0D0D0"/>
-            <AddInfoTextBase
-              title="Requer IP de algum país"
-              text={ObjectValues(resource?.areaIpAddressRequired)}
-            />
-          </GridItem>
-
-          <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-            <CoinIcon alt="é gratuito?" width="22px" height="22px" fill="#D0D0D0"/>
-            <AddInfoTextBase
-              title="Gratuito"
-              text={TrueOrFalse(resource?.isFree)}
-            />
-          </GridItem>
-        </Grid>
-      </VStack>
-    </BaseResourcePage>
+      <AddInfoTextBase
+        title="Gratuito"
+        text={TrueOrFalse(resource?.isFree)}
+      />
+    </Stack>
   )
 }
