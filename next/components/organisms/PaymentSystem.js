@@ -15,10 +15,6 @@ import {
 import Button from "../atoms/RoundedButton";
 import styles from "../../styles/paymentSystem.module.css";
 
-import {
-  getPrices,
-} from "../../pages/api/stripe";
-
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_KEY_STRIPE)
 
 const PaymentForm = ({ onSucess, onErro }) => {

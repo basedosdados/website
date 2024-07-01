@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-export default async function getPrices() {
+async function getPlans() {
   try {
     const res = await axios({
       url: API_URL,
@@ -10,14 +10,15 @@ export default async function getPrices() {
       data: {
         query: `
         query {
-          allStripePrice {
+          allStripePrice (active: true) {
             edges {
               node {
                 _id
                 amount
                 productName
                 productSlug
-                productSlots
+                interval
+                isActive
               }
             }
           }
@@ -25,9 +26,19 @@ export default async function getPrices() {
         `
       }
     })
-    const data = res?.data?.data?.allStripePrice?.edges
+    const data = res.data
     return data
   } catch (error) {
     console.error(error)
+    return "err"
   }
+}
+
+export default async function handler(req, res) {
+  const result = await getPlans()
+
+  if(result.errors) return res.status(500).json({error: result.errors, success: false})
+  if(result === "err") return res.status(500).json({error: "err", success: false})
+
+  res.status(200).json({data: result?.data?.allStripePrice?.edges, success: true})
 }
