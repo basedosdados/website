@@ -7,9 +7,10 @@ on:
     paths:
       - ".github/workflows/release-dev.yaml"
       - "next/**/*"
+  workflow_dispatch:
 
 jobs:
-  release-docker-image-development:
+  release:
     name: Release Docker Image (Development)
     runs-on: ubuntu-latest
     environment:

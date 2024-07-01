@@ -322,7 +322,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
           lineHeight="72px"
           letterSpacing="-1.5px"
         >
-          Compare os planos
+          {t("Compare the plans")}
         </Display>
 
         <Box

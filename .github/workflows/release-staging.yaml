@@ -7,9 +7,10 @@ on:
     paths:
       - ".github/workflows/release-staging.yaml"
       - "next/**/*"
+  workflow_dispatch:
 
 jobs:
-  release-docker-image-development:
+  release:
     name: Release Docker Image (Staging)
     runs-on: ubuntu-latest
     environment:
