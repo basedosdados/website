@@ -110,7 +110,12 @@ export default function DatasetPage ({ dataset }) {
           gap="24px"
           paddingY="24px"
         >
-          <GridItem display="flex" justifyContent="center" >
+          <GridItem
+            display="flex"
+            justifyContent="center"
+            border="1px solid #DEDFE0"
+            borderRadius="16px"
+          >
             <Image
               src={dataset?.organization?.picture ? dataset?.organization?.picture : `https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png`}
               objectFit="cover"
@@ -202,7 +207,7 @@ export default function DatasetPage ({ dataset }) {
         >
           <TabList
             padding="0px"
-            borderBottom= "2px solid #DEDFE0 !important"
+            borderBottom="1px solid #DEDFE0 !important"
           >
             <GreenTab>
               <DataBaseIcon

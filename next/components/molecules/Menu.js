@@ -521,7 +521,7 @@ function SearchInputUser ({ user }) {
           refInput={inputMobileRef}
           inputFocus={showInput}
           changeInputFocus={setShowInput}
-          placeholder="Pesquise dados"
+          placeholder="Pesquisar dados"
           fill="#464A51"
           fillHover="#878A8E"
           icon={
@@ -563,7 +563,7 @@ function SearchInputUser ({ user }) {
         onEnterPress={openSearchLink}
         inputFocus={inputFocus}
         changeInputFocus={setInputFocus}
-        placeholder="Pesquise dados"
+        placeholder="Pesquisar dados"
         fill="#464A51"
         fillHover="#878A8E"
         icon={

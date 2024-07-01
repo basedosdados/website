@@ -126,7 +126,8 @@ export default function InformationRequestPage({ id }) {
       </StackSkeleton>
 
       <StackSkeleton
-        height="56px"
+        minHeight="56px"
+        height="100%"
         marginTop="8px !important"
       >
         <AlertDiscalimerBox>
@@ -137,7 +138,7 @@ export default function InformationRequestPage({ id }) {
       <StackSkeleton
         display="flex"
         flexDirection="row"
-        gap="24px"
+        gap="16px"
         width="fit-content"
         height="40px"
         marginTop="8px !important"
@@ -152,7 +153,7 @@ export default function InformationRequestPage({ id }) {
           height="40px"
           width="fit-content"
           borderRadius="8px"
-          backgroundColor={resource?.dataUrl ? "#0D99FC" : "#ACAEB1"}
+          backgroundColor={resource?.dataUrl ? "#2B8C4D" : "#ACAEB1"}
           padding="8px 16px"
           cursor={resource?.dataUrl ? "pointer" : "default"}
           color="#FFF"
@@ -163,7 +164,7 @@ export default function InformationRequestPage({ id }) {
           gap="8px"
           lineHeight="20px"
           _hover={{
-            opacity: resource?.dataUrl ? "0.7" : "1"
+            backgroundColor: resource?.dataUrl ? "#80BA94" : "#ACAEB1"
           }}
         >
           Acessar dados
@@ -182,7 +183,7 @@ export default function InformationRequestPage({ id }) {
           height="40px"
           width="fit-content"
           borderRadius="8px"
-          backgroundColor={resource?.url ? "#0D99FC" : "#ACAEB1"}
+          backgroundColor={resource?.url ? "#2B8C4D" : "#ACAEB1"}
           padding="8px 16px"
           cursor={resource?.url ? "pointer" : "default"}
           color="#FFF"
@@ -193,7 +194,7 @@ export default function InformationRequestPage({ id }) {
           gap="8px"
           lineHeight="20px"
           _hover={{
-            opacity: resource?.url ? "0.7" : "1"
+            backgroundColor: resource?.url ? "#80BA94" : "#ACAEB1"
           }}
         >
           Acessar pedido

@@ -101,6 +101,7 @@ export default function DatasetResource({
               key={i}
               spacing="4px"
               cursor="pointer"
+              pointerEvents={elm._id === value ? "none" : "default"}
             >
               <Box 
                 width="3px"
@@ -117,8 +118,8 @@ export default function DatasetResource({
                 color={elm._id === value ? "#2B8C4D" : "#71757A"}
                 backgroundColor={elm._id === value && "#F7F7F7"}
                 _hover={{
-                  backgroundColor:"#F7F7F7",
-                  color: "#9D9FA3"
+                  backgroundColor:elm._id === value ? "#F7F7F7" :"#EEEEEE",
+                  color: elm._id === value ? "#2B8C4D" : "#9D9FA3"
                 }}
                 borderRadius="8px"
                 padding="6px 8px"

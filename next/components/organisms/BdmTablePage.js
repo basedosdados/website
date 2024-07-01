@@ -415,7 +415,7 @@ export default function BdmTablePage({ id }) {
           endColor="#F3F3F3"
           borderRadius="16px"
           height="100%"
-          width="800px"
+          width="100%"
           isLoaded={!isLoading}
         >
           {resource?.observationLevels && Object.keys(resource?.observationLevels).length > 0 ?

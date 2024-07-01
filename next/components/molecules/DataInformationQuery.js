@@ -70,7 +70,7 @@ export function CodeHighlight({ language, children }) {
       flexDirection="column"
       width="100%"
       borderRadius="8px"
-      backgroundColor="#282b2e"
+      backgroundColor="#252A32"
     >
       <Box
         display="flex"
@@ -363,7 +363,7 @@ export default function DataInformationQuery({ resource }) {
                   textAlign="center"
                   color="#FFFFFF"
                   placement="top"
-                  maxWidth="180px"
+                  maxWidth="230px"
                 >
                   <InfoIcon
                     alt="tip"
