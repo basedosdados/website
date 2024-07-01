@@ -23,7 +23,7 @@ export default function ObservationLevel({ resource }) {
 
   return (
     <TableContainer
-      width="800px"
+      width="100%"
       height="100%"
       border="1px solid #DEDFE0"
       overflow="hidden"
@@ -66,6 +66,7 @@ export default function ObservationLevel({ resource }) {
               borderBottom="1px solid #DEDFE0"
             >
               <Td
+                width="50%"
                 role="cell"
                 position="relative"
                 padding="14px 22px"
@@ -82,6 +83,7 @@ export default function ObservationLevel({ resource }) {
                 {elm[0]}
               </Td>
               <Td
+                width="50%"
                 role="cell"
                 position="relative"
                 padding="14px 22px"

@@ -521,7 +521,7 @@ function SearchInputUser ({ user }) {
           refInput={inputMobileRef}
           inputFocus={showInput}
           changeInputFocus={setShowInput}
-          placeholder="Pesquise dados"
+          placeholder="Pesquisar dados"
           fill="#464A51"
           fillHover="#878A8E"
           icon={
@@ -563,7 +563,7 @@ function SearchInputUser ({ user }) {
         onEnterPress={openSearchLink}
         inputFocus={inputFocus}
         changeInputFocus={setInputFocus}
-        placeholder="Pesquise dados"
+        placeholder="Pesquisar dados"
         fill="#464A51"
         fillHover="#878A8E"
         icon={
@@ -726,6 +726,27 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   const [isScrollDown, setIsScrollDown] = useState(false)
   const [userData, setUserData] = useState(null)
 
+  const [lastScrollY, setLastScrollY] = useState(0)
+  const [menuVisible, setMenuVisible] = useState(true)
+
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY
+    if (currentScrollY > lastScrollY) {
+      setMenuVisible(false)
+    } else {
+      setMenuVisible(true)
+    }
+    setLastScrollY(currentScrollY)
+  }
+
+  useEffect(() => {
+    if(route !== "/dataset/[dataset]") return
+    window.addEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [lastScrollY])
+
   function maxWidthDataset() {
     if (route === "/dataset" || route === "/dataset/[dataset]") return "1440px"
     return "1264px"
@@ -801,6 +822,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         zIndex="99"
         transition="0.5s"
         as="nav"
+        transform={menuVisible ? 'translateY(0)' : 'translateY(-100%)'}
       >
         <HStack
           justifyContent={simpleTemplate || userTemplate ? "flex-start" : { base: "center", lg: "flex-start" }}

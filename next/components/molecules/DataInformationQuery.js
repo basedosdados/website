@@ -70,7 +70,7 @@ export function CodeHighlight({ language, children }) {
       flexDirection="column"
       width="100%"
       borderRadius="8px"
-      backgroundColor="#282b2e"
+      backgroundColor="#252A32"
     >
       <Box
         display="flex"
@@ -363,7 +363,7 @@ export default function DataInformationQuery({ resource }) {
                   textAlign="center"
                   color="#FFFFFF"
                   placement="top"
-                  maxWidth="180px"
+                  maxWidth="230px"
                 >
                   <InfoIcon
                     alt="tip"
@@ -376,7 +376,7 @@ export default function DataInformationQuery({ resource }) {
               </Box>
             </Skeleton>
 
-            {checkedColumns.length > 0 &&
+            {checkedColumns.length > 0 && resource.uncompressedFileSize && resource.uncompressedFileSize/(1024 * 1024 * 1024) > 5 &&
               <Skeleton
                 display={tabIndex === 3 ? "none" : ""}
                 startColor="#F0F0F0"
@@ -388,9 +388,10 @@ export default function DataInformationQuery({ resource }) {
               >
                 <AlertDiscalimerBox
                   type="warning"
-                  text={`Cuidado para não ultrapassar o limite de processamento gratuito do BigQuery.
-Para otimizar a consulta, você pode selecionar menos colunas ou adicionar filtros no BigQuery.`}
-                />
+                >
+                  Essa tabela possui mais de <Text as="span" fontWeight="700">5 GB</Text>. Cuidado para não ultrapassar o <Text as="a" href="" target="_blank" color="#0068C5" _hover={{color: "#4F9ADC"}}>limite de processamento gratuito</Text> do BigQuery. <Text as="br" display={{base: "none", lg: "flex"}}/>
+                  Para otimizar a consulta, você pode selecionar menos colunas ou adicionar filtros no BigQuery.
+                </AlertDiscalimerBox>
               </Skeleton>
             }
 

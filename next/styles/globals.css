@@ -157,6 +157,10 @@ body {
   background-color: #2b8c4d !important;
 }
 
+.hljs {
+  background-color: #252A32 !important;
+}
+
 .rjsf {
   width: 100%;
   white-space: break-spaces;
