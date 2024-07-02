@@ -41,8 +41,11 @@ import CrossIcon from "../../public/img/icons/crossIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 import SettingsIcon from "../../public/img/icons/settingsIcon";
 import SignOutIcon from "../../public/img/icons/signOutIcon";
+import { useTranslation } from "next-i18next";
 
 function MenuDrawer({ userData, isOpen, onClose, links }) {
+  const {t} = useTranslation("header_footer")
+
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
       <DrawerOverlay backdropFilter="blur(2px)"/>
@@ -142,7 +145,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
               fontSize="20px"
               onClick={() => window.open("/user/login", "_self")}
             >
-              Entrar
+              {t("Login")}
             </RoundedButton>
             <RoundedButton
               backgroundColor="#42B0FF"
@@ -151,7 +154,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
               fontSize="20px"
               onClick={() => window.open("/user/register", "_self")}
             >
-              Cadastrar
+              {t("Register")}
             </RoundedButton>
           </Stack>
         }
@@ -643,6 +646,7 @@ function SearchInputUser () {
 }
 
 function DesktopLinks({ userData, links, position = false, path, userTemplate = false }) {
+  const {t} = useTranslation("header_footer")
   const [statusSearch, setStatusSearch] = useState(false)
 
   const searchStatus = (elm) => {
@@ -771,11 +775,11 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
           ) : (
             <>
               <Link fontSize="15px" fontFamily="Ubuntu" fontWeight="400" letterSpacing="0.3px" href="/user/login">
-                Entrar
+                {t("Login")}
               </Link>
               <Link _hover={{ opacity:"none" }} href="/user/register">
                 <RoundedButton height="35px" fontSize="15px" minWidth="110px" borderRadius="30px">
-                  Cadastrar
+                  {t("Register")}
                 </RoundedButton>
               </Link>
             </>
@@ -796,6 +800,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   const divRef = useRef()
   const [isScrollDown, setIsScrollDown] = useState(false)
   const [userData, setUserData] = useState(null)
+  const { t } = useTranslation("header_footer")
 
   useEffect(() => {
     let userInfo = userBD
@@ -812,26 +817,27 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   }, [userBD])
 
   const links = {
-    Dados: "/dataset",
-    Soluções: [
-      {icon: <BDLogoProImage widthImage="54px"/>, name: "Dados exclusivos", href: "https://info.basedosdados.org/bd-pro"},
-      {icon: <BDLogoEduImage widthImage="54px"/>, name: "Curso de dados", href: "https://info.basedosdados.org/bd-edu-sql"},
-      {icon: <BDLogoLabImage widthImage="54px"/>, name: "Serviços", href: "/servicos"},
+    // TODO: i18n the paths
+    [t('Datasets')]: "/dataset",
+    [t('Solutions')]: [
+      {icon: <BDLogoProImage widthImage="54px"/>, name: t("Exclusive Data"), href: "https://info.basedosdados.org/bd-pro"},
+      {icon: <BDLogoEduImage widthImage="54px"/>, name: t("Data Course"), href: "https://info.basedosdados.org/bd-edu-sql"},
+      {icon: <BDLogoLabImage widthImage="54px"/>, name: t("Services"), href: "/servicos"},
     ],
-    "Preços": "/precos",
-    Tutoriais: [
-      {name: "Documentação", href: "https://basedosdados.github.io/mais/"},
-      {name: "Vídeos no YouTube", href: "https://www.youtube.com/c/BasedosDados/featured"},
-      {name: "Blog", href: "https://medium.com/basedosdados"}
+    [t('Prices')]: "/precos",
+    [t('Tutorials')]: [
+      {name: t("Documentation"), href: "https://basedosdados.github.io/mais/"},
+      {name: t("YouTube Videos"), href: "https://www.youtube.com/c/BasedosDados/featured"},
+      {name: t("Blog"), href: "https://medium.com/basedosdados"}
     ],
-    Institucional: [
-      {name: "Quem somos", href: "/quem-somos"},
-      {name: "Transparência", href: "/transparencia"},
-      {name: "Newsletter", href: "https://info.basedosdados.org/newsletter"},
-      {name: "Carreiras", href: "https://info.basedosdados.org/carreiras"},
-      {name: "Perguntas frequentes", href: "/perguntas-frequentes"},
+    [t('Institutional')]: [
+      {name: t("Who We Are"), href: "/quem-somos"},
+      {name: t("Transparency"), href: "/transparencia"},
+      {name: t("Newsletter"), href: "https://info.basedosdados.org/newsletter"},
+      {name: t("Careers"), href: "https://info.basedosdados.org/carreiras"},
+      {name: t("FAQ"), href: "/perguntas-frequentes"},
     ],
-    Contato: "/contato",
+    [t('Contact us')]: "/contato",
     Button: []
   };
 

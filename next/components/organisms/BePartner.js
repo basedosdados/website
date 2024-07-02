@@ -10,8 +10,10 @@ import { useEffect, useState } from "react";
 import { NamedAvatar } from "../molecules/NamedAvatar";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import Carousel from "../atoms/Carousel";
+import { useTranslation } from 'next-i18next';
 
 function Testimonial({ children, name, position, src }) {
+  const { t } = useTranslation();
   return (
     <VStack
       margin={{ base: "0px", lg: "80px 32px 32px" }}
@@ -75,6 +77,7 @@ function PartnerBox({ src, ...props }) {
 }
 
 export function BePartner() {
+  const { t } = useTranslation();
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
 
@@ -84,7 +87,7 @@ export function BePartner() {
 
   return (
     <VStack width="80%" margin="auto">
-      {/* <BigTitle>Como impactamos pessoas e organizações</BigTitle> */}
+      {/* <BigTitle>{t("How we impact people and organizations")}</BigTitle> */}
       <Stack
         width="100%"
         maxWidth="1264px"
@@ -102,7 +105,7 @@ export function BePartner() {
             letterSpacing={isMobileMod ? "0.2px" : "0.1px"}
             color="#7D7D7D"
           >
-            Parcerias com
+            {t("Partnerships with")}
           </Text>
         </Center>
         <Stack
@@ -141,42 +144,26 @@ export function BePartner() {
           >
               <Testimonial
                 name="Fernando Barbalho"
-                position="Cientista de Dados do Tesouro Nacional"
+                position={t("Data Scientist at National Treasury")}
                 src="https://storage.googleapis.com/basedosdados-website/logos/2022/tesouro_nacional.png"
               >
-                O siconfiBD é um pacote que traz de forma rápida e programática os
-                dados da Secretaria do Tesouro Nacional.
-                O código é construído de forma <i>open-source</i> pela equipe do Tesouro
-                e utiliza as tabelas tratadas BD+ para compor funções em R.
-                Qual a despesa de pessoal dos 100 municípios brasileiros mais
-                populosos? Essas e mais de outras 18 perguntas podem ser consultadas
-                diretamente pelo pacote, sem necessidade de SQL.
+                {t("The siconfiBD is a package that quickly and programmatically brings data from the National Treasury Secretariat. The code is built in an open-source manner by the Treasury team and uses the treated BD+ tables to compose functions in R. What is the personnel expense of the 100 most populous Brazilian municipalities? These and more than 18 other questions can be consulted directly by the package, without the need for SQL.")}
               </Testimonial>
 
               <Testimonial
                 name="Marina Barros"
-                position="Diretora-Executiva do Instituto Alziras"
+                position={t("Executive Director of the Alziras Institute")}
                 src="https://storage.googleapis.com/basedosdados-website/logos/2022/alziras.png"
               >
-                Com o apoio da Base dos Dados realizamos o levantamento das
-                desigualdades de gênero e raça nas eleições 2016-2020 e das
-                distorções de financiamento de campanhas de prefeitas e vereadoras
-                nas últimas eleições, o que resultará no lançamento de uma publicação inédita.
+                {t("With the support of Base dos Dados, we conducted a survey of gender and race inequalities in the 2016-2020 elections and the distortions in campaign financing for mayors and councilors in the last elections, which will result in the launch of an unprecedented publication.")}
               </Testimonial>
 
               <Testimonial
                 name="Amanda de Albuquerque e Mariana Carvalho"
-                position="Co-fundadoras dA Ponte"
+                position={t("Co-founders of A Ponte")}
                 src="https://storage.googleapis.com/basedosdados-website/logos/2022/aponte.png"
               >
-                Criamos um importante produto nosso, a Fotografia do Município,
-                em parceria com a BD. A Fotografia
-                agrega diversos indicadores socioeconômicos dos municípios
-                brasileiros. A Ponte fez o planejamento e desenho do relatório,
-                enquanto a BD cuidou da parte técnica de visualização e gestão de
-                dados. A parceria foi o que nos permitiu avançar rápido no
-                desenvolvimento da ferramenta, e garantiu a qualidade de dados
-                alta como queríamos desde o início.
+                {t("We created an important product of ours, the Municipality Photography, in partnership with BD. The Photography aggregates various socioeconomic indicators of Brazilian municipalities. A Ponte did the planning and design of the report, while BD took care of the technical part of visualization and data management. The partnership was what allowed us to advance quickly in the development of the tool, and ensured the high data quality we wanted from the beginning.")}
               </Testimonial>
           </Carousel>
         </Center>

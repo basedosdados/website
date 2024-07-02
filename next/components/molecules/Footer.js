@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import Link from "../atoms/Link";
 import BodyText from "../atoms/BodyText"
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
+import { useTranslation } from 'next-i18next';
 
 import YoutubeIcon from "../../public/img/icons/youtubeIcon";
 import TwitterIcon from "../../public/img/icons/twitterIcon";
@@ -63,6 +64,7 @@ function FooterLink(props) {
 }
 
 export default function Footer({ ocult = false }) {
+  const { t } = useTranslation('header_footer');
   const mobileCheck = useCheckMobile()
   const [isMobileMod, setIsMobileMod] = useState(false)
   
@@ -115,72 +117,72 @@ export default function Footer({ ocult = false }) {
             spacing={isMobileMod ? "0" :"80px"}
             marginLeft="auto"
           >
-            <SectionCategories title="PRODUTOS" marginBottom={isMobileMod && "24px !important"}>
+            <SectionCategories title={t("PRODUCTS")} marginBottom={isMobileMod && "24px !important"}>
               <FooterLink target="_self" href="/dataset">
-                Mecanismo de busca
+                {t("Search Engine")}
               </FooterLink>
               <FooterLink href="https://basedosdados.github.io/mais/">
-                Datalake público
+                {t("Public Datalake")}
               </FooterLink>
               <FooterLink href="https://basedosdados.github.io/mais/access_data_packages/">
-                Pacotes
+                {t("Packages")}
               </FooterLink>
               <FooterLink href="https://info.basedosdados.org/bd-pro">
-                BD Pro
+                {t("BD Pro")}
               </FooterLink>
               <FooterLink href="https://info.basedosdados.org/bd-edu-sql">
-                BD Edu
+                {t("BD Edu")}
               </FooterLink>
             </SectionCategories>
 
-            <SectionCategories title="SERVIÇOS" marginBottom={isMobileMod && "24px !important"}>
+            <SectionCategories title={t("SERVICES")} marginBottom={isMobileMod && "24px !important"}>
               <FooterLink target="_self" href="/servicos#Captura de dados">
-                Captura de dados
+                {t("Data Capture")}
               </FooterLink>
               <FooterLink href="/servicos#Análise de dados">
-                Análise de dados
+                {t("Data Analysis")}
               </FooterLink>
               <FooterLink href="/servicos#Consultoria de dados">
-                Consultoria de dados
+                {t("Data Consulting")}
               </FooterLink>
               <FooterLink href="/servicos#Estudos de caso">
-                Estudos de caso
+                {t("Case Studies")}
               </FooterLink>
             </SectionCategories>
 
-            <SectionCategories title="TUTORIAIS" marginBottom={isMobileMod && "24px !important"}>
+            <SectionCategories title={t("TUTORIALS")} marginBottom={isMobileMod && "24px !important"}>
               <FooterLink href="https://basedosdados.github.io/mais/">
-                Documentação
+                {t("Documentation")}
               </FooterLink>
               <FooterLink href="https://www.youtube.com/watch?v=nGM2OwTUY_M&list=PLu5pyM8QY6hg3GpNCyCtSS3sUi4Jo8Pir">
-                Vídeos no YouTube
+                {t("YouTube Videos")}
               </FooterLink>
             </SectionCategories>
 
-            <SectionCategories title="INSTITUCIONAL" marginBottom={isMobileMod && "24px !important"}>
+            <SectionCategories title={t("INSTITUTIONAL")} marginBottom={isMobileMod && "24px !important"}>
               <FooterLink target="_self" href="/quem-somos">
-                Quem somos
+                {t("Who We Are")}
               </FooterLink>
               <FooterLink target="_self" href="/transparencia">
-                Transparência
+                {t("Transparency")}
               </FooterLink>
               <FooterLink href="https://info.basedosdados.org/newsletter">
-                Newsletter
+                {t("Newsletter")}
               </FooterLink>
               <FooterLink href="https://info.basedosdados.org/carreiras">
-                Carreiras
+                {t("Careers")}
               </FooterLink>
               <FooterLink href="/perguntas-frequentes">
-                Perguntas frequentes
+                {t("FAQ")}
               </FooterLink>
               <FooterLink target="_self" href="/termos-e-privacidade">
-                Termos e Privacidade
+                {t("Terms and Privacy")}
               </FooterLink>
               <FooterLink target="_self" href="/contato">
-                Contato
+                {t("Contact")}
               </FooterLink>
               <Link fontWeight="700" color="white" href="/#support">
-                Apoie o projeto
+                {t("Support the Project")}
               </Link>
             </SectionCategories>
           </Stack>
@@ -210,7 +212,7 @@ export default function Footer({ ocult = false }) {
             alignItems="flex-start"
             marginTop={isMobileMod && "16px"}
           >
-            <BodyText color="#FFF" fontSize="16px" letterSpacing="0.2px">® 2024 Base dos Dados</BodyText>
+            <BodyText color="#FFF" fontSize="16px" letterSpacing="0.2px">® 2024 {t("Base dos Dados")}</BodyText>
           </HStack>
 
           <HStack spacing={3}>

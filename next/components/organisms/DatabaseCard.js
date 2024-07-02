@@ -10,6 +10,7 @@ import Card from "../molecules/Card";
 import { CategoryIcon } from "../atoms/CategoryIcon";
 import Link from "../atoms/Link";
 import { ThemeTag } from "../atoms/ThemeTag";
+import { useTranslation } from 'next-i18next';
 
 export default function DatabaseCard({
   name,
@@ -21,6 +22,7 @@ export default function DatabaseCard({
   informationRequests,
   link,
 }) {
+  const { t } = useTranslation();
   const databaseInfo = []
 
   if(tables.number > 0) {
@@ -45,11 +47,9 @@ export default function DatabaseCard({
             target="_blank"
             style={{display: "flex"}}
           >
-            <b>{tables?.number === 1 ?
-              "1 tabela tratada"
-            : 
-              `${tables?.number || 0} tabelas tratadas`
-            }</b>
+            <b>
+              {t(`{{count}} treated tables`, {count: tables?.number || 0} )}
+            </b>
           </a>
         </Stack>
       </HStack>
@@ -58,16 +58,12 @@ export default function DatabaseCard({
 
   if (rawDataSources.number > 0) {
     databaseInfo.push(
-      rawDataSources.number === 1 ?
-      "1 fonte original" :
-      `${rawDataSources.number} fontes originais`
+      t(`{{count}} original sources`, {count: rawDataSources.number})
     )
   }
   if (informationRequests.number > 0) {
     databaseInfo.push(
-      informationRequests.number === 1 ?
-      "1 pedido LAI" :
-      `${informationRequests.number} pedidos LAI`
+      t(`{{count}} LAI request`, {count: informationRequests.number})
     )
   }
 
@@ -190,7 +186,7 @@ export default function DatabaseCard({
             cursor={databaseInfo[1] && "pointer"}
             _hover={databaseInfo[1] && {opacity : "0.7"}}
           >
-            {databaseInfo[1] ? databaseInfo[1] : "0 fontes originais"}
+            {databaseInfo[1] ? databaseInfo[1] : t("0 original sources")}
           </Link>
           <Text color="#DEDFE0">•</Text>
           <Link
@@ -205,7 +201,7 @@ export default function DatabaseCard({
             cursor={databaseInfo[2] && "pointer"}
             _hover={databaseInfo[2] && {opacity : "0.7"}}
           >
-            {databaseInfo[2] ? databaseInfo[2] : "0 pedidos LAI"}
+            {databaseInfo[2] ? databaseInfo[2] : t("0 LAI requests")}
           </Link>
         </HStack>
       </VStack>
