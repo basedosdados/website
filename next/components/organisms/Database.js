@@ -20,6 +20,7 @@ import { TemporalCoverageString } from "../molecules/TemporalCoverageDisplay";
 import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";
 import { DataBaseSolidIcon } from "../../public/img/icons/databaseIcon";
+import { useTranslation } from "next-i18next";
 
 export default function Database({
   id,
@@ -32,6 +33,7 @@ export default function Database({
   contains,
   themes = [],
 }) {
+  const { t } = useTranslation('dataset')
 
   const Tables = () => {
     let tablesNumber = tables.number
@@ -45,7 +47,7 @@ export default function Database({
           _hover={tablesNumber > 0 && {opacity: "0.7"}}
         >
           <DataBaseSolidIcon
-            alt="tabelas tratadas"
+            alt={t("processed tables")}
             width="15px"
             height="15px"
             fill={tablesNumber === 0 ? "#C4C4C4" : "#2B8C4D"}
@@ -59,8 +61,7 @@ export default function Database({
             letterSpacing="0px"
             fontFamily="Ubuntu"
           >
-            {tablesNumber}{" "}
-            {tablesNumber === 1 ? "tabela tratada" : "tabelas tratadas"}
+            {t("{{count}} processed table", {count: tablesNumber})}
           </Text>
         </HStack>
       </a>
@@ -89,8 +90,7 @@ export default function Database({
             letterSpacing="0px"
             fontFamily="Ubuntu"
           >
-            {rawDataSourcesNumber}{" "}
-            {rawDataSourcesNumber === 1 ? "fonte original" : "fontes originais"}
+            {t("{{count}} original source", {count: rawDataSourcesNumber})}
           </Text>
         </HStack>
       </a>
@@ -108,7 +108,7 @@ export default function Database({
           _hover={informationRequestsNumber > 0 && {opacity: "0.7"}}
         >
           <InfoArrowIcon
-            alt="pedidos Lai"
+            alt={t("LAI requests")}
             width="15px"
             height="15px"
             fill={informationRequestsNumber === 0 ? "#C4C4C4" : "#2B8C4D"}
@@ -120,8 +120,7 @@ export default function Database({
             letterSpacing="0px"
             fontFamily="Ubuntu"
           >
-            {informationRequestsNumber}{" "}
-            {informationRequestsNumber === 1 ? "pedido LAI" : "pedidos LAI"}
+            {t("{{count}} LAI request", {count: informationRequestsNumber})}
           </Text>
         </HStack>
       </a>
@@ -230,7 +229,7 @@ export default function Database({
                 spacing={{ base: 0, lg: 5 }}
               >
                 <HStack pb={{ base: 1, lg: 0 }}>
-                  <SectionText color="#6F6F6F">Organização:</SectionText>
+                  <SectionText color="#6F6F6F">{t("Organization")}:</SectionText>
                   <Link href={`/dataset?organization=${organization?.slug}`}>
                     <SectionText
                       color="#6F6F6F"
@@ -252,7 +251,7 @@ export default function Database({
                   align="flex-start"
                   pb={{ base: 1, lg: 0 }}
                 >
-                  <SectionText color="#6F6F6F">Cobertura temporal:</SectionText>
+                  <SectionText color="#6F6F6F">{t("Temporal coverage")}:</SectionText>
                   <TemporalCoverageString
                     value={ temporalCoverageText ? temporalCoverageText : ""}
                     textSettings={{color: "#6F6F6F", fontWeight:"400"}}
@@ -268,15 +267,15 @@ export default function Database({
                   align="flex-start"
                   pb={{ base: 1, lg: 0 }}
                 >
-                  <SectionText color="#6F6F6F">Recursos:</SectionText>
+                  <SectionText color="#6F6F6F">{t("Resources")}:</SectionText>
                   <SectionText
                       color="#6F6F6F"
                       fontWeight="400"
                       noOfLines={1}
                       textOverflow="ellipsis"
                     >
-                      {contains.free && "Grátis"} {contains.free && contains.pro && "e"} {contains.pro && "Pro"}
-                      {!contains.free && !contains.pro && "Não listado"}
+                      {contains.free && t("Free")} {contains.free && contains.pro && t("and")} {contains.pro && t("Pro")}
+                      {!contains.free && !contains.pro && t("Not listed")}
                     </SectionText>
                 </HStack>
               </Stack>

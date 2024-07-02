@@ -22,7 +22,7 @@ export default function DatabaseCard({
   informationRequests,
   link,
 }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   const databaseInfo = []
 
   if(tables.number > 0) {
@@ -48,7 +48,7 @@ export default function DatabaseCard({
             style={{display: "flex"}}
           >
             <b>
-              {t(`{{count}} treated tables`, {count: tables?.number || 0} )}
+              {t('{{count}} treated tables', {count: tables?.number || 0} )}
             </b>
           </a>
         </Stack>

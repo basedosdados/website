@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../../utils";
 import { withPages } from "../../hooks/pages.hook";
+import { useTranslation } from 'next-i18next';
 
 import {
   getSearchDatasets
@@ -35,12 +36,18 @@ import Display from "../../components/atoms/Display";
 import RoundedButton from "../../components/atoms/RoundedButton";
 import Database from "../../components/organisms/Database";
 import { MainPageTemplate } from "../../components/templates/main";
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import FilterIcon from "../../public/img/icons/filterIcon";
 import NotFoundImage from "../../public/img/notFoundImage";
 
-export async function getStaticProps() {
-  return await withPages()
+export async function getStaticProps({locale}) {
+      let out = await withPages()
+      out.props = {
+          ...out.props, 
+          ...(await serverSideTranslations(locale, ['common', 'dataset'])),
+      }
+      return out
 }
 
 function FilterTags({
@@ -93,6 +100,7 @@ export default function SearchPage() {
   const [count, setCount] = useState(0)
   const [pageInfo, setPageInfo] = useState({page: 0, count: 0})
   const [isLoading, setIsLoading] = useState(true)
+  const { t } = useTranslation('dataset')
 
   useEffect(() => {
     if(fetchApi) clearTimeout(fetchApi)
@@ -285,7 +293,7 @@ export default function SearchPage() {
             minWidth="240px"
             padding="10px 24px"
             onClick={() => window.open("https://discord.gg/Ec7tfBaTVV", "_blank")}
-          >Fazer uma proposta</RoundedButton>
+          >{t("Make a proposal")}</RoundedButton>
           <RoundedButton
             fontSize="15px"
             minWidth="240px"
@@ -294,7 +302,7 @@ export default function SearchPage() {
             color="#42B0FF"
             padding="10px 24px"
             onClick={() => window.open("https://github.com/orgs/basedosdados/projects/17", "_blank")}
-          >Ver roadmap de dados</RoundedButton>
+          >{t("See data roadmap")}</RoundedButton>
         </HStack>
       </Stack>
     )
@@ -326,15 +334,15 @@ export default function SearchPage() {
   }
 
   const fieldTranslations = {
-    organization: "Organização",
-    tag: "Etiqueta",
-    group: "Tema",
-    resource_type: "Conjuntos com",
-    spatial_coverage: "Cobertura espacial",
-    temporal_coverage: "Cobertura temporal",
-    entity: "Nível da observação",
-    update_frequency: "Frequência de atualização",
-    raw_quality_tier: "Qualidade da fonte original",
+    organization: t("Organization"),
+    tag: t("Tag"),
+    group: t("Theme"),
+    resource_type: t("Sets with"),
+    spatial_coverage: t("Spatial coverage"),
+    temporal_coverage: t("Temporal coverage"),
+    entity: t("Observation level"),
+    update_frequency: t("Update frequency"),
+    raw_quality_tier: t("Original source quality"),
   }
 
   const DatabaseCard = ({ data }) => {
@@ -342,7 +350,7 @@ export default function SearchPage() {
       <Database
         id={data.id}
         themes={data?.themes}
-        name={data?.name || "Conjunto sem nome"}
+        name={data?.name || t("Unnamed set")}
         temporalCoverageText={data?.temporal_coverages[0] || ""}
         organization={data.organizations[0]}
         tables={{
@@ -458,10 +466,10 @@ export default function SearchPage() {
   return (
     <MainPageTemplate>
       <Head>
-        <title>Dados – Base dos Dados</title>
+        <title>{t("Data – Base dos Dados")}</title>
         <meta
           property="og:title"
-          content="Dados – Base dos Dados"
+          content={t("Data – Base dos Dados")}
           key="ogtitle"
         />
       </Head>
@@ -469,7 +477,7 @@ export default function SearchPage() {
       <DebouncedControlledInput
         value={query?.q || ""}
         onChange={(value) => handleSearch(value)}
-        placeholder={isMobileMod() ? "Palavras-chave, instituições ou temas" :"Pesquise palavras-chave, instituições ou temas"}
+        placeholder={isMobileMod() ? t("Keywords, institutions or themes") : t("Search keywords, institutions or themes")}
         justifyContent="center"
         inputStyle={{
           width: "90%",
@@ -504,7 +512,7 @@ export default function SearchPage() {
         >
           <Box display="flex" marginBottom="10px" alignItems="center">
             <FilterIcon
-              alt="filtrar conjuntos"
+              alt={t("filter sets")}
               width="20px"
               height="20px"
               fill="#252A32"
@@ -519,7 +527,7 @@ export default function SearchPage() {
               color="#252A32"
               letterSpacing="0.2px"
             >
-              Filtrar resultados
+              {t("Filter results")}
             </Text>
           </Box>
 
@@ -528,24 +536,24 @@ export default function SearchPage() {
             choices={[
               {
                 key: "tables",
-                name: "Tabelas tratadas",
+                name: t("Processed tables"),
                 count: aggregations?.contains_tables?.filter(elm => elm.key === 1)[0]?.count || 0
               },
               {
                 key: "raw_data_sources",
-                name: `Fontes originais`,
+                name: t("Original sources"),
                 count: aggregations?.contains_raw_data_sources?.filter(elm => elm.key === 1)[0]?.count || 0
               },
               {
                 key: "information_requests",
-                name: `Pedidos LAI`,
+                name: t("Information requests"),
                 count: aggregations?.contains_information_requests?.filter(elm => elm.key === 1)[0]?.count || 0
               },
             ]}
             isActive={validateActiveSetsWith("contains")}
             valueField="key"
             displayField="name"
-            fieldName="Conjuntos com"
+            fieldName={t("Sets with")}
             valuesChecked={valuesCheckedFilter("contains")}
             onChange={(value) => handleSelectFilter(["contains",`${value}`])}
           />
@@ -555,19 +563,19 @@ export default function SearchPage() {
             choices={[
               {
                 key: "open_data",
-                name: "Grátis",
+                name: t("Free"),
                 count: aggregations?.contains_open_data?.filter(elm => elm.key === 1)[0]?.count || 0
               },
               {
                 key: "closed_data",
-                name: "Pagos",
+                name: t("Paid"),
                 count: aggregations?.contains_closed_data?.filter(elm => elm.key === 1)[0]?.count || 0
               }
             ]}
             isActive={validateActiveResource("contains")}
             valueField="key"
             displayField="name"
-            fieldName="Recursos"
+            fieldName={t("Resources")}
             valuesChecked={valuesCheckedFilter("contains")}
             onChange={(value) => handleSelectFilter(["contains",`${value}`])}
           />
@@ -578,7 +586,7 @@ export default function SearchPage() {
             choices={aggregations?.themes}
             valueField="key"
             displayField="name"
-            fieldName="Tema"
+            fieldName={t("Theme")}
             valuesChecked={valuesCheckedFilter("theme")}
             onChange={(value) => handleSelectFilter(["theme",`${value}`])}
           />
@@ -589,7 +597,7 @@ export default function SearchPage() {
             choices={aggregations?.organizations}
             valueField="key"
             displayField="name"
-            fieldName="Organizações"
+            fieldName={t("Organizations")}
             valuesChecked={valuesCheckedFilter("organization")}
             onChange={(value) => handleSelectFilter(["organization",`${value}`])}
           />
@@ -600,7 +608,7 @@ export default function SearchPage() {
             choices={aggregations?.tags}
             valueField="key"
             displayField="name"
-            fieldName="Etiqueta"
+            fieldName={t("Tag")}
             valuesChecked={valuesCheckedFilter("tag")}
             onChange={(value) => handleSelectFilter(["tag",`${value}`])}
           />
@@ -611,7 +619,7 @@ export default function SearchPage() {
             choices={aggregations?.observation_levels}
             valueField="key"
             displayField="name"
-            fieldName="Nível da observação"
+            fieldName={t("Observation level")}
             valuesChecked={valuesCheckedFilter("observation_level")}
             onChange={(value) => handleSelectFilter(["observation_level",`${value}`])}
           />
@@ -645,12 +653,14 @@ export default function SearchPage() {
                 letterSpacing="-0.2px"
                 color="#252A32"
               >
-                {count ?
-                    `${count} conjunto${count > 1 ? "s": ""} encontrado${count > 1 ? "s": ""} ${!!query.q ? ` para ${query.q}` : ""}`
+                {
+                  count ?
+                    t('{{count}} datasets found', {count})
+                    + (!!query.q ? ` ${t('to')} '${query.q}'` : "")
                   :
-                  <Box width="fit-content" display="flex" flexDirection="row" gap="8px" alignItems="center">
-                    <Spinner color="#252A32"/> <Text>encontrando conjuntos {!!query.q ? ` para ${query.q}` : ""}</Text>
-                  </Box>
+                    <Box width="fit-content" display="flex" flexDirection="row" gap="8px" alignItems="center">
+                      <Spinner color="#252A32"/> <Text> {t("finding datasets")} {!!query.q ? ` ${t('to')} '${query.q}'` : ""}</Text>
+                    </Box>
                 }
               </Heading>
             </Flex>
@@ -707,18 +717,14 @@ export default function SearchPage() {
             }
           </VStack>
 
-          {pageInfo?.count >=1 && pageInfo?.count <=10 &&
-            <DataProposalBox 
-              text= "Ainda não encontrou o que está procurando?"
-              bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
-            />
-          }
-
-          {pageInfo.page >= 2 &&
-            <DataProposalBox 
-              text= "Ainda não encontrou o que está procurando?"
-              bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
-            />
+          {
+              (pageInfo?.count >=1 && pageInfo?.count <=10) || pageInfo.page >= 2
+            ?
+              <DataProposalBox 
+                text= {t("Haven't found what you're looking for?")}
+                bodyText= {t("Try searching for related terms or propose new data for us to add to the database.")}
+              />
+            : ""
           }
         </VStack>
       </Stack>
