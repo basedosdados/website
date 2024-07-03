@@ -173,6 +173,7 @@ export default function DataInformationQuery({ resource }) {
   const [isLoadingCode, setIsLoadingCode] = useState(false)
   const [hasLoadingResponse, setHasLoadingResponse] = useState(false)
   const [insufficientChecks, setInsufficientChecks] = useState(false)
+  const [includeTranslation, setIncludeTranslation] = useState(true)
 
   let gcpDatasetID
   let gcpTableId
@@ -199,7 +200,7 @@ export default function DataInformationQuery({ resource }) {
     setHasLoadingResponse(false)
     setSqlCode("")
     setInsufficientChecks(false)
-  }, [resource._id, checkedColumns, tabIndex])
+  }, [resource._id, checkedColumns, tabIndex, includeTranslation])
 
   useEffect(() => {
     if(hasLoadingResponse === true) {
@@ -231,7 +232,7 @@ export default function DataInformationQuery({ resource }) {
   }
 
   async function SqlCodeString() {
-    const result = await getBigTableQuery(resource._id, checkedColumns)
+    const result = await getBigTableQuery(resource._id, checkedColumns, includeTranslation)
     setSqlCode(result.trim())
     setIsLoadingCode(false)
   }
@@ -347,7 +348,11 @@ export default function DataInformationQuery({ resource }) {
                     lineHeight:"20px",
                     color:"#252A32"
                   }}>
-                  <Toggle /><Text>Traduzir códigos institucionais</Text>
+                  <Toggle
+                    defaultChecked
+                    value={includeTranslation}
+                    onChange={() => setIncludeTranslation(!includeTranslation)}
+                  /><Text>Traduzir códigos institucionais</Text>
                 </label>
                 <Tooltip
                   label="Por exemplo, traduzir o código “2927408” por “Salvador-BA”"
