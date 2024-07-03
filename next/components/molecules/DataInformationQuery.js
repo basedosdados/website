@@ -23,7 +23,7 @@ import GreenTab from "../atoms/GreenTab";
 import Toggle from "../atoms/Toggle";
 import ColumnsTable from "./ColumnsTable";
 import { AlertDiscalimerBox} from "./DisclaimerBox";
-import { triggerGAEvent } from "../../utils";
+import { triggerGAEvent, formatBytes } from "../../utils";
 
 import {
   getBigTableQuery
@@ -389,7 +389,7 @@ export default function DataInformationQuery({ resource }) {
                 <AlertDiscalimerBox
                   type="warning"
                 >
-                  Essa tabela possui mais de <Text as="span" fontWeight="700">5 GB</Text>. Cuidado para não ultrapassar o <Text as="a" href="" target="_blank" color="#0068C5" _hover={{color: "#4F9ADC"}}>limite de processamento gratuito</Text> do BigQuery. <Text as="br" display={{base: "none", lg: "flex"}}/>
+                  Essa tabela possui mais de <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>. Cuidado para não ultrapassar o <Text as="a" href="" target="_blank" color="#0068C5" _hover={{color: "#4F9ADC"}}>limite de processamento gratuito</Text> do BigQuery. <Text as="br" display={{base: "none", lg: "flex"}}/>
                   Para otimizar a consulta, você pode selecionar menos colunas ou adicionar filtros no BigQuery.
                 </AlertDiscalimerBox>
               </Skeleton>

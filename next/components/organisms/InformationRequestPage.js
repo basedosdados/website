@@ -288,11 +288,6 @@ export default function InformationRequestPage({ id }) {
         title="Estado"
         text={resource?.status?.name}
       />
-
-      <AddInfoTextBase
-        title="Pedido feito por"
-        text={`${resource?.startedBy?.firstName} ${resource?.startedBy?.lastName}` || "Não informado"}
-      />
     </Stack>
   )
 }

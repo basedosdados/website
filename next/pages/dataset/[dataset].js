@@ -118,7 +118,7 @@ export default function DatasetPage ({ dataset }) {
           >
             <Image
               src={dataset?.organization?.picture ? dataset?.organization?.picture : `https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png`}
-              objectFit="cover"
+              objectFit="contain"
               width="300px"
               height="182px"
               borderRadius="16px"

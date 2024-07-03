@@ -23,6 +23,8 @@ import CrossIcon from "../public/img/icons/crossIcon";
 import SearchIcon from "../public/img/icons/searchIcon";
 import styles from "../styles/faq.module.css";
 
+import 'highlight.js/styles/obsidian.css';
+
 export async function getStaticProps() {
   return await withPages()
 }
@@ -87,6 +89,8 @@ const QuestionsBox = ({ question, answer, id, active }) => {
       </Box>
       <Collapse in={isActive} animateOpacity>
         <BodyText
+          id={id}
+          as="div"
           height={isActive ? "100%" : "0"}
           marginBottom={isActive && "32px !important"}
           overflow="hidden"

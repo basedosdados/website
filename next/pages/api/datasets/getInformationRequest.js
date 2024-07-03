@@ -19,11 +19,6 @@ async function getInformationRequest(id) {
                 url
                 dataUrl
                 observations
-                startedBy {
-                  id
-                  firstName
-                  lastName
-                }
                 updates {
                   edges {
                     node {
