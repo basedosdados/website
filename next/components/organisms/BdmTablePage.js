@@ -188,18 +188,21 @@ export default function BdmTablePage({ id }) {
     return formattedDate
   }
 
-  const formatUpdate = (value) => {
-    if (value === "second") return "Atualização por segundo"
-    if (value === "minute") return "Atualização minutal"
-    if (value === "hour") return "Atualização por hora"
-    if (value === "day") return "Atualização diária"
-    if (value === "week") return "Atualização semanal"
-    if (value === "month") return "Atualização mensal"
-    if (value === "bimester") return "Atualização bimestral"
-    if (value === "quarter") return "Atualização trimestral"
-    if (value === "semester") return "Atualização semestral"
-    if (value === "year") return "Atualização anual"
-    return value
+  const getUpdateFormat = (value) => {
+    const formats = {
+      "second":"Atualização por segundo",
+      "minute":"Atualização por minuto",
+      "hour":"Atualização por hora",
+      "day":"Atualização diária",
+      "week":"Atualização semanal",
+      "month":"Atualização mensal",
+      "bimester":"Atualização bimestral",
+      "quarter":"Atualização trimestral",
+      "semester":"Atualização semestral",
+      "year":"Atualização anual",
+    }
+
+    return formats[value] ? formats[value] : "Atualização não definida"
   }
 
   if(isError) return <FourOFour/>
@@ -350,7 +353,7 @@ export default function BdmTablePage({ id }) {
                 lineHeight="18px"
                 color="#252A32"
               >
-                {formatUpdate(resource.updates[0].entity.slug)}
+                {getUpdateFormat(resource.updates[0].entity.slug)}
               </Text>
             }
           </Box>

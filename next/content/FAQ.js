@@ -1,5 +1,4 @@
 import { CopyIcon } from "../public/img/icons/copyIcon";
-import 'highlight.js/styles/obsidian.css'
 
 export const QuestionFAQ = [
   {
@@ -434,19 +433,21 @@ export const QuestionFAQ = [
             Para verificar uma amostra de todas as variáveis da tabela, use: 
           </p>
 
-          <code className="hljs sql" style={{margin: "16px 0", padding: "6px"}}>
-            {`SELECT * FROM  dataset.table_name LIMIT 100`}
-          </code>
+          <pre>
+            <code className="hljs sql">
+              <span style={{color: "#93c763"}}>SELECT</span> * <span style={{color: "#93c763"}}>FROM</span>  dataset.table_name LIMIT <span style={{color: "#ffcd22"}}>100</span>
+            </code>
+          </pre>
           
           <ul>
             <li>
               A primeira dica valiosa é selecionar as colunas que você vai usar.
               O BigQuery funciona usando um modelo colunar, portanto, quanto menos colunas você usar,
-              melhor vai ser o desempenho da sua consulta. Isso significa evitar o clássico<br/> <code className="hljs sql">SELECT * FROM table_name</code> e
+              melhor vai ser o desempenho da sua consulta. Isso significa evitar o clássico<br/> <pre><code className="hljs sql"><span style={{color: "#93c763"}}>SELECT</span> * <span style={{color: "#93c763"}}>FROM</span> table_name</code></pre> e
               escolher as colunas de seu interesse. Parece chato, mas ajuda muito!
             </li>
             <li>
-              Para tabelas grandes, uma boa prática é filtrar os anos e estados de seu interesse com a cláusula <code className="hljs sql">WHERE</code>.
+              Para tabelas grandes, uma boa prática é filtrar os anos e estados de seu interesse com a cláusula <pre><code className="hljs sql" style={{color: "#93c763"}}>WHERE</code></pre>.
               Como utilizamos o sistema de particionamento, isso vai reduzir drasticamente o custo e o tempo de processamento.
             </li>
           </ul>
