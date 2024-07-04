@@ -14,7 +14,6 @@ import { CategoryIcon } from "../atoms/CategoryIcon";
 import Title from "../atoms/Title";
 import Link from "../atoms/Link";
 import SectionText from "../atoms/SectionText";
-import { ImageOrganization } from "../atoms/ImageOrganization";
 import { TemporalCoverageString } from "../molecules/TemporalCoverageDisplay";
 
 import LinkIcon from "../../public/img/icons/linkIcon";
@@ -38,7 +37,7 @@ export default function Database({
     if(tables.number === undefined) tablesNumber = 0
 
     return (
-      <a href={tablesNumber > 0 && `/dataset/${id}?table=${tables.id}`}>
+      <a href={tablesNumber > 0 ? `/dataset/${id}?table=${tables.id}` : ""}>
         <HStack
           spacing={1}
           cursor={tablesNumber > 0 ? "pointer" : "normal"}
@@ -72,7 +71,7 @@ export default function Database({
     if(rawDataSources.number === undefined) rawDataSourcesNumber = 0
 
     return (
-      <a href={rawDataSourcesNumber > 0 && `/dataset/${id}?raw_data_source=${rawDataSources.id}`}>
+      <a href={rawDataSourcesNumber > 0 ? `/dataset/${id}?raw_data_source=${rawDataSources.id}` : ""}>
         <HStack
           cursor={rawDataSourcesNumber > 0 ? "pointer" : "normal"}
           _hover={rawDataSourcesNumber > 0 && {opacity: "0.7"}}
@@ -102,7 +101,7 @@ export default function Database({
     if(informationRequests.number === undefined) informationRequestsNumber = 0
 
     return (
-      <a href={informationRequestsNumber > 0 && `/dataset/${id}?information_request=${informationRequests.id}`}>
+      <a href={informationRequestsNumber > 0 ? `/dataset/${id}?information_request=${informationRequests.id}` : ""}>
         <HStack
           cursor={informationRequestsNumber > 0 ? "pointer" : "normal"}
           _hover={informationRequestsNumber > 0 && {opacity: "0.7"}}
@@ -144,15 +143,17 @@ export default function Database({
         spacing={6}
       >
         <Link _hover={{opacity:"none"}}>
-          <ImageOrganization
-            title={organization.name}
-            image={organization?.picture || organization?.image}
+          <Image
+            src={organization?.picture.startsWith("https://") ? organization?.picture : `https://basedosdados.org/uploads/group/${organization?.name}`}
+            alt={organization.name || "Não informado"}
+            borderRadius="16px"
+            boxShadow="0px 4px 8px rgba(100, 96, 103, 0.16)"
             maxWidth="138px"
             maxHeight="138px"
             minWidth="138px"
             minHeight="138px"
-            borderRadius="16px"
             backgroundColor="#eee"
+            objectFit="contain"
           />
         </Link>
         <VStack

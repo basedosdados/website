@@ -9,7 +9,7 @@ import {
   SkeletonText,
   Flex,
   Box,
-  Spinner
+  Spinner,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import ReactPaginate from "react-paginate";
@@ -23,12 +23,8 @@ import {
   getSearchDatasets
 } from "../api/datasets/index";
 
-import { DebouncedControlledInput } from "../../components/atoms/ControlledInput";
-import {
-  SimpleFilterAccordion,
-  CheckboxFilterAccordion,
-  RangeFilterAccordion,
-} from "../../components/atoms/FilterAccordion";
+import { CheckboxFilterAccordion } from "../../components/atoms/FilterAccordion";
+import Checkbox from "../../components/atoms/Checkbox";
 import Tag from "../../components/atoms/Tag";
 import BodyText from "../../components/atoms/BodyText";
 import Display from "../../components/atoms/Display";
@@ -82,9 +78,10 @@ function FilterTags({
   )
 }
 
-export default function SearchPage() {
+export default function SearchDatasetPage() {
   const router =  useRouter()
   const query = router.query
+
   const [fetchApi, setFetchApi] = useState(null)
   const [showEmptyState, setShowEmptyState] = useState(false)
   const [resource, setResource] = useState([])
@@ -111,26 +108,6 @@ export default function SearchPage() {
     setSelectedFilters(fetchFilter(query))
     setFetchApi(fetchFunc)
   }, [query])
-
-  async function handleSearch (value) {
-    let newQuery = {...query}
-    if (value) value.replace(/\s+/g, ' ').trim()
-    if (newQuery.page) delete newQuery?.page
-    if (value === "") {
-      delete newQuery?.q
-      router.push({
-        pathname: router.pathname,
-        query: {...newQuery}
-      })
-    } else {
-      triggerGAEvent("search", value)
-      triggerGAEvent("search_dataset", value)
-      router.push({
-        pathname: router.pathname,
-        query: {...newQuery, q: value }
-      })
-    }
-  }
 
   async function getDatasets({q, filters, page}) {
     const res = await getSearchDatasets({q:q, filter: filters, page:page})
@@ -300,43 +277,6 @@ export default function SearchPage() {
     )
   }
 
-  const optionsUpdateFrequencies = {
-    "unique" : "-16",
-    "hour": "-15",
-    "day": "-14",
-    "week": "-13",
-    "month": "-12",
-    "quarter": "-11",
-    "semester": "-10",
-    "one_year": "-9",
-    "two_years": "-8",
-    "three_years": "-7",
-    "four_years": "-6",
-    "five_years": "-5",
-    "ten_years": "-4",
-    "recurring": "-3",
-    "uncertain": "-2",
-    "other": "-1",
-  }
-
-  const optionsRawQualityTiers = {
-    "low" : "-3",
-    "medium": "-2",
-    "high": "-1"
-  }
-
-  const fieldTranslations = {
-    organization: "Organização",
-    tag: "Etiqueta",
-    group: "Tema",
-    resource_type: "Conjuntos com",
-    spatial_coverage: "Cobertura espacial",
-    temporal_coverage: "Cobertura temporal",
-    entity: "Nível da observação",
-    update_frequency: "Frequência de atualização",
-    raw_quality_tier: "Qualidade da fonte original",
-  }
-
   const DatabaseCard = ({ data }) => {
     return (
       <Database
@@ -369,7 +309,7 @@ export default function SearchPage() {
     return selectedFilters.map((elm) => elm[0] === text).find(res => res === true)
   }
 
-  const validateActiveSetsWith = (text) => {
+  const validateActiveSetsWith = () => {
     return selectedFilters.map((elm) => 
         elm[1] === "tables"
       ||elm[1] === "raw_data_sources"
@@ -456,7 +396,7 @@ export default function SearchPage() {
   }
 
   return (
-    <MainPageTemplate>
+    <MainPageTemplate userTemplate footerTemplate="simple">
       <Head>
         <title>Dados – Base dos Dados</title>
         <meta
@@ -466,43 +406,24 @@ export default function SearchPage() {
         />
       </Head>
 
-      <DebouncedControlledInput
-        value={query?.q || ""}
-        onChange={(value) => handleSearch(value)}
-        placeholder={isMobileMod() ? "Palavras-chave, instituições ou temas" :"Pesquise palavras-chave, instituições ou temas"}
-        justifyContent="center"
-        inputStyle={{
-          width: "90%",
-          maxWidth: "1264px",
-          margin: "0 auto 64px",
-          padding: "20px",
-          borderRadius: "17px",
-          backgroundColor: "#FFF",
-          color: "#6F6F6F",
-          fontSize: "16px",
-          height: "50px",
-          boxShadow: "0 1px 3px 0.5 rgba(100 93 103 /0.16) !important",
-          _placeholder:{color:"#6F6F6F"}
-        }}
-        marginTop={isMobileMod() ? "60px" : "46px" }
-      />
-
       <Stack
+        width="100%"
+        maxWidth="1440px"
+        boxSizing="content-box"
+        overflow="auto"
+        paddingX="24px"
+        paddingTop="24px"
+        marginX="auto"
+        flexDirection={{ base: "column", lg: "row" }}
         spacing={isMobileMod() ? 10 : 0}
-        width="90%"
-        maxWidth="1264px"
-        margin="auto"
-        direction={{ base: "column", lg: "row" }}
       >
         <VStack
           justifyContent="flex-start"
           alignItems="flex-start"
-          minWidth={{ base: "100%", lg: "320px" }}
-          maxWidth={{ base: "100%", lg: "320px" }}
-          borderRight={isMobileMod() ? "" : "1px solid #DEDFE0"}
-          padding={isMobileMod() ? "" : "0 20px 0 0"}
+          minWidth={{ base: "100%", lg: "300px" }}
+          maxWidth={{ base: "100%", lg: "300px" }}
         >
-          <Box display="flex" marginBottom="10px" alignItems="center">
+          <Box display="flex" marginBottom="24px" alignItems="center">
             <FilterIcon
               alt="filtrar conjuntos"
               width="20px"
@@ -510,17 +431,82 @@ export default function SearchPage() {
               fill="#252A32"
             />
             <Text
-              fontFamily="Ubuntu"
-              fontSize="20px"
-              fontWeight="400"
-              textAlign="top"
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="16px"
+              lineHeight="24px"
+              color="#252A32"
+              textAlign="center"
               width="100%"
               marginLeft="8px"
-              color="#252A32"
-              letterSpacing="0.2px"
             >
-              Filtrar resultados
+              Filtrar
             </Text>
+          </Box>
+
+          <Box
+            width="100%"
+          >
+            <Text
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="16px"
+              lineHeight="24px"
+              color="#464A51"
+              marginBottom="5px"
+            >
+              Conjuntos com
+            </Text>
+
+            <Skeleton
+              width="100%"
+              marginBottom="5px"
+              borderRadius="6px"
+              startColor="#F0F0F0"
+              endColor="#F3F3F3"
+              isLoaded={!isLoading}
+            >
+              <Text
+                as="label"
+                display="flex"
+                width="100%"
+                cursor="pointer"
+                gap="2px"
+                alignItems="center"
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="14px"
+                lineHeight="20px"
+                height="20px"
+                color="#71757A"
+                overflow="hidden"
+              >
+                <Checkbox
+                  value="tables"
+                  onChange={(e) => handleSelectFilter(["contains", e.target.value])} 
+                  isChecked={query?.contains === "tables" || query?.contains?.[0] ? query?.contains.map((elm) => elm === "tables" ) : false}
+                  minWidth="18px"
+                  minHeight="18px"
+                  maxWidth="18px"
+                  maxHeight="18px"
+                  marginRight="14px"
+                  flexShrink={0}
+                />
+                <Text
+                  as="span"
+                  textOverflow="ellipsis"
+                  whiteSpace="nowrap"
+                  overflow="hidden"
+                  marginRight="2px"
+                  flex="1 1 auto"
+                >
+                  Tabelas tratadas
+                </Text>
+                <Text as="span" flexShrink={0}>
+                  {`(${aggregations?.contains_tables?.filter(elm => elm.key === 1)[0]?.count || 0})`}
+                </Text>
+              </Text>
+            </Skeleton>
           </Box>
 
           <CheckboxFilterAccordion
@@ -572,7 +558,7 @@ export default function SearchPage() {
             onChange={(value) => handleSelectFilter(["contains",`${value}`])}
           />
 
-          <CheckboxFilterAccordion
+          {/* <CheckboxFilterAccordion
             canSearch={true}
             isActive={validateActiveFilterAccordin("theme")}
             choices={aggregations?.themes}
@@ -581,9 +567,9 @@ export default function SearchPage() {
             fieldName="Tema"
             valuesChecked={valuesCheckedFilter("theme")}
             onChange={(value) => handleSelectFilter(["theme",`${value}`])}
-          />
+          /> */}
 
-          <CheckboxFilterAccordion
+          {/* <CheckboxFilterAccordion
             canSearch={true}
             isActive={validateActiveFilterAccordin("organization")}
             choices={aggregations?.organizations}
@@ -592,9 +578,9 @@ export default function SearchPage() {
             fieldName="Organizações"
             valuesChecked={valuesCheckedFilter("organization")}
             onChange={(value) => handleSelectFilter(["organization",`${value}`])}
-          />
+          /> */}
 
-          <CheckboxFilterAccordion
+          {/* <CheckboxFilterAccordion
             canSearch={true}
             isActive={validateActiveFilterAccordin("tag")}
             choices={aggregations?.tags}
@@ -603,9 +589,9 @@ export default function SearchPage() {
             fieldName="Etiqueta"
             valuesChecked={valuesCheckedFilter("tag")}
             onChange={(value) => handleSelectFilter(["tag",`${value}`])}
-          />
+          /> */}
 
-          <CheckboxFilterAccordion
+          {/* <CheckboxFilterAccordion
             canSearch={true}
             isActive={validateActiveFilterAccordin("observation_level")}
             choices={aggregations?.observation_levels}
@@ -614,7 +600,7 @@ export default function SearchPage() {
             fieldName="Nível da observação"
             valuesChecked={valuesCheckedFilter("observation_level")}
             onChange={(value) => handleSelectFilter(["observation_level",`${value}`])}
-          />
+          /> */}
         </VStack>
 
         <VStack
@@ -700,9 +686,9 @@ export default function SearchPage() {
                 }}
                 containerClassName={"pagination"}
                 activeClassName={"active"}
-                pageClassName={isLoading && "disabled"}
-                previousClassName={isLoading && "disabled"}
-                nextClassName={isLoading && "disabled"}
+                pageClassName={isLoading ? "disabled" : ""}
+                previousClassName={isLoading ? "disabled" : ""}
+                nextClassName={isLoading ? "disabled" : ""}
               />
             }
           </VStack>
