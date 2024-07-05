@@ -26,10 +26,19 @@ export default async function getColumnsBdmTable(id) {
                         name
                         table {
                           _id
-                          slug
+                          name
+                          cloudTables{
+                            edges{
+                              node{
+                                gcpTableId
+                                gcpDatasetId
+                                gcpProjectId
+                              }
+                            }
+                          }
                           dataset {
                             _id
-                            slug
+                            name
                           }
                         }
                       }

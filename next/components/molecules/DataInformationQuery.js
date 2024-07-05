@@ -17,6 +17,7 @@ import hljs from "highlight.js/lib/core";
 import sqlHighlight from "highlight.js/lib/languages/sql";
 import pythonHighlight from "highlight.js/lib/languages/python";
 import rHighlight from "highlight.js/lib/languages/r";
+import cookies from "js-cookie";
 import 'highlight.js/styles/obsidian.css'
 
 import GreenTab from "../atoms/GreenTab";
@@ -179,6 +180,14 @@ export default function DataInformationQuery({ resource }) {
   const [gcpDatasetID, setGcpDatasetID] = useState("")
   const [gcpTableId, setGcpTableId] = useState("")
   const [downloadUrl, setDownloadUrl] = useState("")
+
+  const isUserPro = () => {
+    let user
+    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
+
+    if(user?.proSubscriptionStatus === "active") return true
+    return false
+  }
 
   useEffect(() => {
     if (resource?.numberRows === 0) setDownloadNotAllowed(false)
@@ -744,10 +753,10 @@ read_sql(query, billing_project_id = get_billing_id())
               padding={0}
             >
               {downloadNotAllowed ?
+                isUserPro() ? "" :
                 <AlertDiscalimerBox type="info">
-                  <Text>Estes dados estão disponíveis porque diversas pessoas colaboram para a sua manutenção.</Text>
-                  <Text>
-                    Antes de baixar os dados, apoie você também com uma doação financeira ou
+                  Estes dados estão disponíveis porque diversas pessoas colaboram para a sua manutenção. <Text as="br" display={{base: "none", lg: "flex"}}/>
+                  Antes de baixar os dados, apoie você também com uma doação financeira ou
                     <Text
                       marginLeft="4px"
                       as="a"
@@ -758,12 +767,11 @@ read_sql(query, billing_project_id = get_billing_id())
                     >
                       saiba como contribuir com seu tempo.
                     </Text>
-                  </Text>
                 </AlertDiscalimerBox>
               :
                 <AlertDiscalimerBox
                   type="error"
-                  text={`O tamanho da tabela ultrapassou o limite permitido para download, de 200.000 lihas. Você pode acessar os dados em SQL, Python e R.`}
+                  text={`O tamanho da tabela ultrapassou o limite permitido para download, de 200.000 linhas. Você pode acessar os dados em SQL, Python e R.`}
                 />
               }
 
@@ -793,7 +801,7 @@ read_sql(query, billing_project_id = get_billing_id())
                   width="24px"
                   height="24px"
                 />
-                  Download da tabela
+                  Download da tabela {downloadNotAllowed && `(${formatBytes(resource.uncompressedFileSize)})`}
               </Box>
             </TabPanel>
           </TabPanels>

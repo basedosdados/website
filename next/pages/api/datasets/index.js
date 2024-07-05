@@ -1,5 +1,4 @@
 import getSearchDatasets from "./getSearchDatasets";
-import getColumnsBdmTable from "./getColumnsBdmTable";
 import getListDatasets from "./getListDatasets";
 import getShowDataset from "./getShowDataset";
 import postDataset from "./postDataset";
@@ -8,7 +7,6 @@ import deleteDataset from "./deleteDataset";
 
 export {
   getSearchDatasets,
-  getColumnsBdmTable,
   getListDatasets,
   getShowDataset,
   postDataset,

@@ -389,15 +389,20 @@ export default function BdmTablePage({ id }) {
             }
           </Box>
           <Text
-            display="none"
-            marginTop="8px !important"
+            display="flex"
+            flexDirection="row"
+            gap="8px"
             fontFamily="Roboto"
             fontWeight="400"
             fontSize="14px"
             lineHeight="20px"
             color="#464A51"
           >
-            Não informado : Última vez que verificamos a fonte original
+            {resource?.rawDataSource?.[0]?.polls?.[0]?.latest ?
+              formatDate(resource.rawDataSource[0].polls[0].latest)
+              :
+              "Não informado"
+            } : Última vez que verificamos a fonte original
           </Text>
         </SkeletonText>
       </Stack>

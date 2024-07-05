@@ -50,6 +50,14 @@ async function getBdmTable(id) {
                       dataset {
                         _id
                       }
+                      polls {
+                        edges {
+                          node {
+                            _id
+                            latest
+                          }
+                        }
+                      }
                       updates {
                         edges {
                           node {
