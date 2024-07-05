@@ -13,12 +13,18 @@ export function MainPageTemplate({
 }) {
 
   return (
-    <Box backgroundColor={backgroundColor}>
+    <Box 
+      backgroundColor={backgroundColor}
+      minHeight="100vh"
+      display="flex"
+      flexDirection="column"
+    >
       <SiteHead />
       <Menu simpleTemplate={cleanTemplate} userTemplate={userTemplate}/>
       <Box
         paddingTop="70px"
         paddingBottom="50px"
+        flex={1}
         {...style}
       >
         {children}

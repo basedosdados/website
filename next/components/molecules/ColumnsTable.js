@@ -90,6 +90,7 @@ export default function ColumnsTable({
   onChangeCheckedColumns,
   hasLoading,
   setHasLoading,
+  numberColumns,
   template
 }) {
   const [resource, setResource] = useState({})
@@ -129,6 +130,7 @@ export default function ColumnsTable({
 
         if(result) {
           setResource(result.sort(sortElements))
+          numberColumns(result.length)
           setColumns(result.sort(sortElements))
           setHasLoading(false)
           setIsSearchLoading(false)

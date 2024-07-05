@@ -42,7 +42,11 @@ export default function DatasetResource({
   }
 
   useEffect(() => {
-    const dataset_tables = dataset?.tables?.edges.map((elm) => elm.node).filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []
+    const dataset_tables = dataset?.tables?.edges.map((elm) => elm.node)
+      .filter((elm) => elm?.status?.slug !== "under_review")
+        .filter((elm) => elm?.slug !== "dicionario")
+          .filter((elm) => elm?.slug !== "dictionary").sort(sortElements) || []
+
     const raw_data_sources = dataset?.rawDataSources?.edges.map((elm) => elm.node).filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []
     const information_request = dataset?.informationRequests?.edges.map((elm) => elm.node).filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []
 
@@ -57,7 +61,7 @@ export default function DatasetResource({
       if(raw_data_sources.length > 0) return pushQuery("raw_data_source", raw_data_sources[0]?._id)
       if(information_request.length > 0) return pushQuery("information_request", information_request[0]?._id)
     }
-  },[])
+  }, [dataset])
 
   function SwitchResource ({route}) {
     if (route.hasOwnProperty("table")) return <BdmTablePage id={route.table}/>
@@ -141,6 +145,7 @@ export default function DatasetResource({
       gap="24px"
       spacing={0}
       width="100%"
+      height="100%"
     >
       <Stack
         minWidth={{base: "100%", lg: "272px"}}
@@ -163,6 +168,7 @@ export default function DatasetResource({
           onChange={(id) => {
             pushQuery("raw_data_source", id)
           }}
+          hasDivider={tables.length > 0 ? true : false}
         />
 
         <ContentFilter
@@ -172,6 +178,7 @@ export default function DatasetResource({
           onChange={(id) => {
             pushQuery("information_request", id)
           }}
+          hasDivider={tables.length > 0 || rawDataSources.length > 0 ? true : false}
         />
       </Stack>
 

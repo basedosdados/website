@@ -127,7 +127,7 @@ export default function InformationRequestPage({ id }) {
 
       <StackSkeleton
         minHeight="56px"
-        height="100%"
+        height="fit-content"
         marginTop="8px !important"
       >
         <AlertDiscalimerBox>
@@ -205,7 +205,7 @@ export default function InformationRequestPage({ id }) {
         </Box>
       </StackSkeleton>
 
-      <Stack spacing="12px" marginBottom="40px !important">
+      <Stack spacing="12px">
         <StackSkeleton width="160px" height="20px">
           <Text
             fontFamily="Roboto"
@@ -223,7 +223,7 @@ export default function InformationRequestPage({ id }) {
           endColor="#F3F3F3"
           borderRadius="6px"
           width="100%"
-          minHeight="60px"
+          height="fit-content"
           spacing="6px"
           skeletonHeight="16px"
           noOfLines={3}
@@ -234,40 +234,6 @@ export default function InformationRequestPage({ id }) {
             {resource?.observations || "Não fornecido"}
           </ReadMore>
         </SkeletonText>
-      </Stack>
-
-      <Stack spacing="12px">
-        <StackSkeleton width="160px" height="20px">
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="18px"
-            lineHeight="20px"
-            color="#252A32"
-          >
-            Cobertura temporal
-          </Text>
-        </StackSkeleton>
-
-        <StackSkeleton
-          width="350px"
-          height="24px"
-          alignItems="start"
-        >
-          <Text
-            fontFamily="Roboto"
-            fontSize="14px"
-            fontWeight="400"
-            lineHeight="20px"
-            color="#464A51"
-          >
-            Não informado
-          </Text>
-          {/* <TemporalCoverage
-            value={resource?.coverages?.[0]?.datetimeRanges?.[0]}
-            text="Nenhuma cobertura temporal fornecida"
-          /> */}
-        </StackSkeleton>
       </Stack>
 
       <Divider marginY="40px !important" borderColor="#DEDFE0"/>

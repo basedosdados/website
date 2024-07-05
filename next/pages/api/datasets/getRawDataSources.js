@@ -92,30 +92,6 @@ async function getRawDataSources(id) {
                         _id
                         name
                       }
-                      datetimeRanges {
-                        edges {
-                          node {
-                            _id
-                            startYear
-                            startSemester
-                            startQuarter
-                            startMonth
-                            startDay
-                            startHour
-                            startMinute
-                            startSecond
-                            endYear
-                            endSemester
-                            endQuarter
-                            endMonth
-                            endDay
-                            endHour
-                            endMinute
-                            endSecond
-                            interval
-                          }
-                        }
-                      }
                     }
                   }
                 }

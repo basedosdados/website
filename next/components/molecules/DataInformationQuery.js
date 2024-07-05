@@ -168,6 +168,7 @@ export default function DataInformationQuery({ resource }) {
   const [tabIndex, setTabIndex] = useState(0)
   const [downloadNotAllowed, setDownloadNotAllowed] = useState(false)
   const [checkedColumns, setCheckedColumns] = useState([])
+  const [numberColumns, setNumberColumns] = useState(0)
   const [sqlCode, setSqlCode] = useState("")
   const [hasLoadingColumns, setHasLoadingColumns] = useState(true)
   const [isLoadingCode, setIsLoadingCode] = useState(false)
@@ -175,24 +176,25 @@ export default function DataInformationQuery({ resource }) {
   const [insufficientChecks, setInsufficientChecks] = useState(false)
   const [includeTranslation, setIncludeTranslation] = useState(true)
 
-  let gcpDatasetID
-  let gcpTableId
-  let downloadUrl
+  const [gcpDatasetID, setGcpDatasetID] = useState("")
+  const [gcpTableId, setGcpTableId] = useState("")
+  const [downloadUrl, setDownloadUrl] = useState("")
 
   useEffect(() => {
-    if (resource?.numberRows === 0) return setDownloadNotAllowed(false)
-    if (resource?.numberRows) return resource?.numberRows > 200000 ? setDownloadNotAllowed(false) : setDownloadNotAllowed(true)
-
-    if (resource?.cloudTables?.[0]?.gcpDatasetId) gcpDatasetID = resource.cloudTables[0].gcpDatasetId
-    if (resource?.cloudTables?.[0]?.gcpTableId) gcpTableId = resource.cloudTables[0].gcpTableId
+    if (resource?.numberRows === 0) setDownloadNotAllowed(false)
+    if (resource?.numberRows) resource?.numberRows > 200000 ? setDownloadNotAllowed(false) : setDownloadNotAllowed(true)
+        
+    if (resource?.cloudTables?.[0]) {
+      setGcpDatasetID(resource.cloudTables[0]?.gcpDatasetId || "")
+      setGcpTableId(resource.cloudTables[0]?.gcpTableId || "")
+    }
 
     if (gcpDatasetID) {
       if (gcpTableId) {
-        downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${gcpDatasetID}/${gcpTableId}/${gcpTableId}.csv.gz`
+        setDownloadUrl(`https://storage.googleapis.com/basedosdados-public/one-click-download/${gcpDatasetID}/${gcpTableId}/${gcpTableId}.csv.gz`)
       }
     }
-  }, [resource])
-
+  }, [resource.numberRows, resource.cloudTables])
 
   useEffect(() => {
     if(resource._id === undefined) return
@@ -316,6 +318,7 @@ export default function DataInformationQuery({ resource }) {
               tableId={resource._id}
               checkedColumns={checkedColumns}
               onChangeCheckedColumns={setCheckedColumns}
+              numberColumns={setNumberColumns}
               hasLoading={hasLoadingColumns}
               setHasLoading={setHasLoadingColumns}
               template={tabIndex === 3 ? "download" : "checks"}
@@ -394,8 +397,8 @@ export default function DataInformationQuery({ resource }) {
                 <AlertDiscalimerBox
                   type="warning"
                 >
-                  Essa tabela possui mais de <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>. Cuidado para não ultrapassar o <Text as="a" href="" target="_blank" color="#0068C5" _hover={{color: "#4F9ADC"}}>limite de processamento gratuito</Text> do BigQuery. <Text as="br" display={{base: "none", lg: "flex"}}/>
-                  Para otimizar a consulta, você pode selecionar menos colunas ou adicionar filtros no BigQuery.
+                  Essa tabela completa, com todas as colunas, tem <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>. Cuidado para não ultrapassar o <Text as="a" href="" target="_blank" color="#0068C5" _hover={{color: "#4F9ADC"}}>limite de processamento gratuito</Text> do BigQuery. <Text as="br" display={{base: "none", lg: "flex"}}/>
+                  {numberColumns === checkedColumns.length && "Para otimizar a consulta, você pode selecionar menos colunas ou adicionar filtros no BigQuery."}
                 </AlertDiscalimerBox>
               </Skeleton>
             }
@@ -527,7 +530,7 @@ export default function DataInformationQuery({ resource }) {
                 >
                   <Box
                     as="a"
-                    href="https://console.cloud.google.com/"
+                    href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${gcpDatasetID}&t=${gcpTableId}&page=table`}
                     target="_blank"
                     display="flex"
                     alignItems="center"

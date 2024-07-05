@@ -55,6 +55,10 @@ async function getBdmTable(id) {
                           node {
                             _id
                             latest
+                            entity {
+                              _id
+                              slug
+                            }
                           }
                         }
                       }
