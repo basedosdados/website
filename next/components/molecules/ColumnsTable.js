@@ -20,11 +20,11 @@ import Checkbox from '../atoms/Checkbox';
 
 import {
   getColumnsBdmTable
-} from "../../pages/api/datasets/index";
+} from "../../pages/api/tables/index";
 
 import InternalError from '../../public/img/internalError'
 import InfoIcon from '../../public/img/icons/infoIcon';
-import RedirectIcon from '../../public/img/icons/redirectIcon';
+import DownloadIcon from '../../public/img/icons/downloadIcon';
 import SearchIcon from '../../public/img/icons/searchIcon';
 import 'katex/dist/katex.min.css';
 
@@ -90,6 +90,7 @@ export default function ColumnsTable({
   onChangeCheckedColumns,
   hasLoading,
   setHasLoading,
+  numberColumns,
   template
 }) {
   const [resource, setResource] = useState({})
@@ -129,6 +130,7 @@ export default function ColumnsTable({
 
         if(result) {
           setResource(result.sort(sortElements))
+          numberColumns(result.length)
           setColumns(result.sort(sortElements))
           setHasLoading(false)
           setIsSearchLoading(false)
@@ -215,25 +217,43 @@ export default function ColumnsTable({
     )
   }
 
-  const directoryColumnValue = (value) => {
-    const dataset = value?.table?.dataset
-    const table = value?.table
-    const newDirectoryColumn = `${dataset?.slug}.${table?.slug}:${value?.name}`
-  
-    if (newDirectoryColumn === "undefined.undefined:undefined") return empty()
+  function TranslationTable({ value }) {
+    if(value === null) return (
+      <Text>
+        Não precisa de tradução
+      </Text>
+    )
 
+    const cloudValues = value?.table?.cloudTables?.edges?.[0]?.node
+
+    const gcpDatasetID = cloudValues?.gcpDatasetId || ""
+    const gcpTableId = cloudValues?.gcpTableId || ""
+    const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${gcpDatasetID}/${gcpTableId}/${gcpTableId}.csv.gz`
+
+    const datasetName = value?.table?.dataset?.name || ""
+    const tableName = value?.table?.name || ""
+  
     return (
-      <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
-        {newDirectoryColumn}
-        <a target={"_blank"} href={`/dataset/${dataset?._id}?table=${table?._id}`}>
-          <RedirectIcon
-            alt="hiperlink"
-            fill="#42B0FF"
-            cursor="pointer" 
-            _hover={{opacity:0.7}}
-          />
-        </a> 
-      </div>
+      <Box>
+        <Text
+          as="a"
+          target="_blank"
+          href={downloadUrl}
+          display="flex"
+          flexDirection="row"
+          gap="4px"
+          color="#0068C5"
+          fill="#0068C5"
+          _hover={{
+            color:"#4F9ADC",
+            fill:"#4F9ADC"
+          }}
+        >
+          Fazer download da tabela que faz a tradução desta coluna
+          <DownloadIcon width="18px" height="18px"/>
+        </Text>
+        <Text>{datasetName} - {tableName}</Text>
+      </Box>
     )
   }
 
@@ -479,7 +499,10 @@ export default function ColumnsTable({
                   </TableValue>
 
                   <TableValue>
-                    {
+                    {template === "download" ?
+                      <TranslationTable value={elm?.node?.directoryPrimaryKey}/>
+                    :
+                    
                       elm?.node?.coveredByDictionary === true ? "Sim" :
                       elm?.node?.directoryPrimaryKey?._id ? "Sim" :
                       elm?.node?.coveredByDictionary === false ? "Não"

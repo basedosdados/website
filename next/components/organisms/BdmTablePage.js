@@ -251,7 +251,7 @@ export default function BdmTablePage({ id }) {
         endColor="#F3F3F3"
         borderRadius="6px"
         width="100%"
-        minHeight="60px"
+        height="fit-content"
         spacing="6px"
         skeletonHeight="16px"
         noOfLines={3}
@@ -265,7 +265,7 @@ export default function BdmTablePage({ id }) {
       </SkeletonText>
 
       <Stack spacing="12px" marginBottom="40px !important">
-        <StackSkeleton width="160px" height="20px">
+        <StackSkeleton width="240px" height="20px">
           <Text
             fontFamily="Roboto"
             fontWeight="500"
@@ -273,7 +273,7 @@ export default function BdmTablePage({ id }) {
             lineHeight="20px"
             color="#252A32"
           >
-            Cobertura temporal
+            Cobertura temporal da tabela
           </Text>
         </StackSkeleton>
 
@@ -294,7 +294,7 @@ export default function BdmTablePage({ id }) {
             lineHeight="20px"
             color="#252A32"
           >
-            Acesso oas dados
+            Acesso aos dados
           </Text>
         </StackSkeleton>
 
@@ -303,7 +303,7 @@ export default function BdmTablePage({ id }) {
         />
       </Stack>
 
-      <Stack marginBottom="40px !important">
+      <Stack marginBottom="40px !important" onClick={() => setIsLoading(!isLoading)}>
         <StackSkeleton width="300px" height="20px">
           <Text
             fontFamily="Roboto"
@@ -321,7 +321,7 @@ export default function BdmTablePage({ id }) {
           endColor="#F3F3F3"
           borderRadius="6px"
           width={!isLoading ? "100%" : "500px"}
-          spacing="11px"
+          spacing="2px"
           skeletonHeight="18px"
           noOfLines={2}
           marginTop="12px !important"
@@ -357,12 +357,15 @@ export default function BdmTablePage({ id }) {
               </Text>
             }
           </Box>
-          <Text
-            marginTop="8px !important"
+          <Box
+            display="flex"
+            flexDirection="row"
+            gap="8px"
             fontFamily="Roboto"
             fontWeight="400"
             fontSize="14px"
             lineHeight="20px"
+            marginTop="1px"
             color="#464A51"
           >
             {resource?.rawDataSource?.[0]?.updates?.[0]?.latest ?
@@ -370,17 +373,36 @@ export default function BdmTablePage({ id }) {
               :
               "Não informado"
             } : Última vez que atualizaram na fonte original
-          </Text>
+            {resource?.rawDataSource?.[0]?.updates?.[0]?.entity?.slug &&
+              <Text
+                backgroundColor="#EEEEEE"
+                padding="2px 4px"
+                borderRadius="4px"
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="12px"
+                lineHeight="18px"
+                color="#252A32"
+              >
+                {getUpdateFormat(resource?.rawDataSource?.[0]?.updates?.[0]?.entity?.slug)}
+              </Text>
+            }
+          </Box>
           <Text
-            display="none"
-            marginTop="8px !important"
+            display="flex"
+            flexDirection="row"
+            gap="8px"
             fontFamily="Roboto"
             fontWeight="400"
             fontSize="14px"
             lineHeight="20px"
             color="#464A51"
           >
-            Não informado : Última vez que verificamos a fonte original
+            {resource?.rawDataSource?.[0]?.polls?.[0]?.latest ?
+              formatDate(resource.rawDataSource[0].polls[0].latest)
+              :
+              "Não informado"
+            } : Última vez que verificamos a fonte original
           </Text>
         </SkeletonText>
       </Stack>
