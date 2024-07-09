@@ -267,19 +267,24 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
         <Divider margin="24px 0" borderColor="#DEDFE0"/>
 
         <Stack
+          cursor="pointer"
           spacing={0}
           flexDirection="row"
           padding="16px 0"
           alignItems="center"
+          color="#252A32"
+          fill="#D0D0D0"
+          _hover={{
+            opacity: 0.8
+          }}
           onClick={() => {
             cookies.remove('userBD', { path: '/' })
             cookies.remove('token', { path: '/' })
             window.open("/", "_self")
           }}
         >
-          <SignOutIcon width="20px" height="20px" fill="#D0D0D0"/>
+          <SignOutIcon width="20px" height="20px"/>
           <Text
-            color="#252A32"
             fontFamily="Ubuntu"
             fontSize="16px"
             fontWeight="400"
@@ -691,7 +696,11 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
         })}
       </HStack>
 
-      {userTemplate && !isMobileMod() && <SearchInputUser user={userData !== null}/>}
+      {userTemplate && !isMobileMod() &&
+        <SearchInputUser
+          user={userData !== null}
+        />
+      }
 
       <HStack spacing={8} display={{ base: "none", lg: "flex" }}>
         {userData ? (
@@ -883,7 +892,11 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
             />
           }
 
-          {userTemplate && isMobileMod() && <SearchInputUser user={userData !== null}/>}
+          {userTemplate && isMobileMod() &&
+            <SearchInputUser
+              user={userData !== null}
+            />
+          }
 
           {useCheckMobile() && userData &&
             <MenuUser
