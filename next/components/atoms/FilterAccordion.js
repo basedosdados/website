@@ -11,12 +11,9 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Checkbox from "../atoms/Checkbox";
-import ControlledInput from "./ControlledInput";
+import { ControlledInput, ControlledInputSimple} from "./ControlledInput";
 import SectionText from "./SectionText";
 import SearchIcon from "../../public/img/icons/searchIcon"
-import BDLogoPlusImage from "../../public/img/logos/bd_logo_plus";
-import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
-
 
 export function BaseFilterAccordion({
   fieldName,
@@ -25,8 +22,6 @@ export function BaseFilterAccordion({
   isOpen = null,
   isActive = false,
   onChange = () => { },
-  bdPlus = null,
-  bdPro = false,
   alwaysOpen = false,
   isHovering = true
 }) {
@@ -51,27 +46,13 @@ export function BaseFilterAccordion({
                 >
                   <Box
                     width="fit-content"
+                    fontFamily="Roboto"
                     fontWeight="500"
-                    fontFamily="Ubuntu"
                     fontSize="16px"
-                    color={isActive ? "#2B8C4D" : "#252A32"}
-                    letterSpacing="0.2px"
+                    color={isActive ? "#2B8C4D" : "#464A51"}
                   >
                     {fieldName}
                   </Box>
-                  {bdPlus &&
-                    <BDLogoPlusImage
-                      widthImage="45px"
-                      marginLeft="5px !important"
-                    />
-                  }
-                  {bdPro && 
-                    <BDLogoProImage
-                      widthImage="58px"
-                      heightImage="16px"
-                      marginLeft="5px !important"
-                    />
-                  }
                 </HStack>
                 {!alwaysOpen ? <AccordionIcon color={isActive ? "#2B8C4D" : null} marginLeft="auto" fontSize="18px" /> : <></>}
               </AccordionButton>
@@ -80,7 +61,7 @@ export function BaseFilterAccordion({
               <VStack
                 overflowY="auto"
                 overflowX={overflowX + " !important"}
-                maxHeight="300px"
+                maxHeight="380px"
                 width="100%"
                 alignItems="flex-start"
               >
@@ -111,8 +92,10 @@ export function CheckboxFilterAccordion({
 }) {
   const [options , setOptions] = useState([])
   const [search, setSearch] = useState("");
+  const [inputFocus, setInputFocus] = useState(false)
 
   useEffect(() => {
+    if (choices.length === 0) return
     setOptions(choices)
   }, [choices])
 
@@ -137,19 +120,22 @@ export function CheckboxFilterAccordion({
       <CheckboxGroup defaultValue={valuesChecked}>
         {canSearch &&
           <VStack padding="15px 0 10px" width="100%" alignItems="center">
-            <ControlledInput
-              color="#252A32"
+            <ControlledInputSimple
+              width="100%"
               value={search}
               onChange={setSearch}
-              inputBackgroundColor="#FFFFFF"
-              inputStyle={{
-                height: "40px",
-                fontSize: "14px",
-                width: "100%",
-                borderRadius: "16px",
-              }}
-              rightIcon={
-                <SearchIcon alt="pesquisar" fill="#D0D0D0" cursor="pointer"/>
+              inputFocus={inputFocus}
+              changeInputFocus={setInputFocus}
+              placeholder="Pesquisar"
+              fill="#464A51"
+              fillHover="#878A8E"
+              icon={
+                <SearchIcon
+                  alt="pesquisar"
+                  width="16.8px"
+                  height="16.8px"
+                  cursor="pointer"
+                />
               }
             />
           </VStack>
@@ -162,26 +148,46 @@ export function CheckboxFilterAccordion({
           padding="8px 0"
         >
           {options.length > 0 && options.map((c) => (
-            <label
+            <Text
+              as="label"
               key={c[valueField]}
-              style={{
-                display:"flex",
-                flexDirection:"row",
-                gap:"8px",
-                cursor:"pointer",
-                alignItems:"center",
-                color:"#7D7D7D",
-                fontFamily:"Lato",
-                letterSpacing:"0.5px",
-              }}
+              display="flex"
+              width="100%"
+              cursor="pointer"
+              gap="2px"
+              alignItems="center"
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              lineHeight="20px"
+              height="20px"
+              color="#71757A"
+              overflow="hidden"
             >
               <Checkbox
                 value={c[valueField]}
-                onChange={(e) => { onChange(e.target.value)}} 
+                onChange={(e) => { onChange(e.target.value)}}
+                minWidth="18px"
+                minHeight="18px"
+                maxWidth="18px"
+                maxHeight="18px"
+                marginRight="14px"
+                flexShrink={0}
               />
-
-              {c[displayField]} {c["count"] ? `(${c["count"]})` : `(0)`}
-            </label>
+              <Text
+                as="span"
+                textOverflow="ellipsis"
+                whiteSpace="nowrap"
+                overflow="hidden"
+                marginRight="2px"
+                flex="1 1 1"
+              >
+                {c[displayField]}
+              </Text>
+              <Text as="span" flexShrink={0}>
+                {c["count"] ? `(${c["count"]})` : `(0)`}
+              </Text>
+            </Text>
           ))}
         </VStack>
       </CheckboxGroup>

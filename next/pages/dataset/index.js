@@ -6,7 +6,6 @@ import {
   Divider,
   Stack,
   Skeleton,
-  SkeletonText,
   Flex,
   Box,
   Spinner,
@@ -26,9 +25,6 @@ import {
 import { CheckboxFilterAccordion } from "../../components/atoms/FilterAccordion";
 import Checkbox from "../../components/atoms/Checkbox";
 import Tag from "../../components/atoms/Tag";
-import BodyText from "../../components/atoms/BodyText";
-import Display from "../../components/atoms/Display";
-import RoundedButton from "../../components/atoms/RoundedButton";
 import Database from "../../components/organisms/Database";
 import { MainPageTemplate } from "../../components/templates/main";
 
@@ -91,6 +87,17 @@ export default function SearchDatasetPage() {
   const [pageInfo, setPageInfo] = useState({page: 0, count: 0})
   const [isLoading, setIsLoading] = useState(true)
 
+  async function getDatasets({q, filters, page}) {
+    const res = await getSearchDatasets({q:q, filter: filters, page:page})
+    if(res === undefined) return router.push({pathname:"500"})
+    if(res?.count === 0) setShowEmptyState(true)
+    setPageInfo({page: page, count: res?.count})
+    setResource(res?.results || null)
+    setAggregations(res?.aggregations)
+    setCount(res?.count)
+    setIsLoading(false)
+  }
+
   useEffect(() => {
     if(fetchApi) clearTimeout(fetchApi)
     setIsLoading(true)
@@ -108,17 +115,6 @@ export default function SearchDatasetPage() {
     setSelectedFilters(fetchFilter(query))
     setFetchApi(fetchFunc)
   }, [query])
-
-  async function getDatasets({q, filters, page}) {
-    const res = await getSearchDatasets({q:q, filter: filters, page:page})
-    if(res === undefined) return router.push({pathname:"500"})
-    if(res?.count === 0) setShowEmptyState(true)
-    setPageInfo({page: page, count: res?.count})
-    setResource(res?.results || null)
-    setAggregations(res?.aggregations)
-    setCount(res?.count)
-    setIsLoading(false)
-  }
 
   function flattenArray(arr) {
     let result = []
@@ -210,68 +206,111 @@ export default function SearchDatasetPage() {
         width="100%"
         spacing={0}
         marginTop={!display && "24px !important"}
+        borderRadius="16px"
+        border={!display && "1px solid #DEDFE0"}
+        padding="40px 16px"
       >
         {image && 
           <NotFoundImage
-            transform={!isMobileMod() && "translateX(-36px)"}
             widthImage="100%"
             heightImage="100%"
-            marginBottom="24px"
+            marginBottom="16px"
             marginTop={isMobileMod() && "24px"}
           />
         }
+
         {display &&
-          <Display
+          <Text
             width="100%"
-            fontSize="50px"
             textAlign="center"
-            lineHeight="54px"
-            letterSpacing="-0.8px"
-            marginBottom="24px !important"
-          >{display}</Display>
+            marginBottom="16px !important"
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="28px"
+            lineHeight="42px"
+            color="#252A32"
+          >{display}</Text>
         }
+
         <Text
-          fontFamily="ubuntu"
-          fontWeight="400"
-          fontSize={display ? "20px" : "16px"}
-          lineHeight="23px"
-          letterSpacing="0.2px"
-          marginBottom="0 !important"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize={display ? "18px" : "24px"}
+          lineHeight="36px"
           textAlign="center"
+          color="#252A32"
         >
           {text}
         </Text>
-        <BodyText
-          fontSize={display ? "18px" : "16px"}
+
+        <Text
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="18px"
           lineHeight="28px"
           textAlign="center"
+          color="#71757A"
         >
           {bodyText}
-        </BodyText>
+        </Text>
+
         <HStack
           width="100%"
-          marginTop={display ? "24px !important" : "16px !important"}
+          marginTop="16px !important"
           spacing={isMobileMod() ? 0 : "16px"}
           justifyContent="center"
           alignItems={isMobileMod() && "center"}
           flexDirection={isMobileMod() && "column"}
           gridGap={isMobileMod() && "16px"}
         >
-          <RoundedButton
-            fontSize="15px"
-            minWidth="240px"
-            padding="10px 24px"
+          <Box
+            as="button"
             onClick={() => window.open("https://discord.gg/Ec7tfBaTVV", "_blank")}
-          >Fazer uma proposta</RoundedButton>
-          <RoundedButton
-            fontSize="15px"
-            minWidth="240px"
-            backgroundColor="#FFF"
-            border="1px solid #42B0FF"
-            color="#42B0FF"
-            padding="10px 24px"
+            display="flex"
+            alignItems="center"
+            height="40px"
+            width="fit-content"
+            borderRadius="8px"
+            backgroundColor="#2B8C4D"
+            padding="8px 16px"
+            cursor="pointer"
+            color="#FFF"
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="14px"
+            gap="8px"
+            lineHeight="20px"
+            _hover={{
+              backgroundColor: "#80BA94"
+            }}
+          >
+            Fazer uma proposta
+          </Box>
+
+          <Box
+            as="button"
             onClick={() => window.open("https://github.com/orgs/basedosdados/projects/17", "_blank")}
-          >Ver roadmap de dados</RoundedButton>
+            display="flex"
+            alignItems="center"
+            height="40px"
+            width="fit-content"
+            borderRadius="8px"
+            backgroundColor="#FFF"
+            border="1px solid #2B8C4D"
+            padding="8px 16px"
+            cursor="pointer"
+            color="#2B8C4D"
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="14px"
+            gap="8px"
+            lineHeight="20px"
+            _hover={{
+              opacity: 0.7
+            }}
+          >
+            Ver roadmap de dados
+          </Box>
         </HStack>
       </Stack>
     )
@@ -309,20 +348,72 @@ export default function SearchDatasetPage() {
     return selectedFilters.map((elm) => elm[0] === text).find(res => res === true)
   }
 
-  const validateActiveSetsWith = () => {
-    return selectedFilters.map((elm) => 
-        elm[1] === "tables"
-      ||elm[1] === "raw_data_sources"
-      ||elm[1] === "information_requests").find(
-      res => res === true
-    )
-  }
+  function CheckboxFilterComponent({value, text, count}) {
+    const validateContainsQuery = (value) => {
+      if (query?.contains === value) {
+        return true
+      }
+    
+      if (Array.isArray(query?.contains)) {
+        return query.contains.some((elm) => elm === value)
+      }
+    
+      return false
+    }
 
-  const validateActiveResource = (text) => {
-    return selectedFilters.map((elm) => 
-        elm[1] === "open_data"
-      ||elm[1] === "closed_data").find(
-      res => res === true
+    return (
+      <Skeleton
+        width="100%"
+        marginBottom="5px"
+        borderRadius="6px"
+        startColor="#F0F0F0"
+        endColor="#F3F3F3"
+        isLoaded={!isLoading}
+      >
+        <Text
+          as="label"
+          display="flex"
+          width="100%"
+          cursor="pointer"
+          gap="2px"
+          alignItems="center"
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="14px"
+          lineHeight="20px"
+          height="20px"
+          color="#71757A"
+          overflow="hidden"
+          pointerEvents={count === 0 ? "none" : ""}
+        >
+          <Checkbox
+            value={value}
+            onChange={(e) => handleSelectFilter(["contains", e.target.value])} 
+            isChecked={validateContainsQuery(value)}
+            minWidth="18px"
+            minHeight="18px"
+            maxWidth="18px"
+            maxHeight="18px"
+            marginRight="14px"
+            borderColor={count === 0 ? "#ACAEB1" : "#878A8E"}
+            backgroundColor={count === 0 ? "#EEEEEE" : "#FFF"}
+            flexShrink={0}
+          />
+          <Text
+            as="span"
+            textOverflow="ellipsis"
+            whiteSpace="nowrap"
+            overflow="hidden"
+            marginRight="2px"
+            flex="1 1 1"
+          >
+            {text}
+          </Text>
+          <Text as="span" flexShrink={0}>
+            {`(${count})`}
+          </Text>
+        </Text>
+      </Skeleton>
     )
   }
 
@@ -339,7 +430,7 @@ export default function SearchDatasetPage() {
         backgroundColor="#FFF"
       >
         <Skeleton
-          minWidth="138px"
+          minWidth="222px"
           minHeight="138px"
           borderRadius="16px"
           startColor="#F0F0F0"
@@ -347,15 +438,11 @@ export default function SearchDatasetPage() {
         />
 
         <Box display="flex" width="100%" flexDirection="column" gap="8px">
-          <SkeletonText noOfLines={2} spacing="4" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <SkeletonText marginTop="26px" noOfLines={3} spacing="3" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <SkeletonText marginTop="10px" noOfLines={1} spacing="0" startColor="#F0F0F0" endColor="#F0F0F0"/>
-        </Box>
-
-        <Box display="flex" flexDirection="row" gap="8px">
-          <Skeleton width="36px" height="36px" borderRadius="6px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton width="36px" height="36px" borderRadius="6px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton width="36px" height="36px" borderRadius="6px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <Skeleton height="28px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <Skeleton height="18px" width="400px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <Skeleton height="18px" width="300px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <Skeleton height="18px" width="200px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <Skeleton height="20px" width="460px" startColor="#F0F0F0" endColor="#F0F0F0"/>
         </Box>
       </Box>
     )
@@ -374,22 +461,26 @@ export default function SearchDatasetPage() {
         backgroundColor="#FFF"
       >
         <Skeleton
-          width="138px"
+          width="222px"
           height="138px"
           borderRadius="16px"
           startColor="#F0F0F0"
           endColor="#F0F0F0"
         />
-        <SkeletonText noOfLines={2} spacing="4" startColor="#F0F0F0" endColor="#F0F0F0"/>
-
-        <Box display="flex" flexDirection="row" gap="8px">
-          <Skeleton width="36px" height="36px" borderRadius="6px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton width="36px" height="36px" borderRadius="6px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton width="36px" height="36px" borderRadius="6px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-        </Box>
+        <Skeleton height="28px" startColor="#F0F0F0" endColor="#F0F0F0"/>
 
         <Box display="flex" width="100%" flexDirection="column" gap="8px">
-          <SkeletonText marginTop="6px" noOfLines={6} spacing="3" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <Skeleton height="18px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <Skeleton height="18px" width="100px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <Skeleton height="18px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <Skeleton height="20px" width="160px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <Skeleton height="20px" width="100px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+
+          <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+          <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
         </Box>
       </Box>
     )
@@ -407,10 +498,8 @@ export default function SearchDatasetPage() {
       </Head>
 
       <Stack
-        width="100%"
         maxWidth="1440px"
         boxSizing="content-box"
-        overflow="auto"
         paddingX="24px"
         paddingTop="24px"
         marginX="auto"
@@ -423,7 +512,7 @@ export default function SearchDatasetPage() {
           minWidth={{ base: "100%", lg: "300px" }}
           maxWidth={{ base: "100%", lg: "300px" }}
         >
-          <Box display="flex" marginBottom="24px" alignItems="center">
+          <Box display="flex" marginBottom="24px" alignItems="center" onClick={() => setIsLoading(!isLoading)}>
             <FilterIcon
               alt="filtrar conjuntos"
               width="20px"
@@ -453,112 +542,62 @@ export default function SearchDatasetPage() {
               fontSize="16px"
               lineHeight="24px"
               color="#464A51"
-              marginBottom="5px"
+              marginBottom="18px"
             >
               Conjuntos com
             </Text>
 
-            <Skeleton
-              width="100%"
-              marginBottom="5px"
-              borderRadius="6px"
-              startColor="#F0F0F0"
-              endColor="#F3F3F3"
-              isLoaded={!isLoading}
-            >
-              <Text
-                as="label"
-                display="flex"
-                width="100%"
-                cursor="pointer"
-                gap="2px"
-                alignItems="center"
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="14px"
-                lineHeight="20px"
-                height="20px"
-                color="#71757A"
-                overflow="hidden"
-              >
-                <Checkbox
-                  value="tables"
-                  onChange={(e) => handleSelectFilter(["contains", e.target.value])} 
-                  isChecked={query?.contains === "tables" || query?.contains?.[0] ? query?.contains.map((elm) => elm === "tables" ) : false}
-                  minWidth="18px"
-                  minHeight="18px"
-                  maxWidth="18px"
-                  maxHeight="18px"
-                  marginRight="14px"
-                  flexShrink={0}
-                />
-                <Text
-                  as="span"
-                  textOverflow="ellipsis"
-                  whiteSpace="nowrap"
-                  overflow="hidden"
-                  marginRight="2px"
-                  flex="1 1 auto"
-                >
-                  Tabelas tratadas
-                </Text>
-                <Text as="span" flexShrink={0}>
-                  {`(${aggregations?.contains_tables?.filter(elm => elm.key === 1)[0]?.count || 0})`}
-                </Text>
-              </Text>
-            </Skeleton>
+            <CheckboxFilterComponent
+              value="tables"
+              text="Tabelas tratadas"
+              count={aggregations?.contains_tables?.filter(elm => elm.key === 1)[0]?.count || 0}
+            />
+
+            <CheckboxFilterComponent
+              value="raw_data_sources"
+              text="Fontes originais"
+              count={aggregations?.contains_raw_data_sources?.filter(elm => elm.key === 1)[0]?.count || 0}
+            />
+
+            <CheckboxFilterComponent
+              value="information_requests"
+              text="Pedidos LAI"
+              count={aggregations?.contains_information_requests?.filter(elm => elm.key === 1)[0]?.count || 0}
+            />
           </Box>
 
-          <CheckboxFilterAccordion
-            alwaysOpen= {isLoading ? false : true}
-            choices={[
-              {
-                key: "tables",
-                name: "Tabelas tratadas",
-                count: aggregations?.contains_tables?.filter(elm => elm.key === 1)[0]?.count || 0
-              },
-              {
-                key: "raw_data_sources",
-                name: `Fontes originais`,
-                count: aggregations?.contains_raw_data_sources?.filter(elm => elm.key === 1)[0]?.count || 0
-              },
-              {
-                key: "information_requests",
-                name: `Pedidos LAI`,
-                count: aggregations?.contains_information_requests?.filter(elm => elm.key === 1)[0]?.count || 0
-              },
-            ]}
-            isActive={validateActiveSetsWith("contains")}
-            valueField="key"
-            displayField="name"
-            fieldName="Conjuntos com"
-            valuesChecked={valuesCheckedFilter("contains")}
-            onChange={(value) => handleSelectFilter(["contains",`${value}`])}
-          />
+          <Divider marginY="24px !important" borderColor="#DEDFE0"/>
+
+          <Box
+            width="100%"
+          >
+            <Text
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="16px"
+              lineHeight="24px"
+              color="#464A51"
+              marginBottom="18px"
+            >
+              Recursos
+            </Text>
+
+            <CheckboxFilterComponent
+              value="open_data"
+              text="Grátis"
+              count={aggregations?.contains_open_data?.filter(elm => elm.key === 1)[0]?.count || 0}
+            />
+
+            <CheckboxFilterComponent
+              value="closed_data"
+              text="Pagos"
+              count={aggregations?.contains_closed_data?.filter(elm => elm.key === 1)[0]?.count || 0}
+            />
+          </Box>
+
+          <Divider marginY="24px !important" borderColor="#DEDFE0"/>
 
           <CheckboxFilterAccordion
-            alwaysOpen= {isLoading ? false : true}
-            choices={[
-              {
-                key: "open_data",
-                name: "Grátis",
-                count: aggregations?.contains_open_data?.filter(elm => elm.key === 1)[0]?.count || 0
-              },
-              {
-                key: "closed_data",
-                name: "Pagos",
-                count: aggregations?.contains_closed_data?.filter(elm => elm.key === 1)[0]?.count || 0
-              }
-            ]}
-            isActive={validateActiveResource("contains")}
-            valueField="key"
-            displayField="name"
-            fieldName="Recursos"
-            valuesChecked={valuesCheckedFilter("contains")}
-            onChange={(value) => handleSelectFilter(["contains",`${value}`])}
-          />
-
-          {/* <CheckboxFilterAccordion
             canSearch={true}
             isActive={validateActiveFilterAccordin("theme")}
             choices={aggregations?.themes}
@@ -567,9 +606,11 @@ export default function SearchDatasetPage() {
             fieldName="Tema"
             valuesChecked={valuesCheckedFilter("theme")}
             onChange={(value) => handleSelectFilter(["theme",`${value}`])}
-          /> */}
+          />
 
-          {/* <CheckboxFilterAccordion
+          <Divider marginY="24px !important" borderColor="#DEDFE0"/>
+
+          <CheckboxFilterAccordion
             canSearch={true}
             isActive={validateActiveFilterAccordin("organization")}
             choices={aggregations?.organizations}
@@ -578,9 +619,11 @@ export default function SearchDatasetPage() {
             fieldName="Organizações"
             valuesChecked={valuesCheckedFilter("organization")}
             onChange={(value) => handleSelectFilter(["organization",`${value}`])}
-          /> */}
+          />
 
-          {/* <CheckboxFilterAccordion
+          <Divider marginY="24px !important" borderColor="#DEDFE0"/>
+
+          <CheckboxFilterAccordion
             canSearch={true}
             isActive={validateActiveFilterAccordin("tag")}
             choices={aggregations?.tags}
@@ -589,9 +632,11 @@ export default function SearchDatasetPage() {
             fieldName="Etiqueta"
             valuesChecked={valuesCheckedFilter("tag")}
             onChange={(value) => handleSelectFilter(["tag",`${value}`])}
-          /> */}
+          />
 
-          {/* <CheckboxFilterAccordion
+          <Divider marginY="24px !important" borderColor="#DEDFE0"/>
+
+          <CheckboxFilterAccordion
             canSearch={true}
             isActive={validateActiveFilterAccordin("observation_level")}
             choices={aggregations?.observation_levels}
@@ -600,12 +645,11 @@ export default function SearchDatasetPage() {
             fieldName="Nível da observação"
             valuesChecked={valuesCheckedFilter("observation_level")}
             onChange={(value) => handleSelectFilter(["observation_level",`${value}`])}
-          /> */}
+          />
         </VStack>
 
         <VStack
           alignItems="flex-start"
-          overflow="hidden"
           width="100%"
           paddingLeft={isMobileMod() ? "" : "40px !important"}
         >
@@ -650,23 +694,30 @@ export default function SearchDatasetPage() {
           >
             {isLoading
               ? new Array(10).fill(0).map((e, i) => (
-                <Box display="flex" flexDirection="column" width="100%" key={i}>
-                  {useCheckMobile() ?
-                    <SkeletonWaitCardMobile />
-                  :
-                    <SkeletonWaitCard />
-                  }
-                  <Divider />
-                </Box>
+                useCheckMobile() ?
+                  <SkeletonWaitCardMobile key={i}/>
+                :
+                  <SkeletonWaitCard key={i}/>
               ))
               :
               (resource || []).map((res, i) => (
-                <Box display="flex" flexDirection="column" width="100%" key={i}>
-                  <DatabaseCard data={res} />
-                  <Divider border="0" borderBottom="1px solid #DEDFE0" opacity={1}/>
-                </Box>
+                <DatabaseCard data={res} key={i}/>
               ))
             }
+
+          {pageInfo?.count >=1 && pageInfo?.count <=10 &&
+            <DataProposalBox 
+              text= "Ainda não encontrou o que está procurando?"
+              bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
+            />
+          }
+
+          {pageInfo.page >= 2 &&
+            <DataProposalBox 
+              text= "Ainda não encontrou o que está procurando?"
+              bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
+            />
+          }
 
             {!showEmptyState &&
               <ReactPaginate
@@ -692,20 +743,6 @@ export default function SearchDatasetPage() {
               />
             }
           </VStack>
-
-          {pageInfo?.count >=1 && pageInfo?.count <=10 &&
-            <DataProposalBox 
-              text= "Ainda não encontrou o que está procurando?"
-              bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
-            />
-          }
-
-          {pageInfo.page >= 2 &&
-            <DataProposalBox 
-              text= "Ainda não encontrou o que está procurando?"
-              bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
-            />
-          }
         </VStack>
       </Stack>
     </MainPageTemplate>
