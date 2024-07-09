@@ -721,8 +721,8 @@ export default function SearchDatasetPage() {
 
             {!showEmptyState &&
               <ReactPaginate
-                previousLabel={useCheckMobile() ? "<" : "Anterior"}
-                nextLabel={useCheckMobile() ? ">" : "Próxima"}
+                previousLabel={"Anterior"}
+                nextLabel={"Próxima"}
                 breakLabel={"..."}
                 breakClassName={"break-me"}
                 forcePage={pageInfo.page - 1 || 0}
@@ -738,8 +738,8 @@ export default function SearchDatasetPage() {
                 containerClassName={"pagination"}
                 activeClassName={"active"}
                 pageClassName={isLoading ? "disabled" : ""}
-                previousClassName={isLoading ? "disabled" : ""}
-                nextClassName={isLoading ? "disabled" : ""}
+                previousClassName={isLoading ? "disabled" : "previous-page"}
+                nextClassName={isLoading ? "disabled" : "next-page"}
               />
             }
           </VStack>
