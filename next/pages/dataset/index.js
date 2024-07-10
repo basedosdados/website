@@ -1,6 +1,5 @@
 import {
   VStack,
-  Heading,
   HStack,
   Text,
   Divider,
@@ -205,7 +204,6 @@ export default function SearchDatasetPage() {
         alignItems="center"
         width="100%"
         spacing={0}
-        marginTop={!display && "24px !important"}
         borderRadius="16px"
         border={!display && "1px solid #DEDFE0"}
         padding="40px 16px"
@@ -424,8 +422,6 @@ export default function SearchDatasetPage() {
         flexDirection="row"
         gap="24px"
         width="100%"
-        height="172px"
-        paddingY="16px"
         borderRadius="12px"
         backgroundColor="#FFF"
       >
@@ -511,8 +507,9 @@ export default function SearchDatasetPage() {
           alignItems="flex-start"
           minWidth={{ base: "100%", lg: "300px" }}
           maxWidth={{ base: "100%", lg: "300px" }}
+          spacing={0}
         >
-          <Box display="flex" marginBottom="24px" alignItems="center" onClick={() => setIsLoading(!isLoading)}>
+          <Box display="flex" marginBottom="24px" alignItems="center">
             <FilterIcon
               alt="filtrar conjuntos"
               width="20px"
@@ -533,8 +530,10 @@ export default function SearchDatasetPage() {
             </Text>
           </Box>
 
-          <Box
+          <VStack
             width="100%"
+            spacing="14px"
+            alignItems="start"
           >
             <Text
               fontFamily="Roboto"
@@ -542,7 +541,7 @@ export default function SearchDatasetPage() {
               fontSize="16px"
               lineHeight="24px"
               color="#464A51"
-              marginBottom="18px"
+              marginBottom="4px"
             >
               Conjuntos com
             </Text>
@@ -564,12 +563,14 @@ export default function SearchDatasetPage() {
               text="Pedidos LAI"
               count={aggregations?.contains_information_requests?.filter(elm => elm.key === 1)[0]?.count || 0}
             />
-          </Box>
+          </VStack>
 
           <Divider marginY="24px !important" borderColor="#DEDFE0"/>
 
-          <Box
+          <VStack
             width="100%"
+            spacing="14px"
+            alignItems="start"
           >
             <Text
               fontFamily="Roboto"
@@ -577,7 +578,7 @@ export default function SearchDatasetPage() {
               fontSize="16px"
               lineHeight="24px"
               color="#464A51"
-              marginBottom="18px"
+              marginBottom="4px"
             >
               Recursos
             </Text>
@@ -593,7 +594,7 @@ export default function SearchDatasetPage() {
               text="Pagos"
               count={aggregations?.contains_closed_data?.filter(elm => elm.key === 1)[0]?.count || 0}
             />
-          </Box>
+          </VStack>
 
           <Divider marginY="24px !important" borderColor="#DEDFE0"/>
 
@@ -663,34 +664,39 @@ export default function SearchDatasetPage() {
           }
 
           {!showEmptyState &&
-            <Flex width="100%" justify="center" align="baseline">
-              <Heading
+            <Flex
+              width="100%"
+              justify="center"
+              align="baseline"
+              padding="40px 0"
+            >
+              <Text
                 display="flex"
-                flexDirection={useCheckMobile() ? "column" : {base: "column", lg:"row"}}
+                flexDirection="column"
                 gap="6px"
                 width="100%"
-                fontFamily="Ubuntu"
-                fontSize="26px"
+                fontFamily="Roboto"
+                fontSize="14px"
                 fontWeight="400"
-                letterSpacing="-0.2px"
-                color="#252A32"
+                lineHeight="20px"
+                color="#71757A"
               >
                 {count ?
                     `${count} conjunto${count > 1 ? "s": ""} encontrado${count > 1 ? "s": ""} ${!!query.q ? ` para ${query.q}` : ""}`
                   :
                   <Box width="fit-content" display="flex" flexDirection="row" gap="8px" alignItems="center">
-                    <Spinner color="#252A32"/> <Text>encontrando conjuntos {!!query.q ? ` para ${query.q}` : ""}</Text>
+                    <Spinner height="18px" width="18px" color="#252A32"/> <Text>encontrando conjuntos {!!query.q ? ` para ${query.q}` : ""}</Text>
                   </Box>
                 }
-              </Heading>
+              </Text>
             </Flex>
           }
 
           <VStack
             width="100%"
             alignItems="flex-start"
-            spacing={3}
-            padding="28px 0px"
+            spacing="40px"
+            marginTop="0 !important"
           >
             {isLoading
               ? new Array(10).fill(0).map((e, i) => (

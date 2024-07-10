@@ -149,7 +149,6 @@ export default function Database({
       alignItems="flex-start"
       width="100%"
       spacing={{ base: 4, md: 0 }}
-      padding="16px 0px"
     >
       <Stack
         direction={{ base: "column", lg: "row" }}

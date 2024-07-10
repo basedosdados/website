@@ -89,7 +89,7 @@ body {
   list-style-type: none;
   display: flex;
   align-self: center;
-  padding-top: 36px;
+  padding: 24px;
 }
 
 .pagination li {
