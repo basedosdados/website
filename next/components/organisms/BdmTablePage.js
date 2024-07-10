@@ -303,7 +303,7 @@ export default function BdmTablePage({ id }) {
         />
       </Stack>
 
-      <Stack marginBottom="40px !important" onClick={() => setIsLoading(!isLoading)}>
+      <Stack marginBottom="40px !important">
         <StackSkeleton width="300px" height="20px">
           <Text
             fontFamily="Roboto"
@@ -414,7 +414,11 @@ export default function BdmTablePage({ id }) {
             info="As partições são divisões feitas em uma tabela para facilitar o gerenciamento e a consulta aos dados. Ao segmentar uma tabela grande em partições menores, a quantidade de bytes lidos é reduzida, o que ajuda a controlar os custos e melhora o desempenho da consulta."
           />
         </StackSkeleton>
-        <StackSkeleton height="20px" width={resource?.partitions ? "100%" : "200px"} marginTop="12px !important" >
+        <StackSkeleton
+          height="20px"
+          width={resource?.partitions ? "100%" : "200px"}
+          marginTop="12px !important"
+        >
           <Text
             fontFamily="Roboto"
             fontWeight="400"
@@ -431,7 +435,7 @@ export default function BdmTablePage({ id }) {
         <StackSkeleton width="190px" height="20px">
           <TooltipText
             text="Nível da observação"
-            info="indica qual a menor granularidade possível de análise com aquele dado. Por exemplo, uma tabela com nível da observação de estado permite que façamos uma análise no país (por ser mais amplo que estado), mas não uma análise por município (que já seria um recorte mais específico)."
+            info="Indica qual a menor granularidade possível de análise com aquele dado. Por exemplo, uma tabela com nível da observação de estado permite que façamos uma análise no país (por ser mais amplo que estado), mas não uma análise por município (que já seria um recorte mais específico)."
           />
         </StackSkeleton>
 
@@ -467,7 +471,7 @@ export default function BdmTablePage({ id }) {
           />
         </StackSkeleton>
         <StackSkeleton
-          width="178px"
+          width={resource?.auxiliaryFilesUrl ? "100%" :"178px"}
           height="24px"
           marginTop="12px !important"
         >
@@ -520,7 +524,7 @@ export default function BdmTablePage({ id }) {
 
         <StackSkeleton
           height="20px"
-          width="132px"
+          width={resource?.rawDataSource?.[0]?.name ? "100%" :"132px"}
           marginTop="12px !important"
         >
           <Text

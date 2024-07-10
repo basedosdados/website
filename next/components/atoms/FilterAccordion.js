@@ -34,8 +34,7 @@ export function BaseFilterAccordion({
               <AccordionButton
                 onClick={onChange}
                 _hover={isHovering ? { cursor: "pointer", opacity: "0.6" } : "none"}
-                padding="16px 16px 0 0"
-                marginBottom="8px"
+                padding="0"
                 cursor="auto"
               >
                 <HStack
@@ -61,7 +60,7 @@ export function BaseFilterAccordion({
               <VStack
                 overflowY="auto"
                 overflowX={overflowX + " !important"}
-                maxHeight="380px"
+                maxHeight="400px"
                 width="100%"
                 alignItems="flex-start"
               >
@@ -119,7 +118,7 @@ export function CheckboxFilterAccordion({
     >
       <CheckboxGroup defaultValue={valuesChecked}>
         {canSearch &&
-          <VStack padding="15px 0 10px" width="100%" alignItems="center">
+          <VStack padding="12px 0 16px" width="100%" alignItems="center">
             <ControlledInputSimple
               width="100%"
               value={search}
@@ -141,11 +140,12 @@ export function CheckboxFilterAccordion({
           </VStack>
         }
         <VStack
-          overflowX="hidden !important"
           alignItems="flex-start"
           overflowY="auto"
           width="100%"
-          padding="8px 0"
+          height="100%"
+          spacing="14px"
+          marginTop="0 !important"
         >
           {options.length > 0 && options.map((c) => (
             <Text
@@ -153,6 +153,7 @@ export function CheckboxFilterAccordion({
               key={c[valueField]}
               display="flex"
               width="100%"
+              minHeight="20px"
               cursor="pointer"
               gap="2px"
               alignItems="center"
@@ -160,7 +161,6 @@ export function CheckboxFilterAccordion({
               fontWeight="400"
               fontSize="14px"
               lineHeight="20px"
-              height="20px"
               color="#71757A"
               overflow="hidden"
             >
