@@ -249,7 +249,7 @@ export default function ColumnsTable({
             fill:"#4F9ADC"
           }}
         >
-          Fazer download da tabela que faz a tradução desta coluna
+          Baixar tabela que faz a tradução desta coluna
           <DownloadIcon width="18px" height="18px"/>
         </Text>
         <Text>{datasetName} - {tableName}</Text>

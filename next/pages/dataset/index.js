@@ -23,7 +23,7 @@ import {
 
 import { CheckboxFilterAccordion } from "../../components/atoms/FilterAccordion";
 import Checkbox from "../../components/atoms/Checkbox";
-import Tag from "../../components/atoms/Tag";
+import { TagFilter } from "../../components/atoms/Tag";
 import Database from "../../components/organisms/Database";
 import { MainPageTemplate } from "../../components/templates/main";
 
@@ -32,45 +32,6 @@ import NotFoundImage from "../../public/img/notFoundImage";
 
 export async function getStaticProps() {
   return await withPages()
-}
-
-function FilterTags({
-  label,
-  fieldName,
-  values,
-  setParamFilters,
-  paramFilters,
-  translations
-}) {
-  function translate (field, translation) {
-    return translation[field] || field
-  }
-
-  return (
-    <HStack spacing={3} alignItems="center" flexDirection="row">
-      <Text
-        fontFamily="Lato"
-        letterSpacing="0.5px"
-        fontWeight="300"
-        fontSize="14px"
-        color="#6F6F6F"
-      >
-        {label}
-      </Text>
-      <Stack direction={{ base: "column", lg: "row" }}>
-        {values.map((v) => (
-          <Tag
-            handleClick={() => {
-              let newArr = [...values];
-              newArr.splice(values.indexOf(v), 1);
-              setParamFilters({ ...paramFilters, [fieldName]: newArr });
-            }}
-            text={translations ? translate(v, translations) : v}
-          />
-        ))}
-      </Stack>
-    </HStack>
-  )
 }
 
 export default function SearchDatasetPage() {
@@ -206,7 +167,7 @@ export default function SearchDatasetPage() {
         spacing={0}
         borderRadius="16px"
         border={!display && "1px solid #DEDFE0"}
-        padding="40px 16px"
+        padding={display ? "0 16px 40px" :"40px 16px"}
       >
         {image && 
           <NotFoundImage
@@ -314,7 +275,7 @@ export default function SearchDatasetPage() {
     )
   }
 
-  const DatabaseCard = ({ data }) => {
+  function DatabaseCard({ data }) {
     return (
       <Database
         id={data.id}
@@ -339,6 +300,63 @@ export default function SearchDatasetPage() {
           pro: data?.contains_closed_data
         }}
       />
+    )
+  }
+
+  function FilterTags() {
+    function mapArrayProps(obj) {
+      let newObj = {}
+      for (let key in obj) {
+        if (Array.isArray(obj[key])) {
+          newObj[key] = obj[key].map(item => ({ name: item }))
+        } else {
+          newObj[key] = obj[key]
+        }
+      }
+      return newObj
+    }
+
+    let tags = { ...query }
+    delete tags.page
+
+    if(Object.keys(tags).length === 0) return null
+
+    return (
+      <Stack gap="16px" spacing={0} alignItems="center" flexDirection="row" flexWrap="wrap">
+        {Object.entries(mapArrayProps(tags)).map(([key, value]) =>
+          Array.isArray(value) ? (
+            value.map((tag, i) => (
+              <TagFilter
+                key={`${key}_${i}`}
+                text={tag.name}
+                handleClick={() => handleSelectFilter([`${key}`,`${tag.name}`])}
+              />
+            ))
+          ) : (
+            <TagFilter
+              key={key}
+              text={value}
+              handleClick={() => handleSelectFilter([`${key}`,`${value}`])}
+            />
+          )
+        )}
+
+        <Text
+          as="a"
+          href="/dataset"
+          target="_self"
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="14px"
+          lineHeight="20px"
+          color="#0068C5"
+          _hover={{
+            color: "#4F9ADC"
+          }}
+        >
+          Limpar filtros
+        </Text>
+    </Stack>
     )
   }
 
@@ -565,7 +583,7 @@ export default function SearchDatasetPage() {
             />
           </VStack>
 
-          <Divider marginY="24px !important" borderColor="#DEDFE0"/>
+          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
           <VStack
             width="100%"
@@ -596,7 +614,7 @@ export default function SearchDatasetPage() {
             />
           </VStack>
 
-          <Divider marginY="24px !important" borderColor="#DEDFE0"/>
+          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
           <CheckboxFilterAccordion
             canSearch={true}
@@ -609,7 +627,7 @@ export default function SearchDatasetPage() {
             onChange={(value) => handleSelectFilter(["theme",`${value}`])}
           />
 
-          <Divider marginY="24px !important" borderColor="#DEDFE0"/>
+          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
           <CheckboxFilterAccordion
             canSearch={true}
@@ -622,7 +640,7 @@ export default function SearchDatasetPage() {
             onChange={(value) => handleSelectFilter(["organization",`${value}`])}
           />
 
-          <Divider marginY="24px !important" borderColor="#DEDFE0"/>
+          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
           <CheckboxFilterAccordion
             canSearch={true}
@@ -635,7 +653,7 @@ export default function SearchDatasetPage() {
             onChange={(value) => handleSelectFilter(["tag",`${value}`])}
           />
 
-          <Divider marginY="24px !important" borderColor="#DEDFE0"/>
+          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
           <CheckboxFilterAccordion
             canSearch={true}
@@ -653,7 +671,39 @@ export default function SearchDatasetPage() {
           alignItems="flex-start"
           width="100%"
           paddingLeft={isMobileMod() ? "" : "40px !important"}
+          spacing="40px"
         >
+          <FilterTags/>
+
+          <Flex
+            width="100%"
+            justify="center"
+            align="baseline"
+          >
+            <Text
+              display="flex"
+              flexDirection="column"
+              gap="6px"
+              width="100%"
+              fontFamily="Roboto"
+              fontSize="14px"
+              fontWeight="400"
+              lineHeight="20px"
+              color="#71757A"
+              >
+              {count ?
+                `${count} conjunto${count > 1 ? "s": ""} encontrado${count > 1 ? "s": ""} ${!!query.q ? ` para ${query.q}` : ""}`
+                :
+                count === 0  && showEmptyState ?
+                  `0 conjuntos encontrados`
+                :
+                <Box width="fit-content" display="flex" flexDirection="row" gap="8px" alignItems="center">
+                  <Spinner height="18px" width="18px" color="#252A32"/> <Text>encontrando conjuntos {!!query.q ? ` para ${query.q}` : ""}</Text>
+                </Box>
+              }
+            </Text>
+          </Flex>
+
           {showEmptyState &&
             <DataProposalBox 
               image= {true}
@@ -663,40 +713,10 @@ export default function SearchDatasetPage() {
             />
           }
 
-          {!showEmptyState &&
-            <Flex
-              width="100%"
-              justify="center"
-              align="baseline"
-              padding="40px 0"
-            >
-              <Text
-                display="flex"
-                flexDirection="column"
-                gap="6px"
-                width="100%"
-                fontFamily="Roboto"
-                fontSize="14px"
-                fontWeight="400"
-                lineHeight="20px"
-                color="#71757A"
-              >
-                {count ?
-                    `${count} conjunto${count > 1 ? "s": ""} encontrado${count > 1 ? "s": ""} ${!!query.q ? ` para ${query.q}` : ""}`
-                  :
-                  <Box width="fit-content" display="flex" flexDirection="row" gap="8px" alignItems="center">
-                    <Spinner height="18px" width="18px" color="#252A32"/> <Text>encontrando conjuntos {!!query.q ? ` para ${query.q}` : ""}</Text>
-                  </Box>
-                }
-              </Text>
-            </Flex>
-          }
-
           <VStack
             width="100%"
             alignItems="flex-start"
             spacing="40px"
-            marginTop="0 !important"
           >
             {isLoading
               ? new Array(10).fill(0).map((e, i) => (
