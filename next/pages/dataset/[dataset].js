@@ -1,9 +1,7 @@
 import {
   VStack,
-  Stack,
   Tabs,
   TabList,
-  TabIndicator,
   TabPanel,
   TabPanels,
   Grid,
@@ -19,7 +17,6 @@ import BigTitle from "../../components/atoms/BigTitle";
 import Link from "../../components/atoms/Link";
 import GreenTab from "../../components/atoms/GreenTab";
 import ReadMore from "../../components/atoms/ReadMore";
-import HelpWidget from "../../components/atoms/HelpWidget";
 import DatasetResource from "../../components/organisms/DatasetResource";
 import { MainPageTemplate } from "../../components/templates/main";
 
@@ -230,13 +227,6 @@ export default function DatasetPage ({ dataset }) {
             </GreenTab>
           </TabList>
 
-          <TabIndicator
-            marginTop="-4px"
-            height="3px"
-            bg="#2B8C4D"
-            borderRadius="100"
-          />
-
           <TabPanels>
             <TabPanel padding="0px">
               <DatasetResource
@@ -249,23 +239,6 @@ export default function DatasetPage ({ dataset }) {
           </TabPanels>
         </Tabs>
       </VStack>
-
-      <HelpWidget
-        tooltip="Ajuda e recursos"
-        options={[
-          {name:"Perguntas frequentes", url: "/perguntas-frequentes"},
-          {name:"Documentação", url: "https://basedosdados.github.io/mais/"},
-          {name:"Vídeos no YouTube", url: "https://www.youtube.com/c/BasedosDados/featured"},
-          {},
-          {name:"Instale os nossos pacotes", url: "https://basedosdados.github.io/mais/access_data_packages/"},
-          {},
-          {name:"Como citar a BD?",  url: "/perguntas-frequentes/#reference"},
-          {name:"O que são diretórios?", url: "/perguntas-frequentes/#directories"},
-          {},
-          {name:"Fale com nossa comunidade no Discord", url: "https://discord.gg/huKWpsVYx4"},
-          {name:"Entre em contato", url: "/contato"},
-        ]}
-      />
     </MainPageTemplate>
   )
 }

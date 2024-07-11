@@ -321,9 +321,9 @@ export default function BdmTablePage({ id }) {
           endColor="#F3F3F3"
           borderRadius="6px"
           width={!isLoading ? "100%" : "500px"}
-          spacing="2px"
+          spacing="4px"
           skeletonHeight="18px"
-          noOfLines={2}
+          noOfLines={3}
           marginTop="12px !important"
           isLoaded={!isLoading}
         >
@@ -334,14 +334,14 @@ export default function BdmTablePage({ id }) {
             fontFamily="Roboto"
             fontWeight="400"
             fontSize="14px"
-            lineHeight="20px"
+            lineHeight="22px"
             color="#464A51"
           >
             {resource?.updates?.[0]?.latest ?
               formatDate(resource.updates[0].latest)
               :
               "Não informado"
-            } : Última vez que atualizamos na BD
+            }: Última vez que atualizamos na BD
             {resource?.updates?.[0]?.entity?.slug &&
               <Text
                 backgroundColor="#EEEEEE"
@@ -356,6 +356,20 @@ export default function BdmTablePage({ id }) {
                 {getUpdateFormat(resource.updates[0].entity.slug)}
               </Text>
             }
+            {!resource?.updates?.[0] &&
+              <Text
+                backgroundColor="#EEEEEE"
+                padding="2px 4px"
+                borderRadius="4px"
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="12px"
+                lineHeight="18px"
+                color="#252A32"
+              >
+                Sem previsão de atualização
+              </Text>
+            }
           </Box>
           <Box
             display="flex"
@@ -364,15 +378,15 @@ export default function BdmTablePage({ id }) {
             fontFamily="Roboto"
             fontWeight="400"
             fontSize="14px"
-            lineHeight="20px"
-            marginTop="1px"
+            lineHeight="22px"
+            marginTop="4px"
             color="#464A51"
           >
             {resource?.rawDataSource?.[0]?.updates?.[0]?.latest ?
               formatDate(resource.rawDataSource[0].updates[0].latest)
               :
               "Não informado"
-            } : Última vez que atualizaram na fonte original
+            }: Última vez que atualizaram na fonte original
             {resource?.rawDataSource?.[0]?.updates?.[0]?.entity?.slug &&
               <Text
                 backgroundColor="#EEEEEE"
@@ -395,14 +409,15 @@ export default function BdmTablePage({ id }) {
             fontFamily="Roboto"
             fontWeight="400"
             fontSize="14px"
-            lineHeight="20px"
+            lineHeight="22px"
+            marginTop="4px"
             color="#464A51"
           >
             {resource?.rawDataSource?.[0]?.polls?.[0]?.latest ?
               formatDate(resource.rawDataSource[0].polls[0].latest)
               :
               "Não informado"
-            } : Última vez que verificamos a fonte original
+            }: Última vez que verificamos a fonte original
           </Text>
         </SkeletonText>
       </Stack>

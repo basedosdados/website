@@ -29,6 +29,7 @@ import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
+import HelpWidget from "../atoms/HelpWidget";
 import { triggerGAEvent } from "../../utils";
 
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
@@ -61,6 +62,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                   backgroundColor={b.color}
                   minWidth="100px"
                   height="38px"
+                  fontFamily="Roboto"
                   fontSize="20px"
                   borderRadius="30px"
                   onClick={() => window.open(b.href, "_blank")}
@@ -80,7 +82,8 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                     >
                       <Text
                         fontSize="20px"
-                        fontFamily="Ubuntu"
+                        fontFamily="Roboto"
+                        letterSpacing="0.1px"
                         fontWeight="400"
                         color="#252A32"
                       >
@@ -103,8 +106,9 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                           display="flex"
                           gap="16px"
                           fontSize="16px"
-                          fontFamily="Ubuntu"
-                          fontWeight="300"
+                          fontFamily="Roboto"
+                          letterSpacing="0.1px"
+                          fontWeight="400"
                           href={c.href}
                         >{c.icon && c.icon} {c.name}</Link>
                       )
@@ -118,7 +122,8 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                 <Link
                   key={key}
                   fontSize="20px"
-                  fontFamily="Ubuntu"
+                  fontFamily="Roboto"
+                  letterSpacing="0.1px"
                   fontWeight="400"
                   href={elm}
                 >{key}
@@ -132,26 +137,56 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
           <></>
           :
           <Stack display={isMobileMod() ? "flex" : "none"} marginTop="auto" gap="16px">
-            <RoundedButton
-              backgroundColor="#FFF"
-              border="2px solid #42B0FF"
-              color="#42B0FF"
-              height="38px"
-              borderRadius="30px"
-              fontSize="20px"
-              onClick={() => window.open("/user/login", "_self")}
+            <Box
+              as="a"
+              href="/user/login"
+              target="_self"
+              display="flex"
+              alignItems="center"
+              height="40px"
+              width="fit-content"
+              borderRadius="8px"
+              padding="8px 4px"
+              cursor="pointer"
+              color="#252A32"
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              letterSpacing="0.1px"
+              lineHeight="20px"
+              gap="8px"
+              _hover={{
+                opacity: 0.7
+              }}
             >
               Entrar
-            </RoundedButton>
-            <RoundedButton
-              backgroundColor="#42B0FF"
-              height="38px"
-              borderRadius="30px"
-              fontSize="20px"
-              onClick={() => window.open("/user/register", "_self")}
+            </Box>
+            
+            <Box
+              as="a"
+              href="/user/register"
+              target="_self"
+              display="flex"
+              alignItems="center"
+              height="40px"
+              width="fit-content"
+              borderRadius="8px"
+              backgroundColor="#0D99FC"
+              padding="8px 16px"
+              cursor="pointer"
+              color="#FFF"
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              letterSpacing="0.1px"
+              gap="8px"
+              lineHeight="20px"
+              _hover={{
+                backgroundColor: "rgba(13, 153, 252, 0.7)"
+              }}
             >
               Cadastrar
-            </RoundedButton>
+            </Box>
           </Stack>
         }
       </DrawerContent>
@@ -199,19 +234,19 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
           </Box>
           <Text
             color="#252A32"
-            fontFamily="Ubuntu"
+            fontFamily="Roboto"
+            letterSpacing="0.1px"
             fontSize="14px"
             fontWeight="400"
             lineHeight="27px"
-            letterSpacing="0.3px"
           >{userData?.username || ""}</Text>
           <Text
             color="#6F6F6F"
-            fontFamily="Ubuntu"
+            fontFamily="Roboto"
+            letterSpacing="0.1px"
             fontSize="14px"
             fontWeight="400"
             lineHeight="27px"
-            letterSpacing="0.3px"
           >{userData?.email || ""}</Text>
         </Stack>
 
@@ -226,10 +261,10 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
                 <SettingsIcon fill="#D0D0D0" width="16px" height="16px"/>
                 <Text
                   fontSize="16px"
-                  fontFamily="Ubuntu"
+                  fontFamily="Roboto"
+                  letterSpacing="0.1px"
                   fontWeight="400"
                   lineHeight="16px"
-                  letterSpacing="0.2px"
                   color="#252A32"
                 >
                   Configurações
@@ -249,10 +284,10 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
                   key={index}
                   color="#575757"
                   fontSize="14px"
-                  fontFamily="Ubuntu"
+                  fontFamily="Roboto"
+                  letterSpacing="0.1px"
                   fontWeight="400"
                   lineHeight="27px"
-                  letterSpacing="0.3px"
                   onClick={() => {
                     onClose()
                     router.push({pathname: `/user/${userData.username}`, query: elm.value})}
@@ -285,11 +320,11 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
         >
           <SignOutIcon width="20px" height="20px"/>
           <Text
-            fontFamily="Ubuntu"
+            fontFamily="Roboto"
+            letterSpacing="0.1px"
             fontSize="16px"
             fontWeight="400"
             lineHeight="16px"
-            letterSpacing="0.2px"
             marginLeft="8px !important"
           >
             Sair
@@ -401,21 +436,21 @@ function MenuUser ({ userData, onOpen, onClose }) {
             </Box>
             <Text
               color="#252A32"
-              fontFamily="Ubuntu"
+              fontFamily="Roboto"
+              letterSpacing="0.1px"
               fontSize="12px"
               fontWeight="400"
               lineHeight="16px"
-              letterSpacing="0.3px"
             >
               {userData?.username ? userData?.username : ""}
             </Text>
             <Text
               color="#6F6F6F"
-              fontFamily="Ubuntu"
+              fontFamily="Roboto"
+              letterSpacing="0.1px"
               fontSize="12px"
               fontWeight="400"
               lineHeight="16px"
-              letterSpacing="0.3px"
             >
               {userData?.email ? userData?.email : ""}
             </Text>
@@ -433,11 +468,11 @@ function MenuUser ({ userData, onOpen, onClose }) {
             <SettingsIcon fill="#D0D0D0" width="16px" height="16px"/>
             <Text
               color="#252A32"
-              fontFamily="Ubuntu"
+              fontFamily="Roboto"
+              letterSpacing="0.1px"
               fontSize="12px"
               fontWeight="400"
               lineHeight="16px"
-              letterSpacing="0.3px"
             >
               Configurações
             </Text>
@@ -459,11 +494,11 @@ function MenuUser ({ userData, onOpen, onClose }) {
             <SignOutIcon width="20px" height="20px" fill="#D0D0D0"/>
             <Text
               color="#252A32"
-              fontFamily="Ubuntu"
+              fontFamily="Roboto"
+              letterSpacing="0.1px"
               fontSize="12px"
               fontWeight="400"
               lineHeight="16px"
-              letterSpacing="0.3px"
             >
               Sair
             </Text>
@@ -596,12 +631,13 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
         display="flex"
         flexDirection="colunm"
         _hover={{ opacity: "0.6" }}
-        fontSize="14px"
         target={url.slice(0,4) === "http" ? "_blank" : "_self"}
         color="#252A32"
-        fontFamily="Ubuntu"
+        fontSize="14px"
+        fontFamily="Roboto"
         fontWeight="400"
-        letterSpacing="0.3px"
+        lineHeight="20px"
+        letterSpacing="0.1px"
         href={url}
         padding="10px 0"
         alignItems="center"
@@ -640,7 +676,11 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
                   backgroundColor={b.color}
                   minWidth="80px"
                   height="35px"
-                  fontSize="15px"
+                  fontSize="14px"
+                  fontFamily="Roboto"
+                  letterSpacing="0.1px"
+                  fontWeight="400"
+                  lineHeight="20px"
                   borderRadius="30px"
                 >
                   {b.name}
@@ -658,9 +698,11 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
                 marginTop="10px"
                 minWidth="202px"
                 borderColor="#FFF"
-                fontFamily="Ubuntu"
+                fontSize="14px"
+                fontFamily="Roboto"
+                letterSpacing="0.1px"
                 fontWeight="400"
-                letterSpacing="0.3px"
+                lineHeight="20px"
                 borderRadius="10px"
                 padding="32px"
                 _first={{ paddingTop: "10px"}}
@@ -683,10 +725,11 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
             <Link
               key={`link-${i}`}
               _hover={{ opacity: "0.6" }}
-              fontSize="15px"
-              fontFamily="Ubuntu"
+              fontSize="14px"
+              fontFamily="Roboto"
+              letterSpacing="0.1px"
               fontWeight="400"
-              letterSpacing="0.3px"
+              lineHeight="20px"
               href={v}
               target={v.startsWith("https") ? "_blank" : null}
             >
@@ -702,21 +745,82 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
         />
       }
 
-      <HStack spacing={8} display={{ base: "none", lg: "flex" }}>
+      <HStack spacing="21px" display={{ base: "none", lg: "flex" }}>
+        {(path === "/dataset" || path === "/dataset/[dataset]") &&
+          <HelpWidget
+            tooltip="Ajuda e recursos"
+            options={[
+              {name:"Perguntas frequentes", url: "/perguntas-frequentes"},
+              {name:"Documentação", url: "https://basedosdados.github.io/mais/"},
+              {name:"Vídeos no YouTube", url: "https://www.youtube.com/c/BasedosDados/featured"},
+              {},
+              {name:"Instale os nossos pacotes", url: "https://basedosdados.github.io/mais/access_data_packages/"},
+              {},
+              {name:"Como citar a BD?",  url: "/perguntas-frequentes/#reference"},
+              {name:"O que são diretórios?", url: "/perguntas-frequentes/#directories"},
+              {},
+              {name:"Fale com nossa comunidade no Discord", url: "https://discord.gg/huKWpsVYx4"},
+              {name:"Entre em contato", url: "/contato"},
+            ]}
+          />
+        }
+
         {userData ? (
           <HStack spacing="20px">
             <MenuUser userData={userData}/>
           </HStack>
         ) : (
           <>
-            <Link fontSize="15px" fontFamily="Ubuntu" fontWeight="400" letterSpacing="0.3px" href="/user/login">
+            <Box
+              as="a"
+              href="/user/login"
+              target="_self"
+              display="flex"
+              alignItems="center"
+              height="40px"
+              width="fit-content"
+              borderRadius="8px"
+              padding="8px 4px"
+              cursor="pointer"
+              color="#252A32"
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              letterSpacing="0.1px"
+              lineHeight="20px"
+              gap="8px"
+              _hover={{
+                opacity: 0.7
+              }}
+            >
               Entrar
-            </Link>
-            <Link _hover={{ opacity:"none" }} href="/user/register">
-              <RoundedButton height="35px" fontSize="15px" minWidth="110px" borderRadius="30px">
-                Cadastrar
-              </RoundedButton>
-            </Link>
+            </Box>
+            
+            <Box
+              as="a"
+              href="/user/register"
+              target="_self"
+              display="flex"
+              alignItems="center"
+              height="40px"
+              width="fit-content"
+              borderRadius="8px"
+              backgroundColor="#0D99FC"
+              padding="8px 16px"
+              cursor="pointer"
+              color="#FFF"
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              letterSpacing="0.1px"
+              gap="8px"
+              lineHeight="20px"
+              _hover={{
+                backgroundColor: "rgba(13, 153, 252, 0.7)"
+              }}
+            >
+              Cadastrar
+            </Box>
           </>
         )}
       </HStack>

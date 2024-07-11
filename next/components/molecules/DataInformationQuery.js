@@ -1,11 +1,10 @@
 import {
   VStack,
-  Stack,
   Tabs,
   TabList,
+  Tab,
   TabPanel,
   TabPanels,
-  TabIndicator,
   Text,
   Box,
   useClipboard,
@@ -190,6 +189,10 @@ export default function DataInformationQuery({ resource }) {
   }
 
   useEffect(() => {
+    if(resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd") setIncludeTranslation(false)
+  }, [resource.dataset])
+
+  useEffect(() => {
     if (resource?.numberRows === 0) setDownloadNotAllowed(false)
     if (resource?.numberRows) resource?.numberRows > 200000 ? setDownloadNotAllowed(false) : setDownloadNotAllowed(true)
         
@@ -211,7 +214,7 @@ export default function DataInformationQuery({ resource }) {
     setHasLoadingResponse(false)
     setSqlCode("")
     setInsufficientChecks(false)
-  }, [resource._id, checkedColumns, tabIndex, includeTranslation])
+  }, [resource._id, checkedColumns, includeTranslation])
 
   useEffect(() => {
     if(hasLoadingResponse === true) {
@@ -287,13 +290,6 @@ export default function DataInformationQuery({ resource }) {
           <GreenTab>Download</GreenTab>
         </TabList>
 
-        <TabIndicator
-          marginTop="-4px"
-          height="3px"
-          bg="#2B8C4D"
-          borderRadius="100"
-        />
-
         <VStack
           spacing={0}
           padding="24px"
@@ -348,24 +344,25 @@ export default function DataInformationQuery({ resource }) {
                 gap="8px"
                 alignItems="center"
               >
-                <label
-                  style={{
-                    display:"flex",
-                    flexDirection:"row",
-                    alignItems:"center",
-                    gap:"16px",
-                    fontFamily:"Roboto",
-                    fontWeight:"400",
-                    fontSize:"14px",
-                    lineHeight:"20px",
-                    color:"#252A32"
-                  }}>
+                <Box
+                  as="label"
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  gap="16px"
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#252A32"
+                  pointerEvents={resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd" ? "none" : ""}
+                >
                   <Toggle
-                    defaultChecked
+                    defaultChecked={resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd" ? false : true}
                     value={includeTranslation}
                     onChange={() => setIncludeTranslation(!includeTranslation)}
                   /><Text>Traduzir códigos institucionais</Text>
-                </label>
+                </Box>
                 <Tooltip
                   label="Por exemplo, traduzir o código “2927408” por “Salvador-BA”"
                   hasArrow

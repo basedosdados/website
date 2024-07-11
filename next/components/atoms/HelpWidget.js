@@ -53,17 +53,20 @@ export default function HelpWidget({options, tooltip}) {
           >
             <MenuButton
               aria-label="Menu de ajuda"
-              width="50px"
-              height="50px"
-              background="#2B8C4D"
+              width="28px"
+              height="28px"
               borderRadius="50%"
               zIndex="11"
-              boxShadow="0 1.6px 16px rgba(100, 96, 103, 0.3)"
-              position="fixed"
               bottom={{ base: "20px", lg: "40px" }}
               right={{ base: "20px", lg: "40px" }}
             >
-              <HelpIcon alt="menu de ajuda" justifyContent="center" width="25px" height="25px" fill="white"/>
+              <HelpIcon
+                alt="menu de ajuda"
+                justifyContent="center"
+                width="28px"
+                height="28px"
+                fill="#878A8E"
+              />
             </MenuButton>
           </Tooltip>
           <MenuList
