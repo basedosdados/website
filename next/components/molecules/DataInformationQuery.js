@@ -405,7 +405,7 @@ export default function DataInformationQuery({ resource }) {
                 <AlertDiscalimerBox
                   type="warning"
                 >
-                  Essa tabela completa, com todas as colunas, tem <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>. Cuidado para não ultrapassar o <Text as="a" href="" target="_blank" color="#0068C5" _hover={{color: "#4F9ADC"}}>limite de processamento gratuito</Text> do BigQuery. <Text as="br" display={{base: "none", lg: "flex"}}/>
+                  Essa tabela completa, com todas as colunas, tem <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>. Cuidado para não ultrapassar o <Text as="a" href="https://basedosdados.github.io/mais/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#4F9ADC"}}>limite de processamento gratuito</Text> do BigQuery. <Text as="br" display={{base: "none", lg: "flex"}}/>
                   {numberColumns === checkedColumns.length && "Para otimizar a consulta, você pode selecionar menos colunas ou adicionar filtros no BigQuery."}
                 </AlertDiscalimerBox>
               </Skeleton>
