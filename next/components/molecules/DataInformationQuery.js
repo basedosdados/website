@@ -176,6 +176,7 @@ export default function DataInformationQuery({ resource }) {
   const [insufficientChecks, setInsufficientChecks] = useState(false)
   const [includeTranslation, setIncludeTranslation] = useState(true)
 
+  const [gcpProjectID, setGcpProjectID] = useState("")
   const [gcpDatasetID, setGcpDatasetID] = useState("")
   const [gcpTableId, setGcpTableId] = useState("")
   const [downloadUrl, setDownloadUrl] = useState("")
@@ -197,6 +198,7 @@ export default function DataInformationQuery({ resource }) {
     if (resource?.numberRows) resource?.numberRows > 200000 ? setDownloadNotAllowed(false) : setDownloadNotAllowed(true)
         
     if (resource?.cloudTables?.[0]) {
+      setGcpProjectID(resource.cloudTables[0]?.gcpProjectId || "")
       setGcpDatasetID(resource.cloudTables[0]?.gcpDatasetId || "")
       setGcpTableId(resource.cloudTables[0]?.gcpTableId || "")
     }
@@ -536,7 +538,7 @@ export default function DataInformationQuery({ resource }) {
                 >
                   <Box
                     as="a"
-                    href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${gcpDatasetID}&t=${gcpTableId}&page=table`}
+                    href={`https://console.cloud.google.com/bigquery?p=${gcpProjectID}&d=${gcpDatasetID}&t=${gcpTableId}&page=table`}
                     target="_blank"
                     display="flex"
                     alignItems="center"

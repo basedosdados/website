@@ -22,6 +22,7 @@ import WebIcon from "../../public/img/icons/webIcon";
 import TwitterIcon from "../../public/img/icons/twitterIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
+import RedirectIcon from "../../public/img/icons/redirectIcon";
 
 export default function BdmTablePage({ id }) {
   const [isLoading, setIsLoading] = useState(true)
@@ -260,7 +261,7 @@ export default function BdmTablePage({ id }) {
         isLoaded={!isLoading}
       >
         <ReadMore id="readLessTable">
-          {resource?.description || "Não fornecido"}
+          {resource?.description || "Não informado"}
         </ReadMore>
       </SkeletonText>
 
@@ -421,6 +422,60 @@ export default function BdmTablePage({ id }) {
           </Text>
         </SkeletonText>
       </Stack>
+
+      <Stack marginBottom="40px !important">
+        <StackSkeleton width="300px" height="20px">
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="18px"
+            lineHeight="20px"
+            color="#252A32"
+          >
+            ID do BigQuery
+          </Text>
+        </StackSkeleton>
+
+        <StackSkeleton
+          height="20px"
+          width={resource?.cloudTables ? "fit-content" : "500px"}
+          marginTop="12px !important"
+        >
+          <Text
+            as="a"
+            display="flex"
+            flexDirection="row"
+            alignItems="center"
+            gap="8px"
+            href={`https://console.cloud.google.com/bigquery?p=${resource?.cloudTables?.[0]?.gcpProjectId}&d=${resource?.cloudTables?.[0]?.gcpDatasetId}&t=${resource?.cloudTables?.[0]?.gcpTableId}&page=table`}
+            target="_blank"
+            cursor="pointer"
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="14px"
+            lineHeight="20px"
+            color={resource?.cloudTables ? "#0068C5" : "#464A51"}
+            pointerEvents={resource?.cloudTables ? "default" : "none"}
+            fill="#0068C5"
+            _hover={{
+              color:"#4F9ADC",
+              fill:"#4F9ADC"
+            }}
+          >
+            {!resource?.cloudTables ?
+              "Não informado"
+              :
+              resource?.cloudTables?.[0]?.gcpProjectId+"."+resource?.cloudTables?.[0]?.gcpDatasetId+"."+resource?.cloudTables?.[0]?.gcpTableId
+            }
+            <RedirectIcon
+              display={resource?.cloudTables ? "flex" : "none"}
+              width="16px"
+              height="16px"
+            />
+          </Text>
+        </StackSkeleton>
+      </Stack>
+
 
       <Stack marginBottom="40px !important">
         <StackSkeleton width="205px" height="20px">

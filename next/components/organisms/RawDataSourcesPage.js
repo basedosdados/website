@@ -282,7 +282,7 @@ export default function RawDataSourcesPage({ id }) {
           isLoaded={!isLoading}
         >
           <ReadMore id="readLessRawDescription">
-            {resource?.description || "Não fornecido"}
+            {resource?.description || "Não informado"}
           </ReadMore>
         </SkeletonText>
       </Stack>

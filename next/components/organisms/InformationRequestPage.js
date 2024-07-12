@@ -231,7 +231,7 @@ export default function InformationRequestPage({ id }) {
           isLoaded={!isLoading}
         >
           <ReadMore id="readLessRawDescription">
-            {resource?.observations || "Não fornecido"}
+            {resource?.observations || "Não informado"}
           </ReadMore>
         </SkeletonText>
       </Stack>
