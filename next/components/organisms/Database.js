@@ -4,9 +4,9 @@ import {
   Stack,
   VStack,
   Text,
+  Box
 } from "@chakra-ui/react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import Link from "../atoms/Link";
 
 import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";
@@ -157,20 +157,27 @@ export default function Database({
         height="100%"
         spacing={6}
       >
-        <Link href={`/dataset/${id}`} _hover={{opacity:"none"}}>
+        <Box
+          as="a"
+          href={`/dataset/${id}`}
+          target="_self"
+          display="flex"
+          justifyContent="center"
+          border="1px solid #DEDFE0"
+          borderRadius="16px"
+          _hover={{ opacity: 0.9 }}
+        >
           <Image
             src={organization?.picture.startsWith("https://") ? organization?.picture : `https://basedosdados.org/uploads/group/${organization?.name}`}
             alt={organization.name || "Não informado"}
             borderRadius="16px"
-            boxShadow="0px 4px 8px rgba(100, 96, 103, 0.16)"
             minWidth="222px"
             minHeight="138px"
             maxWidth="222px"
             maxHeight="138px"
-            backgroundColor="#eee"
             objectFit="contain"
           />
-        </Link>
+        </Box>
 
         <VStack
           alignItems="flex-start"

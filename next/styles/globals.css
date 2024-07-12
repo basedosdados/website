@@ -117,7 +117,7 @@ body {
 }
 
 .pagination .next-page a {
-  border: 1px solid #2B8C4D;
+  border: 1px solid transparent;
   color: #2B8C4D;
 }
 
@@ -137,7 +137,7 @@ body {
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
-  border: 1px solid #2B8C4D;
+  border: 1px solid transparent;
   color: #2B8C4D;
 }
 

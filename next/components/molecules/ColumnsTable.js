@@ -110,6 +110,7 @@ export default function ColumnsTable({
   }
 
   const handleMasterCheckboxChange = () => {
+    if(checkedColumns.length > 0) return onChangeCheckedColumns([])
     const allColumnSlugs = resource.map(column => column.node.name)
 
     if (checkedColumns.length === allColumnSlugs.length) {
@@ -425,10 +426,8 @@ export default function ColumnsTable({
                       <Checkbox
                         isChecked={checkedColumns.length === resource.length}
                         onChange={handleMasterCheckboxChange}
-                        icon={{
-                          variant:"lessCheck",
-                          viewBox:"0 0 20 20",
-                        }}
+                        isIndeterminate={checkedColumns.length !== resource.length && checkedColumns.length > 0}
+                        hasIndeterminate={checkedColumns.length !== resource.length && checkedColumns.length > 0}
                       />
                     </Box>
                     <Box

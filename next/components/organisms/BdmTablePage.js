@@ -22,6 +22,7 @@ import WebIcon from "../../public/img/icons/webIcon";
 import TwitterIcon from "../../public/img/icons/twitterIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
+import RedirectIcon from "../../public/img/icons/redirectIcon";
 
 export default function BdmTablePage({ id }) {
   const [isLoading, setIsLoading] = useState(true)
@@ -260,7 +261,7 @@ export default function BdmTablePage({ id }) {
         isLoaded={!isLoading}
       >
         <ReadMore id="readLessTable">
-          {resource?.description || "Não fornecido"}
+          {resource?.description || "Não informado"}
         </ReadMore>
       </SkeletonText>
 
@@ -321,9 +322,9 @@ export default function BdmTablePage({ id }) {
           endColor="#F3F3F3"
           borderRadius="6px"
           width={!isLoading ? "100%" : "500px"}
-          spacing="2px"
+          spacing="4px"
           skeletonHeight="18px"
-          noOfLines={2}
+          noOfLines={3}
           marginTop="12px !important"
           isLoaded={!isLoading}
         >
@@ -334,14 +335,14 @@ export default function BdmTablePage({ id }) {
             fontFamily="Roboto"
             fontWeight="400"
             fontSize="14px"
-            lineHeight="20px"
+            lineHeight="22px"
             color="#464A51"
           >
             {resource?.updates?.[0]?.latest ?
               formatDate(resource.updates[0].latest)
               :
               "Não informado"
-            } : Última vez que atualizamos na BD
+            }: Última vez que atualizamos na BD
             {resource?.updates?.[0]?.entity?.slug &&
               <Text
                 backgroundColor="#EEEEEE"
@@ -356,6 +357,20 @@ export default function BdmTablePage({ id }) {
                 {getUpdateFormat(resource.updates[0].entity.slug)}
               </Text>
             }
+            {!resource?.updates?.[0] &&
+              <Text
+                backgroundColor="#EEEEEE"
+                padding="2px 4px"
+                borderRadius="4px"
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="12px"
+                lineHeight="18px"
+                color="#252A32"
+              >
+                Sem previsão de atualização
+              </Text>
+            }
           </Box>
           <Box
             display="flex"
@@ -364,15 +379,15 @@ export default function BdmTablePage({ id }) {
             fontFamily="Roboto"
             fontWeight="400"
             fontSize="14px"
-            lineHeight="20px"
-            marginTop="1px"
+            lineHeight="22px"
+            marginTop="4px"
             color="#464A51"
           >
             {resource?.rawDataSource?.[0]?.updates?.[0]?.latest ?
               formatDate(resource.rawDataSource[0].updates[0].latest)
               :
               "Não informado"
-            } : Última vez que atualizaram na fonte original
+            }: Última vez que atualizaram na fonte original
             {resource?.rawDataSource?.[0]?.updates?.[0]?.entity?.slug &&
               <Text
                 backgroundColor="#EEEEEE"
@@ -395,17 +410,72 @@ export default function BdmTablePage({ id }) {
             fontFamily="Roboto"
             fontWeight="400"
             fontSize="14px"
-            lineHeight="20px"
+            lineHeight="22px"
+            marginTop="4px"
             color="#464A51"
           >
             {resource?.rawDataSource?.[0]?.polls?.[0]?.latest ?
               formatDate(resource.rawDataSource[0].polls[0].latest)
               :
               "Não informado"
-            } : Última vez que verificamos a fonte original
+            }: Última vez que verificamos a fonte original
           </Text>
         </SkeletonText>
       </Stack>
+
+      <Stack marginBottom="40px !important">
+        <StackSkeleton width="300px" height="20px">
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="18px"
+            lineHeight="20px"
+            color="#252A32"
+          >
+            ID do BigQuery
+          </Text>
+        </StackSkeleton>
+
+        <StackSkeleton
+          height="20px"
+          width={resource?.cloudTables ? "fit-content" : "500px"}
+          marginTop="12px !important"
+        >
+          <Text
+            as="a"
+            display="flex"
+            flexDirection="row"
+            alignItems="center"
+            gap="8px"
+            href={`https://console.cloud.google.com/bigquery?p=${resource?.cloudTables?.[0]?.gcpProjectId}&d=${resource?.cloudTables?.[0]?.gcpDatasetId}&t=${resource?.cloudTables?.[0]?.gcpTableId}&page=table`}
+            target="_blank"
+            cursor="pointer"
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="14px"
+            lineHeight="20px"
+            color={resource?.cloudTables ? "#0068C5" : "#464A51"}
+            pointerEvents={resource?.cloudTables ? "default" : "none"}
+            fill="#0068C5"
+            _hover={{
+              color:"#4F9ADC",
+              fill:"#4F9ADC"
+            }}
+          >
+            {!resource?.cloudTables ?
+              "Não informado"
+              :
+              resource?.cloudTables?.[0]?.gcpProjectId+"."+resource?.cloudTables?.[0]?.gcpDatasetId+"."+resource?.cloudTables?.[0]?.gcpTableId
+            }
+            <RedirectIcon
+              display={resource?.cloudTables ? "flex" : "none"}
+              width="16px"
+              height="16px"
+            />
+          </Text>
+        </StackSkeleton>
+      </Stack>
+
 
       <Stack marginBottom="40px !important">
         <StackSkeleton width="205px" height="20px">

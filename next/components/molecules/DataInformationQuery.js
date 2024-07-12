@@ -1,11 +1,10 @@
 import {
   VStack,
-  Stack,
   Tabs,
   TabList,
+  Tab,
   TabPanel,
   TabPanels,
-  TabIndicator,
   Text,
   Box,
   useClipboard,
@@ -177,6 +176,7 @@ export default function DataInformationQuery({ resource }) {
   const [insufficientChecks, setInsufficientChecks] = useState(false)
   const [includeTranslation, setIncludeTranslation] = useState(true)
 
+  const [gcpProjectID, setGcpProjectID] = useState("")
   const [gcpDatasetID, setGcpDatasetID] = useState("")
   const [gcpTableId, setGcpTableId] = useState("")
   const [downloadUrl, setDownloadUrl] = useState("")
@@ -190,10 +190,15 @@ export default function DataInformationQuery({ resource }) {
   }
 
   useEffect(() => {
+    if(resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd") setIncludeTranslation(false)
+  }, [resource.dataset])
+
+  useEffect(() => {
     if (resource?.numberRows === 0) setDownloadNotAllowed(false)
     if (resource?.numberRows) resource?.numberRows > 200000 ? setDownloadNotAllowed(false) : setDownloadNotAllowed(true)
         
     if (resource?.cloudTables?.[0]) {
+      setGcpProjectID(resource.cloudTables[0]?.gcpProjectId || "")
       setGcpDatasetID(resource.cloudTables[0]?.gcpDatasetId || "")
       setGcpTableId(resource.cloudTables[0]?.gcpTableId || "")
     }
@@ -211,7 +216,7 @@ export default function DataInformationQuery({ resource }) {
     setHasLoadingResponse(false)
     setSqlCode("")
     setInsufficientChecks(false)
-  }, [resource._id, checkedColumns, tabIndex, includeTranslation])
+  }, [resource._id, checkedColumns, includeTranslation])
 
   useEffect(() => {
     if(hasLoadingResponse === true) {
@@ -287,13 +292,6 @@ export default function DataInformationQuery({ resource }) {
           <GreenTab>Download</GreenTab>
         </TabList>
 
-        <TabIndicator
-          marginTop="-4px"
-          height="3px"
-          bg="#2B8C4D"
-          borderRadius="100"
-        />
-
         <VStack
           spacing={0}
           padding="24px"
@@ -348,24 +346,25 @@ export default function DataInformationQuery({ resource }) {
                 gap="8px"
                 alignItems="center"
               >
-                <label
-                  style={{
-                    display:"flex",
-                    flexDirection:"row",
-                    alignItems:"center",
-                    gap:"16px",
-                    fontFamily:"Roboto",
-                    fontWeight:"400",
-                    fontSize:"14px",
-                    lineHeight:"20px",
-                    color:"#252A32"
-                  }}>
+                <Box
+                  as="label"
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  gap="16px"
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#252A32"
+                  pointerEvents={resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd" ? "none" : ""}
+                >
                   <Toggle
-                    defaultChecked
+                    defaultChecked={resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd" ? false : true}
                     value={includeTranslation}
                     onChange={() => setIncludeTranslation(!includeTranslation)}
                   /><Text>Traduzir códigos institucionais</Text>
-                </label>
+                </Box>
                 <Tooltip
                   label="Por exemplo, traduzir o código “2927408” por “Salvador-BA”"
                   hasArrow
@@ -406,7 +405,7 @@ export default function DataInformationQuery({ resource }) {
                 <AlertDiscalimerBox
                   type="warning"
                 >
-                  Essa tabela completa, com todas as colunas, tem <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>. Cuidado para não ultrapassar o <Text as="a" href="" target="_blank" color="#0068C5" _hover={{color: "#4F9ADC"}}>limite de processamento gratuito</Text> do BigQuery. <Text as="br" display={{base: "none", lg: "flex"}}/>
+                  Essa tabela completa, com todas as colunas, tem <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>. Cuidado para não ultrapassar o <Text as="a" href="https://basedosdados.github.io/mais/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#4F9ADC"}}>limite de processamento gratuito</Text> do BigQuery. <Text as="br" display={{base: "none", lg: "flex"}}/>
                   {numberColumns === checkedColumns.length && "Para otimizar a consulta, você pode selecionar menos colunas ou adicionar filtros no BigQuery."}
                 </AlertDiscalimerBox>
               </Skeleton>
@@ -539,7 +538,7 @@ export default function DataInformationQuery({ resource }) {
                 >
                   <Box
                     as="a"
-                    href={`https://console.cloud.google.com/bigquery?p=basedosdados&d=${gcpDatasetID}&t=${gcpTableId}&page=table`}
+                    href={`https://console.cloud.google.com/bigquery?p=${gcpProjectID}&d=${gcpDatasetID}&t=${gcpTableId}&page=table`}
                     target="_blank"
                     display="flex"
                     alignItems="center"
