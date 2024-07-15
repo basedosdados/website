@@ -42,10 +42,17 @@ export default function DatasetResource({
   }
 
   useEffect(() => {
-    const dataset_tables = dataset?.tables?.edges.map((elm) => elm.node)
-      .filter((elm) => elm?.status?.slug !== "under_review")
-        .filter((elm) => elm?.slug !== "dicionario")
-          .filter((elm) => elm?.slug !== "dictionary").sort(sortElements) || []
+    // Id do dataset do SAEB
+    let dataset_tables = []
+    if(dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd") {
+      dataset_tables = dataset?.tables?.edges.map((elm) => elm.node)
+        .filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []
+    } else {
+      dataset_tables = dataset?.tables?.edges.map((elm) => elm.node)
+        .filter((elm) => elm?.status?.slug !== "under_review")
+          .filter((elm) => elm?.slug !== "dicionario")
+            .filter((elm) => elm?.slug !== "dictionary").sort(sortElements) || []
+    }
 
     const raw_data_sources = dataset?.rawDataSources?.edges.map((elm) => elm.node).filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []
     const information_request = dataset?.informationRequests?.edges.map((elm) => elm.node).filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []

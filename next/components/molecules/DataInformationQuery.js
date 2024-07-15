@@ -332,6 +332,23 @@ export default function DataInformationQuery({ resource }) {
             />
 
             <Skeleton
+              display={resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd" ? "flex" : "none"}
+              startColor="#F0F0F0"
+              endColor="#F3F3F3"
+              borderRadius="6px"
+              height="100%"
+              width="100%"
+              isLoaded={!hasLoadingColumns}
+            >
+              <AlertDiscalimerBox
+                type="info"
+              >
+                Essa tabela possui códigos institucionais que variam entre anos. Por isso, ainda estamos trabalhando para automatizar o processo de tradução.
+                Por enquanto, recomendamos acessar o <Text as="a" href="https://basedosdados.org/dataset/e083c9a2-1cee-4342-bedc-535cbad6f3cd?table=0308fbe0-270c-4135-9115-ea1100f400f6" target="_blank" color="#0068C5" _hover={{color: "#4F9ADC"}}>dicionário</Text> e os <Text as="a" href="https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=dffb65ac-9df9-4151-94bf-88c45bfcb056" target="_blank" color="#0068C5" _hover={{color: "#4F9ADC"}}>diretórios</Text> para entender como traduzir os códigos presentes na tabela.
+              </AlertDiscalimerBox>
+            </Skeleton>
+
+            <Skeleton
               display={tabIndex === 3 ? "none" : "flex"}
               startColor="#F0F0F0"
               endColor="#F3F3F3"
