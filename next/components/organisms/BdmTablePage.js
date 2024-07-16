@@ -443,6 +443,7 @@ export default function BdmTablePage({ id }) {
         >
           <Text
             as="a"
+            id="acessar_o_bigquery_section"
             display="flex"
             flexDirection="row"
             alignItems="center"

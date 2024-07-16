@@ -90,6 +90,7 @@ export function CodeHighlight({ language, children }) {
         />
 
         <Box
+          id={`copy-${language}`}
           cursor="pointer"
           height="20px"
           padding="0 12px"
@@ -253,16 +254,19 @@ export default function DataInformationQuery({ resource }) {
     setIsLoadingCode(false)
   }
 
-  const handlerDownload = () => {
-    if (downloadNotAllowed === false) return null
-
-    return window.open(downloadUrl)
-  }
-
   const handleIndexes = (index) => {
     const categoryValues = ["SQL", "Python", "R", "Stata", "Download"]
     setTabIndex(index)
     triggerGAEvent("category_click", categoryValues[index])
+  }
+
+  const queryLanguage = () => {
+    const language = {
+      0 : "SQL",
+      1 : "Python",
+      2 : "R"
+    }
+    return language[tabIndex] ? language[tabIndex] : ""
   }
 
   return (
@@ -332,7 +336,7 @@ export default function DataInformationQuery({ resource }) {
             />
 
             <Skeleton
-              display={resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd" ? "flex" : "none"}
+              display={resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd" && tabIndex !== 3 ? "flex" : "none"}
               startColor="#F0F0F0"
               endColor="#F3F3F3"
               borderRadius="6px"
@@ -458,6 +462,7 @@ export default function DataInformationQuery({ resource }) {
                 as="button"
                 onClick={() => {
                   if(checkedColumns.length === 0) return setInsufficientChecks(true)
+                  triggerGAEvent("gerar_consulta_click", queryLanguage())
                   setHasLoadingResponse(true)
                 }}
                 target="_blank"
@@ -555,6 +560,7 @@ export default function DataInformationQuery({ resource }) {
                 >
                   <Box
                     as="a"
+                    id="acessar_o_bigquery_button"
                     href={`https://console.cloud.google.com/bigquery?p=${gcpProjectID}&d=${gcpDatasetID}&t=${gcpTableId}&page=table`}
                     target="_blank"
                     display="flex"
@@ -761,7 +767,7 @@ read_sql(query, billing_project_id = get_billing_id())
             </TabPanel> */}
 
             <TabPanel
-              id="download_section"
+              id="download_table"
               display={!hasLoadingColumns ? "flex" : "none"}
               flexDirection="column"
               gap="16px"
@@ -792,8 +798,9 @@ read_sql(query, billing_project_id = get_billing_id())
               }
 
               <Box
-                as="button"
-                onClick={() => handlerDownload()}
+                as="a"
+                href={downloadUrl}
+                target="_blank"
                 display="flex"
                 alignItems="center"
                 height="40px"
@@ -809,8 +816,9 @@ read_sql(query, billing_project_id = get_billing_id())
                 fontSize="14px"
                 gap="8px"
                 lineHeight="20px"
+                pointerEvents={downloadNotAllowed ? "default" : "none"}
                 _hover={{
-                  backgroundColor: downloadNotAllowed ? "#80BA94" : "#ACAEB1"
+                  backgroundColor: "#80BA94"
                 }}
               >
                 <DownloadIcon

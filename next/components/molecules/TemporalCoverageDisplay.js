@@ -158,7 +158,7 @@ export function TemporalCoverageBar ({ value }) {
     setValues(newValue)
   }, [value])
 
-  if(values === null) return <TextData string="Não Listado"/>
+  if(values === null) return <TextData string="Não informado"/>
 
   return (
     <HStack 

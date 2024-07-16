@@ -635,7 +635,7 @@ export default function SearchDatasetPage() {
             choices={aggregations?.organizations}
             valueField="key"
             displayField="name"
-            fieldName="Organizações"
+            fieldName="Organização"
             valuesChecked={valuesCheckedFilter("organization")}
             onChange={(value) => handleSelectFilter(["organization",`${value}`])}
           />
