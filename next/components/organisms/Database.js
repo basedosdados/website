@@ -293,7 +293,7 @@ export default function Database({
                   color="#71757A"
                 >
                   {contains.free && "Grátis"} {contains.free && contains.pro && "e"} {contains.pro && "Pagos"}
-                  {!contains.free && !contains.pro && "Não listado"}
+                  {!contains.free && !contains.pro && "Não informado"}
                 </Text>
               </Stack>
             </VStack>
