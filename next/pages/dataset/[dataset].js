@@ -61,7 +61,8 @@ export default function DatasetPage ({ dataset }) {
   const isDatasetEmpty = dataset === null || Object.keys(dataset).length === 0
 
   useEffect(() => {
-    if(isDatasetEmpty) return router.push(`${process.env.NEXT_PUBLIC_API_URL}/dataset_redirect?dataset=${query.dataset}`)
+    if (router.query?.dataset === "mundo-kaggle-olimpiadas") return window.open(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/dataset/62f8cb83-ac37-48be-874b-b94dd92d3e2b`, "_self")
+    if (isDatasetEmpty) return router.push(`${process.env.NEXT_PUBLIC_API_URL}/dataset_redirect?dataset=${query.dataset}`)
   }, [])
 
   if(isDatasetEmpty) return <MainPageTemplate userTemplate><FourOFour/></MainPageTemplate>
