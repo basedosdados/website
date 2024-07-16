@@ -401,7 +401,7 @@ export default function ColumnsTable({
       >
         <TableContainer
           height="100%"
-          maxHeight="400px"
+          maxHeight="300px"
           overflowY="auto"
           border="1px solid #DEDFE0"
           borderBottom="0px"

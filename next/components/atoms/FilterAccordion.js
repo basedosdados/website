@@ -8,6 +8,7 @@ import {
   VStack,
   Text,
   HStack,
+  Skeleton
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Checkbox from "../atoms/Checkbox";
@@ -48,24 +49,18 @@ export function BaseFilterAccordion({
                     fontFamily="Roboto"
                     fontWeight="500"
                     fontSize="16px"
-                    color={isActive ? "#2B8C4D" : "#464A51"}
+                    color="#464A51"
                   >
                     {fieldName}
                   </Box>
                 </HStack>
-                {!alwaysOpen ? <AccordionIcon color={isActive ? "#2B8C4D" : null} marginLeft="auto" fontSize="18px" /> : <></>}
+                {!alwaysOpen ? <AccordionIcon marginLeft="auto" fontSize="18px" /> : <></>}
               </AccordionButton>
             </Text>
             {(isOpen && isOpen === true) || (isOpen == null && isExpanded) ? (
-              <VStack
-                overflowY="auto"
-                overflowX={overflowX + " !important"}
-                maxHeight="400px"
-                width="100%"
-                alignItems="flex-start"
-              >
+              <>
                 {children}
-              </VStack>
+              </>
             ) : (
               <></>
             )}
@@ -88,6 +83,7 @@ export function CheckboxFilterAccordion({
   isActive = false,
   isOpen = null,
   canSearch = false,
+  isLoading
 }) {
   const [options , setOptions] = useState([])
   const [search, setSearch] = useState("");
@@ -116,81 +112,92 @@ export function CheckboxFilterAccordion({
       overflowX="hidden"
       alwaysOpen={alwaysOpen}
     >
-      <CheckboxGroup defaultValue={valuesChecked}>
-        {canSearch &&
-          <VStack padding="12px 0 16px" width="100%" alignItems="center">
-            <ControlledInputSimple
-              width="100%"
-              value={search}
-              onChange={setSearch}
-              inputFocus={inputFocus}
-              changeInputFocus={setInputFocus}
-              placeholder="Pesquisar"
-              fill="#464A51"
-              fillHover="#878A8E"
-              icon={
-                <SearchIcon
-                  alt="pesquisar"
-                  width="16.8px"
-                  height="16.8px"
-                  cursor="pointer"
-                />
-              }
-            />
-          </VStack>
-        }
-        <VStack
-          alignItems="flex-start"
-          overflowY="auto"
-          width="100%"
-          height="100%"
-          spacing="14px"
-          marginTop="0 !important"
-        >
-          {options.length > 0 && options.map((c) => (
-            <Text
-              as="label"
-              key={c[valueField]}
-              display="flex"
-              width="100%"
-              minHeight="20px"
-              cursor="pointer"
-              gap="2px"
-              alignItems="center"
-              fontFamily="Roboto"
-              fontWeight="400"
-              fontSize="14px"
-              lineHeight="20px"
-              color="#71757A"
-              overflow="hidden"
-            >
-              <Checkbox
-                value={c[valueField]}
-                onChange={(e) => { onChange(e.target.value)}}
-                minWidth="18px"
-                minHeight="18px"
-                maxWidth="18px"
-                maxHeight="18px"
-                marginRight="14px"
-                flexShrink={0}
+      <Skeleton
+        width="100%"
+        height={isLoading ? "100%" : "40px"}
+        margin="12px 0 5px 0"
+        borderRadius="6px"
+        startColor="#F0F0F0"
+        endColor="#F3F3F3"
+        isLoaded={isLoading}
+      >
+        <CheckboxGroup defaultValue={valuesChecked}>
+          {canSearch &&
+            <VStack padding="0 0 16px" width="100%" alignItems="center">
+              <ControlledInputSimple
+                width="100%"
+                value={search}
+                onChange={setSearch}
+                inputFocus={inputFocus}
+                changeInputFocus={setInputFocus}
+                placeholder="Pesquisar"
+                fill="#464A51"
+                fillHover="#878A8E"
+                icon={
+                  <SearchIcon
+                    alt="pesquisar"
+                    width="16.8px"
+                    height="16.8px"
+                    cursor="pointer"
+                  />
+                }
               />
+            </VStack>
+          }
+          <VStack
+            alignItems="flex-start"
+            width="100%"
+            maxHeight="400px"
+            overflowY="auto"
+            height="100%"
+            spacing="14px"
+            marginTop="0 !important"
+          >
+            {options.length > 0 && options.map((c) => (
               <Text
-                as="span"
-                textOverflow="ellipsis"
-                whiteSpace="nowrap"
+                as="label"
+                key={c[valueField]}
+                display="flex"
+                width="100%"
+                minHeight="20px"
+                cursor="pointer"
+                gap="2px"
+                alignItems="center"
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="14px"
+                lineHeight="20px"
+                color="#71757A"
                 overflow="hidden"
-                marginRight="2px"
-                flex="1 1 1"
               >
-                {c[displayField]}
+                <Checkbox
+                  value={c[valueField]}
+                  onChange={(e) => { onChange(e.target.value)}}
+                  minWidth="18px"
+                  minHeight="18px"
+                  maxWidth="18px"
+                  maxHeight="18px"
+                  marginRight="14px"
+                  flexShrink={0}
+                />
+                <Text
+                  as="span"
+                  textOverflow="ellipsis"
+                  whiteSpace="nowrap"
+                  overflow="hidden"
+                  marginRight="2px"
+                  flex="1 1 1"
+                >
+                  {c[displayField]}
+                </Text>
+                <Text as="span" flexShrink={0}>
+                  {c["count"] ? `(${c["count"]})` : `(0)`}
+                </Text>
               </Text>
-              <Text as="span" flexShrink={0}>
-                {c["count"] ? `(${c["count"]})` : `(0)`}
-              </Text>
-            </Text>
-          ))}
-        </VStack>
-      </CheckboxGroup>
+            ))}
+          </VStack>
+        </CheckboxGroup>
+      </Skeleton>
     </BaseFilterAccordion>
   );
 }

@@ -99,7 +99,6 @@ export default function SearchDatasetPage() {
       const indice = objQuery.findIndex(arr => arr[0] === id)
       if (indice != -1) objQuery.splice(indice, 1)
     }
-    filterQueryFilters("q")
     filterQueryFilters("page")
 
     return flattenArray(objQuery)
@@ -144,7 +143,6 @@ export default function SearchDatasetPage() {
     router.push({
       pathname: router.pathname,
       query: {
-        ...(query.q ? { q: query.q } : {}),
         ...(queryParams || {}),
         page: 1
       }
@@ -625,6 +623,7 @@ export default function SearchDatasetPage() {
             fieldName="Tema"
             valuesChecked={valuesCheckedFilter("theme")}
             onChange={(value) => handleSelectFilter(["theme",`${value}`])}
+            isLoading={!isLoading}
           />
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
@@ -638,6 +637,7 @@ export default function SearchDatasetPage() {
             fieldName="Organização"
             valuesChecked={valuesCheckedFilter("organization")}
             onChange={(value) => handleSelectFilter(["organization",`${value}`])}
+            isLoading={!isLoading}
           />
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
@@ -651,6 +651,7 @@ export default function SearchDatasetPage() {
             fieldName="Etiqueta"
             valuesChecked={valuesCheckedFilter("tag")}
             onChange={(value) => handleSelectFilter(["tag",`${value}`])}
+            isLoading={!isLoading}
           />
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
@@ -664,6 +665,7 @@ export default function SearchDatasetPage() {
             fieldName="Nível da observação"
             valuesChecked={valuesCheckedFilter("observation_level")}
             onChange={(value) => handleSelectFilter(["observation_level",`${value}`])}
+            isLoading={!isLoading}
           />
         </VStack>
 
@@ -681,6 +683,7 @@ export default function SearchDatasetPage() {
             align="baseline"
           >
             <Text
+              as="div"
               display="flex"
               flexDirection="column"
               gap="6px"
@@ -690,15 +693,15 @@ export default function SearchDatasetPage() {
               fontWeight="400"
               lineHeight="20px"
               color="#71757A"
-              >
+            >
               {count ?
                 `${count} conjunto${count > 1 ? "s": ""} encontrado${count > 1 ? "s": ""} ${!!query.q ? ` para ${query.q}` : ""}`
                 :
                 count === 0  && showEmptyState ?
                   `0 conjuntos encontrados`
                 :
-                <Box width="fit-content" display="flex" flexDirection="row" gap="8px" alignItems="center">
-                  <Spinner height="18px" width="18px" color="#252A32"/> <Text>encontrando conjuntos {!!query.q ? ` para ${query.q}` : ""}</Text>
+                <Box as="span" width="fit-content" display="flex" flexDirection="row" gap="8px" alignItems="center">
+                  <Spinner height="18px" width="18px" color="#252A32"/> <Text as="span">encontrando conjuntos {!!query.q ? ` para ${query.q}` : ""}</Text>
                 </Box>
               }
             </Text>
