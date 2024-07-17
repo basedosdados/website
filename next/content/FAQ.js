@@ -712,7 +712,7 @@ export const QuestionFAQ = [
           <p>
           Utilizamos suas informações pessoais para fornecer e melhorar nossos serviços, incluindo o processamento de pagamentos, o fornecimento de suporte ao cliente e a personalização da experiência do usuário.
           Não venderemos, alugaremos ou compartilharemos suas informações pessoais com terceiros não afiliados sem o seu consentimento explícito.
-          Para mais informações, acesse nossos Termos de Uso e Políticas de Privacidade <a href="http://basedosdados.org/termos" target="_blank">aqui</a>.
+          Para mais informações, acesse nossos Termos de Uso e Políticas de Privacidade <a href="http://basedosdados.org/termos-e-privacidade" target="_blank">aqui</a>.
           </p>
         </div>
       )
