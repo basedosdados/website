@@ -372,7 +372,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
               {name: "Tabelas tratadas"},
               {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
               {name: "Acesso em nuvem"},
-              {name: "Acesso via SQL, Python, R e Stata"},
+              {name: "Acesso via SQL, Python e R"},
               {name: "Integração com ferramentas BI"},
             ]}
             button={{
@@ -392,6 +392,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
             textResource="Todos os recursos da BD Grátis, mais:"
             resources={[
               {name: "Dezenas de bases de alta frequência atualizadas"},
+              {name: "Tabela de referência de empresas com informações traduzidas e atualizadas"}
             ]}
             button={{
               text: isBDPro ? "Plano atual" : `Iniciar teste grátis`,

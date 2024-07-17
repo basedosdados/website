@@ -27,6 +27,7 @@ export default async function getColumnsBdmTable(id) {
                         table {
                           _id
                           name
+                          isClosed
                           cloudTables{
                             edges{
                               node{

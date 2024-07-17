@@ -26,6 +26,7 @@ import InternalError from '../../public/img/internalError'
 import InfoIcon from '../../public/img/icons/infoIcon';
 import DownloadIcon from '../../public/img/icons/downloadIcon';
 import SearchIcon from '../../public/img/icons/searchIcon';
+import RedirectIcon from '../../public/img/icons/redirectIcon';
 import 'katex/dist/katex.min.css';
 
 function SearchColumn({ isLoaded, resource, columns }) {
@@ -91,7 +92,8 @@ export default function ColumnsTable({
   hasLoading,
   setHasLoading,
   numberColumns,
-  template
+  template,
+  columnsPro
 }) {
   const [resource, setResource] = useState({})
   const [columns, setColumns] = useState({})
@@ -123,6 +125,13 @@ export default function ColumnsTable({
   useEffect(() => {
     if(tableId === undefined) return
 
+    const filterClosedTables = (data) => {
+      return data.filter(elm => {
+        const table = elm?.node?.directoryPrimaryKey?.table
+        return table && table.isClosed === true
+      })
+    }
+
     const featchColumns = async () => {
       setHasLoading(true)
 
@@ -132,6 +141,7 @@ export default function ColumnsTable({
         if(result) {
           setResource(result.sort(sortElements))
           numberColumns(result.length)
+          columnsPro(filterClosedTables(result))
           setColumns(result.sort(sortElements))
           setHasLoading(false)
           setIsSearchLoading(false)
@@ -204,25 +214,35 @@ export default function ColumnsTable({
     return 0
   }
 
-  const empty = () => {
-    return (
-      <Text
-        fontFamily="Roboto"
-        fontWeight="400"
-        fontSize="14px"
-        lineHeight="20px"
-        color="#464A51"
-      >
-        Não informado
-      </Text>
-    )
-  }
-
   function TranslationTable({ value }) {
     if(value === null) return (
       <Text>
         Não precisa de tradução
       </Text>
+    )
+
+    if(value?.table?.isClosed) return (
+      <Box>
+        <Text
+          as="a"
+          target="_blank"
+          href={`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/dataset/${value?.table?.dataset?._id}?table=${value?.table?._id}`}
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
+          gap="4px"
+          color="#0068C5"
+          fill="#0068C5"
+          _hover={{
+            color:"#4F9ADC",
+            fill:"#4F9ADC"
+          }}
+        >
+          Acessar tabela que faz a tradução desta coluna
+          <RedirectIcon width="14px" height="14px"/>
+        </Text>
+        <Text>{value?.table?.dataset?.name} - {value?.table?.name}</Text>
+      </Box>
     )
 
     const cloudValues = value?.table?.cloudTables?.edges?.[0]?.node
@@ -242,6 +262,7 @@ export default function ColumnsTable({
           href={downloadUrl}
           display="flex"
           flexDirection="row"
+          alignItems="center"
           gap="4px"
           color="#0068C5"
           fill="#0068C5"

@@ -163,7 +163,7 @@ export function TemporalCoverageBar ({ value }) {
   return (
     <HStack 
       position="relative"  
-      width="350px"
+      width="325px"
       height="65px"
       alignItems="normal"
       spacing={0}

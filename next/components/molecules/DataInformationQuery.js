@@ -170,12 +170,13 @@ export default function DataInformationQuery({ resource }) {
   const [downloadNotAllowed, setDownloadNotAllowed] = useState(false)
   const [checkedColumns, setCheckedColumns] = useState([])
   const [numberColumns, setNumberColumns] = useState(0)
+  const [columnsTranslationPro, setColumnsTranslationPro] = useState([])
   const [sqlCode, setSqlCode] = useState("")
+  const [insufficientChecks, setInsufficientChecks] = useState(false)
+  const [includeTranslation, setIncludeTranslation] = useState(true)
   const [hasLoadingColumns, setHasLoadingColumns] = useState(true)
   const [isLoadingCode, setIsLoadingCode] = useState(false)
   const [hasLoadingResponse, setHasLoadingResponse] = useState(false)
-  const [insufficientChecks, setInsufficientChecks] = useState(false)
-  const [includeTranslation, setIncludeTranslation] = useState(true)
 
   const [gcpProjectID, setGcpProjectID] = useState("")
   const [gcpDatasetID, setGcpDatasetID] = useState("")
@@ -333,6 +334,7 @@ export default function DataInformationQuery({ resource }) {
               hasLoading={hasLoadingColumns}
               setHasLoading={setHasLoadingColumns}
               template={tabIndex === 3 ? "download" : "checks"}
+              columnsPro={setColumnsTranslationPro}
             />
 
             <Skeleton
@@ -430,6 +432,15 @@ export default function DataInformationQuery({ resource }) {
                   {numberColumns === checkedColumns.length && "Para otimizar a consulta, você pode selecionar menos colunas ou adicionar filtros no BigQuery."}
                 </AlertDiscalimerBox>
               </Skeleton>
+            }
+
+            {columnsTranslationPro.length > 0 && tabIndex !== 3 &&
+              <AlertDiscalimerBox
+                display={isUserPro() ? "none" : "flex"}
+                type="info"
+              >
+                A tabela de tradução da{columnsTranslationPro.length > 1 && "s"} coluna{columnsTranslationPro.length > 1 && "s"} <Text as="span" fontWeight="500">{columnsTranslationPro.map((elm) => elm?.node?.name).join(", ")}</Text> é exclusiva para <Text as="a" href="/precos" target="_blank" color="#0068C5" _hover={{color: "#4F9ADC"}}>assinantes</Text>. Todos os demais códigos institucionais são de acesso aberto.
+              </AlertDiscalimerBox>
             }
 
             {insufficientChecks &&
