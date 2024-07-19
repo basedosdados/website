@@ -9,7 +9,8 @@ import {
   Box,
   useClipboard,
   Tooltip,
-  Skeleton
+  Skeleton,
+  Stack
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 import hljs from "highlight.js/lib/core";
@@ -166,6 +167,7 @@ export function CodeHighlight({ language, children }) {
 }
 
 export default function DataInformationQuery({ resource }) {
+  const [tabAccessIndex, setTabAccessIndex] = useState(0)
   const [tabIndex, setTabIndex] = useState(0)
   const [downloadNotAllowed, setDownloadNotAllowed] = useState(false)
   const [checkedColumns, setCheckedColumns] = useState([])
@@ -223,9 +225,12 @@ export default function DataInformationQuery({ resource }) {
   useEffect(() => {
     if(hasLoadingResponse === true) {
       SqlCodeString()
-      scrollFocus()
     }
   }, [hasLoadingResponse])
+
+  useEffect(() => {
+    if(sqlCode !== "") scrollFocus() 
+  }, [sqlCode])
 
   function scrollFocus() {
     let idTab
@@ -255,8 +260,14 @@ export default function DataInformationQuery({ resource }) {
     setIsLoadingCode(false)
   }
 
-  const handleIndexes = (index) => {
-    const categoryValues = ["SQL", "Python", "R", "Stata", "Download"]
+  const handleAccessIndexes = (index) => {
+    const categoryValues = ["BigQuery e Pacotes", "Download"]
+    setTabAccessIndex(index)
+    triggerGAEvent("category_click", categoryValues[index])
+  }
+
+  const handleCategoryIndexes = (index) => {
+    const categoryValues = ["SQL", "Python", "R"]
     setTabIndex(index)
     triggerGAEvent("category_click", categoryValues[index])
   }
@@ -281,8 +292,8 @@ export default function DataInformationQuery({ resource }) {
         width="100%"
         variant="unstyled"
         isLazy
-        onChange={(index) => handleIndexes(index)}
-        index={tabIndex}
+        onChange={(index) => handleAccessIndexes(index)}
+        index={tabAccessIndex}
         overflow="hidden"
       >
         <TabList
@@ -290,10 +301,7 @@ export default function DataInformationQuery({ resource }) {
           padding="8px 24px 0"
           borderBottom="2px solid #DEDFE0 !important"
         >
-          <GreenTab>SQL</GreenTab>
-          <GreenTab>Python</GreenTab>
-          <GreenTab>R</GreenTab>
-          {/* <GreenTab>Stata</GreenTab> */}
+          <GreenTab>BigQuery e Pacotes</GreenTab>
           <GreenTab>Download</GreenTab>
         </TabList>
 
@@ -333,12 +341,12 @@ export default function DataInformationQuery({ resource }) {
               numberColumns={setNumberColumns}
               hasLoading={hasLoadingColumns}
               setHasLoading={setHasLoadingColumns}
-              template={tabIndex === 3 ? "download" : "checks"}
+              template={tabAccessIndex === 1 ? "download" : "checks"}
               columnsPro={setColumnsTranslationPro}
             />
 
             <Skeleton
-              display={resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd" && tabIndex !== 3 ? "flex" : "none"}
+              display={resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd" && tabAccessIndex !== 1 ? "flex" : "none"}
               startColor="#F0F0F0"
               endColor="#F3F3F3"
               borderRadius="6px"
@@ -355,7 +363,7 @@ export default function DataInformationQuery({ resource }) {
             </Skeleton>
 
             <Skeleton
-              display={tabIndex === 3 ? "none" : "flex"}
+              display={tabAccessIndex === 1 ? "none" : "flex"}
               startColor="#F0F0F0"
               endColor="#F3F3F3"
               borderRadius="6px"
@@ -417,7 +425,7 @@ export default function DataInformationQuery({ resource }) {
 
             {checkedColumns.length > 0 && resource.uncompressedFileSize && resource.uncompressedFileSize/(1024 * 1024 * 1024) > 5 &&
               <Skeleton
-                display={tabIndex === 3 ? "none" : ""}
+                display={tabAccessIndex === 1 ? "none" : ""}
                 startColor="#F0F0F0"
                 endColor="#F3F3F3"
                 borderRadius="6px"
@@ -434,7 +442,7 @@ export default function DataInformationQuery({ resource }) {
               </Skeleton>
             }
 
-            {columnsTranslationPro.length > 0 && tabIndex !== 3 &&
+            {columnsTranslationPro.length > 0 && tabAccessIndex !== 1 &&
               <AlertDiscalimerBox
                 display={isUserPro() ? "none" : "flex"}
                 type="info"
@@ -445,7 +453,7 @@ export default function DataInformationQuery({ resource }) {
 
             {insufficientChecks &&
               <Skeleton
-                display={tabIndex === 3 ? "none" : ""}
+                display={tabAccessIndex === 1 ? "none" : ""}
                 startColor="#F0F0F0"
                 endColor="#F3F3F3"
                 borderRadius="6px"
@@ -461,7 +469,7 @@ export default function DataInformationQuery({ resource }) {
             }
 
             <Skeleton
-              display={tabIndex !== 3 ? "flex" : "none"}
+              display={tabAccessIndex !== 1 ? "flex" : "none"}
               startColor="#F0F0F0"
               endColor="#F3F3F3"
               borderRadius="6px"
@@ -501,283 +509,12 @@ export default function DataInformationQuery({ resource }) {
             </Skeleton>
           </Box>
 
-          <TabPanels>
-            <TabPanel
-              id="SQL_section"
-              display={hasLoadingResponse ? "flex" : "none"}
-              flexDirection="column"
-              gap="16px"
-              marginTop="40px"
-              padding={0}
-            >
-              <Skeleton
-                startColor="#F0F0F0"
-                endColor="#F3F3F3"
-                borderRadius="6px"
-                height="20px"
-                width="fit-content"
-                isLoaded={!isLoadingCode}
-              >
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="14px"
-                  lineHeight="20px"
-                  color="#252A32"
-                >
-                  No editor de consultas do BigQuery, digite a seguinte instrução:
-                </Text>
-              </Skeleton>
-
-              <Skeleton
-                startColor="#F0F0F0"
-                endColor="#F3F3F3"
-                borderRadius="6px"
-                height="100%"
-                width="100%"
-                isLoaded={!isLoadingCode}
-              >
-                <AlertDiscalimerBox type="info" >
-                  Primeira vez usando o BigQuery?
-                  <Text
-                    marginLeft="4px"
-                    as="a"
-                    target="_blank"
-                    href="https://basedosdados.github.io/mais/access_data_bq/#primeiros-passos"
-                    color="#0068C5"
-                    _hover={{color: "#4F9ADC"}}
-                  >
-                    Siga o passo a passo.
-                  </Text>
-                </AlertDiscalimerBox>
-              </Skeleton>
-
-              <Skeleton
-                startColor="#F0F0F0"
-                endColor="#F3F3F3"
-                borderRadius="6px"
-                height="100%"
-                width="100%"
-                isLoaded={!isLoadingCode}
-              >
-                <Box
-                  display="flex"
-                  flexDirection="row"
-                  justifyContent="flex-end"
-                  alignItems="center"
-                  padding="2px"
-                  backgroundColor="#2B8C4D"
-                  borderRadius="10px"
-                >
-                  <Box
-                    as="a"
-                    id="acessar_o_bigquery_button"
-                    href={`https://console.cloud.google.com/bigquery?p=${gcpProjectID}&d=${gcpDatasetID}&t=${gcpTableId}&page=table`}
-                    target="_blank"
-                    display="flex"
-                    alignItems="center"
-                    height="40px"
-                    borderRadius="8px"
-                    backgroundColor="#FFF"
-                    padding="8px 16px"
-                    cursor="pointer"
-                    color="#2B8C4D"
-                    _hover={{
-                      color:"#80BA94"
-                    }}
-                  >
-                    <Text
-                      fontFamily="Roboto"
-                      fontWeight="500"
-                      fontSize="14px"
-                      lineHeight="20px"
-                    >
-                      Acessar o BigQuery
-                    </Text>
-                  </Box>
-                </Box>
-              </Skeleton>
-
-              <Skeleton
-                id="SQL_section"
-                startColor="#F0F0F0"
-                endColor="#F3F3F3"
-                borderRadius="10px"
-                height="100%"
-                width="100%"
-                isLoaded={!isLoadingCode}
-              >
-                <CodeHighlight language="sql">
-                  {sqlCode}
-                </CodeHighlight>
-              </Skeleton>
-            </TabPanel>
-
-            <TabPanel
-              id="python_section"
-              display={hasLoadingResponse ? "flex" : "none"}
-              flexDirection="column"
-              gap="16px"
-              marginTop="40px"
-              padding={0}
-            >
-              <Skeleton
-                startColor="#F0F0F0"
-                endColor="#F3F3F3"
-                borderRadius="6px"
-                height="20px"
-                width="fit-content"
-                isLoaded={!isLoadingCode}
-              >
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="14px"
-                  lineHeight="20px"
-                  color="#252A32"
-                >
-                  No terminal do Python, digite a seguinte instrução:
-                </Text>
-              </Skeleton>
-
-              <Skeleton
-                startColor="#F0F0F0"
-                endColor="#F3F3F3"
-                borderRadius="6px"
-                height="100%"
-                width="100%"
-                isLoaded={!isLoadingCode}
-              >
-                <AlertDiscalimerBox type="info" >
-                  Primeira vez usando o pacote Python?
-                  <Text
-                    marginLeft="4px"
-                    as="a"
-                    target="_blank"
-                    href="https://basedosdados.github.io/mais/api_reference_python/"
-                    color="#0068C5"
-                    _hover={{color: "#4F9ADC"}}
-                  >
-                    Siga o passo a passo.
-                  </Text>
-                </AlertDiscalimerBox>
-              </Skeleton>
-
-              <Skeleton
-                id="python_section"
-                startColor="#F0F0F0"
-                endColor="#F3F3F3"
-                borderRadius="10px"
-                height="100%"
-                width="100%"
-                isLoaded={!isLoadingCode}
-              >
-                <CodeHighlight language="python">{`import basedosdados as bd
-
-billing_id = <seu_billing_id>
-
-query = """
-  ${sqlCode}
-"""
-
-bd.read_sql(query = query, billing_project_id = billing_id)`}
-                </CodeHighlight>
-              </Skeleton>
-            </TabPanel>
-
-            <TabPanel
-              id="r_section"
-              display={hasLoadingResponse ? "flex" : "none"}
-              flexDirection="column"
-              gap="16px"
-              marginTop="40px"
-              padding={0}
-            >
-              <Skeleton
-                startColor="#F0F0F0"
-                endColor="#F3F3F3"
-                borderRadius="6px"
-                height="20px"
-                width="fit-content"
-                isLoaded={!isLoadingCode}
-              >
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="14px"
-                  lineHeight="20px"
-                  color="#252A32"
-                >
-                  No terminal do R, digite a seguinte instrução:
-                </Text>
-              </Skeleton>
-
-              <Skeleton
-                startColor="#F0F0F0"
-                endColor="#F3F3F3"
-                borderRadius="6px"
-                height="100%"
-                width="100%"
-                isLoaded={!isLoadingCode}
-              >
-                <AlertDiscalimerBox type="info" >
-                  Primeira vez usando o pacote R?
-                  <Text
-                    marginLeft="4px"
-                    as="a"
-                    target="_blank"
-                    href="https://basedosdados.github.io/mais/api_reference_r/"
-                    color="#0068C5"
-                    _hover={{color: "#4F9ADC"}}
-                  >
-                    Siga o passo a passo.
-                  </Text>
-                </AlertDiscalimerBox>
-              </Skeleton>
-
-              <Skeleton
-                id="r_section"
-                startColor="#F0F0F0"
-                endColor="#F3F3F3"
-                borderRadius="10px"
-                height="100%"
-                width="100%"
-                isLoaded={!isLoadingCode}
-              >
-                <CodeHighlight language="r">{`
-# Defina o seu projeto no Google Cloud
-set_billing_id("<YOUR_PROJECT_ID>")
-
-# Para carregar o dado direto no R
-query <- "
-${sqlCode}
-"
-
-read_sql(query, billing_project_id = get_billing_id())
-`}
-                </CodeHighlight>
-              </Skeleton>
-            </TabPanel>
-
-            {/* <TabPanel padding="0">
-                Criamos um pacote em Stata para você acessar o <i>datalake</i>. Basta rodar o código:
-                Criamos um pacote em Stata para você acessar o <i>datalake</i>. Basta rodar o código:
-              </SectionText>
-              Criamos um pacote em Stata para você acessar o <i>datalake</i>. Basta rodar o código:
-              </SectionText>
-
-              <PrismCodeHighlight language="stata">
-                {`net install basedosdados, from("https://raw.githubusercontent.com/basedosdados/mais/master/stata-package")
-
-  bd_read_table, ///
-      path("<PATH>") ///
-      dataset_id("${gcpDatasetID}") ///
-      table_id("${gcpTableId}") ///
-      billing_project_id("<PROJECT_ID>")`}
-              </PrismCodeHighlight>
-            </TabPanel> */}
-
-            <TabPanel
+          <VStack
+            alignItems="flex-start"
+            width="100%"
+            display={tabAccessIndex === 1 ? "flex" : "none" }
+          >
+            <Stack
               id="download_table"
               display={!hasLoadingColumns ? "flex" : "none"}
               flexDirection="column"
@@ -811,6 +548,14 @@ read_sql(query, billing_project_id = get_billing_id())
               <Box
                 as="a"
                 href={downloadUrl}
+                onClick={() => { triggerGAEvent("download_da_tabela",`
+                  {
+                    gcp: ${gcpProjectID+"."+gcpDatasetID+"."+gcpTableId},
+                    tamanho: ${formatBytes(resource.uncompressedFileSize) || ""},
+                    dataset: ${resource?.dataset?._id},
+                    table: ${resource?._id},
+                  }`
+                ) }}
                 target="_blank"
                 display="flex"
                 alignItems="center"
@@ -838,8 +583,298 @@ read_sql(query, billing_project_id = get_billing_id())
                 />
                   Download da tabela {downloadNotAllowed && `(${formatBytes(resource.uncompressedFileSize)})`}
               </Box>
-            </TabPanel>
-          </TabPanels>
+            </Stack>
+          </VStack>
+
+          <VStack
+            display={tabAccessIndex === 0 && sqlCode !== "" ? "flex" : "none" }
+            alignItems="flex-start"
+            width="100%"
+            border="1px solid #DEDFE0"
+            borderRadius="16px"
+            marginTop="24px !important"
+          >
+            <Tabs
+              width="100%"
+              variant="unstyled"
+              isLazy
+              onChange={(index) => handleCategoryIndexes(index)}
+              index={tabIndex}
+              overflow="hidden"
+            >
+              <TabList
+                pointerEvents={hasLoadingColumns ? "none" : "default"}
+                padding="8px 24px 0"
+                borderBottom="2px solid #DEDFE0 !important"
+              >
+                <GreenTab>SQL</GreenTab>
+                <GreenTab>Python</GreenTab>
+                <GreenTab>R</GreenTab>
+              </TabList>
+
+              <VStack
+                spacing={0}
+                padding="24px"
+                overflow="hidden"
+              >
+                <TabPanels>
+                  <TabPanel
+                    id="SQL_section"
+                    display={hasLoadingResponse ? "flex" : "none"}
+                    flexDirection="column"
+                    gap="16px"
+                    padding={0}
+                  >
+                    <Skeleton
+                      startColor="#F0F0F0"
+                      endColor="#F3F3F3"
+                      borderRadius="6px"
+                      height="20px"
+                      width="fit-content"
+                      isLoaded={!isLoadingCode}
+                    >
+                      <Text
+                        fontFamily="Roboto"
+                        fontWeight="400"
+                        fontSize="14px"
+                        lineHeight="20px"
+                        color="#252A32"
+                      >
+                        No editor de consultas do BigQuery, digite a seguinte instrução:
+                      </Text>
+                    </Skeleton>
+
+                    <Skeleton
+                      startColor="#F0F0F0"
+                      endColor="#F3F3F3"
+                      borderRadius="6px"
+                      height="100%"
+                      width="100%"
+                      isLoaded={!isLoadingCode}
+                    >
+                      <AlertDiscalimerBox type="info" >
+                        Primeira vez usando o BigQuery?
+                        <Text
+                          marginLeft="4px"
+                          as="a"
+                          target="_blank"
+                          href="https://basedosdados.github.io/mais/access_data_bq/#primeiros-passos"
+                          color="#0068C5"
+                          _hover={{color: "#4F9ADC"}}
+                        >
+                          Siga o passo a passo.
+                        </Text>
+                      </AlertDiscalimerBox>
+                    </Skeleton>
+
+                    <Skeleton
+                      startColor="#F0F0F0"
+                      endColor="#F3F3F3"
+                      borderRadius="6px"
+                      height="100%"
+                      width="100%"
+                      isLoaded={!isLoadingCode}
+                    >
+                      <Box
+                        display="flex"
+                        flexDirection="row"
+                        justifyContent="flex-end"
+                        alignItems="center"
+                        padding="2px"
+                        backgroundColor="#2B8C4D"
+                        borderRadius="10px"
+                      >
+                        <Box
+                          as="a"
+                          id="acessar_o_bigquery_button"
+                          href={`https://console.cloud.google.com/bigquery?p=${gcpProjectID}&d=${gcpDatasetID}&t=${gcpTableId}&page=table`}
+                          target="_blank"
+                          display="flex"
+                          alignItems="center"
+                          height="40px"
+                          borderRadius="8px"
+                          backgroundColor="#FFF"
+                          padding="8px 16px"
+                          cursor="pointer"
+                          color="#2B8C4D"
+                          _hover={{
+                            color:"#80BA94"
+                          }}
+                        >
+                          <Text
+                            fontFamily="Roboto"
+                            fontWeight="500"
+                            fontSize="14px"
+                            lineHeight="20px"
+                          >
+                            Acessar o BigQuery
+                          </Text>
+                        </Box>
+                      </Box>
+                    </Skeleton>
+
+                    <Skeleton
+                      id="SQL_section"
+                      startColor="#F0F0F0"
+                      endColor="#F3F3F3"
+                      borderRadius="10px"
+                      height="100%"
+                      width="100%"
+                      isLoaded={!isLoadingCode}
+                    >
+                      <CodeHighlight language="sql">
+                        {sqlCode}
+                      </CodeHighlight>
+                    </Skeleton>
+                  </TabPanel>
+
+                  <TabPanel
+                    id="python_section"
+                    display={hasLoadingResponse ? "flex" : "none"}
+                    flexDirection="column"
+                    gap="16px"
+                    padding={0}
+                  >
+                    <Skeleton
+                      startColor="#F0F0F0"
+                      endColor="#F3F3F3"
+                      borderRadius="6px"
+                      height="20px"
+                      width="fit-content"
+                      isLoaded={!isLoadingCode}
+                    >
+                      <Text
+                        fontFamily="Roboto"
+                        fontWeight="400"
+                        fontSize="14px"
+                        lineHeight="20px"
+                        color="#252A32"
+                      >
+                        No terminal do Python, digite a seguinte instrução:
+                      </Text>
+                    </Skeleton>
+
+                    <Skeleton
+                      startColor="#F0F0F0"
+                      endColor="#F3F3F3"
+                      borderRadius="6px"
+                      height="100%"
+                      width="100%"
+                      isLoaded={!isLoadingCode}
+                    >
+                      <AlertDiscalimerBox type="info" >
+                        Primeira vez usando o pacote Python?
+                        <Text
+                          marginLeft="4px"
+                          as="a"
+                          target="_blank"
+                          href="https://basedosdados.github.io/mais/api_reference_python/"
+                          color="#0068C5"
+                          _hover={{color: "#4F9ADC"}}
+                        >
+                          Siga o passo a passo.
+                        </Text>
+                      </AlertDiscalimerBox>
+                    </Skeleton>
+
+                    <Skeleton
+                      id="python_section"
+                      startColor="#F0F0F0"
+                      endColor="#F3F3F3"
+                      borderRadius="10px"
+                      height="100%"
+                      width="100%"
+                      isLoaded={!isLoadingCode}
+                    >
+                      <CodeHighlight language="python">{`import basedosdados as bd
+
+    billing_id = <seu_billing_id>
+
+    query = """
+      ${sqlCode}
+    """
+
+    bd.read_sql(query = query, billing_project_id = billing_id)`}
+                      </CodeHighlight>
+                    </Skeleton>
+                  </TabPanel>
+
+                  <TabPanel
+                    id="r_section"
+                    display={hasLoadingResponse ? "flex" : "none"}
+                    flexDirection="column"
+                    gap="16px"
+                    padding={0}
+                  >
+                    <Skeleton
+                      startColor="#F0F0F0"
+                      endColor="#F3F3F3"
+                      borderRadius="6px"
+                      height="20px"
+                      width="fit-content"
+                      isLoaded={!isLoadingCode}
+                    >
+                      <Text
+                        fontFamily="Roboto"
+                        fontWeight="400"
+                        fontSize="14px"
+                        lineHeight="20px"
+                        color="#252A32"
+                      >
+                        No terminal do R, digite a seguinte instrução:
+                      </Text>
+                    </Skeleton> 
+
+                    <Skeleton
+                      startColor="#F0F0F0"
+                      endColor="#F3F3F3"
+                      borderRadius="6px"
+                      height="100%"
+                      width="100%"
+                      isLoaded={!isLoadingCode}
+                    >
+                      <AlertDiscalimerBox type="info" >
+                        Primeira vez usando o pacote R?
+                        <Text
+                          marginLeft="4px"
+                          as="a"
+                          target="_blank"
+                          href="https://basedosdados.github.io/mais/api_reference_r/"
+                          color="#0068C5"
+                          _hover={{color: "#4F9ADC"}}
+                        >
+                          Siga o passo a passo.
+                        </Text>
+                      </AlertDiscalimerBox>
+                    </Skeleton>
+
+                    <Skeleton
+                      id="r_section"
+                      startColor="#F0F0F0"
+                      endColor="#F3F3F3"
+                      borderRadius="10px"
+                      height="100%"
+                      width="100%"
+                      isLoaded={!isLoadingCode}
+                    >
+                      <CodeHighlight language="r">{`
+  # Defina o seu projeto no Google Cloud
+  set_billing_id("<YOUR_PROJECT_ID>")
+
+  # Para carregar o dado direto no R
+  query <- "
+  ${sqlCode}
+  "
+
+  read_sql(query, billing_project_id = get_billing_id())
+  `}
+                      </CodeHighlight>
+                    </Skeleton>
+                  </TabPanel>
+                </TabPanels>
+              </VStack>
+            </Tabs>
+          </VStack>
         </VStack>
       </Tabs>
     </VStack>
