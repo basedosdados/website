@@ -169,7 +169,6 @@ export function ControlledInputSimple({
         onBlur={() => changeInputFocus(false)}
         autoComplete="off"
         variant="outline"
-        letterSpacing="0.5px"
         border="2px solid transparent !important"
         color="#464A51"
         _hover={{

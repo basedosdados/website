@@ -92,9 +92,11 @@ export function CodeHighlight({ language, children }) {
 
         <Box
           id={`copy-${language}`}
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
           cursor="pointer"
           height="20px"
-          padding="0 12px"
           onClick={onCopy}
           fontFamily="Roboto"
           fontWeight="500"
@@ -299,7 +301,7 @@ export default function DataInformationQuery({ resource }) {
         <TabList
           pointerEvents={hasLoadingColumns ? "none" : "default"}
           padding="8px 24px 0"
-          borderBottom="2px solid #DEDFE0 !important"
+          borderBottom="1px solid #DEDFE0 !important"
         >
           <GreenTab>BigQuery e Pacotes</GreenTab>
           <GreenTab>Download</GreenTab>
@@ -518,6 +520,7 @@ export default function DataInformationQuery({ resource }) {
               id="download_table"
               display={!hasLoadingColumns ? "flex" : "none"}
               flexDirection="column"
+              width="100%"
               gap="16px"
               marginTop="16px"
               padding={0}
@@ -605,7 +608,7 @@ export default function DataInformationQuery({ resource }) {
               <TabList
                 pointerEvents={hasLoadingColumns ? "none" : "default"}
                 padding="8px 24px 0"
-                borderBottom="2px solid #DEDFE0 !important"
+                borderBottom="1px solid #DEDFE0 !important"
               >
                 <GreenTab>SQL</GreenTab>
                 <GreenTab>Python</GreenTab>
