@@ -33,7 +33,7 @@ export default function MenuDropdown({ title, children, ...style }) {
     <Menu isOpen={isOpenMenu}>
       <MenuButton
         backgroundColor="transparent"
-        _hover={{ backgroundColor: "transparent", opacity: "0.6" }}
+        _hover={{ backgroundColor: "transparent", opacity: "0.7" }}
         onMouseEnter={btnMouseEnterEvent}
         onMouseLeave={btnMouseLeaveEvent}
         as={Button}

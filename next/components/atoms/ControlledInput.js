@@ -130,7 +130,6 @@ export function ControlledInputSimple({
   inputStyle,
   inputElementStyle,
   fill,
-  fillHover,
   ...props
 }) {
   async function checkForEnter(e) {
@@ -146,9 +145,6 @@ export function ControlledInputSimple({
       alignSelf="center"
       justifyContent="center"
       fill={fill}
-      _hover={{
-        fill: inputFocus ? fill : fillHover
-      }}
       {...props}
     >
       <InputLeftElement
@@ -173,14 +169,11 @@ export function ControlledInputSimple({
         color="#464A51"
         _hover={{
           border:"2px solid transparent !important",
-          backgroundColor:"#F3F3F3",
-          color:"#878A8E",
-          _placeholder:{color: "#878A8E"}
+          backgroundColor:"#DEDFE0",
         }}
         _focus={{
           border:"2px solid #0068C5 !important",
           backgroundColor: "#FFF",
-          _placeholder:{color: "#464A51"}
         }}
         paddingLeft="52px !important"
         backgroundColor="#EEEEEE"
@@ -191,7 +184,7 @@ export function ControlledInputSimple({
         fontFamily="Roboto"
         fontWeight="400"
         borderRadius="14px"
-        _placeholder={{color: "#464A51"}}
+        _placeholder={{color: "#464A51", opacity: 1}}
         {...inputStyle}
       />
     </InputGroup>

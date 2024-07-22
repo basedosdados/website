@@ -24,7 +24,7 @@ export default function ReadMore({ children, id, ...props}) {
         background-color: #FFF;
         margin-left: 4px;
       "
-      onmouseover="this.style.color='rgba(0, 104, 197, 0.8)'"
+      onmouseover="this.style.color='#0057A4'"
       onmouseout="this.style.color='#0068C5'"
     >Ler menos</span>`
 
@@ -74,7 +74,7 @@ export default function ReadMore({ children, id, ...props}) {
           display={isReadMore ? "none" : "flex"}
           onClick={toggleReadMore}
           cursor="pointer"
-          _hover={{color: "rgba(0, 104, 197, 0.8)"}}
+          _hover={{color: "#0057A4"}}
           color="#0068C5"
           fontFamily="Roboto"
           fontSize="14px"

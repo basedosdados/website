@@ -164,7 +164,7 @@ export default function InformationRequestPage({ id }) {
           gap="8px"
           lineHeight="20px"
           _hover={{
-            backgroundColor: resource?.dataUrl ? "#80BA94" : "#ACAEB1"
+            backgroundColor: resource?.dataUrl ? "#22703E" : "#ACAEB1"
           }}
         >
           Acessar dados
@@ -194,7 +194,7 @@ export default function InformationRequestPage({ id }) {
           gap="8px"
           lineHeight="20px"
           _hover={{
-            backgroundColor: resource?.url ? "#80BA94" : "#ACAEB1"
+            backgroundColor: resource?.url ? "#22703E" : "#ACAEB1"
           }}
         >
           Acessar pedido

@@ -23,7 +23,7 @@ export default function HelpWidget({options, tooltip}) {
           backgroundColor="#FFF"
           padding="0 16px 10px"
           _focus={{backgroundColor: "transparent"}}
-          _hover={{backgroundColor: "transparent", opacity: "0.6"}}
+          _hover={{backgroundColor: "transparent", opacity: "0.7"}}
           onClick={() => window.open(option.url, "_blank")}
         >
           {option.name}

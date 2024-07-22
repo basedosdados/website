@@ -121,7 +121,7 @@ function Slogan () {
         letterSpacing="0.1px"
         marginTop="24px !important"
         _hover={{
-          backgroundColor: "rgba(13, 153, 252, 0.7)"
+          backgroundColor: "#0B89E2"
         }}
       >
         Vamos fazer um projeto juntos
@@ -600,7 +600,7 @@ export default function Services() {
           letterSpacing="0.1px"
           marginTop="24px !important"
           _hover={{
-            backgroundColor: "rgba(13, 153, 252, 0.7)"
+            backgroundColor: "#0B89E2"
           }}
         >
           Vamos fazer um projeto juntos

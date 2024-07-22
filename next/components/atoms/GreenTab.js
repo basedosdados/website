@@ -20,8 +20,8 @@ export default function GreenTab({ children, ...style }) {
         borderBottom: "3px solid #2B8C4D"
       }}
       _hover={{
-        color: "#9D9FA3",
-        fill: "#9D9FA3"
+        color: "#464A51",
+        fill: "#464A51"
       }}
       {...style}
     >

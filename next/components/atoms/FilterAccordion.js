@@ -34,7 +34,7 @@ export function BaseFilterAccordion({
             <Text>
               <AccordionButton
                 onClick={onChange}
-                _hover={isHovering ? { cursor: "pointer", opacity: "0.6" } : "none"}
+                _hover={isHovering ? { cursor: "pointer", opacity: "0.7" } : "none"}
                 padding="0"
                 cursor="auto"
               >
@@ -49,7 +49,7 @@ export function BaseFilterAccordion({
                     fontFamily="Roboto"
                     fontWeight="500"
                     fontSize="16px"
-                    color="#464A51"
+                    color="#252A32"
                   >
                     {fieldName}
                   </Box>
@@ -132,7 +132,6 @@ export function CheckboxFilterAccordion({
                 changeInputFocus={setInputFocus}
                 placeholder="Pesquisar"
                 fill="#464A51"
-                fillHover="#878A8E"
                 icon={
                   <SearchIcon
                     alt="pesquisar"
@@ -303,7 +302,7 @@ export function SimpleFilterAccordion({
             <Text>
               <AccordionButton
                 onClick={onChange}
-                _hover={isHovering ? { cursor: "pointer", opacity: "0.6" } : "none"}
+                _hover={isHovering ? { cursor: "pointer", opacity: "0.7" } : "none"}
                 padding="16px 16px 0 0"
                 marginBottom="8px"
               >

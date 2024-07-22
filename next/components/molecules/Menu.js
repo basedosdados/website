@@ -182,7 +182,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
               gap="8px"
               lineHeight="20px"
               _hover={{
-                backgroundColor: "rgba(13, 153, 252, 0.7)"
+                backgroundColor: "#0B89E2"
               }}
             >
               Cadastrar
@@ -302,6 +302,7 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
         <Divider margin="24px 0" borderColor="#DEDFE0"/>
 
         <Stack
+          display="flex"
           cursor="pointer"
           spacing={0}
           flexDirection="row"
@@ -310,7 +311,7 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
           color="#252A32"
           fill="#D0D0D0"
           _hover={{
-            opacity: 0.8
+            opacity: 0.7
           }}
           onClick={() => {
             cookies.remove('userBD', { path: '/' })
@@ -459,13 +460,13 @@ function MenuUser ({ userData, onOpen, onClose }) {
           <MenuItem
             display="flex"
             flexDirection="row"
-            alignItems="start"
+            alignItems="center"
             gap="8px"
             padding="16px"
-            _hover={{ backgroundColor: "transparent", opacity: "0.6" }}
+            _hover={{ backgroundColor: "transparent", opacity: "0.7" }}
             onClick={() => window.open(`/user/${userData.username}`, "_self")}
           >
-            <SettingsIcon fill="#D0D0D0" width="16px" height="16px"/>
+            <SettingsIcon fill="#D0D0D0" width="20px" height="20px"/>
             <Text
               color="#252A32"
               fontFamily="Roboto"
@@ -481,10 +482,10 @@ function MenuUser ({ userData, onOpen, onClose }) {
           <MenuItem
             display="flex"
             flexDirection="row"
-            alignItems="start"
+            alignItems="center"
             gap="8px"
             padding="16px"
-            _hover={{ backgroundColor: "transparent", opacity: "0.6" }}
+            _hover={{ backgroundColor: "transparent", opacity: "0.7" }}
             onClick={() => {
               cookies.remove('userBD', { path: '/' })
               cookies.remove('token', { path: '/' })
@@ -563,7 +564,6 @@ function SearchInputUser ({ user }) {
           changeInputFocus={setShowInput}
           placeholder="Pesquisar dados"
           fill="#464A51"
-          fillHover="#878A8E"
           icon={
             <SearchIcon
               alt="pesquisar"
@@ -584,7 +584,6 @@ function SearchInputUser ({ user }) {
         height="18px"
         marginLeft="auto !important"
         cursor="pointer"
-        _hover={{opacity:"0.8"}}
         onClick={() => {
           setShowInput(true)
           setTimeout(() => {
@@ -605,7 +604,6 @@ function SearchInputUser ({ user }) {
         changeInputFocus={setInputFocus}
         placeholder="Pesquisar dados"
         fill="#464A51"
-        fillHover="#878A8E"
         icon={
           <SearchIcon
             alt="pesquisar"
@@ -630,7 +628,7 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
       <Link
         display="flex"
         flexDirection="colunm"
-        _hover={{ opacity: "0.6" }}
+        _hover={{ opacity: "0.7" }}
         target={url.slice(0,4) === "http" ? "_blank" : "_self"}
         color="#252A32"
         fontSize="14px"
@@ -724,7 +722,7 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
           return (
             <Link
               key={`link-${i}`}
-              _hover={{ opacity: "0.6" }}
+              _hover={{ opacity: "0.7" }}
               fontSize="14px"
               fontFamily="Roboto"
               letterSpacing="0.1px"
@@ -816,7 +814,7 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
               gap="8px"
               lineHeight="20px"
               _hover={{
-                backgroundColor: "rgba(13, 153, 252, 0.7)"
+                backgroundColor: "#0B89E2"
               }}
             >
               Cadastrar

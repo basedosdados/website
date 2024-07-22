@@ -42,8 +42,8 @@ export default function Database({
         fontSize="14px"
         lineHeight="20px"
         _hover={{
-          color: "#4F9ADC",
-          fill: "#4F9ADC"
+          color: "#0057A4",
+          fill: "#0057A4"
         }}
         href={tablesNumber > 0 ? `/dataset/${id}?table=${tables.id}` : ""}
       >
@@ -82,8 +82,8 @@ export default function Database({
         fontSize="14px"
         lineHeight="20px"
         _hover={{
-          color: "#4F9ADC",
-          fill: "#4F9ADC"
+          color: "#0057A4",
+          fill: "#0057A4"
         }}
         href={rawDataSourcesNumber > 0 ? `/dataset/${id}?raw_data_source=${rawDataSources.id}` : ""}
       >
@@ -122,8 +122,8 @@ export default function Database({
         fontSize="14px"
         lineHeight="20px"
         _hover={{
-          color: "#4F9ADC",
-          fill: "#4F9ADC"
+          color: "#0057A4",
+          fill: "#0057A4"
         }}
         href={informationRequestsNumber > 0 ? `/dataset/${id}?information_request=${informationRequests.id}` : ""}
       >
@@ -239,7 +239,7 @@ export default function Database({
                   lineHeight="20px"
                   color="#71757A"
                   _hover={{
-                    opacity: 0.7
+                    color: "#464A51"
                   }}
                   textOverflow="ellipsis"
                   href={`/dataset?organization=${organization?.slug}`}

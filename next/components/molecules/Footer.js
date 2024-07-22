@@ -104,13 +104,13 @@ export default function Footer({ template, ocult = false }) {
           <TextFooterSimple textAlign="center">
             ® 2024 Base dos Dados
           </TextFooterSimple>
-          <TextFooterSimple as="a" href="/termos-e-privacidade?section=terms" _hover={{ opacity: "0.8" }}>
+          <TextFooterSimple as="a" href="/termos-e-privacidade?section=terms" _hover={{ color: "#252A32" }}>
             Termos de Uso
           </TextFooterSimple>
-          <TextFooterSimple as="a" href="/termos-e-privacidade?section=privacy" _hover={{ opacity: "0.8" }}>
+          <TextFooterSimple as="a" href="/termos-e-privacidade?section=privacy" _hover={{ color: "#252A32" }}>
             Políticas de Privacidade
           </TextFooterSimple>
-          <TextFooterSimple as="a" href="/contato" _hover={{ opacity: "0.8" }}>
+          <TextFooterSimple as="a" href="/contato" _hover={{ color: "#252A32" }}>
             Contato
           </TextFooterSimple>
         </Stack>

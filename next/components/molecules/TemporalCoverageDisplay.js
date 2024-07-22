@@ -299,8 +299,8 @@ export function TemporalCoverageBar ({ value }) {
             marginBottom="10px"
             padding="6px 16px"
             _hover={{
-              color:"#4F9ADC",
-              fill:"#4F9ADC",
+              color:"#0057A4",
+              fill:"#0057A4",
               backgroundColor:"#E4F2FF"
             }}
             href="/precos"

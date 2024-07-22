@@ -106,8 +106,8 @@ export function CodeHighlight({ language, children }) {
           color="#878A8E"
           fill="#878A8E"
           _hover={{
-            fill:"#71757A",
-            color:"#71757A",
+            fill:"#9D9FA3",
+            color:"#9D9FA3",
           }}
         >
           {hasCopied ? "Copiado" : "Copiar"}
@@ -140,11 +140,11 @@ export function CodeHighlight({ language, children }) {
           padding="12px 16px"
           borderTop="1px solid #464A51"
           onClick={() => setIsExpanded(!isExpanded)}
-          fill="#71757A"
-          color="#71757A"
+          fill="#878A8E"
+          color="#878A8E"
           _hover={{
-            fill:"#878A8E",
-            color:"#878A8E"
+            fill:"#9D9FA3",
+            color:"#9D9FA3"
           }}
         >
           <ChevronIcon
@@ -360,7 +360,7 @@ export default function DataInformationQuery({ resource }) {
                 type="info"
               >
                 Essa tabela possui códigos institucionais que variam entre anos. Por isso, ainda estamos trabalhando para automatizar o processo de tradução.
-                Por enquanto, recomendamos acessar o <Text as="a" href="https://basedosdados.org/dataset/e083c9a2-1cee-4342-bedc-535cbad6f3cd?table=0308fbe0-270c-4135-9115-ea1100f400f6" target="_blank" color="#0068C5" _hover={{color: "#4F9ADC"}}>dicionário</Text> e os <Text as="a" href="https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=dffb65ac-9df9-4151-94bf-88c45bfcb056" target="_blank" color="#0068C5" _hover={{color: "#4F9ADC"}}>diretórios</Text> para entender como traduzir os códigos presentes na tabela.
+                Por enquanto, recomendamos acessar o <Text as="a" href="https://basedosdados.org/dataset/e083c9a2-1cee-4342-bedc-535cbad6f3cd?table=0308fbe0-270c-4135-9115-ea1100f400f6" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>dicionário</Text> e os <Text as="a" href="https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=dffb65ac-9df9-4151-94bf-88c45bfcb056" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>diretórios</Text> para entender como traduzir os códigos presentes na tabela.
               </AlertDiscalimerBox>
             </Skeleton>
 
@@ -438,7 +438,7 @@ export default function DataInformationQuery({ resource }) {
                 <AlertDiscalimerBox
                   type="warning"
                 >
-                  Essa tabela completa, com todas as colunas, tem <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>. Cuidado para não ultrapassar o <Text as="a" href="https://basedosdados.github.io/mais/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#4F9ADC"}}>limite de processamento gratuito</Text> do BigQuery. <Text as="br" display={{base: "none", lg: "flex"}}/>
+                  Essa tabela completa, com todas as colunas, tem <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>. Cuidado para não ultrapassar o <Text as="a" href="https://basedosdados.github.io/mais/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>limite de processamento gratuito</Text> do BigQuery. <Text as="br" display={{base: "none", lg: "flex"}}/>
                   {numberColumns === checkedColumns.length && "Para otimizar a consulta, você pode selecionar menos colunas ou adicionar filtros no BigQuery."}
                 </AlertDiscalimerBox>
               </Skeleton>
@@ -449,7 +449,7 @@ export default function DataInformationQuery({ resource }) {
                 display={isUserPro() ? "none" : "flex"}
                 type="info"
               >
-                A tabela de tradução da{columnsTranslationPro.length > 1 && "s"} coluna{columnsTranslationPro.length > 1 && "s"} <Text as="span" fontWeight="500">{columnsTranslationPro.map((elm) => elm?.node?.name).join(", ")}</Text> é exclusiva para <Text as="a" href="/precos" target="_blank" color="#0068C5" _hover={{color: "#4F9ADC"}}>assinantes</Text>. Todos os demais códigos institucionais são de acesso aberto.
+                A tabela de tradução da{columnsTranslationPro.length > 1 && "s"} coluna{columnsTranslationPro.length > 1 && "s"} <Text as="span" fontWeight="500">{columnsTranslationPro.map((elm) => elm?.node?.name).join(", ")}</Text> é exclusiva para <Text as="a" href="/precos" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>assinantes</Text>. Todos os demais códigos institucionais são de acesso aberto.
               </AlertDiscalimerBox>
             }
 
@@ -503,7 +503,7 @@ export default function DataInformationQuery({ resource }) {
                 gap="8px"
                 lineHeight="20px"
                 _hover={{
-                  backgroundColor:"#80BA94"
+                  backgroundColor:"#22703E"
                 }}
               >
                 Gerar consulta
@@ -536,7 +536,7 @@ export default function DataInformationQuery({ resource }) {
                       target="_blank"
                       href="https://basedosdados.github.io/mais/colab_data/"
                       color="#0068C5"
-                      _hover={{color: "#4F9ADC"}}
+                      _hover={{color: "#0057A4"}}
                     >
                       saiba como contribuir com seu tempo.
                     </Text>
@@ -577,7 +577,7 @@ export default function DataInformationQuery({ resource }) {
                 lineHeight="20px"
                 pointerEvents={downloadNotAllowed ? "default" : "none"}
                 _hover={{
-                  backgroundColor: "#80BA94"
+                  backgroundColor: "#22703E"
                 }}
               >
                 <DownloadIcon
@@ -663,7 +663,7 @@ export default function DataInformationQuery({ resource }) {
                           target="_blank"
                           href="https://basedosdados.github.io/mais/access_data_bq/#primeiros-passos"
                           color="#0068C5"
-                          _hover={{color: "#4F9ADC"}}
+                          _hover={{color: "#0057A4"}}
                         >
                           Siga o passo a passo.
                         </Text>
@@ -701,7 +701,7 @@ export default function DataInformationQuery({ resource }) {
                           cursor="pointer"
                           color="#2B8C4D"
                           _hover={{
-                            color:"#80BA94"
+                            color:"#22703E"
                           }}
                         >
                           <Text
@@ -773,7 +773,7 @@ export default function DataInformationQuery({ resource }) {
                           target="_blank"
                           href="https://basedosdados.github.io/mais/api_reference_python/"
                           color="#0068C5"
-                          _hover={{color: "#4F9ADC"}}
+                          _hover={{color: "#0057A4"}}
                         >
                           Siga o passo a passo.
                         </Text>
@@ -844,7 +844,7 @@ export default function DataInformationQuery({ resource }) {
                           target="_blank"
                           href="https://basedosdados.github.io/mais/api_reference_r/"
                           color="#0068C5"
-                          _hover={{color: "#4F9ADC"}}
+                          _hover={{color: "#0057A4"}}
                         >
                           Siga o passo a passo.
                         </Text>

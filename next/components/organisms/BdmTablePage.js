@@ -129,6 +129,9 @@ export default function BdmTablePage({ id }) {
       width:"20px",
       height:"20px",
       fill: "#0068C5",
+      _hover: {
+        fill: "#0057A4"
+      },
       onClick: () => {window.open(href)}
     }
   }
@@ -459,8 +462,8 @@ export default function BdmTablePage({ id }) {
             pointerEvents={resource?.cloudTables ? "default" : "none"}
             fill="#0068C5"
             _hover={{
-              color:"#4F9ADC",
-              fill:"#4F9ADC"
+              color:"#0057A4",
+              fill:"#0057A4"
             }}
           >
             {!resource?.cloudTables ?
@@ -567,8 +570,8 @@ export default function BdmTablePage({ id }) {
                 color="#0068C5"
                 fill="#0068C5"
                 _hover={{
-                  fill: "#4F9ADC",
-                  color: "#4F9ADC"
+                  fill: "#0057A4",
+                  color: "#0057A4"
                 }}
                 href={resource.auxiliaryFilesUrl}
               >
@@ -620,8 +623,8 @@ export default function BdmTablePage({ id }) {
                 color="#0068C5"
                 fill="#0068C5"
                 _hover={{
-                  fill: "#4F9ADC",
-                  color: "#4F9ADC"
+                  fill: "#0057A4",
+                  color: "#0057A4"
                 }}
                 href={`/dataset/${resource.rawDataSource[0].dataset._id}?raw_data_source=${resource.rawDataSource[0]._id}`}
               >

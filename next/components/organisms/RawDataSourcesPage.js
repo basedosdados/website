@@ -245,7 +245,7 @@ export default function RawDataSourcesPage({ id }) {
           gap="8px"
           lineHeight="20px"
           _hover={{
-            backgroundColor: resource?.url ? "#80BA94" : "#ACAEB1"
+            backgroundColor: resource?.url ? "#22703E" : "#ACAEB1"
           }}
         >
           Acessar fonte original

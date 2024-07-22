@@ -130,7 +130,6 @@ export default function DatasetResource({
                 backgroundColor={elm._id === value && "#F7F7F7"}
                 _hover={{
                   backgroundColor:elm._id === value ? "#F7F7F7" :"#EEEEEE",
-                  color: elm._id === value ? "#2B8C4D" : "#9D9FA3"
                 }}
                 borderRadius="8px"
                 padding="6px 8px"

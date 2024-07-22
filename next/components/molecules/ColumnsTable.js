@@ -70,7 +70,6 @@ function SearchColumn({ isLoaded, resource, columns }) {
       changeInputFocus={setInputFocus}
       placeholder="Pesquisar colunas"
       fill="#464A51"
-      fillHover="#878A8E"
       height="48px"
       maxWidth="100%"
       width="100%"
@@ -234,8 +233,8 @@ export default function ColumnsTable({
           color="#0068C5"
           fill="#0068C5"
           _hover={{
-            color:"#4F9ADC",
-            fill:"#4F9ADC"
+            color:"#0057A4",
+            fill:"#0057A4"
           }}
         >
           Acessar tabela que faz a tradução desta coluna
@@ -267,8 +266,8 @@ export default function ColumnsTable({
           color="#0068C5"
           fill="#0068C5"
           _hover={{
-            color:"#4F9ADC",
-            fill:"#4F9ADC"
+            color:"#0057A4",
+            fill:"#0057A4"
           }}
         >
           Baixar tabela que faz a tradução desta coluna

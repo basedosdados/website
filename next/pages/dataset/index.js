@@ -238,7 +238,7 @@ export default function SearchDatasetPage() {
             gap="8px"
             lineHeight="20px"
             _hover={{
-              backgroundColor: "#80BA94"
+              backgroundColor: "#22703E"
             }}
           >
             Fazer uma proposta
@@ -263,7 +263,7 @@ export default function SearchDatasetPage() {
             gap="8px"
             lineHeight="20px"
             _hover={{
-              opacity: 0.7
+              color: "#22703E"
             }}
           >
             Ver roadmap de dados
@@ -349,7 +349,7 @@ export default function SearchDatasetPage() {
           lineHeight="20px"
           color="#0068C5"
           _hover={{
-            color: "#4F9ADC"
+            color: "#0057A4"
           }}
         >
           Limpar filtros
