@@ -332,7 +332,7 @@ export default function DataInformationQuery({ resource }) {
                 fontSize="14px"
                 color="#252A32"
               >
-                Selecione as colunas que você deseja acessar:
+                {tabAccessIndex === 0  ? "Selecione as colunas que você deseja acessar:" : "Confira as colunas da tabela:"}
               </Text>
             </Skeleton>
 
@@ -486,7 +486,6 @@ export default function DataInformationQuery({ resource }) {
                   triggerGAEvent("gerar_consulta_click", queryLanguage())
                   setHasLoadingResponse(true)
                 }}
-                target="_blank"
                 display="flex"
                 alignItems="center"
                 height="40px"
