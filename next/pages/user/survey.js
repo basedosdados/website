@@ -10,6 +10,7 @@ import cookies from 'js-cookie';
 
 import Button from "../../components/atoms/Button";
 import { MainPageTemplate } from "../../components/templates/main";
+import { triggerGAEvent } from "../../utils";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
 
@@ -34,15 +35,15 @@ export default function Survey() {
       .then(res => res.json())
 
     if(result.errors.length > 0) {
-      result.errors.map((elm) => {
-        console.error(`Campo ${elm.field}: ${elm.messages}`)
-      })
+      setErr("Ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde.")
+      console.error(result.errors)
       setIsLoading(false)
     }
 
     const userData = await fetch(`/api/user/getUser?p=${btoa(id)}`, { method: "GET" })
       .then(res => res.json())
     cookies.set('userBD', JSON.stringify(userData))
+    triggerGAEvent("survey_login", skip === "true" ? "Skipou" : "Respondeu")
     window.open("/", "_self")
   }
 

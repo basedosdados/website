@@ -62,6 +62,7 @@ async function updateProfileSurvey({
     return data
   } catch (error) {
     console.error(error)
+    return "err"
   }
 }
 
@@ -78,5 +79,9 @@ export default async function handler(req, res) {
   }
 
   const result = await updateProfileSurvey(object, token, s)
+
+  if(result === null) return res.status(500).json({errors: "err"})
+  if(result.errors.length > 0) return res.status(500).json({errors: result.errors})
+  if(result === "err") return res.status(500).json({errors: "err"})
   res.status(200).json(result)
 }
