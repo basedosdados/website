@@ -87,7 +87,7 @@ export default function DatasetResource({
     if(choices.length < 1) return null
 
     return (
-      <Box>
+      <Box width={{base:"100%", lg:"272px"}}>
         <Divider
           display={hasDivider ? "flex" : "none"}
           marginY="24px"
@@ -121,6 +121,9 @@ export default function DatasetResource({
                 borderRadius="10px"
               />
               <Text
+                textOverflow="ellipsis"
+                whiteSpace="nowrap"
+                overflow="hidden"
                 width="100%"
                 fontFamily="Roboto"
                 fontWeight="500"
@@ -150,11 +153,11 @@ export default function DatasetResource({
       direction={{ base: "column", lg: "row" }}
       gap="24px"
       spacing={0}
-      width="100%"
       height="100%"
     >
       <Stack
-        minWidth={{base: "100%", lg: "272px"}}
+        minWidth={{base: "100%", lg: "296px"}}
+        maxWidth={{base: "100%", lg: "296px"}}
         spacing={0}
       >
         <ContentFilter

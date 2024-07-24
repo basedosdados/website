@@ -103,7 +103,7 @@ export default function DatasetPage ({ dataset }) {
         spacing={0}
       >
         <Grid
-          templateColumns={{ base: "1fr", lg: "300px 1fr" }}
+          templateColumns={{ base: "1fr", lg: "296px 1fr" }}
           width="100%"
           gap="24px"
           paddingY="24px"

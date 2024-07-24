@@ -215,7 +215,6 @@ export default function BdmTablePage({ id }) {
     <Stack
       flex={1}
       overflow="hidden"
-      paddingLeft={{base: "0", lg: "24px"}}
       spacing={0}
     >
       <StackSkeleton
