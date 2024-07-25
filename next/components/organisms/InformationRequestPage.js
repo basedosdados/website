@@ -1,201 +1,259 @@
 import {
-  VStack,
-  HStack,
   Stack,
-  Center,
-  Image,
   Box,
   Text,
-  Grid,
-  GridItem,
+  Skeleton,
+  SkeletonText,
+  Divider
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import LoadingSpin from "../atoms/Loading";
-import Subtitle from "../atoms/Subtitle";
-import SectionText from "../atoms/SectionText";
-import RoundedButton from "../atoms/RoundedButton";
+import ReadMore from "../atoms/ReadMore";
 import { TemporalCoverage } from "../molecules/TemporalCoverageDisplay";
-import BaseResourcePage from "../molecules/BaseResourcePage";
-import DisclaimerBox from "../molecules/DisclaimerBox";
+import { AlertDiscalimerBox } from "../molecules/DisclaimerBox";
 import FourOFour from "../templates/404";
 
-import {
-  getInformationRequest
-} from "../../pages/api/datasets/index";
-
-import StatusIcon from "../../public/img/icons/statusIcon";
-import UserIcon from "../../public/img/icons/userIcon";
-import ExclamationIcon from "../../public/img/icons/exclamationIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
 export default function InformationRequestPage({ id }) {
   const [isLoading, setIsLoading] = useState(true)
   const [resource, setResource] = useState({})
-  const [isError, setIsError] = useState({})
-
-  const featchInformationRequest = async () => {
-    try {
-      const result = await getInformationRequest(id)
-      setResource(result)
-    } catch (error) {
-      setIsError(error)
-      console.error(error)
-    }
-    setIsLoading(false)
-  }
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
+    const featchInformationRequest = async () => {
+      setIsLoading(true)
+
+      try {
+        const response = await fetch(`/api/datasets/getInformationRequest?p=${id}`, { method: "GET" })
+        const result = await response.json()
+
+        if (result.success) {
+          setResource(result.resource)
+          setIsError(false)
+        } else {
+          console.error(result.error)
+          setIsError(true)
+        }
+      } catch (error) {
+        console.error("Fetch error: ", error)
+        setIsError(true)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
     featchInformationRequest()
   },[id])
 
 
-  const AddInfoTextBase = ({title, text, children, ...style}) => {
+  const AddInfoTextBase = ({ title, text, ...props }) => {
     return (
-      <Box display="block" alignItems="center" gridGap="8px" {...style}>
+      <SkeletonText
+        startColor="#F0F0F0"
+        endColor="#F3F3F3"
+        borderRadius="6px"
+        minHeight="40px"
+        width="100%"
+        spacing="4px"
+        skeletonHeight="18px"
+        noOfLines={2}
+        marginBottom="24px !important"
+        isLoaded={!isLoading}
+        {...props}
+      >
         <Text
-          fontFamily="ubuntu"
+          fontFamily="Roboto"
+          fontWeight="500"
           fontSize="14px"
-          fontWeight="400" 
-          letterSpacing="0.3px"
-          marginBottom="8px"
+          lineHeight="20px"
           color="#252A32"
         >{title}</Text>
-        <SectionText>
-          {text}
-        </SectionText>
-        {children}
-      </Box>
+        <Text
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="14px"
+          lineHeight="20px"
+          color="#464A51"
+        >{text || "Não informado"}</Text>
+      </SkeletonText>
     )
   }
 
+  const StackSkeleton = ({ children, ...props }) => {
+    return (
+      <Skeleton
+        startColor="#F0F0F0"
+        endColor="#F3F3F3"
+        borderRadius="6px"
+        height="36px"
+        width="100%"
+        isLoaded={!isLoading}
+        {...props}
+      >
+        {children}
+      </Skeleton>
+    )
+  }
 
-  if(isError?.message?.length > 0 || resource === null || Object.keys(resource).length < 0) return <FourOFour/>
-
-  if(isLoading) return <LoadingSpin />
+  if(isError) return <FourOFour/>
 
   return (
-    <BaseResourcePage
-      padding={useCheckMobile() ? "16px 0 0" : "16px 8px 0 0"}
-      title={`Número do pedido: ${resource?.number}`}
+    <Stack 
+      flex={1}
+      overflow="hidden"
+      paddingLeft={{base: "0", lg: "24px"}}
+      spacing={0}
     >
-      <VStack 
-        marginTop="0 !important" 
-        width="100%" 
-        letterSpacing="0.5px" 
-        spacing={4} 
-        alignItems="flex-start"
+      <StackSkeleton
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        gap="8px"
       >
-        <VStack width="100%" marginTop="32px !important" spacing={4} alignItems="flex-start">
-          <Subtitle>Consulta aos dados</Subtitle>
-          <DisclaimerBox width="100%">
-            <HStack
-              spacing={0}
-              flexDirection={useCheckMobile() && "column"}
-              alignItems="flex-start"
-            >
-              <Center>
-                <ExclamationIcon alt="atenção" width="20px" height="20px" fill="#42B0FF"/>
-                <SectionText margin="0 4px 0 12px" fontWeight="bolder" fontFamily="lato">ATENÇÃO:</SectionText>
-              </Center>
-              <SectionText
-                display="flex"
-                marginLeft={useCheckMobile() && "32px !important"}
-              >
-                Estes dados não passaram pela metodologia de tratamento da Base dos Dados.
-              </SectionText>
-            </HStack>
-          </DisclaimerBox>
-
-          <HStack
-            width="100%"
-            alignItems="flex-start"
-            flexDirection={useCheckMobile() && "column"}
-            gridGap={useCheckMobile() ? "16px" : "8px"}
-            marginTop={useCheckMobile() && "24px !important"}
-            spacing={0}
-          >
-            <a href={resource?.dataUrl} target="_blank">
-              <RoundedButton
-                height="35px"
-                fontSize="14px"
-                minWidth="180px"
-                width={useCheckMobile() && "100%"}
-                color="#FFF"
-                backgroundColor={resource?.dataUrl ? "#42B0FF" : "#C4C4C4"}
-                padding="0 20px"
-                isDisabled={resource?.dataUrl ? false : true}
-              >
-                <RedirectIcon alt="hiperlink" marginRight="8px" width="14px" height="14px" fill="#FFF"/>
-                Acessar dados
-                </RoundedButton>
-            </a>
-
-            <a href={resource?.url} target="_blank">
-              <RoundedButton
-                height="35px"
-                fontSize="14px"
-                minWidth="180px"
-                width={useCheckMobile() && "100%"}
-                color={resource?.url ? "#42B0FF" : "#FFF"}
-                border={resource?.url && "2px solid #42B0FF"}
-                backgroundColor={resource?.url ? "#FFF" : "#C4C4C4"}
-                padding="0 20px"
-                isDisabled={resource?.url ? false : true}
-              >
-                <RedirectIcon alt="hiperlink" marginRight="8px" width="14px" height="14px" fill={resource?.url ? "#42B0FF" : "#FFF"}/>
-                Acessar pedido
-              </RoundedButton>
-            </a>
-          </HStack>
-        </VStack>
-
-        <VStack
-          alignItems="flex-start"
-          marginTop="32px !important"
-          fontFamily="Lato"
-          fontSize="16px"
+        <Text
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="24px"
+          lineHeight="36px"
+          color="#252A32"
+          width="fit-content"
+          overflow="hidden"
+          textOverflow="ellipsis"
+          whiteSpace="nowrap"
         >
-          <Subtitle >Descrição</Subtitle>
-          <SectionText marginTop="16px !important">
-            {resource?.observations || "Nenhuma descrição fornecida."}
-          </SectionText>
-        </VStack>
+          Número do pedido: {resource?.number}
+        </Text>
+      </StackSkeleton>
 
-        <VStack width="100%" marginTop="32px !important" spacing={4} alignItems="flex-start">
-          <Subtitle>Cobertura temporal</Subtitle>
-          <SectionText>
-            <TemporalCoverage
-              value={resource?.coverages?.[0]?.datetimeRanges?.[0]}
-              text="Nenhuma cobertura temporal fornecida"
-            />
-          </SectionText>
-        </VStack>
+      <StackSkeleton
+        minHeight="56px"
+        height="fit-content"
+        marginTop="8px !important"
+      >
+        <AlertDiscalimerBox>
+          Estes dados não passaram pela metodologia de tratamento da Base dos Dados.
+        </AlertDiscalimerBox>
+      </StackSkeleton>
 
-        <VStack width="100%" marginTop="32px !important" spacing={5} alignItems="flex-start">
-          <Stack flex="1" >
-            <Subtitle>Informações adicionais</Subtitle>
-          </Stack>
-  
-          <Grid width="100%" flex={1} templateColumns="repeat(2, 1fr)" gap={6}>
-            <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-              <StatusIcon alt="estado" width="22px" height="22px" fill="#D0D0D0"/>
-              <AddInfoTextBase
-                title="Estado"
-                text={resource?.status?.name || "Não listado"}
-              />
-            </GridItem>
+      <StackSkeleton
+        display="flex"
+        flexDirection="row"
+        gap="16px"
+        width="fit-content"
+        height="40px"
+        marginTop="8px !important"
+        marginBottom="40px !important"
+      >
+        <Box
+          as="a"
+          href={resource?.dataUrl}
+          target="_blank"
+          display="flex"
+          alignItems="center"
+          height="40px"
+          width="fit-content"
+          borderRadius="8px"
+          backgroundColor={resource?.dataUrl ? "#2B8C4D" : "#ACAEB1"}
+          padding="8px 16px"
+          cursor={resource?.dataUrl ? "pointer" : "default"}
+          color="#FFF"
+          fill="#FFF"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="14px"
+          gap="8px"
+          lineHeight="20px"
+          _hover={{
+            backgroundColor: resource?.dataUrl ? "#22703E" : "#ACAEB1"
+          }}
+        >
+          Acessar dados
+          <RedirectIcon
+            width="16px"
+            height="16px"
+          />
+        </Box>
 
-            <GridItem colSpan={2} display="flex" alignItems="flex-start" gridGap="8px">
-              <UserIcon alt="Pedido feito por" width="22px" height="22px" fill="#D0D0D0"/>
-              <AddInfoTextBase
-                title="Pedido feito por"
-                text={`${resource?.startedBy?.firstName} ${resource?.startedBy?.lastName}` || "Não listado"}
-              />
-            </GridItem>
-          </Grid>
-        </VStack>
-      </VStack>
-    </BaseResourcePage>
+        <Box
+          as="a"
+          href={resource?.url}
+          target="_blank"
+          display="flex"
+          alignItems="center"
+          height="40px"
+          width="fit-content"
+          borderRadius="8px"
+          backgroundColor={resource?.url ? "#2B8C4D" : "#ACAEB1"}
+          padding="8px 16px"
+          cursor={resource?.url ? "pointer" : "default"}
+          color="#FFF"
+          fill="#FFF"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="14px"
+          gap="8px"
+          lineHeight="20px"
+          _hover={{
+            backgroundColor: resource?.url ? "#22703E" : "#ACAEB1"
+          }}
+        >
+          Acessar pedido
+          <RedirectIcon
+            width="16px"
+            height="16px"
+          />
+        </Box>
+      </StackSkeleton>
+
+      <Stack spacing="12px">
+        <StackSkeleton width="160px" height="20px">
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="18px"
+            lineHeight="20px"
+            color="#252A32"
+          >
+            Descrição
+          </Text>
+        </StackSkeleton>
+
+        <SkeletonText
+          startColor="#F0F0F0"
+          endColor="#F3F3F3"
+          borderRadius="6px"
+          width="100%"
+          height="fit-content"
+          spacing="6px"
+          skeletonHeight="16px"
+          noOfLines={3}
+          marginTop="8px !important"
+          isLoaded={!isLoading}
+        >
+          <ReadMore id="readLessRawDescription">
+            {resource?.observations || "Não informado"}
+          </ReadMore>
+        </SkeletonText>
+      </Stack>
+
+      <Divider marginY="40px !important" borderColor="#DEDFE0"/>
+
+      <StackSkeleton width="190px" height="20px" marginBottom="20px !important">
+        <Text
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="18px"
+          lineHeight="20px"
+          color="#252A32"
+        >
+          Informações adicionais
+        </Text>
+      </StackSkeleton>
+
+      <AddInfoTextBase
+        title="Estado"
+        text={resource?.status?.name}
+      />
+    </Stack>
   )
 }

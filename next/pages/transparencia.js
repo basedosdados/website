@@ -86,7 +86,7 @@ export default function Transparencia({ pages }) {
   }
 
   return (
-    <MainPageTemplate paddingX="24px" paddingBottom="0">
+    <MainPageTemplate paddingBottom="0">
       <Head>
         <title>Transparência – Base dos Dados</title>
         <meta
@@ -103,6 +103,7 @@ export default function Transparencia({ pages }) {
 
       <SectionBox 
         alignItems="center"
+        paddingX="24px"
       >
         <Stack
           spacing={0}
@@ -139,6 +140,7 @@ export default function Transparencia({ pages }) {
 
       <SectionBox
         paddingTop={isMobileMod ? "112px" : "104px"}
+        paddingX="24px"
         alignItems="center"
       >
         <Stack
@@ -190,6 +192,7 @@ export default function Transparencia({ pages }) {
       <SectionBox
         flexDirection="column"
         paddingTop={{ base: "88px", lg: "152px" }}
+        paddingX="24px"
         alignItems={isMobileMod ? "start" : "center"}
       >
         <Display
@@ -219,6 +222,7 @@ export default function Transparencia({ pages }) {
       <SectionBox
         order={isMobileMod ? 0 : 1}
         paddingTop={{ base: "40px", lg: "64px" }}
+        paddingX="24px"
         flexDirection="column"
       >
         <Stack
@@ -251,6 +255,7 @@ export default function Transparencia({ pages }) {
       <SectionBox
         paddingTop={{ base: "112px", lg: "104px" }}
         flexDirection="column"
+        paddingX="24px"
       >
         <Display
           paddingBottom="24px"
@@ -279,6 +284,7 @@ export default function Transparencia({ pages }) {
         width="100%"
         maxWidth="1264px"
         margin="auto"
+        paddingX="24px"
       >
         <Link
           fontFamily="Ubuntu"
@@ -297,6 +303,7 @@ export default function Transparencia({ pages }) {
         width="100%"
         maxWidth="1264px"
         margin="auto"
+        paddingX="24px"
       >
         <Link
           fontFamily="Ubuntu"
@@ -312,6 +319,7 @@ export default function Transparencia({ pages }) {
 
       <Stack
         paddingTop="16px"
+        paddingX="24px"
         paddingBottom={{ base: "80px", lg: "104px" }}
         width="100%"
         maxWidth="1264px"
@@ -331,10 +339,8 @@ export default function Transparencia({ pages }) {
 
       <Stack
         backgroundColor="#252A32"
-        width="100vw"
-        position="relative"
-        left={isMobileMod ? "-24px" :"-32px"}
-        paddingX={isMobileMod ? "24px" :"32px"}
+        width="100%"
+        paddingX="24px"
       >
         <Stack
           width="100%"

@@ -726,7 +726,6 @@ export default function Home({ dataThemeCatalog }) {
       <BePartner />
       <Products />
       <Support />
-      <link href="/vendor/terminal.css" rel="stylesheet" />
     </MainPageTemplate>
   );
 }

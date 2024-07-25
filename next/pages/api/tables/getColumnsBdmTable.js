@@ -18,26 +18,36 @@ export default async function getColumnsBdmTable(id) {
                   edges {
                     node {
                       _id
-                      name
                       order
-                      bigqueryType {
-                        name
-                      }
-                      description
-                      coverage
+                      name
                       coveredByDictionary
                       directoryPrimaryKey {
                         _id
                         name
                         table {
                           _id
-                          slug
+                          name
+                          isClosed
+                          cloudTables{
+                            edges{
+                              node{
+                                gcpTableId
+                                gcpDatasetId
+                                gcpProjectId
+                              }
+                            }
+                          }
                           dataset {
                             _id
-                            slug
+                            name
                           }
                         }
                       }
+                      description
+                      bigqueryType {
+                        name
+                      }
+                      coverage
                       measurementUnit
                       containsSensitiveData
                       observations

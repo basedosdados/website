@@ -26,9 +26,10 @@ import { useRouter } from "next/router"
 import cookies from "js-cookie";
 import MenuDropdown from "./MenuDropdown";
 import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook"
-import ControlledInput from "../atoms/ControlledInput";
+import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
+import HelpWidget from "../atoms/HelpWidget";
 import { triggerGAEvent } from "../../utils";
 
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
@@ -37,7 +38,6 @@ import BDLogoLabImage from "../../public/img/logos/bd_logo_lab";
 import BDLogoImage from "../../public/img/logos/bd_logo";
 import FarBarsIcon from "../../public/img/icons/farBarsIcon";
 import SearchIcon from "../../public/img/icons/searchIcon";
-import CrossIcon from "../../public/img/icons/crossIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 import SettingsIcon from "../../public/img/icons/settingsIcon";
 import SignOutIcon from "../../public/img/icons/signOutIcon";
@@ -62,6 +62,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                   backgroundColor={b.color}
                   minWidth="100px"
                   height="38px"
+                  fontFamily="Roboto"
                   fontSize="20px"
                   borderRadius="30px"
                   onClick={() => window.open(b.href, "_blank")}
@@ -81,7 +82,8 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                     >
                       <Text
                         fontSize="20px"
-                        fontFamily="Ubuntu"
+                        fontFamily="Roboto"
+                        letterSpacing="0.1px"
                         fontWeight="400"
                         color="#252A32"
                       >
@@ -104,8 +106,9 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                           display="flex"
                           gap="16px"
                           fontSize="16px"
-                          fontFamily="Ubuntu"
-                          fontWeight="300"
+                          fontFamily="Roboto"
+                          letterSpacing="0.1px"
+                          fontWeight="400"
                           href={c.href}
                         >{c.icon && c.icon} {c.name}</Link>
                       )
@@ -119,7 +122,8 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                 <Link
                   key={key}
                   fontSize="20px"
-                  fontFamily="Ubuntu"
+                  fontFamily="Roboto"
+                  letterSpacing="0.1px"
                   fontWeight="400"
                   href={elm}
                 >{key}
@@ -133,26 +137,56 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
           <></>
           :
           <Stack display={isMobileMod() ? "flex" : "none"} marginTop="auto" gap="16px">
-            <RoundedButton
-              backgroundColor="#FFF"
-              border="2px solid #42B0FF"
-              color="#42B0FF"
-              height="38px"
-              borderRadius="30px"
-              fontSize="20px"
-              onClick={() => window.open("/user/login", "_self")}
+            <Box
+              as="a"
+              href="/user/login"
+              target="_self"
+              display="flex"
+              alignItems="center"
+              height="40px"
+              width="fit-content"
+              borderRadius="8px"
+              padding="8px 4px"
+              cursor="pointer"
+              color="#252A32"
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              letterSpacing="0.1px"
+              lineHeight="20px"
+              gap="8px"
+              _hover={{
+                opacity: 0.7
+              }}
             >
               Entrar
-            </RoundedButton>
-            <RoundedButton
-              backgroundColor="#42B0FF"
-              height="38px"
-              borderRadius="30px"
-              fontSize="20px"
-              onClick={() => window.open("/user/register", "_self")}
+            </Box>
+            
+            <Box
+              as="a"
+              href="/user/register"
+              target="_self"
+              display="flex"
+              alignItems="center"
+              height="40px"
+              width="fit-content"
+              borderRadius="8px"
+              backgroundColor="#0D99FC"
+              padding="8px 16px"
+              cursor="pointer"
+              color="#FFF"
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              letterSpacing="0.1px"
+              gap="8px"
+              lineHeight="20px"
+              _hover={{
+                backgroundColor: "#0B89E2"
+              }}
             >
               Cadastrar
-            </RoundedButton>
+            </Box>
           </Stack>
         }
       </DrawerContent>
@@ -200,19 +234,19 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
           </Box>
           <Text
             color="#252A32"
-            fontFamily="Ubuntu"
+            fontFamily="Roboto"
+            letterSpacing="0.1px"
             fontSize="14px"
             fontWeight="400"
             lineHeight="27px"
-            letterSpacing="0.3px"
           >{userData?.username || ""}</Text>
           <Text
             color="#6F6F6F"
-            fontFamily="Ubuntu"
+            fontFamily="Roboto"
+            letterSpacing="0.1px"
             fontSize="14px"
             fontWeight="400"
             lineHeight="27px"
-            letterSpacing="0.3px"
           >{userData?.email || ""}</Text>
         </Stack>
 
@@ -227,10 +261,10 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
                 <SettingsIcon fill="#D0D0D0" width="16px" height="16px"/>
                 <Text
                   fontSize="16px"
-                  fontFamily="Ubuntu"
+                  fontFamily="Roboto"
+                  letterSpacing="0.1px"
                   fontWeight="400"
                   lineHeight="16px"
-                  letterSpacing="0.2px"
                   color="#252A32"
                 >
                   Configurações
@@ -250,10 +284,10 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
                   key={index}
                   color="#575757"
                   fontSize="14px"
-                  fontFamily="Ubuntu"
+                  fontFamily="Roboto"
+                  letterSpacing="0.1px"
                   fontWeight="400"
                   lineHeight="27px"
-                  letterSpacing="0.3px"
                   onClick={() => {
                     onClose()
                     router.push({pathname: `/user/${userData.username}`, query: elm.value})}
@@ -268,24 +302,30 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
         <Divider margin="24px 0" borderColor="#DEDFE0"/>
 
         <Stack
+          display="flex"
+          cursor="pointer"
           spacing={0}
           flexDirection="row"
           padding="16px 0"
           alignItems="center"
+          color="#252A32"
+          fill="#D0D0D0"
+          _hover={{
+            opacity: 0.7
+          }}
           onClick={() => {
             cookies.remove('userBD', { path: '/' })
             cookies.remove('token', { path: '/' })
             window.open("/", "_self")
           }}
         >
-          <SignOutIcon width="20px" height="20px" fill="#D0D0D0"/>
+          <SignOutIcon width="20px" height="20px"/>
           <Text
-            color="#252A32"
-            fontFamily="Ubuntu"
+            fontFamily="Roboto"
+            letterSpacing="0.1px"
             fontSize="16px"
             fontWeight="400"
             lineHeight="16px"
-            letterSpacing="0.2px"
             marginLeft="8px !important"
           >
             Sair
@@ -322,7 +362,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
       <Box
         cursor="pointer"
         position="fixed"
-        right="24px"
+        right="20px"
         height="40px"
         width="40px"
         borderRadius="50%"
@@ -397,21 +437,21 @@ function MenuUser ({ userData, onOpen, onClose }) {
             </Box>
             <Text
               color="#252A32"
-              fontFamily="Ubuntu"
+              fontFamily="Roboto"
+              letterSpacing="0.1px"
               fontSize="12px"
               fontWeight="400"
               lineHeight="16px"
-              letterSpacing="0.3px"
             >
               {userData?.username ? userData?.username : ""}
             </Text>
             <Text
               color="#6F6F6F"
-              fontFamily="Ubuntu"
+              fontFamily="Roboto"
+              letterSpacing="0.1px"
               fontSize="12px"
               fontWeight="400"
               lineHeight="16px"
-              letterSpacing="0.3px"
             >
               {userData?.email ? userData?.email : ""}
             </Text>
@@ -420,20 +460,20 @@ function MenuUser ({ userData, onOpen, onClose }) {
           <MenuItem
             display="flex"
             flexDirection="row"
-            alignItems="start"
+            alignItems="center"
             gap="8px"
             padding="16px"
-            _hover={{ backgroundColor: "transparent", opacity: "0.6" }}
+            _hover={{ backgroundColor: "transparent", opacity: "0.7" }}
             onClick={() => window.open(`/user/${userData.username}`, "_self")}
           >
-            <SettingsIcon fill="#D0D0D0" width="16px" height="16px"/>
+            <SettingsIcon fill="#D0D0D0" width="20px" height="20px"/>
             <Text
               color="#252A32"
-              fontFamily="Ubuntu"
+              fontFamily="Roboto"
+              letterSpacing="0.1px"
               fontSize="12px"
               fontWeight="400"
               lineHeight="16px"
-              letterSpacing="0.3px"
             >
               Configurações
             </Text>
@@ -442,10 +482,10 @@ function MenuUser ({ userData, onOpen, onClose }) {
           <MenuItem
             display="flex"
             flexDirection="row"
-            alignItems="start"
+            alignItems="center"
             gap="8px"
             padding="16px"
-            _hover={{ backgroundColor: "transparent", opacity: "0.6" }}
+            _hover={{ backgroundColor: "transparent", opacity: "0.7" }}
             onClick={() => {
               cookies.remove('userBD', { path: '/' })
               cookies.remove('token', { path: '/' })
@@ -455,11 +495,11 @@ function MenuUser ({ userData, onOpen, onClose }) {
             <SignOutIcon width="20px" height="20px" fill="#D0D0D0"/>
             <Text
               color="#252A32"
-              fontFamily="Ubuntu"
+              fontFamily="Roboto"
+              letterSpacing="0.1px"
               fontSize="12px"
               fontWeight="400"
               lineHeight="16px"
-              letterSpacing="0.3px"
             >
               Sair
             </Text>
@@ -471,169 +511,105 @@ function MenuUser ({ userData, onOpen, onClose }) {
 
 }
 
-function SearchInput ({ status }) {
-  const router = useRouter()
-  const { query } = router
-  const [showSearchInput, setShowSearchInput] = useState(false)
-
-  const [showSearch, setShowSearch] = useState(false)
+function SearchInputUser ({ user }) {
+  const inputMobileRef = useRef(null)
   const [search, setSearch] = useState("")
+  const [showInput, setShowInput] = useState(false)
+  const [inputFocus, setInputFocus] = useState(false)
 
-  const searchStatus = () => {
-    const newStatus = !showSearch
-    setShowSearch(newStatus)
-    status({
-      status: newStatus
-    })
+  function openSearchLink() {
+    if(search.trim() === "") return
+    triggerGAEvent("search_menu", search.trim())
+    window.open(`/dataset?q=${search.trim()}`, "_self")
+  }
+
+  const handleClickOutside = (event) => {
+    if (inputMobileRef.current && !inputMobileRef.current.contains(event.target)) {
+      setShowInput(false);
+    }
   }
 
   useEffect(() => {
-    if(query.dataset) return setShowSearchInput(true)
-  },[query])
+    if (showInput) {
+      document.addEventListener('click', handleClickOutside)
+    } else {
+      document.removeEventListener('click', handleClickOutside)
+    }
+    
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [showInput])
 
-  function openSearchLink() {
-    triggerGAEvent("search_menu", search)
-    window.open(`/dataset?q=${search}`, "_self")
-  }
-
-  if(!showSearchInput) return null
-  
-  return (
-    <>
-      {!showSearch ? 
-        <SearchIcon
-          alt="pesquisar"
-          fill="#404245"
-          width="18px"
-          height="18px"
-          marginRight="14px !important"
-          cursor="pointer"
-          _hover={{opacity:"0.8"}}
-          onClick={searchStatus}
-        />
-      :
-        <ControlledInput
-          flex={2}
-          maxWidth="360px"
+  if (isMobileMod()) return (
+    <Stack spacing={0} width="100%" marginRight={user ? "60px !important" : "0"}>
+      <Stack
+        display={showInput ? "flex" :"none"}
+        position="absolute"
+        top="0"
+        left="0"
+        backgroundColor="#FFF"
+        width="100vw"
+        height="70px"
+        padding="16px 20px"
+        zIndex={99}
+      >
+        <ControlledInputSimple
+          width="100%"
           value={search}
           onChange={setSearch}
           onEnterPress={openSearchLink}
-          placeholder="Pesquise dados"
-          alignSelf="center"
-          marginLeft="20px !important"
-          justifyContent="center"
-          marginRight="10px"
-          autoComplete="off"
-          inputStyle={{
-            height: "40px",
-            fontSize: "16px",
-            width: "100%",
-            borderRadius: "16px",
-            _placeholder:{color: "#6F6F6F"},
-          }}
-          rightIcon={
-            <CrossIcon
-              alt="fecha pesquisa"
-              fill="#404245"
-              width="24px"
-              height="24px"
+          refInput={inputMobileRef}
+          inputFocus={showInput}
+          changeInputFocus={setShowInput}
+          placeholder="Pesquisar dados"
+          fill="#464A51"
+          icon={
+            <SearchIcon
+              alt="pesquisar"
+              width="16.8px"
+              height="16.8px"
               cursor="pointer"
-              _hover={{opacity:"0.8"}}
-              onClick={searchStatus}
+              onClick={() => openSearchLink()}
             />
           }
         />
-      }
-    </>
+      </Stack>
+
+      <SearchIcon
+        display={showInput ? "none" : "flex"}
+        alt="pesquisar"
+        fill="#464A51"
+        width="18px"
+        height="18px"
+        marginLeft="auto !important"
+        cursor="pointer"
+        onClick={() => {
+          setShowInput(true)
+          setTimeout(() => {
+            inputMobileRef.current.focus()
+          }, 0)
+        }}
+      />
+    </Stack>
   )
-}
-
-function SearchInputUser () {
-  const [search, setSearch] = useState("")
-  const [showSearch, setShowSearch] = useState(false)
-
-  function openSearchLink() {
-    triggerGAEvent("search_menu", search)
-    window.open(`/dataset?q=${search}`, "_self")
-  }
-
-  // if(isMobileMod()) return (
-  //   <Stack spacing={0} marginLeft="auto !important" paddingRight="60px">
-  //     <SearchIcon
-  //       display={showSearch ? "none" : "flex"}
-  //       right="100px"
-  //       alt="pesquisar"
-  //       fill="#D0D0D0"
-  //       width="18px"
-  //       height="18px"
-  //       cursor="pointer"
-  //       _hover={{opacity:"0.8"}}
-  //       onClick={() => setShowSearch(true)}
-  //     />
-  //     <Box transition="1s" overflow="hidden" width={showSearch ? "100%" : "0"} maxWidth="160px">
-  //       <ControlledInput
-  //         maxWidth="480px"
-  //         width="480px"
-  //         value={search}
-  //         onChange={setSearch}
-  //         onEnterPress={openSearchLink}
-  //         placeholder="Pesquise dados"
-  //         alignSelf="center"
-  //         justifyContent="center"
-  //         inputStyle={{
-  //           height: "40px",
-  //           fontSize: "16px",
-  //           width: "100%",
-  //           fontFamily: "Lato",
-  //           borderRadius: "14px",
-  //           _placeholder:{color: "#6F6F6F"}
-  //         }}
-  //         rightIcon={
-  //           <SearchIcon
-  //             alt="pesquisar"
-  //             fill="#D0D0D0"
-  //             width="18px"
-  //             height="18px"
-  //             cursor="pointer"
-  //             _hover={{opacity:"0.8"}}
-  //             onClick={() => openSearchLink()}
-  //           />
-  //         }
-  //       />
-  //     </Box>
-  //   </Stack>
-  // )
-
-  if(isMobileMod()) return null
 
   return (
     <Stack spacing={0}>
-      <ControlledInput
-        maxWidth="480px"
-        width="480px"
+      <ControlledInputSimple
         value={search}
         onChange={setSearch}
         onEnterPress={openSearchLink}
-        placeholder="Pesquise dados"
-        alignSelf="center"
-        justifyContent="center"
-        autoComplete="off"
-        inputStyle={{
-          height: "40px",
-          fontSize: "16px",
-          width: "100%",
-          fontFamily: "Lato",
-          borderRadius: "14px",
-          _placeholder:{color: "#6F6F6F"}
-        }}
-        rightIcon={
+        inputFocus={inputFocus}
+        changeInputFocus={setInputFocus}
+        placeholder="Pesquisar dados"
+        fill="#464A51"
+        icon={
           <SearchIcon
             alt="pesquisar"
-            fill="#D0D0D0"
-            width="18px"
-            height="18px"
+            width="16.8px"
+            height="16.8px"
             cursor="pointer"
-            _hover={{opacity:"0.8"}}
             onClick={() => openSearchLink()}
           />
         }
@@ -643,12 +619,6 @@ function SearchInputUser () {
 }
 
 function DesktopLinks({ userData, links, position = false, path, userTemplate = false }) {
-  const [statusSearch, setStatusSearch] = useState(false)
-
-  const searchStatus = (elm) => {
-    setStatusSearch(elm.status)
-  }
-
   function LinkMenuDropDown ({ url, text, icon }) {
     const [flag, setFlag] = useBoolean()
 
@@ -658,13 +628,14 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
       <Link
         display="flex"
         flexDirection="colunm"
-        _hover={{ opacity: "0.6" }}
-        fontSize="14px"
+        _hover={{ opacity: "0.7" }}
         target={url.slice(0,4) === "http" ? "_blank" : "_self"}
         color="#252A32"
-        fontFamily="Ubuntu"
+        fontSize="14px"
+        fontFamily="Roboto"
         fontWeight="400"
-        letterSpacing="0.3px"
+        lineHeight="20px"
+        letterSpacing="0.1px"
         href={url}
         padding="10px 0"
         alignItems="center"
@@ -689,8 +660,8 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
       transition="1s"
       marginLeft={
         path === "/" ?
-        !position ? "0 !important" : "32px !important"
-        : "32px !important"
+        !position ? "0 !important" : "28px !important"
+        : "28px !important"
       }
     >
       <HStack display={userTemplate ? "none" : "flex"} width="100%" flex="3" spacing={7}>
@@ -703,7 +674,11 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
                   backgroundColor={b.color}
                   minWidth="80px"
                   height="35px"
-                  fontSize="15px"
+                  fontSize="14px"
+                  fontFamily="Roboto"
+                  letterSpacing="0.1px"
+                  fontWeight="400"
+                  lineHeight="20px"
                   borderRadius="30px"
                 >
                   {b.name}
@@ -721,9 +696,11 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
                 marginTop="10px"
                 minWidth="202px"
                 borderColor="#FFF"
-                fontFamily="Ubuntu"
+                fontSize="14px"
+                fontFamily="Roboto"
+                letterSpacing="0.1px"
                 fontWeight="400"
-                letterSpacing="0.3px"
+                lineHeight="20px"
                 borderRadius="10px"
                 padding="32px"
                 _first={{ paddingTop: "10px"}}
@@ -745,11 +722,12 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
           return (
             <Link
               key={`link-${i}`}
-              _hover={{ opacity: "0.6" }}
-              fontSize="15px"
-              fontFamily="Ubuntu"
+              _hover={{ opacity: "0.7" }}
+              fontSize="14px"
+              fontFamily="Roboto"
+              letterSpacing="0.1px"
               fontWeight="400"
-              letterSpacing="0.3px"
+              lineHeight="20px"
               href={v}
               target={v.startsWith("https") ? "_blank" : null}
             >
@@ -759,31 +737,93 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
         })}
       </HStack>
 
-      <SearchInput status={searchStatus}/>
-      {userTemplate && !isMobileMod() && <SearchInputUser />}
-
-      {!statusSearch &&
-        <HStack spacing={8} display={{ base: "none", lg: "flex" }}>
-          {userData ? (
-            <HStack spacing="20px">
-              <MenuUser userData={userData}/>
-            </HStack>
-          ) : (
-            <>
-              <Link fontSize="15px" fontFamily="Ubuntu" fontWeight="400" letterSpacing="0.3px" href="/user/login">
-                Entrar
-              </Link>
-              <Link _hover={{ opacity:"none" }} href="/user/register">
-                <RoundedButton height="35px" fontSize="15px" minWidth="110px" borderRadius="30px">
-                  Cadastrar
-                </RoundedButton>
-              </Link>
-            </>
-          )}
-        </HStack>
+      {userTemplate && !isMobileMod() &&
+        <SearchInputUser
+          user={userData !== null}
+        />
       }
+
+      <HStack spacing="21px" display={{ base: "none", lg: "flex" }}>
+        {(path === "/dataset" || path === "/dataset/[dataset]") &&
+          <HelpWidget
+            tooltip="Ajuda e recursos"
+            options={[
+              {name:"Perguntas frequentes", url: "/perguntas-frequentes"},
+              {name:"Documentação", url: "https://basedosdados.github.io/mais/"},
+              {name:"Vídeos no YouTube", url: "https://www.youtube.com/c/BasedosDados/featured"},
+              {},
+              {name:"Instale os nossos pacotes", url: "https://basedosdados.github.io/mais/access_data_packages/"},
+              {},
+              {name:"Como citar a BD?",  url: "/perguntas-frequentes/#reference"},
+              {name:"O que são diretórios?", url: "/perguntas-frequentes/#directories"},
+              {},
+              {name:"Fale com nossa comunidade no Discord", url: "https://discord.gg/huKWpsVYx4"},
+              {name:"Entre em contato", url: "/contato"},
+            ]}
+          />
+        }
+
+        {userData ? (
+          <HStack spacing="20px">
+            <MenuUser userData={userData}/>
+          </HStack>
+        ) : (
+          <>
+            <Box
+              as="a"
+              href="/user/login"
+              target="_self"
+              display="flex"
+              alignItems="center"
+              height="40px"
+              width="fit-content"
+              borderRadius="8px"
+              padding="8px 4px"
+              cursor="pointer"
+              color="#252A32"
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              letterSpacing="0.1px"
+              lineHeight="20px"
+              gap="8px"
+              _hover={{
+                opacity: 0.7
+              }}
+            >
+              Entrar
+            </Box>
+            
+            <Box
+              as="a"
+              href="/user/register"
+              target="_self"
+              display="flex"
+              alignItems="center"
+              height="40px"
+              width="fit-content"
+              borderRadius="8px"
+              backgroundColor="#0D99FC"
+              padding="8px 16px"
+              cursor="pointer"
+              color="#FFF"
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              letterSpacing="0.1px"
+              gap="8px"
+              lineHeight="20px"
+              _hover={{
+                backgroundColor: "#0B89E2"
+              }}
+            >
+              Cadastrar
+            </Box>
+          </>
+        )}
+      </HStack>
     </HStack>
-  );
+  )
 }
 
 export default function MenuNav({ simpleTemplate = false, userTemplate = false }) {
@@ -796,6 +836,32 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   const divRef = useRef()
   const [isScrollDown, setIsScrollDown] = useState(false)
   const [userData, setUserData] = useState(null)
+
+  const [lastScrollY, setLastScrollY] = useState(0)
+  const [menuVisible, setMenuVisible] = useState(true)
+
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY
+    if (currentScrollY > lastScrollY) {
+      setMenuVisible(false)
+    } else {
+      setMenuVisible(true)
+    }
+    setLastScrollY(currentScrollY)
+  }
+
+  useEffect(() => {
+    if(route !== "/dataset/[dataset]") return
+    window.addEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [lastScrollY])
+
+  function maxWidthDataset() {
+    if (route === "/dataset" || route === "/dataset/[dataset]") return "1440px"
+    return "1264px"
+  }
 
   useEffect(() => {
     let userInfo = userBD
@@ -833,7 +899,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     ],
     Contato: "/contato",
     Button: []
-  };
+  }
 
   useEffect(() => {
     document.addEventListener("scroll", () => {
@@ -863,16 +929,17 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         width="100%"
         left="0px"
         backgroundColor="#FFFFFF"
-        padding="16px 28px"
+        padding={isMobileMod() ? "15px 20px" : "15px 24px"}
         zIndex="99"
         transition="0.5s"
         as="nav"
+        transform={menuVisible ? 'translateY(0)' : 'translateY(-100%)'}
       >
         <HStack
           justifyContent={simpleTemplate || userTemplate ? "flex-start" : { base: "center", lg: "flex-start" }}
           width="100%"
           height="40px"
-          maxWidth="1264px"
+          maxWidth={maxWidthDataset()}
           margin="0 auto"
           spacing={6}
         >
@@ -883,6 +950,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
               top="0"
               left="0"
               margin="20px 0 0 20px"
+              marginRight="auto"
               width="30px"
               height="30px"
               onClick={menuDisclosure.onOpen}
@@ -895,8 +963,13 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
             aria-label="Home"
             width={
               route === "/" ?
-              isScrollDown ? "88px" : "0"
-              : "88px"
+              isScrollDown ? "80px" : "0"
+              : "80px"
+            }
+            minWidth={
+              route === "/" ?
+              isScrollDown ? "80px" : "0"
+              : "80px"
             }
             _hover={{opacity:"none"}}
             href={route === "/" ? "/#home" : "/"}
@@ -921,7 +994,11 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
             />
           }
 
-          {userTemplate && isMobileMod() && <SearchInputUser />}
+          {userTemplate && isMobileMod() &&
+            <SearchInputUser
+              user={userData !== null}
+            />
+          }
 
           {useCheckMobile() && userData &&
             <MenuUser

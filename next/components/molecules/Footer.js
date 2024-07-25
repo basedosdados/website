@@ -2,11 +2,11 @@ import {
   HStack,
   Stack,
   VStack,
+  Text
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
 import Link from "../atoms/Link";
 import BodyText from "../atoms/BodyText"
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
+import { isMobileMod } from "../../hooks/useCheckMobile.hook"
 
 import YoutubeIcon from "../../public/img/icons/youtubeIcon";
 import TwitterIcon from "../../public/img/icons/twitterIcon";
@@ -62,13 +62,61 @@ function FooterLink(props) {
   )
 }
 
-export default function Footer({ ocult = false }) {
-  const mobileCheck = useCheckMobile()
-  const [isMobileMod, setIsMobileMod] = useState(false)
-  
-  useEffect(() => {
-    setIsMobileMod(mobileCheck)
-  },[])
+function TextFooterSimple({children, ...props}) {
+  return (
+    <Text
+      fontFamily="Roboto"
+      fontWeight="400"
+      fontSize="12px"
+      lineHeight="18px"
+      letterSpacing="0.1px"
+      color="#464A51"
+      {...props}
+    >
+      {children}
+    </Text>
+  )
+}
+
+export default function Footer({ template, ocult = false }) {
+  if(template === "simple") return (
+    <VStack
+      position="relative"
+      zIndex="10"
+      width="100%"
+      spacing={0}
+    >
+      <VStack
+        width="100%"
+        height={{base: "100%", lg: "96px"}}
+        justifyContent="center"
+        backgroundColor="#EEEEEE"
+      >
+        <Stack
+          width="100%"
+          maxWidth="1440px"
+          justifyContent="center"
+          direction={{base: "column-reverse", lg: "row"}}
+          spacing={0}
+          gridGap={{base: "8px", lg: "40px"}}
+          padding={{base: "24px", lg: "0"}}
+        >
+          <TextFooterSimple textAlign="center">
+            ® 2024 Base dos Dados
+          </TextFooterSimple>
+          <TextFooterSimple as="a" href="/termos-e-privacidade?section=terms" _hover={{ color: "#252A32" }}>
+            Termos de Uso
+          </TextFooterSimple>
+          <TextFooterSimple as="a" href="/termos-e-privacidade?section=privacy" _hover={{ color: "#252A32" }}>
+            Políticas de Privacidade
+          </TextFooterSimple>
+          <TextFooterSimple as="a" href="/contato" _hover={{ color: "#252A32" }}>
+            Contato
+          </TextFooterSimple>
+        </Stack>
+      </VStack>
+    </VStack>
+  )
 
   if(ocult === true) return null
 
@@ -105,17 +153,17 @@ export default function Footer({ ocult = false }) {
 
           <Stack
             paddingBottom="40px"
-            display={isMobileMod ? "grid" : "flex"}
+            display={isMobileMod() ? "grid" : "flex"}
             direction={"row"}
-            gridTemplateColumns={isMobileMod && "1fr 1fr"}
-            gridGap={isMobileMod && "30px"}
+            gridTemplateColumns={isMobileMod() && "1fr 1fr"}
+            gridGap={isMobileMod() && "30px"}
             width="100%"
             alignItems="flex-start"
             justifyContent="flex-end"
-            spacing={isMobileMod ? "0" :"80px"}
+            spacing={isMobileMod() ? "0" :"80px"}
             marginLeft="auto"
           >
-            <SectionCategories title="PRODUTOS" marginBottom={isMobileMod && "24px !important"}>
+            <SectionCategories title="PRODUTOS" marginBottom={isMobileMod() && "24px !important"}>
               <FooterLink target="_self" href="/dataset">
                 Mecanismo de busca
               </FooterLink>
@@ -133,7 +181,7 @@ export default function Footer({ ocult = false }) {
               </FooterLink>
             </SectionCategories>
 
-            <SectionCategories title="SERVIÇOS" marginBottom={isMobileMod && "24px !important"}>
+            <SectionCategories title="SERVIÇOS" marginBottom={isMobileMod() && "24px !important"}>
               <FooterLink target="_self" href="/servicos#Captura de dados">
                 Captura de dados
               </FooterLink>
@@ -148,7 +196,7 @@ export default function Footer({ ocult = false }) {
               </FooterLink>
             </SectionCategories>
 
-            <SectionCategories title="TUTORIAIS" marginBottom={isMobileMod && "24px !important"}>
+            <SectionCategories title="TUTORIAIS" marginBottom={isMobileMod() && "24px !important"}>
               <FooterLink href="https://basedosdados.github.io/mais/">
                 Documentação
               </FooterLink>
@@ -157,7 +205,7 @@ export default function Footer({ ocult = false }) {
               </FooterLink>
             </SectionCategories>
 
-            <SectionCategories title="INSTITUCIONAL" marginBottom={isMobileMod && "24px !important"}>
+            <SectionCategories title="INSTITUCIONAL" marginBottom={isMobileMod() && "24px !important"}>
               <FooterLink target="_self" href="/quem-somos">
                 Quem somos
               </FooterLink>
@@ -189,7 +237,7 @@ export default function Footer({ ocult = false }) {
 
       <HStack
         width="100%"
-        height={isMobileMod ? "100%" :"76px"}
+        height={isMobileMod() ? "100%" :"76px"}
         backgroundColor="#2B8C4D"
         padding="30px"
       >
@@ -198,17 +246,17 @@ export default function Footer({ ocult = false }) {
           maxWidth="1264px"
           margin="0 auto"
           justifyContent="space-between"
-          flexDirection={isMobileMod && "column-reverse"}
+          flexDirection={isMobileMod() && "column-reverse"}
           alignItems="flex-start"
           spacing={0}
         >
           <HStack
-            spacing={isMobileMod ? 0 : 4}
+            spacing={isMobileMod() ? 0 : 4}
             textAlign="center"
             maxWidth="1264px"
-            flexDirection={isMobileMod && "column"}
+            flexDirection={isMobileMod() && "column"}
             alignItems="flex-start"
-            marginTop={isMobileMod && "16px"}
+            marginTop={isMobileMod() && "16px"}
           >
             <BodyText color="#FFF" fontSize="16px" letterSpacing="0.2px">® 2024 Base dos Dados</BodyText>
           </HStack>
