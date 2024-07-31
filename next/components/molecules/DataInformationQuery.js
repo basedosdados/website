@@ -208,17 +208,13 @@ export default function DataInformationQuery({ resource }) {
         setDownloadPermitted(true)
         setDownloadWarning("free")
       } else if (resource?.uncompressedFileSize < limit1GB) {
-        isUserPro() === true
-        ? setDownloadPermitted(true)
-        : setDownloadPermitted(false)
-
+        setDownloadPermitted(isUserPro())
         setDownloadWarning("100mbBetween1gb")
       } else {
         setDownloadWarning("biggest1gb")
-        setDownloadPermitted(false)
       }
     }
-        
+
     if (resource?.cloudTables?.[0]) {
       setGcpProjectID(resource.cloudTables[0]?.gcpProjectId || "")
       setGcpDatasetID(resource.cloudTables[0]?.gcpDatasetId || "")
@@ -816,13 +812,13 @@ export default function DataInformationQuery({ resource }) {
                     >
                       <CodeHighlight language="python">{`import basedosdados as bd
 
-    billing_id = <seu_billing_id>
+billing_id = <seu_billing_id>
 
-    query = """
-      ${sqlCode}
-    """
+query = """
+  ${sqlCode}
+"""
 
-    bd.read_sql(query = query, billing_project_id = billing_id)`}
+bd.read_sql(query = query, billing_project_id = billing_id)`}
                       </CodeHighlight>
                     </Skeleton>
                   </TabPanel>
@@ -885,17 +881,18 @@ export default function DataInformationQuery({ resource }) {
                       width="100%"
                       isLoaded={!isLoadingCode}
                     >
-                      <CodeHighlight language="r">{`
-  # Defina o seu projeto no Google Cloud
-  set_billing_id("<YOUR_PROJECT_ID>")
+                      <CodeHighlight language="r">{`install.packages("basedosdados")
+library("basedosdados")
+# Defina o seu projeto no Google Cloud
+set_billing_id("<YOUR_PROJECT_ID>")
 
-  # Para carregar o dado direto no R
-  query <- "
-  ${sqlCode}
-  "
+# Para carregar o dado direto no R
+query <- "
+${sqlCode}
+"
 
-  read_sql(query, billing_project_id = get_billing_id())
-  `}
+read_sql(query, billing_project_id = get_billing_id())
+`}
                       </CodeHighlight>
                     </Skeleton>
                   </TabPanel>

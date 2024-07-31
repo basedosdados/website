@@ -15,8 +15,10 @@ import {
 import { useState, useEffect } from 'react';
 import FuzzySearch from 'fuzzy-search';
 import Latex from 'react-latex-next';
+import cookies from 'js-cookie';
 import { ControlledInputSimple } from '../atoms/ControlledInput';
 import Checkbox from '../atoms/Checkbox';
+import { triggerGAEvent, formatBytes } from '../../utils';
 
 import {
   getColumnsBdmTable
@@ -101,6 +103,14 @@ export default function ColumnsTable({
   const [isSearchLoading, setIsSearchLoading] = useState(true)
 
   const isChecked = (columnSlug) => checkedColumns.includes(columnSlug)
+
+  const isUserPro = () => {
+    let user
+    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
+
+    if(user?.proSubscriptionStatus === "active") return true
+    return false
+  }
 
   const handleCheckboxChange = (columnSlug) => {
     if (isChecked(columnSlug)) {
@@ -213,67 +223,118 @@ export default function ColumnsTable({
     return 0
   }
 
-  function TranslationTable({ value }) {
-    if(value === null) return (
+  function TranslationTable({ value, dictionary }) {
+    let downloadPermitted = false
+    let downloadWarning = ""
+
+    if (value?.table?.uncompressedFileSize) {
+      const limit100MB = 100 * 1024 * 1024;
+      const limit1GB = 1 * 1024 * 1024 * 1024;
+
+      if (value?.table?.uncompressedFileSize < limit100MB) {
+        downloadPermitted = true
+        downloadWarning = "free"
+      } else if (value?.table?.uncompressedFileSize < limit1GB) {
+        downloadPermitted = isUserPro()
+        downloadWarning = "100mbBetween1gb"
+      } else {
+        downloadWarning = "biggest1gb"
+        downloadPermitted = false
+      }
+    }
+
+    const cloudValues = value?.table?.cloudTables?.edges?.[0]?.node
+
+    const gcpProjectID = cloudValues?.gcpProjectId || ""
+    const gcpDatasetID = cloudValues?.gcpDatasetId || ""
+    const gcpTableId = cloudValues?.gcpTableId || ""
+
+    const datasetName = value?.table?.dataset?.name || ""
+    const tableName = value?.table?.name || ""
+
+    if(gcpDatasetID === "br_bd_diretorios_data_tempo") return (
       <Text>
         Não precisa de tradução
       </Text>
     )
 
-    if(value?.table?.isClosed) return (
-      <Box>
-        <Text
-          as="a"
-          target="_blank"
-          href={`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/dataset/${value?.table?.dataset?._id}?table=${value?.table?._id}`}
-          display="flex"
-          flexDirection="row"
-          alignItems="center"
-          gap="4px"
-          color="#0068C5"
-          fill="#0068C5"
-          _hover={{
-            color:"#0057A4",
-            fill:"#0057A4"
-          }}
-        >
-          Acessar tabela que faz a tradução desta coluna
-          <RedirectIcon width="14px" height="14px"/>
-        </Text>
-        <Text>{value?.table?.dataset?.name} - {value?.table?.name}</Text>
-      </Box>
-    )
-
-    const cloudValues = value?.table?.cloudTables?.edges?.[0]?.node
-
-    const gcpDatasetID = cloudValues?.gcpDatasetId || ""
-    const gcpTableId = cloudValues?.gcpTableId || ""
-    const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${gcpDatasetID}/${gcpTableId}/${gcpTableId}.csv.gz`
-
-    const datasetName = value?.table?.dataset?.name || ""
-    const tableName = value?.table?.name || ""
-  
     return (
       <Box>
-        <Text
-          as="a"
-          target="_blank"
-          href={downloadUrl}
-          display="flex"
-          flexDirection="row"
-          alignItems="center"
-          gap="4px"
-          color="#0068C5"
-          fill="#0068C5"
-          _hover={{
-            color:"#0057A4",
-            fill:"#0057A4"
-          }}
-        >
-          Baixar tabela que faz a tradução desta coluna
-          <DownloadIcon width="18px" height="18px"/>
-        </Text>
-        <Text>{datasetName} - {tableName}</Text>
+        {value === null &&
+          <Text>
+            Não precisa de tradução
+          </Text>
+        }
+
+        {value !== null &&
+          <Box>
+            <Text
+              as="a"
+              target="_blank"
+              href={value?.table?.isClosed
+                ? `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/dataset/${value?.table?.dataset?._id}?table=${value?.table?._id}`
+                : `/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadPermitted)}&s=${btoa(downloadWarning)}`
+              }
+              display="flex"
+              onClick={() => { 
+                triggerGAEvent("download_da_tabela",`{
+                  gcp: ${gcpProjectID+"."+gcpDatasetID+"."+gcpTableId},
+                  tamanho: ${formatBytes(value?.table?.uncompressedFileSize) || ""},
+                  dataset: ${value?.table?.dataset?._id},
+                  table: ${value?.table?._id},
+                  columnDownload: true
+                }`)
+              }}
+              flexDirection="row"
+              alignItems="center"
+              gap="4px"
+              color="#0068C5"
+              fill="#0068C5"
+              _hover={{
+                color:"#0057A4",
+                fill:"#0057A4"
+              }}
+            >
+              {value?.table?.isClosed
+                ?
+                <>
+                  Acessar tabela que faz a tradução desta coluna
+                  <RedirectIcon width="14px" height="14px"/>
+                </>
+                :
+                <>
+                  Baixar tabela que faz a tradução desta coluna
+                  <DownloadIcon width="18px" height="18px"/>
+                </>
+              }
+            </Text>
+            <Text>{datasetName} - {tableName}</Text>
+          </Box>
+        }
+
+        {/* {dictionary === true &&  
+          <Box>
+            <Text
+              as="a"
+              target="_blank"
+              href={`/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa("dicionario")}&d=${btoa("true")}&s=${btoa("free")}`}
+              display="flex"
+              flexDirection="row"
+              alignItems="center"
+              gap="4px"
+              color="#0068C5"
+              fill="#0068C5"
+              _hover={{
+                color:"#0057A4",
+                fill:"#0057A4"
+              }}
+            >
+              Baixar tabela que faz a tradução desta coluna
+              <DownloadIcon width="18px" height="18px"/>
+            </Text>
+            <Text>{datasetName} - {tableName}</Text>
+          </Box>
+        } */}
       </Box>
     )
   }
@@ -519,9 +580,11 @@ export default function ColumnsTable({
 
                   <TableValue>
                     {template === "download" ?
-                      <TranslationTable value={elm?.node?.directoryPrimaryKey}/>
+                      <TranslationTable
+                        value={elm?.node?.directoryPrimaryKey}
+                        dictionary={elm?.node?.coveredByDictionary}
+                      />
                     :
-                    
                       elm?.node?.coveredByDictionary === true ? "Sim" :
                       elm?.node?.directoryPrimaryKey?._id ? "Sim" :
                       elm?.node?.coveredByDictionary === false ? "Não"

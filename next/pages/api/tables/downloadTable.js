@@ -19,13 +19,13 @@ async function validateToken(token) {
 }
 
 async function downloadTable(url, datasetID, tableId, token, res) {
-//   let payloadToken
-//   if(token !== null) payloadToken = await validateToken(token)
+  let payloadToken
+  if(token !== null) payloadToken = await validateToken(token)
 
   try {
     const fileUrl = url === "free"
-    ?`${process.env.URL_DOWNLOAD_TABLE}/${datasetID}/${tableId}/${tableId}.csv.gz`
-    :`${process.env.URL_DOWNLOAD_PRIVATE_TABLE}/${datasetID}/${tableId}/${tableId}.csv.gz`
+    ? `${process.env.URL_DOWNLOAD_TABLE}/${datasetID}/${tableId}/${tableId}.csv.gz`
+    : payloadToken?.pro_subscription_status === "active" ? `${process.env.URL_DOWNLOAD_PRIVATE_TABLE}/${datasetID}/${tableId}/${tableId}.csv.gz` : ""
 
     const response = await axios({
         url: fileUrl,
@@ -48,5 +48,5 @@ export default async function handler(req, res) {
 
   if(atob(req.query.d) === "false") return res.status(500).json({error: "Você não tem permissão para fazer esse download"})
 
-  return downloadTable(atob(req.query.s),atob(req.query.p), atob(req.query.q), token, res)
+  return downloadTable(atob(req.query.s), atob(req.query.p), atob(req.query.q), token, res)
 }
