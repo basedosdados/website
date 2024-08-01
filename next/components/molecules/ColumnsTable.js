@@ -13,6 +13,7 @@ import {
   Skeleton,
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import FuzzySearch from 'fuzzy-search';
 import Latex from 'react-latex-next';
 import cookies from 'js-cookie';
@@ -96,6 +97,8 @@ export default function ColumnsTable({
   template,
   columnsPro
 }) {
+  const router = useRouter()
+  const { query } = router
   const [resource, setResource] = useState({})
   const [columns, setColumns] = useState({})
   const [isError, setIsError] = useState(false)
@@ -223,26 +226,78 @@ export default function ColumnsTable({
     return 0
   }
 
-  function TranslationTable({ value, dictionary }) {
+  function HasDownloadPermitted(value) {
     let downloadPermitted = false
     let downloadWarning = ""
 
-    if (value?.table?.uncompressedFileSize) {
+    if (value) {
       const limit100MB = 100 * 1024 * 1024;
       const limit1GB = 1 * 1024 * 1024 * 1024;
 
-      if (value?.table?.uncompressedFileSize < limit100MB) {
+      if (value < limit100MB) {
         downloadPermitted = true
         downloadWarning = "free"
-      } else if (value?.table?.uncompressedFileSize < limit1GB) {
+      } else if (value < limit1GB) {
         downloadPermitted = isUserPro()
         downloadWarning = "100mbBetween1gb"
       } else {
-        downloadWarning = "biggest1gb"
         downloadPermitted = false
+        downloadWarning = "biggest1gb"
       }
     }
 
+    return {
+      downloadPermitted : downloadPermitted,
+      downloadWarning : downloadWarning
+    }
+  }
+
+  function DictionaryDownload() {
+    async function downloadTable() {
+      const result = await fetch(`/api/tables/getDictionaryTable?p=${btoa(query.dataset)}`, {method: "GET"})
+        .then(res => res.json())
+
+      if(result?.error) return
+
+      let cloudTables = result?.cloudTables?.edges[0]?.node
+      const downloadInfo = HasDownloadPermitted(result?.uncompressedFileSize)
+
+      triggerGAEvent("download_da_tabela",`{
+        gcp: ${cloudTables?.gcpProjectId+"."+cloudTables?.gcpDatasetId+"."+cloudTables?.gcpTableId},
+        tamanho: ${formatBytes(result.uncompressedFileSize) || ""},
+        dataset: ${query.dataset},
+        table: ${resource?._id},
+        columnDownload: true
+      }`)
+      window.open(`/api/tables/downloadTable?p=${btoa(cloudTables?.gcpDatasetId)}&q=${btoa(cloudTables?.gcpTableId)}&d=${btoa(downloadInfo.downloadPermitted)}&s=${btoa(downloadInfo.downloadWarning)}`)
+    }
+
+    return (
+      <Box>
+        <Text
+          as="button"
+          onClick={() => downloadTable()}
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
+          gap="4px"
+          color="#0068C5"
+          fill="#0068C5"
+          _hover={{
+            color:"#0057A4",
+            fill:"#0057A4"
+          }}
+        >
+          Baixar tabela que faz a tradução desta coluna
+          <DownloadIcon width="18px" height="18px"/>
+        </Text>
+        <Text>Dicionário</Text>
+      </Box>
+    )
+  }
+
+  function TranslationTable({ value, dictionary }) {
+    const downloadInfo = HasDownloadPermitted(value?.table?.uncompressedFileSize)
     const cloudValues = value?.table?.cloudTables?.edges?.[0]?.node
 
     const gcpProjectID = cloudValues?.gcpProjectId || ""
@@ -260,23 +315,22 @@ export default function ColumnsTable({
 
     return (
       <Box>
-        {value === null &&
-          <Text>
+        {value === null ?
+          <Text display={dictionary === true ? "none" : "" }>
             Não precisa de tradução
           </Text>
-        }
-
-        {value !== null &&
+        :
           <Box>
             <Text
               as="a"
               target="_blank"
-              href={value?.table?.isClosed
+              href={value?.table?.isClosed || !downloadInfo.downloadPermitted
                 ? `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/dataset/${value?.table?.dataset?._id}?table=${value?.table?._id}`
-                : `/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadPermitted)}&s=${btoa(downloadWarning)}`
+                : `/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadInfo.downloadPermitted)}&s=${btoa(downloadInfo.downloadWarning)}`
               }
               display="flex"
-              onClick={() => { 
+              onClick={() => {
+                if(!downloadInfo.downloadPermitted) return
                 triggerGAEvent("download_da_tabela",`{
                   gcp: ${gcpProjectID+"."+gcpDatasetID+"."+gcpTableId},
                   tamanho: ${formatBytes(value?.table?.uncompressedFileSize) || ""},
@@ -295,7 +349,7 @@ export default function ColumnsTable({
                 fill:"#0057A4"
               }}
             >
-              {value?.table?.isClosed
+              {value?.table?.isClosed || !downloadInfo.downloadPermitted
                 ?
                 <>
                   Acessar tabela que faz a tradução desta coluna
@@ -312,29 +366,9 @@ export default function ColumnsTable({
           </Box>
         }
 
-        {/* {dictionary === true &&  
-          <Box>
-            <Text
-              as="a"
-              target="_blank"
-              href={`/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa("dicionario")}&d=${btoa("true")}&s=${btoa("free")}`}
-              display="flex"
-              flexDirection="row"
-              alignItems="center"
-              gap="4px"
-              color="#0068C5"
-              fill="#0068C5"
-              _hover={{
-                color:"#0057A4",
-                fill:"#0057A4"
-              }}
-            >
-              Baixar tabela que faz a tradução desta coluna
-              <DownloadIcon width="18px" height="18px"/>
-            </Text>
-            <Text>{datasetName} - {tableName}</Text>
-          </Box>
-        } */}
+        {dictionary === true &&  
+          <DictionaryDownload/>
+        }
       </Box>
     )
   }

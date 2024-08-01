@@ -412,7 +412,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
             textResource="Todos os recursos da BD Grátis, mais:"
             resources={[
               {name: "Dezenas de bases de alta frequência atualizadas"},
-              {name: "Download direto até 1 GB (80% das tabelas da plataforma)", tooltip: "Tabelas maiores que 5 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."}
+              {name: "Download direto até 1GB (80% das tabelas da plataforma)", tooltip: "Tabelas maiores que 5 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."}
             ]}
             button={{
               text: isBDPro ? "Plano atual" : `Iniciar teste grátis`,
