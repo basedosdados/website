@@ -110,6 +110,7 @@ export default function DatasetPage ({ dataset }) {
         >
           <GridItem
             display="flex"
+            height="fit-content"
             justifyContent="center"
             border="1px solid #DEDFE0"
             borderRadius="16px"
