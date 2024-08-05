@@ -822,8 +822,9 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     Tutoriais: [
       {name: "Documentação", href: "https://basedosdados.github.io/mais/"},
       {name: "Vídeos no YouTube", href: "https://www.youtube.com/c/BasedosDados/featured"},
-      {name: "Blog", href: "https://medium.com/basedosdados"}
+      // {name: "Blog", href: "https://medium.com/basedosdados"}
     ],
+    Blog: "/blog",
     Institucional: [
       {name: "Quem somos", href: "/quem-somos"},
       {name: "Transparência", href: "/transparencia"},

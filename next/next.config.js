@@ -5,9 +5,10 @@ module.exports = {
     domains: [
       "basedosdados.org",
       "storage.googleapis.com/basedosdados-website",
-    ]
+    ],
   },
   output: "standalone",
   reactStrictMode: true,
-  swcMinify: true
+  swcMinify: true,
+  transpilePackages: ["next-mdx-remote"],
 };
