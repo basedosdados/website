@@ -2,16 +2,11 @@ import {
   Box,
   Stack,
   Text,
-  Link,
   Tooltip,
   Badge,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Head from "next/head";
-import Display from "../components/atoms/Display";
-import BigTitle from "../components/atoms/BigTitle"
-import BodyText from "../components/atoms/BodyText";
-import RoundedButton from "../components/atoms/RoundedButton";
 import Toggle from "../components/atoms/Toggle";
 import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
@@ -77,22 +72,29 @@ export const CardPrice = ({
           alignItems="center"
           marginBottom="8px"
         >
-          <BigTitle>{title}</BigTitle>
-          {badge &&
-            <Badge
-              padding="4px 5px"
-              textTransform="none"
-              borderRadius="6px"
-              backgroundColor="#DEDFE0"
-              color="#252A32"
-              fontSize="10px"
-              fontFamily="ubuntu"
-              fontWeight="300"
-              letterSpacing="0.2px"
-            >{badge}</Badge>}
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="28px"
+            lineHeight="42px"
+            textAlign="center"
+            color="#252A32"
+          >
+            {title}
+          </Text>
         </Box>
 
-        <Box marginBottom="24px">{subTitle}</Box>
+        <Text
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="18px"
+          lineHeight="28px"
+          textAlign="center"
+          color="#71757A"
+          marginBottom="24px"
+        >
+          {subTitle}
+        </Text>
 
         <Box
           justifyContent="center"
@@ -111,9 +113,9 @@ export const CardPrice = ({
               color="#252A32"
               fontSize="50px"
               fontWeight="500"
-              lineHeight="54px"
-              letterSpacing="-0.8px"
-              fontFamily="Ubuntu"
+              lineHeight="60px"
+              fontFamily="Roboto"
+              textAlign="center"
             >R$ {price}</Text>
             <Text
               position="relative"
@@ -121,21 +123,22 @@ export const CardPrice = ({
               right="-4px"
               color="#252A32"
               fontSize="18px"
-              fontWeight="700"
-              lineHeight="22px"
-              letterSpacing="0.3px"
-              fontFamily="Ubuntu"
+              fontWeight="500"
+              lineHeight="28px"
+              fontFamily="Roboto"
+              textAlign="center"
             >/mês</Text>
           </Box>
 
           {anualPlan && 
             <Text
-              fontFamily="Ubuntu"
+              fontFamily="Roboto"
               fontWeight="400"
-              fontSize="14px"
-              lineHeight="27px"
-              color="#71757A"
+              fontSize="16px"
+              lineHeight="24px"
+              color="#464A51"
               marginTop="24px"
+              alignItems="center"
             >{(price*12).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 })} cobrado uma vez no ano</Text>
           }
         </Box>
@@ -148,14 +151,14 @@ export const CardPrice = ({
         flexDirection="column"
         justifyContent="space-between"
       >
-        <Box>
+        <Box marginBottom="24px">
           <Text
-            color="#6F6F6F"
-            fontSize="14px"
+            color="#71757A"
+            fontSize="16px"
             fontWeight="400"
-            lineHeight="27px"
-            letterSpacing="0.3px"
-            fontFamily="Ubuntu"
+            lineHeight="24px"
+            fontFamily="Roboto"
+            alignItems="center"
             marginBottom="16px"
           >
             {textResource}
@@ -177,29 +180,34 @@ export const CardPrice = ({
                   height="24px"
                   fill="#2B8C4D"
                 />
-                <BodyText
+                <Text
+                  fontFamily="Roboto"
                   fontSize="16px"
-                  lineHeight="22px"
-                  letterSpacing="0.2px"
+                  lineHeight="24px"
                   fontWeight="400"
+                  alignItems="center"
+                  color="#464A51"
                 >
                   {elm.name}
-                </BodyText>
+                </Text>
                 {elm.tooltip &&
                   <Tooltip
+                    label={elm.tooltip}
                     hasArrow
                     placement="top"
-                    bg="#2A2F38"
-                    label={elm.tooltip}
-                    fontSize="14px"
+                    padding="16px"
+                    backgroundColor="#252A32"
+                    boxSizing="border-box"
+                    borderRadius="8px"
+                    fontFamily="Roboto"
                     fontWeight="400"
-                    padding="5px 16px 6px"
-                    letterSpacing="0.5px"
-                    lineHeight="24px"
-                    color="#FFF"
-                    borderRadius="6px"
+                    fontSize="14px"
+                    lineHeight="20px"
+                    textAlign="center"
+                    color="#FFFFFF"
+                    maxWidth="230px"
                   >
-                    <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3"/>
+                    <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#878A8E"/>
                   </Tooltip>
                 }
               </Box>
@@ -213,7 +221,7 @@ export const CardPrice = ({
           gap="16px"
         >
           {button.isCurrentPlan ?
-            <Text
+            <Box
               display="flex"
               justifyContent="center"
               alignItems="center"
@@ -223,50 +231,62 @@ export const CardPrice = ({
               color="#7D7D7D"
               cursor="default"
               fontWeight="400"
-              fontFamily="Ubuntu"
+              fontFamily="Roboto"
             >
               {button.text}
-            </Text>
+            </Box>
           :
-            <RoundedButton
-              width="100%"              
-              color={button.colorText || "#FFF"}
-              backgroundColor={button.color || "#42B0FF"}
+            <Box
+              as="button"
               onClick={() => {
                 if(button.onClick) return button.onClick()
                 return window.open(button.href, "_self")
               }}
-              border={button.color && `1px solid ${button.colorText}`}
-              {...button.styles}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              width="100%"
+              borderRadius="8px"
+              backgroundColor="#0D99FC"
+              padding="12px 16px"
+              cursor="pointer"
+              color="#FFF"
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="20px"
+              lineHeight="30px"
+              _hover={{
+                backgroundColor: "#0B89E2"
+              }}
             >
               {button.text}
-            </RoundedButton>
+            </Box>
           }
 
           <Text 
             display="flex"
             flexDirection="row"
             justifyContent="center"
-            color="#252A32"
-            fontSize="14px"
-            fontWeight="400"
-            lineHeight="27px"
-            letterSpacing="0.3px"
-            fontFamily="Ubuntu"
-            height="20px"
             textAlign="center"
+            color="#71757A"
+            fontWeight="400"
+            fontSize="16px"
+            lineHeight="24px"
+            fontFamily="Roboto"
+            height="20px"
           >Leia os
-            <Link
-              fontFamily="ubuntu"
-              color="#42B0FF"
+            <Text
+              as="a"
               cursor="pointer"
-              _hover={{opacity: 0.7}}
-              marginLeft="6px"
-              fontWeight="700"
-              letterSpacing="0.5px"
+              marginLeft="4px"
               href="/termos-e-privacidade?section=terms"
               target="_blank"
-            >Termos de Serviço</Link>
+              alignItems="center"
+              color="#0D99FC"
+              _hover={{
+                color: "#0B89E2"
+              }}
+            >Termos de Serviço</Text>
             .
           </Text>
         </Box>
@@ -315,15 +335,17 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
         margin="auto"
         spacing={0}
       >
-        <Display
+        <Text
           width="100%"
+          fontFamily="Roboto"
+          fontWeight="500"
+          color="#252A32"
           fontSize="60px"
           textAlign="center"
-          lineHeight="72px"
-          letterSpacing="-1.5px"
+          lineHeight="70px"
         >
           Compare os planos
-        </Display>
+        </Text>
 
         <Box
           display="none"
@@ -365,7 +387,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
         >
           <CardPrice
             title="BD Grátis"
-            subTitle={<BodyText>Para você descobrir o potencial da plataforma de dados</BodyText>}
+            subTitle={<>Para você descobrir o potencial da plataforma de dados</>}
             price={"0"}
             textResource="Recursos:"
             resources={[
@@ -374,25 +396,23 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
               {name: "Acesso em nuvem"},
               {name: "Acesso via SQL, Python e R"},
               {name: "Integração com ferramentas BI"},
+              {name: "Download direto até 100 MB", tooltip: "Esse limite não se aplica ao acesso via SQL, Python e R."},
             ]}
             button={{
               text: "Explorar recursos",
               href: "/dataset",
-              target: "_self",
-              color: "#FFF",
-              colorText: "#42B0FF"
             }}
           />
 
           <CardPrice
             title="BD Pro"
-            subTitle={<BodyText>Para você ter acesso aos<br/> dados mais atualizados</BodyText>}
+            subTitle={<>Para você ter acesso aos<br/> dados mais atualizados</>}
             price={priceBDPro}
             anualPlan={toggleAnual}
             textResource="Todos os recursos da BD Grátis, mais:"
             resources={[
               {name: "Dezenas de bases de alta frequência atualizadas"},
-              {name: "Tabela de referência de empresas com informações traduzidas e atualizadas"}
+              {name: "Download direto até 1GB (80% das tabelas da plataforma)", tooltip: "Tabelas maiores que 5 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."}
             ]}
             button={{
               text: isBDPro ? "Plano atual" : `Iniciar teste grátis`,
@@ -403,12 +423,13 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
 
           <CardPrice
             title="BD Empresas"
-            subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
+            subTitle={<>Para sua empresa ganhar tempo<br/> e qualidade em decisões</>}
             price={priceBDEmp}
             anualPlan={toggleAnual}
             textResource="Todos os recursos da BD Pro, mais:"
             resources={[
-              {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
+              {name: "Acesso para 10 contas"},
+              {name: "Suporte prioritário via email e Discord"}
             ]}
             button={{
               text: isBDEmp ? "Plano atual" : "Iniciar teste grátis",

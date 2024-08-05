@@ -790,13 +790,13 @@ export default function DataInformationQuery({ resource }) {
                     >
                       <CodeHighlight language="python">{`import basedosdados as bd
 
-    billing_id = <seu_billing_id>
+billing_id = <seu_billing_id>
 
-    query = """
-      ${sqlCode}
-    """
+query = """
+  ${sqlCode}
+"""
 
-    bd.read_sql(query = query, billing_project_id = billing_id)`}
+bd.read_sql(query = query, billing_project_id = billing_id)`}
                       </CodeHighlight>
                     </Skeleton>
                   </TabPanel>
@@ -860,16 +860,16 @@ export default function DataInformationQuery({ resource }) {
                       isLoaded={!isLoadingCode}
                     >
                       <CodeHighlight language="r">{`
-  # Defina o seu projeto no Google Cloud
-  set_billing_id("<YOUR_PROJECT_ID>")
+# Defina o seu projeto no Google Cloud
+set_billing_id("<YOUR_PROJECT_ID>")
 
-  # Para carregar o dado direto no R
-  query <- "
-  ${sqlCode}
-  "
+# Para carregar o dado direto no R
+query <- "
+${sqlCode}
+"
 
-  read_sql(query, billing_project_id = get_billing_id())
-  `}
+read_sql(query, billing_project_id = get_billing_id())
+`}
                       </CodeHighlight>
                     </Skeleton>
                   </TabPanel>
