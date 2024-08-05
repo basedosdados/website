@@ -404,7 +404,7 @@ export default function BdmTablePage({ id }) {
                 {getUpdateFormat(resource?.rawDataSource?.[0]?.updates?.[0]?.entity?.slug)}
               </Text>
             }
-            {!resource?.rawDataSource?.[0]?.updates?.[0] &&
+            {!resource?.rawDataSource?.[0]?.updates?.[0] || !resource?.updates?.[0]?.frequency &&
               <Text
                 backgroundColor="#EEEEEE"
                 padding="2px 4px"
