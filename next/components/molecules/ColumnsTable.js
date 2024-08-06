@@ -219,6 +219,15 @@ export default function ColumnsTable({
         Não precisa de tradução
       </Text>
     )
+    const cloudValues = value?.table?.cloudTables?.edges?.[0]?.node
+    const gcpDatasetID = cloudValues?.gcpDatasetId || ""
+    const gcpTableId = cloudValues?.gcpTableId || ""
+
+    if(gcpDatasetID === "br_bd_diretorios_data_tempo") return "Não precisa de tradução"
+    if(gcpDatasetID === "br_bd_diretorios_brasil") {
+      if(gcpTableId === "empresa" || gcpTableId === "cep") return "Não precisa de tradução"
+    }
+    if(value?.name === "ddd") return "Não precisa de tradução"
 
     if(value?.table?.isClosed) return (
       <Box>
@@ -244,10 +253,6 @@ export default function ColumnsTable({
       </Box>
     )
 
-    const cloudValues = value?.table?.cloudTables?.edges?.[0]?.node
-
-    const gcpDatasetID = cloudValues?.gcpDatasetId || ""
-    const gcpTableId = cloudValues?.gcpTableId || ""
     const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${gcpDatasetID}/${gcpTableId}/${gcpTableId}.csv.gz`
 
     const datasetName = value?.table?.dataset?.name || ""
@@ -383,6 +388,22 @@ export default function ColumnsTable({
         {children}
       </Td>
     )
+  }
+
+  function TranslationColumnException({ value }) {
+    const cloudValues = value?.node?.directoryPrimaryKey?.table?.cloudTables?.edges?.[0]?.node
+    const gcpDatasetID = cloudValues?.gcpDatasetId || ""
+    const gcpTableId = cloudValues?.gcpTableId || ""
+
+    if(gcpDatasetID === "br_bd_diretorios_data_tempo") return "Não"
+    if(gcpDatasetID === "br_bd_diretorios_brasil") {
+      if(gcpTableId === "empresa" || gcpTableId === "cep") return "Não"
+    }
+    if(value?.node?.name === "ddd") return "Não"
+    if(value?.node?.coveredByDictionary === true) return "Sim"
+    if(value?.node?.directoryPrimaryKey?._id) return "Sim"
+    if(value?.node?.coveredByDictionary === false) return "Não"
+    return "Não informado"
   }
 
   if(isError) return (
@@ -521,12 +542,7 @@ export default function ColumnsTable({
                     {template === "download" ?
                       <TranslationTable value={elm?.node?.directoryPrimaryKey}/>
                     :
-                    
-                      elm?.node?.coveredByDictionary === true ? "Sim" :
-                      elm?.node?.directoryPrimaryKey?._id ? "Sim" :
-                      elm?.node?.coveredByDictionary === false ? "Não"
-                      :
-                      "Não informado"
+                      <TranslationColumnException value={elm}/>
                     }
                   </TableValue>
 
