@@ -299,6 +299,41 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
   const [toggleAnual, setToggleAnual] = useState(false)
   const [priceBDPro, setPriceBDPro] = useState("47")
   const [priceBDEmp, setPriceBDEmp] = useState("350")
+  const [plans, setPlans] = useState(null)
+
+  useEffect(() => {
+    async function fecthPlans() {
+      try {
+        const result = await fetch(`/api/stripe/getPlans`, { method: "GET" })
+          .then(res => res.json())
+
+        if(result.success === true) {
+          function filterData(productName, interval, isActive) {
+            let array = result.data
+
+            return array.filter(item => 
+              (productName ? item.node.productName === productName : true) &&
+              (interval ? item.node.interval === interval : true) &&
+              (isActive !== undefined ? item.node.isActive === isActive : true)
+            )
+          }
+
+          const filteredPlans = {
+            bd_pro_month : filterData("BD Pro", "month", true)[0].node,
+            bd_pro_year : filterData("BD Pro", "year", true)[0].node,
+            bd_empresas_month : filterData("BD Empresas", "month", true)[0].node,
+            bd_empresas_year : filterData("BD Empresas", "year", true)[0].node
+          }
+
+          setPlans(filteredPlans)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    fecthPlans()
+  }, [])
 
   useEffect(() => {
     if(toggleAnual === true) {
