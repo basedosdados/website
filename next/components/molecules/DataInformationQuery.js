@@ -881,10 +881,9 @@ bd.read_sql(query = query, billing_project_id = billing_id)`}
                       width="100%"
                       isLoaded={!isLoadingCode}
                     >
-                      <CodeHighlight language="r">{`install.packages("basedosdados")
-library("basedosdados")
-# Defina o seu projeto no Google Cloud
-set_billing_id("<YOUR_PROJECT_ID>")
+                      <CodeHighlight language="r">{`
+  # Defina o seu projeto no Google Cloud
+  set_billing_id("<YOUR_PROJECT_ID>")
 
 # Para carregar o dado direto no R
 query <- "

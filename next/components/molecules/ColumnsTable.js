@@ -307,11 +307,11 @@ export default function ColumnsTable({
     const datasetName = value?.table?.dataset?.name || ""
     const tableName = value?.table?.name || ""
 
-    if(gcpDatasetID === "br_bd_diretorios_data_tempo") return (
-      <Text>
-        Não precisa de tradução
-      </Text>
-    )
+    if(gcpDatasetID === "br_bd_diretorios_data_tempo") return "Não precisa de tradução"
+    if(gcpDatasetID === "br_bd_diretorios_brasil") {
+      if(gcpTableId === "empresa" || gcpTableId === "cep") return "Não precisa de tradução"
+    }
+    if(value?.name === "ddd") return "Não precisa de tradução"
 
     return (
       <Box>
@@ -480,6 +480,22 @@ export default function ColumnsTable({
     )
   }
 
+  function TranslationColumnException({ value }) {
+    const cloudValues = value?.node?.directoryPrimaryKey?.table?.cloudTables?.edges?.[0]?.node
+    const gcpDatasetID = cloudValues?.gcpDatasetId || ""
+    const gcpTableId = cloudValues?.gcpTableId || ""
+
+    if(gcpDatasetID === "br_bd_diretorios_data_tempo") return "Não"
+    if(gcpDatasetID === "br_bd_diretorios_brasil") {
+      if(gcpTableId === "empresa" || gcpTableId === "cep") return "Não"
+    }
+    if(value?.node?.name === "ddd") return "Não"
+    if(value?.node?.coveredByDictionary === true) return "Sim"
+    if(value?.node?.directoryPrimaryKey?._id) return "Sim"
+    if(value?.node?.coveredByDictionary === false) return "Não"
+    return "Não informado"
+  }
+
   if(isError) return (
     <Stack justifyContent="center" alignItems="center">
       <InternalError
@@ -619,11 +635,7 @@ export default function ColumnsTable({
                         dictionary={elm?.node?.coveredByDictionary}
                       />
                     :
-                      elm?.node?.coveredByDictionary === true ? "Sim" :
-                      elm?.node?.directoryPrimaryKey?._id ? "Sim" :
-                      elm?.node?.coveredByDictionary === false ? "Não"
-                      :
-                      "Não informado"
+                      <TranslationColumnException value={elm}/>
                     }
                   </TableValue>
 
