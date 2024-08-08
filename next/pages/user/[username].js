@@ -1450,32 +1450,51 @@ const PlansAndPayment = ({ userData }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingH, setIsLoadingH] = useState(false)
   const [isLoadingCanSub, setIsLoadingCanSub] = useState(false)
+
+  const [plans, setPlans] = useState(null)
   const [toggleAnual, setToggleAnual] = useState(false)
-  const [priceBDPro, setPriceBDPro] = useState("47")
-  const [priceBDEmp, setPriceBDEmp] = useState("350")
 
   useEffect(() => {
-    if(query.q === "pro") {
-      if(userData.proSubscriptionStatus === "active") return AlertChangePlanModal.onOpen()
-      setPlan({title: "BD Pro", slug:"bd_pro", slots: "0"})
-      PaymentModal.onOpen()
+    async function fecthPlans() {
+      try {
+        const result = await fetch(`/api/stripe/getPlans`, { method: "GET" })
+          .then(res => res.json())
+
+        if(result.success === true) {
+          function filterData(productName, interval, isActive) {
+            let array = result.data
+
+            return array.filter(item => 
+              (productName ? item.node.productName === productName : true) &&
+              (interval ? item.node.interval === interval : true) &&
+              (isActive !== undefined ? item.node.isActive === isActive : true)
+            )
+          }
+
+          const filteredPlans = {
+            bd_pro_month : filterData("BD Pro", "month", true)[0].node,
+            bd_pro_year : filterData("BD Pro", "year", true)[0].node,
+            bd_empresas_month : filterData("BD Empresas", "month", true)[0].node,
+            bd_empresas_year : filterData("BD Empresas", "year", true)[0].node
+          }
+
+          setPlans(filteredPlans)
+        }
+      } catch (error) {
+        console.error(error)
+      }
     }
-    if(query.q === "empresas") {
+
+    fecthPlans()
+  }, [])
+
+  useEffect(() => {
+    if(query.i) {
       if(userData.proSubscriptionStatus === "active") return AlertChangePlanModal.onOpen()
-      setPlan({title: "BD Empresas", slug:"bd_pro_empresas", slots: "10"})
+      setPlan({id: query.i})
       PaymentModal.onOpen()
     }
   }, [query])
-
-  useEffect(() => {
-    if(toggleAnual === true) {
-      setPriceBDPro("37")
-      setPriceBDEmp("280")
-    } else {
-      setPriceBDPro("47")
-      setPriceBDEmp("350")
-    }
-  }, [toggleAnual])
 
   const resources={
     "BD Gratis" : {
@@ -1943,7 +1962,7 @@ const PlansAndPayment = ({ userData }) => {
           <CardPrice
             title="BD Pro"
             subTitle={<>Para você ter acesso aos<br/> dados mais atualizados</>}
-            price={priceBDPro}
+            price={plans?.["bd_pro_month"].amount || 47}
             anualPlan={toggleAnual}
             textResource="Todos os recursos da BD Grátis, mais:"
             resources={[
@@ -1953,7 +1972,7 @@ const PlansAndPayment = ({ userData }) => {
             button={{
               text: `${userData?.proSubscription === "bd_pro" ? "Plano atual" : "Assinar"}`,
               onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => {
-                setPlan({title: "BD Pro", slug:"bd_pro", slots: "0"})
+                setPlan({id: plans?.["bd_pro_month"]._id})
                 PlansModal.onClose()
                 PaymentModal.onOpen()
               },
@@ -1964,7 +1983,7 @@ const PlansAndPayment = ({ userData }) => {
           <CardPrice
             title="BD Empresas"
             subTitle={<>Para sua empresa ganhar tempo<br/> e qualidade em decisões</>}
-            price={priceBDEmp}
+            price={plans?.["bd_empresas_month"].amount || 350}
             anualPlan={toggleAnual}
             textResource="Todos os recursos da BD Pro, mais:"
             resources={[
@@ -1974,7 +1993,7 @@ const PlansAndPayment = ({ userData }) => {
             button={{
               text: `${userData?.proSubscription === "bd_pro_empresas" ? "Plano atual" : "Assinar"}`,
               onClick: userData?.proSubscription === "bd_pro_empresas" ? () => {} : () => {
-                setPlan({title: "BD Empresas", slug:"bd_pro_empresas", slots: "10"})
+                setPlan({id: plans?.["bd_empresas_month"]._id})
                 PlansModal.onClose()
                 PaymentModal.onOpen()
               },
