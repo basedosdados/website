@@ -13,10 +13,13 @@ import {
   Skeleton,
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import FuzzySearch from 'fuzzy-search';
 import Latex from 'react-latex-next';
+import cookies from 'js-cookie';
 import { ControlledInputSimple } from '../atoms/ControlledInput';
 import Checkbox from '../atoms/Checkbox';
+import { triggerGAEvent, formatBytes } from '../../utils';
 
 import {
   getColumnsBdmTable
@@ -94,6 +97,8 @@ export default function ColumnsTable({
   template,
   columnsPro
 }) {
+  const router = useRouter()
+  const { query } = router
   const [resource, setResource] = useState({})
   const [columns, setColumns] = useState({})
   const [isError, setIsError] = useState(false)
@@ -101,6 +106,14 @@ export default function ColumnsTable({
   const [isSearchLoading, setIsSearchLoading] = useState(true)
 
   const isChecked = (columnSlug) => checkedColumns.includes(columnSlug)
+
+  const isUserPro = () => {
+    let user
+    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
+
+    if(user?.proSubscriptionStatus === "active") return true
+    return false
+  }
 
   const handleCheckboxChange = (columnSlug) => {
     if (isChecked(columnSlug)) {
@@ -213,57 +226,56 @@ export default function ColumnsTable({
     return 0
   }
 
-  function TranslationTable({ value }) {
-    if(value === null) return (
-      <Text>
-        Não precisa de tradução
-      </Text>
-    )
-    const cloudValues = value?.table?.cloudTables?.edges?.[0]?.node
-    const gcpDatasetID = cloudValues?.gcpDatasetId || ""
-    const gcpTableId = cloudValues?.gcpTableId || ""
+  function HasDownloadPermitted(value) {
+    let downloadPermitted = false
+    let downloadWarning = ""
 
-    if(gcpDatasetID === "br_bd_diretorios_data_tempo") return "Não precisa de tradução"
-    if(gcpDatasetID === "br_bd_diretorios_brasil") {
-      if(gcpTableId === "empresa" || gcpTableId === "cep") return "Não precisa de tradução"
+    if (value) {
+      const limit100MB = 100 * 1024 * 1024;
+      const limit1GB = 1 * 1024 * 1024 * 1024;
+
+      if (value < limit100MB) {
+        downloadPermitted = true
+        downloadWarning = "free"
+      } else if (value < limit1GB) {
+        downloadPermitted = isUserPro()
+        downloadWarning = "100mbBetween1gb"
+      } else {
+        downloadPermitted = false
+        downloadWarning = "biggest1gb"
+      }
     }
-    if(value?.name === "ddd") return "Não precisa de tradução"
 
-    if(value?.table?.isClosed) return (
-      <Box>
-        <Text
-          as="a"
-          target="_blank"
-          href={`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/dataset/${value?.table?.dataset?._id}?table=${value?.table?._id}`}
-          display="flex"
-          flexDirection="row"
-          alignItems="center"
-          gap="4px"
-          color="#0068C5"
-          fill="#0068C5"
-          _hover={{
-            color:"#0057A4",
-            fill:"#0057A4"
-          }}
-        >
-          Acessar tabela que faz a tradução desta coluna
-          <RedirectIcon width="14px" height="14px"/>
-        </Text>
-        <Text>{value?.table?.dataset?.name} - {value?.table?.name}</Text>
-      </Box>
-    )
+    return {
+      downloadPermitted : downloadPermitted,
+      downloadWarning : downloadWarning
+    }
+  }
 
-    const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${gcpDatasetID}/${gcpTableId}/${gcpTableId}.csv.gz`
+  function DictionaryDownload() {
+    async function downloadTable() {
+      const result = await fetch(`/api/tables/getDictionaryTable?p=${btoa(query.dataset)}`, {method: "GET"})
+        .then(res => res.json())
 
-    const datasetName = value?.table?.dataset?.name || ""
-    const tableName = value?.table?.name || ""
-  
+      if(result?.error) return
+
+      let cloudTables = result?.cloudTables?.edges[0]?.node
+
+      triggerGAEvent("download_da_tabela",`{
+        gcp: ${cloudTables?.gcpProjectId+"."+cloudTables?.gcpDatasetId+"."+cloudTables?.gcpTableId},
+        tamanho: ${formatBytes(result.uncompressedFileSize) || ""},
+        dataset: ${query.dataset},
+        table: ${resource?._id},
+        columnDownload: true
+      }`)
+      window.open(`https://storage.googleapis.com/basedosdados-public/one-click-download/${cloudTables?.gcpDatasetId}/${cloudTables?.gcpTableId}/${cloudTables?.gcpTableId}.csv.gz`)
+    }
+
     return (
       <Box>
         <Text
-          as="a"
-          target="_blank"
-          href={downloadUrl}
+          as="button"
+          onClick={() => downloadTable()}
           display="flex"
           flexDirection="row"
           alignItems="center"
@@ -278,7 +290,83 @@ export default function ColumnsTable({
           Baixar tabela que faz a tradução desta coluna
           <DownloadIcon width="18px" height="18px"/>
         </Text>
-        <Text>{datasetName} - {tableName}</Text>
+        <Text>Dicionário</Text>
+      </Box>
+    )
+  }
+
+  function TranslationTable({ value, dictionary }) {
+    const downloadInfo = HasDownloadPermitted(value?.table?.uncompressedFileSize)
+    const cloudValues = value?.table?.cloudTables?.edges?.[0]?.node
+
+    const gcpProjectID = cloudValues?.gcpProjectId || ""
+    const gcpDatasetID = cloudValues?.gcpDatasetId || ""
+    const gcpTableId = cloudValues?.gcpTableId || ""
+
+    const datasetName = value?.table?.dataset?.name || ""
+    const tableName = value?.table?.name || ""
+  
+    if(gcpDatasetID === "br_bd_diretorios_data_tempo") return "Não precisa de tradução"
+    if(gcpDatasetID === "br_bd_diretorios_brasil") {
+      if(gcpTableId === "empresa" || gcpTableId === "cep") return "Não precisa de tradução"
+    }
+    if(value?.name === "ddd") return "Não precisa de tradução"
+
+    const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${gcpDatasetID}/${gcpTableId}/${gcpTableId}.csv.gz`
+
+    return (
+      <Box>
+        {value === null ?
+          <Text display={dictionary === true ? "none" : "" }>
+            Não precisa de tradução
+          </Text>
+        :
+          <Box>
+            <Text
+              as="a"
+              target="_blank"
+              href={downloadUrl}
+              display="flex"
+              onClick={() => {
+                if(!downloadInfo.downloadPermitted) return
+                triggerGAEvent("download_da_tabela",`{
+                  gcp: ${gcpProjectID+"."+gcpDatasetID+"."+gcpTableId},
+                  tamanho: ${formatBytes(value?.table?.uncompressedFileSize) || ""},
+                  dataset: ${value?.table?.dataset?._id},
+                  table: ${value?.table?._id},
+                  columnDownload: true
+                }`)
+              }}
+              flexDirection="row"
+              alignItems="center"
+              gap="4px"
+              color="#0068C5"
+              fill="#0068C5"
+              _hover={{
+                color:"#0057A4",
+                fill:"#0057A4"
+              }}
+            >
+              {value?.table?.isClosed || !downloadInfo.downloadPermitted
+                ?
+                <>
+                  Acessar tabela que faz a tradução desta coluna
+                  <RedirectIcon width="14px" height="14px"/>
+                </>
+                :
+                <>
+                  Baixar tabela que faz a tradução desta coluna
+                  <DownloadIcon width="18px" height="18px"/>
+                </>
+              }
+            </Text>
+            <Text>{datasetName} - {tableName}</Text>
+          </Box>
+        }
+
+        {dictionary === true &&  
+          <DictionaryDownload/>
+        }
       </Box>
     )
   }
@@ -540,7 +628,10 @@ export default function ColumnsTable({
 
                   <TableValue>
                     {template === "download" ?
-                      <TranslationTable value={elm?.node?.directoryPrimaryKey}/>
+                      <TranslationTable
+                        value={elm?.node?.directoryPrimaryKey}
+                        dictionary={elm?.node?.coveredByDictionary}
+                      />
                     :
                       <TranslationColumnException value={elm}/>
                     }
