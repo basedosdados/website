@@ -81,7 +81,7 @@ export default function Login() {
 
     cookies.set('userBD', JSON.stringify(userData))
 
-    if(query.p && query.i) {
+    if(query.i) {
       return window.open(`/user/${userData.username}?plans_and_payment&q=${query.q}&i=${query.i}`, "_self")
     }
 

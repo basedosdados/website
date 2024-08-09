@@ -88,9 +88,9 @@ export async function getServerSideProps(context) {
   const validateTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/validateToken?p=${btoa(req.cookies.token)}`, {method: "GET"})
   const validateToken = await validateTokenResponse.json()
 
-    if(validateToken.error) {
-      const refreshTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/refreshToken?p=${btoa(req.cookies.token)}`, {method: "GET"})
-      const refreshToken = await refreshTokenResponse.json()
+  if(validateToken.error) {
+    const refreshTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/refreshToken?p=${btoa(req.cookies.token)}`, {method: "GET"})
+    const refreshToken = await refreshTokenResponse.json()
 
     if(refreshToken.error) {
       res.setHeader('Set-Cookie', serialize('token', '', {maxAge: -1, path: '/', }))
@@ -128,7 +128,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      getUser
+      getUser,
     }
   }
 }
@@ -1455,6 +1455,8 @@ const PlansAndPayment = ({ userData }) => {
   const [toggleAnual, setToggleAnual] = useState(false)
 
   useEffect(() => {
+    if(PlansModal.isOpen === false) return
+
     async function fecthPlans() {
       try {
         const result = await fetch(`/api/stripe/getPlans`, { method: "GET" })
@@ -1486,7 +1488,7 @@ const PlansAndPayment = ({ userData }) => {
     }
 
     fecthPlans()
-  }, [])
+  }, [PlansModal.isOpen])
 
   useEffect(() => {
     if(query.i) {
@@ -1616,14 +1618,14 @@ const PlansAndPayment = ({ userData }) => {
       setIsLoadingCanSub(false)
     }
 
-    do {
-      const statusSub = await fetch(`/api/stripe/userGetSubscription?p=${btoa(id)}`, {method: "GET"})
-        .then(res => res.json())
-      if(statusSub?.proSubscriptionStatus !== "active") {
-        break
-      }
-      await new Promise (resolve => setTimeout(resolve ,1000))
-    } while (true)
+    // do {
+    //   const statusSub = await fetch(`/api/stripe/userGetSubscription?p=${btoa(id)}`, {method: "GET"})
+    //     .then(res => res.json())
+    //   if(statusSub?.proSubscriptionStatus !== "active") {
+    //     break
+    //   }
+    //   await new Promise (resolve => setTimeout(resolve ,1000))
+    // } while (true)
 
     const user = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
