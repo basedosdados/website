@@ -21,20 +21,35 @@ import {
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_KEY_STRIPE)
 
-const PaymentForm = ({ onSucess, onErro }) => {
+const PaymentForm = ({ onSucess, onErro, clientSecret}) => {
   const stripe = useStripe()
   const elements = useElements()
 
   const handlerSubmit = async (e) => {
     e.preventDefault()
 
-    const data = await stripe.confirmPayment({
-      elements,
-      redirect: 'if_required',
-    })
+    const isSetupIntent = clientSecret.startsWith('seti_');
+    if (isSetupIntent) {
+      await elements.submit();
 
-    if(data?.error?.code === "card_declined") return onErro()
-    if(data?.paymentIntent?.status === "succeeded") return onSucess()
+      const data = await stripe.confirmSetup({
+        elements,
+        clientSecret: clientSecret,
+        redirect: 'if_required',
+      });
+  
+      if (data?.error?.code === "card_declined") return onErro();
+      if (data?.setupIntent?.status === "succeeded") return onSucess();
+
+    } else {
+      const data = await stripe.confirmPayment({
+        elements,
+        redirect: 'if_required',
+      })
+  
+      if(data?.error?.code === "card_declined") return onErro()
+      if(data?.paymentIntent?.status === "succeeded") return onSucess()
+    }
   }
 
   return (
@@ -89,26 +104,12 @@ export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
   }
 
   const customerCreatPost = async (id) => {
-    let secret = ""
-
-    const subscriptionCreate = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}`, {method: "GET"})
+    const clientSecret = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
 
-    if(subscriptionCreate?.clientSecret) {
-      secret = subscriptionCreate?.clientSecret
+    if (clientSecret) {
+      setClientSecret(clientSecret)
     }
-    if(secret !== "") return setClientSecret(secret)
-
-    const result = await fetch(`/api/stripe/createCustomer`, {method: "GET"})
-      .then(res => res.json())
-
-    if(result?.id) {
-      const subscriptionCreate = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}`, {method: "GET"})
-        .then(res => res.json())
-      secret = subscriptionCreate?.clientSecret
-    }
-
-    return setClientSecret(secret)
   }
 
   async function customerCreat(plan) {
@@ -169,7 +170,12 @@ export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
 
   return (
     <Elements options={options} stripe={stripePromise}>
-      <PaymentForm userData={userData} onSucess={onSucess} onErro={onErro}/>
+      <PaymentForm
+        clientSecret={options.clientSecret}
+        userData={userData}
+        onSucess={onSucess}
+        onErro={onErro}
+      />
     </Elements>
   )
 }
