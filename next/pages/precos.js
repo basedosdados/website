@@ -297,18 +297,41 @@ export const CardPrice = ({
 
 export default function Price({ username ,isBDPro, isBDEmp }) {
   const [toggleAnual, setToggleAnual] = useState(false)
-  const [priceBDPro, setPriceBDPro] = useState("47")
-  const [priceBDEmp, setPriceBDEmp] = useState("350")
+  const [plans, setPlans] = useState(null)
 
   useEffect(() => {
-    if(toggleAnual === true) {
-      setPriceBDPro("37")
-      setPriceBDEmp("280")
-    } else {
-      setPriceBDPro("47")
-      setPriceBDEmp("350")
+    async function fecthPlans() {
+      try {
+        const result = await fetch(`/api/stripe/getPlans`, { method: "GET" })
+          .then(res => res.json())
+
+        if(result.success === true) {
+          function filterData(productName, interval, isActive) {
+            let array = result.data
+
+            return array.filter(item => 
+              (productName ? item.node.productName === productName : true) &&
+              (interval ? item.node.interval === interval : true) &&
+              (isActive !== undefined ? item.node.isActive === isActive : true)
+            )
+          }
+
+          const filteredPlans = {
+            bd_pro_month : filterData("BD Pro", "month", true)[0].node,
+            bd_pro_year : filterData("BD Pro", "year", true)[0].node,
+            bd_empresas_month : filterData("BD Empresas", "month", true)[0].node,
+            bd_empresas_year : filterData("BD Empresas", "year", true)[0].node
+          }
+
+          setPlans(filteredPlans)
+        }
+      } catch (error) {
+        console.error(error)
+      }
     }
-  }, [toggleAnual])
+
+    fecthPlans()
+  }, [])
 
   return (
     <MainPageTemplate paddingX="24px">
@@ -371,7 +394,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
             letterSpacing="0.1px"
             color="#252A32"
           >
-            Desconto anual <Text color="#2B8C4D">Economize 20%</Text>
+            Desconto anual <Text as="span" color="#2B8C4D">Economize 20%</Text>
           </Text>
         </Box>
 
@@ -407,7 +430,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
           <CardPrice
             title="BD Pro"
             subTitle={<>Para você ter acesso aos<br/> dados mais atualizados</>}
-            price={priceBDPro}
+            price={plans?.["bd_pro_month"].amount || 47}
             anualPlan={toggleAnual}
             textResource="Todos os recursos da BD Grátis, mais:"
             resources={[
@@ -416,7 +439,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
             ]}
             button={{
               text: isBDPro ? "Plano atual" : `Iniciar teste grátis`,
-              href: username === null ? "/user/login?p=plans&q=pro" :`/user/${username}?plans_and_payment&q=pro`,
+              href: username === null ? `/user/login?q=pro&i=${plans?.["bd_pro_month"]._id}` :`/user/${username}?plans_and_payment&q=pro&i=${plans?.["bd_pro_month"]._id}`,
               isCurrentPlan: isBDPro,
             }}
           />
@@ -424,7 +447,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
           <CardPrice
             title="BD Empresas"
             subTitle={<>Para sua empresa ganhar tempo<br/> e qualidade em decisões</>}
-            price={priceBDEmp}
+            price={plans?.["bd_empresas_month"].amount || 350}
             anualPlan={toggleAnual}
             textResource="Todos os recursos da BD Pro, mais:"
             resources={[
@@ -433,7 +456,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
             ]}
             button={{
               text: isBDEmp ? "Plano atual" : "Iniciar teste grátis",
-              href: username === null ? "/user/login?p=plans&q=empresas" :`/user/${username}?plans_and_payment&q=empresas`,
+              href: username === null ? `/user/login?q=empresas&i=${plans?.["bd_empresas_month"]._id}` :`/user/${username}?plans_and_payment&q=empresas&i=${plans?.["bd_empresas_month"]._id}`,
               isCurrentPlan: isBDEmp,
             }}
           />

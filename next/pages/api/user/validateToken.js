@@ -3,19 +3,19 @@ import axios from "axios";
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
 async function validateToken(token) {
-  const res = await axios({
-    url: API_URL,
-    method: "POST",
-    data: {
-      query: `
-      mutation {
-        verifyToken ( token: "${token}" ) {
-          payload,
-        }
-      }`
-    }
-  })
   try {
+    const res = await axios({
+      url: API_URL,
+      method: "POST",
+      data: {
+        query: `
+        mutation {
+          verifyToken ( token: "${token}" ) {
+            payload,
+          }
+        }`
+      }
+    })
     const data = res.data
     return data
   } catch (error) {
