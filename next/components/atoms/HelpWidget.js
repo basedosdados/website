@@ -6,40 +6,29 @@ import {
   MenuDivider,
   Tooltip
 } from "@chakra-ui/react";
-import { useDisclosure } from "@chakra-ui/hooks";
-import { useState, useEffect } from 'react';
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import HelpIcon from "../../public/img/icons/helpIcon"
 
 export default function HelpWidget({options, tooltip}) {
-  const isMobile = useCheckMobile();
-  const [isMobileMode, setIsMobileMode] = useState(false)
-
-  useEffect(() => {
-    setIsMobileMode(isMobile)
-  },[isMobile])
-
-  const { isOpen } = useDisclosure()
-
   const optionsRender = (options) => {
-    return options.map((option) => {
+    return options.map((option, i) => {
       if(option.name){ return (
         <MenuItem
-          letterSpacing="0.3px"
-          lineHeight="16px"
+          key={i}
+          letterSpacing="0.1px"
+          lineHeight="18px"
           fontWeight="400"
           fontSize="12px"
-          fontFamily="ubuntu"
-          backgroundColor="#FFF"
+          fontFamily="Roboto"
           color="#252A32"
+          backgroundColor="#FFF"
           padding="0 16px 10px"
           _focus={{backgroundColor: "transparent"}}
-          _hover={{backgroundColor: "transparent", opacity: "0.6"}}
+          _hover={{backgroundColor: "transparent", opacity: "0.7"}}
           onClick={() => window.open(option.url, "_blank")}
         >
           {option.name}
         </MenuItem>)
-      } else { return <MenuDivider margin="0 0 14px"/> }
+      } else { return <MenuDivider key={i} margin="0 0 14px"/> }
     })
   }
 
@@ -50,12 +39,12 @@ export default function HelpWidget({options, tooltip}) {
           <Tooltip 
             backgroundColor="#FFF"
             borderRadius="8px"
-            color="#252A32"
-            fontSize="12px"
+            letterSpacing="0.1px"
+            lineHeight="18px"
             fontWeight="400"
-            fontFamily="ubuntu"
-            lineHeight="16px"
-            letterSpacing="0.3px"
+            fontSize="12px"
+            fontFamily="Roboto"
+            color="#252A32"
             padding="8px 12px"
             boxShadow="0 2px 16px rgba(0, 0, 0, 0.16)"
             placement="top-start"
@@ -64,18 +53,20 @@ export default function HelpWidget({options, tooltip}) {
           >
             <MenuButton
               aria-label="Menu de ajuda"
-              width="50px"
-              height="50px"
-              background="#2B8C4D"
+              width="28px"
+              height="28px"
               borderRadius="50%"
               zIndex="11"
-              boxShadow="0 1.6px 16px rgba(100, 96, 103, 0.3)"
-              position="fixed"
-              bottom={isMobileMode ? "20px" : "40px"}
-              right={isMobileMode ? "20px" : "40px"}
-              isActive={isOpen}
+              bottom={{ base: "20px", lg: "40px" }}
+              right={{ base: "20px", lg: "40px" }}
             >
-              <HelpIcon alt="menu de ajuda" justifyContent="center" width="25px" height="25px" fill="white"/>
+              <HelpIcon
+                alt="menu de ajuda"
+                justifyContent="center"
+                width="28px"
+                height="28px"
+                fill="#878A8E"
+              />
             </MenuButton>
           </Tooltip>
           <MenuList

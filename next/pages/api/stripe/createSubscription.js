@@ -14,10 +14,7 @@ async function createSubscription(id, token) {
         query: `
         mutation {
           createStripeSubscription (priceId: ${id}) {
-            subscription {
-              id
-              clientSecret
-            }
+            clientSecret
           }
         }
         `
@@ -38,5 +35,5 @@ export default async function handler(req, res) {
   if(result.errors) return res.status(500).json({error: result.errors})
   if(result === "err") return res.status(500).json({error: "err"})
 
-  res.status(200).json(result?.data?.createStripeSubscription?.subscription)
+  res.status(200).json(result?.data?.createStripeSubscription?.clientSecret)
 }

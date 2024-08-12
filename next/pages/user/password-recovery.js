@@ -178,7 +178,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
     <MainPageTemplate
       display="flex"
       justifyContent="center"
-      paddingTop="72px"
+      paddingTop="70px"
       cleanTemplate
     >
       <Stack
@@ -333,7 +333,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
     <MainPageTemplate
       display="flex"
       justifyContent="center"
-      paddingTop="72px"
+      paddingTop="70px"
       cleanTemplate
     >
       <Stack

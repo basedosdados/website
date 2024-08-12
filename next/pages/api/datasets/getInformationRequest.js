@@ -3,7 +3,7 @@ import { cleanGraphQLResponse } from "../../../utils";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-export default async function getInformationRequest(id) {
+async function getInformationRequest(id) {
   try {
     const res = await axios({
       url: API_URL,
@@ -19,11 +19,6 @@ export default async function getInformationRequest(id) {
                 url
                 dataUrl
                 observations
-                startedBy {
-                  id
-                  firstName
-                  lastName
-                }
                 updates {
                   edges {
                     node {
@@ -46,37 +41,6 @@ export default async function getInformationRequest(id) {
                   _id
                   name
                 }
-                coverages {
-                  edges {
-                    node {
-                      _id
-                      datetimeRanges {
-                        edges {
-                          node {
-                            _id
-                            startYear
-                            startSemester
-                            startQuarter
-                            startMonth
-                            startDay
-                            startHour
-                            startMinute
-                            startSecond
-                            endYear
-                            endSemester
-                            endQuarter
-                            endMonth
-                            endDay
-                            endHour
-                            endMinute
-                            endSecond
-                            interval
-                          }
-                        }
-                      } 
-                    }
-                  }
-                }
               }
             }
           }
@@ -85,9 +49,19 @@ export default async function getInformationRequest(id) {
         variables: null
       }
     })
-    const data = res?.data?.data?.allInformationrequest?.edges[0]?.node
-    return cleanGraphQLResponse(data)
+    const data = res?.data
+    return data
   } catch (error) {
     console.error(error)
+    return "err"
   }
+}
+
+export default async function handler(req, res) {
+  const result = await getInformationRequest(req.query.p)
+
+  if(result.errors) return res.status(500).json({error: result.errors, success: false})
+  if(result === "err") return res.status(500).json({error: "err", success: false})
+
+  return res.status(200).json({resource: cleanGraphQLResponse(result?.data?.allInformationrequest?.edges[0]?.node), success: true})
 }
