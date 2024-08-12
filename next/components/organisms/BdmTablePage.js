@@ -192,18 +192,34 @@ export default function BdmTablePage({ id }) {
     return formattedDate
   }
 
-  const getUpdateFormat = (value) => {
-    const formats = {
-      "second":"Atualização por segundo",
-      "minute":"Atualização por minuto",
-      "hour":"Atualização por hora",
-      "day":"Atualização diária",
-      "week":"Atualização semanal",
-      "month":"Atualização mensal",
-      "bimester":"Atualização bimestral",
-      "quarter":"Atualização trimestral",
-      "semester":"Atualização semestral",
-      "year":"Atualização anual",
+  const getUpdateFormat = (value, yearFrequency = false, frequency) => {
+    let formats
+    {yearFrequency ?
+      formats = {
+        "second":`Atualização a cada ${frequency} por segundo`,
+        "minute":`Atualização a cada ${frequency} por minuto`,
+        "hour":`Atualização a cada ${frequency} por hora`,
+        "day":`Atualização a cada ${frequency} diária`,
+        "week":`Atualização a cada ${frequency} semanal`,
+        "month":`Atualização a cada ${frequency} mensal`,
+        "bimester":`Atualização a cada ${frequency} bimestral`,
+        "quarter":`Atualização a cada ${frequency} trimestral`,
+        "semester":`Atualização a cada ${frequency} semestral`,
+        "year":`Atualização a cada ${frequency} anual`,
+      }
+      :
+      formats = {
+        "second":"Atualização por segundo",
+        "minute":"Atualização por minuto",
+        "hour":"Atualização por hora",
+        "day":"Atualização diária",
+        "week":"Atualização semanal",
+        "month":"Atualização mensal",
+        "bimester":"Atualização bimestral",
+        "quarter":"Atualização trimestral",
+        "semester":"Atualização semestral",
+        "year":"Atualização anual",
+      }
     }
 
     return formats[value] ? formats[value] : "Atualização não definida"
@@ -345,7 +361,7 @@ export default function BdmTablePage({ id }) {
               :
               "Não informado"
             }: Última vez que atualizamos na BD
-            {resource?.updates?.[0]?.entity?.slug &&
+            {resource?.updates?.[0]?.frequency &&
               <Text
                 backgroundColor="#EEEEEE"
                 padding="2px 4px"
@@ -356,10 +372,14 @@ export default function BdmTablePage({ id }) {
                 lineHeight="18px"
                 color="#252A32"
               >
-                {getUpdateFormat(resource.updates[0].entity.slug)}
+                {resource?.updates?.[0]?.frequency === 1 ?
+                  getUpdateFormat(resource.updates[0].entity.slug)
+                :
+                  getUpdateFormat(resource.updates[0].entity.slug, true, resource?.updates?.[0]?.frequency)
+                }
               </Text>
             }
-            {!resource?.updates?.[0] &&
+            {!resource?.updates?.[0]?.frequency &&
               <Text
                 backgroundColor="#EEEEEE"
                 padding="2px 4px"
@@ -390,7 +410,7 @@ export default function BdmTablePage({ id }) {
               :
               "Não informado"
             }: Última vez que atualizaram na fonte original
-            {resource?.rawDataSource?.[0]?.updates?.[0]?.entity?.slug ?
+            {resource?.rawDataSource?.[0]?.updates?.[0]?.frequency ?
               <Text
                 backgroundColor="#EEEEEE"
                 padding="2px 4px"
@@ -401,7 +421,11 @@ export default function BdmTablePage({ id }) {
                 lineHeight="18px"
                 color="#252A32"
               >
-                {getUpdateFormat(resource?.rawDataSource?.[0]?.updates?.[0]?.entity?.slug)}
+                {resource?.rawDataSource?.[0]?.updates?.[0]?.frequency === 1 ?
+                  getUpdateFormat(resource?.rawDataSource?.[0]?.updates?.[0]?.entity?.slug)
+                :
+                  getUpdateFormat(resource?.rawDataSource?.[0]?.updates?.[0]?.entity?.slug, true, resource?.rawDataSource?.[0]?.updates?.[0]?.frequency)
+                }
               </Text>
             :
             !resource?.rawDataSource?.[0]?.updates?.[0] || !resource?.updates?.[0]?.frequency ?

@@ -63,6 +63,7 @@ async function getBdmTable(id) {
                           node {
                             _id
                             latest
+                            frequency
                             entity {
                               _id
                               slug

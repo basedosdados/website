@@ -38,8 +38,7 @@ export default function MenuDropdown({ title, children, ...style }) {
         onMouseLeave={btnMouseLeaveEvent}
         as={Button}
         fontFamily="Roboto"
-        fontSize="15px"
-        letterSpacing="0.1px"
+        fontSize="14px"
         _active={{ backgroundColor: "transparent" }}
         padding="0px"
         color="#252A32"
