@@ -379,7 +379,7 @@ export default function BdmTablePage({ id }) {
                 }
               </Text>
             }
-            {!resource?.updates?.[0] &&
+            {!resource?.updates?.[0]?.frequency &&
               <Text
                 backgroundColor="#EEEEEE"
                 padding="2px 4px"
