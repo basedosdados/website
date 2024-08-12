@@ -264,6 +264,7 @@ export default function DataInformationQuery({ resource }) {
 
   async function SqlCodeString() {
     const result = await getBigTableQuery(resource._id, checkedColumns, includeTranslation)
+    if(result === null) return 
     setSqlCode(result.trim())
     setIsLoadingCode(false)
   }
@@ -448,15 +449,6 @@ export default function DataInformationQuery({ resource }) {
                   {numberColumns === checkedColumns.length && "Para otimizar a consulta, você pode selecionar menos colunas ou adicionar filtros no BigQuery."}
                 </AlertDiscalimerBox>
               </Skeleton>
-            }
-
-            {columnsTranslationPro.length > 0 && tabAccessIndex !== 1 &&
-              <AlertDiscalimerBox
-                display={isUserPro() ? "none" : "flex"}
-                type="info"
-              >
-                A tabela de tradução da{columnsTranslationPro.length > 1 && "s"} coluna{columnsTranslationPro.length > 1 && "s"} <Text as="span" fontWeight="500">{columnsTranslationPro.map((elm) => elm?.node?.name).join(", ")}</Text> é exclusiva para <Text as="a" href="/precos" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>assinantes</Text>. Todos os demais códigos institucionais são de acesso aberto.
-              </AlertDiscalimerBox>
             }
 
             {insufficientChecks &&

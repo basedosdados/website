@@ -269,6 +269,7 @@ export default function ColumnsTable({
         table: ${resource?._id},
         columnDownload: true
       }`)
+
       window.open(`/api/tables/downloadTable?p=${btoa(cloudTables?.gcpDatasetId)}&q=${btoa(cloudTables?.gcpTableId)}&d=${btoa(downloadInfo.downloadPermitted)}&s=${btoa(downloadInfo.downloadWarning)}`)
     }
 

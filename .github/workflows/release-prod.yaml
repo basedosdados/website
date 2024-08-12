@@ -5,11 +5,12 @@ on:
     branches:
       - main
     paths:
-      - ".github/workflows/release.yaml"
+      - ".github/workflows/release-prod.yaml"
       - "next/**/*"
+  workflow_dispatch:
 
 jobs:
-  release-docker-image-production:
+  release:
     name: Release Docker Image (Production)
     runs-on: ubuntu-latest
     environment:
