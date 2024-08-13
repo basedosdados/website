@@ -209,7 +209,7 @@ export default function DataInformationQuery({ resource }) {
       setGcpTableId(resource.cloudTables[0]?.gcpTableId || "")
     }
 
-    setDownloadUrl(`https://storage.googleapis.com/basedosdados-public/one-click-download/${resource.cloudTables[0]?.gcpDatasetId || ""}/${resource.cloudTables[0]?.gcpTableId || ""}/${resource.cloudTables[0]?.gcpTableId || ""}.csv.gz`)
+    setDownloadUrl(`https://storage.googleapis.com/basedosdados-public/one-click-download/${resource?.cloudTables?.[0]?.gcpDatasetId || ""}/${resource?.cloudTables?.[0]?.gcpTableId || ""}/${resource?.cloudTables?.[0]?.gcpTableId || ""}.csv.gz`)
   }, [resource.numberRows, resource.cloudTables])
 
   useEffect(() => {
