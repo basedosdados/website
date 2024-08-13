@@ -20,7 +20,7 @@ async function validateToken(token) {
 
 async function downloadTable(url, datasetID, tableId, token, res) {
   let payloadToken
-  if(token !== null) payloadToken = await validateToken(token)
+  if(url !== "free" && token !== null) payloadToken = await validateToken(token)
 
   try {
     const fileUrl = url === "free"

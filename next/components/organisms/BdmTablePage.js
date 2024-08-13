@@ -196,16 +196,16 @@ export default function BdmTablePage({ id }) {
     let formats
     {yearFrequency ?
       formats = {
-        "second":`Atualização a cada ${frequency} por segundo`,
-        "minute":`Atualização a cada ${frequency} por minuto`,
-        "hour":`Atualização a cada ${frequency} por hora`,
-        "day":`Atualização a cada ${frequency} diária`,
-        "week":`Atualização a cada ${frequency} semanal`,
-        "month":`Atualização a cada ${frequency} mensal`,
-        "bimester":`Atualização a cada ${frequency} bimestral`,
-        "quarter":`Atualização a cada ${frequency} trimestral`,
-        "semester":`Atualização a cada ${frequency} semestral`,
-        "year":`Atualização a cada ${frequency} anual`,
+        "second":`Atualização a cada ${frequency} segundos`,
+        "minute":`Atualização a cada ${frequency} minutos`,
+        "hour":`Atualização a cada ${frequency} horas`,
+        "day":`Atualização a cada ${frequency} dias`,
+        "week":`Atualização a cada ${frequency} semanas`,
+        "month":`Atualização a cada ${frequency} meses`,
+        "bimester":`Atualização a cada ${frequency} bimestres`,
+        "quarter":`Atualização a cada ${frequency} trimestres`,
+        "semester":`Atualização a cada ${frequency} semestres`,
+        "year":`Atualização a cada ${frequency} anos`,
       }
       :
       formats = {
