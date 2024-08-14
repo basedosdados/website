@@ -444,20 +444,6 @@ export default function BdmTablePage({ id }) {
               :
               <></>
             }
-            {!resource?.rawDataSource?.[0]?.updates?.[0] || !resource?.updates?.[0]?.frequency &&
-              <Text
-                backgroundColor="#EEEEEE"
-                padding="2px 4px"
-                borderRadius="4px"
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="12px"
-                lineHeight="18px"
-                color="#252A32"
-              >
-                Sem previsão de atualização
-              </Text>
-            }
           </Box>
           <Text
             display="flex"
