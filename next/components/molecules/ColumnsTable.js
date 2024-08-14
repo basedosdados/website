@@ -260,6 +260,7 @@ export default function ColumnsTable({
       if(result?.error) return
 
       let cloudTables = result?.cloudTables?.edges[0]?.node
+      const downloadInfo = HasDownloadPermitted(result?.uncompressedFileSize)
 
       triggerGAEvent("download_da_tabela",`{
         gcp: ${cloudTables?.gcpProjectId+"."+cloudTables?.gcpDatasetId+"."+cloudTables?.gcpTableId},
@@ -268,7 +269,8 @@ export default function ColumnsTable({
         table: ${resource?._id},
         columnDownload: true
       }`)
-      window.open(`https://storage.googleapis.com/basedosdados-public/one-click-download/${cloudTables?.gcpDatasetId}/${cloudTables?.gcpTableId}/${cloudTables?.gcpTableId}.csv.gz`)
+
+      window.open(`/api/tables/downloadTable?p=${btoa(cloudTables?.gcpDatasetId)}&q=${btoa(cloudTables?.gcpTableId)}&d=${btoa(downloadInfo.downloadPermitted)}&s=${btoa(downloadInfo.downloadWarning)}`)
     }
 
     return (
@@ -305,14 +307,12 @@ export default function ColumnsTable({
 
     const datasetName = value?.table?.dataset?.name || ""
     const tableName = value?.table?.name || ""
-  
+
     if(gcpDatasetID === "br_bd_diretorios_data_tempo") return "Não precisa de tradução"
     if(gcpDatasetID === "br_bd_diretorios_brasil") {
       if(gcpTableId === "empresa" || gcpTableId === "cep") return "Não precisa de tradução"
     }
     if(value?.name === "ddd") return "Não precisa de tradução"
-
-    const downloadUrl = `https://storage.googleapis.com/basedosdados-public/one-click-download/${gcpDatasetID}/${gcpTableId}/${gcpTableId}.csv.gz`
 
     return (
       <Box>
@@ -325,7 +325,10 @@ export default function ColumnsTable({
             <Text
               as="a"
               target="_blank"
-              href={downloadUrl}
+              href={value?.table?.isClosed || !downloadInfo.downloadPermitted
+                ? `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/dataset/${value?.table?.dataset?._id}?table=${value?.table?._id}`
+                : `/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadInfo.downloadPermitted)}&s=${btoa(downloadInfo.downloadWarning)}`
+              }
               display="flex"
               onClick={() => {
                 if(!downloadInfo.downloadPermitted) return

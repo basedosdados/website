@@ -182,7 +182,10 @@ export default function DatasetPage ({ dataset }) {
                 >
                   Organização
                 </Text>
-                <Link href={`/dataset?organization=${dataset?.organization?.slug || ""}`}>
+                <Text
+                  as="a"
+                  href={`/dataset?organization=${dataset?.organization?.slug || ""}`}
+                >
                   <Text
                     fontFamily="Roboto"
                     fontWeight="400"
@@ -192,7 +195,7 @@ export default function DatasetPage ({ dataset }) {
                   >
                     {dataset?.organization?.name || "Nenhuma organização fornecida."}
                   </Text>
-                </Link>
+                </Text>
               </GridItem>
             </Grid>
           </GridItem>

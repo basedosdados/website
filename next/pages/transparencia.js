@@ -231,12 +231,12 @@ export default function Transparencia({ pages }) {
           gridGap={{ base: "64px", lg: "80px" }}
         >
           <GraphicsBox
-            text="Receitas acumuladas"
+            text="Receitas acumuladas esse ano"
             url="https://perguntas.basedosdados.org/public/question/c41beae5-94d3-41e2-9161-a12492b0cae0#titled=false&bordered=false"
           />
 
           <GraphicsBox 
-            text="Despesas acumuladas"
+            text="Despesas acumuladas esse ano"
             url="https://perguntas.basedosdados.org/public/question/312842db-4ea9-455b-be7a-98d96e742ea7#titled=false&bordered=false"
           />
         </Stack>
