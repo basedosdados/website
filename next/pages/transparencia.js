@@ -311,6 +311,25 @@ export default function Transparencia({ pages }) {
           letterSpacing="0.3px"
           target="_blank"
           color="#42B0FF"
+          href="https://drive.google.com/file/d/1OvqJWAg-m3IRt3NAYZB20uxemNqXJ_MO/view?usp=drive_link"
+        >
+          BD Relatório Anual 2023
+        </Link>
+      </Stack>
+
+      <Stack
+        paddingTop="16px"
+        width="100%"
+        maxWidth="1264px"
+        margin="auto"
+        paddingX="24px"
+      >
+        <Link
+          fontFamily="Ubuntu"
+          fontSize="18px"
+          letterSpacing="0.3px"
+          target="_blank"
+          color="#42B0FF"
           href="https://storage.googleapis.com/basedosdados-website/pdf/bd_relatorio_anual_2022.pdf"
         >
           BD Relatório Anual 2022

@@ -6,36 +6,17 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Head from "next/head";
+import cookies from 'js-cookie';
 import Toggle from "../components/atoms/Toggle";
 import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
+import { withPages } from "../hooks/pages.hook";
 
 import CheckIcon from "../public/img/icons/checkIcon";
 import InfoIcon from '../public/img/icons/infoIcon';
 
-export async function getServerSideProps(context) {
-  const { req, res } = context
-  let user = null
-
-  if(req.cookies.userBD) user = JSON.parse(req.cookies.userBD)
-
-  if (user === null || Object.keys(user).length < 0) {
-    return {
-      props: {
-        username: null,
-        isBDPro: false,
-        isBDEmp: false
-      }
-    }
-  }
-
-  return {
-    props: {
-      username: user.username,
-      isBDPro: user?.proSubscription === "bd_pro",
-      isBDEmp: user?.proSubscription === "bd_pro_empresas"
-    }
-  }
+export async function getStaticProps(context) {
+  return await withPages()
 }
 
 export const CardPrice = ({
@@ -228,7 +209,8 @@ export const CardPrice = ({
               textAlign="center"
               color="#7D7D7D"
               cursor="default"
-              fontWeight="400"
+              fontWeight="500"
+              lineHeight="30px"
               fontFamily="Roboto"
             >
               {button.text}
@@ -293,11 +275,23 @@ export const CardPrice = ({
   )
 }
 
-export default function Price({ username ,isBDPro, isBDEmp }) {
+export function SectionPrice() {
   const [toggleAnual, setToggleAnual] = useState(false)
   const [plans, setPlans] = useState(null)
+  const [username, setUsername] = useState(null)
+  const [isBDPro, setIsBDPro] = useState(false)
+  const [isBDEmp, setIsBDEmp] = useState(false)
 
   useEffect(() => {
+    let user = null
+    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
+
+    if(user != null) {
+      setUsername(user?.username)
+      setIsBDPro(user?.proSubscription === "bd_pro")
+      setIsBDEmp(user?.proSubscription === "bd_pro_empresas")
+    }
+
     async function fecthPlans() {
       try {
         const result = await fetch(`/api/stripe/getPlans`, { method: "GET" })
@@ -332,6 +326,119 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
   }, [])
 
   return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      gridGap="40px"
+    >
+      <Box
+        display="flex"
+        width="100%"
+        flexDirection="row"
+        justifyContent="center"
+        alignitems="center"
+        gap="8px"
+      >
+        <Toggle
+          className="toggle_variant"
+          value={toggleAnual}
+          onChange={() => setToggleAnual(!toggleAnual)}
+        />
+        <Text
+          position="relative"
+          top="-2px"
+          gap="8px"
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="18px"
+          lineHeight="20px"
+          display="flex"
+          alignItems="center"
+          textAlign="center"
+          color="#252A32"
+        >
+          Desconto anual
+          <Text
+            as="span"
+            color="#2B8C4D"
+            backgroundColor="#D5E8DB"
+            fontWeight="500"
+            lineHeight="28px"
+            padding="2px 4px"
+            borderRadius="4px"
+            height="32px"
+          >Economize 20%</Text>
+        </Text>
+      </Box>
+
+      <Stack
+        display={isMobileMod() ? "flex" : "grid"}
+        gridTemplateColumns="repeat(3, 320px)"
+        gridTemplateRows="1fr"
+        justifyContent="center"
+        justifyItems="center"
+        gap="20px"
+        spacing={0}
+      >
+        <CardPrice
+          title="BD Grátis"
+          subTitle={<>Para você descobrir o potencial da plataforma de dados</>}
+          price={"0"}
+          textResource="Recursos:"
+          resources={[
+            {name: "Tabelas tratadas"},
+            {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
+            {name: "Acesso em nuvem"},
+            {name: "Acesso via SQL, Python e R"},
+            {name: "Integração com ferramentas BI"},
+            {name: "Download direto até 100 MB", tooltip: "Esse limite não se aplica ao acesso via SQL, Python e R."},
+          ]}
+          button={{
+            text: "Explorar recursos",
+            href: "/dataset",
+          }}
+        />
+
+        <CardPrice
+          title="BD Pro"
+          subTitle={<>Para você ter acesso aos<br/> dados mais atualizados</>}
+          price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 47}
+          anualPlan={toggleAnual}
+          textResource="Todos os recursos da BD Grátis, mais:"
+          resources={[
+            {name: "Dezenas de bases de alta frequência atualizadas"},
+            {name: "Download direto até 1GB (80% das tabelas da plataforma)", tooltip: "Tabelas maiores que 1 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."}
+          ]}
+          button={{
+            text: isBDPro ? "Plano atual" : `Iniciar teste grátis`,
+            href: username === null ? `/user/login?q=pro&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&q=pro&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}`,
+            isCurrentPlan: isBDPro,
+          }}
+        />
+
+        <CardPrice
+          title="BD Empresas"
+          subTitle={<>Para sua empresa ganhar tempo<br/> e qualidade em decisões</>}
+          price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 350}
+          anualPlan={toggleAnual}
+          textResource="Todos os recursos da BD Pro, mais:"
+          resources={[
+            {name: "Acesso para 10 contas"},
+            {name: "Suporte prioritário via email e Discord"}
+          ]}
+          button={{
+            text: isBDEmp ? "Plano atual" : "Iniciar teste grátis",
+            href: username === null ? `/user/login?q=empresas&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&q=empresas&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}`,
+            isCurrentPlan: isBDEmp,
+          }}
+        />
+      </Stack>
+    </Box>
+  )
+}
+
+export default function Price() {
+  return (
     <MainPageTemplate paddingX="24px">
       <Head>
         <title>Preços – Base dos Dados</title>
@@ -353,6 +460,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
         width="100%"
         maxWidth="1264px"
         flexDirection="column"
+        marginBottom="80px !important"
         margin="auto"
         spacing={0}
       >
@@ -368,109 +476,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
           Compare os planos
         </Text>
 
-        <Box
-          display="flex"
-          width="100%"
-          flexDirection="row"
-          justifyContent="center"
-          alignitems="center"
-          gap="8px"
-        >
-          <Toggle
-            className="toggle_variant"
-            value={toggleAnual}
-            onChange={() => setToggleAnual(!toggleAnual)}
-          />
-          <Text
-            position="relative"
-            top="-2px"
-            gap="8px"
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="18px"
-            lineHeight="20px"
-            display="flex"
-            alignItems="center"
-            textAlign="center"
-            color="#252A32"
-          >
-            Desconto anual
-            <Text
-              as="span"
-              color="#2B8C4D"
-              backgroundColor="#D5E8DB"
-              fontWeight="500"
-              lineHeight="28px"
-              padding="2px 4px"
-              borderRadius="4px"
-              height="32px"
-            >Economize 20%</Text>
-          </Text>
-        </Box>
-
-        <Stack
-          display={isMobileMod() ? "flex" : "grid"}
-          gridTemplateColumns="repeat(3, 320px)"
-          gridTemplateRows="1fr"
-          justifyContent="center"
-          justifyItems="center"
-          marginBottom="80px !important"
-          gap="20px"
-          spacing={0}
-        >
-          <CardPrice
-            title="BD Grátis"
-            subTitle={<>Para você descobrir o potencial da plataforma de dados</>}
-            price={"0"}
-            textResource="Recursos:"
-            resources={[
-              {name: "Tabelas tratadas"},
-              {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
-              {name: "Acesso em nuvem"},
-              {name: "Acesso via SQL, Python e R"},
-              {name: "Integração com ferramentas BI"},
-              {name: "Download direto até 100 MB", tooltip: "Esse limite não se aplica ao acesso via SQL, Python e R."},
-            ]}
-            button={{
-              text: "Explorar recursos",
-              href: "/dataset",
-            }}
-          />
-
-          <CardPrice
-            title="BD Pro"
-            subTitle={<>Para você ter acesso aos<br/> dados mais atualizados</>}
-            price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 47}
-            anualPlan={toggleAnual}
-            textResource="Todos os recursos da BD Grátis, mais:"
-            resources={[
-              {name: "Dezenas de bases de alta frequência atualizadas"},
-              {name: "Download direto até 1GB (80% das tabelas da plataforma)", tooltip: "Tabelas maiores que 5 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."}
-            ]}
-            button={{
-              text: isBDPro ? "Plano atual" : `Iniciar teste grátis`,
-              href: username === null ? `/user/login?q=pro&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&q=pro&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}`,
-              isCurrentPlan: isBDPro,
-            }}
-          />
-
-          <CardPrice
-            title="BD Empresas"
-            subTitle={<>Para sua empresa ganhar tempo<br/> e qualidade em decisões</>}
-            price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 350}
-            anualPlan={toggleAnual}
-            textResource="Todos os recursos da BD Pro, mais:"
-            resources={[
-              {name: "Acesso para 10 contas"},
-              {name: "Suporte prioritário via email e Discord"}
-            ]}
-            button={{
-              text: isBDEmp ? "Plano atual" : "Iniciar teste grátis",
-              href: username === null ? `/user/login?q=empresas&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&q=empresas&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}`,
-              isCurrentPlan: isBDEmp,
-            }}
-          />
-        </Stack>
+        <SectionPrice/>
       </Stack>
     </MainPageTemplate>
 )

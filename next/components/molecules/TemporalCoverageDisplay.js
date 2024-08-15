@@ -5,9 +5,13 @@ import {
   Text,
   Box,
   Tooltip,
+  useDisclosure,
+  ModalCloseButton
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { CalendarComunIcon } from "../../public/img/icons/calendarIcon";
+import { SectionPrice } from "../../pages/precos";
+import { ModalGeneral } from "./uiUserPage";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
 export function TemporalCoverage ({
@@ -126,6 +130,7 @@ export function TemporalCoverageString({
 
 export function TemporalCoverageBar ({ value }) {
   const [values, setValues] = useState({})
+  const plansModal = useDisclosure()
 
   const TextData = ({ string, ...style }) => {
     return (
@@ -168,6 +173,36 @@ export function TemporalCoverageBar ({ value }) {
       alignItems="normal"
       spacing={0}
     >
+      <ModalGeneral
+        isOpen={plansModal.isOpen}
+        onClose={plansModal.onClose}
+        propsModalContent={{
+          minWidth: "fit-content"
+        }}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <Text
+            width="100%"
+            fontFamily="Roboto"
+            fontWeight="400"
+            color="#252A32"
+            fontSize="24px"
+            textAlign="center"
+            lineHeight="40px"
+          >
+            Compare os planos
+          </Text>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", color:"#0B89E2"}}
+          />
+        </Stack>
+
+        <SectionPrice/>
+      </ModalGeneral>
+
       <Tooltip
         hasArrow
         padding="16px"
@@ -303,8 +338,7 @@ export function TemporalCoverageBar ({ value }) {
               fill:"#0057A4",
               backgroundColor:"#E4F2FF"
             }}
-            href="/precos"
-            target="_blank"
+            onClick={() => plansModal.onOpen()}
           >
             PAGO
             <RedirectIcon

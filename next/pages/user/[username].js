@@ -1890,16 +1890,30 @@ const PlansAndPayment = ({ userData }) => {
         isCentered={isMobileMod() ? false : true}
       >
         <Stack spacing={0} marginBottom="16px">
-          <SectionTitle lineHeight="40px" height="40px" textAlign={isMobileMod() ? "start" :"center"}>
+          <Text
+            width="100%"
+            fontFamily="Roboto"
+            fontWeight="400"
+            color="#252A32"
+            fontSize="24px"
+            textAlign="center"
+            lineHeight="40px"
+          >
             Compare os planos
-          </SectionTitle>
+          </Text>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
             right="26px"
             _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
           />
+        </Stack>
 
+        <Box
+          display="flex"
+          flexDirection="column"
+          gridGap="40px"
+        >
           <Box
             display="flex"
             width="100%"
@@ -1907,7 +1921,6 @@ const PlansAndPayment = ({ userData }) => {
             justifyContent="center"
             alignitems="center"
             gap="8px"
-            margin="20px 0 24px !important"
           >
             <Toggle
               value={toggleAnual}
@@ -1939,81 +1952,80 @@ const PlansAndPayment = ({ userData }) => {
               >Economize 20%</Text>
             </Text>
           </Box>
-        </Stack>
 
-        <Stack
-          display={isMobileMod() ? "flex" : {base: "flex", lg: "grid"}}
-          gridTemplateColumns="repeat(3, 320px)"
-          gridTemplateRows="1fr"
-          alignItems={isMobileMod() ? "center" : {base: "center", lg: "inherit"}}
-          justifyContent="center"
-          justifyItems="center"
-          gap="20px"
-          padding="10px"
-          spacing={0}
-        >
-          <CardPrice
-            title="BD Grátis"
-            subTitle={<>Para você descobrir o potencial da plataforma de dados</>}
-            price={"0"}
-            textResource="Recursos:"
-            resources={[
-              {name: "Tabelas tratadas"},
-              {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
-              {name: "Acesso em nuvem"},
-              {name: "Acesso via SQL, Python e R"},
-              {name: "Integração com ferramentas BI"},
-              {name: "Download direto até 100 MB", tooltip: "Esse limite não se aplica ao acesso via SQL, Python e R."},
-            ]}
-            button={{
-              text: "Explorar recursos",
-              href: "/dataset",
-              noHasModal: true,
-            }}
-          />
+          <Stack
+            display={isMobileMod() ? "flex" : {base: "flex", lg: "grid"}}
+            gridTemplateColumns="repeat(3, 320px)"
+            gridTemplateRows="1fr"
+            alignItems={isMobileMod() ? "center" : {base: "center", lg: "inherit"}}
+            justifyContent="center"
+            justifyItems="center"
+            gap="20px"
+            spacing={0}
+          >
+            <CardPrice
+              title="BD Grátis"
+              subTitle={<>Para você descobrir o potencial da plataforma de dados</>}
+              price={"0"}
+              textResource="Recursos:"
+              resources={[
+                {name: "Tabelas tratadas"},
+                {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
+                {name: "Acesso em nuvem"},
+                {name: "Acesso via SQL, Python e R"},
+                {name: "Integração com ferramentas BI"},
+                {name: "Download direto até 100 MB", tooltip: "Esse limite não se aplica ao acesso via SQL, Python e R."},
+              ]}
+              button={{
+                text: "Explorar recursos",
+                href: "/dataset",
+                noHasModal: true,
+              }}
+            />
 
-          <CardPrice
-            title="BD Pro"
-            subTitle={<>Para você ter acesso aos<br/> dados mais atualizados</>}
-            price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 47}
-            anualPlan={toggleAnual}
-            textResource="Todos os recursos da BD Grátis, mais:"
-            resources={[
-              {name: "Dezenas de bases de alta frequência atualizadas"},
-              {name: "Download direto até 1GB (80% das tabelas da plataforma)", tooltip: "Tabelas maiores que 5 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."}
-            ]}
-            button={{
-              text: `${userData?.proSubscription === "bd_pro" ? "Plano atual" : "Assinar"}`,
-              onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => {
-                setPlan({id: plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id})
-                PlansModal.onClose()
-                PaymentModal.onOpen()
-              },
-              isCurrentPlan: userData?.proSubscription === "bd_pro" ? true : false,
-            }}
-          />
+            <CardPrice
+              title="BD Pro"
+              subTitle={<>Para você ter acesso aos<br/> dados mais atualizados</>}
+              price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 47}
+              anualPlan={toggleAnual}
+              textResource="Todos os recursos da BD Grátis, mais:"
+              resources={[
+                {name: "Dezenas de bases de alta frequência atualizadas"},
+                {name: "Download direto até 1GB (80% das tabelas da plataforma)", tooltip: "Tabelas maiores que 1 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."}
+              ]}
+              button={{
+                text: `${userData?.proSubscription === "bd_pro" ? "Plano atual" : "Assinar"}`,
+                onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => {
+                  setPlan({id: plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id})
+                  PlansModal.onClose()
+                  PaymentModal.onOpen()
+                },
+                isCurrentPlan: userData?.proSubscription === "bd_pro" ? true : false,
+              }}
+            />
 
-          <CardPrice
-            title="BD Empresas"
-            subTitle={<>Para sua empresa ganhar tempo<br/> e qualidade em decisões</>}
-            price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 350}
-            anualPlan={toggleAnual}
-            textResource="Todos os recursos da BD Pro, mais:"
-            resources={[
-              {name: "Acesso para 10 contas"},
-              {name: "Suporte prioritário via email e Discord"}
-            ]}
-            button={{
-              text: `${userData?.proSubscription === "bd_pro_empresas" ? "Plano atual" : "Assinar"}`,
-              onClick: userData?.proSubscription === "bd_pro_empresas" ? () => {} : () => {
-                setPlan({id: plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id})
-                PlansModal.onClose()
-                PaymentModal.onOpen()
-              },
-              isCurrentPlan: userData?.proSubscription === "bd_pro_empresas" ? true : false,
-            }}
-          />
-        </Stack>
+            <CardPrice
+              title="BD Empresas"
+              subTitle={<>Para sua empresa ganhar tempo<br/> e qualidade em decisões</>}
+              price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 350}
+              anualPlan={toggleAnual}
+              textResource="Todos os recursos da BD Pro, mais:"
+              resources={[
+                {name: "Acesso para 10 contas"},
+                {name: "Suporte prioritário via email e Discord"}
+              ]}
+              button={{
+                text: `${userData?.proSubscription === "bd_pro_empresas" ? "Plano atual" : "Assinar"}`,
+                onClick: userData?.proSubscription === "bd_pro_empresas" ? () => {} : () => {
+                  setPlan({id: plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id})
+                  PlansModal.onClose()
+                  PaymentModal.onOpen()
+                },
+                isCurrentPlan: userData?.proSubscription === "bd_pro_empresas" ? true : false,
+              }}
+            />
+          </Stack>
+        </Box>
       </ModalGeneral>
 
       <ModalGeneral
