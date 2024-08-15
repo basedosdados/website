@@ -10,7 +10,9 @@ import {
   useClipboard,
   Tooltip,
   Skeleton,
-  Stack
+  Stack,
+  useDisclosure,
+  ModalCloseButton
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 import hljs from "highlight.js/lib/core";
@@ -23,6 +25,8 @@ import 'highlight.js/styles/obsidian.css'
 import GreenTab from "../atoms/GreenTab";
 import Toggle from "../atoms/Toggle";
 import ColumnsTable from "./ColumnsTable";
+import { SectionPrice } from "../../pages/precos";
+import { ModalGeneral } from "./uiUserPage";
 import { AlertDiscalimerBox} from "./DisclaimerBox";
 import { triggerGAEvent, formatBytes } from "../../utils";
 
@@ -182,6 +186,7 @@ export default function DataInformationQuery({ resource }) {
   const [hasLoadingColumns, setHasLoadingColumns] = useState(true)
   const [isLoadingCode, setIsLoadingCode] = useState(false)
   const [hasLoadingResponse, setHasLoadingResponse] = useState(false)
+  const plansModal = useDisclosure()
 
   const [gcpProjectID, setGcpProjectID] = useState("")
   const [gcpDatasetID, setGcpDatasetID] = useState("")
@@ -297,6 +302,36 @@ export default function DataInformationQuery({ resource }) {
       border="1px solid #DEDFE0"
       borderRadius="16px"
     >
+      <ModalGeneral
+        isOpen={plansModal.isOpen}
+        onClose={plansModal.onClose}
+        propsModalContent={{
+          minWidth: "fit-content"
+        }}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <Text
+            width="100%"
+            fontFamily="Roboto"
+            fontWeight="400"
+            color="#252A32"
+            fontSize="24px"
+            textAlign="center"
+            lineHeight="40px"
+          >
+            Compare os planos
+          </Text>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", color:"#0B89E2"}}
+          />
+        </Stack>
+
+        <SectionPrice/>
+      </ModalGeneral>
+
       <Tabs
         width="100%"
         variant="unstyled"
@@ -563,9 +598,10 @@ export default function DataInformationQuery({ resource }) {
 
               <Box
                 as="a"
-                href={`/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadPermitted)}&s=${btoa(downloadWarning)}`}
+                href={isUserPro() || downloadWarning === "free" && `/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadPermitted)}&s=${btoa(downloadWarning)}`}
                 target="_blank"
-                onClick={() => { 
+                onClick={() => {
+                  if(downloadWarning === "100mbBetween1gb") return plansModal.onOpen()
                   triggerGAEvent("download_da_tabela",`{
                     gcp: ${gcpProjectID+"."+gcpDatasetID+"."+gcpTableId},
                     tamanho: ${formatBytes(resource.uncompressedFileSize) || ""},
@@ -578,9 +614,9 @@ export default function DataInformationQuery({ resource }) {
                 height="40px"
                 width="fit-content"
                 borderRadius="8px"
-                backgroundColor={downloadPermitted ? "#2B8C4D" : "#ACAEB1"}
+                backgroundColor={downloadWarning !== "biggest1gb" ? "#2B8C4D" : "#ACAEB1"}
                 padding="8px 16px"
-                cursor={downloadPermitted ? "pointer" : "default"}
+                cursor={downloadWarning !== "biggest1gb" ? "pointer" : "default"}
                 color="#FFF"
                 fill="#FFF"
                 fontFamily="Roboto"
@@ -588,7 +624,7 @@ export default function DataInformationQuery({ resource }) {
                 fontSize="14px"
                 gap="8px"
                 lineHeight="20px"
-                pointerEvents={downloadPermitted ? "default" : "none"}
+                pointerEvents={downloadWarning !== "biggest1gb" ? "default" : "none"}
                 _hover={{
                   backgroundColor: "#22703E"
                 }}
@@ -597,7 +633,7 @@ export default function DataInformationQuery({ resource }) {
                   width="24px"
                   height="24px"
                 />
-                  Download da tabela {downloadPermitted && `(${formatBytes(resource.uncompressedFileSize)})`}
+                  Download da tabela {downloadWarning !== "biggest1gb" && `(${formatBytes(resource.uncompressedFileSize)})`}
               </Box>
             </Stack>
           </VStack>
