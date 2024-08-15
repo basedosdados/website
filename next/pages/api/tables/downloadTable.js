@@ -25,7 +25,7 @@ async function downloadTable(url, datasetID, tableId, token, res) {
   try {
     const fileUrl = url === "free"
     ? `${process.env.URL_DOWNLOAD_TABLE}/${datasetID}/${tableId}/${tableId}.csv.gz`
-    : payloadToken?.pro_subscription_status === "active" ? `${process.env.URL_DOWNLOAD_PRIVATE_TABLE}/${datasetID}/${tableId}/${tableId}.csv.gz` : ""
+    : payloadToken?.pro_subscription_status === "active" ? `${process.env.URL_DOWNLOAD_PRIVATE_TABLE}/${datasetID}/${tableId}/${tableId}_bdpro.csv.gz` : ""
 
     const response = await axios({
         url: fileUrl,

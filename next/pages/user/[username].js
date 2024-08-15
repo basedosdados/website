@@ -1901,7 +1901,7 @@ const PlansAndPayment = ({ userData }) => {
           />
 
           <Box
-            display="none"
+            display="flex"
             width="100%"
             flexDirection="row"
             justifyContent="center"
@@ -1914,18 +1914,29 @@ const PlansAndPayment = ({ userData }) => {
               onChange={() => setToggleAnual(!toggleAnual)}
             />
             <Text
+              position="relative"
+              top="-2px"
               gap="8px"
-              fontFamily="Ubuntu"
+              fontFamily="Roboto"
               fontWeight="400"
-              fontSize={isMobileMod() ? "16px" : "18px"}
-              lineHeight="24px"
+              fontSize="18px"
+              lineHeight="20px"
               display="flex"
               alignItems="center"
               textAlign="center"
-              letterSpacing="0.1px"
               color="#252A32"
             >
-              Desconto anual <Text color="#2B8C4D">Economize 20%</Text>
+              Desconto anual
+              <Text
+                as="span"
+                color="#2B8C4D"
+                backgroundColor="#D5E8DB"
+                fontWeight="500"
+                lineHeight="28px"
+                padding="2px 4px"
+                borderRadius="4px"
+                height="32px"
+              >Economize 20%</Text>
             </Text>
           </Box>
         </Stack>
@@ -1964,7 +1975,7 @@ const PlansAndPayment = ({ userData }) => {
           <CardPrice
             title="BD Pro"
             subTitle={<>Para você ter acesso aos<br/> dados mais atualizados</>}
-            price={plans?.["bd_pro_month"].amount || 47}
+            price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 47}
             anualPlan={toggleAnual}
             textResource="Todos os recursos da BD Grátis, mais:"
             resources={[
@@ -1974,7 +1985,7 @@ const PlansAndPayment = ({ userData }) => {
             button={{
               text: `${userData?.proSubscription === "bd_pro" ? "Plano atual" : "Assinar"}`,
               onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => {
-                setPlan({id: plans?.["bd_pro_month"]._id})
+                setPlan({id: plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id})
                 PlansModal.onClose()
                 PaymentModal.onOpen()
               },
@@ -1985,7 +1996,7 @@ const PlansAndPayment = ({ userData }) => {
           <CardPrice
             title="BD Empresas"
             subTitle={<>Para sua empresa ganhar tempo<br/> e qualidade em decisões</>}
-            price={plans?.["bd_empresas_month"].amount || 350}
+            price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 350}
             anualPlan={toggleAnual}
             textResource="Todos os recursos da BD Pro, mais:"
             resources={[
@@ -1995,7 +2006,7 @@ const PlansAndPayment = ({ userData }) => {
             button={{
               text: `${userData?.proSubscription === "bd_pro_empresas" ? "Plano atual" : "Assinar"}`,
               onClick: userData?.proSubscription === "bd_pro_empresas" ? () => {} : () => {
-                setPlan({id: plans?.["bd_empresas_month"]._id})
+                setPlan({id: plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id})
                 PlansModal.onClose()
                 PaymentModal.onOpen()
               },

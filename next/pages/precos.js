@@ -3,7 +3,6 @@ import {
   Stack,
   Text,
   Tooltip,
-  Badge,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Head from "next/head";
@@ -41,7 +40,6 @@ export async function getServerSideProps(context) {
 
 export const CardPrice = ({
   title,
-  badge,
   subTitle,
   price,
   anualPlan = false,
@@ -116,7 +114,7 @@ export const CardPrice = ({
               lineHeight="60px"
               fontFamily="Roboto"
               textAlign="center"
-            >R$ {price}</Text>
+            >R$ {anualPlan ? price/12 : price}</Text>
             <Text
               position="relative"
               top="16px"
@@ -139,7 +137,7 @@ export const CardPrice = ({
               color="#464A51"
               marginTop="24px"
               alignItems="center"
-            >{(price*12).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 })} cobrado uma vez no ano</Text>
+            >{(price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 })} cobrado uma vez no ano</Text>
           }
         </Box>
       </Box>
@@ -371,7 +369,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
         </Text>
 
         <Box
-          display="none"
+          display="flex"
           width="100%"
           flexDirection="row"
           justifyContent="center"
@@ -379,22 +377,34 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
           gap="8px"
         >
           <Toggle
+            className="toggle_variant"
             value={toggleAnual}
             onChange={() => setToggleAnual(!toggleAnual)}
           />
           <Text
+            position="relative"
+            top="-2px"
             gap="8px"
-            fontFamily="Ubuntu"
+            fontFamily="Roboto"
             fontWeight="400"
             fontSize="18px"
-            lineHeight="24px"
+            lineHeight="20px"
             display="flex"
             alignItems="center"
             textAlign="center"
-            letterSpacing="0.1px"
             color="#252A32"
           >
-            Desconto anual <Text as="span" color="#2B8C4D">Economize 20%</Text>
+            Desconto anual
+            <Text
+              as="span"
+              color="#2B8C4D"
+              backgroundColor="#D5E8DB"
+              fontWeight="500"
+              lineHeight="28px"
+              padding="2px 4px"
+              borderRadius="4px"
+              height="32px"
+            >Economize 20%</Text>
           </Text>
         </Box>
 
@@ -430,7 +440,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
           <CardPrice
             title="BD Pro"
             subTitle={<>Para você ter acesso aos<br/> dados mais atualizados</>}
-            price={plans?.["bd_pro_month"].amount || 47}
+            price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 47}
             anualPlan={toggleAnual}
             textResource="Todos os recursos da BD Grátis, mais:"
             resources={[
@@ -439,7 +449,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
             ]}
             button={{
               text: isBDPro ? "Plano atual" : `Iniciar teste grátis`,
-              href: username === null ? `/user/login?q=pro&i=${plans?.["bd_pro_month"]._id}` :`/user/${username}?plans_and_payment&q=pro&i=${plans?.["bd_pro_month"]._id}`,
+              href: username === null ? `/user/login?q=pro&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&q=pro&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}`,
               isCurrentPlan: isBDPro,
             }}
           />
@@ -447,7 +457,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
           <CardPrice
             title="BD Empresas"
             subTitle={<>Para sua empresa ganhar tempo<br/> e qualidade em decisões</>}
-            price={plans?.["bd_empresas_month"].amount || 350}
+            price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 350}
             anualPlan={toggleAnual}
             textResource="Todos os recursos da BD Pro, mais:"
             resources={[
@@ -456,7 +466,7 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
             ]}
             button={{
               text: isBDEmp ? "Plano atual" : "Iniciar teste grátis",
-              href: username === null ? `/user/login?q=empresas&i=${plans?.["bd_empresas_month"]._id}` :`/user/${username}?plans_and_payment&q=empresas&i=${plans?.["bd_empresas_month"]._id}`,
+              href: username === null ? `/user/login?q=empresas&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&q=empresas&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}`,
               isCurrentPlan: isBDEmp,
             }}
           />
