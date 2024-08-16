@@ -6,6 +6,10 @@ async function updateProfileSurvey({
   id,
   workArea,
   workRole,
+  workSize,
+  workDataTool,
+  workGoal,
+  discoveryMethod,
   availableForResearch
 }, token, skip
 ) {
@@ -18,6 +22,10 @@ async function updateProfileSurvey({
             availableForResearch: "NO"
             workArea: null
             workRole: null
+            workSize: null
+            workDataTool: "NONE"
+            workGoal: null
+            discoveryMethod: null
           }  
         )
         {
@@ -35,6 +43,10 @@ async function updateProfileSurvey({
             id: "${id}"
             workArea: "${workArea}"
             workRole: "${workRole}"
+            workSize: "${workSize}"
+            workDataTool: "${workDataTool}"
+            workGoal: "${workGoal}"
+            discoveryMethod: "${discoveryMethod}"
             availableForResearch: "${availableForResearch}"
           }  
         )
@@ -69,12 +81,16 @@ async function updateProfileSurvey({
 export default async function handler(req, res) {
   const token = req.cookies.token
 
-  const { p, f, l, e, s} = req.query
+  const { p, f, l, i, t, g, d, e, s} = req.query
 
   const object = {
     id:atob(p),
     workArea:atob(f),
     workRole:atob(l),
+    workSize:atob(i),
+    workDataTool:atob(t),
+    workGoal:atob(g),
+    discoveryMethod:atob(d),
     availableForResearch:atob(e),
   }
 

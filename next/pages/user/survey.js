@@ -5,7 +5,7 @@ import {
   Progress,
   Spinner
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import cookies from 'js-cookie';
 
 import Button from "../../components/atoms/Button";
@@ -23,21 +23,32 @@ export async function getStaticProps() {
 export default function Survey() {
   const [err, setErr] = useState("")
   const [index, setIndex] = useState(0)
-  const [stageOne, setStageOne] = useState([])
-  const [stageTwo, setStageTwo] = useState([])
-  const [stageThree, setStageThree] = useState([])
+  const [stages, setStages] = useState(Array(7).fill([]))
   const [isLoading, setIsLoading] = useState(false)
 
   async function fetchUpdateProfileSurvey(skip) {
     setIsLoading(true)
-    const id = JSON.parse(cookies.get("userBD")).id.replace(new RegExp('\\bAccountNode:\\b', 'gi'), '')
-    const result = await fetch(`/api/user/updateProfileSurvey?p=${btoa(id)}&f=${btoa(stageOne[0] || "")}&l=${btoa(stageTwo[0] || "")}&e=${btoa(stageThree[0] || "")}&s=${skip}`, { method: "GET" })
+    const id = JSON.parse(cookies.get("userBD")).id.replace(/\bAccountNode:\b/g, '')
+    const params = {
+      p: btoa(id),
+      f: btoa(stages[0][0] || ""),
+      l: btoa(stages[1][0] || ""),
+      i: btoa(stages[2][0] || ""),
+      t: btoa(stages[3][0] || ""),
+      g: btoa(stages[4][0] || ""),
+      d: btoa(stages[5][0] || ""),
+      e: btoa(stages[6][0] || ""),
+      s: skip
+    }
+
+    const queryString = new URLSearchParams(params).toString()
+    const result = await fetch(`/api/user/updateProfileSurvey?${queryString}`, { method: "GET" })
       .then(res => res.json())
 
     if(result.errors.length > 0) {
       setErr("Ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde.")
       console.error(result.errors)
-      setIsLoading(false)
+      return setIsLoading(false)
     }
 
     const userData = await fetch(`/api/user/getUser?p=${btoa(id)}`, { method: "GET" })
@@ -60,13 +71,14 @@ export default function Survey() {
         ["Jornalismo", "JORNALISMO"],
         ["Outra", "OUTRA"]
       ],
-      buttons: [{ text: "Pular", style: "clean",function: async () => fetchUpdateProfileSurvey("true")},
-      {text: "Continuar", function: () => {
-        if(stageOne.length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
-        setErr("")
-        setIndex(1)
-      }}],
-      stage: setStageOne
+      buttons: [
+        {text: "Pular", style: "clean",function: async () => fetchUpdateProfileSurvey("true")},
+        {text: "Continuar", function: () => {
+          if(stages[0].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
+          setErr("")
+          setIndex(1)
+        }}
+      ],
     },
     {
       question: "Qual o seu cargo?",
@@ -85,45 +97,118 @@ export default function Survey() {
         ["Empreendedor(a)", "EMPREENDEDOR"],
         ["Outro", "OUTRO"]
       ],
-      buttons: [{text: "Voltar", function: () => setIndex(0), style: "clean"}, {text: "Continuar", function: () => {
-        if(stageTwo.length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
-        setErr("")
-        setIndex(2)
-      }}],
-      stage: setStageTwo
+      buttons: [
+        {text: "Voltar", function: () => setIndex(0), style: "clean"},
+        {text: "Continuar", function: () => {
+          if(stages[1].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
+          setErr("")
+          setIndex(2)
+        }}
+      ]
+    },
+    {
+      question: "Qual o tamanho da empresa em que você trabalha?",
+      options: [
+        ["1-10 funcionários", "PEQUENA_1_10"],
+        ["11-50 funcionários", "PEQUENA_11_50"],
+        ["51-200 funcionários", "MEDIA_51_200"],
+        ["201-500 funcionários", "MEDIA_201_500"],
+        ["Mais de 500 funcionários", "GRANDE_MAIS_500"],
+      ],
+      buttons: [
+        {text: "Voltar", function: () => setIndex(1), style: "clean"},
+        {text: "Continuar", function: () => {
+          if(stages[2].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
+          setErr("")
+          setIndex(3)
+        }}
+      ]
+    },
+    {
+      question: "Qual a principal ferramenta que você utiliza para realizar análises de dados?",
+      options: [
+        ["SQL", "SQL"],
+        ["Python", "PYTHON"],
+        ["R", "R"],
+        ["Stata", "STATA"],
+        ["Excel", "EXCEL"],
+        ["Nenhuma", "NONE"],
+        ["Outra", "OTHER"],
+      ],
+      buttons: [
+        {text: "Voltar", function: () => setIndex(2), style: "clean"},
+        {text: "Continuar", function: () => {
+          if(stages[3].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
+          setErr("")
+          setIndex(4)
+        }}
+      ]
+    },
+    {
+      question: "Qual o seu principal objetivo com a BD?",
+      options: [
+        ["Análise de mercado", "MARKET_ANALYSIS"],
+        ["Monitoramento de concorrência", "COMPETITOR_MONITORING"],
+        ["Pesquisa acadêmica", "ACADEMIC_RESEARCH"],
+        ["Gestão de riscos", "RISK_MANAGEMENT"],
+        ["Desenvolvimento de produto", "PRODUCT_DEVELOPMENT"],
+        ["Compliance e regulatório", "COMPLIANCE_REGULATORY"],
+        ["Análise de políticas públicas", "PUBLIC_POLICY_ANALYSIS"],
+        ["Outro", "OTHER"],
+      ],
+      buttons: [
+        {text: "Voltar", function: () => setIndex(3), style: "clean"},
+        {text: "Continuar", function: () => {
+          if(stages[4].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
+          setErr("")
+          setIndex(5)
+        }}
+      ]
+    },
+    {
+      question: "Como você conheceu a BD?",
+      options: [
+        ["Redes sociais", "SOCIAL_MEDIA"],
+        ["Indicação", "REFERRAL"],
+        ["Pesquisa online", "ONLINE_SEARCH"],
+        ["Eventos", "EVENTS"],
+        ["Publicidade", "ADVERTISING"],
+        ["Outros", "OTHER"],
+      ],
+      buttons: [
+        {text: "Voltar", function: () => setIndex(4), style: "clean"},
+        {text: "Continuar", function: () => {
+          if(stages[5].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
+          setErr("")
+          setIndex(6)
+        }}
+      ]
     },
     {
       question: "Estamos sempre buscando aprimorar a plataforma e consideramos fundamental ouvir a nossa comunidade nesse processo. Podemos contatar você para futuras pesquisas?",
       options: [["Sim", "YES"], ["Não", "NO"]],
-      buttons: [{text: "Voltar", function: () => setIndex(1), style: "clean"}, {text: "Enviar", function: () => {
-        if(stageThree.length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
+      buttons: [{text: "Voltar", function: () => setIndex(5), style: "clean"}, {text: "Enviar", function: () => {
+        if(stages[6].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
         setErr("")
         fetchUpdateProfileSurvey("false")
-      }}],
-      stage: setStageThree
+      }}]
     }
   ]
 
-  const selectedValueStage = (elm) => {
-    if(index === 0) return stageOne.includes(elm)
-    if(index === 1) return stageTwo.includes(elm)
-    if(index === 2) return stageThree.includes(elm)
-  }
+  const handleSelected = useCallback((value, stageIndex) => {
+    setStages((prevStages) => prevStages.map((stage, i) => 
+      i === stageIndex ? (stage.includes(value) ? [] : [value]) : stage
+    ))
+  }, [])
 
-  const progressValue = () => {
-    const value = [20, 60, 100]
-    return value[index]
-  }
+  const selectedValueStage = useCallback((value, stageIndex) => {
+    return stages[stageIndex].includes(value)
+  }, [stages])
 
-  function handleSelected(value, setStage) {
-    setStage((stage) => {
-      if (stage.includes(value)) {
-        return []
-      } else {
-        return [value]
-      }
-    })
-  }
+  const progressValue = useCallback(() => {
+    const values = [15, 30, 45, 60, 75, 90, 100]
+    return values[index]
+  }, [index])
 
   return (
     <MainPageTemplate
@@ -148,19 +233,24 @@ export default function Survey() {
           lineHeight="48px"
           marginY="64px"
           color="#252A32"
-        >{question[index].question}</Text>
+        >
+          {question[index].question}
+        </Text>
 
-        <Text
-          display={err ? "flex" : "none"}
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="18px"
-          lineHeight="28px"
-          marginBottom="40px !important"
-          alignItems="center"
-          gap="8px"
-          color="#D93B3B"
-        ><Exclamation fill="#D93B3B"/>{err}</Text>
+        {err && (
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="18px"
+            lineHeight="28px"
+            marginBottom="40px !important"
+            alignItems="center"
+            gap="8px"
+            color="#D93B3B"
+          >
+            <Exclamation fill="#D93B3B" /> {err}
+          </Text>
+        )}
 
         <Stack
           flexDirection="row"
@@ -174,14 +264,14 @@ export default function Survey() {
             <Box
               key={i}
               value={elm[1]}
-              onClick={() => handleSelected(elm[1], question[index].stage)}
+              onClick={() => handleSelected(elm[1], index)}
               pointerEvents={isLoading ? "none" : "default"}
               borderRadius="16px"
               cursor="pointer"
-              border={selectedValueStage(elm[1]) ? "2px solid #42B0FF" : "1px solid #DEDFE0"}
-              backgroundColor={selectedValueStage(elm[1]) ? "#CFEBFE" : "#FFF"}
+              border={selectedValueStage(elm[1], index) ? "2px solid #42B0FF" : "1px solid #DEDFE0"}
+              backgroundColor={selectedValueStage(elm[1], index) ? "#CFEBFE" : "#FFF"}
               width="fit-content"
-              padding={selectedValueStage(elm[1]) ? "11px" : "12px"}
+              padding={selectedValueStage(elm[1], index) ? "11px" : "12px"}
               fontFamily="Roboto"
               fontWeight="500"
               fontSize="18px"
@@ -231,7 +321,7 @@ export default function Survey() {
                   backgroundColor: elm.style ? "" : "#0B89E2"
                 }}
               >
-                {isLoading ? elm.text === "Pular" || elm.text === "Enviar"  ? <Spinner /> : elm.text : elm.text}
+                {isLoading ? (elm.text === "Pular" || elm.text === "Enviar")  ? <Spinner /> : elm.text : elm.text}
               </Button>
             )}
           </Stack>
