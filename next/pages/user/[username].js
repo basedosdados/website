@@ -10,7 +10,6 @@ import {
   Image,
   Tooltip,
   HStack,
-  Checkbox,
   useDisclosure,
   ModalCloseButton,
   UnorderedList,
@@ -33,13 +32,13 @@ import cookies from 'js-cookie';
 import { serialize } from 'cookie';
 import { MainPageTemplate } from "../../components/templates/main";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
+import Checkbox from "../../components/atoms/Checkbox";
 import BigTitle from "../../components/atoms/BigTitle";
 import SectionTitle from "../../components/atoms/SectionTitle";
 import RoundedButton from "../../components/atoms/RoundedButton";
 import ButtonSimple from "../../components/atoms/SimpleButton";
 import InputForm from "../../components/atoms/SimpleInput";
 import Link from "../../components/atoms/Link";
-import BodyText from "../../components/atoms/BodyText";
 import Toggle from "../../components/atoms/Toggle";
 import { CardPrice } from "../precos";
 import PaymentSystem from "../../components/organisms/PaymentSystem";
@@ -65,7 +64,7 @@ import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
 import CrossIcon from "../../public/img/icons/crossIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
-import SucessIcon from "../../public/img/icons/sucessIcon";
+import { SuccessIcon } from "../../public/img/icons/successIcon";
 import ErrIcon from "../../public/img/icons/errIcon";
 import stylesPS from "../../styles/paymentSystem.module.css";
 
@@ -352,21 +351,30 @@ const ProfileConfiguration = ({ userInfo }) => {
             startColor="#F0F0F0"
             endColor="#F3F3F3"
           >
-            <Checkbox
-              id="isEmailVisible"
-              name="isEmailVisible"
-              defaultChecked={formData.isEmailVisible}
-              checked={formData.isEmailVisible}
-              onChange={handleCheckboxChange}
-              color="#7D7D7D"
-              fontFamily="Ubuntu"
-              fontSize="14px"
-              fontWeight="400"
-              lineHeight="20px"
-              letterSpacing="0.3px"
+            <label
+              style={{
+                display:"flex",
+                flexDirection:"row",
+                gap:"8px",
+                cursor:"pointer",
+                alignItems:"center",
+                color:"#7D7D7D",
+                fontFamily:"Ubuntu",
+                fontSize:"14px",
+                fontWeight:"400",
+                lineHeight:"20px",
+                letterSpacing:"0.3px",
+              }}
             >
+              <Checkbox
+                id="isEmailVisible"
+                name="isEmailVisible"
+                defaultChecked={formData.isEmailVisible}
+                checked={formData.isEmailVisible}
+                onChange={handleCheckboxChange}
+              />
               Tornar o e-mail de acesso à sua conta visível para o público.
-            </Checkbox>
+            </label>
           </SkeletonText>
         </FormControl>
 
@@ -1702,7 +1710,7 @@ const PlansAndPayment = ({ userData }) => {
           marginBottom="24px"
           spacing={0}
         >
-          <SucessIcon
+          <SuccessIcon
             width="90px"
             height="64px"
             fill="#34A15A"
@@ -1914,34 +1922,33 @@ const PlansAndPayment = ({ userData }) => {
         >
           <CardPrice
             title="BD Grátis"
-            subTitle={<BodyText>Para você descobrir o potencial da plataforma de dados</BodyText>}
+            subTitle={<>Para você descobrir o potencial da plataforma de dados</>}
             price={"0"}
             textResource="Recursos:"
             resources={[
               {name: "Tabelas tratadas"},
               {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
               {name: "Acesso em nuvem"},
-              {name: "Acesso via SQL, Python, R e Stata"},
+              {name: "Acesso via SQL, Python e R"},
               {name: "Integração com ferramentas BI"},
+              {name: "Download direto até 100 MB", tooltip: "Esse limite não se aplica ao acesso via SQL, Python e R."},
             ]}
             button={{
               text: "Explorar recursos",
               href: "/dataset",
-              target: "_self",
               noHasModal: true,
-              color: "#FFF",
-              colorText: "#42B0FF"
             }}
           />
 
           <CardPrice
             title="BD Pro"
-            subTitle={<BodyText>Para você ter acesso aos<br/> dados mais atualizados</BodyText>}
+            subTitle={<>Para você ter acesso aos<br/> dados mais atualizados</>}
             price={priceBDPro}
             anualPlan={toggleAnual}
             textResource="Todos os recursos da BD Grátis, mais:"
             resources={[
               {name: "Dezenas de bases de alta frequência atualizadas"},
+              {name: "Download direto até 1GB (80% das tabelas da plataforma)", tooltip: "Tabelas maiores que 5 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."}
             ]}
             button={{
               text: `${userData?.proSubscription === "bd_pro" ? "Plano atual" : "Assinar"}`,
@@ -1956,12 +1963,13 @@ const PlansAndPayment = ({ userData }) => {
 
           <CardPrice
             title="BD Empresas"
-            subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
+            subTitle={<>Para sua empresa ganhar tempo<br/> e qualidade em decisões</>}
             price={priceBDEmp}
             anualPlan={toggleAnual}
             textResource="Todos os recursos da BD Pro, mais:"
             resources={[
-              {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
+              {name: "Acesso para 10 contas"},
+              {name: "Suporte prioritário via email e Discord"}
             ]}
             button={{
               text: `${userData?.proSubscription === "bd_pro_empresas" ? "Plano atual" : "Assinar"}`,

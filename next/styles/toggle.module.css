@@ -36,3 +36,19 @@
   width: 21px;
   height: 21px;
 }
+
+.toggle span:hover {
+  background-color: #71757A;
+}
+
+.toggle span span:hover {
+  background-color: #FFF;
+}
+
+.toggle span[data-checked]:hover {
+  background-color: #22703E;
+}
+
+.toggle span[data-checked] span:hover {
+  background-color: #FFF;
+}

@@ -22,6 +22,7 @@
     "framer-motion": "^4.1.17",
     "fuzzy-search": "^3.2.1",
     "gray-matter": "^4.0.3",
+    "highlight.js": "^11.9.0",
     "js-cookie": "^3.0.5",
     "next": "^12.3.4",
     "next-logger": "4.0.0",

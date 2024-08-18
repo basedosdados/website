@@ -4,20 +4,24 @@ import { Tab } from "@chakra-ui/react";
 export default function GreenTab({ children, ...style }) {
   return (
     <Tab
-      fontFamily="ubuntu"
-      fontSize="18px"
-      fontWeight="400"
-      letterSpacing="0.1px"
-      color="#252A32"
-      padding="8px 16px 12px"
-      _hover={{
-        borderBottom: "3px solid #D0D0D0"
-      }}
+      position="relative"
+      top="1px"
+      fontFamily="Roboto"
+      fontWeight="500"
+      fontSize="14px"
+      lineHeight="20px"
+      color="#71757A"
+      fill="#71757A"
+      padding="12px 24px 13px"
       _selected={{
         color: "#2B8C4D",
-        fontWeight: "700",
-        borderBottom: "3px solid #2B8C4D",
-        pointerEvents: "none"
+        fill:"#2B8C4D",
+        pointerEvents: "none",
+        borderBottom: "3px solid #2B8C4D"
+      }}
+      _hover={{
+        color: "#464A51",
+        fill: "#464A51"
       }}
       {...style}
     >

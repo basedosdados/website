@@ -37,7 +37,7 @@ export default function TermsAndPolitics() {
     if(id === "terms") {
       targetElement = document.getElementById("Termos de Serviço")
       setSectionSelected("Termos de Serviço")
-      movedScroll(useCheckMobile() ? 210 : 80)
+      movedScroll(useCheckMobile() ? 210 : 120)
     }
     if(id === "privacy") {
       targetElement = document.getElementById("Políticas de Privacidade")
@@ -100,8 +100,7 @@ export default function TermsAndPolitics() {
       <VStack
         width="100%"
         maxWidth="1264px"
-        margin="auto"
-        paddingTop={isMobileMod() && "80px"}
+        margin="50px auto 0"
         spacing={0}
       >
         <Display
