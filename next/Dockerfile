@@ -12,6 +12,9 @@ RUN \
     else echo "Lockfile not found." && exit 1; \
     fi
 
+ARG URL_DOWNLOAD_CLOSED
+ARG URL_DOWNLOAD_OPEN
+
 # Rebuild the source code only when needed
 FROM node:18.17.0-alpine AS builder
 
@@ -39,6 +42,9 @@ RUN npm run build
 # Production image, copy all the files and run next
 FROM node:18.17.0-alpine AS runner
 WORKDIR /app
+
+ARG URL_DOWNLOAD_CLOSED
+ARG URL_DOWNLOAD_OPEN
 
 ENV NODE_ENV production
 ENV NODE_OPTIONS '-r next-logger'
