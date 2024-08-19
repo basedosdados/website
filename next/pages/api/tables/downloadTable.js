@@ -22,10 +22,19 @@ async function downloadTable(url, datasetID, tableId, token, res) {
   let payloadToken
   if(url !== "free" && token !== null) payloadToken = await validateToken(token)
 
+  const urlDownloadOpen = process.env.URL_DOWNLOAD_OPEN.replace("gs://", "")
+  const urlDownloadClosed = process.env.URL_DOWNLOAD_CLOSED.replace("gs://", "")
+
+  const prefixUrl = "https://storage.googleapis.com/"
+
   try {
-    const fileUrl = url === "free"
-    ? `${process.env.URL_DOWNLOAD_TABLE}/${datasetID}/${tableId}/${tableId}.csv.gz`
-    : payloadToken?.pro_subscription_status === "active" ? `${process.env.URL_DOWNLOAD_PRIVATE_TABLE}/${datasetID}/${tableId}/${tableId}_bdpro.csv.gz` : ""
+    let fileUrl = ""
+
+    if(url === "free") {
+      fileUrl =`${prefixUrl}${urlDownloadOpen}${datasetID}/${tableId}/${tableId}.csv.gz`
+    }else if(payloadToken?.pro_subscription_status === "active") {
+      fileUrl = `${prefixUrl}${urlDownloadClosed}${datasetID}/${tableId}/${tableId}_bdpro.csv.gz`
+    }
 
     const response = await axios({
         url: fileUrl,

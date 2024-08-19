@@ -85,7 +85,7 @@ export default function Login() {
       return window.open(`/user/${userData.username}?plans_and_payment&q=${query.q}&i=${query.i}`, "_self")
     }
 
-    if(userData.availableForResearch === null) return window.open("/user/survey", "_self")
+    if(userData.workDataTool === null) return window.open("/user/survey", "_self")
     return window.open("/", "_self")
   }
 

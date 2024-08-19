@@ -33,6 +33,7 @@ async function getUser(id, token) {
                   proSubscriptionRole
                   proSubscriptionSlots
                   proSubscriptionStatus
+                  workDataTool
                   availableForResearch
                 }
               }
