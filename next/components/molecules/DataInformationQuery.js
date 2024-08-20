@@ -910,8 +910,8 @@ bd.read_sql(query = query, billing_project_id = billing_id)`}
                       isLoaded={!isLoadingCode}
                     >
                       <CodeHighlight language="r">{`
-  # Defina o seu projeto no Google Cloud
-  set_billing_id("<YOUR_PROJECT_ID>")
+# Defina o seu projeto no Google Cloud
+set_billing_id("<YOUR_PROJECT_ID>")
 
 # Para carregar o dado direto no R
 query <- "
