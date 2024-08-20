@@ -1915,7 +1915,7 @@ const PlansAndPayment = ({ userData }) => {
           gridGap="40px"
         >
           <Box
-            display="flex"
+            display="none"
             width="100%"
             flexDirection="row"
             justifyContent="center"
