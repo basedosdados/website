@@ -35,6 +35,16 @@ async function getUser(id, token) {
                   proSubscriptionStatus
                   workDataTool
                   availableForResearch
+                  internalSubscription (isActive: true) {
+                    edges {
+                      node {
+                        canceledAt
+                        createdAt
+                        isActive
+                        stripeSubscription
+                      }
+                    }
+                  }
                 }
               }
             }

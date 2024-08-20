@@ -1671,7 +1671,7 @@ const PlansAndPayment = ({ userData }) => {
         propsModalContent={{
           minWidth: "fit-content",
           maxWidth: "fit-content",
-          maxHeight: isMobileMod() ? "fit-content" : "700px",
+          maxHeight: "fit-content",
           margin: "24px 0"
         }}
       >
@@ -1692,8 +1692,6 @@ const PlansAndPayment = ({ userData }) => {
           flexDirection="column"
           justifyContent="center"
           justifyItems="center"
-          width="fit-content"
-          minWidth="292px"
           gap="20px"
           spacing={0}
         >
