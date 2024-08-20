@@ -20,9 +20,7 @@ async function validateToken(token) {
 
 async function downloadTable(url, datasetID, tableId, token, res) {
   let payloadToken
-  if(url !== "free") {
-    if(token !== null) payloadToken = await validateToken(token)
-  } 
+  if(token !== null) payloadToken = await validateToken(token)
 
   const urlDownloadOpen = process.env.URL_DOWNLOAD_OPEN.replace("gs://", "")
   const urlDownloadClosed = process.env.URL_DOWNLOAD_CLOSED.replace("gs://", "")
@@ -32,10 +30,10 @@ async function downloadTable(url, datasetID, tableId, token, res) {
   try {
     let fileUrl = ""
 
-    if(url === "free") {
-      fileUrl =`${prefixUrl}${urlDownloadOpen}${datasetID}/${tableId}/${tableId}.csv.gz`
-    }else if(payloadToken?.pro_subscription_status === "active") {
+    if(payloadToken?.pro_subscription_status === "active") {
       fileUrl = `${prefixUrl}${urlDownloadClosed}${datasetID}/${tableId}/${tableId}_bdpro.csv.gz`
+    }else if(url === "free") {
+      fileUrl =`${prefixUrl}${urlDownloadOpen}${datasetID}/${tableId}/${tableId}.csv.gz`
     }
 
     const response = await axios({
