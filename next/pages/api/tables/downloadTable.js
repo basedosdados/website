@@ -20,7 +20,9 @@ async function validateToken(token) {
 
 async function downloadTable(url, datasetID, tableId, token, res) {
   let payloadToken
-  if(url !== "free" && token !== null) payloadToken = await validateToken(token)
+  if(url !== "free") {
+    if(token !== null) payloadToken = await validateToken(token)
+  } 
 
   const urlDownloadOpen = process.env.URL_DOWNLOAD_OPEN.replace("gs://", "")
   const urlDownloadClosed = process.env.URL_DOWNLOAD_CLOSED.replace("gs://", "")
