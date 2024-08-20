@@ -12,14 +12,22 @@ RUN \
     else echo "Lockfile not found." && exit 1; \
     fi
 
+ARG URL_DOWNLOAD_CLOSED
+ARG URL_DOWNLOAD_OPEN
+
 # Rebuild the source code only when needed
 FROM node:18.17.0-alpine AS builder
+
 ARG NEXT_PUBLIC_API_URL
 ARG NEXT_PUBLIC_KEY_STRIPE
 ARG NEXT_PUBLIC_BASE_URL_FRONTEND
+ARG URL_DOWNLOAD_CLOSED
+ARG URL_DOWNLOAD_OPEN
+
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_KEY_STRIPE=$NEXT_PUBLIC_KEY_STRIPE
 ENV NEXT_PUBLIC_BASE_URL_FRONTEND=$NEXT_PUBLIC_BASE_URL_FRONTEND
+
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -35,8 +43,13 @@ RUN npm run build
 FROM node:18.17.0-alpine AS runner
 WORKDIR /app
 
+ARG URL_DOWNLOAD_CLOSED
+ARG URL_DOWNLOAD_OPEN
+
 ENV NODE_ENV production
 ENV NODE_OPTIONS '-r next-logger'
+ENV URL_DOWNLOAD_CLOSED=$URL_DOWNLOAD_CLOSED
+ENV URL_DOWNLOAD_OPEN=$URL_DOWNLOAD_OPEN
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 

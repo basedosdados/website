@@ -10,7 +10,9 @@ import {
   useClipboard,
   Tooltip,
   Skeleton,
-  Stack
+  Stack,
+  useDisclosure,
+  ModalCloseButton
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 import hljs from "highlight.js/lib/core";
@@ -23,6 +25,8 @@ import 'highlight.js/styles/obsidian.css'
 import GreenTab from "../atoms/GreenTab";
 import Toggle from "../atoms/Toggle";
 import ColumnsTable from "./ColumnsTable";
+import { SectionPrice } from "../../pages/precos";
+import { ModalGeneral } from "./uiUserPage";
 import { AlertDiscalimerBox} from "./DisclaimerBox";
 import { triggerGAEvent, formatBytes } from "../../utils";
 
@@ -171,7 +175,8 @@ export function CodeHighlight({ language, children }) {
 export default function DataInformationQuery({ resource }) {
   const [tabAccessIndex, setTabAccessIndex] = useState(0)
   const [tabIndex, setTabIndex] = useState(0)
-  const [downloadNotAllowed, setDownloadNotAllowed] = useState(false)
+  const [downloadPermitted, setDownloadPermitted] = useState(false)
+  const [downloadWarning, setDownloadWarning] = useState("")
   const [checkedColumns, setCheckedColumns] = useState([])
   const [numberColumns, setNumberColumns] = useState(0)
   const [columnsTranslationPro, setColumnsTranslationPro] = useState([])
@@ -181,11 +186,11 @@ export default function DataInformationQuery({ resource }) {
   const [hasLoadingColumns, setHasLoadingColumns] = useState(true)
   const [isLoadingCode, setIsLoadingCode] = useState(false)
   const [hasLoadingResponse, setHasLoadingResponse] = useState(false)
+  const plansModal = useDisclosure()
 
   const [gcpProjectID, setGcpProjectID] = useState("")
   const [gcpDatasetID, setGcpDatasetID] = useState("")
   const [gcpTableId, setGcpTableId] = useState("")
-  const [downloadUrl, setDownloadUrl] = useState("")
 
   const isUserPro = () => {
     let user
@@ -200,17 +205,27 @@ export default function DataInformationQuery({ resource }) {
   }, [resource.dataset])
 
   useEffect(() => {
-    if (resource?.numberRows === 0) setDownloadNotAllowed(false)
-    if (resource?.numberRows) resource?.numberRows > 200000 ? setDownloadNotAllowed(false) : setDownloadNotAllowed(true)
-        
+    if (resource?.uncompressedFileSize) {
+      const limit100MB = 100 * 1024 * 1024;
+      const limit1GB = 1 * 1024 * 1024 * 1024;
+
+      if (resource?.uncompressedFileSize < limit100MB) {
+        setDownloadPermitted(true)
+        setDownloadWarning("free")
+      } else if (resource?.uncompressedFileSize < limit1GB) {
+        setDownloadPermitted(isUserPro())
+        setDownloadWarning("100mbBetween1gb")
+      } else {
+        setDownloadWarning("biggest1gb")
+      }
+    }
+
     if (resource?.cloudTables?.[0]) {
       setGcpProjectID(resource.cloudTables[0]?.gcpProjectId || "")
       setGcpDatasetID(resource.cloudTables[0]?.gcpDatasetId || "")
       setGcpTableId(resource.cloudTables[0]?.gcpTableId || "")
     }
-
-    setDownloadUrl(`https://storage.googleapis.com/basedosdados-public/one-click-download/${resource?.cloudTables?.[0]?.gcpDatasetId || ""}/${resource?.cloudTables?.[0]?.gcpTableId || ""}/${resource?.cloudTables?.[0]?.gcpTableId || ""}.csv.gz`)
-  }, [resource.numberRows, resource.cloudTables])
+  }, [resource.uncompressedFileSize, resource.cloudTables])
 
   useEffect(() => {
     if(resource._id === undefined) return
@@ -287,6 +302,36 @@ export default function DataInformationQuery({ resource }) {
       border="1px solid #DEDFE0"
       borderRadius="16px"
     >
+      <ModalGeneral
+        isOpen={plansModal.isOpen}
+        onClose={plansModal.onClose}
+        propsModalContent={{
+          minWidth: "fit-content"
+        }}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <Text
+            width="100%"
+            fontFamily="Roboto"
+            fontWeight="400"
+            color="#252A32"
+            fontSize="24px"
+            textAlign="center"
+            lineHeight="40px"
+          >
+            Compare os planos
+          </Text>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", color:"#0B89E2"}}
+          />
+        </Stack>
+
+        <SectionPrice/>
+      </ModalGeneral>
+
       <Tabs
         width="100%"
         variant="unstyled"
@@ -512,8 +557,7 @@ export default function DataInformationQuery({ resource }) {
               marginTop="16px"
               padding={0}
             >
-              {downloadNotAllowed ?
-                isUserPro() ? "" :
+              {isUserPro() === false && downloadWarning === "free" &&
                 <AlertDiscalimerBox type="info">
                   Estes dados estão disponíveis porque diversas pessoas colaboram para a sua manutenção. <Text as="br" display={{base: "none", lg: "flex"}}/>
                   Antes de baixar os dados, apoie você também com uma doação financeira ou
@@ -528,33 +572,51 @@ export default function DataInformationQuery({ resource }) {
                       saiba como contribuir com seu tempo.
                     </Text>
                 </AlertDiscalimerBox>
-              :
+              }
+              {isUserPro() === false && downloadWarning === "100mbBetween1gb" &&
+                <AlertDiscalimerBox
+                  type="warning"
+                >
+                  O download de tabelas com tamanho entre 100 MB e 1 GB está disponível apenas para
+                  <Text
+                    marginLeft="4px"
+                    as="a"
+                    target="_blank"
+                    href="https://basedosdados.github.io/mais/colab_data/"
+                    color="#0068C5"
+                    _hover={{color: "#0057A4"}}
+                  >assinantes dos nossos planos pagos
+                  </Text>. No entanto, você pode acessar a tabela gratuitamente utilizando SQL, Python, R ou Stata. Considere atualizar para um plano pago para fazer o download.
+                </AlertDiscalimerBox>
+              }
+              {downloadWarning === "biggest1gb" &&
                 <AlertDiscalimerBox
                   type="error"
-                  text={`O tamanho da tabela ultrapassou o limite permitido para download, de 200.000 linhas. Você pode acessar os dados em SQL, Python e R.`}
+                  text={`O tamanho da tabela ultrapassou o limite permitido para download, de 1 GB. Você pode acessar os dados em SQL, Python, R e Stata.`}
                 />
               }
 
               <Box
                 as="a"
-                href={downloadUrl}
-                onClick={() => { triggerGAEvent("download_da_tabela",`
-                  {
+                target="_blank"
+                onClick={() => {
+                  if(downloadWarning !== "free" && isUserPro() === false) return plansModal.onOpen()
+                  window.open(`/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadPermitted)}&s=${btoa(downloadWarning)}`, "_blank")
+                  triggerGAEvent("download_da_tabela",`{
                     gcp: ${gcpProjectID+"."+gcpDatasetID+"."+gcpTableId},
                     tamanho: ${formatBytes(resource.uncompressedFileSize) || ""},
                     dataset: ${resource?.dataset?._id},
                     table: ${resource?._id},
-                  }`
-                ) }}
-                target="_blank"
+                  }`)
+                }}
                 display="flex"
                 alignItems="center"
                 height="40px"
                 width="fit-content"
                 borderRadius="8px"
-                backgroundColor={downloadNotAllowed ? "#2B8C4D" : "#ACAEB1"}
+                backgroundColor={downloadWarning !== "biggest1gb" ? "#2B8C4D" : "#ACAEB1"}
                 padding="8px 16px"
-                cursor={downloadNotAllowed ? "pointer" : "default"}
+                cursor={downloadWarning !== "biggest1gb" ? "pointer" : "default"}
                 color="#FFF"
                 fill="#FFF"
                 fontFamily="Roboto"
@@ -562,7 +624,7 @@ export default function DataInformationQuery({ resource }) {
                 fontSize="14px"
                 gap="8px"
                 lineHeight="20px"
-                pointerEvents={downloadNotAllowed ? "default" : "none"}
+                pointerEvents={downloadWarning !== "biggest1gb" ? "default" : "none"}
                 _hover={{
                   backgroundColor: "#22703E"
                 }}
@@ -571,7 +633,7 @@ export default function DataInformationQuery({ resource }) {
                   width="24px"
                   height="24px"
                 />
-                  Download da tabela {downloadNotAllowed && `(${formatBytes(resource.uncompressedFileSize)})`}
+                  Download da tabela {downloadWarning !== "biggest1gb" && `(${formatBytes(resource.uncompressedFileSize)})`}
               </Box>
             </Stack>
           </VStack>

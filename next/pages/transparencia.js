@@ -231,12 +231,12 @@ export default function Transparencia({ pages }) {
           gridGap={{ base: "64px", lg: "80px" }}
         >
           <GraphicsBox
-            text="Receitas acumuladas"
+            text="Receitas acumuladas esse ano"
             url="https://perguntas.basedosdados.org/public/question/c41beae5-94d3-41e2-9161-a12492b0cae0#titled=false&bordered=false"
           />
 
           <GraphicsBox 
-            text="Despesas acumuladas"
+            text="Despesas acumuladas esse ano"
             url="https://perguntas.basedosdados.org/public/question/312842db-4ea9-455b-be7a-98d96e742ea7#titled=false&bordered=false"
           />
         </Stack>
@@ -295,6 +295,25 @@ export default function Transparencia({ pages }) {
           href="https://storage.googleapis.com/basedosdados-website/pdf/bd_estatuto_social.pdf"
         >
           BD Estatuto Social
+        </Link>
+      </Stack>
+
+      <Stack
+        paddingTop="16px"
+        width="100%"
+        maxWidth="1264px"
+        margin="auto"
+        paddingX="24px"
+      >
+        <Link
+          fontFamily="Ubuntu"
+          fontSize="18px"
+          letterSpacing="0.3px"
+          target="_blank"
+          color="#42B0FF"
+          href="https://drive.google.com/file/d/1OvqJWAg-m3IRt3NAYZB20uxemNqXJ_MO/view?usp=drive_link"
+        >
+          BD Relatório Anual 2023
         </Link>
       </Stack>
 

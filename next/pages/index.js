@@ -380,7 +380,7 @@ function Products() {
                     paddingX="36px"
                     marginTop="50px"
                   >
-                    <Text color="#a1a1a1">$</Text> pip install basedosdados
+                    <Text as="span" color="#a1a1a1">$</Text> pip install basedosdados
                   </Text>
                 </Box>
               </Box>
@@ -415,6 +415,7 @@ export function StepText ({index, text}) {
         gridGap="8px"
       >
         <Text
+          as="span"
           color="#FF8484"
           fontWeight="500"
         >
@@ -530,7 +531,7 @@ function Support() {
               letterSpacing="0.2px"
             >
               <b style={{fontWeight:"500"}}>Doe R$ 1 real por dia</b>
-              <p>para fazer databasers felizes.</p>
+              <span>para fazer databasers felizes.</span>
             </BodyText>
             <Link
               _hover={{ opacity:"none" }}

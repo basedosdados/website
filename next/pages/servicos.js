@@ -2,7 +2,6 @@ import {
   Stack,
   VStack,
   Image,
-  Text,
   Box,
   Skeleton
 } from "@chakra-ui/react";

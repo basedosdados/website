@@ -15,10 +15,6 @@ import {
 import Button from "../atoms/RoundedButton";
 import styles from "../../styles/paymentSystem.module.css";
 
-import {
-  getPrices,
-} from "../../pages/api/stripe";
-
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_KEY_STRIPE)
 
 const PaymentForm = ({ onSucess, onErro, clientSecret}) => {
@@ -112,24 +108,8 @@ export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
     }
   }
 
-  async function customerCreat(plan) {
-    const prices = await getPrices()
-
-    const findPlan = (slug, slots) => {
-      const foundPlan = prices.find(p => {
-        return p.node.productSlug === slug && p.node.productSlots === slots
-      })
-
-      return foundPlan ? foundPlan.node : null
-    }
-
-    const idPlan = findPlan(plan.slug, plan.slots)?._id
-
-    customerCreatPost(idPlan)
-  }
-
   useEffect(() => {
-    customerCreat(plan)
+    customerCreatPost(plan.id)
   }, [])
 
   const SkeletonBox = ({ type, ...props }) => {
