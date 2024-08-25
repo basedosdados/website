@@ -1,0 +1,95 @@
+---
+title: Analisando preços de combustíveis com a BD+
+description: >-
+  Veja como analisar a variação média dos preços de combustíveis no Brasil com
+  valores corrigidos pelo IPCA
+date: '2021-10-29T15:22:29.489Z'
+categories: []
+keywords: []
+slug: >-
+  /@basedosdados/analisando-pre%C3%A7os-de-combust%C3%ADveis-com-a-bd-9524fadbdfb4
+---
+![](https://storage.googleapis.com/basedosdados-website/blog/analisando-precos-de-combustiveis-com-a-bd/image_0.jpg)
+
+**Texto por** [**Lucas Moreira**](https://github.com/lucasnascm) **e** [**Gustavo Aires**](https://github.com/gustavoairestiago)**,** da Base dos Dados **💚**
+
+> Data da publicação original: 29/10/2021
+
+#### TL;DR
+
+Qual o preço do combustível na sua cidade? Neste artigo vamos apresentar os dados da base de pesquisa com preços de distribuição de combustíveis e de gás de cozinha (GLP), divulgados pela [Agência Nacional do Petróleo](https://www.gov.br/anp/pt-br). Além disso, vamos apresentar uma análise da evolução dos preços em relação à inflação, demonstrando como você pode usar a Base dos Dados para analisar como é esse cenário em sua própria cidade, ou no recorte que quiser. Dentre os tópicos deste texto, você encontra:
+
+* **Entendendo a Série Histórica de Preços**
+* **Como consultar esses dados**
+* **Os olhos da cara: Analisando a evolução de preço dos combustíveis no Brasil**
+* **Como criar um gráfico para ilustrar a análise**
+
+![](https://storage.googleapis.com/basedosdados-website/blog/analisando-precos-de-combustiveis-com-a-bd/image_1.gif)
+
+**Entendendo a Série Histórica de Preços**
+
+A ANP fornece, a cada semana, a série histórica com os microdados dos preços praticados por diferentes postos de revenda em todo o Brasil. A base inclui informações dos preços da gasolina, etanol, diesel s10, gasolina aditivada, glp, diesel e gnv, desde 2004 até outubro de 2021.
+
+A Base dos Dados disponibiliza estes dados de uma maneira mais intuitiva: tratados, padronizados e compatibilizados. Especificamente, o [script de tratamento](https://github.com/basedosdados/mais/blob/master/bases/br_anp_precos_combustiveis/code/%5Bdados%5D_br_anp_preco_combustiveis.ipynb) dos dados consistiu em unir os *dataframes* com os diferentes tipos de combustíveis e meses do ano, além de incluir o código do IBGE para os municípios presentes na base — o que facilita o *merge* com outras informações. A inclusão do código do IBGE também simplifica a visualização da tabela, mudando o formato da data ou ainda compatibilizando o endereço do estabelecimento. Vale ressaltar que a pesquisa abrange 883 municípios, ao longo dos 18 anos de pesquisa. Só em 2021 foram coletadas informações de 22.629 postos de revenda dos 27 estados.
+
+A base contém informações sobre a localização de cada posto (UF, município e endereço completo), especificidades do estabelecimento (CNPJ, nome e bandeira), além do produto e dos preços praticados nas mais de 26 milhões de observações.
+
+**Como consultar esses dados**
+
+A BD+ permite que você acesse todas essas informações com uma simples consulta de SQL no BigQuery, ou através dos nossos pacotes no Python e no R. Por conta do tamanho da base, o download direto pela plataforma não é possível.
+
+Para explorar os dados dessa base, acesse a [página deste conjunto de dados](https://basedosdados.org/dataset/c962b5e4-e71c-4e7c-b172-5e70951be633) em nossa plataforma e confira a seção Consulta aos Dados.
+
+![Página do conjunto Preços de Combustíveis — Dados Históricos](https://storage.googleapis.com/basedosdados-website/blog/analisando-precos-de-combustiveis-com-a-bd/image_2.png)![Seção consulte esses dados](https://storage.googleapis.com/basedosdados-website/blog/analisando-precos-de-combustiveis-com-a-bd/image_3.png)
+
+**Os olhos da cara — Analisando a evolução de preço dos combustíveis no Brasil**
+
+As notícias nos últimos meses têm anunciado a constante alta dos combustíveis. Muito se fala da gasolina à R$7, dos impostos, insumos e da cotação do dólar. Nossa análise propõe observar os dados deflacionados e comparados à inflação, isto é, a variação dos preços atuais em relação à variação do índice de preços ao consumidor.
+
+![](https://storage.googleapis.com/basedosdados-website/blog/analisando-precos-de-combustiveis-com-a-bd/image_4.gif)
+
+Cumprindo a nossa missão — acessar os dados em um único lugar — conseguimos captar dados do [Índice Nacional de Preços ao Consumidor Amplo (IPCA)](https://basedosdados.org/dataset/c58781fb-1177-448d-87ff-56b5cbf1735c), também disponíveis na BD+, além de manipular a nossa base de preços dos combustíveis da Agência Nacional do Petróleo, Gás Natural e Biocombustíveis (ANP).
+
+Com o código SQL(query) abaixo, conseguiremos extrair: o ano e mês de referência das informações; o produto (combustível) e seu preço médio da base da ANP, além de atualizar o preço para os valores atuais com os dados da inflação.
+
+* Etapa #1
+
+Na etapa #1, indicada na query acima, fazemos uma subconsulta para retornar o combustível desejado da base de preços da ANP e o índice de inflação atual do IPCA. Para isso, extraímos o mês da data de coleta dos preços e fazemos uma junção(join) com o mês atual da tabela `mes_brasil`, do dataset `br_ibge_ipca`. Fazemos isso filtrando o mês e ano que desejamos utilizar como base para a atualização dos preços. Neste caso, utilizamos ano=2021 e mes=9, mas você pode atualizar essas informações de acordo com os dados disponíveis nas bases.
+
+* Etapa #2
+
+Na etapa #2, deflacionamos os preços dos combustíveis, o que, em resumo, significa corrigi-los para o valor da data de referência de sua escolha. O cálculo é simples: dividimos o índice da inflação do período que desejamos utilizar como base pelo índice da inflação do período ao qual o preço se refere. Para isso, fazemos a junção dos produtos resultantes da subconsulta com os produtos da tabela de preços. Assim, conseguimos dividir o índice base de inflação do mês escolhido com o índice referente aos preços em cada período e multiplicá-lo por cada um dos preços da série histórica.
+
+Por fim, com a consulta executada, iremos obter uma tabela com os preços de combustíveis desde 2004, atualizados para preços de setembro de 2021. Agora esses valores podem ser comparados entre si, com a equivalência dos preços em valores atuais corrigidos pelo IPCA.
+
+**Como criar um gráfico para ilustrar a análise**
+
+![](https://storage.googleapis.com/basedosdados-website/blog/analisando-precos-de-combustiveis-com-a-bd/image_5.png)
+
+Iremos demonstrar a construção de um gráfico para comparar a evolução dos preços com a taxa de inflação realizando uma normalização dos valores para 2004. Para isso, utilizamos o [Plotly](https://plotly.com/python/), uma poderosa ferramenta gráfica disponível para diferentes linguagens.
+
+Não estamos analisando aqui o preço médio do combustível, mas a variação dos preços ao longo dos meses, utilizando como base o ano de início dos dados em comparação com o crescimento inflacionário dos preços.
+
+O primeiro passo é instalar e importar os pacotes python. Utilizamos o pacote basedosdados para realizar a consulta na base de dados, a biblioteca pandas para o tratamento e manipulação dos dados e plotly para a elaboração da visualização gráfica. Abaixo demonstramos como instalar e importar os pacotes:
+
+Com a query abaixo conseguimos extrair: o ano e mês de referência das informações; o produto (combustível) e seu preço médio da base da ANP no mês e em maio de 2004 (data base), além de normalizar o preço e o índice de inflação para os valores da data base.
+
+Nesta primeira query fazemos uma subconsulta para retornar o combustível da base de preços da ANP, o índice de inflação IPCA e o preço em maio de 2004.
+
+![](https://storage.googleapis.com/basedosdados-website/blog/analisando-precos-de-combustiveis-com-a-bd/image_6.png)
+
+Na segunda consulta, iremos normalizar os preços dos combustíveis e o índice de inflação. No cálculo da normalização, dividimos o preço do período ao qual se refere o dado pelo preço em maio de 2004. Faremos o mesmo com o índice de inflação. Para isso, é preciso fazer a junção dos produtos resultantes da subconsulta com os produtos da tabela de preços, para realizarmos a normalização com os valores necessários da data base e dos preços de cada combustível em cada mês.
+
+Nesse próximo passo, execute a requisição pelo pacote da basedosdados indicando ‘df’ como o objeto que armazenará o DataFrame:
+
+Com as transformações acima, modificamos as datas nos formatos desejáveis (`ano_mes`) para a construção do gráfico e ordenamos os valores de forma ascendente pelas datas.
+
+Criaremos uma lista com os combustíveis para um laço de criação de listas com datas e preços normalizados de cada combustível e uma lista com os valores normalizados da inflação. Para isso, faremos transformações nas colunas, retirando espaços entre os nomes dos produtos e criando uma lista com valores únicos de produto(combustível).
+
+O laço abaixo cria as listas de preços normalizados e datas para cada combustível.
+
+O plotly cria os gráficos a partir do desenho dos traços (`fig_trace`) de cada produto. Portanto, precisamos configurar cada traço com os parâmetros de cor e largura da linha (você pode alterar esses parâmetros quando quiser). O segundo passo é configurar os valores dos eixos x e y com seus respectivos rótulos. Os valores de “tickvals” devem ser os mesmos da base de dados, o “ticktext” pode ser alterado por você com o formato de valores de sua preferência, esse é somente o rótulo de dados para os valores de “tickvals”. Confira abaixo:
+
+Por fim é só executar `fig.write_image` (‘grafico.png’) para salvar o gráfico no caminho especificado, como demonstramos acima.
+
+Essa e outras análises você consegue acompanhar na íntegra pelo nosso [Github](https://github.com/basedosdados/analises). A Base dos Dados é uma iniciativa open source e sem fins lucrativos que busca diminuir a distância entre sua pergunta e os dados. Esperamos que você se sinta inspirado em utilizar esse e outros dados. Afinal, muitas outras análises podem ser realizadas. Compartilhe conosco seus achados em nossas redes sociais ou em nossa comunidade no [Discord](https://discord.gg/WzzzQs9T).

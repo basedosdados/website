@@ -10,5 +10,4 @@ module.exports = {
   output: "standalone",
   reactStrictMode: true,
   swcMinify: true,
-  transpilePackages: ["next-mdx-remote"],
 };

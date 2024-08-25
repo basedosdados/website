@@ -1,0 +1,67 @@
+---
+title: Como começar uma análise geoespacial com dados da BD e o QGIS
+description: Aprenda a importar dados da BD no QGIS para criar mapas e visualizações
+date: ''
+categories: []
+keywords: []
+slug: ''
+---
+> **Texto por Gustavo Alcantara**
+
+> Edição por [Giovane Caruso](https://medium.com/@giovanecaruso)
+
+![](https://storage.googleapis.com/basedosdados-website/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_0.png)
+
+#### TL;DR
+
+Neste artigo, vamos apresentar como você pode usar os dados do pacote geobr, já tratados e disponíveis no *datalake* público da Base dos Dados, e um Sistema de Informação Geográfica (SIG) para construir análises geoespaciais com mais praticidade. Acompanhe o passo a passo com um exemplo prático analisando quantas cabeças de gado existiam em cada estado brasileiro no ano de 2017.
+
+#### **O que são os dados do geobr?**
+
+O geobr é um pacote R que permite o fácil acesso aos shapefiles do Instituto Brasileiro de Geografia e Estatística (IBGE) e outros dados espaciais do Brasil. Já tratado e disponível na BD, esse conjunto possibilita análises com diferentes níveis de observação, como biomas, escolas, microrregião, polígono do setor censitário e muito mais!
+
+Foi com dados do geobr que elaboramos, por exemplo, a análise dos resultados geolocalizados da prova de matemática do SAEB de 2019 no Ceará.
+
+![](https://storage.googleapis.com/basedosdados-website/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_1.png)
+
+Além de poder acessar esses dados em Python, R, Stata e pelo BigQuery usando SQL, é possível exportar essas informações em .csv e adicioná-las no seu Sistema de Informação Geográfica (SIG) favorito.
+
+SIG é um conjunto de sistemas de softwares e hardwares que permitem visualizar e analisar dados geográficos para compreender relações, padrões e tendências. Existem diversos tipos de SIG diferentes. Nesse artigo utilizamos o [QGIS](https://qgis.org/pt_BR/site/about/index.html) por ser uma plataforma open source, colaborativa e gratuita para análise de dados geoespaciais.
+
+#### **Como construir sua análise com dados do geobr e o QGIS**
+
+Para demonstrar como começar a construir sua própria análise, utilizamos os dados do [Censo Agropecuário](https://basedosdados.org/dataset/br-ibge-censo-agropecuario?bdm_table=municipio), a principal investigação estatística e territorial sobre a produção agropecuária do país, também tratados e padronizados na BD.
+
+O processo é simples: para entender, por exemplo, quantas cabeças de gado existiam em cada estado brasileiro no ano de 2017, podemos usar a consulta abaixo no BigQuery e baixá-los em um arquivo .csv.
+
+A partir do resultado da consulta, é possível realizar o download do .csv no seu computador. 
+
+Agora, vamos inserir o arquivo .csv com a geometria espacial no QGIS. Clique em ***Adicionar Camada*** e depois ***Adicionar Camada de Texto Delimitado***.
+
+![](https://storage.googleapis.com/basedosdados-website/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_2.png)
+
+Com a tela ***Gerenciador de Dados*** aberta, procure seu arquivo .csv no local em que o salvou.
+
+![](https://storage.googleapis.com/basedosdados-website/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_3.png)
+
+Assim que inserir o arquivo .csv, é necessário que a ***Definição da Geometria*** esteja assinada para ***Well Know Text*** *(WKT)*. Depois, é só clicar em inserir a variável de geometria no *campo de geometria*.
+
+![](https://storage.googleapis.com/basedosdados-website/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_4.png)
+
+A saída ou ***Amostra de Dados*** deverá conter o esquema da imagem acima. É possível visualizar que o campo geometria define o que cada linha representa. Como estamos trabalhando com multipolígonos, a latitude e longitude de cada multipolígono encontram-se nessa variável.
+
+![](https://storage.googleapis.com/basedosdados-website/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_5.png)
+
+Após clicar em ***adicionar***, é possível obter um mapa com a quantidade de cabeças de gado por UF no ano de 2017, como na imagem abaixo.
+
+![](https://storage.googleapis.com/basedosdados-website/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_6.png)
+
+*Fonte: IBGE. Censo Agropecuário, 2017.*
+
+Com o mapa em mãos, fica fácil identificar que o Mato Grosso é o estado com maior quantidade de cabeças de gado no Brasil, por exemplo. Você pode exportar o mapa em um arquivo .*png* ou .*tif* e partir para sua análise.
+
+Vale lembrar que também é possível relacionar mais de uma base de dados com os arquivos de geometria espacial do geobr pela BD. Você pode fazer o mesmo processo para qualquer base com dados a nível de município, regiões e estabelecimentos de saúde, microrregiões, mesorregiões, escolas e muito mais.
+
+Este artigo te ajudou? Não deixe de contar para nós nos comentários!
+
+Teve alguma dúvida sobre como usar os dados do geobr, ou qualquer outro conjunto da BD? Temos uma equipe preparada e pronta para te ajudar em nosso canal do Discord. Venha fazer parte!

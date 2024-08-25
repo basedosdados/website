@@ -1,0 +1,136 @@
+---
+title: Como explorar e análisar os dados de Crédito Rural no Brasil?
+description: >-
+  Veja uma maneira prática de analisar os microdados do Sistema de Operações do
+  Crédito Rural e do Proagro (SICOR)
+date: ''
+categories: []
+keywords: []
+slug: ''
+---
+### TL;DR
+
+### O que é o crédito rural e como ele é concedido e regulado? 
+
+Antes de começarmos a análise, vamos fazer uma breve contextualização sobre como funciona o Crédito Rural (CR), como ele é concedido e regularizado.
+
+Tudo começa com o Sistema Nacional de Crédito Rural (SNCR), **criado em 1965 com objetivo de estimular os financiamentos de custeio e investimento rurais.** O SNCR congrega o conjunto de instituições responsáveis por estruturar, regular e operacionalizar a concessão de CR no Brasil. Entenda melhor o papel de cada uma dessas instituições:
+
+* O **Ministério da Agricultura e do Abastecimento (MAPA)** é um ator chave na elaboração da política de CR, sendo responsável por determinar fatores como volume de recursos públicos, condições de enquadramento dos produtores e taxas juros praticadas para cada **ano safra (AS),** período que se extende de 1º de julho do ano corrente a junho do ano seguinte, para o qual é planejada o exercício da política de crédito rural. Oconjunto das normas regimentais definidas pelo MAPA codificado no Manual de Crédito Rural (MCR) pode ser acessado por [aqui](https://www3.bcb.gov.br/mcr).
+* O **Banco Central (BACEN)** desempenha o papel de orgão regulador das normas codificadas no Manual do Crédito Rural (MCR), que devem ser respeitadas pelas **Instituições financeiras públicas e privadas (IFs)** durante a realização de contratações de CR. É justamente na fiscalização do BACEN das operações de CR contratadas pelas IFs que surgem os [**Microdados do Crédito Rural**](https://basedosdados.org/dataset/br-bcb-sicor?bdm_table=dicionario), já tratados e disponibilizados no datalake da Base dos Dados, e disponíveis em seu formato original no [site do BACEN](https://www.bcb.gov.br/estabilidadefinanceira/creditorural).
+
+Para resumir, é o MAPA que **estipula**, o BACEN **regula** e as IFs **concedem** crédito*. A imagem abaixo sintetiza bem a composição e funcionamento do Sistema Nacional de Crédito Rural (SNCR)
+
+![](https://storage.googleapis.com/basedosdados-website/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_0.png)
+
+Fonte: [https://www.radardesustentabilidade.org.br/media/guidelines/files/GGP\_Gênero\_Cartilha\_3\_PT\_WEB.pdf](https://www.radardesustentabilidade.org.br/media/guidelines/files/GGP_G%C3%AAnero_Cartilha_3_PT_WEB.pdf)
+
+### De onde vêm os microdados do Crédito Rural?
+
+Em 2013 o Banco Central anunciou a implementação de um novo sistema para o registro das contratações de crédito rural no Brasil. O [anúncio](https://www.bcb.gov.br/detalhenoticia/616/noticia) explica que o Sistema de Operações do Crédito Rural e do Proagro (SICOR) substituiu o antigo Registro Comum de Operações Rurais (RECOR), incorporando a exigência de um registro contínuo e sistemático das contratações de crédito rural. Os microdados do SICOR abarcam mais de 10 anos de contratações realizadas em todo território nacional.
+
+De janeiro de 2013 a setembro de 2022, por exemplo, foram registradas 19.65 milhões de contratos e R$ 1.66 trilhões em financiamentos de CR. Atualmente, os mais de 260 campos potencialmente preenchidos no ato da contratação das operações de crédito estão sujeitos a cerca de 1.300 validações.
+
+**Em que pesem possibilidades de inconsistência no preenchimento das contratações realizadas pelas IFs no SICOR, o volume de dados, a exigência de seu registro sistemático e as validações findam em um rico conjunto de microdados que permitem explorar, analisar e avaliar o SNCR sob diferentes perspectivas.**
+
+A imagem abaixo ajuda a compreender o panorama geral dos atores e componentes importantes do Sistema Nacional de Crédito Rural (SNCR), com destaque para as fontes de recurso e os beneficiários.
+
+![](https://storage.googleapis.com/basedosdados-website/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_1.png)
+
+Se quiser se aprofundar mais, você pode ver mais informações do Banco Central do Brasil sobre como funciona o Crédito Rural por [aqui](https://www.bcb.gov.br/estabilidadefinanceira/creditorural). Feita essa breve introdução, vamos enfim começar a explorar e analisar os dados com algumas perguntas interessantes. 
+
+#### Qual o volume de recursos contratados em operações de crédito rural por ano?
+
+*## codigo ##*
+
+A tabela que contém parte considerável das informações sobre as operações de crédito rural —  dentre elas o valor de crédito contrato por operação  —  é a *microdados\_operacao*. Para uma visão agregada, veremos o montante de CR concedido por ano, durante 2013 a 2022.
+
+*## codigo ##*
+
+![](https://storage.googleapis.com/basedosdados-website/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_2.png)
+
+#### Qual foi o montante de crédito cocedido por categoria de produtor?
+
+O enquadramento do produtor rural é feito pela Instituição Financeira (IF) durante o processo de concessão de crédito (CMN nº 4.883 art 1º e Res CMN nº 4.939 art 1º). A classificação pode ser realizada a partir da Renda Bruta Agropecuária (RBA) de um dos últimos 2 anos ou pela participação do beneficiário em programas de crédito para setores específicos.
+
+> No ano safra de 2021/2022 as categorias são definidas por:
+
+> 1.1 Pequeno Produtor (PP): RBA até 500.000 reais ou detentores da Declaração de Aptidão ao PRONAF (DAP);
+
+> 1.2 Médio Produtor (MP): RBA maior que 500.000 até 2.400.000 reais ou aqueles enquadrados no programa de apoio ao médio produtor Rural (PRONAMP);
+
+> 1.3 Grande Produtor (GP): RBA acima de 2.400.000 ou produtores que possuam mais de 20% de sua renda obtida de fontes indiretamente correlatas ou externas as atividades rurais.
+
+Com a tabela abaixo mostra o valor contratado por categoria durante o período
+
+*## codigo ##*
+
+## *tabela* ##
+
+Showing 1 to 3 of 3 entries
+
+A nível nacional uma fatia considerável do valor total (43,88%) é abocanhada por Grandes Produtores Rurais, seguidos pelos Médios (36,22%) e pelos pequenos (19,8%).
+
+A figura abaixo mostra o valor absoluto em crédito contratado para cada categoria durante o período:
+
+*## codigo ##*
+
+![](https://storage.googleapis.com/basedosdados-website/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_3.png)
+
+De modo geral, a demanda por crédito é influência pela taxa SELIC — a taxa de juros básica da econômia. Juros mais altos tendêm a reduzir a demanda, enquanto juros mais baixos tendêm a aumentá-la. Em 2020 a SELIC permaneceu em patamares historicamente baixos, a um valor médio de 2,0% ao ano (a.a.). Já em 2021, apesar do aumento de 7,25% ao longo do ano, a SELIC esteve abaixo de 7.75% até dezembro, o que pode explicar em parte o crescimento expressivo observado em 2020 e sobretudo em 2021.
+
+#### Quais são os produtos mais financiados em termos de valor de crédito por categoria de beneficiário?
+
+*## codigo ##*
+
+![](https://storage.googleapis.com/basedosdados-website/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_4.png)
+
+É bastante perceptível o alto grau de homogeinização dos produtos com maior valor de crédito contratado. A soja aparece como o principal para os GP e MP seguida dos Bovinos. Para os PP a situação se inverte, o financiamento a Bovinos aparece como principal, seguido do milho e da soja.
+
+É interessante ressaltar que existem muitos atributos que qualificam os produtos financiados. É gado para corte ou produção de leite? A modalidade de criação é extensiva ou intensiva? O Gado é financiado junto com a soja? Um pedacito da beleza dos microdados do CR está justamente nas possibilidades de agregações. O BACEN divulga estatísticas agregadas sobre a concessão de crédito rural que invibilizam diversas opções de análise. São exemplos de perguntas que podem ser respondidas manejando os microdados. Em particular as tabelas de *empreendimentos* e *microdados_operacao*, também utilizadas na query acima.
+
+#### Enfim, chegamos a um ponto interessante. Quais bancos financiam quais categorias de produtores rurais?
+
+A planilha intitulada *bancos* é divulgada pelo BACEN, se refere ao conjunto de IFs, seus postos e agências em atividade no mês de referência https://www.bcb.gov.br/fis/info/agencias.asp?frame=1 é uma base bastante útil quando se trabalha com IFs, pois permite identificar os CNPJs, a localização geográfica das agências e demais atributos.
+
+*## codigo ##*
+
+![](https://storage.googleapis.com/basedosdados-website/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_5.png)
+
+O papel dos bancos públicos na concessão de crédito rural torna-se nítido, com o Banco do Brasil (BB) como maior credor para todas as categorias. Ademais disso, para os PP as 3 IFs com maior valor contratado são públicas. Para os MP foi identificado o banco do Bradesco em segundo lugar. Por fim, apesar do BB aperecer como maior credor os GP tem como financiadores importantes dois grandes bancos privados: Itaú e Bradesco.
+
+#### Na esteira do exposto acima, quais são os maiores credores do CR?
+
+*## codigo ##*
+
+![](https://storage.googleapis.com/basedosdados-website/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_6.png)
+
+#### Pra finalizar, quais programas de crédito tem maior valor de recursos contratado?
+
+Os programas de crédito têm relação direta com a política de CR do MAPA. A cada ano safra, é reservado um montante de recursos a taxas de juros subsidiadas para atender setores específicos do meio rural. Um exemplo importante é o Programa de Fortalecimento da Agricultura Familiar (PRONAF).
+
+*a descrição das siglas dos programas é apresentada abaixo*
+
+*## codigo ##*
+
+![](https://storage.googleapis.com/basedosdados-website/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_7.png)
+
+*##siglas dos programas — -*
+
+*# Funcafé -> Funcafé (Programa De Defesa Da Economia Cafeeira*
+
+*# Psi-Rural -> Programa De Sustentação Do Investimento*
+
+*# Abc -> Programa Para Redução Da Emissão De Gases De Efeito Estufa Na Agropecuária*
+
+*# Pronaf -> Programa Nacional De Fortalecimento Da Agricultura Familiar*
+
+*# Pca -> Programa Para Construção E Ampliação De Armazéns*
+
+*# Moderfrota -> Programa De Modernização Da Frota De Tratores Agrícolas E Impl Assoc E Colheitadeiras*
+
+*# Pronamp -> Programa Nacional De Apoio Ao Médio Produtor Rural*
+
+*# FVPE -> Financiamento Sem Vínculo A Programa Específico*
+
+Os financiamentos sem vínculo a programa específico são a modalidade predominante em termos de valor absoluto contratado.
