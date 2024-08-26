@@ -18,7 +18,7 @@ import { getAllPosts } from "./api/blog";
 import Link from "../components/atoms/Link";
 // import Subtitle from "../components/atoms/Subtitle";
 
-const authorIconFallback = createIcon({
+export const authorIconFallback = createIcon({
   displayName: "user",
   viewBox: "0 0 22 22",
   path: (
@@ -32,6 +32,29 @@ const authorIconFallback = createIcon({
 // @ts-check
 export async function getStaticProps() {
   return { props: { posts: getAllPosts() } };
+}
+
+export function DatePost({ date }) {
+  if (date.trim().length === 0) {
+    console.error(`Invalid date ${date}`);
+    return null;
+  }
+  const localeDate = new Date(date).toLocaleString("pt-BR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  return (
+    <Text
+      as="p"
+      fontFamily={"Roboto"}
+      fontSize={"sm"}
+      marginTop={"0.5rem"}
+      color="gray"
+    >
+      {localeDate}
+    </Text>
+  );
 }
 
 function LatestBlogCard({ slug, frontmatter, latest }) {
@@ -93,19 +116,7 @@ function LatestBlogCard({ slug, frontmatter, latest }) {
           </Wrap>
         </Box>
       ) : null}
-      <Text
-        as="p"
-        fontFamily={"Roboto"}
-        fontSize={"sm"}
-        marginTop={"0.5rem"}
-        color="gray"
-      >
-        {new Date(date).toLocaleString("pt-BR", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        })}
-      </Text>
+      <DatePost date={date} />
     </Box>
   );
 }
@@ -160,9 +171,13 @@ function MiniBlogCard({ slug, frontmatter }) {
             </Text>
             <Box display={"flex"}>
               {authors ? (
-                <Wrap display={"flex"} alignItems={"center"} marginRight={".5rem"}>
+                <Wrap
+                  display={"flex"}
+                  alignItems={"center"}
+                  marginRight={".5rem"}
+                >
                   {authors.map((author, index) => (
-                    <WrapItem alignItems={"center"}>
+                    <WrapItem key={index} alignItems={"center"}>
                       <Avatar
                         size="sm"
                         marginLeft={index !== 0 ? "-15px" : "0"}
@@ -175,19 +190,7 @@ function MiniBlogCard({ slug, frontmatter }) {
                   ))}
                 </Wrap>
               ) : null}
-              <Text
-                as="p"
-                fontFamily={"Roboto"}
-                fontSize={"sm"}
-                marginTop={"0.5rem"}
-                color="gray"
-              >
-                {new Date(date).toLocaleString("pt-BR", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </Text>
+              <DatePost date={date} />
             </Box>
           </Box>
         </Box>

@@ -3,23 +3,41 @@ title: Como funciona o sistema de inserção de dados na BD?
 description: >-
   Conheça nossa infraestrutura de inserção de dados e veja como você pode
   melhorar seu portfólio contribuindo
-date: '2022-01-21T15:00:40.969Z'
+date: '2021-05-28'
+authors:
+  - name: Vinicius
+    social: https://github.com/vncsna
+    role: Autor
+  - name: Fernanda
+    social: https://github.com/fernandascovino
+    role: Autor
+  - name: Diego
+    social: https://github.com/d116626
+    role: Autor
+  - name: João
+    social: https://github.com/JoaoCarabetta
+    role: Autor
+  - name: Caio
+    social: https://github.com/Hellcassius
+    role: Autor
+  - name: Giovane Caruso
+    social: https://medium.com/@giovanecaruso
+    role: Adaptação e edição
+thumbnail: https://storage.googleapis.com/basedosdados-website/blog/como-funciona-o-sistema-de-insercao-de-dados-na-bd/image_0.jpg
 categories: []
 keywords: []
-slug: >-
-  /@basedosdados/como-funciona-o-sistema-de-inser%C3%A7%C3%A3o-de-dados-na-bd-61a0fe05c5d5
+medium_slug: >-
+  https://medium.com/@basedosdados/como-funciona-o-sistema-de-inser%C3%A7%C3%A3o-de-dados-na-bd-61a0fe05c5d5
 ---
-> **Texto produzido por** [**Vinicius**](https://github.com/vncsna) **e** [**Fernanda**](https://github.com/fernandascovino)**, com apoio de** [**Diego**](https://github.com/d116626)**,** [**João**](https://github.com/JoaoCarabetta) **e** [**Caio**](https://github.com/Hellcassius) **do time de Infra da Base dos Dados**
 
-> Data da publicação original: *28/5/2021*
 
-> Adaptação e edição por [Giovane Caruso](https://medium.com/@giovanecaruso)
+## TL;DR
 
-**TL;DR:** Neste artigo você vai conhecer um pouco sobre como funciona a infraestrutura de inserção de dados da Base dos Dados e como pode melhorar seu portfólio de cientista de dados e/ou desenvolvedor contribuindo com a nossa missão de universalizar o acesso a dados.
+Neste artigo você vai conhecer um pouco sobre como funciona a infraestrutura de inserção de dados da Base dos Dados e como pode melhorar seu portfólio de cientista de dados e/ou desenvolvedor contribuindo com a nossa missão de universalizar o acesso a dados.
 
-![](https://storage.googleapis.com/basedosdados-website/blog/como-funciona-o-sistema-de-insercao-de-dados-na-bd/image_0.jpg)
+<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-funciona-o-sistema-de-insercao-de-dados-na-bd/image_0.jpg" caption="Photo by [Riho Kroll](https://unsplash.com/@rihok) on [Unsplash](https://unsplash.com/)"/>
 
-### A Infraestrutura
+## A Infraestrutura
 
 O time de infraestrutura da Base dos Dados é responsável pelas ferramentas de ingestão de dados, que englobam desde o upload até a disponibilização de dados no ambiente de produção; pelo acesso de dados através de pacotes em Python e R; e pelo nosso [website](https://basedosdados.org/). Neste cenário, o time é atualmente dividido em várias frentes, tratando da renovação do site e da implementação de pesos e contrapesos automatizados.
 
@@ -29,11 +47,11 @@ Após o pull request de revisão, entra em ação o sistema de Pesos e Contrapes
 
 Após a checagem dos dados, o pull request de inserção de dados é aprovado e os dados entram no **Ambiente de Produção**. Logo podem ser acessados por uma de nossas ferramentas, como os pacotes em Python e R, ou diretamente pelo BigQuery.
 
-![](https://storage.googleapis.com/basedosdados-website/blog/como-funciona-o-sistema-de-insercao-de-dados-na-bd/image_1.png)
+<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-funciona-o-sistema-de-insercao-de-dados-na-bd/image_1.png"/>
 
 Paralelamente ao processo de inserção de dados, o time de Infra também trabalha com a equipe website na renovação da nossa plataforma, visando oferecer uma interface moderna. Preparamos um [artigo](https://medium.com/basedosdados/um-site-feito-a-v%C3%A1rias-m%C3%A3os-60ddc9eaa4d3?source=collection_home---------2-------------------------------) para mostrar como organizamos um projeto colaborativo para desenvolver uma nova plataforma que facilita ainda mais seu trabalho com dados.
 
-### Contribuindo com dados
+## Contribuindo com dados
 
 No caminho para se tornar um analista de dados ou desenvolvedor nos encontramos com certas dificuldades de entrada no mercado de trabalho. Por vezes não existe balanço entre estudo e aplicação prática, ou somente a análise de dados de brincadeirinha. Levante a mão quem não passou uma época paralisado em bases de dados como o Titanic ou Iris. E, apesar dessas bases de dados serem uma boa alternativa para aprender novos métodos ou ferramentas, o conhecimento obtido trabalhando com as mesmas não é transferível para o mundo real.
 
@@ -41,7 +59,7 @@ Uma boa alternativa para lidar com dados reais e melhorar seu portfólio é ajud
 
 Descrevemos em detalhes esse processo em [Colaborando com dados na BD+](https://basedosdados.github.io/mais/colab_data/). Em resumo o processo é dividido em quatro partes. Inicialmente você informa seu interesse para a BD. Então, faz a limpeza e tratamento dos dados que pretende subir. Em seguida realiza upload dos dados em seu BigQuery pessoal. E, por fim, envia os dados para revisão.
 
-### Contribuindo com a infra
+## Contribuindo com a infra
 
 Outra forma de contribuir e melhorar seu portfólio, mas agora de desenvolvedor, é colaborando com a infraestrutura da BD.
 

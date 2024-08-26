@@ -1,4 +1,3 @@
-import { MainPageTemplate } from "../../components/templates/main";
 import {
   Box,
   Heading,
@@ -7,12 +6,29 @@ import {
   Wrap,
   WrapItem,
   Avatar,
-  createIcon,
+  UnorderedList,
+  ListItem,
+  OrderedList,
 } from "@chakra-ui/react";
 import { serialize } from "next-mdx-remote/serialize";
 import { MDXRemote } from "next-mdx-remote";
-import { getAllPosts, getPostBySlug } from "../api/blog";
+import { MainPageTemplate } from "../../components/templates/main";
 import Link from "../../components/atoms/Link";
+import { getAllPosts, getPostBySlug } from "../api/blog";
+import { DatePost, authorIconFallback } from "../blog";
+import hljs from "highlight.js/lib/core";
+import sqlHighlight from "highlight.js/lib/languages/sql";
+import pythonHighlight from "highlight.js/lib/languages/python";
+import rHighlight from "highlight.js/lib/languages/r";
+import bashHighlight from "highlight.js/lib/languages/bash";
+
+import "highlight.js/styles/obsidian.css";
+
+hljs.registerLanguage("sql", sqlHighlight);
+hljs.registerLanguage("python", pythonHighlight);
+hljs.registerLanguage("r", rHighlight);
+hljs.registerLanguage("bash", bashHighlight);
+hljs.registerLanguage("sh", bashHighlight);
 
 export async function getStaticProps({ params }) {
   const { slug } = params;
@@ -99,25 +115,92 @@ const components = {
     <Text
       as={"p"}
       lineHeight={"7"}
-      marginY={"2"}
+      marginY={"1.5rem"}
       fontFamily={"Roboto"}
       {...props}
     />
   ),
-  img: (props) => (
-    <Box marginY={"2rem"}>
+  Image: (props) => (
+    <Box as="figure" marginY={"2rem"}>
       <Image margin={"0 auto"} src={props.src} />
-      <Text
-        as="p"
-        fontFamily={"Roboto"}
-        fontSize={"sm"}
-        color={"gray"}
-        textAlign={"center"}
-      >
-        {props.alt}
-      </Text>
+      {props.caption ? (
+        <Text
+          as="figcaption"
+          fontFamily={"Roboto"}
+          fontSize={"sm"}
+          color={"gray"}
+          textAlign={"center"}
+        >
+          {props.caption}
+        </Text>
+      ) : null}
     </Box>
   ),
+  // img: (props) => (
+  //   <Box as="figure" marginY={"2rem"}>
+  //     <Image margin={"0 auto"} src={props.src} />
+  //     <Text
+  //       as="figcaption"
+  //       fontFamily={"Roboto"}
+  //       fontSize={"sm"}
+  //       color={"gray"}
+  //       textAlign={"center"}
+  //     >
+  //       {props.alt}
+  //     </Text>
+  //   </Box>
+  // ),
+  code: (props) => (
+    <Text
+      as="code"
+      fontFamily={"ui-monospace, monospace"}
+      backgroundColor={"#e7e7e7"}
+      color="#3b3b3b"
+      fontSize={"90%"}
+      padding="2px 4px"
+      borderRadius={"3px"}
+      {...props}
+    />
+  ),
+  pre: (props) => {
+    // NOTE: children of children bc pre node element has a code children node element
+    const content = props.children.props.children;
+    const language = props.children.props.className?.replace("language-", "");
+
+    const highlighted =
+      language !== undefined
+        ? hljs.highlight(content, {
+            language: language,
+          })
+        : hljs.highlightAuto(content);
+
+    return (
+      <Box
+        as="pre"
+        display="flex"
+        justifyContent="space-between"
+        width="100%"
+        overflowX="auto"
+        whiteSpace={"pre"}
+        padding="0.2rem"
+        marginY={"1rem"}
+        borderRadius={"8px"}
+        backgroundColor={"#282b2e"}
+      >
+        <Text
+          as="code"
+          width={"100%"}
+          // whiteSpace="pre"
+          // overflow={"auto"}
+          className={`hljs ${language}`}
+          dangerouslySetInnerHTML={{ __html: highlighted.value }}
+        />
+      </Box>
+    );
+  },
+  ol: (props) => <OrderedList {...props} />,
+  ul: (props) => <UnorderedList {...props} />,
+  li: (props) => <ListItem marginY={"2"} {...props} />,
   Blockquote: (props) => (
     <Box
       padding={"2rem 2.5rem"}
@@ -150,22 +233,11 @@ const components = {
   ),
 };
 
-const authorIconFallback = createIcon({
-  displayName: "user",
-  viewBox: "0 0 22 22",
-  path: (
-    <path
-      fill="current-color"
-      d="M11.4998 1.87695C14.5058 1.87695 16.9425 4.31372 16.9425 7.31966C16.9425 10.3256 14.5058 12.7624 11.4998 12.7624C8.4939 12.7624 6.05713 10.3256 6.05713 7.31966C6.05713 4.31372 8.4939 1.87695 11.4998 1.87695ZM17.7346 13.2325L15.3087 12.6261C12.7601 14.4592 9.67081 14.0501 7.69096 12.6261L5.26511 13.2325C3.81137 13.596 2.7915 14.9021 2.7915 16.4006V17.6608C2.7915 18.5626 3.52253 19.2936 4.42432 19.2936H18.5754C19.4771 19.2936 20.2082 18.5626 20.2082 17.6608V16.4006C20.2082 14.9021 19.1883 13.596 17.7346 13.2325Z"
-    />
-  ),
-});
-
 export default function Blog({ slug, mdxSource }) {
   const { frontmatter } = mdxSource;
 
   return (
-    <MainPageTemplate maxWidth={"900px"} margin={"0 auto"} paddingX="3rem">
+    <MainPageTemplate maxWidth={"800px"} margin={"0 auto"} paddingX="24px">
       <Box paddingTop={"4rem"}>
         <Text
           as="span"
@@ -174,62 +246,61 @@ export default function Blog({ slug, mdxSource }) {
           color={"gray"}
           fontFamily={"Roboto"}
         >
-          {new Date(frontmatter.date).toLocaleString("pt-BR", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
+          <DatePost date={frontmatter.date} />
         </Text>
         <Heading as="h1" fontFamily={"Roboto"} size="2xl">
           {frontmatter.title}
         </Heading>
-        <Text
-          as="p"
+        <Heading
+          as="h2"
           fontFamily={"Roboto"}
+          fontWeight={"normal"}
           fontSize={"xl"}
           color={"gray"}
           marginY={"10"}
         >
           {frontmatter.description}
-        </Text>
-        <Box marginBottom={"4rem"}>
-          <Wrap display={"flex"} alignItems={"center"}>
-            {frontmatter?.authors?.map((author) => (
-              <WrapItem alignItems={"center"}>
-                <Avatar
-                  size="md"
-                  name={author.name}
-                  src={author.avatar}
-                  icon={authorIconFallback}
-                />
-                <Box
-                  display={"flex"}
-                  flexDirection={"column"}
-                  alignItems={"start"}
-                  marginLeft={"2"}
-                  marginRight={"4"}
-                >
-                  <Link
-                    href={author.social}
-                    fontFamily={"Roboto"}
-                    fontSize={"1rem"}
-                    fontWeight={500}
+        </Heading>
+        {frontmatter.authors ? (
+          <Box marginBottom={"4rem"}>
+            <Wrap display={"flex"} alignItems={"center"}>
+              {frontmatter.authors.map((author) => (
+                <WrapItem alignItems={"center"}>
+                  <Avatar
+                    size="md"
+                    name={author.name}
+                    src={author.avatar}
+                    icon={authorIconFallback}
+                  />
+                  <Box
+                    display={"flex"}
+                    flexDirection={"column"}
+                    alignItems={"start"}
+                    marginLeft={"2"}
+                    marginRight={"4"}
                   >
-                    {author.name}
-                  </Link>
-                  <Text
-                    as="span"
-                    fontSize={"0.8rem"}
-                    fontFamily={"Roboto"}
-                    color="gray"
-                  >
-                    {author.role}
-                  </Text>
-                </Box>
-              </WrapItem>
-            ))}
-          </Wrap>
-        </Box>
+                    <Link
+                      href={author.social}
+                      fontFamily={"Roboto"}
+                      fontSize={"1rem"}
+                      fontWeight={500}
+                    >
+                      {author.name}
+                    </Link>
+                    <Text
+                      as="span"
+                      fontSize={"0.8rem"}
+                      fontFamily={"Roboto"}
+                      color="gray"
+                    >
+                      {author.role}
+                    </Text>
+                  </Box>
+                </WrapItem>
+              ))}
+            </Wrap>
+          </Box>
+        ) : null}
         <MDXRemote {...mdxSource} components={components} />
       </Box>
     </MainPageTemplate>

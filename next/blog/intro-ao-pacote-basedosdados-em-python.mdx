@@ -30,7 +30,7 @@ A Base dos Dados Mais (BD+) é o nosso *datalake* de dados públicos **limpos, i
 
 O *datalake* é mantido no Google BigQuery e tem custo praticamente zero para todos os usuários — você tem 1 TB disponível por mês para fazer consulta aos dados. Para facilitar ainda mais a vida de Pythonistas, criamos um pacote de acesso direto ao repositório via Python: **basedosdados**
 
-```
+```python
 !pip install basedosdados # rode para instalar no Python/Jupyter
 ```
 
@@ -44,51 +44,61 @@ Existem diversas funções no pacote, tanto para acesso quanto para publicação
 
 #### Explorando as funções do pacote
 
-Para ilustrar, podemos verificar todos os conjuntos de dados disponíveis no *datalake* usando a função **list\_datasets**. Essa função retorna todos os conjuntos de dados, que podem ser filtrados por algum termo específico usando o parâmetro **filter\_by.** Mostramos como fazer isso abaixo buscando dados do IBGE. O parâmetro **with\_description** indica se queremos visualizar também a descrição de cada conjunto.
+Para ilustrar, podemos verificar todos os conjuntos de dados disponíveis no *datalake* usando a função `list_datasets`. Essa função retorna todos os conjuntos de dados, que podem ser filtrados por algum termo específico usando o parâmetro `filter_by`. Mostramos como fazer isso abaixo buscando dados do IBGE. O parâmetro `with_description` indica se queremos visualizar também a descrição de cada conjunto.
 
-bd.list\_datasets(filter\_by=’ibge’, with\_description=True)
+```python
+bd.list_datasets(filter_by="ibge", with_description=True)
+```
 
-Da mesma forma, podemos listar as tabelas de um conjunto de dados específico com a função **list\_dataset\_tables**. Além disso, podemos ter também uma visão completa das colunas e seus tipos com a função **get\_table\_columns** — tudo isso sem carregar ainda os dados no ambiente!
+Da mesma forma, podemos listar as tabelas de um conjunto de dados específico com a função `list_dataset_tables` Além disso, podemos ter também uma visão completa das colunas e seus tipos com a função `get_table_columns` — tudo isso sem carregar ainda os dados no ambiente!
 
-\# Lista as tabelas do conjunto de dados sobre nomes no Brasil\
-bd.list\_dataset\_tables(\
-dataset\_id=’br\_ibge\_nomes\_brasil’, with\_description=True)
-
-\# Consultando as colunas de uma das tabelas do conjunto\
-bd.get\_table\_columns(\
-dataset\_id=’br\_ibge\_nomes\_brasil’,\
-table\_id=’quantidade\_municipio\_nome\_2010'\
+```python
+# Lista as tabelas do conjunto de dados sobre nomes no Brasil
+bd.list_dataset_tables(
+  dataset_id="br_ibge_nomes_brasil",
+  with_description=True
 )
+
+# Consultando as colunas de uma das tabelas do conjunto
+bd.get_table_columns(
+  dataset_id="br_ibge_nomes_brasil",
+  table_id="quantidade_municipio_nome_2010"
+)
+```
 
 Antes de carregar os dados, pode-se verificar inclusive seu tamanho total — existem tabelas muito grandes no repositório, então recomendamos fortemente fazer esse passo.
 
-bd.get\_table\_size(\
-dataset\_id=’br\_ibge\_nomes\_brasil’,\
-table\_id=’quantidade\_municipio\_nome\_2010',\
-billing\_project\_id=’seu-id-projeto'\
+```python
+bd.get_table_size(
+  dataset_id="br_ibge_nomes_brasil",
+  table_id="quantidade_municipio_nome_2010",
+  billing_project_id="seu-id-projeto"
 )
+```
 
-Por fim, a função \`read\_table\` faz o carregamento dos dados no ambiente Python. Caso a base em questão seja muito grande, você pode optar também em usar a função \`read\_sql\`, que permite fazer uma query SQL e carregar no ambiente somente os dados requisitados. Para ambos é necessário que você explicite o seu \`billing\_project\_id\`, o projeto que foi habilitado lá no início e que será cobrado caso você exceda o limite.
+Por fim, a função `read_table` faz o carregamento dos dados no ambiente Python. Caso a base em questão seja muito grande, você pode optar também em usar a função `read_sql`, que permite fazer uma query SQL e carregar no ambiente somente os dados requisitados. Para ambos é necessário que você explicite o seu `billing_project_id`, o projeto que foi habilitado lá no início e que será cobrado caso você exceda o limite.
 
-df = bd.read\_table(\
-dataset\_id=’br\_ibge\_nomes\_brasil’,\
-table\_id=’quantidade\_municipio\_nome\_2010',\
-billing\_project\_id=’seu-id-projeto'\
+```python
+df = bd.read_table(
+  dataset_id="br_ibge_nomes_brasil",
+  table_id="quantidade_municipio_nome_2010",
+  billing_project_id="seu-id-projeto"
 )
+```
 
 Neste exemplo vamos trabalhar com os dados de [nomes brasileiros do Censo Demográfico 2010 do IBGE](https://basedosdados.org/dataset/br-ibge-nomes-brasil). De acordo com o Censo, existem ao todo cerca de 200 milhões de habitantes com mais de 130 mil nomes diferentes espalhados pelo Brasil. Curioso? Nós também!
 
 #### Construindo uma análise: Quais os nomes mais famosos no Brasil?
 
-> Qual a sua aposta, Maria ou João? Vamos descobrir com os dados.
+Qual a sua aposta, Maria ou João? Vamos descobrir com os dados.
 
 Para respondermos a essa pergunta, contamos a frequência de cada nome no Brasil e ordenamos colocando os mais frequentes no topo. Em seguida, vamos criar uma nuvem de palavras para visualizar essas informações.
 
-Criamos então a função **generate\_list\_sorted\_by\_freq** que faz a agregação dos nomes na tabela contando quantas vezes cada um aparece, e ordenamos a lista de acordo com os nomes mais frequentes. O código segue mais abaixo.
+Criamos então a função `generate_list_sorted_by_freq` que faz a agregação dos nomes na tabela contando quantas vezes cada um aparece, e ordenamos a lista de acordo com os nomes mais frequentes. O código segue mais abaixo.
 
-Para criar a imagem, usamos a biblioteca **wordcloud** junto ao **matplotlib,** disponíveis para instalação via pip. A **wordcloud** nos possibilita gerar uma imagem com as palavras onde o tamanho de cada uma é determinado pela sua frequência, gerando um belo efeito visual para nosso ranking.
+Para criar a imagem, usamos a biblioteca `wordcloud` junto ao `matplotlib`, disponíveis para instalação via `pip`. A `wordcloud` nos possibilita gerar uma imagem com as palavras onde o tamanho de cada uma é determinado pela sua frequência, gerando um belo efeito visual para nosso ranking.
 
-> E como resultado: **Maria é a vencedora**!
+E como resultado: **Maria é a vencedora**!
 
 ![Nuvem de palavras com nomes mais frequentes no Brasil. O tamanho de cada palavra corresponde ao quão famoso aquele nome é. O maior nome na imagem é Maria, em seguida José, João, Antônio e Francisco.](https://storage.googleapis.com/basedosdados-website/blog/intro-ao-pacote-basedosdados-em-python/image_1.jpg)
 
