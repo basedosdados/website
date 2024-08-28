@@ -286,10 +286,12 @@ export function SectionPrice() {
     let user = null
     if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
 
+    const stripeSubscription = user?.internalSubscription?.edges?.[0]?.node?.stripeSubscription
+
     if(user != null) {
       setUsername(user?.username)
-      setIsBDPro(user?.proSubscription === "bd_pro")
-      setIsBDEmp(user?.proSubscription === "bd_pro_empresas")
+      setIsBDPro(stripeSubscription === "bd_pro")
+      setIsBDEmp(stripeSubscription === "bd_pro_empresas")
     }
 
     async function fecthPlans() {
