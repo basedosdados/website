@@ -7,7 +7,7 @@ const blogpostsDir = path.join(root, "blog");
 
 export function getAllPosts() {
   const postsDir = fs.readdirSync(blogpostsDir, "utf-8");
-  return postsDir.map((folder) => {
+  const posts = postsDir.map((folder) => {
     const fullpath = path.join(blogpostsDir, folder);
     const content = fs.readFileSync(fullpath, "utf-8");
     const { data } = matter(content);
@@ -16,6 +16,12 @@ export function getAllPosts() {
       frontmatter: data,
     };
   });
+
+  posts.sort(
+    (a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date),
+  );
+
+  return posts;
 }
 
 export function getPostBySlug(slug) {

@@ -15,7 +15,6 @@ import Head from "next/head";
 import { MainPageTemplate } from "../components/templates/main";
 // import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { getAllPosts } from "./api/blog";
-import Link from "../components/atoms/Link";
 // import Subtitle from "../components/atoms/Subtitle";
 
 export const authorIconFallback = createIcon({
@@ -49,7 +48,6 @@ export function DatePost({ date }) {
       as="p"
       fontFamily={"Roboto"}
       fontSize={"sm"}
-      marginTop={"0.5rem"}
       color="gray"
     >
       {localeDate}
@@ -78,7 +76,7 @@ function LatestBlogCard({ slug, frontmatter, latest }) {
           </Box>
           <Heading
             as="h1"
-            marginY={"1rem"}
+            marginTop={"1rem"}
             fontSize="3xl"
             fontWeight={500}
             fontFamily={"Roboto"}
@@ -91,16 +89,16 @@ function LatestBlogCard({ slug, frontmatter, latest }) {
             fontFamily={"Roboto"}
             fontWeight={400}
             fontSize={"1rem"}
-            marginTop={4}
+            marginY={"2"}
             color={"gray"}
           >
             {description}
           </Text>
         </a>
       </Box>
-      {authors ? (
-        <Box>
-          <Wrap display={"flex"} alignItems={"center"}>
+      <Box display={"flex"} alignItems={"center"}>
+        {authors ? (
+          <Wrap display={"flex"} alignItems={"center"} marginRight={"0.5rem"}>
             {authors.map((author, index) => (
               <WrapItem alignItems={"center"}>
                 <Avatar
@@ -114,9 +112,9 @@ function LatestBlogCard({ slug, frontmatter, latest }) {
               </WrapItem>
             ))}
           </Wrap>
-        </Box>
-      ) : null}
-      <DatePost date={date} />
+        ) : null}
+        <DatePost date={date} />
+      </Box>
     </Box>
   );
 }
@@ -164,12 +162,12 @@ function MiniBlogCard({ slug, frontmatter }) {
               fontFamily={"Roboto"}
               fontWeight={400}
               fontSize={"1rem"}
-              marginY={4}
+              marginY={".5rem"}
               color={"gray"}
             >
               {description}
             </Text>
-            <Box display={"flex"}>
+            <Box display={"flex"} alignItems={"center"}>
               {authors ? (
                 <Wrap
                   display={"flex"}

@@ -3,20 +3,20 @@ title: Explorando o Censo Escolar com a BD+
 description: >-
   Uma maneira prática de analisar a mais importante pesquisa estatística
   educacional do Brasil
-date: '2021-11-15T15:18:48.544Z'
+date: '2021-06-04'
+authors:
+  - name: Matheus Valentim
+    role: Equipe da Base dos Dados 💚
+    social: https://github.com/mavalentim
+thumbnail: https://storage.googleapis.com/basedosdados-website/blog/explorando-o-censo-escolar-com-a-bd/image_0.jpg
 categories: []
 keywords: []
-slug: /@basedosdados/explorando-o-censo-escolar-com-a-bd-6577d7251ea1
+medium_slug: https://medium.com/@basedosdados/explorando-o-censo-escolar-com-a-bd-6577d7251ea1
 ---
-![](https://storage.googleapis.com/basedosdados-website/blog/explorando-o-censo-escolar-com-a-bd/image_0.jpg)
 
-> **Texto por** [**Matheus Valentim**](https://github.com/mavalentim)**,** da Base dos Dados **💚**
+<Image src="https://storage.googleapis.com/basedosdados-website/blog/explorando-o-censo-escolar-com-a-bd/image_0.jpg"/>
 
-> Data da publicação original: 4/06/2021.
-
-> Teve algum problema seguindo o tutorial? Escreva para a gente nos comentários!
-
-### TL;DR
+## TL;DR
 
 Nesse texto, vamos dissecar o conjunto de dados do **Censo Escolar,** já disponível, tratado e pronto para a análise na BD+. Primeiro, vamos introduzir as **quatro** diferentes tabelas da base, apresentando algumas de suas variáveis. Depois, vamos mostrar alguns pontos de contato interessantes com outras tabelas disponíveis em nosso datalake público e perguntas que podem surgir dessas interações. Acesse essa base por [aqui](https://basedosdados.org/dataset/br-inep-censo-escolar). Dentre os temas deste artigo, estão:
 
@@ -24,7 +24,7 @@ Nesse texto, vamos dissecar o conjunto de dados do **Censo Escolar,** já dispon
 * **Explorando o Censo Escolar com a BD+**
 * **Pontos de contato com outras bases**
 
-### O Censo e suas dificuldades
+## O Censo e suas dificuldades
 
 O Censo Escolar é uma pesquisa **anual**, onde cada escola do país responde a diversas perguntas sobre a própria escola, as turmas, os professores e os alunos que ali frequentam. O Censo tem microdados desde 1995 e, em 2007, assumiu um novo formato digital. Há indícios de que a pesquisa ocorre desde a década de 30. Aqui na Base dos Dados, optamos por disponibilizar, inicialmente, valores **desde 2009 até 2020**. O período é o mais uniforme da pesquisa e foi quando ela manteve o mesmo formato, o que facilita e corrobora com a compatibilização entre diferentes anos.
 
@@ -37,7 +37,7 @@ A disponibilização dos dados do Censo, assim como de outras bases de educaçã
 
 Ao invés de enfrentar tudo isso, você pode usar nossa versão já limpa e harmonizada, baixando via BigQuery ou abrindo as tabelas [direto no R](https://medium.com/basedosdados/como-usar-a-bd-com-r-427aded95448?source=collection_home---------3-------------------------------) ou [no Python](https://medium.com/basedosdados/intro-ao-pacote-basedosdados-em-python-4e05439e936d?source=collection_home---------5-------------------------------).
 
-### Explorando o Censo Escolar com a BD+
+## Explorando o Censo Escolar com a BD+
 
 Com as suas 4 tabelas, o nosso dataset do Censo Escolar replica a arquitetura da base original, disponibilizando diferentes tabelas para diferentes níveis de agregação. Temos uma base a nível de **escola**, uma a nível de **turma**, e duas no nível individual: uma para **docentes** e outra para os **alunos**.
 
@@ -45,7 +45,7 @@ Com as suas 4 tabelas, o nosso dataset do Censo Escolar replica a arquitetura da
 
 Além disso, cabe reforçar que não disponibilizamos todas as variáveis que aparecem no Censo. Selecionamos a maioria das variáveis, as que aparecem mais vezes. Pegamos as variáveis que aparecem 8 ou mais vezes ao longo dos 12 anos, além de outras variáveis que julgamos serem cruciais por serem identificadoras importantes. Isso significa que, se a variável só aparece em 2 anos, por exemplo, ela não foi incluída nas nossas tabelas.
 
-#### A tabela `escola`
+## A tabela `escola`
 
 A tabela `escola` tem a granularidade de cada escola por cada ano. A identificação básica de cada unidade é feita pelas variáveis `id_escola` e `ano`.
 
@@ -59,9 +59,21 @@ Por fim, nas variáveis que identificam o ensino, temos em sua maioria variávei
 
 Com uma única entrada no R usando a biblioteca basedosdados, podemos descobrir, por exemplo, quais escolas não têm água potável em Minas Gerais no ano de 2020:
 
+```r
+basedosdados::read_sql('SELECT ano,id_escola,agua_potavel FROM `basedosdados-dev.br_inep_censo_escolar.escola` WHERE agua_potavel = 0 and ano = 2020 and sigla_uf = "MG"')
+```
+
 Ou quais escolas funcionavam em unidades prisionais em 2009:
 
-#### A tabela `turma`
+```python
+import basedosdados as bd
+bd.read_sql(
+  query = "SELECT * FROM `basedosdados.br_inep_censo_escolar.turma` WHERE ano = 2010 and sigla_uf = BA",
+  billing_project_id = "bd_projeto"
+)
+```
+
+## A tabela `turma`
 
 A tabela turma tem a granularidade de **cada turma** por **cada ano**, isto é, cada observação é identificada por seu `id_turma`e pelo seu `ano`.
 
@@ -71,7 +83,15 @@ Temos também variáveis que identificam **atividades extracurriculares** e **qu
 
 Se quisermos abrir as turmas de 2010 para o estado da Bahia por exemplo, no [Python](https://dev.to/basedosdados/base-dos-dados-python-101-44lc):
 
-#### A tabela `docente`
+```python
+import basedosdados as bd
+bd.read_sql(
+  query = "SELECT * FROM `basedosdados.br_inep_censo_escolar.turma` WHERE ano = 2010 and sigla_uf = BA",
+  billing_project_id = "bd_projeto"
+)
+```
+
+## A tabela `docente`
 
 A tabela `docente` tem a granularidade a nível dos profissionais escolares em sala de aula: professores, auxiliares, tradutores/intérpretes entre outros que atuam pedagogicamente na escola. Cada linha da tabela corresponde a **um profissional, por cada ano**. Cada um desses profissionais é identificado com um `id_docente`.
 
@@ -79,7 +99,15 @@ Na tabela temos as mais diversas características de cada docente, representadas
 
 Se quisermos só os docentes pretos da cidade de Rio Branco por exemplo, poderíamos rodar em Python:
 
-#### A tabela `matricula`
+```python
+import basedosdados as bd
+bd.read_sql(
+  query = "SELECT * FROM `basedosdados.br_inep_censo_escolar.docente` WHERE id_municipio = 1200401 and raca_cor = 2",
+  billing_project_id = "bd_projeto"
+)
+```
+
+## A tabela `matricula`
 
 Sem dúvida uma das maiores tabelas de todo nosso datalake, a tabela `matricula` identifica cada aluno brasileiro através da `id_aluno`. As observações estão no nível de cada **aluno** e de cada **ano**.
 
@@ -91,24 +119,29 @@ A tabela `matricula`, especificamente, é muito grande (chega a mais de 90gb), p
 
 Como exemplo, podemos recortá-la para pegar somente os estudantes que vão à escola de transporte público em 2019, no estado de Roraima. No R, ficaria assim:
 
-### Pontos de contato com outras bases
+```r
+basedosdados::read_sql("SELECT * FROM `basedosdados.br_inep_censo_escolar.matricula` WHERE sigla_uf = RR and transporte_publico = 1 and ano = 2019")
+```
+
+## Pontos de contato com outras bases
 
 O censo escolar por si só já disponibiliza uma grande variedade de variáveis. Caso você queira obter ainda mais, com a [BD+](https://basedosdados.github.io/mais/access_data_bq/) é fácil: como as bases têm os mesmos nomes de variável, podemos rapidamente juntar diferentes informações. A seguir separamos algumas bases já disponíveis na BD+ que podem complementar bem as tabelas do Censo Escolar:
 
-[**Os indicadores escolares do INEP**](https://basedosdados.org/dataset/br-inep-indicadores-educacionais): O dataset `br_inep_indicadores_educacionais` apresenta uma série de medições sobre a qualidade de ensino, em diferentes níveis de agregação. Usando a tabela `escola` como ponte, podemos juntar **média de alunos por turma da escola** (proveniente dessa tabela) com **número de computadores da escola** (vindo do Censo) e **construir um mais amplo cenário socioeconômico da escola**.
+[Os indicadores escolares do INEP](https://basedosdados.org/dataset/br-inep-indicadores-educacionais): O dataset `br_inep_indicadores_educacionais` apresenta uma série de medições sobre a qualidade de ensino, em diferentes níveis de agregação. Usando a tabela `escola` como ponte, podemos juntar **média de alunos por turma da escola** (proveniente dessa tabela) com **número de computadores da escola** (vindo do Censo) e **construir um mais amplo cenário socioeconômico da escola**.
 
-[**As notas do IDEB**](https://basedosdados.org/dataset/br-inep-ideb): O dataset `br_inep_ideb`nos disponibiliza tabelas de diferentes que identificam as notas dos alunos em avaliações da qualidade do ensino (as provas do SAEB), as taxas de rendimento (aprovação, reprovação, abandono) e o desempenho no IDEB. Junto com as tabelas do Censo, pode-se avaliar, por exemplo, **como escolas com mais professores com mestrado vão nessas provas em relação a escolas com professores que não tem pós graduação**.
+[As notas do IDEB](https://basedosdados.org/dataset/br-inep-ideb): O dataset `br_inep_ideb`nos disponibiliza tabelas de diferentes que identificam as notas dos alunos em avaliações da qualidade do ensino (as provas do SAEB), as taxas de rendimento (aprovação, reprovação, abandono) e o desempenho no IDEB. Junto com as tabelas do Censo, pode-se avaliar, por exemplo, **como escolas com mais professores com mestrado vão nessas provas em relação a escolas com professores que não tem pós graduação**.
 
-[**Diferentes tabelas da SEDUC**](https://basedosdados.org/dataset/?q=seduc): As tabelas da SEDUC disponibilizam informações sobre o nível educacional e socioeconômico das escolas estaduais de São Paulo. Com elas somadas ao censo, pode se avaliar por exemplo **se escolas com melhor infraestrutura tem maior evasão no ensino médio.**
+[Diferentes tabelas da SEDUC](https://basedosdados.org/dataset/?q=seduc): As tabelas da SEDUC disponibilizam informações sobre o nível educacional e socioeconômico das escolas estaduais de São Paulo. Com elas somadas ao censo, pode se avaliar por exemplo **se escolas com melhor infraestrutura tem maior evasão no ensino médio.**
 
 As tabelas do Censo também tem identificação do município de cada uma das escolas, das turmas, dos docentes e dos alunos, permitindo vinculá-las com quase todas as tabelas a nível de município disponível no nosso datalake.
 
 Chegamos ao fim da nossa breve apresentação! Os dados da mais importante pesquisa estatística educacional brasileira, o Censo Escolar (e todas suas nuances) agora fazem parte da [Base dos Dados](https://basedosdados.org/)!
 
-Nosso projeto já te ajudou de alguma forma? Saiba como nos ajudar:\
--[Apoie o projeto](https://apoia.se/basedosdados)\
--[Seja um(a) colaborador(a) de dados na BD](https://basedosdados.github.io/mais/colab_data/)\
--[Colabore com nossos pacotes](https://github.com/basedosdados/mais)\
--[Compartilhe nas redes sociais!](https://twitter.com/basedosdados)
+Nosso projeto já te ajudou de alguma forma? Saiba como nos ajudar:
+
+- [Apoie o projeto](https://apoia.se/basedosdados)
+- [Seja um(a) colaborador(a) de dados na BD](https://basedosdados.github.io/mais/colab_data/)
+- [Colabore com nossos pacotes](https://github.com/basedosdados/mais)
+- [Compartilhe nas redes sociais!](https://twitter.com/basedosdados)
 
 Texto produzido por [Matheus](https://github.com/mavalentim) da equipe de Dados, com enorme apoio do pesquisador Adriano Senkevics, um dos especialistas em educação da nossa comunidade 💚

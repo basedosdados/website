@@ -264,40 +264,53 @@ export default function Blog({ slug, mdxSource }) {
         {frontmatter.authors ? (
           <Box marginBottom={"4rem"}>
             <Wrap display={"flex"} alignItems={"center"}>
-              {frontmatter.authors.map((author) => (
-                <WrapItem alignItems={"center"}>
-                  <Avatar
-                    size="md"
-                    name={author.name}
-                    src={author.avatar}
-                    icon={authorIconFallback}
-                  />
-                  <Box
-                    display={"flex"}
-                    flexDirection={"column"}
-                    alignItems={"start"}
-                    marginLeft={"2"}
-                    marginRight={"4"}
-                  >
-                    <Link
-                      href={author.social}
+              {frontmatter.authors.map((author) => {
+                const authorComponent = (
+                  <WrapItem alignItems={"center"}>
+                    <Box
+                      // href={author.social}
                       fontFamily={"Roboto"}
-                      fontSize={"1rem"}
+                      fontSize={"0.9rem"}
                       fontWeight={500}
+                      display="flex"
+                      alignItems={"center"}
                     >
-                      {author.name}
-                    </Link>
-                    <Text
-                      as="span"
-                      fontSize={"0.8rem"}
-                      fontFamily={"Roboto"}
-                      color="gray"
-                    >
-                      {author.role}
-                    </Text>
-                  </Box>
-                </WrapItem>
-              ))}
+                      <Avatar
+                        size="sm"
+                        name={author.name}
+                        src={author.avatar}
+                        icon={authorIconFallback}
+                      />
+                      <Box
+                        display={"flex"}
+                        flexDirection={"column"}
+                        alignItems={"start"}
+                        marginLeft={"2"}
+                        marginRight={"4"}
+                      >
+                        {author.name}
+                        {author?.role ? (
+                          <Text
+                            as="span"
+                            marginTop={"-0.2rem"}
+                            fontSize={"0.7rem"}
+                            fontFamily={"Roboto"}
+                            color="gray"
+                          >
+                            {author.role}
+                          </Text>
+                        ) : null}
+                      </Box>
+                    </Box>
+                  </WrapItem>
+                );
+
+                return author?.social ? (
+                  <Link href={author.social}>{authorComponent}</Link>
+                ) : (
+                  <>{authorComponent}</>
+                );
+              })}
             </Wrap>
           </Box>
         ) : null}

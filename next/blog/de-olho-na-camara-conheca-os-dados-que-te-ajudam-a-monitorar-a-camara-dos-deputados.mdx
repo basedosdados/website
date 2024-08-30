@@ -6,12 +6,16 @@ description: >-
   Aprenda como acessar e analisar dados sobre a atuação da Câmara, do contexto
   histórico à prática
 date: '2024-06-03T17:33:29.243Z'
+authors:
+  - name: Base dos Dados
+thumbnail: https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_0.png
 categories: []
 keywords: []
-slug: >-
-  /@basedosdados/de-olho-na-c%C3%A2mara-conhe%C3%A7a-os-dados-que-te-ajudam-a-monitorar-a-c%C3%A2mara-dos-deputados-1570cf740c43
+medium_slug: >-
+  https://medium.com/@basedosdados/de-olho-na-c%C3%A2mara-conhe%C3%A7a-os-dados-que-te-ajudam-a-monitorar-a-c%C3%A2mara-dos-deputados-1570cf740c43
 ---
-![Conheã os dados que te ajudam a monitorar a Câmara dos Deputados. Imagem do Congresso Nacional e logo da Campanha no canto superior direito (uma lupa com o prédio da Câmara dos Deputados no centro)](https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_0.png)
+
+<Image src="https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_0.png"/>
 
 Os Dados Abertos da Câmara dos Deputados promovem o acesso direto às informações sobre a atividade legislativa e facilitam a fiscalização das ações dos deputados e da gestão dos recursos públicos. Porém, ainda existe um grande salto entre a disponibilização dos dados e a possibilidade de que cidadãos acompanhem o trabalho dos seus representantes. Afinal, trabalhar com dados não é algo tão trivial, especialmente quando falamos de grandes volumes de informações que são atualizadas com frequência, como é o caso dos dados da Câmara.
 
@@ -19,20 +23,20 @@ A Base dos Dados já deu um grande passo para tornar esses dados mais acessívei
 
 É por isso que lançamos a campanha De Olho Na Câmara, que consiste em artigos, dicas, tutoriais e análises com os Dados Abertos da Câmara, sempre com o objetivo de trazer mais acessibilidade e praticidade à sua análise. Este é apenas o primeiro artigo da série, então não deixe de nos seguir nas redes sociais para ficar sempre por dentro das novidades da campanha.
 
-### O que você vai ler?
+## O que você vai ler?
 
 Neste artigo, apresentamos um breve contexto histórico da política de governo aberto da Câmara dos Deputados, explicamos como esses dados estão disponíveis e como você pode usar a BD para acessar e analisar os dados de maneira mais prática e rápida. Organizamos também uma lista de referências e casos de uso que podem servir de inspiração e consulta. Veja os Tópicos:
 
-* *Contexto*
-* *Como a Câmara disponibiliza os dados*
-* *Por que acessar os dados da Câmara pela BD?*
-* *Lista de referências e links úteis*
+* Contexto
+* Como a Câmara disponibiliza os dados
+* Por que acessar os dados da Câmara pela BD?
+* Lista de referências e links úteis
 
-### Contexto
+## Contexto
 
 A Câmara dos Deputados disponibiliza o serviço de Dados Abertos desde 2011 — e desde 2017 com o formato mais parecido com o atual. Contudo, tudo começou mesmo em 2006, com o Serviço de Integração Tecnológica (SIT Câmara). O portal sofreu alterações para se adequar melhor à Lei de Acesso à Informação e disponibilizar informações sem necessidade de cadastro prévio.
 
-#### **E quais são as características dos Dados Abertos?**
+## E quais são as características dos Dados Abertos?
 
 Os Dados Abertos seguem alguns princípios básicos de disponibilização de dados públicos, como completude, atualidade, acesso não discriminatório, acessibilidade, formatos não proprietários, dados estruturados, livre de licenças e disponibilidade no mesmo grau de detalhe da fonte. Muitos desses princípios são compatíveis e complementam a ideia de governo aberto ([Oliveira & Ckagnazaroff, 2022](https://www.researchgate.net/publication/362482737_Principios_de_governo_aberto_Uma_revisao_pela_perspectiva_historica)).
 
@@ -54,7 +58,7 @@ Com a Lei de Acesso à Informação (2011) veio, por exemplo, a Parceria para Go
 
 *Contudo, mesmo com todos esses avanços, é importante destacar uma parte importante do processo de governo aberto: você. A participação cidadã ativa nesses processos acaba exigindo letramento em dados quando a produção e acesso a dados aumenta exponencialmente com o desenvolvimento tecnológico. Então precisamos colocar a mão na massa.*
 
-### Como a Câmara disponibiliza esses dados?
+## Como a Câmara disponibiliza esses dados?
 
 Por meio de link para download direto pelo site, em diversos formatos (como csv, JSON, xlsx e xlm, além de ods em alguns casos) ou por API (*application programming interface* ou interface de programação de aplicação). A maior parte das tabelas disponibilizadas possuem atualização diária ou mensal, além de vários anos de cobertura. O conteúdo cobre dados sobre despesas parlamentares, proposições, frentes e grupos parlamentares, legislaturas, órgãos, informações sobre os deputados e funcionários lotados na Câmara, eventos, votações, licitações e o Tesauro da Câmara dos Deputados.
 
@@ -70,7 +74,7 @@ Pedro explica que seu “processo de análise envolveu pegar os .csv ano a ano 
 
 Apesar do acesso aos dados brutos facilitar, e muito, o processo de análise e extração de insights, hoje existe uma maneira ainda mais prática para acessar esse grande volume de dados sem precisar baixar ou até organizar eles.
 
-### Por que acessar os dados da Câmara pela BD?
+## Por que acessar os dados da Câmara pela BD?
 
 A Base dos Dados disponibiliza um datalake público com os principais indicadores brasileiros. Isso permite que você acesse, explore e cruze os dados pelo próprio Google Cloud. Uma vez no nosso *datalake*, onde os dados já estão tratados, padronizados e atualizados, tudo o que precisamos fazer é interagir com eles via SQL ou por *download* diretamente no site da BD. Via SQL — e aí dá para usar a linguagem de consulta mesmo dentro do R, Python ou Stata –, muitas portas se abrem, como a conexão com as demais tabelas do conjunto dos Dados Abertos da Câmara e outras do *datalake*, quando a conexão fizer sentido.
 
@@ -94,11 +98,11 @@ ORDER BY data_emissao ASC;
 
 A consulta irá retornar uma tabela já com os dados do recorte desejado.
 
-![](https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_1.png)
+<Image src="https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_1.png"/>
 
 Você pode exportar os resultados em um arquivo local (.csv, JASON ou para a área de transferência do seu computador) para explorar com com seu editor de planilha ou linguagem de programação preferida, ou ainda salvá-los em uma tabela do BigQuery ou Google Sheets, sem precisar fazer download da tabela.
 
-![](https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_2.png)
+<Image src="https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_2.png"/>
 
 Se você tem algum conhecimento de SQL, pode ainda utilizar o datalake para criar agrupamentos e operações básicas nos dados. Uma consulta que agrupe os dados por categoria de despesa, por exemplo, pode te ajudar a ter uma noção das prioridades do(a) parlamentar em questão. Com a consulta abaixo, basta substituir o nome do(a) parlamentar para acessar esse recorte específico.
 
@@ -115,11 +119,11 @@ ORDER BY despesas DESC;
 
 Veja o resultado da consulta anterior. Para este exemplo, utilizamos o nome de um deputado escolhido aleatoriamente. Note que a categoria “Divulgação da Atividade Parlamentar” concentra o maior valor das despesas da Cota Parlamentar do deputado em questão.
 
-![](https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_3.png)
+<Image src="https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_3.png"/>
 
 Esse é apenas um simples exemplo de aplicação dos dados em nosso datalake público. Vem aí um tutorial completo sobre como estão organizados os dados na BD, como as diferentes tabelas deste conjunto se relacionam, quais informações são possíveis extrair dos dados e como.
 
-### Lista de referências
+## Lista de referências
 
 Organizamos aqui uma lista com links que podem ser úteis para sua pesquisa e análise. Aproveite para salvar esse artigo para ter sempre a lista em mãos.
 
