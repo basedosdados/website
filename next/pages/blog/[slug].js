@@ -421,8 +421,6 @@ export default function Blog({ slug, mdxSource }) {
           content={frontmatter.thumbnail}
           key="ogimage"
         />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="600" />
         <meta
           name="twitter:image"
           content={frontmatter.thumbnail}

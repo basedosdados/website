@@ -48,6 +48,38 @@ export function DatePost({ date }) {
   );
 }
 
+function Authors({ authors }) {
+  const MAX_ICONS = 3;
+
+  return authors.slice(0, MAX_ICONS).map((author, index) => {
+    return (
+      <WrapItem key={index} alignItems={"center"}>
+        {authors.length > MAX_ICONS && index == 2 ? (
+          <Avatar
+            size="sm"
+            backgroundColor={"#efefef"}
+            marginLeft={"-15px"}
+            title={`${authors
+              .slice(MAX_ICONS - 1)
+              .map((author) => author.name)
+              .join(", ")}`}
+            icon={<span>{`+${authors.length - MAX_ICONS + 1}`}</span>}
+          />
+        ) : (
+          <Avatar
+            size="sm"
+            marginLeft={index !== 0 ? "-15px" : "0"}
+            title={author.name}
+            name={author.name}
+            src={author?.avatar}
+            icon={authorIconFallback}
+          />
+        )}
+      </WrapItem>
+    );
+  });
+}
+
 function LatestBlogCard({ slug, frontmatter }) {
   const { title, description, date, authors } = frontmatter;
   return (
@@ -104,18 +136,7 @@ function LatestBlogCard({ slug, frontmatter }) {
         <Box display={"flex"} alignItems={"center"}>
           {authors ? (
             <Wrap display={"flex"} alignItems={"center"} marginRight={"0.5rem"}>
-              {authors.map((author, index) => (
-                <WrapItem key={index} alignItems={"center"}>
-                  <Avatar
-                    size="sm"
-                    marginLeft={index !== 0 ? "-15px" : "0"}
-                    title={author.name}
-                    name={author.name}
-                    src={author.avatar}
-                    icon={authorIconFallback}
-                  />
-                </WrapItem>
-              ))}
+              <Authors authors={authors} />
             </Wrap>
           ) : null}
           <DatePost date={date} />
@@ -180,18 +201,7 @@ function MiniBlogCard({ slug, frontmatter }) {
       <Box display={"flex"} alignItems={"center"}>
         {authors ? (
           <Wrap display={"flex"} alignItems={"center"} marginRight={".5rem"}>
-            {authors.map((author, index) => (
-              <WrapItem key={index} alignItems={"center"}>
-                <Avatar
-                  size="sm"
-                  marginLeft={index !== 0 ? "-15px" : "0"}
-                  title={author.name}
-                  name={author.name}
-                  src={author.avatar}
-                  icon={authorIconFallback}
-                />
-              </WrapItem>
-            ))}
+            <Authors authors={authors} />
           </Wrap>
         ) : null}
         <DatePost date={date} />
@@ -217,7 +227,7 @@ export default function Blog({ posts }) {
         />
       </Head>
 
-      <Grid marginTop={"2rem"} gap={"3rem"} templateColumns="1fr 1fr 1fr">
+      <Grid marginTop={"4rem"} gap={"3rem"} templateColumns="1fr 1fr 1fr">
         {posts.map((post, index) => {
           if (index === 0) {
             return (
