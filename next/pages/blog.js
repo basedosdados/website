@@ -9,13 +9,12 @@ import {
   Avatar,
   createIcon,
   Image,
+  Link,
 } from "@chakra-ui/react";
 import Head from "next/head";
-// import Display from "../components/atoms/Display";
+import NextLink from "next/link";
 import { MainPageTemplate } from "../components/templates/main";
-// import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { getAllPosts } from "./api/blog";
-// import Subtitle from "../components/atoms/Subtitle";
 
 export const authorIconFallback = createIcon({
   displayName: "user",
@@ -28,7 +27,6 @@ export const authorIconFallback = createIcon({
   ),
 });
 
-// @ts-check
 export async function getStaticProps() {
   return { props: { posts: getAllPosts() } };
 }
@@ -44,63 +42,146 @@ export function DatePost({ date }) {
     day: "numeric",
   });
   return (
-    <Text
-      as="p"
-      fontFamily={"Roboto"}
-      fontSize={"sm"}
-      color="gray"
-    >
+    <Text as="p" fontFamily={"Roboto"} fontSize={"sm"} color="gray">
       {localeDate}
     </Text>
   );
 }
 
-function LatestBlogCard({ slug, frontmatter, latest }) {
+function LatestBlogCard({ slug, frontmatter }) {
   const { title, description, date, authors } = frontmatter;
   return (
-    <Box display={"flex"} flexDir={"column"}>
-      <Box role="group">
-        <a href={`/blog/${slug}`}>
-          <Box overflow={"hidden"}>
-            <Image
-              width={"100%"}
-              height={"300px"}
-              src={
-                frontmatter.thumbnail ||
-                "https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_9.png"
-              }
-              objectFit={"none"}
-              transition={"transform .6s cubic-bezier(0.01, 0.97, 0.42, 1.09)"}
-              _groupHover={{ transform: "scale(1.1)" }}
-            />
-          </Box>
-          <Heading
-            as="h1"
-            marginTop={"1rem"}
-            fontSize="3xl"
-            fontWeight={500}
-            fontFamily={"Roboto"}
-            _groupHover={{ color: "rgb(43, 140, 77)" }}
-          >
-            {title}
-          </Heading>
-          <Text
-            as="p"
-            fontFamily={"Roboto"}
-            fontWeight={400}
-            fontSize={"1rem"}
-            marginY={"2"}
-            color={"gray"}
-          >
-            {description}
-          </Text>
-        </a>
+    <Box display={"flex"}>
+      <Box role="group" flexGrow={"1"}>
+        <Box
+          overflow={"hidden"}
+          border="1px solid #DEDFE0"
+          borderRadius="16px"
+          marginRight={"2rem"}
+        >
+          <NextLink href={`/blog/${slug}`} passHref>
+            <Link>
+              <Image
+                cursor="pointer"
+                width={"100%"}
+                height={"370px"}
+                src={
+                  frontmatter.thumbnail ||
+                  "https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_9.png"
+                }
+                objectFit={"none"}
+                transition={
+                  "transform .6s cubic-bezier(0.01, 0.97, 0.42, 1.09)"
+                }
+                _groupHover={{ transform: "scale(1.03)" }}
+              />
+            </Link>
+          </NextLink>
+        </Box>
       </Box>
+      <Box width={"40%"}>
+        <Heading
+          as="h1"
+          fontSize="4xl"
+          fontWeight={500}
+          fontFamily={"Roboto"}
+          _groupHover={{ color: "rgb(43, 140, 77)" }}
+        >
+          <NextLink href={`/blog/${slug}`} passHref>
+            <Link>{title}</Link>
+          </NextLink>
+        </Heading>
+        <Text
+          as="p"
+          fontFamily={"Roboto"}
+          fontWeight={400}
+          fontSize={"1rem"}
+          marginY={"2"}
+          color={"gray"}
+        >
+          {description}
+        </Text>
+        <Box display={"flex"} alignItems={"center"}>
+          {authors ? (
+            <Wrap display={"flex"} alignItems={"center"} marginRight={"0.5rem"}>
+              {authors.map((author, index) => (
+                <WrapItem key={index} alignItems={"center"}>
+                  <Avatar
+                    size="sm"
+                    marginLeft={index !== 0 ? "-15px" : "0"}
+                    title={author.name}
+                    name={author.name}
+                    src={author.avatar}
+                    icon={authorIconFallback}
+                  />
+                </WrapItem>
+              ))}
+            </Wrap>
+          ) : null}
+          <DatePost date={date} />
+        </Box>
+      </Box>
+    </Box>
+  );
+}
+
+function MiniBlogCard({ slug, frontmatter }) {
+  const { title, description, date, authors } = frontmatter;
+  return (
+    <Box display={"flex"} flexDirection={"column"}>
+      <Box role="group">
+        <Box overflow={"hidden"} border="1px solid #DEDFE0" borderRadius="16px">
+          <NextLink href={`/blog/${slug}`} passHref>
+            <Link>
+              <Image
+                width={"100%"}
+                style={{ aspectRatio: "16/8" }}
+                src={
+                  frontmatter.thumbnail ||
+                  "https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_9.png"
+                }
+                objectFit={"cover"}
+                transition={
+                  "transform .6s cubic-bezier(0.01, 0.97, 0.42, 1.09)"
+                }
+                _groupHover={{ transform: "scale(1.03)" }}
+              />
+            </Link>
+          </NextLink>
+        </Box>
+        <Heading
+          as="h3"
+          fontSize={"xl"}
+          fontWeight={500}
+          fontFamily={"Roboto"}
+          _groupHover={{ color: "rgb(43, 140, 77)" }}
+        >
+          <NextLink href={`/blog/${slug}`} passHref>
+            <Link
+              display="block"
+              paddingTop={"1rem"}
+              _groupHover={{ textDecoration: "underline" }}
+            >
+              {title}
+            </Link>
+          </NextLink>
+        </Heading>
+      </Box>
+      <Text
+        as="p"
+        fontFamily={"Roboto"}
+        fontWeight={400}
+        fontSize={"1rem"}
+        marginY={".5rem"}
+        color={"gray"}
+      >
+        {description}
+      </Text>
       <Box display={"flex"} alignItems={"center"}>
         {authors ? (
-          <Wrap display={"flex"} alignItems={"center"} marginRight={"0.5rem"}>
+          <Wrap display={"flex"} alignItems={"center"} marginRight={".5rem"}>
             {authors.map((author, index) => (
-              <WrapItem alignItems={"center"}>
+              <WrapItem key={index} alignItems={"center"}>
                 <Avatar
                   size="sm"
                   marginLeft={index !== 0 ? "-15px" : "0"}
@@ -115,84 +196,6 @@ function LatestBlogCard({ slug, frontmatter, latest }) {
         ) : null}
         <DatePost date={date} />
       </Box>
-    </Box>
-  );
-}
-
-function MiniBlogCard({ slug, frontmatter }) {
-  const { title, description, date, authors } = frontmatter;
-  return (
-    <Box role="group">
-      <a href={`/blog/${slug}`}>
-        <Box display={"flex"}>
-          <Box
-            overflow={"hidden"}
-            position={"relative"}
-            width={"150px"}
-            height={"150px"}
-          >
-            <Image
-              position={"absolute"}
-              top="0"
-              width={"100%"}
-              height={"100%"}
-              // minWidth={"100px"}
-              // height={"100px"}
-              src={
-                frontmatter.thumbnail ||
-                "https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_9.png"
-              }
-              objectFit={"cover"}
-              transition={"transform .6s cubic-bezier(0.01, 0.97, 0.42, 1.09)"}
-              _groupHover={{ transform: "scale(1.1)" }}
-            />
-          </Box>
-          <Box marginLeft={"1rem"} width={"75%"}>
-            <Heading
-              as="h3"
-              fontSize={"xl"}
-              fontWeight={500}
-              fontFamily={"Roboto"}
-              _groupHover={{ color: "rgb(43, 140, 77)" }}
-            >
-              {title}
-            </Heading>
-            <Text
-              as="p"
-              fontFamily={"Roboto"}
-              fontWeight={400}
-              fontSize={"1rem"}
-              marginY={".5rem"}
-              color={"gray"}
-            >
-              {description}
-            </Text>
-            <Box display={"flex"} alignItems={"center"}>
-              {authors ? (
-                <Wrap
-                  display={"flex"}
-                  alignItems={"center"}
-                  marginRight={".5rem"}
-                >
-                  {authors.map((author, index) => (
-                    <WrapItem key={index} alignItems={"center"}>
-                      <Avatar
-                        size="sm"
-                        marginLeft={index !== 0 ? "-15px" : "0"}
-                        title={author.name}
-                        name={author.name}
-                        src={author.avatar}
-                        icon={authorIconFallback}
-                      />
-                    </WrapItem>
-                  ))}
-                </Wrap>
-              ) : null}
-              <DatePost date={date} />
-            </Box>
-          </Box>
-        </Box>
-      </a>
     </Box>
   );
 }
@@ -214,26 +217,21 @@ export default function Blog({ posts }) {
         />
       </Head>
 
-      <Grid
-        marginTop={"5rem"}
-        // h="200px"
-        templateRows="min-content min-content 1fr"
-        templateColumns="1fr 1fr"
-        gap={"5rem"}
-      >
+      <Grid marginTop={"2rem"} gap={"3rem"} templateColumns="1fr 1fr 1fr">
         {posts.map((post, index) => {
           if (index === 0) {
             return (
-              <GridItem key={index} colSpan={"1"} gridRow={"span 2"}>
+              <GridItem as="article" key={index} gridColumn={"span 3"}>
                 <LatestBlogCard key={post.slug} {...post} />
               </GridItem>
             );
           } else {
             return (
               <GridItem
+                as="article"
                 key={index}
-                // colSpan={index === 0 ? 1 : ""}
-                // gridRow={index === 0 ? "span 2" : ""}
+                borderTop={"1px solid #DEDFE0"}
+                paddingTop={"3rem"}
               >
                 <MiniBlogCard key={post.slug} {...post} />
               </GridItem>
