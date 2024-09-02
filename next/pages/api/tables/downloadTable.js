@@ -20,24 +20,22 @@ async function validateToken(token) {
 
 async function downloadTable(url, datasetID, tableId, token, res) {
   let payloadToken
-  if(url !== "free") {
-    if(token !== null) payloadToken = await validateToken(token)
-  } 
+  if(token !== null) payloadToken = await validateToken(token)
 
   const urlDownloadOpen = process.env.URL_DOWNLOAD_OPEN.replace("gs://", "")
   const urlDownloadClosed = process.env.URL_DOWNLOAD_CLOSED.replace("gs://", "")
 
   const prefixUrl = "https://storage.googleapis.com/"
 
+  let fileUrl = ""
+
+  if(payloadToken?.is_subscription_active === true) {
+    fileUrl = `${prefixUrl}${urlDownloadClosed}${datasetID}/${tableId}/${tableId}_bdpro.csv.gz`
+  }else if(url === "free") {
+    fileUrl =`${prefixUrl}${urlDownloadOpen}${datasetID}/${tableId}/${tableId}.csv.gz`
+  }
+
   try {
-    let fileUrl = ""
-
-    if(url === "free") {
-      fileUrl =`${prefixUrl}${urlDownloadOpen}${datasetID}/${tableId}/${tableId}.csv.gz`
-    }else if(payloadToken?.pro_subscription_status === "active") {
-      fileUrl = `${prefixUrl}${urlDownloadClosed}${datasetID}/${tableId}/${tableId}_bdpro.csv.gz`
-    }
-
     const response = await axios({
         url: fileUrl,
         method: 'GET',
@@ -49,8 +47,21 @@ async function downloadTable(url, datasetID, tableId, token, res) {
 
     response.data.pipe(res)
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ message: 'Error downloading the file' })
+    try {
+      const response = await axios({
+        url: `${prefixUrl}${urlDownloadOpen}${datasetID}/${tableId}/${tableId}.csv.gz`,
+        method: 'GET',
+        responseType: 'stream'
+    })
+
+      res.setHeader('Content-Disposition', `attachment; filename=${datasetID}_${tableId}.csv.gz`)
+      res.setHeader('Content-Type', 'application/gzip')
+
+      response.data.pipe(res)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: 'Error downloading the file' })
+    }
   }
 }
 

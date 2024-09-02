@@ -38,6 +38,8 @@ async function getUser(id, token) {
                         createdAt
                         isActive
                         stripeSubscription
+                        planInterval
+                        nextBillingCycle
                       }
                     }
                   }

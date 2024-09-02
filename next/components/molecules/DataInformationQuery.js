@@ -196,7 +196,7 @@ export default function DataInformationQuery({ resource }) {
     let user
     if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
 
-    if(user?.internalSubscription?.edges?.[0]?.node?.isActive === true) return true
+    if(user?.proSubscriptionStatus === "active") return true
     return false
   }
 
@@ -598,10 +598,10 @@ export default function DataInformationQuery({ resource }) {
 
               <Box
                 as="a"
-                href={isUserPro() || downloadWarning === "free" && `/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadPermitted)}&s=${btoa(downloadWarning)}`}
                 target="_blank"
                 onClick={() => {
-                  if(downloadWarning === "100mbBetween1gb") return plansModal.onOpen()
+                  if(downloadWarning !== "free" && isUserPro() === false) return plansModal.onOpen()
+                  window.open(`/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadPermitted)}&s=${btoa(downloadWarning)}`, "_blank")
                   triggerGAEvent("download_da_tabela",`{
                     gcp: ${gcpProjectID+"."+gcpDatasetID+"."+gcpTableId},
                     tamanho: ${formatBytes(resource.uncompressedFileSize) || ""},
@@ -910,8 +910,8 @@ bd.read_sql(query = query, billing_project_id = billing_id)`}
                       isLoaded={!isLoadingCode}
                     >
                       <CodeHighlight language="r">{`
-  # Defina o seu projeto no Google Cloud
-  set_billing_id("<YOUR_PROJECT_ID>")
+# Defina o seu projeto no Google Cloud
+set_billing_id("<YOUR_PROJECT_ID>")
 
 # Para carregar o dado direto no R
 query <- "

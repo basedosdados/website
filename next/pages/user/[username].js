@@ -1549,7 +1549,6 @@ const PlansAndPayment = ({ userData }) => {
   const controlResource  = () => {
     return planActive ? planResource : defaultResource
   }
-
   const IncludesFeature = ({ elm, index }) => {
     return (
       <Box key={index} display="flex" alignItems="center">
@@ -1656,6 +1655,18 @@ const PlansAndPayment = ({ userData }) => {
 
     if(isLoadingH === true) return window.open("/", "_self")
     window.open(`/user/${userData.username}?plans_and_payment`, "_self")
+  }
+
+  function formatTimeStamp (value) {
+    const date = new Date(value)
+    const options = { day: '2-digit', month: 'long', year: 'numeric' }
+    const formattedDate = date.toLocaleDateString('pt-BR', options)
+    return formattedDate
+  }
+
+  function formattedPlanInterval (value) {
+    if(value === "month") return "(Mensal)"
+    if(value === "year") return "(Anual)"
   }
 
   useEffect(() => {
@@ -2183,11 +2194,11 @@ const PlansAndPayment = ({ userData }) => {
                 letterSpacing="0.1px"
                 color="#71757A"
               >
-                (Mensal)
+                {formattedPlanInterval(subscriptionInfo?.planInterval)}
               </Text>
             </Box>
 
-            <Box>
+            <Box display={subscriptionInfo ? "flex" : "none"}>
               <Text
                 fontFamily="Ubuntu"
                 fontWeight="400"
@@ -2195,14 +2206,13 @@ const PlansAndPayment = ({ userData }) => {
                 lineHeight="22px"
                 color="#252A32"
               >
-                Próxima data de renovação automática: <Text
+                {subscriptionInfo?.canceledAt ? "Acesso ao plano disponível até:" : "Próxima data de renovação automática: "} <Text
                   as="span"
                   fontWeight="500"
                 >
-                  08 de agosto de 2024
+                  {formatTimeStamp(subscriptionInfo?.canceledAt ? subscriptionInfo?.canceledAt : subscriptionInfo?.nextBillingCycle)}
                 </Text>
               </Text>
-              {/* Acesso ao plano disponível até: */}
             </Box>
           </Stack>
 
