@@ -29,7 +29,7 @@ async function downloadTable(url, datasetID, tableId, token, res) {
 
   let fileUrl = ""
 
-  if(payloadToken?.pro_subscription_status === "active") {
+  if(payloadToken?.is_subscription_active === true) {
     fileUrl = `${prefixUrl}${urlDownloadClosed}${datasetID}/${tableId}/${tableId}_bdpro.csv.gz`
   }else if(url === "free") {
     fileUrl =`${prefixUrl}${urlDownloadOpen}${datasetID}/${tableId}/${tableId}.csv.gz`

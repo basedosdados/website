@@ -313,6 +313,8 @@ export default function Survey() {
                 height="100%"
                 fontSize="20px"
                 lineHeight="30px"
+                fontFamily="Roboto"
+                fontWeight="500"
                 pointerEvents={isLoading ? "none" : "default"}
                 color={elm.style ? "#0D99FC" : "#FFFFFF"}
                 backgroundColor={elm.style ? "#FFF" : "#0D99FC"}
