@@ -25,6 +25,8 @@ import Head from "next/head";
 import { serialize } from "next-mdx-remote/serialize";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
+import { fromMarkdown } from "mdast-util-from-markdown";
+import { visit } from "unist-util-visit";
 import { MDXRemote } from "next-mdx-remote";
 import { MainPageTemplate } from "../../components/templates/main";
 import Link from "../../components/atoms/Link";
@@ -44,6 +46,17 @@ import markdownHighlight from "highlight.js/lib/languages/markdown";
 
 import "highlight.js/styles/obsidian.css";
 
+const LANGS_SUPPORTED = [
+  "sql",
+  "python",
+  "r",
+  "bash",
+  "sh",
+  "stata",
+  "markdown",
+  "md",
+];
+
 hljs.registerLanguage("sql", sqlHighlight);
 hljs.registerLanguage("python", pythonHighlight);
 hljs.registerLanguage("r", rHighlight);
@@ -53,21 +66,69 @@ hljs.registerLanguage("stata", stataHighlight);
 hljs.registerLanguage("markdown", markdownHighlight);
 hljs.registerLanguage("md", markdownHighlight);
 
+const remarkPluginCaption = () => (tree) =>
+  visit(
+    tree,
+    (node) =>
+      ["Image", "Video", "Embed", "Blockquote"].includes(node.name) &&
+      node.attributes.find(({ name }) => name === "caption"),
+    (node) => {
+      const caption = node.attributes.filter(({ name }) => name === "caption");
+      const tree = fromMarkdown(caption[0].value);
+      const children = tree.children.map((node) => ({
+        ...node,
+        type: "figcaption",
+      }));
+
+      if (node.name === "Embed") {
+        // Since Embed component has a children (`iframe`), set children as children of iframe
+        // React does not support two children, should be nested childrens
+        node.children[0].children = children;
+      } else {
+        node.children = children;
+      }
+
+      // Remove caption attributes
+      node.attributes = node.attributes.filter(
+        ({ name }) => name !== "caption",
+      );
+    },
+  );
+
+const rehypeExtractHeadings =
+  ({ headings }) =>
+  (tree) => {
+    visit(
+      tree,
+      (node) => node.tagName === "h2",
+      (node) => {
+        if (node?.properties?.id) {
+          headings.push({
+            title: node.children[0]?.value ?? null,
+            id: node.properties.id.toString() ?? null,
+          });
+        }
+      },
+    );
+  };
+
 export async function getStaticProps({ params }) {
   const { slug } = params;
 
+  const headings = [];
   const content = getPostBySlug(slug);
   const mdxSource = await serialize(content, {
     parseFrontmatter: true,
     mdxOptions: {
-      remarkPlugins: [remarkGfm],
-      rehypePlugins: [rehypeSlug],
+      remarkPlugins: [remarkGfm, remarkPluginCaption],
+      rehypePlugins: [rehypeSlug, [rehypeExtractHeadings, { headings }]],
     },
   });
 
   return {
     props: {
       slug,
+      headings,
       mdxSource,
     },
   };
@@ -89,7 +150,7 @@ function CodeBlock({ children }) {
   const { hasCopied, onCopy } = useClipboard(code);
 
   const highlighted =
-    language !== undefined
+    language !== undefined && LANGS_SUPPORTED.includes(language)
       ? hljs.highlight(code, {
           language: language,
         })
@@ -169,58 +230,7 @@ function CodeBlock({ children }) {
   );
 }
 
-const ForkIcon = createIcon({
-  displayName: "fork",
-  viewBox: "0 0 16 16",
-  path: (
-    <path
-      fill="current-color"
-      d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354ZM3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z"
-    />
-  ),
-});
-
-function Contribute({ slug }) {
-  return (
-    <Box width={"30%"} marginLeft={"auto"}>
-      <Text
-        as="p"
-        color="gray"
-        fontSize={"0.9rem"}
-        fontFamily={"Roboto"}
-        marginBottom={"1rem"}
-      >
-        Todos os documentos são abertos. Viu algo errado ou pouco claro? Envie
-        um pull request e contribua na Base dos Dados {"💚"}
-      </Text>
-      <Link
-        href={`https://github.com/basedosdados/website/edit/main/next/blog/${slug}.mdx`}
-        display={"flex"}
-        alignItems={"center"}
-        borderRadius="8px"
-        backgroundColor="#2B8C4D"
-        padding="8px 16px"
-        width="fit-content"
-        fill="#fff"
-        color="#fff"
-        fontFamily={"Roboto"}
-        fontSize={"0.9rem"}
-        fontWeight={500}
-        _hover={{
-          backgroundColor: "#22703E",
-        }}
-        isExternal
-      >
-        <>
-          <ForkIcon width={"16px"} height={"16px"} marginRight={"0.5rem"} />
-          Editar essa página
-        </>
-      </Link>
-    </Box>
-  );
-}
-
-function HeadingAnchor(props) {
+function HeadingWithAnchor(props) {
   return (
     <Heading
       {...props}
@@ -234,10 +244,11 @@ function HeadingAnchor(props) {
         href={`#${props.id}`}
         variant="unstyled"
         opacity="0"
+        color="gray"
         fontSize={"inherit"}
         marginLeft="5px"
         transition="none"
-        _groupHover={{ opacity: "1", color: "green" }}
+        _groupHover={{ opacity: "1" }}
       >
         {"#"}
       </Link>
@@ -245,13 +256,28 @@ function HeadingAnchor(props) {
   );
 }
 
+function FigCaption(props) {
+  return props.children ? (
+    <Text
+      as="figcaption"
+      fontFamily={"Roboto"}
+      fontSize={"sm"}
+      color={"gray"}
+      textAlign={"center"}
+      marginY="0.5rem"
+    >
+      {props.children}
+    </Text>
+  ) : null;
+}
+
 const components = {
-  h1: (props) => <Heading as="h1" size="xl" {...props} />,
-  h2: (props) => <HeadingAnchor as="h2" fontSize="1.8rem" {...props} />,
-  h3: (props) => <HeadingAnchor as="h3" fontSize="1.5rem" {...props} />,
-  h4: (props) => <HeadingAnchor as="h4" fontSize="1.2rem" {...props} />,
-  h5: (props) => <HeadingAnchor as="h5" fontSize={"1.1rem"} {...props} />,
-  h6: (props) => <HeadingAnchor as="h6" fontSize={"1.05rem"} {...props} />,
+  h1: (props) => <HeadingWithAnchor as="h2" size="1.8rem" {...props} />,
+  h2: (props) => <HeadingWithAnchor as="h2" fontSize="1.8rem" {...props} />,
+  h3: (props) => <HeadingWithAnchor as="h3" fontSize="1.5rem" {...props} />,
+  h4: (props) => <HeadingWithAnchor as="h4" fontSize="1.2rem" {...props} />,
+  h5: (props) => <HeadingWithAnchor as="h5" fontSize={"1.1rem"} {...props} />,
+  h6: (props) => <HeadingWithAnchor as="h6" fontSize={"1.05rem"} {...props} />,
   blockquote: (props) => (
     <Box
       as="blockquote"
@@ -267,24 +293,13 @@ const components = {
       as={"p"}
       lineHeight={"7"}
       marginY={"1.5rem"}
+      // TODO(aspeddro): check color
+      color="#252A32"
       fontFamily={"Roboto"}
       {...props}
     />
   ),
-  // img: (props) => (
-  //   <Box as="figure" marginY={"2rem"}>
-  //     <Image margin={"0 auto"} src={props.src} />
-  //     <Text
-  //       as="figcaption"
-  //       fontFamily={"Roboto"}
-  //       fontSize={"sm"}
-  //       color={"gray"}
-  //       textAlign={"center"}
-  //     >
-  //       {props.alt}
-  //     </Text>
-  //   </Box>
-  // ),
+  // Inline code
   code: (props) => (
     <Text
       as="code"
@@ -315,49 +330,19 @@ const components = {
   Image: (props) => (
     <Box as="figure" marginY={"2rem"}>
       <Image margin={"0 auto"} src={props.src} />
-      {props.caption ? (
-        <Text
-          as="figcaption"
-          fontFamily={"Roboto"}
-          fontSize={"sm"}
-          color={"gray"}
-          textAlign={"center"}
-        >
-          {props.caption}
-        </Text>
-      ) : null}
+      <FigCaption {...props.children} />
     </Box>
   ),
   Video: (props) => (
     <Box as="figure" marginY="2rem">
       <video width="100%" controls preload="metadata" src={props.src} />
-      {props.caption ? (
-        <Text
-          as="figcaption"
-          fontFamily={"Roboto"}
-          fontSize={"sm"}
-          color={"gray"}
-          textAlign={"center"}
-        >
-          {props.caption}
-        </Text>
-      ) : null}
+      <FigCaption {...props} />
     </Box>
   ),
-  Embed: (props) => (
+  Embed: ({ children }) => (
     <Box marginY="2rem">
-      <AspectRatio ratio={16 / 9}>{props.children}</AspectRatio>
-      {props.caption ? (
-        <Text
-          as="figcaption"
-          fontFamily={"Roboto"}
-          fontSize={"sm"}
-          color={"gray"}
-          textAlign={"center"}
-        >
-          {props.caption}
-        </Text>
-      ) : null}
+      <AspectRatio ratio={16 / 9}>{children}</AspectRatio>
+      <FigCaption {...children.props} />
     </Box>
   ),
   Blockquote: (props) => (
@@ -386,18 +371,189 @@ const components = {
         fontSize={"lg"}
         {...props}
       />
-      <Text as="p" fontFamily={"Roboto"} color="gray" marginTop={"1rem"}>
+      <Text as="p" fontFamily={"Roboto"} color="gray">
         {props.author}
       </Text>
     </Box>
   ),
 };
 
-export default function Blog({ slug, mdxSource }) {
+function Toc({ headings }) {
+  return (
+    <Box marginBottom={"1rem"}>
+      <Text
+        as="p"
+        fontFamily={"Roboto"}
+        fontWeight={"500"}
+        // paddingLeft={"1rem"}
+        // borderBottom={"1px solid #DEDFE0"}
+        paddingBottom={"0.6rem"}
+      >
+        Tabela de conteúdo
+      </Text>
+      <Box as="hr" />
+      <UnorderedList marginTop={"1rem"}>
+        {headings.map((header) => (
+          <ListItem margin={"0.5rem 0"}>
+            <Link
+              href={`#${header.id}`}
+              fontFamily="Roboto"
+              fontWeight="normal"
+              display="block"
+            >
+              {header.title}
+            </Link>
+          </ListItem>
+        ))}
+      </UnorderedList>
+    </Box>
+  );
+}
+
+const ForkIcon = createIcon({
+  displayName: "fork",
+  viewBox: "0 0 16 16",
+  path: (
+    <path
+      fill="current-color"
+      d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354ZM3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z"
+    />
+  ),
+});
+
+function Contribute({ slug }) {
+  return (
+    <Box marginTop={"1rem"}>
+      <Text
+        as="p"
+        color="gray"
+        fontSize={"0.9rem"}
+        fontFamily={"Roboto"}
+        marginBottom={"1rem"}
+      >
+        Todos os documentos são abertos. Viu algo errado ou pouco claro? Envie
+        um pull request e contribua na Base dos Dados {"💚"}
+      </Text>
+      <Link
+        href={`https://github.com/basedosdados/website/edit/main/next/blog/${slug}.mdx`}
+        display={"flex"}
+        alignItems={"center"}
+        borderRadius="8px"
+        // backgroundColor="#2B8C4D"
+        // padding="8px 16px"
+        // width="fit-content"
+        // fill="#fff"
+        // color="#fff"
+        fontFamily={"Roboto"}
+        // fontSize={"0.9rem"}
+        fontWeight={"500"}
+        letterSpacing={"0"}
+        // marginLeft="auto"
+        // _hover={{
+        //   backgroundColor: "#22703E",
+        // }}
+        isExternal
+      >
+        <>
+          <ForkIcon width={"16px"} height={"16px"} marginRight={"0.5rem"} />
+          Editar essa página no GitHub
+        </>
+      </Link>
+    </Box>
+  );
+}
+
+function Header({ frontmatter }) {
+  return (
+    <Box as="header">
+      <Text
+        as="span"
+        display={"block"}
+        marginBottom={"10"}
+        color={"gray"}
+        fontFamily={"Roboto"}
+      >
+        <DatePost date={frontmatter.date} />
+      </Text>
+      <Heading as="h1" fontFamily={"Roboto"} size="2xl">
+        {frontmatter.title}
+      </Heading>
+      <Heading
+        as="h2"
+        fontFamily={"Roboto"}
+        fontWeight={"normal"}
+        fontSize={"xl"}
+        color={"gray"}
+        marginY={"10"}
+      >
+        {frontmatter.description}
+      </Heading>
+      {frontmatter.authors ? (
+        <Box marginBottom={"4rem"}>
+          <Wrap display={"flex"} alignItems={"center"}>
+            {frontmatter.authors.map((author, index) => {
+              const authorComponent = (
+                <WrapItem alignItems={"center"}>
+                  <Box
+                    // href={author.social}
+                    fontFamily={"Roboto"}
+                    fontSize={"0.9rem"}
+                    fontWeight={500}
+                    display="flex"
+                    alignItems={"center"}
+                  >
+                    <Avatar
+                      size="sm"
+                      name={author.name}
+                      src={author.avatar}
+                      icon={authorIconFallback}
+                    />
+                    <Box
+                      display={"flex"}
+                      flexDirection={"column"}
+                      alignItems={"start"}
+                      marginLeft={"2"}
+                      marginRight={"4"}
+                    >
+                      {author.name}
+                      {author?.role ? (
+                        <Text
+                          as="span"
+                          marginTop={"-0.2rem"}
+                          fontSize={"0.7rem"}
+                          fontFamily={"Roboto"}
+                          color="gray"
+                        >
+                          {author.role}
+                        </Text>
+                      ) : null}
+                    </Box>
+                  </Box>
+                </WrapItem>
+              );
+
+              return (
+                <Box key={index}>
+                  {author?.social ? (
+                    <Link href={author.social}>{authorComponent}</Link>
+                  ) : (
+                    <>{authorComponent}</>
+                  )}
+                </Box>
+              );
+            })}
+          </Wrap>
+        </Box>
+      ) : null}
+    </Box>
+  );
+}
+
+export default function Blog({ slug, mdxSource, headings }) {
   const { frontmatter } = mdxSource;
 
   return (
-    <MainPageTemplate maxWidth={"800px"} margin={"0 auto"} paddingX="24px">
+    <MainPageTemplate maxWidth={"1100px"} margin={"0 auto"} paddingX="24px">
       <Head>
         <title>{frontmatter.title} – Blog – Base dos Dados</title>
         <meta
@@ -429,93 +585,28 @@ export default function Blog({ slug, mdxSource }) {
         <meta property="article:published_time" content={frontmatter.date} />
       </Head>
       <Box paddingTop={"4rem"}>
-        <Text
-          as="span"
-          display={"block"}
-          marginBottom={"10"}
-          color={"gray"}
-          fontFamily={"Roboto"}
-        >
-          <DatePost date={frontmatter.date} />
-        </Text>
-        <Heading as="h1" fontFamily={"Roboto"} size="2xl">
-          {frontmatter.title}
-        </Heading>
-        <Heading
-          as="h2"
-          fontFamily={"Roboto"}
-          fontWeight={"normal"}
-          fontSize={"xl"}
-          color={"gray"}
-          marginY={"10"}
-        >
-          {frontmatter.description}
-        </Heading>
-        {frontmatter.authors ? (
-          <Box marginBottom={"4rem"}>
-            <Wrap display={"flex"} alignItems={"center"}>
-              {frontmatter.authors.map((author, index) => {
-                const authorComponent = (
-                  <WrapItem alignItems={"center"}>
-                    <Box
-                      // href={author.social}
-                      fontFamily={"Roboto"}
-                      fontSize={"0.9rem"}
-                      fontWeight={500}
-                      display="flex"
-                      alignItems={"center"}
-                    >
-                      <Avatar
-                        size="sm"
-                        name={author.name}
-                        src={author.avatar}
-                        icon={authorIconFallback}
-                      />
-                      <Box
-                        display={"flex"}
-                        flexDirection={"column"}
-                        alignItems={"start"}
-                        marginLeft={"2"}
-                        marginRight={"4"}
-                      >
-                        {author.name}
-                        {author?.role ? (
-                          <Text
-                            as="span"
-                            marginTop={"-0.2rem"}
-                            fontSize={"0.7rem"}
-                            fontFamily={"Roboto"}
-                            color="gray"
-                          >
-                            {author.role}
-                          </Text>
-                        ) : null}
-                      </Box>
-                    </Box>
-                  </WrapItem>
-                );
-
-                return (
-                  <Box key={index}>
-                    {author?.social ? (
-                      <Link href={author.social}>{authorComponent}</Link>
-                    ) : (
-                      <>{authorComponent}</>
-                    )}
-                  </Box>
-                );
-              })}
-            </Wrap>
-          </Box>
-        ) : null}
-        <MDXRemote {...mdxSource} components={components} />
+        <Header frontmatter={frontmatter} />
         <Box
-          as="footer"
           display={"flex"}
-          borderTop={"1px solid #DEDFE0"}
-          paddingTop={"2rem"}
+          flexDirection={"row"}
+          alignItems={"start"}
+          maxWidth={"100%"}
         >
-          <Contribute slug={slug} />
+          <Box as="section" width={"65%"}>
+            <MDXRemote {...mdxSource} components={components} />
+          </Box>
+          <Box
+            as="aside"
+            marginLeft={"auto"}
+            marginTop={"2rem"}
+            position={"sticky"}
+            top="6rem"
+            paddingLeft={"5rem"}
+          >
+            <Toc headings={headings} />
+            <Box as="hr" />
+            <Contribute slug={slug} />
+          </Box>
         </Box>
       </Box>
     </MainPageTemplate>

@@ -83,13 +83,16 @@ function Authors({ authors }) {
 function LatestBlogCard({ slug, frontmatter }) {
   const { title, description, date, authors } = frontmatter;
   return (
-    <Box display={"flex"}>
+    <Box
+      display={"flex"}
+      flexDirection={{ base: "column", md: "column", lg: "row" }}
+    >
       <Box role="group" flexGrow={"1"}>
         <Box
           overflow={"hidden"}
           border="1px solid #DEDFE0"
           borderRadius="16px"
-          marginRight={"2rem"}
+          marginRight={{ base: "0", md: "0", lg: "2rem" }}
         >
           <NextLink href={`/blog/${slug}`} passHref>
             <Link>
@@ -111,13 +114,15 @@ function LatestBlogCard({ slug, frontmatter }) {
           </NextLink>
         </Box>
       </Box>
-      <Box width={"40%"}>
+      <Box
+        width={{ base: "100%", md: "100%", lg: "40%" }}
+        marginTop={{ base: "1rem", md: "1rem", lg: "0" }}
+      >
         <Heading
           as="h1"
           fontSize="4xl"
           fontWeight={500}
           fontFamily={"Roboto"}
-          _groupHover={{ color: "rgb(43, 140, 77)" }}
         >
           <NextLink href={`/blog/${slug}`} passHref>
             <Link>{title}</Link>
@@ -175,7 +180,6 @@ function MiniBlogCard({ slug, frontmatter }) {
           fontSize={"xl"}
           fontWeight={500}
           fontFamily={"Roboto"}
-          _groupHover={{ color: "rgb(43, 140, 77)" }}
         >
           <NextLink href={`/blog/${slug}`} passHref>
             <Link
@@ -227,11 +231,19 @@ export default function Blog({ posts }) {
         />
       </Head>
 
-      <Grid marginTop={"4rem"} gap={"3rem"} templateColumns="1fr 1fr 1fr">
+      <Grid
+        marginTop={"4rem"}
+        gap={"3rem"}
+        templateColumns={{ md: "1fr 1fr", xl: "1fr 1fr 1fr" }}
+      >
         {posts.map((post, index) => {
           if (index === 0) {
             return (
-              <GridItem as="article" key={index} gridColumn={"span 3"}>
+              <GridItem
+                as="article"
+                key={index}
+                gridColumn={{ md: "span 2", xl: "span 3" }}
+              >
                 <LatestBlogCard key={post.slug} {...post} />
               </GridItem>
             );
