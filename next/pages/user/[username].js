@@ -1891,7 +1891,10 @@ const PlansAndPayment = ({ userData }) => {
 
       <ModalGeneral
         isOpen={PlansModal.isOpen}
-        onClose={PlansModal.onClose}
+        onClose={() => {
+          PlansModal.onClose()
+          setToggleAnual(false)
+        }}
         propsModal={{
           scrollBehavior: isMobileMod() ? "outside" : "inside",
         }}
