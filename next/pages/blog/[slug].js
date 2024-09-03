@@ -394,7 +394,7 @@ function Toc({ headings }) {
       <Box as="hr" />
       <UnorderedList marginTop={"1rem"}>
         {headings.map((header) => (
-          <ListItem margin={"0.5rem 0"}>
+          <ListItem key={header.id} margin={"0.5rem 0"}>
             <Link
               href={`#${header.id}`}
               fontFamily="Roboto"
@@ -592,6 +592,7 @@ export default function Blog({ slug, mdxSource, headings }) {
           alignItems={"start"}
           maxWidth={"100%"}
         >
+          {/* TODO(aspeddro): Revisit this */}
           <Box as="section" width={"65%"}>
             <MDXRemote {...mdxSource} components={components} />
           </Box>
@@ -602,6 +603,7 @@ export default function Blog({ slug, mdxSource, headings }) {
             position={"sticky"}
             top="6rem"
             paddingLeft={"5rem"}
+            width="35%"
           >
             <Toc headings={headings} />
             <Box as="hr" />
