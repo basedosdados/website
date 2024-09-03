@@ -281,10 +281,25 @@ export function SectionPrice() {
   const [username, setUsername] = useState(null)
   const [isBDPro, setIsBDPro] = useState(false)
   const [isBDEmp, setIsBDEmp] = useState(false)
+  const [hasSubscribed, setHasSubscribed] = useState(true)
+
+  async function alreadySubscribed(id) {
+    const result = await fetch(`/api/user/getAlreadySubscribed?p=${btoa(id)}`)
+      .then(res => res.json())
+    setHasSubscribed(result?.edges.length > 0)
+  } 
 
   useEffect(() => {
     let user = null
     if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
+
+    if(user) {
+      const reg = new RegExp("(?<=:).*")
+      const [ id ] = reg.exec(user.id)
+      alreadySubscribed(id)
+    } else {
+      setHasSubscribed(false)
+    }
 
     const stripeSubscription = user?.internalSubscription?.edges?.[0]?.node?.stripeSubscription
 
@@ -412,7 +427,7 @@ export function SectionPrice() {
             {name: "Download direto até 1GB (80% das tabelas da plataforma)", tooltip: "Tabelas maiores que 1 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."}
           ]}
           button={{
-            text: isBDPro ? "Plano atual" : `Iniciar teste grátis`,
+            text: isBDPro ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis",
             href: username === null ? `/user/login?q=pro&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&q=pro&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}`,
             isCurrentPlan: isBDPro,
           }}
@@ -429,7 +444,7 @@ export function SectionPrice() {
             {name: "Suporte prioritário via email e Discord"}
           ]}
           button={{
-            text: isBDEmp ? "Plano atual" : "Iniciar teste grátis",
+            text: isBDEmp ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis",
             href: username === null ? `/user/login?q=empresas&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&q=empresas&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}`,
             isCurrentPlan: isBDEmp,
           }}

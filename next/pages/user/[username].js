@@ -1450,11 +1450,25 @@ const PlansAndPayment = ({ userData }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingH, setIsLoadingH] = useState(false)
   const [isLoadingCanSub, setIsLoadingCanSub] = useState(false)
+  const [hasSubscribed, setHasSubscribed] = useState(true)
 
   const [plans, setPlans] = useState(null)
   const [toggleAnual, setToggleAnual] = useState(false)
 
   const subscriptionInfo = userData?.internalSubscription?.edges?.[0]?.node
+
+  async function alreadySubscribed(id) {
+    const result = await fetch(`/api/user/getAlreadySubscribed?p=${btoa(id)}`)
+      .then(res => res.json())
+    setHasSubscribed(result?.edges.length > 0)
+  }
+
+  useEffect(() => {
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(userData.id)
+
+    alreadySubscribed(id)
+  }, [userData?.id])
 
   useEffect(() => {
     if(PlansModal.isOpen === false) return
@@ -2010,7 +2024,7 @@ const PlansAndPayment = ({ userData }) => {
                 {name: "Download direto até 1GB (80% das tabelas da plataforma)", tooltip: "Tabelas maiores que 1 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."}
               ]}
               button={{
-                text: `${subscriptionInfo?.stripeSubscription === "bd_pro" ? "Plano atual" : "Assinar"}`,
+                text: `${subscriptionInfo?.stripeSubscription === "bd_pro" ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis"}`,
                 onClick: subscriptionInfo?.stripeSubscription === "bd_pro" ? () => {} : () => {
                   setPlan({id: plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id})
                   PlansModal.onClose()
@@ -2031,7 +2045,7 @@ const PlansAndPayment = ({ userData }) => {
                 {name: "Suporte prioritário via email e Discord"}
               ]}
               button={{
-                text: `${subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? "Plano atual" : "Assinar"}`,
+                text: `${subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis"}`,
                 onClick: subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? () => {} : () => {
                   setPlan({id: plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id})
                   PlansModal.onClose()
