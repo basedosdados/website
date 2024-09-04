@@ -1914,6 +1914,8 @@ const PlansAndPayment = ({ userData }) => {
         }}
         propsModalContent={{
           maxWidth: "fit-content",
+          minWidth: "fit-content",
+          maxHeight: "fit-content",
           margin: isMobileMod() ? "0" : "24px",
           borderRadius: isMobileMod() ? "0" : "20px",
         }}
@@ -1988,6 +1990,7 @@ const PlansAndPayment = ({ userData }) => {
             gridTemplateColumns="repeat(3, 320px)"
             gridTemplateRows="1fr"
             alignItems={isMobileMod() ? "center" : {base: "center", lg: "inherit"}}
+            padding="0 20px 10px"
             justifyContent="center"
             justifyItems="center"
             gap="20px"
