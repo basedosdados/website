@@ -28,7 +28,7 @@ function MyApp({ Component, pageProps }) {
         <title>Base dos Dados</title>
         <meta
           property="description"
-          content="São centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python, R ou Stata."
+          content="São centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python ou R."
         />
         <script
           defer
@@ -59,7 +59,7 @@ function MyApp({ Component, pageProps }) {
         <meta property="og:title" content="Base dos Dados" key="ogtitle" />
         <meta
           property="og:description"
-          content="São centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python, R ou Stata."
+          content="São centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python ou R."
           key="ogdesc"
         />
 

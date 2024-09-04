@@ -325,7 +325,7 @@ export const CaseStudiesContent = [
           <p class="bodyText">
             A BD também disponibiliza em sua plataforma os dados atualizados de receitas e despesas,
             possibilitando o download das tabelas tratadas ou o acesso por ferramentas de análise de dados,
-            como SQL, Python, R e Stata.
+            como SQL, Python e R.
           </p>
 
           <p class="bodyText">

@@ -1453,7 +1453,7 @@ const PlansAndPayment = ({ userData }) => {
   const [hasSubscribed, setHasSubscribed] = useState(true)
 
   const [plans, setPlans] = useState(null)
-  const [toggleAnual, setToggleAnual] = useState(false)
+  const [toggleAnual, setToggleAnual] = useState(true)
 
   const subscriptionInfo = userData?.internalSubscription?.edges?.[0]?.node
 
@@ -1514,18 +1514,23 @@ const PlansAndPayment = ({ userData }) => {
     }
   }, [query])
 
-  const resources={
+  const planActive = subscriptionInfo?.isActive === true
+
+  const resources = {
     "BD Gratis" : {
       title: "BD Grátis",
       buttons: [{
         text:"Comparar planos",
         onClick: () => PlansModal.onOpen()}
       ],
-      resources : [{name: "Tabelas tratadas"},
-      {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
-      {name: "Acesso em nuvem"},
-      {name: "Acesso via SQL, Python, R e Stata"},
-      {name: "Integração com ferramentas BI"},]
+      resources : [
+        {name: "Tabelas tratadas"},
+        {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
+        {name: "Acesso em nuvem"},
+        {name: "Acesso via SQL, Python e R"},
+        {name: "Integração com ferramentas BI"},
+        planActive ? "" : {name: "Download direto até 100 MB", tooltip: "Esse limite não se aplica ao acesso via SQL, Python e R."},
+      ]
     },
     "bd_pro" : {
       title: "BD Pro",
@@ -1538,7 +1543,11 @@ const PlansAndPayment = ({ userData }) => {
           pointerEvents: subscriptionInfo?.canceledAt ? "none" : "default"
         }
       }],
-      resources : [{name: "Dezenas de bases de alta frequência atualizadas"}]
+      resources : [
+        {name: "Dezenas de bases de alta frequência atualizadas"},
+        {name: "Tabela de referência de empresas com informações atualizadas"},
+        {name: "Download direto até 1 GB", tooltip: "Tabelas maiores que 1 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."},
+      ]
     },
     "bd_pro_empresas" : {
       title: "BD Empresas",
@@ -1551,11 +1560,14 @@ const PlansAndPayment = ({ userData }) => {
           pointerEvents: subscriptionInfo?.canceledAt ? "none" : "default"
         }
       }],
-      resources : [{name: "Acesso para 10 contas"},
-      {name: "Suporte prioritário via email e Discord"}]}
+      resources : [
+        {name: "Acesso para 10 contas"},
+        {name: "Suporte prioritário via email e Discord"}
+      ]}
   }
 
-  const planActive = subscriptionInfo?.isActive === true
+  console.log(resources["BD Gratis"])
+
   const defaultResource = resources["BD Gratis"]
   const planResource = resources[subscriptionInfo?.stripeSubscription]
   const planCanceled = subscriptionInfo?.canceledAt
@@ -1563,6 +1575,7 @@ const PlansAndPayment = ({ userData }) => {
   const controlResource  = () => {
     return planActive ? planResource : defaultResource
   }
+
   const IncludesFeature = ({ elm, index }) => {
     return (
       <Box key={index} display="flex" alignItems="center">
@@ -1572,7 +1585,7 @@ const PlansAndPayment = ({ userData }) => {
           fontFamily="Ubuntu"
           fontSize="16px"
           fontWeight="400"
-          lineHeight="16px"
+          lineHeight="24px"
           letterSpacing="0.2px"
         >{elm.name}</Text>
         {elm.tooltip &&
@@ -1622,7 +1635,7 @@ const PlansAndPayment = ({ userData }) => {
             color="#FFF"
             borderRadius="6px"
           >
-            <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3"/>
+            <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3" marginLeft="16px"/>
           </Tooltip>
         }
       </Box>
@@ -1907,7 +1920,7 @@ const PlansAndPayment = ({ userData }) => {
         isOpen={PlansModal.isOpen}
         onClose={() => {
           PlansModal.onClose()
-          setToggleAnual(false)
+          setToggleAnual(true)
         }}
         propsModal={{
           scrollBehavior: isMobileMod() ? "outside" : "inside",
@@ -1955,6 +1968,8 @@ const PlansAndPayment = ({ userData }) => {
             gap="8px"
           >
             <Toggle
+              defaultChecked
+              className="toggle_variant"
               value={toggleAnual}
               onChange={() => setToggleAnual(!toggleAnual)}
             />
@@ -2019,11 +2034,12 @@ const PlansAndPayment = ({ userData }) => {
             <CardPrice
               title="BD Pro"
               subTitle={<>Para você ter acesso aos<br/> dados mais atualizados</>}
-              price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 47}
+              price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 444}
               anualPlan={toggleAnual}
               textResource="Todos os recursos da BD Grátis, mais:"
               resources={[
                 {name: "Dezenas de bases de alta frequência atualizadas"},
+                {name: "Tabela de referência de empresas com informações atualizadas"},
                 {name: "Download direto até 1GB (80% das tabelas da plataforma)", tooltip: "Tabelas maiores que 1 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."}
               ]}
               button={{
@@ -2040,7 +2056,7 @@ const PlansAndPayment = ({ userData }) => {
             <CardPrice
               title="BD Empresas"
               subTitle={<>Para sua empresa ganhar tempo<br/> e qualidade em decisões</>}
-              price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 350}
+              price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3360}
               anualPlan={toggleAnual}
               textResource="Todos os recursos da BD Pro, mais:"
               resources={[
@@ -2083,8 +2099,10 @@ const PlansAndPayment = ({ userData }) => {
         </Stack>
 
         <Stack spacing="24px" marginBottom="16px">
-          <ExtraInfoTextForm fontSize="16px" lineHeight="24px" letterSpacing="0.2px">
-            Para prosseguir com a assinatura do novo plano, é necessário primeiro cancelar sua assinatura atual. Por favor, faça o cancelamento da sua assinatura atual e, em seguida, você poderá iniciar o processo de assinatura do novo plano.
+          <ExtraInfoTextForm fontSize="16px" lineHeight="24px" letterSpacing="0.2px" color="#464A51">
+            Para realizar o upgrade ou downgrade, por favor,
+            entre em contato com a nossa equipe.
+            Estamos prontos para ajudar você a fazer a transição para o novo plano o mais rápido possível!
           </ExtraInfoTextForm>
         </Stack>
 
@@ -2098,9 +2116,12 @@ const PlansAndPayment = ({ userData }) => {
             borderRadius="30px"
             width={isMobileMod() ? "100%" : ""}
             _hover={{transform: "none", opacity: 0.8}}
-            onClick={() => AlertChangePlanModal.onClose()}
+            onClick={() => {
+              AlertChangePlanModal.onClose()
+              window.open("/contato", "_self")
+            }}
           >
-            Entendi
+            Entrar em contato
           </RoundedButton>
         </Stack>
       </ModalGeneral>
@@ -2271,6 +2292,7 @@ const PlansAndPayment = ({ userData }) => {
               marginBottom="8px"
             >Inclui</Text>
             {defaultResource.resources.map((elm, index) => {
+              if(elm === "") return
               return <IncludesFeature elm={elm} index={index} key={index}/>
             })}
             {subscriptionInfo?.stripeSubscription === "bd_pro" && 

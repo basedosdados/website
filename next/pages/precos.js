@@ -109,17 +109,16 @@ export const CardPrice = ({
             >/mês</Text>
           </Box>
 
-          {anualPlan && 
-            <Text
-              fontFamily="Roboto"
-              fontWeight="400"
-              fontSize="16px"
-              lineHeight="24px"
-              color="#464A51"
-              marginTop="24px"
-              alignItems="center"
-            >{(price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 })} cobrado uma vez no ano</Text>
-          }
+          <Text
+            height="24px"
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="16px"
+            lineHeight="24px"
+            color="#464A51"
+            marginTop="24px"
+            alignItems="center"
+          >{anualPlan && price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 })+" cobrado uma vez no ano"}</Text>
         </Box>
       </Box>
 
@@ -276,7 +275,7 @@ export const CardPrice = ({
 }
 
 export function SectionPrice() {
-  const [toggleAnual, setToggleAnual] = useState(false)
+  const [toggleAnual, setToggleAnual] = useState(true)
   const [plans, setPlans] = useState(null)
   const [username, setUsername] = useState(null)
   const [isBDPro, setIsBDPro] = useState(false)
@@ -357,6 +356,7 @@ export function SectionPrice() {
         gap="8px"
       >
         <Toggle
+          defaultChecked
           className="toggle_variant"
           value={toggleAnual}
           onChange={() => setToggleAnual(!toggleAnual)}
@@ -419,11 +419,12 @@ export function SectionPrice() {
         <CardPrice
           title="BD Pro"
           subTitle={<>Para você ter acesso aos<br/> dados mais atualizados</>}
-          price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 47}
+          price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 444}
           anualPlan={toggleAnual}
           textResource="Todos os recursos da BD Grátis, mais:"
           resources={[
             {name: "Dezenas de bases de alta frequência atualizadas"},
+            {name: "Tabela de referência de empresas com informações atualizadas"},
             {name: "Download direto até 1GB (80% das tabelas da plataforma)", tooltip: "Tabelas maiores que 1 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."}
           ]}
           button={{
@@ -436,7 +437,7 @@ export function SectionPrice() {
         <CardPrice
           title="BD Empresas"
           subTitle={<>Para sua empresa ganhar tempo<br/> e qualidade em decisões</>}
-          price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 350}
+          price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3360}
           anualPlan={toggleAnual}
           textResource="Todos os recursos da BD Pro, mais:"
           resources={[
