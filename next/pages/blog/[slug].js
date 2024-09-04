@@ -330,7 +330,7 @@ const components = {
   Image: (props) => (
     <Box as="figure" marginY={"2rem"}>
       <Image margin={"0 auto"} src={props.src} />
-      <FigCaption {...props.children} />
+      <FigCaption {...props} />
     </Box>
   ),
   Video: (props) => (
