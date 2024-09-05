@@ -1566,8 +1566,6 @@ const PlansAndPayment = ({ userData }) => {
       ]}
   }
 
-  console.log(resources["BD Gratis"])
-
   const defaultResource = resources["BD Gratis"]
   const planResource = resources[subscriptionInfo?.stripeSubscription]
   const planCanceled = subscriptionInfo?.canceledAt
@@ -2147,11 +2145,7 @@ const PlansAndPayment = ({ userData }) => {
           />
         </Stack>
 
-        <Stack spacing="24px" marginBottom="16px">
-          <ExtraInfoTextForm fontSize="16px" lineHeight="24px" letterSpacing="0.2px">
-            Após o cancelamento, você perderá acesso aos recursos exclusivos do plano atual. 
-          </ExtraInfoTextForm>
-        </Stack>
+        <Stack/>
 
         <Stack
           flexDirection={isMobileMod() ? "column-reverse" : "row"}
@@ -2181,7 +2175,7 @@ const PlansAndPayment = ({ userData }) => {
             {isLoadingCanSub ?
               <Spinner />
             :
-              "Cancelar o plano"
+              "Cancelar plano"
             }
           </RoundedButton>
         </Stack>
@@ -2309,20 +2303,6 @@ const PlansAndPayment = ({ userData }) => {
                   return <IncludesFeature elm={elm} index={index} key={index}/>
                 })}
               </>
-            }
-
-            {!subscriptionInfo?.isActive &&
-              <ButtonSimple
-                color="#42B0FF"
-                fontSize="14px"
-                fontWeight="700"
-                letterSpacing="0.3px"
-                _hover={{opacity: 0.7}}
-                marginTop="16px !important"
-                onClick={() => PlansModal.onOpen()}
-              >
-                Veja tudo e compare os planos
-              </ButtonSimple>
             }
           </Stack>
 

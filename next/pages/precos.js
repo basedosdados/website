@@ -278,8 +278,8 @@ export function SectionPrice() {
   const [toggleAnual, setToggleAnual] = useState(true)
   const [plans, setPlans] = useState(null)
   const [username, setUsername] = useState(null)
-  const [isBDPro, setIsBDPro] = useState(false)
-  const [isBDEmp, setIsBDEmp] = useState(false)
+  const [isBDPro, setIsBDPro] = useState({isCurrentPlan: false})
+  const [isBDEmp, setIsBDEmp] = useState({isCurrentPlan: false})
   const [hasSubscribed, setHasSubscribed] = useState(true)
 
   async function alreadySubscribed(id) {
@@ -300,12 +300,12 @@ export function SectionPrice() {
       setHasSubscribed(false)
     }
 
-    const stripeSubscription = user?.internalSubscription?.edges?.[0]?.node?.stripeSubscription
+    const stripeSubscription = user?.internalSubscription?.edges?.[0]?.node
 
     if(user != null) {
       setUsername(user?.username)
-      setIsBDPro(stripeSubscription === "bd_pro")
-      setIsBDEmp(stripeSubscription === "bd_pro_empresas")
+      setIsBDPro({isCurrentPlan: stripeSubscription?.stripeSubscription === "bd_pro", planInterval: stripeSubscription?.planInterval})
+      setIsBDEmp({isCurrentPlan: stripeSubscription?.stripeSubscription === "bd_pro_empresas", planInterval: stripeSubscription?.planInterval})
     }
 
     async function fecthPlans() {
@@ -340,6 +340,13 @@ export function SectionPrice() {
 
     fecthPlans()
   }, [])
+
+  function planIntervalPlan() {
+    const planInterval = toggleAnual ? "year" : "month"
+
+    if(isBDPro?.planInterval === planInterval) return true
+    return false
+  }
 
   return (
     <Box
@@ -428,9 +435,9 @@ export function SectionPrice() {
             {name: "Download direto até 1GB (80% das tabelas da plataforma)", tooltip: "Tabelas maiores que 1 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."}
           ]}
           button={{
-            text: isBDPro ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis",
+            text: isBDPro.isCurrentPlan && planIntervalPlan() ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis",
             href: username === null ? `/user/login?q=pro&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&q=pro&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}`,
-            isCurrentPlan: isBDPro,
+            isCurrentPlan: isBDPro.isCurrentPlan && planIntervalPlan(),
           }}
         />
 
@@ -445,9 +452,9 @@ export function SectionPrice() {
             {name: "Suporte prioritário via email e Discord"}
           ]}
           button={{
-            text: isBDEmp ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis",
+            text: isBDEmp.isCurrentPlan && planIntervalPlan() ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis",
             href: username === null ? `/user/login?q=empresas&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&q=empresas&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}`,
-            isCurrentPlan: isBDEmp,
+            isCurrentPlan: isBDEmp.isCurrentPlan && planIntervalPlan(),
           }}
         />
       </Stack>
