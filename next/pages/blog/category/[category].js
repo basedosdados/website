@@ -7,7 +7,7 @@ import { Box, Heading } from "@chakra-ui/react";
 export async function getStaticProps({ params }) {
   const { category } = params;
 
-  const posts = getPostsByCategory(category);
+  const posts = await getPostsByCategory(category);
 
   return {
     props: {
@@ -18,7 +18,7 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const allPosts = getAllPosts();
+  const allPosts = await getAllPosts();
 
   const allCategories = allPosts
     .map(({ frontmatter }) => frontmatter?.categories)

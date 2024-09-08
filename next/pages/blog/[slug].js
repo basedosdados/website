@@ -32,7 +32,7 @@ hljs.registerLanguage("md", markdownHighlight);
 export async function getStaticProps({ params }) {
   const { slug } = params;
 
-  const content = getPostBySlug(slug);
+  const content = await getPostBySlug(slug);
   const serialize = await serializePost(content);
 
   return {
@@ -44,7 +44,7 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const allPosts = getAllPosts();
+  const allPosts = await getAllPosts();
   return {
     paths: allPosts.map(({ slug }) => ({ params: { slug } })),
     fallback: false,

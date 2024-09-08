@@ -313,11 +313,7 @@ export function Toc({ headings }) {
         <Box as="hr" />
         <UnorderedList marginTop={"1rem"}>
           {headings.map(({ id, title, level }) => (
-            <ListItem
-              key={id}
-              margin={"0.5rem 0"}
-              marginLeft={`${level * 5}%`}
-            >
+            <ListItem key={id} margin={"0.5rem 0"} marginLeft={`${level * 5}%`}>
               <Link
                 href={`#${id}`}
                 fontFamily="Roboto"

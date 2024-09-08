@@ -4,7 +4,8 @@ import { BlogGrid } from "../components/organisms/Blog";
 import { getAllPosts } from "./api/blog";
 
 export async function getStaticProps() {
-  return { props: { posts: getAllPosts() } };
+  const posts = await getAllPosts();
+  return { props: { posts } };
 }
 
 export default function Blog({ posts }) {

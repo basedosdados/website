@@ -1,27 +1,29 @@
 import path from "path";
-import fs from "fs";
+import fs from "fs/promises";
 import matter from "gray-matter";
 import { serialize } from "next-mdx-remote/serialize";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import { fromMarkdown } from "mdast-util-from-markdown";
 import { visit } from "unist-util-visit";
-import {toString} from "hast-util-to-string"
+import { toString } from "hast-util-to-string";
 
 const root = process.cwd();
 const blogpostsDir = path.join(root, "blog");
 
-export function getAllPosts() {
-  const postsDir = fs.readdirSync(blogpostsDir, "utf-8");
-  const posts = postsDir.map((folder) => {
-    const fullpath = path.join(blogpostsDir, folder);
-    const content = fs.readFileSync(fullpath, "utf-8");
-    const { data } = matter(content);
-    return {
-      slug: folder.replace(".mdx", ""),
-      frontmatter: data,
-    };
-  });
+export async function getAllPosts() {
+  const postsDir = await fs.readdir(blogpostsDir, "utf-8");
+  const posts = await Promise.all(
+    postsDir.map(async (folder) => {
+      const fullpath = path.join(blogpostsDir, folder);
+      const content = await fs.readFile(fullpath, "utf-8");
+      const { data } = matter(content);
+      return {
+        slug: folder.replace(".mdx", ""),
+        frontmatter: data,
+      };
+    }),
+  );
 
   posts.sort(
     (a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date),
@@ -30,13 +32,13 @@ export function getAllPosts() {
   return posts;
 }
 
-export function getPostBySlug(slug) {
+export async function getPostBySlug(slug) {
   const filepath = path.join(blogpostsDir, `${slug}.mdx`);
-  return fs.readFileSync(filepath, "utf-8");
+  return await fs.readFile(filepath, "utf-8");
 }
 
-export function getPostsByCategory(category) {
-  const posts = getAllPosts();
+export async function getPostsByCategory(category) {
+  const posts = await getAllPosts();
   return posts.filter(({ frontmatter }) =>
     frontmatter?.categories?.includes(category),
   );
