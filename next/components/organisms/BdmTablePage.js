@@ -284,7 +284,7 @@ export default function BdmTablePage({ id }) {
       </SkeletonText>
 
       <Stack spacing="12px" marginBottom="40px !important">
-        <StackSkeleton width="240px" height="20px">
+        <StackSkeleton width="300px" height="20px">
           <Text
             fontFamily="Roboto"
             fontWeight="500"
@@ -297,7 +297,7 @@ export default function BdmTablePage({ id }) {
         </StackSkeleton>
 
         <StackSkeleton
-          width="350px"
+          width="100%"
           height={!isLoading ? "fit-content" : "65px"}
         >
           <TemporalCoverageBar value={resource?.fullCoverage}/>
@@ -305,7 +305,7 @@ export default function BdmTablePage({ id }) {
       </Stack>
 
       <Stack spacing="12px" marginBottom="40px !important">
-        <StackSkeleton width="160px" height="20px">
+        <StackSkeleton width="200px" height="20px">
           <Text
             fontFamily="Roboto"
             fontWeight="500"
@@ -323,7 +323,7 @@ export default function BdmTablePage({ id }) {
       </Stack>
 
       <Stack marginBottom="40px !important">
-        <StackSkeleton width="300px" height="20px">
+        <StackSkeleton width="380px" height="20px">
           <Text
             fontFamily="Roboto"
             fontWeight="500"
@@ -521,7 +521,7 @@ export default function BdmTablePage({ id }) {
 
 
       <Stack marginBottom="40px !important">
-        <StackSkeleton width="205px" height="20px">
+        <StackSkeleton width="260px" height="20px">
           <TooltipText
             text="Partições no BigQuery"
             info="As partições são divisões feitas em uma tabela para facilitar o gerenciamento e a consulta aos dados. Ao segmentar uma tabela grande em partições menores, a quantidade de bytes lidos é reduzida, o que ajuda a controlar os custos e melhora o desempenho da consulta."
@@ -545,7 +545,7 @@ export default function BdmTablePage({ id }) {
       </Stack>
 
       <Stack marginBottom="40px !important">
-        <StackSkeleton width="190px" height="20px">
+        <StackSkeleton width="300px" height="20px">
           <TooltipText
             text="Nível da observação"
             info="Indica qual a menor granularidade possível de análise com aquele dado. Por exemplo, uma tabela com nível da observação de estado permite que façamos uma análise no país (por ser mais amplo que estado), mas não uma análise por município (que já seria um recorte mais específico)."
@@ -577,7 +577,7 @@ export default function BdmTablePage({ id }) {
       </Stack>
 
       <Stack marginBottom="40px !important">
-        <StackSkeleton width="180px" height="20px">
+        <StackSkeleton width="240px" height="20px">
           <TooltipText
             text="Arquivos auxiliares"
             info="Os arquivos dão mais contexto e ajudam a entender melhor os dados disponíveis. Podem incluir notas técnicas, descrições de coleta e amostragem, etc."
@@ -628,7 +628,7 @@ export default function BdmTablePage({ id }) {
       </Stack>
 
       <Stack>
-        <StackSkeleton width="155px" height="20px">
+        <StackSkeleton width="240px" height="20px">
           <TooltipText
             text="Fontes originais"
             info="São links para páginas externas à plataforma com informações úteis sobre o conjunto de dados. Tentamos sempre fornecer o caminho mais próximo possível à fonte para baixar os dados originais."
@@ -647,30 +647,35 @@ export default function BdmTablePage({ id }) {
             lineHeight="20px"
             color="#464A51"
           >
-            {resource?.rawDataSource?.[0]?._id && resource?.rawDataSource?.[0]?.dataset?._id ? 
-              <Text
-                as="a"
-                target="_blank"
-                display="flex"
-                flexDirection="row"
-                gap="8px"
-                alignItems="center"
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="14px"
-                lineHeight="20px"
-                color="#0068C5"
-                fill="#0068C5"
-                _hover={{
-                  fill: "#0057A4",
-                  color: "#0057A4"
-                }}
-                href={`/dataset/${resource.rawDataSource[0].dataset._id}?raw_data_source=${resource.rawDataSource[0]._id}`}
-              >
-                {resource.rawDataSource[0].name}
-              </Text>
-            :
-              "Não informado"
+            {resource?.rawDataSource?.[0]?._id ?
+              Object.values(resource?.rawDataSource).map((elm, i) => {
+                return (
+                  <Text
+                    key={i}
+                    as="a"
+                    target="_blank"
+                    display="flex"
+                    flexDirection="row"
+                    gap="8px"
+                    alignItems="center"
+                    fontFamily="Roboto"
+                    fontWeight="400"
+                    fontSize="14px"
+                    lineHeight="20px"
+                    color="#0068C5"
+                    fill="#0068C5"
+                    _hover={{
+                      fill: "#0057A4",
+                      color: "#0057A4"
+                    }}
+                    href={`/dataset/${elm?.dataset?._id}?raw_data_source=${elm?._id}`}
+                  >
+                    {elm?.name}
+                  </Text>
+                )
+              }) 
+              :
+                "Não informado"
             }
           </Text>
         </StackSkeleton> 
@@ -678,7 +683,7 @@ export default function BdmTablePage({ id }) {
 
       <Divider marginY="40px !important" borderColor="#DEDFE0"/>
 
-      <StackSkeleton width="190px" height="20px" marginBottom="20px !important">
+      <StackSkeleton width="240px" height="20px" marginBottom="20px !important">
         <Text
           fontFamily="Roboto"
           fontWeight="500"
