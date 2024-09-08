@@ -19,7 +19,7 @@ export async function getAllPosts() {
       const content = await fs.readFile(fullpath, "utf-8");
       const { data } = matter(content);
       return {
-        slug: folder.replace(".mdx", ""),
+        slug: folder.replace(".md", ""),
         frontmatter: data,
       };
     }),
@@ -33,7 +33,7 @@ export async function getAllPosts() {
 }
 
 export async function getPostBySlug(slug) {
-  const filepath = path.join(blogpostsDir, `${slug}.mdx`);
+  const filepath = path.join(blogpostsDir, `${slug}.md`);
   return await fs.readFile(filepath, "utf-8");
 }
 
