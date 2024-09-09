@@ -168,7 +168,8 @@ export function TemporalCoverageBar ({ value }) {
   return (
     <HStack 
       position="relative"  
-      width="325px"
+      width="100%"
+      maxWidth="325px"
       height="65px"
       alignItems="normal"
       spacing={0}
@@ -219,7 +220,11 @@ export function TemporalCoverageBar ({ value }) {
         maxWidth="160px"
         label="Acesso liberado para o período"
       >
-        <Box flex={3} display={values?.["0"] ? "" : "none"}>
+        <Box
+          flex={3}
+          marginRight={values?.["3"] ? "" : {base:"24px !important", lg: "0"}}
+          display={values?.["0"] ? "" : "none"}
+        >
           <Box
             width="100%"
             height="24px"
@@ -312,7 +317,7 @@ export function TemporalCoverageBar ({ value }) {
         maxWidth="160px"
         label="Faça o upgrade para liberar o período"
       >
-        <Box flex={2} display={values?.["3"] ? "" : "none"}>
+        <Box flex={2} marginRight={{base:"24px !important", lg: "0"}}  display={values?.["3"] ? "" : "none"}>
           <Box
             as="a"
             cursor="pointer"

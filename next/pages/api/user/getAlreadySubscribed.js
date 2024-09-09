@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-async function userGetSubscription(id, token) {
+async function getAlreadySubscribed(id, token) {
   try {
     const res = await axios({
       url: API_URL,
@@ -16,8 +16,19 @@ async function userGetSubscription(id, token) {
             allAccount (id: "${id}"){
               edges {
                 node {
-                  email
-                  proSubscriptionStatus
+                  id
+                  internalSubscription {
+                    edges {
+                      node {
+                        canceledAt
+                        createdAt
+                        isActive
+                        stripeSubscription
+                        planInterval
+                        nextBillingCycle
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -34,11 +45,15 @@ async function userGetSubscription(id, token) {
 }
 
 export default async function handler(req, res) {
-  const token = req.cookies.token
-  const result = await userGetSubscription(atob(req.query.p), token)
+  const token = () => {
+    if(req.query.q) return atob(req.query.q)
+    return req.cookies.token
+  }
+
+  const result = await getAlreadySubscribed(atob(req.query.p), token())
 
   if(result.errors) return res.status(500).json({error: result.errors})
   if(result === "err") return res.status(500).json({error: "err"})
 
-  res.status(200).json(result?.data?.allAccount?.edges[0]?.node)
+  res.status(200).json(result?.data?.allAccount?.edges[0]?.node?.internalSubscription)
 }

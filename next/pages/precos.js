@@ -109,17 +109,16 @@ export const CardPrice = ({
             >/mês</Text>
           </Box>
 
-          {anualPlan && 
-            <Text
-              fontFamily="Roboto"
-              fontWeight="400"
-              fontSize="16px"
-              lineHeight="24px"
-              color="#464A51"
-              marginTop="24px"
-              alignItems="center"
-            >{(price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 })} cobrado uma vez no ano</Text>
-          }
+          <Text
+            height="24px"
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="16px"
+            lineHeight="24px"
+            color="#464A51"
+            marginTop="24px"
+            alignItems="center"
+          >{anualPlan && price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 })+" cobrado uma vez no ano"}</Text>
         </Box>
       </Box>
 
@@ -276,20 +275,37 @@ export const CardPrice = ({
 }
 
 export function SectionPrice() {
-  const [toggleAnual, setToggleAnual] = useState(false)
+  const [toggleAnual, setToggleAnual] = useState(true)
   const [plans, setPlans] = useState(null)
   const [username, setUsername] = useState(null)
-  const [isBDPro, setIsBDPro] = useState(false)
-  const [isBDEmp, setIsBDEmp] = useState(false)
+  const [isBDPro, setIsBDPro] = useState({isCurrentPlan: false})
+  const [isBDEmp, setIsBDEmp] = useState({isCurrentPlan: false})
+  const [hasSubscribed, setHasSubscribed] = useState(true)
+
+  async function alreadySubscribed(id) {
+    const result = await fetch(`/api/user/getAlreadySubscribed?p=${btoa(id)}`)
+      .then(res => res.json())
+    setHasSubscribed(result?.edges.length > 0)
+  } 
 
   useEffect(() => {
     let user = null
     if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
 
+    if(user) {
+      const reg = new RegExp("(?<=:).*")
+      const [ id ] = reg.exec(user.id)
+      alreadySubscribed(id)
+    } else {
+      setHasSubscribed(false)
+    }
+
+    const stripeSubscription = user?.internalSubscription?.edges?.[0]?.node
+
     if(user != null) {
       setUsername(user?.username)
-      setIsBDPro(user?.proSubscription === "bd_pro")
-      setIsBDEmp(user?.proSubscription === "bd_pro_empresas")
+      setIsBDPro({isCurrentPlan: stripeSubscription?.stripeSubscription === "bd_pro", planInterval: stripeSubscription?.planInterval})
+      setIsBDEmp({isCurrentPlan: stripeSubscription?.stripeSubscription === "bd_pro_empresas", planInterval: stripeSubscription?.planInterval})
     }
 
     async function fecthPlans() {
@@ -325,6 +341,13 @@ export function SectionPrice() {
     fecthPlans()
   }, [])
 
+  function planIntervalPlan() {
+    const planInterval = toggleAnual ? "year" : "month"
+
+    if(isBDPro?.planInterval === planInterval) return true
+    return false
+  }
+
   return (
     <Box
       display="flex"
@@ -340,6 +363,7 @@ export function SectionPrice() {
         gap="8px"
       >
         <Toggle
+          defaultChecked
           className="toggle_variant"
           value={toggleAnual}
           onChange={() => setToggleAnual(!toggleAnual)}
@@ -402,24 +426,25 @@ export function SectionPrice() {
         <CardPrice
           title="BD Pro"
           subTitle={<>Para você ter acesso aos<br/> dados mais atualizados</>}
-          price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 47}
+          price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 444}
           anualPlan={toggleAnual}
           textResource="Todos os recursos da BD Grátis, mais:"
           resources={[
             {name: "Dezenas de bases de alta frequência atualizadas"},
+            {name: "Tabela de referência de empresas com informações atualizadas"},
             {name: "Download direto até 1GB (80% das tabelas da plataforma)", tooltip: "Tabelas maiores que 1 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."}
           ]}
           button={{
-            text: isBDPro ? "Plano atual" : `Iniciar teste grátis`,
+            text: isBDPro.isCurrentPlan && planIntervalPlan() ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis",
             href: username === null ? `/user/login?q=pro&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&q=pro&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}`,
-            isCurrentPlan: isBDPro,
+            isCurrentPlan: isBDPro.isCurrentPlan && planIntervalPlan(),
           }}
         />
 
         <CardPrice
           title="BD Empresas"
           subTitle={<>Para sua empresa ganhar tempo<br/> e qualidade em decisões</>}
-          price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 350}
+          price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3360}
           anualPlan={toggleAnual}
           textResource="Todos os recursos da BD Pro, mais:"
           resources={[
@@ -427,9 +452,9 @@ export function SectionPrice() {
             {name: "Suporte prioritário via email e Discord"}
           ]}
           button={{
-            text: isBDEmp ? "Plano atual" : "Iniciar teste grátis",
+            text: isBDEmp.isCurrentPlan && planIntervalPlan() ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis",
             href: username === null ? `/user/login?q=empresas&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&q=empresas&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}`,
-            isCurrentPlan: isBDEmp,
+            isCurrentPlan: isBDEmp.isCurrentPlan && planIntervalPlan(),
           }}
         />
       </Stack>
