@@ -582,17 +582,17 @@ export default function DataInformationQuery({ resource }) {
                     marginLeft="4px"
                     as="a"
                     target="_blank"
-                    href="https://basedosdados.github.io/mais/colab_data/"
+                    href="https://basedosdados.org/precos"
                     color="#0068C5"
                     _hover={{color: "#0057A4"}}
                   >assinantes dos nossos planos pagos
-                  </Text>. No entanto, você pode acessar a tabela gratuitamente utilizando SQL, Python, R ou Stata. Considere atualizar para um plano pago para fazer o download.
+                  </Text>. No entanto, você pode acessar a tabela gratuitamente utilizando SQL, Python ou R. Considere atualizar para um plano pago para fazer o download.
                 </AlertDiscalimerBox>
               }
               {downloadWarning === "biggest1gb" &&
                 <AlertDiscalimerBox
                   type="error"
-                  text={`O tamanho da tabela ultrapassou o limite permitido para download, de 1 GB. Você pode acessar os dados em SQL, Python, R e Stata.`}
+                  text={`O tamanho da tabela ultrapassou o limite permitido para download, de 1 GB. Você pode acessar os dados em SQL, Python ou R.`}
                 />
               }
 

@@ -60,7 +60,7 @@ export default function ServiceTerms() {
         gap="8px"
       >
         <TitleText>2. Descrição do Serviço</TitleText>
-        <SecText>2.1. Nossos serviços consistem em uma assinatura mensal que concede aos seus assinantes o acesso a diversos dados exclusivos, harmonizados e atualizados na plataforma da Base dos Dados. O acesso se dá via os pacotes Python, R ou Stata da Base dos Dados, ou via BigQuery, serviço de armazenamento de dados de baixo custo e totalmente gerenciado do Google para análises.</SecText>
+        <SecText>2.1. Nossos serviços consistem em uma assinatura mensal que concede aos seus assinantes o acesso a diversos dados exclusivos, harmonizados e atualizados na plataforma da Base dos Dados. O acesso se dá via os pacotes Python ou R da Base dos Dados, ou via BigQuery, serviço de armazenamento de dados de baixo custo e totalmente gerenciado do Google para análises.</SecText>
       </VStack>
     
       <VStack

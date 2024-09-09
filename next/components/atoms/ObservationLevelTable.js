@@ -17,7 +17,25 @@ export default function ObservationLevel({ resource }) {
   keys.forEach((elm) => {
     const value = resource?.observationLevels[elm]
 
-    const newValue = [value?.entity?.name || "Não informado", value?.columns[0]?.name || "Não informado"]
+    const valueEntity = () => {
+      if(value.entity.name) return value.entity.name
+      return "Não informado"
+    }
+
+    const valueColumns = () => {
+      let columns = []
+
+      if(value?.columns[0]) {
+        Object.values(value.columns).map((column) => {
+          columns.push(column?.name)
+        })
+      } else {
+        columns = ["Não informado"]
+      }
+      return columns.join(", ")
+    }
+
+    const newValue = [valueEntity(), valueColumns()]
     array.push(newValue)
   })
 

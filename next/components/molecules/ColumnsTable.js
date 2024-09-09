@@ -111,7 +111,7 @@ export default function ColumnsTable({
     let user
     if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
 
-    if(user?.proSubscriptionStatus === "active") return true
+    if(user?.internalSubscription?.edges?.[0]?.node?.isActive === true) return true
     return false
   }
 

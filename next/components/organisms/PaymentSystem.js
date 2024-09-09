@@ -2,13 +2,13 @@ import {
   Stack,
   VStack,
   Skeleton,
+  Spinner,
 } from "@chakra-ui/react"
 import { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import {
   Elements,
   PaymentElement,
-  AddressElement,
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
@@ -18,10 +18,12 @@ import styles from "../../styles/paymentSystem.module.css";
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_KEY_STRIPE)
 
 const PaymentForm = ({ onSucess, onErro, clientSecret}) => {
+  const [isLoading, setIsLoading] = useState(false)
   const stripe = useStripe()
   const elements = useElements()
 
   const handlerSubmit = async (e) => {
+    setIsLoading(true)
     e.preventDefault()
 
     const isSetupIntent = clientSecret.startsWith('seti_');
@@ -57,11 +59,25 @@ const PaymentForm = ({ onSucess, onErro, clientSecret}) => {
         className={styles.content}
         onSubmit={handlerSubmit}
       >
-        <AddressElement options={{mode:'billing'}}/>
-
         <PaymentElement className={styles.payment}/>
 
-        <Button width="100%" type="submit" marginTop="6px !important">Iniciar inscrição</Button>
+        <Button
+          type="submit"
+          height="40px"
+          fontSize="20px"
+          lineHeight="30px"
+          fontFamily="Roboto"
+          fontWeight="500"
+          pointerEvents={isLoading ? "none" : "default"}
+          color={"#FFFFFF"}
+          backgroundColor={"#0D99FC"}
+          _hover={{
+            color: "#FAFAFA",
+            backgroundColor: "#0B89E2"
+          }}
+        >
+          {isLoading ? <Spinner /> : "Iniciar inscrição"}
+        </Button>
       </form>
     </VStack>
   )
@@ -121,15 +137,17 @@ export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
 
   if(!clientSecret) return (
     <Stack>
-      <SkeletonBox type="text"/>
-      <SkeletonBox type="box"/>
+      <Stack width="100%" flexDirection="row" spacing={0} gap="8px" marginBottom="16px !important">
+        <Stack width="100%"  spacing={0} gap="8px">
+          <SkeletonBox type="text"/>
+          <SkeletonBox type="smallBox" width="100%"/>
+        </Stack>
+        <Stack width="100%" spacing={0} gap="8px">
+          <SkeletonBox type="text"/>
+          <SkeletonBox type="smallBox" width="100%"/>
+        </Stack>
+      </Stack>
 
-      <SkeletonBox type="text"/>
-      <SkeletonBox type="box"/>
-
-      <SkeletonBox type="text"/>
-      <SkeletonBox type="box"/>
-      
       <SkeletonBox type="text"/>
       <SkeletonBox type="box"/>
 
