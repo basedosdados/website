@@ -355,7 +355,7 @@ export function SectionPrice() {
       gridGap="40px"
     >
       <Box
-        display="none"
+        display="flex"
         width="100%"
         flexDirection="row"
         justifyContent="center"
