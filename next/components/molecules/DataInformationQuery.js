@@ -582,7 +582,7 @@ export default function DataInformationQuery({ resource }) {
                     marginLeft="4px"
                     as="a"
                     target="_blank"
-                    href="https://basedosdados.github.io/mais/colab_data/"
+                    href="https://basedosdados.org/precos"
                     color="#0068C5"
                     _hover={{color: "#0057A4"}}
                   >assinantes dos nossos planos pagos
