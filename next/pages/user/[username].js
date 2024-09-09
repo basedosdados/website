@@ -1958,7 +1958,7 @@ const PlansAndPayment = ({ userData }) => {
           gridGap="40px"
         >
           <Box
-            display="none"
+            display="flex"
             width="100%"
             flexDirection="row"
             justifyContent="center"
