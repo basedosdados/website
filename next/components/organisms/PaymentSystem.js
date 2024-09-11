@@ -53,6 +53,7 @@ const PaymentForm = ({ onSucess, onErro, clientSecret}) => {
   return (
     <VStack
       spacing={0}
+      flex={1}
       alignItems="start"
     >
       <form
@@ -63,20 +64,19 @@ const PaymentForm = ({ onSucess, onErro, clientSecret}) => {
 
         <Button
           type="submit"
-          height="40px"
-          fontSize="20px"
-          lineHeight="30px"
+          fontSize="14px"
+          lineHeight="20px"
           fontFamily="Roboto"
           fontWeight="500"
+          borderRadius="8px"
           pointerEvents={isLoading ? "none" : "default"}
-          color={"#FFFFFF"}
-          backgroundColor={"#0D99FC"}
+          color="#FFFFFF"
+          backgroundColor="#2B8C4D"
           _hover={{
-            color: "#FAFAFA",
-            backgroundColor: "#0B89E2"
+            backgroundColor: "#22703E"
           }}
         >
-          {isLoading ? <Spinner /> : "Iniciar inscrição"}
+          {isLoading ? <Spinner /> : "Confirmar pagamento"}
         </Button>
       </form>
     </VStack>
@@ -94,7 +94,7 @@ export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
       fontFamily: "Ubuntu",
       borderRadius: "14px",
       colorPrimary: "#42B0FF",
-      colorTextPlaceholder: "#A3A3A3",
+      colorTextPlaceholder: "#464A51",
       colorDanger: "#D93B3B",
       colorBackground: "#FFF",
       colorText: "#252A32",
@@ -136,7 +136,7 @@ export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
   }
 
   if(!clientSecret) return (
-    <Stack>
+    <Stack flex={1}>
       <Stack width="100%" flexDirection="row" spacing={0} gap="8px" marginBottom="16px !important">
         <Stack width="100%"  spacing={0} gap="8px">
           <SkeletonBox type="text"/>

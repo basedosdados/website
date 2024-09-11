@@ -32,6 +32,7 @@ import cookies from 'js-cookie';
 import { serialize } from 'cookie';
 import { MainPageTemplate } from "../../components/templates/main";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
+import { ControlledInputSimple } from "../../components/atoms/ControlledInput";
 import Checkbox from "../../components/atoms/Checkbox";
 import BigTitle from "../../components/atoms/BigTitle";
 import SectionTitle from "../../components/atoms/SectionTitle";
@@ -1703,22 +1704,29 @@ const PlansAndPayment = ({ userData }) => {
     <Stack>
       <Box display={isLoading || isLoadingH ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
 
+      {/* stripe */}
       <ModalGeneral
         classNameBody={stylesPS.modal}
         isOpen={PaymentModal.isOpen}
         onClose={PaymentModal.onClose}
-        isCentered={isMobileMod() ? false : true}
         propsModalContent={{
-          minWidth: "fit-content",
-          maxWidth: "fit-content",
-          maxHeight: "fit-content",
-          margin: "24px 0"
+          width: "100%",
+          maxWidth:"1008px",
+          margin: "24px"
         }}
+        isCentered={isMobileMod() ? false : true}
       >
-        <Stack spacing={0} marginBottom="16px">
-          <SectionTitle lineHeight="40px" height="40px">
-            Assinatura {plan.title}
-          </SectionTitle>
+        <Stack spacing={0} marginBottom="40px">
+          <Text
+            width="100%"
+            fontFamily="Roboto"
+            fontWeight="500"
+            color="#252A32"
+            fontSize="24px"
+            lineHeight="36px"
+          >
+            Pagamento
+          </Text>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
@@ -1729,21 +1737,164 @@ const PlansAndPayment = ({ userData }) => {
 
         <Stack
           display="flex"
-          flexDirection="column"
-          justifyContent="center"
-          justifyItems="center"
-          gap="20px"
+          flexDirection={{base: "column", lg: "row"}}
+          gap="80px"
           spacing={0}
         >
-          <PaymentSystem
-            userData={userData}
-            plan={plan}
-            onSucess={() => openModalSucess()}
-            onErro={() => openModalErro()}
-          />
+          <Stack
+            flex={1}
+            spacing="32px"
+          >
+            <Stack
+              flexDirection="column"
+              spacing={0}
+              gap="16px"
+            >
+              <Box
+                display="flex"
+                flexDirection="row"
+                gap="8px"
+                width="100%"
+              >
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="16px"
+                  lineHeight="24px"
+                  color="#252A32"
+                >
+                  BD Pro
+                </Text>
+                <Text
+                  cursor="pointer"
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="16px"
+                  lineHeight="24px"
+                  color="#0068C5"
+                  _hover={{color: "#0057A4"}}
+                  marginLeft="auto"
+                >Trocar plano</Text>
+              </Box>
+
+              <Box
+                display="flex"
+                flexDirection="row"
+                gap="8px"
+                alignItems="center"
+              >
+                <Toggle/>
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="16px"
+                  lineHeight="24px"
+                  color="#252A32"
+                >Desconto anual</Text>
+                <Text
+                  as="span"
+                  color="#2B8C4D"
+                  backgroundColor="#D5E8DB"
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  lineHeight="28px"
+                  padding="2px 4px"
+                  borderRadius="4px"
+                  height="32px"
+                >Economize 20%</Text>
+              </Box>
+            </Stack>
+
+            <Stack
+              flexDirection="column"
+              spacing={0}
+              gap="8px"
+            >
+              <Text
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="16px"
+                lineHeight="24px"
+                color="#252A32"
+              >
+                Cupom de desconto
+              </Text>
+              <Box
+                display="flex"
+                flexDirection="row"
+                alignItems="center"
+                gap="8px"
+              >
+                <ControlledInputSimple
+                  width="100%"
+                  placeholder="Insira o cupom"
+                  inputElementStyle={{
+                    display: "none"
+                  }}
+                  inputStyle={{
+                    paddingLeft: "16px !important",
+                    height: "48px"
+                  }}
+                />
+
+                <Box
+                  as="button"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  width="fit-content"
+                  height="40px"
+                  borderRadius="8px"
+                  padding="10px 34px"
+                  border="1px solid"
+                  cursor="pointer"
+                  backgroundColor="#FFF"
+                  color="#2B8C4D"
+                  borderColor="#2B8C4D"
+                  _hover={{
+                    borderColor: "#22703E",
+                    color: "#22703E"
+                  }}
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="14px"
+                  lineHeight="20px"
+                >
+                  Aplicar
+                </Box>
+              </Box>
+            </Stack>
+
+            <Text
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="16px"
+              lineHeight="24px"
+              color="#464A51"
+            >Período de teste - 7 dias grátis</Text>
+          </Stack>
+
+          <Box display="flex" flexDirection="column" gap="24px" flex={1}>
+            <Text
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="16px"
+              lineHeight="24px"
+              color="#252A32"
+            >
+              Detalhes do pagamento
+            </Text>
+            <PaymentSystem
+              userData={userData}
+              plan={plan}
+              onSucess={() => openModalSucess()}
+              onErro={() => openModalErro()}
+            />
+          </Box>
         </Stack>
       </ModalGeneral>
 
+      {/* success */}
       <ModalGeneral
         isOpen={SucessPaymentModal.isOpen}
         onClose={() => setIsLoading(true)}
@@ -1833,6 +1984,7 @@ const PlansAndPayment = ({ userData }) => {
         </Stack>
       </ModalGeneral>
 
+      {/* err */}
       <ModalGeneral
         isOpen={ErroPaymentModal.isOpen}
         onClose={ErroPaymentModal.onClose}
@@ -1914,6 +2066,7 @@ const PlansAndPayment = ({ userData }) => {
         </Stack>
       </ModalGeneral>
 
+      {/* modal plans */}
       <ModalGeneral
         isOpen={PlansModal.isOpen}
         onClose={() => {
@@ -1928,19 +2081,20 @@ const PlansAndPayment = ({ userData }) => {
           minWidth: "fit-content",
           maxHeight: "fit-content",
           margin: isMobileMod() ? "0" : "24px",
+          padding: "32px 22px 26px 22px",
           borderRadius: isMobileMod() ? "0" : "20px",
         }}
         isCentered={isMobileMod() ? false : true}
       >
-        <Stack spacing={0} marginBottom="16px">
+        <Stack spacing={0} marginBottom="40px">
           <Text
             width="100%"
             fontFamily="Roboto"
-            fontWeight="400"
+            fontWeight="500"
             color="#252A32"
             fontSize="24px"
-            textAlign="center"
-            lineHeight="40px"
+            lineHeight="36px"
+            paddingLeft="10px"
           >
             Compare os planos
           </Text>
@@ -2003,10 +2157,10 @@ const PlansAndPayment = ({ userData }) => {
             gridTemplateColumns="repeat(3, 320px)"
             gridTemplateRows="1fr"
             alignItems={isMobileMod() ? "center" : {base: "center", lg: "inherit"}}
-            padding="0 20px 10px"
+            padding="0 10px 6px"
             justifyContent="center"
             justifyItems="center"
-            gap="20px"
+            gap="24px"
             spacing={0}
           >
             <CardPrice
@@ -2075,6 +2229,7 @@ const PlansAndPayment = ({ userData }) => {
         </Box>
       </ModalGeneral>
 
+      {/* err plans */}
       <ModalGeneral
         isOpen={AlertChangePlanModal.isOpen}
         onClose={AlertChangePlanModal.onClose}
@@ -2124,6 +2279,7 @@ const PlansAndPayment = ({ userData }) => {
         </Stack>
       </ModalGeneral>
 
+      {/* cancel */}
       <ModalGeneral
         isOpen={CancelModalPlan.isOpen}
         onClose={CancelModalPlan.onClose}

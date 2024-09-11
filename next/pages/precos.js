@@ -85,7 +85,7 @@ export const CardPrice = ({
           <Box
             display="flex"
             flexDirection="row"
-            height="50px"
+            height="60px"
             alignItems="center"
           >
             <Text
@@ -151,7 +151,7 @@ export const CardPrice = ({
                 flexDirection="row"
                 alignItems="center"
                 gap="8px"
-                _last={{marginBottom:"24px"}}
+                _last={{marginBottom:"0px !important"}}
               >
                 <CheckIcon 
                   width="24px"
@@ -233,7 +233,7 @@ export const CardPrice = ({
               fontFamily="Roboto"
               fontWeight="500"
               fontSize="20px"
-              lineHeight="30px"
+              lineHeight="36px"
               _hover={{
                 backgroundColor: "#0B89E2"
               }}
@@ -252,7 +252,7 @@ export const CardPrice = ({
             fontSize="16px"
             lineHeight="24px"
             fontFamily="Roboto"
-            height="20px"
+            height="24px"
           >Leia os
             <Text
               as="a"
