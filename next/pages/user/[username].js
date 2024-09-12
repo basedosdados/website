@@ -1441,7 +1441,11 @@ const PlansAndPayment = ({ userData }) => {
   const router = useRouter()
   const { query } = router
 
-  const [plan, setPlan] = useState({})
+  const [plan, setPlan] = useState("")
+  const [checkoutInfos, setCheckoutInfos] = useState({})
+  const [valueCoupon, setValueCoupon] = useState("")
+  const [couponInputFocus, setCouponInputFocus] = useState(false)
+  const [coupon, setCoupon] = useState("")
   const PaymentModal = useDisclosure()
   const SucessPaymentModal = useDisclosure()
   const ErroPaymentModal = useDisclosure()
@@ -1472,8 +1476,6 @@ const PlansAndPayment = ({ userData }) => {
   }, [userData?.id])
 
   useEffect(() => {
-    if(PlansModal.isOpen === false) return
-
     async function fecthPlans() {
       try {
         const result = await fetch(`/api/stripe/getPlans`, { method: "GET" })
@@ -1505,12 +1507,20 @@ const PlansAndPayment = ({ userData }) => {
     }
 
     fecthPlans()
-  }, [PlansModal.isOpen])
+  }, [])
+
+  useEffect(() => {
+    if(plans === null) return
+    if(plan === "") return
+
+    const value = Object.values(plans).find(elm => elm._id === plan)
+    setCheckoutInfos(value)
+  }, [plan, plans])
 
   useEffect(() => {
     if(query.i) {
       if(subscriptionInfo?.isActive === true) return AlertChangePlanModal.onOpen()
-      setPlan({id: query.i})
+      setPlan(query.i)
       PaymentModal.onOpen()
     }
   }, [query])
@@ -1690,9 +1700,22 @@ const PlansAndPayment = ({ userData }) => {
     return formattedDate
   }
 
-  function formattedPlanInterval (value) {
-    if(value === "month") return "(Mensal)"
-    if(value === "year") return "(Anual)"
+  function formattedPlanInterval (value, variant = false) {
+    if(variant) {
+      if(value === "month") return "mês"
+      if(value === "year") return "ano"
+    } else {
+      if(value === "month") return "(Mensal)"
+      if(value === "year") return "(Anual)"
+    }
+  }
+
+  function changeIntervalPlanCheckout() {
+    let togglerValue = !toggleAnual ? "year" : "month"
+    const value = Object.values(plans).find(elm => elm.interval === togglerValue && elm.productSlug === checkoutInfos?.productSlug)
+    setCheckoutInfos(value)
+    setPlan(value._id)
+    setToggleAnual(!toggleAnual)
   }
 
   useEffect(() => {
@@ -1708,7 +1731,10 @@ const PlansAndPayment = ({ userData }) => {
       <ModalGeneral
         classNameBody={stylesPS.modal}
         isOpen={PaymentModal.isOpen}
-        onClose={PaymentModal.onClose}
+        onClose={() => {
+          setToggleAnual(true)
+          PaymentModal.onClose()
+        }}
         propsModalContent={{
           width: "100%",
           maxWidth:"1008px",
@@ -1763,7 +1789,7 @@ const PlansAndPayment = ({ userData }) => {
                   lineHeight="24px"
                   color="#252A32"
                 >
-                  BD Pro
+                  {checkoutInfos?.productName}
                 </Text>
                 <Text
                   cursor="pointer"
@@ -1774,7 +1800,11 @@ const PlansAndPayment = ({ userData }) => {
                   color="#0068C5"
                   _hover={{color: "#0057A4"}}
                   marginLeft="auto"
-                >Trocar plano</Text>
+                  onClick={() => {
+                    PaymentModal.onClose()
+                    PlansModal.onOpen()
+                  }}
+                >Alterar plano</Text>
               </Box>
 
               <Box
@@ -1783,7 +1813,18 @@ const PlansAndPayment = ({ userData }) => {
                 gap="8px"
                 alignItems="center"
               >
-                <Toggle/>
+                {toggleAnual ?  
+                    <Toggle
+                      defaultChecked
+                      value={toggleAnual}
+                      onChange={() => changeIntervalPlanCheckout()}
+                    />
+                  : 
+                    <Toggle
+                      value={toggleAnual}
+                      onChange={() => changeIntervalPlanCheckout()}
+                    />
+                }
                 <Text
                   fontFamily="Roboto"
                   fontWeight="400"
@@ -1826,6 +1867,10 @@ const PlansAndPayment = ({ userData }) => {
                 gap="8px"
               >
                 <ControlledInputSimple
+                  value={valueCoupon}
+                  onChange={setValueCoupon}
+                  inputFocus={couponInputFocus}
+                  changeInputFocus={setCouponInputFocus}
                   width="100%"
                   placeholder="Insira o cupom"
                   inputElementStyle={{
@@ -1859,6 +1904,10 @@ const PlansAndPayment = ({ userData }) => {
                   fontWeight="500"
                   fontSize="14px"
                   lineHeight="20px"
+                  onClick={() => {
+                    if(valueCoupon === "") return
+                    setCoupon(valueCoupon)
+                  }}
                 >
                   Aplicar
                 </Box>
@@ -1866,12 +1915,51 @@ const PlansAndPayment = ({ userData }) => {
             </Stack>
 
             <Text
+              display={hasSubscribed ? "none" : "flex"}
               fontFamily="Roboto"
               fontWeight="400"
               fontSize="16px"
               lineHeight="24px"
               color="#464A51"
             >Período de teste - 7 dias grátis</Text>
+
+            <Divider borderColor="#DEDFE0" />
+
+            <Stack
+              spacing="8px"
+            >
+              <Stack
+                flexDirection="row"
+                alignItems="center"
+                spacing={0}
+                justifyContent="space-between"
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="16px"
+                lineHeight="24px"
+                color="#464A51"
+              >
+                <Text>Subtotal</Text>
+                <Text>{checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
+              </Stack>
+
+              {/* <Stack></Stack> */}
+
+              <Stack
+                flexDirection="row"
+                alignItems="center"
+                spacing={0}
+                justifyContent="space-between"
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="16px"
+                lineHeight="24px"
+                color="#252A32"
+              >
+                <Text>Total a pagar</Text>
+                <Text>{checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
+              </Stack>
+            </Stack>
           </Stack>
 
           <Box display="flex" flexDirection="column" gap="24px" flex={1}>
@@ -1887,6 +1975,7 @@ const PlansAndPayment = ({ userData }) => {
             <PaymentSystem
               userData={userData}
               plan={plan}
+              coupon={coupon}
               onSucess={() => openModalSucess()}
               onErro={() => openModalErro()}
             />
@@ -2197,7 +2286,8 @@ const PlansAndPayment = ({ userData }) => {
               button={{
                 text: `${subscriptionInfo?.stripeSubscription === "bd_pro" ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis"}`,
                 onClick: subscriptionInfo?.stripeSubscription === "bd_pro" ? () => {} : () => {
-                  setPlan({id: plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id})
+                  setPlan(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id)
+                  setToggleAnual(true)
                   PlansModal.onClose()
                   PaymentModal.onOpen()
                 },
@@ -2218,7 +2308,8 @@ const PlansAndPayment = ({ userData }) => {
               button={{
                 text: `${subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis"}`,
                 onClick: subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? () => {} : () => {
-                  setPlan({id: plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id})
+                  setPlan(plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id)
+                  setToggleAnual(true)
                   PlansModal.onClose()
                   PaymentModal.onOpen()
                 },

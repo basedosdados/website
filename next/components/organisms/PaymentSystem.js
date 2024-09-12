@@ -83,7 +83,7 @@ const PaymentForm = ({ onSucess, onErro, clientSecret}) => {
   )
 }
 
-export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
+export default function PaymentSystem({ userData, plan, coupon, onSucess, onErro }) {
   const [clientSecret, setClientSecret] = useState("")
 
   const appearance = {
@@ -115,8 +115,8 @@ export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
     fonts: [{ cssSrc: 'https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap' }],
   }
 
-  const customerCreatPost = async (id) => {
-    const clientSecret = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}`, {method: "GET"})
+  const customerCreatPost = async (id, coupon) => {
+    const clientSecret = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}&c=${btoa(coupon)}`, {method: "GET"})
       .then(res => res.json())
 
     if (clientSecret) {
@@ -125,8 +125,9 @@ export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
   }
 
   useEffect(() => {
-    customerCreatPost(plan.id)
-  }, [])
+    setClientSecret("")
+    customerCreatPost(plan, coupon)
+  }, [plan, coupon])
 
   const SkeletonBox = ({ type, ...props }) => {
     if(type === "text") return <Skeleton height="17px" borderRadius="12px" startColor="#F0F0F0" endColor="#F3F3F3" {...props}/>
