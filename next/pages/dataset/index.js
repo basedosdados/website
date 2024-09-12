@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../../utils";
 import { withPages } from "../../hooks/pages.hook";
+import { useTranslation } from 'next-i18next';
 
 import {
   getSearchDatasets
@@ -26,12 +27,18 @@ import Checkbox from "../../components/atoms/Checkbox";
 import { TagFilter } from "../../components/atoms/Tag";
 import Database from "../../components/organisms/Database";
 import { MainPageTemplate } from "../../components/templates/main";
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import FilterIcon from "../../public/img/icons/filterIcon";
 import NotFoundImage from "../../public/img/notFoundImage";
 
-export async function getStaticProps() {
-  return await withPages()
+export async function getStaticProps({locale}) {
+      let out = await withPages()
+      out.props = {
+          ...out.props, 
+          ...(await serverSideTranslations(locale, ['common', 'dataset'])),
+      }
+      return out
 }
 
 export default function SearchDatasetPage() {
@@ -46,6 +53,7 @@ export default function SearchDatasetPage() {
   const [count, setCount] = useState(0)
   const [pageInfo, setPageInfo] = useState({page: 0, count: 0})
   const [isLoading, setIsLoading] = useState(true)
+  const { t } = useTranslation('dataset')
 
   async function getDatasets({q, filters, page}) {
     const res = await getSearchDatasets({q:q, filter: filters, page:page})
@@ -223,6 +231,18 @@ export default function SearchDatasetPage() {
           <Box
             as="button"
             onClick={() => window.open("https://discord.gg/Ec7tfBaTVV", "_blank")}
+<<<<<<< HEAD
+          >{t("Make a proposal")}</RoundedButton>
+          <RoundedButton
+            fontSize="15px"
+            minWidth="240px"
+            backgroundColor="#FFF"
+            border="1px solid #42B0FF"
+            color="#42B0FF"
+            padding="10px 24px"
+            onClick={() => window.open("https://github.com/orgs/basedosdados/projects/17", "_blank")}
+          >{t("See data roadmap")}</RoundedButton>
+=======
             display="flex"
             alignItems="center"
             height="40px"
@@ -268,17 +288,59 @@ export default function SearchDatasetPage() {
           >
             Ver roadmap de dados
           </Box>
+>>>>>>> main
         </HStack>
       </Stack>
     )
   }
 
+<<<<<<< HEAD
+  const optionsUpdateFrequencies = {
+    "unique" : "-16",
+    "hour": "-15",
+    "day": "-14",
+    "week": "-13",
+    "month": "-12",
+    "quarter": "-11",
+    "semester": "-10",
+    "one_year": "-9",
+    "two_years": "-8",
+    "three_years": "-7",
+    "four_years": "-6",
+    "five_years": "-5",
+    "ten_years": "-4",
+    "recurring": "-3",
+    "uncertain": "-2",
+    "other": "-1",
+  }
+
+  const optionsRawQualityTiers = {
+    "low" : "-3",
+    "medium": "-2",
+    "high": "-1"
+  }
+
+  const fieldTranslations = {
+    organization: t("Organization"),
+    tag: t("Tag"),
+    group: t("Theme"),
+    resource_type: t("Sets with"),
+    spatial_coverage: t("Spatial coverage"),
+    temporal_coverage: t("Temporal coverage"),
+    entity: t("Observation level"),
+    update_frequency: t("Update frequency"),
+    raw_quality_tier: t("Original source quality"),
+  }
+
+  const DatabaseCard = ({ data }) => {
+=======
   function DatabaseCard({ data }) {
+>>>>>>> main
     return (
       <Database
         id={data.id}
         themes={data?.themes}
-        name={data?.name || "Conjunto sem nome"}
+        name={data?.name || t("Unnamed set")}
         temporalCoverageText={data?.temporal_coverages[0] || ""}
         organization={data.organizations[0]}
         tables={{
@@ -501,14 +563,38 @@ export default function SearchDatasetPage() {
   return (
     <MainPageTemplate userTemplate footerTemplate="simple">
       <Head>
-        <title>Dados – Base dos Dados</title>
+        <title>{t("Data – Base dos Dados")}</title>
         <meta
           property="og:title"
-          content="Dados – Base dos Dados"
+          content={t("Data – Base dos Dados")}
           key="ogtitle"
         />
       </Head>
 
+<<<<<<< HEAD
+      <DebouncedControlledInput
+        value={query?.q || ""}
+        onChange={(value) => handleSearch(value)}
+        placeholder={isMobileMod() ? t("Keywords, institutions or themes") : t("Search keywords, institutions or themes")}
+        justifyContent="center"
+        inputStyle={{
+          width: "90%",
+          maxWidth: "1264px",
+          margin: "0 auto 64px",
+          padding: "20px",
+          borderRadius: "17px",
+          backgroundColor: "#FFF",
+          color: "#6F6F6F",
+          fontSize: "16px",
+          height: "50px",
+          boxShadow: "0 1px 3px 0.5 rgba(100 93 103 /0.16) !important",
+          _placeholder:{color:"#6F6F6F"}
+        }}
+        marginTop={isMobileMod() ? "60px" : "46px" }
+      />
+
+=======
+>>>>>>> main
       <Stack
         maxWidth="1440px"
         boxSizing="content-box"
@@ -527,7 +613,7 @@ export default function SearchDatasetPage() {
         >
           <Box display="flex" marginBottom="24px" alignItems="center">
             <FilterIcon
-              alt="filtrar conjuntos"
+              alt={t("filter sets")}
               width="20px"
               height="20px"
               fill="#252A32"
@@ -542,6 +628,60 @@ export default function SearchDatasetPage() {
               width="100%"
               marginLeft="8px"
             >
+<<<<<<< HEAD
+              {t("Filter results")}
+            </Text>
+          </Box>
+
+          <CheckboxFilterAccordion
+            alwaysOpen= {isLoading ? false : true}
+            choices={[
+              {
+                key: "tables",
+                name: t("Processed tables"),
+                count: aggregations?.contains_tables?.filter(elm => elm.key === 1)[0]?.count || 0
+              },
+              {
+                key: "raw_data_sources",
+                name: t("Original sources"),
+                count: aggregations?.contains_raw_data_sources?.filter(elm => elm.key === 1)[0]?.count || 0
+              },
+              {
+                key: "information_requests",
+                name: t("Information requests"),
+                count: aggregations?.contains_information_requests?.filter(elm => elm.key === 1)[0]?.count || 0
+              },
+            ]}
+            isActive={validateActiveSetsWith("contains")}
+            valueField="key"
+            displayField="name"
+            fieldName={t("Sets with")}
+            valuesChecked={valuesCheckedFilter("contains")}
+            onChange={(value) => handleSelectFilter(["contains",`${value}`])}
+          />
+
+          <CheckboxFilterAccordion
+            alwaysOpen= {isLoading ? false : true}
+            choices={[
+              {
+                key: "open_data",
+                name: t("Free"),
+                count: aggregations?.contains_open_data?.filter(elm => elm.key === 1)[0]?.count || 0
+              },
+              {
+                key: "closed_data",
+                name: t("Paid"),
+                count: aggregations?.contains_closed_data?.filter(elm => elm.key === 1)[0]?.count || 0
+              }
+            ]}
+            isActive={validateActiveResource("contains")}
+            valueField="key"
+            displayField="name"
+            fieldName={t("Resources")}
+            valuesChecked={valuesCheckedFilter("contains")}
+            onChange={(value) => handleSelectFilter(["contains",`${value}`])}
+          />
+=======
               Filtrar
             </Text>
           </Box>
@@ -613,6 +753,7 @@ export default function SearchDatasetPage() {
           </VStack>
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
+>>>>>>> main
 
           <CheckboxFilterAccordion
             canSearch={true}
@@ -620,7 +761,7 @@ export default function SearchDatasetPage() {
             choices={aggregations?.themes}
             valueField="key"
             displayField="name"
-            fieldName="Tema"
+            fieldName={t("Theme")}
             valuesChecked={valuesCheckedFilter("theme")}
             onChange={(value) => handleSelectFilter(["theme",`${value}`])}
             isLoading={!isLoading}
@@ -634,7 +775,11 @@ export default function SearchDatasetPage() {
             choices={aggregations?.organizations}
             valueField="key"
             displayField="name"
+<<<<<<< HEAD
+            fieldName={t("Organizations")}
+=======
             fieldName="Organização"
+>>>>>>> main
             valuesChecked={valuesCheckedFilter("organization")}
             onChange={(value) => handleSelectFilter(["organization",`${value}`])}
             isLoading={!isLoading}
@@ -648,7 +793,7 @@ export default function SearchDatasetPage() {
             choices={aggregations?.tags}
             valueField="key"
             displayField="name"
-            fieldName="Etiqueta"
+            fieldName={t("Tag")}
             valuesChecked={valuesCheckedFilter("tag")}
             onChange={(value) => handleSelectFilter(["tag",`${value}`])}
             isLoading={!isLoading}
@@ -662,7 +807,7 @@ export default function SearchDatasetPage() {
             choices={aggregations?.observation_levels}
             valueField="key"
             displayField="name"
-            fieldName="Nível da observação"
+            fieldName={t("Observation level")}
             valuesChecked={valuesCheckedFilter("observation_level")}
             onChange={(value) => handleSelectFilter(["observation_level",`${value}`])}
             isLoading={!isLoading}
@@ -716,6 +861,35 @@ export default function SearchDatasetPage() {
             />
           }
 
+<<<<<<< HEAD
+          {!showEmptyState &&
+            <Flex width="100%" justify="center" align="baseline">
+              <Heading
+                display="flex"
+                flexDirection={useCheckMobile() ? "column" : {base: "column", lg:"row"}}
+                gap="6px"
+                width="100%"
+                fontFamily="Ubuntu"
+                fontSize="26px"
+                fontWeight="400"
+                letterSpacing="-0.2px"
+                color="#252A32"
+              >
+                {
+                  count ?
+                    t('{{count}} datasets found', {count})
+                    + (!!query.q ? ` ${t('to')} '${query.q}'` : "")
+                  :
+                    <Box width="fit-content" display="flex" flexDirection="row" gap="8px" alignItems="center">
+                      <Spinner color="#252A32"/> <Text> {t("finding datasets")} {!!query.q ? ` ${t('to')} '${query.q}'` : ""}</Text>
+                    </Box>
+                }
+              </Heading>
+            </Flex>
+          }
+
+=======
+>>>>>>> main
           <VStack
             width="100%"
             alignItems="flex-start"
@@ -734,6 +908,41 @@ export default function SearchDatasetPage() {
               ))
             }
 
+<<<<<<< HEAD
+            {!showEmptyState &&
+              <ReactPaginate
+                previousLabel={useCheckMobile() ? "<" : "Anterior"}
+                nextLabel={useCheckMobile() ? ">" : "Próxima"}
+                breakLabel={"..."}
+                breakClassName={"break-me"}
+                forcePage={pageInfo.page - 1 || 0}
+                pageCount={Math.ceil(pageInfo.count / 10) || 1}
+                marginPagesDisplayed={useCheckMobile() ? 0 : 1}
+                pageRangeDisplayed={useCheckMobile() ? 0 : 2}
+                onPageChange={(newPage) => {
+                  router.push({
+                    pathname: router.pathname,
+                    query: {...query, page: newPage.selected + 1 || 1}
+                  })
+                }}
+                containerClassName={"pagination"}
+                activeClassName={"active"}
+                pageClassName={isLoading && "disabled"}
+                previousClassName={isLoading && "disabled"}
+                nextClassName={isLoading && "disabled"}
+              />
+            }
+          </VStack>
+
+          {
+              (pageInfo?.count >=1 && pageInfo?.count <=10) || pageInfo.page >= 2
+            ?
+              <DataProposalBox 
+                text= {t("Haven't found what you're looking for?")}
+                bodyText= {t("Try searching for related terms or propose new data for us to add to the database.")}
+              />
+            : ""
+=======
           {pageInfo?.count >=1 && pageInfo?.count <=10 &&
             <DataProposalBox 
               text= "Ainda não encontrou o que está procurando?"
@@ -746,6 +955,7 @@ export default function SearchDatasetPage() {
               text= "Ainda não encontrou o que está procurando?"
               bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
             />
+>>>>>>> main
           }
 
             {!showEmptyState &&

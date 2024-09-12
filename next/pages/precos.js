@@ -498,7 +498,7 @@ export default function Price() {
           textAlign="center"
           lineHeight="70px"
         >
-          Compare os planos
+          {t("Compare the plans")}
         </Text>
 
         <SectionPrice/>

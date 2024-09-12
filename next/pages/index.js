@@ -42,8 +42,10 @@ import MasterOfDatabaseImage from "../public/img/masterOfDatabaseImage";
 import ProductsFiltersImage from "../public/img/productsFiltersImage";
 import ProcessedDataImage from "../public/img/processedDataImage";
 import BDLogoEduImage from "../public/img/logos/bd_logo_edu";
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-export async function getStaticProps() {
+export async function getStaticProps({locale}) {
   const themes = await getAllThemes()
   const defaultDataset = await getAllDatasets()
 
@@ -54,7 +56,8 @@ export async function getStaticProps() {
 
   return {
     props: {
-      dataThemeCatalog
+      dataThemeCatalog,
+      ...(await serverSideTranslations(locale, [ 'index', 'common' ])),
     },
     revalidate: 30
   }
@@ -64,6 +67,7 @@ function Hero({ dataThemeCatalog }) {
   const [search, setSearch] = useState("");
   const [tags, setTags] = useState([])
   const [mediumQuery] = useMediaQuery("(max-width: 1366px)")
+  const { t } = useTranslation('index')
 
   function openSearchLink() {
     triggerGAEvent("search", search)
@@ -118,7 +122,7 @@ function Hero({ dataThemeCatalog }) {
             >
               <ControlledInput
                 value={search}
-                placeholder={isMobileMod() ? "Encontre os dados" : "Encontre os dados que você precisa"}
+                placeholder={isMobileMod() ? t("Find the data") : t("Find the data you need")}
                 width="100%"
                 onChange={setSearch}
                 onEnterPress={openSearchLink}
@@ -152,7 +156,7 @@ function Hero({ dataThemeCatalog }) {
                     />
                     :
                     <SearchIcon
-                      alt="pesquisar"
+                      alt={t("search")}
                       width={isMobileMod() ? "18px" : "28px"}
                       height={isMobileMod() ? "18px" : "28px"}
                       fill="#252A32"
@@ -170,7 +174,7 @@ function Hero({ dataThemeCatalog }) {
                     letterSpacing="0.4px"
                     color="#575757"
                   >
-                    Termos populares: 
+                    {t("Popular terms:")}
                   </Text>
                 }
                 {tags.map((elm, i) => 
@@ -198,7 +202,7 @@ function Hero({ dataThemeCatalog }) {
               cursor="pointer"
               onClick={() => window.open("#theme", "_self")}
             >
-              Busque por tema
+              {t("Search by theme")}
             </Text>
             <ThemeCatalog data={dataThemeCatalog}/>
           </VStack>
@@ -209,6 +213,7 @@ function Hero({ dataThemeCatalog }) {
 }
 
 function Products() {
+  const { t } = useTranslation('index')
   return (
     <VStack
       width={{ base: "90%", lg: "85%" }}
@@ -226,8 +231,12 @@ function Products() {
           textAlign="center"
           margin="80px 0px"
         >
-          Facilitamos o trabalho para que a distância {!isMobileMod() && <br/>}
-          entre você e sua análise seja <span style={{color:"#2B8C4D"}}>apenas uma boa pergunta</span>.
+          {t("We make things easy, so that the only thing")}
+          {!isMobileMod() && <br/>}
+          {t("between you and your analysis is")}
+          <span style={{color:"#2B8C4D"}}> {" "}
+            {t("just a good question")}
+          </span>.
         </Display>
 
         <VStack spacing={isMobileMod() ? 8 : 120}>
@@ -245,21 +254,19 @@ function Products() {
                 letterSpacing="0.5px"
                 lineHeight="24px"
               >
-                FILTROS
+                {t("FILTERS")}
               </Text>
 
-              <SectionTitle marginTop="0 !important">Busque dados como quiser</SectionTitle>
+              <SectionTitle marginTop="0 !important">{t("Search data as you wish")}</SectionTitle>
               <SectionText fontSize="16px">
-                São vários filtros para ajudar você a encontrar os dados que necessita.
-                Ao navegar entre centenas de conjuntos de dados disponíveis na plataforma,
-                você pode refinar sua busca por tema, organização, cobertura temporal, nível da observação e mais.
+                {t("There are several filters to help you find the data you need.....")}
               </SectionText>
 
               <SectionLink
                 marginTop="24px !important"
                 href={"/dataset"}
               >
-                Comece sua pesquisa
+                {t("Start your search")}
               </SectionLink>
             </Stack>
 
@@ -289,22 +296,20 @@ function Products() {
                   letterSpacing="0.5px"
                   lineHeight="24px"
                 >
-                  TABELAS TRATADAS
+                  {t("PROCESSED TABLES")}
                 </Text>
               </HStack>
               
-              <SectionTitle marginTop="0 !important">Acesse dados de qualidade</SectionTitle>
+              <SectionTitle marginTop="0 !important">{t("Access quality data")}</SectionTitle>
               <SectionText fontSize="16px">
-                Com as tabelas tratadas do nosso <i>datalake</i> público,
-                você não precisa mais gastar horas limpando bases.
-                Nossa metodologia de padronização permite cruzar facilmente dados de diferentes organizações. Assim, você pode focar no que realmente importa.
+                {t("With the processed tables from our public datalake.....")}
               </SectionText>
 
               <SectionLink
                 marginTop="24px !important"
                 href={"/dataset?contains=tables"}
               >
-                Veja os dados disponíveis
+                {t("See available databases")}
               </SectionLink>
             </Stack>
 
@@ -331,20 +336,19 @@ function Products() {
                 letterSpacing="0.5px"
                 lineHeight="24px"
               >
-                PACOTES
+                {t("PACKAGES")}
               </Text>
 
-              <SectionTitle marginTop="0 !important">Explore na sua linguagem favorita</SectionTitle>
+              <SectionTitle marginTop="0 !important">{t("Explore in your favorite language")}</SectionTitle>
               <SectionText fontSize="16px">
-                Desenvolvemos pacotes para acesso aos dados tratados em Python, R e linha de comando. Além disso, você pode consultar e filtrar
-                dados usando SQL no editor do nosso <i>datalake</i> público no Google BigQuery.
+                {t("We have developed packages for accessing processed data in Python.....")}
               </SectionText>
 
               <SectionLink
                 marginTop="24px !important"
                 href={"https://basedosdados.github.io/mais/"}
               >
-                Saiba como acessar
+                {t("Learn how to access")}
               </SectionLink>
             </Stack>
 
@@ -428,7 +432,7 @@ export function StepText ({index, text}) {
 }
 
 function Support() {
-  const { hasCopied, onCopy } = useClipboard("42494318000116")
+  const { t, i18n } = useTranslation('index')
 
   return (
     <VStack
@@ -445,8 +449,8 @@ function Support() {
           textAlign="center"
           margin={isMobileMod() ? "80px 0px 24px" : "104px 0px 24px"}
         >
-          Existimos através do esforço de pessoas que {!isMobileMod() && <br/>}
-          acreditam no acesso a dados abertos de qualidade.
+          {t('We exist through the effort of people who')} {!isMobileMod() && <br/>}
+          {t('believe in access to quality open data.')}
         </Display>
         <Text
           position="relative"
@@ -458,7 +462,7 @@ function Support() {
           letterSpacing={isMobileMod() ? "0.2px" : "0.1px"}
           fontWeight="300"
           margin="0 0 48px !important"
-        > Apoie a Base dos Dados você também
+        > {t('Please support Base dos Dados')}
         </Text>
 
         <Stack
@@ -678,6 +682,229 @@ function Support() {
   );
 }
 
+function SupportPix() {
+  const { hasCopied, onCopy } = useClipboard("42494318000116")
+  return (
+    <Box padding="0px">
+      <Text
+        width="100%"
+        textAlign="center"
+        fontFamily="Ubuntu"
+        fontSize="20px"
+        letterSpacing="0.2px"
+        color="#7D7D7D"
+        fontWeight="400"
+        lineHeight="32px"
+        paddingBottom={!isMobileMod() && "32px"}
+      >
+        Doe qualquer valor via PIX
+      </Text>
+
+      <Grid
+        templateColumns={isMobileMod() ? "repeat(1, 3fr)" : "repeat(3, 1fr)"}
+        gridGap={isMobileMod() && "40px"}
+        justifyItems="center"
+        width="100%"
+      >
+        <GridItem
+          marginTop={isMobileMod() && "32px !important"}
+          justifyContent="center"
+          alignItems="flex-start"
+        >
+          <TextPix title="Razão Social" text="Instituto Base dos Dados" />
+          <TextPix title="CNPJ" text="42494318/0001-16" />
+          <TextPix title="Banco" text="PagSeguro" />
+          <Box display="flex" gridGap="48px">
+            <TextPix title="Agência" text="0001" />
+            <TextPix title="Conta" text="31401653-6" />
+          </Box>
+        </GridItem>
+
+        <GridItem marginBottom={isMobileMod() && "24px"}>
+          <ChakraImage
+            alt="QR code para apoiador"
+            position="relative"
+            top="-5px"
+            width="250px"
+            height="250px"
+            objectFit="contain"
+            boxShadow="0 1.6px 16px rgba(100, 96, 103, 0.16)"
+            src="https://storage.googleapis.com/basedosdados-website/images/bd_qrcode.png"
+          />
+          <RoundedButton
+            fontSize="15px"
+            fontWeight="700"
+            backgroundColor="#FF8484"
+            paddingX="30px"
+            width="100%"
+            gridGap="6px"
+            onClick={onCopy}
+            opacity={hasCopied && "0.8"}
+            marginTop="32px"
+          >
+            <CopySolidIcon alt="copiar chave PIX" width="22px" height="22px" fill="#FFF" />
+            {hasCopied ? "Copiada chave PIX" : "Copiar chave PIX"}
+          </RoundedButton>
+        </GridItem>
+
+        <GridItem display={isMobileMod() && "none"}>
+          <BodyText letterSpacing="0.2px" fontSize="16px" color="#FF8484" fontWeight="500" marginBottom="24px">Siga o passo a passo</BodyText>
+          <StepText index="1" text=" Abra o app do seu banco;" />
+          <StepText index="2" text=" Escolha a opção de pagamento com PIX;" />
+          <StepText index="3" text=" Escaneie o QR Code ou digite a chave ao lado;" />
+          <StepText index="❤" text=" Faça sua doação!" />
+        </GridItem>
+      </Grid>
+
+      <BodyText
+        fontSize="16px"
+        letterSpacing="0.2px"
+        textAlign="center"
+        margin="32px 0 !important"
+      >
+        💰 Gostaria de apoiar a BD institucionalmente?
+        <Link
+          fontFamily="ubuntu"
+          textDecoration="none"
+          fontWeight="500"
+          fontSize="16px"
+          letterSpacing="0.2px"
+          color="#42B0FF"
+          href="/contato"
+        > Entre em contato conosco.
+        </Link>
+      </BodyText>
+    </Box>
+  )
+}
+
+function SupportApoiase() {
+  return (
+    <Stack
+      width="100%"
+      margin="0 0 80px !important"
+      justifyContent="center"
+      alignItems="center"
+      direction={{ base: "column", lg: "row" }}
+      gridGap="48px"
+    >
+      <ShadowBox
+        width="266px"
+        height="400px"
+        image={
+          <EnthusiasticImage
+            widthImage="100%"
+            heightImage="100%"
+          />
+        }
+        title="Entusiasta"
+        spacing={4}
+      >
+        <BodyText
+          textAlign="center"
+          fontWeight="300"
+          fontSize="14px"
+          letterSpacing="0.2px"
+          margin="10px 0 24px !important"
+          lineHeight="24px"
+        >
+          Bolso apertado? Apenas R$0,50 por
+          dia para nos ajudar a manter a iniciativa.
+        </BodyText>
+        <Link
+          _hover={{ opacity: "none" }}
+          margin="0 !important"
+          target="_blank"
+          href="https://apoia.se/support/basedosdados/new/15"
+        >
+          <RoundedButton backgroundColor="#FF8484" width="200px">
+            R$ <p style={{ fontSize: "24px", margin: "0 5px" }}>15</p>/ mês
+          </RoundedButton>
+        </Link>
+      </ShadowBox>
+
+      <ShadowBox
+        width={isMobileMod() ? "266px" : "320px"}
+        height={isMobileMod() ? "400" : "428px"}
+        image={
+          <DatabaseImage
+            widthImage="100%"
+            heightImage="100%"
+            backgroundColor="#FF8484"
+          />
+        }
+        title="Databaser"
+        titleStyle={{
+          fontSize: "22px",
+          color: "#FF8484",
+          fontWeight: "500",
+          letterSpacing: "0.1px"
+        }}
+        spacing={4}
+      >
+        <BodyText
+          display="flex"
+          flexDirection="column"
+          textAlign="center"
+          fontSize="16px"
+          margin="16px 0 24px !important"
+          letterSpacing="0.2px"
+        >
+          <b style={{ fontWeight: "500" }}>Doe R$ 1 real por dia</b>
+          <span>para fazer databasers felizes.</span>
+        </BodyText>
+        <Link
+          _hover={{ opacity: "none" }}
+          marginTop="0 !important"
+          target="_blank"
+          href="https://apoia.se/support/basedosdados/new/30"
+        >
+          <RoundedButton
+            backgroundColor="#FF8484"
+            width="200px"
+          >
+            R$ <p style={{ fontSize: "24px", margin: "0 5px" }}>30</p>/ mês
+          </RoundedButton>
+        </Link>
+      </ShadowBox>
+
+      <ShadowBox
+        width="266px"
+        height="400px"
+        image={
+          <MasterOfDatabaseImage
+            widthImage="100%"
+            heightImage="100%"
+          />
+        }
+        title="Mestre dos dados"
+        spacing={4}
+      >
+        <BodyText
+          textAlign="center"
+          fontWeight="300"
+          fontSize="14px"
+          letterSpacing="0.2px"
+          margin="10px 0 24px !important"
+          lineHeight="24px"
+        >
+          Menos de R$2 reais por dia para pouparmos ainda mais seu trabalho.
+        </BodyText>
+        <Link
+          _hover={{ opacity: "none" }}
+          marginTop="0 !important"
+          target="_blank"
+          href="https://apoia.se/support/basedosdados/new/50"
+        >
+          <RoundedButton backgroundColor="#FF8484" width="200px">
+            R$ <p style={{ fontSize: "24px", margin: "0 5px" }}>50</p>/ mês
+          </RoundedButton>
+        </Link>
+      </ShadowBox>
+    </Stack>
+  )
+}
+
 function BDEdu () {
   const closeDate = new Date(2024, 2, 26)
   const currentDate = new Date()
@@ -705,14 +932,14 @@ function BDEdu () {
         textAlign="center"
         margin="0 0 24px !important"
       >
-        Com nosso curso você pode ir mais longe na sua pesquisa, profissão, ou organização.
+        {t('With our course, you can go further in your research, profession, or organization.')}
       </BodyText>
       <RoundedButton
         margin="0 !important"
         backgroundColor="#8262D1"
       >
         <a href="https://info.basedosdados.org/bd-edu-sql" target="_blank">
-          Aproveite o preço promocional
+          {t('Take advantage of the promotional price')}
         </a>
       </RoundedButton>
     </Stack>

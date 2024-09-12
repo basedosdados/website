@@ -41,8 +41,11 @@ import SearchIcon from "../../public/img/icons/searchIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 import SettingsIcon from "../../public/img/icons/settingsIcon";
 import SignOutIcon from "../../public/img/icons/signOutIcon";
+import { useTranslation } from "next-i18next";
 
 function MenuDrawer({ userData, isOpen, onClose, links }) {
+  const {t} = useTranslation("header_footer")
+
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
       <DrawerOverlay backdropFilter="blur(2px)"/>
@@ -836,6 +839,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   const divRef = useRef()
   const [isScrollDown, setIsScrollDown] = useState(false)
   const [userData, setUserData] = useState(null)
+  const { t } = useTranslation("header_footer")
 
   const [lastScrollY, setLastScrollY] = useState(0)
   const [menuVisible, setMenuVisible] = useState(true)
@@ -878,26 +882,27 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   }, [userBD])
 
   const links = {
-    Dados: "/dataset",
-    Soluções: [
-      {icon: <BDLogoProImage widthImage="54px"/>, name: "Dados exclusivos", href: "https://info.basedosdados.org/bd-pro"},
-      {icon: <BDLogoEduImage widthImage="54px"/>, name: "Curso de dados", href: "https://info.basedosdados.org/bd-edu-sql"},
-      {icon: <BDLogoLabImage widthImage="54px"/>, name: "Serviços", href: "/servicos"},
+    // TODO: i18n the paths
+    [t('Datasets')]: "/dataset",
+    [t('Solutions')]: [
+      {icon: <BDLogoProImage widthImage="54px"/>, name: t("Exclusive Data"), href: "https://info.basedosdados.org/bd-pro"},
+      {icon: <BDLogoEduImage widthImage="54px"/>, name: t("Data Course"), href: "https://info.basedosdados.org/bd-edu-sql"},
+      {icon: <BDLogoLabImage widthImage="54px"/>, name: t("Services"), href: "/servicos"},
     ],
-    "Preços": "/precos",
-    Tutoriais: [
-      {name: "Documentação", href: "https://basedosdados.github.io/mais/"},
-      {name: "Vídeos no YouTube", href: "https://www.youtube.com/c/BasedosDados/featured"},
-      {name: "Blog", href: "https://medium.com/basedosdados"}
+    [t('Prices')]: "/precos",
+    [t('Tutorials')]: [
+      {name: t("Documentation"), href: "https://basedosdados.github.io/mais/"},
+      {name: t("YouTube Videos"), href: "https://www.youtube.com/c/BasedosDados/featured"},
+      {name: t("Blog"), href: "https://medium.com/basedosdados"}
     ],
-    Institucional: [
-      {name: "Quem somos", href: "/quem-somos"},
-      {name: "Transparência", href: "/transparencia"},
-      {name: "Newsletter", href: "https://info.basedosdados.org/newsletter"},
-      {name: "Carreiras", href: "https://info.basedosdados.org/carreiras"},
-      {name: "Perguntas frequentes", href: "/perguntas-frequentes"},
+    [t('Institutional')]: [
+      {name: t("Who We Are"), href: "/quem-somos"},
+      {name: t("Transparency"), href: "/transparencia"},
+      {name: t("Newsletter"), href: "https://info.basedosdados.org/newsletter"},
+      {name: t("Careers"), href: "https://info.basedosdados.org/carreiras"},
+      {name: t("FAQ"), href: "/perguntas-frequentes"},
     ],
-    Contato: "/contato",
+    [t('Contact us')]: "/contato",
     Button: []
   }
 
