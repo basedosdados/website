@@ -23,6 +23,8 @@ import CrossIcon from "../public/img/icons/crossIcon";
 import SearchIcon from "../public/img/icons/searchIcon";
 import styles from "../styles/faq.module.css";
 
+import 'highlight.js/styles/obsidian.css';
+
 export async function getStaticProps() {
   return await withPages()
 }
@@ -53,12 +55,11 @@ const QuestionsBox = ({ question, answer, id, active }) => {
 
   const OpenCloseQuestion = () => {
     setIsActive(!isActive)
-    window.Prism.highlightAll()
   }
 
   return (
     <Stack
-      spacing={0} 
+      spacing={0}
       className={styles.questionContainer}
     >
       <Box
@@ -88,6 +89,8 @@ const QuestionsBox = ({ question, answer, id, active }) => {
       </Box>
       <Collapse in={isActive} animateOpacity>
         <BodyText
+          id={id}
+          as="div"
           height={isActive ? "100%" : "0"}
           marginBottom={isActive && "32px !important"}
           overflow="hidden"
@@ -187,7 +190,7 @@ export default function FAQ({}) {
         />
         <meta
           property="og:description"
-          content="Aqui você encontra as respostas para as suas dúvidas sobre a Base dos Dados. Saiba mais sobre nossos dados, como acessá-los pelo BigQuery usando SQL ou com os pacotes Python, R e Stata agora mesmo."
+          content="Aqui você encontra as respostas para as suas dúvidas sobre a Base dos Dados. Saiba mais sobre nossos dados, como acessá-los pelo BigQuery usando SQL ou com os pacotes Python e R agora mesmo."
           key="ogdesc"
         />
       </Head>
@@ -278,8 +281,9 @@ export default function FAQ({}) {
                 Infelizmente, não encontramos nenhuma pergunta relacionada à sua busca.
               </BodyText>
             :
-              questions.map((elm) => 
+              questions.map((elm, i) => 
                 <QuestionsBox
+                  key={i}
                   question={elm.question}
                   answer={elm.answer}
                   id={elm.id && elm.id}
@@ -300,9 +304,6 @@ export default function FAQ({}) {
           </Stack>
         </Stack>
       </VStack>
-
-      <script key="sql" src="/vendor/prism.js"/>
-      <link rel="stylesheet" href="/vendor/prism.css" data-noprefix />
     </MainPageTemplate>
   )
 }

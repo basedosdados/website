@@ -6,7 +6,6 @@ import {
   Input,
   Textarea,
   Select,
-  Checkbox,
   Text,
   Alert,
   AlertIcon,
@@ -22,10 +21,11 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react"
 import { useRouter } from "next/router";
-import SelectList from "../molecules/SelectList";
+import Checkbox from "../atoms/Checkbox";
 import RoundedButton from "../atoms/RoundedButton";
 import SelectSearch from "../atoms/SelectSearch";
 import LoadingSpin from "../atoms/Loading";
+import SelectList from "../molecules/SelectList";
 
 import {
   postDataset,

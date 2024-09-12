@@ -41,42 +41,38 @@ async function getBdmTable(id) {
                   }
                 }
                 version
-                coverages {
+                fullCoverage
+                rawDataSource {
                   edges {
                     node {
                       _id
-                      datetimeRanges {
+                      name
+                      dataset {
+                        _id
+                      }
+                      polls {
                         edges {
                           node {
                             _id
-                            startYear
-                            startSemester
-                            startQuarter
-                            startMonth
-                            startDay
-                            startHour
-                            startMinute
-                            startSecond
-                            endYear
-                            endSemester
-                            endQuarter
-                            endMonth
-                            endDay
-                            endHour
-                            endMinute
-                            endSecond
-                            interval
+                            latest
+                          }
+                        }
+                      }
+                      updates {
+                        edges {
+                          node {
+                            _id
+                            latest
+                            frequency
+                            entity {
+                              _id
+                              slug
+                            }
                           }
                         }
                       }
                     }
                   }
-                }
-                fullCoverage
-                license {
-                  _id
-                  name
-                  url
                 }
                 updates {
                   edges {
@@ -87,30 +83,15 @@ async function getBdmTable(id) {
                       latest
                       entity {
                         _id
-                        name
-                        category {
-                          _id
-                          name
-                        }
+                        slug
                       }
                     }
                   }
                 }
-                pipeline {
-                  _id
-                  githubUrl
-                }
                 isDirectory
-                dataCleaningDescription
-                dataCleaningCodeUrl
-                rawDataUrl
                 auxiliaryFilesUrl
-                architectureUrl
-                sourceBucketName
                 uncompressedFileSize
-                compressedFileSize
                 numberRows
-                numberColumns
                 partitions
                 publishedByInfo
                 dataCleanedByInfo
@@ -152,8 +133,8 @@ async function getBdmTable(id) {
 export default async function handler(req, res) {
   const result = await getBdmTable(req.query.p)
 
-  if(result.errors) return res.status(500).json({error: result.errors})
-  if(result === "err") return res.status(500).json({error: "err"})
+  if(result.errors) return res.status(500).json({error: result.errors, success: false})
+  if(result === "err") return res.status(500).json({error: "err", success: false})
 
-  res.status(200).json(cleanGraphQLResponse(result?.data?.allTable?.edges[0]?.node))
+  return res.status(200).json({resource: cleanGraphQLResponse(result?.data?.allTable?.edges[0]?.node), success: true})
 }

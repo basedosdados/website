@@ -29,10 +29,20 @@ async function getUser(id, token) {
                   github
                   twitter
                   linkedin
-                  proSubscription
-                  proSubscriptionRole
-                  proSubscriptionSlots
-                  proSubscriptionStatus
+                  workDataTool
+                  availableForResearch
+                  internalSubscription (isActive: true) {
+                    edges {
+                      node {
+                        canceledAt
+                        createdAt
+                        isActive
+                        stripeSubscription
+                        planInterval
+                        nextBillingCycle
+                      }
+                    }
+                  }
                 }
               }
             }

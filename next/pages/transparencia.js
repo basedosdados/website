@@ -86,7 +86,7 @@ export default function Transparencia({ pages }) {
   }
 
   return (
-    <MainPageTemplate paddingX="24px" paddingBottom="0">
+    <MainPageTemplate paddingBottom="0">
       <Head>
         <title>Transparência – Base dos Dados</title>
         <meta
@@ -103,6 +103,7 @@ export default function Transparencia({ pages }) {
 
       <SectionBox 
         alignItems="center"
+        paddingX="24px"
       >
         <Stack
           spacing={0}
@@ -139,6 +140,7 @@ export default function Transparencia({ pages }) {
 
       <SectionBox
         paddingTop={isMobileMod ? "112px" : "104px"}
+        paddingX="24px"
         alignItems="center"
       >
         <Stack
@@ -190,6 +192,7 @@ export default function Transparencia({ pages }) {
       <SectionBox
         flexDirection="column"
         paddingTop={{ base: "88px", lg: "152px" }}
+        paddingX="24px"
         alignItems={isMobileMod ? "start" : "center"}
       >
         <Display
@@ -219,6 +222,7 @@ export default function Transparencia({ pages }) {
       <SectionBox
         order={isMobileMod ? 0 : 1}
         paddingTop={{ base: "40px", lg: "64px" }}
+        paddingX="24px"
         flexDirection="column"
       >
         <Stack
@@ -227,12 +231,12 @@ export default function Transparencia({ pages }) {
           gridGap={{ base: "64px", lg: "80px" }}
         >
           <GraphicsBox
-            text="Receitas acumuladas"
+            text="Receitas acumuladas esse ano"
             url="https://perguntas.basedosdados.org/public/question/c41beae5-94d3-41e2-9161-a12492b0cae0#titled=false&bordered=false"
           />
 
           <GraphicsBox 
-            text="Despesas acumuladas"
+            text="Despesas acumuladas esse ano"
             url="https://perguntas.basedosdados.org/public/question/312842db-4ea9-455b-be7a-98d96e742ea7#titled=false&bordered=false"
           />
         </Stack>
@@ -251,6 +255,7 @@ export default function Transparencia({ pages }) {
       <SectionBox
         paddingTop={{ base: "112px", lg: "104px" }}
         flexDirection="column"
+        paddingX="24px"
       >
         <Display
           paddingBottom="24px"
@@ -279,6 +284,7 @@ export default function Transparencia({ pages }) {
         width="100%"
         maxWidth="1264px"
         margin="auto"
+        paddingX="24px"
       >
         <Link
           fontFamily="Ubuntu"
@@ -297,6 +303,26 @@ export default function Transparencia({ pages }) {
         width="100%"
         maxWidth="1264px"
         margin="auto"
+        paddingX="24px"
+      >
+        <Link
+          fontFamily="Ubuntu"
+          fontSize="18px"
+          letterSpacing="0.3px"
+          target="_blank"
+          color="#42B0FF"
+          href="https://drive.google.com/file/d/1OvqJWAg-m3IRt3NAYZB20uxemNqXJ_MO/view?usp=drive_link"
+        >
+          BD Relatório Anual 2023
+        </Link>
+      </Stack>
+
+      <Stack
+        paddingTop="16px"
+        width="100%"
+        maxWidth="1264px"
+        margin="auto"
+        paddingX="24px"
       >
         <Link
           fontFamily="Ubuntu"
@@ -312,6 +338,7 @@ export default function Transparencia({ pages }) {
 
       <Stack
         paddingTop="16px"
+        paddingX="24px"
         paddingBottom={{ base: "80px", lg: "104px" }}
         width="100%"
         maxWidth="1264px"
@@ -331,10 +358,8 @@ export default function Transparencia({ pages }) {
 
       <Stack
         backgroundColor="#252A32"
-        width="100vw"
-        position="relative"
-        left={isMobileMod ? "-24px" :"-32px"}
-        paddingX={isMobileMod ? "24px" :"32px"}
+        width="100%"
+        paddingX="24px"
       >
         <Stack
           width="100%"

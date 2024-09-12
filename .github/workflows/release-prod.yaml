@@ -36,6 +36,16 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Import Secrets
+        id: import_secrets
+        uses: hashicorp/vault-action@v2.4.1
+        with:
+          url: https://vault.basedosdados.org
+          token: ${{ secrets.VAULT_TOKEN }}
+          secrets: |
+            secret/data/url_download_data    URL_DOWNLOAD_CLOSED | URL_DOWNLOAD_CLOSED ;
+            secret/data/url_download_data    URL_DOWNLOAD_OPEN   | URL_DOWNLOAD_OPEN ;
+
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
@@ -48,3 +58,5 @@ jobs:
             NEXT_PUBLIC_SITE_NAME=${{ env.NEXT_PUBLIC_SITE_NAME }}
             NEXT_PUBLIC_KEY_STRIPE=${{ env.NEXT_PUBLIC_KEY_STRIPE }}
             NEXT_PUBLIC_BASE_URL_FRONTEND=${{ env.NEXT_PUBLIC_BASE_URL_FRONTEND }}
+            URL_DOWNLOAD_CLOSED=${{ steps.import_secrets.outputs.URL_DOWNLOAD_CLOSED }}
+            URL_DOWNLOAD_OPEN=${{ steps.import_secrets.outputs.URL_DOWNLOAD_OPEN }}

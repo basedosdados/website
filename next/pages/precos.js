@@ -2,51 +2,25 @@ import {
   Box,
   Stack,
   Text,
-  Link,
   Tooltip,
-  Badge,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Head from "next/head";
-import Display from "../components/atoms/Display";
-import BigTitle from "../components/atoms/BigTitle"
-import BodyText from "../components/atoms/BodyText";
-import RoundedButton from "../components/atoms/RoundedButton";
+import cookies from 'js-cookie';
 import Toggle from "../components/atoms/Toggle";
 import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
+import { withPages } from "../hooks/pages.hook";
 
 import CheckIcon from "../public/img/icons/checkIcon";
 import InfoIcon from '../public/img/icons/infoIcon';
 
-export async function getServerSideProps(context) {
-  const { req, res } = context
-  let user = null
-
-  if(req.cookies.userBD) user = JSON.parse(req.cookies.userBD)
-
-  if (user === null || Object.keys(user).length < 0) {
-    return {
-      props: {
-        username: null,
-        isBDPro: false,
-        isBDEmp: false
-      }
-    }
-  }
-
-  return {
-    props: {
-      username: user.username,
-      isBDPro: user?.proSubscription === "bd_pro",
-      isBDEmp: user?.proSubscription === "bd_pro_empresas"
-    }
-  }
+export async function getStaticProps(context) {
+  return await withPages()
 }
 
 export const CardPrice = ({
   title,
-  badge,
   subTitle,
   price,
   anualPlan = false,
@@ -77,22 +51,29 @@ export const CardPrice = ({
           alignItems="center"
           marginBottom="8px"
         >
-          <BigTitle>{title}</BigTitle>
-          {badge &&
-            <Badge
-              padding="4px 5px"
-              textTransform="none"
-              borderRadius="6px"
-              backgroundColor="#DEDFE0"
-              color="#252A32"
-              fontSize="10px"
-              fontFamily="ubuntu"
-              fontWeight="300"
-              letterSpacing="0.2px"
-            >{badge}</Badge>}
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="28px"
+            lineHeight="42px"
+            textAlign="center"
+            color="#252A32"
+          >
+            {title}
+          </Text>
         </Box>
 
-        <Box marginBottom="24px">{subTitle}</Box>
+        <Text
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="18px"
+          lineHeight="28px"
+          textAlign="center"
+          color="#71757A"
+          marginBottom="24px"
+        >
+          {subTitle}
+        </Text>
 
         <Box
           justifyContent="center"
@@ -111,33 +92,33 @@ export const CardPrice = ({
               color="#252A32"
               fontSize="50px"
               fontWeight="500"
-              lineHeight="54px"
-              letterSpacing="-0.8px"
-              fontFamily="Ubuntu"
-            >R$ {price}</Text>
+              lineHeight="60px"
+              fontFamily="Roboto"
+              textAlign="center"
+            >R$ {anualPlan ? price/12 : price}</Text>
             <Text
               position="relative"
               top="16px"
               right="-4px"
               color="#252A32"
               fontSize="18px"
-              fontWeight="700"
-              lineHeight="22px"
-              letterSpacing="0.3px"
-              fontFamily="Ubuntu"
+              fontWeight="500"
+              lineHeight="28px"
+              fontFamily="Roboto"
+              textAlign="center"
             >/mês</Text>
           </Box>
 
-          {anualPlan && 
-            <Text
-              fontFamily="Ubuntu"
-              fontWeight="400"
-              fontSize="14px"
-              lineHeight="27px"
-              color="#71757A"
-              marginTop="24px"
-            >{(price*12).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 })} cobrado uma vez no ano</Text>
-          }
+          <Text
+            height="24px"
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="16px"
+            lineHeight="24px"
+            color="#464A51"
+            marginTop="24px"
+            alignItems="center"
+          >{anualPlan && price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 })+" cobrado uma vez no ano"}</Text>
         </Box>
       </Box>
 
@@ -148,14 +129,14 @@ export const CardPrice = ({
         flexDirection="column"
         justifyContent="space-between"
       >
-        <Box>
+        <Box marginBottom="24px">
           <Text
-            color="#6F6F6F"
-            fontSize="14px"
+            color="#71757A"
+            fontSize="16px"
             fontWeight="400"
-            lineHeight="27px"
-            letterSpacing="0.3px"
-            fontFamily="Ubuntu"
+            lineHeight="24px"
+            fontFamily="Roboto"
+            alignItems="center"
             marginBottom="16px"
           >
             {textResource}
@@ -177,29 +158,34 @@ export const CardPrice = ({
                   height="24px"
                   fill="#2B8C4D"
                 />
-                <BodyText
+                <Text
+                  fontFamily="Roboto"
                   fontSize="16px"
-                  lineHeight="22px"
-                  letterSpacing="0.2px"
+                  lineHeight="24px"
                   fontWeight="400"
+                  alignItems="center"
+                  color="#464A51"
                 >
                   {elm.name}
-                </BodyText>
+                </Text>
                 {elm.tooltip &&
                   <Tooltip
+                    label={elm.tooltip}
                     hasArrow
                     placement="top"
-                    bg="#2A2F38"
-                    label={elm.tooltip}
-                    fontSize="14px"
+                    padding="16px"
+                    backgroundColor="#252A32"
+                    boxSizing="border-box"
+                    borderRadius="8px"
+                    fontFamily="Roboto"
                     fontWeight="400"
-                    padding="5px 16px 6px"
-                    letterSpacing="0.5px"
-                    lineHeight="24px"
-                    color="#FFF"
-                    borderRadius="6px"
+                    fontSize="14px"
+                    lineHeight="20px"
+                    textAlign="center"
+                    color="#FFFFFF"
+                    maxWidth="230px"
                   >
-                    <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3"/>
+                    <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#878A8E"/>
                   </Tooltip>
                 }
               </Box>
@@ -213,7 +199,7 @@ export const CardPrice = ({
           gap="16px"
         >
           {button.isCurrentPlan ?
-            <Text
+            <Box
               display="flex"
               justifyContent="center"
               alignItems="center"
@@ -222,51 +208,64 @@ export const CardPrice = ({
               textAlign="center"
               color="#7D7D7D"
               cursor="default"
-              fontWeight="400"
-              fontFamily="Ubuntu"
+              fontWeight="500"
+              lineHeight="30px"
+              fontFamily="Roboto"
             >
               {button.text}
-            </Text>
+            </Box>
           :
-            <RoundedButton
-              width="100%"              
-              color={button.colorText || "#FFF"}
-              backgroundColor={button.color || "#42B0FF"}
+            <Box
+              as="button"
               onClick={() => {
                 if(button.onClick) return button.onClick()
                 return window.open(button.href, "_self")
               }}
-              border={button.color && `1px solid ${button.colorText}`}
-              {...button.styles}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              width="100%"
+              borderRadius="8px"
+              backgroundColor="#0D99FC"
+              padding="12px 16px"
+              cursor="pointer"
+              color="#FFF"
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="20px"
+              lineHeight="30px"
+              _hover={{
+                backgroundColor: "#0B89E2"
+              }}
             >
               {button.text}
-            </RoundedButton>
+            </Box>
           }
 
           <Text 
             display="flex"
             flexDirection="row"
             justifyContent="center"
-            color="#252A32"
-            fontSize="14px"
-            fontWeight="400"
-            lineHeight="27px"
-            letterSpacing="0.3px"
-            fontFamily="Ubuntu"
-            height="20px"
             textAlign="center"
+            color="#71757A"
+            fontWeight="400"
+            fontSize="16px"
+            lineHeight="24px"
+            fontFamily="Roboto"
+            height="20px"
           >Leia os
-            <Link
-              fontFamily="ubuntu"
-              color="#42B0FF"
+            <Text
+              as="a"
               cursor="pointer"
-              _hover={{opacity: 0.7}}
-              marginLeft="6px"
-              fontWeight="700"
-              letterSpacing="0.5px"
+              marginLeft="4px"
               href="/termos-e-privacidade?section=terms"
               target="_blank"
-            >Termos de Serviço</Link>
+              alignItems="center"
+              color="#0D99FC"
+              _hover={{
+                color: "#0B89E2"
+              }}
+            >Termos de Serviço</Text>
             .
           </Text>
         </Box>
@@ -275,21 +274,195 @@ export const CardPrice = ({
   )
 }
 
-export default function Price({ username ,isBDPro, isBDEmp }) {
-  const [toggleAnual, setToggleAnual] = useState(false)
-  const [priceBDPro, setPriceBDPro] = useState("47")
-  const [priceBDEmp, setPriceBDEmp] = useState("350")
+export function SectionPrice() {
+  const [toggleAnual, setToggleAnual] = useState(true)
+  const [plans, setPlans] = useState(null)
+  const [username, setUsername] = useState(null)
+  const [isBDPro, setIsBDPro] = useState({isCurrentPlan: false})
+  const [isBDEmp, setIsBDEmp] = useState({isCurrentPlan: false})
+  const [hasSubscribed, setHasSubscribed] = useState(true)
+
+  async function alreadySubscribed(id) {
+    const result = await fetch(`/api/user/getAlreadySubscribed?p=${btoa(id)}`)
+      .then(res => res.json())
+    setHasSubscribed(result?.edges.length > 0)
+  } 
 
   useEffect(() => {
-    if(toggleAnual === true) {
-      setPriceBDPro("37")
-      setPriceBDEmp("280")
-    } else {
-      setPriceBDPro("47")
-      setPriceBDEmp("350")
-    }
-  }, [toggleAnual])
+    let user = null
+    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
 
+    if(user) {
+      const reg = new RegExp("(?<=:).*")
+      const [ id ] = reg.exec(user.id)
+      alreadySubscribed(id)
+    } else {
+      setHasSubscribed(false)
+    }
+
+    const stripeSubscription = user?.internalSubscription?.edges?.[0]?.node
+
+    if(user != null) {
+      setUsername(user?.username)
+      setIsBDPro({isCurrentPlan: stripeSubscription?.stripeSubscription === "bd_pro", planInterval: stripeSubscription?.planInterval})
+      setIsBDEmp({isCurrentPlan: stripeSubscription?.stripeSubscription === "bd_pro_empresas", planInterval: stripeSubscription?.planInterval})
+    }
+
+    async function fecthPlans() {
+      try {
+        const result = await fetch(`/api/stripe/getPlans`, { method: "GET" })
+          .then(res => res.json())
+
+        if(result.success === true) {
+          function filterData(productName, interval, isActive) {
+            let array = result.data
+
+            return array.filter(item => 
+              (productName ? item.node.productName === productName : true) &&
+              (interval ? item.node.interval === interval : true) &&
+              (isActive !== undefined ? item.node.isActive === isActive : true)
+            )
+          }
+
+          const filteredPlans = {
+            bd_pro_month : filterData("BD Pro", "month", true)[0].node,
+            bd_pro_year : filterData("BD Pro", "year", true)[0].node,
+            bd_empresas_month : filterData("BD Empresas", "month", true)[0].node,
+            bd_empresas_year : filterData("BD Empresas", "year", true)[0].node
+          }
+
+          setPlans(filteredPlans)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    fecthPlans()
+  }, [])
+
+  function planIntervalPlan() {
+    const planInterval = toggleAnual ? "year" : "month"
+
+    if(isBDPro?.planInterval === planInterval) return true
+    return false
+  }
+
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      gridGap="40px"
+    >
+      <Box
+        display="flex"
+        width="100%"
+        flexDirection="row"
+        justifyContent="center"
+        alignitems="center"
+        gap="8px"
+      >
+        <Toggle
+          defaultChecked
+          className="toggle_variant"
+          value={toggleAnual}
+          onChange={() => setToggleAnual(!toggleAnual)}
+        />
+        <Text
+          position="relative"
+          top="-2px"
+          gap="8px"
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="18px"
+          lineHeight="20px"
+          display="flex"
+          alignItems="center"
+          textAlign="center"
+          color="#252A32"
+        >
+          Desconto anual
+          <Text
+            as="span"
+            color="#2B8C4D"
+            backgroundColor="#D5E8DB"
+            fontWeight="500"
+            lineHeight="28px"
+            padding="2px 4px"
+            borderRadius="4px"
+            height="32px"
+          >Economize 20%</Text>
+        </Text>
+      </Box>
+
+      <Stack
+        display={isMobileMod() ? "flex" : "grid"}
+        gridTemplateColumns="repeat(3, 320px)"
+        gridTemplateRows="1fr"
+        justifyContent="center"
+        justifyItems="center"
+        gap="20px"
+        spacing={0}
+      >
+        <CardPrice
+          title="BD Grátis"
+          subTitle={<>Para você descobrir o potencial da plataforma de dados</>}
+          price={"0"}
+          textResource="Recursos:"
+          resources={[
+            {name: "Tabelas tratadas"},
+            {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
+            {name: "Acesso em nuvem"},
+            {name: "Acesso via SQL, Python e R"},
+            {name: "Integração com ferramentas BI"},
+            {name: "Download direto até 100 MB", tooltip: "Esse limite não se aplica ao acesso via SQL, Python e R."},
+          ]}
+          button={{
+            text: "Explorar recursos",
+            href: "/dataset",
+          }}
+        />
+
+        <CardPrice
+          title="BD Pro"
+          subTitle={<>Para você ter acesso aos<br/> dados mais atualizados</>}
+          price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 444}
+          anualPlan={toggleAnual}
+          textResource="Todos os recursos da BD Grátis, mais:"
+          resources={[
+            {name: "Dezenas de bases de alta frequência atualizadas"},
+            {name: "Tabela de referência de empresas com informações atualizadas"},
+            {name: "Download direto até 1GB (80% das tabelas da plataforma)", tooltip: "Tabelas maiores que 1 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."}
+          ]}
+          button={{
+            text: isBDPro.isCurrentPlan && planIntervalPlan() ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis",
+            href: username === null ? `/user/login?q=pro&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&q=pro&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}`,
+            isCurrentPlan: isBDPro.isCurrentPlan && planIntervalPlan(),
+          }}
+        />
+
+        <CardPrice
+          title="BD Empresas"
+          subTitle={<>Para sua empresa ganhar tempo<br/> e qualidade em decisões</>}
+          price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3360}
+          anualPlan={toggleAnual}
+          textResource="Todos os recursos da BD Pro, mais:"
+          resources={[
+            {name: "Acesso para 10 contas"},
+            {name: "Suporte prioritário via email e Discord"}
+          ]}
+          button={{
+            text: isBDEmp.isCurrentPlan && planIntervalPlan() ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis",
+            href: username === null ? `/user/login?q=empresas&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&q=empresas&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}`,
+            isCurrentPlan: isBDEmp.isCurrentPlan && planIntervalPlan(),
+          }}
+        />
+      </Stack>
+    </Box>
+  )
+}
+
+export default function Price() {
   return (
     <MainPageTemplate paddingX="24px">
       <Head>
@@ -312,110 +485,23 @@ export default function Price({ username ,isBDPro, isBDEmp }) {
         width="100%"
         maxWidth="1264px"
         flexDirection="column"
+        marginBottom="80px !important"
         margin="auto"
         spacing={0}
       >
-        <Display
+        <Text
           width="100%"
+          fontFamily="Roboto"
+          fontWeight="500"
+          color="#252A32"
           fontSize="60px"
           textAlign="center"
-          lineHeight="72px"
-          letterSpacing="-1.5px"
+          lineHeight="70px"
         >
           {t("Compare the plans")}
-        </Display>
+        </Text>
 
-        <Box
-          display="none"
-          width="100%"
-          flexDirection="row"
-          justifyContent="center"
-          alignitems="center"
-          gap="8px"
-        >
-          <Toggle
-            value={toggleAnual}
-            onChange={() => setToggleAnual(!toggleAnual)}
-          />
-          <Text
-            gap="8px"
-            fontFamily="Ubuntu"
-            fontWeight="400"
-            fontSize="18px"
-            lineHeight="24px"
-            display="flex"
-            alignItems="center"
-            textAlign="center"
-            letterSpacing="0.1px"
-            color="#252A32"
-          >
-            Desconto anual <Text color="#2B8C4D">Economize 20%</Text>
-          </Text>
-        </Box>
-
-        <Stack
-          display={isMobileMod() ? "flex" : "grid"}
-          gridTemplateColumns="repeat(3, 320px)"
-          gridTemplateRows="1fr"
-          justifyContent="center"
-          justifyItems="center"
-          marginBottom="80px !important"
-          gap="20px"
-          spacing={0}
-        >
-          <CardPrice
-            title="BD Grátis"
-            subTitle={<BodyText>Para você descobrir o potencial da plataforma de dados</BodyText>}
-            price={"0"}
-            textResource="Recursos:"
-            resources={[
-              {name: "Tabelas tratadas"},
-              {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
-              {name: "Acesso em nuvem"},
-              {name: "Acesso via SQL, Python, R e Stata"},
-              {name: "Integração com ferramentas BI"},
-            ]}
-            button={{
-              text: "Explorar recursos",
-              href: "/dataset",
-              target: "_self",
-              color: "#FFF",
-              colorText: "#42B0FF"
-            }}
-          />
-
-          <CardPrice
-            title="BD Pro"
-            subTitle={<BodyText>Para você ter acesso aos<br/> dados mais atualizados</BodyText>}
-            price={priceBDPro}
-            anualPlan={toggleAnual}
-            textResource="Todos os recursos da BD Grátis, mais:"
-            resources={[
-              {name: "Dezenas de bases de alta frequência atualizadas"},
-            ]}
-            button={{
-              text: isBDPro ? "Plano atual" : `Iniciar teste grátis`,
-              href: username === null ? "/user/login?p=plans&q=pro" :`/user/${username}?plans_and_payment&q=pro`,
-              isCurrentPlan: isBDPro,
-            }}
-          />
-
-          <CardPrice
-            title="BD Empresas"
-            subTitle={<BodyText>Para sua empresa ganhar tempo<br/> e qualidade em decisões</BodyText>}
-            price={priceBDEmp}
-            anualPlan={toggleAnual}
-            textResource="Todos os recursos da BD Pro, mais:"
-            resources={[
-              {name: "Acesso para 10 contas"},{name: "Suporte prioritário via email e Discord"}
-            ]}
-            button={{
-              text: isBDEmp ? "Plano atual" : "Iniciar teste grátis",
-              href: username === null ? "/user/login?p=plans&q=empresas" :`/user/${username}?plans_and_payment&q=empresas`,
-              isCurrentPlan: isBDEmp,
-            }}
-          />
-        </Stack>
+        <SectionPrice/>
       </Stack>
     </MainPageTemplate>
 )

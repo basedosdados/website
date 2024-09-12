@@ -3,12 +3,12 @@ import {
   InputGroup,
   InputRightAddon,
   InputRightElement,
+  InputLeftElement
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 export default function ControlledInput({
   placeholder,
-  variant,
   value,
   onChange,
   onEnterPress,
@@ -116,4 +116,77 @@ export function DebouncedControlledInput({
       {rightAddon ? <InputRightAddon children={rightAddon} /> : <></>}
     </InputGroup>
   );
+}
+
+export function ControlledInputSimple({
+  refInput = null,
+  placeholder,
+  value,
+  onChange,
+  onEnterPress,
+  inputFocus,
+  changeInputFocus,
+  icon = null,
+  inputStyle,
+  inputElementStyle,
+  fill,
+  ...props
+}) {
+  async function checkForEnter(e) {
+    if (e.key === "Enter" && onEnterPress) {
+      onEnterPress();
+    }
+  }
+
+  return (
+    <InputGroup
+      maxWidth="480px"
+      width="480px"
+      alignSelf="center"
+      justifyContent="center"
+      fill={fill}
+      {...props}
+    >
+      <InputLeftElement
+        width="24px"
+        height="24px"
+        margin="8px 8px 8px 16px"
+        children={icon}
+        {...inputElementStyle}
+      />
+
+      <Input
+        ref={refInput}
+        value={value}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={checkForEnter}
+        onFocus={() => changeInputFocus(true)}
+        onBlur={() => changeInputFocus(false)}
+        autoComplete="off"
+        variant="outline"
+        border="2px solid transparent !important"
+        color="#464A51"
+        _hover={{
+          border:"2px solid transparent !important",
+          backgroundColor:"#DEDFE0",
+        }}
+        _focus={{
+          border:"2px solid #0068C5 !important",
+          backgroundColor: "#FFF",
+        }}
+        paddingLeft="52px !important"
+        backgroundColor="#EEEEEE"
+        height="40px"
+        fontSize="14px"
+        lineHeight="20px"
+        width="100%"
+        fontFamily="Roboto"
+        fontWeight="400"
+        borderRadius="14px"
+        _placeholder={{color: "#464A51", opacity: 1}}
+        {...inputStyle}
+      />
+    </InputGroup>
+  )
 }

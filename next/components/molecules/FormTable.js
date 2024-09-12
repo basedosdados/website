@@ -6,7 +6,6 @@ import {
   Input,
   Textarea,
   Select,
-  Checkbox,
   Alert,
   AlertIcon,
   AlertTitle,
@@ -21,6 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react"
 import { useRouter } from "next/router";
+import Checkbox from "../atoms/Checkbox";
 import RoundedButton from "../atoms/RoundedButton";
 import SelectSearch from "../atoms/SelectSearch";
 import LoadingSpin from "../atoms/Loading";

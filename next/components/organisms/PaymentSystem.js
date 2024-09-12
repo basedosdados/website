@@ -2,39 +2,52 @@ import {
   Stack,
   VStack,
   Skeleton,
+  Spinner,
 } from "@chakra-ui/react"
 import { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import {
   Elements,
   PaymentElement,
-  AddressElement,
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
 import Button from "../atoms/RoundedButton";
 import styles from "../../styles/paymentSystem.module.css";
 
-import {
-  getPrices,
-} from "../../pages/api/stripe";
-
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_KEY_STRIPE)
 
-const PaymentForm = ({ onSucess, onErro }) => {
+const PaymentForm = ({ onSucess, onErro, clientSecret}) => {
+  const [isLoading, setIsLoading] = useState(false)
   const stripe = useStripe()
   const elements = useElements()
 
   const handlerSubmit = async (e) => {
+    setIsLoading(true)
     e.preventDefault()
 
-    const data = await stripe.confirmPayment({
-      elements,
-      redirect: 'if_required',
-    })
+    const isSetupIntent = clientSecret.startsWith('seti_');
+    if (isSetupIntent) {
+      await elements.submit();
 
-    if(data?.error?.code === "card_declined") return onErro()
-    if(data?.paymentIntent?.status === "succeeded") return onSucess()
+      const data = await stripe.confirmSetup({
+        elements,
+        clientSecret: clientSecret,
+        redirect: 'if_required',
+      });
+  
+      if (data?.error?.code === "card_declined") return onErro();
+      if (data?.setupIntent?.status === "succeeded") return onSucess();
+
+    } else {
+      const data = await stripe.confirmPayment({
+        elements,
+        redirect: 'if_required',
+      })
+  
+      if(data?.error?.code === "card_declined") return onErro()
+      if(data?.paymentIntent?.status === "succeeded") return onSucess()
+    }
   }
 
   return (
@@ -46,11 +59,25 @@ const PaymentForm = ({ onSucess, onErro }) => {
         className={styles.content}
         onSubmit={handlerSubmit}
       >
-        <AddressElement options={{mode:'billing'}}/>
-
         <PaymentElement className={styles.payment}/>
 
-        <Button width="100%" type="submit" marginTop="6px !important">Iniciar inscrição</Button>
+        <Button
+          type="submit"
+          height="40px"
+          fontSize="20px"
+          lineHeight="30px"
+          fontFamily="Roboto"
+          fontWeight="500"
+          pointerEvents={isLoading ? "none" : "default"}
+          color={"#FFFFFF"}
+          backgroundColor={"#0D99FC"}
+          _hover={{
+            color: "#FAFAFA",
+            backgroundColor: "#0B89E2"
+          }}
+        >
+          {isLoading ? <Spinner /> : "Iniciar inscrição"}
+        </Button>
       </form>
     </VStack>
   )
@@ -89,46 +116,16 @@ export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
   }
 
   const customerCreatPost = async (id) => {
-    let secret = ""
-
-    const subscriptionCreate = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}`, {method: "GET"})
+    const clientSecret = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
 
-    if(subscriptionCreate?.clientSecret) {
-      secret = subscriptionCreate?.clientSecret
+    if (clientSecret) {
+      setClientSecret(clientSecret)
     }
-    if(secret !== "") return setClientSecret(secret)
-
-    const result = await fetch(`/api/stripe/createCustomer`, {method: "GET"})
-      .then(res => res.json())
-
-    if(result?.id) {
-      const subscriptionCreate = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}`, {method: "GET"})
-        .then(res => res.json())
-      secret = subscriptionCreate?.clientSecret
-    }
-
-    return setClientSecret(secret)
-  }
-
-  async function customerCreat(plan) {
-    const prices = await getPrices()
-
-    const findPlan = (slug, slots) => {
-      const foundPlan = prices.find(p => {
-        return p.node.productSlug === slug && p.node.productSlots === slots
-      })
-
-      return foundPlan ? foundPlan.node : null
-    }
-
-    const idPlan = findPlan(plan.slug, plan.slots)?._id
-
-    customerCreatPost(idPlan)
   }
 
   useEffect(() => {
-    customerCreat(plan)
+    customerCreatPost(plan.id)
   }, [])
 
   const SkeletonBox = ({ type, ...props }) => {
@@ -140,15 +137,17 @@ export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
 
   if(!clientSecret) return (
     <Stack>
-      <SkeletonBox type="text"/>
-      <SkeletonBox type="box"/>
+      <Stack width="100%" flexDirection="row" spacing={0} gap="8px" marginBottom="16px !important">
+        <Stack width="100%"  spacing={0} gap="8px">
+          <SkeletonBox type="text"/>
+          <SkeletonBox type="smallBox" width="100%"/>
+        </Stack>
+        <Stack width="100%" spacing={0} gap="8px">
+          <SkeletonBox type="text"/>
+          <SkeletonBox type="smallBox" width="100%"/>
+        </Stack>
+      </Stack>
 
-      <SkeletonBox type="text"/>
-      <SkeletonBox type="box"/>
-
-      <SkeletonBox type="text"/>
-      <SkeletonBox type="box"/>
-      
       <SkeletonBox type="text"/>
       <SkeletonBox type="box"/>
 
@@ -169,7 +168,12 @@ export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
 
   return (
     <Elements options={options} stripe={stripePromise}>
-      <PaymentForm userData={userData} onSucess={onSucess} onErro={onErro}/>
+      <PaymentForm
+        clientSecret={options.clientSecret}
+        userData={userData}
+        onSucess={onSucess}
+        onErro={onErro}
+      />
     </Elements>
   )
 }

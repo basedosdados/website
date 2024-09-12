@@ -80,12 +80,13 @@ export default function Login() {
     if(userData.error) return setErrors({login:"Não foi possível conectar ao servidor. Tente novamente mais tarde."}) 
 
     cookies.set('userBD', JSON.stringify(userData))
-    if(query.p === "plans") {
-      if(query.q) return window.open(`/user/${userData.username}?plans_and_payment&q=${query.q}`, "_self")
-      return window.open(`/user/${userData.username}?plans_and_payment&p=plans`, "_self")
-    } else {
-      return window.open("/", "_self")
+
+    if(query.i) {
+      return window.open(`/user/${userData.username}?plans_and_payment&q=${query.q}&i=${query.i}`, "_self")
     }
+
+    if(userData.workDataTool === null) return window.open("/user/survey", "_self")
+    return window.open("/", "_self")
   }
 
   const LabelTextForm = ({ text, ...props }) => {
@@ -106,7 +107,7 @@ export default function Login() {
     <MainPageTemplate
       display="flex"
       justifyContent="center"
-      paddingTop="72px"
+      paddingTop="70px"
       cleanTemplate
     >
       <Stack

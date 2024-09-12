@@ -21,6 +21,7 @@
     "cookie-parser": "^1.4.6",
     "framer-motion": "^4.1.17",
     "fuzzy-search": "^3.2.1",
+    "highlight.js": "^11.9.0",
     "js-cookie": "^3.0.5",
     "next": "^12.3.4",
     "next-i18next": "^15.3.0",

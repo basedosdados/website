@@ -100,6 +100,31 @@ function Slogan () {
       >
         A Base dos Dados é a especialista que ajuda você ou sua equipe a trabalhar e extrair o máximo de valor dos dados.
       </BodyText>
+      <Box
+        as="a"
+        href="/contato-consultoria"
+        target="_self"
+        display="flex"
+        alignItems="center"
+        height="56px"
+        width="fit-content"
+        borderRadius="8px"
+        backgroundColor="#0D99FC"
+        padding="10px 16px"
+        cursor="pointer"
+        color="#FFF"
+        fontFamily="Ubuntu"
+        fontWeight="700"
+        fontSize="20px"
+        lineHeight="23px"
+        letterSpacing="0.1px"
+        marginTop="24px !important"
+        _hover={{
+          backgroundColor: "#0B89E2"
+        }}
+      >
+        Vamos fazer um projeto juntos
+      </Box>
     </Stack>
   )
 }
@@ -553,9 +578,33 @@ export default function Services() {
             </WorkflowBox>
           </Stack>
         </VStack>
-      </Stack>
 
-      <FixedBottomBar />
+        <Box
+          as="a"
+          href="/contato-consultoria"
+          target="_self"
+          display="flex"
+          alignItems="center"
+          height="56px"
+          width="fit-content"
+          borderRadius="8px"
+          backgroundColor="#0D99FC"
+          padding="10px 16px"
+          cursor="pointer"
+          color="#FFF"
+          fontFamily="Ubuntu"
+          fontWeight="700"
+          fontSize="20px"
+          lineHeight="23px"
+          letterSpacing="0.1px"
+          marginTop="24px !important"
+          _hover={{
+            backgroundColor: "#0B89E2"
+          }}
+        >
+          Vamos fazer um projeto juntos
+        </Box>
+      </Stack>
     </MainPageTemplate>
   )
 }

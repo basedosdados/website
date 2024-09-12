@@ -1,4 +1,4 @@
-import { CopyIcon } from "../public/img/icons/copyIcon"
+import { CopyIcon } from "../public/img/icons/copyIcon";
 
 export const QuestionFAQ = [
   {
@@ -48,7 +48,7 @@ export const QuestionFAQ = [
         <div id="download" style={{display: "flex", flexDirection: "column"}}>
           <p>
           Sim, você pode baixar o arquivo CSV completo das tabelas tratadas direto na plataforma.
-          No entanto, tabelas com mais de 200.000 linhas só podem ser acessados através do nosso data lake no BigQuery ou dos nossos pacotes em Python, R e Stata.
+          No entanto, tabelas com mais de 200.000 linhas só podem ser acessados através do nosso data lake no BigQuery ou dos nossos pacotes em Python e R.
           </p>
         </div>
       )
@@ -64,7 +64,7 @@ export const QuestionFAQ = [
         <div id="download-limit" style={{display: "flex", flexDirection: "column"}}>
           <p>
             O limite para download dos dados na nossa plataforma é de 200.000 linhas.
-            Para acessar tabelas que ultrapassam esse limite, utilize nosso <i>datalake</i> no BigQuery ou nossos pacotes em Python, R e Stata.
+            Para acessar tabelas que ultrapassam esse limite, utilize nosso <i>datalake</i> no BigQuery ou nossos pacotes em Python e R.
           </p>
         </div>
       )
@@ -94,7 +94,7 @@ export const QuestionFAQ = [
       return (
         <div id="tables" style={{display: "flex", flexDirection: "column"}}>
           <p>
-          São tabelas prontas para análise, disponíveis via SQL, Python, R ou Stata.
+          São tabelas prontas para análise, disponíveis via SQL, Python e R.
           O processo de tratamento das tabelas envolve a padronização de nomes de variáveis e compatibilização de códigos, o que permite que o cruzamento de tabelas de diferentes instituições e temas seja tão simples quanto qualquer outra consulta.
           </p>
         </div>
@@ -147,13 +147,13 @@ export const QuestionFAQ = [
           <p>
             Você pode consultar as tabelas tratadas BD+ de diferentes maneiras.
             Além de fazer o download direto na plataforma,
-            é possível explorar os dados com SQL através do BigQuery ou com os pacotes em Python, R e Stata.
+            é possível explorar os dados com SQL através do BigQuery ou com os pacotes em Python e R.
           </p>
         </div>
       )
     },
     categories: ["Dados"],
-    keywords: "acesso, consulta, tratada, tratado, BD+, download, baixar, pacote, SQL, BigQuery, Python, R, Stata",
+    keywords: "acesso, consulta, tratada, tratado, BD+, download, baixar, pacote, SQL, BigQuery, Python, R",
     id: "access-tables"
   },
   {
@@ -231,7 +231,7 @@ export const QuestionFAQ = [
         <div id="packages" style={{display: "flex", flexDirection: "column"}}>
           <p>
             Nossos pacotes permitem o acesso ao <i>datalake</i> público direto do seu computador ou ambiente de desenvolvimento.
-            Para começar a explorar nossos dados em Python, R ou Stata,
+            Para começar a explorar nossos dados em Python ou R,
             siga os tutoriais de instalação dos pacotes presentes na nossa <a href="https://basedosdados.github.io/mais/access_data_packages/" target="_blank">
             documentação</a>.
           </p>
@@ -239,7 +239,7 @@ export const QuestionFAQ = [
       )
     },
     categories: ["Dados"],
-    keywords: "pacote, Python, R, Stata, instalação, documentação",
+    keywords: "pacote, Python, R, instalação, documentação",
     id: "packages"
   },
   {
@@ -433,19 +433,21 @@ export const QuestionFAQ = [
             Para verificar uma amostra de todas as variáveis da tabela, use: 
           </p>
 
-          <code className="language-sql" style={{margin: "16px 0", padding: "6px"}}>
-            {`SELECT * FROM  dataset.table_name LIMIT 100`}
-          </code>
+          <pre>
+            <code className="hljs sql">
+              <span style={{color: "#93c763"}}>SELECT</span> * <span style={{color: "#93c763"}}>FROM</span>  dataset.table_name LIMIT <span style={{color: "#ffcd22"}}>100</span>
+            </code>
+          </pre>
           
           <ul>
             <li>
               A primeira dica valiosa é selecionar as colunas que você vai usar.
               O BigQuery funciona usando um modelo colunar, portanto, quanto menos colunas você usar,
-              melhor vai ser o desempenho da sua consulta. Isso significa evitar o clássico<br/> <code className="language-sql">SELECT * FROM table_name</code> e
+              melhor vai ser o desempenho da sua consulta. Isso significa evitar o clássico<br/> <pre><code className="hljs sql"><span style={{color: "#93c763"}}>SELECT</span> * <span style={{color: "#93c763"}}>FROM</span> table_name</code></pre> e
               escolher as colunas de seu interesse. Parece chato, mas ajuda muito!
             </li>
             <li>
-              Para tabelas grandes, uma boa prática é filtrar os anos e estados de seu interesse com a cláusula <code className="language-sql">WHERE</code>.
+              Para tabelas grandes, uma boa prática é filtrar os anos e estados de seu interesse com a cláusula <pre><code className="hljs sql" style={{color: "#93c763"}}>WHERE</code></pre>.
               Como utilizamos o sistema de particionamento, isso vai reduzir drasticamente o custo e o tempo de processamento.
             </li>
           </ul>
@@ -710,7 +712,7 @@ export const QuestionFAQ = [
           <p>
           Utilizamos suas informações pessoais para fornecer e melhorar nossos serviços, incluindo o processamento de pagamentos, o fornecimento de suporte ao cliente e a personalização da experiência do usuário.
           Não venderemos, alugaremos ou compartilharemos suas informações pessoais com terceiros não afiliados sem o seu consentimento explícito.
-          Para mais informações, acesse nossos Termos de Uso e Políticas de Privacidade <a href="http://basedosdados.org/termos" target="_blank">aqui</a>.
+          Para mais informações, acesse nossos Termos de Uso e Políticas de Privacidade <a href="http://basedosdados.org/termos-e-privacidade" target="_blank">aqui</a>.
           </p>
         </div>
       )

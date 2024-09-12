@@ -1,4 +1,4 @@
-.toggle {
+.toggle, .toggle_variant  {
   --switch-track-diff: 17px !important;
   --switch-thumb-x: 17px !important;
   --switch-track-width: 0 !important;
@@ -6,23 +6,27 @@
   border-color: transparent !important;
 }
 
-.toggle span{
+.toggle span, .toggle_variant span{
   background-color: #878A8E;
   width: 42px;
   height: 24px;
 }
 
-.toggle span[data-checked]{
+.toggle span[data-checked], .toggle_variant span[data-checked]{
   background-color: #2B8C4D;
   width: 42px;
   height: 24px;
 }
 
-.toggle span[data-focus]{
+.toggle_variant span[data-checked]{
+  background-color: #0D99FC;
+}
+
+.toggle span[data-focus], .toggle_variant span[data-focus]{
   box-shadow: none;
 }
 
-.toggle span span{
+.toggle span span, .toggle_variant span span{
   background-color: #FFF;
   position: relative;
   top: 1px;
@@ -31,8 +35,28 @@
   height: 21px;
 }
 
-.toggle span span[data-checked]{
+.toggle span span[data-checked], .toggle_variant span span[data-checked]{
   background-color: #FFF;
   width: 21px;
   height: 21px;
+}
+
+.toggle span:hover, .toggle_variant span:hover {
+  background-color: #71757A;
+}
+
+.toggle span span:hover, .toggle_variant span span:hover{
+  background-color: #FFF;
+}
+
+.toggle span[data-checked]:hover {
+  background-color: #22703E;
+}
+
+.toggle_variant span[data-checked]:hover {
+  background-color: #0D99FC;
+}
+
+.toggle span[data-checked] span:hover, .toggle_variant span[data-checked] span:hover {
+  background-color: #FFF;
 }

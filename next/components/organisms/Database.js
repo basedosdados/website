@@ -1,21 +1,12 @@
 import {
-  Heading,
   HStack,
   Image,
   Stack,
   VStack,
-  Flex,
   Text,
-  Center,
-  Tooltip,
+  Box
 } from "@chakra-ui/react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { CategoryIcon } from "../atoms/CategoryIcon";
-import Title from "../atoms/Title";
-import Link from "../atoms/Link";
-import SectionText from "../atoms/SectionText";
-import { ImageOrganization } from "../atoms/ImageOrganization";
-import { TemporalCoverageString } from "../molecules/TemporalCoverageDisplay";
 
 import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";
@@ -31,7 +22,6 @@ export default function Database({
   rawDataSources,
   informationRequests,
   contains,
-  themes = [],
 }) {
   const { t } = useTranslation('dataset')
 
@@ -40,12 +30,35 @@ export default function Database({
     if(tables.number === undefined) tablesNumber = 0
 
     return (
-      <a href={tablesNumber > 0 && `/dataset/${id}?table=${tables.id}`}>
-        <HStack
-          spacing={1}
-          cursor={tablesNumber > 0 ? "pointer" : "normal"}
-          _hover={tablesNumber > 0 && {opacity: "0.7"}}
+      <Text
+        as="a"
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        cursor={tablesNumber > 0 ? "pointer" : "normal"}
+        color={tablesNumber === 0 ? "#ACAEB1" : "#0068C5"}
+        fill={tablesNumber === 0 ? "#ACAEB1" : "#0068C5"}
+        pointerEvents={tablesNumber === 0 && "none"}
+        fontFamily="Roboto"
+        fontWeight="400"
+        fontSize="14px"
+        lineHeight="20px"
+        _hover={{
+          color: "#0057A4",
+          fill: "#0057A4"
+        }}
+        href={tablesNumber > 0 ? `/dataset/${id}?table=${tables.id}` : ""}
+      >
+        <DataBaseSolidIcon
+          alt="tabelas tratadas"
+          width="15px"
+          height="15px"
+        />
+        <Text
+          marginLeft="4px !important"
+          whiteSpace="nowrap"
         >
+<<<<<<< HEAD
           <DataBaseSolidIcon
             alt={t("processed tables")}
             width="15px"
@@ -65,6 +78,12 @@ export default function Database({
           </Text>
         </HStack>
       </a>
+=======
+          {tablesNumber}{" "}
+          {tablesNumber === 1 ? "tabela tratada" : "tabelas tratadas"}
+        </Text>
+      </Text>
+>>>>>>> main
     )
   }
 
@@ -73,11 +92,35 @@ export default function Database({
     if(rawDataSources.number === undefined) rawDataSourcesNumber = 0
 
     return (
-      <a href={rawDataSourcesNumber > 0 && `/dataset/${id}?raw_data_source=${rawDataSources.id}`}>
-        <HStack
-          cursor={rawDataSourcesNumber > 0 ? "pointer" : "normal"}
-          _hover={rawDataSourcesNumber > 0 && {opacity: "0.7"}}
+      <Text
+        as="a"
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        cursor={rawDataSourcesNumber > 0 ? "pointer" : "normal"}
+        color={rawDataSourcesNumber === 0 ? "#ACAEB1" : "#0068C5"}
+        fill={rawDataSourcesNumber === 0 ? "#ACAEB1" : "#0068C5"}
+        pointerEvents={rawDataSourcesNumber === 0 && "none"}
+        fontFamily="Roboto"
+        fontWeight="400"
+        fontSize="14px"
+        lineHeight="20px"
+        _hover={{
+          color: "#0057A4",
+          fill: "#0057A4"
+        }}
+        href={rawDataSourcesNumber > 0 ? `/dataset/${id}?raw_data_source=${rawDataSources.id}` : ""}
+      >
+        <LinkIcon
+          alt="fontes originais"
+          width="15px"
+          height="15px"
+        />
+        <Text
+          marginLeft="4px !important"
+          whiteSpace="nowrap"
         >
+<<<<<<< HEAD
           <LinkIcon
             width="15px"
             height="15px"
@@ -94,6 +137,12 @@ export default function Database({
           </Text>
         </HStack>
       </a>
+=======
+          {rawDataSourcesNumber}{" "}
+          {rawDataSourcesNumber === 1 ? "fonte original" : "fontes originais"}
+        </Text>
+      </Text>
+>>>>>>> main
     )
   }
 
@@ -102,11 +151,35 @@ export default function Database({
     if(informationRequests.number === undefined) informationRequestsNumber = 0
 
     return (
-      <a href={informationRequestsNumber > 0 && `/dataset/${id}?information_request=${informationRequests.id}`}>
-        <HStack
-          cursor={informationRequestsNumber > 0 ? "pointer" : "normal"}
-          _hover={informationRequestsNumber > 0 && {opacity: "0.7"}}
+      <Text
+        as="a"
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        cursor={informationRequestsNumber > 0 ? "pointer" : "normal"}
+        color={informationRequestsNumber === 0 ? "#ACAEB1" : "#0068C5"}
+        fill={informationRequestsNumber === 0 ? "#ACAEB1" : "#0068C5"}
+        pointerEvents={informationRequestsNumber === 0 && "none"}
+        fontFamily="Roboto"
+        fontWeight="400"
+        fontSize="14px"
+        lineHeight="20px"
+        _hover={{
+          color: "#0057A4",
+          fill: "#0057A4"
+        }}
+        href={informationRequestsNumber > 0 ? `/dataset/${id}?information_request=${informationRequests.id}` : ""}
+      >
+        <InfoArrowIcon
+          alt="pedidos Lai"
+          width="15px"
+          height="15px"
+        />
+        <Text
+          marginLeft="4px !important"
+          whiteSpace="nowrap"
         >
+<<<<<<< HEAD
           <InfoArrowIcon
             alt={t("LAI requests")}
             width="15px"
@@ -124,6 +197,12 @@ export default function Database({
           </Text>
         </HStack>
       </a>
+=======
+          {informationRequestsNumber}{" "}
+          {informationRequestsNumber === 1 ? "pedido LAI" : "pedidos LAI"}
+        </Text>
+      </Text>
+>>>>>>> main
     )
   }
 
@@ -133,7 +212,6 @@ export default function Database({
       alignItems="flex-start"
       width="100%"
       spacing={{ base: 4, md: 0 }}
-      padding="16px 0px"
     >
       <Stack
         direction={{ base: "column", lg: "row" }}
@@ -142,18 +220,28 @@ export default function Database({
         height="100%"
         spacing={6}
       >
-        <Link _hover={{opacity:"none"}}>
-          <ImageOrganization
-            title={organization.name}
-            image={organization?.picture || organization?.image}
-            maxWidth="138px"
-            maxHeight="138px"
-            minWidth="138px"
-            minHeight="138px"
+        <Box
+          as="a"
+          href={`/dataset/${id}`}
+          target="_self"
+          display="flex"
+          justifyContent="center"
+          border="1px solid #DEDFE0"
+          borderRadius="16px"
+          _hover={{ opacity: 0.9 }}
+        >
+          <Image
+            src={organization?.picture.startsWith("https://") ? organization?.picture : `https://basedosdados.org/uploads/group/${organization?.name}`}
+            alt={organization.name || "Não informado"}
             borderRadius="16px"
-            backgroundColor="#eee"
+            minWidth="222px"
+            minHeight="138px"
+            maxWidth="222px"
+            maxHeight="138px"
+            objectFit="contain"
           />
-        </Link>
+        </Box>
+
         <VStack
           alignItems="flex-start"
           justifyContent="space-between"
@@ -162,72 +250,72 @@ export default function Database({
           minHeight="115px"
         >
           <VStack width="100%" spacing={1} alignItems="flex-start">
-            <Flex
-              position="relative"
-              flexDir={{ base: "column", lg: "row" }}
-              justifyContent="center"
-              alignItems="flex-start"
+            <Stack
+              direction={{ base: "column", lg: "row" }}
               width="100%"
+              alignItems="flex-start"
+              pb={{ base: 2, lg: 0 }}
+            >
+              <Text
+                as="a"
+                href={`/dataset/${id}`}
+                width="100%"
+                noOfLines={2}
+                textOverflow="ellipsis"
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="18px"
+                lineHeight="28px"
+                color="#252A32"
+                _hover={{
+                  opacity: 0.7
+                }}
+              >
+                {name}
+              </Text>
+            </Stack>
+
+            <VStack
+              width="100%"
+              spacing="8px"
+              marginBottom="4px !important"
+              alignItems="flex-start"
             >
               <Stack
                 direction={{ base: "column", lg: "row" }}
-                width="100%"
-                alignItems="flex-start"
-                pb={{ base: 2, lg: 0 }}
+                spacing={1}
               >
-                <Link width="100%" href={`/dataset/${id}`}>
-                  <Title
-                    margin="0px"
-                    padding="0px"
-                    noOfLines={2}
-                    textOverflow="ellipsis"
-                  >
-                    {name}
-                  </Title>
-                </Link>
-                <HStack
-                  justifyContent={{ base: "flex-start", lg: "flex-end" }}
-                  margin={useCheckMobile() ? "16px 0px 0px !important" : "0px 0px 0px 28px !important"}
-                  height="36px"
-                  spacing={2}
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#464A51"
                 >
-                  {themes.slice(0,6).map((elm, i) => (
-                    <Tooltip
-                      key={i}
-                      hasArrow
-                      bg="#2A2F38"
-                      label={elm.name}
-                      fontSize="16px"
-                      fontWeight="500"
-                      padding="5px 16px 6px"
-                      color="#FFF"
-                      borderRadius="6px"
-                    >
-                      <Center
-                        width="36px"
-                        height="36px"
-                        backgroundColor="#2B8C4D"
-                        padding="4px"
-                        borderRadius="6px"
-                      >
-                        <Link filter="invert(1)" _hover={{ opacity: "none" }} href={`/dataset?theme=${elm.slug}`}>
-                          <CategoryIcon
-                            alt={elm.name}
-                            size="36px"
-                            url={`https://storage.googleapis.com/basedosdados-website/category_icons/2022/icone_${elm.slug}.svg`}
-                          />
-                        </Link>
-                      </Center>
-                    </Tooltip>
-                  ))}
-                </HStack>
+                  Organização:
+                </Text>
+                <Text
+                  as="a"
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#71757A"
+                  _hover={{
+                    color: "#464A51"
+                  }}
+                  textOverflow="ellipsis"
+                  href={`/dataset?organization=${organization?.slug}`}
+                >
+                  {organization?.name}
+                </Text>
               </Stack>
-            </Flex>
-            <VStack spacing={0} width="100%" alignItems="flex-start">
+
               <Stack
                 direction={{ base: "column", lg: "row" }}
-                spacing={{ base: 0, lg: 5 }}
+                spacing={1}
               >
+<<<<<<< HEAD
                 <HStack pb={{ base: 1, lg: 0 }}>
                   <SectionText color="#6F6F6F">{t("Organization")}:</SectionText>
                   <Link href={`/dataset?organization=${organization?.slug}`}>
@@ -241,16 +329,40 @@ export default function Database({
                     </SectionText>
                   </Link>
                 </HStack>
+=======
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#464A51"
+                >
+                  Cobertura temporal:
+                </Text>
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#71757A"
+                >
+                  {temporalCoverageText ? temporalCoverageText : "Não informado"}
+                </Text>
+>>>>>>> main
               </Stack>
+
               <Stack
                 direction={{ base: "column", lg: "row" }}
-                spacing={{ base: 0, lg: 5 }}
+                spacing={1}
               >
-                <HStack
-                  spacing={2}
-                  align="flex-start"
-                  pb={{ base: 1, lg: 0 }}
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#464A51"
                 >
+<<<<<<< HEAD
                   <SectionText color="#6F6F6F">{t("Temporal coverage")}:</SectionText>
                   <TemporalCoverageString
                     value={ temporalCoverageText ? temporalCoverageText : ""}
@@ -278,20 +390,36 @@ export default function Database({
                       {!contains.free && !contains.pro && t("Not listed")}
                     </SectionText>
                 </HStack>
+=======
+                  Recursos:
+                </Text>
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#71757A"
+                >
+                  {contains.free && "Grátis"} {contains.free && contains.pro && "e"} {contains.pro && "Pagos"}
+                  {!contains.free && !contains.pro && "Não informado"}
+                </Text>
+>>>>>>> main
               </Stack>
             </VStack>
           </VStack>
-          <VStack>
-            <HStack
-              flexDirection={useCheckMobile() && "column"}
-              alignItems={useCheckMobile() && "flex-start"}
-              spacing={useCheckMobile() ? 0 : 5}
-            >
-              <Tables/>
-              <RawDataSources/>
-              <InformationRequest/>
-            </HStack>
-          </VStack>
+
+          <HStack
+            flexDirection={useCheckMobile() && "column"}
+            alignItems={useCheckMobile() && "flex-start"}
+            spacing={0}
+            width="100%"
+            maxWidth="440px"
+            justifyContent="space-between"
+          >
+            <Tables/>
+            <RawDataSources/>
+            <InformationRequest/>
+          </HStack>
         </VStack>
       </Stack>
     </VStack>

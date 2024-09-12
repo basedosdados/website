@@ -1,12 +1,13 @@
 import {
   Stack,
   VStack,
+  Box,
+  HStack,
+  Divider,
+  Text
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { isMobileMod } from "../../hooks/useCheckMobile.hook";
-
-import { FilterAccordion } from "../atoms/FilterAccordion";
 
 import BdmTablePage from "./BdmTablePage";
 import RawDataSourcesPage from "./RawDataSourcesPage";
@@ -41,7 +42,18 @@ export default function DatasetResource({
   }
 
   useEffect(() => {
-    const dataset_tables = dataset?.tables?.edges.map((elm) => elm.node).filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []
+    // Id do dataset do SAEB
+    let dataset_tables = []
+    if(dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd") {
+      dataset_tables = dataset?.tables?.edges.map((elm) => elm.node)
+        .filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []
+    } else {
+      dataset_tables = dataset?.tables?.edges.map((elm) => elm.node)
+        .filter((elm) => elm?.status?.slug !== "under_review")
+          .filter((elm) => elm?.slug !== "dicionario")
+            .filter((elm) => elm?.slug !== "dictionary").sort(sortElements) || []
+    }
+
     const raw_data_sources = dataset?.rawDataSources?.edges.map((elm) => elm.node).filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []
     const information_request = dataset?.informationRequests?.edges.map((elm) => elm.node).filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []
 
@@ -56,7 +68,7 @@ export default function DatasetResource({
       if(raw_data_sources.length > 0) return pushQuery("raw_data_source", raw_data_sources[0]?._id)
       if(information_request.length > 0) return pushQuery("information_request", information_request[0]?._id)
     }
-  },[])
+  }, [dataset])
 
   function SwitchResource ({route}) {
     if (route.hasOwnProperty("table")) return <BdmTablePage id={route.table}/>
@@ -65,70 +77,121 @@ export default function DatasetResource({
     return null
   }
 
+  function ContentFilter({
+    fieldName,
+    choices,
+    onChange,
+    value,
+    hasDivider = true
+  }) {
+    if(choices.length < 1) return null
+
+    return (
+      <Box width={{base:"100%", lg:"272px"}}>
+        <Divider
+          display={hasDivider ? "flex" : "none"}
+          marginY="24px"
+          borderColor="#DEDFE0"
+        />
+
+        <Text
+          paddingLeft="15px"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="14px"
+          lineHeight="20px"
+          color="#252A32"
+          marginBottom="8px"
+        >
+          {fieldName}
+        </Text>
+
+        <Box>
+          {choices.map((elm, i) => (
+            <HStack
+              key={i}
+              spacing="4px"
+              cursor="pointer"
+              pointerEvents={elm._id === value ? "none" : "default"}
+            >
+              <Box 
+                width="3px"
+                height="24px"
+                backgroundColor={elm._id === value && "#2B8C4D"}
+                borderRadius="10px"
+              />
+              <Text
+                textOverflow="ellipsis"
+                whiteSpace="nowrap"
+                overflow="hidden"
+                width="100%"
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="14px"
+                lineHeight="20px"
+                color={elm._id === value ? "#2B8C4D" : "#71757A"}
+                backgroundColor={elm._id === value && "#F7F7F7"}
+                _hover={{
+                  backgroundColor:elm._id === value ? "#F7F7F7" :"#EEEEEE",
+                }}
+                borderRadius="8px"
+                padding="6px 8px"
+                onClick={() => onChange(elm._id)}
+              >
+                {elm.name || elm.number}
+              </Text>
+            </HStack>
+          ))}
+        </Box>
+      </Box>
+    )
+  }
+
   return (
     <Stack
-      paddingTop="24px"
+      paddingTop="32px"
       direction={{ base: "column", lg: "row" }}
-      spacing={4}
-      width="100%"
+      gap="24px"
+      spacing={0}
+      height="100%"
     >
-      <VStack
-        minWidth={{ base: "100%", lg: "250px" }}
-        maxWidth={{ base: "100%", lg: "250px" }}
-        spacing={2}
-        align="flex-start"
-        justify="flex-start"
-        borderRight={!isMobileMod() && "1px solid #DEDFE0"}
+      <Stack
+        minWidth={{base: "100%", lg: "296px"}}
+        maxWidth={{base: "100%", lg: "296px"}}
+        spacing={0}
       >
-        <FilterAccordion
-          alwaysOpen={true}
+        <ContentFilter
+          fieldName="Tabelas tratadas"
           choices={tables}
           value={query.table}
-          valueField="_id"
-          displayField="name"
-          fieldName="Tabelas tratadas"
-          isHovering={false}
           onChange={(id) => {
             pushQuery("table", id)
           }}
+          hasDivider={false}
         />
 
-        <FilterAccordion
-          alwaysOpen={true}
+        <ContentFilter
+          fieldName="Fontes originais"
           choices={rawDataSources}
           value={query.raw_data_source}
-          valueField="_id"
-          displayField="name"
-          fieldName="Fontes originais"
-          isHovering={false}
           onChange={(id) => {
             pushQuery("raw_data_source", id)
           }}
+          hasDivider={tables.length > 0 ? true : false}
         />
 
-        <FilterAccordion
-          alwaysOpen={true}
+        <ContentFilter
+          fieldName="Pedidos LAI"
           choices={informationRequests}
           value={query.information_request}
-          valueField="_id"
-          displayField="number"
-          fieldName="Pedidos LAI"
-          isHovering={false}
           onChange={(id) => {
             pushQuery("information_request", id)
           }}
+          hasDivider={tables.length > 0 || rawDataSources.length > 0 ? true : false}
         />
-      </VStack>
+      </Stack>
 
-      <VStack
-        width="100%"
-        overflow="hidden"
-        marginLeft={{base:"0", lg: "32px !important", xl: "40px !important"}}
-        alignItems="flex-start"
-        flex="1"
-      >
-        <SwitchResource route={query}/>
-      </VStack>
+      <SwitchResource route={query}/>
     </Stack>
   )
 }
