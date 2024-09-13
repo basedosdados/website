@@ -1444,6 +1444,8 @@ const PlansAndPayment = ({ userData }) => {
   const [plan, setPlan] = useState("")
   const [checkoutInfos, setCheckoutInfos] = useState({})
   const [valueCoupon, setValueCoupon] = useState("")
+  const [errCoupon, setErrCoupon] = useState(false)
+  const [couponInfos, setCouponInfos] = useState({})
   const [couponInputFocus, setCouponInputFocus] = useState(false)
   const [coupon, setCoupon] = useState("")
   const PaymentModal = useDisclosure()
@@ -1717,9 +1719,73 @@ const PlansAndPayment = ({ userData }) => {
     let togglerValue = !toggleAnual ? "year" : "month"
     const value = Object.values(plans).find(elm => elm.interval === togglerValue && elm.productSlug === checkoutInfos?.productSlug)
     setCheckoutInfos(value)
+    setCoupon("")
+    setValueCoupon("")
     setPlan(value._id)
     setToggleAnual(!toggleAnual)
   }
+
+  async function validateStripeCoupon() {
+    if(valueCoupon === "") return
+    setErrCoupon(false)
+
+    const result = await fetch(`/api/stripe/validateStripeCoupon?p=${btoa(plan)}&c=${btoa(valueCoupon)}`, { method: "GET" })
+      .then(res => res.json())
+
+    if(result?.isValid === false || result?.errors || !result) {
+      setValueCoupon("")
+      setErrCoupon(true)
+    } else {
+      setCouponInfos(result)
+      setCoupon(valueCoupon)
+    }
+  }
+
+  const CouponDisplay = () => {
+    let limitText
+
+    if(couponInfos?.duration === "once") limitText = "(válido apenas na 1ª cobrança)"
+    if(couponInfos?.duration === "repeating") limitText = `(válido por ${couponInfos?.durationInMonths} meses)`
+
+    return (
+      <>
+        <GridItem>
+          <Text>Cupom {coupon.toUpperCase()} {limitText}</Text>
+        </GridItem>
+        <GridItem>
+          <Text>- {couponInfos?.discountAmount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
+        </GridItem>
+      </>
+    )
+  }
+
+  const TotalToPayDisplay = () => {
+    let value
+
+    if(couponInfos?.discountAmount) {
+      value = (checkoutInfos?.amount-couponInfos?.discountAmount).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })
+    } else {
+      value = checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })
+    }
+
+    return (
+      <>
+        <GridItem>
+          <Text color="#252A32" fontWeight="500">Total a pagar</Text>
+        </GridItem>
+        <GridItem>
+          <Text color="#252A32" fontWeight="500">{value}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
+        </GridItem>
+      </>
+    ) 
+  }
+
+  useEffect(() => {
+    if(valueCoupon === "") {
+      setCoupon("")
+      setCouponInfos("")
+    }
+  }, [valueCoupon])
 
   useEffect(() => {
     if(isLoading === true || isLoadingH === true) closeModalSucess()
@@ -1807,6 +1873,8 @@ const PlansAndPayment = ({ userData }) => {
                   onClick={() => {
                     PaymentModal.onClose()
                     setToggleAnual(true)
+                    setCoupon("")
+                    setValueCoupon("")
                     PlansModal.onOpen()
                   }}
                 >Alterar plano</Text>
@@ -1865,27 +1933,45 @@ const PlansAndPayment = ({ userData }) => {
               >
                 Cupom de desconto
               </Text>
+
               <Box
                 display="flex"
                 flexDirection="row"
                 alignItems="center"
                 gap="8px"
               >
-                <ControlledInputSimple
-                  value={valueCoupon}
-                  onChange={setValueCoupon}
-                  inputFocus={couponInputFocus}
-                  changeInputFocus={setCouponInputFocus}
-                  width="100%"
-                  placeholder="Insira o cupom"
-                  inputElementStyle={{
-                    display: "none"
-                  }}
-                  inputStyle={{
-                    paddingLeft: "16px !important",
-                    height: "48px"
-                  }}
-                />
+                <Stack spacing={0} width="100%" position="relative">
+                  <ControlledInputSimple
+                    value={valueCoupon}
+                    onChange={setValueCoupon}
+                    inputFocus={couponInputFocus}
+                    changeInputFocus={setCouponInputFocus}
+                    width="100%"
+                    placeholder="Insira o cupom"
+                    inputElementStyle={{
+                      display: "none",
+                    }}
+                    inputStyle={{
+                      paddingLeft: "16px !important",
+                      paddingRight: "40px !important",
+                      borderRadius: "8px",
+                      height: "44px"
+                    }}
+                  />
+                  {valueCoupon &&
+                    <CrossIcon
+                      position="absolute"
+                      top="10px"
+                      right="12px"
+                      alt="apagar"
+                      width="24px"
+                      height="24px"
+                      fill="#878A8E"
+                      cursor="pointer"
+                      onClick={() => setValueCoupon("")}
+                    />
+                  }
+                </Stack>
 
                 <Box
                   as="button"
@@ -1893,7 +1979,7 @@ const PlansAndPayment = ({ userData }) => {
                   alignItems="center"
                   justifyContent="center"
                   width="fit-content"
-                  height="40px"
+                  height="44px"
                   borderRadius="8px"
                   padding="10px 34px"
                   border="1px solid"
@@ -1909,14 +1995,32 @@ const PlansAndPayment = ({ userData }) => {
                   fontWeight="500"
                   fontSize="14px"
                   lineHeight="20px"
-                  onClick={() => {
-                    if(valueCoupon === "") return
-                    setCoupon(valueCoupon)
-                  }}
+                  onClick={() => validateStripeCoupon()}
                 >
                   Aplicar
                 </Box>
               </Box>
+
+              {errCoupon && 
+                <Text
+                  display="flex"
+                  flexDirection="row"
+                  fontFamily="Roboto"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  fontWeight="400"
+                  color="#BF3434"
+                  gap="8px"
+                  height="24px"
+                  alignItems="center"
+                >
+                  <Exclamation
+                    width="21px"
+                    height="21px"
+                    fill="#BF3434"
+                  /> Por favor, insira um cupom válido.
+                </Text>
+              }
             </Stack>
 
             <Text
@@ -1930,41 +2034,29 @@ const PlansAndPayment = ({ userData }) => {
 
             <Divider borderColor="#DEDFE0" />
 
-            <Stack
-              spacing="8px"
+            <Grid
+              templateColumns="3fr 1fr"
+              width="100%"
+              gap="8px"
+              alignItems="center"
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="16px"
+              lineHeight="24px"
+              color="#464A51"
             >
-              <Stack
-                flexDirection="row"
-                alignItems="center"
-                spacing={0}
-                justifyContent="space-between"
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="16px"
-                lineHeight="24px"
-                color="#464A51"
-              >
+              <GridItem>
                 <Text>Subtotal</Text>
+              </GridItem>
+              <GridItem>
                 <Text>{checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
-              </Stack>
+              </GridItem>
 
-              {/* <Stack></Stack> */}
-
-              <Stack
-                flexDirection="row"
-                alignItems="center"
-                spacing={0}
-                justifyContent="space-between"
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="16px"
-                lineHeight="24px"
-                color="#252A32"
-              >
-                <Text>Total a pagar</Text>
-                <Text>{checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
-              </Stack>
-            </Stack>
+              {couponInfos?.discountAmount &&
+                <CouponDisplay />
+              }
+              <TotalToPayDisplay />
+            </Grid>
           </Stack>
 
           <Box display="flex" flexDirection="column" gap="24px" flex={1}>
