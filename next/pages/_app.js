@@ -1,3 +1,4 @@
+import { appWithTranslation } from 'next-i18next';
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Head from "next/head";
@@ -130,4 +131,4 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);

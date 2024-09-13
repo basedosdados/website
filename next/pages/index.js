@@ -1,3 +1,5 @@
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 import {
   Box,
   HStack,
@@ -43,7 +45,7 @@ import ProductsFiltersImage from "../public/img/productsFiltersImage";
 import ProcessedDataImage from "../public/img/processedDataImage";
 import BDLogoEduImage from "../public/img/logos/bd_logo_edu";
 
-export async function getStaticProps() {
+export async function getStaticProps({ locale }) {
   const themes = await getAllThemes()
   const defaultDataset = await getAllDatasets()
 
@@ -54,6 +56,7 @@ export async function getStaticProps() {
 
   return {
     props: {
+      ...(await serverSideTranslations(locale, ['common'])),
       dataThemeCatalog
     },
     revalidate: 30
@@ -61,6 +64,7 @@ export async function getStaticProps() {
 }
 
 function Hero({ dataThemeCatalog }) {
+  const { t } = useTranslation('common');
   const [search, setSearch] = useState("");
   const [tags, setTags] = useState([])
   const [mediumQuery] = useMediaQuery("(max-width: 1366px)")
@@ -118,7 +122,7 @@ function Hero({ dataThemeCatalog }) {
             >
               <ControlledInput
                 value={search}
-                placeholder={isMobileMod() ? "Encontre os dados" : "Encontre os dados que você precisa"}
+                placeholder={isMobileMod() ? t('search_placeholder_mobile') : t('search_placeholder')}
                 width="100%"
                 onChange={setSearch}
                 onEnterPress={openSearchLink}
@@ -170,7 +174,7 @@ function Hero({ dataThemeCatalog }) {
                     letterSpacing="0.4px"
                     color="#575757"
                   >
-                    Termos populares: 
+                    {t('popular_terms')}
                   </Text>
                 }
                 {tags.map((elm, i) => 
@@ -198,7 +202,7 @@ function Hero({ dataThemeCatalog }) {
               cursor="pointer"
               onClick={() => window.open("#theme", "_self")}
             >
-              Busque por tema
+              {t('search_by_theme')}
             </Text>
             <ThemeCatalog data={dataThemeCatalog}/>
           </VStack>
@@ -209,6 +213,8 @@ function Hero({ dataThemeCatalog }) {
 }
 
 function Products() {
+  const { t } = useTranslation('common');
+
   return (
     <VStack
       width={{ base: "90%", lg: "85%" }}
@@ -226,8 +232,10 @@ function Products() {
           textAlign="center"
           margin="80px 0px"
         >
-          Facilitamos o trabalho para que a distância {!isMobileMod() && <br/>}
-          entre você e sua análise seja <span style={{color:"#2B8C4D"}}>apenas uma boa pergunta</span>.
+          {t('products.facilitation_text')}
+          {!isMobileMod() && <br/>}
+          {t('products.analysis_distance')}
+          <span style={{color:"#2B8C4D"}}>{t('products.good_question')}</span>.
         </Display>
 
         <VStack spacing={isMobileMod() ? 8 : 120}>
@@ -245,21 +253,19 @@ function Products() {
                 letterSpacing="0.5px"
                 lineHeight="24px"
               >
-                FILTROS
+                {t('products.filters')}
               </Text>
 
-              <SectionTitle marginTop="0 !important">Busque dados como quiser</SectionTitle>
+              <SectionTitle marginTop="0 !important">{t('products.search_as_you_want')}</SectionTitle>
               <SectionText fontSize="16px">
-                São vários filtros para ajudar você a encontrar os dados que necessita.
-                Ao navegar entre centenas de conjuntos de dados disponíveis na plataforma,
-                você pode refinar sua busca por tema, organização, cobertura temporal, nível da observação e mais.
+                {t('products.search_description')}
               </SectionText>
 
               <SectionLink
                 marginTop="24px !important"
                 href={"/dataset"}
               >
-                Comece sua pesquisa
+                {t('products.start_search')}
               </SectionLink>
             </Stack>
 
@@ -289,22 +295,20 @@ function Products() {
                   letterSpacing="0.5px"
                   lineHeight="24px"
                 >
-                  TABELAS TRATADAS
+                  {t('products.processed_tables')}
                 </Text>
               </HStack>
               
-              <SectionTitle marginTop="0 !important">Acesse dados de qualidade</SectionTitle>
+              <SectionTitle marginTop="0 !important">{t('products.access_quality_data')}</SectionTitle>
               <SectionText fontSize="16px">
-                Com as tabelas tratadas do nosso <i>datalake</i> público,
-                você não precisa mais gastar horas limpando bases.
-                Nossa metodologia de padronização permite cruzar facilmente dados de diferentes organizações. Assim, você pode focar no que realmente importa.
+                {t('products.processed_tables_description')}
               </SectionText>
 
               <SectionLink
                 marginTop="24px !important"
                 href={"/dataset?contains=tables"}
               >
-                Veja os dados disponíveis
+                {t('products.view_available_data')}
               </SectionLink>
             </Stack>
 
@@ -331,20 +335,19 @@ function Products() {
                 letterSpacing="0.5px"
                 lineHeight="24px"
               >
-                PACOTES
+                {t('products.packages')}
               </Text>
 
-              <SectionTitle marginTop="0 !important">Explore na sua linguagem favorita</SectionTitle>
+              <SectionTitle marginTop="0 !important">{t('products.explore_in_your_favorite_language')}</SectionTitle>
               <SectionText fontSize="16px">
-                Desenvolvemos pacotes para acesso aos dados tratados em Python, R e linha de comando. Além disso, você pode consultar e filtrar
-                dados usando SQL no editor do nosso <i>datalake</i> público no Google BigQuery.
+                {t('products.packages_description')}
               </SectionText>
 
               <SectionLink
                 marginTop="24px !important"
                 href={"https://basedosdados.github.io/mais/"}
               >
-                Saiba como acessar
+                {t('products.learn_how_to_access')}
               </SectionLink>
             </Stack>
 
@@ -428,6 +431,7 @@ export function StepText ({index, text}) {
 }
 
 function Support() {
+  const { t } = useTranslation('common');
   const { hasCopied, onCopy } = useClipboard("42494318000116")
 
   return (
@@ -445,8 +449,7 @@ function Support() {
           textAlign="center"
           margin={isMobileMod() ? "80px 0px 24px" : "104px 0px 24px"}
         >
-          Existimos através do esforço de pessoas que {!isMobileMod() && <br/>}
-          acreditam no acesso a dados abertos de qualidade.
+          {t('support.existence_through_effort')} {!isMobileMod() && <br/>} {t('support.those_who_believe_in_quality_open_data')}
         </Display>
         <Text
           position="relative"
@@ -458,7 +461,8 @@ function Support() {
           letterSpacing={isMobileMod() ? "0.2px" : "0.1px"}
           fontWeight="300"
           margin="0 0 48px !important"
-        > Apoie a Base dos Dados você também
+        >
+          {t('support.support_us_too')}
         </Text>
 
         <Stack
@@ -478,7 +482,7 @@ function Support() {
                 heightImage="100%"
               />
             }
-            title="Entusiasta"
+            title={t('support.enthusiast')}
             spacing={4}
           >
             <BodyText
@@ -489,7 +493,7 @@ function Support() {
               margin="10px 0 24px !important"
               lineHeight="24px"
             >
-              Bolso apertado? Apenas R$0,50 por <br/>dia para nos ajudar a manter a iniciativa.
+              {t('support.tight_pocket')} <br/> {t('support.enthusiast_description')}
             </BodyText>
             <Link
               _hover={{ opacity:"none" }}
@@ -498,7 +502,7 @@ function Support() {
               href="https://apoia.se/support/basedosdados/new/15"
             >
               <RoundedButton backgroundColor="#FF8484" width="200px">
-                  R$ <p style={{fontSize:"24px", margin:"0 5px"}}>15</p>/ mês
+                  R$ <p style={{fontSize:"24px", margin:"0 5px"}}>15</p>/ {t('support.month')}
               </RoundedButton>
             </Link>
           </ShadowBox>
@@ -513,7 +517,7 @@ function Support() {
                 backgroundColor="#FF8484"
               />
             }
-            title="Databaser"
+            title={t('support.databaser')}
             titleStyle={{
               fontSize:"22px",
               color:"#FF8484",
@@ -530,8 +534,8 @@ function Support() {
               margin="16px 0 24px !important"
               letterSpacing="0.2px"
             >
-              <b style={{fontWeight:"500"}}>Doe R$ 1 real por dia</b>
-              <span>para fazer databasers felizes.</span>
+              <b style={{fontWeight:"500"}}>{t('support.donate_1_real_per_day')}</b>
+              <span>{t('support.to_make_databasers_happy')}</span>
             </BodyText>
             <Link
               _hover={{ opacity:"none" }}
@@ -543,7 +547,7 @@ function Support() {
                 backgroundColor="#FF8484"
                 width="200px"
               >
-                  R$ <p style={{fontSize:"24px", margin:"0 5px"}}>30</p>/ mês
+                  R$ <p style={{fontSize:"24px", margin:"0 5px"}}>30</p>/ {t('support.month')}
               </RoundedButton>
             </Link>
           </ShadowBox>
@@ -557,7 +561,7 @@ function Support() {
                 heightImage="100%"
               />
             }
-            title="Mestre dos dados"
+            title={t('support.master_of_data')}
             spacing={4}
           >
             <BodyText
@@ -568,7 +572,7 @@ function Support() {
               margin="10px 0 24px !important"
               lineHeight="24px"
             >
-              Menos de R$2 reais por dia para pouparmos ainda mais seu trabalho.
+              {t('support.master_of_data_description')}
             </BodyText>
             <Link
               _hover={{ opacity:"none" }}
@@ -577,7 +581,7 @@ function Support() {
               href="https://apoia.se/support/basedosdados/new/50"
             >
               <RoundedButton backgroundColor="#FF8484" width="200px">
-                  R$ <p style={{fontSize:"24px", margin:"0 5px"}}>50</p>/ mês
+                  R$ <p style={{fontSize:"24px", margin:"0 5px"}}>50</p>/ {t('support.month')}
               </RoundedButton>
             </Link>
           </ShadowBox>
@@ -595,7 +599,7 @@ function Support() {
             lineHeight="32px"
             paddingBottom={!isMobileMod() && "32px"}
           >
-            Doe qualquer valor via PIX
+            {t('support.donate_any_amount_via_pix')}
           </Text>
 
           <Grid
@@ -609,12 +613,12 @@ function Support() {
               justifyContent="center"
               alignItems="flex-start"
             >
-              <TextPix title="Razão Social" text="Instituto Base dos Dados"/>
-              <TextPix title="CNPJ" text="42494318/0001-16"/>
-              <TextPix title="Banco" text="PagSeguro"/>
+              <TextPix title={t('support.company_name')} text="Instituto Base dos Dados"/>
+              <TextPix title={t('support.cnpj')} text="42494318/0001-16"/>
+              <TextPix title={t('support.bank')} text="PagSeguro"/>
               <Box display="flex" gridGap="48px">
-                <TextPix title="Agência" text="0001"/>
-                <TextPix title="Conta" text="31401653-6"/>
+                <TextPix title={t('support.agency')} text="0001"/>
+                <TextPix title={t('support.account')} text="31401653-6"/>
               </Box>
             </GridItem>
 
@@ -641,16 +645,16 @@ function Support() {
                 marginTop="32px"
               >
                 <CopySolidIcon alt="copiar chave PIX" width="22px" height="22px" fill="#FFF"/>
-                  {hasCopied ? "Copiada chave PIX" :"Copiar chave PIX"}
+                  {hasCopied ? t('support.pix_key_copied') : t('support.copy_pix_key')}
               </RoundedButton>
             </GridItem>
 
             <GridItem display={isMobileMod() && "none"}>
-              <BodyText letterSpacing="0.2px" fontSize="16px" color="#FF8484" fontWeight="500" marginBottom="24px">Siga o passo a passo</BodyText>
-              <StepText index="1" text=" Abra o app do seu banco;"/>
-              <StepText index="2" text=" Escolha a opção de pagamento com PIX;"/>
-              <StepText index="3" text=" Escaneie o QR Code ou digite a chave ao lado;"/>
-              <StepText index="❤" text=" Faça sua doação!"/>
+              <BodyText letterSpacing="0.2px" fontSize="16px" color="#FF8484" fontWeight="500" marginBottom="24px">{t('support.follow_the_steps')}</BodyText>
+              <StepText index="1" text={t('support.step_1')}/>
+              <StepText index="2" text={t('support.step_2')}/>
+              <StepText index="3" text={t('support.step_3')}/>
+              <StepText index="❤" text={t('support.step_4')}/>
             </GridItem>
           </Grid>
 
@@ -660,7 +664,7 @@ function Support() {
             textAlign="center"
             margin="32px 0 !important"
           >
-            💰 Gostaria de apoiar a BD institucionalmente?
+            💰 {t('support.want_to_institutionally_support_bd')}
             <Link
               fontFamily="ubuntu"
               textDecoration="none"
@@ -669,7 +673,8 @@ function Support() {
               letterSpacing="0.2px"
               color="#42B0FF"
               href="/contato"
-            > Entre em contato conosco.
+            >
+              {t('support.contact_us')}.
             </Link>
           </BodyText>
         </Box>
@@ -679,6 +684,7 @@ function Support() {
 }
 
 function BDEdu () {
+  const { t } = useTranslation('common');
   const closeDate = new Date(2024, 2, 26)
   const currentDate = new Date()
 
@@ -699,20 +705,23 @@ function BDEdu () {
       <Display
         textAlign="center"
         margin="0 0 24px !important"
-      > Venha aprender com quem é referência {!isMobileMod() &&<br/>} em disponibilizar dados públicos no Brasil
+      >
+        {t('edu.learn_from_the_reference')}
+        {!isMobileMod() &&<br/>}
+        {t('edu.in_making_public_data_available')}
       </Display>
       <BodyText
         textAlign="center"
         margin="0 0 24px !important"
       >
-        Com nosso curso você pode ir mais longe na sua pesquisa, profissão, ou organização.
+        {t('edu.with_our_course_you_can_go_further')}
       </BodyText>
       <RoundedButton
         margin="0 !important"
         backgroundColor="#8262D1"
       >
         <a href="https://info.basedosdados.org/bd-edu-sql" target="_blank">
-          Aproveite o preço promocional
+          {t('edu.take_advantage_of_the_promotional_price')}
         </a>
       </RoundedButton>
     </Stack>
