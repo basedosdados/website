@@ -1532,7 +1532,10 @@ const PlansAndPayment = ({ userData }) => {
       title: "BD Grátis",
       buttons: [{
         text:"Comparar planos",
-        onClick: () => PlansModal.onOpen()}
+        onClick: () => {
+          PlansModal.onOpen()
+          setToggleAnual(true)
+        }}
       ],
       resources : [
         {name: "Tabelas tratadas"},
@@ -1733,6 +1736,7 @@ const PlansAndPayment = ({ userData }) => {
         isOpen={PaymentModal.isOpen}
         onClose={() => {
           setToggleAnual(true)
+          if(query.i) return window.open(`/user/${userData.username}?plans_and_payment`, "_self")
           PaymentModal.onClose()
         }}
         propsModalContent={{
@@ -1802,6 +1806,7 @@ const PlansAndPayment = ({ userData }) => {
                   marginLeft="auto"
                   onClick={() => {
                     PaymentModal.onClose()
+                    setToggleAnual(true)
                     PlansModal.onOpen()
                   }}
                 >Alterar plano</Text>
@@ -2158,10 +2163,7 @@ const PlansAndPayment = ({ userData }) => {
       {/* modal plans */}
       <ModalGeneral
         isOpen={PlansModal.isOpen}
-        onClose={() => {
-          PlansModal.onClose()
-          setToggleAnual(true)
-        }}
+        onClose={PlansModal.onClose}
         propsModal={{
           scrollBehavior: isMobileMod() ? "outside" : "inside",
         }}
@@ -2287,7 +2289,6 @@ const PlansAndPayment = ({ userData }) => {
                 text: `${subscriptionInfo?.stripeSubscription === "bd_pro" ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis"}`,
                 onClick: subscriptionInfo?.stripeSubscription === "bd_pro" ? () => {} : () => {
                   setPlan(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id)
-                  setToggleAnual(true)
                   PlansModal.onClose()
                   PaymentModal.onOpen()
                 },
@@ -2309,7 +2310,6 @@ const PlansAndPayment = ({ userData }) => {
                 text: `${subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis"}`,
                 onClick: subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? () => {} : () => {
                   setPlan(plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id)
-                  setToggleAnual(true)
                   PlansModal.onClose()
                   PaymentModal.onOpen()
                 },
@@ -2590,7 +2590,10 @@ const PlansAndPayment = ({ userData }) => {
                 letterSpacing="0.3px"
                 _hover={{opacity: 0.7}}
                 marginTop="16px !important"
-                onClick={() => PlansModal.onOpen()}
+                onClick={() => {
+                  PlansModal.onOpen()
+                  setToggleAnual(true)
+                }}
               >
                 Veja tudo e compare os planos
               </ButtonSimple>
