@@ -46,7 +46,7 @@
         "step_2": "Escolha a opção de pagamento com PIX;",
         "step_3": "Escaneie o QR Code ou digite a chave ao lado;",
         "step_4": "Faça sua doação!",
-        "want_to_institutionally_support_bd": "Gostaria de apoiar a BD institucionalmente?",
+        "want_to_institutionally_support_bd": "Gostaria de apoiar a BD institucionalmente? ",
         "contact_us": "Entre em contato conosco."
     },
     "edu": {
@@ -54,5 +54,48 @@
         "in_making_public_data_available": "em disponibilizar dados públicos no Brasil",
         "with_our_course_you_can_go_further": "Com nosso curso você pode ir mais longe na sua pesquisa, profissão, ou organização.",
         "take_advantage_of_the_promotional_price": "Aproveite o preço promocional"
+    },
+    "footer": {
+        "title": "Base dos Dados",
+        "copyright": "® {{year}} Base dos Dados",
+        "termsOfUse": "Termos de uso",
+        "privacyPolicy": "Política de privacidade",
+        "contact": "Contato",
+        "faq": "FAQ",
+        "newsletter": "Newsletter",
+        "careers": "Carreiras",
+        "supportProject": "Apoie o projeto",
+        "products": {
+            "title": "PRODUTOS",
+            "searchEngine": "Mecanismo de busca",
+            "publicDatalake": "Datalake público",
+            "dataPackages": "Pacotes",
+            "bdPro": "BD Pro",
+            "bdEdu": "BD Edu"
+        },
+        "services": {
+            "title": "SERVIÇOS",
+            "dataCapture": "Captura de dados",
+            "dataAnalytics": "Análise de dados",
+            "dataConsulting": "Consultoria de dados",
+            "caseStudies": "Estudos de caso"
+        },
+        "tutorials": {
+            "title": "TUTORIAIS",
+            "documentation": "Documentação",
+            "blog": "Blog",
+            "youtubeVideos": "Vídeos"
+        },
+        "institutional": {
+            "title": "INSTITUCIONAL",
+            "aboutUs": "Quem somos",
+            "transparency": "Transparência",
+            "newsletter": "Newsletter",
+            "careers": "Carreiras",
+            "faq": "Perguntas frequentes",
+            "termsAndPrivacy": "Termos e Privacidade",
+            "contact": "Contato",
+            "supportProject": "Apoie o projeto"
+        }
     }
 }

@@ -19,7 +19,8 @@ import {
   Menu,
   MenuButton,
   MenuList,
-  MenuItem
+  MenuItem,
+  Select
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState, useMemo } from "react";
 import { useRouter } from "next/router"
@@ -31,6 +32,7 @@ import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
 import HelpWidget from "../atoms/HelpWidget";
 import { triggerGAEvent } from "../../utils";
+import { useTranslation } from 'next-i18next';
 
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import BDLogoEduImage from "../../public/img/logos/bd_logo_edu";
@@ -43,6 +45,8 @@ import SettingsIcon from "../../public/img/icons/settingsIcon";
 import SignOutIcon from "../../public/img/icons/signOutIcon";
 
 function MenuDrawer({ userData, isOpen, onClose, links }) {
+  const { t } = useTranslation('menu');
+
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
       <DrawerOverlay backdropFilter="blur(2px)"/>
@@ -159,7 +163,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                 opacity: 0.7
               }}
             >
-              Entrar
+              {t('enter')}
             </Box>
             
             <Box
@@ -185,7 +189,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                 backgroundColor: "#0B89E2"
               }}
             >
-              Cadastrar
+              {t('register')}
             </Box>
           </Stack>
         }
@@ -196,12 +200,13 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
 
 function MenuDrawerUser({ userData, isOpen, onClose}) {
   const router = useRouter()
+  const { t } = useTranslation('menu');
 
   const links = [
-    {name: "Perfil público", value: "profile"},
-    {name: "Conta", value: "account"},
-    {name: "Senha", value: "new_password"},
-    {name: "Planos e pagamento", value: "plans_and_payment"},
+    {name: t('public_profile'), value: "profile"},
+    {name: t('account'), value: "account"},
+    {name: t('password'), value: "new_password"},
+    {name: t('plans_and_payment'), value: "plans_and_payment"},
   ]
   // {name: "Acessos", value: "accesses"},
 
@@ -267,7 +272,7 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
                   lineHeight="16px"
                   color="#252A32"
                 >
-                  Configurações
+                  {t('settings')}
                 </Text>
               </Stack>
               <AccordionIcon />
@@ -328,7 +333,7 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
             lineHeight="16px"
             marginLeft="8px !important"
           >
-            Sair
+            {t('exit')}
           </Text>
         </Stack>
       </DrawerContent>
@@ -339,6 +344,7 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
 function MenuUser ({ userData, onOpen, onClose }) {
   const timerRef = useRef()
   const [isOpenMenu, setIsOpenMenu] = useState(false)
+  const { t } = useTranslation('menu');
 
   const btnMouseEnterEvent = () => {
     setIsOpenMenu(true)
@@ -475,7 +481,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
               fontWeight="400"
               lineHeight="16px"
             >
-              Configurações
+              {t('settings')}
             </Text>
           </MenuItem>
           <Divider borderColor="#DEDFE0"/>
@@ -501,7 +507,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
               fontWeight="400"
               lineHeight="16px"
             >
-              Sair
+              {t('exit')}
             </Text>
           </MenuItem>
         </MenuList>
@@ -516,6 +522,7 @@ function SearchInputUser ({ user }) {
   const [search, setSearch] = useState("")
   const [showInput, setShowInput] = useState(false)
   const [inputFocus, setInputFocus] = useState(false)
+  const { t } = useTranslation('menu');
 
   function openSearchLink() {
     if(search.trim() === "") return
@@ -562,7 +569,7 @@ function SearchInputUser ({ user }) {
           refInput={inputMobileRef}
           inputFocus={showInput}
           changeInputFocus={setShowInput}
-          placeholder="Pesquisar dados"
+          placeholder={t('search_data')}
           fill="#464A51"
           icon={
             <SearchIcon
@@ -602,7 +609,7 @@ function SearchInputUser ({ user }) {
         onEnterPress={openSearchLink}
         inputFocus={inputFocus}
         changeInputFocus={setInputFocus}
-        placeholder="Pesquisar dados"
+        placeholder={t('search_data')}
         fill="#464A51"
         icon={
           <SearchIcon
@@ -649,6 +656,8 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
       </Link>
     )
   }
+
+  const { t } = useTranslation('menu');
 
   return (
     <HStack
@@ -791,7 +800,7 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
                 opacity: 0.7
               }}
             >
-              Entrar
+              {t('enter')}
             </Box>
             
             <Box
@@ -817,7 +826,7 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
                 backgroundColor: "#0B89E2"
               }}
             >
-              Cadastrar
+              {t('register')}
             </Box>
           </>
         )}
@@ -827,6 +836,7 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
 }
 
 export default function MenuNav({ simpleTemplate = false, userTemplate = false }) {
+  const { t } = useTranslation('menu');
   const router = useRouter()
   const { route } = router
   const userBD = useMemo(() => cookies.get("userBD") || null, [cookies])
@@ -878,26 +888,26 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   }, [userBD])
 
   const links = {
-    Dados: "/dataset",
-    Soluções: [
-      {icon: <BDLogoProImage widthImage="54px"/>, name: "Dados exclusivos", href: "https://info.basedosdados.org/bd-pro"},
-      {icon: <BDLogoEduImage widthImage="54px"/>, name: "Curso de dados", href: "https://info.basedosdados.org/bd-edu-sql"},
-      {icon: <BDLogoLabImage widthImage="54px"/>, name: "Serviços", href: "/servicos"},
+    [t('data')]: "/dataset",
+    [t('solutions')]: [
+      {icon: <BDLogoProImage widthImage="54px"/>, name: [t('exclusive_data')], href: "https://info.basedosdados.org/bd-pro"},
+      {icon: <BDLogoEduImage widthImage="54px"/>, name: [t('data_courses')], href: "https://info.basedosdados.org/bd-edu-sql"},
+      {icon: <BDLogoLabImage widthImage="54px"/>, name: [t('services')], href: "/servicos"},
     ],
-    "Preços": "/precos",
-    Tutoriais: [
-      {name: "Documentação", href: "https://basedosdados.github.io/mais/"},
-      {name: "Vídeos no YouTube", href: "https://www.youtube.com/c/BasedosDados/featured"},
-      {name: "Blog", href: "https://medium.com/basedosdados"}
+    [t('prices')]: "/precos",
+    [t('tutorials')]: [
+      {name: [t('documentation')], href: "https://basedosdados.github.io/mais/"},
+      {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
+      {name: [t('blog')], href: "https://medium.com/basedosdados"}
     ],
-    Institucional: [
-      {name: "Quem somos", href: "/quem-somos"},
-      {name: "Transparência", href: "/transparencia"},
-      {name: "Newsletter", href: "https://info.basedosdados.org/newsletter"},
-      {name: "Carreiras", href: "https://info.basedosdados.org/carreiras"},
-      {name: "Perguntas frequentes", href: "/perguntas-frequentes"},
+    [t('institutional')]: [
+      {name: [t('about_us')], href: "/quem-somos"},
+      {name: [t('transparency')], href: "/transparencia"},
+      {name: [t('newsletter')], href: "https://info.basedosdados.org/newsletter"},
+      {name: [t('jobs')], href: "https://info.basedosdados.org/carreiras"},
+      {name: [t('faq')], href: "/perguntas-frequentes"},
     ],
-    Contato: "/contato",
+    [t('contact')]: "/contato",
     Button: []
   }
 

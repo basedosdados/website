@@ -1,5 +1,7 @@
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
+import { Select } from "@chakra-ui/react";
+import { useRouter } from 'next/router';
 import {
   Box,
   HStack,
@@ -63,6 +65,32 @@ export async function getStaticProps({ locale }) {
   }
 }
 
+function LanguageSelector() {
+  const router = useRouter();
+  const { t } = useTranslation('common');
+
+  const changeLanguage = (e) => {
+    const locale = e.target.value;
+    router.push(router.pathname, router.asPath, { locale });
+  };
+
+  return (
+    <Select
+      onChange={changeLanguage}
+      defaultValue={router.locale}
+      width="120px"
+      position="absolute"
+      top="20px"
+      right="20px"
+      zIndex="100"
+    >
+      <option value="pt">Português</option>
+      <option value="en">English</option>
+      <option value="es">Español</option>
+    </Select>
+  );
+}
+
 function Hero({ dataThemeCatalog }) {
   const { t } = useTranslation('common');
   const [search, setSearch] = useState("");
@@ -84,6 +112,7 @@ function Hero({ dataThemeCatalog }) {
       zIndex="10"
       position="relative"
     >
+      <LanguageSelector />
       <VStack
         position="relative"
         width="100%"
