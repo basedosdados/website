@@ -14,12 +14,12 @@ const blogpostsDir = path.join(root, "blog");
 export async function getAllPosts() {
   const postsDir = await fs.readdir(blogpostsDir, "utf-8");
   const posts = await Promise.all(
-    postsDir.map(async (folder) => {
-      const fullpath = path.join(blogpostsDir, folder);
+    postsDir.map(async (file) => {
+      const fullpath = path.join(blogpostsDir, file);
       const content = await fs.readFile(fullpath, "utf-8");
       const { data } = matter(content);
       return {
-        slug: folder.replace(".md", ""),
+        slug: file.replace(".md", ""),
         frontmatter: data,
       };
     }),

@@ -31,7 +31,7 @@ import hljs from "highlight.js/lib/core";
 import { CopyIcon } from "../../public/img/icons/copyIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
 
-export function DatePost({ date, slug }) {
+function DatePost({ date, slug }) {
   if (date.trim().length === 0) {
     console.error(`Invalid date \`${date}\` for post slug: ${slug}`);
     return null;
@@ -331,7 +331,7 @@ export function Toc({ headings }) {
   );
 }
 
-export const ForkIcon = createIcon({
+const ForkIcon = createIcon({
   displayName: "fork",
   viewBox: "0 0 16 16",
   path: (
@@ -342,7 +342,7 @@ export const ForkIcon = createIcon({
   ),
 });
 
-export const AuthorIconFallback = createIcon({
+const AuthorIconFallback = createIcon({
   displayName: "user",
   viewBox: "0 0 22 22",
   path: (
@@ -518,9 +518,7 @@ const CATEGORIES = {
   tutorial: "Tutorial",
 };
 
-export const prettyCategory = (tag) => {
-  return CATEGORIES[tag];
-};
+export const prettyCategory = (tag) => CATEGORIES[tag] ?? tag;
 
 function Categories({ categories }) {
   if (categories !== undefined) {
@@ -547,7 +545,7 @@ function Categories({ categories }) {
   return null;
 }
 
-export function LatestBlogCard({ slug, frontmatter }) {
+function LatestBlogCard({ slug, frontmatter }) {
   const { title, description, date, authors } = frontmatter;
   return (
     <Box
@@ -614,7 +612,7 @@ export function LatestBlogCard({ slug, frontmatter }) {
   );
 }
 
-export function MiniBlogCard({ slug, frontmatter }) {
+function MiniBlogCard({ slug, frontmatter }) {
   const { title, description, date, authors } = frontmatter;
   return (
     <Box display={"flex"} flexDirection={"column"}>
