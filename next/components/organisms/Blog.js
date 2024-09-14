@@ -27,9 +27,11 @@ import {
 
 // import Link from "../atoms/Link"
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 import hljs from "highlight.js/lib/core";
 import { CopyIcon } from "../../public/img/icons/copyIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
+import { useEffect, useState } from "react";
 
 function DatePost({ date, slug }) {
   if (date.trim().length === 0) {
@@ -142,6 +144,127 @@ function CodeBlock({ children }) {
           className={`hljs ${language}`}
           dangerouslySetInnerHTML={{ __html: highlighted.value }}
         />
+      </Box>
+    </Box>
+  );
+}
+
+const ShareIcon = createIcon({
+  displayName: "share",
+  viewBox: "0 0 24 24",
+  path: (
+    <path
+      fill="currentColor"
+      fill-rule="evenodd"
+      d="M15.218 4.931a.4.4 0 0 1-.118.132l.012.006a.45.45 0 0 1-.292.074.5.5 0 0 1-.3-.13l-2.02-2.02v7.07c0 .28-.23.5-.5.5s-.5-.22-.5-.5v-7.04l-2 2a.45.45 0 0 1-.57.04h-.02a.4.4 0 0 1-.16-.3.4.4 0 0 1 .1-.32l2.8-2.8a.5.5 0 0 1 .7 0l2.8 2.79a.42.42 0 0 1 .068.498m-.106.138.008.004v-.01zM16 7.063h1.5a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-11c-1.1 0-2-.9-2-2v-10a2 2 0 0 1 2-2H8a.5.5 0 0 1 .35.15.5.5 0 0 1 .15.35.5.5 0 0 1-.15.35.5.5 0 0 1-.35.15H6.4c-.5 0-.9.4-.9.9v10.2a.9.9 0 0 0 .9.9h11.2c.5 0 .9-.4.9-.9v-10.2c0-.5-.4-.9-.9-.9H16a.5.5 0 0 1 0-1"
+      clip-rule="evenodd"
+    ></path>
+  ),
+});
+
+const FacebookIcon = createIcon({
+  displayName: "facebook",
+  viewBox: "0 0 24 24",
+  path: (
+    <path
+      fill="currentColor"
+      d="M22 12.061C22 6.505 17.523 2 12 2S2 6.505 2 12.061c0 5.022 3.657 9.184 8.438 9.939v-7.03h-2.54V12.06h2.54V9.845c0-2.522 1.492-3.915 3.777-3.915 1.094 0 2.238.197 2.238.197v2.476h-1.26c-1.243 0-1.63.775-1.63 1.57v1.888h2.773l-.443 2.908h-2.33V22c4.78-.755 8.437-4.917 8.437-9.939"
+    ></path>
+  ),
+});
+
+const LinkedInIcon = createIcon({
+  displayName: "linkedin",
+  viewBox: "0 0 24 24",
+  path: (
+    <path
+      fill="currentColor"
+      d="M21 4.324v15.352A1.324 1.324 0 0 1 19.676 21H4.324A1.324 1.324 0 0 1 3 19.676V4.324A1.324 1.324 0 0 1 4.324 3h15.352A1.324 1.324 0 0 1 21 4.324M8.295 9.886H5.648v8.478h2.636V9.886zm.221-2.914a1.52 1.52 0 0 0-1.51-1.533H6.96a1.533 1.533 0 0 0 0 3.066 1.52 1.52 0 0 0 1.556-1.487zm9.825 6.236c0-2.555-1.626-3.542-3.229-3.542a3.02 3.02 0 0 0-2.67 1.37h-.082V9.875H9.875v8.477h2.648v-4.494a1.754 1.754 0 0 1 1.579-1.893h.104c.837 0 1.464.523 1.464 1.858v4.54h2.647l.024-5.144z"
+    ></path>
+  ),
+});
+
+function NativeShare({ url, title, description }) {
+  const { hasCopied, onCopy } = useClipboard(url);
+
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  // client-side only
+  if (navigator.share) {
+    return (
+      <Button
+        variant="unstyled"
+        onClick={() =>
+          navigator
+            .share({
+              title: title,
+              text: description,
+              url: url,
+            })
+            .then(() => {})
+            .catch((error) => {
+              console.error(`Something went wrong to share: ${url}`, error);
+            })
+        }
+      >
+        <ShareIcon width={"1.4rem"} height={"1.4rem"} />
+      </Button>
+    );
+  }
+
+  return (
+    <Button
+      variant="unstyled"
+      title="Copiar link"
+      onClick={onCopy}
+      minWidth={"auto"}
+      minHeight={"auto"}
+    >
+      {hasCopied ? (
+        <CheckIcon width={"1.4rem"} height={"1.4rem"} alt="copiado conteúdo" />
+      ) : (
+        <CopyIcon width={"1.4rem"} height={"1.4rem"} alt="copiar conteúdo" />
+      )}
+    </Button>
+  );
+}
+
+export function ShareButtons({ frontmatter }) {
+  const { title, description } = frontmatter;
+
+  const [location, setLocation] = useState("https://basedosdados.org");
+  const router = useRouter();
+
+  useEffect(() => {
+    setLocation(window.location.href);
+  }, []);
+
+  // const origin = location || "https://basedosdados.org";
+  const url = location + router.asPath;
+
+  const facebook = `https://www.facebook.com/sharer/sharer.php?t=${encodeURIComponent(title)}&u=${encodeURIComponent(url)}`;
+
+  const linkedin = `https://www.linkedin.com/shareArticle?url=${encodeURIComponent(url)}&title=${title}`;
+
+  return (
+    <Box marginTop={"1rem"}>
+      <Text as="span" fontFamily={"Roboto"} fontSize={"0.9rem"} color="gray">
+        Compartilhar
+      </Text>
+      <Box display={"flex"} alignItems={"center"} gap="1rem">
+        <NextLink href={facebook}>
+          <a target="_blank">
+            <FacebookIcon width={"1.4rem"} height={"1.4rem"} />
+          </a>
+        </NextLink>
+        <NextLink href={linkedin}>
+          <a target="_blank">
+            <LinkedInIcon width={"1.4rem"} height={"1.4rem"} />
+          </a>
+        </NextLink>
+        <NativeShare url={url} title={title} description={description} />
       </Box>
     </Box>
   );

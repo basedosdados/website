@@ -7,6 +7,7 @@ import {
   Header,
   Toc,
   Contribute,
+  ShareButtons,
   mdxComponents,
 } from "../../components/organisms/Blog";
 
@@ -109,6 +110,7 @@ export default function Post({ slug, mdxSource, headings }) {
           >
             <Toc headings={headings} />
             <Contribute slug={slug} />
+            <ShareButtons frontmatter={frontmatter} />
           </Box>
         </Box>
       </Box>
