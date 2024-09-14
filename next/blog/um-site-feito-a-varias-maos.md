@@ -8,13 +8,13 @@ authors:
   - name: Base dos Dados
     social: https://basedosdados.org/quem-somos
     role: Equipe Base dos Dados
-thumbnail: https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_0.png
+thumbnail: /blog/um-site-feito-a-varias-maos/image_0.png
 categories: []
 keywords: []
 medium_slug: https://medium.com/@basedosdados/um-site-feito-a-v%C3%A1rias-m%C3%A3os-60ddc9eaa4d3
 ---
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_0.png" caption="Arte com página da plataforma da BD"/>
+<Image src="/blog/um-site-feito-a-varias-maos/image_0.png" caption="Arte com página da plataforma da BD"/>
 
 ## TL;DR
 
@@ -34,7 +34,7 @@ Os tópicos estão separados em:
 
 A Base dos Dados começou como um grande catálogo com informações sobre dados públicos. Nossa prioridade era ter uma plataforma simples e possibilitar a inserção de informações de forma fácil. Isso foi suficiente no início — mas logo percebemos que precisávamos inovar.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_1.png" caption="Versão antiga do nosso site"/>
+<Image src="/blog/um-site-feito-a-varias-maos/image_1.png" caption="Versão antiga do nosso site"/>
 
 O site original foi construído somente com o [CKAN](http://ckan.org). Criado pela Open Knowledge, o CKAN é conhecido e utilizado internacionalmente como principal tecnologia para desenvolvimento de portais de dados abertos. Ele proporciona um ótimo sistema de gestão de dados e metadados, e já possui interfaces padrões (*templates*) que podem ser modificados.
 
@@ -42,7 +42,7 @@ O site original foi construído somente com o [CKAN](http://ckan.org). Criado pe
 
 Embora seja largamente utilizado em portais de dados abertos, o CKAN não costuma ser uma tecnologia facilmente encontrada no *toolkit* de desenvolvedores web. Conforme o site foi evoluindo com novas demandas e funcionalidades, como o botão de download conectado ao *datalake,* vimos que teríamos dificuldade para desenvolver grandes mudanças caso mantivéssemos a mesma tecnologia. Além disso, precisávamos ter total flexibilidade no *front-end* para criar um site com um design único.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_2.png"/>
+<Image src="/blog/um-site-feito-a-varias-maos/image_2.png"/>
 
 Escolhemos então manter o CKAN na gestão de metadados do site e repensar todo o *back* e *front-end* da plataforma do melhor jeito que conseguimos fazer: com intensas trocas das equipes e muita escuta à nossa comunidade.
 
@@ -66,7 +66,7 @@ Muita gente que já acompanhava a Base dos Dados desde 2019 chegou a comentar em
 
 Organizamos as primeiras entrevistas com usuários(as) em novembro de 2020. **A ideia era validar uma série de hipóteses que acreditávamos serem essenciais na nossa plataforma** — **se é fácil obter o dado que o(a) usuário(a) necessita, se as etapas e informações disponíveis estão claras**, dentre outras conforme pode ser observado no esquema abaixo.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_3.png" caption="Esquema de premissas que acreditávamos serem essenciais na nossa plataforma"/>
+<Image src="/blog/um-site-feito-a-varias-maos/image_3.png" caption="Esquema de premissas que acreditávamos serem essenciais na nossa plataforma"/>
 
 Chamamos pessoas chave na comunidade para representar diferentes públicos — pesquisadores(as), jornalistas, cientistas de dados e ativistas de dados abertos. Ao todo, nosso time se dividiu em duplas para realizar 6 entrevistas. Durante a entrevista a pessoa tinha a tarefa de buscar por um conjunto de dados no nosso site e responder perguntas de usabilidade, além de avaliar o desenho (*rascunho*) de um nova interface.
 
@@ -78,11 +78,11 @@ Existem diversas maneiras de conduzir uma entrevista de UX (*user experience*)�
 
 Ela por si só já transmitia a nossa principal função de buscar por informações. Porém, a interface confundia os(as) entrevistados(as) por conter **muitas informações sem uma ordem clara de hierarquia visual**. Após a busca pelos dados, foram relatadas dificuldades como “*botões não muito intuitivos*” e “*não está claro o que fazer para ter acesso aos dados de uma tabela*”.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_4.png" caption="Versão antiga do nosso site"/>
+<Image src="/blog/um-site-feito-a-varias-maos/image_4.png" caption="Versão antiga do nosso site"/>
 
 O novo visual, nosso primeiro rascunho mais objetivo e com menos texto desenhado pelo time de Comunicação, era mostrado em seguida para comparação. Porém, depois das primeiras conversas de equipe em 2021 resolvemos que **só isso não bastava — era necessário investirmos num site todo renovado e com a nossa cara.** Um local único onde você encontra tudo sobre a BD, desde tabelas tratadas a tutoriais e análises no [Youtube](https://www.youtube.com/c/basedosdados/videos), [Medium](https://medium.com/basedosdados) e [Github](https://github.com/basedosdados). Era um desafio que demandava tempo, criatividade e o mais importante: **pessoas**.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_5.png" caption="Primeira proposta de novo visual construído no Figma pelo nosso time de Comunicação"/>
+<Image src="/blog/um-site-feito-a-varias-maos/image_5.png" caption="Primeira proposta de novo visual construído no Figma pelo nosso time de Comunicação"/>
 
 ## Preparação: Definição de equipe
 
@@ -99,13 +99,13 @@ A**ntes do desenvolvimento, é necessário muito (e muito) desenho.** Nossas gra
 1. **Definir páginas e elementos prioritários**: Começamos pela **Home**, página de **Busca** (com filtros) e de **Conjuntos.** Com base nas entrevistas, decidimos centralizar na página de **Conjuntos** todas as informações de [tabelas tratadas no *datalake* e outros recursos](https://basedosdados.github.io/mais/) — diminuindo o número de cliques para chegar na informação que você realmente precisa.
 2. **Buscar referências de design e conteúdo**: Prints de sites como [Kaggle](https://www.kaggle.com/), [NSW](https://www.nsw.gov.au/) e [World Bank Data](https://data.worldbank.org/) aos poucos foram enchendo nosso mural.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_6.png" caption="Mural de ideias, desenhos e referências no figma."/>
+<Image src="/blog/um-site-feito-a-varias-maos/image_6.png" caption="Mural de ideias, desenhos e referências no figma."/>
 
 3. **Idear e rascunhar versões**: Primeiro no papel, de forma mais abstrata, depois no Figma com a criação de elementos, designs e organização de **seções** (grupos de elementos) que faziam a composição de cada página. A cada semana apresentávamos os avanços das versões do design, mantendo os desenhos anteriores numa mesma tela para comparação.
 
 > **A versão final do design nunca é o mesmo que o site** — muitas mudanças ocorrem após iniciar a implementação do site, direto no código HTML/CSS.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_7.png" caption="Diferentes versões de designs para comparação"/>
+<Image src="/blog/um-site-feito-a-varias-maos/image_7.png" caption="Diferentes versões de designs para comparação"/>
 
 ## Escolha do Next.js
 
@@ -143,7 +143,7 @@ Ouvimos outros pontos de melhoria, como diferenciar [o que é uma tabela tratada
 
 ## Lançamento e próximos passos
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_8.png"/>
+<Image src="/blog/um-site-feito-a-varias-maos/image_8.png"/>
 
 13 de outubro de 2021, por coincidência a exatos 365 depois de subirmos o código que deu início ao *datalake* BD+(se a gente tivesse combinado não acontecia!). Nos reunimos no final de domingo a noite (dia 12) para garantir que tudo sairia conforme o esperado. O horário era vital: **evitamos** **migrar durante um momento de alta utilização, pois iria quebrar o site e frustar diversos usuários.**
 
@@ -153,7 +153,7 @@ Como mudamos totalmente o *back-end* do site, ao invés de substituirmos o códi
 
 O toque final foi criar uma [**página de manutenção**](https://info.basedosdados.org/home) (landing no *Hubspot*, como a nossa página de [newsletter](https://info.basedosdados.org/assine-a-newsletter-da-base-dos-dados)), assim nossos usuários saberiam que estamos fazendo uma migração.
 
-![](https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_9.png)
+![](/blog/um-site-feito-a-varias-maos/image_9.png)
 
 ## Ciclo contínuo de melhorias
 

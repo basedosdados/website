@@ -8,7 +8,7 @@ authors:
   - name: Giovane Caruso
     social: https://medium.com/@giovanecaruso
     role: Redação
-thumbnail: https://storage.googleapis.com/basedosdados-website/blog/conheca-5-iniciativas-que-coletam-e-sistematizam-dados-sobre-a-comunidade/image_0.jpg
+thumbnail: /blog/conheca-5-iniciativas-que-coletam-e-sistematizam-dados-sobre-a-comunidade/image_0.jpg
 categories: []
 keywords: []
 medium_slug: >-
@@ -17,7 +17,7 @@ medium_slug: >-
 
 Repost: Em 2022, mapeamos 5 iniciativas que contribuiem no combate contra a violência e preconceito através de dados.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/conheca-5-iniciativas-que-coletam-e-sistematizam-dados-sobre-a-comunidade/image_0.jpg" caption="Photo by [Alexander Grey](https://unsplash.com/@sharonmccutcheon) on [Unsplash](https://unsplash.com)"/>
+<Image src="/blog/conheca-5-iniciativas-que-coletam-e-sistematizam-dados-sobre-a-comunidade/image_0.jpg" caption="Photo by [Alexander Grey](https://unsplash.com/@sharonmccutcheon) on [Unsplash](https://unsplash.com)"/>
 
 O Mês do Orgulho LGBTQIA+ começou com o debate em torno do [primeiro levantamento do Instituto Brasileiro de Geografia e Estatística (IBGE) sobre homossexuais e bissexuais no Brasil](https://g1.globo.com/jornal-nacional/noticia/2022/05/25/ibge-divulga-primeiro-levantamento-sobre-homossexuais-e-bissexuais-no-brasil.ghtml). Na divulgação da Pesquisa Nacional de Saúde, o instituto compartilhou pela primeira vez como brasileiros declaram sua orientação sexual, com base em dados coletados em 2019.
 

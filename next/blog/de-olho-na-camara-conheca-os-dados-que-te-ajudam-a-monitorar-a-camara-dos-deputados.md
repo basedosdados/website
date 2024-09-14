@@ -8,14 +8,14 @@ description: >-
 date: '2024-06-03T17:33:29.243Z'
 authors:
   - name: Base dos Dados
-thumbnail: https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_0.png
+thumbnail: /blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_0.png
 categories: [analise]
 keywords: []
 medium_slug: >-
   https://medium.com/@basedosdados/de-olho-na-c%C3%A2mara-conhe%C3%A7a-os-dados-que-te-ajudam-a-monitorar-a-c%C3%A2mara-dos-deputados-1570cf740c43
 ---
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_0.png"/>
+<Image src="/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_0.png"/>
 
 Os Dados Abertos da Câmara dos Deputados promovem o acesso direto às informações sobre a atividade legislativa e facilitam a fiscalização das ações dos deputados e da gestão dos recursos públicos. Porém, ainda existe um grande salto entre a disponibilização dos dados e a possibilidade de que cidadãos acompanhem o trabalho dos seus representantes. Afinal, trabalhar com dados não é algo tão trivial, especialmente quando falamos de grandes volumes de informações que são atualizadas com frequência, como é o caso dos dados da Câmara.
 
@@ -98,11 +98,11 @@ ORDER BY data_emissao ASC;
 
 A consulta irá retornar uma tabela já com os dados do recorte desejado.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_1.png"/>
+<Image src="/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_1.png"/>
 
 Você pode exportar os resultados em um arquivo local (.csv, JASON ou para a área de transferência do seu computador) para explorar com com seu editor de planilha ou linguagem de programação preferida, ou ainda salvá-los em uma tabela do BigQuery ou Google Sheets, sem precisar fazer download da tabela.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_2.png"/>
+<Image src="/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_2.png"/>
 
 Se você tem algum conhecimento de SQL, pode ainda utilizar o datalake para criar agrupamentos e operações básicas nos dados. Uma consulta que agrupe os dados por categoria de despesa, por exemplo, pode te ajudar a ter uma noção das prioridades do(a) parlamentar em questão. Com a consulta abaixo, basta substituir o nome do(a) parlamentar para acessar esse recorte específico.
 
@@ -119,7 +119,7 @@ ORDER BY despesas DESC;
 
 Veja o resultado da consulta anterior. Para este exemplo, utilizamos o nome de um deputado escolhido aleatoriamente. Note que a categoria “Divulgação da Atividade Parlamentar” concentra o maior valor das despesas da Cota Parlamentar do deputado em questão.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_3.png"/>
+<Image src="/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_3.png"/>
 
 Esse é apenas um simples exemplo de aplicação dos dados em nosso datalake público. Vem aí um tutorial completo sobre como estão organizados os dados na BD, como as diferentes tabelas deste conjunto se relacionam, quais informações são possíveis extrair dos dados e como.
 

@@ -30,7 +30,7 @@ Publicada em setembro pelo Ministério da Educação (MEC) e o Instituto Naciona
 
 Para exemplificar o que é possível explorar com esse conjunto, preparamos a visualização abaixo, que compara a média de proficiência em matemática do Saeb nos estados brasileiros ao longo dos anos. Podemos identificar quais regiões se destacam na avaliação, como foi seu desempenho na disciplina e até qual o impacto da pandemia nesse indicador da educação brasileira.
 
-![](https://storage.googleapis.com/basedosdados-website/blog/hello-databaser/image_0.gif)
+![](/blog/hello-databaser/image_0.gif)
 
 Em 2021, Santa Catarina lidera com a maior média em matemática do país, 270.53, seguida de São Paulo e Paraná, ambos com média 266.94. Por outro lado, Maranhão apresentou a menor média da disciplina, com apenas 229.27. Vale destacar que, ao longo dos anos, o Ceará foi o estado que apresentou o maior crescimento na média de proficiência da disciplina, indo de 242.96 para 262.76. Em 10 anos, as escolas cearenses somaram um crescimento de 9,9% na média de matemática.
 
@@ -50,7 +50,7 @@ Pesquisador na área da Diretoria de Estudos Educacionais (DIRED) do Instituto N
 
 Os dados do Saeb 2021 já chegaram na BD e nós conversamos com o [**Adriano Senkevics**](https://sites.google.com/view/asenkevics/?utm_source=hs_email\&utm_medium=email&_hsenc=p2ANqtz--YpGtypt7MHxa7gKjuF6bpT3bAJiG342VXBSrF68FtG-8GxJddyjV9rQTBV-vkkXtHft3FRjeIZk08skPAlx3_A0I7Fb-YS80HfexzBDrwV42YjDY), pesquisador na área da Diretoria de Estudos Educacionais (DIRED) do Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep), para entender melhor o sistema de avaliação, as mudanças da edição de 2021 e perspectivas para seu futuro.
 
-![](https://storage.googleapis.com/basedosdados-website/blog/hello-databaser/image_1.png)
+![](/blog/hello-databaser/image_1.png)
 
 Adriano é doutor e mestre em educação pela Universidade de São Paulo (USP) e especialista em políticas públicas em gênero e raça pela Universidade de Brasília (UnB). No mestrado e no doutorado, realizou estágio-sanduíche nas Universidades de Sydney (Austrália) e de Toronto (Canadá), respectivamente. Foi também ganhador da 10ª edição do Prêmio Construindo a Igualdade de Gênero, da Secretaria de Políticas para as Mulheres, além de ganhar o Prêmio Capes de Tese 2022 na área de Educação.
 
@@ -76,7 +76,7 @@ Com os [**dados do pacote geobr**](https://basedosdados.org/dataset/br-geobr-map
 
 O processo é simples: para entender, por exemplo, quantas cabeças de gado existiam em cada estado brasileiro no ano de 2017, podemos usar a consulta abaixo no BigQuery para acessar as informações desse recorte específico e baixá-los em um arquivo .csv.
 
-![](https://storage.googleapis.com/basedosdados-website/blog/hello-databaser/image_2.png)
+![](/blog/hello-databaser/image_2.png)
 
 Com o arquivo em mãos, você pode adicioná-lo facilmente ao QGIS para criar seu próprio mapa com essas informações. Teve alguma dúvida sobre como usar os dados do geobr? Preparamos um tutorial com o passo a passo para te ajudar. Confira por [**aqui**](https://medium.com/basedosdados/como-come%C3%A7ar-uma-an%C3%A1lise-geoespacial-com-dados-da-bd-e-o-qgis-4792877950e0?utm_source=hs_email\&utm_medium=email&_hsenc=p2ANqtz--YpGtypt7MHxa7gKjuF6bpT3bAJiG342VXBSrF68FtG-8GxJddyjV9rQTBV-vkkXtHft3FRjeIZk08skPAlx3_A0I7Fb-YS80HfexzBDrwV42YjDY).
 
@@ -103,4 +103,4 @@ Com o arquivo em mãos, você pode adicioná-lo facilmente ao QGIS para criar se
 
 [**Fernando Barbalho**](https://www.linkedin.com/in/fernando-almeida-barbalho-00623640/?utm_source=hs_email\&utm_medium=email&_hsenc=p2ANqtz--YpGtypt7MHxa7gKjuF6bpT3bAJiG342VXBSrF68FtG-8GxJddyjV9rQTBV-vkkXtHft3FRjeIZk08skPAlx3_A0I7Fb-YS80HfexzBDrwV42YjDY), cientista de dados sênior na Secretaria do Tesouro Nacional, utilizou os [**dados do Índice de Desenvolvimento Humano Municipal**](https://basedosdados.org/dataset/mundo-onu-adh?bdm_table=brasil\&utm_source=hs_email\&utm_medium=email&_hsenc=p2ANqtz--YpGtypt7MHxa7gKjuF6bpT3bAJiG342VXBSrF68FtG-8GxJddyjV9rQTBV-vkkXtHft3FRjeIZk08skPAlx3_A0I7Fb-YS80HfexzBDrwV42YjDY) (IDHM), já tratados e padronizados na BD, para analisar as melhorias no índice pelo Brasil, nordeste e Ceará. Acesse também esses dados e comece sua análise!
 
-![](https://storage.googleapis.com/basedosdados-website/blog/hello-databaser/image_3.png)
+![](/blog/hello-databaser/image_3.png)

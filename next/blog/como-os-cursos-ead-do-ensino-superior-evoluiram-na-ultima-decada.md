@@ -6,7 +6,7 @@ description: >-
 date: '2024-07-01T21:29:19.247Z'
 authors:
   - name: Base dos Dados
-thumbnail: https://storage.googleapis.com/basedosdados-website/blog/como-os-cursos-ead-do-ensino-superior-evoluiram-na-ultima-decada/image_0.jpg
+thumbnail: /blog/como-os-cursos-ead-do-ensino-superior-evoluiram-na-ultima-decada/image_0.jpg
 categories: [analise]
 keywords: []
 medium_slug: >-
@@ -19,13 +19,13 @@ No cenário educacional brasileiro, uma importante tendência tem se desenrolado
 
 Para entender melhor este contexto, exploramos os [dados do Censo do Ensino Superior](https://basedosdados.org/dataset/a3b57cca-ff80-4bf2-8bac-c145109e06a7?table=03f7e043-9ea1-47f9-9e77-f55dfe449381\&utm_source=hs_email\&utm_medium=email&_hsenc=p2ANqtz-8RvX84WlcYeELzleRoX5PpEZjlkRs2V8DjQUWOornwwYhJ1t6oJRu-6BiBuRKvYElXr_wGmLTZoTNOlCz8_a0u4nGDYuMQZjEnE5fjuKjZc0IdCx4), pesquisa realizada anualmente pelo Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP). O objetivo da pesquisa é coletar dados sobre as Instituições de Ensino Superior (IES), seus cursos oferecidos, matrículas, ingressos, concluintes, docentes e infraestrutura, fornecendo um panorama do sistema de ensino superior no país.São informações abrangentes que vão desde os detalhes de cada instituição, até o perfil de alunos(as) matriculados(as), como idade, gênero e mais. Vamos para a análise?
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-os-cursos-ead-do-ensino-superior-evoluiram-na-ultima-decada/image_0.jpg" caption="A ascensão do EAD Subtítulo: Porcentagem de ingressantes nas modalidades presencial e EAD no Brasil no período de 2009 a 2021. Descrição: Este gráfico de barras verticais apresenta a evolução percentual de ingressantes em cursos de Ensino a Distância (EAD) e presencial no Brasil entre 2009 e 2021. o Gráfico mostra como a proporção de ingressantes no EAD foi de pouco menos de 20% para pouco mais de 50%"/>
+<Image src="/blog/como-os-cursos-ead-do-ensino-superior-evoluiram-na-ultima-decada/image_0.jpg" caption="A ascensão do EAD Subtítulo: Porcentagem de ingressantes nas modalidades presencial e EAD no Brasil no período de 2009 a 2021. Descrição: Este gráfico de barras verticais apresenta a evolução percentual de ingressantes em cursos de Ensino a Distância (EAD) e presencial no Brasil entre 2009 e 2021. o Gráfico mostra como a proporção de ingressantes no EAD foi de pouco menos de 20% para pouco mais de 50%"/>
 
 A ascensão no número de participantes no ensino a distância nos últimos dez anos é impressionante. Em 2009, cerca de 331 mil indivíduos escolheram essa modalidade. Já em 2021, a modalidade chegou a atrair mais de 2,47 milhões de pessoas. Alguns dos fatores que podem ter contribuído para esse crescimento são o avanço tecnológico na conectividade e acesso à internet no Brasil, a redução de custo para estudantes e instituições, que podem economizar com gastos relacionados à infraestrutura, a grande variedade de cursos oferecidos, dentre outros.
 
 Outro importante fator para o crescimento da modalidade é a grande oferta de formações à distância pela rede privada. Em 2021, 559 instituições de ensino superior ofereciam cursos EAD, sendo 450 da rede particular, aproximadamente 80,57%. Veja no gráfico abaixo como foi esse crescimento ao longo do tempo.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-os-cursos-ead-do-ensino-superior-evoluiram-na-ultima-decada/image_1.jpg" caption="Mercado EAD em Expansão Subtítulo: Quantidade de instituições de ensino públicas e privadas no Brasil que oferecem ensino EAD de 2009 a 2021. Observações principais: Em 2009, a quantidade de instituições que ofereciam EAD era baixa tanto para as públicas quanto para as privadas. A partir de 2014, observa-se um crescimento significativo no número de instituições privadas oferecendo EAD. Em 2018, há um aumento notável de 46,1% nas IES particulares que oferecem EAD."/>
+<Image src="/blog/como-os-cursos-ead-do-ensino-superior-evoluiram-na-ultima-decada/image_1.jpg" caption="Mercado EAD em Expansão Subtítulo: Quantidade de instituições de ensino públicas e privadas no Brasil que oferecem ensino EAD de 2009 a 2021. Observações principais: Em 2009, a quantidade de instituições que ofereciam EAD era baixa tanto para as públicas quanto para as privadas. A partir de 2014, observa-se um crescimento significativo no número de instituições privadas oferecendo EAD. Em 2018, há um aumento notável de 46,1% nas IES particulares que oferecem EAD."/>
 
 A idade dos(as) alunos(as) não é muito diferente entre as modalidades à distância e presencial — 30% na faixa etária dos 18 aos 24 anos, seguido de 25 a 29 (19%) e 30 a 34 anos (16%). Porém, as áreas de preferência dos estudantes diferem bastante. Em 2021, 46% de todos os ingressantes na modalidade EAD se concentram nas áreas de Administração, Negócios, Direito, Educação e Saúde e Bem-Estar. Foram aproximadamente 1,8 milhões de pessoas ingressando nessas áreas, enquanto no presencial foram pouco mais de 883 mil pessoas. A grande tendência nos cursos presenciais é a área de Engenharia, Produção e Construção, que contou com mais de 1,7 milhões de ingressantes no mesmo ano.
 
@@ -37,7 +37,7 @@ Crie suas próprias análises, compare o desempenho das equipes participantes e 
 
 > **Entrevista com Hugo Medeiros,** Gestor de Projetos Especiais na Secretaria de Planejamento, Gestão e Desenvolvimento Regional de Pernambuco (SEPLAG — PE)
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-os-cursos-ead-do-ensino-superior-evoluiram-na-ultima-decada/image_2.png"/>
+<Image src="/blog/como-os-cursos-ead-do-ensino-superior-evoluiram-na-ultima-decada/image_2.png"/>
 
 Já vimos como os dados do Censo da Educação Superior são importantes para entender as tendências do cenário educacional no Brasil. Para aprofundar essa conversa, falamos com Hugo Medeiros sobre um caso muito interessante do uso de dados para elaboração e avaliação de políticas públicas. Falamos também sobre oportunidades e desafios da digitalização na educação.
 

@@ -21,7 +21,7 @@ authors:
      role: Orientação
    - name: Giovane Caruso
      role: Edição
-thumbnail: https://storage.googleapis.com/basedosdados-website/blog/quanto-o-brasileiro-compromete-de-sua-renda-em-aluguel/image_2.png
+thumbnail: /blog/quanto-o-brasileiro-compromete-de-sua-renda-em-aluguel/image_2.png
 categories: [analise]
 keywords: []
 medium_slug: >-
@@ -59,11 +59,11 @@ Essa importante amostra traz informações e características demográficas e so
 
 ## Resultados
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/quanto-o-brasileiro-compromete-de-sua-renda-em-aluguel/image_0.png" caption="Gráfico 1: Valor médio do aluguel e da renda"/>
+<Image src="/blog/quanto-o-brasileiro-compromete-de-sua-renda-em-aluguel/image_0.png" caption="Gráfico 1: Valor médio do aluguel e da renda"/>
 
 O Gráfico 01 (acima), apresenta a curva da média da renda em comparativo a linha de média de valor de aluguel ao longo de 1997 à 2015. Podemos notar que houve um crescimento mais acentuado da renda em comparação ao valor médio de aluguel — ou seja, os dados sugerem que o aluguel tem ficado mais caro relativamente com o passar dos anos.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/quanto-o-brasileiro-compromete-de-sua-renda-em-aluguel/image_1.png" caption="Gráfico 2: Porcentagem de Comprometimento com Aluguel no tempo"/>
+<Image src="/blog/quanto-o-brasileiro-compromete-de-sua-renda-em-aluguel/image_1.png" caption="Gráfico 2: Porcentagem de Comprometimento com Aluguel no tempo"/>
 
 Entre 1997 e 2015, a porcentagem do comprometimento da renda familiar com aluguel de moradia no Brasil teve uma inversão: ela decresce entre 1997 até 2007, quando passa a crescer em altas taxas. Durante esse período, fatores como o crescimento populacional, a urbanização acelerada e a expansão econômica podem ter contribuído para a elevação dos preços dos imóveis e, consequentemente, dos aluguéis, resultando em um maior esforço financeiro por parte das famílias brasileiras para arcar com os custos de habitação.
 
@@ -71,7 +71,7 @@ As famílias de baixa renda foram especialmente afetadas, uma vez que o aumento 
 
 Fazendo um paralelo entre o comprometimento da renda familiar e o crescimento das favelas no país, podemos constatar que no ano de 2010, o número de brasileiros residindo em assentamentos subnormais foi de 3.224.529 pessoas, correspondendo a 5,61% da população brasileira, tal aumento da população residindo em favelas pode ser justificado pela crescente no comprometimento da renda com a moradia ‘’regular’’.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/quanto-o-brasileiro-compromete-de-sua-renda-em-aluguel/image_2.png" caption="Gráfico 3 — Dispêndio Aluguel/Renda por estado (2015)"/>
+<Image src="/blog/quanto-o-brasileiro-compromete-de-sua-renda-em-aluguel/image_2.png" caption="Gráfico 3 — Dispêndio Aluguel/Renda por estado (2015)"/>
 
 No Gráfico 03, podemos comparar o dispêndio médio em 2015 da renda com aluguel em cada Estado. Rio de Janeiro e São Paulo apresentam valores mais elevados, mas não se trata de uma tendência regional. Estados da mesma região (Norte,Sul, Nordeste, Sudeste e Centro-Oeste) têm maiores particularidades, a exemplo do AM que figura na 3ª posição e RR da mesma região ocupa a 25ª posição, CE a 4ª posição e PI a última, assim como, MG da região Sudeste ocupa 15ª posição.
 

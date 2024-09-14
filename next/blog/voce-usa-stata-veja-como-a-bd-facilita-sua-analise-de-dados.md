@@ -10,11 +10,11 @@ authors:
     social: https://medium.com/@isabellahelter
 categories: [tutorial]
 keywords: []
-thumbnail: https://storage.googleapis.com/basedosdados-website/blog/voce-usa-stata-veja-como-a-bd-facilita-sua-analise-de-dados/image_0.jpg
+thumbnail: /blog/voce-usa-stata-veja-como-a-bd-facilita-sua-analise-de-dados/image_0.jpg
 medium_slug: https://medium.com/basedosdados/voc%C3%AA-usa-stata-veja-como-a-bd-facilita-sua-an%C3%A1lise-de-dados-e7ab79111220
 ---
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/voce-usa-stata-veja-como-a-bd-facilita-sua-analise-de-dados/image_0.jpg"/>
+<Image src="/blog/voce-usa-stata-veja-como-a-bd-facilita-sua-analise-de-dados/image_0.jpg"/>
 
 ## TL;DR
 
@@ -62,7 +62,7 @@ Nossa futura meta é garantir que o pacote tenha sua dependência no próprio St
 
 Clique [aqui](https://www.python.org/downloads/) na opção “Download Python” para baixar o Python. Em seguida, siga as instruções da tela e, principalmente, não esqueça de marcar a opção “*add to path*”:
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/voce-usa-stata-veja-como-a-bd-facilita-sua-analise-de-dados/image_1.png"/>
+<Image src="/blog/voce-usa-stata-veja-como-a-bd-facilita-sua-analise-de-dados/image_1.png"/>
 
 2. Instalando o pacote: configurações iniciais
 
@@ -70,7 +70,7 @@ Clique [aqui](https://www.python.org/downloads/) na opção “Download Python�
 
 4. passo: Na tela do `Prompt de Comando` que aparecerá, digite `pip install basedosdados -U` e dê enter.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/voce-usa-stata-veja-como-a-bd-facilita-sua-analise-de-dados/image_2.png"/>
+<Image src="/blog/voce-usa-stata-veja-como-a-bd-facilita-sua-analise-de-dados/image_2.png"/>
 
 5. Após concluir a instalação do pacote basedosdados, digite basedosdados reauth no Prompt de Comando. Copie o link que aparecerá, cole na sua aba de navegação e dê autorização ao google. Em seguida, copie o código gerado, volte e cole na tela do Prompt e dê enter.
 
@@ -86,7 +86,7 @@ Antes de usar o pacote pela primeira vez, digite db basedosdados e confirme nova
 
 Antes de mais nada, é importante ter em mãos os comandos possíveis na utilização do pacote. Neste caso, são 7 comandos, com diferentes funcionalidades. Veja na imagem:
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/voce-usa-stata-veja-como-a-bd-facilita-sua-analise-de-dados/image_3.png"/>
+<Image src="/blog/voce-usa-stata-veja-como-a-bd-facilita-sua-analise-de-dados/image_3.png"/>
 
 ### Exemplo de análise: PIB per capita dos municípios brasileiros
 
@@ -112,7 +112,7 @@ Renomeie o código do município para `id_municipio` e faça merge com o arquivo
 
 Baixe o pacote spmap e plote o mapa a partir do seguinte comando:
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/voce-usa-stata-veja-como-a-bd-facilita-sua-analise-de-dados/image_4.png"/>
+<Image src="/blog/voce-usa-stata-veja-como-a-bd-facilita-sua-analise-de-dados/image_4.png"/>
 
 Nosso projeto já te ajudou de alguma forma? Saiba como nos ajudar:
 

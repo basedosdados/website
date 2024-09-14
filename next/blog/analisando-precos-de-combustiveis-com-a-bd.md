@@ -11,14 +11,14 @@ authors:
   - name: Gustavo Aires
     role: Autor
     social: https://github.com/gustavoairestiago
-thumbnail: https://storage.googleapis.com/basedosdados-website/blog/analisando-precos-de-combustiveis-com-a-bd/image_0.jpg
+thumbnail: /blog/analisando-precos-de-combustiveis-com-a-bd/image_0.jpg
 categories: [analise]
 keywords: []
 medium_slug: >-
   https://medium.com/@basedosdados/analisando-pre%C3%A7os-de-combust%C3%ADveis-com-a-bd-9524fadbdfb4
 ---
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/analisando-precos-de-combustiveis-com-a-bd/image_0.jpg"/>
+<Image src="/blog/analisando-precos-de-combustiveis-com-a-bd/image_0.jpg"/>
 
 
 ## TL;DR
@@ -30,7 +30,7 @@ Qual o preço do combustível na sua cidade? Neste artigo vamos apresentar os da
 * **Os olhos da cara: Analisando a evolução de preço dos combustíveis no Brasil**
 * **Como criar um gráfico para ilustrar a análise**
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/analisando-precos-de-combustiveis-com-a-bd/image_1.gif"/>
+<Image src="/blog/analisando-precos-de-combustiveis-com-a-bd/image_1.gif"/>
 
 ## Entendendo a Série Histórica de Preços
 
@@ -46,15 +46,15 @@ A BD+ permite que você acesse todas essas informações com uma simples consult
 
 Para explorar os dados dessa base, acesse a [página deste conjunto de dados](https://basedosdados.org/dataset/c962b5e4-e71c-4e7c-b172-5e70951be633) em nossa plataforma e confira a seção Consulta aos Dados.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/analisando-precos-de-combustiveis-com-a-bd/image_2.png" caption="Página do conjunto Preços de Combustíveis — Dados Históricos"/>
+<Image src="/blog/analisando-precos-de-combustiveis-com-a-bd/image_2.png" caption="Página do conjunto Preços de Combustíveis — Dados Históricos"/>
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/analisando-precos-de-combustiveis-com-a-bd/image_3.png" caption="Seção consulte esses dados"/>
+<Image src="/blog/analisando-precos-de-combustiveis-com-a-bd/image_3.png" caption="Seção consulte esses dados"/>
 
 ## Os olhos da cara — Analisando a evolução de preço dos combustíveis no Brasil
 
 As notícias nos últimos meses têm anunciado a constante alta dos combustíveis. Muito se fala da gasolina à R$7, dos impostos, insumos e da cotação do dólar. Nossa análise propõe observar os dados deflacionados e comparados à inflação, isto é, a variação dos preços atuais em relação à variação do índice de preços ao consumidor.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/analisando-precos-de-combustiveis-com-a-bd/image_4.gif"/>
+<Image src="/blog/analisando-precos-de-combustiveis-com-a-bd/image_4.gif"/>
 
 Cumprindo a nossa missão — acessar os dados em um único lugar — conseguimos captar dados do [Índice Nacional de Preços ao Consumidor Amplo (IPCA)](https://basedosdados.org/dataset/c58781fb-1177-448d-87ff-56b5cbf1735c), também disponíveis na BD+, além de manipular a nossa base de preços dos combustíveis da Agência Nacional do Petróleo, Gás Natural e Biocombustíveis (ANP).
 
@@ -94,7 +94,7 @@ Por fim, com a consulta executada, iremos obter uma tabela com os preços de com
 
 ### Como criar um gráfico para ilustrar a análise
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/analisando-precos-de-combustiveis-com-a-bd/image_5.png"/>
+<Image src="/blog/analisando-precos-de-combustiveis-com-a-bd/image_5.png"/>
 
 Iremos demonstrar a construção de um gráfico para comparar a evolução dos preços com a taxa de inflação realizando uma normalização dos valores para 2004. Para isso, utilizamos o [Plotly](https://plotly.com/python/), uma poderosa ferramenta gráfica disponível para diferentes linguagens.
 
@@ -148,7 +148,7 @@ GROUP BY 1,2,3,6
 
 Nesta primeira query fazemos uma subconsulta para retornar o combustível da base de preços da ANP, o índice de inflação IPCA e o preço em maio de 2004.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/analisando-precos-de-combustiveis-com-a-bd/image_6.png"/>
+<Image src="/blog/analisando-precos-de-combustiveis-com-a-bd/image_6.png"/>
 
 Na segunda consulta, iremos normalizar os preços dos combustíveis e o índice de inflação. No cálculo da normalização, dividimos o preço do período ao qual se refere o dado pelo preço em maio de 2004. Faremos o mesmo com o índice de inflação. Para isso, é preciso fazer a junção dos produtos resultantes da subconsulta com os produtos da tabela de preços, para realizarmos a normalização com os valores necessários da data base e dos preços de cada combustível em cada mês.
 

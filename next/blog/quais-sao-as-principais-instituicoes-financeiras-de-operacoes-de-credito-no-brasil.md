@@ -11,7 +11,7 @@ authors:
     role: Análise
   - name: Giovane Caruso
     role: Edição
-thumbnail: https://storage.googleapis.com/basedosdados-website/blog/quais-sao-as-principais-instituicoes-financeiras-de-operacoes-de-credito-no-brasil/image_0.png
+thumbnail: /blog/quais-sao-as-principais-instituicoes-financeiras-de-operacoes-de-credito-no-brasil/image_0.png
 categories: [analise]
 keywords: []
 medium_slug: >-
@@ -28,7 +28,7 @@ Para entender um pouco melhor o cenário da oferta de crédito no país, analisa
 
 São muitas as possibilidade de análise com esses dados e, para exemplificar, lançamos um olhar para a participação percentual de instituições financeiras em operações de crédito no Brasil, de 2003 a 2022. Para isso, realizamos uma análise temporal descritiva das instituições financeiras que tiveram mais de 5% de participação nos valores totais de oferta de crédito no período. Veja na imagem abaixo.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/quais-sao-as-principais-instituicoes-financeiras-de-operacoes-de-credito-no-brasil/image_0.png"/>
+<Image src="/blog/quais-sao-as-principais-instituicoes-financeiras-de-operacoes-de-credito-no-brasil/image_0.png"/>
 
 Através dos dados foi possível identificar, por exemplo, que hoje são dois bancos públicos que contemplam o maior percentual dos valores da modalidade de crédito, a Caixa Econômica Federal e o Banco do Brasil, seguidos pelos bancos privados Bradesco, Itaú e Santander. Além disso, foi possível observar a dinâmica de incorporação de instituições ao longo do período analisado, como foi o caso do ABN AMRO REAL S.A e do Unibanco S.A, que possuíam participações até 2008, mas foram incorporados por outros bancos. Após as aquisições, a participação do ABN AMRO REAL S.A foi incorporada pelo grupo Santander e a do Unibanco S.A pelo Itaú.
 

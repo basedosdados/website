@@ -2,7 +2,7 @@
 title: Como acessar dados públicos em R
 description: Um guia prático para utilizar nosso datalake BD+ na linguagem R
 date: '2021-05-12'
-thumbnail: https://storage.googleapis.com/basedosdados-website/blog/como-acessar-dados-publicos-em-r/image_0.png
+thumbnail: /blog/como-acessar-dados-publicos-em-r/image_0.png
 authors:
     - name: Matheus Valentim
       role: Autor
@@ -12,7 +12,7 @@ keywords: []
 medium_slug: https://medium.com/@basedosdados/como-usar-a-bd-com-r-427aded95448
 ---
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-acessar-dados-publicos-em-r/image_0.png"/>
+<Image src="/blog/como-acessar-dados-publicos-em-r/image_0.png"/>
 
 ## TL;DR
 
@@ -105,11 +105,11 @@ Para exemplificar o uso da biblioteca, vamos estudar duas variáveis **de bases 
 
 Para começar essa análise, iremos acessar os dados do [Atlas Esgotos da Agência Nacional das Águas](https://basedosdados.org/dataset/br-ana-atlas-esgotos). Ao acessar o link do conjunto de dados no nosso site (acima), você verá listado as “Tabelas tratadas BD+” — isso indica quais tabelas estão disponíveis no banco.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-acessar-dados-publicos-em-r/image_1.png"/>
+<Image src="/blog/como-acessar-dados-publicos-em-r/image_1.png"/>
 
 Neste caso temos somente a tabela `municipios`. Ao clicar na mesma, você encontra a seção “Consulta aos Dados”, que mostra como acessar essa tabela no próprio banco (via editor do BigQuery), em Python e em R (figura abaixo).
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-acessar-dados-publicos-em-r/image_2.png"/>
+<Image src="/blog/como-acessar-dados-publicos-em-r/image_2.png"/>
 
 No código, vem descrito já o nome do conjunto e da tabela no banco — neste caso, `basedodados` é o banco, `br_ana_atlas_esgotos` o conjunto e `municipios` a tabela. Você pode copiar este código direto para o RStudio.
 
@@ -125,7 +125,7 @@ base <- basedosdados::read_sql(
 
 Caso você clique para ver a base, vai se deparar com algo assim:
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-acessar-dados-publicos-em-r/image_3.png"/>
+<Image src="/blog/como-acessar-dados-publicos-em-r/image_3.png"/>
 
 O Atlas contém mais de 30 variáveis sobre a condição da coleta e do tratamento de esgoto para cada município brasileiro. Entre elas, temos, por exemplo, a porcentagem de habitantes do município sem acesso a esgoto tratado, o nome do prestador do serviço do saneamento e o investimento feito pelo município em coleta e em tratamento de esgoto.
 
@@ -166,7 +166,7 @@ base_uf %>%
     theme_classic()
 ```
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-acessar-dados-publicos-em-r/image_4.png"/>
+<Image src="/blog/como-acessar-dados-publicos-em-r/image_4.png"/>
 
 Parabéns! Concluímos a nossa primeira aplicação da basedosdados! Com ela, descobrimos que o estado que tem, em média, o pior acesso a tratamento e coleta de esgoto nas suas cidades é Rondônia, e o estado que tem a melhor é São Paulo.
 
@@ -217,7 +217,7 @@ base_final %>%
     theme_classic()
 ```
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-acessar-dados-publicos-em-r/image_5.png"/>
+<Image src="/blog/como-acessar-dados-publicos-em-r/image_5.png"/>
 
 E com isso descobrimos que aparentemente não há uma forte correlação entre cobertura de saneamento e mortalidade por doenças quando analisamos todos municípios brasileiros que tiveram mortes por diarreia… Mas, conseguimos facilmente juntar 3 bases de diferentes organizações numa única entrada!
 

@@ -8,7 +8,7 @@ authors:
   - name: Crislane Alves
     role: Equipe Base dos Dados
     social: https://medium.com/@s.alvescrislane
-thumbnail: https://storage.googleapis.com/basedosdados-website/blog/diretorios-brasileiros-como-essa-base-facilita-sua-analise/image_0.jpg
+thumbnail: /blog/diretorios-brasileiros-como-essa-base-facilita-sua-analise/image_0.jpg
 categories: [tutorial]
 keywords: []
 medium_slug: >-
@@ -17,7 +17,7 @@ medium_slug: >-
 
 Conheça essa base que funciona como um perfil completo de unidades como município, escola, UF, e mais.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/diretorios-brasileiros-como-essa-base-facilita-sua-analise/image_0.jpg"/>
+<Image src="/blog/diretorios-brasileiros-como-essa-base-facilita-sua-analise/image_0.jpg"/>
 
 ## TL;DR
 

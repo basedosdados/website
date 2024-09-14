@@ -8,13 +8,13 @@ authors:
   - name: Matheus Valentim
     role: Equipe da Base dos Dados 💚
     social: https://github.com/mavalentim
-thumbnail: https://storage.googleapis.com/basedosdados-website/blog/explorando-o-censo-escolar-com-a-bd/image_0.jpg
+thumbnail: /blog/explorando-o-censo-escolar-com-a-bd/image_0.jpg
 categories: [analise]
 keywords: []
 medium_slug: https://medium.com/@basedosdados/explorando-o-censo-escolar-com-a-bd-6577d7251ea1
 ---
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/explorando-o-censo-escolar-com-a-bd/image_0.jpg"/>
+<Image src="/blog/explorando-o-censo-escolar-com-a-bd/image_0.jpg"/>
 
 ## TL;DR
 

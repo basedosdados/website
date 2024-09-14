@@ -23,7 +23,7 @@ authors:
   - name: Giovane Caruso
     social: https://medium.com/@giovanecaruso
     role: Adaptação e edição
-thumbnail: https://storage.googleapis.com/basedosdados-website/blog/como-funciona-o-sistema-de-insercao-de-dados-na-bd/image_0.jpg
+thumbnail: /blog/como-funciona-o-sistema-de-insercao-de-dados-na-bd/image_0.jpg
 categories: []
 keywords: []
 medium_slug: >-
@@ -35,7 +35,7 @@ medium_slug: >-
 
 Neste artigo você vai conhecer um pouco sobre como funciona a infraestrutura de inserção de dados da Base dos Dados e como pode melhorar seu portfólio de cientista de dados e/ou desenvolvedor contribuindo com a nossa missão de universalizar o acesso a dados.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-funciona-o-sistema-de-insercao-de-dados-na-bd/image_0.jpg" caption="Photo by [Riho Kroll](https://unsplash.com/@rihok) on [Unsplash](https://unsplash.com/)"/>
+<Image src="/blog/como-funciona-o-sistema-de-insercao-de-dados-na-bd/image_0.jpg" caption="Photo by [Riho Kroll](https://unsplash.com/@rihok) on [Unsplash](https://unsplash.com/)"/>
 
 ## A Infraestrutura
 
@@ -47,7 +47,7 @@ Após o pull request de revisão, entra em ação o sistema de Pesos e Contrapes
 
 Após a checagem dos dados, o pull request de inserção de dados é aprovado e os dados entram no **Ambiente de Produção**. Logo podem ser acessados por uma de nossas ferramentas, como os pacotes em Python e R, ou diretamente pelo BigQuery.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-funciona-o-sistema-de-insercao-de-dados-na-bd/image_1.png"/>
+<Image src="/blog/como-funciona-o-sistema-de-insercao-de-dados-na-bd/image_1.png"/>
 
 Paralelamente ao processo de inserção de dados, o time de Infra também trabalha com a equipe website na renovação da nossa plataforma, visando oferecer uma interface moderna. Preparamos um [artigo](https://medium.com/basedosdados/um-site-feito-a-v%C3%A1rias-m%C3%A3os-60ddc9eaa4d3?source=collection_home---------2-------------------------------) para mostrar como organizamos um projeto colaborativo para desenvolver uma nova plataforma que facilita ainda mais seu trabalho com dados.
 

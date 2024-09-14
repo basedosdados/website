@@ -11,7 +11,7 @@ authors:
     role: Edição
   - name: José Félix
     role: Design e Edição de arte
-thumbnail: https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-deputados-e-deputadas-atuam-da-mesma-forma-no-parlamento/image_0.png
+thumbnail: /blog/de-olho-na-camara-deputados-e-deputadas-atuam-da-mesma-forma-no-parlamento/image_0.png
 categories: [analise]
 keywords: []
 medium_slug: >-
@@ -38,7 +38,7 @@ O indicador de produção legislativa é composto por oito parâmetros (ver deta
 
 De modo geral, não há muita diferença na pontuação média dos(as) deputados(as) por sexo no indicador de produção legislativa. A pontuação feminina, contudo, é ligeiramente maior em todos os parâmetros, com exceção na presença em sessões deliberativas. O infográfico abaixo mostra essas informações para Câmara como um todo e para as bancadas parlamentares.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-deputados-e-deputadas-atuam-da-mesma-forma-no-parlamento/image_0.png" caption="Audiodescrição do Infográfico Título Principal: Produção Legislativa na Câmara Subtítulo: Pontuação média de deputados(as) da atual legislatura nos parâmetros de produção legislativa, por gênero Gráfico Radar: O gráfico radar mostra a pontuação média dos deputados e deputadas em vários parâmetros de produção legislativa, com duas linhas representando mulheres (linha azul) e homens (linha verde). Parâmetros no gráfico radar: Votos em separado, Apresentação de projetos, Relevância das autorias"/>
+<Image src="/blog/de-olho-na-camara-deputados-e-deputadas-atuam-da-mesma-forma-no-parlamento/image_0.png" caption="Audiodescrição do Infográfico Título Principal: Produção Legislativa na Câmara Subtítulo: Pontuação média de deputados(as) da atual legislatura nos parâmetros de produção legislativa, por gênero Gráfico Radar: O gráfico radar mostra a pontuação média dos deputados e deputadas em vários parâmetros de produção legislativa, com duas linhas representando mulheres (linha azul) e homens (linha verde). Parâmetros no gráfico radar: Votos em separado, Apresentação de projetos, Relevância das autorias"/>
 
 Em primeiro lugar, vamos falar sobre o gráfico de radar, que utilizamos aqui. Ele ajuda muito quando queremos comparar diversos atributos de uma única vez — no caso, todos os parâmetros do indicador de produção legislativa. Quem é familiarizado com videogames ou jogos de RPG conhece bem esse formato. Cada um dos eixos mostra a pontuação média nos parâmetros, e a área coberta — nesse caso agrupada por sexo, mostra o perfil de distribuição pelos parâmetros. A pontuação varia de 0 a 1, então caso a média em todos os atributos fosse 1 para um dos grupos considerados, toda a área do círculo estaria coberta; se fosse zero, nenhuma.
 

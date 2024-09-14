@@ -9,13 +9,13 @@ authors:
     - name: Giovane Caruso
       social: https://medium.com/@giovanecaruso
       role: Edição
-thumbnail: https://storage.googleapis.com/basedosdados-website/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_0.png
+thumbnail: /blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_0.png
 categories: [tutorial]
 keywords: []
 medium_slug: https://medium.com/basedosdados/como-come%C3%A7ar-uma-an%C3%A1lise-geoespacial-com-dados-da-bd-e-o-qgis-4792877950e0
 ---
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_0.png" caption="Mapa com quantidade de cabeças de gado por UF no Brasil"/>
+<Image src="/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_0.png" caption="Mapa com quantidade de cabeças de gado por UF no Brasil"/>
 
 ## TL;DR
 
@@ -27,7 +27,7 @@ O `geobr` é um pacote R que permite o fácil acesso aos shapefiles do Instituto
 
 Foi com dados do geobr que elaboramos, por exemplo, a análise dos resultados geolocalizados da prova de matemática do SAEB de 2019 no Ceará.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_1.png" caption="Proficiência média por escolar no Ceará"/>
+<Image src="/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_1.png" caption="Proficiência média por escolar no Ceará"/>
 
 Além de poder acessar esses dados em Python, R, Stata e pelo BigQuery usando SQL, é possível exportar essas informações em .csv e adicioná-las no seu Sistema de Informação Geográfica (SIG) favorito.
 
@@ -52,23 +52,23 @@ A partir do resultado da consulta, é possível realizar o download do .csv no 
 
 Agora, vamos inserir o arquivo `.csv` com a geometria espacial no QGIS. Clique em `Adicionar Camada` e depois `Adicionar Camada de Texto Delimitado`.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_2.png" caption="Adicionar Camada e Adicionar Camada de Texto Delimitado no QGIS"/>
+<Image src="/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_2.png" caption="Adicionar Camada e Adicionar Camada de Texto Delimitado no QGIS"/>
 
 Com a tela `Gerenciador de Dados` aberta, procure seu arquivo `.csv` no local em que o salvou.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_3.png" caption="Gerenciador de Dados do QGIS"/>
+<Image src="/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_3.png" caption="Gerenciador de Dados do QGIS"/>
 
 Assim que inserir o arquivo `.csv`, é necessário que a **Definição da Geometria** esteja assinada para **Well Know Text** *(WKT)*. Depois, é só clicar em inserir a variável de geometria no `campo de geometria`.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_4.png" caption="Definição da Geometria"/>
+<Image src="/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_4.png" caption="Definição da Geometria"/>
 
 A saída ou **Amostra de Dados** deverá conter o esquema da imagem acima. É possível visualizar que o campo geometria define o que cada linha representa. Como estamos trabalhando com multipolígonos, a latitude e longitude de cada multipolígono encontram-se nessa variável.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_5.png" caption="Amostra de Dados"/>
+<Image src="/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_5.png" caption="Amostra de Dados"/>
 
 Após clicar em **adicionar**, é possível obter um mapa com a quantidade de cabeças de gado por UF no ano de 2017, como na imagem abaixo.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_6.png" caption="Mapa com quantidade de cabeças de gado por UF no Brasil. Fonte: IBGE. Censo Agropecuário, 2017."/>
+<Image src="/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_6.png" caption="Mapa com quantidade de cabeças de gado por UF no Brasil. Fonte: IBGE. Censo Agropecuário, 2017."/>
 
 Com o mapa em mãos, fica fácil identificar que o Mato Grosso é o estado com maior quantidade de cabeças de gado no Brasil, por exemplo. Você pode exportar o mapa em um arquivo .*png* ou .*tif* e partir para sua análise.
 

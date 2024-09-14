@@ -9,13 +9,13 @@ authors:
   - name: Fernanda Scovino
     role: Equipe Base dos Dados 💚
     social: https://medium.com/u/444581849446
-thumbnail: https://storage.googleapis.com/basedosdados-website/blog/intro-ao-pacote-basedosdados-em-python/image_0.jpg
+thumbnail: /blog/intro-ao-pacote-basedosdados-em-python/image_0.jpg
 categories: [tutorial]
 keywords: []
 medium_slug: https://medium.com/@basedosdados/intro-ao-pacote-basedosdados-em-python-4e05439e936d
 ---
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/intro-ao-pacote-basedosdados-em-python/image_0.jpg"/>
+<Image src="/blog/intro-ao-pacote-basedosdados-em-python/image_0.jpg"/>
 
 ## TL;DR
 
@@ -104,6 +104,6 @@ Para criar a imagem, usamos a biblioteca `wordcloud` junto ao `matplotlib`, disp
 
 E como resultado: **Maria é a vencedora**!
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/intro-ao-pacote-basedosdados-em-python/image_1.jpg" caption="Nuvem de palavras com nomes mais frequentes no Brasil. O tamanho de cada palavra corresponde ao quão famoso aquele nome é. O maior nome na imagem é Maria, em seguida José, João, Antônio e Francisco."/>
+<Image src="/blog/intro-ao-pacote-basedosdados-em-python/image_1.jpg" caption="Nuvem de palavras com nomes mais frequentes no Brasil. O tamanho de cada palavra corresponde ao quão famoso aquele nome é. O maior nome na imagem é Maria, em seguida José, João, Antônio e Francisco."/>
 
 **O que achou dessa descoberta?** No próximo texto traremos uma análise regional construída pelo Fred também no Workshop. Veja este e outros workshops no nossos [Youtube](https://www.youtube.com/c/BasedosDados).

@@ -11,7 +11,7 @@ authors:
     role: Edição
   - name: José Felix
     role: Design e Edição de Arte
-thumbnail: https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados/image_0.png
+thumbnail: /blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados/image_0.png
 categories: [analise]
 keywords: []
 medium_slug: >-
@@ -28,7 +28,7 @@ A criação do Portal de Dados Abertos da Câmara dos Deputados facilitou muito 
 >
 > [Assine a BDletter](https://info.basedosdados.org/newsletter)
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados/image_0.png"/>
+<Image src="/blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados/image_0.png"/>
 
 ## O que você vai ler?
 
@@ -60,7 +60,7 @@ Além disso, grande parte das tabelas são tratadas via [DBT (Data Build Tool)](
 
 Cada tabela disponibilizada pela Câmara tem uma cobertura temporal específica, resultado de como os dados foram sendo produzidos e tornados públicos ao longo do tempo. Trouxemos aqui uma linha do tempo dos dados para auxiliar no seu processo de pesquisa. Veja na imagem, por exemplo, que os dados de legislaturas remetem desde a criação da Câmara dos Deputados pela Constituição de 1826. Já os primeiros registros de despesas datam de 1959, antes mesmo da criação da atual Cota para o Exercício da Atividade Parlamentar (CEAP).
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados/image_1.png" caption="A imagem apresenta uma linha do tempo que ilustra a evolução da cobertura das tabelas nos Estados Unidos, abrangendo o período de 1826 a 2015. Cada ano é representado por uma caixa contendo as tabelas que passaram a ser cobertas nesse período. 1826: Legislatura 1899: Proposicao_microdados 1900: Evento Evento_orgao Evento_presenca_deputado 1934: Proposicao_autor Votacao 1935: Votacao_objeto 1946: Proposicao_tema 1959: Despesa Funcionario 1974: Votacao_proposicao 1977: Evento_requeriment"/>
+<Image src="/blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados/image_1.png" caption="A imagem apresenta uma linha do tempo que ilustra a evolução da cobertura das tabelas nos Estados Unidos, abrangendo o período de 1826 a 2015. Cada ano é representado por uma caixa contendo as tabelas que passaram a ser cobertas nesse período. 1826: Legislatura 1899: Proposicao_microdados 1900: Evento Evento_orgao Evento_presenca_deputado 1934: Proposicao_autor Votacao 1935: Votacao_objeto 1946: Proposicao_tema 1959: Despesa Funcionario 1974: Votacao_proposicao 1977: Evento_requeriment"/>
 
 ### Chaves identificadoras
 
@@ -74,7 +74,7 @@ Agora, tomando a tabela de autores das proposições por ano de apresentação c
 
 A seguir temos um mapa mental que mostra todas as conexões entre as chaves identificadoras no nosso *datalake*. Ele mostra as possibilidades de conexão entre as tabelas para facilitar a sua análise.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados/image_2.png" caption="No canto superior está o texto “Como as tabelas dos dados da Câmara se relacionam?”. No centro, há uma série de caixas que representam as diferentes tabelas da base de dados. Cada caixa contém o nome da tabela e uma breve descrição do que ela armazena. As caixas estão conectadas por linhas que mostram como as tabelas se relacionam entre si. Por exemplo, a caixa “evento” está conectada à caixa “proposicao” por uma linha com a etiqueta “id_proposicao”."/>
+<Image src="/blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados/image_2.png" caption="No canto superior está o texto “Como as tabelas dos dados da Câmara se relacionam?”. No centro, há uma série de caixas que representam as diferentes tabelas da base de dados. Cada caixa contém o nome da tabela e uma breve descrição do que ela armazena. As caixas estão conectadas por linhas que mostram como as tabelas se relacionam entre si. Por exemplo, a caixa “evento” está conectada à caixa “proposicao” por uma linha com a etiqueta “id_proposicao”."/>
 
 ## Dados de despesa através das legislaturas
 
@@ -92,17 +92,17 @@ ORDER BY id_legislatura ASC;
 
 A consulta gera a seguinte tabela. Vale lembrar que você pode exportar os resultados em um arquivo local (.csv, JASON ou para a área de transferência do seu computador) para explorar com com seu editor de planilha ou linguagem de programação preferida, ou ainda salvá-los em uma tabela do BigQuery ou Google Sheets, sem precisar fazer download da tabela.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados/image_3.png" caption="16 primeiras linhas da tabela com o total de despesas por categoria de despesa"/>
+<Image src="/blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados/image_3.png" caption="16 primeiras linhas da tabela com o total de despesas por categoria de despesa"/>
 
 Aqui conseguimos avaliar, por exemplo, o total de despesas pela cota para exercício da atividade parlamentar por tipo de despesa, ou seja, gastos com passagens aéreas, manutenção de escritório, alimentação, divulgação de atividade parlamentar etc. Utilizamos os dados da 53ª até a 57ª Legislatura, a atual.
 
 Notamos que os gastos de divulgação da atividade parlamentar têm se destacado entre os parlamentares da legislatura atual, e por isso resolvemos investigar como esse tipo de despesa evoluiu ao longo do tempo como um todo. Com essa consulta, que poderia ser feita diretamente no ambiente do Google Cloud Console ([tutorial aqui](https://basedosdados.github.io/mais/#bigquery-sql)) ou através das nossas bibliotecas no Python ou R, conseguimos o seguinte resultado:
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados/image_4.png" cation="Título: Gastos de Deputados com Propaganda Subtítulo: Valor de gastos com divulgações em relação ao total de despesas da Cota Parlamentar, em milhões (R$) O gráfico mostra 5 barras, uma para cada legislatura, da de 2007 até a atual, com os gastos aumentando de aproximadamente 220mi até 810mi na legislatura de 2019–2023. Dentro das bararas é identificado o quanto dos gastos foram com divulgações da atividade parlamentar. Os valores, em ordem, são: 45,4; 147,5; 210,8; 217,4; e 120,4"/>
+<Image src="/blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados/image_4.png" cation="Título: Gastos de Deputados com Propaganda Subtítulo: Valor de gastos com divulgações em relação ao total de despesas da Cota Parlamentar, em milhões (R$) O gráfico mostra 5 barras, uma para cada legislatura, da de 2007 até a atual, com os gastos aumentando de aproximadamente 220mi até 810mi na legislatura de 2019–2023. Dentro das bararas é identificado o quanto dos gastos foram com divulgações da atividade parlamentar. Os valores, em ordem, são: 45,4; 147,5; 210,8; 217,4; e 120,4"/>
 
 Vale mencionar que as despesas da legislatura atual são muito menores pois ela ainda não acabou. Além disso, parece que o palpite sobre a importância crescente deste tipo de gasto parece estar na direção certa. Para termos uma noção do quanto essa despesa tem ocupado uma parcela maior dos gastos de deeputados, podemos observar o mesmo recorte, mas com a proporção(%) que as divulgações ocupam no total gasto da Cota Parlamentar.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados/image_5.png" caption="Título: Gastos de Deputados com Propaganda Subtítulo: Proporção de gastos com divulgações em relação ao total de despesas da Cota Parlamentar (%) O gráfico mostra 5 barras, uma para cada legislatura, da de 2007 até a atual, com a porcetagem do gasto com divulgações da atividade parlamentar. Os valores são, em ordem: 9%, 10,9%, 12,5%, 13,6%, 19,9%."/>
+<Image src="/blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados/image_5.png" caption="Título: Gastos de Deputados com Propaganda Subtítulo: Proporção de gastos com divulgações em relação ao total de despesas da Cota Parlamentar (%) O gráfico mostra 5 barras, uma para cada legislatura, da de 2007 até a atual, com a porcetagem do gasto com divulgações da atividade parlamentar. Os valores são, em ordem: 9%, 10,9%, 12,5%, 13,6%, 19,9%."/>
 
 A análise e os gráficos foram feitos utilizando o pacote Python da BD.
 

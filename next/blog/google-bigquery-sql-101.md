@@ -9,13 +9,13 @@ authors:
     - name: Fernanda
       role: Equipe Base dos Dados  💚
       social: https://medium.com/@fernandascovino
-thumbnail: https://storage.googleapis.com/basedosdados-website/blog/google-bigquery-sql-101/image_0.jpg
+thumbnail: /blog/google-bigquery-sql-101/image_0.jpg
 categories: [tutorial]
 keywords: []
 medium_slug: https://medium.com/@basedosdados/bigquery-101-8b39da1ce52b
 ---
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/google-bigquery-sql-101/image_0.jpg"/>
+<Image src="/blog/google-bigquery-sql-101/image_0.jpg"/>
 
 ## TL;DR
 
@@ -34,7 +34,7 @@ As bases disponíveis para download e análise no nosso site possuem o ícone **
 
 Ao longo do texto iremos explorar os dados da [RAIS (Relação Anual de Informações Sociais)](https://basedosdados.org/dataset/br-me-rais), mas o processo é o mesmo para qualquer base que você desejar acessar. A RAIS é um relatório de informações socioeconômicas solicitado pela Secretaria de Trabalho do Ministério da Economia brasileiro às pessoas jurídicas e outros empregadores anualmente.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/google-bigquery-sql-101/image_1.png"/>
+<Image src="/blog/google-bigquery-sql-101/image_1.png"/>
 
 Através do site, após escolher o conjunto de dados de interesse, você pode visualizar **Tabelas já tratadas** neste conjunto. No caso da RAIS, temos disponíveis toda a série histórica de microdados de vínculos empregatícios no Brasil, e tabelas de agregações destes dados.
 
@@ -44,13 +44,13 @@ Para explorar uma tabela em específico, você deve clicar nela e a seção Cons
 
 > Se já tiver um projeto no Google Cloud, siga em frente. Caso contrário, após clicar no botão você verá a página abaixo — basta clicar em Criar um projeto (é gratuito) e já terá acesso às nossas bases.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/google-bigquery-sql-101/image_2.jpg"/>
+<Image src="/blog/google-bigquery-sql-101/image_2.jpg"/>
 
 ## Navegando pelo BigQuery
 
 Abaixo vamos entender melhor como funciona a interface do BigQuery. Após criar o projeto, ele vai aparecer para você no canto superior esquerdo **(1)**. Logo abaixo terá uma lista de Projeto fixos do BigQuery, dentre esses o `basedosdados` **(2)** - o ícone de pino azul indica que o projeto está fixado e poderá ser acessado sempre que você abrir o BigQuery. A seta à esquerda do nome `basedosdados` nos permite expandir a lista de todas as bases disponíveis na BD+ logo abaixo.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/google-bigquery-sql-101/image_3.png"/>
+<Image src="/blog/google-bigquery-sql-101/image_3.png"/>
 
 Neste exemplo acessamos a página dos dados da RAIS. Sempre que abrirmos uma tabela no BigQuery teremos alguns itens que ficarão à mostra: a aba referente à tabela que selecionamos **(3)** que contém informações sobre a estrutura e descrição das colunas em **Esquema (4)** e também metadados da tabela em **Detalhes (5)**.
 
@@ -73,15 +73,15 @@ Essa estrutura mínima indica que iremos selecionar (`SELECT`) alguma(s) coluna(
 
 > Atenção: Esse limite é importante para não processarmos a tabela inteira, caso contrário, seriam 250GB de dados! Conforme tornamos a query mais refinada, adicionando filtros para anos e locais específicos, por exemplo, esse tamanho de processamento se reduz bastante.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/google-bigquery-sql-101/image_4.png"/>
+<Image src="/blog/google-bigquery-sql-101/image_4.png"/>
 
 Para selecionar todas as colunas da tabela podemos usar o “\*”, ao invés de escrever uma por uma após o `SELECT`. Ao clicar em **Executar (1)** obtemos logo abaixo a tabela de resultado da nossa consulta. Acima da tabela irá aparecer o tamanho do processamento realizado **(2)** e você pode também salvar a tabela gerada em CSV no Drive ou no seu computador no botão de **Salvar resultados (3)** ou **Explorar dados (4)** para criar gráficos com o Google Data Studio - veja o exemplo com os dados da RAIS abaixo.
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/google-bigquery-sql-101/image_5.png"/>
+<Image src="/blog/google-bigquery-sql-101/image_5.png"/>
 
 Vamos usar como exemplo mais completo uma consulta de vínculos empregatícios do estado do Acre e cruzar com os dados de população do IBGE de 1985 até 2019. Essa é uma consulta mais complexa, mas basta sabermos quais são as colunas de pareamento (neste caso, `id_municipio` e ano que fazem o JOIN) entre as tabelas para realizar o cruzamento. Abaixo em vermelho segue a explicação de cada linha da query, você pode acessar o código em SQL também em [nosso Github](https://github.com/basedosdados/analises/blob/main/workshops/br_me_rais_microdados_vinculos_20210526.sql).
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/google-bigquery-sql-101/image_6.png"/>
+<Image src="/blog/google-bigquery-sql-101/image_6.png"/>
 
 ## Importante ressaltar:
 
@@ -91,7 +91,7 @@ Vamos usar como exemplo mais completo uma consulta de vínculos empregatícios d
 
 Para visualizar o resultado ao longo do tempo podemos criar um gráfico através do botão **Explorar dados** que irá nos redirecionar para uma aba do Google Data Studio, uma ferramenta gratuita de BI do Google. Para saber mais sobre o Data Studio [veja aqui](https://support.google.com/datastudio/answer/6283323?hl=pt-BR).
 
-<Image src="https://storage.googleapis.com/basedosdados-website/blog/google-bigquery-sql-101/image_7.png"/>
+<Image src="/blog/google-bigquery-sql-101/image_7.png"/>
 
 ## Por que usar SQL?
 
