@@ -28,10 +28,10 @@ import {
 // import Link from "../atoms/Link"
 import NextLink from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import hljs from "highlight.js/lib/core";
 import { CopyIcon } from "../../public/img/icons/copyIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
-import { useEffect, useState } from "react";
 
 function DatePost({ date, slug }) {
   if (date.trim().length === 0) {
@@ -199,7 +199,7 @@ function NativeShare({ url, title, description }) {
         onClick={() =>
           navigator
             .share({
-              title: title,
+              title: `${title} – Blog – Base dos Dados`,
               text: description,
               url: url,
             })
@@ -241,7 +241,6 @@ export function ShareButtons({ frontmatter }) {
     setLocation(window.location.href);
   }, []);
 
-  // const origin = location || "https://basedosdados.org";
   const url = location + router.asPath;
 
   const facebook = `https://www.facebook.com/sharer/sharer.php?t=${encodeURIComponent(title)}&u=${encodeURIComponent(url)}`;

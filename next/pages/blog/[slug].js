@@ -20,6 +20,7 @@ import stataHighlight from "highlight.js/lib/languages/stata";
 import markdownHighlight from "highlight.js/lib/languages/markdown";
 
 import "highlight.js/styles/obsidian.css";
+import { useRouter } from "next/router";
 
 hljs.registerLanguage("sql", sqlHighlight);
 hljs.registerLanguage("python", pythonHighlight);
@@ -52,8 +53,13 @@ export async function getStaticPaths() {
   };
 }
 
+const getLocation = () => window.location.href;
+
 export default function Post({ slug, mdxSource, headings }) {
   const { frontmatter } = mdxSource;
+
+  const origin =
+    process.env.NEXT_PUBLIC_BASE_URL_FRONTEND ?? "https://basedosdados.org";
 
   return (
     <MainPageTemplate maxWidth={"1100px"} margin={"0 auto"} paddingX="24px">
@@ -71,18 +77,15 @@ export default function Post({ slug, mdxSource, headings }) {
         />
         <meta name="description" content={frontmatter.description} />
         <meta property="og:type" content="article" />
-        <meta
-          property="og:url"
-          content={`https://basedosdados.org/blog/${slug}`}
-        />
+        <meta property="og:url" content={`${origin}/blog/${slug}`} />
         <meta
           property="og:image"
-          content={frontmatter.thumbnail}
+          content={`${origin}/${frontmatter.thumbnail}`}
           key="ogimage"
         />
         <meta
           name="twitter:image"
-          content={frontmatter.thumbnail}
+          content={`${origin}/${frontmatter.thumbnail}`}
           key="twimage"
         />
         <meta property="article:published_time" content={frontmatter.date} />
