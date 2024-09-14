@@ -55,6 +55,17 @@
         "with_our_course_you_can_go_further": "Con nuestro curso, puedes ir más allá en tu investigación, profesión u organización.",
         "take_advantage_of_the_promotional_price": "Aprovecha el precio promocional"
     },
+    "tooltip": {
+        "helpAndResources": "Ayuda y recursos",
+        "faq": "Preguntas frecuentes",
+        "documentation": "Documentación",
+        "youtubeVideos": "Videos de YouTube",
+        "installPackages": "Instalar nuestros paquetes",
+        "howToCite": "¿Cómo citar nuestro trabajo?",
+        "whatAreDirectories": "¿Qué son los directorios?",
+        "discordCommunity": "Habla con nuestra comunidad en Discord",
+        "contactUs": "Contáctanos"
+    },
     "footer": {
         "title": "Base de los Datos",
         "copyright": "® {{year}} Base de los Datos",

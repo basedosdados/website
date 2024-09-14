@@ -55,6 +55,17 @@
         "with_our_course_you_can_go_further": "With our course, you can go further in your research, profession, or organization.",
         "take_advantage_of_the_promotional_price": "Take advantage of the promotional price"
     },
+    "tooltip": {
+        "helpAndResources": "Help and resources",
+        "faq": "Frequently asked questions",
+        "documentation": "Documentation",
+        "youtubeVideos": "YouTube videos",
+        "installPackages": "Install our packages",
+        "howToCite": "How to cite our work?",
+        "whatAreDirectories": "What are directories?",
+        "discordCommunity": "Talk to our community on Discord",
+        "contactUs": "Contact us"
+    },
     "footer": {
         "title": "Data Basis",
         "copyright": "® {{year}} Data Basis",

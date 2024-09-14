@@ -15,6 +15,7 @@ import ObservationLevel from "../atoms/ObservationLevelTable";
 import { TemporalCoverageBar } from "../molecules/TemporalCoverageDisplay";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import FourOFour from "../templates/404";
+import { useTranslation } from 'next-i18next';
 
 import EmailIcon from "../../public/img/icons/emailIcon";
 import GithubIcon from "../../public/img/icons/githubIcon";
@@ -25,6 +26,7 @@ import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
 export default function BdmTablePage({ id }) {
+  const { t } = useTranslation('table');
   const [isLoading, setIsLoading] = useState(true)
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState(false)
@@ -159,7 +161,7 @@ export default function BdmTablePage({ id }) {
             lineHeight="20px"
             color="#464A51"
           >
-            Não informado
+            {t('notInformed')}
           </Text>
         }
         {resource?.email && <EmailIcon {...keyIcons({email : resource.email})}/>}
@@ -196,33 +198,33 @@ export default function BdmTablePage({ id }) {
     let formats
     {yearFrequency ?
       formats = {
-        "second":`Atualização a cada ${frequency} segundos`,
-        "minute":`Atualização a cada ${frequency} minutos`,
-        "hour":`Atualização a cada ${frequency} horas`,
-        "day":`Atualização a cada ${frequency} dias`,
-        "week":`Atualização a cada ${frequency} semanas`,
-        "month":`Atualização a cada ${frequency} meses`,
-        "bimester":`Atualização a cada ${frequency} bimestres`,
-        "quarter":`Atualização a cada ${frequency} trimestres`,
-        "semester":`Atualização a cada ${frequency} semestres`,
-        "year":`Atualização a cada ${frequency} anos`,
+        "second":`${t('updateEvery')} ${frequency} ${t('seconds')}`,
+        "minute":`${t('updateEvery')} ${frequency} ${t('minutes')}`,
+        "hour":`${t('updateEvery')} ${frequency} ${t('hours')}`,
+        "day":`${t('updateEvery')} ${frequency} ${t('days')}`,
+        "week":`${t('updateEvery')} ${frequency} ${t('weeks')}`,
+        "month":`${t('updateEvery')} ${frequency} ${t('months')}`,
+        "bimester":`${t('updateEvery')} ${frequency} ${t('bimonths')}`,
+        "quarter":`${t('updateEvery')} ${frequency} ${t('quarters')}`,
+        "semester":`${t('updateEvery')} ${frequency} ${t('semesters')}`,
+        "year":`${t('updateEvery')} ${frequency} ${t('years')}`,
       }
       :
       formats = {
-        "second":"Atualização por segundo",
-        "minute":"Atualização por minuto",
-        "hour":"Atualização por hora",
-        "day":"Atualização diária",
-        "week":"Atualização semanal",
-        "month":"Atualização mensal",
-        "bimester":"Atualização bimestral",
-        "quarter":"Atualização trimestral",
-        "semester":"Atualização semestral",
-        "year":"Atualização anual",
+        "second":t('updatePerSecond'),
+        "minute":t('updatePerMinute'),
+        "hour":t('updatePerHour'),
+        "day":t('dailyUpdate'),
+        "week":t('weeklyUpdate'),
+        "month":t('monthlyUpdate'),
+        "bimester":t('bimonthlyUpdate'),
+        "quarter":t('quarterlyUpdate'),
+        "semester":t('semiannualUpdate'),
+        "year":t('annualUpdate'),
       }
     }
 
-    return formats[value] ? formats[value] : "Atualização não definida"
+    return formats[value] ? formats[value] : t('updateNotDefined')
   }
 
   if(isError) return <FourOFour/>
@@ -279,7 +281,7 @@ export default function BdmTablePage({ id }) {
         isLoaded={!isLoading}
       >
         <ReadMore id="readLessTable">
-          {resource?.description || "Não informado"}
+          {resource?.description || t('notInformed')}
         </ReadMore>
       </SkeletonText>
 
@@ -292,7 +294,7 @@ export default function BdmTablePage({ id }) {
             lineHeight="20px"
             color="#252A32"
           >
-            Cobertura temporal da tabela
+            {t('temporalCoverage')}
           </Text>
         </StackSkeleton>
 
@@ -313,7 +315,7 @@ export default function BdmTablePage({ id }) {
             lineHeight="20px"
             color="#252A32"
           >
-            Acesso aos dados
+            {t('dataAccess')}
           </Text>
         </StackSkeleton>
 
@@ -331,7 +333,7 @@ export default function BdmTablePage({ id }) {
             lineHeight="20px"
             color="#252A32"
           >
-            Frequência de atualização dos dados
+            {t('dataUpdateFrequency')}
           </Text>
         </StackSkeleton>
 
@@ -359,8 +361,8 @@ export default function BdmTablePage({ id }) {
             {resource?.updates?.[0]?.latest ?
               formatDate(resource.updates[0].latest)
               :
-              "Não informado"
-            }: Última vez que atualizamos na BD
+              t('notInformed')
+            }: {t('lastUpdateBD')}
             {resource?.updates?.[0]?.frequency &&
               <Text
                 backgroundColor="#EEEEEE"
@@ -390,7 +392,7 @@ export default function BdmTablePage({ id }) {
                 lineHeight="18px"
                 color="#252A32"
               >
-                Sem previsão de atualização
+                {t('noUpdateScheduled')}
               </Text>
             }
           </Box>
@@ -408,8 +410,8 @@ export default function BdmTablePage({ id }) {
             {resource?.rawDataSource?.[0]?.updates?.[0]?.latest ?
               formatDate(resource.rawDataSource[0].updates[0].latest)
               :
-              "Não informado"
-            }: Última vez que atualizaram na fonte original
+              t('notInformed')
+            }: {t('lastUpdateRawDataSource')}
             {resource?.rawDataSource?.[0]?.updates?.[0]?.frequency ?
               <Text
                 backgroundColor="#EEEEEE"
@@ -439,7 +441,7 @@ export default function BdmTablePage({ id }) {
                 lineHeight="18px"
                 color="#252A32"
               >
-                Sem previsão de atualização
+                {t('noUpdateScheduled')}
               </Text>
               :
               <></>
@@ -459,8 +461,8 @@ export default function BdmTablePage({ id }) {
             {resource?.rawDataSource?.[0]?.polls?.[0]?.latest ?
               formatDate(resource.rawDataSource[0].polls[0].latest)
               :
-              "Não informado"
-            }: Última vez que verificamos a fonte original
+              t('notInformed')
+            }: {t('lastCheckRawDataSource')}
           </Text>
         </SkeletonText>
       </Stack>
@@ -474,7 +476,7 @@ export default function BdmTablePage({ id }) {
             lineHeight="20px"
             color="#252A32"
           >
-            ID do BigQuery
+            {t('bigQueryID')}
           </Text>
         </StackSkeleton>
 
@@ -506,7 +508,7 @@ export default function BdmTablePage({ id }) {
             }}
           >
             {!resource?.cloudTables ?
-              "Não informado"
+              t('notInformed')
               :
               resource?.cloudTables?.[0]?.gcpProjectId+"."+resource?.cloudTables?.[0]?.gcpDatasetId+"."+resource?.cloudTables?.[0]?.gcpTableId
             }
@@ -523,8 +525,8 @@ export default function BdmTablePage({ id }) {
       <Stack marginBottom="40px !important">
         <StackSkeleton width="260px" height="20px">
           <TooltipText
-            text="Partições no BigQuery"
-            info="As partições são divisões feitas em uma tabela para facilitar o gerenciamento e a consulta aos dados. Ao segmentar uma tabela grande em partições menores, a quantidade de bytes lidos é reduzida, o que ajuda a controlar os custos e melhora o desempenho da consulta."
+            text="partitionsInBigQuery"
+            info="partitionsTooltip"
           />
         </StackSkeleton>
         <StackSkeleton
@@ -539,7 +541,7 @@ export default function BdmTablePage({ id }) {
             lineHeight="20px"
             color="#464A51"
           >
-            {resource?.partitions ? resource.partitions :"Não informado"}
+            {resource?.partitions ? resource.partitions : t('notInformed')}
           </Text>
         </StackSkeleton>
       </Stack>
@@ -547,8 +549,8 @@ export default function BdmTablePage({ id }) {
       <Stack marginBottom="40px !important">
         <StackSkeleton width="300px" height="20px">
           <TooltipText
-            text="Nível da observação"
-            info="Indica qual a menor granularidade possível de análise com aquele dado. Por exemplo, uma tabela com nível da observação de estado permite que façamos uma análise no país (por ser mais amplo que estado), mas não uma análise por município (que já seria um recorte mais específico)."
+            text="observationLevel"
+            info="observationLevelTooltip"
           />
         </StackSkeleton>
 
@@ -570,7 +572,7 @@ export default function BdmTablePage({ id }) {
               lineHeight="20px"
               color="#464A51"
             >
-              Não informado
+              {t('notInformed')}
             </Text>
           }
         </Skeleton>       
@@ -579,8 +581,8 @@ export default function BdmTablePage({ id }) {
       <Stack marginBottom="40px !important">
         <StackSkeleton width="240px" height="20px">
           <TooltipText
-            text="Arquivos auxiliares"
-            info="Os arquivos dão mais contexto e ajudam a entender melhor os dados disponíveis. Podem incluir notas técnicas, descrições de coleta e amostragem, etc."
+            text="auxiliaryFiles"
+            info="auxiliaryFilesTooltip"
           />
         </StackSkeleton>
         <StackSkeleton
@@ -614,14 +616,14 @@ export default function BdmTablePage({ id }) {
                 }}
                 href={resource.auxiliaryFilesUrl}
               >
-                Download dos arquivos
+                {t('downloadFiles')}
                 <DownloadIcon
                   width="24px"
                   height="24px"
                 />
               </Text>
             :
-              "Não informado"
+              t('notInformed')
             }
           </Text>  
         </StackSkeleton>
@@ -630,8 +632,8 @@ export default function BdmTablePage({ id }) {
       <Stack>
         <StackSkeleton width="240px" height="20px">
           <TooltipText
-            text="Fontes originais"
-            info="São links para páginas externas à plataforma com informações úteis sobre o conjunto de dados. Tentamos sempre fornecer o caminho mais próximo possível à fonte para baixar os dados originais."
+            text="rawDataSources"
+            info="rawDataSourcesTooltip"
           />
         </StackSkeleton>
 
@@ -675,7 +677,7 @@ export default function BdmTablePage({ id }) {
                 )
               }) 
               :
-                "Não informado"
+                t('notInformed')
             }
           </Text>
         </StackSkeleton> 
@@ -691,7 +693,7 @@ export default function BdmTablePage({ id }) {
           lineHeight="20px"
           color="#252A32"
         >
-          Informações adicionais
+          {t('additionalInformation')}
         </Text>
       </StackSkeleton>
 
@@ -713,9 +715,9 @@ export default function BdmTablePage({ id }) {
           fontSize="14px"
           lineHeight="20px"
           color="#252A32"
-        >Publicação por</Text>
+        >{t('publishedBy')}</Text>
         <PublishedOrDataCleanedBy
-          resource={resource?.publishedByInfo || "Não informado"}
+          resource={resource?.publishedByInfo || t('notInformed')}
         />
       </SkeletonText>
 
@@ -737,9 +739,9 @@ export default function BdmTablePage({ id }) {
           fontSize="14px"
           lineHeight="20px"
           color="#252A32"
-        >Tratamento por</Text>
+        >{t('dataCleanedBy')}</Text>
         <PublishedOrDataCleanedBy
-          resource={resource?.dataCleanedByInfo || "Não informado"}
+          resource={resource?.dataCleanedByInfo || t('notInformed')}
         />
       </SkeletonText>
 
@@ -761,14 +763,14 @@ export default function BdmTablePage({ id }) {
           fontSize="14px"
           lineHeight="20px"
           color="#252A32"
-        >Versão</Text>
+        >{t('version')}</Text>
         <Text
           fontFamily="Roboto"
           fontWeight="400"
           fontSize="14px"
           lineHeight="20px"
           color="#464A51"
-        >{resource?.version || "Não informado"}</Text>
+        >{resource?.version || t('notInformed')}</Text>
       </SkeletonText>
     </Stack>
   )

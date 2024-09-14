@@ -755,22 +755,22 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
       <HStack spacing="21px" display={{ base: "none", lg: "flex" }}>
         {(path === "/dataset" || path === "/dataset/[dataset]") &&
           <HelpWidget
-            tooltip="Ajuda e recursos"
+            tooltip={t('tooltip.helpAndResources')}
             options={[
-              {name:"Perguntas frequentes", url: "/perguntas-frequentes"},
-              {name:"Documentação", url: "https://basedosdados.github.io/mais/"},
-              {name:"Vídeos no YouTube", url: "https://www.youtube.com/c/BasedosDados/featured"},
+              {name: t('tooltip.faq'), url: "/perguntas-frequentes"},
+              {name: t('tooltip.documentation'), url: "https://basedosdados.github.io/mais/"},
+              {name: t('tooltip.youtubeVideos'), url: "https://www.youtube.com/c/BasedosDados/featured"},
               {},
-              {name:"Instale os nossos pacotes", url: "https://basedosdados.github.io/mais/access_data_packages/"},
+              {name: t('tooltip.installPackages'), url: "https://basedosdados.github.io/mais/access_data_packages/"},
               {},
-              {name:"Como citar a BD?",  url: "/perguntas-frequentes/#reference"},
-              {name:"O que são diretórios?", url: "/perguntas-frequentes/#directories"},
+              {name: t('tooltip.howToCite'),  url: "/perguntas-frequentes/#reference"},
+              {name: t('tooltip.whatAreDirectories'), url: "/perguntas-frequentes/#directories"},
               {},
-              {name:"Fale com nossa comunidade no Discord", url: "https://discord.gg/huKWpsVYx4"},
-              {name:"Entre em contato", url: "/contato"},
+              {name: t('tooltip.discordCommunity'), url: "https://discord.gg/huKWpsVYx4"},
+              {name: t('tooltip.contactUs'), url: "/contato"},
             ]}
-          />
-        }
+        />
+      }
 
         {userData ? (
           <HStack spacing="20px">

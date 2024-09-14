@@ -16,6 +16,8 @@ import { useEffect, useState } from "react";
 import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../../utils";
 import { withPages } from "../../hooks/pages.hook";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import {
   getSearchDatasets
@@ -30,13 +32,18 @@ import { MainPageTemplate } from "../../components/templates/main";
 import FilterIcon from "../../public/img/icons/filterIcon";
 import NotFoundImage from "../../public/img/notFoundImage";
 
-export async function getStaticProps() {
-  return await withPages()
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common', 'dataset'])),
+    },
+  };
 }
 
 export default function SearchDatasetPage() {
   const router =  useRouter()
   const query = router.query
+  const { t } = useTranslation('dataset')
 
   const [fetchApi, setFetchApi] = useState(null)
   const [showEmptyState, setShowEmptyState] = useState(false)
@@ -241,7 +248,7 @@ export default function SearchDatasetPage() {
               backgroundColor: "#22703E"
             }}
           >
-            Fazer uma proposta
+            {t('suggestData')}
           </Box>
 
           <Box
@@ -266,7 +273,7 @@ export default function SearchDatasetPage() {
               color: "#22703E"
             }}
           >
-            Ver roadmap de dados
+            {t('viewDataRoadmap')}
           </Box>
         </HStack>
       </Stack>
@@ -501,10 +508,10 @@ export default function SearchDatasetPage() {
   return (
     <MainPageTemplate userTemplate footerTemplate="simple">
       <Head>
-        <title>Dados – Base dos Dados</title>
+        <title>{t('pageTitle')}</title>
         <meta
           property="og:title"
-          content="Dados – Base dos Dados"
+          content={t('pageTitle')}
           key="ogtitle"
         />
       </Head>
@@ -542,7 +549,7 @@ export default function SearchDatasetPage() {
               width="100%"
               marginLeft="8px"
             >
-              Filtrar
+              {t('filter')}
             </Text>
           </Box>
 
@@ -559,24 +566,24 @@ export default function SearchDatasetPage() {
               color="#464A51"
               marginBottom="4px"
             >
-              Conjuntos com
+              {t('datasetsWith')}
             </Text>
 
             <CheckboxFilterComponent
               value="tables"
-              text="Tabelas tratadas"
+              text={t('tables')}
               count={aggregations?.contains_tables?.filter(elm => elm.key === 1)[0]?.count || 0}
             />
 
             <CheckboxFilterComponent
               value="raw_data_sources"
-              text="Fontes originais"
+              text={t('rawDataSources')}
               count={aggregations?.contains_raw_data_sources?.filter(elm => elm.key === 1)[0]?.count || 0}
             />
 
             <CheckboxFilterComponent
               value="information_requests"
-              text="Pedidos LAI"
+              text={t('informationRequests')}
               count={aggregations?.contains_information_requests?.filter(elm => elm.key === 1)[0]?.count || 0}
             />
           </VStack>
@@ -596,18 +603,18 @@ export default function SearchDatasetPage() {
               color="#464A51"
               marginBottom="4px"
             >
-              Recursos
+              {t('resources')}
             </Text>
 
             <CheckboxFilterComponent
               value="open_data"
-              text="Grátis"
+              text={t('openData')}
               count={aggregations?.contains_open_data?.filter(elm => elm.key === 1)[0]?.count || 0}
             />
 
             <CheckboxFilterComponent
               value="closed_data"
-              text="Pagos"
+              text={t('closedData')}
               count={aggregations?.contains_closed_data?.filter(elm => elm.key === 1)[0]?.count || 0}
             />
           </VStack>
@@ -620,7 +627,7 @@ export default function SearchDatasetPage() {
             choices={aggregations?.themes}
             valueField="key"
             displayField="name"
-            fieldName="Tema"
+            fieldName={t('theme')}
             valuesChecked={valuesCheckedFilter("theme")}
             onChange={(value) => handleSelectFilter(["theme",`${value}`])}
             isLoading={!isLoading}
@@ -634,7 +641,7 @@ export default function SearchDatasetPage() {
             choices={aggregations?.organizations}
             valueField="key"
             displayField="name"
-            fieldName="Organização"
+            fieldName={t('organization')}
             valuesChecked={valuesCheckedFilter("organization")}
             onChange={(value) => handleSelectFilter(["organization",`${value}`])}
             isLoading={!isLoading}
@@ -648,7 +655,7 @@ export default function SearchDatasetPage() {
             choices={aggregations?.tags}
             valueField="key"
             displayField="name"
-            fieldName="Etiqueta"
+            fieldName={t('tag')}
             valuesChecked={valuesCheckedFilter("tag")}
             onChange={(value) => handleSelectFilter(["tag",`${value}`])}
             isLoading={!isLoading}
@@ -662,7 +669,7 @@ export default function SearchDatasetPage() {
             choices={aggregations?.observation_levels}
             valueField="key"
             displayField="name"
-            fieldName="Nível da observação"
+            fieldName={t('observationLevel')}
             valuesChecked={valuesCheckedFilter("observation_level")}
             onChange={(value) => handleSelectFilter(["observation_level",`${value}`])}
             isLoading={!isLoading}
@@ -698,7 +705,7 @@ export default function SearchDatasetPage() {
                 `${count} conjunto${count > 1 ? "s": ""} encontrado${count > 1 ? "s": ""} ${!!query.q ? ` para ${query.q}` : ""}`
                 :
                 count === 0  && showEmptyState ?
-                  `0 conjuntos encontrados`
+                  `${t('noDatasetsFound')}`
                 :
                 <Box as="span" width="fit-content" display="flex" flexDirection="row" gap="8px" alignItems="center">
                   <Spinner height="18px" width="18px" color="#252A32"/> <Text as="span">encontrando conjuntos {!!query.q ? ` para ${query.q}` : ""}</Text>
@@ -710,9 +717,9 @@ export default function SearchDatasetPage() {
           {showEmptyState &&
             <DataProposalBox 
               image= {true}
-              display= "Ooops..."
-              text= "Infelizmente não encontramos nenhum conjunto para sua busca."
-              bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
+              display= {t('ooops')}
+              text= {t('unfortunatelyNoDatasetsFound')}
+              bodyText= {t('tryRelatedTerms')}
             />
           }
 
@@ -736,22 +743,22 @@ export default function SearchDatasetPage() {
 
           {pageInfo?.count >=1 && pageInfo?.count <=10 &&
             <DataProposalBox 
-              text= "Ainda não encontrou o que está procurando?"
-              bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
+              text= {t('stillNotFound')}
+              bodyText= {t('tryRelatedTerms')}
             />
           }
 
           {pageInfo.page >= 2 &&
             <DataProposalBox 
-              text= "Ainda não encontrou o que está procurando?"
-              bodyText= "Tente pesquisar por termos relacionados ou proponha novos dados para adicionarmos na BD."
+              text= {t('stillNotFound')}
+              bodyText= {t('tryRelatedTerms')}
             />
           }
 
             {!showEmptyState &&
               <ReactPaginate
-                previousLabel={"Anterior"}
-                nextLabel={"Próxima"}
+                previousLabel={t('previous')}
+                nextLabel={t('next')}
                 breakLabel={"..."}
                 breakClassName={"break-me"}
                 forcePage={pageInfo.page - 1 || 0}

@@ -10,6 +10,7 @@ import Card from "../molecules/Card";
 import { CategoryIcon } from "../atoms/CategoryIcon";
 import Link from "../atoms/Link";
 import { ThemeTag } from "../atoms/ThemeTag";
+import { useTranslation } from 'next-i18next';
 
 export default function DatabaseCard({
   name,
@@ -21,6 +22,7 @@ export default function DatabaseCard({
   informationRequests,
   link,
 }) {
+  const { t } = useTranslation('dataset');
   const databaseInfo = []
 
   if(tables.number > 0) {
@@ -46,9 +48,8 @@ export default function DatabaseCard({
             style={{display: "flex"}}
           >
             <b>{tables?.number === 1 ?
-              "1 tabela tratada"
-            : 
-              `${tables?.number || 0} tabelas tratadas`
+              `1 ${t('datasetCard.table')}` :
+              `${tables?.number || 0} ${t('datasetCard.tables')}`
             }</b>
           </a>
         </Stack>
@@ -59,15 +60,15 @@ export default function DatabaseCard({
   if (rawDataSources.number > 0) {
     databaseInfo.push(
       rawDataSources.number === 1 ?
-      "1 fonte original" :
-      `${rawDataSources.number} fontes originais`
+      `1 ${t('datasetCard.rawDataSource')}` :
+      `${rawDataSources.number} ${t('datasetCard.rawDataSources')}`
     )
   }
   if (informationRequests.number > 0) {
     databaseInfo.push(
       informationRequests.number === 1 ?
-      "1 pedido LAI" :
-      `${informationRequests.number} pedidos LAI`
+      `1 ${t('datasetCard.informationRequest')}` :
+      `${informationRequests.number} ${t('datasetCard.informationRequests')}`
     )
   }
 
@@ -190,7 +191,7 @@ export default function DatabaseCard({
             cursor={databaseInfo[1] && "pointer"}
             _hover={databaseInfo[1] && {opacity : "0.7"}}
           >
-            {databaseInfo[1] ? databaseInfo[1] : "0 fontes originais"}
+            {databaseInfo[1] ? databaseInfo[1] : t('datasetCard.noRawDataSources')}
           </Link>
           <Text color="#DEDFE0">•</Text>
           <Link
@@ -205,7 +206,7 @@ export default function DatabaseCard({
             cursor={databaseInfo[2] && "pointer"}
             _hover={databaseInfo[2] && {opacity : "0.7"}}
           >
-            {databaseInfo[2] ? databaseInfo[2] : "0 pedidos LAI"}
+            {databaseInfo[2] ? databaseInfo[2] : t('datasetCard.noInformationRequests')}
           </Link>
         </HStack>
       </VStack>

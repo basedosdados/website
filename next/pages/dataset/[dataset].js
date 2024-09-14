@@ -12,6 +12,8 @@ import {
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import BigTitle from "../../components/atoms/BigTitle";
 import Link from "../../components/atoms/Link";
@@ -31,15 +33,16 @@ import {
 
 import { withPages } from "../../hooks/pages.hook";
 
-export async function getStaticProps(context) {
-  const dataset = await getShowDataset(context.params.dataset) || null
+export async function getStaticProps({ params, locale }) {
+  const dataset = await getShowDataset(params.dataset) || null;
 
   return await withPages({
     props: {
+      ...(await serverSideTranslations(locale, ['dataset'])),
       dataset,
     },
     revalidate: 30,
-  })
+  });
 }
 
 export async function getStaticPaths(context) {
@@ -54,6 +57,7 @@ export async function getStaticPaths(context) {
 }
 
 export default function DatasetPage ({ dataset }) {
+  const { t } = useTranslation(['dataset']);
   const router = useRouter()
   const { query } = router
   const [tabIndex, setTabIndex] = useState(0)
@@ -70,7 +74,7 @@ export default function DatasetPage ({ dataset }) {
   return (
     <MainPageTemplate userTemplate footerTemplate="simple">
       <Head>
-        <title>{dataset.name} – Base dos Dados</title>
+        <title>{dataset.name} – t('dataBasis')</title>
 
         <link
           rel="image_src"
@@ -88,7 +92,7 @@ export default function DatasetPage ({ dataset }) {
         />
         <meta
           property="og:title"
-          content={`${dataset.name} – Base dos Dados`}
+          content={`${dataset.name} – t('dataBasis')`}
           key="ogtitle"
         />
         <meta property="og:description" content={dataset.description} key="ogdesc" />
@@ -139,13 +143,13 @@ export default function DatasetPage ({ dataset }) {
                   fontWeight="500"
                   lineHeight="42px"
                 >
-                  {dataset.name || "Conjunto sem nome"}
+                  {dataset.name || t('noName')}
                 </BigTitle>
               </GridItem>
 
               <GridItem colSpan={2} minHeight="60px" marginBottom="8px">
                 <ReadMore id="readLessDataset">
-                  {dataset?.description || "Nenhuma descrição fornecida."}
+                  {dataset?.description || t('noDescription')}
                 </ReadMore>
               </GridItem>
 
@@ -158,7 +162,7 @@ export default function DatasetPage ({ dataset }) {
                   color="#252A32"
                   marginBottom="8px"
                 >
-                  Cobertura temporal do conjunto
+                  {t('temporalCoverage')}
                 </Text>
                 <Text
                   fontFamily="Roboto"
@@ -167,7 +171,7 @@ export default function DatasetPage ({ dataset }) {
                   lineHeight="20px"
                   color="#464A51"
                 >
-                  {dataset.coverage || "Nenhuma cobertura temporal fornecida."}
+                  {dataset.coverage || t('noCoverage')}
                 </Text>
               </GridItem>
 
@@ -180,7 +184,7 @@ export default function DatasetPage ({ dataset }) {
                   color="#252A32"
                   marginBottom="8px"
                 >
-                  Organização
+                  {t('organization')}
                 </Text>
                 <Text
                   as="a"
@@ -193,7 +197,7 @@ export default function DatasetPage ({ dataset }) {
                     lineHeight="20px"
                     color="#464A51"
                   >
-                    {dataset?.organization?.name || "Nenhuma organização fornecida."}
+                    {dataset?.organization?.name || t('noOrganization')}
                   </Text>
                 </Text>
               </GridItem>
@@ -213,22 +217,22 @@ export default function DatasetPage ({ dataset }) {
           >
             <GreenTab>
               <DataBaseIcon
-                alt="dados"
+                alt={t('dataset:dataAlt')}
                 width="18px"
                 height="18px"
                 marginRight="6px"
               />
-              Dados
+              {t('data')}
             </GreenTab>
 
             <GreenTab display="none">
               <CrossingIcon
-                alt="cruzamento"
+                alt={t('crossingAlt')}
                 width="28px"
                 height="24px"
                 marginRight="2px"
               />
-              Cruzamento
+              {t('crossing')}
             </GreenTab>
           </TabList>
 

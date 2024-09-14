@@ -7,6 +7,7 @@ import {
   Box
 } from "@chakra-ui/react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import { useTranslation } from 'next-i18next';
 
 import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";
@@ -22,6 +23,7 @@ export default function Database({
   informationRequests,
   contains,
 }) {
+  const { t } = useTranslation('dataset');
 
   const Tables = () => {
     let tablesNumber = tables.number
@@ -48,7 +50,7 @@ export default function Database({
         href={tablesNumber > 0 ? `/dataset/${id}?table=${tables.id}` : ""}
       >
         <DataBaseSolidIcon
-          alt="tabelas tratadas"
+          alt={t('tables')}
           width="15px"
           height="15px"
         />
@@ -57,7 +59,7 @@ export default function Database({
           whiteSpace="nowrap"
         >
           {tablesNumber}{" "}
-          {tablesNumber === 1 ? "tabela tratada" : "tabelas tratadas"}
+          {tablesNumber === 1 ? t('datasetCard.table') : t('datasetCard.tables')}
         </Text>
       </Text>
     )
@@ -88,7 +90,7 @@ export default function Database({
         href={rawDataSourcesNumber > 0 ? `/dataset/${id}?raw_data_source=${rawDataSources.id}` : ""}
       >
         <LinkIcon
-          alt="fontes originais"
+          alt={t('rawDataSources')}
           width="15px"
           height="15px"
         />
@@ -97,7 +99,7 @@ export default function Database({
           whiteSpace="nowrap"
         >
           {rawDataSourcesNumber}{" "}
-          {rawDataSourcesNumber === 1 ? "fonte original" : "fontes originais"}
+          {rawDataSourcesNumber === 1 ? t('datasetCard.rawDataSource') : t('datasetCard.rawDataSources')}
         </Text>
       </Text>
     )
@@ -128,7 +130,7 @@ export default function Database({
         href={informationRequestsNumber > 0 ? `/dataset/${id}?information_request=${informationRequests.id}` : ""}
       >
         <InfoArrowIcon
-          alt="pedidos Lai"
+          alt={t('informationRequests')}
           width="15px"
           height="15px"
         />
@@ -137,7 +139,7 @@ export default function Database({
           whiteSpace="nowrap"
         >
           {informationRequestsNumber}{" "}
-          {informationRequestsNumber === 1 ? "pedido LAI" : "pedidos LAI"}
+          {informationRequestsNumber === 1 ? t('datasetCard.informationRequest') : t('datasetCard.informationRequests')}
         </Text>
       </Text>
     )
@@ -169,7 +171,7 @@ export default function Database({
         >
           <Image
             src={organization?.picture.startsWith("https://") ? organization?.picture : `https://basedosdados.org/uploads/group/${organization?.name}`}
-            alt={organization.name || "Não informado"}
+            alt={organization.name || t('notProvided')}
             borderRadius="16px"
             minWidth="222px"
             minHeight="138px"
@@ -229,7 +231,7 @@ export default function Database({
                   lineHeight="20px"
                   color="#464A51"
                 >
-                  Organização:
+                  {t('organization')}:
                 </Text>
                 <Text
                   as="a"
@@ -259,7 +261,7 @@ export default function Database({
                   lineHeight="20px"
                   color="#464A51"
                 >
-                  Cobertura temporal:
+                  {t('temporalCoverage')}:
                 </Text>
                 <Text
                   fontFamily="Roboto"
@@ -268,7 +270,7 @@ export default function Database({
                   lineHeight="20px"
                   color="#71757A"
                 >
-                  {temporalCoverageText ? temporalCoverageText : "Não informado"}
+                  {temporalCoverageText ? temporalCoverageText : t('noCoverage')}
                 </Text>
               </Stack>
 
@@ -283,7 +285,7 @@ export default function Database({
                   lineHeight="20px"
                   color="#464A51"
                 >
-                  Recursos:
+                  {t('resources')}:
                 </Text>
                 <Text
                   fontFamily="Roboto"
@@ -292,8 +294,8 @@ export default function Database({
                   lineHeight="20px"
                   color="#71757A"
                 >
-                  {contains.free && "Grátis"} {contains.free && contains.pro && "e"} {contains.pro && "Pagos"}
-                  {!contains.free && !contains.pro && "Não informado"}
+                  {contains.free && t('openData')} {contains.free && contains.pro && "e"} {contains.pro && t('closedData')}
+                  {!contains.free && !contains.pro && t('noOrganization')}
                 </Text>
               </Stack>
             </VStack>
