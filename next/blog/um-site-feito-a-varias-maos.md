@@ -154,7 +154,7 @@ Como mudamos totalmente o *back-end* do site, ao invés de substituirmos o códi
 
 O toque final foi criar uma [**página de manutenção**](https://info.basedosdados.org/home) (landing no *Hubspot*, como a nossa página de [newsletter](https://info.basedosdados.org/assine-a-newsletter-da-base-dos-dados)), assim nossos usuários saberiam que estamos fazendo uma migração.
 
-![](/blog/um-site-feito-a-varias-maos/image_9.png)
+<Image src="/blog/um-site-feito-a-varias-maos/image_9.png"/>
 
 ## Ciclo contínuo de melhorias
 
