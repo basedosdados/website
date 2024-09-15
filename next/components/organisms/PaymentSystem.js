@@ -89,30 +89,57 @@ export default function PaymentSystem({ userData, plan, coupon, onSucess, onErro
   const appearance = {
     theme: "stripe",
     variables: {
+      fontFamily: 'Roboto, sans-serif',
       fontSizeBase: "16px",
       fontSizeSm: "16px",
-      fontFamily: "Ubuntu",
       borderRadius: "14px",
-      colorPrimary: "#42B0FF",
+      colorPrimary: "#2B8C4D",
       colorTextPlaceholder: "#464A51",
-      colorDanger: "#D93B3B",
-      colorBackground: "#FFF",
+      colorDanger: "#BF3434",
+      colorBackground: "#FFFFFF",
       colorText: "#252A32",
     },
     rules: {
       ".Input": {
-        border: "1px solid #DEDFE0",
+        border: "2px solid #EEEEEE",
+        backgroundColor: "#EEEEEE"
       },
       ".Input:hover": {
-        border: "2px solid #42B0FF",
+        backgroundColor:"#DEDFE0",
+        borderColor: "#DEDFE0"
       },
+      ".Input:focus": {
+        backgroundColor: "#FFFFFF",
+        border:"2px solid #0068C5",
+        borderColor: "#0068C5",
+        boxShadow: "none",
+        outline: "none"
+      },
+      ".Input:focus:hover": {
+        backgroundColor: "#FFFFFF",
+        borderColor: "#0068C5",
+      },
+      ".Tab": {
+        border: "2px solid #ececec",
+        backgroundColor: "#FFF",
+        boxShadow: "none"
+      },
+      ".Tab:focus": {
+        boxShadow: "none"
+      },
+      ".Tab--selected": {
+        boxShadow: "none"
+      },
+      ".Tab--selected:focus": {
+        boxShadow: "none"
+      }
     }
   }
 
   const options = {
     clientSecret,
     appearance,
-    fonts: [{ cssSrc: 'https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap' }],
+    fonts: [{ cssSrc: 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' }],
   }
 
   const customerCreatPost = async (id, coupon) => {
