@@ -28,9 +28,9 @@ Vamos investigar se a atuação feminina na 57ª Legislatura (a atual) é muito 
 
 Este artigo é parte da Campanha #DeOlhoNaCamara. O objetivo da campanha é promover uma série de conteúdos para te ajudar a construir suas próprias análises. Confira abaixo os artigos e tutoriais já publicados e não deixe de [assinar gratuitamente a BDletter](https://info.basedosdados.org/newsletter) para ficar por dentro das novidades da BD.
 
-> [*Conheça os dados que te ajudam a monitorar a Câmara dos Deputados*](https://medium.com/basedosdados/de-olho-na-c%C3%A2mara-conhe%C3%A7a-os-dados-que-te-ajudam-a-monitorar-a-c%C3%A2mara-dos-deputados-1570cf740c43)
+> [*Conheça os dados que te ajudam a monitorar a Câmara dos Deputados*](/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados)
 >
-> [Veja nosso tutorial sobre Como Analisar os Dados Abertos da Câmara com a BD](https://medium.com/basedosdados/de-olho-na-c%C3%A2mara-como-analisar-os-dados-abertos-da-c%C3%A2mara-dos-deputados-6a36292aa384?source=collection_home---------0----------------------------)
+> [Veja nosso tutorial sobre Como Analisar os Dados Abertos da Câmara com a BD](/blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados)
 
 ## Sobre o indicador
 

@@ -15,7 +15,7 @@ medium_slug: https://medium.com/@basedosdados/o-brasil-nas-olimp%C3%ADadas-2a3f9
 
 ## TL;DR
 
-Hoje começa mais uma edição das Olimpíadas, mas você sabia que os jogos da Era Moderna tiveram sua primeira edição em 1896? Nesse texto vamos apresentar dados históricos dos Jogos Olímpicos, que já estão limpos, tratados e disponíveis no datalake público da Base dos Dados. Os [microdados das Olimpíadas](https://basedosdados.org/dataset/mundo-kaggle-olimpiadas) trazem informações sobre os jogos, cidade sede, as delegações, atletas e suas características, além dos esportes, suas diferentes modalidades e medalhistas também.
+Hoje começa mais uma edição das Olimpíadas, mas você sabia que os jogos da Era Moderna tiveram sua primeira edição em 1896? Nesse texto vamos apresentar dados históricos dos Jogos Olímpicos, que já estão limpos, tratados e disponíveis no datalake público da Base dos Dados. Os [microdados das Olimpíadas](https://basedosdados.org/dataset/62f8cb83-ac37-48be-874b-b94dd92d3e2b?table=567b1ccd-d8c2-4616-bacb-cf5c0e7b8d89) trazem informações sobre os jogos, cidade sede, as delegações, atletas e suas características, além dos esportes, suas diferentes modalidades e medalhistas também.
 
 <Image src="/blog/o-brasil-nas-olimpiadas/image_0.jpg"/>
 

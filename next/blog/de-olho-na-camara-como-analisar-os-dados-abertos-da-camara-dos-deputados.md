@@ -25,7 +25,7 @@ A criação do Portal de Dados Abertos da Câmara dos Deputados facilitou muito 
 
 É para você poder responder essas e muitas outras perguntas que nós criamos a campanha De Olho Na Câmara. O objetivo da campanha é promover uma série de conteúdos para te ajudar a construir suas próprias análises. Você pode conferir o artigo anterior, que recupera o contexto histórico da disponibilização dos dados da Câmara, além de um compilado de links e informações úteis. Considere também assinar nossa newsletter mensal para ficar por dentro dos próximos lançamentos.
 
-> [Conheça os dados que te ajudam a monitorar a Câmara dos Deputados](https://medium.com/basedosdados/de-olho-na-c%C3%A2mara-conhe%C3%A7a-os-dados-que-te-ajudam-a-monitorar-a-c%C3%A2mara-dos-deputados-1570cf740c43)
+> [Conheça os dados que te ajudam a monitorar a Câmara dos Deputados](/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados)
 >
 > [Assine a BDletter](https://info.basedosdados.org/newsletter)
 
@@ -55,7 +55,7 @@ Outra observação importante é sobre o tratamento de dados. Além de todas as 
 
 Além disso, grande parte das tabelas são tratadas via [DBT (Data Build Tool)](https://docs.getdbt.com/docs/introduction), que é uma ferramenta para transformar dados em SQL (Structured Query Language). Isso é muito útil no nosso contexto do datalake, em que um grande volume de dados é armazenado e processado. Com essa ferramenta, é possível fazer testes unitários para verificar aspectos do nível de observação da tabela, como a proporção de nulos, verificação do cruzamento de colunas identificadoras com a tabela de diretórios, enfim, tudo o que diz respeito à garantia da qualidade dos dados.
 
-[Saiba mais sobre o sistema de inserção de dados na BD aqui](https://medium.com/basedosdados/como-funciona-o-sistema-de-inser%C3%A7%C3%A3o-de-dados-na-bd-61a0fe05c5d5)
+[Saiba mais sobre o sistema de inserção de dados na BD aqui](/blog/como-funciona-o-sistema-de-insercao-de-dados-na-bd)
 
 ## Compreendendo a cobertura temporal
 
@@ -79,7 +79,7 @@ A seguir temos um mapa mental que mostra todas as conexões entre as chaves iden
 
 ## Dados de despesa através das legislaturas
 
-Vamos agora a um exemplo prático utilizando o *datalake* público da BD e consultas SQL. Se precisar de ajuda para criar suas consultas, confira [nosso tutorial de SQL](https://medium.com/basedosdados/bigquery-101-8b39da1ce52b?source=user_profile---------13----------------------------) sobre como acessar os dados da BD usando a linguagem.
+Vamos agora a um exemplo prático utilizando o *datalake* público da BD e consultas SQL. Se precisar de ajuda para criar suas consultas, confira [nosso tutorial de SQL](/blog/google-bigquery-sql-101) sobre como acessar os dados da BD usando a linguagem.
 
 A consulta abaixo nos permite comparar dados de despesa dos(as) deputados ao longo das últimas cinco legislaturas (de 2007 até o presente).
 

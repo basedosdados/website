@@ -104,7 +104,7 @@ basedosdados::read_sql(
 
 Para exemplificar o uso da biblioteca, vamos estudar duas variáveis **de bases diferentes** que acreditamos estar correlacionadas: **investimento em coleta de esgoto** e **mortes por doenças que se propagam na falta de saneamento básico**.
 
-Para começar essa análise, iremos acessar os dados do [Atlas Esgotos da Agência Nacional das Águas](https://basedosdados.org/dataset/br-ana-atlas-esgotos). Ao acessar o link do conjunto de dados no nosso site (acima), você verá listado as “Tabelas tratadas BD+” — isso indica quais tabelas estão disponíveis no banco.
+Para começar essa análise, iremos acessar os dados do [Atlas Esgotos da Agência Nacional das Águas](https://basedosdados.org/dataset/fdd3e0b6-a5bd-4cb6-83c9-eae7cb5cdccb?table=7f12e752-d9db-4dd2-9ced-4650561d72d4). Ao acessar o link do conjunto de dados no nosso site (acima), você verá listado as “Tabelas tratadas BD+” — isso indica quais tabelas estão disponíveis no banco.
 
 <Image src="/blog/como-acessar-dados-publicos-em-r/image_1.png"/>
 
@@ -116,7 +116,7 @@ No código, vem descrito já o nome do conjunto e da tabela no banco — nes
 
 ### Diferentes maneiras de consultar uma tabela no R
 
-Utilizando a função `read_sql()`, iremos carregar os dados do [Atlas Esgostos da ANA](https://basedosdados.org/dataset/br-ana-atlas-esgotos) no R e salvar esse tibble em um objeto chamado `base`.
+Utilizando a função `read_sql()`, iremos carregar os dados do [Atlas Esgostos da ANA](https://basedosdados.org/dataset/fdd3e0b6-a5bd-4cb6-83c9-eae7cb5cdccb?table=7f12e752-d9db-4dd2-9ced-4650561d72d4) no R e salvar esse tibble em um objeto chamado `base`.
 
 ```r
 base <- basedosdados::read_sql(
@@ -184,7 +184,7 @@ basedosdados::download(
 
 Outra aplicação importante do pacote é a possibilidade de **juntar diferentes bases sem ter que abrí-las individualmente**.
 
-Para exemplificar, vamos comparar os dados que obtemos de saneamento com o **nível de mortalidade por doenças relacionadas à falta de saneamento**. Para explorar mortalidade precisamos de *número de óbitos*, que estão na tabela do [Sistema de Mortalidade do Ministério da Saúde (SIM)](https://basedosdados.org/dataset/br-ms-sim), e da *população*, na [tabela de população do IBGE](https://basedosdados.org/dataset/br-ibge-populacao). Ambas as tabelas estão disponíveis na BD+ nos links acima!
+Para exemplificar, vamos comparar os dados que obtemos de saneamento com o **nível de mortalidade por doenças relacionadas à falta de saneamento**. Para explorar mortalidade precisamos de *número de óbitos*, que estão na tabela do [Sistema de Mortalidade do Ministério da Saúde (SIM)](https://basedosdados.org/dataset/5beeec93-cbf3-43f6-9eea-9bee6a0d1683?table=dea823a5-cad7-4014-b77c-4aa33b3b0541), e da *população*, na [tabela de população do IBGE](https://basedosdados.org/dataset/d30222ad-7a5c-4778-a1ec-f0785371d1ca?table=2440d076-8934-471f-8cbe-51faae387c66). Ambas as tabelas estão disponíveis na BD+ nos links acima!
 
 Para cruzar as tabelas vamos filtrar ambas para o ano de 2013, referente ao Atlas Esgotos (tabela anterior), pela coluna `ano` presente em todas as tabelas. Além disso, vamos também escolher somente a mortalidade de `causa_basica` referente a **doenças diarréicas**, relacionadas à falta de saneamento básico. Os códigos de referência da coluna `causa_basica` na tabela SIM podem ser [consultados aqui](https://github.com/basedosdados/mais/blob/master/bases/br_ms_sim/dictionaries/CID10/CID-10-CATEGORIAS.CSV). A query abaixo faz esses filtros e seleciona as colunas tanto da base de população e quanto de mortalidade:
 

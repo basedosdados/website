@@ -22,7 +22,7 @@ Conheça essa base que funciona como um perfil completo de unidades como municí
 
 ## TL;DR
 
-Neste artigo vamos apresentar nossa base de [Diretórios Brasileiros](https://basedosdados.org/dataset/br-bd-diretorios-brasil), que está disponível no nosso datalake público (a BD+), onde disponibilizamos diversas bases de dados públicas já tratadas, organizadas e integradas para análise. Também vamos demonstrar como essa base facilita o cruzamento entre tabelas de diferentes conjuntos de dados e como você pode aplicá-la em sua análise, com um exemplo prático de aplicação.
+Neste artigo vamos apresentar nossa base de [Diretórios Brasileiros](https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=0a2d8187-f936-437d-89db-b4eb3a7e1735), que está disponível no nosso datalake público (a BD+), onde disponibilizamos diversas bases de dados públicas já tratadas, organizadas e integradas para análise. Também vamos demonstrar como essa base facilita o cruzamento entre tabelas de diferentes conjuntos de dados e como você pode aplicá-la em sua análise, com um exemplo prático de aplicação.
 
 ## A Base de Diretórios Brasileiros
 
@@ -42,7 +42,7 @@ Para exemplificar como a base de Diretórios Brasileiros facilita o cruzamento d
 
 ### Indicadores de Mobilidade e Transportes
 
-No primeiro exemplo, cruzamos a tabela `municipio` da base de Diretórios Brasileiros com a tabela `tempo_deslocamento_casa_trabalho`, da base de [Indicadores de Mobilidade e Transporte](https://basedosdados.org/dataset/br-mobilidados-indicadores) da [Mobilidados](https://mobilidados.org.br/), que contém dados sobre tempo médio de deslocamento casa-trabalho, assim como de percentual de pessoas que gastam mais de uma hora neste deslocamento no ano de 2010.
+No primeiro exemplo, cruzamos a tabela `municipio` da base de Diretórios Brasileiros com a tabela `tempo_deslocamento_casa_trabalho`, da base de [Indicadores de Mobilidade e Transporte](https://basedosdados.org/dataset/e3edf621-c491-4d74-a03a-15a759f6e638?table=01114371-3b1b-4574-a3ea-3d7d2125b4f2) da [Mobilidados](https://mobilidados.org.br/), que contém dados sobre tempo médio de deslocamento casa-trabalho, assim como de percentual de pessoas que gastam mais de uma hora neste deslocamento no ano de 2010.
 
 Para isso, usamos como chave primária a coluna `id_municipio`. O objetivo é adicionar as colunas **regiao** e **municipio** no novo conjunto de dados. Assim, além de saber o nome dos municípios, também é possível fazer o agrupamento por cidade, grande região ou por estado e ver qual destes têm o tempo médio de deslocamento maior ou menor.
 
@@ -61,7 +61,7 @@ ON t1.id_municipio = t2.id_municipio
 
 ### Dados de importações e exportações brasileiras
 
-No segundo exemplo, usamos a tabela `pais` da base de Diretórios, com a tabela `municipio_importacao` da base [Comex Stat](https://basedosdados.org/dataset/br-me-comex-stat), que contém dados detalhados das exportações e importações brasileiras, extraídas do [SISCOMEX](http://www.siscomex.gov.br/). Esta tabela específica aborda dados de importação, detalhados por município e empresa importadora.
+No segundo exemplo, usamos a tabela `pais` da base de Diretórios, com a tabela `municipio_importacao` da base [Comex Stat](https://basedosdados.org/dataset/74827951-3f2c-4f9f-b3d0-56e3aa7aeb39?table=f4b08023-5530-4dc9-bced-3321e8928fd7), que contém dados detalhados das exportações e importações brasileiras, extraídas do [SISCOMEX](http://www.siscomex.gov.br/). Esta tabela específica aborda dados de importação, detalhados por município e empresa importadora.
 
 Neste exemplo, usamos como chave primária a coluna `id_pais` para extrair da base de Diretórios o **nome** do país.
 Ao rodar query, teremos como resultado, além do **ID do País** e **Valor da Importação**, o **nome do país**, ou seja, os destinos das importações do Brasil no ano de 2020.
@@ -82,7 +82,7 @@ GROUP BY 1, 2, 3
 ORDER BY 3 DESC
 ```
 
-Acesse a base de Diretórios Brasileiros por [aqui](https://basedosdados.org/dataset/br-bd-diretorios-brasil).
+Acesse a base de Diretórios Brasileiros por [aqui](https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=0a2d8187-f936-437d-89db-b4eb3a7e1735).
 
 Vale lembrar que o cruzamento entre bases não é realizável apenas porque a base de Diretórios funciona como uma espécie de dicionário. Além deste fator, existe o **padrão de qualidade da Base dos Dados**, ou seja, nós compatibilizamos todos os dados para que possam ser cruzados entre tabelas. A limpeza das bases disponíveis em nosso datalake público envolve um rigoroso processo de padronização e compatibilização de dados.
 

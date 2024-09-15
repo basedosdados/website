@@ -50,7 +50,7 @@ Após a checagem dos dados, o pull request de inserção de dados é aprovado e 
 
 <Image src="/blog/como-funciona-o-sistema-de-insercao-de-dados-na-bd/image_1.png"/>
 
-Paralelamente ao processo de inserção de dados, o time de Infra também trabalha com a equipe website na renovação da nossa plataforma, visando oferecer uma interface moderna. Preparamos um [artigo](https://medium.com/basedosdados/um-site-feito-a-v%C3%A1rias-m%C3%A3os-60ddc9eaa4d3?source=collection_home---------2-------------------------------) para mostrar como organizamos um projeto colaborativo para desenvolver uma nova plataforma que facilita ainda mais seu trabalho com dados.
+Paralelamente ao processo de inserção de dados, o time de Infra também trabalha com a equipe website na renovação da nossa plataforma, visando oferecer uma interface moderna. Preparamos um [artigo](/blog/um-site-feito-a-varias-maos) para mostrar como organizamos um projeto colaborativo para desenvolver uma nova plataforma que facilita ainda mais seu trabalho com dados.
 
 ## Contribuindo com dados
 

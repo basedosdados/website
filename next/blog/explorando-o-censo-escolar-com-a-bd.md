@@ -19,7 +19,7 @@ medium_slug: https://medium.com/@basedosdados/explorando-o-censo-escolar-com-a-b
 
 ## TL;DR
 
-Nesse texto, vamos dissecar o conjunto de dados do **Censo Escolar,** já disponível, tratado e pronto para a análise na BD+. Primeiro, vamos introduzir as **quatro** diferentes tabelas da base, apresentando algumas de suas variáveis. Depois, vamos mostrar alguns pontos de contato interessantes com outras tabelas disponíveis em nosso datalake público e perguntas que podem surgir dessas interações. Acesse essa base por [aqui](https://basedosdados.org/dataset/br-inep-censo-escolar). Dentre os temas deste artigo, estão:
+Nesse texto, vamos dissecar o conjunto de dados do **Censo Escolar,** já disponível, tratado e pronto para a análise na BD+. Primeiro, vamos introduzir as **quatro** diferentes tabelas da base, apresentando algumas de suas variáveis. Depois, vamos mostrar alguns pontos de contato interessantes com outras tabelas disponíveis em nosso datalake público e perguntas que podem surgir dessas interações. Acesse essa base por [aqui](https://basedosdados.org/dataset/dae21af4-4b6a-42f4-b94a-4c2061ea9de5?table=cf9586ad-a168-40c1-97f9-86083ba4409f). Dentre os temas deste artigo, estão:
 
 * **O Censo e suas dificuldades**
 * **Explorando o Censo Escolar com a BD+**
@@ -36,7 +36,7 @@ A disponibilização dos dados do Censo, assim como de outras bases de educaçã
 * Os dicionários **não** são muito claros sobre a constância das variáveis: em muitos casos **é necessário abrir a base para verificar a existência** de uma dada variável.
 * O período de 2009 até 2020 soma mais de 100gb se for aberto inteiro no seu computador.
 
-Ao invés de enfrentar tudo isso, você pode usar nossa versão já limpa e harmonizada, baixando via BigQuery ou abrindo as tabelas [direto no R](https://medium.com/basedosdados/como-usar-a-bd-com-r-427aded95448?source=collection_home---------3-------------------------------) ou [no Python](https://medium.com/basedosdados/intro-ao-pacote-basedosdados-em-python-4e05439e936d?source=collection_home---------5-------------------------------).
+Ao invés de enfrentar tudo isso, você pode usar nossa versão já limpa e harmonizada, baixando via BigQuery ou abrindo as tabelas [direto no R](/blog/como-acessar-dados-publicos-em-r) ou [no Python](/blog/intro-ao-pacote-basedosdados-em-python).
 
 ## Explorando o Censo Escolar com a BD+
 
@@ -128,9 +128,9 @@ basedosdados::read_sql("SELECT * FROM `basedosdados.br_inep_censo_escolar.matric
 
 O censo escolar por si só já disponibiliza uma grande variedade de variáveis. Caso você queira obter ainda mais, com a [BD+](https://basedosdados.github.io/mais/access_data_bq/) é fácil: como as bases têm os mesmos nomes de variável, podemos rapidamente juntar diferentes informações. A seguir separamos algumas bases já disponíveis na BD+ que podem complementar bem as tabelas do Censo Escolar:
 
-[Os indicadores escolares do INEP](https://basedosdados.org/dataset/br-inep-indicadores-educacionais): O dataset `br_inep_indicadores_educacionais` apresenta uma série de medições sobre a qualidade de ensino, em diferentes níveis de agregação. Usando a tabela `escola` como ponte, podemos juntar **média de alunos por turma da escola** (proveniente dessa tabela) com **número de computadores da escola** (vindo do Censo) e **construir um mais amplo cenário socioeconômico da escola**.
+[Os indicadores escolares do INEP](https://basedosdados.org/dataset/63f1218f-c446-4835-b746-f109a338e3a1?table=cd65b1d2-45e8-432b-afe8-c3a706addbe8): O dataset `br_inep_indicadores_educacionais` apresenta uma série de medições sobre a qualidade de ensino, em diferentes níveis de agregação. Usando a tabela `escola` como ponte, podemos juntar **média de alunos por turma da escola** (proveniente dessa tabela) com **número de computadores da escola** (vindo do Censo) e **construir um mais amplo cenário socioeconômico da escola**.
 
-[As notas do IDEB](https://basedosdados.org/dataset/br-inep-ideb): O dataset `br_inep_ideb`nos disponibiliza tabelas de diferentes que identificam as notas dos alunos em avaliações da qualidade do ensino (as provas do SAEB), as taxas de rendimento (aprovação, reprovação, abandono) e o desempenho no IDEB. Junto com as tabelas do Censo, pode-se avaliar, por exemplo, **como escolas com mais professores com mestrado vão nessas provas em relação a escolas com professores que não tem pós graduação**.
+[As notas do IDEB](https://basedosdados.org/dataset/96eab476-5d30-459b-82be-f888d4d0d6b9?table=bc84dea9-1126-4423-86d2-8835e6b19a72): O dataset `br_inep_ideb`nos disponibiliza tabelas de diferentes que identificam as notas dos alunos em avaliações da qualidade do ensino (as provas do SAEB), as taxas de rendimento (aprovação, reprovação, abandono) e o desempenho no IDEB. Junto com as tabelas do Censo, pode-se avaliar, por exemplo, **como escolas com mais professores com mestrado vão nessas provas em relação a escolas com professores que não tem pós graduação**.
 
 [Diferentes tabelas da SEDUC](https://basedosdados.org/dataset/?q=seduc): As tabelas da SEDUC disponibilizam informações sobre o nível educacional e socioeconômico das escolas estaduais de São Paulo. Com elas somadas ao censo, pode se avaliar por exemplo **se escolas com melhor infraestrutura tem maior evasão no ensino médio.**
 
