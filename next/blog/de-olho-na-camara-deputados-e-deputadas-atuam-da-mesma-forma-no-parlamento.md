@@ -60,7 +60,7 @@ O Índice Legisla Brasil é multidimensional para ser capaz de captar tipos de a
 
 O indicador também não mede a eficácia das proposições avaliadas, somente o ato de produção. É custoso acompanhar a tramitação dos projetos e medir o empenho colocado pelos parlamentares no que eles produzem. Essa é uma limitação do dado.
 
-**#FicaADica**: Você pode conferir o código da análise dessa edição para aprimorar e criar novos recortes. Veja o código por [**aqui**](https://github.com/basedosdados/analises/blob/main/redes_sociais/br_dados_abertos_camara_20240618.ipynb?utm_source=hs_email\&utm_medium=email&_hsenc=p2ANqtz-8IgQ8S3UoomjYWGJPSmkYtdB3Ryud6xH76yvrAR4nC_zJFjfdp_xEKmny0lyHUfP3GWe8BvWI07l7eB4rhffxWIEENz-y3NFtq9kM9Cwg-v4JY5fQ).
+**#FicaADica**: Você pode conferir o código da análise dessa edição para aprimorar e criar novos recortes. Veja o código por [**aqui**](https://github.com/basedosdados/analises/blob/main/redes_sociais/br_dados_abertos_camara_20240618.ipynb).
 
 ## O que vem por aí?
 

@@ -32,6 +32,6 @@ A distribuição geográfica dos valores do metro quadrado construído na cidade
 
 Com assinatura BDPro você pode acessar dados atualizados periodicamente pelo cadastro fiscal da Prefeitura, com informações como valor do terreno, área construída, uso do imóvel e até características do bairro. Comece já seu [teste grátis](https://info.basedosdados.org/bd-pro) e explore!
 
-Que tal utilizar o código dessa análise para criar seus próprios recortes? Todos os códigos das análises que publicamos estão disponíveis em nosso [GitHub](https://github.com/basedosdados/analises/blob/main/redes_sociais/br_sp_geosampa_iptu_iptu_20230829.ipynb?utm_source=hs_email\&utm_medium=email&_hsenc=p2ANqtz---rzGX-OemQw7kAbvZnv_xsuI-i18_fBjxzcsnQTCPQwbTIHNcfCCk6zc-k6wWzLMPKSYn).
+Que tal utilizar o código dessa análise para criar seus próprios recortes? Todos os códigos das análises que publicamos estão disponíveis em nosso [GitHub](https://github.com/basedosdados/analises/blob/main/redes_sociais/br_sp_geosampa_iptu_iptu_20230829.ipynb).
 
-➡️ Acesse os dados por [aqui](https://basedosdados.org/dataset/05f1b96d-883b-4202-a4bd-40379c5d326a?table=bdffc0f4-00da-4437-9ed9-0db7df11d3fa\&utm_source=hs_email\&utm_medium=email&_hsenc=p2ANqtz---rzGX-OemQw7kAbvZnv_xsuI-i18_fBjxzcsnQTCPQwbTIHNcfCCk6zc-k6wWzLMPKSYn)
+➡️ Acesse os dados por [aqui](https://basedosdados.org/dataset/05f1b96d-883b-4202-a4bd-40379c5d326a?table=bdffc0f4-00da-4437-9ed9-0db7df11d3fa)

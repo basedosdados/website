@@ -61,4 +61,4 @@ Segundo ponto que pode também explicar, é o fato das políticas públicas de s
 
 Terceiro ponto é o avanço da medicina que faz com que esta parcela populacional tenha uma sobrevida com doenças crônicas muito maior que antigamente, fazendo com que esses idosos centenários morram com a doença e não em decorrência dela.
 
-**#FicaADica**: Você pode conferir o código da análise dessa edição para aprimorar e criar novos recortes. Veja o código por [**aqui**](https://github.com/basedosdados/analises/blob/cc9f1cc092b5a07f247a3aae038d21dd9b4a135a/redes_sociais/br_ibge_censo_2022_centenarios.ipynb?utm_source=hs_email\&utm_medium=email&_hsenc=p2ANqtz--m2dyztBRl9vKlvBux7BZpvhAU5Ih8f9ufl81o9JrF8o8er2S17ulXMroikOA6Z9Wvt_H925HSMCuov12F83BWrjYUY2kXDcvB4hJX8jm0v2pq0TQ).
+**#FicaADica**: Você pode conferir o código da análise dessa edição para aprimorar e criar novos recortes. Veja o código por [**aqui**](https://github.com/basedosdados/analises/blob/cc9f1cc092b5a07f247a3aae038d21dd9b4a135a/redes_sociais/br_ibge_censo_2022_centenarios.ipynb).
