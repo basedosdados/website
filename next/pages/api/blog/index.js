@@ -26,7 +26,9 @@ export async function getAllPosts() {
   );
 
   posts.sort(
-    (a, b) => new Date(b.frontmatter.date.created) - new Date(a.frontmatter.date.created),
+    (a, b) =>
+      new Date(b.frontmatter.date.created) -
+      new Date(a.frontmatter.date.created),
   );
 
   return posts;
@@ -62,6 +64,8 @@ const remarkPluginCaption = () => (tree) =>
         // Since Embed component has a children (`iframe`), set children as children of iframe
         // React does not support two children, should be nested childrens
         node.children[0].children = children;
+      } else if (node.name === "Blockquote") {
+        node.children = [...children, ...node.children];
       } else {
         node.children = children;
       }

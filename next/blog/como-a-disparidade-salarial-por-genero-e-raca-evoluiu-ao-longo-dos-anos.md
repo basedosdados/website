@@ -25,7 +25,7 @@ medium_slug: >-
 
 Não é novidade que a desigualdade de gênero e raça reflete na empregabilidade e na remuneração dentro do mercado de trabalho no Brasil. Apesar da legislação que proíbe a disparidade salarial entre indivíduos desempenhando a mesma função, a realidade é que tais disparidades persistem. Recentemente, o Governo Federal tomou medidas para enfrentar esse desafio ao publicar uma portaria que regulamenta a Lei nº 14.611/2023. Essa lei cria mecanismos para equalizar salários entre homens e mulheres ocupando o mesmo cargo em empresas com pelo menos 100 funcionários.
 
-<Blockquote author="Natália Leão, Diretora de pesquisa e projetos na Gênero e Número.">
+<Blockquote caption="Natália Leão, Diretora de pesquisa e projetos na Gênero e Número.">
 Atualmente estamos vivendo um momento importante de mudanças culturais no que se refere ao modo de pensar do brasileiro, aos seus aspectos morais e de valores. Com isso temos conquistado muitos avanços no que tange às desigualdades de gênero e raça, e devemos sempre nos perguntar se essas desigualdades são permanentes ou se tivemos mudanças ao longo dos anos.
 </Blockquote>
 

@@ -181,10 +181,42 @@ const LinkedInIcon = createIcon({
 function NativeShare({ url, title, description }) {
   const { hasCopied, onCopy } = useClipboard(url);
 
-  // client-side only
-  if (typeof window === "undefined") {
-    return null;
-  }
+  const [nagivatorAvailable, setNavigatorAvailable] = useState(false);
+
+  useEffect(() => {
+    setNavigatorAvailable(typeof window.navigator.share !== "undefined");
+  }, []);
+
+  return (
+    <Box
+      as="button"
+      variant="unstyled"
+      onClick={() => {
+        if (nagivatorAvailable) {
+          navigator
+            .share({
+              title: `${title} – Blog – Base dos Dados`,
+              text: `${title}\n${description}`,
+              url: url,
+            })
+            .then(() => {})
+            .catch((error) => {
+              console.error(`Something went wrong to share: ${url}`, error);
+            });
+        } else {
+          onCopy();
+        }
+      }}
+    >
+      {nagivatorAvailable ? (
+        <ShareIcon width={"1.4rem"} />
+      ) : hasCopied ? (
+        <CheckIcon width={"1.4rem"} height={"1.4rem"} alt="copiado conteúdo" />
+      ) : (
+        <CopyIcon width={"1.4rem"} height={"1.4rem"} alt="copiar conteúdo" />
+      )}
+    </Box>
+  );
 
   if (navigator.share) {
     return (
@@ -376,37 +408,50 @@ export const mdxComponents = {
       <FigCaption {...children.props} />
     </Box>
   ),
-  Blockquote: (props) => (
-    <Box
-      as="blockquote"
-      padding={"2rem 2.5rem"}
-      borderLeft={"4px solid #7ec876"}
-      marginY={"3rem"}
-      position={"relative"}
-    >
-      <Text
-        as="span"
-        fontSize={"4rem"}
-        pointerEvents={"none"}
-        userSelect={"none"}
-        position={"absolute"}
-        lineHeight={"1"}
-        top="1rem"
+  Blockquote: ({ children }) => {
+    const withCaption = children.length > 1;
+
+    const figcaption = withCaption ? children[0] : null;
+    const body = withCaption ? children[1] : children;
+
+    return (
+      <Box
+        as="blockquote"
+        padding={"2rem 2.5rem"}
+        borderLeft={"4px solid #7ec876"}
+        marginY={"3rem"}
+        position={"relative"}
       >
-        “
-      </Text>
-      <Text
-        as="p"
-        marginTop={"1.5rem"}
-        fontFamily={"Roboto"}
-        fontSize={"lg"}
-        {...props}
-      />
-      <Text as="p" fontFamily={"Roboto"} color="gray">
-        {props.author}
-      </Text>
-    </Box>
-  ),
+        <Text
+          as="span"
+          fontSize={"4rem"}
+          pointerEvents={"none"}
+          userSelect={"none"}
+          position={"absolute"}
+          lineHeight={"1"}
+          top="1rem"
+        >
+          “
+        </Text>
+        <Text
+          as="p"
+          fontFamily={"Roboto"}
+          fontSize={"lg"}
+          marginTop={"1.5rem"}
+          {...body.props}
+        />
+        {figcaption ? (
+          <Text
+            as="p"
+            marginTop={"1rem"}
+            fontFamily={"Roboto"}
+            color="gray"
+            {...figcaption.props}
+          />
+        ) : null}
+      </Box>
+    );
+  },
 };
 
 export function Toc({ headings }) {
