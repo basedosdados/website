@@ -234,14 +234,14 @@ function NativeShare({ url, title, description }) {
 export function ShareButtons({ frontmatter }) {
   const { title, description } = frontmatter;
 
-  const [location, setLocation] = useState("https://basedosdados.org");
+  const [origin, setOrigin] = useState("https://basedosdados.org");
   const router = useRouter();
 
   useEffect(() => {
-    setLocation(window.location.href);
+    setOrigin(window.location.origin);
   }, []);
 
-  const url = location + router.asPath;
+  const url = origin + router.asPath;
 
   const facebook = `https://www.facebook.com/sharer/sharer.php?t=${encodeURIComponent(title)}&u=${encodeURIComponent(url)}`;
 
