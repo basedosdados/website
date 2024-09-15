@@ -8,11 +8,10 @@ authors:
       role: Autor
       social: https://dev.to/paolofullone
     - name: Fernanda
-      role: Equipe Base dos Dados  💚
+      role: Equipe Base dos Dados 💚
       social: https://medium.com/@fernandascovino
 thumbnail: /blog/google-bigquery-sql-101/image_0.jpg
 categories: [tutorial]
-keywords: []
 medium_slug: https://medium.com/@basedosdados/bigquery-101-8b39da1ce52b
 ---
 

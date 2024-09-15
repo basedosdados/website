@@ -4,7 +4,6 @@ description: ''
 date:
   created: '2024-03-20T22:05:17.446Z'
 categories: []
-keywords: []
 medium_slug: >-
   https://medium.com/@basedosdados/vale-lembrar-que-na-base-os-dados-voc%C3%AA-encontra-muitos-dados-do-gov-96eb15c68a9a
 ---

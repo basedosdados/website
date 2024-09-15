@@ -10,7 +10,6 @@ authors:
     role: Autora
     social: https://medium.com/@isabellahelter
 categories: [tutorial]
-keywords: []
 thumbnail: /blog/voce-usa-stata-veja-como-a-bd-facilita-sua-analise-de-dados/image_0.jpg
 medium_slug: https://medium.com/@basedosdados/voc%C3%AA-usa-stata-veja-como-a-bd-facilita-sua-an%C3%A1lise-de-dados-e7ab79111220
 ---

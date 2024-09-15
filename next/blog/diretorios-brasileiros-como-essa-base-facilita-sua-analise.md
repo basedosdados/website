@@ -11,7 +11,6 @@ authors:
     social: https://medium.com/@s.alvescrislane
 thumbnail: /blog/diretorios-brasileiros-como-essa-base-facilita-sua-analise/image_0.jpg
 categories: [tutorial]
-keywords: []
 medium_slug: >-
   https://medium.com/@basedosdados/diret%C3%B3rios-brasileiros-como-essa-base-facilita-sua-an%C3%A1lise-40dc8ce2ca2
 ---

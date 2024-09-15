@@ -9,7 +9,6 @@ authors:
       role: Autor
       social: https://github.com/mavalentim
 categories: [tutorial]
-keywords: []
 medium_slug: https://medium.com/@basedosdados/como-usar-a-bd-com-r-427aded95448
 ---
 

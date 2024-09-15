@@ -11,7 +11,6 @@ authors:
   - name: Base dos Dados
 thumbnail: /blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_0.png
 categories: [analise]
-keywords: []
 medium_slug: >-
   https://medium.com/@basedosdados/de-olho-na-c%C3%A2mara-conhe%C3%A7a-os-dados-que-te-ajudam-a-monitorar-a-c%C3%A2mara-dos-deputados-1570cf740c43
 ---

@@ -9,7 +9,6 @@ authors:
       social: https://github.com/lucasnascm
 thumbnail: /blog/o-brasil-nas-olimpiadas/image_0.jpg
 categories: [analise]
-keywords: []
 medium_slug: https://medium.com/@basedosdados/o-brasil-nas-olimp%C3%ADadas-2a3f9960cc69
 ---
 

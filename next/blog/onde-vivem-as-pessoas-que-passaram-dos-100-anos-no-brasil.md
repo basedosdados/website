@@ -8,7 +8,6 @@ date:
 authors:
 thumbnail: /blog/onde-vivem-as-pessoas-que-passaram-dos-100-anos-no-brasil/image_0.png
 categories: [analise]
-keywords: []
 medium_slug: ''
 ---
 Ainda que tenha sido executado com dois anos de atraso, o Censo Demográfico 2022 teve seus primeiros resultados lançados em junho de 2023. Todas as tabelas disponíveis até o momento estão, também, no datalake público da Base dos Dados, facilitando a análise da população brasileira. População essa que, no período da pesquisa, contava com 203.080.756 indivíduos. Veja abaixo a pirâmide etária de 2022 em comparação com a da última edição da pesquisa.

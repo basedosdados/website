@@ -24,7 +24,6 @@ authors:
      role: Edição
 thumbnail: /blog/quanto-o-brasileiro-compromete-de-sua-renda-em-aluguel/image_2.png
 categories: [analise]
-keywords: []
 medium_slug: >-
   https://medium.com/@basedosdados/quanto-o-brasileiro-compromete-de-sua-renda-em-aluguel-9a0082b213fe
 ---

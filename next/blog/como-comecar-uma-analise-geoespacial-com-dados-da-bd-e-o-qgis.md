@@ -12,7 +12,6 @@ authors:
       role: Edição
 thumbnail: /blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_0.png
 categories: [tutorial]
-keywords: []
 medium_slug: https://medium.com/@basedosdados/como-come%C3%A7ar-uma-an%C3%A1lise-geoespacial-com-dados-da-bd-e-o-qgis-4792877950e0
 ---
 

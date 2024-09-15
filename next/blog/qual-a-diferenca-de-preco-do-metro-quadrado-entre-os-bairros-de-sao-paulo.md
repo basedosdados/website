@@ -15,7 +15,6 @@ authors:
     role: Arte
 thumbnail: /blog/qual-a-diferenca-de-preco-do-metro-quadrado-entre-os-bairros-de-sao-paulo/image_0.png
 categories: [analise]
-keywords: []
 medium_slug: >-
   https://medium.com/@basedosdados/qual-a-diferen%C3%A7a-de-pre%C3%A7o-do-metro-quadrado-entre-os-bairros-de-s%C3%A3o-paulo-14cad7e4a89d
 ---

@@ -7,7 +7,6 @@ date:
   created: '2024-02-29T18:18:06.419Z'
 thumbnail: /blog/como-a-disparidade-salarial-por-genero-e-raca-evoluiu-ao-longo-dos-anos/image_0.png
 categories: [analise]
-keywords: []
 authors:
   - name: Thais Filipi
     role: Análise e texto

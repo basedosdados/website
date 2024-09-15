@@ -11,7 +11,6 @@ authors:
     social: https://github.com/mavalentim
 thumbnail: /blog/explorando-o-censo-escolar-com-a-bd/image_0.jpg
 categories: [analise]
-keywords: []
 medium_slug: https://medium.com/@basedosdados/explorando-o-censo-escolar-com-a-bd-6577d7251ea1
 ---
 

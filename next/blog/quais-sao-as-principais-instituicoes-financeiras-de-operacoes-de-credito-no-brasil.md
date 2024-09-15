@@ -14,7 +14,6 @@ authors:
     role: Edição
 thumbnail: /blog/quais-sao-as-principais-instituicoes-financeiras-de-operacoes-de-credito-no-brasil/image_0.png
 categories: [analise]
-keywords: []
 medium_slug: >-
   https://medium.com/@basedosdados/quais-s%C3%A3o-as-principais-institui%C3%A7%C3%B5es-financeiras-de-opera%C3%A7%C3%B5es-de-cr%C3%A9dito-no-brasil-87b1a9eba3a5
 ---

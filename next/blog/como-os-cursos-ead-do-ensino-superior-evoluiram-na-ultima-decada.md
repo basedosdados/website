@@ -9,7 +9,6 @@ authors:
   - name: Base dos Dados
 thumbnail: /blog/como-os-cursos-ead-do-ensino-superior-evoluiram-na-ultima-decada/image_0.jpg
 categories: [analise]
-keywords: []
 medium_slug: >-
   https://medium.com/@basedosdados/como-os-cursos-ead-do-ensino-superior-evolu%C3%ADram-na-%C3%BAltima-d%C3%A9cada-35469e167f96
 ---

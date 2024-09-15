@@ -26,7 +26,6 @@ authors:
     role: Adaptação e edição
 thumbnail: /blog/como-funciona-o-sistema-de-insercao-de-dados-na-bd/image_0.jpg
 categories: []
-keywords: []
 medium_slug: >-
   https://medium.com/@basedosdados/como-funciona-o-sistema-de-inser%C3%A7%C3%A3o-de-dados-na-bd-61a0fe05c5d5
 ---

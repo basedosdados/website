@@ -11,7 +11,6 @@ authors:
     role: Equipe Base dos Dados
 thumbnail: /blog/um-site-feito-a-varias-maos/image_0.png
 categories: []
-keywords: []
 medium_slug: https://medium.com/@basedosdados/um-site-feito-a-v%C3%A1rias-m%C3%A3os-60ddc9eaa4d3
 ---
 

@@ -14,7 +14,6 @@ authors:
     social: https://github.com/gustavoairestiago
 thumbnail: /blog/analisando-precos-de-combustiveis-com-a-bd/image_0.jpg
 categories: [analise]
-keywords: []
 medium_slug: >-
   https://medium.com/@basedosdados/analisando-pre%C3%A7os-de-combust%C3%ADveis-com-a-bd-9524fadbdfb4
 ---

@@ -15,7 +15,6 @@ authors:
     role: Design e Edição de arte
 thumbnail: /blog/de-olho-na-camara-deputados-e-deputadas-atuam-da-mesma-forma-no-parlamento/image_0.png
 categories: [analise]
-keywords: []
 medium_slug: >-
   https://medium.com/@basedosdados/deputados-e-deputadas-atuam-da-mesma-forma-no-parlamento-90786b721012
 ---

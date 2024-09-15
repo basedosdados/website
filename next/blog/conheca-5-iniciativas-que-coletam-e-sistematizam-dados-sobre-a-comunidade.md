@@ -11,7 +11,6 @@ authors:
     role: Redação
 thumbnail: /blog/conheca-5-iniciativas-que-coletam-e-sistematizam-dados-sobre-a-comunidade/image_0.jpg
 categories: []
-keywords: []
 medium_slug: >-
   https://medium.com/@basedosdados/conhe%C3%A7a-5-iniciativas-que-coletam-e-sistematizam-dados-sobre-a-comunidade-08b71616cb76
 ---

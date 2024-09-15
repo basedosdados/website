@@ -6,7 +6,6 @@ date:
 authors:
 thumbnail: /blog/tutorial-power-bi/image_11.gif
 categories: [tutorial]
-keywords: []
 medium_slug: ''
 ---
 

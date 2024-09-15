@@ -14,7 +14,6 @@ authors:
     role: Design e Edição de Arte
 thumbnail: /blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados/image_0.png
 categories: [analise]
-keywords: []
 medium_slug: >-
   https://medium.com/@basedosdados/de-olho-na-c%C3%A2mara-como-analisar-os-dados-abertos-da-c%C3%A2mara-dos-deputados-6a36292aa384
 ---
