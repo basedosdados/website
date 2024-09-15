@@ -188,7 +188,8 @@ function NativeShare({ url, title, description }) {
 
   if (navigator.share) {
     return (
-      <Button
+      <Box
+        as="button"
         variant="unstyled"
         onClick={() =>
           navigator
@@ -204,12 +205,13 @@ function NativeShare({ url, title, description }) {
         }
       >
         <ShareIcon width={"1.4rem"} />
-      </Button>
+      </Box>
     );
   }
 
   return (
-    <Button
+    <Box
+      as="button"
       variant="unstyled"
       title="Copiar link"
       onClick={onCopy}
@@ -221,7 +223,7 @@ function NativeShare({ url, title, description }) {
       ) : (
         <CopyIcon width={"1.4rem"} height={"1.4rem"} alt="copiar conteúdo" />
       )}
-    </Button>
+    </Box>
   );
 }
 
