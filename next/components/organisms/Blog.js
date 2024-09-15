@@ -200,7 +200,7 @@ function NativeShare({ url, title, description }) {
           navigator
             .share({
               title: `${title} – Blog – Base dos Dados`,
-              text: description,
+              text: `${title}\n ${description}`,
               url: url,
             })
             .then(() => {})
@@ -242,10 +242,7 @@ export function ShareButtons({ frontmatter }) {
   }, []);
 
   const url = origin + router.asPath;
-
-  const facebook = `https://www.facebook.com/sharer/sharer.php?t=${encodeURIComponent(title)}&u=${encodeURIComponent(url)}`;
-
-  const linkedin = `https://www.linkedin.com/shareArticle?url=${encodeURIComponent(url)}&title=${title}`;
+  const encodedUrl = encodeURIComponent(url);
 
   return (
     <Box marginTop={"1rem"}>
@@ -253,12 +250,16 @@ export function ShareButtons({ frontmatter }) {
         Compartilhar
       </Text>
       <Box display={"flex"} alignItems={"center"} gap="1rem">
-        <NextLink href={facebook}>
+        <NextLink
+          href={`https://www.facebook.com/sharer/sharer.php?t=${encodeURIComponent(title)}&u=${encodedUrl}`}
+        >
           <a target="_blank">
             <FacebookIcon width={"1.4rem"} height={"1.4rem"} />
           </a>
         </NextLink>
-        <NextLink href={linkedin}>
+        <NextLink
+          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
+        >
           <a target="_blank">
             <LinkedInIcon width={"1.4rem"} height={"1.4rem"} />
           </a>
