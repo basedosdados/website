@@ -1,7 +1,8 @@
 ---
 title: Poxa. faltou a Base dos Dados aí!
 description: 'Confira: https://basedosdados.org/'
-date: '2024-04-08T19:46:20.931Z'
+date:
+  created: '2024-04-08T19:46:20.931Z'
 categories: []
 keywords: []
 medium_slug: https://medium.com/@basedosdados/poxa-faltou-a-base-dos-dados-a%C3%AD-918edca4d83e

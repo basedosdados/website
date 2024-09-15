@@ -5,7 +5,8 @@ title: >-
 description: >-
   Análise das instituições financeiras com maior participação no crédito ao
   longo das últimas duas décadas
-date: '2023-05-01'
+date:
+  created: '2023-05-01'
 authors:
   - name: Gustavo Alcântara
     role: Análise

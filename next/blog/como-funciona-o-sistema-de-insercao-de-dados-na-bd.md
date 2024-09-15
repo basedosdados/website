@@ -3,7 +3,8 @@ title: Como funciona o sistema de inserção de dados na BD?
 description: >-
   Conheça nossa infraestrutura de inserção de dados e veja como você pode
   melhorar seu portfólio contribuindo
-date: '2021-05-28'
+date:
+  created: '2021-05-28'
 authors:
   - name: Vinicius
     social: https://github.com/vncsna

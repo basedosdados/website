@@ -3,7 +3,8 @@ title: Explorando o Censo Escolar com a BD+
 description: >-
   Uma maneira prática de analisar a mais importante pesquisa estatística
   educacional do Brasil
-date: '2021-06-04'
+date:
+  created: '2021-06-04'
 authors:
   - name: Matheus Valentim
     role: Equipe da Base dos Dados 💚

@@ -3,7 +3,8 @@ title: 'Hello, databaser!'
 description: >-
   Nesta edição, você vai conferir uma análise inédita com os dados do Saeb 2021
   que já estão fresquinhos em nosso datalake público, além de…
-date: ''
+date:
+  created: ''
 categories: []
 keywords: []
 medium_slug: ''

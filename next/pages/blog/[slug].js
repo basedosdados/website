@@ -85,7 +85,7 @@ export default function Post({ slug, mdxSource, headings }) {
           content={frontmatter.thumbnail}
           key="twimage"
         />
-        <meta property="article:published_time" content={frontmatter.date} />
+        <meta property="article:published_time" content={frontmatter.date.created} />
       </Head>
       <Box paddingTop={"4rem"}>
         <Header frontmatter={frontmatter} slug={slug} />

@@ -43,7 +43,7 @@ function DatePost({ date, slug }) {
     day: "numeric",
   });
   return (
-    <Text as="p" fontFamily={"Roboto"} fontSize={"sm"} color="gray">
+    <Text as="span" fontFamily={"Roboto"} fontSize={"sm"} color="gray">
       {localeDate}
     </Text>
   );
@@ -505,7 +505,25 @@ export function Header({ frontmatter, slug }) {
         color={"gray"}
         fontFamily={"Roboto"}
       >
-        <DatePost date={frontmatter.date} slug={slug} />
+        <Box>
+          <Text as="span" fontFamily={"Roboto"} fontSize={"sm"} color="gray">
+            {"Publicado em "}
+          </Text>
+          <DatePost date={frontmatter.date.created} slug={slug} />
+          {frontmatter.date?.updated ? (
+            <Box>
+              <Text
+                as="span"
+                fontFamily={"Roboto"}
+                fontSize={"sm"}
+                color="gray"
+              >
+                {"Atualizado em "}
+              </Text>
+              <DatePost date={frontmatter.date.updated} slug={slug} />
+            </Box>
+          ) : null}
+        </Box>
       </Text>
       <Heading as="h1" fontFamily={"Roboto"} size="2xl">
         {frontmatter.title}
@@ -710,7 +728,7 @@ function LatestBlogCard({ slug, frontmatter }) {
               <Authors authors={authors} />
             </Wrap>
           ) : null}
-          <DatePost date={date} slug={slug} />
+          <DatePost date={date.created} slug={slug} />
         </Box>
       </Box>
     </Box>
@@ -770,7 +788,7 @@ function MiniBlogCard({ slug, frontmatter }) {
             <Authors authors={authors} />
           </Wrap>
         ) : null}
-        <DatePost date={date} slug={slug} />
+        <DatePost date={date.created} slug={slug} />
       </Box>
     </Box>
   );

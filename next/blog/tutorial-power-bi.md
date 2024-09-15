@@ -1,7 +1,8 @@
 ---
 title: Tutorial Power BI
 description:
-date: ''
+date:
+  created: ''
 authors:
 thumbnail: /blog/tutorial-power-bi/image_11.gif
 categories: [tutorial]

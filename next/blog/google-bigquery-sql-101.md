@@ -1,7 +1,8 @@
 ---
 title: Google BigQuery (SQL) 101
 description: Acesse diversas bases de dados públicas com uma simples consulta SQL
-date: '2021-04-26'
+date:
+  created: '2021-04-26'
 authors:
     - name: Paolo
       role: Autor

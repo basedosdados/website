@@ -3,7 +3,8 @@ title: Como explorar e análisar os dados de Crédito Rural no Brasil?
 description: >-
   Veja uma maneira prática de analisar os microdados do Sistema de Operações do
   Crédito Rural e do Proagro (SICOR)
-date: '2023-02-01'
+date:
+  created: '2023-02-01'
 authors:
   - name: Gabriel Pisa
     role: Autor

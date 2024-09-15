@@ -1,7 +1,8 @@
 ---
 title: Título
 description: Teste
-date: ''
+date:
+  created: ''
 categories: []
 keywords: []
 medium_slug: ''

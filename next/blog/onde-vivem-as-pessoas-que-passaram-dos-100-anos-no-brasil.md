@@ -3,7 +3,8 @@ title: Onde vivem as pessoas que passaram dos 100 anos no Brasil?
 description: >-
   Análise e entrevista sobre pessoas centenárias no Brasil e os desafios do
   envelhecimento populacional
-date: ''
+date:
+  created: ''
 authors:
 thumbnail: /blog/onde-vivem-as-pessoas-que-passaram-dos-100-anos-no-brasil/image_0.png
 categories: [analise]

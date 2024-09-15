@@ -2,7 +2,8 @@
 title: Tutorial
 description: >-
   Escreva no blog da Base dos Dados
-date: '2024-07-16T18:43:47.361Z'
+date:
+  created: '2024-07-16T18:43:47.361Z'
 categories: []
 keywords: []
 ---

@@ -1,7 +1,8 @@
 ---
 title: Intro ao pacote basedosdados em Python
 description: Explore os dados do nosso datalake público
-date: '2021-04-16'
+date:
+  created: '2021-04-16'
 authors:
   - name: Vinicius Aguiar
     role: Equipe Base dos Dados 💚

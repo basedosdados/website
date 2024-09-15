@@ -1,7 +1,8 @@
 ---
 title: Como acessar dados públicos em R
 description: Um guia prático para utilizar nosso datalake BD+ na linguagem R
-date: '2021-05-12'
+date:
+  created: '2021-05-12'
 thumbnail: /blog/como-acessar-dados-publicos-em-r/image_0.png
 authors:
     - name: Matheus Valentim

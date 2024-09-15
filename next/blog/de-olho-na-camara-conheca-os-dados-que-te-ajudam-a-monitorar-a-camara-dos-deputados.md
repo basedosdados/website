@@ -5,7 +5,8 @@ title: >-
 description: >-
   Aprenda como acessar e analisar dados sobre a atuação da Câmara, do contexto
   histórico à prática
-date: '2024-06-03T17:33:29.243Z'
+date:
+  created: '2024-06-03T17:33:29.243Z'
 authors:
   - name: Base dos Dados
 thumbnail: /blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_0.png

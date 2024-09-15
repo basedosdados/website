@@ -1,7 +1,8 @@
 ---
 title: Como começar uma análise geoespacial com dados da BD e o QGIS
 description: Aprenda a importar dados da BD no QGIS para criar mapas e visualizações
-date: '2022-10-07'
+date:
+  created: '2022-10-07'
 authors:
     - name: Gustavo Alcântara
       social: https://github.com/gustavoalcantara

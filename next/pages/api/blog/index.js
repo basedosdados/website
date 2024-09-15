@@ -26,7 +26,7 @@ export async function getAllPosts() {
   );
 
   posts.sort(
-    (a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date),
+    (a, b) => new Date(b.frontmatter.date.created) - new Date(a.frontmatter.date.created),
   );
 
   return posts;

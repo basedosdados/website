@@ -3,7 +3,8 @@ title: Como os cursos EAD do Ensino Superior evoluíram na última década?
 description: >-
   Em 12 anos o número de ingressantes em EAD cresceu 657%, segundo dados do
   Censo da Educação Superior
-date: '2024-07-01T21:29:19.247Z'
+date:
+  created: '2024-07-01T21:29:19.247Z'
 authors:
   - name: Base dos Dados
 thumbnail: /blog/como-os-cursos-ead-do-ensino-superior-evoluiram-na-ultima-decada/image_0.jpg

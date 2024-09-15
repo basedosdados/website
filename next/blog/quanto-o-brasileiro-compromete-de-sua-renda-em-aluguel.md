@@ -3,7 +3,8 @@ title: Quanto o brasileiro compromete de sua renda em aluguel?
 description: >-
   Trabalho de alunos da BD Edu usa PNAD para analisar o comprometimento da renda
   do brasileiro com o aluguel
-date: '2023-10-17T15:32:39.376Z'
+date:
+  created: '2023-10-17T15:32:39.376Z'
 authors:
    - name: Ana Paula Bastos
      role: Autora

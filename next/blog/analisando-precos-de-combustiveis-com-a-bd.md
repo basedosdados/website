@@ -3,7 +3,8 @@ title: Analisando preços de combustíveis com a BD+
 description: >-
   Veja como analisar a variação média dos preços de combustíveis no Brasil com
   valores corrigidos pelo IPCA
-date: '2021-10-29T15:22:29.489Z'
+date:
+  created: '2021-10-29T15:22:29.489Z'
 authors:
   - name: Lucas Moreira
     role: Autor

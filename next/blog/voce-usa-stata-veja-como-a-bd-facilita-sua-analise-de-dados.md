@@ -3,7 +3,8 @@ title: Você usa Stata? Veja como a BD facilita sua análise de dados
 description: >-
   Confira como acessar mais de 80 bases de dados públicos de maneira mais
   prática com nosso pacote em Stata.
-date: '2022-05-26'
+date:
+  created: '2022-05-26'
 authors:
   - name: Isabella Helter
     role: Autora

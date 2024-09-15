@@ -3,7 +3,8 @@ title: 'De Olho Na Câmara: Como Analisar os Dados Abertos da Câmara dos Deputa
 description: >-
   Aprenda como acessar e analisar os dados da atividade parlamentar e despesas
   da Câmara
-date: '2024-06-19T13:58:09.699Z'
+date:
+  created: '2024-06-19T13:58:09.699Z'
 authors:
   - name: Thaís Filipi
     role: Análise e texto

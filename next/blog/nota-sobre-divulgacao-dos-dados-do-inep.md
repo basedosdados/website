@@ -3,7 +3,8 @@ title: Nota sobre divulgação dos dados do Inep
 description: >-
   Instituto tira do ar dados do Censo Escolar e do Enem com justificativa de
   adequação à LGPD
-date: '2022-03-09T21:02:04.375Z'
+date:
+  created: '2022-03-09T21:02:04.375Z'
 authors:
   - name: Base dos Dados
     role: Equipe Base dos Dados

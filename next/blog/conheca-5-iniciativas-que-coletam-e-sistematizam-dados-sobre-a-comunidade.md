@@ -3,7 +3,8 @@ title: Conheça 5 iniciativas que coletam e sistematizam dados sobre a comunidad
 description: >-
   Repost: Em 2022, mapeamos 5 iniciativas que contribuiem no combate contra a
   violência e preconceito através de dados.
-date: '2022-06-28'
+date:
+  created: '2022-06-28'
 authors:
   - name: Giovane Caruso
     social: https://medium.com/@giovanecaruso

@@ -3,7 +3,9 @@ title: 'De Olho Na Câmara: Deputados e deputadas atuam da mesma forma no parlam
 description: >-
   Análise do índice de produção legislativa com os Dados Abertos da Câmara por
   gênero e bancada
-date: '2024-07-16T18:43:47.361Z'
+date:
+  created: '2024-07-16T18:43:47.361Z'
+  updated: '2024-09-15T00:50'
 authors:
   - name: Thais Filipi
     role: Análise e texto

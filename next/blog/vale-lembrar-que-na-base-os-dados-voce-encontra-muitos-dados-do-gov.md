@@ -1,7 +1,8 @@
 ---
 title: Vale lembrar que na Base os Dados você encontra muitos dados do .gov
 description: ''
-date: '2024-03-20T22:05:17.446Z'
+date:
+  created: '2024-03-20T22:05:17.446Z'
 categories: []
 keywords: []
 medium_slug: >-

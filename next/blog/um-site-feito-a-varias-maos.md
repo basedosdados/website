@@ -3,7 +3,8 @@ title: Um site feito a várias mãos
 description: >-
   Conheça o projeto colaborativo para desenvolver uma plataforma que facilita
   ainda mais seu trabalho com dados.
-date: '2021-12-22T15:41:54.427Z'
+date:
+  created: '2021-12-22T15:41:54.427Z'
 authors:
   - name: Base dos Dados
     social: https://basedosdados.org/quem-somos

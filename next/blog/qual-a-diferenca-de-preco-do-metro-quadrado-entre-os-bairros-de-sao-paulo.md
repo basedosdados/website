@@ -3,7 +3,8 @@ title: Qual a diferença de preço do metro quadrado entre os bairros de São Pa
 description: >-
   Analisamos os dados do GeoSampa para mapear a disparidade de valores em São
   Paulo
-date: '2023-09-07T00:03:07.999Z'
+date:
+  created: '2023-09-07T00:03:07.999Z'
 authors:
   - name: Gustavo Alcantara
     role: Dados
