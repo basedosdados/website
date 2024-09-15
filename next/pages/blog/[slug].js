@@ -91,25 +91,31 @@ export default function Post({ slug, mdxSource, headings }) {
         <Header frontmatter={frontmatter} slug={slug} />
         <Box
           display={"flex"}
-          flexDirection={"row"}
+          flexDirection={{ base: "column", md: "row" }}
           alignItems={"start"}
           maxWidth={"100%"}
         >
-          {/* TODO(aspeddro): Revisit this */}
-          <Box as="section" width={"65%"}>
+          <Box
+            as="section"
+            width={{ base: "100%", md: "65%", xl: "65%" }}
+            marginBottom={"2rem"}
+          >
             <MDXRemote {...mdxSource} components={mdxComponents} />
           </Box>
           <Box
             as="aside"
             marginLeft={"auto"}
-            marginTop={"2rem"}
+            marginTop={{ base: "0", md: "2rem" }}
             position={"sticky"}
             top="6rem"
-            paddingLeft={"5rem"}
-            width="35%"
+            paddingLeft={{ base: "0", md: "5rem" }}
+            width={{ base: "100%", md: "35%", xl: "35%" }}
           >
-            <Toc headings={headings} />
+            <Box display={{ base: "none", md: "block" }}>
+              {headings.length > 0 ? <Toc headings={headings} /> : null}
+            </Box>
             <Contribute slug={slug} />
+            <Box as="hr" marginY={"1rem"} />
             <ShareButtons frontmatter={frontmatter} />
           </Box>
         </Box>

@@ -25,7 +25,6 @@ import {
   Link,
 } from "@chakra-ui/react";
 
-// import Link from "../atoms/Link"
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -151,14 +150,9 @@ function CodeBlock({ children }) {
 
 const ShareIcon = createIcon({
   displayName: "share",
-  viewBox: "0 0 24 24",
+  viewBox: "0 0 16 16",
   path: (
-    <path
-      fill="currentColor"
-      fill-rule="evenodd"
-      d="M15.218 4.931a.4.4 0 0 1-.118.132l.012.006a.45.45 0 0 1-.292.074.5.5 0 0 1-.3-.13l-2.02-2.02v7.07c0 .28-.23.5-.5.5s-.5-.22-.5-.5v-7.04l-2 2a.45.45 0 0 1-.57.04h-.02a.4.4 0 0 1-.16-.3.4.4 0 0 1 .1-.32l2.8-2.8a.5.5 0 0 1 .7 0l2.8 2.79a.42.42 0 0 1 .068.498m-.106.138.008.004v-.01zM16 7.063h1.5a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-11c-1.1 0-2-.9-2-2v-10a2 2 0 0 1 2-2H8a.5.5 0 0 1 .35.15.5.5 0 0 1 .15.35.5.5 0 0 1-.15.35.5.5 0 0 1-.35.15H6.4c-.5 0-.9.4-.9.9v10.2a.9.9 0 0 0 .9.9h11.2c.5 0 .9-.4.9-.9v-10.2c0-.5-.4-.9-.9-.9H16a.5.5 0 0 1 0-1"
-      clip-rule="evenodd"
-    ></path>
+    <path d="m 12.818311,11.294921 c 1.280064,0 2.333667,1.054406 2.333667,2.333668 0,1.279261 -1.054406,2.371411 -2.333667,2.371411 -1.279262,0 -2.333668,-1.09215 -2.333668,-2.371411 0,-0.187915 0,-0.377435 0.03774,-0.526802 L 4.8407964,9.789199 A 2.4252158,2.4252158 0 0 1 0.772537,8.020076 2.4252158,2.4252158 0 0 1 4.8383872,6.250954 L 10.48384,2.9761092 A 2.8974102,2.8974102 0 0 1 10.40915,2.4091547 C 10.40915,1.0921502 11.5013,0 12.818304,0 c 1.317008,0 2.409159,1.0921502 2.409159,2.4091547 0,1.3170047 -1.092151,2.4091553 -2.409155,2.4091553 -0.640032,0 -1.204577,-0.263401 -1.656695,-0.677776 L 5.5161598,7.453925 c 0.036941,0.187914 0.074684,0.377434 0.074684,0.564545 0,0.187111 -0.037744,0.377434 -0.075486,0.562137 l 5.7217422,3.31339 c 0.417587,-0.377434 0.979724,-0.602289 1.582012,-0.602289 z"></path>
   ),
 });
 
@@ -187,11 +181,11 @@ const LinkedInIcon = createIcon({
 function NativeShare({ url, title, description }) {
   const { hasCopied, onCopy } = useClipboard(url);
 
+  // client-side only
   if (typeof window === "undefined") {
     return null;
   }
 
-  // client-side only
   if (navigator.share) {
     return (
       <Button
@@ -200,7 +194,7 @@ function NativeShare({ url, title, description }) {
           navigator
             .share({
               title: `${title} – Blog – Base dos Dados`,
-              text: `${title}\n ${description}`,
+              text: `${title}\n${description}`,
               url: url,
             })
             .then(() => {})
@@ -209,7 +203,7 @@ function NativeShare({ url, title, description }) {
             })
         }
       >
-        <ShareIcon width={"1.4rem"} height={"1.4rem"} />
+        <ShareIcon width={"1.4rem"} />
       </Button>
     );
   }
@@ -245,27 +239,22 @@ export function ShareButtons({ frontmatter }) {
   const encodedUrl = encodeURIComponent(url);
 
   return (
-    <Box marginTop={"1rem"}>
-      <Text as="span" fontFamily={"Roboto"} fontSize={"0.9rem"} color="gray">
-        Compartilhar
-      </Text>
-      <Box display={"flex"} alignItems={"center"} gap="1rem">
-        <NextLink
-          href={`https://www.facebook.com/sharer/sharer.php?t=${encodeURIComponent(title)}&u=${encodedUrl}`}
-        >
-          <a target="_blank">
-            <FacebookIcon width={"1.4rem"} height={"1.4rem"} />
-          </a>
-        </NextLink>
-        <NextLink
-          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
-        >
-          <a target="_blank">
-            <LinkedInIcon width={"1.4rem"} height={"1.4rem"} />
-          </a>
-        </NextLink>
-        <NativeShare url={url} title={title} description={description} />
-      </Box>
+    <Box display={"flex"} alignItems={"center"} gap="1rem">
+      <NextLink
+        href={`https://www.facebook.com/sharer/sharer.php?t=${encodeURIComponent(title)}&u=${encodedUrl}`}
+      >
+        <a target="_blank">
+          <FacebookIcon width={"1.4rem"} height={"1.4rem"} />
+        </a>
+      </NextLink>
+      <NextLink
+        href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
+      >
+        <a target="_blank">
+          <LinkedInIcon width={"1.4rem"} height={"1.4rem"} />
+        </a>
+      </NextLink>
+      <NativeShare url={url} title={title} description={description} />
     </Box>
   );
 }
@@ -288,6 +277,7 @@ function HeadingWithAnchor(props) {
         fontSize={"inherit"}
         marginLeft="5px"
         transition="none"
+        _hover={{ textDecoration: "none" }}
         _groupHover={{ opacity: "1" }}
       >
         {"#"}
@@ -333,7 +323,6 @@ export const mdxComponents = {
       as={"p"}
       lineHeight={"7"}
       marginY={"1.5rem"}
-      // TODO(aspeddro): check color
       color="#252A32"
       fontFamily={"Roboto"}
       {...props}
@@ -419,9 +408,6 @@ export const mdxComponents = {
 };
 
 export function Toc({ headings }) {
-  if (headings.length === 0) {
-    return null;
-  }
   return (
     <>
       <Box marginBottom={"1rem"}>
@@ -442,6 +428,7 @@ export function Toc({ headings }) {
                 fontFamily="Roboto"
                 fontWeight="normal"
                 display="block"
+                _hover={{ textDecoration: "none" }}
               >
                 {title}
               </Link>
@@ -494,19 +481,9 @@ export function Contribute({ slug }) {
         display={"flex"}
         alignItems={"center"}
         borderRadius="8px"
-        // backgroundColor="#2B8C4D"
-        // padding="8px 16px"
-        // width="fit-content"
-        // fill="#fff"
-        // color="#fff"
         fontFamily={"Roboto"}
-        // fontSize={"0.9rem"}
         fontWeight={"500"}
         letterSpacing={"0"}
-        // marginLeft="auto"
-        // _hover={{
-        //   backgroundColor: "#22703E",
-        // }}
         isExternal
       >
         <>
@@ -560,7 +537,7 @@ export function Header({ frontmatter, slug }) {
                     <Avatar
                       size="sm"
                       name={author.name}
-                      src={author.avatar}
+                      src={author?.avatar}
                       icon={<AuthorIconFallback />}
                     />
                     <Box
@@ -590,7 +567,12 @@ export function Header({ frontmatter, slug }) {
               return (
                 <Box key={index}>
                   {author?.social ? (
-                    <Link href={author.social}>{authorComponent}</Link>
+                    <Link
+                      _hover={{ textDecoration: "none" }}
+                      href={author.social}
+                    >
+                      {authorComponent}
+                    </Link>
                   ) : (
                     <>{authorComponent}</>
                   )}
@@ -687,9 +669,9 @@ function LatestBlogCard({ slug, frontmatter }) {
               <Image
                 cursor="pointer"
                 width={"100%"}
-                height={"370px"}
+                height={{ base: "250px", md: "370px" }}
                 src={
-                  frontmatter.thumbnail ||
+                  frontmatter.thumbnail ??
                   "https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_9.png"
                 }
                 objectFit={"none"}
