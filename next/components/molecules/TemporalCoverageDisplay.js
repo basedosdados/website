@@ -13,6 +13,7 @@ import { CalendarComunIcon } from "../../public/img/icons/calendarIcon";
 import { SectionPrice } from "../../pages/precos";
 import { ModalGeneral } from "./uiUserPage";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
+import { useTranslation } from 'next-i18next';
 
 export function TemporalCoverage ({
   value,
@@ -20,6 +21,7 @@ export function TemporalCoverage ({
   iconSettings = {width: "18px", height: "18px", fill: "#D0D0D0"},
   textSettings = {}
 }) {
+  const { t } = useTranslation('dataset');
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
 
@@ -44,7 +46,7 @@ export function TemporalCoverage ({
     ) 
   }
 
-  if(!value) return <TextDate value={text}/>
+  if(!value) return <TextDate value={t('temporalCoverageBar.notInformed')}/>
   if(startDate === null && endDate === null) return <TextDate value={text}/>
 
   function Dates ({ date, ...props }) {
@@ -131,6 +133,7 @@ export function TemporalCoverageString({
 export function TemporalCoverageBar ({ value }) {
   const [values, setValues] = useState({})
   const plansModal = useDisclosure()
+  const { t } = useTranslation('dataset');
 
   const TextData = ({ string, ...style }) => {
     return (
@@ -163,7 +166,7 @@ export function TemporalCoverageBar ({ value }) {
     setValues(newValue)
   }, [value])
 
-  if(values === null) return <TextData string="Não informado"/>
+  if(values === null) return <TextData string={t('temporalCoverageBar.notInformed')}/>
 
   return (
     <HStack 
@@ -191,7 +194,7 @@ export function TemporalCoverageBar ({ value }) {
             textAlign="center"
             lineHeight="40px"
           >
-            Compare os planos
+            {t('temporalCoverageBar.comparePlans')}
           </Text>
           <ModalCloseButton
             fontSize="14px"
@@ -218,7 +221,7 @@ export function TemporalCoverageBar ({ value }) {
         color="#FFFFFF"
         placement="top"
         maxWidth="160px"
-        label="Acesso liberado para o período"
+        label={t('temporalCoverageBar.accessGranted')}
       >
         <Box
           flex={3}
@@ -242,7 +245,7 @@ export function TemporalCoverageBar ({ value }) {
             marginBottom="10px"
             padding="6px 16px"
           >
-            GRÁTIS
+            {t('temporalCoverageBar.free')}
           </Box>
           <Box
             position="relative"
@@ -315,7 +318,7 @@ export function TemporalCoverageBar ({ value }) {
         color="#FFFFFF"
         placement="top"
         maxWidth="160px"
-        label="Faça o upgrade para liberar o período"
+        label={t('temporalCoverageBar.upgradeRequired')}
       >
         <Box flex={2} marginRight={{base:"24px !important", lg: "0"}}  display={values?.["3"] ? "" : "none"}>
           <Box
@@ -345,7 +348,7 @@ export function TemporalCoverageBar ({ value }) {
             }}
             onClick={() => plansModal.onOpen()}
           >
-            PAGO
+            {t('temporalCoverageBar.paid')}
             <RedirectIcon
               width="12px"
               height="12px"

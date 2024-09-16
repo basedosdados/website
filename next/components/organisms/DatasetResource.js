@@ -9,6 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from 'next-i18next';
+import { capitalize } from 'lodash';
 
 import TablePage from "./TablePage";
 import RawDataSourcesPage from "./RawDataSourcesPage";
@@ -18,7 +19,7 @@ export default function DatasetResource({
   dataset
 }) {
   const router = useRouter()
-  const { query } = router
+  const { query, locale } = router
   const [tables, setTables] = useState([])
   const [rawDataSources, setRawDataSources] = useState([])
   const [informationRequests, setInformationRequests] = useState([])
@@ -140,7 +141,7 @@ export default function DatasetResource({
                 padding="6px 8px"
                 onClick={() => onChange(elm._id)}
               >
-                {elm.name || elm.number}
+                {elm[`name${capitalize(locale)}`] || elm.name || elm.number}
               </Text>
             </HStack>
           ))}

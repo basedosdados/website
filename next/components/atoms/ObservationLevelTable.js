@@ -7,9 +7,16 @@ import {
   Th,
   Td,
 } from "@chakra-ui/react";
+import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
+import { capitalize } from "lodash";
 
 export default function ObservationLevel({ resource }) {
-  const headers = ["Entidade","Colunas Correspondentes"]
+  const { t } = useTranslation('dataset');
+  const router = useRouter();
+  const { locale } = router;
+
+  const headers = [t('observationLevelTable.entityHeader'), t('observationLevelTable.columnsHeader')];
 
   let array = []
   const keys = Object.keys(resource?.observationLevels)
@@ -18,8 +25,9 @@ export default function ObservationLevel({ resource }) {
     const value = resource?.observationLevels[elm]
 
     const valueEntity = () => {
+      if(value.entity[`name${capitalize(locale)}`]) return value.entity[`name${capitalize(locale)}`]
       if(value.entity.name) return value.entity.name
-      return "Não informado"
+      return t('observationLevelTable.notInformed')
     }
 
     const valueColumns = () => {
@@ -30,7 +38,7 @@ export default function ObservationLevel({ resource }) {
           columns.push(column?.name)
         })
       } else {
-        columns = ["Não informado"]
+        columns = [t('observationLevelTable.notInformed')]
       }
       return columns.join(", ")
     }

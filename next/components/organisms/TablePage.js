@@ -28,7 +28,7 @@ import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
 export default function TablePage({ id }) {
-  const { t, i18n } = useTranslation('dataset');
+  const { t } = useTranslation('dataset');
   const router = useRouter();
   const { locale } = router;
   const [isLoading, setIsLoading] = useState(true)
@@ -256,7 +256,7 @@ export default function TablePage({ id }) {
           textOverflow="ellipsis"
           whiteSpace="nowrap"
         >
-          {resource?.name}
+          {resource?.[`name${capitalize(locale)}`] || resource?.name}
         </Text>
         {resource?.uncompressedFileSize &&
           <Text
@@ -676,7 +676,7 @@ export default function TablePage({ id }) {
                     }}
                     href={`/dataset/${elm?.dataset?._id}?raw_data_source=${elm?._id}`}
                   >
-                    {elm?.name}
+                    {elm?.[`name${capitalize(locale)}`] || elm?.name}
                   </Text>
                 )
               }) 

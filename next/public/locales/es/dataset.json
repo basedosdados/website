@@ -52,7 +52,7 @@
     },
     "table": {
         "notInformed": "No informado",
-        "temporalCoverage": "Cobertura temporal de la tabla",
+        "temporalCoverage": "Cobertura temporal",
         "dataAccess": "Acceso a los datos",
         "dataUpdateFrequency": "Frecuencia de actualización de datos",
         "lastUpdateBD": "Última actualización en la Base de Datos",
@@ -117,6 +117,16 @@
         "bigQueryAndPackages": "BigQuery y Paquetes",
         "download": "Descargar"
     },
+    "temporalCoverageBar": {
+        "title": "Cobertura temporal",
+        "notInformed": "No informado",
+        "noCoverage": "Sin cobertura temporal",
+        "free": "GRATIS",
+        "paid": "PAGO",
+        "accessGranted": "Acceso liberado para el período",
+        "upgradeRequired": "Actualiza a un plano para liberar el período",
+        "comparePlans": "Comparar los planes"
+    },
     "column": {
         "search": "Buscar columnas",
         "name": "Nombre",
@@ -144,5 +154,10 @@
         "notInformed": "No informado",
         "yes": "Sí",
         "no": "No"
+    },
+    "observationLevelTable": {
+        "entityHeader": "Entidad",
+        "columnsHeader": "Columnas Correspondientes",
+        "notInformed": "No informado"
     }
 }

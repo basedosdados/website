@@ -21,7 +21,7 @@ import { ControlledInputSimple } from '../atoms/ControlledInput';
 import Checkbox from '../atoms/Checkbox';
 import { triggerGAEvent, formatBytes } from '../../utils';
 import { useTranslation } from 'next-i18next';
-
+import { capitalize } from 'lodash';
 import {
   getColumnsBdmTable
 } from "../../pages/api/tables/index";
@@ -100,7 +100,7 @@ export default function ColumnsTable({
   columnsPro
 }) {
   const router = useRouter()
-  const { query } = router
+  const { query, locale } = router
   const [resource, setResource] = useState({})
   const [columns, setColumns] = useState({})
   const [isError, setIsError] = useState(false)
@@ -599,8 +599,8 @@ export default function ColumnsTable({
                         padding="14px 22px 14px 30px"
                       >
                         <Checkbox
-                          isChecked={isChecked(elm.node.name)}
-                          onChange={() => handleCheckboxChange(elm.node.name)}
+                          isChecked={isChecked(elm.node[`name${capitalize(locale)}`] || elm.node.name)}
+                          onChange={() => handleCheckboxChange(elm.node[`name${capitalize(locale)}`] || elm.node.name)}
                         />
                       </Box>
                     </Td>
@@ -612,7 +612,7 @@ export default function ColumnsTable({
                     zIndex="4"
                     backgroundColor="#FFF"
                   >
-                    {elm?.node?.name ? elm.node.name : t('column.notInformed')}
+                    {elm?.node?.[`name${capitalize(locale)}`] || elm?.node?.name || t('column.notInformed')}
                     <Box
                       position="absolute"
                       right="0"
@@ -635,7 +635,7 @@ export default function ColumnsTable({
                   </TableValue>
 
                   <TableValue>
-                    {elm?.node?.description ? elm.node.description : t('column.notInformed')}
+                    {elm?.node?.[`description${capitalize(locale)}`] || elm?.node?.description || t('column.notInformed')}
                   </TableValue>
 
                   <TableValue>
@@ -669,7 +669,7 @@ export default function ColumnsTable({
                   </TableValue>
 
                   <TableValue>
-                    {elm?.node?.observations ? elm.node.observations : t('column.notInformed')}
+                    {elm?.node?.[`observations${capitalize(locale)}`] || elm?.node?.observations || t('column.notInformed')}
                   </TableValue>
                 </Tr>
               ))}

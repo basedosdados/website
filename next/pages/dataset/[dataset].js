@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { capitalize } from 'lodash';
 
 import BigTitle from "../../components/atoms/BigTitle";
 import Link from "../../components/atoms/Link";
@@ -33,8 +34,9 @@ import {
 
 import { withPages } from "../../hooks/pages.hook";
 
-export async function getStaticProps({ params, locale }) {
-  const dataset = await getShowDataset(params.dataset) || null;
+export async function getStaticProps(context) {
+  const { locale } = context;
+  const dataset = await getShowDataset(context.params.dataset) || null
 
   return await withPages({
     props: {
@@ -59,6 +61,7 @@ export async function getStaticPaths(context) {
 export default function DatasetPage ({ dataset }) {
   const { t } = useTranslation(['dataset']);
   const router = useRouter()
+  const { locale } = router
   const { query } = router
   const [tabIndex, setTabIndex] = useState(0)
 
@@ -92,10 +95,10 @@ export default function DatasetPage ({ dataset }) {
         />
         <meta
           property="og:title"
-          content={`${dataset.name} – t('dataBasis')`}
+          content={`${dataset[`name${capitalize(locale)}`] || dataset.name} – t('dataBasis')`}
           key="ogtitle"
         />
-        <meta property="og:description" content={dataset.description} key="ogdesc" />
+        <meta property="og:description" content={dataset[`description${capitalize(locale)}`] || dataset.description} key="ogdesc" />
       </Head>
 
       <VStack
@@ -143,13 +146,13 @@ export default function DatasetPage ({ dataset }) {
                   fontWeight="500"
                   lineHeight="42px"
                 >
-                  {dataset.name || t('noName')}
+                  {dataset[`name${capitalize(locale)}`] || dataset.name || t('noName')}
                 </BigTitle>
               </GridItem>
 
               <GridItem colSpan={2} minHeight="60px" marginBottom="8px">
                 <ReadMore id="readLessDataset">
-                  {dataset?.description || t('noDescription')}
+                  {dataset[`description${capitalize(locale)}`] || dataset.description || t('noDescription')}
                 </ReadMore>
               </GridItem>
 
@@ -197,7 +200,7 @@ export default function DatasetPage ({ dataset }) {
                     lineHeight="20px"
                     color="#464A51"
                   >
-                    {dataset?.organization?.name || t('noOrganization')}
+                    {dataset[`organization${capitalize(locale)}`] || dataset.organization?.name || t('noOrganization')}
                   </Text>
                 </Text>
               </GridItem>
@@ -217,7 +220,7 @@ export default function DatasetPage ({ dataset }) {
           >
             <GreenTab>
               <DataBaseIcon
-                alt={t('dataset:dataAlt')}
+                alt="dados"
                 width="18px"
                 height="18px"
                 marginRight="6px"
@@ -227,7 +230,7 @@ export default function DatasetPage ({ dataset }) {
 
             <GreenTab display="none">
               <CrossingIcon
-                alt={t('crossingAlt')}
+                alt="cruzamento"
                 width="28px"
                 height="24px"
                 marginRight="2px"
