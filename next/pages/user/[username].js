@@ -1516,14 +1516,15 @@ const PlansAndPayment = ({ userData }) => {
     if(plan === "") return
 
     const value = Object.values(plans).find(elm => elm._id === plan)
+    if(value?.interval === "month") setToggleAnual(false)
     setCheckoutInfos(value)
+    PaymentModal.onOpen()
   }, [plan, plans])
 
   useEffect(() => {
     if(query.i) {
       if(subscriptionInfo?.isActive === true) return AlertChangePlanModal.onOpen()
       setPlan(query.i)
-      PaymentModal.onOpen()
     }
   }, [query])
 
@@ -1744,15 +1745,15 @@ const PlansAndPayment = ({ userData }) => {
   const CouponDisplay = () => {
     let limitText
 
-    if(couponInfos?.duration === "once") limitText = "(válido apenas na 1ª cobrança)"
-    if(couponInfos?.duration === "repeating") limitText = `(válido por ${couponInfos?.durationInMonths} meses)`
+    if(couponInfos?.duration === "once") limitText = toggleAnual ? "(válido por 1 ano)" : "(válido por 1 mês)"
+    if(couponInfos?.duration === "repeating") limitText = `(válido por ${couponInfos?.durationInMonths} ${couponInfos?.durationInMonths.length === 1 ? "mês" : "meses"})`
 
     return (
       <>
         <GridItem>
           <Text>Cupom {coupon.toUpperCase()} {limitText}</Text>
         </GridItem>
-        <GridItem>
+        <GridItem textAlign="end">
           <Text>- {couponInfos?.discountAmount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
         </GridItem>
       </>
@@ -1773,7 +1774,7 @@ const PlansAndPayment = ({ userData }) => {
         <GridItem>
           <Text color="#252A32" fontWeight="500">Total a pagar</Text>
         </GridItem>
-        <GridItem>
+        <GridItem textAlign="end">
           <Text color="#252A32" fontWeight="500">{value}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
         </GridItem>
       </>
@@ -1802,6 +1803,7 @@ const PlansAndPayment = ({ userData }) => {
         isOpen={PaymentModal.isOpen}
         onClose={() => {
           setToggleAnual(true)
+          setValueCoupon("")
           if(query.i) return window.open(`/user/${userData.username}?plans_and_payment`, "_self")
           PaymentModal.onClose()
         }}
@@ -2035,7 +2037,7 @@ const PlansAndPayment = ({ userData }) => {
             <Divider borderColor="#DEDFE0" />
 
             <Grid
-              templateColumns="3fr 1fr"
+              templateColumns="4fr 2fr"
               width="100%"
               gap="8px"
               alignItems="center"
@@ -2048,7 +2050,7 @@ const PlansAndPayment = ({ userData }) => {
               <GridItem>
                 <Text>Subtotal</Text>
               </GridItem>
-              <GridItem>
+              <GridItem textAlign="end">
                 <Text>{checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
               </GridItem>
 
