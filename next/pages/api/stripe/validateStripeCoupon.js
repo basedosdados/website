@@ -2,24 +2,7 @@ import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-async function createSubscription({id, coupon,  token}) {
-  const query = coupon !== "" ?
-    `
-      mutation {
-        createStripeSubscription (priceId: ${id}, coupon: "${coupon}") {
-          clientSecret
-        }
-      }
-    `
-  :
-    `
-      mutation {
-        createStripeSubscription (priceId: ${id}) {
-          clientSecret
-        }
-      }
-    `
-
+async function validateStripeCoupon({id, coupon, token}) {
   try {
     const res = await axios({
       url: API_URL,
@@ -28,7 +11,17 @@ async function createSubscription({id, coupon,  token}) {
         Authorization: `Bearer ${token}`
       },
       data: {
-        query: query
+        query:`
+          mutation {
+            validateStripeCoupon (priceId: ${id}, coupon: "${coupon}") {
+              isValid
+              discountAmount
+              duration
+              durationInMonths
+              errors
+            }
+          }
+        `
       }
     })
     const data = res.data
@@ -41,7 +34,7 @@ async function createSubscription({id, coupon,  token}) {
 
 export default async function handler(req, res) {
   const token = req.cookies.token
-  const result = await createSubscription({
+  const result = await validateStripeCoupon({
     id: atob(req.query.p),
     coupon: atob(req.query.c),
     token: token
@@ -50,5 +43,5 @@ export default async function handler(req, res) {
   if(result.errors) return res.status(500).json({error: result.errors})
   if(result === "err") return res.status(500).json({error: "err"})
 
-  res.status(200).json(result?.data?.createStripeSubscription?.clientSecret)
+  res.status(200).json(result?.data?.validateStripeCoupon)
 }
