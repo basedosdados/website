@@ -21,6 +21,7 @@ import pythonHighlight from "highlight.js/lib/languages/python";
 import rHighlight from "highlight.js/lib/languages/r";
 import cookies from "js-cookie";
 import 'highlight.js/styles/obsidian.css'
+import { useTranslation } from 'next-i18next';
 
 import GreenTab from "../atoms/GreenTab";
 import Toggle from "../atoms/Toggle";
@@ -173,6 +174,7 @@ export function CodeHighlight({ language, children }) {
 }
 
 export default function DataInformationQuery({ resource }) {
+  const { t } = useTranslation('dataset');
   const [tabAccessIndex, setTabAccessIndex] = useState(0)
   const [tabIndex, setTabIndex] = useState(0)
   const [downloadPermitted, setDownloadPermitted] = useState(false)
@@ -275,7 +277,7 @@ export default function DataInformationQuery({ resource }) {
   }
 
   const handleAccessIndexes = (index) => {
-    const categoryValues = ["BigQuery e Pacotes", "Download"]
+    const categoryValues = [t('table.bigQueryAndPackages'), t('table.download')];
     setTabAccessIndex(index)
     triggerGAEvent("category_click", categoryValues[index])
   }
@@ -319,7 +321,7 @@ export default function DataInformationQuery({ resource }) {
             textAlign="center"
             lineHeight="40px"
           >
-            Compare os planos
+            {t('table.compareThePlans')}
           </Text>
           <ModalCloseButton
             fontSize="14px"
@@ -345,8 +347,8 @@ export default function DataInformationQuery({ resource }) {
           padding="8px 24px 0"
           borderBottom="1px solid #DEDFE0 !important"
         >
-          <GreenTab>BigQuery e Pacotes</GreenTab>
-          <GreenTab>Download</GreenTab>
+          <GreenTab>{t('table.bigQueryAndPackages')}</GreenTab>
+          <GreenTab>{t('table.download')}</GreenTab>
         </TabList>
 
         <VStack
@@ -374,7 +376,7 @@ export default function DataInformationQuery({ resource }) {
                 fontSize="14px"
                 color="#252A32"
               >
-                {tabAccessIndex === 0  ? "Selecione as colunas que você deseja acessar:" : "Confira as colunas da tabela:"}
+                {tabAccessIndex === 0 ? t('table.selectColumns') : t('table.checkColumns')}
               </Text>
             </Skeleton>
 
@@ -401,8 +403,14 @@ export default function DataInformationQuery({ resource }) {
               <AlertDiscalimerBox
                 type="info"
               >
-                Essa tabela possui códigos institucionais que variam entre anos. Por isso, ainda estamos trabalhando para automatizar o processo de tradução.
-                Por enquanto, recomendamos acessar o <Text as="a" href="https://basedosdados.org/dataset/e083c9a2-1cee-4342-bedc-535cbad6f3cd?table=0308fbe0-270c-4135-9115-ea1100f400f6" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>dicionário</Text> e os <Text as="a" href="https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=dffb65ac-9df9-4151-94bf-88c45bfcb056" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>diretórios</Text> para entender como traduzir os códigos presentes na tabela.
+                {t('table.infoTranslationNotAvailable', {
+                  dictionaryLink: (
+                    <Text as="a" href="https://basedosdados.org/dataset/e083c9a2-1cee-4342-bedc-535cbad6f3cd?table=0308fbe0-270c-4135-9115-ea1100f400f6" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>dicionário</Text>
+                  ),
+                  directoryLink: (
+                    <Text as="a" href="https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=dffb65ac-9df9-4151-94bf-88c45bfcb056" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>diretórios</Text>
+                  )
+                })}
               </AlertDiscalimerBox>
             </Skeleton>
 
@@ -438,10 +446,10 @@ export default function DataInformationQuery({ resource }) {
                     defaultChecked={resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd" ? false : true}
                     value={includeTranslation}
                     onChange={() => setIncludeTranslation(!includeTranslation)}
-                  /><Text>Traduzir códigos institucionais</Text>
+                  /><Text>{t('table.translateInstitutionalCodes')}</Text>
                 </Box>
                 <Tooltip
-                  label="Por exemplo, traduzir o código “2927408” por “Salvador-BA”"
+                  label={t('table.translateTooltip')}
                   hasArrow
                   padding="16px"
                   backgroundColor="#252A32"
@@ -480,8 +488,10 @@ export default function DataInformationQuery({ resource }) {
                 <AlertDiscalimerBox
                   type="warning"
                 >
-                  Essa tabela completa, com todas as colunas, tem <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>. Cuidado para não ultrapassar o <Text as="a" href="https://basedosdados.github.io/mais/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>limite de processamento gratuito</Text> do BigQuery. <Text as="br" display={{base: "none", lg: "flex"}}/>
-                  {numberColumns === checkedColumns.length && "Para otimizar a consulta, você pode selecionar menos colunas ou adicionar filtros no BigQuery."}
+                  {t('table.warningLargeTable', { size: <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text> })}
+                  <Text as="a" href="https://basedosdados.github.io/mais/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>limite de processamento gratuito</Text>
+                  <Text as="br" display={{base: "none", lg: "flex"}}/>
+                  {numberColumns === checkedColumns.length && t('table.warningLargeTableOptimize')}
                 </AlertDiscalimerBox>
               </Skeleton>
             }
@@ -498,7 +508,7 @@ export default function DataInformationQuery({ resource }) {
               >
                 <AlertDiscalimerBox
                   type="error"
-                  text={`Por favor, selecione acima as colunas que você deseja acessar.`}
+                  text={t('table.errorInsufficientChecks')}
                 />
               </Skeleton>
             }
@@ -538,7 +548,7 @@ export default function DataInformationQuery({ resource }) {
                   backgroundColor:"#22703E"
                 }}
               >
-                Gerar consulta
+                {t('table.generateQuery')}
               </Box>
             </Skeleton>
           </Box>
@@ -559,40 +569,45 @@ export default function DataInformationQuery({ resource }) {
             >
               {isUserPro() === false && downloadWarning === "free" &&
                 <AlertDiscalimerBox type="info">
-                  Estes dados estão disponíveis porque diversas pessoas colaboram para a sua manutenção. <Text as="br" display={{base: "none", lg: "flex"}}/>
-                  Antes de baixar os dados, apoie você também com uma doação financeira ou
-                    <Text
-                      marginLeft="4px"
-                      as="a"
-                      target="_blank"
-                      href="https://basedosdados.github.io/mais/colab_data/"
-                      color="#0068C5"
-                      _hover={{color: "#0057A4"}}
-                    >
-                      saiba como contribuir com seu tempo.
-                    </Text>
+                  {t('table.infoDataAvailability', {
+                    link: (
+                      <Text
+                        marginLeft="4px"
+                        as="a"
+                        target="_blank"
+                        href="https://basedosdados.github.io/mais/colab_data/"
+                        color="#0068C5"
+                        _hover={{color: "#0057A4"}}
+                      >
+                        saiba como contribuir com seu tempo
+                      </Text>
+                    )
+                  })}
                 </AlertDiscalimerBox>
               }
               {isUserPro() === false && downloadWarning === "100mbBetween1gb" &&
                 <AlertDiscalimerBox
                   type="warning"
                 >
-                  O download de tabelas com tamanho entre 100 MB e 1 GB está disponível apenas para
-                  <Text
-                    marginLeft="4px"
-                    as="a"
-                    target="_blank"
-                    href="https://basedosdados.org/precos"
-                    color="#0068C5"
-                    _hover={{color: "#0057A4"}}
-                  >assinantes dos nossos planos pagos
-                  </Text>. No entanto, você pode acessar a tabela gratuitamente utilizando SQL, Python ou R. Considere atualizar para um plano pago para fazer o download.
+                  {t('table.warningPaidPlanRequired', {
+                    link: (
+                      <Text
+                        marginLeft="4px"
+                        as="a"
+                        target="_blank"
+                        href="https://basedosdados.org/precos"
+                        color="#0068C5"
+                        _hover={{color: "#0057A4"}}
+                      >assinantes dos nossos planos pagos
+                      </Text>
+                    )
+                  })}
                 </AlertDiscalimerBox>
               }
               {downloadWarning === "biggest1gb" &&
                 <AlertDiscalimerBox
                   type="error"
-                  text={`O tamanho da tabela ultrapassou o limite permitido para download, de 1 GB. Você pode acessar os dados em SQL, Python ou R.`}
+                  text={t('table.errorTableTooLarge')}
                 />
               }
 
@@ -633,7 +648,7 @@ export default function DataInformationQuery({ resource }) {
                   width="24px"
                   height="24px"
                 />
-                  Download da tabela {downloadWarning !== "biggest1gb" && `(${formatBytes(resource.uncompressedFileSize)})`}
+                  {t('table.downloadTable')} {downloadWarning !== "biggest1gb" && `(${formatBytes(resource.uncompressedFileSize)})`}
               </Box>
             </Stack>
           </VStack>
@@ -692,7 +707,7 @@ export default function DataInformationQuery({ resource }) {
                         lineHeight="20px"
                         color="#252A32"
                       >
-                        No editor de consultas do BigQuery, digite a seguinte instrução:
+                        {t('table.bigQueryInstructions')}
                       </Text>
                     </Skeleton>
 
@@ -705,7 +720,7 @@ export default function DataInformationQuery({ resource }) {
                       isLoaded={!isLoadingCode}
                     >
                       <AlertDiscalimerBox type="info" >
-                        Primeira vez usando o BigQuery?
+                        {t('table.firstTimeBigQuery')}
                         <Text
                           marginLeft="4px"
                           as="a"
@@ -714,7 +729,7 @@ export default function DataInformationQuery({ resource }) {
                           color="#0068C5"
                           _hover={{color: "#0057A4"}}
                         >
-                          Siga o passo a passo.
+                          {t('table.followStepByStep')}
                         </Text>
                       </AlertDiscalimerBox>
                     </Skeleton>
@@ -759,7 +774,7 @@ export default function DataInformationQuery({ resource }) {
                             fontSize="14px"
                             lineHeight="20px"
                           >
-                            Acessar o BigQuery
+                            {t('table.accessBigQuery')}
                           </Text>
                         </Box>
                       </Box>
@@ -802,7 +817,7 @@ export default function DataInformationQuery({ resource }) {
                         lineHeight="20px"
                         color="#252A32"
                       >
-                        No terminal do Python, digite a seguinte instrução:
+                        {t('table.pythonInstructions')}
                       </Text>
                     </Skeleton>
 
@@ -815,7 +830,7 @@ export default function DataInformationQuery({ resource }) {
                       isLoaded={!isLoadingCode}
                     >
                       <AlertDiscalimerBox type="info" >
-                        Primeira vez usando o pacote Python?
+                        {t('table.firstTimePython')}
                         <Text
                           marginLeft="4px"
                           as="a"
@@ -824,7 +839,7 @@ export default function DataInformationQuery({ resource }) {
                           color="#0068C5"
                           _hover={{color: "#0057A4"}}
                         >
-                          Siga o passo a passo.
+                          {t('table.followStepByStep')}
                         </Text>
                       </AlertDiscalimerBox>
                     </Skeleton>
@@ -873,7 +888,7 @@ bd.read_sql(query = query, billing_project_id = billing_id)`}
                         lineHeight="20px"
                         color="#252A32"
                       >
-                        No terminal do R, digite a seguinte instrução:
+                        {t('table.rInstructions')}
                       </Text>
                     </Skeleton> 
 
@@ -886,7 +901,7 @@ bd.read_sql(query = query, billing_project_id = billing_id)`}
                       isLoaded={!isLoadingCode}
                     >
                       <AlertDiscalimerBox type="info" >
-                        Primeira vez usando o pacote R?
+                        {t('table.firstTimeR')}
                         <Text
                           marginLeft="4px"
                           as="a"
@@ -895,7 +910,7 @@ bd.read_sql(query = query, billing_project_id = billing_id)`}
                           color="#0068C5"
                           _hover={{color: "#0057A4"}}
                         >
-                          Siga o passo a passo.
+                          {t('table.followStepByStep')}
                         </Text>
                       </AlertDiscalimerBox>
                     </Skeleton>

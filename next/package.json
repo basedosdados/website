@@ -24,6 +24,7 @@
     "highlight.js": "^11.9.0",
     "i18next": "^23.15.1",
     "js-cookie": "^3.0.5",
+    "lodash": "^4.17.21",
     "next": "^12.3.4",
     "next-i18next": "^15.3.1",
     "next-logger": "4.0.0",

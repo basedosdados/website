@@ -16,6 +16,8 @@ import { TemporalCoverageBar } from "../molecules/TemporalCoverageDisplay";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import FourOFour from "../templates/404";
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
+import { capitalize } from 'lodash';
 
 import EmailIcon from "../../public/img/icons/emailIcon";
 import GithubIcon from "../../public/img/icons/githubIcon";
@@ -25,8 +27,10 @@ import InfoIcon from "../../public/img/icons/infoIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
-export default function BdmTablePage({ id }) {
-  const { t } = useTranslation('table');
+export default function TablePage({ id }) {
+  const { t, i18n } = useTranslation('dataset');
+  const router = useRouter();
+  const { locale } = router;
   const [isLoading, setIsLoading] = useState(true)
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState(false)
@@ -35,7 +39,7 @@ export default function BdmTablePage({ id }) {
     const fetchData = async () => {
       setIsLoading(true)
       try {
-        const response = await fetch(`/api/tables/getBdmTable?p=${id}`, { method: "GET" })
+        const response = await fetch(`/api/tables/getTable?id=${id}&locale=${locale}`, { method: "GET" })
         const result = await response.json()
 
         if (result.success) {
@@ -54,7 +58,7 @@ export default function BdmTablePage({ id }) {
     }
 
     fetchData()
-  }, [id])
+  }, [id, locale])
 
   const TooltipText = ({ text, info, ...props }) => {
     return (
@@ -161,7 +165,7 @@ export default function BdmTablePage({ id }) {
             lineHeight="20px"
             color="#464A51"
           >
-            {t('notInformed')}
+            {t('table.notInformed')}
           </Text>
         }
         {resource?.email && <EmailIcon {...keyIcons({email : resource.email})}/>}
@@ -198,33 +202,33 @@ export default function BdmTablePage({ id }) {
     let formats
     {yearFrequency ?
       formats = {
-        "second":`${t('updateEvery')} ${frequency} ${t('seconds')}`,
-        "minute":`${t('updateEvery')} ${frequency} ${t('minutes')}`,
-        "hour":`${t('updateEvery')} ${frequency} ${t('hours')}`,
-        "day":`${t('updateEvery')} ${frequency} ${t('days')}`,
-        "week":`${t('updateEvery')} ${frequency} ${t('weeks')}`,
-        "month":`${t('updateEvery')} ${frequency} ${t('months')}`,
-        "bimester":`${t('updateEvery')} ${frequency} ${t('bimonths')}`,
-        "quarter":`${t('updateEvery')} ${frequency} ${t('quarters')}`,
-        "semester":`${t('updateEvery')} ${frequency} ${t('semesters')}`,
-        "year":`${t('updateEvery')} ${frequency} ${t('years')}`,
+        "second":`${t('table.updateEvery')} ${frequency} ${t('table.seconds')}`,
+        "minute":`${t('table.updateEvery')} ${frequency} ${t('table.minutes')}`,
+        "hour":`${t('table.updateEvery')} ${frequency} ${t('table.hours')}`,
+        "day":`${t('table.updateEvery')} ${frequency} ${t('table.days')}`,
+        "week":`${t('table.updateEvery')} ${frequency} ${t('table.weeks')}`,
+        "month":`${t('table.updateEvery')} ${frequency} ${t('table.months')}`,
+        "bimester":`${t('table.updateEvery')} ${frequency} ${t('table.bimonths')}`,
+        "quarter":`${t('table.updateEvery')} ${frequency} ${t('table.quarters')}`,
+        "semester":`${t('table.updateEvery')} ${frequency} ${t('table.semesters')}`,
+        "year":`${t('table.updateEvery')} ${frequency} ${t('table.years')}`,
       }
       :
       formats = {
-        "second":t('updatePerSecond'),
-        "minute":t('updatePerMinute'),
-        "hour":t('updatePerHour'),
-        "day":t('dailyUpdate'),
-        "week":t('weeklyUpdate'),
-        "month":t('monthlyUpdate'),
-        "bimester":t('bimonthlyUpdate'),
-        "quarter":t('quarterlyUpdate'),
-        "semester":t('semiannualUpdate'),
-        "year":t('annualUpdate'),
+        "second":t('table.updatePerSecond'),
+        "minute":t('table.updatePerMinute'),
+        "hour":t('table.updatePerHour'),
+        "day":t('table.dailyUpdate'),
+        "week":t('table.weeklyUpdate'),
+        "month":t('table.monthlyUpdate'),
+        "bimester":t('table.bimonthlyUpdate'),
+        "quarter":t('table.quarterlyUpdate'),
+        "semester":t('table.semiannualUpdate'),
+        "year":t('table.annualUpdate'),
       }
     }
 
-    return formats[value] ? formats[value] : t('updateNotDefined')
+    return formats[value] ? formats[value] : t('table.updateNotDefined')
   }
 
   if(isError) return <FourOFour/>
@@ -281,7 +285,7 @@ export default function BdmTablePage({ id }) {
         isLoaded={!isLoading}
       >
         <ReadMore id="readLessTable">
-          {resource?.description || t('notInformed')}
+          {resource?.[`description${capitalize(locale)}`] || resource?.description || t('table.notInformed')}
         </ReadMore>
       </SkeletonText>
 
@@ -294,7 +298,7 @@ export default function BdmTablePage({ id }) {
             lineHeight="20px"
             color="#252A32"
           >
-            {t('temporalCoverage')}
+            {t('table.temporalCoverage')}
           </Text>
         </StackSkeleton>
 
@@ -315,7 +319,7 @@ export default function BdmTablePage({ id }) {
             lineHeight="20px"
             color="#252A32"
           >
-            {t('dataAccess')}
+            {t('table.dataAccess')}
           </Text>
         </StackSkeleton>
 
@@ -333,7 +337,7 @@ export default function BdmTablePage({ id }) {
             lineHeight="20px"
             color="#252A32"
           >
-            {t('dataUpdateFrequency')}
+            {t('table.dataUpdateFrequency')}
           </Text>
         </StackSkeleton>
 
@@ -361,8 +365,8 @@ export default function BdmTablePage({ id }) {
             {resource?.updates?.[0]?.latest ?
               formatDate(resource.updates[0].latest)
               :
-              t('notInformed')
-            }: {t('lastUpdateBD')}
+              t('table.notInformed')
+            }: {t('table.lastUpdateBD')}
             {resource?.updates?.[0]?.frequency &&
               <Text
                 backgroundColor="#EEEEEE"
@@ -392,7 +396,7 @@ export default function BdmTablePage({ id }) {
                 lineHeight="18px"
                 color="#252A32"
               >
-                {t('noUpdateScheduled')}
+                {t('table.noUpdateScheduled')}
               </Text>
             }
           </Box>
@@ -410,8 +414,8 @@ export default function BdmTablePage({ id }) {
             {resource?.rawDataSource?.[0]?.updates?.[0]?.latest ?
               formatDate(resource.rawDataSource[0].updates[0].latest)
               :
-              t('notInformed')
-            }: {t('lastUpdateRawDataSource')}
+              t('table.notInformed')
+            }: {t('table.lastUpdateRawDataSource')}
             {resource?.rawDataSource?.[0]?.updates?.[0]?.frequency ?
               <Text
                 backgroundColor="#EEEEEE"
@@ -441,7 +445,7 @@ export default function BdmTablePage({ id }) {
                 lineHeight="18px"
                 color="#252A32"
               >
-                {t('noUpdateScheduled')}
+                {t('table.noUpdateScheduled')}
               </Text>
               :
               <></>
@@ -461,8 +465,8 @@ export default function BdmTablePage({ id }) {
             {resource?.rawDataSource?.[0]?.polls?.[0]?.latest ?
               formatDate(resource.rawDataSource[0].polls[0].latest)
               :
-              t('notInformed')
-            }: {t('lastCheckRawDataSource')}
+              t('table.notInformed')
+            }: {t('table.lastCheckRawDataSource')}
           </Text>
         </SkeletonText>
       </Stack>
@@ -476,7 +480,7 @@ export default function BdmTablePage({ id }) {
             lineHeight="20px"
             color="#252A32"
           >
-            {t('bigQueryID')}
+            {t('table.bigQueryID')}
           </Text>
         </StackSkeleton>
 
@@ -508,7 +512,7 @@ export default function BdmTablePage({ id }) {
             }}
           >
             {!resource?.cloudTables ?
-              t('notInformed')
+              t('table.notInformed')
               :
               resource?.cloudTables?.[0]?.gcpProjectId+"."+resource?.cloudTables?.[0]?.gcpDatasetId+"."+resource?.cloudTables?.[0]?.gcpTableId
             }
@@ -525,8 +529,8 @@ export default function BdmTablePage({ id }) {
       <Stack marginBottom="40px !important">
         <StackSkeleton width="260px" height="20px">
           <TooltipText
-            text="partitionsInBigQuery"
-            info="partitionsTooltip"
+            text={t("table.partitionsInBigQuery")}
+            info={t("table.partitionsTooltip")}
           />
         </StackSkeleton>
         <StackSkeleton
@@ -541,7 +545,7 @@ export default function BdmTablePage({ id }) {
             lineHeight="20px"
             color="#464A51"
           >
-            {resource?.partitions ? resource.partitions : t('notInformed')}
+            {resource?.partitions ? resource.partitions : t('table.notInformed')}
           </Text>
         </StackSkeleton>
       </Stack>
@@ -549,8 +553,8 @@ export default function BdmTablePage({ id }) {
       <Stack marginBottom="40px !important">
         <StackSkeleton width="300px" height="20px">
           <TooltipText
-            text="observationLevel"
-            info="observationLevelTooltip"
+            text={t("table.observationLevel")}
+            info={t("table.observationLevelTooltip")}
           />
         </StackSkeleton>
 
@@ -572,7 +576,7 @@ export default function BdmTablePage({ id }) {
               lineHeight="20px"
               color="#464A51"
             >
-              {t('notInformed')}
+              {t('table.notInformed')}
             </Text>
           }
         </Skeleton>       
@@ -581,8 +585,8 @@ export default function BdmTablePage({ id }) {
       <Stack marginBottom="40px !important">
         <StackSkeleton width="240px" height="20px">
           <TooltipText
-            text="auxiliaryFiles"
-            info="auxiliaryFilesTooltip"
+            text={t("table.auxiliaryFiles")}
+            info={t("table.auxiliaryFilesTooltip")}
           />
         </StackSkeleton>
         <StackSkeleton
@@ -616,14 +620,14 @@ export default function BdmTablePage({ id }) {
                 }}
                 href={resource.auxiliaryFilesUrl}
               >
-                {t('downloadFiles')}
+                {t('table.downloadFiles')}
                 <DownloadIcon
                   width="24px"
                   height="24px"
                 />
               </Text>
             :
-              t('notInformed')
+              t('table.notInformed')
             }
           </Text>  
         </StackSkeleton>
@@ -632,8 +636,8 @@ export default function BdmTablePage({ id }) {
       <Stack>
         <StackSkeleton width="240px" height="20px">
           <TooltipText
-            text="rawDataSources"
-            info="rawDataSourcesTooltip"
+            text={t("table.rawDataSources")}
+            info={t("table.rawDataSourcesTooltip")}
           />
         </StackSkeleton>
 
@@ -677,7 +681,7 @@ export default function BdmTablePage({ id }) {
                 )
               }) 
               :
-                t('notInformed')
+                t('table.notInformed')
             }
           </Text>
         </StackSkeleton> 
@@ -693,7 +697,7 @@ export default function BdmTablePage({ id }) {
           lineHeight="20px"
           color="#252A32"
         >
-          {t('additionalInformation')}
+          {t('table.additionalInformation')}
         </Text>
       </StackSkeleton>
 
@@ -715,9 +719,9 @@ export default function BdmTablePage({ id }) {
           fontSize="14px"
           lineHeight="20px"
           color="#252A32"
-        >{t('publishedBy')}</Text>
+        >{t('table.publishedBy')}</Text>
         <PublishedOrDataCleanedBy
-          resource={resource?.publishedByInfo || t('notInformed')}
+          resource={resource?.publishedByInfo || t('table.notInformed')}
         />
       </SkeletonText>
 
@@ -739,9 +743,9 @@ export default function BdmTablePage({ id }) {
           fontSize="14px"
           lineHeight="20px"
           color="#252A32"
-        >{t('dataCleanedBy')}</Text>
+        >{t('table.dataCleanedBy')}</Text>
         <PublishedOrDataCleanedBy
-          resource={resource?.dataCleanedByInfo || t('notInformed')}
+          resource={resource?.dataCleanedByInfo || t('table.notInformed')}
         />
       </SkeletonText>
 
@@ -763,14 +767,14 @@ export default function BdmTablePage({ id }) {
           fontSize="14px"
           lineHeight="20px"
           color="#252A32"
-        >{t('version')}</Text>
+        >{t('table.version')}</Text>
         <Text
           fontFamily="Roboto"
           fontWeight="400"
           fontSize="14px"
           lineHeight="20px"
           color="#464A51"
-        >{resource?.version || t('notInformed')}</Text>
+        >{resource?.version || t('table.notInformed')}</Text>
       </SkeletonText>
     </Stack>
   )

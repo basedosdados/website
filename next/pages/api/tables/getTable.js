@@ -1,9 +1,10 @@
 import axios from "axios";
 import { cleanGraphQLResponse } from "../../../utils";
+import { capitalize } from 'lodash';
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-async function getBdmTable(id) {
+async function getTable(id, locale) {
   try {
     const res = await axios({
       url: API_URL,
@@ -17,7 +18,9 @@ async function getBdmTable(id) {
                 _id
                 slug
                 name
+                name${capitalize(locale)}
                 description
+                description${capitalize(locale)}
                 isClosed
                 dataset {
                   _id
@@ -25,6 +28,8 @@ async function getBdmTable(id) {
                   organization {
                     _id
                     slug
+                    name
+                    name${capitalize(locale)}
                     area {
                       _id
                       slug
@@ -131,7 +136,8 @@ async function getBdmTable(id) {
 }
 
 export default async function handler(req, res) {
-  const result = await getBdmTable(req.query.p)
+  const { id: id, locale = 'pt' } = req.query;
+  const result = await getTable(id, locale);
 
   if(result.errors) return res.status(500).json({error: result.errors, success: false})
   if(result === "err") return res.status(500).json({error: "err", success: false})

@@ -8,8 +8,9 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useTranslation } from 'next-i18next';
 
-import BdmTablePage from "./BdmTablePage";
+import TablePage from "./TablePage";
 import RawDataSourcesPage from "./RawDataSourcesPage";
 import InformationRequestPage from "./InformationRequestPage";
 
@@ -21,6 +22,7 @@ export default function DatasetResource({
   const [tables, setTables] = useState([])
   const [rawDataSources, setRawDataSources] = useState([])
   const [informationRequests, setInformationRequests] = useState([])
+  const { t } = useTranslation('dataset');
 
   const pushQuery = (key, value) => {
     router.push({
@@ -71,7 +73,7 @@ export default function DatasetResource({
   }, [dataset])
 
   function SwitchResource ({route}) {
-    if (route.hasOwnProperty("table")) return <BdmTablePage id={route.table}/>
+    if (route.hasOwnProperty("table")) return <TablePage id={route.table}/>
     if (route.hasOwnProperty("raw_data_source")) return <RawDataSourcesPage id={route.raw_data_source}/>
     if (route.hasOwnProperty("information_request")) return <InformationRequestPage id={route.information_request}/>
     return null
@@ -161,7 +163,7 @@ export default function DatasetResource({
         spacing={0}
       >
         <ContentFilter
-          fieldName="Tabelas tratadas"
+          fieldName={t('tables')}
           choices={tables}
           value={query.table}
           onChange={(id) => {
@@ -171,7 +173,7 @@ export default function DatasetResource({
         />
 
         <ContentFilter
-          fieldName="Fontes originais"
+          fieldName={t('rawDataSources')}
           choices={rawDataSources}
           value={query.raw_data_source}
           onChange={(id) => {
@@ -181,7 +183,7 @@ export default function DatasetResource({
         />
 
         <ContentFilter
-          fieldName="Pedidos LAI"
+          fieldName={t('informationRequests')}
           choices={informationRequests}
           value={query.information_request}
           onChange={(id) => {
