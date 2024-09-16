@@ -359,7 +359,7 @@ export default function SearchDatasetPage() {
             color: "#0057A4"
           }}
         >
-          Limpar filtros
+          {t('clearFilters')}
         </Text>
     </Stack>
     )
@@ -701,16 +701,23 @@ export default function SearchDatasetPage() {
               lineHeight="20px"
               color="#71757A"
             >
-              {count ?
-                `${count} conjunto${count > 1 ? "s": ""} encontrado${count > 1 ? "s": ""} ${!!query.q ? ` para ${query.q}` : ""}`
-                :
-                count === 0  && showEmptyState ?
-                  `${t('noDatasetsFound')}`
-                :
+              {count ? (
+                t('datasetsFound_plural', {
+                  count: count,
+                  query: query.q ? t('forQuery', { query: query.q }) : ''
+                })
+              ) : count === 0 && showEmptyState ? (
+                t('noDatasetsFound')
+              ) : (
                 <Box as="span" width="fit-content" display="flex" flexDirection="row" gap="8px" alignItems="center">
-                  <Spinner height="18px" width="18px" color="#252A32"/> <Text as="span">encontrando conjuntos {!!query.q ? ` para ${query.q}` : ""}</Text>
+                  <Spinner height="18px" width="18px" color="#252A32"/>
+                  <Text as="span">
+                    {t('findingDatasets', {
+                      query: query.q ? t('forQuery', { query: query.q }) : ''
+                    })}
+                  </Text>
                 </Box>
-              }
+              )}
             </Text>
           </Flex>
 

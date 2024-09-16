@@ -21,12 +21,21 @@ import { isMobileMod, useCheckMobile } from "../hooks/useCheckMobile.hook";
 import BDLogoLabImage from "../public/img/logos/bd_logo_lab"
 
 import CheckIcon from "../public/img/icons/checkIcon";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-export async function getStaticProps(context) {
-  return await withPages()
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common', 'services'])),
+      ...(await withPages()),
+    },
+  };
 }
 
 function FixedBottomBar() {
+  const { t } = useTranslation('services');
+
   return (
     <Stack
       position="fixed"
@@ -43,7 +52,7 @@ function FixedBottomBar() {
       direction={{ base: "row", lg: "column" }}
     >
       <SectionText fontWeight="500" fontFamily="Ubuntu" color="white">
-        Gostaria de marcar uma reunião com nossa equipe?
+        {t('fixedBottomBar.text')}
       </SectionText>
       <Link
         position={{ base: "initial", lg: "fixed" }}
@@ -60,7 +69,7 @@ function FixedBottomBar() {
           color="#3AA1EB"
           backgroundColor="white"
         >
-          Entre em contato
+          {t('fixedBottomBar.buttonText')}
         </RoundedButton>
       </Link>
     </Stack>
@@ -68,6 +77,8 @@ function FixedBottomBar() {
 }
 
 function Slogan () {
+  const { t } = useTranslation('services');
+
   return (
     <Stack
       width="100%"
@@ -89,7 +100,7 @@ function Slogan () {
         textAlign="center"
         margin="0 0 24px !important"
       > 
-        Nossos serviços
+        {t('slogan.title')}
       </Display>
       <BodyText
         fontWeight="400"
@@ -98,7 +109,7 @@ function Slogan () {
         letterSpacing={isMobileMod() ? "0.1px" : "-0.1px"}
         textAlign="center"
       >
-        A Base dos Dados é a especialista que ajuda você ou sua equipe a trabalhar e extrair o máximo de valor dos dados.
+        {t('slogan.description')}
       </BodyText>
       <Box
         as="a"
@@ -123,7 +134,7 @@ function Slogan () {
           backgroundColor: "#0B89E2"
         }}
       >
-        Vamos fazer um projeto juntos
+        {t('slogan.cta')}
       </Box>
     </Stack>
   )
@@ -193,6 +204,7 @@ function WorkflowBox({ order, title, subtitle, children}) {
 }
 
 function CaseStudies ({}) {
+  const { t } = useTranslation('services');
   const [CaseStudiesPages, setCaseStudiesPages] = useState([])
 
   useEffect(() => {
@@ -215,7 +227,7 @@ function CaseStudies ({}) {
         textAlign="center"
         marginBottom={useCheckMobile() ? "8px" : "16px"}
       >
-        Nossas soluções
+        {t('caseStudies.title')}
       </Display>
       <SectionTitle
         color="#575757"
@@ -223,7 +235,7 @@ function CaseStudies ({}) {
         marginBottom={useCheckMobile() ? "80px !important" : "112px !important"}
         lineHeight={useCheckMobile() ? "32px" : "40px"}
       >
-        Descubra por que as instituições escolhem inovar com a Base dos Dados
+        {t('caseStudies.subtitle')}
       </SectionTitle>
 
       <Stack
@@ -302,7 +314,7 @@ function CaseStudies ({}) {
               color="#42B0FF"
               marginBottom="40px !important"
             >
-              Leia o estudo de caso
+              {t('caseStudies.readMore')}
             </Link>
           </Stack>
         )}
@@ -312,22 +324,21 @@ function CaseStudies ({}) {
 }
 
 export default function Services() {
+  const { t } = useTranslation('services');
+
   const services = {
-    "Captura de dados":
-      "https://storage.googleapis.com/basedosdados-website/images/cloud.png",
-    "Análise de dados":
-      "https://storage.googleapis.com/basedosdados-website/images/bar.png",
-    "Consultoria de dados":
-      "https://storage.googleapis.com/basedosdados-website/images/lightbulb.png",
+    [t('services.dataCapture')]: "https://storage.googleapis.com/basedosdados-website/images/cloud.png",
+    [t('services.dataAnalysis')]: "https://storage.googleapis.com/basedosdados-website/images/bar.png",
+    [t('services.dataConsulting')]: "https://storage.googleapis.com/basedosdados-website/images/lightbulb.png",
   }
 
   return (
     <MainPageTemplate>
       <Head>
-        <title>Serviços – Base dos Dados</title>
+        <title>{t('pageTitle')}</title>
         <meta
           property="og:title"
-          content="Serviços – Base dos Dados"
+          content={t('metaTitle')}
           key="ogtitle"
         />
       </Head>
@@ -372,36 +383,31 @@ export default function Services() {
           spacing={0}
         >
           <Display paddingBottom="24px" >
-            Captura de dados
+            {t('dataCapture.title')}
           </Display>
 
           <BodyText maxWidth="800px" paddingBottom="8px" fontWeight="500" marginTop="0">
-            Capturamos e disponibilizamos dados sob demanda com rapidez, escala e baixo custo.
+            {t('dataCapture.description')}
           </BodyText>
           <BodyText maxWidth="800px">
-            Você não precisa se preocupar em criar e manter uma infraestrutura
-            própria ou escrever códigos - nós cuidamos disso. Tudo é feito
-            seguindo a metodologia de tratamento e padronização da Base dos Dados,
-            e conforme as melhores práticas de engenharia de dados do mercado. As
-            tabelas tratadas podem ser disponibilizadas com exclusividade ou serem
-            públicas.
+            {t('dataCapture.longDescription')}
           </BodyText>
 
           <Stack paddingTop="40px">
-            <BodyText fontWeight="700">Principais vantagens</BodyText>
-            <BoxBenefits benefits="Rapidez">
-              Mesmo <i>queries</i> muito complexas demoram apenas minutos para serem processadas.
+            <BodyText fontWeight="700">{t('dataCapture.advantages.title')}</BodyText>
+            <BoxBenefits benefits={t('dataCapture.advantages.speed')}>
+              {t('dataCapture.advantages.speedDescription')}
             </BoxBenefits>
-            <BoxBenefits benefits="Escala">
-              Nosso <i>datalake</i> escala magicamente para hexabytes se necessário.
+            <BoxBenefits benefits={t('dataCapture.advantages.scale')}>
+              {t('dataCapture.advantages.scaleDescription')}
             </BoxBenefits>
-            <BoxBenefits benefits="Baixo custo">
-              Todo usuário possui 1TB gratuito por mês para consulta aos dados.
+            <BoxBenefits benefits={t('dataCapture.advantages.cost')}>
+              {t('dataCapture.advantages.costDescription')}
             </BoxBenefits>
           </Stack>
 
           <Stack paddingTop="40px" spacing="40px">
-            <BodyText fontWeight="700">Nosso trabalho com engenharia de dados</BodyText>
+            <BodyText fontWeight="700">{t('dataCapture.work.title')}</BodyText>
 
             <Stack
               justifyContent="space-between"
@@ -409,25 +415,14 @@ export default function Services() {
               direction={{ base: "column", lg: "row" }}
               align="center"
             >
-              <BorderBox title="Tecnologia de ponta">
-                Utilizando da infraestrutura do <i>Google Cloud Platform</i>, uma
-                das maiores plataformas de armazenamento e processamento de dados,
-                garantimos a segurança e a confiabilidade do nosso trabalho.
+              <BorderBox title={t('dataCapture.work.technology.title')}>
+                {t('dataCapture.work.technology.description')}
               </BorderBox>
-              <BorderBox title="Flexibilidade">
-                Seja envios pontuais, atualizações recorrentes, acesso via{" "}
-                <i>API</i>, ou conexão com plataformas de <i>BI</i>, entregamos a
-                solução que você precisa de forma ágil e completa.
+              <BorderBox title={t('dataCapture.work.flexibility.title')}>
+                {t('dataCapture.work.flexibility.description')}
               </BorderBox>
-              <BorderBox
-                title={
-                  <>
-                    <i>Frameworks</i> reconhecidos
-                  </>
-                }
-              >
-                Com <i>frameworks</i> e sistemas de gestão de dados, garantimos a qualidade e a organização do seu sistema
-                de dados sem gerar qualquer preocupação para sua equipe.
+              <BorderBox title={t('dataCapture.work.frameworks.title')}>
+                {t('dataCapture.work.frameworks.description')}
               </BorderBox>
             </Stack>
           </Stack>
@@ -443,31 +438,26 @@ export default function Services() {
           spacing={0}
         >
           <Display paddingBottom="24px" >
-            Análise de dados
+            {t('dataAnalysis.title')}
           </Display>
 
           <BodyText maxWidth="900px" paddingBottom="8px" fontWeight="500" marginTop="0">
-            Construímos análises, relatórios e indicadores essenciais para sua pesquisa ou tomada de decisão.
+            {t('dataAnalysis.description')}
           </BodyText>
           <BodyText maxWidth="800px">
-            As informações e <i>insights</i> são geradas a partir de diversos
-            conjuntos de dados já tratados no nosso <i>datalake</i> público
-            atrelado à <i>expertise</i> da nossa equipe de Dados. E mais:
-            utilizamos nossa metodologia padrão de tratamento para que você também
-            possa cruzar esses dados com quaisquer outras bases disponíveis no{" "}
-            <i>datalake</i>.
+            {t('dataAnalysis.longDescription')}
           </BodyText>
 
           <Stack paddingTop="40px">
-            <BodyText fontWeight="700">Exemplos de perguntas que podemos responder</BodyText>
+            <BodyText fontWeight="700">{t('dataAnalysis.examples.title')}</BodyText>
             <BoxBenefits>
-              Como vem evoluindo a economia brasileira, com indicadores detalhados mensais por setor?
+              {t('dataAnalysis.examples.example1')}
             </BoxBenefits>
             <BoxBenefits>
-              Quais escolas terão <i>performance</i> acima da média do estado em matemática no ano que vem?
+              {t('dataAnalysis.examples.example2')}
             </BoxBenefits>
             <BoxBenefits>
-              Quantas vezes o Diário Oficial da União publica sobre certo tema a cada dia?
+              {t('dataAnalysis.examples.example3')}
             </BoxBenefits>
           </Stack>
         </VStack>
@@ -482,34 +472,31 @@ export default function Services() {
           spacing={0}
         >
           <Display paddingBottom="24px" >
-            Consultoria de dados
+            {t('dataConsulting.title')}
           </Display>
 
           <BodyText maxWidth="900px" paddingBottom="8px" fontWeight="500" marginTop="0">
-            Orientamos como aplicar a nossa metodologia de limpeza, estruturação e padronização de dados
+            {t('dataConsulting.description')}
           </BodyText>
           <BodyText maxWidth="800px">
-            No seu projeto ou organização através de workshops e materiais
-            exclusivos. Reproduzir nosso processo de tratamento em seu próprio
-            banco de dados pode poupar horas de trabalho de sua equipe ao
-            consultar, manipular ou atualizar as informações.
+            {t('dataConsulting.longDescription')}
           </BodyText>
 
           <Stack paddingTop="40px">
-            <BodyText fontWeight="700">Principais vantagens</BodyText>
+            <BodyText fontWeight="700">{t('dataConsulting.advantages.title')}</BodyText>
             <BoxBenefits>
-              Experiência em construir infraestruturas capazes de suportar milhares de acessos mensais.
+              {t('dataConsulting.advantages.advantage1')}
             </BoxBenefits>
             <BoxBenefits>
-              Flexibilidade para projetos remotos em qualquer lugar do país.
+              {t('dataConsulting.advantages.advantage2')}
             </BoxBenefits>
             <BoxBenefits>
-              Equipe diversa e com <i>expertise</i> em diferentes áreas do conhecimento e dados.
+              {t('dataConsulting.advantages.advantage3')}
             </BoxBenefits>
           </Stack>
 
           <Stack paddingTop="40px" spacing="40px">
-            <BodyText fontWeight="700">Frentes de atuação</BodyText>
+            <BodyText fontWeight="700">{t('dataConsulting.areas.title')}</BodyText>
 
             <Stack
               justifyContent="space-between"
@@ -517,20 +504,14 @@ export default function Services() {
               direction={{ base: "column", lg: "row" }}
               align="center"
             >
-              <BorderBox title="Infraestrutura">
-                Mentoria para equipes de engenharia de dados que buscam estruturar
-                processos de manutenção de dados, seus próprios <i>datalakes</i> ou
-                ainda alavancarem-se utilizando a infraestrutura da Base dos Dados.
+              <BorderBox title={t('dataConsulting.areas.infrastructure.title')}>
+                {t('dataConsulting.areas.infrastructure.description')}
               </BorderBox>
-              <BorderBox title="Análise">
-                Workshops práticos, mostrando como funciona o <i>datalake</i> da
-                Base dos Dados e ensinando como explorar dados públicos para
-                matérias jornalísticas ou pesquisas científicas.
+              <BorderBox title={t('dataConsulting.areas.analysis.title')}>
+                {t('dataConsulting.areas.analysis.description')}
               </BorderBox>
-              <BorderBox title="Programação">
-                Programas personalizados de ensino para utilizar pacotes de Python e
-                R da Base dos Dados, além de mentoria de SQL para construir análises
-                rápidas e escaláveis direto na nuvem.
+              <BorderBox title={t('dataConsulting.areas.programming.title')}>
+                {t('dataConsulting.areas.programming.description')}
               </BorderBox>
             </Stack>
           </Stack>
@@ -545,36 +526,27 @@ export default function Services() {
           spacing={0}
         >
           <Display paddingBottom="24px" >
-            Nosso fluxo de trabalho
+            {t('workflow.title')}
           </Display>
           <BodyText maxWidth="800px">
-            Uma mesma metodologia de trabalho para todos os serviços, pautada na
-            satisfação dos clientes e na primazia pela qualidade.
+            {t('workflow.description')}
           </BodyText>
 
           <Stack spacing={0} width="100%">
-            <WorkflowBox order={1} title="Demanda" subtitle="Identificação de demandas e necessidades do cliente">
-              Trabalhamos colaborativamente para compreender as reais necessidades por trás dos pedidos de nossos clientes. O trabalho de descoberta compreende discussões sobre os objetivos do projeto ou o uso dos dados a serem capturados e analisados. É nesta etapa que fica claro para nossa equipe e para os clientes o objetivo final do serviço.
+            <WorkflowBox order={1} title={t('workflow.steps.demand.title')} subtitle={t('workflow.steps.demand.subtitle')}>
+              {t('workflow.steps.demand.description')}
             </WorkflowBox>
 
-            <WorkflowBox order={2} title="Planejamento" subtitle="Alinhamento de expectativas de negócio, engenharia ou capacitação">
-              O segundo passo é entender qual a melhor forma de entregarmos o valor que você precisa. Não trabalhamos com propostas genéricas. Cada projeto é pensado e orientado 100% para as demandas dos clientes, seja no formato de entrega de dados, análises ou capacitações específicas.
+            <WorkflowBox order={2} title={t('workflow.steps.planning.title')} subtitle={t('workflow.steps.planning.subtitle')}>
+              {t('workflow.steps.planning.description')}
             </WorkflowBox>
 
-            <WorkflowBox order={3} title="Orçamento" subtitle="Orçamento transparente e simplificado">
-              Uma vez alinhado o escopo, formato e expectativas, entregamos uma
-              proposta de orçamento completamente transparente. Para isso,
-              consideramos fatores como a quantidade e complexidade de{" "}
-              <i>datasets</i>, trabalho necessário, tamanho da equipe e urgência.
-              Tudo explícito de forma direta e em conformidade com o que foi
-              determinado até então.
+            <WorkflowBox order={3} title={t('workflow.steps.budget.title')} subtitle={t('workflow.steps.budget.subtitle')}>
+              {t('workflow.steps.budget.description')}
             </WorkflowBox>
 
-            <WorkflowBox order={4} title="Execução" subtitle="Execução ágil e entrega de valor">
-              Por fim, nossa entrega é comprometida com prazos e, sobretudo,
-              qualidade. A comunicação é constante durante toda execução.
-              Trabalhando de forma <i>lean</i> e com profissionais experientes na
-              área, nossa equipe preza pela satisfação de nossos clientes.
+            <WorkflowBox order={4} title={t('workflow.steps.execution.title')} subtitle={t('workflow.steps.execution.subtitle')}>
+              {t('workflow.steps.execution.description')}
             </WorkflowBox>
           </Stack>
         </VStack>
@@ -602,7 +574,7 @@ export default function Services() {
             backgroundColor: "#0B89E2"
           }}
         >
-          Vamos fazer um projeto juntos
+          {t('contactCTA')}
         </Box>
       </Stack>
     </MainPageTemplate>

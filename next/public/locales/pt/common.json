@@ -3,6 +3,9 @@
     "search_placeholder_mobile": "Encontre os dados",
     "popular_terms": "Termos populares:",
     "search_by_theme": "Busque por tema",
+    "min": "Mín",
+    "max": "Máx",
+    "search": "Buscar",
     "products": {
         "facilitation_text": "Facilitamos o trabalho para que a distância",
         "analysis_distance": "entre você e sua análise seja",

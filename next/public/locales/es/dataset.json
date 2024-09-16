@@ -28,11 +28,26 @@
     "datasetsFound_plural": "{{count}} conjuntos de datos encontrados",
     "for": "para",
     "findingDatasets": "buscando conjuntos de datos",
+    "findingDatasets_plural": "buscando {{count}} conjuntos de datos",
+    "forQuery": "para \"{{query}}\"",
+    "forQuery_plural": "para \"{{query}}\"",
+    "noDatasetsFound": "No encontramos ningún conjunto de datos para tu búsqueda.",
     "ooops": "Ups...",
     "unfortunatelyNoDatasetsFound": "Desafortunadamente, no encontramos ningún conjunto de datos para tu búsqueda.",
     "tryRelatedTerms": "Intenta buscar términos relacionados o proponer nuevos datos para agregar a la BD.",
     "stillNotFound": "¿Aún no has encontrado lo que buscas?",
     "suggestNewData": "Proponer nuevos datos",
+    "clearFilters": "Limpiar filtros",
     "previous": "Anterior",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "datasetCard": {
+        "table": "tabla",
+        "tables": "tablas",
+        "rawDataSource": "fuente de datos original",
+        "rawDataSources": "fuentes de datos originales",
+        "informationRequest": "solicitud LAI",
+        "informationRequests": "solicitudes LAI",
+        "noRawDataSources": "0 fuentes de datos originales",
+        "noInformationRequests": "0 solicitudes LAI"
+    }
 }

@@ -1,0 +1,70 @@
+{
+    "login": {
+      "title": "Faça login",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "Insira seu e-mail",
+      "emailError": "Por favor, insira um endereço de e-mail válido.",
+      "passwordLabel": "Senha",
+      "passwordPlaceholder": "Insira sua senha",
+      "passwordError": "Por favor, insira a senha.",
+      "forgotPassword": "Esqueceu a senha?",
+      "loginButton": "Entrar",
+      "noAccount": "Não tem uma conta?",
+      "signUp": "Cadastre-se",
+      "loginError": "E-mail ou senha incorretos.",
+      "serverError": "Não foi possível conectar ao servidor. Tente novamente mais tarde."
+    },
+    "signup": {
+        "title": "Cadastre-se",
+        "firstName": "Nome",
+        "lastName": "Sobrenome",
+        "email": "E-mail",
+        "username": "Nome de usuário",
+        "password": "Senha",
+        "confirmPassword": "Confirme a senha",
+        "register": "Cadastrar",
+        "alreadyHaveAccount": "Já tem uma conta?",
+        "login": "Faça login",
+        "termsAgreement": {
+            "part1": "Ao clicar em \"Cadastrar\" acima, você confirma que leu, compreendeu e aceita os ",
+            "termsLink": "Termos de Serviço",
+            "part2": " e ",
+            "privacyLink": "Políticas de Privacidade",
+            "part3": " da Base dos Dados."
+        },
+        "placeholders": {
+            "firstName": "Insira seu nome",
+            "lastName": "Insira seu sobrenome (opcional)",
+            "email": "Insira seu e-mail",
+            "username": "Insira seu nome de usuário",
+            "password": "Crie uma senha",
+            "confirmPassword": "Insira a senha novamente"
+        },
+        "errors": {
+        "firstName": "Por favor, insira seu nome.",
+        "username": {
+            "invalid": "Nome de usuário inválido ou já existe uma conta com este nome de usuário.",
+            "noSpaces": "Nome de usuário não pode haver espaçamento.",
+            "exists": "Conta com este nome de usuário já existe."
+        },
+        "email": {
+            "invalid": "Endereço de e-mail inválido ou já existe uma conta com este e-mail.",
+            "exists": "Conta com este email já existe."
+        },
+        "password": {
+            "noSpaces": "As senhas inseridas não podem conter espaçamentos.",
+            "requirements": "Certifique-se que a senha tenha no mínimo:",
+            "chars": "8 caracteres",
+            "uppercase": "Uma letra maiúscula",
+            "lowercase": "Uma letra minúscula",
+            "digit": "Um dígito",
+            "special": "Um caractere especial, dentre ! @ # ? ! % & *"
+        },
+        "confirmPassword": {
+            "required": "Confirmar a senha é necessário.",
+            "mismatch": "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente."
+        },
+        "register": "Error ao tentar se cadastrar, tente novamente mais tarde!"
+        }
+    }
+}

@@ -9,6 +9,8 @@ import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import cookies from 'js-cookie';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import Display from "../../components/atoms/Display";
 import Input from "../../components/atoms/SimpleInput";
@@ -23,8 +25,14 @@ import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 
 import { withPages } from "../../hooks/pages.hook";
 
-export async function getStaticProps() {
-  return await withPages()
+export async function getStaticProps({ locale }) {
+  const pages = await withPages();
+  return {
+    props: {
+      ...pages,
+      ...(await serverSideTranslations(locale, ['user'])),
+    },
+  };
 }
 
 export default function Login() {
@@ -33,6 +41,7 @@ export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" })
   const [errors, setErrors] = useState({ email: "", password: "", login: ""})
   const [showPassword, setShowPassword] = useState(true)
+  const { t } = useTranslation('user');
 
   const handleInputChange = (e, field) => {
     setFormData((prevState) => ({
@@ -46,11 +55,11 @@ export default function Login() {
 
     let validationErrors = {}
     if (!formData.email) {
-      validationErrors.email = "Por favor, insira um endereço de e-mail válido."
+      validationErrors.email = t('login.emailError');
     } else if (!/^\S+@\S+$/.test(formData.email)) {
-      validationErrors.email = "Por favor, insira um endereço de e-mail válido."
+      validationErrors.email = t('login.emailError');
     }
-    if (!formData.password) validationErrors.password = "Por favor, insira a senha."
+    if (!formData.password) validationErrors.password = t('login.passwordError');
     setErrors(validationErrors)
 
     if (Object.keys(validationErrors).length === 0) {
@@ -72,12 +81,12 @@ export default function Login() {
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/account/account_activate/${btoa(id)}/`)
         return window.open("/user/check-email?e=1", "_self")
       }
-      return setErrors({login:"E-mail ou senha incorretos."})
+      return setErrors({login: t('login.loginError')})
     }
 
     const userData = await fetch(`/api/user/getUser?p=${btoa(result.id)}`, {method: "GET"})
       .then(res => res.json())
-    if(userData.error) return setErrors({login:"Não foi possível conectar ao servidor. Tente novamente mais tarde."}) 
+    if(userData.error) return setErrors({login: t('login.serverError')}) 
 
     cookies.set('userBD', JSON.stringify(userData))
 
@@ -125,7 +134,7 @@ export default function Login() {
           letterSpacing={isMobileMod() ? "-0.4px" : "-1.5px"}
           marginBottom="40px"
           textAlign="center"
-        >Faça login</Display>
+        >{t('login.title')}</Display>
 
         {errors.login && 
           <Box
@@ -145,7 +154,7 @@ export default function Login() {
 
         <form onSubmit={handleSubmit}>
           <FormControl isInvalid={!!errors.email} marginBottom="24px !important">
-            <LabelTextForm text="E-mail"/>
+            <LabelTextForm text={t('login.emailLabel')}/>
             <Input
               id="username"
               name="username"
@@ -153,7 +162,7 @@ export default function Login() {
               autoComplete="username"
               value={formData.email}
               onChange={(e) => handleInputChange(e, "email")}
-              placeholder="Insira seu e-mail"
+              placeholder={t('login.emailPlaceholder')}
               fontFamily="ubuntu"
               height="40px"
               fontSize="14px"
@@ -172,7 +181,7 @@ export default function Login() {
               width="100%"
               marginBottom="8px"
             >
-              <LabelTextForm text="Senha" margin="0 !important"/>
+              <LabelTextForm text={t('login.passwordLabel')} margin="0 !important"/>
               <ButtonSimple
                 position="relative"
                 top="-2px"
@@ -185,7 +194,7 @@ export default function Login() {
                 justifyContent="end"
                 _hover={{opacity: "0.6"}}
                 onClick={() => window.open("./password-recovery", "_self")}
-              >Esqueceu a senha?
+              >{t('login.forgotPassword')}
               </ButtonSimple>
             </Box>
 
@@ -196,7 +205,7 @@ export default function Login() {
               autoComplete="current-password"
               value={formData.password}
               onChange={(e) => handleInputChange(e, "password")}
-              placeholder="Insira sua senha"
+              placeholder={t('login.passwordPlaceholder')}
               fontFamily="ubuntu"
               height="40px"
               fontSize="14px"
@@ -236,7 +245,7 @@ export default function Login() {
             marginBottom="24px !important"
             backgroundColor="#42B0FF"
           >
-            Entrar
+            {t('login.loginButton')}
           </Button>
         </form>
 
@@ -249,7 +258,7 @@ export default function Login() {
           fontSize="14px"
           fontFamily="ubuntu"
         >
-          Não tem uma conta?
+          {t('login.noAccount')}
           <ButtonSimple
             width="none"
             fontSize="14px"
@@ -259,7 +268,7 @@ export default function Login() {
             _hover={{opacity: "0.6"}}
             marginLeft="2px"
             onClick={() => window.open("./register", "_self")}
-          >{" "}Cadastre-se
+          >{" "}{t('login.signUp')}
           </ButtonSimple>.
         </SectionText>
       </Stack>

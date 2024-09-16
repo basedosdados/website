@@ -1,0 +1,70 @@
+{
+    "login": {
+      "title": "Iniciar sesión",
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "Ingrese su correo electrónico",
+      "emailError": "Por favor, ingrese una dirección de correo electrónico válida.",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "Ingrese su contraseña",
+      "passwordError": "Por favor, ingrese la contraseña.",
+      "forgotPassword": "¿Olvidó su contraseña?",
+      "loginButton": "Entrar",
+      "noAccount": "¿No tiene una cuenta?",
+      "signUp": "Regístrese",
+      "loginError": "Correo electrónico o contraseña incorrectos.",
+      "serverError": "No se pudo conectar al servidor. Intente nuevamente más tarde."
+    },
+    "signup": {
+        "title": "Regístrese",
+        "firstName": "Nombre",
+        "lastName": "Apellido",
+        "email": "Correo electrónico",
+        "username": "Nombre de usuario",
+        "password": "Contraseña",
+        "confirmPassword": "Confirme la contraseña",
+        "register": "Regístrese",
+        "alreadyHaveAccount": "¿Ya tiene una cuenta?",
+        "login": "Iniciar sesión",
+        "termsAgreement": {
+            "part1": "Al hacer clic en \"Regístrese\" arriba, confirma que ha leído, entendido y aceptado los ",
+            "termsLink": "Términos de Servicio",
+            "part2": " y la ",
+            "privacyLink": "Política de Privacidad",
+            "part3": " de la Base de los Datos."
+        },
+        "placeholders": {
+            "firstName": "Ingrese su nombre",
+            "lastName": "Ingrese su apellido (opcional)",
+            "email": "Ingrese su correo electrónico",
+            "username": "Ingrese su nombre de usuario",
+            "password": "Cree una contraseña",
+            "confirmPassword": "Ingrese la contraseña nuevamente"
+        },
+        "errors": {
+            "firstName": "Por favor, ingrese su nombre.",
+            "username": {
+                "invalid": "Nombre de usuario inválido o ya existe una cuenta con este nombre de usuario.",
+                "noSpaces": "El nombre de usuario no puede tener espacios.",
+                "exists": "Ya existe una cuenta con este nombre de usuario."
+            },
+            "email": {
+                "invalid": "Dirección de correo electrónico inválida o ya existe una cuenta con este correo electrónico.",
+                "exists": "Ya existe una cuenta con este correo electrónico."
+            },
+            "password": {
+                "noSpaces": "Las contraseñas ingresadas no pueden contener espacios.",
+                "requirements": "Asegúrese de que la contraseña tenga al menos:",
+                "chars": "8 caracteres",
+                "uppercase": "Una letra mayúscula",
+                "lowercase": "Una letra minúscula",
+                "digit": "Un dígito",
+                "special": "Un carácter especial, entre ! @ # ? ! % & *"
+            },
+            "confirmPassword": {
+                "required": "Es necesario confirmar la contraseña.",
+                "mismatch": "La contraseña ingresada no coincide con la contraseña creada en el campo anterior. Por favor, verifique si no hay errores de escritura e intente nuevamente."
+            },
+            "register": "Error al intentar registrarse, ¡intente nuevamente más tarde!"
+        }
+    }
+}
