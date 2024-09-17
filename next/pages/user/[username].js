@@ -1736,6 +1736,10 @@ const PlansAndPayment = ({ userData }) => {
     if(result?.isValid === false || result?.errors || !result) {
       setValueCoupon("")
       setErrCoupon(true)
+    }
+    if(result?.duration === "repeating" && toggleAnual === true) {
+      setValueCoupon("")
+      setErrCoupon(true)
     } else {
       setCouponInfos(result)
       setCoupon(valueCoupon)
@@ -2059,6 +2063,18 @@ const PlansAndPayment = ({ userData }) => {
               }
               <TotalToPayDisplay />
             </Grid>
+
+            {(couponInfos?.duration === "once" || couponInfos?.duration === "repeating") &&
+              <Text
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="16px"
+                lineHeight="24px"
+                color="#464A51"
+              >
+                A partir do {couponInfos?.duration === "once" && 2} {couponInfos?.duration === "repeating" && couponInfos?.durationInMonths + 1}°{formattedPlanInterval(checkoutInfos?.interval, true)}, o total a pagar será de {checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}.
+              </Text>
+            }
           </Stack>
 
           <Box display="flex" flexDirection="column" gap="24px" flex={1}>
