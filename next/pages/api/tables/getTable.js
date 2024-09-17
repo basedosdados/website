@@ -2,12 +2,9 @@ import axios from "axios";
 import { cleanGraphQLResponse } from "../../../utils";
 import { capitalize } from 'lodash';
 
-//const NEXT_PUBLIC_API_URL="https://development.backend.basedosdados.org"
-//const API_URL= `${NEXT_PUBLIC_API_URL}/api/v1/graphql`
-
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-async function getTable(id, locale) {
+async function getTable(id, locale='pt') {
   try {
     const res = await axios({
       url: API_URL,

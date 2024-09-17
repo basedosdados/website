@@ -1,8 +1,10 @@
 import axios from "axios";
+import { cleanGraphQLResponse } from "../../../utils";
+import { capitalize } from 'lodash';
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-export default async function getShowDataset(id) {
+async function getShowDataset(id, locale='pt') {
   try {
     const res = await axios({
       url: API_URL,
@@ -16,13 +18,16 @@ export default async function getShowDataset(id) {
                 _id
                 slug
                 name
+                name${capitalize(locale)}
                 description
+                description${capitalize(locale)}
                 coverage
                 themes {
                   edges {
                     node {
                       _id
                       name
+                      name${capitalize(locale)}
                     }
                   }
                 }
@@ -31,6 +36,7 @@ export default async function getShowDataset(id) {
                     node {
                       _id
                       name
+                      name${capitalize(locale)}
                     }
                   }
                 }
@@ -38,6 +44,7 @@ export default async function getShowDataset(id) {
                   _id
                   slug
                   name
+                  name${capitalize(locale)}
                   website
                   picture
                 }
@@ -50,6 +57,8 @@ export default async function getShowDataset(id) {
                       status {
                         _id
                         slug
+                        name
+                        name${capitalize(locale)}
                       }
                     }
                   }
@@ -59,10 +68,13 @@ export default async function getShowDataset(id) {
                     node {
                       _id
                       name
+                      name${capitalize(locale)}
                       order
                       status {
                         _id
                         slug
+                        name
+                        name${capitalize(locale)}
                       }
                     }
                   }
@@ -72,12 +84,15 @@ export default async function getShowDataset(id) {
                     node {
                       _id
                       name
+                      name${capitalize(locale)}
                       slug
                       isClosed
                       order
                       status {
                         _id
                         slug
+                        name
+                        name${capitalize(locale)}
                       }
                     }
                   }
@@ -95,4 +110,14 @@ export default async function getShowDataset(id) {
   } catch (error) {
     console.error(error)
   }
+}
+
+export default async function handler(req, res) {
+  const { id: id, locale = 'pt' } = req.query;
+  const result = await getShowDataset(id, locale);
+
+  if(result.errors) return res.status(500).json({error: result.errors, success: false})
+  if(result === "err") return res.status(500).json({error: "err", success: false})
+
+  return res.status(200).json({resource: cleanGraphQLResponse(result), success: true})
 }

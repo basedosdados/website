@@ -22,7 +22,7 @@ export async function getStaticProps({ locale }) {
   return {
     props: {
       ...pagesProps,
-      ...(await serverSideTranslations(locale, ['prices'])),
+      ...(await serverSideTranslations(locale, ['prices', 'common'])),
     },
   };
 }
