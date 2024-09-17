@@ -29,6 +29,7 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import hljs from "highlight.js/lib/core";
+import { categories } from "../../pages/api/blog/categories";
 import { CopyIcon } from "../../public/img/icons/copyIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
 
@@ -683,12 +684,14 @@ function Authors({ authors }) {
   });
 }
 
-const CATEGORIES = {
-  analise: "Análise",
-  tutorial: "Tutorial",
+export const prettyCategory = (category) => {
+  const prettyName = categories[category];
+  if (prettyName == undefined) {
+    console.error(`Not found category ${category}`);
+    return category;
+  }
+  return prettyName;
 };
-
-export const prettyCategory = (tag) => CATEGORIES[tag] ?? tag;
 
 function Categories({ categories }) {
   if (categories !== undefined) {
@@ -841,37 +844,80 @@ function MiniBlogCard({ slug, frontmatter }) {
   );
 }
 
-export function BlogGrid({ posts }) {
+function BlogHeader({ category }) {
   return (
-    <Grid
-      marginTop={"4rem"}
-      gap={"3rem"}
-      templateColumns={{ md: "1fr 1fr", xl: "1fr 1fr 1fr" }}
-    >
-      {posts.map((post, index) => {
-        if (index === 0) {
-          return (
-            <GridItem
-              as="article"
-              key={index}
-              gridColumn={{ md: "span 2", xl: "span 3" }}
+    <Box marginTop={"2rem"}>
+      <Heading as="h1" fontFamily={"Roboto"} color="#2b8c4d" fontSize={"5xl"}>
+        {category === "Todos" ? "blog" : prettyCategory(category)}
+      </Heading>
+      <Box as="nav" marginTop={"2rem"}>
+        <UnorderedList marginInlineStart={"0"} display={"flex"} gap="2rem">
+          {[
+            { name: "Todos", shortName: "Todos", href: "/blog" },
+            ...Object.entries(categories).map((category) => {
+              const [shortName, name] = category;
+              return {
+                name,
+                shortName,
+                href: `/blog/category/${shortName}`,
+              };
+            }),
+          ].map(({ name, shortName, href }) => (
+            <ListItem
+              fontFamily={"Roboto"}
+              fontSize={"0.9rem"}
+              listStyleType={"none"}
+              fontWeight={"500"}
+              color={shortName === category ? "#2b8c4d" : "#252A32"}
             >
-              <LatestBlogCard key={post.slug} {...post} />
-            </GridItem>
-          );
-        } else {
-          return (
-            <GridItem
-              as="article"
-              key={index}
-              borderTop={"1px solid #DEDFE0"}
-              paddingTop={"3rem"}
-            >
-              <MiniBlogCard key={post.slug} {...post} />
-            </GridItem>
-          );
-        }
-      })}
-    </Grid>
+              <NextLink
+                _hover={{ textDecoration: "none", color: "gray" }}
+                href={href}
+              >
+                {name}
+              </NextLink>
+            </ListItem>
+          ))}
+        </UnorderedList>
+      </Box>
+    </Box>
+  );
+}
+
+export function BlogGrid({ posts, category }) {
+  return (
+    <>
+      <BlogHeader category={category} />
+      <Grid
+        marginTop={"4rem"}
+        gap={"3rem"}
+        templateColumns={{ md: "1fr 1fr", xl: "1fr 1fr 1fr" }}
+      >
+        {posts.map((post, index) => {
+          if (index === 0) {
+            return (
+              <GridItem
+                as="article"
+                key={index}
+                gridColumn={{ md: "span 2", xl: "span 3" }}
+              >
+                <LatestBlogCard key={post.slug} {...post} />
+              </GridItem>
+            );
+          } else {
+            return (
+              <GridItem
+                as="article"
+                key={index}
+                borderTop={"1px solid #DEDFE0"}
+                paddingTop={"3rem"}
+              >
+                <MiniBlogCard key={post.slug} {...post} />
+              </GridItem>
+            );
+          }
+        })}
+      </Grid>
+    </>
   );
 }

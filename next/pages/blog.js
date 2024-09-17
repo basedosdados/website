@@ -25,7 +25,7 @@ export default function Blog({ posts }) {
         />
       </Head>
 
-      <BlogGrid posts={posts} />
+      <BlogGrid posts={posts} category={"Todos"} />
     </MainPageTemplate>
   );
 }

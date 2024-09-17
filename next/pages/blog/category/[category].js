@@ -2,7 +2,6 @@ import { getAllPosts, getPostsByCategory } from "./../../api/blog";
 import { BlogGrid, prettyCategory } from "../../../components/organisms/Blog";
 import { MainPageTemplate } from "../../../components/templates/main";
 import Head from "next/head";
-import { Box, Heading } from "@chakra-ui/react";
 
 export async function getStaticProps({ params }) {
   const { category } = params;
@@ -46,19 +45,7 @@ export default function TaggedPosts({ category, posts }) {
         <meta property="og:description" content={metaContent} key="ogdesc" />
       </Head>
 
-      <Box>
-        <Box marginTop={"4rem"}>
-          <Heading
-            as="h1"
-            fontFamily={"Roboto"}
-            color="#2b8c4d"
-            fontSize={"5xl"}
-          >
-            {categoryName}
-          </Heading>
-        </Box>
-        <BlogGrid posts={posts} />
-      </Box>
+      <BlogGrid posts={posts} category={category} />
     </MainPageTemplate>
   );
 }
