@@ -3,6 +3,7 @@
     "search_placeholder_mobile": "Encontre os dados",
     "popular_terms": "Termos populares:",
     "search_by_theme": "Busque por tema",
+    "noDatasetsFound": "Nenhum conjunto com todos os temas selecionados foi encontrado. Tente desmarcar algum dos temas.",
     "min": "Mín",
     "max": "Máx",
     "search": "Buscar",
@@ -110,6 +111,26 @@
             "termsAndPrivacy": "Termos e Privacidade",
             "contact": "Contato",
             "supportProject": "Apoie o projeto"
+        }
+    },
+    "partners": {
+        "partnershipsWith": "Parcerias com",
+        "testimonials": {
+            "fernando": {
+                "name": "Fernando Barbalho",
+                "position": "Cientista de Dados do Tesouro Nacional",
+                "quote": "O siconfiBD é um pacote que traz de forma rápida e programática os dados da Secretaria do Tesouro Nacional. O código é construído de forma open-source pela equipe do Tesouro e utiliza as tabelas tratadas BD+ para compor funções em R. Qual a despesa de pessoal dos 100 municípios brasileiros mais populosos? Essas e mais de outras 18 perguntas podem ser consultadas diretamente pelo pacote, sem necessidade de SQL."
+            },
+            "marina": {
+                "name": "Marina Barros",
+                "position": "Diretora-Executiva do Instituto Alziras",
+                "quote": "Com o apoio da Base dos Dados realizamos o levantamento das desigualdades de gênero e raça nas eleições 2016-2020 e das distorções de financiamento de campanhas de prefeitas e vereadoras nas últimas eleições, o que resultará no lançamento de uma publicação inédita."
+            },
+            "amanda": {
+                "name": "Amanda de Albuquerque e Mariana Carvalho",
+                "position": "Co-fundadoras dA Ponte",
+                "quote": "Criamos um importante produto nosso, a Fotografia do Município, em parceria com a BD. A Fotografia agrega diversos indicadores socioeconômicos dos municípios brasileiros. A Ponte fez o planejamento e desenho do relatório, enquanto a BD cuidou da parte técnica de visualização e gestão de dados. A parceria foi o que nos permitiu avançar rápido no desenvolvimento da ferramenta, e garantiu a qualidade de dados alta como queríamos desde o início."
+            }
         }
     }
 }

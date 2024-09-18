@@ -162,32 +162,32 @@
             "id": "data-limit"
         },
         {
-        "question": "Como criar um projeto no Google Cloud?",
-        "answer": "<p>Para criar um projeto no Google Cloud, basta ter um e-mail cadastrado no Google. É necessário ter um projeto seu, mesmo que vazio, para você fazer consultas em nosso <i>datalake</i> público.</p><ol><li>Acesse o <a href=\"https://console.cloud.google.com/projectselector2/home/dashboard\" target=\"_blank\">Google Cloud</a>.t=\"_blank\">Google Cloud</a>. Caso for a sua primeira vez, aceite os Termos de Serviço.</li><li>Clique em <i>Create Project/Criar Projeto</i>. Escolha um nome bacana para o projeto.</li><li>Clique em <i>Create/Criar</i>.</li></ol>",
-        "categories": ["BigQuery"],
-        "keywords": "criar, cadastrar, projeto, Google, Cloud",
-        "id": "google-cloud-project"
+            "question": "Como criar um projeto no Google Cloud?",
+            "answer": "<p>Para criar um projeto no Google Cloud, basta ter um e-mail cadastrado no Google. É necessário ter um projeto seu, mesmo que vazio, para você fazer consultas em nosso <i>datalake</i> público.</p><ol><li>Acesse o <a href=\"https://console.cloud.google.com/projectselector2/home/dashboard\" target=\"_blank\">Google Cloud</a>.t=\"_blank\">Google Cloud</a>. Caso for a sua primeira vez, aceite os Termos de Serviço.</li><li>Clique em <i>Create Project/Criar Projeto</i>. Escolha um nome bacana para o projeto.</li><li>Clique em <i>Create/Criar</i>.</li></ol>",
+            "categories": ["BigQuery"],
+            "keywords": "criar, cadastrar, projeto, Google, Cloud",
+            "id": "google-cloud-project"
         },
         {
-        "question": "Quais as melhores práticas para fazer uma consulta no BigQuery?",
-        "answer": "<p>Para verificar uma amostra de todas as variáveis da tabela, use:</p><pre><code className=\"hljs sql\"><span style={{color: \"#93c763\"}}>SELECT</span> * <span style={{color: \"#93c763\"}}>FROM</span>  dataset.table_name LIMIT <span style={{color: \"#ffcd22\"}}>100</span></code></pre><ul><li>A primeira dica valiosa é selecionar as colunas que você vai usar. O BigQuery funciona usando um modelo colunar, portanto, quanto menos colunas você usar, melhor vai ser o desempenho da sua consulta. Isso significa evitar o clássico<br/> <pre><code className=\"hljs sql\"><span style={{color: \"#93c763\"}}>SELECT</span> * <span style={{color: \"#93c763\"}}>FROM</span> table_name</code></pre> e escolher as colunas de seu interesse. Parece chato, mas ajuda muito!</li><li>Para tabelas grandes, uma boa prática é filtrar os anos e estados de seu interesse com a cláusula <pre><code className=\"hljs sql\" style={{color: \"#93c763\"}}>WHERE</code></pre>. Como utilizamos o sistema de particionamento, isso vai reduzir drasticamente o custo e o tempo de processamento.</li></ul><p>Essas são as dicas mais simples e rápidas de executar. Para saber mais sobre boas práticas, acesse o <a href=\"https://cloud.google.com/bigquery/docs/best-practices-performance-overview?hl=pt-br\" target=\"_blank\">manual completo</a> disponibilizado pelo  Google Cloud.</p>",
-        "categories": ["BigQuery"],
-        "keywords": "prática, dica, otimização, desempenho, consulta, BigQuery, selecionar, filtrar",
-        "id": "best-practices-performance"
+            "question": "Quais as melhores práticas para fazer uma consulta no BigQuery?",
+            "answer": "<p>Para verificar uma amostra de todas as variáveis da tabela, use:</p><pre><code className=\"hljs sql\"><span style={{color: \"#93c763\"}}>SELECT</span> * <span style={{color: \"#93c763\"}}>FROM</span>  dataset.table_name LIMIT <span style={{color: \"#ffcd22\"}}>100</span></code></pre><ul><li>A primeira dica valiosa é selecionar as colunas que você vai usar. O BigQuery funciona usando um modelo colunar, portanto, quanto menos colunas você usar, melhor vai ser o desempenho da sua consulta. Isso significa evitar o clássico<br/> <pre><code className=\"hljs sql\"><span style={{color: \"#93c763\"}}>SELECT</span> * <span style={{color: \"#93c763\"}}>FROM</span> table_name</code></pre> e escolher as colunas de seu interesse. Parece chato, mas ajuda muito!</li><li>Para tabelas grandes, uma boa prática é filtrar os anos e estados de seu interesse com a cláusula <pre><code className=\"hljs sql\" style={{color: \"#93c763\"}}>WHERE</code></pre>. Como utilizamos o sistema de particionamento, isso vai reduzir drasticamente o custo e o tempo de processamento.</li></ul><p>Essas são as dicas mais simples e rápidas de executar. Para saber mais sobre boas práticas, acesse o <a href=\"https://cloud.google.com/bigquery/docs/best-practices-performance-overview?hl=pt-br\" target=\"_blank\">manual completo</a> disponibilizado pelo  Google Cloud.</p>",
+            "categories": ["BigQuery"],
+            "keywords": "prática, dica, otimização, desempenho, consulta, BigQuery, selecionar, filtrar",
+            "id": "best-practices-performance"
         },
         {
-        "question": "O que são os tipos no BigQuery?",
-        "answer": "<p>São os tipos de dados do Google Standard SQL. Suas categorias incluem: INTEGER (Inteiro), STRING (Texto), DATE (Data), FLOAT64 (Decimal), GEOGRAPHY (Geográfico), entre outras.</p>",
-        "categories": ["BigQuery"],
-        "keywords": "tipo, categoria, BigQuery, INTEGER, STRING, DATE, FLOAT, GEOGRAPHY",
-        "id": "bigquery-types"
+            "question": "O que são os tipos no BigQuery?",
+            "answer": "<p>São os tipos de dados do Google Standard SQL. Suas categorias incluem: INTEGER (Inteiro), STRING (Texto), DATE (Data), FLOAT64 (Decimal), GEOGRAPHY (Geográfico), entre outras.</p>",
+            "categories": ["BigQuery"],
+            "keywords": "tipo, categoria, BigQuery, INTEGER, STRING, DATE, FLOAT, GEOGRAPHY",
+            "id": "bigquery-types"
         },
         {
-        "question": "O que são as partições no BigQuery?",
-        "answer": "<p>As partições são divisões feitas em uma tabela para facilitar o gerenciamento e a consulta aos dados. Ao segmentar uma tabela grande em partições menores, a quantidade de bytes lidos é reduzida, o que ajuda a controlar os custos e melhora o desempenho da consulta.</p>",
-        "categories": ["BigQuery"],
-        "keywords": "partição, particionamento, otimização, desempenho, BigQuery",
-        "id": "bigquery-partitions"
+            "question": "O que são as partições no BigQuery?",
+            "answer": "<p>As partições são divisões feitas em uma tabela para facilitar o gerenciamento e a consulta aos dados. Ao segmentar uma tabela grande em partições menores, a quantidade de bytes lidos é reduzida, o que ajuda a controlar os custos e melhora o desempenho da consulta.</p>",
+            "categories": ["BigQuery"],
+            "keywords": "partição, particionamento, otimização, desempenho, BigQuery",
+            "id": "bigquery-partitions"
         },
         {
         "question": "O que é a BD Lab?",
@@ -278,15 +278,15 @@
     "pageDescription": "Aqui você encontra as respostas para as suas dúvidas sobre a Base dos Dados. Saiba mais sobre nossos dados, como acessá-los pelo BigQuery usando SQL ou com os pacotes Python e R agora mesmo.",
     "title": "Perguntas frequentes",
     "searchPlaceholder": "Pesquise",
-    "categories": [
-        "Dados",
-        "Planos Pagos",
-        "BigQuery",
-        "BD Lab",
-        "BD Edu",
-        "Institucional"
-    ],
+    "categories": {
+        "data": "Dados",
+        "paidPlans": "Planos Pagos",
+        "bigQuery": "BigQuery",
+        "bdLab": "BD Lab",
+        "bdEdu": "BD Edu",
+        "institutional": "Institucional"
+    },
     "noQuestionsFound": "Infelizmente, não encontramos nenhuma pergunta relacionada à sua busca.",
-    "notFoundQuestion": "Não encontrou sua pergunta?",
-    "contactUs": "Entre em contato"
+    "contactText": "Não encontrou sua pergunta?",
+    "contactLink": "Entre em contato"
 }

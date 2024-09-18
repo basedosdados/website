@@ -1,18 +1,18 @@
 {
     "login": {
-      "title": "Log in",
-      "emailLabel": "Email",
-      "emailPlaceholder": "Enter your email",
-      "emailError": "Please enter a valid email address.",
-      "passwordLabel": "Password",
-      "passwordPlaceholder": "Enter your password",
-      "passwordError": "Please enter the password.",
-      "forgotPassword": "Forgot password?",
-      "loginButton": "Sign in",
-      "noAccount": "Don't have an account?",
-      "signUp": "Sign up",
-      "loginError": "Incorrect email or password.",
-      "serverError": "Unable to connect to the server. Please try again later."
+        "title": "Log in",
+        "emailLabel": "Email",
+        "emailPlaceholder": "Enter your email",
+        "emailError": "Please enter a valid email address.",
+        "passwordLabel": "Password",
+        "passwordPlaceholder": "Enter your password",
+        "passwordError": "Please enter the password.",
+        "forgotPassword": "Forgot password?",
+        "loginButton": "Sign in",
+        "noAccount": "Don't have an account?",
+        "signUp": "Sign up",
+        "loginError": "Incorrect email or password.",
+        "serverError": "Unable to connect to the server. Please try again later."
     },
     "signup": {
         "title": "Sign up",
@@ -33,38 +33,38 @@
             "part3": " of Data Basis."
         },
         "placeholders": {
-        "firstName": "Enter your name",
-        "lastName": "Enter your last name (optional)",
-        "email": "Enter your email",
-        "username": "Enter your username",
-        "password": "Create a password",
-        "confirmPassword": "Enter the password again"
+            "firstName": "Enter your name",
+            "lastName": "Enter your last name (optional)",
+            "email": "Enter your email",
+            "username": "Enter your username",
+            "password": "Create a password",
+            "confirmPassword": "Enter the password again"
         },
         "errors": {
-        "firstName": "Please enter your name.",
-        "username": {
-            "invalid": "Invalid username or an account with this username already exists.",
-            "noSpaces": "Username cannot have spaces.",
-            "exists": "Account with this username already exists."
-        },
-        "email": {
-            "invalid": "Invalid email address or an account with this email already exists.",
-            "exists": "Account with this email already exists."
-        },
-        "password": {
-            "noSpaces": "Passwords entered cannot contain spaces.",
-            "requirements": "Ensure that the password has at least:",
-            "chars": "8 characters",
-            "uppercase": "An uppercase letter",
-            "lowercase": "A lowercase letter",
-            "digit": "A digit",
-            "special": "A special character, among ! @ # ? ! % & *"
-        },
-        "confirmPassword": {
-            "required": "Confirming the password is required.",
-            "mismatch": "The password entered does not match the password created in the field above. Please check for typing errors and try again."
-        },
-        "register": "Error trying to register, try again later!"
+            "firstName": "Please enter your name.",
+            "username": {
+                "invalid": "Invalid username or an account with this username already exists.",
+                "noSpaces": "Username cannot have spaces.",
+                "exists": "Account with this username already exists."
+            },
+            "email": {
+                "invalid": "Invalid email address or an account with this email already exists.",
+                "exists": "Account with this email already exists."
+            },
+            "password": {
+                "noSpaces": "Passwords entered cannot contain spaces.",
+                "requirements": "Ensure that the password has at least:",
+                "chars": "8 characters",
+                "uppercase": "An uppercase letter",
+                "lowercase": "A lowercase letter",
+                "digit": "A digit",
+                "special": "A special character, among ! @ # ? ! % & *"
+            },
+            "confirmPassword": {
+                "required": "Confirming the password is required.",
+                "mismatch": "The password entered does not match the password created in the field above. Please check for typing errors and try again."
+            },
+            "register": "Error trying to register, try again later!"
         }
     }
 }

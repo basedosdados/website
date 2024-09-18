@@ -11,6 +11,7 @@ import React, { useState, useEffect } from "react";
 import { useMediaQuery } from "@chakra-ui/react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../../utils";
+import { useTranslation } from 'next-i18next';
 
 import { getDatasetsByThemes } from "../../pages/api/themes/index"
 
@@ -27,6 +28,7 @@ function Themes ({
   selectedTheme=[],
   listThemes,
 }) {
+  const { t } = useTranslation('common');
   const [screenQuery, setScreenQuery] = useState(0)
 
   useEffect(() => {
@@ -183,7 +185,7 @@ const SkeletonWaitCard = () => {
   )
 }
 
-function CardThemes ({ responsive, datasetsCards = [], loading }) {
+function CardThemes ({ responsive, datasetsCards = [], loading, locale }) {
   const [screenQuery, setScreenQuery] = useState(0)
   useEffect(() => {
     if(responsive.mobileQuery)
@@ -195,6 +197,8 @@ function CardThemes ({ responsive, datasetsCards = [], loading }) {
 
     return setScreenQuery(4)
   },[responsive])
+
+  const { t } = useTranslation('common');
 
   return (
     <Box
@@ -210,8 +214,7 @@ function CardThemes ({ responsive, datasetsCards = [], loading }) {
             textAlign="center"
             marginBottom={responsive.mobileQuery ? "16px" : "32px"}
           >
-            Nenhum conjunto com todos os temas selecionados foi encontrado.
-            Tente desmarcar algum dos temas.
+            {t('noDatasetsFound')}
           </SectionText>
         </Center>
       }
@@ -262,6 +265,7 @@ function CardThemes ({ responsive, datasetsCards = [], loading }) {
                   number: elm?.n_information_requests
                 }}
                 link={`/dataset/${elm.id}`}
+                locale={locale}
               />
             ))
           }
@@ -271,7 +275,8 @@ function CardThemes ({ responsive, datasetsCards = [], loading }) {
   )
 }
 
-export default function ThemeCatalog ({ data }) {
+export default function ThemeCatalog ({ data, locale }) {
+  const { t } = useTranslation('common');
   const [listThemes, setListThemes] = useState([])
   const [defaultDatasetsCards, setDefaultDatasetCards] = useState([])
   const [fetchThemesTimeout, setFetchThemesTimeout] = useState(null)
@@ -344,6 +349,7 @@ export default function ThemeCatalog ({ data }) {
         }
         loading={loading}
         responsive={{mobileQuery, baseQuery, mediumQuery, lgQuery}}
+        locale={locale}
       />
     </VStack>
   )

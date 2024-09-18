@@ -8,6 +8,7 @@ import Link from "../atoms/Link";
 import BodyText from "../atoms/BodyText"
 import { isMobileMod } from "../../hooks/useCheckMobile.hook"
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 
 import YoutubeIcon from "../../public/img/icons/youtubeIcon";
 import TwitterIcon from "../../public/img/icons/twitterIcon";
@@ -51,6 +52,9 @@ function SocialLink({ href, icon }) {
 }
 
 function FooterLink(props) {
+  const router = useRouter();
+  const { locale } = router;
+  
   return (
     <Link
       fontFamily="ubuntu"
@@ -58,6 +62,7 @@ function FooterLink(props) {
       letterSpacing="0.3px"
       color="#FFF"
       target="_blank"
+      href={`/${locale}${props.href}`}
       {...props}
     />
   )

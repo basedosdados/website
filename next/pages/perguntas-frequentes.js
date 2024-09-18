@@ -14,6 +14,8 @@ import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { QuestionFAQ } from "../content/FAQ";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 
 import { DebouncedControlledInput } from "../components/atoms/ControlledInput";
 import Display from "../components/atoms/Display";
@@ -25,8 +27,14 @@ import styles from "../styles/faq.module.css";
 
 import 'highlight.js/styles/obsidian.css';
 
-export async function getStaticProps() {
-  return await withPages()
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common', 'menu', 'faq', 'user'])),
+      ...(await withPages()),
+    },
+    revalidate: 30
+  }
 }
 
 const QuestionsBox = ({ question, answer, id, active }) => {
@@ -111,6 +119,8 @@ export default function FAQ({}) {
   const [searchFilter, setSearchFilter] = useState("")
   const [closeQuestion, setCloseQuestion] = useState(false)
 
+  const { t } = useTranslation('common', 'menu', 'faq');
+
   useEffect(() => {
     setAllQuestions(QuestionFAQ)
     setQuestions(QuestionFAQ)
@@ -182,15 +192,15 @@ export default function FAQ({}) {
   return (
     <MainPageTemplate paddingX="24px">
       <Head>
-        <title>Perguntas frequentes – Base dos Dados</title>
+        <title>{t('pageTitle')}</title>
         <meta
           property="og:title"
-          content="Perguntas frequentes – Base dos Dados"
+          content={t('pageTitle')}
           key="ogtitle"
         />
         <meta
           property="og:description"
-          content="Aqui você encontra as respostas para as suas dúvidas sobre a Base dos Dados. Saiba mais sobre nossos dados, como acessá-los pelo BigQuery usando SQL ou com os pacotes Python e R agora mesmo."
+          content={t('pageDescription')}
           key="ogdesc"
         />
       </Head>
@@ -205,7 +215,7 @@ export default function FAQ({}) {
           paddingBottom={isMobileMod() ? "56px" : "66px" }
           color="#2B8C4D"
         >
-          Perguntas frequentes
+          {t('title')}
         </Display>
 
         <DebouncedControlledInput
@@ -213,7 +223,7 @@ export default function FAQ({}) {
           onChange={(val) => setSearchFilter(val)}
           paddingBottom={isMobileMod() ? "56px" : "126px" }
           maxWidth="600px"
-          placeholder="Pesquise"
+          placeholder={t('searchPlaceholder')}
           inputStyle={{
             padding: "12px 32px 12px 16px",
             height: "48px",
@@ -278,7 +288,7 @@ export default function FAQ({}) {
           >
             {questions.length === 0 ?
               <BodyText color="#7D7D7D">
-                Infelizmente, não encontramos nenhuma pergunta relacionada à sua busca.
+                {t('noQuestionsFound')}
               </BodyText>
             :
               questions.map((elm, i) => 
@@ -299,7 +309,7 @@ export default function FAQ({}) {
               lineHeight="16px"
               letterSpacing="0.2px"
             >
-              Não encontrou sua pergunta? <a className={styles.link} href="/contato">Entre em contato</a> com nossa equipe.
+              {t('contactText')} <a className={styles.link} href="/contato">{t('contactLink')}</a>
             </Text>
           </Stack>
         </Stack>

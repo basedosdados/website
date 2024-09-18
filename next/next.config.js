@@ -1,7 +1,8 @@
 module.exports = {
   i18n: {
-    locales: ['en', 'pt', 'es'],
+    locales: ['pt', 'en', 'es'],
     defaultLocale: 'pt',
+    localeDetection: false
   },
   images: {
     unoptimized: true,

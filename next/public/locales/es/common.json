@@ -3,6 +3,7 @@
     "search_placeholder_mobile": "Encuentra los datos",
     "popular_terms": "Términos populares:",
     "search_by_theme": "Buscar por tema",
+    "noDatasetsFound": "Ningún conjunto con todos los temas seleccionados fue encontrado. Intente desmarcar alguno de los temas.",
     "min": "Mín",
     "max": "Máx",
     "search": "Buscar",
@@ -110,6 +111,26 @@
             "termsAndPrivacy": "Términos y Privacidad",
             "contact": "Contacto",
             "supportProject": "Apoya el proyecto"
+        }
+    },
+    "partners": {
+        "partnershipsWith": "Asociaciones con",
+        "testimonials": {
+            "fernando": {
+                "name": "Fernando Barbalho",
+                "position": "Científico de Datos del Tesoro Nacional",
+                "quote": "SiconfiBD es un paquete que trae de forma rápida y programática los datos de la Secretaría del Tesoro Nacional. El código es construido de forma open-source por el equipo del Tesoro y utiliza las tablas tratadas BD+ para componer funciones en R. ¿Cuál es el gasto de personal de los 100 municipios brasileños más poblados? Estas y más de otras 18 preguntas pueden ser consultadas directamente a través del paquete, sin necesidad de SQL."
+            },
+            "marina": {
+                "name": "Marina Barros",
+                "position": "Directora Ejecutiva del Instituto Alziras",
+                "quote": "Con el apoyo de Base de los Datos, realizamos un estudio sobre las desigualdades de género y raza en las elecciones 2016-2020 y las distorsiones en el financiamiento de campañas de alcaldesas y concejalas en las últimas elecciones, lo que resultará en el lanzamiento de una publicación inédita."
+            },
+            "amanda": {
+                "name": "Amanda de Albuquerque y Mariana Carvalho",
+                "position": "Cofundadoras de A Ponte",
+                "quote": "Creamos un producto importante nuestro, la Fotografía del Municipio, en asociación con BD. La Fotografía agrega varios indicadores socioeconómicos de los municipios brasileños. A Ponte hizo la planificación y el diseño del informe, mientras que BD se encargó de la parte técnica de visualización y gestión de datos. La asociación nos permitió avanzar rápidamente en el desarrollo de la herramienta y garantizó la alta calidad de datos que queríamos desde el principio."
+            }
         }
     }
 }

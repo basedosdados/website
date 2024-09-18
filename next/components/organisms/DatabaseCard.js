@@ -48,8 +48,8 @@ export default function DatabaseCard({
             style={{display: "flex"}}
           >
             <b>{tables?.number === 1 ?
-              `1 ${t('datasetCard.table')}` :
-              `${tables?.number || 0} ${t('datasetCard.tables')}`
+              t('datasetCard.oneTable') :
+              t('datasetCard.multipleTables', { count: tables?.number || 0 })
             }</b>
           </a>
         </Stack>
@@ -60,15 +60,15 @@ export default function DatabaseCard({
   if (rawDataSources.number > 0) {
     databaseInfo.push(
       rawDataSources.number === 1 ?
-      `1 ${t('datasetCard.rawDataSource')}` :
-      `${rawDataSources.number} ${t('datasetCard.rawDataSources')}`
+      t('datasetCard.oneRawDataSource') :
+      t('datasetCard.multipleRawDataSources', { count: rawDataSources.number })
     )
   }
   if (informationRequests.number > 0) {
     databaseInfo.push(
       informationRequests.number === 1 ?
-      `1 ${t('datasetCard.informationRequest')}` :
-      `${informationRequests.number} ${t('datasetCard.informationRequests')}`
+      t('datasetCard.oneInformationRequest') :
+      t('datasetCard.multipleInformationRequests', { count: informationRequests.number })
     )
   }
 

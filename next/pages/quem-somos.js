@@ -41,7 +41,7 @@ export async function getServerSideProps({ locale }) {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['aboutUs', 'common'])),
+      ...(await serverSideTranslations(locale, ['aboutUs', 'common', 'menu'])),
       data
     },
   }
@@ -401,7 +401,7 @@ export default function QuemSomos({ data }) {
               textAlign="center" 
               marginBottom={isMobileMod() ? "80px" : "136px"}
             >
-              {t('heroTitle', { breakTag: isMobileMod() ? ' ' : <br/> })}
+              {t('heroTitle1')} {isMobileMod() ? " " : <br/>} {t('heroTitle2')} {isMobileMod() ? " " : <br/>} {t('heroTitle3')} <a style={{color:"#2B8C4D"}}>{t('heroTitle4')}</a>.
             </Display>
           </Stack>
 

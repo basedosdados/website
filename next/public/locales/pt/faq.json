@@ -274,19 +274,19 @@
         "id": "personal-data"
         }
     ],
-    "pageTitle": "Perguntas frequentes – Base dos Dados",
-    "pageDescription": "Aqui você encontra as respostas para as suas dúvidas sobre a Base dos Dados. Saiba mais sobre nossos dados, como acessá-los pelo BigQuery usando SQL ou com os pacotes Python e R agora mesmo.",
-    "title": "Perguntas frequentes",
-    "searchPlaceholder": "Pesquise",
-    "categories": [
-        "Dados",
-        "Planos Pagos",
-        "BigQuery",
-        "BD Lab",
-        "BD Edu",
-        "Institucional"
-    ],
-    "noQuestionsFound": "Infelizmente, não encontramos nenhuma pergunta relacionada à sua busca.",
-    "notFoundQuestion": "Não encontrou sua pergunta?",
-    "contactUs": "Entre em contato"
+    "pageTitle": "Frequently Asked Questions – Data Basis",
+    "pageDescription": "Here you can find answers to your questions about Data Basis. Learn more about our data, how to access it through BigQuery using SQL or with Python and R packages right now.",
+    "title": "Frequently Asked Questions",
+    "searchPlaceholder": "Search",
+    "categories": {
+        "data": "Data",
+        "paidPlans": "Paid Plans",
+        "bigQuery": "BigQuery",
+        "bdLab": "BD Lab",
+        "bdEdu": "BD Edu",
+        "institutional": "Institutional"
+    },
+    "noQuestionsFound": "Unfortunately, we couldn't find any questions related to your search.",
+    "contactText": "Didn't find your question?",
+    "contactLink": "Contact our team."
 }

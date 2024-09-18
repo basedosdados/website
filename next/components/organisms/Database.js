@@ -285,7 +285,7 @@ export default function Database({
                   lineHeight="20px"
                   color="#464A51"
                 >
-                  {t('resources')}:
+                  {t('tables')}:
                 </Text>
                 <Text
                   fontFamily="Roboto"
@@ -294,8 +294,8 @@ export default function Database({
                   lineHeight="20px"
                   color="#71757A"
                 >
-                  {contains.free && t('openData')} {contains.free && contains.pro && "e"} {contains.pro && t('closedData')}
-                  {!contains.free && !contains.pro && t('noOrganization')}
+                  {contains.free && t('openData')} {contains.free && contains.pro && t('and')} {contains.pro && t('closedData')}
+                  {!contains.free && !contains.pro && t('none')}
                 </Text>
               </Stack>
             </VStack>

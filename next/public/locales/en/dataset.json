@@ -6,6 +6,7 @@
     "noCoverage": "No temporal coverage",
     "organization": "Organization",
     "noOrganization": "No organization",
+    "none": "None",
     "dataAlt": "data",
     "data": "Data",
     "crossingAlt": "crossing",
@@ -43,12 +44,19 @@
     "datasetCard": {
         "table": "table",
         "tables": "tables",
+        "oneTable": "1 table",
+        "multipleTables": "{{count}} tables",
         "rawDataSource": "raw data source",
         "rawDataSources": "raw data sources",
+        "oneRawDataSource": "1 raw data source",
+        "multipleRawDataSources": "{{count}} raw data sources",
+        "noRawDataSources": "0 raw data sources",
         "informationRequest": "information request",
         "informationRequests": "information requests",
-        "noRawDataSources": "0 raw data sources",
-        "noInformationRequests": "0 information requests"
+        "oneInformationRequest": "1 information request",
+        "multipleInformationRequests": "{{count}} information requests",
+        "noInformationRequests": "0 information requests",
+        "and": "and"
     },
     "table": {
         "notInformed": "Not informed",

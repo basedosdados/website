@@ -7,6 +7,7 @@
     "noCoverage": "Sem cobertura temporal",
     "organization": "Organização",
     "noOrganization": "Sem organização",
+    "none": "Nenhum",
     "dataAlt": "dados",
     "data": "Dados",
     "crossingAlt": "cruzamento",
@@ -44,12 +45,19 @@
     "datasetCard": {
         "table": "tabela tratada",
         "tables": "tabelas tratadas",
+        "oneTable": "1 tabela tratada",
+        "multipleTables": "{{count}} tabelas tratadas",
         "rawDataSource": "fonte original",
         "rawDataSources": "fontes originais",
         "informationRequest": "pedido LAI",
         "informationRequests": "pedidos LAI",
+        "oneInformationRequest": "1 pedido LAI",
+        "multipleInformationRequests": "{{count}} pedidos LAI",
+        "noInformationRequests": "0 pedidos LAI",
+        "oneRawDataSource": "1 fonte original",
+        "multipleRawDataSources": "{{count}} fontes originais",
         "noRawDataSources": "0 fontes originais",
-        "noInformationRequests": "0 pedidos LAI"
+        "and": "e"
     },
     "table": {
         "notInformed": "Não informado",

@@ -1,18 +1,18 @@
 {
     "login": {
-      "title": "Faça login",
-      "emailLabel": "E-mail",
-      "emailPlaceholder": "Insira seu e-mail",
-      "emailError": "Por favor, insira um endereço de e-mail válido.",
-      "passwordLabel": "Senha",
-      "passwordPlaceholder": "Insira sua senha",
-      "passwordError": "Por favor, insira a senha.",
-      "forgotPassword": "Esqueceu a senha?",
-      "loginButton": "Entrar",
-      "noAccount": "Não tem uma conta?",
-      "signUp": "Cadastre-se",
-      "loginError": "E-mail ou senha incorretos.",
-      "serverError": "Não foi possível conectar ao servidor. Tente novamente mais tarde."
+        "title": "Faça login",
+        "emailLabel": "E-mail",
+        "emailPlaceholder": "Insira seu e-mail",
+        "emailError": "Por favor, insira um endereço de e-mail válido.",
+        "passwordLabel": "Senha",
+        "passwordPlaceholder": "Insira sua senha",
+        "passwordError": "Por favor, insira a senha.",
+        "forgotPassword": "Esqueceu a senha?",
+        "loginButton": "Entrar",
+        "noAccount": "Não tem uma conta?",
+        "signUp": "Cadastre-se",
+        "loginError": "E-mail ou senha incorretos.",
+        "serverError": "Não foi possível conectar ao servidor. Tente novamente mais tarde."
     },
     "signup": {
         "title": "Cadastre-se",
@@ -41,30 +41,125 @@
             "confirmPassword": "Insira a senha novamente"
         },
         "errors": {
-        "firstName": "Por favor, insira seu nome.",
-        "username": {
-            "invalid": "Nome de usuário inválido ou já existe uma conta com este nome de usuário.",
-            "noSpaces": "Nome de usuário não pode haver espaçamento.",
-            "exists": "Conta com este nome de usuário já existe."
-        },
-        "email": {
-            "invalid": "Endereço de e-mail inválido ou já existe uma conta com este e-mail.",
-            "exists": "Conta com este email já existe."
-        },
-        "password": {
-            "noSpaces": "As senhas inseridas não podem conter espaçamentos.",
-            "requirements": "Certifique-se que a senha tenha no mínimo:",
-            "chars": "8 caracteres",
-            "uppercase": "Uma letra maiúscula",
-            "lowercase": "Uma letra minúscula",
-            "digit": "Um dígito",
-            "special": "Um caractere especial, dentre ! @ # ? ! % & *"
-        },
-        "confirmPassword": {
-            "required": "Confirmar a senha é necessário.",
-            "mismatch": "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente."
-        },
-        "register": "Error ao tentar se cadastrar, tente novamente mais tarde!"
+            "firstName": "Por favor, insira seu nome.",
+            "username": {
+                "invalid": "Nome de usuário inválido ou já existe uma conta com este nome de usuário.",
+                "noSpaces": "Nome de usuário não pode haver espaçamento.",
+                "exists": "Conta com este nome de usuário já existe."
+            },
+            "email": {
+                "invalid": "Endereço de e-mail inválido ou já existe uma conta com este e-mail.",
+                "exists": "Conta com este email já existe."
+            },
+            "password": {
+                "noSpaces": "As senhas inseridas não podem conter espaçamentos.",
+                "requirements": "Certifique-se que a senha tenha no mínimo:",
+                "chars": "8 caracteres",
+                "uppercase": "Uma letra maiúscula",
+                "lowercase": "Uma letra minúscula",
+                "digit": "Um dígito",
+                "special": "Um caractere especial, dentre ! @ # ? ! % & *"
+            },
+            "confirmPassword": {
+                "required": "Confirmar a senha é necessário.",
+                "mismatch": "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente."
+            },
+            "register": "Error ao tentar se cadastrar, tente novamente mais tarde!"
         }
+    },
+    "survey": {
+        "title": "Pesquisa de perfil",
+        "skip": "Pular",
+        "continue": "Continuar",
+        "back": "Voltar",
+        "send": "Enviar",
+        "error": "Por favor, selecione uma das opções abaixo.",
+        "serverError": "Ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde.",
+        "questions": [
+            {
+                "question": "Em que área você atua?",
+                "options": [
+                    "Tecnologia",
+                    "Saúde",
+                    "Financeiro",
+                    "Educação",
+                    "Varejo",
+                    "Energia",
+                    "Jornalismo",
+                    "Outra"
+                ]
+            },
+            {
+                "question": "Qual o seu cargo?",
+                "options": [
+                    "CEO/Diretor(a)",
+                    "Gerente",
+                    "Coordenador(a)",
+                    "Analista",
+                    "Consultor(a)",
+                    "Especialista",
+                    "Assistente",
+                    "Estagiário(a)",
+                    "Estudante",
+                    "Professor(a)/Pesquisador(a)",
+                    "Freelancer",
+                    "Empreendedor(a)",
+                    "Outro"
+                ]
+            },
+            {
+                "question": "Qual o tamanho da empresa em que você trabalha?",
+                "options": [
+                    "1-10 funcionários",
+                    "11-50 funcionários",
+                    "51-200 funcionários",
+                    "201-500 funcionários",
+                    "Mais de 500 funcionários"
+                ]
+            },
+            {
+                "question": "Qual a principal ferramenta que você utiliza para realizar análises de dados?",
+                "options": [
+                    "SQL",
+                    "Python",
+                    "R",
+                    "Stata",
+                    "Excel",
+                    "Nenhuma",
+                    "Outra"
+                ]
+            },
+            {
+                "question": "Qual o seu principal objetivo com a BD?",
+                "options": [
+                    "Análise de mercado",
+                    "Monitoramento de concorrência",
+                    "Pesquisa acadêmica",
+                    "Gestão de riscos",
+                    "Desenvolvimento de produto",
+                    "Compliance e regulatório",
+                    "Análise de políticas públicas",
+                    "Outro"
+                ]
+            },
+            {
+                "question": "Como você conheceu a BD?",
+                "options": [
+                    "Redes sociais",
+                    "Indicação",
+                    "Pesquisa online",
+                    "Eventos",
+                    "Publicidade",
+                    "Outros"
+                ]
+            },
+            {
+                "question": "Estamos sempre buscando aprimorar a plataforma e consideramos fundamental ouvir a nossa comunidade nesse processo. Podemos contatar você para futuras pesquisas?",
+                "options": [
+                    "Sim",
+                    "Não"
+                ]
+            }
+        ]
     }
 }

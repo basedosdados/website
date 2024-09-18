@@ -1,7 +1,10 @@
 {
     "pageTitle": "Sobre Nosotros – Base de los Datos",
     "pageDescription": "Conoce Base de los Datos. Facilitamos el acceso a los datos para que la distancia entre tú y tu análisis sea solo una buena pregunta. Aprende más sobre la historia de la organización y el equipo detrás de nuestro trabajo.",
-    "heroTitle": "Facilitamos el acceso a los datos {{breakTag}} para que la distancia entre tú y tu análisis{{breakTag}}sea <0>solo una buena pregunta</0>.",
+    "heroTitle1": "Facilitamos el acceso a los datos",
+    "heroTitle2": "para que la distancia entre tú y tu análisis",
+    "heroTitle3": "sea",
+    "heroTitle4": "solo una buena pregunta",
     "usersCount": "+114 mil",
     "usersText": "usuarios en la plataforma",
     "queriesCount": "+1.3 millones",

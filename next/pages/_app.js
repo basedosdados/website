@@ -1,4 +1,5 @@
 import { appWithTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Head from "next/head";
@@ -6,6 +7,9 @@ import themeBD from "../styles/themeBD";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
+  const router = useRouter();
+  const { locale } = router;
+
   const queryClient = new QueryClient({
     cacheTime: 0,
   });
@@ -96,7 +100,7 @@ function MyApp({ Component, pageProps }) {
       </Head>
 
       <ChakraProvider theme={themeBD}>
-        <Component {...pageProps} />
+        <Component {...pageProps} locale={locale} />
       </ChakraProvider>
 
       {/*<!-- Google Tag Manager (noscript) -->*/}

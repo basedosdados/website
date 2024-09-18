@@ -35,7 +35,7 @@ import NotFoundImage from "../../public/img/notFoundImage";
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common', 'dataset'])),
+      ...(await serverSideTranslations(locale, ['common', 'dataset', 'menu'])),
     },
   };
 }
@@ -285,7 +285,7 @@ export default function SearchDatasetPage() {
       <Database
         id={data.id}
         themes={data?.themes}
-        name={data?.name || "Conjunto sem nome"}
+        name={data?.name || t('noName')}
         temporalCoverageText={data?.temporal_coverages[0] || ""}
         organization={data.organizations[0]}
         tables={{
@@ -603,7 +603,7 @@ export default function SearchDatasetPage() {
               color="#464A51"
               marginBottom="4px"
             >
-              {t('resources')}
+              {t('tables')}
             </Text>
 
             <CheckboxFilterComponent

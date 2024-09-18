@@ -3,6 +3,7 @@
     "search_placeholder_mobile": "Find the data",
     "popular_terms": "Popular terms:",
     "search_by_theme": "Search by theme",
+    "noDatasetsFound": "No dataset with all selected themes was found. Try unselecting some of the themes.",
     "min": "Min",
     "max": "Max",
     "search": "Search",
@@ -26,7 +27,7 @@
     "support": {
         "existence_through_effort": "We exist through the effort of people who",
         "those_who_believe_in_quality_open_data": "believe in access to quality open data.",
-        "support_us_too": "Support Base dos Dados too",
+        "support_us_too": "Support Data Basis too",
         "enthusiast": "Enthusiast",
         "tight_pocket": "Tight budget? Just R$0.50 per",
         "enthusiast_description": "day to help us maintain the initiative.",
@@ -110,6 +111,26 @@
             "termsAndPrivacy": "Terms and Privacy",
             "contact": "Contact",
             "supportProject": "Support the project"
+        }
+    },
+    "partners": {
+        "partnershipsWith": "Partnerships with",
+        "testimonials": {
+            "fernando": {
+                "name": "Fernando Barbalho",
+                "position": "Data Scientist at the National Treasury",
+                "quote": "SiconfiBD is a package that quickly and programmatically brings data from the National Treasury Secretariat. The code is built open-source by the Treasury team and uses DB tables to compose functions in R. What is the personnel expense of the 100 most populous Brazilian municipalities? These and more than 18 other questions can be consulted directly through the package, without the need for SQL."
+            },
+            "marina": {
+                "name": "Marina Barros",
+                "position": "Executive Director of Instituto Alziras",
+                "quote": "With the support of Data Basis, we conducted a survey of gender and race inequalities in the 2016-2020 elections and the distortions in campaign financing for female mayors and councilors in the last elections, which will result in the launch of an unprecedented publication."
+            },
+            "amanda": {
+                "name": "Amanda de Albuquerque and Mariana Carvalho",
+                "position": "Co-founders of A Ponte",
+                "quote": "We created an important product of ours, the Municipality Photograph, in partnership with DB. The Photograph aggregates various socioeconomic indicators of Brazilian municipalities. A Ponte did the planning and design of the report, while BD took care of the technical part of data visualization and management. The partnership allowed us to advance quickly in the development of the tool and ensured the high data quality we wanted from the beginning."
+            }
         }
     }
 }

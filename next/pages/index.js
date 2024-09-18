@@ -1,6 +1,5 @@
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
-import { Select } from "@chakra-ui/react";
 import { useRouter } from 'next/router';
 import {
   Box,
@@ -58,41 +57,16 @@ export async function getStaticProps({ locale }) {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common'])),
+      ...(await serverSideTranslations(locale, ['common', 'menu', 'dataset'])),
       dataThemeCatalog
     },
     revalidate: 30
   }
 }
 
-function LanguageSelector() {
+function Hero({ dataThemeCatalog, locale }) {
+  const { t } = useTranslation('common');
   const router = useRouter();
-  const { t } = useTranslation('common');
-
-  const changeLanguage = (e) => {
-    const locale = e.target.value;
-    router.push(router.pathname, router.asPath, { locale });
-  };
-
-  return (
-    <Select
-      onChange={changeLanguage}
-      defaultValue={router.locale}
-      width="120px"
-      position="absolute"
-      top="20px"
-      right="20px"
-      zIndex="100"
-    >
-      <option value="pt">Português</option>
-      <option value="en">English</option>
-      <option value="es">Español</option>
-    </Select>
-  );
-}
-
-function Hero({ dataThemeCatalog }) {
-  const { t } = useTranslation('common');
   const [search, setSearch] = useState("");
   const [tags, setTags] = useState([])
   const [mediumQuery] = useMediaQuery("(max-width: 1366px)")
@@ -100,7 +74,7 @@ function Hero({ dataThemeCatalog }) {
   function openSearchLink() {
     triggerGAEvent("search", search)
     triggerGAEvent("search_home", search)
-    return window.open(`/dataset?q=${search}`, "_self");
+    return router.push(`/${locale}/dataset?q=${search}`);
   }
 
   return (
@@ -112,7 +86,6 @@ function Hero({ dataThemeCatalog }) {
       zIndex="10"
       position="relative"
     >
-      <LanguageSelector />
       <VStack
         position="relative"
         width="100%"
@@ -241,7 +214,7 @@ function Hero({ dataThemeCatalog }) {
   );
 }
 
-function Products() {
+function Products({ locale }) {
   const { t } = useTranslation('common');
 
   return (
@@ -459,7 +432,7 @@ export function StepText ({index, text}) {
   )
 }
 
-function Support() {
+function Support({ locale }) {
   const { t } = useTranslation('common');
   const { hasCopied, onCopy } = useClipboard("42494318000116")
 
@@ -703,7 +676,7 @@ function Support() {
               color="#42B0FF"
               href="/contato"
             >
-              {t('support.contact_us')}.
+              {t('support.contact_us')}
             </Link>
           </BodyText>
         </Box>
@@ -712,7 +685,7 @@ function Support() {
   );
 }
 
-function BDEdu () {
+function BDEdu ({ locale }) {
   const { t } = useTranslation('common');
   const closeDate = new Date(2024, 2, 26)
   const currentDate = new Date()
@@ -749,7 +722,7 @@ function BDEdu () {
         margin="0 !important"
         backgroundColor="#8262D1"
       >
-        <a href="https://info.basedosdados.org/bd-edu-sql" target="_blank">
+        <a href={`https://info.basedosdados.org/bd-edu-sql`} target="_blank">
           {t('edu.take_advantage_of_the_promotional_price')}
         </a>
       </RoundedButton>
@@ -758,6 +731,9 @@ function BDEdu () {
 }
 
 export default function Home({ dataThemeCatalog }) {
+  const router = useRouter();
+  const { locale } = router;
+
   return (
     <MainPageTemplate id="home" backgroundColor="#FFFFFF">
       <Hero dataThemeCatalog={dataThemeCatalog}/>

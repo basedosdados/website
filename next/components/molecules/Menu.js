@@ -163,7 +163,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                 opacity: 0.7
               }}
             >
-              {t('enter')}
+              {t('enter', { ns: 'menu' })}
             </Box>
             
             <Box
@@ -189,7 +189,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                 backgroundColor: "#0B89E2"
               }}
             >
-              {t('register')}
+              {t('register', { ns: 'menu' })}
             </Box>
           </Stack>
         }
@@ -657,7 +657,7 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
     )
   }
 
-  const { t } = useTranslation('menu');
+  const { t } = useTranslation('common', 'menu');
 
   return (
     <HStack
@@ -800,7 +800,7 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
                 opacity: 0.7
               }}
             >
-              {t('enter')}
+              {t('enter', { ns: 'menu' })}
             </Box>
             
             <Box
@@ -826,7 +826,7 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
                 backgroundColor: "#0B89E2"
               }}
             >
-              {t('register')}
+              {t('register', { ns: 'menu' })}
             </Box>
           </>
         )}
