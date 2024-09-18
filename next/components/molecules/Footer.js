@@ -11,7 +11,8 @@ import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 
 import YoutubeIcon from "../../public/img/icons/youtubeIcon";
-import TwitterIcon from "../../public/img/icons/twitterIcon";
+// import TwitterIcon from "../../public/img/icons/twitterIcon";
+import BlueskyIcon from "../../public/img/icons/blueskyIcon";
 import DiscordIcon from "../../public/img/icons/discordIcon";
 import GithubIcon from "../../public/img/icons/githubIcon";
 import LinkedinIcon from "../../public/img/icons/linkedinIcon";
@@ -270,7 +271,8 @@ export default function Footer({ template, ocult = false }) {
           </HStack>
 
           <HStack spacing={3}>
-            <SocialLink title="Twitter" href="https://twitter.com/basedosdados" icon={<TwitterIcon alt="twitter da BD" {...IconKey}/>}/>
+            {/* <SocialLink title="Twitter" href="https://twitter.com/basedosdados" icon={<TwitterIcon alt="twitter da BD" {...IconKey}/>}/> */}
+            <SocialLink title="Bluesky" href="https://bsky.app/profile/basedosdados.bsky.social" icon={<BlueskyIcon alt="bluesky da BD" {...IconKey}/>}/>
             <SocialLink title="Discord" href="https://discord.gg/huKWpsVYx4" icon={<DiscordIcon alt="discord da BD" {...IconKey}/>}/>
             <SocialLink title="GitHub" href="https://github.com/basedosdados" icon={<GithubIcon alt="github da BD" {...IconKey}/>}/>
             <SocialLink title="LinkedIn" href="https://www.linkedin.com/company/base-dos-dados/mycompany/" icon={<LinkedinIcon alt="linkedin da BD" {...IconKey}/>}/>

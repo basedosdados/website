@@ -434,7 +434,7 @@ export default function ColumnsTable({
           </Tooltip>
         </Box>
         <Box
-          display={header.pt === t('column.name') ? "flex" : "none"}
+          display={header.pt === t('column.name') ? {base: "none", lg: "flex"} : "none"}
           position="absolute"
           right="0"
           top="0"
@@ -540,13 +540,14 @@ export default function ColumnsTable({
                   <Th
                     role="row"
                     position="sticky"
+                    left={0}
                     top="0"
                     boxSizing="content-box"
                     alignItems="center"
                     border="none !important"
                     backgroundColor="#F7F7F7"
                     padding="0 !important"
-                    zIndex={5}
+                    zIndex={6}
                   >
                     <Box padding="14px 22px 14px 30px" >
                       <Checkbox
@@ -563,13 +564,22 @@ export default function ColumnsTable({
                       width="100%"
                       backgroundColor="#DEDFE0"
                     />
+                    <Box
+                      display={{base: "flex", lg: "none"}}
+                      position="absolute"
+                      right="0"
+                      top="0"
+                      height="100%"
+                      width="1px"
+                      backgroundColor="#DEDFE0"
+                    />
                   </Th>
                 }
 
                 <TableHeader
                   header={headers[0]}
                   zIndex={5}
-                  left={{base: "none", lg:"0"}}
+                  left={{base: "none", lg:"72px"}}
                 />
 
                 {headers.map((elm, i) => (
@@ -588,7 +598,9 @@ export default function ColumnsTable({
                   {template === "checks" &&
                     <Td
                       role="cell"
-                      position="relative"
+                      position="sticky"
+                      left={0}
+                      zIndex={5}
                       padding="0 !important"
                       backgroundColor="#FFF"
                       borderColor="#DEDFE0"
@@ -603,17 +615,27 @@ export default function ColumnsTable({
                           onChange={() => handleCheckboxChange(elm.node[`name${capitalize(locale)}`] || elm.node.name)}
                         />
                       </Box>
+                      <Box
+                        display={{base: "flex", lg: "none"}}
+                        position="absolute"
+                        right="0"
+                        top="0"
+                        height="100%"
+                        width="1px"
+                        backgroundColor="#DEDFE0"
+                      />
                     </Td>
                   }
 
                   <TableValue
                     position="sticky"
-                    left={{base: "none", lg:"0"}}
+                    left={{base: "none", lg:"72px"}}
                     zIndex="4"
                     backgroundColor="#FFF"
                   >
                     {elm?.node?.[`name${capitalize(locale)}`] || elm?.node?.name || t('column.notInformed')}
                     <Box
+                      display={{base: "none", lg: "flex"}}
                       position="absolute"
                       right="0"
                       top="0"

@@ -91,7 +91,7 @@ export default function Login() {
     cookies.set('userBD', JSON.stringify(userData))
 
     if(query.i) {
-      return window.open(`/user/${userData.username}?plans_and_payment&q=${query.q}&i=${query.i}`, "_self")
+      return window.open(`/user/${userData.username}?plans_and_payment&i=${query.i}`, "_self")
     }
 
     if(userData.workDataTool === null) return window.open("/user/survey", "_self")
