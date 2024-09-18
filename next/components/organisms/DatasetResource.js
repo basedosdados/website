@@ -23,7 +23,7 @@ export default function DatasetResource({
   const [informationRequests, setInformationRequests] = useState([])
 
   const pushQuery = (key, value) => {
-    router.push({
+    router.replace({
       pathname: `/dataset/${query.dataset}`,
       query: { [key]: value }
     },
