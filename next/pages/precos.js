@@ -338,6 +338,7 @@ export function SectionPrice() {
       }
     }
 
+    setToggleAnual(true)
     fecthPlans()
   }, [])
 
