@@ -846,11 +846,14 @@ function MiniBlogCard({ slug, frontmatter }) {
 
 function BlogHeader({ category }) {
   return (
-    <Box marginTop={"2rem"}>
-      <Heading as="h1" fontFamily={"Roboto"} color="#2b8c4d" fontSize={"5xl"}>
-        {category === "Todos" ? "blog" : prettyCategory(category)}
-      </Heading>
-      <Box as="nav" marginTop={"2rem"}>
+    <Box marginBottom={"3rem"} marginTop={"2.2rem"}>
+      <Text as="span" color="gray" fontFamily={"Roboto"} fontSize={".88rem"}>
+        Categorias
+      </Text>
+      {/* <Heading as="h1" fontFamily={"Roboto"} color="#2b8c4d" fontSize={"4xl"}> */}
+      {/*   {category === "Todos" ? "blog" : prettyCategory(category)} */}
+      {/* </Heading> */}
+      <Box as="nav" marginTop={"0.5rem"}>
         <UnorderedList marginInlineStart={"0"} display={"flex"} gap="2rem">
           {[
             { name: "Todos", shortName: "Todos", href: "/blog" },
@@ -888,11 +891,7 @@ export function BlogGrid({ posts, category }) {
   return (
     <>
       <BlogHeader category={category} />
-      <Grid
-        marginTop={"4rem"}
-        gap={"3rem"}
-        templateColumns={{ md: "1fr 1fr", xl: "1fr 1fr 1fr" }}
-      >
+      <Grid gap={"3rem"} templateColumns={{ md: "1fr 1fr", xl: "1fr 1fr 1fr" }}>
         {posts.map((post, index) => {
           if (index === 0) {
             return (
