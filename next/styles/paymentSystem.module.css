@@ -6,16 +6,8 @@
 }
 
 .modal {
-  width: 400px;
   height: 100%;
   scroll-margin-left: 20px;
-}
-
-@media (max-width: 600px) {
-  .modal {
-    overflow-y: initial;
-    width: 400px;
-  }
 }
 
 .modal::-webkit-scrollbar {

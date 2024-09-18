@@ -32,6 +32,7 @@ import cookies from 'js-cookie';
 import { serialize } from 'cookie';
 import { MainPageTemplate } from "../../components/templates/main";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
+import { ControlledInputSimple } from "../../components/atoms/ControlledInput";
 import Checkbox from "../../components/atoms/Checkbox";
 import BigTitle from "../../components/atoms/BigTitle";
 import SectionTitle from "../../components/atoms/SectionTitle";
@@ -1440,7 +1441,13 @@ const PlansAndPayment = ({ userData }) => {
   const router = useRouter()
   const { query } = router
 
-  const [plan, setPlan] = useState({})
+  const [plan, setPlan] = useState("")
+  const [checkoutInfos, setCheckoutInfos] = useState({})
+  const [valueCoupon, setValueCoupon] = useState("")
+  const [errCoupon, setErrCoupon] = useState(false)
+  const [couponInfos, setCouponInfos] = useState({})
+  const [couponInputFocus, setCouponInputFocus] = useState(false)
+  const [coupon, setCoupon] = useState("")
   const PaymentModal = useDisclosure()
   const SucessPaymentModal = useDisclosure()
   const ErroPaymentModal = useDisclosure()
@@ -1471,8 +1478,6 @@ const PlansAndPayment = ({ userData }) => {
   }, [userData?.id])
 
   useEffect(() => {
-    if(PlansModal.isOpen === false) return
-
     async function fecthPlans() {
       try {
         const result = await fetch(`/api/stripe/getPlans`, { method: "GET" })
@@ -1504,13 +1509,22 @@ const PlansAndPayment = ({ userData }) => {
     }
 
     fecthPlans()
-  }, [PlansModal.isOpen])
+  }, [])
+
+  useEffect(() => {
+    if(plans === null) return
+    if(plan === "") return
+
+    const value = Object.values(plans).find(elm => elm._id === plan)
+    if(value?.interval === "month") setToggleAnual(false)
+    setCheckoutInfos(value)
+    PaymentModal.onOpen()
+  }, [plan, plans])
 
   useEffect(() => {
     if(query.i) {
       if(subscriptionInfo?.isActive === true) return AlertChangePlanModal.onOpen()
-      setPlan({id: query.i})
-      PaymentModal.onOpen()
+      setPlan(query.i)
     }
   }, [query])
 
@@ -1521,7 +1535,10 @@ const PlansAndPayment = ({ userData }) => {
       title: "BD Grátis",
       buttons: [{
         text:"Comparar planos",
-        onClick: () => PlansModal.onOpen()}
+        onClick: () => {
+          PlansModal.onOpen()
+          setToggleAnual(true)
+        }}
       ],
       resources : [
         {name: "Tabelas tratadas"},
@@ -1689,10 +1706,91 @@ const PlansAndPayment = ({ userData }) => {
     return formattedDate
   }
 
-  function formattedPlanInterval (value) {
-    if(value === "month") return "(Mensal)"
-    if(value === "year") return "(Anual)"
+  function formattedPlanInterval (value, variant = false) {
+    if(variant) {
+      if(value === "month") return "mês"
+      if(value === "year") return "ano"
+    } else {
+      if(value === "month") return "(Mensal)"
+      if(value === "year") return "(Anual)"
+    }
   }
+
+  function changeIntervalPlanCheckout() {
+    let togglerValue = !toggleAnual ? "year" : "month"
+    const value = Object.values(plans).find(elm => elm.interval === togglerValue && elm.productSlug === checkoutInfos?.productSlug)
+    setCheckoutInfos(value)
+    setCoupon("")
+    setValueCoupon("")
+    setPlan(value._id)
+    setToggleAnual(!toggleAnual)
+  }
+
+  async function validateStripeCoupon() {
+    if(valueCoupon === "") return
+    setErrCoupon(false)
+
+    const result = await fetch(`/api/stripe/validateStripeCoupon?p=${btoa(plan)}&c=${btoa(valueCoupon)}`, { method: "GET" })
+      .then(res => res.json())
+
+    if(result?.isValid === false || result?.errors || !result) {
+      setValueCoupon("")
+      setErrCoupon(true)
+    }
+    if(result?.duration === "repeating" && toggleAnual === true) {
+      setValueCoupon("")
+      setErrCoupon(true)
+    } else {
+      setCouponInfos(result)
+      setCoupon(valueCoupon)
+    }
+  }
+
+  const CouponDisplay = () => {
+    let limitText
+
+    if(couponInfos?.duration === "once") limitText = toggleAnual ? "(válido por 1 ano)" : "(válido por 1 mês)"
+    if(couponInfos?.duration === "repeating") limitText = `(válido por ${couponInfos?.durationInMonths} ${couponInfos?.durationInMonths.length === 1 ? "mês" : "meses"})`
+
+    return (
+      <>
+        <GridItem>
+          <Text>Cupom {coupon.toUpperCase()} {limitText}</Text>
+        </GridItem>
+        <GridItem textAlign="end">
+          <Text>- {couponInfos?.discountAmount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
+        </GridItem>
+      </>
+    )
+  }
+
+  const TotalToPayDisplay = () => {
+    let value
+
+    if(couponInfos?.discountAmount) {
+      value = (checkoutInfos?.amount-couponInfos?.discountAmount).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })
+    } else {
+      value = checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })
+    }
+
+    return (
+      <>
+        <GridItem>
+          <Text color="#252A32" fontWeight="500">Total a pagar</Text>
+        </GridItem>
+        <GridItem textAlign="end">
+          <Text color="#252A32" fontWeight="500">{value}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
+        </GridItem>
+      </>
+    ) 
+  }
+
+  useEffect(() => {
+    if(valueCoupon === "") {
+      setCoupon("")
+      setCouponInfos("")
+    }
+  }, [valueCoupon])
 
   useEffect(() => {
     if(isLoading === true || isLoadingH === true) closeModalSucess()
@@ -1703,22 +1801,34 @@ const PlansAndPayment = ({ userData }) => {
     <Stack>
       <Box display={isLoading || isLoadingH ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
 
+      {/* stripe */}
       <ModalGeneral
         classNameBody={stylesPS.modal}
         isOpen={PaymentModal.isOpen}
-        onClose={PaymentModal.onClose}
-        isCentered={isMobileMod() ? false : true}
-        propsModalContent={{
-          minWidth: "fit-content",
-          maxWidth: "fit-content",
-          maxHeight: "fit-content",
-          margin: "24px 0"
+        onClose={() => {
+          setToggleAnual(true)
+          setValueCoupon("")
+          if(query.i) return window.open(`/user/${userData.username}?plans_and_payment`, "_self")
+          PaymentModal.onClose()
         }}
+        propsModalContent={{
+          width: "100%",
+          maxWidth:"1008px",
+          margin: "24px"
+        }}
+        isCentered={isMobileMod() ? false : true}
       >
-        <Stack spacing={0} marginBottom="16px">
-          <SectionTitle lineHeight="40px" height="40px">
-            Assinatura {plan.title}
-          </SectionTitle>
+        <Stack spacing={0} marginBottom="40px">
+          <Text
+            width="100%"
+            fontFamily="Roboto"
+            fontWeight="500"
+            color="#252A32"
+            fontSize="24px"
+            lineHeight="36px"
+          >
+            Pagamento
+          </Text>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
@@ -1729,21 +1839,266 @@ const PlansAndPayment = ({ userData }) => {
 
         <Stack
           display="flex"
-          flexDirection="column"
-          justifyContent="center"
-          justifyItems="center"
-          gap="20px"
+          flexDirection={{base: "column", lg: "row"}}
+          gap="80px"
           spacing={0}
         >
-          <PaymentSystem
-            userData={userData}
-            plan={plan}
-            onSucess={() => openModalSucess()}
-            onErro={() => openModalErro()}
-          />
+          <Stack
+            flex={1}
+            spacing="32px"
+          >
+            <Stack
+              flexDirection="column"
+              spacing={0}
+              gap="16px"
+            >
+              <Box
+                display="flex"
+                flexDirection="row"
+                gap="8px"
+                width="100%"
+              >
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="16px"
+                  lineHeight="24px"
+                  color="#252A32"
+                >
+                  {checkoutInfos?.productName}
+                </Text>
+                <Text
+                  cursor="pointer"
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="16px"
+                  lineHeight="24px"
+                  color="#0068C5"
+                  _hover={{color: "#0057A4"}}
+                  marginLeft="auto"
+                  onClick={() => {
+                    PaymentModal.onClose()
+                    setToggleAnual(true)
+                    setCoupon("")
+                    setValueCoupon("")
+                    PlansModal.onOpen()
+                  }}
+                >Alterar plano</Text>
+              </Box>
+
+              <Box
+                display="flex"
+                flexDirection="row"
+                gap="8px"
+                alignItems="center"
+              >
+                {toggleAnual ?  
+                    <Toggle
+                      defaultChecked
+                      value={toggleAnual}
+                      onChange={() => changeIntervalPlanCheckout()}
+                    />
+                  : 
+                    <Toggle
+                      value={toggleAnual}
+                      onChange={() => changeIntervalPlanCheckout()}
+                    />
+                }
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="16px"
+                  lineHeight="24px"
+                  color="#252A32"
+                >Desconto anual</Text>
+                <Text
+                  as="span"
+                  color="#2B8C4D"
+                  backgroundColor="#D5E8DB"
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  lineHeight="28px"
+                  padding="2px 4px"
+                  borderRadius="4px"
+                  height="32px"
+                >Economize 20%</Text>
+              </Box>
+            </Stack>
+
+            <Stack
+              flexDirection="column"
+              spacing={0}
+              gap="8px"
+            >
+              <Text
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="16px"
+                lineHeight="24px"
+                color="#252A32"
+              >
+                Cupom de desconto
+              </Text>
+
+              <Box
+                display="flex"
+                flexDirection="row"
+                alignItems="center"
+                gap="8px"
+              >
+                <Stack spacing={0} width="100%" position="relative">
+                  <ControlledInputSimple
+                    value={valueCoupon}
+                    onChange={setValueCoupon}
+                    inputFocus={couponInputFocus}
+                    changeInputFocus={setCouponInputFocus}
+                    width="100%"
+                    placeholder="Insira o cupom"
+                    inputElementStyle={{
+                      display: "none",
+                    }}
+                    inputStyle={{
+                      paddingLeft: "16px !important",
+                      paddingRight: "40px !important",
+                      borderRadius: "8px",
+                      height: "44px"
+                    }}
+                  />
+                  {valueCoupon &&
+                    <CrossIcon
+                      position="absolute"
+                      top="10px"
+                      right="12px"
+                      alt="apagar"
+                      width="24px"
+                      height="24px"
+                      fill="#878A8E"
+                      cursor="pointer"
+                      onClick={() => setValueCoupon("")}
+                    />
+                  }
+                </Stack>
+
+                <Box
+                  as="button"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  width="fit-content"
+                  height="44px"
+                  borderRadius="8px"
+                  padding="10px 34px"
+                  border="1px solid"
+                  cursor="pointer"
+                  backgroundColor="#FFF"
+                  color="#2B8C4D"
+                  borderColor="#2B8C4D"
+                  _hover={{
+                    borderColor: "#22703E",
+                    color: "#22703E"
+                  }}
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  onClick={() => validateStripeCoupon()}
+                >
+                  Aplicar
+                </Box>
+              </Box>
+
+              {errCoupon && 
+                <Text
+                  display="flex"
+                  flexDirection="row"
+                  fontFamily="Roboto"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  fontWeight="400"
+                  color="#BF3434"
+                  gap="8px"
+                  height="24px"
+                  alignItems="center"
+                >
+                  <Exclamation
+                    width="21px"
+                    height="21px"
+                    fill="#BF3434"
+                  /> Por favor, insira um cupom válido.
+                </Text>
+              }
+            </Stack>
+
+            <Text
+              display={hasSubscribed ? "none" : "flex"}
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="16px"
+              lineHeight="24px"
+              color="#464A51"
+            >Período de teste - 7 dias grátis</Text>
+
+            <Divider borderColor="#DEDFE0" />
+
+            <Grid
+              templateColumns="4fr 2fr"
+              width="100%"
+              gap="8px"
+              alignItems="center"
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="16px"
+              lineHeight="24px"
+              color="#464A51"
+            >
+              <GridItem>
+                <Text>Subtotal</Text>
+              </GridItem>
+              <GridItem textAlign="end">
+                <Text>{checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
+              </GridItem>
+
+              {couponInfos?.discountAmount &&
+                <CouponDisplay />
+              }
+              <TotalToPayDisplay />
+            </Grid>
+
+            {(couponInfos?.duration === "once" || couponInfos?.duration === "repeating") &&
+              <Text
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="16px"
+                lineHeight="24px"
+                color="#464A51"
+              >
+                A partir do {couponInfos?.duration === "once" && 2} {couponInfos?.duration === "repeating" && couponInfos?.durationInMonths + 1}°{formattedPlanInterval(checkoutInfos?.interval, true)}, o total a pagar será de {checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}.
+              </Text>
+            }
+          </Stack>
+
+          <Box display="flex" flexDirection="column" gap="24px" flex={1}>
+            <Text
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="16px"
+              lineHeight="24px"
+              color="#252A32"
+            >
+              Detalhes do pagamento
+            </Text>
+            <PaymentSystem
+              userData={userData}
+              plan={plan}
+              coupon={coupon}
+              onSucess={() => openModalSucess()}
+              onErro={() => openModalErro()}
+            />
+          </Box>
         </Stack>
       </ModalGeneral>
 
+      {/* success */}
       <ModalGeneral
         isOpen={SucessPaymentModal.isOpen}
         onClose={() => setIsLoading(true)}
@@ -1833,6 +2188,7 @@ const PlansAndPayment = ({ userData }) => {
         </Stack>
       </ModalGeneral>
 
+      {/* err */}
       <ModalGeneral
         isOpen={ErroPaymentModal.isOpen}
         onClose={ErroPaymentModal.onClose}
@@ -1914,12 +2270,10 @@ const PlansAndPayment = ({ userData }) => {
         </Stack>
       </ModalGeneral>
 
+      {/* modal plans */}
       <ModalGeneral
         isOpen={PlansModal.isOpen}
-        onClose={() => {
-          PlansModal.onClose()
-          setToggleAnual(true)
-        }}
+        onClose={PlansModal.onClose}
         propsModal={{
           scrollBehavior: isMobileMod() ? "outside" : "inside",
         }}
@@ -1928,19 +2282,20 @@ const PlansAndPayment = ({ userData }) => {
           minWidth: "fit-content",
           maxHeight: "fit-content",
           margin: isMobileMod() ? "0" : "24px",
+          padding: "32px 22px 26px 22px",
           borderRadius: isMobileMod() ? "0" : "20px",
         }}
         isCentered={isMobileMod() ? false : true}
       >
-        <Stack spacing={0} marginBottom="16px">
+        <Stack spacing={0} marginBottom="40px">
           <Text
             width="100%"
             fontFamily="Roboto"
-            fontWeight="400"
+            fontWeight="500"
             color="#252A32"
             fontSize="24px"
-            textAlign="center"
-            lineHeight="40px"
+            lineHeight="36px"
+            paddingLeft="10px"
           >
             Compare os planos
           </Text>
@@ -2003,10 +2358,10 @@ const PlansAndPayment = ({ userData }) => {
             gridTemplateColumns="repeat(3, 320px)"
             gridTemplateRows="1fr"
             alignItems={isMobileMod() ? "center" : {base: "center", lg: "inherit"}}
-            padding="0 20px 10px"
+            padding="0 10px 6px"
             justifyContent="center"
             justifyItems="center"
-            gap="20px"
+            gap="24px"
             spacing={0}
           >
             <CardPrice
@@ -2043,7 +2398,7 @@ const PlansAndPayment = ({ userData }) => {
               button={{
                 text: `${subscriptionInfo?.stripeSubscription === "bd_pro" ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis"}`,
                 onClick: subscriptionInfo?.stripeSubscription === "bd_pro" ? () => {} : () => {
-                  setPlan({id: plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id})
+                  setPlan(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id)
                   PlansModal.onClose()
                   PaymentModal.onOpen()
                 },
@@ -2064,7 +2419,7 @@ const PlansAndPayment = ({ userData }) => {
               button={{
                 text: `${subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis"}`,
                 onClick: subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? () => {} : () => {
-                  setPlan({id: plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id})
+                  setPlan(plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id)
                   PlansModal.onClose()
                   PaymentModal.onOpen()
                 },
@@ -2075,6 +2430,7 @@ const PlansAndPayment = ({ userData }) => {
         </Box>
       </ModalGeneral>
 
+      {/* err plans */}
       <ModalGeneral
         isOpen={AlertChangePlanModal.isOpen}
         onClose={AlertChangePlanModal.onClose}
@@ -2124,6 +2480,7 @@ const PlansAndPayment = ({ userData }) => {
         </Stack>
       </ModalGeneral>
 
+      {/* cancel */}
       <ModalGeneral
         isOpen={CancelModalPlan.isOpen}
         onClose={CancelModalPlan.onClose}
@@ -2343,7 +2700,10 @@ const PlansAndPayment = ({ userData }) => {
                 letterSpacing="0.3px"
                 _hover={{opacity: 0.7}}
                 marginTop="16px !important"
-                onClick={() => PlansModal.onOpen()}
+                onClick={() => {
+                  PlansModal.onOpen()
+                  setToggleAnual(true)
+                }}
               >
                 Veja tudo e compare os planos
               </ButtonSimple>
