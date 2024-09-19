@@ -31,20 +31,30 @@ import { useEffect, useState } from "react";
 import hljs from "highlight.js/lib/core";
 import { CopyIcon } from "../../public/img/icons/copyIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
+import { TimeIcon } from "@chakra-ui/icons";
+
+export const dateToLocatePt = (date) =>
+  new Date(date).toLocaleString("pt-BR", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 
 function DatePost({ date, slug }) {
   if (date.trim().length === 0) {
     console.error(`Invalid date \`${date}\` for post slug: ${slug}`);
     return null;
   }
-  const localeDate = new Date(date).toLocaleString("pt-BR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+
   return (
-    <Text as="span" fontFamily={"Roboto"} fontSize={"sm"} color="gray">
-      {localeDate}
+    <Text
+      as="span"
+      fontFamily={"Roboto"}
+      fontSize={"sm"}
+      color="gray"
+      lineHeight={"1"}
+    >
+      {dateToLocatePt(date)}
     </Text>
   );
 }
@@ -273,7 +283,7 @@ export function ShareButtons({ frontmatter }) {
   const encodedUrl = encodeURIComponent(url);
 
   return (
-    <Box display={"flex"} alignItems={"center"} gap="1rem">
+    <Box display={"flex"} alignItems={"center"} gap="1rem" marginTop={"1rem"}>
       <NextLink
         href={`https://www.facebook.com/sharer/sharer.php?t=${encodeURIComponent(title)}&u=${encodedUrl}`}
       >
@@ -357,7 +367,8 @@ export const mdxComponents = {
       as={"p"}
       lineHeight={"7"}
       marginY={"1.5rem"}
-      color="#252A32"
+      // color="#252A32"
+      color="rgb(55, 65, 81)"
       fontFamily={"Roboto"}
       {...props}
     />
@@ -456,35 +467,32 @@ export const mdxComponents = {
 
 export function Toc({ headings }) {
   return (
-    <>
-      <Box marginBottom={"1rem"}>
-        <Text
-          as="p"
-          fontFamily={"Roboto"}
-          fontWeight={"500"}
-          paddingBottom={"0.6rem"}
-        >
-          Tabela de conteúdo
-        </Text>
-        <Box as="hr" />
-        <UnorderedList marginTop={"1rem"}>
-          {headings.map(({ id, title, level }) => (
-            <ListItem key={id} margin={"0.5rem 0"} marginLeft={`${level * 5}%`}>
-              <Link
-                href={`#${id}`}
-                fontFamily="Roboto"
-                fontWeight="normal"
-                display="block"
-                _hover={{ textDecoration: "none" }}
-              >
-                {title}
-              </Link>
-            </ListItem>
-          ))}
-        </UnorderedList>
-      </Box>
-      <Box as="hr" marginBottom={"1rem"} />
-    </>
+    <Box marginBottom={"1rem"}>
+      <Text
+        as="p"
+        fontFamily={"Roboto"}
+        fontWeight={"500"}
+        paddingBottom={"0.6rem"}
+      >
+        Tabela de conteúdo
+      </Text>
+      <Box as="hr" />
+      <UnorderedList marginTop={"1rem"}>
+        {headings.map(({ id, title, level }) => (
+          <ListItem key={id} margin={"0.5rem 0"} marginLeft={`${level * 5}%`}>
+            <Link
+              href={`#${id}`}
+              fontFamily="Roboto"
+              fontWeight="normal"
+              display="block"
+              _hover={{ textDecoration: "none" }}
+            >
+              {title}
+            </Link>
+          </ListItem>
+        ))}
+      </UnorderedList>
+    </Box>
   );
 }
 
@@ -531,6 +539,7 @@ export function Contribute({ slug }) {
         fontFamily={"Roboto"}
         fontWeight={"500"}
         letterSpacing={"0"}
+        _hover={{ textDecoration: "none" }}
         isExternal
       >
         <>
@@ -545,33 +554,6 @@ export function Contribute({ slug }) {
 export function Header({ frontmatter, slug }) {
   return (
     <Box as="header">
-      <Text
-        as="span"
-        display={"block"}
-        marginBottom={"10"}
-        color={"gray"}
-        fontFamily={"Roboto"}
-      >
-        <Box>
-          <Text as="span" fontFamily={"Roboto"} fontSize={"sm"} color="gray">
-            {"Publicado em "}
-          </Text>
-          <DatePost date={frontmatter.date.created} slug={slug} />
-          {frontmatter.date?.updated ? (
-            <Box>
-              <Text
-                as="span"
-                fontFamily={"Roboto"}
-                fontSize={"sm"}
-                color="gray"
-              >
-                {"Atualizado em "}
-              </Text>
-              <DatePost date={frontmatter.date.updated} slug={slug} />
-            </Box>
-          ) : null}
-        </Box>
-      </Text>
       <Heading as="h1" fontFamily={"Roboto"} size="2xl">
         {frontmatter.title}
       </Heading>
@@ -585,8 +567,38 @@ export function Header({ frontmatter, slug }) {
       >
         {frontmatter.description}
       </Heading>
+
+      {frontmatter?.date ? (
+        <Box display={"flex"} alignItems={"center"} marginBottom={"2rem"}>
+          {frontmatter.date?.created ? (
+            <Box>
+              <Box
+                display={"flex"}
+                alignItems={"center"}
+                alignContent={"center"}
+              >
+                <TimeIcon color="gray" marginRight={"0.3rem"} />
+                <DatePost date={frontmatter.date.created} slug={slug} />
+              </Box>
+              {frontmatter.date?.updated ? (
+                <Box fontSize={"1rem"}>
+                  <Text
+                    as="span"
+                    color={"gray"}
+                    fontFamily={"Roboto"}
+                    fontSize={".8rem"}
+                  >
+                    {`Editado em ${dateToLocatePt(frontmatter.date.updated)}`}
+                  </Text>
+                </Box>
+              ) : null}
+            </Box>
+          ) : null}
+        </Box>
+      ) : null}
+
       {frontmatter.authors ? (
-        <Box marginBottom={"4rem"}>
+        <Box marginBottom={"2rem"}>
           <Wrap display={"flex"} alignItems={"center"}>
             {frontmatter.authors.map((author, index) => {
               const authorComponent = (
@@ -734,7 +746,7 @@ function LatestBlogCard({ slug, frontmatter }) {
               <Image
                 cursor="pointer"
                 width={"100%"}
-                height={{ base: "250px", md: "370px" }}
+                style={{ aspectRatio: "16/9" }}
                 src={
                   frontmatter.thumbnail ??
                   "https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_9.png"
@@ -753,7 +765,12 @@ function LatestBlogCard({ slug, frontmatter }) {
         width={{ base: "100%", md: "100%", lg: "40%" }}
         marginTop={{ base: "1rem", md: "1rem", lg: "0" }}
       >
-        <Heading as="h1" fontSize="4xl" fontWeight={500} fontFamily={"Roboto"}>
+        <Heading
+          as="h1"
+          fontSize={{ base: "2xl", md: "4xl" }}
+          fontWeight={500}
+          fontFamily={"Roboto"}
+        >
           <NextLink href={`/blog/${slug}`} passHref>
             <Link>{title}</Link>
           </NextLink>
@@ -792,7 +809,7 @@ function MiniBlogCard({ slug, frontmatter }) {
             <Link>
               <Image
                 width={"100%"}
-                style={{ aspectRatio: "16/8" }}
+                style={{ aspectRatio: "16/9" }}
                 src={
                   frontmatter.thumbnail ||
                   "https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_9.png"
@@ -811,7 +828,7 @@ function MiniBlogCard({ slug, frontmatter }) {
             <Link
               display="block"
               paddingTop={"1rem"}
-              _groupHover={{ textDecoration: "underline" }}
+              // _groupHover={{ textDecoration: "underline" }}
             >
               {title}
             </Link>
