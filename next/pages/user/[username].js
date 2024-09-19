@@ -2058,7 +2058,7 @@ const PlansAndPayment = ({ userData }) => {
                 <Text>{checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
               </GridItem>
 
-              {couponInfos?.discountAmount &&
+              {couponInfos?.isValid &&
                 <CouponDisplay />
               }
               <TotalToPayDisplay />
