@@ -85,7 +85,10 @@ export default function Post({ slug, mdxSource, headings }) {
           content={frontmatter.thumbnail}
           key="twimage"
         />
-        <meta property="article:published_time" content={frontmatter.date.created} />
+        <meta
+          property="article:published_time"
+          content={frontmatter.date.created}
+        />
       </Head>
       <Box paddingTop={"4rem"}>
         <Header frontmatter={frontmatter} slug={slug} />
@@ -95,11 +98,7 @@ export default function Post({ slug, mdxSource, headings }) {
           alignItems={"start"}
           maxWidth={"100%"}
         >
-          <Box
-            as="section"
-            width={{ base: "100%", md: "65%", xl: "65%" }}
-            marginBottom={"2rem"}
-          >
+          <Box as="section" width={{ base: "100%", md: "65%", xl: "65%" }}>
             <MDXRemote {...mdxSource} components={mdxComponents} />
           </Box>
           <Box
@@ -108,14 +107,29 @@ export default function Post({ slug, mdxSource, headings }) {
             marginTop={{ base: "0", md: "2rem" }}
             position={"sticky"}
             top="6rem"
+            maxHeight={"calc(100vh - 6rem)"}
+            overflowY={"auto"}
             paddingLeft={{ base: "0", md: "5rem" }}
+            paddingBottom={"2rem"}
             width={{ base: "100%", md: "35%", xl: "35%" }}
           >
             <Box display={{ base: "none", md: "block" }}>
-              {headings.length > 0 ? <Toc headings={headings} /> : null}
+              {headings.length > 0 ? (
+                <>
+                  <Toc headings={headings} />
+                  <Box as="hr" marginBottom={"1rem"} />
+                </>
+              ) : null}
             </Box>
-            <Contribute slug={slug} />
-            <Box as="hr" marginY={"1rem"} />
+            <Box
+              borderTop="0px solid rgb(226, 232, 240)"
+              borderTopWidth={{ base: "1px", md: "0px" }}
+              paddingTop={{ base: "1rem", md: "0" }}
+              paddingBottom={"1rem"}
+              borderBottom="1px solid rgb(226, 232, 240)"
+            >
+              <Contribute slug={slug} />
+            </Box>
             <ShareButtons frontmatter={frontmatter} />
           </Box>
         </Box>
