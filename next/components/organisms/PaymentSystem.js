@@ -53,6 +53,7 @@ const PaymentForm = ({ onSucess, onErro, clientSecret}) => {
   return (
     <VStack
       spacing={0}
+      flex={1}
       alignItems="start"
     >
       <form
@@ -63,60 +64,87 @@ const PaymentForm = ({ onSucess, onErro, clientSecret}) => {
 
         <Button
           type="submit"
-          height="40px"
-          fontSize="20px"
-          lineHeight="30px"
+          fontSize="14px"
+          lineHeight="20px"
           fontFamily="Roboto"
           fontWeight="500"
+          borderRadius="8px"
           pointerEvents={isLoading ? "none" : "default"}
-          color={"#FFFFFF"}
-          backgroundColor={"#0D99FC"}
+          color="#FFFFFF"
+          backgroundColor="#2B8C4D"
           _hover={{
-            color: "#FAFAFA",
-            backgroundColor: "#0B89E2"
+            backgroundColor: "#22703E"
           }}
         >
-          {isLoading ? <Spinner /> : "Iniciar inscrição"}
+          {isLoading ? <Spinner /> : "Confirmar pagamento"}
         </Button>
       </form>
     </VStack>
   )
 }
 
-export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
+export default function PaymentSystem({ userData, plan, coupon, onSucess, onErro }) {
   const [clientSecret, setClientSecret] = useState("")
 
   const appearance = {
     theme: "stripe",
     variables: {
+      fontFamily: 'Roboto, sans-serif',
       fontSizeBase: "16px",
       fontSizeSm: "16px",
-      fontFamily: "Ubuntu",
       borderRadius: "14px",
-      colorPrimary: "#42B0FF",
-      colorTextPlaceholder: "#A3A3A3",
-      colorDanger: "#D93B3B",
-      colorBackground: "#FFF",
+      colorPrimary: "#2B8C4D",
+      colorTextPlaceholder: "#464A51",
+      colorDanger: "#BF3434",
+      colorBackground: "#FFFFFF",
       colorText: "#252A32",
     },
     rules: {
       ".Input": {
-        border: "1px solid #DEDFE0",
+        borderRadius: "8px",
+        border: "2px solid #EEEEEE",
+        backgroundColor: "#EEEEEE"
       },
       ".Input:hover": {
-        border: "2px solid #42B0FF",
+        backgroundColor:"#DEDFE0",
+        borderColor: "#DEDFE0"
       },
+      ".Input:focus": {
+        backgroundColor: "#FFFFFF",
+        border:"2px solid #0068C5",
+        borderColor: "#0068C5",
+        boxShadow: "none",
+        outline: "none"
+      },
+      ".Input:focus:hover": {
+        backgroundColor: "#FFFFFF",
+        borderColor: "#0068C5",
+      },
+      ".Tab": {
+        border: "2px solid #ececec",
+        backgroundColor: "#FFF",
+        boxShadow: "none"
+      },
+      ".Tab:focus": {
+        boxShadow: "none"
+      },
+      ".Tab--selected": {
+        boxShadow: "none"
+      },
+      ".Tab--selected:focus": {
+        boxShadow: "none"
+      }
     }
   }
 
   const options = {
     clientSecret,
     appearance,
-    fonts: [{ cssSrc: 'https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap' }],
+    fonts: [{ cssSrc: 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' }],
   }
 
-  const customerCreatPost = async (id) => {
-    const clientSecret = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}`, {method: "GET"})
+  const customerCreatPost = async (id, coupon) => {
+    const clientSecret = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}&c=${btoa(coupon)}`, {method: "GET"})
       .then(res => res.json())
 
     if (clientSecret) {
@@ -125,8 +153,9 @@ export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
   }
 
   useEffect(() => {
-    customerCreatPost(plan.id)
-  }, [])
+    setClientSecret("")
+    customerCreatPost(plan, coupon)
+  }, [plan, coupon])
 
   const SkeletonBox = ({ type, ...props }) => {
     if(type === "text") return <Skeleton height="17px" borderRadius="12px" startColor="#F0F0F0" endColor="#F3F3F3" {...props}/>
@@ -136,7 +165,7 @@ export default function PaymentSystem({ userData, plan, onSucess, onErro }) {
   }
 
   if(!clientSecret) return (
-    <Stack>
+    <Stack flex={1}>
       <Stack width="100%" flexDirection="row" spacing={0} gap="8px" marginBottom="16px !important">
         <Stack width="100%"  spacing={0} gap="8px">
           <SkeletonBox type="text"/>

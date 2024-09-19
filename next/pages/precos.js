@@ -85,7 +85,7 @@ export const CardPrice = ({
           <Box
             display="flex"
             flexDirection="row"
-            height="50px"
+            height="60px"
             alignItems="center"
           >
             <Text
@@ -151,7 +151,7 @@ export const CardPrice = ({
                 flexDirection="row"
                 alignItems="center"
                 gap="8px"
-                _last={{marginBottom:"24px"}}
+                _last={{marginBottom:"0px !important"}}
               >
                 <CheckIcon 
                   width="24px"
@@ -233,7 +233,7 @@ export const CardPrice = ({
               fontFamily="Roboto"
               fontWeight="500"
               fontSize="20px"
-              lineHeight="30px"
+              lineHeight="36px"
               _hover={{
                 backgroundColor: "#0B89E2"
               }}
@@ -252,7 +252,7 @@ export const CardPrice = ({
             fontSize="16px"
             lineHeight="24px"
             fontFamily="Roboto"
-            height="20px"
+            height="24px"
           >Leia os
             <Text
               as="a"
@@ -338,6 +338,7 @@ export function SectionPrice() {
       }
     }
 
+    setToggleAnual(true)
     fecthPlans()
   }, [])
 
@@ -436,7 +437,7 @@ export function SectionPrice() {
           ]}
           button={{
             text: isBDPro.isCurrentPlan && planIntervalPlan() ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis",
-            href: username === null ? `/user/login?q=pro&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&q=pro&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}`,
+            href: username === null ? `/user/login?i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}`,
             isCurrentPlan: isBDPro.isCurrentPlan && planIntervalPlan(),
           }}
         />
@@ -453,7 +454,7 @@ export function SectionPrice() {
           ]}
           button={{
             text: isBDEmp.isCurrentPlan && planIntervalPlan() ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis",
-            href: username === null ? `/user/login?q=empresas&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&q=empresas&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}`,
+            href: username === null ? `/user/login?i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}`,
             isCurrentPlan: isBDEmp.isCurrentPlan && planIntervalPlan(),
           }}
         />
