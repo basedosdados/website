@@ -169,8 +169,8 @@ export default function InformationRequestPage({ id }) {
         >
           Acessar dados
           <RedirectIcon
-            width="16px"
-            height="16px"
+            width="12px"
+            height="12px"
           />
         </Box>
 
@@ -199,8 +199,8 @@ export default function InformationRequestPage({ id }) {
         >
           Acessar pedido
           <RedirectIcon
-            width="16px"
-            height="16px"
+            width="12px"
+            height="12px"
           />
         </Box>
       </StackSkeleton>
