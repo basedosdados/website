@@ -235,8 +235,9 @@ export default function BdmTablePage({ id }) {
     >
       <StackSkeleton
         display="flex"
-        flexDirection="row"
-        alignItems="center"
+        height="100%"
+        flexDirection={{base: "column", lg: "row"}}
+        alignItems={{base: "start", lg: "center"}}
         gap="8px"
       >
         <Text
@@ -348,8 +349,9 @@ export default function BdmTablePage({ id }) {
         >
           <Box
             display="flex"
-            flexDirection="row"
-            gap="8px"
+            marginBottom={{base: "24px", lg: "0"}}
+            flexDirection={{base: "column", lg: "row"}}
+            gap="4px"
             fontFamily="Roboto"
             fontWeight="400"
             fontSize="14px"
@@ -357,12 +359,18 @@ export default function BdmTablePage({ id }) {
             color="#464A51"
           >
             {resource?.updates?.[0]?.latest ?
-              formatDate(resource.updates[0].latest)
+              `${formatDate(resource.updates[0].latest)}:`
               :
-              "Não informado"
-            }: Última vez que atualizamos na BD
+              "Não informado:"
+            }
+
+            <Text>
+              Última vez que atualizamos na BD
+            </Text>
+
             {resource?.updates?.[0]?.frequency &&
               <Text
+                width="fit-content"
                 backgroundColor="#EEEEEE"
                 padding="2px 4px"
                 borderRadius="4px"
@@ -381,6 +389,7 @@ export default function BdmTablePage({ id }) {
             }
             {!resource?.updates?.[0]?.frequency &&
               <Text
+                width="fit-content"
                 backgroundColor="#EEEEEE"
                 padding="2px 4px"
                 borderRadius="4px"
@@ -396,8 +405,9 @@ export default function BdmTablePage({ id }) {
           </Box>
           <Box
             display="flex"
-            flexDirection="row"
-            gap="8px"
+            flexDirection={{base: "column", lg: "row"}}
+            marginBottom={{base: "24px", lg: "0"}}
+            gap="4px"
             fontFamily="Roboto"
             fontWeight="400"
             fontSize="14px"
@@ -406,12 +416,18 @@ export default function BdmTablePage({ id }) {
             color="#464A51"
           >
             {resource?.rawDataSource?.[0]?.updates?.[0]?.latest ?
-              formatDate(resource.rawDataSource[0].updates[0].latest)
+              `${formatDate(resource.rawDataSource[0].updates[0].latest)}:`
               :
-              "Não informado"
-            }: Última vez que atualizaram na fonte original
+              "Não informado:"
+            }
+
+            <Text>
+              Última vez que atualizaram na fonte original
+            </Text>
+
             {resource?.rawDataSource?.[0]?.updates?.[0]?.frequency ?
               <Text
+                width="fit-content"
                 backgroundColor="#EEEEEE"
                 padding="2px 4px"
                 borderRadius="4px"
@@ -430,6 +446,7 @@ export default function BdmTablePage({ id }) {
             :
             !resource?.rawDataSource?.[0]?.updates?.[0] || !resource?.updates?.[0]?.frequency ?
               <Text
+                width="fit-content"
                 backgroundColor="#EEEEEE"
                 padding="2px 4px"
                 borderRadius="4px"
@@ -447,8 +464,8 @@ export default function BdmTablePage({ id }) {
           </Box>
           <Text
             display="flex"
-            flexDirection="row"
-            gap="8px"
+            flexDirection={{base: "column", lg: "row"}}
+            gap="4px"
             fontFamily="Roboto"
             fontWeight="400"
             fontSize="14px"
@@ -457,10 +474,13 @@ export default function BdmTablePage({ id }) {
             color="#464A51"
           >
             {resource?.rawDataSource?.[0]?.polls?.[0]?.latest ?
-              formatDate(resource.rawDataSource[0].polls[0].latest)
+              `${formatDate(resource.rawDataSource[0].polls[0].latest)}:`
               :
-              "Não informado"
-            }: Última vez que verificamos a fonte original
+              "Não informado:"
+            }
+            <Text as="span">
+              Última vez que verificamos a fonte original
+            </Text>
           </Text>
         </SkeletonText>
       </Stack>
@@ -512,8 +532,8 @@ export default function BdmTablePage({ id }) {
             }
             <RedirectIcon
               display={resource?.cloudTables ? "flex" : "none"}
-              width="16px"
-              height="16px"
+              width="12px"
+              height="12px"
             />
           </Text>
         </StackSkeleton>
@@ -616,8 +636,8 @@ export default function BdmTablePage({ id }) {
               >
                 Download dos arquivos
                 <DownloadIcon
-                  width="24px"
-                  height="24px"
+                  width="16px"
+                  height="16px"
                 />
               </Text>
             :

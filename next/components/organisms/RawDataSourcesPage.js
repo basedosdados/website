@@ -250,8 +250,8 @@ export default function RawDataSourcesPage({ id }) {
         >
           Acessar fonte original
           <RedirectIcon
-            width="16px"
-            height="16px"
+            width="12px"
+            height="12px"
           />
         </Box>
       </StackSkeleton>
