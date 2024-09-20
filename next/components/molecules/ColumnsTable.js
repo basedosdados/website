@@ -275,7 +275,7 @@ export default function ColumnsTable({
           display="flex"
           flexDirection="row"
           alignItems="center"
-          gap="4px"
+          gap="8px"
           color="#0068C5"
           fill="#0068C5"
           _hover={{
@@ -284,7 +284,7 @@ export default function ColumnsTable({
           }}
         >
           {t('column.downloadTranslationTable')}
-          <DownloadIcon width="18px" height="18px"/>
+          <DownloadIcon width="14px" height="16px"/>
         </Text>
         <Text>{t('column.dictionary')}</Text>
       </Box>
@@ -336,7 +336,7 @@ export default function ColumnsTable({
               }}
               flexDirection="row"
               alignItems="center"
-              gap="4px"
+              gap="8px"
               color="#0068C5"
               fill="#0068C5"
               _hover={{
@@ -353,7 +353,7 @@ export default function ColumnsTable({
                 :
                 <>
                   {t('column.downloadTranslationTable')}
-                  <DownloadIcon width="18px" height="18px"/>
+                  <DownloadIcon width="14px" height="16px"/>
                 </>
               }
             </Text>
@@ -579,7 +579,7 @@ export default function ColumnsTable({
                 <TableHeader
                   header={headers[0]}
                   zIndex={5}
-                  left={{base: "none", lg:"72px"}}
+                  left={{base: "none", lg: template === "download" ? "0" : "72px"}}
                 />
 
                 {headers.map((elm, i) => (
@@ -629,7 +629,7 @@ export default function ColumnsTable({
 
                   <TableValue
                     position="sticky"
-                    left={{base: "none", lg:"72px"}}
+                    left={{base: "none", lg: template === "download" ? "0" : "72px"}}
                     zIndex="4"
                     backgroundColor="#FFF"
                   >

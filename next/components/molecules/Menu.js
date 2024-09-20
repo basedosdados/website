@@ -652,7 +652,7 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
       > 
         {icon && icon}
         {text}
-        <RedirectIcon fill={flag && url.slice(0,4) === "http" ? "#A3A3A3" : "transparent"} marginLeft="auto" width="16px" height="16px"/>
+        <RedirectIcon fill={flag && url.slice(0,4) === "http" ? "#A3A3A3" : "transparent"} marginLeft="auto" width="12px" height="12px"/>
       </Link>
     )
   }

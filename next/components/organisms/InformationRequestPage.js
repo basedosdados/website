@@ -173,8 +173,8 @@ export default function InformationRequestPage({ id }) {
         >
           {t('informationRequest.accessData')}
           <RedirectIcon
-            width="16px"
-            height="16px"
+            width="12px"
+            height="12px"
           />
         </Box>
 
@@ -203,8 +203,8 @@ export default function InformationRequestPage({ id }) {
         >
           {t('informationRequest.accessRequest')}
           <RedirectIcon
-            width="16px"
-            height="16px"
+            width="12px"
+            height="12px"
           />
         </Box>
       </StackSkeleton>

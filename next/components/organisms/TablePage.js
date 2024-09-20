@@ -241,8 +241,9 @@ export default function TablePage({ id }) {
     >
       <StackSkeleton
         display="flex"
-        flexDirection="row"
-        alignItems="center"
+        height="100%"
+        flexDirection={{base: "column", lg: "row"}}
+        alignItems={{base: "start", lg: "center"}}
         gap="8px"
       >
         <Text
@@ -354,8 +355,9 @@ export default function TablePage({ id }) {
         >
           <Box
             display="flex"
-            flexDirection="row"
-            gap="8px"
+            marginBottom={{base: "24px", lg: "0"}}
+            flexDirection={{base: "column", lg: "row"}}
+            gap="4px"
             fontFamily="Roboto"
             fontWeight="400"
             fontSize="14px"
@@ -363,12 +365,13 @@ export default function TablePage({ id }) {
             color="#464A51"
           >
             {resource?.updates?.[0]?.latest ?
-              formatDate(resource.updates[0].latest)
+              `${formatDate(resource.updates[0].latest)}:`
               :
               t('table.notInformed')
             }: {t('table.lastUpdateBD')}
             {resource?.updates?.[0]?.frequency &&
               <Text
+                width="fit-content"
                 backgroundColor="#EEEEEE"
                 padding="2px 4px"
                 borderRadius="4px"
@@ -387,6 +390,7 @@ export default function TablePage({ id }) {
             }
             {!resource?.updates?.[0]?.frequency &&
               <Text
+                width="fit-content"
                 backgroundColor="#EEEEEE"
                 padding="2px 4px"
                 borderRadius="4px"
@@ -402,8 +406,9 @@ export default function TablePage({ id }) {
           </Box>
           <Box
             display="flex"
-            flexDirection="row"
-            gap="8px"
+            flexDirection={{base: "column", lg: "row"}}
+            marginBottom={{base: "24px", lg: "0"}}
+            gap="4px"
             fontFamily="Roboto"
             fontWeight="400"
             fontSize="14px"
@@ -412,12 +417,13 @@ export default function TablePage({ id }) {
             color="#464A51"
           >
             {resource?.rawDataSource?.[0]?.updates?.[0]?.latest ?
-              formatDate(resource.rawDataSource[0].updates[0].latest)
+              `${formatDate(resource.rawDataSource[0].updates[0].latest)}:`
               :
               t('table.notInformed')
             }: {t('table.lastUpdateRawDataSource')}
             {resource?.rawDataSource?.[0]?.updates?.[0]?.frequency ?
               <Text
+                width="fit-content"
                 backgroundColor="#EEEEEE"
                 padding="2px 4px"
                 borderRadius="4px"
@@ -436,6 +442,7 @@ export default function TablePage({ id }) {
             :
             !resource?.rawDataSource?.[0]?.updates?.[0] || !resource?.updates?.[0]?.frequency ?
               <Text
+                width="fit-content"
                 backgroundColor="#EEEEEE"
                 padding="2px 4px"
                 borderRadius="4px"
@@ -453,8 +460,8 @@ export default function TablePage({ id }) {
           </Box>
           <Text
             display="flex"
-            flexDirection="row"
-            gap="8px"
+            flexDirection={{base: "column", lg: "row"}}
+            gap="4px"
             fontFamily="Roboto"
             fontWeight="400"
             fontSize="14px"
@@ -463,7 +470,7 @@ export default function TablePage({ id }) {
             color="#464A51"
           >
             {resource?.rawDataSource?.[0]?.polls?.[0]?.latest ?
-              formatDate(resource.rawDataSource[0].polls[0].latest)
+              `${formatDate(resource.rawDataSource[0].polls[0].latest)}:`
               :
               t('table.notInformed')
             }: {t('table.lastCheckRawDataSource')}
@@ -518,8 +525,8 @@ export default function TablePage({ id }) {
             }
             <RedirectIcon
               display={resource?.cloudTables ? "flex" : "none"}
-              width="16px"
-              height="16px"
+              width="12px"
+              height="12px"
             />
           </Text>
         </StackSkeleton>
@@ -622,8 +629,8 @@ export default function TablePage({ id }) {
               >
                 {t('table.downloadFiles')}
                 <DownloadIcon
-                  width="24px"
-                  height="24px"
+                  width="16px"
+                  height="16px"
                 />
               </Text>
             :

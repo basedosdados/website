@@ -12,7 +12,8 @@ import {
   Skeleton,
   Stack,
   useDisclosure,
-  ModalCloseButton
+  ModalCloseButton,
+  Spinner
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 import hljs from "highlight.js/lib/core";
@@ -36,7 +37,7 @@ import {
 } from "../../pages/api/tables"
 
 
-import { CopyIcon } from "../../public/img/icons/copyIcon";
+import { CopySolidIcon } from "../../public/img/icons/copyIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import ChevronIcon from "../../public/img/icons/chevronIcon";
@@ -107,7 +108,6 @@ export function CodeHighlight({ language, children }) {
           fontWeight="500"
           fontSize="12px"
           lineHeight="18px"
-          letterSpacing="0.1px"
           color="#878A8E"
           fill="#878A8E"
           _hover={{
@@ -124,7 +124,7 @@ export function CodeHighlight({ language, children }) {
               marginLeft="5px"
             />
           :
-            <CopyIcon
+            <CopySolidIcon
               alt="copiar conteúdo"
               width="24px"
               height="24px"
@@ -163,7 +163,6 @@ export function CodeHighlight({ language, children }) {
             fontWeight="500"
             fontSize="12px"
             lineHeight="18px"
-            letterSpacing="0.1px"
           >
             {isExpanded ? "Recolher" : "Expandir"}
           </Text>
@@ -187,6 +186,7 @@ export default function DataInformationQuery({ resource }) {
   const [includeTranslation, setIncludeTranslation] = useState(true)
   const [hasLoadingColumns, setHasLoadingColumns] = useState(true)
   const [isLoadingCode, setIsLoadingCode] = useState(false)
+  const [isLoadingSpin, setIsLoadingSpin] = useState(false)
   const [hasLoadingResponse, setHasLoadingResponse] = useState(false)
   const plansModal = useDisclosure()
 
@@ -239,6 +239,7 @@ export default function DataInformationQuery({ resource }) {
 
   useEffect(() => {
     if(hasLoadingResponse === true) {
+      setIsLoadingSpin(true)
       SqlCodeString()
     }
   }, [hasLoadingResponse])
@@ -274,6 +275,7 @@ export default function DataInformationQuery({ resource }) {
     if(result === null) return 
     setSqlCode(result.trim())
     setIsLoadingCode(false)
+    setIsLoadingSpin(false)
   }
 
   const handleAccessIndexes = (index) => {
@@ -366,7 +368,7 @@ export default function DataInformationQuery({ resource }) {
               startColor="#F0F0F0"
               endColor="#F3F3F3"
               borderRadius="6px"
-              height="20px"
+              lineHeight="20px"
               width="fit-content"
               isLoaded={!hasLoadingColumns}
             >
@@ -548,7 +550,7 @@ export default function DataInformationQuery({ resource }) {
                   backgroundColor:"#22703E"
                 }}
               >
-                {t('table.generateQuery')}
+                {t('table.generateQuery')} <Spinner display={ isLoadingSpin ? "flex" : "none"} width="16px" height="16px"/>
               </Box>
             </Skeleton>
           </Box>
@@ -645,8 +647,8 @@ export default function DataInformationQuery({ resource }) {
                 }}
               >
                 <DownloadIcon
-                  width="24px"
-                  height="24px"
+                  width="16px"
+                  height="16px"
                 />
                   {t('table.downloadTable')} {downloadWarning !== "biggest1gb" && `(${formatBytes(resource.uncompressedFileSize)})`}
               </Box>

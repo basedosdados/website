@@ -525,7 +525,7 @@ export default function QuemSomos({ data }) {
                   href="https://cloud.google.com/blog/topics/customers/announcing-winners-of-google-cloud-customer-awards"
                 >
                   {t('googleCloudAwardLink')}
-                  <RedirectIcon alt="hiperlink" fill="#42B0FF"/>
+                  <RedirectIcon width="12px" height="12px" alt="hiperlink" fill="#42B0FF"/>
                 </Link>
               </Box>
 
@@ -567,7 +567,7 @@ export default function QuemSomos({ data }) {
                   href="https://www.tesourotransparente.gov.br/descubra-explore-crie/crie"
                 >
                   {t('treasuryAwardLink')}
-                  <RedirectIcon alt="hiperlink" fill="#42B0FF"/>
+                  <RedirectIcon width="12px" height="12px" alt="hiperlink" fill="#42B0FF"/>
                 </Link>
               </Box>
             </Stack>
@@ -801,9 +801,10 @@ export default function QuemSomos({ data }) {
             <RoundedButton
               paddingX="20px"
               fontSize="15px"
+              alignItems="center"
               onClick={() => window.open("https://info.basedosdados.org/carreiras", "_blank")}
             >
-              {t('joinUsButton')} <RedirectIcon alt="vagas basedosdados" fill="#FFF" width="15px" height="15px" marginLeft="8px"/>
+              {t('joinUsButton')} <RedirectIcon alt="vagas basedosdados" fill="#FFF" width="12px" height="12px" marginLeft="8px"/>
             </RoundedButton>
           </Box>
         </Stack>
