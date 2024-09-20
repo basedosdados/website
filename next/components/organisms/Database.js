@@ -171,7 +171,7 @@ export default function Database({
         >
           <Image
             src={organization?.picture.startsWith("https://") ? organization?.picture : `https://basedosdados.org/uploads/group/${organization?.name}`}
-            alt={organization.name || t('notProvided')}
+            alt={organization?.name || t('notProvided')}
             borderRadius="16px"
             minWidth="222px"
             minHeight="138px"

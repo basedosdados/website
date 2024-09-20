@@ -55,7 +55,8 @@ export default function SearchDatasetPage() {
   const [isLoading, setIsLoading] = useState(true)
 
   async function getDatasets({q, filters, page}) {
-    const res = await getSearchDatasets({q:q, filter: filters, page:page})
+    const { locale } = router
+    const res = await getSearchDatasets({q, filter: filters, page, locale: locale || 'pt'})
     if(res === undefined) return router.push({pathname:"500"})
     if(res?.count === 0) setShowEmptyState(true)
     setPageInfo({page: page, count: res?.count})
