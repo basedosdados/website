@@ -101,6 +101,7 @@ export default function PaymentSystem({ userData, plan, coupon, onSucess, onErro
     },
     rules: {
       ".Input": {
+        borderRadius: "8px",
         border: "2px solid #EEEEEE",
         backgroundColor: "#EEEEEE"
       },
