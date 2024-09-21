@@ -831,7 +831,6 @@ function MiniBlogCard({ slug, frontmatter }) {
             <Link
               display="block"
               paddingTop={"1rem"}
-              // _groupHover={{ textDecoration: "underline" }}
             >
               {title}
             </Link>
@@ -864,12 +863,9 @@ function MiniBlogCard({ slug, frontmatter }) {
 function BlogHeader({ category }) {
   return (
     <Box marginBottom={"3rem"} marginTop={"2.2rem"}>
-      <Text as="span" color="gray" fontFamily={"Roboto"} fontSize={".88rem"}>
+      <Text as="span" color="gray" fontFamily={"Roboto"} fontSize={".88rem"} fontWeight={500}>
         Categorias
       </Text>
-      {/* <Heading as="h1" fontFamily={"Roboto"} color="#2b8c4d" fontSize={"4xl"}> */}
-      {/*   {category === "Todos" ? "blog" : prettyCategory(category)} */}
-      {/* </Heading> */}
       <Box as="nav" marginTop={"0.5rem"}>
         <UnorderedList marginInlineStart={"0"} display={"flex"} gap="2rem">
           {[
