@@ -11,20 +11,25 @@ import ReadMore from "../atoms/ReadMore";
 import { TemporalCoverage } from "../molecules/TemporalCoverageDisplay";
 import { AlertDiscalimerBox } from "../molecules/DisclaimerBox";
 import FourOFour from "../templates/404";
+import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
 export default function InformationRequestPage({ id }) {
+  const { t } = useTranslation('dataset');
+  const router = useRouter();
+  const { locale } = router;
   const [isLoading, setIsLoading] = useState(true)
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState(false)
 
   useEffect(() => {
-    const featchInformationRequest = async () => {
+    const fetchInformationRequest = async () => {
       setIsLoading(true)
-
       try {
-        const response = await fetch(`/api/datasets/getInformationRequest?p=${id}`, { method: "GET" })
+        const url = `/api/datasets/getInformationRequest?id=${id}&locale=${locale}`;
+        const response = await fetch(url, { method: "GET" })
         const result = await response.json()
 
         if (result.success) {
@@ -42,9 +47,8 @@ export default function InformationRequestPage({ id }) {
       }
     }
 
-    featchInformationRequest()
-  },[id])
-
+    fetchInformationRequest()
+  }, [id, locale])
 
   const AddInfoTextBase = ({ title, text, ...props }) => {
     return (
@@ -74,7 +78,7 @@ export default function InformationRequestPage({ id }) {
           fontSize="14px"
           lineHeight="20px"
           color="#464A51"
-        >{text || "Não informado"}</Text>
+        >{text || t('informationRequest.notInformed')}</Text>
       </SkeletonText>
     )
   }
@@ -121,7 +125,7 @@ export default function InformationRequestPage({ id }) {
           textOverflow="ellipsis"
           whiteSpace="nowrap"
         >
-          Número do pedido: {resource?.number}
+          {t('informationRequest.requestNumber', { number: resource?.number })}
         </Text>
       </StackSkeleton>
 
@@ -131,7 +135,7 @@ export default function InformationRequestPage({ id }) {
         marginTop="8px !important"
       >
         <AlertDiscalimerBox>
-          Estes dados não passaram pela metodologia de tratamento da Base dos Dados.
+          {t('informationRequest.disclaimer')}
         </AlertDiscalimerBox>
       </StackSkeleton>
 
@@ -167,7 +171,7 @@ export default function InformationRequestPage({ id }) {
             backgroundColor: resource?.dataUrl ? "#22703E" : "#ACAEB1"
           }}
         >
-          Acessar dados
+          {t('informationRequest.accessData')}
           <RedirectIcon
             width="16px"
             height="16px"
@@ -197,7 +201,7 @@ export default function InformationRequestPage({ id }) {
             backgroundColor: resource?.url ? "#22703E" : "#ACAEB1"
           }}
         >
-          Acessar pedido
+          {t('informationRequest.accessRequest')}
           <RedirectIcon
             width="16px"
             height="16px"
@@ -214,7 +218,7 @@ export default function InformationRequestPage({ id }) {
             lineHeight="20px"
             color="#252A32"
           >
-            Descrição
+            {t('informationRequest.description')}
           </Text>
         </StackSkeleton>
 
@@ -231,7 +235,7 @@ export default function InformationRequestPage({ id }) {
           isLoaded={!isLoading}
         >
           <ReadMore id="readLessRawDescription">
-            {resource?.observations || "Não informado"}
+            {resource?.observations || t('informationRequest.notInformed')}
           </ReadMore>
         </SkeletonText>
       </Stack>
@@ -246,12 +250,12 @@ export default function InformationRequestPage({ id }) {
           lineHeight="20px"
           color="#252A32"
         >
-          Informações adicionais
+          {t('informationRequest.additionalInformation')}
         </Text>
       </StackSkeleton>
 
       <AddInfoTextBase
-        title="Estado"
+        title={t('informationRequest.status')}
         text={resource?.status?.name}
       />
     </Stack>

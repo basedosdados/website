@@ -35,16 +35,36 @@ import {
 import { withPages } from "../../hooks/pages.hook";
 
 export async function getStaticProps(context) {
-  const { locale } = context;
-  const dataset = await getShowDataset(context.params.dataset) || null
+  const { locale, params } = context;
+  
+  let dataset = null;
+  try {
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/datasets/getShowDataset?id=${params.dataset}&locale=${locale}`;
+    const response = await fetch(url, { method: "GET" });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    //console.log("Full API response:", JSON.stringify(result, null, 2));
 
-  return await withPages({
+    if (result.success) {
+      dataset = result.resource;
+    } else {
+      console.error("API error:", result.error);
+    }
+  } catch (error) {
+    console.error("Fetch error:", error.message);
+  }
+
+  return {
     props: {
-      ...(await serverSideTranslations(locale, ['dataset'])),
+      ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu'])),
       dataset,
     },
     revalidate: 30,
-  });
+  };
 }
 
 export async function getStaticPaths(context) {
@@ -59,7 +79,7 @@ export async function getStaticPaths(context) {
 }
 
 export default function DatasetPage ({ dataset }) {
-  const { t } = useTranslation(['dataset']);
+  const { t } = useTranslation('dataset', 'common');
   const router = useRouter()
   const { locale } = router
   const { query } = router
@@ -77,7 +97,7 @@ export default function DatasetPage ({ dataset }) {
   return (
     <MainPageTemplate userTemplate footerTemplate="simple">
       <Head>
-        <title>{dataset.name} – t('dataBasis')</title>
+        <title>{dataset.name} – {t('dataBasis')}</title>
 
         <link
           rel="image_src"
@@ -95,7 +115,7 @@ export default function DatasetPage ({ dataset }) {
         />
         <meta
           property="og:title"
-          content={`${dataset[`name${capitalize(locale)}`] || dataset.name} – t('dataBasis')`}
+          content={`${dataset[`name${capitalize(locale)}`] || dataset.name} – ${t('dataBasis')}`}
           key="ogtitle"
         />
         <meta property="og:description" content={dataset[`description${capitalize(locale)}`] || dataset.description} key="ogdesc" />
