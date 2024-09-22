@@ -45,6 +45,8 @@ import { CardPrice } from "../precos";
 import PaymentSystem from "../../components/organisms/PaymentSystem";
 import ImageCrop from "../../components/molecules/ImgCrop";
 import { cleanString } from "../../utils";
+import { useTranslation } from "react-i18next";
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import {
   LabelTextForm,
@@ -70,7 +72,7 @@ import ErrIcon from "../../public/img/icons/errIcon";
 import stylesPS from "../../styles/paymentSystem.module.css";
 
 export async function getServerSideProps(context) {
-  const { req, res } = context
+  const { req, res, locale } = context
   let user = null
 
   if(req.cookies.userBD) user = JSON.parse(req.cookies.userBD)
@@ -129,6 +131,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
+      ...(await serverSideTranslations(locale, ['user'])),
       getUser,
     }
   }
@@ -136,6 +139,7 @@ export async function getServerSideProps(context) {
 
 // Sections Of User Page
 const ProfileConfiguration = ({ userInfo }) => {
+  const { t } = useTranslation('user');
   const [isLoading, setIsLoading] = useState(true)
   const [isImgLoading, setIsImgLoading] = useState(false)
   const [formData, setFormData] = useState({
@@ -197,22 +201,22 @@ const ProfileConfiguration = ({ userInfo }) => {
     const validationErrors = {}
 
     if (!formData.firstName) {
-      validationErrors.firstName = "Seu nome é um campo obrigatorio."
+      validationErrors.firstName = t('username.requiredField')
     }
     if(/\s/.test(formData.website)) {
-      validationErrors.website = "Não pode haver espaçamento nesse campo."
+      validationErrors.website = t('username.noSpaces')
     }
     if(/\s/.test(formData.github)) {
-      validationErrors.github = "Não pode haver espaçamento nesse campo."
+      validationErrors.github = t('username.noSpaces')
     }
     if(/\s/.test(formData.twitter)) {
-      validationErrors.twitter = "Não pode haver espaçamento nesse campo."
+      validationErrors.twitter = t('username.noSpaces')
     }
     if(/\s/.test(formData.linkedin)) {
-      validationErrors.linkedin = "Não pode haver espaçamento nesse campo."
+      validationErrors.linkedin = t('username.noSpaces')
     }
     if (formData.website) {
-      if(!formData.website.startsWith("http")) validationErrors.website = "Informe uma URL válida."
+      if(!formData.website.startsWith("http")) validationErrors.website = t('username.invalidURL')
     }
 
     setErrors(validationErrors)
@@ -301,14 +305,14 @@ const ProfileConfiguration = ({ userInfo }) => {
 
       <Stack spacing="24px" flex={1}>
         <FormControl isInvalid={!!errors.firstName}>
-          <LabelTextForm text="Nome"/>
+          <LabelTextForm text={t('username.firstName')}/>
           <SkStack isLoaded={!isLoading}>
             <InputForm
               id="firstName"
               name="firstName"
               value={formData.firstName}
               onChange={handleInputChange}
-              placeholder="Insira seu nome"
+              placeholder={t('username.enterFirstName')}
               fontFamily="ubuntu"
               height="40px"
               fontSize="14px"
@@ -323,14 +327,14 @@ const ProfileConfiguration = ({ userInfo }) => {
         </FormControl>
 
         <FormControl>
-          <LabelTextForm text="Sobrenome"/>
+          <LabelTextForm text={t('username.lastName')}/>
           <SkStack isLoaded={!isLoading}>
             <InputForm
               id="lastName"
               name="lastName"
               value={formData.lastName}
               onChange={handleInputChange}
-              placeholder="Insira seu sobrenome"
+              placeholder={t('username.enterLastName')}
               fontFamily="ubuntu"
               height="40px"
               fontSize="14px"
@@ -342,7 +346,7 @@ const ProfileConfiguration = ({ userInfo }) => {
         </FormControl>
 
         <FormControl>
-          <LabelTextForm text="E-mail"/>
+          <LabelTextForm text={t('username.email')}/>
           <SkeletonText
             isLoaded={!isLoading}
             fadeDuration={2}
@@ -374,20 +378,20 @@ const ProfileConfiguration = ({ userInfo }) => {
                 checked={formData.isEmailVisible}
                 onChange={handleCheckboxChange}
               />
-              Tornar o e-mail de acesso à sua conta visível para o público.
+              {t('username.makeEmailPublic')}
             </label>
           </SkeletonText>
         </FormControl>
 
         <FormControl isInvalid={!!errors.website}>
-          <LabelTextForm text="URL"/>
+          <LabelTextForm text={t('username.url')}/>
           <SkStack isLoaded={!isLoading}>
             <InputForm
               id="website"
               name="website"
               value={formData.website}
               onChange={handleInputChange}
-              placeholder="Insira seu endereço URL"
+              placeholder={t('username.enterURL')}
               fontFamily="ubuntu"
               height="40px"
               fontSize="14px"
@@ -402,7 +406,7 @@ const ProfileConfiguration = ({ userInfo }) => {
         </FormControl>
         
         <Stack>
-          <LabelTextForm text="Redes sociais"/>
+          <LabelTextForm text={t('username.socialMedia')}/>
           <FormControl isInvalid={!!errors.github}>
             <HStack spacing="8px" margin="0 0 8px 0 !important">
               <GithubIcon width="24px" height="24px" fill="#D0D0D0"/>
@@ -412,7 +416,7 @@ const ProfileConfiguration = ({ userInfo }) => {
                   name="github"
                   value={formData.github}
                   onChange={handleInputChange}
-                  placeholder="Link para o perfil no GitHub"
+                  placeholder={t('username.githubProfileLink')}
                   fontFamily="ubuntu"
                   height="40px"
                   fontSize="14px"
@@ -435,7 +439,7 @@ const ProfileConfiguration = ({ userInfo }) => {
                   name="twitter"
                   value={formData.twitter}
                   onChange={handleInputChange}
-                  placeholder="Link para o perfil no Twitter"
+                  placeholder={t('username.twitterProfileLink')}
                   fontFamily="ubuntu"
                   height="40px"
                   fontSize="14px"
@@ -458,7 +462,7 @@ const ProfileConfiguration = ({ userInfo }) => {
                   name="linkedin"
                   value={formData.linkedin}
                   onChange={handleInputChange}
-                  placeholder="Link para o perfil no LinkedIn"
+                  placeholder={t('username.linkedinProfileLink')}
                   fontFamily="ubuntu"
                   height="40px"
                   fontSize="14px"
@@ -481,7 +485,7 @@ const ProfileConfiguration = ({ userInfo }) => {
           letterSpacing="0.3px"
           color="#7D7D7D"
         >
-          Ao preencher os campos desta página, você nos dá consentimento para compartilhar essas informações onde quer que o seu perfil de usuário apareça.
+          {t('username.shareInfo')}
         </Text>
 
         <RoundedButton
@@ -494,7 +498,7 @@ const ProfileConfiguration = ({ userInfo }) => {
           {isLoading ?
             <Spinner />
           :
-            "Atualizar perfil"
+            t('username.updateProfile')
           }
         </RoundedButton>
       </Stack>
@@ -508,7 +512,7 @@ const ProfileConfiguration = ({ userInfo }) => {
           width="100%"
           fontSize="18px"
           letterSpacing="0.1px"
-        >Foto de perfil</SectionTitle>
+        >{t('username.profilePicture')}</SectionTitle>
 
         <SkeletonCircle
           position="relative"
@@ -559,7 +563,7 @@ const ProfileConfiguration = ({ userInfo }) => {
                       hasArrow
                       isDisabled={menuAvatar.isOpen}
                       bg="#2A2F38"
-                      label="Editar"
+                      label={t('username.edit')}
                       fontSize="14px"
                       fontWeight="400"
                       letterSpacing="0.5px"
@@ -598,7 +602,7 @@ const ProfileConfiguration = ({ userInfo }) => {
                         color="#252A32"
                         margin="0"
                         _hover={{ color: "#42B0FF" }}
-                      >Atualizar a foto</FormLabel>
+                      >{t('username.updatePicture')}</FormLabel>
                       <Input
                         key={fileInputKey}
                         display="none"
@@ -618,7 +622,7 @@ const ProfileConfiguration = ({ userInfo }) => {
                       color="#252A32"
                       _hover={{ color: "#42B0FF" }}
                       onClick={() => hanlderRemovePicture()}
-                    >Remover foto</Text>
+                    >{t('username.removePicture')}</Text>
                   </PopoverBody>
                 </PopoverContent>
               </Popover>
@@ -630,6 +634,7 @@ const ProfileConfiguration = ({ userInfo }) => {
 }
 
 const Account = ({ userInfo }) => {
+  const { t } = useTranslation('user');
   const emailModal = useDisclosure()
   const usernameModal = useDisclosure()
   const eraseModalAccount = useDisclosure()
@@ -654,8 +659,8 @@ const Account = ({ userInfo }) => {
 
   async function submitUpdate() {
     setErrors({})
-    if(formData.username === "") return setErrors({username: "Nome de usuário inválido."})
-    if(formData.username.includes(" ")) return setErrors({username: "Nome de usuário não pode conter espaços."})
+    if(formData.username === "") return setErrors({username: t('username.invalidUsername')})
+    if(formData.username.includes(" ")) return setErrors({username: t('username.noSpacesInUsername')})
     setIsLoading(true)
     
     const reg = new RegExp("(?<=:).*")
@@ -673,13 +678,13 @@ const Account = ({ userInfo }) => {
     }
 
     if(result?.errors?.length > 0) {
-      setErrors({username: "Nome de usuário inválido ou já existe uma conta com este nome de usuário."})
+      setErrors({username: t('username.usernameAlreadyExists')})
       setIsLoading(false)
     }
   }
 
   async function eraseAccount(string) {
-    if(string = "deletar minha conta") {
+    if(string = t('username.deleteAccount')) {
       setIsLoading(true)
       const reg = new RegExp("(?<=:).*")
       const [ id ] = reg.exec(userInfo.id)
@@ -696,7 +701,7 @@ const Account = ({ userInfo }) => {
     }
   }
 
-  const stringConfirm = confirmationWord === "deletar minha conta"
+  const stringConfirm = confirmationWord === t('username.deleteAccount')
 
   return (
     <Stack spacing="24px">
@@ -726,7 +731,7 @@ const Account = ({ userInfo }) => {
                 lineHeight="16px"
                 letterSpacing="0.2px"
                 marginLeft="8px !important"
-              >Voltar</Text>
+              >{t('username.back')}</Text>
             </Stack>
               
             <ModalCloseButton
@@ -744,7 +749,7 @@ const Account = ({ userInfo }) => {
           <Stack spacing={0} marginBottom="16px">
             <SectionTitle
               lineHeight="40px"
-            >Alterar e-mail</SectionTitle>
+            >{t('username.changeEmail')}</SectionTitle>
             <ModalCloseButton
               fontSize="14px"
               top="34px"
@@ -760,33 +765,32 @@ const Account = ({ userInfo }) => {
 
             <SectionTitle
               lineHeight="40px"
-            >Confirme seu endereço de e-mail</SectionTitle>
+            >{t('username.confirmEmailAddress')}</SectionTitle>
             <ExtraInfoTextForm
               fontSize="16px"
               letterSpacing="0.2px"
-            >Enviamos uma confirmação de e-mail para</ExtraInfoTextForm>
+            >{t('username.emailSentTo')}</ExtraInfoTextForm>
             <TitleTextForm>dadinho@basedosdados.org</TitleTextForm>
             <ExtraInfoTextForm
               fontSize="16px"
               letterSpacing="0.2px"
               lineHeight="24px"
-            >Confira sua caixa de entrada e siga as <br/>
-instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm>
+            >{t('username.checkInboxAndFollowInstructions')}</ExtraInfoTextForm>
           </Stack>
           :
           <Stack spacing="24px">
             <ExtraInfoTextForm fontSize="16px" lineHeight="24px" letterSpacing="0.2px">
-              Insira o seu novo endereço de e-mail. Enviaremos as instruções para você completar a alteração.
+              {t('username.enterNewEmail')}
             </ExtraInfoTextForm>
 
             <FormControl isInvalid={!!errors.email}>
-              <LabelTextForm text="Novo e-mail"/>
+              <LabelTextForm text={t('username.newEmail')}/>
               <InputForm
                 id="email"
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                placeholder="Insira seu e-mail"
+                placeholder={t('username.enterEmail')}
                 fontFamily="ubuntu"
                 height="40px"
                 fontSize="14px"
@@ -805,7 +809,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
                 width="100%"
                 marginBottom="8px"
               >
-                <LabelTextForm text="Senha" margin="0 !important"/>
+                <LabelTextForm text={t('username.password')} margin="0 !important"/>
                 <ButtonSimple
                   position="relative"
                   top="-2px"
@@ -818,7 +822,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
                   justifyContent="end"
                   _hover={{opacity: "0.6"}}
                   onClick={() => window.open("./password-recovery", "_self")}
-                >Esqueceu a senha?
+                >{t('username.forgotPassword')}
                 </ButtonSimple>
               </Box>
 
@@ -828,7 +832,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
-                placeholder="Insira sua senha"
+                placeholder={t('username.enterPassword')}
                 fontFamily="ubuntu"
                 height="40px"
                 fontSize="14px"
@@ -842,14 +846,14 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
                 }}
                 elmRight={showPassword ?
                   <EyeOffIcon
-                    alt="esconder senha"
+                    alt={t('username.hidePassword')}
                     width="20px"
                     height="20px"
                     fill="#D0D0D0"
                   />
                 :
                   <EyeIcon
-                    alt="exibir senhar"
+                    alt={t('username.showPassword')}
                     width="20px"
                     height="20px"
                     fill="#D0D0D0"
@@ -871,7 +875,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
             _hover={{transform: "none", opacity: 0.8}}
             onClick={() => setEmailSent(true)}
           >
-            Enviar e-mail
+            {t('username.sendEmail')}
           </RoundedButton>
         }
       </ModalGeneral>
@@ -883,7 +887,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
         <Stack spacing={0} marginBottom="16px">
           <SectionTitle
             lineHeight="40px"
-          >Alterar nome de usuário</SectionTitle>
+          >{t('username.changeUsername')}</SectionTitle>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
@@ -893,7 +897,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
         </Stack>
 
         <FormControl isInvalid={!!errors.username}>
-          <LabelTextForm text="Novo nome de usuário"/>
+          <LabelTextForm text={t('username.newUsername')}/>
           <InputForm
             id="username"
             name="username"
@@ -921,7 +925,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
           {isLoading ?
             <Spinner />
           :
-            "Atualizar nome de usuário"
+            t('username.updateUsername')
           }
         </RoundedButton>
       </ModalGeneral>
@@ -934,7 +938,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
         <Stack spacing={0} marginBottom="16px">
           <SectionTitle
             lineHeight={isMobileMod() ? "32px" : "40px"}
-          >Tem certeza que deseja deletar sua conta?</SectionTitle>
+          >{t('username.confirmAccountDeletion')}</SectionTitle>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
@@ -949,7 +953,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
 
         <Stack spacing="24px" marginBottom="16px">
           <ExtraInfoTextForm fontSize="16px" lineHeight="24px" letterSpacing="0.2px">
-          Após deletar sua conta, todos os dados serão permanentemente removidos e não poderão ser recuperados. 
+          {t('username.accountDeletionWarning')}
           </ExtraInfoTextForm>
 
           <FormControl isInvalid={!!errors.firstName}>
@@ -961,7 +965,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
               fontWeight="400"
               lineHeight="16px"
               userSelect="none"
-            >Por favor, confirme escrevendo: "deletar minha conta" abaixo.</FormLabel>
+            >{t('username.confirmDeletion')}</FormLabel>
             <InputForm
               value={confirmationWord}
               onChange={(e) => setConfirmationWord(e.target.value)}
@@ -993,7 +997,7 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
               setConfirmationWord("")
             }}
           >
-            Cancelar
+            {t('username.cancel')}
           </RoundedButton>
 
           <RoundedButton
@@ -1009,35 +1013,14 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
             {isLoading ?
               <Spinner />
             :
-              "Deletar"
+              t('username.delete')
             }
           </RoundedButton>
         </Stack>
       </ModalGeneral>
 
-      {/* <Box>
-        <TitleTextForm>E-mail</TitleTextForm>
-        <Text
-          color="#6F6F6F"
-          fontFamily="Ubuntu"
-          fontSize="14px"
-          fontWeight="400"
-          lineHeight="27px"
-          letterSpacing="0.3px"
-        >{userInfo.email}</Text>
-        <Link
-          color="#42B0FF"
-          fontFamily="ubuntu"
-          fontWeight="500"
-          fontSize="16px"
-          lineHeight="30px"
-          letterSpacing="0.2px"
-          onClick={() => emailModal.onOpen()}
-        >Alterar e-mail</Link>
-      </Box> */}
-
       <Box>
-        <TitleTextForm>Nome de usuário</TitleTextForm>
+        <TitleTextForm>{t('username.username')}</TitleTextForm>
         <Text
           color="#6F6F6F"
           fontFamily="Ubuntu"
@@ -1054,12 +1037,12 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
           lineHeight="30px"
           letterSpacing="0.2px"
           onClick={() => usernameModal.onOpen()}
-        >Alterar nome de usuário</Link>
+        >{t('username.changeUsername')}</Link>
       </Box>
 
       <Box>
-        <TitleTextForm>Exportar dados da conta</TitleTextForm>
-        <ExtraInfoTextForm>Saiba como seus dados são armazenados em nossos Termos de Uso e Políticas de Privacidade.{!isMobileMod() && <br/>} Para exportar os dados da sua conta, entre em contato conosco.</ExtraInfoTextForm>
+        <TitleTextForm>{t('username.exportAccountData')}</TitleTextForm>
+        <ExtraInfoTextForm>{t('username.dataStorageInfo')}{!isMobileMod() && <br/>} {t('username.exportDataInstructions')}</ExtraInfoTextForm>
         <Link
           color="#42B0FF"
           fontFamily="ubuntu"
@@ -1069,23 +1052,24 @@ instruções enviadas no e-mail para completar a alteração.</ExtraInfoTextForm
           letterSpacing="0.2px"
           href="/contato"
           target="_self"
-        >Entre em contato</Link>
+        >{t('username.contactUs')}</Link>
       </Box>
 
       <Box>
-        <TitleTextForm color="#D93B3B">Deletar conta</TitleTextForm>
-        <ExtraInfoTextForm marginBottom="8px">Após a exclusão, não será possível recuperar o acesso à sua conta.</ExtraInfoTextForm>
+        <TitleTextForm color="#D93B3B">{t('username.deleteAccount')}</TitleTextForm>
+        <ExtraInfoTextForm marginBottom="8px">{t('username.accountAccessWarning')}</ExtraInfoTextForm>
         <RoundedButton
           width={isMobileMod() ? "100%" :"fit-content"}
           backgroundColor="#FF8484"
           onClick={() => eraseModalAccount.onOpen()}
-        >Deletar minha conta</RoundedButton>
+        >{t('username.deleteMyAccount')}</RoundedButton>
       </Box>
     </Stack>
   )
 }
 
 const NewPassword = ({ userInfo }) => {
+  const { t } = useTranslation('user');
   const newPasswordModal = useDisclosure()
   const [formData, setFormData] = useState({
     password: "",
@@ -1113,7 +1097,7 @@ const NewPassword = ({ userInfo }) => {
     const validationErrors = {}
 
     if(formData.password !== "" && formData.password === formData.newPassword) {
-      validationErrors.newPassword = "A nova senha tem quer ser diferente da atual"
+      validationErrors.newPassword = t('username.newPasswordDifferent')
     }
     if(!/^.{8,}$/.test(formData.newPassword)) {
       regexPassword = {...regexPassword, amount: true}
@@ -1131,27 +1115,27 @@ const NewPassword = ({ userInfo }) => {
       regexPassword = {...regexPassword, special: true}
     }
     if (!formData.confirmPassword) {
-      validationErrors.confirmPassword = "Confirmar a senha é necessário"
+      validationErrors.confirmPassword = t('username.confirmPasswordRequired')
     }
     if(/\s/.test(formData.confirmPassword)) {
-      validationErrors.newPassword = "As senhas inseridas não podem conter espaçamentos."
-      validationErrors.confirmPassword = "As senhas inseridas não podem conter espaçamentos."
+      validationErrors.newPassword = t('username.noSpacesInPassword')
+      validationErrors.confirmPassword = t('username.noSpacesInPassword')
     }
     if(formData.confirmPassword !== formData.newPassword) {
-      validationErrors.confirmPassword = "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente."
+      validationErrors.confirmPassword = t('username.passwordMismatch')
     }
 
     if(Object.keys(regexPassword).length > 0) validationErrors.regexPassword = regexPassword
 
     if(formData.password === "") {
-      validationErrors.password = "Por favor, insira a senha."
+      validationErrors.password = t('username.enterPassword')
     }
 
     if(formData.password !== "") {
       const result = await fetch(`/api/user/getToken?a=${btoa(userInfo.email)}&q=${btoa(formData.password)}&s=${"true"}`, {method: "GET"})
         .then(res => res.json())
       if(result.error) {
-        validationErrors.password = "A senha está incorreta. Por favor, tente novamente."
+        validationErrors.password = t('username.incorrectPassword')
       }
     }
     setErrors(validationErrors)
@@ -1198,12 +1182,12 @@ const NewPassword = ({ userInfo }) => {
           <EmailRecoveryImage/>
           <SectionTitle
             lineHeight="40px"
-          >Sua senha foi alterada com sucesso</SectionTitle>
+          >{t('username.passwordChangedSuccessfully')}</SectionTitle>
           <ExtraInfoTextForm
             fontSize="16px"
             letterSpacing="0.2px"
             lineHeight="24px"
-          >Agora você pode utilizar a nova senha para acessar sua<br/> conta na Base dos Dados.</ExtraInfoTextForm>
+          >{t('username.useNewPassword')}</ExtraInfoTextForm>
         </Stack>
 
         <Stack
@@ -1222,7 +1206,7 @@ const NewPassword = ({ userInfo }) => {
             _hover={{transform: "none", opacity: 0.8}}
             onClick={() => window.open(`/user/${userInfo.username}`, "_self")}
           >
-            Continuar nas configurações
+            {t('username.continueSettings')}
           </RoundedButton>
 
           <RoundedButton
@@ -1231,7 +1215,7 @@ const NewPassword = ({ userInfo }) => {
             _hover={{transform: "none", opacity: 0.8}}
             onClick={() => window.open("/", "_self")}
           >
-            Ir para a página inicial
+            {t('username.goToHomepage')}
           </RoundedButton>
         </Stack>
       </ModalGeneral>
@@ -1244,7 +1228,7 @@ const NewPassword = ({ userInfo }) => {
             width="100%"
             marginBottom="8px"
           >
-            <LabelTextForm width="100%" text="Senha atual" margin="0 !important"/>
+            <LabelTextForm width="100%" text={t('username.currentPassword')} margin="0 !important"/>
             <ButtonSimple
               display={isMobileMod() ? "none" : "flex"}
               position="relative"
@@ -1258,7 +1242,7 @@ const NewPassword = ({ userInfo }) => {
               justifyContent="end"
               _hover={{opacity: "0.6"}}
               onClick={() => window.open("./password-recovery", "_self")}
-            >Esqueceu a senha?
+            >{t('username.forgotPassword')}
             </ButtonSimple>
           </Box>
           <InputForm
@@ -1268,7 +1252,7 @@ const NewPassword = ({ userInfo }) => {
             autoComplete="current-password"
             value={formData.password}
             onChange={(e) => handleInputChange(e, "password")}
-            placeholder="Insira a senha atual"
+            placeholder={t('username.enterCurrentPassword')}
             fontFamily="ubuntu"
             height="40px"
             fontSize="14px"
@@ -1282,14 +1266,14 @@ const NewPassword = ({ userInfo }) => {
             }}
             elmRight={showPassword ?
               <EyeOffIcon
-                alt="esconder senha"
+                alt={t('username.hidePassword')}
                 width="20px"
                 height="20px"
                 fill="#D0D0D0"
               />
             :
               <EyeIcon
-                alt="exibir senhar"
+                alt={t('username.showPassword')}
                 width="20px"
                 height="20px"
                 fill="#D0D0D0"
@@ -1308,12 +1292,12 @@ const NewPassword = ({ userInfo }) => {
             _hover={{opacity: "0.6"}}
             marginTop="8px"
             onClick={() => window.open("./password-recovery", "_self")}
-          >Esqueceu a senha?
+          >{t('username.forgotPassword')}
           </ButtonSimple>
         </FormControl>
 
         <FormControl marginTop="24px" isInvalid={!!errors.newPassword || !!errors.regexPassword}>
-          <LabelTextForm text="Nova senha"/>
+          <LabelTextForm text={t('username.newPassword')}/>
           <InputForm
             type={showNewPassword ? "password" : "text"}
             id="newPassword"
@@ -1321,7 +1305,7 @@ const NewPassword = ({ userInfo }) => {
             autoComplete="new-password"
             value={formData.newPassword}
             onChange={(e) => handleInputChange(e, "newPassword")}
-            placeholder="Crie uma nova senha"
+            placeholder={t('username.createNewPassword')}
             fontFamily="ubuntu"
             height="40px"
             fontSize="14px"
@@ -1335,14 +1319,14 @@ const NewPassword = ({ userInfo }) => {
             }}
             elmRight={showNewPassword ?
               <EyeOffIcon
-                alt="esconder senha"
+                alt={t('username.hidePassword')}
                 width="20px"
                 height="20px"
                 fill="#D0D0D0"
               />
             :
               <EyeIcon
-                alt="exibir senhar"
+                alt={t('username.showPassword')}
                 width="20px"
                 height="20px"
                 fill="#D0D0D0"
@@ -1361,13 +1345,13 @@ const NewPassword = ({ userInfo }) => {
             flexDirection="row"
             gap="4px"
             alignItems="flex-start"
-          ><Exclamation width="14px" height="14px" fill="#D93B3B" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
+          ><Exclamation width="14px" height="14px" fill="#D93B3B" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> {t('username.passwordRequirements')}:</Text>
           <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
-            <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>8 caracteres</ListItem>
-            <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>Uma letra maiúscula</ListItem>
-            <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>Uma letra minúscula</ListItem>
-            <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>Um dígito</ListItem>
-            <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial, dentre ! @ # ? ! % & *</ListItem>
+            <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>{t('username.minCharacters')}</ListItem>
+            <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>{t('username.uppercaseLetter')}</ListItem>
+            <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>{t('username.lowercaseLetter')}</ListItem>
+            <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>{t('username.digit')}</ListItem>
+            <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>{t('username.specialCharacter')}</ListItem>
           </UnorderedList>
           {errors.newPassword &&
             <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
@@ -1377,7 +1361,7 @@ const NewPassword = ({ userInfo }) => {
         </FormControl>
 
         <FormControl marginTop="24px" isInvalid={!!errors.confirmPassword}>
-          <LabelTextForm text="Confirme a nova senha" />
+          <LabelTextForm text={t('username.confirmNewPassword')} />
           <InputForm
             type={showConfirmPassword ? "password" : "text"}
             id="confirmPassword"
@@ -1385,7 +1369,7 @@ const NewPassword = ({ userInfo }) => {
             autoComplete="new-password"
             value={formData.confirmPassword}
             onChange={(e) => handleInputChange(e, "confirmPassword")}
-            placeholder="Insira a senha novamente"
+            placeholder={t('username.enterPasswordAgain')}
             fontFamily="ubuntu"
             height="40px"
             fontSize="14px"
@@ -1399,14 +1383,14 @@ const NewPassword = ({ userInfo }) => {
             }}
             elmRight={showConfirmPassword ?
               <EyeOffIcon
-                alt="esconder senha"
+                alt={t('username.hidePassword')}
                 width="20px"
                 height="20px"
                 fill="#D0D0D0"
               />
             :
               <EyeIcon
-                alt="exibir senhar"
+                alt={t('username.showPassword')}
                 width="20px"
                 height="20px"
                 fill="#D0D0D0"
@@ -1429,7 +1413,7 @@ const NewPassword = ({ userInfo }) => {
           {isLoading ?
             <Spinner />
             :
-            "Atualizar senha"
+            t('username.updatePassword')
           }
         </RoundedButton>
       </form>
@@ -1438,9 +1422,9 @@ const NewPassword = ({ userInfo }) => {
 }
 
 const PlansAndPayment = ({ userData }) => {
+  const { t } = useTranslation('user');
   const router = useRouter()
   const { query } = router
-
   const [plan, setPlan] = useState("")
   const [checkoutInfos, setCheckoutInfos] = useState({})
   const [valueCoupon, setValueCoupon] = useState("")
@@ -1532,27 +1516,27 @@ const PlansAndPayment = ({ userData }) => {
 
   const resources = {
     "BD Gratis" : {
-      title: "BD Grátis",
+      title: t('username.freeBD'),
       buttons: [{
-        text:"Comparar planos",
+        text: t('username.comparePlans'),
         onClick: () => {
           PlansModal.onOpen()
           setToggleAnual(true)
         }}
       ],
       resources : [
-        {name: "Tabelas tratadas"},
-        {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
-        {name: "Acesso em nuvem"},
-        {name: "Acesso via SQL, Python e R"},
-        {name: "Integração com ferramentas BI"},
-        planActive ? "" : {name: "Download direto até 100 MB", tooltip: "Esse limite não se aplica ao acesso via SQL, Python e R."},
+        {name: t('username.processedTables')},
+        {name: t('username.integratedData'), tooltip: t('username.dataIntegrationTooltip')},
+        {name: t('username.cloudAccess')},
+        {name: t('username.sqlPythonRAccess')},
+        {name: t('username.biIntegration')},
+        planActive ? "" : {name: t('username.directDownloadLimit'), tooltip: t('username.downloadLimitTooltip')},
       ]
     },
     "bd_pro" : {
-      title: "BD Pro",
+      title: t('username.bdPro'),
       buttons : [{
-        text:"Cancelar plano",
+        text: t('username.cancelPlan'),
         onClick: () => CancelModalPlan.onOpen(),
         props: {
           borderColor: subscriptionInfo?.canceledAt ? "#ACAEB1" : "#42B0FF",
@@ -1561,15 +1545,15 @@ const PlansAndPayment = ({ userData }) => {
         }
       }],
       resources : [
-        {name: "Dezenas de bases de alta frequência atualizadas"},
-        {name: "Tabela de referência de empresas com informações atualizadas"},
-        {name: "Download direto até 1 GB", tooltip: "Tabelas maiores que 1 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."},
+        {name: t('username.dozensOfHighFrequencyDatabases')},
+        {name: t('username.companyReferenceTable')},
+        {name: t('username.directDownloadLimitPro'), tooltip: t('username.downloadLimitProTooltip')},
       ]
     },
     "bd_pro_empresas" : {
-      title: "BD Empresas",
+      title: t('username.bdEmpresas'),
       buttons : [{
-        text:"Cancelar plano",
+        text: t('username.cancelPlan'),
         onClick: () => CancelModalPlan.onOpen(),
         props: {
           borderColor: subscriptionInfo?.canceledAt ? "#ACAEB1" : "#42B0FF",
@@ -1578,8 +1562,8 @@ const PlansAndPayment = ({ userData }) => {
         }
       }],
       resources : [
-        {name: "Acesso para 10 contas"},
-        {name: "Suporte prioritário via email e Discord"}
+        {name: t('username.accessFor10Accounts')},
+        {name: t('username.prioritySupport')}
       ]}
   }
 
@@ -1708,11 +1692,11 @@ const PlansAndPayment = ({ userData }) => {
 
   function formattedPlanInterval (value, variant = false) {
     if(variant) {
-      if(value === "month") return "mês"
-      if(value === "year") return "ano"
+      if(value === "month") return t('username.month')
+      if(value === "year") return t('username.year')
     } else {
-      if(value === "month") return "(Mensal)"
-      if(value === "year") return "(Anual)"
+      if(value === "month") return t('username.monthly')
+      if(value === "year") return t('username.annually')
     }
   }
 
@@ -1749,13 +1733,13 @@ const PlansAndPayment = ({ userData }) => {
   const CouponDisplay = () => {
     let limitText
 
-    if(couponInfos?.duration === "once") limitText = toggleAnual ? "(válido por 1 ano)" : "(válido por 1 mês)"
-    if(couponInfos?.duration === "repeating") limitText = `(válido por ${couponInfos?.durationInMonths} ${couponInfos?.durationInMonths.length === 1 ? "mês" : "meses"})`
+    if(couponInfos?.duration === "once") limitText = toggleAnual ? t('username.validFor1Year') : t('username.validFor1Month')
+    if(couponInfos?.duration === "repeating") limitText = `${t('username.validFor')} ${couponInfos?.durationInMonths} ${couponInfos?.durationInMonths.length === 1 ? t('username.month') : t('username.months')}`
 
     return (
       <>
         <GridItem>
-          <Text>Cupom {coupon.toUpperCase()} {limitText}</Text>
+          <Text>{t('username.coupon')} {coupon.toUpperCase()} {limitText}</Text>
         </GridItem>
         <GridItem textAlign="end">
           <Text>- {couponInfos?.discountAmount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
@@ -1776,7 +1760,7 @@ const PlansAndPayment = ({ userData }) => {
     return (
       <>
         <GridItem>
-          <Text color="#252A32" fontWeight="500">Total a pagar</Text>
+          <Text color="#252A32" fontWeight="500">{t('username.totalToPay')}</Text>
         </GridItem>
         <GridItem textAlign="end">
           <Text color="#252A32" fontWeight="500">{value}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
@@ -1827,7 +1811,7 @@ const PlansAndPayment = ({ userData }) => {
             fontSize="24px"
             lineHeight="36px"
           >
-            Pagamento
+            {t('username.payment')}
           </Text>
           <ModalCloseButton
             fontSize="14px"
@@ -1883,7 +1867,7 @@ const PlansAndPayment = ({ userData }) => {
                     setValueCoupon("")
                     PlansModal.onOpen()
                   }}
-                >Alterar plano</Text>
+                >{t('username.changePlan')}</Text>
               </Box>
 
               <Box
@@ -1910,7 +1894,9 @@ const PlansAndPayment = ({ userData }) => {
                   fontSize="16px"
                   lineHeight="24px"
                   color="#252A32"
-                >Desconto anual</Text>
+                >
+                  {t('username.annualDiscount')}
+                </Text>
                 <Text
                   as="span"
                   color="#2B8C4D"
@@ -1921,7 +1907,9 @@ const PlansAndPayment = ({ userData }) => {
                   padding="2px 4px"
                   borderRadius="4px"
                   height="32px"
-                >Economize 20%</Text>
+                >
+                  {t('username.save20')}
+                </Text>
               </Box>
             </Stack>
 
@@ -1937,7 +1925,7 @@ const PlansAndPayment = ({ userData }) => {
                 lineHeight="24px"
                 color="#252A32"
               >
-                Cupom de desconto
+                {t('username.discountCoupon')}
               </Text>
 
               <Box
@@ -1953,7 +1941,7 @@ const PlansAndPayment = ({ userData }) => {
                     inputFocus={couponInputFocus}
                     changeInputFocus={setCouponInputFocus}
                     width="100%"
-                    placeholder="Insira o cupom"
+                    placeholder={t('username.enterCoupon')}
                     inputElementStyle={{
                       display: "none",
                     }}
@@ -1969,7 +1957,7 @@ const PlansAndPayment = ({ userData }) => {
                       position="absolute"
                       top="10px"
                       right="12px"
-                      alt="apagar"
+                      alt={t('username.clear')}
                       width="24px"
                       height="24px"
                       fill="#878A8E"
@@ -2003,7 +1991,7 @@ const PlansAndPayment = ({ userData }) => {
                   lineHeight="20px"
                   onClick={() => validateStripeCoupon()}
                 >
-                  Aplicar
+                  {t('username.apply')}
                 </Box>
               </Box>
 
@@ -2024,7 +2012,7 @@ const PlansAndPayment = ({ userData }) => {
                     width="21px"
                     height="21px"
                     fill="#BF3434"
-                  /> Por favor, insira um cupom válido.
+                  /> {t('username.enterValidCoupon')}
                 </Text>
               }
             </Stack>
@@ -2036,7 +2024,9 @@ const PlansAndPayment = ({ userData }) => {
               fontSize="16px"
               lineHeight="24px"
               color="#464A51"
-            >Período de teste - 7 dias grátis</Text>
+            >
+              {t('username.trialPeriod')}
+            </Text>
 
             <Divider borderColor="#DEDFE0" />
 
@@ -2052,7 +2042,7 @@ const PlansAndPayment = ({ userData }) => {
               color="#464A51"
             >
               <GridItem>
-                <Text>Subtotal</Text>
+                <Text>{t('username.subtotal')}</Text>
               </GridItem>
               <GridItem textAlign="end">
                 <Text>{checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
@@ -2072,7 +2062,13 @@ const PlansAndPayment = ({ userData }) => {
                 lineHeight="24px"
                 color="#464A51"
               >
-                A partir do {couponInfos?.duration === "once" && 2} {couponInfos?.duration === "repeating" && couponInfos?.durationInMonths + 1}º {formattedPlanInterval(checkoutInfos?.interval, true)} {!hasSubscribed && "e 7º dia"}, o total a pagar será de {checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}.
+                {t('username.afterCouponExpiration', {
+                  duration: couponInfos?.duration === "once" ? 2 : couponInfos?.durationInMonths + 1,
+                  interval: formattedPlanInterval(checkoutInfos?.interval, true),
+                  trialDay: !hasSubscribed && t('username.andTrialDay'),
+                  amount: checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 }),
+                  interval2: formattedPlanInterval(checkoutInfos?.interval, true)
+                })}
               </Text>
             }
           </Stack>
@@ -2085,7 +2081,7 @@ const PlansAndPayment = ({ userData }) => {
               lineHeight="24px"
               color="#252A32"
             >
-              Detalhes do pagamento
+              {t('username.paymentDetails')}
             </Text>
             <PaymentSystem
               userData={userData}
@@ -2136,7 +2132,7 @@ const PlansAndPayment = ({ userData }) => {
             lineHeight="40px"
             color="#252A32"
           >
-            Parabéns!
+            {t('username.congratulations')}
           </Text>
           <Text
             fontFamily="Ubuntu"
@@ -2147,7 +2143,7 @@ const PlansAndPayment = ({ userData }) => {
             letterSpacing="0.2px"
             color="#7D7D7D"
           >
-            Seu pagamento foi efetuado com sucesso e seu plano foi atualizado.
+            {t('username.paymentSuccessful')}
           </Text>
         </Stack>
 
@@ -2169,7 +2165,7 @@ const PlansAndPayment = ({ userData }) => {
             {isLoading ?
               <Spinner/>
               :
-              "Continuar nas configurações"
+              t('username.continueSettings')
             }
           </RoundedButton>
 
@@ -2182,7 +2178,7 @@ const PlansAndPayment = ({ userData }) => {
             {isLoadingH ?
               <Spinner/>
               :
-              "Ir para a página inicial"
+              t('username.goToHomepage')
             }
           </RoundedButton>
         </Stack>
@@ -2226,7 +2222,7 @@ const PlansAndPayment = ({ userData }) => {
             lineHeight="40px"
             color="#252A32"
           >
-            O pagamento falhou
+            {t('username.paymentFailed')}
           </Text>
           <Text
             fontFamily="Ubuntu"
@@ -2237,9 +2233,7 @@ const PlansAndPayment = ({ userData }) => {
             letterSpacing="0.2px"
             color="#7D7D7D"
           >
-            Houve um problema ao processar seu pagamento.
-            Por favor, verifique se as informações estão corretas ou tente novamente mais tarde.
-            Se esta mensagem continuar a ser exibida,
+            {t('username.paymentError')}
             <Link color="#42B0FF"
               fontFamily="ubuntu"
               fontWeight="600"
@@ -2249,7 +2243,7 @@ const PlansAndPayment = ({ userData }) => {
               href="/contato"
               target="_self"
               marginLeft="2px"
-              >entre em contato</Link>
+              >{t('username.contactUs')}</Link>
             .
           </Text>
         </Stack>
@@ -2265,7 +2259,7 @@ const PlansAndPayment = ({ userData }) => {
             _hover={{transform: "none", opacity: 0.8}}
             onClick={() => ErroPaymentModal.onClose()}
           >
-            Entendi
+            {t('username.understood')}
           </RoundedButton>
         </Stack>
       </ModalGeneral>
@@ -2297,7 +2291,7 @@ const PlansAndPayment = ({ userData }) => {
             lineHeight="36px"
             paddingLeft="10px"
           >
-            Compare os planos
+            {t('username.comparePlans')}
           </Text>
           <ModalCloseButton
             fontSize="14px"
@@ -2339,7 +2333,7 @@ const PlansAndPayment = ({ userData }) => {
               textAlign="center"
               color="#252A32"
             >
-              Desconto anual
+              {t('username.annualDiscount')}
               <Text
                 as="span"
                 color="#2B8C4D"
@@ -2349,7 +2343,9 @@ const PlansAndPayment = ({ userData }) => {
                 padding="2px 4px"
                 borderRadius="4px"
                 height="32px"
-              >Economize 20%</Text>
+              >
+                {t('username.save20')}
+              </Text>
             </Text>
           </Box>
 
@@ -2365,38 +2361,38 @@ const PlansAndPayment = ({ userData }) => {
             spacing={0}
           >
             <CardPrice
-              title="BD Grátis"
+              title={t('username.freeBD')}
               subTitle={<>Para você descobrir o potencial da plataforma de dados</>}
               price={"0"}
-              textResource="Recursos:"
+              textResource={t('username.resources')}
               resources={[
-                {name: "Tabelas tratadas"},
-                {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
-                {name: "Acesso em nuvem"},
-                {name: "Acesso via SQL, Python e R"},
-                {name: "Integração com ferramentas BI"},
-                {name: "Download direto até 100 MB", tooltip: "Esse limite não se aplica ao acesso via SQL, Python e R."},
+                {name: t('username.processedTables')},
+                {name: t('username.integratedData'), tooltip: t('username.dataIntegrationTooltip')},
+                {name: t('username.cloudAccess')},
+                {name: t('username.sqlPythonRAccess')},
+                {name: t('username.biIntegration')},
+                {name: t('username.directDownloadLimit'), tooltip: t('username.downloadLimitTooltip')},
               ]}
               button={{
-                text: "Explorar recursos",
+                text: t('username.exploreFeatures'),
                 href: "/dataset",
                 noHasModal: true,
               }}
             />
 
             <CardPrice
-              title="BD Pro"
+              title={t('username.bdPro')}
               subTitle={<>Para você ter acesso aos<br/> dados mais atualizados</>}
               price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 444}
               anualPlan={toggleAnual}
-              textResource="Todos os recursos da BD Grátis, mais:"
+              textResource={t('username.allFreeBDResources')}
               resources={[
-                {name: "Dezenas de bases de alta frequência atualizadas"},
-                {name: "Tabela de referência de empresas com informações atualizadas"},
-                {name: "Download direto até 1GB (80% das tabelas da plataforma)", tooltip: "Tabelas maiores que 1 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."}
+                {name: t('username.dozensOfHighFrequencyDatabases')},
+                {name: t('username.companyReferenceTable')},
+                {name: t('username.directDownloadLimitPro'), tooltip: t('username.downloadLimitProTooltip')}
               ]}
               button={{
-                text: `${subscriptionInfo?.stripeSubscription === "bd_pro" ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis"}`,
+                text: `${subscriptionInfo?.stripeSubscription === "bd_pro" ? t('username.currentPlan') : hasSubscribed ? t('username.subscribe') : t('username.startFreeTrial')}`,
                 onClick: subscriptionInfo?.stripeSubscription === "bd_pro" ? () => {} : () => {
                   setPlan(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id)
                   PlansModal.onClose()
@@ -2407,17 +2403,17 @@ const PlansAndPayment = ({ userData }) => {
             />
 
             <CardPrice
-              title="BD Empresas"
+              title={t('username.bdEmpresas')}
               subTitle={<>Para sua empresa ganhar tempo<br/> e qualidade em decisões</>}
               price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3360}
               anualPlan={toggleAnual}
-              textResource="Todos os recursos da BD Pro, mais:"
+              textResource={t('username.allBDProResources')}
               resources={[
-                {name: "Acesso para 10 contas"},
-                {name: "Suporte prioritário via email e Discord"}
+                {name: t('username.accessFor10Accounts')},
+                {name: t('username.prioritySupport')}
               ]}
               button={{
-                text: `${subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis"}`,
+                text: `${subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? t('username.currentPlan') : hasSubscribed ? t('username.subscribe') : t('username.startFreeTrial')}`,
                 onClick: subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? () => {} : () => {
                   setPlan(plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id)
                   PlansModal.onClose()
@@ -2442,7 +2438,7 @@ const PlansAndPayment = ({ userData }) => {
           height={isMobileMod() ? "100%" : "fit-content"}
         >
           <SectionTitle lineHeight={isMobileMod() ? "32px" : "40px"}>
-            Alteração de planos
+            {t('username.planChange')}
           </SectionTitle>
           <ModalCloseButton
             fontSize="14px"
@@ -2454,9 +2450,7 @@ const PlansAndPayment = ({ userData }) => {
 
         <Stack spacing="24px" marginBottom="16px">
           <ExtraInfoTextForm fontSize="16px" lineHeight="24px" letterSpacing="0.2px" color="#464A51">
-            Para realizar o upgrade ou downgrade, por favor,
-            entre em contato com a nossa equipe.
-            Estamos prontos para ajudar você a fazer a transição para o novo plano o mais rápido possível!
+            {t('username.changePlanInstructions')}
           </ExtraInfoTextForm>
         </Stack>
 
@@ -2468,14 +2462,14 @@ const PlansAndPayment = ({ userData }) => {
         >
           <RoundedButton
             borderRadius="30px"
-            width={isMobileMod() ? "100%" : ""}
+            width={isMobileMod() ? "100%" : "fit-content"}
             _hover={{transform: "none", opacity: 0.8}}
             onClick={() => {
               AlertChangePlanModal.onClose()
               window.open("/contato", "_self")
             }}
           >
-            Entrar em contato
+            {t('username.contactUs')}
           </RoundedButton>
         </Stack>
       </ModalGeneral>
@@ -2492,7 +2486,7 @@ const PlansAndPayment = ({ userData }) => {
           height={isMobileMod() ? "100%" : "fit-content"}
         >
           <SectionTitle lineHeight={isMobileMod() ? "32px" : "40px"}>
-            Tem certeza que deseja cancelar seu plano?
+            {t('username.confirmPlanCancellation')}
           </SectionTitle>
           <ModalCloseButton
             fontSize="14px"
@@ -2519,7 +2513,7 @@ const PlansAndPayment = ({ userData }) => {
             _hover={{transform: "none", opacity: 0.8}}
             onClick={() => CancelModalPlan.onClose()}
           >
-            Voltar
+            {t('username.back')}
           </RoundedButton>
 
           <RoundedButton
@@ -2532,7 +2526,7 @@ const PlansAndPayment = ({ userData }) => {
             {isLoadingCanSub ?
               <Spinner />
             :
-              "Cancelar plano"
+              t('username.cancelPlan')
             }
           </RoundedButton>
         </Stack>
@@ -2562,7 +2556,7 @@ const PlansAndPayment = ({ userData }) => {
               fontWeight="500"
               letterSpacing="0.1px"
             >
-              {planActive ? planCanceled ? "Cancelado" : "Ativo" : "Ativo"}
+              {planActive ? planCanceled ? t('username.canceled') : t('username.active') : t('username.active')}
             </Badge>
 
             <Box
@@ -2598,7 +2592,7 @@ const PlansAndPayment = ({ userData }) => {
                 lineHeight="22px"
                 color="#252A32"
               >
-                {subscriptionInfo?.canceledAt ? "Acesso ao plano disponível até:" : "Próxima data de renovação automática: "} <Text
+                {subscriptionInfo?.canceledAt ? t('username.planAccessUntil') : t('username.nextAutoRenewal')}: <Text
                   as="span"
                   fontWeight="500"
                 >
@@ -2641,7 +2635,7 @@ const PlansAndPayment = ({ userData }) => {
               lineHeight="16px"
               letterSpacing="0.2px"
               marginBottom="8px"
-            >Inclui</Text>
+            >{t('username.includes')}</Text>
             {defaultResource.resources.map((elm, index) => {
               if(elm === "") return
               return <IncludesFeature elm={elm} index={index} key={index}/>
@@ -2673,7 +2667,7 @@ const PlansAndPayment = ({ userData }) => {
                 lineHeight="16px"
                 letterSpacing="0.2px"
                 marginBottom="8px"
-              >Não inclui</Text>}
+              >{t('username.doesNotInclude')}</Text>}
 
               {!planActive && 
                 <>
@@ -2705,7 +2699,7 @@ const PlansAndPayment = ({ userData }) => {
                   setToggleAnual(true)
                 }}
               >
-                Veja tudo e compare os planos
+                {t('username.viewAllAndComparePlans')}
               </ButtonSimple>
             }
           </Stack>
@@ -2724,7 +2718,7 @@ const Accesses = ({ userInfo }) => {
           top="-10px"
           placement="top"
           bg="#2A2F38"
-          label="Disponível apenas no plano BD Empresas"
+          label={t('username.onlyAvailableInBDEnterprises')}
           fontSize="14px"
           fontWeight="400"
           fontFamily="Lato"
@@ -2741,7 +2735,7 @@ const Accesses = ({ userInfo }) => {
               _hover={{transform: "none"}}
               cursor="default"
               backgroundColor="#C4C4C4"
-            >Adicionar usuário</RoundedButton>
+            >{t('username.addUser')}</RoundedButton>
           </Box>
         </Tooltip>
       </Stack>
@@ -2757,7 +2751,7 @@ const Accesses = ({ userInfo }) => {
             fontWeight="400"
             lineHeight="16px"
             letterSpacing="0.2px"
-          >Usuário</Text>
+          >{t('username.user')}</Text>
         </GridItem>
         <GridItem>
           <Text
@@ -2770,7 +2764,7 @@ const Accesses = ({ userInfo }) => {
             lineHeight="16px"
             letterSpacing="0.2px"
             width="100%"
-          >Acesso</Text>
+          >{t('username.access')}</Text>
         </GridItem>
 
         <GridItem
@@ -2841,7 +2835,7 @@ const Accesses = ({ userInfo }) => {
             lineHeight="27px"
             letterSpacing="0.3px"
           >
-            Administrador
+            {t('username.administrator')}
           </Text>
         </GridItem>
       </Grid>
@@ -2851,6 +2845,7 @@ const Accesses = ({ userInfo }) => {
 // Sections Of User Page
 
 export default function UserPage({ getUser }) {
+  const { t } = useTranslation('user')
   const router = useRouter()
   const { query } = router
   const [userInfo, setUserInfo] = useState({})
@@ -2861,10 +2856,10 @@ export default function UserPage({ getUser }) {
   }, [getUser])
 
   const choices = [
-    {bar: "Perfil público", title: "Perfil público", value: "profile", index: 0},
-    {bar: "Conta", title: "Conta", value: "account", index: 1},
-    {bar: "Senha", title: "Alterar senha", value: "new_password", index: 2},
-    {bar: "Planos e pagamento", title: "Planos e pagamento", value: "plans_and_payment", index: 3},
+    {bar: t('username.publicProfile'), title: t('username.publicProfile'), value: "profile", index: 0},
+    {bar: t('username.account'), title: t('username.account'), value: "account", index: 1},
+    {bar: t('username.changePassword'), title: t('username.changePassword'), value: "new_password", index: 2},
+    {bar: t('username.plansAndPayment'), title: t('username.plansAndPayment'), value: "plans_and_payment", index: 3},
   ]
   // {bar: "Acessos", title: "Gerenciar acessos", value: "accesses", index: 4},
 
@@ -2893,7 +2888,7 @@ export default function UserPage({ getUser }) {
         spacing={0}
         gap="40px"
       >
-        <BigTitle display={isMobileMod() ? "none" : "flex"}>Configurações</BigTitle>
+        <BigTitle display={isMobileMod() ? "none" : "flex"}>{t('username.settings')}</BigTitle>
 
         <Stack
           flexDirection="row"
