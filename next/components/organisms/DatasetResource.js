@@ -94,10 +94,10 @@ export default function DatasetResource({
     value,
     hasDivider = true
   }) {
-    if(choices.length === 0) return null
-
     const [isOverflow, setIsOverflow] = useState({})
     const textRefs = useRef({})
+
+    if(choices.length === 0) return null
 
     useEffect(() => {
       choices.forEach((elm, i) => {
@@ -239,6 +239,8 @@ export default function DatasetResource({
         <MenuList
           minWidth={widthScreen}
           maxWidth={widthScreen}
+          maxHeight="420px"
+          overflowY="auto"
           borderWidth={0}
           padding={0}
           zIndex={100}

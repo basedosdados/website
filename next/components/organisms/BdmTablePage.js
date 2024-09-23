@@ -246,10 +246,10 @@ export default function BdmTablePage({ id }) {
           fontSize="24px"
           lineHeight="36px"
           color="#252A32"
-          width="fit-content"
+          width={{base: "100%", lg:"fit-content"}}
           overflow="hidden"
           textOverflow="ellipsis"
-          whiteSpace="nowrap"
+          whiteSpace={{base: "normal", lg:"nowrap"}}
         >
           {resource?.name}
         </Text>
