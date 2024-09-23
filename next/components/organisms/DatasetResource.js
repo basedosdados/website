@@ -248,7 +248,7 @@ export default function DatasetResource({
         >
           {tables.length > 0 &&
             <MenuOptionGroup
-              title="Tabela tratada"
+              title="Tabelas tratadas"
               fontFamily="Roboto"
               fontWeight="400"
               fontSize="16px"
@@ -287,7 +287,7 @@ export default function DatasetResource({
             <>
               <MenuDivider margin="0" borderWidth="2px" borderColor="#DEDFE0"/>
               <MenuOptionGroup
-                title="Fonte original"
+                title="Fontes originais"
                 fontFamily="Roboto"
                 fontWeight="400"
                 fontSize="16px"
