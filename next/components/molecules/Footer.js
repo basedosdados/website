@@ -110,7 +110,7 @@ export default function Footer({ template, ocult = false }) {
           gridGap={{base: "8px", lg: "40px"}}
           padding={{base: "24px", lg: "0"}}
         >
-          <TextFooterSimple textAlign="center">
+          <TextFooterSimple>
             {t('footer.copyright', { year: new Date().getFullYear() })}
           </TextFooterSimple>
           <TextFooterSimple as="a" href="/termos-e-privacidade?section=terms" _hover={{ color: "#252A32" }}>

@@ -715,7 +715,7 @@ export default function QuemSomos({ data }) {
           {t('teamTitle')}
         </Display>
 
-        {data.length > 1 ?
+        {data.length > 0 ?
           <Stack
             position="relative"
             gridGap="96px"

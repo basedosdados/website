@@ -122,6 +122,7 @@ export default function ObservationLevel({ resource }) {
                 borderColor="#DEDFE0"
                 textTransform="none"
                 letterSpacing="inherit"
+                whiteSpace="break-spaces"
               >
                 {elm[1]}
               </Td>
