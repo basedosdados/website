@@ -10,6 +10,7 @@ import {
 import { useState, useEffect } from "react";
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import { capitalize } from "lodash";
 
 import ReadMore from "../atoms/ReadMore";
 import ObservationLevel from "../atoms/ObservationLevelTable";
@@ -55,7 +56,7 @@ export default function RawDataSourcesPage({ id }) {
   }, [id, locale])
 
   const ObjectValues = (value) => {
-    if(value === undefined || Object.keys(value).length === 0) return t('notProvided')
+    if(value === undefined || Object.keys(value).length === 0) return t('rawDataSource.notProvided')
 
     const array = []
 
@@ -63,7 +64,7 @@ export default function RawDataSourcesPage({ id }) {
       array.push(elm.name)
     })
 
-    if(array.length === 0) return t('notProvided')
+    if(array.length === 0) return t('rawDataSource.notProvided')
     return array.join(", ").toString()
   }
 
@@ -76,19 +77,19 @@ export default function RawDataSourcesPage({ id }) {
         return t('rawDataSource.no')
         break;
       default:
-        return t('notProvided')
+        return t('rawDataSource.notProvided')
         break;
     }
   }
 
   const UpdateFrequency = () => {
     const value = resource?.updates?.[0]
-    if(value === undefined || Object.keys(value).length === 0) return t('notProvided')
+    if(value === undefined || Object.keys(value).length === 0) return t('rawDataSource.notProvided')
 
     if(value?.frequency >= 0 && value?.entity?.name) return `${value.frequency} ${value.entity.name}`
     if(value?.entity?.name) return `${value.entity.name}`
 
-    return t('notProvided')
+    return t('rawDataSource.notProvided')
   }
 
   const TooltipText = ({ text, info, ...props }) => {
@@ -180,7 +181,7 @@ export default function RawDataSourcesPage({ id }) {
           fontSize="14px"
           lineHeight="20px"
           color="#464A51"
-        >{text || t('notProvided')}</Text>
+        >{text || t('rawDataSource.notProvided')}</Text>
       </SkeletonText>
     )
   }
@@ -288,7 +289,7 @@ export default function RawDataSourcesPage({ id }) {
           isLoaded={!isLoading}
         >
           <ReadMore id="readLessRawDescription">
-            {resource?.description || t('notProvided')}
+            {resource?.[`description${capitalize(locale)}`] || resource?.description || t('rawDataSource.notProvided')}
           </ReadMore>
         </SkeletonText>
       </Stack>
@@ -359,7 +360,7 @@ export default function RawDataSourcesPage({ id }) {
               lineHeight="20px"
               color="#464A51"
             >
-              {t('notProvided')}
+              {t('rawDataSource.notProvided')}
             </Text>
           }
         </Skeleton>       

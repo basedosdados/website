@@ -165,7 +165,7 @@ export default function TablePage({ id }) {
             lineHeight="20px"
             color="#464A51"
           >
-            {t('table.notInformed')}
+            {t('table.notProvided')}
           </Text>
         }
         {resource?.email && <EmailIcon {...keyIcons({email : resource.email})}/>}
@@ -286,7 +286,7 @@ export default function TablePage({ id }) {
         isLoaded={!isLoading}
       >
         <ReadMore id="readLessTable">
-          {resource?.[`description${capitalize(locale)}`] || resource?.description || t('table.notInformed')}
+          {resource?.[`description${capitalize(locale)}`] || resource?.description || t('table.notProvided')}
         </ReadMore>
       </SkeletonText>
 
@@ -367,7 +367,7 @@ export default function TablePage({ id }) {
             {resource?.updates?.[0]?.latest ?
               `${formatDate(resource.updates[0].latest)}:`
               :
-              t('table.notInformed')
+              t('table.notProvided')
             }: {t('table.lastUpdateBD')}
             {resource?.updates?.[0]?.frequency &&
               <Text
@@ -419,7 +419,7 @@ export default function TablePage({ id }) {
             {resource?.rawDataSource?.[0]?.updates?.[0]?.latest ?
               `${formatDate(resource.rawDataSource[0].updates[0].latest)}:`
               :
-              t('table.notInformed')
+              t('table.notProvided')
             }: {t('table.lastUpdateRawDataSource')}
             {resource?.rawDataSource?.[0]?.updates?.[0]?.frequency ?
               <Text
@@ -472,7 +472,7 @@ export default function TablePage({ id }) {
             {resource?.rawDataSource?.[0]?.polls?.[0]?.latest ?
               `${formatDate(resource.rawDataSource[0].polls[0].latest)}:`
               :
-              t('table.notInformed')
+              t('table.notProvided')
             }: {t('table.lastCheckRawDataSource')}
           </Text>
         </SkeletonText>
@@ -519,7 +519,7 @@ export default function TablePage({ id }) {
             }}
           >
             {!resource?.cloudTables ?
-              t('table.notInformed')
+              t('table.notProvided')
               :
               resource?.cloudTables?.[0]?.gcpProjectId+"."+resource?.cloudTables?.[0]?.gcpDatasetId+"."+resource?.cloudTables?.[0]?.gcpTableId
             }
@@ -552,7 +552,7 @@ export default function TablePage({ id }) {
             lineHeight="20px"
             color="#464A51"
           >
-            {resource?.partitions ? resource.partitions : t('table.notInformed')}
+            {resource?.partitions ? resource.partitions : t('table.notProvided')}
           </Text>
         </StackSkeleton>
       </Stack>
@@ -583,7 +583,7 @@ export default function TablePage({ id }) {
               lineHeight="20px"
               color="#464A51"
             >
-              {t('table.notInformed')}
+              {t('table.notProvided')}
             </Text>
           }
         </Skeleton>       
@@ -634,7 +634,7 @@ export default function TablePage({ id }) {
                 />
               </Text>
             :
-              t('table.notInformed')
+              t('table.notProvided')
             }
           </Text>  
         </StackSkeleton>
@@ -688,7 +688,7 @@ export default function TablePage({ id }) {
                 )
               }) 
               :
-                t('table.notInformed')
+                t('table.notProvided')
             }
           </Text>
         </StackSkeleton> 
@@ -728,7 +728,7 @@ export default function TablePage({ id }) {
           color="#252A32"
         >{t('table.publishedBy')}</Text>
         <PublishedOrDataCleanedBy
-          resource={resource?.publishedByInfo || t('table.notInformed')}
+          resource={resource?.publishedByInfo || t('table.notProvided')}
         />
       </SkeletonText>
 
@@ -752,7 +752,7 @@ export default function TablePage({ id }) {
           color="#252A32"
         >{t('table.dataCleanedBy')}</Text>
         <PublishedOrDataCleanedBy
-          resource={resource?.dataCleanedByInfo || t('table.notInformed')}
+          resource={resource?.dataCleanedByInfo || t('table.notProvided')}
         />
       </SkeletonText>
 
@@ -781,7 +781,7 @@ export default function TablePage({ id }) {
           fontSize="14px"
           lineHeight="20px"
           color="#464A51"
-        >{resource?.version || t('table.notInformed')}</Text>
+        >{resource?.version || t('table.notProvided')}</Text>
       </SkeletonText>
     </Stack>
   )

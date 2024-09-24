@@ -20,6 +20,7 @@ async function getInformationRequest(id, locale = 'pt') {
                 url
                 dataUrl
                 observations
+                observations${capitalize(locale)}
                 updates {
                   edges {
                     node {

@@ -26,7 +26,7 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import { useRouter } from "next/router"
 import cookies from "js-cookie";
 import MenuDropdown from "./MenuDropdown";
-import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook"
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
@@ -44,8 +44,14 @@ import RedirectIcon from "../../public/img/icons/redirectIcon";
 import SettingsIcon from "../../public/img/icons/settingsIcon";
 import SignOutIcon from "../../public/img/icons/signOutIcon";
 
+// Create a custom hook that uses isMobileMod
+function useIsMobileMod() {
+  return useCheckMobile();
+}
+
 function MenuDrawer({ userData, isOpen, onClose, links }) {
   const { t } = useTranslation('menu');
+  const isMobile = useIsMobileMod(); // Use the custom hook here
 
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
@@ -137,10 +143,10 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
           })}
         </VStack>
 
-        {userData ?
+        {userData ? (
           <></>
-          :
-          <Stack display={isMobileMod() ? "flex" : "none"} marginTop="auto" gap="16px">
+        ) : (
+          <Stack display={isMobile ? "flex" : "none"} marginTop="auto" gap="16px">
             <Box
               as="a"
               href="/user/login"
@@ -192,7 +198,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
               {t('register', { ns: 'menu' })}
             </Box>
           </Stack>
-        }
+        )}
       </DrawerContent>
     </Drawer>
   );
@@ -345,6 +351,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
   const timerRef = useRef()
   const [isOpenMenu, setIsOpenMenu] = useState(false)
   const { t } = useTranslation('menu');
+  const isMobile = useIsMobileMod(); // Use the custom hook here
 
   const btnMouseEnterEvent = () => {
     setIsOpenMenu(true)
@@ -363,7 +370,7 @@ function MenuUser ({ userData, onOpen, onClose }) {
     setIsOpenMenu(false)
   }
 
-  if(useCheckMobile()) {
+  if(isMobile) {
     return (
       <Box
         cursor="pointer"
@@ -523,6 +530,7 @@ function SearchInputUser ({ user }) {
   const [showInput, setShowInput] = useState(false)
   const [inputFocus, setInputFocus] = useState(false)
   const { t } = useTranslation('menu');
+  const isMobile = useIsMobileMod(); // Use the custom hook here
 
   function openSearchLink() {
     if(search.trim() === "") return
@@ -548,7 +556,7 @@ function SearchInputUser ({ user }) {
     }
   }, [showInput])
 
-  if (isMobileMod()) return (
+  if (isMobile) return (
     <Stack spacing={0} width="100%" marginRight={user ? "60px !important" : "0"}>
       <Stack
         display={showInput ? "flex" :"none"}
@@ -626,6 +634,8 @@ function SearchInputUser ({ user }) {
 }
 
 function DesktopLinks({ userData, links, position = false, path, userTemplate = false }) {
+  const isMobile = useIsMobileMod(); // Use the custom hook here
+
   function LinkMenuDropDown ({ url, text, icon }) {
     const [flag, setFlag] = useBoolean()
 
@@ -746,7 +756,7 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
         })}
       </HStack>
 
-      {userTemplate && !isMobileMod() &&
+      {userTemplate && !isMobile &&
         <SearchInputUser
           user={userData !== null}
         />
@@ -839,7 +849,8 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   const { t } = useTranslation('menu');
   const router = useRouter()
   const { route } = router
-  const userBD = useMemo(() => cookies.get("userBD") || null, [cookies])
+  const [userBD, setUserBD] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   const menuDisclosure = useDisclosure()
   const menuUserMobile = useDisclosure()
@@ -849,6 +860,13 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
 
   const [lastScrollY, setLastScrollY] = useState(0)
   const [menuVisible, setMenuVisible] = useState(true)
+  const isMobile = useIsMobileMod(); // Use the custom hook here
+
+  useEffect(() => {
+    const cookieUserBD = cookies.get("userBD")
+    setUserBD(cookieUserBD || null)
+    setIsLoading(false)
+  }, [])
 
   const handleScroll = () => {
     const currentScrollY = window.scrollY
@@ -866,7 +884,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [lastScrollY])
+  }, [lastScrollY, route])
 
   function maxWidthDataset() {
     if (route === "/dataset" || route === "/dataset/[dataset]") return "1440px"
@@ -874,18 +892,23 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   }
 
   useEffect(() => {
-    let userInfo = userBD
-    if(userInfo !== null && userInfo !== "undefined") {
-      const res = JSON.parse(userInfo)
-      setUserData({
-        email: res.email,
-        username: res.username,
-        picture: res.picture || "",
-      })
+    if(isLoading) return
+    if(userBD !== null && userBD !== "undefined") {
+      try {
+        const res = JSON.parse(userBD)
+        setUserData({
+          email: res.email,
+          username: res.username,
+          picture: res.picture || "",
+        })
+      } catch (error) {
+        console.error("Error parsing user data:", error)
+        setUserData(null)
+      }
     } else {
       setUserData(null)
     }
-  }, [userBD])
+  }, [userBD, isLoading])
 
   const links = {
     [t('data')]: "/dataset",
@@ -912,7 +935,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   }
 
   useEffect(() => {
-    document.addEventListener("scroll", () => {
+    const handleScroll = () => {
       if (window.scrollY >= 225) setIsScrollDown(true)
       if (window.scrollY <= 225) setIsScrollDown(false)
 
@@ -921,8 +944,17 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       else
         divRef.current.style.boxShadow =
           "0px 1px 8px 1px rgba(64, 60, 67, 0.16)";
-    });
-  }, [divRef.current])
+    };
+
+    document.addEventListener("scroll", handleScroll);
+    return () => {
+      document.removeEventListener("scroll", handleScroll);
+    };
+  }, [])
+
+  if (isLoading) {
+    return null; // or a loading spinner
+  }
 
   return (
     <>
@@ -939,7 +971,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         width="100%"
         left="0px"
         backgroundColor="#FFFFFF"
-        padding={isMobileMod() ? "15px 20px" : "15px 24px"}
+        padding={isMobile ? "15px 20px" : "15px 24px"}
         zIndex="99"
         transition="0.5s"
         as="nav"
@@ -1004,13 +1036,13 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
             />
           }
 
-          {userTemplate && isMobileMod() &&
+          {userTemplate && isMobile &&
             <SearchInputUser
               user={userData !== null}
             />
           }
 
-          {useCheckMobile() && userData &&
+          {isMobile && userData &&
             <MenuUser
               userData={userData}
               onOpen={menuUserMobile.onOpen}

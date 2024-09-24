@@ -59,7 +59,7 @@
         "and": "and"
     },
     "table": {
-        "notInformed": "Not informed",
+        "notProvided": "Not provided",
         "temporalCoverage": "Temporal coverage",
         "dataAccess": "Data access",
         "dataUpdateFrequency": "Data update frequency",
@@ -127,7 +127,7 @@
     },
     "temporalCoverageBar": {
         "title": "Temporal coverage",
-        "notInformed": "Not informed",
+        "notProvided": "Not provided",
         "noCoverage": "No temporal coverage",
         "free": "FREE",
         "paid": "PAID",
@@ -159,14 +159,14 @@
         "accessTranslationTable": "Access table that makes the translation of this column",
         "dictionary": "Dictionary",
         "noTranslationNeeded": "No need for translation",
-        "notInformed": "Not informed",
+        "notProvided": "Not provided",
         "yes": "Yes",
         "no": "No"
     },
     "observationLevelTable": {
         "entityHeader": "Entity",
         "columnsHeader": "Corresponding Columns",
-        "notInformed": "Not informed"
+        "notProvided": "Not provided"
     },
     "rawDataSource": {
         "name": "Name",
@@ -191,8 +191,8 @@
         "requiresIPFromCountry": "Requires IP from country",
         "requiresRegistration": "Requires registration",
         "isFree": "Is free",
-        "rawDataDisclaimer": "These data have not passed the treatment methodology of the Data Basis.",
-        "accessOriginalSource": "Access original source",
+        "rawDataDisclaimer": "These data have been cleaned with the Data Basis methodology.",
+        "accessOriginalSource": "Access the raw data source",
         "license": "License",
         "dataAccessLink": "Data access link",
         "dataAccessInstructions": "Data access instructions",
@@ -207,7 +207,7 @@
         "accessData": "Access data",
         "accessRequest": "Access request",
         "description": "Description",
-        "notInformed": "Not informed",
+        "notProvided": "Not provided",
         "additionalInformation": "Additional information",
         "status": "Status"
     }

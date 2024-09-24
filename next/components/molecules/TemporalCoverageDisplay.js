@@ -46,7 +46,7 @@ export function TemporalCoverage ({
     ) 
   }
 
-  if(!value) return <TextDate value={t('temporalCoverageBar.notInformed')}/>
+  if(!value) return <TextDate value={t('temporalCoverageBar.notProvided')}/>
   if(startDate === null && endDate === null) return <TextDate value={text}/>
 
   function Dates ({ date, ...props }) {
@@ -166,7 +166,7 @@ export function TemporalCoverageBar ({ value }) {
     setValues(newValue)
   }, [value])
 
-  if(values === null) return <TextData string={t('temporalCoverageBar.notInformed')}/>
+  if(values === null) return <TextData string={t('temporalCoverageBar.notProvided')}/>
 
   return (
     <HStack 

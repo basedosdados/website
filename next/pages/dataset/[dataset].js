@@ -220,7 +220,7 @@ export default function DatasetPage ({ dataset }) {
                     lineHeight="20px"
                     color="#464A51"
                   >
-                    {dataset[`organization${capitalize(locale)}`] || dataset.organization?.name || t('noOrganization')}
+                    {dataset.organization?.[`name${capitalize(locale)}`] || dataset.organization?.name || t('noOrganization')}
                   </Text>
                 </Text>
               </GridItem>

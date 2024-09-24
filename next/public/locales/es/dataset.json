@@ -59,7 +59,7 @@
         "and": "y"
     },
     "table": {
-        "notInformed": "No informado",
+        "notProvided": "No informado",
         "temporalCoverage": "Cobertura temporal",
         "dataAccess": "Acceso a los datos",
         "dataUpdateFrequency": "Frecuencia de actualización de datos",
@@ -127,7 +127,7 @@
     },
     "temporalCoverageBar": {
         "title": "Cobertura temporal",
-        "notInformed": "No informado",
+        "notProvided": "No informado",
         "noCoverage": "Sin cobertura temporal",
         "free": "GRATIS",
         "paid": "PAGO",
@@ -159,14 +159,14 @@
         "accessTranslationTable": "Acceder a la tabla que hace la traducción de esta columna",
         "dictionary": "Diccionario",
         "noTranslationNeeded": "No necesita traducción",
-        "notInformed": "No informado",
+        "notProvided": "No informado",
         "yes": "Sí",
         "no": "No"
     },
     "observationLevelTable": {
         "entityHeader": "Entidad",
         "columnsHeader": "Columnas Correspondientes",
-        "notInformed": "No informado"
+        "notProvided": "No informado"
     },
     "rawDataSource": {
         "name": "Nombre",
@@ -205,7 +205,7 @@
         "accessData": "Acceder a los datos",
         "accessRequest": "Acceder al pedido",
         "description": "Descripción",
-        "notInformed": "No informado",
+        "notProvided": "No informado",
         "additionalInformation": "Información adicional",
         "status": "Estado"
     }

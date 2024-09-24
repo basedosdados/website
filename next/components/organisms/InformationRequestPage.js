@@ -78,7 +78,7 @@ export default function InformationRequestPage({ id }) {
           fontSize="14px"
           lineHeight="20px"
           color="#464A51"
-        >{text || t('informationRequest.notInformed')}</Text>
+        >{text || t('informationRequest.notProvided')}</Text>
       </SkeletonText>
     )
   }
@@ -235,7 +235,7 @@ export default function InformationRequestPage({ id }) {
           isLoaded={!isLoading}
         >
           <ReadMore id="readLessRawDescription">
-            {resource?.observations || t('informationRequest.notInformed')}
+            {resource?.[`observations${capitalize(locale)}`] || resource?.observations || t('informationRequest.notProvided')}
           </ReadMore>
         </SkeletonText>
       </Stack>

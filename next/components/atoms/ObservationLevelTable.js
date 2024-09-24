@@ -27,7 +27,7 @@ export default function ObservationLevel({ resource }) {
     const valueEntity = () => {
       if(value.entity[`name${capitalize(locale)}`]) return value.entity[`name${capitalize(locale)}`]
       if(value.entity.name) return value.entity.name
-      return t('observationLevelTable.notInformed')
+      return t('observationLevelTable.notProvided')
     }
 
     const valueColumns = () => {
@@ -38,7 +38,7 @@ export default function ObservationLevel({ resource }) {
           columns.push(column?.name)
         })
       } else {
-        columns = [t('observationLevelTable.notInformed')]
+        columns = [t('observationLevelTable.notProvided')]
       }
       return columns.join(", ")
     }

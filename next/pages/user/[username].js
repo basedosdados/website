@@ -131,7 +131,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['user'])),
+      ...(await serverSideTranslations(locale, ['menu', 'user', 'prices'])),
       getUser,
     }
   }
@@ -1345,7 +1345,7 @@ const NewPassword = ({ userInfo }) => {
             flexDirection="row"
             gap="4px"
             alignItems="flex-start"
-          ><Exclamation width="14px" height="14px" fill="#D93B3B" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> {t('username.passwordRequirements')}:</Text>
+          ><Exclamation width="14px" height="14px" fill="#D93B3B" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> {t('username.passwordRequirements')}</Text>
           <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
             <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>{t('username.minCharacters')}</ListItem>
             <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>{t('username.uppercaseLetter')}</ListItem>
@@ -1516,7 +1516,7 @@ const PlansAndPayment = ({ userData }) => {
 
   const resources = {
     "BD Gratis" : {
-      title: t('username.freeBD'),
+      title: t('username.DBFree'),
       buttons: [{
         text: t('username.comparePlans'),
         onClick: () => {
@@ -1534,7 +1534,7 @@ const PlansAndPayment = ({ userData }) => {
       ]
     },
     "bd_pro" : {
-      title: t('username.bdPro'),
+      title: t('username.DBPro'),
       buttons : [{
         text: t('username.cancelPlan'),
         onClick: () => CancelModalPlan.onOpen(),
@@ -1545,13 +1545,13 @@ const PlansAndPayment = ({ userData }) => {
         }
       }],
       resources : [
-        {name: t('username.dozensOfHighFrequencyDatabases')},
+        {name: t('username.dozensOfHighFrequencyDatasets')},
         {name: t('username.companyReferenceTable')},
         {name: t('username.directDownloadLimitPro'), tooltip: t('username.downloadLimitProTooltip')},
       ]
     },
     "bd_pro_empresas" : {
-      title: t('username.bdEmpresas'),
+      title: t('username.DBEnterprise'),
       buttons : [{
         text: t('username.cancelPlan'),
         onClick: () => CancelModalPlan.onOpen(),
@@ -2361,8 +2361,8 @@ const PlansAndPayment = ({ userData }) => {
             spacing={0}
           >
             <CardPrice
-              title={t('username.freeBD')}
-              subTitle={<>Para você descobrir o potencial da plataforma de dados</>}
+              title={t('username.DBFree')}
+              subTitle={<>{t('username.DBFreeSubtitle')}</>}
               price={"0"}
               textResource={t('username.resources')}
               resources={[
@@ -2381,13 +2381,13 @@ const PlansAndPayment = ({ userData }) => {
             />
 
             <CardPrice
-              title={t('username.bdPro')}
-              subTitle={<>Para você ter acesso aos<br/> dados mais atualizados</>}
+              title={t('username.DBPro')}
+              subTitle={<>{t('username.DBProSubtitle')}</>}
               price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 444}
               anualPlan={toggleAnual}
-              textResource={t('username.allFreeBDResources')}
+              textResource={t('username.allDBFreeResources')}
               resources={[
-                {name: t('username.dozensOfHighFrequencyDatabases')},
+                {name: t('username.dozensOfHighFrequencyDatasets')},
                 {name: t('username.companyReferenceTable')},
                 {name: t('username.directDownloadLimitPro'), tooltip: t('username.downloadLimitProTooltip')}
               ]}
@@ -2403,11 +2403,11 @@ const PlansAndPayment = ({ userData }) => {
             />
 
             <CardPrice
-              title={t('username.bdEmpresas')}
-              subTitle={<>Para sua empresa ganhar tempo<br/> e qualidade em decisões</>}
+              title={t('username.DBEnterprise')}
+              subTitle={<>{t('username.DBEnterpriseSubtitle')}</>}
               price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3360}
               anualPlan={toggleAnual}
-              textResource={t('username.allBDProResources')}
+              textResource={t('username.allDBProResources')}
               resources={[
                 {name: t('username.accessFor10Accounts')},
                 {name: t('username.prioritySupport')}

@@ -369,7 +369,7 @@ export default function ColumnsTable({
   }
 
   const measurementUnit = (value) => {
-    if(!value) return t('column.notInformed')
+    if(!value) return t('column.notProvided')
 
     const splitValue = value.split(/([^a-z])/)
     const translated = (value) => value.map((elm) =>  elm)
@@ -488,7 +488,7 @@ export default function ColumnsTable({
     if(value?.node?.coveredByDictionary === true) return t('column.yes')
     if(value?.node?.directoryPrimaryKey?._id) return t('column.yes')
     if(value?.node?.coveredByDictionary === false) return t('column.no')
-    return t('column.notInformed')
+    return t('column.notProvided')
   }
 
   if(isError) return (
@@ -633,7 +633,7 @@ export default function ColumnsTable({
                     zIndex="4"
                     backgroundColor="#FFF"
                   >
-                    {elm?.node?.[`name${capitalize(locale)}`] || elm?.node?.name || t('column.notInformed')}
+                    {elm?.node?.[`name${capitalize(locale)}`] || elm?.node?.name || t('column.notProvided')}
                     <Box
                       display={{base: "none", lg: "flex"}}
                       position="absolute"
@@ -657,18 +657,18 @@ export default function ColumnsTable({
                   </TableValue>
 
                   <TableValue>
-                    {elm?.node?.[`description${capitalize(locale)}`] || elm?.node?.description || t('column.notInformed')}
+                    {elm?.node?.[`description${capitalize(locale)}`] || elm?.node?.description || t('column.notProvided')}
                   </TableValue>
 
                   <TableValue>
-                    {elm?.node?.bigqueryType?.name ? elm.node.bigqueryType.name : t('column.notInformed')}
+                    {elm?.node?.bigqueryType?.name ? elm.node.bigqueryType.name : t('column.notProvided')}
                   </TableValue>
 
                   <TableValue>
                     {elm?.node?.coverage?.start && elm?.node?.coverage?.end ?
                       elm.node.coverage.start +" - "+ elm.node.coverage.end
                       :
-                      t('column.notInformed')
+                      t('column.notProvided')
                     }
                   </TableValue>
 
@@ -676,7 +676,7 @@ export default function ColumnsTable({
                     {elm?.node?.measurementUnit ?
                       measurementUnit(elm.node.measurementUnit)
                       :
-                      t('column.notInformed')
+                      t('column.notProvided')
                     }
                   </TableValue>
 
@@ -686,12 +686,12 @@ export default function ColumnsTable({
                       :
                       elm?.node?.containsSensitiveData === false ? t('column.no')
                       :
-                      t('column.notInformed')
+                      t('column.notProvided')
                     }
                   </TableValue>
 
                   <TableValue>
-                    {elm?.node?.[`observations${capitalize(locale)}`] || elm?.node?.observations || t('column.notInformed')}
+                    {elm?.node?.[`observations${capitalize(locale)}`] || elm?.node?.observations || t('column.notProvided')}
                   </TableValue>
                 </Tr>
               ))}
