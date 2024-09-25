@@ -51,6 +51,7 @@ function useIsMobileMod() {
 
 function MenuDrawer({ userData, isOpen, onClose, links }) {
   const { t } = useTranslation('menu');
+  const { locale } = useRouter();
   const isMobile = useIsMobileMod(); // Use the custom hook here
 
   return (
@@ -848,7 +849,7 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
 export default function MenuNav({ simpleTemplate = false, userTemplate = false }) {
   const { t } = useTranslation('menu');
   const router = useRouter()
-  const { route } = router
+  const { route, locale } = router
   const [userBD, setUserBD] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -911,7 +912,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   }, [userBD, isLoading])
 
   const links = {
-    [t('data')]: "/dataset",
+    [t('data')]: `/dataset`,
     [t('solutions')]: [
       {icon: <BDLogoProImage widthImage="54px"/>, name: [t('exclusive_data')], href: "https://info.basedosdados.org/bd-pro"},
       {icon: <BDLogoEduImage widthImage="54px"/>, name: [t('data_courses')], href: "https://info.basedosdados.org/bd-edu-sql"},
