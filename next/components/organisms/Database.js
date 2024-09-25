@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { useTranslation } from 'next-i18next';
+import { capitalize } from "lodash";
 
 import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";
@@ -22,6 +23,7 @@ export default function Database({
   rawDataSources,
   informationRequests,
   contains,
+  locale
 }) {
   const { t } = useTranslation('dataset');
 
@@ -171,7 +173,7 @@ export default function Database({
         >
           <Image
             src={organization?.picture.startsWith("https://") ? organization?.picture : `https://basedosdados.org/uploads/group/${organization?.name}`}
-            alt={organization?.name || t('notProvided')}
+            alt={organization[`name${capitalize(locale)}`] || organization?.name || t('notProvided')}
             borderRadius="16px"
             minWidth="222px"
             minHeight="138px"
@@ -246,7 +248,7 @@ export default function Database({
                   textOverflow="ellipsis"
                   href={`/dataset?organization=${organization?.slug}`}
                 >
-                  {organization?.name}
+                  {organization[`name${capitalize(locale)}`] || organization?.name}
                 </Text>
               </Stack>
 

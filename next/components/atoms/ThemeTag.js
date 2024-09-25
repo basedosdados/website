@@ -1,6 +1,6 @@
 import { Tag } from "@chakra-ui/react";
 
-export function ThemeTag({ name, ...style }) {
+export function ThemeTag({ slug, ...style }) {
   return (
     <Tag
       position="relative"
@@ -16,8 +16,8 @@ export function ThemeTag({ name, ...style }) {
       fontFamily="ubuntu"
       {...style}
     >
-      <a href={`/dataset?tag=${name.toLowerCase()}`} target="_blank">
-        {name}
+      <a href={`/dataset?tag=${slug}`} target="_blank">
+        {slug}
       </a>
     </Tag>
   );

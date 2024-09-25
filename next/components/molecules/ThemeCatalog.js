@@ -12,6 +12,8 @@ import { useMediaQuery } from "@chakra-ui/react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../../utils";
 import { useTranslation } from 'next-i18next';
+import { capitalize } from "lodash";
+import axios from 'axios'; // Add this import
 
 import { getDatasetsByThemes } from "../../pages/api/themes/index"
 
@@ -27,8 +29,8 @@ function Themes ({
   onSelectTheme,
   selectedTheme=[],
   listThemes,
+  locale,
 }) {
-  const { t } = useTranslation('common');
   const [screenQuery, setScreenQuery] = useState(0)
 
   useEffect(() => {
@@ -84,7 +86,7 @@ function Themes ({
           ))
           :
           listThemes ?
-            listThemes.map((elm) => (
+            Object.values(listThemes).map((elm) => (
               <Center
                 key={elm.node._id}
                 position="relative"
@@ -104,7 +106,7 @@ function Themes ({
                 <Tooltip
                   hasArrow
                   bg="#2A2F38"
-                  label={elm.node.name}
+                  label={elm.node.name[`${capitalize(locale)}`] || elm.node.name}
                   fontSize="16px"
                   fontWeight="500"
                   padding="5px 16px 6px"
@@ -120,8 +122,8 @@ function Themes ({
                     transition="all 0.5s"
                     filter={found(elm.node.slug) && "invert(1)"}
                     _hover={{ filter:"invert(1)"}}
-                    alt={`${elm.node.name}`}
-                    src={`https://storage.googleapis.com/basedosdados-website/category_icons/2022/icone_${elm.node.slug}.svg`}
+                    alt={elm.node.name[`${capitalize(locale)}`] || elm.node.name}
+                    src={`https://storage.googleapis.com/basedosdados-website/theme_icons/${elm.node.slug}.svg`}
                   />
                 </Tooltip>
                 <RemoveIcon
@@ -249,7 +251,7 @@ function CardThemes ({ responsive, datasetsCards = [], loading, locale }) {
               <DatabaseCard
                 key={i}
                 name={elm?.name}
-                categories={elm?.themes}
+                themes={elm?.themes}
                 organization={elm?.organizations?.[0]}
                 tags={elm?.tags}
                 tables={{
@@ -305,17 +307,24 @@ export default function ThemeCatalog ({ data, locale }) {
       if(fetchThemesTimeout) clearTimeout(fetchThemesTimeout)
       setLoading(true)
 
-      const fetchFunc = setTimeout(() => {
-        getDatasetsByThemes(selectedTheme)
-        .then(res => {
-          setDatasetsCards(res)
-          setLoading(false)
-        })
+      const fetchFunc = setTimeout(async () => {
+        try {
+          const response = await axios.get('/api/themes/getDatasetsByThemes', {
+            params: { themes: selectedTheme.join(','), locale }
+          });
+          setDatasetsCards(response.data);
+          setLoading(false);
+        } catch (error) {
+          console.error('Error fetching datasets by themes:', error);
+          setLoading(false);
+        }
       }, 500)
       
       setFetchThemesTimeout(fetchFunc)
+    } else {
+      setDatasetsCards(defaultDatasetsCards);
     }
-  },[selectedTheme])
+  }, [selectedTheme, locale, defaultDatasetsCards]);
 
   const handleSelectTheme = (elm) => {
     triggerGAEvent("theme_home", elm)
@@ -339,6 +348,7 @@ export default function ThemeCatalog ({ data, locale }) {
         selectedTheme={selectedTheme}
         onSelectTheme={handleSelectTheme}
         responsive={{mobileQuery, baseQuery, mediumQuery, lgQuery}}
+        locale={locale} // Pass the locale prop here
       />
 
       <CardThemes

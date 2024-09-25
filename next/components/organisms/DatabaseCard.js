@@ -11,16 +11,18 @@ import { CategoryIcon } from "../atoms/CategoryIcon";
 import Link from "../atoms/Link";
 import { ThemeTag } from "../atoms/ThemeTag";
 import { useTranslation } from 'next-i18next';
+import { capitalize } from "lodash";
 
 export default function DatabaseCard({
   name,
-  categories = [],
+  themes = [],
   organization,
   tags = [],
   tables,
   rawDataSources,
   informationRequests,
   link,
+  locale,
 }) {
   const { t } = useTranslation('dataset');
   const databaseInfo = []
@@ -74,8 +76,8 @@ export default function DatabaseCard({
 
   return (
     <Card
-      icons={categories.length !== 0 && [
-        ...categories.slice(0,6).map((c,i) => (
+      icons={themes.length !== 0 && [
+        ...themes.slice(0,6).map((c,i) => (
           <Tooltip
             key={i}
             hasArrow
@@ -105,7 +107,7 @@ export default function DatabaseCard({
                   alt={c.name}
                   size="37px"
                   padding="4px"
-                  url={`https://storage.googleapis.com/basedosdados-website/category_icons/2022/icone_${c.slug}.svg`}
+                  url={`https://storage.googleapis.com/basedosdados-website/theme_icons/${c.slug}.svg`}
                 />
               </Link>
             </Center>
@@ -140,7 +142,9 @@ export default function DatabaseCard({
           fontSize="12px"
           fontWeight="400"
           color="#6F6F6F"
-        >{organization.name}</Text>
+        >
+          {organization[`name${capitalize(locale)}`] || organization.name || organization.slug}
+        </Text>
       </Link>
 
       <VStack spacing={1} align="flex-start" marginTop="auto">
@@ -151,7 +155,7 @@ export default function DatabaseCard({
           {tags.length !== 0 && tags.slice(0,3).map((t, i) => (
             <ThemeTag
               key={i}
-              name={t.name}
+              slug={t.slug}
               display="block"
               aligntext="center"
               whiteSpace="nowrap"

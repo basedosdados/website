@@ -47,8 +47,12 @@ import ProcessedDataImage from "../public/img/processedDataImage";
 import BDLogoEduImage from "../public/img/logos/bd_logo_edu";
 
 export async function getStaticProps({ locale }) {
-  const themes = await getAllThemes()
-  const defaultDataset = await getAllDatasets()
+  
+  const themesResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/themes/getAllThemes?locale=${locale}`)
+  const themesData = await themesResponse.json()
+  const themes = themesData.resource
+
+  const defaultDataset = await getAllDatasets(locale)
 
   let dataThemeCatalog = {
     themes: themes,
@@ -180,7 +184,7 @@ function Hero({ dataThemeCatalog, locale }) {
                   </Text>
                 }
                 {tags.map((elm, i) => 
-                  <ThemeTag name={elm} key={i}/>
+                  <ThemeTag slug={elm} key={i}/>
                 )}
               </HStack>
             </VStack>
