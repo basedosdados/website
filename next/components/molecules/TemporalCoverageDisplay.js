@@ -9,10 +9,12 @@ import {
   ModalCloseButton
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import cookies from "js-cookie";
 import { CalendarComunIcon } from "../../public/img/icons/calendarIcon";
 import { SectionPrice } from "../../pages/precos";
 import { ModalGeneral } from "./uiUserPage";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
+import CheckIcon from "../../public/img/icons/checkIcon";
 
 export function TemporalCoverage ({
   value,
@@ -131,6 +133,14 @@ export function TemporalCoverageString({
 export function TemporalCoverageBar ({ value }) {
   const [values, setValues] = useState({})
   const plansModal = useDisclosure()
+
+  const isUserPro = () => {
+    let user
+    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
+
+    if(user?.internalSubscription?.edges?.[0]?.node?.isActive === true) return true
+    return false
+  }
 
   const TextData = ({ string, ...style }) => {
     return (
@@ -280,8 +290,9 @@ export function TemporalCoverageBar ({ value }) {
                 display="flex"
                 alignItems="center"
                 flexDirection="column"
-                right={0}
+                right={values?.["3"] ? "-4px" : "0"}
                 top="-3px"
+                zIndex={1}
               >
                 <Box
                   width="8px"
@@ -315,15 +326,18 @@ export function TemporalCoverageBar ({ value }) {
         color="#FFFFFF"
         placement="top"
         maxWidth="160px"
-        label="Faça o upgrade para liberar o período"
+        label={isUserPro() ? "Acesso liberado para o período" : "Faça o upgrade para liberar o período"}
       >
-        <Box flex={2} marginRight={{base:"24px !important", lg: "0"}}  display={values?.["3"] ? "" : "none"}>
+        <Box
+          flex={2}
+          marginRight={{base:"24px !important", lg: "0"}}  display={values?.["3"] ? "" : "none"}
+        >
           <Box
             as="a"
-            cursor="pointer"
+            cursor={isUserPro() ? "default" : "pointer"}
             width="100%"
             height="24px"
-            backgroundColor="#E4F2FF"
+            backgroundColor={isUserPro() ? "#D5E8DB" : "#E4F2FF"}
             fontFamily="Roboto"
             fontWeight="500"
             fontSize="12px"
@@ -333,29 +347,41 @@ export function TemporalCoverageBar ({ value }) {
             justifyContent="center"
             textAlign="center"
             letterSpacing="0.2px"
-            color="#0068C5"
-            fill="#0068C5"
+            color={isUserPro() ? "#2B8C4D" : "#0068C5"}
+            fill={isUserPro() ? "#2B8C4D" : "#0068C5"}
             gap="10px"
             marginBottom="10px"
             padding="6px 16px"
+            marginLeft="2px"
             _hover={{
-              color:"#0057A4",
-              fill:"#0057A4",
-              backgroundColor:"#E4F2FF"
+              color: isUserPro() ? "#2B8C4D" : "#0057A4",
+              fill: isUserPro() ? "#2B8C4D" : "#0057A4",
+              backgroundColor: isUserPro() ? "#D5E8DB" : "#E4F2FF"
             }}
-            onClick={() => plansModal.onOpen()}
+            onClick={() => {
+              if(isUserPro()) return
+              plansModal.onOpen()}
+            }
           >
             PAGO
-            <RedirectIcon
-              width="12px"
-              height="12px"
-            />
+            {isUserPro() ?
+              <CheckIcon
+                width="20px"
+                height="20px"
+              />
+              :
+              <RedirectIcon
+                width="12px"
+                height="12px"
+              />
+            }
           </Box>
 
           <Box
             position="relative"
             width="100%"
-            borderBottom="solid 3px #0068C5"
+            borderBottom="solid 3px"
+            borderColor={isUserPro() ? "#22703E" : "#0068C5"}
             marginBottom="10px"
           >
             <Box position="absolute" width="100%" display={values?.["2"] ? "" : "none"}>
@@ -388,13 +414,13 @@ export function TemporalCoverageBar ({ value }) {
                 display="flex"
                 alignItems="center"
                 flexDirection="column"
-                right={0}
                 top="-3px"
+                right="-4px"
               >
                 <Box
                   width="8px"
                   height="8px"
-                  backgroundColor="#0068C5"
+                  backgroundColor={isUserPro() ? "#22703E" : "#0068C5"}
                   borderRadius="50%"
                 />
                 <TextData

@@ -1541,6 +1541,7 @@ const PlansAndPayment = ({ userData }) => {
         }}
       ],
       resources : [
+        {name: "Bases de baixa frequência atualizadas"},
         {name: "Tabelas tratadas"},
         {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
         {name: "Acesso em nuvem"},
@@ -2370,6 +2371,7 @@ const PlansAndPayment = ({ userData }) => {
               price={"0"}
               textResource="Recursos:"
               resources={[
+                {name: "Bases de baixa frequência atualizadas"},
                 {name: "Tabelas tratadas"},
                 {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
                 {name: "Acesso em nuvem"},
