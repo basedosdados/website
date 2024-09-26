@@ -1,0 +1,119 @@
+{
+    "pageTitle": "Terms – Data Basis",
+    "ogTitle": "Terms and Privacy – Data Basis",
+    "mainTitle": "Terms and Privacy",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "ToS": {
+        "term1": {
+            "title": "1. Acceptance of Terms",
+            "content": "By accessing or using the services offered by Data Basis (\"We\", \"Our\" or \"Us\"), you agree to comply with and accept these Terms of Service. If you do not agree with all the terms and conditions of this agreement, you may not use our services."
+        },
+        "term2": {
+            "title": "2. Service Description",
+            "content": "2.1. Our services consist of a monthly subscription that grants subscribers access to various exclusive, harmonized, and updated data on the Data Basis platform. Access is provided via Data Basis Python or R packages, or via BigQuery, Google's low-cost and fully managed data storage service for analysis."
+        },
+        "term3": {
+            "title": "3. Payment and Subscriptions",
+            "content": "",
+            "subContent1": "3.1. By subscribing, you agree to pay the specified monthly fee. Payment will be processed automatically each month unless you cancel your subscription before the renewal date, which is clearly stated when you sign up for the service.",
+            "subContent2": "3.2. By subscribing, you agree that your data will be used in the creation and maintenance of users on the Stripe payment platform.",
+            "subContent3": "3.3. Prices and payment methods are subject to change at the sole discretion of Data Basis. Price or payment method changes will be notified in advance."
+        },
+        "term4": {
+            "title": "4. Cancellation and Refund",
+            "content": "4.1. You can cancel your subscription at any time through the options available in your account. However, no refunds or credits will be provided for periods when the subscription was not used."
+        },
+        "term5": {
+            "title": "5. Responsible Use",
+            "content": "5.1. You agree to use our services responsibly and in compliance with all applicable laws and regulations."
+        },
+        "term6": {
+            "title": "6. Intellectual Property",
+            "content": "6.1. All intellectual property rights related to the provided data are owned by third parties and are subject to their respective usage policies."
+        },
+        "term7": {
+            "title": "7. Privacy",
+            "content": "7.1. The use of your personal data is governed by our Privacy Policy. By using our services, you agree to the collection and use of your information as described in our Privacy Policy."
+        },
+        "term8": {
+            "title": "8. Termination",
+            "content": "8.1. We reserve the right to terminate or suspend your account at any time, for any reason, without prior notice."
+        },
+        "term9": {
+            "title": "9. Limitation of Liability",
+            "content": "9.1. Under no circumstances will we be liable for any direct, indirect, special, incidental, or consequential damages arising from the use or inability to use our services."
+        },
+        "term10": {
+            "title": "10. Changes to Terms of Service",
+            "content": "10.1. We reserve the right to modify these Terms of Service at any time. Changes will be effective upon posting of the updated versions on our website."
+        },
+        "term11": {
+            "title": "11. Applicable Law and Jurisdiction",
+            "content": "11.1. These Terms of Service will be governed and interpreted in accordance with the laws of Brazil. Any dispute related to these terms will be subject to the exclusive jurisdiction of the courts of Rio de Janeiro, RJ, Brazil."
+        },
+        "term12": {
+            "title": "12. Contact",
+            "content": "12.1. To contact us with questions or concerns related to these Terms of Service, please send an email to suporte.bdpro@basedosdados.org."
+        },
+        "finalNote": "By using our services, you agree to all the terms and conditions set forth in this agreement. Please read these terms carefully before proceeding."
+    },
+    "PP": {
+        "header": {
+            "subContent1": "Data Basis (\"We\", \"Our\" or \"Us\"). We commit to protecting and respecting your privacy and complying with all obligations established in the General Data Protection Regulation (\"LGPD\").",
+            "subContent2": "This Privacy Policy describes how we collect, use, share and protect your personal information. By accessing or using our services, you agree to the terms and practices described in this Privacy Policy."
+        },
+        "term1": {
+            "title": "1. Information We Collect",
+            "subContent1": "1.1. We collect personal information that you provide directly to us when using our services. This may include your name, email address, payment information, and other information you choose to share with us.",
+            "subContent2": "1.2. We also collect information automatically, including usage data, IP address, browser type, and information about the device you use to access our services."
+        },
+        "term2": {
+            "title": "2. Use of Information",
+            "subContent1": "2.1. We use your personal information to provide and improve our services, including payment processing, customer support, and user experience customization.",
+            "subContent2": "2.2. We will not sell, rent, or share your personal information with non-affiliated third parties without your explicit consent."
+        },
+        "term3": {
+            "title": "3. Cookies and Similar Technologies",
+            "subContent1": "3.1. Cookies are pieces of data that help the site remember your preferences and make navigation more efficient.",
+            "subContent2": "3.2. These cookies are necessary to ensure the proper functioning of the site, improve performance, and personalize the navigation experience, such as language and region.",
+            "subContent3": {
+                "title": "3.3. Cookies used:",
+                "headers": {
+                    "header1": "Name",
+                    "header2": "Retention",
+                    "header3": "Purpose"
+                },
+                "row1": {
+                    "name": "userBD",
+                    "retention": "7 days",
+                    "purpose": "When logging into our site, this special cookie is created to store your basic information. This cookie is essential to allow you to remain logged in and access protected areas of the site. Without it, you will not be able to log in."
+                },
+                "row2": {
+                    "name": "token",
+                    "retention": "7 days",
+                    "purpose": "When logging into our site, this special cookie is created to store your access token. This token not only allows you to remain logged in, but also acts as a guardian to ensure the integrity of your settings and personal information."
+                }
+            },
+            "subContent4": "3.4. By continuing to use our site, you agree to the use of these cookies. If you prefer not to use them, we recommend adjusting your browser settings. However, this will affect your ability to log in and access restricted areas.",
+            "subContent5": "If you have any questions about these cookies or any other privacy issue, please contact us at the email address contato@basedosdados.org."
+        },
+        "term4": {
+            "title": "4. Information Security",
+            "subContent1": "4.1. We implement technical and organizational security measures to protect your personal information against unauthorized access and misuse."
+        },
+        "term5": {
+            "title": "5. Your Rights",
+            "subContent1": "5.1. Under the LGPD, you have the right to access, correct, delete or port your personal data. If you wish to exercise these rights or have any questions about how your information is being processed, please contact us at the email address contato@basedosdados.org."
+        },
+        "term6": {
+            "title": "6. Changes to this Privacy Policy",
+            "subContent1": "6.1. We reserve the right to update this Privacy Policy periodically. Changes will be published on our site, and the last update date will be reviewed. We recommend that you review this Privacy Policy regularly to stay informed about our privacy practices."
+        },
+        "term7": {
+            "title": "7. Contact",
+            "subContent1": "7.1. For any questions or concerns related to our Privacy Policy, please contact us at the email address contato@basedosdados.org."
+        },
+        "finalNote": "This Privacy Policy has been prepared in accordance with the provisions of the LGPD and aims to ensure that your personal information is treated with the necessary respect and care."
+    }
+}

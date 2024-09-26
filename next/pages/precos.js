@@ -13,6 +13,8 @@ import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import CheckIcon from "../public/img/icons/checkIcon";
 import InfoIcon from '../public/img/icons/infoIcon';
@@ -35,6 +37,7 @@ export const CardPrice = ({
   textResource,
   resources = [],
   button,
+  locale,
 }) => {
   const { t } = useTranslation('prices');
 
@@ -210,7 +213,7 @@ export const CardPrice = ({
           flexDirection="column"
           gap="16px"
         >
-          {button.isCurrentPlan ?
+          {button.isCurrentPlan ? (
             <Box
               display="flex"
               justifyContent="center"
@@ -226,33 +229,32 @@ export const CardPrice = ({
             >
               {t('currentPlan')}
             </Box>
-          :
-            <Box
-              as="button"
-              onClick={() => {
-                if(button.onClick) return button.onClick()
-                return window.open(button.href, "_self")
-              }}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              width="100%"
-              borderRadius="8px"
-              backgroundColor="#0D99FC"
-              padding="12px 16px"
-              cursor="pointer"
-              color="#FFF"
-              fontFamily="Roboto"
-              fontWeight="500"
-              fontSize="20px"
-              lineHeight="36px"
-              _hover={{
-                backgroundColor: "#0B89E2"
-              }}
-            >
-              {t(button.text)}
-            </Box>
-          }
+          ) : (
+            <Link href={button.href} locale={locale} passHref>
+              <Box
+                as="a"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                width="100%"
+                borderRadius="8px"
+                backgroundColor="#0D99FC"
+                padding="12px 16px"
+                cursor="pointer"
+                color="#FFF"
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="20px"
+                lineHeight="36px"
+                textDecoration="none"
+                _hover={{
+                  backgroundColor: "#0B89E2"
+                }}
+              >
+                {t(button.text)}
+              </Box>
+            </Link>
+          )}
 
           <Text 
             display="flex"
@@ -266,18 +268,21 @@ export const CardPrice = ({
             fontFamily="Roboto"
             height="24px"
           >{t('readThe')}
-            <Text
-              as="a"
-              cursor="pointer"
-              marginLeft="4px"
-              href="/termos-e-privacidade?section=terms"
-              target="_blank"
-              alignItems="center"
-              color="#0D99FC"
-              _hover={{
-                color: "#0B89E2"
-              }}
-            >{t('termsOfService')}</Text>
+            <Link href="/termos-e-privacidade?section=terms" locale={locale} passHref>
+              <Text
+                as="a"
+                cursor="pointer"
+                marginLeft="4px"
+                target="_blank"
+                alignItems="center"
+                color="#0D99FC"
+                _hover={{
+                  color: "#0B89E2"
+                }}
+              >
+                {t('termsOfService')}
+              </Text>
+            </Link>
             .
           </Text>
         </Box>
@@ -288,6 +293,7 @@ export const CardPrice = ({
 
 export function SectionPrice() {
   const { t } = useTranslation('prices');
+  const { locale } = useRouter();
   const [toggleAnual, setToggleAnual] = useState(true)
   const [plans, setPlans] = useState(null)
   const [username, setUsername] = useState(null)
@@ -422,7 +428,7 @@ export function SectionPrice() {
           title={t('plans.free.title')}
           subTitle={t('plans.free.subtitle')}
           price="0"
-          textResource={t('resources')}
+          textResource={t('features')}
           resources={t('plans.free.features', { returnObjects: true }).map((feature, index) => ({
             name: feature,
             tooltip: index === 1 ? t('tooltips.integratedData') : (index === 5 ? t('tooltips.downloadLimit') : null)
@@ -431,6 +437,7 @@ export function SectionPrice() {
             text: t('exploreFeatures'),
             href: "/dataset",
           }}
+          locale={locale}
         />
 
         <CardPrice
@@ -448,6 +455,7 @@ export function SectionPrice() {
             href: username === null ? `/user/login?i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}`,
             isCurrentPlan: isBDPro.isCurrentPlan && planIntervalPlan(),
           }}
+          locale={locale}
         />
 
         <CardPrice
@@ -462,6 +470,7 @@ export function SectionPrice() {
             href: username === null ? `/user/login?i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}`,
             isCurrentPlan: isBDEmp.isCurrentPlan && planIntervalPlan(),
           }}
+          locale={locale}
         />
       </Stack>
     </Box>

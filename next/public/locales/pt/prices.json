@@ -10,7 +10,7 @@
     "annualBillingMessage": "{{price}} cobrado uma vez no ano",
     "readThe": "Leia os",
     "termsOfService": "Termos de Serviço",
-    "resources": "Recursos:",
+    "features": "Recursos:",
     "allFeaturesPlus": "Todos os recursos da {{plan}}, mais:",
     "currentPlan": "Plano atual",
     "subscribe": "Assinar",
