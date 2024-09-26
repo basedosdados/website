@@ -14,5 +14,9 @@
     "dataTitle": "Datos",
     "dataDescription": "Ayudamos a personas y organizaciones a subir datos a nuestro datalake. Escribe tu propuesta a nuestro equipo de Datos.",
     "questionsText": "¿Preguntas? Habla con nuestra comunidad en ",
-    "discordLink": "Discord"
+    "discordLink": "Discord",
+    "consulting": {
+        "title": "Consultoria – Base de los Datos",
+        "description": "Ponte en contacto con nuestro equipo."
+    }
   }

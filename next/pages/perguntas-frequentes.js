@@ -119,7 +119,7 @@ export default function FAQ({}) {
   const [searchFilter, setSearchFilter] = useState("")
   const [closeQuestion, setCloseQuestion] = useState(false)
 
-  const { t } = useTranslation('common', 'menu', 'faq');
+  const { t } = useTranslation('faq');
 
   useEffect(() => {
     setAllQuestions(QuestionFAQ)

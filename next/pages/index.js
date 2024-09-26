@@ -68,7 +68,7 @@ export async function getStaticProps({ locale }) {
   }
 }
 
-function Hero({ dataThemeCatalog, locale }) {
+function Hero({ dataThemeCatalog }) {
   const { t } = useTranslation('common');
   const router = useRouter();
   const [search, setSearch] = useState("");
@@ -78,7 +78,7 @@ function Hero({ dataThemeCatalog, locale }) {
   function openSearchLink() {
     triggerGAEvent("search", search)
     triggerGAEvent("search_home", search)
-    return router.push(`/${locale}/dataset?q=${search}`);
+    router.push(`/dataset?q=${search}`);
   }
 
   return (
@@ -151,15 +151,22 @@ function Hero({ dataThemeCatalog, locale }) {
                 }}
                 rightIcon={
                   (search ?
-                    <ArrowIcon
-                      alt=""
-                      width={isMobileMod() ? "18px" : "28px"}
-                      height={isMobileMod() ? "18px" : "28px"}
-                      fill="#252A32"
-                      marginRight={isMobileMod() ? "10px" : "20px"}
-                      cursor="pointer"
-                      onClick={openSearchLink}
-                    />
+                    <Link
+                      href={`/dataset?q=${search}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        openSearchLink();
+                      }}
+                    >
+                      <ArrowIcon
+                        alt=""
+                        width={isMobileMod() ? "18px" : "28px"}
+                        height={isMobileMod() ? "18px" : "28px"}
+                        fill="#252A32"
+                        marginRight={isMobileMod() ? "10px" : "20px"}
+                        cursor="pointer"
+                      />
+                    </Link>
                     :
                     <SearchIcon
                       alt="pesquisar"
@@ -740,7 +747,7 @@ export default function Home({ dataThemeCatalog }) {
 
   return (
     <MainPageTemplate id="home" backgroundColor="#FFFFFF">
-      <Hero dataThemeCatalog={dataThemeCatalog}/>
+      <Hero dataThemeCatalog={dataThemeCatalog} />
       {/* <BDEdu /> */}
       <BePartner />
       <Products />

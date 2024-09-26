@@ -111,31 +111,34 @@ function Slogan () {
       >
         {t('slogan.description')}
       </BodyText>
-      <Box
-        as="a"
+      <Link
         href="/contato-consultoria"
-        target="_self"
-        display="flex"
-        alignItems="center"
-        height="56px"
-        width="fit-content"
-        borderRadius="8px"
-        backgroundColor="#0D99FC"
-        padding="10px 16px"
-        cursor="pointer"
-        color="#FFF"
-        fontFamily="Ubuntu"
-        fontWeight="700"
-        fontSize="20px"
-        lineHeight="23px"
-        letterSpacing="0.1px"
-        marginTop="24px !important"
-        _hover={{
-          backgroundColor: "#0B89E2"
-        }}
       >
-        {t('slogan.cta')}
-      </Box>
+        <Box
+          as="a"
+          target="_self"
+          display="flex"
+          alignItems="center"
+          height="56px"
+          width="fit-content"
+          borderRadius="8px"
+          backgroundColor="#0D99FC"
+          padding="10px 16px"
+          cursor="pointer"
+          color="#FFF"
+          fontFamily="Ubuntu"
+          fontWeight="700"
+          fontSize="20px"
+          lineHeight="23px"
+          letterSpacing="0.1px"
+          marginTop="24px !important"
+          _hover={{
+            backgroundColor: "#0B89E2"
+          }}
+        >
+          {t('slogan.cta')}
+        </Box>
+      </Link>
     </Stack>
   )
 }
@@ -550,32 +553,35 @@ export default function Services() {
             </WorkflowBox>
           </Stack>
         </VStack>
-
-        <Box
-          as="a"
+        
+        <Link
           href="/contato-consultoria"
-          target="_self"
-          display="flex"
-          alignItems="center"
-          height="56px"
-          width="fit-content"
-          borderRadius="8px"
-          backgroundColor="#0D99FC"
-          padding="10px 16px"
-          cursor="pointer"
-          color="#FFF"
-          fontFamily="Ubuntu"
-          fontWeight="700"
-          fontSize="20px"
-          lineHeight="23px"
-          letterSpacing="0.1px"
-          marginTop="24px !important"
-          _hover={{
-            backgroundColor: "#0B89E2"
-          }}
         >
-          {t('contactCTA')}
-        </Box>
+          <Box
+            as="a"
+            target="_self"
+            display="flex"
+            alignItems="center"
+            height="56px"
+            width="fit-content"
+            borderRadius="8px"
+            backgroundColor="#0D99FC"
+            padding="10px 16px"
+            cursor="pointer"
+            color="#FFF"
+            fontFamily="Ubuntu"
+            fontWeight="700"
+            fontSize="20px"
+            lineHeight="23px"
+            letterSpacing="0.1px"
+            marginTop="24px !important"
+            _hover={{
+              backgroundColor: "#0B89E2"
+            }}
+          >
+            {t('slogan.cta')}
+          </Box>
+        </Link>
       </Stack>
     </MainPageTemplate>
   )

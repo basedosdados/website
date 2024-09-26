@@ -531,12 +531,13 @@ function SearchInputUser ({ user }) {
   const [showInput, setShowInput] = useState(false)
   const [inputFocus, setInputFocus] = useState(false)
   const { t } = useTranslation('menu');
-  const isMobile = useIsMobileMod(); // Use the custom hook here
+  const isMobile = useIsMobileMod();
+  const router = useRouter();
 
   function openSearchLink() {
     if(search.trim() === "") return
     triggerGAEvent("search_menu", search.trim())
-    window.open(`/dataset?q=${search.trim()}`, "_self")
+    router.push(`/dataset?q=${search.trim()}`);
   }
 
   const handleClickOutside = (event) => {
@@ -581,13 +582,20 @@ function SearchInputUser ({ user }) {
           placeholder={t('search_data')}
           fill="#464A51"
           icon={
-            <SearchIcon
-              alt="pesquisar"
-              width="16.8px"
-              height="16.8px"
-              cursor="pointer"
-              onClick={() => openSearchLink()}
-            />
+            <Link
+              href={`/dataset?q=${search.trim()}`}
+              onClick={(e) => {
+                e.preventDefault();
+                openSearchLink();
+              }}
+            >
+              <SearchIcon
+                alt="pesquisar"
+                width="16.8px"
+                height="16.8px"
+                cursor="pointer"
+              />
+            </Link>
           }
         />
       </Stack>
@@ -621,13 +629,20 @@ function SearchInputUser ({ user }) {
         placeholder={t('search_data')}
         fill="#464A51"
         icon={
-          <SearchIcon
-            alt="pesquisar"
-            width="16.8px"
-            height="16.8px"
-            cursor="pointer"
-            onClick={() => openSearchLink()}
-          />
+          <Link
+            href={`/dataset?q=${search.trim()}`}
+            onClick={(e) => {
+              e.preventDefault();
+              openSearchLink();
+            }}
+          >
+            <SearchIcon
+              alt="pesquisar"
+              width="16.8px"
+              height="16.8px"
+              cursor="pointer"
+            />
+          </Link>
         }
       />
     </Stack>
@@ -768,20 +783,20 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
           <HelpWidget
             tooltip={t('tooltip.helpAndResources')}
             options={[
-              {name: t('tooltip.faq'), url: "/perguntas-frequentes"},
+              {name: t('tooltip.faq'), component: <Link href="/perguntas-frequentes">{t('tooltip.faq')}</Link>},
               {name: t('tooltip.documentation'), url: "https://basedosdados.github.io/mais/"},
               {name: t('tooltip.youtubeVideos'), url: "https://www.youtube.com/c/BasedosDados/featured"},
               {},
               {name: t('tooltip.installPackages'), url: "https://basedosdados.github.io/mais/access_data_packages/"},
               {},
-              {name: t('tooltip.howToCite'),  url: "/perguntas-frequentes/#reference"},
-              {name: t('tooltip.whatAreDirectories'), url: "/perguntas-frequentes/#directories"},
+              {name: t('tooltip.howToCite'), component: <Link href="/perguntas-frequentes#reference">{t('tooltip.howToCite')}</Link>},
+              {name: t('tooltip.whatAreDirectories'), component: <Link href="/perguntas-frequentes#directories">{t('tooltip.whatAreDirectories')}</Link>},
               {},
               {name: t('tooltip.discordCommunity'), url: "https://discord.gg/huKWpsVYx4"},
-              {name: t('tooltip.contactUs'), url: "/contato"},
+              {name: t('tooltip.contactUs'), component: <Link href="/contato">{t('tooltip.contactUs')}</Link>},
             ]}
-        />
-      }
+          />
+        }
 
         {userData ? (
           <HStack spacing="20px">

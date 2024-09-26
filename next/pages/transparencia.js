@@ -23,7 +23,7 @@ export async function getStaticProps({ locale }) {
   const pages = await withPages();
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['transparency', 'menu'])),
+      ...(await serverSideTranslations(locale, ['common', 'transparency', 'menu'])),
       pages,
     },
   };
