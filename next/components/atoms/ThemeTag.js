@@ -1,6 +1,7 @@
-import { Tag } from "@chakra-ui/react";
+import Link from '../atoms/Link';
+import { Tag } from '@chakra-ui/react';
 
-export function ThemeTag({ slug, ...style }) {
+export function ThemeTag({ slug, locale, ...props }) {
   return (
     <Tag
       position="relative"
@@ -14,11 +15,11 @@ export function ThemeTag({ slug, ...style }) {
       letterSpacing="0.2px"
       fontWeight="300"
       fontFamily="ubuntu"
-      {...style}
+      {...props}
     >
-      <a href={`/dataset?tag=${slug}`} target="_blank">
+      <Link href={`/dataset?tag=${slug}`} locale={locale}>
         {slug}
-      </a>
+      </Link>
     </Tag>
   );
 }

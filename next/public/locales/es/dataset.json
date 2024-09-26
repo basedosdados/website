@@ -182,6 +182,7 @@
         "coverageStart": "Inicio de cobertura",
         "coverageEnd": "Fin de cobertura",
         "observationLevel": "Nivel de observación",
+        "observationLevelTooltip": "Indica la granularidad más pequeña posible de análisis con esos datos. Por ejemplo, una tabla con nivel de observación estatal nos permite realizar un análisis a nivel nacional (por ser más amplio que el estado), pero no un análisis por municipio (que sería un desglose más específico).",
         "format": "Formato",
         "treatment": "Tratamiento",
         "language": "Lenguaje",

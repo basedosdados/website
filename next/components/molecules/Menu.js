@@ -148,10 +148,8 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
           <></>
         ) : (
           <Stack display={isMobile ? "flex" : "none"} marginTop="auto" gap="16px">
-            <Box
-              as="a"
+            <Link
               href="/user/login"
-              target="_self"
               display="flex"
               alignItems="center"
               height="40px"
@@ -171,12 +169,10 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
               }}
             >
               {t('enter', { ns: 'menu' })}
-            </Box>
+            </Link>
             
-            <Box
-              as="a"
+            <Link
               href="/user/register"
-              target="_self"
               display="flex"
               alignItems="center"
               height="40px"
@@ -197,7 +193,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
               }}
             >
               {t('register', { ns: 'menu' })}
-            </Box>
+            </Link>
           </Stack>
         )}
       </DrawerContent>
@@ -804,10 +800,8 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
           </HStack>
         ) : (
           <>
-            <Box
-              as="a"
+            <Link
               href="/user/login"
-              target="_self"
               display="flex"
               alignItems="center"
               height="40px"
@@ -827,12 +821,10 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
               }}
             >
               {t('enter', { ns: 'menu' })}
-            </Box>
+            </Link>
             
-            <Box
-              as="a"
+            <Link
               href="/user/register"
-              target="_self"
               display="flex"
               alignItems="center"
               height="40px"
@@ -853,7 +845,7 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
               }}
             >
               {t('register', { ns: 'menu' })}
-            </Box>
+            </Link>
           </>
         )}
       </HStack>

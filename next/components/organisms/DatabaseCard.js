@@ -41,19 +41,23 @@ export default function DatabaseCard({
         <Stack
           margin="0 !important"
           cursor={tables?.number > 0 ? "pointer" : "default"}
-          _hover={tables?.number === undefined ||tables?.number > 0 && {opacity : "0.7"}}
-          color={tables?.number === undefined || tables?.number === 0? "#C4C4C4" : "#2B8C4D"}
+          _hover={tables?.number === undefined || tables?.number > 0 ? {opacity : "0.7"} : undefined}
         >
-          <a
+          <Link
             href={tables?.number > 0 ? `${link}?table=${tables?.id}` : ""}
             target="_blank"
-            style={{display: "flex"}}
+            display="flex"
+            fontFamily="Ubuntu"
+            fontSize="14px"
+            letterSpacing="0.3px"
+            fontWeight="700"
+            color={tables?.number === undefined || tables?.number === 0 ? "#C4C4C4" : "#2B8C4D"}
           >
-            <b>{tables?.number === 1 ?
+            {tables?.number === 1 ?
               t('datasetCard.oneTable') :
               t('datasetCard.multipleTables', { count: tables?.number || 0 })
-            }</b>
-          </a>
+            }
+          </Link>
         </Stack>
       </HStack>
     )
@@ -156,6 +160,7 @@ export default function DatabaseCard({
             <ThemeTag
               key={i}
               slug={t.slug}
+              locale={locale}
               display="block"
               aligntext="center"
               whiteSpace="nowrap"

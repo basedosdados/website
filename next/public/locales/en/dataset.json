@@ -182,6 +182,7 @@
         "coverageStart": "Coverage start",
         "coverageEnd": "Coverage end",
         "observationLevel": "Observation level",
+        "observationLevelTooltip": "Indicates the smallest possible granularity of analysis with that data. For example, a table with state-level observation allows us to perform an analysis at the country level (as it's broader than state), but not an analysis by municipality (which would be a more specific breakdown).",
         "format": "Format",
         "treatment": "Treatment",
         "language": "Language",

@@ -191,7 +191,7 @@ function Hero({ dataThemeCatalog }) {
                   </Text>
                 }
                 {tags.map((elm, i) => 
-                  <ThemeTag slug={elm} key={i}/>
+                  <ThemeTag slug={elm} key={i} locale={locale}/>
                 )}
               </HStack>
             </VStack>
