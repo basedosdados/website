@@ -1692,9 +1692,23 @@ const PlansAndPayment = ({ userData }) => {
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(userData.id)
 
-    const user = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
-      .then(res => res.json())
-    cookies.set('userBD', JSON.stringify(user))
+    let user
+    let attempts = 0
+    const maxAttempts = 10
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+    while (!user?.internalSubscription?.edges?.[0]?.node && attempts < maxAttempts) {
+      user = await fetch(`/api/user/getUser?p=${btoa(id)}`, { method: "GET" })
+        .then((res) => res.json())
+
+      if (user?.internalSubscription?.edges?.[0]?.node) {
+        cookies.set("userBD", JSON.stringify(user))
+        break
+      }
+
+      attempts++
+      await delay(10000)
+    }
 
     if(isLoadingH === true) return window.open("/", "_self")
     window.open(`/user/${userData.username}?plans_and_payment`, "_self")
