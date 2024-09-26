@@ -18,6 +18,7 @@ import { triggerGAEvent } from "../../utils";
 import { withPages } from "../../hooks/pages.hook";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Link from "../../components/atoms/Link";
 
 import {
   getSearchDatasets
@@ -347,10 +348,8 @@ export default function SearchDatasetPage() {
           )
         )}
 
-        <Text
-          as="a"
+        <Link
           href="/dataset"
-          target="_self"
           fontFamily="Roboto"
           fontWeight="400"
           fontSize="14px"
@@ -361,7 +360,7 @@ export default function SearchDatasetPage() {
           }}
         >
           {t('clearFilters')}
-        </Text>
+        </Link>
     </Stack>
     )
   }
