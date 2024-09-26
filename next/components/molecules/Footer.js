@@ -113,15 +113,30 @@ export default function Footer({ template, ocult = false }) {
           <TextFooterSimple>
             {t('footer.copyright', { year: new Date().getFullYear() })}
           </TextFooterSimple>
-          <TextFooterSimple as="a" href="/termos-e-privacidade?section=terms" _hover={{ color: "#252A32" }}>
-            {t('footer.termsOfUse')}
-          </TextFooterSimple>
-          <TextFooterSimple as="a" href="/termos-e-privacidade?section=privacy" _hover={{ color: "#252A32" }}>
-            {t('footer.privacyPolicy')}
-          </TextFooterSimple>
-          <TextFooterSimple as="a" href="/contato" _hover={{ color: "#252A32" }}>
-            {t('footer.contact')}
-          </TextFooterSimple>
+          <Link
+            href="/termos-e-privacidade?section=terms"
+            _hover={{ color: "#252A32" }}
+          >
+            <TextFooterSimple>
+              {t('footer.termsOfUse')}
+            </TextFooterSimple>
+          </Link>
+          <Link
+            href="/termos-e-privacidade?section=privacy"
+            _hover={{ color: "#252A32" }}
+          >
+            <TextFooterSimple>
+              {t('footer.privacyPolicy')}
+            </TextFooterSimple>
+          </Link>
+          <Link
+            href="/contato"
+            _hover={{ color: "#252A32" }}
+          >
+            <TextFooterSimple>
+              {t('footer.contact')}
+            </TextFooterSimple>
+          </Link>
         </Stack>
       </VStack>
     </VStack>
