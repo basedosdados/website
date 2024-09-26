@@ -23,6 +23,7 @@
         "features": [
           "Tablas procesadas",
           "Datos integrados",
+          "Datos de baja frecuencia actualizados",
           "Acceso en la nube",
           "Acceso vía SQL, Python y R",
           "Integración con herramientas BI",

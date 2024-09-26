@@ -1527,6 +1527,7 @@ const PlansAndPayment = ({ userData }) => {
       resources : [
         {name: t('username.processedTables')},
         {name: t('username.integratedData'), tooltip: t('username.dataIntegrationTooltip')},
+        {name: t('updatedLowFrequencyData')},
         {name: t('username.cloudAccess')},
         {name: t('username.sqlPythonRAccess')},
         {name: t('username.biIntegration')},
@@ -2366,12 +2367,12 @@ const PlansAndPayment = ({ userData }) => {
               price={"0"}
               textResource={t('username.resources')}
               resources={[
-                {name: t('username.processedTables')},
-                {name: t('username.integratedData'), tooltip: t('username.dataIntegrationTooltip')},
-                {name: t('username.cloudAccess')},
-                {name: t('username.sqlPythonRAccess')},
-                {name: t('username.biIntegration')},
-                {name: t('username.directDownloadLimit'), tooltip: t('username.downloadLimitTooltip')},
+                {name: "Tabelas tratadas"},
+                {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
+                {name: "Acesso em nuvem"},
+                {name: "Acesso via SQL, Python e R"},
+                {name: "Integração com ferramentas BI"},
+                {name: "Download direto até 100 MB", tooltip: "Esse limite não se aplica ao acesso via SQL, Python e R."},
               ]}
               button={{
                 text: t('username.exploreFeatures'),

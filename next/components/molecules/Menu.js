@@ -201,7 +201,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
   );
 }
 
-function MenuDrawerUser({ userData, isOpen, onClose}) {
+function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
   const router = useRouter()
   const { t } = useTranslation('menu');
 
@@ -244,35 +244,50 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
             color="#252A32"
             fontFamily="Roboto"
             letterSpacing="0.1px"
-            fontSize="14px"
-            fontWeight="400"
-            lineHeight="27px"
+            fontSize="12px"
+            fontWeight="500"
+            lineHeight="18px"
           >{userData?.username || ""}</Text>
           <Text
-            color="#6F6F6F"
+            color="#71757A"
             fontFamily="Roboto"
             letterSpacing="0.1px"
-            fontSize="14px"
-            fontWeight="400"
-            lineHeight="27px"
+            fontSize="12px"
+            fontWeight="500"
+            lineHeight="18px"
           >{userData?.email || ""}</Text>
+
+          <Box
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="12px"
+            lineHeight="18px"
+            letterSpacing="0.1px"
+            border="1px solid #2B8C4D"
+            backgroundColor={isUserPro ? "#2B8C4D" : "#FFFFFF"}
+            color={isUserPro ? "#FFFFFF" : "#2B8C4D"}
+            borderRadius="100px"
+            padding="4px 8px"
+            marginTop="10px !important"
+          >
+            {isUserPro ? "Pro" : "Grátis"}
+          </Box>
         </Stack>
 
         <Accordion allowToggle width="100%" defaultIndex={0}>
           <AccordionItem borderWidth="0 !important">
             <AccordionButton
-              padding="16px 0"
+              padding="14px 0"
               _hover={{background: "none"}}
               justifyContent="space-between"
             >
-              <Stack spacing={0} flexDirection="row" gap="8px">
-                <SettingsIcon fill="#D0D0D0" width="16px" height="16px"/>
+              <Stack spacing={0} flexDirection="row" alignItems="center" gap="8px">
+                <SettingsIcon fill="#D0D0D0" width="20px" height="20px"/>
                 <Text
-                  fontSize="16px"
+                  fontSize="14px"
                   fontFamily="Roboto"
-                  letterSpacing="0.1px"
                   fontWeight="400"
-                  lineHeight="16px"
+                  lineHeight="20px"
                   color="#252A32"
                 >
                   {t('settings')}
@@ -280,30 +295,31 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
               </Stack>
               <AccordionIcon />
             </AccordionButton>
-          <AccordionPanel
-            display="flex"
-            flexDirection="column"
-            gridGap="10px"
-            padding="8px 0 0 24px"
-          >
-            {links.map((elm, index) => {
-              return (
-                <Link
-                  key={index}
-                  color="#575757"
-                  fontSize="14px"
-                  fontFamily="Roboto"
-                  letterSpacing="0.1px"
-                  fontWeight="400"
-                  lineHeight="27px"
-                  onClick={() => {
-                    onClose()
-                    router.push({pathname: `/user/${userData.username}`, query: elm.value})}
-                  }
-                >{elm.name}</Link>
-              )
-            })}
-          </AccordionPanel>
+
+            <AccordionPanel
+              display="flex"
+              flexDirection="column"
+              gridGap="10px"
+              padding="0 0 0 28px"
+            >
+              {links.map((elm, index) => {
+                return (
+                  <Link
+                    key={index}
+                    color="#71757A"
+                    fontSize="14px"
+                    fontFamily="Roboto"
+                    letterSpacing="0.1px"
+                    fontWeight="400"
+                    lineHeight="20px"
+                    onClick={() => {
+                      onClose()
+                      router.push({pathname: `/user/${userData.username}`, query: elm.value})}
+                    }
+                  >{elm.name}</Link>
+                )
+              })}
+            </AccordionPanel>
           </AccordionItem>
         </Accordion>
 
@@ -314,7 +330,7 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
           cursor="pointer"
           spacing={0}
           flexDirection="row"
-          padding="16px 0"
+          padding="14px 0"
           alignItems="center"
           color="#252A32"
           fill="#D0D0D0"
@@ -330,10 +346,9 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
           <SignOutIcon width="20px" height="20px"/>
           <Text
             fontFamily="Roboto"
-            letterSpacing="0.1px"
-            fontSize="16px"
+            fontSize="14px"
             fontWeight="400"
-            lineHeight="16px"
+            lineHeight="20px"
             marginLeft="8px !important"
           >
             {t('exit')}
@@ -344,7 +359,7 @@ function MenuDrawerUser({ userData, isOpen, onClose}) {
   )
 }
 
-function MenuUser ({ userData, onOpen, onClose }) {
+function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
   const timerRef = useRef()
   const [isOpenMenu, setIsOpenMenu] = useState(false)
   const { t } = useTranslation('menu');
@@ -450,21 +465,37 @@ function MenuUser ({ userData, onOpen, onClose }) {
               fontFamily="Roboto"
               letterSpacing="0.1px"
               fontSize="12px"
-              fontWeight="400"
-              lineHeight="16px"
+              fontWeight="500"
+              lineHeight="18px"
             >
               {userData?.username ? userData?.username : ""}
             </Text>
             <Text
-              color="#6F6F6F"
+              color="#71757A"
               fontFamily="Roboto"
-              letterSpacing="0.1px"
               fontSize="12px"
-              fontWeight="400"
-              lineHeight="16px"
+              fontWeight="500"
+              lineHeight="18px"
+              letterSpacing="0.1px"
             >
               {userData?.email ? userData?.email : ""}
             </Text>
+
+            <Box
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="12px"
+              lineHeight="18px"
+              letterSpacing="0.1px"
+              border="1px solid #2B8C4D"
+              backgroundColor={isUserPro ? "#2B8C4D" : "#FFFFFF"}
+              color={isUserPro ? "#FFFFFF" : "#2B8C4D"}
+              borderRadius="100px"
+              padding="4px 8px"
+              marginTop="10px"
+            >
+              {isUserPro ? "Pro" : "Grátis"}
+            </Box>
           </MenuItem>
 
           <MenuItem
@@ -480,10 +511,9 @@ function MenuUser ({ userData, onOpen, onClose }) {
             <Text
               color="#252A32"
               fontFamily="Roboto"
-              letterSpacing="0.1px"
-              fontSize="12px"
+              fontSize="14px"
               fontWeight="400"
-              lineHeight="16px"
+              lineHeight="20px"
             >
               {t('settings')}
             </Text>
@@ -506,10 +536,9 @@ function MenuUser ({ userData, onOpen, onClose }) {
             <Text
               color="#252A32"
               fontFamily="Roboto"
-              letterSpacing="0.1px"
-              fontSize="12px"
+              fontSize="14px"
               fontWeight="400"
-              lineHeight="16px"
+              lineHeight="20px"
             >
               {t('exit')}
             </Text>
@@ -645,7 +674,14 @@ function SearchInputUser ({ user }) {
   )
 }
 
-function DesktopLinks({ userData, links, position = false, path, userTemplate = false }) {
+function DesktopLinks({
+  userData,
+  links,
+  position = false,
+  path,
+  userTemplate = false,
+  isUserPro
+}) {
   const isMobile = useIsMobileMod(); // Use the custom hook here
 
   function LinkMenuDropDown ({ url, text, icon }) {
@@ -796,7 +832,7 @@ function DesktopLinks({ userData, links, position = false, path, userTemplate = 
 
         {userData ? (
           <HStack spacing="20px">
-            <MenuUser userData={userData}/>
+            <MenuUser userData={userData} isUserPro={isUserPro}/>
           </HStack>
         ) : (
           <>
@@ -868,6 +904,14 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
 
   const [lastScrollY, setLastScrollY] = useState(0)
   const [menuVisible, setMenuVisible] = useState(true)
+
+  const isUserPro = () => {
+    let user
+    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
+
+    if(user?.internalSubscription?.edges?.[0]?.node?.isActive === true) return true
+    return false
+  }
   const isMobile = useIsMobileMod(); // Use the custom hook here
 
   useEffect(() => {
@@ -1041,6 +1085,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
               position={isScrollDown}
               path={route}
               userTemplate={userTemplate}
+              isUserPro={isUserPro()}
             />
           }
 
@@ -1055,12 +1100,14 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
               userData={userData}
               onOpen={menuUserMobile.onOpen}
               onClose={menuUserMobile.onClose}
+              isUserPro={isUserPro()}
             />
           }
           <MenuDrawerUser 
             userData={userData}
             isOpen={menuUserMobile.isOpen}
             onClose={menuUserMobile.onClose}
+            isUserPro={isUserPro()}
           />
         </HStack>
       </Box>

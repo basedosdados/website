@@ -23,6 +23,7 @@
         "features": [
           "Processed tables",
           "Integrated data",
+          "Updated low-frequency data",
           "Cloud access",
           "Access via SQL, Python, and R",
           "Integration with BI tools",
@@ -33,7 +34,7 @@
         "title": "DB Pro",
         "subtitle": "For you to access the most up-to-date data",
         "features": [
-          "Dozens of updated high-frequency databases",
+          "Dozens of updated high-frequency datasets",
           "Company reference table with updated information",
           "Direct download up to 1GB (80% of the platform's tables)"
         ]

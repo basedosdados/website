@@ -266,6 +266,7 @@
         "processedTables": "Tabelas tratadas",
         "integratedData": "Dados integrados",
         "integratedDataTooltip": "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada.",
+        "updatedLowFrequencyData": "Dados de baixa frequência atualizados",
         "cloudAccess": "Acesso em nuvem",
         "sqlPythonRAccess": "Acesso via SQL, Python e R",
         "biIntegration": "Integração com ferramentas BI",

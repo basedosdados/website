@@ -13,6 +13,7 @@ import Head from "next/head";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import cookies from "js-cookie";
 import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../../utils";
 import { withPages } from "../../hooks/pages.hook";
@@ -84,6 +85,14 @@ export default function SearchDatasetPage() {
     setSelectedFilters(fetchFilter(query))
     setFetchApi(fetchFunc)
   }, [query])
+
+  const isUserPro = () => {
+    let user
+    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
+
+    if(user?.internalSubscription?.edges?.[0]?.node?.isActive === true) return true
+    return false
+  }
 
   function flattenArray(arr) {
     let result = []
@@ -591,6 +600,7 @@ export default function SearchDatasetPage() {
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
           <VStack
+            display={isUserPro() ? "none" : "flex"}
             width="100%"
             spacing="14px"
             alignItems="start"
@@ -619,7 +629,7 @@ export default function SearchDatasetPage() {
             />
           </VStack>
 
-          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
+          <Divider display={isUserPro() ? "none" : "flex"} marginY="16px !important" borderColor="#DEDFE0"/>
 
           <CheckboxFilterAccordion
             canSearch={true}

@@ -431,7 +431,7 @@ export function SectionPrice() {
           textResource={t('features')}
           resources={t('plans.free.features', { returnObjects: true }).map((feature, index) => ({
             name: feature,
-            tooltip: index === 1 ? t('tooltips.integratedData') : (index === 5 ? t('tooltips.downloadLimit') : null)
+            tooltip: index === 1 ? t('tooltips.integratedData') : (index === 6 ? t('tooltips.downloadLimit') : null)
           }))}
           button={{
             text: t('exploreFeatures'),
