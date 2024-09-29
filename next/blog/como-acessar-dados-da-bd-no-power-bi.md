@@ -1,23 +1,27 @@
 ---
-title: Tutorial Power BI
-description:
+title: Como acessar dados da BD no Power BI
+description: Veja como acessar o datalake público da Base dos Dados no Power BI para criar gráficos, visualizações e dashboards.
 date:
-  created: ''
+  created: '2021-07-30'
 authors:
+  - name: Victor Viana
+    role: Autor
+    social: https://medium.com/@ovictorviana
 thumbnail: /blog/tutorial-power-bi/image_11.gif
 categories: [tutorial]
-medium_slug: ''
+medium_slug: >
+  https://medium.com/basedosdados/como-acessar-dados-da-bd-no-power-bi-aeeea9a9bdc0
 ---
 
 ## TL;DR
 
-O Power BI é uma das tecnologias mais populares para o desenvolvimento de dashboards com dados relacionais, e a [Base dos Dados](https://www.google.com/url?q=https://basedosdados.org/\&sa=D\&source=editors\&ust=1626396149894000\&usg=AOvVaw2fSCNOCKXtr8yiXoj-Hw3Z) é um dos maiores data lakes públicos do Brasil. Essa combinação é o ambiente perfeito para sua análise e a visualização de dados. Neste artigo, vou te mostrar como é fácil ter acesso às bases de dados da BD para uso no PBI, além de explicar o passo a passo.
+O Power BI é uma das tecnologias mais populares para o desenvolvimento de dashboards com dados relacionais, e a [Base dos Dados](https://basedosdados.org) é um dos maiores data lakes públicos do Brasil. Essa combinação é o ambiente perfeito para sua análise e a visualização de dados. Neste artigo, vou te mostrar como é fácil ter acesso às bases de dados da BD para uso no PBI, além de explicar o passo a passo.
 
 <Image src="/blog/tutorial-power-bi/image_0.png"/>
 
 ## Conectar ao Google BigQuery
 
-O [Google Bigquery](https://www.google.com/url?q=https://cloud.google.com/bigquery\&sa=D\&source=editors\&ust=1626396176093000\&usg=AOvVaw0Tv_wR9xWDsunWNof6mJbF) é um serviço de banco de dados em nuvem do Google, onde os conjuntos de dados da Base dos Dados estão armazenados dentro de um datalake público — chamado `basedosdados`. Para acessar os dados, necessário criar um projeto (gratuito) no BigQuery caso já tenha um projeto siga para o próximo passo, caso contrário, elaboramos dois tutoriais para te ajudar de forma simples e rápida:
+O [Google Bigquery](https://cloud.google.com/bigquery?hl=pt_br) é um serviço de banco de dados em nuvem do Google, onde os conjuntos de dados da Base dos Dados estão armazenados dentro de um datalake público — chamado `basedosdados`. Para acessar os dados, necessário criar um projeto (gratuito) no BigQuery caso já tenha um projeto siga para o próximo passo, caso contrário, elaboramos dois tutoriais para te ajudar de forma simples e rápida:
 
 1. [Artigo](https://dev.to/basedosdados/bigquery-101-45pk)
 2. [Video](https://www.youtube.com/watch?v=nGM2OwTUY_M)
@@ -26,11 +30,11 @@ O [Google Bigquery](https://www.google.com/url?q=https://cloud.google.com/bigque
 
 Nesse projeto vamos mostrar como conectar os dados da evolução do PIB dos municípios (base fato) e as informações sobre os municípios (base dimensão) no [Power BI](https://powerbi.microsoft.com/pt-br/downloads/) para elaboração de análises. Essa base é usada de exemplo, mas o tutorial serve para qualquer outra base de interesse que esteja no *datalake*.
 
-**Buscando os dados no site**
+### Buscando os dados no site
 
 Para acessar os dados na interface do BigQuery utilizamos queries (consultas) em SQL, uma das linguagens de programação mais básicas e úteis para quem trabalha com dados. No site da Base dos Dados você pode procurar por qualquer base e copiar direto o código SQL, disponível na página da tabela selecionada em “Acesse os dados via BigQuery”, para usar no editor de SQL do Google BigQuery, como mostra no exemplo abaixo. Para aprender mais sobre como usar a linguagem, recomendo o curso gratuito da [Udacity](https://www.udacity.com/course/sql-for-data-analysis--ud198), ou o próprio tutorial do [BigQuery](https://cloud.google.com/bigquery/docs/tutorials).
 
-**Selecionando os dados no BigQuery**
+### Selecionando os dados no BigQuery
 
 Ainda no site, você pode clicar no botão “Consultar no BigQuery” para ser redirecionado ao [*datalake*](https://console.cloud.google.com/bigquery?p=basedosdados\&page=project). A interface do BigQuery é diferente do site pois é um serviço mantido pelo próprio Google, explicamos mais sobre cada elemento dessa interface neste artigo.
 
@@ -51,9 +55,9 @@ LIMIT 100
 
 <Image src="/blog/tutorial-power-bi/image_2.png"/>
 
-**Salvando os dados num projeto privado**
+### Salvando os dados num projeto privado
 
-Salve a tabela obtida clicando em “Salvar”. Você pode salvar a consulta ou a visualização
+Salve a tabela obtida clicando em __Salvar__. Você pode salvar a consulta ou a visualização
 
 <Image src="/blog/tutorial-power-bi/image_3.png"/>
 
@@ -73,7 +77,7 @@ Para salvar outra tabela com as informações de municípios (nome, UF, etc), fa
 
 ```sql
 SELECT
-  id_municipio, 
+  id_municipio,
   municipio,
   id_uf,
   uf,
@@ -81,7 +85,7 @@ SELECT
 FROM `basedosdados.br_bd_diretorios_brasil.municipio`
 ```
 
-**Importando os dados para o PBI**
+### Importando os dados para o PBI
 
 * Abra o PBI
 * Vá em Obter Dados -> Mais
@@ -104,11 +108,9 @@ FROM `basedosdados.br_bd_diretorios_brasil.municipio`
 <Image src="/blog/tutorial-power-bi/image_10.png"/>
 
 * Clique em carregar
-* Selecione Importar\
-  Para maioria dos casos não é necessário estar conectado diretamente, além disso não você não fica dependente da conexão com o banco.
+* Selecione Importar
+  - Para maioria dos casos não é necessário estar conectado diretamente, além disso não você não fica dependente da conexão com o banco.
 
 Pronto, agora você tem acesso às suas bases da BD para criar seu dashboard. :)
 
 <Image src="/blog/tutorial-power-bi/image_11.gif"/>
-
-Para qualquer sugestão ou dúvidas, fique a vontade para comentar, me procurar pelas redes ou na comunidade da Base dos Dados no [Discord](https://discord.com/invite/huKWpsVYx4).
