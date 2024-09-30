@@ -60,16 +60,36 @@ Por fim, nas variáveis que identificam o ensino, temos em sua maioria variávei
 Com uma única entrada no R usando a biblioteca basedosdados, podemos descobrir, por exemplo, quais escolas não têm água potável em Minas Gerais no ano de 2020:
 
 ```r
-basedosdados::read_sql('SELECT ano,id_escola,agua_potavel FROM `basedosdados-dev.br_inep_censo_escolar.escola` WHERE agua_potavel = 0 and ano = 2020 and sigla_uf = "MG"')
+basedosdados::read_sql('
+SELECT
+  ano,
+  id_escola,
+  agua_potavel
+FROM
+  `basedosdados-dev.br_inep_censo_escolar.escola`
+WHERE
+  agua_potavel = 0
+  AND ano = 2020
+  AND sigla_uf = "MG"
+')
 ```
 
 Ou quais escolas funcionavam em unidades prisionais em 2009:
 
 ```python
 import basedosdados as bd
+
 bd.read_sql(
-  query = "SELECT * FROM `basedosdados.br_inep_censo_escolar.turma` WHERE ano = 2010 and sigla_uf = BA",
-  billing_project_id = "bd_projeto"
+    query="""
+SELECT
+  *
+FROM
+  `basedosdados.br_inep_censo_escolar.turma`
+WHERE
+  ano = 2010
+  AND sigla_uf = 'BA'
+""",
+    billing_project_id="bd_projeto",
 )
 ```
 
@@ -84,10 +104,9 @@ Temos também variáveis que identificam **atividades extracurriculares** e **qu
 Se quisermos abrir as turmas de 2010 para o estado da Bahia por exemplo, no [Python](https://dev.to/basedosdados/base-dos-dados-python-101-44lc):
 
 ```python
-import basedosdados as bd
 bd.read_sql(
-  query = "SELECT * FROM `basedosdados.br_inep_censo_escolar.turma` WHERE ano = 2010 and sigla_uf = BA",
-  billing_project_id = "bd_projeto"
+    query = "SELECT * FROM `basedosdados.br_inep_censo_escolar.turma` WHERE ano = 2010 and sigla_uf = 'BA'",
+    billing_project_id = "bd_projeto"
 )
 ```
 
@@ -100,10 +119,9 @@ Na tabela temos as mais diversas características de cada docente, representadas
 Se quisermos só os docentes pretos da cidade de Rio Branco por exemplo, poderíamos rodar em Python:
 
 ```python
-import basedosdados as bd
 bd.read_sql(
-  query = "SELECT * FROM `basedosdados.br_inep_censo_escolar.docente` WHERE id_municipio = 1200401 and raca_cor = 2",
-  billing_project_id = "bd_projeto"
+    query = "SELECT * FROM `basedosdados.br_inep_censo_escolar.docente` WHERE id_municipio = '1200401' and raca_cor = '2'",
+    billing_project_id = "bd_projeto"
 )
 ```
 
@@ -120,7 +138,16 @@ A tabela `matricula`, especificamente, é muito grande (chega a mais de 90gb), p
 Como exemplo, podemos recortá-la para pegar somente os estudantes que vão à escola de transporte público em 2019, no estado de Roraima. No R, ficaria assim:
 
 ```r
-basedosdados::read_sql("SELECT * FROM `basedosdados.br_inep_censo_escolar.matricula` WHERE sigla_uf = RR and transporte_publico = 1 and ano = 2019")
+basedosdados::read_sql("
+SELECT
+  *
+FROM
+  `basedosdados.br_inep_censo_escolar.matricula`
+WHERE
+  sigla_uf = 'RR'
+  AND transporte_publico = 1
+  AND ano = 2019
+")
 ```
 
 ## Pontos de contato com outras bases
@@ -136,12 +163,5 @@ O censo escolar por si só já disponibiliza uma grande variedade de variáveis.
 As tabelas do Censo também tem identificação do município de cada uma das escolas, das turmas, dos docentes e dos alunos, permitindo vinculá-las com quase todas as tabelas a nível de município disponível no nosso datalake.
 
 Chegamos ao fim da nossa breve apresentação! Os dados da mais importante pesquisa estatística educacional brasileira, o Censo Escolar (e todas suas nuances) agora fazem parte da [Base dos Dados](https://basedosdados.org/)!
-
-Nosso projeto já te ajudou de alguma forma? Saiba como nos ajudar:
-
-- [Apoie o projeto](https://apoia.se/basedosdados)
-- [Seja um(a) colaborador(a) de dados na BD](https://basedosdados.github.io/mais/colab_data/)
-- [Colabore com nossos pacotes](https://github.com/basedosdados/mais)
-- [Compartilhe nas redes sociais!](https://twitter.com/basedosdados)
 
 Texto produzido por [Matheus](https://github.com/mavalentim) da equipe de Dados, com enorme apoio do pesquisador Adriano Senkevics, um dos especialistas em educação da nossa comunidade 💚

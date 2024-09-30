@@ -110,6 +110,7 @@ export default function Post({ slug, mdxSource, headings }) {
             maxHeight={"calc(100vh - 6rem)"}
             overflowY={"auto"}
             paddingLeft={{ base: "0", md: "5rem" }}
+            paddingRight={"1rem"}
             paddingBottom={"2rem"}
             width={{ base: "100%", md: "35%", xl: "35%" }}
           >

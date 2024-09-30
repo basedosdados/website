@@ -78,12 +78,11 @@ function CodeBlock({ children }) {
 
   const { hasCopied, onCopy } = useClipboard(code);
 
-  const highlighted =
-    language !== undefined && LANGS_SUPPORTED.includes(language)
-      ? hljs.highlight(code, {
-          language: language,
-        })
-      : hljs.highlightAuto(code);
+  const highlighted = LANGS_SUPPORTED.includes(language)
+    ? hljs.highlight(code, {
+        language: language,
+      })
+    : { value: code };
 
   return (
     <Box
@@ -91,6 +90,8 @@ function CodeBlock({ children }) {
       marginY={"1rem"}
       borderRadius={"8px"}
       backgroundColor={"#282b2e"}
+      maxHeight={"70vh"}
+      overflowY={"auto"}
     >
       <Box display={"flex"} alignItems={"center"} padding={"0 0.5rem"}>
         {language ? (
@@ -390,7 +391,14 @@ export const mdxComponents = {
   pre: (props) => <CodeBlock {...props} />,
   ol: (props) => <OrderedList {...props} />,
   ul: (props) => <UnorderedList {...props} />,
-  li: (props) => <ListItem marginY={"2"} fontFamily={"Roboto"} {...props} />,
+  li: (props) => (
+    <ListItem
+      marginY={"2"}
+      color="rgb(55, 65, 81)"
+      fontFamily={"Roboto"}
+      {...props}
+    />
+  ),
   table: (props) => (
     <TableContainer>
       <Table variant="simple" {...props} />
@@ -533,7 +541,7 @@ export function Contribute({ slug }) {
         um pull request e contribua na Base dos Dados {"💚"}
       </Text>
       <Link
-        href={`https://github.com/basedosdados/website/edit/main/next/blog/${slug}.mdx`}
+        href={`https://github.com/basedosdados/website/edit/main/next/blog/${slug}.md`}
         display={"flex"}
         alignItems={"center"}
         borderRadius="8px"
@@ -828,10 +836,7 @@ function MiniBlogCard({ slug, frontmatter }) {
         </Box>
         <Heading as="h3" fontSize={"xl"} fontWeight={500} fontFamily={"Roboto"}>
           <NextLink href={`/blog/${slug}`} passHref>
-            <Link
-              display="block"
-              paddingTop={"1rem"}
-            >
+            <Link display="block" paddingTop={"1rem"}>
               {title}
             </Link>
           </NextLink>
@@ -863,7 +868,13 @@ function MiniBlogCard({ slug, frontmatter }) {
 function BlogHeader({ category }) {
   return (
     <Box marginBottom={"3rem"} marginTop={"2.2rem"}>
-      <Text as="span" color="gray" fontFamily={"Roboto"} fontSize={".88rem"} fontWeight={500}>
+      <Text
+        as="span"
+        color="gray"
+        fontFamily={"Roboto"}
+        fontSize={".88rem"}
+        fontWeight={500}
+      >
         Categorias
       </Text>
       <Box as="nav" marginTop={"0.5rem"}>
@@ -880,6 +891,7 @@ function BlogHeader({ category }) {
             }),
           ].map(({ name, shortName, href }) => (
             <ListItem
+              key={name}
               fontFamily={"Roboto"}
               fontSize={"0.9rem"}
               listStyleType={"none"}

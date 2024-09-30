@@ -96,30 +96,31 @@ dataset_id = "br_ibge_pnad"
 table_id = "microdados_compatibilizados_domicilio"
 
 # Load the data into a Pandas DataFrame
-df = bd.read_table(dataset_id=dataset_id, table_id=table_id,
-billing_project_id=project_id)
+df = bd.read_table(
+    dataset_id=dataset_id, table_id=table_id, billing_project_id=project_id
+)
 
 # Filter the DataFrame
-filtered_df = df[(df['posse_domicilio'] != '1') &
-(df['renda_mensal_domiciliar_compativel_1992'] > 0) &
-(df['aluguel'] > 0) &
-(df['ano'].between(1997, 2015))]
+filtered_df = df[
+    (df["posse_domicilio"] != "1")
+    & (df["renda_mensal_domiciliar_compativel_1992"] > 0)
+    & (df["aluguel"] > 0)
+    & (df["ano"].between(1997, 2015))
+]
 
 # Calculate the mean value for rent and income for each year
-mean_rent_year = filtered_df.groupby('ano')['aluguel'].mean()
-mean_income_year =
-filtered_df.groupby('ano')['renda_mensal_domiciliar_compativel
-_1992'].mean()
+mean_rent_year = filtered_df.groupby("ano")["aluguel"].mean()
+mean_income_year = filtered_df.groupby("ano")[
+    "renda_mensal_domiciliar_compativel_1992"
+].mean()
 
 # Plot the line graph for mean rent and mean income for each
 year
-plt.plot(mean_rent_year.index, mean_rent_year, label="Média
-Aluguel")
-plt.plot(mean_income_year.index, mean_income_year,
-label="Média Renda")
-plt.xlabel('Ano')
-plt.ylabel('Valor')
-plt.title('Valor Médio do Aluguel e da Renda')
+plt.plot(mean_rent_year.index, mean_rent_year, label="Média Aluguel")
+plt.plot(mean_income_year.index, mean_income_year, label="Média Renda")
+plt.xlabel("Ano")
+plt.ylabel("Valor")
+plt.title("Valor Médio do Aluguel e da Renda")
 plt.legend()
 plt.show()
 ```
@@ -128,40 +129,39 @@ Gráfico 2 — Porcentagem de comprometimento da renda com aluguel
 
 ```sql
 SELECT
-ano,
-SUM(renda_mensal_domiciliar_compativel_1992) AS total_renda_mensal,
-SUM(aluguel) AS total_aluguel,
-SUM(aluguel) / SUM(renda_mensal_domiciliar_compativel_1992) * 100 AS
-porcentagem_renda_aluguel
+  ano,
+  SUM(renda_mensal_domiciliar_compativel_1992) AS total_renda_mensal,
+  SUM(aluguel) AS total_aluguel,
+  SUM(aluguel) / SUM(renda_mensal_domiciliar_compativel_1992) * 100 AS porcentagem_renda_aluguel
 FROM
-`basedosdados.br_ibge_pnad.microdados_compatibilizados_domicilio`
+  `basedosdados.br_ibge_pnad.microdados_compatibilizados_domicilio`
 WHERE
-posse_domicilio <> '1'
-AND renda_mensal_domiciliar_compativel_1992 > 0
-AND aluguel > 0
+  posse_domicilio <> '1'
+  AND renda_mensal_domiciliar_compativel_1992 > 0
+  AND aluguel > 0
 GROUP BY
-ano
-ORDER BY ano DESC
+  ano
+ORDER BY
+  ano DESC
 ```
 
 Gráfico 3 — Dispêndio para todos os estados (2015)
 
 ```sql
 SELECT
-sigla_uf,
-SUM(renda_mensal_domiciliar_compativel_1992) AS total_renda_mensal,
-SUM(aluguel) AS total_aluguel,
-SUM(aluguel) / SUM(renda_mensal_domiciliar_compativel_1992) * 100 AS
-porcentagem_renda_aluguel
+  sigla_uf,
+  SUM(renda_mensal_domiciliar_compativel_1992) AS total_renda_mensal,
+  SUM(aluguel) AS total_aluguel,
+  SUM(aluguel) / SUM(renda_mensal_domiciliar_compativel_1992) * 100 AS porcentagem_renda_aluguel
 FROM
-`basedosdados.br_ibge_pnad.microdados_compatibilizados_domicilio`
+  `basedosdados.br_ibge_pnad.microdados_compatibilizados_domicilio`
 WHERE
-posse_domicilio <> '1'
-AND renda_mensal_domiciliar_compativel_1992 > 0
-AND aluguel > 0
-AND ano = 2015 -- Selecting only the data for the year 2015
+  posse_domicilio <> '1'
+  AND renda_mensal_domiciliar_compativel_1992 > 0
+  AND aluguel > 0
+  AND ano = 2015 -- Selecting only the data for the year 2015
 GROUP BY
-sigla_uf
+  sigla_uf
 ORDER BY
-porcentagem_renda_aluguel DESC;
+  porcentagem_renda_aluguel DESC;
 ```

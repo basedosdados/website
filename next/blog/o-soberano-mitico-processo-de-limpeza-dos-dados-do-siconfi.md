@@ -17,12 +17,7 @@ medium_slug: >-
 
 ## TL;DR
 
-Os dados de Finanças Municipais do Governo Federal, disponibilizados pelo Sistema de Informações Contábeis e Fiscais do Setor Público Brasileiro ([Siconfi](https://siconfi.tesouro.gov.br/siconfi/index.jsf)), já estão tratados e padronizados no [datalake público](https://console.cloud.google.com/bigquery?p=basedosdados&d=br_me_siconfi&t=municipio_receitas_orcamentarias&page=table) da [Base dos Dados](https://basedosdados.org/), por onde você pode acessá-los e cruzá-los com diversas outras bases de dados públicas. Preparamos esse artigo para detalhar a saga épica que foi o processo de limpeza e tratamento desses dados. Dentre os tópicos deste texto, você encontra:
-
-- Finbra X Siconfi
-- Considerações sobre os conjuntos de dados
-- O processo de limpeza e compatibilização
-- Considerações finais
+Os dados de Finanças Municipais do Governo Federal, disponibilizados pelo Sistema de Informações Contábeis e Fiscais do Setor Público Brasileiro ([Siconfi](https://siconfi.tesouro.gov.br/siconfi/index.jsf)), já estão tratados e padronizados no [datalake público](https://console.cloud.google.com/bigquery?p=basedosdados&d=br_me_siconfi&t=municipio_receitas_orcamentarias&page=table) da [Base dos Dados](https://basedosdados.org/), por onde você pode acessá-los e cruzá-los com diversas outras bases de dados públicas. Preparamos esse artigo para detalhar a saga épica que foi o processo de limpeza e tratamento desses dados.
 
 O Siconfi foi desenvolvido como um instrumento para, dentre outros objetivos, facilitar a produção e análise de informações contábeis e fiscais, padronizar os mecanismos de consolidação e aumentar a qualidade e confiabilidade das informações contábeis, financeiras e de estatísticas fiscais recebidas dos municípios, estados, Distrito Federal e União. A base contempla tabelas de despesas e receitas orçamentárias, com colunas por ano, sigla UF, município, estágio e portaria.
 

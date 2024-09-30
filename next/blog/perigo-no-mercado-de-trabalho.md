@@ -47,9 +47,24 @@ library(formattable)
 
 set_billing_id("YOUR-PROJECT-HERE")
 
-query <- "SELECT ano, mes,sigla_uf,id_municipio,idade,saldo_movimentacao,salario_mensal,sexo,raca_cor,grau_instrucao
-FROM `basedosdados.br_me_caged.microdados_movimentacoes`
-WHERE sigla_uf = 'RJ'"
+query <- "
+SELECT
+  ano,
+  mes,
+  sigla_uf,
+  id_municipio,
+  idade,
+  saldo_movimentacao,
+  salario_mensal,
+  sexo,
+  raca_cor,
+  grau_instrucao
+FROM
+  `basedosdados.br_me_caged.microdados_movimentacao`
+WHERE
+  sigla_uf = 'RJ'
+"
+
 caged_novo <- read_sql(query)
 ```
 
@@ -396,5 +411,3 @@ Vale ressaltar ainda que a pandemia causou uma anomalia importante no mercado de
 Dessa forma, conseguimos observar que o estado do Rio de Janeiro vem conseguindo, de maneira geral, recuperar seu mercado de trabalho. Entretanto, como indica a experiência que vimos com relação à cidade de Campos, uma maior quantidade de contratações não basta, uma vez que o mercado ainda se encontra frágil e com alta demanda por emprego, fazendo com que os salários caiam. Como vimos, esse fato é ainda mais intensificado quando a população é pouco qualificada.
 
 Portanto, as notícias são de que o desemprego no estado tende a se recuperar, mas iremos observar uma importante queda no poder de compra, já que de um lado vemos uma queda nos salários e, de outro, uma inflação perigosamente alta. Vivemos, talvez, nesse momento, uma perigosa armadilha no mercado de trabalho: empregos subindo, mas salários caindo.
-
-

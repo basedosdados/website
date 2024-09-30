@@ -135,9 +135,18 @@ Alguns comandos mais básicos de SQL são:
 Então, por exemplo, para consultas o nome, cargo e raça de candidatos(as) de um município e em um ano específico, podemos utilizar a consulta abaixo.
 
 ```sql
-SELECT ano, id_municipio, cargo, nome, raca, genero
-FROM basedosdados.br_tse_eleicoes.candidatos
-WHERE ano = 2000 AND id_municipio = "3509502"
+SELECT
+  ano,
+  id_municipio,
+  cargo,
+  nome,
+  raca,
+  genero
+FROM
+  basedosdados.br_tse_eleicoes.candidatos
+WHERE
+  ano = 2000
+  AND id_municipio = "3509502"
 ```
 
 Veja o resultado dessa consulta na imagem abaixo

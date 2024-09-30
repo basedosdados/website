@@ -51,11 +51,14 @@ Confira abaixo a Query utilizada:
 SELECT
   t1.ano,
   t2.nome_uf AS estado,
-  t2.nome    AS municipio,
+  t2.nome AS municipio,
   t1.tempo_medio_deslocamento
-FROM `basedosdados.br_mobilidados_indicadores.tempo_deslocamento_casa_trabalho` AS t1
-JOIN `basedosdados.br_bd_diretorios_brasil.municipio` AS t2
-ON t1.id_municipio = t2.id_municipio
+FROM
+  `basedosdados.br_mobilidados_indicadores.tempo_deslocamento_casa_trabalho` AS t1
+JOIN
+  `basedosdados.br_bd_diretorios_brasil.municipio` AS t2
+ON
+  t1.id_municipio = t2.id_municipio
 ```
 
 ### Dados de importações e exportações brasileiras
@@ -73,12 +76,20 @@ SELECT
   t1.sigla_uf,
   t2.nome AS pais,
   SUM(valor_fob_dolar) AS importacao
-FROM `basedosdados.br_me_comex_stat.municipio_importacao` AS t1
-JOIN `basedosdados-dev.br_bd_diretorios_brasil.pais`      AS t2 
-ON t1.id_pais = t2.id_pais
-WHERE ano = 2020
-GROUP BY 1, 2, 3
-ORDER BY 3 DESC
+FROM
+  `basedosdados.br_me_comex_stat.municipio_importacao` AS t1
+JOIN
+  `basedosdados-dev.br_bd_diretorios_brasil.pais` AS t2
+ON
+  t1.id_pais = t2.id_pais
+WHERE
+  ano = 2020
+GROUP BY
+  1,
+  2,
+  3
+ORDER BY
+  3 DESC
 ```
 
 Acesse a base de Diretórios Brasileiros por [aqui](https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=0a2d8187-f936-437d-89db-b4eb3a7e1735).

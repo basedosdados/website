@@ -61,10 +61,10 @@ Se quiser se aprofundar mais, você pode ver mais informações do Banco Central
 Vamos começar a analisar os dados de Crédito Rural observando o valor de recursos contratados de 2013 a 2022. Observe abaixo o código utilizado.
 
 ```r
-#settings
+# settings
 options(scipen = 999)
 
-#carregar bibliotecas
+# carregar bibliotecas
 library(basedosdados)
 library(dplyr)
 library(readr)
@@ -75,77 +75,101 @@ library(ggrepel)
 library(RColorBrewer)
 library(viridis)
 
-#settar billing id do projeto no google 
-#cloud para acessar os dados  no datalake da BD
+# settar billing id do projeto no google
+# cloud para acessar os dados  no datalake da BD
 
-set_billing_id('insira-seu-billing-id')
+set_billing_id("insira-seu-billing-id")
 ```
 
 ```r
-#aqui são definidos algums temas padrões para os gráficos
-#construidos durante a análise.
+# aqui são definidos algums temas padrões para os gráficos
+# construidos durante a análise.
 
 tema_sem_legenda <- theme_classic() +
-  theme(axis.title.x = element_text(colour = "black"),
-        axis.title.y = element_text(colour = "black"),
-        axis.text.y = element_text(face="bold", color="#000000", 
-                                   size=12),
-        axis.line = element_line(colour = "black", 
-                                 size = 1.5, linetype = "solid"),
-        axis.text=element_text(size=8, face="bold"),
-        axis.text.x = element_text(face="bold", color="#000000", size=11),
-        plot.title = element_text(colour = "black", face = 'bold' ,size = 15, hjust=0),
-        plot.subtitle = element_text(colour = 'black', size  = 12),
-        legend.position = 'none') 
+  theme(
+    axis.title.x = element_text(colour = "black"),
+    axis.title.y = element_text(colour = "black"),
+    axis.text.y = element_text(
+      face = "bold", color = "#000000",
+      size = 12
+    ),
+    axis.line = element_line(
+      colour = "black",
+      size = 1.5, linetype = "solid"
+    ),
+    axis.text = element_text(size = 8, face = "bold"),
+    axis.text.x = element_text(face = "bold", color = "#000000", size = 11),
+    plot.title = element_text(colour = "black", face = "bold", size = 15, hjust = 0),
+    plot.subtitle = element_text(colour = "black", size = 12),
+    legend.position = "none"
+  )
 
-tema_com_legenda <-  theme_classic() +
-  theme(axis.title.x = element_text(colour = "black"),
-        axis.title.y = element_text(colour = "black"),
-        axis.text.y = element_text(face="bold", color="#000000", 
-                                   size=12),
-        axis.line = element_line(colour = "black", 
-                                 size = 1.5, linetype = "solid"),
-        axis.text=element_text(size=8, face="bold"),
-        axis.text.x = element_text(face="bold", color="#000000", size=11),
-        plot.title = element_text(colour = "black", face = 'bold' ,size = 15, hjust=0),
-        plot.subtitle = element_text(colour = 'black', size  = 12),
-        legend.position = 'top',
-        legend.text = element_text(size = 12))
+tema_com_legenda <- theme_classic() +
+  theme(
+    axis.title.x = element_text(colour = "black"),
+    axis.title.y = element_text(colour = "black"),
+    axis.text.y = element_text(
+      face = "bold", color = "#000000",
+      size = 12
+    ),
+    axis.line = element_line(
+      colour = "black",
+      size = 1.5, linetype = "solid"
+    ),
+    axis.text = element_text(size = 8, face = "bold"),
+    axis.text.x = element_text(face = "bold", color = "#000000", size = 11),
+    plot.title = element_text(colour = "black", face = "bold", size = 15, hjust = 0),
+    plot.subtitle = element_text(colour = "black", size = 12),
+    legend.position = "top",
+    legend.text = element_text(size = 12)
+  )
 ```
 
 A tabela que contém parte considerável das informações sobre as operações de crédito rural —  dentre elas o valor de crédito contrato por operação  —  é a `microdados_operacao`. Para uma visão agregada, veremos o montante de CR concedido por ano, durante 2013 a 2022.
 
 ```r
-#vamos a primeira query!
-#O objetivo é construir uma tabela agregada com a soma do valor das operações de crédito por ano.
-#Basta selecionar a tabela de *microdados_operacao* e somar o valor total das operações por ano.
+# vamos a primeira query!
+# O objetivo é construir uma tabela agregada com a soma do valor das operações de crédito por ano.
+# Basta selecionar a tabela de *microdados_operacao* e somar o valor total das operações por ano.
 
-operacoes_ano <- read_sql("SELECT  op.ano, SUM (op.valor_parcela_credito) AS valor_total
-FROM `basedosdados.br_bcb_sicor.microdados_operacao` op
-GROUP BY op.ano  
-ORDER BY op.ano")
+operacoes_ano <- read_sql("
+SELECT
+  op.ano,
+  SUM (op.valor_parcela_credito) AS valor_total
+FROM
+  `basedosdados.br_bcb_sicor.microdados_operacao` op
+GROUP BY
+  op.ano
+ORDER BY
+  op.ano
+")
 
-#Em seguida, é só elaborar o gráfico
+# Em seguida, é só elaborar o gráfico
 
-plot1 <-operacoes_ano %>%
-  mutate(valor_total = round(valor_total/1000000000, 2),
-         ano = as.integer(ano)) %>% 
+plot1 <- operacoes_ano %>%
+  mutate(
+    valor_total = round(valor_total / 1000000000, 2),
+    ano = as.integer(ano)
+  ) %>%
   ggplot(aes(x = ano, y = valor_total)) +
   geom_line(size = 2) +
-  geom_point(aes( color = 'red'), size = 3) +
-  geom_text_repel(aes(label = valor_total), fontface = 'bold', 
-                   color = 'black', size = 4,
-                  vjust = -0.8, hjust = -1.2,  segment.linetype = 6,
-                 
-                  arrow = arrow(length = unit(0.09, "inches"))) +
+  geom_point(aes(color = "red"), size = 3) +
+  geom_text_repel(aes(label = valor_total),
+    fontface = "bold",
+    color = "black", size = 4,
+    vjust = -0.8, hjust = -1.2, segment.linetype = 6,
+    arrow = arrow(length = unit(0.09, "inches"))
+  ) +
   scale_x_continuous(breaks = c(2013:2022)) +
-  scale_y_continuous(limits = c(100,300), breaks = seq(50,300, 50)) +
+  scale_y_continuous(limits = c(100, 300), breaks = seq(50, 300, 50)) +
   tema_sem_legenda +
-  labs(y = " " ,
-       x = " ", 
-       caption = "Fonte: elaborado pelo autor com Microdados do SICOR extraidos da @Basedosdados.",
-       title = "Valor de Crédito Rural contratado por ano, durante janeiro de 2013 a setembro de 2022",
-       subtitle = "Preços constantes em Bilhões (R$)")
+  labs(
+    y = " ",
+    x = " ",
+    caption = "Fonte: elaborado pelo autor com Microdados do SICOR extraidos da @Basedosdados.",
+    title = "Valor de Crédito Rural contratado por ano, durante janeiro de 2013 a setembro de 2022",
+    subtitle = "Preços constantes em Bilhões (R$)"
+  )
 ```
 
 <Image src="/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_2.png" caption="Valor de Crédito Rural contratado por ano, durante janeiro de 2013 a setembro de 2022"/>
@@ -163,29 +187,45 @@ No ano safra de 2021/2022 as categorias são definidas por:
 Com a tabela abaixo mostra o valor contratado por categoria durante o período
 
 ```r
-#A categoria do produtor esta mapeada no *dicionario*. Optei por fazer um *join*
-#da tabela de microdados com o dicionário, mas seria perfeitamente
-#possível atribuir os valores usando a expressão *case when*.
+# A categoria do produtor esta mapeada no *dicionario*. Optei por fazer um *join*
+# da tabela de microdados com o dicionário, mas seria perfeitamente
+# possível atribuir os valores usando a expressão *case when*.
 
-operacoes <- read_sql("SELECT dic.valor, SUM (op.valor_parcela_credito) AS valor_total
-FROM `basedosdados.br_bcb_sicor.microdados_operacao` op
-INNER JOIN `basedosdados.br_bcb_sicor.dicionario` dic
-ON op.id_categoria_emitente = dic.chave AND 
-dic.nome_coluna = 'id_categoria_emitente'
-GROUP BY  dic.valor 
-ORDER BY valor_total")
+operacoes <- read_sql("
+SELECT
+  dic.valor,
+  SUM (op.valor_parcela_credito) AS valor_total
+FROM
+  `basedosdados.br_bcb_sicor.microdados_operacao` op
+INNER JOIN
+  `basedosdados.br_bcb_sicor.dicionario` dic
+ON
+  op.id_categoria_emitente = dic.chave
+  AND dic.nome_coluna = 'id_categoria_emitente'
+GROUP BY
+  dic.valor
+ORDER BY
+  valor_total
+")
 
-#formatar a tabela para ficar apresentável 
-operacoes <- operacoes %>% 
-  filter(valor_total > 3000000000) %>% 
+# formatar a tabela para ficar apresentável
+operacoes <- operacoes %>%
+  filter(valor_total > 3000000000) %>%
   mutate(
-    percentual = paste0('%', round(valor_total*100/sum(valor_total),2)),
-    valor_total = paste0('R$ ', round(valor_total/1000000000, 2)))  %>% 
-  datatable(extensions = 'Buttons',
-            options = list(dom = 'Blfrtip',
-                           buttons = c('copy', 'csv', 'print'),
-                           lengthMenu = list(c(10,25,50,-1),
-                                             c(10,25,50,"All"))))
+    percentual = paste0("%", round(valor_total * 100 / sum(valor_total), 2)),
+    valor_total = paste0("R$ ", round(valor_total / 1000000000, 2))
+  ) %>%
+  datatable(
+    extensions = "Buttons",
+    options = list(
+      dom = "Blfrtip",
+      buttons = c("copy", "csv", "print"),
+      lengthMenu = list(
+        c(10, 25, 50, -1),
+        c(10, 25, 50, "All")
+      )
+    )
+  )
 
 operacoes
 ```
@@ -197,34 +237,50 @@ A nível nacional uma fatia considerável do valor total (43,88%) é abocanhada 
 A figura abaixo mostra o valor absoluto em crédito contratado para cada categoria durante o período:
 
 ```r
-#Esta query é bastante similar a anterior, com a diferença de que os valores 
-#foram somados por ano. 
+# Esta query é bastante similar a anterior, com a diferença de que os valores
+# foram somados por ano.
 
-operacoes_ano_st <- read_sql("SELECT op.ano, dic.valor, SUM (op.valor_parcela_credito) AS valor_total
-FROM `basedosdados.br_bcb_sicor.microdados_operacao` op
-INNER JOIN `basedosdados.br_bcb_sicor.dicionario` dic
-ON op.id_categoria_emitente = dic.chave AND 
-dic.nome_coluna = 'id_categoria_emitente'
-GROUP BY  op.ano, dic.valor 
-ORDER BY valor_total")
+operacoes_ano_st <- read_sql("
+SELECT
+  op.ano,
+  dic.valor,
+  SUM (op.valor_parcela_credito) AS valor_total
+FROM
+  `basedosdados.br_bcb_sicor.microdados_operacao` op
+INNER JOIN
+  `basedosdados.br_bcb_sicor.dicionario` dic
+ON
+  op.id_categoria_emitente = dic.chave
+  AND dic.nome_coluna = 'id_categoria_emitente'
+GROUP BY
+  op.ano,
+  dic.valor
+ORDER BY
+  valor_total
+")
 
-#gráfico 
+# gráfico
 
-plot2 <- operacoes_ano_st %>% 
-  filter(valor_total > 3000000000) %>% 
-  mutate(ano = as.integer(ano),
-         valor_total = valor_total) %>% 
-  ggplot(aes(x = ano, y = valor_total/1000000000, fill = valor)) +
-  geom_col(position = 'stack') +
-  geom_text(aes(label = round(valor_total/1000000000, 2)),
-            position = position_stack(vjust = .5),
-            size = 5) +
+plot2 <- operacoes_ano_st %>%
+  filter(valor_total > 3000000000) %>%
+  mutate(
+    ano = as.integer(ano),
+    valor_total = valor_total
+  ) %>%
+  ggplot(aes(x = ano, y = valor_total / 1000000000, fill = valor)) +
+  geom_col(position = "stack") +
+  geom_text(aes(label = round(valor_total / 1000000000, 2)),
+    position = position_stack(vjust = .5),
+    size = 5
+  ) +
   scale_x_continuous(breaks = c(2013:2022)) +
-  scale_fill_manual(values = c("#DADAEB", "#9E9AC8", "#6A51A3"), name = ' ') +
+  scale_fill_manual(values = c("#DADAEB", "#9E9AC8", "#6A51A3"), name = " ") +
   tema_com_legenda +
-  labs(y = " " ,x = " ", caption = "Fonte: elaborado pelo autor com Microdados do SICOR extraidos da @Basedosdados.",
-       title = "Valor de Crédito Rural contratado por categoria de beneficiário,\n durante janeiro de 2013 a setembro de 2022",
-       subtitle = "Preços constantes em Bilhões (R$)") 
+  labs(
+    y = " ", x = " ", caption = "Fonte: elaborado pelo autor com Microdados do SICOR extraidos da @Basedosdados.",
+    title = "Valor de Crédito Rural contratado por categoria de beneficiário,\n durante janeiro de 2013 a setembro de 2022",
+    subtitle = "Preços constantes em Bilhões (R$)"
+  )
 
 
 plot2
@@ -241,39 +297,60 @@ Os dados gerais sobre a operação de crédito estão concentrados na tabela de 
 O conjunto de códigos de empreendimento existentes esta descrito na tabela empreendimento.
 
 ```r
-produtos_emitentes <- read_sql('SELECT  op.id_categoria_emitente,emp.produto, sum(op.valor_parcela_credito) AS valor_total
-FROM `basedosdados.br_bcb_sicor.microdados_operacao` op
-INNER JOIN `basedosdados.br_bcb_sicor.empreendimento` emp
-ON op.id_empreendimento = emp.id_empreendimento
-GROUP BY op.id_categoria_emitente, emp.produto')
+produtos_emitentes <- read_sql("
+SELECT
+  op.id_categoria_emitente,
+  emp.produto,
+  SUM(op.valor_parcela_credito) AS valor_total
+FROM
+  `basedosdados.br_bcb_sicor.microdados_operacao` op
+INNER JOIN
+  `basedosdados.br_bcb_sicor.empreendimento` emp
+ON
+  op.id_empreendimento = emp.id_empreendimento
+GROUP BY
+  op.id_categoria_emitente,
+  emp.produto
+")
 
-#gráfico
+# gráfico
 
-plot3 <- produtos_emitentes %>% 
-  group_by(id_categoria_emitente) %>% 
-  mutate(rank_produtos_emitentes =  rank(-valor_total)) %>% 
+plot3 <- produtos_emitentes %>%
+  group_by(id_categoria_emitente) %>%
+  mutate(rank_produtos_emitentes = rank(-valor_total)) %>%
   filter(rank_produtos_emitentes <= 3 &
-           (id_categoria_emitente %in% c(2222,3333,4444))) %>% 
-  mutate(nome_emitente = if_else(id_categoria_emitente == 2222, 
-                                 'Pequeno Produtor Rural',
-                                 if_else(id_categoria_emitente == 3333,
-                                         'Médio Produtor Rural',
-                                         'Grande Produtor Rural'))) %>% 
-  ggplot(aes(x = nome_emitente, y = valor_total/1000000000, fill = produto)) +
-  geom_col(aes(
-               group = rank_produtos_emitentes),
-           position = 'dodge') +
-  geom_text(aes(label = paste0(round(valor_total/1000000000,2),' BI'),
-                group = rank_produtos_emitentes),
-                  position = position_dodge(.9),
-            vjust = -.2,hjust = .5, size = 6)+
-  scale_fill_manual(values = c("#482677FF", "#33638DFF", "#20A387FF", '95D840FF'), name = ' ') +
+    (id_categoria_emitente %in% c(2222, 3333, 4444))) %>%
+  mutate(nome_emitente = if_else(id_categoria_emitente == 2222,
+    "Pequeno Produtor Rural",
+    if_else(id_categoria_emitente == 3333,
+      "Médio Produtor Rural",
+      "Grande Produtor Rural"
+    )
+  )) %>%
+  ggplot(aes(x = nome_emitente, y = valor_total / 1000000000, fill = produto)) +
+  geom_col(
+    aes(
+      group = rank_produtos_emitentes
+    ),
+    position = "dodge"
+  ) +
+  geom_text(
+    aes(
+      label = paste0(round(valor_total / 1000000000, 2), " BI"),
+      group = rank_produtos_emitentes
+    ),
+    position = position_dodge(.9),
+    vjust = -.2, hjust = .5, size = 6
+  ) +
+  scale_fill_manual(values = c("#482677FF", "#33638DFF", "#20A387FF", "95D840FF"), name = " ") +
   tema_com_legenda +
-  labs(y = " " ,
-       x = " ", 
-       caption = "Fonte: elaborado pelo autor com Microdados do SICOR extraidos da @Basedosdados.",
-       title = "Top 3 produtos financiados por categoria de beneficiário durante janeiro de 2013 \n a setembro de 2022",
-       subtitle = "Preços constantes em Bilhões (R$)") 
+  labs(
+    y = " ",
+    x = " ",
+    caption = "Fonte: elaborado pelo autor com Microdados do SICOR extraidos da @Basedosdados.",
+    title = "Top 3 produtos financiados por categoria de beneficiário durante janeiro de 2013 \n a setembro de 2022",
+    subtitle = "Preços constantes em Bilhões (R$)"
+  )
 
 plot3
 ```
@@ -289,53 +366,76 @@ plot3
 Enfim, chegamos a um ponto interessante: entender a relação entre os bancos e as categorias de produtores rurais com financiamento. A planilha intitulada `bancos` é divulgada pelo BACEN, se refere ao conjunto de IFs, seus postos e [agências em atividade no mês de referência](https://www.bcb.gov.br/fis/info/agencias.asp?frame=1). Essa é uma base bastante útil quando se trabalha com IFs, pois permite identificar os CNPJs, a localização geográfica das agências e demais atributos.
 
 ```r
-#ler csv com relação de nomes de bancos e cnpjs
-bancos <- read_csv2("C:/Users/gabri/Downloads/202105AGENCIAS/202105AGENCIAS.csv") %>% 
-  mutate(cnpj_instituicao_financeira = as.character(CNPJ),
-    cnpj_instituicao_financeira = gsub('\\.', '', cnpj_instituicao_financeira)) %>% 
+# ler csv com relação de nomes de bancos e cnpjs
+bancos <- read_csv2("C:/Users/gabri/Downloads/202105AGENCIAS/202105AGENCIAS.csv") %>%
+  mutate(
+    cnpj_instituicao_financeira = as.character(CNPJ),
+    cnpj_instituicao_financeira = gsub("\\.", "", cnpj_instituicao_financeira)
+  ) %>%
   select(cnpj_instituicao_financeira,
-         nome_instituicao_financeira  = `NOME INSTITUIÇÃO`) %>% 
+    nome_instituicao_financeira = `NOME INSTITUIÇÃO`
+  ) %>%
   unique()
 
 
 # Esta query agregada o valor de crédito rural concedido por Instituição Financeira
-#para cada categoria de produtor rural 
+# para cada categoria de produtor rural
 
-top3_ifs_prod <- read_sql('SELECT op.id_categoria_emitente, op.cnpj_instituicao_financeira, 
-                          SUM (op.valor_parcela_credito) AS valor_total
-                          FROM `basedosdados.br_bcb_sicor.microdados_operacao` op
-                          GROUP BY op.cnpj_instituicao_financeira, op.id_categoria_emitente')
+top3_ifs_prod <- read_sql("
+SELECT
+  op.id_categoria_emitente,
+  op.cnpj_basico_instituicao_financeira as cnpj_instituicao_financeira,
+  SUM (op.valor_parcela_credito) AS valor_total
+FROM
+  `basedosdados.br_bcb_sicor.microdados_operacao` op
+GROUP BY
+  op.cnpj_basico_instituicao_financeira,
+  op.id_categoria_emitente
+")
 
 
-#elborar gráfico
-plot4 <- top3_ifs_prod %>% 
-  group_by(id_categoria_emitente) %>% 
-  mutate(rank_produtos_emitentes =  rank(-valor_total),
-         nome_emitente = if_else(id_categoria_emitente == 2222, 
-                                 'Pequeno Produtor Rural',
-                                 if_else(id_categoria_emitente == 3333,
-                                         'Médio Produtor Rural',
-                                         'Grande Produtor Rural'))) %>%
+# elborar gráfico
+plot4 <- top3_ifs_prod %>%
+  group_by(id_categoria_emitente) %>%
+  mutate(
+    rank_produtos_emitentes = rank(-valor_total),
+    nome_emitente = if_else(id_categoria_emitente == 2222,
+      "Pequeno Produtor Rural",
+      if_else(id_categoria_emitente == 3333,
+        "Médio Produtor Rural",
+        "Grande Produtor Rural"
+      )
+    )
+  ) %>%
   filter(rank_produtos_emitentes <= 3 &
-           (id_categoria_emitente %in% c(2222,3333,4444))) %>% 
+    (id_categoria_emitente %in% c(2222, 3333, 4444))) %>%
   inner_join(bancos,
-             by = c('cnpj_instituicao_financeira')) %>% 
-  ggplot(aes(x = nome_emitente, y = valor_total/1000000000, fill = nome_instituicao_financeira)) +
-  geom_col(aes(
-               group = rank_produtos_emitentes),
-           position = 'dodge') +
-  geom_text(aes(
-                 group = rank_produtos_emitentes,
-                 label = paste0(round(valor_total/1000000000,2),' BI')),
-            position = position_dodge(.9),
-            vjust = -.2, size = 6) +
-  scale_fill_viridis(discrete = TRUE, name = '') +
+    by = c("cnpj_instituicao_financeira")
+  ) %>%
+  ggplot(aes(x = nome_emitente, y = valor_total / 1000000000, fill = nome_instituicao_financeira)) +
+  geom_col(
+    aes(
+      group = rank_produtos_emitentes
+    ),
+    position = "dodge"
+  ) +
+  geom_text(
+    aes(
+      group = rank_produtos_emitentes,
+      label = paste0(round(valor_total / 1000000000, 2), " BI")
+    ),
+    position = position_dodge(.9),
+    vjust = -.2, size = 6
+  ) +
+  scale_fill_viridis(discrete = TRUE, name = "") +
   tema_com_legenda +
-  labs(y = " " ,
-       x = " ",
-       caption = "Fonte: elaborado pelo autor com Microdados do SICOR extraidos da @Basedosdados.",
-       title = "Top 3 Instituições financeiras por categoria de beneficiário durante janeiro de 2013\n a setembro de 2022",
-       subtitle = "Preços constantes em Bilhões (R$)") 
+  labs(
+    y = " ",
+    x = " ",
+    caption = "Fonte: elaborado pelo autor com Microdados do SICOR extraidos da @Basedosdados.",
+    title = "Top 3 Instituições financeiras por categoria de beneficiário durante janeiro de 2013\n a setembro de 2022",
+    subtitle = "Preços constantes em Bilhões (R$)"
+  )
 
 plot4
 ```
@@ -347,42 +447,55 @@ O papel dos bancos públicos na concessão de crédito rural torna-se nítido, c
 ### Quais são os maiores credores do CR?
 
 ```r
-#Esta query é similar a anterior, com a diferença de que o valor das operações 
-#de crédito foi agregado para as intituições financeiras, durante todo o período de
-#cobertura da base 
-credito_banco <- read_sql('SELECT  op.cnpj_instituicao_financeira,   
-SUM (op.valor_parcela_credito) AS valor_total
-FROM `basedosdados.br_bcb_sicor.microdados_operacao` op
-GROUP BY  op.cnpj_instituicao_financeira')
+# Esta query é similar a anterior, com a diferença de que o valor das operações
+# de crédito foi agregado para as intituições financeiras, durante todo o período de
+# cobertura da base
+credito_banco <- read_sql("
+SELECT
+  op.cnpj_basico_instituicao_financeira as cnpj_instituicao_financeira,
+  SUM (op.valor_parcela_credito) AS valor_total
+FROM
+  `basedosdados.br_bcb_sicor.microdados_operacao` op
+GROUP BY
+  op.cnpj_basico_instituicao_financeira
+")
 
-#alterar o nome BANCO para reduzir o tamanho e facilitar a visualização
-bancos <- bancos %>% 
-  mutate(nome_instituicao_financeira = str_replace_all(nome_instituicao_financeira, 'BANCO', 'B.'))
+# alterar o nome BANCO para reduzir o tamanho e facilitar a visualização
+bancos <- bancos %>%
+  mutate(nome_instituicao_financeira = str_replace_all(nome_instituicao_financeira, "BANCO", "B."))
 
-#criar veotor com cores
-cores <- rep('palegreen2',8)
+# criar veotor com cores
+cores <- rep("palegreen2", 8)
 
-#construir gráfico
+# construir gráfico
 plot5 <- credito_banco %>%
-  mutate(rank_produtos_emitentes =  rank(-valor_total)) %>%
+  mutate(rank_produtos_emitentes = rank(-valor_total)) %>%
   filter(rank_produtos_emitentes <= 8) %>%
   inner_join(bancos,
-             by = c('cnpj_instituicao_financeira')) %>%
-  ggplot(aes(x = reorder(nome_instituicao_financeira,
-                         -valor_total/1000000000),
-             y = valor_total/1000000000,
-             fill = nome_instituicao_financeira))+
+    by = c("cnpj_instituicao_financeira")
+  ) %>%
+  ggplot(aes(
+    x = reorder(
+      nome_instituicao_financeira,
+      -valor_total / 1000000000
+    ),
+    y = valor_total / 1000000000,
+    fill = nome_instituicao_financeira
+  )) +
   geom_col() +
   coord_flip() +
-  geom_text(aes(label = round(valor_total/1000000000,2)),
-            size  = 5,
-            hjust = 0.4)+
+  geom_text(aes(label = round(valor_total / 1000000000, 2)),
+    size  = 5,
+    hjust = 0.4
+  ) +
   scale_fill_manual(values = cores) +
   theme_classic() +
   tema_sem_legenda +
-  labs(y = " " ,x = " ", caption = "Fonte: elaborado pelo autor com Microdados do SICOR extraidos da @Basedosdados.",
-       title = "Top 8 Instituições financeiras por valor financiado \n durante janeiro de 2013 a setembro de 2022",
-       subtitle = "Preços constantes em Bilhões (R$)")
+  labs(
+    y = " ", x = " ", caption = "Fonte: elaborado pelo autor com Microdados do SICOR extraidos da @Basedosdados.",
+    title = "Top 8 Instituições financeiras por valor financiado \n durante janeiro de 2013 a setembro de 2022",
+    subtitle = "Preços constantes em Bilhões (R$)"
+  )
 
 plot5
 ```
@@ -394,52 +507,75 @@ plot5
 Os programas de crédito têm relação direta com a política de CR do MAPA. A cada ano safra, é reservado um montante de recursos a taxas de juros subsidiadas para atender setores específicos do meio rural. Um exemplo importante é o Programa de Fortalecimento da Agricultura Familiar (PRONAF).
 
 ```r
-prog <- read_sql("SELECT  dic.valor,  
-SUM (op.valor_parcela_credito) AS valor_total
-FROM `basedosdados.br_bcb_sicor.microdados_operacao` op
-INNER JOIN `basedosdados.br_bcb_sicor.dicionario` dic
-ON op.id_programa = dic.chave AND 
-dic.nome_coluna = 'id_programa'
-GROUP BY  dic.valor")
+prog <- read_sql("
+SELECT
+  dic.valor,
+  SUM (op.valor_parcela_credito) AS valor_total
+FROM
+  `basedosdados.br_bcb_sicor.microdados_operacao` op
+INNER JOIN
+  `basedosdados.br_bcb_sicor.dicionario` dic
+ON
+  op.id_programa = dic.chave
+  AND dic.nome_coluna = 'id_programa'
+GROUP BY
+  dic.valor
+")
 
-#criar veotor com cores
-cores <- rep('skyblue1', 8)
+# criar veotor com cores
+cores <- rep("skyblue1", 8)
 
-#elaborar gráfico
-plot6 <-prog %>%
-  mutate(rank_programa =  rank(-valor_total)) %>%
+# elaborar gráfico
+plot6 <- prog %>%
+  mutate(rank_programa = rank(-valor_total)) %>%
   filter(rank_programa <= 8) %>%
-  #renomear programas para construir visualização 
+  # renomear programas para construir visualização
   mutate(valor = if_else(valor == "Funcafé (Programa De Defesa Da Economia Cafeeira)",
-                         'Funcafé',
-                         if_else(valor == "Psi-Rural - Programa De Sustentação Do Investimento",
-                                 'Psi-Rural',
-                                 if_else(valor == "Abc - Programa Para Redução Da Emissão De Gases De Efeito Estufa Na Agropecuária",
-                                         'Abc',
-                                         if_else(valor == "Pronaf - Programa Nacional De Fortalecimento Da Agricultura Familiar",
-                                                 'Pronaf',
-                                                 if_else(valor == "Pca - Programa Para Construção E Ampliação De Armazéns",
-                                                         'Pca',
-                                                         if_else(valor == "Moderfrota - Programa De Modernização Da Frota De Tratores Agrícolas E Impl Assoc E Colheitadeiras",
-                                                                 'Moderfrota',
-                                                                 if_else(valor == "Pronamp - Programa Nacional De Apoio Ao Médio Produtor Rural",
-                                                                        'Pronamp',
-                                                                        "FVPE" )))))))) %>%
-  ggplot(aes(x = reorder(valor,
-                         -valor_total),
-             y = valor_total/1000000000)) +
+    "Funcafé",
+    if_else(valor == "Psi-Rural - Programa De Sustentação Do Investimento",
+      "Psi-Rural",
+      if_else(valor == "Abc - Programa Para Redução Da Emissão De Gases De Efeito Estufa Na Agropecuária",
+        "Abc",
+        if_else(valor == "Pronaf - Programa Nacional De Fortalecimento Da Agricultura Familiar",
+          "Pronaf",
+          if_else(valor == "Pca - Programa Para Construção E Ampliação De Armazéns",
+            "Pca",
+            if_else(valor == "Moderfrota - Programa De Modernização Da Frota De Tratores Agrícolas E Impl Assoc E Colheitadeiras",
+              "Moderfrota",
+              if_else(valor == "Pronamp - Programa Nacional De Apoio Ao Médio Produtor Rural",
+                "Pronamp",
+                "FVPE"
+              )
+            )
+          )
+        )
+      )
+    )
+  )) %>%
+  ggplot(aes(
+    x = reorder(
+      valor,
+      -valor_total
+    ),
+    y = valor_total / 1000000000
+  )) +
   geom_col(aes(fill = valor)) +
-  geom_text(aes(
-                label = round(valor_total/1000000000,2)),
-            size  = 5,
-            hjust = 0.3) +
+  geom_text(
+    aes(
+      label = round(valor_total / 1000000000, 2)
+    ),
+    size = 5,
+    hjust = 0.3
+  ) +
   coord_flip() +
   scale_fill_manual(values = cores) +
   theme_classic() +
-  tema_sem_legenda + 
-  labs(y = " " ,x = " ", caption = "Fonte: elaborado pelo autor com Microdados do SICOR extraidos da @Basedosdados.",
-       title = "Top 8 Programas de Crédito por valor financiado durante \n janeiro de 2013 a setembro de 2022",
-       subtitle = "Preços constantes em Bilhões (R$)")
+  tema_sem_legenda +
+  labs(
+    y = " ", x = " ", caption = "Fonte: elaborado pelo autor com Microdados do SICOR extraidos da @Basedosdados.",
+    title = "Top 8 Programas de Crédito por valor financiado durante \n janeiro de 2013 a setembro de 2022",
+    subtitle = "Preços constantes em Bilhões (R$)"
+  )
 
 
 plot6
@@ -462,14 +598,3 @@ Descrição das siglas dos programas:
 Vale observar que a modalidade predominante em termos de valor absoluto contratado é a dos financiamentos sem vínculo a um programa específico.
 
 Esses são alguns exemplos de possíveis análises com os microdados do Sistema de Operações do Crédito Rural e do Proagro. Vale ressaltar que você pode utilizar o [datalake da Base dos Dados](https://basedosdados.org/dataset/544c9d22-97b7-479a-8eca-94762840b465?table=e2d5dcc5-270e-4a8b-8d55-0227fd46c10f) e o conjunto de [Diretórios Brasileiros](/blog/diretorios-brasileiros-como-essa-base-facilita-sua-analise) para cruzar diferentes indicadores como esses para criar suas análises e visualizações. Explore esses dados você também e compartilhe conosco o que descobriu!
-
-
-A Base dos Dados já te ajudou de alguma forma? Saiba como nos ajudar:
-
-- [Apoie o projeto](https://apoia.se/basedosdados)
-
-- [Seja um(a) colaborador(a) de dados na BD](https://basedosdados.github.io/mais/colab_data/)
-
-- [Colabore com nossos pacotes](https://github.com/basedosdados/mais)
-
-- [Compartilhe nas redes sociais!](https://twitter.com/basedosdados)

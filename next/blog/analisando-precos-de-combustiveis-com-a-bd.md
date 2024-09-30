@@ -63,13 +63,28 @@ Com o código SQL(query) abaixo, conseguiremos extrair: o ano e mês de referên
 ### Etapa #1
 
 ```sql
-WITH sub as (SELECT p.produto,
-            ip.indice as indice_atual
-            FROM basedosdados.br_anp_precos_combustiveis.microdados p
-            LEFT JOIN basedosdados.br_ibge_ipca.mes_brasil ip
-            ON p.ano=ip.ano AND EXTRACT(MONTH FROM p.data_coleta)=ip.mes
-            WHERE p.ano = 2021 and EXTRACT(MONTH FROM p.data_coleta) = 9
-            GROUP BY 1,2)
+WITH
+  sub AS (
+  SELECT
+    p.produto,
+    ip.indice AS indice_atual
+  FROM
+    basedosdados.br_anp_precos_combustiveis.microdados p
+  LEFT JOIN
+    basedosdados.br_ibge_ipca.mes_brasil ip
+  ON
+    p.ano=ip.ano
+    AND EXTRACT(MONTH
+    FROM
+      p.data_coleta)=ip.mes
+  WHERE
+    p.ano = 2021
+    AND EXTRACT(MONTH
+    FROM
+      p.data_coleta) = 9
+  GROUP BY
+    1,
+    2)
 ```
 
 Na etapa #1, indicada na query acima, fazemos uma subconsulta para retornar o combustível desejado da base de preços da ANP e o índice de inflação atual do IPCA. Para isso, extraímos o mês da data de coleta dos preços e fazemos uma junção (`join`) com o mês atual da tabela `mes_brasil`, do dataset `br_ibge_ipca`. Fazemos isso filtrando o mês e ano que desejamos utilizar como base para a atualização dos preços. Neste caso, utilizamos `ano=2021` e `mes=9`, mas você pode atualizar essas informações de acordo com os dados disponíveis nas bases.
@@ -77,15 +92,29 @@ Na etapa #1, indicada na query acima, fazemos uma subconsulta para retornar o co
 ### Etapa #2
 
 ```sql
-SELECT p.ano,
-EXTRACT(MONTH from p.data_coleta) AS mes,
-p.produto,
-ROUND(AVG(p.preco_venda),3) AS preco_medio,
-ROUND((AVG(sub.indice_atual)/AVG(ip.indice))*AVG(p.preco_venda),3) AS preco_corrigido,
-FROM basedosdados.br_anp_precos_combustiveis.microdados p
-LEFT JOIN basedosdados.br_ibge_ipca.mes_brasil ip on p.ano=ip.ano and EXTRACT(MONTH from p.data_coleta)=ip.mes
-INNER JOIN sub ON p.produto=sub.produto
-WHERE ip.mes is not null
+SELECT
+  p.ano,
+  EXTRACT(MONTH
+  FROM
+    p.data_coleta) AS mes,
+  p.produto,
+  ROUND(AVG(p.preco_venda),3) AS preco_medio,
+  ROUND((AVG(sub.indice_atual)/AVG(ip.indice))*AVG(p.preco_venda),3) AS preco_corrigido,
+FROM
+  basedosdados.br_anp_precos_combustiveis.microdados p
+LEFT JOIN
+  basedosdados.br_ibge_ipca.mes_brasil ip
+ON
+  p.ano=ip.ano
+  AND EXTRACT(MONTH
+  FROM
+    p.data_coleta)=ip.mes
+INNER JOIN
+  sub
+ON
+  p.produto=sub.produto
+WHERE
+  ip.mes IS NOT NULL
 ```
 
 Na etapa #2, deflacionamos os preços dos combustíveis, o que, em resumo, significa corrigi-los para o valor da data de referência de sua escolha. O cálculo é simples: dividimos o índice da inflação do período que desejamos utilizar como base pelo índice da inflação do período ao qual o preço se refere. Para isso, fazemos a junção dos produtos resultantes da subconsulta com os produtos da tabela de preços. Assim, conseguimos dividir o índice base de inflação do mês escolhido com o índice referente aos preços em cada período e multiplicá-lo por cada um dos preços da série histórica.
@@ -119,30 +148,61 @@ Com a query abaixo conseguimos extrair: o ano e mês de referência das informa�
 ```python
 # define a query dos dados
 query = """
-WITH sub AS (SELECT p.produto,
-                    AVG(p.preco_venda) AS preco_04,
-                    ip.indice AS indice_04
-            FROM basedosdados.br_anp_precos_combustiveis.microdados p
-            LEFT JOIN basedosdados.br_ibge_ipca.mes_brasil ip
-            ON p.ano=ip.ano AND EXTRACT(MONTH FROM p.data_coleta)=ip.mes
-            WHERE p.ano = 2004 and EXTRACT(MONTH FROM p.data_coleta) = 5
-            GROUP BY 1,3)
-
-SELECT  p.ano,
-        EXTRACT(MONTH FROM p.data_coleta) AS mes,
-        p.produto,
-        AVG(sub.preco_04) AS preco_2004,
-        AVG(p.preco_venda) AS preco_medio,
-        ip.indice AS indice_at,
-        AVG(sub.indice_04) AS indice_2004,
-        AVG(p.preco_venda)/AVG(sub.preco_04) AS preco_normalizado,
-        ip.indice/AVG(sub.indice_04) AS indice_normalizado
-FROM basedosdados.br_anp_precos_combustiveis.microdados p
-LEFT JOIN basedosdados.br_ibge_ipca.mes_brasil ip
-ON p.ano=ip.ano AND EXTRACT(MONTH FROM p.data_coleta)=ip.mes
-INNER JOIN sub ON p.produto=sub.produto
-WHERE ip.indice is not null
-GROUP BY 1,2,3,6
+WITH
+  sub AS (
+  SELECT
+    p.produto,
+    AVG(p.preco_venda) AS preco_04,
+    ip.indice AS indice_04
+  FROM
+    basedosdados.br_anp_precos_combustiveis.microdados p
+  LEFT JOIN
+    basedosdados.br_ibge_ipca.mes_brasil ip
+  ON
+    p.ano=ip.ano
+    AND EXTRACT(MONTH
+    FROM
+      p.data_coleta)=ip.mes
+  WHERE
+    p.ano = 2004
+    AND EXTRACT(MONTH
+    FROM
+      p.data_coleta) = 5
+  GROUP BY
+    1,
+    3)
+SELECT
+  p.ano,
+  EXTRACT(MONTH
+  FROM
+    p.data_coleta) AS mes,
+  p.produto,
+  AVG(sub.preco_04) AS preco_2004,
+  AVG(p.preco_venda) AS preco_medio,
+  ip.indice AS indice_at,
+  AVG(sub.indice_04) AS indice_2004,
+  AVG(p.preco_venda)/AVG(sub.preco_04) AS preco_normalizado,
+  ip.indice/AVG(sub.indice_04) AS indice_normalizado
+FROM
+  basedosdados.br_anp_precos_combustiveis.microdados p
+LEFT JOIN
+  basedosdados.br_ibge_ipca.mes_brasil ip
+ON
+  p.ano=ip.ano
+  AND EXTRACT(MONTH
+  FROM
+    p.data_coleta)=ip.mes
+INNER JOIN
+  sub
+ON
+  p.produto=sub.produto
+WHERE
+  ip.indice IS NOT NULL
+GROUP BY
+  1,
+  2,
+  3,
+  6
 """
 ```
 
@@ -160,25 +220,25 @@ df = bd.read_sql(query, billing_project_id="basedosdados-dev")
 Nesse próximo passo, execute a requisição pelo pacote da basedosdados indicando `df` como o objeto que armazenará o `DataFrame`:
 
 ```python
-#Formata datas
-df['date']=df.apply(lambda x:'%s-%s' % (x['ano'],x['mes']),axis=1)
-df =df.dropna(subset=['mes'])
-df['date'] = pd.to_datetime(df['date']).dt.to_period('m')
-df['date']=df['date'].apply(lambda x: x.strftime('%Y-%m'))
-df['date']=df['date'].replace('-','_', regex=True)
-df[['ano','mes']]=df[['ano','mes']].astype('int64')
-df = df.sort_values(['ano','mes'])
+# Formata datas
+df["date"] = df.apply(lambda x: "%s-%s" % (x["ano"], x["mes"]), axis=1)
+df = df.dropna(subset=["mes"])
+df["date"] = pd.to_datetime(df["date"]).dt.to_period("m")
+df["date"] = df["date"].apply(lambda x: x.strftime("%Y-%m"))
+df["date"] = df["date"].replace("-", "_", regex=True)
+df[["ano", "mes"]] = df[["ano", "mes"]].astype("int64")
+df = df.sort_values(["ano", "mes"])
 ```
 
 Com as transformações acima, modificamos as datas nos formatos desejáveis (`ano_mes`) para a construção do gráfico e ordenamos os valores de forma ascendente pelas datas.
 
 ```python
-produto = pd.DataFrame(df['produto'].drop_duplicates()).replace(' ','_', regex=True)
-produto = produto['produto'].values.tolist()
+produto = pd.DataFrame(df["produto"].drop_duplicates()).replace(" ", "_", regex=True)
+produto = produto["produto"].values.tolist()
 
-inflacao = pd.DataFrame(df['indice_normalizado'].drop_duplicates())
-inflacao = inflacao['indice_normalizado'].values.tolist()
-date_in = df['date'].drop_duplicates().values.tolist()
+inflacao = pd.DataFrame(df["indice_normalizado"].drop_duplicates())
+inflacao = inflacao["indice_normalizado"].values.tolist()
+date_in = df["date"].drop_duplicates().values.tolist()
 ```
 
 Criaremos uma lista com os combustíveis para um laço de criação de listas com datas e preços normalizados de cada combustível e uma lista com os valores normalizados da inflação. Para isso, faremos transformações nas colunas, retirando espaços entre os nomes dos produtos e criando uma lista com valores únicos de produto(combustível).
@@ -187,12 +247,20 @@ O laço abaixo cria as listas de preços normalizados e datas para cada combust�
 
 ```python
 for i in produto:
-    a = df['produto']==i
-    exec('df_{} = df[a]'.format(i))
-    exec('p_{} = df_{}["preco_normalizado"].drop_duplicates().values.tolist()'.format(i,i))
-    exec('date_{} = df_{}["date"].drop_duplicates().values.tolist()'.format(i,i))
-    exec('indice_{} = df_{}["indice_normalizado"].drop_duplicates().values.tolist()'.format(i,i))
-    exec('dind_{} = df_{}["date"].drop_duplicates().values.tolist()'.format(i,i))
+    a = df["produto"] == i
+    exec("df_{} = df[a]".format(i))
+    exec(
+        'p_{} = df_{}["preco_normalizado"].drop_duplicates().values.tolist()'.format(
+            i, i
+        )
+    )
+    exec('date_{} = df_{}["date"].drop_duplicates().values.tolist()'.format(i, i))
+    exec(
+        'indice_{} = df_{}["indice_normalizado"].drop_duplicates().values.tolist()'.format(
+            i, i
+        )
+    )
+    exec('dind_{} = df_{}["date"].drop_duplicates().values.tolist()'.format(i, i))
 ```
 
 O plotly cria os gráficos a partir do desenho dos traços (`fig_trace`) de cada produto. Portanto, precisamos configurar cada traço com os parâmetros de cor e largura da linha (você pode alterar esses parâmetros quando quiser). O segundo passo é configurar os valores dos eixos x e y com seus respectivos rótulos. Os valores de “tickvals” devem ser os mesmos da base de dados, o `ticktext` pode ser alterado por você com o formato de valores de sua preferência, esse é somente o rótulo de dados para os valores de `tickvals`. Confira abaixo:
@@ -200,97 +268,144 @@ O plotly cria os gráficos a partir do desenho dos traços (`fig_trace`) de cada
 ```python
 fig = go.Figure()
 
-fig.add_trace(go.Scatter(
-    x= date_gasolina ,
-    y=p_gasolina,
-    line_color='rgb(255,132,132)',
-    line_width=4,
-    name='Gasolina',
-    showlegend = True))
+fig.add_trace(
+    go.Scatter(
+        x=date_gasolina,
+        y=p_gasolina,
+        line_color="rgb(255,132,132)",
+        line_width=4,
+        name="Gasolina",
+        showlegend=True,
+    )
+)
 
-fig.add_trace(go.Scatter(
-    x= date_etanol ,
-    y=p_etanol,
-    line_color='rgb(43,140,77)',
-    line_width=4,
-    name='Etanol',
-    showlegend = True))
+fig.add_trace(
+    go.Scatter(
+        x=date_etanol,
+        y=p_etanol,
+        line_color="rgb(43,140,77)",
+        line_width=4,
+        name="Etanol",
+        showlegend=True,
+    )
+)
 
-fig.add_trace(go.Scatter(
-    x= date_diesel ,
-    y=p_diesel,
-    line_color='rgb(246,158,76)',
-    line_width=4,
-    name='Diesel',
-    showlegend = True))
+fig.add_trace(
+    go.Scatter(
+        x=date_diesel,
+        y=p_diesel,
+        line_color="rgb(246,158,76)",
+        line_width=4,
+        name="Diesel",
+        showlegend=True,
+    )
+)
 
-fig.add_trace(go.Scatter(
-    x= date_gnv ,
-    y=p_gnv,
-    line_color='rgb(66,176,255)',
-    line_width=4,
-    name='GNV',
-    showlegend = True))
+fig.add_trace(
+    go.Scatter(
+        x=date_gnv,
+        y=p_gnv,
+        line_color="rgb(66,176,255)",
+        line_width=4,
+        name="GNV",
+        showlegend=True,
+    )
+)
 
-fig.add_trace(go.Scatter(
-    x= dind_diesel ,
-    y=indice_diesel,
-    line_color='rgb(99,99,99)',
-    line_width=4,
-    line_dash="dot",
-    name='Inflação',
-    showlegend = True))
+fig.add_trace(
+    go.Scatter(
+        x=dind_diesel,
+        y=indice_diesel,
+        line_color="rgb(99,99,99)",
+        line_width=4,
+        line_dash="dot",
+        name="Inflação",
+        showlegend=True,
+    )
+)
 
 fig.update_layout(
-    template = 'plotly_white',
+    template="plotly_white",
     xaxis=dict(
-        tickvals = ['2004_01', '2005_01','2006_01','2007_01', '2008_01', '2009_01', '2010_01', '2011_01','2012_01',
-                    '2013_01','2014_01','2015_01','2016_01','2017_01','2018_01','2019_01','2020_01','2021_01'],
-        ticktext = ['2004','2005', '2006', '2007', '2008','2009', '2010',
-                    '2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021'],
+        tickvals=[
+            "2004_01",
+            "2005_01",
+            "2006_01",
+            "2007_01",
+            "2008_01",
+            "2009_01",
+            "2010_01",
+            "2011_01",
+            "2012_01",
+            "2013_01",
+            "2014_01",
+            "2015_01",
+            "2016_01",
+            "2017_01",
+            "2018_01",
+            "2019_01",
+            "2020_01",
+            "2021_01",
+        ],
+        ticktext=[
+            "2004",
+            "2005",
+            "2006",
+            "2007",
+            "2008",
+            "2009",
+            "2010",
+            "2011",
+            "2012",
+            "2013",
+            "2014",
+            "2015",
+            "2016",
+            "2017",
+            "2018",
+            "2019",
+            "2020",
+            "2021",
+        ],
         showline=True,
         showgrid=False,
         showticklabels=True,
-        scaleanchor = "x",
-        scaleratio = 20,
-        linecolor='rgb(204, 204, 204)',
+        scaleanchor="x",
+        scaleratio=20,
+        linecolor="rgb(204, 204, 204)",
         linewidth=2,
-        title = 'período',
-        ticks='outside',
+        title="período",
+        ticks="outside",
         tickfont=dict(
-            family='Ubuntu',
+            family="Ubuntu",
             size=14,
-            color='rgb(82, 82, 82)',
+            color="rgb(82, 82, 82)",
         ),
     ),
     yaxis=dict(
-        autorange = True,
-        tickvals = [0.5,1,1.5,2,2.5,3,3.5,4,4.5,5],
-        ticktext = ['0.5','1','1.5','2','2.5','3','3.5','4','4.5','5'],
-        title = 'Preço (normalizado 2004-05 = 1)',
+        autorange=True,
+        tickvals=[0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5],
+        ticktext=["0.5", "1", "1.5", "2", "2.5", "3", "3.5", "4", "4.5", "5"],
+        title="Preço (normalizado 2004-05 = 1)",
         showgrid=True,
         zeroline=True,
-        ticks='outside',
-        tickfont=dict(
-                family='Ubuntu',
-                size=14,
-                color='rgb(82, 82, 82)'),
+        ticks="outside",
+        tickfont=dict(family="Ubuntu", size=14, color="rgb(82, 82, 82)"),
         showline=True,
-        showticklabels=True
-        ,
+        showticklabels=True,
     ),
     autosize=False,
-    height=800,  
+    height=800,
     width=900,
     showlegend=True,
-    plot_bgcolor='white',
+    plot_bgcolor="white",
 )
 fig.update_shapes()
 
-fig.update_traces(mode='lines')
+fig.update_traces(mode="lines")
 fig.show()
 
-fig.write_image('grafico.png')
+fig.write_image("grafico.png")
 ```
 
 Por fim é só executar `fig.write_image('grafico.png')` para salvar o gráfico no caminho especificado, como demonstramos acima.

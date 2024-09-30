@@ -30,7 +30,7 @@ Como qualquer outra biblioteca no R, você deve instalá-la e carregar no seu am
 
 ```r
 # instalando a biblioteca
-install.packages('basedosdados')
+install.packages("basedosdados")
 ```
 
 ```r
@@ -56,8 +56,8 @@ Para baixar os dados do Atlas Esgotos da ANA, você pode rodar:
 
 ```r
 basedosdados::download(
-    query = 'SELECT * FROM `basedosdados.br_ana_atlas_esgotos.municipios`',
-    path = '/bases/base_ana.csv'
+  query = 'SELECT * FROM `basedosdados.br_ana_atlas_esgotos.municipio`',
+  path = '/bases/base_ana.csv'
 )
 ```
 
@@ -84,8 +84,8 @@ Não precisamos mais usar a função `read_sql()` com dois argumentos:
 
 ```r
 basedosdados::read_sql(
-    query = 'SELECT * FROM `basedosdados.br_ana_atlas_esgotos.municipios`',
-    billing_project_id = "meu-projetoid-3058"
+  query = "SELECT * FROM `basedosdados.br_ana_atlas_esgotos.municipio`",
+  billing_project_id = "meu-projetoid-3058"
 )
 ```
 
@@ -93,7 +93,7 @@ Podemos usá-la **sem** o segundo argumento (que é o que será feito ao longo d
 
 ```r
 basedosdados::read_sql(
-    query = 'SELECT * FROM `basedosdados.br_ana_atlas_esgotos.municipios`'
+  query = "SELECT * FROM `basedosdados.br_ana_atlas_esgotos.municipio`"
 )
 ```
 
@@ -119,7 +119,7 @@ Utilizando a função `read_sql()`, iremos carregar os dados do [Atlas Esgostos 
 
 ```r
 base <- basedosdados::read_sql(
-    query = 'SELECT * FROM `basedosdados.br_ana_atlas_esgotos.municipios`'
+  query = "SELECT * FROM `basedosdados.br_ana_atlas_esgotos.municipio`"
 )
 ```
 
@@ -129,24 +129,49 @@ Caso você clique para ver a base, vai se deparar com algo assim:
 
 O Atlas contém mais de 30 variáveis sobre a condição da coleta e do tratamento de esgoto para cada município brasileiro. Entre elas, temos, por exemplo, a porcentagem de habitantes do município sem acesso a esgoto tratado, o nome do prestador do serviço do saneamento e o investimento feito pelo município em coleta e em tratamento de esgoto.
 
-A query usada contém um `*` para indicar que estamos selecionando **todas** as colunas da tabela. Caso quiséssemos baixar **só** duas colunas, como o identificador do municipio (`id_municipio`) e o índice de pessoas que não recebe atendimento de tratamento de esgoto (`indice_sem_atend`) bastaria rodar algo como:
+A query usada contém um `*` para indicar que estamos selecionando **todas** as colunas da tabela. Caso quiséssemos baixar **só** duas colunas, como o identificador do municipio (`id_municipio`) e o índice de pessoas que não recebe atendimento de tratamento de esgoto (`indice_sem_atendimento_sem_coleta_sem_tratamento`) bastaria rodar algo como:
 
 ```r
 base_cobertura <- basedosdados::read_sql(
-    query = 'SELECT id_municipio, indice_sem_atend FROM `basedosdados.br_ana_atlas_esgotos.municipios`'
+  query = "
+SELECT
+  id_municipio,
+  indice_sem_atendimento_sem_coleta_sem_tratamento
+FROM
+  `basedosdados.br_ana_atlas_esgotos.municipio`
+"
 )
 ```
 
 Outra maneira de selecionar uma "sub-base" é filtrando as observações por alguma característica: se estivermos interessados somente no saneamento básico da região norte, não faz sentido pegarmos todas as 5570 linhas da base original. Podemos rodar uma query adicionando o verbo `WHERE` e indicar que só queremos estados do Norte:
 
 ```r
-base_norte <- basedosdados::read_sql('SELECT * FROM `basedosdados.br_ana_atlas_esgotos.municipios` WHERE sigla_uf in ("AM","AP","RO","RR","AC", "PA")')
+base_norte <- basedosdados::read_sql('
+SELECT
+  *
+FROM
+  `basedosdados.br_ana_atlas_esgotos.municipio`
+WHERE
+  sigla_uf IN ("AM",
+    "AP",
+    "RO",
+    "RR",
+    "AC",
+    "PA")
+')
 ```
 
 Além dessas possibilidades de seleção, podemos **agregar** essas tabela para o nível de estado, ao invés do nível de município, utilizando um agrupamento por `sigla_uf`. Ao agregarmos, precisamos também agregar as colunas, somando ou tirando uma média, por exemplo. Nesse exemplo, vamos pegar uma média da cobertura de esgoto por UF. O código fica assim:
 
 ```r
-base_uf <- basedosdados::read_sql(query = 'SELECT sigla_uf, AVG(indice_sem_atend) as sem_esgotoFROM `basedosdados.br_ana_atlas_esgotos.municipios` GROUP BY sigla_uf')
+base_uf <- basedosdados::read_sql(query = '
+SELECT
+  sigla_uf,
+  AVG(indice_sem_atendimento_sem_coleta_sem_tratamento) AS sem_esgoto
+FROM `basedosdados.br_ana_atlas_esgotos.municipio`
+GROUP BY
+  sigla_uf
+')
 ```
 
 ### Visualizando o acesso a tratamento nos estados
@@ -155,15 +180,15 @@ Para finalizar, vamos construir um gráfico com essa última base criada para vi
 
 ```r
 base_uf %>%
-    ggplot(aes(y = sem_esgoto, x = reorder(sigla_uf, -sem_esgoto))) +
-    geom_col(fill = '#7cb342') +
-    labs(
-        x = "Estado",
-        y = "Porcentagem média sem saneamento",
-        title = "População sem saneamento básico",
-        subtitle = "Média da porcentagem da população municipal sem saneamento, por UF"
-    ) +
-    theme_classic()
+  ggplot(aes(y = sem_esgoto, x = reorder(sigla_uf, -sem_esgoto))) +
+  geom_col(fill = "#7cb342") +
+  labs(
+    x = "Estado",
+    y = "Porcentagem média sem saneamento",
+    title = "População sem saneamento básico",
+    subtitle = "Média da porcentagem da população municipal sem saneamento, por UF"
+  ) +
+  theme_classic()
 ```
 
 <Image src="/blog/como-acessar-dados-publicos-em-r/image_4.png"/>
@@ -174,8 +199,16 @@ Para usar esta mesma base em um outro software, pode-se usar a função `downloa
 
 ```r
 basedosdados::download(
-    query = 'SELECT sigla_uf, AVG(indice_sem_atend) as sem_esgoto FROM `basedosdados.br_ana_atlas_esgotos.municipios` GROUP BY sigla_uf',
-    path = '/bases/base_ana_uf.csv'
+  query = "
+SELECT
+  sigla_uf,
+  AVG(indice_sem_atendimento_sem_coleta_sem_tratamento) AS sem_esgoto
+FROM
+  `basedosdados.br_ana_atlas_esgotos.municipio`
+GROUP BY
+  sigla_uf
+",
+  path = "/bases/base_ana_uf.csv"
 )
 ```
 
@@ -188,33 +221,86 @@ Para exemplificar, vamos comparar os dados que obtemos de saneamento com o **ní
 Para cruzar as tabelas vamos filtrar ambas para o ano de 2013, referente ao Atlas Esgotos (tabela anterior), pela coluna `ano` presente em todas as tabelas. Além disso, vamos também escolher somente a mortalidade de `causa_basica` referente a **doenças diarréicas**, relacionadas à falta de saneamento básico. Os códigos de referência da coluna `causa_basica` na tabela SIM podem ser [consultados aqui](https://github.com/basedosdados/mais/blob/master/bases/br_ms_sim/dictionaries/CID10/CID-10-CATEGORIAS.CSV). A query abaixo faz esses filtros e seleciona as colunas tanto da base de população e quanto de mortalidade:
 
 ```r
-base_mortalidade <- basedosdados::read_sql(
-    'SELECT sim.id_municipio, sim.numero_obitos , pop.populacao FROM `basedosdados.br_ms_sim.municipio_causa` as simFULL JOIN `basedosdados.br_ibge_populacao.municipios` as pop ON sim.id_municipio = pop.id_municipioWHERE sim.ano = 2013 and pop.ano = 2013 and sim.causa_basica in ("A00", "A01", "A02", "A03", "A04", "A05", "A06","A07", "A08", "A09")'
+base_mortalidade <- basedosdados::read_sql('
+SELECT
+  sim.id_municipio,
+  sim.numero_obitos,
+  pop.populacao
+FROM
+  `basedosdados.br_ms_sim.municipio_causa` AS sim
+FULL JOIN
+  `basedosdados.br_ibge_populacao.municipio` AS pop
+ON
+  sim.id_municipio = pop.id_municipio
+WHERE
+  sim.ano = 2013
+  AND pop.ano = 2013
+  AND sim.causa_basica IN ("A00",
+    "A01",
+    "A02",
+    "A03",
+    "A04",
+    "A05",
+    "A06",
+    "A07",
+    "A08",
+    "A09")
+'
 ) %>%
-    mutate(mortalidade = (numero_obitos / populacao) * 10000) %>%
-    select(id_municipio,mortalidade)
+  mutate(mortalidade = (numero_obitos / populacao) * 10000) %>%
+  select(id_municipio, mortalidade)
 ```
 
 Vamos então juntar essa base com a tabela de cobertura de saneamento e ver as possíveis correlações. Para isso, podemos juntar as bases abertas no R, a `base_cobertura` e a `base_mortalidade`, ou podemos rodar uma nova QUERY:
 
 ```r
-base_final <- basedosdados::read_sql('SELECT  sim.id_municipio, sim.numero_obitos , pop.populacao, ana.indice_sem_atendFROM `basedosdados.br_ms_sim.municipio_causa` as simFULL JOIN `basedosdados.br_ibge_populacao.municipios` as pop ON sim.id_municipio = pop.id_municipioFULL JOIN `basedosdados.br_ana_atlas_esgotos.municipios` asana ON sim.id_municipio = ana.id_municipio WHERE sim.ano = 2013 and pop.ano = 2013 and sim.causa_basica in ("A00", "A01", "A02", "A03", "A04", "A05", "A06","A07", "A08", "A09")')
+base_final <- basedosdados::read_sql('
+SELECT
+  sim.id_municipio,
+  sim.numero_obitos,
+  pop.populacao,
+  ana.indice_sem_atendimento_sem_coleta_sem_tratamento
+FROM
+  `basedosdados.br_ms_sim.municipio_causa` AS sim
+FULL JOIN
+  `basedosdados.br_ibge_populacao.municipio` AS pop
+ON
+  sim.id_municipio = pop.id_municipio
+FULL JOIN
+  `basedosdados.br_ana_atlas_esgotos.municipio` AS ana
+ON
+  sim.id_municipio = ana.id_municipio
+WHERE
+  sim.ano = 2013
+  AND pop.ano = 2013
+  AND sim.causa_basica IN ("A00",
+    "A01",
+    "A02",
+    "A03",
+    "A04",
+    "A05",
+    "A06",
+    "A07",
+    "A08",
+    "A09")
+'
+)
 ```
 
 Com a base em mãos, criamos um gráfico que relaciona a mortalidade por doenças diarreicas e a cobertura de saneamento básico:
 
 ```r
 base_final %>%
-    mutate(mortalidade = (numero_obitos / populacao) * 10000) %>%
-    ggplot(aes(y = mortalidade, x =indice_sem_atend)) +
-    geom_point(color = '#7cb342') +
-    labs(
-        x = "Porcentagem sem saneamento",
-        y = "Mortalidade",
-        title = "Saneamento x Mortalidade",
-        subtitle = "Os municípios que tem pior cobertura também tem mais mortes?"
-    ) +
-    theme_classic()
+  mutate(mortalidade = (numero_obitos / populacao) * 10000) %>%
+  ggplot(aes(y = mortalidade, x = indice_sem_atend)) +
+  geom_point(color = "#7cb342") +
+  labs(
+    x = "Porcentagem sem saneamento",
+    y = "Mortalidade",
+    title = "Saneamento x Mortalidade",
+    subtitle = "Os municípios que tem pior cobertura também tem mais mortes?"
+  ) +
+  theme_classic()
 ```
 
 <Image src="/blog/como-acessar-dados-publicos-em-r/image_5.png"/>
@@ -224,5 +310,3 @@ E com isso descobrimos que aparentemente não há uma forte correlação entre c
 Muito obrigado por ler até aqui!
 
 Confira o notebook com a análise completa no nosso [repositório](https://github.com/basedosdados/analises).
-
-A [Base dos Dados](https://basedosdados.org/) é uma ONG com intuito de disponibilizar dados tratados e limpos para qualquer um acessar de um jeito rápido e fácil. [Apoie a nossa iniciativa 💚](https://apoia.se/basedosdados).

@@ -84,16 +84,19 @@ Apenas com uma conta Google e um projeto criado no BigQuery, você pode consulta
 
 ```sql
 SELECT
-id_deputado,
-categoria_despesa,
-data_emissao,
-valor_liquido,
-nome_passageiro,
-valor_restituicao
-FROM `basedosdados.br_camara_dados_abertos.despesa`
-WHERE nome_parlamentar = "Nome da(o) Deputada(o)"
-AND ano_legislatura = 2023 #soma das despesas desde o início da atual legislatura até agora
-ORDER BY data_emissao ASC;
+  id_deputado,
+  categoria_despesa,
+  data_emissao,
+  valor_liquido,
+  nome_passageiro,
+  valor_restituicao
+FROM
+  `basedosdados.br_camara_dados_abertos.despesa`
+WHERE
+  nome_parlamentar = "Nome da(o) Deputada(o)"
+  AND ano_legislatura = 2023 #soma das despesas desde o início da atual legislatura até agora
+ORDER BY
+  data_emissao ASC;
 ```
 
 A consulta irá retornar uma tabela já com os dados do recorte desejado.
@@ -108,13 +111,17 @@ Se você tem algum conhecimento de SQL, pode ainda utilizar o datalake para cria
 
 ```sql
 SELECT
-categoria_despesa,
-ROUND(SUM(valor_liquido),0) AS despesas,
-FROM `basedosdados.br_camara_dados_abertos.despesa`
-WHERE nome_parlamentar = "Nome da(o) Deputada(o)"
-AND ano_legislatura = 2023 #soma das despesas desde o início da atual legislatura até agora
-GROUP BY categoria_despesa
-ORDER BY despesas DESC;
+  categoria_despesa,
+  ROUND(SUM(valor_liquido),0) AS despesas,
+FROM
+  `basedosdados.br_camara_dados_abertos.despesa`
+WHERE
+  nome_parlamentar = "Nome da(o) Deputada(o)"
+  AND ano_legislatura = 2023 #soma das despesas desde o início da atual legislatura até agora
+GROUP BY
+  categoria_despesa
+ORDER BY
+  despesas DESC;
 ```
 
 Veja o resultado da consulta anterior. Para este exemplo, utilizamos o nome de um deputado escolhido aleatoriamente. Note que a categoria “Divulgação da Atividade Parlamentar” concentra o maior valor das despesas da Cota Parlamentar do deputado em questão.

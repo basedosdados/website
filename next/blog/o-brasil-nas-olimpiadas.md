@@ -27,8 +27,8 @@ library("gridExtra")
 library("dplyr")
 
 olimpiadas <- basedosdados::read_sql(
-    "SELECT * FROM `basedosdados.mundo_kaggle_olimpiadas.microdados` WHERE delegacao = 'BRA'",
-    billing_project_id='input-dados'
+  "SELECT * FROM `basedosdados.mundo_kaggle_olimpiadas.microdados` WHERE delegacao = 'BRA'",
+  billing_project_id = "input-dados"
 )
 ```
 
@@ -39,27 +39,29 @@ O Brasil teve sua primeira participação em uma edição dos Jogos Olímpicos e
 <Image src="/blog/o-brasil-nas-olimpiadas/image_1.png"/>
 
 ```r
-counts <- olimpiadas %>% filter(edicao == "Summer") %>%
+counts <- olimpiadas %>%
+  filter(edicao == "Summer") %>%
   group_by(ano) %>%
   summarize(
     atletas = length(unique(id_atleta)),
     eventos = length(unique(evento))
   )
 
-p1 <- ggplot(counts, aes(x=as.numeric(ano), y=as.numeric(atletas))) +
+p1 <- ggplot(counts, aes(x = as.numeric(ano), y = as.numeric(atletas))) +
   geom_point() +
-  scale_y_continuous(limits=c(0,470)) +
-  labs(title="Participação brasileira nos Jogos Olímpicos", y="Total de atletas") +
+  scale_y_continuous(limits = c(0, 470)) +
+  labs(title = "Participação brasileira nos Jogos Olímpicos", y = "Total de atletas") +
   theme(plot.title = element_text(hjust = 0.5)) +
-  geom_line() + xlab("")
+  geom_line() +
+  xlab("")
 
-p2 <- ggplot(counts, aes(x=as.numeric(ano), y=as.numeric(eventos))) +
+p2 <- ggplot(counts, aes(x = as.numeric(ano), y = as.numeric(eventos))) +
   geom_point() +
-  scale_y_continuous(limits=c(0,250)) +
-  labs(x="Anos", y="Modalidades") +
+  scale_y_continuous(limits = c(0, 250)) +
+  labs(x = "Anos", y = "Modalidades") +
   geom_line()
 
-grid.arrange(p1, p2, ncol=1)
+grid.arrange(p1, p2, ncol = 1)
 ```
 
 O recorde de participação brasileira foi em 2016, competindo em casa, com 462 atletas disputando em 222 provas distintas. As edições passadas foram bem diferentes, a média de participação das 5 edições anteriores a 2016 foi de 236 atletas. Esse ano contamos com 302 atletas em Tokyo, segundo dados do Comitê Olímpico Brasileiro.
@@ -73,27 +75,28 @@ Em todas as edições, jornais e canais esportivos se concentram nos melhores mo
 No nosso pódio, Judô, Vela e Atletismo são os recordistas no total de medalhas com 22, 18 e 16, respectivamente. Os dados permitem identificar quem são os atletas campeões e os eventos em que eles garantiram a vitória. Nas modalidades do Judô 🥋, as mulheres ganharam 3 medalhas de bronze e 2 de ouro, enquanto os homens trouxeram para casa 12 bronzes, 3 pratas e 2 ouros. O script para desenvolver o gráfico é:
 
 ```r
-medalha_counts <- olimpiadas %>% filter(!is.na(medalha))%>%
-  group_by(ano, esporte, evento, medalha) %>% 
-  summarize(Count=length(unique(medalha)))
+medalha_counts <- olimpiadas %>%
+  filter(!is.na(medalha)) %>%
+  group_by(ano, esporte, evento, medalha) %>%
+  summarize(Count = length(unique(medalha)))
 
-#ordena a tabela
-medalha_counts$medalha <- factor(medalha_counts$medalha, levels=c("Gold", "Silver", "Bronze"))
+# ordena a tabela
+medalha_counts$medalha <- factor(medalha_counts$medalha, levels = c("Gold", "Silver", "Bronze"))
 
-#total de medalhas por modalidade esportiva ao longo dos anos
+# total de medalhas por modalidade esportiva ao longo dos anos
 lev <- medalha_counts %>%
   group_by(esporte) %>%
-  summarize(Total=sum(Count)) %>%
+  summarize(Total = sum(Count)) %>%
   arrange(Total) %>%
   select(esporte)
 
-medalha_counts$esporte <- factor(medalha_counts$esporte, levels=lev$esporte)
+medalha_counts$esporte <- factor(medalha_counts$esporte, levels = lev$esporte)
 
-#criação do gráfico
-ggplot(medalha_counts, aes(x=esporte, y=Count, fill=medalha)) +
+# criação do gráfico
+ggplot(medalha_counts, aes(x = esporte, y = Count, fill = medalha)) +
   geom_col() +
   coord_flip() +
-  scale_fill_manual(values=c("gold1", "gray70", "gold4")) +
+  scale_fill_manual(values = c("gold1", "gray70", "gold4")) +
   ggtitle("Total de medalhas brasileiras por esporte nos Jogos Olímpicos") +
   theme(plot.title = element_text(hjust = 0.5))
 ```
@@ -107,21 +110,21 @@ A participação feminina brasileira nos jogos acontece pela primeira vez soment
 O código de análise do total de participação por sexo ao longo dos anos é fácil.
 
 ```r
-#filtrando para edição de verão dos Jogos
+# filtrando para edição de verão dos Jogos
 sexo <- olimpiadas %>% filter(edicao == "Summer")
 
-#série do total de atletas por sexo
-counts_sex <- sexo %>% 
+# série do total de atletas por sexo
+counts_sex <- sexo %>%
   group_by(ano, sexo) %>%
   summarize(atletas = length(unique(id_atleta)))
 
 counts_sex$ano <- as.integer(counts_sex$ano)
 
-#criação do gráfico
-ggplot(counts_sex, aes(x=ano, y=atletas, group=sexo, color=sexo)) +
-  geom_point(size=2) +
-  geom_line()  +
-  scale_color_manual(values=c("orange","darkgreen")) +
+# criação do gráfico
+ggplot(counts_sex, aes(x = ano, y = atletas, group = sexo, color = sexo)) +
+  geom_point(size = 2) +
+  geom_line() +
+  scale_color_manual(values = c("orange", "darkgreen")) +
   labs(title = "Participação masculina e feminina nas Olimpíadas") +
   theme(plot.title = element_text(hjust = 0.5))
 ```

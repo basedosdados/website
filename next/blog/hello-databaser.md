@@ -81,13 +81,18 @@ O processo é simples: para entender, por exemplo, quantas cabeças de gado exis
 ```sql
 SELECT
   censo.sigla_uf,
-  sum(quantidade_bovinos_total) as gado,
-  geometria
-FROM basedosdados.br_ibge_censo_agropecuario.municipio AS censo 
-JOIN basedosdados.br_geobr_mapas.uf AS geo 
-ON censo.sigla_uf = geo.sigla_uf -- join da variável sigla_uf
-WHERE ano = 2017
-GROUP BY censo.sigla_uf, geo.sigla_uf, geometria
+  SUM(quantidade_bovinos_total) AS gado,
+FROM
+  basedosdados.br_ibge_censo_agropecuario.municipio AS censo
+JOIN
+  basedosdados.br_geobr_mapas.uf AS geo
+ON
+  censo.sigla_uf = geo.sigla_uf -- join da variável sigla_uf
+WHERE
+  ano = 2017
+GROUP BY
+  censo.sigla_uf,
+  geo.sigla_uf
 ```
 
 Com o arquivo em mãos, você pode adicioná-lo facilmente ao QGIS para criar seu próprio mapa com essas informações. Teve alguma dúvida sobre como usar os dados do geobr? Preparamos um tutorial com o passo a passo para te ajudar. Confira por [**aqui**](/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis).

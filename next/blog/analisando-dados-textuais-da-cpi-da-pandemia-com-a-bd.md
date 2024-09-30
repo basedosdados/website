@@ -44,11 +44,16 @@ SELECT
   nome_discursante,
   genero_discursante,
   categoria_discursante,
-  SUM(duracao_discurso) as tempo_fala
+  SUM(duracao_discurso) AS tempo_fala
 FROM
   `basedosdados.br_senado_cpipandemia.discursos`
-GROUP BY data_sessao, nome_discursante, genero_discursante, categoria_discursante
-ORDER by data_sessao;
+GROUP BY
+  data_sessao,
+  nome_discursante,
+  genero_discursante,
+  categoria_discursante
+ORDER BY
+  data_sessao;
 ```
 
 Esses dados foram utilizados para criar a parte da visualização que contabiliza o tempo de fala médio e total de cada categoria e gênero.
@@ -59,11 +64,13 @@ Consulta par selecionar todos os discursos agregados por data
 SELECT
   data_sessao,
   SUM(duracao_discurso) duracao_discursos,
-  STRING_AGG(texto_discurso, ' ') as discurso
+  STRING_AGG(texto_discurso, ' ') AS discurso
 FROM
   `basedosdados.br_senado_cpipandemia.discursos`
-GROUP BY data_sessao
-ORDER BY data_sessao
+GROUP BY
+  data_sessao
+ORDER BY
+  data_sessao
 ```
 
 Esses dados foram utilizados para montar a nuvem de tags geral e por dia.
@@ -75,13 +82,16 @@ SELECT
   data_sessao,
   nome_discursante,
   SUM(duracao_discurso) duracao_discursos,
-  STRING_AGG(texto_discurso, ' ') as discurso
+  STRING_AGG(texto_discurso, ' ') AS discurso
 FROM
   `basedosdados.br_senado_cpipandemia.discursos`
 WHERE
   categoria_discursante = 'Depoente/Convidado'
-GROUP BY data_sessao, nome_discursante
-ORDER BY data_sessao
+GROUP BY
+  data_sessao,
+  nome_discursante
+ORDER BY
+  data_sessao
 ```
 
 Esses dados foram utilizados para gerar o gráfico das entidades nomeadas. Com o intuito de diminuir a quantidade de dados processados para essa tarefa, foi desconsiderado os textos dos senadores e mantida apenas as falas dos depoentes e convidados. A consulta agrega os dados por data e por nome do discursante. Os dados gerados foram usados como entrada para o algoritmo de extração de entidades.

@@ -83,11 +83,23 @@ Vamos agora a um exemplo prático utilizando o *datalake* público da BD e consu
 A consulta abaixo nos permite comparar dados de despesa dos(as) deputados ao longo das últimas cinco legislaturas (de 2007 até o presente).
 
 ```sql
-SELECT id_legislatura, categoria_despesa, ROUND(SUM(valor_liquido),1) AS despesa_total
-FROM `basedosdados.br_camara_dados_abertos.despesa` desp
-WHERE id_legislatura IN ('53', '54', '55', '56', '57')
-GROUP BY id_legislatura
-ORDER BY id_legislatura ASC;
+SELECT
+  id_legislatura,
+  categoria_despesa,
+  ROUND(SUM(valor_liquido),1) AS despesa_total
+FROM
+  `basedosdados.br_camara_dados_abertos.despesa` desp
+WHERE
+  id_legislatura IN ('53',
+    '54',
+    '55',
+    '56',
+    '57')
+GROUP BY
+  id_legislatura,
+  categoria_despesa
+ORDER BY
+  id_legislatura ASC;
 ```
 
 A consulta gera a seguinte tabela. Vale lembrar que você pode exportar os resultados em um arquivo local (.csv, JASON ou para a área de transferência do seu computador) para explorar com com seu editor de planilha ou linguagem de programação preferida, ou ainda salvá-los em uma tabela do BigQuery ou Google Sheets, sem precisar fazer download da tabela.
@@ -111,13 +123,29 @@ A análise e os gráficos foram feitos utilizando o pacote Python da BD.
 Além disso, ainda poderíamos discriminar as despesas dos deputados segundo sexo. Para isso, podemos utilizar a consulta SQL a seguir.
 
 ```sql
-SELECT sexo, id_legislatura, categoria_despesa, ROUND(SUM(valor_liquido),1) AS despesa_total
-FROM `basedosdados.br_camara_dados_abertos.despesa` desp
-INNER JOIN `basedosdados.br_camara_dados_abertos.deputado` dep
-ON desp.id_deputado = dep.id_deputado
-WHERE id_legislatura IN ('53', '54', '55', '56', '57')
-GROUP BY sexo, id_legislatura, categoria_despesa
-ORDER BY id_legislatura ASC;
+SELECT
+  sexo,
+  id_legislatura,
+  categoria_despesa,
+  ROUND(SUM(valor_liquido),1) AS despesa_total
+FROM
+  `basedosdados.br_camara_dados_abertos.despesa` desp
+INNER JOIN
+  `basedosdados.br_camara_dados_abertos.deputado` dep
+ON
+  desp.id_deputado = dep.id_deputado
+WHERE
+  id_legislatura IN ('53',
+    '54',
+    '55',
+    '56',
+    '57')
+GROUP BY
+  sexo,
+  id_legislatura,
+  categoria_despesa
+ORDER BY
+  id_legislatura ASC;
 ```
 
 Note como juntamos a tabela `deputado` à tabela de `despesa`. Isso é possível porque temos a coluna `id_deputado` em ambas as tabelas. Com o `inner join` juntamos apenas as informações correspondentes de ambas as tabelas

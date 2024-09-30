@@ -45,35 +45,48 @@ A minha língua materna na programação é o R. Comecei a desenvolver algumas a
 Agora, é a hora mais legal: vamos codar! O primeiro passo é criarmos o dataframe para responder a questão que refletimos anteriormente. Deixei as anotações no próprio código. Caso você tenha alguma dúvida com relação ao código, pode me escrever aqui nos comentários ou me encontrar no servidor da [Base dos Dados no Discord](https://discord.com/invite/huKWpsVYx4). Meu usuário é @gustavoalcantara. Confira os primeiros passos no código abaixo:
 
 ```r
-#Inicio da Jornada
-#Atribuição do projeto na Base dos dados
+# Inicio da Jornada
+# Atribuição do projeto na Base dos dados
 
 con <- bigrquery::dbConnect(
   bigquery(),
-  billing ='basedosdados-elections',
-  project='basedosdados'
+  billing = "basedosdados-elections",
+  project = "basedosdados"
 )
 
-#indo para o meu projeto no Google DataLake
+# indo para o meu projeto no Google DataLake
 basedosdados::set_billing_id("basedosdados-elections")
 
-#query necessária para responder à minha pergunta
-query = "SELECT ano, turno,sigla_uf, sigla_partido, id_municipio, 
-votos, resultado, cargo
-FROM `basedosdados.br_tse_eleicoes.resultados_candidato_municipio`
-WHERE ano=2018 AND sigla_uf='SP' AND cargo='presidente'"
+# query necessária para responder à minha pergunta
+query <- "
+SELECT
+  ano,
+  turno,
+  sigla_uf,
+  sigla_partido,
+  id_municipio,
+  votos,
+  resultado,
+  cargo
+FROM
+  `basedosdados.br_tse_eleicoes.resultados_candidato_municipio`
+WHERE
+  ano = 2018
+  AND sigla_uf = 'SP'
+  AND cargo = 'presidente'
+"
 
-#atribuição do Dataframe
+# atribuição do Dataframe
 df <- DBI::dbGetQuery(con, query)
 ```
 
 Com o `dataframe` em mãos, é hora de atribuir uma proporção das votações dos candidatos presidenciáveis por município para verificarmos a relação entre o IDHM. Para isso, utilizamos o código abaixo para criar uma nova variável:
 
 ```r
-#Criação de Variável: Porcentagem das votações
+# Criação de Variável: Porcentagem das votações
 df <- df |>
-  dplyr::group_by(id_municipio)|>
-  dplyr::mutate(porcentagem = votos/sum(votos)*100)
+  dplyr::group_by(id_municipio) |>
+  dplyr::mutate(porcentagem = votos / sum(votos) * 100)
 ```
 
 A proposta deste material é que você também consiga trabalhar com uma tabela externa à BD. Por isso, importei um `.csv` do meu computador, o IDHM dos municípios paulistas, e alterei o nome da variável de município para realizarmos um join. Como a proposta é analisarmos uma possível relação entre o IDHM e a porcentagem de votação, fica mais fácil visualizarmos essa relação graficamente com as variáveis organizadas. O código que usei foi esse:
@@ -81,16 +94,16 @@ A proposta deste material é que você também consiga trabalhar com uma tabela 
 ```r
 # Juntando o IDHM de uma base externa com a base de Eleições
 # Lendo a base Externa
-idhm <- read.csv('idhm_sp.csv')
-#Mudando o nome da variável Cod.IBGE para id_municipio
-#para o futuro join
-idhm <- idhm|>
-  dplyr::rename(id_municipio = 'Cod.IBGE'
-    )
-#Join entre as tabelas
-df|>
+idhm <- read.csv("idhm_sp.csv")
+# Mudando o nome da variável Cod.IBGE para id_municipio
+# para o futuro join
+idhm <- idhm |>
+  dplyr::rename(id_municipio = "Cod.IBGE")
+# Join entre as tabelas
+df |>
   dplyr::left_join(idhm,
-                   by = 'id_municipio')
+    by = "id_municipio"
+  )
 ```
 
 Pronto! Está pronto o nosso dataframe. A carinha dele é essa aqui:
@@ -103,21 +116,23 @@ Com o dataframe completo em mãos, fica simples elaborar uma visualização grá
 
 ```r
 # grafico das relacoes
-dplyr::filter(df, turno==2) |>
+dplyr::filter(df, turno == 2) |>
   dplyr::group_by(id_municipio) |>
-  ggplot2::ggplot(aes(x=idhm_2010,
-                      y=porcentagem,
-                      color=resultado)) +
+  ggplot2::ggplot(aes(
+    x = idhm_2010,
+    y = porcentagem,
+    color = resultado
+  )) +
   geom_point() +
   geom_smooth() +
-  scale_color_discrete(labels=c("Bolsonaro", "Fernando Haddad")) +
+  scale_color_discrete(labels = c("Bolsonaro", "Fernando Haddad")) +
   labs(
-    title="Relação entre IDHM e Porcentagem de Votos em SP",
+    title = "Relação entre IDHM e Porcentagem de Votos em SP",
     x = "IDHM",
     y = "Porcentagem de Votos",
-    colour = 'Candidato:'
+    colour = "Candidato:"
   ) +
-  theme(legend.position = 'bottom')
+  theme(legend.position = "bottom")
 ```
 
 <Image src="/blog/qual-a-relacao-entre-o-idhm-e-a-votacao-presidencial-de-2018-em-sp/image_0.webp"/>

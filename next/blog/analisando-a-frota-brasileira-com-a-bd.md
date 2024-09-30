@@ -47,12 +47,31 @@ library("tidyr")
 # Defina o seu projeto no Google Cloud
 set_billing_id(“xxxx-2609”)
 # Para carregar os dados direto no R
-query <- "SELECT A.automovel ,A.caminhao ,A.caminhonete ,A.camioneta ,A.motocicleta ,A.total ,B.populacao ,C.nome
-FROM `basedosdados.br_denatran_frota.municipio_tipo` A
-LEFT JOIN `basedosdados.br_ibge_populacao.municipio` B ON A.ID_MUNICIPIO=b.id_municipio and b.ano=2021
-LEFT JOIN `basedosdados.br_bd_diretorios_brasil.municipio` C ON A.ID_municipio=c.id_municipio
-where a.ano=2021
-and a.mes=3"
+query <- "
+SELECT
+  A.automovel,
+  A.caminhao,
+  A.caminhonete,
+  A.camioneta,
+  A.motocicleta,
+  A.total,
+  B.populacao,
+  C.nome
+FROM
+  `basedosdados.br_denatran_frota.municipio_tipo` A
+LEFT JOIN
+  `basedosdados.br_ibge_populacao.municipio` B
+ON
+  A.ID_MUNICIPIO=b.id_municipio
+  AND b.ano=2021
+LEFT JOIN
+  `basedosdados.br_bd_diretorios_brasil.municipio` C
+ON
+  A.ID_municipio=c.id_municipio
+WHERE
+  a.ano=2021
+  AND a.mes=3
+"
 df <- read_sql(query)
 ```
 
@@ -64,35 +83,35 @@ Após conseguirmos acessar os dados, precisamos fazer pequenas transformações 
 
 ```r
 # Criando nova coluna com a info de automovel per capita
-df$automovel_per_capita = round(df$automovel/df$populacao,2)
+df$automovel_per_capita <- round(df$automovel / df$populacao, 2)
 # Criando um novo dataframe, filtrando cidades com mais de 500 mil habitantes e selecionado o top 10
 # do indicador de automovel per capita
-df_automovel = df %>%
-    filter(populacao >= 500000)
-    %>% arrange(desc(automovel_per_capita))
-    %>% head(10)
+df_automovel <- df %>%
+  filter(populacao >= 500000) %>%
+  arrange(desc(automovel_per_capita)) %>%
+  head(10)
 
-df_automovel$nome = gsub("São Bernardo do Campo", "S.B. do Campo", df_automovel$nome)
+df_automovel$nome <- gsub("São Bernardo do Campo", "S.B. do Campo", df_automovel$nome)
 
 #### Gráfico de Automovel por habitante top 10 municipios
-black.bold <- element_text(face="bold",color = "black", size = 15)
+black.bold <- element_text(face = "bold", color = "black", size = 15)
 ggplot(df_automovel) +
-    aes(x = reorder(nome, -automovel_per_capita), y = automovel_per_capita) +
-    geom_col(fill = "#6A51A3") +
-    geom_text(aes(label = round(automovel_per_capita,2)),size=6, vjust = -0.2, colour = "black") +
-    labs(
-        x = " ",
-        y = " ",
-        title = "Indicador de automóveis per capita por município ",
-        subtitle = "Top 10 Municípios"
-    ) +
-    theme_minimal() +
-    theme(
-        axis.text.x = black.bold,
-        axis.text.y = element_blank(),
-        axis.ticks.y = element_blank(),
-        plot.title = element_text(size = 17)
-    )
+  aes(x = reorder(nome, -automovel_per_capita), y = automovel_per_capita) +
+  geom_col(fill = "#6A51A3") +
+  geom_text(aes(label = round(automovel_per_capita, 2)), size = 6, vjust = -0.2, colour = "black") +
+  labs(
+    x = " ",
+    y = " ",
+    title = "Indicador de automóveis per capita por município ",
+    subtitle = "Top 10 Municípios"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = black.bold,
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 17)
+  )
 ```
 
 O resultado é o gráfico abaixo, que demonstra os 10 municípios com maior indicador de automóveis per capta no Brasil.
@@ -112,54 +131,54 @@ Para responder essa pergunta, novamente precisamos fazer algumas transformaçõe
 ```r
 #### Analise 2: Shares dos top 10 municipios mais populosos
 # filtrando os dados que usaremos
-df_share = df %>%
-    mutate(caminhonete=caminhonete + camioneta) %>%
-    arrange(desc(populacao)) %>%
-    head(10) %>%
-    select(automovel, motocicleta, caminhonete, nome)
+df_share <- df %>%
+  mutate(caminhonete = caminhonete + camioneta) %>%
+  arrange(desc(populacao)) %>%
+  head(10) %>%
+  select(automovel, motocicleta, caminhonete, nome)
 
 # transformando em tidy para possibilitar fazer o gráfico
-df_share_tidy= df_share %>%
-    pivot_longer(
-        -nome,
-        names_to="tipo_veiculo",
-        values_to="qtd"
-    )
+df_share_tidy <- df_share %>%
+  pivot_longer(
+    -nome,
+    names_to = "tipo_veiculo",
+    values_to = "qtd"
+  )
 
 # adicionando o percent para os labels do gráfico
-df_share_total = df_share_tidy %>%
-    group_by(nome) %>%
-    summarise(total = sum(qtd)) %>%
-    left_join(df_share_tidy, by="nome") %>%
-    mutate(percent = round(qtd / total, 2))
+df_share_total <- df_share_tidy %>%
+  group_by(nome) %>%
+  summarise(total = sum(qtd)) %>%
+  left_join(df_share_tidy, by = "nome") %>%
+  mutate(percent = round(qtd / total, 2))
 
-df_share_total$tipo_veiculo = as.factor(df_share_total$tipo_veiculo)
+df_share_total$tipo_veiculo <- as.factor(df_share_total$tipo_veiculo)
 
 #### Gráfico de share de tipo dos veículos top 10 municipios mais populosos
-black.bold2 <- element_text(face="bold",c olor="black", size=8)
+black.bold2 <- element_text(face = "bold", color = "black", size = 8)
 
-ggplot(df_share_total, aes(fill=tipo_veiculo, y=as.numeric(percent), x=nome)) +
-    geom_bar(position="fill", stat="identity") +
-    geom_text(
-        aes(label=paste0(percent*100, "% ")),
-        position=position_stack(vjust=0.7),
-        size=5
-    ) +
-    scale_fill_manual(values = c("#DADAEB", "#9E9AC8", "#6A51A3")) +
-    labs(
-        x = " ",
-        y = " ",
-        title = "Share de veículos",
-        subtitle = "Top 10 Municípios mais populosos"
-    ) +
-    theme_minimal() +
-    theme(
-        axis.text.y.left = black.bold2,
-        axis.text.x = element_blank(),
-        axis.ticks.y = element_blank(),
-        plot.title = element_text(size = 17)
-    ) +
-    coord_flip()
+ggplot(df_share_total, aes(fill = tipo_veiculo, y = as.numeric(percent), x = nome)) +
+  geom_bar(position = "fill", stat = "identity") +
+  geom_text(
+    aes(label = paste0(percent * 100, "% ")),
+    position = position_stack(vjust = 0.7),
+    size = 5
+  ) +
+  scale_fill_manual(values = c("#DADAEB", "#9E9AC8", "#6A51A3")) +
+  labs(
+    x = " ",
+    y = " ",
+    title = "Share de veículos",
+    subtitle = "Top 10 Municípios mais populosos"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.y.left = black.bold2,
+    axis.text.x = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(size = 17)
+  ) +
+  coord_flip()
 ```
 
 O resultado é o gráfico abaixo, que demonstra em porcentagem o share de veículos nos municípios mais populosos do Brasil.

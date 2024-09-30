@@ -44,13 +44,20 @@ Clicamos então em “Criar nova consulta” e no editor que aparece na tela bas
 
 ```sql
 SELECT
-  pib.id_municipio, --selecionar id do municipio
-  pop.ano, -- população do muunicipio
+  pib.id_municipio,
+  --selecionar id do municipio
+  pop.ano,
+  -- população do muunicipio
   pib.PIB / pop.populacao AS pib_per_capita -- calculo do PIB per capita
-FROM `basedosdados.br_ibge_pib.municipio` AS pib -- selecionar base de pib dos municipios
-JOIN `basedosdados.br_ibge_populacao.municipio` AS pop -- join com a base de população
-ON pib.id_municipio = pop.id_municipio AND pib.ano = pop.ano
-LIMIT 100
+FROM
+  `basedosdados.br_ibge_pib.municipio` AS pib -- selecionar base de pib dos municipios
+JOIN
+  `basedosdados.br_ibge_populacao.municipio` AS pop -- join com a base de população
+ON
+  pib.id_municipio = pop.id_municipio
+  AND pib.ano = pop.ano
+LIMIT
+  100
 ```
 
 <Image src="/blog/tutorial-power-bi/image_2.png"/>
@@ -78,10 +85,10 @@ Para salvar outra tabela com as informações de municípios (nome, UF, etc), fa
 ```sql
 SELECT
   id_municipio,
-  municipio,
+  nome,
   id_uf,
-  uf,
-  regiao
+  sigla_uf,
+  nome_regiao
 FROM `basedosdados.br_bd_diretorios_brasil.municipio`
 ```
 
