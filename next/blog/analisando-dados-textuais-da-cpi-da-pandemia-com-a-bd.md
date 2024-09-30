@@ -116,7 +116,18 @@ O TF-IDF foi usado para gerar a WordCloud de termos mais relevantes para cada di
 
 ### Extração de Entidades Nomeadas
 
-Entidades nomeadas são termos que, a partir do contexto, são classificados em diferentes categorias, como **data**, **local**, **pessoa**. Vale ressaltar que esses modelos são dependentes do domínio para o qual foi treinado. Apesar de estar trabalhando com um domínio específico (política), o modelo escolhido extraiu entidades relevantes para a análise. Utilizei um modelo pré-treinado, que você pode conferir por [aqui](https://github.com/neuralmind-ai/portuguese-bert). Esse modelo permite extrair até 10 classes de entidades: `PESSOA, ORGANIZACAO, LOCAL, TEMPO, VALOR, ABSTRACAO, ACONTECIMENTO, COISA, OBRA e OUTRO`
+Entidades nomeadas são termos que, a partir do contexto, são classificados em diferentes categorias, como **data**, **local**, **pessoa**. Vale ressaltar que esses modelos são dependentes do domínio para o qual foi treinado. Apesar de estar trabalhando com um domínio específico (política), o modelo escolhido extraiu entidades relevantes para a análise. Utilizei um modelo pré-treinado, que você pode conferir por [aqui](https://github.com/neuralmind-ai/portuguese-bert). Esse modelo permite extrair até 10 classes de entidades:
+
+- PESSOA
+- ORGANIZACAO
+- LOCAL
+- TEMPO
+- VALOR
+- ABSTRACAO
+- ACONTECIMENTO
+- COISA
+- OBRA
+- OUTRO
 
 Para essa visualização, foram utilizadas as classes PESSOA, ORGANIZACAO e LOCAL. As entidades COISA, ABSTRACAO, OUTRO, OBRA e ACONTECIMENTO foram agrupadas em uma classe chamada de OUTROS.
 

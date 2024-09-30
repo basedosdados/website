@@ -229,46 +229,6 @@ function NativeShare({ url, title, description }) {
       )}
     </Box>
   );
-
-  if (navigator.share) {
-    return (
-      <Box
-        as="button"
-        variant="unstyled"
-        onClick={() =>
-          navigator
-            .share({
-              title: `${title} – Blog – Base dos Dados`,
-              text: `${title}\n${description}`,
-              url: url,
-            })
-            .then(() => {})
-            .catch((error) => {
-              console.error(`Something went wrong to share: ${url}`, error);
-            })
-        }
-      >
-        <ShareIcon width={"1.4rem"} />
-      </Box>
-    );
-  }
-
-  return (
-    <Box
-      as="button"
-      variant="unstyled"
-      title="Copiar link"
-      onClick={onCopy}
-      minWidth={"auto"}
-      minHeight={"auto"}
-    >
-      {hasCopied ? (
-        <CheckIcon width={"1.4rem"} height={"1.4rem"} alt="copiado conteúdo" />
-      ) : (
-        <CopyIcon width={"1.4rem"} height={"1.4rem"} alt="copiar conteúdo" />
-      )}
-    </Box>
-  );
 }
 
 export function ShareButtons({ frontmatter }) {

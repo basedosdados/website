@@ -4,12 +4,12 @@ description: Como dados abertos podem contribuir para o desenvolvimento igualit�
 date:
   created: '2021-03-06T15:00:00'
 authors:
-  - name: Gabriel Manhães
+  - name: Giovane Caruso
     role: Texto
-    social: https://twitter.com/Manhaes_2000
+    social: https://medium.com/@giovanecaruso
 categories: [analise]
 medium_slug: >-
-  https://medium.com/basedosdados/perigo-no-mercado-de-trabalho-6b50c825bee1
+  https://medium.com/basedosdados/relembrando-o-datathon-bd-2021-ee46fe00ccc0
 ---
 
 A divulgação de dados públicos mostra em números a desigualdade em diferentes aspectos da sociedade e é a partir disso que podemos começar a elaborar soluções e iniciativas para um desenvolvimento mais democrático.

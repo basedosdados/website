@@ -78,7 +78,7 @@ populacao_mga <- bdplyr("basedosdados-dev.br_ms_populacao.municipio") %>%
 
 Pronto! Já temos o dataset com os microdados dos vacinados (`dados_vacina`) e a estimativa da população (`populacao_mga`) carregados no R!
 
-Nesse texto utilizei a minha cidade como exemplo (código _4115200_), mas você pode fazer para a sua também. É só buscar sua cidade no site [IBGE Cidades](https://cidades.ibge.gov.br/), colocar o código do IBGE de 7 dígitos nos filtros de `id_municipio_estabelecimento` e `id_municipio` acima e mudar a `sigla_uf` para seu estado!
+Nesse texto utilizei a minha cidade como exemplo (código `4115200`), mas você pode fazer para a sua também. É só buscar sua cidade no site [IBGE Cidades](https://cidades.ibge.gov.br/), colocar o código do IBGE de 7 dígitos nos filtros de `id_municipio_estabelecimento` e `id_municipio` acima e mudar a `sigla_uf` para seu estado!
 
 ## Arrumando os dados
 

@@ -145,4 +145,4 @@ Alguns momentos foram muito similares a trecho do filme “Em Busca do Cálice S
 
 No mais, as dificuldades aqui apresentadas reforçam não só o padrão de qualidade da [Base dos Dados](https://basedosdados.org/), mas também o comprometimento e senso de responsabilidade da Instituição com o propósito de democratizar o acesso a dados no Brasil.
 
-Você pode encontrar o dataset do Siconfi pronto para uso neste [link](https://basedosdados.org/dataset/b5878df7-e259-44bc-8903-4feb8d56945a).
+Você pode encontrar o dataset do Siconfi pronto para uso neste [link](https://basedosdados.org/dataset/5a3dec52-8740-460e-b31d-0e0347979da0?table=ee51f2d3-c5fb-4ff3-a6e2-fe4bbdcc46c8).
