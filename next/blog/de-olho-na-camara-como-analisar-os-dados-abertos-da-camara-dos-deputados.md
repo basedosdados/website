@@ -32,13 +32,7 @@ A criação do Portal de Dados Abertos da Câmara dos Deputados facilitou muito 
 
 ## O que você vai ler?
 
-Neste artigo você vai encontrar informações sobre o processo de captura e atualização dos dados no nosso datalake, sobre como eles estão organizados e como aplicar tudo isso nas suas próprias análises. Vamos utilizar os dados de despesa de deputados(as) ao longo das últimas cinco legislaturas como exemplo.Veja os Tópicos:
-
-* Introdução
-* Como a BD captura os dados e como eles são atualizados?
-* Compreendendo a cobertura temporal
-* Chaves identificadoras
-* Dados de despesa através das legislaturas
+Neste artigo você vai encontrar informações sobre o processo de captura e atualização dos dados no nosso datalake, sobre como eles estão organizados e como aplicar tudo isso nas suas próprias análises. Vamos utilizar os dados de despesa de deputados(as) ao longo das últimas cinco legislaturas como exemplo.
 
 O [site da Câmara dos Deputados](https://dadosabertos.camara.leg.br/) disponibiliza os dados brutos e detalhados sobre a atividade legislativa feita pela Casa. São esses dados que possibilitam a criação de diversas iniciativas que promovem mais transparência sobre o poder público, como é o caso do [LegislaBrasil](https://indice.legislabrasil.org/), [Serenata de Amor](https://serenata.ai/), dentre muitas outras.
 

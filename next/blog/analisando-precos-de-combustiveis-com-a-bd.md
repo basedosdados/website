@@ -23,12 +23,7 @@ medium_slug: >-
 
 ## TL;DR
 
-Qual o preço do combustível na sua cidade? Neste artigo vamos apresentar os dados da base de pesquisa com preços de distribuição de combustíveis e de gás de cozinha (GLP), divulgados pela [Agência Nacional do Petróleo](https://www.gov.br/anp/pt-br). Além disso, vamos apresentar uma análise da evolução dos preços em relação à inflação, demonstrando como você pode usar a Base dos Dados para analisar como é esse cenário em sua própria cidade, ou no recorte que quiser. Dentre os tópicos deste texto, você encontra:
-
-* **Entendendo a Série Histórica de Preços**
-* **Como consultar esses dados**
-* **Os olhos da cara: Analisando a evolução de preço dos combustíveis no Brasil**
-* **Como criar um gráfico para ilustrar a análise**
+Qual o preço do combustível na sua cidade? Neste artigo vamos apresentar os dados da base de pesquisa com preços de distribuição de combustíveis e de gás de cozinha (GLP), divulgados pela [Agência Nacional do Petróleo](https://www.gov.br/anp/pt-br). Além disso, vamos apresentar uma análise da evolução dos preços em relação à inflação, demonstrando como você pode usar a Base dos Dados para analisar como é esse cenário em sua própria cidade, ou no recorte que quiser.
 
 <Image src="/blog/analisando-precos-de-combustiveis-com-a-bd/image_1.gif"/>
 

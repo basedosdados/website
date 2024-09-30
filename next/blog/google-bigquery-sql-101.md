@@ -19,12 +19,7 @@ medium_slug: https://medium.com/@basedosdados/bigquery-101-8b39da1ce52b
 
 ## TL;DR
 
-Neste artigo vamos demonstrar como consultar os conjuntos de dados disponíveis no nosso datalake público online através do Google BigQuery. Você irá aprender a avaliar os dados, cruzar tabelas de diferentes conjuntos de dados disponíveis e para isso iremos explicar algumas funções básicas de SQL e BigQuery — ao final do artigo temos inclusive uma super indicação de curso gratuito de SQL. Dentre os tópicos do texto, você irá encontrar:
-
-* **Navegando pelo BigQuery**
-* **Explorando os metadados da RAIS**
-* **Utilizando o Editor de Consultas em SQL**
-* **Por que usar SQL?**
+Neste artigo vamos demonstrar como consultar os conjuntos de dados disponíveis no nosso datalake público online através do Google BigQuery. Você irá aprender a avaliar os dados, cruzar tabelas de diferentes conjuntos de dados disponíveis e para isso iremos explicar algumas funções básicas de SQL e BigQuery — ao final do artigo temos inclusive uma super indicação de curso gratuito de SQL.
 
 O texto tem como base o workshop feito por João Carabetta disponível em [nosso canal no Youtube](https://www.youtube.com/basedosdados).
 

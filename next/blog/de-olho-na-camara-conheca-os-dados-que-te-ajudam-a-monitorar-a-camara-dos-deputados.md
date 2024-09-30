@@ -25,12 +25,7 @@ A Base dos Dados já deu um grande passo para tornar esses dados mais acessívei
 
 ## O que você vai ler?
 
-Neste artigo, apresentamos um breve contexto histórico da política de governo aberto da Câmara dos Deputados, explicamos como esses dados estão disponíveis e como você pode usar a BD para acessar e analisar os dados de maneira mais prática e rápida. Organizamos também uma lista de referências e casos de uso que podem servir de inspiração e consulta. Veja os Tópicos:
-
-* Contexto
-* Como a Câmara disponibiliza os dados
-* Por que acessar os dados da Câmara pela BD?
-* Lista de referências e links úteis
+Neste artigo, apresentamos um breve contexto histórico da política de governo aberto da Câmara dos Deputados, explicamos como esses dados estão disponíveis e como você pode usar a BD para acessar e analisar os dados de maneira mais prática e rápida. Organizamos também uma lista de referências e casos de uso que podem servir de inspiração e consulta.
 
 ## Contexto
 

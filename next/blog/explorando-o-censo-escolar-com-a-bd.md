@@ -18,11 +18,7 @@ medium_slug: https://medium.com/@basedosdados/explorando-o-censo-escolar-com-a-b
 
 ## TL;DR
 
-Nesse texto, vamos dissecar o conjunto de dados do **Censo Escolar,** já disponível, tratado e pronto para a análise na BD+. Primeiro, vamos introduzir as **quatro** diferentes tabelas da base, apresentando algumas de suas variáveis. Depois, vamos mostrar alguns pontos de contato interessantes com outras tabelas disponíveis em nosso datalake público e perguntas que podem surgir dessas interações. Acesse essa base por [aqui](https://basedosdados.org/dataset/dae21af4-4b6a-42f4-b94a-4c2061ea9de5?table=cf9586ad-a168-40c1-97f9-86083ba4409f). Dentre os temas deste artigo, estão:
-
-* **O Censo e suas dificuldades**
-* **Explorando o Censo Escolar com a BD+**
-* **Pontos de contato com outras bases**
+Nesse texto, vamos dissecar o conjunto de dados do **Censo Escolar,** já disponível, tratado e pronto para a análise na BD+. Primeiro, vamos introduzir as **quatro** diferentes tabelas da base, apresentando algumas de suas variáveis. Depois, vamos mostrar alguns pontos de contato interessantes com outras tabelas disponíveis em nosso datalake público e perguntas que podem surgir dessas interações. Acesse essa base por [aqui](https://basedosdados.org/dataset/dae21af4-4b6a-42f4-b94a-4c2061ea9de5?table=cf9586ad-a168-40c1-97f9-86083ba4409f).
 
 ## O Censo e suas dificuldades
 

@@ -19,11 +19,7 @@ medium_slug: https://medium.com/@basedosdados/intro-ao-pacote-basedosdados-em-py
 
 ## TL;DR
 
-Vamos demonstrar **como usar o pacote da Base dos Dados em Python.** O pacote permite acessar e analisar mais de 70 conjuntos de dados do nosso *datalake* público BD+, obter informações sobre tabelas, carregar dados no pandas, e mais. Neste artigo você vai aprender a:
-
-* **Como acessar a BD+ em Python**
-* **Explorando as funções do pacote**
-* **Construindo uma análise: *Quais os nomes mais famosos no Brasil?***
+Vamos demonstrar **como usar o pacote da Base dos Dados em Python.** O pacote permite acessar e analisar mais de 70 conjuntos de dados do nosso *datalake* público BD+, obter informações sobre tabelas, carregar dados no pandas, e mais.
 
 Conteúdo baseado no [Workshop “Brincando com dados BD+ em Python”](https://www.youtube.com/watch?v=wI2xEioDPgM).
 

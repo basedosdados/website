@@ -22,12 +22,6 @@ Construir um site totalmente novo foi um dos maiores projetos que realizamos ess
 
 **Neste artigo queremos mostrar para você como aconteceu esse processo quase mágico**, no qual as ideias foram tomando forma até chegar ao [resultado final](http://basedosdados.org). Além de falar sobre nossa motivação, explicamos também como organizamos os times para construir um site do zero, quais ferramentas utilizamos (e o por quê) e, é claro, como você pode contribuir com esse desenvolvimento ([todo em código aberto](http://github.com/basedosdados/website)).
 
-Os tópicos estão separados em:
-
-* **Por que resolvemos construir um novo site?**
-* **Processo de criação**
-* **Lançamento e próximos passos**
-
 ## Por que resolvemos construir um novo site?
 
 ### Limitações do site original

@@ -21,12 +21,6 @@ medium_slug: https://medium.com/@basedosdados/como-explorar-e-an%C3%A1lisar-os-d
 
 Nesse artigo, você vai entender como funciona o Crédito Rural no Brasil, quais instituições participam desse processo de financiamento e como você pode acessar e análisar os microdados já tratados com essas informações pelo [datalake público da Base dos Dados](https://basedosdados.org/dataset/544c9d22-97b7-479a-8eca-94762840b465?table=e2d5dcc5-270e-4a8b-8d55-0227fd46c10f). Além disso, você confere alguns exemplos práticos de análises com os dados do Sistema de Operações do Crédito Rural e do Proagro.
 
-Os tópicos deste artigo estão separados em:
-
-- O que é o Crédito Rural e como ele é concedido e regulado no Brasil
-- De onde vêm os dados de Crédito Rural
-- Analisando os microdados de Crédito Rural
-
 ## O que é o crédito rural e como ele é concedido e regulado? 
 
 Antes de começarmos a falar sobre os dados, vamos fazer uma breve contextualização sobre como funciona o Crédito Rural (CR), como ele é concedido e regularizado.

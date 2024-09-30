@@ -20,12 +20,6 @@ medium_slug: https://medium.com/@basedosdados/voc%C3%AA-usa-stata-veja-como-a-bd
 
 Neste artigo vamos explicar como usar o pacote basedosdados no Stata para acessar e explorar diversas bases de dados públicas já tratadas e prontas para análise. No tutorial, você vai entender como instalar e utilizar o pacote em Stata da Base dos Dados, além de conferir um exemplo de análise feito com essa ferramenta.
 
-Os tópicos deste tutorial estão separados em:
-
-* **Sobre o pacote:** Informações gerais sobre o pacote e como ele foi construído
-* **Como instalar:** O passo a passo da instalação até como utilizar o pacote
-* **Usando o pacote:** Um exemplo prático de como acessar e analisar dados públicos com Stata
-
 ## Sobre o pacote
 
 O novo pacote basedosdados no Stata possibilita o acesso a [centenas de tabelas tratadas e compatibilizadas](https://basedosdados.org/dataset?resource_type=bdm_table), disponíveis no datalake público da Base dos Dados. O pacote é habilitado para 7 comandos. Os comandos dão desde a possibilidade de listar todos os conjuntos de dados disponíveis do datalake, até baixá-los ou analisá-los diretamente do Stata.

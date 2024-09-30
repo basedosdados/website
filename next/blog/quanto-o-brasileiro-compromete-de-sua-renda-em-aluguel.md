@@ -32,13 +32,6 @@ medium_slug: >-
 
 Este artigo é a reprodução do trabalho final da Trilha Formativa “Uso de Dados no Setor Público”, ministrada pela Base dos Dados para alunos do Vetor Brasil, ong que auxilia governos na solução de desafios por meio da inovação em gestão de pessoas.
 
-## Table of Content
-
-* *Introdução*
-* *Dados e Metodologia*
-* *Resultados*
-* *Consultas utilizadas*
-
 ## Introdução
 
 A casa própria permeia o imaginário do brasileiro como um ideal de segurança de um local para morar e uma reserva de riqueza em caso de emergência. Faz sentido: ao longo das décadas de alta inflação, a população não bancarizada de fato tinha pouco ou nenhum acesso a outras formas de reserva e de ativo — a casa própria, era portanto, sua segurança financeira, o que se podia deixar aos filhos. Embora programas como o Minha Casa Minha Vida tenham expandido o acesso à moradia própria às camadas menos abastadas, a realidade é que parte relevante dos brasileiros habitam sob outra modalidade de moradia: o aluguel.
