@@ -105,8 +105,8 @@ Se quisermos abrir as turmas de 2010 para o estado da Bahia por exemplo, no [Pyt
 
 ```python
 bd.read_sql(
-    query = "SELECT * FROM `basedosdados.br_inep_censo_escolar.turma` WHERE ano = 2010 and sigla_uf = 'BA'",
-    billing_project_id = "bd_projeto"
+  query = "SELECT * FROM `basedosdados.br_inep_censo_escolar.turma` WHERE ano = 2010 and sigla_uf = 'BA'",
+  billing_project_id = "bd_projeto"
 )
 ```
 
