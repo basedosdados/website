@@ -77,5 +77,3 @@ De acordo com Natália Leão, Diretora de pesquisa e projetos na Gênero e Núme
 Sobre os aspectos que podem interferir nessas disparidades, Natália também aponta que a sociedade impõe padrões e características pré-estabelecidas do que seria o comportamento e atividades ideais para pessoas de determinado gênero ou raça. “ Ao adentrarmos no mercado de trabalho, podemos notar que muitos desses aspectos são ali replicados e ganham uma lógica própria, como a discriminação por parte do empregador, ao encaixar características pré-determinadas às pessoas de acordo com seu gênero ou raça/cor; a institucionalização dessa discriminação que faz com que se torne um padrão de comportamento dentro do mundo laboral já no processo de seleção de candidatos, encaixando cada perfil de vaga a características pré-estabelecidas a cada gênero e raça/cor.”
 
 Você pode conferir o código completo da análise por [aqui](https://github.com/basedosdados/analises/commit/cc2bc420a31e30def49f68c0ca85d5538ff26fdb).
-
-Gostou dessa análise? Então não deixe de assinar a BDletter para ficar sempre por dentro das nossas análises, novidades e dicas! [Assine já](https://info.basedosdados.org/newsletter).

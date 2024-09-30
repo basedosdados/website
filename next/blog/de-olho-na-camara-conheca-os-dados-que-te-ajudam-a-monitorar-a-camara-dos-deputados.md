@@ -129,7 +129,7 @@ Esse é apenas um simples exemplo de aplicação dos dados em nosso datalake pú
 
 Organizamos aqui uma lista com links que podem ser úteis para sua pesquisa e análise. Aproveite para salvar esse artigo para ter sempre a lista em mãos.
 
-Já fez uma análise com os dados da BD? Conte para nós nos comentários eu envie para `giovanecaruso@basedosdados.org`. Para nós é muito importante conhecer e compartilhar o seu traballho.
+Já fez uma análise com os dados da BD? Conte para nós ou envie um email para `giovanecaruso@basedosdados.org`. Para nós é muito importante conhecer e compartilhar o seu traballho.
 
 **Acesso aos dados**
 

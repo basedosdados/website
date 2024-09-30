@@ -64,5 +64,3 @@ Com foco na cidade de Florianópolis e no estado de Santa Catarina, a [Acontece�
 ## Grupo Gay da Bahia (GGB)
 
 Fundada em 1980, o Grupo Gay da Bahia é a mais antiga associação brasileira ainda em atividade que tem como foco a defesa dos gays. Dentre suas diversas atividades e projetos, a organização organiza e disponibiliza, desde 2011, relatórios anuais de mortes LGBTI+ no Brasil. Confira por [aqui](https://grupogaydabahia.com/relatorios-anuais-de-morte-de-lgbti/).
-
-Você conhece alguma organização que não trouxemos no artigo? Não deixe de mencionar nos comentários!

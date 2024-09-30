@@ -67,5 +67,3 @@ __Poderia nos contar um pouco sobre a sua pesquisa em climatologia, especialment
 Minha pesquisa é sobre eventos extremos de chuva e desastres. Acredito que seja uma área de grande importância porque precisamos de mais estudos para termos uma melhor previsibilidade para mesoescala, especialmente em um mundo mais quente e com modificação de padrões.
 
 Assim como a pesquisa, a divulgação científica é essencial para que o conhecimento acadêmico seja democratizado e chegue a todos porque, a partir do momento que as pessoas têm acesso à informação de qualidade, elas tomam melhores decisões e transformam o mundo. Logo, vejo a divulgação científica sobre a crise climática como uma questão moral, pois é essencial que as pessoas entendam o que está acontecendo e saibam que só com grande adesão popular conseguiremos superar essa crise e garantir habitabilidade para nós, para as futuras gerações e para todas as outras espécies com as quais dividimos nosso lar comum, o planeta Terra.
-
-

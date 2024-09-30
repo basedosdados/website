@@ -74,6 +74,4 @@ Com o mapa em mãos, fica fácil identificar que o Mato Grosso é o estado com m
 
 Vale lembrar que também é possível relacionar mais de uma base de dados com os arquivos de geometria espacial do geobr pela BD. Você pode fazer o mesmo processo para qualquer base com dados a nível de município, regiões e estabelecimentos de saúde, microrregiões, mesorregiões, escolas e muito mais.
 
-Este artigo te ajudou? Não deixe de contar para nós nos comentários!
-
 Teve alguma dúvida sobre como usar os dados do geobr, ou qualquer outro conjunto da BD? Temos uma equipe preparada e pronta para te ajudar em nosso canal do Discord. Venha fazer parte!

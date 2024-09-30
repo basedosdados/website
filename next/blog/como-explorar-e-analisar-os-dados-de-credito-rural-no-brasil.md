@@ -577,7 +577,6 @@ plot6
 
 <Image src="/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_7.png" cation="Top 8 programas de Crédito por valor financiado durante janeiro de 2013 a setembro de 2022"/>
 
-
 Descrição das siglas dos programas:
 
 - Funcafé: Funcafé (Programa De Defesa Da Economia Cafeeira

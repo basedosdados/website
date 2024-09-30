@@ -42,7 +42,7 @@ A minha língua materna na programação é o R. Comecei a desenvolver algumas a
 
 ### Criando o Dataframe
 
-Agora, é a hora mais legal: vamos codar! O primeiro passo é criarmos o dataframe para responder a questão que refletimos anteriormente. Deixei as anotações no próprio código. Caso você tenha alguma dúvida com relação ao código, pode me escrever aqui nos comentários ou me encontrar no servidor da [Base dos Dados no Discord](https://discord.com/invite/huKWpsVYx4). Meu usuário é @gustavoalcantara. Confira os primeiros passos no código abaixo:
+Agora, é a hora mais legal: vamos codar! O primeiro passo é criarmos o dataframe para responder a questão que refletimos anteriormente. Deixei as anotações no próprio código. Caso você tenha alguma dúvida com relação ao código, pode me encontrar no servidor da [Base dos Dados no Discord](https://discord.com/invite/huKWpsVYx4). Meu usuário é @gustavoalcantara. Confira os primeiros passos no código abaixo:
 
 ```r
 # Inicio da Jornada
@@ -139,4 +139,4 @@ dplyr::filter(df, turno == 2) |>
 
 E pronto! Com essa visualização temos um primeiro insight sobre a relação entre o IDHM no Estado de São Paulo e a votação presidencial de 2018. Cada pontinho desse é um município e está representando no eixo y a porcentagem de votos que cada um dos candidatos recebeu. Portanto, esse pontinho aparecerá para Fernando Haddad em azul e Bolsonaro em vermelho. Observe como a porcentagem de votos e a relação entre os municípios com alto IDHM (maiores que 0,70) se mostra inversa entre os dois candidatos. Haddad, nesses municípios, teve a menor porcentagem de votos, enquanto Bolsonaro obteve a maior e apresenta uma tendência de aumento quanto maior for o IDH.
 
-Será que esse cenário se repete em outros estados? Faça também sua análise e compartilhe nos comentários! Se precisar de uma mãozinha, a Base dos Dados tem uma equipe preparada para te ajudar. Traga suas dúvidas para [nossa comunidade no Discord](https://discord.com/invite/huKWpsVYx4).
+Será que esse cenário se repete em outros estados? Faça também sua análise! Se precisar de uma mãozinha, a Base dos Dados tem uma equipe preparada para te ajudar. Traga suas dúvidas para [nossa comunidade no Discord](https://discord.com/invite/huKWpsVYx4).

@@ -95,5 +95,3 @@ ORDER BY
 Acesse a base de Diretórios Brasileiros por [aqui](https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=0a2d8187-f936-437d-89db-b4eb3a7e1735).
 
 Vale lembrar que o cruzamento entre bases não é realizável apenas porque a base de Diretórios funciona como uma espécie de dicionário. Além deste fator, existe o **padrão de qualidade da Base dos Dados**, ou seja, nós compatibilizamos todos os dados para que possam ser cruzados entre tabelas. A limpeza das bases disponíveis em nosso datalake público envolve um rigoroso processo de padronização e compatibilização de dados.
-
-Ficou com alguma dúvida sobre nossa base de Diretórios Brasileiros, ou como aplicá-la? Deixe seu comentário ou procure algum de nossos assistentes de dados no canal *#dados* em nossa [comunidade do Discord](https://discord.com/invite/huKWpsVYx4).

@@ -179,4 +179,3 @@ A análise revela a significativa influência das atividades econômicas ligadas
 Para avançar no entendimento desse cenário, futuras pesquisas podem se concentrar na identificação dos centros de influência das atividades econômicas públicas, possibilitando comparações com os padrões de distribuição salarial em todo o estado do Rio de Janeiro.
 
 Além disso, o **Gráfico B** sugere uma correlação econômica entre o estado do Rio de Janeiro e sua capital. Para aprofundar essa análise, é fundamental expandir a série histórica e realizar comparações mais abrangentes das atividades econômicas em pesquisas futuras.
-
