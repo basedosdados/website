@@ -29,7 +29,7 @@ Foi com dados do geobr que elaboramos, por exemplo, a análise dos resultados ge
 
 <Image src="/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_1.png" caption="Proficiência média por escolar no Ceará"/>
 
-Além de poder acessar esses dados em Python, R, Stata e pelo BigQuery usando SQL, é possível exportar essas informações em .csv e adicioná-las no seu Sistema de Informação Geográfica (SIG) favorito.
+Além de poder acessar esses dados em Python, R, Stata e pelo BigQuery usando SQL, é possível exportar essas informações em `.csv` e adicioná-las no seu Sistema de Informação Geográfica (SIG) favorito.
 
 SIG é um conjunto de sistemas de softwares e hardwares que permitem visualizar e analisar dados geográficos para compreender relações, padrões e tendências. Existem diversos tipos de SIG diferentes. Nesse artigo utilizamos o [QGIS](https://qgis.org/pt_BR/site/about/index.html) por ser uma plataforma open source, colaborativa e gratuita para análise de dados geoespaciais.
 
@@ -48,7 +48,7 @@ WHERE ano = 2017
 GROUP BY censo.sigla_uf, geo.sigla_uf, geometria
 ```
 
-A partir do resultado da consulta, é possível realizar o download do .csv no seu computador. 
+A partir do resultado da consulta, é possível realizar o download do `.csv` no seu computador. 
 
 Agora, vamos inserir o arquivo `.csv` com a geometria espacial no QGIS. Clique em `Adicionar Camada` e depois `Adicionar Camada de Texto Delimitado`.
 

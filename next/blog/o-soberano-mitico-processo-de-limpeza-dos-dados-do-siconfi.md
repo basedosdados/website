@@ -67,21 +67,19 @@ Como as tabelas vinham apenas com o nome dos municípios, tanto para entrar no p
 
 Por exemplo:
 
-```
-Tabela de Receita para um ano X.
+- Tabela de Receita para um ano X.
 
-quadro1 = RIO DE JANEIRO
+  - quadro1 = RIO DE JANEIRO
 
-quadro2 = RIO DE JANEIRO-RJ
+  - quadro2 = RIO DE JANEIRO-RJ
 
-quadro3 = RIO DE JANEIRO/RJ
+  - quadro3 = RIO DE JANEIRO/RJ
 
-Tabela de Receita para um ano Xn.
+- Tabela de Receita para um ano Xn.
 
-quadro1 = Rio deJaneiro
+  - quadro1 = Rio deJaneiro
 
-quadro2 = RÍO DE JANEIRO — RJ
-```
+  - quadro2 = RÍO DE JANEIRO — RJ
 
 Por vezes, as siglas dos municípios estavam erradas e/ou o nome dos municípios desatualizados.
 

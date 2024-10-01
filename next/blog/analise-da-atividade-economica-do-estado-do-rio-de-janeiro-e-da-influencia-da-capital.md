@@ -148,7 +148,7 @@ A economia de uma região geográfica influencia a quantidade de empregos gerado
 
 Um dos objetivos da **Consulta A** foi identificar as atividades econômicas que representam mais de 50% dos empregados gerados no estado do Rio de Janeiro. A pesquisa estabeleceu como uma linha de corte para efeitos dessa pesquisa 35 CNAEs, de um total de 1.318, com 52,82% do estoque total de empregos no início de 2022 conforme a **Tabela A1**.
 
-Dessa forma, o**Gráfico A** foi gerado para identificar as principais atividades econômicas geradoras de empregos no estado do Rio de Janeiro a partir da **Tabela A2,** que apresenta os grupamentos das principais atividades econômicas.
+Dessa forma, o **Gráfico A** foi gerado para identificar as principais atividades econômicas geradoras de empregos no estado do Rio de Janeiro a partir da **Tabela A2,** que apresenta os grupamentos das principais atividades econômicas.
 
 <Image src="/blog/analise-da-atividade-economica-do-estado-do-rio-de-janeiro-e-da-influencia-da-capital/image_2.webp" caption="Gráfico A: Principais atividades econômicas com mais de 50% dos empregos"/>
 

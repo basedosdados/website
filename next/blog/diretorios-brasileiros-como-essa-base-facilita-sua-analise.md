@@ -43,7 +43,7 @@ Para exemplificar como a base de Diretórios Brasileiros facilita o cruzamento d
 
 No primeiro exemplo, cruzamos a tabela `municipio` da base de Diretórios Brasileiros com a tabela `tempo_deslocamento_casa_trabalho`, da base de [Indicadores de Mobilidade e Transporte](https://basedosdados.org/dataset/e3edf621-c491-4d74-a03a-15a759f6e638?table=01114371-3b1b-4574-a3ea-3d7d2125b4f2) da [Mobilidados](https://mobilidados.org.br/), que contém dados sobre tempo médio de deslocamento casa-trabalho, assim como de percentual de pessoas que gastam mais de uma hora neste deslocamento no ano de 2010.
 
-Para isso, usamos como chave primária a coluna `id_municipio`. O objetivo é adicionar as colunas **regiao** e **municipio** no novo conjunto de dados. Assim, além de saber o nome dos municípios, também é possível fazer o agrupamento por cidade, grande região ou por estado e ver qual destes têm o tempo médio de deslocamento maior ou menor.
+Para isso, usamos como chave primária a coluna `id_municipio`. O objetivo é adicionar as colunas `regiao` e `municipio` no novo conjunto de dados. Assim, além de saber o nome dos municípios, também é possível fazer o agrupamento por cidade, grande região ou por estado e ver qual destes têm o tempo médio de deslocamento maior ou menor.
 
 Confira abaixo a Query utilizada:
 

@@ -2,7 +2,7 @@
 title: Como começar sua análise com dados públicos?
 description: Aprenda como formular uma boa pergunta e acessar os dados para responder ela
 date:
-  created: '2024-07-30T15:00:00'
+  created: "2024-07-30T15:00:00"
 authors:
   - name: Giovane Caruso
     role: Autor
@@ -19,7 +19,7 @@ Não é nenhuma novidade que dados públicos são fundamentais para a transparê
 
 Porém, ainda existe uma barreira entre a população e o acesso e utilização dessas informações tão cruciais. Trabalhar com dados ainda exige habilidades que não aprendemos na escola, talvez nem mesmo no ensino superior. Infelizmente, essa ferramenta tão poderosa para influenciar positivamente a sociedade ainda é para poucos(as).
 
-__Mas queremos e devemos mudar isso.__
+**Mas queremos e devemos mudar isso.**
 
 Este artigo foi criado para ajudar a diminuir, ao menos um pouco, essa barreira e ajudar pessoas a navegar melhor em um mundo cada vez mais orientado por dados. Faremos isso introduzindo algumas ferramentas criadas pela ONG Base dos Dados com o mesmo propósito, pensadas exatamente para trazer mais acessibilidade à essas informações que podem ajudar a compreender e melhorar a realidade da nossa sociedade, da sua cidade e até do seu bairro.
 
@@ -61,11 +61,11 @@ Veja [aqui](https://info.basedosdados.org/newsletter/edicoes-anteriores) algumas
 
 Como falamos anteriormente, parte do processe de elaborar e responder uma boa pergunta é saber quais dados estão disponíveis. Mas como e onde encontrar esses dados?
 
-Muitas vezes não há como fugir de uma pesquisa na internet para saber quais sites e plataformas e governo possuem os dados que você precisa, mas a BD criou uma solução mais prática para te ajudar nisso: o nosso __mecanismo de busca__.
+Muitas vezes não há como fugir de uma pesquisa na internet para saber quais sites e plataformas e governo possuem os dados que você precisa, mas a BD criou uma solução mais prática para te ajudar nisso: o nosso **mecanismo de busca**.
 
 Pelo nosso site você consegue buscar conjuntos de dados através de palavras-chave, da mesma maneira que você busca informações no Google, por exemplo. Além disso, ele possui uma seleção de filtros que te ajudama delimitar sua busca. Você pode buscar dados sobre meio ambiente e selecionar apenas conjuntos que sejam disponibilizados pelo Ministério do Meio Ambiente.
 
-Um filtro muito útil é o de __Tabelas tratadas__, isso porque ele seleciona apenas dados que já estejam tratados e organizados em nosso _datalake_ público.
+Um filtro muito útil é o de **Tabelas tratadas**, isso porque ele seleciona apenas dados que já estejam tratados e organizados em nosso _datalake_ público.
 
 <Image src="/blog/como-comecar-sua-analise-com-dados-publicos/image_1.webp"/>
 
@@ -77,7 +77,7 @@ Além disso, você pode conferir quais colunas cada tabela possui e a descriçã
 
 <Image src="/blog/como-comecar-sua-analise-com-dados-publicos/image_3.webp"/>
 
-Quando você tiver identificado o conjunto, a tabela e as colunas que precisa para sua análise, você pode partir para acessar os dados através do BigQuery, um serviço de banco de dados em nuvem da Google que te permite fazer consultas ao banco em SQL direto do navegador com __rapidez__ (mesmo consultas muito longas demoram apenas minutos para serem processadas), __escala__ (o BigQuery escala magicamente para hexabytes se necessário) e __economia__ (todo usuário possui 1 TB _gratuito por mês para consulta aos dados_). Para chegar até o BigQuery, utilize o link "clique aqui" da página, conforme a imagem abaixo.
+Quando você tiver identificado o conjunto, a tabela e as colunas que precisa para sua análise, você pode partir para acessar os dados através do BigQuery, um serviço de banco de dados em nuvem da Google que te permite fazer consultas ao banco em SQL direto do navegador com **rapidez** (mesmo consultas muito longas demoram apenas minutos para serem processadas), **escala** (o BigQuery escala magicamente para hexabytes se necessário) e **economia** (todo usuário possui 1 TB _gratuito por mês para consulta aos dados_). Para chegar até o BigQuery, utilize o link "clique aqui" da página, conforme a imagem abaixo.
 
 <Image src="/blog/como-comecar-sua-analise-com-dados-publicos/image_4.webp"/>
 
@@ -97,7 +97,7 @@ A Google fornece 1 TB gratuito por mês de uso do BigQuery para cada projeto que
 
 ## Fixe o datalake da BD no BigQuery
 
-Agora você precisa fixar o projeto da BD no seu BigQuery, é bem simples. Clique no botão __Adicionar__ no canto superior esquerdo da tela, ao lado de “Explorer”, selecione a opção “marcar um projeto com estrela por nome” e adicione o nome do projeto da BD, que é "basedosdados", tudo minúsculo, e pronto. Veja:
+Agora você precisa fixar o projeto da BD no seu BigQuery, é bem simples. Clique no botão **Adicionar** no canto superior esquerdo da tela, ao lado de “Explorer”, selecione a opção “marcar um projeto com estrela por nome” e adicione o nome do projeto da BD, que é "basedosdados", tudo minúsculo, e pronto. Veja:
 
 <Image src="/blog/como-comecar-sua-analise-com-dados-publicos/image_6.bin"/>
 
@@ -126,11 +126,11 @@ Vamos abordar aqui uma estrutura básica de consulta SQL. Mas você pode conferi
 
 Alguns comandos mais básicos de SQL são:
 
-- `SELECT` — Seleciona as colunas que você vai usar
+- `SELECT`: Seleciona as colunas que você vai usar
 
-- `FROM` — Seleciona a tabela de origem dos dados
+- `FROM`: Seleciona a tabela de origem dos dados
 
-- `WHERE` — Coloca condições para filtrar os dados
+- `WHERE`: Coloca condições para filtrar os dados
 
 Então, por exemplo, para consultas o nome, cargo e raça de candidatos(as) de um município e em um ano específico, podemos utilizar a consulta abaixo.
 
@@ -167,16 +167,16 @@ Abaixo você encontra uma seção com diversos links úteis para seu trabalho e 
 
 ## Links úteis
 
-* [Salve nossa documentação para consultar quando tiver dúvidas;](https://basedosdados.github.io/mais/)
-* [Assine gratuitamente nossa BDleter para receber mensalmente nossas novidades;](https://info.basedosdados.org/newsletter)
-* [Conheçã nosso Curso de Análise de Dados com SQL para se aprofundar e dominar uma das linguagens mais utilizadas no mercado;](https://info.basedosdados.org/bd-edu-sql)
-* [Se inscreva em nosso canal no YouTube](https://www.youtube.com/@BasedosDados) e siga a gente no [instagram](https://www.instagram.com/basedosdados/), [linkedin](https://www.linkedin.com/company/base-dos-dados/mycompany/) e [twitter](https://chat.whatsapp.com/CLLFXb1ogPPDomCM6tQT22).
-* [Faça parte da nossa comunidade do Discord para tirar dúvidas direto com nossa equipe e conhecer mais pessoas entusismadas com dados;](https://discord.gg/huKWpsVYx4)
+- [Salve nossa documentação para consultar quando tiver dúvidas;](https://basedosdados.github.io/mais/)
+- [Assine gratuitamente nossa BDleter para receber mensalmente nossas novidades;](https://info.basedosdados.org/newsletter)
+- [Conheçã nosso Curso de Análise de Dados com SQL para se aprofundar e dominar uma das linguagens mais utilizadas no mercado;](https://info.basedosdados.org/bd-edu-sql)
+- [Se inscreva em nosso canal no YouTube](https://www.youtube.com/@BasedosDados) e siga a gente no [instagram](https://www.instagram.com/basedosdados/), [linkedin](https://www.linkedin.com/company/base-dos-dados/mycompany/) e [twitter](https://chat.whatsapp.com/CLLFXb1ogPPDomCM6tQT22).
+- [Faça parte da nossa comunidade do Discord para tirar dúvidas direto com nossa equipe e conhecer mais pessoas entusismadas com dados;](https://discord.gg/huKWpsVYx4)
 
 ## Links sobre BigQuery e SQL
 
-* [Como funciona o armazenamento de dados no BigQuery?](https://cloud.google.com/bigquery/docs/storage_overview?hl=pt-br)
-* [Análise de dados com o BigQuery](https://cloud.google.com/bigquery/docs/query-overview?hl=pt-br)
-* [O que é o BigQuery?](https://cloud.google.com/bigquery/docs/introduction?hl=pt-br)
-* [Tipos de datas SQL](https://www.w3schools.com/sql/sql_dates.asp)
-* [Gerenciando datas com diferentes SQL](https://drive.google.com/file/d/11NE9Faqltyl-ZePovy2ThfLo2ALrqGLF/view?usp=sharing)
+- [Como funciona o armazenamento de dados no BigQuery?](https://cloud.google.com/bigquery/docs/storage_overview?hl=pt-br)
+- [Análise de dados com o BigQuery](https://cloud.google.com/bigquery/docs/query-overview?hl=pt-br)
+- [O que é o BigQuery?](https://cloud.google.com/bigquery/docs/introduction?hl=pt-br)
+- [Tipos de datas SQL](https://www.w3schools.com/sql/sql_dates.asp)
+- [Gerenciando datas com diferentes SQL](https://drive.google.com/file/d/11NE9Faqltyl-ZePovy2ThfLo2ALrqGLF/view?usp=sharing)

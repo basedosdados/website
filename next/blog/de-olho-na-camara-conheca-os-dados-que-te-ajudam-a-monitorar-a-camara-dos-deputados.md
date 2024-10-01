@@ -6,7 +6,7 @@ description: >-
   Aprenda como acessar e analisar dados sobre a atuação da Câmara, do contexto
   histórico à prática
 date:
-  created: '2024-06-03T17:33:29.243Z'
+  created: "2024-06-03T17:33:29.243Z"
 authors:
   - name: Base dos Dados
 thumbnail: /blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_0.png
@@ -35,11 +35,11 @@ A Câmara dos Deputados disponibiliza o serviço de Dados Abertos desde 2011 �
 
 Os Dados Abertos seguem alguns princípios básicos de disponibilização de dados públicos, como completude, atualidade, acesso não discriminatório, acessibilidade, formatos não proprietários, dados estruturados, livre de licenças e disponibilidade no mesmo grau de detalhe da fonte. Muitos desses princípios são compatíveis e complementam a ideia de governo aberto ([Oliveira & Ckagnazaroff, 2022](https://www.researchgate.net/publication/362482737_Principios_de_governo_aberto_Uma_revisao_pela_perspectiva_historica)).
 
-Contudo, quem pesquisa o portal de Dados Abertos já encontra o aviso: *serviços de dados abertos são feitos para máquinas e programas*. Por um lado isso é muito bom, pois facilita o processamento de dados em computadores, a transformação de dados segundo objetivos mais específicos de busca e fornecimento de ampla gama de possibilidades dado o grau de detalhamentos dos dados. Está [página](https://dadosabertos.camara.leg.br/howtouse/sobre-dados-abertos.html) explica bem isso..
+Contudo, quem pesquisa o portal de Dados Abertos já encontra o aviso: _serviços de dados abertos são feitos para máquinas e programas_. Por um lado isso é muito bom, pois facilita o processamento de dados em computadores, a transformação de dados segundo objetivos mais específicos de busca e fornecimento de ampla gama de possibilidades dado o grau de detalhamentos dos dados. Está [página](https://dadosabertos.camara.leg.br/howtouse/sobre-dados-abertos.html) explica bem isso..
 
 Por outro lado, isso também acaba reproduzindo algumas desigualdades do mundo “real” no mundo virtual: nem todo mundo possui as ferramentas ou habilidades para explorar as possibilidades dos Dados Abertos.
 
-*É aqui que entramos.*
+_É aqui que entramos._
 
 A ideia mais moderna de “governo aberto” — que tem o acesso às informações públicas como princípio, surge no século XX (mesmo que na Suécia a primeira lei de acesso à informação seja de 1766 — sempre a Suécia). Entre os anos 1950 e 1970 começam a surgir reivindicações da sociedade pelo acesso à informação. Um exemplo é o Movimento pela Liberdade de Informação nos EUA, que culminou no famoso Freedom of Information Act (FOIA), de 1966.
 
@@ -51,11 +51,11 @@ Internamente, esse também foi um período bastante ativo. Vários órgãos do s
 
 Com a Lei de Acesso à Informação (2011) veio, por exemplo, a Parceria para Governo Aberto (PGA), a criação da Infraestrutura Nacional de Dados Abertos (Inda) e a realização de diversos hackathons ([fonte](https://www.blog.inteligov.com.br/tecnologia-dadosabertos)). A Câmara dos Deputados foi bastante ativa em diversos desses momentos.
 
-*Contudo, mesmo com todos esses avanços, é importante destacar uma parte importante do processo de governo aberto: você. A participação cidadã ativa nesses processos acaba exigindo letramento em dados quando a produção e acesso a dados aumenta exponencialmente com o desenvolvimento tecnológico. Então precisamos colocar a mão na massa.*
+_Contudo, mesmo com todos esses avanços, é importante destacar uma parte importante do processo de governo aberto: você. A participação cidadã ativa nesses processos acaba exigindo letramento em dados quando a produção e acesso a dados aumenta exponencialmente com o desenvolvimento tecnológico. Então precisamos colocar a mão na massa._
 
 ## Como a Câmara disponibiliza esses dados?
 
-Por meio de link para download direto pelo site, em diversos formatos (como csv, JSON, xlsx e xlm, além de ods em alguns casos) ou por API (*application programming interface* ou interface de programação de aplicação). A maior parte das tabelas disponibilizadas possuem atualização diária ou mensal, além de vários anos de cobertura. O conteúdo cobre dados sobre despesas parlamentares, proposições, frentes e grupos parlamentares, legislaturas, órgãos, informações sobre os deputados e funcionários lotados na Câmara, eventos, votações, licitações e o Tesauro da Câmara dos Deputados.
+Por meio de link para download direto pelo site, em diversos formatos (como csv, JSON, xlsx e xlm, além de ods em alguns casos) ou por API (_application programming interface_ ou interface de programação de aplicação). A maior parte das tabelas disponibilizadas possuem atualização diária ou mensal, além de vários anos de cobertura. O conteúdo cobre dados sobre despesas parlamentares, proposições, frentes e grupos parlamentares, legislaturas, órgãos, informações sobre os deputados e funcionários lotados na Câmara, eventos, votações, licitações e o Tesauro da Câmara dos Deputados.
 
 Vamos tomar como exemplo os dados de proposições. Nela podemos encontrar registro das proposições apresentadas à Câmara por ano, tema, autoria, situação etc. Vale a pena checar a documentação para mais detalhes nessa parte. Cada proposição tem um identificador universal, e este identificador está presente em diversas tabelas, não só aquelas que dizem respeito à seção de proposições especificamente. Dá para encontrar informações sobre as proposições na tabela de requerimentos de realização de eventos, de proposição objeto de cada votação e de proposições afetadas por votação, por exemplo.
 
@@ -71,11 +71,11 @@ Apesar do acesso aos dados brutos facilitar, e muito, o processo de análise e e
 
 ## Por que acessar os dados da Câmara pela BD?
 
-A Base dos Dados disponibiliza um datalake público com os principais indicadores brasileiros. Isso permite que você acesse, explore e cruze os dados pelo próprio Google Cloud. Uma vez no nosso *datalake*, onde os dados já estão tratados, padronizados e atualizados, tudo o que precisamos fazer é interagir com eles via SQL ou por *download* diretamente no site da BD. Via SQL — e aí dá para usar a linguagem de consulta mesmo dentro do R, Python ou Stata –, muitas portas se abrem, como a conexão com as demais tabelas do conjunto dos Dados Abertos da Câmara e outras do *datalake*, quando a conexão fizer sentido.
+A Base dos Dados disponibiliza um datalake público com os principais indicadores brasileiros. Isso permite que você acesse, explore e cruze os dados pelo próprio Google Cloud. Uma vez no nosso _datalake_, onde os dados já estão tratados, padronizados e atualizados, tudo o que precisamos fazer é interagir com eles via SQL ou por _download_ diretamente no site da BD. Via SQL — e aí dá para usar a linguagem de consulta mesmo dentro do R, Python ou Stata –, muitas portas se abrem, como a conexão com as demais tabelas do conjunto dos Dados Abertos da Câmara e outras do _datalake_, quando a conexão fizer sentido.
 
 Estamos preparando um tutorial completo para demonstrar como é o processo de tratamento dos dados pela BD e como você pode usar nosso datalake para cruzar essas informações com outras indicadores importantes, mas você já pode conferir abaixo um exemplo da praticidade que isso proporciona.
 
-Apenas com uma conta Google e um projeto criado no BigQuery, você pode consultar o histórico de despesas para um(a) deputado(a) desde o início da sua atual legislatura até agora. O campo valor\_liquido representa o valor da despesa efetivamente debitada da Cota Parlamentar e você pode utilizar a consulta SQL abaixo para acessar todo o histórico.
+Apenas com uma conta Google e um projeto criado no BigQuery, você pode consultar o histórico de despesas para um(a) deputado(a) desde o início da sua atual legislatura até agora. O campo valor_liquido representa o valor da despesa efetivamente debitada da Cota Parlamentar e você pode utilizar a consulta SQL abaixo para acessar todo o histórico.
 
 ```sql
 SELECT
@@ -133,24 +133,24 @@ Já fez uma análise com os dados da BD? Conte para nós ou envie um email para 
 
 **Acesso aos dados**
 
-* Dados Abertos da Câmara dos Deputados na Base dos Dados ([link](https://basedosdados.org/dataset/3d388daa-2d20-49eb-8f55-6c561bef26b6))
-* Portal dos Dados Abertos da Câmara dos Deputados ([link](https://dadosabertos.camara.leg.br/))
-* Link para o as consultas utilizadas no texto ([link](https://t.co/V9MF2togi9))
+- [Dados Abertos da Câmara dos Deputados na Base dos Dados](https://basedosdados.org/dataset/3d388daa-2d20-49eb-8f55-6c561bef26b6)
+- [Portal dos Dados Abertos da Câmara dos Deputados](https://dadosabertos.camara.leg.br/)
+- [Link para o as consultas utilizadas no texto](https://t.co/V9MF2togi9)
 
 **Tutoriais e informações sobre os dados**
 
-* Documentação da Base dos Dados ([link](https://basedosdados.github.io/mais/))
-* Manual de Estilo da Base dos Dados ([link](https://basedosdados.github.io/mais/style_data/))
-* Tutorial de SQL da Base dos Dados ([link](https://www.youtube.com/watch?v=fMo54j1GL6U\&list=PLu5pyM8QY6hh283MYmLUnV2Fgs7NNC7Ww\&index=2))
-* Tutoriais do Portal da Câmara dos Deputados ([link](https://dadosabertos.camara.leg.br/howtouse/central-tutoriais.html))
-* Perguntas Frequêntes do Portal da Câmara dos Deputados ([link](https://www2.camara.leg.br/transparencia/dados-abertos/perguntas-e-respostas))
-* Download e informações sobre as variáveis dos dados ([link](https://dadosabertos.camara.leg.br/swagger/api.html#staticfile))
+- [Documentação da Base dos Dados](https://basedosdados.github.io/mais/)
+- [Manual de Estilo da Base dos Dados](https://basedosdados.github.io/mais/style_data/)
+- [Tutorial de SQL da Base dos Dados](https://www.youtube.com/watch?v=fMo54j1GL6U&list=PLu5pyM8QY6hh283MYmLUnV2Fgs7NNC7Ww&index=2)
+- [Tutoriais do Portal da Câmara dos Deputados](https://dadosabertos.camara.leg.br/howtouse/central-tutoriais.html)
+- [Perguntas Frequêntes do Portal da Câmara dos Deputados](https://www2.camara.leg.br/transparencia/dados-abertos/perguntas-e-respostas)
+- [Download e informações sobre as variáveis dos dados](https://dadosabertos.camara.leg.br/swagger/api.html#staticfile)
 
 **Projetos e Casos de Uso**
 
-* Índice Legisla Brasil ([link](https://indice.legislabrasil.org/sobre-o-projeto))
-* Análise e Predição nas Votações de Leis Federais na Câmara dos Deputados — UFRPE ([link](https://repository.ufrpe.br/bitstream/123456789/3162/1/tcc_rannierydiasdebrito.pdf))
-* Avaliando a política de Dados abertos no Legislativo brasileiro — revista compolítica ([link](https://www.researchgate.net/publication/341744388_Avaliando_a_politica_de_Dados_abertos_no_Legislativo_brasileiro))
-* Interface Visual Interativa para Dados Abertos sobre Proposições na Câmara de Deputados — UFRGS ([link](https://lume.ufrgs.br/bitstream/handle/10183/223627/001127313.pdf?sequence=1))
-* Congresso em números: a produção legislativa do Brasil de 1988 a 2017 ([link](https://repositorio.fgv.br/items/b2f91e64-42fa-4909-8401-ca41b084fa22))
-* Congresso em números 2018: Relatório de Atividades do Congresso Nacional — FGV ([link](https://repositorio.fgv.br/items/e4171b9e-5419-43e6-8a70-fb93d5f11c4e))
+- [Índice Legisla Brasil](https://indice.legislabrasil.org/sobre-o-projeto)
+- [Análise e Predição nas Votações de Leis Federais na Câmara dos Deputados — UFRPE](https://repository.ufrpe.br/bitstream/123456789/3162/1/tcc_rannierydiasdebrito.pdf)
+- [Avaliando a política de Dados abertos no Legislativo brasileiro — revista compolítica](https://www.researchgate.net/publication/341744388_Avaliando_a_politica_de_Dados_abertos_no_Legislativo_brasileiro)
+- [Interface Visual Interativa para Dados Abertos sobre Proposições na Câmara de Deputados — UFRGS](https://lume.ufrgs.br/bitstream/handle/10183/223627/001127313.pdf?sequence=1)
+- [Congresso em números: a produção legislativa do Brasil de 1988 a 2017](https://repositorio.fgv.br/items/b2f91e64-42fa-4909-8401-ca41b084fa22)
+- [Congresso em números 2018: Relatório de Atividades do Congresso Nacional — FGV](https://repositorio.fgv.br/items/e4171b9e-5419-43e6-8a70-fb93d5f11c4e)

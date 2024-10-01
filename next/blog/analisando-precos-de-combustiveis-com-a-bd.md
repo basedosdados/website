@@ -405,4 +405,8 @@ fig.write_image("grafico.png")
 
 Por fim é só executar `fig.write_image('grafico.png')` para salvar o gráfico no caminho especificado, como demonstramos acima.
 
-Essa e outras análises você consegue acompanhar na íntegra pelo nosso [Github](https://github.com/basedosdados/analises). A Base dos Dados é uma iniciativa open source e sem fins lucrativos que busca diminuir a distância entre sua pergunta e os dados. Esperamos que você se sinta inspirado em utilizar esse e outros dados. Afinal, muitas outras análises podem ser realizadas. Compartilhe conosco seus achados em nossas redes sociais ou em nossa comunidade no [Discord](https://discord.gg/WzzzQs9T).
+Essa e outras análises você consegue acompanhar na íntegra pelo nosso [Github](https://github.com/basedosdados/analises).
+
+A Base dos Dados é uma iniciativa open source e sem fins lucrativos que busca diminuir a distância entre sua pergunta e os dados. Esperamos que você se sinta inspirado em utilizar esse e outros dados. Afinal, muitas outras análises podem ser realizadas.
+
+Compartilhe conosco seus achados em nossas redes sociais ou em nossa comunidade no [Discord](https://discord.gg/WzzzQs9T).
