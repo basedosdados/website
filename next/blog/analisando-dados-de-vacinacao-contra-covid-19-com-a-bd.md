@@ -2,7 +2,7 @@
 title: Analisando dados de vacinação contra COVID-19 com a BD
 description: Veja como utilizar o datalake público da Base dos Dados para criar um gráfico de vacinação da sua cidade
 date:
-  created: '2022-06-07T15:00:00'
+  created: "2022-06-07T15:00:00"
 authors:
   - name: Bruno Mioto
     role: Autor
@@ -97,6 +97,7 @@ dados_vacina2 <- dados_vacina %>%
   ) %>%
   mutate(dose_vacina = ifelse(str_detect(dose_vacina, "1"), 1, 2))
 ```
+
 Aproveitando o gancho do _"sexo indeterminado"_, precisamos entender que os dados públicos - principalmente estes que são alimentados por diferentes pessoas de diferentes prefeituras de todo o país - sempre estarão passivas de erros. Álvaro, da [brasil.io](http://brasil.io) fez um [post](https://blog.brasil.io/2021/05/24/os-problemas-nos-microdados-de-vacinacao/index.html) muito bom com alguns pontos acerca dos dados de vacinação.
 
 Se temos erros, o que podemos fazer? Na medida do possível, desconsideraremos esses erros (como fizemos acima), lembrando que são poucos dados com erros grosseiros. **Mesmo com esses problemas, essa é nossa fonte de dados mais confiável para essa análise!**
@@ -167,7 +168,7 @@ vacina_populacao2 <- vacina_populacao %>%
   )
 ```
 
-Como um toque final em nossos dados, vamos apenas determinar a ordem que queremos que os grupos etários sejam exibidos no gráfico **0–4 anos -> 80\_mais**
+Como um toque final em nossos dados, vamos apenas determinar a ordem que queremos que os grupos etários sejam exibidos no gráfico **0–4 anos -> 80_mais**
 
 ```r
 vacina_populacao2$grupo_idade <- factor(vacina_populacao2$grupo_idade,
@@ -549,6 +550,8 @@ ggplot(vacina_populacao2, aes(x = grupo_idade, y = n_grafico)) +
   # inverter eixos x e y! (e definir limites laterais)
   coord_flip(ylim = c(-20000, 20000))
 ```
+
+<Image src="/blog/analisando-dados-de-vacinacao-contra-covid-19-com-a-bd/image_2.webp"/>
 
 Algumas faixas etárias possuem bem mais que **100%** de vacinados. Isso pode ser **erro na projeçãom**, na **inserção dos dados no sistema**, ou podem ter sidos vacinados idosos de **outras cidades da região** (Maringá é a cidade central na região), por exemplo. Estes são problemas que encontramos ao lidar com dados na pequena escala, como municípios. Ao utilizar dados para todo o país, muitos desses erros são compensados em larga escala.
 
