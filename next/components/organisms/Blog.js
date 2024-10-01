@@ -86,12 +86,9 @@ function CodeBlock({ children }) {
 
   return (
     <Box
-      padding="0.2rem"
       marginY={"1rem"}
       borderRadius={"8px"}
       backgroundColor={"#282b2e"}
-      maxHeight={"70vh"}
-      overflowY={"auto"}
     >
       <Box display={"flex"} alignItems={"center"} padding={"0 0.5rem"}>
         {language ? (
@@ -145,8 +142,12 @@ function CodeBlock({ children }) {
         display="flex"
         justifyContent="space-between"
         width="100%"
+        maxHeight={"70vh"}
         overflowX="auto"
+        overflowY={"auto"}
         whiteSpace={"pre"}
+        borderBottomLeftRadius={"8px"}
+        borderBottomRightRadius={"8px"}
       >
         <Text
           as="code"
