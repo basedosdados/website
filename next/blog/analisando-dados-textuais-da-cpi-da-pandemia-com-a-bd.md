@@ -2,7 +2,7 @@
 title: Analisando dados textuais da CPI da Pandemia com a BD
 description: Veja como acessar e analisar de maneira prática os discursos da CPI da Pandemia do Covid-19.
 date:
-  created: '2022-06-07T15:00:00'
+  created: "2022-06-07T15:00:00"
 authors:
   - name: Adolfo Guimarães
     role: Autor

@@ -1,10 +1,10 @@
 ---
-title: 'De Olho Na Câmara: Como Analisar os Dados Abertos da Câmara dos Deputados'
+title: "De Olho Na Câmara: Como Analisar os Dados Abertos da Câmara dos Deputados"
 description: >-
   Aprenda como acessar e analisar os dados da atividade parlamentar e despesas
   da Câmara
 date:
-  created: '2024-06-19T13:58:09.699Z'
+  created: "2024-06-19T13:58:09.699Z"
 authors:
   - name: Thaís Filipi
     role: Análise e texto
@@ -62,17 +62,17 @@ Os Dados Abertos da Câmara estão organizados como um banco de dados relacional
 
 > Chaves identificadoras podem ser primárias ou estrangeiras. Uma chave primária identifica unicamente cada registro na tabela. Chaves estrangeiras, por outro lado, podem ser uma ou mais colunas que fazem referência à chave primária de outra tabela
 
-Cada proposição pode ter mais de uma tema, e por isso pode aparecer diversas vezes na tabela de proposições por ano de apresentação. Levando em consideração que as proposições têm formas de nomeação diferentes quando são debatidas na Câmara e no Senado, seria muito fácil confundir informações sobre o montante e relevância de trabalho feito em cada casa legislativa. Por isso, cada proposição tem um identificador único, o `idProposicao` (que funciona como uma *chave primária*). No nosso *datalake* ele é chamado de `id_proposicao`.
+Cada proposição pode ter mais de uma tema, e por isso pode aparecer diversas vezes na tabela de proposições por ano de apresentação. Levando em consideração que as proposições têm formas de nomeação diferentes quando são debatidas na Câmara e no Senado, seria muito fácil confundir informações sobre o montante e relevância de trabalho feito em cada casa legislativa. Por isso, cada proposição tem um identificador único, o `idProposicao` (que funciona como uma _chave primária_). No nosso _datalake_ ele é chamado de `id_proposicao`.
 
-Agora, tomando a tabela de autores das proposições por ano de apresentação como exemplo, além do identificador único das proposições, ela tem também um identificador único dos(as) deputados(as) que apresentaram as proposições. Aqui, o `idDeputadoAutor` (`id_deputado` na BD) funciona como uma *chave estrangeira* se a conectamos à tabela de informações sobre os deputados. Isso pode ser válido se queremos acrescentar a informação de filiação partidária ou sexo do(a) deputado(a) proponente aos dados sobre as proposições. Os IDs garantem que vamos mesclar certinho cada parlamentar à sua proposição.
+Agora, tomando a tabela de autores das proposições por ano de apresentação como exemplo, além do identificador único das proposições, ela tem também um identificador único dos(as) deputados(as) que apresentaram as proposições. Aqui, o `idDeputadoAutor` (`id_deputado` na BD) funciona como uma _chave estrangeira_ se a conectamos à tabela de informações sobre os deputados. Isso pode ser válido se queremos acrescentar a informação de filiação partidária ou sexo do(a) deputado(a) proponente aos dados sobre as proposições. Os IDs garantem que vamos mesclar certinho cada parlamentar à sua proposição.
 
-A seguir temos um mapa mental que mostra todas as conexões entre as chaves identificadoras no nosso *datalake*. Ele mostra as possibilidades de conexão entre as tabelas para facilitar a sua análise.
+A seguir temos um mapa mental que mostra todas as conexões entre as chaves identificadoras no nosso _datalake_. Ele mostra as possibilidades de conexão entre as tabelas para facilitar a sua análise.
 
 <Image src="/blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados/image_2.png" caption="No canto superior está o texto “Como as tabelas dos dados da Câmara se relacionam?”. No centro, há uma série de caixas que representam as diferentes tabelas da base de dados. Cada caixa contém o nome da tabela e uma breve descrição do que ela armazena. As caixas estão conectadas por linhas que mostram como as tabelas se relacionam entre si. Por exemplo, a caixa “evento” está conectada à caixa “proposicao” por uma linha com a etiqueta “id_proposicao”."/>
 
 ## Dados de despesa através das legislaturas
 
-Vamos agora a um exemplo prático utilizando o *datalake* público da BD e consultas SQL. Se precisar de ajuda para criar suas consultas, confira [nosso tutorial de SQL](/blog/google-bigquery-sql-101) sobre como acessar os dados da BD usando a linguagem.
+Vamos agora a um exemplo prático utilizando o _datalake_ público da BD e consultas SQL. Se precisar de ajuda para criar suas consultas, confira [nosso tutorial de SQL](/blog/google-bigquery-sql-101) sobre como acessar os dados da BD usando a linguagem.
 
 A consulta abaixo nos permite comparar dados de despesa dos(as) deputados ao longo das últimas cinco legislaturas (de 2007 até o presente).
 

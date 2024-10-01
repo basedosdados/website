@@ -2,14 +2,14 @@
 title: Como começar uma análise geoespacial com dados da BD e o QGIS
 description: Aprenda a importar dados da BD no QGIS para criar mapas e visualizações
 date:
-  created: '2022-10-07'
+  created: "2022-10-07"
 authors:
-    - name: Gustavo Alcântara
-      social: https://github.com/gustavoalcantara
-      role: Autor
-    - name: Giovane Caruso
-      social: https://medium.com/@giovanecaruso
-      role: Edição
+  - name: Gustavo Alcântara
+    social: https://github.com/gustavoalcantara
+    role: Autor
+  - name: Giovane Caruso
+    social: https://medium.com/@giovanecaruso
+    role: Edição
 thumbnail: /blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_0.png
 categories: [tutorial]
 medium_slug: https://medium.com/@basedosdados/como-come%C3%A7ar-uma-an%C3%A1lise-geoespacial-com-dados-da-bd-e-o-qgis-4792877950e0
@@ -19,7 +19,7 @@ medium_slug: https://medium.com/@basedosdados/como-come%C3%A7ar-uma-an%C3%A1lise
 
 ## TL;DR
 
-Neste artigo, vamos apresentar como você pode usar os dados do pacote geobr, já tratados e disponíveis no *datalake* público da Base dos Dados, e um Sistema de Informação Geográfica (SIG) para construir análises geoespaciais com mais praticidade. Acompanhe o passo a passo com um exemplo prático analisando quantas cabeças de gado existiam em cada estado brasileiro no ano de 2017.
+Neste artigo, vamos apresentar como você pode usar os dados do pacote geobr, já tratados e disponíveis no _datalake_ público da Base dos Dados, e um Sistema de Informação Geográfica (SIG) para construir análises geoespaciais com mais praticidade. Acompanhe o passo a passo com um exemplo prático analisando quantas cabeças de gado existiam em cada estado brasileiro no ano de 2017.
 
 ## O que são os dados do geobr?
 
@@ -40,15 +40,15 @@ Para demonstrar como começar a construir sua própria análise, utilizamos os d
 O processo é simples: para entender, por exemplo, quantas cabeças de gado existiam em cada estado brasileiro no ano de 2017, podemos usar a consulta abaixo no BigQuery e baixá-los em um arquivo `.csv`.
 
 ```sql
-SELECT censo.sigla_uf, sum(quantidade_bovinos_total) as gado, geometria 
+SELECT censo.sigla_uf, sum(quantidade_bovinos_total) as gado, geometria
 FROM basedosdados.br_ibge_censo_agropecuario.municipio AS censo
-JOIN basedosdados.br_geobr_mapas.uf AS geo 
+JOIN basedosdados.br_geobr_mapas.uf AS geo
 ON censo.sigla_uf = geo.sigla_uf #join da variável sigla_uf
-WHERE ano = 2017 
+WHERE ano = 2017
 GROUP BY censo.sigla_uf, geo.sigla_uf, geometria
 ```
 
-A partir do resultado da consulta, é possível realizar o download do `.csv` no seu computador. 
+A partir do resultado da consulta, é possível realizar o download do `.csv` no seu computador.
 
 Agora, vamos inserir o arquivo `.csv` com a geometria espacial no QGIS. Clique em `Adicionar Camada` e depois `Adicionar Camada de Texto Delimitado`.
 
@@ -58,7 +58,7 @@ Com a tela `Gerenciador de Dados` aberta, procure seu arquivo `.csv` no local e
 
 <Image src="/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_3.png" caption="Gerenciador de Dados do QGIS"/>
 
-Assim que inserir o arquivo `.csv`, é necessário que a **Definição da Geometria** esteja assinada para **Well Know Text** *(WKT)*. Depois, é só clicar em inserir a variável de geometria no `campo de geometria`.
+Assim que inserir o arquivo `.csv`, é necessário que a **Definição da Geometria** esteja assinada para **Well Know Text** _(WKT)_. Depois, é só clicar em inserir a variável de geometria no `campo de geometria`.
 
 <Image src="/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_4.png" caption="Definição da Geometria"/>
 
@@ -70,7 +70,7 @@ Após clicar em **adicionar**, é possível obter um mapa com a quantidade de ca
 
 <Image src="/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_6.png" caption="Mapa com quantidade de cabeças de gado por UF no Brasil. Fonte: IBGE. Censo Agropecuário, 2017."/>
 
-Com o mapa em mãos, fica fácil identificar que o Mato Grosso é o estado com maior quantidade de cabeças de gado no Brasil, por exemplo. Você pode exportar o mapa em um arquivo .*png* ou .*tif* e partir para sua análise.
+Com o mapa em mãos, fica fácil identificar que o Mato Grosso é o estado com maior quantidade de cabeças de gado no Brasil, por exemplo. Você pode exportar o mapa em um arquivo ._png_ ou ._tif_ e partir para sua análise.
 
 Vale lembrar que também é possível relacionar mais de uma base de dados com os arquivos de geometria espacial do geobr pela BD. Você pode fazer o mesmo processo para qualquer base com dados a nível de município, regiões e estabelecimentos de saúde, microrregiões, mesorregiões, escolas e muito mais.
 

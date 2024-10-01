@@ -4,12 +4,13 @@ description: >-
   Análise e entrevista sobre pessoas centenárias no Brasil e os desafios do
   envelhecimento populacional
 date:
-  created: ''
+  created: ""
 authors:
 thumbnail: /blog/onde-vivem-as-pessoas-que-passaram-dos-100-anos-no-brasil/image_0.png
 categories: [analise]
-medium_slug: ''
+medium_slug: ""
 ---
+
 Ainda que tenha sido executado com dois anos de atraso, o Censo Demográfico 2022 teve seus primeiros resultados lançados em junho de 2023. Todas as tabelas disponíveis até o momento estão, também, no datalake público da Base dos Dados, facilitando a análise da população brasileira. População essa que, no período da pesquisa, contava com 203.080.756 indivíduos. Veja abaixo a pirâmide etária de 2022 em comparação com a da última edição da pesquisa.
 
 <Image src="/blog/onde-vivem-as-pessoas-que-passaram-dos-100-anos-no-brasil/image_0.png"/>
@@ -28,7 +29,7 @@ Contrariando toda e qualquer intuição sobre o assunto, não são as regiões m
 
 <Image src="/blog/onde-vivem-as-pessoas-que-passaram-dos-100-anos-no-brasil/image_2.png"/>
 
-Essa análise é um ponta pé inicial em um importante debate sobre como nossa população está envelhecendo. Para aprofundar um pouco mais, falamos sobre esse cenário e os dasafios que ele apresenta na entrevista do Trocando Dados desta edição. Convidamos você também, databaser, a enriquecer esse debate e criar suas próprias análises. Explore os dados e não deixe de compartilhar conosco ou marcar *@basedosdados* nas redes sociais.
+Essa análise é um ponta pé inicial em um importante debate sobre como nossa população está envelhecendo. Para aprofundar um pouco mais, falamos sobre esse cenário e os dasafios que ele apresenta na entrevista do Trocando Dados desta edição. Convidamos você também, databaser, a enriquecer esse debate e criar suas próprias análises. Explore os dados e não deixe de compartilhar conosco ou marcar _@basedosdados_ nas redes sociais.
 
 Como a análise ponta, nosso Brasil está envelhecendo. Mas quais são os desafios que esse cenário traz , o significa para o planejamento de políticas públicas e por que que nosso centenários estão em maior número no Nordeste? Conversamos com Cristian Arnecke Schröder, Pesquisador Associado do GERA, para tentar responder essas questões.
 

@@ -1,10 +1,10 @@
 ---
-title: 'Diretórios Brasileiros: Como essa base facilita sua análise'
+title: "Diretórios Brasileiros: Como essa base facilita sua análise"
 description: >-
   Conheça essa base que funciona como um perfil completo de unidades como
   município, escola, UF, e mais.
 date:
-  created: '2021-08-16'
+  created: "2021-08-16"
 authors:
   - name: Crislane Alves
     role: Equipe Base dos Dados

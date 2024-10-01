@@ -2,7 +2,7 @@
 title: Relembrando o Datathon BD 2021 🎲
 description: Como dados abertos podem contribuir para o desenvolvimento igualitário no Brasil?
 date:
-  created: '2021-03-06T15:00:00'
+  created: "2021-03-06T15:00:00"
 authors:
   - name: Giovane Caruso
     role: Texto

@@ -4,7 +4,7 @@ description: >-
   Instituto tira do ar dados do Censo Escolar e do Enem com justificativa de
   adequação à LGPD
 date:
-  created: '2022-03-09T21:02:04.375Z'
+  created: "2022-03-09T21:02:04.375Z"
 authors:
   - name: Base dos Dados
     role: Equipe Base dos Dados

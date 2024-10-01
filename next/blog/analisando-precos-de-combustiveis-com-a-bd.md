@@ -4,7 +4,7 @@ description: >-
   Veja como analisar a variação média dos preços de combustíveis no Brasil com
   valores corrigidos pelo IPCA
 date:
-  created: '2021-10-29T15:22:29.489Z'
+  created: "2021-10-29T15:22:29.489Z"
 authors:
   - name: Lucas Moreira
     role: Autor
@@ -20,7 +20,6 @@ medium_slug: >-
 
 <Image src="/blog/analisando-precos-de-combustiveis-com-a-bd/image_0.jpg"/>
 
-
 ## TL;DR
 
 Qual o preço do combustível na sua cidade? Neste artigo vamos apresentar os dados da base de pesquisa com preços de distribuição de combustíveis e de gás de cozinha (GLP), divulgados pela [Agência Nacional do Petróleo](https://www.gov.br/anp/pt-br). Além disso, vamos apresentar uma análise da evolução dos preços em relação à inflação, demonstrando como você pode usar a Base dos Dados para analisar como é esse cenário em sua própria cidade, ou no recorte que quiser.
@@ -31,7 +30,7 @@ Qual o preço do combustível na sua cidade? Neste artigo vamos apresentar os da
 
 A ANP fornece, a cada semana, a série histórica com os microdados dos preços praticados por diferentes postos de revenda em todo o Brasil. A base inclui informações dos preços da gasolina, etanol, diesel s10, gasolina aditivada, glp, diesel e gnv, desde 2004 até outubro de 2021.
 
-A Base dos Dados disponibiliza estes dados de uma maneira mais intuitiva: tratados, padronizados e compatibilizados. Especificamente, o [script de tratamento](https://github.com/basedosdados/mais/blob/master/bases/br_anp_precos_combustiveis/code/%5Bdados%5D_br_anp_preco_combustiveis.ipynb) dos dados consistiu em unir os *dataframes* com os diferentes tipos de combustíveis e meses do ano, além de incluir o código do IBGE para os municípios presentes na base — o que facilita o *merge* com outras informações. A inclusão do código do IBGE também simplifica a visualização da tabela, mudando o formato da data ou ainda compatibilizando o endereço do estabelecimento. Vale ressaltar que a pesquisa abrange 883 municípios, ao longo dos 18 anos de pesquisa. Só em 2021 foram coletadas informações de 22.629 postos de revenda dos 27 estados.
+A Base dos Dados disponibiliza estes dados de uma maneira mais intuitiva: tratados, padronizados e compatibilizados. Especificamente, o [script de tratamento](https://github.com/basedosdados/mais/blob/master/bases/br_anp_precos_combustiveis/code/%5Bdados%5D_br_anp_preco_combustiveis.ipynb) dos dados consistiu em unir os _dataframes_ com os diferentes tipos de combustíveis e meses do ano, além de incluir o código do IBGE para os municípios presentes na base — o que facilita o _merge_ com outras informações. A inclusão do código do IBGE também simplifica a visualização da tabela, mudando o formato da data ou ainda compatibilizando o endereço do estabelecimento. Vale ressaltar que a pesquisa abrange 883 municípios, ao longo dos 18 anos de pesquisa. Só em 2021 foram coletadas informações de 22.629 postos de revenda dos 27 estados.
 
 A base contém informações sobre a localização de cada posto (UF, município e endereço completo), especificidades do estabelecimento (CNPJ, nome e bandeira), além do produto e dos preços praticados nas mais de 26 milhões de observações.
 
@@ -208,7 +207,7 @@ Nesta primeira query fazemos uma subconsulta para retornar o combustível da bas
 Na segunda consulta, iremos normalizar os preços dos combustíveis e o índice de inflação. No cálculo da normalização, dividimos o preço do período ao qual se refere o dado pelo preço em maio de 2004. Faremos o mesmo com o índice de inflação. Para isso, é preciso fazer a junção dos produtos resultantes da subconsulta com os produtos da tabela de preços, para realizarmos a normalização com os valores necessários da data base e dos preços de cada combustível em cada mês.
 
 ```python
-# utiliza a API para importar os dados com a query 
+# utiliza a API para importar os dados com a query
 df = bd.read_sql(query, billing_project_id="basedosdados-dev")
 ```
 

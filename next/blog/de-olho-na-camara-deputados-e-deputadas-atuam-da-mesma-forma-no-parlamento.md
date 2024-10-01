@@ -1,11 +1,11 @@
 ---
-title: 'De Olho Na Câmara: Deputados e deputadas atuam da mesma forma no parlamento?'
+title: "De Olho Na Câmara: Deputados e deputadas atuam da mesma forma no parlamento?"
 description: >-
   Análise do índice de produção legislativa com os Dados Abertos da Câmara por
   gênero e bancada
 date:
-  created: '2024-07-16T18:43:47.361Z'
-  updated: '2024-09-15T00:50'
+  created: "2024-07-16T18:43:47.361Z"
+  updated: "2024-09-15T00:50"
 authors:
   - name: Thais Filipi
     role: Análise e texto
@@ -27,7 +27,7 @@ Vamos investigar se a atuação feminina na 57ª Legislatura (a atual) é muito 
 
 Este artigo é parte da Campanha #DeOlhoNaCamara. O objetivo da campanha é promover uma série de conteúdos para te ajudar a construir suas próprias análises. Confira abaixo os artigos e tutoriais já publicados e não deixe de [assinar gratuitamente a BDletter](https://info.basedosdados.org/newsletter) para ficar por dentro das novidades da BD.
 
-> [*Conheça os dados que te ajudam a monitorar a Câmara dos Deputados*](/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados)
+> [_Conheça os dados que te ajudam a monitorar a Câmara dos Deputados_](/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados)
 >
 > [Veja nosso tutorial sobre Como Analisar os Dados Abertos da Câmara com a BD](/blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados)
 

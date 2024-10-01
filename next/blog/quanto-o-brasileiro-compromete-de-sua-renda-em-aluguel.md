@@ -4,24 +4,24 @@ description: >-
   Trabalho de alunos da BD Edu usa PNAD para analisar o comprometimento da renda
   do brasileiro com o aluguel
 date:
-  created: '2023-10-17T15:32:39.376Z'
+  created: "2023-10-17T15:32:39.376Z"
 authors:
-   - name: Ana Paula Bastos
-     role: Autora
-   - name: Vila Garcia Carlos
-     role: Autora
-   - name: Antônio Canabrava Júnior
-     role: Autor
-   - name: Guilherme Melo Gonçalves
-     role: Autor
-   - name: Henrique Carvalho Feli
-     role: Autor
-   - name: Rita de Cássia Minarbini
-     role: Autora
-   - name: Gustavo Alcantara
-     role: Orientação
-   - name: Giovane Caruso
-     role: Edição
+  - name: Ana Paula Bastos
+    role: Autora
+  - name: Vila Garcia Carlos
+    role: Autora
+  - name: Antônio Canabrava Júnior
+    role: Autor
+  - name: Guilherme Melo Gonçalves
+    role: Autor
+  - name: Henrique Carvalho Feli
+    role: Autor
+  - name: Rita de Cássia Minarbini
+    role: Autora
+  - name: Gustavo Alcantara
+    role: Orientação
+  - name: Giovane Caruso
+    role: Edição
 thumbnail: /blog/quanto-o-brasileiro-compromete-de-sua-renda-em-aluguel/image_2.png
 categories: [analise]
 medium_slug: >-

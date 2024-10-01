@@ -1,18 +1,18 @@
 ---
-title: 'Hello, databaser!'
+title: "Hello, databaser!"
 description: >-
   Nesta edição, você vai conferir uma análise inédita com os dados do Saeb 2021
   que já estão fresquinhos em nosso datalake público, além de…
 date:
-  created: ''
+  created: ""
 categories: []
 keywords: []
-medium_slug: ''
+medium_slug: ""
 ---
 
-*Hello, databaser!*
+_Hello, databaser!_
 
-Nesta edição, você vai conferir uma análise inédita com os dados do Saeb 2021 que já estão fresquinhos em nosso *datalake* público, além de saber como está sendo nosso projeto com uma das organizações mais importantes para a educação no Brasil. Claro que também não poderia faltar nossa entrevista e todas as novidades da BD. Boa leitura!
+Nesta edição, você vai conferir uma análise inédita com os dados do Saeb 2021 que já estão fresquinhos em nosso _datalake_ público, além de saber como está sendo nosso projeto com uma das organizações mais importantes para a educação no Brasil. Claro que também não poderia faltar nossa entrevista e todas as novidades da BD. Boa leitura!
 
 ### 📚 Parceria: Fundação Lemann
 
@@ -20,13 +20,13 @@ Em 2022, a [**Fundação Lemann**](https://fundacaolemann.org.br/) criou sua ár
 
 A BD trouxe soluções práticas para tornar isso possível, com a reestruturação da arquitetura dos dados utilizados pela Fundação, tratamento e disponibilização de novas bases de dados, análise das informações coletadas e construção de painéis interativos atualizados automaticamente. Com isso, diversos conjuntos de dados importantes sobre a educação no Brasil estão hoje disponíveis na BD. Dentre eles estão os dados do Saeb 2021, tema desta edição da BDletter. Você pode conferir os detalhes do trabalho empenhado na parceria pelo nosso site.
 
-* [**Veja o estudo de caso**](https://basedosdados.org/estudos-de-caso/fundacao-lemann)
+- [**Veja o estudo de caso**](https://basedosdados.org/estudos-de-caso/fundacao-lemann)
 
 ### 📊 Uma boa pergunta
 
 **Como o desempenho em matemática evoluiu nas escolas brasileiras ao longo dos anos?**
 
-A BD está com uma novidade quentíssima para quem pesquisa educação no Brasil. Os [**dados agregados do Sistema de Avaliação da Educação Básica (Saeb)**](https://basedosdados.org/dataset/e083c9a2-1cee-4342-bedc-535cbad6f3cd?table=d429a79a-eca1-461c-9c1f-ce65d61048a1) de 2021 já estão tratados e prontos para análise em nosso *datalake* público. São informações que representam os indicadores mais importantes sobre o nível de aprendizado de crianças e jovens por todo o Brasil, com foco nas aquisições de habilidades e competências em língua portuguesa e matemática.
+A BD está com uma novidade quentíssima para quem pesquisa educação no Brasil. Os [**dados agregados do Sistema de Avaliação da Educação Básica (Saeb)**](https://basedosdados.org/dataset/e083c9a2-1cee-4342-bedc-535cbad6f3cd?table=d429a79a-eca1-461c-9c1f-ce65d61048a1) de 2021 já estão tratados e prontos para análise em nosso _datalake_ público. São informações que representam os indicadores mais importantes sobre o nível de aprendizado de crianças e jovens por todo o Brasil, com foco nas aquisições de habilidades e competências em língua portuguesa e matemática.
 
 Publicada em setembro pelo Ministério da Educação (MEC) e o Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep), a nova edição do Saeb trouxe algumas novidades, como a aplicação das provas e dos questionários migrando progressivamente para o formato digital. Você já pode acessar os dados históricos do conjunto de avaliações, de 1995 até 2021. Vale lembrar que os microdados da nova edição ainda serão divulgados pelo Inep até dezembro de 2022.
 
@@ -42,7 +42,7 @@ Embora alguns estados tenham sido mais impactados do que outros, a grande maiori
 
 Através do conjunto é possível analisar também o desempenho nas avaliações de Língua Portuguesa. Explore, analise e não deixe de compartilhar conosco. Tem alguma pergunta interessante na manga? Mande para nós, quem sabe você não encontra ela aqui na próxima edição!
 
-* **Conte para a gente**
+- **Conte para a gente**
 
 ### 💬 Trocando dados
 
@@ -99,18 +99,18 @@ Com o arquivo em mãos, você pode adicioná-lo facilmente ao QGIS para criar se
 
 ### **📌 O que rolou esse mês**
 
-* **Eleições 2022 |** Outubro começou e vai terminar com boa parte da população atenta com as eleições. Aqui na BD não é diferente. Os dados com resultados da votação do 1ª turno já estão tratados e prontos para sua análise em nosso *datalake* público. São dados atualizados de candidatos e partidos por seção eleitoral, desde 1994. [**Acesse já**](https://basedosdados.org/dataset/eef764df-bde8-4905-b115-6fc23b6ba9d6?table=2e204854-e453-4257-9fef-5e10f3ff1f56).
-* Vale lembrar que ainda é possível conferir e acompanhar as prestações de contas das candidaturas pelo [**painel Siga o Dinheiro**](https://www.sigaodinheiro.org/), criado pela BD em parceria com o JOTA. Pelo painel, você pode filtrar as informações por candidato(a), cargo ou partido, além de criar recortes geográficos, raciais e de gênero. São diversas possibilidades para você explorar como quiser.
-* **Perguntas Frequentes |** A BD trouxe diversas possibilidades para quem quer analisar dados públicos. Nesse processo, é natural que apareçam dúvidas sobre a plataforma, como acessar nosso *datalake,* pacotes\_,\_ dentre outras. Agora você pode conferir as [**principais dúvidas da comunidade em nosso site**](https://basedosdados.org/perguntas-frequentes).
-* **Setembro Amarelo |** No mês da maior campanha de conscientização sobre o suicídio no mundo, utilizamos os dados do Cadastro Nacional de Estabelecimentos de Saúde (CNES) para preparar uma análise da distribuição dos Centros de Atenção Psicossocial (CAPS) pelo Brasil. Veja o [**resultado**](https://twitter.com/basedosdados/status/1575951698748575744?s=20\&t=wuC5m-hJYIw0y75M5oZeYg) e saiba como acessar esses dados também.
+- **Eleições 2022 |** Outubro começou e vai terminar com boa parte da população atenta com as eleições. Aqui na BD não é diferente. Os dados com resultados da votação do 1ª turno já estão tratados e prontos para sua análise em nosso _datalake_ público. São dados atualizados de candidatos e partidos por seção eleitoral, desde 1994. [**Acesse já**](https://basedosdados.org/dataset/eef764df-bde8-4905-b115-6fc23b6ba9d6?table=2e204854-e453-4257-9fef-5e10f3ff1f56).
+- Vale lembrar que ainda é possível conferir e acompanhar as prestações de contas das candidaturas pelo [**painel Siga o Dinheiro**](https://www.sigaodinheiro.org/), criado pela BD em parceria com o JOTA. Pelo painel, você pode filtrar as informações por candidato(a), cargo ou partido, além de criar recortes geográficos, raciais e de gênero. São diversas possibilidades para você explorar como quiser.
+- **Perguntas Frequentes |** A BD trouxe diversas possibilidades para quem quer analisar dados públicos. Nesse processo, é natural que apareçam dúvidas sobre a plataforma, como acessar nosso _datalake,_ pacotes\_,\_ dentre outras. Agora você pode conferir as [**principais dúvidas da comunidade em nosso site**](https://basedosdados.org/perguntas-frequentes).
+- **Setembro Amarelo |** No mês da maior campanha de conscientização sobre o suicídio no mundo, utilizamos os dados do Cadastro Nacional de Estabelecimentos de Saúde (CNES) para preparar uma análise da distribuição dos Centros de Atenção Psicossocial (CAPS) pelo Brasil. Veja o [**resultado**](https://twitter.com/basedosdados/status/1575951698748575744?s=20&t=wuC5m-hJYIw0y75M5oZeYg) e saiba como acessar esses dados também.
 
 **📡 No radar**
 
-* **CODA 2022 |** Já estão abertas as inscrições para a Conferência Brasileira de Jornalismo de Dados e Métodos Digitais e a BD irá marcar presença nesta edição. O evento será híbrido e você já pode garantir seu ingresso por [**aqui**](https://escoladedados.org/coda2022/).
+- **CODA 2022 |** Já estão abertas as inscrições para a Conferência Brasileira de Jornalismo de Dados e Métodos Digitais e a BD irá marcar presença nesta edição. O evento será híbrido e você já pode garantir seu ingresso por [**aqui**](https://escoladedados.org/coda2022/).
 
-* **#Hacktoberfest |** Ao longo de todo o mês de outubro é comemorado o Hacktoberfest, evento internacional para incentivar contribuições com projetos de código aberto. Organizações como a Open Knowledge Brasil já prepararam [**instruções**](https://ok.org.br/noticia/voce-conhece-os-projetos-da-okbr-que-estao-participando-do-hacktoberfest/) para quem quiser colaborar. Em breve, você poderá aproveitar a ocasião para contribuir com a BD também. Fique ligado(a) em nossas redes sociais!
+- **#Hacktoberfest |** Ao longo de todo o mês de outubro é comemorado o Hacktoberfest, evento internacional para incentivar contribuições com projetos de código aberto. Organizações como a Open Knowledge Brasil já prepararam [**instruções**](https://ok.org.br/noticia/voce-conhece-os-projetos-da-okbr-que-estao-participando-do-hacktoberfest/) para quem quiser colaborar. Em breve, você poderá aproveitar a ocasião para contribuir com a BD também. Fique ligado(a) em nossas redes sociais!
 
-* **#CartaParaUmGovernoEstadualAberto |** Mais de 17 organizações endossaram a carta da campanha #CartaPorUmGovernoEstadualAberto, propondo que candidaturas aos governos estaduais e assembleias legislativas de todo o Brasil assumam o compromisso público pelo fortalecimento da transparência e do acesso à informação e pela consolidação de uma política estadual de abertura de dados ao longo da gestão de 2023–2026. Confira a carta-compromisso por [**aqui**](https://t.co/71QNJBTd5t).
+- **#CartaParaUmGovernoEstadualAberto |** Mais de 17 organizações endossaram a carta da campanha #CartaPorUmGovernoEstadualAberto, propondo que candidaturas aos governos estaduais e assembleias legislativas de todo o Brasil assumam o compromisso público pelo fortalecimento da transparência e do acesso à informação e pela consolidação de uma política estadual de abertura de dados ao longo da gestão de 2023–2026. Confira a carta-compromisso por [**aqui**](https://t.co/71QNJBTd5t).
 
 **🌎 Databasers**
 

@@ -2,14 +2,14 @@
 title: Google BigQuery (SQL) 101
 description: Acesse diversas bases de dados públicas com uma simples consulta SQL
 date:
-  created: '2021-04-26'
+  created: "2021-04-26"
 authors:
-    - name: Paolo
-      role: Autor
-      social: https://dev.to/paolofullone
-    - name: Fernanda
-      role: Equipe Base dos Dados 💚
-      social: https://medium.com/@fernandascovino
+  - name: Paolo
+    role: Autor
+    social: https://dev.to/paolofullone
+  - name: Fernanda
+    role: Equipe Base dos Dados 💚
+    social: https://medium.com/@fernandascovino
 thumbnail: /blog/google-bigquery-sql-101/image_0.jpg
 categories: [tutorial]
 medium_slug: https://medium.com/@basedosdados/bigquery-101-8b39da1ce52b
@@ -53,8 +53,8 @@ Por fim, para visualizar os dados da tabela criamos uma nova **Consulta (6)**, q
 
 ## Explorando os metadados da RAIS
 
-* Na RAIS podemos ver entre as colunas disponíveis a `sigla_uf`, `id_município` (código IBGE), tipo de vínculo empregatício, tipo de admissão, mês de admissão, mês de desligamento, motivo de desligamento etc.
-* Todos os dados podem ser filtrados por região, período, nacionalidade, raça, salários etc.
+- Na RAIS podemos ver entre as colunas disponíveis a `sigla_uf`, `id_município` (código IBGE), tipo de vínculo empregatício, tipo de admissão, mês de admissão, mês de desligamento, motivo de desligamento etc.
+- Todos os dados podem ser filtrados por região, período, nacionalidade, raça, salários etc.
 
 ## Utilizando o Editor de consultas em SQL
 
@@ -64,7 +64,7 @@ Após selecionarmos em Consulta na página anterior, o BigQuery irá nos fornece
 SELECT FROM `basedosdados.br_me_rais.microdados_vinculos` LIMIT 1000
 ```
 
-Essa estrutura mínima indica que iremos selecionar (`SELECT`) alguma(s) coluna(s) ou agregações (*temos que indicar aqui quais serão*) da tabela de microdados (`FROM basedosdados.br_me_rais.microdados_vinculos`) e queremos só visualizar as 1000 primeiras linhas (`LIMIT 1000`).
+Essa estrutura mínima indica que iremos selecionar (`SELECT`) alguma(s) coluna(s) ou agregações (_temos que indicar aqui quais serão_) da tabela de microdados (`FROM basedosdados.br_me_rais.microdados_vinculos`) e queremos só visualizar as 1000 primeiras linhas (`LIMIT 1000`).
 
 > Atenção: Esse limite é importante para não processarmos a tabela inteira, caso contrário, seriam 250GB de dados! Conforme tornamos a query mais refinada, adicionando filtros para anos e locais específicos, por exemplo, esse tamanho de processamento se reduz bastante.
 
@@ -98,7 +98,7 @@ Usar o SQL para pré-processamento de dados é uma ótima saída para quem traba
 
 **Nosso projeto já te ajudou de alguma forma?** Veja como nos retribuir:
 
-* [Apoie o projeto](https://apoia.se/basedosdados)
-* [Seja um(a) colaborador(a) de dados na BD](https://basedosdados.github.io/mais/colab_data/)
-* [Colabore com nossos pacotes](https://github.com/basedosdados/mais)
-* Compartilhe nas redes sociais!
+- [Apoie o projeto](https://apoia.se/basedosdados)
+- [Seja um(a) colaborador(a) de dados na BD](https://basedosdados.github.io/mais/colab_data/)
+- [Colabore com nossos pacotes](https://github.com/basedosdados/mais)
+- Compartilhe nas redes sociais!

@@ -4,7 +4,7 @@ description: >-
   Conheça nossa infraestrutura de inserção de dados e veja como você pode
   melhorar seu portfólio contribuindo
 date:
-  created: '2021-05-28'
+  created: "2021-05-28"
 authors:
   - name: Vinicius
     social: https://github.com/vncsna
@@ -29,7 +29,6 @@ categories: []
 medium_slug: >-
   https://medium.com/@basedosdados/como-funciona-o-sistema-de-inser%C3%A7%C3%A3o-de-dados-na-bd-61a0fe05c5d5
 ---
-
 
 ## TL;DR
 
@@ -63,22 +62,22 @@ Descrevemos em detalhes esse processo em [Colaborando com dados na BD+](https://
 
 Outra forma de contribuir e melhorar seu portfólio, mas agora de desenvolvedor, é colaborando com a infraestrutura da BD.
 
-A colaboração começa conversando conosco, no bate papo da infra ou nas reuniões às 19h da segunda-feira, ambas nos canais da infra no [Discord](https://discord.gg/huKWpsVYx4). Após este passo, podemos escolher uma *feature* ou problema para desenvolvimento, isto é, caso ainda não tenha escolhido algum problema contido nas [issues](https://github.com/basedosdados/mais/issues).
+A colaboração começa conversando conosco, no bate papo da infra ou nas reuniões às 19h da segunda-feira, ambas nos canais da infra no [Discord](https://discord.gg/huKWpsVYx4). Após este passo, podemos escolher uma _feature_ ou problema para desenvolvimento, isto é, caso ainda não tenha escolhido algum problema contido nas [issues](https://github.com/basedosdados/mais/issues).
 
 Como você pode colaborar? **Aqui estão algumas ideias:**
 
-* Adicionando novos conjuntos de dados
-* Fazendo a revisão de submissões de dados
-* Aprimorando e criando novas funcionalidades do pacote em Python
-* Aprimorando e criando novas funcionalidades do pacote em R
-* Criando um pacote em Stata
-* Adicionando checagens automáticas de dados
-* Adicionando checagens automáticas de metadados
-* Desenvolvendo novas features para o site
+- Adicionando novos conjuntos de dados
+- Fazendo a revisão de submissões de dados
+- Aprimorando e criando novas funcionalidades do pacote em Python
+- Aprimorando e criando novas funcionalidades do pacote em R
+- Criando um pacote em Stata
+- Adicionando checagens automáticas de dados
+- Adicionando checagens automáticas de metadados
+- Desenvolvendo novas features para o site
 
 **Nosso projeto já te ajudou de alguma forma?** Somos uma organização sem fins lucrativos que depende do apoio de nossa comunidade. Veja como contribuir:
 
-* [Apoie o projeto](https://apoia.se/basedosdados)
-* [Seja um(a) colaborador(a) de dados na BD](https://basedosdados.github.io/mais/colab_data/)
-* [Colabore com nossos pacotes](https://github.com/basedosdados/mais)
-* Compartilhe nas redes sociais!
+- [Apoie o projeto](https://apoia.se/basedosdados)
+- [Seja um(a) colaborador(a) de dados na BD](https://basedosdados.github.io/mais/colab_data/)
+- [Colabore com nossos pacotes](https://github.com/basedosdados/mais)
+- Compartilhe nas redes sociais!

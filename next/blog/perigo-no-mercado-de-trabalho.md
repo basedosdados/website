@@ -2,7 +2,7 @@
 title: Perigo no mercado de trabalho
 description: Analisando o mercado de trabalho do estado do RJ com dados da BD
 date:
-  created: '2022-03-16T15:00:00'
+  created: "2022-03-16T15:00:00"
 authors:
   - name: Gabriel Manhães
     role: Texto
@@ -406,7 +406,7 @@ Enquanto a [literatura atual](https://www.anpec.org.br/encontro/2021/submissao/f
 
 <Image src="/blog/perigo-no-mercado-de-trabalho/image_4.webp"/>
 
-Vale ressaltar ainda que a pandemia causou uma anomalia importante no mercado de trabalho. A [literatura atual](https://www.cemla.org/actividades/2021-final/2021-07-conference-frbny-ecb/SIII.1(PAPER)Leyva_Urrutia.pdf) mostra que o mercado informal, que costumava ter um perfil contra cíclico —aumentando durante crises, em decorrência da profunda desaceleração econômica e da maior dependência de contato físico — vem também se reduzindo durante a pandemia. E não apenas no Brasil, mas também na América Latina.
+Vale ressaltar ainda que a pandemia causou uma anomalia importante no mercado de trabalho. A [literatura atual](<https://www.cemla.org/actividades/2021-final/2021-07-conference-frbny-ecb/SIII.1(PAPER)Leyva_Urrutia.pdf>) mostra que o mercado informal, que costumava ter um perfil contra cíclico —aumentando durante crises, em decorrência da profunda desaceleração econômica e da maior dependência de contato físico — vem também se reduzindo durante a pandemia. E não apenas no Brasil, mas também na América Latina.
 
 Dessa forma, conseguimos observar que o estado do Rio de Janeiro vem conseguindo, de maneira geral, recuperar seu mercado de trabalho. Entretanto, como indica a experiência que vimos com relação à cidade de Campos, uma maior quantidade de contratações não basta, uma vez que o mercado ainda se encontra frágil e com alta demanda por emprego, fazendo com que os salários caiam. Como vimos, esse fato é ainda mais intensificado quando a população é pouco qualificada.
 

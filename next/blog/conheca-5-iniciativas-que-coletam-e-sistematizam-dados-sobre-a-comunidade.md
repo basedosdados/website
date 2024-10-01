@@ -4,7 +4,7 @@ description: >-
   Repost: Em 2022, mapeamos 5 iniciativas que contribuiem no combate contra a
   violência e preconceito através de dados.
 date:
-  created: '2022-06-28'
+  created: "2022-06-28"
 authors:
   - name: Giovane Caruso
     social: https://medium.com/@giovanecaruso

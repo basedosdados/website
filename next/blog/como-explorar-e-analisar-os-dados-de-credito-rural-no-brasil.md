@@ -4,7 +4,7 @@ description: >-
   Veja uma maneira prática de analisar os microdados do Sistema de Operações do
   Crédito Rural e do Proagro (SICOR)
 date:
-  created: '2023-02-01'
+  created: "2023-02-01"
 authors:
   - name: Gabriel Pisa
     role: Autor
@@ -27,10 +27,10 @@ Antes de começarmos a falar sobre os dados, vamos fazer uma breve contextualiza
 
 Tudo começa com o Sistema Nacional de Crédito Rural (SNCR), **criado em 1965 com objetivo de estimular os financiamentos de custeio e investimento rurais.** O SNCR congrega o conjunto de instituições responsáveis por estruturar, regular e operacionalizar a concessão de CR no Brasil. Entenda melhor o papel de cada uma dessas instituições:
 
-* O **Ministério da Agricultura e do Abastecimento (MAPA)** é um ator chave na elaboração da política de CR, sendo responsável por determinar fatores como volume de recursos públicos, condições de enquadramento dos produtores e taxas juros praticadas para cada **ano safra (AS),** período que se extende de 1º de julho do ano corrente a junho do ano seguinte, para o qual é planejada o exercício da política de crédito rural. Oconjunto das normas regimentais definidas pelo MAPA codificado no Manual de Crédito Rural (MCR) pode ser acessado por [aqui](https://www3.bcb.gov.br/mcr).
-* O **Banco Central (BACEN)** desempenha o papel de orgão regulador das normas codificadas no Manual do Crédito Rural (MCR), que devem ser respeitadas pelas **Instituições financeiras públicas e privadas (IFs)** durante a realização de contratações de CR. É justamente na fiscalização do BACEN das operações de CR contratadas pelas IFs que surgem os [**Microdados do Crédito Rural**](https://basedosdados.org/dataset/544c9d22-97b7-479a-8eca-94762840b465?table=e2d5dcc5-270e-4a8b-8d55-0227fd46c10f), já tratados e disponibilizados no datalake da Base dos Dados, e disponíveis em seu formato original no [site do BACEN](https://www.bcb.gov.br/estabilidadefinanceira/creditorural).
+- O **Ministério da Agricultura e do Abastecimento (MAPA)** é um ator chave na elaboração da política de CR, sendo responsável por determinar fatores como volume de recursos públicos, condições de enquadramento dos produtores e taxas juros praticadas para cada **ano safra (AS),** período que se extende de 1º de julho do ano corrente a junho do ano seguinte, para o qual é planejada o exercício da política de crédito rural. Oconjunto das normas regimentais definidas pelo MAPA codificado no Manual de Crédito Rural (MCR) pode ser acessado por [aqui](https://www3.bcb.gov.br/mcr).
+- O **Banco Central (BACEN)** desempenha o papel de orgão regulador das normas codificadas no Manual do Crédito Rural (MCR), que devem ser respeitadas pelas **Instituições financeiras públicas e privadas (IFs)** durante a realização de contratações de CR. É justamente na fiscalização do BACEN das operações de CR contratadas pelas IFs que surgem os [**Microdados do Crédito Rural**](https://basedosdados.org/dataset/544c9d22-97b7-479a-8eca-94762840b465?table=e2d5dcc5-270e-4a8b-8d55-0227fd46c10f), já tratados e disponibilizados no datalake da Base dos Dados, e disponíveis em seu formato original no [site do BACEN](https://www.bcb.gov.br/estabilidadefinanceira/creditorural).
 
-Para resumir, é o MAPA que **estipula**, o BACEN **regula** e as IFs **concedem** crédito*. A imagem abaixo sintetiza bem a composição e funcionamento do Sistema Nacional de Crédito Rural (SNCR)
+Para resumir, é o MAPA que **estipula**, o BACEN **regula** e as IFs **concedem** crédito\*. A imagem abaixo sintetiza bem a composição e funcionamento do Sistema Nacional de Crédito Rural (SNCR)
 
 <Image src="/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_0.png" caption="Esquema com instituições envolvidas na concessão de Crédito Rural no Brasil e seus papéis. [Fonte](https://www.radardesustentabilidade.org.br/media/guidelines/files/GGP_Gênero_Cartilha_3_PT_WEB.pdf)"/>
 
@@ -46,7 +46,7 @@ A imagem abaixo ajuda a compreender o panorama geral dos atores e componentes im
 
 <Image src="/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_1.png"/>
 
-Se quiser se aprofundar mais, você pode ver mais informações do Banco Central do Brasil sobre como funciona o Crédito Rural por [aqui](https://www.bcb.gov.br/estabilidadefinanceira/creditorural). Feita essa breve introdução, vamos enfim começar a explorar e analisar os dados com algumas perguntas interessantes. 
+Se quiser se aprofundar mais, você pode ver mais informações do Banco Central do Brasil sobre como funciona o Crédito Rural por [aqui](https://www.bcb.gov.br/estabilidadefinanceira/creditorural). Feita essa breve introdução, vamos enfim começar a explorar e analisar os dados com algumas perguntas interessantes.
 
 ## Analisando os microdados de Crédito Rural
 

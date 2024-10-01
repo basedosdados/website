@@ -3,7 +3,7 @@ title: Tutorial
 description: >-
   Escreva no blog da Base dos Dados
 date:
-  created: '2024-07-16T18:43:47.361Z'
+  created: "2024-07-16T18:43:47.361Z"
 categories: []
 ---
 
@@ -22,18 +22,16 @@ Text
 Tabela
 
 ```markdown
-| Syntax | Description |
-| ----------- | ----------- |
-| Header | Title |
-| Paragraph | Text |
+| Syntax    | Description |
+| --------- | ----------- |
+| Header    | Title       |
+| Paragraph | Text        |
 ```
 
-
-| Syntax | Description |
-| ----------- | ----------- |
-| Header | Title |
-| Paragraph | Text |
-
+| Syntax    | Description |
+| --------- | ----------- |
+| Header    | Title       |
+| Paragraph | Text        |
 
 ## Embedar
 
@@ -42,7 +40,6 @@ Tabela
 ```
 
 <Video src="https://customer-snccc0j9v3kfzkif.cloudflarestream.com/410d006808a1e647b2ed6532ffc3ae33/downloads/default.mp4" caption="Video caption here"/>
-
 
 Youtube, Twitter, etc
 

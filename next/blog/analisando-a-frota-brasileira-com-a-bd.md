@@ -2,7 +2,7 @@
 title: Analisando a frota brasileira com a BD
 description: Saiba quais são as cidades com mais carros por habitantes no Brasil
 date:
-  created: '2021-11-25T15:00:00'
+  created: "2021-11-25T15:00:00"
 authors:
   - name: Andre Gorenstin
     role: Autor

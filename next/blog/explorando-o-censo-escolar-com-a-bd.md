@@ -4,7 +4,7 @@ description: >-
   Uma maneira prática de analisar a mais importante pesquisa estatística
   educacional do Brasil
 date:
-  created: '2021-06-04'
+  created: "2021-06-04"
 authors:
   - name: Matheus Valentim
     role: Equipe da Base dos Dados 💚
@@ -26,10 +26,10 @@ O Censo Escolar é uma pesquisa **anual**, onde cada escola do país responde a 
 
 A disponibilização dos dados do Censo, assim como de outras bases de educação, vêm do [Plano Inep Dados Abertos](http://inep.gov.br/dados). Porém, utilizar as bases originais do Censo tem vários obstáculos:
 
-* Você precisa baixar **cada ano individualmente** em um arquivo compactado, cada um com aproximadamente **10gb**
-* Cada base tem seu próprio conjunto de variáveis e você terá que consultar os vários dicionários, já que uma **mesma** variável recebe **vários nomes diferentes** ao longo do período.
-* Os dicionários **não** são muito claros sobre a constância das variáveis: em muitos casos **é necessário abrir a base para verificar a existência** de uma dada variável.
-* O período de 2009 até 2020 soma mais de 100gb se for aberto inteiro no seu computador.
+- Você precisa baixar **cada ano individualmente** em um arquivo compactado, cada um com aproximadamente **10gb**
+- Cada base tem seu próprio conjunto de variáveis e você terá que consultar os vários dicionários, já que uma **mesma** variável recebe **vários nomes diferentes** ao longo do período.
+- Os dicionários **não** são muito claros sobre a constância das variáveis: em muitos casos **é necessário abrir a base para verificar a existência** de uma dada variável.
+- O período de 2009 até 2020 soma mais de 100gb se for aberto inteiro no seu computador.
 
 Ao invés de enfrentar tudo isso, você pode usar nossa versão já limpa e harmonizada, baixando via BigQuery ou abrindo as tabelas [direto no R](/blog/como-acessar-dados-publicos-em-r) ou [no Python](/blog/intro-ao-pacote-basedosdados-em-python).
 

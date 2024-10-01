@@ -2,11 +2,11 @@
 title: O Brasil nas Olimpíadas
 description: Um panorama da performance brasileira nos jogos olímpicos ao longo dos anos
 date:
-  created: '2021-07-23'
+  created: "2021-07-23"
 authors:
-    - name: Lucas Nascimento
-      role: Autor
-      social: https://github.com/lucasnascm
+  - name: Lucas Nascimento
+    role: Autor
+    social: https://github.com/lucasnascm
 thumbnail: /blog/o-brasil-nas-olimpiadas/image_0.jpg
 categories: [analise]
 medium_slug: https://medium.com/@basedosdados/o-brasil-nas-olimp%C3%ADadas-2a3f9960cc69

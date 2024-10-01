@@ -2,7 +2,7 @@
 title: Como acessar dados da BD no Power BI
 description: Veja como acessar o datalake público da Base dos Dados no Power BI para criar gráficos, visualizações e dashboards.
 date:
-  created: '2021-07-30'
+  created: "2021-07-30"
 authors:
   - name: Victor Viana
     role: Autor
@@ -28,7 +28,7 @@ O [Google Bigquery](https://cloud.google.com/bigquery?hl=pt_br) é um serviço d
 
 ## Conectar dados no PowerBI (PBI)
 
-Nesse projeto vamos mostrar como conectar os dados da evolução do PIB dos municípios (base fato) e as informações sobre os municípios (base dimensão) no [Power BI](https://powerbi.microsoft.com/pt-br/downloads/) para elaboração de análises. Essa base é usada de exemplo, mas o tutorial serve para qualquer outra base de interesse que esteja no *datalake*.
+Nesse projeto vamos mostrar como conectar os dados da evolução do PIB dos municípios (base fato) e as informações sobre os municípios (base dimensão) no [Power BI](https://powerbi.microsoft.com/pt-br/downloads/) para elaboração de análises. Essa base é usada de exemplo, mas o tutorial serve para qualquer outra base de interesse que esteja no _datalake_.
 
 ### Buscando os dados no site
 
@@ -36,7 +36,7 @@ Para acessar os dados na interface do BigQuery utilizamos queries (consultas) em
 
 ### Selecionando os dados no BigQuery
 
-Ainda no site, você pode clicar no botão “Consultar no BigQuery” para ser redirecionado ao [*datalake*](https://console.cloud.google.com/bigquery?p=basedosdados\&page=project). A interface do BigQuery é diferente do site pois é um serviço mantido pelo próprio Google, explicamos mais sobre cada elemento dessa interface neste artigo.
+Ainda no site, você pode clicar no botão “Consultar no BigQuery” para ser redirecionado ao [_datalake_](https://console.cloud.google.com/bigquery?p=basedosdados&page=project). A interface do BigQuery é diferente do site pois é um serviço mantido pelo próprio Google, explicamos mais sobre cada elemento dessa interface neste artigo.
 
 Clicamos então em “Criar nova consulta” e no editor que aparece na tela basta colar o código copiado e rodar. Note que no código explicitamos `LIMIT 100` para puxar somente as 100 primeiras linhas do dado, mas você pode mudar esse parâmetro (ou removê-lo) para puxar mais linhas - pedimos somente que tome cuidado com bases muito grandes (RAIS, Censo Populacional), pois puxar todos os dados de uma vez não só é demorado como também gasta bastante processamento, o que pode acarretar em custos.
 
@@ -64,7 +64,7 @@ LIMIT
 
 ### Salvando os dados num projeto privado
 
-Salve a tabela obtida clicando em __Salvar__. Você pode salvar a consulta ou a visualização
+Salve a tabela obtida clicando em **Salvar**. Você pode salvar a consulta ou a visualização
 
 <Image src="/blog/tutorial-power-bi/image_3.png"/>
 
@@ -94,28 +94,28 @@ FROM `basedosdados.br_bd_diretorios_brasil.municipio`
 
 ### Importando os dados para o PBI
 
-* Abra o PBI
-* Vá em Obter Dados -> Mais
+- Abra o PBI
+- Vá em Obter Dados -> Mais
 
 <Image src="/blog/tutorial-power-bi/image_7.png"/>
 
-* Procure pelo `Google BigQuery` -> Conectar
+- Procure pelo `Google BigQuery` -> Conectar
 
 <Image src="/blog/tutorial-power-bi/image_8.png"/>
 
-* Entre com sua conta do Google. A mesma que fez as consultas no BigQuery. Caso você entre com outra conta não será possível conectar.
+- Entre com sua conta do Google. A mesma que fez as consultas no BigQuery. Caso você entre com outra conta não será possível conectar.
 
 <Image src="/blog/tutorial-power-bi/image_9.png"/>
 
-* Permita o acesso ao seu PBI
-* Volte ao PBI e clique em conectar
-* Selecione a pasta com o nome do seu conjunto de dados
-* Selecione as tabelas
+- Permita o acesso ao seu PBI
+- Volte ao PBI e clique em conectar
+- Selecione a pasta com o nome do seu conjunto de dados
+- Selecione as tabelas
 
 <Image src="/blog/tutorial-power-bi/image_10.png"/>
 
-* Clique em carregar
-* Selecione Importar
+- Clique em carregar
+- Selecione Importar
   - Para maioria dos casos não é necessário estar conectado diretamente, além disso não você não fica dependente da conexão com o banco.
 
 Pronto, agora você tem acesso às suas bases da BD para criar seu dashboard. :)

@@ -2,8 +2,9 @@
 title: Título
 description: Teste
 date:
-  created: ''
+  created: ""
 categories: []
-medium_slug: ''
+medium_slug: ""
 ---
+
 Teste

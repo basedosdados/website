@@ -2,7 +2,7 @@
 title: Análise da Atividade Econômica do Estado do Rio de Janeiro e da influência da capital
 description: Explorando dados da RAIS para analisar as principais atividades econômicas do estado e sua relação com a capital
 date:
-  created: '2024-04-10T15:00:00'
+  created: "2024-04-10T15:00:00"
 authors:
   - name: Laryssa Bertin Ribeiro
     role: Autora
@@ -45,7 +45,7 @@ Este estudo baseia-se na análise de dados provenientes da base [Relação Anual
 
 Foram utilizadas consultas SQL e o datalake público da Base dos Dados, que pode ser acessado pela plataforma BigQuery para coletar e visualizar os dados relevantes. A consulta SQL específica utilizada para extrair os dados necessários para a análise básica, que trata dos vínculos ativos no período de 2018 a 2022 para cada CNAE no estado do Rio de Janeiro, está apresentada abaixo:
 
-__Consulta A__
+**Consulta A**
 
 ```sql
 SELECT
@@ -93,7 +93,7 @@ ORDER BY
 
 <Image src="/blog/analise-da-atividade-economica-do-estado-do-rio-de-janeiro-e-da-influencia-da-capital/image_1.webp" caption="Tabela A1: Empregos por CNAEs, estado do Rio de Janeiro, 2018 a 2022"/>
 
-__Consulta B__
+**Consulta B**
 
 ```sql
 SELECT

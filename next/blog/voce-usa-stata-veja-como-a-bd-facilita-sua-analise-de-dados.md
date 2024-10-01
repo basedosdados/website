@@ -4,7 +4,7 @@ description: >-
   Confira como acessar mais de 80 bases de dados públicos de maneira mais
   prática com nosso pacote em Stata.
 date:
-  created: '2022-05-26'
+  created: "2022-05-26"
 authors:
   - name: Isabella Helter
     role: Autora
@@ -26,7 +26,7 @@ O novo pacote basedosdados no Stata possibilita o acesso a [centenas de tabelas 
 
 É importante ressaltar que essa versão inicial ainda é um wrapper do pacote do Python e, portanto, necessita da execução de alguns passos antes da utilização. Neste tutorial, mostramos como instalar o Python e autorizar seu projeto do Google — requerimentos obrigatórios para uso do pacote do Stata.
 
-Um wrapper é, basicamente, o aproveitamento da estrutura de um pacote desenvolvido inicialmente em um software, mas adaptado a um software diferente, através de uma ponte que liga esses dois. No caso do Python e do Stata, a ponte é o próprio pacote *python* no Stata. O motivo do pacote no Stata ainda ser um wrapper é que não há (ou não descobrimos até agora) uma ponte direta entre o Stata e o Big Query, caso contrário do que ocorre no R e no Python.
+Um wrapper é, basicamente, o aproveitamento da estrutura de um pacote desenvolvido inicialmente em um software, mas adaptado a um software diferente, através de uma ponte que liga esses dois. No caso do Python e do Stata, a ponte é o próprio pacote _python_ no Stata. O motivo do pacote no Stata ainda ser um wrapper é que não há (ou não descobrimos até agora) uma ponte direta entre o Stata e o Big Query, caso contrário do que ocorre no R e no Python.
 
 Na verdade, a única ponte existente até agora no Stata, que permitiria o pacote ser construído inteiramente nessa linguagem, seria através do PostgreSQL. O PostgreSQL também é um banco de dados, assim como o BigQuery. No entanto, isso demandaria mover toda estrutura da Base dos Dados que já está no BigQuery para este novo banco, custo infelizmente alto comparado a manter o pacote do Stata como um wrapper. Por outro lado, o pacote ainda está em desenvolvimento e esta é uma questão em aberto.
 
@@ -36,7 +36,7 @@ Portanto, se você é um stateiro que tem novas ideias ou alguma solução para 
 
 ### Requerimentos
 
-Antes de instalar o pacote basedosdados no Stata, você deve executar dois passos: 
+Antes de instalar o pacote basedosdados no Stata, você deve executar dois passos:
 
 1. Garantir que seu Stata seja a versão 16+
 
@@ -46,7 +46,7 @@ Caso esteja utilizando os dados da BD pela primeira vez, é necessário criar um
 
 Após garantir esses dois requerimentos obrigatórios, você pode finalmente instalar o pacote digitando o seguinte comando no seu Stata:
 
-* Porque instalar o Python é necessário?
+- Porque instalar o Python é necessário?
 
 Nossa futura meta é garantir que o pacote tenha sua dependência no próprio Stata. Porém, essa primeira versão ainda é um wrapper do pacote do Python. Por outro lado, isso não significa que você precisa saber Python para usá-lo, pelo contrário. **Seguindo os passos abaixo, não será necessário nem abrir o software para configurar o pacote do Stata.**
 
@@ -54,7 +54,7 @@ Nossa futura meta é garantir que o pacote tenha sua dependência no próprio St
 
 1. Instalando o Python
 
-Clique [aqui](https://www.python.org/downloads/) na opção “Download Python” para baixar o Python. Em seguida, siga as instruções da tela e, principalmente, não esqueça de marcar a opção “*add to path*”:
+Clique [aqui](https://www.python.org/downloads/) na opção “Download Python” para baixar o Python. Em seguida, siga as instruções da tela e, principalmente, não esqueça de marcar a opção “_add to path_”:
 
 <Image src="/blog/voce-usa-stata-veja-como-a-bd-facilita-sua-analise-de-dados/image_1.png"/>
 

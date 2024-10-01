@@ -2,12 +2,12 @@
 title: Como acessar dados públicos em R
 description: Um guia prático para utilizar nosso datalake BD+ na linguagem R
 date:
-  created: '2021-05-12'
+  created: "2021-05-12"
 thumbnail: /blog/como-acessar-dados-publicos-em-r/image_0.png
 authors:
-    - name: Matheus Valentim
-      role: Autor
-      social: https://github.com/mavalentim
+  - name: Matheus Valentim
+    role: Autor
+    social: https://github.com/mavalentim
 categories: [tutorial]
 medium_slug: https://medium.com/@basedosdados/como-usar-a-bd-com-r-427aded95448
 ---
@@ -16,11 +16,11 @@ medium_slug: https://medium.com/@basedosdados/como-usar-a-bd-com-r-427aded95448
 
 ## TL;DR
 
-Neste texto vamos explicar **como usar a biblioteca** `basedosdados` no R para explorar as diversas bases tratadas do *datalake* BD+. Para ilustrar **relação entre cobertura de saneamento básico e incidência de doenças de causa relacionada.** Serão apresentadas as funções presentes do pacote e como utilizá-las para realizar análises.
+Neste texto vamos explicar **como usar a biblioteca** `basedosdados` no R para explorar as diversas bases tratadas do _datalake_ BD+. Para ilustrar **relação entre cobertura de saneamento básico e incidência de doenças de causa relacionada.** Serão apresentadas as funções presentes do pacote e como utilizá-las para realizar análises.
 
 ## Como acessar o datalake público BD+
 
-Organizamos no *datalake* as principais bases de dados públicas já tratadas e prontas para análise. O *datalake* é mantido no ambiente da Google (BigQuery) e o acesso às bases é gratuito, com um limite mensal de 1TB por mês — acredite, nem a gente chega a tanto.
+Organizamos no _datalake_ as principais bases de dados públicas já tratadas e prontas para análise. O _datalake_ é mantido no ambiente da Google (BigQuery) e o acesso às bases é gratuito, com um limite mensal de 1TB por mês — acredite, nem a gente chega a tanto.
 
 O pacote `basedosdados` te permite acessar esse banco através do R de um jeito rápido e fácil. Para isso, é necessário que você possua um projeto (gratuito) no Google Cloud — veja como criar seu projeto com estes [5 passos](https://basedosdados.github.io/mais/access_data_bq/) ou siga as instruções na primeira vez que usar o pacote.
 
@@ -40,15 +40,15 @@ library(basedosdados)
 
 A biblioteca contém duas funções principais:
 
-* `download()`, que permite **baixar bases do *datalake* como arquivo .CSV**
-* `read_sql()`, que já **abre uma base em formato *tibble* na sua sessão R**.
+- `download()`, que permite **baixar bases do _datalake_ como arquivo .CSV**
+- `read_sql()`, que já **abre uma base em formato _tibble_ na sua sessão R**.
 
 ### Função `download()`
 
 Para utilizar a função `download()` , você pode usar os argumentos:
 
-* `query`: query **em SQL** com qual tabela se quer baixar, com quais colunas e com qual agregação
-* `path`: um caminho para onde salvar o arquivo `.csv`.
+- `query`: query **em SQL** com qual tabela se quer baixar, com quais colunas e com qual agregação
+- `path`: um caminho para onde salvar o arquivo `.csv`.
 
 > Um truque é usar [projetos do R](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects). Com eles, você não precisa especificar todo o caminho onde quer salvar as bases e o código pode ser reutilizado por outros usuários. Ao longo do texto vamos usar o caminho `/bases` como uma pasta em um dado projeto R. Note que depois de `/bases` acrescentamos o nome do arquivo e o formato .csv.
 
@@ -65,8 +65,8 @@ basedosdados::download(
 
 A `read_sql()` usa uma API para acessar o datalake e **abrir uma base em formato tibble na sua sessão de R**. O R se encarrega de entrar na nuvem, escolher a tabela e rodar a query para acessá-la, conforme os parâmetros passados na função:
 
-* `query` (string) : é a consulta que será feita ao banco em SQL. Aqui você pode especificar filtros, agrupamentos, e outras transformações usando SQL. [Veja mais sobre a sintaxe aqui.](https://www.w3schools.com/sql/)
-* `billing-project-id`: é o identificador do seu projeto do Google. Ele é necessário para que o Google saiba quem está acessando a nuvem, e contabilizar o tamanho da requisição que você está fazendo. Não precisa ser especificado caso a `set_billing_id` seja usada.
+- `query` (string) : é a consulta que será feita ao banco em SQL. Aqui você pode especificar filtros, agrupamentos, e outras transformações usando SQL. [Veja mais sobre a sintaxe aqui.](https://www.w3schools.com/sql/)
+- `billing-project-id`: é o identificador do seu projeto do Google. Ele é necessário para que o Google saiba quem está acessando a nuvem, e contabilizar o tamanho da requisição que você está fazendo. Não precisa ser especificado caso a `set_billing_id` seja usada.
 
 ### Funções `set_billing_id()` e `get_billing_id()`
 
@@ -216,7 +216,7 @@ GROUP BY
 
 Outra aplicação importante do pacote é a possibilidade de **juntar diferentes bases sem ter que abrí-las individualmente**.
 
-Para exemplificar, vamos comparar os dados que obtemos de saneamento com o **nível de mortalidade por doenças relacionadas à falta de saneamento**. Para explorar mortalidade precisamos de *número de óbitos*, que estão na tabela do [Sistema de Mortalidade do Ministério da Saúde (SIM)](https://basedosdados.org/dataset/5beeec93-cbf3-43f6-9eea-9bee6a0d1683?table=dea823a5-cad7-4014-b77c-4aa33b3b0541), e da *população*, na [tabela de população do IBGE](https://basedosdados.org/dataset/d30222ad-7a5c-4778-a1ec-f0785371d1ca?table=2440d076-8934-471f-8cbe-51faae387c66). Ambas as tabelas estão disponíveis na BD+ nos links acima!
+Para exemplificar, vamos comparar os dados que obtemos de saneamento com o **nível de mortalidade por doenças relacionadas à falta de saneamento**. Para explorar mortalidade precisamos de _número de óbitos_, que estão na tabela do [Sistema de Mortalidade do Ministério da Saúde (SIM)](https://basedosdados.org/dataset/5beeec93-cbf3-43f6-9eea-9bee6a0d1683?table=dea823a5-cad7-4014-b77c-4aa33b3b0541), e da _população_, na [tabela de população do IBGE](https://basedosdados.org/dataset/d30222ad-7a5c-4778-a1ec-f0785371d1ca?table=2440d076-8934-471f-8cbe-51faae387c66). Ambas as tabelas estão disponíveis na BD+ nos links acima!
 
 Para cruzar as tabelas vamos filtrar ambas para o ano de 2013, referente ao Atlas Esgotos (tabela anterior), pela coluna `ano` presente em todas as tabelas. Além disso, vamos também escolher somente a mortalidade de `causa_basica` referente a **doenças diarréicas**, relacionadas à falta de saneamento básico. Os códigos de referência da coluna `causa_basica` na tabela SIM podem ser [consultados aqui](https://github.com/basedosdados/mais/blob/master/bases/br_ms_sim/dictionaries/CID10/CID-10-CATEGORIAS.CSV). A query abaixo faz esses filtros e seleciona as colunas tanto da base de população e quanto de mortalidade:
 

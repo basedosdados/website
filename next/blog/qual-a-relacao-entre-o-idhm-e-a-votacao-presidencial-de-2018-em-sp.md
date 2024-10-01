@@ -2,7 +2,7 @@
 title: Qual a relação entre o IDHM e a Votação Presidencial de 2018 em SP?
 description: Veja como analisar dados do índice de maneira mais fácil e prática
 date:
-  created: '2022-04-28T15:00:00'
+  created: "2022-04-28T15:00:00"
 authors:
   - name: Gustavo Alcântara
     role: Texto

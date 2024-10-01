@@ -2,7 +2,7 @@
 title: Intro ao pacote basedosdados em Python
 description: Explore os dados do nosso datalake público
 date:
-  created: '2021-04-16'
+  created: "2021-04-16"
 authors:
   - name: Vinicius Aguiar
     role: Equipe Base dos Dados 💚
@@ -19,15 +19,15 @@ medium_slug: https://medium.com/@basedosdados/intro-ao-pacote-basedosdados-em-py
 
 ## TL;DR
 
-Vamos demonstrar **como usar o pacote da Base dos Dados em Python.** O pacote permite acessar e analisar mais de 70 conjuntos de dados do nosso *datalake* público BD+, obter informações sobre tabelas, carregar dados no pandas, e mais.
+Vamos demonstrar **como usar o pacote da Base dos Dados em Python.** O pacote permite acessar e analisar mais de 70 conjuntos de dados do nosso _datalake_ público BD+, obter informações sobre tabelas, carregar dados no pandas, e mais.
 
 Conteúdo baseado no [Workshop “Brincando com dados BD+ em Python”](https://www.youtube.com/watch?v=wI2xEioDPgM).
 
 ## Como acessar a BD+ em Python
 
-A Base dos Dados Mais (BD+) é o nosso *datalake* de dados públicos **limpos, integrados e atualizados** pela nossa equipe de dados — dados prontos para análise.
+A Base dos Dados Mais (BD+) é o nosso _datalake_ de dados públicos **limpos, integrados e atualizados** pela nossa equipe de dados — dados prontos para análise.
 
-O *datalake* é mantido no Google BigQuery e tem custo praticamente zero para todos os usuários — você tem 1 TB disponível por mês para fazer consulta aos dados. Para facilitar ainda mais a vida de Pythonistas, criamos um pacote de acesso direto ao repositório via Python: **basedosdados**
+O _datalake_ é mantido no Google BigQuery e tem custo praticamente zero para todos os usuários — você tem 1 TB disponível por mês para fazer consulta aos dados. Para facilitar ainda mais a vida de Pythonistas, criamos um pacote de acesso direto ao repositório via Python: **basedosdados**
 
 ```sh
 # rode para instalar no Python/Jupyter
@@ -44,7 +44,7 @@ Existem diversas funções no pacote, tanto para acesso quanto para publicação
 
 ## Explorando as funções do pacote
 
-Para ilustrar, podemos verificar todos os conjuntos de dados disponíveis no *datalake* usando a função `list_datasets`. Essa função retorna todos os conjuntos de dados, que podem ser filtrados por algum termo específico usando o parâmetro `filter_by`. Mostramos como fazer isso abaixo buscando dados do IBGE. O parâmetro `with_description` indica se queremos visualizar também a descrição de cada conjunto.
+Para ilustrar, podemos verificar todos os conjuntos de dados disponíveis no _datalake_ usando a função `list_datasets`. Essa função retorna todos os conjuntos de dados, que podem ser filtrados por algum termo específico usando o parâmetro `filter_by`. Mostramos como fazer isso abaixo buscando dados do IBGE. O parâmetro `with_description` indica se queremos visualizar também a descrição de cada conjunto.
 
 ```python
 bd.list_datasets(filter_by="ibge", with_description=True)
