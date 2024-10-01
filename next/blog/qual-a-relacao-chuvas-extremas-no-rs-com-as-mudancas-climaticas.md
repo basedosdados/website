@@ -22,7 +22,7 @@ Começando no dia 27 de abril, chuvas intensas atingiram o RS e as bacias dos ri
 
 Focamos nossa análise na capital do estado, Porto Alegre, e utilizamos os dados da estação automática localizada no bairro Jardim Botânico, mantida pelo Instituto Nacional de Meteorologia (INMET). Estes dados, é claro, já estão tratados e disponíveis no datalake público da Base dos Dados.
 
-Acesse os dados no INMET por [aqui](https://basedosdados.org/dataset/782c5607-9f69-4e12-b0d5-aa0f1a7a94e2).
+Acesse os dados no INMET por [aqui](/dataset/782c5607-9f69-4e12-b0d5-aa0f1a7a94e2).
 
 A estação foi instalada em 22 de setembro de 2000 e, desde então, tem coletado dados de pressão, temperatura e, entre outros, precipitação, nosso interesse. É possível perceber que, a partir do dia 27 de abril, o volume de chuvas ultrapassou toda a precipitação registrada para qualquer ano anterior, como é possível observar no gráfico abaixo.
 

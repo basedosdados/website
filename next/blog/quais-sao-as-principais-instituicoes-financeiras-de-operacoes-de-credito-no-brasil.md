@@ -24,7 +24,7 @@ De acordo com o Instituto de Pesquisa Econômica Aplicada (IPEA), em março de 2
 
 Para entender um pouco melhor o cenário da oferta de crédito no país, analisamos os dados de Estatísticas Bancárias (ESTBAN), que trazem informações sobre a posição mensal dos saldos das principais rubricas de balancetes dos bancos comerciais e dos bancos múltiplos com carteira comercial, agregadas por agência bancária e atualizadas mensalmente. Você também pode acessar esses dados, já tratados e atualizados pela BD, para realizar análises econômicas, estudos de mercado, planejamento financeiro e outras finalidades relacionadas ao setor bancário e às atividades econômicas em nível municipal.
 
-➡️ Confira as tabelas tratadas por [aqui](https://basedosdados.org/dataset/84bb75ae-5955-4bbe-8bb6-2d644cae0cee?table=14906976-ff12-4210-b08c-45a1c843a76a).
+➡️ Confira as tabelas tratadas por [aqui](/dataset/84bb75ae-5955-4bbe-8bb6-2d644cae0cee?table=14906976-ff12-4210-b08c-45a1c843a76a).
 
 São muitas as possibilidade de análise com esses dados e, para exemplificar, lançamos um olhar para a participação percentual de instituições financeiras em operações de crédito no Brasil, de 2003 a 2022. Para isso, realizamos uma análise temporal descritiva das instituições financeiras que tiveram mais de 5% de participação nos valores totais de oferta de crédito no período. Veja na imagem abaixo.
 

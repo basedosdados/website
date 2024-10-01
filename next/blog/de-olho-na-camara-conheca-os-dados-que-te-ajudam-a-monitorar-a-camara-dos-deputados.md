@@ -133,7 +133,7 @@ Já fez uma análise com os dados da BD? Conte para nós ou envie um email para 
 
 **Acesso aos dados**
 
-- [Dados Abertos da Câmara dos Deputados na Base dos Dados](https://basedosdados.org/dataset/3d388daa-2d20-49eb-8f55-6c561bef26b6)
+- [Dados Abertos da Câmara dos Deputados na Base dos Dados](/dataset/3d388daa-2d20-49eb-8f55-6c561bef26b6)
 - [Portal dos Dados Abertos da Câmara dos Deputados](https://dadosabertos.camara.leg.br/)
 - [Link para o as consultas utilizadas no texto](https://t.co/V9MF2togi9)
 

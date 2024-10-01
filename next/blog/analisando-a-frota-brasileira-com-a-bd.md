@@ -17,7 +17,7 @@ medium_slug: >-
 
 ## TL;DR
 
-Neste artigo você irá aprender usar a Base dos Dados para analisar de maneira mais prática os dados de [estatísticas da frota de veículos no Brasil](https://basedosdados.org/dataset/61d592ca-5aec-4f66-b8eb-f7b894a29b66?table=3f0d609e-c85d-4daf-845f-08dd502665b2) (Denatran) e dados da [população brasileira](https://basedosdados.org/dataset/d30222ad-7a5c-4778-a1ec-f0785371d1ca?table=2440d076-8934-471f-8cbe-51faae387c66) (IBGE) em R. Estes dois conjuntos de dados já estão tratados, compatibilizados e prontos para análise no _datalake_ público da BD.
+Neste artigo você irá aprender usar a Base dos Dados para analisar de maneira mais prática os dados de [estatísticas da frota de veículos no Brasil](/dataset/61d592ca-5aec-4f66-b8eb-f7b894a29b66?table=3f0d609e-c85d-4daf-845f-08dd502665b2) (Denatran) e dados da [população brasileira](/dataset/d30222ad-7a5c-4778-a1ec-f0785371d1ca?table=2440d076-8934-471f-8cbe-51faae387c66) (IBGE) em R. Estes dois conjuntos de dados já estão tratados, compatibilizados e prontos para análise no _datalake_ público da BD.
 
 Ao longo do artigo iremos responder 2 perguntas:
 
@@ -32,7 +32,7 @@ Nós os amando ou odiando, os veículos já rodam em terras tupiniquins há mais
 
 ## Dados de Frota de Veículos no Brasil
 
-A Base dos Dados disponibiliza dados de 2003 até 2021, com estatísticas da Frota de veículos por tipo, estado e município. Você pode conferir detalhes desse conjunto e acessá-lo por [aqui](https://basedosdados.org/dataset/61d592ca-5aec-4f66-b8eb-f7b894a29b66?table=3f0d609e-c85d-4daf-845f-08dd502665b2).
+A Base dos Dados disponibiliza dados de 2003 até 2021, com estatísticas da Frota de veículos por tipo, estado e município. Você pode conferir detalhes desse conjunto e acessá-lo por [aqui](/dataset/61d592ca-5aec-4f66-b8eb-f7b894a29b66?table=3f0d609e-c85d-4daf-845f-08dd502665b2).
 
 ## Acessando os dados
 
@@ -75,7 +75,7 @@ WHERE
 df <- read_sql(query)
 ```
 
-OBS: Para fazer a mudança de id_município para o nome próprio das cidades, foi necessário cruzar com a tabela de [diretórios brasileiros](https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=0a2d8187-f936-437d-89db-b4eb3a7e1735) da BD+, que funciona como uma referência de centralização de informações de unidades básicas para análises.
+OBS: Para fazer a mudança de id_município para o nome próprio das cidades, foi necessário cruzar com a tabela de [diretórios brasileiros](/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=0a2d8187-f936-437d-89db-b4eb3a7e1735) da BD+, que funciona como uma referência de centralização de informações de unidades básicas para análises.
 
 ## Respondendo a pergunta: Qual cidade brasileira tem mais carro por habitante?
 

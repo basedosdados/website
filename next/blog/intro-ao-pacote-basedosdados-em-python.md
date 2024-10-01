@@ -86,7 +86,7 @@ df = bd.read_table(
 )
 ```
 
-Neste exemplo vamos trabalhar com os dados de [nomes brasileiros do Censo Demográfico 2010 do IBGE](https://basedosdados.org/dataset/703f9f0d-caee-4b47-b900-46b1dea2c33c?table=3bc00c7a-28e5-421b-b310-b32bed3dd4d4). De acordo com o Censo, existem ao todo cerca de 200 milhões de habitantes com mais de 130 mil nomes diferentes espalhados pelo Brasil. Curioso? Nós também!
+Neste exemplo vamos trabalhar com os dados de [nomes brasileiros do Censo Demográfico 2010 do IBGE](/dataset/703f9f0d-caee-4b47-b900-46b1dea2c33c?table=3bc00c7a-28e5-421b-b310-b32bed3dd4d4). De acordo com o Censo, existem ao todo cerca de 200 milhões de habitantes com mais de 130 mil nomes diferentes espalhados pelo Brasil. Curioso? Nós também!
 
 ## Construindo uma análise: Quais os nomes mais famosos no Brasil?
 

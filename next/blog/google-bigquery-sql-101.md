@@ -27,7 +27,7 @@ O texto tem como base o workshop feito por João Carabetta disponível em [nosso
 
 As bases disponíveis para download e análise no nosso site possuem o ícone **BD+** e seus ícones de temas estão na cor azul. Isto significa que a base está disponível no nosso datalake público, ou seja, estes dados já foram tratados pela nossa equipe técnica e são atualizados frequentemente.
 
-Ao longo do texto iremos explorar os dados da [RAIS (Relação Anual de Informações Sociais)](https://basedosdados.org/dataset/3e7c4d58-96ba-448e-b053-d385a829ef00?table=86b69f96-0bfe-45da-833b-6edc9a0af213), mas o processo é o mesmo para qualquer base que você desejar acessar. A RAIS é um relatório de informações socioeconômicas solicitado pela Secretaria de Trabalho do Ministério da Economia brasileiro às pessoas jurídicas e outros empregadores anualmente.
+Ao longo do texto iremos explorar os dados da [RAIS (Relação Anual de Informações Sociais)](/dataset/3e7c4d58-96ba-448e-b053-d385a829ef00?table=86b69f96-0bfe-45da-833b-6edc9a0af213), mas o processo é o mesmo para qualquer base que você desejar acessar. A RAIS é um relatório de informações socioeconômicas solicitado pela Secretaria de Trabalho do Ministério da Economia brasileiro às pessoas jurídicas e outros empregadores anualmente.
 
 <Image src="/blog/google-bigquery-sql-101/image_1.png"/>
 

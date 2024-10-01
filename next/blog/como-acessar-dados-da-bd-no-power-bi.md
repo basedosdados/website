@@ -15,7 +15,7 @@ medium_slug: >
 
 ## TL;DR
 
-O Power BI é uma das tecnologias mais populares para o desenvolvimento de dashboards com dados relacionais, e a [Base dos Dados](https://basedosdados.org) é um dos maiores data lakes públicos do Brasil. Essa combinação é o ambiente perfeito para sua análise e a visualização de dados. Neste artigo, vou te mostrar como é fácil ter acesso às bases de dados da BD para uso no PBI, além de explicar o passo a passo.
+O Power BI é uma das tecnologias mais populares para o desenvolvimento de dashboards com dados relacionais, e a [Base dos Dados]() é um dos maiores data lakes públicos do Brasil. Essa combinação é o ambiente perfeito para sua análise e a visualização de dados. Neste artigo, vou te mostrar como é fácil ter acesso às bases de dados da BD para uso no PBI, além de explicar o passo a passo.
 
 <Image src="/blog/tutorial-power-bi/image_0.png"/>
 

@@ -7,7 +7,7 @@ date:
   created: "2021-12-22T15:41:54.427Z"
 authors:
   - name: Base dos Dados
-    social: https://basedosdados.org/quem-somos
+    social: /quem-somos
     role: Equipe Base dos Dados
 thumbnail: /blog/um-site-feito-a-varias-maos/image_0.png
 categories: []

@@ -20,7 +20,7 @@ Em 2021, o Brasil acompanhou as discussões a respeito da CPI da Pandemia. Os se
 
 **Como podemos utilizar essas informações para entender os principais tópicos discutidos?** O que foi discutido em cada dia? Quais foram as pessoas, lugares e organizações mais citadas nos textos? Procurando responder a essas perguntas, resolvi utilizar técnicas de **Processamento de Linguagem Natural** com visualização de dados a partir dos textos transcritos das seções.
 
-Para isso, utilizei as transcrições das seções disponibilizadas pela Base dos Dados, que você por acessar por [aqui](https://basedosdados.org/dataset/br-senado-cpipandemia). Originalmente, essa visualização foi criada como parte do [#SWDChallenge](https://storytellingwithdata.com), desafio mensal de visuzalização de dados.
+Para isso, utilizei as transcrições das seções disponibilizadas pela Base dos Dados, que você por acessar por [aqui](/dataset/br-senado-cpipandemia). Originalmente, essa visualização foi criada como parte do [#SWDChallenge](https://storytellingwithdata.com), desafio mensal de visuzalização de dados.
 
 <Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia-com-a-bd/image_0.webp" captino="Photo by [Joakim Honkasalo](https://unsplash.com/@jhonkasalo) on [Unsplash](https://unsplash.com/)"/>
 
@@ -32,7 +32,7 @@ A seguir você confere o passo a passo dos dados até a visualização. Segue qu
 
 ## Os dados
 
-A [base de textos da CPI](https://basedosdados.org/dataset/7bd4bcc6-815a-49bc-9de3-1828dcd9f30f?table=951298a3-113d-4f10-9605-53d4282b4a69) possui as falas de cada senador, depoente ou convidado que falou durante as sessões da CPI da pandemia. Ela corresponde ao período de 24/04 a 15/07. Ou seja, os 3 primeiros meses. A CPI foi prorrogada por mais 3 meses e terminou em 26 de outubro de 2021. No entanto, esses textos ainda não estão disponíveis no dataset.
+A [base de textos da CPI](/dataset/7bd4bcc6-815a-49bc-9de3-1828dcd9f30f?table=951298a3-113d-4f10-9605-53d4282b4a69) possui as falas de cada senador, depoente ou convidado que falou durante as sessões da CPI da pandemia. Ela corresponde ao período de 24/04 a 15/07. Ou seja, os 3 primeiros meses. A CPI foi prorrogada por mais 3 meses e terminou em 26 de outubro de 2021. No entanto, esses textos ainda não estão disponíveis no dataset.
 
 Foram utilizadas as seguintes consultas para extrair os dados de interesse para a construção da visualização:
 

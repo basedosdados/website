@@ -35,7 +35,7 @@ SIG é um conjunto de sistemas de softwares e hardwares que permitem visualizar 
 
 ## Como construir sua análise com dados do geobr e o QGIS
 
-Para demonstrar como começar a construir sua própria análise, utilizamos os dados do [Censo Agropecuário](https://basedosdados.org/dataset/55a39c28-58f3-4804-827d-6eee5ed27b6b?table=5366d485-e7db-4367-911a-a6a0198dda13), a principal investigação estatística e territorial sobre a produção agropecuária do país, também tratados e padronizados na BD.
+Para demonstrar como começar a construir sua própria análise, utilizamos os dados do [Censo Agropecuário](/dataset/55a39c28-58f3-4804-827d-6eee5ed27b6b?table=5366d485-e7db-4367-911a-a6a0198dda13), a principal investigação estatística e territorial sobre a produção agropecuária do país, também tratados e padronizados na BD.
 
 O processo é simples: para entender, por exemplo, quantas cabeças de gado existiam em cada estado brasileiro no ano de 2017, podemos usar a consulta abaixo no BigQuery e baixá-los em um arquivo `.csv`.
 

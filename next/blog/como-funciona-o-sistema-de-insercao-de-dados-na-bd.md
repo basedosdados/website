@@ -38,7 +38,7 @@ Neste artigo você vai conhecer um pouco sobre como funciona a infraestrutura de
 
 ## A Infraestrutura
 
-O time de infraestrutura da Base dos Dados é responsável pelas ferramentas de ingestão de dados, que englobam desde o upload até a disponibilização de dados no ambiente de produção; pelo acesso de dados através de pacotes em Python e R; e pelo nosso [website](https://basedosdados.org/). Neste cenário, o time é atualmente dividido em várias frentes, tratando da renovação do site e da implementação de pesos e contrapesos automatizados.
+O time de infraestrutura da Base dos Dados é responsável pelas ferramentas de ingestão de dados, que englobam desde o upload até a disponibilização de dados no ambiente de produção; pelo acesso de dados através de pacotes em Python e R; e pelo nosso [website](/). Neste cenário, o time é atualmente dividido em várias frentes, tratando da renovação do site e da implementação de pesos e contrapesos automatizados.
 
 Procuramos simplificar e automatizar todos os processos, começando com o [upload de dados](https://basedosdados.github.io/mais/colab_data/) e inserção dos mesmos no **Ambiente de Experimentação**. Neste ponto, o colaborador pode adicionar dados em sua nuvem do Google, limpar e tratar os dados e então criar as tabelas locais com a interface de linha de comando desenvolvida pela infra. Por fim, é possível submeter a base de dados para revisão, criando um pull request no [Github](https://github.com/basedosdados/mais/pulls).
 

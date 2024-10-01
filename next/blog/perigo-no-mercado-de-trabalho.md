@@ -24,7 +24,7 @@ medium_slug: >-
 
 ## TL;DR
 
-Neste artigo vamos analisar a situação do mercado de trabalho no Rio de Janeiro através dos dados do Cadastro Geral de Empregados e Desempregados (CAGED). Essa base já está disponível no _datalake_ público da [Base dos Dados](https://basedosdados.org/dataset/562b56a3-0b01-4735-a049-eeac5681f056?table=95106d6f-e36e-4fed-b8e9-99c41cd99ecf) com informações tratadas e padronizadas. Confira a construção dessa análise, o processo de criação das visualizações que a ilustram e como acessar e explorar você também esses dados.
+Neste artigo vamos analisar a situação do mercado de trabalho no Rio de Janeiro através dos dados do Cadastro Geral de Empregados e Desempregados (CAGED). Essa base já está disponível no _datalake_ público da [Base dos Dados](/dataset/562b56a3-0b01-4735-a049-eeac5681f056?table=95106d6f-e36e-4fed-b8e9-99c41cd99ecf) com informações tratadas e padronizadas. Confira a construção dessa análise, o processo de criação das visualizações que a ilustram e como acessar e explorar você também esses dados.
 
 ## Empregados e Desempregados
 

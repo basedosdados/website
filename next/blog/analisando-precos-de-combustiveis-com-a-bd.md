@@ -38,7 +38,7 @@ A base contém informações sobre a localização de cada posto (UF, município
 
 A BD+ permite que você acesse todas essas informações com uma simples consulta de SQL no BigQuery, ou através dos nossos pacotes no Python e no R. Por conta do tamanho da base, o download direto pela plataforma não é possível.
 
-Para explorar os dados dessa base, acesse a [página deste conjunto de dados](https://basedosdados.org/dataset/c962b5e4-e71c-4e7c-b172-5e70951be633) em nossa plataforma e confira a seção Consulta aos Dados.
+Para explorar os dados dessa base, acesse a [página deste conjunto de dados](/dataset/c962b5e4-e71c-4e7c-b172-5e70951be633) em nossa plataforma e confira a seção Consulta aos Dados.
 
 <Image src="/blog/analisando-precos-de-combustiveis-com-a-bd/image_2.png" caption="Página do conjunto Preços de Combustíveis — Dados Históricos"/>
 
@@ -50,7 +50,7 @@ As notícias nos últimos meses têm anunciado a constante alta dos combustívei
 
 <Image src="/blog/analisando-precos-de-combustiveis-com-a-bd/image_4.gif"/>
 
-Cumprindo a nossa missão — acessar os dados em um único lugar — conseguimos captar dados do [Índice Nacional de Preços ao Consumidor Amplo (IPCA)](https://basedosdados.org/dataset/c58781fb-1177-448d-87ff-56b5cbf1735c), também disponíveis na BD+, além de manipular a nossa base de preços dos combustíveis da Agência Nacional do Petróleo, Gás Natural e Biocombustíveis (ANP).
+Cumprindo a nossa missão — acessar os dados em um único lugar — conseguimos captar dados do [Índice Nacional de Preços ao Consumidor Amplo (IPCA)](/dataset/c58781fb-1177-448d-87ff-56b5cbf1735c), também disponíveis na BD+, além de manipular a nossa base de preços dos combustíveis da Agência Nacional do Petróleo, Gás Natural e Biocombustíveis (ANP).
 
 Com o código SQL(query) abaixo, conseguiremos extrair: o ano e mês de referência das informações; o produto (combustível) e seu preço médio da base da ANP, além de atualizar o preço para os valores atuais com os dados da inflação.
 

@@ -14,7 +14,7 @@ medium_slug: https://medium.com/@basedosdados/o-brasil-nas-olimp%C3%ADadas-2a3f9
 
 ## TL;DR
 
-Hoje começa mais uma edição das Olimpíadas, mas você sabia que os jogos da Era Moderna tiveram sua primeira edição em 1896? Nesse texto vamos apresentar dados históricos dos Jogos Olímpicos, que já estão limpos, tratados e disponíveis no datalake público da Base dos Dados. Os [microdados das Olimpíadas](https://basedosdados.org/dataset/62f8cb83-ac37-48be-874b-b94dd92d3e2b?table=567b1ccd-d8c2-4616-bacb-cf5c0e7b8d89) trazem informações sobre os jogos, cidade sede, as delegações, atletas e suas características, além dos esportes, suas diferentes modalidades e medalhistas também.
+Hoje começa mais uma edição das Olimpíadas, mas você sabia que os jogos da Era Moderna tiveram sua primeira edição em 1896? Nesse texto vamos apresentar dados históricos dos Jogos Olímpicos, que já estão limpos, tratados e disponíveis no datalake público da Base dos Dados. Os [microdados das Olimpíadas](/dataset/62f8cb83-ac37-48be-874b-b94dd92d3e2b?table=567b1ccd-d8c2-4616-bacb-cf5c0e7b8d89) trazem informações sobre os jogos, cidade sede, as delegações, atletas e suas características, além dos esportes, suas diferentes modalidades e medalhistas também.
 
 <Image src="/blog/o-brasil-nas-olimpiadas/image_0.jpg"/>
 
@@ -133,6 +133,6 @@ Curtiu essa análise? Nosso intuito aqui foi instigar a você analisar mais. Mui
 
 Que a força esteja com nossos atletas! Vai Brasil!
 
-A [Base dos Dados](https://basedosdados.org/) é uma iniciativa sem fins lucrativos, open source e que busca facilitar e fomentar a produção de conhecimento no Brasil. Nossa equipe trabalha duro para tratar e disponibilizar dados de qualidade que facilitem sua análise. Seu apoio é importante para manter essa iniciativa.
+A [Base dos Dados](/) é uma iniciativa sem fins lucrativos, open source e que busca facilitar e fomentar a produção de conhecimento no Brasil. Nossa equipe trabalha duro para tratar e disponibilizar dados de qualidade que facilitem sua análise. Seu apoio é importante para manter essa iniciativa.
 
 Apoie pelo [https://apoia.se/basedosdados](https://apoia.se/basedosdados), ou com um PIX: 42494318000116

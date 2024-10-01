@@ -33,4 +33,4 @@ Com assinatura BDPro você pode acessar dados atualizados periodicamente pelo ca
 
 Que tal utilizar o código dessa análise para criar seus próprios recortes? Todos os códigos das análises que publicamos estão disponíveis em nosso [GitHub](https://github.com/basedosdados/analises/blob/main/redes_sociais/br_sp_geosampa_iptu_iptu_20230829.ipynb).
 
-➡️ Acesse os dados por [aqui](https://basedosdados.org/dataset/05f1b96d-883b-4202-a4bd-40379c5d326a?table=bdffc0f4-00da-4437-9ed9-0db7df11d3fa)
+➡️ Acesse os dados por [aqui](/dataset/05f1b96d-883b-4202-a4bd-40379c5d326a?table=bdffc0f4-00da-4437-9ed9-0db7df11d3fa)

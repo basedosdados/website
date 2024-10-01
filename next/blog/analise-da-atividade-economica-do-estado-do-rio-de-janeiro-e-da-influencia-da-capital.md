@@ -17,7 +17,7 @@ medium_slug: >-
 
 Este relatório apresenta uma investigação detalhada sobre os dados relacionados às principais atividades econômicas do Estado do Rio de Janeiro, focando na relação com sua capital.
 
-O estudo também avalia a dinâmica da geração dos empregos ativos ao longo de um período determinado. Utilizando dados da [Relação Anual de Informações Sociais](https://basedosdados.org/dataset/3e7c4d58-96ba-448e-b053-d385a829ef00?table=c3a5121e-f00d-41ff-b46f-bd26be8d4af3) (RAIS), o trabalho emprega análises estatísticas para compreender a evolução desses padrões e suas implicações na relação com os demais municípios do estado do Rio de Janeiro.
+O estudo também avalia a dinâmica da geração dos empregos ativos ao longo de um período determinado. Utilizando dados da [Relação Anual de Informações Sociais](/dataset/3e7c4d58-96ba-448e-b053-d385a829ef00?table=c3a5121e-f00d-41ff-b46f-bd26be8d4af3) (RAIS), o trabalho emprega análises estatísticas para compreender a evolução desses padrões e suas implicações na relação com os demais municípios do estado do Rio de Janeiro.
 
 > Este artigo foi produzido como Projeto Final do Curso de Análise de Dados Públicos com SQl e Sheets, da Base dos Dados. Para saber mais sobre o curso, acesse [aqui](https://info.basedosdados.org/bd-edu-sql)
 

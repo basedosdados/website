@@ -15,7 +15,7 @@ medium_slug: >-
 
 ## TL;DR
 
-Uma das melhores formas de comunicar grandes quantidades de dados é por meio de gráficos. Hoje vamos aprender como buscar os dados da [Campanha Nacional de Vacinação contra Covid-19](http://Campanha Nacional de Vacinação contra Covid-19) e de [população](https://basedosdados.org/dataset/d30222ad-7a5c-4778-a1ec-f0785371d1ca?table=2440d076-8934-471f-8cbe-51faae387c66) na [Base dos Dados](https://basedosdados.org/), além de como gerar um gráfico de vacinados de acordo com a população, utilizando apenas o pacote em R da `basedosdados` e o `ggplot2`.
+Uma das melhores formas de comunicar grandes quantidades de dados é por meio de gráficos. Hoje vamos aprender como buscar os dados da [Campanha Nacional de Vacinação contra Covid-19](http://Campanha Nacional de Vacinação contra Covid-19) e de [população](/dataset/d30222ad-7a5c-4778-a1ec-f0785371d1ca?table=2440d076-8934-471f-8cbe-51faae387c66) na [Base dos Dados](/), além de como gerar um gráfico de vacinados de acordo com a população, utilizando apenas o pacote em R da `basedosdados` e o `ggplot2`.
 
 ## Introdução e contexto
 

@@ -17,7 +17,7 @@ medium_slug: >-
 
 ## TL;DR
 
-Os dados de Finanças Municipais do Governo Federal, disponibilizados pelo Sistema de Informações Contábeis e Fiscais do Setor Público Brasileiro ([Siconfi](https://siconfi.tesouro.gov.br/siconfi/index.jsf)), já estão tratados e padronizados no [datalake público](https://console.cloud.google.com/bigquery?p=basedosdados&d=br_me_siconfi&t=municipio_receitas_orcamentarias&page=table) da [Base dos Dados](https://basedosdados.org/), por onde você pode acessá-los e cruzá-los com diversas outras bases de dados públicas. Preparamos esse artigo para detalhar a saga épica que foi o processo de limpeza e tratamento desses dados.
+Os dados de Finanças Municipais do Governo Federal, disponibilizados pelo Sistema de Informações Contábeis e Fiscais do Setor Público Brasileiro ([Siconfi](https://siconfi.tesouro.gov.br/siconfi/index.jsf)), já estão tratados e padronizados no [datalake público](https://console.cloud.google.com/bigquery?p=basedosdados&d=br_me_siconfi&t=municipio_receitas_orcamentarias&page=table) da [Base dos Dados](/), por onde você pode acessá-los e cruzá-los com diversas outras bases de dados públicas. Preparamos esse artigo para detalhar a saga épica que foi o processo de limpeza e tratamento desses dados.
 
 O Siconfi foi desenvolvido como um instrumento para, dentre outros objetivos, facilitar a produção e análise de informações contábeis e fiscais, padronizar os mecanismos de consolidação e aumentar a qualidade e confiabilidade das informações contábeis, financeiras e de estatísticas fiscais recebidas dos municípios, estados, Distrito Federal e União. A base contempla tabelas de despesas e receitas orçamentárias, com colunas por ano, sigla UF, município, estágio e portaria.
 
@@ -83,7 +83,7 @@ Por exemplo:
 
 Por vezes, as siglas dos municípios estavam erradas e/ou o nome dos municípios desatualizados.
 
-Então, iniciamos um processo muito longo de limpeza de tipos (acentos, pontos, espaços), atualização de nomes, siglas etc. No entanto, boa parte desta etapa foi manual para mais de 100 arquivos. Posteriormente, foi possível fazer a compatibilização por meio de joins com a tabela de [Diretórios Brasileiros](https://basedosdados.org/dataset/b5878df7-e259-44bc-8903-4feb8d56945a) construída pela BD.
+Então, iniciamos um processo muito longo de limpeza de tipos (acentos, pontos, espaços), atualização de nomes, siglas etc. No entanto, boa parte desta etapa foi manual para mais de 100 arquivos. Posteriormente, foi possível fazer a compatibilização por meio de joins com a tabela de [Diretórios Brasileiros](/dataset/b5878df7-e259-44bc-8903-4feb8d56945a) construída pela BD.
 
 ### Compatibilização das portarias e estágios
 
@@ -141,6 +141,6 @@ Depois de todos esses processos, pesquisas e, principalmente, de uma ampla coope
 
 Alguns momentos foram muito similares a trecho do filme “Em Busca do Cálice Sagrado”, do Monty Python, em que o rei Artur se encontra com Cavaleiro Negro e trava uma quase-épica batalha. No entanto, a confusão era tanta que não sabíamos se éramos Artur ou Cavaleiro Negro.
 
-No mais, as dificuldades aqui apresentadas reforçam não só o padrão de qualidade da [Base dos Dados](https://basedosdados.org/), mas também o comprometimento e senso de responsabilidade da Instituição com o propósito de democratizar o acesso a dados no Brasil.
+No mais, as dificuldades aqui apresentadas reforçam não só o padrão de qualidade da [Base dos Dados](/), mas também o comprometimento e senso de responsabilidade da Instituição com o propósito de democratizar o acesso a dados no Brasil.
 
-Você pode encontrar o dataset do Siconfi pronto para uso neste [link](https://basedosdados.org/dataset/5a3dec52-8740-460e-b31d-0e0347979da0?table=ee51f2d3-c5fb-4ff3-a6e2-fe4bbdcc46c8).
+Você pode encontrar o dataset do Siconfi pronto para uso neste [link](/dataset/5a3dec52-8740-460e-b31d-0e0347979da0?table=ee51f2d3-c5fb-4ff3-a6e2-fe4bbdcc46c8).

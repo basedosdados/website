@@ -42,7 +42,7 @@ Outro número alarmante é o crescimento da população em situação de rua: de
 
 As pessoas que vivem em condições de moradia precária compõem o déficit habitacional. Tecnicamente, esse conceito é dividido em três componentes: habitação 1 precária (situação de rua, cortiços, barracas), coabitação (pessoas coabitando mesmos cômodos) e o Ônus Excessivo com o Aluguel Urbano: famílias que comprometem mais de 30% da renda com o aluguel. Esse último foi o principal componente do déficit habitacional nas análises mais recentes da Fundação João Pinheiro (principal entidade que trata do assunto no Brasil) e o que mais cresceu: passou de 2,814 milhões de domicílios em 2016 para 3,035 milhões em 2019.
 
-Neste artigo, analisaremos a participação do aluguel na renda anual familiar entre 1997 e 2016, utilizando [dados da PNAD](https://basedosdados.org/dataset/0cde957f-1b58-425a-b6cd-ba1208515537?table=83062c5c-6b1f-4d54-8cf2-9f541e835bf0), tratados pela Base dos Dados.
+Neste artigo, analisaremos a participação do aluguel na renda anual familiar entre 1997 e 2016, utilizando [dados da PNAD](/dataset/0cde957f-1b58-425a-b6cd-ba1208515537?table=83062c5c-6b1f-4d54-8cf2-9f541e835bf0), tratados pela Base dos Dados.
 
 ## Dados e Metodologia
 

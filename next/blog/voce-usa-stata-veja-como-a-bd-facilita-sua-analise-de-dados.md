@@ -22,7 +22,7 @@ Neste artigo vamos explicar como usar o pacote basedosdados no Stata para acessa
 
 ## Sobre o pacote
 
-O novo pacote basedosdados no Stata possibilita o acesso a [centenas de tabelas tratadas e compatibilizadas](https://basedosdados.org/dataset?resource_type=bdm_table), disponíveis no datalake público da Base dos Dados. O pacote é habilitado para 7 comandos. Os comandos dão desde a possibilidade de listar todos os conjuntos de dados disponíveis do datalake, até baixá-los ou analisá-los diretamente do Stata.
+O novo pacote basedosdados no Stata possibilita o acesso a [centenas de tabelas tratadas e compatibilizadas](/dataset?resource_type=bdm_table), disponíveis no datalake público da Base dos Dados. O pacote é habilitado para 7 comandos. Os comandos dão desde a possibilidade de listar todos os conjuntos de dados disponíveis do datalake, até baixá-los ou analisá-los diretamente do Stata.
 
 É importante ressaltar que essa versão inicial ainda é um wrapper do pacote do Python e, portanto, necessita da execução de alguns passos antes da utilização. Neste tutorial, mostramos como instalar o Python e autorizar seu projeto do Google — requerimentos obrigatórios para uso do pacote do Stata.
 
