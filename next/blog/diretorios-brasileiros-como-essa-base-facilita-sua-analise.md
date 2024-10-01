@@ -79,7 +79,7 @@ SELECT
 FROM
   `basedosdados.br_me_comex_stat.municipio_importacao` AS t1
 JOIN
-  `basedosdados-dev.br_bd_diretorios_brasil.pais` AS t2
+  `basedosdados.br_bd_diretorios_brasil.pais` AS t2
 ON
   t1.id_pais = t2.id_pais
 WHERE

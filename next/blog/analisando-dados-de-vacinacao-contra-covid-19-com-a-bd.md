@@ -43,7 +43,7 @@ Essa parte seria a mais trabalhosa, mas agora é a mais simples. Utilizando o pa
 
 ```r
 # buscar os dados de vacinação
-dados_vacina <- bdplyr("basedosdados-dev.br_ms_vacinacao_covid19.microdados") %>%
+dados_vacina <- bdplyr("basedosdados.br_ms_vacinacao_covid19.microdados") %>%
   # vamos filtrar o estado e o município pelo código do IBGE
   filter(
     sigla_uf == "PR",
@@ -60,7 +60,7 @@ dados_vacina <- bdplyr("basedosdados-dev.br_ms_vacinacao_covid19.microdados") %>
   bd_collect()
 
 # buscar os dados da população em 2020
-populacao_mga <- bdplyr("basedosdados-dev.br_ms_populacao.municipio") %>%
+populacao_mga <- bdplyr("basedosdados.br_ms_populacao.municipio") %>%
   # vamos filtrar o município pelo código do IBGE e o ano de 2020
   filter(
     id_municipio == "4115200",
