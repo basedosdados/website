@@ -1451,6 +1451,7 @@ const PlansAndPayment = ({ userData }) => {
   const [emailGCP, setEmailGCP] = useState(userData?.gcpEmail || userData?.email)
   const [emailGCPFocus, setEmailGCPFocus] = useState(false)
   const [errEmailGCP, setErrEmailGCP] = useState(false)
+  
   const PaymentModal = useDisclosure()
   const EmailModal = useDisclosure()
   const SucessPaymentModal = useDisclosure()
@@ -1458,6 +1459,7 @@ const PlansAndPayment = ({ userData }) => {
   const PlansModal = useDisclosure()
   const CancelModalPlan = useDisclosure()
   const AlertChangePlanModal  = useDisclosure()
+  
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingH, setIsLoadingH] = useState(false)
   const [isLoadingCanSub, setIsLoadingCanSub] = useState(false)
@@ -1814,7 +1816,7 @@ const PlansAndPayment = ({ userData }) => {
     if(!isValidEmail(emailGCP)) return setErrEmailGCP(true)
 
     const response = await fetch(`/api/user/changeUserGcpEmail?p=${btoa(emailGCP)}`)
-    .then(res => res.json())
+      .then(res => res.json())
 
     EmailModal.onClose()
     PaymentModal.onOpen()
@@ -1933,29 +1935,36 @@ const PlansAndPayment = ({ userData }) => {
 
               <Box
                 display="flex"
-                flexDirection="row"
+                flexDirection={{base: "column", lg: "row"}}
                 gap="8px"
-                alignItems="center"
+                alignItems={{base: "start", lg: "center"}}
               >
-                {toggleAnual ?  
-                    <Toggle
-                      defaultChecked
-                      value={toggleAnual}
-                      onChange={() => changeIntervalPlanCheckout()}
-                    />
-                  : 
-                    <Toggle
-                      value={toggleAnual}
-                      onChange={() => changeIntervalPlanCheckout()}
-                    />
-                }
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="16px"
-                  lineHeight="24px"
-                  color="#252A32"
-                >Desconto anual</Text>
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  gap="8px"
+                  alignItems="center"
+                >
+                  {toggleAnual ?  
+                      <Toggle
+                        defaultChecked
+                        value={toggleAnual}
+                        onChange={() => changeIntervalPlanCheckout()}
+                      />
+                    : 
+                      <Toggle
+                        value={toggleAnual}
+                        onChange={() => changeIntervalPlanCheckout()}
+                      />
+                  }
+                  <Text
+                    fontFamily="Roboto"
+                    fontWeight="400"
+                    fontSize="16px"
+                    lineHeight="24px"
+                    color="#252A32"
+                  >Desconto anual</Text>
+                </Box>
                 <Text
                   as="span"
                   color="#2B8C4D"
@@ -2121,35 +2130,37 @@ const PlansAndPayment = ({ userData }) => {
               </Text>
             }
 
-            <Box
-              as="button"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              width="fit-content"
-              height="40px"
-              borderRadius="8px"
-              padding="10px 34px"
-              border="1px solid"
-              cursor="pointer"
-              marginTop="auto !important"
-              backgroundColor="#FFF"
-              color="#2B8C4D"
-              borderColor="#2B8C4D"
-              _hover={{
-                borderColor: "#22703E",
-                color: "#22703E"
-              }}
-              fontFamily="Roboto"
-              fontWeight="500"
-              fontSize="14px"
-              lineHeight="20px"
-              onClick={() => {
-                PaymentModal.onClose()
-                EmailModal.onOpen()
-              }}
-            >
-              Voltar
+            <Box marginTop="auto !important">
+              <Box
+                as="button"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                width={{base: "100%", lg: "fit-content"}}
+                height="40px"
+                borderRadius="8px"
+                padding="10px 34px"
+                border="1px solid"
+                cursor="pointer"
+                marginTop="24px !important"
+                backgroundColor="#FFF"
+                color="#2B8C4D"
+                borderColor="#2B8C4D"
+                _hover={{
+                  borderColor: "#22703E",
+                  color: "#22703E"
+                }}
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="14px"
+                lineHeight="20px"
+                onClick={() => {
+                  PaymentModal.onClose()
+                  EmailModal.onOpen()
+                }}
+              >
+                Voltar
+              </Box>
             </Box>
           </Stack>
 
@@ -2185,7 +2196,7 @@ const PlansAndPayment = ({ userData }) => {
         propsModalContent={{
           width: "100%",
           maxWidth:"1008px",
-          margin: "24px"
+          margin: "24px",
         }}
         isCentered={isMobileMod() ? false : true}
       >
@@ -2208,7 +2219,7 @@ const PlansAndPayment = ({ userData }) => {
           />
         </Stack>
 
-        <Stack marginBottom="285px !important">
+        <Stack marginBottom={{base: "24px", lg: "285px !important"}}>
           <Text
             fontFamily="Roboto"
             fontWeight="500"
@@ -2227,7 +2238,7 @@ const PlansAndPayment = ({ userData }) => {
             lineHeight="24px"
             marginBottom="32px !important"
           >
-            Utilizaremos o seu e-mail para garantir acesso exclusivo aos dados pelo BigQuery. Já preenchemos com o e-mail que você usou ao criar sua conta na nossa plataforma. Caso prefira usar outro e-mail para acessar o BigQuery, basta editá-lo abaixo.
+            O seu e-mail precisa ser uma <Text as="span" fontWeight="500">Conta Google</Text> para garantir acesso exclusivo aos dados pelo BigQuery. Já preenchemos com o e-mail que você usou ao criar sua conta na nossa plataforma. Caso necessite usar outro e-mail para acessar o BigQuery, basta editá-lo abaixo.
           </Text>
 
           <Text
@@ -2243,7 +2254,7 @@ const PlansAndPayment = ({ userData }) => {
 
           <Stack
             spacing={0}
-            width="464px"
+            width={{base: "100%", lg: "464px"}}
             position="relative"
           >
             <ControlledInputSimple
@@ -2288,13 +2299,19 @@ const PlansAndPayment = ({ userData }) => {
           }
         </Stack>
 
-        <Stack spacing={0} gap="16px" flexDirection="row">
+        <Stack
+          width="100%"
+          spacing={0}
+          gap="16px"
+          justifyContent="end"
+          flexDirection={{base: "column", lg:"row"}}
+        >
           <Box
             as="button"
             display="flex"
             alignItems="center"
             justifyContent="center"
-            width="fit-content"
+            width={{base: "100%", lg:"fit-content"}}
             height="40px"
             borderRadius="8px"
             padding="10px 34px"
@@ -2315,6 +2332,7 @@ const PlansAndPayment = ({ userData }) => {
               setEmailGCP(userData?.gcpEmail || userData?.email)
               setErrEmailGCP(false)
               EmailModal.onClose()
+            
             }}
           >
             Cancelar
@@ -2325,7 +2343,7 @@ const PlansAndPayment = ({ userData }) => {
             display="flex"
             alignItems="center"
             justifyContent="center"
-            width="fit-content"
+            width={{base: "100%", lg:"fit-content"}}
             height="40px"
             borderRadius="8px"
             padding="10px 34px"
@@ -2416,7 +2434,7 @@ const PlansAndPayment = ({ userData }) => {
             display="flex"
             alignItems="center"
             justifyContent="center"
-            width="50%"
+            width={{base:"100%", lg: "50%"}}
             height="40px"
             borderRadius="8px"
             padding="10px 34px"
@@ -2448,7 +2466,7 @@ const PlansAndPayment = ({ userData }) => {
             display="flex"
             alignItems="center"
             justifyContent="center"
-            width="50%"
+            width={{base:"100%", lg: "50%"}}
             height="40px"
             borderRadius="8px"
             padding="10px 34px"
@@ -3140,16 +3158,53 @@ const Accesses = ({ userInfo }) => {
 }
 
 const BigQuery = ({ userInfo }) => {
-  const [emailGcp, setEmailGcp] = useState(userInfo?.emailgcp || userInfo?.email)
+  const [emailGcp, setEmailGcp] = useState(userInfo?.gcpEmail || userInfo?.email)
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(false)
 
   async function handleUpdateEmailGcp() {
-    
+    setErrors({})
+    setIsLoading(true)
+
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      return emailRegex.test(email)
+    }
+
+    if(!isValidEmail(emailGcp)) { 
+      setErrors({emailGcp: "Por favor, insira um e-mail válido."})
+    } else {
+      const reg = new RegExp("(?<=:).*")
+      const [ id ] = reg.exec(userInfo.id)
+
+      let user
+      let attempts = 0
+      const maxAttempts = 10
+      const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+      const response = await fetch(`/api/user/changeUserGcpEmail?p=${btoa(emailGcp)}`)
+        .then(res => res.json())
+
+      while (!user?.gcpEmail && attempts < maxAttempts) {
+        user = await fetch(`/api/user/getUser?p=${btoa(id)}`, { method: "GET" })
+          .then((res) => res.json())
+
+        if (user?.gcpEmail) {
+          cookies.set("userBD", JSON.stringify(user))
+          break
+        }
+
+        attempts++
+        await delay(10000)
+      }
+    }
+    setIsLoading(false)
   }
 
   return (
     <Stack>
+      <Box display={isLoading ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
+
       <Text
         fontFamily="Ubuntu"
         fontWeight="400"
@@ -3169,7 +3224,7 @@ const BigQuery = ({ userInfo }) => {
         letterSpacing="0.3px"
         color="#7D7D7D"
       >
-        O seu e-mail é utilizado para garantir acesso exclusivo aos dados pelo BigQuery.
+        O seu e-mail precisa ser uma <Text as="span" fontWeight="500">Conta Google</Text> para garantir acesso exclusivo aos dados pelo BigQuery.
       </Text>
 
       <FormControl isInvalid={!!errors.emailGcp} margin="16px 0 24px !important">
@@ -3177,9 +3232,10 @@ const BigQuery = ({ userInfo }) => {
           id="emailgcp"
           name="emailgcp"
           value={emailGcp}
-          onChange={(e) => setEmailGcp(e)}
+          onChange={(e) => setEmailGcp(e.target.value)}
           placeholder="Insira o e-mail que deseja utilizar para acessar o BigQuery"
           fontFamily="ubuntu"
+          
           maxWidth="480px"
           height="40px"
           fontSize="14px"
@@ -3219,12 +3275,17 @@ export default function UserPage({ getUser }) {
     setUserInfo(getUser)
   }, [getUser])
 
+  const isUserPro = () => {
+    if(getUser?.internalSubscription?.edges?.[0]?.node?.isActive === true) return true
+    return false
+  }
+
   const choices = [
     {bar: "Perfil público", title: "Perfil público", value: "profile", index: 0},
     {bar: "Conta", title: "Conta", value: "account", index: 1},
     {bar: "Senha", title: "Alterar senha", value: "new_password", index: 2},
     {bar: "Planos e pagamento", title: "Planos e pagamento", value: "plans_and_payment", index: 3},
-    {bar: "BigQuery", title: "BigQuery", value: "big_query", index: 4},
+    isUserPro() && {bar: "BigQuery", title: "BigQuery", value: "big_query", index: 4},
   ]
   // {bar: "Acessos", title: "Gerenciar acessos", value: "accesses", index: 4},
 
@@ -3305,7 +3366,7 @@ export default function UserPage({ getUser }) {
             {sectionSelected === 1 && <Account userInfo={userInfo}/>}
             {sectionSelected === 2 && <NewPassword userInfo={userInfo}/>}
             {sectionSelected === 3 && <PlansAndPayment userData={userInfo}/>}
-            {sectionSelected === 4 && <BigQuery userInfo={userInfo}/>}
+            {sectionSelected === 4 && isUserPro() && <BigQuery userInfo={userInfo}/>}
             {/* {sectionSelected === 4 && <Accesses userInfo={userInfo}/>} */}
           </Stack>
         </Stack>
