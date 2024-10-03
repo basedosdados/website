@@ -1448,6 +1448,7 @@ const PlansAndPayment = ({ userData }) => {
   const [couponInfos, setCouponInfos] = useState({})
   const [couponInputFocus, setCouponInputFocus] = useState(false)
   const [coupon, setCoupon] = useState("")
+  const [hasOpenEmailModal, setHasOpenEmailModal] = useState(false)
   const [emailGCP, setEmailGCP] = useState(userData?.gcpEmail || userData?.email)
   const [emailGCPFocus, setEmailGCPFocus] = useState(false)
   const [errEmailGCP, setErrEmailGCP] = useState(false)
@@ -1524,7 +1525,10 @@ const PlansAndPayment = ({ userData }) => {
     const value = Object.values(plans).find(elm => elm._id === plan)
     if(value?.interval === "month") setToggleAnual(false)
     setCheckoutInfos(value)
-    EmailModal.onOpen()
+    if(!hasOpenEmailModal) {
+      EmailModal.onOpen()
+      setHasOpenEmailModal(true)
+    }
   }, [plan, plans])
 
   useEffect(() => {
