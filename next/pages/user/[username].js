@@ -1452,7 +1452,8 @@ const PlansAndPayment = ({ userData }) => {
   const [emailGCP, setEmailGCP] = useState(userData?.gcpEmail || userData?.email)
   const [emailGCPFocus, setEmailGCPFocus] = useState(false)
   const [errEmailGCP, setErrEmailGCP] = useState(false)
-  
+  const [isLoadingEmailChange, setIsLoadingEmailChange] = useState(false)
+
   const PaymentModal = useDisclosure()
   const EmailModal = useDisclosure()
   const SucessPaymentModal = useDisclosure()
@@ -1812,6 +1813,7 @@ const PlansAndPayment = ({ userData }) => {
 
   async function handlerEmailGcp() {
     setErrEmailGCP(false)
+    setIsLoadingEmailChange(true)
 
     function isValidEmail(email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -1822,6 +1824,7 @@ const PlansAndPayment = ({ userData }) => {
     const response = await fetch(`/api/user/changeUserGcpEmail?p=${btoa(emailGCP)}`)
       .then(res => res.json())
 
+    setIsLoadingEmailChange(false)
     EmailModal.onClose()
     PaymentModal.onOpen()
   }
@@ -2000,7 +2003,7 @@ const PlansAndPayment = ({ userData }) => {
 
               <Box
                 display="flex"
-                flexDirection="row"
+                flexDirection={{base: "column", lg: "row"}}
                 alignItems="center"
                 gap="8px"
               >
@@ -2042,7 +2045,7 @@ const PlansAndPayment = ({ userData }) => {
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  width="fit-content"
+                  width={{base: "100%", lg: "fit-content"}}
                   height="44px"
                   borderRadius="8px"
                   padding="10px 34px"
@@ -2134,7 +2137,7 @@ const PlansAndPayment = ({ userData }) => {
               </Text>
             }
 
-            <Box marginTop="auto !important">
+            <Box display={{base:"none", lg: "flex"}} marginTop="auto !important">
               <Box
                 as="button"
                 display="flex"
@@ -2185,6 +2188,38 @@ const PlansAndPayment = ({ userData }) => {
               onSucess={() => openModalSucess()}
               onErro={() => openModalErro()}
             />
+
+            <Box display={{base:"flex", lg: "none"}} marginTop="auto !important">
+              <Box
+                as="button"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                width={{base: "100%", lg: "fit-content"}}
+                height="40px"
+                borderRadius="8px"
+                padding="10px 34px"
+                border="1px solid"
+                cursor="pointer"
+                backgroundColor="#FFF"
+                color="#2B8C4D"
+                borderColor="#2B8C4D"
+                _hover={{
+                  borderColor: "#22703E",
+                  color: "#22703E"
+                }}
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="14px"
+                lineHeight="20px"
+                onClick={() => {
+                  PaymentModal.onClose()
+                  EmailModal.onOpen()
+                }}
+              >
+                Voltar
+              </Box>
+            </Box>
           </Box>
         </Stack>
       </ModalGeneral>
@@ -2308,7 +2343,7 @@ const PlansAndPayment = ({ userData }) => {
           spacing={0}
           gap="16px"
           justifyContent="end"
-          flexDirection={{base: "column", lg:"row"}}
+          flexDirection={{base: "column-reverse", lg:"row"}}
         >
           <Box
             as="button"
@@ -2366,7 +2401,11 @@ const PlansAndPayment = ({ userData }) => {
             lineHeight="20px"
             onClick={() => handlerEmailGcp()}
           >
-            Próximo
+            {isLoadingEmailChange ?
+              <Spinner/>
+              :
+              "Próximo"
+            }
           </Box>
         </Stack>
       </ModalGeneral>
