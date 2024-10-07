@@ -1824,9 +1824,13 @@ const PlansAndPayment = ({ userData }) => {
     const response = await fetch(`/api/user/changeUserGcpEmail?p=${btoa(emailGCP)}`)
       .then(res => res.json())
 
-    setIsLoadingEmailChange(false)
-    EmailModal.onClose()
-    PaymentModal.onOpen()
+      if(response.ok) {
+      setIsLoadingEmailChange(false)
+      EmailModal.onClose()
+      PaymentModal.onOpen()
+    } else {
+      setErrEmailGCP(true)
+    }
   }
 
   useEffect(() => {
@@ -3227,18 +3231,22 @@ const BigQuery = ({ userInfo }) => {
 
       const response = await fetch(`/api/user/changeUserGcpEmail?p=${btoa(emailGcp)}`)
         .then(res => res.json())
-
-      while (!user?.gcpEmail && attempts < maxAttempts) {
-        user = await fetch(`/api/user/getUser?p=${btoa(id)}`, { method: "GET" })
-          .then((res) => res.json())
-
-        if (user?.gcpEmail) {
-          cookies.set("userBD", JSON.stringify(user))
-          break
+      
+      if(response.ok) {
+        while (!user?.gcpEmail && attempts < maxAttempts) {
+          user = await fetch(`/api/user/getUser?p=${btoa(id)}`, { method: "GET" })
+            .then((res) => res.json())
+  
+          if (user?.gcpEmail) {
+            cookies.set("userBD", JSON.stringify(user))
+            break
+          }
+  
+          attempts++
+          await delay(10000)
         }
-
-        attempts++
-        await delay(10000)
+      } else {
+        setErrors({emailGcp: "Por favor, insira um e-mail válido."})
       }
     }
     setIsLoading(false)
