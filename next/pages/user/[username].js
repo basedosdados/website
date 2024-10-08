@@ -44,7 +44,7 @@ import Toggle from "../../components/atoms/Toggle";
 import { CardPrice } from "../precos";
 import PaymentSystem from "../../components/organisms/PaymentSystem";
 import ImageCrop from "../../components/molecules/ImgCrop";
-import { cleanString } from "../../utils";
+import { cleanString, triggerGAEvent } from "../../utils";
 
 import {
   LabelTextForm,
@@ -1824,7 +1824,12 @@ const PlansAndPayment = ({ userData }) => {
     const response = await fetch(`/api/user/changeUserGcpEmail?p=${btoa(emailGCP)}`)
       .then(res => res.json())
 
-      if(response.ok) {
+    if(response.ok) {
+      if(emailGCP !== userData?.email) {
+        if(emailGCP !== userData?.gcpEmail) {
+          triggerGAEvent("troca_do_email_gcp",`checkout_de_pagamento`)
+        }
+      }
       setIsLoadingEmailChange(false)
       EmailModal.onClose()
       PaymentModal.onOpen()
@@ -3233,6 +3238,12 @@ const BigQuery = ({ userInfo }) => {
         .then(res => res.json())
       
       if(response.ok) {
+        if(emailGcp !== userInfo?.email) {
+          if(emailGcp !== userInfo?.gcpEmail) {
+            triggerGAEvent("troca_do_email_gcp",`section_bigquery`)
+          }
+        }
+
         while (!user?.gcpEmail && attempts < maxAttempts) {
           user = await fetch(`/api/user/getUser?p=${btoa(id)}`, { method: "GET" })
             .then((res) => res.json())
