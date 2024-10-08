@@ -20,6 +20,7 @@ async function getUser(id, token) {
                   isAdmin
                   isActive
                   isEmailVisible
+                  gcpEmail
                   picture
                   username
                   firstName
