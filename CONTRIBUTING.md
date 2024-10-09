@@ -92,7 +92,7 @@ Ao analisarmos o salário médio por grupos, ficou evidente a vantagem que homen
 
 ### Seções
 
-Utilize seções (cabeçalhos) para estruturar seu post. Um bom exemplo é o post [O Soberano mítico: Processo de limpeza dos dados do Siconfi](./next/blog/o-soberano-mitico-processo-de-limpeza-dos-dados-do-siconfi.md)
+Utilize seções (cabeçalhos) para estruturar seu post. Um bom exemplo é o post [O Soberano mítico: Processo de limpeza dos dados do Siconfi](./next/blog/o-soberano-mitico-processo-de-limpeza-dos-dados-do-siconfi.md?plain=1)
 
 ```md
 ## TL;DR
@@ -265,7 +265,7 @@ LIMIT 100
 
 Inline code é util para citar parte de um código, nome de uma coluna, tabela, variável.
 
-Inlice code é crase ao seu redor, \`texto-a\`
+Inlice code é delimitado por crase ao seu redor, \`texto-a\`
 
 Exemplo:
 
@@ -294,7 +294,7 @@ Resultado:
 
 Para adicionar links para outro post ou para um dataset ou tabela use links relativos e não absolutos.
 
-✅
+✅ Correto
 
 ```md
 Veja a análise [Qual a relação das chuvas extremas no RS com as mudanças climáticas?](/blog/qual-a-relacao-chuvas-extremas-no-rs-com-as-mudancas-climaticas)
@@ -302,7 +302,7 @@ Veja a análise [Qual a relação das chuvas extremas no RS com as mudanças cli
 Acesse os dados no INMET por [aqui](/dataset/782c5607-9f69-4e12-b0d5-aa0f1a7a94e2).
 ```
 
-❌
+❌ Errado
 
 ```md
 Veja a análise [Qual a relação das chuvas extremas no RS com as mudanças climáticas?](https://basedosdados.org/blog/qual-a-relacao-chuvas-extremas-no-rs-com-as-mudancas-climaticas)
@@ -322,7 +322,7 @@ Exemplo:
 <Image src="/blog/analisando-a-frota-brasileira-com-a-bd/image_1.webp" caption="Fonte: Rawpixel"/>
 ```
 
-`caption` pode ter link
+`caption` é opcional e pode ter link
 
 ```md
 <Image src="/blog/analisando-a-frota-brasileira-com-a-bd/image_1.webp" caption="Fonte: [Rawpixel](https://www.rawpixel.com/)"/>
@@ -360,7 +360,7 @@ Atualmente estamos vivendo um momento importante de mudanças culturais no que s
 
 Para incoporar _iframes_, como vídeos do youtube, twitter ou qualquer outro recurso de terceiros utilize o elemento `Emdeb`. Ao contrário do elemento `Image` o código de incorporação é colocado _dentro_ do elemento `Embed`.
 
-O atributo `caption` é opcional e pode ter link como `Image`
+O atributo `caption` é opcional e pode ter link, assim como `Image`
 
 ```md
 <Embed caption="Legenda é opcional">
