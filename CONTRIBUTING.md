@@ -42,7 +42,7 @@ O post é escrito em Markdown com algumas diferenças que serão abordadas logo 
 
 ### Metadados
 
-Os metadados dos posts são em [YAML](https://yaml.org/) em um bloco no topo do arquivo delimitado por `---` e `---`. Preencha os metadadaos do seu post, título, descrição, etc.
+Os metadados do post são em [YAML](https://yaml.org/) em um bloco no topo do arquivo delimitado por `---` e `---`. Preencha os metadadaos do seu post, título, descrição, etc.
 
 - `title`: Título do post
 - `description`: Descrição do post
@@ -131,11 +131,11 @@ Utilize seções (cabeçalhos) para estruturar seu post. Um bom exemplo é o pos
 ```
 
 > [!IMPORTANT]
-> Os cabeçalhos iniciam no nível dois `##` ao ínves de um `#`
+> Os cabeçalhos iniciam no nível dois `##` ao invés de um `#`
 
 ### Negrito
 
-Texto em negrito é delimitado por `*` ao seu redor.
+Texto em negrito é delimitado por `**` ao seu redor.
 
 ```md
 Texto em **negrito**
@@ -195,7 +195,7 @@ Resultado:
 
 ### Bloco de códigos
 
-Adicione blocos de códigos entre os tripos backtick <code>`</code>. Adicione o nome da linguagem na abertura
+Adicione blocos de códigos entre os tripos backtick (crase) <code>`</code>. Adicione o nome da linguagem na abertura, depois dos três backticks.
 
 #### Python:
 
@@ -348,7 +348,7 @@ Resultado:
 
 ### Citação
 
-Citação é feita usando o elemento `Blockquote`. O atributo `caption` é opcional e pode ter link como `Image`
+Citação é feita usando o elemento `Blockquote`. O atributo `caption` é opcional e pode ter link, assim como elemento `Image`
 
 ```md
 <Blockquote caption="Natália Leão, Diretora de pesquisa e projetos na Gênero e Número.">
@@ -376,5 +376,26 @@ Exemplo para um vídeo do YouTube:
 </Embed>
 ```
 
-Por último, faça o commit e push das alterações e abra um [pull request](https://docs.github.com/pt/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request). Faremos o review do seu post, fornecer feedback ou alterações.
-Assim que estiver pronto iremos mesclar e publicar.
+### Enviando para revisão
+
+Ao finalizar a post você precisa comitar e enviar as alterações.
+
+Adicione os arquivos do seu post
+
+```sh
+git add .
+```
+
+Crie um commit
+
+```sh
+git commit -m "blogpost: sua mensagem"
+```
+
+Faça o push
+
+```sh
+git push
+```
+
+Por último abra um [pull request](https://docs.github.com/pt/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request). Você precisa ir no [reposotório do website da Base dos Dados](https://github.com/basedosdados/website) e cliar em `Compare & pull request` para criar o PR. Iremos revisar seu post.
