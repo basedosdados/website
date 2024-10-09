@@ -44,7 +44,7 @@ import Toggle from "../../components/atoms/Toggle";
 import { CardPrice } from "../precos";
 import PaymentSystem from "../../components/organisms/PaymentSystem";
 import ImageCrop from "../../components/molecules/ImgCrop";
-import { cleanString } from "../../utils";
+import { cleanString, triggerGAEvent } from "../../utils";
 import { useTranslation } from "react-i18next";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
@@ -738,7 +738,7 @@ const Account = ({ userInfo }) => {
               fontSize="14px"
               top="24px"
               right="26px"
-              _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+              _hover={{backgroundColor: "transparent", opacity: 0.7}}
               onClick={() => {
                 setEmailSent(false)
                 emailModal.onClose()
@@ -754,7 +754,7 @@ const Account = ({ userInfo }) => {
               fontSize="14px"
               top="34px"
               right="26px"
-              _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+            _hover={{backgroundColor: "transparent", opacity: 0.7}}
             />
           </Stack>
         }
@@ -892,7 +892,7 @@ const Account = ({ userInfo }) => {
             fontSize="14px"
             top="34px"
             right="26px"
-            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+            _hover={{backgroundColor: "transparent", opacity: 0.7}}
           />
         </Stack>
 
@@ -1174,7 +1174,7 @@ const NewPassword = ({ userInfo }) => {
             fontSize="14px"
             top="34px"
             right="26px"
-            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+            _hover={{backgroundColor: "transparent", opacity: 0.7}}
           />
         </Stack>
 
@@ -1432,12 +1432,20 @@ const PlansAndPayment = ({ userData }) => {
   const [couponInfos, setCouponInfos] = useState({})
   const [couponInputFocus, setCouponInputFocus] = useState(false)
   const [coupon, setCoupon] = useState("")
+  const [hasOpenEmailModal, setHasOpenEmailModal] = useState(false)
+  const [emailGCP, setEmailGCP] = useState(userData?.gcpEmail || userData?.email)
+  const [emailGCPFocus, setEmailGCPFocus] = useState(false)
+  const [errEmailGCP, setErrEmailGCP] = useState(false)
+  const [isLoadingEmailChange, setIsLoadingEmailChange] = useState(false)
+
   const PaymentModal = useDisclosure()
+  const EmailModal = useDisclosure()
   const SucessPaymentModal = useDisclosure()
   const ErroPaymentModal = useDisclosure()
   const PlansModal = useDisclosure()
   const CancelModalPlan = useDisclosure()
   const AlertChangePlanModal  = useDisclosure()
+  
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingH, setIsLoadingH] = useState(false)
   const [isLoadingCanSub, setIsLoadingCanSub] = useState(false)
@@ -1502,7 +1510,10 @@ const PlansAndPayment = ({ userData }) => {
     const value = Object.values(plans).find(elm => elm._id === plan)
     if(value?.interval === "month") setToggleAnual(false)
     setCheckoutInfos(value)
-    PaymentModal.onOpen()
+    if(!hasOpenEmailModal) {
+      EmailModal.onOpen()
+      setHasOpenEmailModal(true)
+    }
   }, [plan, plans])
 
   useEffect(() => {
@@ -1784,6 +1795,33 @@ const PlansAndPayment = ({ userData }) => {
     ) 
   }
 
+  async function handlerEmailGcp() {
+    setErrEmailGCP(false)
+    setIsLoadingEmailChange(true)
+
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      return emailRegex.test(email)
+    }
+    if(!isValidEmail(emailGCP)) return setErrEmailGCP(true)
+
+    const response = await fetch(`/api/user/changeUserGcpEmail?p=${btoa(emailGCP)}`)
+      .then(res => res.json())
+
+    if(response.ok) {
+      if(emailGCP !== userData?.email) {
+        if(emailGCP !== userData?.gcpEmail) {
+          triggerGAEvent("troca_do_email_gcp",`checkout_de_pagamento`)
+        }
+      }
+      setIsLoadingEmailChange(false)
+      EmailModal.onClose()
+      PaymentModal.onOpen()
+    } else {
+      setErrEmailGCP(true)
+    }
+  }
+
   useEffect(() => {
     if(valueCoupon === "") {
       setCoupon("")
@@ -1821,6 +1859,16 @@ const PlansAndPayment = ({ userData }) => {
           <Text
             width="100%"
             fontFamily="Roboto"
+            fontWeight="400"
+            color="#2B8C4D"
+            fontSize="14px"
+            lineHeight="20px"
+          >
+            Passo 2 de 2
+          </Text>
+          <Text
+            width="100%"
+            fontFamily="Roboto"
             fontWeight="500"
             color="#252A32"
             fontSize="24px"
@@ -1832,7 +1880,7 @@ const PlansAndPayment = ({ userData }) => {
             fontSize="14px"
             top="34px"
             right="26px"
-            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+            _hover={{backgroundColor: "transparent", opacity: 0.7}}
           />
         </Stack>
 
@@ -1887,32 +1935,40 @@ const PlansAndPayment = ({ userData }) => {
 
               <Box
                 display="flex"
-                flexDirection="row"
+                flexDirection={{base: "column", lg: "row"}}
                 gap="8px"
-                alignItems="center"
+                alignItems={{base: "start", lg: "center"}}
               >
-                {toggleAnual ?  
-                    <Toggle
-                      defaultChecked
-                      value={toggleAnual}
-                      onChange={() => changeIntervalPlanCheckout()}
-                    />
-                  : 
-                    <Toggle
-                      value={toggleAnual}
-                      onChange={() => changeIntervalPlanCheckout()}
-                    />
-                }
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="16px"
-                  lineHeight="24px"
-                  color="#252A32"
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  gap="8px"
+                  alignItems="center"
                 >
-                  {t('username.annualDiscount')}
-                </Text>
-                <Text
+                  {toggleAnual ?  
+                      <Toggle
+                        defaultChecked
+                        value={toggleAnual}
+                        onChange={() => changeIntervalPlanCheckout()}
+                      />
+                    : 
+                      <Toggle
+                        value={toggleAnual}
+                        onChange={() => changeIntervalPlanCheckout()}
+                      />
+                  }
+                  <Text
+                    fontFamily="Roboto"
+                    fontWeight="400"
+                    fontSize="16px"
+                    lineHeight="24px"
+                    color="#252A32"
+                  >
+                    {t('username.annualDiscount')}
+                  </Text>
+                </Box>
+
+                 <Text
                   as="span"
                   color="#2B8C4D"
                   backgroundColor="#D5E8DB"
@@ -1945,7 +2001,7 @@ const PlansAndPayment = ({ userData }) => {
 
               <Box
                 display="flex"
-                flexDirection="row"
+                flexDirection={{base: "column", lg: "row"}}
                 alignItems="center"
                 gap="8px"
               >
@@ -1987,7 +2043,7 @@ const PlansAndPayment = ({ userData }) => {
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  width="fit-content"
+                  width={{base: "100%", lg: "fit-content"}}
                   height="44px"
                   borderRadius="8px"
                   padding="10px 34px"
@@ -2086,6 +2142,39 @@ const PlansAndPayment = ({ userData }) => {
                 })}
               </Text>
             }
+
+            <Box display={{base:"none", lg: "flex"}} marginTop="auto !important">
+              <Box
+                as="button"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                width={{base: "100%", lg: "fit-content"}}
+                height="40px"
+                borderRadius="8px"
+                padding="10px 34px"
+                border="1px solid"
+                cursor="pointer"
+                marginTop="24px !important"
+                backgroundColor="#FFF"
+                color="#2B8C4D"
+                borderColor="#2B8C4D"
+                _hover={{
+                  borderColor: "#22703E",
+                  color: "#22703E"
+                }}
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="14px"
+                lineHeight="20px"
+                onClick={() => {
+                  PaymentModal.onClose()
+                  EmailModal.onOpen()
+                }}
+              >
+                Voltar
+              </Box>
+            </Box>
           </Stack>
 
           <Box display="flex" flexDirection="column" gap="24px" flex={1}>
@@ -2105,6 +2194,224 @@ const PlansAndPayment = ({ userData }) => {
               onSucess={() => openModalSucess()}
               onErro={() => openModalErro()}
             />
+
+            <Box display={{base:"flex", lg: "none"}} marginTop="auto !important">
+              <Box
+                as="button"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                width={{base: "100%", lg: "fit-content"}}
+                height="40px"
+                borderRadius="8px"
+                padding="10px 34px"
+                border="1px solid"
+                cursor="pointer"
+                backgroundColor="#FFF"
+                color="#2B8C4D"
+                borderColor="#2B8C4D"
+                _hover={{
+                  borderColor: "#22703E",
+                  color: "#22703E"
+                }}
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="14px"
+                lineHeight="20px"
+                onClick={() => {
+                  PaymentModal.onClose()
+                  EmailModal.onOpen()
+                }}
+              >
+                Voltar
+              </Box>
+            </Box>
+          </Box>
+        </Stack>
+      </ModalGeneral>
+
+      {/* email gcp */}
+      <ModalGeneral
+        isOpen={EmailModal.isOpen}
+        onClose={() => {
+          setEmailGCP(userData?.gcpEmail || userData?.email)
+          setErrEmailGCP(false)
+          EmailModal.onClose()
+        }}
+        propsModalContent={{
+          width: "100%",
+          maxWidth:"1008px",
+          margin: "24px",
+        }}
+        isCentered={isMobileMod() ? false : true}
+      >
+        <Stack spacing={0}>
+          <Text
+            width="100%"
+            fontFamily="Roboto"
+            fontWeight="400"
+            color="#2B8C4D"
+            fontSize="14px"
+            lineHeight="20px"
+          >
+            Passo 1 de 2
+          </Text>
+          <ModalCloseButton
+            fontSize="14px"
+            top="28px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", opacity: 0.7}}
+          />
+        </Stack>
+
+        <Stack marginBottom={{base: "24px", lg: "285px !important"}}>
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            color="#252A32"
+            fontSize="24px"
+            lineHeight="36px"
+          >
+            E-mail de acesso ao BigQuery
+          </Text>
+
+          <Text
+            fontFamily="Roboto"
+            fontWeight="400"
+            color="#464A51"
+            fontSize="16px"
+            lineHeight="24px"
+            marginBottom="32px !important"
+          >
+            O seu e-mail precisa ser uma <Text as="span" fontWeight="500">Conta Google</Text> para garantir acesso exclusivo aos dados pelo BigQuery. Já preenchemos com o e-mail que você usou ao criar sua conta na nossa plataforma. Caso necessite usar outro e-mail para acessar o BigQuery, basta editá-lo abaixo.
+          </Text>
+
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            color="#252A32"
+            fontSize="16px"
+            lineHeight="24px"
+            marginBottom="8px !important"
+          >
+            E-mail de acesso
+          </Text>
+
+          <Stack
+            spacing={0}
+            width={{base: "100%", lg: "464px"}}
+            position="relative"
+          >
+            <ControlledInputSimple
+              value={emailGCP}
+              onChange={setEmailGCP}
+              inputFocus={emailGCPFocus}
+              changeInputFocus={setEmailGCPFocus}
+              width="100%"
+              placeholder="Insira o e-mail que deseja utilizar para acessar o BigQuery"
+              inputElementStyle={{
+                display: "none",
+              }}
+              inputStyle={{
+                paddingLeft: "16px !important",
+                paddingRight: "40px !important",
+                borderRadius: "8px",
+                height: "44px",
+                backgroundColor: errEmailGCP ? "#F6E3E3" : "#EEEEEE"
+              }}
+            />
+          </Stack>
+
+          {errEmailGCP && 
+            <Text
+              display="flex"
+              flexDirection="row"
+              fontFamily="Roboto"
+              fontSize="14px"
+              lineHeight="20px"
+              fontWeight="400"
+              color="#BF3434"
+              gap="8px"
+              height="24px"
+              alignItems="center"
+            >
+              <Exclamation
+                width="21px"
+                height="21px"
+                fill="#BF3434"
+              /> Por favor, insira um e-mail válido.
+            </Text>
+          }
+        </Stack>
+
+        <Stack
+          width="100%"
+          spacing={0}
+          gap="16px"
+          justifyContent="end"
+          flexDirection={{base: "column-reverse", lg:"row"}}
+        >
+          <Box
+            as="button"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            width={{base: "100%", lg:"fit-content"}}
+            height="40px"
+            borderRadius="8px"
+            padding="10px 34px"
+            border="1px solid"
+            cursor="pointer"
+            backgroundColor="#FFF"
+            color="#2B8C4D"
+            borderColor="#2B8C4D"
+            _hover={{
+              borderColor: "#22703E",
+              color: "#22703E"
+            }}
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="14px"
+            lineHeight="20px"
+            onClick={() => {
+              setEmailGCP(userData?.gcpEmail || userData?.email)
+              setErrEmailGCP(false)
+              EmailModal.onClose()
+            
+            }}
+          >
+            Cancelar
+          </Box>
+
+          <Box
+            as="button"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            width={{base: "100%", lg:"fit-content"}}
+            height="40px"
+            borderRadius="8px"
+            padding="10px 34px"
+            border="1px solid"
+            cursor="pointer"
+            backgroundColor="#2B8C4D"
+            color="#FFF"
+            borderColor="#2B8C4D"
+            _hover={{
+              borderColor: "#22703E",
+              backgroundColor: "#22703E"
+            }}
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="14px"
+            lineHeight="20px"
+            onClick={() => handlerEmailGcp()}
+          >
+            {isLoadingEmailChange ?
+              <Spinner/>
+              :
+              "Próximo"
+            }
           </Box>
         </Stack>
       </ModalGeneral>
@@ -2112,6 +2419,10 @@ const PlansAndPayment = ({ userData }) => {
       {/* success */}
       <ModalGeneral
         isOpen={SucessPaymentModal.isOpen}
+        propsModalContent={{
+          width: "100%",
+          maxWidth: "656px"
+        }}
         onClose={() => setIsLoading(true)}
       >
         <Stack spacing={0} marginBottom="16px">
@@ -2120,7 +2431,7 @@ const PlansAndPayment = ({ userData }) => {
             fontSize="14px"
             top="28px"
             right="26px"
-            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+            _hover={{backgroundColor: "transparent", opacity: 0.7}}
           />
         </Stack>
 
@@ -2141,24 +2452,25 @@ const PlansAndPayment = ({ userData }) => {
             fill="#34A15A"
           />
           <Text
-            fontFamily="Ubuntu"
-            fontWeight="400"
+            fontFamily="Roboto"
+            fontWeight="500"
             fontSize="24px"
-            lineHeight="40px"
+            lineHeight="36px"
             color="#252A32"
           >
             {t('username.congratulations')}
+//             Assinatura efetuada com sucesso!
           </Text>
           <Text
-            fontFamily="Ubuntu"
+            fontFamily="Roboto"
             fontWeight="400"
             fontSize="16px"
-            lineHeight="22px"
-            textAlign="center"
-            letterSpacing="0.2px"
-            color="#7D7D7D"
+            lineHeight="24px"
+            color="#464A51"
           >
             {t('username.paymentSuccessful')}
+//             O acesso aos dados foi concedido para o e-mail <Text as="span" fontWeight="500">{emailGCP}</Text>. Se precisar alterar o e-mail de acesso, você pode fazer isso na seção “BigQuery” das configurações da sua conta.
+//             Em caso de dúvida, <Text as="a" href="/contato" target="_self" color="#0068C5" _hover={{color: "#0057A4"}}>entre em contato com nosso suporte.</Text>
           </Text>
         </Stack>
 
@@ -2168,26 +2480,62 @@ const PlansAndPayment = ({ userData }) => {
           gap="24px"
           width="100%"
         >
-          <RoundedButton
-            borderRadius="30px"
+          <Box
+            as="button"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            width={{base:"100%", lg: "50%"}}
+            height="40px"
+            borderRadius="8px"
+            padding="10px 34px"
+            border="1px solid"
+            cursor="pointer"
+            marginTop="auto !important"
             backgroundColor="#FFF"
-            border="1px solid #42B0FF"
-            color="#42B0FF"
-            width="inherit"
-            _hover={{transform: "none", opacity: 0.8}}
-            onClick={() => setIsLoading(true)}
+            color="#2B8C4D"
+            borderColor="#2B8C4D"
+            _hover={{
+              borderColor: "#22703E",
+              color: "#22703E"
+            }}
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="14px"
+            lineHeight="20px"
+            onClick={() => window.open(`/user/${userData?.username}?big_query`, "_self")}
           >
             {isLoading ?
               <Spinner/>
               :
               t('username.continueSettings')
+//               "Alterar e-mail de acesso"
             }
-          </RoundedButton>
+          </Box>
 
-          <RoundedButton
-            borderRadius="30px"
-            width="inherit"
-            _hover={{transform: "none", opacity: 0.8}}
+          <Box
+            as="button"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            width={{base:"100%", lg: "50%"}}
+            height="40px"
+            borderRadius="8px"
+            padding="10px 34px"
+            border="1px solid"
+            cursor="pointer"
+            marginTop="auto !important"
+            backgroundColor="#2B8C4D"
+            color="#FFF"
+            borderColor="#2B8C4D"
+            _hover={{
+              borderColor: "#22703E",
+              backgroundColor: "#22703E"
+            }}
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="14px"
+            lineHeight="20px"
             onClick={() => setIsLoadingH(true)}
           >
             {isLoadingH ?
@@ -2195,7 +2543,7 @@ const PlansAndPayment = ({ userData }) => {
               :
               t('username.goToHomepage')
             }
-          </RoundedButton>
+          </Box>
         </Stack>
       </ModalGeneral>
 
@@ -2210,7 +2558,7 @@ const PlansAndPayment = ({ userData }) => {
             fontSize="14px"
             top="28px"
             right="26px"
-            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+            _hover={{backgroundColor: "transparent", opacity: 0.7}}
           />
         </Stack>
 
@@ -2312,7 +2660,7 @@ const PlansAndPayment = ({ userData }) => {
             fontSize="14px"
             top="34px"
             right="26px"
-            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+            _hover={{backgroundColor: "transparent", opacity: 0.7}}
           />
         </Stack>
 
@@ -2411,7 +2759,7 @@ const PlansAndPayment = ({ userData }) => {
                 onClick: subscriptionInfo?.stripeSubscription === "bd_pro" ? () => {} : () => {
                   setPlan(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id)
                   PlansModal.onClose()
-                  PaymentModal.onOpen()
+                  EmailModal.onOpen()
                 },
                 isCurrentPlan: subscriptionInfo?.stripeSubscription === "bd_pro" ? true : false,
               }}
@@ -2432,7 +2780,7 @@ const PlansAndPayment = ({ userData }) => {
                 onClick: subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? () => {} : () => {
                   setPlan(plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id)
                   PlansModal.onClose()
-                  PaymentModal.onOpen()
+                  EmailModal.onOpen()
                 },
                 isCurrentPlan: subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? true : false,
               }}
@@ -2459,7 +2807,7 @@ const PlansAndPayment = ({ userData }) => {
             fontSize="14px"
             top="34px"
             right="26px"
-            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+            _hover={{backgroundColor: "transparent", opacity: 0.7}}
           />
         </Stack>
 
@@ -2507,7 +2855,7 @@ const PlansAndPayment = ({ userData }) => {
             fontSize="14px"
             top="34px"
             right="26px"
-            _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
+            _hover={{backgroundColor: "transparent", opacity: 0.7}}
           />
         </Stack>
 
@@ -2857,7 +3205,124 @@ const Accesses = ({ userInfo }) => {
     </Stack>
   )
 }
-// Sections Of User Page
+
+const BigQuery = ({ userInfo }) => {
+  const [emailGcp, setEmailGcp] = useState(userInfo?.gcpEmail || userInfo?.email)
+  const [errors, setErrors] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
+
+  async function handleUpdateEmailGcp() {
+    setErrors({})
+    setIsLoading(true)
+
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      return emailRegex.test(email)
+    }
+
+    if(!isValidEmail(emailGcp)) { 
+      setErrors({emailGcp: "Por favor, insira um e-mail válido."})
+    } else {
+      const reg = new RegExp("(?<=:).*")
+      const [ id ] = reg.exec(userInfo.id)
+
+      let user
+      let attempts = 0
+      const maxAttempts = 10
+      const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+      const response = await fetch(`/api/user/changeUserGcpEmail?p=${btoa(emailGcp)}`)
+        .then(res => res.json())
+      
+      if(response.ok) {
+        if(emailGcp !== userInfo?.email) {
+          if(emailGcp !== userInfo?.gcpEmail) {
+            triggerGAEvent("troca_do_email_gcp",`section_bigquery`)
+          }
+        }
+
+        while (!user?.gcpEmail && attempts < maxAttempts) {
+          user = await fetch(`/api/user/getUser?p=${btoa(id)}`, { method: "GET" })
+            .then((res) => res.json())
+  
+          if (user?.gcpEmail) {
+            cookies.set("userBD", JSON.stringify(user))
+            break
+          }
+  
+          attempts++
+          await delay(10000)
+        }
+      } else {
+        setErrors({emailGcp: "Por favor, insira um e-mail válido."})
+      }
+    }
+    setIsLoading(false)
+  }
+
+  return (
+    <Stack>
+      <Box display={isLoading ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
+
+      <Text
+        fontFamily="Ubuntu"
+        fontWeight="400"
+        fontSize="16px"
+        lineHeight="22px"
+        letterSpacing="0.2px"
+        color="#252A32"
+      >
+        E-mail de acesso ao BigQuery
+      </Text>
+
+      <Text
+        fontFamily="Ubuntu"
+        fontWeight="400"
+        fontSize="14px"
+        lineHeight="20px"
+        letterSpacing="0.3px"
+        color="#7D7D7D"
+      >
+        O seu e-mail precisa ser uma <Text as="span" fontWeight="500">Conta Google</Text> para garantir acesso exclusivo aos dados pelo BigQuery.
+      </Text>
+
+      <FormControl isInvalid={!!errors.emailGcp} margin="16px 0 24px !important">
+        <InputForm
+          id="emailgcp"
+          name="emailgcp"
+          value={emailGcp}
+          onChange={(e) => setEmailGcp(e.target.value)}
+          placeholder="Insira o e-mail que deseja utilizar para acessar o BigQuery"
+          fontFamily="ubuntu"
+          
+          maxWidth="480px"
+          height="40px"
+          fontSize="14px"
+          borderRadius="16px"
+          _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+        />
+        <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
+          <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.emailGcp}
+        </FormErrorMessage>
+      </FormControl>
+
+      <RoundedButton
+        borderRadius="30px"
+        width={isMobileMod() ? "100%" : "fit-content"}
+        _hover={{transform: "none", opacity: 0.8}}
+        marginTop="0 !important"
+        onClick={() => handleUpdateEmailGcp()}
+        isDisabled={isLoading}
+      >
+        {isLoading ?
+          <Spinner />
+        :
+          "Atualizar e-mail"
+        }
+      </RoundedButton>
+    </Stack>
+  )
+}
 
 export default function UserPage({ getUser }) {
   const { t } = useTranslation('user')
@@ -2870,11 +3335,21 @@ export default function UserPage({ getUser }) {
     setUserInfo(getUser)
   }, [getUser])
 
+  const isUserPro = () => {
+    if(getUser?.internalSubscription?.edges?.[0]?.node?.isActive === true) return true
+    return false
+  }
+
   const choices = [
     {bar: t('username.publicProfile'), title: t('username.publicProfile'), value: "profile", index: 0},
     {bar: t('username.account'), title: t('username.account'), value: "account", index: 1},
     {bar: t('username.changePassword'), title: t('username.changePassword'), value: "new_password", index: 2},
     {bar: t('username.plansAndPayment'), title: t('username.plansAndPayment'), value: "plans_and_payment", index: 3},
+//     {bar: "Perfil público", title: "Perfil público", value: "profile", index: 0},
+//     {bar: "Conta", title: "Conta", value: "account", index: 1},
+//     {bar: "Senha", title: "Alterar senha", value: "new_password", index: 2},
+//     {bar: "Planos e pagamento", title: "Planos e pagamento", value: "plans_and_payment", index: 3},
+//     isUserPro() && {bar: "BigQuery", title: "BigQuery", value: "big_query", index: 4},
   ]
   // {bar: "Acessos", title: "Gerenciar acessos", value: "accesses", index: 4},
 
@@ -2955,6 +3430,7 @@ export default function UserPage({ getUser }) {
             {sectionSelected === 1 && <Account userInfo={userInfo}/>}
             {sectionSelected === 2 && <NewPassword userInfo={userInfo}/>}
             {sectionSelected === 3 && <PlansAndPayment userData={userInfo}/>}
+            {sectionSelected === 4 && isUserPro() && <BigQuery userInfo={userInfo}/>}
             {/* {sectionSelected === 4 && <Accesses userInfo={userInfo}/>} */}
           </Stack>
         </Stack>

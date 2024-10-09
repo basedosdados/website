@@ -94,7 +94,7 @@ export function ModalGeneral ({
         minWidth={isMobileMod() ? "auto" : "536px"}
         boxSizing="content-box"
         padding="32px"
-        borderRadius="20px"
+        borderRadius="16px"
         {...propsModalContent}
       >
         <ModalHeader padding="0">
