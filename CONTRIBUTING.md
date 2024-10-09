@@ -13,7 +13,8 @@ Obrigado por considerar contribuir com a Base dos Dados. Nesse guia vamos mostra
 - Faça o [fork](https://docs.github.com/pt/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo) desse repositório
   - Desmarque a opção `Copy the main branch only`
 - Clone seu fork
-- Entre no diretório `cd website`
+- Entre no respositório clonado
+  - `cd website`
 
 ## Adicionando posts
 
