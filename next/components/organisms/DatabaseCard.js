@@ -111,7 +111,7 @@ export default function DatabaseCard({
                   alt={c.name}
                   size="37px"
                   padding="4px"
-                  url={`https://storage.googleapis.com/basedosdados-website/theme_icons/${c.slug}.svg`}
+                  url={`https://storage.googleapis.com/basedosdados-website/category_icons/2022/icone_${c.slug}.svg`}
                 />
               </Link>
             </Center>

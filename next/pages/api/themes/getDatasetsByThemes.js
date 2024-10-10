@@ -3,8 +3,8 @@ import axios from "axios";
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/search/`;
 
 export default async function getDatasetsByThemes(req, res) {
-  const { themes, locale = 'pt' } = req.query;
-  let query = [`locale=${locale}`];
+  const { themes, locale } = req.query;
+  let query = [`locale=${locale || "pt"}`];
 
   if (Array.isArray(themes)) {
     themes.forEach(element => {
@@ -25,5 +25,6 @@ export default async function getDatasetsByThemes(req, res) {
     res.status(200).json(response.data.results);
   } catch (error) {
     console.error(error);
+    return "err"
   }
 }

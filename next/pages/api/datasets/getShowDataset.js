@@ -113,7 +113,7 @@ async function getShowDataset(id, locale='pt') {
 }
 
 export default async function handler(req, res) {
-  const { id: id, locale = 'pt' } = req.query;
+  const { id: id, locale } = req.query;
   const result = await getShowDataset(id, locale);
 
   if(result.errors) return res.status(500).json({error: result.errors, success: false})

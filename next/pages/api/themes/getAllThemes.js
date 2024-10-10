@@ -36,7 +36,7 @@ async function getAllThemes(locale = 'pt') {
 }
 
 export default async function handler(req, res) {
-  const { locale = 'pt' } = req.query;
+  const { locale } = req.query;
   const result = await getAllThemes(locale);
 
   if (result === "err") return res.status(500).json({ error: "err", success: false });

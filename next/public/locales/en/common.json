@@ -3,7 +3,7 @@
     "search_placeholder_mobile": "Find the data",
     "popular_terms": "Popular terms:",
     "search_by_theme": "Search by theme",
-    "noDatasetsFound": "No dataset with all selected themes was found. Try unselecting some of the themes.",
+    "noDatasetsFound": ["No dataset with all selected themes was found.","Try unselecting some of the themes."],
     "min": "Min",
     "max": "Max",
     "search": "Search",

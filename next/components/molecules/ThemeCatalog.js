@@ -15,8 +15,6 @@ import { useTranslation } from 'next-i18next';
 import { capitalize } from "lodash";
 import axios from 'axios'; // Add this import
 
-import { getDatasetsByThemes } from "../../pages/api/themes/index"
-
 import Carousel from "../atoms/Carousel";
 import SectionText from "../atoms/SectionText";
 import DatabaseCard from "../organisms/DatabaseCard";
@@ -123,7 +121,7 @@ function Themes ({
                     filter={found(elm.node.slug) && "invert(1)"}
                     _hover={{ filter:"invert(1)"}}
                     alt={elm.node.name[`${capitalize(locale)}`] || elm.node.name}
-                    src={`https://storage.googleapis.com/basedosdados-website/theme_icons/${elm.node.slug}.svg`}
+                    src={`https://storage.googleapis.com/basedosdados-website/category_icons/2022/icone_${elm.node.slug}.svg`}
                   />
                 </Tooltip>
                 <RemoveIcon
@@ -188,7 +186,9 @@ const SkeletonWaitCard = () => {
 }
 
 function CardThemes ({ responsive, datasetsCards = [], loading, locale }) {
+  const { t } = useTranslation('common');
   const [screenQuery, setScreenQuery] = useState(0)
+
   useEffect(() => {
     if(responsive.mobileQuery)
       return setScreenQuery(1)
@@ -199,8 +199,6 @@ function CardThemes ({ responsive, datasetsCards = [], loading, locale }) {
 
     return setScreenQuery(4)
   },[responsive])
-
-  const { t } = useTranslation('common');
 
   return (
     <Box
@@ -216,7 +214,9 @@ function CardThemes ({ responsive, datasetsCards = [], loading, locale }) {
             textAlign="center"
             marginBottom={responsive.mobileQuery ? "16px" : "32px"}
           >
-            {t('noDatasetsFound')}
+            {t('noDatasetsFound', { returnObjects: true })[0]}
+            {useCheckMobile() ? null : <br/>}
+            {t('noDatasetsFound', { returnObjects: true })[1]}
           </SectionText>
         </Center>
       }
@@ -278,7 +278,6 @@ function CardThemes ({ responsive, datasetsCards = [], loading, locale }) {
 }
 
 export default function ThemeCatalog ({ data, locale }) {
-  const { t } = useTranslation('common');
   const [listThemes, setListThemes] = useState([])
   const [defaultDatasetsCards, setDefaultDatasetCards] = useState([])
   const [fetchThemesTimeout, setFetchThemesTimeout] = useState(null)
@@ -348,7 +347,7 @@ export default function ThemeCatalog ({ data, locale }) {
         selectedTheme={selectedTheme}
         onSelectTheme={handleSelectTheme}
         responsive={{mobileQuery, baseQuery, mediumQuery, lgQuery}}
-        locale={locale} // Pass the locale prop here
+        locale={locale}
       />
 
       <CardThemes

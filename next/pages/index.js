@@ -31,7 +31,6 @@ import { MainPageTemplate } from "../components/templates/main";
 import { triggerGAEvent } from "../utils";
 
 import {
-  getAllThemes,
   getAllDatasets
 } from "./api/themes/index"
 
@@ -47,7 +46,6 @@ import ProcessedDataImage from "../public/img/processedDataImage";
 import BDLogoEduImage from "../public/img/logos/bd_logo_edu";
 
 export async function getStaticProps({ locale }) {
-  
   const themesResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/themes/getAllThemes?locale=${locale}`)
   const themesData = await themesResponse.json()
   const themes = themesData.resource
@@ -68,7 +66,7 @@ export async function getStaticProps({ locale }) {
   }
 }
 
-function Hero({ dataThemeCatalog }) {
+function Hero({ dataThemeCatalog, locale }) {
   const { t } = useTranslation('common');
   const router = useRouter();
   const [search, setSearch] = useState("");
@@ -217,7 +215,7 @@ function Hero({ dataThemeCatalog }) {
             >
               {t('search_by_theme')}
             </Text>
-            <ThemeCatalog data={dataThemeCatalog}/>
+            <ThemeCatalog data={dataThemeCatalog} locale={locale}/>
           </VStack>
         </VStack>
       </VStack>
@@ -225,7 +223,7 @@ function Hero({ dataThemeCatalog }) {
   );
 }
 
-function Products({ locale }) {
+function Products() {
   const { t } = useTranslation('common');
 
   return (
@@ -409,7 +407,6 @@ function Products({ locale }) {
 }
 
 export function TextPix ({ title, text }) {
-
   return (
     <Box>
       <BodyText fontSize="16px" letterSpacing="0.2px" color="#FF8484" fontWeight="500">
@@ -443,7 +440,7 @@ export function StepText ({index, text}) {
   )
 }
 
-function Support({ locale }) {
+function Support() {
   const { t } = useTranslation('common');
   const { hasCopied, onCopy } = useClipboard("42494318000116")
 
@@ -696,7 +693,7 @@ function Support({ locale }) {
   );
 }
 
-function BDEdu ({ locale }) {
+function BDEdu () {
   const { t } = useTranslation('common');
   const closeDate = new Date(2024, 2, 26)
   const currentDate = new Date()
@@ -747,7 +744,7 @@ export default function Home({ dataThemeCatalog }) {
 
   return (
     <MainPageTemplate id="home" backgroundColor="#FFFFFF">
-      <Hero dataThemeCatalog={dataThemeCatalog} />
+      <Hero dataThemeCatalog={dataThemeCatalog} locale={locale}/>
       {/* <BDEdu /> */}
       <BePartner />
       <Products />

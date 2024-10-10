@@ -17,7 +17,6 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { capitalize } from 'lodash';
 
 import BigTitle from "../../components/atoms/BigTitle";
-import Link from "../../components/atoms/Link";
 import GreenTab from "../../components/atoms/GreenTab";
 import ReadMore from "../../components/atoms/ReadMore";
 import DatasetResource from "../../components/organisms/DatasetResource";
@@ -29,10 +28,7 @@ import CrossingIcon from "../../public/img/icons/crossingIcon";
 
 import {
   getListDatasets,
-  getShowDataset,
 } from "../api/datasets/index";
-
-import { withPages } from "../../hooks/pages.hook";
 
 export async function getStaticProps(context) {
   const { locale, params } = context;
@@ -47,7 +43,6 @@ export async function getStaticProps(context) {
     }
     
     const result = await response.json();
-    //console.log("Full API response:", JSON.stringify(result, null, 2));
 
     if (result.success) {
       dataset = result.resource;
