@@ -8,6 +8,8 @@ import {
 import Image from 'next/image';
 import { useState, useEffect } from "react";
 import Head from "next/head";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { MainPageTemplate } from "../../components/templates/main";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
@@ -19,11 +21,15 @@ import BodyText from "../../components/atoms/BodyText";
 import RoundedButton from "../../components/atoms/RoundedButton";
 import styles from "../../styles/caseStudies.module.css";
 
-export async function getStaticProps(context) {
+export async function getStaticProps({ params, locale }) {
+  const caseStudy = CaseStudiesContent.find((res) => res.id === params.id);
   return {
-    props : CaseStudiesContent.find((res) => res.id === context.params.id),
+    props: {
+      ...(await serverSideTranslations(locale, ['common', 'caseStudies'])),
+      ...caseStudy,
+    },
     revalidate: 30
-  } 
+  }
 }
 
 export async function getStaticPaths(context) {
@@ -47,6 +53,7 @@ export default function CaseStudies ({
   sector,
   body
 }) {
+  const { t } = useTranslation('caseStudies');
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
 
@@ -57,7 +64,7 @@ export default function CaseStudies ({
   return (
     <MainPageTemplate paddingX="24px">
       <Head>
-        <title>{displayTitle} – Base dos Dados</title>
+        <title>{t('pageTitle', { title: displayTitle })}</title>
         <link
           rel="image_src"
           href={thumbnail}
@@ -74,7 +81,7 @@ export default function CaseStudies ({
         />
         <meta
           property="og:title"
-          content={`${displayTitle} – Base dos Dados`}
+          content={t('pageTitle', { title: displayTitle })}
           key="ogtitle"
         />
         <meta
@@ -89,7 +96,7 @@ export default function CaseStudies ({
         maxWidth="1264px"
         margin="50px auto auto"
       >
-        {!isMobileMod &&
+        {!isMobileMod && (
           <Link
             marginBottom="48px"
             color="#42B0FF"
@@ -98,8 +105,10 @@ export default function CaseStudies ({
             fontSize="16px"
             width="fit-content"
             href={"/estudos-de-caso"}
-          >{`<< Voltar`}</Link>
-        }
+          >
+            {t('backLink')}
+          </Link>
+        )}
 
         {isMobileMod &&
           <Display
@@ -195,12 +204,12 @@ export default function CaseStudies ({
             </BodyText>
 
             <BodyText paddingBottom="8px">
-              Queremos ajudar você.
+              {t('contactText')}
             </BodyText>
             <RoundedButton
               onClick={() => window.open("/contato", "_blank")}
             >
-              Entre em contato
+              {t('contactButton')}
             </RoundedButton>
           </VStack>
 

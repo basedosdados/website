@@ -13,15 +13,24 @@ import { MainPageTemplate } from "../components/templates/main";
 import ServiceTerms from "../content/serviceTerms";
 import PrivacyPolicy from "../content/privacyPolicy";
 import { withPages } from "../hooks/pages.hook";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-export async function getStaticProps() {
-  return await withPages()
+export async function getStaticProps({ locale }) {
+  const pages = await withPages();
+  return {
+    props: {
+      ...pages,
+      ...(await serverSideTranslations(locale, ['common', 'menu', 'terms'])),
+    },
+  };
 }
 
 export default function TermsAndPolitics() {
   const router = useRouter()
   const { query } = router
   const [sectionSelected, setSectionSelected] = useState("")
+  const { t } = useTranslation('terms');
 
   function movedScroll(value) {
     window.scrollTo({
@@ -35,13 +44,13 @@ export default function TermsAndPolitics() {
     let targetElement = ""
 
     if(id === "terms") {
-      targetElement = document.getElementById("Termos de Serviço")
-      setSectionSelected("Termos de Serviço")
+      targetElement = document.getElementById(t('termsOfService'))
+      setSectionSelected(t('termsOfService'))
       movedScroll(useCheckMobile() ? 210 : 120)
     }
     if(id === "privacy") {
-      targetElement = document.getElementById("Políticas de Privacidade")
-      setSectionSelected("Políticas de Privacidade")
+      targetElement = document.getElementById(t('privacyPolicy'))
+      setSectionSelected(t('privacyPolicy'))
       movedScroll(targetElement?.offsetTop+120)
     }
   },[query?.section])
@@ -56,7 +65,7 @@ export default function TermsAndPolitics() {
         const targetElement = document.getElementById(elm)
 
         if (targetElement) {
-          if(targetElement.id === "Termos de Serviço") {
+          if(targetElement.id === t('termsOfService')) {
             movedScroll(useCheckMobile() ? 210 : 80)
           } else {
             movedScroll(targetElement?.offsetTop+120)
@@ -81,7 +90,7 @@ export default function TermsAndPolitics() {
         letterSpacing="0.2px"
         onClick={() => handlerClick(section)}
       >
-        {section}
+        {t(section)}
       </Text>
     )
   }
@@ -89,10 +98,10 @@ export default function TermsAndPolitics() {
   return (
     <MainPageTemplate paddingX="24px">
       <Head>
-        <title>Termos – Base dos Dados</title>
+        <title>{t('pageTitle')}</title>
         <meta
           property="og:title"
-          content="Termos e Privacidade – Base dos Dados"
+          content={t('ogTitle')}
           key="ogtitle"
         />
       </Head>
@@ -107,7 +116,7 @@ export default function TermsAndPolitics() {
           paddingBottom={isMobileMod() ? "56px" : "66px" }
           color="#2B8C4D"
         >
-          Termos e Privacidade
+          {t('mainTitle')}
         </Display>
 
         <Stack
@@ -126,8 +135,8 @@ export default function TermsAndPolitics() {
             position={isMobileMod() ? "relative" : "sticky"}
             top={isMobileMod()? "0" : "120px"}
           >
-            <SectionText section="Termos de Serviço"/>
-            <SectionText section="Políticas de Privacidade"/>
+            <SectionText section="termsOfService"/>
+            <SectionText section="privacyPolicy"/>
           </Box>
 
           <Stack
@@ -135,7 +144,7 @@ export default function TermsAndPolitics() {
             spacing="80px"
           >
             <VStack
-              id="Termos de Serviço"
+              id={t('termsOfService')}
               name="terms"
               width="100%"
               spacing={8}
@@ -147,12 +156,12 @@ export default function TermsAndPolitics() {
                 lineHeight="40px"
                 fontWeight="400"
                 color="#252A32"
-              >Termos de Serviço</Text>
+              >{t('termsOfService')}</Text>
               <ServiceTerms/>
             </VStack>
 
             <VStack
-              id="Políticas de Privacidade"
+              id={t('privacyPolicy')}
               name="privacy"
               width="100%"
               spacing={8}
@@ -164,7 +173,7 @@ export default function TermsAndPolitics() {
                 lineHeight="40px"
                 fontWeight="400"
                 color="#252A32"
-              >Políticas de Privacidade</Text>
+              >{t('privacyPolicy')}</Text>
               <PrivacyPolicy/>
             </VStack>
           </Stack>

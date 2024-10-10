@@ -6,12 +6,23 @@ import Head from "next/head";
 import { useEffect } from "react";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-export async function getStaticProps() {
-  return await withPages()
+export async function getStaticProps({ locale }) {
+  const pages = await withPages();
+  return {
+    ...pages,
+    props: {
+      ...pages.props,
+      ...(await serverSideTranslations(locale, ['common', 'menu', 'contact'])),
+    },
+  };
 }
 
 export default function ContactConsultancy() {
+  const { t } = useTranslation('contact');
+
   useEffect(() => {
     const script = document.createElement('script');
     script.src='https://js.hsforms.net/forms/embed/v2.js';
@@ -32,15 +43,15 @@ export default function ContactConsultancy() {
   return (
     <MainPageTemplate paddingX="24px">
       <Head>
-        <title>Consultoria – Base dos Dados</title>
+        <title>{t('consulting.title')}</title>
         <meta
           property="og:title"
-          content="Consultoria – Base dos Dados"
+          content={t('consulting.title')}
           key="ogtitle"
         />
         <meta
           property="og:description"
-          content="Entre em contato com nossa equipe."
+          content={t('consulting.description')}
           key="ogdesc"
         />
       </Head>

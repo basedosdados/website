@@ -21,26 +21,31 @@ import { MainPageTemplate } from "../../components/templates/main";
 import { EmailRecoveryImage } from "../../public/img/emailImage";
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export async function getServerSideProps(context) {
-  const { query } = context
-  let confirmed = false
+  const { query, locale } = context;
+  let confirmed = false;
 
-  if(query.q !== undefined && query.p !== undefined) confirmed = true
+  if (query.q !== undefined && query.p !== undefined) confirmed = true;
 
-  let uid = query?.q || ""
-  let confirmToken = query?.p || ""
+  let uid = query?.q || "";
+  let confirmToken = query?.p || "";
 
   return {
     props: {
+      ...(await serverSideTranslations(locale, ['user'])),
       confirmed,
       uid,
-      confirmToken
-    }
-  }
+      confirmToken,
+    },
+  };
 }
 
 export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
+  const { t } = useTranslation('user');
+
   const [email, setEmail] = useState("")
   const [error, setError] = useState("")
   const [count, setCount] = useState(0)
@@ -69,14 +74,14 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
     if(value === "") return null
 
     const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if(!regexEmail.test(value)) return setError("Endereço de e-mail inválido.")
+    if(!regexEmail.test(value)) return setError(t('passwordRecovery.invalidEmail'))
 
     const API_URL = `${process.env.NEXT_PUBLIC_API_URL}`
 
     const getIdUser = await fetch(`/api/user/getIdUser?p=${btoa(value)}`, {method: "GET"})
       .then(res => res.json())
 
-    if(getIdUser.error) return setError("Endereço de e-mail inválido.")
+    if(getIdUser.error) return setError(t('passwordRecovery.invalidEmail'))
 
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(getIdUser?.id)
@@ -124,20 +129,20 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
       regexPassword = {...regexPassword, special: true}
     }
     if (!formData.confirmPassword) {
-      validationErrors.confirmPassword = "Confirmar a senha é necessário"
+      validationErrors.confirmPassword = t('passwordRecovery.confirmPasswordRequired')
     }
     if(/\s/.test(formData.confirmPassword)) {
-      validationErrors.password = "As senhas inseridas não podem conter espaçamentos."
-      validationErrors.confirmPassword = "As senhas inseridas não podem conter espaçamentos."
+      validationErrors.password = t('passwordRecovery.passwordNoSpaces')
+      validationErrors.confirmPassword = t('passwordRecovery.passwordNoSpaces')
     }
     if(formData.confirmPassword !== formData.password) {
-      validationErrors.confirmPassword = "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente."
+      validationErrors.confirmPassword = t('passwordRecovery.passwordMismatch')
     }
 
     if(Object.keys(regexPassword).length > 0) validationErrors.regexPassword = regexPassword
 
     if(formData.password === "") {
-      validationErrors.password = "Por favor, insira a senha."
+      validationErrors.password = t('passwordRecovery.passwordRequired')
     }
 
     setErrors(validationErrors)
@@ -199,7 +204,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
           letterSpacing={isMobileMod() ? "0" : "-0.4px"}
           fontweith="500"
           textAlign="center"
-        >Redefina sua nova senha</Display>
+        >{t('passwordRecovery.titleConfirmed')}</Display>
 
         <form
           style={{
@@ -210,7 +215,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
           onSubmit={handleSubmit}
         >
           <FormControl isInvalid={!!errors.password || !!errors.regexPassword}>
-            <LabelTextForm text="Nova Senha" />
+            <LabelTextForm text={t('passwordRecovery.newPasswordLabel')} />
             <InputForm
               type={showPassword ? "password" : "text"}
               id="password"
@@ -218,7 +223,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
               autoComplete="new-password"
               value={formData.password}
               onChange={(e) => handleInputChange(e, "password")}
-              placeholder="Crie uma nova senha"
+              placeholder={t('passwordRecovery.newPasswordPlaceholder')}
               fontFamily="ubuntu"
               height="40px"
               fontSize="14px"
@@ -258,13 +263,13 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
               flexDirection="row"
               gap="4px"
               alignItems="flex-start"
-            ><Exclamation width="14px" height="14px" fill="#D93B3B" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
+            ><Exclamation width="14px" height="14px" fill="#D93B3B" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> {t('passwordRecovery.passwordRequirements')}</Text>
             <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
-              <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>8 caracteres</ListItem>
-              <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>Uma letra maiúscula</ListItem>
-              <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>Uma letra minúscula</ListItem>
-              <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>Um dígito</ListItem>
-              <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial, dentre ! @ # ? ! % & *</ListItem>
+              <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>{t('passwordRecovery.passwordRequirementChars')}</ListItem>
+              <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>{t('passwordRecovery.passwordRequirementUppercase')}</ListItem>
+              <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>{t('passwordRecovery.passwordRequirementLowercase')}</ListItem>
+              <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>{t('passwordRecovery.passwordRequirementDigit')}</ListItem>
+              <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>{t('passwordRecovery.passwordRequirementSpecial')}</ListItem>
             </UnorderedList>
             {errors.password &&
               <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
@@ -274,7 +279,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
           </FormControl>
 
           <FormControl marginTop="40px" isInvalid={!!errors.confirmPassword}>
-            <LabelTextForm text="Confirme a nova senha" />
+            <LabelTextForm text={t('passwordRecovery.confirmPasswordLabel')} />
             <InputForm
               type={showConfirmPassword ? "password" : "text"}
               id="confirmPassword"
@@ -282,7 +287,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
               autoComplete="new-password"
               value={formData.confirmPassword}
               onChange={(e) => handleInputChange(e, "confirmPassword")}
-              placeholder="Insira a senha novamente"
+              placeholder={t('passwordRecovery.confirmPasswordPlaceholder')}
               fontFamily="ubuntu"
               height="40px"
               fontSize="14px"
@@ -322,7 +327,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
             _hover={{transform: "none", opacity: 0.8}}
             width="fit-content"
           >
-            Atualizar senha
+            {t('passwordRecovery.updatePassword')}
           </Button>
         </form>
       </Stack>
@@ -354,7 +359,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
           letterSpacing={isMobileMod() ? "0" : "-0.4px"}
           fontweith="500"
           textAlign="center"
-        >Redefina sua senha</Display>
+        >{t('passwordRecovery.title')}</Display>
 
         <Text
           textAlign="center"
@@ -365,7 +370,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
           lineHeight= "24px"
           letterSpacing= "0.2px"
         >
-          Insira o endereço de e-mail que você usou para cadastrar sua conta. Enviaremos as instruções para você redefinir sua senha.
+          {t('passwordRecovery.description')}
         </Text>
 
         <FormControl
@@ -377,10 +382,10 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
           letterSpacing="0.2px"
           isInvalid={!!error}
         >
-          <FormLabel fontWeight="400">E-mail</FormLabel>
+          <FormLabel fontWeight="400">{t('passwordRecovery.emailLabel')}</FormLabel>
           <Input
             type="email"
-            placeholder="Insira seu e-mail"
+            placeholder={t('passwordRecovery.emailPlaceholder')}
             _placeholder={{color: "#A3A3A3"}}
             _focus={{border:"2px solid #42B0FF !important" }}
             _hover={{border:"2px solid #42B0FF !important" }}
@@ -408,7 +413,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
           width="fit-content"
           onClick={() => handleEmailPasswordRecovery(email)}
         >
-          {forwardingDisabled ? `Espere ${count} segundos...` :"Enviar e-mail de redefinição"}
+          {forwardingDisabled ? t('passwordRecovery.waitSeconds', { count }) : t('passwordRecovery.sendResetEmail')}
         </Button>
 
         <Text
@@ -420,7 +425,11 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
           lineHeight= "27px"
           letterSpacing= "0.3px"
         >
-          Se ainda precisar de ajuda, <Link fontFamily="ubuntu" color="#42B0FF" href="/contato">entre em contato</Link>.
+          {t('passwordRecovery.needHelp')}{' '}
+          <Link fontFamily="ubuntu" color="#42B0FF" href="/contato">
+            {t('passwordRecovery.contactUs')}
+          </Link>
+          .
         </Text>
       </Stack>
     </MainPageTemplate>

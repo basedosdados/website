@@ -12,9 +12,11 @@ import {
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { capitalize } from 'lodash';
 
 import BigTitle from "../../components/atoms/BigTitle";
-import Link from "../../components/atoms/Link";
 import GreenTab from "../../components/atoms/GreenTab";
 import ReadMore from "../../components/atoms/ReadMore";
 import DatasetResource from "../../components/organisms/DatasetResource";
@@ -26,20 +28,38 @@ import CrossingIcon from "../../public/img/icons/crossingIcon";
 
 import {
   getListDatasets,
-  getShowDataset,
 } from "../api/datasets/index";
 
-import { withPages } from "../../hooks/pages.hook";
-
 export async function getStaticProps(context) {
-  const dataset = await getShowDataset(context.params.dataset) || null
+  const { locale, params } = context;
+  
+  let dataset = null;
+  try {
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/datasets/getShowDataset?id=${params.dataset}&locale=${locale}`;
+    const response = await fetch(url, { method: "GET" });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
 
-  return await withPages({
+    if (result.success) {
+      dataset = result.resource;
+    } else {
+      console.error("API error:", result.error);
+    }
+  } catch (error) {
+    console.error("Fetch error:", error.message);
+  }
+
+  return {
     props: {
+      ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu'])),
       dataset,
     },
     revalidate: 30,
-  })
+  };
 }
 
 export async function getStaticPaths(context) {
@@ -54,7 +74,9 @@ export async function getStaticPaths(context) {
 }
 
 export default function DatasetPage ({ dataset }) {
+  const { t } = useTranslation('dataset', 'common');
   const router = useRouter()
+  const { locale } = router
   const { query } = router
   const [tabIndex, setTabIndex] = useState(0)
 
@@ -70,7 +92,7 @@ export default function DatasetPage ({ dataset }) {
   return (
     <MainPageTemplate userTemplate footerTemplate="simple">
       <Head>
-        <title>{dataset.name} – Base dos Dados</title>
+        <title>{dataset.name} – {t('dataBasis')}</title>
 
         <link
           rel="image_src"
@@ -88,10 +110,10 @@ export default function DatasetPage ({ dataset }) {
         />
         <meta
           property="og:title"
-          content={`${dataset.name} – Base dos Dados`}
+          content={`${dataset[`name${capitalize(locale)}`] || dataset.name} – ${t('dataBasis')}`}
           key="ogtitle"
         />
-        <meta property="og:description" content={dataset.description} key="ogdesc" />
+        <meta property="og:description" content={dataset[`description${capitalize(locale)}`] || dataset.description} key="ogdesc" />
       </Head>
 
       <VStack
@@ -139,13 +161,13 @@ export default function DatasetPage ({ dataset }) {
                   fontWeight="500"
                   lineHeight="42px"
                 >
-                  {dataset.name || "Conjunto sem nome"}
+                  {dataset[`name${capitalize(locale)}`] || dataset.name || t('noName')}
                 </BigTitle>
               </GridItem>
 
               <GridItem colSpan={2} minHeight="60px" marginBottom="8px">
                 <ReadMore id="readLessDataset">
-                  {dataset?.description || "Nenhuma descrição fornecida."}
+                  {dataset[`description${capitalize(locale)}`] || dataset.description || t('noDescription')}
                 </ReadMore>
               </GridItem>
 
@@ -158,7 +180,7 @@ export default function DatasetPage ({ dataset }) {
                   color="#252A32"
                   marginBottom="8px"
                 >
-                  Cobertura temporal do conjunto
+                  {t('temporalCoverage')}
                 </Text>
                 <Text
                   fontFamily="Roboto"
@@ -167,7 +189,7 @@ export default function DatasetPage ({ dataset }) {
                   lineHeight="20px"
                   color="#464A51"
                 >
-                  {dataset.coverage || "Nenhuma cobertura temporal fornecida."}
+                  {dataset.coverage || t('noCoverage')}
                 </Text>
               </GridItem>
 
@@ -180,7 +202,7 @@ export default function DatasetPage ({ dataset }) {
                   color="#252A32"
                   marginBottom="8px"
                 >
-                  Organização
+                  {t('organization')}
                 </Text>
                 <Text
                   as="a"
@@ -193,7 +215,7 @@ export default function DatasetPage ({ dataset }) {
                     lineHeight="20px"
                     color="#464A51"
                   >
-                    {dataset?.organization?.name || "Nenhuma organização fornecida."}
+                    {dataset.organization?.[`name${capitalize(locale)}`] || dataset.organization?.name || t('noOrganization')}
                   </Text>
                 </Text>
               </GridItem>
@@ -218,7 +240,7 @@ export default function DatasetPage ({ dataset }) {
                 height="18px"
                 marginRight="6px"
               />
-              Dados
+              {t('data')}
             </GreenTab>
 
             <GreenTab display="none">
@@ -228,7 +250,7 @@ export default function DatasetPage ({ dataset }) {
                 height="24px"
                 marginRight="2px"
               />
-              Cruzamento
+              {t('crossing')}
             </GreenTab>
           </TabList>
 

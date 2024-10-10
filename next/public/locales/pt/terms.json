@@ -1,0 +1,119 @@
+{
+    "pageTitle": "Termos – Base dos Dados",
+    "ogTitle": "Termos e Privacidade – Base dos Dados",
+    "mainTitle": "Termos e Privacidade",
+    "termsOfService": "Termos de Serviço",
+    "privacyPolicy": "Políticas de Privacidade",
+    "ToS": {
+        "term1": {
+            "title": "1. Aceitação dos Termos",
+            "content": "Ao acessar ou usar os serviços oferecidos pela Base dos Dados (\"Nós\", \"Nosso\" ou \"Nossos\"), você concorda em cumprir e aceitar estes Termos de Serviço. Se você não concordar com todos os termos e condições deste acordo, não poderá utilizar nossos serviços."
+        },
+        "term2": {
+            "title": "2. Descrição do Serviço",
+            "content": "2.1. Nossos serviços consistem em uma assinatura mensal que concede aos seus assinantes o acesso a diversos dados exclusivos, harmonizados e atualizados na plataforma da Base dos Dados. O acesso se dá via os pacotes Python ou R da Base dos Dados, ou via BigQuery, serviço de armazenamento de dados de baixo custo e totalmente gerenciado do Google para análises."
+        },
+        "term3": {
+            "title": "3. Pagamento e Assinaturas",
+            "content": "",
+            "subContent1": "3.1. Ao fazer a assinatura, você concorda em pagar a taxa mensal especificada. O pagamento será processado automaticamente a cada mês, a menos que você cancele sua assinatura antes da data de renovação, devidamente explicita na contratação do serviço.",
+            "subContent2": "3.2. Ao fazer a assinatura, você concorda que seus dados sejam utilizados na criação e manutenção de usuários na plataforma de pagamentos Stripe.",
+            "subContent3": "3.3. Os preços e os métodos de pagamento estão sujeitos a alterações a critério exclusivo da Base dos Dados. As alterações de preço ou de métodos de pagamento serão notificadas com antecedência."
+        },
+        "term4": {
+            "title": "4. Cancelamento e Reembolso",
+            "content": "4.1. Você pode cancelar sua assinatura a qualquer momento através das opções disponíveis em sua conta. No entanto, não serão fornecidos reembolsos ou créditos por períodos em que a assinatura não foi utilizada."
+        },
+        "term5": {
+            "title": "5. Uso Responsável",
+            "content": "5.1. Você concorda em usar nossos serviços de forma responsável e em conformidade com todas as leis e regulamentos aplicáveis."
+        },
+        "term6": {
+            "title": "6. Propriedade Intelectual",
+            "content": "6.1. Todos os direitos de propriedade intelectual relacionados aos dados fornecidos são de propriedade de terceiros e estão sujeitos às suas respectivas políticas de uso."
+        },
+        "term7": {
+            "title": "7. Privacidade",
+            "content": "7.1. O uso de seus dados pessoais é regido por nossa Política de Privacidade. Ao usar nossos serviços, você concorda com a coleta e o uso de suas informações conforme descrito em nossa Política de Privacidade."
+        },
+        "term8": {
+            "title": "8. Rescisão",
+            "content": "8.1. Reservamo-nos o direito de encerrar ou suspender sua conta a qualquer momento, por qualquer motivo, sem aviso prévio."
+        },
+        "term9": {
+            "title": "9. Limitação de Responsabilidade",
+            "content": "9.1. Em nenhuma circunstância seremos responsáveis por danos diretos, indiretos, especiais, incidentais ou consequentes decorrentes do uso ou da incapacidade de usar nossos serviços."
+        },
+        "term10": {
+            "title": "10. Alterações nos Termos de Serviço",
+            "content": "10.1. Reservamo-nos o direito de modificar estes Termos de Serviço a qualquer momento. As alterações serão efetivas após a publicação das versões atualizadas em nosso site."
+        },
+        "term11": {
+            "title": "11. Lei Aplicável e Jurisdição",
+            "content": "11.1. Estes Termos de Serviço serão regidos e interpretados de acordo com as leis do Brasil. Qualquer disputa relacionada a estes termos estará sujeita à jurisdição exclusiva dos tribunais do Rio de Janeiro, RJ, Brasil."
+        },
+        "term12": {
+            "title": "12. Contato",
+            "content": "12.1. Para entrar em contato conosco com perguntas ou preocupações relacionadas a estes Termos de Serviço, por favor, envie um e-mail para suporte.bdpro@basedosdados.org."
+        },
+        "finalNote": "Ao utilizar nossos serviços, você concorda com todos os termos e condições estabelecidos neste acordo. Por favor, leia estes termos atentamente antes de prosseguir."
+    },
+    "PP": {
+        "header": {
+            "subContent1": "Base dos Dados (\"Nós\", \"Nosso\" ou \"Nossos\"). Comprometemo-nos a proteger e respeitar sua privacidade e cumprir todas as obrigações estabelecidas na Lei Geral de Proteção de Dados (\"LGPD\").",
+            "subContent2": "Esta Política de Privacidade descreve como coletamos, usamos, compartilhamos e protegemos suas informações pessoais. Ao acessar ou usar nossos serviços, você concorda com os termos e práticas descritos nesta Política de Privacidade."
+        },
+        "term1": {
+            "title": "1. Informações que Coletamos",
+            "subContent1": "1.1. Coletamos informações pessoais que você nos fornece diretamente ao usar nossos serviços. Isso pode incluir seu nome, endereço de e-mail, informações de pagamento e outras informações que você escolher compartilhar conosco.",
+            "subContent2": "1.2. Também coletamos informações de forma automática, incluindo dados de uso, endereço IP, tipo de navegador, e informações sobre o dispositivo que você usa para acessar nossos serviços."
+        },
+        "term2": {
+            "title": "2. Uso das Informações",
+            "subContent1": "2.1. Utilizamos suas informações pessoais para fornecer e melhorar nossos serviços, incluindo o processamento de pagamentos, o fornecimento de suporte ao cliente e a personalização da experiência do usuário.",
+            "subContent2": "2.2. Não venderemos, alugaremos ou compartilharemos suas informações pessoais com terceiros não afiliados sem o seu consentimento explícito."
+        },
+        "term3": {
+            "title": "3. Cookies e Tecnologias Semelhantes",
+            "subContent1": "3.1. Cookies são pedaços de dados que ajudam o site a lembrar suas preferências e tornar a navegação mais eficiente.",
+            "subContent2": "3.2. Esses cookies são necessários para garantir o funcionamento adequado do site, melhorar o desempenho e personalizar a experiência de navegação, como idioma e região.",
+            "subContent3": {
+                "title": "3.3. Cookies usados:",
+                "headers": {
+                    "header1": "Nome do Cookie",
+                    "header2": "Retenção",
+                    "header3": "Finalidade"
+                },
+                "row1": {
+                    "name": "userBD",
+                    "retention": "7 dias",
+                    "purpose": "Ao realizar o login em nosso site, esse cookie especial é criado para armazenar suas informações básicas. Esse cookie é essencial para permitir que você permaneça logado e acesse as áreas protegidas do site. Sem ele, você não conseguirá fazer login."
+                },
+                "row2": {
+                    "name": "token",
+                    "retention": "7 dias",
+                    "purpose": "Ao realizar o login em nosso site, esse cookie especial é criado para armazenar seu token de acesso. Este token não apenas permite que você permaneça logado, mas também atua como um guardião para garantir a integridade de suas configurações e informações pessoais."
+                }
+            },
+            "subContent4": "3.4. Ao continuar a usar nosso site, você concorda com o uso desses cookies. Se preferir não usá-los, recomendamos que ajuste as configurações do seu navegador. No entanto, isso afetará sua capacidade de fazer login e acessar áreas restritas.",
+            "subContent5": "Se tiver alguma dúvida sobre esses cookies ou qualquer outra questão de privacidade, entre em contato conosco através do endereço de e-mail contato@basedosdados.org."
+        },
+        "term4": {
+            "title": "4. Segurança das Informações",
+            "subContent1": "4.1. Implementamos medidas de segurança técnicas e organizacionais para proteger suas informações pessoais contra acesso não autorizado e uso indevido."
+        },
+        "term5": {
+            "title": "5. Seus Direitos",
+            "subContent1": "5.1. De acordo com a LGPD, você tem direito de acessar, retificar, excluir ou portar seus dados pessoais. Se você deseja exercer esses direitos ou tiver alguma dúvida sobre como suas informações estão sendo tratadas, entre em contato conosco através do endereço de e-mail contato@basedosdados.org."
+        },
+        "term6": {
+            "title": "6. Alterações nesta Política de Privacidade",
+            "subContent1": "6.1. Reservamo-nos o direito de atualizar esta Política de Privacidade periodicamente. As alterações serão publicadas em nosso site, e a data da última atualização será revisada. Recomendamos que você revise esta Política regularmente para se manter informado sobre nossas práticas de privacidade."
+        },
+        "term7": {
+            "title": "7. Contato",
+            "subContent1": "7.1. Para quaisquer perguntas ou preocupações relacionadas à nossa Política de Privacidade, entre em contato conosco através do endereço de e-mail contato@basedosdados.org."
+        },
+        "finalNote": "Esta Política de Privacidade foi elaborada de acordo com as disposições da LGPD e visa garantir que suas informações pessoais sejam tratadas com o devido respeito e cuidado."
+    }
+}
