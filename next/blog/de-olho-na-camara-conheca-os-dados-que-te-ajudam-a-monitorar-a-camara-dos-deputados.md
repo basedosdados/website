@@ -121,7 +121,16 @@ ORDER BY
 
 Veja o resultado da consulta anterior. Para este exemplo, utilizamos o nome de um deputado escolhido aleatoriamente. Note que a categoria “Divulgação da Atividade Parlamentar” concentra o maior valor das despesas da Cota Parlamentar do deputado em questão.
 
-<Image src="/blog/de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados/image_3.png"/>
+| categoria_despesa                                         | despesas |
+| --------------------------------------------------------- | -------- |
+| DIVULGAÇÃO DA ATIVIDADE PARLAMENTAR.                      | 312691.0 |
+| LOCAÇÃO OU FRETAMENTO DE VEÍCULOS AUTOMOTORES             | 115580.0 |
+| MANUTENÇÃO DE ESCRITÓRIO DE APOIO À ATIVIDADE PARLAMENTAR | 114125.0 |
+| PASSAGEM AÉREA - SIGEPA                                   | 67171.0  |
+| COMBUSTÍVEIS E LUBRIFICANTES.                             | 47694.0  |
+| SERVIÇO DE SEGURANÇA PRESTADO POR EMPRESA ESPECIALIZADA.  | 39550.0  |
+| TELEFONIA                                                 | 22346.0  |
+| HOSPEDAGEM, EXCETO DO PARLAMENTAR NO DISTRITO FEDERAL.    | 15272.0  |
 
 Esse é apenas um simples exemplo de aplicação dos dados em nosso datalake público. Vem aí um tutorial completo sobre como estão organizados os dados na BD, como as diferentes tabelas deste conjunto se relacionam, quais informações são possíveis extrair dos dados e como.
 

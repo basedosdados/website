@@ -365,11 +365,33 @@ Quando analisadas as médias, a cidade não aparece no top 10 em nenhum dos 2 an
 
 Confira abaixo os municípios com as 10 maiores medianas salariais no estado do Rio:
 
-<Image src="/blog/perigo-no-mercado-de-trabalho/image_2.webp"/>
+| Rank | Município         | Mediana Salarial |
+| ---- | ----------------- | ---------------- |
+| 1    | São João Da Barra | 2050.40          |
+| 2    | Macaé             | 1695.50          |
+| 3    | Itaboraí          | 1486.83          |
+| 4    | Porto Real        | 1446.50          |
+| 5    | Itaguaí           | 1375.01          |
+| 6    | Rio Das Ostras    | 1323.31          |
+| 7    | Silva Jardim      | 1317.19          |
+| 8    | Rio De Janeiro    | 1316.01          |
+| 9    | Cordeiro          | 1310.87          |
+| 10   | Petrópolis        | 1310.00          |
 
 Já em 2021, Campos de Goytacazes aparece no décimo lugar da lista:
 
-<Image src="/blog/perigo-no-mercado-de-trabalho/image_3.webp"/>
+| Rank | Município             | Mediana Salarial |
+| ---- | --------------------- | ---------------- |
+| 1    | Macaé                 | 1700.09          |
+| 2    | São João Da Barra     | 1612.60          |
+| 3    | Itaguaí               | 1423.06          |
+| 4    | Porto Real            | 1406.89          |
+| 5    | Itaboraí              | 1375.01          |
+| 6    | Rio De Janeiro        | 1370.00          |
+| 7    | Rio Das Ostras        | 1357.00          |
+| 8    | Petrópolis            | 1350.00          |
+| 9    | Resende               | 1348.73          |
+| 10   | Campos Dos Goytacazes | 1345.00          |
 
 Ainda na questão salarial, mas agora no estado do Rio de Janeiro, houve uma característica interessante no perfil salarial.
 

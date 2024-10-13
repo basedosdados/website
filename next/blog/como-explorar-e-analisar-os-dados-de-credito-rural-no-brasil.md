@@ -224,7 +224,13 @@ operacoes <- operacoes %>%
 operacoes
 ```
 
-<Image src="/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_8.webp" caption="Tabela com o valor contratado por categoria durante o período"/>
+Tabela com o valor contratado por categoria durante o período:
+
+| valor                  | valor_total | percentual |
+| ---------------------- | ----------- | ---------- |
+| Pequeno Produtor Rural | R$ 350.12   | % 19.8     |
+| Médio Produtor Rural   | R$ 642.34   | % 36.32    |
+| Grande Produtor Rural  | R$ 775.99   | % 43.88    |
 
 A nível nacional uma fatia considerável do valor total (43,88%) é abocanhada por Grandes Produtores Rurais, seguidos pelos Médios (36,22%) e pelos pequenos (19,8%).
 

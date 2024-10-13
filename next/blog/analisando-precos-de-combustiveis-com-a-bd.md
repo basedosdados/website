@@ -24,8 +24,6 @@ medium_slug: >-
 
 Qual o preço do combustível na sua cidade? Neste artigo vamos apresentar os dados da base de pesquisa com preços de distribuição de combustíveis e de gás de cozinha (GLP), divulgados pela [Agência Nacional do Petróleo](https://www.gov.br/anp/pt-br). Além disso, vamos apresentar uma análise da evolução dos preços em relação à inflação, demonstrando como você pode usar a Base dos Dados para analisar como é esse cenário em sua própria cidade, ou no recorte que quiser.
 
-<Image src="/blog/analisando-precos-de-combustiveis-com-a-bd/image_1.gif"/>
-
 ## Entendendo a Série Histórica de Preços
 
 A ANP fornece, a cada semana, a série histórica com os microdados dos preços praticados por diferentes postos de revenda em todo o Brasil. A base inclui informações dos preços da gasolina, etanol, diesel s10, gasolina aditivada, glp, diesel e gnv, desde 2004 até outubro de 2021.
@@ -47,8 +45,6 @@ Para explorar os dados dessa base, acesse a [página deste conjunto de dados](/d
 ## Os olhos da cara — Analisando a evolução de preço dos combustíveis no Brasil
 
 As notícias nos últimos meses têm anunciado a constante alta dos combustíveis. Muito se fala da gasolina à R$7, dos impostos, insumos e da cotação do dólar. Nossa análise propõe observar os dados deflacionados e comparados à inflação, isto é, a variação dos preços atuais em relação à variação do índice de preços ao consumidor.
-
-<Image src="/blog/analisando-precos-de-combustiveis-com-a-bd/image_4.gif"/>
 
 Cumprindo a nossa missão — acessar os dados em um único lugar — conseguimos captar dados do [Índice Nacional de Preços ao Consumidor Amplo (IPCA)](/dataset/c58781fb-1177-448d-87ff-56b5cbf1735c), também disponíveis na BD+, além de manipular a nossa base de preços dos combustíveis da Agência Nacional do Petróleo, Gás Natural e Biocombustíveis (ANP).
 
