@@ -377,14 +377,22 @@ export const mdxComponents = {
   ),
   table: (props) => (
     <TableContainer>
-      <Table variant="simple" {...props} />
+      <Table variant="simple" border="1px solid #edf2f7" {...props} />
     </TableContainer>
   ),
   thead: (props) => <Thead {...props} />,
   tbody: (props) => <Tbody {...props} />,
   tr: (props) => <Tr {...props} />,
-  td: (props) => <Td {...props} />,
-  th: (props) => <Th {...props} />,
+  td: (props) => (
+    <Td
+      fontFamily={"Roboto"}
+      color="rgb(55, 65, 81)"
+      paddingY={"0.5rem"}
+      style={{ textWrap: "wrap" }}
+      {...props}
+    />
+  ),
+  th: (props) => <Th fontFamily={"Roboto"} {...props} />,
   // custom components
   Image: (props) => (
     <Box as="figure" marginY={"2rem"}>
