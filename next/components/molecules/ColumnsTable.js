@@ -532,7 +532,7 @@ export default function ColumnsTable({
         isLoaded={!isLoading}
       >
         <TableContainer
-          height="100%"
+          style={{maxHeight: "50vh"}}
           maxHeight="300px"
           overflowY="auto"
           border="1px solid #DEDFE0"
