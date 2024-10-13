@@ -187,6 +187,17 @@ const LinkedInIcon = createIcon({
   ),
 });
 
+const XIcon = createIcon({
+  displayName: "xicon",
+  viewBox: "0 0 1200 1227",
+  path: (
+    <path
+      fill="currentColor"
+      d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"
+    ></path>
+  ),
+});
+
 function NativeShare({ url, title, description }) {
   const { hasCopied, onCopy } = useClipboard(url);
 
@@ -238,13 +249,21 @@ export function ShareButtons({ frontmatter }) {
     setOrigin(window.location.origin);
   }, []);
 
+  const text = `${title} – Blog – Base dos Dados`;
   const url = origin + router.asPath;
   const encodedUrl = encodeURIComponent(url);
 
   return (
     <Box display={"flex"} alignItems={"center"} gap="1rem" marginTop={"1rem"}>
       <NextLink
-        href={`https://www.facebook.com/sharer/sharer.php?t=${encodeURIComponent(title)}&u=${encodedUrl}`}
+        href={`https://x.com/share?text=${encodeURIComponent(text)}&url=${encodedUrl}`}
+      >
+        <a target="_blank">
+          <XIcon width={"1.1rem"} height={"1.1rem"} />
+        </a>
+      </NextLink>
+      <NextLink
+        href={`https://www.facebook.com/sharer/sharer.php?t=${encodeURIComponent(text)}&u=${encodedUrl}`}
       >
         <a target="_blank">
           <FacebookIcon width={"1.4rem"} height={"1.4rem"} />
