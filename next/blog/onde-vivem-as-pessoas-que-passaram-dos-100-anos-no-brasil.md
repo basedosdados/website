@@ -4,8 +4,9 @@ description: >-
   Análise e entrevista sobre pessoas centenárias no Brasil e os desafios do
   envelhecimento populacional
 date:
-  created: ""
+  created: "2024-04-01T02:00"
 authors:
+  - name: Marina Monteiro
 thumbnail: /blog/onde-vivem-as-pessoas-que-passaram-dos-100-anos-no-brasil/image_0.png
 categories: [analise]
 medium_slug: ""
