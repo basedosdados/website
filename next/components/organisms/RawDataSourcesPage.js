@@ -14,7 +14,6 @@ import { capitalize } from "lodash";
 
 import ReadMore from "../atoms/ReadMore";
 import ObservationLevel from "../atoms/ObservationLevelTable";
-import { TemporalCoverage } from "../molecules/TemporalCoverageDisplay";
 import { AlertDiscalimerBox } from "../molecules/DisclaimerBox";
 import FourOFour from "../templates/404";
 

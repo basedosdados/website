@@ -84,7 +84,7 @@ export default function DatasetResource({
 
   function SwitchResource ({route}) {
     if (route.hasOwnProperty("table")) return <TablePage id={route.table}/>
-    if (route.hasOwnProperty("raw_data_source")) return <RawDataSourcesPage id={route.raw_data_source}/>
+    if (route.hasOwnProperty("raw_data_source")) return <RawDataSourcesPage id={route.raw_data_source} locale={locale}/>
     if (route.hasOwnProperty("information_request")) return <InformationRequestPage id={route.information_request}/>
     return null
   }

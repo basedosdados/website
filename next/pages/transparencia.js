@@ -5,6 +5,8 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
 import { MainPageTemplate } from "../components/templates/main";
@@ -16,8 +18,6 @@ import Link from "../components/atoms/Link";
 import RoundedButton from "../components/atoms/RoundedButton";
 import TransparencyImage from "../public/img/transparencyImage";
 import DonationImage from "../public/img/donationImage";
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export async function getStaticProps({ locale }) {
   const pages = await withPages();
@@ -253,7 +253,7 @@ export default function Transparencia({ pages }) {
           textAlign={isMobileMod ? "start" : "end"}
           fontSize={isMobileMod ? "14px" : "16px"}
         >
-          {t('fullDashboard')} <Link fontSize={isMobileMod ? "14px" : "16px"} target="_blank" color="#42B0FF" href="https://perguntas.basedosdados.org/public/dashboard/ab21da85-bff2-435b-a819-953d785167b4"
+          {t('fullDashboard')} <Link display="inline" fontSize={isMobileMod ? "14px" : "16px"} target="_blank" color="#42B0FF" href="https://perguntas.basedosdados.org/public/dashboard/ab21da85-bff2-435b-a819-953d785167b4"
           > {t('here')}</Link>.
         </SectionText>
       </SectionBox>

@@ -64,5 +64,5 @@ export default async function handler(req, res) {
   if(result.errors) return res.status(500).json({error: result.errors, success: false})
   if(result === "err") return res.status(500).json({error: "err", success: false})
 
-  return res.status(200).json({resource: cleanGraphQLResponse(result), success: true})
+  return res.status(200).json({resource: cleanGraphQLResponse(result?.data?.allInformationrequest?.edges[0]?.node), success: true})
 }

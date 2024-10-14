@@ -94,6 +94,7 @@ export default function Contato({ pages }) {
             <BodyText fontSize="16px" letterSpacing="0.2px" paddingBottom="32px">
               {t('servicesDescription')}
               <Link
+                display="inline"
                 href="/servicos"
                 textDecoration="none"
                 fontFamily="Ubuntu"
@@ -120,6 +121,7 @@ export default function Contato({ pages }) {
             <BodyText fontSize="16px" letterSpacing="0.2px" fontWeight="500">
               {t('questionsText')}
               <Link
+                display="inline"
                 href="https://discord.gg/huKWpsVYx4"
                 textDecoration="none"
                 fontFamily="Ubuntu"

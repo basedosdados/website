@@ -25,7 +25,7 @@ export async function getStaticProps({ params, locale }) {
   const caseStudy = CaseStudiesContent.find((res) => res.id === params.id);
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common', 'caseStudies'])),
+      ...(await serverSideTranslations(locale, ['common', 'menu', 'caseStudies'])),
       ...caseStudy,
     },
     revalidate: 30

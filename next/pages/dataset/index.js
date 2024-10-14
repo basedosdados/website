@@ -14,12 +14,11 @@ import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import cookies from "js-cookie";
-import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { triggerGAEvent } from "../../utils";
-import { withPages } from "../../hooks/pages.hook";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Link from "../../components/atoms/Link";
+import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import { triggerGAEvent } from "../../utils";
 
 import {
   getSearchDatasets
@@ -43,9 +42,9 @@ export async function getStaticProps({ locale }) {
 }
 
 export default function SearchDatasetPage() {
+  const { t } = useTranslation('dataset')
   const router =  useRouter()
   const query = router.query
-  const { t } = useTranslation('dataset')
 
   const [fetchApi, setFetchApi] = useState(null)
   const [showEmptyState, setShowEmptyState] = useState(false)

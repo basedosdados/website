@@ -7,12 +7,12 @@ import {
   Divider
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import ReadMore from "../atoms/ReadMore";
-import { TemporalCoverage } from "../molecules/TemporalCoverageDisplay";
-import { AlertDiscalimerBox } from "../molecules/DisclaimerBox";
-import FourOFour from "../templates/404";
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import { capitalize } from "lodash";
+import ReadMore from "../atoms/ReadMore";
+import { AlertDiscalimerBox } from "../molecules/DisclaimerBox";
+import FourOFour from "../templates/404";
 
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 

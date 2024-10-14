@@ -732,7 +732,7 @@ export default function QuemSomos({ data }) {
               top={isMobileMod()? "0" : "120px"}
               z-index="20"
             >
-              {t('teamCategories').map((elm, i) => (
+              {t('teamCategories', { returnObjects: true }).map((elm, i) => (
                 <Text
                   key={i}
                   fontSize="16px"

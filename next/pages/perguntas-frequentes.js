@@ -113,13 +113,12 @@ const QuestionsBox = ({ question, answer, id, active }) => {
 }
 
 export default function FAQ({}) {
+  const { t } = useTranslation('faq');
   const [allQuestions, setAllQuestions] = useState([])
   const [questions, setQuestions] = useState([])
   const [categorySelected, setCategorySelected] = useState("")
   const [searchFilter, setSearchFilter] = useState("")
   const [closeQuestion, setCloseQuestion] = useState(false)
-
-  const { t } = useTranslation('faq');
 
   useEffect(() => {
     setAllQuestions(QuestionFAQ)

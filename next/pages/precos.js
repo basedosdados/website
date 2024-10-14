@@ -7,14 +7,14 @@ import {
 import { useEffect, useState } from "react";
 import Head from "next/head";
 import cookies from 'js-cookie';
-import Toggle from "../components/atoms/Toggle";
-import { MainPageTemplate } from "../components/templates/main";
-import { isMobileMod } from "../hooks/useCheckMobile.hook";
-import { withPages } from "../hooks/pages.hook";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Toggle from "../components/atoms/Toggle";
+import { MainPageTemplate } from "../components/templates/main";
+import { isMobileMod } from "../hooks/useCheckMobile.hook";
+import { withPages } from "../hooks/pages.hook";
 
 import CheckIcon from "../public/img/icons/checkIcon";
 import InfoIcon from '../public/img/icons/infoIcon';

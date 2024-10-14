@@ -27,10 +27,10 @@ export async function getStaticProps({ locale }) {
 }
 
 export default function TermsAndPolitics() {
+  const { t } = useTranslation('terms');
   const router = useRouter()
   const { query } = router
   const [sectionSelected, setSectionSelected] = useState("")
-  const { t } = useTranslation('terms');
 
   function movedScroll(value) {
     window.scrollTo({
@@ -44,13 +44,13 @@ export default function TermsAndPolitics() {
     let targetElement = ""
 
     if(id === "terms") {
-      targetElement = document.getElementById(t('termsOfService'))
-      setSectionSelected(t('termsOfService'))
+      targetElement = document.getElementById("Terms Of Service")
+      setSectionSelected("Terms Of Service")
       movedScroll(useCheckMobile() ? 210 : 120)
     }
     if(id === "privacy") {
-      targetElement = document.getElementById(t('privacyPolicy'))
-      setSectionSelected(t('privacyPolicy'))
+      targetElement = document.getElementById("Privacy Policy")
+      setSectionSelected("Privacy Policy")
       movedScroll(targetElement?.offsetTop+120)
     }
   },[query?.section])
@@ -65,7 +65,7 @@ export default function TermsAndPolitics() {
         const targetElement = document.getElementById(elm)
 
         if (targetElement) {
-          if(targetElement.id === t('termsOfService')) {
+          if(targetElement.id === "Terms Of Service") {
             movedScroll(useCheckMobile() ? 210 : 80)
           } else {
             movedScroll(targetElement?.offsetTop+120)
@@ -135,8 +135,8 @@ export default function TermsAndPolitics() {
             position={isMobileMod() ? "relative" : "sticky"}
             top={isMobileMod()? "0" : "120px"}
           >
-            <SectionText section="termsOfService"/>
-            <SectionText section="privacyPolicy"/>
+            <SectionText section="Terms Of Service"/>
+            <SectionText section="Privacy Policy"/>
           </Box>
 
           <Stack
@@ -144,7 +144,7 @@ export default function TermsAndPolitics() {
             spacing="80px"
           >
             <VStack
-              id={t('termsOfService')}
+              id="Terms Of Service"
               name="terms"
               width="100%"
               spacing={8}
@@ -161,7 +161,7 @@ export default function TermsAndPolitics() {
             </VStack>
 
             <VStack
-              id={t('privacyPolicy')}
+              id="Privacy Policy"
               name="privacy"
               width="100%"
               spacing={8}

@@ -9,15 +9,15 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
+import { capitalize } from 'lodash';
 import ReadMore from "../atoms/ReadMore";
 import { formatBytes } from "../../utils";
 import ObservationLevel from "../atoms/ObservationLevelTable";
 import { TemporalCoverageBar } from "../molecules/TemporalCoverageDisplay";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import FourOFour from "../templates/404";
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
-import { capitalize } from 'lodash';
 
 import EmailIcon from "../../public/img/icons/emailIcon";
 import GithubIcon from "../../public/img/icons/githubIcon";

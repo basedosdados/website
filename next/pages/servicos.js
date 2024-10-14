@@ -8,6 +8,8 @@ import {
 import { useEffect, useState } from "react";
 import ImageNext from "next/image";
 import Head from "next/head";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { CaseStudiesPaged } from "../content/caseStudies";
 import Display from "../components/atoms/Display";
 import BodyText from "../components/atoms/BodyText";
@@ -21,8 +23,7 @@ import { isMobileMod, useCheckMobile } from "../hooks/useCheckMobile.hook";
 import BDLogoLabImage from "../public/img/logos/bd_logo_lab"
 
 import CheckIcon from "../public/img/icons/checkIcon";
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
 
 export async function getStaticProps({ locale }) {
   return {
@@ -359,6 +360,7 @@ export default function Services() {
           width="100%"
           maxWidth="1264px"
           margin="0 auto !important"
+          alignItems="center"
           direction={{ base: "column", lg: "row" }}
           gap="120px"
         >
