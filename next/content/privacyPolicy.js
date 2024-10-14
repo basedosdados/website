@@ -3,7 +3,6 @@ import {
   VStack,
   Stack,
   Box,
-  Text
 } from "@chakra-ui/react";
 import BodyText from "../components/atoms/BodyText";
 import SectionText from "../components/atoms/SectionText";

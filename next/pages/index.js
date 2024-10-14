@@ -1,6 +1,3 @@
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
 import {
   Box,
   HStack,
@@ -14,6 +11,9 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useMediaQuery } from "@chakra-ui/react";
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import BodyText from "../components/atoms/BodyText";
 import ControlledInput from "../components/atoms/ControlledInput";
@@ -512,7 +512,7 @@ function Support() {
               href="https://apoia.se/support/basedosdados/new/15"
             >
               <RoundedButton backgroundColor="#FF8484" width="200px">
-                  R$ <p style={{fontSize:"24px", margin:"0 5px"}}>15</p>/ {t('support.month')}
+                R$ <p style={{fontSize:"24px", margin:"0 5px"}}>15</p>/ {t('support.month')}
               </RoundedButton>
             </Link>
           </ShadowBox>
@@ -557,7 +557,7 @@ function Support() {
                 backgroundColor="#FF8484"
                 width="200px"
               >
-                  R$ <p style={{fontSize:"24px", margin:"0 5px"}}>30</p>/ {t('support.month')}
+                R$ <p style={{fontSize:"24px", margin:"0 5px"}}>30</p>/ {t('support.month')}
               </RoundedButton>
             </Link>
           </ShadowBox>
@@ -591,7 +591,7 @@ function Support() {
               href="https://apoia.se/support/basedosdados/new/50"
             >
               <RoundedButton backgroundColor="#FF8484" width="200px">
-                  R$ <p style={{fontSize:"24px", margin:"0 5px"}}>50</p>/ {t('support.month')}
+                R$ <p style={{fontSize:"24px", margin:"0 5px"}}>50</p>/ {t('support.month')}
               </RoundedButton>
             </Link>
           </ShadowBox>
@@ -676,6 +676,7 @@ function Support() {
           >
             💰 {t('support.want_to_institutionally_support_bd')}
             <Link
+              display="inline"
               fontFamily="ubuntu"
               textDecoration="none"
               fontWeight="500"

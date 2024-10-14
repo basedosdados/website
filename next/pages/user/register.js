@@ -9,9 +9,9 @@ import {
   Text
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { triggerGAEvent } from "../../utils";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { triggerGAEvent } from "../../utils";
 
 import Input from "../../components/atoms/SimpleInput";
 import Button from "../../components/atoms/RoundedButton";
@@ -407,11 +407,11 @@ export default function Register() {
           marginTop="16px !important"
         >
           {t('signup.termsAgreement.part1')}
-          <Link fontSize="12px" fontFamily="ubuntu" color="#42B0FF" href="/termos-e-privacidade?section=terms" target="_blank">
+          <Link display="inline" fontSize="12px" lineHeight="normal" fontFamily="ubuntu" color="#42B0FF" href="/termos-e-privacidade?section=terms" target="_blank">
             {t('signup.termsAgreement.termsLink')}
           </Link>
           {t('signup.termsAgreement.part2')}
-          <Link fontSize="12px" fontFamily="ubuntu" color="#42B0FF" href="/termos-e-privacidade?section=privacy" target="_blank">
+          <Link display="inline" fontSize="12px" lineHeight="normal" fontFamily="ubuntu" color="#42B0FF" href="/termos-e-privacidade?section=privacy" target="_blank">
             {t('signup.termsAgreement.privacyLink')}
           </Link>
           {t('signup.termsAgreement.part3')}
@@ -427,7 +427,7 @@ export default function Register() {
           letterSpacing= "0.3px"
           marginTop="24px !important"
         >
-          {t('signup.alreadyHaveAccount')} <Link fontFamily="ubuntu" color="#42B0FF" href="/user/login">{t('signup.login')}</Link>.
+          {t('signup.alreadyHaveAccount')} <Link display="inline" lineHeight="normal" fontFamily="ubuntu" color="#42B0FF" href="/user/login">{t('signup.login')}</Link>.
         </Text>
       </Stack>
     </MainPageTemplate>

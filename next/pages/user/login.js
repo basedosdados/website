@@ -36,12 +36,12 @@ export async function getStaticProps({ locale }) {
 }
 
 export default function Login() {
+  const { t } = useTranslation('user');
   const router = useRouter()
   const { query } = router
   const [formData, setFormData] = useState({ email: "", password: "" })
   const [errors, setErrors] = useState({ email: "", password: "", login: ""})
   const [showPassword, setShowPassword] = useState(true)
-  const { t } = useTranslation('user');
 
   const handleInputChange = (e, field) => {
     setFormData((prevState) => ({
@@ -268,7 +268,7 @@ export default function Login() {
             _hover={{opacity: "0.6"}}
             marginLeft="2px"
             onClick={() => window.open("./register", "_self")}
-          >{" "}{t('login.signUp')}
+          >{t('login.signUp')}
           </ButtonSimple>.
         </SectionText>
       </Stack>

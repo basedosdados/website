@@ -1,4 +1,4 @@
-import { Link as ChakraLink } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -14,19 +14,22 @@ export default function Link({
 
   return (
     <NextLink href={href || '#'} locale={locale} passHref legacyBehavior>
-      <ChakraLink
-        target={target}
-        fontFamily="Lato"
+      <Text
+        as="a"
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        fontFamily="Roboto"
         fontSize="14px"
-        letterSpacing="0.5px"
-        color={color}
-        _hover={{ textDecoration: "none", opacity:"0.6" }}
+        lineHeight="20px"
         fontWeight={fontWeight}
-        {...(href ? {} : { as: 'span' })}
+        color={color}
+        target={target}
         {...props}
       >
         {children}
-      </ChakraLink>
+      </Text>
     </NextLink>
   );
 }
+

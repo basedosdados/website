@@ -6,10 +6,10 @@ import {
   Text,
   Box
 } from "@chakra-ui/react";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { useTranslation } from 'next-i18next';
 import { capitalize } from "lodash";
 import { useRouter } from 'next/router';
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import Link from '../atoms/Link';
 
 import LinkIcon from "../../public/img/icons/linkIcon";
@@ -37,37 +37,27 @@ export default function Database({
     return (
       <Link
         href={tablesNumber > 0 ? `/dataset/${id}?table=${tables.id}` : "#"}
+        cursor={tablesNumber > 0 ? "pointer" : "normal"}
         color={tablesNumber === 0 ? "#ACAEB1" : "#0068C5"}
+        fill={tablesNumber === 0 ? "#ACAEB1" : "#0068C5"}
+        pointerEvents={tablesNumber === 0 && "none"}
         fontWeight="400"
         _hover={{
           color: "#0057A4",
-          fill: "#0057A4",
-          textDecoration: "none"
+          fill: "#0057A4"
         }}
-        pointerEvents={tablesNumber === 0 ? "none" : "auto"}
-        cursor={tablesNumber > 0 ? "pointer" : "normal"}
       >
+        <DataBaseSolidIcon
+          alt={t('tables')}
+          width="15px"
+          height="15px"
+        />
         <Text
-          display="flex"
-          flexDirection="row"
-          alignItems="center"
-          fontFamily="Roboto"
-          fontSize="14px"
-          lineHeight="20px"
-          fill={tablesNumber === 0 ? "#ACAEB1" : "#0068C5"}
+          marginLeft="4px !important"
+          whiteSpace="nowrap"
         >
-          <DataBaseSolidIcon
-            alt={t('tables')}
-            width="15px"
-            height="15px"
-          />
-          <Text
-            marginLeft="4px !important"
-            whiteSpace="nowrap"
-          >
-            {tablesNumber}{" "}
-            {tablesNumber === 1 ? t('datasetCard.table') : t('datasetCard.tables')}
-          </Text>
+          {tablesNumber}{" "}
+          {tablesNumber === 1 ? t('datasetCard.table') : t('datasetCard.tables')}
         </Text>
       </Link>
     )
@@ -79,38 +69,28 @@ export default function Database({
 
     return (
       <Link
-        href={rawDataSourcesNumber > 0 ? `/dataset/${id}?raw_data_source=${rawDataSources.id}` : "#"}
+        cursor={rawDataSourcesNumber > 0 ? "pointer" : "normal"}
         color={rawDataSourcesNumber === 0 ? "#ACAEB1" : "#0068C5"}
+        fill={rawDataSourcesNumber === 0 ? "#ACAEB1" : "#0068C5"}
+        pointerEvents={rawDataSourcesNumber === 0 && "none"}
         fontWeight="400"
         _hover={{
           color: "#0057A4",
-          fill: "#0057A4",
-          textDecoration: "none"
+          fill: "#0057A4"
         }}
-        pointerEvents={rawDataSourcesNumber === 0 ? "none" : "auto"}
-        cursor={rawDataSourcesNumber > 0 ? "pointer" : "normal"}
+        href={rawDataSourcesNumber > 0 ? `/dataset/${id}?raw_data_source=${rawDataSources.id}` : "#"}
       >
+        <LinkIcon
+          alt={t('rawDataSources')}
+          width="15px"
+          height="15px"
+        />
         <Text
-          display="flex"
-          flexDirection="row"
-          alignItems="center"
-          fontFamily="Roboto"
-          fontSize="14px"
-          lineHeight="20px"
-          fill={rawDataSourcesNumber === 0 ? "#ACAEB1" : "#0068C5"}
+          marginLeft="4px !important"
+          whiteSpace="nowrap"
         >
-          <LinkIcon
-            alt={t('rawDataSources')}
-            width="15px"
-            height="15px"
-          />
-          <Text
-            marginLeft="4px !important"
-            whiteSpace="nowrap"
-          >
-            {rawDataSourcesNumber}{" "}
-            {rawDataSourcesNumber === 1 ? t('datasetCard.rawDataSource') : t('datasetCard.rawDataSources')}
-          </Text>
+          {rawDataSourcesNumber}{" "}
+          {rawDataSourcesNumber === 1 ? t('datasetCard.rawDataSource') : t('datasetCard.rawDataSources')}
         </Text>
       </Link>
     )
@@ -122,38 +102,28 @@ export default function Database({
 
     return (
       <Link
-        href={informationRequestsNumber > 0 ? `/dataset/${id}?information_request=${informationRequests.id}` : "#"}
+        cursor={informationRequestsNumber > 0 ? "pointer" : "normal"}
         color={informationRequestsNumber === 0 ? "#ACAEB1" : "#0068C5"}
+        fill={informationRequestsNumber === 0 ? "#ACAEB1" : "#0068C5"}
+        pointerEvents={informationRequestsNumber === 0 && "none"}
         fontWeight="400"
         _hover={{
           color: "#0057A4",
-          fill: "#0057A4",
-          textDecoration: "none"
+          fill: "#0057A4"
         }}
-        pointerEvents={informationRequestsNumber === 0 ? "none" : "auto"}
-        cursor={informationRequestsNumber > 0 ? "pointer" : "normal"}
+        href={informationRequestsNumber > 0 ? `/dataset/${id}?information_request=${informationRequests.id}` : "#"}
       >
+        <InfoArrowIcon
+          alt={t('informationRequests')}
+          width="15px"
+          height="15px"
+        />
         <Text
-          display="flex"
-          flexDirection="row"
-          alignItems="center"
-          fontFamily="Roboto"
-          fontSize="14px"
-          lineHeight="20px"
-          fill={informationRequestsNumber === 0 ? "#ACAEB1" : "#0068C5"}
+          marginLeft="4px !important"
+          whiteSpace="nowrap"
         >
-          <InfoArrowIcon
-            alt={t('informationRequests')}
-            width="15px"
-            height="15px"
-          />
-          <Text
-            marginLeft="4px !important"
-            whiteSpace="nowrap"
-          >
-            {informationRequestsNumber}{" "}
-            {informationRequestsNumber === 1 ? t('datasetCard.informationRequest') : t('datasetCard.informationRequests')}
-          </Text>
+          {informationRequestsNumber}{" "}
+          {informationRequestsNumber === 1 ? t('datasetCard.informationRequest') : t('datasetCard.informationRequests')}
         </Text>
       </Link>
     )
@@ -178,7 +148,6 @@ export default function Database({
           target="_self"
         >
           <Box
-            as="a"
             display="flex"
             justifyContent="center"
             border="1px solid #DEDFE0"

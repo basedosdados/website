@@ -5,14 +5,14 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useEffect } from "react";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Display from "../components/atoms/Display";
 import Subtitle from "../components/atoms/Subtitle";
 import BodyText from "../components/atoms/BodyText";
 import Link from "../components/atoms/Link";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export async function getStaticProps({ locale }) {
   const pages = await withPages();

@@ -6,12 +6,12 @@ import {
   Tooltip,
   Stack
 } from "@chakra-ui/react";
+import { useTranslation } from 'next-i18next';
+import { capitalize } from "lodash";
 import Card from "../molecules/Card";
 import { CategoryIcon } from "../atoms/CategoryIcon";
 import Link from "../atoms/Link";
 import { ThemeTag } from "../atoms/ThemeTag";
-import { useTranslation } from 'next-i18next';
-import { capitalize } from "lodash";
 
 export default function DatabaseCard({
   name,
@@ -111,7 +111,7 @@ export default function DatabaseCard({
                   alt={c.name}
                   size="37px"
                   padding="4px"
-                  url={`https://storage.googleapis.com/basedosdados-website/category_icons/2022/icone_${c.slug}.svg`}
+                  url={`https://storage.googleapis.com/basedosdados-website/theme_icons/${c.slug}.svg`}
                 />
               </Link>
             </Center>
@@ -166,7 +166,6 @@ export default function DatabaseCard({
               whiteSpace="nowrap"
               overflow="hidden"
               minHeight="0"
-              padding="6px 8px"
               textOverflow="ellipsis"
             />
           ))}

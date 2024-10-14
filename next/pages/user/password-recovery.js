@@ -11,6 +11,8 @@ import {
 import { useState, useEffect } from "react";
 import axios from "axios";
 import InputForm from "../../components/atoms/SimpleInput";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import Display from "../../components/atoms/Display";
 import Link from "../../components/atoms/Link";
@@ -21,8 +23,6 @@ import { MainPageTemplate } from "../../components/templates/main";
 import { EmailRecoveryImage } from "../../public/img/emailImage";
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export async function getServerSideProps(context) {
   const { query, locale } = context;
@@ -426,7 +426,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
           letterSpacing= "0.3px"
         >
           {t('passwordRecovery.needHelp')}{' '}
-          <Link fontFamily="ubuntu" color="#42B0FF" href="/contato">
+          <Link display="inline" fontFamily="ubuntu" color="#42B0FF" href="/contato">
             {t('passwordRecovery.contactUs')}
           </Link>
           .

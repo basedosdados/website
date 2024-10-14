@@ -7,10 +7,10 @@ import {
   Image
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { useTranslation } from 'next-i18next';
 import { NamedAvatar } from "../molecules/NamedAvatar";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import Carousel from "../atoms/Carousel";
-import { useTranslation } from 'next-i18next';
 
 function Testimonial({ children, name, position, src }) {
   return (

@@ -180,7 +180,6 @@ export default function DataInformationQuery({ resource }) {
   const [downloadWarning, setDownloadWarning] = useState("")
   const [checkedColumns, setCheckedColumns] = useState([])
   const [numberColumns, setNumberColumns] = useState(0)
-  const [columnsTranslationPro, setColumnsTranslationPro] = useState([])
   const [sqlCode, setSqlCode] = useState("")
   const [insufficientChecks, setInsufficientChecks] = useState(false)
   const [includeTranslation, setIncludeTranslation] = useState(true)
@@ -390,7 +389,6 @@ export default function DataInformationQuery({ resource }) {
               hasLoading={hasLoadingColumns}
               setHasLoading={setHasLoadingColumns}
               template={tabAccessIndex === 1 ? "download" : "checks"}
-              columnsPro={setColumnsTranslationPro}
             />
 
             <Skeleton
@@ -405,14 +403,11 @@ export default function DataInformationQuery({ resource }) {
               <AlertDiscalimerBox
                 type="info"
               >
-                {t('table.infoTranslationNotAvailable', {
-                  dictionaryLink: (
-                    <Text as="a" href="https://basedosdados.org/dataset/e083c9a2-1cee-4342-bedc-535cbad6f3cd?table=0308fbe0-270c-4135-9115-ea1100f400f6" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>dicionário</Text>
-                  ),
-                  directoryLink: (
-                    <Text as="a" href="https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=dffb65ac-9df9-4151-94bf-88c45bfcb056" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>diretórios</Text>
-                  )
-                })}
+                {t('table.infoTranslationNotAvailable', { returnObjects: true })[0]}
+                <Text as="a" marginRight="4px" href="https://basedosdados.org/dataset/e083c9a2-1cee-4342-bedc-535cbad6f3cd?table=0308fbe0-270c-4135-9115-ea1100f400f6" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.infoTranslationNotAvailable', { returnObjects: true })[1]}</Text>
+                {t('table.infoTranslationNotAvailable', { returnObjects: true })[2]}
+                <Text as="a" margin="0 4px" href="https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=dffb65ac-9df9-4151-94bf-88c45bfcb056" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.infoTranslationNotAvailable', { returnObjects: true })[3]}</Text>
+                {t('table.infoTranslationNotAvailable', { returnObjects: true })[4]}
               </AlertDiscalimerBox>
             </Skeleton>
 
@@ -490,8 +485,11 @@ export default function DataInformationQuery({ resource }) {
                 <AlertDiscalimerBox
                   type="warning"
                 >
-                  {t('table.warningLargeTable', { size: <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text> })}
-                  <Text as="a" href="https://basedosdados.github.io/mais/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>limite de processamento gratuito</Text>
+                  {t('table.warningLargeTable', { returnObjects: true })[0]}
+                  <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>
+                  {t('table.warningLargeTable', { returnObjects: true })[1]}
+                  <Text marginRight="4px" as="a" href="https://basedosdados.github.io/mais/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.warningLargeTable', { returnObjects: true })[2]}</Text>
+                  {t('table.warningLargeTable', { returnObjects: true })[3]}
                   <Text as="br" display={{base: "none", lg: "flex"}}/>
                   {numberColumns === checkedColumns.length && t('table.warningLargeTableOptimize')}
                 </AlertDiscalimerBox>
@@ -571,39 +569,33 @@ export default function DataInformationQuery({ resource }) {
             >
               {isUserPro() === false && downloadWarning === "free" &&
                 <AlertDiscalimerBox type="info">
-                  {t('table.infoDataAvailability', {
-                    link: (
-                      <Text
-                        marginLeft="4px"
-                        as="a"
-                        target="_blank"
-                        href="https://basedosdados.github.io/mais/colab_data/"
-                        color="#0068C5"
-                        _hover={{color: "#0057A4"}}
-                      >
-                        saiba como contribuir com seu tempo
-                      </Text>
-                    )
-                  })}
+                  {t('table.infoDataAvailability', { returnObjects: true })[0]}
+                  <Text
+                    as="a"
+                    target="_blank"
+                    href="https://basedosdados.github.io/mais/colab_data/"
+                    color="#0068C5"
+                    _hover={{color: "#0057A4"}}
+                  >
+                    {t('table.infoDataAvailability', { returnObjects: true })[1]}
+                  </Text>.
                 </AlertDiscalimerBox>
               }
               {isUserPro() === false && downloadWarning === "100mbBetween1gb" &&
                 <AlertDiscalimerBox
                   type="warning"
                 >
-                  {t('table.warningPaidPlanRequired', {
-                    link: (
-                      <Text
-                        marginLeft="4px"
-                        as="a"
-                        target="_blank"
-                        href="https://basedosdados.org/precos"
-                        color="#0068C5"
-                        _hover={{color: "#0057A4"}}
-                      >assinantes dos nossos planos pagos
-                      </Text>
-                    )
-                  })}
+                  {t('table.warningPaidPlanRequired', { returnObjects: true })[0]}
+                  <Text
+                    as="a"
+                    target="_blank"
+                    href="https://basedosdados.org/precos"
+                    color="#0068C5"
+                    _hover={{color: "#0057A4"}}
+                  >
+                    {t('table.warningPaidPlanRequired', { returnObjects: true })[1]}
+                  </Text>
+                  {t('table.warningPaidPlanRequired', { returnObjects: true })[2]}
                 </AlertDiscalimerBox>
               }
               {downloadWarning === "biggest1gb" &&

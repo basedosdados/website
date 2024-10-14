@@ -19,11 +19,11 @@ import {
   Menu,
   MenuButton,
   MenuList,
-  MenuItem,
-  Select
+  MenuItem
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState, useMemo } from "react";
 import { useRouter } from "next/router"
+import { useTranslation } from 'next-i18next';
 import cookies from "js-cookie";
 import MenuDropdown from "./MenuDropdown";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
@@ -32,7 +32,6 @@ import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
 import HelpWidget from "../atoms/HelpWidget";
 import { triggerGAEvent } from "../../utils";
-import { useTranslation } from 'next-i18next';
 
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import BDLogoEduImage from "../../public/img/logos/bd_logo_edu";
@@ -44,7 +43,6 @@ import RedirectIcon from "../../public/img/icons/redirectIcon";
 import SettingsIcon from "../../public/img/icons/settingsIcon";
 import SignOutIcon from "../../public/img/icons/signOutIcon";
 
-// Create a custom hook that uses isMobileMod
 function useIsMobileMod() {
   return useCheckMobile();
 }
@@ -52,7 +50,7 @@ function useIsMobileMod() {
 function MenuDrawer({ userData, isOpen, onClose, links }) {
   const { t } = useTranslation('menu');
   const { locale } = useRouter();
-  const isMobile = useIsMobileMod(); // Use the custom hook here
+  const isMobile = useIsMobileMod();
 
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
@@ -363,7 +361,7 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
   const timerRef = useRef()
   const [isOpenMenu, setIsOpenMenu] = useState(false)
   const { t } = useTranslation('menu');
-  const isMobile = useIsMobileMod(); // Use the custom hook here
+  const isMobile = useIsMobileMod();
 
   const btnMouseEnterEvent = () => {
     setIsOpenMenu(true)
@@ -551,11 +549,11 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
 }
 
 function SearchInputUser ({ user }) {
+  const { t } = useTranslation('menu');
   const inputMobileRef = useRef(null)
   const [search, setSearch] = useState("")
   const [showInput, setShowInput] = useState(false)
   const [inputFocus, setInputFocus] = useState(false)
-  const { t } = useTranslation('menu');
   const isMobile = useIsMobileMod();
   const router = useRouter();
 
@@ -682,7 +680,8 @@ function DesktopLinks({
   userTemplate = false,
   isUserPro
 }) {
-  const isMobile = useIsMobileMod(); // Use the custom hook here
+  const isMobile = useIsMobileMod();
+  const { t } = useTranslation('common', 'menu');
 
   function LinkMenuDropDown ({ url, text, icon }) {
     const [flag, setFlag] = useBoolean()
@@ -714,8 +713,6 @@ function DesktopLinks({
       </Link>
     )
   }
-
-  const { t } = useTranslation('common', 'menu');
 
   return (
     <HStack
@@ -895,6 +892,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   const { route, locale } = router
   const [userBD, setUserBD] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+  const isMobile = useIsMobileMod();
 
   const menuDisclosure = useDisclosure()
   const menuUserMobile = useDisclosure()
@@ -912,7 +910,6 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     if(user?.internalSubscription?.edges?.[0]?.node?.isActive === true) return true
     return false
   }
-  const isMobile = useIsMobileMod(); // Use the custom hook here
 
   useEffect(() => {
     const cookieUserBD = cookies.get("userBD")
@@ -1005,7 +1002,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   }, [])
 
   if (isLoading) {
-    return null; // or a loading spinner
+    return null;
   }
 
   return (

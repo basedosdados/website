@@ -13,6 +13,14 @@ import { MainPageTemplate } from "../../components/templates/main";
 
 import { EmailConfirmImage } from "../../public/img/emailImage";
 
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['user'])),
+    },
+  };
+}
+
 export default function CheckEmail() {
   const { t } = useTranslation('user');
   const [email, setEmail] = useState("")
@@ -131,12 +139,4 @@ export default function CheckEmail() {
       </Stack>
     </MainPageTemplate>
   )
-}
-
-export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ['user'])),
-    },
-  };
 }

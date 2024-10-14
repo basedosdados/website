@@ -8,12 +8,12 @@ import {
   SkeletonText
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
+import axios from 'axios';
+import { useTranslation } from 'next-i18next';
+import { capitalize } from "lodash";
 import { useMediaQuery } from "@chakra-ui/react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../../utils";
-import { useTranslation } from 'next-i18next';
-import { capitalize } from "lodash";
-import axios from 'axios'; // Add this import
 
 import Carousel from "../atoms/Carousel";
 import SectionText from "../atoms/SectionText";
@@ -121,7 +121,7 @@ function Themes ({
                     filter={found(elm.node.slug) && "invert(1)"}
                     _hover={{ filter:"invert(1)"}}
                     alt={elm.node.name[`${capitalize(locale)}`] || elm.node.name}
-                    src={`https://storage.googleapis.com/basedosdados-website/category_icons/2022/icone_${elm.node.slug}.svg`}
+                    src={`https://storage.googleapis.com/basedosdados-website/theme_icons/${elm.node.slug}.svg`}
                   />
                 </Tooltip>
                 <RemoveIcon

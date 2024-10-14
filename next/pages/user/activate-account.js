@@ -34,7 +34,7 @@ export default function ActiveAccount({ data }) {
       <Stack
         display="flex"
         justifyContent="center"
-        width="570px"
+        width="650px"
         height="100%"
         marginTop={isMobileMod() ? "150px" : "50px"}
         marginX="27px"

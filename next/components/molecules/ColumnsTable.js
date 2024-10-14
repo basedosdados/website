@@ -97,7 +97,6 @@ export default function ColumnsTable({
   setHasLoading,
   numberColumns,
   template,
-  columnsPro
 }) {
   const router = useRouter()
   const { query, locale } = router
@@ -156,7 +155,6 @@ export default function ColumnsTable({
         if(result) {
           setResource(result.sort(sortElements))
           numberColumns(result.length)
-          columnsPro(filterClosedTables(result))
           setColumns(result.sort(sortElements))
           setHasLoading(false)
           setIsSearchLoading(false)

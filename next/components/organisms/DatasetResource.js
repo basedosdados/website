@@ -377,41 +377,45 @@ export default function DatasetResource({
       spacing={0}
       height="100%"
     >
-      <Stack
-        minWidth={{base: "100%", lg: "296px"}}
-        maxWidth={{base: "100%", lg: "296px"}}
-        spacing={0}
-      >
-        <ContentFilter
-          fieldName={t('tables')}
-          choices={tables}
-          value={query.table}
-          onChange={(id) => {
-            pushQuery("table", id)
-          }}
-          hasDivider={false}
-        />
+      {displayScreen === "desktop" ? 
+        <Stack
+          minWidth={{base: "100%", lg: "296px"}}
+          maxWidth={{base: "100%", lg: "296px"}}
+          spacing={0}
+        >
+          <ContentFilter
+            fieldName={t('tables')}
+            choices={tables}
+            value={query.table}
+            onChange={(id) => {
+              pushQuery("table", id)
+            }}
+            hasDivider={false}
+          />
 
-        <ContentFilter
-          fieldName={t('rawDataSources')}
-          choices={rawDataSources}
-          value={query.raw_data_source}
-          onChange={(id) => {
-            pushQuery("raw_data_source", id)
-          }}
-          hasDivider={tables.length > 0 ? true : false}
-        />
+          <ContentFilter
+            fieldName={t('rawDataSources')}
+            choices={rawDataSources}
+            value={query.raw_data_source}
+            onChange={(id) => {
+              pushQuery("raw_data_source", id)
+            }}
+            hasDivider={tables.length > 0 ? true : false}
+          />
 
-        <ContentFilter
-          fieldName={t('informationRequests')}
-          choices={informationRequests}
-          value={query.information_request}
-          onChange={(id) => {
-            pushQuery("information_request", id)
-          }}
-          hasDivider={tables.length > 0 || rawDataSources.length > 0 ? true : false}
-        />
-      </Stack>
+          <ContentFilter
+            fieldName={t('informationRequests')}
+            choices={informationRequests}
+            value={query.information_request}
+            onChange={(id) => {
+              pushQuery("information_request", id)
+            }}
+            hasDivider={tables.length > 0 || rawDataSources.length > 0 ? true : false}
+          />
+        </Stack>
+        :
+        <SelectResource />
+      }
 
       <SwitchResource route={query}/>
     </Stack>

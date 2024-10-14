@@ -11,11 +11,11 @@ import {
   Skeleton
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { useTranslation } from 'next-i18next';
 import Checkbox from "../atoms/Checkbox";
 import { ControlledInput, ControlledInputSimple} from "./ControlledInput";
 import SectionText from "./SectionText";
 import SearchIcon from "../../public/img/icons/searchIcon";
-import { useTranslation } from 'next-i18next';
 
 export function BaseFilterAccordion({
   fieldName,
