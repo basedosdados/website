@@ -4,6 +4,8 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import Display from "../../components/atoms/Display";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook"
@@ -11,7 +13,16 @@ import { MainPageTemplate } from "../../components/templates/main";
 
 import { EmailConfirmImage } from "../../public/img/emailImage";
 
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['user'])),
+    },
+  };
+}
+
 export default function CheckEmail() {
+  const { t } = useTranslation('user');
   const [email, setEmail] = useState("")
   const [count, setCount] = useState(0)
   const [forwardingDisabled, setForwardingDisabled] = useState(false)
@@ -70,7 +81,7 @@ export default function CheckEmail() {
           letterSpacing={isMobileMod() ? "0" : "-0.4px"}
           fontweith="500"
           textAlign="center"
-        >Confirme seu endereço de e-mail</Display>
+        >{t('checkEmail.confirmEmail')}</Display>
 
         <Stack spacing="16px">
           <Text
@@ -82,7 +93,7 @@ export default function CheckEmail() {
             lineHeight= "16px"
             letterSpacing= "0.2px"
           >
-            Enviamos uma confirmação de e-mail para
+            {t('checkEmail.sentConfirmation')}
           </Text>
 
           <Text
@@ -108,7 +119,7 @@ export default function CheckEmail() {
             lineHeight= "24px"
             letterSpacing= "0.2px"
           >
-            Confira sua caixa de entrada e siga as instruções enviadas no e-mail para completar o cadastro.
+            {t('checkEmail.checkInbox')}
           </Text>
 
           <Text
@@ -123,7 +134,7 @@ export default function CheckEmail() {
             lineHeight="30px"
             letterSpacing="0.2px"
             onClick={() => handleEmailConfirm()}
-          >{forwardingDisabled ? `Espere ${count} segundos...` :"Reenviar e-mail"}</Text>
+          >{forwardingDisabled ? t('checkEmail.waitSeconds', { count }) : t('checkEmail.resendEmail')}</Text>
         </Stack>
       </Stack>
     </MainPageTemplate>

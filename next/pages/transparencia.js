@@ -5,6 +5,8 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
 import { MainPageTemplate } from "../components/templates/main";
@@ -17,11 +19,18 @@ import RoundedButton from "../components/atoms/RoundedButton";
 import TransparencyImage from "../public/img/transparencyImage";
 import DonationImage from "../public/img/donationImage";
 
-export async function getStaticProps() {
-  return await withPages()
+export async function getStaticProps({ locale }) {
+  const pages = await withPages();
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common', 'transparency', 'menu'])),
+      pages,
+    },
+  };
 }
 
 export default function Transparencia({ pages }) {
+  const { t } = useTranslation('transparency');
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
 
@@ -76,10 +85,10 @@ export default function Transparencia({ pages }) {
 
         <iframe
           src={url}
-          frameborder="0"
+          frameBorder="0"
           width="100%"
           height="100%"
-          allowtransparency
+          allowtransparency="true"
         />
       </Box>
     )
@@ -88,15 +97,15 @@ export default function Transparencia({ pages }) {
   return (
     <MainPageTemplate paddingBottom="0">
       <Head>
-        <title>Transparência – Base dos Dados</title>
+        <title>{t('pageTitle')}</title>
         <meta
           property="og:title"
-          content="Transparência – Base dos Dados"
+          content={t('pageTitle')}
           key="ogtitle"
         />
         <meta
           property="og:description"
-          content="Utilizamos os recursos para facilitar o acesso de milhares de pessoas a dados de qualidade. Nesse espaço, você encontra informações referentes às nossas atividades, receitas e despesas. Acompanhe de perto como garantimos a sustentabilidade da organização e saiba como você também pode nos apoiar."
+          content={t('ogDescription')}
           key="ogdesc"
         />
       </Head>
@@ -116,14 +125,12 @@ export default function Transparencia({ pages }) {
             lineHeight={isMobileMod ? "40px" : "54px"}
             letterSpacing={isMobileMod ? "-0.5px" : "-0.8px" }
           >
-            Nossas contas são {isMobileMod ? " " : <br/>} transparentes e abertas {isMobileMod ? " " : <br/>} – como todo o resto.
+            {t('mainTitle1')} {isMobileMod ? " " : <br/>}
+            {t('mainTitle2')} {isMobileMod ? " " : <br/>}
+            {t('mainTitle3')}
           </Display>
-          <BodyText paddingBottom="24px">
-            Somos uma organização não-governamental sem fins lucrativos e <i>open source</i>. A transparência fundamenta todas as nossas ações, desde o trabalho com dados públicos até a prestação de contas. Utilizamos os recursos para facilitar o acesso de milhares de pessoas a dados de qualidade. 
-          </BodyText>
-          <BodyText paddingBottom="24px">
-            Nesse espaço, você encontra informações referentes às nossas atividades, receitas e despesas. Acompanhe de perto como garantimos a sustentabilidade da organização.
-          </BodyText>
+          <BodyText paddingBottom="24px" dangerouslySetInnerHTML={{ __html: t('mainDescription1') }} />
+          <BodyText paddingBottom="24px">{t('mainDescription2')}</BodyText>
         </Stack>
 
         <Stack 
@@ -150,7 +157,7 @@ export default function Transparencia({ pages }) {
           <Display
             paddingBottom="40px"
           >
-            Indicador de sobrevida
+            {t('survivalIndicator')}
           </Display>
         </Stack>
 
@@ -162,10 +169,10 @@ export default function Transparencia({ pages }) {
         >
           <iframe
             src="https://perguntas.basedosdados.org/public/question/80ad0ba9-bfa9-4427-96a0-675fb2252b37#titled=false&bordered=false"
-            frameborder="0"
+            frameBorder="0"
             width="100%"
             height="100%"
-            allowtransparency
+            allowtransparency="true"
           />
         </Stack>
 
@@ -178,13 +185,13 @@ export default function Transparencia({ pages }) {
             display={isMobileMod ? "none" : "flex"}
             paddingBottom={{base: "8px", lg: "24px"}}
           >
-            Indicador de sobrevida
+            {t('survivalIndicator')}
           </Display>
           <BodyText paddingBottom="24px">
-            Esse é nosso indicador de sobrevida. Ele mostra o tempo que nossas atividades poderiam se manter caso a organização arrecadasse só o que já está planejado e se continuasse gastando como na média dos três meses anteriores. 
+            {t('survivalDescription1')}
           </BodyText>
           <BodyText paddingBottom="24px">
-            Abaixo, você confere os detalhes das fontes e destinações de recursos da organização.
+            {t('survivalDescription2')}
           </BodyText>
         </Stack>
       </SectionBox>
@@ -199,14 +206,13 @@ export default function Transparencia({ pages }) {
           textAlign={isMobileMod ? "start" : "center"}
           paddingBottom={isMobileMod ? "24px" : "8px"}
         >
-          Dados da contabilidade
+          {t('accountingData')}
         </Display>
         <BodyText
           textAlign={isMobileMod ? "start" : "center"}
           paddingBottom={isMobileMod ? "24px" : "16px"}
         >
-          Como não poderia deixar de ser, todos os microdados{isMobileMod ? " " : <br/>}
-          relativos à contabilidade da BD estão disponíveis no <i>datalake</i> público.
+          {t('accountingDescription1')} {isMobileMod ? " " : <br/>} {t('accountingDescription2')}
         </BodyText>
         <RoundedButton
           fontSize="15px"
@@ -215,7 +221,7 @@ export default function Transparencia({ pages }) {
             "https://basedosdados.org/dataset/8b6c07fd-af78-44ad-8408-da57e6a0b3d4?table=26480073-cb94-41e2-9dfa-6b4ea76da9d9", "_blank"
           )}
         >
-          Acesse
+          {t('accessButton')}
         </RoundedButton>
       </SectionBox>
 
@@ -231,12 +237,12 @@ export default function Transparencia({ pages }) {
           gridGap={{ base: "64px", lg: "80px" }}
         >
           <GraphicsBox
-            text="Receitas acumuladas esse ano"
+            text={t('accumulatedRevenue')}
             url="https://perguntas.basedosdados.org/public/question/c41beae5-94d3-41e2-9161-a12492b0cae0#titled=false&bordered=false"
           />
 
           <GraphicsBox 
-            text="Despesas acumuladas esse ano"
+            text={t('accumulatedExpenses')}
             url="https://perguntas.basedosdados.org/public/question/312842db-4ea9-455b-be7a-98d96e742ea7#titled=false&bordered=false"
           />
         </Stack>
@@ -247,8 +253,8 @@ export default function Transparencia({ pages }) {
           textAlign={isMobileMod ? "start" : "end"}
           fontSize={isMobileMod ? "14px" : "16px"}
         >
-          Veja o painel completo <Link fontSize={isMobileMod ? "14px" : "16px"} target="_blank" color="#42B0FF" href="https://perguntas.basedosdados.org/public/dashboard/ab21da85-bff2-435b-a819-953d785167b4"
-          > aqui</Link>.
+          {t('fullDashboard')} <Link display="inline" fontSize={isMobileMod ? "14px" : "16px"} target="_blank" color="#42B0FF" href="https://perguntas.basedosdados.org/public/dashboard/ab21da85-bff2-435b-a819-953d785167b4"
+          > {t('here')}</Link>.
         </SectionText>
       </SectionBox>
 
@@ -260,7 +266,7 @@ export default function Transparencia({ pages }) {
         <Display
           paddingBottom="24px"
         >
-          Estatuto e relatórios 
+          {t('statuteReports')}
         </Display>
 
         <Stack
@@ -270,11 +276,11 @@ export default function Transparencia({ pages }) {
           spacing={0}
         >
           <BodyText paddingBottom="24px" maxWidth={isMobileMod ? "100%" : "45%"}>
-            Em nosso estatuto, estão presentes as diretrizes que regulamentam o funcionamento e o processo de tomada de decisões da organização. O documento inclui também os direitos e deveres dos membros e as competências dos conselhos administrativos e fiscais.
+            {t('statuteDescription')}
           </BodyText>
         
           <BodyText paddingBottom="24px" maxWidth={isMobileMod ? "100%" : "45%"}>
-            Nossos relatórios apresentam todas as atividades empenhadas pela equipe. São diversos projetos que colaboram com a promoção da cultura de transparência, o desenvolvimento socioeconômico e a construção de políticas públicas baseadas em dados e evidências.
+            {t('reportsDescription')}
           </BodyText>
         </Stack>
       </SectionBox>
@@ -294,7 +300,7 @@ export default function Transparencia({ pages }) {
           color="#42B0FF"
           href="https://storage.googleapis.com/basedosdados-website/pdf/bd_estatuto_social.pdf"
         >
-          BD Estatuto Social
+          {t('DBStatute')}
         </Link>
       </Stack>
 
@@ -313,7 +319,7 @@ export default function Transparencia({ pages }) {
           color="#42B0FF"
           href="https://drive.google.com/file/d/1OvqJWAg-m3IRt3NAYZB20uxemNqXJ_MO/view?usp=drive_link"
         >
-          BD Relatório Anual 2023
+          {t('DBReport2023')}
         </Link>
       </Stack>
 
@@ -332,7 +338,7 @@ export default function Transparencia({ pages }) {
           color="#42B0FF"
           href="https://storage.googleapis.com/basedosdados-website/pdf/bd_relatorio_anual_2022.pdf"
         >
-          BD Relatório Anual 2022
+          {t('DBReport2022')}
         </Link>
       </Stack>
 
@@ -352,7 +358,7 @@ export default function Transparencia({ pages }) {
           color="#42B0FF"
           href="https://storage.googleapis.com/basedosdados-website/pdf/bd_relatorio_anual_2021.pdf"
         >
-          BD Relatório Anual 2021
+          {t('DBReport2021')}
         </Link>
       </Stack>
 
@@ -379,7 +385,7 @@ export default function Transparencia({ pages }) {
               paddingBottom={{base: "20px", lg: "24px"}}
               color="#FFF"
             >
-              Você também acredita no {isMobileMod ? " " : <br/>} acesso a dados de qualidade?
+              {t('supportTitle1')} {isMobileMod ? " " : <br/>} {t('supportTitle2')}
             </BigTitle>
             <BodyText 
               fontSize="16px"
@@ -388,7 +394,7 @@ export default function Transparencia({ pages }) {
               paddingBottom="24px"
               color="#FFF"
             >
-              Tudo o que fazemos só é possível por conta das pessoas que apoiam o nosso trabalho. Ajude a BD a continuar facilitando o acesso a dados públicos. Com qualquer valor, você contribui para a manutenção dos nossos projetos e a sobrevivência da organização.
+              {t('supportDescription')}
             </BodyText>
             <RoundedButton
               backgroundColor="#FF8484"
@@ -397,7 +403,7 @@ export default function Transparencia({ pages }) {
               fontSize="15px"
               onClick={() => window.open("https://apoia.se/basedosdados", "_blank")}
             >
-              Apoie agora
+              {t('supportButton')}
             </RoundedButton>
           </Stack>
 

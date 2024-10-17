@@ -6,6 +6,8 @@ import {
   Tooltip,
   Stack
 } from "@chakra-ui/react";
+import { useTranslation } from 'next-i18next';
+import { capitalize } from "lodash";
 import Card from "../molecules/Card";
 import { CategoryIcon } from "../atoms/CategoryIcon";
 import Link from "../atoms/Link";
@@ -13,14 +15,16 @@ import { ThemeTag } from "../atoms/ThemeTag";
 
 export default function DatabaseCard({
   name,
-  categories = [],
+  themes = [],
   organization,
   tags = [],
   tables,
   rawDataSources,
   informationRequests,
   link,
+  locale,
 }) {
+  const { t } = useTranslation('dataset');
   const databaseInfo = []
 
   if(tables.number > 0) {
@@ -37,20 +41,23 @@ export default function DatabaseCard({
         <Stack
           margin="0 !important"
           cursor={tables?.number > 0 ? "pointer" : "default"}
-          _hover={tables?.number === undefined ||tables?.number > 0 && {opacity : "0.7"}}
-          color={tables?.number === undefined || tables?.number === 0? "#C4C4C4" : "#2B8C4D"}
+          _hover={tables?.number === undefined || tables?.number > 0 ? {opacity : "0.7"} : undefined}
         >
-          <a
+          <Link
             href={tables?.number > 0 ? `${link}?table=${tables?.id}` : ""}
             target="_blank"
-            style={{display: "flex"}}
+            display="flex"
+            fontFamily="Ubuntu"
+            fontSize="14px"
+            letterSpacing="0.3px"
+            fontWeight="700"
+            color={tables?.number === undefined || tables?.number === 0 ? "#C4C4C4" : "#2B8C4D"}
           >
-            <b>{tables?.number === 1 ?
-              "1 tabela tratada"
-            : 
-              `${tables?.number || 0} tabelas tratadas`
-            }</b>
-          </a>
+            {tables?.number === 1 ?
+              t('datasetCard.oneTable') :
+              t('datasetCard.multipleTables', { count: tables?.number || 0 })
+            }
+          </Link>
         </Stack>
       </HStack>
     )
@@ -59,22 +66,22 @@ export default function DatabaseCard({
   if (rawDataSources.number > 0) {
     databaseInfo.push(
       rawDataSources.number === 1 ?
-      "1 fonte original" :
-      `${rawDataSources.number} fontes originais`
+      t('datasetCard.oneRawDataSource') :
+      t('datasetCard.multipleRawDataSources', { count: rawDataSources.number })
     )
   }
   if (informationRequests.number > 0) {
     databaseInfo.push(
       informationRequests.number === 1 ?
-      "1 pedido LAI" :
-      `${informationRequests.number} pedidos LAI`
+      t('datasetCard.oneInformationRequest') :
+      t('datasetCard.multipleInformationRequests', { count: informationRequests.number })
     )
   }
 
   return (
     <Card
-      icons={categories.length !== 0 && [
-        ...categories.slice(0,6).map((c,i) => (
+      icons={themes.length !== 0 && [
+        ...themes.slice(0,6).map((c,i) => (
           <Tooltip
             key={i}
             hasArrow
@@ -104,7 +111,7 @@ export default function DatabaseCard({
                   alt={c.name}
                   size="37px"
                   padding="4px"
-                  url={`https://storage.googleapis.com/basedosdados-website/category_icons/2022/icone_${c.slug}.svg`}
+                  url={`https://storage.googleapis.com/basedosdados-website/theme_icons/${c.slug}.svg`}
                 />
               </Link>
             </Center>
@@ -139,7 +146,9 @@ export default function DatabaseCard({
           fontSize="12px"
           fontWeight="400"
           color="#6F6F6F"
-        >{organization.name}</Text>
+        >
+          {organization[`name${capitalize(locale)}`] || organization.name || organization.slug}
+        </Text>
       </Link>
 
       <VStack spacing={1} align="flex-start" marginTop="auto">
@@ -150,13 +159,13 @@ export default function DatabaseCard({
           {tags.length !== 0 && tags.slice(0,3).map((t, i) => (
             <ThemeTag
               key={i}
-              name={t.name}
+              slug={t.slug}
+              locale={locale}
               display="block"
               aligntext="center"
               whiteSpace="nowrap"
               overflow="hidden"
               minHeight="0"
-              padding="6px 8px"
               textOverflow="ellipsis"
             />
           ))}
@@ -190,7 +199,7 @@ export default function DatabaseCard({
             cursor={databaseInfo[1] && "pointer"}
             _hover={databaseInfo[1] && {opacity : "0.7"}}
           >
-            {databaseInfo[1] ? databaseInfo[1] : "0 fontes originais"}
+            {databaseInfo[1] ? databaseInfo[1] : t('datasetCard.noRawDataSources')}
           </Link>
           <Text color="#DEDFE0">•</Text>
           <Link
@@ -205,7 +214,7 @@ export default function DatabaseCard({
             cursor={databaseInfo[2] && "pointer"}
             _hover={databaseInfo[2] && {opacity : "0.7"}}
           >
-            {databaseInfo[2] ? databaseInfo[2] : "0 pedidos LAI"}
+            {databaseInfo[2] ? databaseInfo[2] : t('datasetCard.noInformationRequests')}
           </Link>
         </HStack>
       </VStack>

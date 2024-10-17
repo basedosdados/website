@@ -5,18 +5,28 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useEffect } from "react";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Display from "../components/atoms/Display";
 import Subtitle from "../components/atoms/Subtitle";
 import BodyText from "../components/atoms/BodyText";
 import Link from "../components/atoms/Link";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
-    
-export async function getStaticProps() {
-  return await withPages()
+
+export async function getStaticProps({ locale }) {
+  const pages = await withPages();
+  return {
+    props: {
+      ...pages,
+      ...(await serverSideTranslations(locale, ['common', 'menu', 'contact'])),
+    },
+  };
 }
 
 export default function Contato({ pages }) {
+  const { t } = useTranslation('contact');
+
   useEffect(() => {
     const script = document.createElement('script');
     script.src='https://js.hsforms.net/forms/v2.js';
@@ -37,15 +47,15 @@ export default function Contato({ pages }) {
   return (
     <MainPageTemplate paddingX="24px">
       <Head>
-        <title>Contato – Base dos Dados</title>
+        <title>{t('pageTitle')}</title>
         <meta
           property="og:title"
-          content="Contato – Base dos Dados"
+          content={t('pageTitle')}
           key="ogtitle"
         />
         <meta
           property="og:description"
-          content="Entre em contato com nossa equipe."
+          content={t('pageDescription')}
           key="ogdesc"
         />
       </Head>
@@ -59,7 +69,7 @@ export default function Contato({ pages }) {
         margin="50px auto auto"
       >
         <VStack maxWidth={{ base: "100%", lg: "45%" }}>
-          <Box contentAlign="flex-start">
+          <Box contentalign="flex-start">
             <Display
               fontSize="34px"
               lineHeight="40px"
@@ -67,23 +77,24 @@ export default function Contato({ pages }) {
               color="#2B8C4D"
               paddingBottom="16px"
             >
-              Entre em contato
+              {t('contactTitle')}
             </Display>
             <BodyText fontSize="16px" letterSpacing="0.2px" paddingBottom="32px">
-              Envie sua mensagem no formulário ao lado para falar com nossa equipe.
+              {t('contactDescription')}
             </BodyText>
             <Subtitle fontSize="18px" letterSpacing="0.1px" paddingBottom="8px">
-              Apoio institucional
+              {t('institutionalSupportTitle')}
             </Subtitle>
             <BodyText fontSize="16px" letterSpacing="0.2px" paddingBottom="32px">
-              A Base dos Dados é mantida por meio doações de pessoas que acreditam na transparência e acesso a dados de qualidade. Colabore para o crescimento e fortalecimento da iniciativa.
+              {t('institutionalSupportDescription')}
             </BodyText>
             <Subtitle fontSize="18px" letterSpacing="0.1px" paddingBottom="8px">
-              Serviços
+              {t('servicesTitle')}
             </Subtitle>
             <BodyText fontSize="16px" letterSpacing="0.2px" paddingBottom="32px">
-              Fale diretamente com nossa equipe comercial para marcarmos uma conversa e avaliarmos como{" "}
+              {t('servicesDescription')}
               <Link
+                display="inline"
                 href="/servicos"
                 textDecoration="none"
                 fontFamily="Ubuntu"
@@ -92,24 +103,25 @@ export default function Contato({ pages }) {
                 fontWeight="500"
                 letterSpacing="0.2px"
               >
-                nossos serviços
-              </Link> podem ajudar.
+                {t('servicesLink')}
+              </Link> {t('servicesLinkText')}
             </BodyText>
             <Subtitle fontSize="18px" letterSpacing="0.1px" paddingBottom="8px">
-              Projetos e Parcerias
+              {t('projectsPartnershipsTitle')}
             </Subtitle>
             <BodyText fontSize="16px" letterSpacing="0.2px" paddingBottom="32px">
-              Desenvolvemos projetos e aplicações com outras organizações afins para promover o acesso a dados públicos de qualidade. Estamos sempre abertos a novas ideias.
+              {t('projectsPartnershipsDescription')}
             </BodyText>
             <Subtitle fontSize="18px" letterSpacing="0.1px" paddingBottom="8px">
-              Dados
+              {t('dataTitle')}
             </Subtitle>
             <BodyText fontSize="16px" letterSpacing="0.2px" paddingBottom="16px">
-              Auxiliamos pessoas e organizações a subirem dados no nosso <i>datalake</i>. Escreva sua proposta para nossa equipe de Dados.
+              {t('dataDescription')}
             </BodyText>
             <BodyText fontSize="16px" letterSpacing="0.2px" fontWeight="500">
-              Dúvidas? Fale com a nossa comunidade no{" "}
+              {t('questionsText')}
               <Link
+                display="inline"
                 href="https://discord.gg/huKWpsVYx4"
                 textDecoration="none"
                 fontFamily="Ubuntu"
@@ -119,7 +131,7 @@ export default function Contato({ pages }) {
                 fontWeight="500"
                 letterSpacing="0.2px"
               >
-                Discord<a style={{color:"#252A32", fontWeight:"500"}}>.</a>
+                {t('discordLink')}<a style={{color:"#252A32", fontWeight:"500"}}>.</a>
               </Link>
             </BodyText>
           </Box>

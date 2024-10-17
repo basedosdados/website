@@ -7,30 +7,34 @@ import RoundedButton from "../../components/atoms/RoundedButton";
 import SectionText from "../../components/atoms/SectionText";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 import { MainPageTemplate } from "../../components/templates/main";
-
 import { EmailConfirmImage, EmailRecoveryImage } from "../../public/img/emailImage";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export async function getServerSideProps(context) {
-  const { query } = context
+  const { query, locale } = context;
 
   const result = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/activeAccount?q=${query.q}&p=${query.p}`, { method: "GET" })
-    .then(res => res.json())
-  const data = result
+    .then(res => res.json());
+  const data = result;
 
   return {
     props: {
+      ...(await serverSideTranslations(locale, ['user'])),
       data
     }
   }
 }
 
 export default function ActiveAccount({ data }) {
+  const { t } = useTranslation('user');
+
   return (
     <MainPageTemplate display="flex" justifyContent="center" cleanTemplate>
       <Stack
         display="flex"
         justifyContent="center"
-        width="570px"
+        width="650px"
         height="100%"
         marginTop={isMobileMod() ? "150px" : "50px"}
         marginX="27px"
@@ -51,17 +55,17 @@ export default function ActiveAccount({ data }) {
               letterSpacing={isMobileMod() ? "0" : "-0.4px"}
               fontweith="500"
               textAlign="center"
-            >Conta ativa</Display>
+            >{t('activate.accountActive')}</Display>
 
-            <SectionText>Parabéns! Sua conta foi ativada com sucesso. Agora você faz parte da nossa comunidade.</SectionText>
-            <SectionText>Agradecemos por se juntar a nós. Estamos aqui para ajudar no que precisar.</SectionText>
-            <SectionText>Bem-vindo(a)!</SectionText>
+            <SectionText>{t('activate.congratulations')}</SectionText>
+            <SectionText>{t('activate.thankYou')}</SectionText>
+            <SectionText>{t('activate.welcome')}</SectionText>
 
             <RoundedButton
               borderRadius="30px"
               onClick={() => window.open("/user/login", "_self")}
             >
-              Logar na conta
+              {t('activate.loginToAccount')}
             </RoundedButton>
           </VStack>
         :
@@ -72,14 +76,14 @@ export default function ActiveAccount({ data }) {
               letterSpacing={isMobileMod() ? "0" : "-0.4px"}
               fontweith="500"
               textAlign="center"
-            >Algo deu errado</Display>
+            >{t('activate.somethingWentWrong')}</Display>
 
-            <SectionText textAlign="center">Lamentamos informar que ocorreu um problema durante a ativação da sua conta. Pedimos desculpas pela inconveniência.</SectionText>
+            <SectionText textAlign="center">{t('activate.activationProblem')}</SectionText>
             <RoundedButton
               borderRadius="30px"
               onClick={() => window.open("/contato", "_self")}
             >
-              Entrar em contato
+              {t('activate.contactUs')}
             </RoundedButton>
           </VStack>
         }

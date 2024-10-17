@@ -11,10 +11,11 @@ import {
   Skeleton
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { useTranslation } from 'next-i18next';
 import Checkbox from "../atoms/Checkbox";
 import { ControlledInput, ControlledInputSimple} from "./ControlledInput";
 import SectionText from "./SectionText";
-import SearchIcon from "../../public/img/icons/searchIcon"
+import SearchIcon from "../../public/img/icons/searchIcon";
 
 export function BaseFilterAccordion({
   fieldName,
@@ -26,6 +27,8 @@ export function BaseFilterAccordion({
   alwaysOpen = false,
   isHovering = true
 }) {
+  const { t } = useTranslation('common');
+
   return (
     <Accordion allowToggle width="100%">
       <AccordionItem border="0px">
@@ -85,6 +88,7 @@ export function CheckboxFilterAccordion({
   canSearch = false,
   isLoading
 }) {
+  const { t } = useTranslation('common');
   const [options , setOptions] = useState([])
   const [search, setSearch] = useState("");
   const [inputFocus, setInputFocus] = useState(false)
@@ -130,7 +134,7 @@ export function CheckboxFilterAccordion({
                 onChange={setSearch}
                 inputFocus={inputFocus}
                 changeInputFocus={setInputFocus}
-                placeholder="Pesquisar"
+                placeholder={t('search')}
                 fill="#464A51"
                 icon={
                   <SearchIcon
@@ -211,6 +215,7 @@ export function RangeFilterAccordion({
   maxValue = null,
   minValue = null,
 }) {
+  const { t } = useTranslation('common');
   const [min, setMin] = useState();
   const [max, setMax] = useState();
   const [error, setError] = useState(false);
@@ -245,7 +250,7 @@ export function RangeFilterAccordion({
             value={min}
             onChange={setMin}
             width="100%"
-            placeholder="Min"
+            placeholder={t('min')}
             inputStyle={{
               height: "40px",
               fontSize: "14px",
@@ -258,7 +263,7 @@ export function RangeFilterAccordion({
             value={max}
             onChange={setMax}
             width="100%"
-            placeholder="Max"
+            placeholder={t('max')}
             inputStyle={{
               height: "40px",
               fontSize: "14px",

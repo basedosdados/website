@@ -1,0 +1,111 @@
+{
+    "pageTitle": "Servicios – Base de los Datos",
+    "metaTitle": "Servicios – Base de los Datos",
+    "slogan": {
+      "title": "Nuestros servicios",
+      "description": "Base de los Datos es el experto que te ayuda a ti o a tu equipo a trabajar y extraer el máximo valor de los datos.",
+      "cta": "Hagamos un proyecto juntos"
+    },
+    "services": {
+      "dataCapture": "Captura de datos",
+      "dataAnalysis": "Análisis de datos",
+      "dataConsulting": "Consultoría de datos"
+    },
+    "caseStudies": {
+      "title": "Nuestras soluciones",
+      "subtitle": "Descubre por qué las instituciones eligen innovar con Base de los Datos",
+      "readMore": "Lee el caso de estudio"
+    },
+    "dataCapture": {
+      "title": "Captura de datos",
+      "description": "Capturamos y ponemos a disposición datos bajo demanda con rapidez, escala y bajo costo.",
+      "longDescription": "No necesitas preocuparte por crear y mantener una infraestructura propia o escribir códigos - nosotros nos encargamos de eso. Todo se hace siguiendo la metodología de tratamiento y estandarización de Base de los Datos, y conforme a las mejores prácticas de ingeniería de datos del mercado. Las tablas tratadas pueden estar disponibles de forma exclusiva o ser públicas.",
+      "advantages": {
+        "title": "Principales ventajas",
+        "speed": "Rapidez",
+        "speedDescription": "Incluso las consultas muy complejas tardan solo minutos en procesarse.",
+        "scale": "Escala",
+        "scaleDescription": "Nuestro datalake escala mágicamente a hexabytes si es necesario.",
+        "cost": "Bajo costo",
+        "costDescription": "Cada usuario tiene 1TB gratuito por mes para consultar los datos."
+      },
+      "work": {
+        "title": "Nuestro trabajo con ingeniería de datos",
+        "technology": {
+          "title": "Tecnología de punta",
+          "description": "Utilizando la infraestructura de Google Cloud Platform, una de las mayores plataformas de almacenamiento y procesamiento de datos, garantizamos la seguridad y confiabilidad de nuestro trabajo."
+        },
+        "flexibility": {
+          "title": "Flexibilidad",
+          "description": "Ya sean envíos puntuales, actualizaciones recurrentes, acceso vía API o conexión con plataformas de BI, entregamos la solución que necesitas de forma ágil y completa."
+        },
+        "frameworks": {
+          "title": "Frameworks reconocidos",
+          "description": "Con frameworks y sistemas de gestión de datos, garantizamos la calidad y organización de tu sistema de datos sin generar ninguna preocupación para tu equipo."
+        }
+      }
+    },
+    "dataAnalysis": {
+      "title": "Análisis de datos",
+      "description": "Construimos análisis, informes e indicadores esenciales para tu investigación o toma de decisiones.",
+      "longDescription": "La información y los insights se generan a partir de diversos conjuntos de datos ya tratados en nuestro datalake público junto con la experiencia de nuestro equipo de Datos. Y más: utilizamos nuestra metodología estándar de tratamiento para que también puedas cruzar estos datos con cualquier otra base disponible en el datalake.",
+      "examples": {
+        "title": "Ejemplos de preguntas que podemos responder",
+        "example1": "¿Cómo ha evolucionado la economía brasileña, con indicadores detallados mensuales por sector?",
+        "example2": "¿Qué escuelas tendrán un rendimiento por encima del promedio estatal en matemáticas el próximo año?",
+        "example3": "¿Cuántas veces el Diario Oficial de la Unión publica sobre cierto tema cada día?"
+      }
+    },
+    "dataConsulting": {
+      "title": "Consultoría de datos",
+      "description": "Orientamos cómo aplicar nuestra metodología de limpieza, estructuración y estandarización de datos",
+      "longDescription": "En tu proyecto u organización a través de talleres y materiales exclusivos. Reproducir nuestro proceso de tratamiento en tu propia base de datos puede ahorrar horas de trabajo de tu equipo al consultar, manipular o actualizar la información.",
+      "advantages": {
+        "title": "Principales ventajas",
+        "advantage1": "Experiencia en construir infraestructuras capaces de soportar miles de accesos mensuales.",
+        "advantage2": "Flexibilidad para proyectos remotos en cualquier lugar del país.",
+        "advantage3": "Equipo diverso y con experiencia en diferentes áreas del conocimiento y datos."
+      },
+      "areas": {
+        "title": "Áreas de actuación",
+        "infrastructure": {
+          "title": "Infraestructura",
+          "description": "Mentoría para equipos de ingeniería de datos que buscan estructurar procesos de mantenimiento de datos, sus propios datalakes o incluso potenciarse utilizando la infraestructura de Base de los Datos."
+        },
+        "analysis": {
+          "title": "Análisis",
+          "description": "Talleres prácticos, mostrando cómo funciona el datalake de Base de los Datos y enseñando cómo explorar datos públicos para artículos periodísticos o investigaciones científicas."
+        },
+        "programming": {
+          "title": "Programación",
+          "description": "Programas personalizados de enseñanza para utilizar paquetes de Python y R de Base de los Datos, además de mentoría de SQL para construir análisis rápidos y escalables directamente en la nube."
+        }
+      }
+    },
+    "workflow": {
+      "title": "Nuestro flujo de trabajo",
+      "description": "Una misma metodología de trabajo para todos los servicios, basada en la satisfacción de los clientes y en la excelencia en la calidad.",
+      "steps": {
+        "demand": {
+          "title": "Demanda",
+          "subtitle": "Identificación de demandas y necesidades del cliente",
+          "description": "Trabajamos colaborativamente para comprender las necesidades reales detrás de las solicitudes de nuestros clientes. El trabajo de descubrimiento incluye discusiones sobre los objetivos del proyecto o el uso de los datos a ser capturados y analizados. Es en esta etapa donde queda claro para nuestro equipo y para los clientes el objetivo final del servicio."
+        },
+        "planning": {
+          "title": "Planificación",
+          "subtitle": "Alineación de expectativas de negocio, ingeniería o capacitación",
+          "description": "El segundo paso es entender cuál es la mejor forma de entregar el valor que necesitas. No trabajamos con propuestas genéricas. Cada proyecto está pensado y orientado 100% a las demandas de los clientes, ya sea en el formato de entrega de datos, análisis o capacitaciones específicas."
+        },
+        "budget": {
+          "title": "Presupuesto",
+          "subtitle": "Presupuesto transparente y simplificado",
+          "description": "Una vez alineado el alcance, formato y expectativas, entregamos una propuesta de presupuesto completamente transparente. Para ello, consideramos factores como la cantidad y complejidad de datasets, trabajo necesario, tamaño del equipo y urgencia. Todo explícito de forma directa y en conformidad con lo que se ha determinado hasta entonces."
+        },
+        "execution": {
+          "title": "Ejecución",
+          "subtitle": "Ejecución ágil y entrega de valor",
+          "description": "Por último, nuestra entrega está comprometida con los plazos y, sobre todo, con la calidad. La comunicación es constante durante toda la ejecución. Trabajando de forma lean y con profesionales experimentados en el área, nuestro equipo se enfoca en la satisfacción de nuestros clientes."
+        }
+      }
+    }
+}

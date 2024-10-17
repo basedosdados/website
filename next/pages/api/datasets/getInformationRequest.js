@@ -1,9 +1,10 @@
 import axios from "axios";
 import { cleanGraphQLResponse } from "../../../utils";
+import { capitalize } from 'lodash';
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-async function getInformationRequest(id) {
+async function getInformationRequest(id, locale = 'pt') {
   try {
     const res = await axios({
       url: API_URL,
@@ -19,6 +20,7 @@ async function getInformationRequest(id) {
                 url
                 dataUrl
                 observations
+                observations${capitalize(locale)}
                 updates {
                   edges {
                     node {
@@ -29,10 +31,7 @@ async function getInformationRequest(id) {
                       entity {
                         _id
                         name
-                        category {
-                          _id
-                          name
-                        }
+                        name${capitalize(locale)}
                       }
                     }
                   }
@@ -40,6 +39,7 @@ async function getInformationRequest(id) {
                 status {
                   _id
                   name
+                  name${capitalize(locale)}
                 }
               }
             }
@@ -58,7 +58,8 @@ async function getInformationRequest(id) {
 }
 
 export default async function handler(req, res) {
-  const result = await getInformationRequest(req.query.p)
+  const { id: id, locale } = req.query;
+  const result = await getInformationRequest(id, locale);
 
   if(result.errors) return res.status(500).json({error: result.errors, success: false})
   if(result === "err") return res.status(500).json({error: "err", success: false})
