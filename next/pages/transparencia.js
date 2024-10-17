@@ -85,10 +85,10 @@ export default function Transparencia({ pages }) {
 
         <iframe
           src={url}
-          frameborder="0"
+          frameBorder="0"
           width="100%"
           height="100%"
-          allowtransparency
+          allowtransparency="true"
         />
       </Box>
     )
@@ -169,10 +169,10 @@ export default function Transparencia({ pages }) {
         >
           <iframe
             src="https://perguntas.basedosdados.org/public/question/80ad0ba9-bfa9-4427-96a0-675fb2252b37#titled=false&bordered=false"
-            frameborder="0"
+            frameBorder="0"
             width="100%"
             height="100%"
-            allowtransparency
+            allowtransparency="true"
           />
         </Stack>
 

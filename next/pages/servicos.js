@@ -116,7 +116,7 @@ function Slogan () {
         href="/contato-consultoria"
       >
         <Box
-          as="a"
+          as="p"
           target="_self"
           display="flex"
           alignItems="center"
@@ -560,7 +560,7 @@ export default function Services() {
           href="/contato-consultoria"
         >
           <Box
-            as="a"
+            as="p"
             target="_self"
             display="flex"
             alignItems="center"

@@ -208,6 +208,7 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
     {name: t('account'), value: "account"},
     {name: t('password'), value: "new_password"},
     {name: t('plans_and_payment'), value: "plans_and_payment"},
+    isUserPro && {name: t('bigquery'), value: "big_query"},
   ]
   // {name: "Acessos", value: "accesses"},
 

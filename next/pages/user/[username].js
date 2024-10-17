@@ -30,6 +30,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import cookies from 'js-cookie';
 import { serialize } from 'cookie';
+import { useTranslation } from "react-i18next";
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { MainPageTemplate } from "../../components/templates/main";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 import { ControlledInputSimple } from "../../components/atoms/ControlledInput";
@@ -45,8 +47,6 @@ import { CardPrice } from "../precos";
 import PaymentSystem from "../../components/organisms/PaymentSystem";
 import ImageCrop from "../../components/molecules/ImgCrop";
 import { cleanString, triggerGAEvent } from "../../utils";
-import { useTranslation } from "react-i18next";
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import {
   LabelTextForm,
@@ -1128,7 +1128,7 @@ const NewPassword = ({ userInfo }) => {
     if(Object.keys(regexPassword).length > 0) validationErrors.regexPassword = regexPassword
 
     if(formData.password === "") {
-      validationErrors.password = t('username.enterPassword')
+      validationErrors.password = t('username.errEnterPassword')
     }
 
     if(formData.password !== "") {
@@ -1538,7 +1538,7 @@ const PlansAndPayment = ({ userData }) => {
       resources : [
         {name: t('username.processedTables')},
         {name: t('username.integratedData'), tooltip: t('username.dataIntegrationTooltip')},
-        {name: t('updatedLowFrequencyData')},
+        {name: t('username.updatedLowFrequencyData')},
         {name: t('username.cloudAccess')},
         {name: t('username.sqlPythonRAccess')},
         {name: t('username.biIntegration')},
@@ -1760,7 +1760,7 @@ const PlansAndPayment = ({ userData }) => {
     let limitText
 
     if(couponInfos?.duration === "once") limitText = toggleAnual ? t('username.validFor1Year') : t('username.validFor1Month')
-    if(couponInfos?.duration === "repeating") limitText = `${t('username.validFor')} ${couponInfos?.durationInMonths} ${couponInfos?.durationInMonths.length === 1 ? t('username.month') : t('username.months')}`
+    if(couponInfos?.duration === "repeating") limitText = `${t('username.validFor')} ${couponInfos?.durationInMonths} ${couponInfos?.durationInMonths.length === 1 ? t('username.month') : t('username.months')})`
 
     return (
       <>
@@ -1968,7 +1968,7 @@ const PlansAndPayment = ({ userData }) => {
                   </Text>
                 </Box>
 
-                 <Text
+                <Text
                   as="span"
                   color="#2B8C4D"
                   backgroundColor="#D5E8DB"
@@ -2133,13 +2133,7 @@ const PlansAndPayment = ({ userData }) => {
                 lineHeight="24px"
                 color="#464A51"
               >
-                {t('username.afterCouponExpiration', {
-                  duration: couponInfos?.duration === "once" ? 2 : couponInfos?.durationInMonths + 1,
-                  interval: formattedPlanInterval(checkoutInfos?.interval, true),
-                  trialDay: !hasSubscribed && t('username.andTrialDay'),
-                  amount: checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 }),
-                  interval2: formattedPlanInterval(checkoutInfos?.interval, true)
-                })}
+                A partir do {couponInfos?.duration === "once" && 2} {couponInfos?.duration === "repeating" && couponInfos?.durationInMonths + 1}º {formattedPlanInterval(checkoutInfos?.interval, true)} {!hasSubscribed && "e 7º dia"}, o total a pagar será de {checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}.
               </Text>
             }
 
@@ -2172,7 +2166,7 @@ const PlansAndPayment = ({ userData }) => {
                   EmailModal.onOpen()
                 }}
               >
-                Voltar
+                {t('username.back')}
               </Box>
             </Box>
           </Stack>
@@ -2223,7 +2217,7 @@ const PlansAndPayment = ({ userData }) => {
                   EmailModal.onOpen()
                 }}
               >
-                Voltar
+                {t('username.back')}
               </Box>
             </Box>
           </Box>
@@ -2459,7 +2453,6 @@ const PlansAndPayment = ({ userData }) => {
             color="#252A32"
           >
             {t('username.congratulations')}
-//             Assinatura efetuada com sucesso!
           </Text>
           <Text
             fontFamily="Roboto"
@@ -2468,9 +2461,8 @@ const PlansAndPayment = ({ userData }) => {
             lineHeight="24px"
             color="#464A51"
           >
-            {t('username.paymentSuccessful')}
-//             O acesso aos dados foi concedido para o e-mail <Text as="span" fontWeight="500">{emailGCP}</Text>. Se precisar alterar o e-mail de acesso, você pode fazer isso na seção “BigQuery” das configurações da sua conta.
-//             Em caso de dúvida, <Text as="a" href="/contato" target="_self" color="#0068C5" _hover={{color: "#0057A4"}}>entre em contato com nosso suporte.</Text>
+            O acesso aos dados foi concedido para o e-mail <Text as="span" fontWeight="500">{emailGCP}</Text>. Se precisar alterar o e-mail de acesso, você pode fazer isso na seção “BigQuery” das configurações da sua conta.
+            Em caso de dúvida, <Text as="a" href="/contato" target="_self" color="#0068C5" _hover={{color: "#0057A4"}}>entre em contato com nosso suporte.</Text>
           </Text>
         </Stack>
 
@@ -2509,7 +2501,6 @@ const PlansAndPayment = ({ userData }) => {
               <Spinner/>
               :
               t('username.continueSettings')
-//               "Alterar e-mail de acesso"
             }
           </Box>
 
@@ -2597,7 +2588,9 @@ const PlansAndPayment = ({ userData }) => {
             color="#7D7D7D"
           >
             {t('username.paymentError')}
-            <Link color="#42B0FF"
+            <Link
+              display="inline"
+              color="#42B0FF"
               fontFamily="ubuntu"
               fontWeight="600"
               fontSize="16px"
@@ -3325,14 +3318,18 @@ const BigQuery = ({ userInfo }) => {
 }
 
 export default function UserPage({ getUser }) {
-  const { t } = useTranslation('user')
+  const { t, ready } = useTranslation('user')
   const router = useRouter()
   const { query } = router
   const [userInfo, setUserInfo] = useState({})
   const [sectionSelected, setSectionSelected] = useState(0)
 
+  if (!ready) return null
+
   useEffect(() => {
-    setUserInfo(getUser)
+    if (getUser) {
+      setUserInfo(getUser)
+    }
   }, [getUser])
 
   const isUserPro = () => {
@@ -3345,13 +3342,8 @@ export default function UserPage({ getUser }) {
     {bar: t('username.account'), title: t('username.account'), value: "account", index: 1},
     {bar: t('username.changePassword'), title: t('username.changePassword'), value: "new_password", index: 2},
     {bar: t('username.plansAndPayment'), title: t('username.plansAndPayment'), value: "plans_and_payment", index: 3},
-//     {bar: "Perfil público", title: "Perfil público", value: "profile", index: 0},
-//     {bar: "Conta", title: "Conta", value: "account", index: 1},
-//     {bar: "Senha", title: "Alterar senha", value: "new_password", index: 2},
-//     {bar: "Planos e pagamento", title: "Planos e pagamento", value: "plans_and_payment", index: 3},
-//     isUserPro() && {bar: "BigQuery", title: "BigQuery", value: "big_query", index: 4},
-  ]
-  // {bar: "Acessos", title: "Gerenciar acessos", value: "accesses", index: 4},
+    isUserPro() && {bar: "BigQuery", title: "BigQuery", value: "big_query", index: 4},
+  ].filter(Boolean)
 
   useEffect(() => {
     const key = Object.keys(query)
@@ -3361,7 +3353,7 @@ export default function UserPage({ getUser }) {
     if (key.length === 0) return
 
     for (const elements of choices) {
-      if (elements.value === key[0]) {
+      if (elements && elements.value === key[0]) {
         setSectionSelected(elements.index)
       }
     }
@@ -3430,8 +3422,7 @@ export default function UserPage({ getUser }) {
             {sectionSelected === 1 && <Account userInfo={userInfo}/>}
             {sectionSelected === 2 && <NewPassword userInfo={userInfo}/>}
             {sectionSelected === 3 && <PlansAndPayment userData={userInfo}/>}
-            {sectionSelected === 4 && isUserPro() && <BigQuery userInfo={userInfo}/>}
-            {/* {sectionSelected === 4 && <Accesses userInfo={userInfo}/>} */}
+            {sectionSelected === 4 && <BigQuery userInfo={userInfo}/>}
           </Stack>
         </Stack>
       </Stack>

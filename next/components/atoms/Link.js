@@ -15,11 +15,12 @@ export default function Link({
   return (
     <NextLink href={href || '#'} locale={locale} passHref legacyBehavior>
       <Text
-        as="a"
+        as="span"
         display="flex"
         flexDirection="row"
         alignItems="center"
         fontFamily="Roboto"
+        cursor="pointer"
         fontSize="14px"
         lineHeight="20px"
         fontWeight={fontWeight}

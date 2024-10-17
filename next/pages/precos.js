@@ -230,30 +230,32 @@ export const CardPrice = ({
               {t('currentPlan')}
             </Box>
           ) : (
-            <Link href={button.href} locale={locale} passHref>
-              <Box
-                as="a"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                width="100%"
-                borderRadius="8px"
-                backgroundColor="#0D99FC"
-                padding="12px 16px"
-                cursor="pointer"
-                color="#FFF"
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="20px"
-                lineHeight="36px"
-                textDecoration="none"
-                _hover={{
-                  backgroundColor: "#0B89E2"
-                }}
-              >
-                {t(button.text)}
-              </Box>
-            </Link>
+            <Box
+              as="button"
+              onClick={() => {
+                if(button.onClick) return button.onClick()
+                return window.open(button.href, "_self")
+              }}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              width="100%"
+              borderRadius="8px"
+              backgroundColor="#0D99FC"
+              padding="12px 16px"
+              cursor="pointer"
+              color="#FFF"
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="20px"
+              lineHeight="36px"
+              textDecoration="none"
+              _hover={{
+                backgroundColor: "#0B89E2"
+              }}
+            >
+              {t(button.text)}
+            </Box>
           )}
 
           <Text 

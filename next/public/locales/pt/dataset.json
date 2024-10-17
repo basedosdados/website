@@ -200,7 +200,8 @@
         "auxiliaryFiles": "Arquivos auxiliares",
         "auxiliaryFilesDescription": "Descrição dos arquivos auxiliares",
         "version": "Versão",
-        "versionDescription": "Descrição da versão"
+        "versionDescription": "Descrição da versão",
+        "notProvided": "Não informado"
     },
     "informationRequest": {
         "requestNumber": "Número do pedido: {{number}}",

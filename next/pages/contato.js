@@ -69,7 +69,7 @@ export default function Contato({ pages }) {
         margin="50px auto auto"
       >
         <VStack maxWidth={{ base: "100%", lg: "45%" }}>
-          <Box contentAlign="flex-start">
+          <Box contentalign="flex-start">
             <Display
               fontSize="34px"
               lineHeight="40px"

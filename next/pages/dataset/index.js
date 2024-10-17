@@ -393,7 +393,6 @@ export default function SearchDatasetPage() {
     return (
       <Skeleton
         width="100%"
-        marginBottom="5px"
         borderRadius="6px"
         startColor="#F0F0F0"
         endColor="#F3F3F3"
@@ -561,9 +560,11 @@ export default function SearchDatasetPage() {
             </Text>
           </Box>
 
-          <VStack
+          <Box
+            display="flex"
+            flexDirection="column"
             width="100%"
-            spacing="14px"
+            gap="14px"
             alignItems="start"
           >
             <Text
@@ -594,14 +595,15 @@ export default function SearchDatasetPage() {
               text={t('informationRequests')}
               count={aggregations?.contains_information_requests?.filter(elm => elm.key === 1)[0]?.count || 0}
             />
-          </VStack>
+          </Box>
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
-          <VStack
-            display={isUserPro() ? "none" : "flex"}
+          <Box
+            display="flex"
+            flexDirection="column"
             width="100%"
-            spacing="14px"
+            gap="14px"
             alignItems="start"
           >
             <Text
@@ -626,9 +628,9 @@ export default function SearchDatasetPage() {
               text={t('closedData')}
               count={aggregations?.contains_closed_data?.filter(elm => elm.key === 1)[0]?.count || 0}
             />
-          </VStack>
+          </Box>
 
-          <Divider display={isUserPro() ? "none" : "flex"} marginY="16px !important" borderColor="#DEDFE0"/>
+          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
           <CheckboxFilterAccordion
             canSearch={true}
@@ -757,19 +759,19 @@ export default function SearchDatasetPage() {
               ))
             }
 
-          {pageInfo?.count >=1 && pageInfo?.count <=10 &&
-            <DataProposalBox 
-              text= {t('stillNotFound')}
-              bodyText= {t('tryRelatedTerms')}
-            />
-          }
+            {pageInfo?.count >=1 && pageInfo?.count <=10 &&
+              <DataProposalBox 
+                text={t('stillNotFound')}
+                bodyText={t('tryRelatedTerms')}
+              />
+            }
 
-          {pageInfo.page >= 2 &&
-            <DataProposalBox 
-              text= {t('stillNotFound')}
-              bodyText= {t('tryRelatedTerms')}
-            />
-          }
+            {pageInfo.page >= 2 &&
+              <DataProposalBox 
+                text={t('stillNotFound')}
+                bodyText={t('tryRelatedTerms')}
+              />
+            }
 
             {!showEmptyState &&
               <ReactPaginate
