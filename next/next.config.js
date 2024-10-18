@@ -1,9 +1,7 @@
+const { i18n } = require('./next-i18next.config');
+
 module.exports = {
-  i18n: {
-    locales: ['pt', 'en', 'es'],
-    defaultLocale: 'pt',
-    localeDetection: false
-  },
+  i18n,
   images: {
     unoptimized: true,
     disableStaticImages: true,
