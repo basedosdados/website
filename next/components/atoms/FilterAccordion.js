@@ -13,7 +13,8 @@ import {
 import { useEffect, useState } from "react";
 import { useTranslation } from 'next-i18next';
 import Checkbox from "../atoms/Checkbox";
-import { ControlledInput, ControlledInputSimple} from "./ControlledInput";
+import ControlledInput from "./ControlledInput";
+import ControlledInputSimple from "./ControlledInput";
 import SectionText from "./SectionText";
 import SearchIcon from "../../public/img/icons/searchIcon";
 
