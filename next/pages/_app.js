@@ -4,6 +4,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Head from "next/head";
 import themeBD from "../styles/themeBD";
+import i18n from '../i18n';
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {

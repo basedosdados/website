@@ -16,7 +16,7 @@ import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import BodyText from "../components/atoms/BodyText";
-import ControlledInput from "../components/atoms/ControlledInput";
+import { ControlledInput } from "../components/atoms/ControlledInput";
 import Display from "../components/atoms/Display";
 import Link from "../components/atoms/Link";
 import SectionText from "../components/atoms/SectionText";
@@ -31,6 +31,7 @@ import { MainPageTemplate } from "../components/templates/main";
 import { triggerGAEvent } from "../utils";
 
 import {
+  getAllThemes,
   getAllDatasets
 } from "./api/themes/index"
 
@@ -46,10 +47,7 @@ import ProcessedDataImage from "../public/img/processedDataImage";
 import BDLogoEduImage from "../public/img/logos/bd_logo_edu";
 
 export async function getStaticProps({ locale }) {
-  const themesResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/themes/getAllThemes?locale=${locale}`)
-  const themesData = await themesResponse.json()
-  const themes = themesData.resource
-
+  const themes = await getAllThemes(locale)
   const defaultDataset = await getAllDatasets(locale)
 
   let dataThemeCatalog = {

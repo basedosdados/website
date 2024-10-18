@@ -1,10 +1,9 @@
 import axios from "axios";
-import { cleanGraphQLResponse } from "../../../utils";
 import { capitalize } from 'lodash';
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-async function getShowDataset(id, locale='pt') {
+export default async function getShowDataset(id, locale='pt') {
   try {
     const res = await axios({
       url: API_URL,
@@ -110,14 +109,4 @@ async function getShowDataset(id, locale='pt') {
   } catch (error) {
     console.error(error)
   }
-}
-
-export default async function handler(req, res) {
-  const { id: id, locale } = req.query;
-  const result = await getShowDataset(id, locale);
-
-  if(result.errors) return res.status(500).json({error: result.errors, success: false})
-  if(result === "err") return res.status(500).json({error: "err", success: false})
-
-  return res.status(200).json({resource: cleanGraphQLResponse(result), success: true})
 }
