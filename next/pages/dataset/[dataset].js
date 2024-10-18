@@ -28,6 +28,7 @@ import CrossingIcon from "../../public/img/icons/crossingIcon";
 
 import {
   getListDatasets,
+  getShowDataset,
 } from "../api/datasets/index";
 
 export async function getStaticProps(context) {
@@ -35,20 +36,8 @@ export async function getStaticProps(context) {
   
   let dataset = null;
   try {
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/datasets/getShowDataset?id=${params.dataset}&locale=${locale}`;
-    const response = await fetch(url, { method: "GET" });
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    const result = await response.json();
-
-    if (result.success) {
-      dataset = result.resource;
-    } else {
-      console.error("API error:", result.error);
-    }
+    const response = await getShowDataset(params.dataset, locale)
+    dataset = response
   } catch (error) {
     console.error("Fetch error:", error.message);
   }

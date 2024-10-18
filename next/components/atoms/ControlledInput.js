@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
-export default function ControlledInput({
+export function ControlledInput({
   placeholder,
   value,
   onChange,
