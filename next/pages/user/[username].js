@@ -59,7 +59,7 @@ import {
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import PenIcon from "../../public/img/icons/penIcon";
 import GithubIcon from "../../public/img/icons/githubIcon";
-import TwitterIcon from "../../public/img/icons/twitterIcon";
+import XIcon from "../../public/img/icons/xIcon";
 import LinkedinIcon from "../../public/img/icons/linkedinIcon";
 import { EmailConfirmImage, EmailRecoveryImage } from "../../public/img/emailImage";
 import ChevronIcon from "../../public/img/icons/chevronIcon";
@@ -432,7 +432,7 @@ const ProfileConfiguration = ({ userInfo }) => {
 
           <FormControl isInvalid={!!errors.twitter}>
             <HStack spacing="8px" margin="0 0 8px 0 !important">
-              <TwitterIcon width="24px" height="24px" fill="#D0D0D0"/>
+              <XIcon width="24px" height="24px" fill="#D0D0D0"/>
               <SkStack isLoaded={!isLoading}>
                 <InputForm
                   id="twitter"
