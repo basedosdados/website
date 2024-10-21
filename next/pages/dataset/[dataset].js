@@ -27,17 +27,15 @@ import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
 import CrossingIcon from "../../public/img/icons/crossingIcon";
 
 import {
+  getDataset,
   getListDatasets,
-  getShowDataset,
 } from "../api/datasets/index";
 
 export async function getStaticProps(context) {
   const { locale, params } = context;
-  
   let dataset = null;
   try {
-    const response = await getShowDataset(params.dataset, locale)
-    dataset = response
+    dataset = await getDataset(params.dataset, locale || 'pt');
   } catch (error) {
     console.error("Fetch error:", error.message);
   }

@@ -3,7 +3,7 @@ import getListDatasets from "./getListDatasets";
 import postDataset from "./postDataset";
 import getDatasetEdit from "./getDatasetEdit";
 import deleteDataset from "./deleteDataset";
-import getShowDataset from "./getShowDataset";
+import getDataset from "./getDataset";
 
 export {
   getSearchDatasets,
@@ -11,5 +11,5 @@ export {
   postDataset,
   getDatasetEdit,
   deleteDataset,
-  getShowDataset
+  getDataset
 }
