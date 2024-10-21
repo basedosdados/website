@@ -1,5 +1,4 @@
 import axios from "axios";
-import { cleanGraphQLResponse } from "../../../utils";
 import { capitalize } from 'lodash';
 
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`;
