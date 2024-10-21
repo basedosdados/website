@@ -8,6 +8,7 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
+  Spinner,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useState, useEffect } from "react";
@@ -37,13 +38,9 @@ import RedirectIcon from "../public/img/icons/redirectIcon";
 import styles from "../styles/quemSomos.module.css";
 
 export async function getServerSideProps({ locale }) {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/team/getAllPeople`, {method: "GET"})
-  const data = await response.json()
-
   return {
     props: {
       ...(await serverSideTranslations(locale, ['aboutUs', 'common', 'menu'])),
-      data
     },
   }
 }
@@ -255,11 +252,31 @@ const TeamBox = ({
   )
 }
 
-export default function QuemSomos({ data }) {
+export default function QuemSomos() {
   const { t } = useTranslation('aboutUs');
+  const [isLoading, setIsLoading] = useState(false)
+  const [data, setData] = useState([])
   const [allPeople, setAllPeople] = useState([])
   const [people, setPeople] = useState([])
   const [filterTeam, setFilterTeam] = useState("")
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/team/getAllPeople`, { method: "GET" });
+        if (!response.ok) {
+          throw new Error("Erro");
+        }
+        const result = await response.json();
+        setData(result);
+      } catch (error) {
+        console.error("Erro:", error);
+      }
+      setIsLoading(true)
+    };
+  
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if(data.length === 0) return
@@ -715,68 +732,78 @@ export default function QuemSomos({ data }) {
           {t('teamTitle')}
         </Display>
 
-        {data.length > 0 ?
-          <Stack
-            position="relative"
-            gridGap="96px"
-            spacing={0}
-            flexDirection={isMobileMod() ? "column" :"row"}
-            paddingBottom="32px"
-          >
-            <Box
-              display="flex"
-              height="100%"
-              flexDirection="column"
-              gridGap="16px"
-              position={isMobileMod() ? "relative" : "sticky"}
-              top={isMobileMod()? "0" : "120px"}
-              z-index="20"
-            >
-              {t('teamCategories', { returnObjects: true }).map((elm, i) => (
-                <Text
-                  key={i}
-                  fontSize="16px"
-                  color={filterTeam === elm ? "#2B8C4D" :"#6F6F6F"}
-                  fontFamily="ubuntu"
-                  fontWeight="500"
-                  width="max-content"
-                  cursor="pointer"
-                  letterSpacing="0.2px"
-                  onClick={() => handleSelect(elm)}
-                >
-                  {elm}
-                </Text>
-              ))}
-            </Box>
-
-            <Stack
-              width="100%"
-              spacing={{ base: "72px", lg: "96px" }}
-            >
-              {people?.map((elm, index) => (
-                <TeamBox
-                  key={index}
-                  index={index}
-                  name={`${elm.node.firstName} ${elm.node.lastName}`}
-                  picture={elm.node.picture}
-                  description={elm.node.description}
-                  website={elm.node.website}
-                  email={elm.node.email}
-                  twitter={elm.node.twitter}
-                  linkedin={elm.node.linkedin}
-                  github={elm.node.github}
-                  career={elm.node.careers.edges}
-                />
-              ))}
-            </Stack>
-          </Stack>
-        :
-          <Stack justifyContent="center" alignItems="center">
-            <InternalError
-              widthImage="300"
-              heightImage="300"
+        {!isLoading ?
+          <Stack>
+            <Spinner
+              margin="0 auto"
+              width="200px"
+              height="200px"
+              color="#2B8C4D"
             />
           </Stack>
+          :
+          data.length > 0 ?
+            <Stack
+              position="relative"
+              gridGap="96px"
+              spacing={0}
+              flexDirection={{base:"column", lg:"row"}}
+              paddingBottom="32px"
+            >
+              <Box
+                display="flex"
+                height="100%"
+                flexDirection="column"
+                gridGap="16px"
+                position={{base:"relative", lg: "sticky"}}
+                top={{base:"0", lg: "120px"}}
+                z-index="20"
+              >
+                {t('teamCategories', { returnObjects: true }).map((elm, i) => (
+                  <Text
+                    key={i}
+                    fontSize="16px"
+                    color={filterTeam === elm ? "#2B8C4D" :"#6F6F6F"}
+                    fontFamily="ubuntu"
+                    fontWeight="500"
+                    width="max-content"
+                    cursor="pointer"
+                    letterSpacing="0.2px"
+                    onClick={() => handleSelect(elm)}
+                  >
+                    {elm}
+                  </Text>
+                ))}
+              </Box>
+
+              <Stack
+                width="100%"
+                spacing={{ base: "72px", lg: "96px" }}
+              >
+                {people?.map((elm, index) => (
+                  <TeamBox
+                    key={index}
+                    index={index}
+                    name={`${elm.node.firstName} ${elm.node.lastName}`}
+                    picture={elm.node.picture}
+                    description={elm.node.description}
+                    website={elm.node.website}
+                    email={elm.node.email}
+                    twitter={elm.node.twitter}
+                    linkedin={elm.node.linkedin}
+                    github={elm.node.github}
+                    career={elm.node.careers.edges}
+                  />
+                ))}
+              </Stack>
+            </Stack>
+          :
+            <Stack justifyContent="center" alignItems="center">
+              <InternalError
+                widthImage="300"
+                heightImage="300"
+              />
+            </Stack>
         }
 
         <Stack
