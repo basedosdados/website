@@ -30,7 +30,8 @@ import { BePartner } from "../components/organisms/BePartner";
 import { MainPageTemplate } from "../components/templates/main";
 import { triggerGAEvent } from "../utils";
 
-import { getAllThemes, getAllDatasets } from "./api/themes/index";
+import { getAllThemes } from "./api/themes/getAllThemes";
+import { getAllDatasets } from "./api/themes/getAllDatasets";
 
 import SearchIcon from "../public/img/icons/searchIcon";
 import ArrowIcon from "../public/img/icons/arrowIcon";
