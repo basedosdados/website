@@ -30,10 +30,7 @@ import { BePartner } from "../components/organisms/BePartner";
 import { MainPageTemplate } from "../components/templates/main";
 import { triggerGAEvent } from "../utils";
 
-import {
-  getAllThemes,
-  getAllDatasets
-} from "./api/themes/index"
+import { getAllThemes, getAllDatasets } from "./api/themes/index";
 
 import SearchIcon from "../public/img/icons/searchIcon";
 import ArrowIcon from "../public/img/icons/arrowIcon";
@@ -47,13 +44,13 @@ import ProcessedDataImage from "../public/img/processedDataImage";
 import BDLogoEduImage from "../public/img/logos/bd_logo_edu";
 
 export async function getStaticProps({ locale }) {
-  const themes = await getAllThemes(locale)
-  const defaultDataset = await getAllDatasets(locale)
+  const themes = await getAllThemes(locale);
+  const defaultDataset = await getAllDatasets(locale);
 
   let dataThemeCatalog = {
     themes: themes,
     defaultDataset: defaultDataset
-  }
+  };
 
   return {
     props: {
@@ -61,7 +58,7 @@ export async function getStaticProps({ locale }) {
       dataThemeCatalog
     },
     revalidate: 30
-  }
+  };
 }
 
 function Hero({ dataThemeCatalog, locale }) {

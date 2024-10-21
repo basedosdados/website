@@ -1,9 +1,9 @@
 import axios from "axios";
 import { capitalize } from 'lodash';
 
-const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`;
 
-export default async function getShowDataset(id, locale='pt') {
+export default async function getDataset(id, locale = 'pt') {
   try {
     const res = await axios({
       url: API_URL,
@@ -103,10 +103,11 @@ export default async function getShowDataset(id, locale='pt') {
         `,
         variables: null
       }
-    })
-    const data = res?.data?.data?.allDataset?.edges[0]?.node
-    return data
+    });
+    const data = res?.data?.data?.allDataset?.edges[0]?.node;
+    return data;
   } catch (error) {
-    console.error(error)
+    console.error(error);
+    return null;
   }
 }
