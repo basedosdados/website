@@ -13,7 +13,7 @@ import { CategoryIcon } from "../atoms/CategoryIcon";
 import Link from "../atoms/Link";
 import { ThemeTag } from "../atoms/ThemeTag";
 
-export default function DatabaseCard({
+export default function DatasetCard({
   name,
   themes = [],
   organization,

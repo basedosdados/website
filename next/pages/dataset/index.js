@@ -27,7 +27,7 @@ import {
 import { CheckboxFilterAccordion } from "../../components/atoms/FilterAccordion";
 import Checkbox from "../../components/atoms/Checkbox";
 import { TagFilter } from "../../components/atoms/Tag";
-import Database from "../../components/organisms/Database";
+import Dataset from "../../components/organisms/Dataset";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import FilterIcon from "../../public/img/icons/filterIcon";
@@ -290,9 +290,9 @@ export default function SearchDatasetPage() {
     )
   }
 
-  function DatabaseCard({ data }) {
+  function DatasetCard({ data }) {
     return (
-      <Database
+      <Dataset
         id={data.id}
         themes={data?.themes}
         name={data?.name || t('noName')}
@@ -755,7 +755,7 @@ export default function SearchDatasetPage() {
               ))
               :
               (resource || []).map((res, i) => (
-                <DatabaseCard data={res} key={i}/>
+                <DatasetCard data={res} key={i}/>
               ))
             }
 
