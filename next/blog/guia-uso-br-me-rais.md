@@ -1,4 +1,18 @@
-# RAIS
+---
+title: Guia de Uso da RAIS
+description: >-
+  Levantando informações úteis para o bom uso da base
+date:
+  created: "2024-10-22T18:18:06.419Z"
+thumbnail: /blog/como-a-disparidade-salarial-por-genero-e-raca-evoluiu-ao-longo-dos-anos/image_0.png
+categories: [tutorial]
+authors:
+  - name: Laura Amaral
+    role: Texto
+---
+
+
+# Guia de Uso da RAIS
 ## Como esses dados são coletados?
 ### Que instituição é responsável?
 Ministério do Trabalho e Emprego (MTE)
