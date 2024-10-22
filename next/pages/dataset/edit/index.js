@@ -20,10 +20,6 @@ import {
 } from "../../api/organizations";
 
 import {
-  getAllThemes
-} from "../../api/themes";
-
-import {
   getAllTags
 } from "../../api/tags";
 
@@ -58,11 +54,6 @@ export default function Control() {
     setOrganizations(allOrganizations)
   }
 
-  const fetchThemes = async () => {
-    const allThemes = await getAllThemes()
-    setThemes(allThemes)
-  }
-
   const fetchTags = async () => {
     const allTags = await getAllTags()
     setTags(allTags)
@@ -76,7 +67,6 @@ export default function Control() {
   const fetchData = async () => {
     const promises = []
     promises.push(fetchOrganizations())
-    promises.push(fetchThemes())
     promises.push(fetchTags())
     promises.push(fetchStatus())
     await Promise.all(promises)

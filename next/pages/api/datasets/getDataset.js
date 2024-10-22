@@ -1,8 +1,9 @@
 import axios from "axios";
+import { capitalize } from 'lodash';
 
-const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`;
 
-export default async function getShowDataset(id) {
+export default async function getDataset(id, locale = 'pt') {
   try {
     const res = await axios({
       url: API_URL,
@@ -16,13 +17,16 @@ export default async function getShowDataset(id) {
                 _id
                 slug
                 name
+                name${capitalize(locale)}
                 description
+                description${capitalize(locale)}
                 coverage
                 themes {
                   edges {
                     node {
                       _id
                       name
+                      name${capitalize(locale)}
                     }
                   }
                 }
@@ -31,6 +35,7 @@ export default async function getShowDataset(id) {
                     node {
                       _id
                       name
+                      name${capitalize(locale)}
                     }
                   }
                 }
@@ -38,6 +43,7 @@ export default async function getShowDataset(id) {
                   _id
                   slug
                   name
+                  name${capitalize(locale)}
                   website
                   picture
                 }
@@ -50,6 +56,8 @@ export default async function getShowDataset(id) {
                       status {
                         _id
                         slug
+                        name
+                        name${capitalize(locale)}
                       }
                     }
                   }
@@ -59,10 +67,13 @@ export default async function getShowDataset(id) {
                     node {
                       _id
                       name
+                      name${capitalize(locale)}
                       order
                       status {
                         _id
                         slug
+                        name
+                        name${capitalize(locale)}
                       }
                     }
                   }
@@ -72,12 +83,15 @@ export default async function getShowDataset(id) {
                     node {
                       _id
                       name
+                      name${capitalize(locale)}
                       slug
                       isClosed
                       order
                       status {
                         _id
                         slug
+                        name
+                        name${capitalize(locale)}
                       }
                     }
                   }
@@ -89,10 +103,11 @@ export default async function getShowDataset(id) {
         `,
         variables: null
       }
-    })
-    const data = res?.data?.data?.allDataset?.edges[0]?.node
-    return data
+    });
+    const data = res?.data?.data?.allDataset?.edges[0]?.node;
+    return data;
   } catch (error) {
-    console.error(error)
+    console.error(error);
+    return null;
   }
 }

@@ -15,8 +15,10 @@ import {
 } from "@chakra-ui/react";
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useTranslation } from 'next-i18next';
+import { capitalize } from 'lodash';
 
-import BdmTablePage from "./BdmTablePage";
+import TablePage from "./TablePage";
 import RawDataSourcesPage from "./RawDataSourcesPage";
 import InformationRequestPage from "./InformationRequestPage";
 
@@ -26,10 +28,11 @@ export default function DatasetResource({
   dataset
 }) {
   const router = useRouter()
-  const { query } = router
+  const { query, locale } = router
   const [tables, setTables] = useState([])
   const [rawDataSources, setRawDataSources] = useState([])
   const [informationRequests, setInformationRequests] = useState([])
+  const { t } = useTranslation('dataset');
   const displayScreen = useBreakpointValue({ base: "mobile", lg: "desktop" })
 
   const pushQuery = (key, value) => {
@@ -52,24 +55,24 @@ export default function DatasetResource({
   }
 
   useEffect(() => {
-    // Id do dataset do SAEB
-    let dataset_tables = []
-    if(dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd") {
-      dataset_tables = dataset?.tables?.edges.map((elm) => elm.node)
-        .filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []
-    } else {
-      dataset_tables = dataset?.tables?.edges.map((elm) => elm.node)
-        .filter((elm) => elm?.status?.slug !== "under_review")
-          .filter((elm) => elm?.slug !== "dicionario")
-            .filter((elm) => elm?.slug !== "dictionary").sort(sortElements) || []
-    }
 
-    const raw_data_sources = dataset?.rawDataSources?.edges.map((elm) => elm.node).filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []
-    const information_request = dataset?.informationRequests?.edges.map((elm) => elm.node).filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []
+    let dataset_tables = dataset?.tables?.edges.map((elm) => elm.node)
+      .filter((elm) => elm?.status?.slug !== "under_review")
+      .filter((elm) => elm?.slug !== "dicionario")
+      .filter((elm) => elm?.slug !== "dictionary")
+      .sort(sortElements) || []
 
-    setTables(dataset_tables)
-    setRawDataSources(raw_data_sources)
-    setInformationRequests(information_request)
+    let raw_data_sources = dataset?.rawDataSources?.edges.map((elm) => elm.node)
+      .filter((elm) => elm?.status?.slug !== "under_review")
+      .sort(sortElements) || []
+    
+    let information_request = dataset?.informationRequests?.edges.map((elm) => elm.node)
+      .filter((elm) => elm?.status?.slug !== "under_review")
+      .sort(sortElements) || []
+
+    setTables(dataset_tables);
+    setRawDataSources(raw_data_sources);
+    setInformationRequests(information_request);
 
     const queryParams = new URLSearchParams(window.location.search)
 
@@ -81,8 +84,8 @@ export default function DatasetResource({
   }, [dataset])
 
   function SwitchResource ({route}) {
-    if (route.hasOwnProperty("table")) return <BdmTablePage id={route.table}/>
-    if (route.hasOwnProperty("raw_data_source")) return <RawDataSourcesPage id={route.raw_data_source}/>
+    if (route.hasOwnProperty("table")) return <TablePage id={route.table}/>
+    if (route.hasOwnProperty("raw_data_source")) return <RawDataSourcesPage id={route.raw_data_source} locale={locale}/>
     if (route.hasOwnProperty("information_request")) return <InformationRequestPage id={route.information_request}/>
     return null
   }
@@ -146,7 +149,7 @@ export default function DatasetResource({
                 borderRadius="10px"
               />
               <Tooltip
-                label={elm.name || elm.number}
+                label={elm[`name${capitalize(locale)}`] || elm.name || elm.number}
                 isDisabled={!isOverflow[i]}
                 hasArrow
                 padding="16px"
@@ -181,7 +184,7 @@ export default function DatasetResource({
                   padding="6px 8px"
                   onClick={() => onChange(elm._id)}
                 >
-                  {elm.name || elm.number}
+                  {elm[`name${capitalize(locale)}`] || elm.name || elm.number}
                 </Text>
               </Tooltip>
             </HStack>
@@ -382,7 +385,7 @@ export default function DatasetResource({
           spacing={0}
         >
           <ContentFilter
-            fieldName="Tabelas tratadas"
+            fieldName={t('tables')}
             choices={tables}
             value={query.table}
             onChange={(id) => {
@@ -392,7 +395,7 @@ export default function DatasetResource({
           />
 
           <ContentFilter
-            fieldName="Fontes originais"
+            fieldName={t('rawDataSources')}
             choices={rawDataSources}
             value={query.raw_data_source}
             onChange={(id) => {
@@ -402,7 +405,7 @@ export default function DatasetResource({
           />
 
           <ContentFilter
-            fieldName="Pedidos LAI"
+            fieldName={t('informationRequests')}
             choices={informationRequests}
             value={query.information_request}
             onChange={(id) => {
@@ -411,7 +414,7 @@ export default function DatasetResource({
             hasDivider={tables.length > 0 || rawDataSources.length > 0 ? true : false}
           />
         </Stack>
-      :
+        :
         <SelectResource />
       }
 

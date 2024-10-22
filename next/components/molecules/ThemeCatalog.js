@@ -8,15 +8,16 @@ import {
   SkeletonText
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
+import axios from 'axios';
+import { useTranslation } from 'next-i18next';
+import { capitalize } from "lodash";
 import { useMediaQuery } from "@chakra-ui/react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../../utils";
 
-import { getDatasetsByThemes } from "../../pages/api/themes/index"
-
 import Carousel from "../atoms/Carousel";
 import SectionText from "../atoms/SectionText";
-import DatabaseCard from "../organisms/DatabaseCard";
+import DatasetCard from "../organisms/DatasetCard";
 import RemoveIcon from "../../public/img/icons/removeIcon";
 import styles from "../../styles/themeCatalog.module.css";
 
@@ -26,6 +27,7 @@ function Themes ({
   onSelectTheme,
   selectedTheme=[],
   listThemes,
+  locale,
 }) {
   const [screenQuery, setScreenQuery] = useState(0)
 
@@ -82,7 +84,7 @@ function Themes ({
           ))
           :
           listThemes ?
-            listThemes.map((elm) => (
+            Object.values(listThemes).map((elm) => (
               <Center
                 key={elm.node._id}
                 position="relative"
@@ -102,7 +104,7 @@ function Themes ({
                 <Tooltip
                   hasArrow
                   bg="#2A2F38"
-                  label={elm.node.name}
+                  label={elm.node.name[`${capitalize(locale)}`] || elm.node.name}
                   fontSize="16px"
                   fontWeight="500"
                   padding="5px 16px 6px"
@@ -118,8 +120,8 @@ function Themes ({
                     transition="all 0.5s"
                     filter={found(elm.node.slug) && "invert(1)"}
                     _hover={{ filter:"invert(1)"}}
-                    alt={`${elm.node.name}`}
-                    src={`https://storage.googleapis.com/basedosdados-website/category_icons/2022/icone_${elm.node.slug}.svg`}
+                    alt={elm.node.name[`${capitalize(locale)}`] || elm.node.name}
+                    src={`https://storage.googleapis.com/basedosdados-website/theme_icons/${elm.node.slug}.svg`}
                   />
                 </Tooltip>
                 <RemoveIcon
@@ -183,8 +185,10 @@ const SkeletonWaitCard = () => {
   )
 }
 
-function CardThemes ({ responsive, datasetsCards = [], loading }) {
+function CardThemes ({ responsive, datasetsCards = [], loading, locale }) {
+  const { t } = useTranslation('common');
   const [screenQuery, setScreenQuery] = useState(0)
+
   useEffect(() => {
     if(responsive.mobileQuery)
       return setScreenQuery(1)
@@ -210,8 +214,9 @@ function CardThemes ({ responsive, datasetsCards = [], loading }) {
             textAlign="center"
             marginBottom={responsive.mobileQuery ? "16px" : "32px"}
           >
-            Nenhum conjunto com todos os temas selecionados foi encontrado.
-            Tente desmarcar algum dos temas.
+            {t('noDatasetsFound', { returnObjects: true })[0]}
+            {useCheckMobile() ? null : <br/>}
+            {t('noDatasetsFound', { returnObjects: true })[1]}
           </SectionText>
         </Center>
       }
@@ -243,10 +248,10 @@ function CardThemes ({ responsive, datasetsCards = [], loading }) {
             ))
             :
             datasetsCards.map((elm, i) => (
-              <DatabaseCard
+              <DatasetCard
                 key={i}
                 name={elm?.name}
-                categories={elm?.themes}
+                themes={elm?.themes}
                 organization={elm?.organizations?.[0]}
                 tags={elm?.tags}
                 tables={{
@@ -262,6 +267,7 @@ function CardThemes ({ responsive, datasetsCards = [], loading }) {
                   number: elm?.n_information_requests
                 }}
                 link={`/dataset/${elm.id}`}
+                locale={locale}
               />
             ))
           }
@@ -271,7 +277,7 @@ function CardThemes ({ responsive, datasetsCards = [], loading }) {
   )
 }
 
-export default function ThemeCatalog ({ data }) {
+export default function ThemeCatalog ({ data, locale }) {
   const [listThemes, setListThemes] = useState([])
   const [defaultDatasetsCards, setDefaultDatasetCards] = useState([])
   const [fetchThemesTimeout, setFetchThemesTimeout] = useState(null)
@@ -300,17 +306,24 @@ export default function ThemeCatalog ({ data }) {
       if(fetchThemesTimeout) clearTimeout(fetchThemesTimeout)
       setLoading(true)
 
-      const fetchFunc = setTimeout(() => {
-        getDatasetsByThemes(selectedTheme)
-        .then(res => {
-          setDatasetsCards(res)
-          setLoading(false)
-        })
+      const fetchFunc = setTimeout(async () => {
+        try {
+          const response = await axios.get('/api/themes/getDatasetsByThemes', {
+            params: { themes: selectedTheme.join(','), locale }
+          });
+          setDatasetsCards(response.data);
+          setLoading(false);
+        } catch (error) {
+          console.error('Error fetching datasets by themes:', error);
+          setLoading(false);
+        }
       }, 500)
       
       setFetchThemesTimeout(fetchFunc)
+    } else {
+      setDatasetsCards(defaultDatasetsCards);
     }
-  },[selectedTheme])
+  }, [selectedTheme, locale, defaultDatasetsCards]);
 
   const handleSelectTheme = (elm) => {
     triggerGAEvent("theme_home", elm)
@@ -334,6 +347,7 @@ export default function ThemeCatalog ({ data }) {
         selectedTheme={selectedTheme}
         onSelectTheme={handleSelectTheme}
         responsive={{mobileQuery, baseQuery, mediumQuery, lgQuery}}
+        locale={locale}
       />
 
       <CardThemes
@@ -344,6 +358,7 @@ export default function ThemeCatalog ({ data }) {
         }
         loading={loading}
         responsive={{mobileQuery, baseQuery, mediumQuery, lgQuery}}
+        locale={locale}
       />
     </VStack>
   )

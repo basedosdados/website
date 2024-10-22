@@ -6,13 +6,17 @@ import {
   Text,
   Box
 } from "@chakra-ui/react";
+import { useTranslation } from 'next-i18next';
+import { capitalize } from "lodash";
+import { useRouter } from 'next/router';
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
+import Link from '../atoms/Link';
 
 import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";
 import { DataBaseSolidIcon } from "../../public/img/icons/databaseIcon";
 
-export default function Database({
+export default function Dataset({
   id,
   name,
   temporalCoverageText,
@@ -21,34 +25,30 @@ export default function Database({
   rawDataSources,
   informationRequests,
   contains,
+  locale
 }) {
+  const { t } = useTranslation('dataset');
+  const router = useRouter();
 
   const Tables = () => {
     let tablesNumber = tables.number
     if(tables.number === undefined) tablesNumber = 0
 
     return (
-      <Text
-        as="a"
-        display="flex"
-        flexDirection="row"
-        alignItems="center"
+      <Link
+        href={tablesNumber > 0 ? `/dataset/${id}?table=${tables.id}` : "#"}
         cursor={tablesNumber > 0 ? "pointer" : "normal"}
         color={tablesNumber === 0 ? "#ACAEB1" : "#0068C5"}
         fill={tablesNumber === 0 ? "#ACAEB1" : "#0068C5"}
         pointerEvents={tablesNumber === 0 && "none"}
-        fontFamily="Roboto"
         fontWeight="400"
-        fontSize="14px"
-        lineHeight="20px"
         _hover={{
           color: "#0057A4",
           fill: "#0057A4"
         }}
-        href={tablesNumber > 0 ? `/dataset/${id}?table=${tables.id}` : ""}
       >
         <DataBaseSolidIcon
-          alt="tabelas tratadas"
+          alt={t('tables')}
           width="15px"
           height="15px"
         />
@@ -57,9 +57,9 @@ export default function Database({
           whiteSpace="nowrap"
         >
           {tablesNumber}{" "}
-          {tablesNumber === 1 ? "tabela tratada" : "tabelas tratadas"}
+          {tablesNumber === 1 ? t('datasetCard.table') : t('datasetCard.tables')}
         </Text>
-      </Text>
+      </Link>
     )
   }
 
@@ -68,27 +68,20 @@ export default function Database({
     if(rawDataSources.number === undefined) rawDataSourcesNumber = 0
 
     return (
-      <Text
-        as="a"
-        display="flex"
-        flexDirection="row"
-        alignItems="center"
+      <Link
         cursor={rawDataSourcesNumber > 0 ? "pointer" : "normal"}
         color={rawDataSourcesNumber === 0 ? "#ACAEB1" : "#0068C5"}
         fill={rawDataSourcesNumber === 0 ? "#ACAEB1" : "#0068C5"}
         pointerEvents={rawDataSourcesNumber === 0 && "none"}
-        fontFamily="Roboto"
         fontWeight="400"
-        fontSize="14px"
-        lineHeight="20px"
         _hover={{
           color: "#0057A4",
           fill: "#0057A4"
         }}
-        href={rawDataSourcesNumber > 0 ? `/dataset/${id}?raw_data_source=${rawDataSources.id}` : ""}
+        href={rawDataSourcesNumber > 0 ? `/dataset/${id}?raw_data_source=${rawDataSources.id}` : "#"}
       >
         <LinkIcon
-          alt="fontes originais"
+          alt={t('rawDataSources')}
           width="15px"
           height="15px"
         />
@@ -97,9 +90,9 @@ export default function Database({
           whiteSpace="nowrap"
         >
           {rawDataSourcesNumber}{" "}
-          {rawDataSourcesNumber === 1 ? "fonte original" : "fontes originais"}
+          {rawDataSourcesNumber === 1 ? t('datasetCard.rawDataSource') : t('datasetCard.rawDataSources')}
         </Text>
-      </Text>
+      </Link>
     )
   }
 
@@ -108,27 +101,20 @@ export default function Database({
     if(informationRequests.number === undefined) informationRequestsNumber = 0
 
     return (
-      <Text
-        as="a"
-        display="flex"
-        flexDirection="row"
-        alignItems="center"
+      <Link
         cursor={informationRequestsNumber > 0 ? "pointer" : "normal"}
         color={informationRequestsNumber === 0 ? "#ACAEB1" : "#0068C5"}
         fill={informationRequestsNumber === 0 ? "#ACAEB1" : "#0068C5"}
         pointerEvents={informationRequestsNumber === 0 && "none"}
-        fontFamily="Roboto"
         fontWeight="400"
-        fontSize="14px"
-        lineHeight="20px"
         _hover={{
           color: "#0057A4",
           fill: "#0057A4"
         }}
-        href={informationRequestsNumber > 0 ? `/dataset/${id}?information_request=${informationRequests.id}` : ""}
+        href={informationRequestsNumber > 0 ? `/dataset/${id}?information_request=${informationRequests.id}` : "#"}
       >
         <InfoArrowIcon
-          alt="pedidos Lai"
+          alt={t('informationRequests')}
           width="15px"
           height="15px"
         />
@@ -137,9 +123,9 @@ export default function Database({
           whiteSpace="nowrap"
         >
           {informationRequestsNumber}{" "}
-          {informationRequestsNumber === 1 ? "pedido LAI" : "pedidos LAI"}
+          {informationRequestsNumber === 1 ? t('datasetCard.informationRequest') : t('datasetCard.informationRequests')}
         </Text>
-      </Text>
+      </Link>
     )
   }
 
@@ -157,27 +143,29 @@ export default function Database({
         height="100%"
         spacing={6}
       >
-        <Box
-          as="a"
+        <Link
           href={`/dataset/${id}`}
           target="_self"
-          display="flex"
-          justifyContent="center"
-          border="1px solid #DEDFE0"
-          borderRadius="16px"
-          _hover={{ opacity: 0.9 }}
         >
-          <Image
-            src={organization?.picture.startsWith("https://") ? organization?.picture : `https://basedosdados.org/uploads/group/${organization?.name}`}
-            alt={organization.name || "Não informado"}
+          <Box
+            display="flex"
+            justifyContent="center"
+            border="1px solid #DEDFE0"
             borderRadius="16px"
-            minWidth="222px"
-            minHeight="138px"
-            maxWidth="222px"
-            maxHeight="138px"
-            objectFit="contain"
-          />
-        </Box>
+            _hover={{ opacity: 0.9 }}
+          >
+            <Image
+              src={organization?.picture.startsWith("https://") ? organization?.picture : `https://basedosdados.org/uploads/group/${organization?.name}`}
+              alt={organization[`name${capitalize(locale)}`] || organization?.name || t('notProvided')}
+              borderRadius="16px"
+              minWidth="222px"
+              minHeight="138px"
+              maxWidth="222px"
+              maxHeight="138px"
+              objectFit="contain"
+            />
+          </Box>
+        </Link>
 
         <VStack
           alignItems="flex-start"
@@ -193,23 +181,26 @@ export default function Database({
               alignItems="flex-start"
               pb={{ base: 2, lg: 0 }}
             >
-              <Text
-                as="a"
+              <Link
                 href={`/dataset/${id}`}
                 width="100%"
-                noOfLines={2}
-                textOverflow="ellipsis"
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="18px"
-                lineHeight="28px"
                 color="#252A32"
-                _hover={{
-                  opacity: 0.7
-                }}
+                fontWeight="500"
               >
-                {name}
-              </Text>
+                <Text
+                  width="100%"
+                  noOfLines={2}
+                  textOverflow="ellipsis"
+                  fontFamily="Roboto"
+                  fontSize="18px"
+                  lineHeight="28px"
+                  _hover={{
+                    opacity: 0.7
+                  }}
+                >
+                  {name}
+                </Text>
+              </Link>
             </Stack>
 
             <VStack
@@ -229,22 +220,48 @@ export default function Database({
                   lineHeight="20px"
                   color="#464A51"
                 >
-                  Organização:
+                  {t('organization')}:
                 </Text>
-                <Text
-                  as="a"
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="14px"
-                  lineHeight="20px"
+                <Link
+                  href={`/dataset?organization=${organization?.slug}`}
                   color="#71757A"
+                  fontWeight="400"
                   _hover={{
                     color: "#464A51"
                   }}
-                  textOverflow="ellipsis"
-                  href={`/dataset?organization=${organization?.slug}`}
                 >
-                  {organization?.name}
+                  <Text
+                    fontFamily="Roboto"
+                    fontSize="14px"
+                    lineHeight="20px"
+                    textOverflow="ellipsis"
+                  >
+                    {organization[`name${capitalize(locale)}`] || organization?.name}
+                  </Text>
+                </Link>
+              </Stack>
+
+              <Stack
+                direction={{ base: "column", lg: "row" }}
+                spacing={1}
+              >
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#464A51"
+                >
+                  {t('temporalCoverage')}:
+                </Text>
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#71757A"
+                >
+                  {temporalCoverageText ? temporalCoverageText : t('noCoverage')}
                 </Text>
               </Stack>
 
@@ -259,7 +276,7 @@ export default function Database({
                   lineHeight="20px"
                   color="#464A51"
                 >
-                  Cobertura temporal:
+                  {t('tables')}:
                 </Text>
                 <Text
                   fontFamily="Roboto"
@@ -268,32 +285,8 @@ export default function Database({
                   lineHeight="20px"
                   color="#71757A"
                 >
-                  {temporalCoverageText ? temporalCoverageText : "Não informado"}
-                </Text>
-              </Stack>
-
-              <Stack
-                direction={{ base: "column", lg: "row" }}
-                spacing={1}
-              >
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="14px"
-                  lineHeight="20px"
-                  color="#464A51"
-                >
-                  Recursos:
-                </Text>
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="14px"
-                  lineHeight="20px"
-                  color="#71757A"
-                >
-                  {contains.free && "Grátis"} {contains.free && contains.pro && "e"} {contains.pro && "Pagos"}
-                  {!contains.free && !contains.pro && "Não informado"}
+                  {contains.free && t('openData')} {contains.free && contains.pro && t('and')} {contains.pro && t('closedData')}
+                  {!contains.free && !contains.pro && t('none')}
                 </Text>
               </Stack>
             </VStack>

@@ -1,0 +1,56 @@
+{
+    "pageTitle": "Prices – Data Basis",
+    "ogTitle": "Price – Data Basis",
+    "ogDescription": "Compare Data Basis plans: Free, Pro, and Enterprise. With DB Pro, you get advanced features of our platform, high-frequency data, and exclusive datasets starting at R$47/month.",
+    "comparePlans": "Compare plans",
+    "annualDiscount": "Annual discount",
+    "annualBillingMessage": "{{price}} charged once a year",
+    "save20": "Save 20%",
+    "perMonth": "/month",
+    "chargedAnnually": "charged once a year",
+    "readThe": "Read the",
+    "termsOfService": "Terms of Service",
+    "features": "Features:",
+    "allFeaturesPlus": "All features of {{plan}}, plus:",
+    "currentPlan": "Current plan",
+    "subscribe": "Subscribe",
+    "startFreeTrial": "Start free trial",
+    "exploreFeatures": "Explore features",
+    "plans": {
+      "free": {
+        "title": "DB Free",
+        "subtitle": "For you to discover the potential of the data platform",
+        "features": [
+          "Processed tables",
+          "Integrated data",
+          "Updated low-frequency data",
+          "Cloud access",
+          "Access via SQL, Python, and R",
+          "Integration with BI tools",
+          "Direct download up to 100 MB"
+        ]
+      },
+      "pro": {
+        "title": "DB Pro",
+        "subtitle": "For you to access the most up-to-date data",
+        "features": [
+          "Dozens of updated high-frequency datasets",
+          "Company reference table with updated information",
+          "Direct download up to 1GB (80% of the platform's tables)"
+        ]
+      },
+      "enterprise": {
+        "title": "DB Enterprise",
+        "subtitle": "For your company to save time and improve decision quality",
+        "features": [
+          "Access for 10 accounts",
+          "Priority support via email and Discord"
+        ]
+      }
+    },
+    "tooltips": {
+      "integratedData": "Our data standardization and compatibility methodology allows you to cross-reference tables from different institutions and themes in a simplified manner.",
+      "downloadLimit": "This limit does not apply to access via SQL, Python, and R.",
+      "downloadLimitPro": "Tables larger than 1 GB are not available for partial or complete download. This limit does not apply to access via SQL, Python, and R."
+    }
+  }

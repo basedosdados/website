@@ -8,10 +8,12 @@ import {
   Divider
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
+import { capitalize } from "lodash";
 
 import ReadMore from "../atoms/ReadMore";
 import ObservationLevel from "../atoms/ObservationLevelTable";
-import { TemporalCoverage } from "../molecules/TemporalCoverageDisplay";
 import { AlertDiscalimerBox } from "../molecules/DisclaimerBox";
 import FourOFour from "../templates/404";
 
@@ -19,15 +21,19 @@ import RedirectIcon from "../../public/img/icons/redirectIcon"
 import InfoIcon from "../../public/img/icons/infoIcon";
 
 export default function RawDataSourcesPage({ id }) {
+  const { t } = useTranslation('dataset');
+  const router = useRouter();
+  const { locale } = router;
   const [isLoading, setIsLoading] = useState(true)
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState(false)
 
   useEffect(() => {
-    const featchRawDataSources = async () => {
+    const fetchRawDataSources = async () => {
       setIsLoading(true)
       try {
-        const response = await fetch(`/api/datasets/getRawDataSources?p=${id}`, { method: "GET" })
+        const url = `/api/datasets/getRawDataSource?id=${id}&locale=${locale}`;
+        const response = await fetch(url, { method: "GET" })
         const result = await response.json()
 
         if (result.success) {
@@ -45,11 +51,11 @@ export default function RawDataSourcesPage({ id }) {
       }
     }
 
-    featchRawDataSources()
-  },[id])
+    fetchRawDataSources()
+  }, [id, locale])
 
   const ObjectValues = (value) => {
-    if(value === undefined || Object.keys(value).length === 0) return "Não informado"
+    if(value === undefined || Object.keys(value).length === 0) return t('rawDataSource.notProvided')
 
     const array = []
 
@@ -57,32 +63,32 @@ export default function RawDataSourcesPage({ id }) {
       array.push(elm.name)
     })
 
-    if(array.length === 0) return "Não informado"
+    if(array.length === 0) return t('rawDataSource.notProvided')
     return array.join(", ").toString()
   }
 
   const TrueOrFalse = (value) => {
     switch (value) {
       case true:
-        return "Sim"
+        return t('rawDataSource.yes')
         break;
       case false:
-        return "Não"
+        return t('rawDataSource.no')
         break;
       default:
-        return "Não informado"
+        return t('rawDataSource.notProvided')
         break;
     }
   }
 
   const UpdateFrequency = () => {
     const value = resource?.updates?.[0]
-    if(value === undefined || Object.keys(value).length === 0) return "Não informado"
+    if(value === undefined || Object.keys(value).length === 0) return t('rawDataSource.notProvided')
 
     if(value?.frequency >= 0 && value?.entity?.name) return `${value.frequency} ${value.entity.name}`
     if(value?.entity?.name) return `${value.entity.name}`
 
-    return "Não informado"
+    return t('rawDataSource.notProvided')
   }
 
   const TooltipText = ({ text, info, ...props }) => {
@@ -174,7 +180,7 @@ export default function RawDataSourcesPage({ id }) {
           fontSize="14px"
           lineHeight="20px"
           color="#464A51"
-        >{text || "Não informado"}</Text>
+        >{text || t('rawDataSource.notProvided')}</Text>
       </SkeletonText>
     )
   }
@@ -215,7 +221,7 @@ export default function RawDataSourcesPage({ id }) {
         marginTop="8px !important"
       >
         <AlertDiscalimerBox>
-          Estes dados não passaram pela metodologia de tratamento da Base dos Dados.
+          {t('rawDataSource.rawDataDisclaimer')}
         </AlertDiscalimerBox>
       </StackSkeleton>
 
@@ -248,7 +254,7 @@ export default function RawDataSourcesPage({ id }) {
             backgroundColor: resource?.url ? "#22703E" : "#ACAEB1"
           }}
         >
-          Acessar fonte original
+          {t('rawDataSource.accessOriginalSource')}
           <RedirectIcon
             width="12px"
             height="12px"
@@ -265,7 +271,7 @@ export default function RawDataSourcesPage({ id }) {
             lineHeight="20px"
             color="#252A32"
           >
-            Descrição
+            {t('rawDataSource.description')}
           </Text>
         </StackSkeleton>
 
@@ -282,7 +288,7 @@ export default function RawDataSourcesPage({ id }) {
           isLoaded={!isLoading}
         >
           <ReadMore id="readLessRawDescription">
-            {resource?.description || "Não informado"}
+            {resource?.[`description${capitalize(locale)}`] || resource?.description || t('rawDataSource.notProvided')}
           </ReadMore>
         </SkeletonText>
       </Stack>
@@ -297,40 +303,40 @@ export default function RawDataSourcesPage({ id }) {
           lineHeight="20px"
           color="#252A32"
         >
-          Informações adicionais
+          {t('rawDataSource.additionalInfo')}
         </Text>
       </StackSkeleton>
 
       <AddInfoTextBase
-        title="Idioma"
+        title={t('rawDataSource.language')}
         text={ObjectValues(resource?.languages)}
       />
 
       <AddInfoTextBase
-        title="Disponibilidade"
+        title={t('rawDataSource.availability')}
         text={resource?.availability?.name}
       />
 
       <AddInfoTextBase
-        title="Tem dados estruturados"
+        title={t('rawDataSource.hasStructuredData')}
         text={TrueOrFalse(resource?.containsStructuredData)}
       />
 
       <AddInfoTextBase
-        title="Tem API"
+        title={t('rawDataSource.hasAPI')}
         text={TrueOrFalse(resource?.containsApi)}
       />
 
       <AddInfoTextBase
-        title="Frequência de atualização"
+        title={t('rawDataSource.updateFrequency')}
         text={UpdateFrequency()}
       />
 
       <Stack marginBottom="24px !important">
         <StackSkeleton width="190px" height="20px">
           <TooltipText
-            text="Nível da observação"
-            info="indica qual a menor granularidade possível de análise com aquele dado. Por exemplo, uma tabela com nível da observação de estado permite que façamos uma análise no país (por ser mais amplo que estado), mas não uma análise por município (que já seria um recorte mais específico)."
+            text={t('rawDataSource.observationLevel')}
+            info={t('rawDataSource.observationLevelTooltip')}
             fontSize="14px"
           />
         </StackSkeleton>
@@ -353,24 +359,24 @@ export default function RawDataSourcesPage({ id }) {
               lineHeight="20px"
               color="#464A51"
             >
-              Não informado
+              {t('rawDataSource.notProvided')}
             </Text>
           }
         </Skeleton>       
       </Stack>
 
       <AddInfoTextBase
-        title="Requer registro"
+        title={t('rawDataSource.requiresRegistration')}
         text={TrueOrFalse(resource?.requiredRegistration)}
       />
 
       <AddInfoTextBase
-        title="Requer IP de algum país"
+        title={t('rawDataSource.requiresIPFromCountry')}
         text={ObjectValues(resource?.areaIpAddressRequired)}
       />
 
       <AddInfoTextBase
-        title="Gratuito"
+        title={t('rawDataSource.isFree')}
         text={TrueOrFalse(resource?.isFree)}
       />
     </Stack>

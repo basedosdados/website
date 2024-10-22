@@ -1,0 +1,56 @@
+{
+    "pageTitle": "Precios – Base de los Datos",
+    "ogTitle": "Precio – Base de los Datos",
+    "ogDescription": "Compare los planes de Base de los Datos: Gratis, Pro y Empresas. Con BD Pro, cuenta con funciones avanzadas de nuestra plataforma, datos de alta frecuencia y conjuntos exclusivos desde R$47/mes.",
+    "comparePlans": "Comparar planes",
+    "annualDiscount": "Descuento anual",
+    "annualBillingMessage": "{{price}} cobrado una vez al año",
+    "save20": "Ahorre 20%",
+    "perMonth": "/mes",
+    "chargedAnnually": "cobrado una vez al año",
+    "readThe": "Lea los",
+    "termsOfService": "Términos de Servicio",
+    "features": "Características:",
+    "allFeaturesPlus": "Todas las características de {{plan}}, más:",
+    "currentPlan": "Plan actual",
+    "subscribe": "Suscribirse",
+    "startFreeTrial": "Iniciar prueba gratuita",
+    "exploreFeatures": "Explorar características",
+    "plans": {
+      "free": {
+        "title": "BD Gratis",
+        "subtitle": "Para que descubras el potencial de la plataforma de datos",
+        "features": [
+          "Tablas procesadas",
+          "Datos integrados",
+          "Datos de baja frecuencia actualizados",
+          "Acceso en la nube",
+          "Acceso vía SQL, Python y R",
+          "Integración con herramientas BI",
+          "Descarga directa hasta 100 MB"
+        ]
+      },
+      "pro": {
+        "title": "BD Pro",
+        "subtitle": "Para que tengas acceso a los datos más actualizados",
+        "features": [
+          "Decenas de bases de alta frecuencia actualizadas",
+          "Tabla de referencia de empresas con información actualizada",
+          "Descarga directa hasta 1GB (80% de las tablas de la plataforma)"
+        ]
+      },
+      "enterprise": {
+        "title": "BD Empresas",
+        "subtitle": "Para que tu empresa gane tiempo y calidad en las decisiones",
+        "features": [
+          "Acceso para 10 cuentas",
+          "Soporte prioritario por correo electrónico y Discord"
+        ]
+      }
+    },
+    "tooltips": {
+      "integratedData": "Nuestra metodología de estandarización y compatibilización de datos te permite cruzar tablas de diferentes instituciones y temas de manera simplificada.",
+      "downloadLimit": "Este límite no se aplica al acceso vía SQL, Python y R.",
+      "downloadLimitPro": "Las tablas mayores de 1 GB no están disponibles para descarga parcial o completa. Este límite no se aplica al acceso vía SQL, Python y R."
+    }
+  }

@@ -8,12 +8,15 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
+  Spinner,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import Display from "../components/atoms/Display";
 import RoundedButton from "../components/atoms/RoundedButton";
@@ -34,13 +37,10 @@ import DiscordIcon from "../public/img/icons/discordIcon";
 import RedirectIcon from "../public/img/icons/redirectIcon";
 import styles from "../styles/quemSomos.module.css";
 
-export async function getServerSideProps() {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/team/getAllPeople`, {method: "GET"})
-  const data = await response.json()
-
+export async function getServerSideProps({ locale }) {
   return {
     props: {
-      data
+      ...(await serverSideTranslations(locale, ['aboutUs', 'common', 'menu'])),
     },
   }
 }
@@ -252,10 +252,31 @@ const TeamBox = ({
   )
 }
 
-export default function QuemSomos({ data }) {
+export default function QuemSomos() {
+  const { t } = useTranslation('aboutUs');
+  const [isLoading, setIsLoading] = useState(false)
+  const [data, setData] = useState([])
   const [allPeople, setAllPeople] = useState([])
   const [people, setPeople] = useState([])
   const [filterTeam, setFilterTeam] = useState("")
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/team/getAllPeople`, { method: "GET" });
+        if (!response.ok) {
+          throw new Error("Erro");
+        }
+        const result = await response.json();
+        setData(result);
+      } catch (error) {
+        console.error("Erro:", error);
+      }
+      setIsLoading(true)
+    };
+  
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if(data.length === 0) return
@@ -350,15 +371,15 @@ export default function QuemSomos({ data }) {
   return (
     <MainPageTemplate paddingX="24px">
       <Head>
-        <title>Quem Somos – Base dos Dados</title>
+        <title>{t('pageTitle')}</title>
         <meta
           property="og:title"
-          content="Quem Somos – Base dos Dados"
+          content={t('pageTitle')}
           key="ogtitle"
         />
         <meta
           property="og:description"
-          content="Conheça a Base dos Dados. Nós facilitamos o acesso a dados para que a distância entre você e sua análise seja apenas uma boa pergunta. Saiba mais sobre a história da organização e sobre a equipe por trás do nosso trabalho."
+          content={t('pageDescription')}
           key="ogdesc"
         />
       </Head>
@@ -399,7 +420,7 @@ export default function QuemSomos({ data }) {
               textAlign="center" 
               marginBottom={isMobileMod() ? "80px" : "136px"}
             >
-              Facilitamos o acesso a dados {isMobileMod() ? " " : <br/>} para que a distância entre você e sua análise{isMobileMod() ? " " : <br/>}seja <a style={{color:"#2B8C4D"}}>apenas uma boa pergunta</a>.
+              {t('heroTitle1')} {isMobileMod() ? " " : <br/>} {t('heroTitle2')} {isMobileMod() ? " " : <br/>} {t('heroTitle3')} <a style={{color:"#2B8C4D"}}>{t('heroTitle4')}</a>.
             </Display>
           </Stack>
 
@@ -415,19 +436,19 @@ export default function QuemSomos({ data }) {
           >
             <Center flexDirection="column">
               <Display>
-                +114 mil
+                {t('usersCount')}
               </Display>
               <Text paddingTop="4px" letterSpacing="0.1px" fontSize="20px" fontFamily="Ubuntu" color="#252A32" fontWeight="300">
-                usuários na plataforma 
+                {t('usersText')}
               </Text>
             </Center>
 
             <Center flexDirection="column">
               <Display>
-                +1,3 milhão
+                {t('queriesCount')}
               </Display>
               <Text paddingTop="4px" letterSpacing="0.1px" fontSize="20px" fontFamily="Ubuntu" color="#252A32" fontWeight="300">
-                consultas aos dados
+                {t('queriesText')}
               </Text>
             </Center>   
           </Stack>
@@ -447,16 +468,16 @@ export default function QuemSomos({ data }) {
               lineHeight={isMobileMod() ? "40px" : "54px"}
               letterSpacing={isMobileMod() ? "-0.5px" : "-0.8px" }
             >
-              A Base dos Dados
+              {t('aboutTitle')}
             </Display>
             <BodyText paddingBottom="20px">
-              Somos uma organização não-governamental sem fins lucrativos e <i>open source</i> que atua para universalizar o acesso a dados de qualidade. Fazemos isso através da criação de ferramentas inovadoras, da produção e difusão do conhecimento e da promoção de uma cultura de transparência e dados abertos.
+              {t('aboutText1')}
             </BodyText>
             <BodyText paddingBottom="20px">
-              Ao quebrar barreiras técnicas para quem já faz e quem quer começar a fazer análise de dados, reunimos uma rede altamente engajada que potencializa o impacto do nosso trabalho. Estamos construindo uma comunidade de pessoas que acreditam no uso inteligente de dados como instrumento para o desenvolvimento socioeconômico e que encontram na BD uma grande aliada.
+              {t('aboutText2')}
             </BodyText>
             <BodyText paddingBottom="20px">
-              O que queremos é aproximar diferentes setores da sociedade de informações que são de interesse coletivo, mas ainda pouco acessíveis para a maioria das pessoas. Acreditamos que ampliar o acesso e uso de dados abertos favorece o aumento da participação social, a melhoria da gestão pública e o aperfeiçoamento da democracia.
+              {t('aboutText3')}
             </BodyText>
           </Stack>
 
@@ -474,7 +495,7 @@ export default function QuemSomos({ data }) {
               letterSpacing={isMobileMod() ? "-0.5px" : "-0.8px" }
               textAlign="center"
             >
-              Reconhecimentos
+              {t('recognitionTitle')}
             </Display>
 
             <Stack
@@ -497,7 +518,7 @@ export default function QuemSomos({ data }) {
                   letterSpacing={{base: "0.2px", lg: "0px"}}
                   marginBottom={{base: "8px", lg: "16px"}}
                 >
-                  Google Cloud Customer Award
+                  {t('googleCloudAwardTitle')}
                 </SectionTitle>
                 <BodyText
                   fontSize="17px"
@@ -505,8 +526,7 @@ export default function QuemSomos({ data }) {
                   letterSpacing="0.1px"
                   marginBottom="8px"
                 >
-                  O prêmio reconheceu as implementações mais inovadoras e transformadoras do Google Cloud ao redor do mundo. 
-                  Fomos a única organização brasileira a receber a premiação na categoria de Impacto Social, que também selecionou outras iniciativas que usam tecnologia para promover mais abertura e transparência. 
+                  {t('googleCloudAwardText')}
                 </BodyText>
                 <Link
                   display="flex"
@@ -521,7 +541,7 @@ export default function QuemSomos({ data }) {
                   color="#42B0FF"
                   href="https://cloud.google.com/blog/topics/customers/announcing-winners-of-google-cloud-customer-awards"
                 >
-                  Veja mais detalhes
+                  {t('googleCloudAwardLink')}
                   <RedirectIcon width="12px" height="12px" alt="hiperlink" fill="#42B0FF"/>
                 </Link>
               </Box>
@@ -540,7 +560,7 @@ export default function QuemSomos({ data }) {
                   letterSpacing={{base: "0.2px", lg: "0px"}}
                   marginBottom={{base: "8px", lg: "16px"}}
                 >
-                  XXVI Prêmio Tesouro Nacional 2021
+                  {t('treasuryAwardTitle')}
                 </SectionTitle>
                 <BodyText 
                   fontSize="17px"
@@ -548,7 +568,7 @@ export default function QuemSomos({ data }) {
                   letterSpacing="0.1px"
                   marginBottom="8px"
                 >
-                  Conquistamos o 1º lugar na categoria Soluções do prêmio, que tem como objetivo reconhecer o desenvolvimento de aplicações em ciências de dados e inteligência artificial aplicadas a finanças públicas. Fomos selecionados por conta de nosso trabalho compatibilizando informações de despesas e receitas orçamentárias do Setor Público Brasileiro.
+                  {t('treasuryAwardText')}
                 </BodyText>
                 <Link
                   display="flex"
@@ -563,7 +583,7 @@ export default function QuemSomos({ data }) {
                   color="#42B0FF"
                   href="https://www.tesourotransparente.gov.br/descubra-explore-crie/crie"
                 >
-                  Veja mais detalhes
+                  {t('treasuryAwardLink')}
                   <RedirectIcon width="12px" height="12px" alt="hiperlink" fill="#42B0FF"/>
                 </Link>
               </Box>
@@ -589,7 +609,7 @@ export default function QuemSomos({ data }) {
             letterSpacing={isMobileMod() ? "-0.5px" : "-0.8px" }
             color="#FFF"
           >
-            Nossa história
+            {t('historyTitle')}
           </Display>
           <Text
             fontFamily="ubuntu"
@@ -600,7 +620,7 @@ export default function QuemSomos({ data }) {
             textAlign="center"
             color="#FFF"
             margin="8px 0 48px"
-          >Alguns dos marcos que definiram nossa trajetória até aqui</Text>
+          >{t('historySubtitle')}</Text>
         </Center>
       
         <Center
@@ -616,81 +636,81 @@ export default function QuemSomos({ data }) {
             }}
           >
             <HistoryBox
-              title="Um grande catálogo"
-              date="OUT DE 2019"
+              title={t('historyBox1Title')}
+              date={t('historyBox1Date')}
               image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_um_grande_catalogo_colaborativo.png"
             >
-              Nosso co-fundador, Ricardo Dahis, enxergou a necessidade de uma plataforma com capacidade de busca e filtragem de diferentes conjuntos de dados e iniciou esse trabalho lançando o mecanismo de busca da BD.
+              {t('historyBox1Text')}
             </HistoryBox>
             <HistoryBox
-              title="O e-mail"
-              date="SET DE 2020"
+              title={t('historyBox2Title')}
+              date={t('historyBox2Date')}
               image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_o_email.png"
             >
-              Foi já no primeiro contato de João Carabetta, também co-fundador da BD, com Ricardo Dahis que veio a ambiciosa proposta: estruturar um grande <i>datalake</i> público pelo BigQuery e usar o mecanismo de busca para catalogação das bases e de seus metadados.
+              {t('historyBox2Text')}
             </HistoryBox>
             <HistoryBox
-              title="A happy sunday"
-              date="SET DE 2020"
+              title={t('historyBox3Title')}
+              date={t('historyBox3Date')}
               image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_a_happy_sunday.png"
             >
-              Nos últimos três minutos de um domingo de setembro, o GitHub testemunhou o <i>commit</i> que mudaria para sempre a vida de quem trabalha com dados públicos. Criamos a estrutura do nosso <i>datalake</i>, uma ferramenta que faria a alegria de muita gente que já passou tantos domingos limpando bases.
+              {t('historyBox3Text')}
             </HistoryBox>
             <HistoryBox
-              title="Nem só de boa vontade..."
-              date="SET DE 2020"
+              title={t('historyBox4Title')}
+              date={t('historyBox4Date')}
               image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_nem_so_de_boa_vontade.png"
             >
-              Começamos a receber apoio financeiro de pessoas que acreditam na importância do nosso trabalho. Isso foi fundamental para escalar nossas atividades, afinal, nem só de esforço e boa vontade se faz um bom projeto.
+              {t('historyBox4Text')}
             </HistoryBox>
             <HistoryBox
-              title="Funcionário do mês"
-              date="NOV DE 2020"
+              title={t('historyBox5Title')}
+              date={t('historyBox5Date')}
               image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_funcionario_do_mes.png"
             >
-              Abrimos a primeira vaga de Assistente de Dados e contratamos a primeira pessoa remunerada para integrar nossa equipe. Aos poucos, esse time foi crescendo e hoje não é mais tão fácil assim ser funcionário(a) do mês.
+              {t('historyBox5Text')}
             </HistoryBox>
             <HistoryBox
-              title="A primeira de muitas"
-              date="JAN DE 2021"
+              title={t('historyBox6Title')}
+              date={t('historyBox6Date')}
               image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_a_primeira_de_muitas.png"
             >
-              A RAIS foi nossa primeira grande base tratada e disponibilizada no <i>datalake</i> público. Subimos seus assombrosos 260 GB de microdados completos, com informações de 1985 até 2019, possibilitando agregações por município e UF.
+              {t('historyBox6Text')}
             </HistoryBox>
             <HistoryBox
-              title="Real oficial"
-              date="JUN DE 2021"
+              title={t('historyBox7Title')}
+              date={t('historyBox7Date')}
               image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_real_oficial.png"
             >
-              Nos tornamos oficialmente o Instituto Base dos Dados, uma organização sem fins lucrativos, com equipe formal, CNPJ e tudo que tem direito. Um passo importante para consolidar nosso trabalho.
+              {t('historyBox7Text')}
             </HistoryBox>
             <HistoryBox
-              title="De cara nova"
-              date="SET DE 2021"
+              title={t('historyBox8Title')}
+              date={t('historyBox8Date')}
               image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_de_cara_nova.png"
             >
-              Desenvolver o novo site foi um dos maiores e desafiadores projetos que assumimos. Apesar dos momentos de caos e peças mirabolantes, aos poucos tudo foi se encaixando e tomando a forma de uma plataforma com a nossa cara. Assim, nasceu a primeira versão do novo site da BD, com interface mais intuitiva, design moderno e uma estrutura que facilita ainda mais a experiência dos usuários.
+              {t('historyBox8Text')}
             </HistoryBox>
             <HistoryBox
-              title="Um prêmio de peso"
-              date="OUT DE 2021"
+              title={t('historyBox9Title')}
+              date={t('historyBox9Date')}
               image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_um_premio_de_peso.png"
             >
-              Precisamos de muitas mãos para carregar essa conquista. Recebemos o <i>Google Cloud Customer Award</i> na categoria de Impacto Social. O prêmio inédito foi anunciado no evento internacional, <i>Google Cloud Next'21</i>, e tem como objetivo reconhecer as implementações mais inovadoras e transformadoras do Google Cloud ao redor do mundo.
+              {t('historyBox9Text')}
             </HistoryBox>
             <HistoryBox
-              title="Chegamos primeiro no tesouro"
-              date="NOV DE 2021"
+              title={t('historyBox10Title')}
+              date={t('historyBox10Date')}
               image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_chegamos_primeiro_no_tesouro.png"
             >
-              Conquistamos o 1º lugar na categoria Soluções do XXVI Prêmio Tesouro Nacional 2021. O prêmio tem como objetivo expandir as fronteiras do conhecimento em finanças públicas, promovendo a normalização de temas específicos quando tratados consistentemente pela pesquisa científica.
+              {t('historyBox10Text')}
             </HistoryBox>
             <HistoryBox
-              title="Conquistando o mundo"
-              date="Muito em breve"
+              title={t('historyBox11Title')}
+              date={t('historyBox11Date')}
               image="https://storage.googleapis.com/basedosdados-website/historia/nossa_historia_conquistando_o_mundo.png"
             >
-              A necessidade de ter um repositório que centralize importantes bases de dados já tratadas e padronizadas não é exclusiva do Brasil. Imagina ter um <i>datalake</i> aberto que permite o acesso e cruzamento de dados de diversos países diferentes? Esse é o futuro da BD.
+              {t('historyBox11Text')}
             </HistoryBox>
           </Carousel>
         </Center>
@@ -709,71 +729,81 @@ export default function QuemSomos({ data }) {
           letterSpacing={isMobileMod() ? "-0.5px" : "-0.8px" }
           textAlign="center"
         >
-          Uma equipe colaborativa
+          {t('teamTitle')}
         </Display>
 
-        {data.length > 0 ?
-          <Stack
-            position="relative"
-            gridGap="96px"
-            spacing={0}
-            flexDirection={isMobileMod() ? "column" :"row"}
-            paddingBottom="32px"
-          >
-            <Box
-              display="flex"
-              height="100%"
-              flexDirection="column"
-              gridGap="16px"
-              position={isMobileMod() ? "relative" : "sticky"}
-              top={isMobileMod()? "0" : "120px"}
-              z-index="20"
-            >
-              {schemasTeam?.map((elm, i) => (
-                <Text
-                  key={i}
-                  fontSize="16px"
-                  color={filterTeam === elm ? "#2B8C4D" :"#6F6F6F"}
-                  fontFamily="ubuntu"
-                  fontWeight="500"
-                  width="max-content"
-                  cursor="pointer"
-                  letterSpacing="0.2px"
-                  onClick={() => handleSelect(elm)}
-                >
-                  {elm}
-                </Text>
-              ))}
-            </Box>
-
-            <Stack
-              width="100%"
-              spacing={{ base: "72px", lg: "96px" }}
-            >
-              {people?.map((elm, index) => (
-                <TeamBox
-                  key={index}
-                  index={index}
-                  name={`${elm.node.firstName} ${elm.node.lastName}`}
-                  picture={elm.node.picture}
-                  description={elm.node.description}
-                  website={elm.node.website}
-                  email={elm.node.email}
-                  twitter={elm.node.twitter}
-                  linkedin={elm.node.linkedin}
-                  github={elm.node.github}
-                  career={elm.node.careers.edges}
-                />
-              ))}
-            </Stack>
-          </Stack>
-        :
-          <Stack justifyContent="center" alignItems="center">
-            <InternalError
-              widthImage="300"
-              heightImage="300"
+        {!isLoading ?
+          <Stack>
+            <Spinner
+              margin="0 auto"
+              width="200px"
+              height="200px"
+              color="#2B8C4D"
             />
           </Stack>
+          :
+          data.length > 0 ?
+            <Stack
+              position="relative"
+              gridGap="96px"
+              spacing={0}
+              flexDirection={{base:"column", lg:"row"}}
+              paddingBottom="32px"
+            >
+              <Box
+                display="flex"
+                height="100%"
+                flexDirection="column"
+                gridGap="16px"
+                position={{base:"relative", lg: "sticky"}}
+                top={{base:"0", lg: "120px"}}
+                z-index="20"
+              >
+                {t('teamCategories', { returnObjects: true }).map((elm, i) => (
+                  <Text
+                    key={i}
+                    fontSize="16px"
+                    color={filterTeam === elm ? "#2B8C4D" :"#6F6F6F"}
+                    fontFamily="ubuntu"
+                    fontWeight="500"
+                    width="max-content"
+                    cursor="pointer"
+                    letterSpacing="0.2px"
+                    onClick={() => handleSelect(elm)}
+                  >
+                    {elm}
+                  </Text>
+                ))}
+              </Box>
+
+              <Stack
+                width="100%"
+                spacing={{ base: "72px", lg: "96px" }}
+              >
+                {people?.map((elm, index) => (
+                  <TeamBox
+                    key={index}
+                    index={index}
+                    name={`${elm.node.firstName} ${elm.node.lastName}`}
+                    picture={elm.node.picture}
+                    description={elm.node.description}
+                    website={elm.node.website}
+                    email={elm.node.email}
+                    twitter={elm.node.twitter}
+                    linkedin={elm.node.linkedin}
+                    github={elm.node.github}
+                    career={elm.node.careers.edges}
+                  />
+                ))}
+              </Stack>
+            </Stack>
+          :
+            <Stack justifyContent="center" alignItems="center">
+              <InternalError
+                widthImage="300"
+                heightImage="300"
+              />
+            </Stack>
         }
 
         <Stack
@@ -789,13 +819,11 @@ export default function QuemSomos({ data }) {
             boxShadow="0 2px 8px 1px rgba(64, 60, 67, 0.16)"
           >
             <BigTitle paddingBottom="16px">
-              Venha colaborar com a transparência
+              {t('joinUsTitle')}
             </BigTitle>
 
             <BodyText paddingBottom="24px">
-              Faça parte de uma organização que está mudando a maneira de acessar dados.<br/>
-              Reunimos pessoas de várias partes do Brasil, empenhadas em contribuir e trabalhar<br/>
-              por mais transparência pública.
+              {t('joinUsText')}
             </BodyText>
             <RoundedButton
               paddingX="20px"
@@ -803,7 +831,7 @@ export default function QuemSomos({ data }) {
               alignItems="center"
               onClick={() => window.open("https://info.basedosdados.org/carreiras", "_blank")}
             >
-              Veja as vagas abertas <RedirectIcon alt="vagas basedosdados" fill="#FFF" width="12px" height="12px" marginLeft="8px"/>
+              {t('joinUsButton')} <RedirectIcon alt="vagas basedosdados" fill="#FFF" width="12px" height="12px" marginLeft="8px"/>
             </RoundedButton>
           </Box>
         </Stack>

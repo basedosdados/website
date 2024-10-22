@@ -9,6 +9,8 @@ import {
   Text
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { triggerGAEvent } from "../../utils";
 
 import Input from "../../components/atoms/SimpleInput";
@@ -24,11 +26,18 @@ import Link from "../../components/atoms/Link";
 
 import { withPages } from "../../hooks/pages.hook";
 
-export async function getStaticProps() {
-  return await withPages()
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['user'])),
+      ...(await withPages()),
+    },
+  };
 }
 
 export default function Register() {
+  const { t } = useTranslation('user');
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -64,19 +73,19 @@ export default function Register() {
     const validationErrors = {}
 
     if (!formData.firstName) {
-      validationErrors.firstName = "Por favor, insira seu nome."
+      validationErrors.firstName = t('signup.errors.firstName')
     }
     if (!formData.username) {
-      validationErrors.username = "Nome de usuário inválido ou já existe uma conta com este nome de usuário."
+      validationErrors.username = t('signup.errors.username.invalid')
     }
     if(/\s/.test(formData.username)) {
-      validationErrors.username = "Nome de usuário não pode haver espaçamento."
+      validationErrors.username = t('signup.errors.username.noSpaces')
     }
     if (!formData.email) {
-      validationErrors.email = "Endereço de e-mail inválido ou já existe uma conta com este e-mail."
+      validationErrors.email = t('signup.errors.email.invalid')
     } 
     if (!/^\S+@\S+$/.test(formData.email)) {
-      validationErrors.email = "Endereço de e-mail inválido ou já existe uma conta com este e-mail."
+      validationErrors.email = t('signup.errors.email.invalid')
     }
     if(!/^.{8,}$/.test(formData.password)) {
       regexPassword = {...regexPassword, amount: true}
@@ -94,14 +103,14 @@ export default function Register() {
       regexPassword = {...regexPassword, special: true}
     }
     if (!formData.confirmPassword) {
-      validationErrors.confirmPassword = "Confirmar a senha é necessário."
+      validationErrors.confirmPassword = t('signup.errors.confirmPassword.required')
     }
     if(/\s/.test(formData.confirmPassword)) {
-      validationErrors.password = "As senhas inseridas não podem conter espaçamentos."
-      validationErrors.confirmPassword = "As senhas inseridas não podem conter espaçamentos."
+      validationErrors.password = t('signup.errors.password.noSpaces')
+      validationErrors.confirmPassword = t('signup.errors.password.noSpaces')
     }
     if(formData.confirmPassword !== formData.password) {
-      validationErrors.confirmPassword = "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente."
+      validationErrors.confirmPassword = t('signup.errors.confirmPassword.mismatch')
     }
 
     if(Object.keys(regexPassword).length > 0) validationErrors.regexPassword = regexPassword
@@ -127,12 +136,12 @@ export default function Register() {
 
       let arrayErrors = {}
       if(result?.success === false) {
-        arrayErrors = ({register: "Error ao tentar se cadastrar, tente novamente mais tarde!"})
+        arrayErrors = ({register: t('signup.errors.register')})
       }
       if(result?.errors?.length > 0) {
         result.errors.map((elm) => {
-          if(elm.field === "email") arrayErrors = ({...arrayErrors, email: "Conta com este email já existe."})
-          if(elm.field === "username") arrayErrors = ({...arrayErrors, username: "Conta com este nome de usuário já existe."})
+          if(elm.field === "email") arrayErrors = ({...arrayErrors, email: t('signup.errors.email.exists')})
+          if(elm.field === "username") arrayErrors = ({...arrayErrors, username: t('signup.errors.username.exists')})
         })
       }
       setErrors(arrayErrors)
@@ -181,7 +190,7 @@ export default function Register() {
           letterSpacing={isMobileMod() ? "-0.4px" : "-1.5px"}
           marginBottom="40px"
           textAlign="center"
-        >Cadastre-se</Display>
+        >{t('signup.title')}</Display>
 
         <form onSubmit={handleSubmit}>
           <VStack
@@ -189,13 +198,13 @@ export default function Register() {
             gap="24px"
           >
             <FormControl isInvalid={!!errors.firstName} >
-              <LabelTextForm text="Nome"/>
+              <LabelTextForm text={t('signup.firstName')}/>
               <Input
                 id="firstName"
                 name="firstName"
                 value={formData.firstName}
                 onChange={(e) => handleInputChange(e, "firstName")}
-                placeholder="Insira seu nome"
+                placeholder={t('signup.placeholders.firstName')}
                 fontFamily="ubuntu"
                 height="40px"
                 fontSize="14px"
@@ -208,13 +217,13 @@ export default function Register() {
             </FormControl>
 
             <FormControl isInvalid={!!errors.lastName}>
-              <LabelTextForm text="Sobrenome"/>
+              <LabelTextForm text={t('signup.lastName')}/>
               <Input
                 id="lastName"
                 name="lastName"
                 value={formData.lastName}
                 onChange={(e) => handleInputChange(e, "lastName")}
-                placeholder="Insira seu sobrenome (opcional)"
+                placeholder={t('signup.placeholders.lastName')}
                 fontFamily="ubuntu"
                 height="40px"
                 fontSize="14px"
@@ -227,7 +236,7 @@ export default function Register() {
             </FormControl>
 
             <FormControl isInvalid={!!errors.email}>
-              <LabelTextForm text="E-mail" />
+              <LabelTextForm text={t('signup.email')} />
               <Input
                 id="username"
                 name="username"
@@ -235,7 +244,7 @@ export default function Register() {
                 autoComplete="username"
                 value={formData.email}
                 onChange={(e) => handleInputChange(e, "email")}
-                placeholder="Insira seu e-mail"
+                placeholder={t('signup.placeholders.email')}
                 fontFamily="ubuntu"
                 height="40px"
                 fontSize="14px"
@@ -248,7 +257,7 @@ export default function Register() {
             </FormControl>
 
             <FormControl isInvalid={!!errors.username} >
-              <LabelTextForm text="Nome de usuário"/>
+              <LabelTextForm text={t('signup.username')}/>
               <Input
                 id="user"
                 name="user"
@@ -256,7 +265,7 @@ export default function Register() {
                 autoComplete="off"
                 value={formData.username}
                 onChange={(e) => handleInputChange(e, "username")}
-                placeholder="Insira seu nome de usuário"
+                placeholder={t('signup.placeholders.username')}
                 fontFamily="ubuntu"
                 height="40px"
                 fontSize="14px"
@@ -269,7 +278,7 @@ export default function Register() {
             </FormControl>
 
             <FormControl isInvalid={!!errors.password}>
-              <LabelTextForm text="Senha" />
+              <LabelTextForm text={t('signup.password')} />
               <Input
                 type={showPassword ? "password" : "text"}
                 id="password"
@@ -277,7 +286,7 @@ export default function Register() {
                 autoComplete="current-password"
                 value={formData.password}
                 onChange={(e) => handleInputChange(e, "password")}
-                placeholder="Crie uma senha"
+                placeholder={t('signup.placeholders.password')}
                 fontFamily="ubuntu"
                 height="40px"
                 fontSize="14px"
@@ -317,18 +326,18 @@ export default function Register() {
                 flexDirection="row"
                 gap="4px"
                 alignItems="flex-start"
-              ><Exclamation width="14px" height="14px" fill="#D93B3B" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> Certifique-se que a senha tenha no mínimo:</Text>
+              ><Exclamation width="14px" height="14px" fill="#D93B3B" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> {t('signup.errors.password.requirements')}</Text>
               <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
-                <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>8 caracteres</ListItem>
-                <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>Uma letra maiúscula</ListItem>
-                <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>Uma letra minúscula</ListItem>
-                <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>Um dígito</ListItem>
-                <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>Um caractere especial, dentre ! @ # ? ! % & *</ListItem>
+                <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>{t('signup.errors.password.chars')}</ListItem>
+                <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>{t('signup.errors.password.uppercase')}</ListItem>
+                <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>{t('signup.errors.password.lowercase')}</ListItem>
+                <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>{t('signup.errors.password.digit')}</ListItem>
+                <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>{t('signup.errors.password.special')}</ListItem>
               </UnorderedList>
             </FormControl>
 
             <FormControl isInvalid={!!errors.confirmPassword}>
-              <LabelTextForm text="Confirme a senha" />
+              <LabelTextForm text={t('signup.confirmPassword')} />
               <Input
                 type={showConfirmPassword ? "password" : "text"}
                 id="confirmPassword"
@@ -336,7 +345,7 @@ export default function Register() {
                 autoComplete="current-password"
                 value={formData.confirmPassword}
                 onChange={(e) => handleInputChange(e, "confirmPassword")}
-                placeholder="Insira a senha novamente"
+                placeholder={t('signup.placeholders.confirmPassword')}
                 fontFamily="ubuntu"
                 height="40px"
                 fontSize="14px"
@@ -377,7 +386,7 @@ export default function Register() {
             marginTop="24px !important"
             backgroundColor={errors?.register ? "#D93B3B" : "#42B0FF"}
           >
-            Cadastrar
+            {t('signup.register')}
           </Button>
         </form>
 
@@ -397,7 +406,15 @@ export default function Register() {
           letterSpacing= "0.3px"
           marginTop="16px !important"
         >
-          Ao clicar em “Cadastrar” acima, você confirma que leu, compreendeu e aceita os <Link fontSize="12px" fontFamily="ubuntu" color="#42B0FF" href="/termos-e-privacidade?section=terms" target="_blank">Termos de Serviço</Link> e <Link fontSize="12px" fontFamily="ubuntu" color="#42B0FF" href="/termos-e-privacidade?section=privacy" target="_blank">Políticas de Privacidade</Link> da Base dos Dados.
+          {t('signup.termsAgreement.part1')}
+          <Link display="inline" fontSize="12px" lineHeight="normal" fontFamily="ubuntu" color="#42B0FF" href="/termos-e-privacidade?section=terms" target="_blank">
+            {t('signup.termsAgreement.termsLink')}
+          </Link>
+          {t('signup.termsAgreement.part2')}
+          <Link display="inline" fontSize="12px" lineHeight="normal" fontFamily="ubuntu" color="#42B0FF" href="/termos-e-privacidade?section=privacy" target="_blank">
+            {t('signup.termsAgreement.privacyLink')}
+          </Link>
+          {t('signup.termsAgreement.part3')}
         </Text>
 
         <Text
@@ -410,7 +427,7 @@ export default function Register() {
           letterSpacing= "0.3px"
           marginTop="24px !important"
         >
-          Já tem uma conta? <Link fontFamily="ubuntu" color="#42B0FF" href="/user/login">Faça login</Link>.
+          {t('signup.alreadyHaveAccount')} <Link display="inline" lineHeight="normal" fontFamily="ubuntu" color="#42B0FF" href="/user/login">{t('signup.login')}</Link>.
         </Text>
       </Stack>
     </MainPageTemplate>

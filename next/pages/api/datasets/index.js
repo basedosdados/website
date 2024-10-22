@@ -1,15 +1,15 @@
 import getSearchDatasets from "./getSearchDatasets";
 import getListDatasets from "./getListDatasets";
-import getShowDataset from "./getShowDataset";
 import postDataset from "./postDataset";
 import getDatasetEdit from "./getDatasetEdit";
 import deleteDataset from "./deleteDataset";
+import getDataset from "./getDataset";
 
 export {
   getSearchDatasets,
   getListDatasets,
-  getShowDataset,
   postDataset,
   getDatasetEdit,
-  deleteDataset
+  deleteDataset,
+  getDataset
 }

@@ -20,7 +20,8 @@ import cookies from 'js-cookie';
 import { ControlledInputSimple } from '../atoms/ControlledInput';
 import Checkbox from '../atoms/Checkbox';
 import { triggerGAEvent, formatBytes } from '../../utils';
-
+import { useTranslation } from 'next-i18next';
+import { capitalize } from 'lodash';
 import {
   getColumnsBdmTable
 } from "../../pages/api/tables/index";
@@ -33,6 +34,7 @@ import RedirectIcon from '../../public/img/icons/redirectIcon';
 import 'katex/dist/katex.min.css';
 
 function SearchColumn({ isLoaded, resource, columns }) {
+  const { t } = useTranslation('dataset');
   const [inputFocus, setInputFocus] = useState(false)
   const [search, setSearch] = useState("")
   const [value, setValue] = useState("")
@@ -71,7 +73,7 @@ function SearchColumn({ isLoaded, resource, columns }) {
       onChange={setSearch}
       inputFocus={inputFocus}
       changeInputFocus={setInputFocus}
-      placeholder="Pesquisar colunas"
+      placeholder={t('column.search')}
       fill="#464A51"
       height="48px"
       maxWidth="100%"
@@ -95,15 +97,15 @@ export default function ColumnsTable({
   setHasLoading,
   numberColumns,
   template,
-  columnsPro
 }) {
   const router = useRouter()
-  const { query } = router
+  const { query, locale } = router
   const [resource, setResource] = useState({})
   const [columns, setColumns] = useState({})
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isSearchLoading, setIsSearchLoading] = useState(true)
+  const { t } = useTranslation('dataset');
 
   const isChecked = (columnSlug) => checkedColumns.includes(columnSlug)
 
@@ -153,7 +155,6 @@ export default function ColumnsTable({
         if(result) {
           setResource(result.sort(sortElements))
           numberColumns(result.length)
-          columnsPro(filterClosedTables(result))
           setColumns(result.sort(sortElements))
           setHasLoading(false)
           setIsSearchLoading(false)
@@ -174,45 +175,36 @@ export default function ColumnsTable({
 
   const headers = [
     {
-      pt: "Nome",
-      tooltip:"Nome da coluna."
+      pt: t('column.name'),
+      tooltip: t('column.nameTooltip')
     },
     {
-      pt: 
-        template === "download" ?
-        "Tabela de tradução"
-        :
-        "Precisa de tradução"
-      ,
-      tooltip:
-        template === "download" ?
-        "Para traduzir os códigos institucionais da tabela você precisa utilizar as tabelas de dicionário e diretórios, dependendo de qual coluna você quiser usar."
-        :
-        "A coluna possui códigos institucionais a serem traduzidos."
+      pt: template === "download" ? t('column.translationTable') : t('column.needsTranslation'),
+      tooltip: template === "download" ? t('column.translationTableTooltip') : t('column.needsTranslationTooltip')
     },
     {
-      pt: "Descrição",
-      tooltip:"Descrição dos dados da coluna."
+      pt: t('column.description'),
+      tooltip: t('column.descriptionTooltip')
     },
     {
-      pt: "Tipo No BigQuery",
-      tooltip:"Tipo de dado no BigQuery — categorias: INTEGER (Inteiro), STRING (Texto), DATE (Data), FLOAT64 (Decimal), GEOGRAPHY (Geográfico)."
+      pt: t('column.bigQueryType'),
+      tooltip: t('column.bigQueryTypeTooltip')
     },
     {
-      pt: "Cobertura Temporal",
-      tooltip:"Data inicial e final de cobertura dos dados. Pode variar entre colunas, de acordo com a disponibilidade nos dados originais."
+      pt: t('column.temporalCoverage'),
+      tooltip: t('column.temporalCoverageTooltip')
     },
     {
-      pt: "Unidade De Medida",
-      tooltip:"Unidade de medida da coluna — ex: km, m2, kg."
+      pt: t('column.measurementUnit'),
+      tooltip: t('column.measurementUnitTooltip')
     },
     {
-      pt: "Contém Dados Sensíveis (LGPD)",
-      tooltip:"Indica se a coluna possui dados sensíveis — ex: CPF identificado, dados de conta bancária, etc."
+      pt: t('column.sensitiveData'),
+      tooltip: t('column.sensitiveDataTooltip')
     },
     {
-      pt: "Observações",
-      tooltip:"Descreve processos de tratamentos realizados na coluna que precisam ser evidenciados."
+      pt: t('column.observations'),
+      tooltip: t('column.observationsTooltip')
     }
   ]
 
@@ -289,10 +281,10 @@ export default function ColumnsTable({
             fill:"#0057A4"
           }}
         >
-          Baixar tabela que faz a tradução desta coluna
+          {t('column.downloadTranslationTable')}
           <DownloadIcon width="14px" height="16px"/>
         </Text>
-        <Text>Dicionário</Text>
+        <Text>{t('column.dictionary')}</Text>
       </Box>
     )
   }
@@ -308,17 +300,17 @@ export default function ColumnsTable({
     const datasetName = value?.table?.dataset?.name || ""
     const tableName = value?.table?.name || ""
 
-    if(gcpDatasetID === "br_bd_diretorios_data_tempo") return "Não precisa de tradução"
+    if(gcpDatasetID === "br_bd_diretorios_data_tempo") return t('column.noTranslationNeeded')
     if(gcpDatasetID === "br_bd_diretorios_brasil") {
-      if(gcpTableId === "empresa" || gcpTableId === "cep") return "Não precisa de tradução"
+      if(gcpTableId === "empresa" || gcpTableId === "cep") return t('column.noTranslationNeeded')
     }
-    if(value?.name === "ddd") return "Não precisa de tradução"
+    if(value?.name === "ddd") return t('column.noTranslationNeeded')
 
     return (
       <Box>
         {value === null ?
           <Text display={dictionary === true ? "none" : "" }>
-            Não precisa de tradução
+            {t('column.noTranslationNeeded')}
           </Text>
         :
           <Box>
@@ -353,12 +345,12 @@ export default function ColumnsTable({
               {value?.table?.isClosed || !downloadInfo.downloadPermitted
                 ?
                 <>
-                  Acessar tabela que faz a tradução desta coluna
+                  {t('column.accessTranslationTable')}
                   <RedirectIcon width="14px" height="14px"/>
                 </>
                 :
                 <>
-                  Baixar tabela que faz a tradução desta coluna
+                  {t('column.downloadTranslationTable')}
                   <DownloadIcon width="14px" height="16px"/>
                 </>
               }
@@ -375,7 +367,7 @@ export default function ColumnsTable({
   }
 
   const measurementUnit = (value) => {
-    if(!value) return "Não informado"
+    if(!value) return t('column.notProvided')
 
     const splitValue = value.split(/([^a-z])/)
     const translated = (value) => value.map((elm) =>  elm)
@@ -440,7 +432,7 @@ export default function ColumnsTable({
           </Tooltip>
         </Box>
         <Box
-          display={header.pt === "Nome" ? {base: "none", lg: "flex"} : "none"}
+          display={header.pt === t('column.name') ? {base: "none", lg: "flex"} : "none"}
           position="absolute"
           right="0"
           top="0"
@@ -486,15 +478,15 @@ export default function ColumnsTable({
     const gcpDatasetID = cloudValues?.gcpDatasetId || ""
     const gcpTableId = cloudValues?.gcpTableId || ""
 
-    if(gcpDatasetID === "br_bd_diretorios_data_tempo") return "Não"
+    if(gcpDatasetID === "br_bd_diretorios_data_tempo") return t('column.no')
     if(gcpDatasetID === "br_bd_diretorios_brasil") {
-      if(gcpTableId === "empresa" || gcpTableId === "cep") return "Não"
+      if(gcpTableId === "empresa" || gcpTableId === "cep") return t('column.no')
     }
-    if(value?.node?.name === "ddd") return "Não"
-    if(value?.node?.coveredByDictionary === true) return "Sim"
-    if(value?.node?.directoryPrimaryKey?._id) return "Sim"
-    if(value?.node?.coveredByDictionary === false) return "Não"
-    return "Não informado"
+    if(value?.node?.name === "ddd") return t('column.no')
+    if(value?.node?.coveredByDictionary === true) return t('column.yes')
+    if(value?.node?.directoryPrimaryKey?._id) return t('column.yes')
+    if(value?.node?.coveredByDictionary === false) return t('column.no')
+    return t('column.notProvided')
   }
 
   if(isError) return (
@@ -617,8 +609,8 @@ export default function ColumnsTable({
                         padding="14px 22px 14px 30px"
                       >
                         <Checkbox
-                          isChecked={isChecked(elm.node.name)}
-                          onChange={() => handleCheckboxChange(elm.node.name)}
+                          isChecked={isChecked(elm.node[`name${capitalize(locale)}`] || elm.node.name)}
+                          onChange={() => handleCheckboxChange(elm.node[`name${capitalize(locale)}`] || elm.node.name)}
                         />
                       </Box>
                       <Box
@@ -639,7 +631,7 @@ export default function ColumnsTable({
                     zIndex="4"
                     backgroundColor="#FFF"
                   >
-                    {elm?.node?.name ? elm.node.name : "Não informado"}
+                    {elm?.node?.[`name${capitalize(locale)}`] || elm?.node?.name || t('column.notProvided')}
                     <Box
                       display={{base: "none", lg: "flex"}}
                       position="absolute"
@@ -663,18 +655,18 @@ export default function ColumnsTable({
                   </TableValue>
 
                   <TableValue>
-                    {elm?.node?.description ? elm.node.description : "Não informado"}
+                    {elm?.node?.[`description${capitalize(locale)}`] || elm?.node?.description || t('column.notProvided')}
                   </TableValue>
 
                   <TableValue>
-                    {elm?.node?.bigqueryType?.name ? elm.node.bigqueryType.name : "Não informado"}
+                    {elm?.node?.bigqueryType?.name ? elm.node.bigqueryType.name : t('column.notProvided')}
                   </TableValue>
 
                   <TableValue>
                     {elm?.node?.coverage?.start && elm?.node?.coverage?.end ?
                       elm.node.coverage.start +" - "+ elm.node.coverage.end
                       :
-                      "Não informado"
+                      t('column.notProvided')
                     }
                   </TableValue>
 
@@ -682,22 +674,22 @@ export default function ColumnsTable({
                     {elm?.node?.measurementUnit ?
                       measurementUnit(elm.node.measurementUnit)
                       :
-                      "Não informado"
+                      t('column.notProvided')
                     }
                   </TableValue>
 
                   <TableValue>
                     {
-                      elm?.node?.containsSensitiveData === true ? "Sim"
+                      elm?.node?.containsSensitiveData === true ? t('column.yes')
                       :
-                      elm?.node?.containsSensitiveData === false ? "Não"
+                      elm?.node?.containsSensitiveData === false ? t('column.no')
                       :
-                      "Não informado"
+                      t('column.notProvided')
                     }
                   </TableValue>
 
                   <TableValue>
-                    {elm?.node?.observations ? elm.node.observations : "Não informado"}
+                    {elm?.node?.[`observations${capitalize(locale)}`] || elm?.node?.observations || t('column.notProvided')}
                   </TableValue>
                 </Tr>
               ))}

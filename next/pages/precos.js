@@ -7,6 +7,10 @@ import {
 import { useEffect, useState } from "react";
 import Head from "next/head";
 import cookies from 'js-cookie';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import Toggle from "../components/atoms/Toggle";
 import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
@@ -15,8 +19,14 @@ import { withPages } from "../hooks/pages.hook";
 import CheckIcon from "../public/img/icons/checkIcon";
 import InfoIcon from '../public/img/icons/infoIcon';
 
-export async function getStaticProps(context) {
-  return await withPages()
+export async function getStaticProps({ locale }) {
+  const pagesProps = await withPages();
+  return {
+    props: {
+      ...pagesProps,
+      ...(await serverSideTranslations(locale, ['common', 'prices', 'menu'])),
+    },
+  };
 }
 
 export const CardPrice = ({
@@ -27,7 +37,10 @@ export const CardPrice = ({
   textResource,
   resources = [],
   button,
+  locale,
 }) => {
+  const { t } = useTranslation('prices');
+
   return (
     <Box
       display="flex"
@@ -106,7 +119,7 @@ export const CardPrice = ({
               lineHeight="28px"
               fontFamily="Roboto"
               textAlign="center"
-            >/mês</Text>
+            >{t('perMonth')}</Text>
           </Box>
 
           <Text
@@ -118,7 +131,9 @@ export const CardPrice = ({
             color="#464A51"
             marginTop="24px"
             alignItems="center"
-          >{anualPlan && price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 })+" cobrado uma vez no ano"}</Text>
+          >{anualPlan && t('annualBillingMessage', {
+            price: price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 })
+          })}</Text>
         </Box>
       </Box>
 
@@ -198,7 +213,7 @@ export const CardPrice = ({
           flexDirection="column"
           gap="16px"
         >
-          {button.isCurrentPlan ?
+          {button.isCurrentPlan ? (
             <Box
               display="flex"
               justifyContent="center"
@@ -212,9 +227,9 @@ export const CardPrice = ({
               lineHeight="30px"
               fontFamily="Roboto"
             >
-              {button.text}
+              {t('currentPlan')}
             </Box>
-          :
+          ) : (
             <Box
               as="button"
               onClick={() => {
@@ -234,13 +249,14 @@ export const CardPrice = ({
               fontWeight="500"
               fontSize="20px"
               lineHeight="36px"
+              textDecoration="none"
               _hover={{
                 backgroundColor: "#0B89E2"
               }}
             >
-              {button.text}
+              {t(button.text)}
             </Box>
-          }
+          )}
 
           <Text 
             display="flex"
@@ -253,19 +269,22 @@ export const CardPrice = ({
             lineHeight="24px"
             fontFamily="Roboto"
             height="24px"
-          >Leia os
-            <Text
-              as="a"
-              cursor="pointer"
-              marginLeft="4px"
-              href="/termos-e-privacidade?section=terms"
-              target="_blank"
-              alignItems="center"
-              color="#0D99FC"
-              _hover={{
-                color: "#0B89E2"
-              }}
-            >Termos de Serviço</Text>
+          >{t('readThe')}
+            <Link href="/termos-e-privacidade?section=terms" locale={locale} passHref>
+              <Text
+                as="a"
+                cursor="pointer"
+                marginLeft="4px"
+                target="_blank"
+                alignItems="center"
+                color="#0D99FC"
+                _hover={{
+                  color: "#0B89E2"
+                }}
+              >
+                {t('termsOfService')}
+              </Text>
+            </Link>
             .
           </Text>
         </Box>
@@ -275,6 +294,8 @@ export const CardPrice = ({
 }
 
 export function SectionPrice() {
+  const { t } = useTranslation('prices');
+  const { locale } = useRouter();
   const [toggleAnual, setToggleAnual] = useState(true)
   const [plans, setPlans] = useState(null)
   const [username, setUsername] = useState(null)
@@ -382,7 +403,7 @@ export function SectionPrice() {
           textAlign="center"
           color="#252A32"
         >
-          Desconto anual
+          {t('annualDiscount')}
           <Text
             as="span"
             color="#2B8C4D"
@@ -392,7 +413,7 @@ export function SectionPrice() {
             padding="2px 4px"
             borderRadius="4px"
             height="32px"
-          >Economize 20%</Text>
+          >{t('save20')}</Text>
         </Text>
       </Box>
 
@@ -406,58 +427,52 @@ export function SectionPrice() {
         spacing={0}
       >
         <CardPrice
-          title="BD Grátis"
-          subTitle={<>Para você descobrir o potencial da plataforma de dados</>}
-          price={"0"}
-          textResource="Recursos:"
-          resources={[
-            {name: "Bases de baixa frequência atualizadas"},
-            {name: "Tabelas tratadas"},
-            {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
-            {name: "Acesso em nuvem"},
-            {name: "Acesso via SQL, Python e R"},
-            {name: "Integração com ferramentas BI"},
-            {name: "Download direto até 100 MB", tooltip: "Esse limite não se aplica ao acesso via SQL, Python e R."},
-          ]}
+          title={t('plans.free.title')}
+          subTitle={t('plans.free.subtitle')}
+          price="0"
+          textResource={t('features')}
+          resources={t('plans.free.features', { returnObjects: true }).map((feature, index) => ({
+            name: feature,
+            tooltip: index === 1 ? t('tooltips.integratedData') : (index === 6 ? t('tooltips.downloadLimit') : null)
+          }))}
           button={{
-            text: "Explorar recursos",
+            text: t('exploreFeatures'),
             href: "/dataset",
           }}
+          locale={locale}
         />
 
         <CardPrice
-          title="BD Pro"
-          subTitle={<>Para você ter acesso aos<br/> dados mais atualizados</>}
+          title={t('plans.pro.title')}
+          subTitle={t('plans.pro.subtitle')}
           price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 444}
           anualPlan={toggleAnual}
-          textResource="Todos os recursos da BD Grátis, mais:"
-          resources={[
-            {name: "Dezenas de bases de alta frequência atualizadas"},
-            {name: "Tabela de referência de empresas com informações atualizadas"},
-            {name: "Download direto até 1GB (80% das tabelas da plataforma)", tooltip: "Tabelas maiores que 1 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."}
-          ]}
+          textResource={t('allFeaturesPlus', { plan: t('plans.free.title') })}
+          resources={t('plans.pro.features', { returnObjects: true }).map((feature, index) => ({
+            name: feature,
+            tooltip: index === 2 ? t('tooltips.downloadLimitPro') : null
+          }))}
           button={{
-            text: isBDPro.isCurrentPlan && planIntervalPlan() ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis",
+            text: isBDPro.isCurrentPlan && planIntervalPlan() ? t('currentPlan') : hasSubscribed ? t('subscribe') : t('startFreeTrial'),
             href: username === null ? `/user/login?i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}`,
             isCurrentPlan: isBDPro.isCurrentPlan && planIntervalPlan(),
           }}
+          locale={locale}
         />
 
         <CardPrice
-          title="BD Empresas"
-          subTitle={<>Para sua empresa ganhar tempo<br/> e qualidade em decisões</>}
+          title={t('plans.enterprise.title')}
+          subTitle={t('plans.enterprise.subtitle')}
           price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3360}
           anualPlan={toggleAnual}
-          textResource="Todos os recursos da BD Pro, mais:"
-          resources={[
-            {name: "Acesso para 10 contas"},
-            {name: "Suporte prioritário via email e Discord"}
-          ]}
+          textResource={t('allFeaturesPlus', { plan: t('plans.pro.title') })}
+          resources={t('plans.enterprise.features', { returnObjects: true }).map(feature => ({ name: feature }))}
           button={{
-            text: isBDEmp.isCurrentPlan && planIntervalPlan() ? "Plano atual" : hasSubscribed ? "Assinar" : "Iniciar teste grátis",
+            text: isBDEmp.isCurrentPlan && planIntervalPlan() ? t('currentPlan') : hasSubscribed ? t('subscribe') : t('startFreeTrial'),
             href: username === null ? `/user/login?i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}`,
             isCurrentPlan: isBDEmp.isCurrentPlan && planIntervalPlan(),
           }}
+          locale={locale}
         />
       </Stack>
     </Box>
@@ -465,18 +480,20 @@ export function SectionPrice() {
 }
 
 export default function Price() {
+  const { t } = useTranslation('prices');
+
   return (
     <MainPageTemplate paddingX="24px">
       <Head>
-        <title>Preços – Base dos Dados</title>
+        <title>{t('pageTitle')}</title>
         <meta
           property="og:title"
-          content="Preço – Base dos Dados"
+          content={t('ogTitle')}
           key="ogtitle"
         />
         <meta
           property="og:description"
-          content="Compare os planos da Base dos Dados: Grátis, Pro e Empresas. Com a BD Pro você conta com recursos avançados da nossa plataforma, dados de alta frequência e conjuntos exclusivos a partir de R$47/mês."
+          content={t('ogDescription')}
           key="ogdesc"
         />
       </Head>
@@ -500,7 +517,7 @@ export default function Price() {
           textAlign="center"
           lineHeight="70px"
         >
-          Compare os planos
+          {t('comparePlans')}
         </Text>
 
         <SectionPrice/>
