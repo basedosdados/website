@@ -131,15 +131,15 @@ export default function UserPage({ getUser }) {
   }, [query])
 
   return (
-    <MainPageTemplate padding="70px 24px 50px !important" userTemplate footerTemplate="simple">
+    <MainPageTemplate padding="70px 24px 40px !important" userTemplate footerTemplate="simple">
       <Stack
-        paddingTop="50px"
+        paddingTop="40px"
         width="100%"
-        maxWidth="1264px"
+        maxWidth="1440px"
         flexDirection="column"
-        margin="auto"
+        margin="0 auto"
+        gap="8px"
         spacing={0}
-        gap="40px"
       >
         <BigTitle display={isMobileMod() ? "none" : "flex"}>{t('username.settings')}</BigTitle>
 
