@@ -14,7 +14,7 @@ i18n
     supportedLngs: nextI18NextConfig.i18n.locales,
     localeDetection: nextI18NextConfig.i18n.localeDetection,
     backend: {
-      loadPath: './public/locales/{{lng}}/{{ns}}.json',
+      loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
     detection: {
       order: ['querystring', 'cookie'],

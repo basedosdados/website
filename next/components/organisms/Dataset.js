@@ -16,7 +16,7 @@ import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";
 import { DataBaseSolidIcon } from "../../public/img/icons/databaseIcon";
 
-export default function Database({
+export default function Dataset({
   id,
   name,
   temporalCoverageText,

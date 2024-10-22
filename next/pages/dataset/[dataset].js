@@ -18,6 +18,7 @@ import { capitalize } from 'lodash';
 
 import BigTitle from "../../components/atoms/BigTitle";
 import GreenTab from "../../components/atoms/GreenTab";
+import Link from '../../components/atoms/Link';
 import ReadMore from "../../components/atoms/ReadMore";
 import DatasetResource from "../../components/organisms/DatasetResource";
 import { MainPageTemplate } from "../../components/templates/main";
@@ -191,20 +192,19 @@ export default function DatasetPage ({ dataset }) {
                 >
                   {t('organization')}
                 </Text>
-                <Text
-                  as="a"
+                <Link
                   href={`/dataset?organization=${dataset?.organization?.slug || ""}`}
+                  color="#464A51"
+                  fontWeight="400"
                 >
                   <Text
                     fontFamily="Roboto"
-                    fontWeight="400"
                     fontSize="14px"
                     lineHeight="20px"
-                    color="#464A51"
                   >
                     {dataset.organization?.[`name${capitalize(locale)}`] || dataset.organization?.name || t('noOrganization')}
                   </Text>
-                </Text>
+                </Link>
               </GridItem>
             </Grid>
           </GridItem>
