@@ -285,7 +285,7 @@ export default function Dataset({
                   lineHeight="20px"
                   color="#71757A"
                 >
-                  {contains.free && t('openData')} {contains.free && contains.pro && t('and')} {contains.pro && t('closedData')}
+                  {contains.free && t('openData')} {contains.free && contains.pro && t('datasetCard.and')} {contains.pro && t('closedData')}
                   {!contains.free && !contains.pro && t('none')}
                 </Text>
               </Stack>
