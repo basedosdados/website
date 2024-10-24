@@ -24,6 +24,7 @@ import {
 import { useEffect, useRef, useState, useMemo } from "react";
 import { useRouter } from "next/router"
 import { useTranslation } from 'next-i18next';
+import LanguageSelector from "../atoms/LanguageSelector";
 import cookies from "js-cookie";
 import MenuDropdown from "./MenuDropdown";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
@@ -850,6 +851,8 @@ function DesktopLinks({
             ]}
           />
         }
+
+        <LanguageSelector />
 
         {userData ? (
           <HStack spacing="20px">
