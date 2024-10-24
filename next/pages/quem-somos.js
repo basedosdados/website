@@ -324,16 +324,16 @@ export default function QuemSomos() {
 
     return removeDuplicates(data).filter(obj => obj.node.firstName !== "API User" && obj.node.firstName !== "Staging")
   }
-
+  
   const schemasTeam = [
+    "Diretoria",
+    "Plataforma",
+    "BD Lab",
+    "BD Edu",
+    "Comunicação",
     "Co-fundadores",
     "Associados",
     "Administrativo",
-    "Captação, Parcerias e Projetos",
-    "Comunicação",
-    "Dados",
-    "Plataforma",
-    "BD Edu",
     "Conselho Fiscal"
   ]
 
