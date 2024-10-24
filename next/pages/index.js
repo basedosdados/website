@@ -37,12 +37,14 @@ import SearchIcon from "../public/img/icons/searchIcon";
 import ArrowIcon from "../public/img/icons/arrowIcon";
 import { CopySolidIcon } from "../public/img/icons/copyIcon";
 import BDLogoImage from "../public/img/logos/bd_logo";
+import DBLogoImage from "../public/img/logos/db_logo";
+import BDLogoEduImage from "../public/img/logos/bd_logo_edu";
+import DBLogoEduImage from "../public/img/logos/db_logo_edu";
 import EnthusiasticImage from "../public/img/enthusiasticImage";
 import DatabaseImage from "../public/img/databaseImage";
 import MasterOfDatabaseImage from "../public/img/masterOfDatabaseImage";
 import ProductsFiltersImage from "../public/img/productsFiltersImage";
 import ProcessedDataImage from "../public/img/processedDataImage";
-import BDLogoEduImage from "../public/img/logos/bd_logo_edu";
 
 export async function getStaticProps({ locale }) {
   const themes = await getAllThemes(locale);
@@ -107,11 +109,19 @@ function Hero({ dataThemeCatalog, locale }) {
               mediumQuery ? "16px" : "80px"
             }
           >
-            <BDLogoImage 
-              widthImage={isMobileMod() ? "160px" : "200px"}
-              heightImage={isMobileMod() ? "75px" : "94px"}
-              marginBottom="24px"
-            />
+            {locale === 'en' ? (
+              <DBLogoImage 
+                widthImage={isMobileMod() ? "160px" : "200px"}
+                heightImage={isMobileMod() ? "75px" : "94px"}
+                marginBottom="24px"
+              />
+            ) : (
+              <BDLogoImage 
+                widthImage={isMobileMod() ? "160px" : "200px"}
+                heightImage={isMobileMod() ? "75px" : "94px"}
+                marginBottom="24px"
+              />
+            )}
             <VStack
               maxWidth="650px"
               width={isMobileMod() ? "100vw" : "100%"}
