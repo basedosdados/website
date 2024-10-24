@@ -104,7 +104,7 @@ function Themes ({
                 <Tooltip
                   hasArrow
                   bg="#2A2F38"
-                  label={elm.node.name[`${capitalize(locale)}`] || elm.node.name}
+                  label={elm.node[`name${capitalize(locale)}`] || elm.node.name}
                   fontSize="16px"
                   fontWeight="500"
                   padding="5px 16px 6px"
@@ -120,7 +120,7 @@ function Themes ({
                     transition="all 0.5s"
                     filter={found(elm.node.slug) && "invert(1)"}
                     _hover={{ filter:"invert(1)"}}
-                    alt={elm.node.name[`${capitalize(locale)}`] || elm.node.name}
+                    alt={elm.node[`name${capitalize(locale)}`] || elm.node.name}
                     src={`https://storage.googleapis.com/basedosdados-website/theme_icons/${elm.node.slug}.svg`}
                   />
                 </Tooltip>
