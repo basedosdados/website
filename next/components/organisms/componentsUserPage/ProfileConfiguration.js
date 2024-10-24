@@ -5,10 +5,8 @@ import {
   Input,
   FormControl,
   FormLabel,
-  FormErrorMessage,
   Image,
   Tooltip,
-  HStack,
   useDisclosure,
   SkeletonCircle,
   SkeletonText,
@@ -17,30 +15,23 @@ import {
   PopoverContent,
   PopoverBody,
   PopoverArrow,
-  Spinner
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
-
-import SectionTitle from "../../atoms/SectionTitle";
-import RoundedButton from "../../atoms/RoundedButton";
-import InputForm from "../../atoms/SimpleInput";
 import ImageCrop from "../../molecules/ImgCrop";
 import Checkbox from "../../atoms/Checkbox";
 import { cleanString } from "../../../utils";
-import { isMobileMod } from "../../../hooks/useCheckMobile.hook";
 
 import {
   LabelTextForm,
   SkStack,
+  InputForm,
+  ErrorMessage,
+  Button
 } from "../../molecules/uiUserPage";
 
-import Exclamation from "../../../public/img/icons/exclamationIcon";
 import PenIcon from "../../../public/img/icons/penIcon";
-import GithubIcon from "../../../public/img/icons/githubIcon";
-import TwitterIcon from "../../../public/img/icons/twitterIcon";
-import LinkedinIcon from "../../../public/img/icons/linkedinIcon";
 
 export default function ProfileConfiguration({ userInfo }) {
   const { t } = useTranslation('user');
@@ -191,12 +182,19 @@ export default function ProfileConfiguration({ userInfo }) {
 
   return (
     <Stack
-      flexDirection={isMobileMod() ? "column-reverse" : "row"}
-      justifyContent="space-between"
+      flexDirection={{base: "column-reverse", lg: "row"}}
       spacing={0}
-      gap={isMobileMod() ? "40px" : "80px"}
+      gap="24px"
     >
-      <Box display={isImgLoading ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
+      <Box
+        display={isImgLoading ? "flex" : "none"}
+        position="fixed"
+        top="0"
+        left="0"
+        width="100%"
+        height="100%"
+        zIndex="99999"
+      />
 
       <ImageCrop
         isOpen={pictureModal.isOpen}
@@ -207,7 +205,7 @@ export default function ProfileConfiguration({ userInfo }) {
         email={userInfo.email}
       />
 
-      <Stack spacing="24px" flex={1}>
+      <Stack spacing="24px" flex={1} maxWidth="480px">
         <FormControl isInvalid={!!errors.firstName}>
           <LabelTextForm text={t('username.firstName')}/>
           <SkStack isLoaded={!isLoading}>
@@ -217,17 +215,11 @@ export default function ProfileConfiguration({ userInfo }) {
               value={formData.firstName}
               onChange={handleInputChange}
               placeholder={t('username.enterFirstName')}
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _placeholder={{color: "#A3A3A3"}}
-              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
             />
           </SkStack>
-          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
-            <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.firstName}
-          </FormErrorMessage>
+          <ErrorMessage>
+            {errors.firstName}
+          </ErrorMessage>
         </FormControl>
 
         <FormControl>
@@ -239,12 +231,6 @@ export default function ProfileConfiguration({ userInfo }) {
               value={formData.lastName}
               onChange={handleInputChange}
               placeholder={t('username.enterLastName')}
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _placeholder={{color: "#A3A3A3"}}
-              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
             />
           </SkStack>
         </FormControl>
@@ -254,7 +240,7 @@ export default function ProfileConfiguration({ userInfo }) {
           <SkeletonText
             isLoaded={!isLoading}
             fadeDuration={2}
-            height="20px"
+            height="48px"
             width="100%"
             noOfLines={2}
             startColor="#F0F0F0"
@@ -267,12 +253,12 @@ export default function ProfileConfiguration({ userInfo }) {
                 gap:"8px",
                 cursor:"pointer",
                 alignItems:"center",
-                color:"#7D7D7D",
-                fontFamily:"Ubuntu",
+                padding:"15px",
+                color:"#464A51",
+                fontFamily:"Roboto",
                 fontSize:"14px",
                 fontWeight:"400",
                 lineHeight:"20px",
-                letterSpacing:"0.3px",
               }}
             >
               <Checkbox
@@ -296,127 +282,94 @@ export default function ProfileConfiguration({ userInfo }) {
               value={formData.website}
               onChange={handleInputChange}
               placeholder={t('username.enterURL')}
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _placeholder={{color: "#A3A3A3"}}
-              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
             />
           </SkStack>
-          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
-            <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.website}
-          </FormErrorMessage>
+          <ErrorMessage>
+            {errors.website}
+          </ErrorMessage>
         </FormControl>
-        
-        <Stack>
-          <LabelTextForm text={t('username.socialMedia')}/>
-          <FormControl isInvalid={!!errors.github}>
-            <HStack spacing="8px" margin="0 0 8px 0 !important">
-              <GithubIcon width="24px" height="24px" fill="#D0D0D0"/>
-              <SkStack isLoaded={!isLoading}>
-                <InputForm
-                  id="github"
-                  name="github"
-                  value={formData.github}
-                  onChange={handleInputChange}
-                  placeholder={t('username.githubProfileLink')}
-                  fontFamily="ubuntu"
-                  height="40px"
-                  fontSize="14px"
-                  borderRadius="16px"
-                  _placeholder={{color: "#A3A3A3"}}
-                />
-              </SkStack>
-              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
-                <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.github}
-              </FormErrorMessage>
-            </HStack>
-          </FormControl>
 
-          <FormControl isInvalid={!!errors.twitter}>
-            <HStack spacing="8px" margin="0 0 8px 0 !important">
-              <TwitterIcon width="24px" height="24px" fill="#D0D0D0"/>
-              <SkStack isLoaded={!isLoading}>
-                <InputForm
-                  id="twitter"
-                  name="twitter"
-                  value={formData.twitter}
-                  onChange={handleInputChange}
-                  placeholder={t('username.twitterProfileLink')}
-                  fontFamily="ubuntu"
-                  height="40px"
-                  fontSize="14px"
-                  borderRadius="16px"
-                  _placeholder={{color: "#A3A3A3"}}
-                />
-              </SkStack>
-              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
-                <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.twitter}
-              </FormErrorMessage>
-            </HStack>
-          </FormControl>
+        <FormControl isInvalid={!!errors.github}>
+          <LabelTextForm text={t('username.github')}/>
+          <SkStack isLoaded={!isLoading}>
+            <InputForm
+              id="github"
+              name="github"
+              value={formData.github}
+              onChange={handleInputChange}
+              placeholder={t('username.githubProfileLink')}
+            />
+          </SkStack>
+          <ErrorMessage>
+            {errors.github}
+          </ErrorMessage>
+        </FormControl>
 
-          <FormControl isInvalid={!!errors.linkedin}>
-            <HStack spacing="8px"  margin="0 !important">
-              <LinkedinIcon width="24px" height="24px" fill="#D0D0D0"/>
-              <SkStack isLoaded={!isLoading}>
-                <InputForm
-                  id="linkedin"
-                  name="linkedin"
-                  value={formData.linkedin}
-                  onChange={handleInputChange}
-                  placeholder={t('username.linkedinProfileLink')}
-                  fontFamily="ubuntu"
-                  height="40px"
-                  fontSize="14px"
-                  borderRadius="16px"
-                  _placeholder={{color: "#A3A3A3"}}
-                />
-              </SkStack>
-              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="flex-start">
-                <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.linkedin}
-              </FormErrorMessage>
-            </HStack>
-          </FormControl>
-        </Stack>
+        <FormControl isInvalid={!!errors.twitter}>
+          <LabelTextForm text={t('username.twitter')}/>
+          <SkStack isLoaded={!isLoading}>
+            <InputForm
+              id="twitter"
+              name="twitter"
+              value={formData.twitter}
+              onChange={handleInputChange}
+              placeholder={t('username.twitterProfileLink')}
+            />
+          </SkStack>
+          <ErrorMessage>
+            {errors.twitter}
+          </ErrorMessage>
+        </FormControl>
+
+        <FormControl isInvalid={!!errors.linkedin}>
+          <LabelTextForm text={t('username.linkedIn')}/>
+          <SkStack isLoaded={!isLoading}>
+            <InputForm
+              id="linkedin"
+              name="linkedin"
+              value={formData.linkedin}
+              onChange={handleInputChange}
+              placeholder={t('username.linkedinProfileLink')}
+            />
+          </SkStack>
+          <ErrorMessage>
+            {errors.linkedin}
+          </ErrorMessage>
+        </FormControl>
 
         <Text
-          fontFamily="ubuntu"
+          fontFamily="Roboto"
           fontSize="12px"
           fontWeight="400"
-          lineHeight="16px"
-          letterSpacing="0.3px"
-          color="#7D7D7D"
+          lineHeight="18px"
+          letterSpacing="0.1px"
+          color="#71757A"
         >
           {t('username.shareInfo')}
         </Text>
 
-        <RoundedButton
-          borderRadius="30px"
-          width={isMobileMod() ? "100%" : "fit-content"}
-          _hover={{transform: "none", opacity: 0.8}}
+        <Button
           onClick={() => handleUpdateProfile()}
-          isDisabled={isLoading}
+          isLoading={isLoading}
         >
-          {isLoading ?
-            <Spinner />
-          :
-            t('username.updateProfile')
-          }
-        </RoundedButton>
+          {t('username.updateProfile')}
+        </Button>
       </Stack>
 
       <Stack
-        width={isMobileMod() ? "100%" : "fit-content"}
-        alignItems="center"
+        flex={1}
+        spacing="8px"
+        alignItems={{base: "start", lg:"center"}}
       >
-        <SectionTitle
-          textAlign={isMobileMod() ? "start" :"center"}
-          width="100%"
-          fontSize="18px"
-          letterSpacing="0.1px"
-        >{t('username.profilePicture')}</SectionTitle>
+        <Text
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="16px"
+          lineHeight="24px"
+          color="#252A32"
+        >
+          {t('username.profilePicture')}
+        </Text>
 
         <SkeletonCircle
           position="relative"
@@ -457,31 +410,34 @@ export default function ProfileConfiguration({ userInfo }) {
                     cursor="pointer"
                     bottom="10px"
                     left="10px"
-                    width="32px"
-                    height="32px"
+                    width="48px"
+                    height="48px"
                     borderRadius="50%"
                     backgroundColor="#2B8C4D"
                     onClick={() => { menuAvatar.onOpen() }}
                   >
                     <Tooltip
                       hasArrow
+                      placement="top"
                       isDisabled={menuAvatar.isOpen}
-                      bg="#2A2F38"
                       label={t('username.edit')}
-                      fontSize="14px"
+                      padding="16px"
+                      backgroundColor="#252A32"
+                      boxSizing="border-box"
+                      borderRadius="8px"
+                      fontFamily="Roboto"
                       fontWeight="400"
-                      letterSpacing="0.5px"
-                      lineHeight="24px"
-                      padding="5px 16px 6px"
-                      marginTop="10px"
-                      color="#FFF"
-                      borderRadius="6px"
-                      minWidth="96px"
+                      fontSize="14px"
+                      lineHeight="20px"
                       textAlign="center"
+                      color="#FFFFFF"
+                      maxWidth="230px"
+                      marginTop="10px"
+                      minWidth="96px"
                     >
                       <PenIcon
-                        width="22px"
-                        height="22px"
+                        width="24px"
+                        height="24px"
                         fill="#FFF"
                       />
                     </Tooltip>
@@ -494,14 +450,14 @@ export default function ProfileConfiguration({ userInfo }) {
                   <PopoverArrow/>
                   <PopoverBody
                     padding="8px 24px"
-                    zIndex="1000000 !important"
+                    zIndex="100 !important"
                   >
                     <FormControl>
                       <FormLabel
                         cursor="pointer"
-                        fontFamily="Lato"
+                        fontFamily="Roboto"
                         fontSize="14px"
-                        letterSpacing="0.5px"
+                        lineHeight="20px"
                         fontWeight="400"
                         color="#252A32"
                         margin="0"

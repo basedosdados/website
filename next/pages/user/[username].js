@@ -10,9 +10,6 @@ import { serialize } from 'cookie';
 import { useTranslation } from "react-i18next";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { MainPageTemplate } from "../../components/templates/main";
-import { isMobileMod } from "../../hooks/useCheckMobile.hook";
-import BigTitle from "../../components/atoms/BigTitle";
-import SectionTitle from "../../components/atoms/SectionTitle";
 
 import {
   ProfileConfiguration,
@@ -136,65 +133,93 @@ export default function UserPage({ getUser }) {
         paddingTop="40px"
         width="100%"
         maxWidth="1440px"
-        flexDirection="column"
+        flexDirection="row"
         margin="0 auto"
-        gap="8px"
         spacing={0}
       >
-        <BigTitle display={isMobileMod() ? "none" : "flex"}>{t('username.settings')}</BigTitle>
-
         <Stack
-          flexDirection="row"
-          justifyContent="space-between"
-          spacing={0}
-          gap="80px"
-          width="100%"
-          marginBottom={isMobileMod() ? "0px" : "80px !important"}
+          display={{base: "none", lg:"flex"}}
+          flexDirection="column"
+          spacing="8px"
+          padding="4px 24px 0 0"
+          width="272px"
+          boxSizing="content-box"
         >
-          <Stack
-            display={isMobileMod() ? "none" : "flex"}
-            width="fit-content"
+          <Text
+            display={{base: "none", lg: "flex"}}
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="28px"
+            lineHeight="42px"
+            color="#252A32"
+            paddingLeft="15px"
           >
+            {t('username.settings')}
+          </Text>
+
+          <Stack width="267px" >
             {choices.map((section, index) => (
-              <Box
+              <Stack
                 key={index}
-                borderLeft={ sectionSelected === index ? "3px solid #2B8C4D" : "transparent" }
-                width="100%"
+                flexDirection="row"
+                alignItems="center"
+                paddingRight="5px"
+                spacing={0}
+                gap="4px"
+                cursor="pointer"
+                pointerEvents={sectionSelected === index ? "none" : "default"}
               >
+                <Box 
+                  width="3px"
+                  height="24px"
+                  backgroundColor={sectionSelected === index && "#2B8C4D"}
+                  borderRadius="10px"
+                />
                 <Text
-                  fontFamily="Ubuntu"
-                  fontSize="16px"
-                  lineHeight="27px"
-                  letterSpacing="0.2px"
-                  cursor="pointer"
-                  fontWeight={sectionSelected === index ? "500" : "300"}
-                  color={sectionSelected === index ? "#2B8C4D" : "#7D7D7D"}
-                  _hover={sectionSelected !== index && {  opacity: "0.6" , fontWeight: "500" }}
-                  padding="0 24px"
                   width="100%"
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color={sectionSelected === index ? "#2B8C4D" : "#71757A"}
+                  backgroundColor={sectionSelected === index && "#F7F7F7"}
+                  _hover={{
+                    backgroundColor:sectionSelected === index ? "#F7F7F7" :"#EEEEEE",
+                  }}
+                  borderRadius="8px"
+                  padding="6px 8px"
                   onClick={() => router.push({pathname: `/user/${userInfo.username}`, query: section.value})}
                 >
-                  {section.bar}
+                  { section.bar }
                 </Text>
-              </Box>
+              </Stack>
             ))}
           </Stack>
+        </Stack>
 
-          <Stack
-            flex={1}
-            maxWidth="800px"
-            width="100%"
-            spacing={0}
+        <Stack
+          flex={1}
+          width="100%"
+          padding="56px 0 0 24px"
+          spacing={0}
+        >
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="24px"
+            lineHeight="36px"
+            color="#252A32"
+            marginBottom="8px"
           >
-            <SectionTitle marginBottom="8px">{choices[sectionSelected].title}</SectionTitle>
-            <Divider marginBottom={isMobileMod() ? "40px !important" : "32px !important"} borderColor="#DEDFE0"/>
+            {choices[sectionSelected].title}
+          </Text>
+          <Divider marginBottom="24px !important" borderColor="#DEDFE0"/>
 
-            {sectionSelected === 0 && <ProfileConfiguration userInfo={userInfo}/>}
-            {sectionSelected === 1 && <Account userInfo={userInfo}/>}
-            {sectionSelected === 2 && <NewPassword userInfo={userInfo}/>}
-            {sectionSelected === 3 && <PlansAndPayment userData={userInfo}/>}
-            {sectionSelected === 4 && <BigQuery userInfo={userInfo}/>}
-          </Stack>
+          {sectionSelected === 0 && <ProfileConfiguration userInfo={userInfo}/>}
+          {sectionSelected === 1 && <Account userInfo={userInfo}/>}
+          {sectionSelected === 2 && <NewPassword userInfo={userInfo}/>}
+          {sectionSelected === 3 && <PlansAndPayment userData={userInfo}/>}
+          {sectionSelected === 4 && <BigQuery userInfo={userInfo}/>}
         </Stack>
       </Stack>
     </MainPageTemplate>

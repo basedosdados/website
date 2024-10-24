@@ -1,4 +1,5 @@
 import {
+  Box,
   Text,
   FormLabel,
   Modal,
@@ -8,18 +9,23 @@ import {
   ModalBody,
   ModalFooter,
   Skeleton,
+  InputGroup,
+  InputLeftElement,
+  Input,
+  FormErrorMessage,
+  Spinner
 } from "@chakra-ui/react";
-import { isMobileMod } from "../../hooks/useCheckMobile.hook";
+import Exclamation from "../../public/img/icons/exclamationIcon";
 
 export function LabelTextForm ({ text, ...props }) {
   return (
     <FormLabel
       color="#252A32"
-      fontFamily="ubuntu"
-      letterSpacing="0.2px"
+      fontFamily="Roboto"
       fontSize="16px"
-      fontWeight="400"
-      lineHeight="16px"
+      fontWeight="500"
+      lineHeight="24px"
+      margin="0 0 8px 0"
       {...props}
     >{text}</FormLabel>
   )
@@ -91,7 +97,7 @@ export function ModalGeneral ({
       <ModalOverlay/>
       <ModalContent
         margin="24px"
-        minWidth={isMobileMod() ? "auto" : "536px"}
+        minWidth={{base: "auto", lg: "536px"}}
         boxSizing="content-box"
         padding="32px"
         borderRadius="16px"
@@ -105,10 +111,129 @@ export function ModalGeneral ({
           {children[1]}
         </ModalBody>
 
-        <ModalFooter padding="0" width={isMobileMod() ? "100%" : "auto"}>
+        <ModalFooter padding="0" width={{base: "100%", lg: "auto"}}>
           {children[2]}
         </ModalFooter>
       </ModalContent>
     </Modal>
+  )
+}
+
+export function InputForm({
+  value,
+  onChange,
+  placeholder,
+  icon = null,
+  inputGroupStyle,
+  inputElementStyle,
+  fill,
+  ...props
+}) {
+  return (
+    <InputGroup
+      width="100%"
+      alignSelf="center"
+      justifyContent="center"
+      fill={fill}
+      {...inputGroupStyle}
+    >
+      {icon &&
+        <InputLeftElement
+          width="24px"
+          height="24px"
+          margin="8px 8px 8px 16px"
+          children={icon}
+          {...inputElementStyle}
+        />
+      }
+
+      <Input
+        value={value}
+        placeholder={placeholder}
+        onChange={onChange}
+        autoComplete="off"
+        variant="outline"
+        border="2px solid transparent !important"
+        color="#464A51"
+        _hover={{
+          border:"2px solid transparent !important",
+          backgroundColor:"#DEDFE0",
+        }}
+        _focus={{
+          border:"2px solid #0068C5 !important",
+          backgroundColor: "#FFF",
+        }}
+        _invalid={{backgroundColor:"#F6E3E3"}}
+        paddingLeft={icon !== null && "52px !important"}
+        backgroundColor="#EEEEEE"
+        height="40px"
+        fontSize="14px"
+        lineHeight="20px"
+        width="100%"
+        fontFamily="Roboto"
+        fontWeight="400"
+        borderRadius="8px"
+        _placeholder={{color: "#464A51", opacity: 1}}
+        {...props}
+      />
+    </InputGroup>
+  )
+}
+
+export function ErrorMessage({ children }) {
+  return (
+    <FormErrorMessage
+      fontFamily="Roboto"
+      fontSize="14px"
+      fontWeight="400"
+      lineHeight="20px"
+      color="#BF3434"
+      marginTop="12px"
+      display="flex"
+      flexDirection="row"
+      gap="8px"
+      alignItems="flex-start"
+    >
+      <Exclamation
+        width="18px"
+        height="18px"
+        fill="#BF3434"
+      />{children}
+    </FormErrorMessage>
+  )
+}
+
+export function Button ({ children, onClick, isLoading, ...props }) {
+  return (
+    <Box
+      as="button"
+      onClick={() => onClick()}
+      display="flex"
+      alignItems="center"
+      height="44px"
+      width="fit-content"
+      borderRadius="8px"
+      backgroundColor="#2B8C4D"
+      padding="8px 16px"
+      cursor="pointer"
+      color="#FFF"
+      fill="#FFF"
+      fontFamily="Roboto"
+      fontWeight="500"
+      fontSize="14px"
+      lineHeight="20px"
+      letterSpacing="0.1px"
+      gap="8px"
+      _hover={{
+        backgroundColor:"#22703E"
+      }}
+      {...props}
+    >
+      {isLoading ? 
+        <Spinner width="16px" height="16px"/>
+        :
+        children
+      }
+    </Box>
   )
 }
