@@ -33,7 +33,7 @@ function MyApp({ Component, pageProps }) {
           href="https://storage.googleapis.com/basedosdados-website/thumbnails/2022/thumbnail_padrao.png"
         />
 
-        <title>{t('title')}</title>
+        <title>{locale === 'en' ? 'Data Basis' : locale === 'es' ? 'Base de los Datos' : 'Base dos Dados'}</title>
         <meta
           property="description"
           content={t('description')}
