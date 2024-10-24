@@ -6,10 +6,12 @@ import Head from "next/head";
 import themeBD from "../styles/themeBD";
 import i18n from '../i18n';
 import "../styles/globals.css";
+import { useTranslation } from 'next-i18next';
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const { locale } = router;
+  const { t } = useTranslation('app');
 
   const queryClient = new QueryClient({
     cacheTime: 0,
@@ -31,10 +33,10 @@ function MyApp({ Component, pageProps }) {
           href="https://storage.googleapis.com/basedosdados-website/thumbnails/2022/thumbnail_padrao.png"
         />
 
-        <title>Base dos Dados</title>
+        <title>{t('title')}</title>
         <meta
           property="description"
-          content="São centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python ou R."
+          content={t('description')}
         />
         <script
           defer
@@ -59,13 +61,13 @@ function MyApp({ Component, pageProps }) {
         />
         <meta
           property="og:site_name"
-          content="Base dos Dados"
+          content={t('siteName')}
           key="ogsitename"
         />
-        <meta property="og:title" content="Base dos Dados" key="ogtitle" />
+        <meta property="og:title" content={t('title')} key="ogtitle" />
         <meta
           property="og:description"
-          content="São centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python ou R."
+          content={t('description')}
           key="ogdesc"
         />
 
