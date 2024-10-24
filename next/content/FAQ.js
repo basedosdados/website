@@ -620,7 +620,7 @@ export const QuestionFAQ = [
         <div id="bd-edu-teacher" style={{display: "flex", flexDirection: "column"}}>
           <p>
           Nossos cursos são desenvolvidos e revisados por especialistas que trabalham na equipe da Base dos Dados.
-          Você pode checar o perfil de todos em nossa <a href="https://basedosdados.org/quem-somos" target="_blank">página institucional</a>.
+          Você pode checar o perfil de todos em nossa <a href="https://basedosdados.org/about-us" target="_blank">página institucional</a>.
           </p>
         </div>
       )
@@ -652,7 +652,7 @@ export const QuestionFAQ = [
           <p>
             Ao longo dos anos, a BD cresceu com o apoio financeiro de usuários e de pessoas que se identificam com nossa missão.
             Hoje, contamos também com nossa área de Serviços e Parcerias (BD Lab) e nossos planos de acesso a dados exclusivos de alta frequência atualizados (BD Pro).
-            Confira mais sobre a contabilidade da organização em nossa página de <a href="https://basedosdados.org/transparencia" target="_blank">Transparência</a>.
+            Confira mais sobre a contabilidade da organização em nossa página de <a href="https://basedosdados.org/transparency" target="_blank">Transparência</a>.
           </p>
         </div>
       )
@@ -712,7 +712,7 @@ export const QuestionFAQ = [
           <p>
           Utilizamos suas informações pessoais para fornecer e melhorar nossos serviços, incluindo o processamento de pagamentos, o fornecimento de suporte ao cliente e a personalização da experiência do usuário.
           Não venderemos, alugaremos ou compartilharemos suas informações pessoais com terceiros não afiliados sem o seu consentimento explícito.
-          Para mais informações, acesse nossos Termos de Uso e Políticas de Privacidade <a href="http://basedosdados.org/termos-e-privacidade" target="_blank">aqui</a>.
+          Para mais informações, acesse nossos Termos de Uso e Políticas de Privacidade <a href="http://basedosdados.org/terms" target="_blank">aqui</a>.
           </p>
         </div>
       )

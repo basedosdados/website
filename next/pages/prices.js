@@ -270,7 +270,7 @@ export const CardPrice = ({
             fontFamily="Roboto"
             height="24px"
           >{t('readThe')}
-            <Link href="/termos-e-privacidade?section=terms" locale={locale} passHref>
+            <Link href="/terms?section=terms" locale={locale} passHref>
               <Text
                 as="a"
                 cursor="pointer"

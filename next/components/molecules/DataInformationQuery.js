@@ -27,7 +27,7 @@ import { useTranslation } from 'next-i18next';
 import GreenTab from "../atoms/GreenTab";
 import Toggle from "../atoms/Toggle";
 import ColumnsTable from "./ColumnsTable";
-import { SectionPrice } from "../../pages/precos";
+import { SectionPrice } from "../../pages/prices";
 import { ModalGeneral } from "./uiUserPage";
 import { AlertDiscalimerBox} from "./DisclaimerBox";
 import { triggerGAEvent, formatBytes } from "../../utils";
@@ -589,7 +589,7 @@ export default function DataInformationQuery({ resource }) {
                   <Text
                     as="a"
                     target="_blank"
-                    href="https://basedosdados.org/precos"
+                    href="https://basedosdados.org/prices"
                     color="#0068C5"
                     _hover={{color: "#0057A4"}}
                   >

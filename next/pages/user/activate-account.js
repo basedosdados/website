@@ -81,7 +81,7 @@ export default function ActiveAccount({ data }) {
             <SectionText textAlign="center">{t('activate.activationProblem')}</SectionText>
             <RoundedButton
               borderRadius="30px"
-              onClick={() => window.open("/contato", "_self")}
+              onClick={() => window.open("/contact", "_self")}
             >
               {t('activate.contactUs')}
             </RoundedButton>

@@ -29,7 +29,7 @@ export async function getStaticProps({ locale }) {
   };
 }
 
-export default function Transparencia({ pages }) {
+export default function Transparency({ pages }) {
   const { t } = useTranslation('transparency');
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
