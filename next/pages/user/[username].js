@@ -43,7 +43,7 @@ import ButtonSimple from "../../components/atoms/SimpleButton";
 import InputForm from "../../components/atoms/SimpleInput";
 import Link from "../../components/atoms/Link";
 import Toggle from "../../components/atoms/Toggle";
-import { CardPrice } from "../precos";
+import { CardPrice } from "../prices";
 import PaymentSystem from "../../components/organisms/PaymentSystem";
 import ImageCrop from "../../components/molecules/ImgCrop";
 import { cleanString, triggerGAEvent } from "../../utils";
@@ -1050,7 +1050,7 @@ const Account = ({ userInfo }) => {
           fontSize="16px"
           lineHeight="30px"
           letterSpacing="0.2px"
-          href="/contato"
+          href="/contact"
           target="_self"
         >{t('username.contactUs')}</Link>
       </Box>
@@ -2462,7 +2462,7 @@ const PlansAndPayment = ({ userData }) => {
             color="#464A51"
           >
             O acesso aos dados foi concedido para o e-mail <Text as="span" fontWeight="500">{emailGCP}</Text>. Se precisar alterar o e-mail de acesso, você pode fazer isso na seção “BigQuery” das configurações da sua conta.
-            Em caso de dúvida, <Text as="a" href="/contato" target="_self" color="#0068C5" _hover={{color: "#0057A4"}}>entre em contato com nosso suporte.</Text>
+            Em caso de dúvida, <Text as="a" href="/contact" target="_self" color="#0068C5" _hover={{color: "#0057A4"}}>entre em contato com nosso suporte.</Text>
           </Text>
         </Stack>
 
@@ -2596,7 +2596,7 @@ const PlansAndPayment = ({ userData }) => {
               fontSize="16px"
               lineHeight="30px"
               letterSpacing="0.2px"
-              href="/contato"
+              href="/contact"
               target="_self"
               marginLeft="2px"
               >{t('username.contactUs')}</Link>
@@ -2822,7 +2822,7 @@ const PlansAndPayment = ({ userData }) => {
             _hover={{transform: "none", opacity: 0.8}}
             onClick={() => {
               AlertChangePlanModal.onClose()
-              window.open("/contato", "_self")
+              window.open("/contact", "_self")
             }}
           >
             {t('username.contactUs')}

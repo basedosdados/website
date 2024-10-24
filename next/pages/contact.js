@@ -24,7 +24,7 @@ export async function getStaticProps({ locale }) {
   };
 }
 
-export default function Contato({ pages }) {
+export default function Contact({ pages }) {
   const { t } = useTranslation('contact');
 
   useEffect(() => {
@@ -95,7 +95,7 @@ export default function Contato({ pages }) {
               {t('servicesDescription')}
               <Link
                 display="inline"
-                href="/servicos"
+                href="/services"
                 textDecoration="none"
                 fontFamily="Ubuntu"
                 color="#42B0FF"

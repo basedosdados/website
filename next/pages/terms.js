@@ -26,7 +26,7 @@ export async function getStaticProps({ locale }) {
   };
 }
 
-export default function TermsAndPolitics() {
+export default function TermsAndPolicies() {
   const { t } = useTranslation('terms');
   const router = useRouter()
   const { query } = router

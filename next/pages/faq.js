@@ -54,11 +54,11 @@ const QuestionsBox = ({ question, answer, id, active }) => {
   },[active])
 
   useEffect(() => {
-    if(router.asPath === `/perguntas-frequentes#${id}`) setIsActive(true)
+    if(router.asPath === `/faq#${id}`) setIsActive(true)
   },[id])
 
   useEffect(() => {
-    if(router.asPath === `/perguntas-frequentes#${id}`) scrollFocus(id)
+    if(router.asPath === `/faq#${id}`) scrollFocus(id)
   },[isActive])
 
   const OpenCloseQuestion = () => {
@@ -308,7 +308,7 @@ export default function FAQ({}) {
               lineHeight="16px"
               letterSpacing="0.2px"
             >
-              {t('contactText')} <a className={styles.link} href="/contato">{t('contactLink')}</a>
+              {t('contactText')} <a className={styles.link} href="/contact">{t('contactLink')}</a>
             </Text>
           </Stack>
         </Stack>

@@ -813,17 +813,17 @@ function DesktopLinks({
           <HelpWidget
             tooltip={t('tooltip.helpAndResources')}
             options={[
-              {name: t('tooltip.faq'), component: <Link href="/perguntas-frequentes">{t('tooltip.faq')}</Link>},
+              {name: t('tooltip.faq'), component: <Link href="/faq">{t('tooltip.faq')}</Link>},
               {name: t('tooltip.documentation'), url: "https://basedosdados.github.io/mais/"},
               {name: t('tooltip.youtubeVideos'), url: "https://www.youtube.com/c/BasedosDados/featured"},
               {},
               {name: t('tooltip.installPackages'), url: "https://basedosdados.github.io/mais/access_data_packages/"},
               {},
-              {name: t('tooltip.howToCite'), component: <Link href="/perguntas-frequentes#reference">{t('tooltip.howToCite')}</Link>},
-              {name: t('tooltip.whatAreDirectories'), component: <Link href="/perguntas-frequentes#directories">{t('tooltip.whatAreDirectories')}</Link>},
+              {name: t('tooltip.howToCite'), component: <Link href="/faq#reference">{t('tooltip.howToCite')}</Link>},
+              {name: t('tooltip.whatAreDirectories'), component: <Link href="/faq#directories">{t('tooltip.whatAreDirectories')}</Link>},
               {},
               {name: t('tooltip.discordCommunity'), url: "https://discord.gg/huKWpsVYx4"},
-              {name: t('tooltip.contactUs'), component: <Link href="/contato">{t('tooltip.contactUs')}</Link>},
+              {name: t('tooltip.contactUs'), component: <Link href="/contact">{t('tooltip.contactUs')}</Link>},
             ]}
           />
         }
@@ -965,22 +965,22 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     [t('solutions')]: [
       {icon: <BDLogoProImage widthImage="54px"/>, name: [t('exclusive_data')], href: "https://info.basedosdados.org/bd-pro"},
       {icon: <BDLogoEduImage widthImage="54px"/>, name: [t('data_courses')], href: "https://info.basedosdados.org/bd-edu-sql"},
-      {icon: <BDLogoLabImage widthImage="54px"/>, name: [t('services')], href: "/servicos"},
+      {icon: <BDLogoLabImage widthImage="54px"/>, name: [t('services')], href: "/services"},
     ],
-    [t('prices')]: "/precos",
+    [t('prices')]: "/prices",
     [t('tutorials')]: [
       {name: [t('documentation')], href: "https://basedosdados.github.io/mais/"},
       {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
       {name: [t('blog')], href: "https://medium.com/basedosdados"}
     ],
     [t('institutional')]: [
-      {name: [t('about_us')], href: "/quem-somos"},
-      {name: [t('transparency')], href: "/transparencia"},
+      {name: [t('about_us')], href: "/about-us"},
+      {name: [t('transparency')], href: "/transparency"},
       {name: [t('newsletter')], href: "https://info.basedosdados.org/newsletter"},
       {name: [t('jobs')], href: "https://info.basedosdados.org/carreiras"},
-      {name: [t('faq')], href: "/perguntas-frequentes"},
+      {name: [t('faq')], href: "/faq"},
     ],
-    [t('contact')]: "/contato",
+    [t('contact')]: "/contact",
     Button: []
   }
 

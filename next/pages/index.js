@@ -679,7 +679,7 @@ function Support() {
               fontSize="16px"
               letterSpacing="0.2px"
               color="#42B0FF"
-              href="/contato"
+              href="/contact"
             >
               {t('support.contact_us')}
             </Link>

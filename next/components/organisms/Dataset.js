@@ -57,7 +57,7 @@ export default function Dataset({
           whiteSpace="nowrap"
         >
           {tablesNumber}{" "}
-          {tablesNumber === 1 ? t('datasetCard.table') : t('datasetCard.tables')}
+          {tablesNumber === 1 ? t('dataset.table') : t('dataset.tables')}
         </Text>
       </Link>
     )

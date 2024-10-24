@@ -114,7 +114,7 @@ export default function Footer({ template, ocult = false }) {
             {t('footer.copyright', { year: new Date().getFullYear() })}
           </TextFooterSimple>
           <Link
-            href="/termos-e-privacidade?section=terms"
+            href="/terms?section=terms"
             _hover={{ color: "#252A32" }}
           >
             <TextFooterSimple>
@@ -122,7 +122,7 @@ export default function Footer({ template, ocult = false }) {
             </TextFooterSimple>
           </Link>
           <Link
-            href="/termos-e-privacidade?section=privacy"
+            href="/terms?section=privacy"
             _hover={{ color: "#252A32" }}
           >
             <TextFooterSimple>
@@ -130,7 +130,7 @@ export default function Footer({ template, ocult = false }) {
             </TextFooterSimple>
           </Link>
           <Link
-            href="/contato"
+            href="/contact"
             _hover={{ color: "#252A32" }}
           >
             <TextFooterSimple>
@@ -206,16 +206,16 @@ export default function Footer({ template, ocult = false }) {
             </SectionCategories>
 
             <SectionCategories title={t('footer.services.title')} marginBottom={isMobileMod() && "24px !important"}>
-              <FooterLink target="_self" href="/servicos#Captura de dados">
+              <FooterLink target="_self" href="/services#Captura de dados">
                 {t('footer.services.dataCapture')}
               </FooterLink>
-              <FooterLink href="/servicos#Análise de dados">
+              <FooterLink href="/services#Análise de dados">
                 {t('footer.services.dataAnalytics')}
               </FooterLink>
-              <FooterLink href="/servicos#Consultoria de dados">
+              <FooterLink href="/services#Consultoria de dados">
                 {t('footer.services.dataConsulting')}
               </FooterLink>
-              <FooterLink href="/servicos#Estudos de caso">
+              <FooterLink href="/services#Estudos de caso">
                 {t('footer.services.caseStudies')}
               </FooterLink>
             </SectionCategories>
@@ -230,10 +230,10 @@ export default function Footer({ template, ocult = false }) {
             </SectionCategories>
 
             <SectionCategories title={t('footer.institutional.title')} marginBottom={isMobileMod() && "24px !important"}>
-              <FooterLink target="_self" href="/quem-somos">
+              <FooterLink target="_self" href="/about-us">
                 {t('footer.institutional.aboutUs')}
               </FooterLink>
-              <FooterLink target="_self" href="/transparencia">
+              <FooterLink target="_self" href="/transparency">
                 {t('footer.institutional.transparency')}
               </FooterLink>
               <FooterLink href="https://info.basedosdados.org/newsletter">
@@ -242,13 +242,13 @@ export default function Footer({ template, ocult = false }) {
               <FooterLink href="https://info.basedosdados.org/carreiras">
                 {t('footer.institutional.careers')}
               </FooterLink>
-              <FooterLink href="/perguntas-frequentes">
+              <FooterLink href="/faq">
                 {t('footer.institutional.faq')}
               </FooterLink>
-              <FooterLink target="_self" href="/termos-e-privacidade">
+              <FooterLink target="_self" href="/terms">
                 {t('footer.institutional.termsAndPrivacy')}
               </FooterLink>
-              <FooterLink target="_self" href="/contato">
+              <FooterLink target="_self" href="/contact">
                 {t('footer.institutional.contact')}
               </FooterLink>
               <Link fontWeight="700" color="white" href="/#support">

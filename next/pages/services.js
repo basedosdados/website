@@ -59,7 +59,7 @@ function FixedBottomBar() {
         position={{ base: "initial", lg: "fixed" }}
         bottom="14px"
         right="20%"
-        href="/contato"
+        href="/contact"
         textDecoration="none !important"
       >
         <RoundedButton
@@ -113,7 +113,7 @@ function Slogan () {
         {t('slogan.description')}
       </BodyText>
       <Link
-        href="/contato-consultoria"
+        href="/contact-consulting"
       >
         <Box
           as="p"
@@ -314,7 +314,7 @@ function CaseStudies ({}) {
               fontSize="18px"
               lineHeight="20px"
               target="_self"
-              href={`/estudos-de-caso/${elm.id}`}
+              href={`/case-studies/${elm.id}`}
               color="#42B0FF"
               marginBottom="40px !important"
             >
@@ -557,7 +557,7 @@ export default function Services() {
         </VStack>
         
         <Link
-          href="/contato-consultoria"
+          href="/contact-consulting"
         >
           <Box
             as="p"
