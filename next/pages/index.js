@@ -45,6 +45,7 @@ import DatabaseImage from "../public/img/databaseImage";
 import MasterOfDatabaseImage from "../public/img/masterOfDatabaseImage";
 import ProductsFiltersImage from "../public/img/productsFiltersImage";
 import ProcessedDataImage from "../public/img/processedDataImage";
+import PayPalButton from '../components/atoms/PayPalButton';
 
 export async function getStaticProps({ locale }) {
   const themes = await getAllThemes(locale);
@@ -449,6 +450,8 @@ export function StepText ({index, text}) {
 function Support() {
   const { t } = useTranslation('common');
   const { hasCopied, onCopy } = useClipboard("42494318000116")
+  const router = useRouter();
+  const { locale } = router;
 
   return (
     <VStack
@@ -467,234 +470,261 @@ function Support() {
         >
           {t('support.existence_through_effort')} {!isMobileMod() && <br/>} {t('support.those_who_believe_in_quality_open_data')}
         </Display>
-        <Text
-          position="relative"
-          zIndex="1"
-          color="#6F6F6F"
-          fontFamily="Ubuntu"
-          fontSize={isMobileMod() ? "16px" : "18px"}
-          alignSelf="center"
-          letterSpacing={isMobileMod() ? "0.2px" : "0.1px"}
-          fontWeight="300"
-          margin="0 0 48px !important"
-        >
-          {t('support.support_us_too')}
-        </Text>
 
-        <Stack
-          width="100%"
-          margin="0 0 80px !important"
-          justifyContent="center"
-          alignItems="center"
-          direction={{ base: "column", lg: "row" }}
-          gridGap="48px"
-        >
-          <ShadowBox
-            width="266px"
-            height="400px"
-            image= {
-              <EnthusiasticImage
-                widthImage="100%"
-                heightImage="100%"
-              />
-            }
-            title={t('support.enthusiast')}
-            spacing={4}
-          >
-            <BodyText
-              textAlign="center"
+        {locale === 'pt' && (
+          <>
+
+            <Text
+              position="relative"
+              zIndex="1"
+              color="#6F6F6F"
+              fontFamily="Ubuntu"
+              fontSize={isMobileMod() ? "16px" : "18px"}
+              alignSelf="center"
+              letterSpacing={isMobileMod() ? "0.2px" : "0.1px"}
               fontWeight="300"
-              fontSize="14px"
-              letterSpacing="0.2px"
-              margin="10px 0 24px !important"
-              lineHeight="24px"
+              margin="0 0 48px !important"
             >
-              {t('support.tight_pocket')} <br/> {t('support.enthusiast_description')}
-            </BodyText>
-            <Link
-              _hover={{ opacity:"none" }}
-              margin="0 !important"
-              target="_blank"
-              href="https://apoia.se/support/basedosdados/new/15"
-            >
-              <RoundedButton backgroundColor="#FF8484" width="200px">
-                R$ <p style={{fontSize:"24px", margin:"0 5px"}}>15</p>/ {t('support.month')}
-              </RoundedButton>
-            </Link>
-          </ShadowBox>
+              {t('support.support_us_too')}
+            </Text>
 
-          <ShadowBox
-            width={isMobileMod() ? "266px" : "320px"}
-            height={isMobileMod() ? "400" : "428px"}
-            image={
-              <DatabaseImage 
-                widthImage="100%"
-                heightImage="100%"
-                backgroundColor="#FF8484"
-              />
-            }
-            title={t('support.databaser')}
-            titleStyle={{
-              fontSize:"22px",
-              color:"#FF8484",
-              fontWeight:"500",
-              letterSpacing:"0.1px"
-            }}
-            spacing={4}
-          >
-            <BodyText
-              display="flex"
-              flexDirection="column"
-              textAlign="center"
-              fontSize="16px"
-              margin="16px 0 24px !important"
-              letterSpacing="0.2px"
-            >
-              <b style={{fontWeight:"500"}}>{t('support.donate_1_real_per_day')}</b>
-              <span>{t('support.to_make_databasers_happy')}</span>
-            </BodyText>
-            <Link
-              _hover={{ opacity:"none" }}
-              marginTop="0 !important"
-              target="_blank"
-              href="https://apoia.se/support/basedosdados/new/30"
-            >
-              <RoundedButton
-                backgroundColor="#FF8484"
-                width="200px"
-              >
-                R$ <p style={{fontSize:"24px", margin:"0 5px"}}>30</p>/ {t('support.month')}
-              </RoundedButton>
-            </Link>
-          </ShadowBox>
-          
-          <ShadowBox
-            width="266px"
-            height="400px"
-            image= {
-              <MasterOfDatabaseImage
-                widthImage="100%"
-                heightImage="100%"
-              />
-            }
-            title={t('support.master_of_data')}
-            spacing={4}
-          >
-            <BodyText
-              textAlign="center"
-              fontWeight="300"
-              fontSize="14px"
-              letterSpacing="0.2px"
-              margin="10px 0 24px !important"
-              lineHeight="24px"
-            >
-              {t('support.master_of_data_description')}
-            </BodyText>
-            <Link
-              _hover={{ opacity:"none" }}
-              marginTop="0 !important"
-              target="_blank"
-              href="https://apoia.se/support/basedosdados/new/50"
-            >
-              <RoundedButton backgroundColor="#FF8484" width="200px">
-                R$ <p style={{fontSize:"24px", margin:"0 5px"}}>50</p>/ {t('support.month')}
-              </RoundedButton>
-            </Link>
-          </ShadowBox>
-        </Stack>
-
-        <Box padding="0px">
-          <Text
-            width="100%"
-            textAlign="center"
-            fontFamily="Ubuntu"
-            fontSize="20px"
-            letterSpacing="0.2px"
-            color="#7D7D7D"
-            fontWeight="400"
-            lineHeight="32px"
-            paddingBottom={!isMobileMod() && "32px"}
-          >
-            {t('support.donate_any_amount_via_pix')}
-          </Text>
-
-          <Grid
-            templateColumns={isMobileMod() ? "repeat(1, 3fr)" : "repeat(3, 1fr)"}
-            gridGap={isMobileMod() && "40px"}
-            justifyItems="center"
-            width="100%"
-          >
-            <GridItem
-              marginTop={isMobileMod() && "32px !important"}
+            <Stack
+              width="100%"
+              margin="0 0 80px !important"
               justifyContent="center"
-              alignItems="flex-start"
+              alignItems="center"
+              direction={{ base: "column", lg: "row" }}
+              gridGap="48px"
             >
-              <TextPix title={t('support.company_name')} text="Instituto Base dos Dados"/>
-              <TextPix title={t('support.cnpj')} text="42494318/0001-16"/>
-              <TextPix title={t('support.bank')} text="PagSeguro"/>
-              <Box display="flex" gridGap="48px">
-                <TextPix title={t('support.agency')} text="0001"/>
-                <TextPix title={t('support.account')} text="31401653-6"/>
-              </Box>
-            </GridItem>
-
-            <GridItem marginBottom={isMobileMod() && "24px"}>
-              <ChakraImage
-                alt="QR code para apoiador"
-                position="relative"
-                top="-5px"
-                width="250px"
-                height="250px"
-                objectFit="contain"
-                boxShadow="0 1.6px 16px rgba(100, 96, 103, 0.16)"
-                src="https://storage.googleapis.com/basedosdados-website/images/bd_qrcode.png"
-              />
-              <RoundedButton 
-                fontSize="15px"
-                fontWeight="700"
-                backgroundColor="#FF8484"
-                paddingX="30px"
-                width="100%"
-                gridGap="6px"
-                onClick={onCopy}
-                opacity={hasCopied && "0.8"}
-                marginTop="32px"
+              <ShadowBox
+                width="266px"
+                height="400px"
+                image= {
+                  <EnthusiasticImage
+                    widthImage="100%"
+                    heightImage="100%"
+                  />
+                }
+                title={t('support.enthusiast')}
+                spacing={4}
               >
-                <CopySolidIcon alt="copiar chave PIX" width="22px" height="22px" fill="#FFF"/>
-                  {hasCopied ? t('support.pix_key_copied') : t('support.copy_pix_key')}
-              </RoundedButton>
-            </GridItem>
+                <BodyText
+                  textAlign="center"
+                  fontWeight="300"
+                  fontSize="14px"
+                  letterSpacing="0.2px"
+                  margin="10px 0 24px !important"
+                  lineHeight="24px"
+                >
+                  {t('support.tight_pocket')} <br/> {t('support.enthusiast_description')}
+                </BodyText>
+                <Link
+                  _hover={{ opacity:"none" }}
+                  margin="0 !important"
+                  target="_blank"
+                  href="https://apoia.se/support/basedosdados/new/15"
+                >
+                  <RoundedButton backgroundColor="#FF8484" width="200px">
+                    R$ <p style={{fontSize:"24px", margin:"0 5px"}}>15</p>/ {t('support.month')}
+                  </RoundedButton>
+                </Link>
+              </ShadowBox>
 
-            <GridItem display={isMobileMod() && "none"}>
-              <BodyText letterSpacing="0.2px" fontSize="16px" color="#FF8484" fontWeight="500" marginBottom="24px">{t('support.follow_the_steps')}</BodyText>
-              <StepText index="1" text={t('support.step_1')}/>
-              <StepText index="2" text={t('support.step_2')}/>
-              <StepText index="3" text={t('support.step_3')}/>
-              <StepText index="❤" text={t('support.step_4')}/>
-            </GridItem>
-          </Grid>
+              <ShadowBox
+                width={isMobileMod() ? "266px" : "320px"}
+                height={isMobileMod() ? "400" : "428px"}
+                image={
+                  <DatabaseImage 
+                    widthImage="100%"
+                    heightImage="100%"
+                    backgroundColor="#FF8484"
+                  />
+                }
+                title={t('support.databaser')}
+                titleStyle={{
+                  fontSize:"22px",
+                  color:"#FF8484",
+                  fontWeight:"500",
+                  letterSpacing:"0.1px"
+                }}
+                spacing={4}
+              >
+                <BodyText
+                  display="flex"
+                  flexDirection="column"
+                  textAlign="center"
+                  fontSize="16px"
+                  margin="16px 0 24px !important"
+                  letterSpacing="0.2px"
+                >
+                  <b style={{fontWeight:"500"}}>{t('support.donate_1_real_per_day')}</b>
+                  <span>{t('support.to_make_databasers_happy')}</span>
+                </BodyText>
+                <Link
+                  _hover={{ opacity:"none" }}
+                  marginTop="0 !important"
+                  target="_blank"
+                  href="https://apoia.se/support/basedosdados/new/30"
+                >
+                  <RoundedButton
+                    backgroundColor="#FF8484"
+                    width="200px"
+                  >
+                    R$ <p style={{fontSize:"24px", margin:"0 5px"}}>30</p>/ {t('support.month')}
+                  </RoundedButton>
+                </Link>
+              </ShadowBox>
+              
+              <ShadowBox
+                width="266px"
+                height="400px"
+                image= {
+                  <MasterOfDatabaseImage
+                    widthImage="100%"
+                    heightImage="100%"
+                  />
+                }
+                title={t('support.master_of_data')}
+                spacing={4}
+              >
+                <BodyText
+                  textAlign="center"
+                  fontWeight="300"
+                  fontSize="14px"
+                  letterSpacing="0.2px"
+                  margin="10px 0 24px !important"
+                  lineHeight="24px"
+                >
+                  {t('support.master_of_data_description')}
+                </BodyText>
+                <Link
+                  _hover={{ opacity:"none" }}
+                  marginTop="0 !important"
+                  target="_blank"
+                  href="https://apoia.se/support/basedosdados/new/50"
+                >
+                  <RoundedButton backgroundColor="#FF8484" width="200px">
+                    R$ <p style={{fontSize:"24px", margin:"0 5px"}}>50</p>/ {t('support.month')}
+                  </RoundedButton>
+                </Link>
+              </ShadowBox>
+            </Stack>
 
-          <BodyText
-            fontSize="16px"
-            letterSpacing="0.2px"
-            textAlign="center"
-            margin="32px 0 !important"
-          >
-            💰 {t('support.want_to_institutionally_support_db')}
-            <Link
-              display="inline"
-              fontFamily="ubuntu"
-              textDecoration="none"
-              fontWeight="500"
-              fontSize="16px"
+            <Box padding="0px">
+              <Text
+                width="100%"
+                textAlign="center"
+                fontFamily="Ubuntu"
+                fontSize="20px"
+                letterSpacing="0.2px"
+                color="#7D7D7D"
+                fontWeight="400"
+                lineHeight="32px"
+                paddingBottom={!isMobileMod() && "32px"}
+              >
+                {t('support.donate_any_amount_via_pix')}
+              </Text>
+
+              <Grid
+                templateColumns={isMobileMod() ? "repeat(1, 3fr)" : "repeat(3, 1fr)"}
+                gridGap={isMobileMod() && "40px"}
+                justifyItems="center"
+                width="100%"
+              >
+                <GridItem
+                  marginTop={isMobileMod() && "32px !important"}
+                  justifyContent="center"
+                  alignItems="flex-start"
+                >
+                  <TextPix title={t('support.company_name')} text="Instituto Base dos Dados"/>
+                  <TextPix title={t('support.cnpj')} text="42494318/0001-16"/>
+                  <TextPix title={t('support.bank')} text="PagSeguro"/>
+                  <Box display="flex" gridGap="48px">
+                    <TextPix title={t('support.agency')} text="0001"/>
+                    <TextPix title={t('support.account')} text="31401653-6"/>
+                  </Box>
+                </GridItem>
+
+                <GridItem marginBottom={isMobileMod() && "24px"}>
+                  <ChakraImage
+                    alt="QR code para apoiador"
+                    position="relative"
+                    top="-5px"
+                    width="250px"
+                    height="250px"
+                    objectFit="contain"
+                    boxShadow="0 1.6px 16px rgba(100, 96, 103, 0.16)"
+                    src="https://storage.googleapis.com/basedosdados-website/images/bd_qrcode.png"
+                  />
+                  <RoundedButton 
+                    fontSize="15px"
+                    fontWeight="700"
+                    backgroundColor="#FF8484"
+                    paddingX="30px"
+                    width="100%"
+                    gridGap="6px"
+                    onClick={onCopy}
+                    opacity={hasCopied && "0.8"}
+                    marginTop="32px"
+                  >
+                    <CopySolidIcon alt="copiar chave PIX" width="22px" height="22px" fill="#FFF"/>
+                      {hasCopied ? t('support.pix_key_copied') : t('support.copy_pix_key')}
+                  </RoundedButton>
+                </GridItem>
+
+                <GridItem display={isMobileMod() && "none"}>
+                  <BodyText letterSpacing="0.2px" fontSize="16px" color="#FF8484" fontWeight="500" marginBottom="24px">{t('support.follow_the_steps')}</BodyText>
+                  <StepText index="1" text={t('support.step_1')}/>
+                  <StepText index="2" text={t('support.step_2')}/>
+                  <StepText index="3" text={t('support.step_3')}/>
+                  <StepText index="❤" text={t('support.step_4')}/>
+                </GridItem>
+              </Grid>
+
+              <BodyText
+                fontSize="16px"
+                letterSpacing="0.2px"
+                textAlign="center"
+                margin="32px 0 !important"
+              >
+                💰 {t('support.want_to_institutionally_support_db')}
+                <Link
+                  display="inline"
+                  fontFamily="ubuntu"
+                  textDecoration="none"
+                  fontWeight="500"
+                  fontSize="16px"
+                  letterSpacing="0.2px"
+                  color="#42B0FF"
+                  href="/contact"
+                >
+                  {t('support.contact_us')}
+                </Link>
+              </BodyText>
+            </Box>
+          </>
+        )}
+
+        {locale !== 'pt' && (
+          <>
+            <Text
+              width="100%"
+              textAlign="center"
+              fontFamily="Ubuntu"
+              fontSize="20px"
               letterSpacing="0.2px"
-              color="#42B0FF"
-              href="/contact"
+              color="#7D7D7D"
+              fontWeight="400"
+              lineHeight="32px"
+              paddingBottom={!isMobileMod() && "32px"}
             >
-              {t('support.contact_us')}
-            </Link>
-          </BodyText>
-        </Box>
+              {t('support.donate_any_amount_via_paypal')}
+            </Text>
+            <Box marginTop="32px">
+              <PayPalButton />
+            </Box>
+          </>
+        )}
       </VStack>
     </VStack>
   );

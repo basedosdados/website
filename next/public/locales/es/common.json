@@ -27,7 +27,7 @@
     "support": {
         "existence_through_effort": "Existimos gracias al esfuerzo de personas que",
         "those_who_believe_in_quality_open_data": "creen en el acceso a datos abiertos de calidad.",
-        "support_us_too": "Apoya a Base dos Dados también",
+        "support_us_too": "Apoya a Base de los Datos también",
         "enthusiast": "Entusiasta",
         "tight_pocket": "¿Presupuesto ajustado? Solo R$0,50 por",
         "enthusiast_description": "día para ayudarnos a mantener la iniciativa.",
@@ -51,7 +51,8 @@
         "step_3": "Escanea el código QR o ingresa la clave al lado;",
         "step_4": "¡Haz tu donación!",
         "want_to_institutionally_support_db": "¿Te gustaría apoyar a BD institucionalmente? ",
-        "contact_us": "Contáctanos."
+        "contact_us": "Contáctanos.",
+        "donate_any_amount_via_paypal": "Dona cualquier cantidad vía PayPal"
     },
     "edu": {
         "learn_from_the_reference": "Ven a aprender de quienes son referencia",

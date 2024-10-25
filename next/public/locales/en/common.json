@@ -51,7 +51,8 @@
         "step_3": "Scan the QR Code or enter the key on the side;",
         "step_4": "Make your donation!",
         "want_to_institutionally_support_db": "Would you like to support DB institutionally? ",
-        "contact_us": "Contact us."
+        "contact_us": "Contact us.",
+        "donate_any_amount_via_paypal": "Donate any amount via PayPal"
     },
     "edu": {
         "learn_from_the_reference": "Come learn from those who are a reference",
