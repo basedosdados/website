@@ -194,11 +194,10 @@ export default function CropImage ({
           <Stack
             flexDirection={{base: "column", lg: "row"}}
             spacing={0}
-            gap="24px"
+            gap="16px"
             width={{base: "100%", lg: "fit-content"}}
           >
             <Button
-              justifyContent="center"
               width={{base: "100%", lg: "auto"}}
               color="#2B8C4D"
               backgroundColor="#FFF"
@@ -214,7 +213,6 @@ export default function CropImage ({
               {t('username.imgCropButtonCancel')}
             </Button>
             <Button
-              justifyContent="center"
               width={{base: "100%", lg: "auto"}}
               onClick={() => handlerUpdatePicture()}
               isLoading={isLoading}

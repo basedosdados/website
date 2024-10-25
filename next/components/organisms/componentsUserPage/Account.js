@@ -159,12 +159,11 @@ export default function Account({ userInfo }) {
         <Stack
           flexDirection={{base: "column-reverse", lg: "row"}}
           spacing={0}
-          gap={{base: "24px", lg: "16px"}}
+          gap="16px"
           width={{base:"100%", lg: "fit-content"}}
         >
           <Button
             width="100%"
-            justifyContent="center"
             border="1px solid #BF3434"
             color="#BF3434"
             backgroundColor="#fff"
@@ -179,7 +178,6 @@ export default function Account({ userInfo }) {
 
           <Button
             width="100%"
-            justifyContent="center"
             backgroundColor="#BF3434"
             _hover={{
               backgroundColor: "#992A2A",
@@ -231,7 +229,6 @@ export default function Account({ userInfo }) {
         >
           <Button
             width="100%"
-            justifyContent="center"
             backgroundColor="#BF3434"
             _hover={{
               backgroundColor: "#992A2A",

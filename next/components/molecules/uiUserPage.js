@@ -208,6 +208,7 @@ export function Button ({ children, onClick, isLoading, ...props }) {
       as="button"
       onClick={() => onClick()}
       display="flex"
+      justifyContent="center"
       alignItems="center"
       height="44px"
       width="fit-content"

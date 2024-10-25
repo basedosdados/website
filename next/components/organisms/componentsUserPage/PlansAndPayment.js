@@ -8,18 +8,13 @@ import {
   ModalCloseButton,
   Badge,
   Grid,
-  GridItem,
-  Spinner
+  GridItem
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import cookies from 'js-cookie';
 import { useTranslation } from "react-i18next";
-import { isMobileMod } from "../../../hooks/useCheckMobile.hook";
 import { ControlledInputSimple } from "../../atoms/ControlledInput";
-import SectionTitle from "../../atoms/SectionTitle";
-import RoundedButton from "../../atoms/RoundedButton";
-import ButtonSimple from "../../atoms/SimpleButton";
 import Link from "../../atoms/Link";
 import Toggle from "../../atoms/Toggle";
 import { CardPrice } from "../../../pages/precos";
@@ -28,7 +23,8 @@ import { triggerGAEvent } from "../../../utils";
 
 import {
   ExtraInfoTextForm,
-  ModalGeneral
+  ModalGeneral,
+  Button
 } from "../../molecules/uiUserPage";
 
 import Exclamation from "../../../public/img/icons/exclamationIcon";
@@ -155,7 +151,7 @@ export default function PlansAndPayment ({ userData }) {
       ],
       resources : [
         {name: t('username.processedTables')},
-        {name: t('username.integratedData'), tooltip: t('username.dataIntegrationTooltip')},
+        {name: t('username.integratedData'), tooltip: t('username.integratedDataTooltip')},
         {name: t('username.updatedLowFrequencyData')},
         {name: t('username.cloudAccess')},
         {name: t('username.sqlPythonRAccess')},
@@ -169,9 +165,16 @@ export default function PlansAndPayment ({ userData }) {
         text: t('username.cancelPlan'),
         onClick: () => CancelModalPlan.onOpen(),
         props: {
-          borderColor: subscriptionInfo?.canceledAt ? "#ACAEB1" : "#42B0FF",
-          color: subscriptionInfo?.canceledAt ? "#ACAEB1" : "#42B0FF",
-          pointerEvents: subscriptionInfo?.canceledAt ? "none" : "default"
+          borderColor: subscriptionInfo?.canceledAt ? "#ACAEB1" : "#2B8C4D",
+          color: subscriptionInfo?.canceledAt ? "#ACAEB1" : "#2B8C4D",
+          pointerEvents: subscriptionInfo?.canceledAt ? "none" : "default",
+          backgroundColor: "#FFF",
+          border: "1px solid",
+          _hover: {
+            borderColor: "#22703E",
+            color: "#22703E",
+            backgroundColor: "#FFF",
+          }
         }
       }],
       resources : [
@@ -186,9 +189,16 @@ export default function PlansAndPayment ({ userData }) {
         text: t('username.cancelPlan'),
         onClick: () => CancelModalPlan.onOpen(),
         props: {
-          borderColor: subscriptionInfo?.canceledAt ? "#ACAEB1" : "#42B0FF",
-          color: subscriptionInfo?.canceledAt ? "#ACAEB1" : "#42B0FF",
-          pointerEvents: subscriptionInfo?.canceledAt ? "none" : "default"
+          borderColor: subscriptionInfo?.canceledAt ? "#ACAEB1" : "#2B8C4D",
+          color: subscriptionInfo?.canceledAt ? "#ACAEB1" : "#2B8C4D",
+          pointerEvents: subscriptionInfo?.canceledAt ? "none" : "default",
+          backgroundColor: "#FFF",
+          border: "1px solid",
+          _hover: {
+            borderColor: "#22703E",
+            color: "#22703E",
+            backgroundColor: "#FFF",
+          }
         }
       }],
       resources : [
@@ -205,64 +215,37 @@ export default function PlansAndPayment ({ userData }) {
     return planActive ? planResource : defaultResource
   }
 
-  const IncludesFeature = ({ elm, index }) => {
+  const ListFeature = ({ elm, index, notIncludes = false }) => {
     return (
       <Box key={index} display="flex" alignItems="center">
-        <CheckIcon fill="#2B8C4D" width="24px" height="24px" marginRight="8px"/>
-        <Text
-          color="#252A32"
-          fontFamily="Ubuntu"
-          fontSize="16px"
-          fontWeight="400"
-          lineHeight="24px"
-          letterSpacing="0.2px"
-        >{elm.name}</Text>
-        {elm.tooltip &&
-          <Tooltip
-            hasArrow
-            placement="top"
-            bg="#2A2F38"
-            label={elm.tooltip}
-            fontSize="14px"
-            fontWeight="400"
-            padding="5px 16px 6px"
-            letterSpacing="0.5px"
-            lineHeight="24px"
-            color="#FFF"
-            borderRadius="6px"
-          >
-            <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3" marginLeft="16px"/>
-          </Tooltip>
+        {notIncludes ?
+          <CrossIcon fill="#BF3434" width="24px" height="24px" marginRight="8px"/>
+          :
+          <CheckIcon fill="#2B8C4D" width="24px" height="24px" marginRight="8px"/>
         }
-      </Box>
-    )
-  }
-
-  const NotIncludesFeature = ({ elm, index }) => {
-    return (
-      <Box key={index} display="flex" alignItems="center">
-        <CrossIcon fill="#FF8484" width="24px" height="24px" marginRight="8px"/>
         <Text
-          color="#252A32"
-          fontFamily="Ubuntu"
-          fontSize="16px"
+          color="#464A51"
+          fontFamily="Roboto"
+          fontSize="14px"
           fontWeight="400"
-          lineHeight="24px"
-          letterSpacing="0.2px"
+          lineHeight="20px"
         >{elm.name}</Text>
         {elm.tooltip &&
           <Tooltip
-            hasArrow
-            placement="top"
-            bg="#2A2F38"
             label={elm.tooltip}
-            fontSize="14px"
+            hasArrow
+            padding="16px"
+            backgroundColor="#252A32"
+            boxSizing="border-box"
+            borderRadius="8px"
+            fontFamily="Roboto"
             fontWeight="400"
-            padding="5px 16px 6px"
-            letterSpacing="0.5px"
-            lineHeight="24px"
-            color="#FFF"
-            borderRadius="6px"
+            fontSize="14px"
+            lineHeight="20px"
+            textAlign="center"
+            color="#FFFFFF"
+            placement="top"
+            maxWidth="300px"
           >
             <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#A3A3A3" marginLeft="16px"/>
           </Tooltip>
@@ -293,6 +276,7 @@ export default function PlansAndPayment ({ userData }) {
 
     if(result?.success === false) {
       setIsLoadingCanSub(false)
+      CancelModalPlan.onClose()
     }
 
     const user = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
@@ -471,7 +455,7 @@ export default function PlansAndPayment ({ userData }) {
           maxWidth:"1008px",
           margin: "24px"
         }}
-        isCentered={isMobileMod() ? false : true}
+        isCentered={{base: false, lg: true}}
       >
         <Stack spacing={0} marginBottom="40px">
           <Text
@@ -482,7 +466,7 @@ export default function PlansAndPayment ({ userData }) {
             fontSize="14px"
             lineHeight="20px"
           >
-            Passo 2 de 2
+            {t('username.step2of2')}
           </Text>
           <Text
             width="100%"
@@ -656,32 +640,20 @@ export default function PlansAndPayment ({ userData }) {
                   }
                 </Stack>
 
-                <Box
-                  as="button"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  width={{base: "100%", lg: "fit-content"}}
-                  height="44px"
-                  borderRadius="8px"
-                  padding="10px 34px"
-                  border="1px solid"
-                  cursor="pointer"
-                  backgroundColor="#FFF"
+                <Button
                   color="#2B8C4D"
-                  borderColor="#2B8C4D"
+                  backgroundColor="#FFF"
+                  border="1px solid #2B8C4D"
                   _hover={{
-                    borderColor: "#22703E",
-                    color: "#22703E"
+                    backgroundColor: "#FFF",
+                    color: "#22703E",
+                    borderColor: "#22703E"
                   }}
-                  fontFamily="Roboto"
-                  fontWeight="500"
-                  fontSize="14px"
-                  lineHeight="20px"
+                  width={{base: "100%", lg: "fit-content"}}
                   onClick={() => validateStripeCoupon()}
                 >
                   {t('username.apply')}
-                </Box>
+                </Button>
               </Box>
 
               {errCoupon && 
@@ -751,41 +723,29 @@ export default function PlansAndPayment ({ userData }) {
                 lineHeight="24px"
                 color="#464A51"
               >
-                A partir do {couponInfos?.duration === "once" && 2} {couponInfos?.duration === "repeating" && couponInfos?.durationInMonths + 1}º {formattedPlanInterval(checkoutInfos?.interval, true)} {!hasSubscribed && "e 7º dia"}, o total a pagar será de {checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}.
+                {t('username.couponDuration', { returnObjects: true })[0]}{couponInfos?.duration === "once" && 2} {couponInfos?.duration === "repeating" && couponInfos?.durationInMonths + 1}º {formattedPlanInterval(checkoutInfos?.interval, true)} {!hasSubscribed && "e 7º dia"}{t('username.couponDuration', { returnObjects: true })[1]}{checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}.
               </Text>
             }
 
             <Box display={{base:"none", lg: "flex"}} marginTop="auto !important">
-              <Box
-                as="button"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                width={{base: "100%", lg: "fit-content"}}
-                height="40px"
-                borderRadius="8px"
-                padding="10px 34px"
-                border="1px solid"
-                cursor="pointer"
-                marginTop="24px !important"
-                backgroundColor="#FFF"
+              <Button
+                marginTop="24px"
                 color="#2B8C4D"
-                borderColor="#2B8C4D"
+                backgroundColor="#FFF"
+                border="1px solid #2B8C4D"
                 _hover={{
-                  borderColor: "#22703E",
-                  color: "#22703E"
+                  backgroundColor: "#FFF",
+                  color: "#22703E",
+                  borderColor: "#22703E"
                 }}
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="14px"
-                lineHeight="20px"
+                width={{base: "100%", lg: "fit-content"}}
                 onClick={() => {
                   PaymentModal.onClose()
                   EmailModal.onOpen()
                 }}
               >
                 {t('username.back')}
-              </Box>
+              </Button>
             </Box>
           </Stack>
 
@@ -808,35 +768,15 @@ export default function PlansAndPayment ({ userData }) {
             />
 
             <Box display={{base:"flex", lg: "none"}} marginTop="auto !important">
-              <Box
-                as="button"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
+              <Button                
                 width={{base: "100%", lg: "fit-content"}}
-                height="40px"
-                borderRadius="8px"
-                padding="10px 34px"
-                border="1px solid"
-                cursor="pointer"
-                backgroundColor="#FFF"
-                color="#2B8C4D"
-                borderColor="#2B8C4D"
-                _hover={{
-                  borderColor: "#22703E",
-                  color: "#22703E"
-                }}
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="14px"
-                lineHeight="20px"
                 onClick={() => {
                   PaymentModal.onClose()
                   EmailModal.onOpen()
                 }}
               >
                 {t('username.back')}
-              </Box>
+              </Button>
             </Box>
           </Box>
         </Stack>
@@ -855,7 +795,7 @@ export default function PlansAndPayment ({ userData }) {
           maxWidth:"1008px",
           margin: "24px",
         }}
-        isCentered={isMobileMod() ? false : true}
+        isCentered={{base: false, lg: true}}
       >
         <Stack spacing={0}>
           <Text
@@ -866,7 +806,7 @@ export default function PlansAndPayment ({ userData }) {
             fontSize="14px"
             lineHeight="20px"
           >
-            Passo 1 de 2
+            {t('username.step1of2')}
           </Text>
           <ModalCloseButton
             fontSize="14px"
@@ -884,7 +824,7 @@ export default function PlansAndPayment ({ userData }) {
             fontSize="24px"
             lineHeight="36px"
           >
-            E-mail de acesso ao BigQuery
+            {t('username.BQEmail')}
           </Text>
 
           <Text
@@ -895,7 +835,9 @@ export default function PlansAndPayment ({ userData }) {
             lineHeight="24px"
             marginBottom="32px !important"
           >
-            O seu e-mail precisa ser uma <Text as="span" fontWeight="500">Conta Google</Text> para garantir acesso exclusivo aos dados pelo BigQuery. Já preenchemos com o e-mail que você usou ao criar sua conta na nossa plataforma. Caso necessite usar outro e-mail para acessar o BigQuery, basta editá-lo abaixo.
+            {t('username.BQEmailDescription1')}
+            <Text as="span" fontWeight="500">{t('username.BQEmailDescription2')}</Text> 
+            {t('username.BQEmailDescription3')}
           </Text>
 
           <Text
@@ -906,7 +848,7 @@ export default function PlansAndPayment ({ userData }) {
             lineHeight="24px"
             marginBottom="8px !important"
           >
-            E-mail de acesso
+            {t('username.BQEmail')}
           </Text>
 
           <Stack
@@ -951,7 +893,7 @@ export default function PlansAndPayment ({ userData }) {
                 width="21px"
                 height="21px"
                 fill="#BF3434"
-              /> Por favor, insira um e-mail válido.
+              /> {t('username.pleaseEnterValidEmail')}
             </Text>
           }
         </Stack>
@@ -963,68 +905,32 @@ export default function PlansAndPayment ({ userData }) {
           justifyContent="end"
           flexDirection={{base: "column-reverse", lg:"row"}}
         >
-          <Box
-            as="button"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            width={{base: "100%", lg:"fit-content"}}
-            height="40px"
-            borderRadius="8px"
-            padding="10px 34px"
-            border="1px solid"
-            cursor="pointer"
-            backgroundColor="#FFF"
+          <Button
             color="#2B8C4D"
-            borderColor="#2B8C4D"
+            backgroundColor="#FFF"
+            border="1px solid #2B8C4D"
             _hover={{
-              borderColor: "#22703E",
-              color: "#22703E"
+              backgroundColor: "#FFF",
+              color: "#22703E",
+              borderColor: "#22703E"
             }}
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="14px"
-            lineHeight="20px"
+            width={{base: "100%", lg:"fit-content"}}
             onClick={() => {
               setEmailGCP(userData?.gcpEmail || userData?.email)
               setErrEmailGCP(false)
               EmailModal.onClose()
-            
             }}
           >
-            Cancelar
-          </Box>
+            {t('username.cancel')}
+          </Button>
 
-          <Box
-            as="button"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
+          <Button
             width={{base: "100%", lg:"fit-content"}}
-            height="40px"
-            borderRadius="8px"
-            padding="10px 34px"
-            border="1px solid"
-            cursor="pointer"
-            backgroundColor="#2B8C4D"
-            color="#FFF"
-            borderColor="#2B8C4D"
-            _hover={{
-              borderColor: "#22703E",
-              backgroundColor: "#22703E"
-            }}
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="14px"
-            lineHeight="20px"
             onClick={() => handlerEmailGcp()}
+            isLoading={isLoadingEmailChange}
           >
-            {isLoadingEmailChange ?
-              <Spinner/>
-              :
-              "Próximo"
-            }
-          </Box>
+            {t('username.nextStep')}
+          </Button>
         </Stack>
       </ModalGeneral>
 
@@ -1079,80 +985,42 @@ export default function PlansAndPayment ({ userData }) {
             lineHeight="24px"
             color="#464A51"
           >
-            O acesso aos dados foi concedido para o e-mail <Text as="span" fontWeight="500">{emailGCP}</Text>. Se precisar alterar o e-mail de acesso, você pode fazer isso na seção “BigQuery” das configurações da sua conta.
-            Em caso de dúvida, <Text as="a" href="/contato" target="_self" color="#0068C5" _hover={{color: "#0057A4"}}>entre em contato com nosso suporte.</Text>
+            {t('username.BQEmailDescription4')} <Text as="span" fontWeight="500">{emailGCP}</Text>.
+            {t('username.BQEmailDescription5')}
+
+            {t('username.BQEmailDescription6')} <Text as="a" href="/contact" target="_self" color="#0068C5" _hover={{color: "#0057A4"}}>{t('username.BQEmailDescription7')}</Text>
           </Text>
         </Stack>
 
         <Stack
-          flexDirection={isMobileMod() ? "column-reverse" : "row"}
+          flexDirection={{base: "column-reverse", lg: "row"}}
           spacing={0}
           gap="24px"
           width="100%"
         >
-          <Box
-            as="button"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            width={{base:"100%", lg: "50%"}}
-            height="40px"
-            borderRadius="8px"
-            padding="10px 34px"
-            border="1px solid"
-            cursor="pointer"
-            marginTop="auto !important"
-            backgroundColor="#FFF"
+          <Button
             color="#2B8C4D"
-            borderColor="#2B8C4D"
+            backgroundColor="#FFF"
+            border="1px solid #2B8C4D"
             _hover={{
-              borderColor: "#22703E",
-              color: "#22703E"
+              backgroundColor: "#FFF",
+              color: "#22703E",
+              borderColor: "#22703E"
             }}
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="14px"
-            lineHeight="20px"
-            onClick={() => window.open(`/user/${userData?.username}?big_query`, "_self")}
-          >
-            {isLoading ?
-              <Spinner/>
-              :
-              t('username.continueSettings')
-            }
-          </Box>
-
-          <Box
-            as="button"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
             width={{base:"100%", lg: "50%"}}
-            height="40px"
-            borderRadius="8px"
-            padding="10px 34px"
-            border="1px solid"
-            cursor="pointer"
-            marginTop="auto !important"
-            backgroundColor="#2B8C4D"
-            color="#FFF"
-            borderColor="#2B8C4D"
-            _hover={{
-              borderColor: "#22703E",
-              backgroundColor: "#22703E"
-            }}
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="14px"
-            lineHeight="20px"
-            onClick={() => setIsLoadingH(true)}
+            onClick={() => window.open(`/user/${userData?.username}?big_query`, "_self")}
+            isLoading={isLoading}
           >
-            {isLoadingH ?
-              <Spinner/>
-              :
-              t('username.goToHomepage')
-            }
-          </Box>
+            {t('username.continueSettings')}
+          </Button>
+
+          <Button
+            width={{base:"100%", lg: "50%"}}
+            onClick={() => setIsLoadingH(true)}
+            isLoading={isLoadingH}
+          >
+            {t('username.goToHomepage')}
+          </Button>
         </Stack>
       </ModalGeneral>
 
@@ -1185,35 +1053,34 @@ export default function PlansAndPayment ({ userData }) {
           <ErrIcon
             width="90px"
             height="64px"
-            fill="#FF8484"
+            fill="#BF3434"
           />
           <Text
-            fontFamily="Ubuntu"
-            fontWeight="400"
+            fontFamily="Roboto"
+            fontWeight="500"
             fontSize="24px"
-            lineHeight="40px"
+            lineHeight="36px"
             color="#252A32"
-          >
-            {t('username.paymentFailed')}
-          </Text>
+          >{t('username.paymentFailed')}</Text>
           <Text
-            fontFamily="Ubuntu"
+            fontFamily="Roboto"
             fontWeight="400"
-            fontSize="16px"
-            lineHeight="22px"
-            textAlign="center"
-            letterSpacing="0.2px"
-            color="#7D7D7D"
+            fontSize="14px"
+            lineHeight="20px"
+            color="#464A51"
+            marginBottom="8px"
           >
             {t('username.paymentError')}
             <Link
               display="inline"
-              color="#42B0FF"
-              fontFamily="ubuntu"
-              fontWeight="600"
-              fontSize="16px"
-              lineHeight="30px"
-              letterSpacing="0.2px"
+              color="#0068C5"
+              _hover={{
+                color: "#0057A4"
+              }}
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              lineHeight="20px"
               href="/contato"
               target="_self"
               marginLeft="2px"
@@ -1223,18 +1090,16 @@ export default function PlansAndPayment ({ userData }) {
         </Stack>
 
         <Stack
-          width="100%"
+          width={{base: "100%", lg: "fit-content"}}
           alignItems="center"
           spacing={0}
         >
-          <RoundedButton
-            borderRadius="30px"
-            width="fit-content"
-            _hover={{transform: "none", opacity: 0.8}}
+          <Button
+            width={{base: "100%", lg: "fit-content"}}
             onClick={() => ErroPaymentModal.onClose()}
           >
             {t('username.understood')}
-          </RoundedButton>
+          </Button>
         </Stack>
       </ModalGeneral>
 
@@ -1243,17 +1108,17 @@ export default function PlansAndPayment ({ userData }) {
         isOpen={PlansModal.isOpen}
         onClose={PlansModal.onClose}
         propsModal={{
-          scrollBehavior: isMobileMod() ? "outside" : "inside",
+          scrollBehavior: {base: "outside", lg: "inside"}
         }}
         propsModalContent={{
           maxWidth: "fit-content",
           minWidth: "fit-content",
           maxHeight: "fit-content",
-          margin: isMobileMod() ? "0" : "24px",
+          margin: {base: "0", lg: "24px"},
           padding: "32px 22px 26px 22px",
-          borderRadius: isMobileMod() ? "0" : "20px",
+          borderRadius: {base: "0", lg: "20px"},
         }}
-        isCentered={isMobileMod() ? false : true}
+        isCentered={{base: false, lg: true}}
       >
         <Stack spacing={0} marginBottom="40px">
           <Text
@@ -1324,10 +1189,10 @@ export default function PlansAndPayment ({ userData }) {
           </Box>
 
           <Stack
-            display={isMobileMod() ? "flex" : {base: "flex", lg: "grid"}}
+            display={{base: "flex", lg: "grid"}}
             gridTemplateColumns="repeat(3, 320px)"
             gridTemplateRows="1fr"
-            alignItems={isMobileMod() ? "center" : {base: "center", lg: "inherit"}}
+            alignItems={{base: "center", lg: "inherit"}}
             padding="0 10px 6px"
             justifyContent="center"
             justifyItems="center"
@@ -1340,12 +1205,12 @@ export default function PlansAndPayment ({ userData }) {
               price={"0"}
               textResource={t('username.resources')}
               resources={[
-                {name: "Tabelas tratadas"},
-                {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
-                {name: "Acesso em nuvem"},
-                {name: "Acesso via SQL, Python e R"},
-                {name: "Integração com ferramentas BI"},
-                {name: "Download direto até 100 MB", tooltip: "Esse limite não se aplica ao acesso via SQL, Python e R."},
+                {name: t('username.processedTables')},
+                {name: t('username.integratedData'), tooltip: t('username.integratedDataTooltip')},
+                {name: t('username.cloudAccess')},
+                {name: t('username.sqlPythonRAccess')},
+                {name: t('username.biIntegration')},
+                {name: t('username.directDownloadLimit'), tooltip: t('username.directDownloadLimitTooltip')},
               ]}
               button={{
                 text: t('username.exploreFeatures'),
@@ -1409,11 +1274,15 @@ export default function PlansAndPayment ({ userData }) {
         <Stack
           spacing={0}
           marginBottom="16px"
-          height={isMobileMod() ? "100%" : "fit-content"}
+          height={{base: "100%", lg: "fit-content"}}
         >
-          <SectionTitle lineHeight={isMobileMod() ? "32px" : "40px"}>
-            {t('username.planChange')}
-          </SectionTitle>
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="24px"
+            lineHeight="36px"
+            color="#252A32"
+          >{t('username.planChange')}</Text>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
@@ -1423,28 +1292,25 @@ export default function PlansAndPayment ({ userData }) {
         </Stack>
 
         <Stack spacing="24px" marginBottom="16px">
-          <ExtraInfoTextForm fontSize="16px" lineHeight="24px" letterSpacing="0.2px" color="#464A51">
+          <ExtraInfoTextForm>
             {t('username.changePlanInstructions')}
           </ExtraInfoTextForm>
         </Stack>
 
         <Stack
-          flexDirection={isMobileMod() ? "column-reverse" : "row"}
           spacing={0}
           gap="24px"
-          width={isMobileMod() ? "100%" : "fit-content"}
+          width={{base: "100%", lg: "fit-content"}}
         >
-          <RoundedButton
-            borderRadius="30px"
-            width={isMobileMod() ? "100%" : "fit-content"}
-            _hover={{transform: "none", opacity: 0.8}}
+          <Button
+            width={{base: "100%", lg: "fit-content"}}
             onClick={() => {
               AlertChangePlanModal.onClose()
               window.open("/contato", "_self")
             }}
           >
             {t('username.contactUs')}
-          </RoundedButton>
+          </Button>
         </Stack>
       </ModalGeneral>
 
@@ -1457,11 +1323,15 @@ export default function PlansAndPayment ({ userData }) {
         <Stack
           spacing={0}
           marginBottom="16px"
-          height={isMobileMod() ? "100%" : "fit-content"}
         >
-          <SectionTitle lineHeight={isMobileMod() ? "32px" : "40px"}>
-            {t('username.confirmPlanCancellation')}
-          </SectionTitle>
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="24px"
+            lineHeight="36px"
+            color="#252A32"
+            marginRight="24px"
+          >{t('username.confirmPlanCancellation')}</Text>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
@@ -1470,39 +1340,38 @@ export default function PlansAndPayment ({ userData }) {
           />
         </Stack>
 
-        <Stack/>
-
         <Stack
-          flexDirection={isMobileMod() ? "column-reverse" : "row"}
+          flexDirection={{base: "column-reverse", lg: "row"}}
           spacing={0}
-          gap="24px"
-          width={isMobileMod() ? "100%" : "fit-content"}
+          gap="16px"
+          marginLeft="auto"
+          width={{base:"100%", lg: "300px"}}
         >
-          <RoundedButton
-            borderRadius="30px"
-            backgroundColor="#FFF"
-            border="1px solid #FF8484"
-            color="#FF8484"
-            width={isMobileMod() ? "100%" : "fit-content"}
-            _hover={{transform: "none", opacity: 0.8}}
+          <Button
+            width="100%"
+            border="1px solid #BF3434"
+            color="#BF3434"
+            backgroundColor="#fff"
+            _hover={{
+              color: "#992A2A",
+              borderColor: "#992A2A"
+            }}
             onClick={() => CancelModalPlan.onClose()}
           >
             {t('username.back')}
-          </RoundedButton>
+          </Button>
 
-          <RoundedButton
-            borderRadius="30px"
-            backgroundColor="#FF8484"
-            width={isMobileMod() ? "100%" : ""}
-            _hover={{transform: "none", opacity: 0.8}}
+          <Button
+            width="100%"
+            backgroundColor="#BF3434"
+            _hover={{
+              backgroundColor: "#992A2A",
+            }}
             onClick={() => setIsLoadingCanSub(true)}
+            isLoading={isLoadingCanSub}
           >
-            {isLoadingCanSub ?
-              <Spinner />
-            :
-              t('username.cancelPlan')
-            }
-          </RoundedButton>
+            {t('username.cancelPlan')}
+          </Button>
         </Stack>
       </ModalGeneral>
 
@@ -1510,12 +1379,12 @@ export default function PlansAndPayment ({ userData }) {
         <Stack
           width="100%"
           spacing={0}
-          flexDirection={isMobileMod() ? "column" : "row"}
+          flexDirection={{base: "column", lg: "row"}}
           justifyContent="space-between"
         >
           <Stack
             spacing="8px"
-            marginBottom={isMobileMod() ? "16px" : "0"}
+            marginBottom={{base: "16px", lg: "0"}}
           >
             <Badge
               width="fit-content"
@@ -1541,10 +1410,10 @@ export default function PlansAndPayment ({ userData }) {
             >
               <Text
                 color="#252A32"
-                fontFamily="Ubuntu"
-                fontSize="28px"
+                fontFamily="Roboto"
+                fontSize="18px"
                 fontWeight="500"
-                lineHeight="36px"
+                lineHeight="28px"
               >{controlResource().title}</Text>
               <Text
                 fontFamily="Roboto"
@@ -1560,15 +1429,16 @@ export default function PlansAndPayment ({ userData }) {
 
             <Box display={subscriptionInfo ? "flex" : "none"}>
               <Text
-                fontFamily="Ubuntu"
+                fontFamily="Roboto"
                 fontWeight="400"
-                fontSize="16px"
-                lineHeight="22px"
-                color="#252A32"
+                fontSize="14px"
+                lineHeight="20px"
+                color="#71757A"
               >
-                {subscriptionInfo?.canceledAt ? t('username.planAccessUntil') : t('username.nextAutoRenewal')}: <Text
+                {subscriptionInfo?.canceledAt ? t('username.planAccessUntil') : t('username.nextAutoRenewal')}<Text
                   as="span"
                   fontWeight="500"
+                  color="#464A51"
                 >
                   {formatTimeStamp(subscriptionInfo?.canceledAt ? subscriptionInfo?.canceledAt : subscriptionInfo?.nextBillingCycle)}
                 </Text>
@@ -1579,53 +1449,48 @@ export default function PlansAndPayment ({ userData }) {
           <Stack
             spacing={0}
             gap="24px"
-            flexDirection={isMobileMod() ? "column-reverse" : "row"}
+            flexDirection={{base: "column-reverse", lg: "row"}}
           >
-            <RoundedButton
-              borderRadius="30px"
-              backgroundColor="#FFF"
-              border="1px solid #42B0FF"
-              color="#42B0FF"
-              width={isMobileMod() ? "100%" : "fit-content"}
-              _hover={{transform: "none", opacity: 0.8}}
+            <Button
+              width={{base: "100%", lg: "fit-content"}}
               onClick={() => controlResource().buttons[0].onClick()}
               {...controlResource()?.buttons?.[0]?.props}
-            >{controlResource().buttons[0].text}
-            </RoundedButton>
+            >
+              {controlResource().buttons[0].text}
+            </Button>
           </Stack>
         </Stack>
 
         <Stack
           spacing={0}
           gap="64px"
-          flexDirection={isMobileMod() ? "column" : {base: "column", lg: "row"}}
+          flexDirection={{base: "column", lg: "row"}}
         >
           <Stack minWidth="350px" spacing="8px">
             <Text
-              color="#7D7D7D"
-              fontFamily="Ubuntu"
-              fontSize="16px"
+              color="#464A51"
+              fontFamily="Roboto"
+              fontSize="14px"
               fontWeight="400"
-              lineHeight="16px"
-              letterSpacing="0.2px"
+              lineHeight="20px"
               marginBottom="8px"
             >{t('username.includes')}</Text>
             {defaultResource.resources.map((elm, index) => {
               if(elm === "") return
-              return <IncludesFeature elm={elm} index={index} key={index}/>
+              return <ListFeature elm={elm} index={index} key={index}/>
             })}
             {subscriptionInfo?.stripeSubscription === "bd_pro" && 
               planResource.resources.map((elm, index) => {
-                return <IncludesFeature elm={elm} index={index} key={index}/>
+                return <ListFeature elm={elm} index={index} key={index}/>
               })
             }
             {subscriptionInfo?.stripeSubscription === "bd_pro_empresas" &&
               <>
                 {resources["bd_pro"].resources.map((elm, index) => {
-                  return <IncludesFeature elm={elm} index={index} key={index}/>
+                  return <ListFeature elm={elm} index={index} key={index}/>
                 })}
                 {planResource.resources.map((elm, index) => {
-                  return <IncludesFeature elm={elm} index={index} key={index}/>
+                  return <ListFeature elm={elm} index={index} key={index}/>
                 })}
               </>
             }
@@ -1634,39 +1499,42 @@ export default function PlansAndPayment ({ userData }) {
           <Stack spacing="8px">
             {subscriptionInfo?.stripeSubscription !== "bd_pro_empresas" &&
               <Text
-                color="#7D7D7D"
-                fontFamily="Ubuntu"
-                fontSize="16px"
+                color="#464A51"
+                fontFamily="Roboto"
+                fontSize="14px"
                 fontWeight="400"
-                lineHeight="16px"
-                letterSpacing="0.2px"
+                lineHeight="20px"
                 marginBottom="8px"
               >{t('username.doesNotInclude')}</Text>}
 
               {!planActive && 
                 <>
                   {resources["bd_pro"].resources.map((elm, index) => {
-                    return <NotIncludesFeature  elm={elm} index={index} key={index}/>
+                    return <ListFeature notIncludes elm={elm} index={index} key={index}/>
                   })}
                   {resources["bd_pro_empresas"].resources.map((elm, index) => {
-                    return <NotIncludesFeature  elm={elm} index={index} key={index}/>
+                    return <ListFeature notIncludes elm={elm} index={index} key={index}/>
                   })}
                 </>
               }
 
               {subscriptionInfo?.stripeSubscription === "bd_pro" &&
                 resources["bd_pro_empresas"].resources.map((elm, index) => {
-                  return <NotIncludesFeature  elm={elm} index={index} key={index}/>
+                  return <ListFeature notIncludes elm={elm} index={index} key={index}/>
                 })
               }
 
             {!subscriptionInfo?.isActive &&
-              <ButtonSimple
-                color="#42B0FF"
+              <Text
+                as="button"
+                display="flex"
+                justifyContent="start"
+                fontFamily="Roboto"
+                lineHeight="20px"
+                color="#0068C5"
                 fontSize="14px"
-                fontWeight="700"
-                letterSpacing="0.3px"
-                _hover={{opacity: 0.7}}
+                fontWeight="400"
+                _hover={{color: "#0057A4"}}
                 marginTop="16px !important"
                 onClick={() => {
                   PlansModal.onOpen()
@@ -1674,7 +1542,7 @@ export default function PlansAndPayment ({ userData }) {
                 }}
               >
                 {t('username.viewAllAndComparePlans')}
-              </ButtonSimple>
+              </Text>
             }
           </Stack>
         </Stack>

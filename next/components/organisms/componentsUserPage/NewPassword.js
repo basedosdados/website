@@ -217,7 +217,7 @@ export default function NewPassword({ userInfo }) {
             height="40px"
             fontSize="14px"
             borderRadius="16px"
-            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+            _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
             styleElmRight={{
               width: "50px",
               height: "40px",
@@ -240,8 +240,8 @@ export default function NewPassword({ userInfo }) {
               />
             }
           />
-          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
-            <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.password}
+          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
+            <Exclamation marginTop="4px" fill="#BF3434"/>{errors.password}
           </FormErrorMessage>
           <ButtonSimple
             display={isMobileMod() ? "flex" : "none"}
@@ -270,7 +270,7 @@ export default function NewPassword({ userInfo }) {
             height="40px"
             fontSize="14px"
             borderRadius="16px"
-            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+            _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
             styleElmRight={{
               width: "50px",
               height: "40px",
@@ -295,7 +295,7 @@ export default function NewPassword({ userInfo }) {
           />
           <Text 
             margin="8px 0"
-            color= { errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#D93B3B" : "#7D7D7D" : "#7D7D7D" }
+            color= { errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#BF3434" : "#7D7D7D" : "#7D7D7D" }
             fontFamily= "Ubuntu"
             fontSize= "12px"
             fontWeight= "400"
@@ -305,17 +305,17 @@ export default function NewPassword({ userInfo }) {
             flexDirection="row"
             gap="4px"
             alignItems="flex-start"
-          ><Exclamation width="14px" height="14px" fill="#D93B3B" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> {t('username.passwordRequirements')}</Text>
+          ><Exclamation width="14px" height="14px" fill="#BF3434" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> {t('username.passwordRequirements')}</Text>
           <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
-            <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>{t('username.minCharacters')}</ListItem>
-            <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>{t('username.uppercaseLetter')}</ListItem>
-            <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>{t('username.lowercaseLetter')}</ListItem>
-            <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>{t('username.digit')}</ListItem>
-            <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>{t('username.specialCharacter')}</ListItem>
+            <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#BF3434" :"#7D7D7D"}>{t('username.minCharacters')}</ListItem>
+            <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#BF3434" :"#7D7D7D"}>{t('username.uppercaseLetter')}</ListItem>
+            <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#BF3434" :"#7D7D7D"}>{t('username.lowercaseLetter')}</ListItem>
+            <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#BF3434" :"#7D7D7D"}>{t('username.digit')}</ListItem>
+            <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#BF3434" :"#7D7D7D"}>{t('username.specialCharacter')}</ListItem>
           </UnorderedList>
           {errors.newPassword &&
-            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
-              <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.newPassword}
+            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
+              <Exclamation marginTop="4px" fill="#BF3434"/>{errors.newPassword}
             </FormErrorMessage>
           }
         </FormControl>
@@ -334,7 +334,7 @@ export default function NewPassword({ userInfo }) {
             height="40px"
             fontSize="14px"
             borderRadius="16px"
-            _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+            _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
             styleElmRight={{
               width: "50px",
               height: "40px",
@@ -357,8 +357,8 @@ export default function NewPassword({ userInfo }) {
               />
             }
           />
-          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
-            <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.confirmPassword}
+          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
+            <Exclamation marginTop="4px" fill="#BF3434"/>{errors.confirmPassword}
           </FormErrorMessage>
         </FormControl>
 

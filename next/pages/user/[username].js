@@ -157,7 +157,7 @@ export default function UserPage({ getUser }) {
             {t('username.settings')}
           </Text>
 
-          <Stack width="267px" >
+          <Stack width="267px" spacing={0}>
             {choices.map((section, index) => (
               <Stack
                 key={index}
