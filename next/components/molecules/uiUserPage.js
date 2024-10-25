@@ -35,11 +35,10 @@ export function TitleTextForm ({ children, ...props }) {
   return (
     <Text
       color="#252A32"
-      fontFamily="ubuntu"
-      letterSpacing="0.2px"
+      fontFamily="Roboto"
       fontSize="16px"
-      fontWeight="400"
-      lineHeight="16px"
+      lineHeight="24px"
+      fontWeight="500"
       marginBottom="8px"
       {...props}
     >{children}</Text>
@@ -66,12 +65,12 @@ export  function SkStack ({ isLoaded, children, ...props }) {
 export function ExtraInfoTextForm ({children, ...props}) {
   return (
     <Text
-      color="#7D7D7D"
-      fontFamily="ubuntu"
-      letterSpacing="0.3px"
-      fontSize="12px"
+      fontFamily="Roboto"
       fontWeight="400"
-      lineHeight="16px"
+      fontSize="14px"
+      lineHeight="20px"
+      color="#464A51"
+      marginBottom="8px"
       {...props}
     >{children}</Text>
   )

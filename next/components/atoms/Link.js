@@ -15,7 +15,7 @@ export default function Link({
   return (
     <NextLink href={href || '#'} locale={locale} passHref legacyBehavior>
       <Text
-        as="span"
+        as="a"
         display="flex"
         flexDirection="row"
         alignItems="center"

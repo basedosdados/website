@@ -200,7 +200,7 @@ export default function UserPage({ getUser }) {
         <Stack
           flex={1}
           width="100%"
-          padding="56px 0 0 24px"
+          padding={{base: "", lg: "56px 0 0 24px"}}
           spacing={0}
         >
           <Text

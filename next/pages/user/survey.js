@@ -246,9 +246,9 @@ export default function Survey() {
             marginBottom="40px !important"
             alignItems="center"
             gap="8px"
-            color="#D93B3B"
+            color="#BF3434"
           >
-            <Exclamation fill="#D93B3B" /> {err}
+            <Exclamation fill="#BF3434" /> {err}
           </Text>
         )}
 

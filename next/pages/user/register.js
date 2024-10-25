@@ -209,10 +209,10 @@ export default function Register() {
                 height="40px"
                 fontSize="14px"
                 borderRadius="16px"
-                _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+                _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
               />
-              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
-                <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.firstName}
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
+                <Exclamation marginTop="4px" fill="#BF3434"/>{errors.firstName}
               </FormErrorMessage>
             </FormControl>
 
@@ -228,10 +228,10 @@ export default function Register() {
                 height="40px"
                 fontSize="14px"
                 borderRadius="16px"
-                _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+                _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
               />
-              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
-                <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.lastName}
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
+                <Exclamation marginTop="4px" fill="#BF3434"/>{errors.lastName}
               </FormErrorMessage>
             </FormControl>
 
@@ -249,10 +249,10 @@ export default function Register() {
                 height="40px"
                 fontSize="14px"
                 borderRadius="16px"
-                _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+                _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
               />
-              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
-                <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.email}
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
+                <Exclamation marginTop="4px" fill="#BF3434"/>{errors.email}
               </FormErrorMessage>
             </FormControl>
 
@@ -270,10 +270,10 @@ export default function Register() {
                 height="40px"
                 fontSize="14px"
                 borderRadius="16px"
-                _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+                _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
               />
-              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
-                <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.username}
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
+                <Exclamation marginTop="4px" fill="#BF3434"/>{errors.username}
               </FormErrorMessage>
             </FormControl>
 
@@ -291,7 +291,7 @@ export default function Register() {
                 height="40px"
                 fontSize="14px"
                 borderRadius="16px"
-                _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+                _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
                 styleElmRight={{
                   width: "50px",
                   height: "40px",
@@ -316,7 +316,7 @@ export default function Register() {
               />
               <Text 
                 margin="8px 0"
-                color= { errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#D93B3B" : "#7D7D7D" : "#7D7D7D" }
+                color= { errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#BF3434" : "#7D7D7D" : "#7D7D7D" }
                 fontFamily= "Ubuntu"
                 fontSize= "12px"
                 fontWeight= "400"
@@ -326,13 +326,13 @@ export default function Register() {
                 flexDirection="row"
                 gap="4px"
                 alignItems="flex-start"
-              ><Exclamation width="14px" height="14px" fill="#D93B3B" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> {t('signup.errors.password.requirements')}</Text>
+              ><Exclamation width="14px" height="14px" fill="#BF3434" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> {t('signup.errors.password.requirements')}</Text>
               <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
-                <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#D93B3B" :"#7D7D7D"}>{t('signup.errors.password.chars')}</ListItem>
-                <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#D93B3B" :"#7D7D7D"}>{t('signup.errors.password.uppercase')}</ListItem>
-                <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#D93B3B" :"#7D7D7D"}>{t('signup.errors.password.lowercase')}</ListItem>
-                <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#D93B3B" :"#7D7D7D"}>{t('signup.errors.password.digit')}</ListItem>
-                <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#D93B3B" :"#7D7D7D"}>{t('signup.errors.password.special')}</ListItem>
+                <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#BF3434" :"#7D7D7D"}>{t('signup.errors.password.chars')}</ListItem>
+                <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#BF3434" :"#7D7D7D"}>{t('signup.errors.password.uppercase')}</ListItem>
+                <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#BF3434" :"#7D7D7D"}>{t('signup.errors.password.lowercase')}</ListItem>
+                <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#BF3434" :"#7D7D7D"}>{t('signup.errors.password.digit')}</ListItem>
+                <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#BF3434" :"#7D7D7D"}>{t('signup.errors.password.special')}</ListItem>
               </UnorderedList>
             </FormControl>
 
@@ -350,7 +350,7 @@ export default function Register() {
                 height="40px"
                 fontSize="14px"
                 borderRadius="16px"
-                _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+                _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
                 styleElmRight={{
                   width: "50px",
                   height: "40px",
@@ -373,8 +373,8 @@ export default function Register() {
                   />
                 }
               />
-              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
-                <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.confirmPassword}
+              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
+                <Exclamation marginTop="4px" fill="#BF3434"/>{errors.confirmPassword}
               </FormErrorMessage>
             </FormControl>
           </VStack>
@@ -384,15 +384,15 @@ export default function Register() {
             width="100%"
             borderRadius="30px"
             marginTop="24px !important"
-            backgroundColor={errors?.register ? "#D93B3B" : "#42B0FF"}
+            backgroundColor={errors?.register ? "#BF3434" : "#42B0FF"}
           >
             {t('signup.register')}
           </Button>
         </form>
 
         {errors?.register &&
-          <Text fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
-            <Exclamation marginTop="4px" fill="#D93B3B"/>{errors.register}
+          <Text fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
+            <Exclamation marginTop="4px" fill="#BF3434"/>{errors.register}
           </Text>
         }
 

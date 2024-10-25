@@ -444,7 +444,7 @@ export default function ProfileConfiguration({ userInfo }) {
                   </Box>
                 </PopoverTrigger>
                 <PopoverContent
-                  maxWidth="160px"
+                  width="100%"
                   boxShadow="0 1.6px 16px 0 rgba(100, 96, 103, 0.16) !important"
                 >
                   <PopoverArrow/>
@@ -461,7 +461,7 @@ export default function ProfileConfiguration({ userInfo }) {
                         fontWeight="400"
                         color="#252A32"
                         margin="0"
-                        _hover={{ color: "#42B0FF" }}
+                        _hover={{ color: "#2B8C4D" }}
                       >{t('username.updatePicture')}</FormLabel>
                       <Input
                         key={fileInputKey}
@@ -480,7 +480,7 @@ export default function ProfileConfiguration({ userInfo }) {
                       letterSpacing="0.5px"
                       fontWeight="400"
                       color="#252A32"
-                      _hover={{ color: "#42B0FF" }}
+                      _hover={{ color: "#2B8C4D" }}
                       onClick={() => hanlderRemovePicture()}
                     >{t('username.removePicture')}</Text>
                   </PopoverBody>

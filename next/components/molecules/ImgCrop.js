@@ -7,7 +7,8 @@ import {
   ModalBody,
   ModalFooter,
   ModalCloseButton,
-  Spinner
+  Text,
+  Box
 } from '@chakra-ui/react';
 import { useState, useEffect, useRef } from 'react';
 import ReactCrop, {
@@ -15,12 +16,10 @@ import ReactCrop, {
   makeAspectCrop
 } from 'react-image-crop';
 import cookies from 'js-cookie';
-import { isMobileMod } from '../../hooks/useCheckMobile.hook';
+import { useTranslation } from "react-i18next";
+import { Button } from './uiUserPage';
 
 import updatePictureProfile from '../../pages/api/user/updatePictureProfile'
-
-import SectionTitle from '../atoms/SectionTitle';
-import RoundedButton from '../atoms/RoundedButton';
 import 'react-image-crop/dist/ReactCrop.css';
 import styles from "../../styles/imgCrop.module.css";
 
@@ -31,6 +30,7 @@ export default function CropImage ({
   id,
   username,
 }) {
+  const { t } = useTranslation('user');
   const imgRef = useRef(null)
   const [completedCrop, setCompletedCrop] = useState()
   const [crop, setCrop] = useState()
@@ -143,28 +143,30 @@ export default function CropImage ({
       isCentered
       margin="24px !important"
     >
+      <Box display={isLoading ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
       <ModalOverlay/>
       <ModalContent
         margin="24px"
-        minWidth={isMobileMod() ? "" : "536px"}
+        minWidth={{base: "", lg: "536px"}}
         boxSizing="content-box"
         padding="32px"
         borderRadius="20px"
       >
         <ModalHeader padding="0">
-          <Stack>
-            <SectionTitle
-              lineHeight="40px"
-            >Corte sua nova foto de perfil</SectionTitle>
-            <ModalCloseButton
-              display={isMobileMod() ? "none" : "flex"}
-              fontSize="14px"
-              top="24px"
-              right="26px"
-              _hover={{backgroundColor: "transparent", color:"#42B0FF"}}
-              onClick={onClose}
-            />
-          </Stack>
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="24px"
+            lineHeight="36px"
+            color="#252A32"
+          >{t('username.imgCropTitle')}</Text>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", opacity: 0.7}}
+            onClick={onClose}
+          />
         </ModalHeader>
 
         <ModalBody padding="0">
@@ -188,38 +190,37 @@ export default function CropImage ({
           </Stack>
         </ModalBody>
 
-        <ModalFooter padding="0" width={isMobileMod() ? "100%" : "auto"}>
+        <ModalFooter padding="0" width={{base: "100%", lg: "auto"}}>
           <Stack
-            flexDirection={isMobileMod() ? "column" : "row"}
+            flexDirection={{base: "column", lg: "row"}}
             spacing={0}
             gap="24px"
-            width={isMobileMod() ? "100%" : "fit-content"}
+            width={{base: "100%", lg: "fit-content"}}
           >
-            <RoundedButton
-              borderRadius="30px"
+            <Button
+              justifyContent="center"
+              width={{base: "100%", lg: "auto"}}
+              color="#2B8C4D"
               backgroundColor="#FFF"
-              border="1px solid #42B0FF"
-              color="#42B0FF"
-              width={isMobileMod() ? "100%" : "fit-content"}
-              _hover={{transform: "none", opacity: 0.8}}
+              border="1px solid #2B8C4D"
+              _hover={{
+                backgroundColor: "#FFF",
+                color: "#22703E",
+                borderColor: "#22703E"
+              }}
               onClick={onClose}
               isDisabled={isLoading}
             >
-              Cancelar
-            </RoundedButton>
-            <RoundedButton
-              marginTop="16px"
-              borderRadius="30px"
-              _hover={{transform: "none", opacity: 0.8}}
+              {t('username.imgCropButtonCancel')}
+            </Button>
+            <Button
+              justifyContent="center"
+              width={{base: "100%", lg: "auto"}}
               onClick={() => handlerUpdatePicture()}
-              isDisabled={isLoading}
+              isLoading={isLoading}
             >
-              {isLoading ?
-                <Spinner />
-              :
-                "Salvar"
-              }
-            </RoundedButton>
+              {t('username.imgCropButtonSave')}
+            </Button>
           </Stack>
         </ModalFooter>
       </ModalContent>
