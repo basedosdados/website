@@ -2,6 +2,8 @@
     "dataBasis": "Data Basis",
     "noName": "Unnamed dataset",
     "noDescription": "No description",
+    "readMore": "Read more",
+    "readLess": "Read less",
     "temporalCoverage": "Temporal coverage",
     "noCoverage": "No temporal coverage",
     "organization": "Organization",

@@ -680,7 +680,7 @@ function Support() {
             textAlign="center"
             margin="32px 0 !important"
           >
-            💰 {t('support.want_to_institutionally_support_bd')}
+            💰 {t('support.want_to_institutionally_support_db')}
             <Link
               display="inline"
               fontFamily="ubuntu"

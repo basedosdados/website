@@ -50,7 +50,7 @@
         "step_2": "Escolha a opção de pagamento com PIX;",
         "step_3": "Escaneie o QR Code ou digite a chave ao lado;",
         "step_4": "Faça sua doação!",
-        "want_to_institutionally_support_bd": "Gostaria de apoiar a BD institucionalmente? ",
+        "want_to_institutionally_support_db": "Gostaria de apoiar a BD institucionalmente? ",
         "contact_us": "Entre em contato conosco."
     },
     "edu": {
@@ -85,8 +85,8 @@
             "searchEngine": "Mecanismo de busca",
             "publicDatalake": "Datalake público",
             "dataPackages": "Pacotes",
-            "bdPro": "BD Pro",
-            "bdEdu": "BD Edu"
+            "DBPro": "BD Pro",
+            "DBEdu": "BD Edu"
         },
         "services": {
             "title": "SERVIÇOS",

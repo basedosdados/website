@@ -2,6 +2,8 @@
     "dataBasis": "Base dos Dados",
     "noName": "Conjunto sem nome",
     "noDescription": "Sem descrição",
+    "readMore": "Ler mais",
+    "readLess": "Ler menos",
     "notProvided": "Não informado",
     "temporalCoverage": "Cobertura temporal",
     "noCoverage": "Sem cobertura temporal",

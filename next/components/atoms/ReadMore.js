@@ -3,11 +3,13 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
+import { useTranslation } from 'next-i18next';
 
 export default function ReadMore({ children, id, ...props}) {
   const [isReadMore, setIsReadMore] = useState(false)
   const [isOverflowing, setIsOverflowing] = useState(false)
   const textRef = useRef(null)
+  const { t } = useTranslation('dataset');
 
   const modifiedChildren = `
     ${children.trim()}
@@ -26,7 +28,7 @@ export default function ReadMore({ children, id, ...props}) {
       "
       onmouseover="this.style.color='#0057A4'"
       onmouseout="this.style.color='#0068C5'"
-    >Ler menos</span>`
+    >${t('readLess')}</span>`
 
   useEffect(() => {
     if (textRef.current) {
@@ -85,7 +87,7 @@ export default function ReadMore({ children, id, ...props}) {
           bottom="0"
           right="0"
         >
-          <span style={{color:"#464A51", marginRight:"4px"}}>...</span>Ler mais
+          <span style={{color:"#464A51", marginRight:"4px"}}>...</span>{t('readMore')}
         </Text>
       }
     </Flex>

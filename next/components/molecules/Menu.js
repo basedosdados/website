@@ -293,7 +293,7 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
             padding="4px 8px"
             marginTop="10px !important"
           >
-            {isUserPro ? "Pro" : "Grátis"}
+            {isUserPro ? t('DBPro') : t('DBFree')}
           </Box>
         </Stack>
 
@@ -517,7 +517,7 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
               padding="4px 8px"
               marginTop="10px"
             >
-              {isUserPro ? "Pro" : "Grátis"}
+              {isUserPro ? t('DBPro') : t('DBFree')}
             </Box>
           </MenuItem>
 
@@ -992,7 +992,9 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       {
         icon: locale === 'en' ? <DBLogoProImage widthImage="54px"/> : <BDLogoProImage widthImage="54px"/>,
         name: [t('exclusive_data')],
-        href: "https://info.basedosdados.org/bd-pro"
+        href: locale === 'en' ? "https://info.basedosdados.org/en/bd-pro" :
+              locale === 'es' ? "https://info.basedosdados.org/es/bd-pro" :
+              "https://info.basedosdados.org/bd-pro"
       },
       {
         icon: locale === 'en' ? <DBLogoEduImage widthImage="54px"/> : <BDLogoEduImage widthImage="54px"/>,
@@ -1014,7 +1016,9 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     [t('institutional')]: [
       {name: [t('about_us')], href: "/about-us"},
       {name: [t('transparency')], href: "/transparency"},
-      {name: [t('newsletter')], href: "https://info.basedosdados.org/newsletter"},
+      {name: [t('newsletter')], href: locale === 'en' ? "https://info.basedosdados.org/en/newsletter" :
+                                      locale === 'es' ? "https://info.basedosdados.org/es/newsletter" :
+                                                        "https://info.basedosdados.org/newsletter"},
       {name: [t('jobs')], href: "https://info.basedosdados.org/carreiras"},
       {name: [t('faq')], href: "/faq"},
     ],

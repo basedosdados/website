@@ -87,6 +87,7 @@ function TextFooterSimple({children, ...props}) {
 
 export default function Footer({ template, ocult = false }) {
   const { t } = useTranslation('common');
+  const { locale } = useRouter();
 
   if(template === "simple") return (
     <VStack
@@ -194,14 +195,13 @@ export default function Footer({ template, ocult = false }) {
               <FooterLink href="https://basedosdados.github.io/mais/">
                 {t('footer.products.publicDatalake')}
               </FooterLink>
-              <FooterLink href="https://basedosdados.github.io/mais/access_data_packages/">
-                {t('footer.products.dataPackages')}
-              </FooterLink>
-              <FooterLink href="https://info.basedosdados.org/bd-pro">
-                {t('footer.products.bdPro')}
+              <FooterLink href={locale === 'en' ? "https://info.basedosdados.org/en/bd-pro" : 
+                                locale === 'es' ? "https://info.basedosdados.org/es/bd-pro" : 
+                                "https://info.basedosdados.org/bd-pro"}>
+                {t('footer.products.DBPro')}
               </FooterLink>
               <FooterLink href="https://info.basedosdados.org/bd-edu-sql">
-                {t('footer.products.bdEdu')}
+                {t('footer.products.DBEdu')}
               </FooterLink>
             </SectionCategories>
 
