@@ -24,7 +24,7 @@ import SectionTitle from "../components/atoms/SectionTitle";
 import SectionLink from "../components/atoms/SectionLink"
 import { ShadowBox } from "../components/atoms/ShadowBox";
 import RoundedButton from "../components/atoms/RoundedButton";
-import { ThemeTag } from "../components/atoms/ThemeTag";
+import { DatasetCardTag } from "../components/atoms/DatasetCardTag";
 import ThemeCatalog from "../components/molecules/ThemeCatalog";
 import { BePartner } from "../components/organisms/BePartner";
 import { MainPageTemplate } from "../components/templates/main";
@@ -196,7 +196,7 @@ function Hero({ dataThemeCatalog, locale }) {
                   </Text>
                 }
                 {tags.map((elm, i) => 
-                  <ThemeTag slug={elm} key={i} locale={locale}/>
+                  <DatasetCardTag slug={elm} key={i} locale={locale}/>
                 )}
               </HStack>
             </VStack>
