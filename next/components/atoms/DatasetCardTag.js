@@ -1,7 +1,7 @@
-import Link from '../atoms/Link';
+import Link from './Link';
 import { Tag } from '@chakra-ui/react';
 
-export function ThemeTag({ slug, locale, ...props }) {
+export function DatasetCardTag({ slug, name, locale, ...props }) {
   return (
     <Tag
       borderRadius="8px"
@@ -21,7 +21,7 @@ export function ThemeTag({ slug, locale, ...props }) {
         whiteSpace="nowrap"
         {...props}
       >
-        {slug}
+        {name}
       </Link>
     </Tag>
   );

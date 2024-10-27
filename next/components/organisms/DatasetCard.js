@@ -11,7 +11,7 @@ import { capitalize } from "lodash";
 import Card from "../molecules/Card";
 import { CategoryIcon } from "../atoms/CategoryIcon";
 import Link from "../atoms/Link";
-import { ThemeTag } from "../atoms/ThemeTag";
+import { DatasetCardTag } from "../atoms/DatasetCardTag";
 
 export default function DatasetCard({
   name,
@@ -157,9 +157,10 @@ export default function DatasetCard({
           margin="8px 0 16px"
         >
           {tags.length !== 0 && tags.slice(0,3).map((t, i) => (
-            <ThemeTag
+            <DatasetCardTag
               key={i}
               slug={t.slug}
+              name={t.name}
               locale={locale}
               display="block"
               aligntext="center"
