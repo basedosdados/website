@@ -120,7 +120,7 @@
             "fernando": {
                 "name": "Fernando Barbalho",
                 "position": "Científico de Datos del Tesoro Nacional",
-                "quote": "SiconfiBD es un paquete que trae de forma rápida y programática los datos de la Secretaría del Tesoro Nacional. El código es construido de forma open-source por el equipo del Tesoro y utiliza las tablas tratadas BD+ para componer funciones en R. ¿Cuál es el gasto de personal de los 100 municipios brasileños más poblados? Estas y más de otras 18 preguntas pueden ser consultadas directamente a través del paquete, sin necesidad de SQL."
+                "quote": "SiconfiBD es un paquete que trae de forma rápida y programática los datos de la Secretaría del Tesoro Nacional. El código es construido de forma open-source por el equipo del Tesoro y utiliza las tablas tratadas BD+ para componer funciones en R. ¿Cuál es el gasto de personal de los 100 municipios brasileños más poblados? Esta pregunta y más pueden ser consultadas directamente a través del paquete, sin necesidad de SQL."
             },
             "marina": {
                 "name": "Marina Barros",
@@ -130,7 +130,7 @@
             "amanda": {
                 "name": "Amanda de Albuquerque y Mariana Carvalho",
                 "position": "Cofundadoras de A Ponte",
-                "quote": "Creamos un producto importante nuestro, la Fotografía del Municipio, en asociación con BD. La Fotografía agrega varios indicadores socioeconómicos de los municipios brasileños. A Ponte hizo la planificación y el diseño del informe, mientras que BD se encargó de la parte técnica de visualización y gestión de datos. La asociación nos permitió avanzar rápidamente en el desarrollo de la herramienta y garantizó la alta calidad de datos que queríamos desde el principio."
+                "quote": "Creamos un producto importante de nuestro portfolio, la Fotografía del Municipio, en asociación con BD. La Fotografía agrega varios indicadores socioeconómicos de los municipios brasileños. A Ponte hizo la planificación y el diseño del informe, mientras que BD se encargó de la parte técnica de visualización y gestión de datos. La asociación nos permitió avanzar rápidamente en el desarrollo de la herramienta y garantizó la alta calidad de datos que queríamos desde el principio."
             }
         }
     }
