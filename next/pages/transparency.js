@@ -6,6 +6,7 @@ import {
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useTranslation } from 'next-i18next';
+import { useRouter } from "next/router";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
@@ -31,6 +32,7 @@ export async function getStaticProps({ locale }) {
 
 export default function Transparency({ pages }) {
   const { t } = useTranslation('transparency');
+  const { locale } = useRouter();
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
 
@@ -214,15 +216,17 @@ export default function Transparency({ pages }) {
         >
           {t('accountingDescription1')} {isMobileMod ? " " : <br/>} {t('accountingDescription2')}
         </BodyText>
-        <RoundedButton
+        <Link
+          as={RoundedButton}
           fontSize="15px"
           width="fit-content"
-          onClick={() => window.open(
-            "https://basedosdados.org/dataset/8b6c07fd-af78-44ad-8408-da57e6a0b3d4?table=26480073-cb94-41e2-9dfa-6b4ea76da9d9", "_blank"
-          )}
+          href="/dataset/8b6c07fd-af78-44ad-8408-da57e6a0b3d4?table=26480073-cb94-41e2-9dfa-6b4ea76da9d9"
+          target="_blank"
+          locale={locale}
+          color="#FFFFFF"
         >
           {t('accessButton')}
-        </RoundedButton>
+        </Link>
       </SectionBox>
 
       <SectionBox

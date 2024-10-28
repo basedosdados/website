@@ -274,9 +274,9 @@
         "id": "personal-data"
         }
     ],
-    "pageTitle": "Perguntas frequentes – Base dos Dados",
-    "pageDescription": "Aqui você encontra as respostas para as suas dúvidas sobre a Base dos Dados. Saiba mais sobre nossos dados, como acessá-los pelo BigQuery usando SQL ou com os pacotes Python e R agora mesmo.",
-    "title": "Perguntas frequentes",
+    "pageTitle": "Perguntas frecuentes – Base de los Datos",
+    "pageDescription": "Aquí encontrarás respuestas a tus preguntas sobre la Base de los Datos. Conoce más sobre nuestros datos, cómo acceder a ellos usando SQL con BigQuery o con los paquetes Python, R y Stata ahora mismo.",
+    "title": "Perguntas Frecuentes (en portugués)",
     "searchPlaceholder": "Pesquise",
     "categories": [
         "Dados",
@@ -286,7 +286,7 @@
         "BD Edu",
         "Institucional"
     ],
-    "noQuestionsFound": "Infelizmente, não encontramos nenhuma pergunta relacionada à sua busca.",
-    "notFoundQuestion": "Não encontrou sua pergunta?",
-    "contactUs": "Entre em contato"
+    "noQuestionsFound": "Infelizmente, no encontramos ninguna pregunta relacionada a su búsqueda.",
+    "notFoundQuestion": "No encontró su pregunta? ",
+    "contactUs": "Contactanos"
 }
