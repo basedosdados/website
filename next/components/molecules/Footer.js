@@ -192,7 +192,12 @@ export default function Footer({ template, ocult = false }) {
               <FooterLink target="_self" href="/dataset">
                 {t('footer.products.searchEngine')}
               </FooterLink>
-              <FooterLink href="https://basedosdados.github.io/mais/">
+              <FooterLink href={
+                            locale === "en" ? "https://basedosdados.github.io/mais/en" :
+                            locale === "es" ? "https://basedosdados.github.io/mais/es" :
+                            "https://basedosdados.github.io/mais"
+                          }
+              >
                 {t('footer.products.publicDatalake')}
               </FooterLink>
               <FooterLink href={locale === 'en' ? "https://info.basedosdados.org/en/bd-pro" : 
@@ -221,7 +226,12 @@ export default function Footer({ template, ocult = false }) {
             </SectionCategories>
 
             <SectionCategories title={t('footer.tutorials.title')} marginBottom={isMobileMod() && "24px !important"}>
-              <FooterLink href="https://basedosdados.github.io/mais/">
+              <FooterLink href={
+                            locale === "en" ? "https://basedosdados.github.io/mais/en" :
+                            locale === "es" ? "https://basedosdados.github.io/mais/es" :
+                            "https://basedosdados.github.io/mais"
+                          }
+              >
                 {t('footer.tutorials.documentation')}
               </FooterLink>
               <FooterLink href="https://www.youtube.com/watch?v=nGM2OwTUY_M&list=PLu5pyM8QY6hg3GpNCyCtSS3sUi4Jo8Pir">

@@ -232,7 +232,8 @@ function Hero({ dataThemeCatalog, locale }) {
 
 function Products() {
   const { t } = useTranslation('common');
-
+  const { locale } = useRouter();
+  
   return (
     <VStack
       width={{ base: "90%", lg: "85%" }}
@@ -363,7 +364,11 @@ function Products() {
 
               <SectionLink
                 marginTop="24px !important"
-                href={"https://basedosdados.github.io/mais/"}
+                href={
+                  locale === "en" ? "https://basedosdados.github.io/mais/en" :
+                  locale === "es" ? "https://basedosdados.github.io/mais/es" :
+                  "https://basedosdados.github.io/mais"
+                }
               >
                 {t('products.learn_how_to_access')}
               </SectionLink>

@@ -42,6 +42,7 @@ import DownloadIcon from "../../public/img/icons/downloadIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import ChevronIcon from "../../public/img/icons/chevronIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
+import Link from "../atoms/Link";
 
 export function CodeHighlight({ language, children }) {
   const textRef = useRef(null)
@@ -404,9 +405,9 @@ export default function DataInformationQuery({ resource }) {
                 type="info"
               >
                 {t('table.infoTranslationNotAvailable', { returnObjects: true })[0]}
-                <Text as="a" marginRight="4px" href="https://basedosdados.org/dataset/e083c9a2-1cee-4342-bedc-535cbad6f3cd?table=0308fbe0-270c-4135-9115-ea1100f400f6" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.infoTranslationNotAvailable', { returnObjects: true })[1]}</Text>
+                <Link href="https://basedosdados.org/dataset/e083c9a2-1cee-4342-bedc-535cbad6f3cd?table=0308fbe0-270c-4135-9115-ea1100f400f6" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.infoTranslationNotAvailable', { returnObjects: true })[1]}</Link>
                 {t('table.infoTranslationNotAvailable', { returnObjects: true })[2]}
-                <Text as="a" margin="0 4px" href="https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=dffb65ac-9df9-4151-94bf-88c45bfcb056" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.infoTranslationNotAvailable', { returnObjects: true })[3]}</Text>
+                <Link href="https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=dffb65ac-9df9-4151-94bf-88c45bfcb056" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.infoTranslationNotAvailable', { returnObjects: true })[3]}</Link>
                 {t('table.infoTranslationNotAvailable', { returnObjects: true })[4]}
               </AlertDiscalimerBox>
             </Skeleton>
@@ -573,7 +574,11 @@ export default function DataInformationQuery({ resource }) {
                   <Text
                     as="a"
                     target="_blank"
-                    href="https://basedosdados.github.io/mais/colab_data/"
+                    href={
+                      locale === "en" ? "https://basedosdados.github.io/mais/en/colab_data/" :
+                      locale === "es" ? "https://basedosdados.github.io/mais/es/colab_data/" :
+                      "https://basedosdados.github.io/mais/colab_data/"
+                    }
                     color="#0068C5"
                     _hover={{color: "#0057A4"}}
                   >
@@ -586,15 +591,14 @@ export default function DataInformationQuery({ resource }) {
                   type="warning"
                 >
                   {t('table.warningPaidPlanRequired', { returnObjects: true })[0]}
-                  <Text
-                    as="a"
+                  <Link
                     target="_blank"
-                    href="https://basedosdados.org/prices"
+                    href="/prices"
                     color="#0068C5"
                     _hover={{color: "#0057A4"}}
                   >
                     {t('table.warningPaidPlanRequired', { returnObjects: true })[1]}
-                  </Text>
+                  </Link>
                   {t('table.warningPaidPlanRequired', { returnObjects: true })[2]}
                 </AlertDiscalimerBox>
               }
@@ -719,7 +723,11 @@ export default function DataInformationQuery({ resource }) {
                           marginLeft="4px"
                           as="a"
                           target="_blank"
-                          href="https://basedosdados.github.io/mais/access_data_bq/#primeiros-passos"
+                          href={
+                            locale === "en" ? "https://basedosdados.github.io/mais/en/access_data_bq/#getting-started" :
+                            locale === "es" ? "https://basedosdados.github.io/mais/es/access_data_bq/#pinitos" :
+                            "https://basedosdados.github.io/mais/access_data_bq/#primeiros-passos"
+                          }
                           color="#0068C5"
                           _hover={{color: "#0057A4"}}
                         >
@@ -829,7 +837,11 @@ export default function DataInformationQuery({ resource }) {
                           marginLeft="4px"
                           as="a"
                           target="_blank"
-                          href="https://basedosdados.github.io/mais/api_reference_python/"
+                          href={
+                            locale === "en" ? "https://basedosdados.github.io/mais/en/api_reference_python/" :
+                            locale === "es" ? "https://basedosdados.github.io/mais/es/api_reference_python/" :
+                            "https://basedosdados.github.io/mais/api_reference_python/"
+                          }
                           color="#0068C5"
                           _hover={{color: "#0057A4"}}
                         >
@@ -900,7 +912,11 @@ bd.read_sql(query = query, billing_project_id = billing_id)`}
                           marginLeft="4px"
                           as="a"
                           target="_blank"
-                          href="https://basedosdados.github.io/mais/api_reference_r/"
+                          href={
+                            locale === "en" ? "https://basedosdados.github.io/mais/en/api_reference_r/" :
+                            locale === "es" ? "https://basedosdados.github.io/mais/es/api_reference_r/" :
+                            "https://basedosdados.github.io/mais/api_reference_r/"
+                          }
                           color="#0068C5"
                           _hover={{color: "#0057A4"}}
                         >
