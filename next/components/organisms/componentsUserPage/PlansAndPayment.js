@@ -1081,7 +1081,7 @@ export default function PlansAndPayment ({ userData }) {
               fontWeight="400"
               fontSize="14px"
               lineHeight="20px"
-              href="/contato"
+              href="/contact"
               target="_self"
               marginLeft="2px"
               >{t('username.contactUs')}</Link>
@@ -1306,7 +1306,7 @@ export default function PlansAndPayment ({ userData }) {
             width={{base: "100%", lg: "fit-content"}}
             onClick={() => {
               AlertChangePlanModal.onClose()
-              window.open("/contato", "_self")
+              window.open("/contact", "_self")
             }}
           >
             {t('username.contactUs')}

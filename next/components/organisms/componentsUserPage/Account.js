@@ -268,7 +268,7 @@ export default function Account({ userInfo }) {
             _hover={{
               color:"#0057A4",
             }}
-            href="/termos-e-privacidade?section=terms"
+            href="/terms?section=terms"
           >
             {t('username.dataStorageInfo', { returnObjects: true })[1]}
           </Link>
@@ -280,7 +280,7 @@ export default function Account({ userInfo }) {
             _hover={{
               color:"#0057A4",
             }}
-            href="/termos-e-privacidade?section=privacy"
+            href="/terms?section=privacy"
           >
             {t('username.dataStorageInfo', { returnObjects: true })[3]}
           </Link>
@@ -295,7 +295,7 @@ export default function Account({ userInfo }) {
             color: "#22703E",
             borderColor: "#22703E"
           }}
-          onClick={() => window.open("/contato")}
+          onClick={() => window.open("/contact")}
         >{t('username.contactUs')}</Button>
       </Box>
 
