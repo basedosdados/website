@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export async function getStaticProps({ locale }) {
@@ -22,6 +23,7 @@ export async function getStaticProps({ locale }) {
 
 export default function ContactConsulting() {
   const { t } = useTranslation('contact');
+  const { locale } = useRouter();
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -33,12 +35,15 @@ export default function ContactConsulting() {
         window.hbspt.forms.create({
           region: "na1",
           portalId: "9331013",
-          formId: "1b1d4a12-5cbc-4ffc-837a-12b905c2d87b",
+          formId:
+            locale === "en" ? "a81d259d-7c97-494d-866d-639416f70df2" :
+            locale === "es" ? "3e1063fa-f29e-4044-9f71-37e6e0cdf678" :
+            "1b1d4a12-5cbc-4ffc-837a-12b905c2d87b",
           target: '#form-hbspt'
         })
       }
     })
-  },[])
+  }, [locale])
     
   return (
     <MainPageTemplate paddingX="24px">
