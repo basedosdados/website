@@ -3,29 +3,25 @@ import {
   Box,
   Text,
   FormControl,
-  FormErrorMessage,
   useDisclosure,
   ModalCloseButton,
-  UnorderedList,
-  ListItem,
-  Spinner
+  List,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { isMobileMod } from "../../../hooks/useCheckMobile.hook";
-import SectionTitle from "../../atoms/SectionTitle";
-import RoundedButton from "../../atoms/RoundedButton";
-import ButtonSimple from "../../atoms/SimpleButton";
-import InputForm from "../../atoms/SimpleInput";
+import Link from "../../atoms/Link";
 
 import {
   LabelTextForm,
-  ExtraInfoTextForm,
-  ModalGeneral
+  ModalGeneral,
+  InputForm,
+  ErrorMessage,
+  Button,
+  ListChecked
 } from "../../molecules/uiUserPage";
 
 import Exclamation from "../../../public/img/icons/exclamationIcon";
-import { EmailRecoveryImage } from "../../../public/img/emailImage";
+import { SuccessIcon } from "../../../public/img/icons/successIcon";
 import { EyeIcon, EyeOffIcon } from "../../../public/img/icons/eyeIcon";
 
 export default function NewPassword({ userInfo }) {
@@ -122,8 +118,16 @@ export default function NewPassword({ userInfo }) {
   }
 
   return (
-    <Stack spacing="24px" maxWidth="480px">
-      <Box display={isLoading ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
+    <Stack spacing="0" maxWidth="480px">
+      <Box
+        display={isLoading ? "flex" : "none"}
+        position="fixed"
+        top="0"
+        left="0"
+        width="100%"
+        height="100%"
+        zIndex="99999"
+      />
 
       <ModalGeneral
         isOpen={newPasswordModal.isOpen}
@@ -138,73 +142,32 @@ export default function NewPassword({ userInfo }) {
           />
         </Stack>
 
-        <Stack spacing="24px" alignItems="center" textAlign="center" marginBottom="24px">
-          <EmailRecoveryImage/>
-          <SectionTitle
-            lineHeight="40px"
-          >{t('username.passwordChangedSuccessfully')}</SectionTitle>
-          <ExtraInfoTextForm
-            fontSize="16px"
-            letterSpacing="0.2px"
-            lineHeight="24px"
-          >{t('username.useNewPassword')}</ExtraInfoTextForm>
+        <Stack spacing="24px" alignItems="center" textAlign="center" margin="24px 0">
+          <SuccessIcon
+            width="90px"
+            height="90px"
+            fill="#34A15A"
+          />
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="24px"
+            lineHeight="36px"
+            color="#252A32"
+          >{t('username.passwordChangedSuccessfully')}</Text>
         </Stack>
 
-        <Stack
-          flexDirection={isMobileMod() ? "column-reverse" : "row"}
-          spacing={0}
-          justifyContent="center"
-          gap="24px"
+        <Button
           width="100%"
+          onClick={() => window.open("/", "_self")}
         >
-          <RoundedButton
-            borderRadius="30px"
-            backgroundColor="#FFF"
-            border="1px solid #42B0FF"
-            color="#42B0FF"
-            width={isMobileMod() ? "100%" : "fit-content"}
-            _hover={{transform: "none", opacity: 0.8}}
-            onClick={() => window.open(`/user/${userInfo.username}`, "_self")}
-          >
-            {t('username.continueSettings')}
-          </RoundedButton>
-
-          <RoundedButton
-            borderRadius="30px"
-            width={isMobileMod() ? "100%" : "fit-content"}
-            _hover={{transform: "none", opacity: 0.8}}
-            onClick={() => window.open("/", "_self")}
-          >
-            {t('username.goToHomepage')}
-          </RoundedButton>
-        </Stack>
+          {t('username.goToHomepage')}
+        </Button>
       </ModalGeneral>
 
       <form onSubmit={handleSubmit}>
         <FormControl isInvalid={!!errors.password}>
-          <Box
-            display="flex"
-            flexDirection="row"
-            width="100%"
-            marginBottom="8px"
-          >
-            <LabelTextForm width="100%" text={t('username.currentPassword')} margin="0 !important"/>
-            <ButtonSimple
-              display={isMobileMod() ? "none" : "flex"}
-              position="relative"
-              top="-2px"
-              width="inherit"
-              marginLeft="auto !important"
-              fontWeight="700"
-              color="#42B0FF"
-              letterSpacing="0.3px"
-              fontSize="14px"
-              justifyContent="end"
-              _hover={{opacity: "0.6"}}
-              onClick={() => window.open("./password-recovery", "_self")}
-            >{t('username.forgotPassword')}
-            </ButtonSimple>
-          </Box>
+          <LabelTextForm text={t('username.currentPassword')}/>
           <InputForm
             type={showPassword ? "password" : "text"}
             id="password"
@@ -213,47 +176,37 @@ export default function NewPassword({ userInfo }) {
             value={formData.password}
             onChange={(e) => handleInputChange(e, "password")}
             placeholder={t('username.enterCurrentPassword')}
-            fontFamily="ubuntu"
-            height="40px"
-            fontSize="14px"
-            borderRadius="16px"
-            _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
-            styleElmRight={{
-              width: "50px",
-              height: "40px",
+            inputElementStyle={{
               cursor: "pointer",
               onClick: () => setShowPassword(!showPassword)
             }}
-            elmRight={showPassword ?
+            icon={showPassword ?
               <EyeOffIcon
                 alt={t('username.hidePassword')}
                 width="20px"
                 height="20px"
-                fill="#D0D0D0"
+                fill="#464A51"
               />
             :
               <EyeIcon
                 alt={t('username.showPassword')}
                 width="20px"
                 height="20px"
-                fill="#D0D0D0"
+                fill="#464A51"
               />
             }
           />
-          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
-            <Exclamation marginTop="4px" fill="#BF3434"/>{errors.password}
-          </FormErrorMessage>
-          <ButtonSimple
-            display={isMobileMod() ? "flex" : "none"}
-            fontWeight="400"
-            color="#42B0FF"
-            letterSpacing="0.3px"
-            fontSize="12px"
-            _hover={{opacity: "0.6"}}
+          <ErrorMessage>{errors.password}</ErrorMessage>
+          <Link
             marginTop="8px"
-            onClick={() => window.open("./password-recovery", "_self")}
+            fontWeight="400"
+            color="#0068C5"
+            _hover={{
+              color:"#0057A4",
+            }}
+            href="/user/password-recovery"
           >{t('username.forgotPassword')}
-          </ButtonSimple>
+          </Link>
         </FormControl>
 
         <FormControl marginTop="24px" isInvalid={!!errors.newPassword || !!errors.regexPassword}>
@@ -266,57 +219,91 @@ export default function NewPassword({ userInfo }) {
             value={formData.newPassword}
             onChange={(e) => handleInputChange(e, "newPassword")}
             placeholder={t('username.createNewPassword')}
-            fontFamily="ubuntu"
-            height="40px"
-            fontSize="14px"
-            borderRadius="16px"
-            _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
-            styleElmRight={{
-              width: "50px",
-              height: "40px",
+            inputElementStyle={{
               cursor: "pointer",
               onClick: () => setShowNewPassword(!showNewPassword)
             }}
-            elmRight={showNewPassword ?
+            icon={showNewPassword ?
               <EyeOffIcon
                 alt={t('username.hidePassword')}
                 width="20px"
                 height="20px"
-                fill="#D0D0D0"
+                fill="#464A51"
               />
             :
               <EyeIcon
                 alt={t('username.showPassword')}
                 width="20px"
                 height="20px"
-                fill="#D0D0D0"
+                fill="#464A51"
               />
             }
           />
           <Text 
             margin="8px 0"
-            color= { errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#BF3434" : "#7D7D7D" : "#7D7D7D" }
-            fontFamily= "Ubuntu"
-            fontSize= "12px"
-            fontWeight= "400"
-            lineHeight= "16px"
-            letterSpacing= "0.3px"
+            color={errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#BF3434" : "#71757A" : "#71757A" }
+            fontFamily="Roboto"
+            fontSize="14px"
+            fontWeight="400"
+            lineHeight="20px"
             display="flex"
             flexDirection="row"
-            gap="4px"
+            gap="8px"
             alignItems="flex-start"
-          ><Exclamation width="14px" height="14px" fill="#BF3434" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> {t('username.passwordRequirements')}</Text>
-          <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
-            <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#BF3434" :"#7D7D7D"}>{t('username.minCharacters')}</ListItem>
-            <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#BF3434" :"#7D7D7D"}>{t('username.uppercaseLetter')}</ListItem>
-            <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#BF3434" :"#7D7D7D"}>{t('username.lowercaseLetter')}</ListItem>
-            <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#BF3434" :"#7D7D7D"}>{t('username.digit')}</ListItem>
-            <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#BF3434" :"#7D7D7D"}>{t('username.specialCharacter')}</ListItem>
-          </UnorderedList>
+          >
+            <Exclamation
+              display={errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}
+              width="18px"
+              height="18px"
+              fill="#BF3434"
+            /> {t('username.passwordRequirements')}
+          </Text>
+
+          <List
+            fontFamily="Roboto"
+            fontSize="14px"
+            fontWeight="400"
+            lineHeight="20px"
+            position="relative"
+            left="2px"
+            display="flex"
+            flexDirection="column"
+            gap="8px"
+          >
+            <ListChecked 
+              checked={formData.newPassword.length >= 8}
+              err={errors?.regexPassword?.amount}
+            >
+              {t('username.minCharacters')}
+            </ListChecked>
+            <ListChecked
+              checked={/[A-Z]/.test(formData.newPassword)}
+              err={errors?.regexPassword?.upperCase}
+            >
+              {t('username.uppercaseLetter')}
+            </ListChecked>
+            <ListChecked
+              checked={/[a-z]/.test(formData.newPassword)}
+              err={errors?.regexPassword?.lowerCase}
+            >
+              {t('username.lowercaseLetter')}
+            </ListChecked>
+            <ListChecked
+              checked={/\d/.test(formData.newPassword)}
+              err={errors?.regexPassword?.number}
+            >
+              {t('username.digit')}
+            </ListChecked>
+            <ListChecked
+              checked={/[!@#?%&*]/.test(formData.newPassword)}
+              err={errors?.regexPassword?.special}
+            >
+              {t('username.specialCharacter')}
+            </ListChecked>
+          </List>
+
           {errors.newPassword &&
-            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
-              <Exclamation marginTop="4px" fill="#BF3434"/>{errors.newPassword}
-            </FormErrorMessage>
+            <ErrorMessage>{errors.newPassword}</ErrorMessage>
           }
         </FormControl>
 
@@ -330,52 +317,37 @@ export default function NewPassword({ userInfo }) {
             value={formData.confirmPassword}
             onChange={(e) => handleInputChange(e, "confirmPassword")}
             placeholder={t('username.enterPasswordAgain')}
-            fontFamily="ubuntu"
-            height="40px"
-            fontSize="14px"
-            borderRadius="16px"
-            _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
-            styleElmRight={{
-              width: "50px",
-              height: "40px",
+            inputElementStyle={{
               cursor: "pointer",
               onClick: () => setShowConfirmPassword(!showConfirmPassword)
             }}
-            elmRight={showConfirmPassword ?
+            icon={showConfirmPassword ?
               <EyeOffIcon
                 alt={t('username.hidePassword')}
                 width="20px"
                 height="20px"
-                fill="#D0D0D0"
+                fill="#464A51"
               />
             :
               <EyeIcon
                 alt={t('username.showPassword')}
                 width="20px"
                 height="20px"
-                fill="#D0D0D0"
+                fill="#464A51"
               />
             }
           />
-          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
-            <Exclamation marginTop="4px" fill="#BF3434"/>{errors.confirmPassword}
-          </FormErrorMessage>
+          <ErrorMessage>{errors.confirmPassword}</ErrorMessage>
         </FormControl>
 
-        <RoundedButton
+        <Button
           type="submit"
           marginTop="24px"
-          borderRadius="30px"
-          _hover={{transform: "none", opacity: 0.8}}
-          width="fit-content"
-          isDisabled={isLoading}
+          isLoading={isLoading}
+          onClick={() => {}}
         >
-          {isLoading ?
-            <Spinner />
-            :
-            t('username.updatePassword')
-          }
-        </RoundedButton>
+          {t('username.updatePassword')}
+        </Button>
       </form>
     </Stack>
   )

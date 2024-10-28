@@ -74,12 +74,12 @@ export default function BigQuery ({ userInfo }) {
   }
 
   return (
-    <Stack>
+    <Stack spacing={0}>
       <Box display={isLoading ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
 
       <TitleTextForm>{t('username.bigquerySectionTitle')}</TitleTextForm>
 
-      <ExtraInfoTextForm>
+      <ExtraInfoTextForm marginTop="8px !important" >
       {t('username.bigquerySectionSubtitle', { returnObjects: true })[0]}
       <Text as="span" fontWeight="500">
         {t('username.bigquerySectionSubtitle', { returnObjects: true })[1]}
@@ -87,12 +87,11 @@ export default function BigQuery ({ userInfo }) {
       {t('username.bigquerySectionSubtitle', { returnObjects: true })[2]}
       </ExtraInfoTextForm>
 
-      <FormControl maxWidth={{base: "100%", lg: "480px"}} isInvalid={!!errors.emailGcp} margin="16px 0 24px !important">
+      <FormControl maxWidth={{base: "100%", lg: "480px"}} isInvalid={!!errors.emailGcp} margin="8px 0 24px !important">
         <InputForm
           id="emailgcp"
           name="emailgcp"
           value={emailGcp}
-          
           justifyContent="start"
           onChange={(e) => setEmailGcp(e.target.value)}
           placeholder={t('username.bigquerySectionInputPlaceholder')}

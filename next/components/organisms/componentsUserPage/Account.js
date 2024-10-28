@@ -241,7 +241,7 @@ export default function Account({ userInfo }) {
         </Stack>
       </ModalGeneral>
 
-      <Box>
+      <Box marginTop="0 !important">
         <TitleTextForm>{t('username.username')}</TitleTextForm>
         <ExtraInfoTextForm>{userInfo.username}</ExtraInfoTextForm>
         <Button

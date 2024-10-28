@@ -10,12 +10,16 @@ import {
   ModalFooter,
   Skeleton,
   InputGroup,
-  InputLeftElement,
+  InputRightElement,
   Input,
   FormErrorMessage,
-  Spinner
+  Spinner,
+  ListItem,
+  ListIcon
 } from "@chakra-ui/react";
 import Exclamation from "../../public/img/icons/exclamationIcon";
+import CheckIcon from "../../public/img/icons/checkIcon";
+import CircleIcon from "../../public/img/icons/circleIcon";
 
 export function LabelTextForm ({ text, ...props }) {
   return (
@@ -136,16 +140,6 @@ export function InputForm({
       fill={fill}
       {...inputGroupStyle}
     >
-      {icon &&
-        <InputLeftElement
-          width="24px"
-          height="24px"
-          margin="8px 8px 8px 16px"
-          children={icon}
-          {...inputElementStyle}
-        />
-      }
-
       <Input
         value={value}
         placeholder={placeholder}
@@ -163,7 +157,7 @@ export function InputForm({
           backgroundColor: "#FFF",
         }}
         _invalid={{backgroundColor:"#F6E3E3"}}
-        paddingLeft={icon !== null && "52px !important"}
+        paddingRight={icon !== null && "52px !important"}
         backgroundColor="#EEEEEE"
         height="40px"
         fontSize="14px"
@@ -175,6 +169,16 @@ export function InputForm({
         _placeholder={{color: "#464A51", opacity: 1}}
         {...props}
       />
+
+      {icon &&
+        <InputRightElement
+          width="24px"
+          height="24px"
+          margin="8px 16px"
+          children={icon}
+          {...inputElementStyle}
+        />
+      }
     </InputGroup>
   )
 }
@@ -235,5 +239,14 @@ export function Button ({ children, onClick, isLoading, ...props }) {
         children
       }
     </Box>
+  )
+}
+
+export function ListChecked({ children, checked = false, err = false }) {
+  return (
+    <ListItem color={err ? (checked  ? "#71757A" : "#BF3434") :"#71757A"}>
+      {checked ? <ListIcon marginRight="6px" width="16px" height="16px" as={CheckIcon}/> : <ListIcon margin="0 10px 6px 6px" width="6px" height="6px" as={CircleIcon} fill={err ? "#BF3434" :"#71757A"}/>}
+      {children}
+    </ListItem>
   )
 }
