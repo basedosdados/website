@@ -369,7 +369,7 @@ export default function AboutUs() {
   }
 
   return (
-    <MainPageTemplate paddingX="24px">
+    <MainPageTemplate >
       <Head>
         <title>{t('pageTitle')}</title>
         <meta
@@ -384,17 +384,13 @@ export default function AboutUs() {
         />
       </Head>
 
-      <Stack
-        position="relative"
-        left={isMobileMod() ? "0" :"-24px"}
-      >
+      <Stack spacing={0} >
         <Stack
           display={isMobileMod() ? "none" :"flex"}
           spacing={0}
           position="sticky"
           width="fit-content"
           top="40%"
-          left="-32px"
           zIndex="1"
           backgroundColor="#FFF"
         >
@@ -405,12 +401,13 @@ export default function AboutUs() {
           <LinkedinIcon alt="linkedin basedosdados" {...keyIcon("https://www.linkedin.com/company/base-dos-dados/mycompany/")}/>
         </Stack>
 
-        <VStack paddingLeft={isMobileMod() ? "0" : "30px"} position="relative" top="-40px">
+        <VStack spacing={0}>
           <Stack
             width="100%"
             maxWidth="1264px"
             margin="auto"
             paddingTop={{ base: "150px", lg: "0" }}
+            paddingX="24px"
             alignItems="center"
           >
             <Display 
@@ -433,6 +430,7 @@ export default function AboutUs() {
             justifyContent="center"
             marginTop="0px !important"
             paddingBottom={isMobileMod() ? "0" : "16px"}
+            paddingX="24px"
           >
             <Center flexDirection="column">
               <Display>
@@ -456,6 +454,7 @@ export default function AboutUs() {
           <Stack
             paddingTop={{ base: "112px", lg: "144px" }}
             paddingBottom={{ base: "96px", lg: "104px" }}
+            paddingX="24px"
             marginTop="0px !important"
             textAlign="center"
             justifyContent="center"
@@ -486,6 +485,7 @@ export default function AboutUs() {
             maxWidth="1264px"
             margin="auto"
             paddingBottom={{ base: "80px", lg: "104px" }}
+            paddingX="24px"
             spacing={0}
           >
             <Display
@@ -502,7 +502,6 @@ export default function AboutUs() {
               flexDirection={isMobileMod() ? "column" : "row"}
               justifyContent="space-between"
               spacing={isMobileMod() ? "80px" : "0"}
-              paddingX={isMobileMod() ? "0" : "16px"}
             >
               <Box textAlign="center" maxWidth={isMobileMod() ? "100%" : "45%"}>
                 <Image
@@ -593,11 +592,9 @@ export default function AboutUs() {
       </Stack>
 
       <Stack
-        width="100vw"
+        width="100%"
         height="100%"
         alignItems="center"
-        position="relative"
-        left={isMobileMod() ? "-24px" : "-32px"}
         paddingBottom={{ base: "40px", lg: "104px" }}
         bgGradient={isMobileMod() ? "linear(#34A15A 38%, #FFF 38%)" : "linear(#34A15A 45%, #FFF 45%)"}
       >
@@ -720,6 +717,7 @@ export default function AboutUs() {
         id="teams"
         width="100%"
         maxWidth="1264px"
+        padding="0 24px"
         margin="auto"
       >
         <Display

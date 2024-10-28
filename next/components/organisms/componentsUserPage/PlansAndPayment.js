@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 import { ControlledInputSimple } from "../../atoms/ControlledInput";
 import Link from "../../atoms/Link";
 import Toggle from "../../atoms/Toggle";
-import { CardPrice } from "../../../pages/precos";
+import { CardPrice } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
 import { triggerGAEvent } from "../../../utils";
 

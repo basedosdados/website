@@ -52,7 +52,7 @@ function useIsMobileMod() {
   return useCheckMobile();
 }
 
-function MenuDrawer({ userData, isOpen, onClose, links }) {
+function MenuDrawer({ userData, isOpen, onClose, links, locale }) {
   const { t } = useTranslation('menu');
   const isMobile = useIsMobileMod();
 
@@ -858,7 +858,9 @@ function DesktopLinks({
           />
         }
 
-        <LanguageSelector />
+        {process.env.NEXT_PUBLIC_BASE_URL_FRONTEND === "https://basedosdados.org" ? null: (
+          <LanguageSelector />
+        )}
 
         {userData ? (
           <HStack spacing="20px">
@@ -922,7 +924,7 @@ function DesktopLinks({
 export default function MenuNav({ simpleTemplate = false, userTemplate = false }) {
   const { t } = useTranslation('menu');
   const router = useRouter()
-  const { route } = router
+  const { route, locale } = router
   const [userBD, setUserBD] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const isMobile = useIsMobileMod();
@@ -1063,6 +1065,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       <MenuDrawer
         userData={userData}
         links={links}
+        locale={locale}
         {...menuDisclosure}
       />
 
