@@ -157,6 +157,7 @@ const ProfileConfiguration = ({ userInfo }) => {
   const pictureModal = useDisclosure()
   const [picture, setPicture] = useState("")
   const [fileInputKey, setFileInputKey] = useState(Date.now())
+  const router = useRouter()
 
   useEffect(() => {
     if(Object.keys(userInfo).length === 0) return null
@@ -635,6 +636,7 @@ const ProfileConfiguration = ({ userInfo }) => {
 
 const Account = ({ userInfo }) => {
   const { t } = useTranslation('user');
+  const { router } = useRouter()
   const emailModal = useDisclosure()
   const usernameModal = useDisclosure()
   const eraseModalAccount = useDisclosure()
@@ -674,7 +676,13 @@ const Account = ({ userInfo }) => {
       const userData = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
         .then(res => res.json())
       cookies.set('userBD', JSON.stringify(userData))
-      window.open(`/user/${formData.username}?account`, "_self")
+      router.push({
+        pathname: '/user/[username]',
+        query: { 
+          username: formData.username,
+          account: '' 
+        }
+      }, undefined, { locale: router.locale })
     }
 
     if(result?.errors?.length > 0) {
@@ -695,7 +703,7 @@ const Account = ({ userInfo }) => {
       if(result?.ok === true) {
         cookies.remove('userBD', { path: '/' })
         cookies.remove('token', { path: '/' })
-        return window.open("/", "_self")
+        return router.push('/', undefined, { locale: router.locale })
       }
       setIsLoading(false)
     }
@@ -821,7 +829,7 @@ const Account = ({ userInfo }) => {
                   fontSize="14px"
                   justifyContent="end"
                   _hover={{opacity: "0.6"}}
-                  onClick={() => window.open("./password-recovery", "_self")}
+                  onClick={() => router.push('/password-recovery', undefined, { locale: router.locale })}
                 >{t('username.forgotPassword')}
                 </ButtonSimple>
               </Box>
@@ -1070,6 +1078,7 @@ const Account = ({ userInfo }) => {
 
 const NewPassword = ({ userInfo }) => {
   const { t } = useTranslation('user');
+  const { router } = useRouter()
   const newPasswordModal = useDisclosure()
   const [formData, setFormData] = useState({
     password: "",
@@ -1204,7 +1213,7 @@ const NewPassword = ({ userInfo }) => {
             color="#42B0FF"
             width={isMobileMod() ? "100%" : "fit-content"}
             _hover={{transform: "none", opacity: 0.8}}
-            onClick={() => window.open(`/user/${userInfo.username}`, "_self")}
+            onClick={() => router.push(`/user/${userInfo.username}`, undefined, { locale: router.locale })}
           >
             {t('username.continueSettings')}
           </RoundedButton>
@@ -1213,7 +1222,7 @@ const NewPassword = ({ userInfo }) => {
             borderRadius="30px"
             width={isMobileMod() ? "100%" : "fit-content"}
             _hover={{transform: "none", opacity: 0.8}}
-            onClick={() => window.open("/", "_self")}
+            onClick={() => router.push('/', undefined, { locale: router.locale })}
           >
             {t('username.goToHomepage')}
           </RoundedButton>
@@ -1241,7 +1250,7 @@ const NewPassword = ({ userInfo }) => {
               fontSize="14px"
               justifyContent="end"
               _hover={{opacity: "0.6"}}
-              onClick={() => window.open("./password-recovery", "_self")}
+              onClick={() => router.push('/password-recovery', undefined, { locale: router.locale })}
             >{t('username.forgotPassword')}
             </ButtonSimple>
           </Box>
@@ -1291,7 +1300,7 @@ const NewPassword = ({ userInfo }) => {
             fontSize="12px"
             _hover={{opacity: "0.6"}}
             marginTop="8px"
-            onClick={() => window.open("./password-recovery", "_self")}
+            onClick={() => router.push('/password-recovery', undefined, { locale: router.locale })}
           >{t('username.forgotPassword')}
           </ButtonSimple>
         </FormControl>
@@ -1537,12 +1546,12 @@ const PlansAndPayment = ({ userData }) => {
       ],
       resources : [
         {name: t('username.processedTables')},
-        {name: t('username.integratedData'), tooltip: t('username.dataIntegrationTooltip')},
+        {name: t('username.integratedData'), tooltip: t('username.integratedDataTooltip')},
         {name: t('username.updatedLowFrequencyData')},
         {name: t('username.cloudAccess')},
         {name: t('username.sqlPythonRAccess')},
         {name: t('username.biIntegration')},
-        planActive ? "" : {name: t('username.directDownloadLimit'), tooltip: t('username.downloadLimitTooltip')},
+        planActive ? "" : {name: t('username.downloadLimit100MB'), tooltip: t('username.downloadLimit100MBTooltip')},
       ]
     },
     "bd_pro" : {
@@ -1680,7 +1689,13 @@ const PlansAndPayment = ({ userData }) => {
     const user = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
     cookies.set('userBD', JSON.stringify(user))
-    window.open(`/user/${userData.username}?plans_and_payment`, "_self")
+    router.push({
+      pathname: '/user/[username]',
+      query: { 
+        username: userData.username,
+        plans_and_payment: '' 
+      }
+    }, undefined, { locale: router.locale })
   }
 
   async function closeModalSucess() {
@@ -1705,8 +1720,14 @@ const PlansAndPayment = ({ userData }) => {
       await delay(10000)
     }
 
-    if(isLoadingH === true) return window.open("/", "_self")
-    window.open(`/user/${userData.username}?plans_and_payment`, "_self")
+    if(isLoadingH === true) return router.push('/', undefined, { locale: router.locale })
+    router.push({
+      pathname: '/user/[username]',
+      query: { 
+        username: userData.username,
+        plans_and_payment: '' 
+      }
+    }, undefined, { locale: router.locale })
   }
 
   function formatTimeStamp (value) {
@@ -1845,7 +1866,13 @@ const PlansAndPayment = ({ userData }) => {
         onClose={() => {
           setToggleAnual(true)
           setValueCoupon("")
-          if(query.i) return window.open(`/user/${userData.username}?plans_and_payment`, "_self")
+          if(query.i) return router.push({
+            pathname: '/user/[username]',
+            query: { 
+              username: userData.username,
+              plans_and_payment: '' 
+            }
+          }, undefined, { locale: router.locale })
           PaymentModal.onClose()
         }}
         propsModalContent={{
@@ -2406,7 +2433,7 @@ const PlansAndPayment = ({ userData }) => {
             {isLoadingEmailChange ?
               <Spinner/>
               :
-              "Próximo"
+              t('username.next')
             }
           </Box>
         </Stack>
@@ -2500,7 +2527,13 @@ const PlansAndPayment = ({ userData }) => {
             fontWeight="500"
             fontSize="14px"
             lineHeight="20px"
-            onClick={() => window.open(`/user/${userData?.username}?big_query`, "_self")}
+            onClick={() => router.push({
+              pathname: '/user/[username]',
+              query: { 
+                username: userData?.username,
+                big_query: '' 
+              }
+            }, undefined, { locale: router.locale })}
           >
             {isLoading ?
               <Spinner/>
@@ -2732,7 +2765,7 @@ const PlansAndPayment = ({ userData }) => {
                 {name: t('username.cloudAccess')},
                 {name: t('username.sqlPythonRAccess')},
                 {name: t('username.biIntegration')},
-                {name: t('username.directDownloadLimit'), tooltip: t('username.directDownloadLimitTooltip')},
+                {name: t('username.downloadLimit100MB'), tooltip: t('username.downloadLimit100MBTooltip')},
               ]}
               button={{
                 text: t('username.exploreFeatures'),
@@ -2750,7 +2783,7 @@ const PlansAndPayment = ({ userData }) => {
               resources={[
                 {name: t('username.dozensOfHighFrequencyDatasets')},
                 {name: t('username.companyReferenceTable')},
-                {name: t('username.directDownloadLimitPro'), tooltip: t('username.downloadLimitProTooltip')}
+                {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')}
               ]}
               button={{
                 text: `${subscriptionInfo?.stripeSubscription === "bd_pro" ? t('username.currentPlan') : hasSubscribed ? t('username.subscribe') : t('username.startFreeTrial')}`,
@@ -2827,7 +2860,7 @@ const PlansAndPayment = ({ userData }) => {
             _hover={{transform: "none", opacity: 0.8}}
             onClick={() => {
               AlertChangePlanModal.onClose()
-              window.open("/contact", "_self")
+              router.push('/contact', undefined, { locale: router.locale })
             }}
           >
             {t('username.contactUs')}
@@ -3252,7 +3285,7 @@ const BigQuery = ({ userInfo }) => {
           await delay(10000)
         }
       } else {
-        setErrors({emailGcp: "Por favor, insira um e-mail válido."})
+        setErrors({emailGcp: t('username.pleaseEnterValidEmail')})
       }
     }
     setIsLoading(false)
@@ -3270,7 +3303,7 @@ const BigQuery = ({ userInfo }) => {
         letterSpacing="0.2px"
         color="#252A32"
       >
-        E-mail de acesso ao BigQuery
+        {t('username.BQEmail')}
       </Text>
 
       <Text
@@ -3281,7 +3314,7 @@ const BigQuery = ({ userInfo }) => {
         letterSpacing="0.3px"
         color="#7D7D7D"
       >
-        O seu e-mail precisa ser uma <Text as="span" fontWeight="500">Conta Google</Text> para garantir acesso exclusivo aos dados pelo BigQuery.
+        {t('username.BQEmailDescription1')} <Text as="span" fontWeight="500">{t('username.BQEmailDescription2')}</Text> {t('username.BQEmailDescription3')}
       </Text>
 
       <FormControl isInvalid={!!errors.emailGcp} margin="16px 0 24px !important">
@@ -3315,7 +3348,7 @@ const BigQuery = ({ userInfo }) => {
         {isLoading ?
           <Spinner />
         :
-          "Atualizar e-mail"
+          t('username.updateEmail')
         }
       </RoundedButton>
     </Stack>
