@@ -80,7 +80,7 @@ export default function DatasetPage ({ dataset }) {
   return (
     <MainPageTemplate userTemplate footerTemplate="simple">
       <Head>
-        <title>{dataset.name} – {t('dataBasis')}</title>
+        <title>{`${dataset[`name${capitalize(locale)}`] || dataset.name} – ${t('dataBasis')}`}</title>
 
         <link
           rel="image_src"
@@ -101,7 +101,11 @@ export default function DatasetPage ({ dataset }) {
           content={`${dataset[`name${capitalize(locale)}`] || dataset.name} – ${t('dataBasis')}`}
           key="ogtitle"
         />
-        <meta property="og:description" content={dataset[`description${capitalize(locale)}`] || dataset.description} key="ogdesc" />
+        <meta
+          property="og:description"
+          content={dataset[`description${capitalize(locale)}`] || dataset.description}
+          key="ogdesc"
+        />
       </Head>
 
       <VStack

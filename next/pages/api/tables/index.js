@@ -3,7 +3,7 @@ import getAllTableInDataset from "./getAllTableInDataset";
 import getTableEdit from "./getTableEdit";
 import postTable from "./postTable";
 import getBigTableQuery from "./getBigTableQuery";
-import getColumnsBdmTable from "../tables/getColumnsBdmTable";
+import getTableColumns from "../tables/getTableColumns";
 
 export {
   deleteTable,
@@ -11,5 +11,5 @@ export {
   getTableEdit,
   postTable,
   getBigTableQuery,
-  getColumnsBdmTable
+  getTableColumns
 }

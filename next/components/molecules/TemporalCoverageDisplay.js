@@ -11,7 +11,7 @@ import {
 import { useState, useEffect } from "react";
 import cookies from "js-cookie";
 import { CalendarComunIcon } from "../../public/img/icons/calendarIcon";
-import { SectionPrice } from "../../pages/precos";
+import { SectionPrice } from "../../pages/prices";
 import { ModalGeneral } from "./uiUserPage";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";

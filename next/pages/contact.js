@@ -6,6 +6,7 @@ import {
 import Head from "next/head";
 import { useEffect } from "react";
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Display from "../components/atoms/Display";
 import Subtitle from "../components/atoms/Subtitle";
@@ -24,8 +25,9 @@ export async function getStaticProps({ locale }) {
   };
 }
 
-export default function Contato({ pages }) {
+export default function Contact({ pages }) {
   const { t } = useTranslation('contact');
+  const { locale } = useRouter();
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -34,15 +36,21 @@ export default function Contato({ pages }) {
 
     script.addEventListener('load', () => {
       if (window.hbspt) {
+        const formIds = {
+          en: "93a67d53-74ce-43bb-ad53-56ec4fd39cbd",
+          es: "50fc5a64-fa29-4360-b1b4-28f519aede79",
+          pt: "3c85cc81-2b91-4a90-b3ff-41412dfed25e",
+        };
+
         window.hbspt.forms.create({
           region: "na1",
           portalId: "9331013",
-          formId: "3c85cc81-2b91-4a90-b3ff-41412dfed25e",
+          formId: formIds[locale],
           target: '#form-hbspt'
         })
       }
     })
-  },[])
+  },[locale])
     
   return (
     <MainPageTemplate paddingX="24px">
@@ -95,7 +103,7 @@ export default function Contato({ pages }) {
               {t('servicesDescription')}
               <Link
                 display="inline"
-                href="/servicos"
+                href="/services"
                 textDecoration="none"
                 fontFamily="Ubuntu"
                 color="#42B0FF"

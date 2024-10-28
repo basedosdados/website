@@ -32,7 +32,7 @@ export default function RawDataSourcesPage({ id }) {
     const fetchRawDataSources = async () => {
       setIsLoading(true)
       try {
-        const url = `/api/datasets/getRawDataSource?id=${id}&locale=${locale}`;
+        const url = `/api/rawDataSources/getRawDataSource?id=${id}&locale=${locale}`;
         const response = await fetch(url, { method: "GET" })
         const result = await response.json()
 
@@ -60,7 +60,8 @@ export default function RawDataSourcesPage({ id }) {
     const array = []
 
     Object.values(value).map((elm) => {
-      array.push(elm.name)
+      const translatedName = elm[`name${capitalize(locale)}`] || elm.name
+      array.push(translatedName)
     })
 
     if(array.length === 0) return t('rawDataSource.notProvided')
@@ -82,13 +83,20 @@ export default function RawDataSourcesPage({ id }) {
   }
 
   const UpdateFrequency = () => {
-    const value = resource?.updates?.[0]
-    if(value === undefined || Object.keys(value).length === 0) return t('rawDataSource.notProvided')
+    const value = resource?.updates?.[0];
+    if (!value || Object.keys(value).length === 0) return t('rawDataSource.notProvided');
 
-    if(value?.frequency >= 0 && value?.entity?.name) return `${value.frequency} ${value.entity.name}`
-    if(value?.entity?.name) return `${value.entity.name}`
+    const localizedName = value.entity[`name${capitalize(locale)}`];
+    const defaultName = value.entity.name;
 
-    return t('rawDataSource.notProvided')
+    if (value.frequency >= 0 && (localizedName || defaultName)) {
+      return `${value.frequency} ${localizedName || defaultName}`;
+    }
+    if (localizedName || defaultName) {
+      return `${localizedName || defaultName}`;
+    }
+
+    return t('rawDataSource.notProvided');
   }
 
   const TooltipText = ({ text, info, ...props }) => {
@@ -211,7 +219,7 @@ export default function RawDataSourcesPage({ id }) {
           textOverflow="ellipsis"
           whiteSpace="nowrap"
         >
-          {resource?.name}
+          {resource?.[`name${capitalize(locale)}`] || resource?.name}
         </Text>
       </StackSkeleton>
 
@@ -351,7 +359,7 @@ export default function RawDataSourcesPage({ id }) {
         >
           {resource?.observationLevels && Object.keys(resource?.observationLevels).length > 0 ?
             <ObservationLevel resource={resource}/>
-          :
+            :
             <Text
               fontFamily="Roboto"
               fontWeight="400"

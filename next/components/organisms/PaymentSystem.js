@@ -14,10 +14,12 @@ import {
 } from "@stripe/react-stripe-js";
 import Button from "../atoms/RoundedButton";
 import styles from "../../styles/paymentSystem.module.css";
+import { useTranslation } from 'next-i18next';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_KEY_STRIPE)
 
 const PaymentForm = ({ onSucess, onErro, clientSecret}) => {
+  const { t } = useTranslation('user');
   const [isLoading, setIsLoading] = useState(false)
   const stripe = useStripe()
   const elements = useElements()
@@ -76,7 +78,7 @@ const PaymentForm = ({ onSucess, onErro, clientSecret}) => {
             backgroundColor: "#22703E"
           }}
         >
-          {isLoading ? <Spinner /> : "Confirmar pagamento"}
+          {isLoading ? <Spinner /> : t('username.confirmPayment')}
         </Button>
       </form>
     </VStack>

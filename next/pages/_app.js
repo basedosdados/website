@@ -4,7 +4,6 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Head from "next/head";
 import themeBD from "../styles/themeBD";
-import i18n from '../i18n';
 import "../styles/globals.css";
 import { useTranslation } from 'next-i18next';
 
@@ -36,7 +35,11 @@ function MyApp({ Component, pageProps }) {
         <title>{locale === 'en' ? 'Data Basis' : locale === 'es' ? 'Base de los Datos' : 'Base dos Dados'}</title>
         <meta
           property="description"
-          content={t('description')}
+          content={
+            locale === 'en' ? 'Hundreds of open datasets for you to explore however you like. Download or access processed data ready for analysis using SQL, Python, R, or Stata.' : 
+            locale === 'es' ? 'Cientos de conjuntos de datos abiertos para que explores como quieras. Descarga o accede a datos procesados y listos para análisis usando SQL, Python, R y Stata.' : 
+            'Centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python, R ou Stata.'
+          }
         />
         <script
           defer

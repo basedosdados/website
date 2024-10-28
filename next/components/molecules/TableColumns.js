@@ -23,7 +23,7 @@ import { triggerGAEvent, formatBytes } from '../../utils';
 import { useTranslation } from 'next-i18next';
 import { capitalize } from 'lodash';
 import {
-  getColumnsBdmTable
+  getTableColumns
 } from "../../pages/api/tables/index";
 
 import InternalError from '../../public/img/internalError'
@@ -89,7 +89,7 @@ function SearchColumn({ isLoaded, resource, columns }) {
   )
 }
 
-export default function ColumnsTable({
+export default function TableColumns({
   tableId,
   checkedColumns,
   onChangeCheckedColumns,
@@ -150,24 +150,33 @@ export default function ColumnsTable({
       setHasLoading(true)
 
       try {
-        const result = await getColumnsBdmTable(tableId)
+        // const result = await getTableColumns(tableId)
+        const url = `/api/tables/getTableColumns?id=${tableId}&locale=${locale}`;
+        const response = await fetch(url, { method: "GET" })
+        const result = await response.json()
 
-        if(result) {
-          setResource(result.sort(sortElements))
-          numberColumns(result.length)
-          setColumns(result.sort(sortElements))
+        if(result.success) {
+          setResource(result.resource.sort(sortElements))
+          numberColumns(result.resource.length)
+          setColumns(result.resource.sort(sortElements))
           setHasLoading(false)
           setIsSearchLoading(false)
+          setIsError(false)
+        } else {
+          console.error(result.error)
+          setIsError(true)
         }
 
       } catch (error) {
         console.error(error)
         setIsError(true)
+      } finally {
+        setIsLoading(false)
       }
     }
 
     featchColumns()
-  },[tableId])
+  },[tableId, locale])
 
   useEffect(() => {
     setIsLoading(hasLoading)
@@ -631,7 +640,7 @@ export default function ColumnsTable({
                     zIndex="4"
                     backgroundColor="#FFF"
                   >
-                    {elm?.node?.[`name${capitalize(locale)}`] || elm?.node?.name || t('column.notProvided')}
+                    {elm?.node?.namePt || elm?.node?.name || elm?.node?.[`name${capitalize(locale)}`] || t('column.notProvided')}
                     <Box
                       display={{base: "none", lg: "flex"}}
                       position="absolute"

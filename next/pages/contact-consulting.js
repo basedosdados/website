@@ -20,7 +20,7 @@ export async function getStaticProps({ locale }) {
   };
 }
 
-export default function ContactConsultancy() {
+export default function ContactConsulting() {
   const { t } = useTranslation('contact');
 
   useEffect(() => {
