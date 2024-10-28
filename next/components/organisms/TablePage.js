@@ -8,6 +8,7 @@ import {
   Divider,
   Tooltip,
 } from "@chakra-ui/react";
+import Link from "../atoms/Link";
 import { useState, useEffect } from "react";
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
@@ -663,9 +664,8 @@ export default function TablePage({ id }) {
             {resource?.rawDataSource?.[0]?._id ?
               Object.values(resource?.rawDataSource).map((elm, i) => {
                 return (
-                  <Text
+                  <Link
                     key={i}
-                    as="a"
                     target="_blank"
                     display="flex"
                     flexDirection="row"
@@ -684,7 +684,7 @@ export default function TablePage({ id }) {
                     href={`/dataset/${elm?.dataset?._id}?raw_data_source=${elm?._id}`}
                   >
                     {elm?.[`name${capitalize(locale)}`] || elm?.name}
-                  </Text>
+                  </Link>
                 )
               }) 
               :

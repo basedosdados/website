@@ -1,8 +1,10 @@
 import axios from "axios";
+import { cleanGraphQLResponse } from "../../../utils";
+import { capitalize } from 'lodash';
 
-const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`;
 
-export default async function getColumnsBdmTable(id) {
+async function getTableColumns(id, locale = 'pt') {
   try {
     const res = await axios({
       url: API_URL,
@@ -20,13 +22,16 @@ export default async function getColumnsBdmTable(id) {
                       _id
                       order
                       name
+                      name${capitalize(locale)}
                       coveredByDictionary
                       directoryPrimaryKey {
                         _id
                         name
+                        name${capitalize(locale)}
                         table {
                           _id
                           name
+                          name${capitalize(locale)}
                           isClosed
                           uncompressedFileSize
                           cloudTables{
@@ -41,10 +46,12 @@ export default async function getColumnsBdmTable(id) {
                           dataset {
                             _id
                             name
+                            name${capitalize(locale)}
                           }
                         }
                       }
                       description
+                      description${capitalize(locale)}
                       bigqueryType {
                         name
                       }
@@ -52,6 +59,7 @@ export default async function getColumnsBdmTable(id) {
                       measurementUnit
                       containsSensitiveData
                       observations
+                      observations${capitalize(locale)}
                     }
                   }
                 }
@@ -62,10 +70,20 @@ export default async function getColumnsBdmTable(id) {
         `
       },
       variables: null
-    })
-    const data = res?.data?.data?.allTable?.edges[0]?.node?.columns?.edges
-    return data
+    });
+    const data = res?.data?.data?.allTable?.edges[0]?.node?.columns?.edges;
+    return data;
   } catch (error) {
-    console.error(error)
+    console.error(error);
+    return "err";
   }
+}
+
+export default async function handler(req, res) {
+  const { id, locale } = req.query;
+  const result = await getTableColumns(id, locale);
+
+  if (result === "err") return res.status(500).json({ error: "err", success: false });
+
+  return res.status(200).json({ resource: result, success: true });
 }

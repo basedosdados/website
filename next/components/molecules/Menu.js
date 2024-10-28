@@ -24,6 +24,7 @@ import {
 import { useEffect, useRef, useState, useMemo } from "react";
 import { useRouter } from "next/router"
 import { useTranslation } from 'next-i18next';
+import LanguageSelector from "../atoms/LanguageSelector";
 import cookies from "js-cookie";
 import MenuDropdown from "./MenuDropdown";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
@@ -33,10 +34,14 @@ import RoundedButton from "../atoms/RoundedButton";
 import HelpWidget from "../atoms/HelpWidget";
 import { triggerGAEvent } from "../../utils";
 
+import BDLogoImage from "../../public/img/logos/bd_logo";
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import BDLogoEduImage from "../../public/img/logos/bd_logo_edu";
 import BDLogoLabImage from "../../public/img/logos/bd_logo_lab";
-import BDLogoImage from "../../public/img/logos/bd_logo";
+import DBLogoImage from "../../public/img/logos/db_logo";
+import DBLogoProImage from "../../public/img/logos/db_logo_pro";
+import DBLogoEduImage from "../../public/img/logos/db_logo_edu";
+import DBLogoLabImage from "../../public/img/logos/db_logo_lab";
 import FarBarsIcon from "../../public/img/icons/farBarsIcon";
 import SearchIcon from "../../public/img/icons/searchIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
@@ -55,12 +60,21 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
       <DrawerOverlay backdropFilter="blur(2px)"/>
       <DrawerContent padding="24px">
-        <BDLogoImage
-          widthImage="65px"
-          heightImage="30px"
-          marginBottom="24px"
-          onClick={() => window.open("/", "_self")}
-        />
+        {locale === 'en' ? (
+          <DBLogoImage
+            widthImage="65px"
+            heightImage="30px"
+            marginBottom="24px"
+            onClick={() => window.open("/", "_self")}
+          />
+        ) : (
+          <BDLogoImage
+            widthImage="65px"
+            heightImage="30px"
+            marginBottom="24px"
+            onClick={() => window.open("/", "_self")}
+          />
+        )}
         <VStack alignItems="flex-start" width="100%" spacing="16px">
           {Object.entries(links).map(([key, elm]) => {
             if(key === "Button") {
@@ -199,8 +213,9 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
 }
 
 function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
-  const router = useRouter()
+  const router = useRouter();
   const { t } = useTranslation('menu');
+  const { locale } = useRouter();
 
   const links = [
     {name: t('public_profile'), value: "profile"},
@@ -215,12 +230,21 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
     <Drawer isOpen={isOpen} onClose={onClose}>
       <DrawerOverlay backdropFilter="blur(2px)"/>
       <DrawerContent padding="16px">
-        <BDLogoImage
-          widthImage="65px"
-          heightImage="30px"
-          marginBottom="24px"
-          onClick={() => window.open("/", "_self")}
-        />
+        {locale === 'en' ? (
+          <DBLogoImage
+            widthImage="65px"
+            heightImage="30px"
+            marginBottom="24px"
+            onClick={() => window.open("/", "_self")}
+          />
+        ) : (
+          <BDLogoImage
+            widthImage="65px"
+            heightImage="30px"
+            marginBottom="24px"
+            onClick={() => window.open("/", "_self")}
+          />
+        )}
 
         <Stack spacing={0} justifyContent="center" alignItems="center" padding="16px 0" marginBottom="24px">
           <Box
@@ -268,7 +292,7 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
             padding="4px 8px"
             marginTop="10px !important"
           >
-            {isUserPro ? "Pro" : "Grátis"}
+            {isUserPro ? t('DBPro') : t('DBFree')}
           </Box>
         </Stack>
 
@@ -492,7 +516,7 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
               padding="4px 8px"
               marginTop="10px"
             >
-              {isUserPro ? "Pro" : "Grátis"}
+              {isUserPro ? t('DBPro') : t('DBFree')}
             </Box>
           </MenuItem>
 
@@ -682,6 +706,7 @@ function DesktopLinks({
 }) {
   const isMobile = useIsMobileMod();
   const { t } = useTranslation('common', 'menu');
+  const { locale } = useRouter();
 
   function LinkMenuDropDown ({ url, text, icon }) {
     const [flag, setFlag] = useBoolean()
@@ -812,20 +837,28 @@ function DesktopLinks({
           <HelpWidget
             tooltip={t('tooltip.helpAndResources')}
             options={[
-              {name: t('tooltip.faq'), component: <Link href="/perguntas-frequentes">{t('tooltip.faq')}</Link>},
-              {name: t('tooltip.documentation'), url: "https://basedosdados.github.io/mais/"},
+              {name: t('tooltip.faq'), component: <Link href="/faq">{t('tooltip.faq')}</Link>},
+              {name: t('tooltip.documentation'), url: 
+                locale === "en" ? "https://basedosdados.github.io/mais/en" :
+                locale === "es" ? "https://basedosdados.github.io/mais/es" :
+                "https://basedosdados.github.io/mais"
+              },
               {name: t('tooltip.youtubeVideos'), url: "https://www.youtube.com/c/BasedosDados/featured"},
-              {},
-              {name: t('tooltip.installPackages'), url: "https://basedosdados.github.io/mais/access_data_packages/"},
-              {},
-              {name: t('tooltip.howToCite'), component: <Link href="/perguntas-frequentes#reference">{t('tooltip.howToCite')}</Link>},
-              {name: t('tooltip.whatAreDirectories'), component: <Link href="/perguntas-frequentes#directories">{t('tooltip.whatAreDirectories')}</Link>},
+              {name: t('tooltip.installPackages'), url: 
+                locale === "en" ? "https://basedosdados.github.io/mais/en/access_data_packages/" :
+                locale === "es" ? "https://basedosdados.github.io/mais/es/access_data_packages/" :
+                "https://basedosdados.github.io/mais/access_data_packages/"
+              },
+              {name: t('tooltip.howToCite'), component: <Link href="/faq#reference">{t('tooltip.howToCite')}</Link>},
+              {name: t('tooltip.whatAreDirectories'), component: <Link href="/faq#directories">{t('tooltip.whatAreDirectories')}</Link>},
               {},
               {name: t('tooltip.discordCommunity'), url: "https://discord.gg/huKWpsVYx4"},
-              {name: t('tooltip.contactUs'), component: <Link href="/contato">{t('tooltip.contactUs')}</Link>},
+              {name: t('tooltip.contactUs'), component: <Link href="/contact">{t('tooltip.contactUs')}</Link>},
             ]}
           />
         }
+
+        <LanguageSelector />
 
         {userData ? (
           <HStack spacing="20px">
@@ -928,12 +961,12 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   }
 
   useEffect(() => {
-    if(route !== "/dataset/[dataset]") return
+    if(router.pathname !== "/dataset/[dataset]") return
     window.addEventListener('scroll', handleScroll)
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [lastScrollY, route])
+  }, [lastScrollY, router.pathname])
 
   function maxWidthDataset() {
     if (route === "/dataset" || route === "/dataset/[dataset]" || route === "/user/[username]") return "1440px"
@@ -962,24 +995,44 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   const links = {
     [t('data')]: `/dataset`,
     [t('solutions')]: [
-      {icon: <BDLogoProImage widthImage="54px"/>, name: [t('exclusive_data')], href: "https://info.basedosdados.org/bd-pro"},
-      {icon: <BDLogoEduImage widthImage="54px"/>, name: [t('data_courses')], href: "https://info.basedosdados.org/bd-edu-sql"},
-      {icon: <BDLogoLabImage widthImage="54px"/>, name: [t('services')], href: "/servicos"},
+      {
+        icon: locale === 'en' ? <DBLogoProImage widthImage="54px"/> : <BDLogoProImage widthImage="54px"/>,
+        name: [t('exclusive_data')],
+        href: locale === 'en' ? "https://info.basedosdados.org/en/bd-pro" :
+              locale === 'es' ? "https://info.basedosdados.org/es/bd-pro" :
+              "https://info.basedosdados.org/bd-pro"
+      },
+      {
+        icon: locale === 'en' ? <DBLogoEduImage widthImage="54px"/> : <BDLogoEduImage widthImage="54px"/>,
+        name: [t('data_courses')],
+        href: "https://info.basedosdados.org/bd-edu-sql"
+      },
+      {
+        icon: locale === 'en' ? <DBLogoLabImage widthImage="54px"/> : <BDLogoLabImage widthImage="54px"/>,
+        name: [t('services')],
+        href: "/services"
+      },
     ],
-    [t('prices')]: "/precos",
+    [t('prices')]: "/prices",
     [t('tutorials')]: [
-      {name: [t('documentation')], href: "https://basedosdados.github.io/mais/"},
+      {name: [t('documentation')], href:
+        locale === "en" ? "https://basedosdados.github.io/mais/en" :
+        locale === "es" ? "https://basedosdados.github.io/mais/es" :
+        "https://basedosdados.github.io/mais"
+      },
       {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
       {name: [t('blog')], href: "https://medium.com/basedosdados"}
     ],
     [t('institutional')]: [
-      {name: [t('about_us')], href: "/quem-somos"},
-      {name: [t('transparency')], href: "/transparencia"},
-      {name: [t('newsletter')], href: "https://info.basedosdados.org/newsletter"},
+      {name: [t('about_us')], href: "/about-us"},
+      {name: [t('transparency')], href: "/transparency"},
+      {name: [t('newsletter')], href: locale === 'en' ? "https://info.basedosdados.org/en/newsletter" :
+                                      locale === 'es' ? "https://info.basedosdados.org/es/newsletter" :
+                                                        "https://info.basedosdados.org/newsletter"},
       {name: [t('jobs')], href: "https://info.basedosdados.org/carreiras"},
-      {name: [t('faq')], href: "/perguntas-frequentes"},
+      {name: [t('faq')], href: "/faq"},
     ],
-    [t('contact')]: "/contato",
+    [t('contact')]: "/contact",
     Button: []
   }
 
@@ -1053,24 +1106,30 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
           <Link
             aria-label="Home"
             width={
-              route === "/" ?
+              router.pathname === "/" ?
               isScrollDown ? "80px" : "0"
               : "80px"
             }
             minWidth={
-              route === "/" ?
+              router.pathname === "/" ?
               isScrollDown ? "80px" : "0"
               : "80px"
             }
             _hover={{opacity:"none"}}
-            href={route === "/" ? "/#home" : "/"}
+            href={router.pathname === "/" ? "/#home" : "/"}
             marginLeft="0 !important"
             transition="0.5s"
             overflow="hidden"
           >
-            <BDLogoImage
-              widthImage="80px"
-            />
+            {locale === 'en' ? (
+              <DBLogoImage
+                widthImage="80px"
+              />
+            ) : (
+              <BDLogoImage
+                widthImage="80px"
+              />
+            )}
           </Link>
 
           {simpleTemplate ?
@@ -1080,7 +1139,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
               userData={userData}
               links={links}
               position={isScrollDown}
-              path={route}
+              path={router.pathname}
               userTemplate={userTemplate}
               isUserPro={isUserPro()}
             />

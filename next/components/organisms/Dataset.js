@@ -16,7 +16,7 @@ import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";
 import { DataBaseSolidIcon } from "../../public/img/icons/databaseIcon";
 
-export default function Database({
+export default function Dataset({
   id,
   name,
   temporalCoverageText,
@@ -285,7 +285,7 @@ export default function Database({
                   lineHeight="20px"
                   color="#71757A"
                 >
-                  {contains.free && t('openData')} {contains.free && contains.pro && t('and')} {contains.pro && t('closedData')}
+                  {contains.free && t('openData')} {contains.free && contains.pro && t('datasetCard.and')} {contains.pro && t('closedData')}
                   {!contains.free && !contains.pro && t('none')}
                 </Text>
               </Stack>

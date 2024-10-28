@@ -426,7 +426,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
           letterSpacing= "0.3px"
         >
           {t('passwordRecovery.needHelp')}{' '}
-          <Link display="inline" fontFamily="ubuntu" color="#42B0FF" href="/contato">
+          <Link display="inline" fontFamily="ubuntu" color="#42B0FF" href="/contact">
             {t('passwordRecovery.contactUs')}
           </Link>
           .

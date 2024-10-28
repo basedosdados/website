@@ -87,6 +87,7 @@ function TextFooterSimple({children, ...props}) {
 
 export default function Footer({ template, ocult = false }) {
   const { t } = useTranslation('common');
+  const { locale } = useRouter();
 
   if(template === "simple") return (
     <VStack
@@ -114,7 +115,7 @@ export default function Footer({ template, ocult = false }) {
             {t('footer.copyright', { year: new Date().getFullYear() })}
           </TextFooterSimple>
           <Link
-            href="/termos-e-privacidade?section=terms"
+            href="/terms?section=terms"
             _hover={{ color: "#252A32" }}
           >
             <TextFooterSimple>
@@ -122,7 +123,7 @@ export default function Footer({ template, ocult = false }) {
             </TextFooterSimple>
           </Link>
           <Link
-            href="/termos-e-privacidade?section=privacy"
+            href="/terms?section=privacy"
             _hover={{ color: "#252A32" }}
           >
             <TextFooterSimple>
@@ -130,7 +131,7 @@ export default function Footer({ template, ocult = false }) {
             </TextFooterSimple>
           </Link>
           <Link
-            href="/contato"
+            href="/contact"
             _hover={{ color: "#252A32" }}
           >
             <TextFooterSimple>
@@ -191,37 +192,46 @@ export default function Footer({ template, ocult = false }) {
               <FooterLink target="_self" href="/dataset">
                 {t('footer.products.searchEngine')}
               </FooterLink>
-              <FooterLink href="https://basedosdados.github.io/mais/">
+              <FooterLink href={
+                            locale === "en" ? "https://basedosdados.github.io/mais/en" :
+                            locale === "es" ? "https://basedosdados.github.io/mais/es" :
+                            "https://basedosdados.github.io/mais"
+                          }
+              >
                 {t('footer.products.publicDatalake')}
               </FooterLink>
-              <FooterLink href="https://basedosdados.github.io/mais/access_data_packages/">
-                {t('footer.products.dataPackages')}
-              </FooterLink>
-              <FooterLink href="https://info.basedosdados.org/bd-pro">
-                {t('footer.products.bdPro')}
+              <FooterLink href={locale === 'en' ? "https://info.basedosdados.org/en/bd-pro" : 
+                                locale === 'es' ? "https://info.basedosdados.org/es/bd-pro" : 
+                                "https://info.basedosdados.org/bd-pro"}>
+                {t('footer.products.DBPro')}
               </FooterLink>
               <FooterLink href="https://info.basedosdados.org/bd-edu-sql">
-                {t('footer.products.bdEdu')}
+                {t('footer.products.DBEdu')}
               </FooterLink>
             </SectionCategories>
 
             <SectionCategories title={t('footer.services.title')} marginBottom={isMobileMod() && "24px !important"}>
-              <FooterLink target="_self" href="/servicos#Captura de dados">
+              <FooterLink target="_self" href="/services#Captura de dados">
                 {t('footer.services.dataCapture')}
               </FooterLink>
-              <FooterLink href="/servicos#Análise de dados">
+              <FooterLink href="/services#Análise de dados">
                 {t('footer.services.dataAnalytics')}
               </FooterLink>
-              <FooterLink href="/servicos#Consultoria de dados">
+              <FooterLink href="/services#Consultoria de dados">
                 {t('footer.services.dataConsulting')}
               </FooterLink>
-              <FooterLink href="/servicos#Estudos de caso">
+              <FooterLink href="/services#Estudos de caso">
                 {t('footer.services.caseStudies')}
               </FooterLink>
             </SectionCategories>
 
             <SectionCategories title={t('footer.tutorials.title')} marginBottom={isMobileMod() && "24px !important"}>
-              <FooterLink href="https://basedosdados.github.io/mais/">
+              <FooterLink href={
+                            locale === "en" ? "https://basedosdados.github.io/mais/en" :
+                            locale === "es" ? "https://basedosdados.github.io/mais/es" :
+                            "https://basedosdados.github.io/mais"
+                          }
+              >
                 {t('footer.tutorials.documentation')}
               </FooterLink>
               <FooterLink href="https://www.youtube.com/watch?v=nGM2OwTUY_M&list=PLu5pyM8QY6hg3GpNCyCtSS3sUi4Jo8Pir">
@@ -230,10 +240,10 @@ export default function Footer({ template, ocult = false }) {
             </SectionCategories>
 
             <SectionCategories title={t('footer.institutional.title')} marginBottom={isMobileMod() && "24px !important"}>
-              <FooterLink target="_self" href="/quem-somos">
+              <FooterLink target="_self" href="/about-us">
                 {t('footer.institutional.aboutUs')}
               </FooterLink>
-              <FooterLink target="_self" href="/transparencia">
+              <FooterLink target="_self" href="/transparency">
                 {t('footer.institutional.transparency')}
               </FooterLink>
               <FooterLink href="https://info.basedosdados.org/newsletter">
@@ -242,13 +252,13 @@ export default function Footer({ template, ocult = false }) {
               <FooterLink href="https://info.basedosdados.org/carreiras">
                 {t('footer.institutional.careers')}
               </FooterLink>
-              <FooterLink href="/perguntas-frequentes">
+              <FooterLink href="/faq">
                 {t('footer.institutional.faq')}
               </FooterLink>
-              <FooterLink target="_self" href="/termos-e-privacidade">
+              <FooterLink target="_self" href="/terms">
                 {t('footer.institutional.termsAndPrivacy')}
               </FooterLink>
-              <FooterLink target="_self" href="/contato">
+              <FooterLink target="_self" href="/contact">
                 {t('footer.institutional.contact')}
               </FooterLink>
               <Link fontWeight="700" color="white" href="/#support">

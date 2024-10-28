@@ -67,6 +67,101 @@
             "register": "Error trying to register, try again later!"
         }
     },
+    "survey": {
+        "title": "Profile survey",
+        "skip": "Skip",
+        "continue": "Continue",
+        "back": "Back",
+        "send": "Send",
+        "error": "Please select one of the options below.",
+        "serverError": "An internal server error occurred. Please try again later.",
+        "questions": [
+            {
+                "question": "In which area do you work?",
+                "options": [
+                    "Technology",
+                    "Health",
+                    "Finance",
+                    "Education",
+                    "Retail",
+                    "Energy",
+                    "Journalism",
+                    "Other"
+                ]
+            },
+            {
+                "question": "What is your position?",
+                "options": [
+                    "CEO/Director",
+                    "Manager",
+                    "Coordinator",
+                    "Analyst",
+                    "Consultant",
+                    "Specialist",
+                    "Assistant",
+                    "Intern",
+                    "Student",
+                    "Professor/Researcher",
+                    "Freelancer",
+                    "Entrepreneur",
+                    "Other"
+                ]
+            },
+            {
+                "question": "What is the size of the company you work for?",
+                "options": [
+                    "1-10 employees",
+                    "11-50 employees",
+                    "51-200 employees",
+                    "201-500 employees",
+                    "More than 500 employees"
+                ]
+            },
+            {
+                "question": "What is the main tool you use for data analysis?",
+                "options": [
+                    "SQL",
+                    "Python",
+                    "R",
+                    "Stata",
+                    "Excel",
+                    "None",
+                    "Other"
+                ]
+            },
+            {
+                "question": "What is your main goal with DB?",
+                "options": [
+                    "Market analysis",
+                    "Competition monitoring",
+                    "Academic research",
+                    "Risk management",
+                    "Product development",
+                    "Compliance and regulatory",
+                    "Public policy analysis",
+                    "Other"
+                ]
+            },
+            {
+                "question": "How did you hear about DB?",
+                "options": [
+                    "Social media",
+                    "Recommendation",
+                    "Online search",
+                    "Events",
+                    "Advertising",
+                    "Other"
+                ]
+            },
+            {
+                "question": "We are always looking to improve the platform and consider it essential to listen to our community in this process. Can we contact you for future research?",
+                "options": [
+                    "Yes",
+                    "No"
+                ]
+            }
+        ]
+    },
     "username": {
         "userSettings": "User settings",
         "firstName": "First name",
@@ -127,6 +222,20 @@
         "deleteAccountWarning": "This action cannot be undone. This will permanently delete your account and remove all your data from our servers.",
         "confirmDeleteInstructions": "Type 'delete account' to confirm",
         "cancel": "Cancel",
+        "exploreFeatures": "Explore features",
+        "allDBFreeResources": "All DB Free resources, plus:",
+        "allDBProResources": "All DB Pro resources, plus:",
+        "active": "Active",
+        "DBFree": "DB Free",
+        "DBFreeSubtitle": "For you to discover the potential of the data platform",
+        "DBPro": "DB Pro",
+        "DBProSubtitle": "For you to have access to the most up-to-date data",
+        "DBEnterprise": "DB Enterprise",
+        "DBEnterpriseSubtitle": "For your company to save time and gain quality in decisions",
+        "perMonth": "/month",
+        "annualBillingMessage": "{{price}} charged once a year",
+        "includes": "Includes",
+        "doesNotInclude": "Does not include",
         "exploreResources": "Explore resources",
         "payment": "Payment",
         "changePlan": "Change plan",
@@ -147,6 +256,7 @@
         "goToHomepage": "Go to homepage",
         "paymentFailed": "Payment failed",
         "paymentError": "An error occurred while processing your payment. Please try again or contact support:",
+        "confirmPayment": "Confirm payment",
         "understood": "Understood",
         "comparePlans": "Compare plans",
         "resources": "Resources",
@@ -157,13 +267,13 @@
         "cloudAccess": "Cloud access",
         "sqlPythonRAccess": "Access via SQL, Python, and R",
         "biIntegration": "Integration with BI tools",
-        "downloadLimit": "Direct download up to 100 MB",
-        "downloadLimitTooltip": "This limit does not apply to access via SQL, Python, and R.",
-        "proPlan": "BD Pro",
+        "directDownloadLimit": "Direct download up to 100 MB",
+        "directDownloadLimitTooltip": "This limit does not apply to access via SQL, Python, and R.",
+        "proPlan": "DB Pro",
         "allFreePlanResources": "All free plan resources, plus:",
-        "highFrequencyTables": "Dozens of updated high-frequency databases",
+        "dozensOfHighFrequencyDatasets": "Dozens of updated high-frequency databases",
         "companyReferenceTable": "Company reference table with updated information",
-        "downloadLimitPro": "Direct download up to 1 GB",
+        "directDownloadLimitPro": "Direct download up to 1 GB",
         "downloadLimitProTooltip": "Tables larger than 1 GB are not available for partial or complete download. This limit does not apply to access via SQL, Python, and R.",
         "passwordChangedSuccessfully": "Password changed successfully!",
         "useNewPassword": "Use your new password to log in next time.",
@@ -187,7 +297,54 @@
         "exportDataInstructions": "To export your data, contact us:",
         "deleteMyAccount": "Delete my account",
         "accountAccessWarning": "By deleting your account, you will lose access to all your data and information.",
-        "usernameAlreadyExists": "Username already exists"
+        "requiredField": "Your name is a required field.",
+        "noSpaces": "There cannot be spaces in this field.",
+        "invalidURL": "Enter a valid URL.",
+        "usernameAlreadyExists": "Username already exists",
+        "confirmAccountDeletion": "Are you sure you want to delete your account?",
+        "accountDeletionWarning": "After deleting your account, all your data will be permanently removed and cannot be recovered.",
+        "confirmDeletion": "Please confirm by typing: \"Delete account\" below.",
+        "delete": "Delete",
+        "newPasswordDifferent": "The new password must be different from the current one",
+        "confirmPasswordRequired": "Confirming the password is required",
+        "noSpacesInPassword": "Passwords entered cannot contain spaces.",
+        "passwordMismatch": "The password entered does not match the password created in the field above. Please check for typing errors and try again.",
+        "incorrectPassword": "The password is incorrect. Please try again.",
+        "hidePassword": "hide password",
+        "showPassword": "show password",
+        "month": "month",
+        "year": "year",
+        "monthly": "(Monthly)",
+        "annually": "(Anual)",
+        "validFor1Year": "(valid for 1 year)",
+        "validFor1Month": "(valid for 1 month)",
+        "validFor": "(valid for",
+        "coupon": "Coupon",
+        "clear": "clear",
+        "enterValidCoupon": "Please enter a valid coupon.",
+        "totalToPay": "Total to pay",
+        "changePlanInstructions": "To upgrade or downgrade, please contact our team. We're ready to help you transition to the new plan as quickly as possible!",
+        "confirmPlanCancellation": "Are you sure you want to cancel your plan?",
+        "planAccessUntil": "Plan access available until: ",
+        "nextAutoRenewal": "Next automatic renewal date: ",
+        "onlyAvailableInBDEnterprises": "Available only in the DB Enterprises plan",
+        "addUser": "Add user",
+        "user": "User",
+        "access": "Access",
+        "administrator": "Administrator",
+        "errEnterPassword": "Please enter the password.",
+        "enterPassword": "Enter your password",
+        "step1of2": "Step 1 of 2",
+        "step2of2": "Step 2 of 2",
+        "BQEmail": "BigQuery access email",
+        "BQEmailDescription1": "Your email needs to be a ",
+        "BQEmailDescription2": "Google account",
+        "BQEmailDescription3": " to ensure exclusive access to the data via BigQuery. We've already filled in with the email you used to create your account on our platform. If you need to use another email to access BigQuery, just edit it below.",
+        "pleaseEnterValidEmail": "Please enter a valid email.",
+        "BQEmailDescription4": "The data access has been granted to the email",
+        "BQEmailDescription5": "If you need to change the access email, you can do so in the 'BigQuery' section of your account settings.",
+        "BQEmailDescription6": "In case of doubt,",
+        "BQEmailDescription7": "contact our support."
     },
     "activate": {
         "accountActive": "Active account",
