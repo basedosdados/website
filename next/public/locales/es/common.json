@@ -27,7 +27,7 @@
     "support": {
         "existence_through_effort": "Existimos gracias al esfuerzo de personas que",
         "those_who_believe_in_quality_open_data": "creen en el acceso a datos abiertos de calidad.",
-        "support_us_too": "Apoya a Base dos Dados también",
+        "support_us_too": "Apoya a Base de los Datos también",
         "enthusiast": "Entusiasta",
         "tight_pocket": "¿Presupuesto ajustado? Solo R$0,50 por",
         "enthusiast_description": "día para ayudarnos a mantener la iniciativa.",
@@ -50,8 +50,9 @@
         "step_2": "Elige la opción de pago PIX;",
         "step_3": "Escanea el código QR o ingresa la clave al lado;",
         "step_4": "¡Haz tu donación!",
-        "want_to_institutionally_support_bd": "¿Te gustaría apoyar a BD institucionalmente? ",
-        "contact_us": "Contáctanos."
+        "want_to_institutionally_support_db": "¿Te gustaría apoyar a BD institucionalmente? ",
+        "contact_us": "Contáctanos.",
+        "donate_any_amount_via_paypal": "Dona cualquier cantidad vía PayPal"
     },
     "edu": {
         "learn_from_the_reference": "Ven a aprender de quienes son referencia",
@@ -85,8 +86,8 @@
             "searchEngine": "Motor de búsqueda",
             "publicDatalake": "Datalake público",
             "dataPackages": "Paquetes",
-            "bdPro": "BD Pro",
-            "bdEdu": "BD Edu"
+            "DBPro": "BD Pro",
+            "DBEdu": "BD Edu"
         },
         "services": {
             "title": "SERVICIOS",
@@ -119,7 +120,7 @@
             "fernando": {
                 "name": "Fernando Barbalho",
                 "position": "Científico de Datos del Tesoro Nacional",
-                "quote": "SiconfiBD es un paquete que trae de forma rápida y programática los datos de la Secretaría del Tesoro Nacional. El código es construido de forma open-source por el equipo del Tesoro y utiliza las tablas tratadas BD+ para componer funciones en R. ¿Cuál es el gasto de personal de los 100 municipios brasileños más poblados? Estas y más de otras 18 preguntas pueden ser consultadas directamente a través del paquete, sin necesidad de SQL."
+                "quote": "SiconfiBD es un paquete que trae de forma rápida y programática los datos de la Secretaría del Tesoro Nacional. El código es construido de forma open-source por el equipo del Tesoro y utiliza las tablas tratadas BD+ para componer funciones en R. ¿Cuál es el gasto de personal de los 100 municipios brasileños más poblados? Esta pregunta y más pueden ser consultadas directamente a través del paquete, sin necesidad de SQL."
             },
             "marina": {
                 "name": "Marina Barros",
@@ -129,7 +130,7 @@
             "amanda": {
                 "name": "Amanda de Albuquerque y Mariana Carvalho",
                 "position": "Cofundadoras de A Ponte",
-                "quote": "Creamos un producto importante nuestro, la Fotografía del Municipio, en asociación con BD. La Fotografía agrega varios indicadores socioeconómicos de los municipios brasileños. A Ponte hizo la planificación y el diseño del informe, mientras que BD se encargó de la parte técnica de visualización y gestión de datos. La asociación nos permitió avanzar rápidamente en el desarrollo de la herramienta y garantizó la alta calidad de datos que queríamos desde el principio."
+                "quote": "Creamos un producto importante de nuestro portfolio, la Fotografía del Municipio, en asociación con BD. La Fotografía agrega varios indicadores socioeconómicos de los municipios brasileños. A Ponte hizo la planificación y el diseño del informe, mientras que BD se encargó de la parte técnica de visualización y gestión de datos. La asociación nos permitió avanzar rápidamente en el desarrollo de la herramienta y garantizó la alta calidad de datos que queríamos desde el principio."
             }
         }
     }

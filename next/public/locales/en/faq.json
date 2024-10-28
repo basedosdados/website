@@ -268,16 +268,16 @@
         },
         {
         "question": "Como a BD coleta dados pessoais?",
-        "answer": "<p>Coletamos informações pessoais que você nos fornece diretamente ao usar nossos serviços. Isso pode incluir seu nome, endereço de e-mail, informações de pagamento e outras informações que você escolher compartilhar conosco. Também coletamos informações de forma automática, através de cookies, incluindo dados de uso, endereço IP, tipo de navegador, e informações sobre o dispositivo que você usa para acessar nossos serviços.</p><p>Utilizamos suas informações pessoais para fornecer e melhorar nossos serviços, incluindo o processamento de pagamentos, o fornecimento de suporte ao cliente e a personalização da experiência do usuário. Não venderemos, alugaremos ou compartilharemos suas informações pessoais com terceiros não afiliados sem o seu consentimento explícito. Para mais informações, acesse nossos Termos de Uso e Políticas de Privacidade <a href=\"http://basedosdados.org/termos-e-privacidade\" target=\"_blank\">aqui</a>.</p>",
+        "answer": "<p>Coletamos informações pessoais que você nos fornece diretamente ao usar nossos serviços. Isso pode incluir seu nome, endereço de e-mail, informações de pagamento e outras informações que você escolher compartilhar conosco. Também coletamos informações de forma automática, através de cookies, incluindo dados de uso, endereço IP, tipo de navegador, e informações sobre o dispositivo que você usa para acessar nossos serviços.</p><p>Utilizamos suas informações pessoais para fornecer e melhorar nossos serviços, incluindo o processamento de pagamentos, o fornecimento de suporte ao cliente e a personalização da experiência do usuário. Não venderemos, alugaremos ou compartilharemos suas informações pessoais com terceiros não afiliados sem o seu consentimento explícito. Para mais informações, acesse nossos Termos de Uso e Políticas de Privacidade <a href=\"http://basedosdados.org/terms\" target=\"_blank\">aqui</a>.</p>",
         "categories": ["Institucional"],
         "keywords": "privacidade, uso, lgpd",
         "id": "personal-data"
         }
     ],
-    "pageTitle": "Perguntas frequentes – Base dos Dados",
-    "pageDescription": "Aqui você encontra as respostas para as suas dúvidas sobre a Base dos Dados. Saiba mais sobre nossos dados, como acessá-los pelo BigQuery usando SQL ou com os pacotes Python e R agora mesmo.",
-    "title": "Perguntas frequentes",
-    "searchPlaceholder": "Pesquise",
+    "pageTitle": "Frequently Asked Questions – Data Basis",
+    "pageDescription": "Here you can find answers to your questions about Data Basis. Learn more about our data, how to access it using SQL with BigQuery or with the Python and R packages now.",
+    "title": "Frequently Asked Questions (in Portuguese)",
+    "searchPlaceholder": "Search",
     "categories": {
         "data": "Dados",
         "paidPlans": "Planos Pagos",
@@ -286,7 +286,7 @@
         "bdEdu": "BD Edu",
         "institutional": "Institucional"
     },
-    "noQuestionsFound": "Infelizmente, não encontramos nenhuma pergunta relacionada à sua busca.",
-    "contactText": "Não encontrou sua pergunta?",
-    "contactLink": "Entre em contato"
+    "noQuestionsFound": "Unfortunately, we couldn't find any questions related to your search.",
+    "contactText": "Didn't find your question? ",
+    "contactLink": "Contact us"
 }

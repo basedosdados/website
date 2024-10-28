@@ -47,9 +47,11 @@ async function getRawDataSource(id, locale = 'pt') {
                       entity {
                         _id
                         name
+                        name${capitalize(locale)}
                         category {
                           _id
                           name
+                          name${capitalize(locale)}
                         }
                       }
                     }
@@ -64,12 +66,14 @@ async function getRawDataSource(id, locale = 'pt') {
                           node {
                             _id
                             name
+                            name${capitalize(locale)}
                           }
                         }
                       }
                       entity {
                         _id
                         name
+                        name${capitalize(locale)}
                       }
                     }
                   }
@@ -80,6 +84,7 @@ async function getRawDataSource(id, locale = 'pt') {
                     node {
                       _id
                       name
+                      name${capitalize(locale)}
                     }
                   }
                 }

@@ -104,7 +104,7 @@ export default function CaseStudies ({
             fontFamily="ubuntu"
             fontSize="16px"
             width="fit-content"
-            href={"/estudos-de-caso"}
+            href={"/case-studies"}
           >
             {t('backLink')}
           </Link>
@@ -207,7 +207,7 @@ export default function CaseStudies ({
               {t('contactText')}
             </BodyText>
             <RoundedButton
-              onClick={() => window.open("/contato", "_blank")}
+              onClick={() => window.open("/contact", "_blank")}
             >
               {t('contactButton')}
             </RoundedButton>

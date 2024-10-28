@@ -6,6 +6,7 @@ import {
   Divider,
   Collapse,
 } from "@chakra-ui/react";
+import Link from "../components/atoms/Link";
 import Head from "next/head";
 import FuzzySearch from 'fuzzy-search';
 import { useEffect, useState } from "react";
@@ -54,11 +55,11 @@ const QuestionsBox = ({ question, answer, id, active }) => {
   },[active])
 
   useEffect(() => {
-    if(router.asPath === `/perguntas-frequentes#${id}`) setIsActive(true)
+    if(router.asPath === `/faq#${id}`) setIsActive(true)
   },[id])
 
   useEffect(() => {
-    if(router.asPath === `/perguntas-frequentes#${id}`) scrollFocus(id)
+    if(router.asPath === `/faq#${id}`) scrollFocus(id)
   },[isActive])
 
   const OpenCloseQuestion = () => {
@@ -308,7 +309,17 @@ export default function FAQ({}) {
               lineHeight="16px"
               letterSpacing="0.2px"
             >
-              {t('contactText')} <a className={styles.link} href="/contato">{t('contactLink')}</a>
+              {t('contactText')} 
+              <Link
+                display="inline"
+                href="/contact"
+                color="#42B0FF"
+                fontFamily="ubuntu"
+                fontSize="16px"
+                fontWeight="500"
+              >
+                {t('contactLink')}
+              </Link>
             </Text>
           </Stack>
         </Stack>

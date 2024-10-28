@@ -28,7 +28,7 @@ export default function InformationRequestPage({ id }) {
     const fetchInformationRequest = async () => {
       setIsLoading(true)
       try {
-        const url = `/api/datasets/getInformationRequest?id=${id}&locale=${locale}`;
+        const url = `/api/informationRequests/getInformationRequest?id=${id}&locale=${locale}`;
         const response = await fetch(url, { method: "GET" })
         const result = await response.json()
 
@@ -256,7 +256,7 @@ export default function InformationRequestPage({ id }) {
 
       <AddInfoTextBase
         title={t('informationRequest.status')}
-        text={resource?.status?.name}
+        text={resource?.status?.[`name${capitalize(locale)}`] || resource?.status?.name}
       />
     </Stack>
   )

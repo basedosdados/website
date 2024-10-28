@@ -252,7 +252,7 @@ const TeamBox = ({
   )
 }
 
-export default function QuemSomos() {
+export default function AboutUs() {
   const { t } = useTranslation('aboutUs');
   const [isLoading, setIsLoading] = useState(false)
   const [data, setData] = useState([])

@@ -247,6 +247,7 @@
         "goToHomepage": "Ir para a página inicial",
         "paymentFailed": "Falha no pagamento",
         "paymentError": "Ocorreu um erro ao processar seu pagamento. Por favor, tente novamente ou entre em contato com o suporte:",
+        "confirmPayment": "Confirmar pagamento",
         "understood": "Entendi",
         "comparePlans": "Comparar planos",
         "resources": "Recursos",
@@ -331,7 +332,18 @@
         "access": "Acesso",
         "administrator": "Administrador",
         "errEnterPassword": "Por favor, insira a senha.",
-        "enterPassword": "Insira sua senha"
+        "enterPassword": "Insira sua senha",
+        "step1of2": "Passo 1 de 2",
+        "step2of2": "Passo 2 de 2",
+        "BQEmail": "E-mail de acesso ao BigQuery",
+        "BQEmailDescription1": "O seu e-mail precisa ser uma ",
+        "BQEmailDescription2": "Conta Google",
+        "BQEmailDescription3": " para garantir acesso exclusivo aos dados pelo BigQuery. Já preenchemos com o e-mail que você usou ao criar sua conta na nossa plataforma. Caso necessite usar outro e-mail para acessar o BigQuery, basta editá-lo abaixo.",
+        "pleaseEnterValidEmail": "Por favor, insira um e-mail válido.",
+        "BQEmailDescription4": "O acesso aos dados foi concedido para o e-mail",
+        "BQEmailDescription5": "Se precisar alterar o e-mail de acesso, você pode fazer isso na seção 'BigQuery' das configurações da sua conta.",
+        "BQEmailDescription6": "Em caso de dúvida,",
+        "BQEmailDescription7": "entre em contato com nosso suporte."
     },
     "activate": {
         "accountActive": "Conta ativa",

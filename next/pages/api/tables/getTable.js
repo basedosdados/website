@@ -52,6 +52,7 @@ async function getTable(id, locale='pt') {
                     node {
                       _id
                       name
+                      name${capitalize(locale)}
                       dataset {
                         _id
                       }

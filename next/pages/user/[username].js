@@ -43,7 +43,7 @@ import ButtonSimple from "../../components/atoms/SimpleButton";
 import InputForm from "../../components/atoms/SimpleInput";
 import Link from "../../components/atoms/Link";
 import Toggle from "../../components/atoms/Toggle";
-import { CardPrice } from "../precos";
+import { CardPrice } from "../prices";
 import PaymentSystem from "../../components/organisms/PaymentSystem";
 import ImageCrop from "../../components/molecules/ImgCrop";
 import { cleanString, triggerGAEvent } from "../../utils";
@@ -1050,7 +1050,7 @@ const Account = ({ userInfo }) => {
           fontSize="16px"
           lineHeight="30px"
           letterSpacing="0.2px"
-          href="/contato"
+          href="/contact"
           target="_self"
         >{t('username.contactUs')}</Link>
       </Box>
@@ -1864,7 +1864,7 @@ const PlansAndPayment = ({ userData }) => {
             fontSize="14px"
             lineHeight="20px"
           >
-            Passo 2 de 2
+            {t('username.step2of2')}
           </Text>
           <Text
             width="100%"
@@ -2248,7 +2248,7 @@ const PlansAndPayment = ({ userData }) => {
             fontSize="14px"
             lineHeight="20px"
           >
-            Passo 1 de 2
+            {t('username.step1of2')}
           </Text>
           <ModalCloseButton
             fontSize="14px"
@@ -2266,7 +2266,7 @@ const PlansAndPayment = ({ userData }) => {
             fontSize="24px"
             lineHeight="36px"
           >
-            E-mail de acesso ao BigQuery
+            {t('username.BQEmail')}
           </Text>
 
           <Text
@@ -2277,7 +2277,9 @@ const PlansAndPayment = ({ userData }) => {
             lineHeight="24px"
             marginBottom="32px !important"
           >
-            O seu e-mail precisa ser uma <Text as="span" fontWeight="500">Conta Google</Text> para garantir acesso exclusivo aos dados pelo BigQuery. Já preenchemos com o e-mail que você usou ao criar sua conta na nossa plataforma. Caso necessite usar outro e-mail para acessar o BigQuery, basta editá-lo abaixo.
+            {t('username.BQEmailDescription1')}
+            <Text as="span" fontWeight="500">{t('username.BQEmailDescription2')}</Text> 
+            {t('username.BQEmailDescription3')}
           </Text>
 
           <Text
@@ -2288,7 +2290,7 @@ const PlansAndPayment = ({ userData }) => {
             lineHeight="24px"
             marginBottom="8px !important"
           >
-            E-mail de acesso
+            {t('username.BQEmail')}
           </Text>
 
           <Stack
@@ -2333,7 +2335,7 @@ const PlansAndPayment = ({ userData }) => {
                 width="21px"
                 height="21px"
                 fill="#BF3434"
-              /> Por favor, insira um e-mail válido.
+              /> {t('username.pleaseEnterValidEmail')}
             </Text>
           }
         </Stack>
@@ -2374,7 +2376,7 @@ const PlansAndPayment = ({ userData }) => {
             
             }}
           >
-            Cancelar
+            {t('username.cancel')}
           </Box>
 
           <Box
@@ -2461,8 +2463,11 @@ const PlansAndPayment = ({ userData }) => {
             lineHeight="24px"
             color="#464A51"
           >
-            O acesso aos dados foi concedido para o e-mail <Text as="span" fontWeight="500">{emailGCP}</Text>. Se precisar alterar o e-mail de acesso, você pode fazer isso na seção “BigQuery” das configurações da sua conta.
-            Em caso de dúvida, <Text as="a" href="/contato" target="_self" color="#0068C5" _hover={{color: "#0057A4"}}>entre em contato com nosso suporte.</Text>
+            {t('username.BQEmailDescription4')} <Text as="span" fontWeight="500">{emailGCP}</Text>.
+            {t('username.BQEmailDescription5')}
+            
+            {t('username.BQEmailDescription6')}
+            <Text as="a" href="/contact" target="_self" color="#0068C5" _hover={{color: "#0057A4"}}>{t('username.BQEmailDescription7')}</Text>
           </Text>
         </Stack>
 
@@ -2596,7 +2601,7 @@ const PlansAndPayment = ({ userData }) => {
               fontSize="16px"
               lineHeight="30px"
               letterSpacing="0.2px"
-              href="/contato"
+              href="/contact"
               target="_self"
               marginLeft="2px"
               >{t('username.contactUs')}</Link>
@@ -2722,12 +2727,12 @@ const PlansAndPayment = ({ userData }) => {
               price={"0"}
               textResource={t('username.resources')}
               resources={[
-                {name: "Tabelas tratadas"},
-                {name: "Dados integrados", tooltip: "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada."},
-                {name: "Acesso em nuvem"},
-                {name: "Acesso via SQL, Python e R"},
-                {name: "Integração com ferramentas BI"},
-                {name: "Download direto até 100 MB", tooltip: "Esse limite não se aplica ao acesso via SQL, Python e R."},
+                {name: t('username.processedTables')},
+                {name: t('username.integratedData'), tooltip: t('username.integratedDataTooltip')},
+                {name: t('username.cloudAccess')},
+                {name: t('username.sqlPythonRAccess')},
+                {name: t('username.biIntegration')},
+                {name: t('username.directDownloadLimit'), tooltip: t('username.directDownloadLimitTooltip')},
               ]}
               button={{
                 text: t('username.exploreFeatures'),
@@ -2822,7 +2827,7 @@ const PlansAndPayment = ({ userData }) => {
             _hover={{transform: "none", opacity: 0.8}}
             onClick={() => {
               AlertChangePlanModal.onClose()
-              window.open("/contato", "_self")
+              window.open("/contact", "_self")
             }}
           >
             {t('username.contactUs')}

@@ -407,11 +407,11 @@ export default function Register() {
           marginTop="16px !important"
         >
           {t('signup.termsAgreement.part1')}
-          <Link display="inline" fontSize="12px" lineHeight="normal" fontFamily="ubuntu" color="#42B0FF" href="/termos-e-privacidade?section=terms" target="_blank">
+          <Link display="inline" fontSize="12px" lineHeight="normal" fontFamily="ubuntu" color="#42B0FF" href="/terms?section=terms" target="_blank">
             {t('signup.termsAgreement.termsLink')}
           </Link>
           {t('signup.termsAgreement.part2')}
-          <Link display="inline" fontSize="12px" lineHeight="normal" fontFamily="ubuntu" color="#42B0FF" href="/termos-e-privacidade?section=privacy" target="_blank">
+          <Link display="inline" fontSize="12px" lineHeight="normal" fontFamily="ubuntu" color="#42B0FF" href="/terms?section=privacy" target="_blank">
             {t('signup.termsAgreement.privacyLink')}
           </Link>
           {t('signup.termsAgreement.part3')}
