@@ -54,7 +54,6 @@ function useIsMobileMod() {
 
 function MenuDrawer({ userData, isOpen, onClose, links }) {
   const { t } = useTranslation('menu');
-  const { locale } = useRouter();
   const isMobile = useIsMobileMod();
 
   return (
@@ -834,7 +833,7 @@ function DesktopLinks({
       }
 
       <HStack spacing="21px" display={{ base: "none", lg: "flex" }}>
-        {(path === "/dataset" || path === "/dataset/[dataset]") &&
+        {(path === "/dataset" || path === "/dataset/[dataset]" || "/user/[username]") &&
           <HelpWidget
             tooltip={t('tooltip.helpAndResources')}
             options={[
@@ -922,8 +921,8 @@ function DesktopLinks({
 
 export default function MenuNav({ simpleTemplate = false, userTemplate = false }) {
   const { t } = useTranslation('menu');
-  const { locale } = useRouter();
-  const router = useRouter();
+  const router = useRouter()
+  const { route } = router
   const [userBD, setUserBD] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const isMobile = useIsMobileMod();
@@ -970,7 +969,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   }, [lastScrollY, router.pathname])
 
   function maxWidthDataset() {
-    if (router.pathname === "/dataset" || router.pathname === "/dataset/[dataset]") return "1440px"
+    if (route === "/dataset" || route === "/dataset/[dataset]" || route === "/user/[username]") return "1440px"
     return "1264px"
   }
 
