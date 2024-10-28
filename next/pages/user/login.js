@@ -145,9 +145,9 @@ export default function Login() {
             fontSize="12px"
             fontFamily="ubuntu"
             marginBottom="24px !important"
-            color="#D93B3B"
+            color="#BF3434"
           >
-            <Exclamation fill="#D93B3B"/>
+            <Exclamation fill="#BF3434"/>
             {errors.login}
           </Box>
         }
@@ -167,10 +167,10 @@ export default function Login() {
               height="40px"
               fontSize="14px"
               borderRadius="16px"
-              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+              _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
             />
-            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
-              <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.email}
+            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
+              <Exclamation marginTop="3px" fill="#BF3434"/>{errors.email}
             </FormErrorMessage>
           </FormControl>
 
@@ -210,7 +210,7 @@ export default function Login() {
               height="40px"
               fontSize="14px"
               borderRadius="16px"
-              _invalid={{boxShadow:"0 0 0 2px #D93B3B"}}
+              _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
               styleElmRight={{
                 width: "50px",
                 height: "40px",
@@ -233,8 +233,8 @@ export default function Login() {
                 />
               }
             />
-            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#D93B3B" display="flex" flexDirection="row" gap="4px" alignItems="center">
-              <Exclamation marginTop="3px" fill="#D93B3B"/>{errors.password}
+            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
+              <Exclamation marginTop="3px" fill="#BF3434"/>{errors.password}
             </FormErrorMessage>
           </FormControl>
 
