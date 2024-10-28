@@ -454,9 +454,9 @@ export function StepText ({index, text}) {
 
 function Support() {
   const { t } = useTranslation('common');
-  const { hasCopied, onCopy } = useClipboard("42494318000116")
-  const router = useRouter();
-  const { locale } = router;
+  const { locale } = useRouter();
+  const { hasCopied, onCopy } = useClipboard("42494318000116");
+  const isMobile = isMobileMod(); // Call hook at the top level
 
   return (
     <VStack
@@ -466,14 +466,14 @@ function Support() {
     >
       <VStack id="support" position="relative" width="95%">
         <Display
-          letterSpacing={isMobileMod() ? "0.2px" : "-0.4px"}
+          letterSpacing={isMobile ? "0.2px" : "-0.4px"}
           position="relative"
           zIndex="1"
           width="100%"
           textAlign="center"
-          margin={isMobileMod() ? "80px 0px 24px" : "104px 0px 24px"}
+          margin={isMobile ? "80px 0px 24px" : "104px 0px 24px"}
         >
-          {t('support.existence_through_effort')} {!isMobileMod() && <br/>} {t('support.those_who_believe_in_quality_open_data')}
+          {t('support.existence_through_effort')} {!isMobile && <br/>} {t('support.those_who_believe_in_quality_open_data')}
         </Display>
 
         {locale === 'pt' && (
@@ -484,9 +484,9 @@ function Support() {
               zIndex="1"
               color="#6F6F6F"
               fontFamily="Ubuntu"
-              fontSize={isMobileMod() ? "16px" : "18px"}
+              fontSize={isMobile ? "16px" : "18px"}
               alignSelf="center"
-              letterSpacing={isMobileMod() ? "0.2px" : "0.1px"}
+              letterSpacing={isMobile ? "0.2px" : "0.1px"}
               fontWeight="300"
               margin="0 0 48px !important"
             >
@@ -536,8 +536,8 @@ function Support() {
               </ShadowBox>
 
               <ShadowBox
-                width={isMobileMod() ? "266px" : "320px"}
-                height={isMobileMod() ? "400" : "428px"}
+                width={isMobile ? "266px" : "320px"}
+                height={isMobile ? "400" : "428px"}
                 image={
                   <DatabaseImage 
                     widthImage="100%"
@@ -625,19 +625,19 @@ function Support() {
                 color="#7D7D7D"
                 fontWeight="400"
                 lineHeight="32px"
-                paddingBottom={!isMobileMod() && "32px"}
+                paddingBottom={!isMobile && "32px"}
               >
                 {t('support.donate_any_amount_via_pix')}
               </Text>
 
               <Grid
-                templateColumns={isMobileMod() ? "repeat(1, 3fr)" : "repeat(3, 1fr)"}
-                gridGap={isMobileMod() && "40px"}
+                templateColumns={isMobile ? "repeat(1, 3fr)" : "repeat(3, 1fr)"}
+                gridGap={isMobile && "40px"}
                 justifyItems="center"
                 width="100%"
               >
                 <GridItem
-                  marginTop={isMobileMod() && "32px !important"}
+                  marginTop={isMobile && "32px !important"}
                   justifyContent="center"
                   alignItems="flex-start"
                 >
@@ -650,7 +650,7 @@ function Support() {
                   </Box>
                 </GridItem>
 
-                <GridItem marginBottom={isMobileMod() && "24px"}>
+                <GridItem marginBottom={isMobile && "24px"}>
                   <ChakraImage
                     alt="QR code para apoiador"
                     position="relative"
@@ -677,7 +677,7 @@ function Support() {
                   </RoundedButton>
                 </GridItem>
 
-                <GridItem display={isMobileMod() && "none"}>
+                <GridItem display={isMobile && "none"}>
                   <BodyText letterSpacing="0.2px" fontSize="16px" color="#FF8484" fontWeight="500" marginBottom="24px">{t('support.follow_the_steps')}</BodyText>
                   <StepText index="1" text={t('support.step_1')}/>
                   <StepText index="2" text={t('support.step_2')}/>
@@ -721,7 +721,7 @@ function Support() {
               color="#7D7D7D"
               fontWeight="400"
               lineHeight="32px"
-              paddingBottom={!isMobileMod() && "32px"}
+              paddingBottom={!isMobile && "32px"}
             >
               {t('support.donate_any_amount_via_paypal')}
             </Text>
@@ -837,3 +837,4 @@ export const config = {
       (dep) => `node_modules/${dep}/**/*.+(js|json)`
   ),
 };
+

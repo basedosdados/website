@@ -707,6 +707,7 @@ function DesktopLinks({
 }) {
   const isMobile = useIsMobileMod();
   const { t } = useTranslation('common', 'menu');
+  const { locale } = useRouter();
 
   function LinkMenuDropDown ({ url, text, icon }) {
     const [flag, setFlag] = useBoolean()
@@ -921,8 +922,8 @@ function DesktopLinks({
 
 export default function MenuNav({ simpleTemplate = false, userTemplate = false }) {
   const { t } = useTranslation('menu');
-  const router = useRouter()
-  const { route, locale } = router
+  const { locale } = useRouter();
+  const router = useRouter();
   const [userBD, setUserBD] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const isMobile = useIsMobileMod();
@@ -961,15 +962,15 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   }
 
   useEffect(() => {
-    if(route !== "/dataset/[dataset]") return
+    if(router.pathname !== "/dataset/[dataset]") return
     window.addEventListener('scroll', handleScroll)
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [lastScrollY, route])
+  }, [lastScrollY, router.pathname])
 
   function maxWidthDataset() {
-    if (route === "/dataset" || route === "/dataset/[dataset]") return "1440px"
+    if (router.pathname === "/dataset" || router.pathname === "/dataset/[dataset]") return "1440px"
     return "1264px"
   }
 
@@ -1106,17 +1107,17 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
           <Link
             aria-label="Home"
             width={
-              route === "/" ?
+              router.pathname === "/" ?
               isScrollDown ? "80px" : "0"
               : "80px"
             }
             minWidth={
-              route === "/" ?
+              router.pathname === "/" ?
               isScrollDown ? "80px" : "0"
               : "80px"
             }
             _hover={{opacity:"none"}}
-            href={route === "/" ? "/#home" : "/"}
+            href={router.pathname === "/" ? "/#home" : "/"}
             marginLeft="0 !important"
             transition="0.5s"
             overflow="hidden"
@@ -1139,7 +1140,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
               userData={userData}
               links={links}
               position={isScrollDown}
-              path={route}
+              path={router.pathname}
               userTemplate={userTemplate}
               isUserPro={isUserPro()}
             />

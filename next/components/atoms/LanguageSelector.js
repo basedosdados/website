@@ -4,8 +4,8 @@ import { useTranslation } from "next-i18next";
 import LanguageIcon from "../../public/img/icons/languageIcon";
 
 export default function LanguageSelector() {
+  const { locale } = useRouter();
   const router = useRouter();
-  const { t } = useTranslation('common');
 
   const changeLanguage = (locale) => {
     router.push(router.pathname, router.asPath, { locale });
@@ -14,7 +14,7 @@ export default function LanguageSelector() {
   return (
     <Menu>
       <MenuButton as={Button} rightIcon={<LanguageIcon />} variant="ghost">
-        {router.locale === 'pt' ? 'PT' : router.locale === 'en' ? 'EN' : 'ES'}
+        {locale === 'pt' ? 'PT' : locale === 'en' ? 'EN' : 'ES'}
       </MenuButton>
       <MenuList>
         <MenuItem onClick={() => changeLanguage('pt')}>Português</MenuItem>

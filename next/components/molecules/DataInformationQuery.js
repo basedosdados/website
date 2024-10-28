@@ -23,6 +23,7 @@ import rHighlight from "highlight.js/lib/languages/r";
 import cookies from "js-cookie";
 import 'highlight.js/styles/obsidian.css'
 import { useTranslation } from 'next-i18next';
+import { useRouter } from "next/router";
 
 import GreenTab from "../atoms/GreenTab";
 import Toggle from "../atoms/Toggle";
@@ -175,6 +176,7 @@ export function CodeHighlight({ language, children }) {
 
 export default function DataInformationQuery({ resource }) {
   const { t } = useTranslation('dataset');
+  const { locale } = useRouter();
   const [tabAccessIndex, setTabAccessIndex] = useState(0)
   const [tabIndex, setTabIndex] = useState(0)
   const [downloadPermitted, setDownloadPermitted] = useState(false)
