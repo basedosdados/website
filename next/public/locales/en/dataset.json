@@ -122,8 +122,8 @@
         "errorInsufficientChecks": "Please select above the columns you want to access.",
         "infoTranslationNotAvailable": ["This table has institutional codes that vary between years. Therefore, we are still working to automate the translation process. For now, we recommend accessing the ", "dictionary","and the", "directories", "to understand how to translate the codes present in the table."],
         "infoDataAvailability": ["These data are available because several people contribute to their maintenance. Before downloading the data, support you too with a financial donation or ", "learn how to contribute your time"],
-        "warningPaidPlanRequired": ["The download of tables with size between 100 MB and 1 GB is available only for ", "subscribers of our paid plans", ". However, you can access the table for free using SQL, Python or R. Consider updating to a paid plan to make the download."],
-        "errorTableTooLarge": "The table size has exceeded the allowed limit for download, of 1 GB. You can access the data in SQL, Python or R.",
+        "warningPaidPlanRequired": ["The download of tables with size between 100 MB and 1 GB is available only for ", "subscribers of our paid plans", ". However, you can access the table for free using SQL, Python, R, or Stata. Consider updating to a paid plan to make the download."],
+        "errorTableTooLarge": "The table size has exceeded the allowed limit for download, of 1 GB. You can access the data in SQL, Python, R, or Stata.",
         "bigQueryAndPackages": "BigQuery and Packages",
         "download": "Download"
     },
@@ -206,7 +206,7 @@
     },
     "informationRequest": {
         "requestNumber": "Request number: {{number}}",
-        "disclaimer": "These data have not passed the treatment methodology of the Data Basis.",
+        "disclaimer": "These data have not been processed by Data Basis.",
         "accessData": "Access data",
         "accessRequest": "Access request",
         "description": "Description",

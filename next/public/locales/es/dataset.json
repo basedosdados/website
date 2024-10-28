@@ -122,8 +122,8 @@
         "errorInsufficientChecks": "Por favor, selecciona arriba las columnas que deseas acceder.",
         "infoTranslationNotAvailable": ["Esta tabla tiene códigos institucionales que varían entre años. Por eso, todavía estamos trabajando para automatizar el proceso de traducción. Por ahora, recomendamos acceder al ", "diccionario", "y los", "directorios", "para entender cómo traducir los códigos presentes en la tabla."],
         "infoDataAvailability": ["Estos datos están disponibles porque varias personas contribuyen a su mantenimiento. Antes de descargar los datos, apóyanos también con una donación financiera o ", "aprende cómo contribuir con tu tiempo"],
-        "warningPaidPlanRequired": ["La descarga de tablas con tamaño entre 100 MB y 1 GB está disponible solo para ", "suscriptores de nuestros planes de pago", ". Sin embargo, puedes acceder a la tabla gratis utilizando SQL, Python o R. Considera actualizar a un plan de pago para hacer la descarga."],
-        "errorTableTooLarge": "El tamaño de la tabla ha excedido el límite permitido para descarga, de 1 GB. Puedes acceder a los datos en SQL, Python o R.",
+        "warningPaidPlanRequired": ["La descarga de tablas con tamaño entre 100 MB y 1 GB está disponible solo para ", "suscriptores de nuestros planes de pago", ". Sin embargo, puedes acceder a la tabla gratis utilizando SQL, Python, R o Stata. Considera actualizar a un plan de pago para hacer la descarga."],
+        "errorTableTooLarge": "El tamaño de la tabla ha excedido el límite permitido para descarga, de 1 GB. Puedes acceder a los datos en SQL, Python, R o Stata.",
         "bigQueryAndPackages": "BigQuery y Paquetes",
         "download": "Descargar"
     },

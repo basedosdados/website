@@ -26,7 +26,7 @@ import { useTranslation } from 'next-i18next';
 
 import GreenTab from "../atoms/GreenTab";
 import Toggle from "../atoms/Toggle";
-import ColumnsTable from "./ColumnsTable";
+import TableColumns from "./TableColumns";
 import { SectionPrice } from "../../pages/prices";
 import { ModalGeneral } from "./uiUserPage";
 import { AlertDiscalimerBox} from "./DisclaimerBox";
@@ -381,7 +381,7 @@ export default function DataInformationQuery({ resource }) {
               </Text>
             </Skeleton>
 
-            <ColumnsTable
+            <TableColumns
               tableId={resource._id}
               checkedColumns={checkedColumns}
               onChangeCheckedColumns={setCheckedColumns}
