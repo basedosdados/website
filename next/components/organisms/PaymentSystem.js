@@ -50,6 +50,7 @@ const PaymentForm = ({ onSucess, onErro, clientSecret}) => {
       if(data?.error?.code === "card_declined") return onErro()
       if(data?.paymentIntent?.status === "succeeded") return onSucess()
     }
+    setIsLoading(false)
   }
 
   return (
