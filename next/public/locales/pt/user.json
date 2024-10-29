@@ -224,8 +224,10 @@
         "planChangeInstructions": "Para alterar seu plano, entre em contato conosco:",
         "contactUs": "Entrar em contato",
         "changeUsername": "Alterar nome de usuário",
-        "newUsername": "Nome de usuário",
+        "newUsername": "Novo nome de usuário",
         "changeUsernameInput": "Insira o nome de usuário",
+        "updateUsername": "Atualizar nome de usuário",
+        "usernameAlreadyExists": "Nome de usuário já existe",
         "confirmDeleteAccount": "Tem certeza que deseja excluir sua conta?",
         "deleteAccountWarning": "Essa ação não pode ser desfeita. Isso excluirá permanentemente sua conta e removerá todos os seus dados de nossos servidores.",
         "confirmDeleteInstructions": "Digite 'excluir conta' para confirmar",
@@ -294,7 +296,6 @@
         "newEmail": "Novo e-mail",
         "enterEmail": "Digite seu e-mail",
         "sendEmail": "Enviar e-mail",
-        "updateUsername": "Atualizar nome de usuário",
         "exportAccountData": "Exportar dados da conta",
         "dataStorageInfo": ["Saiba como seus dados são armazenados em nossos ", "Termos de Uso", " e ", "Políticas de Privacidade", ". Para exportar os dados da sua conta, entre em contato conosco."],
         "deleteMyAccount": "Excluir minha conta",
@@ -305,7 +306,6 @@
         "requiredField": "Seu nome é um campo obrigatorio.",
         "noSpaces": "Não pode haver espaçamento nesse campo.",
         "invalidURL": "Informe uma URL válida.",
-        "usernameAlreadyExists": "Nome de usuário já existe",
         "confirmAccountDeletion": "Tem certeza que deseja deletar sua conta?",
         "accountDeletionWarning": "Após deletar sua conta, todos os dados serão permanentemente removidos e não poderão ser recuperados.",
         "confirmDeletion": "Por favor, confirme escrevendo: \"Excluir conta\" abaixo.",
@@ -360,8 +360,7 @@
         "BQEmailDescription6": "Em caso de dúvida,",
         "BQEmailDescription7": "entre em contato com nosso suporte.",
         "updateEmail": "Atualizar e-mail",
-        "pleaseEnterValidEmail": "Por favor, insira um e-mail válido.",
-        "nextStep": "Próximo"
+        "pleaseEnterValidEmail": "Por favor, insira um e-mail válido."
     },
     "activate": {
         "accountActive": "Conta ativa",

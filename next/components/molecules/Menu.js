@@ -52,7 +52,7 @@ function useIsMobileMod() {
   return useCheckMobile();
 }
 
-function MenuDrawer({ userData, isOpen, onClose, links, locale }) {
+function MenuDrawer({ userData, isOpen, onClose, links }) {
   const { t } = useTranslation('menu');
   const { locale } = useRouter();
   const router = useRouter();
@@ -1068,7 +1068,6 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       <MenuDrawer
         userData={userData}
         links={links}
-        locale={locale}
         {...menuDisclosure}
       />
 
