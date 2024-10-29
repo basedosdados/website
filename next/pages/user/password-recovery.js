@@ -13,6 +13,7 @@ import axios from "axios";
 import InputForm from "../../components/atoms/SimpleInput";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useRouter } from 'next/router';
 
 import Display from "../../components/atoms/Display";
 import Link from "../../components/atoms/Link";
@@ -44,6 +45,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
+  const router = useRouter();
   const { t } = useTranslation('user');
 
   const [email, setEmail] = useState("")
@@ -159,9 +161,9 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
 
     try {
       const res = await axios.request(options)
-      if(res.status === 200) return window.open("/user/login", "_self")
+      if(res.status === 200) return router.push('/user/login')
     } catch (error) {
-      window.open("/user/password-recovery", "_self")
+      router.push('/user/password-recovery')
     }
   }
 
@@ -426,7 +428,12 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
           letterSpacing= "0.3px"
         >
           {t('passwordRecovery.needHelp')}{' '}
-          <Link display="inline" fontFamily="ubuntu" color="#42B0FF" href="/contact">
+          <Link 
+            display="inline" 
+            fontFamily="ubuntu" 
+            color="#42B0FF" 
+            href="/contact"
+          >
             {t('passwordRecovery.contactUs')}
           </Link>
           .

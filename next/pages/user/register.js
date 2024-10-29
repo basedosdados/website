@@ -12,6 +12,7 @@ import { useState } from "react";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { triggerGAEvent } from "../../utils";
+import { useRouter } from 'next/router';
 
 import Input from "../../components/atoms/SimpleInput";
 import Button from "../../components/atoms/RoundedButton";
@@ -36,6 +37,7 @@ export async function getStaticProps({ locale }) {
 }
 
 export default function Register() {
+  const router = useRouter();
   const { t } = useTranslation('user');
 
   const [formData, setFormData] = useState({
@@ -149,7 +151,7 @@ export default function Register() {
       if(result?.success === true) {
         sessionStorage.setItem('registration_email_bd', `${email}`)
         triggerGAEvent("user_register", "register_success")
-        window.open("/user/check-email", "_self")
+        router.push('/user/check-email')
       }
     } catch (error) {
       console.error(error)

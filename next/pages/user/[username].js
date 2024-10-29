@@ -636,7 +636,7 @@ const ProfileConfiguration = ({ userInfo }) => {
 
 const Account = ({ userInfo }) => {
   const { t } = useTranslation('user');
-  const { router } = useRouter()
+  const router = useRouter()
   const emailModal = useDisclosure()
   const usernameModal = useDisclosure()
   const eraseModalAccount = useDisclosure()
@@ -829,7 +829,7 @@ const Account = ({ userInfo }) => {
                   fontSize="14px"
                   justifyContent="end"
                   _hover={{opacity: "0.6"}}
-                  onClick={() => router.push('/password-recovery', undefined, { locale: router.locale })}
+                  onClick={() => router.push('/user/password-recovery', undefined, { locale: router.locale })}
                 >{t('username.forgotPassword')}
                 </ButtonSimple>
               </Box>
@@ -1078,7 +1078,7 @@ const Account = ({ userInfo }) => {
 
 const NewPassword = ({ userInfo }) => {
   const { t } = useTranslation('user');
-  const { router } = useRouter()
+  const router = useRouter()
   const newPasswordModal = useDisclosure()
   const [formData, setFormData] = useState({
     password: "",
@@ -1250,7 +1250,7 @@ const NewPassword = ({ userInfo }) => {
               fontSize="14px"
               justifyContent="end"
               _hover={{opacity: "0.6"}}
-              onClick={() => router.push('/password-recovery', undefined, { locale: router.locale })}
+              onClick={() => router.push('/user/password-recovery', undefined, { locale: router.locale })}
             >{t('username.forgotPassword')}
             </ButtonSimple>
           </Box>
@@ -1300,7 +1300,7 @@ const NewPassword = ({ userInfo }) => {
             fontSize="12px"
             _hover={{opacity: "0.6"}}
             marginTop="8px"
-            onClick={() => router.push('/password-recovery', undefined, { locale: router.locale })}
+            onClick={() => router.push('/user/password-recovery', undefined, { locale: router.locale })}
           >{t('username.forgotPassword')}
           </ButtonSimple>
         </FormControl>
@@ -1568,7 +1568,7 @@ const PlansAndPayment = ({ userData }) => {
       resources : [
         {name: t('username.dozensOfHighFrequencyDatasets')},
         {name: t('username.companyReferenceTable')},
-        {name: t('username.directDownloadLimitPro'), tooltip: t('username.downloadLimitProTooltip')},
+        {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')},
       ]
     },
     "bd_pro_empresas" : {
