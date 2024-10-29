@@ -22,9 +22,6 @@ import Checkbox from '../atoms/Checkbox';
 import { triggerGAEvent, formatBytes } from '../../utils';
 import { useTranslation } from 'next-i18next';
 import { capitalize } from 'lodash';
-import {
-  getTableColumns
-} from "../../pages/api/tables/index";
 
 import InternalError from '../../public/img/internalError'
 import InfoIcon from '../../public/img/icons/infoIcon';
@@ -150,7 +147,6 @@ export default function TableColumns({
       setHasLoading(true)
 
       try {
-        // const result = await getTableColumns(tableId)
         const url = `/api/tables/getTableColumns?id=${tableId}&locale=${locale}`;
         const response = await fetch(url, { method: "GET" })
         const result = await response.json()

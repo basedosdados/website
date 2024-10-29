@@ -52,7 +52,7 @@ function useIsMobileMod() {
   return useCheckMobile();
 }
 
-function MenuDrawer({ userData, isOpen, onClose, links }) {
+function MenuDrawer({ userData, isOpen, onClose, links, locale }) {
   const { t } = useTranslation('menu');
   const { locale } = useRouter();
   const router = useRouter();
@@ -836,7 +836,7 @@ function DesktopLinks({
       }
 
       <HStack spacing="21px" display={{ base: "none", lg: "flex" }}>
-        {(path === "/dataset" || path === "/dataset/[dataset]") &&
+        {(path === "/dataset" || path === "/dataset/[dataset]" || "/user/[username]") &&
           <HelpWidget
             tooltip={t('tooltip.helpAndResources')}
             options={[
@@ -861,7 +861,9 @@ function DesktopLinks({
           />
         }
 
-        <LanguageSelector />
+        {process.env.NEXT_PUBLIC_BASE_URL_FRONTEND === "https://basedosdados.org" ? null: (
+          <LanguageSelector />
+        )}
 
         {userData ? (
           <HStack spacing="20px">
@@ -924,8 +926,8 @@ function DesktopLinks({
 
 export default function MenuNav({ simpleTemplate = false, userTemplate = false }) {
   const { t } = useTranslation('menu');
-  const { locale } = useRouter();
-  const router = useRouter();
+  const router = useRouter()
+  const { route, locale } = router
   const [userBD, setUserBD] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const isMobile = useIsMobileMod();
@@ -972,7 +974,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   }, [lastScrollY, router.pathname])
 
   function maxWidthDataset() {
-    if (router.pathname === "/dataset" || router.pathname === "/dataset/[dataset]") return "1440px"
+    if (route === "/dataset" || route === "/dataset/[dataset]" || route === "/user/[username]") return "1440px"
     return "1264px"
   }
 
@@ -1066,6 +1068,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       <MenuDrawer
         userData={userData}
         links={links}
+        locale={locale}
         {...menuDisclosure}
       />
 
