@@ -75,7 +75,7 @@ function Hero({ dataThemeCatalog, locale }) {
   function openSearchLink() {
     triggerGAEvent("search", search)
     triggerGAEvent("search_home", search)
-    router.push(`/dataset?q=${search}`);
+    router.push(`/search?q=${search}`);
   }
 
   return (
@@ -157,7 +157,7 @@ function Hero({ dataThemeCatalog, locale }) {
                 rightIcon={
                   (search ?
                     <Link
-                      href={`/dataset?q=${search}`}
+                      href={`/search?q=${search}`}
                       onClick={(e) => {
                         e.preventDefault();
                         openSearchLink();
@@ -282,7 +282,7 @@ function Products() {
 
               <SectionLink
                 marginTop="24px !important"
-                href={"/dataset"}
+                href={"/search"}
               >
                 {t('products.start_search')}
               </SectionLink>
@@ -325,7 +325,7 @@ function Products() {
 
               <SectionLink
                 marginTop="24px !important"
-                href={"/dataset?contains=tables"}
+                href={"/search?contains=tables"}
               >
                 {t('products.view_available_data')}
               </SectionLink>

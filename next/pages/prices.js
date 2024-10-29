@@ -438,7 +438,7 @@ export function SectionPrice() {
           }))}
           button={{
             text: t('exploreFeatures'),
-            href: "/dataset",
+            href: "/search",
           }}
           locale={locale}
         />

@@ -189,7 +189,7 @@ export default function Footer({ template, ocult = false }) {
             marginLeft="auto"
           >
             <SectionCategories title={t('footer.products.title')} marginBottom={isMobileMod() && "24px !important"}>
-              <FooterLink target="_self" href="/dataset">
+              <FooterLink target="_self" href="/search">
                 {t('footer.products.searchEngine')}
               </FooterLink>
               <FooterLink href={
@@ -211,16 +211,16 @@ export default function Footer({ template, ocult = false }) {
             </SectionCategories>
 
             <SectionCategories title={t('footer.services.title')} marginBottom={isMobileMod() && "24px !important"}>
-              <FooterLink target="_self" href="/services#Captura de dados">
+              <FooterLink target="_self" href="/services#data-capture">
                 {t('footer.services.dataCapture')}
               </FooterLink>
-              <FooterLink href="/services#Análise de dados">
+              <FooterLink href="/services#analytics">
                 {t('footer.services.dataAnalytics')}
               </FooterLink>
-              <FooterLink href="/services#Consultoria de dados">
+              <FooterLink href="/services#consulting">
                 {t('footer.services.dataConsulting')}
               </FooterLink>
-              <FooterLink href="/services#Estudos de caso">
+              <FooterLink href="/services#case-studies">
                 {t('footer.services.caseStudies')}
               </FooterLink>
             </SectionCategories>

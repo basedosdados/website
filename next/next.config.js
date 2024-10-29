@@ -12,5 +12,16 @@ module.exports = {
   },
   output: "standalone",
   reactStrictMode: true,
-  swcMinify: true
+  swcMinify: true,
+
+  async redirects() {
+    return [
+      {
+        source: '/dataset',
+        destination: '/search',
+        permanent: true,
+      }
+    ]
+  }
+
 };

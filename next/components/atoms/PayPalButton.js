@@ -8,7 +8,7 @@ const PayPalButton = () => {
 
   useEffect(() => {
     const renderButton = () => {
-      if (window.paypal) {
+      if (window.paypal && window.paypal.HostedButtons) {
         const buttonConfig = getButtonConfig(locale);
         window.paypal.HostedButtons({
           hostedButtonId: buttonConfig.id,
@@ -16,10 +16,17 @@ const PayPalButton = () => {
       }
     };
 
-    if (window.paypal) {
+    if (window.paypal && window.paypal.HostedButtons) {
       renderButton();
     } else {
-      window.renderPayPalButton = renderButton;
+      const checkPayPal = setInterval(() => {
+        if (window.paypal && window.paypal.HostedButtons) {
+          renderButton();
+          clearInterval(checkPayPal);
+        }
+      }, 100);
+
+      return () => clearInterval(checkPayPal);
     }
   }, [locale]);
 
