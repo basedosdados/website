@@ -186,7 +186,13 @@
         "enterEmail": "Ingrese su correo electrónico",
         "sendEmail": "Enviar correo electrónico",
         "exportAccountData": "Exportar datos de la cuenta",
-        "dataStorageInfo": "Conozca cómo se almacenan sus datos en nuestros Términos de Uso y Políticas de Privacidad. Para exportar los datos de su cuenta, contáctenos.",
+        "dataStorageInfo": [
+            "Conozca cómo se almacenan sus datos en nuestros ",
+            "Términos de Uso",
+            " y ",
+            "Política de Privacidad",
+            ". Para exportar los datos de su cuenta, contáctenos."
+        ],
         "exportDataInstructions": "Para exportar sus datos, contáctenos:",
         "deleteMyAccount": "Eliminar mi cuenta",
         "accountAccessWarning": "Al eliminar su cuenta, perderá acceso a todos sus datos e información.",
