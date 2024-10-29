@@ -10,7 +10,7 @@ export function DatasetCardTag({ slug, name, locale, ...props }) {
       cursor="pointer"
     >
       <Link
-        href={`/dataset?tag=${slug}`}
+        href={`/search?tag=${slug}`}
         locale={locale}
         fontWeight="300"
         fontFamily="ubuntu"

@@ -104,7 +104,7 @@ export default function DatasetCard({
                 overflow="hidden"
                 filter="invert(1)"
                 _hover={{ opacity: "none" }}
-                href={`/dataset?theme=${c.slug}`}
+                href={`/search?theme=${c.slug}`}
                 target="_blank"
               >
                 <CategoryIcon
@@ -136,7 +136,7 @@ export default function DatasetCard({
           {name}
         </Text>
       </Link>
-      <Link href={`/dataset?organization=${organization.slug}`}>
+      <Link href={`/search?organization=${organization.slug}`}>
         <Text
           noOfLines={2}
           lineHeight="16px"

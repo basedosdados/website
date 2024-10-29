@@ -1214,7 +1214,7 @@ export default function PlansAndPayment ({ userData }) {
               ]}
               button={{
                 text: t('username.exploreFeatures'),
-                href: "/dataset",
+                href: "/search",
                 noHasModal: true,
               }}
             />

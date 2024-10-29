@@ -223,7 +223,7 @@ export default function Dataset({
                   {t('organization')}:
                 </Text>
                 <Link
-                  href={`/dataset?organization=${organization?.slug}`}
+                  href={`/search?organization=${organization?.slug}`}
                   color="#71757A"
                   fontWeight="400"
                   _hover={{
