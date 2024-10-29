@@ -8,6 +8,7 @@ import {
 import Image from 'next/image';
 import { useState, useEffect } from "react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
@@ -54,6 +55,7 @@ export default function CaseStudies ({
   body
 }) {
   const { t } = useTranslation('caseStudies');
+  const router = useRouter();
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
 
@@ -207,7 +209,7 @@ export default function CaseStudies ({
               {t('contactText')}
             </BodyText>
             <RoundedButton
-              onClick={() => window.open("/contact", "_blank")}
+              onClick={() => router.push('/contact')}
             >
               {t('contactButton')}
             </RoundedButton>

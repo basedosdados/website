@@ -7,6 +7,7 @@ import {
 } from "@chakra-ui/react";
 import { useState, useCallback } from "react";
 import cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 
 import Button from "../../components/atoms/Button";
 import { MainPageTemplate } from "../../components/templates/main";
@@ -21,6 +22,7 @@ export async function getStaticProps() {
 }
 
 export default function Survey() {
+  const router = useRouter();
   const [err, setErr] = useState("")
   const [index, setIndex] = useState(0)
   const [stages, setStages] = useState(Array(7).fill([]))
@@ -55,7 +57,7 @@ export default function Survey() {
       .then(res => res.json())
     cookies.set('userBD', JSON.stringify(userData))
     triggerGAEvent("survey_login", skip === "true" ? "Skipou" : "Respondeu")
-    window.open("/", "_self")
+    router.push('/')
   }
 
   const question  = [

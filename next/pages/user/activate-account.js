@@ -10,6 +10,7 @@ import { MainPageTemplate } from "../../components/templates/main";
 import { EmailConfirmImage, EmailRecoveryImage } from "../../public/img/emailImage";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useRouter } from 'next/router';
 
 export async function getServerSideProps(context) {
   const { query, locale } = context;
@@ -27,6 +28,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function ActiveAccount({ data }) {
+  const router = useRouter();
   const { t } = useTranslation('user');
 
   return (
@@ -63,7 +65,7 @@ export default function ActiveAccount({ data }) {
 
             <RoundedButton
               borderRadius="30px"
-              onClick={() => window.open("/user/login", "_self")}
+              onClick={() => router.push('/user/login')}
             >
               {t('activate.loginToAccount')}
             </RoundedButton>
@@ -81,7 +83,7 @@ export default function ActiveAccount({ data }) {
             <SectionText textAlign="center">{t('activate.activationProblem')}</SectionText>
             <RoundedButton
               borderRadius="30px"
-              onClick={() => window.open("/contact", "_self")}
+              onClick={() => router.push('/contact')}
             >
               {t('activate.contactUs')}
             </RoundedButton>

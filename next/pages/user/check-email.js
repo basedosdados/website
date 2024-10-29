@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useRouter } from 'next/router';
 
 import Display from "../../components/atoms/Display";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook"
@@ -22,6 +23,7 @@ export async function getStaticProps({ locale }) {
 }
 
 export default function CheckEmail() {
+  const router = useRouter();
   const { t } = useTranslation('user');
   const [email, setEmail] = useState("")
   const [count, setCount] = useState(0)
@@ -29,9 +31,9 @@ export default function CheckEmail() {
 
   useEffect(() => {
     const res = sessionStorage.getItem("registration_email_bd") || "" 
-    if(res === "") return window.open("/", "_self")
+    if(res === "") return router.push('/')
     setEmail(res)
-  }, [])
+  }, [router])
 
   useEffect(() => { 
     if(count > 0) {

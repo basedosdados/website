@@ -25,7 +25,7 @@
           "Dados integrados",
           "Dados de baixa frequência atualizados",
           "Acesso em nuvem",
-          "Acesso via SQL, Python e R",
+          "Acesso via SQL, Python, R e Stata",
           "Integração com ferramentas BI",
           "Download direto até 100 MB"
         ]
@@ -50,7 +50,7 @@
     },
     "tooltips": {
       "integratedData": "Nossa metodologia de padronização e compatibilização de dados permite que você cruze tabelas de diferentes instituições e temas de maneira simplificada.",
-      "downloadLimit": "Esse limite não se aplica ao acesso via SQL, Python e R.",
-      "downloadLimitPro": "Tabelas maiores que 1 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python e R."
+      "downloadLimit": "Esse limite não se aplica ao acesso via SQL, Python, R ou Stata.",
+      "downloadLimitPro": "Tabelas maiores que 1 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python, R ou Stata."
     }
   }

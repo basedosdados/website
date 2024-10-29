@@ -139,7 +139,7 @@ export default function TablePage({ id }) {
       _hover: {
         fill: "#0057A4"
       },
-      onClick: () => {window.open(href)}
+      onClick: () => {router.push(href)}
     }
   }
 

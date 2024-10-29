@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import cookies from 'js-cookie';
 import { useTranslation } from "react-i18next";
+import { useRouter } from "next/router";
 import Link from "../../atoms/Link";
 
 import {
@@ -23,6 +24,7 @@ import {
 
 export default function Account({ userInfo }) {
   const { t } = useTranslation('user');
+  const router = useRouter();
   const usernameModal = useDisclosure()
   const eraseModalAccount = useDisclosure()
   const sucessEraseModalAccount = useDisclosure()
@@ -295,7 +297,7 @@ export default function Account({ userInfo }) {
             color: "#22703E",
             borderColor: "#22703E"
           }}
-          onClick={() => window.open("/contact")}
+          onClick={() => router.push('/contact')}
         >{t('username.contactUs')}</Button>
       </Box>
 
