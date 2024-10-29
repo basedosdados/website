@@ -295,7 +295,13 @@
         "enterEmail": "Enter your email",
         "sendEmail": "Send email",
         "exportAccountData": "Export account data",
-        "dataStorageInfo": "Learn how your data is stored in our Terms of Use and Privacy Policies. To export your account data, contact us.",
+        "dataStorageInfo": [
+            "Learn how your data is stored in our ",
+            "Terms of Use",
+            " and ",
+            "Privacy Policy",
+            ". To export your account data, contact us."
+        ],
         "exportDataInstructions": "To export your data, contact us:",
         "deleteMyAccount": "Delete my account",
         "accountAccessWarning": "By deleting your account, you will lose access to all your data and information.",
