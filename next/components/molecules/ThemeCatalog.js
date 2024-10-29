@@ -10,6 +10,7 @@ import {
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import { capitalize } from "lodash";
 import { useMediaQuery } from "@chakra-ui/react";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
@@ -278,6 +279,7 @@ function CardThemes ({ responsive, datasetsCards = [], loading, locale }) {
 }
 
 export default function ThemeCatalog ({ data, locale }) {
+  const router = useRouter()
   const [listThemes, setListThemes] = useState([])
   const [defaultDatasetsCards, setDefaultDatasetCards] = useState([])
   const [fetchThemesTimeout, setFetchThemesTimeout] = useState(null)
@@ -328,7 +330,7 @@ export default function ThemeCatalog ({ data, locale }) {
   const handleSelectTheme = (elm) => {
     triggerGAEvent("theme_home", elm)
     triggerGAEvent("theme", elm)
-    window.open("#theme", "_self")
+    router.push("#theme", undefined, { locale: router.locale })
     if(selectedTheme.includes(elm)) {
       setSelectedTheme(selectedTheme.filter(res => res !== elm))
     } else {
