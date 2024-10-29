@@ -156,7 +156,7 @@ export default function PlansAndPayment ({ userData }) {
         {name: t('username.cloudAccess')},
         {name: t('username.sqlPythonRAccess')},
         {name: t('username.biIntegration')},
-        planActive ? "" : {name: t('username.directDownloadLimit'), tooltip: t('username.downloadLimitTooltip')},
+        planActive ? "" : {name: t('username.downloadLimit100MB'), tooltip: t('username.downloadLimit100MBTooltip')},
       ]
     },
     "bd_pro" : {
@@ -180,7 +180,7 @@ export default function PlansAndPayment ({ userData }) {
       resources : [
         {name: t('username.dozensOfHighFrequencyDatasets')},
         {name: t('username.companyReferenceTable')},
-        {name: t('username.directDownloadLimitPro'), tooltip: t('username.downloadLimitProTooltip')},
+        {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')},
       ]
     },
     "bd_pro_empresas" : {
@@ -929,7 +929,7 @@ export default function PlansAndPayment ({ userData }) {
             onClick={() => handlerEmailGcp()}
             isLoading={isLoadingEmailChange}
           >
-            {t('username.nextStep')}
+            {t('username.next')}
           </Button>
         </Stack>
       </ModalGeneral>
@@ -1210,7 +1210,7 @@ export default function PlansAndPayment ({ userData }) {
                 {name: t('username.cloudAccess')},
                 {name: t('username.sqlPythonRAccess')},
                 {name: t('username.biIntegration')},
-                {name: t('username.directDownloadLimit'), tooltip: t('username.directDownloadLimitTooltip')},
+                {name: t('username.downloadLimit100MB'), tooltip: t('username.downloadLimit100MBTooltip')},
               ]}
               button={{
                 text: t('username.exploreFeatures'),
@@ -1228,7 +1228,7 @@ export default function PlansAndPayment ({ userData }) {
               resources={[
                 {name: t('username.dozensOfHighFrequencyDatasets')},
                 {name: t('username.companyReferenceTable')},
-                {name: t('username.directDownloadLimitPro'), tooltip: t('username.downloadLimitProTooltip')}
+                {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')}
               ]}
               button={{
                 text: `${subscriptionInfo?.stripeSubscription === "bd_pro" ? t('username.currentPlan') : hasSubscribed ? t('username.subscribe') : t('username.startFreeTrial')}`,

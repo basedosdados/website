@@ -52,8 +52,10 @@ function useIsMobileMod() {
   return useCheckMobile();
 }
 
-function MenuDrawer({ userData, isOpen, onClose, links, locale }) {
+function MenuDrawer({ userData, isOpen, onClose, links }) {
   const { t } = useTranslation('menu');
+  const { locale } = useRouter();
+  const router = useRouter();
   const isMobile = useIsMobileMod();
 
   return (
@@ -65,14 +67,14 @@ function MenuDrawer({ userData, isOpen, onClose, links, locale }) {
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => window.open("/", "_self")}
+            onClick={() => router.push('/')}
           />
         ) : (
           <BDLogoImage
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => window.open("/", "_self")}
+            onClick={() => router.push('/')}
           />
         )}
         <VStack alignItems="flex-start" width="100%" spacing="16px">
@@ -87,7 +89,7 @@ function MenuDrawer({ userData, isOpen, onClose, links, locale }) {
                   fontFamily="Roboto"
                   fontSize="20px"
                   borderRadius="30px"
-                  onClick={() => window.open(b.href, "_blank")}
+                  onClick={() => router.push(b.href)}
                 >
                   {b.name}
                 </RoundedButton>
@@ -235,14 +237,14 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => window.open("/", "_self")}
+            onClick={() => router.push('/')}
           />
         ) : (
           <BDLogoImage
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => window.open("/", "_self")}
+            onClick={() => router.push('/')}
           />
         )}
 
@@ -362,7 +364,7 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
           onClick={() => {
             cookies.remove('userBD', { path: '/' })
             cookies.remove('token', { path: '/' })
-            window.open("/", "_self")
+            router.push('/')
           }}
         >
           <SignOutIcon width="20px" height="20px"/>
@@ -386,6 +388,7 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
   const [isOpenMenu, setIsOpenMenu] = useState(false)
   const { t } = useTranslation('menu');
   const isMobile = useIsMobileMod();
+  const router = useRouter();
 
   const btnMouseEnterEvent = () => {
     setIsOpenMenu(true)
@@ -527,7 +530,7 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
             gap="8px"
             padding="16px"
             _hover={{ backgroundColor: "transparent", opacity: "0.7" }}
-            onClick={() => window.open(`/user/${userData.username}`, "_self")}
+            onClick={() => router.push(`/user/${userData.username}`)}
           >
             <SettingsIcon fill="#D0D0D0" width="20px" height="20px"/>
             <Text
@@ -551,8 +554,8 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
             onClick={() => {
               cookies.remove('userBD', { path: '/' })
               cookies.remove('token', { path: '/' })
-              window.open("/", "_self")}
-            }
+              router.push('/')
+            }}
           >
             <SignOutIcon width="20px" height="20px" fill="#D0D0D0"/>
             <Text
@@ -1065,7 +1068,6 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       <MenuDrawer
         userData={userData}
         links={links}
-        locale={locale}
         {...menuDisclosure}
       />
 

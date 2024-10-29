@@ -36,9 +36,9 @@ export async function getStaticProps({ locale }) {
 }
 
 export default function Login() {
+  const router = useRouter();
   const { t } = useTranslation('user');
-  const router = useRouter()
-  const { query } = router
+  const { query } = useRouter()
   const [formData, setFormData] = useState({ email: "", password: "" })
   const [errors, setErrors] = useState({ email: "", password: "", login: ""})
   const [showPassword, setShowPassword] = useState(true)
@@ -79,7 +79,7 @@ export default function Login() {
 
         sessionStorage.setItem('registration_email_bd', `${email}`)
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/account/account_activate/${btoa(id)}/`)
-        return window.open("/user/check-email?e=1", "_self")
+        return router.push('/user/check-email?e=1')
       }
       return setErrors({login: t('login.loginError')})
     }
@@ -91,11 +91,21 @@ export default function Login() {
     cookies.set('userBD', JSON.stringify(userData))
 
     if(query.i) {
-      return window.open(`/user/${userData.username}?plans_and_payment&i=${query.i}`, "_self")
+      return router.push({
+        pathname: '/user/[username]',
+        query: { 
+          username: userData.username,
+          plans_and_payment: '',
+          i: query.i
+        }
+      })
     }
 
-    if(userData.workDataTool === null) return window.open("/user/survey", "_self")
-    return window.open("/", "_self")
+    if(userData.workDataTool === null) {
+      return router.push('/user/survey')
+    }
+    
+    return router.push('/')
   }
 
   const LabelTextForm = ({ text, ...props }) => {
@@ -193,7 +203,7 @@ export default function Login() {
                 fontSize="14px"
                 justifyContent="end"
                 _hover={{opacity: "0.6"}}
-                onClick={() => window.open("./password-recovery", "_self")}
+                onClick={() => router.push('/user/password-recovery')}
               >{t('login.forgotPassword')}
               </ButtonSimple>
             </Box>
@@ -267,7 +277,7 @@ export default function Login() {
             color="#42B0FF"
             _hover={{opacity: "0.6"}}
             marginLeft="2px"
-            onClick={() => window.open("./register", "_self")}
+            onClick={() => router.push('/user/register')}
           >{t('login.signUp')}
           </ButtonSimple>.
         </SectionText>
