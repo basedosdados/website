@@ -17,7 +17,7 @@
         "start_search": "Start your search",
         "processed_tables": "PROCESSED TABLES",
         "access_quality_data": "Access quality data",
-        "processed_tables_description": "With the processed tables from our public data lake, you no longer need to spend hours cleaning datasets. Our standardization methodology allows you to easily cross-reference data from different organizations. This way, you can focus on what really matters.",
+        "processed_tables_description": "With the processed tables in our data lake, you no longer need to spend hours cleaning data. Our standardization methodology allows you to easily cross-reference data from different organizations. This way, you can focus on what really matters.",
         "view_available_data": "View available data",
         "packages": "PACKAGES",
         "explore_in_your_favorite_language": "Explore in your favorite language",

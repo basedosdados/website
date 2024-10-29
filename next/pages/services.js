@@ -217,7 +217,7 @@ function CaseStudies ({}) {
 
   return (
     <Stack
-      id="Estudos de caso"
+      id="case-studies"
       width="100%"
       maxWidth="1264px"
       paddingTop="100px"
@@ -336,6 +336,12 @@ export default function Services() {
     [t('services.dataConsulting')]: "https://storage.googleapis.com/basedosdados-website/images/lightbulb.png",
   }
 
+  const service_ids = {
+    [t('services.dataCapture')]: "data-capture",
+    [t('services.dataAnalysis')]: "analytics",
+    [t('services.dataConsulting')]: "consulting",
+  }
+
   return (
     <MainPageTemplate>
       <Head>
@@ -365,7 +371,7 @@ export default function Services() {
           gap="120px"
         >
           {Object.entries(services).map(([k, v]) => (
-            <Link href={`#${k}`} key={v}>
+            <Link href={`#${service_ids[k]}`} key={v}>
               <VStack justify="flex-end">
                 <Image alt="" marginBottom="15px" height="100px" src={v} />
                 <SectionText fontSize="20px" fontWeight="bold">
@@ -379,7 +385,7 @@ export default function Services() {
         <CaseStudies />
 
         <VStack
-          id="Captura de dados"
+          id="data-capture"
           width="100%"
           maxWidth="1264px"
           padding="100px 0 40px"
@@ -434,7 +440,7 @@ export default function Services() {
         </VStack>
 
         <VStack
-          id="Análise de dados"
+          id="analytics"
           width="100%"
           maxWidth="1264px"
           padding="100px 0 40px"
@@ -468,7 +474,7 @@ export default function Services() {
         </VStack>
 
         <VStack
-          id="Consultoria de dados"
+          id="consulting"
           width="100%"
           maxWidth="1264px"
           padding="100px 0 40px"

@@ -197,7 +197,7 @@ export default function DatasetPage ({ dataset }) {
                   {t('organization')}
                 </Text>
                 <Link
-                  href={`/dataset?organization=${dataset?.organization?.slug || ""}`}
+                  href={`/search?organization=${dataset?.organization?.slug || ""}`}
                   color="#464A51"
                   fontWeight="400"
                 >

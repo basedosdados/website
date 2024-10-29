@@ -16,22 +16,22 @@ import { useEffect, useState } from "react";
 import cookies from "js-cookie";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Link from "../../components/atoms/Link";
-import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { triggerGAEvent } from "../../utils";
+import Link from "../components/atoms/Link";
+import { isMobileMod, useCheckMobile } from "../hooks/useCheckMobile.hook";
+import { triggerGAEvent } from "../utils";
 
 import {
   getSearchDatasets
-} from "../api/datasets/index";
+} from "./api/datasets/index";
 
-import { CheckboxFilterAccordion } from "../../components/atoms/FilterAccordion";
-import Checkbox from "../../components/atoms/Checkbox";
-import { TagFilter } from "../../components/atoms/Tag";
-import Dataset from "../../components/organisms/Dataset";
-import { MainPageTemplate } from "../../components/templates/main";
+import { CheckboxFilterAccordion } from "../components/atoms/FilterAccordion";
+import Checkbox from "../components/atoms/Checkbox";
+import { TagFilter } from "../components/atoms/Tag";
+import Dataset from "../components/organisms/Dataset";
+import { MainPageTemplate } from "../components/templates/main";
 
-import FilterIcon from "../../public/img/icons/filterIcon";
-import NotFoundImage from "../../public/img/notFoundImage";
+import FilterIcon from "../public/img/icons/filterIcon";
+import NotFoundImage from "../public/img/notFoundImage";
 
 export async function getStaticProps({ locale }) {
   return {
@@ -357,7 +357,7 @@ export default function SearchDatasetPage() {
         )}
 
         <Link
-          href="/dataset"
+          href="/search"
           fontFamily="Roboto"
           fontWeight="400"
           fontSize="14px"

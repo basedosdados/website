@@ -587,7 +587,7 @@ function SearchInputUser ({ user }) {
   function openSearchLink() {
     if(search.trim() === "") return
     triggerGAEvent("search_menu", search.trim())
-    router.push(`/dataset?q=${search.trim()}`);
+    router.push(`/search?q=${search.trim()}`);
   }
 
   const handleClickOutside = (event) => {
@@ -633,7 +633,7 @@ function SearchInputUser ({ user }) {
           fill="#464A51"
           icon={
             <Link
-              href={`/dataset?q=${search.trim()}`}
+              href={`/search?q=${search.trim()}`}
               onClick={(e) => {
                 e.preventDefault();
                 openSearchLink();
@@ -680,7 +680,7 @@ function SearchInputUser ({ user }) {
         fill="#464A51"
         icon={
           <Link
-            href={`/dataset?q=${search.trim()}`}
+            href={`/search?q=${search.trim()}`}
             onClick={(e) => {
               e.preventDefault();
               openSearchLink();
@@ -836,7 +836,7 @@ function DesktopLinks({
       }
 
       <HStack spacing="21px" display={{ base: "none", lg: "flex" }}>
-        {(path === "/dataset" || path === "/dataset/[dataset]" || "/user/[username]") &&
+        {(path === "/search" || path === "/dataset/[dataset]" || "/user/[username]") &&
           <HelpWidget
             tooltip={t('tooltip.helpAndResources')}
             options={[
@@ -974,7 +974,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   }, [lastScrollY, router.pathname])
 
   function maxWidthDataset() {
-    if (route === "/dataset" || route === "/dataset/[dataset]" || route === "/user/[username]") return "1440px"
+    if (route === "/search" || route === "/dataset/[dataset]" || route === "/user/[username]") return "1440px"
     return "1264px"
   }
 
@@ -998,7 +998,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   }, [userBD, isLoading])
 
   const links = {
-    [t('data')]: `/dataset`,
+    [t('data')]: `/search`,
     [t('solutions')]: [
       {
         icon: locale === 'en' ? <DBLogoProImage widthImage="54px"/> : <BDLogoProImage widthImage="54px"/>,
