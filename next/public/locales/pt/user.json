@@ -297,7 +297,13 @@
         "enterEmail": "Digite seu e-mail",
         "sendEmail": "Enviar e-mail",
         "exportAccountData": "Exportar dados da conta",
-        "dataStorageInfo": ["Saiba como seus dados são armazenados em nossos ", "Termos de Uso", " e ", "Políticas de Privacidade", ". Para exportar os dados da sua conta, entre em contato conosco."],
+        "dataStorageInfo": [
+            "Saiba como seus dados são armazenados em nossos ",
+            "Termos de Uso",
+            " e ",
+            "Políticas de Privacidade",
+            ". Para exportar os dados da sua conta, entre em contato conosco."
+        ],
         "deleteMyAccount": "Excluir minha conta",
         "accountAccessWarning": "Após a exclusão, não será possível recuperar o acesso à sua conta.",
         "deleteAccountSuccessTitle": "Sua conta foi deletada",

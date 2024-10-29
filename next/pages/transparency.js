@@ -33,6 +33,7 @@ export async function getStaticProps({ locale }) {
 export default function Transparency({ pages }) {
   const { t } = useTranslation('transparency');
   const { locale } = useRouter();
+  const router = useRouter();
   const [isMobileMod, setIsMobileMod] = useState(false)
   const isMobile = useCheckMobile();
 
@@ -405,7 +406,7 @@ export default function Transparency({ pages }) {
               width="fit-content"
               height="40px"
               fontSize="15px"
-              onClick={() => window.open("https://apoia.se/basedosdados", "_blank")}
+              onClick={() => router.push("/#support")}
             >
               {t('supportButton')}
             </RoundedButton>
