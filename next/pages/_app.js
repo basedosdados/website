@@ -33,7 +33,7 @@ function MyApp({ Component, pageProps }) {
         }
         <link
           rel="image_src"
-          href="https://storage.googleapis.com/basedosdados-website/thumbnails/2022/thumbnail_padrao.png"
+          href={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`}
         />
 
         <title>{locale === 'en' ? 'Data Basis' : locale === 'es' ? 'Base de los Datos' : 'Base dos Dados'}</title>
@@ -56,14 +56,14 @@ function MyApp({ Component, pageProps }) {
         <meta name="twitter:creator" content="@basedosdados" />
         <meta
           name="twitter:image"
-          content="https://storage.googleapis.com/basedosdados-website/thumbnails/2022/thumbnail_padrao.png"
+          content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`}
           key="twimage"
         />
 
         {/* Open Graph */}
         <meta
           property="og:image"
-          content="https://storage.googleapis.com/basedosdados-website/thumbnails/2022/thumbnail_padrao.png"
+          content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`}
           key="ogimage"
         />
         <meta
