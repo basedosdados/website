@@ -23,36 +23,60 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState, useMemo } from "react";
 import { useRouter } from "next/router"
+import { useTranslation } from 'next-i18next';
+import LanguageSelector from "../atoms/LanguageSelector";
 import cookies from "js-cookie";
 import MenuDropdown from "./MenuDropdown";
-import { isMobileMod, useCheckMobile } from "../../hooks/useCheckMobile.hook"
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
 import HelpWidget from "../atoms/HelpWidget";
 import { triggerGAEvent } from "../../utils";
 
+import BDLogoImage from "../../public/img/logos/bd_logo";
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
 import BDLogoEduImage from "../../public/img/logos/bd_logo_edu";
 import BDLogoLabImage from "../../public/img/logos/bd_logo_lab";
-import BDLogoImage from "../../public/img/logos/bd_logo";
+import DBLogoImage from "../../public/img/logos/db_logo";
+import DBLogoProImage from "../../public/img/logos/db_logo_pro";
+import DBLogoEduImage from "../../public/img/logos/db_logo_edu";
+import DBLogoLabImage from "../../public/img/logos/db_logo_lab";
 import FarBarsIcon from "../../public/img/icons/farBarsIcon";
 import SearchIcon from "../../public/img/icons/searchIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 import SettingsIcon from "../../public/img/icons/settingsIcon";
 import SignOutIcon from "../../public/img/icons/signOutIcon";
 
+function useIsMobileMod() {
+  return useCheckMobile();
+}
+
 function MenuDrawer({ userData, isOpen, onClose, links }) {
+  const { t } = useTranslation('menu');
+  const { locale } = useRouter();
+  const router = useRouter();
+  const isMobile = useIsMobileMod();
+
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
       <DrawerOverlay backdropFilter="blur(2px)"/>
       <DrawerContent padding="24px">
-        <BDLogoImage
-          widthImage="65px"
-          heightImage="30px"
-          marginBottom="24px"
-          onClick={() => window.open("/", "_self")}
-        />
+        {locale === 'en' ? (
+          <DBLogoImage
+            widthImage="65px"
+            heightImage="30px"
+            marginBottom="24px"
+            onClick={() => router.push('/')}
+          />
+        ) : (
+          <BDLogoImage
+            widthImage="65px"
+            heightImage="30px"
+            marginBottom="24px"
+            onClick={() => router.push('/')}
+          />
+        )}
         <VStack alignItems="flex-start" width="100%" spacing="16px">
           {Object.entries(links).map(([key, elm]) => {
             if(key === "Button") {
@@ -65,7 +89,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                   fontFamily="Roboto"
                   fontSize="20px"
                   borderRadius="30px"
-                  onClick={() => window.open(b.href, "_blank")}
+                  onClick={() => router.push(b.href)}
                 >
                   {b.name}
                 </RoundedButton>
@@ -133,14 +157,12 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
           })}
         </VStack>
 
-        {userData ?
+        {userData ? (
           <></>
-          :
-          <Stack display={isMobileMod() ? "flex" : "none"} marginTop="auto" gap="16px">
-            <Box
-              as="a"
+        ) : (
+          <Stack display={isMobile ? "flex" : "none"} marginTop="auto" gap="16px">
+            <Link
               href="/user/login"
-              target="_self"
               display="flex"
               alignItems="center"
               height="40px"
@@ -159,13 +181,11 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                 opacity: 0.7
               }}
             >
-              Entrar
-            </Box>
+              {t('enter', { ns: 'menu' })}
+            </Link>
             
-            <Box
-              as="a"
+            <Link
               href="/user/register"
-              target="_self"
               display="flex"
               alignItems="center"
               height="40px"
@@ -185,23 +205,26 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                 backgroundColor: "#0B89E2"
               }}
             >
-              Cadastrar
-            </Box>
+              {t('register', { ns: 'menu' })}
+            </Link>
           </Stack>
-        }
+        )}
       </DrawerContent>
     </Drawer>
   );
 }
 
 function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
-  const router = useRouter()
+  const router = useRouter();
+  const { t } = useTranslation('menu');
+  const { locale } = useRouter();
 
   const links = [
-    {name: "Perfil público", value: "profile"},
-    {name: "Conta", value: "account"},
-    {name: "Senha", value: "new_password"},
-    {name: "Planos e pagamento", value: "plans_and_payment"},
+    {name: t('public_profile'), value: "profile"},
+    {name: t('account'), value: "account"},
+    {name: t('password'), value: "new_password"},
+    {name: t('plans_and_payment'), value: "plans_and_payment"},
+    isUserPro && {name: t('bigquery'), value: "big_query"},
   ]
   // {name: "Acessos", value: "accesses"},
 
@@ -209,12 +232,21 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
     <Drawer isOpen={isOpen} onClose={onClose}>
       <DrawerOverlay backdropFilter="blur(2px)"/>
       <DrawerContent padding="16px">
-        <BDLogoImage
-          widthImage="65px"
-          heightImage="30px"
-          marginBottom="24px"
-          onClick={() => window.open("/", "_self")}
-        />
+        {locale === 'en' ? (
+          <DBLogoImage
+            widthImage="65px"
+            heightImage="30px"
+            marginBottom="24px"
+            onClick={() => router.push('/')}
+          />
+        ) : (
+          <BDLogoImage
+            widthImage="65px"
+            heightImage="30px"
+            marginBottom="24px"
+            onClick={() => router.push('/')}
+          />
+        )}
 
         <Stack spacing={0} justifyContent="center" alignItems="center" padding="16px 0" marginBottom="24px">
           <Box
@@ -262,7 +294,7 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
             padding="4px 8px"
             marginTop="10px !important"
           >
-            {isUserPro ? "Pro" : "Grátis"}
+            {isUserPro ? t('DBPro') : t('DBFree')}
           </Box>
         </Stack>
 
@@ -282,7 +314,7 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
                   lineHeight="20px"
                   color="#252A32"
                 >
-                  Configurações
+                  {t('settings')}
                 </Text>
               </Stack>
               <AccordionIcon />
@@ -332,7 +364,7 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
           onClick={() => {
             cookies.remove('userBD', { path: '/' })
             cookies.remove('token', { path: '/' })
-            window.open("/", "_self")
+            router.push('/')
           }}
         >
           <SignOutIcon width="20px" height="20px"/>
@@ -343,7 +375,7 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
             lineHeight="20px"
             marginLeft="8px !important"
           >
-            Sair
+            {t('exit')}
           </Text>
         </Stack>
       </DrawerContent>
@@ -354,6 +386,9 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
 function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
   const timerRef = useRef()
   const [isOpenMenu, setIsOpenMenu] = useState(false)
+  const { t } = useTranslation('menu');
+  const isMobile = useIsMobileMod();
+  const router = useRouter();
 
   const btnMouseEnterEvent = () => {
     setIsOpenMenu(true)
@@ -372,7 +407,7 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
     setIsOpenMenu(false)
   }
 
-  if(useCheckMobile()) {
+  if(isMobile) {
     return (
       <Box
         cursor="pointer"
@@ -484,7 +519,7 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
               padding="4px 8px"
               marginTop="10px"
             >
-              {isUserPro ? "Pro" : "Grátis"}
+              {isUserPro ? t('DBPro') : t('DBFree')}
             </Box>
           </MenuItem>
 
@@ -495,7 +530,7 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
             gap="8px"
             padding="16px"
             _hover={{ backgroundColor: "transparent", opacity: "0.7" }}
-            onClick={() => window.open(`/user/${userData.username}`, "_self")}
+            onClick={() => router.push(`/user/${userData.username}`)}
           >
             <SettingsIcon fill="#D0D0D0" width="20px" height="20px"/>
             <Text
@@ -505,7 +540,7 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
               fontWeight="400"
               lineHeight="20px"
             >
-              Configurações
+              {t('settings')}
             </Text>
           </MenuItem>
           <Divider borderColor="#DEDFE0"/>
@@ -519,8 +554,8 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
             onClick={() => {
               cookies.remove('userBD', { path: '/' })
               cookies.remove('token', { path: '/' })
-              window.open("/", "_self")}
-            }
+              router.push('/')
+            }}
           >
             <SignOutIcon width="20px" height="20px" fill="#D0D0D0"/>
             <Text
@@ -530,7 +565,7 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
               fontWeight="400"
               lineHeight="20px"
             >
-              Sair
+              {t('exit')}
             </Text>
           </MenuItem>
         </MenuList>
@@ -541,15 +576,18 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
 }
 
 function SearchInputUser ({ user }) {
+  const { t } = useTranslation('menu');
   const inputMobileRef = useRef(null)
   const [search, setSearch] = useState("")
   const [showInput, setShowInput] = useState(false)
   const [inputFocus, setInputFocus] = useState(false)
+  const isMobile = useIsMobileMod();
+  const router = useRouter();
 
   function openSearchLink() {
     if(search.trim() === "") return
     triggerGAEvent("search_menu", search.trim())
-    window.open(`/dataset?q=${search.trim()}`, "_self")
+    router.push(`/search?q=${search.trim()}`);
   }
 
   const handleClickOutside = (event) => {
@@ -570,7 +608,7 @@ function SearchInputUser ({ user }) {
     }
   }, [showInput])
 
-  if (isMobileMod()) return (
+  if (isMobile) return (
     <Stack spacing={0} width="100%" marginRight={user ? "60px !important" : "0"}>
       <Stack
         display={showInput ? "flex" :"none"}
@@ -591,16 +629,23 @@ function SearchInputUser ({ user }) {
           refInput={inputMobileRef}
           inputFocus={showInput}
           changeInputFocus={setShowInput}
-          placeholder="Pesquisar dados"
+          placeholder={t('search_data')}
           fill="#464A51"
           icon={
-            <SearchIcon
-              alt="pesquisar"
-              width="16.8px"
-              height="16.8px"
-              cursor="pointer"
-              onClick={() => openSearchLink()}
-            />
+            <Link
+              href={`/search?q=${search.trim()}`}
+              onClick={(e) => {
+                e.preventDefault();
+                openSearchLink();
+              }}
+            >
+              <SearchIcon
+                alt="pesquisar"
+                width="16.8px"
+                height="16.8px"
+                cursor="pointer"
+              />
+            </Link>
           }
         />
       </Stack>
@@ -631,16 +676,23 @@ function SearchInputUser ({ user }) {
         onEnterPress={openSearchLink}
         inputFocus={inputFocus}
         changeInputFocus={setInputFocus}
-        placeholder="Pesquisar dados"
+        placeholder={t('search_data')}
         fill="#464A51"
         icon={
-          <SearchIcon
-            alt="pesquisar"
-            width="16.8px"
-            height="16.8px"
-            cursor="pointer"
-            onClick={() => openSearchLink()}
-          />
+          <Link
+            href={`/search?q=${search.trim()}`}
+            onClick={(e) => {
+              e.preventDefault();
+              openSearchLink();
+            }}
+          >
+            <SearchIcon
+              alt="pesquisar"
+              width="16.8px"
+              height="16.8px"
+              cursor="pointer"
+            />
+          </Link>
         }
       />
     </Stack>
@@ -655,6 +707,10 @@ function DesktopLinks({
   userTemplate = false,
   isUserPro
 }) {
+  const isMobile = useIsMobileMod();
+  const { t } = useTranslation('common', 'menu');
+  const { locale } = useRouter();
+
   function LinkMenuDropDown ({ url, text, icon }) {
     const [flag, setFlag] = useBoolean()
 
@@ -773,31 +829,41 @@ function DesktopLinks({
         })}
       </HStack>
 
-      {userTemplate && !isMobileMod() &&
+      {userTemplate && !isMobile &&
         <SearchInputUser
           user={userData !== null}
         />
       }
 
       <HStack spacing="21px" display={{ base: "none", lg: "flex" }}>
-        {(path === "/dataset" || path === "/dataset/[dataset]") &&
+        {(path === "/search" || path === "/dataset/[dataset]" || "/user/[username]") &&
           <HelpWidget
-            tooltip="Ajuda e recursos"
+            tooltip={t('tooltip.helpAndResources')}
             options={[
-              {name:"Perguntas frequentes", url: "/perguntas-frequentes"},
-              {name:"Documentação", url: "https://basedosdados.github.io/mais/"},
-              {name:"Vídeos no YouTube", url: "https://www.youtube.com/c/BasedosDados/featured"},
+              {name: t('tooltip.faq'), component: <Link href="/faq">{t('tooltip.faq')}</Link>},
+              {name: t('tooltip.documentation'), url: 
+                locale === "en" ? "https://basedosdados.github.io/mais/en" :
+                locale === "es" ? "https://basedosdados.github.io/mais/es" :
+                "https://basedosdados.github.io/mais"
+              },
+              {name: t('tooltip.youtubeVideos'), url: "https://www.youtube.com/c/BasedosDados/featured"},
+              {name: t('tooltip.installPackages'), url: 
+                locale === "en" ? "https://basedosdados.github.io/mais/en/access_data_packages/" :
+                locale === "es" ? "https://basedosdados.github.io/mais/es/access_data_packages/" :
+                "https://basedosdados.github.io/mais/access_data_packages/"
+              },
+              {name: t('tooltip.howToCite'), component: <Link href="/faq#reference">{t('tooltip.howToCite')}</Link>},
+              {name: t('tooltip.whatAreDirectories'), component: <Link href="/faq#directories">{t('tooltip.whatAreDirectories')}</Link>},
               {},
-              {name:"Instale os nossos pacotes", url: "https://basedosdados.github.io/mais/access_data_packages/"},
-              {},
-              {name:"Como citar a BD?",  url: "/perguntas-frequentes/#reference"},
-              {name:"O que são diretórios?", url: "/perguntas-frequentes/#directories"},
-              {},
-              {name:"Fale com nossa comunidade no Discord", url: "https://discord.gg/huKWpsVYx4"},
-              {name:"Entre em contato", url: "/contato"},
+              {name: t('tooltip.discordCommunity'), url: "https://discord.gg/huKWpsVYx4"},
+              {name: t('tooltip.contactUs'), component: <Link href="/contact">{t('tooltip.contactUs')}</Link>},
             ]}
           />
         }
+
+        {process.env.NEXT_PUBLIC_BASE_URL_FRONTEND === "https://basedosdados.org" ? null: (
+          <LanguageSelector />
+        )}
 
         {userData ? (
           <HStack spacing="20px">
@@ -805,10 +871,8 @@ function DesktopLinks({
           </HStack>
         ) : (
           <>
-            <Box
-              as="a"
+            <Link
               href="/user/login"
-              target="_self"
               display="flex"
               alignItems="center"
               height="40px"
@@ -827,13 +891,11 @@ function DesktopLinks({
                 opacity: 0.7
               }}
             >
-              Entrar
-            </Box>
+              {t('enter', { ns: 'menu' })}
+            </Link>
             
-            <Box
-              as="a"
+            <Link
               href="/user/register"
-              target="_self"
               display="flex"
               alignItems="center"
               height="40px"
@@ -853,8 +915,8 @@ function DesktopLinks({
                 backgroundColor: "#0B89E2"
               }}
             >
-              Cadastrar
-            </Box>
+              {t('register', { ns: 'menu' })}
+            </Link>
           </>
         )}
       </HStack>
@@ -863,9 +925,12 @@ function DesktopLinks({
 }
 
 export default function MenuNav({ simpleTemplate = false, userTemplate = false }) {
+  const { t } = useTranslation('menu');
   const router = useRouter()
-  const { route } = router
-  const userBD = useMemo(() => cookies.get("userBD") || null, [cookies])
+  const { route, locale } = router
+  const [userBD, setUserBD] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const isMobile = useIsMobileMod();
 
   const menuDisclosure = useDisclosure()
   const menuUserMobile = useDisclosure()
@@ -884,6 +949,12 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     return false
   }
 
+  useEffect(() => {
+    const cookieUserBD = cookies.get("userBD")
+    setUserBD(cookieUserBD || null)
+    setIsLoading(false)
+  }, [])
+
   const handleScroll = () => {
     const currentScrollY = window.scrollY
     if (currentScrollY > lastScrollY) {
@@ -895,58 +966,83 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   }
 
   useEffect(() => {
-    if(route !== "/dataset/[dataset]") return
+    if(router.pathname !== "/dataset/[dataset]") return
     window.addEventListener('scroll', handleScroll)
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [lastScrollY])
+  }, [lastScrollY, router.pathname])
 
   function maxWidthDataset() {
-    if (route === "/dataset" || route === "/dataset/[dataset]") return "1440px"
+    if (route === "/search" || route === "/dataset/[dataset]" || route === "/user/[username]") return "1440px"
     return "1264px"
   }
 
   useEffect(() => {
-    let userInfo = userBD
-    if(userInfo !== null && userInfo !== "undefined") {
-      const res = JSON.parse(userInfo)
-      setUserData({
-        email: res.email,
-        username: res.username,
-        picture: res.picture || "",
-      })
+    if(isLoading) return
+    if(userBD !== null && userBD !== "undefined") {
+      try {
+        const res = JSON.parse(userBD)
+        setUserData({
+          email: res.email,
+          username: res.username,
+          picture: res.picture || "",
+        })
+      } catch (error) {
+        console.error("Error parsing user data:", error)
+        setUserData(null)
+      }
     } else {
       setUserData(null)
     }
-  }, [userBD])
+  }, [userBD, isLoading])
 
   const links = {
-    Dados: "/dataset",
-    Soluções: [
-      {icon: <BDLogoProImage widthImage="54px"/>, name: "Dados exclusivos", href: "https://info.basedosdados.org/bd-pro"},
-      {icon: <BDLogoEduImage widthImage="54px"/>, name: "Curso de dados", href: "https://info.basedosdados.org/bd-edu-sql"},
-      {icon: <BDLogoLabImage widthImage="54px"/>, name: "Serviços", href: "/servicos"},
+    [t('data')]: `/search`,
+    [t('solutions')]: [
+      {
+        icon: locale === 'en' ? <DBLogoProImage widthImage="54px"/> : <BDLogoProImage widthImage="54px"/>,
+        name: [t('exclusive_data')],
+        href: locale === 'en' ? "https://info.basedosdados.org/en/bd-pro" :
+              locale === 'es' ? "https://info.basedosdados.org/es/bd-pro" :
+              "https://info.basedosdados.org/bd-pro"
+      },
+      {
+        icon: locale === 'en' ? <DBLogoEduImage widthImage="54px"/> : <BDLogoEduImage widthImage="54px"/>,
+        name: [t('data_courses')],
+        href: "https://info.basedosdados.org/bd-edu-sql"
+      },
+      {
+        icon: locale === 'en' ? <DBLogoLabImage widthImage="54px"/> : <BDLogoLabImage widthImage="54px"/>,
+        name: [t('services')],
+        href: "/services"
+      },
     ],
-    "Preços": "/precos",
-    Tutoriais: [
-      {name: "Documentação", href: "https://basedosdados.github.io/mais/"},
-      {name: "Vídeos no YouTube", href: "https://www.youtube.com/c/BasedosDados/featured"},
-      {name: "Blog", href: "https://medium.com/basedosdados"}
+    [t('prices')]: "/prices",
+    [t('tutorials')]: [
+      {name: [t('documentation')], href:
+        locale === "en" ? "https://basedosdados.github.io/mais/en" :
+        locale === "es" ? "https://basedosdados.github.io/mais/es" :
+        "https://basedosdados.github.io/mais"
+      },
+      {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
+      {name: [t('blog')], href: "https://medium.com/basedosdados"}
     ],
-    Institucional: [
-      {name: "Quem somos", href: "/quem-somos"},
-      {name: "Transparência", href: "/transparencia"},
-      {name: "Newsletter", href: "https://info.basedosdados.org/newsletter"},
-      {name: "Carreiras", href: "https://info.basedosdados.org/carreiras"},
-      {name: "Perguntas frequentes", href: "/perguntas-frequentes"},
+    [t('institutional')]: [
+      {name: [t('about_us')], href: "/about-us"},
+      {name: [t('transparency')], href: "/transparency"},
+      {name: [t('newsletter')], href: locale === 'en' ? "https://info.basedosdados.org/en/newsletter" :
+                                      locale === 'es' ? "https://info.basedosdados.org/es/newsletter" :
+                                                        "https://info.basedosdados.org/newsletter"},
+      {name: [t('jobs')], href: "https://info.basedosdados.org/carreiras"},
+      {name: [t('faq')], href: "/faq"},
     ],
-    Contato: "/contato",
+    [t('contact')]: "/contact",
     Button: []
   }
 
   useEffect(() => {
-    document.addEventListener("scroll", () => {
+    const handleScroll = () => {
       if (window.scrollY >= 225) setIsScrollDown(true)
       if (window.scrollY <= 225) setIsScrollDown(false)
 
@@ -955,8 +1051,17 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       else
         divRef.current.style.boxShadow =
           "0px 1px 8px 1px rgba(64, 60, 67, 0.16)";
-    });
-  }, [divRef.current])
+    };
+
+    document.addEventListener("scroll", handleScroll);
+    return () => {
+      document.removeEventListener("scroll", handleScroll);
+    };
+  }, [])
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <>
@@ -973,7 +1078,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         width="100%"
         left="0px"
         backgroundColor="#FFFFFF"
-        padding={isMobileMod() ? "15px 20px" : "15px 24px"}
+        padding={isMobile ? "15px 20px" : "15px 24px"}
         zIndex="99"
         transition="0.5s"
         as="nav"
@@ -1006,24 +1111,30 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
           <Link
             aria-label="Home"
             width={
-              route === "/" ?
+              router.pathname === "/" ?
               isScrollDown ? "80px" : "0"
               : "80px"
             }
             minWidth={
-              route === "/" ?
+              router.pathname === "/" ?
               isScrollDown ? "80px" : "0"
               : "80px"
             }
             _hover={{opacity:"none"}}
-            href={route === "/" ? "/#home" : "/"}
+            href={router.pathname === "/" ? "/#home" : "/"}
             marginLeft="0 !important"
             transition="0.5s"
             overflow="hidden"
           >
-            <BDLogoImage
-              widthImage="80px"
-            />
+            {locale === 'en' ? (
+              <DBLogoImage
+                widthImage="80px"
+              />
+            ) : (
+              <BDLogoImage
+                widthImage="80px"
+              />
+            )}
           </Link>
 
           {simpleTemplate ?
@@ -1033,19 +1144,19 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
               userData={userData}
               links={links}
               position={isScrollDown}
-              path={route}
+              path={router.pathname}
               userTemplate={userTemplate}
               isUserPro={isUserPro()}
             />
           }
 
-          {userTemplate && isMobileMod() &&
+          {userTemplate && isMobile &&
             <SearchInputUser
               user={userData !== null}
             />
           }
 
-          {useCheckMobile() && userData &&
+          {isMobile && userData &&
             <MenuUser
               userData={userData}
               onOpen={menuUserMobile.onOpen}

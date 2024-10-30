@@ -1,0 +1,137 @@
+{
+    "search_placeholder": "Encuentra los datos que necesitas",
+    "search_placeholder_mobile": "Encuentra los datos",
+    "popular_terms": "Términos populares:",
+    "search_by_theme": "Buscar por tema",
+    "noDatasetsFound": ["Ningún conjunto con todos los temas seleccionados fue encontrado.","Intente desmarcar alguno de los temas."],
+    "min": "Mín",
+    "max": "Máx",
+    "search": "Buscar",
+    "products": {
+        "facilitation_text": "Facilitamos el trabajo para que la distancia",
+        "analysis_distance": "entre tú y tu análisis sea ",
+        "good_question": "solo una buena pregunta",
+        "filters": "FILTROS",
+        "search_as_you_want": "Busca datos como desees",
+        "search_description": "Hay varios filtros para ayudarte a encontrar los datos que necesitas. Mientras navegas por cientos de conjuntos de datos disponibles en la plataforma, puedes refinar tu búsqueda por tema, organización, cobertura temporal, nivel de observación y más.",
+        "start_search": "Comienza tu búsqueda",
+        "processed_tables": "TABLAS PROCESADAS",
+        "access_quality_data": "Accede a datos de calidad",
+        "processed_tables_description": "Con las tablas procesadas de nuestro lago de datos público, ya no necesitas pasar horas limpiando conjuntos de datos. Nuestra metodología de estandarización te permite cruzar fácilmente datos de diferentes organizaciones. Así, puedes concentrarte en lo que realmente importa.",
+        "view_available_data": "Ver datos disponibles",
+        "packages": "PAQUETES",
+        "explore_in_your_favorite_language": "Explora en tu lenguaje favorito",
+        "packages_description": "Hemos desarrollado paquetes para acceder a datos procesados en Python, R y línea de comandos. Además, puedes consultar y filtrar datos usando SQL en nuestro editor de lago de datos público en Google BigQuery.",
+        "learn_how_to_access": "Aprende cómo acceder"
+    },
+    "support": {
+        "existence_through_effort": "Existimos gracias al esfuerzo de personas que",
+        "those_who_believe_in_quality_open_data": "creen en el acceso a datos abiertos de calidad.",
+        "support_us_too": "Apoya a Base de los Datos también",
+        "enthusiast": "Entusiasta",
+        "tight_pocket": "¿Presupuesto ajustado? Solo R$0,50 por",
+        "enthusiast_description": "día para ayudarnos a mantener la iniciativa.",
+        "month": "mes",
+        "databaser": "Databaser",
+        "donate_1_real_per_day": "Dona R$1 por día",
+        "to_make_databasers_happy": "para hacer felices a los databasers.",
+        "master_of_data": "Maestro de Datos",
+        "master_of_data_description": "Menos de R$2 por día para ahorrarte aún más trabajo.",
+        "donate_any_amount_via_pix": "Dona cualquier cantidad vía PIX",
+        "company_name": "Nombre de la Empresa",
+        "cnpj": "CNPJ",
+        "bank": "Banco",
+        "agency": "Sucursal",
+        "account": "Cuenta",
+        "pix_key_copied": "Clave PIX copiada",
+        "copy_pix_key": "Copiar clave PIX",
+        "follow_the_steps": "Sigue los pasos",
+        "step_1": "Abre tu app bancaria;",
+        "step_2": "Elige la opción de pago PIX;",
+        "step_3": "Escanea el código QR o ingresa la clave al lado;",
+        "step_4": "¡Haz tu donación!",
+        "want_to_institutionally_support_db": "¿Te gustaría apoyar a BD institucionalmente? ",
+        "contact_us": "Contáctanos.",
+        "donate_any_amount_via_paypal": "Dona cualquier cantidad vía PayPal"
+    },
+    "edu": {
+        "learn_from_the_reference": "Ven a aprender de quienes son referencia",
+        "in_making_public_data_available": "en hacer disponibles datos públicos en Brasil",
+        "with_our_course_you_can_go_further": "Con nuestro curso, puedes ir más allá en tu investigación, profesión u organización.",
+        "take_advantage_of_the_promotional_price": "Aprovecha el precio promocional"
+    },
+    "tooltip": {
+        "helpAndResources": "Ayuda y recursos",
+        "faq": "Preguntas frecuentes",
+        "documentation": "Documentación",
+        "youtubeVideos": "Videos de YouTube",
+        "installPackages": "Instalar nuestros paquetes",
+        "howToCite": "¿Cómo citar nuestro trabajo?",
+        "whatAreDirectories": "¿Qué son los directorios?",
+        "discordCommunity": "Habla con nuestra comunidad en Discord",
+        "contactUs": "Contáctanos"
+    },
+    "footer": {
+        "title": "Base de los Datos",
+        "copyright": "® {{year}} Base de los Datos",
+        "termsOfUse": "Términos de uso",
+        "privacyPolicy": "Política de privacidad",
+        "contact": "Contacto",
+        "faq": "Preguntas frecuentes",
+        "newsletter": "Boletín",
+        "careers": "Carreras",
+        "supportProject": "Apoya el proyecto",
+        "products": {
+            "title": "PRODUCTOS",
+            "searchEngine": "Motor de búsqueda",
+            "publicDatalake": "Datalake público",
+            "dataPackages": "Paquetes",
+            "DBPro": "BD Pro",
+            "DBEdu": "BD Edu"
+        },
+        "services": {
+            "title": "SERVICIOS",
+            "dataCapture": "Captura de datos",
+            "dataAnalytics": "Análisis de datos",
+            "dataConsulting": "Consultoría de datos",
+            "caseStudies": "Estudios de caso"
+        },
+        "tutorials": {
+            "title": "TUTORIALES",
+            "documentation": "Documentación",
+            "blog": "Blog",
+            "youtubeVideos": "Vídeos"
+        },
+        "institutional": {
+            "title": "INSTITUCIONAL",
+            "aboutUs": "Quiénes somos",
+            "transparency": "Transparencia",
+            "newsletter": "Boletín",
+            "careers": "Carreras",
+            "faq": "Preguntas frecuentes",
+            "termsAndPrivacy": "Términos y Privacidad",
+            "contact": "Contacto",
+            "supportProject": "Apoya el proyecto"
+        }
+    },
+    "partners": {
+        "partnershipsWith": "Asociaciones con",
+        "testimonials": {
+            "fernando": {
+                "name": "Fernando Barbalho",
+                "position": "Científico de Datos del Tesoro Nacional",
+                "quote": "SiconfiBD es un paquete que trae de forma rápida y programática los datos de la Secretaría del Tesoro Nacional. El código es construido de forma open-source por el equipo del Tesoro y utiliza las tablas tratadas BD+ para componer funciones en R. ¿Cuál es el gasto de personal de los 100 municipios brasileños más poblados? Esta pregunta y más pueden ser consultadas directamente a través del paquete, sin necesidad de SQL."
+            },
+            "marina": {
+                "name": "Marina Barros",
+                "position": "Directora Ejecutiva del Instituto Alziras",
+                "quote": "Con el apoyo de Base de los Datos, realizamos un estudio sobre las desigualdades de género y raza en las elecciones 2016-2020 y las distorsiones en el financiamiento de campañas de alcaldesas y concejalas en las últimas elecciones, lo que resultará en el lanzamiento de una publicación inédita."
+            },
+            "amanda": {
+                "name": "Amanda de Albuquerque y Mariana Carvalho",
+                "position": "Cofundadoras de A Ponte",
+                "quote": "Creamos un producto importante de nuestro portfolio, la Fotografía del Municipio, en asociación con BD. La Fotografía agrega varios indicadores socioeconómicos de los municipios brasileños. A Ponte hizo la planificación y el diseño del informe, mientras que BD se encargó de la parte técnica de visualización y gestión de datos. La asociación nos permitió avanzar rápidamente en el desarrollo de la herramienta y garantizó la alta calidad de datos que queríamos desde el principio."
+            }
+        }
+    }
+}
