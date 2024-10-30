@@ -186,7 +186,8 @@ export default function DatasetCard({
         <HStack
           spacing={0}
           justifyContent="space-between"
-          width="220px"
+          width="100%"
+          gap="20px"
         >
           <Link
             target="_blank"

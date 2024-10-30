@@ -84,16 +84,16 @@ export default function DatasetPage ({ dataset }) {
 
         <link
           rel="image_src"
-          href="https://storage.googleapis.com/basedosdados-website/thumbnails/2022/thumbnail_conjunto.png"
+          href={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/dataset.png`}
         />
         <meta
           property="og:image"
-          content="https://storage.googleapis.com/basedosdados-website/thumbnails/2022/thumbnail_conjunto.png"
+          content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/dataset.png`}
           key="ogimage"
         />
         <meta
           name="twitter:image"
-          content="https://storage.googleapis.com/basedosdados-website/thumbnails/2022/thumbnail_conjunto.png"
+          content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/dataset.png`}
           key="twimage"
         />
         <meta
