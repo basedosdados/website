@@ -26,7 +26,11 @@ function MyApp({ Component, pageProps }) {
           <meta name="robots" content="noindex" />
         )}
         {/* <meta/> para não noindex ambientes de development e staging */}
-        <link rel="icon" type="image/ico" href="/favicon.ico" />
+        {locale === 'en' ?
+          <link rel="icon" type="image/ico" href="/favicon_en.ico"/>
+          :
+          <link rel="icon" type="image/ico" href="/favicon_default.ico"/>
+        }
         <link
           rel="image_src"
           href="https://storage.googleapis.com/basedosdados-website/thumbnails/2022/thumbnail_padrao.png"
