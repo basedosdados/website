@@ -4,9 +4,6 @@
     "popular_terms": "Popular terms:",
     "search_by_theme": "Search by theme",
     "noDatasetsFound": ["No dataset with all selected themes was found.","Try unselecting some of the themes."],
-    "min": "Min",
-    "max": "Max",
-    "search": "Search",
     "products": {
         "facilitation_text": "We make the work easier so that the distance",
         "analysis_distance": "between you and your analysis is ",

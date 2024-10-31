@@ -861,10 +861,6 @@ function DesktopLinks({
           />
         }
 
-        {process.env.NEXT_PUBLIC_BASE_URL_FRONTEND === "https://basedosdados.org" ? null: (
-          <LanguageSelector />
-        )}
-
         {userData ? (
           <HStack spacing="20px">
             <MenuUser userData={userData} isUserPro={isUserPro}/>

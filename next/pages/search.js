@@ -36,7 +36,7 @@ import NotFoundImage from "../public/img/notFoundImage";
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common', 'dataset', 'menu'])),
+      ...(await serverSideTranslations(locale, ['common', 'dataset', 'menu', 'search'])),
     },
   };
 }
