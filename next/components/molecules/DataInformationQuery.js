@@ -594,8 +594,10 @@ export default function DataInformationQuery({ resource }) {
                 >
                   {t('table.warningPaidPlanRequired', { returnObjects: true })[0]}
                   <Link
+                    display="inline"
                     target="_blank"
                     href="/prices"
+                    fontWeight="400"
                     color="#0068C5"
                     _hover={{color: "#0057A4"}}
                   >

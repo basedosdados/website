@@ -836,7 +836,7 @@ function DesktopLinks({
       }
 
       <HStack spacing="21px" display={{ base: "none", lg: "flex" }}>
-        {(path === "/search" || path === "/dataset/[dataset]" || "/user/[username]") &&
+        {(path === "/search" || path === "/dataset/[dataset]" || path === "/user/[username]") &&
           <HelpWidget
             tooltip={t('tooltip.helpAndResources')}
             options={[
