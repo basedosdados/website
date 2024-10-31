@@ -2,7 +2,8 @@ import {
   HStack,
   Stack,
   VStack,
-  Text
+  Text,
+  Box
 } from "@chakra-ui/react";
 import Link from "../atoms/Link";
 import BodyText from "../atoms/BodyText"
@@ -18,6 +19,7 @@ import GithubIcon from "../../public/img/icons/githubIcon";
 import LinkedinIcon from "../../public/img/icons/linkedinIcon";
 import WhatsAppIcon from "../../public/img/icons/whatsAppIcon";
 import TelegramIcon from "../../public/img/icons/telegramIcon";
+import LanguageSelector from "../atoms/LanguageSelector";
 
 function SectionCategories({ title, children, ...props }) {
   return (
@@ -105,39 +107,46 @@ export default function Footer({ template, ocult = false }) {
         <Stack
           width="100%"
           maxWidth="1440px"
-          justifyContent="center"
+          justifyContent="space-between"
           direction={{base: "column-reverse", lg: "row"}}
           spacing={0}
           gridGap={{base: "8px", lg: "40px"}}
           padding={{base: "24px", lg: "0"}}
         >
-          <TextFooterSimple>
-            {t('footer.copyright', { year: new Date().getFullYear() })}
-          </TextFooterSimple>
-          <Link
-            href="/terms?section=terms"
-            _hover={{ color: "#252A32" }}
-          >
+          <HStack spacing={4}>
             <TextFooterSimple>
-              {t('footer.termsOfUse')}
+              {t('footer.copyright', { year: new Date().getFullYear() })}
             </TextFooterSimple>
-          </Link>
-          <Link
-            href="/terms?section=privacy"
-            _hover={{ color: "#252A32" }}
-          >
-            <TextFooterSimple>
-              {t('footer.privacyPolicy')}
-            </TextFooterSimple>
-          </Link>
-          <Link
-            href="/contact"
-            _hover={{ color: "#252A32" }}
-          >
-            <TextFooterSimple>
-              {t('footer.contact')}
-            </TextFooterSimple>
-          </Link>
+            <Box ml={4}>
+              <LanguageSelector theme="light" />
+            </Box>
+          </HStack>
+          <HStack spacing={4}>
+            <Link
+              href="/terms?section=terms"
+              _hover={{ color: "#252A32" }}
+            >
+              <TextFooterSimple>
+                {t('footer.termsOfUse')}
+              </TextFooterSimple>
+            </Link>
+            <Link
+              href="/terms?section=privacy"
+              _hover={{ color: "#252A32" }}
+            >
+              <TextFooterSimple>
+                {t('footer.privacyPolicy')}
+              </TextFooterSimple>
+            </Link>
+            <Link
+              href="/contact"
+              _hover={{ color: "#252A32" }}
+            >
+              <TextFooterSimple>
+                {t('footer.contact')}
+              </TextFooterSimple>
+            </Link>
+          </HStack>
         </Stack>
       </VStack>
     </VStack>
@@ -292,7 +301,14 @@ export default function Footer({ template, ocult = false }) {
             alignItems="flex-start"
             marginTop={isMobileMod() && "16px"}
           >
-            <BodyText color="#FFF" fontSize="16px" letterSpacing="0.2px">{t('footer.copyright', { year: new Date().getFullYear() })}</BodyText>
+            <HStack spacing={4}>
+              <BodyText color="#FFF" fontSize="16px" letterSpacing="0.2px">
+                {t('footer.copyright', { year: new Date().getFullYear() })}
+              </BodyText>
+              <Box ml={4}>
+                <LanguageSelector theme="dark" />
+              </Box>
+            </HStack>
           </HStack>
 
           <HStack spacing={3}>
