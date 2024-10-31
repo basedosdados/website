@@ -295,7 +295,7 @@ export const CardPrice = ({
 }
 
 export function SectionPrice() {
-  const { t } = useTranslation('prices');
+  const { t, ready } = useTranslation('prices');
   const { locale } = useRouter();
   const [toggleAnual, setToggleAnual] = useState(true)
   const [plans, setPlans] = useState(null)
@@ -303,6 +303,8 @@ export function SectionPrice() {
   const [isBDPro, setIsBDPro] = useState({isCurrentPlan: false})
   const [isBDEmp, setIsBDEmp] = useState({isCurrentPlan: false})
   const [hasSubscribed, setHasSubscribed] = useState(true)
+
+  if (!ready) return null
 
   async function alreadySubscribed(id) {
     const result = await fetch(`/api/user/getAlreadySubscribed?p=${btoa(id)}`)

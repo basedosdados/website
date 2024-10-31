@@ -133,9 +133,9 @@ export function TemporalCoverageString({
 }
 
 export function TemporalCoverageBar ({ value }) {
+  const { t } = useTranslation(['dataset', 'prices']);
   const [values, setValues] = useState({})
   const plansModal = useDisclosure()
-  const { t } = useTranslation('dataset');
 
   const isUserPro = () => {
     let user

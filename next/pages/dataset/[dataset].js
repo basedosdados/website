@@ -43,7 +43,7 @@ export async function getStaticProps(context) {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu'])),
+      ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices'])),
       dataset,
     },
     revalidate: 30,

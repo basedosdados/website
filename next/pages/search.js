@@ -614,7 +614,7 @@ export default function SearchDatasetPage() {
               color="#464A51"
               marginBottom="4px"
             >
-              {t('tables')}
+              {t('resources')}
             </Text>
 
             <CheckboxFilterComponent

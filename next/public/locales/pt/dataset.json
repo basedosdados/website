@@ -67,7 +67,7 @@
         "dataAccess": "Acesso aos dados",
         "dataUpdateFrequency": "Frequência de atualização dos dados",
         "lastUpdateBD": "Última atualização na Base de Dados",
-        "noUpdateScheduled": "Nenhuma atualização agendada",
+        "noUpdateScheduled": "Sem previsão de atualização",
         "lastUpdateRawDataSource": "Última atualização na fonte de dados brutos",
         "lastCheckRawDataSource": "Última verificação da fonte original",
         "bigQueryID": "ID do BigQuery",
@@ -76,13 +76,13 @@
         "observationLevel": "Nível de observação",
         "observationLevelTooltip": "Indica a menor granularidade possível de análise com esses dados. Por exemplo, uma tabela com nível de observação estadual nos permite realizar uma análise em nível nacional (por ser mais amplo que o estado), mas não uma análise por município (que seria um detalhamento mais específico).",
         "downloadFiles": "Baixar arquivos",
-        "rawDataSources": "Fontes de dados brutos",
+        "rawDataSources": "Fontes originais",
         "rawDataSourcesTooltip": "Links para páginas com informações úteis sobre o conjunto de dados. Sempre tentamos fornecer o caminho mais próximo da fonte para baixar os dados originais.",
         "auxiliaryFiles": "Arquivos auxiliares",
         "auxiliaryFilesTooltip": "Arquivos auxiliares fornecem mais contexto e ajudam a entender melhor os dados. Podem incluir notas técnicas, descrições de coleta e amostragem, etc.",
         "additionalInformation": "Informações adicionais",
         "publishedBy": "Publicado por",
-        "dataCleanedBy": "Dados limpos por",
+        "dataCleanedBy": "Tratamento por",
         "version": "Versão",
         "updateEvery": "Atualização a cada",
         "updatePerSecond": "Atualização por segundo",
@@ -126,7 +126,7 @@
         "warningPaidPlanRequired": ["O download de tabelas com tamanho entre 100 MB e 1 GB está disponível apenas para ", "assinantes dos nossos planos pagos", ". No entanto, você pode acessar a tabela gratuitamente utilizando SQL, Python, R ou Stata. Considere atualizar para um plano pago para fazer o download."],
         "errorTableTooLarge": "O tamanho da tabela ultrapassou o limite permitido para download, de 1 GB. Você pode acessar os dados em SQL, Python, R ou Stata.",
         "bigQueryAndPackages": "BigQuery e Pacotes",
-        "download": "Baixar"
+        "download": "Download"
     },
     "temporalCoverageBar": {
         "title": "Cobertura temporal",
