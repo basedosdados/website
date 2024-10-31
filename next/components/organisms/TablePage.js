@@ -29,7 +29,7 @@ import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
 export default function TablePage({ id }) {
-  const { t } = useTranslation('dataset');
+  const { t } = useTranslation('dataset', 'prices');
   const router = useRouter();
   const { locale } = router;
   const [isLoading, setIsLoading] = useState(true)
@@ -366,7 +366,7 @@ export default function TablePage({ id }) {
             color="#464A51"
           >
             {resource?.updates?.[0]?.latest ?
-              `${formatDate(resource.updates[0].latest)}:`
+              `${formatDate(resource.updates[0].latest)}`
               :
               t('table.notProvided')
             }: {t('table.lastUpdateBD')}

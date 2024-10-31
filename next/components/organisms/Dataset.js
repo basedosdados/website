@@ -276,7 +276,7 @@ export default function Dataset({
                   lineHeight="20px"
                   color="#464A51"
                 >
-                  {t('tables')}:
+                  {t('resources')}:
                 </Text>
                 <Text
                   fontFamily="Roboto"
