@@ -46,6 +46,7 @@ import CheckIcon from "../../public/img/icons/checkIcon";
 import Link from "../atoms/Link";
 
 export function CodeHighlight({ language, children }) {
+  const { t } = useTranslation('dataset');
   const textRef = useRef(null)
   const [isOverflowing, setIsOverflowing] = useState(false)
   const [isExpanded, setIsExpanded] = useState(true)
@@ -117,17 +118,17 @@ export function CodeHighlight({ language, children }) {
             color:"#9D9FA3",
           }}
         >
-          {hasCopied ? "Copiado" : "Copiar"}
+          {hasCopied ? t('table.copied') : t('table.copy')}
           {hasCopied ? 
             <CheckIcon
-              alt="copiado conteúdo"
+              alt="copied"
               width="24px"
               height="24px"
               marginLeft="5px"
             />
           :
             <CopySolidIcon
-              alt="copiar conteúdo"
+              alt="copy"
               width="24px"
               height="24px"
               marginLeft="5px"
@@ -155,7 +156,7 @@ export function CodeHighlight({ language, children }) {
           }}
         >
           <ChevronIcon
-            alt="expandir/recoler código"
+            alt="expand/collapse"
             width="24px"
             height="24px"
             transform={isExpanded ? "rotate(-90deg)" : "rotate(90deg)"}
@@ -166,7 +167,7 @@ export function CodeHighlight({ language, children }) {
             fontSize="12px"
             lineHeight="18px"
           >
-            {isExpanded ? "Recolher" : "Expandir"}
+            {isExpanded ? t('table.collapse') : t('table.expand')}
           </Text>
         </Box>
       )}
