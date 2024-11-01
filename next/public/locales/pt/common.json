@@ -4,9 +4,6 @@
     "popular_terms": "Termos populares:",
     "search_by_theme": "Busque por tema",
     "noDatasetsFound": ["Nenhum conjunto com todos os temas selecionados foi encontrado.","Tente desmarcar algum dos temas."],
-    "min": "Mín",
-    "max": "Máx",
-    "search": "Buscar",
     "products": {
         "facilitation_text": "Facilitamos o trabalho para que a distância",
         "analysis_distance": "entre você e sua análise seja ",

@@ -1,72 +1,115 @@
-import { Menu, MenuButton, MenuList, MenuItem, Tooltip } from "@chakra-ui/react";
+import { Menu, MenuButton, MenuList, MenuItem, Box, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useTranslation } from "next-i18next";
-import { useState } from "react";
-import LanguageIcon from "../../public/img/icons/languageIcon";
+import GlobeIcon from "../../public/img/icons/globeIcon";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
-export default function LanguageSelector() {
+export default function LanguageSelector({ theme = "light" }) {
   const { locale } = useRouter();
   const router = useRouter();
-  const [showTooltip, setShowTooltip] = useState(false);
+
+  const styles = {
+    light: {
+      colors: {
+        text: "#464A51",
+        icon: "#464A51"
+      },
+      text: {
+        fontSize: "12px",
+        lineHeight: "18px",
+        ml: "6px",
+        mr: "4px",
+        fontFamily: "Roboto"
+      },
+      icon: {
+        width: "16px",
+        height: "16px"
+      },
+      chevron: {
+        w: 3,
+        h: 3
+      }
+    },
+    dark: {
+      colors: {
+        text: "#FFFFFF",
+        icon: "#FFFFFF"
+      },
+      text: {
+        fontSize: "16px",
+        fontWeight: "300",
+        lineHeight: "20px",
+        ml: "8px",
+        mr: "4px",
+        fontFamily: "Ubuntu"
+      },
+      icon: {
+        width: "20px",
+        height: "20px"
+      },
+      chevron: {
+        w: 4,
+        h: 4
+      }
+    }
+  };
 
   const changeLanguage = (locale) => {
     router.push(router.pathname, router.asPath, { locale });
   };
 
-  const getTooltipText = () => {
+  const getCurrentLanguage = () => {
     switch(locale) {
       case 'pt':
-        return 'Língua';
+        return 'Português';
       case 'en':
-        return 'Language';
+        return 'English';
       case 'es':
-        return 'Idioma';
+        return 'Español';
       default:
-        return 'Language';
+        return 'Português';
     }
   };
 
   return (
-    <Menu
-      onOpen={() => setShowTooltip(false)}
-    >
+    <Menu>
       {({ isOpen }) => (
         <>
-          <Tooltip 
-            backgroundColor="#FFF"
-            borderRadius="8px"
-            letterSpacing="0.1px"
-            lineHeight="18px"
-            fontWeight="400"
-            fontSize="12px"
-            fontFamily="Roboto"
-            marginTop="-4px"
-            color="#252A32"
-            padding="8px 12px"
-            boxShadow="0 2px 16px rgba(0, 0, 0, 0.16)"
-            placement="top-start"
-            label={getTooltipText()}
-            isOpen={showTooltip && !isOpen}
-            onClose={() => setShowTooltip(false)}
+          <MenuButton
+            aria-label="Language selector"
+            position="relative"
+            display="inline-flex"
+            alignItems="center"
+            width="auto"
+            padding="4px 0px"
+            height="36px"
+            borderRadius="18px"
+            zIndex="11"
+            _hover={{ opacity: 0.8 }}
           >
-            <MenuButton
-              aria-label="Language selector"
-              width="36px"
-              height="36px"
-              borderRadius="50%"
-              zIndex="11"
-              onMouseEnter={() => setShowTooltip(true)}
-              onMouseLeave={() => setShowTooltip(false)}
-            >
-              <LanguageIcon
+            <Box display="flex" alignItems="center">
+              <GlobeIcon
                 alt="language selector"
-                justifyContent="center"
-                width="36px"
-                height="36px"
-                fill="#878A8E"
+                width={styles[theme].icon.width}
+                height={styles[theme].icon.height}
+                fill={styles[theme].colors.icon}
               />
-            </MenuButton>
-          </Tooltip>
+              <Text
+                ml={styles[theme].text.ml}
+                mr={styles[theme].text.mr}
+                color={styles[theme].colors.text}
+                fontSize={styles[theme].text.fontSize}
+                lineHeight={styles[theme].text.lineHeight}
+                fontFamily={styles[theme].text.fontFamily}
+              >
+                {getCurrentLanguage()}
+              </Text>
+              <ChevronDownIcon 
+                color={styles[theme].colors.text}
+                w={styles[theme].chevron.w} 
+                h={styles[theme].chevron.h} 
+              />
+            </Box>
+          </MenuButton>
           <MenuList
             boxShadow="0px 1.5px 16px rgba(0, 0, 0, 0.16)"
             _focus={{boxShadow: "0px 1.5px 16px rgba(0, 0, 0, 0.16) !important"}}
