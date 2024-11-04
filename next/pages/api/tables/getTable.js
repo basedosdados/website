@@ -105,6 +105,7 @@ async function getTable(id, locale='pt') {
                   edges {
                     node {
                       _id
+                      order
                       columns {
                         edges {
                           node {
