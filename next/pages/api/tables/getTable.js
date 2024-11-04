@@ -46,7 +46,9 @@ async function getTable(id, locale='pt') {
                   }
                 }
                 version
-                fullCoverage
+                temporalCoverage
+                spatialCoverage
+                fullTemporalCoverage
                 rawDataSource {
                   edges {
                     node {

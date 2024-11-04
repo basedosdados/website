@@ -4,8 +4,9 @@
     "noDescription": "Sin descripción",
     "readMore": "Leer más",
     "readLess": "Leer menos",
+    "notProvided": "No informado",
     "temporalCoverage": "Cobertura temporal",
-    "noCoverage": "Sin cobertura temporal",
+    "spatialCoverage": "Cobertura espacial",
     "organization": "Organización",
     "noOrganization": "Sin organización",
     "none": "Ninguno",
@@ -63,6 +64,8 @@
     "table": {
         "notProvided": "No informado",
         "temporalCoverage": "Cobertura temporal",
+        "spatialCoverage": "Cobertura espacial",
+        "noSpatialCoverage": "Ninguna",
         "dataAccess": "Acceso a los datos",
         "dataUpdateFrequency": "Frecuencia de actualización de datos",
         "lastUpdateBD": "Última actualización en la Base de Datos",
@@ -130,7 +133,7 @@
     "temporalCoverageBar": {
         "title": "Cobertura temporal",
         "notProvided": "No informado",
-        "noCoverage": "Sin cobertura temporal",
+        "noTemporalCoverage": "Sin cobertura temporal",
         "free": "GRATIS",
         "paid": "PAGO",
         "accessGranted": "Acceso liberado para el período",
