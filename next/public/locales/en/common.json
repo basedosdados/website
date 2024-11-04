@@ -5,8 +5,8 @@
     "search_by_theme": "Search by theme",
     "noDatasetsFound": ["No dataset with all selected themes was found.","Try unselecting some of the themes."],
     "products": {
-        "facilitation_text": "We make the work easier so that the distance",
-        "analysis_distance": "between you and your analysis is ",
+        "facilitation_text": "We facilitate access to data so that the distance",
+        "analysis_distance": "between you and an analysis is ",
         "good_question": "just a good question",
         "filters": "FILTERS",
         "search_as_you_want": "Search for data as you wish",
