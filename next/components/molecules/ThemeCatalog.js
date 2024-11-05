@@ -18,7 +18,7 @@ import { triggerGAEvent } from "../../utils";
 
 import Carousel from "../atoms/Carousel";
 import SectionText from "../atoms/SectionText";
-import DatasetCard from "../organisms/DatasetCard";
+import DatasetThemeCatalogCard from "../organisms/DatasetThemeCatalogCard";
 import RemoveIcon from "../../public/img/icons/removeIcon";
 import styles from "../../styles/themeCatalog.module.css";
 
@@ -249,7 +249,7 @@ function CardThemes ({ responsive, datasetsCards = [], loading, locale }) {
             ))
             :
             datasetsCards.map((elm, i) => (
-              <DatasetCard
+              <DatasetThemeCatalogCard
                 key={i}
                 name={elm?.name}
                 themes={elm?.themes}

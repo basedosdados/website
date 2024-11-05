@@ -15,10 +15,13 @@ import Link from '../atoms/Link';
 import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";
 import { DataBaseSolidIcon } from "../../public/img/icons/databaseIcon";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 export default function Dataset({
   id,
   name,
+  spatialCoverage,
   temporalCoverageText,
   organization,
   tables,
@@ -28,7 +31,36 @@ export default function Dataset({
   locale
 }) {
   const { t } = useTranslation('dataset');
-  const router = useRouter();
+  const [spatialCoverageNames, setSpatialCoverageNames] = useState([]);
+
+  useEffect(() => {
+    const fetchAreaNames = async () => {
+      if (!spatialCoverage) return;
+      
+      const coverageArray = Array.isArray(spatialCoverage)
+        ? spatialCoverage
+        : typeof spatialCoverage === 'string'
+          ? spatialCoverage.split(',').map(item => item.trim())
+          : Object.values(spatialCoverage);
+
+      const promises = coverageArray.map(slug => 
+        axios.get(`/api/areas/getArea?slug=${slug}&locale=${locale}`)
+      );
+      
+      try {
+        const responses = await Promise.all(promises);
+        const areaNames = responses
+          .map(res => res.data.resource[0]?.node[`name${capitalize(locale)}`] || res.data.resource[0]?.node.name)
+          .filter(Boolean)
+          .sort((a, b) => a.localeCompare(b, locale));
+        setSpatialCoverageNames(areaNames);
+      } catch (error) {
+        console.error('Error fetching area names:', error);
+      }
+    };
+    
+    fetchAreaNames();
+  }, [spatialCoverage, locale]);
 
   const Tables = () => {
     let tablesNumber = tables.number
@@ -261,7 +293,33 @@ export default function Dataset({
                   lineHeight="20px"
                   color="#71757A"
                 >
-                  {temporalCoverageText ? temporalCoverageText : t('noCoverage')}
+                  {temporalCoverageText ? temporalCoverageText : t('notProvided')}
+                </Text>
+              </Stack>
+
+              <Stack
+                direction={{ base: "column", lg: "row" }}
+                spacing={1}
+              >
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#464A51"
+                >
+                  {t('spatialCoverage')}:
+                </Text>
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#71757A"
+                >
+                  {spatialCoverageNames.length > 0 
+                    ? spatialCoverageNames.join(', ')
+                    : spatialCoverage ? spatialCoverage : t('notProvided')}
                 </Text>
               </Stack>
 

@@ -27,6 +27,7 @@ import TwitterIcon from "../../public/img/icons/twitterIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
+import axios from "axios";
 
 export default function TablePage({ id }) {
   const { t } = useTranslation('dataset', 'prices');
@@ -35,17 +36,38 @@ export default function TablePage({ id }) {
   const [isLoading, setIsLoading] = useState(true)
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState(false)
+  const [spatialCoverageNames, setSpatialCoverageNames] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true)
       try {
         const response = await fetch(`/api/tables/getTable?id=${id}&locale=${locale}`, { method: "GET" })
         const result = await response.json()
 
         if (result.success) {
-          setResource(result.resource)
-          setIsError(false)
+          let areaNames = [];
+          
+          if (result.resource?.spatialCoverage) {
+            const coverageArray = Array.isArray(result.resource.spatialCoverage)
+              ? result.resource.spatialCoverage
+              : typeof result.resource.spatialCoverage === 'string'
+                ? result.resource.spatialCoverage.split(',').map(item => item.trim())
+                : Object.values(result.resource.spatialCoverage);
+
+            const promises = coverageArray.map(slug => 
+              axios.get(`/api/areas/getArea?slug=${slug}&locale=${locale}`)
+            );
+            
+            const responses = await Promise.all(promises);
+            areaNames = responses
+              .map(res => res.data.resource[0]?.node[`name${capitalize(locale)}`] || res.data.resource[0]?.node.name)
+              .filter(Boolean)
+              .sort((a, b) => a.localeCompare(b, locale));
+          }
+          
+          setResource(result.resource);
+          setSpatialCoverageNames(areaNames);
+          setIsError(false);
         } else {
           console.error(result.error)
           setIsError(true)
@@ -58,7 +80,8 @@ export default function TablePage({ id }) {
       }
     }
 
-    fetchData()
+    setIsLoading(true);
+    fetchData();
   }, [id, locale])
 
   const TooltipText = ({ text, info, ...props }) => {
@@ -232,8 +255,8 @@ export default function TablePage({ id }) {
     return formats[value] ? formats[value] : t('table.updateNotDefined')
   }
 
-  if(isError) return <FourOFour/>
-
+  if (isError) return <FourOFour/>;
+  
   return (
     <Stack
       flex={1}
@@ -292,24 +315,59 @@ export default function TablePage({ id }) {
       </SkeletonText>
 
       <Stack spacing="12px" marginBottom="40px !important">
-        <StackSkeleton width="300px" height="20px">
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="18px"
-            lineHeight="20px"
-            color="#252A32"
-          >
-            {t('table.temporalCoverage')}
-          </Text>
-        </StackSkeleton>
+        <HStack spacing="40px" align="start">
+          <Stack spacing="12px" width="100%">
+            <StackSkeleton width="300px" height="20px">
+              <Text
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="18px"
+                lineHeight="20px"
+                color="#252A32"
+              >
+                {t('table.temporalCoverage')}
+              </Text>
+            </StackSkeleton>
 
-        <StackSkeleton
-          width="100%"
-          height={!isLoading ? "fit-content" : "65px"}
-        >
-          <TemporalCoverageBar value={resource?.fullCoverage}/>
-        </StackSkeleton>
+            <StackSkeleton
+              width="100%"
+              height={!isLoading ? "fit-content" : "65px"}
+            >
+              <TemporalCoverageBar value={resource?.fullTemporalCoverage}/>
+            </StackSkeleton>
+          </Stack>
+
+          <Stack spacing="12px" width="100%">
+            <StackSkeleton width="300px" height="20px">
+              <Text
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="18px"
+                lineHeight="20px"
+                color="#252A32"
+              >
+                {t('table.spatialCoverage')}
+              </Text>
+            </StackSkeleton>
+
+            <StackSkeleton
+              height="20px"
+              width={resource?.spatialCoverageNames ? "100%" : "200px"}
+            >
+              <Text
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="14px"
+                lineHeight="20px"
+                color="#464A51"
+              >
+                {spatialCoverageNames.length > 0 
+                  ? spatialCoverageNames.join(', ')
+                  : t('table.notProvided')}
+              </Text>
+            </StackSkeleton>
+          </Stack>
+        </HStack>
       </Stack>
 
       <Stack spacing="12px" marginBottom="40px !important">
