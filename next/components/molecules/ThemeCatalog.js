@@ -253,7 +253,7 @@ function CardThemes ({ responsive, datasetsCards = [], loading, locale }) {
                 key={i}
                 name={elm?.name}
                 themes={elm?.themes}
-                organization={elm?.organizations?.[0]}
+                organizations={elm?.organizations}
                 tags={elm?.tags}
                 tables={{
                   id: elm?.first_table_id || elm?.first_closed_table_id,
