@@ -326,60 +326,58 @@ export default function TablePage({ id }) {
       </SkeletonText>
 
       <Stack spacing="12px" marginBottom="40px !important">
-        <HStack spacing="40px" align="start">
-          <Stack spacing="12px" width="100%">
-            <StackSkeleton width="300px" height="20px">
-              <Text
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="18px"
-                lineHeight="20px"
-                color="#252A32"
-              >
-                {t('table.temporalCoverage')}
-              </Text>
-            </StackSkeleton>
+        <StackSkeleton width="300px" height="20px">
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="18px"
+            lineHeight="20px"
+            color="#252A32"
+          >
+            {t('table.temporalCoverage')}
+          </Text>
+        </StackSkeleton>
 
-            <StackSkeleton
-              width="100%"
-              height={!isLoading ? "fit-content" : "65px"}
-            >
-              <TemporalCoverageBar value={resource?.fullTemporalCoverage}/>
-            </StackSkeleton>
-          </Stack>
-
-          <Stack spacing="12px" width="100%">
-            <StackSkeleton width="300px" height="20px">
-              <Text
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="18px"
-                lineHeight="20px"
-                color="#252A32"
-              >
-                {t('table.spatialCoverage')}
-              </Text>
-            </StackSkeleton>
-
-            <StackSkeleton
-              height="20px"
-              width={resource?.spatialCoverageNames ? "100%" : "200px"}
-            >
-              <Text
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="14px"
-                lineHeight="20px"
-                color="#464A51"
-              >
-                {spatialCoverageNames.length > 0 
-                  ? spatialCoverageNames.join(', ')
-                  : t('table.notProvided')}
-              </Text>
-            </StackSkeleton>
-          </Stack>
-        </HStack>
+        <StackSkeleton
+          width="100%"
+          height={!isLoading ? "fit-content" : "65px"}
+        >
+          <TemporalCoverageBar value={resource?.fullTemporalCoverage}/>
+        </StackSkeleton>
       </Stack>
+
+      {process.env.NEXT_PUBLIC_BASE_URL_FRONTEND !== "https://basedosdados.org" &&
+        <Stack spacing="12px"  marginBottom="40px !important">
+          <StackSkeleton width="300px" height="20px">
+            <Text
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="18px"
+              lineHeight="20px"
+              color="#252A32"
+            >
+              {t('table.spatialCoverage')}
+            </Text>
+          </StackSkeleton>
+
+          <StackSkeleton
+            height="20px"
+            width={resource?.spatialCoverageNames ? "100%" : "200px"}
+          >
+            <Text
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              lineHeight="20px"
+              color="#464A51"
+            >
+              {spatialCoverageNames.length > 0 
+                ? spatialCoverageNames.join(', ')
+                : t('table.notProvided')}
+            </Text>
+          </StackSkeleton>
+        </Stack>
+      }
 
       <Stack spacing="12px" marginBottom="40px !important">
         <StackSkeleton width="200px" height="20px">

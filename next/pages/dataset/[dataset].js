@@ -142,7 +142,7 @@ export default function DatasetPage ({ dataset, spatialCoverageNames }) {
         spacing={0}
       >
         <Grid
-          templateColumns={{ base: "1fr", lg: "296px 1fr" }}
+          templateColumns={{ base: "1fr", lg: "320px 1fr" }}
           width="100%"
           gap="24px"
           paddingY="24px"
@@ -158,17 +158,17 @@ export default function DatasetPage ({ dataset, spatialCoverageNames }) {
               src={dataset?.organizations?.edges?.[0]?.node?.picture ? dataset?.organizations?.edges?.[0]?.node?.picture : `https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png`}
               objectFit="contain"
               width="300px"
-              height="182px"
+              height="252px"
               borderRadius="16px"
             />
           </GridItem>
 
           <GridItem>
             <Grid
-              templateColumns="1fr 1fr"
+              templateColumns="1fr 1fr 1fr 1fr 1fr"
               gap="8px"
             >
-              <GridItem colSpan={2}>
+              <GridItem colSpan={5}>
                 <BigTitle
                   width="100%"
                   overflow="hidden"
@@ -182,42 +182,62 @@ export default function DatasetPage ({ dataset, spatialCoverageNames }) {
                 </BigTitle>
               </GridItem>
 
-              <GridItem colSpan={2} minHeight="60px" marginBottom="8px">
+              <GridItem colSpan={5} minHeight="60px" marginBottom="8px">
                 <ReadMore id="readLessDataset">
                   {dataset[`description${capitalize(locale)}`] || dataset.description || t('noDescription')}
                 </ReadMore>
               </GridItem>
 
-              <Grid
-                templateColumns={{ base: "1fr", lg: "minmax(250px, 1fr) minmax(250px, 1fr) minmax(250px, 1fr)" }}
-                gap={{ base: "32px", lg: "48px" }}
-                width="100%"
-                marginTop="16px"
-                maxWidth={{ lg: "1200px" }}
-              >
-                <GridItem>
+              <GridItem colSpan={5} marginBottom="8px">
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="18px"
+                  lineHeight="28px"
+                  color="#252A32"
+                  marginBottom="8px"
+                >
+                  {t('organization')}
+                </Text>
+                <Link
+                  href={`/search?organization=${dataset?.organizations?.edges?.[0]?.node?.slug || ""}`}
+                  color="#464A51"
+                  fontWeight="400"
+                >
                   <Text
                     fontFamily="Roboto"
-                    fontWeight="500"
-                    fontSize="18px"
-                    lineHeight="28px"
-                    color="#252A32"
-                    marginBottom="8px"
-                  >
-                    {t('temporalCoverage')}
-                  </Text>
-                  <Text
-                    fontFamily="Roboto"
-                    fontWeight="400"
                     fontSize="14px"
                     lineHeight="20px"
-                    color="#464A51"
                   >
-                    {dataset.temporalCoverage || t('notProvided')}
+                    {dataset.organizations?.edges?.[0]?.node?.[`name${capitalize(locale)}`] || dataset.organizations?.edges?.[0]?.node?.name || t('noOrganization')}
                   </Text>
-                </GridItem>
+                </Link>
+              </GridItem>
 
-                <GridItem>
+              <GridItem colSpan={{ base: 5, lg: 2 }} marginBottom="8px">
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="18px"
+                  lineHeight="28px"
+                  color="#252A32"
+                  marginBottom="8px"
+                >
+                  {t('temporalCoverage')}
+                </Text>
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#464A51"
+                >
+                  {dataset.temporalCoverage || t('notProvided')}
+                </Text>
+              </GridItem>
+
+              {process.env.NEXT_PUBLIC_BASE_URL_FRONTEND !== "https://basedosdados.org" &&
+                <GridItem colSpan={{ base: 5, lg: 3 }} marginBottom="8px">
                   <Text
                     fontFamily="Roboto"
                     fontWeight="500"
@@ -240,33 +260,7 @@ export default function DatasetPage ({ dataset, spatialCoverageNames }) {
                       : t('notProvided')}
                   </Text>
                 </GridItem>
-
-                <GridItem>
-                  <Text
-                    fontFamily="Roboto"
-                    fontWeight="500"
-                    fontSize="18px"
-                    lineHeight="28px"
-                    color="#252A32"
-                    marginBottom="8px"
-                  >
-                    {t('organization')}
-                  </Text>
-                  <Link
-                    href={`/search?organization=${dataset?.organizations?.edges?.[0]?.node?.slug || ""}`}
-                    color="#464A51"
-                    fontWeight="400"
-                  >
-                    <Text
-                      fontFamily="Roboto"
-                      fontSize="14px"
-                      lineHeight="20px"
-                    >
-                      {dataset.organizations?.edges?.[0]?.node?.[`name${capitalize(locale)}`] || dataset.organizations?.edges?.[0]?.node?.name || t('noOrganization')}
-                    </Text>
-                  </Link>
-                </GridItem>
-              </Grid>
+              }
             </Grid>
           </GridItem>
         </Grid>

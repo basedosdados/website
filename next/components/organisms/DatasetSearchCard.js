@@ -299,31 +299,33 @@ export default function Dataset({
                 </Text>
               </Stack>
 
-              <Stack
-                direction={{ base: "column", lg: "row" }}
-                spacing={1}
-              >
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="14px"
-                  lineHeight="20px"
-                  color="#464A51"
+              {process.env.NEXT_PUBLIC_BASE_URL_FRONTEND !== "https://basedosdados.org" &&
+                <Stack
+                  direction={{ base: "column", lg: "row" }}
+                  spacing={1}
                 >
-                  {t('spatialCoverage')}:
-                </Text>
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="14px"
-                  lineHeight="20px"
-                  color="#71757A"
-                >
-                  {spatialCoverageNames.length > 0 
-                    ? spatialCoverageNames.join(', ')
-                    : spatialCoverage ? spatialCoverage : t('notProvided')}
-                </Text>
-              </Stack>
+                  <Text
+                    fontFamily="Roboto"
+                    fontWeight="400"
+                    fontSize="14px"
+                    lineHeight="20px"
+                    color="#464A51"
+                  >
+                    {t('spatialCoverage')}:
+                  </Text>
+                  <Text
+                    fontFamily="Roboto"
+                    fontWeight="400"
+                    fontSize="14px"
+                    lineHeight="20px"
+                    color="#71757A"
+                  >
+                    {spatialCoverageNames.length > 0 
+                      ? spatialCoverageNames.join(', ')
+                      : spatialCoverage ? spatialCoverage : t('notProvided')}
+                  </Text>
+                </Stack>
+              }
 
               <Stack
                 direction={{ base: "column", lg: "row" }}
