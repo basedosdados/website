@@ -27,6 +27,7 @@ import TwitterIcon from "../../public/img/icons/twitterIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
+import axios from "axios";
 
 export default function TablePage({ id }) {
   const { t } = useTranslation('dataset', 'prices');
@@ -35,17 +36,38 @@ export default function TablePage({ id }) {
   const [isLoading, setIsLoading] = useState(true)
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState(false)
+  const [spatialCoverageNames, setSpatialCoverageNames] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true)
       try {
         const response = await fetch(`/api/tables/getTable?id=${id}&locale=${locale}`, { method: "GET" })
         const result = await response.json()
 
         if (result.success) {
-          setResource(result.resource)
-          setIsError(false)
+          let areaNames = [];
+          
+          if (result.resource?.spatialCoverage) {
+            const coverageArray = Array.isArray(result.resource.spatialCoverage)
+              ? result.resource.spatialCoverage
+              : typeof result.resource.spatialCoverage === 'string'
+                ? result.resource.spatialCoverage.split(',').map(item => item.trim())
+                : Object.values(result.resource.spatialCoverage);
+
+            const promises = coverageArray.map(slug => 
+              axios.get(`/api/areas/getArea?slug=${slug}&locale=${locale}`)
+            );
+            
+            const responses = await Promise.all(promises);
+            areaNames = responses
+              .map(res => res.data.resource[0]?.node[`name${capitalize(locale)}`] || res.data.resource[0]?.node.name)
+              .filter(Boolean)
+              .sort((a, b) => a.localeCompare(b, locale));
+          }
+          
+          setResource(result.resource);
+          setSpatialCoverageNames(areaNames);
+          setIsError(false);
         } else {
           console.error(result.error)
           setIsError(true)
@@ -58,7 +80,8 @@ export default function TablePage({ id }) {
       }
     }
 
-    fetchData()
+    setIsLoading(true);
+    fetchData();
   }, [id, locale])
 
   const TooltipText = ({ text, info, ...props }) => {
@@ -144,38 +167,49 @@ export default function TablePage({ id }) {
   }
 
   const PublishedOrDataCleanedBy = ({ resource }) => {
+    if (!resource || typeof resource !== 'object' || Object.keys(resource).length === 0) {
+      return (
+        <Text
+          marginRight="4px !important"
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="14px"
+          lineHeight="20px"
+          color="#464A51"
+        >
+          {t('table.notProvided')}
+        </Text>
+      );
+    }
+
+    const people = Object.values(resource);
+
     return (
-      <HStack spacing="4px">
-        {resource?.firstName && resource?.lastName ?
-          <Text
-            marginRight="4px !important"
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="14px"
-            lineHeight="20px"
-            color="#464A51"
-          >
-            {`${resource.firstName} ${resource.lastName}`}
-          </Text>
-          :
-          <Text
-            marginRight="4px !important"
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="14px"
-            lineHeight="20px"
-            color="#464A51"
-          >
-            {t('table.notProvided')}
-          </Text>
-        }
-        {resource?.email && <EmailIcon {...keyIcons({email : resource.email})}/>}
-        {resource?.github && <GithubIcon {...keyIcons({github_user : resource.github})}/>}
-        {resource?.website && <WebIcon {...keyIcons({website : resource.website})}/>}
-        {resource?.twitter && <TwitterIcon {...keyIcons({twitter_user : resource.twitter_user})}/>}
-      </HStack>
-    )
-  }
+      <Stack spacing="8px">
+        {people.map((person, index) => (
+          <HStack key={index} spacing="4px">
+            <Text
+              marginRight="4px !important"
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              lineHeight="20px"
+              color="#464A51"
+            >
+              {person?.firstName && person?.lastName 
+                ? `${person.firstName} ${person.lastName}`
+                : t('table.notProvided')
+              }
+            </Text>
+            {person?.email && <EmailIcon {...keyIcons({email: person.email})}/>}
+            {person?.github && <GithubIcon {...keyIcons({github_user: person.github})}/>}
+            {person?.website && <WebIcon {...keyIcons({website: person.website})}/>}
+            {person?.twitter && <TwitterIcon {...keyIcons({twitter_user: person.twitter})}/>}
+          </HStack>
+        ))}
+      </Stack>
+    );
+  };
 
   const StackSkeleton = ({ children, ...props }) => {
     return (
@@ -232,8 +266,8 @@ export default function TablePage({ id }) {
     return formats[value] ? formats[value] : t('table.updateNotDefined')
   }
 
-  if(isError) return <FourOFour/>
-
+  if (isError) return <FourOFour/>;
+  
   return (
     <Stack
       flex={1}
@@ -292,24 +326,59 @@ export default function TablePage({ id }) {
       </SkeletonText>
 
       <Stack spacing="12px" marginBottom="40px !important">
-        <StackSkeleton width="300px" height="20px">
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="18px"
-            lineHeight="20px"
-            color="#252A32"
-          >
-            {t('table.temporalCoverage')}
-          </Text>
-        </StackSkeleton>
+        <HStack spacing="40px" align="start">
+          <Stack spacing="12px" width="100%">
+            <StackSkeleton width="300px" height="20px">
+              <Text
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="18px"
+                lineHeight="20px"
+                color="#252A32"
+              >
+                {t('table.temporalCoverage')}
+              </Text>
+            </StackSkeleton>
 
-        <StackSkeleton
-          width="100%"
-          height={!isLoading ? "fit-content" : "65px"}
-        >
-          <TemporalCoverageBar value={resource?.fullCoverage}/>
-        </StackSkeleton>
+            <StackSkeleton
+              width="100%"
+              height={!isLoading ? "fit-content" : "65px"}
+            >
+              <TemporalCoverageBar value={resource?.fullTemporalCoverage}/>
+            </StackSkeleton>
+          </Stack>
+
+          <Stack spacing="12px" width="100%">
+            <StackSkeleton width="300px" height="20px">
+              <Text
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="18px"
+                lineHeight="20px"
+                color="#252A32"
+              >
+                {t('table.spatialCoverage')}
+              </Text>
+            </StackSkeleton>
+
+            <StackSkeleton
+              height="20px"
+              width={resource?.spatialCoverageNames ? "100%" : "200px"}
+            >
+              <Text
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="14px"
+                lineHeight="20px"
+                color="#464A51"
+              >
+                {spatialCoverageNames.length > 0 
+                  ? spatialCoverageNames.join(', ')
+                  : t('table.notProvided')}
+              </Text>
+            </StackSkeleton>
+          </Stack>
+        </HStack>
       </Stack>
 
       <Stack spacing="12px" marginBottom="40px !important">

@@ -25,14 +25,14 @@ async function getTable(id, locale='pt') {
                 dataset {
                   _id
                   slug
-                  organization {
-                    _id
-                    slug
-                    name
-                    name${capitalize(locale)}
-                    area {
-                      _id
-                      slug
+                  organizations {
+                    edges {
+                      node {
+                        _id
+                        slug
+                        name
+                        name${capitalize(locale)}
+                      }
                     }
                   }
                 }
@@ -46,7 +46,9 @@ async function getTable(id, locale='pt') {
                   }
                 }
                 version
-                fullCoverage
+                temporalCoverage
+                spatialCoverage
+                fullTemporalCoverage
                 rawDataSource {
                   edges {
                     node {
