@@ -155,7 +155,7 @@ export default function DatasetPage ({ dataset, spatialCoverageNames }) {
             borderRadius="16px"
           >
             <Image
-              src={dataset?.organization?.picture ? dataset?.organization?.picture : `https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png`}
+              src={dataset?.organizations?.edges?.[0]?.node?.picture ? dataset?.organizations?.edges?.[0]?.node?.picture : `https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png`}
               objectFit="contain"
               width="300px"
               height="182px"
@@ -253,7 +253,7 @@ export default function DatasetPage ({ dataset, spatialCoverageNames }) {
                     {t('organization')}
                   </Text>
                   <Link
-                    href={`/search?organization=${dataset?.organization?.slug || ""}`}
+                    href={`/search?organization=${dataset?.organizations?.edges?.[0]?.node?.slug || ""}`}
                     color="#464A51"
                     fontWeight="400"
                   >
@@ -262,7 +262,7 @@ export default function DatasetPage ({ dataset, spatialCoverageNames }) {
                       fontSize="14px"
                       lineHeight="20px"
                     >
-                      {dataset.organization?.[`name${capitalize(locale)}`] || dataset.organization?.name || t('noOrganization')}
+                      {dataset.organizations?.edges?.[0]?.node?.[`name${capitalize(locale)}`] || dataset.organizations?.edges?.[0]?.node?.name || t('noOrganization')}
                     </Text>
                   </Link>
                 </GridItem>

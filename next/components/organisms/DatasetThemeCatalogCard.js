@@ -16,7 +16,7 @@ import { DatasetCardTag } from "../atoms/DatasetCardTag";
 export default function DatasetCard({
   name,
   themes = [],
-  organization,
+  organizations,
   tags = [],
   tables,
   rawDataSources,
@@ -136,7 +136,7 @@ export default function DatasetCard({
           {name}
         </Text>
       </Link>
-      <Link href={`/search?organization=${organization.slug}`}>
+      <Link href={`/search?organization=${organizations?.[0]?.slug}`}>
         <Text
           noOfLines={2}
           lineHeight="16px"
@@ -147,7 +147,7 @@ export default function DatasetCard({
           fontWeight="400"
           color="#6F6F6F"
         >
-          {organization[`name${capitalize(locale)}`] || organization.name || organization.slug}
+          {organizations?.[0]?.[`name${capitalize(locale)}`] || organizations?.[0]?.name || organizations?.[0]?.slug}
         </Text>
       </Link>
 

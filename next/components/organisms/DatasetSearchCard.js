@@ -23,7 +23,7 @@ export default function Dataset({
   name,
   spatialCoverage,
   temporalCoverageText,
-  organization,
+  organizations,
   tables,
   rawDataSources,
   informationRequests,
@@ -187,8 +187,10 @@ export default function Dataset({
             _hover={{ opacity: 0.9 }}
           >
             <Image
-              src={organization?.picture.startsWith("https://") ? organization?.picture : `https://basedosdados.org/uploads/group/${organization?.name}`}
-              alt={organization[`name${capitalize(locale)}`] || organization?.name || t('notProvided')}
+              src={organizations[0]?.picture?.startsWith("https://") 
+                ? organizations[0]?.picture 
+                : `https://basedosdados.org/uploads/group/${organizations[0]?.name}`}
+              alt={organizations[0]?.[`name${capitalize(locale)}`] || organizations[0]?.name || t('notProvided')}
               borderRadius="16px"
               minWidth="222px"
               minHeight="138px"
@@ -255,7 +257,7 @@ export default function Dataset({
                   {t('organization')}:
                 </Text>
                 <Link
-                  href={`/search?organization=${organization?.slug}`}
+                  href={`/search?organization=${organizations[0]?.slug}`}
                   color="#71757A"
                   fontWeight="400"
                   _hover={{
@@ -268,7 +270,7 @@ export default function Dataset({
                     lineHeight="20px"
                     textOverflow="ellipsis"
                   >
-                    {organization[`name${capitalize(locale)}`] || organization?.name}
+                    {organizations[0]?.[`name${capitalize(locale)}`] || organizations[0]?.name}
                   </Text>
                 </Link>
               </Stack>

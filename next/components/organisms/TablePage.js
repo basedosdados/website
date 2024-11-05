@@ -167,38 +167,49 @@ export default function TablePage({ id }) {
   }
 
   const PublishedOrDataCleanedBy = ({ resource }) => {
+    if (!resource || typeof resource !== 'object' || Object.keys(resource).length === 0) {
+      return (
+        <Text
+          marginRight="4px !important"
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="14px"
+          lineHeight="20px"
+          color="#464A51"
+        >
+          {t('table.notProvided')}
+        </Text>
+      );
+    }
+
+    const people = Object.values(resource);
+
     return (
-      <HStack spacing="4px">
-        {resource?.firstName && resource?.lastName ?
-          <Text
-            marginRight="4px !important"
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="14px"
-            lineHeight="20px"
-            color="#464A51"
-          >
-            {`${resource.firstName} ${resource.lastName}`}
-          </Text>
-          :
-          <Text
-            marginRight="4px !important"
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="14px"
-            lineHeight="20px"
-            color="#464A51"
-          >
-            {t('table.notProvided')}
-          </Text>
-        }
-        {resource?.email && <EmailIcon {...keyIcons({email : resource.email})}/>}
-        {resource?.github && <GithubIcon {...keyIcons({github_user : resource.github})}/>}
-        {resource?.website && <WebIcon {...keyIcons({website : resource.website})}/>}
-        {resource?.twitter && <TwitterIcon {...keyIcons({twitter_user : resource.twitter_user})}/>}
-      </HStack>
-    )
-  }
+      <Stack spacing="8px">
+        {people.map((person, index) => (
+          <HStack key={index} spacing="4px">
+            <Text
+              marginRight="4px !important"
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              lineHeight="20px"
+              color="#464A51"
+            >
+              {person?.firstName && person?.lastName 
+                ? `${person.firstName} ${person.lastName}`
+                : t('table.notProvided')
+              }
+            </Text>
+            {person?.email && <EmailIcon {...keyIcons({email: person.email})}/>}
+            {person?.github && <GithubIcon {...keyIcons({github_user: person.github})}/>}
+            {person?.website && <WebIcon {...keyIcons({website: person.website})}/>}
+            {person?.twitter && <TwitterIcon {...keyIcons({twitter_user: person.twitter})}/>}
+          </HStack>
+        ))}
+      </Stack>
+    );
+  };
 
   const StackSkeleton = ({ children, ...props }) => {
     return (

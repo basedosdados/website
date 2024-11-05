@@ -40,13 +40,17 @@ export default async function getDataset(id, locale = 'pt') {
                     }
                   }
                 }
-                organization {
-                  _id
-                  slug
-                  name
-                  name${capitalize(locale)}
-                  website
-                  picture
+                organizations {
+                  edges {
+                    node {
+                      _id
+                      slug
+                      name
+                      name${capitalize(locale)}
+                      website
+                      picture
+                    }
+                  }
                 }
                 informationRequests {
                   edges {

@@ -300,7 +300,7 @@ export default function SearchDatasetPage() {
         spatialCoverage={(data?.spatial_coverage?.map(coverage => coverage.slug) || [])
           .sort((a, b) => a.localeCompare(b))
           .join(', ')}
-        organization={data.organizations[0]}
+        organizations={data.organizations}
         tables={{
           id: data?.first_table_id,
           number: data?.n_tables
