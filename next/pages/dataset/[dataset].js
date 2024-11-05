@@ -142,7 +142,7 @@ export default function DatasetPage ({ dataset, spatialCoverageNames }) {
         spacing={0}
       >
         <Grid
-          templateColumns={{ base: "1fr", lg: "320px 1fr" }}
+          templateColumns={{ base: "1fr", lg: "295px 1fr" }}
           width="100%"
           gap="24px"
           paddingY="24px"
@@ -157,7 +157,7 @@ export default function DatasetPage ({ dataset, spatialCoverageNames }) {
             <Image
               src={dataset?.organizations?.edges?.[0]?.node?.picture ? dataset?.organizations?.edges?.[0]?.node?.picture : `https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png`}
               objectFit="contain"
-              width="300px"
+              width="295px"
               height="252px"
               borderRadius="16px"
             />
