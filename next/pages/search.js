@@ -56,6 +56,8 @@ export default function SearchDatasetPage() {
   const [pageInfo, setPageInfo] = useState({page: 0, count: 0})
   const [isLoading, setIsLoading] = useState(true)
 
+  const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
+
   async function getDatasets({q, filters, page}) {
     const res = await getSearchDatasets({q, filter: filters, page, locale: locale || 'pt'})
     if(res === undefined) return router.push({pathname:"500"})
@@ -664,7 +666,7 @@ export default function SearchDatasetPage() {
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
-          {process.env.NEXT_PUBLIC_BASE_URL_FRONTEND !== "https://basedosdados.org" ?
+          {!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND) ?
             <>
               <CheckboxFilterAccordion
                 canSearch={true}

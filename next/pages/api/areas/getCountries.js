@@ -37,11 +37,7 @@ async function getAreas(locale = 'pt') {
 
 export default async function handler(req, res) {
   const { locale } = req.query;
-  console.log('API URL:', API_URL);
-  console.log('Locale:', locale);
-  
   const result = await getAreas(locale);
-  console.log('Result:', result);
 
   if(result.errors) return res.status(500).json({error: result.errors, success: false})
   if(result === "err") return res.status(500).json({error: "err", success: false})

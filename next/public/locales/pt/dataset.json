@@ -44,6 +44,7 @@
     "clearFilters": "Limpar filtros",
     "previous": "Anterior",
     "next": "Próxima",
+    "selectResource": "Selecione uma tabela ou fonte original",
     "datasetCard": {
         "table": "tabela tratada",
         "tables": "tabelas tratadas",

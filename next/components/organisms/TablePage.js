@@ -38,6 +38,8 @@ export default function TablePage({ id }) {
   const [isError, setIsError] = useState(false)
   const [spatialCoverageNames, setSpatialCoverageNames] = useState([]);
 
+  const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,28 +47,31 @@ export default function TablePage({ id }) {
         const result = await response.json()
 
         if (result.success) {
-          let areaNames = [];
-          
-          if (result.resource?.spatialCoverage) {
-            const coverageArray = Array.isArray(result.resource.spatialCoverage)
-              ? result.resource.spatialCoverage
-              : typeof result.resource.spatialCoverage === 'string'
-                ? result.resource.spatialCoverage.split(',').map(item => item.trim())
-                : Object.values(result.resource.spatialCoverage);
+          if(!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND)) {
+            let areaNames = [];
 
-            const promises = coverageArray.map(slug => 
-              axios.get(`/api/areas/getArea?slug=${slug}&locale=${locale}`)
-            );
-            
-            const responses = await Promise.all(promises);
-            areaNames = responses
-              .map(res => res.data.resource[0]?.node[`name${capitalize(locale)}`] || res.data.resource[0]?.node.name)
-              .filter(Boolean)
-              .sort((a, b) => a.localeCompare(b, locale));
+            if (result.resource?.spatialCoverage) {
+              const coverageArray = Array.isArray(result.resource.spatialCoverage)
+                ? result.resource.spatialCoverage
+                : typeof result.resource.spatialCoverage === 'string'
+                  ? result.resource.spatialCoverage.split(',').map(item => item.trim())
+                  : Object.values(result.resource.spatialCoverage);
+  
+              const promises = coverageArray.map(slug => 
+                axios.get(`/api/areas/getArea?slug=${slug}&locale=${locale}`)
+              );
+              
+              const responses = await Promise.all(promises);
+              areaNames = responses
+                .map(res => res.data.resource[0]?.node[`name${capitalize(locale)}`] || res.data.resource[0]?.node.name)
+                .filter(Boolean)
+                .sort((a, b) => a.localeCompare(b, locale));
+            }
+
+            setSpatialCoverageNames(areaNames);
           }
           
           setResource(result.resource);
-          setSpatialCoverageNames(areaNames);
           setIsError(false);
         } else {
           console.error(result.error)
@@ -346,7 +351,7 @@ export default function TablePage({ id }) {
         </StackSkeleton>
       </Stack>
 
-      {process.env.NEXT_PUBLIC_BASE_URL_FRONTEND !== "https://basedosdados.org" &&
+      {!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND) &&
         <Stack spacing="12px"  marginBottom="40px !important">
           <StackSkeleton width="300px" height="20px">
             <Text

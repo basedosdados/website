@@ -37,45 +37,50 @@ export async function getStaticProps(context) {
   const { locale, params } = context;
   let dataset = null;
   let spatialCoverageNames = [];
+  const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
 
   try {
     dataset = await getDataset(params.dataset, locale || 'pt');
-    
-    if (dataset?.spatialCoverage) {
-      const coverageArray = Array.isArray(dataset.spatialCoverage)
-        ? dataset.spatialCoverage
-        : typeof dataset.spatialCoverage === 'string'
-          ? dataset.spatialCoverage.split(',').map(item => item.trim())
-          : Object.values(dataset.spatialCoverage);
 
-      const promises = coverageArray.map(slug => {
-        const url = `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/areas/getArea?slug=${slug}&locale=${locale}`;
-        return axios.get(url).catch(error => {
-          console.error(`Error fetching ${url}:`, error.message);
-          return null;
+    if(!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND)) {
+      if (dataset?.spatialCoverage) {
+        const coverageArray = Array.isArray(dataset.spatialCoverage)
+          ? dataset.spatialCoverage
+          : typeof dataset.spatialCoverage === 'string'
+            ? dataset.spatialCoverage.split(',').map(item => item.trim())
+            : Object.values(dataset.spatialCoverage);
+  
+        const promises = coverageArray.map(slug => {
+          const url = `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/areas/getArea?slug=${slug}&locale=${locale}`;
+          return axios.get(url).catch(error => {
+            console.error(`Error fetching ${url}:`, error.message);
+            return null;
+          });
         });
-      });
-      
-      const responses = await Promise.all(promises);
-      spatialCoverageNames = responses
-        .filter(res => res !== null)
-        .map(res => {
-          const name = res.data.resource[0]?.node[`name${capitalize(locale)}`] || res.data.resource[0]?.node.name;
-          return name;
-        })
-        .filter(Boolean)
-        .sort((a, b) => a.localeCompare(b, locale));
+        
+        const responses = await Promise.all(promises);
+        spatialCoverageNames = responses
+          .filter(res => res !== null)
+          .map(res => {
+            const name = res.data.resource[0]?.node[`name${capitalize(locale)}`] || res.data.resource[0]?.node.name;
+            return name;
+          })
+          .filter(Boolean)
+          .sort((a, b) => a.localeCompare(b, locale));
+      }
     }
   } catch (error) {
     console.error("Fetch error:", error.message);
   }
 
+  const props = {
+    ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices'])),
+    dataset,
+    ...(allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND) ? {} : { spatialCoverageNames }),
+  };
+  
   return {
-    props: {
-      ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices'])),
-      dataset,
-      spatialCoverageNames,
-    },
+    props,
     revalidate: 30,
   };
 }
@@ -91,12 +96,15 @@ export async function getStaticPaths(context) {
   }
 }
 
-export default function DatasetPage ({ dataset, spatialCoverageNames }) {
+export default function DatasetPage ({ dataset, spatialCoverageNames = [] }) {
   const { t } = useTranslation('dataset', 'common');
   const router = useRouter()
   const { locale } = router
   const { query } = router
   const [tabIndex, setTabIndex] = useState(0)
+
+  const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
+
 
   const isDatasetEmpty = dataset === null || Object.keys(dataset).length === 0
 
@@ -236,7 +244,7 @@ export default function DatasetPage ({ dataset, spatialCoverageNames }) {
                 </Text>
               </GridItem>
 
-              {process.env.NEXT_PUBLIC_BASE_URL_FRONTEND !== "https://basedosdados.org" &&
+              {!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND) &&
                 <GridItem colSpan={{ base: 5, lg: 3 }} marginBottom="8px">
                   <Text
                     fontFamily="Roboto"

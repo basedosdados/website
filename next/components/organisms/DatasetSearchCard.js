@@ -33,7 +33,12 @@ export default function Dataset({
   const { t } = useTranslation('dataset');
   const [spatialCoverageNames, setSpatialCoverageNames] = useState([]);
 
+  const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
+
+
   useEffect(() => {
+    if(allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND)) return
+
     const fetchAreaNames = async () => {
       if (!spatialCoverage) return;
       
@@ -299,7 +304,7 @@ export default function Dataset({
                 </Text>
               </Stack>
 
-              {process.env.NEXT_PUBLIC_BASE_URL_FRONTEND !== "https://basedosdados.org" &&
+              {!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND) &&
                 <Stack
                   direction={{ base: "column", lg: "row" }}
                   spacing={1}
