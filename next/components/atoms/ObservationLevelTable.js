@@ -18,16 +18,25 @@ export default function ObservationLevel({ resource }) {
 
   const headers = [t('observationLevelTable.entityHeader'), t('observationLevelTable.columnsHeader')];
 
-  let array = []
-  const keys = Object.keys(resource?.observationLevels)
+  function sortElements(a, b) {
+    if (a.order < b.order) {
+      return -1;
+    }
+    if (a.order > b.order) {
+      return 1;
+    }
+    return 0;
+  }
 
-  keys.forEach((elm) => {
-    const value = resource?.observationLevels[elm]
+  let array = [];
+  const keys = Object.keys(resource?.observationLevels);
+  const sortedLevels = Object.values(resource?.observationLevels).sort(sortElements);
 
+  sortedLevels.forEach((value) => {
     const valueEntity = () => {
-      if(value.entity[`name${capitalize(locale)}`]) return value.entity[`name${capitalize(locale)}`]
-      if(value.entity.name) return value.entity.name
-      return t('observationLevelTable.notProvided')
+      if(value.entity[`name${capitalize(locale)}`]) return value.entity[`name${capitalize(locale)}`];
+      if(value.entity.name) return value.entity.name;
+      return t('observationLevelTable.notProvided');
     }
 
     const valueColumns = () => {

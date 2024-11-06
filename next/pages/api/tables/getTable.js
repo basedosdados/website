@@ -46,6 +46,11 @@ async function getTable(id, locale='pt') {
                   }
                 }
                 version
+                status {
+                  _id
+                  slug
+                }
+                isDeprecated
                 temporalCoverage
                 spatialCoverage
                 fullTemporalCoverage
@@ -107,6 +112,7 @@ async function getTable(id, locale='pt') {
                   edges {
                     node {
                       _id
+                      order
                       columns {
                         edges {
                           node {
