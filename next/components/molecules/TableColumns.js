@@ -668,8 +668,8 @@ export default function TableColumns({
                   </TableValue>
 
                   <TableValue>
-                    {elm?.node?.coverage?.start && elm?.node?.coverage?.end ?
-                      elm.node.coverage.start +" - "+ elm.node.coverage.end
+                    {elm?.node?.temporalCoverage?.start && elm?.node?.temporalCoverage?.end ?
+                      elm.node.temporalCoverage.start +" - "+ elm.node.temporalCoverage.end
                       :
                       t('column.notProvided')
                     }

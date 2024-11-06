@@ -27,7 +27,7 @@ import {
 import { CheckboxFilterAccordion } from "../components/atoms/FilterAccordion";
 import Checkbox from "../components/atoms/Checkbox";
 import { TagFilter } from "../components/atoms/Tag";
-import Dataset from "../components/organisms/Dataset";
+import DatasetSearchCard from "../components/organisms/DatasetSearchCard";
 import { MainPageTemplate } from "../components/templates/main";
 
 import FilterIcon from "../public/img/icons/filterIcon";
@@ -43,6 +43,7 @@ export async function getStaticProps({ locale }) {
 
 export default function SearchDatasetPage() {
   const { t } = useTranslation('dataset')
+  const { locale } = useRouter()
   const router =  useRouter()
   const query = router.query
 
@@ -55,8 +56,9 @@ export default function SearchDatasetPage() {
   const [pageInfo, setPageInfo] = useState({page: 0, count: 0})
   const [isLoading, setIsLoading] = useState(true)
 
+  const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
+
   async function getDatasets({q, filters, page}) {
-    const { locale } = router
     const res = await getSearchDatasets({q, filter: filters, page, locale: locale || 'pt'})
     if(res === undefined) return router.push({pathname:"500"})
     if(res?.count === 0) setShowEmptyState(true)
@@ -292,12 +294,15 @@ export default function SearchDatasetPage() {
 
   function DatasetCard({ data }) {
     return (
-      <Dataset
+      <DatasetSearchCard
         id={data.id}
         themes={data?.themes}
         name={data?.name || t('noName')}
-        temporalCoverageText={data?.temporal_coverages[0] || ""}
-        organization={data.organizations[0]}
+        temporalCoverageText={(data?.temporal_coverage && data.temporal_coverage[0]) || ""}
+        spatialCoverage={(data?.spatial_coverage?.map(coverage => coverage.slug) || [])
+          .sort((a, b) => a.localeCompare(b))
+          .join(', ')}
+        organizations={data.organizations}
         tables={{
           id: data?.first_table_id,
           number: data?.n_tables
@@ -314,6 +319,7 @@ export default function SearchDatasetPage() {
           free: data?.contains_open_data,
           pro: data?.contains_closed_data
         }}
+        locale={locale}
       />
     )
   }
@@ -659,6 +665,25 @@ export default function SearchDatasetPage() {
           />
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
+
+          {!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND) ?
+            <>
+              <CheckboxFilterAccordion
+                canSearch={true}
+                isActive={validateActiveFilterAccordin("spatial_coverage")}
+                choices={aggregations?.spatial_coverages}
+                valueField="key"
+                displayField="name"
+                fieldName={t('spatialCoverage')}
+                valuesChecked={valuesCheckedFilter("spatial_coverage")}
+                onChange={(value) => handleSelectFilter(["spatial_coverage",`${value}`])}
+                isLoading={!isLoading}
+              />
+              <Divider marginY="16px !important" borderColor="#DEDFE0"/>
+            </>
+            :
+            <></>
+          }
 
           <CheckboxFilterAccordion
             canSearch={true}

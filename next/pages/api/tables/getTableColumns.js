@@ -55,7 +55,8 @@ async function getTableColumns(id, locale = 'pt') {
                       bigqueryType {
                         name
                       }
-                      coverage
+                      spatialCoverage
+                      temporalCoverage
                       measurementUnit
                       containsSensitiveData
                       observations
