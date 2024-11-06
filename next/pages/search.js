@@ -664,19 +664,24 @@ export default function SearchDatasetPage() {
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
-          <CheckboxFilterAccordion
-            canSearch={true}
-            isActive={validateActiveFilterAccordin("spatial_coverage")}
-            choices={aggregations?.spatial_coverages}
-            valueField="key"
-            displayField="name"
-            fieldName={t('spatialCoverage')}
-            valuesChecked={valuesCheckedFilter("spatial_coverage")}
-            onChange={(value) => handleSelectFilter(["spatial_coverage",`${value}`])}
-            isLoading={!isLoading}
-          />
-
-          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
+          {process.env.NEXT_PUBLIC_BASE_URL_FRONTEND !== "https://basedosdados.org" ?
+            <>
+              <CheckboxFilterAccordion
+                canSearch={true}
+                isActive={validateActiveFilterAccordin("spatial_coverage")}
+                choices={aggregations?.spatial_coverages}
+                valueField="key"
+                displayField="name"
+                fieldName={t('spatialCoverage')}
+                valuesChecked={valuesCheckedFilter("spatial_coverage")}
+                onChange={(value) => handleSelectFilter(["spatial_coverage",`${value}`])}
+                isLoading={!isLoading}
+              />
+              <Divider marginY="16px !important" borderColor="#DEDFE0"/>
+            </>
+            :
+            <></>
+          }
 
           <CheckboxFilterAccordion
             canSearch={true}

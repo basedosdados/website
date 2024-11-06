@@ -93,25 +93,24 @@ export default function Footer({ template, ocult = false }) {
 
   if(template === "simple") return (
     <VStack
-      position="relative"
       zIndex="10"
       width="100%"
       spacing={0}
     >
       <VStack
         width="100%"
-        height={{base: "100%", lg: "96px"}}
-        justifyContent="center"
+        height="100%"
         backgroundColor="#EEEEEE"
       >
         <Stack
           width="100%"
           maxWidth="1440px"
+          height="100%"
           justifyContent="space-between"
           direction={{base: "column-reverse", lg: "row"}}
           spacing={0}
           gridGap={{base: "8px", lg: "40px"}}
-          padding={{base: "24px", lg: "0"}}
+          padding="24px"
         >
           <HStack spacing={4}>
             <TextFooterSimple>
