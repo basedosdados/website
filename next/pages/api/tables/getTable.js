@@ -46,6 +46,11 @@ async function getTable(id, locale='pt') {
                   }
                 }
                 version
+                status {
+                  _id
+                  slug
+                }
+                isDeprecated
                 temporalCoverage
                 spatialCoverage
                 fullTemporalCoverage
