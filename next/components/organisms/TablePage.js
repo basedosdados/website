@@ -27,7 +27,6 @@ import TwitterIcon from "../../public/img/icons/twitterIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
-import axios from "axios";
 
 export default function TablePage({ id }) {
   const { t } = useTranslation('dataset', 'prices');

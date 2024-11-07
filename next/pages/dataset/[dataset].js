@@ -36,7 +36,6 @@ import {
 export async function getStaticProps(context) {
   const { locale, params } = context;
   let dataset = null;
-  const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
 
   try {
     dataset = await getDataset(params.dataset, locale || 'pt');
