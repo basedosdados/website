@@ -15,12 +15,15 @@ import Link from '../atoms/Link';
 import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";
 import { DataBaseSolidIcon } from "../../public/img/icons/databaseIcon";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 export default function Dataset({
   id,
   name,
+  organizations,
   temporalCoverageText,
-  organization,
+  spatialCoverage,
   tables,
   rawDataSources,
   informationRequests,
@@ -28,7 +31,7 @@ export default function Dataset({
   locale
 }) {
   const { t } = useTranslation('dataset');
-  const router = useRouter();
+  const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
 
   const Tables = () => {
     let tablesNumber = tables.number
@@ -155,8 +158,10 @@ export default function Dataset({
             _hover={{ opacity: 0.9 }}
           >
             <Image
-              src={organization?.picture.startsWith("https://") ? organization?.picture : `https://basedosdados.org/uploads/group/${organization?.name}`}
-              alt={organization[`name${capitalize(locale)}`] || organization?.name || t('notProvided')}
+              src={organizations[0]?.picture?.startsWith("https://") 
+                ? organizations[0]?.picture 
+                : `https://basedosdados.org/uploads/group/${organizations[0]?.name}`}
+              alt={organizations[0]?.[`name${capitalize(locale)}`] || organizations[0]?.name || t('notProvided')}
               borderRadius="16px"
               minWidth="222px"
               minHeight="138px"
@@ -223,7 +228,7 @@ export default function Dataset({
                   {t('organization')}:
                 </Text>
                 <Link
-                  href={`/search?organization=${organization?.slug}`}
+                  href={`/search?organization=${organizations[0]?.slug}`}
                   color="#71757A"
                   fontWeight="400"
                   _hover={{
@@ -236,7 +241,7 @@ export default function Dataset({
                     lineHeight="20px"
                     textOverflow="ellipsis"
                   >
-                    {organization[`name${capitalize(locale)}`] || organization?.name}
+                    {organizations[0]?.[`name${capitalize(locale)}`] || organizations[0]?.name}
                   </Text>
                 </Link>
               </Stack>
@@ -261,9 +266,35 @@ export default function Dataset({
                   lineHeight="20px"
                   color="#71757A"
                 >
-                  {temporalCoverageText ? temporalCoverageText : t('noCoverage')}
+                  {temporalCoverageText ? temporalCoverageText : t('notProvided')}
                 </Text>
               </Stack>
+
+              {!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND) &&
+                <Stack
+                  direction={{ base: "column", lg: "row" }}
+                  spacing={1}
+                >
+                  <Text
+                    fontFamily="Roboto"
+                    fontWeight="400"
+                    fontSize="14px"
+                    lineHeight="20px"
+                    color="#464A51"
+                  >
+                    {t('spatialCoverage')}:
+                  </Text>
+                  <Text
+                    fontFamily="Roboto"
+                    fontWeight="400"
+                    fontSize="14px"
+                    lineHeight="20px"
+                    color="#71757A"
+                  >
+                    {spatialCoverage ? spatialCoverage : t('notProvided')}
+                  </Text>
+                </Stack>
+              }
 
               <Stack
                 direction={{ base: "column", lg: "row" }}

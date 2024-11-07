@@ -36,16 +36,17 @@ export default function TablePage({ id }) {
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState(false)
 
+  const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
+
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true)
       try {
         const response = await fetch(`/api/tables/getTable?id=${id}&locale=${locale}`, { method: "GET" })
         const result = await response.json()
 
         if (result.success) {
-          setResource(result.resource)
-          setIsError(false)
+          setResource(result.resource);
+          setIsError(false);
         } else {
           console.error(result.error)
           setIsError(true)
@@ -58,7 +59,8 @@ export default function TablePage({ id }) {
       }
     }
 
-    fetchData()
+    setIsLoading(true);
+    fetchData();
   }, [id, locale])
 
   const TooltipText = ({ text, info, ...props }) => {
@@ -144,38 +146,49 @@ export default function TablePage({ id }) {
   }
 
   const PublishedOrDataCleanedBy = ({ resource }) => {
+    if (!resource || typeof resource !== 'object' || Object.keys(resource).length === 0) {
+      return (
+        <Text
+          marginRight="4px !important"
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="14px"
+          lineHeight="20px"
+          color="#464A51"
+        >
+          {t('table.notProvided')}
+        </Text>
+      );
+    }
+
+    const people = Object.values(resource);
+
     return (
-      <HStack spacing="4px">
-        {resource?.firstName && resource?.lastName ?
-          <Text
-            marginRight="4px !important"
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="14px"
-            lineHeight="20px"
-            color="#464A51"
-          >
-            {`${resource.firstName} ${resource.lastName}`}
-          </Text>
-          :
-          <Text
-            marginRight="4px !important"
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="14px"
-            lineHeight="20px"
-            color="#464A51"
-          >
-            {t('table.notProvided')}
-          </Text>
-        }
-        {resource?.email && <EmailIcon {...keyIcons({email : resource.email})}/>}
-        {resource?.github && <GithubIcon {...keyIcons({github_user : resource.github})}/>}
-        {resource?.website && <WebIcon {...keyIcons({website : resource.website})}/>}
-        {resource?.twitter && <TwitterIcon {...keyIcons({twitter_user : resource.twitter_user})}/>}
-      </HStack>
-    )
-  }
+      <Stack spacing="8px">
+        {people.map((person, index) => (
+          <HStack key={index} spacing="4px">
+            <Text
+              marginRight="4px !important"
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              lineHeight="20px"
+              color="#464A51"
+            >
+              {person?.firstName && person?.lastName 
+                ? `${person.firstName} ${person.lastName}`
+                : t('table.notProvided')
+              }
+            </Text>
+            {person?.email && <EmailIcon {...keyIcons({email: person.email})}/>}
+            {person?.github && <GithubIcon {...keyIcons({github_user: person.github})}/>}
+            {person?.website && <WebIcon {...keyIcons({website: person.website})}/>}
+            {person?.twitter && <TwitterIcon {...keyIcons({twitter_user: person.twitter})}/>}
+          </HStack>
+        ))}
+      </Stack>
+    );
+  };
 
   const StackSkeleton = ({ children, ...props }) => {
     return (
@@ -232,8 +245,8 @@ export default function TablePage({ id }) {
     return formats[value] ? formats[value] : t('table.updateNotDefined')
   }
 
-  if(isError) return <FourOFour/>
-
+  if (isError) return <FourOFour/>;
+  
   return (
     <Stack
       flex={1}
@@ -308,9 +321,44 @@ export default function TablePage({ id }) {
           width="100%"
           height={!isLoading ? "fit-content" : "65px"}
         >
-          <TemporalCoverageBar value={resource?.fullCoverage}/>
+          <TemporalCoverageBar value={resource?.fullTemporalCoverage}/>
         </StackSkeleton>
       </Stack>
+
+      {!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND) &&
+        <Stack spacing="12px"  marginBottom="40px !important">
+          <StackSkeleton width="300px" height="20px">
+            <Text
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="18px"
+              lineHeight="20px"
+              color="#252A32"
+            >
+              {t('table.spatialCoverage')}
+            </Text>
+          </StackSkeleton>
+
+          <StackSkeleton
+            height="20px"
+            width={resource?.[`spatialCoverageName${capitalize(locale)}`] ? "100%" : "200px"}
+          >
+            <Text
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              lineHeight="20px"
+              color="#464A51"
+            >
+              {resource?.[`spatialCoverageName${capitalize(locale)}`]
+                ? Object.values(resource[`spatialCoverageName${capitalize(locale)}`])
+                    .sort((a, b) => a.localeCompare(b, locale))
+                    .join(', ')
+                : t('table.notProvided')}
+            </Text>
+          </StackSkeleton>
+        </Stack>
+      }
 
       <Stack spacing="12px" marginBottom="40px !important">
         <StackSkeleton width="200px" height="20px">
@@ -418,7 +466,7 @@ export default function TablePage({ id }) {
             color="#464A51"
           >
             {resource?.rawDataSource?.[0]?.updates?.[0]?.latest ?
-              `${formatDate(resource.rawDataSource[0].updates[0].latest)}:`
+              `${formatDate(resource.rawDataSource[0].updates[0].latest)}`
               :
               t('table.notProvided')
             }: {t('table.lastUpdateRawDataSource')}
@@ -471,7 +519,7 @@ export default function TablePage({ id }) {
             color="#464A51"
           >
             {resource?.rawDataSource?.[0]?.polls?.[0]?.latest ?
-              `${formatDate(resource.rawDataSource[0].polls[0].latest)}:`
+              `${formatDate(resource.rawDataSource[0].polls[0].latest)}`
               :
               t('table.notProvided')
             }: {t('table.lastCheckRawDataSource')}

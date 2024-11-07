@@ -27,12 +27,12 @@ import ChevronIcon from "../../public/img/icons/chevronIcon";
 export default function DatasetResource({
   dataset
 }) {
+  const { t } = useTranslation('dataset');
   const router = useRouter()
   const { query, locale } = router
   const [tables, setTables] = useState([])
   const [rawDataSources, setRawDataSources] = useState([])
   const [informationRequests, setInformationRequests] = useState([])
-  const { t } = useTranslation('dataset');
   const displayScreen = useBreakpointValue({ base: "mobile", lg: "desktop" })
 
   const pushQuery = (key, value) => {
@@ -55,7 +55,6 @@ export default function DatasetResource({
   }
 
   useEffect(() => {
-
     let dataset_tables = dataset?.tables?.edges.map((elm) => elm.node)
       .filter((elm) => elm?.status?.slug !== "under_review")
       .filter((elm) => elm?.slug !== "dicionario")
@@ -194,10 +193,24 @@ export default function DatasetResource({
     )
   }
 
-  function SelectResource() {
-    const [widthScreen, setWidthScreen] = useState(0)
+  function SelectResource ({ selectedResource }) {
+    const { t } = useTranslation('dataset');
+    const [widthScreen, setWidthScreen] = useState(0);
+    const [value, setValue] = useState("")
+    const {table, raw_data_source, information_request} = selectedResource;
+
+    const findResourceName = (source, id) => {
+      const resource = source.find(item => item._id === id);
+      return resource ? resource[`name${capitalize(locale)}`] || resource.name : "";
+    };
 
     useEffect(() => {
+      setValue(
+        table ? findResourceName(tables, table) :
+        raw_data_source ? findResourceName(rawDataSources, raw_data_source) :
+        information_request ? findResourceName(informationRequests, information_request) : ""
+      );
+
       const updateWidthScreen = () => {
         setWidthScreen(window.innerWidth - 48)
       }
@@ -209,35 +222,49 @@ export default function DatasetResource({
       return () => {
         window.removeEventListener('resize', updateWidthScreen)
       }
-    }, [])
+    }, [table, raw_data_source, information_request]);
 
     return (
       <Menu>
-        <MenuButton
-          width="100%"
-          maxWidth="360px"
-          borderRadius="8px"
-          padding="14px 20px"
+        <Text
+          as="label"
+          display="flex"
+          flexDirection="column"
+          gap="8px"
           fontFamily="Roboto"
-          fontWeight="400"
-          fontSize="14px"
-          lineHeight="20px"
-          backgroundColor="#EEEEEE"
-          color="#464A51"
-          textAlign="start"
+          fontWeight="500"
+          fontSize="16px"
+          lineHeight="24px"
+          color="#252A32"
         >
-          <Text
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
+          {t('selectResource')}
+
+          <MenuButton
+            width="100%"
+            maxWidth="360px"
+            borderRadius="8px"
+            padding="14px 20px"
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="14px"
+            lineHeight="20px"
+            backgroundColor="#EEEEEE"
+            color="#464A51"
+            textAlign="start"
           >
-            Selecione uma tabela ou fonte original
-            <ChevronIcon
-              marginLeft="auto"
-              transform="rotate(90deg)"
-            />
-          </Text>
-        </MenuButton>
+            <Text
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              {value}
+              <ChevronIcon
+                marginLeft="auto"
+                transform="rotate(90deg)"
+              />
+            </Text>
+          </MenuButton>
+        </Text>
 
         <MenuList
           minWidth={widthScreen}
@@ -415,7 +442,7 @@ export default function DatasetResource({
           />
         </Stack>
         :
-        <SelectResource />
+        <SelectResource selectedResource={query}/>
       }
 
       <SwitchResource route={query}/>

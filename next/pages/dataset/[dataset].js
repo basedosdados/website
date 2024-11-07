@@ -15,6 +15,7 @@ import Head from "next/head";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { capitalize } from 'lodash';
+import axios from "axios";
 
 import BigTitle from "../../components/atoms/BigTitle";
 import GreenTab from "../../components/atoms/GreenTab";
@@ -35,17 +36,21 @@ import {
 export async function getStaticProps(context) {
   const { locale, params } = context;
   let dataset = null;
+
   try {
     dataset = await getDataset(params.dataset, locale || 'pt');
+
   } catch (error) {
     console.error("Fetch error:", error.message);
   }
 
+  const props = {
+    ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices'])),
+    dataset,
+  };
+  
   return {
-    props: {
-      ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices'])),
-      dataset,
-    },
+    props,
     revalidate: 30,
   };
 }
@@ -68,12 +73,10 @@ export default function DatasetPage ({ dataset }) {
   const { query } = router
   const [tabIndex, setTabIndex] = useState(0)
 
-  const isDatasetEmpty = dataset === null || Object.keys(dataset).length === 0
+  const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
 
-  useEffect(() => {
-    if (router.query?.dataset === "mundo-kaggle-olimpiadas") return window.open(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/dataset/62f8cb83-ac37-48be-874b-b94dd92d3e2b`, "_self")
-    if (isDatasetEmpty) return router.push(`${process.env.NEXT_PUBLIC_API_URL}/dataset_redirect?dataset=${query.dataset}`)
-  }, [])
+
+  const isDatasetEmpty = dataset === null || Object.keys(dataset).length === 0
 
   if(isDatasetEmpty) return <MainPageTemplate userTemplate><FourOFour/></MainPageTemplate>
 
@@ -117,7 +120,7 @@ export default function DatasetPage ({ dataset }) {
         spacing={0}
       >
         <Grid
-          templateColumns={{ base: "1fr", lg: "296px 1fr" }}
+          templateColumns={{ base: "1fr", lg: "295px 1fr" }}
           width="100%"
           gap="24px"
           paddingY="24px"
@@ -130,20 +133,20 @@ export default function DatasetPage ({ dataset }) {
             borderRadius="16px"
           >
             <Image
-              src={dataset?.organization?.picture ? dataset?.organization?.picture : `https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png`}
+              src={dataset?.organizations?.edges?.[0]?.node?.picture ? dataset?.organizations?.edges?.[0]?.node?.picture : `https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png`}
               objectFit="contain"
-              width="300px"
-              height="182px"
+              width="295px"
+              height="252px"
               borderRadius="16px"
             />
           </GridItem>
 
           <GridItem>
             <Grid
-              templateColumns="1fr 1fr"
+              templateColumns="1fr 1fr 1fr 1fr 1fr"
               gap="8px"
             >
-              <GridItem colSpan={2}>
+              <GridItem colSpan={5}>
                 <BigTitle
                   width="100%"
                   overflow="hidden"
@@ -157,13 +160,39 @@ export default function DatasetPage ({ dataset }) {
                 </BigTitle>
               </GridItem>
 
-              <GridItem colSpan={2} minHeight="60px" marginBottom="8px">
+              <GridItem colSpan={5} minHeight="60px" marginBottom="8px">
                 <ReadMore id="readLessDataset">
                   {dataset[`description${capitalize(locale)}`] || dataset.description || t('noDescription')}
                 </ReadMore>
               </GridItem>
 
-              <GridItem colSpan={{ base: 2, lg: 1 }}>
+              <GridItem colSpan={5} marginBottom="8px">
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="18px"
+                  lineHeight="28px"
+                  color="#252A32"
+                  marginBottom="8px"
+                >
+                  {t('organization')}
+                </Text>
+                <Link
+                  href={`/search?organization=${dataset?.organizations?.edges?.[0]?.node?.slug || ""}`}
+                  color="#464A51"
+                  fontWeight="400"
+                >
+                  <Text
+                    fontFamily="Roboto"
+                    fontSize="14px"
+                    lineHeight="20px"
+                  >
+                    {dataset.organizations?.edges?.[0]?.node?.[`name${capitalize(locale)}`] || dataset.organizations?.edges?.[0]?.node?.name || t('noOrganization')}
+                  </Text>
+                </Link>
+              </GridItem>
+
+              <GridItem colSpan={{ base: 5, lg: 2 }} marginBottom="8px">
                 <Text
                   fontFamily="Roboto"
                   fontWeight="500"
@@ -181,35 +210,37 @@ export default function DatasetPage ({ dataset }) {
                   lineHeight="20px"
                   color="#464A51"
                 >
-                  {dataset.coverage || t('noCoverage')}
+                  {dataset.temporalCoverage || t('notProvided')}
                 </Text>
               </GridItem>
 
-              <GridItem colSpan={{ base: 2, lg: 1 }}>
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="500"
-                  fontSize="18px"
-                  lineHeight="28px"
-                  color="#252A32"
-                  marginBottom="8px"
-                >
-                  {t('organization')}
-                </Text>
-                <Link
-                  href={`/search?organization=${dataset?.organization?.slug || ""}`}
-                  color="#464A51"
-                  fontWeight="400"
-                >
+              {!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND) &&
+                <GridItem colSpan={{ base: 5, lg: 3 }} marginBottom="8px">
                   <Text
                     fontFamily="Roboto"
+                    fontWeight="500"
+                    fontSize="18px"
+                    lineHeight="28px"
+                    color="#252A32"
+                    marginBottom="8px"
+                  >
+                    {t('spatialCoverage')}
+                  </Text>
+                  <Text
+                    fontFamily="Roboto"
+                    fontWeight="400"
                     fontSize="14px"
                     lineHeight="20px"
+                    color="#464A51"
                   >
-                    {dataset.organization?.[`name${capitalize(locale)}`] || dataset.organization?.name || t('noOrganization')}
+                    {dataset?.[`spatialCoverageName${capitalize(locale)}`]
+                      ? Object.values(dataset[`spatialCoverageName${capitalize(locale)}`])
+                          .sort((a, b) => a.localeCompare(b, locale))
+                          .join(', ')
+                      : t('notProvided')}
                   </Text>
-                </Link>
-              </GridItem>
+                </GridItem>
+              }
             </Grid>
           </GridItem>
         </Grid>

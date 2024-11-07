@@ -61,6 +61,7 @@ async function getRawDataSource(id, locale = 'pt') {
                   edges {
                     node {
                       _id
+                      order
                       columns {
                         edges {
                           node {
