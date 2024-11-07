@@ -16,7 +16,6 @@ import { useEffect, useState } from "react";
 import cookies from "js-cookie";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import capitalize from "lodash/capitalize";
 import Link from "../components/atoms/Link";
 import { isMobileMod, useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../utils";
