@@ -490,7 +490,7 @@ export default function TablePage({ id }) {
             color="#464A51"
           >
             {resource?.rawDataSource?.[0]?.updates?.[0]?.latest ?
-              `${formatDate(resource.rawDataSource[0].updates[0].latest)}:`
+              `${formatDate(resource.rawDataSource[0].updates[0].latest)}`
               :
               t('table.notProvided')
             }: {t('table.lastUpdateRawDataSource')}
@@ -543,7 +543,7 @@ export default function TablePage({ id }) {
             color="#464A51"
           >
             {resource?.rawDataSource?.[0]?.polls?.[0]?.latest ?
-              `${formatDate(resource.rawDataSource[0].polls[0].latest)}:`
+              `${formatDate(resource.rawDataSource[0].polls[0].latest)}`
               :
               t('table.notProvided')
             }: {t('table.lastCheckRawDataSource')}
