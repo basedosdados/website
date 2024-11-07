@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import cookies from "js-cookie";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import capitalize from "lodash/capitalize";
 import Link from "../components/atoms/Link";
 import { isMobileMod, useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../utils";
@@ -299,8 +300,9 @@ export default function SearchDatasetPage() {
         themes={data?.themes}
         name={data?.name || t('noName')}
         temporalCoverageText={(data?.temporal_coverage && data.temporal_coverage[0]) || ""}
-        spatialCoverage={(data?.spatial_coverage?.map(coverage => coverage.slug) || [])
-          .sort((a, b) => a.localeCompare(b))
+        spatialCoverage={data?.spatial_coverage
+          ?.map(coverage => coverage.name)
+          .sort((a, b) => a.localeCompare(b, locale))
           .join(', ')}
         organizations={data.organizations}
         tables={{
