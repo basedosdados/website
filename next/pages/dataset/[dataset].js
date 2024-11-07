@@ -36,39 +36,10 @@ import {
 export async function getStaticProps(context) {
   const { locale, params } = context;
   let dataset = null;
-  let spatialCoverageNames = [];
-  const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
 
   try {
     dataset = await getDataset(params.dataset, locale || 'pt');
 
-    if(!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND)) {
-      if (dataset?.spatialCoverage) {
-        const coverageArray = Array.isArray(dataset.spatialCoverage)
-          ? dataset.spatialCoverage
-          : typeof dataset.spatialCoverage === 'string'
-            ? dataset.spatialCoverage.split(',').map(item => item.trim())
-            : Object.values(dataset.spatialCoverage);
-  
-        const promises = coverageArray.map(slug => {
-          const url = `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/areas/getArea?slug=${slug}&locale=${locale}`;
-          return axios.get(url).catch(error => {
-            console.error(`Error fetching ${url}:`, error.message);
-            return null;
-          });
-        });
-        
-        const responses = await Promise.all(promises);
-        spatialCoverageNames = responses
-          .filter(res => res !== null)
-          .map(res => {
-            const name = res.data.resource[0]?.node[`name${capitalize(locale)}`] || res.data.resource[0]?.node.name;
-            return name;
-          })
-          .filter(Boolean)
-          .sort((a, b) => a.localeCompare(b, locale));
-      }
-    }
   } catch (error) {
     console.error("Fetch error:", error.message);
   }
@@ -76,7 +47,6 @@ export async function getStaticProps(context) {
   const props = {
     ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices'])),
     dataset,
-    ...(allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND) ? {} : { spatialCoverageNames }),
   };
   
   return {
@@ -96,7 +66,7 @@ export async function getStaticPaths(context) {
   }
 }
 
-export default function DatasetPage ({ dataset, spatialCoverageNames = [] }) {
+export default function DatasetPage ({ dataset }) {
   const { t } = useTranslation('dataset', 'common');
   const router = useRouter()
   const { locale } = router
@@ -263,8 +233,10 @@ export default function DatasetPage ({ dataset, spatialCoverageNames = [] }) {
                     lineHeight="20px"
                     color="#464A51"
                   >
-                    {spatialCoverageNames.length > 0 
-                      ? spatialCoverageNames.join(', ')
+                    {dataset?.[`spatialCoverageName${capitalize(locale)}`]
+                      ? Object.values(dataset[`spatialCoverageName${capitalize(locale)}`])
+                          .sort((a, b) => a.localeCompare(b, locale))
+                          .join(', ')
                       : t('notProvided')}
                   </Text>
                 </GridItem>

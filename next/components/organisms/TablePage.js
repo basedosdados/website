@@ -27,7 +27,6 @@ import TwitterIcon from "../../public/img/icons/twitterIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
-import axios from "axios";
 
 export default function TablePage({ id }) {
   const { t } = useTranslation('dataset', 'prices');
@@ -36,7 +35,6 @@ export default function TablePage({ id }) {
   const [isLoading, setIsLoading] = useState(true)
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState(false)
-  const [spatialCoverageNames, setSpatialCoverageNames] = useState([]);
 
   const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
 
@@ -47,30 +45,6 @@ export default function TablePage({ id }) {
         const result = await response.json()
 
         if (result.success) {
-          if(!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND)) {
-            let areaNames = [];
-
-            if (result.resource?.spatialCoverage) {
-              const coverageArray = Array.isArray(result.resource.spatialCoverage)
-                ? result.resource.spatialCoverage
-                : typeof result.resource.spatialCoverage === 'string'
-                  ? result.resource.spatialCoverage.split(',').map(item => item.trim())
-                  : Object.values(result.resource.spatialCoverage);
-  
-              const promises = coverageArray.map(slug => 
-                axios.get(`/api/areas/getArea?slug=${slug}&locale=${locale}`)
-              );
-              
-              const responses = await Promise.all(promises);
-              areaNames = responses
-                .map(res => res.data.resource[0]?.node[`name${capitalize(locale)}`] || res.data.resource[0]?.node.name)
-                .filter(Boolean)
-                .sort((a, b) => a.localeCompare(b, locale));
-            }
-
-            setSpatialCoverageNames(areaNames);
-          }
-          
           setResource(result.resource);
           setIsError(false);
         } else {
@@ -367,7 +341,7 @@ export default function TablePage({ id }) {
 
           <StackSkeleton
             height="20px"
-            width={resource?.spatialCoverageNames ? "100%" : "200px"}
+            width={resource?.[`spatialCoverageName${capitalize(locale)}`] ? "100%" : "200px"}
           >
             <Text
               fontFamily="Roboto"
@@ -376,8 +350,10 @@ export default function TablePage({ id }) {
               lineHeight="20px"
               color="#464A51"
             >
-              {spatialCoverageNames.length > 0 
-                ? spatialCoverageNames.join(', ')
+              {resource?.[`spatialCoverageName${capitalize(locale)}`]
+                ? Object.values(resource[`spatialCoverageName${capitalize(locale)}`])
+                    .sort((a, b) => a.localeCompare(b, locale))
+                    .join(', ')
                 : t('table.notProvided')}
             </Text>
           </StackSkeleton>
@@ -490,7 +466,7 @@ export default function TablePage({ id }) {
             color="#464A51"
           >
             {resource?.rawDataSource?.[0]?.updates?.[0]?.latest ?
-              `${formatDate(resource.rawDataSource[0].updates[0].latest)}:`
+              `${formatDate(resource.rawDataSource[0].updates[0].latest)}`
               :
               t('table.notProvided')
             }: {t('table.lastUpdateRawDataSource')}
@@ -543,7 +519,7 @@ export default function TablePage({ id }) {
             color="#464A51"
           >
             {resource?.rawDataSource?.[0]?.polls?.[0]?.latest ?
-              `${formatDate(resource.rawDataSource[0].polls[0].latest)}:`
+              `${formatDate(resource.rawDataSource[0].polls[0].latest)}`
               :
               t('table.notProvided')
             }: {t('table.lastCheckRawDataSource')}

@@ -20,8 +20,9 @@ export default async function getDataset(id, locale = 'pt') {
                 name${capitalize(locale)}
                 description
                 description${capitalize(locale)}
-                spatialCoverage
                 temporalCoverage
+                spatialCoverage
+                spatialCoverageName${capitalize(locale)}
                 themes {
                   edges {
                     node {
