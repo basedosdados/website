@@ -299,8 +299,9 @@ export default function SearchDatasetPage() {
         themes={data?.themes}
         name={data?.name || t('noName')}
         temporalCoverageText={(data?.temporal_coverage && data.temporal_coverage[0]) || ""}
-        spatialCoverage={(data?.spatial_coverage?.map(coverage => coverage.slug) || [])
-          .sort((a, b) => a.localeCompare(b))
+        spatialCoverage={data?.spatial_coverage
+          ?.map(coverage => coverage.name)
+          .sort((a, b) => a.localeCompare(b, locale))
           .join(', ')}
         organizations={data.organizations}
         tables={{
