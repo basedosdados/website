@@ -1,10 +1,17 @@
+import { appWithTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Head from "next/head";
 import themeBD from "../styles/themeBD";
 import "../styles/globals.css";
+import { useTranslation } from 'next-i18next';
 
 function MyApp({ Component, pageProps }) {
+  const router = useRouter();
+  const { locale } = router;
+  const { t } = useTranslation('app');
+
   const queryClient = new QueryClient({
     cacheTime: 0,
   });
@@ -19,16 +26,24 @@ function MyApp({ Component, pageProps }) {
           <meta name="robots" content="noindex" />
         )}
         {/* <meta/> para não noindex ambientes de development e staging */}
-        <link rel="icon" type="image/ico" href="/favicon.ico" />
+        {locale === 'en' ?
+          <link rel="icon" type="image/ico" href="/favicon_en.ico"/>
+          :
+          <link rel="icon" type="image/ico" href="/favicon_default.ico"/>
+        }
         <link
           rel="image_src"
-          href="https://storage.googleapis.com/basedosdados-website/thumbnails/2022/thumbnail_padrao.png"
+          href={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`}
         />
 
-        <title>Base dos Dados</title>
+        <title>{locale === 'en' ? 'Data Basis' : locale === 'es' ? 'Base de los Datos' : 'Base dos Dados'}</title>
         <meta
           property="description"
-          content="São centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python, R ou Stata."
+          content={
+            locale === 'en' ? 'Hundreds of open datasets for you to explore however you like. Download or access processed data ready for analysis using SQL, Python, R, or Stata.' : 
+            locale === 'es' ? 'Cientos de conjuntos de datos abiertos para que explores como quieras. Descarga o accede a datos procesados y listos para análisis usando SQL, Python, R y Stata.' : 
+            'Centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python, R ou Stata.'
+          }
         />
         <script
           defer
@@ -41,25 +56,25 @@ function MyApp({ Component, pageProps }) {
         <meta name="twitter:creator" content="@basedosdados" />
         <meta
           name="twitter:image"
-          content="https://storage.googleapis.com/basedosdados-website/thumbnails/2022/thumbnail_padrao.png"
+          content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`}
           key="twimage"
         />
 
         {/* Open Graph */}
         <meta
           property="og:image"
-          content="https://storage.googleapis.com/basedosdados-website/thumbnails/2022/thumbnail_padrao.png"
+          content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`}
           key="ogimage"
         />
         <meta
           property="og:site_name"
-          content="Base dos Dados"
+          content={t('siteName')}
           key="ogsitename"
         />
-        <meta property="og:title" content="Base dos Dados" key="ogtitle" />
+        <meta property="og:title" content={t('title')} key="ogtitle" />
         <meta
           property="og:description"
-          content="São centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python, R ou Stata."
+          content={t('description')}
           key="ogdesc"
         />
 
@@ -95,7 +110,7 @@ function MyApp({ Component, pageProps }) {
       </Head>
 
       <ChakraProvider theme={themeBD}>
-        <Component {...pageProps} />
+        <Component {...pageProps} locale={locale} />
       </ChakraProvider>
 
       {/*<!-- Google Tag Manager (noscript) -->*/}
@@ -130,4 +145,4 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);

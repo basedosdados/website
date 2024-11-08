@@ -20,6 +20,7 @@ async function getUser(id, token) {
                   isAdmin
                   isActive
                   isEmailVisible
+                  gcpEmail
                   picture
                   username
                   firstName
@@ -29,11 +30,20 @@ async function getUser(id, token) {
                   github
                   twitter
                   linkedin
-                  proSubscription
-                  proSubscriptionRole
-                  proSubscriptionSlots
-                  proSubscriptionStatus
+                  workDataTool
                   availableForResearch
+                  internalSubscription (isActive: true) {
+                    edges {
+                      node {
+                        canceledAt
+                        createdAt
+                        isActive
+                        stripeSubscription
+                        planInterval
+                        nextBillingCycle
+                      }
+                    }
+                  }
                 }
               }
             }

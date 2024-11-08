@@ -1,0 +1,111 @@
+{
+    "pageTitle": "Services – Data Basis",
+    "metaTitle": "Services – Data Basis",
+    "slogan": {
+      "title": "Our services",
+      "description": "Data Basis is the expert that helps you or your team work with and extract maximum value from data.",
+      "cta": "Let's work on a project together"
+    },
+    "services": {
+      "dataCapture": "Data capture",
+      "dataAnalysis": "Data analysis",
+      "dataConsulting": "Data consulting"
+    },
+    "caseStudies": {
+      "title": "Our solutions",
+      "subtitle": "Discover why institutions choose to innovate with Data Basis",
+      "readMore": "Read the case study"
+    },
+    "dataCapture": {
+      "title": "Data capture",
+      "description": "We capture and provide data on demand with speed, scale, and low cost.",
+      "longDescription": "You don't need to worry about creating and maintaining your own infrastructure or writing code - we take care of that. Everything is done following Data Basis' treatment and standardization methodology, and according to the best data engineering practices in the market. The processed tables can be made available exclusively or be public.",
+      "advantages": {
+        "title": "Main advantages",
+        "speed": "Speed",
+        "speedDescription": "Even very complex queries take only minutes to process.",
+        "scale": "Scale",
+        "scaleDescription": "Our data lake magically scales to hexabytes if necessary.",
+        "cost": "Low cost",
+        "costDescription": "Every user has 1TB free per month for data queries."
+      },
+      "work": {
+        "title": "Our work with data engineering",
+        "technology": {
+          "title": "Cutting-edge technology",
+          "description": "Using Google Cloud Platform infrastructure, one of the largest data storage and processing platforms, we ensure the security and reliability of our work."
+        },
+        "flexibility": {
+          "title": "Flexibility",
+          "description": "Whether it's one-time submissions, recurring updates, API access, or connection to BI platforms, we deliver the solution you need in an agile and complete way."
+        },
+        "frameworks": {
+          "title": "Recognized frameworks",
+          "description": "With frameworks and data management systems, we ensure the quality and organization of your data system without generating any concerns for your team."
+        }
+      }
+    },
+    "dataAnalysis": {
+      "title": "Data analysis",
+      "description": "We build essential analyses, reports, and indicators for your research or decision-making.",
+      "longDescription": "The information and insights are generated from various datasets already processed in our public data lake, coupled with the expertise of our Data team. And more: we use our standard treatment methodology so that you can also cross-reference this data with any other bases available in the data lake.",
+      "examples": {
+        "title": "Examples of questions we can answer",
+        "example1": "How has the Brazilian economy been evolving, with detailed monthly indicators by sector?",
+        "example2": "Which schools will perform above the state average in mathematics next year?",
+        "example3": "How many times does the Official Gazette of the Union publish about a certain topic each day?"
+      }
+    },
+    "dataConsulting": {
+      "title": "Data consulting",
+      "description": "We guide you on how to apply our methodology for cleaning, structuring, and standardizing data",
+      "longDescription": "In your project or organization through workshops and exclusive materials. Reproducing our treatment process in your own database can save hours of work for your team when querying, manipulating, or updating information.",
+      "advantages": {
+        "title": "Main advantages",
+        "advantage1": "Experience in building infrastructures capable of supporting thousands of monthly accesses.",
+        "advantage2": "Flexibility for remote projects anywhere in the country.",
+        "advantage3": "Diverse team with expertise in different areas of knowledge and data."
+      },
+      "areas": {
+        "title": "Areas of expertise",
+        "infrastructure": {
+          "title": "Infrastructure",
+          "description": "Mentoring for data engineering teams looking to structure data maintenance processes, their own data lakes, or leverage themselves using Data Basis infrastructure."
+        },
+        "analysis": {
+          "title": "Analysis",
+          "description": "Practical workshops, showing how Data Basis data lake works and teaching how to explore public data for journalistic articles or scientific research."
+        },
+        "programming": {
+          "title": "Programming",
+          "description": "Customized teaching programs to use Data Basis Python, R, and Stata packages, as well as SQL mentoring to build fast and scalable analyses directly in the cloud."
+        }
+      }
+    },
+    "workflow": {
+      "title": "Our workflow",
+      "description": "The same work methodology for all services, based on customer satisfaction and excellence in quality.",
+      "steps": {
+        "demand": {
+          "title": "Demand",
+          "subtitle": "Identification of client demands and needs",
+          "description": "We work collaboratively to understand the real needs behind our clients' requests. The discovery work includes discussions about project objectives or the use of data to be captured and analyzed. It is at this stage that the final objective of the service becomes clear to our team and clients."
+        },
+        "planning": {
+          "title": "Planning",
+          "subtitle": "Alignment of business, engineering, or training expectations",
+          "description": "The second step is to understand the best way to deliver the value you need. We don't work with generic proposals. Each project is 100% thought out and oriented towards client demands, whether in the format of data delivery, analyses, or specific training."
+        },
+        "budget": {
+          "title": "Budget",
+          "subtitle": "Transparent and simplified budget",
+          "description": "Once the scope, format, and expectations are aligned, we deliver a completely transparent budget proposal. For this, we consider factors such as the quantity and complexity of datasets, necessary work, team size, and urgency. Everything is explicitly stated in a direct manner and in accordance with what has been determined so far."
+        },
+        "execution": {
+          "title": "Execution",
+          "subtitle": "Agile execution and value delivery",
+          "description": "Finally, our delivery is committed to deadlines and, above all, quality. Communication is constant throughout the execution. Working in a lean manner and with experienced professionals in the field, our team values the satisfaction of our clients."
+        }
+      }
+    }
+}

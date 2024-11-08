@@ -2,19 +2,24 @@ import {
   HStack,
   Stack,
   VStack,
-  Text
+  Text,
+  Box
 } from "@chakra-ui/react";
 import Link from "../atoms/Link";
 import BodyText from "../atoms/BodyText"
 import { isMobileMod } from "../../hooks/useCheckMobile.hook"
+import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 
 import YoutubeIcon from "../../public/img/icons/youtubeIcon";
-import TwitterIcon from "../../public/img/icons/twitterIcon";
+// import TwitterIcon from "../../public/img/icons/twitterIcon";
+import BlueskyIcon from "../../public/img/icons/blueskyIcon";
 import DiscordIcon from "../../public/img/icons/discordIcon";
 import GithubIcon from "../../public/img/icons/githubIcon";
 import LinkedinIcon from "../../public/img/icons/linkedinIcon";
 import WhatsAppIcon from "../../public/img/icons/whatsAppIcon";
 import TelegramIcon from "../../public/img/icons/telegramIcon";
+import LanguageSelector from "../atoms/LanguageSelector";
 
 function SectionCategories({ title, children, ...props }) {
   return (
@@ -50,6 +55,9 @@ function SocialLink({ href, icon }) {
 }
 
 function FooterLink(props) {
+  const router = useRouter();
+  const { locale } = router;
+  
   return (
     <Link
       fontFamily="ubuntu"
@@ -57,6 +65,7 @@ function FooterLink(props) {
       letterSpacing="0.3px"
       color="#FFF"
       target="_blank"
+      href={`/${locale}${props.href}`}
       {...props}
     />
   )
@@ -79,40 +88,64 @@ function TextFooterSimple({children, ...props}) {
 }
 
 export default function Footer({ template, ocult = false }) {
+  const { t } = useTranslation('common');
+  const { locale } = useRouter();
+
   if(template === "simple") return (
     <VStack
-      position="relative"
       zIndex="10"
       width="100%"
       spacing={0}
     >
       <VStack
         width="100%"
-        height={{base: "100%", lg: "96px"}}
-        justifyContent="center"
+        height="100%"
         backgroundColor="#EEEEEE"
       >
         <Stack
           width="100%"
           maxWidth="1440px"
-          justifyContent="center"
+          height="100%"
+          justifyContent="space-between"
           direction={{base: "column-reverse", lg: "row"}}
           spacing={0}
           gridGap={{base: "8px", lg: "40px"}}
-          padding={{base: "24px", lg: "0"}}
+          padding="24px"
         >
-          <TextFooterSimple textAlign="center">
-            ® 2024 Base dos Dados
-          </TextFooterSimple>
-          <TextFooterSimple as="a" href="/termos-e-privacidade?section=terms" _hover={{ color: "#252A32" }}>
-            Termos de Uso
-          </TextFooterSimple>
-          <TextFooterSimple as="a" href="/termos-e-privacidade?section=privacy" _hover={{ color: "#252A32" }}>
-            Políticas de Privacidade
-          </TextFooterSimple>
-          <TextFooterSimple as="a" href="/contato" _hover={{ color: "#252A32" }}>
-            Contato
-          </TextFooterSimple>
+          <HStack spacing={4}>
+            <TextFooterSimple>
+              {t('footer.copyright', { year: new Date().getFullYear() })}
+            </TextFooterSimple>
+            <Box ml={4}>
+              <LanguageSelector theme="light" />
+            </Box>
+          </HStack>
+          <HStack spacing={4}>
+            <Link
+              href="/terms?section=terms"
+              _hover={{ color: "#252A32" }}
+            >
+              <TextFooterSimple>
+                {t('footer.termsOfUse')}
+              </TextFooterSimple>
+            </Link>
+            <Link
+              href="/terms?section=privacy"
+              _hover={{ color: "#252A32" }}
+            >
+              <TextFooterSimple>
+                {t('footer.privacyPolicy')}
+              </TextFooterSimple>
+            </Link>
+            <Link
+              href="/contact"
+              _hover={{ color: "#252A32" }}
+            >
+              <TextFooterSimple>
+                {t('footer.contact')}
+              </TextFooterSimple>
+            </Link>
+          </HStack>
         </Stack>
       </VStack>
     </VStack>
@@ -149,7 +182,7 @@ export default function Footer({ template, ocult = false }) {
             letterSpacing="-0.4px"
             color="#FFF"
             paddingBottom="40px"
-          >Base dos Dados</BodyText>
+          >{t('footer.title')}</BodyText>
 
           <Stack
             paddingBottom="40px"
@@ -163,72 +196,81 @@ export default function Footer({ template, ocult = false }) {
             spacing={isMobileMod() ? "0" :"80px"}
             marginLeft="auto"
           >
-            <SectionCategories title="PRODUTOS" marginBottom={isMobileMod() && "24px !important"}>
-              <FooterLink target="_self" href="/dataset">
-                Mecanismo de busca
+            <SectionCategories title={t('footer.products.title')} marginBottom={isMobileMod() && "24px !important"}>
+              <FooterLink target="_self" href="/search">
+                {t('footer.products.searchEngine')}
               </FooterLink>
-              <FooterLink href="https://basedosdados.github.io/mais/">
-                Datalake público
+              <FooterLink href={
+                            locale === "en" ? "https://basedosdados.github.io/mais/en" :
+                            locale === "es" ? "https://basedosdados.github.io/mais/es" :
+                            "https://basedosdados.github.io/mais"
+                          }
+              >
+                {t('footer.products.publicDatalake')}
               </FooterLink>
-              <FooterLink href="https://basedosdados.github.io/mais/access_data_packages/">
-                Pacotes
-              </FooterLink>
-              <FooterLink href="https://info.basedosdados.org/bd-pro">
-                BD Pro
+              <FooterLink href={locale === 'en' ? "https://info.basedosdados.org/en/bd-pro" : 
+                                locale === 'es' ? "https://info.basedosdados.org/es/bd-pro" : 
+                                "https://info.basedosdados.org/bd-pro"}>
+                {t('footer.products.DBPro')}
               </FooterLink>
               <FooterLink href="https://info.basedosdados.org/bd-edu-sql">
-                BD Edu
+                {t('footer.products.DBEdu')}
               </FooterLink>
             </SectionCategories>
 
-            <SectionCategories title="SERVIÇOS" marginBottom={isMobileMod() && "24px !important"}>
-              <FooterLink target="_self" href="/servicos#Captura de dados">
-                Captura de dados
+            <SectionCategories title={t('footer.services.title')} marginBottom={isMobileMod() && "24px !important"}>
+              <FooterLink target="_self" href="/services#data-capture">
+                {t('footer.services.dataCapture')}
               </FooterLink>
-              <FooterLink href="/servicos#Análise de dados">
-                Análise de dados
+              <FooterLink href="/services#analytics">
+                {t('footer.services.dataAnalytics')}
               </FooterLink>
-              <FooterLink href="/servicos#Consultoria de dados">
-                Consultoria de dados
+              <FooterLink href="/services#consulting">
+                {t('footer.services.dataConsulting')}
               </FooterLink>
-              <FooterLink href="/servicos#Estudos de caso">
-                Estudos de caso
+              <FooterLink href="/services#case-studies">
+                {t('footer.services.caseStudies')}
               </FooterLink>
             </SectionCategories>
 
-            <SectionCategories title="TUTORIAIS" marginBottom={isMobileMod() && "24px !important"}>
-              <FooterLink href="https://basedosdados.github.io/mais/">
-                Documentação
+            <SectionCategories title={t('footer.tutorials.title')} marginBottom={isMobileMod() && "24px !important"}>
+              <FooterLink href={
+                            locale === "en" ? "https://basedosdados.github.io/mais/en" :
+                            locale === "es" ? "https://basedosdados.github.io/mais/es" :
+                            "https://basedosdados.github.io/mais"
+                          }
+              >
+                {t('footer.tutorials.documentation')}
               </FooterLink>
               <FooterLink href="https://www.youtube.com/watch?v=nGM2OwTUY_M&list=PLu5pyM8QY6hg3GpNCyCtSS3sUi4Jo8Pir">
-                Vídeos no YouTube
+                {t('footer.tutorials.youtubeVideos')}
               </FooterLink>
             </SectionCategories>
 
-            <SectionCategories title="INSTITUCIONAL" marginBottom={isMobileMod() && "24px !important"}>
-              <FooterLink target="_self" href="/quem-somos">
-                Quem somos
+            <SectionCategories title={t('footer.institutional.title')} marginBottom={isMobileMod() && "24px !important"}>
+              <FooterLink target="_self" href="/about-us">
+                {t('footer.institutional.aboutUs')}
               </FooterLink>
-              <FooterLink target="_self" href="/transparencia">
-                Transparência
+              <FooterLink target="_self" href="/transparency">
+                {t('footer.institutional.transparency')}
               </FooterLink>
               <FooterLink href="https://info.basedosdados.org/newsletter">
-                Newsletter
+                {t('footer.institutional.newsletter')}
               </FooterLink>
               <FooterLink href="https://info.basedosdados.org/carreiras">
-                Carreiras
+                {t('footer.institutional.careers')}
               </FooterLink>
-              <FooterLink href="/perguntas-frequentes">
-                Perguntas frequentes
+              <FooterLink href="/faq">
+                {t('footer.institutional.faq')}
               </FooterLink>
-              <FooterLink target="_self" href="/termos-e-privacidade">
-                Termos e Privacidade
+              <FooterLink target="_self" href="/terms">
+                {t('footer.institutional.termsAndPrivacy')}
               </FooterLink>
-              <FooterLink target="_self" href="/contato">
-                Contato
+              <FooterLink target="_self" href="/contact">
+                {t('footer.institutional.contact')}
               </FooterLink>
               <Link fontWeight="700" color="white" href="/#support">
-                Apoie o projeto
+                {t('footer.institutional.supportProject')}
               </Link>
             </SectionCategories>
           </Stack>
@@ -258,11 +300,19 @@ export default function Footer({ template, ocult = false }) {
             alignItems="flex-start"
             marginTop={isMobileMod() && "16px"}
           >
-            <BodyText color="#FFF" fontSize="16px" letterSpacing="0.2px">® 2024 Base dos Dados</BodyText>
+            <HStack spacing={4}>
+              <BodyText color="#FFF" fontSize="16px" letterSpacing="0.2px">
+                {t('footer.copyright', { year: new Date().getFullYear() })}
+              </BodyText>
+              <Box ml={4}>
+                <LanguageSelector theme="dark" />
+              </Box>
+            </HStack>
           </HStack>
 
           <HStack spacing={3}>
-            <SocialLink title="Twitter" href="https://twitter.com/basedosdados" icon={<TwitterIcon alt="twitter da BD" {...IconKey}/>}/>
+            {/* <SocialLink title="Twitter" href="https://twitter.com/basedosdados" icon={<TwitterIcon alt="twitter da BD" {...IconKey}/>}/> */}
+            <SocialLink title="Bluesky" href="https://bsky.app/profile/basedosdados.bsky.social" icon={<BlueskyIcon alt="bluesky da BD" {...IconKey}/>}/>
             <SocialLink title="Discord" href="https://discord.gg/huKWpsVYx4" icon={<DiscordIcon alt="discord da BD" {...IconKey}/>}/>
             <SocialLink title="GitHub" href="https://github.com/basedosdados" icon={<GithubIcon alt="github da BD" {...IconKey}/>}/>
             <SocialLink title="LinkedIn" href="https://www.linkedin.com/company/base-dos-dados/mycompany/" icon={<LinkedinIcon alt="linkedin da BD" {...IconKey}/>}/>

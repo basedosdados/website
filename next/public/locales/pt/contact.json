@@ -1,0 +1,22 @@
+{
+    "pageTitle": "Contato – Base dos Dados",
+    "pageDescription": "Entre em contato com nossa equipe.",
+    "contactTitle": "Entre em contato",
+    "contactDescription": "Envie sua mensagem no formulário ao lado para falar com nossa equipe.",
+    "institutionalSupportTitle": "Apoio institucional",
+    "institutionalSupportDescription": "A Base dos Dados é mantida por meio doações de pessoas que acreditam na transparência e acesso a dados de qualidade. Colabore para o crescimento e fortalecimento da iniciativa.",
+    "servicesTitle": "Serviços",
+    "servicesDescription": "Fale diretamente com nossa equipe comercial para marcarmos uma conversa e avaliarmos como nossos ",
+    "servicesLink": "serviços",
+    "servicesLinkText": "podem ajudar.",
+    "projectsPartnershipsTitle": "Projetos e Parcerias",
+    "projectsPartnershipsDescription": "Desenvolvemos projetos e aplicações com outras organizações afins para promover o acesso a dados públicos de qualidade. Estamos sempre abertos a novas ideias.",
+    "dataTitle": "Dados",
+    "dataDescription": "Auxiliamos pessoas e organizações a subirem dados no nosso datalake. Escreva sua proposta para nossa equipe de Dados.",
+    "questionsText": "Dúvidas? Fale com a nossa comunidade no ",
+    "discordLink": "Discord",
+    "consulting": {
+        "title": "Consultoria – Base dos Dados",
+        "description": "Entre em contato com nossa equipe."
+    }
+}

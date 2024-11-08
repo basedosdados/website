@@ -9,6 +9,7 @@ export function MainPageTemplate({
   cleanTemplate = false,
   userTemplate = false,
   footerTemplate = "default",
+  locale,
   ...style
 }) {
 

@@ -5,10 +5,17 @@ import {
   Text,
   Box,
   Tooltip,
+  useDisclosure,
+  ModalCloseButton
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import cookies from "js-cookie";
 import { CalendarComunIcon } from "../../public/img/icons/calendarIcon";
+import { SectionPrice } from "../../pages/prices";
+import { ModalGeneral } from "./uiUserPage";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
+import CheckIcon from "../../public/img/icons/checkIcon";
+import { useTranslation } from 'next-i18next';
 
 export function TemporalCoverage ({
   value,
@@ -16,6 +23,7 @@ export function TemporalCoverage ({
   iconSettings = {width: "18px", height: "18px", fill: "#D0D0D0"},
   textSettings = {}
 }) {
+  const { t } = useTranslation('dataset');
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
 
@@ -40,7 +48,7 @@ export function TemporalCoverage ({
     ) 
   }
 
-  if(!value) return <TextDate value={text}/>
+  if(!value) return <TextDate value={t('temporalCoverageBar.notProvided')}/>
   if(startDate === null && endDate === null) return <TextDate value={text}/>
 
   function Dates ({ date, ...props }) {
@@ -125,7 +133,17 @@ export function TemporalCoverageString({
 }
 
 export function TemporalCoverageBar ({ value }) {
+  const { t } = useTranslation(['dataset', 'prices']);
   const [values, setValues] = useState({})
+  const plansModal = useDisclosure()
+
+  const isUserPro = () => {
+    let user
+    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
+
+    if(user?.internalSubscription?.edges?.[0]?.node?.isActive === true) return true
+    return false
+  }
 
   const TextData = ({ string, ...style }) => {
     return (
@@ -158,16 +176,47 @@ export function TemporalCoverageBar ({ value }) {
     setValues(newValue)
   }, [value])
 
-  if(values === null) return <TextData string="Não informado"/>
+  if(values === null) return <TextData string={t('temporalCoverageBar.notProvided')}/>
 
   return (
     <HStack 
       position="relative"  
-      width="325px"
+      width="100%"
+      maxWidth="325px"
       height="65px"
       alignItems="normal"
       spacing={0}
     >
+      <ModalGeneral
+        isOpen={plansModal.isOpen}
+        onClose={plansModal.onClose}
+        propsModalContent={{
+          minWidth: "fit-content"
+        }}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <Text
+            width="100%"
+            fontFamily="Roboto"
+            fontWeight="400"
+            color="#252A32"
+            fontSize="24px"
+            textAlign="center"
+            lineHeight="40px"
+          >
+            {t('temporalCoverageBar.comparePlans')}
+          </Text>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", color:"#0B89E2"}}
+          />
+        </Stack>
+
+        <SectionPrice/>
+      </ModalGeneral>
+
       <Tooltip
         hasArrow
         padding="16px"
@@ -182,9 +231,13 @@ export function TemporalCoverageBar ({ value }) {
         color="#FFFFFF"
         placement="top"
         maxWidth="160px"
-        label="Acesso liberado para o período"
+        label={t('temporalCoverageBar.accessGranted')}
       >
-        <Box flex={3} display={values?.["0"] ? "" : "none"}>
+        <Box
+          flex={3}
+          marginRight={values?.["3"] ? "" : {base:"24px !important", lg: "0"}}
+          display={values?.["0"] ? "" : "none"}
+        >
           <Box
             width="100%"
             height="24px"
@@ -202,7 +255,7 @@ export function TemporalCoverageBar ({ value }) {
             marginBottom="10px"
             padding="6px 16px"
           >
-            GRÁTIS
+            {t('temporalCoverageBar.free')}
           </Box>
           <Box
             position="relative"
@@ -240,8 +293,9 @@ export function TemporalCoverageBar ({ value }) {
                 display="flex"
                 alignItems="center"
                 flexDirection="column"
-                right={0}
+                right={values?.["3"] ? "-4px" : "0"}
                 top="-3px"
+                zIndex={1}
               >
                 <Box
                   width="8px"
@@ -275,15 +329,18 @@ export function TemporalCoverageBar ({ value }) {
         color="#FFFFFF"
         placement="top"
         maxWidth="160px"
-        label="Faça o upgrade para liberar o período"
+        label={isUserPro() ? t('temporalCoverageBar.accessGranted') : t('temporalCoverageBar.upgradeRequired')}
       >
-        <Box flex={2} display={values?.["3"] ? "" : "none"}>
+        <Box
+          flex={2}
+          marginRight={{base:"24px !important", lg: "0"}}  display={values?.["3"] ? "" : "none"}
+        >
           <Box
             as="a"
-            cursor="pointer"
+            cursor={isUserPro() ? "default" : "pointer"}
             width="100%"
             height="24px"
-            backgroundColor="#E4F2FF"
+            backgroundColor={isUserPro() ? "#D5E8DB" : "#E4F2FF"}
             fontFamily="Roboto"
             fontWeight="500"
             fontSize="12px"
@@ -293,30 +350,41 @@ export function TemporalCoverageBar ({ value }) {
             justifyContent="center"
             textAlign="center"
             letterSpacing="0.2px"
-            color="#0068C5"
-            fill="#0068C5"
+            color={isUserPro() ? "#2B8C4D" : "#0068C5"}
+            fill={isUserPro() ? "#2B8C4D" : "#0068C5"}
             gap="10px"
             marginBottom="10px"
             padding="6px 16px"
+            marginLeft="2px"
             _hover={{
-              color:"#0057A4",
-              fill:"#0057A4",
-              backgroundColor:"#E4F2FF"
+              color: isUserPro() ? "#2B8C4D" : "#0057A4",
+              fill: isUserPro() ? "#2B8C4D" : "#0057A4",
+              backgroundColor: isUserPro() ? "#D5E8DB" : "#E4F2FF"
             }}
-            href="/precos"
-            target="_blank"
+            onClick={() => {
+              if(isUserPro()) return
+              plansModal.onOpen()}
+            }
           >
-            PAGO
-            <RedirectIcon
-              width="12px"
-              height="12px"
-            />
+            {t('temporalCoverageBar.paid')}
+            {isUserPro() ?
+              <CheckIcon
+                width="20px"
+                height="20px"
+              />
+              :
+              <RedirectIcon
+                width="12px"
+                height="12px"
+              />
+            }
           </Box>
 
           <Box
             position="relative"
             width="100%"
-            borderBottom="solid 3px #0068C5"
+            borderBottom="solid 3px"
+            borderColor={isUserPro() ? "#22703E" : "#0068C5"}
             marginBottom="10px"
           >
             <Box position="absolute" width="100%" display={values?.["2"] ? "" : "none"}>
@@ -349,13 +417,13 @@ export function TemporalCoverageBar ({ value }) {
                 display="flex"
                 alignItems="center"
                 flexDirection="column"
-                right={0}
                 top="-3px"
+                right="-4px"
               >
                 <Box
                   width="8px"
                   height="8px"
-                  backgroundColor="#0068C5"
+                  backgroundColor={isUserPro() ? "#22703E" : "#0068C5"}
                   borderRadius="50%"
                 />
                 <TextData

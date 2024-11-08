@@ -10,11 +10,12 @@ import {
   HStack,
   Skeleton
 } from "@chakra-ui/react";
+import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from "react";
 import Checkbox from "../atoms/Checkbox";
-import { ControlledInput, ControlledInputSimple} from "./ControlledInput";
+import { ControlledInput, ControlledInputSimple } from "./ControlledInput";
 import SectionText from "./SectionText";
-import SearchIcon from "../../public/img/icons/searchIcon"
+import SearchIcon from "../../public/img/icons/searchIcon";
 
 export function BaseFilterAccordion({
   fieldName,
@@ -26,6 +27,7 @@ export function BaseFilterAccordion({
   alwaysOpen = false,
   isHovering = true
 }) {
+
   return (
     <Accordion allowToggle width="100%">
       <AccordionItem border="0px">
@@ -85,6 +87,7 @@ export function CheckboxFilterAccordion({
   canSearch = false,
   isLoading
 }) {
+  const { t } = useTranslation('search');
   const [options , setOptions] = useState([])
   const [search, setSearch] = useState("");
   const [inputFocus, setInputFocus] = useState(false)
@@ -130,7 +133,7 @@ export function CheckboxFilterAccordion({
                 onChange={setSearch}
                 inputFocus={inputFocus}
                 changeInputFocus={setInputFocus}
-                placeholder="Pesquisar"
+                placeholder={t('search_placeholder')}
                 fill="#464A51"
                 icon={
                   <SearchIcon
@@ -211,6 +214,7 @@ export function RangeFilterAccordion({
   maxValue = null,
   minValue = null,
 }) {
+  const { t } = useTranslation('search');
   const [min, setMin] = useState();
   const [max, setMax] = useState();
   const [error, setError] = useState(false);
@@ -219,7 +223,7 @@ export function RangeFilterAccordion({
     setError(null);
 
     if (min > max) return;
-    if ((!min && min < 0) || (!max && max < 0)) return setError("Antigo demais!");
+    if ((!min && min < 0) || (!max && max < 0)) return setError(t('too_old'));
     if (!min && !max) return;
 
     onChange({ min, max });
@@ -245,7 +249,7 @@ export function RangeFilterAccordion({
             value={min}
             onChange={setMin}
             width="100%"
-            placeholder="Min"
+            placeholder={t('min')}
             inputStyle={{
               height: "40px",
               fontSize: "14px",
@@ -258,7 +262,7 @@ export function RangeFilterAccordion({
             value={max}
             onChange={setMax}
             width="100%"
-            placeholder="Max"
+            placeholder={t('max')}
             inputStyle={{
               height: "40px",
               fontSize: "14px",

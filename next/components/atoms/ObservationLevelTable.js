@@ -7,17 +7,52 @@ import {
   Th,
   Td,
 } from "@chakra-ui/react";
+import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
+import { capitalize } from "lodash";
 
 export default function ObservationLevel({ resource }) {
-  const headers = ["Entidade","Colunas Correspondentes"]
+  const { t } = useTranslation('dataset');
+  const router = useRouter();
+  const { locale } = router;
 
-  let array = []
-  const keys = Object.keys(resource?.observationLevels)
+  const headers = [t('observationLevelTable.entityHeader'), t('observationLevelTable.columnsHeader')];
 
-  keys.forEach((elm) => {
-    const value = resource?.observationLevels[elm]
+  function sortElements(a, b) {
+    if (a.order < b.order) {
+      return -1;
+    }
+    if (a.order > b.order) {
+      return 1;
+    }
+    return 0;
+  }
 
-    const newValue = [value?.entity?.name || "Não informado", value?.columns[0]?.name || "Não informado"]
+  let array = [];
+  const keys = Object.keys(resource?.observationLevels);
+  const sortedLevels = Object.values(resource?.observationLevels).sort(sortElements);
+
+  sortedLevels.forEach((value) => {
+    const valueEntity = () => {
+      if(value.entity[`name${capitalize(locale)}`]) return value.entity[`name${capitalize(locale)}`];
+      if(value.entity.name) return value.entity.name;
+      return t('observationLevelTable.notProvided');
+    }
+
+    const valueColumns = () => {
+      let columns = []
+
+      if(value?.columns[0]) {
+        Object.values(value.columns).map((column) => {
+          columns.push(column?.name)
+        })
+      } else {
+        columns = [t('observationLevelTable.notProvided')]
+      }
+      return columns.join(", ")
+    }
+
+    const newValue = [valueEntity(), valueColumns()]
     array.push(newValue)
   })
 
@@ -96,6 +131,7 @@ export default function ObservationLevel({ resource }) {
                 borderColor="#DEDFE0"
                 textTransform="none"
                 letterSpacing="inherit"
+                whiteSpace="break-spaces"
               >
                 {elm[1]}
               </Td>

@@ -1,29 +1,42 @@
 import {
   Stack,
-  VStack,
   Box,
   HStack,
   Divider,
-  Text
+  Text,
+  Tooltip,
+  Menu,
+  MenuButton,
+  MenuOptionGroup,
+  MenuList,
+  MenuItem,
+  MenuDivider,
+  useBreakpointValue
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useTranslation } from 'next-i18next';
+import { capitalize } from 'lodash';
 
-import BdmTablePage from "./BdmTablePage";
+import TablePage from "./TablePage";
 import RawDataSourcesPage from "./RawDataSourcesPage";
 import InformationRequestPage from "./InformationRequestPage";
+
+import ChevronIcon from "../../public/img/icons/chevronIcon";
 
 export default function DatasetResource({
   dataset
 }) {
+  const { t } = useTranslation('dataset');
   const router = useRouter()
-  const { query } = router
+  const { query, locale } = router
   const [tables, setTables] = useState([])
   const [rawDataSources, setRawDataSources] = useState([])
   const [informationRequests, setInformationRequests] = useState([])
+  const displayScreen = useBreakpointValue({ base: "mobile", lg: "desktop" })
 
   const pushQuery = (key, value) => {
-    router.push({
+    router.replace({
       pathname: `/dataset/${query.dataset}`,
       query: { [key]: value }
     },
@@ -42,24 +55,23 @@ export default function DatasetResource({
   }
 
   useEffect(() => {
-    // Id do dataset do SAEB
-    let dataset_tables = []
-    if(dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd") {
-      dataset_tables = dataset?.tables?.edges.map((elm) => elm.node)
-        .filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []
-    } else {
-      dataset_tables = dataset?.tables?.edges.map((elm) => elm.node)
-        .filter((elm) => elm?.status?.slug !== "under_review")
-          .filter((elm) => elm?.slug !== "dicionario")
-            .filter((elm) => elm?.slug !== "dictionary").sort(sortElements) || []
-    }
+    let dataset_tables = dataset?.tables?.edges.map((elm) => elm.node)
+      .filter((elm) => elm?.status?.slug !== "under_review")
+      .filter((elm) => elm?.slug !== "dicionario")
+      .filter((elm) => elm?.slug !== "dictionary")
+      .sort(sortElements) || []
 
-    const raw_data_sources = dataset?.rawDataSources?.edges.map((elm) => elm.node).filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []
-    const information_request = dataset?.informationRequests?.edges.map((elm) => elm.node).filter((elm) => elm?.status?.slug !== "under_review").sort(sortElements) || []
+    let raw_data_sources = dataset?.rawDataSources?.edges.map((elm) => elm.node)
+      .filter((elm) => elm?.status?.slug !== "under_review")
+      .sort(sortElements) || []
+    
+    let information_request = dataset?.informationRequests?.edges.map((elm) => elm.node)
+      .filter((elm) => elm?.status?.slug !== "under_review")
+      .sort(sortElements) || []
 
-    setTables(dataset_tables)
-    setRawDataSources(raw_data_sources)
-    setInformationRequests(information_request)
+    setTables(dataset_tables);
+    setRawDataSources(raw_data_sources);
+    setInformationRequests(information_request);
 
     const queryParams = new URLSearchParams(window.location.search)
 
@@ -71,8 +83,8 @@ export default function DatasetResource({
   }, [dataset])
 
   function SwitchResource ({route}) {
-    if (route.hasOwnProperty("table")) return <BdmTablePage id={route.table}/>
-    if (route.hasOwnProperty("raw_data_source")) return <RawDataSourcesPage id={route.raw_data_source}/>
+    if (route.hasOwnProperty("table")) return <TablePage id={route.table}/>
+    if (route.hasOwnProperty("raw_data_source")) return <RawDataSourcesPage id={route.raw_data_source} locale={locale}/>
     if (route.hasOwnProperty("information_request")) return <InformationRequestPage id={route.information_request}/>
     return null
   }
@@ -84,10 +96,25 @@ export default function DatasetResource({
     value,
     hasDivider = true
   }) {
-    if(choices.length < 1) return null
+    const [isOverflow, setIsOverflow] = useState({})
+    const textRefs = useRef({})
+
+    if(choices.length === 0) return null
+
+    useEffect(() => {
+      choices.forEach((elm, i) => {
+        const textElement = textRefs.current[i]
+        if (textElement) {
+          setIsOverflow((prev) => ({
+            ...prev,
+            [i]: textElement.scrollWidth > textElement.clientWidth,
+          }))
+        }
+      })
+    }, [choices])
 
     return (
-      <Box width={{base:"100%", lg:"272px"}}>
+      <Box width="272px">
         <Divider
           display={hasDivider ? "flex" : "none"}
           marginY="24px"
@@ -120,30 +147,253 @@ export default function DatasetResource({
                 backgroundColor={elm._id === value && "#2B8C4D"}
                 borderRadius="10px"
               />
-              <Text
-                textOverflow="ellipsis"
-                whiteSpace="nowrap"
-                overflow="hidden"
-                width="100%"
+              <Tooltip
+                label={elm[`name${capitalize(locale)}`] || elm.name || elm.number}
+                isDisabled={!isOverflow[i]}
+                hasArrow
+                padding="16px"
+                backgroundColor="#252A32"
+                boxSizing="border-box"
+                borderRadius="8px"
                 fontFamily="Roboto"
-                fontWeight="500"
+                fontWeight="400"
                 fontSize="14px"
                 lineHeight="20px"
-                color={elm._id === value ? "#2B8C4D" : "#71757A"}
-                backgroundColor={elm._id === value && "#F7F7F7"}
-                _hover={{
-                  backgroundColor:elm._id === value ? "#F7F7F7" :"#EEEEEE",
-                }}
-                borderRadius="8px"
-                padding="6px 8px"
-                onClick={() => onChange(elm._id)}
+                textAlign="center"
+                color="#FFFFFF"
+                placement="top"
+                maxWidth="100%"
               >
-                {elm.name || elm.number}
-              </Text>
+                <Text
+                  ref={(el) => (textRefs.current[i] = el)}
+                  textOverflow="ellipsis"
+                  whiteSpace="nowrap"
+                  overflow="hidden"
+                  width="100%"
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color={elm._id === value ? "#2B8C4D" : "#71757A"}
+                  backgroundColor={elm._id === value && "#F7F7F7"}
+                  _hover={{
+                    backgroundColor:elm._id === value ? "#F7F7F7" :"#EEEEEE",
+                  }}
+                  borderRadius="8px"
+                  padding="6px 8px"
+                  onClick={() => onChange(elm._id)}
+                >
+                  {elm[`name${capitalize(locale)}`] || elm.name || elm.number}
+                </Text>
+              </Tooltip>
             </HStack>
           ))}
         </Box>
       </Box>
+    )
+  }
+
+  function SelectResource ({ selectedResource }) {
+    const { t } = useTranslation('dataset');
+    const [widthScreen, setWidthScreen] = useState(0);
+    const [value, setValue] = useState("")
+    const {table, raw_data_source, information_request} = selectedResource;
+
+    const findResourceName = (source, id) => {
+      const resource = source.find(item => item._id === id);
+      return resource ? resource[`name${capitalize(locale)}`] || resource.name : "";
+    };
+
+    useEffect(() => {
+      setValue(
+        table ? findResourceName(tables, table) :
+        raw_data_source ? findResourceName(rawDataSources, raw_data_source) :
+        information_request ? findResourceName(informationRequests, information_request) : ""
+      );
+
+      const updateWidthScreen = () => {
+        setWidthScreen(window.innerWidth - 48)
+      }
+
+      updateWidthScreen()
+
+      window.addEventListener('resize', updateWidthScreen)
+
+      return () => {
+        window.removeEventListener('resize', updateWidthScreen)
+      }
+    }, [table, raw_data_source, information_request]);
+
+    return (
+      <Menu>
+        <Text
+          as="label"
+          display="flex"
+          flexDirection="column"
+          gap="8px"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="16px"
+          lineHeight="24px"
+          color="#252A32"
+        >
+          {t('selectResource')}
+
+          <MenuButton
+            width="100%"
+            maxWidth="360px"
+            borderRadius="8px"
+            padding="14px 20px"
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="14px"
+            lineHeight="20px"
+            backgroundColor="#EEEEEE"
+            color="#464A51"
+            textAlign="start"
+          >
+            <Text
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              {value}
+              <ChevronIcon
+                marginLeft="auto"
+                transform="rotate(90deg)"
+              />
+            </Text>
+          </MenuButton>
+        </Text>
+
+        <MenuList
+          minWidth={widthScreen}
+          maxWidth={widthScreen}
+          maxHeight="420px"
+          overflowY="auto"
+          borderWidth={0}
+          padding={0}
+          zIndex={100}
+          boxShadow="0 1.6px 16px 0 rgba(100, 96, 103, 0.16)"
+        >
+          {tables.length > 0 &&
+            <MenuOptionGroup
+              title="Tabelas tratadas"
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="16px"
+              lineHeight="24px"
+              color="#71757A"
+              margin="0"
+              padding="24px 20px 8px"
+            >
+              {tables.map((elm, i) => {return (
+                <MenuItem
+                  key={i}
+                  width="100%"
+                  whiteSpace="normal"
+                  overflow="hidden"
+                  textOverflow="ellipsis"
+                  wordBreak="break-all"
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#252A32"
+                  padding="16px 20px"
+                  _hover={{ backgroundColor: "transparent"}}
+                  _focus={{ backgroundColor: "transparent"}}
+                  _active={{ backgroundColor: "transparent" }}
+                  _focusVisible={{ backgroundColor: "transparent" }}
+                  onClick={() => pushQuery("table", elm._id)}
+                  >
+                  {elm.name || elm.number}
+                </MenuItem>
+              )})}
+            </MenuOptionGroup>
+          }
+
+          {rawDataSources.length > 0 &&
+            <>
+              <MenuDivider margin="0" borderWidth="2px" borderColor="#DEDFE0"/>
+              <MenuOptionGroup
+                title="Fontes originais"
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="16px"
+                lineHeight="24px"
+                color="#71757A"
+                margin="0"
+                padding="24px 20px 8px"
+              >
+                {rawDataSources.map((elm, i) => {return (
+                  <MenuItem
+                    key={i}
+                    width="100%"
+                    whiteSpace="normal"
+                    overflow="hidden"
+                    textOverflow="ellipsis"
+                    wordBreak="break-all"
+                    fontFamily="Roboto"
+                    fontWeight="500"
+                    fontSize="14px"
+                    lineHeight="20px"
+                    color="#252A32"
+                    padding="16px 20px"
+                    _hover={{ backgroundColor: "transparent"}}
+                    _focus={{ backgroundColor: "transparent"}}
+                    _active={{ backgroundColor: "transparent" }}
+                    _focusVisible={{ backgroundColor: "transparent" }}
+                    onClick={() => pushQuery("raw_data_source", elm._id)}
+                  >
+                    {elm.name || elm.number}
+                  </MenuItem>
+                )})}
+              </MenuOptionGroup>
+            </>
+          }
+
+          {informationRequests.length > 0 &&
+            <>
+              <MenuDivider margin="0" borderWidth="2px" borderColor="#DEDFE0"/>
+              <MenuOptionGroup
+                title="Pedidos LAI"
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="16px"
+                lineHeight="24px"
+                color="#71757A"
+                margin="0"
+                padding="24px 20px 8px"
+              >
+                {informationRequests.map((elm, i) => {return (
+                  <MenuItem
+                    key={i}
+                    width="100%"
+                    whiteSpace="normal"
+                    overflow="hidden"
+                    textOverflow="ellipsis"
+                    wordBreak="break-all"
+                    fontFamily="Roboto"
+                    fontWeight="500"
+                    fontSize="14px"
+                    lineHeight="20px"
+                    color="#252A32"
+                    padding="16px 20px"
+                    _hover={{ backgroundColor: "transparent"}}
+                    _focus={{ backgroundColor: "transparent"}}
+                    _active={{ backgroundColor: "transparent" }}
+                    _focusVisible={{ backgroundColor: "transparent" }}
+                    onClick={() => pushQuery("information_request", elm._id)}
+                  >
+                    {elm.name || elm.number}
+                  </MenuItem>
+                )})}
+              </MenuOptionGroup>
+            </>
+          }
+        </MenuList>
+      </Menu>
     )
   }
 
@@ -155,41 +405,45 @@ export default function DatasetResource({
       spacing={0}
       height="100%"
     >
-      <Stack
-        minWidth={{base: "100%", lg: "296px"}}
-        maxWidth={{base: "100%", lg: "296px"}}
-        spacing={0}
-      >
-        <ContentFilter
-          fieldName="Tabelas tratadas"
-          choices={tables}
-          value={query.table}
-          onChange={(id) => {
-            pushQuery("table", id)
-          }}
-          hasDivider={false}
-        />
+      {displayScreen === "desktop" ? 
+        <Stack
+          minWidth={{base: "100%", lg: "296px"}}
+          maxWidth={{base: "100%", lg: "296px"}}
+          spacing={0}
+        >
+          <ContentFilter
+            fieldName={t('tables')}
+            choices={tables}
+            value={query.table}
+            onChange={(id) => {
+              pushQuery("table", id)
+            }}
+            hasDivider={false}
+          />
 
-        <ContentFilter
-          fieldName="Fontes originais"
-          choices={rawDataSources}
-          value={query.raw_data_source}
-          onChange={(id) => {
-            pushQuery("raw_data_source", id)
-          }}
-          hasDivider={tables.length > 0 ? true : false}
-        />
+          <ContentFilter
+            fieldName={t('rawDataSources')}
+            choices={rawDataSources}
+            value={query.raw_data_source}
+            onChange={(id) => {
+              pushQuery("raw_data_source", id)
+            }}
+            hasDivider={tables.length > 0 ? true : false}
+          />
 
-        <ContentFilter
-          fieldName="Pedidos LAI"
-          choices={informationRequests}
-          value={query.information_request}
-          onChange={(id) => {
-            pushQuery("information_request", id)
-          }}
-          hasDivider={tables.length > 0 || rawDataSources.length > 0 ? true : false}
-        />
-      </Stack>
+          <ContentFilter
+            fieldName={t('informationRequests')}
+            choices={informationRequests}
+            value={query.information_request}
+            onChange={(id) => {
+              pushQuery("information_request", id)
+            }}
+            hasDivider={tables.length > 0 || rawDataSources.length > 0 ? true : false}
+          />
+        </Stack>
+        :
+        <SelectResource selectedResource={query}/>
+      }
 
       <SwitchResource route={query}/>
     </Stack>

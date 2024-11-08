@@ -23,8 +23,9 @@ export function SimpleTable({
     >
       <Table role="table">
         <Thead role="rowgroup">
-          {headers.map((h) => (
+          {headers.map((h, index) => (
             <Th
+              key={`header-${index}`}
               role="row"
               padding="8px 24px"
               fontSize="14px"
@@ -43,10 +44,11 @@ export function SimpleTable({
           ))}
         </Thead>
         <Tbody role="rowgroup">
-          {values.map((h) => (
-            <Tr role="row">
-              {h.map((r) => (
+          {values.map((h, rowIndex) => (
+            <Tr key={`row-${rowIndex}`} role="row">
+              {h.map((r, cellIndex) => (
                 <Td
+                  key={`cell-${rowIndex}-${cellIndex}`}
                   role="cell"
                   padding="10px 24px"
                   fontSize="14px"

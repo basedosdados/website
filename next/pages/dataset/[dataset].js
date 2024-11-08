@@ -12,10 +12,14 @@ import {
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { capitalize } from 'lodash';
+import axios from "axios";
 
 import BigTitle from "../../components/atoms/BigTitle";
-import Link from "../../components/atoms/Link";
 import GreenTab from "../../components/atoms/GreenTab";
+import Link from '../../components/atoms/Link';
 import ReadMore from "../../components/atoms/ReadMore";
 import DatasetResource from "../../components/organisms/DatasetResource";
 import { MainPageTemplate } from "../../components/templates/main";
@@ -25,21 +29,30 @@ import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
 import CrossingIcon from "../../public/img/icons/crossingIcon";
 
 import {
+  getDataset,
   getListDatasets,
-  getShowDataset,
 } from "../api/datasets/index";
 
-import { withPages } from "../../hooks/pages.hook";
-
 export async function getStaticProps(context) {
-  const dataset = await getShowDataset(context.params.dataset) || null
+  const { locale, params } = context;
+  let dataset = null;
 
-  return await withPages({
-    props: {
-      dataset,
-    },
+  try {
+    dataset = await getDataset(params.dataset, locale || 'pt');
+
+  } catch (error) {
+    console.error("Fetch error:", error.message);
+  }
+
+  const props = {
+    ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices'])),
+    dataset,
+  };
+  
+  return {
+    props,
     revalidate: 30,
-  })
+  };
 }
 
 export async function getStaticPaths(context) {
@@ -54,44 +67,48 @@ export async function getStaticPaths(context) {
 }
 
 export default function DatasetPage ({ dataset }) {
+  const { t } = useTranslation('dataset', 'common');
   const router = useRouter()
+  const { locale } = router
   const { query } = router
   const [tabIndex, setTabIndex] = useState(0)
 
-  const isDatasetEmpty = dataset === null || Object.keys(dataset).length === 0
+  const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
 
-  useEffect(() => {
-    if (router.query?.dataset === "mundo-kaggle-olimpiadas") return window.open(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/dataset/62f8cb83-ac37-48be-874b-b94dd92d3e2b`, "_self")
-    if (isDatasetEmpty) return router.push(`${process.env.NEXT_PUBLIC_API_URL}/dataset_redirect?dataset=${query.dataset}`)
-  }, [])
+
+  const isDatasetEmpty = dataset === null || Object.keys(dataset).length === 0
 
   if(isDatasetEmpty) return <MainPageTemplate userTemplate><FourOFour/></MainPageTemplate>
 
   return (
     <MainPageTemplate userTemplate footerTemplate="simple">
       <Head>
-        <title>{dataset.name} – Base dos Dados</title>
+        <title>{`${dataset[`name${capitalize(locale)}`] || dataset.name} – ${t('dataBasis')}`}</title>
 
         <link
           rel="image_src"
-          href="https://storage.googleapis.com/basedosdados-website/thumbnails/2022/thumbnail_conjunto.png"
+          href={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/dataset.png`}
         />
         <meta
           property="og:image"
-          content="https://storage.googleapis.com/basedosdados-website/thumbnails/2022/thumbnail_conjunto.png"
+          content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/dataset.png`}
           key="ogimage"
         />
         <meta
           name="twitter:image"
-          content="https://storage.googleapis.com/basedosdados-website/thumbnails/2022/thumbnail_conjunto.png"
+          content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/dataset.png`}
           key="twimage"
         />
         <meta
           property="og:title"
-          content={`${dataset.name} – Base dos Dados`}
+          content={`${dataset[`name${capitalize(locale)}`] || dataset.name} – ${t('dataBasis')}`}
           key="ogtitle"
         />
-        <meta property="og:description" content={dataset.description} key="ogdesc" />
+        <meta
+          property="og:description"
+          content={dataset[`description${capitalize(locale)}`] || dataset.description}
+          key="ogdesc"
+        />
       </Head>
 
       <VStack
@@ -103,7 +120,7 @@ export default function DatasetPage ({ dataset }) {
         spacing={0}
       >
         <Grid
-          templateColumns={{ base: "1fr", lg: "296px 1fr" }}
+          templateColumns={{ base: "1fr", lg: "295px 1fr" }}
           width="100%"
           gap="24px"
           paddingY="24px"
@@ -116,20 +133,20 @@ export default function DatasetPage ({ dataset }) {
             borderRadius="16px"
           >
             <Image
-              src={dataset?.organization?.picture ? dataset?.organization?.picture : `https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png`}
+              src={dataset?.organizations?.edges?.[0]?.node?.picture ? dataset?.organizations?.edges?.[0]?.node?.picture : `https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png`}
               objectFit="contain"
-              width="300px"
-              height="182px"
+              width="295px"
+              height="252px"
               borderRadius="16px"
             />
           </GridItem>
 
           <GridItem>
             <Grid
-              templateColumns="1fr 1fr"
+              templateColumns="1fr 1fr 1fr 1fr 1fr"
               gap="8px"
             >
-              <GridItem colSpan={2}>
+              <GridItem colSpan={5}>
                 <BigTitle
                   width="100%"
                   overflow="hidden"
@@ -139,17 +156,17 @@ export default function DatasetPage ({ dataset }) {
                   fontWeight="500"
                   lineHeight="42px"
                 >
-                  {dataset.name || "Conjunto sem nome"}
+                  {dataset[`name${capitalize(locale)}`] || dataset.name || t('noName')}
                 </BigTitle>
               </GridItem>
 
-              <GridItem colSpan={2} minHeight="60px" marginBottom="8px">
+              <GridItem colSpan={5} minHeight="60px" marginBottom="8px">
                 <ReadMore id="readLessDataset">
-                  {dataset?.description || "Nenhuma descrição fornecida."}
+                  {dataset[`description${capitalize(locale)}`] || dataset.description || t('noDescription')}
                 </ReadMore>
               </GridItem>
 
-              <GridItem colSpan={{ base: 2, lg: 1 }}>
+              <GridItem colSpan={5} marginBottom="8px">
                 <Text
                   fontFamily="Roboto"
                   fontWeight="500"
@@ -158,7 +175,33 @@ export default function DatasetPage ({ dataset }) {
                   color="#252A32"
                   marginBottom="8px"
                 >
-                  Cobertura temporal do conjunto
+                  {t('organization')}
+                </Text>
+                <Link
+                  href={`/search?organization=${dataset?.organizations?.edges?.[0]?.node?.slug || ""}`}
+                  color="#464A51"
+                  fontWeight="400"
+                >
+                  <Text
+                    fontFamily="Roboto"
+                    fontSize="14px"
+                    lineHeight="20px"
+                  >
+                    {dataset.organizations?.edges?.[0]?.node?.[`name${capitalize(locale)}`] || dataset.organizations?.edges?.[0]?.node?.name || t('noOrganization')}
+                  </Text>
+                </Link>
+              </GridItem>
+
+              <GridItem colSpan={{ base: 5, lg: 2 }} marginBottom="8px">
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="18px"
+                  lineHeight="28px"
+                  color="#252A32"
+                  marginBottom="8px"
+                >
+                  {t('temporalCoverage')}
                 </Text>
                 <Text
                   fontFamily="Roboto"
@@ -167,22 +210,22 @@ export default function DatasetPage ({ dataset }) {
                   lineHeight="20px"
                   color="#464A51"
                 >
-                  {dataset.coverage || "Nenhuma cobertura temporal fornecida."}
+                  {dataset.temporalCoverage || t('notProvided')}
                 </Text>
               </GridItem>
 
-              <GridItem colSpan={{ base: 2, lg: 1 }}>
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="500"
-                  fontSize="18px"
-                  lineHeight="28px"
-                  color="#252A32"
-                  marginBottom="8px"
-                >
-                  Organização
-                </Text>
-                <Link href={`/dataset?organization=${dataset?.organization?.slug || ""}`}>
+              {!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND) &&
+                <GridItem colSpan={{ base: 5, lg: 3 }} marginBottom="8px">
+                  <Text
+                    fontFamily="Roboto"
+                    fontWeight="500"
+                    fontSize="18px"
+                    lineHeight="28px"
+                    color="#252A32"
+                    marginBottom="8px"
+                  >
+                    {t('spatialCoverage')}
+                  </Text>
                   <Text
                     fontFamily="Roboto"
                     fontWeight="400"
@@ -190,10 +233,14 @@ export default function DatasetPage ({ dataset }) {
                     lineHeight="20px"
                     color="#464A51"
                   >
-                    {dataset?.organization?.name || "Nenhuma organização fornecida."}
+                    {dataset?.[`spatialCoverageName${capitalize(locale)}`]
+                      ? Object.values(dataset[`spatialCoverageName${capitalize(locale)}`])
+                          .sort((a, b) => a.localeCompare(b, locale))
+                          .join(', ')
+                      : t('notProvided')}
                   </Text>
-                </Link>
-              </GridItem>
+                </GridItem>
+              }
             </Grid>
           </GridItem>
         </Grid>
@@ -215,7 +262,7 @@ export default function DatasetPage ({ dataset }) {
                 height="18px"
                 marginRight="6px"
               />
-              Dados
+              {t('data')}
             </GreenTab>
 
             <GreenTab display="none">
@@ -225,7 +272,7 @@ export default function DatasetPage ({ dataset }) {
                 height="24px"
                 marginRight="2px"
               />
-              Cruzamento
+              {t('crossing')}
             </GreenTab>
           </TabList>
 

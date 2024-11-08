@@ -138,7 +138,7 @@ export default function PostDatasetForm({
       setIsSuccess({notDelete: true})
       onClose()
     }
-    if(result === true) window.open("/dataset", "_self")
+    if(result === true) router.push("/search", undefined, { locale: router.locale })
   }
 
   if(isLoading) return <LoadingSpin/>
