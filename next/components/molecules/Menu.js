@@ -1024,6 +1024,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
       {name: [t('blog')], href: "https://medium.com/basedosdados"}
     ],
+    Blog: "/blog",
     [t('institutional')]: [
       {name: [t('about_us')], href: "/about-us"},
       {name: [t('transparency')], href: "/transparency"},

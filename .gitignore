@@ -39,3 +39,7 @@ next-env.d.ts
 
 # Environments
 .env
+
+# Blog migration
+next/medium-export.zip
+next/medium-export/
