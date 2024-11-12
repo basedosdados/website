@@ -842,15 +842,15 @@ function DesktopLinks({
             options={[
               {name: t('tooltip.faq'), component: <Link href="/faq">{t('tooltip.faq')}</Link>},
               {name: t('tooltip.documentation'), url: 
-                locale === "en" ? "https://basedosdados.github.io/mais/en" :
-                locale === "es" ? "https://basedosdados.github.io/mais/es" :
-                "https://basedosdados.github.io/mais"
+                locale === "en" ? "https://basedosdados.github.io/sdk/en" :
+                locale === "es" ? "https://basedosdados.github.io/sdk/es" :
+                "https://basedosdados.github.io/sdk"
               },
               {name: t('tooltip.youtubeVideos'), url: "https://www.youtube.com/c/BasedosDados/featured"},
               {name: t('tooltip.installPackages'), url: 
-                locale === "en" ? "https://basedosdados.github.io/mais/en/access_data_packages/" :
-                locale === "es" ? "https://basedosdados.github.io/mais/es/access_data_packages/" :
-                "https://basedosdados.github.io/mais/access_data_packages/"
+                locale === "en" ? "https://basedosdados.github.io/sdk/en/access_data_packages/" :
+                locale === "es" ? "https://basedosdados.github.io/sdk/es/access_data_packages/" :
+                "https://basedosdados.github.io/sdk/access_data_packages/"
               },
               {name: t('tooltip.howToCite'), component: <Link href="/faq#reference">{t('tooltip.howToCite')}</Link>},
               {name: t('tooltip.whatAreDirectories'), component: <Link href="/faq#directories">{t('tooltip.whatAreDirectories')}</Link>},
@@ -1017,9 +1017,9 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     [t('prices')]: "/prices",
     [t('tutorials')]: [
       {name: [t('documentation')], href:
-        locale === "en" ? "https://basedosdados.github.io/mais/en" :
-        locale === "es" ? "https://basedosdados.github.io/mais/es" :
-        "https://basedosdados.github.io/mais"
+        locale === "en" ? "https://basedosdados.github.io/sdk/en" :
+        locale === "es" ? "https://basedosdados.github.io/sdk/es" :
+        "https://basedosdados.github.io/sdk"
       },
       {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
       {name: [t('blog')], href: "https://medium.com/basedosdados"}

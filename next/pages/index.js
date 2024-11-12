@@ -365,9 +365,9 @@ function Products() {
               <SectionLink
                 marginTop="24px !important"
                 href={
-                  locale === "en" ? "https://basedosdados.github.io/mais/en" :
-                  locale === "es" ? "https://basedosdados.github.io/mais/es" :
-                  "https://basedosdados.github.io/mais"
+                  locale === "en" ? "https://basedosdados.github.io/sdk/en" :
+                  locale === "es" ? "https://basedosdados.github.io/sdk/es" :
+                  "https://basedosdados.github.io/sdk"
                 }
               >
                 {t('products.learn_how_to_access')}
