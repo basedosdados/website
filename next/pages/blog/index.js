@@ -1,7 +1,7 @@
 import Head from "next/head";
-import { MainPageTemplate } from "../components/templates/main";
-import { BlogGrid } from "../components/organisms/Blog";
-import { getAllPosts } from "./api/blog";
+import { MainPageTemplate } from "../../components/templates/main";
+import { BlogGrid } from "../../components/organisms/Blog";
+import { getAllPosts } from "../api/blog";
 
 export async function getStaticProps() {
   const posts = await getAllPosts();

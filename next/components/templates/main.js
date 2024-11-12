@@ -16,10 +16,9 @@ export function MainPageTemplate({
   return (
     <Box 
       backgroundColor={backgroundColor}
-      // NOTE: flexbox dont make codeblocks responsives on blogpost
-      // minHeight="100vh"
-      // display="flex"
-      // flexDirection="column"
+      minHeight="100vh"
+      display="flex"
+      flexDirection="column"
     >
       <SiteHead />
       <Menu simpleTemplate={cleanTemplate} userTemplate={userTemplate}/>
