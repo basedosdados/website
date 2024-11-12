@@ -232,7 +232,7 @@ export const QuestionFAQ = [
           <p>
             Nossos pacotes permitem o acesso ao <i>datalake</i> público direto do seu computador ou ambiente de desenvolvimento.
             Para começar a explorar nossos dados em Python ou R,
-            siga os tutoriais de instalação dos pacotes presentes na nossa <a href="https://basedosdados.github.io/mais/access_data_packages/" target="_blank">
+            siga os tutoriais de instalação dos pacotes presentes na nossa <a href="https://basedosdados.github.io/sdk/access_data_packages/" target="_blank">
             documentação</a>.
           </p>
         </div>

@@ -93,7 +93,7 @@
         },
         {
             "question": "Como utilizar os pacotes da BD?",
-            "answer": "<p>Nossos pacotes permitem o acesso ao <i>datalake</i> público direto do seu computador ou ambiente de desenvolvimento. Para começar a explorar nossos dados em Python ou R, siga os tutoriais de instalação dos pacotes presentes na nossa <a href=\"https://basedosdados.github.io/mais/access_data_packages/\" target=\"_blank\"> documentação</a>.</p>",
+            "answer": "<p>Nossos pacotes permitem o acesso ao <i>datalake</i> público direto do seu computador ou ambiente de desenvolvimento. Para começar a explorar nossos dados em Python ou R, siga os tutoriais de instalação dos pacotes presentes na nossa <a href=\"https://basedosdados.github.io/sdk/access_data_packages/\" target=\"_blank\"> documentação</a>.</p>",
             "categories": ["Dados"],
             "keywords": "pacote, Python, R, instalação, documentação",
             "id": "packages"

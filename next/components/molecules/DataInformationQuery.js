@@ -492,7 +492,7 @@ export default function DataInformationQuery({ resource }) {
                   {t('table.warningLargeTable', { returnObjects: true })[0]}
                   <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>
                   {t('table.warningLargeTable', { returnObjects: true })[1]}
-                  <Text marginRight="4px" as="a" href="https://basedosdados.github.io/mais/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.warningLargeTable', { returnObjects: true })[2]}</Text>
+                  <Text marginRight="4px" as="a" href="https://basedosdados.github.io/sdk/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.warningLargeTable', { returnObjects: true })[2]}</Text>
                   {t('table.warningLargeTable', { returnObjects: true })[3]}
                   <Text as="br" display={{base: "none", lg: "flex"}}/>
                   {numberColumns === checkedColumns.length && t('table.warningLargeTableOptimize')}
@@ -578,9 +578,9 @@ export default function DataInformationQuery({ resource }) {
                     as="a"
                     target="_blank"
                     href={
-                      locale === "en" ? "https://basedosdados.github.io/mais/en/colab_data/" :
-                      locale === "es" ? "https://basedosdados.github.io/mais/es/colab_data/" :
-                      "https://basedosdados.github.io/mais/colab_data/"
+                      locale === "en" ? "https://basedosdados.github.io/sdk/en/colab_data/" :
+                      locale === "es" ? "https://basedosdados.github.io/sdk/es/colab_data/" :
+                      "https://basedosdados.github.io/sdk/colab_data/"
                     }
                     color="#0068C5"
                     _hover={{color: "#0057A4"}}
@@ -729,9 +729,9 @@ export default function DataInformationQuery({ resource }) {
                           as="a"
                           target="_blank"
                           href={
-                            locale === "en" ? "https://basedosdados.github.io/mais/en/access_data_bq/#getting-started" :
-                            locale === "es" ? "https://basedosdados.github.io/mais/es/access_data_bq/#pinitos" :
-                            "https://basedosdados.github.io/mais/access_data_bq/#primeiros-passos"
+                            locale === "en" ? "https://basedosdados.github.io/sdk/en/access_data_bq/#getting-started" :
+                            locale === "es" ? "https://basedosdados.github.io/sdk/es/access_data_bq/#pinitos" :
+                            "https://basedosdados.github.io/sdk/access_data_bq/#primeiros-passos"
                           }
                           color="#0068C5"
                           _hover={{color: "#0057A4"}}
@@ -843,9 +843,9 @@ export default function DataInformationQuery({ resource }) {
                           as="a"
                           target="_blank"
                           href={
-                            locale === "en" ? "https://basedosdados.github.io/mais/en/api_reference_python/" :
-                            locale === "es" ? "https://basedosdados.github.io/mais/es/api_reference_python/" :
-                            "https://basedosdados.github.io/mais/api_reference_python/"
+                            locale === "en" ? "https://basedosdados.github.io/sdk/en/api_reference_python/" :
+                            locale === "es" ? "https://basedosdados.github.io/sdk/es/api_reference_python/" :
+                            "https://basedosdados.github.io/sdk/api_reference_python/"
                           }
                           color="#0068C5"
                           _hover={{color: "#0057A4"}}
@@ -918,9 +918,9 @@ bd.read_sql(query = query, billing_project_id = billing_id)`}
                           as="a"
                           target="_blank"
                           href={
-                            locale === "en" ? "https://basedosdados.github.io/mais/en/api_reference_r/" :
-                            locale === "es" ? "https://basedosdados.github.io/mais/es/api_reference_r/" :
-                            "https://basedosdados.github.io/mais/api_reference_r/"
+                            locale === "en" ? "https://basedosdados.github.io/sdk/en/api_reference_r/" :
+                            locale === "es" ? "https://basedosdados.github.io/sdk/es/api_reference_r/" :
+                            "https://basedosdados.github.io/sdk/api_reference_r/"
                           }
                           color="#0068C5"
                           _hover={{color: "#0057A4"}}
