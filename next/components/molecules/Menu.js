@@ -24,7 +24,6 @@ import {
 import { useEffect, useRef, useState, useMemo } from "react";
 import { useRouter } from "next/router"
 import { useTranslation } from 'next-i18next';
-import LanguageSelector from "../atoms/LanguageSelector";
 import cookies from "js-cookie";
 import MenuDropdown from "./MenuDropdown";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
@@ -970,7 +969,11 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   }, [lastScrollY, router.pathname])
 
   function maxWidthDataset() {
-    if (route === "/search" || route === "/dataset/[dataset]" || route === "/user/[username]") return "1440px"
+    if( route === "/search" ||
+        route === "/dataset/[dataset]" ||
+        route === "/user/[username]" ||
+        route === "/blog"
+      ) return "1440px"
     return "1264px"
   }
 

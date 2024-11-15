@@ -39,13 +39,6 @@ export async function getPostBySlug(slug) {
   return await fs.readFile(filepath, "utf-8");
 }
 
-export async function getPostsByCategory(category) {
-  const posts = await getAllPosts();
-  return posts.filter(({ frontmatter }) =>
-    frontmatter?.categories?.includes(category),
-  );
-}
-
 const remarkPluginCaption = () => (tree) =>
   visit(
     tree,

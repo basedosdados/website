@@ -1,4 +1,5 @@
 import {
+  Stack,
   Box,
   Heading,
   Image,
@@ -22,14 +23,16 @@ import {
   Th,
   Grid,
   GridItem,
-  Link,
 } from "@chakra-ui/react";
 
-import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import hljs from "highlight.js/lib/core";
+import { useTranslation } from 'next-i18next';
 import { categories } from "../../pages/api/blog/categories";
+import Link from "../atoms/Link";
+
+import FilterIcon from "../../public/img/icons/filterIcon";
 import { CopyIcon } from "../../public/img/icons/copyIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
 import { TimeIcon } from "@chakra-ui/icons";
@@ -255,27 +258,24 @@ export function ShareButtons({ frontmatter }) {
 
   return (
     <Box display={"flex"} alignItems={"center"} gap="1rem" marginTop={"1rem"}>
-      <NextLink
+      <Link
         href={`https://x.com/share?text=${encodeURIComponent(text)}&url=${encodedUrl}`}
+        target="_blank"
       >
-        <a target="_blank">
-          <XIcon width={"1.1rem"} height={"1.1rem"} />
-        </a>
-      </NextLink>
-      <NextLink
+        <XIcon width={"1.1rem"} height={"1.1rem"} />
+      </Link>
+      <Link
         href={`https://www.facebook.com/sharer/sharer.php?t=${encodeURIComponent(text)}&u=${encodedUrl}`}
+        target="_blank"
       >
-        <a target="_blank">
-          <FacebookIcon width={"1.4rem"} height={"1.4rem"} />
-        </a>
-      </NextLink>
-      <NextLink
+        <FacebookIcon width={"1.4rem"} height={"1.4rem"} />
+      </Link>
+      <Link
         href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
+        target="_blank"
       >
-        <a target="_blank">
-          <LinkedInIcon width={"1.4rem"} height={"1.4rem"} />
-        </a>
-      </NextLink>
+        <LinkedInIcon width={"1.4rem"} height={"1.4rem"} />
+      </Link>
       <NativeShare url={url} title={title} description={description} />
     </Box>
   );
@@ -700,21 +700,22 @@ export const prettyCategory = (category) => {
 function Categories({ categories }) {
   if (categories !== undefined) {
     return (
-      <Box marginTop={"2"}>
+      <Box>
         {categories.map((category) => (
-          <NextLink key={category} href={`/blog/category/${category}`} passHref>
-            <a>
-              <Text
-                as="span"
-                color="#2b8c4d"
-                cursor={"pointer"}
-                fontFamily="Roboto"
-                fontWeight={"500"}
-              >
-                {prettyCategory(category)}
-              </Text>
-            </a>
-          </NextLink>
+          <Link
+            key={category}
+            href={`/blog?category=${category}`}
+            color="#2B8C4D"
+            fontWeight="500"
+            fontSize="14px"
+            lineHeight="20px"
+            letterSpacing="0.1px"
+            _hover={{
+              color: "#22703E"
+            }}
+          >
+            {prettyCategory(category)}
+          </Link>
         ))}
       </Box>
     );
@@ -725,52 +726,60 @@ function Categories({ categories }) {
 function LatestBlogCard({ slug, frontmatter }) {
   const { title, description, date, authors } = frontmatter;
   return (
-    <Box
-      display={"flex"}
+    <Stack
       flexDirection={{ base: "column", md: "column", lg: "row" }}
+      spacing={0}
+      gap="40px"
     >
-      <Box role="group" flexGrow={"1"}>
+      <Box
+        role="group"
+        width="100%"
+        height="365px"
+        maxWidth={{ base: "100%", md: "100%", lg: "648px" }}
+      >
         <Box
-          overflow={"hidden"}
+          overflow="hidden"
           border="1px solid #DEDFE0"
           borderRadius="16px"
-          marginRight={{ base: "0", md: "0", lg: "2rem" }}
         >
-          <NextLink href={`/blog/${slug}`} passHref>
-            <Link>
-              <Image
-                cursor="pointer"
-                width={"100%"}
-                style={{ aspectRatio: "16/9" }}
-                src={
-                  frontmatter.thumbnail ??
-                  "https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_9.png"
-                }
-                objectFit={"none"}
-                transition={
-                  "transform .6s cubic-bezier(0.01, 0.97, 0.42, 1.09)"
-                }
-                _groupHover={{ transform: "scale(1.03)" }}
-              />
-            </Link>
-          </NextLink>
+          <Link href={`/blog/${slug}`} >
+            <Image
+              cursor="pointer"
+              width={"100%"}
+              style={{ aspectRatio: "16/9" }}
+              src={
+                frontmatter.thumbnail ??
+                "https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_9.png"
+              }
+              objectFit={"none"}
+              transition={
+                "transform .6s cubic-bezier(0.01, 0.97, 0.42, 1.09)"
+              }
+              _groupHover={{ transform: "scale(1.03)" }}
+            />
+          </Link>
         </Box>
       </Box>
+
       <Box
-        width={{ base: "100%", md: "100%", lg: "40%" }}
-        marginTop={{ base: "1rem", md: "1rem", lg: "0" }}
+        width="100%"
       >
-        <Heading
-          as="h1"
-          fontSize={{ base: "2xl", md: "4xl" }}
-          fontWeight={500}
-          fontFamily={"Roboto"}
-        >
-          <NextLink href={`/blog/${slug}`} passHref>
-            <Link>{title}</Link>
-          </NextLink>
-        </Heading>
         <Categories categories={frontmatter.categories} />
+        <Heading as="h1">
+          <Link
+            href={`/blog/${slug}`}
+            fontFamily="Roboto"
+            fontSize="50px"
+            lineHeight="60px"
+            fontWeight="500"
+            color="#252A32"
+            _hover={{
+              opacity: 0.9
+            }}
+          >
+            {title}
+          </Link>
+        </Heading>
         <Text
           as="p"
           fontFamily={"Roboto"}
@@ -790,7 +799,7 @@ function LatestBlogCard({ slug, frontmatter }) {
           <DatePost date={date.created} slug={slug} />
         </Box>
       </Box>
-    </Box>
+    </Stack>
   );
 }
 
@@ -800,33 +809,31 @@ function MiniBlogCard({ slug, frontmatter }) {
     <Box display={"flex"} flexDirection={"column"}>
       <Box role="group">
         <Box overflow={"hidden"} border="1px solid #DEDFE0" borderRadius="16px">
-          <NextLink href={`/blog/${slug}`} passHref>
-            <Link>
-              <Image
-                width={"100%"}
-                style={{ aspectRatio: "16/9" }}
-                src={
-                  frontmatter.thumbnail ||
-                  "https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_9.png"
-                }
-                objectFit={"cover"}
-                transition={
-                  "transform .6s cubic-bezier(0.01, 0.97, 0.42, 1.09)"
-                }
-                _groupHover={{ transform: "scale(1.03)" }}
-              />
-            </Link>
-          </NextLink>
+          <Link href={`/blog/${slug}`}>
+            <Image
+              width={"100%"}
+              style={{ aspectRatio: "16/9" }}
+              src={
+                frontmatter.thumbnail ||
+                "https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_9.png"
+              }
+              objectFit={"cover"}
+              transition={
+                "transform .6s cubic-bezier(0.01, 0.97, 0.42, 1.09)"
+              }
+              _groupHover={{ transform: "scale(1.03)" }}
+            />
+          </Link>
         </Box>
+        <Categories categories={frontmatter.categories} />
         <Heading as="h3" fontSize={"xl"} fontWeight={500} fontFamily={"Roboto"}>
-          <NextLink href={`/blog/${slug}`} passHref>
-            <Link display="block" paddingTop={"1rem"}>
+          <Link href={`/blog/${slug}`}>
+            <Text as="span" display="block" paddingTop={"1rem"}>
               {title}
-            </Link>
-          </NextLink>
+            </Text>
+          </Link>
         </Heading>
       </Box>
-      <Categories categories={frontmatter.categories} />
       <Text
         as="p"
         fontFamily={"Roboto"}
@@ -850,44 +857,67 @@ function MiniBlogCard({ slug, frontmatter }) {
 }
 
 function BlogHeader({ category }) {
+  const { t } = useTranslation('blog')
+
   return (
-    <Box marginBottom={"3rem"} marginTop={"2.2rem"}>
-      <Text
-        as="span"
-        color="gray"
-        fontFamily={"Roboto"}
-        fontSize={".88rem"}
-        fontWeight={500}
-      >
-        Categorias
-      </Text>
-      <Box as="nav" marginTop={"0.5rem"}>
-        <UnorderedList marginInlineStart={"0"} display={"flex"} gap="2rem">
+    <Box margin="0 0 48px">
+      <Box display="flex" width="fit-content" marginBottom="16px" alignItems="center">
+        <FilterIcon
+          alt="filtrar conjuntos"
+          width="20px"
+          height="20px"
+          fill="#252A32"
+        />
+        <Text
+          as="span"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="16px"
+          lineHeight="24px"
+          color="#252A32"
+          textAlign="center"
+          width="100%"
+          marginLeft="8px"
+        >
+          {t('filter')}
+        </Text>
+      </Box>
+
+      <Box as="nav">
+        <UnorderedList marginInlineStart="0" display="flex" gap="8px">
           {[
-            { name: "Todos", shortName: "Todos", href: "/blog" },
+            { name: t('all'), shortName: t('all'), href: "/blog" },
             ...Object.entries(categories).map((category) => {
               const [shortName, name] = category;
               return {
                 name,
                 shortName,
-                href: `/blog/category/${shortName}`,
+                href: `/blog?category=${shortName}`,
               };
             }),
           ].map(({ name, shortName, href }) => (
             <ListItem
               key={name}
-              fontFamily={"Roboto"}
-              fontSize={"0.9rem"}
-              listStyleType={"none"}
-              fontWeight={"500"}
-              color={shortName === category ? "#2b8c4d" : "#252A32"}
+              listStyleType="none"
+              borderRadius="100px"
+              pointerEvents={shortName === category ? "none" : "default"}
+              background={shortName === category ? "#2B8C4D" : "#EEEEEE"}
+              _hover={{
+                opacity: 0.8
+              }}
             >
-              <NextLink
-                _hover={{ textDecoration: "none", color: "gray" }}
+              <Link
+                _hover={{ textDecoration: "none" }}
                 href={href}
+                fontSize="12px"
+                lineHeight="18px"
+                letterSpacing="0.1px"
+                fontWeight="500"
+                padding="8px 12px"
+                color={shortName === category ? "#FFFFFF" : "#464A51"}
               >
                 {name}
-              </NextLink>
+              </Link>
             </ListItem>
           ))}
         </UnorderedList>
@@ -898,9 +928,16 @@ function BlogHeader({ category }) {
 
 export function BlogGrid({ posts, category }) {
   return (
-    <>
+    <Stack
+      maxWidth="1440px"
+      boxSizing="content-box"
+      paddingX="24px"
+      paddingTop="24px"
+      marginX="auto"
+      spacing={0}
+    >
       <BlogHeader category={category} />
-      <Grid gap={"3rem"} templateColumns={{ md: "1fr 1fr", xl: "1fr 1fr 1fr" }}>
+      <Grid gap="40px" templateColumns={{ md: "1fr 1fr", xl: "1fr 1fr 1fr" }}>
         {posts.map((post, index) => {
           if (index === 0) {
             return (
@@ -917,8 +954,8 @@ export function BlogGrid({ posts, category }) {
               <GridItem
                 as="article"
                 key={index}
-                borderTop={"1px solid #DEDFE0"}
-                paddingTop={"3rem"}
+                borderBottom="1px solid #DEDFE0"
+                paddingBottom="40px"
               >
                 <MiniBlogCard key={post.slug} {...post} />
               </GridItem>
@@ -926,6 +963,6 @@ export function BlogGrid({ posts, category }) {
           }
         })}
       </Grid>
-    </>
+    </Stack>
   );
 }
