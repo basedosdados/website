@@ -23,7 +23,7 @@ import FourOFour from "../templates/404";
 import EmailIcon from "../../public/img/icons/emailIcon";
 import GithubIcon from "../../public/img/icons/githubIcon";
 import WebIcon from "../../public/img/icons/webIcon";
-import TwitterIcon from "../../public/img/icons/twitterIcon";
+import XIcon from "../../public/img/icons/xIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
@@ -119,7 +119,7 @@ export default function TablePage({ id }) {
     }
     if(ref.twitter_user) {
       const twitter = ref.twitter_user.replace(/(https:)\/\/(twitter.com)\//gim, "")
-      href = `https://twitter.com/${twitter}`
+      href = `https://x.com/${twitter}`
       alt = "twitter basedosdados"
     }
     if(ref.email) {
@@ -183,7 +183,7 @@ export default function TablePage({ id }) {
             {person?.email && <EmailIcon {...keyIcons({email: person.email})}/>}
             {person?.github && <GithubIcon {...keyIcons({github_user: person.github})}/>}
             {person?.website && <WebIcon {...keyIcons({website: person.website})}/>}
-            {person?.twitter && <TwitterIcon {...keyIcons({twitter_user: person.twitter})}/>}
+            {person?.twitter && <XIcon {...keyIcons({twitter_user: person.twitter})}/>}
           </HStack>
         ))}
       </Stack>
