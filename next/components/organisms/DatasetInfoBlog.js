@@ -10,7 +10,7 @@ import {
   Contribute,
   ShareButtons,
   mdxComponents,
-} from "./Blog";
+} from "./Blog/Slug";
 
 import hljs from "highlight.js/lib/core";
 import sqlHighlight from "highlight.js/lib/languages/sql";

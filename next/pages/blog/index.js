@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { MainPageTemplate } from "../../components/templates/main";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { BlogGrid } from "../../components/organisms/Blog";
+import { BlogGrid } from "../../components/organisms/Blog/Home";
 import { getAllPosts } from "../api/blog";
 
 export async function getStaticProps({ locale }) {

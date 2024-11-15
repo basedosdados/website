@@ -9,7 +9,7 @@ import {
   Contribute,
   ShareButtons,
   mdxComponents,
-} from "../../components/organisms/Blog";
+} from "../../components/organisms/Blog/Slug";
 
 import hljs from "highlight.js/lib/core";
 import sqlHighlight from "highlight.js/lib/languages/sql";
