@@ -633,11 +633,11 @@ export default function SearchDatasetPage() {
               count={aggregations?.contains_raw_data_sources?.filter(elm => elm.key === 1)[0]?.count || 0}
             />
 
-            <CheckboxFilterComponent
+            {/* <CheckboxFilterComponent
               value="information_requests"
               text={t('informationRequests')}
               count={aggregations?.contains_information_requests?.filter(elm => elm.key === 1)[0]?.count || 0}
-            />
+            /> */}
           </Box>
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>

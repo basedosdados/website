@@ -203,21 +203,24 @@ export default function DatasetCard({
           >
             {databaseInfo[1] ? databaseInfo[1] : t('datasetCard.noRawDataSources')}
           </Link>
-          <Text color="#DEDFE0">•</Text>
-          <Link
-            target="_blank"
-            href={informationRequests.number > 0 ? `${link}?information_request=${informationRequests.id}` : ""}
-            pointerEvents={informationRequests.number > 0 ? "default" : "none"}
-            fontFamily="Ubuntu"
-            fontSize="12px"
-            fontWeight="400"
-            letterSpacing="0.3px"
-            color={databaseInfo[2] ? "#252A32" : "#C4C4C4"}
-            cursor={databaseInfo[2] && "pointer"}
-            _hover={databaseInfo[2] && {opacity : "0.7"}}
-          >
-            {databaseInfo[2] ? databaseInfo[2] : t('datasetCard.noInformationRequests')}
-          </Link>
+          {databaseInfo[2] && (
+            <>
+              <Text color="#DEDFE0">•</Text>
+              <Link
+                target="_blank"
+                href={`${link}?information_request=${informationRequests.id}`}
+                fontFamily="Ubuntu"
+                fontSize="12px"
+                fontWeight="400"
+                letterSpacing="0.3px"
+                color="#252A32"
+                cursor="pointer"
+                _hover={{opacity: "0.7"}}
+              >
+                {databaseInfo[2]}
+              </Link>
+            </>
+          )}
         </HStack>
       </VStack>
     </Card>
