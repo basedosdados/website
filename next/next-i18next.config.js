@@ -5,15 +5,15 @@ module.exports = {
     localeDetection: false,
     domains: [
       {
-        domain: '127.0.0.1',
+        domain: 'basedosdados.org',
         defaultLocale: 'pt',
       },
       {
-        domain: '127.0.0.2',
+        domain: 'data-basis.org',
         defaultLocale: 'en',
       },
       {
-        domain: '127.0.0.3',
+        domain: 'basedelosdatos.org',
         defaultLocale: 'es',
       }
     ]

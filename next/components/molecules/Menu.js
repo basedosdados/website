@@ -1033,7 +1033,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('contact')]: "/contact",
       Button: []
     }
-  } else if (window.location.hostname === '127.0.0.1') {
+  } else if (window.location.hostname === 'basedosdados.org' || window.location.hostname === '127.0.0.1') {
     // Portuguese version
     links = {
       [t('data')]: `/search`,
@@ -1071,7 +1071,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('contact')]: "/contact",
       Button: []
     }
-  } else if (window.location.hostname === '127.0.0.2') {
+  } else if (window.location.hostname === 'data-basis.org' || window.location.hostname === '127.0.0.2') {
     // English version
     links = {
       [t('data')]: `/search`,
@@ -1099,8 +1099,8 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('contact')]: "/contact",
       Button: []
     }
-  } else {
-    // Spanish version (127.0.0.3)
+  } else if (window.location.hostname === 'basedelosdatos.org' || window.location.hostname === '127.0.0.3') {
+    // Spanish version
     links = {
       [t('data')]: `/search`,
       [t('solutions')]: [

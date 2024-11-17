@@ -1,23 +1,23 @@
-name: Deploy (Base dos Dados Development)
+name: Deploy (Base de los Datos Development)
 
 on:
   workflow_run:
-    workflows: ["Release Docker Image (Base dos Dados Development)"]
+    workflows: ["Release Docker Image (Data Basis Development)"]
     types:
       - completed
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: ghcr.io/basedosdados/website:development
+  IMAGE_NAME: ghcr.io/basedosdados/website:basedelosdatos-development
 
 jobs:
   deploy-development:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}  || ${{ github.event_name == 'workflow_dispatch' }}
-    name: Deploy (Base dos Dados Development)
+    name: Deploy (Base de los Datos Development)
     runs-on: ubuntu-latest
     environment:
       name: development
-      url: https://development.basedosdados.org
+      url: https://development.basedelosdatos.org
 
     steps:
       - name: Checkout
@@ -55,10 +55,10 @@ jobs:
         run: |
           cat << EOF > values.yaml
           website:
-            name: "basedosdados-website-development"
+            name: "basedelosdatos-website-development"
             image:
               name: "ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}"
-              tag: "development"
+              tag: "basedelosdatos-development"
               pullPolicy: "Always"
             replicas: 1
             resources:
@@ -69,14 +69,16 @@ jobs:
                 cpu: 500m
                 memory: 1Gi
             env:
-              - name: "NEXT_PUBLIC_KEY_STRIPE"
-                value: "${{ secrets.NEXT_PUBLIC_KEY_STRIPE }}"
+              - name: "NEXT_PUBLIC_DOMAIN"
+                value: "basedelosdatos.org"
+              - name: "NEXT_PUBLIC_SITE_NAME"
+                value: "Base de los Datos"
             envFrom:
               - secretRef:
-                  name: basedosdados-website-development
+                  name: basedelosdatos-website-development
             ingress:
               enabled: true
-              host: "development.basedosdados.org"
+              host: "development.basedelosdatos.org"
               annotations:
                 cert-manager.io/issuer: "letsencrypt-production"
                 kubernetes.io/ingress.class: nginx
@@ -84,10 +86,10 @@ jobs:
                 nginx.ingress.kubernetes.io/ssl-redirect: "true"
               tls:
                 - hosts:
-                    - "development.basedosdados.org"
-                  secretName: "development-basedosdados-org-tls"
+                    - "development.basedelosdatos.org"
+                  secretName: "development-basedelosdatos-org-tls"
           EOF
 
       - name: Deploy using Helm
         run: |
-          helm upgrade --install basedosdados-website-development charts/basedosdados-website/. -n website -f values.yaml --wait
+          helm upgrade --install basedelosdatos-website-development charts/basedosdados-website/. -n website -f values.yaml --wait 
