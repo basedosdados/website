@@ -3,9 +3,8 @@ import fs from "fs/promises";
 import matter from "gray-matter";
 
 const root = process.cwd();
-const faqsDirRoot = path.join(root, "content/FAQ");
-
-export async function getAllFAQs() {
+export async function getAllFAQs(locale = 'pt') {
+  const faqsDirRoot = path.join(root, `content/FAQ/${locale}`);
   const faqsDir = await fs.readdir(faqsDirRoot, "utf-8");
 
   const faqs = await Promise.all(

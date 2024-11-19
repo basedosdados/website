@@ -13,7 +13,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import ReactMarkdown from "react-markdown";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
-import { QuestionFAQ } from "../content/FAQ";
 import { MainPageTemplate } from "../components/templates/main";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
@@ -103,8 +102,7 @@ const QuestionsBox = ({ question, answer, id, active }) => {
         />
       </Box>
       <Collapse in={isActive} animateOpacity>
-        <ReactMarkdown>{answer}</ReactMarkdown>
-        {/* <BodyText
+        <Box
           id={id}
           as="div"
           height={isActive ? "100%" : "0"}
@@ -112,8 +110,8 @@ const QuestionsBox = ({ question, answer, id, active }) => {
           overflow="hidden"
           transition="all 1s ease"
         >
-          {answer()}
-        </BodyText> */}
+          <ReactMarkdown>{answer}</ReactMarkdown>
+        </Box>
       </Collapse>
       <Divider borderColor="#DEDFE0"/>
     </Stack>
@@ -129,9 +127,9 @@ export default function FAQ({ faqs }) {
   const [closeQuestion, setCloseQuestion] = useState(false)
 
   useEffect(() => {
-    setAllQuestions(QuestionFAQ)
-    setQuestions(QuestionFAQ)
-  },[])
+    setAllQuestions(faqs)
+    setQuestions(faqs)
+  },[faqs])
 
   useEffect(() => {
     if(categorySelected) return setQuestions(filterByCategory(categorySelected))
@@ -142,12 +140,15 @@ export default function FAQ({ faqs }) {
   )
 
   useEffect(() => {
-    if(searchFilter.trim() === "") return setSearchFilter("")
-
-    const result = searcher.search(searchFilter.trim())
-    setQuestions(result)
-    setCloseQuestion(!closeQuestion)
-    window.scrollTo({top: 1})
+    if(searchFilter.trim() === "") {
+      setSearchFilter("")
+      setQuestions(faqs)
+    } else {
+      const result = searcher.search(searchFilter.trim())
+      setQuestions(result)
+      setCloseQuestion(!closeQuestion)
+      window.scrollTo({top: 1})
+    }
   },[searchFilter])
 
   const filterByCategory = (category) => {
@@ -302,7 +303,7 @@ export default function FAQ({ faqs }) {
                 <QuestionsBox
                   key={i}
                   question={elm.question}
-                  answer={faqs[0].content}
+                  answer={elm.content}
                   id={elm.id && elm.id}
                   active={closeQuestion}
                 />
