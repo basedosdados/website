@@ -12,7 +12,6 @@ module.exports = {
   },
   output: "standalone",
   reactStrictMode: true,
-  swcMinify: true,
 
   async redirects() {
     return [

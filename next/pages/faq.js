@@ -11,12 +11,16 @@ import Head from "next/head";
 import FuzzySearch from 'fuzzy-search';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import ReactMarkdown from "react-markdown";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { QuestionFAQ } from "../content/FAQ";
 import { MainPageTemplate } from "../components/templates/main";
-import { withPages } from "../hooks/pages.hook";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
+
+import {
+  getAllFAQs,
+} from "./api/faqs";
 
 import { DebouncedControlledInput } from "../components/atoms/ControlledInput";
 import Display from "../components/atoms/Display";
@@ -29,10 +33,12 @@ import styles from "../styles/faq.module.css";
 import 'highlight.js/styles/obsidian.css';
 
 export async function getStaticProps({ locale }) {
+  const faqs = await getAllFAQs()
+
   return {
     props: {
       ...(await serverSideTranslations(locale, ['common', 'menu', 'faq', 'user'])),
-      ...(await withPages()),
+      faqs
     },
     revalidate: 30
   }
@@ -97,7 +103,8 @@ const QuestionsBox = ({ question, answer, id, active }) => {
         />
       </Box>
       <Collapse in={isActive} animateOpacity>
-        <BodyText
+        <ReactMarkdown>{answer}</ReactMarkdown>
+        {/* <BodyText
           id={id}
           as="div"
           height={isActive ? "100%" : "0"}
@@ -106,14 +113,14 @@ const QuestionsBox = ({ question, answer, id, active }) => {
           transition="all 1s ease"
         >
           {answer()}
-        </BodyText>
+        </BodyText> */}
       </Collapse>
       <Divider borderColor="#DEDFE0"/>
     </Stack>
   )
 }
 
-export default function FAQ({}) {
+export default function FAQ({ faqs }) {
   const { t } = useTranslation('faq');
   const [allQuestions, setAllQuestions] = useState([])
   const [questions, setQuestions] = useState([])
@@ -295,7 +302,7 @@ export default function FAQ({}) {
                 <QuestionsBox
                   key={i}
                   question={elm.question}
-                  answer={elm.answer}
+                  answer={faqs[0].content}
                   id={elm.id && elm.id}
                   active={closeQuestion}
                 />

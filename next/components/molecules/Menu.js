@@ -761,7 +761,6 @@ function DesktopLinks({
             return v.map((b, j) => (
               <a key={`button-${j}`} href={b.href} target="_blank">
                 <RoundedButton
-                  colorScheme="red"
                   backgroundColor={b.color}
                   minWidth="80px"
                   height="35px"

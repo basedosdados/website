@@ -8,6 +8,7 @@ import { getAllPosts } from "../api/blog";
 
 export async function getStaticProps({ locale }) {
   const posts = await getAllPosts();
+
   return { 
     props: {
       posts,
