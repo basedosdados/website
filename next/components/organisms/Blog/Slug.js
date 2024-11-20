@@ -25,7 +25,10 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import hljs from "highlight.js/lib/core";
 import Link from "../../atoms/Link";
-import { DatePost } from "./Home";
+import {
+  DatePost,
+  dateToLocatePt
+} from "./Home";
 
 import { CopyIcon } from "../../../public/img/icons/copyIcon";
 import AuthorIconFallback from "../../../public/img/icons/authorIconFallback";

@@ -29,8 +29,6 @@ import CrossIcon from "../public/img/icons/crossIcon";
 import SearchIcon from "../public/img/icons/searchIcon";
 import styles from "../styles/faq.module.css";
 
-import 'highlight.js/styles/obsidian.css';
-
 export async function getStaticProps({ locale }) {
   const faqs = await getAllFAQs()
 
@@ -109,6 +107,12 @@ const QuestionsBox = ({ question, answer, id, active }) => {
           marginBottom={isActive && "32px !important"}
           overflow="hidden"
           transition="all 1s ease"
+          fontFamily="ubuntu"
+          color="#252A32"
+          letterSpacing="0.1px"
+          fontSize="18px"
+          lineHeight="28px"
+          fontWeight="300"
         >
           <ReactMarkdown>{answer}</ReactMarkdown>
         </Box>
