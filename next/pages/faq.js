@@ -58,11 +58,11 @@ const QuestionsBox = ({ question, answer, id, active }) => {
   },[active])
 
   useEffect(() => {
-    if(router.asPath === `/faq#${id}`) setIsActive(true)
+    if(router.asPath === `/faq#${id}`) return setIsActive(true)
   },[id])
 
   useEffect(() => {
-    if(router.asPath === `/faq#${id}`) scrollFocus(id)
+    if(router.asPath === `/faq#${id}`) return scrollFocus(id)
   },[isActive])
 
   const OpenCloseQuestion = () => {
