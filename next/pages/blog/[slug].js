@@ -1,6 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import Head from "next/head";
 import { MDXRemote } from "next-mdx-remote";
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { MainPageTemplate } from "../../components/templates/main";
 import { getAllPosts, getPostBySlug, serializePost } from "../api/blog";
 import {
@@ -30,7 +31,7 @@ hljs.registerLanguage("stata", stataHighlight);
 hljs.registerLanguage("markdown", markdownHighlight);
 hljs.registerLanguage("md", markdownHighlight);
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params, locale }) {
   const { slug } = params;
 
   const content = await getPostBySlug(slug);
@@ -40,6 +41,7 @@ export async function getStaticProps({ params }) {
     props: {
       slug,
       ...serialize,
+      ...(await serverSideTranslations(locale, ['common', 'blog', 'menu'])),
     },
   };
 }

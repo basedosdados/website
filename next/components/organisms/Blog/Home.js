@@ -47,7 +47,6 @@ export function DatePost({ date, slug }) {
   );
 }
 
-{/* Validar com a Nay */}
 function Authors({ authors }) {
   const MAX_ICONS = 3;
 
@@ -190,11 +189,16 @@ function LatestBlogCard({ slug, frontmatter }) {
           marginTop="24px !important"
         >
           {authors ? (
-            <Wrap display={"flex"} alignItems={"center"} marginRight={"0.5rem"}>
-              <Authors authors={authors} />
-            </Wrap>
+            <Text
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="16px"
+              lineHeight="24px"
+              color="#252A32"
+            >
+              {authors[0].name}
+            </Text>
           ) : null}
-
           <DatePost date={date.created} slug={slug} />
         </Box>
       </Stack>
@@ -268,11 +272,16 @@ function MiniBlogCard({ slug, frontmatter }) {
         marginTop="16px !important"
       >
         {authors ? (
-          <Wrap display={"flex"} alignItems={"center"} marginRight={".5rem"}>
-            <Authors authors={authors} />
-          </Wrap>
+          <Text
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="16px"
+            lineHeight="24px"
+            color="#252A32"
+          >
+            {authors[0].name}
+          </Text>
         ) : null}
-
         <DatePost date={date.created} slug={slug} />
       </Box>
     </Stack>
