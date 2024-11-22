@@ -3,9 +3,6 @@ import {
   Heading,
   Image,
   Text,
-  Wrap,
-  WrapItem,
-  Avatar,
   UnorderedList,
   ListItem,
   OrderedList,
@@ -19,8 +16,9 @@ import {
   Tr,
   Td,
   Th,
+  Stack,
 } from "@chakra-ui/react";
-
+import { useTranslation } from 'next-i18next';
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import hljs from "highlight.js/lib/core";
@@ -31,14 +29,12 @@ import {
 } from "./Home";
 
 import { CopyIcon } from "../../../public/img/icons/copyIcon";
-import AuthorIconFallback from "../../../public/img/icons/authorIconFallback";
 import FacebookIcon from "../../../public/img/icons/facebookIcon";
 import LinkedInIcon from "../../../public/img/icons/linkedinIcon";
 import XIcon from "../../../public/img/icons/xIcon";
 import ForkIcon from "../../../public/img/icons/forkIcon";
 import ShareIcon from "../../../public/img/icons/shareIcon";
 import CheckIcon from "../../../public/img/icons/checkIcon";
-import { TimeIcon } from "@chakra-ui/icons";
 
 const LANGS_SUPPORTED = [
   "sql",
@@ -150,6 +146,7 @@ function NativeShare({ url, title, description }) {
     <Box
       as="button"
       variant="unstyled"
+      _hover={{opacity: 0.8}}
       onClick={() => {
         if (nagivatorAvailable) {
           navigator
@@ -168,11 +165,11 @@ function NativeShare({ url, title, description }) {
       }}
     >
       {nagivatorAvailable ? (
-        <ShareIcon width={"1.4rem"} />
+        <ShareIcon width="22px" />
       ) : hasCopied ? (
-        <CheckIcon width={"1.4rem"} height={"1.4rem"} alt="copiado conteúdo" />
+        <CheckIcon width="22px" height="22px" alt="copiado conteúdo" />
       ) : (
-        <CopyIcon width={"1.4rem"} height={"1.4rem"} alt="copiar conteúdo" />
+        <CopyIcon width="22px" height="22px" alt="copiar conteúdo" />
       )}
     </Box>
   );
@@ -193,26 +190,29 @@ export function ShareButtons({ frontmatter }) {
   const encodedUrl = encodeURIComponent(url);
 
   return (
-    <Box display={"flex"} alignItems={"center"} gap="1rem" marginTop={"1rem"}>
+    <Box display="flex" alignItems="center" gap="10px">
       <Link
         href={`https://x.com/share?text=${encodeURIComponent(text)}&url=${encodedUrl}`}
+        _hover={{opacity: 0.8}}
         target="_blank"
       >
-        <XIcon width={"1.1rem"} height={"1.1rem"} />
+        <XIcon width="18px" height="18px" />
       </Link>
       <Link
         href={`https://www.facebook.com/sharer/sharer.php?t=${encodeURIComponent(text)}&u=${encodedUrl}`}
+        _hover={{opacity: 0.8}}
         target="_blank"
       >
-        <FacebookIcon width={"1.4rem"} height={"1.4rem"} />
+        <FacebookIcon width="25px" height="25px" />
       </Link>
       <Link
         href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
+        _hover={{opacity: 0.8}}
         target="_blank"
       >
-        <LinkedInIcon width={"1.4rem"} height={"1.4rem"} />
+        <LinkedInIcon width="25px" height="25px" />
       </Link>
-      <NativeShare url={url} title={title} description={description} />
+      <NativeShare url={url} title={title} description={description}/>
     </Box>
   );
 }
@@ -312,7 +312,7 @@ export function Contribute({ slug }) {
         fontWeight={"500"}
         letterSpacing={"0"}
         _hover={{ textDecoration: "none" }}
-        isExternal
+        isexternal="true"
       >
         <>
           <ForkIcon width={"16px"} height={"16px"} marginRight={"0.5rem"} />
@@ -324,124 +324,105 @@ export function Contribute({ slug }) {
 }
 
 export function Header({ frontmatter, slug }) {
+  const { t } = useTranslation('blog')
+
   return (
-    <Box as="header">
-      <Heading as="h1" fontFamily={"Roboto"} size="2xl">
+    <Box as="header" marginBottom="64px">
+      <Heading
+        as="h1"
+        fontFamily="Roboto"
+        fontWeight="500"
+        fontSize="50px"
+        lineHeight="60px"
+        color="#252A32"
+      >
         {frontmatter.title}
       </Heading>
       <Heading
         as="h2"
-        fontFamily={"Roboto"}
-        fontWeight={"normal"}
-        fontSize={"xl"}
-        color={"gray"}
-        marginY={"10"}
+        fontFamily="Roboto"
+        fontWeight="400"
+        fontSize="16px"
+        lineHeight="24px"
+        color="#71757A"
+        margin="8px 0 24px"
       >
         {frontmatter.description}
       </Heading>
 
-      {frontmatter?.date ? (
-        <Box display={"flex"} alignItems={"center"} marginBottom={"2rem"}>
-          {frontmatter.date?.created ? (
-            <Box>
-              <Box
-                display={"flex"}
-                alignItems={"center"}
-                alignContent={"center"}
-              >
-                <TimeIcon color="gray" marginRight={"0.3rem"} />
-                <DatePost date={frontmatter.date.created} slug={slug} />
-              </Box>
-              {frontmatter.date?.updated ? (
-                <Box fontSize={"1rem"}>
-                  <Text
-                    as="span"
-                    color={"gray"}
-                    fontFamily={"Roboto"}
-                    fontSize={".8rem"}
-                  >
-                    {`Editado em ${dateToLocatePt(frontmatter.date.updated)}`}
-                  </Text>
-                </Box>
-              ) : null}
-            </Box>
-          ) : null}
-        </Box>
-      ) : null}
+      <Stack
+        width="100%"
+        flexDirection="row"
+        spacing={0}
+        gap="40px"
+      >
+        <Stack spacing={0} width="100%">
+          {frontmatter.authors && (
+            <Text
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="16px"
+              lineHeight="24px"
+              color="#252A32"
+            >
+              {frontmatter.authors.map((elm) => elm.name).join(', ')}
+            </Text>
+          )}
 
-      {frontmatter.authors ? (
-        <Box marginBottom={"2rem"}>
-          <Wrap display={"flex"} alignItems={"center"}>
-            {frontmatter.authors.map((author, index) => {
-              const authorComponent = (
-                <WrapItem alignItems={"center"}>
-                  <Box
-                    // href={author.social}
-                    fontFamily={"Roboto"}
-                    fontSize={"0.9rem"}
-                    fontWeight={500}
-                    display="flex"
-                    alignItems={"center"}
-                  >
-                    <Avatar
-                      size="sm"
-                      name={author.name}
-                      src={author?.avatar}
-                      icon={<AuthorIconFallback />}
-                    />
-                    <Box
-                      display={"flex"}
-                      flexDirection={"column"}
-                      alignItems={"start"}
-                      marginLeft={"2"}
-                      marginRight={"4"}
-                    >
-                      {author.name}
-                      {author?.role ? (
-                        <Text
-                          as="span"
-                          marginTop={"-0.2rem"}
-                          fontSize={"0.7rem"}
-                          fontFamily={"Roboto"}
-                          color="gray"
-                        >
-                          {author.role}
-                        </Text>
-                      ) : null}
-                    </Box>
-                  </Box>
-                </WrapItem>
-              );
+          {frontmatter?.date &&
+            <Stack flexDirection="column" spacing="4px">
+              {frontmatter.date?.created &&
+                <>
+                  <DatePost date={frontmatter.date.created} slug={slug} />
 
-              return (
-                <Box key={index}>
-                  {author?.social ? (
-                    <Link
-                      _hover={{ textDecoration: "none" }}
-                      href={author.social}
+                  {frontmatter.date?.updated && 
+                    <Text
+                      as="span"
+                      fontFamily="Roboto"
+                      fontWeight="400"
+                      fontSize="16px"
+                      lineHeight="24px"
+                      color="#71757A"
                     >
-                      {authorComponent}
-                    </Link>
-                  ) : (
-                    <>{authorComponent}</>
-                  )}
-                </Box>
-              );
-            })}
-          </Wrap>
-        </Box>
-      ) : null}
+                      {`${t("edited")} ${dateToLocatePt(frontmatter.date.updated)}`}
+                    </Text>
+                  }
+                </>
+              }
+            </Stack>
+          }
+        </Stack>
+
+        <Stack
+          flexDirection="row"
+          alignItems="center"
+          gap="18px"
+          spacing={0}
+        >
+          <Text
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="16px"
+            lineHeight="24px"
+            color="#252A32"
+          >
+            {t("share")}
+          </Text>
+
+          <ShareButtons frontmatter={frontmatter}/>
+        </Stack>
+      </Stack>
     </Box>
   );
 }
 
 export const mdxComponents = {
-  h1: (props) => <HeadingWithAnchor as="h2" size="1.8rem" {...props} />,
-  h2: (props) => <HeadingWithAnchor as="h2" fontSize="1.8rem" {...props} />,
-  h3: (props) => <HeadingWithAnchor as="h3" fontSize="1.5rem" {...props} />,
-  h4: (props) => <HeadingWithAnchor as="h4" fontSize="1.2rem" {...props} />,
-  h5: (props) => <HeadingWithAnchor as="h5" fontSize={"1.1rem"} {...props} />,
-  h6: (props) => <HeadingWithAnchor as="h6" fontSize={"1.05rem"} {...props} />,
+  h1: (props) => <HeadingWithAnchor as="h2" size="28px" {...props} />,
+  h2: (props) => <HeadingWithAnchor as="h2" fontSize="28px" {...props} />,
+  h3: (props) => <HeadingWithAnchor as="h3" fontSize="24px" {...props} />,
+  h4: (props) => <HeadingWithAnchor as="h4" fontSize="18px" {...props} />,
+  h5: (props) => <HeadingWithAnchor as="h5" fontSize={"16px"} {...props} />,
+  h6: (props) => <HeadingWithAnchor as="h6" fontSize={"15px"} {...props} />,
   blockquote: (props) => (
     <Box
       as="blockquote"
@@ -451,15 +432,27 @@ export const mdxComponents = {
       {...props}
     />
   ),
-  a: (props) => <Text as="a" color="#0068C5" {...props} />,
+  a: (props) => (
+  <Text
+    as="a"
+    fontFamily="Roboto"
+    fontSize="16px"
+    fontWeight="400"
+    lineHeight="24px"
+    margin="0 0 24px"
+    color="#0068C5"
+    {...props} 
+  />
+  ),
   p: (props) => (
     <Text
       as={"p"}
-      lineHeight={"7"}
-      marginY={"1.5rem"}
-      // color="#252A32"
-      color="rgb(55, 65, 81)"
-      fontFamily={"Roboto"}
+      fontFamily="Roboto"
+      fontSize="16px"
+      fontWeight="400"
+      lineHeight="24px"
+      margin="0 0 24px"
+      color="#252A32"
       {...props}
     />
   ),

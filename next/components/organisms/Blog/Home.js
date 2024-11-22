@@ -4,8 +4,6 @@ import {
   Heading,
   Image,
   Text,
-  WrapItem,
-  Avatar,
   UnorderedList,
   ListItem,
   Grid,
@@ -18,7 +16,6 @@ import { useTranslation } from 'next-i18next';
 import { categories } from "../../../pages/api/blog/categories";
 import Link from "../../atoms/Link";
 
-import AuthorIconFallback from "../../../public/img/icons/authorIconFallback"
 import FilterIcon from "../../../public/img/icons/filterIcon";
 
 export const dateToLocatePt = (date) =>
@@ -46,38 +43,6 @@ export function DatePost({ date, slug }) {
       {dateToLocatePt(date)}
     </Text>
   );
-}
-
-function Authors({ authors }) {
-  const MAX_ICONS = 3;
-
-  return authors.slice(0, MAX_ICONS).map((author, index) => {
-    return (
-      <WrapItem key={index} alignItems={"center"}>
-        {authors.length > MAX_ICONS && index == 2 ? (
-          <Avatar
-            size="sm"
-            backgroundColor={"#efefef"}
-            marginLeft={"-15px"}
-            title={`${authors
-              .slice(MAX_ICONS - 1)
-              .map((author) => author.name)
-              .join(", ")}`}
-            icon={<span>{`+${authors.length - MAX_ICONS + 1}`}</span>}
-          />
-        ) : (
-          <Avatar
-            size="sm"
-            marginLeft={index !== 0 ? "-15px" : "0"}
-            title={author.name}
-            name={author.name}
-            src={author?.avatar}
-            icon={<AuthorIconFallback />}
-          />
-        )}
-      </WrapItem>
-    );
-  });
 }
 
 export const prettyCategory = (category) => {
@@ -187,7 +152,7 @@ function MiniBlogCard({ slug, frontmatter }) {
       spacing={0}
     >
       <Box role="group" marginBottom="8px">
-        <Box
+        {/* <Box
           overflow={"hidden"}
           border="1px solid #DEDFE0"
           borderRadius="16px"
@@ -208,7 +173,7 @@ function MiniBlogCard({ slug, frontmatter }) {
               _groupHover={{ transform: "scale(1.03)" }}
             />
           </Link>
-        </Box>
+        </Box> */}
 
         <Heading as="h3" marginTop="4px">
           <Link
