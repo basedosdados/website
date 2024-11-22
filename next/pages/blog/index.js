@@ -21,7 +21,7 @@ export default function Blog({ posts }) {
   const router = useRouter()
   const { query } = router
   const [data, setData] = useState([])
-  const [category, setCategory] = useState("Todos")
+  const [category, setCategory] = useState("all")
 
   useEffect(() => {
     setData(posts)
@@ -29,7 +29,7 @@ export default function Blog({ posts }) {
 
   useEffect(() => {
     if(!query.category) {
-      setCategory("Todos")
+      setCategory("all")
     } else {
       const filteredPost = posts.filter(({ frontmatter }) =>
         frontmatter?.categories?.includes(query.category),
@@ -62,7 +62,7 @@ export default function Blog({ posts }) {
         />
       </Head>
 
-      <BlogGrid posts={data} category={category} />
+      <BlogGrid posts={data} category={category}/>
     </MainPageTemplate>
   );
 }

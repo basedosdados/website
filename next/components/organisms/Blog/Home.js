@@ -4,15 +4,16 @@ import {
   Heading,
   Image,
   Text,
-  Wrap,
   WrapItem,
   Avatar,
   UnorderedList,
   ListItem,
   Grid,
   GridItem,
+  Divider,
 } from "@chakra-ui/react";
 
+import { useEffect, useState } from "react";
 import { useTranslation } from 'next-i18next';
 import { categories } from "../../../pages/api/blog/categories";
 import Link from "../../atoms/Link";
@@ -88,32 +89,6 @@ export const prettyCategory = (category) => {
   return prettyName;
 };
 
-function Categories({ categories }) {
-  if (categories !== undefined) {
-    return (
-      <Box>
-        {categories.map((category) => (
-          <Link
-            key={category}
-            href={`/blog?category=${category}`}
-            color="#2B8C4D"
-            fontWeight="500"
-            fontSize="14px"
-            lineHeight="20px"
-            letterSpacing="0.1px"
-            _hover={{
-              color: "#22703E"
-            }}
-          >
-            {prettyCategory(category)}
-          </Link>
-        ))}
-      </Box>
-    );
-  }
-  return null;
-}
-
 function LatestBlogCard({ slug, frontmatter }) {
   const { title, description, date, authors } = frontmatter;
   return (
@@ -155,8 +130,6 @@ function LatestBlogCard({ slug, frontmatter }) {
         width="100%"
         spacing="8px"
       >
-        <Categories categories={frontmatter.categories} />
-
         <Heading as="h1">
           <Link
             href={`/blog/${slug}`}
@@ -237,8 +210,6 @@ function MiniBlogCard({ slug, frontmatter }) {
           </Link>
         </Box>
 
-        <Categories categories={frontmatter.categories} />
-
         <Heading as="h3" marginTop="4px">
           <Link
             href={`/blog/${slug}`}
@@ -318,7 +289,7 @@ function BlogHeader({ category }) {
       <Box as="nav">
         <UnorderedList marginInlineStart="0" display="flex" gap="8px">
           {[
-            { name: t('all'), shortName: t('all'), href: "/blog" },
+            { name: t('all'), shortName: "all", href: "/blog" },
             ...Object.entries(categories).map((category) => {
               const [shortName, name] = category;
               return {
@@ -359,6 +330,38 @@ function BlogHeader({ category }) {
 }
 
 export function BlogGrid({ posts, category }) {
+  const { t } = useTranslation('blog')
+  const [data, setData] = useState({})
+
+  function groupByCategories(array) {
+    const result = {}
+
+    array.forEach(elm => {
+      const { frontmatter } = elm
+      const categories = frontmatter.categories || []
+
+      if(categories.length > 0 ) {
+        categories.forEach(category => {
+          if (!result[category]) {
+            result[category] = []
+          }
+          result[category].push({ ...elm })
+        })
+      } else {
+        if (!result["no categories"]) {
+          result["no categories"] = []
+        }
+        result["no categories"].push({ ...elm })
+      }
+    })
+
+    return result
+  }
+
+  useEffect(() => {
+    setData(groupByCategories(posts))
+  }, [posts])
+
   return (
     <Stack
       maxWidth="1440px"
@@ -369,34 +372,107 @@ export function BlogGrid({ posts, category }) {
       spacing={0}
     >
       <BlogHeader category={category} />
-      <Grid gap="40px" templateColumns={{ md: "1fr 1fr", xl: "1fr 1fr 1fr" }}>
-        {posts.map((post, index) => {
-          if (index === 0) {
-            return (
-              <GridItem
-                as="article"
-                key={index}
-                gridColumn={{ md: "span 2", xl: "span 3" }}
+
+      {category === "all" ?
+        data && Object.entries(data).map(([key, value], index) => {
+          return (
+            <Box width="100%" key={key}>
+              <Divider
+                display={index === 0 ? "none" : "flex"}
+                borderColor="#252A32"
+                borderWidth="2px"
+                margin="80px 0 24px"
+              />
+
+              <Text
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="20px"
+                lineHeight="30px"
+                color="#252A32"
+                marginBottom="40px"
               >
-                <LatestBlogCard key={post.slug} {...post} />
-              </GridItem>
-            );
-          } else {
-            return (
-              <GridItem
-                as="article"
-                key={index}
-                minHeight="504px"
-                boxSizing="content-box"
-                borderBottom="1px solid #DEDFE0"
-                paddingBottom="40px"
-              >
-                <MiniBlogCard key={post.slug} {...post} />
-              </GridItem>
-            );
-          }
-        })}
-      </Grid>
+                {categories?.[key] || t(key)}
+              </Text>
+
+              <Grid gap="40px" templateColumns={{ md: "1fr 1fr", xl: "1fr 1fr 1fr" }}>
+                {value.map((post, index) => {
+                  const itemsInLastRow = (value.length - 1) % 3 || 3;
+                  const isInLastRow = index >= value.length - itemsInLastRow;
+
+                  if (index === 0) {
+                    return (
+                      <GridItem
+                        as="article"
+                        key={index}
+                        gridColumn={{ md: "span 2", xl: "span 3" }}
+                      >
+                        <LatestBlogCard key={post.slug} {...post} />
+                      </GridItem>
+                    );
+                  } else {
+                    return (
+                      <GridItem
+                        as="article"
+                        key={index}
+                        boxSizing="content-box"
+                        borderBottom={isInLastRow ? "none" : "1px solid #DEDFE0"}
+                        paddingBottom="24px"
+                      >
+                        <MiniBlogCard key={post.slug} {...post} />
+                      </GridItem>
+                    );
+                  }
+                })}
+              </Grid>
+            </Box>
+          )
+        })
+        :
+        <Box width="100%">
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="20px"
+            lineHeight="30px"
+            color="#252A32"
+            marginBottom="40px"
+          >
+            {categories?.[category] || category}
+          </Text>
+
+          <Grid gap="40px" templateColumns={{ md: "1fr 1fr", xl: "1fr 1fr 1fr" }}>
+            {posts.map((post, index) => {
+              const itemsInLastRow = (posts.length - 1) % 3 || 3;
+              const isInLastRow = index >= posts.length - itemsInLastRow;
+
+              if (index === 0) {
+                return (
+                  <GridItem
+                    as="article"
+                    key={index}
+                    gridColumn={{ md: "span 2", xl: "span 3" }}
+                  >
+                    <LatestBlogCard key={post.slug} {...post} />
+                  </GridItem>
+                );
+              } else {
+                return (
+                  <GridItem
+                    as="article"
+                    key={index}
+                    boxSizing="content-box"
+                    borderBottom={isInLastRow ? "none" : "1px solid #DEDFE0"}
+                    paddingBottom="24px"
+                  >
+                    <MiniBlogCard key={post.slug} {...post} />
+                  </GridItem>
+                );
+              }
+            })}
+          </Grid>
+        </Box>
+      }
     </Stack>
   );
 }
