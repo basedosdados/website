@@ -326,13 +326,49 @@ export default function SearchDatasetPage() {
   }
 
   function FilterTags() {
+    function getLocalizedName(key, value) {
+      // Handle special case for contains filters
+      if (key === "contains") {
+        const containsMap = {
+          "tables": t('tables'),
+          "raw_data_sources": t('rawDataSources'),
+          "information_requests": t('informationRequests'),
+          "open_data": t('openData'),
+          "closed_data": t('closedData')
+        };
+        return containsMap[value] || value;
+      }
+
+      // Look up the display name in aggregations
+      const aggregationKey = {
+        "theme": "themes",
+        "organization": "organizations",
+        "spatial_coverage": "spatial_coverages",
+        "tag": "tags",
+        "observation_level": "observation_levels"
+      }[key];
+
+      if (aggregationKey && aggregations[aggregationKey]) {
+        const item = aggregations[aggregationKey].find(item => item.key === value);
+        return item?.name || value;
+      }
+
+      return value;
+    }
+
     function mapArrayProps(obj) {
       let newObj = {}
       for (let key in obj) {
         if (Array.isArray(obj[key])) {
-          newObj[key] = obj[key].map(item => ({ name: item }))
+          newObj[key] = obj[key].map(item => ({ 
+            name: item,
+            displayName: getLocalizedName(key, item)
+          }))
         } else {
-          newObj[key] = obj[key]
+          newObj[key] = {
+            name: obj[key],
+            displayName: getLocalizedName(key, obj[key])
+          }
         }
       }
       return newObj
@@ -350,14 +386,14 @@ export default function SearchDatasetPage() {
             value.map((tag, i) => (
               <TagFilter
                 key={`${key}_${i}`}
-                text={tag.name}
-                handleClick={() => handleSelectFilter([`${key}`,`${tag.name}`])}
+                text={tag.displayName}
+                handleClick={() => handleSelectFilter([`${key}`, tag.name])}
               />
             ))
           ) : (
             <TagFilter
               key={key}
-              text={value}
+              text={value.displayName}
               handleClick={() => handleSelectFilter([`${key}`,`${value}`])}
             />
           )
@@ -597,11 +633,11 @@ export default function SearchDatasetPage() {
               count={aggregations?.contains_raw_data_sources?.filter(elm => elm.key === 1)[0]?.count || 0}
             />
 
-            <CheckboxFilterComponent
+            {/* <CheckboxFilterComponent
               value="information_requests"
               text={t('informationRequests')}
               count={aggregations?.contains_information_requests?.filter(elm => elm.key === 1)[0]?.count || 0}
-            />
+            /> */}
           </Box>
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>

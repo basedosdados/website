@@ -326,14 +326,14 @@ export default function Dataset({
           <HStack
             flexDirection={useCheckMobile() && "column"}
             alignItems={useCheckMobile() && "flex-start"}
-            spacing={0}
+            spacing={informationRequests?.number > 0 ? 0 : 10}
             width="100%"
             maxWidth="440px"
-            justifyContent="space-between"
+            justifyContent={informationRequests?.number > 0 ? "space-between" : "flex-start"}
           >
             <Tables/>
             <RawDataSources/>
-            <InformationRequest/>
+            {informationRequests?.number > 0 && <InformationRequest/>}
           </HStack>
         </VStack>
       </Stack>
