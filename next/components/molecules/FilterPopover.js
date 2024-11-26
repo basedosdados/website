@@ -96,7 +96,6 @@ export function FilterPopover({ }) {
                 fontFamily="ubuntu"
                 letterSpacing="0.5px"
                 borderRadius="23.1818px"
-                colorScheme="blue"
                 width="120px"
                 boxShadow="0px 4.63636px 4.63636px rgba(0, 0, 0, 0.25);"
                 fontSize="14px"

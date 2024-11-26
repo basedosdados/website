@@ -39,6 +39,7 @@
     "react-i18next": "^15.0.3",
     "react-image-crop": "^11.0.4",
     "react-latex-next": "^2.2.0",
+    "react-markdown": "^8.0.7",
     "react-paginate": "^8.2.0",
     "react-query": "^3.39.2",
     "rehype-slug": "^6.0.0",

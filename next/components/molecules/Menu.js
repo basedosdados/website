@@ -24,7 +24,6 @@ import {
 import { useEffect, useRef, useState, useMemo } from "react";
 import { useRouter } from "next/router"
 import { useTranslation } from 'next-i18next';
-import LanguageSelector from "../atoms/LanguageSelector";
 import cookies from "js-cookie";
 import MenuDropdown from "./MenuDropdown";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
@@ -586,6 +585,7 @@ function SearchInputUser ({ user }) {
 
   function openSearchLink() {
     if(search.trim() === "") return
+    triggerGAEvent("search", search.trim())
     triggerGAEvent("search_menu", search.trim())
     router.push(`/search?q=${search.trim()}`);
   }
@@ -762,7 +762,6 @@ function DesktopLinks({
             return v.map((b, j) => (
               <a key={`button-${j}`} href={b.href} target="_blank">
                 <RoundedButton
-                  colorScheme="red"
                   backgroundColor={b.color}
                   minWidth="80px"
                   height="35px"
@@ -970,7 +969,11 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   }, [lastScrollY, router.pathname])
 
   function maxWidthDataset() {
-    if (route === "/search" || route === "/dataset/[dataset]" || route === "/user/[username]") return "1440px"
+    if( route === "/search" ||
+        route === "/dataset/[dataset]" ||
+        route === "/user/[username]" ||
+        route === "/blog"
+      ) return "1440px"
     return "1264px"
   }
 

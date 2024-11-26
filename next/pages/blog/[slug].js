@@ -1,15 +1,20 @@
-import { Box } from "@chakra-ui/react";
+import {
+  Box,
+  Text
+} from "@chakra-ui/react";
 import Head from "next/head";
 import { MDXRemote } from "next-mdx-remote";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { MainPageTemplate } from "../../components/templates/main";
 import { getAllPosts, getPostBySlug, serializePost } from "../api/blog";
+import { categories } from "../api/blog/categories";
 import {
   Header,
   Toc,
   Contribute,
-  ShareButtons,
   mdxComponents,
-} from "../../components/organisms/Blog";
+} from "../../components/organisms/Blog/Slug";
 
 import hljs from "highlight.js/lib/core";
 import sqlHighlight from "highlight.js/lib/languages/sql";
@@ -30,7 +35,7 @@ hljs.registerLanguage("stata", stataHighlight);
 hljs.registerLanguage("markdown", markdownHighlight);
 hljs.registerLanguage("md", markdownHighlight);
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params, locale }) {
   const { slug } = params;
 
   const content = await getPostBySlug(slug);
@@ -40,6 +45,7 @@ export async function getStaticProps({ params }) {
     props: {
       slug,
       ...serialize,
+      ...(await serverSideTranslations(locale, ['common', 'blog', 'menu'])),
     },
   };
 }
@@ -53,10 +59,17 @@ export async function getStaticPaths() {
 }
 
 export default function Post({ slug, mdxSource, headings }) {
+  const { t } = useTranslation('blog')
   const { frontmatter } = mdxSource;
 
   return (
-    <MainPageTemplate maxWidth={"1100px"} margin={"0 auto"} paddingX="24px">
+    <MainPageTemplate
+      width="100%"
+      maxWidth="944px"
+      margin="0 auto"
+      paddingX="24px"
+      boxSizing="content-box"
+    >
       <Head>
         <title>{frontmatter.title} – Blog – Base dos Dados</title>
         <meta
@@ -90,7 +103,26 @@ export default function Post({ slug, mdxSource, headings }) {
           content={frontmatter.date.created}
         />
       </Head>
-      <Box paddingTop={"4rem"}>
+
+      <Text
+        as="div"
+        display="flex"
+        flexDirection="row"
+        fontFamily="Roboto"
+        fontWeight="400"
+        fontSize="14px"
+        lineHeight="20px"
+        color="#252A32"
+        padding="24px 0 48px"
+        gap="8px"
+      >
+        {t("blog")} <Text color="#71757A">/</Text>
+        {frontmatter.categories.map((elm) => {
+          return <Text>{categories?.[elm] || t(elm)}</Text>
+        })}
+      </Text>
+
+      <Box>
         <Header frontmatter={frontmatter} slug={slug} />
         <Box
           display={"flex"}
@@ -98,7 +130,13 @@ export default function Post({ slug, mdxSource, headings }) {
           alignItems={"start"}
           maxWidth={"100%"}
         >
-          <Box as="section" width={{ base: "100%", md: "65%", xl: "65%" }}>
+          <Box
+            as="section"
+            width={{ base: "100%", md: "65%", xl: "65%" }}
+            display="flex"
+            flexDirection="column"
+            gap="24px"
+          >
             <MDXRemote {...mdxSource} components={mdxComponents} />
           </Box>
           <Box
@@ -131,7 +169,6 @@ export default function Post({ slug, mdxSource, headings }) {
             >
               <Contribute slug={slug} />
             </Box>
-            <ShareButtons frontmatter={frontmatter} />
           </Box>
         </Box>
       </Box>
