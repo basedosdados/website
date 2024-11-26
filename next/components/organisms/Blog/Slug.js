@@ -219,28 +219,22 @@ export function ShareButtons({ frontmatter }) {
 
 function HeadingWithAnchor(props) {
   return (
-    <Heading
-      {...props}
-      scrollMarginTop={"6rem"}
-      fontFamily="Roboto"
-      marginY={"1.5rem"}
-      role="group"
+    <Link
+      href={`#${props.id}`}
+      variant="unstyled"
+      transition="none"
+      _hover={{ textDecoration: "none" }}
     >
-      {props.children}
-      <Link
-        href={`#${props.id}`}
-        variant="unstyled"
-        opacity="0"
-        color="gray"
-        fontSize={"inherit"}
-        marginLeft="5px"
-        transition="none"
-        _hover={{ textDecoration: "none" }}
-        _groupHover={{ opacity: "1" }}
+      <Heading
+        {...props}
+        scrollMarginTop="100px"
+        fontFamily="Roboto"
+        margin="24px 0 0"
+        role="group"
       >
-        {"#"}
-      </Link>
-    </Heading>
+        {props.children}
+      </Heading>
+    </Link>
   );
 }
 
@@ -426,9 +420,9 @@ export const mdxComponents = {
   blockquote: (props) => (
     <Box
       as="blockquote"
-      paddingY={"0.1rem"}
-      paddingLeft={"1.5rem"}
-      borderLeft={"3px solid #7ec876"}
+      padding="24px"
+      background="#D5E8DB"
+      borderRadius="16px"
       {...props}
     />
   ),
@@ -439,8 +433,10 @@ export const mdxComponents = {
     fontSize="16px"
     fontWeight="400"
     lineHeight="24px"
-    margin="0 0 24px"
     color="#0068C5"
+    _hover={{
+      color: "#0057A4"
+    }}
     {...props} 
   />
   ),
@@ -451,7 +447,6 @@ export const mdxComponents = {
       fontSize="16px"
       fontWeight="400"
       lineHeight="24px"
-      margin="0 0 24px"
       color="#252A32"
       {...props}
     />

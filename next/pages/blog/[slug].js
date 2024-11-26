@@ -130,7 +130,13 @@ export default function Post({ slug, mdxSource, headings }) {
           alignItems={"start"}
           maxWidth={"100%"}
         >
-          <Box as="section" width={{ base: "100%", md: "65%", xl: "65%" }}>
+          <Box
+            as="section"
+            width={{ base: "100%", md: "65%", xl: "65%" }}
+            display="flex"
+            flexDirection="column"
+            gap="24px"
+          >
             <MDXRemote {...mdxSource} components={mdxComponents} />
           </Box>
           <Box
