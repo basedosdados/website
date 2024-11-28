@@ -17,6 +17,7 @@ import {
   Td,
   Th,
   Stack,
+  Divider,
 } from "@chakra-ui/react";
 import { useTranslation } from 'next-i18next';
 import { useRouter } from "next/router";
@@ -255,25 +256,32 @@ function FigCaption(props) {
 
 export function Toc({ headings }) {
   return (
-    <Box marginBottom={"1rem"}>
+    <Box>
       <Text
-        as="p"
-        fontFamily={"Roboto"}
-        fontWeight={"500"}
-        paddingBottom={"0.6rem"}
+        fontFamily="Roboto"
+        fontWeight="500"
+        fontSize="18px"
+        lineHeight="28px"
+        color="#252A32"
+        marginBottom="2px"
       >
         Tabela de conteúdo
       </Text>
-      <Box as="hr" />
-      <UnorderedList marginTop={"1rem"}>
+      <Box as="hr" borderWidth="2px" borderColor="#DEDFE0" marginBottom="8px"/>
+      <UnorderedList margin="0">
         {headings.map(({ id, title, level }) => (
-          <ListItem key={id} margin={"0.5rem 0"} marginLeft={`${level * 5}%`}>
+          <ListItem listStyleType="none" key={id} marginLeft={`${level * 5}%`}>
             <Link
               href={`#${id}`}
               fontFamily="Roboto"
-              fontWeight="normal"
               display="block"
               _hover={{ textDecoration: "none" }}
+              fontWeight="500"
+              fontSize="14px"
+              lineHeight="20px"
+              letterSpacing="0.1px"
+              color="#252A32"
+              padding="8px 16px"
             >
               {title}
             </Link>
@@ -439,6 +447,15 @@ export const mdxComponents = {
     }}
     {...props} 
   />
+  ),
+  hr: (props) => (
+    <Divider
+      borderWidth="0px"
+      borderTop="3px solid #252A32"
+      opacity="1"
+      margin="24px 0"
+      {...props}
+    />
   ),
   p: (props) => (
     <Text

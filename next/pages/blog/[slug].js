@@ -9,6 +9,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { MainPageTemplate } from "../../components/templates/main";
 import { getAllPosts, getPostBySlug, serializePost } from "../api/blog";
 import { categories } from "../api/blog/categories";
+import Link from "../../components/atoms/Link";
 import {
   Header,
   Toc,
@@ -68,7 +69,6 @@ export default function Post({ slug, mdxSource, headings }) {
       maxWidth="944px"
       margin="0 auto"
       paddingX="24px"
-      boxSizing="content-box"
     >
       <Head>
         <title>{frontmatter.title} – Blog – Base dos Dados</title>
@@ -125,10 +125,10 @@ export default function Post({ slug, mdxSource, headings }) {
       <Box>
         <Header frontmatter={frontmatter} slug={slug} />
         <Box
-          display={"flex"}
+          display="flex"
           flexDirection={{ base: "column", md: "row" }}
-          alignItems={"start"}
-          maxWidth={"100%"}
+          alignItems="start"
+          maxWidth="100%"
         >
           <Box
             as="section"
@@ -138,34 +138,55 @@ export default function Post({ slug, mdxSource, headings }) {
             gap="24px"
           >
             <MDXRemote {...mdxSource} components={mdxComponents} />
+
+            <Box
+              display="flex"
+              flexDirection="column"
+            >
+              <Text
+                fontFamily="Roboto"
+                fontSize="16px"
+                fontWeight="400"
+                lineHeight="24px"
+                color="#252A32"
+              >Notou algo errado ou tem uma sugestão? </Text>
+              <Link
+                href={`https://github.com/basedosdados/website/edit/main/next/blog/${slug}.md`}
+                isexternal="true"
+                fontSize="16px"
+                fontWeight="400"
+                lineHeight="24px"
+                color="#0068C5"
+                _hover={{
+                  color: "#0057A4"
+                }}
+              >Contribua com a BD editando este artigo via pull request no nosso GitHub.</Link>
+            </Box>
           </Box>
           <Box
             as="aside"
-            marginLeft={"auto"}
-            marginTop={{ base: "0", md: "2rem" }}
-            position={"sticky"}
+            marginLeft="auto"
+            marginTop={{ base: "0", md: "48px" }}
+            position="sticky"
             top="6rem"
-            maxHeight={"calc(100vh - 6rem)"}
-            overflowY={"auto"}
-            paddingLeft={{ base: "0", md: "5rem" }}
-            paddingRight={"1rem"}
-            paddingBottom={"2rem"}
+            maxHeight="calc(100vh - 6rem)"
+            overflowY="auto"
+            paddingLeft={{ base: "0", md: "48px" }}
+            paddingRight="24px"
+            paddingBottom="24px"
             width={{ base: "100%", md: "35%", xl: "35%" }}
           >
             <Box display={{ base: "none", md: "block" }}>
               {headings.length > 0 ? (
-                <>
-                  <Toc headings={headings} />
-                  <Box as="hr" marginBottom={"1rem"} />
-                </>
+                <Toc headings={headings} />
               ) : null}
             </Box>
             <Box
-              borderTop="0px solid rgb(226, 232, 240)"
-              borderTopWidth={{ base: "1px", md: "0px" }}
-              paddingTop={{ base: "1rem", md: "0" }}
-              paddingBottom={"1rem"}
-              borderBottom="1px solid rgb(226, 232, 240)"
+              display={{ base: "none", lg: "flex"}}
+              borderTop="4px solid #DEDFE0"
+              padding="24px 0"
+              marginTop="10px"
+              borderBottom="4px solid #DEDFE0"
             >
               <Contribute slug={slug} />
             </Box>
