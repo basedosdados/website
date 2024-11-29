@@ -6,15 +6,24 @@ import {
   Skeleton,
 } from "@chakra-ui/react";
 import Image from 'next/image';
+import { MDXRemote } from "next-mdx-remote";
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-
 import { MainPageTemplate } from "../../components/templates/main";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { CaseStudiesContent } from "../../content/caseStudies";
+
+import {
+  getAllCaseStudies,
+  getCaseStudiesById,
+  serializeCaseStudies
+} from "../api/caseStudies"
+
+import {
+  mdxComponents
+} from "../../components/organisms/Blog/Slug"
+
 import Link from "../../components/atoms/Link";
 import SectionText from "../../components/atoms/SectionText";
 import Display from "../../components/atoms/Display";
@@ -23,72 +32,62 @@ import RoundedButton from "../../components/atoms/RoundedButton";
 import styles from "../../styles/caseStudies.module.css";
 
 export async function getStaticProps({ params, locale }) {
-  const caseStudy = CaseStudiesContent.find((res) => res.id === params.id);
+  const { id } = params;
+
+  const content = await getCaseStudiesById(id, locale);
+  const serialize = await serializeCaseStudies(content);
+
   return {
     props: {
+      serialize,
       ...(await serverSideTranslations(locale, ['common', 'menu', 'caseStudies'])),
-      ...caseStudy,
     },
     revalidate: 30
   }
 }
 
-export async function getStaticPaths(context) {
+export async function getStaticPaths() {
+  const allCaseStudies = await getAllCaseStudies();
+
   return {
-    paths: CaseStudiesContent.map((elm) => {
-      return {params: { id : elm.id }}
+    paths: allCaseStudies.map(({ id }) => {
+      return {params: { id }}
     }),
     fallback: false
   }
 }
 
-export default function CaseStudies ({
-  title,
-  displayTitle,
-  thumbnail,
-  img,
-  imgDescription,
-  description,
-  logo,
-  about,
-  sector,
-  body
-}) {
+export default function CaseStudies ({ serialize }) {
   const { t } = useTranslation('caseStudies');
   const router = useRouter();
-  const [isMobileMod, setIsMobileMod] = useState(false)
-  const isMobile = useCheckMobile();
-
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
+  const { frontmatter } = serialize;
 
   return (
     <MainPageTemplate paddingX="24px">
       <Head>
-        <title>{t('pageTitle', { title: displayTitle })}</title>
+        <title>{t('pageTitle', { title: frontmatter.displayTitle || "" })}</title>
         <link
           rel="image_src"
-          href={thumbnail}
+          href={frontmatter.thumbnail || ""}
         />
         <meta
           property="og:image"
-          content={thumbnail}
+          content={frontmatter.thumbnail || ""}
           key="ogimage"
         />
         <meta
           name="twitter:image"
-          content={thumbnail}
+          content={frontmatter.thumbnail || ""}
           key="twimage"
         />
         <meta
           property="og:title"
-          content={t('pageTitle', { title: displayTitle })}
+          content={t('pageTitle', { title: frontmatter.displayTitle || "" })}
           key="ogtitle"
         />
         <meta
           property="og:description"
-          content={`${description}`}
+          content={frontmatter.description || ""}
           key="ogdesc"
         />
       </Head>
@@ -98,49 +97,46 @@ export default function CaseStudies ({
         maxWidth="1264px"
         margin="50px auto auto"
       >
-        {!isMobileMod && (
-          <Link
-            marginBottom="48px"
-            color="#42B0FF"
-            fontWeight="500"
-            fontFamily="ubuntu"
-            fontSize="16px"
-            width="fit-content"
-            href={"/case-studies"}
-          >
-            {t('backLink')}
-          </Link>
-        )}
+        <Link
+          display={{base: "none", lg: "flex"}}
+          marginBottom="48px"
+          color="#42B0FF"
+          fontWeight="500"
+          fontFamily="ubuntu"
+          fontSize="16px"
+          width="fit-content"
+          href={"/case-studies"}
+        >
+          {t('backLink')}
+        </Link>
 
-        {isMobileMod &&
-          <Display
-            margin="0 0 48px !important"
-          >{title}</Display>
-        }
-        
+        <Display
+          display={{base: "flex", lg: "none"}}
+          margin="0 0 48px !important"
+        >{frontmatter?.title || ""}</Display>
+
         <VStack position="relative" spacing={0} gridGap="16px">
-          {!isMobileMod &&
-            <Display
-              position="absolute"
-              paddingTop={isMobileMod && "80px"}
-              margin="40px 48px"
-              color="#FFF"
-              zIndex="10"
-            >{title}</Display>
-          }
+          <Display
+            display={{base: "none", lg: "flex"}}
+            position="absolute"
+            paddingTop={{base: "80px", lg: "0"}}
+            margin="40px 48px"
+            color="#FFF"
+            zIndex="10"
+          >{frontmatter?.title || ""}</Display>
 
           <Box
             position="relative"
             width="100%"
-            height={isMobileMod ? "145px" : "450px"}
+            height={{base:"145px", lg:"450px"}}
             overflow="hidden"
-            borderRadius={isMobileMod ? "12px" : "24px"}
-            filter={!isMobileMod && "brightness(0.4)"}
+            borderRadius={{base:"12px", lg:"24px"}}
+            filter={{base: "none", lg: "brightness(0.4)"}}
           >
-            {img.length > 0 ?
+            {frontmatter.img ?
               <Image
-                alt={displayTitle}
-                src={img}
+                alt={frontmatter?.displayTitle}
+                src={frontmatter.img}
                 layout="fill"
                 objectFit="cover"
               />
@@ -149,29 +145,29 @@ export default function CaseStudies ({
             }
           </Box>
 
-          {imgDescription && 
+          {frontmatter.imgDescription && 
             <SectionText
               width="100%"
               textAlign="end"
               color="#6F6F6F"
             >
-              {imgDescription}
+              {frontmatter.imgDescription}
             </SectionText>
           }
         </VStack>
-        
+
         <HStack
-          flexDirection={isMobileMod && "column"}
+          flexDirection={{base: "column", lg: "row"}}
           spacing={0}
           alignItems="flex-start"
           paddingTop="64px"
           position="relative"
-          gridGap={isMobileMod ? "40px" : "80px"}
+          gridGap={{base: "40px", lg: "80px"}}
         >
           <VStack
-            position={isMobileMod ? "relative" : "sticky"}
-            top={!isMobileMod && "100px"}
-            marginBottom={isMobileMod && "32px"}
+            position={{base: "relative", lg: "sticky"}}
+            top={{base: "0", lg: "100px"}}
+            marginBottom={{base: "32px", lg: "0"}}
             spacing={0}
             maxWidth="300px"
             alignItems="flex-start"
@@ -183,26 +179,26 @@ export default function CaseStudies ({
               overflow="hidden"
               marginBottom="32px"
             >
-              {logo?.img.length > 0 ?
+              {frontmatter?.logo?.img ?
                 <Image
-                  alt={displayTitle}
-                  src={logo.img}
-                  width={logo.width}
-                  height={logo.height}
+                  alt={frontmatter?.displayTitle}
+                  src={frontmatter.logo.img}
+                  width={frontmatter?.logo.width}
+                  height={frontmatter?.logo.height}
                 />
               :
                 <Skeleton width="245px" height="85px"/>
               }
             </Box>
 
-            <BodyText  fontSize="16px" letterSpacing="0.2px" fontWeight="400">Sobre</BodyText>
+            <BodyText fontSize="16px" letterSpacing="0.2px" fontWeight="400">Sobre</BodyText>
             <BodyText paddingBottom="32px" fontSize="16px" letterSpacing="0.2px" color="#6F6F6F">
-              {about}
+              {frontmatter?.about || ""}
             </BodyText>
 
-            <BodyText  fontSize="16px" letterSpacing="0.2px" fontWeight="400">Setor</BodyText>
+            <BodyText fontSize="16px" letterSpacing="0.2px" fontWeight="400">Setor</BodyText>
             <BodyText paddingBottom="48px" fontSize="16px" letterSpacing="0.2px" color="#6F6F6F">
-              {sector}
+              {frontmatter?.sector || ""}
             </BodyText>
 
             <BodyText paddingBottom="8px">
@@ -215,11 +211,17 @@ export default function CaseStudies ({
             </RoundedButton>
           </VStack>
 
-          <VStack flex={1}>
-            <BodyText>  
-              <div className={styles.body} dangerouslySetInnerHTML={{__html: body}} />
-            </BodyText>
-          </VStack>
+          <Box
+            className={styles.body}
+            as="section"
+            flex={1}
+            width="100%"
+            display="flex"
+            flexDirection="column"
+            gap="24px"
+          >
+            <MDXRemote {...serialize} components={mdxComponents} />
+          </Box>
         </HStack>
       </Stack>
     </MainPageTemplate>  
