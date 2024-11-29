@@ -13,6 +13,7 @@ thumbnail: /blog/diretorios-brasileiros-como-essa-base-facilita-sua-analise/imag
 categories: [tutorial]
 medium_slug: >-
   https://medium.com/@basedosdados/diret%C3%B3rios-brasileiros-como-essa-base-facilita-sua-an%C3%A1lise-40dc8ce2ca2
+published: true
 ---
 
 Conheça essa base que funciona como um perfil completo de unidades como município, escola, UF, e mais.

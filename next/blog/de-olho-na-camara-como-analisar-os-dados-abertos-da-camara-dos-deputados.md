@@ -16,6 +16,7 @@ thumbnail: /blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-
 categories: [analise]
 medium_slug: >-
   https://medium.com/@basedosdados/de-olho-na-c%C3%A2mara-como-analisar-os-dados-abertos-da-c%C3%A2mara-dos-deputados-6a36292aa384
+published: true
 ---
 
 Quais partidos possuem a maior mais proposições aprovadas na Câmara? Qual é o maior gasto dentre deputados(as) na utilização da Cota Parlamentar? Essa legislatura está mais ou menos ativa que a anterior?

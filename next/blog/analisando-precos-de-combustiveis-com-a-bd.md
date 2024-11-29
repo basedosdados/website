@@ -16,6 +16,7 @@ thumbnail: /blog/analisando-precos-de-combustiveis-com-a-bd/image_0.jpg
 categories: [analise]
 medium_slug: >-
   https://medium.com/@basedosdados/analisando-pre%C3%A7os-de-combust%C3%ADveis-com-a-bd-9524fadbdfb4
+published: true
 ---
 
 <Image src="/blog/analisando-precos-de-combustiveis-com-a-bd/image_0.jpg"/>

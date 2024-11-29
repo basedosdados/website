@@ -17,6 +17,7 @@ thumbnail: /blog/qual-a-diferenca-de-preco-do-metro-quadrado-entre-os-bairros-de
 categories: [analise]
 medium_slug: >-
   https://medium.com/@basedosdados/qual-a-diferen%C3%A7a-de-pre%C3%A7o-do-metro-quadrado-entre-os-bairros-de-s%C3%A3o-paulo-14cad7e4a89d
+published: true
 ---
 
 Se você já buscou um imóvel para comprar ou alugar, sabe que a localização influencia significativamente no valo. No geral, sabemos que imóveis em regiões centrais costumam custar mais do que os que estão localizados nas regiões periféricas de uma cidade, especialmente em uma grande metrópole como São Paulo. Mas como se dá essa geografia de valores e qual é o metro quadrado mais caro, ou mais barato, em uma das maiores cidades do mundo em termos de população?

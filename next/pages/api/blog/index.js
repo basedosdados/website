@@ -12,26 +12,45 @@ const root = process.cwd();
 const blogpostsDir = path.join(root, "blog");
 
 export async function getAllPosts() {
-  const postsDir = await fs.readdir(blogpostsDir, "utf-8");
-  const posts = await Promise.all(
-    postsDir.map(async (file) => {
-      const fullpath = path.join(blogpostsDir, file);
-      const content = await fs.readFile(fullpath, "utf-8");
-      const { data } = matter(content);
-      return {
-        slug: file.replace(".md", ""),
-        frontmatter: data,
-      };
-    }),
-  );
+  try {
+    const postsDir = await fs.readdir(blogpostsDir, "utf-8");
 
-  posts.sort(
-    (a, b) =>
-      new Date(b.frontmatter.date.created) -
-      new Date(a.frontmatter.date.created),
-  );
+    const posts = (
+      await Promise.all(
+        postsDir.map(async (file) => {
+          const fullpath = path.join(blogpostsDir, file);
+          const content = await fs.readFile(fullpath, "utf-8");
+          const { data } = matter(content);
 
-  return posts;
+          if (data.published) {
+            return {
+              slug: file.replace(".md", ""),
+              frontmatter: data,
+            };
+          }
+          return null;
+        })
+      )
+    ).filter(Boolean); 
+
+    posts.sort((a, b) => {
+      const orderA = a.frontmatter.order ?? Number.MAX_SAFE_INTEGER;
+      const orderB = b.frontmatter.order ?? Number.MAX_SAFE_INTEGER;
+
+      if (orderA !== orderB) {
+        return orderA - orderB;
+      }
+
+      const dateA = new Date(a.frontmatter.date.created);
+      const dateB = new Date(b.frontmatter.date.created);
+      return dateB - dateA;
+    });
+
+    return posts;
+  } catch (error) {
+    console.error("Error reading posts:", error);
+    throw error;
+  }
 }
 
 export async function getPostBySlug(slug) {

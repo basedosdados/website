@@ -11,6 +11,7 @@ thumbnail: /blog/como-comecar-sua-analise-com-dados-publicos/image_0.webp
 categories: [analise]
 medium_slug: >-
   https://medium.com/basedosdados/como-come%C3%A7ar-sua-an%C3%A1lise-com-dados-p%C3%BAblicos-6918e9b888af
+published: true
 ---
 
 ## Introdução

@@ -11,6 +11,7 @@ thumbnail: /blog/analisando-dados-de-vacinacao-contra-covid-19-com-a-bd/image_2.
 categories: [analise]
 medium_slug: >-
   https://medium.com/basedosdados/analisando-dados-de-vacina%C3%A7%C3%A3o-contra-covid-19-com-a-bd-49fe3db8c7f4
+published: true
 ---
 
 ## TL;DR

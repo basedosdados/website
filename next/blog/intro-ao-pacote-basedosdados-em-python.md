@@ -13,6 +13,7 @@ authors:
 thumbnail: /blog/intro-ao-pacote-basedosdados-em-python/image_0.jpg
 categories: [tutorial]
 medium_slug: https://medium.com/@basedosdados/intro-ao-pacote-basedosdados-em-python-4e05439e936d
+published: true
 ---
 
 <Image src="/blog/intro-ao-pacote-basedosdados-em-python/image_0.jpg"/>

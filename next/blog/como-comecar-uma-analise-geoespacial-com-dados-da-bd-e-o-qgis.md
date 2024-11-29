@@ -13,6 +13,7 @@ authors:
 thumbnail: /blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_0.png
 categories: [tutorial]
 medium_slug: https://medium.com/@basedosdados/como-come%C3%A7ar-uma-an%C3%A1lise-geoespacial-com-dados-da-bd-e-o-qgis-4792877950e0
+published: true
 ---
 
 <Image src="/blog/como-comecar-uma-analise-geoespacial-com-dados-da-bd-e-o-qgis/image_0.png" caption="Mapa com quantidade de cabeças de gado por UF no Brasil"/>

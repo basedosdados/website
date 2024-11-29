@@ -20,6 +20,7 @@ thumbnail: /blog/perigo-no-mercado-de-trabalho/image_1.webp
 categories: [analise]
 medium_slug: >-
   https://medium.com/basedosdados/perigo-no-mercado-de-trabalho-6b50c825bee1
+published: true
 ---
 
 ## TL;DR

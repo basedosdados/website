@@ -20,6 +20,7 @@ authors:
     social: https://www.linkedin.com/in/jos%C3%A9-f%C3%A9lix-517b05210/
 medium_slug: >-
   https://medium.com/@basedosdados/como-a-disparidade-salarial-por-g%C3%AAnero-e-ra%C3%A7a-evoluiu-ao-longo-dos-anos-949ea4d121a7
+published: true
 ---
 
 Não é novidade que a desigualdade de gênero e raça reflete na empregabilidade e na remuneração dentro do mercado de trabalho no Brasil. Apesar da legislação que proíbe a disparidade salarial entre indivíduos desempenhando a mesma função, a realidade é que tais disparidades persistem. Recentemente, o Governo Federal tomou medidas para enfrentar esse desafio ao publicar uma portaria que regulamenta a Lei nº 14.611/2023. Essa lei cria mecanismos para equalizar salários entre homens e mulheres ocupando o mesmo cargo em empresas com pelo menos 100 funcionários.

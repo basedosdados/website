@@ -11,6 +11,7 @@ thumbnail: /blog/analisando-a-frota-brasileira-com-a-bd/image_0.webp
 categories: [analise]
 medium_slug: >-
   https://medium.com/basedosdados/analisando-a-frota-brasileira-com-a-bd-f073c0c15ef
+published: true
 ---
 
 <Image src="/blog/analisando-a-frota-brasileira-com-a-bd/image_0.webp" caption="Fonte: Rawpixel"/>

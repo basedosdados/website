@@ -15,6 +15,7 @@ authors:
 thumbnail: /blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_0.png
 categories: [analise]
 medium_slug: https://medium.com/@basedosdados/como-explorar-e-an%C3%A1lisar-os-dados-de-cr%C3%A9dito-rural-no-brasil-53cf6c478781
+published: true
 ---
 
 ## TL;DR

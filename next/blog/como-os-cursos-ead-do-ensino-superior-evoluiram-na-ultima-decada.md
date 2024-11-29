@@ -11,6 +11,7 @@ thumbnail: /blog/como-os-cursos-ead-do-ensino-superior-evoluiram-na-ultima-decad
 categories: [analise]
 medium_slug: >-
   https://medium.com/@basedosdados/como-os-cursos-ead-do-ensino-superior-evolu%C3%ADram-na-%C3%BAltima-d%C3%A9cada-35469e167f96
+published: true
 ---
 
 > Análise e entrevista publicadas na BDletter em Novembro de 2023. [Assine gratuitamente](https://info.basedosdados.org/newsletter) para receber mensalmente em seu email

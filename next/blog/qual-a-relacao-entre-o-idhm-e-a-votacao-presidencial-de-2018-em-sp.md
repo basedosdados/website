@@ -14,6 +14,7 @@ thumbnail: /blog/qual-a-relacao-entre-o-idhm-e-a-votacao-presidencial-de-2018-em
 categories: [analise]
 medium_slug: >-
   https://medium.com/basedosdados/qual-a-rela%C3%A7%C3%A3o-entre-o-idhm-e-a-vota%C3%A7%C3%A3o-presidencial-de-2018-em-sp-aa9f1305586f
+published: true
 ---
 
 ## TL;DR

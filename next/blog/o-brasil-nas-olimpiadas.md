@@ -10,6 +10,7 @@ authors:
 thumbnail: /blog/o-brasil-nas-olimpiadas/image_0.jpg
 categories: [analise]
 medium_slug: https://medium.com/@basedosdados/o-brasil-nas-olimp%C3%ADadas-2a3f9960cc69
+published: true
 ---
 
 ## TL;DR
