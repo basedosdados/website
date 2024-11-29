@@ -1,8 +1,8 @@
-name: Deploy (Base dos Dados Development)
+name: Deploy (Development)
 
 on:
   workflow_run:
-    workflows: ["Release Docker Image (Base dos Dados Development)"]
+    workflows: ["Release Docker Image (Development)"]
     types:
       - completed
   workflow_dispatch:
@@ -13,7 +13,7 @@ env:
 jobs:
   deploy-development:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}  || ${{ github.event_name == 'workflow_dispatch' }}
-    name: Deploy (Base dos Dados Development)
+    name: Deploy (Development)
     runs-on: ubuntu-latest
     environment:
       name: development
