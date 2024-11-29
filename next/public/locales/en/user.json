@@ -229,12 +229,41 @@
         "allDBFreeResources": "All DB Free resources, plus:",
         "allDBProResources": "All DB Pro resources, plus:",
         "active": "Active",
-        "DBFree": "DB Free",
-        "DBFreeSubtitle": "For you to discover the potential of the data platform",
-        "DBPro": "DB Pro",
-        "DBProSubtitle": "For you to have access to the most up-to-date data",
-        "DBEnterprise": "DB Enterprise",
-        "DBEnterpriseSubtitle": "For your company to save time and gain quality in decisions",
+        "plans": {
+            "free": {
+                "title": "DB Free",
+                "subtitle": "For you to discover the potential of the data platform",
+                "features": [
+                    "Processed tables",
+                    "Integrated data",
+                    "Updated low-frequency data",
+                    "Cloud access",
+                    "Access via SQL, Python, R, and Stata",
+                    "Integration with BI tools",
+                    "Direct download up to 100 MB"
+                ]
+            },
+            "pro": {
+                "title": "DB Pro",
+                "subtitle": "For you to have access to the most up-to-date data",
+                "features": [
+                    "Dozens of updated high-frequency datasets",
+                    "Company reference table with updated information",
+                    "Direct download up to 1GB (80% of the platform's tables)"
+                ]
+            },
+            "enterprise": {
+                "title": "DB Enterprise",
+                "subtitle": "For your company to save time and gain quality in decisions",
+                "features": [
+                    "Access for multiple accounts",
+                    "Data scraping on demand",
+                    "Access to enriched data via APIs",
+                    "Data lake integrations",
+                    "Priority support"
+                ]
+            }
+        },
         "perMonth": "/month",
         "annualBillingMessage": "{{price}} charged once a year",
         "includes": "Includes",
@@ -285,8 +314,6 @@
         "account": "Account",
         "changePassword": "Password",
         "plansAndPayment": "Plans and payment",
-        "accessFor10Accounts": "Access for 10 users",
-        "prioritySupport": "Priority support via email and Discord",
         "viewAllAndComparePlans": "View all and compare plans",
         "confirmEmailAddress": "Confirm your email address",
         "checkInboxAndFollowInstructions": "Check your inbox and follow the instructions sent in the email to complete the change.",

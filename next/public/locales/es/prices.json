@@ -42,10 +42,15 @@
       "enterprise": {
         "title": "BD Empresas",
         "subtitle": "Para que tu empresa gane tiempo y calidad en las decisiones",
+        "customPrice": "Precio personalizado",
         "features": [
-          "Acceso para 10 cuentas",
-          "Soporte prioritario por correo electrónico y Discord"
-        ]
+          "Acceso para múltiplas cuentas",
+          "Raspado de datos a demanda",
+          "Acceso a datos enriquecidos a través de APIs",
+          "Integraciones de data lakes",
+          "Soporte prioritario"
+        ],
+        "contactUs": "Contactar"
       }
     },
     "tooltips": {
