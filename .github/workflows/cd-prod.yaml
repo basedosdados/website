@@ -84,6 +84,27 @@ jobs:
                 - hosts:
                     - "basedosdados.org"
                   secretName: "basedosdados-org-tls"
+              internationalDomains:
+                - language: "es"
+                  host: "basedelosdatos.org"
+                  annotations:
+                    cert-manager.io/issuer: "letsencrypt-production"
+                    kubernetes.io/ingress.class: nginx
+                    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+                  tls:
+                    - hosts:
+                        - "basedelosdatos.org"
+                      secretName: "basedelosdatos-org-tls"
+                - language: "en"
+                  host: "data-basis.org"
+                  annotations:
+                    cert-manager.io/issuer: "letsencrypt-production"
+                    kubernetes.io/ingress.class: nginx
+                    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+                  tls:
+                    - hosts:
+                        - "data-basis.org"
+                      secretName: "data-basis-org-tls"
           EOF
 
       - name: Deploy using Helm
