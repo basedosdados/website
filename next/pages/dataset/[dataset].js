@@ -49,14 +49,14 @@ export async function getStaticProps(context) {
     console.error("Fetch error:", error.message);
   }
 
-  const infoId = "de-olho-na-camara-conheca-os-dados-que-te-ajudam-a-monitorar-a-camara-dos-deputados"
-  const content = await getPostBySlug(infoId);
-  const serialize = await serializePost(content);
+  // const infoIdMarkdown = ""
+  // const content = await getPostBySlug(infoIdMarkdown);
+  // const serialize = await serializePost(content);
 
   const props = {
     ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices'])),
-    ...serialize,
-    infoId,
+    // ...serialize,
+    // infoIdMarkdown,
     dataset,
   };
   
@@ -276,14 +276,7 @@ export default function DatasetPage ({ dataset, mdxSource, headings, infoId }) {
               {t('data')}
             </GreenTab>
 
-            <GreenTab>
-              <DataBaseIcon
-                alt="dados"
-                width="18px"
-                height="18px"
-                marginRight="6px"
-              />
-              Informações
+            <GreenTab display="none">
             </GreenTab>
 
             <GreenTab display="none">
@@ -305,7 +298,7 @@ export default function DatasetPage ({ dataset, mdxSource, headings, infoId }) {
             </TabPanel>
 
             <TabPanel padding="0px">
-              <DatasetInfoBlog mdxSource={mdxSource} headings={headings} slug={infoId}/>
+              {/* <DatasetInfoBlog mdxSource={mdxSource} headings={headings} slug={infoId}/> */}
             </TabPanel>
 
             <TabPanel padding="0px">

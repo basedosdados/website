@@ -4,10 +4,10 @@ import {
   HStack,
   Box,
   Skeleton,
+  Text
 } from "@chakra-ui/react";
 import Image from 'next/image';
 import { MDXRemote } from "next-mdx-remote";
-import { useState, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useTranslation } from 'next-i18next';
@@ -24,11 +24,9 @@ import {
   mdxComponents
 } from "../../components/organisms/Blog/Slug"
 
+import ChevronIcon from "../../public/img/icons/chevronIcon";
+import Button from "../../components/atoms/Button";
 import Link from "../../components/atoms/Link";
-import SectionText from "../../components/atoms/SectionText";
-import Display from "../../components/atoms/Display";
-import BodyText from "../../components/atoms/BodyText";
-import RoundedButton from "../../components/atoms/RoundedButton";
 import styles from "../../styles/caseStudies.module.css";
 
 export async function getStaticProps({ params, locale }) {
@@ -99,31 +97,54 @@ export default function CaseStudies ({ serialize }) {
       >
         <Link
           display={{base: "none", lg: "flex"}}
+          alignItems="center"
+          gap="8px"
           marginBottom="48px"
-          color="#42B0FF"
+          color="#0068C5"
+          fill="#0068C5"
+          _hover={{
+            color: "#0057A4",
+            fill: "#0057A4"
+          }}
           fontWeight="500"
-          fontFamily="ubuntu"
+          fontFamily="Roboto"
           fontSize="16px"
           width="fit-content"
-          href={"/case-studies"}
+          href={"/services"}
         >
+          <ChevronIcon
+            alt=""
+            width="16px"
+            transform={"rotate(180deg)"}
+          />
           {t('backLink')}
         </Link>
 
-        <Display
+        <Text
+          as="h1"
           display={{base: "flex", lg: "none"}}
           margin="0 0 48px !important"
-        >{frontmatter?.title || ""}</Display>
+          fontFamily="Roboto"
+          fontSize="28px"
+          lineHeight="36px"
+          fontWeight="500"
+          color="#252A32"
+        >{frontmatter?.title || ""}</Text>
 
         <VStack position="relative" spacing={0} gridGap="16px">
-          <Display
+          <Text
+            as="h1"
             display={{base: "none", lg: "flex"}}
             position="absolute"
             paddingTop={{base: "80px", lg: "0"}}
+            fontFamily="Roboto"
+            fontSize="36px"
+            lineHeight="48px"
+            fontWeight="500"
             margin="40px 48px"
             color="#FFF"
             zIndex="10"
-          >{frontmatter?.title || ""}</Display>
+          >{frontmatter?.title || ""}</Text>
 
           <Box
             position="relative"
@@ -146,13 +167,16 @@ export default function CaseStudies ({ serialize }) {
           </Box>
 
           {frontmatter.imgDescription && 
-            <SectionText
+            <Text
+              as="h3"
               width="100%"
+              fontFamily="Roboto"
               textAlign="end"
-              color="#6F6F6F"
+              fontSize="14px"
+              color="#71757A"
             >
               {frontmatter.imgDescription}
-            </SectionText>
+            </Text>
           }
         </VStack>
 
@@ -191,24 +215,60 @@ export default function CaseStudies ({ serialize }) {
               }
             </Box>
 
-            <BodyText fontSize="16px" letterSpacing="0.2px" fontWeight="400">Sobre</BodyText>
-            <BodyText paddingBottom="32px" fontSize="16px" letterSpacing="0.2px" color="#6F6F6F">
+            <Text
+              fontFamily="Roboto"
+              fontSize="16px"
+              color="#252A32"
+              fontWeight="500"
+            >
+              Sobre
+            </Text>
+
+            <Text
+              as="h2"
+              fontFamily="Roboto"
+              paddingBottom="32px"
+              fontSize="16px"
+              color="#71757A"
+            >
               {frontmatter?.about || ""}
-            </BodyText>
+            </Text>
 
-            <BodyText fontSize="16px" letterSpacing="0.2px" fontWeight="400">Setor</BodyText>
-            <BodyText paddingBottom="48px" fontSize="16px" letterSpacing="0.2px" color="#6F6F6F">
+            <Text
+              fontFamily="Roboto"
+              fontSize="16px"
+              color="#252A32"
+              fontWeight="500"
+            >
+              Setor
+            </Text>
+
+            <Text
+              fontFamily="Roboto"
+              paddingBottom="32px"
+              fontSize="16px"
+              color="#71757A"
+            >
               {frontmatter?.sector || ""}
-            </BodyText>
+            </Text>
 
-            <BodyText paddingBottom="8px">
+            <Text
+              fontFamily="Roboto"
+              paddingBottom="8px"
+            >
               {t('contactText')}
-            </BodyText>
-            <RoundedButton
+            </Text>
+
+            <Button
+              color="#FFFFFF"
+              backgroundColor="#0D99FC"
+              _hover={{
+                backgroundColor: "#0B89E2"
+              }}
               onClick={() => router.push('/contact')}
             >
               {t('contactButton')}
-            </RoundedButton>
+            </Button>
           </VStack>
 
           <Box

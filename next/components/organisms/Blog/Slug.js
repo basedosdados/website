@@ -243,11 +243,11 @@ function FigCaption(props) {
   return props.children ? (
     <Text
       as="figcaption"
-      fontFamily={"Roboto"}
-      fontSize={"sm"}
-      color={"gray"}
-      textAlign={"center"}
-      marginY="0.5rem"
+      fontFamily="Roboto"
+      fontSize="14px"
+      color="#71757A"
+      textAlign="center"
+      marginY="8px"
     >
       {props.children}
     </Text>
@@ -486,9 +486,9 @@ export const mdxComponents = {
   ul: (props) => <UnorderedList {...props} />,
   li: (props) => (
     <ListItem
-      marginY={"2"}
-      color="rgb(55, 65, 81)"
-      fontFamily={"Roboto"}
+      marginY="8px"
+      color="#252A32"
+      fontFamily="Roboto"
       {...props}
     />
   ),
@@ -538,35 +538,38 @@ export const mdxComponents = {
     return (
       <Box
         as="blockquote"
-        padding={"2rem 2.5rem"}
-        borderLeft={"4px solid #7ec876"}
-        marginY={"3rem"}
-        position={"relative"}
+        padding="16px 20px"
+        borderLeft="4px solid #2B8C4D"
+        marginY="24px"
+        position="relative"
       >
         <Text
           as="span"
-          fontSize={"4rem"}
-          pointerEvents={"none"}
-          userSelect={"none"}
-          position={"absolute"}
-          lineHeight={"1"}
-          top="1rem"
+          position="absolute"
+          top="0"
+          pointerEvents="none"
+          userSelect="none"
+          fontFamily="Roboto"
+          fontSize="65px"
         >
           “
         </Text>
         <Text
           as="p"
-          fontFamily={"Roboto"}
-          fontSize={"lg"}
-          marginTop={"1.5rem"}
+          fontFamily="Roboto"
+          fontSize="16px"
+          fontWeight="400"
+          lineHeight="24px"
+          color="#252A32"
+          marginTop="35px"
           {...body.props}
         />
         {figcaption ? (
           <Text
             as="p"
-            marginTop={"1rem"}
-            fontFamily={"Roboto"}
-            color="gray"
+            marginTop="16px"
+            fontFamily="Roboto"
+            color="#71757A"
             {...figcaption.props}
           />
         ) : null}
