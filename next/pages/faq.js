@@ -11,12 +11,15 @@ import Head from "next/head";
 import FuzzySearch from 'fuzzy-search';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import ReactMarkdown from "react-markdown";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
-import { QuestionFAQ } from "../content/FAQ";
 import { MainPageTemplate } from "../components/templates/main";
-import { withPages } from "../hooks/pages.hook";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
+
+import {
+  getAllFAQs,
+} from "./api/faqs";
 
 import { DebouncedControlledInput } from "../components/atoms/ControlledInput";
 import Display from "../components/atoms/Display";
@@ -26,13 +29,13 @@ import CrossIcon from "../public/img/icons/crossIcon";
 import SearchIcon from "../public/img/icons/searchIcon";
 import styles from "../styles/faq.module.css";
 
-import 'highlight.js/styles/obsidian.css';
-
 export async function getStaticProps({ locale }) {
+  const faqs = await getAllFAQs()
+
   return {
     props: {
       ...(await serverSideTranslations(locale, ['common', 'menu', 'faq', 'user'])),
-      ...(await withPages()),
+      faqs
     },
     revalidate: 30
   }
@@ -55,11 +58,11 @@ const QuestionsBox = ({ question, answer, id, active }) => {
   },[active])
 
   useEffect(() => {
-    if(router.asPath === `/faq#${id}`) setIsActive(true)
+    if(router.asPath === `/faq#${id}`) return setIsActive(true)
   },[id])
 
   useEffect(() => {
-    if(router.asPath === `/faq#${id}`) scrollFocus(id)
+    if(router.asPath === `/faq#${id}`) return scrollFocus(id)
   },[isActive])
 
   const OpenCloseQuestion = () => {
@@ -97,23 +100,29 @@ const QuestionsBox = ({ question, answer, id, active }) => {
         />
       </Box>
       <Collapse in={isActive} animateOpacity>
-        <BodyText
+        <Box
           id={id}
           as="div"
           height={isActive ? "100%" : "0"}
           marginBottom={isActive && "32px !important"}
           overflow="hidden"
           transition="all 1s ease"
+          fontFamily="ubuntu"
+          color="#252A32"
+          letterSpacing="0.1px"
+          fontSize="18px"
+          lineHeight="28px"
+          fontWeight="300"
         >
-          {answer()}
-        </BodyText>
+          <ReactMarkdown>{answer}</ReactMarkdown>
+        </Box>
       </Collapse>
       <Divider borderColor="#DEDFE0"/>
     </Stack>
   )
 }
 
-export default function FAQ({}) {
+export default function FAQ({ faqs }) {
   const { t } = useTranslation('faq');
   const [allQuestions, setAllQuestions] = useState([])
   const [questions, setQuestions] = useState([])
@@ -122,9 +131,9 @@ export default function FAQ({}) {
   const [closeQuestion, setCloseQuestion] = useState(false)
 
   useEffect(() => {
-    setAllQuestions(QuestionFAQ)
-    setQuestions(QuestionFAQ)
-  },[])
+    setAllQuestions(faqs)
+    setQuestions(faqs)
+  },[faqs])
 
   useEffect(() => {
     if(categorySelected) return setQuestions(filterByCategory(categorySelected))
@@ -135,12 +144,15 @@ export default function FAQ({}) {
   )
 
   useEffect(() => {
-    if(searchFilter.trim() === "") return setSearchFilter("")
-
-    const result = searcher.search(searchFilter.trim())
-    setQuestions(result)
-    setCloseQuestion(!closeQuestion)
-    window.scrollTo({top: 1})
+    if(searchFilter.trim() === "") {
+      setSearchFilter("")
+      setQuestions(faqs)
+    } else {
+      const result = searcher.search(searchFilter.trim())
+      setQuestions(result)
+      setCloseQuestion(!closeQuestion)
+      window.scrollTo({top: 1})
+    }
   },[searchFilter])
 
   const filterByCategory = (category) => {
@@ -295,7 +307,7 @@ export default function FAQ({}) {
                 <QuestionsBox
                   key={i}
                   question={elm.question}
-                  answer={elm.answer}
+                  answer={elm.content}
                   id={elm.id && elm.id}
                   active={closeQuestion}
                 />

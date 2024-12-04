@@ -10,6 +10,7 @@ authors:
 categories: [analise]
 medium_slug: >-
   https://medium.com/basedosdados/relembrando-o-datathon-bd-2021-ee46fe00ccc0
+published: true
 ---
 
 A divulgação de dados públicos mostra em números a desigualdade em diferentes aspectos da sociedade e é a partir disso que podemos começar a elaborar soluções e iniciativas para um desenvolvimento mais democrático.

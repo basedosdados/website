@@ -10,6 +10,7 @@ authors:
     social: https://github.com/mavalentim
 categories: [tutorial]
 medium_slug: https://medium.com/@basedosdados/como-usar-a-bd-com-r-427aded95448
+published: true
 ---
 
 <Image src="/blog/como-acessar-dados-publicos-em-r/image_0.png"/>

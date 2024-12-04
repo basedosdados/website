@@ -11,6 +11,7 @@ thumbnail: /blog/analise-da-atividade-economica-do-estado-do-rio-de-janeiro-e-da
 categories: [analise]
 medium_slug: >-
   https://medium.com/basedosdados/an%C3%A1lise-da-atividade-econ%C3%B4mica-do-estado-do-rio-de-janeiro-e-da-influ%C3%AAncia-da-capital-95ed6b5910b5
+published: true
 ---
 
 ## TL;DR

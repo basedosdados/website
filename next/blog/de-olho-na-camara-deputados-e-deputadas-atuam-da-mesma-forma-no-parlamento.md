@@ -17,6 +17,7 @@ thumbnail: /blog/de-olho-na-camara-deputados-e-deputadas-atuam-da-mesma-forma-no
 categories: [analise]
 medium_slug: >-
   https://medium.com/@basedosdados/deputados-e-deputadas-atuam-da-mesma-forma-no-parlamento-90786b721012
+published: true
 ---
 
 Quando falamos sobre a participação feminina na Legislatura atual da Câmara dos Deputados é importante ter em mente ao menos duas coisas: ela é muito baixa, mas ainda é a melhor da série histórica da Casa. Houve um aumento de 2,7% entre as eleições de 2018 e 2022, que passou de 15% do total da composição para 17,7%, por exemplo.

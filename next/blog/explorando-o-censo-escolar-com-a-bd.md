@@ -12,6 +12,7 @@ authors:
 thumbnail: /blog/explorando-o-censo-escolar-com-a-bd/image_0.jpg
 categories: [analise]
 medium_slug: https://medium.com/@basedosdados/explorando-o-censo-escolar-com-a-bd-6577d7251ea1
+published: true
 ---
 
 <Image src="/blog/explorando-o-censo-escolar-com-a-bd/image_0.jpg"/>

@@ -14,6 +14,7 @@ thumbnail: /blog/analisando-dados-textuais-da-cpi-da-pandemia-com-a-bd/image_0.w
 categories: [analise]
 medium_slug: >-
   https://medium.com/basedosdados/analisando-dados-textuais-da-cpi-da-pandemia-com-a-bd-d178b344a6eb
+published: true
 ---
 
 Em 2021, o Brasil acompanhou as discussões a respeito da CPI da Pandemia. Os senadores se reuniram para discutir as ações do Governo Federal no combate à pandemia. Na ocasião, depoentes convocados e diversos especialistas foram ouvidos durante três meses. A cada dia, horas de discussões debateram sobre as ações do governo no combate à pandemia, a crise do oxigêncio em Manaus, o atraso nos contratos com a Pfizer, o caso dos contratos com a Davati, entre outros episódios que foram apresentados aos brasileiros.

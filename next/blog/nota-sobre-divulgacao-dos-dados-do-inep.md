@@ -10,6 +10,7 @@ authors:
     role: Equipe Base dos Dados
 categories: []
 medum_slug: https://medium.com/@basedosdados/nota-sobre-divulga%C3%A7%C3%A3o-dos-dados-do-inep-9168291dbca0
+published: true
 ---
 
 Neste último sábado (19), o Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep) tirou do ar, sem aviso ou consulta prévia, microdados históricos do Censo Escolar da Educação Básica e do Enem, além de publicar os dados da edição de 2021 com um volume consideravelmente reduzido de informações. Enquanto os dados da edição de 2020 contavam com quase 17 GB, o arquivo referente à edição de 2021 conta com apenas 164 Mb.

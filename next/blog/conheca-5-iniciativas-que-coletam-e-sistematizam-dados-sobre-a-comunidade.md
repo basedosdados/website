@@ -13,6 +13,7 @@ thumbnail: /blog/conheca-5-iniciativas-que-coletam-e-sistematizam-dados-sobre-a-
 categories: []
 medium_slug: >-
   https://medium.com/@basedosdados/conhe%C3%A7a-5-iniciativas-que-coletam-e-sistematizam-dados-sobre-a-comunidade-08b71616cb76
+published: true
 ---
 
 <Image src="/blog/conheca-5-iniciativas-que-coletam-e-sistematizam-dados-sobre-a-comunidade/image_0.jpg" caption="Photo by [Alexander Grey](https://unsplash.com/@sharonmccutcheon) on [Unsplash](https://unsplash.com)"/>
