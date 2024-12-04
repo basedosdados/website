@@ -16,17 +16,11 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { capitalize } from 'lodash';
 
-import {
-  getPostBySlug,
-  serializePost
-} from "../../pages/api/blog";
-
 import BigTitle from "../../components/atoms/BigTitle";
 import GreenTab from "../../components/atoms/GreenTab";
 import Link from '../../components/atoms/Link';
 import ReadMore from "../../components/atoms/ReadMore";
 import DatasetResource from "../../components/organisms/DatasetResource";
-import DatasetInfoBlog from "../../components/organisms/DatasetInfoBlog";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import FourOFour from "../../components/templates/404";
@@ -49,14 +43,8 @@ export async function getStaticProps(context) {
     console.error("Fetch error:", error.message);
   }
 
-  // const infoIdMarkdown = ""
-  // const content = await getPostBySlug(infoIdMarkdown);
-  // const serialize = await serializePost(content);
-
   const props = {
     ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices'])),
-    // ...serialize,
-    // infoIdMarkdown,
     dataset,
   };
   
@@ -298,7 +286,6 @@ export default function DatasetPage ({ dataset, mdxSource, headings, infoId }) {
             </TabPanel>
 
             <TabPanel padding="0px">
-              {/* <DatasetInfoBlog mdxSource={mdxSource} headings={headings} slug={infoId}/> */}
             </TabPanel>
 
             <TabPanel padding="0px">
