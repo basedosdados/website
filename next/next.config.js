@@ -25,7 +25,7 @@ module.exports = {
         headers: [
           {
             key: 'Access-Control-Allow-Origin',
-            value: 'https://basedosdados.org, https://data-basis.org, https://basedelosdatos.org, http://0.0.0.0:3000, http://0.0.0.0:3001, http://0.0.0.0:3002',
+            value: 'https://basedosdados.org, https://data-basis.org, https://basedelosdatos.org, http://127.0.0.1, http://127.0.0.2, http://127.0.0.3',
           },
         ],
       },

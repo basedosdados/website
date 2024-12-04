@@ -1068,7 +1068,6 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('tutorials')]: [
         {name: [t('documentation')], href: "https://basedosdados.github.io/sdk"},
         {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
-        {name: [t('blog')], href: "https://medium.com/basedosdados"}
       ],
       Blog: "/blog",
       [t('institutional')]: [
@@ -1094,16 +1093,13 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       ],
       [t('prices')]: "/prices",
       [t('tutorials')]: [
-        {name: [t('documentation')], href: "https://basedosdados.github.io/mais/en"},
+        {name: [t('documentation')], href: "https://basedosdados.github.io/sdk/en"},
         {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
-        {name: [t('blog')], href: "https://medium.com/basedosdados"}
       ],
       Blog: "/blog",
       [t('institutional')]: [
         {name: [t('about_us')], href: "/about-us"},
         {name: [t('transparency')], href: "/transparency"},
-        {name: [t('newsletter')], href: "https://info.basedosdados.org/en/newsletter"},
-        {name: [t('jobs')], href: "https://info.basedosdados.org/carreiras"},
         {name: [t('faq')], href: "/faq"},
       ],
       [t('contact')]: "/contact",
@@ -1115,23 +1111,20 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('data')]: `/search`,
       [t('solutions')]: [
         {
-          icon: <DBLogoProImage widthImage="54px"/>,
+          icon: <BDLogoProImage widthImage="54px"/>,
           name: [t('exclusive_data')],
           href: "https://info.basedosdados.org/es/bd-pro"
         }
       ],
       [t('prices')]: "/prices",
       [t('tutorials')]: [
-        {name: [t('documentation')], href: "https://basedosdados.github.io/mais/es"},
+        {name: [t('documentation')], href: "https://basedosdados.github.io/sdk/es"},
         {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
-        {name: [t('blog')], href: "https://medium.com/basedosdados"}
       ],
       Blog: "/blog",
       [t('institutional')]: [
         {name: [t('about_us')], href: "/about-us"},
         {name: [t('transparency')], href: "/transparency"},
-        {name: [t('newsletter')], href: "https://info.basedosdados.org/es/newsletter"},
-        {name: [t('jobs')], href: "https://info.basedosdados.org/carreiras"},
         {name: [t('faq')], href: "/faq"},
       ],
       [t('contact')]: "/contact",
