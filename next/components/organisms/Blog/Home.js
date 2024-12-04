@@ -10,13 +10,13 @@ import {
   GridItem,
   Divider,
 } from "@chakra-ui/react";
-
 import { useEffect, useState } from "react";
 import { useTranslation } from 'next-i18next';
 import { categories } from "../../../pages/api/blog/categories";
 import Link from "../../atoms/Link";
 
 import FilterIcon from "../../../public/img/icons/filterIcon";
+import ChevronIcon from "../../../public/img/icons/chevronIcon";
 
 export const dateToLocatePt = (date) =>
   new Date(date).toLocaleString("pt-BR", {
@@ -348,23 +348,49 @@ export function BlogGrid({ posts, category }) {
                 borderWidth="2px"
                 margin="80px 0 24px"
               />
-
-              <Text
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="20px"
-                lineHeight="30px"
-                color="#252A32"
+              <Stack
+                spacing={0}
+                flexDirection="row"
+                justifyContent="space-between"
                 marginBottom="40px"
               >
-                {categories?.[key] || t(key)}
-              </Text>
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="20px"
+                  lineHeight="30px"
+                  color="#252A32"
+                >
+                  {categories?.[key] || t(key)}
+                </Text>
+
+                <Link
+                  display="flex"
+                  flexDirection="row"
+                  href={`blog?category=${key}`}
+                  gap="8px"
+                  cursor="pointer"
+                  textAlign="center"
+                  fontWeight="400"
+                  fontSize="16px"
+                  lineHeight="24px"
+                  color="#0068C5"
+                  fill="#0068C5"
+                  _hover={{
+                    color: "#0057A4",
+                    fill: "#0068C5"
+                  }}
+                >
+                  Ver todos
+                  <ChevronIcon
+                    alt=""
+                    width="16px"
+                  />
+                </Link>
+              </Stack>
 
               <Grid gap="40px" templateColumns={{ md: "1fr 1fr", xl: "1fr 1fr 1fr" }}>
-                {value.map((post, index) => {
-                  const itemsInLastRow = (value.length - 1) % 3 || 3;
-                  const isInLastRow = index >= value.length - itemsInLastRow;
-
+                {value.slice(0, 7).map((post, index) => {
                   if (index === 0) {
                     return (
                       <GridItem
@@ -381,7 +407,7 @@ export function BlogGrid({ posts, category }) {
                         as="article"
                         key={index}
                         boxSizing="content-box"
-                        borderBottom={isInLastRow ? "none" : "1px solid #DEDFE0"}
+                        borderBottom="1px solid #DEDFE0"
                         paddingBottom="24px"
                       >
                         <MiniBlogCard key={post.slug} {...post} />
@@ -408,9 +434,6 @@ export function BlogGrid({ posts, category }) {
 
           <Grid gap="40px" templateColumns={{ md: "1fr 1fr", xl: "1fr 1fr 1fr" }}>
             {posts.map((post, index) => {
-              const itemsInLastRow = (posts.length - 1) % 3 || 3;
-              const isInLastRow = index >= posts.length - itemsInLastRow;
-
               if (index === 0) {
                 return (
                   <GridItem
@@ -427,7 +450,7 @@ export function BlogGrid({ posts, category }) {
                     as="article"
                     key={index}
                     boxSizing="content-box"
-                    borderBottom={isInLastRow ? "none" : "1px solid #DEDFE0"}
+                    borderBottom="1px solid #DEDFE0"
                     paddingBottom="24px"
                   >
                     <MiniBlogCard key={post.slug} {...post} />

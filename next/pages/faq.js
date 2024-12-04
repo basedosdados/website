@@ -30,7 +30,7 @@ import SearchIcon from "../public/img/icons/searchIcon";
 import styles from "../styles/faq.module.css";
 
 export async function getStaticProps({ locale }) {
-  const faqs = await getAllFAQs()
+  const faqs = await getAllFAQs(locale)
 
   return {
     props: {

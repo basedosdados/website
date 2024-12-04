@@ -1,5 +1,6 @@
 import {
   Box,
+  Divider,
   Text
 } from "@chakra-ui/react";
 import Head from "next/head";
@@ -13,7 +14,6 @@ import Link from "../../components/atoms/Link";
 import {
   Header,
   Toc,
-  Contribute,
   mdxComponents,
 } from "../../components/organisms/Blog/Slug";
 
@@ -143,6 +143,12 @@ export default function Post({ slug, mdxSource, headings }) {
               display="flex"
               flexDirection="column"
             >
+              <Divider
+                borderWidth="0px"
+                borderTop="3px solid #252A32"
+                opacity="1"
+                margin="24px 0"
+              />
               <Text
                 fontFamily="Roboto"
                 fontSize="16px"
@@ -180,15 +186,6 @@ export default function Post({ slug, mdxSource, headings }) {
               {headings.length > 0 ? (
                 <Toc headings={headings} />
               ) : null}
-            </Box>
-            <Box
-              display={{ base: "none", lg: "flex"}}
-              borderTop="4px solid #DEDFE0"
-              padding="24px 0"
-              marginTop="10px"
-              borderBottom="4px solid #DEDFE0"
-            >
-              <Contribute slug={slug} />
             </Box>
           </Box>
         </Box>

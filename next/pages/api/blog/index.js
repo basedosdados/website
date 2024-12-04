@@ -34,8 +34,8 @@ export async function getAllPosts() {
     ).filter(Boolean); 
 
     posts.sort((a, b) => {
-      const orderA = a.frontmatter.order ?? Number.MAX_SAFE_INTEGER;
-      const orderB = b.frontmatter.order ?? Number.MAX_SAFE_INTEGER;
+      const orderA = a.frontmatter?.order ?? Number.MAX_SAFE_INTEGER;
+      const orderB = b.frontmatter?.order ?? Number.MAX_SAFE_INTEGER;
 
       if (orderA !== orderB) {
         return orderA - orderB;
