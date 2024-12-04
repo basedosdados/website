@@ -7,7 +7,7 @@ import { BlogGrid } from "../../components/organisms/Blog/Home";
 import { getAllPosts } from "../api/blog";
 
 export async function getStaticProps({ locale }) {
-  const posts = await getAllPosts();
+  const posts = await getAllPosts(locale)
 
   return { 
     props: {

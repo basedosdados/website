@@ -39,7 +39,7 @@ hljs.registerLanguage("md", markdownHighlight);
 export async function getStaticProps({ params, locale }) {
   const { slug } = params;
 
-  const content = await getPostBySlug(slug);
+  const content = await getPostBySlug(slug, locale);
   const serialize = await serializePost(content);
 
   return {

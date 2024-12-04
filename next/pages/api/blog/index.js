@@ -9,9 +9,9 @@ import { visit } from "unist-util-visit";
 import { toString } from "hast-util-to-string";
 
 const root = process.cwd();
-const blogpostsDir = path.join(root, "blog");
 
-export async function getAllPosts() {
+export async function getAllPosts(locale = 'pt') {
+  const blogpostsDir = path.join(root, `blog/${locale}`)
   try {
     const postsDir = await fs.readdir(blogpostsDir, "utf-8");
 
@@ -53,7 +53,8 @@ export async function getAllPosts() {
   }
 }
 
-export async function getPostBySlug(slug) {
+export async function getPostBySlug(slug, locale) {
+  const blogpostsDir = path.join(root, `blog/${locale}`)
   const filepath = path.join(blogpostsDir, `${slug}.md`);
   return await fs.readFile(filepath, "utf-8");
 }
