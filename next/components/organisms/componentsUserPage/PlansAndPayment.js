@@ -448,7 +448,7 @@ export default function PlansAndPayment ({ userData }) {
           maxWidth:"1008px",
           margin: "24px"
         }}
-        isCentered={{base: false, lg: true}}
+        isCentered={false}
       >
         <Stack spacing={0} marginBottom="40px">
           <Text
@@ -788,7 +788,7 @@ export default function PlansAndPayment ({ userData }) {
           maxWidth:"1008px",
           margin: "24px",
         }}
-        isCentered={{base: false, lg: true}}
+        isCentered={false}
       >
         <Stack spacing={0}>
           <Text
@@ -1111,7 +1111,7 @@ export default function PlansAndPayment ({ userData }) {
           padding: "32px 22px 26px 22px",
           borderRadius: {base: "0", lg: "20px"},
         }}
-        isCentered={{base: false, lg: true}}
+        isCentered={false}
       >
         <Stack spacing={0} marginBottom="40px">
           <Text
