@@ -10,7 +10,6 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const { locale } = router;
   const { t } = useTranslation('app');
-
   const queryClient = new QueryClient({
     cacheTime: 0,
   });

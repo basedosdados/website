@@ -229,41 +229,6 @@
         "allDBFreeResources": "All DB Free resources, plus:",
         "allDBProResources": "All DB Pro resources, plus:",
         "active": "Active",
-        "plans": {
-            "free": {
-                "title": "DB Free",
-                "subtitle": "For you to discover the potential of the data platform",
-                "features": [
-                    "Processed tables",
-                    "Integrated data",
-                    "Updated low-frequency data",
-                    "Cloud access",
-                    "Access via SQL, Python, R, and Stata",
-                    "Integration with BI tools",
-                    "Direct download up to 100 MB"
-                ]
-            },
-            "pro": {
-                "title": "DB Pro",
-                "subtitle": "For you to have access to the most up-to-date data",
-                "features": [
-                    "Dozens of updated high-frequency datasets",
-                    "Company reference table with updated information",
-                    "Direct download up to 1GB (80% of the platform's tables)"
-                ]
-            },
-            "enterprise": {
-                "title": "DB Enterprise",
-                "subtitle": "For your company to save time and gain quality in decisions",
-                "features": [
-                    "Access for multiple accounts",
-                    "Data scraping on demand",
-                    "Access to enriched data via APIs",
-                    "Data lake integrations",
-                    "Priority support"
-                ]
-            }
-        },
         "perMonth": "/month",
         "annualBillingMessage": "{{price}} charged once a year",
         "includes": "Includes",
@@ -292,21 +257,6 @@
         "understood": "Understood",
         "comparePlans": "Compare plans",
         "resources": "Resources",
-        "processedTables": "Processed tables",
-        "integratedData": "Integrated data",
-        "integratedDataTooltip": "Our data standardization and compatibility methodology allows you to cross-reference tables from different institutions and themes in a simplified manner.",
-        "updatedLowFrequencyData": "Updated low-frequency data",
-        "cloudAccess": "Cloud access",
-        "sqlPythonRAccess": "Access via SQL, Python, R, and Stata",
-        "biIntegration": "Integration with BI tools",
-        "downloadLimit100MB": "Direct download up to 100 MB",
-        "downloadLimit100MBTooltip": "This limit does not apply to access via SQL, Python, R, or Stata.",
-        "proPlan": "DB Pro",
-        "allFreePlanResources": "All free plan resources, plus:",
-        "dozensOfHighFrequencyDatasets": "Dozens of updated high-frequency datasets",
-        "companyReferenceTable": "Company reference table with updated information",
-        "downloadLimit1GB": "Direct download up to 1 GB",
-        "downloadLimit1GBTooltip": "Tables larger than 1 GB are not available for partial or complete download. This limit does not apply to access via SQL, Python, R, or Stata.",
         "passwordChangedSuccessfully": "Password changed successfully!",
         "useNewPassword": "Use your new password to log in next time.",
         "settings": "Settings",

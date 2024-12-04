@@ -142,7 +142,7 @@ export default function PlansAndPayment ({ userData }) {
 
   const resources = {
     "BD Gratis" : {
-      title: t('username.DBFree'),
+      title: t('prices:plans.free.title'),
       buttons: [{
         text: t('username.comparePlans'),
         onClick: () => {
@@ -150,18 +150,13 @@ export default function PlansAndPayment ({ userData }) {
           setToggleAnual(true)
         }}
       ],
-      resources : [
-        {name: t('username.processedTables')},
-        {name: t('username.integratedData'), tooltip: t('username.integratedDataTooltip')},
-        {name: t('username.updatedLowFrequencyData')},
-        {name: t('username.cloudAccess')},
-        {name: t('username.sqlPythonRAccess')},
-        {name: t('username.biIntegration')},
-        planActive ? "" : {name: t('username.downloadLimit100MB'), tooltip: t('username.downloadLimit100MBTooltip')},
-      ]
+      resources: t('prices:plans.free.features', { returnObjects: true }).map((feature, index) => ({
+        name: feature,
+        tooltip: index === 1 ? t('prices:tooltips.integratedData') : (index === 6 ? t('prices:tooltips.downloadLimit') : null)
+      }))
     },
     "bd_pro" : {
-      title: t('username.DBPro'),
+      title: t('prices:plans.pro.title'),
       buttons : [{
         text: t('username.cancelPlan'),
         onClick: () => CancelModalPlan.onOpen(),
@@ -178,14 +173,13 @@ export default function PlansAndPayment ({ userData }) {
           }
         }
       }],
-      resources : [
-        {name: t('username.dozensOfHighFrequencyDatasets')},
-        {name: t('username.companyReferenceTable')},
-        {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')},
-      ]
+      resources: t('prices:plans.pro.features', { returnObjects: true }).map((feature, index) => ({
+        name: feature,
+        tooltip: index === 2 ? t('prices:tooltips.downloadLimitPro') : null
+      }))
     },
     "bd_pro_empresas" : {
-      title: t('username.DBEnterprise'),
+      title: t('prices:plans.enterprise.title'),
       buttons : [{
         text: t('username.cancelPlan'),
         onClick: () => CancelModalPlan.onOpen(),
@@ -202,10 +196,8 @@ export default function PlansAndPayment ({ userData }) {
           }
         }
       }],
-      resources : [
-        {name: t('username.accessFor10Accounts')},
-        {name: t('username.prioritySupport')}
-      ]}
+      resources: t('prices:plans.enterprise.features', { returnObjects: true }).map(feature => ({ name: feature }))
+    }
   }
 
   const defaultResource = resources["BD Gratis"]
@@ -1201,30 +1193,30 @@ export default function PlansAndPayment ({ userData }) {
             spacing={0}
           >
             <CardPrice
-              title={t('plans.free.title')}
-              subTitle={<>{t('plans.free.subtitle')}</>}
+              title={t('prices:plans.free.title')}
+              subTitle={<>{t('prices:plans.free.subtitle')}</>}
               price={"0"}
-              textResource={t('features')}
-              resources={t('plans.free.features', { returnObjects: true }).map((feature, index) => ({
+              textResource={t('prices:features')}
+              resources={t('prices:plans.free.features', { returnObjects: true }).map((feature, index) => ({
                 name: feature,
-                tooltip: index === 1 ? t('tooltips.integratedData') : (index === 6 ? t('tooltips.downloadLimit') : null)
+                tooltip: index === 1 ? t('prices:tooltips.integratedData') : (index === 6 ? t('prices:tooltips.downloadLimit') : null)
               }))}
               button={{
-                text: t('exploreFeatures'),
+                text: t('prices:exploreFeatures'),
                 href: "/search",
                 noHasModal: true,
               }}
             />
 
             <CardPrice
-              title={t('plans.pro.title')}
-              subTitle={<>{t('plans.pro.subtitle')}</>}
+              title={t('prices:plans.pro.title')}
+              subTitle={<>{t('prices:plans.pro.subtitle')}</>}
               price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 444}
               anualPlan={toggleAnual}
-              textResource={t('allFeaturesPlus', { plan: t('plans.free.title') })}
-              resources={t('plans.pro.features', { returnObjects: true }).map((feature, index) => ({
+              textResource={t('prices:allFeaturesPlus', { plan: t('prices:plans.free.title') })}
+              resources={t('prices:plans.pro.features', { returnObjects: true }).map((feature, index) => ({
                 name: feature,
-                tooltip: index === 2 ? t('tooltips.downloadLimitPro') : null
+                tooltip: index === 2 ? t('prices:tooltips.downloadLimitPro') : null
               }))}
               button={{
                 text: `${subscriptionInfo?.stripeSubscription === "bd_pro" ? t('currentPlan') : hasSubscribed ? t('subscribe') : t('startFreeTrial')}`,
@@ -1238,16 +1230,15 @@ export default function PlansAndPayment ({ userData }) {
             />
 
             <CardPriceEnterprise
-              title={t('plans.enterprise.title')}
-              subTitle={<>{t('plans.enterprise.subtitle')}</>}
-              price="10000"
-              textResource={t('allFeaturesPlus', { plan: t('plans.pro.title') })}
-              resources={t('plans.enterprise.features', { returnObjects: true }).map((feature, index) => ({
+              title={t('prices:plans.enterprise.title')}
+              subTitle={<>{t('prices:plans.enterprise.subtitle')}</>}
+              price=""
+              textResource={t('prices:allFeaturesPlus', { plan: t('prices:plans.pro.title') })}
+              resources={t('prices:plans.enterprise.features', { returnObjects: true }).map((feature, index) => ({
                 name: feature,
-                tooltip: index === 0 ? t('tooltips.downloadLimitPro') : null
               }))}
               button={{
-                text: t('plans.enterprise.contactUs'),
+                text: t('prices:plans.enterprise.contactUs'),
                 href: "/contact-services",
               }}
             />

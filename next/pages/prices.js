@@ -731,7 +731,7 @@ export function SectionPrice() {
         <CardPriceEnterprise
           title={t('plans.enterprise.title')}
           subTitle={t('plans.enterprise.subtitle')}
-          price={t('plans.enterprise.customPrice')}
+          price=""
           textResource={t('allFeaturesPlus', { plan: t('plans.pro.title') })}
           resources={t('plans.enterprise.features', { returnObjects: true }).map(feature => ({ name: feature }))}
           button={{
