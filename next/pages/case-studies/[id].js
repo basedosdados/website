@@ -51,7 +51,7 @@ export async function getStaticPaths() {
     paths: allCaseStudies.map(({ id }) => {
       return {params: { id }}
     }),
-    fallback: false
+    fallback: "blocking"
   }
 }
 

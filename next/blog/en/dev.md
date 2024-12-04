@@ -1,17 +1,17 @@
 ---
-title: Test
-description: Test
+title: Dev
+description: Dev
 date:
   created: "2021-11-25T15:00:00"
 authors:
-  - name: test
-    role: test
-    social: test
+  - name: Dev
+    role: Dev
+    social: Dev
 thumbnail: /blog/analisando-a-frota-brasileira-com-a-bd/image_0.webp
-categories: ["test"]
+categories: ["Dev"]
 medium_slug: >-
-  test
+  Dev
 published: true
 ---
 
-Test
+Dev

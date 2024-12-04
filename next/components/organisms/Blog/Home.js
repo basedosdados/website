@@ -344,9 +344,10 @@ export function BlogGrid({ posts, category }) {
             <Box width="100%" key={key}>
               <Divider
                 display={index === 0 ? "none" : "flex"}
-                borderColor="#252A32"
-                borderWidth="2px"
+                borderWidth="0px"
                 margin="80px 0 24px"
+                borderTop="4px solid #252A32"
+                opacity="1"
               />
               <Stack
                 spacing={0}
@@ -397,6 +398,8 @@ export function BlogGrid({ posts, category }) {
                         as="article"
                         key={index}
                         gridColumn={{ md: "span 2", xl: "span 3" }}
+                        borderBottom={{base: "1px solid #DEDFE0", md: "none"}}
+                        paddingBottom={{base: "24px", md: "none"}}
                       >
                         <LatestBlogCard key={post.slug} {...post} />
                       </GridItem>
@@ -440,6 +443,8 @@ export function BlogGrid({ posts, category }) {
                     as="article"
                     key={index}
                     gridColumn={{ md: "span 2", xl: "span 3" }}
+                    borderBottom={{base: "1px solid #DEDFE0", md: "none"}}
+                    paddingBottom={{base: "24px", md: "none"}}
                   >
                     <LatestBlogCard key={post.slug} {...post} />
                   </GridItem>

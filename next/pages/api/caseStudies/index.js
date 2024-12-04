@@ -32,7 +32,6 @@ export async function getAllCaseStudies(locale = 'pt') {
 
 export async function getCaseStudiesById(id, locale = 'pt') {
   const caseStudiesDirRoot = path.join(root, `content/caseStudies/${locale}`);
-
   const filepath = path.join(caseStudiesDirRoot, `${id}.md`);
   return await fs.readFile(filepath, "utf-8");
 }
