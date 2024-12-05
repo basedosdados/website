@@ -33,6 +33,16 @@ export async function getStaticProps({ params, locale }) {
   const { id } = params;
 
   const content = await getCaseStudiesById(id, locale);
+
+  if (!content) {
+    return {
+      redirect: {
+        destination: locale === "pt" ? "/services" : `/${locale}/services`,
+        permanent: false,
+      },
+    };
+  }
+
   const serialize = await serializeCaseStudies(content);
 
   return {

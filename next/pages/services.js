@@ -224,6 +224,7 @@ function CaseStudies ({ data }) {
 
   return (
     <Stack
+      display={CaseStudiesPages.length === 0 ? "none" : "flex"}
       id="case-studies"
       width="100%"
       maxWidth="1264px"

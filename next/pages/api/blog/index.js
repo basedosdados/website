@@ -49,14 +49,18 @@ export async function getAllPosts(locale = 'pt') {
     return posts;
   } catch (error) {
     console.error("Error reading posts:", error);
-    throw error;
+    return []
   }
 }
 
-export async function getPostBySlug(slug, locale) {
-  const blogpostsDir = path.join(root, `blog/${locale}`)
-  const filepath = path.join(blogpostsDir, `${slug}.md`);
-  return await fs.readFile(filepath, "utf-8");
+export async function getPostBySlug(slug, locale = 'pt') {
+  try {
+    const blogpostsDir = path.join(root, `blog/${locale}`)
+    const filepath = path.join(blogpostsDir, `${slug}.md`);
+    return await fs.readFile(filepath, "utf-8");
+  } catch (error) {
+    return null;
+  }
 }
 
 const remarkPluginCaption = () => (tree) =>

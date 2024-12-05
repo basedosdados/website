@@ -40,6 +40,16 @@ export async function getStaticProps({ params, locale }) {
   const { slug } = params;
 
   const content = await getPostBySlug(slug, locale);
+
+  if (!content) {
+    return {
+      redirect: {
+        destination: locale === "pt" ? "/blog" : `/${locale}/blog`,
+        permanent: false,
+      },
+    };
+  }
+
   const serialize = await serializePost(content);
 
   return {
