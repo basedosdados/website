@@ -221,7 +221,7 @@ export default function CaseStudies ({ serialize }) {
               color="#252A32"
               fontWeight="500"
             >
-              Sobre
+              {t('about')}
             </Text>
 
             <Text
@@ -240,7 +240,7 @@ export default function CaseStudies ({ serialize }) {
               color="#252A32"
               fontWeight="500"
             >
-              Setor
+              {t('sector')}
             </Text>
 
             <Text

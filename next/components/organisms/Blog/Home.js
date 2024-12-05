@@ -365,29 +365,31 @@ export function BlogGrid({ posts, category }) {
                   {categories?.[key] || t(key)}
                 </Text>
 
-                <Link
-                  display="flex"
-                  flexDirection="row"
-                  href={`blog?category=${key}`}
-                  gap="8px"
-                  cursor="pointer"
-                  textAlign="center"
-                  fontWeight="400"
-                  fontSize="16px"
-                  lineHeight="24px"
-                  color="#0068C5"
-                  fill="#0068C5"
-                  _hover={{
-                    color: "#0057A4",
-                    fill: "#0068C5"
-                  }}
-                >
-                  Ver todos
-                  <ChevronIcon
-                    alt=""
-                    width="16px"
-                  />
-                </Link>
+                {value.length > 7 &&
+                  <Link
+                    display="flex"
+                    flexDirection="row"
+                    href={`blog?category=${key}`}
+                    gap="8px"
+                    cursor="pointer"
+                    textAlign="center"
+                    fontWeight="400"
+                    fontSize="16px"
+                    lineHeight="24px"
+                    color="#0068C5"
+                    fill="#0068C5"
+                    _hover={{
+                      color: "#0057A4",
+                      fill: "#0068C5"
+                    }}
+                  >
+                    {t("seeAll")}
+                    <ChevronIcon
+                      alt=""
+                      width="16px"
+                    />
+                  </Link>
+                }
               </Stack>
 
               <Grid gap="40px" templateColumns={{ md: "1fr 1fr", xl: "1fr 1fr 1fr" }}>

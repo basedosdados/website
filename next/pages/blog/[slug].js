@@ -71,10 +71,10 @@ export default function Post({ slug, mdxSource, headings }) {
       paddingX="24px"
     >
       <Head>
-        <title>{frontmatter.title} – Blog – Base dos Dados</title>
+        <title>{frontmatter.title} – {t("pageTitle")}</title>
         <meta
           property="og:title"
-          content={`${frontmatter.title} – Blog – Base dos Dados`}
+          content={`${frontmatter.title} – ${t("pageTitle")}`}
           key="ogtitle"
         />
         <meta
@@ -155,7 +155,7 @@ export default function Post({ slug, mdxSource, headings }) {
                 fontWeight="400"
                 lineHeight="24px"
                 color="#252A32"
-              >Notou algo errado ou tem uma sugestão? </Text>
+              >{t("noticedSomething")} </Text>
               <Link
                 href={`https://github.com/basedosdados/website/edit/main/next/blog/${slug}.md`}
                 isexternal="true"
@@ -166,7 +166,7 @@ export default function Post({ slug, mdxSource, headings }) {
                 _hover={{
                   color: "#0057A4"
                 }}
-              >Contribua com a BD editando este artigo via pull request no nosso GitHub.</Link>
+              >{t("contributeToBD")}</Link>
             </Box>
           </Box>
           <Box

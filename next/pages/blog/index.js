@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { MainPageTemplate } from "../../components/templates/main";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 import { BlogGrid } from "../../components/organisms/Blog/Home";
 import { getAllPosts } from "../api/blog";
 
@@ -18,6 +19,7 @@ export async function getStaticProps({ locale }) {
 }
 
 export default function Blog({ posts }) {
+  const { t } = useTranslation("blog")
   const router = useRouter()
   const { query } = router
   const [data, setData] = useState([])
@@ -49,15 +51,15 @@ export default function Blog({ posts }) {
   return (
     <MainPageTemplate>
       <Head>
-        <title>Blog – Base dos Dados</title>
+        <title>{t("pageTitle")}</title>
         <meta
           property="og:title"
-          content="Blog – Base dos Dados"
+          content={t("pageTitle")}
           key="ogtitle"
         />
         <meta
           property="og:description"
-          content="Blog da Base dos Dados"
+          content={t("pageDescription")}
           key="ogdesc"
         />
       </Head>
