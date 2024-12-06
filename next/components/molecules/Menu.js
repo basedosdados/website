@@ -999,52 +999,8 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
 
   let links;
 
-  if (typeof window === 'undefined') {
-    // Server-side rendering - use default (Portuguese) version
-    links = {
-      [t('data')]: `/search`,
-      [t('solutions')]: [
-        {
-          icon: <BDLogoProImage widthImage="54px"/>,
-          name: [t('exclusive_data')],
-          href: locale === 'en' ? "https://info.basedosdados.org/en/bd-pro" :
-              locale === 'es' ? "https://info.basedosdados.org/es/bd-pro" :
-              "https://info.basedosdados.org/bd-pro"
-        },
-        {
-          icon: <BDLogoEduImage widthImage="54px"/>,
-          name: [t('data_courses')],
-          href: "https://info.basedosdados.org/bd-edu-sql"
-        },
-        {
-          icon: <BDLogoLabImage widthImage="54px"/>,
-          name: [t('services')],
-          href: "/services"
-        },
-      ],
-      [t('prices')]: "/prices",
-      [t('tutorials')]: [
-        {name: [t('documentation')], href:
-          locale === "en" ? "https://basedosdados.github.io/sdk/en" :
-          locale === "es" ? "https://basedosdados.github.io/sdk/es" :
-          "https://basedosdados.github.io/sdk"
-        },
-        {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
-        {name: [t('blog')], href: "https://medium.com/basedosdados"}
-      ],
-      Blog: "/blog",
-      [t('institutional')]: [
-        {name: [t('about_us')], href: "/about-us"},
-        {name: [t('transparency')], href: "/transparency"},
-        {name: [t('newsletter')], href: "https://info.basedosdados.org/newsletter"},
-        {name: [t('jobs')], href: "https://info.basedosdados.org/carreiras"},
-        {name: [t('faq')], href: "/faq"},
-      ],
-      [t('contact')]: "/contact",
-      Button: []
-    }
-  } else if (window.location.hostname === 'basedosdados.org' || window.location.hostname === '127.0.0.1') {
-    // Portuguese version
+  if (locale === "pt") {
+
     links = {
       [t('data')]: `/search`,
       [t('solutions')]: [
@@ -1080,8 +1036,9 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('contact')]: "/contact",
       Button: []
     }
-  } else if (window.location.hostname === 'data-basis.org' || window.location.hostname === '127.0.0.2') {
-    // English version
+
+  } else if (locale === "en") {
+
     links = {
       [t('data')]: `/search`,
       [t('solutions')]: [
@@ -1105,8 +1062,9 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('contact')]: "/contact",
       Button: []
     }
-  } else if (window.location.hostname === 'basedelosdatos.org' || window.location.hostname === '127.0.0.3') {
-    // Spanish version
+
+  } else if (locale === "es") {
+
     links = {
       [t('data')]: `/search`,
       [t('solutions')]: [
@@ -1130,6 +1088,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('contact')]: "/contact",
       Button: []
     }
+
   }
 
   useEffect(() => {
