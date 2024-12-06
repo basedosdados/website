@@ -24,7 +24,6 @@ import {
 import { useEffect, useRef, useState, useMemo } from "react";
 import { useRouter } from "next/router"
 import { useTranslation } from 'next-i18next';
-import LanguageSelector from "../atoms/LanguageSelector";
 import cookies from "js-cookie";
 import MenuDropdown from "./MenuDropdown";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
@@ -763,7 +762,6 @@ function DesktopLinks({
             return v.map((b, j) => (
               <a key={`button-${j}`} href={b.href} target="_blank">
                 <RoundedButton
-                  colorScheme="red"
                   backgroundColor={b.color}
                   minWidth="80px"
                   height="35px"
@@ -843,15 +841,15 @@ function DesktopLinks({
             options={[
               {name: t('tooltip.faq'), component: <Link href="/faq">{t('tooltip.faq')}</Link>},
               {name: t('tooltip.documentation'), url: 
-                locale === "en" ? "https://basedosdados.github.io/mais/en" :
-                locale === "es" ? "https://basedosdados.github.io/mais/es" :
-                "https://basedosdados.github.io/mais"
+                locale === "en" ? "https://basedosdados.github.io/sdk/en" :
+                locale === "es" ? "https://basedosdados.github.io/sdk/es" :
+                "https://basedosdados.github.io/sdk"
               },
               {name: t('tooltip.youtubeVideos'), url: "https://www.youtube.com/c/BasedosDados/featured"},
               {name: t('tooltip.installPackages'), url: 
-                locale === "en" ? "https://basedosdados.github.io/mais/en/access_data_packages/" :
-                locale === "es" ? "https://basedosdados.github.io/mais/es/access_data_packages/" :
-                "https://basedosdados.github.io/mais/access_data_packages/"
+                locale === "en" ? "https://basedosdados.github.io/sdk/en/access_data_packages/" :
+                locale === "es" ? "https://basedosdados.github.io/sdk/es/access_data_packages/" :
+                "https://basedosdados.github.io/sdk/access_data_packages/"
               },
               {name: t('tooltip.howToCite'), component: <Link href="/faq#reference">{t('tooltip.howToCite')}</Link>},
               {name: t('tooltip.whatAreDirectories'), component: <Link href="/faq#directories">{t('tooltip.whatAreDirectories')}</Link>},
@@ -971,7 +969,11 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   }, [lastScrollY, router.pathname])
 
   function maxWidthDataset() {
-    if (route === "/search" || route === "/dataset/[dataset]" || route === "/user/[username]") return "1440px"
+    if( route === "/search" ||
+        route === "/dataset/[dataset]" ||
+        route === "/user/[username]" ||
+        route === "/blog"
+      ) return "1440px"
     return "1264px"
   }
 
@@ -1018,13 +1020,14 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     [t('prices')]: "/prices",
     [t('tutorials')]: [
       {name: [t('documentation')], href:
-        locale === "en" ? "https://basedosdados.github.io/mais/en" :
-        locale === "es" ? "https://basedosdados.github.io/mais/es" :
-        "https://basedosdados.github.io/mais"
+        locale === "en" ? "https://basedosdados.github.io/sdk/en" :
+        locale === "es" ? "https://basedosdados.github.io/sdk/es" :
+        "https://basedosdados.github.io/sdk"
       },
       {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
       {name: [t('blog')], href: "https://medium.com/basedosdados"}
     ],
+    Blog: "/blog",
     [t('institutional')]: [
       {name: [t('about_us')], href: "/about-us"},
       {name: [t('transparency')], href: "/transparency"},

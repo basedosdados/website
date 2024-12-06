@@ -77,7 +77,6 @@ export default function BaseResourcePage({
             <AlertDialogFooter>
               <Button onClick={deleteModalDisclosure.onClose}>Cancelar</Button>
               <Button
-                colorScheme="red"
                 onClick={async () => {
                   await removeFunction();
                   window.location.reload();

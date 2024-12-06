@@ -4,91 +4,98 @@ import {
   HStack,
   Box,
   Skeleton,
+  Text
 } from "@chakra-ui/react";
 import Image from 'next/image';
-import { useState, useEffect } from "react";
+import { MDXRemote } from "next-mdx-remote";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-
 import { MainPageTemplate } from "../../components/templates/main";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import { CaseStudiesContent } from "../../content/caseStudies";
+
+import {
+  getAllCaseStudies,
+  getCaseStudiesById,
+  serializeCaseStudies
+} from "../api/caseStudies"
+
+import {
+  mdxComponents
+} from "../../components/organisms/Blog/Slug"
+
+import ChevronIcon from "../../public/img/icons/chevronIcon";
+import Button from "../../components/atoms/Button";
 import Link from "../../components/atoms/Link";
-import SectionText from "../../components/atoms/SectionText";
-import Display from "../../components/atoms/Display";
-import BodyText from "../../components/atoms/BodyText";
-import RoundedButton from "../../components/atoms/RoundedButton";
 import styles from "../../styles/caseStudies.module.css";
 
 export async function getStaticProps({ params, locale }) {
-  const caseStudy = CaseStudiesContent.find((res) => res.id === params.id);
+  const { id } = params;
+
+  const content = await getCaseStudiesById(id, locale);
+
+  if (!content) {
+    return {
+      redirect: {
+        destination: locale === "pt" ? "/services" : `/${locale}/services`,
+        permanent: false,
+      },
+    };
+  }
+
+  const serialize = await serializeCaseStudies(content);
+
   return {
     props: {
+      serialize,
       ...(await serverSideTranslations(locale, ['common', 'menu', 'caseStudies'])),
-      ...caseStudy,
     },
     revalidate: 30
   }
 }
 
-export async function getStaticPaths(context) {
+export async function getStaticPaths() {
+  const allCaseStudies = await getAllCaseStudies();
+
   return {
-    paths: CaseStudiesContent.map((elm) => {
-      return {params: { id : elm.id }}
+    paths: allCaseStudies.map(({ id }) => {
+      return {params: { id }}
     }),
-    fallback: false
+    fallback: "blocking"
   }
 }
 
-export default function CaseStudies ({
-  title,
-  displayTitle,
-  thumbnail,
-  img,
-  imgDescription,
-  description,
-  logo,
-  about,
-  sector,
-  body
-}) {
+export default function CaseStudies ({ serialize }) {
   const { t } = useTranslation('caseStudies');
   const router = useRouter();
-  const [isMobileMod, setIsMobileMod] = useState(false)
-  const isMobile = useCheckMobile();
-
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
+  const { frontmatter } = serialize;
 
   return (
     <MainPageTemplate paddingX="24px">
       <Head>
-        <title>{t('pageTitle', { title: displayTitle })}</title>
+        <title>{t('pageTitle', { title: frontmatter.displayTitle || "" })}</title>
         <link
           rel="image_src"
-          href={thumbnail}
+          href={frontmatter.thumbnail || ""}
         />
         <meta
           property="og:image"
-          content={thumbnail}
+          content={frontmatter.thumbnail || ""}
           key="ogimage"
         />
         <meta
           name="twitter:image"
-          content={thumbnail}
+          content={frontmatter.thumbnail || ""}
           key="twimage"
         />
         <meta
           property="og:title"
-          content={t('pageTitle', { title: displayTitle })}
+          content={t('pageTitle', { title: frontmatter.displayTitle || "" })}
           key="ogtitle"
         />
         <meta
           property="og:description"
-          content={`${description}`}
+          content={frontmatter.description || ""}
           key="ogdesc"
         />
       </Head>
@@ -98,49 +105,69 @@ export default function CaseStudies ({
         maxWidth="1264px"
         margin="50px auto auto"
       >
-        {!isMobileMod && (
-          <Link
-            marginBottom="48px"
-            color="#42B0FF"
-            fontWeight="500"
-            fontFamily="ubuntu"
-            fontSize="16px"
-            width="fit-content"
-            href={"/case-studies"}
-          >
-            {t('backLink')}
-          </Link>
-        )}
+        <Link
+          display={{base: "none", lg: "flex"}}
+          alignItems="center"
+          gap="8px"
+          marginBottom="48px"
+          color="#0068C5"
+          fill="#0068C5"
+          _hover={{
+            color: "#0057A4",
+            fill: "#0057A4"
+          }}
+          fontWeight="500"
+          fontFamily="Roboto"
+          fontSize="16px"
+          width="fit-content"
+          href={"/services"}
+        >
+          <ChevronIcon
+            alt=""
+            width="16px"
+            transform={"rotate(180deg)"}
+          />
+          {t('backLink')}
+        </Link>
 
-        {isMobileMod &&
-          <Display
-            margin="0 0 48px !important"
-          >{title}</Display>
-        }
-        
+        <Text
+          as="h1"
+          display={{base: "flex", lg: "none"}}
+          margin="0 0 48px !important"
+          fontFamily="Roboto"
+          fontSize="28px"
+          lineHeight="36px"
+          fontWeight="500"
+          color="#252A32"
+        >{frontmatter?.title || ""}</Text>
+
         <VStack position="relative" spacing={0} gridGap="16px">
-          {!isMobileMod &&
-            <Display
-              position="absolute"
-              paddingTop={isMobileMod && "80px"}
-              margin="40px 48px"
-              color="#FFF"
-              zIndex="10"
-            >{title}</Display>
-          }
+          <Text
+            as="h1"
+            display={{base: "none", lg: "flex"}}
+            position="absolute"
+            paddingTop={{base: "80px", lg: "0"}}
+            fontFamily="Roboto"
+            fontSize="36px"
+            lineHeight="48px"
+            fontWeight="500"
+            margin="40px 48px"
+            color="#FFF"
+            zIndex="10"
+          >{frontmatter?.title || ""}</Text>
 
           <Box
             position="relative"
             width="100%"
-            height={isMobileMod ? "145px" : "450px"}
+            height={{base:"145px", lg:"450px"}}
             overflow="hidden"
-            borderRadius={isMobileMod ? "12px" : "24px"}
-            filter={!isMobileMod && "brightness(0.4)"}
+            borderRadius={{base:"12px", lg:"24px"}}
+            filter={{base: "none", lg: "brightness(0.4)"}}
           >
-            {img.length > 0 ?
+            {frontmatter.img ?
               <Image
-                alt={displayTitle}
-                src={img}
+                alt={frontmatter?.displayTitle}
+                src={frontmatter.img}
                 layout="fill"
                 objectFit="cover"
               />
@@ -149,29 +176,32 @@ export default function CaseStudies ({
             }
           </Box>
 
-          {imgDescription && 
-            <SectionText
+          {frontmatter.imgDescription && 
+            <Text
+              as="h3"
               width="100%"
+              fontFamily="Roboto"
               textAlign="end"
-              color="#6F6F6F"
+              fontSize="14px"
+              color="#71757A"
             >
-              {imgDescription}
-            </SectionText>
+              {frontmatter.imgDescription}
+            </Text>
           }
         </VStack>
-        
+
         <HStack
-          flexDirection={isMobileMod && "column"}
+          flexDirection={{base: "column", lg: "row"}}
           spacing={0}
           alignItems="flex-start"
           paddingTop="64px"
           position="relative"
-          gridGap={isMobileMod ? "40px" : "80px"}
+          gridGap={{base: "40px", lg: "80px"}}
         >
           <VStack
-            position={isMobileMod ? "relative" : "sticky"}
-            top={!isMobileMod && "100px"}
-            marginBottom={isMobileMod && "32px"}
+            position={{base: "relative", lg: "sticky"}}
+            top={{base: "0", lg: "100px"}}
+            marginBottom={{base: "32px", lg: "0"}}
             spacing={0}
             maxWidth="300px"
             alignItems="flex-start"
@@ -183,43 +213,85 @@ export default function CaseStudies ({
               overflow="hidden"
               marginBottom="32px"
             >
-              {logo?.img.length > 0 ?
+              {frontmatter?.logo?.img ?
                 <Image
-                  alt={displayTitle}
-                  src={logo.img}
-                  width={logo.width}
-                  height={logo.height}
+                  alt={frontmatter?.displayTitle}
+                  src={frontmatter.logo.img}
+                  width={frontmatter?.logo.width}
+                  height={frontmatter?.logo.height}
                 />
               :
                 <Skeleton width="245px" height="85px"/>
               }
             </Box>
 
-            <BodyText  fontSize="16px" letterSpacing="0.2px" fontWeight="400">Sobre</BodyText>
-            <BodyText paddingBottom="32px" fontSize="16px" letterSpacing="0.2px" color="#6F6F6F">
-              {about}
-            </BodyText>
+            <Text
+              fontFamily="Roboto"
+              fontSize="16px"
+              color="#252A32"
+              fontWeight="500"
+            >
+              {t('about')}
+            </Text>
 
-            <BodyText  fontSize="16px" letterSpacing="0.2px" fontWeight="400">Setor</BodyText>
-            <BodyText paddingBottom="48px" fontSize="16px" letterSpacing="0.2px" color="#6F6F6F">
-              {sector}
-            </BodyText>
+            <Text
+              as="h2"
+              fontFamily="Roboto"
+              paddingBottom="32px"
+              fontSize="16px"
+              color="#71757A"
+            >
+              {frontmatter?.about || ""}
+            </Text>
 
-            <BodyText paddingBottom="8px">
+            <Text
+              fontFamily="Roboto"
+              fontSize="16px"
+              color="#252A32"
+              fontWeight="500"
+            >
+              {t('sector')}
+            </Text>
+
+            <Text
+              fontFamily="Roboto"
+              paddingBottom="32px"
+              fontSize="16px"
+              color="#71757A"
+            >
+              {frontmatter?.sector || ""}
+            </Text>
+
+            <Text
+              fontFamily="Roboto"
+              paddingBottom="8px"
+            >
               {t('contactText')}
-            </BodyText>
-            <RoundedButton
+            </Text>
+
+            <Button
+              color="#FFFFFF"
+              backgroundColor="#0D99FC"
+              _hover={{
+                backgroundColor: "#0B89E2"
+              }}
               onClick={() => router.push('/contact')}
             >
               {t('contactButton')}
-            </RoundedButton>
+            </Button>
           </VStack>
 
-          <VStack flex={1}>
-            <BodyText>  
-              <div className={styles.body} dangerouslySetInnerHTML={{__html: body}} />
-            </BodyText>
-          </VStack>
+          <Box
+            className={styles.body}
+            as="section"
+            flex={1}
+            width="100%"
+            display="flex"
+            flexDirection="column"
+            gap="24px"
+          >
+            <MDXRemote {...serialize} components={mdxComponents} />
+          </Box>
         </HStack>
       </Stack>
     </MainPageTemplate>  

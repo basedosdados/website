@@ -29,7 +29,7 @@ import Carousel from "../components/atoms/Carousel";
 import InternalError from "../public/img/internalError";
 import WebIcon  from "../public/img/icons/webIcon";
 import EmailIcon  from "../public/img/icons/emailIcon";
-import TwitterIcon  from "../public/img/icons/twitterIcon";
+import XIcon  from "../public/img/icons/xIcon";
 import BlueskyIcon from "../public/img/icons/blueskyIcon";
 import LinkedinIcon  from "../public/img/icons/linkedinIcon";
 import GithubIcon  from "../public/img/icons/githubIcon";
@@ -186,7 +186,7 @@ const TeamBox = ({
       <Box display="flex" flexDirection="row" gridGap="5px">
         {website ? <WebIcon {...iconTeamBox({website: website})}/> : null}
         {email ? <EmailIcon {...iconTeamBox({email: email})}/> : null}
-        {twitter ? <TwitterIcon {...iconTeamBox({twitter: twitter})}/> : null}
+        {twitter ? <XIcon {...iconTeamBox({twitter: twitter})}/> : null}
         {linkedin ? <LinkedinIcon {...iconTeamBox({linkedin: linkedin})}/> : null}
         {github ? <GithubIcon {...iconTeamBox({github: github})}/> : null}
       </Box>
@@ -394,8 +394,8 @@ export default function AboutUs() {
           zIndex="1"
           backgroundColor="#FFF"
         >
-          {/* <TwitterIcon alt="twitter basedosdados" {...keyIcon("https://twitter.com/basedosdados")} borderTop="1px solid #0000001a"/> */}
-          <BlueskyIcon alt="bluesky basedosdados" {...keyIcon("https://bsky.app/profile/basedosdados.bsky.social")} borderTop="1px solid #0000001a"/>
+          <XIcon alt="twitter basedosdados" {...keyIcon("https://x.com/basedosdados")} borderTop="1px solid #0000001a"/>
+          <BlueskyIcon alt="bluesky basedosdados" {...keyIcon("https://bsky.app/profile/basedosdados.bsky.social")}/>
           <DiscordIcon alt="comunidade do discord basedosdados" {...keyIcon("https://discord.gg/huKWpsVYx4")}/>
           <GithubIcon alt="repositório github" {...keyIcon("https://github.com/basedosdados")}/>
           <LinkedinIcon alt="linkedin basedosdados" {...keyIcon("https://www.linkedin.com/company/base-dos-dados/mycompany/")}/>

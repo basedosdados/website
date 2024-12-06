@@ -9,13 +9,12 @@ import {
   Image,
   Text,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { capitalize } from 'lodash';
-import axios from "axios";
 
 import BigTitle from "../../components/atoms/BigTitle";
 import GreenTab from "../../components/atoms/GreenTab";
@@ -66,7 +65,7 @@ export async function getStaticPaths(context) {
   }
 }
 
-export default function DatasetPage ({ dataset }) {
+export default function DatasetPage ({ dataset, mdxSource, headings, infoId }) {
   const { t } = useTranslation('dataset', 'common');
   const router = useRouter()
   const { locale } = router
@@ -266,6 +265,9 @@ export default function DatasetPage ({ dataset }) {
             </GreenTab>
 
             <GreenTab display="none">
+            </GreenTab>
+
+            <GreenTab display="none">
               <CrossingIcon
                 alt="cruzamento"
                 width="28px"
@@ -281,6 +283,9 @@ export default function DatasetPage ({ dataset }) {
               <DatasetResource
                 dataset={dataset}
               />
+            </TabPanel>
+
+            <TabPanel padding="0px">
             </TabPanel>
 
             <TabPanel padding="0px">

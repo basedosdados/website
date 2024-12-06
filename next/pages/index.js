@@ -837,4 +837,3 @@ export const config = {
       (dep) => `node_modules/${dep}/**/*.+(js|json)`
   ),
 };
-
