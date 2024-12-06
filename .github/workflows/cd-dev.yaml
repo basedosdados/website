@@ -109,6 +109,13 @@ jobs:
                       secretName: "development-data-basis-org-tls"
           EOF
 
+      - name: Debug values.yaml
+        run: |
+          echo "Generated values.yaml content:"
+          cat values.yaml
+          echo "Validating YAML syntax:"
+          python3 -c "import yaml; yaml.safe_load(open('values.yaml'))"
+
       - name: Deploy using Helm
         run: |
           helm upgrade --install basedosdados-website-development charts/basedosdados-website/. -n website -f values.yaml --wait
