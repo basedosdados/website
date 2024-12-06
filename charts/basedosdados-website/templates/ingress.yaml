@@ -10,19 +10,21 @@ metadata:
     app.kubernetes.io/component: basedosdados-website
     app.kubernetes.io/name: {{ $name }}
   annotations:
-    {{- toYaml .Values.website.ingress.annotations | nindent 4 }}
+    {{- with .Values.website.ingress.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   rules:
     - host: {{ .Values.website.ingress.host | quote }}
       http:
         paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: "{{ $name }}-service"
-              port:
-                number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ $name }}-service"
+                port:
+                  number: 80
   {{- with .Values.website.ingress.tls }}
   tls:
     {{- toYaml . | nindent 4 }}
