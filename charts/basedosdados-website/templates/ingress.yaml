@@ -80,7 +80,7 @@ metadata:
     app.kubernetes.io/component: basedosdados-website
     app.kubernetes.io/name: {{ $name }}
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /es/$1
+    nginx.ingress.kubernetes.io/rewrite-target: /{{ $domain.language }}/$1
     nginx.ingress.kubernetes.io/use-regex: "true"
     {{- toYaml $domain.annotations | nindent 4 }}
 spec:
