@@ -354,7 +354,7 @@ export function Header({ frontmatter, slug }) {
 
       <Stack
         width="100%"
-        flexDirection="row"
+        flexDirection={{base: "column", lg: "row"}}
         spacing={0}
         gap="40px"
       >
