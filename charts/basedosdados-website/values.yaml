@@ -5,51 +5,69 @@ website:
 
   # Deployment image
   image:
-    name: "ghcr.io/basedosdados/website"
-    tag: "production" # We use the production tag fot the website as a default
+    name: "ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}"
+    tag: "production"
     pullPolicy: "Always"
 
   # Number of replicas
   replicas: 1
 
   # Specifying resources is recommended for production deployments
-  resources: {}
-    # limits:
-    #   cpu: 500m
-    #   memory: 1G
-    # requests:
-    #   cpu: 100m
-    #   memory: 500Mi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 500Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
 
   # Additional environment variables to be passed to the website container.
-  env: []
-    # - name: "SOME_ENV"
-    #   value: "some-value"
-  envFrom: []
-    # - secretRef:
-    #     name: "some-secret"
+  env:
+    - name: "NEXT_PUBLIC_KEY_STRIPE"
+      value: "${{ secrets.NEXT_PUBLIC_KEY_STRIPE }}"
+  envFrom:
+    - secretRef:
+        name: basedosdados-website-development
 
   # Ingress configuration
   ingress:
     # Enable ingress
-    enabled: false
+    enabled: true
 
     # Host to be used in the ingress
-    host: "basedosdados-website.example.com"
+    host: "development.basedosdados.org"
 
     # Ingress annotations
-    annotations: {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
+    annotations:
+      cert-manager.io/issuer: "letsencrypt-production"
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
 
     # TLS configuration
-    tls: []
-      # - secretName: basedosdados-website-tls
-      #   hosts:
-      #     - basedosdados-website.example.com
+    tls:
+      - hosts:
+          - "development.basedosdados.org"
+        secretName: "development-basedosdados-org-tls"
 
     internationalDomains:
       - language: "es"
-        host: "basedelosdatos-website.example.com"
-        annotations: {}
-        tls: []
+        host: "development.basedelosdatos.org"
+        annotations:
+          cert-manager.io/issuer: "letsencrypt-production"
+          kubernetes.io/ingress.class: nginx
+          nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        tls:
+          - hosts:
+              - "development.basedelosdatos.org"
+            secretName: "development-basedelosdatos-org-tls"
+      - language: "en"
+        host: "development.data-basis.org"
+        annotations:
+          cert-manager.io/issuer: "letsencrypt-production"
+          kubernetes.io/ingress.class: nginx
+          nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        tls:
+          - hosts:
+              - "development.data-basis.org"
+            secretName: "development-data-basis-org-tls"
