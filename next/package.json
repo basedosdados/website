@@ -1,13 +1,17 @@
 {
-  "name": "bdd-next",
+  "name": "next",
   "version": "0.1.0",
   "private": true,
   "cacheDirectories": [
     ".next/cache"
   ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev-basedosdados": "env-cmd -f .env.basedosdados next dev -p 3000 -H 127.0.0.1",
+    "dev-databasis": "env-cmd -f .env.databasis next dev -p 3000 -H 127.0.0.2",
+    "dev-basedelosdatos": "env-cmd -f .env.basedelosdatos next dev -p 3000 -H 127.0.0.3",
+    "build-basedosdados": "env-cmd -f .env.basedosdados next build",
+    "build-databasis": "env-cmd -f .env.databasis next build",
+    "build-basedelosdatos": "env-cmd -f .env.basedelosdatos next build",
     "start": "NODE_OPTIONS='-r next-logger' next start"
   },
   "dependencies": {
@@ -55,6 +59,7 @@
     "remark-parse": "^11.0.0",
     "remark-stringify": "^11.0.0",
     "unified": "^11.0.5",
-    "unist-util-visit": "^5.0.0"
+    "unist-util-visit": "^5.0.0",
+    "env-cmd": "^10.1.0"
   }
 }

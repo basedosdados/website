@@ -47,3 +47,9 @@ website:
       # - secretName: basedosdados-website-tls
       #   hosts:
       #     - basedosdados-website.example.com
+
+    internationalDomains:
+      - language: "es"
+        host: "basedelosdatos-website.example.com"
+        annotations: {}
+        tls: []

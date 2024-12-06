@@ -1,14 +1,47 @@
 version: '3'
 
 services:
-  next:
-    container_name: nextjs
+  next-basedosdados:
+    container_name: nextjs-basedosdados
     build:
       context: next
       dockerfile: Dockerfile
       args:
         - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+        - NEXT_PUBLIC_DOMAIN=basedosdados.org
     env_file:
       - .env
+    environment:
+      - NEXT_PUBLIC_DOMAIN=basedosdados.org
     ports:
       - ${NEXT_PORT}:3000
+
+  next-databasis:
+    container_name: nextjs-databasis
+    build:
+      context: next
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+        - NEXT_PUBLIC_DOMAIN=data-basis.org
+    env_file:
+      - .env
+    environment:
+      - NEXT_PUBLIC_DOMAIN=data-basis.org
+    ports:
+      - "3001:3000"
+
+  next-basedelosdatos:
+    container_name: nextjs-basedelosdatos
+    build:
+      context: next
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+        - NEXT_PUBLIC_DOMAIN=basedelosdatos.org
+    env_file:
+      - .env
+    environment:
+      - NEXT_PUBLIC_DOMAIN=basedelosdatos.org
+    ports:
+      - "3002:3000"

@@ -7,20 +7,28 @@ module.exports = {
     disableStaticImages: true,
     domains: [
       "basedosdados.org",
-      "storage.googleapis.com/basedosdados-website",
+      "data-basis.org",
+      "basedelosdatos.org",
+      "storage.googleapis.com",
     ]
   },
   output: "standalone",
   reactStrictMode: true,
-
-  async redirects() {
+  swcMinify: true,
+  serverRuntimeConfig: {
+    port: parseInt(process.env.PORT, 10) || 3000
+  },
+  async headers() {
     return [
       {
-        source: '/dataset',
-        destination: '/search',
-        permanent: true,
-      }
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: 'https://basedosdados.org, https://data-basis.org, https://basedelosdatos.org, http://127.0.0.1, http://127.0.0.2, http://127.0.0.3',
+          },
+        ],
+      },
     ]
   }
-
 };
