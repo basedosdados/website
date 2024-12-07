@@ -120,7 +120,7 @@ function Slogan () {
         {t('slogan.description')}
       </BodyText>
       <Link
-        href="/contact-consulting"
+        href="/contact-services"
       >
         <Box
           as="p"
@@ -571,7 +571,7 @@ export default function Services({ caseStudiesContent }) {
         </VStack>
         
         <Link
-          href="/contact-consulting"
+          href="/contact-services"
         >
           <Box
             as="p"

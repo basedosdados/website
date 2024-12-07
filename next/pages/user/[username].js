@@ -86,7 +86,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function UserPage({ getUser }) {
-  const { t, ready } = useTranslation('user')
+  const { t, ready } = useTranslation(['user', 'prices'])
   const router = useRouter()
   const { query } = router
   const [userInfo, setUserInfo] = useState({})

@@ -42,10 +42,15 @@
       "enterprise": {
         "title": "DB Enterprise",
         "subtitle": "For your company to save time and improve decision quality",
+        "customPrice": "Custom price",
         "features": [
-          "Access for 10 accounts",
-          "Priority support via email and Discord"
-        ]
+          "Access for multiple accounts",
+          "Data scraping on demand",
+          "Access to enriched data via APIs",
+          "Data lake integrations",
+          "Priority support"
+        ],
+        "contactUs": "Contact us"
       }
     },
     "tooltips": {
