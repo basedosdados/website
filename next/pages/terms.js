@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import { isMobileMod, useCheckMobile } from "../hooks/useCheckMobile.hook";
 import Display from "../components/atoms/Display";
 import { MainPageTemplate } from "../components/templates/main";
-import ServiceTerms from "../content/serviceTerms";
+import TermsOfService from "../content/termsOfService";
 import PrivacyPolicy from "../content/privacyPolicy";
 import { withPages } from "../hooks/pages.hook";
 import { useTranslation } from 'next-i18next';
@@ -157,7 +157,7 @@ export default function TermsAndPolicies() {
                 fontWeight="400"
                 color="#252A32"
               >{t('termsOfService')}</Text>
-              <ServiceTerms/>
+              <TermsOfService/>
             </VStack>
 
             <VStack

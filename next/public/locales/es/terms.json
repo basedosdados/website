@@ -22,7 +22,8 @@
         },
         "term4": {
             "title": "4. Cancelación y Reembolso",
-            "content": "4.1. Puede cancelar su suscripción en cualquier momento a través de las opciones disponibles en su cuenta. Sin embargo, no se proporcionarán reembolsos ni créditos por períodos en los que no se utilizó la suscripción."
+            "subContent1": "4.1. Puede cancelar su suscripción en cualquier momento a través de las opciones disponibles en su cuenta. Sin embargo, no se proporcionarán reembolsos ni créditos por períodos en los que no se utilizó la suscripción.",
+            "subContent2": "4.2. Usted acepta contactarse con nosotros a través del correo electrónico contato@basedosdados.org antes de abrir una disputa de cobro con su banco."
         },
         "term5": {
             "title": "5. Uso Responsable",
