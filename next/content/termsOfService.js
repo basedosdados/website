@@ -7,7 +7,7 @@ import BodyText from "../components/atoms/BodyText";
 import SectionText from "../components/atoms/SectionText";
 import { useTranslation } from 'next-i18next';
 
-export default function ServiceTerms() {
+export default function TermsOfService() {
   const { t } = useTranslation('terms');
   const TitleText = ({ children, ...props }) => {
     return (
@@ -88,7 +88,8 @@ export default function ServiceTerms() {
         gap="8px"
       >
         <TitleText>{t('ToS.term4.title')}</TitleText>
-        <SecText>{t('ToS.term4.content')}</SecText>
+        <SecText>{t('ToS.term4.subContent1')}</SecText>
+        <SecText>{t('ToS.term4.subContent2')}</SecText>
       </VStack>
 
       <VStack

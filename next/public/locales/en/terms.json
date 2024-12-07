@@ -22,7 +22,8 @@
         },
         "term4": {
             "title": "4. Cancellation and Refund",
-            "content": "4.1. You can cancel your subscription at any time through the options available in your account. However, no refunds or credits will be provided for periods when the subscription was not used."
+            "subContent1": "4.1. You can cancel your subscription at any time through the options available in your account. However, no refunds or credits will be provided for periods when the subscription was not used.",
+            "subContent2": "4.2. You agree to contact us at the email address contato@basedosdados.org before opening a charge dispute with your bank."
         },
         "term5": {
             "title": "5. Responsible Use",

@@ -22,7 +22,8 @@
         },
         "term4": {
             "title": "4. Cancelamento e Reembolso",
-            "content": "4.1. Você pode cancelar sua assinatura a qualquer momento através das opções disponíveis em sua conta. No entanto, não serão fornecidos reembolsos ou créditos por períodos em que a assinatura não foi utilizada."
+            "subContent1": "4.1. Você pode cancelar sua assinatura a qualquer momento através das opções disponíveis em sua conta. No entanto, não serão fornecidos reembolsos ou créditos por períodos em que a assinatura não foi utilizada.",
+            "subContent2": "4.2. Você concorda em entrar em contato conosco no email contato@basedosdados.org antes de abrir uma contestação de cobrança com seu banco."
         },
         "term5": {
             "title": "5. Uso Responsável",
