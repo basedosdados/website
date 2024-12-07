@@ -32,6 +32,7 @@ import Link from "../atoms/Link";
 import RoundedButton from "../atoms/RoundedButton";
 import HelpWidget from "../atoms/HelpWidget";
 import { triggerGAEvent } from "../../utils";
+import DomainComponent from "../atoms/DomainComponent";
 
 import BDLogoImage from "../../public/img/logos/bd_logo";
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
@@ -996,49 +997,98 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     }
   }, [userBD, isLoading])
 
-  const links = {
-    [t('data')]: `/search`,
-    [t('solutions')]: [
-      {
-        icon: locale === 'en' ? <DBLogoProImage widthImage="54px"/> : <BDLogoProImage widthImage="54px"/>,
-        name: [t('exclusive_data')],
-        href: locale === 'en' ? "https://info.basedosdados.org/en/bd-pro" :
-              locale === 'es' ? "https://info.basedosdados.org/es/bd-pro" :
-              "https://info.basedosdados.org/bd-pro"
-      },
-      {
-        icon: locale === 'en' ? <DBLogoEduImage widthImage="54px"/> : <BDLogoEduImage widthImage="54px"/>,
-        name: [t('data_courses')],
-        href: "https://info.basedosdados.org/bd-edu-sql"
-      },
-      {
-        icon: locale === 'en' ? <DBLogoLabImage widthImage="54px"/> : <BDLogoLabImage widthImage="54px"/>,
-        name: [t('services')],
-        href: "/services"
-      },
-    ],
-    [t('prices')]: "/prices",
-    [t('tutorials')]: [
-      {name: [t('documentation')], href:
-        locale === "en" ? "https://basedosdados.github.io/sdk/en" :
-        locale === "es" ? "https://basedosdados.github.io/sdk/es" :
-        "https://basedosdados.github.io/sdk"
-      },
-      {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
-      {name: [t('blog')], href: "https://medium.com/basedosdados"}
-    ],
-    Blog: "/blog",
-    [t('institutional')]: [
-      {name: [t('about_us')], href: "/about-us"},
-      {name: [t('transparency')], href: "/transparency"},
-      {name: [t('newsletter')], href: locale === 'en' ? "https://info.basedosdados.org/en/newsletter" :
-                                      locale === 'es' ? "https://info.basedosdados.org/es/newsletter" :
-                                                        "https://info.basedosdados.org/newsletter"},
-      {name: [t('jobs')], href: "https://info.basedosdados.org/carreiras"},
-      {name: [t('faq')], href: "/faq"},
-    ],
-    [t('contact')]: "/contact",
-    Button: []
+  let links;
+
+  if (locale === "pt") {
+
+    links = {
+      [t('data')]: `/search`,
+      [t('solutions')]: [
+        {
+          icon: <BDLogoProImage widthImage="54px"/>,
+          name: [t('exclusive_data')],
+          href: "https://info.basedosdados.org/bd-pro"
+        },
+        {
+          icon: <BDLogoEduImage widthImage="54px"/>,
+          name: [t('data_courses')],
+          href: "https://info.basedosdados.org/bd-edu-sql"
+        },
+        {
+          icon: <BDLogoLabImage widthImage="54px"/>,
+          name: [t('services')],
+          href: "/services"
+        },
+      ],
+      [t('prices')]: "/prices",
+      [t('tutorials')]: [
+        {name: [t('documentation')], href: "https://basedosdados.github.io/sdk"},
+        {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
+      ],
+      Blog: "/blog",
+      [t('institutional')]: [
+        {name: [t('about_us')], href: "/about-us"},
+        {name: [t('transparency')], href: "/transparency"},
+        {name: [t('newsletter')], href: "https://info.basedosdados.org/newsletter"},
+        {name: [t('jobs')], href: "https://info.basedosdados.org/carreiras"},
+        {name: [t('faq')], href: "/faq"},
+      ],
+      [t('contact')]: "/contact",
+      Button: []
+    }
+
+  } else if (locale === "en") {
+
+    links = {
+      [t('data')]: `/search`,
+      [t('solutions')]: [
+        {
+          icon: <DBLogoProImage widthImage="54px"/>,
+          name: [t('exclusive_data')],
+          href: "https://info.basedosdados.org/en/bd-pro"
+        }
+      ],
+      [t('prices')]: "/prices",
+      [t('tutorials')]: [
+        {name: [t('documentation')], href: "https://basedosdados.github.io/sdk/en"},
+        {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
+      ],
+      Blog: "/blog",
+      [t('institutional')]: [
+        {name: [t('about_us')], href: "/about-us"},
+        {name: [t('transparency')], href: "/transparency"},
+        {name: [t('faq')], href: "/faq"},
+      ],
+      [t('contact')]: "/contact",
+      Button: []
+    }
+
+  } else if (locale === "es") {
+
+    links = {
+      [t('data')]: `/search`,
+      [t('solutions')]: [
+        {
+          icon: <BDLogoProImage widthImage="54px"/>,
+          name: [t('exclusive_data')],
+          href: "https://info.basedosdados.org/es/bd-pro"
+        }
+      ],
+      [t('prices')]: "/prices",
+      [t('tutorials')]: [
+        {name: [t('documentation')], href: "https://basedosdados.github.io/sdk/es"},
+        {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
+      ],
+      Blog: "/blog",
+      [t('institutional')]: [
+        {name: [t('about_us')], href: "/about-us"},
+        {name: [t('transparency')], href: "/transparency"},
+        {name: [t('faq')], href: "/faq"},
+      ],
+      [t('contact')]: "/contact",
+      Button: []
+    }
+
   }
 
   useEffect(() => {

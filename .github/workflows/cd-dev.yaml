@@ -86,7 +86,35 @@ jobs:
                 - hosts:
                     - "development.basedosdados.org"
                   secretName: "development-basedosdados-org-tls"
+              internationalDomains:
+                - language: "es"
+                  host: "development.basedelosdatos.org"
+                  annotations:
+                    cert-manager.io/issuer: "letsencrypt-production"
+                    kubernetes.io/ingress.class: nginx
+                    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+                  tls:
+                    - hosts:
+                        - "development.basedelosdatos.org"
+                      secretName: "development-basedelosdatos-org-tls"
+                - language: "en"
+                  host: "development.data-basis.org"
+                  annotations:
+                    cert-manager.io/issuer: "letsencrypt-production"
+                    kubernetes.io/ingress.class: nginx
+                    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+                  tls:
+                    - hosts:
+                        - "development.data-basis.org"
+                      secretName: "development-data-basis-org-tls"
           EOF
+
+      - name: Debug values.yaml
+        run: |
+          echo "Generated values.yaml content:"
+          cat values.yaml
+          echo "Validating YAML syntax:"
+          python3 -c "import yaml; yaml.safe_load(open('values.yaml'))"
 
       - name: Deploy using Helm
         run: |

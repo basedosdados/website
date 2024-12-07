@@ -6,7 +6,7 @@ website:
   # Deployment image
   image:
     name: "ghcr.io/basedosdados/website"
-    tag: "production" # We use the production tag fot the website as a default
+    tag: "production"
     pullPolicy: "Always"
 
   # Number of replicas
@@ -14,36 +14,15 @@ website:
 
   # Specifying resources is recommended for production deployments
   resources: {}
-    # limits:
-    #   cpu: 500m
-    #   memory: 1G
-    # requests:
-    #   cpu: 100m
-    #   memory: 500Mi
 
-  # Additional environment variables to be passed to the website container.
+  # Additional environment variables
   env: []
-    # - name: "SOME_ENV"
-    #   value: "some-value"
   envFrom: []
-    # - secretRef:
-    #     name: "some-secret"
 
   # Ingress configuration
   ingress:
-    # Enable ingress
     enabled: false
-
-    # Host to be used in the ingress
-    host: "basedosdados-website.example.com"
-
-    # Ingress annotations
+    host: ""
     annotations: {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
-
-    # TLS configuration
     tls: []
-      # - secretName: basedosdados-website-tls
-      #   hosts:
-      #     - basedosdados-website.example.com
+    internationalDomains: []

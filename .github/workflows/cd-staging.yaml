@@ -84,6 +84,27 @@ jobs:
                 - hosts:
                     - "staging.basedosdados.org"
                   secretName: "staging-basedosdados-org-tls"
+              internationalDomains:
+                - language: "es"
+                  host: "staging.basedelosdatos.org"
+                  annotations:
+                    cert-manager.io/issuer: "letsencrypt-production"
+                    kubernetes.io/ingress.class: nginx
+                    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+                  tls:
+                    - hosts:
+                        - "staging.basedelosdatos.org"
+                      secretName: "staging-basedelosdatos-org-tls"
+                - language: "en"
+                  host: "staging.data-basis.org"
+                  annotations:
+                    cert-manager.io/issuer: "letsencrypt-production"
+                    kubernetes.io/ingress.class: nginx
+                    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+                  tls:
+                    - hosts:
+                        - "staging.data-basis.org"
+                      secretName: "staging-data-basis-org-tls"
           EOF
 
       - name: Deploy using Helm
