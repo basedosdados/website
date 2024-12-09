@@ -385,6 +385,8 @@ export function BlogGrid({ posts, category }) {
                   >
                     {t("seeAll")}
                     <ChevronIcon
+                      position="relative"
+                      top="-1px"
                       alt=""
                       width="16px"
                     />
