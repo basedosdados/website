@@ -126,9 +126,29 @@ export default function Post({ slug, mdxSource, headings }) {
         padding="24px 0 48px"
         gap="8px"
       >
-        {t("blog")} <Text color="#71757A">/</Text>
+        <Link 
+          href="/blog"
+          fontSize="14px"
+          fontWeight="400"
+          lineHeight="20px"
+          color="#0068C5"
+          _hover={{
+            color: "#0057A4"
+          }}
+        >{t("blog")}</Link> <Text color="#71757A">/</Text>
         {frontmatter.categories.map((elm) => {
-          return <Text>{categories?.[elm] || t(elm)}</Text>
+          return (
+            <Link
+              href={`/blog?category=${elm}`}
+              fontSize="14px"
+              fontWeight="400"
+              lineHeight="20px"
+              color="#0068C5"
+              _hover={{
+                color: "#0057A4"
+              }}
+            >{categories?.[elm] || t(elm)}</Link>
+          )
         })}
       </Text>
 
@@ -165,6 +185,7 @@ export default function Post({ slug, mdxSource, headings }) {
                 fontWeight="400"
                 lineHeight="24px"
                 color="#252A32"
+                marginTop="24px"
               >{t("noticedSomething")} </Text>
               <Link
                 href={`https://github.com/basedosdados/website/edit/main/next/blog/${slug}.md`}
@@ -177,6 +198,7 @@ export default function Post({ slug, mdxSource, headings }) {
                   color: "#0057A4"
                 }}
               >{t("contributeToBD")}</Link>
+              <Box id="hotjarSurveyBlog"/>
             </Box>
           </Box>
           <Box

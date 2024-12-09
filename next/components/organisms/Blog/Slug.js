@@ -62,7 +62,7 @@ function CodeBlock({ children }) {
     : { value: code };
 
   return (
-    <Box marginY={"1rem"} borderRadius={"8px"} backgroundColor={"#282b2e"}>
+    <Box marginY={"1rem"} borderRadius={"8px"} backgroundColor="#252A32">
       <Box display={"flex"} alignItems={"center"} padding={"0 0.5rem"}>
         {language ? (
           <Text
@@ -275,7 +275,10 @@ export function Toc({ headings }) {
               href={`#${id}`}
               fontFamily="Roboto"
               display="block"
-              _hover={{ textDecoration: "none" }}
+              _hover={{
+                textDecoration: "none",
+                opacity: 0.8
+              }}
               fontWeight="500"
               fontSize="14px"
               lineHeight="20px"
