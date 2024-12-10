@@ -16,7 +16,7 @@ authors:
   - name: Nayara Moraes
     role: Edição de arte
     social: https://www.linkedin.com/in/nayaramoraesdacosta
-thumbnail: /blog/perigo-no-mercado-de-trabalho/image_1.webp
+thumbnail: /blog/analisando-mercado-de-trabalho-do-rio-de-janeiro/image_1.webp
 categories: [analise]
 medium_slug: >-
   https://medium.com/basedosdados/perigo-no-mercado-de-trabalho-6b50c825bee1
@@ -138,7 +138,7 @@ map_saldo <- ggplot() +
 
 No mapa, evidenciamos as cidades com um saldo negativo (municípios em vermelho). Durante 2020, o saldo final foi de 132.628 vagas perdidas.
 
-<Image src="/blog/perigo-no-mercado-de-trabalho/image_0.webp"/>
+<Image src="/blog/analisando-mercado-de-trabalho-do-rio-de-janeiro/image_0.webp"/>
 
 ## Campos dos Goytacazes
 
@@ -249,7 +249,7 @@ hist_total <- grid.arrange(hist_rj, hist_campos, legenda,
 
 Como é possível observar nos dados, em comparação com o estado, Campos possui uma população com uma taxa desproporcionalmente alta de analfabetismo, sobretudo entre 50 e 60 anos de idade. O gráfico abaixo ilustra esse cenário:
 
-<Image src="/blog/perigo-no-mercado-de-trabalho/image_1.webp"/>
+<Image src="/blog/analisando-mercado-de-trabalho-do-rio-de-janeiro/image_1.webp"/>
 
 Essa situação se reflete nos salários, uma vez que a faixa etária onde deveriam ocorrer os maiores registros de remuneração possui as maiores taxas de analfabetismo da sociedade campista. Apesar de ser consideravelmente rica por conta dos royalties advindos da exploração de petróleo da bacia de Campos, a baixa qualificação da população faz o município figurar apenas a décima colocação das medianas salariais do estado do Rio de Janeiro em 2021, não aparecendo nem no top 10 em 2020, mesmo com um baixo saldo negativo de empregos.
 
@@ -427,7 +427,7 @@ Nota: Há um considerável contingente de missing (Não Informado) para a variá
 
 Enquanto a [literatura atual](https://www.anpec.org.br/encontro/2021/submissao/files_I/i13-75c71528dfa0a7d8f99e1bf79578b404.pdf) demostra que minorias, como negros e mulheres sofreram mais com a atual pandemia no estado, a mediana dos salários dos homens sofreu uma queda considerável entre 2020 e 2021, conforme mostra o gráfico abaixo:
 
-<Image src="/blog/perigo-no-mercado-de-trabalho/image_4.webp"/>
+<Image src="/blog/analisando-mercado-de-trabalho-do-rio-de-janeiro/image_4.webp"/>
 
 Vale ressaltar ainda que a pandemia causou uma anomalia importante no mercado de trabalho. A [literatura atual](<https://www.cemla.org/actividades/2021-final/2021-07-conference-frbny-ecb/SIII.1(PAPER)Leyva_Urrutia.pdf>) mostra que o mercado informal, que costumava ter um perfil contra cíclico —aumentando durante crises, em decorrência da profunda desaceleração econômica e da maior dependência de contato físico — vem também se reduzindo durante a pandemia. E não apenas no Brasil, mas também na América Latina.
 

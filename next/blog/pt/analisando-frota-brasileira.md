@@ -7,14 +7,14 @@ authors:
   - name: Andre Gorenstin
     role: Autor
     social: https://medium.com/@agorenstin
-thumbnail: /blog/analisando-a-frota-brasileira-com-a-bd/image_0.webp
+thumbnail: /blog/analisando-frota-brasileira/image_0.webp
 categories: [analise]
 medium_slug: >-
   https://medium.com/basedosdados/analisando-a-frota-brasileira-com-a-bd-f073c0c15ef
 published: true
 ---
 
-<Image src="/blog/analisando-a-frota-brasileira-com-a-bd/image_0.webp" caption="Fonte: Rawpixel"/>
+<Image src="/blog/analisando-frota-brasileira/image_0.webp" caption="Fonte: Rawpixel"/>
 
 ## TL;DR
 
@@ -27,7 +27,7 @@ Ao longo do artigo iremos responder 2 perguntas:
 
 ## Contexto
 
-<Image src="/blog/analisando-a-frota-brasileira-com-a-bd/image_1.webp" caption="Fonte: Rawpixel"/>
+<Image src="/blog/analisando-frota-brasileira/image_1.webp" caption="Fonte: Rawpixel"/>
 
 Nós os amando ou odiando, os veículos já rodam em terras tupiniquins há mais de 100 anos. Hoje entendemos que uma grande e crescente frota de veículos, aliada a um mau planejamento, pode resultar em congestionamentos, acidentes e poluição atmosférica. Sabemos também que o transporte público e os veículos particulares devem se complementar e que ambos são essenciais para a nossa locomoção.
 
@@ -117,7 +117,7 @@ ggplot(df_automovel) +
 
 O resultado é o gráfico abaixo, que demonstra os 10 municípios com maior indicador de automóveis per capta no Brasil.
 
-<Image src="/blog/analisando-a-frota-brasileira-com-a-bd/image_2.webp"/>
+<Image src="/blog/analisando-frota-brasileira/image_2.webp"/>
 
 Destaques da análise:
 
@@ -184,7 +184,7 @@ ggplot(df_share_total, aes(fill = tipo_veiculo, y = as.numeric(percent), x = nom
 
 O resultado é o gráfico abaixo, que demonstra em porcentagem o share de veículos nos municípios mais populosos do Brasil.
 
-<Image src="/blog/analisando-a-frota-brasileira-com-a-bd/image_3.webp"/>
+<Image src="/blog/analisando-frota-brasileira/image_3.webp"/>
 
 Destaques da análise:
 
