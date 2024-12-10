@@ -12,7 +12,7 @@ logo: {
   height: 85
 }
 about: "Journalism and technology company for decision-makers with the mission of making Brazilian institutions more transparent and predictable."
-resume: "Created by DB in partnership with JOTA, a journalism and technology company, the 'Follow the Money' platform helped the population and press monitor campaign financing during the 2022 elections. The project became an important tool for public transparency and combating corruption in the electoral process."
+summary: "Created by DB in partnership with JOTA, a journalism and technology company, the 'Follow the Money' platform helped the population and press monitor campaign financing during the 2022 elections. The project became an important tool for public transparency and combating corruption in the electoral process."
 sector: "Politics"
 ---
 

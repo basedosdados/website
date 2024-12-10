@@ -12,7 +12,7 @@ logo: {
   height: 85
 }
 about: "Empresa de periodismo y tecnología para tomadores de decisiones cuya misión es hacer que las instituciones brasileñas sean más transparentes y predecibles."
-resume: "Creada por BD en asociación con JOTA, empresa de periodismo y tecnología, la plataforma Siga o Dinheiro ayudó a la población y la prensa a monitorear el financiamiento de campañas electorales en las elecciones de 2022. El proyecto se convirtió en una importante herramienta para la transparencia pública y la lucha contra la corrupción en el proceso electoral."
+summary: "Creada por BD en asociación con JOTA, empresa de periodismo y tecnología, la plataforma Siga o Dinheiro ayudó a la población y la prensa a monitorear el financiamiento de campañas electorales en las elecciones de 2022. El proyecto se convirtió en una importante herramienta para la transparencia pública y la lucha contra la corrupción en el proceso electoral."
 sector: "Política"
 ---
 

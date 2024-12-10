@@ -12,7 +12,7 @@ logo: {
   height: 85
 }
 about: "An organization working to ensure quality education for all Brazilian children and support leaders focused on Brazil's social development."
-resume: "With over 61 supported school networks and more than 28,000 schools involved, implementing a data analysis and indicator flow was crucial for the Fundação Lemann to better understand the education landscape in Brazil, evaluate supported programs, and set strategic goals to enhance education and leadership development in the country. BD provided practical solutions to make this possible, including restructuring the data architecture used by the Foundation, processing and making new datasets available in an online repository, analyzing collected information, and creating interactive dashboards automatically updated."
+summary: "With over 61 supported school networks and more than 28,000 schools involved, implementing a data analysis and indicator flow was crucial for the Fundação Lemann to better understand the education landscape in Brazil, evaluate supported programs, and set strategic goals to enhance education and leadership development in the country. BD provided practical solutions to make this possible, including restructuring the data architecture used by the Foundation, processing and making new datasets available in an online repository, analyzing collected information, and creating interactive dashboards automatically updated."
 sector: "Education"
 ---
 
