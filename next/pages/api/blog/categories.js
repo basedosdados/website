@@ -1,4 +1,5 @@
 export const categories = {
   analise: "Análises",
-  tutorial: "Tutoriais"
+  tutorial: "Tutoriais",
+  institucional: "Institucional"
 }

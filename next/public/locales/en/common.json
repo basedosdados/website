@@ -93,11 +93,12 @@
             "dataConsulting": "Data consulting",
             "caseStudies": "Case studies"
         },
-        "tutorials": {
-            "title": "TUTORIALS",
+        "resources": {
+            "title": "RESOURCES",
             "documentation": "Documentation",
             "blog": "Blog",
-            "youtubeVideos": "Videos"
+            "youtubeVideos": "Videos",
+            "faq": "FAQ"
         },
         "institutional": {
             "title": "INSTITUTIONAL",
@@ -105,7 +106,6 @@
             "transparency": "Transparency",
             "newsletter": "Newsletter",
             "careers": "Careers",
-            "faq": "FAQ",
             "termsAndPrivacy": "Terms and Privacy",
             "contact": "Contact",
             "supportProject": "Support the project"
