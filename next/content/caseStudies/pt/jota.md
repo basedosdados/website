@@ -12,7 +12,7 @@ logo: {
   height: 85
 }
 about: "Empresa de jornalismo e tecnologia para tomadores de decisão que tem como missão tornar as instituições brasileiras mais transparentes e previsíveis."
-resume: "Criada pela BD em parceria com o JOTA, empresa de jornalismo e tecnologia, a plataforma Siga o Dinheiro auxiliou população e imprensa no monitoramento do financiamento de campanhas eleitorais nas eleições de 2022. O projeto se tornou uma importante ferramenta para a transparência pública e o combate à corrupção no processo eleitoral."
+summary: "Criada pela BD em parceria com o JOTA, empresa de jornalismo e tecnologia, a plataforma Siga o Dinheiro auxiliou população e imprensa no monitoramento do financiamento de campanhas eleitorais nas eleições de 2022. O projeto se tornou uma importante ferramenta para a transparência pública e o combate à corrupção no processo eleitoral."
 sector: "Política"
 ---
 

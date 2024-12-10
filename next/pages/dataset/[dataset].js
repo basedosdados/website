@@ -74,8 +74,7 @@ export default function DatasetPage ({ dataset, mdxSource, headings, infoId }) {
 
   const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
 
-
-  const isDatasetEmpty = dataset === null || Object.keys(dataset).length === 0
+  const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
 
   if(isDatasetEmpty) return <MainPageTemplate userTemplate><FourOFour/></MainPageTemplate>
 
