@@ -12,18 +12,18 @@ authors:
 thumbnail: /blog/explorando-o-censo-escolar-com-a-bd/image_0.jpg
 categories: [analise]
 medium_slug: https://medium.com/@basedosdados/explorando-o-censo-escolar-com-a-bd-6577d7251ea1
-published: true
+published: false
 ---
 
 <Image src="/blog/explorando-o-censo-escolar-com-a-bd/image_0.jpg"/>
 
 ## TL;DR
 
-Nesse texto, vamos dissecar o conjunto de dados do **Censo Escolar,** já disponível, tratado e pronto para a análise na BD+. Primeiro, vamos introduzir as **quatro** diferentes tabelas da base, apresentando algumas de suas variáveis. Depois, vamos mostrar alguns pontos de contato interessantes com outras tabelas disponíveis em nosso datalake público e perguntas que podem surgir dessas interações. Acesse essa base por [aqui](/dataset/dae21af4-4b6a-42f4-b94a-4c2061ea9de5?table=cf9586ad-a168-40c1-97f9-86083ba4409f).
+Nesse texto, vamos dissecar o conjunto de dados do **Censo Escolar,** já disponível, tratado e pronto para a análise na BD. Primeiro, vamos introduzir as **quatro** diferentes tabelas da base, apresentando algumas de suas variáveis. Depois, vamos mostrar alguns pontos de contato interessantes com outras tabelas disponíveis em nosso datalake público e perguntas que podem surgir dessas interações. Acesse essa base por [aqui](/dataset/dae21af4-4b6a-42f4-b94a-4c2061ea9de5?table=cf9586ad-a168-40c1-97f9-86083ba4409f).
 
 ## O Censo e suas dificuldades
 
-O Censo Escolar é uma pesquisa **anual**, onde cada escola do país responde a diversas perguntas sobre a própria escola, as turmas, os professores e os alunos que ali frequentam. O Censo tem microdados desde 1995 e, em 2007, assumiu um novo formato digital. Há indícios de que a pesquisa ocorre desde a década de 30. Aqui na Base dos Dados, optamos por disponibilizar, inicialmente, valores **desde 2009 até 2020**. O período é o mais uniforme da pesquisa e foi quando ela manteve o mesmo formato, o que facilita e corrobora com a compatibilização entre diferentes anos.
+O Censo Escolar é uma pesquisa **anual**, onde cada escola do país responde a diversas perguntas sobre a própria escola, as turmas, os professores e os alunos que ali frequentam. O Censo tem microdados desde 1995 e, em 2007, assumiu um novo formato digital. Há indícios de que a pesquisa ocorre desde a década de 30. Aqui na Base dos Dados, optamos por disponibilizar, inicialmente, valores **desde 2009**. O período é o mais uniforme da pesquisa e foi quando ela manteve o mesmo formato, o que facilita e corrobora com a compatibilização entre diferentes anos.
 
 A disponibilização dos dados do Censo, assim como de outras bases de educação, vêm do [Plano Inep Dados Abertos](http://inep.gov.br/dados). Porém, utilizar as bases originais do Censo tem vários obstáculos:
 
@@ -34,7 +34,7 @@ A disponibilização dos dados do Censo, assim como de outras bases de educaçã
 
 Ao invés de enfrentar tudo isso, você pode usar nossa versão já limpa e harmonizada, baixando via BigQuery ou abrindo as tabelas [direto no R](/blog/como-acessar-dados-publicos-em-r) ou [no Python](/blog/intro-ao-pacote-basedosdados-em-python).
 
-## Explorando o Censo Escolar com a BD+
+## Explorando o Censo Escolar com a BD
 
 Com as suas 4 tabelas, o nosso dataset do Censo Escolar replica a arquitetura da base original, disponibilizando diferentes tabelas para diferentes níveis de agregação. Temos uma base a nível de **escola**, uma a nível de **turma**, e duas no nível individual: uma para **docentes** e outra para os **alunos**.
 

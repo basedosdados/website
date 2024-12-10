@@ -10,7 +10,7 @@ authors:
     role: Edição
   - name: José Félix
     role: Edição de arte
-thumbnail: /blog/qual-a-relacao-chuvas-extremas-no-rs-com-as-mudancas-climaticas/image_0.webp
+thumbnail: /blog/analisando-chuvas-no-rio-grande-do-sul/image_0.webp
 categories: [analise]
 medium_slug: >-
   https://medium.com/basedosdados/qual-foi-a-magnitude-das-chuvas-extremas-que-atingiram-porto-alegre-este-ano-e-qual-a-rela%C3%A7%C3%A3o-675265bce50e
@@ -27,7 +27,7 @@ Acesse os dados no INMET por [aqui](/dataset/782c5607-9f69-4e12-b0d5-aa0f1a7a94e
 
 A estação foi instalada em 22 de setembro de 2000 e, desde então, tem coletado dados de pressão, temperatura e, entre outros, precipitação, nosso interesse. É possível perceber que, a partir do dia 27 de abril, o volume de chuvas ultrapassou toda a precipitação registrada para qualquer ano anterior, como é possível observar no gráfico abaixo.
 
-<Image src="/blog/qual-a-relacao-chuvas-extremas-no-rs-com-as-mudancas-climaticas/image_0.webp"/>
+<Image src="/blog/analisando-chuvas-no-rio-grande-do-sul/image_0.webp"/>
 
 A precipitação não só se manteve alta até a primeira semana de maio, mas por todo o resto do mês. Ainda no dia 23, maio já havia sido declarado o mês com maior quantidade de chuva na história de Porto Alegre.
 
@@ -35,7 +35,7 @@ Chuvas tão intensas e por tanto tempo foram o resultado de um alinhamento desag
 
 Climatologistas determinam índices para facilitar a avaliação de eventos extremos e poder entender como eles estão se dando ao longo do tempo. Um desses índices determina a maior quantidade de precipitação em um período de cinco dias seguidos ao longo de um ano. Um valor muito alto em relação à média climatológica indicaria a presença de um evento extremo. Com os dados da estação automática de Porto Alegre fizemos esta análise abaixo e o resultado foi notável.
 
-<Image src="/blog/qual-a-relacao-chuvas-extremas-no-rs-com-as-mudancas-climaticas/image_1.webp"/>
+<Image src="/blog/analisando-chuvas-no-rio-grande-do-sul/image_1.webp"/>
 
 Com relação ao futuro do Rio Grande do Sul e a previsão de novos eventos climáticos extremos, Karina explica que "os modelos projetam aumento do total anual e da precipitação máxima de 5 dias sobre o estado, e não uma precipitação bem distribuída durante o ano. Teremos mais eventos extremos de chuva."
 
@@ -47,7 +47,7 @@ Embora tenhamos testemunhado uma mobilização surpreendente do governo e socied
 
 Já tivemos uma contribuição especial na análise desta edição e, para completar o assunto, tivemos o prazer de aprofundar um pouco a conversa sobre mudanças climáticas com a Karina Lima. Falamos sobre os desafios na análise de dados meteorológicos, possíveis relações do aquecimento global com os eventos extremos no RS e mais.
 
-<Image src="/blog/qual-a-relacao-chuvas-extremas-no-rs-com-as-mudancas-climaticas/image_2.webp" caption="Karina Lima, Doutoranda em climatologia e divulgadora científica"/>
+<Image src="/blog/analisando-chuvas-no-rio-grande-do-sul/image_2.webp" caption="Karina Lima, Doutoranda em climatologia e divulgadora científica"/>
 
 Karina é doutoranda em Geografia na área de Climatologia pela Universidade Federal do Rio Grande do Sul (UFRGS), mestre em Geografia com ênfase em análise ambiental e bacharel em Geografia pela mesma instituição e atua nas áreas de Climatologia e Meteorologia com pesquisas sobre tempestades, eventos extremos, desastres e mudanças climáticas. Ela também integra grupos de pesquisa sobre os impactos de eventos extremos na saúde humana e o projeto de extensão "O Que Você Faria Se Soubesse o Que Eu Sei?", que comunica sobre a crise climática e combate o negacionismo.
 

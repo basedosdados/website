@@ -12,7 +12,7 @@ authors:
   - name: Giovane Caruso
     role: Edição
     social: https://www.linkedin.com/in/giovanecaruso/
-thumbnail: /blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_0.png
+thumbnail: /blog/analisando-credito-rural-no-brasil/image_0.png
 categories: [analise]
 medium_slug: https://medium.com/@basedosdados/como-explorar-e-an%C3%A1lisar-os-dados-de-cr%C3%A9dito-rural-no-brasil-53cf6c478781
 published: true
@@ -33,7 +33,7 @@ Tudo começa com o Sistema Nacional de Crédito Rural (SNCR), **criado em 1965 c
 
 Para resumir, é o MAPA que **estipula**, o BACEN **regula** e as IFs **concedem** crédito\*. A imagem abaixo sintetiza bem a composição e funcionamento do Sistema Nacional de Crédito Rural (SNCR)
 
-<Image src="/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_0.png" caption="Esquema com instituições envolvidas na concessão de Crédito Rural no Brasil e seus papéis. [Fonte](https://www.radardesustentabilidade.org.br/media/guidelines/files/GGP_Gênero_Cartilha_3_PT_WEB.pdf)"/>
+<Image src="/blog/analisando-credito-rural-no-brasil/image_0.png" caption="Esquema com instituições envolvidas na concessão de Crédito Rural no Brasil e seus papéis. [Fonte](https://www.radardesustentabilidade.org.br/media/guidelines/files/GGP_Gênero_Cartilha_3_PT_WEB.pdf)"/>
 
 ## De onde vêm os microdados do Crédito Rural?
 
@@ -45,7 +45,7 @@ De janeiro de 2013 a setembro de 2022, por exemplo, foram registradas 19.65 milh
 
 A imagem abaixo ajuda a compreender o panorama geral dos atores e componentes importantes do Sistema Nacional de Crédito Rural (SNCR), com destaque para as fontes de recurso e os beneficiários.
 
-<Image src="/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_1.png"/>
+<Image src="/blog/analisando-credito-rural-no-brasil/image_1.png"/>
 
 Se quiser se aprofundar mais, você pode ver mais informações do Banco Central do Brasil sobre como funciona o Crédito Rural por [aqui](https://www.bcb.gov.br/estabilidadefinanceira/creditorural). Feita essa breve introdução, vamos enfim começar a explorar e analisar os dados com algumas perguntas interessantes.
 
@@ -167,7 +167,7 @@ plot1 <- operacoes_ano %>%
   )
 ```
 
-<Image src="/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_2.png" caption="Valor de Crédito Rural contratado por ano, durante janeiro de 2013 a setembro de 2022"/>
+<Image src="/blog/analisando-credito-rural-no-brasil/image_2.png" caption="Valor de Crédito Rural contratado por ano, durante janeiro de 2013 a setembro de 2022"/>
 
 ### Qual foi o montante de crédito cocedido por categoria de produtor?
 
@@ -287,7 +287,7 @@ plot2 <- operacoes_ano_st %>%
 plot2
 ```
 
-<Image src="/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_3.png" caption="Valor de Crédito Rural contratado por categoria de beneficiário durante janeiro de 2013 a setembro de 2022"/>
+<Image src="/blog/analisando-credito-rural-no-brasil/image_3.png" caption="Valor de Crédito Rural contratado por categoria de beneficiário durante janeiro de 2013 a setembro de 2022"/>
 
 De modo geral, a demanda por crédito é influência pela taxa SELIC — a taxa de juros básica da econômia. Juros mais altos tendêm a reduzir a demanda, enquanto juros mais baixos tendêm a aumentá-la. Em 2020 a SELIC permaneceu em patamares historicamente baixos, a um valor médio de 2,0% ao ano (a.a.). Já em 2021, apesar do aumento de 7,25% ao longo do ano, a SELIC esteve abaixo de 7.75% até dezembro, o que pode explicar em parte o crescimento expressivo observado em 2020 e sobretudo em 2021.
 
@@ -356,7 +356,7 @@ plot3 <- produtos_emitentes %>%
 plot3
 ```
 
-<Image src="/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_4.png" caption="Top 3 financiados por categoria de beneficiário durante janeiro de 2013 a setembro de 2022"/>
+<Image src="/blog/analisando-credito-rural-no-brasil/image_4.png" caption="Top 3 financiados por categoria de beneficiário durante janeiro de 2013 a setembro de 2022"/>
 
 É bastante perceptível o alto grau de homogeinização dos produtos com maior valor de crédito contratado. A soja aparece como o principal para os GP e MP seguida dos Bovinos. Para os PP a situação se inverte, o financiamento a Bovinos aparece como principal, seguido do milho e da soja.
 
@@ -441,7 +441,7 @@ plot4 <- top3_ifs_prod %>%
 plot4
 ```
 
-<Image src="/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_5.png" caption="Top 3 instituições financeiras por categoria de beneficiário durante janeiro de 2013 a setembro de 2022"/>
+<Image src="/blog/analisando-credito-rural-no-brasil/image_5.png" caption="Top 3 instituições financeiras por categoria de beneficiário durante janeiro de 2013 a setembro de 2022"/>
 
 O papel dos bancos públicos na concessão de crédito rural torna-se nítido, com o Banco do Brasil (BB) como maior credor para todas as categorias. Ademais disso, para os PP as 3 IFs com maior valor contratado são públicas. Para os MP foi identificado o banco do Bradesco em segundo lugar. Por fim, apesar do BB aperecer como maior credor os GP tem como financiadores importantes dois grandes bancos privados: Itaú e Bradesco.
 
@@ -501,7 +501,7 @@ plot5 <- credito_banco %>%
 plot5
 ```
 
-<Image src="/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_6.png" caption="Top 8 instituições financeiras por valor financiado durante janeiro de 2013 a setembro de 2022"/>
+<Image src="/blog/analisando-credito-rural-no-brasil/image_6.png" caption="Top 8 instituições financeiras por valor financiado durante janeiro de 2013 a setembro de 2022"/>
 
 ### Quais programas de crédito tem maior valor de recursos contratado?
 
@@ -582,7 +582,7 @@ plot6 <- prog %>%
 plot6
 ```
 
-<Image src="/blog/como-explorar-e-analisar-os-dados-de-credito-rural-no-brasil/image_7.png" cation="Top 8 programas de Crédito por valor financiado durante janeiro de 2013 a setembro de 2022"/>
+<Image src="/blog/analisando-credito-rural-no-brasil/image_7.png" cation="Top 8 programas de Crédito por valor financiado durante janeiro de 2013 a setembro de 2022"/>
 
 Descrição das siglas dos programas:
 

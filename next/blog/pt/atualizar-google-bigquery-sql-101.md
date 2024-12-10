@@ -13,7 +13,7 @@ authors:
 thumbnail: /blog/google-bigquery-sql-101/image_0.jpg
 categories: [tutorial]
 medium_slug: https://medium.com/@basedosdados/bigquery-101-8b39da1ce52b
-published: true
+published: false
 ---
 
 <Image src="/blog/google-bigquery-sql-101/image_0.jpg"/>

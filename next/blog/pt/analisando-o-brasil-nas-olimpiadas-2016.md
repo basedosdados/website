@@ -7,17 +7,17 @@ authors:
   - name: Lucas Nascimento
     role: Autor
     social: https://github.com/lucasnascm
-thumbnail: /blog/o-brasil-nas-olimpiadas/image_0.jpg
+thumbnail: /blog/analisando-o-brasil-nas-olimpiadas-2016/image_0.jpg
 categories: [analise]
 medium_slug: https://medium.com/@basedosdados/o-brasil-nas-olimp%C3%ADadas-2a3f9960cc69
-published: true
 ---
 
-## TL;DR
+> **Atenção**: Esse artigo foi publicado em 2021 e foi baseado num conjunto de dados que possuia informações até 2016. Para as olimpíadas de 2024, não encontramos os dados no mesmo formato, por isso incluímos dados até 2021 em um novo formato neste [novo conjunto de dados](https://basedosdados.org/dataset/62f8cb83-ac37-48be-874b-b94dd92d3e2b?table=567b1ccd-d8c2-4616-bacb-cf5c0e7b8d89).
 
+## TL;DR
 Hoje começa mais uma edição das Olimpíadas, mas você sabia que os jogos da Era Moderna tiveram sua primeira edição em 1896? Nesse texto vamos apresentar dados históricos dos Jogos Olímpicos, que já estão limpos, tratados e disponíveis no datalake público da Base dos Dados. Os [microdados das Olimpíadas](/dataset/62f8cb83-ac37-48be-874b-b94dd92d3e2b?table=567b1ccd-d8c2-4616-bacb-cf5c0e7b8d89) trazem informações sobre os jogos, cidade sede, as delegações, atletas e suas características, além dos esportes, suas diferentes modalidades e medalhistas também.
 
-<Image src="/blog/o-brasil-nas-olimpiadas/image_0.jpg"/>
+<Image src="/blog/analisando-o-brasil-nas-olimpiadas-2016/image_0.jpg"/>
 
 O script de análise foi executado em R usando nosso pacote de dados. A ideia aqui é mostrar um panorama da performance brasileira nas edições em que a delegação brasileira esteve presente. Vale lembrar que, com a BD+, você também pode acessar esses dados em Python ou diretamente pelo BigQuery.
 
@@ -37,7 +37,7 @@ olimpiadas <- basedosdados::read_sql(
 
 O Brasil teve sua primeira participação em uma edição dos Jogos Olímpicos em 1900, na cidade de Paris. O único atleta da delegação era Adolphe Klingelhoeffer, que competia nas provas de atletismo. A próxima edição com representantes brasileiros foi em 1920 e, desde então, temos marcado presença em diferentes provas. Abaixo você pode conferir o panorama da participação brasileira ao longo das edições dos jogos, com número de atletas e modalidades, e veja também o código utilizado para produzir essa visualização.
 
-<Image src="/blog/o-brasil-nas-olimpiadas/image_1.png"/>
+<Image src="/blog/analisando-o-brasil-nas-olimpiadas-2016/image_1.png"/>
 
 ```r
 counts <- olimpiadas %>%
@@ -71,7 +71,7 @@ O recorde de participação brasileira foi em 2016, competindo em casa, com 462 
 
 Em todas as edições, jornais e canais esportivos se concentram nos melhores momentos da nossa delegação e o quadro geral de medalhas é um destaque nos noticiários. Analisando o desempenho dos atletas nos jogos em que participou, o Brasil acumula 30 medalhas de ouro, 36 de prata e 63 bronzes. O gráfico abaixo mostra os esportes, nas modalidades masculina e feminina somados, em que o Brasil divide suas conquistas.
 
-<Image src="/blog/o-brasil-nas-olimpiadas/image_2.png"/>
+<Image src="/blog/analisando-o-brasil-nas-olimpiadas-2016/image_2.png"/>
 
 No nosso pódio, Judô, Vela e Atletismo são os recordistas no total de medalhas com 22, 18 e 16, respectivamente. Os dados permitem identificar quem são os atletas campeões e os eventos em que eles garantiram a vitória. Nas modalidades do Judô 🥋, as mulheres ganharam 3 medalhas de bronze e 2 de ouro, enquanto os homens trouxeram para casa 12 bronzes, 3 pratas e 2 ouros. O script para desenvolver o gráfico é:
 
@@ -106,7 +106,7 @@ ggplot(medalha_counts, aes(x = esporte, y = Count, fill = medalha)) +
 
 A participação feminina brasileira nos jogos acontece pela primeira vez somente em 1932–36 anos após a primeira edição — e a lacuna entre homens e mulheres é notória. Antes dos anos 2000, a razão de homens para mulheres nos jogos era de 20% em média: ou seja, para cada mulher competindo na delegação, existiam outros 5 homens. Somente no novo milênio que essa desigualdade quase se anula, a nível Brasil. Em 2016, foram 207 mulheres e 255 homens competindo em 31 esportes diferentes.
 
-<Image src="/blog/o-brasil-nas-olimpiadas/image_3.png"/>
+<Image src="/blog/analisando-o-brasil-nas-olimpiadas-2016/image_3.png"/>
 
 O código de análise do total de participação por sexo ao longo dos anos é fácil.
 

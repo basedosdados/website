@@ -7,18 +7,17 @@ authors:
   - name: Victor Viana
     role: Autor
     social: https://medium.com/@ovictorviana
-thumbnail: /blog/tutorial-power-bi/image_11.gif
+thumbnail: /blog/como-acessar-dados-da-bd-no-power-bi/image_11.gif
 categories: [tutorial]
 medium_slug: >
   https://medium.com/basedosdados/como-acessar-dados-da-bd-no-power-bi-aeeea9a9bdc0
-published: true
 ---
 
 ## TL;DR
 
 O Power BI é uma das tecnologias mais populares para o desenvolvimento de dashboards com dados relacionais, e a [Base dos Dados]() é um dos maiores data lakes públicos do Brasil. Essa combinação é o ambiente perfeito para sua análise e a visualização de dados. Neste artigo, vou te mostrar como é fácil ter acesso às bases de dados da BD para uso no PBI, além de explicar o passo a passo.
 
-<Image src="/blog/tutorial-power-bi/image_0.png"/>
+<Image src="/blog/como-acessar-dados-da-bd-no-power-bi/image_0.png"/>
 
 ## Conectar ao Google BigQuery
 
@@ -41,7 +40,7 @@ Ainda no site, você pode clicar no botão “Consultar no BigQuery” para ser 
 
 Clicamos então em “Criar nova consulta” e no editor que aparece na tela basta colar o código copiado e rodar. Note que no código explicitamos `LIMIT 100` para puxar somente as 100 primeiras linhas do dado, mas você pode mudar esse parâmetro (ou removê-lo) para puxar mais linhas - pedimos somente que tome cuidado com bases muito grandes (RAIS, Censo Populacional), pois puxar todos os dados de uma vez não só é demorado como também gasta bastante processamento, o que pode acarretar em custos.
 
-<Image src="/blog/tutorial-power-bi/image_1.png"/>
+<Image src="/blog/como-acessar-dados-da-bd-no-power-bi/image_1.png"/>
 
 ```sql
 SELECT
@@ -61,25 +60,25 @@ LIMIT
   100
 ```
 
-<Image src="/blog/tutorial-power-bi/image_2.png"/>
+<Image src="/blog/como-acessar-dados-da-bd-no-power-bi/image_2.png"/>
 
 ### Salvando os dados num projeto privado
 
 Salve a tabela obtida clicando em **Salvar**. Você pode salvar a consulta ou a visualização
 
-<Image src="/blog/tutorial-power-bi/image_3.png"/>
+<Image src="/blog/como-acessar-dados-da-bd-no-power-bi/image_3.png"/>
 
-O BigQuery irá te pedir para criar um conjunto de dados onde você pode salvar essa tabela (caso não tenha um). Se já tem maior familiaridade com o PBI, é algo muito similar aos conjuntos de dados do PBI. Dê um nome intuitivo ao seu conjunto No caso da Base dos Dados, organizamos os nomes de conjuntos por abrangência geográfica, instituição e tema do dado, você pode ver mais sobre nossas regras de nomenclatura [aqui](https://basedosdados.github/mais/style_data/#nomea%C3%A7%C3%A3o-de-bases-e-tabelas). Esse conjunto é essencialmente uma “pasta”onde ficarão todas as tabelas do seu projeto. Neste exemplo, escolhemos o nome “tutorial” de forma mais genérica.
+O BigQuery irá te pedir para criar um conjunto de dados onde você pode salvar essa tabela (caso não tenha um). Se já tem maior familiaridade com o PBI, é algo muito similar aos conjuntos de dados do PBI. Dê um nome intuitivo ao seu conjunto No caso da Base dos Dados, organizamos os nomes de conjuntos por abrangência geográfica, instituição e tema do dado, você pode ver mais sobre nossas regras de nomenclatura [aqui](https://basedosdados.github.io/mais/style_data/#nomea%C3%A7%C3%A3o-de-bases-e-tabelas). Esse conjunto é essencialmente uma “pasta”onde ficarão todas as tabelas do seu projeto. Neste exemplo, escolhemos o nome “tutorial” de forma mais genérica.
 
-<Image src="/blog/tutorial-power-bi/image_4.png"/>
+<Image src="/blog/como-acessar-dados-da-bd-no-power-bi/image_4.png"/>
 
 Em seguida, selecione o conjunto criado para salvar a base e escolha um nome para sua tabela e clique em Salvar. Simples assim 😊.
 
-<Image src="/blog/tutorial-power-bi/image_5.png"/>
+<Image src="/blog/como-acessar-dados-da-bd-no-power-bi/image_5.png"/>
 
 Agora seu projeto irá aparecer na barra lateral esquerda. Clique na setinha do lado do nome do seu projeto, lá vai aparecer seu conjunto de dados com a tabela que você salvou. Se não aparecer, atualize a página.
 
-<Image src="/blog/tutorial-power-bi/image_6.png"/>
+<Image src="/blog/como-acessar-dados-da-bd-no-power-bi/image_6.png"/>
 
 Para salvar outra tabela com as informações de municípios (nome, UF, etc), faça o mesmo processo com a query abaixo. Vamos chamar essa tabela de `dMunicipio`, que será salva no mesmo conjunto chamado `tutorial`.
 
@@ -98,22 +97,22 @@ FROM `basedosdados.br_bd_diretorios_brasil.municipio`
 - Abra o PBI
 - Vá em Obter Dados -> Mais
 
-<Image src="/blog/tutorial-power-bi/image_7.png"/>
+<Image src="/blog/como-acessar-dados-da-bd-no-power-bi/image_7.png"/>
 
 - Procure pelo `Google BigQuery` -> Conectar
 
-<Image src="/blog/tutorial-power-bi/image_8.png"/>
+<Image src="/blog/como-acessar-dados-da-bd-no-power-bi/image_8.png"/>
 
 - Entre com sua conta do Google. A mesma que fez as consultas no BigQuery. Caso você entre com outra conta não será possível conectar.
 
-<Image src="/blog/tutorial-power-bi/image_9.png"/>
+<Image src="/blog/como-acessar-dados-da-bd-no-power-bi/image_9.png"/>
 
 - Permita o acesso ao seu PBI
 - Volte ao PBI e clique em conectar
 - Selecione a pasta com o nome do seu conjunto de dados
 - Selecione as tabelas
 
-<Image src="/blog/tutorial-power-bi/image_10.png"/>
+<Image src="/blog/como-acessar-dados-da-bd-no-power-bi/image_10.png"/>
 
 - Clique em carregar
 - Selecione Importar
@@ -121,4 +120,4 @@ FROM `basedosdados.br_bd_diretorios_brasil.municipio`
 
 Pronto, agora você tem acesso às suas bases da BD para criar seu dashboard. :)
 
-<Image src="/blog/tutorial-power-bi/image_11.gif"/>
+<Image src="/blog/como-acessar-dados-da-bd-no-power-bi/image_11.gif"/>

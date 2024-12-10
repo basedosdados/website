@@ -7,7 +7,7 @@ authors:
   - name: Bruno Mioto
     role: Autor
     social: https://medium.com/@brunomioto
-thumbnail: /blog/analisando-dados-de-vacinacao-contra-covid-19-com-a-bd/image_2.webp
+thumbnail: /blog/analisando-vacinacao-contra-covid-19/image_2.webp
 categories: [analise]
 medium_slug: >-
   https://medium.com/basedosdados/analisando-dados-de-vacina%C3%A7%C3%A3o-contra-covid-19-com-a-bd-49fe3db8c7f4
@@ -156,7 +156,7 @@ vacina_populacao <- dados_vacina3 %>%
 
 O gráfico que queremos fazer tem mais ou menos a estrutura da imagem **1**. No entanto, com o `ggplot2` é mais fácil fazermos um gráfico de colunas, como a imagem **2,** e depois apenas inverter os eixos **x** e **y** utilizando a função `coord_flip()` no final da produção do gráfico.
 
-<Image src="/blog/analisando-dados-de-vacinacao-contra-covid-19-com-a-bd/image_0.webp"/>
+<Image src="/blog/analisando-vacinacao-contra-covid-19/image_0.webp"/>
 
 Por esse motivo, toda a construção do nosso gráfico será feita com base no gráfico **2** acima. Assim, os números referentes ao sexo masculino (_em laranja_) serão tratados como negativos, enquanto os do sexo feminino (_verde-água?_) serão tratados como positivos. É o que faremos no script a seguir, além de adicionar a porcentagem de vacinados para cada grupo.
 
@@ -309,7 +309,7 @@ ggplot(vacina_populacao2, aes(x = grupo_idade, y = n_grafico)) +
   coord_flip()
 ```
 
-<Image src="/blog/analisando-dados-de-vacinacao-contra-covid-19-com-a-bd/image_1.webp"/>
+<Image src="/blog/analisando-vacinacao-contra-covid-19/image_1.webp"/>
 
 ### Gráfico completo
 
@@ -552,7 +552,7 @@ ggplot(vacina_populacao2, aes(x = grupo_idade, y = n_grafico)) +
   coord_flip(ylim = c(-20000, 20000))
 ```
 
-<Image src="/blog/analisando-dados-de-vacinacao-contra-covid-19-com-a-bd/image_2.webp"/>
+<Image src="/blog/analisando-vacinacao-contra-covid-19/image_2.webp"/>
 
 Algumas faixas etárias possuem bem mais que **100%** de vacinados. Isso pode ser **erro na projeçãom**, na **inserção dos dados no sistema**, ou podem ter sidos vacinados idosos de **outras cidades da região** (Maringá é a cidade central na região), por exemplo. Estes são problemas que encontramos ao lidar com dados na pequena escala, como municípios. Ao utilizar dados para todo o país, muitos desses erros são compensados em larga escala.
 

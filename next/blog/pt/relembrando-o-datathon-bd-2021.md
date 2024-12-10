@@ -7,7 +7,7 @@ authors:
   - name: Giovane Caruso
     role: Texto
     social: https://medium.com/@giovanecaruso
-categories: [analise]
+categories: [institucional]
 medium_slug: >-
   https://medium.com/basedosdados/relembrando-o-datathon-bd-2021-ee46fe00ccc0
 published: true
