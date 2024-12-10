@@ -10,7 +10,7 @@ authors:
   - name: Giovane Caruso
     role: Edição
     social: https://medium.com/@giovanecaruso
-thumbnail: /blog/analisando-dados-textuais-da-cpi-da-pandemia-com-a-bd/image_0.webp
+thumbnail: /blog/analisando-dados-textuais-da-cpi-da-pandemia/image_0.webp
 categories: [analise]
 medium_slug: >-
   https://medium.com/basedosdados/analisando-dados-textuais-da-cpi-da-pandemia-com-a-bd-d178b344a6eb
@@ -23,7 +23,7 @@ Em 2021, o Brasil acompanhou as discussões a respeito da CPI da Pandemia. Os se
 
 Para isso, utilizei as transcrições das seções disponibilizadas pela Base dos Dados, que você por acessar por [aqui](/dataset/br-senado-cpipandemia). Originalmente, essa visualização foi criada como parte do [#SWDChallenge](https://storytellingwithdata.com), desafio mensal de visuzalização de dados.
 
-<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia-com-a-bd/image_0.webp" captino="Photo by [Joakim Honkasalo](https://unsplash.com/@jhonkasalo) on [Unsplash](https://unsplash.com/)"/>
+<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia/image_0.webp" captino="Photo by [Joakim Honkasalo](https://unsplash.com/@jhonkasalo) on [Unsplash](https://unsplash.com/)"/>
 
 ## A proposta
 
@@ -111,7 +111,7 @@ Para entender como o TF-IDF funciona, vamos considerar, por exemplo, a palavra �
 
 [Existem várias definições na literatura de como calcular essa métrica](https://en.wikipedia.org/wiki/Tf%E2%80%93idf). Para o nosso caso, foram usadas as seguintes fórmulas de cálculo do TF-IDF.
 
-<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia-com-a-bd/image_1.webp"/>
+<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia/image_1.webp"/>
 
 O TF-IDF foi usado para gerar a WordCloud de termos mais relevantes para cada dia de sessão da CPI. No entanto, a WordCloud geral possui os termos de todos os dias. Para isso, foi usado o IDF de cada termo ponderado pela frequência dele em toda coleção de textos.
 
@@ -140,11 +140,11 @@ Todo o código produzido para esta etapa pode se encontrado [aqui](https://githu
 
 A visualização pode ser dividida em três partes principais. **Na primeira parte, foi mostrado o tempo de fala agregado de senadores, depoentes e convidados por gênero**. A proposta era mostrar a diferença entre a participação de mulheres e homens na comissão, em relação ao tempo médio e total de fala. É fácil ver, a partir do tempo agregado, a maior participação de homens. Isso não se dá somente no número de senadores, por exemplo. O tempo de fala médio dos senadores homens é o dobro do tempo de fala que foi dado às mulheres.
 
-<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia-com-a-bd/image_2.webp"/>
+<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia/image_2.webp"/>
 
 A segunda parte foi a nuvem de tags. Esse tipo de visualização é bem tradicional para apresentar dados textuais quando se deseja visualizar os termos mais frequentes. **Quanto maior a palavra, mais relevante ela é para a coleção de textos.**
 
-<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia-com-a-bd/image_3.webp"/>
+<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia/image_3.webp"/>
 
 A partir da nuvem geral, é possível ver em destaque alguns termos que ajudam a classificar esses 3 primeiros meses: **invoice, davati, miranda, oxigênio, manaus**. Todos os termos estão bem relacionados com as discussões em torno dos contratos assinados pelo governo federal e a crise em Manaus, pautas bem relevantes para discussões na CPI.
 
@@ -152,28 +152,28 @@ Essa nuvem de tags varia de acordo com o dia selecionado. A proposta era que, al
 
 Por exemplo, no dia 01/07, a CPI da Covid ouviu Luiz Paulo Dominguetti, representante da empresa Davati Medical Supply sobre o [pedido de propina de um diretor do Ministério da Saúde em troca de contrato para o fornecimento de vacinas](https://noticias.uol.com.br/politica/ultimas-noticias/2021/07/01/frases-cpi-da-covid-senado-luiz-paulo-dominguetti-pereira.htm). Se olhar a nuvem de tags deste dia, os termos mais relevantes giram em torno deste denúncia.
 
-<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia-com-a-bd/image_4.webp"/>
+<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia/image_4.webp"/>
 
 Outro exemplo é o o dia 18/05 quando o ex-ministro Ernesto Araújo foi ouvido. Dentre os tópicos discutidos durante o depoimento, estavam os [conflitos relacionados à China e as denúncias de falta de insumo vindo do país](https://g1.globo.com/bemestar/coronavirus/noticia/2021/05/18/cpi-da-covid-compare-o-que-disse-ernesto-araujo-aos-senadores-com-declaracoes-anteriores-do-ex-ministro.ghtml). Olhando para a nuvem de tags é possível ver que os termos mais relevantes giram também em torno destes tópicos.
 
-<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia-com-a-bd/image_5.webp"/>
+<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia/image_5.webp"/>
 
 Por fim, para a visualização das entidades nomeadas foi utilizado um gráfico de barras separado por categoria. O gráfico ajuda a ver a diferença da frequência que os termos apresentam em cada categoria.
 
-<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia-com-a-bd/image_6.webp"/>
+<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia/image_6.webp"/>
 
 Olhando para o gráfico geral é fácil ver que as entidades relacionadas permite ver de fato pessoas, locais e organizações que foram mais citadas dentro das discussões dos 3 primeiros meses da CPI.
 
 Essa visualização também varia de acordo com o dia. Por exemplo, a imagem a seguir mostra as entidades para o dia 01/07, no depoimento do Luiz Paulo Dominguetti.
 
-<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia-com-a-bd/image_7.webp"/>
+<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia/image_7.webp"/>
 
 E para o dia 18/05 no depoimento do ex-ministro Ernesto Araújo.
 
-<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia-com-a-bd/image_8.webp"/>
+<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia/image_8.webp"/>
 
 É isso, com algumas técnicas tradicionais de análise e processamento de linguagem natural é possível extrair bastante informação de dados textuais, sem precisar ler todos os textos. A seguir você confere a visualização completa.
 
-<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia-com-a-bd/image_9.webp"/>
+<Image src="/blog/analisando-dados-textuais-da-cpi-da-pandemia/image_9.webp"/>
 
 A versão interativa da visualização pode ser acessada [aqui](https://observablehq.com/@adolfoguimaraes/swd-challenge-mar-22).

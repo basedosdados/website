@@ -7,11 +7,11 @@ authors:
   - name: Crislane Alves
     role: Autora
     social: https://medium.com/@s.alvescrislane
-thumbnail: /blog/o-soberano-mitico-processo-de-limpeza-dos-dados-do-siconfi/image_0.webp
+thumbnail: /blog/processo-de-limpeza-dos-dados-do-siconfi/image_0.webp
 categories: [analise]
 medium_slug: >-
   https://medium.com/basedosdados/o-soberano-m%C3%ADtico-processo-de-limpeza-dos-dados-do-siconfi-a730007e2852
-published: true
+published: false
 ---
 
 <Image src="/blog/o-soberano-mitico-processo-de-limpeza-dos-dados-do-siconfi/image_0.webp" caption="Photo by [Slejven Djurakovic](https://unsplash.com/@slavudin) on [Unsplash](https://unsplash.com/)"/>

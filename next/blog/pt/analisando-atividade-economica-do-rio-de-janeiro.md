@@ -7,7 +7,7 @@ authors:
   - name: Laryssa Bertin Ribeiro
     role: Autora
     social: https://medium.com/@lary.bertin
-thumbnail: /blog/analise-da-atividade-economica-do-estado-do-rio-de-janeiro-e-da-influencia-da-capital/image_4.webp
+thumbnail: /blog/analisando-atividade-economica-do-rio-de-janeiro/image_4.webp
 categories: [analise]
 medium_slug: >-
   https://medium.com/basedosdados/an%C3%A1lise-da-atividade-econ%C3%B4mica-do-estado-do-rio-de-janeiro-e-da-influ%C3%AAncia-da-capital-95ed6b5910b5
@@ -34,7 +34,7 @@ Os CNAEs foram oficializados através da Resolução do IBGE/CONCLA (Figura 1), 
 
 A primeira versão do detalhamento das subclasses CNAE foi definida em 1998, com a denominação CNAE-Fiscal. Passou por ajustes em 2001 (versão CNAE-Fiscal 1.0) e em 2002 (versão CNAE-Fiscal 1.1), esta última acompanhando alterações pontuais na estrutura da CNAE (versão CNAE 1.0) em função de ajustes na classificação internacional versão ISIC/CIIU 3.1 (Figura 2).
 
-<Image src="/blog/analise-da-atividade-economica-do-estado-do-rio-de-janeiro-e-da-influencia-da-capital/image_0.webp"/>
+<Image src="/blog/analisando-atividade-economica-do-rio-de-janeiro/image_0.webp"/>
 
 ## Metodologia
 
@@ -92,7 +92,7 @@ ORDER BY
   CNAE DESC;
 ```
 
-<Image src="/blog/analise-da-atividade-economica-do-estado-do-rio-de-janeiro-e-da-influencia-da-capital/image_1.webp" caption="Tabela A1: Empregos por CNAEs, estado do Rio de Janeiro, 2018 a 2022"/>
+<Image src="/blog/analisando-atividade-economica-do-rio-de-janeiro/image_1.webp" caption="Tabela A1: Empregos por CNAEs, estado do Rio de Janeiro, 2018 a 2022"/>
 
 **Consulta B**
 
@@ -151,9 +151,9 @@ Um dos objetivos da **Consulta A** foi identificar as atividades econômicas que
 
 Dessa forma, o **Gráfico A** foi gerado para identificar as principais atividades econômicas geradoras de empregos no estado do Rio de Janeiro a partir da **Tabela A2,** que apresenta os grupamentos das principais atividades econômicas.
 
-<Image src="/blog/analise-da-atividade-economica-do-estado-do-rio-de-janeiro-e-da-influencia-da-capital/image_2.webp" caption="Gráfico A: Principais atividades econômicas com mais de 50% dos empregos"/>
+<Image src="/blog/analisando-atividade-economica-do-rio-de-janeiro/image_2.webp" caption="Gráfico A: Principais atividades econômicas com mais de 50% dos empregos"/>
 
-<Image src="/blog/analise-da-atividade-economica-do-estado-do-rio-de-janeiro-e-da-influencia-da-capital/image_3.webp" caption="Tabela A2: Empregos por Grupamentos, estado do Rio de Janeiro"/>
+<Image src="/blog/analisando-atividade-economica-do-rio-de-janeiro/image_3.webp" caption="Tabela A2: Empregos por Grupamentos, estado do Rio de Janeiro"/>
 
 Um dos objetivos da **Consulta B** foi identificar as principais atividades econômicas que geraram mais empregos na cidade do Rio de Janeiro, conforme é possível observar na **Tabela B**. Com o somatório do total de empregos gerados no estado e na cidade ao longo do período 2018 a 2022, foi possível elaborar o **Gráfico B** para identificar sua relação dinâmica.
 
@@ -171,7 +171,7 @@ O Rio de Janeiro foi a unidade da federação com maior proporção de MEIs em r
 
 Consultamos o site da [Receita federal](https://www8.receita.fazenda.gov.br/simplesnacional/aplicacoes/atbhe/estatisticassinac.app/EstatisticasOptantesPorCNAE.aspx?tipoConsulta=2&optanteSimei=&anoConsulta=MjAyMg%3D%3D) que contém informações sobre a quantidade de MEIs por CNAE. A pesquisa encontrou 35 CNAEs com 67,42% do total de microempresários individuais em 18/11/2023.
 
-<Image src="/blog/analise-da-atividade-economica-do-estado-do-rio-de-janeiro-e-da-influencia-da-capital/image_4.webp" caption="Gráfico B: Relação de emprego cidade/estado do Rio de Janeiro"/>
+<Image src="/blog/analisando-atividade-economica-do-rio-de-janeiro/image_4.webp" caption="Gráfico B: Relação de emprego cidade/estado do Rio de Janeiro"/>
 
 ## Conclusão
 

@@ -10,7 +10,7 @@ authors:
   - name: Giovane Caruso
     role: Edição
     social: https://medium.com/@giovanecaruso
-thumbnail: /blog/qual-a-relacao-entre-o-idhm-e-a-votacao-presidencial-de-2018-em-sp/image_0.webp
+thumbnail: /blog/analisando-relacao-entre-idhm-e-eleicoes/image_0.webp
 categories: [analise]
 medium_slug: >-
   https://medium.com/basedosdados/qual-a-rela%C3%A7%C3%A3o-entre-o-idhm-e-a-vota%C3%A7%C3%A3o-presidencial-de-2018-em-sp-aa9f1305586f
@@ -21,7 +21,7 @@ published: true
 
 Neste breve artigo, proponho uma visualização simples e rápida de como a votação presidencial no ano de 2018 se relaciona com o Índice de Desenvolvimento Humano Municipal (IDHM) dos municípios paulistas. Veja no artigo o como acessar e analisar dados do índice de maneira mais fácil e prática através do _datalake_ público da Base dos Dados, além de quais foram os passos para a construção dessa visualização.
 
-<Image src="/blog/qual-a-relacao-entre-o-idhm-e-a-votacao-presidencial-de-2018-em-sp/image_0.webp"/>
+<Image src="/blog/analisando-relacao-entre-idhm-e-eleicoes/image_0.webp"/>
 
 ## O Índice de Desenvolvimento Humano (IDHM)
 
@@ -109,7 +109,7 @@ df |>
 
 Pronto! Está pronto o nosso dataframe. A carinha dele é essa aqui:
 
-<Image src="/blog/qual-a-relacao-entre-o-idhm-e-a-votacao-presidencial-de-2018-em-sp/image_1.webp"/>
+<Image src="/blog/analisando-relacao-entre-idhm-e-eleicoes/image_1.webp"/>
 
 ### Analisando o graficamente as relações entre IDHM e Porcentagem de votos
 
@@ -136,7 +136,7 @@ dplyr::filter(df, turno == 2) |>
   theme(legend.position = "bottom")
 ```
 
-<Image src="/blog/qual-a-relacao-entre-o-idhm-e-a-votacao-presidencial-de-2018-em-sp/image_0.webp"/>
+<Image src="/blog/analisando-relacao-entre-idhm-e-eleicoes/image_0.webp"/>
 
 E pronto! Com essa visualização temos um primeiro insight sobre a relação entre o IDHM no Estado de São Paulo e a votação presidencial de 2018. Cada pontinho desse é um município e está representando no eixo y a porcentagem de votos que cada um dos candidatos recebeu. Portanto, esse pontinho aparecerá para Fernando Haddad em azul e Bolsonaro em vermelho. Observe como a porcentagem de votos e a relação entre os municípios com alto IDHM (maiores que 0,70) se mostra inversa entre os dois candidatos. Haddad, nesses municípios, teve a menor porcentagem de votos, enquanto Bolsonaro obteve a maior e apresenta uma tendência de aumento quanto maior for o IDH.
 

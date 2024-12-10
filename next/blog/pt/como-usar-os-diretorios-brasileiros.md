@@ -9,7 +9,7 @@ authors:
   - name: Crislane Alves
     role: Equipe Base dos Dados
     social: https://medium.com/@s.alvescrislane
-thumbnail: /blog/diretorios-brasileiros-como-essa-base-facilita-sua-analise/image_0.jpg
+thumbnail: /blog/como-usar-os-diretorios-brasileiros/image_0.jpg
 categories: [tutorial]
 medium_slug: >-
   https://medium.com/@basedosdados/diret%C3%B3rios-brasileiros-como-essa-base-facilita-sua-an%C3%A1lise-40dc8ce2ca2
@@ -18,11 +18,11 @@ published: true
 
 Conheça essa base que funciona como um perfil completo de unidades como município, escola, UF, e mais.
 
-<Image src="/blog/diretorios-brasileiros-como-essa-base-facilita-sua-analise/image_0.jpg"/>
+<Image src="/blog/como-usar-os-diretorios-brasileiros/image_0.jpg"/>
 
 ## TL;DR
 
-Neste artigo vamos apresentar nossa base de [Diretórios Brasileiros](/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=0a2d8187-f936-437d-89db-b4eb3a7e1735), que está disponível no nosso datalake público (a BD+), onde disponibilizamos diversas bases de dados públicas já tratadas, organizadas e integradas para análise. Também vamos demonstrar como essa base facilita o cruzamento entre tabelas de diferentes conjuntos de dados e como você pode aplicá-la em sua análise, com um exemplo prático de aplicação.
+Neste artigo vamos apresentar nossa base de [Diretórios Brasileiros](/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=0a2d8187-f936-437d-89db-b4eb3a7e1735), que está disponível no nosso datalake público, onde disponibilizamos diversas bases de dados públicas já tratadas, organizadas e integradas para análise. Também vamos demonstrar como essa base facilita o cruzamento entre tabelas de diferentes conjuntos de dados e como você pode aplicá-la em sua análise, com um exemplo prático de aplicação.
 
 ## A Base de Diretórios Brasileiros
 

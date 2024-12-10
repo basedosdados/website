@@ -12,7 +12,7 @@ authors:
 categories: [tutorial]
 thumbnail: /blog/voce-usa-stata-veja-como-a-bd-facilita-sua-analise-de-dados/image_0.jpg
 medium_slug: https://medium.com/@basedosdados/voc%C3%AA-usa-stata-veja-como-a-bd-facilita-sua-an%C3%A1lise-de-dados-e7ab79111220
-published: true
+published: false
 ---
 
 <Image src="/blog/voce-usa-stata-veja-como-a-bd-facilita-sua-analise-de-dados/image_0.jpg"/>

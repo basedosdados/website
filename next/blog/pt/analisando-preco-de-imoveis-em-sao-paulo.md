@@ -13,7 +13,7 @@ authors:
     social: https://www.linkedin.com/in/giovanecaruso/
   - name: Luiza Vilas Boas
     role: Arte
-thumbnail: /blog/qual-a-diferenca-de-preco-do-metro-quadrado-entre-os-bairros-de-sao-paulo/image_0.png
+thumbnail: /blog/analisando-preco-de-imoveis-em-sao-paulo/image_0.png
 categories: [analise]
 medium_slug: >-
   https://medium.com/@basedosdados/qual-a-diferen%C3%A7a-de-pre%C3%A7o-do-metro-quadrado-entre-os-bairros-de-s%C3%A3o-paulo-14cad7e4a89d
@@ -26,7 +26,7 @@ Para explorar esse cenário, analisamos os dados do GeoSampa, portal oficial da 
 
 Nesta análise, concentramos nossa atenção no valor do metro quadrado construído. Essa variável representa o custo médio por metro quadrado de um imóvel construído, o que permite verificarmos geograficamente as disparidades na concentração desses valores. Selecionamos os mil imóveis com os maiores valores médios de construção e os mil imóveis com os menores valores. Para isso, utilizamos os dados dos nossos Diretórios Brasileiros para marcar o ponto médio de cada CEP e os dados de município do geobr para delimitar pontos que se sobrepunham à cidade de São Paulo. Confira no gráfico abaixo.
 
-<Image src="/blog/qual-a-diferenca-de-preco-do-metro-quadrado-entre-os-bairros-de-sao-paulo/image_0.png"/>
+<Image src="/blog/analisando-preco-de-imoveis-em-sao-paulo/image_0.png"/>
 
 A distribuição geográfica dos valores do metro quadrado construído na cidade de São Paulo revela uma notável disparidade. O bairro do Jardim Paulistano, localizado na Zona Norte da cidade, apresenta o menor valor de metro quadrado construído, avaliado em R$ 7.960, enquanto o bairro do Itaim Bibi, na Zona Oeste, registra o maior valor, impressionantes R$ 39.980 por metro quadrado. Isso significa que a diferença entre o metro quadrado mais caro e o mais barato na cidade é de aproximadamente cinco vezes, destacando as variações significativas nos preços imobiliários em diferentes regiões da metrópole paulistana. O valor médio por metro quadrado na cidade é R$ 23.088.
 

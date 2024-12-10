@@ -5,7 +5,7 @@ description: >-
   datalake público da BD
 date:
   created: "2024-02-29T18:18:06.419Z"
-thumbnail: /blog/como-a-disparidade-salarial-por-genero-e-raca-evoluiu-ao-longo-dos-anos/image_0.png
+thumbnail: /blog/analisando-disparidade-salarial-por-genero-e-raca/image_0.png
 categories: [analise]
 authors:
   - name: Thais Filipi
@@ -39,13 +39,13 @@ Antes de partir para análise, vale ressaltar que são muitos os conjuntos de da
 
 Ao analisarmos o salário médio por grupos, ficou evidente a vantagem que homens brancos mantêm em relação aos demais. Em 2023, o salário médio dos homens brancos foi de R$2.087, 25,6% maior do que o salário médio das mulheres negras, que foi de R$1.662. Uma forma de visualizar as diferenças é ver o salário médio de homens negros, mulheres negras e brancas enquanto porcentagem do salário médio de homens brancos, como você pode conferir no gráfico abaixo.
 
-<Image src="/blog/como-a-disparidade-salarial-por-genero-e-raca-evoluiu-ao-longo-dos-anos/image_0.png" caption="Salário médio por grupos como percentual de salário médio de homens brancos, de 2020 até 2023"/>
+<Image src="/blog/analisando-disparidade-salarial-por-genero-e-raca/image_0.png" caption="Salário médio por grupos como percentual de salário médio de homens brancos, de 2020 até 2023"/>
 
 ### Diferenças regionais
 
 O salário médio de homens negros e mulheres brancas alternam na proximidade com o rendimento médio de homens brancos, mas no Centro-Oeste e Sul, os homens negros possuem rendimentos médios melhores. A tendência parece menos evidente no Norte nesse sentido. No Nordeste, Norte e Sul, o salário médio das mulheres negras chega a ultrapassar o patamar de 85% do rendimento de homens brancos em alguns meses. O Sudeste e o Centro-Oeste são similares na remuneração de mulheres negras, ambos abaixo de 80% na maioria dos meses (a média entre os anos das duas regiões foi de 78,7% e 79,3%, respectivamente).
 
-<Image src="/blog/como-a-disparidade-salarial-por-genero-e-raca-evoluiu-ao-longo-dos-anos/image_1.png" caption="Salário médio por grupos como percentual de salário médio de homens brancos em cada região brasileira, de 2020 até 2023"/>
+<Image src="/blog/analisando-disparidade-salarial-por-genero-e-raca/image_1.png" caption="Salário médio por grupos como percentual de salário médio de homens brancos em cada região brasileira, de 2020 até 2023"/>
 
 Similarmente, o Sudeste e Centro-Oeste são as regiões mais desiguais quando consideramos o quanto o salário médio dos homens brancos é maior do que o das mulheres negras, sendo 24% e 27% maior em 2023, respectivamente. No Nordeste, este valor é 17% maior — ainda desigual, mas menos do que as outras regiões. E em termos do rendimento médio geral nas regiões, há variações importantes, mas não entre o Centro-Oeste e o Nordeste, por exemplo. Esta última é a região com menor salário mensal médio (R$1.615). No Centro-Oeste, que está na terceira posição, a remuneração média dos quatro grupos é de R$1.764 — no Sudeste e Sul esses valores são de R$1.946 e R$1.905; o norte tem remuneração média de R$1.695.
 
@@ -71,7 +71,7 @@ A atividade de Organismos Internacionais e Outras Instituições Extraterritoria
 
 Quando buscamos por possíveis tendências, vemos que pessoas brancas, especialmente homens, costumam se beneficiar mais quando a economia melhora, refletindo em ganhos salariais. No entanto, também são os primeiros a sentir perdas salariais quando a situação econômica piora, embora não o suficiente para se aproximar dos níveis de outros grupos. Por outro lado, pessoas negras, especialmente homens, têm enfrentado desafios para desfrutar dos ganhos em períodos econômicos positivos, mas, ao mesmo tempo, não experimentam tantas perdas durante períodos de desaceleração econômica. Isso ocorre em parte devido ao crescimento lento dos salários, que começaram em patamares muito baixos, geralmente abaixo da média salarial geral.
 
-<Image src="/blog/como-a-disparidade-salarial-por-genero-e-raca-evoluiu-ao-longo-dos-anos/image_2.png" caption="Evolução do salário médio em reais por grupo, de 2020 até 2023"/>
+<Image src="/blog/analisando-disparidade-salarial-por-genero-e-raca/image_2.png" caption="Evolução do salário médio em reais por grupo, de 2020 até 2023"/>
 
 De acordo com Natália Leão, Diretora de pesquisa e projetos na Gênero e Número, “Quando olhamos para as discrepâncias salariais por gênero e raça, nossa tendência é inicialmente demarcar a permanência dessa desigualdade — que de fato existe. Contudo, ao analisarmos séries temporais, podemos notar que as mulheres, principalmente as brancas, tiveram enormes avanços tanto no montante salarial quanto ao acesso às ocupações que antes eram fechadas apenas aos homens.”
 
