@@ -12,6 +12,10 @@ const root = process.cwd();
 
 export async function getAllPosts(locale = 'pt') {
   const blogpostsDir = path.join(root, `blog/${locale}`)
+  const isDevelopment =
+  process.env.NEXT_PUBLIC_BASE_URL_FRONTEND === 'http://localhost:3000' ||
+  process.env.NEXT_PUBLIC_BASE_URL_FRONTEND === 'https://development.basedosdados.org';
+
   try {
     const postsDir = await fs.readdir(blogpostsDir, "utf-8");
 
@@ -22,7 +26,7 @@ export async function getAllPosts(locale = 'pt') {
           const content = await fs.readFile(fullpath, "utf-8");
           const { data } = matter(content);
 
-          if (data.published) {
+          if (isDevelopment || data.published) {
             return {
               slug: file.replace(".md", ""),
               frontmatter: data,

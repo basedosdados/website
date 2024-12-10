@@ -312,7 +312,7 @@ function CaseStudies ({ data }) {
               textAlign="justify"
               overflow="hidden"
             >
-              {elm?.resume && elm?.resume.slice(0,useCheckMobile() ? 160 :178)+"..."}
+              {elm?.summary && elm?.summary.slice(0,useCheckMobile() ? 160 :178)+"..."}
             </BodyText>
 
             <Link
