@@ -5,18 +5,18 @@ thumbnail: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/
 title: "Platform brings more transparency to the accountability of candidates and parties in the 2022 Elections"
 img: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/imagens/estudo_de_caso_jota.png"
 imgDescription: "Photo: Superior Electoral Court (TSE)"
-description: "Created by BD in partnership with JOTA, a journalism and technology company, the 'Follow the Money' platform helped the population and press monitor campaign financing during the 2022 elections. The project became an important tool for public transparency and combating corruption in the electoral process."
+description: "Created by DB in partnership with JOTA, a journalism and technology company, the 'Follow the Money' platform helped the population and press monitor campaign financing during the 2022 elections. The project became an important tool for public transparency and combating corruption in the electoral process."
 logo: {
   img: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/logos/jota.svg",
   width: 222,
   height: 85
 }
 about: "Journalism and technology company for decision-makers with the mission of making Brazilian institutions more transparent and predictable."
-resume: "Created by BD in partnership with JOTA, a journalism and technology company, the 'Follow the Money' platform helped the population and press monitor campaign financing during the 2022 elections. The project became an important tool for public transparency and combating corruption in the electoral process."
+summary: "Created by DB in partnership with JOTA, a journalism and technology company, the 'Follow the Money' platform helped the population and press monitor campaign financing during the 2022 elections. The project became an important tool for public transparency and combating corruption in the electoral process."
 sector: "Politics"
 ---
 
-Created by BD in partnership with JOTA, a journalism and technology company, the [Follow the Money](https://sigaodinheiro.org/) platform helped the population and press monitor campaign revenues and expenditures during the 2022 elections. The project became an important tool for public transparency and combating corruption in the electoral process.
+Created by DB in partnership with JOTA, a journalism and technology company, the [Follow the Money](https://sigaodinheiro.org/) platform helped the population and press monitor campaign revenues and expenditures during the 2022 elections. The project became an important tool for public transparency and combating corruption in the electoral process.
 
 ## Partnership Results
 
@@ -44,6 +44,6 @@ In addition to identifying trends in campaign financing for federal offices, the
 
 The dashboard was developed through a combination of automated extraction techniques and a rigorous process of data treatment and standardization. This enabled real-time access to information from the Superior Electoral Court (TSE), presented in an intuitive format where users can search and create custom filters by state, party, office, gender, race, and more.
 
-BD also makes updated election revenue and expenditure data available on its platform, allowing users to download treated tables or access them through data analysis tools like SQL, Python, and R.
+DB also makes updated election revenue and expenditure data available on its platform, allowing users to download treated tables or access them through data analysis tools like SQL, Python, and R.
 
-[Access updated data on Brazilian elections](https://basedosdados.org/dataset/eef764df-bde8-4905-b115-6fc23b6ba9d6?table=2e204854-e453-4257-9fef-5e10f3ff1f56).
+[Access updated data on Brazilian elections](https://basedosdados.org/en/dataset/eef764df-bde8-4905-b115-6fc23b6ba9d6?table=2e204854-e453-4257-9fef-5e10f3ff1f56).

@@ -1,5 +1,5 @@
 ---
-id: "fundacao-lemann"
+id: "lemann"
 displayTitle: "Fundación Lemann"
 thumbnail: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/thumbnails/thumbnail_estudo_de_caso_flemann.png"
 title: "Fundación Lemann mejora la toma de decisiones y el seguimiento de metas con tecnología de análisis y ingeniería de datos desarrollada por BD"
@@ -12,7 +12,7 @@ logo: {
   height: 85
 }
 about: "Organización que trabaja para garantizar educación de calidad para todos los niños brasileños y apoya a líderes enfocados en el desarrollo social de Brasil."
-resume: "Con más de 61 redes educativas apoyadas y más de 28 mil escuelas involucradas, implementar un flujo de análisis de datos e indicadores fue fundamental para que la Fundação Lemann comprendiera mejor el panorama de la educación en Brasil, evaluara los programas apoyados y estableciera metas estratégicas para potenciar el avance de la educación y el impulso del liderazgo en el país. BD trajo soluciones prácticas para hacer esto posible, con la reestructuración de la arquitectura de datos utilizada por la Fundação, el tratamiento y la disponibilidad de nuevas bases de datos en un repositorio en línea, el análisis de la información recopilada y la construcción de paneles interactivos actualizados automáticamente."
+summary: "Con más de 61 redes educativas apoyadas y más de 28 mil escuelas involucradas, implementar un flujo de análisis de datos e indicadores fue fundamental para que la Fundação Lemann comprendiera mejor el panorama de la educación en Brasil, evaluara los programas apoyados y estableciera metas estratégicas para potenciar el avance de la educación y el impulso del liderazgo en el país. BD trajo soluciones prácticas para hacer esto posible, con la reestructuración de la arquitectura de datos utilizada por la Fundação, el tratamiento y la disponibilidad de nuevas bases de datos en un repositorio en línea, el análisis de la información recopilada y la construcción de paneles interactivos actualizados automáticamente."
 sector: "Educación"
 ---
 
