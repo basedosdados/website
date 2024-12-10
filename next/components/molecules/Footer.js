@@ -201,9 +201,9 @@ export default function Footer({ template, ocult = false }) {
                 {t('footer.products.searchEngine')}
               </FooterLink>
               <FooterLink href={
-                            locale === "en" ? "https://basedosdados.github.io/mais/en" :
-                            locale === "es" ? "https://basedosdados.github.io/mais/es" :
-                            "https://basedosdados.github.io/mais"
+                            locale === "en" ? "https://basedosdados.github.io/sdk/en" :
+                            locale === "es" ? "https://basedosdados.github.io/sdk/es" :
+                            "https://basedosdados.github.io/sdk"
                           }
               >
                 {t('footer.products.publicDatalake')}
@@ -213,25 +213,29 @@ export default function Footer({ template, ocult = false }) {
                                 "https://info.basedosdados.org/bd-pro"}>
                 {t('footer.products.DBPro')}
               </FooterLink>
-              <FooterLink href="https://info.basedosdados.org/bd-edu-sql">
-                {t('footer.products.DBEdu')}
-              </FooterLink>
+              {locale === 'pt' && (
+                <FooterLink href="https://info.basedosdados.org/bd-edu-sql">
+                  {t('footer.products.DBEdu')}
+                </FooterLink>
+              )}
             </SectionCategories>
-
-            <SectionCategories title={t('footer.services.title')} marginBottom={isMobileMod() && "24px !important"}>
-              <FooterLink target="_self" href="/services#data-capture">
-                {t('footer.services.dataCapture')}
-              </FooterLink>
-              <FooterLink href="/services#analytics">
-                {t('footer.services.dataAnalytics')}
-              </FooterLink>
-              <FooterLink href="/services#consulting">
-                {t('footer.services.dataConsulting')}
-              </FooterLink>
-              <FooterLink href="/services#case-studies">
-                {t('footer.services.caseStudies')}
-              </FooterLink>
-            </SectionCategories>
+            
+            {locale === 'pt' && (
+              <SectionCategories title={t('footer.services.title')} marginBottom={isMobileMod() && "24px !important"}>
+                <FooterLink target="_self" href="/services#data-capture">
+                  {t('footer.services.dataCapture')}
+                </FooterLink>
+                <FooterLink href="/services#analytics">
+                  {t('footer.services.dataAnalytics')}
+                </FooterLink>
+                <FooterLink href="/services#consulting">
+                  {t('footer.services.dataConsulting')}
+                </FooterLink>
+                <FooterLink href="/services#case-studies">
+                  {t('footer.services.caseStudies')}
+                </FooterLink>
+              </SectionCategories>
+            )}
 
             <SectionCategories title={t('footer.tutorials.title')} marginBottom={isMobileMod() && "24px !important"}>
               <FooterLink href={
@@ -254,12 +258,16 @@ export default function Footer({ template, ocult = false }) {
               <FooterLink target="_self" href="/transparency">
                 {t('footer.institutional.transparency')}
               </FooterLink>
-              <FooterLink href="https://info.basedosdados.org/newsletter">
-                {t('footer.institutional.newsletter')}
-              </FooterLink>
-              <FooterLink href="https://info.basedosdados.org/carreiras">
-                {t('footer.institutional.careers')}
-              </FooterLink>
+              {locale === 'pt' && (
+                <>
+                  <FooterLink href="https://info.basedosdados.org/newsletter">
+                    {t('footer.institutional.newsletter')}
+                  </FooterLink>
+                  <FooterLink href="https://info.basedosdados.org/carreiras">
+                    {t('footer.institutional.careers')}
+                  </FooterLink>
+                </>
+              )}
               <FooterLink href="/faq">
                 {t('footer.institutional.faq')}
               </FooterLink>
@@ -311,14 +319,22 @@ export default function Footer({ template, ocult = false }) {
           </HStack>
 
           <HStack spacing={3}>
-            <SocialLink title="X" href="https://x.com/basedosdados" icon={<XIcon alt="X da BD" {...IconKey}/>}/>
-            <SocialLink title="Bluesky" href="https://bsky.app/profile/basedosdados.bsky.social" icon={<BlueskyIcon alt="bluesky da BD" {...IconKey}/>}/>
-            <SocialLink title="Discord" href="https://discord.gg/huKWpsVYx4" icon={<DiscordIcon alt="discord da BD" {...IconKey}/>}/>
-            <SocialLink title="GitHub" href="https://github.com/basedosdados" icon={<GithubIcon alt="github da BD" {...IconKey}/>}/>
-            <SocialLink title="LinkedIn" href="https://www.linkedin.com/company/base-dos-dados/mycompany/" icon={<LinkedinIcon alt="linkedin da BD" {...IconKey}/>}/>
-            <SocialLink title="YouTube" href="https://www.youtube.com/basedosdados" icon={<YoutubeIcon alt="youtube basedosdados" {...IconKey}/>}/>
-            <SocialLink title="WhatsApp" href="https://chat.whatsapp.com/CLLFXb1ogPPDomCM6tQT22" icon={<WhatsAppIcon alt="whatsApp da BD"{...IconKey}/>}/>
-            <SocialLink title="Telegram" href="https://t.me/joinchat/OKWc3RnClXnq2hq-8o0h_w" icon={<TelegramIcon alt="telegram da BD" {...IconKey}/>}/>
+            <SocialLink title="X" href={
+              locale === 'en' ? "https://x.com/data__basis" :
+              locale === 'es' ? "https://x.com/basedelosdatos" :
+              "https://x.com/basedosdados"
+            } icon={<XIcon alt="X" {...IconKey}/>}/>
+            <SocialLink title="Bluesky" href={
+              locale === 'en' ? "https://bsky.app/profile/databasis" :
+              locale === 'es' ? "https://bsky.app/profile/basedelosdatos" :
+              "https://bsky.app/profile/basedosdados"
+            } icon={<BlueskyIcon alt="bluesky" {...IconKey}/>}/>
+            <SocialLink title="Discord" href="https://discord.gg/huKWpsVYx4" icon={<DiscordIcon alt="discord" {...IconKey}/>}/>
+            <SocialLink title="GitHub" href="https://github.com/basedosdados" icon={<GithubIcon alt="github" {...IconKey}/>}/>
+            <SocialLink title="LinkedIn" href="https://www.linkedin.com/company/base-dos-dados/mycompany/" icon={<LinkedinIcon alt="linkedin" {...IconKey}/>}/>
+            <SocialLink title="YouTube" href="https://www.youtube.com/basedosdados" icon={<YoutubeIcon alt="youtube" {...IconKey}/>}/>
+            <SocialLink title="WhatsApp" href="https://chat.whatsapp.com/CLLFXb1ogPPDomCM6tQT22" icon={<WhatsAppIcon alt="whatsApp" {...IconKey}/>}/>
+            <SocialLink title="Telegram" href="https://t.me/joinchat/OKWc3RnClXnq2hq-8o0h_w" icon={<TelegramIcon alt="telegram" {...IconKey}/>}/>
           </HStack>
         </HStack>
       </HStack>
