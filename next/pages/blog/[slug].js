@@ -196,9 +196,11 @@ export default function Post({ slug, locale, mdxSource, headings }) {
                 color="#252A32"
                 marginTop="24px"
               >{t("noticedSomething")} </Text>
-              <Link
+              <Text
+                as="a"
                 href={`https://github.com/basedosdados/website/edit/${repository()}/next/blog/${locale}/${slug}.md`}
                 isexternal="true"
+                fontFamily="Roboto"
                 fontSize="16px"
                 fontWeight="400"
                 lineHeight="24px"
@@ -206,7 +208,7 @@ export default function Post({ slug, locale, mdxSource, headings }) {
                 _hover={{
                   color: "#0057A4"
                 }}
-              >{t("contributeToBD")}</Link>
+              >{t("contributeToBD")}</Text>
               <Box id="hotjarSurveyBlog"/>
             </Box>
           </Box>
