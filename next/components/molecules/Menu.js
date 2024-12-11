@@ -1000,7 +1000,6 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   let links;
 
   if (locale === "pt") {
-
     links = {
       [t('data')]: `/search`,
       [t('solutions')]: [
@@ -1036,9 +1035,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('contact')]: "/contact",
       Button: []
     }
-
   } else if (locale === "en") {
-
     links = {
       [t('data')]: `/search`,
       [t('solutions')]: [
@@ -1062,9 +1059,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('contact')]: "/contact",
       Button: []
     }
-
   } else if (locale === "es") {
-
     links = {
       [t('data')]: `/search`,
       [t('solutions')]: [
@@ -1088,7 +1083,6 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('contact')]: "/contact",
       Button: []
     }
-
   }
 
   useEffect(() => {
