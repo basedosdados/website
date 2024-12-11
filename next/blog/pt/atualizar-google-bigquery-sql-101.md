@@ -100,6 +100,6 @@ Usar o SQL para pré-processamento de dados é uma ótima saída para quem traba
 **Nosso projeto já te ajudou de alguma forma?** Veja como nos retribuir:
 
 - [Apoie o projeto](https://apoia.se/basedosdados)
-- [Seja um(a) colaborador(a) de dados na BD](https://basedosdados.github.io/mais/colab_data/)
+- [Seja um(a) colaborador(a) de dados na BD](https://basedosdados.github.io/sdk/colab_data/)
 - [Colabore com nossos pacotes](https://github.com/basedosdados/mais)
 - Compartilhe nas redes sociais!
