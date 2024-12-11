@@ -11,7 +11,7 @@ thumbnail: /blog/como-comecar-sua-analise-com-dados-publicos/image_0.webp
 categories: [tutorial]
 medium_slug: >-
   https://medium.com/basedosdados/como-come%C3%A7ar-sua-an%C3%A1lise-com-dados-p%C3%BAblicos-6918e9b888af
-published: true
+published: false
 ---
 
 ## Introdução
@@ -56,7 +56,7 @@ Por isso, tenha essas dicas em mentes na hora de formular a pergunta que vai gui
 
 Formular perguntas claras, específicas e mensuráveis vai te poupar tempo e te ajudar ser mais assertivo(a) no problema que sua análise busca solucionar.
 
-Veja [aqui](https://info.basedosdados.org/newsletter/edicoes-anteriores) algumas análises que criamos para nossa newsletter para se inspirar.
+Veja [aqui](/blog?category=analise) algumas análises para se inspirar.
 
 ## Onde encontrar os dados que preciso?
 
@@ -68,19 +68,19 @@ Pelo nosso site você consegue buscar conjuntos de dados através de palavras-ch
 
 Um filtro muito útil é o de **Tabelas tratadas**, isso porque ele seleciona apenas dados que já estejam tratados e organizados em nosso _datalake_ público.
 
-<Image src="/blog/como-comecar-sua-analise-com-dados-publicos/image_1.webp"/>
+<Image src="/blog/como-comecar-sua-analise-com-dados-publicos/image_1.png"/>
 
 Uma vez que você já tenha encontrado um conjunto de dados no mecanismo de busca, você pode conferir na parte esquerda da página quais são as tabelas que compõem ele. Veja na imagem.
 
-<Image src="/blog/como-comecar-sua-analise-com-dados-publicos/image_2.webp"/>
+<Image src="/blog/como-comecar-sua-analise-com-dados-publicos/image_2.png"/>
 
 Além disso, você pode conferir quais colunas cada tabela possui e a descrição das informações que elas contém. Veja na imagem abaixo
 
-<Image src="/blog/como-comecar-sua-analise-com-dados-publicos/image_3.webp"/>
+<Image src="/blog/como-comecar-sua-analise-com-dados-publicos/image_3.png"/>
 
-Quando você tiver identificado o conjunto, a tabela e as colunas que precisa para sua análise, você pode partir para acessar os dados através do BigQuery, um serviço de banco de dados em nuvem da Google que te permite fazer consultas ao banco em SQL direto do navegador com **rapidez** (mesmo consultas muito longas demoram apenas minutos para serem processadas), **escala** (o BigQuery escala magicamente para hexabytes se necessário) e **economia** (todo usuário possui 1 TB _gratuito por mês para consulta aos dados_). Para chegar até o BigQuery, utilize o link "clique aqui" da página, conforme a imagem abaixo.
+Quando você tiver identificado o conjunto, a tabela e as colunas que precisa para sua análise, você pode partir para selecionar as colunas do seu interesse e clicar em Gerar Query para acessar os dados através do BigQuery, um serviço de banco de dados em nuvem da Google que te permite fazer consultas ao banco em SQL direto do navegador com **rapidez** (mesmo consultas muito longas demoram apenas minutos para serem processadas), **escala** (o BigQuery escala magicamente para hexabytes se necessário) e **economia** (todo usuário possui 1 TB _gratuito por mês para consulta aos dados_). Para chegar até o BigQuery, utilize o botão "Acessar o BigQuery" da página, conforme a imagem abaixo. Não se esqueça de copiar o código disponibilizado para puxar apenas as colunas selecionadas com os códigos institucionais já traduzidos! 
 
-<Image src="/blog/como-comecar-sua-analise-com-dados-publicos/image_4.webp"/>
+<Image src="/blog/como-comecar-sua-analise-com-dados-publicos/image_4.png"/>
 
 ## Criando um projeto no Google Cloud
 
