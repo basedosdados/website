@@ -91,7 +91,7 @@ Mas processo todo de desenvolvimento começou com a nossa contratação de um (d
 
 A**ntes do desenvolvimento, é necessário muito (e muito) desenho.** Nossas grandes artistas de Comunicação, [Fernanda](http://github.com/fernandascovino) e [Nayara](https://www.linkedin.com/in/nayaramoraesdacosta/), passaram dias e semanas pensando, rascunhando e redesenhando muitas versões possíveis do site. Para isso, utilizamos nosso querido Figma. O Figma é um programa gratuito que possibilita criar protótipos estáticos ou interativos de forma colaborativa, e até mesmo [exportar designs em HTML e CSS](https://www.figma.com/community/plugin/851183094275736358/Figma-to-HTML).
 
-1. **Definir páginas e elementos prioritários**: Começamos pela **Home**, página de **Busca** (com filtros) e de **Conjuntos.** Com base nas entrevistas, decidimos centralizar na página de **Conjuntos** todas as informações de [tabelas tratadas no _datalake_ e outros recursos](https://basedosdados.github.io/mais/) — diminuindo o número de cliques para chegar na informação que você realmente precisa.
+1. **Definir páginas e elementos prioritários**: Começamos pela **Home**, página de **Busca** (com filtros) e de **Conjuntos.** Com base nas entrevistas, decidimos centralizar na página de **Conjuntos** todas as informações de [tabelas tratadas no _datalake_ e outros recursos](https://basedosdados.github.io/sdk/) — diminuindo o número de cliques para chegar na informação que você realmente precisa.
 2. **Buscar referências de design e conteúdo**: Prints de sites como [Kaggle](https://www.kaggle.com/), [NSW](https://www.nsw.gov.au/) e [World Bank Data](https://data.worldbank.org/) aos poucos foram enchendo nosso mural.
 
 <Image src="/blog/construimos-um-novo-site/image_6.png" caption="Mural de ideias, desenhos e referências no figma."/>
@@ -134,7 +134,7 @@ Fizemos a gestão do código de desenvolvimento via Github de forma simples: tod
 
 E descobrimos também alguns ajustes para serem consertados antes do lançamento — *acredita que quase lançamos sem o botão de acesso ao datalake?* **Por isso a importância de sempre testar com novos olhos!**
 
-Ouvimos outros pontos de melhoria, como diferenciar [o que é uma tabela tratada e o que é um link externo](https://basedosdados.github.io/mais/) e informar a data de atualização de dados, que foram priorizados pela equipe nos _sprints_ após o lançamento.
+Ouvimos outros pontos de melhoria, como diferenciar [o que é uma tabela tratada e o que é um link externo](https://basedosdados.github.io/sdk/) e informar a data de atualização de dados, que foram priorizados pela equipe nos _sprints_ após o lançamento.
 
 ## Lançamento e próximos passos
 

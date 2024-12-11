@@ -31,7 +31,7 @@ Um wrapper é, basicamente, o aproveitamento da estrutura de um pacote desenvolv
 
 Na verdade, a única ponte existente até agora no Stata, que permitiria o pacote ser construído inteiramente nessa linguagem, seria através do PostgreSQL. O PostgreSQL também é um banco de dados, assim como o BigQuery. No entanto, isso demandaria mover toda estrutura da Base dos Dados que já está no BigQuery para este novo banco, custo infelizmente alto comparado a manter o pacote do Stata como um wrapper. Por outro lado, o pacote ainda está em desenvolvimento e esta é uma questão em aberto.
 
-Portanto, se você é um stateiro que tem novas ideias ou alguma solução para a questão citada, queremos te ouvir! Faça parte da sala do [Discord](https://discord.gg/p2g4RkBW8f) sobre o pacote.
+Portanto, se você é um stateiro que tem novas ideias ou alguma solução para a questão citada, queremos te ouvir! Faça parte da sala do [Discord](https://discord.gg/huKWpsVYx4) sobre o pacote.
 
 ## Como instalar?
 
@@ -41,9 +41,9 @@ Antes de instalar o pacote basedosdados no Stata, você deve executar dois passo
 
 1. Garantir que seu Stata seja a versão 16+
 
-2. Garantir que o Python esteja instalado no seu computador — você pode se guiar pelo nosso Mini Tutorial de Python [aqui](https://github.com/basedosdados/mais/blob/master/stata-package/Minitutorial.md). Nesse tutorial você também vai descobrir como autenticar seu projeto pelo prompt do seu computador (importante!).
+2. Garantir que o Python esteja instalado no seu computador — você pode se guiar pelo nosso Mini Tutorial de Python [aqui](https://github.com/basedosdados/sdk/blob/master/stata-package/Minitutorial.md). Nesse tutorial você também vai descobrir como autenticar seu projeto pelo prompt do seu computador (importante!).
 
-Caso esteja utilizando os dados da BD pela primeira vez, é necessário criar um projeto para que você possa fazer as queries no nosso repositório. Ter um projeto é de graça e basta ter uma conta Google (seu gmail por exemplo). [Veja aqui como criar um projeto no Google Cloud](https://basedosdados.github.io/mais/access_data_bq/#antes-de-comecar-crie-o-seu-projeto-no-google-cloud).
+Caso esteja utilizando os dados da BD pela primeira vez, é necessário criar um projeto para que você possa fazer as queries no nosso repositório. Ter um projeto é de graça e basta ter uma conta Google (seu gmail por exemplo). [Veja aqui como criar um projeto no Google Cloud](https://basedosdados.github.io/sdk/access_data_bq/#antes-de-comecar-crie-o-seu-projeto-no-google-cloud).
 
 Após garantir esses dois requerimentos obrigatórios, você pode finalmente instalar o pacote digitando o seguinte comando no seu Stata:
 
@@ -69,9 +69,9 @@ Clique [aqui](https://www.python.org/downloads/) na opção “Download Python�
 
 5. Após concluir a instalação do pacote basedosdados, digite basedosdados reauth no Prompt de Comando. Copie o link que aparecerá, cole na sua aba de navegação e dê autorização ao google. Em seguida, copie o código gerado, volte e cole na tela do Prompt e dê enter.
 
-Caso esteja utilizando os dados da BD pela primeira vez, é necessário criar um projeto para que você possa fazer as queries no nosso repositório. Ter um projeto é de graça e basta ter uma conta Google (seu gmail por exemplo). [Veja aqui como criar um projeto no Google Cloud](https://basedosdados.github.io/mais/access_data_bq/#antes-de-comecar-crie-o-seu-projeto-no-google-cloud).
+Caso esteja utilizando os dados da BD pela primeira vez, é necessário criar um projeto para que você possa fazer as queries no nosso repositório. Ter um projeto é de graça e basta ter uma conta Google (seu gmail por exemplo). [Veja aqui como criar um projeto no Google Cloud](https://basedosdados.github.io/sdk/access_data_bq/#antes-de-comecar-crie-o-seu-projeto-no-google-cloud).
 
-Após finalizar esses 3 passos, já será possível abrir o Stata e começar a usar o pacote. Para saber mais sobre os comandos do pacote, leia esse manual [aqui](https://github.com/basedosdados/mais/tree/master/stata-package).
+Após finalizar esses 3 passos, já será possível abrir o Stata e começar a usar o pacote. Para saber mais sobre os comandos do pacote, leia esse manual [aqui](https://github.com/basedosdados/sdk/tree/master/stata-package).
 
 Antes de usar o pacote pela primeira vez, digite db basedosdados e confirme novamente se as etapas acima foram concluídas com sucesso.
 
@@ -120,6 +120,6 @@ Baixe o pacote spmap e plote o mapa a partir do seguinte comando:
 Nosso projeto já te ajudou de alguma forma? Saiba como nos ajudar:
 
 - [Apoie o projeto](https://apoia.se/basedosdados)
-- [Seja um(a) colaborador(a) de dados na BD](https://basedosdados.github.io/mais/colab_data/)
+- [Seja um(a) colaborador(a) de dados na BD](https://basedosdados.github.io/sdk/colab_data/)
 - [Colabore com nossos pacotes](https://github.com/basedosdados/mais)
 - [Compartilhe nas redes sociais!](https://twitter.com/basedosdados)
