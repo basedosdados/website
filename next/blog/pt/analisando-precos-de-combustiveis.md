@@ -29,7 +29,7 @@ Qual o preço do combustível na sua cidade? Neste artigo vamos apresentar os da
 
 A ANP fornece, a cada semana, a série histórica com os microdados dos preços praticados por diferentes postos de revenda em todo o Brasil. A base inclui informações dos preços da gasolina, etanol, diesel s10, gasolina aditivada, glp, diesel e gnv, desde 2004 até outubro de 2021.
 
-A Base dos Dados disponibiliza estes dados de uma maneira mais intuitiva: tratados, padronizados e compatibilizados. Especificamente, o [script de tratamento](https://github.com/basedosdados/mais/blob/master/bases/br_anp_precos_combustiveis/code/%5Bdados%5D_br_anp_preco_combustiveis.ipynb) dos dados consistiu em unir os _dataframes_ com os diferentes tipos de combustíveis e meses do ano, além de incluir o código do IBGE para os municípios presentes na base — o que facilita o _merge_ com outras informações. A inclusão do código do IBGE também simplifica a visualização da tabela, mudando o formato da data ou ainda compatibilizando o endereço do estabelecimento. Vale ressaltar que a pesquisa abrange 883 municípios, ao longo dos 18 anos de pesquisa. Só em 2021 foram coletadas informações de 22.629 postos de revenda dos 27 estados.
+A Base dos Dados disponibiliza estes dados de uma maneira mais intuitiva: tratados, padronizados e compatibilizados. Especificamente, o [script de tratamento](https://github.com/basedosdados/sdk/blob/master/bases/br_anp_precos_combustiveis/code/%5Bdados%5D_br_anp_preco_combustiveis.ipynb) dos dados consistiu em unir os _dataframes_ com os diferentes tipos de combustíveis e meses do ano, além de incluir o código do IBGE para os municípios presentes na base — o que facilita o _merge_ com outras informações. A inclusão do código do IBGE também simplifica a visualização da tabela, mudando o formato da data ou ainda compatibilizando o endereço do estabelecimento. Vale ressaltar que a pesquisa abrange 883 municípios, ao longo dos 18 anos de pesquisa. Só em 2021 foram coletadas informações de 22.629 postos de revenda dos 27 estados.
 
 A base contém informações sobre a localização de cada posto (UF, município e endereço completo), especificidades do estabelecimento (CNPJ, nome e bandeira), além do produto e dos preços praticados nas mais de 26 milhões de observações.
 
@@ -405,4 +405,4 @@ Essa e outras análises você consegue acompanhar na íntegra pelo nosso [Github
 
 A Base dos Dados é uma iniciativa open source e sem fins lucrativos que busca diminuir a distância entre sua pergunta e os dados. Esperamos que você se sinta inspirado em utilizar esse e outros dados. Afinal, muitas outras análises podem ser realizadas.
 
-Compartilhe conosco seus achados em nossas redes sociais ou em nossa comunidade no [Discord](https://discord.gg/WzzzQs9T).
+Compartilhe conosco seus achados em nossas redes sociais ou em nossa comunidade no [Discord](https://discord.gg/huKWpsVYx4).

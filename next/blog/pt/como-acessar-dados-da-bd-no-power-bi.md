@@ -69,7 +69,7 @@ Salve a tabela obtida clicando em **Salvar**. Você pode salvar a consulta ou a 
 
 <Image src="/blog/como-acessar-dados-da-bd-no-power-bi/image_3.png"/>
 
-O BigQuery irá te pedir para criar um conjunto de dados onde você pode salvar essa tabela (caso não tenha um). Se já tem maior familiaridade com o PBI, é algo muito similar aos conjuntos de dados do PBI. Dê um nome intuitivo ao seu conjunto No caso da Base dos Dados, organizamos os nomes de conjuntos por abrangência geográfica, instituição e tema do dado, você pode ver mais sobre nossas regras de nomenclatura [aqui](https://basedosdados.github.io/mais/style_data/#nomea%C3%A7%C3%A3o-de-bases-e-tabelas). Esse conjunto é essencialmente uma “pasta”onde ficarão todas as tabelas do seu projeto. Neste exemplo, escolhemos o nome “tutorial” de forma mais genérica.
+O BigQuery irá te pedir para criar um conjunto de dados onde você pode salvar essa tabela (caso não tenha um). Se já tem maior familiaridade com o PBI, é algo muito similar aos conjuntos de dados do PBI. Dê um nome intuitivo ao seu conjunto No caso da Base dos Dados, organizamos os nomes de conjuntos por abrangência geográfica, instituição e tema do dado, você pode ver mais sobre nossas regras de nomenclatura [aqui](https://basedosdados.github.io/sdk/style_data/#nomea%C3%A7%C3%A3o-de-bases-e-tabelas). Esse conjunto é essencialmente uma “pasta”onde ficarão todas as tabelas do seu projeto. Neste exemplo, escolhemos o nome “tutorial” de forma mais genérica.
 
 <Image src="/blog/como-acessar-dados-da-bd-no-power-bi/image_4.png"/>
 

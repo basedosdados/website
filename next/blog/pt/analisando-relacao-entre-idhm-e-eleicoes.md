@@ -27,7 +27,7 @@ Neste breve artigo, proponho uma visualização simples e rápida de como a vota
 
 O IDHM é uma medida composta de indicadores de três dimensões do desenvolvimento humano: longevidade, educação e renda. O índice varia de 0 a 1. Quanto mais próximo de 1, maior o desenvolvimento humano. Além de seguir as mesmas três dimensões, o IDHM brasileiro adequa a metodologia global ao contexto brasileiro e à disponibilidade de indicadores nacionais. Isso o deixa mais adequado para avaliar o desenvolvimento de municípios brasileiros.
 
-A Base dos Dados disponibiliza dados do [Atlas do Desenvolvimento Humano (ADH)](http://atlasbrasil.org.br/), site que traz o IDHM e outros 200 indicadores, já tratados e prontos para análise. **São dados a nível de Brasil, UF e município** que podem ser analisados em Python, R, Stata, ou pelo próprio BigQuery via SQL. Para essa análise utilizamos o [pacote em R da BD](https://github.com/basedosdados/mais/tree/master/r-package). Acesse essa base por [aqui](/dataset/mundo-onu-adh).
+A Base dos Dados disponibiliza dados do [Atlas do Desenvolvimento Humano (ADH)](http://atlasbrasil.org.br/), site que traz o IDHM e outros 200 indicadores, já tratados e prontos para análise. **São dados a nível de Brasil, UF e município** que podem ser analisados em Python, R, Stata, ou pelo próprio BigQuery via SQL. Para essa análise utilizamos o [pacote em R da BD](https://github.com/basedosdados/sdk/tree/master/r-package). Acesse essa base por [aqui](/dataset/mundo-onu-adh).
 
 ## Analisando a relação entre o IDHM e a Votação Presidencial
 
