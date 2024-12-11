@@ -1,0 +1,13 @@
+{
+  "pageTitle": "Blog – Base dos Dados",
+  "pageDescription": "Blog da Base dos Dados",
+  "blog": "Blog",
+  "edited": "Editado em",
+  "share": "Compartilhe",
+  "filter": "Filtrar",
+  "all": "Todos",
+  "noCategories": "Sem categoria",
+  "noticedSomething": "Notou algo errado ou tem uma sugestão?",
+  "contributeToBD": "Contribua com a BD editando este artigo via pull request no nosso GitHub.",
+  "seeAll": "Ver todos"
+}

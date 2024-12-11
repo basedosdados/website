@@ -19,29 +19,12 @@
   padding-bottom: 20px;
 }
 
-.questionContainer :global(.button-copy) {
-  position: relative;
-}
-
-.questionContainer :global(.button-copy) :global(.tooltip-button-copy) {
-  display: none;
-  position: absolute;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Lato';
-  width: 80px;
-  bottom: 30px;
-  left: -25px;
-  padding: 3px 8px 6px;
-  border-radius: 6px;
+.questionContainer pre {
+  background-color: #282b2e;
+  padding: 16px;
+  border-radius: 10px;
   color: #FFF;
-  background-color: #2A2F38;
-}
-
-.questionContainer :global(.button-copy:hover) :global(.tooltip-button-copy) {
-  display: flex;
-  position: absolute;
-  left: -60px;
+  margin: 8px 0;
 }
 
 .link {

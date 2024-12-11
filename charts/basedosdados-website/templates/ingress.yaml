@@ -1,27 +1,106 @@
 {{- if .Values.website.ingress.enabled }}
+{{- $name := .Values.website.name }}
+
+# Default Ingress
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.website.name }}-ingress
+  name: {{ $name }}-ingress
   labels:
     app.kubernetes.io/component: basedosdados-website
-    app.kubernetes.io/name: {{ .Values.website.name }}
+    app.kubernetes.io/name: {{ $name }}
   annotations:
-    {{- toYaml .Values.website.ingress.annotations | nindent 4 }}
+    {{- with .Values.website.ingress.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   rules:
     - host: {{ .Values.website.ingress.host | quote }}
       http:
         paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: "{{ .Values.website.name }}-service"
-              port:
-                number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ $name }}-service"
+                port:
+                  number: 80
   {{- with .Values.website.ingress.tls }}
   tls:
     {{- toYaml . | nindent 4 }}
   {{- end }}
+
+# International domain Ingresses
+{{- range $domain := .Values.website.ingress.internationalDomains }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $name }}-{{ $domain.language }}-direct-ingress
+  labels:
+    app.kubernetes.io/component: basedosdados-website
+    app.kubernetes.io/name: {{ $name }}
+  annotations:
+    {{- toYaml $domain.annotations | nindent 4 }}
+spec:
+  {{- with $domain.tls }}
+  tls:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  rules:
+    - host: {{ $domain.host | quote }}
+      http:
+        paths:
+          - path: /_next
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ $name }}-service"
+                port:
+                  number: 80
+          - path: /favicon_default.ico
+            pathType: Exact
+            backend:
+              service:
+                name: "{{ $name }}-service"
+                port:
+                  number: 80
+          - path: /{{ $domain.language }}/*
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ $name }}-service"
+                port:
+                  number: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $name }}-{{ $domain.language }}-rewrite-ingress
+  labels:
+    app.kubernetes.io/component: basedosdados-website
+    app.kubernetes.io/name: {{ $name }}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /{{ $domain.language }}/$1
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    {{- toYaml $domain.annotations | nindent 4 }}
+spec:
+  {{- with $domain.tls }}
+  tls:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  rules:
+    - host: {{ $domain.host | quote }}
+      http:
+        paths:
+          - path: /(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ $name }}-service"
+                port:
+                  number: 80
+
+{{- end }}
 {{- end }}

@@ -10,24 +10,31 @@ import ImageNext from "next/image";
 import Head from "next/head";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { CaseStudiesPaged } from "../content/caseStudies";
+import { isMobileMod, useCheckMobile } from "../hooks/useCheckMobile.hook";
+import { withPages } from "../hooks/pages.hook";
+import { MainPageTemplate } from "../components/templates/main";
+
+import {
+  getAllCaseStudies
+} from "./api/caseStudies"
+
 import Display from "../components/atoms/Display";
 import BodyText from "../components/atoms/BodyText";
 import Link from "../components/atoms/Link";
 import RoundedButton from "../components/atoms/RoundedButton";
 import SectionText from "../components/atoms/SectionText";
 import SectionTitle from "../components/atoms/SectionTitle";
-import { MainPageTemplate } from "../components/templates/main";
-import { withPages } from "../hooks/pages.hook";
-import { isMobileMod, useCheckMobile } from "../hooks/useCheckMobile.hook";
-import BDLogoLabImage from "../public/img/logos/bd_logo_lab"
 
+import BDLogoLabImage from "../public/img/logos/bd_logo_lab"
 import CheckIcon from "../public/img/icons/checkIcon";
 
 
 export async function getStaticProps({ locale }) {
+  const caseStudiesContent = await getAllCaseStudies(locale)
+
   return {
     props: {
+      caseStudiesContent,
       ...(await serverSideTranslations(locale, ['common', 'services', 'menu'])),
       ...(await withPages()),
     },
@@ -207,16 +214,17 @@ function WorkflowBox({ order, title, subtitle, children}) {
   )
 }
 
-function CaseStudies ({}) {
+function CaseStudies ({ data }) {
   const { t } = useTranslation('services');
   const [CaseStudiesPages, setCaseStudiesPages] = useState([])
 
   useEffect(() => {
-    setCaseStudiesPages(CaseStudiesPaged())
-  },[])
+    setCaseStudiesPages(data)
+  },[data])
 
   return (
     <Stack
+      display={CaseStudiesPages.length === 0 ? "none" : "flex"}
       id="case-studies"
       width="100%"
       maxWidth="1264px"
@@ -265,7 +273,7 @@ function CaseStudies ({}) {
               borderRadius="16px"
               marginBottom="24px"
             >
-              {elm?.img.length > 0 ?
+              {elm?.img ?
                 <ImageNext
                   alt={elm.displayTitle}
                   src={elm.img}
@@ -285,7 +293,7 @@ function CaseStudies ({}) {
               overflow="hidden"
               marginBottom="16px !important"
             >
-              {elm?.logo.img.length > 0 ?
+              {elm?.logo?.img ?
                 <ImageNext
                   alt={elm.displayTitle}
                   src={elm.logo.img}
@@ -304,7 +312,7 @@ function CaseStudies ({}) {
               textAlign="justify"
               overflow="hidden"
             >
-              {elm.resume.slice(0,useCheckMobile() ? 160 :178)+"..."}
+              {elm?.summary && elm?.summary.slice(0,useCheckMobile() ? 160 :178)+"..."}
             </BodyText>
 
             <Link
@@ -327,7 +335,7 @@ function CaseStudies ({}) {
   )
 }
 
-export default function Services() {
+export default function Services({ caseStudiesContent }) {
   const { t } = useTranslation('services');
 
   const services = {
@@ -382,7 +390,7 @@ export default function Services() {
           ))}
         </Stack>
 
-        <CaseStudies />
+        <CaseStudies data={caseStudiesContent}/>
 
         <VStack
           id="data-capture"

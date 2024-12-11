@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Head from "next/head";
-import themeBD from "../styles/themeBD";
 import "../styles/globals.css";
 import { useTranslation } from 'next-i18next';
 
@@ -109,7 +108,7 @@ function MyApp({ Component, pageProps }) {
         {/* FIM DA TAG DEVELOPMENT */}
       </Head>
 
-      <ChakraProvider theme={themeBD}>
+      <ChakraProvider>
         <Component {...pageProps} locale={locale} />
       </ChakraProvider>
 

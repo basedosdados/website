@@ -1,6 +1,8 @@
 {
-    "pageTitle": "{{title}} – Base de los Datos",
-    "backLink": "<< Volver",
-    "contactText": "Queremos ayudarle.",
-    "contactButton": "Contactar"
+  "pageTitle": "{{title}} – Base de los Datos",
+  "backLink": "Volver",
+  "contactText": "Queremos ayudarte.",
+  "contactButton": "Contáctanos",
+  "about": "Acerca de",
+  "sector": "Sector"
 }
