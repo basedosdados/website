@@ -11,6 +11,7 @@ thumbnail: /blog/como-acessar-dados-da-bd-no-power-bi/image_11.gif
 categories: [tutorial]
 medium_slug: >
   https://medium.com/basedosdados/como-acessar-dados-da-bd-no-power-bi-aeeea9a9bdc0
+published: true
 ---
 
 ## TL;DR

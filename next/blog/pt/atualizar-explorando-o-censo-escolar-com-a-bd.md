@@ -1,5 +1,5 @@
 ---
-title: Explorando o Censo Escolar com a BD+
+title: Explorando o Censo Escolar com a BD
 description: >-
   Uma maneira prática de analisar a mais importante pesquisa estatística
   educacional do Brasil
@@ -149,7 +149,7 @@ WHERE
 
 ## Pontos de contato com outras bases
 
-O censo escolar por si só já disponibiliza uma grande variedade de variáveis. Caso você queira obter ainda mais, com a [BD+](https://basedosdados.github.io/mais/access_data_bq/) é fácil: como as bases têm os mesmos nomes de variável, podemos rapidamente juntar diferentes informações. A seguir separamos algumas bases já disponíveis na BD+ que podem complementar bem as tabelas do Censo Escolar:
+O censo escolar por si só já disponibiliza uma grande variedade de variáveis. Caso você queira obter ainda mais, com a [BD](https://basedosdados.github.io/mais/access_data_bq/) é fácil: como as bases têm os mesmos nomes de variável, podemos rapidamente juntar diferentes informações. A seguir separamos algumas bases já disponíveis na BD que podem complementar bem as tabelas do Censo Escolar:
 
 [Os indicadores escolares do INEP](/dataset/63f1218f-c446-4835-b746-f109a338e3a1?table=cd65b1d2-45e8-432b-afe8-c3a706addbe8): O dataset `br_inep_indicadores_educacionais` apresenta uma série de medições sobre a qualidade de ensino, em diferentes níveis de agregação. Usando a tabela `escola` como ponte, podemos juntar **média de alunos por turma da escola** (proveniente dessa tabela) com **número de computadores da escola** (vindo do Censo) e **construir um mais amplo cenário socioeconômico da escola**.
 
