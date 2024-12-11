@@ -21,7 +21,7 @@ export async function getStaticProps({ locale }) {
   };
 }
 
-export default function ContactConsulting() {
+export default function ContactServices() {
   const { t } = useTranslation('contact');
   const { locale } = useRouter();
 
