@@ -139,7 +139,7 @@ Ouvimos outros pontos de melhoria, como diferenciar [o que é uma tabela tratada
 
 <Image src="/blog/construimos-um-novo-site/image_8.png"/>
 
-13 de outubro de 2021, por coincidência a exatos 365 depois de subirmos o código que deu início ao _datalake_ BD+(se a gente tivesse combinado não acontecia!). Nos reunimos no final de domingo a noite (dia 12) para garantir que tudo sairia conforme o esperado. O horário era vital: **evitamos** **migrar durante um momento de alta utilização, pois iria quebrar o site e frustar diversos usuários.**
+13 de outubro de 2021, por coincidência a exatos 365 depois de subirmos o código que deu início ao _datalake_ (se a gente tivesse combinado não acontecia!). Nos reunimos no final de domingo a noite (dia 12) para garantir que tudo sairia conforme o esperado. O horário era vital: **evitamos** **migrar durante um momento de alta utilização, pois iria quebrar o site e frustar diversos usuários.**
 
 > **Virar a chave após uma grande mudança nunca é um processo fácil.**
 

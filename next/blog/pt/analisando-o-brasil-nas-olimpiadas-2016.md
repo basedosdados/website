@@ -10,9 +10,10 @@ authors:
 thumbnail: /blog/analisando-o-brasil-nas-olimpiadas-2016/image_0.jpg
 categories: [analise]
 medium_slug: https://medium.com/@basedosdados/o-brasil-nas-olimp%C3%ADadas-2a3f9960cc69
+published: true
 ---
 
-> **Atenção**: Esse artigo foi publicado em 2021 e foi baseado num conjunto de dados que possuia informações até 2016. Para as olimpíadas de 2024, não encontramos os dados no mesmo formato, por isso incluímos dados até 2021 em um novo formato neste [novo conjunto de dados](https://basedosdados.org/dataset/62f8cb83-ac37-48be-874b-b94dd92d3e2b?table=567b1ccd-d8c2-4616-bacb-cf5c0e7b8d89).
+> **Atenção**: Esse artigo foi publicado em 2021 e foi baseado num conjunto de dados que possuia informações até 2016. Para atualizar não encontramos os dados no mesmo formato, por isso incluímos dados até 2021 em um novo formato neste [novo conjunto de dados](https://basedosdados.org/dataset/62f8cb83-ac37-48be-874b-b94dd92d3e2b?table=567b1ccd-d8c2-4616-bacb-cf5c0e7b8d89).
 
 ## TL;DR
 Hoje começa mais uma edição das Olimpíadas, mas você sabia que os jogos da Era Moderna tiveram sua primeira edição em 1896? Nesse texto vamos apresentar dados históricos dos Jogos Olímpicos, que já estão limpos, tratados e disponíveis no datalake público da Base dos Dados. Os [microdados das Olimpíadas](/dataset/62f8cb83-ac37-48be-874b-b94dd92d3e2b?table=567b1ccd-d8c2-4616-bacb-cf5c0e7b8d89) trazem informações sobre os jogos, cidade sede, as delegações, atletas e suas características, além dos esportes, suas diferentes modalidades e medalhistas também.

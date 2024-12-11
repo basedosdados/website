@@ -57,7 +57,7 @@ No caminho para se tornar um analista de dados ou desenvolvedor nos encontramos 
 
 Uma boa alternativa para lidar com dados reais e melhorar seu portfólio é ajudar a Base dos Dados com a sua ingestão de dados. No mínimo, você irá lidar com a captura de dados, preferencialmente de forma automatizada, com a arquitetura e a limpeza dos mesmos. Também vai interagir com ferramentas do dia a dia de um cientista de dados, como interfaces de linha de comando, YAML e BigQuery. A experiência conquistada pode ser crucial na entrada no mercado de trabalho.
 
-Descrevemos em detalhes esse processo em [Colaborando com dados na BD+](https://basedosdados.github.io/mais/colab_data/). Em resumo o processo é dividido em quatro partes. Inicialmente você informa seu interesse para a BD. Então, faz a limpeza e tratamento dos dados que pretende subir. Em seguida realiza upload dos dados em seu BigQuery pessoal. E, por fim, envia os dados para revisão.
+Descrevemos em detalhes esse processo em [Colaborando com dados na BD](https://basedosdados.github.io/mais/colab_data/). Em resumo o processo é dividido em quatro partes. Inicialmente você informa seu interesse para a BD. Então, faz a limpeza e tratamento dos dados que pretende subir. Em seguida realiza upload dos dados em seu BigQuery pessoal. E, por fim, envia os dados para revisão.
 
 ## Contribuindo com a infra
 
