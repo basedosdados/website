@@ -76,12 +76,10 @@ function LatestBlogCard({ slug, frontmatter }) {
             <Image
               cursor="pointer"
               width={"100%"}
-              style={{ aspectRatio: "16/9" }}
               src={
                 frontmatter.thumbnail ??
                 "https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_9.png"
               }
-              objectFit={"none"}
               transition={
                 "transform .6s cubic-bezier(0.01, 0.97, 0.42, 1.09)"
               }

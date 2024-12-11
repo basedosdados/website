@@ -10,7 +10,7 @@ authors:
     role: Edição
   - name: José Félix
     role: Edição de arte
-thumbnail: /blog/analisando-chuvas-no-rio-grande-do-sul/image_0.webp
+thumbnail: /blog/analisando-chuvas-no-rio-grande-do-sul/image_0.png
 categories: [analise]
 medium_slug: >-
   https://medium.com/basedosdados/qual-foi-a-magnitude-das-chuvas-extremas-que-atingiram-porto-alegre-este-ano-e-qual-a-rela%C3%A7%C3%A3o-675265bce50e
