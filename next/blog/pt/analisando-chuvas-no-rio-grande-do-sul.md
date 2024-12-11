@@ -28,7 +28,7 @@ Acesse os dados no INMET por [aqui](/dataset/782c5607-9f69-4e12-b0d5-aa0f1a7a94e
 
 A estação foi instalada em 22 de setembro de 2000 e, desde então, tem coletado dados de pressão, temperatura e, entre outros, precipitação, nosso interesse. É possível perceber que, a partir do dia 27 de abril, o volume de chuvas ultrapassou toda a precipitação registrada para qualquer ano anterior, como é possível observar no gráfico abaixo.
 
-<Image src="/blog/analisando-chuvas-no-rio-grande-do-sul/image_0.webp"/>
+<Image src="/blog/analisando-chuvas-no-rio-grande-do-sul/image_0.png"/>
 
 A precipitação não só se manteve alta até a primeira semana de maio, mas por todo o resto do mês. Ainda no dia 23, maio já havia sido declarado o mês com maior quantidade de chuva na história de Porto Alegre.
 
