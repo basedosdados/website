@@ -18,13 +18,11 @@ published: false
 
 Não é nenhuma novidade que dados públicos são fundamentais para a transparência, responsabilidade governamental e para a participação cidadâ. O acesso a esses dados empodera cidadãos, jornalistas, pesquisadores(as) e organizações da sociedade civil para analisar nossa realidade, monitorar o poder público e identificar problemas e possíveis soluções. Os dados nos ajudam a compreender melhor o mundo e fortalecem a democracia ao garantir que decisões importantes sejam tomadas com base em evidências e de forma transparente.
 
-Porém, ainda existe uma barreira entre a população e o acesso e utilização dessas informações tão cruciais. Trabalhar com dados ainda exige habilidades que não aprendemos na escola, talvez nem mesmo no ensino superior. Infelizmente, essa ferramenta tão poderosa para influenciar positivamente a sociedade ainda é para poucos(as).
+Porém, ainda existe uma barreira entre a população e o acesso e utilização dessas informações tão cruciais. Infelizmente, essa ferramenta tão poderosa para influenciar positivamente a sociedade ainda é para poucos(as).
 
 **Mas queremos e devemos mudar isso.**
 
-Este artigo foi criado para ajudar a diminuir, ao menos um pouco, essa barreira e ajudar pessoas a navegar melhor em um mundo cada vez mais orientado por dados. Faremos isso introduzindo algumas ferramentas criadas pela ONG Base dos Dados com o mesmo propósito, pensadas exatamente para trazer mais acessibilidade à essas informações que podem ajudar a compreender e melhorar a realidade da nossa sociedade, da sua cidade e até do seu bairro.
-
-Se esse artigo foi útil para você, pedimos que ajude compartilhando com mais alguém que possa tirar bom proveito dele. Assim, vamos contribuindo, de pouco a pouco, por uma sociedade que se apropria dos dados para construir um futuro melhor.
+Este artigo foi criado para ajudar a diminuir, ao menos um pouco, essa barreira e ajudar pessoas a navegar melhor em um mundo cada vez mais orientado por dados. Faremos isso introduzindo algumas ferramentas criadas pela ONG Base dos Dados com o mesmo propósito, pensadas exatamente para trazer mais acessibilidade à essas informações que podem ajudar a compreender e melhorar a realidade da nossa sociedade.
 
 <Image src="/blog/como-comecar-sua-analise-com-dados-publicos/image_0.webp" caption="Photo by [Campaign Creators](https://unsplash.com/@campaign_creators) on [Unsplash](https://unsplash.com)"/>
 
@@ -42,7 +40,7 @@ Clique [aqui](https://medium.com/basedosdados/como-funciona-o-sistema-de-inser%C
 
 Existem algumas maneiras diferentes de acessar os dados a BD, mas neste artigo vamos focar na mais simples: através de uma consulta SQL no datalake público.
 
-Se quiser aprender como acessar nossos dados com Python ou R, veja nossa documentação por [aqui](https://basedosdados.github.io/mais/#acessando-tabelas-tratadas-bd).
+Se quiser aprender como acessar nossos dados com Python ou R, veja nossa documentação por [aqui](https://basedosdados.github.io/sdk/#acessando-tabelas-tratadas-bd).
 
 ## Por onde começar a sua análise?
 
@@ -78,7 +76,7 @@ Além disso, você pode conferir quais colunas cada tabela possui e a descriçã
 
 <Image src="/blog/como-comecar-sua-analise-com-dados-publicos/image_3.png"/>
 
-Quando você tiver identificado o conjunto, a tabela e as colunas que precisa para sua análise, você pode partir para selecionar as colunas do seu interesse e clicar em Gerar Query para acessar os dados através do BigQuery, um serviço de banco de dados em nuvem da Google que te permite fazer consultas ao banco em SQL direto do navegador com **rapidez** (mesmo consultas muito longas demoram apenas minutos para serem processadas), **escala** (o BigQuery escala magicamente para hexabytes se necessário) e **economia** (todo usuário possui 1 TB _gratuito por mês para consulta aos dados_). Para chegar até o BigQuery, utilize o botão "Acessar o BigQuery" da página, conforme a imagem abaixo. Não se esqueça de copiar o código disponibilizado para puxar apenas as colunas selecionadas com os códigos institucionais já traduzidos! 
+Quando você tiver identificado o conjunto, a tabela e as colunas que precisa para sua análise, você pode partir para selecionar as colunas do seu interesse e clicar em Gerar Query. Esse botão vai montar uma query SQL para você acessar os dados através do BigQuery, um serviço de banco de dados em nuvem da Google que te permite fazer consultas direto do navegador com **rapidez** (mesmo consultas muito longas demoram apenas minutos para serem processadas), **escala** (o BigQuery escala magicamente para hexabytes se necessário) e **economia** (todo usuário possui 1 TB _gratuito por mês para consulta aos dados_). Para chegar até o BigQuery, utilize o botão "Acessar o BigQuery" da página, conforme a imagem abaixo. Não se esqueça de copiar o código disponibilizado para puxar apenas as colunas selecionadas com os códigos institucionais já traduzidos! 
 
 <Image src="/blog/como-comecar-sua-analise-com-dados-publicos/image_4.png"/>
 
@@ -168,7 +166,7 @@ Abaixo você encontra uma seção com diversos links úteis para seu trabalho e 
 
 ## Links úteis
 
-- [Salve nossa documentação para consultar quando tiver dúvidas;](https://basedosdados.github.io/mais/)
+- [Salve nossa documentação para consultar quando tiver dúvidas;](https://basedosdados.github.io/sdk/)
 - [Assine gratuitamente nossa BDleter para receber mensalmente nossas novidades;](https://info.basedosdados.org/newsletter)
 - [Conheçã nosso Curso de Análise de Dados com SQL para se aprofundar e dominar uma das linguagens mais utilizadas no mercado;](https://info.basedosdados.org/bd-edu-sql)
 - [Se inscreva em nosso canal no YouTube](https://www.youtube.com/@BasedosDados) e siga a gente no [instagram](https://www.instagram.com/basedosdados/), [linkedin](https://www.linkedin.com/company/base-dos-dados/mycompany/) e [twitter](https://chat.whatsapp.com/CLLFXb1ogPPDomCM6tQT22).
@@ -180,4 +178,4 @@ Abaixo você encontra uma seção com diversos links úteis para seu trabalho e 
 - [Análise de dados com o BigQuery](https://cloud.google.com/bigquery/docs/query-overview?hl=pt-br)
 - [O que é o BigQuery?](https://cloud.google.com/bigquery/docs/introduction?hl=pt-br)
 - [Tipos de datas SQL](https://www.w3schools.com/sql/sql_dates.asp)
-- [Gerenciando datas com diferentes SQL](https://drive.google.com/file/d/11NE9Faqltyl-ZePovy2ThfLo2ALrqGLF/view?usp=sharing)
+- [Gerenciando datas com diferentes funções do SQL](https://drive.google.com/file/d/11NE9Faqltyl-ZePovy2ThfLo2ALrqGLF/view?usp=sharing)
