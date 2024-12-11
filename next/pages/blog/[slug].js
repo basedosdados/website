@@ -55,6 +55,7 @@ export async function getStaticProps({ params, locale }) {
   return {
     props: {
       slug,
+      locale,
       ...serialize,
       ...(await serverSideTranslations(locale, ['common', 'blog', 'menu'])),
     },
@@ -69,9 +70,17 @@ export async function getStaticPaths() {
   };
 }
 
-export default function Post({ slug, mdxSource, headings }) {
+export default function Post({ slug, locale, mdxSource, headings }) {
   const { t } = useTranslation('blog')
   const { frontmatter } = mdxSource;
+
+  const repository = () => {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_FRONTEND
+    if (baseUrl === "http://localhost:3000" || baseUrl === "https://development.basedosdados.org") return "development" 
+    if (baseUrl === "https://staging.basedosdados.org") return "staging"
+    if (baseUrl === "https://basedosdados.org") return "main" 
+    return null
+  }
 
   return (
     <MainPageTemplate
@@ -188,7 +197,7 @@ export default function Post({ slug, mdxSource, headings }) {
                 marginTop="24px"
               >{t("noticedSomething")} </Text>
               <Link
-                href={`https://github.com/basedosdados/website/edit/main/next/blog/${slug}.md`}
+                href={`https://github.com/basedosdados/website/edit/${repository()}/next/blog/${locale}/${slug}.md`}
                 isexternal="true"
                 fontSize="16px"
                 fontWeight="400"
