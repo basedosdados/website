@@ -7,7 +7,7 @@ authors:
   - name: Giovane Caruso
     role: Autor
     social: https://medium.com/@giovanecaruso
-thumbnail: /blog/como-comecar-sua-analise-com-dados-publicos/image_0.png
+thumbnail: /blog/como-comecar-sua-analise-com-dados-publicos/image.png
 categories: [tutorial]
 medium_slug: >-
   https://medium.com/basedosdados/como-come%C3%A7ar-sua-an%C3%A1lise-com-dados-p%C3%BAblicos-6918e9b888af
@@ -25,7 +25,7 @@ Porém, ainda existe uma barreira entre a população e o acesso e utilização 
 
 Este artigo foi criado para ajudar a diminuir, ao menos um pouco, essa barreira e ajudar pessoas a navegar melhor em um mundo cada vez mais orientado por dados. Faremos isso introduzindo algumas ferramentas criadas pela ONG Base dos Dados com o mesmo propósito, pensadas exatamente para trazer mais acessibilidade à essas informações que podem ajudar a compreender e melhorar a realidade da nossa sociedade.
 
-<Image src="/blog/como-comecar-sua-analise-com-dados-publicos/image_0.png" caption="Photo by [Campaign Creators](https://unsplash.com/@campaign_creators) on [Unsplash](https://unsplash.com)"/>
+<Image src="/blog/como-comecar-sua-analise-com-dados-publicos/image_0.webp" caption="Photo by [Campaign Creators](https://unsplash.com/@campaign_creators) on [Unsplash](https://unsplash.com)"/>
 
 ## O que você vai ler?
 
