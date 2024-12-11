@@ -17,7 +17,7 @@ A divulgação de dados públicos mostra em números a desigualdade em diferente
 
 Por isso, inspirados(as) no tema do Open Data Day 2021, resolvemos abrir espaço para programadores, jornalistas, pesquisadores e entusiastas de dados pensarem conosco como podemos identificar ou combater desigualdades no Brasil a partir de dados públicos.
 
-E como começar? Nós demos o ponto de partida: a partir das mais de 30 bases públicas que disponibilizamos tratadas e integradas para uso da sociedade no nosso [_datalake_ público (BD+)](/dataset/?download_type=BD+Mais). Recebemos ao todo mais de 30 inscrições de diferentes públicos, agradecemos a participação de todas e todos!
+E como começar? Nós demos o ponto de partida: a partir das mais de 30 bases públicas que disponibilizamos tratadas e integradas para uso da sociedade no nosso _datalake_ público. Recebemos ao todo mais de 30 inscrições de diferentes públicos, agradecemos a participação de todas e todos!
 
 > **Atenção: Nenhuma das análises tem a intenção de trazer evidências rigorosamente testadas sobre os temas abordados, mas sim explorar e abrir possíveis caminhos para pensarmos os mesmos.**
 
@@ -29,7 +29,7 @@ Equipe: Erica Ferreira, Pedro Boechat, Pedro Borges e Rafael Ribeiro (graduandos
 
 > **Análise: De que forma diferenças no acesso a uma educação de qualidade se manifestam em diferentes regiões do país?**
 
-Para entender melhor sobre essa e outras perguntas levantadas quanto à qualidade de ensino e investimento em educação, eles utilizaram ao todo 4 bases disponibilizadas na BD+: [Atlas do Desenvolvimento Humano (ADH)](/dataset/cbfc7253-089b-44e2-8825-755e1419efc8?table=2b704f11-2b3a-485d-a492-71f86c7ea21a), [Índice de Desenvolvimento da Educação Básica (Ideb)](/dataset/96eab476-5d30-459b-82be-f888d4d0d6b9?table=bc84dea9-1126-4423-86d2-8835e6b19a72), [Finanças do Brasil (Finbra)](/dataset/br-tesouro-finbra) e nossa base de [diretórios brasileiros](/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=0a2d8187-f936-437d-89db-b4eb3a7e1735), que liga diferentes identificações para municípios, estados e regiões do país.
+Para entender melhor sobre essa e outras perguntas levantadas quanto à qualidade de ensino e investimento em educação, eles utilizaram ao todo 4 bases disponibilizadas na BD: [Atlas do Desenvolvimento Humano (ADH)](/dataset/cbfc7253-089b-44e2-8825-755e1419efc8?table=2b704f11-2b3a-485d-a492-71f86c7ea21a), [Índice de Desenvolvimento da Educação Básica (Ideb)](/dataset/96eab476-5d30-459b-82be-f888d4d0d6b9?table=bc84dea9-1126-4423-86d2-8835e6b19a72), [Finanças do Brasil (Finbra)](/dataset/br-tesouro-finbra) e nossa base de [diretórios brasileiros](/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=0a2d8187-f936-437d-89db-b4eb3a7e1735), que liga diferentes identificações para municípios, estados e regiões do país.
 
 [➡️ Confira a análise completa aqui](/ufrj-analytica/datathon-open-data-day-base-dos-dados-86079c93945f)
 

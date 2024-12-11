@@ -1,5 +1,5 @@
 ---
-title: Analisando preços de combustíveis com a BD+
+title: Analisando preços de combustíveis com a BD
 description: >-
   Veja como analisar a variação média dos preços de combustíveis no Brasil com
   valores corrigidos pelo IPCA
@@ -35,7 +35,7 @@ A base contém informações sobre a localização de cada posto (UF, município
 
 ## Como consultar esses dados
 
-A BD+ permite que você acesse todas essas informações com uma simples consulta de SQL no BigQuery, ou através dos nossos pacotes no Python e no R. Por conta do tamanho da base, o download direto pela plataforma não é possível.
+A BD permite que você acesse todas essas informações com uma simples consulta de SQL no BigQuery, ou através dos nossos pacotes no Python e no R. Por conta do tamanho da base, o download direto pela plataforma não é possível.
 
 Para explorar os dados dessa base, acesse a [página deste conjunto de dados](/dataset/c962b5e4-e71c-4e7c-b172-5e70951be633) em nossa plataforma e confira a seção Consulta aos Dados.
 
@@ -47,7 +47,7 @@ Para explorar os dados dessa base, acesse a [página deste conjunto de dados](/d
 
 As notícias nos últimos meses têm anunciado a constante alta dos combustíveis. Muito se fala da gasolina à R$7, dos impostos, insumos e da cotação do dólar. Nossa análise propõe observar os dados deflacionados e comparados à inflação, isto é, a variação dos preços atuais em relação à variação do índice de preços ao consumidor.
 
-Cumprindo a nossa missão — acessar os dados em um único lugar — conseguimos captar dados do [Índice Nacional de Preços ao Consumidor Amplo (IPCA)](/dataset/c58781fb-1177-448d-87ff-56b5cbf1735c), também disponíveis na BD+, além de manipular a nossa base de preços dos combustíveis da Agência Nacional do Petróleo, Gás Natural e Biocombustíveis (ANP).
+Cumprindo a nossa missão — acessar os dados em um único lugar — conseguimos captar dados do [Índice Nacional de Preços ao Consumidor Amplo (IPCA)](/dataset/c58781fb-1177-448d-87ff-56b5cbf1735c), também disponíveis na BD, além de manipular a nossa base de preços dos combustíveis da Agência Nacional do Petróleo, Gás Natural e Biocombustíveis (ANP).
 
 Com o código SQL(query) abaixo, conseguiremos extrair: o ano e mês de referência das informações; o produto (combustível) e seu preço médio da base da ANP, além de atualizar o preço para os valores atuais com os dados da inflação.
 
