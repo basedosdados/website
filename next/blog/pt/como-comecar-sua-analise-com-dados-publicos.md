@@ -56,7 +56,7 @@ Por isso, tenha essas dicas em mentes na hora de formular a pergunta que vai gui
 
 Formular perguntas claras, específicas e mensuráveis vai te poupar tempo e te ajudar ser mais assertivo(a) no problema que sua análise busca solucionar.
 
-Veja [aqui](/blog?category=analise) algumas análises para se inspirar.
+Veja [aqui](https://basedosdados.org/blog?category=analise) algumas análises para se inspirar.
 
 ## Onde encontrar os dados que preciso?
 
