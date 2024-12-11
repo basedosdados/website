@@ -15,6 +15,7 @@ categories: [analise]
 medium_slug: >-
   https://medium.com/basedosdados/qual-foi-a-magnitude-das-chuvas-extremas-que-atingiram-porto-alegre-este-ano-e-qual-a-rela%C3%A7%C3%A3o-675265bce50e
 published: true
+order: 1
 ---
 
 Prestes a completar quatro meses da tragédia causada pelas chuvas no Rio Grande do Sul, a análise dessa edição traz um pouco de uma discussão sobre sua magnitude e sua relação com o aquecimento global. Afinal, trata-se de uma das maiores tragédias climáticas já ocorridas no país, e não podemos esquecer dela facilmente.
