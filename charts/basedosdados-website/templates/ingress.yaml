@@ -65,6 +65,13 @@ spec:
                 name: "{{ $name }}-service"
                 port:
                   number: 80
+          - path: /api/*
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ $name }}-service"
+                port:
+                  number: 80
           - path: /{{ $domain.language }}/*
             pathType: Prefix
             backend:
