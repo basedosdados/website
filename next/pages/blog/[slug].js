@@ -148,6 +148,7 @@ export default function Post({ slug, locale, mdxSource, headings }) {
         {frontmatter.categories.map((elm) => {
           return (
             <Link
+              key={elm}
               href={`/blog?category=${elm}`}
               fontSize="14px"
               fontWeight="400"
