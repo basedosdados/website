@@ -18,6 +18,7 @@ import {
   Th,
   Stack,
   Divider,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
 import { useTranslation } from 'next-i18next';
 import { useRouter } from "next/router";
@@ -192,27 +193,30 @@ export function ShareButtons({ frontmatter }) {
 
   return (
     <Box display="flex" alignItems="center" gap="10px">
-      <Link
+      <ChakraLink
         href={`https://x.com/share?text=${encodeURIComponent(text)}&url=${encodedUrl}`}
         _hover={{opacity: 0.8}}
         target="_blank"
+        isExternal
       >
         <XIcon width="18px" height="18px" />
-      </Link>
-      <Link
+      </ChakraLink>
+      <ChakraLink
         href={`https://www.facebook.com/sharer/sharer.php?t=${encodeURIComponent(text)}&u=${encodedUrl}`}
         _hover={{opacity: 0.8}}
         target="_blank"
+        isExternal
       >
         <FacebookIcon width="25px" height="25px" />
-      </Link>
-      <Link
+      </ChakraLink>
+      <ChakraLink
         href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
         _hover={{opacity: 0.8}}
         target="_blank"
+        isExternal
       >
         <LinkedInIcon width="25px" height="25px" />
-      </Link>
+      </ChakraLink>
       <NativeShare url={url} title={title} description={description}/>
     </Box>
   );

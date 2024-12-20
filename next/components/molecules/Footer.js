@@ -65,7 +65,7 @@ function FooterLink(props) {
       letterSpacing="0.3px"
       color="#FFF"
       target="_blank"
-      href={`/${locale}${props.href}`}
+      href={`${props.href}`}
       {...props}
     />
   )
