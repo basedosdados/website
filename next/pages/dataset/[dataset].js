@@ -21,6 +21,7 @@ import GreenTab from "../../components/atoms/GreenTab";
 import Link from '../../components/atoms/Link';
 import ReadMore from "../../components/atoms/ReadMore";
 import DatasetResource from "../../components/organisms/DatasetResource";
+import DatasetUserGuide from "../../components/organisms/DatasetUserGuide";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import FourOFour from "../../components/templates/404";
@@ -33,20 +34,31 @@ import {
   getListDatasets,
 } from "../api/datasets/index";
 
+import { getUserGuide, serializeUserGuide } from "../api/datasets/getUserGuide";
+
 export async function getStaticProps(context) {
   const { locale, params } = context;
   let dataset = null;
+  let userGuide = null;
+
+  const contentUserGuide = await getUserGuide("RAIS", locale || 'pt');
 
   try {
     dataset = await getDataset(params.dataset, locale || 'pt');
-
   } catch (error) {
     console.error("Fetch error:", error.message);
+  }
+
+  try {
+    userGuide = await serializeUserGuide(contentUserGuide);
+  } catch (error) {
+    userGuide = null;
   }
 
   const props = {
     ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices'])),
     dataset,
+    userGuide,
   };
   
   return {
@@ -66,7 +78,7 @@ export async function getStaticPaths(context) {
   }
 }
 
-export default function DatasetPage ({ dataset, mdxSource, headings, infoId }) {
+export default function DatasetPage ({ dataset, userGuide }) {
   const { t } = useTranslation('dataset', 'common');
   const router = useRouter()
   const { locale } = router
@@ -293,6 +305,10 @@ export default function DatasetPage ({ dataset, mdxSource, headings, infoId }) {
             </TabPanel>
 
             <TabPanel padding="0px">
+              <DatasetUserGuide
+                mdxSource={userGuide?.mdxSource || null}
+                headings={userGuide?.headings || null}
+              />
             </TabPanel>
 
             <TabPanel padding="0px">
