@@ -25,6 +25,7 @@ import { MainPageTemplate } from "../../components/templates/main";
 
 import FourOFour from "../../components/templates/404";
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
+import BookIcon from "../../public/img/icons/bookIcon";
 import CrossingIcon from "../../public/img/icons/crossingIcon";
 
 import {
@@ -255,7 +256,7 @@ export default function DatasetPage ({ dataset, mdxSource, headings, infoId }) {
           >
             <GreenTab>
               <DataBaseIcon
-                alt="dados"
+                alt={t('dataAlt')}
                 width="18px"
                 height="18px"
                 marginRight="6px"
@@ -263,7 +264,14 @@ export default function DatasetPage ({ dataset, mdxSource, headings, infoId }) {
               {t('data')}
             </GreenTab>
 
-            <GreenTab display="none">
+            <GreenTab>
+              <BookIcon
+                alt={t('userGuideAlt')}
+                width="24px"
+                height="16px"
+                marginRight="6px"
+              />
+              {t('userGuide')}
             </GreenTab>
 
             <GreenTab display="none">
