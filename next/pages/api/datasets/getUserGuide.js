@@ -23,7 +23,7 @@ const remarkPluginCaption = () => (tree) =>
   visit(
     tree,
     (node) =>
-      ["Image", "Video", "Embed", "Blockquote"].includes(node.name) &&
+      ["Blockquote"].includes(node.name) &&
       node.attributes.find(({ name }) => name === "caption"),
     (node) => {
       const caption = node.attributes.filter(({ name }) => name === "caption");
@@ -33,11 +33,7 @@ const remarkPluginCaption = () => (tree) =>
         type: "figcaption",
       }));
 
-      if (node.name === "Embed") {
-        // Since Embed component has a children (`iframe`), set children as children of iframe
-        // React does not support two children, should be nested childrens
-        node.children[0].children = children;
-      } else if (node.name === "Blockquote") {
+      if (node.name === "Blockquote") {
         node.children = [...children, ...node.children];
       } else {
         node.children = children;
@@ -55,16 +51,16 @@ const rehypeExtractHeadings =
   (tree) => {
     visit(
       tree,
-      (node) => ["h2", "h3", "h4", "h5", "h6"].includes(node.tagName),
+      (node) => ["h1", "h2", "h3", "h4", "h5", "h6"].includes(node.tagName),
       (node) => {
         if (node?.properties?.id) {
           headings.push({
             title: toString(node),
             level: Number(node.tagName.replace("h", "")) - 2,
-            id: node.properties.id.toString() ?? null,
+            id: node.properties?.id?.toString() ?? null,
           });
         }
-      },
+      }
     );
   };
 

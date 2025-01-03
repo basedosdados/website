@@ -1,13 +1,11 @@
 import {
   Box,
-  Image,
   Text,
   UnorderedList,
   ListItem,
   OrderedList,
   Button,
   useClipboard,
-  AspectRatio,
   Table,
   TableContainer,
   Thead,
@@ -185,21 +183,6 @@ function HeadingWithAnchor(props) {
   );
 }
 
-function FigCaption(props) {
-  return props.children ? (
-    <Text
-      as="figcaption"
-      fontFamily="Roboto"
-      fontSize="14px"
-      color="#71757A"
-      textAlign="center"
-      marginY="8px"
-    >
-      {props.children}
-    </Text>
-  ) : null;
-}
-
 export const mdxComponents = {
   h1: (props) => <HeadingWithAnchor as="h2" size="28px" {...props} />,
   h2: (props) => <HeadingWithAnchor as="h2" fontSize="28px" {...props} />,
@@ -291,25 +274,6 @@ export const mdxComponents = {
     />
   ),
   th: (props) => <Th fontFamily={"Roboto"} {...props} />,
-  // custom components
-  Image: (props) => (
-    <Box as="figure" marginY={"2rem"}>
-      <Image margin={"0 auto"} src={props.src} />
-      <FigCaption {...props} />
-    </Box>
-  ),
-  Video: (props) => (
-    <Box as="figure" marginY="2rem">
-      <video width="100%" controls preload="metadata" src={props.src} />
-      <FigCaption {...props} />
-    </Box>
-  ),
-  Embed: ({ children }) => (
-    <Box marginY="2rem">
-      <AspectRatio ratio={16 / 9}>{children}</AspectRatio>
-      <FigCaption {...children.props} />
-    </Box>
-  ),
   Blockquote: ({ children }) => {
     const withCaption = children.length > 1;
 
@@ -387,10 +351,7 @@ export default function DatasetUserGuide({ mdxSource, headings }) {
         >
           <Box display={{ base: "none", md: "block" }}>
             {headings.length > 0 ? (
-              <>
-                <Toc headings={headings} />
-                <Box as="hr" marginBottom={"1rem"} />
-              </>
+              <Toc headings={headings} />
             ) : null}
           </Box>
         </Box>
