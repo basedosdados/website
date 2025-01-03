@@ -16,6 +16,7 @@ export default async function getDataset(id, locale = 'pt') {
               node {
                 _id
                 slug
+                usageGuide
                 name
                 name${capitalize(locale)}
                 description

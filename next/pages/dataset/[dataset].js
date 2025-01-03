@@ -21,10 +21,12 @@ import GreenTab from "../../components/atoms/GreenTab";
 import Link from '../../components/atoms/Link';
 import ReadMore from "../../components/atoms/ReadMore";
 import DatasetResource from "../../components/organisms/DatasetResource";
+import DatasetUserGuide from "../../components/organisms/DatasetUserGuide";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import FourOFour from "../../components/templates/404";
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
+import BookIcon from "../../public/img/icons/bookIcon";
 import CrossingIcon from "../../public/img/icons/crossingIcon";
 
 import {
@@ -32,20 +34,34 @@ import {
   getListDatasets,
 } from "../api/datasets/index";
 
+import { getUserGuide, serializeUserGuide } from "../api/datasets/getUserGuide";
+
 export async function getStaticProps(context) {
   const { locale, params } = context;
   let dataset = null;
+  let contentUserGuide = null;
+  let userGuide = null;
 
   try {
     dataset = await getDataset(params.dataset, locale || 'pt');
-
   } catch (error) {
     console.error("Fetch error:", error.message);
+  }
+
+  if(dataset?.usageGuide) {
+    contentUserGuide = await getUserGuide(dataset.usageGuide, locale || 'pt');
+  }
+
+  try {
+    userGuide = await serializeUserGuide(contentUserGuide);
+  } catch (error) {
+    userGuide = null;
   }
 
   const props = {
     ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices'])),
     dataset,
+    userGuide,
   };
   
   return {
@@ -65,7 +81,7 @@ export async function getStaticPaths(context) {
   }
 }
 
-export default function DatasetPage ({ dataset, mdxSource, headings, infoId }) {
+export default function DatasetPage ({ dataset, userGuide }) {
   const { t } = useTranslation('dataset', 'common');
   const router = useRouter()
   const { locale } = router
@@ -113,8 +129,8 @@ export default function DatasetPage ({ dataset, mdxSource, headings, infoId }) {
         maxWidth="1440px"
         marginX="auto"
         boxSizing="content-box"
-        overflow="auto"
         paddingX="24px"
+        height="100%"
         spacing={0}
       >
         <Grid
@@ -255,7 +271,7 @@ export default function DatasetPage ({ dataset, mdxSource, headings, infoId }) {
           >
             <GreenTab>
               <DataBaseIcon
-                alt="dados"
+                alt={t('dataAlt')}
                 width="18px"
                 height="18px"
                 marginRight="6px"
@@ -263,7 +279,14 @@ export default function DatasetPage ({ dataset, mdxSource, headings, infoId }) {
               {t('data')}
             </GreenTab>
 
-            <GreenTab display="none">
+            <GreenTab>
+              <BookIcon
+                alt={t('userGuideAlt')}
+                width="24px"
+                height="16px"
+                marginRight="6px"
+              />
+              {t('userGuide')}
             </GreenTab>
 
             <GreenTab display="none">
@@ -285,6 +308,7 @@ export default function DatasetPage ({ dataset, mdxSource, headings, infoId }) {
             </TabPanel>
 
             <TabPanel padding="0px">
+              <DatasetUserGuide data={userGuide} />
             </TabPanel>
 
             <TabPanel padding="0px">

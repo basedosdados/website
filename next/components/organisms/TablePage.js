@@ -255,7 +255,7 @@ export default function TablePage({ id }) {
     >
       <StackSkeleton
         display="flex"
-        height="100%"
+        height="fit-content"
         flexDirection={{base: "column", lg: "row"}}
         alignItems={{base: "start", lg: "center"}}
         gap="8px"
