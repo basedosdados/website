@@ -51,7 +51,7 @@ const rehypeExtractHeadings =
   (tree) => {
     visit(
       tree,
-      (node) => ["h1", "h2", "h3", "h4", "h5", "h6"].includes(node.tagName),
+      (node) => ["h1"].includes(node.tagName),
       (node) => {
         if (node?.properties?.id) {
           headings.push({

@@ -41,7 +41,7 @@ export async function getStaticProps(context) {
   let dataset = null;
   let userGuide = null;
 
-  const contentUserGuide = await getUserGuide("RAIS", locale || 'pt');
+  const contentUserGuide = await getUserGuide("br-me-rais", locale || 'pt');
 
   try {
     dataset = await getDataset(params.dataset, locale || 'pt');
@@ -126,8 +126,8 @@ export default function DatasetPage ({ dataset, userGuide }) {
         maxWidth="1440px"
         marginX="auto"
         boxSizing="content-box"
-        overflow="auto"
         paddingX="24px"
+        height="100%"
         spacing={0}
       >
         <Grid

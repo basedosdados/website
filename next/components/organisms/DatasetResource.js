@@ -410,6 +410,9 @@ export default function DatasetResource({
           minWidth={{base: "100%", lg: "296px"}}
           maxWidth={{base: "100%", lg: "296px"}}
           spacing={0}
+          position="sticky"
+          height="100%"
+          top="80px"
         >
           <ContentFilter
             fieldName={t('tables')}

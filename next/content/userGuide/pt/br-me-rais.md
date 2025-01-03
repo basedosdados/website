@@ -11,24 +11,25 @@ authors:
     role: Texto
 ---
 
-Este é um guia de uso da Relação Anual de Informações Sociais (RAIS). Este material contém informações sobre as variáveis mais importantes, perguntas frequentes e exemplos de uso do conjunto da RAIS 
-
 # Introdução
+
+> Este é um guia de uso da Relação Anual de Informações Sociais (RAIS). Este material contém informações sobre as variáveis mais importantes, perguntas frequentes e exemplos de uso do conjunto da RAIS 
+
 Essa base possui 2 tabelas: 
-* Microdados Estabelecimentos: cada linha representa um estabelecimento e suas características para cada ano de declaração
-* Microdados Vínculos: cada linha representa um vínculo e suas características para cada ano de declaração
+* **Microdados Estabelecimentos:** cada linha representa um estabelecimento e suas características para cada ano de declaração
+* **Microdados Vínculos:** cada linha representa um vínculo e suas características para cada ano de declaração
 
 # Considerações para análises
-**Colunas quantidade_vinculos_ativos e tamanho_estabelecimento**
-As colunas quantidade_vinculos_ativos e tamanho_estabelecimento  da tabela de estabelecimentos tem informações discrepantes entre si. A primeira tem um valor inteiro representando o total de vínculos daquele estabelecimento, a segunda é uma categoria definida pelo total de vínculos, mas mesmo assim encontramos vários casos que a quantidade de vínculos não está dentro da faixa definida pelo tamanho do estabelecimento. Ainda não se sabe por que essa inconsistência. 
+## Colunas quantidade_vinculos_ativos e tamanho_estabelecimento
+As colunas quantidade_vinculos_ativos e tamanho_estabelecimento  da tabela de estabelecimentos tem informações discrepantes entre si. A primeira tem um valor inteiro representando o total de vínculos daquele estabelecimento, a segunda é uma categoria definida pelo total de vínculos, mas mesmo assim encontramos vários casos que a quantidade de vínculos não está dentro da faixa definida pelo tamanho do estabelecimento. Ainda não se sabe por que essa inconsistência.
 
-**Coerência entre RAIS e CAGED**
+## Coerência entre RAIS e CAGED
 A base da RAIS deveria registrar todos os vínculos de trabalho uma vez ao ano, enquanto o CAGED seria responsável por todas as movimentações desses vínculos. Teoricamente, ao somar ou subtrair todas as movimentações registradas no CAGED a partir de um total de vínculos em um determinado ano dado pela RAIS, seria possível chegar ao total do ano seguinte. No entanto, isso não ocorre na prática. Ainda não sabemos porque isso ocorre, mas como os dois sistemas operam de forma independente, é provável que cada um acumule diferentes tipos de erros, o que resulta em divergências nos números.
 
-**Coluna id_municipio_trabalho**
+## Coluna id_municipio_trabalho
 Os valores da  id_municipio_trabalho nos dados vínculos são só disponíveis nos anos 2005-2011 e 2017-2021. Não sabemos o porquê.
 
-**Ponderação nos cálculos**
+## Ponderação nos cálculos 
 Esses são dados que incluem todos os vínculos empregatícios do Brasil, não existe necessidade de nenhum tipo de ponderação ou peso. Entretanto, assim como já levantamos na seção sobre linhas duplicadas é importante ressaltar que a tabela de Vínculos inclui todos os vínculos que uma empresa teve durante o ano. Assim, se algum empregado foi demitido e outro contratado dentro do mesmo ano, terão 2 linhas para a mesma posição naquela empresa. Caso o objetivo seja avaliar o total de empregados de um setor ou região é importante utilizar a coluna de vinculo_ativo_3112 para filtrar apenas os vínculos que estão ativos ao mesmo tempo.
 
 # Observações ao longo tempo

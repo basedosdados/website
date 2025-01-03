@@ -426,12 +426,12 @@ export function Header({ frontmatter, slug }) {
 }
 
 export const mdxComponents = {
-  h1: (props) => <HeadingWithAnchor as="h2" size="28px" {...props} />,
+  h1: (props) => <HeadingWithAnchor as="h2" fontSize="28px" {...props} />,
   h2: (props) => <HeadingWithAnchor as="h2" fontSize="28px" {...props} />,
   h3: (props) => <HeadingWithAnchor as="h3" fontSize="24px" {...props} />,
   h4: (props) => <HeadingWithAnchor as="h4" fontSize="18px" {...props} />,
-  h5: (props) => <HeadingWithAnchor as="h5" fontSize={"16px"} {...props} />,
-  h6: (props) => <HeadingWithAnchor as="h6" fontSize={"15px"} {...props} />,
+  h5: (props) => <HeadingWithAnchor as="h5" fontSize="16px" {...props} />,
+  h6: (props) => <HeadingWithAnchor as="h6" fontSize="15px" {...props} />,
   blockquote: (props) => (
     <Box
       as="blockquote"
