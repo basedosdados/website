@@ -39,14 +39,17 @@ import { getUserGuide, serializeUserGuide } from "../api/datasets/getUserGuide";
 export async function getStaticProps(context) {
   const { locale, params } = context;
   let dataset = null;
+  let contentUserGuide = null;
   let userGuide = null;
-
-  const contentUserGuide = await getUserGuide("br-me-rais", locale || 'pt');
 
   try {
     dataset = await getDataset(params.dataset, locale || 'pt');
   } catch (error) {
     console.error("Fetch error:", error.message);
+  }
+
+  if(dataset?.usageGuide) {
+    contentUserGuide = await getUserGuide(dataset.usageGuide, locale || 'pt');
   }
 
   try {
@@ -305,10 +308,7 @@ export default function DatasetPage ({ dataset, userGuide }) {
             </TabPanel>
 
             <TabPanel padding="0px">
-              <DatasetUserGuide
-                mdxSource={userGuide?.mdxSource || null}
-                headings={userGuide?.headings || null}
-              />
+              <DatasetUserGuide data={userGuide} />
             </TabPanel>
 
             <TabPanel padding="0px">

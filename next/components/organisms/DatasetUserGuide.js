@@ -358,7 +358,9 @@ export const mdxComponents = {
   },
 };
 
-export default function DatasetUserGuide({ mdxSource, headings }) {
+export default function DatasetUserGuide({ data }) {
+  let mdxSource = data?.mdxSource || null
+
   return (
     <Stack
       paddingTop="32px"
@@ -366,8 +368,9 @@ export default function DatasetUserGuide({ mdxSource, headings }) {
       flexDirection="row"
       height="100%"
     >
-      {headings.length > 0 &&
+      {data?.headings.length > 0 &&
         <Box
+          display={{base: "none", md: "flex"}}
           as="aside"
           position="sticky"
           height="100%"
@@ -378,14 +381,14 @@ export default function DatasetUserGuide({ mdxSource, headings }) {
           boxSizing="content-box"
           padding="4px 26px 0 0"
         >
-          <Toc headings={headings} />
+          <Toc headings={data.headings} />
         </Box>
       }
 
       <Box
         as="section"
         width="100%"
-        paddingLeft={headings.length === 0 ? "0" : "24px"}
+        paddingLeft={{base: "0", md: data?.headings.length === 0 ? "0" : "24px"}}
       >
         <MDXRemote {...mdxSource} components={mdxComponents} />
       </Box>
