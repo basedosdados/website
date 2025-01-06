@@ -19,6 +19,8 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { MDXRemote } from "next-mdx-remote";
 import { useTranslation } from 'next-i18next';
+import Button from "../atoms/Button";
+import Link from "../atoms/Link";
 import InfoIcon from "../../public/img/icons/infoIcon";
 
 function Toc({ headings }) {
@@ -220,6 +222,7 @@ export const mdxComponents = {
           fill="#0068C5"
         />
         <Text
+          as="span"
           fontFamily="Roboto"
           fontWeight="400"
           fontSize="14px"
@@ -358,8 +361,25 @@ export const mdxComponents = {
   },
 };
 
-export default function DatasetUserGuide({ data }) {
-  let mdxSource = data?.mdxSource || null
+export default function DatasetUserGuide({ data, locale = "pt", slug }) {
+  const { t } = useTranslation('dataset');
+  const [mdxSource, setMdxSource] = useState(null)
+  const [hasGuide, setHasGuide] = useState(false)
+
+  useEffect(() => {
+    if(data?.mdxSource) {
+      setMdxSource(data.mdxSource)
+      if(data?.mdxSource?.frontmatter?.title) setHasGuide(true)
+    }
+  }, [data])
+
+  const repository = () => {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_FRONTEND
+    if (baseUrl === "http://localhost:3000" || baseUrl === "https://development.basedosdados.org") return "development" 
+    if (baseUrl === "https://staging.basedosdados.org") return "staging"
+    if (baseUrl === "https://basedosdados.org") return "main" 
+    return null
+  }
 
   return (
     <Stack
@@ -390,7 +410,103 @@ export default function DatasetUserGuide({ data }) {
         width="100%"
         paddingLeft={{base: "0", md: data?.headings.length === 0 ? "0" : "24px"}}
       >
-        <MDXRemote {...mdxSource} components={mdxComponents} />
+        {mdxSource && <MDXRemote {...mdxSource} components={mdxComponents} />}
+
+        <Box
+          marginTop="40px"
+          borderRadius="16px"
+          border={hasGuide ? "1px solid #DEDFE0" : ""}
+          padding="40px 24px"
+        >
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="24px"
+            lineHeight="36px"
+            textAlign="center"
+            color="#252A32"
+          >{hasGuide ? t("gotAnyQuestionsGuide") : t("notHaveUserGuide")}</Text>
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="18px"
+            lineHeight="28px"
+            textAlign="center"
+            color="#71757A"
+          >{t("contributeToTheUsageGuide")}</Text>
+
+          <Box
+            display="flex"
+            flexDirection={{base: "column", lg: "row"}}
+            alignItems="center"
+            justifyContent="center"
+            gap="16px"
+            marginTop="16px"
+          >
+            <Link
+              width={{base: "100%", lg: "fit-content"}}
+              href="/contact"
+              target="_self"
+            >
+              <Button
+                width={{base: "100%", lg: "fit-content"}}
+                justifyContent="center"
+              >
+                {t("sendQuestionUsageGuide")}
+              </Button>
+            </Link>
+
+            <Link
+              width={{base: "100%", lg: "fit-content"}}
+              href={`https://github.com/basedosdados/website/edit/${repository()}/next/content/userGuide/${locale}/${hasGuide ? slug : "README"}.md`}
+              target="_self"
+            >
+              <Button
+                width={{base: "100%", lg: "fit-content"}}
+                justifyContent="center"
+                color="#2B8C4D"
+                border="1px solid #2B8C4D"
+                backgroundColor="#FFFFFF"
+                _hover={{
+                  backgroundColor: "#FFFFFF",
+                  color: "#22703E",
+                  boderColor: "#22703E"
+                }}
+              >
+                {t("makeSuggestionUsageGuide")}
+              </Button>
+            </Link>
+          </Box>
+
+          <Text
+            display={hasGuide ? "none" : "flex"}
+            marginTop="32px"
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="14px"
+            lineHeight="20px"
+            color="#71757A"
+            justifyContent="center"
+            textAlign="center"
+            flexWrap="wrap"
+          >
+            {t("haveAnyQuestions", { returnObjects: true }).replace(
+              "{{content}}",
+              ""
+            )}
+            <Link
+              href="/faq"
+              color="#0068C5"
+              fontWeight="400"
+              marginLeft="4px"
+              _hover={{
+                color: "#0057A4"
+              }}
+            >
+              {t("pageFaq")}
+            </Link>.
+          </Text>
+        </Box>
       </Box>
     </Stack>
   )

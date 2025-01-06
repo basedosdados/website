@@ -9,7 +9,6 @@ import {
   Image,
   Text,
 } from "@chakra-ui/react";
-import { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { useTranslation } from 'next-i18next';
@@ -85,8 +84,6 @@ export default function DatasetPage ({ dataset, userGuide }) {
   const { t } = useTranslation('dataset', 'common');
   const router = useRouter()
   const { locale } = router
-  const { query } = router
-  const [tabIndex, setTabIndex] = useState(0)
 
   const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
 
@@ -260,7 +257,6 @@ export default function DatasetPage ({ dataset, userGuide }) {
         </Grid>
 
         <Tabs
-          onChange={(index) => setTabIndex(index)}
           variant="unstyled"
           isLazy
           width="100%"
@@ -308,7 +304,11 @@ export default function DatasetPage ({ dataset, userGuide }) {
             </TabPanel>
 
             <TabPanel padding="0px">
-              <DatasetUserGuide data={userGuide} />
+              <DatasetUserGuide
+                data={userGuide}
+                locale={locale}
+                slug={dataset?.usageGuide}
+              />
             </TabPanel>
 
             <TabPanel padding="0px">
