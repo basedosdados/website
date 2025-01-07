@@ -48,6 +48,13 @@
     "previous": "Anterior",
     "next": "Próxima",
     "selectResource": "Selecione uma tabela ou fonte original",
+    "gotAnyQuestionsGuide": "Ficou com dúvidas ou acha que este guia pode melhorar?",
+    "notHaveUserGuide": "Este conjunto de dados ainda não possui um guia disponível",
+    "contributeToTheUsageGuide": "Conte com a gente ou contribua diretamente para aprimorar este conteúdo",
+    "sendQuestionUsageGuide": "Enviar dúvida para nossa equipe",
+    "makeSuggestionUsageGuide": "Fazer sugestão para o guia via GitHub",
+    "haveAnyQuestions": "Caso tenha dúvidas sobre o uso geral da plataforma, acesse nossa {{content}}",
+    "pageFaq": "página de Perguntas Frequentes",
     "datasetCard": {
         "table": "tabela tratada",
         "tables": "tabelas tratadas",
