@@ -12,12 +12,12 @@ authors:
 ---
 
 # Considerações para análises
-**Diferença entre estabelecimentos e empresas**  
+## Diferença entre estabelecimentos e empresas
 Uma empresa é representada pelo `cnpj_basico` e pode ter vários estabelecimentos. Já um estabelecimento é representado pelo CNPJ de 14 dígitos e pertence a uma única empresa. A lógica é: uma empresa tem vários estabelecimentos. Logo, o `cnpj_basico` da empresa se repete em proporção ao número de estabelecimentos.  
 
 Exemplo: a coluna de natureza jurídica não está presente na base de estabelecimentos. Isso ocorre porque a natureza jurídica é um atributo da empresa e não do estabelecimento. Você pode fazer um join para atribuir a natureza jurídica da empresa aos estabelecimentos.
 
-**Filtrando CNPJs ativos**  
+## Filtrando CNPJs ativos
 Se quiser filtrar somente os CNPJs ativos em uma determinada data, use a variável `situacao_cadastral`. O valor 2 identifica empresas ativas. Para acessar os outros códigos, consulte o dicionário de dados do conjunto.  
 
 # Limitações
@@ -38,7 +38,7 @@ Se, na fotografia de 2023-11-01, você fizer uma query procurando pelo CNPJ 123,
 
 A fotografia de 2020-11-23 contém os dados históricos com o status dessa data. Dados históricos de fotografias mais antigas não estão disponíveis.  
 
-# Linhas Duplicadas
+# Linhas duplicadas
 Ainda não foram encontrados indícios de linhas duplicadas nessa base (**Pisa pode verificar aqui? eu tenho quase ctz que tem 1 único cnpj que vem duplicado pq conversamos sobre isso com um moço na américa aberta** ). Mas é importante ter claro que a base tem formato de fotografia, então um mesmo CNPJ aparece em diversas datas diferentes. 
 
 # Cruzamentos

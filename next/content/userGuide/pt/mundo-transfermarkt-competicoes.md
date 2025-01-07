@@ -12,7 +12,7 @@ authors:
 ---
 
 # Considerações para análises
-**Fontes e Compilação dos Dados:**  
+## Fontes e compilação dos dados
 As tabelas apresentam informações compiladas pelo Transfermarkt. Para entender como essas estatísticas foram realizadas e estruturadas, é necessário revisar os métodos de compilação
 
 
@@ -25,7 +25,7 @@ Ainda não foram reportadas inconsistências
 # Observações ao longo tempo
 Cada linha representa um jogo, assim é possível acompanhar a evolução de um time ao longo de uma temporada, ou ainda ao longo dos anos.
 
-# Linhas Duplicadas
+# Linhas duplicadas
 Ainda não foram encontrados indícios de linhas duplicadas nas tabelas desse conjunto
 
 # Cruzamentos

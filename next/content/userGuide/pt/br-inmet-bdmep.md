@@ -12,16 +12,16 @@ authors:
 ---
 
 # Considerações para análises
-**Compreensão dos Dados:**  
+## Compreensão dos dados
   Antes de realizar cálculos com os dados da BDMEP, é crucial entender como cada medida foi compilada. Algumas colunas apresentam valores médios, enquanto outras contêm valores máximos ou mínimos. A escolha da variável adequada dependerá das necessidades específicas da análise.
 
-**Linhas Vazias, Falhas e Dados Inexistentes:**  
+## Linhas vazias, falhas e dados inexistentes
 Os dados do INMET-BDMEP possuem falhas, como linhas vazias devido a problemas nos sensores e na comunicação das estações meteorológicas. Essas falhas podem ser identificadas por todas as colunas de valores estarem nulas. É importante considerar essas falhas ao realizar análises e tratá-las como dados inexistentes.
 
-**Conversão de Horário:**  
+## Conversão de horário
 Todas as informações de horário estão em UTC. Para convertê-las para o horário oficial de Brasília, é necessário subtrair 3 horas. Por exemplo, 12:00 UTC é equivalente a 9:00 pelo horário de Brasília.
 
-**Dados Brutos e Não Validados:**  
+## Dados brutos e não validados
  Os dados das estações automáticas são brutos e não passam por um processo de validação de consistência.
 
 # Limitações
