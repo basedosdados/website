@@ -12,26 +12,26 @@ authors:
 ---
 
 # Considerações para análises
-**Saldo de Movimentações:**  
+## Saldo de movimentações
 É fundamental observar a coluna `saldo_movimentacao`, que indica se a linha representa uma demissão ou uma admissão. O crescimento ou redução de empregos em um grupo pode ser determinado pela soma dessa coluna.
 
-**Exclusões e Movimentações Fora do Prazo:**  
+## Exclusões e movimentações fora do prazo
 Além das movimentações regulares, é importante considerar as tabelas de "Microdados de Movimentações Excluídas" e "Microdados de Movimentações Fora do Prazo". A primeira contém cancelamentos de eventos, como admissões informadas erroneamente e excluídas posteriormente. Esses cancelamentos impactam o saldo do CAGED de forma inversa ao evento original. Já as "Movimentações Fora do Prazo" incluem eventos registrados após o período regular, mas também afetam os resultados.
 
 # Limitações
 * Os dados disponibilizados são limitados a trabalhadores com vínculo empregatício formal, não incluindo informações sobre trabalhadores informais ou autônomos.
 
 # Inconsistências
-**Coluna `salario_mensal`**
+## Coluna `salario_mensal`
 Foram identificados valores fora do esperado na coluna salario_mensal, como salários na faixa de milhões de reais para cnaes e cbos que costumeiramente não recebem tanto assim. Acreditamos serem erros de registro ou valores atípicos não tratados
 
-**Painel de empregos do CAGED**
+## Painel de empregos do CAGED
 Foram identificadas inconsistências entre os dados disponíveis e o painel de empregos do CAGED. Uma possível origem do problema é a falta, em nossos dados, da coluna que especifica o mês de referência para movimentações fora do prazo e movimentações excluídas. No entanto, parte dos arquivos fornecidos pelo Ministério do Trabalho encontra-se corrompida, o que impede a atualização. Estamos aguardando a resolução dessa situação para realizar os ajustes necessários.  
 
 # Observações ao longo tempo
 Cada linha representa uma contratação ou demissão e os dados são desidentificados, assim, não é possível acompanhar um indivíduo ou uma empresa ao longo do tempo. O que é possível fazer é acompanhar o crescimento ou queda de funcionários com carteira em um determinado setor (CNAE), função (CBO) ou combinações de diferentes colunas que são disponibilizadas
 
-# Linhas Duplicadas
+# Linhas duplicadas
 Ainda não foram encontrados indícios de linhas duplicadas nas tabelas desse conjunto
 
 # Cruzamentos

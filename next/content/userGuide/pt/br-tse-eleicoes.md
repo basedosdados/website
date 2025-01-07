@@ -13,19 +13,19 @@ authors:
 # Introdução
 Os dados de eleições brasileiras incluem muitas tabelas. Para facilitar o entendimento desse guia vamos separar elas em 4 grandes grupos 
 
-**Candidatos e Vagas**
+## Candidatos e vagas
 - candidatos
 - bens_candidato
 - partidos
 - vagas
 
-**Prestação de Contas**
+## Prestação de contas
 - despesas_candidato
 - receitas_candidato
 - receitas_comite
 - receitas_orgao_partidario
 
-**Resultados**
+## Resultados
 - resultados_candidato
 - resultados_candidato_municipio
 - resultados_candidato_municipio_zona
@@ -37,20 +37,20 @@ Os dados de eleições brasileiras incluem muitas tabelas. Para facilitar o ente
 - detalhes_votacao_municipio_zona
 - detalhes_votacao_secao
 
-**Eleitorado**
+## Eleitorado
 - perfil_eleitorado_local_votacao
 - perfil_eleitorado_municipio_zona
 - perfil_eleitorado_secao
 - local_secao
 
 # Considerações para análises
-**Repasses entre candidatos na tabela de receitas**  
+## Repasses entre candidatos na tabela de receitas
 Na tabela de receitas, é importante considerar que, às vezes, candidatos repassam verbas entre si, o que faz com que uma receita apareça mais de uma vez.  
 
-**Coluna id_candidato_bd**  
+## Coluna id_candidato_bd
 A coluna `id_candidato_bd` foi desenvolvida internamente pela BD com o objetivo de identificar candidatos entre eleições. Nossa metodologia conseguiu identificar todos os candidatos unicamente em 99,5% dos casos. No entanto, como as tabelas possuem alguns dados mais antigos sem CPF ou outros identificadores, em alguns casos raros, ao comparar um ano recente com um mais antigo, pode ocorrer de haver dois identificadores para o mesmo candidato.  
 
-**Coluna id_municipio**
+## Coluna id_municipio
 Alguns id_municipio tem código nulo, isso acontece pois o tse também tem registro de municipios no exterior e não existe código IBGE para municipios externos, nseses casos apenas o id_municipio_tse está preenchido
 
 # Limitações
@@ -63,7 +63,7 @@ Ainda não foram reportadas inconsistências nessa base
 # Observações ao longo tempo
 Para facilitar o acompanhamento dos candidatos ao longo dos anos, a BD desenvolveu o id_candidato_bd. Esse identificador único permite rastrear indivíduos de maneira consistente, superando a limitação de outros IDs associados, que frequentemente mudam de um pleito para outro.
 
-# Linhas Duplicadas
+# Linhas duplicadas
 As linhas duplicadas desse conjunto são removidas antes de subirem ao datalake da BD
 
 # Cruzamentos
@@ -76,16 +76,16 @@ Essas tabelas costumam ser muito grandes para o download direto, é muito import
 Tribunal Superior Eleitoral (TSE) 
 
 # Instrumento de coleta
-**Sistema de Candidaturas (CAND)**  
+## Sistema de Candidaturas (CAND) 
 Este é o sistema oficial utilizado para o registro das candidaturas. Por meio dele, partidos políticos e coligações inserem dados pessoais, informações sobre filiação partidária, certidões criminais e outras documentações necessárias para formalizar a candidatura.  
 
-**Sistema de Prestação de Contas Eleitorais (SPCE)**  
+## Sistema de Prestação de Contas Eleitorais (SPCE)
 Candidatos e partidos utilizam este sistema para registrar todas as movimentações financeiras da campanha, incluindo arrecadações (receitas) e gastos (despesas). O SPCE assegura que as informações sejam prestadas de forma padronizada e dentro dos prazos estabelecidos pela Justiça Eleitoral.  
 
-**Resultados eleitorais**  
+## Resultados eleitorais
 Após o encerramento da votação, cada urna eletrônica gera um Boletim de Urna, que contém os resultados apurados naquela seção eleitoral. Esses boletins são fundamentais para a totalização dos votos e servem como instrumento de transparência, permitindo que partidos e cidadãos acompanhem os resultados de cada urna. Os dados dos Boletins de Urna são transmitidos para os Tribunais Regionais Eleitorais (TREs) e, posteriormente, para o TSE, onde são totalizados para a divulgação dos resultados finais das eleições.  
 
-**Perfil dos eleitores**  
+## Perfil dos eleitores  
 Durante o alistamento eleitoral e em processos de revisão cadastral, os eleitores fornecem informações pessoais, como nome, data de nascimento, gênero, grau de instrução e endereço. Esses dados são inseridos no Cadastro Nacional de Eleitores pelos cartórios eleitorais.  
 
 # Mudanças na coleta

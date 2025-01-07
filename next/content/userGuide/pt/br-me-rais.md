@@ -11,18 +11,19 @@ authors:
     role: Texto
 ---
 
-Este é um guia de uso da Relação Anual de Informações Sociais (RAIS). Este material contém informações sobre as variáveis mais importantes, perguntas frequentes e exemplos de uso do conjunto da RAIS 
-
 # Introdução
+
+> Este é um guia de uso da Relação Anual de Informações Sociais (RAIS). Este material contém informações sobre as variáveis mais importantes, perguntas frequentes e exemplos de uso do conjunto da RAIS 
+
 Essa base possui 2 tabelas: 
 * Microdados Estabelecimentos: cada linha representa um estabelecimento e suas características para cada ano de declaração
 * Microdados Vínculos: cada linha representa um vínculo e suas características para cada ano de declaração
 
 # Considerações para análises
-**Vínculos e Filtragem de Dados:**  
+## Vínculos e filtragem de dados
 A tabela de Vínculos inclui todos os vínculos registrados por uma empresa durante o ano. Portanto, se um empregado foi demitido e outro contratado no mesmo ano, ambos terão uma linha para a mesma posição na empresa. Caso o objetivo seja avaliar o total de empregados ativos em um setor ou região, é necessário utilizar a coluna `vinculo_ativo_3112` para filtrar apenas os vínculos que estão ativos na data mencionada.
 
-**Informações de Endereço:**  
+## Informações de endereço
 Segundo o manual de preenchimento da RAIS, o empregado não fornece informações sobre seu endereço. O campo `id_municipio` se refere ao município da empresa contratante, enquanto `id_municipio_trabalho` é utilizado quando o trabalhador presta serviços fora do município da empresa contratante.
 
 # Limitações
@@ -30,22 +31,22 @@ Segundo o manual de preenchimento da RAIS, o empregado não fornece informaçõe
 * Os dados públicos são anonimizados
 
 # Inconsistências
-**Colunas quantidade_vinculos_ativos e tamanho_estabelecimento**  
+## Colunas quantidade_vinculos_ativos e tamanho_estabelecimento
 As colunas `quantidade_vinculos_ativos` e `tamanho_estabelecimento` da tabela de estabelecimentos têm informações discrepantes entre si. A primeira tem um valor inteiro representando o total de vínculos daquele estabelecimento, e a segunda é uma categoria definida pelo total de vínculos. No entanto, encontramos vários casos em que a quantidade de vínculos não está dentro da faixa definida pelo tamanho do estabelecimento. Ainda não se sabe por que essa inconsistência ocorre.  
 
-**Coerência entre RAIS e CAGED**  
+## Coerência entre RAIS e CAGED
 A base da RAIS deveria registrar todos os vínculos de trabalho uma vez ao ano, enquanto o CAGED seria responsável por todas as movimentações desses vínculos. Teoricamente, ao somar ou subtrair todas as movimentações registradas no CAGED a partir de um total de vínculos em um determinado ano dado pela RAIS, seria possível chegar ao total do ano seguinte. No entanto, isso não ocorre na prática. Ainda não sabemos por que isso acontece, mas como os dois sistemas operam de forma independente, é provável que cada um acumule diferentes tipos de erros, resultando em divergências nos números.  
 
-**Coluna id_municipio_trabalho**  
+## Coluna id_municipio_trabalho
 Os valores de `id_municipio_trabalho` nos dados de vínculos estão disponíveis apenas nos anos de 2005-2011 e 2017-2021. Não sabemos o motivo.  
 
-**Dados desatualizados**  
+## Dados desatualizados
 Às vezes, os dados da RAIS são atualizados fora do calendário esperado, e nossa equipe nem sempre fica sabendo. Se você está confiante de que está fazendo as queries corretas, entre em contato conosco enviando a query e a diferença com o site oficial, para que possamos avaliar a situação e, se necessário, corrigir.  
 
 # Observações ao longo tempo
 A cada ano, a base é atualizada, o que faz com que um estabelecimento apareça em todos os anos em que o seu CNPJ esteve ativo. Da mesma forma, um vínculo pode aparecer em mais de um ano se continuar ativo. Como a base é desidentificada (não contém o CNPJ nem o CPF), não é possível acompanhar a evolução dos vínculos ou das empresas ao longo do tempo. O que pode ser analisado é o crescimento ou a redução do número de funcionários com carteira em um determinado setor (CNAE), endereço (CEP), função (CBO) ou outras combinações de diferentes colunas disponibilizadas.
 
-# Linhas Duplicadas
+# Linhas duplicadas
 Ainda não foram encontrados indícios de linhas duplicadas nessa base. Mas é importante ter claro que a base de Vínculos inclui todos os vínculos que uma empresa teve durante o ano. Assim, se algum empregado foi demitido e outro contratado dentro do mesmo ano, terão 2 linhas para a mesma posição naquela empresa.
 
 # Cruzamentos
@@ -69,7 +70,7 @@ Normalmente a base é atualizada no início do ano seguinte da coleta, isso sign
 # Dados identificados
 Para obter os dados identificados da RAIS, é preciso realizar uma solicitação por meio deste link ao Ministério do Trabalho. Contudo, vale destacar que o processo pode ser demorado e não há garantia de aprovação.
 
-# Tratamentos feitos pela BD:
+# Tratamentos feitos pela BD
 O tratamento das duas tabelas do conjunto é muito similar: 
 * Padronização das colunas que identificam municípios para o formato ID Município IBGE (7 dígitos).
 * Adequação das colunas que identificam Unidades Federativas ao padrão de Sigla UF.
