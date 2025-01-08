@@ -1,6 +1,4 @@
 import { Heading } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
 export default function BigTitle({
   children,
@@ -8,14 +6,6 @@ export default function BigTitle({
   fontWeight = "500",
   ...props
 }) {
-  
-  const [isMobileMod, setIsMobileMod] = useState(false)
-  const isMobile = useCheckMobile();
-
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
-
   return (
     <Heading
       fontFamily="Ubuntu"

@@ -973,7 +973,8 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     if( route === "/search" ||
         route === "/dataset/[dataset]" ||
         route === "/user/[username]" ||
-        route === "/blog"
+        route === "/blog" ||
+        route === "/transparency"
       ) return "1440px"
     return "1264px"
   }

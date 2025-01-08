@@ -18,8 +18,8 @@ export default function Subtitle({
   return (
     <Heading
       fontFamily="Ubuntu"
-      fontSize={isMobileMod ? "16px" : "18px"}
-      letterSpacing={isMobileMod ? "0.2px" : "0.1px"}
+      fontSize={{base: "16px", md: "18px"}}
+      letterSpacing={{base: "0.2px", md: "0.1px"}}
       color={color}
       fontWeight={fontWeight}
       {...props}
