@@ -65,10 +65,13 @@ O instrumento de coleta atual é um formulário que deve ser preenchido pelos em
 Algumas colunas pararam de ser coletadas e outras foram incluídas ao longo do tempo. Para obter os detalhes de quais colunas entraram e saíram ver a coluna de cobertura temporal da coluna no site
 
 # Atualizações
-Normalmente a base é atualizada no início do ano seguinte da coleta, isso significa que os dados referentes ao ano de 2022 só saí no início de 2024.  Porém, às vezes os dados da RAIS são atualizados fora do calendário esperado e nossa equipe nem sempre fica sabendo. Se você está  percebeu que nossos dados estão desatualizados manda uma mensagem pra gente. 
+Normalmente, a base completa é atualizada no início do ano seguinte ao período de coleta. Isso significa que os dados referentes a 2022 só estarão disponíveis no início de 2024. O MTE libera primeiro os dados parciais e, posteriormente, os completos. No entanto, ocasionalmente, as atualizações da RAIS (tanto parciais quanto completas) ocorrem fora do calendário previsto, e nossa equipe pode não ser informada a tempo. Se você perceber que nossos dados estão desatualizados, entre em contato conosco.
 
 # Dados identificados
 Para obter os dados identificados da RAIS, é preciso realizar uma solicitação por meio deste link ao Ministério do Trabalho. Contudo, vale destacar que o processo pode ser demorado e não há garantia de aprovação.
+
+# Comparação com o dashboard do MTE
+Caso os dados do nosso sistema não coincidam com os apresentados no [dashboard](https://app.powerbi.com/view?r=eyJrIjoiYTJlODQ5MWYtYzgyMi00NDA3LWJjNjAtYjI2NTI1MzViYTdlIiwidCI6IjNlYzkyOTY5LTVhNTEtNGYxOC04YWM5LWVmOThmYmFmYTk3OCJ9) do MTE, é importante esclarecer que utilizamos a base diretamente do FTP do MTE. Por isso, ainda não conseguimos identificar quais agrupamentos ou cálculos foram aplicados às variáveis na construção do dashboard.
 
 # Tratamentos feitos pela BD
 O tratamento das duas tabelas do conjunto é muito similar: 
@@ -76,6 +79,8 @@ O tratamento das duas tabelas do conjunto é muito similar:
 * Adequação das colunas que identificam Unidades Federativas ao padrão de Sigla UF.
 * Substituição de códigos inválidos(como “9999” ou “000”) por valores nulos nas colunas de bairros, CBO, CNAE e ano.
 * Padronização dos códigos na coluna `tipo_estabelecimento` para garantir consistência entre diferentes anos.
+
+Caso queira entender melhor o tratamento: https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_me_rais/code
 
 # Materiais de apoio
 * [Manual de Orientação](http://www.rais.gov.br/sitio/rais_ftp/ManualRAIS2023.pdf): Tem todas as instruções de como os empregadores devem preencher os campos. Ajuda a compreender o que cada campo representa com mais detalhe. 
