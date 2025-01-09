@@ -50,7 +50,7 @@ O Novo Caged é um compilado de dados do emprego formal por meio de informaçõe
 Em 2020, os dados do CAGED passaram por uma reformulação que  trouxe maior automatização na coleta de informações. Como resultado, houve ampliação na cobertura e maior agilidade na disponibilização dos dados, mas os novos dados coletados são incompatíveis com as séries históricas. Por isso esse conjunto possui 2 grupos de tabelas de microdados um para o formato anterior a 2020 e outro para o novo formato. Para mais detalhes sobre essas modificações adicionamos alguns links nos materiais de apoio
 
 # Atualizações
-Normalmente a base é atualizada no início do ano seguinte da coleta, isso significa que os dados referentes ao ano de 2022 só saí no início de 2024.  Porém, às vezes os dados da RAIS são atualizados fora do calendário esperado e nossa equipe nem sempre fica sabendo. Se você está  percebeu que nossos dados estão desatualizados manda uma mensagem pra gente. 
+Os microdados do CAGED são atualizados com 1 mês de defasagem. Isto é, supondo que o mês corrente seja março, os dados de fevereiro serão atualizados no final de março. O MTE disponibiliza um [calendário de atualização](https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/estatisticas-trabalho/o-pdet/calendario-de-divulgacao-do-novo-caged) disponível para consulta
 
 # Dados identificados
 Para obter os dados identificados do CAGED, é preciso realizar uma solicitação por meio deste link ao Ministério do Trabalho. Contudo, vale destacar que o processo pode ser demorado e não há garantia de aprovação.
@@ -64,4 +64,4 @@ O tratamento das três tabelas mais atualizadas do conjunto é muito similar:
 
 # Materiais de apoio
 * [Reportagem sobre mudanças no CAGED](https://g1.globo.com/economia/noticia/2021/04/28/serie-historica-do-emprego-formal-nao-pode-ser-comparada-com-novo-caged-dizem-analistas.ghtml): Reportagem do G1 levantando considerações de especialistas sobre as mudanças do CAGED
-* [Nota sobre o Novo CAGED](ftp//:ftp.mtps.gov.br/pdet/microdados/NOVO%20CAGED/Sobre%20o%20Novo%20Caged.pdf): Incluir nos arquivos auxiliares essa nota que está no fpt e referenciar aqui
+* [Nota sobre o Novo CAGED](ftp//:ftp.mtps.gov.br/pdet/microdados/NOVO%20CAGED/Sobre%20o%20Novo%20Caged.pdf): Nota do MTE que explica principais mudanças ocorridas no Novo Caged

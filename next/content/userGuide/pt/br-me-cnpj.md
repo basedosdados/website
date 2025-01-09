@@ -57,7 +57,7 @@ Documento Básico de Entrada, que é entregue a Receita Federal para:
 * Baixar o cadastro de pessoa jurídica no CNPJ.
   
 # Mudanças na coleta
-Os dados não tiveram mudança de metodologia de coleta de 2021 até o momento **Pisa ajuda aqui, não sei se é vdd**
+Os dados não tiveram mudança de metodologia de coleta de 2021 até o momento de elaboração deste guia (08/01/2025)
 
 # Atualizações
 Os dados são atualizados normalmente após o dia 15. A Base dos Dados tem uma verificação automática diária, caso detecte que os dados foram alterados a atualização é feita na nossa plataforma
@@ -66,11 +66,33 @@ Os dados são atualizados normalmente após o dia 15. A Base dos Dados tem uma v
 Os dados de CNPJ disponibiliza os CPFs dos sócios de maneira anonimizada 
 
 # Tratamentos feitos pela BD:
-**Pisa ajuda aqui**
+1. estabelecimentos
+* Preenchimento de zeros (0) a esquerda com comprimento máximo de 8 dígitos na coluna cnpj_basico
+* Preenchimento de zeros (0) a esquerda com comprimento máximo de 4 dígitos na coluna cnpj_ordem
+* Preenchimento de zeros (0) a esquerda com comprimento máximo de 2 dígitos na coluna cnpj_dv
+* Criação da coluna cnpj com a junção das valores das colunas cnpj_basico, cnpj_ordem e cnpj_dv
+* Criação da coluna id_municipio de 7 dígitos do IBGE a partir do id_municipio_rf (ID município da Receita Federal)
+* Formatação das colunas data_situacao_cadastral,data_situacao_especial e data_inicio_atividade para o padrão ano-mês-dia (%Y-%m-%d)
+
+2. empresas
+* Troca de ',' por '.' na coluna capital_social
+* Preenchimento de zeros (0) a esquerda com comprimento máximo de 8 dígitos na coluna cnpj_basico
+* Preenchimento de zeros (0) a esquerda com comprimento máximo de 4 dígitos na coluna natureza_juridica
+
+3. socios
+* Formatação das colunas data_entrada_sociedade para o padrão ano-mês-dia (%Y-%m-%d)
+* Preenchimento de zeros (0) a esquerda com comprimento máximo de 8 dígitos na coluna cnpj_basico
+* Troca valor que identifica valores nulos de cpf de "***000000***" para ""
+
+4. simples
+* Troca de valores N por 0 e S por 1 na coluna opcao_simples
+* Troca de valores N por 0 e S por 1 na coluna opcao_mei
+* Preenchimento de zeros (0) a esquerda com comprimento máximo de 8 dígitos na coluna cnpj_basico
+* Formatação das colunas data_opcao_simples, data_exclusao_simples, data_opcao_mei e data_exclusao_mei para o padrão ano-mês-dia (%Y-%m-%d)
 
 # Materiais de apoio
-
-
+* [Nota Técnica RFB/COCAD nº 86, de 4 de julho de 2024](https://www.gov.br/receitafederal/dados/nota-cocad-rfb-86-2024.pdf/): Avaliação de confidencialidade das informações constantes nos Dados Abertos do Cadastro Nacional de Pessoa Jurídica (CNPJ)
+* [Como consultar a analisar dados de CNPJ usando SQL, Python ou R](https://www.youtube.com/watch?v=WQruVEizTlc&t=1782s): Venha aprender como acessar, analisar e cruzar os dados de CNPJ de empresas com alguns dos principais indicadores brasileiros!
 
 
 
