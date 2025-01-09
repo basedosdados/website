@@ -1,6 +1,5 @@
 import {
   Center,
-  Text
 } from "@chakra-ui/react";
 import FourOFourImage from "../../public/img/fourOFour";
 
@@ -14,7 +13,6 @@ export default function FourOFour({ children, ...props }) {
       {...props}
     >
       <FourOFourImage
-        transform="translateX(-26px)"
         widthImage="320px"
         heightImage="320px"
       />

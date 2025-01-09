@@ -12,7 +12,6 @@ import FuzzySearch from 'fuzzy-search';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import ReactMarkdown from "react-markdown";
-import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { MainPageTemplate } from "../components/templates/main";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
@@ -22,8 +21,6 @@ import {
 } from "./api/faqs";
 
 import { DebouncedControlledInput } from "../components/atoms/ControlledInput";
-import Display from "../components/atoms/Display";
-import BodyText from "../components/atoms/BodyText";
 
 import CrossIcon from "../public/img/icons/crossIcon";
 import SearchIcon from "../public/img/icons/searchIcon";
@@ -82,11 +79,10 @@ const QuestionsBox = ({ question, answer, id, active }) => {
         onClick={() => OpenCloseQuestion()}
       >
         <Text
-          fontFamily="ubuntu"
-          fontSize={isMobileMod() ? "18px" : "20px"}
-          fontWeight="400"
-          lineHeight={isMobileMod() ? "28px" :"22px"}
-          letterSpacing={isMobileMod() ? "0.1px" : "0.2px"}
+          fontFamily="Roboto"
+          fontSize="20px"
+          fontWeight="500"
+          lineHeight="30px"
           color="#252A32"
         >
           {question}
@@ -107,12 +103,11 @@ const QuestionsBox = ({ question, answer, id, active }) => {
           marginBottom={isActive && "32px !important"}
           overflow="hidden"
           transition="all 1s ease"
-          fontFamily="ubuntu"
-          color="#252A32"
-          letterSpacing="0.1px"
+          fontFamily="Roboto"
+          color="#464A51"
           fontSize="18px"
           lineHeight="28px"
-          fontWeight="300"
+          fontWeight="400"
         >
           <ReactMarkdown>{answer}</ReactMarkdown>
         </Box>
@@ -121,6 +116,19 @@ const QuestionsBox = ({ question, answer, id, active }) => {
     </Stack>
   )
 }
+
+const Display = ({ children, ...props }) => (
+  <Text
+    fontFamily="Roboto"
+    fontWeight="500"
+    fontSize="36px"
+    lineHeight="48px"
+    color="#2B8C4D"
+    {...props}
+  >
+    {children}
+  </Text>
+);
 
 export default function FAQ({ faqs }) {
   const { t } = useTranslation('faq');
@@ -187,13 +195,16 @@ export default function FAQ({ faqs }) {
 
     return (
       <Text
-        fontSize="16px"
-        color={categorySelected === category ? "#2B8C4D" :"#6F6F6F"}
-        fontFamily="ubuntu"
+        color={categorySelected === category ? "#2B8C4D" :"#71757A"}
+        fontFamily="Roboto"
         fontWeight="500"
+        fontSize="16px"
+        lineHeight="24px"
         width="max-content"
         cursor="pointer"
-        letterSpacing="0.2px"
+        _hover={{
+          color: "#2B8C4D"
+        }}
         onClick={() => handlerClick(category)}
       >
         {category}
@@ -219,13 +230,14 @@ export default function FAQ({ faqs }) {
 
       <VStack
         width="100%"
-        maxWidth="1264px"
+        maxWidth="1440px"
         margin="50px auto auto"
         spacing={0}
       >
         <Display
-          paddingBottom={isMobileMod() ? "56px" : "66px" }
+          paddingBottom={{base: "56px", lg: "66px" }}
           color="#2B8C4D"
+          textAlign="center"
         >
           {t('title')}
         </Display>
@@ -233,7 +245,7 @@ export default function FAQ({ faqs }) {
         <DebouncedControlledInput
           value={searchFilter}
           onChange={(val) => setSearchFilter(val)}
-          paddingBottom={isMobileMod() ? "56px" : "126px" }
+          paddingBottom={{base: "56px", lg: "126px" }}
           maxWidth="600px"
           placeholder={t('searchPlaceholder')}
           inputStyle={{
@@ -273,9 +285,9 @@ export default function FAQ({ faqs }) {
         <Stack
           width="100%"
           position="relative"
-          gridGap={isMobileMod() ? "64px" : "120px"}
+          gridGap={{base: "64px", lg: "160px"}}
           spacing={0}
-          flexDirection={isMobileMod() ? "column" :"row"} 
+          flexDirection={{base: "column", lg: "row"} }
           paddingBottom="32px"
         >
           <Box
@@ -283,8 +295,8 @@ export default function FAQ({ faqs }) {
             height="100%"
             flexDirection="column"
             gridGap="16px"
-            position={isMobileMod() ? "relative" : "sticky"}
-            top={isMobileMod()? "0" : "120px"}
+            position={{base: "relative", lg: "sticky"}}
+            top={{base: "0", lg: "120px"}}
           >
             <CategoryText category="Dados"/>
             <CategoryText category="Planos Pagos"/>
@@ -299,9 +311,15 @@ export default function FAQ({ faqs }) {
             spacing={8}
           >
             {questions.length === 0 ?
-              <BodyText color="#7D7D7D">
+              <Text
+                fontFamily="Roboto"
+                fontSize="20px"
+                fontWeight="500"
+                lineHeight="30px"
+                color="#252A32"
+              >
                 {t('noQuestionsFound')}
-              </BodyText>
+              </Text>
             :
               questions.map((elm, i) => 
                 <QuestionsBox
@@ -315,20 +333,20 @@ export default function FAQ({ faqs }) {
             <Text
               marginTop="60px !important"
               color="#252A32"
-              fontFamily="ubuntu"
+              fontFamily="Roboto"
               fontSize="16px"
-              fontWeight="500"
-              lineHeight="16px"
-              letterSpacing="0.2px"
+              fontWeight="400"
+              lineHeight="24px"
             >
               {t('contactText')} 
               <Link
                 display="inline"
                 href="/contact"
-                color="#42B0FF"
-                fontFamily="ubuntu"
+                color="#0068C5"
                 fontSize="16px"
                 fontWeight="500"
+                lineHeight="24px"
+                _hover={{color: "#0057A4"}}
               >
                 {t('contactLink')}
               </Link>
