@@ -55,9 +55,6 @@ function SocialLink({ href, icon }) {
 }
 
 function FooterLink(props) {
-  const router = useRouter();
-  const { locale } = router;
-  
   return (
     <Link
       fontFamily="ubuntu"
@@ -65,7 +62,7 @@ function FooterLink(props) {
       letterSpacing="0.3px"
       color="#FFF"
       target="_blank"
-      href={`${props.href}`}
+      href={props.href}
       {...props}
     />
   )
