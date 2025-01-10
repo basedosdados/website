@@ -118,6 +118,81 @@ export function DebouncedControlledInput({
   );
 }
 
+export function DebouncedSimpleControlledInput({
+  placeholder,
+  value,
+  onChange,
+  icon = null,
+  inputStyle,
+  inputElementStyle,
+  fill,
+  ...props
+}) {
+  const [skipFirstDebounced, setSkipFirstDebounced] = useState(true)
+  const [_value, _setValue] = useState(value);
+  const [_timeout, _setTimeout] = useState(null);
+
+  useEffect(() => {
+    clearTimeout(_timeout);
+    _setTimeout(setTimeout(() => {
+      if(!skipFirstDebounced) onChange(_value)
+      setSkipFirstDebounced(false)
+    }, 1000));
+  }, [_value]);
+
+  useEffect(() => {
+    _setValue(value);
+  }, [value]);
+
+  return (
+    <InputGroup
+      maxWidth="480px"
+      width="480px"
+      alignSelf="center"
+      justifyContent="center"
+      fill={fill}
+      {...props}
+    >
+      <InputLeftElement
+        width="24px"
+        height="24px"
+        margin="8px 8px 8px 16px"
+        children={icon}
+        {...inputElementStyle}
+      />
+
+      <Input
+        value={_value}
+        placeholder={placeholder}
+        onChange={(e) => _setValue(e.target.value)}
+        autoComplete="off"
+        variant="outline"
+        border="2px solid transparent !important"
+        color="#464A51"
+        _hover={{
+          border:"2px solid transparent !important",
+          backgroundColor:"#DEDFE0",
+        }}
+        _focus={{
+          border:"2px solid #0068C5 !important",
+          backgroundColor: "#FFF",
+        }}
+        paddingLeft="52px !important"
+        backgroundColor="#EEEEEE"
+        height="40px"
+        fontSize="14px"
+        lineHeight="20px"
+        width="100%"
+        fontFamily="Roboto"
+        fontWeight="400"
+        borderRadius="14px"
+        _placeholder={{color: "#464A51", opacity: 1}}
+        {...inputStyle}
+      />
+    </InputGroup>
+  );
+}
+
 export function ControlledInputSimple({
   refInput = null,
   placeholder,

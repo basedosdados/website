@@ -130,5 +130,14 @@
                 "quote": "We created an important product of ours, the Municipality Photograph, in partnership with DB. The Photograph aggregates various socioeconomic indicators of Brazilian municipalities. A Ponte did the planning and design of the report, while DB took care of the technical part of data visualization and management. The partnership allowed us to advance quickly in the development of the tool and ensured the high data quality we wanted from the beginning."
             }
         }
+    },
+    "error": {
+        "ops": "Ooops..",
+        "notFoundPage": "Unfortunately, we couldn't find this page.",
+        "system": "Unfortunately, an error occurred.",
+        "searchNewBases": "Browse the menu above or search for the data you need in the search bar.",
+        "verifyStatusSystem": "Check our platform's status and try again later.",
+        "searchData": "Search data",
+        "checkStatus": "Check the status"
     }
 }

@@ -130,5 +130,14 @@
                 "quote": "Creamos un producto importante de nuestro portfolio, la Fotografía del Municipio, en asociación con BD. La Fotografía agrega varios indicadores socioeconómicos de los municipios brasileños. A Ponte hizo la planificación y el diseño del informe, mientras que BD se encargó de la parte técnica de visualización y gestión de datos. La asociación nos permitió avanzar rápidamente en el desarrollo de la herramienta y garantizó la alta calidad de datos que queríamos desde el principio."
             }
         }
+    },
+    "error": {
+        "ops": "Ooops..",
+        "notFoundPage": "Desafortunadamente no encontramos esta página.",
+        "system": "Desafortunadamente ocurrió un error.",
+        "searchNewBases": "Navega por el menú arriba o busca los datos que necesitas en la barra de búsqueda.",
+        "verifyStatusSystem": "Verifica el estado de nuestra plataforma e intenta acceder nuevamente más tarde.",
+        "searchData": "Busca datos",
+        "checkStatus": "Verifica el estado"
     }
 }

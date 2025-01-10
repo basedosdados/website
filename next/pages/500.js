@@ -3,6 +3,7 @@ import {
   Center,
   Box
 } from "@chakra-ui/react";
+import { useTranslation } from 'next-i18next';
 import FiveHundredTemplate from "../components/templates/500";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { MainPageTemplate } from "../components/templates/main";
@@ -17,6 +18,8 @@ export async function getStaticProps({ locale }) {
 }
 
 export default function InternalServerError() {
+  const { t } = useTranslation('common');
+
   return (
     <MainPageTemplate>
       <FiveHundredTemplate 
@@ -31,7 +34,7 @@ export default function InternalServerError() {
           lineHeight="60px"
           color="#252A32"
           marginBottom="24px"
-        >Ooops...</Text>
+        >{t('error.ops')}</Text>
         <Center flexDirection="column" marginBottom="24px" gap="8px">
           <Text
             fontFamily="Roboto"
@@ -39,14 +42,14 @@ export default function InternalServerError() {
             fontSize="28px"
             lineHeight="42px"
             color="#252A32"
-          >Infelizmente ocorreu um erro.</Text>
+          >{t('error.system')}</Text>
           <Text
             fontFamily="Roboto"
             fontWeight="400"
             fontSize="18px"
             lineHeight="26px"
             color="#252A32"
-          >Verifique o status da nossa plataforma e tente acessar novamente mais tarde.</Text>
+          >{t('error.verifyStatusSystem')}</Text>
         </Center>
         <Link
           target="_blank"
@@ -72,7 +75,7 @@ export default function InternalServerError() {
               backgroundColor: "#0B89E2"
             }}
           >
-            Confira o status
+            {t('error.checkStatus')}
           </Box>
         </Link>
       </FiveHundredTemplate>

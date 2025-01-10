@@ -12,15 +12,14 @@ import FuzzySearch from 'fuzzy-search';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import ReactMarkdown from "react-markdown";
+import { useTranslation } from 'next-i18next';
 import { MainPageTemplate } from "../components/templates/main";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
+import { DebouncedSimpleControlledInput } from "../components/atoms/ControlledInput";
 
 import {
   getAllFAQs,
 } from "./api/faqs";
-
-import { DebouncedControlledInput } from "../components/atoms/ControlledInput";
 
 import CrossIcon from "../public/img/icons/crossIcon";
 import SearchIcon from "../public/img/icons/searchIcon";
@@ -143,18 +142,35 @@ export default function FAQ({ faqs }) {
     setQuestions(faqs)
   },[faqs])
 
+  const searcher = new FuzzySearch(
+    categorySelected ? questions : allQuestions,
+    ["question", "keywords"],
+    {sort: true}
+  )
+
+  const filterByCategory = (category) => {
+    return allQuestions.filter((elm) =>
+      elm.categories.includes(category)
+    );
+  }
+
   useEffect(() => {
     if(categorySelected) return setQuestions(filterByCategory(categorySelected))
   },[categorySelected])
 
-  const searcher = new FuzzySearch(
-    categorySelected ? questions : allQuestions, ["question", "keywords"], {sort: true}
-  )
+  useEffect(() => {
+    if (categorySelected) {
+      const filteredQuestions = filterByCategory(categorySelected);
+      setQuestions(filteredQuestions);
+    } else {
+      setQuestions(allQuestions);
+    }
+    setSearchFilter("");
+  }, [categorySelected, allQuestions]);
 
   useEffect(() => {
     if(searchFilter.trim() === "") {
-      setSearchFilter("")
-      setQuestions(faqs)
+      setQuestions(categorySelected ? filterByCategory(categorySelected) : allQuestions);
     } else {
       const result = searcher.search(searchFilter.trim())
       setQuestions(result)
@@ -163,34 +179,22 @@ export default function FAQ({ faqs }) {
     }
   },[searchFilter])
 
-  const filterByCategory = (category) => {
-    const filtedCategory = allQuestions.filter((elm) => {
-      const indexCategory = elm.categories.findIndex((res) => res === category)
-      if(indexCategory > -1) return elm.categories[indexCategory]
-    })
-    return filtedCategory
-  }
-
   const cleanFilter = () => {
-    setSearchFilter("")
-
-    if(categorySelected) return setQuestions(filterByCategory(categorySelected))
-
-    setQuestions(allQuestions)
+    setSearchFilter("");
+    setQuestions(categorySelected ? filterByCategory(categorySelected) : allQuestions);
   }
 
   const CategoryText = ({ category }) => {
-    function handlerClick(elm) {
-      if(elm === categorySelected) {
+    function handlerClick() {
+      if(category === categorySelected) {
         setCategorySelected("")
         setQuestions(allQuestions)
-        setCloseQuestion(!closeQuestion)
-        window.scrollTo({top: 1})
       } else {
-        setCategorySelected(elm)
-        setCloseQuestion(!closeQuestion)
-        window.scrollTo({top: 1})
+        setCategorySelected(category)
       }
+
+      setCloseQuestion(!closeQuestion)
+      window.scrollTo({top: 1})
     }
 
     return (
@@ -205,7 +209,7 @@ export default function FAQ({ faqs }) {
         _hover={{
           color: "#2B8C4D"
         }}
-        onClick={() => handlerClick(category)}
+        onClick={handlerClick}
       >
         {category}
       </Text>
@@ -242,44 +246,31 @@ export default function FAQ({ faqs }) {
           {t('title')}
         </Display>
 
-        <DebouncedControlledInput
-          value={searchFilter}
-          onChange={(val) => setSearchFilter(val)}
-          paddingBottom={{base: "56px", lg: "126px" }}
+        <DebouncedSimpleControlledInput
+          width="100%"
           maxWidth="600px"
+          paddingBottom={{base: "56px", lg: "126px" }}
+          value={searchFilter}
+          onChange={setSearchFilter}
           placeholder={t('searchPlaceholder')}
-          inputStyle={{
-            padding: "12px 32px 12px 16px",
-            height: "48px",
-            borderRadius: "18px",
-            backgroundColor: "#ffffff",
-            fontSize: "16px",
-            border: "1px solid #DEDFE0 !important",
-            _placeholder:{ color: "#6F6F6F" }
-          }}
-          inputElementStyle={{
-            height: "48px"
-          }}
-          rightIcon={
-            (searchFilter ?
-              <CrossIcon
-                alt="limpar pesquisa"
-                width="22px"
-                height="22px"
-                cursor="pointer"
-                fill="#252A32"
-                onClick={() => cleanFilter()}
-              />
-              :
-              <SearchIcon
-                alt="pesquisar"
-                width="20px"
-                height="20px"
-                cursor="normal"
-                fill="#D0D0D0"
-              />
-            )
-          }
+          icon={(searchFilter ?
+            <CrossIcon
+              alt="limpar pesquisa"
+              width="17px"
+              height="17px"
+              cursor="pointer"
+              fill="#464A51"
+              onClick={() => cleanFilter()}
+            />
+            :
+            <SearchIcon
+              alt="pesquisar"
+              width="17px"
+              height="17px"
+              cursor="normal"
+              fill="#464A51"
+            />
+          )}
         />
 
         <Stack

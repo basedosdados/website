@@ -21,7 +21,7 @@ import {
   MenuList,
   MenuItem
 } from "@chakra-ui/react";
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router"
 import { useTranslation } from 'next-i18next';
 import cookies from "js-cookie";
