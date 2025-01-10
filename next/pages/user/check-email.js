@@ -8,8 +8,6 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 
-import Display from "../../components/atoms/Display";
-import { isMobileMod } from "../../hooks/useCheckMobile.hook"
 import { MainPageTemplate } from "../../components/templates/main";
 
 import { EmailConfirmImage } from "../../public/img/emailImage";
@@ -68,32 +66,32 @@ export default function CheckEmail() {
       <Stack
         display="flex"
         justifyContent="center"
-        width="510px"
+        width="560px"
         height="100%"
-        marginTop={isMobileMod() ? "150px" : "50px"}
+        marginTop={{base: "150px", lg: "50px"}}
         marginX="27px"
         spacing="40px"
         alignItems="center"
       >
         <EmailConfirmImage justifyContent="center" marginBottom="8px"/>
 
-        <Display
-          fontSize={isMobileMod() ? "28px" : "34px"}
-          lineHeight={isMobileMod() ? "36px" : "44px"}
-          letterSpacing={isMobileMod() ? "0" : "-0.4px"}
-          fontweith="500"
+        <Text
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="36px"
+          lineHeight="48px"
+          color="#252A32"
           textAlign="center"
-        >{t('checkEmail.confirmEmail')}</Display>
+        >{t('checkEmail.confirmEmail')}</Text>
 
         <Stack spacing="16px">
           <Text
-            textAlign="center"
-            color= "#7D7D7D"
-            fontFamily= "Ubuntu"
-            fontSize= "16px"
+            color= "#464A51"
+            fontFamily= "Roboto"
             fontWeight= "400"
-            lineHeight= "16px"
-            letterSpacing= "0.2px"
+            fontSize= "18px"
+            lineHeight= "26px"
+            textAlign="center"
           >
             {t('checkEmail.sentConfirmation')}
           </Text>
@@ -101,11 +99,10 @@ export default function CheckEmail() {
           <Text
             textAlign="center"
             color= "#252A32"
-            fontFamily= "Ubuntu"
-            fontSize= "16px"
+            fontFamily= "Inter"
             fontWeight= "500"
-            lineHeight= "16px"
-            letterSpacing= "0.2px"
+            fontSize= "18px"
+            lineHeight= "26px"
           >
             {email}
           </Text>
@@ -114,27 +111,25 @@ export default function CheckEmail() {
         <Stack spacing="8px">
           <Text
             textAlign="center"
-            color= "#7D7D7D"
-            fontFamily= "Ubuntu"
-            fontSize= "16px"
+            color= "#464A51"
+            fontFamily= "Roboto"
             fontWeight= "400"
-            lineHeight= "24px"
-            letterSpacing= "0.2px"
+            fontSize= "18px"
+            lineHeight= "26px"
           >
             {t('checkEmail.checkInbox')}
           </Text>
 
           <Text
             cursor={forwardingDisabled ? "default" : "pointer"}
-            _hover={{opacity:forwardingDisabled ? 1 : 0.7}}
+            _hover={{color:forwardingDisabled ? "#0068C5" : "#0057A4"}}
             pointerEvents={forwardingDisabled ? "none" : ""}
             textAlign="center"
-            fontFamily="ubuntu"
-            color={forwardingDisabled ? "#252A32" : "#42B0FF"}
-            fontSize="16px"
-            fontWeight="500"
-            lineHeight="30px"
-            letterSpacing="0.2px"
+            color={forwardingDisabled ? "#252A32" : "#0068C5"}
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="18px"
+            lineHeight="26px"
             onClick={() => handleEmailConfirm()}
           >{forwardingDisabled ? t('checkEmail.waitSeconds', { count }) : t('checkEmail.resendEmail')}</Text>
         </Stack>

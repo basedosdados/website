@@ -1,12 +1,9 @@
 import {
+  Text,
   Stack,
   FormControl,
-  FormLabel,
-  FormErrorMessage,
-  UnorderedList,
-  ListItem,
+  List,
   VStack,
-  Text
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useTranslation } from 'next-i18next';
@@ -14,16 +11,20 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { triggerGAEvent } from "../../utils";
 import { useRouter } from 'next/router';
 
-import Input from "../../components/atoms/SimpleInput";
-import Button from "../../components/atoms/RoundedButton";
-import Display from "../../components/atoms/Display";
+import {
+  LabelTextForm,
+  InputForm,
+  ErrorMessage,
+  Button,
+  ListChecked
+} from "../../components/molecules/uiUserPage";
+
+import Link from "../../components/atoms/Link";
 import { MainPageTemplate } from "../../components/templates/main";
-import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 import { cleanString } from "../../utils";
 
 import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 import Exclamation from "../../public/img/icons/exclamationIcon";
-import Link from "../../components/atoms/Link";
 
 import { withPages } from "../../hooks/pages.hook";
 
@@ -158,19 +159,6 @@ export default function Register() {
     }
   }
 
-  const LabelTextForm = ({ text }) => {
-    return (
-      <FormLabel
-        color="#252A32"
-        fontFamily="ubuntu"
-        letterSpacing="0.2px"
-        lineHeight="16px"
-        fontWeight="400"
-        fontSize="16px"
-      >{text}</FormLabel>
-    )
-  }
-
   return (
     <MainPageTemplate
       display="flex"
@@ -186,13 +174,17 @@ export default function Register() {
         marginTop="50px"
         marginX="27px"
       >
-        <Display
-          fontSize={isMobileMod() ? "34px" : "60px"}
-          lineHeight={isMobileMod() ? "44px" : "72px"}
-          letterSpacing={isMobileMod() ? "-0.4px" : "-1.5px"}
-          marginBottom="40px"
+        <Text
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="50px"
+          lineHeight="60px"
+          color="#252A32"
           textAlign="center"
-        >{t('signup.title')}</Display>
+          marginBottom="40px"
+        >
+          {t('signup.title')}
+        </Text>
 
         <form onSubmit={handleSubmit}>
           <VStack
@@ -201,45 +193,35 @@ export default function Register() {
           >
             <FormControl isInvalid={!!errors.firstName} >
               <LabelTextForm text={t('signup.firstName')}/>
-              <Input
+              <InputForm
                 id="firstName"
                 name="firstName"
                 value={formData.firstName}
                 onChange={(e) => handleInputChange(e, "firstName")}
                 placeholder={t('signup.placeholders.firstName')}
-                fontFamily="ubuntu"
-                height="40px"
-                fontSize="14px"
-                borderRadius="16px"
-                _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
               />
-              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
-                <Exclamation marginTop="4px" fill="#BF3434"/>{errors.firstName}
-              </FormErrorMessage>
+              <ErrorMessage>
+                {errors.firstName}
+              </ErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.lastName}>
               <LabelTextForm text={t('signup.lastName')}/>
-              <Input
+              <InputForm
                 id="lastName"
                 name="lastName"
                 value={formData.lastName}
                 onChange={(e) => handleInputChange(e, "lastName")}
                 placeholder={t('signup.placeholders.lastName')}
-                fontFamily="ubuntu"
-                height="40px"
-                fontSize="14px"
-                borderRadius="16px"
-                _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
               />
-              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
-                <Exclamation marginTop="4px" fill="#BF3434"/>{errors.lastName}
-              </FormErrorMessage>
+              <ErrorMessage>
+                {errors.lastName}
+              </ErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.email}>
               <LabelTextForm text={t('signup.email')} />
-              <Input
+              <InputForm
                 id="username"
                 name="username"
                 type="email"
@@ -247,20 +229,15 @@ export default function Register() {
                 value={formData.email}
                 onChange={(e) => handleInputChange(e, "email")}
                 placeholder={t('signup.placeholders.email')}
-                fontFamily="ubuntu"
-                height="40px"
-                fontSize="14px"
-                borderRadius="16px"
-                _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
               />
-              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
-                <Exclamation marginTop="4px" fill="#BF3434"/>{errors.email}
-              </FormErrorMessage>
+              <ErrorMessage>
+                {errors.email}
+              </ErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.username} >
               <LabelTextForm text={t('signup.username')}/>
-              <Input
+              <InputForm
                 id="user"
                 name="user"
                 type="text"
@@ -268,20 +245,15 @@ export default function Register() {
                 value={formData.username}
                 onChange={(e) => handleInputChange(e, "username")}
                 placeholder={t('signup.placeholders.username')}
-                fontFamily="ubuntu"
-                height="40px"
-                fontSize="14px"
-                borderRadius="16px"
-                _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
               />
-              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
-                <Exclamation marginTop="4px" fill="#BF3434"/>{errors.username}
-              </FormErrorMessage>
+              <ErrorMessage>
+                {errors.username}
+              </ErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.password}>
               <LabelTextForm text={t('signup.password')} />
-              <Input
+              <InputForm
                 type={showPassword ? "password" : "text"}
                 id="password"
                 name="password"
@@ -289,58 +261,97 @@ export default function Register() {
                 value={formData.password}
                 onChange={(e) => handleInputChange(e, "password")}
                 placeholder={t('signup.placeholders.password')}
-                fontFamily="ubuntu"
-                height="40px"
-                fontSize="14px"
-                borderRadius="16px"
-                _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
-                styleElmRight={{
-                  width: "50px",
-                  height: "40px",
+                inputElementStyle={{
                   cursor: "pointer",
                   onClick: () => setShowPassword(!showPassword)
                 }}
-                elmRight={showPassword ?
+                icon={showPassword ?
                   <EyeOffIcon
                     alt="esconder senha"
                     width="20px"
                     height="20px"
-                    fill="#D0D0D0"
+                    fill="#464A51"
                   />
                 :
                   <EyeIcon
                     alt="exibir senhar"
                     width="20px"
                     height="20px"
-                    fill="#D0D0D0"
+                    fill="#464A51"
                   />
                 }
               />
               <Text 
                 margin="8px 0"
-                color= { errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#BF3434" : "#7D7D7D" : "#7D7D7D" }
-                fontFamily= "Ubuntu"
-                fontSize= "12px"
-                fontWeight= "400"
-                lineHeight= "16px"
-                letterSpacing= "0.3px"
+                color={errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#BF3434" : "#71757A" : "#71757A" }
+                fontFamily="Roboto"
+                fontSize="14px"
+                fontWeight="400"
+                lineHeight="20px"
                 display="flex"
                 flexDirection="row"
-                gap="4px"
+                gap="8px"
                 alignItems="flex-start"
-              ><Exclamation width="14px" height="14px" fill="#BF3434" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> {t('signup.errors.password.requirements')}</Text>
-              <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
-                <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#BF3434" :"#7D7D7D"}>{t('signup.errors.password.chars')}</ListItem>
-                <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#BF3434" :"#7D7D7D"}>{t('signup.errors.password.uppercase')}</ListItem>
-                <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#BF3434" :"#7D7D7D"}>{t('signup.errors.password.lowercase')}</ListItem>
-                <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#BF3434" :"#7D7D7D"}>{t('signup.errors.password.digit')}</ListItem>
-                <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#BF3434" :"#7D7D7D"}>{t('signup.errors.password.special')}</ListItem>
-              </UnorderedList>
+              >
+                <Exclamation
+                  display={errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}
+                  width="18px"
+                  height="18px"
+                  fill="#BF3434"
+                /> {t('username.passwordRequirements')}
+              </Text>
+
+              <List
+                fontFamily="Roboto"
+                fontSize="14px"
+                fontWeight="400"
+                lineHeight="20px"
+                position="relative"
+                left="2px"
+                display="flex"
+                flexDirection="column"
+                gap="8px"
+              >
+                <ListChecked 
+                  checked={formData.password.length >= 8}
+                  err={errors?.regexPassword?.amount}
+                >
+                  {t('username.minCharacters')}
+                </ListChecked>
+                <ListChecked
+                  checked={/[A-Z]/.test(formData.password)}
+                  err={errors?.regexPassword?.upperCase}
+                >
+                  {t('username.uppercaseLetter')}
+                </ListChecked>
+                <ListChecked
+                  checked={/[a-z]/.test(formData.password)}
+                  err={errors?.regexPassword?.lowerCase}
+                >
+                  {t('username.lowercaseLetter')}
+                </ListChecked>
+                <ListChecked
+                  checked={/\d/.test(formData.password)}
+                  err={errors?.regexPassword?.number}
+                >
+                  {t('username.digit')}
+                </ListChecked>
+                <ListChecked
+                  checked={/[!@#?%&*]/.test(formData.password)}
+                  err={errors?.regexPassword?.special}
+                >
+                  {t('username.specialCharacter')}
+                </ListChecked>
+              </List>
+
+              {errors.password &&
+                <ErrorMessage>{errors.password}</ErrorMessage>
+              }
             </FormControl>
 
             <FormControl isInvalid={!!errors.confirmPassword}>
               <LabelTextForm text={t('signup.confirmPassword')} />
-              <Input
+              <InputForm
                 type={showConfirmPassword ? "password" : "text"}
                 id="confirmPassword"
                 name="password"
@@ -348,72 +359,93 @@ export default function Register() {
                 value={formData.confirmPassword}
                 onChange={(e) => handleInputChange(e, "confirmPassword")}
                 placeholder={t('signup.placeholders.confirmPassword')}
-                fontFamily="ubuntu"
-                height="40px"
-                fontSize="14px"
-                borderRadius="16px"
-                _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
-                styleElmRight={{
-                  width: "50px",
-                  height: "40px",
+                inputElementStyle={{
                   cursor: "pointer",
                   onClick: () => setShowConfirmPassword(!showConfirmPassword)
                 }}
-                elmRight={showConfirmPassword ?
+                icon={showConfirmPassword ?
                   <EyeOffIcon
                     alt="esconder senha"
                     width="20px"
                     height="20px"
-                    fill="#D0D0D0"
+                    fill="#464A51"
                   />
                 :
                   <EyeIcon
                     alt="exibir senhar"
                     width="20px"
                     height="20px"
-                    fill="#D0D0D0"
+                    fill="#464A51"
                   />
                 }
               />
-              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
-                <Exclamation marginTop="4px" fill="#BF3434"/>{errors.confirmPassword}
-              </FormErrorMessage>
+              <ErrorMessage>{errors.confirmPassword}</ErrorMessage>
             </FormControl>
           </VStack>
 
           <Button
             type="submit"
+            onClick={() => {}}
             width="100%"
-            borderRadius="30px"
             marginTop="24px !important"
-            backgroundColor={errors?.register ? "#BF3434" : "#42B0FF"}
+            backgroundColor={errors?.register ? "#BF3434" : "#2B8C4D"}
           >
             {t('signup.register')}
           </Button>
         </form>
 
         {errors?.register &&
-          <Text fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
-            <Exclamation marginTop="4px" fill="#BF3434"/>{errors.register}
-          </Text>
+          <Box
+            display="flex"
+            flexDirection="row"
+            gap="8px"
+            alignItems="center"
+            marginBottom="24px !important"
+          >
+            <Exclamation width="19px" height="19px" fill="#BF3434"/>
+            <Text
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              lineHeight="20px"
+              color="#BF3434"
+            >
+              {errors.register}
+            </Text>
+          </Box>
         }
 
         <Text
           textAlign="center"
-          color= "#7D7D7D"
-          fontFamily= "Ubuntu"
-          fontSize= "12px"
-          fontWeight= "400"
-          lineHeight= "16px"
-          letterSpacing= "0.3px"
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="14px"
+          lineHeight="20px"
+          color="#71757A"
           marginTop="16px !important"
         >
           {t('signup.termsAgreement.part1')}
-          <Link display="inline" fontSize="12px" lineHeight="normal" fontFamily="ubuntu" color="#42B0FF" href="/terms?section=terms" target="_blank">
+          <Link
+            display="inline"
+            fontWeight="400"
+            color="#0068C5"
+            _hover={{
+              color: "#0057A4"
+            }}
+            href="/terms?section=terms" target="_blank"
+          >
             {t('signup.termsAgreement.termsLink')}
           </Link>
           {t('signup.termsAgreement.part2')}
-          <Link display="inline" fontSize="12px" lineHeight="normal" fontFamily="ubuntu" color="#42B0FF" href="/terms?section=privacy" target="_blank">
+          <Link
+            display="inline"
+            fontWeight="400"
+            color="#0068C5"
+            _hover={{
+              color: "#0057A4"
+            }}
+            href="/terms?section=privacy" target="_blank"
+          >
             {t('signup.termsAgreement.privacyLink')}
           </Link>
           {t('signup.termsAgreement.part3')}
@@ -422,14 +454,23 @@ export default function Register() {
         <Text
           textAlign="center"
           color= "#252A32"
-          fontFamily= "Ubuntu"
-          fontSize= "14px"
+          fontFamily= "Roboto"
           fontWeight= "400"
-          lineHeight= "27px"
-          letterSpacing= "0.3px"
+          fontSize= "14px"
+          lineHeight= "20px"
           marginTop="24px !important"
         >
-          {t('signup.alreadyHaveAccount')} <Link display="inline" lineHeight="normal" fontFamily="ubuntu" color="#42B0FF" href="/user/login">{t('signup.login')}</Link>.
+          {t('signup.alreadyHaveAccount')} <Link
+            display="inline"
+            fontWeight="400"
+            color="#0068C5"
+            _hover={{
+              color: "#0057A4"
+            }}
+            href="/user/login"
+          >
+            {t('signup.login')}
+          </Link>.
         </Text>
       </Stack>
     </MainPageTemplate>

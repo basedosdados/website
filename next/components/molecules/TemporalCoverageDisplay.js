@@ -191,8 +191,10 @@ export function TemporalCoverageBar ({ value }) {
         isOpen={plansModal.isOpen}
         onClose={plansModal.onClose}
         propsModalContent={{
-          minWidth: "fit-content"
+          minWidth: "fit-content",
+          overflow: "auto"
         }}
+        isCentered={false}
       >
         <Stack spacing={0} marginBottom="16px">
           <Text
