@@ -10,7 +10,6 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { withPages } from "../hooks/pages.hook";
 import { MainPageTemplate } from "../components/templates/main";
 import Link from "../components/atoms/Link";
-import RoundedButton from "../components/atoms/RoundedButton";
 import TransparencyImage from "../public/img/transparencyImage";
 import DonationImage from "../public/img/donationImage";
 
@@ -27,7 +26,6 @@ export async function getStaticProps({ locale }) {
 export default function Transparency({ pages }) {
   const { t } = useTranslation('transparency');
   const { locale } = useRouter();
-  const router = useRouter();
 
   const SectionBox = ({ children, ...props }) => {
     return (

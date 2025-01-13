@@ -99,7 +99,7 @@ export default function CheckEmail() {
           <Text
             textAlign="center"
             color= "#252A32"
-            fontFamily= "Inter"
+            fontFamily= "Roboto"
             fontWeight= "500"
             fontSize= "18px"
             lineHeight= "26px"
