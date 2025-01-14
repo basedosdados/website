@@ -15,7 +15,6 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { capitalize } from 'lodash';
 
-import BigTitle from "../../components/atoms/BigTitle";
 import GreenTab from "../../components/atoms/GreenTab";
 import Link from '../../components/atoms/Link';
 import ReadMore from "../../components/atoms/ReadMore";
@@ -158,17 +157,18 @@ export default function DatasetPage ({ dataset, userGuide }) {
               gap="8px"
             >
               <GridItem colSpan={5}>
-                <BigTitle
+                <Text
                   width="100%"
                   overflow="hidden"
                   textOverflow="ellipsis"
                   whiteSpace={{base: "inherit", lg:"nowrap"}}
                   fontFamily="Roboto"
                   fontWeight="500"
+                  fontSize="28px"
                   lineHeight="42px"
                 >
                   {dataset[`name${capitalize(locale)}`] || dataset.name || t('noName')}
-                </BigTitle>
+                </Text>
               </GridItem>
 
               <GridItem colSpan={5} minHeight="60px" marginBottom="8px">

@@ -5,7 +5,8 @@ import {
   Image,
   Tooltip,
   Skeleton,
-  SkeletonText
+  SkeletonText,
+  Text
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
@@ -17,7 +18,6 @@ import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../../utils";
 
 import Carousel from "../atoms/Carousel";
-import SectionText from "../atoms/SectionText";
 import DatasetThemeCatalogCard from "../organisms/DatasetThemeCatalogCard";
 import RemoveIcon from "../../public/img/icons/removeIcon";
 import styles from "../../styles/themeCatalog.module.css";
@@ -209,16 +209,18 @@ function CardThemes ({ responsive, datasetsCards = [], loading, locale }) {
     >
       {!loading && datasetsCards?.length === 0 &&
         <Center padding="0 40px">
-          <SectionText
+          <Text
+            fontFamily="Lato"
             fontSize={responsive.mobileQuery ? "14px" : "18px"}
             color="#A3A3A3"
+            lineHeight="24px"
             textAlign="center"
             marginBottom={responsive.mobileQuery ? "16px" : "32px"}
           >
             {t('noDatasetsFound', { returnObjects: true })[0]}
             {useCheckMobile() ? null : <br/>}
             {t('noDatasetsFound', { returnObjects: true })[1]}
-          </SectionText>
+          </Text>
         </Center>
       }
       <Center

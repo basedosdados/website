@@ -27,7 +27,6 @@ import {
 import ChevronIcon from "../../public/img/icons/chevronIcon";
 import Button from "../../components/atoms/Button";
 import Link from "../../components/atoms/Link";
-import styles from "../../styles/caseStudies.module.css";
 
 export async function getStaticProps({ params, locale }) {
   const { id } = params;
@@ -282,7 +281,6 @@ export default function CaseStudies ({ serialize }) {
           </VStack>
 
           <Box
-            className={styles.body}
             as="section"
             flex={1}
             width="100%"

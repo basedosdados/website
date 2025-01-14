@@ -1,7 +1,6 @@
 import {
   Stack,
   HStack,
-  Center,
   Text,
   Box,
   Tooltip,
@@ -10,127 +9,11 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import cookies from "js-cookie";
-import { CalendarComunIcon } from "../../public/img/icons/calendarIcon";
 import { SectionPrice } from "../../pages/prices";
 import { ModalGeneral } from "./uiUserPage";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
 import { useTranslation } from 'next-i18next';
-
-export function TemporalCoverage ({
-  value,
-  text,
-  iconSettings = {width: "18px", height: "18px", fill: "#D0D0D0"},
-  textSettings = {}
-}) {
-  const { t } = useTranslation('dataset');
-  const [startDate, setStartDate] = useState("")
-  const [endDate, setEndDate] = useState("")
-
-  useEffect(() => {
-    setStartDate(value?.start)
-    setEndDate(value?.end)
-  },[value])
-
-  const TextDate = ({ value }) => {
-    return (
-      <Text
-        color="#252A32"
-        fontSize="14px"
-        lineHeight="24px"
-        letterSpacing="0.5px"
-        fontWeight="300"
-        fontFamily="Lato"
-        {...textSettings}
-      >
-        {value}
-      </Text>
-    ) 
-  }
-
-  if(!value) return <TextDate value={t('temporalCoverageBar.notProvided')}/>
-  if(startDate === null && endDate === null) return <TextDate value={text}/>
-
-  function Dates ({ date, ...props }) {
-    if(date === null) return ""
-
-    return (
-      <Center marginRight="10px" {...props}>
-        <CalendarComunIcon {...iconSettings} marginRight="6px"/> <TextDate value={date}/>
-      </Center>
-    )
-  }
-
-  return (
-    <Center>
-      <Dates date={startDate}/> ─ <Dates date={endDate} margin="0 0 0 10px"/>
-    </Center>
-  )
-}
-
-export function TemporalCoverageString({
-  value,
-  iconSettings = {width: "18px", height: "18px", fill: "#D0D0D0"},
-  textSettings = {}
-}) {
-
-  let pieces = value.split(" - ")
-  let dateStart = pieces[0]
-  let dateEnd = pieces[1]
-
-  const TextData = ({textSettings, string}) => {
-    return (
-      <Text
-        color="#252A32"
-        fontSize="14px"
-        lineHeight="24px"
-        letterSpacing="0.5px"
-        fontWeight="300"
-        fontFamily="Lato"
-        {...textSettings}
-      >
-        {string}
-      </Text>
-    )
-  }
-
-  return (
-    <Stack
-      flexDirection="row"
-      alignItems="center"
-      gap="8px"
-      spacing={0}
-    >
-      {value === "" ?
-        <span style={{color: "#A3A3A3"}}>─</span>
-      :
-        <>
-          <Center>
-            <CalendarComunIcon
-              position="relative"
-              top="-1px"
-              margin="0 6px 0 0"
-              width="18px"
-              height="18px"
-              {...iconSettings}
-            />
-            <TextData textSettings={textSettings} string={dateStart}/>
-          </Center> <span style={{color: "#A3A3A3"}}>─</span> <Center>
-            <CalendarComunIcon
-              position="relative"
-              top="-1px"
-              margin="0 6px 0 0"
-              width="18px"
-              height="18px"
-              {...iconSettings}
-            />
-            <TextData textSettings={textSettings} string={dateEnd}/>
-          </Center>
-        </>
-      }
-    </Stack>
-  )
-}
 
 export function TemporalCoverageBar ({ value }) {
   const { t } = useTranslation(['dataset', 'prices']);

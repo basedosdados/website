@@ -7,6 +7,7 @@ import {
   Grid,
   GridItem,
   useClipboard,
+  Text,
   Image as ChakraImage,
 } from "@chakra-ui/react";
 import { useState } from "react";
@@ -15,13 +16,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
-import BodyText from "../components/atoms/BodyText";
 import { ControlledInput } from "../components/atoms/ControlledInput";
-import Display from "../components/atoms/Display";
 import Link from "../components/atoms/Link";
-import SectionText from "../components/atoms/SectionText";
-import SectionTitle from "../components/atoms/SectionTitle";
-import SectionLink from "../components/atoms/SectionLink"
 import { ShadowBox } from "../components/atoms/ShadowBox";
 import RoundedButton from "../components/atoms/RoundedButton";
 import { DatasetCardTag } from "../components/atoms/DatasetCardTag";
@@ -64,6 +60,46 @@ export async function getStaticProps({ locale }) {
     revalidate: 30
   };
 }
+
+export const BodyText = ({ children, ...props }) => (
+  <Text
+    fontFamily="ubuntu"
+    fontWeight="300"
+    fontSize="18px"
+    lineHeight="28px"
+    color="#252A32"
+    {...props}
+  >
+    {children}
+  </Text>
+);
+
+export const Display = ({ children, ...props }) => (
+  <Text
+    fontFamily="Ubuntu"
+    fontWeight="500"
+    fontSize="34px"
+    lineHeight="44px"
+    color="#252A32"
+    {...props}
+  >
+    {children}
+  </Text>
+);
+
+export const SectionTitle = ({ children, ...props }) => (
+  <Text
+    fontFamily="Ubuntu"
+    fontWeight="400"
+    fontSize="24px"
+    lineHeight="40px"
+    color="#252A32"
+    {...props}
+  >
+    {children}
+  </Text>
+);
+
 
 function Hero({ dataThemeCatalog, locale }) {
   const { t } = useTranslation('common');
@@ -276,16 +312,22 @@ function Products() {
               </Text>
 
               <SectionTitle marginTop="0 !important">{t('products.search_as_you_want')}</SectionTitle>
-              <SectionText fontSize="16px">
+              <Text
+                fontFamily="Lato"
+                lineHeight="24px"
+                fontSize="16px"
+                fontWeight="400"
+                color="#252A32"
+              >
                 {t('products.search_description')}
-              </SectionText>
+              </Text>
 
-              <SectionLink
+              <Link
                 marginTop="24px !important"
                 href={"/search"}
               >
                 {t('products.start_search')}
-              </SectionLink>
+              </Link>
             </Stack>
 
             <Stack>
@@ -319,16 +361,22 @@ function Products() {
               </HStack>
               
               <SectionTitle marginTop="0 !important">{t('products.access_quality_data')}</SectionTitle>
-              <SectionText fontSize="16px">
+              <Text
+                fontFamily="Lato"
+                lineHeight="24px"
+                fontSize="16px"
+                fontWeight="400"
+                color="#252A32"
+              >
                 {t('products.processed_tables_description')}
-              </SectionText>
+              </Text>
 
-              <SectionLink
+              <Link
                 marginTop="24px !important"
                 href={"/search?contains=tables"}
               >
                 {t('products.view_available_data')}
-              </SectionLink>
+              </Link>
             </Stack>
 
             <Stack order={isMobileMod() ? 1 : 0}>
@@ -358,11 +406,17 @@ function Products() {
               </Text>
 
               <SectionTitle marginTop="0 !important">{t('products.explore_in_your_favorite_language')}</SectionTitle>
-              <SectionText fontSize="16px">
+              <Text
+                fontFamily="Lato"
+                lineHeight="24px"
+                fontSize="16px"
+                fontWeight="400"
+                color="#252A32"
+              >
                 {t('products.packages_description')}
-              </SectionText>
+              </Text>
 
-              <SectionLink
+              <Link
                 marginTop="24px !important"
                 href={
                   locale === "en" ? "https://basedosdados.github.io/sdk/en" :
@@ -371,7 +425,7 @@ function Products() {
                 }
               >
                 {t('products.learn_how_to_access')}
-              </SectionLink>
+              </Link>
             </Stack>
 
             <Stack

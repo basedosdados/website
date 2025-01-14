@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import cookies from "js-cookie";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Button from "../components/atoms/Button";
 import Link from "../components/atoms/Link";
 import { isMobileMod, useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../utils";
@@ -233,60 +234,30 @@ export default function SearchDatasetPage() {
         <HStack
           width="100%"
           marginTop="16px !important"
-          spacing={isMobileMod() ? 0 : "16px"}
+          spacing={{base: 0, lg: "16px"}}
           justifyContent="center"
-          alignItems={isMobileMod() && "center"}
-          flexDirection={isMobileMod() && "column"}
-          gridGap={isMobileMod() && "16px"}
+          alignItems={{base: "center", lg: "start"}}
+          flexDirection={{base: "column", lg: "row"}}
+          gridGap={{base: "16px", lg: "0"}}
         >
-          <Box
-            as="button"
+          <Button
             onClick={() => window.open("https://discord.gg/Ec7tfBaTVV", "_blank")}
-            display="flex"
-            alignItems="center"
-            height="40px"
-            width="fit-content"
-            borderRadius="8px"
-            backgroundColor="#2B8C4D"
-            padding="8px 16px"
-            cursor="pointer"
-            color="#FFF"
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="14px"
-            gap="8px"
-            lineHeight="20px"
-            _hover={{
-              backgroundColor: "#22703E"
-            }}
           >
             {t('suggestData')}
-          </Box>
+          </Button>
 
-          <Box
-            as="button"
+          <Button
             onClick={() => window.open("https://github.com/orgs/basedosdados/projects/17", "_blank")}
-            display="flex"
-            alignItems="center"
-            height="40px"
-            width="fit-content"
-            borderRadius="8px"
             backgroundColor="#FFF"
             border="1px solid #2B8C4D"
-            padding="8px 16px"
-            cursor="pointer"
             color="#2B8C4D"
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="14px"
-            gap="8px"
-            lineHeight="20px"
             _hover={{
-              color: "#22703E"
+              color: "#22703E",
+              backgroundColor: "#FFF"
             }}
           >
             {t('viewDataRoadmap')}
-          </Box>
+          </Button>
         </HStack>
       </Stack>
     )

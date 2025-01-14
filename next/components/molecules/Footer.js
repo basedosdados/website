@@ -6,7 +6,6 @@ import {
   Box
 } from "@chakra-ui/react";
 import Link from "../atoms/Link";
-import BodyText from "../atoms/BodyText"
 import { isMobileMod } from "../../hooks/useCheckMobile.hook"
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
@@ -20,6 +19,19 @@ import LinkedinIcon from "../../public/img/icons/linkedinIcon";
 import WhatsAppIcon from "../../public/img/icons/whatsAppIcon";
 import TelegramIcon from "../../public/img/icons/telegramIcon";
 import LanguageSelector from "../atoms/LanguageSelector";
+
+export const BodyText = ({ children, ...props }) => (
+  <Text
+    fontFamily="ubuntu"
+    fontWeight="300"
+    fontSize="18px"
+    lineHeight="28px"
+    color="#252A32"
+    {...props}
+  >
+    {children}
+  </Text>
+);
 
 function SectionCategories({ title, children, ...props }) {
   return (

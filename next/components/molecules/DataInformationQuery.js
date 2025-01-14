@@ -2,7 +2,6 @@ import {
   VStack,
   Tabs,
   TabList,
-  Tab,
   TabPanel,
   TabPanels,
   Text,
@@ -25,6 +24,7 @@ import 'highlight.js/styles/obsidian.css'
 import { useTranslation } from 'next-i18next';
 import { useRouter } from "next/router";
 
+import Button from "../atoms/Button";
 import GreenTab from "../atoms/GreenTab";
 import Toggle from "../atoms/Toggle";
 import TableColumns from "./TableColumns";
@@ -526,34 +526,15 @@ export default function DataInformationQuery({ resource }) {
               width="fit-content"
               isLoaded={!hasLoadingColumns}
             >
-              <Box
-                as="button"
+              <Button
                 onClick={() => {
                   if(checkedColumns.length === 0) return setInsufficientChecks(true)
                   triggerGAEvent("gerar_consulta_click", queryLanguage())
                   setHasLoadingResponse(true)
                 }}
-                display="flex"
-                alignItems="center"
-                height="40px"
-                width="fit-content"
-                borderRadius="8px"
-                backgroundColor="#2B8C4D"
-                padding="8px 16px"
-                cursor="pointer"
-                color="#FFF"
-                fill="#FFF"
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="14px"
-                gap="8px"
-                lineHeight="20px"
-                _hover={{
-                  backgroundColor:"#22703E"
-                }}
               >
                 {t('table.generateQuery')} <Spinner display={ isLoadingSpin ? "flex" : "none"} width="16px" height="16px"/>
-              </Box>
+              </Button>
             </Skeleton>
           </Box>
 
@@ -614,9 +595,7 @@ export default function DataInformationQuery({ resource }) {
                 />
               }
 
-              <Box
-                as="a"
-                target="_blank"
+              <Button
                 onClick={() => {
                   if(downloadWarning !== "free" && isUserPro() === false) return plansModal.onOpen()
                   window.open(`/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadPermitted)}&s=${btoa(downloadWarning)}`, "_blank")
@@ -627,32 +606,16 @@ export default function DataInformationQuery({ resource }) {
                     table: ${resource?._id},
                   }`)
                 }}
-                display="flex"
-                alignItems="center"
-                height="40px"
-                width="fit-content"
-                borderRadius="8px"
                 backgroundColor={downloadWarning !== "biggest1gb" ? "#2B8C4D" : "#ACAEB1"}
-                padding="8px 16px"
                 cursor={downloadWarning !== "biggest1gb" ? "pointer" : "default"}
-                color="#FFF"
-                fill="#FFF"
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="14px"
-                gap="8px"
-                lineHeight="20px"
                 pointerEvents={downloadWarning !== "biggest1gb" ? "default" : "none"}
-                _hover={{
-                  backgroundColor: "#22703E"
-                }}
               >
                 <DownloadIcon
                   width="16px"
                   height="16px"
                 />
                   {t('table.downloadTable')} {downloadWarning !== "biggest1gb" && `(${formatBytes(resource.uncompressedFileSize)})`}
-              </Box>
+              </Button>
             </Stack>
           </VStack>
 
