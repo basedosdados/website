@@ -27,14 +27,16 @@ export function SimpleTable({
             <Th
               key={`header-${index}`}
               role="row"
-              padding="8px 24px"
+              padding="14px 22px"
+              textTransform="none"
+              letterSpacing="inherit"
+              fontFamily="Roboto"
+              fontWeight="400"
               fontSize="14px"
-              color="#6F6F6F"
-              background="#F6F6F6"
-              fontWeight="500"
-              fontFamily="Ubuntu"
-              letterSpacing="0.4px"
-              textTransform="capitalize"
+              lineHeight="20px"
+              color="#252A32"
+              backgroundColor="#F7F7F7"
+              borderBottom="1px solid #DEDFE0 !important"
               boxSizing="content-box"
             >
               <div role="columnheader">
@@ -50,14 +52,17 @@ export function SimpleTable({
                 <Td
                   key={`cell-${rowIndex}-${cellIndex}`}
                   role="cell"
-                  padding="10px 24px"
+                  padding="14px 22px"
+                  fontFamily="Roboto"
+                  fontWeight="400"
                   fontSize="14px"
-                  fontFamily="Lato"
-                  letterSpacing="0.5px"
-                  color="#000000a8"
-                  _first={{
-                    color:"#252A32",
-                  }}
+                  lineHeight="20px"
+                  color="#464A51"
+                  backgroundColor="#FFF"
+                  borderColor="#DEDFE0"
+                  textTransform="none"
+                  letterSpacing="inherit"
+                  whiteSpace="break-spaces"
                   {...valuesTable}
                 >
                   {r}

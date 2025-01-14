@@ -13,8 +13,8 @@ export default function FourOFour({ children, ...props }) {
       {...props}
     >
       <FourOFourImage
-        widthImage="320px"
-        heightImage="320px"
+        widthImage="256px"
+        heightImage="256px"
       />
       {children}
     </Center>

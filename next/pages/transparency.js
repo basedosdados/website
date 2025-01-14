@@ -48,8 +48,8 @@ export default function Transparency({ pages }) {
     <Text
       fontFamily="Roboto"
       fontWeight="500"
-      fontSize="36px"
-      lineHeight="48px"
+      fontSize="50px"
+      lineHeight="60px"
       color="#2B8C4D"
       {...props}
     >
@@ -336,7 +336,7 @@ export default function Transparency({ pages }) {
           color="#0068C5"
           _hover={{color: "#0057A4"}}
           fontSize="16px"
-          fontWeight="500"
+          fontWeight="400"
           > {t('here')}</Link>.
         </Text>
       </SectionBox>
@@ -409,13 +409,14 @@ export default function Transparency({ pages }) {
         >
           <Stack
             paddingTop={{ base: "0px", lg: "16px" }}
-            maxWidth={{ base: "100%", lg: "42%" }}
+            maxWidth={{ base: "100%", lg: "580px" }}
             spacing={0}
           >
             <Text
               display={{base: "block", md:"flex"}}
               flexDirection="column"
               paddingBottom={{base: "20px", lg: "24px"}}
+              maxWidth={{ base: "100%", lg: "400px" }}
               fontFamily="Roboto"
               fontWeight="500"
               fontSize="28px"

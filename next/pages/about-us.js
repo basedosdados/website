@@ -356,11 +356,11 @@ export default function AboutUs() {
       cursor:"pointer",
       width:"35px",
       height:"35px",
-      fill:"#42B0FF",
+      fill:"#0068C5",
+      _hover:{fill: "#0057A4"},
       backgroundColor:"#FFF",
       padding:"6px",
       boxShadow:"1px 1px 0 0 #0000001a",
-      _hover:{opacity: "0.8"},
       onClick:() => {window.open(url)}
     }
   }
@@ -489,7 +489,7 @@ export default function AboutUs() {
                   fontSize="18px"
                   lineHeight="28px"
                   textAlign="center"
-                  color="#252A32"
+                  color="#464A51"
                 >
                   {t('usersText')}
                 </Text>
@@ -852,6 +852,9 @@ export default function AboutUs() {
                   <Text
                     key={i}
                     color={filterTeam === elm ? "#2B8C4D" :"#71757A"}
+                    _hover={{
+                      color: "#2B8C4D"
+                    }}
                     fontFamily="Roboto"
                     fontWeight="500"
                     fontSize="16px"

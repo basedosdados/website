@@ -132,7 +132,7 @@
         }
     },
     "error": {
-        "ops": "Ooops..",
+        "ops": "Ooops...",
         "notFoundPage": "Infelizmente não encontramos essa página.",
         "system": "Infelizmente ocorreu um erro.",
         "searchNewBases": "Navegue pelo menu ali em cima ou busque os dados que voce precisa na barra de pesquisa.",

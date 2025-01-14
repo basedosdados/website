@@ -276,7 +276,7 @@ export default function FAQ({ faqs }) {
         <Stack
           width="100%"
           position="relative"
-          gridGap={{base: "64px", lg: "160px"}}
+          gap={{base: "64px", lg: "160px"}}
           spacing={0}
           flexDirection={{base: "column", lg: "row"} }
           paddingBottom="32px"
@@ -285,7 +285,7 @@ export default function FAQ({ faqs }) {
             display="flex"
             height="100%"
             flexDirection="column"
-            gridGap="16px"
+            gap="16px"
             position={{base: "relative", lg: "sticky"}}
             top={{base: "0", lg: "120px"}}
           >
@@ -335,7 +335,7 @@ export default function FAQ({ faqs }) {
                 href="/contact"
                 color="#0068C5"
                 fontSize="16px"
-                fontWeight="500"
+                fontWeight="400"
                 lineHeight="24px"
                 _hover={{color: "#0057A4"}}
               >

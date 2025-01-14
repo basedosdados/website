@@ -976,7 +976,9 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         route === "/blog" ||
         route === "/transparency" ||
         route === "/faq" ||
-        route === "/about-us"
+        route === "/about-us" ||
+        route === "/terms" ||
+        route === "/services"
       ) return "1440px"
     return "1264px"
   }

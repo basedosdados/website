@@ -140,7 +140,7 @@ export default function Contact({ pages }) {
                 color="#0068C5"
                 _hover={{color: "#0057A4"}}
                 fontSize="16px"
-                fontWeight="500"
+                fontWeight="400"
               >
                 {t('servicesLink')}
               </Link> {t('servicesLinkText')}
@@ -167,7 +167,7 @@ export default function Contact({ pages }) {
                 color="#0068C5"
                 _hover={{color: "#0057A4"}}
                 fontSize="16px"
-                fontWeight="500"
+                fontWeight="400"
                 target="_blank"
               >
                 {t('discordLink')}<a style={{color:"#252A32", fontWeight:"500"}}>.</a>

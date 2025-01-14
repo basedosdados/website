@@ -14,8 +14,8 @@ export default function InternalError({ children, ...props }) {
       {...props}
     >
       <InternalErrorImage
-        widthImage="320px"
-        heightImage="320px"
+        widthImage="256px"
+        heightImage="256px"
       />
       {children}
     </Center>

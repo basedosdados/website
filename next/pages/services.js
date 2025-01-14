@@ -3,14 +3,17 @@ import {
   VStack,
   Image,
   Box,
-  Skeleton
+  Skeleton,
+  Text,
+  Grid,
+  GridItem
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import ImageNext from "next/image";
 import Head from "next/head";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { isMobileMod, useCheckMobile } from "../hooks/useCheckMobile.hook";
+import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
 import { MainPageTemplate } from "../components/templates/main";
 
@@ -18,12 +21,7 @@ import {
   getAllCaseStudies
 } from "./api/caseStudies"
 
-import Display from "../components/atoms/Display";
-import BodyText from "../components/atoms/BodyText";
 import Link from "../components/atoms/Link";
-import RoundedButton from "../components/atoms/RoundedButton";
-import SectionText from "../components/atoms/SectionText";
-import SectionTitle from "../components/atoms/SectionTitle";
 
 import BDLogoLabImage from "../public/img/logos/bd_logo_lab"
 import CheckIcon from "../public/img/icons/checkIcon";
@@ -41,49 +39,6 @@ export async function getStaticProps({ locale }) {
   };
 }
 
-function FixedBottomBar() {
-  const { t } = useTranslation('services');
-
-  return (
-    <Stack
-      position="fixed"
-      bottom="0px"
-      width="100%"
-      padding="10px 20px"
-      height={isMobileMod() ? "90px" : "70px"}
-      backgroundColor="#3AA1EB"
-      justify="center"
-      align="center"
-      spacing={10}
-      boxShadow="0px 2px 10px 2px rgba(0, 0, 0, 0.15)"
-      zIndex="100"
-      direction={{ base: "row", lg: "column" }}
-    >
-      <SectionText fontWeight="500" fontFamily="Ubuntu" color="white">
-        {t('fixedBottomBar.text')}
-      </SectionText>
-      <Link
-        position={{ base: "initial", lg: "fixed" }}
-        bottom="14px"
-        right="20%"
-        href="/contact"
-        textDecoration="none !important"
-      >
-        <RoundedButton
-          _hover={{
-            backgroundColor: "white",
-            color: "#3AA1EB",
-          }}
-          color="#3AA1EB"
-          backgroundColor="white"
-        >
-          {t('fixedBottomBar.buttonText')}
-        </RoundedButton>
-      </Link>
-    </Stack>
-  )
-}
-
 function Slogan () {
   const { t } = useTranslation('services');
 
@@ -93,32 +48,35 @@ function Slogan () {
       maxWidth="950px"
       paddingTop="80px"
       spacing={0}
-      margin={isMobileMod() ? "0 auto 60px" :"0 auto 100px"}
+      margin={{base: "0 auto 60px", lg: "0 auto 100px"}}
       alignItems="center"
     >
       <BDLogoLabImage
-        widthImage={isMobileMod() ? "120px" : "240px"}
-        heightImage={isMobileMod() ? "30px" : "60px"}
-        marginBottom={isMobileMod() ? "24px" : "40px"}
+        widthImage={{base: "120px", lg: "240px"}}
+        heightImage={{base: "30px", lg: "60px"}}
+        marginBottom={{base: "24px", lg: "40px"}}
       />
-      <Display
-        fontSize={isMobileMod() ? "34px" : "90px"}
-        letterSpacing={isMobileMod() ? "-0.4px" : "-2.25px"}
-        lineHeight={isMobileMod() ? "44px" : "108px"}
+      <Text
+        color="#252A32"
+        fontFamily="Roboto"
+        fontSize="60px"
+        lineHeight="70px"
+        fontWeight="500"
         textAlign="center"
         margin="0 0 24px !important"
       > 
         {t('slogan.title')}
-      </Display>
-      <BodyText
-        fontWeight="400"
-        fontSize={isMobileMod() ? "18px" : "28px"}
-        lineHeight={isMobileMod() ? "24px" : "44px"}
-        letterSpacing={isMobileMod() ? "0.1px" : "-0.1px"}
+      </Text>
+      <Text
+        color="#71757A"
+        fontFamily="Roboto"
+        fontSize="28px"
+        lineHeight="42px"
+        fontWeight="500"
         textAlign="center"
       >
         {t('slogan.description')}
-      </BodyText>
+      </Text>
       <Link
         href="/contact-consulting"
       >
@@ -134,11 +92,10 @@ function Slogan () {
           padding="10px 16px"
           cursor="pointer"
           color="#FFF"
-          fontFamily="Ubuntu"
-          fontWeight="700"
+          fontFamily="Roboto"
+          fontWeight="500"
           fontSize="20px"
-          lineHeight="23px"
-          letterSpacing="0.1px"
+          lineHeight="30px"
           marginTop="24px !important"
           _hover={{
             backgroundColor: "#0B89E2"
@@ -153,16 +110,41 @@ function Slogan () {
 
 function BoxBenefits ({ benefits, children }) {
   return (
-    <Stack flexDirection={benefits ? isMobileMod() ? "column" : "row" : "row"} spacing={0} gap="10px">
-      <Box display="flex" flexDirection="row" justifyContent="center">
+    <Stack
+      flexDirection={benefits ? {base: "column", lg: "row"} : "row"}
+      spacing={0}
+      alignItems="center"
+      gap="10px"
+    >
+      <Box
+        display="flex"
+        flexDirection="row"
+        justifyContent="center"
+        alignItems="center"
+      >
         <CheckIcon 
           width="28px"
           height="28px"
           fill="#2B8C4D"
         />
-        {benefits && <BodyText fontWeight="500">{benefits}:</BodyText>}
+        {benefits && 
+          <Text 
+            fontFamily="Roboto"
+            fontSize="18px"
+            lineHeight="26px"
+            fontWeight="500"
+            color="#464A51"
+          >
+            {benefits}:
+          </Text>}
       </Box>
-      <BodyText>{children}</BodyText>
+      <Text
+        fontFamily="Roboto"
+        fontSize="18px"
+        lineHeight="26px"
+        fontWeight="400"
+        color="#464A51"
+      >{children}</Text>
     </Stack>
   )
 }
@@ -175,13 +157,28 @@ function BorderBox({ title, children }) {
       padding="25px"
       boxShadow="0 2px 16px 0 rgba(100, 96, 103, 0.16)"
       width="350px"
-      height="230px"
+      height="100%"
       spacing={4}
     >
-      <SectionTitle fontSize="16px">{title}</SectionTitle>
-      <SectionText fontWeight="300" fontSize="14px" textAlign="center">
+      <Text
+        fontFamily="Roboto"
+        fontSize="18px"
+        lineHeight="28px"
+        fontWeight="500"
+        color="#252A32"
+      >
+        {title}
+      </Text>
+      <Text
+        fontFamily="Roboto"
+        fontSize="18px"
+        lineHeight="26px"
+        fontWeight="400"
+        color="#464A51"
+        textAlign="center"
+      >
         {children}
-      </SectionText>
+      </Text>
     </VStack>
   )
 }
@@ -196,20 +193,46 @@ function WorkflowBox({ order, title, subtitle, children}) {
       borderRadius="18px"
       padding="25px"
       boxShadow="0 2px 16px 0 rgba(100, 96, 103, 0.16)"
-      margin={
-        isMobileMod() ? "40px 0 0 0 !important" :
-        hasLeftSpacing ?
+      margin={{
+        base: "40px 0 0 0 !important",
+        lg: hasLeftSpacing ?
           "40px auto 0 250px !important"
         : 
           "40px 250px 0 auto !important"
-      }
+      }}
       spacing={0}
     >
-      <SectionTitle fontSize="20px" fontWeight="500" color="#2B8C4D">{title}</SectionTitle>
-      <SectionTitle fontSize="16px" fontWeight="500">{subtitle}</SectionTitle>
-      <SectionText fontWeight="300" fontSize="14px" textAlign="center">
+      <Text
+        fontFamily="Roboto"
+        color="#252A32"
+        fontSize="18px"
+        lineHeight="28px"
+        fontWeight="500"
+        textAlign="center"
+      >
+          {title}
+      </Text>
+      <Text
+        fontFamily="Roboto"
+        color="#71757A"
+        fontSize="18px"
+        lineHeight="28px"
+        fontWeight="500"
+        textAlign="center"
+        paddingBottom="16px"
+      >
+          {subtitle}
+      </Text>
+      <Text
+        fontFamily="Roboto"
+        color="#464A51"
+        fontSize="16px"
+        lineHeight="24px"
+        fontWeight="400"
+        textAlign="center"
+      >
         {children}
-      </SectionText>
+      </Text>
     </VStack>
   )
 }
@@ -227,35 +250,40 @@ function CaseStudies ({ data }) {
       display={CaseStudiesPages.length === 0 ? "none" : "flex"}
       id="case-studies"
       width="100%"
-      maxWidth="1264px"
+      maxWidth="1440px"
       paddingTop="100px"
       margin="0 auto !important"
       spacing={0}
     >
-      <Display
-        fontSize={useCheckMobile() ? "34px" : "60px"}
-        letterSpacing={useCheckMobile() ? "-0.4px" : "-1.5px"}
-        lineHeight={useCheckMobile() ? "44px" : "72px"}
+      <Text
+        fontFamily="Roboto"
+        color="#252A32"
+        fontSize="36px"
+        lineHeight="48px"
+        fontWeight="500"
         textAlign="center"
-        marginBottom={useCheckMobile() ? "8px" : "16px"}
+        paddingBottom="16px"
       >
         {t('caseStudies.title')}
-      </Display>
-      <SectionTitle
-        color="#575757"
+      </Text>
+      <Text
+        fontFamily="Roboto"
+        color="#71757A"
+        fontSize="24px"
+        lineHeight="36px"
+        fontWeight="500"
         textAlign="center"
-        marginBottom={useCheckMobile() ? "80px !important" : "112px !important"}
-        lineHeight={useCheckMobile() ? "32px" : "40px"}
+        paddingBottom="40px"
       >
         {t('caseStudies.subtitle')}
-      </SectionTitle>
+      </Text>
 
       <Stack
         flexWrap="wrap"
         flexDirection="row"
-        gridGap="32px"
+        gap="32px"
         spacing={0}
-        justifyContent={useCheckMobile() && "center"}
+        justifyContent={{base: "center", lg: "start"}}
       >
         {CaseStudiesPages.length > 0 && 
         CaseStudiesPages.map(elm => 
@@ -267,7 +295,7 @@ function CaseStudies ({ data }) {
             {/* Imagem banner */}
             <Box
               position="relative"
-              width={useCheckMobile() ? "100%" : "400px"}
+              width={{base: "100%", lg: "400px"}}
               height="145px"
               overflow="hidden"
               borderRadius="16px"
@@ -305,25 +333,29 @@ function CaseStudies ({ data }) {
               }
             </Box>
 
-            <BodyText
-              marginBottom="18px !important"
+            <Text
+              marginBottom="8px !important"
               minHeight="110px"
               maxHeight="110px"
               textAlign="justify"
               overflow="hidden"
+              fontFamily="Roboto"
+              color="#464A51"
+              fontSize="18px"
+              lineHeight="26px"
+              fontWeight="400"
             >
               {elm?.summary && elm?.summary.slice(0,useCheckMobile() ? 160 :178)+"..."}
-            </BodyText>
+            </Text>
 
             <Link
-              fontFamily="ubuntu"
-              fontWeight="500"
-              letterSpacing="0.1px"
-              fontSize="18px"
-              lineHeight="20px"
               target="_self"
               href={`/case-studies/${elm.id}`}
-              color="#42B0FF"
+              color="#0068C5"
+              _hover={{color: "#0057A4"}}
+              fontSize="18px"
+              lineHeight="26px"
+              fontWeight="400"
               marginBottom="40px !important"
             >
               {t('caseStudies.readMore')}
@@ -372,7 +404,7 @@ export default function Services({ caseStudiesContent }) {
         <Stack
           justifyContent="center"
           width="100%"
-          maxWidth="1264px"
+          maxWidth="1440px"
           margin="0 auto !important"
           alignItems="center"
           direction={{ base: "column", lg: "row" }}
@@ -382,9 +414,14 @@ export default function Services({ caseStudiesContent }) {
             <Link href={`#${service_ids[k]}`} key={v}>
               <VStack justify="flex-end">
                 <Image alt="" marginBottom="15px" height="100px" src={v} />
-                <SectionText fontSize="20px" fontWeight="bold">
+                <Text
+                  fontFamily="Roboto"
+                  fontSize="20px"
+                  lineHeight="30px"
+                  fontWeight="500"
+                >
                   {k}
-                </SectionText>
+                </Text>
               </VStack>
             </Link>
           ))}
@@ -395,25 +432,56 @@ export default function Services({ caseStudiesContent }) {
         <VStack
           id="data-capture"
           width="100%"
-          maxWidth="1264px"
+          maxWidth="1440px"
           padding="100px 0 40px"
           margin="auto"
           textAlign="center"
           spacing={0}
         >
-          <Display paddingBottom="24px" >
+          <Text
+            fontFamily="Roboto"
+            color="#252A32"
+            fontSize="50px"
+            lineHeight="60px"
+            fontWeight="500"
+            textAlign="center"
+            paddingBottom="8px"
+          >
             {t('dataCapture.title')}
-          </Display>
+          </Text>
 
-          <BodyText maxWidth="800px" paddingBottom="8px" fontWeight="500" marginTop="0">
+          <Text
+            paddingBottom="24px"
+            fontFamily="Roboto"
+            fontSize="24px"
+            lineHeight="32px"
+            fontWeight="500"
+            color="#252A32"
+          >
             {t('dataCapture.description')}
-          </BodyText>
-          <BodyText maxWidth="800px">
+          </Text>
+          <Text
+            maxWidth="800px"
+            fontFamily="Roboto"
+            fontSize="18px"
+            lineHeight="26px"
+            fontWeight="400"
+            color="#464A51"
+          >
             {t('dataCapture.longDescription')}
-          </BodyText>
+          </Text>
 
           <Stack paddingTop="40px">
-            <BodyText fontWeight="700">{t('dataCapture.advantages.title')}</BodyText>
+            <Text
+              fontFamily="Roboto"
+              fontSize="18px"
+              lineHeight="28px"
+              fontWeight="500"
+              color="#252A32"
+            >
+              {t('dataCapture.advantages.title')}
+            </Text>
+
             <BoxBenefits benefits={t('dataCapture.advantages.speed')}>
               {t('dataCapture.advantages.speedDescription')}
             </BoxBenefits>
@@ -426,7 +494,15 @@ export default function Services({ caseStudiesContent }) {
           </Stack>
 
           <Stack paddingTop="40px" spacing="40px">
-            <BodyText fontWeight="700">{t('dataCapture.work.title')}</BodyText>
+            <Text
+              fontFamily="Roboto"
+              fontSize="18px"
+              lineHeight="28px"
+              fontWeight="500"
+              color="#252A32"
+            >
+              {t('dataCapture.work.title')}
+            </Text>
 
             <Stack
               justifyContent="space-between"
@@ -434,15 +510,23 @@ export default function Services({ caseStudiesContent }) {
               direction={{ base: "column", lg: "row" }}
               align="center"
             >
-              <BorderBox title={t('dataCapture.work.technology.title')}>
-                {t('dataCapture.work.technology.description')}
-              </BorderBox>
-              <BorderBox title={t('dataCapture.work.flexibility.title')}>
-                {t('dataCapture.work.flexibility.description')}
-              </BorderBox>
-              <BorderBox title={t('dataCapture.work.frameworks.title')}>
-                {t('dataCapture.work.frameworks.description')}
-              </BorderBox>
+              <Grid templateColumns={{base: "1fr", lg: "repeat(3, 1fr)"}} gap="8px">
+                <GridItem>
+                  <BorderBox title={t('dataCapture.work.technology.title')}>
+                    {t('dataCapture.work.technology.description')}
+                  </BorderBox>
+                </GridItem>
+                <GridItem>
+                  <BorderBox title={t('dataCapture.work.flexibility.title')}>
+                    {t('dataCapture.work.flexibility.description')}
+                  </BorderBox>
+                </GridItem>
+                <GridItem>
+                  <BorderBox title={t('dataCapture.work.frameworks.title')}>
+                    {t('dataCapture.work.frameworks.description')}
+                  </BorderBox>
+                </GridItem>
+              </Grid>
             </Stack>
           </Stack>
         </VStack>
@@ -450,25 +534,56 @@ export default function Services({ caseStudiesContent }) {
         <VStack
           id="analytics"
           width="100%"
-          maxWidth="1264px"
+          maxWidth="1440px"
           padding="100px 0 40px"
           margin="auto"
           textAlign="center"
           spacing={0}
         >
-          <Display paddingBottom="24px" >
+          <Text
+            fontFamily="Roboto"
+            color="#252A32"
+            fontSize="50px"
+            lineHeight="60px"
+            fontWeight="500"
+            textAlign="center"
+            paddingBottom="8px"
+          >
             {t('dataAnalysis.title')}
-          </Display>
+          </Text>
 
-          <BodyText maxWidth="900px" paddingBottom="8px" fontWeight="500" marginTop="0">
+          <Text
+            paddingBottom="24px"
+            fontFamily="Roboto"
+            fontSize="24px"
+            lineHeight="32px"
+            fontWeight="500"
+            color="#252A32"
+          >
             {t('dataAnalysis.description')}
-          </BodyText>
-          <BodyText maxWidth="800px">
+          </Text>
+          <Text
+            maxWidth="800px"
+            fontFamily="Roboto"
+            fontSize="18px"
+            lineHeight="26px"
+            fontWeight="400"
+            color="#464A51"
+          >
             {t('dataAnalysis.longDescription')}
-          </BodyText>
+          </Text>
 
           <Stack paddingTop="40px">
-            <BodyText fontWeight="700">{t('dataAnalysis.examples.title')}</BodyText>
+          <Text
+              fontFamily="Roboto"
+              fontSize="18px"
+              lineHeight="28px"
+              fontWeight="500"
+              color="#252A32"
+            >
+              {t('dataAnalysis.examples.title')}
+            </Text>
+
             <BoxBenefits>
               {t('dataAnalysis.examples.example1')}
             </BoxBenefits>
@@ -484,25 +599,56 @@ export default function Services({ caseStudiesContent }) {
         <VStack
           id="consulting"
           width="100%"
-          maxWidth="1264px"
+          maxWidth="1440px"
           padding="100px 0 40px"
           margin="auto"
           textAlign="center"
           spacing={0}
         >
-          <Display paddingBottom="24px" >
+          <Text
+            fontFamily="Roboto"
+            color="#252A32"
+            fontSize="50px"
+            lineHeight="60px"
+            fontWeight="500"
+            textAlign="center"
+            paddingBottom="8px"
+          >
             {t('dataConsulting.title')}
-          </Display>
+          </Text>
 
-          <BodyText maxWidth="900px" paddingBottom="8px" fontWeight="500" marginTop="0">
+          <Text
+            paddingBottom="24px"
+            fontFamily="Roboto"
+            fontSize="24px"
+            lineHeight="32px"
+            fontWeight="500"
+            color="#252A32"
+          >
             {t('dataConsulting.description')}
-          </BodyText>
-          <BodyText maxWidth="800px">
+          </Text>
+          <Text
+            maxWidth="800px"
+            fontFamily="Roboto"
+            fontSize="18px"
+            lineHeight="26px"
+            fontWeight="400"
+            color="#464A51"
+          >
             {t('dataConsulting.longDescription')}
-          </BodyText>
+          </Text>
 
           <Stack paddingTop="40px">
-            <BodyText fontWeight="700">{t('dataConsulting.advantages.title')}</BodyText>
+            <Text
+              fontFamily="Roboto"
+              fontSize="18px"
+              lineHeight="28px"
+              fontWeight="500"
+              color="#252A32"
+            >
+              {t('dataConsulting.advantages.title')}
+            </Text>
+
             <BoxBenefits>
               {t('dataConsulting.advantages.advantage1')}
             </BoxBenefits>
@@ -515,7 +661,15 @@ export default function Services({ caseStudiesContent }) {
           </Stack>
 
           <Stack paddingTop="40px" spacing="40px">
-            <BodyText fontWeight="700">{t('dataConsulting.areas.title')}</BodyText>
+            <Text
+              fontFamily="Roboto"
+              fontSize="18px"
+              lineHeight="28px"
+              fontWeight="500"
+              color="#252A32"
+            >
+              {t('dataConsulting.areas.title')}
+            </Text>
 
             <Stack
               justifyContent="space-between"
@@ -523,35 +677,59 @@ export default function Services({ caseStudiesContent }) {
               direction={{ base: "column", lg: "row" }}
               align="center"
             >
-              <BorderBox title={t('dataConsulting.areas.infrastructure.title')}>
-                {t('dataConsulting.areas.infrastructure.description')}
-              </BorderBox>
-              <BorderBox title={t('dataConsulting.areas.analysis.title')}>
-                {t('dataConsulting.areas.analysis.description')}
-              </BorderBox>
-              <BorderBox title={t('dataConsulting.areas.programming.title')}>
-                {t('dataConsulting.areas.programming.description')}
-              </BorderBox>
+              <Grid templateColumns={{base: "1fr", lg: "repeat(3, 1fr)"}} gap="8px">
+                <GridItem>
+                  <BorderBox title={t('dataConsulting.areas.infrastructure.title')}>
+                    {t('dataConsulting.areas.infrastructure.description')}
+                  </BorderBox>
+                </GridItem>
+                <GridItem>
+                  <BorderBox title={t('dataConsulting.areas.analysis.title')}>
+                    {t('dataConsulting.areas.analysis.description')}
+                  </BorderBox>
+                </GridItem>
+                <GridItem>
+                  <BorderBox title={t('dataConsulting.areas.programming.title')}>
+                    {t('dataConsulting.areas.programming.description')}
+                  </BorderBox>
+                </GridItem>
+              </Grid>
             </Stack>
           </Stack>
         </VStack>
 
         <VStack
           width="100%"
-          maxWidth="1264px"
+          maxWidth="1440px"
           margin="auto"
           padding="100px 0 40px"
           textAlign="center"
           spacing={0}
         >
-          <Display paddingBottom="24px" >
+          <Text
+            fontFamily="Roboto"
+            color="#252A32"
+            fontSize="36px"
+            lineHeight="48px"
+            fontWeight="500"
+            textAlign="center"
+            paddingBottom="24px"
+          >
             {t('workflow.title')}
-          </Display>
-          <BodyText maxWidth="800px">
+          </Text>
+          <Text
+            maxWidth="800px"
+            fontFamily="Roboto"
+            color="#71757A"
+            fontSize="24px"
+            lineHeight="36px"
+            fontWeight="500"
+            textAlign="center"
+          >
             {t('workflow.description')}
-          </BodyText>
+          </Text>
 
-          <Stack spacing={0} width="100%">
+          <Stack spacing={0} width="100%" alignItems="center">
             <WorkflowBox order={1} title={t('workflow.steps.demand.title')} subtitle={t('workflow.steps.demand.subtitle')}>
               {t('workflow.steps.demand.description')}
             </WorkflowBox>
@@ -569,7 +747,7 @@ export default function Services({ caseStudiesContent }) {
             </WorkflowBox>
           </Stack>
         </VStack>
-        
+
         <Link
           href="/contact-consulting"
         >
@@ -585,11 +763,10 @@ export default function Services({ caseStudiesContent }) {
             padding="10px 16px"
             cursor="pointer"
             color="#FFF"
-            fontFamily="Ubuntu"
-            fontWeight="700"
+            fontFamily="Roboto"
+            fontWeight="500"
             fontSize="20px"
-            lineHeight="23px"
-            letterSpacing="0.1px"
+            lineHeight="30px"
             marginTop="24px !important"
             _hover={{
               backgroundColor: "#0B89E2"

@@ -81,13 +81,16 @@ export default function TermsAndPolicies() {
     
     return (
       <Text
-        fontSize="16px"
-        color={sectionSelected === section ? "#2B8C4D" :"#6F6F6F"}
-        fontFamily="ubuntu"
-        fontWeight="500"
-        width="max-content"
         cursor="pointer"
-        letterSpacing="0.2px"
+        color={sectionSelected === section ? "#2B8C4D" :"#71757A"}
+        _hover={{
+          color: "#2B8C4D"
+        }}
+        width="max-content"
+        fontFamily="Roboto"
+        fontWeight="500"
+        fontSize="16px"
+        lineHeight="24px"
         onClick={() => handlerClick(section)}
       >
         {t(section)}
@@ -108,32 +111,36 @@ export default function TermsAndPolicies() {
 
       <VStack
         width="100%"
-        maxWidth="1264px"
+        maxWidth="1440px"
         margin="50px auto 0"
         spacing={0}
       >
-        <Display
-          paddingBottom={isMobileMod() ? "56px" : "66px" }
+        <Text
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="36px"
+          lineHeight="48px"
           color="#2B8C4D"
+          paddingBottom={{base: "56px", lg: "66px" }}
         >
           {t('mainTitle')}
-        </Display>
+        </Text>
 
         <Stack
           width="100%"
           position="relative"
-          gridGap={isMobileMod() ? "64px" : "120px"}
+          gridGap="120px"
           spacing={0}
-          flexDirection={isMobileMod() ? "column" :"row"} 
+          flexDirection={{base: "column", lg:"row"} }
           paddingBottom="32px"
         >
           <Box
             display="flex"
             height="100%"
             flexDirection="column"
-            gridGap="16px"
-            position={isMobileMod() ? "relative" : "sticky"}
-            top={isMobileMod()? "0" : "120px"}
+            gap="16px"
+            position={{base: "relative", lg: "sticky"}}
+            top={{base: "0", lg: "120px"}}
           >
             <SectionText section="Terms Of Service"/>
             <SectionText section="Privacy Policy"/>
@@ -151,10 +158,10 @@ export default function TermsAndPolicies() {
               alignItems="flex-start"
             >
               <Text
-                fontFamily="Ubuntu"
+                fontFamily="Roboto"
                 fontSize="24px"
-                lineHeight="40px"
-                fontWeight="400"
+                lineHeight="36px"
+                fontWeight="500"
                 color="#252A32"
               >{t('termsOfService')}</Text>
               <TermsOfService/>
@@ -168,10 +175,10 @@ export default function TermsAndPolicies() {
               alignItems="flex-start"
             >
               <Text
-                fontFamily="Ubuntu"
+                fontFamily="Roboto"
                 fontSize="24px"
-                lineHeight="40px"
-                fontWeight="400"
+                lineHeight="36px"
+                fontWeight="500"
                 color="#252A32"
               >{t('privacyPolicy')}</Text>
               <PrivacyPolicy/>
