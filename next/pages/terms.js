@@ -7,8 +7,7 @@ import {
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { isMobileMod, useCheckMobile } from "../hooks/useCheckMobile.hook";
-import Display from "../components/atoms/Display";
+import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { MainPageTemplate } from "../components/templates/main";
 import TermsOfService from "../content/termsOfService";
 import PrivacyPolicy from "../content/privacyPolicy";

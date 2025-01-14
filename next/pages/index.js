@@ -312,7 +312,7 @@ function Products() {
 
               <SectionTitle marginTop="0 !important">{t('products.search_as_you_want')}</SectionTitle>
               <Text
-                fontFamily="Lato"
+                fontFamily="Roboto"
                 lineHeight="24px"
                 fontSize="16px"
                 fontWeight="400"
@@ -361,7 +361,7 @@ function Products() {
               
               <SectionTitle marginTop="0 !important">{t('products.access_quality_data')}</SectionTitle>
               <Text
-                fontFamily="Lato"
+                fontFamily="Roboto"
                 lineHeight="24px"
                 fontSize="16px"
                 fontWeight="400"
@@ -406,7 +406,7 @@ function Products() {
 
               <SectionTitle marginTop="0 !important">{t('products.explore_in_your_favorite_language')}</SectionTitle>
               <Text
-                fontFamily="Lato"
+                fontFamily="Roboto"
                 lineHeight="24px"
                 fontSize="16px"
                 fontWeight="400"

@@ -22,7 +22,7 @@ export default function Accesses ({ userInfo }) {
           label={t('username.onlyAvailableInBDEnterprises')}
           fontSize="14px"
           fontWeight="400"
-          fontFamily="Lato"
+          fontFamily="Roboto"
           padding="5px 16px 6px"
           letterSpacing="0.5px"
           lineHeight="24px"
