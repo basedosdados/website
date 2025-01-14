@@ -7,7 +7,6 @@ import {
   Grid,
   GridItem,
   useClipboard,
-  Text,
   Image as ChakraImage,
 } from "@chakra-ui/react";
 import { useState } from "react";
@@ -19,7 +18,7 @@ import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { ControlledInput } from "../components/atoms/ControlledInput";
 import Link from "../components/atoms/Link";
 import { ShadowBox } from "../components/atoms/ShadowBox";
-import RoundedButton from "../components/atoms/RoundedButton";
+import Button from "../components/atoms/Button";
 import { DatasetCardTag } from "../components/atoms/DatasetCardTag";
 import ThemeCatalog from "../components/molecules/ThemeCatalog";
 import { BePartner } from "../components/organisms/BePartner";
@@ -583,9 +582,9 @@ function Support() {
                   target="_blank"
                   href="https://apoia.se/support/basedosdados/new/15"
                 >
-                  <RoundedButton backgroundColor="#FF8484" width="200px">
+                  <Button backgroundColor="#FF8484" width="200px">
                     R$ <p style={{fontSize:"24px", margin:"0 5px"}}>15</p>/ {t('support.month')}
-                  </RoundedButton>
+                  </Button>
                 </Link>
               </ShadowBox>
 
@@ -625,12 +624,12 @@ function Support() {
                   target="_blank"
                   href="https://apoia.se/support/basedosdados/new/30"
                 >
-                  <RoundedButton
+                  <Button
                     backgroundColor="#FF8484"
                     width="200px"
                   >
                     R$ <p style={{fontSize:"24px", margin:"0 5px"}}>30</p>/ {t('support.month')}
-                  </RoundedButton>
+                  </Button>
                 </Link>
               </ShadowBox>
               
@@ -662,9 +661,9 @@ function Support() {
                   target="_blank"
                   href="https://apoia.se/support/basedosdados/new/50"
                 >
-                  <RoundedButton backgroundColor="#FF8484" width="200px">
+                  <Button backgroundColor="#FF8484" width="200px">
                     R$ <p style={{fontSize:"24px", margin:"0 5px"}}>50</p>/ {t('support.month')}
-                  </RoundedButton>
+                  </Button>
                 </Link>
               </ShadowBox>
             </Stack>
@@ -715,7 +714,7 @@ function Support() {
                     boxShadow="0 1.6px 16px rgba(100, 96, 103, 0.16)"
                     src="https://storage.googleapis.com/basedosdados-website/images/bd_qrcode.png"
                   />
-                  <RoundedButton 
+                  <Button 
                     fontSize="15px"
                     fontWeight="700"
                     backgroundColor="#FF8484"
@@ -728,7 +727,7 @@ function Support() {
                   >
                     <CopySolidIcon alt="copiar chave PIX" width="22px" height="22px" fill="#FFF"/>
                       {hasCopied ? t('support.pix_key_copied') : t('support.copy_pix_key')}
-                  </RoundedButton>
+                  </Button>
                 </GridItem>
 
                 <GridItem display={isMobile && "none"}>
@@ -822,14 +821,14 @@ function BDEdu () {
       >
         {t('edu.with_our_course_you_can_go_further')}
       </BodyText>
-      <RoundedButton
+      <Button
         margin="0 !important"
         backgroundColor="#8262D1"
       >
         <a href={`https://info.basedosdados.org/bd-edu-sql`} target="_blank">
           {t('edu.take_advantage_of_the_promotional_price')}
         </a>
-      </RoundedButton>
+      </Button>
     </Stack>
   )
 }

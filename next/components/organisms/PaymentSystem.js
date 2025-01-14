@@ -12,7 +12,7 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import Button from "../atoms/RoundedButton";
+import Button from "../atoms/Button";
 import styles from "../../styles/paymentSystem.module.css";
 import { useTranslation } from 'next-i18next';
 
@@ -66,18 +66,12 @@ const PaymentForm = ({ onSucess, onErro, clientSecret}) => {
         <PaymentElement className={styles.payment}/>
 
         <Button
+          width="100%"
+          height="44px"
+          justifyContent="center"
           type="submit"
-          fontSize="14px"
-          lineHeight="20px"
-          fontFamily="Roboto"
-          fontWeight="500"
-          borderRadius="8px"
+          onClick={() => {}}
           pointerEvents={isLoading ? "none" : "default"}
-          color="#FFFFFF"
-          backgroundColor="#2B8C4D"
-          _hover={{
-            backgroundColor: "#22703E"
-          }}
         >
           {isLoading ? <Spinner /> : t('username.confirmPayment')}
         </Button>

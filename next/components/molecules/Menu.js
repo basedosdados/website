@@ -29,7 +29,7 @@ import MenuDropdown from "./MenuDropdown";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
-import RoundedButton from "../atoms/RoundedButton";
+import Button from "../atoms/Button";
 import HelpWidget from "../atoms/HelpWidget";
 import { triggerGAEvent } from "../../utils";
 import DomainComponent from "../atoms/DomainComponent";
@@ -81,18 +81,17 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
           {Object.entries(links).map(([key, elm]) => {
             if(key === "Button") {
               return elm.map(b => 
-                <RoundedButton
+                <Button
                   key={b.name}
                   backgroundColor={b.color}
                   minWidth="100px"
                   height="38px"
-                  fontFamily="Roboto"
                   fontSize="20px"
-                  borderRadius="30px"
+                  lineHeight="26px"
                   onClick={() => router.push(b.href)}
                 >
                   {b.name}
-                </RoundedButton>
+                </Button>
               )
             }
             if (typeof elm === "object") {
@@ -762,19 +761,15 @@ function DesktopLinks({
           if (k === "Button") {
             return v.map((b, j) => (
               <a key={`button-${j}`} href={b.href} target="_blank">
-                <RoundedButton
+                <Button
+                  onClick={() => {}}
                   backgroundColor={b.color}
                   minWidth="80px"
                   height="35px"
-                  fontSize="14px"
-                  fontFamily="Roboto"
-                  letterSpacing="0.1px"
                   fontWeight="400"
-                  lineHeight="20px"
-                  borderRadius="30px"
                 >
                   {b.name}
-                </RoundedButton>
+                </Button>
               </a>
             ))
           }

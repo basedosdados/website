@@ -14,6 +14,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import cookies from 'js-cookie';
 import { useTranslation } from "react-i18next";
+import { isMobileMod } from "../../../hooks/useCheckMobile.hook";
 import { ControlledInputSimple } from "../../atoms/ControlledInput";
 import Link from "../../atoms/Link";
 import Toggle from "../../atoms/Toggle";
@@ -455,7 +456,7 @@ export default function PlansAndPayment ({ userData }) {
           maxWidth:"1008px",
           margin: "24px"
         }}
-        isCentered={false}
+        isCentered={isMobileMod() ? false : true}
       >
         <Stack spacing={0} marginBottom="40px">
           <Text
@@ -795,7 +796,7 @@ export default function PlansAndPayment ({ userData }) {
           maxWidth:"1008px",
           margin: "24px",
         }}
-        isCentered={false}
+        isCentered={isMobileMod() ? false : true}
       >
         <Stack spacing={0}>
           <Text
@@ -1118,7 +1119,7 @@ export default function PlansAndPayment ({ userData }) {
           padding: "32px 22px 26px 22px",
           borderRadius: {base: "0", lg: "20px"},
         }}
-        isCentered={false}
+        isCentered={isMobileMod() ? false : true}
       >
         <Stack spacing={0} marginBottom="40px">
           <Text

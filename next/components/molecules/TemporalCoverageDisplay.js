@@ -9,11 +9,11 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import cookies from "js-cookie";
+import { useTranslation } from 'next-i18next';
 import { SectionPrice } from "../../pages/prices";
 import { ModalGeneral } from "./uiUserPage";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
-import { useTranslation } from 'next-i18next';
 
 export function TemporalCoverageBar ({ value }) {
   const { t } = useTranslation(['dataset', 'prices']);
