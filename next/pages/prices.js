@@ -375,7 +375,9 @@ export const CardPriceEnterprise = ({
               lineHeight="46px"
               fontFamily="Roboto"
               textAlign="center"
-            >Preço customizado</Text>
+            >
+              {t('plans.enterprise.customPrice')}
+            </Text>
           </Box>
 
           <Text
