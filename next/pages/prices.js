@@ -358,33 +358,24 @@ export const CardPriceEnterprise = ({
           display="flex"
           flexDirection="column"
           alignItems="center"
-          marginBottom="40px"
+          marginBottom="20px"
         >
           <Box
             display="flex"
             flexDirection="row"
-            height="60px"
+            height="80px"
             alignItems="center"
           >
             <Text
               color="#252A32"
-              fontSize="50px"
+              fontSize="36px"
               fontWeight="500"
-              lineHeight="60px"
-              fontFamily="Roboto"
-              textAlign="center"
-            >{price}</Text>
-            <Text
               position="relative"
-              top="16px"
-              right="-4px"
-              color="#252A32"
-              fontSize="18px"
-              fontWeight="500"
-              lineHeight="28px"
+              top="-8px"
+              lineHeight="46px"
               fontFamily="Roboto"
               textAlign="center"
-            ></Text>
+            >Preço customizado</Text>
           </Box>
 
           <Text

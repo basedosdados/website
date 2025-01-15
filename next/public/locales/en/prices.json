@@ -45,10 +45,9 @@
         "customPrice": "Custom price",
         "features": [
           "Access for multiple accounts",
+          "Priority support",
           "Data scraping on demand",
-          "Access to enriched data via APIs",
-          "Data lake integrations",
-          "Priority support"
+          "Data lake integrations"
         ],
         "contactUs": "Contact us"
       }

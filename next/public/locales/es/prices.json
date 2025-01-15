@@ -45,10 +45,9 @@
         "customPrice": "Precio personalizado",
         "features": [
           "Acceso para múltiplas cuentas",
+          "Soporte prioritario",
           "Raspado de datos a demanda",
-          "Acceso a datos enriquecidos a través de APIs",
-          "Integraciones de data lakes",
-          "Soporte prioritario"
+          "Integraciones de data lakes"
         ],
         "contactUs": "Contactar"
       }
