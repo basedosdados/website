@@ -19,6 +19,7 @@ import { ControlledInputSimple } from "../../atoms/ControlledInput";
 import Link from "../../atoms/Link";
 import Toggle from "../../atoms/Toggle";
 import { CardPrice } from "../../../pages/prices";
+import { CardPriceEnterprise } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
 import { triggerGAEvent } from "../../../utils";
 
@@ -37,7 +38,7 @@ import ErrIcon from "../../../public/img/icons/errIcon";
 import stylesPS from "../../../styles/paymentSystem.module.css";
 
 export default function PlansAndPayment ({ userData }) {
-  const { t } = useTranslation('user');
+  const { t } = useTranslation(['user', 'prices']);
   const router = useRouter()
   const { query } = router
   const [plan, setPlan] = useState("")
@@ -142,7 +143,7 @@ export default function PlansAndPayment ({ userData }) {
 
   const resources = {
     "BD Gratis" : {
-      title: t('username.DBFree'),
+      title: t('prices:plans.free.title'),
       buttons: [{
         text: t('username.comparePlans'),
         onClick: () => {
@@ -150,18 +151,13 @@ export default function PlansAndPayment ({ userData }) {
           setToggleAnual(true)
         }}
       ],
-      resources : [
-        {name: t('username.processedTables')},
-        {name: t('username.integratedData'), tooltip: t('username.integratedDataTooltip')},
-        {name: t('username.updatedLowFrequencyData')},
-        {name: t('username.cloudAccess')},
-        {name: t('username.sqlPythonRAccess')},
-        {name: t('username.biIntegration')},
-        planActive ? "" : {name: t('username.downloadLimit100MB'), tooltip: t('username.downloadLimit100MBTooltip')},
-      ]
+      resources: t('prices:plans.free.features', { returnObjects: true }).map((feature, index) => ({
+        name: feature,
+        tooltip: index === 1 ? t('prices:tooltips.integratedData') : (index === 6 ? t('prices:tooltips.downloadLimit') : null)
+      }))
     },
     "bd_pro" : {
-      title: t('username.DBPro'),
+      title: t('prices:plans.pro.title'),
       buttons : [{
         text: t('username.cancelPlan'),
         onClick: () => CancelModalPlan.onOpen(),
@@ -178,14 +174,13 @@ export default function PlansAndPayment ({ userData }) {
           }
         }
       }],
-      resources : [
-        {name: t('username.dozensOfHighFrequencyDatasets')},
-        {name: t('username.companyReferenceTable')},
-        {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')},
-      ]
+      resources: t('prices:plans.pro.features', { returnObjects: true }).map((feature, index) => ({
+        name: feature,
+        tooltip: index === 2 ? t('prices:tooltips.downloadLimitPro') : null
+      }))
     },
     "bd_pro_empresas" : {
-      title: t('username.DBEnterprise'),
+      title: t('prices:plans.enterprise.title'),
       buttons : [{
         text: t('username.cancelPlan'),
         onClick: () => CancelModalPlan.onOpen(),
@@ -202,10 +197,8 @@ export default function PlansAndPayment ({ userData }) {
           }
         }
       }],
-      resources : [
-        {name: t('username.accessFor10Accounts')},
-        {name: t('username.prioritySupport')}
-      ]}
+      resources: t('prices:plans.enterprise.features', { returnObjects: true }).map(feature => ({ name: feature }))
+    }
   }
 
   const defaultResource = resources["BD Gratis"]
@@ -1201,38 +1194,33 @@ export default function PlansAndPayment ({ userData }) {
             spacing={0}
           >
             <CardPrice
-              title={t('username.DBFree')}
-              subTitle={<>{t('username.DBFreeSubtitle')}</>}
+              title={t('prices:plans.free.title')}
+              subTitle={<>{t('prices:plans.free.subtitle')}</>}
               price={"0"}
-              textResource={t('username.resources')}
-              resources={[
-                {name: t('username.processedTables')},
-                {name: t('username.integratedData'), tooltip: t('username.integratedDataTooltip')},
-                {name: t('username.cloudAccess')},
-                {name: t('username.sqlPythonRAccess')},
-                {name: t('username.biIntegration')},
-                {name: t('username.downloadLimit100MB'), tooltip: t('username.downloadLimit100MBTooltip')},
-              ]}
+              textResource={t('prices:features')}
+              resources={t('prices:plans.free.features', { returnObjects: true }).map((feature, index) => ({
+                name: feature,
+                tooltip: index === 1 ? t('prices:tooltips.integratedData') : (index === 6 ? t('prices:tooltips.downloadLimit') : null)
+              }))}
               button={{
-                text: t('username.exploreFeatures'),
+                text: t('prices:exploreFeatures'),
                 href: "/search",
                 noHasModal: true,
               }}
             />
 
             <CardPrice
-              title={t('username.DBPro')}
-              subTitle={<>{t('username.DBProSubtitle')}</>}
+              title={t('prices:plans.pro.title')}
+              subTitle={<>{t('prices:plans.pro.subtitle')}</>}
               price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 444}
               anualPlan={toggleAnual}
-              textResource={t('username.allDBFreeResources')}
-              resources={[
-                {name: t('username.dozensOfHighFrequencyDatasets')},
-                {name: t('username.companyReferenceTable')},
-                {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')}
-              ]}
+              textResource={t('prices:allFeaturesPlus', { plan: t('prices:plans.free.title') })}
+              resources={t('prices:plans.pro.features', { returnObjects: true }).map((feature, index) => ({
+                name: feature,
+                tooltip: index === 2 ? t('prices:tooltips.downloadLimitPro') : null
+              }))}
               button={{
-                text: `${subscriptionInfo?.stripeSubscription === "bd_pro" ? t('username.currentPlan') : hasSubscribed ? t('username.subscribe') : t('username.startFreeTrial')}`,
+                text: `${subscriptionInfo?.stripeSubscription === "bd_pro" ? t('currentPlan') : hasSubscribed ? t('subscribe') : t('startFreeTrial')}`,
                 onClick: subscriptionInfo?.stripeSubscription === "bd_pro" ? () => {} : () => {
                   setPlan(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id)
                   PlansModal.onClose()
@@ -1242,24 +1230,17 @@ export default function PlansAndPayment ({ userData }) {
               }}
             />
 
-            <CardPrice
-              title={t('username.DBEnterprise')}
-              subTitle={<>{t('username.DBEnterpriseSubtitle')}</>}
-              price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3360}
-              anualPlan={toggleAnual}
-              textResource={t('username.allDBProResources')}
-              resources={[
-                {name: t('username.accessFor10Accounts')},
-                {name: t('username.prioritySupport')}
-              ]}
+            <CardPriceEnterprise
+              title={t('prices:plans.enterprise.title')}
+              subTitle={<>{t('prices:plans.enterprise.subtitle')}</>}
+              price=""
+              textResource={t('prices:allFeaturesPlus', { plan: t('prices:plans.pro.title') })}
+              resources={t('prices:plans.enterprise.features', { returnObjects: true }).map((feature, index) => ({
+                name: feature,
+              }))}
               button={{
-                text: `${subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? t('username.currentPlan') : hasSubscribed ? t('username.subscribe') : t('username.startFreeTrial')}`,
-                onClick: subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? () => {} : () => {
-                  setPlan(plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id)
-                  PlansModal.onClose()
-                  EmailModal.onOpen()
-                },
-                isCurrentPlan: subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? true : false,
+                text: t('prices:plans.enterprise.contactUs'),
+                href: "/contact-services",
               }}
             />
           </Stack>

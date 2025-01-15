@@ -78,7 +78,7 @@ function Slogan () {
         {t('slogan.description')}
       </Text>
       <Link
-        href="/contact-consulting"
+        href="/contact-services"
       >
         <Box
           as="p"
@@ -749,7 +749,7 @@ export default function Services({ caseStudiesContent }) {
         </VStack>
 
         <Link
-          href="/contact-consulting"
+          href="/contact-services"
         >
           <Box
             as="p"

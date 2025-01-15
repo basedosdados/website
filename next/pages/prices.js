@@ -294,6 +294,264 @@ export const CardPrice = ({
   )
 }
 
+export const CardPriceEnterprise = ({
+  title,
+  subTitle,
+  price,
+  anualPlan = false,
+  textResource,
+  resources = [],
+  button,
+  locale,
+}) => {
+  const { t } = useTranslation('prices');
+
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      position="relative"
+      width={isMobileMod() ? "100%" : "272px"}
+      boxSizing={isMobileMod() ? "inherit" : "content-box"}
+      borderRadius="16px"
+      boxShadow="0 2px 16px 0 rgba(100, 96, 103, 0.16)"
+      padding="40px 24px"
+      textAlign="center"
+    >
+      <Box
+        height="fit-content"
+      >
+        <Box
+          display="flex"
+          flexDirection="row"
+          gap="8px"
+          justifyContent="center"
+          alignItems="center"
+          marginBottom="8px"
+        >
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="28px"
+            lineHeight="42px"
+            textAlign="center"
+            color="#252A32"
+          >
+            {title}
+          </Text>
+        </Box>
+
+        <Text
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="18px"
+          lineHeight="28px"
+          textAlign="center"
+          color="#71757A"
+          marginBottom="24px"
+        >
+          {subTitle}
+        </Text>
+
+        <Box
+          justifyContent="center"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          marginBottom="20px"
+        >
+          <Box
+            display="flex"
+            flexDirection="row"
+            height="80px"
+            alignItems="center"
+          >
+            <Text
+              color="#252A32"
+              fontSize="36px"
+              fontWeight="500"
+              position="relative"
+              top="-8px"
+              lineHeight="46px"
+              fontFamily="Roboto"
+              textAlign="center"
+            >
+              {t('plans.enterprise.customPrice')}
+            </Text>
+          </Box>
+
+          <Text
+            height="24px"
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="16px"
+            lineHeight="24px"
+            color="#464A51"
+            marginTop="24px"
+            alignItems="center"
+          ></Text>
+        </Box>
+
+      </Box>
+
+      <Box
+        flex={1}
+        textAlign="start"
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-between"
+      >
+        <Box marginBottom="24px">
+          <Text
+            color="#71757A"
+            fontSize="16px"
+            fontWeight="400"
+            lineHeight="24px"
+            fontFamily="Roboto"
+            alignItems="center"
+            marginBottom="16px"
+          >
+            {textResource}
+          </Text>
+
+          {resources.map((elm, i) => {
+            return (
+              <Box
+                key={i}
+                display="flex"
+                marginBottom="8px"
+                flexDirection="row"
+                alignItems="center"
+                gap="8px"
+                _last={{marginBottom:"0px !important"}}
+              >
+                <CheckIcon 
+                  width="24px"
+                  height="24px"
+                  fill="#2B8C4D"
+                />
+                <Text
+                  fontFamily="Roboto"
+                  fontSize="16px"
+                  lineHeight="24px"
+                  fontWeight="400"
+                  alignItems="center"
+                  color="#464A51"
+                >
+                  {elm.name}
+                </Text>
+                {elm.tooltip &&
+                  <Tooltip
+                    label={elm.tooltip}
+                    hasArrow
+                    placement="top"
+                    padding="16px"
+                    backgroundColor="#252A32"
+                    boxSizing="border-box"
+                    borderRadius="8px"
+                    fontFamily="Roboto"
+                    fontWeight="400"
+                    fontSize="14px"
+                    lineHeight="20px"
+                    textAlign="center"
+                    color="#FFFFFF"
+                    maxWidth="230px"
+                  >
+                    <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#878A8E"/>
+                  </Tooltip>
+                }
+              </Box>
+            )
+          })}
+        </Box>
+
+        <Box
+          display="flex"
+          flexDirection="column"
+          gap="16px"
+        >
+          {button.isCurrentPlan ? (
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              width="100%"
+              height="40px"
+              textAlign="center"
+              color="#7D7D7D"
+              cursor="default"
+              fontWeight="500"
+              lineHeight="30px"
+              fontFamily="Roboto"
+            >
+              {t('currentPlan')}
+            </Box>
+          ) : (
+            <Link
+              href={button.onClick ? '#' : button.href}
+              width="100%"
+              style={{ textDecoration: 'none' }}
+            >
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                width="100%"
+                borderRadius="8px"
+                backgroundColor="#0D99FC"
+                padding="12px 16px"
+                cursor="pointer"
+                color="#FFF"
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="20px"
+                lineHeight="36px"
+                onClick={button.onClick}
+                _hover={{
+                  backgroundColor: "#0B89E2"
+                }}
+              >
+                {t(button.text)}
+              </Box>
+            </Link>
+          )}
+
+          <Text 
+            display="flex"
+            flexDirection="row"
+            justifyContent="center"
+            textAlign="center"
+            color="#71757A"
+            fontWeight="400"
+            fontSize="16px"
+            lineHeight="24px"
+            fontFamily="Roboto"
+            height="24px"
+          >{t('readThe')}
+            <Link href="/terms?section=terms" locale={locale} passHref>
+              <Text
+                as="a"
+                cursor="pointer"
+                marginLeft="4px"
+                target="_blank"
+                alignItems="center"
+                color="#0D99FC"
+                _hover={{
+                  color: "#0B89E2"
+                }}
+              >
+                {t('termsOfService')}
+              </Text>
+            </Link>
+            .
+          </Text>
+
+        </Box>
+      </Box>
+    </Box>
+  )
+}
+
 export function SectionPrice() {
   const { t, ready } = useTranslation('prices');
   const { locale } = useRouter();
@@ -463,17 +721,15 @@ export function SectionPrice() {
           locale={locale}
         />
 
-        <CardPrice
+        <CardPriceEnterprise
           title={t('plans.enterprise.title')}
           subTitle={t('plans.enterprise.subtitle')}
-          price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3360}
-          anualPlan={toggleAnual}
+          price=""
           textResource={t('allFeaturesPlus', { plan: t('plans.pro.title') })}
           resources={t('plans.enterprise.features', { returnObjects: true }).map(feature => ({ name: feature }))}
           button={{
-            text: isBDEmp.isCurrentPlan && planIntervalPlan() ? t('currentPlan') : hasSubscribed ? t('subscribe') : t('startFreeTrial'),
-            href: username === null ? `/user/login?i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}`,
-            isCurrentPlan: isBDEmp.isCurrentPlan && planIntervalPlan(),
+            text: t('plans.enterprise.contactUs'),
+            href: "/contact-services",
           }}
           locale={locale}
         />
