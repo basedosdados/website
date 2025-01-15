@@ -20,63 +20,10 @@ export default function DatasetCard({
   tags = [],
   tables,
   rawDataSources,
-  informationRequests,
   link,
   locale,
 }) {
   const { t } = useTranslation('dataset');
-  const databaseInfo = []
-
-  if(tables.number > 0) {
-    databaseInfo.push(
-      <HStack
-        flexDirection="column"
-        alignItems="flex-start"
-        whiteSpace="nowrap"
-        fontFamily="Ubuntu"
-        fontSize="14px"
-        letterSpacing="0.3px"
-        spacing={2}
-      >
-        <Stack
-          margin="0 !important"
-          cursor={tables?.number > 0 ? "pointer" : "default"}
-          _hover={tables?.number === undefined || tables?.number > 0 ? {opacity : "0.7"} : undefined}
-        >
-          <Link
-            href={tables?.number > 0 ? `${link}?table=${tables?.id}` : ""}
-            target="_blank"
-            display="flex"
-            fontFamily="Ubuntu"
-            fontSize="14px"
-            letterSpacing="0.3px"
-            fontWeight="700"
-            color={tables?.number === undefined || tables?.number === 0 ? "#C4C4C4" : "#2B8C4D"}
-          >
-            {tables?.number === 1 ?
-              t('datasetCard.oneTable') :
-              t('datasetCard.multipleTables', { count: tables?.number || 0 })
-            }
-          </Link>
-        </Stack>
-      </HStack>
-    )
-  }
-
-  if (rawDataSources.number > 0) {
-    databaseInfo.push(
-      rawDataSources.number === 1 ?
-      t('datasetCard.oneRawDataSource') :
-      t('datasetCard.multipleRawDataSources', { count: rawDataSources.number })
-    )
-  }
-  if (informationRequests.number > 0) {
-    databaseInfo.push(
-      informationRequests.number === 1 ?
-      t('datasetCard.oneInformationRequest') :
-      t('datasetCard.multipleInformationRequests', { count: informationRequests.number })
-    )
-  }
 
   return (
     <Card
@@ -84,15 +31,20 @@ export default function DatasetCard({
         ...themes.slice(0,6).map((c,i) => (
           <Tooltip
             key={i}
-            hasArrow
-            bg="#2A2F38"
             label={c.name}
-            fontSize="16px"
-            fontWeight="500"
-            padding="5px 16px 6px"
-            marginTop="10px"
-            color="#FFF"
-            borderRadius="6px"
+            hasArrow
+            padding="16px"
+            backgroundColor="#252A32"
+            boxSizing="border-box"
+            borderRadius="8px"
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="14px"
+            lineHeight="20px"
+            textAlign="center"
+            color="#FFFFFF"
+            placement="top"
+            maxWidth="160px"
           >
             <Center
               width="30px"
@@ -122,13 +74,12 @@ export default function DatasetCard({
     >
       <Link href={link}>
         <Text
-          fontFamily="Ubuntu"
+          fontFamily="Roboto"
+          fontWeight="500"
           fontSize="16px"
-          fontWeight="700"
-          letterSpacing="0.3px"
+          lineHeight="24px"
           color="#252A32"
-          minHeight="40px"
-          lineHeight="20px"
+          minHeight="48px"
           textOverflow="ellipsis"
           marginBottom="10px"
           noOfLines={2}
@@ -139,13 +90,13 @@ export default function DatasetCard({
       <Link href={`/search?organization=${organizations?.[0]?.slug}`}>
         <Text
           noOfLines={2}
-          lineHeight="16px"
-          textOverflow="ellipsis"
-          letterSpacing="0.3px"
-          fontFamily="Ubuntu"
+          fontFamily="Roboto"
+          fontWeight="500"
           fontSize="12px"
-          fontWeight="400"
-          color="#6F6F6F"
+          lineHeight="18px"
+          letterSpacing="0.1px"
+          textOverflow="ellipsis"
+          color="#71757A"
         >
           {organizations?.[0]?.[`name${capitalize(locale)}`] || organizations?.[0]?.name || organizations?.[0]?.slug}
         </Text>
@@ -172,55 +123,86 @@ export default function DatasetCard({
           ))}
         </HStack>
 
-        <Text
-          as="div"
-          fontFamily="Ubuntu"
-          fontSize="12px"
-          fontWeight="400"
-          letterSpacing="0.3px"
-          color="#252A32"
-        >
-          {databaseInfo[0]}
-        </Text>
-
         <HStack
           spacing={0}
           justifyContent="space-between"
+          alignItems="center"
           width="100%"
-          gap="20px"
+          gap="4px"
         >
-          <Link
-            target="_blank"
-            href={rawDataSources.number > 0 ? `${link}?raw_data_source=${rawDataSources.id}` : ""}
-            pointerEvents={rawDataSources.number > 0 ? "default" : "none"}
-            fontFamily="Ubuntu"
-            fontSize="12px"
-            fontWeight="400"
-            letterSpacing="0.3px"
-            color={databaseInfo[1] ? "#252A32" : "#C4C4C4"}
-            cursor={databaseInfo[1] && "pointer"}
-            _hover={databaseInfo[1] && {opacity : "0.7"}}
+          <HStack
+            flexDirection="column"
+            alignItems="flex-start"
+            whiteSpace="nowrap"
+            spacing={2}
           >
-            {databaseInfo[1] ? databaseInfo[1] : t('datasetCard.noRawDataSources')}
-          </Link>
-          {databaseInfo[2] && (
-            <>
-              <Text color="#DEDFE0">•</Text>
+            <Stack
+              margin="0 !important"
+              cursor={tables?.number > 0 ? "pointer" : "default"}
+              pointerEvents={tables?.number > 0 ? "default" : "none"}
+            >
               <Link
+                href={tables?.number > 0 ? `${link}?table=${tables?.id}` : ""}
                 target="_blank"
-                href={`${link}?information_request=${informationRequests.id}`}
-                fontFamily="Ubuntu"
+                display="flex"
+                fontFamily="Roboto"
+                fontWeight="500"
                 fontSize="12px"
-                fontWeight="400"
-                letterSpacing="0.3px"
-                color="#252A32"
-                cursor="pointer"
-                _hover={{opacity: "0.7"}}
+                lineHeight="18px"
+                letterSpacing="0.1px"
+                color={tables?.number === undefined || tables?.number === 0 ? "#C4C4C4" : "#2B8C4D"}
+                _hover={{color: "#22703E"}}
               >
-                {databaseInfo[2]}
+                {
+                  tables?.number === 0 ?
+                    t('datasetCard.noRawDataSources')
+                  :
+                  tables?.number === 1 ?
+                    t('datasetCard.oneTable')
+                    :
+                    t('datasetCard.multipleTables', { count: tables?.number || 0 })
+                }
               </Link>
-            </>
-          )}
+            </Stack>
+          </HStack>
+
+          <Text color="#71757A">•</Text>
+
+          <HStack
+            flexDirection="column"
+            alignItems="flex-start"
+            whiteSpace="nowrap"
+            spacing={2}
+          >
+            <Stack
+              margin="0 !important"
+              cursor={rawDataSources?.number > 0 ? "pointer" : "default"}
+              pointerEvents={rawDataSources?.number > 0 ? "default" : "none"}
+            >
+              <Link
+                href={rawDataSources?.number > 0 ? `${link}?raw_data_source=${rawDataSources?.id}` : ""}
+                target="_blank"
+                display="flex"
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="12px"
+                lineHeight="18px"
+                letterSpacing="0.1px"
+                color={rawDataSources?.number === undefined || rawDataSources?.number === 0 ? "#C4C4C4" : "#2B8C4D"}
+                _hover={{color: "#22703E"}}
+              >
+                { 
+                  rawDataSources.number === 0 ?
+                    t('datasetCard.noRawDataSources')
+                    :
+                    rawDataSources.number === 1 ?
+                      t('datasetCard.oneRawDataSource')
+                      :
+                      t('datasetCard.multipleRawDataSources', { count: rawDataSources.number })
+                }
+              </Link>
+            </Stack>
+          </HStack>
         </HStack>
       </VStack>
     </Card>

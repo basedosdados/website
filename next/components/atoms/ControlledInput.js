@@ -14,11 +14,8 @@ export function ControlledInput({
   onEnterPress,
   rightIcon = null,
   rightAddon,
-  inputBackgroundColor = null,
   inputStyle,
-  isBorderColor = true,
   inputElementStyle,
-  autoComplete,
   ...props
 }) {
   async function checkForEnter(e) {
@@ -28,27 +25,37 @@ export function ControlledInput({
   }
 
   return (
-    <InputGroup flex="1" {...props}>
+    <InputGroup
+      width="100%"
+      alignSelf="center"
+      justifyContent="center"
+      {...props}
+    >
       <Input
-        onKeyDown={checkForEnter}
-        fontFamily="Lato"
-        variant="outline"
-        letterSpacing="0.5px"
-        fontWeight="300"
-        _placeholder={{ color: "#A3A3A3" }}
-        border="1px solid #DEDFE0 !important"
-        _focus={isBorderColor && { border:"2px solid #42B0FF !important" }}
-        _hover={isBorderColor && { border:"2px solid #42B0FF !important" }}
-        backgroundColor={inputBackgroundColor}
-        borderRadius="20px"
         value={value}
-        placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
-        autoComplete={autoComplete}
+        onKeyDown={checkForEnter}
+        variant="outline"
+        padding={{base: "24px 48px 24px 20px", lg: "24px 64px 24px 32px"}}
+        height={{base: "50px", lg: "80px"}}
+        backgroundColor="#FFFFFF"
+        borderRadius={{base: "18px", lg: "25px"}}
+        placeholder={placeholder}
+        _placeholder={{
+          color: "#717571"
+        }}
+        boxShadow="0 1px 8px 1px rgba(64, 60, 67, 0.16) !important"
+        border="0"
+        fontFamily="Roboto"
+        fontWeight="400"
+        fontSize={{base: "16px", lg: "20px"}}
+        lineHeight={{base: "24px", lg: "30px"}}
+        color="#252A32"
         {...inputStyle}
       />
       <InputRightElement
         height="100%"
+        width="fit-content"
         padding="8px"
         marginRight="5px"
         children={rightIcon}

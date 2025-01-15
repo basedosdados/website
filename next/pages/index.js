@@ -19,7 +19,6 @@ import { ControlledInput } from "../components/atoms/ControlledInput";
 import Link from "../components/atoms/Link";
 import { ShadowBox } from "../components/atoms/ShadowBox";
 import Button from "../components/atoms/Button";
-import { DatasetCardTag } from "../components/atoms/DatasetCardTag";
 import ThemeCatalog from "../components/molecules/ThemeCatalog";
 import { BePartner } from "../components/organisms/BePartner";
 import { MainPageTemplate } from "../components/templates/main";
@@ -99,12 +98,10 @@ export const SectionTitle = ({ children, ...props }) => (
   </Text>
 );
 
-
 function Hero({ dataThemeCatalog, locale }) {
   const { t } = useTranslation('common');
   const router = useRouter();
   const [search, setSearch] = useState("");
-  const [tags, setTags] = useState([])
   const [mediumQuery] = useMediaQuery("(max-width: 1366px)")
 
   function openSearchLink() {
@@ -117,7 +114,6 @@ function Hero({ dataThemeCatalog, locale }) {
     <VStack
       alignItems="center"
       width="100%"
-      padding="0px 10%"
       marginTop="50px"
       zIndex="10"
       position="relative"
@@ -125,7 +121,7 @@ function Hero({ dataThemeCatalog, locale }) {
       <VStack
         position="relative"
         width="100%"
-        maxWidth="1264px"
+        maxWidth="1440px"
         height="100%"
       >
         <VStack
@@ -140,28 +136,28 @@ function Hero({ dataThemeCatalog, locale }) {
             width="100%"
             marginStart="0px !important"
             direction="column"
-            marginTop={
-              isMobileMod() ? "64px" : 
-              mediumQuery ? "16px" : "80px"
-            }
+            marginTop={{
+              base: "64px",
+              lg: mediumQuery ? "16px" : "80px"
+            }}
           >
             {locale === 'en' ? (
               <DBLogoImage 
-                widthImage={isMobileMod() ? "160px" : "200px"}
-                heightImage={isMobileMod() ? "75px" : "94px"}
+                widthImage={{base: "160px", lg: "200px"}}
+                heightImage={{base: "75px", lg: "94px"}}
                 marginBottom="24px"
               />
             ) : (
               <BDLogoImage 
-                widthImage={isMobileMod() ? "160px" : "200px"}
-                heightImage={isMobileMod() ? "75px" : "94px"}
+                widthImage={{base: "160px", lg: "200px"}}
+                heightImage={{base: "75px", lg: "94px"}}
                 marginBottom="24px"
               />
             )}
             <VStack
               maxWidth="650px"
-              width={isMobileMod() ? "100vw" : "100%"}
-              paddingX={isMobileMod() && "24px"}
+              width={{base: "100vw", lg: "100%"}}
+              paddingX={{base: "24px", lg: "0"}}
               spacing={4}
               alignItems="flex-start"
               flex="3"
@@ -169,25 +165,11 @@ function Hero({ dataThemeCatalog, locale }) {
               <ControlledInput
                 value={search}
                 placeholder={isMobileMod() ? t('search_placeholder_mobile') : t('search_placeholder')}
-                width="100%"
                 onChange={setSearch}
                 onEnterPress={openSearchLink}
-                alignSelf="center"
-                justifyContent="center"
-                isBorderColor={false}
                 inputStyle={{
                   "aria-label": "Search",
                   id: "searchDatabases",
-                  fontFamily: "ubuntu",
-                  padding: isMobileMod() ? "24px 48px 24px 20px " : "24px 64px 24px 32px",
-                  height: isMobileMod() ? "50px" :"80px",
-                  borderRadius: isMobileMod() ? "18px" : "25px",
-                  backgroundColor: "#ffffff",
-                  fontSize: isMobileMod() ? "18px" : "22px",
-                  letterSpacing: isMobileMod()? "0.1px" : "0",
-                  border: "0px",
-                  boxShadow: "0 1px 8px 1px rgba(64, 60, 67, 0.16) !important",
-                  _placeholder:isMobileMod() ? {color:"#6F6F6F !important"} : {color: "#A3A3A3"}
                 }}
                 rightIcon={
                   (search ?
@@ -200,63 +182,48 @@ function Hero({ dataThemeCatalog, locale }) {
                     >
                       <ArrowIcon
                         alt=""
-                        width={isMobileMod() ? "18px" : "28px"}
-                        height={isMobileMod() ? "18px" : "28px"}
+                        width={{base: "18px", lg: "28px"}}
+                        height={{base: "18px", lg: "28px"}}
                         fill="#252A32"
-                        marginRight={isMobileMod() ? "10px" : "20px"}
+                        marginRight={{base: "10px", lg: "20px"}}
                         cursor="pointer"
                       />
                     </Link>
                     :
                     <SearchIcon
                       alt="pesquisar"
-                      width={isMobileMod() ? "18px" : "28px"}
-                      height={isMobileMod() ? "18px" : "28px"}
+                      width={{base: "18px", lg: "28px"}}
+                      height={{base: "18px", lg: "28px"}}
                       fill="#252A32"
-                      marginRight={isMobileMod() ? "10px" : "25px"}
+                      marginRight={{base: "10px", lg: "20px"}}
                     />
                   )
                 }
               />
-              <HStack display={tags.length === 0 ? "none" : "flex"} paddingLeft={isMobileMod() ? "20px" : "32px"}>
-                {!isMobileMod() &&
-                  <Text 
-                    fontFamily="Ubuntu"
-                    fontSize="13px"
-                    fontWeight="300"
-                    letterSpacing="0.4px"
-                    color="#575757"
-                  >
-                    {t('popular_terms')}
-                  </Text>
-                }
-                {tags.map((elm, i) => 
-                  <DatasetCardTag slug={elm} key={i} locale={locale}/>
-                )}
-              </HStack>
             </VStack>
           </VStack>
 
           <VStack
             margin="0 !important"
-            paddingTop={isMobileMod() ? "80px" : "120px"}
+            paddingTop={{base: "80px", lg: "153px"}}
             width="100%"
+            spacing="65px"
             position="relative"
             id="theme"
           >
             <Text
-              fontSize={isMobileMod() ? "16px" : "22px"}
-              letterSpacing={isMobileMod() ? "0.1px" : "0"}
-              fontFamily="Ubuntu"
-              fontWeight="300"
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="20px"
+              lineHeight="30px"
+              color="#71757A"
               minHeight="30px"
-              marginBottom={isMobileMod() ? "8px" : "24px"}
-              color="#575757"
               cursor="pointer"
               onClick={() => window.open("#theme", "_self")}
             >
               {t('search_by_theme')}
             </Text>
+
             <ThemeCatalog data={dataThemeCatalog} locale={locale}/>
           </VStack>
         </VStack>
@@ -271,26 +238,32 @@ function Products() {
   
   return (
     <VStack
-      width={{ base: "90%", lg: "85%" }}
-      maxWidth="1264px"
-      margin="0 auto 36px"
+      width="100%"
+      maxWidth="1440px"
+      padding="0 24px"
+      margin="0 auto"
     >
-      <VStack position="relative" width="95%">
-        <Display
-          fontSize={isMobileMod() ? "32px" : "38px"}
-          letterSpacing={isMobileMod() ? "0.2px" : "-0.2px"}
-          lineHeight={isMobileMod() ? "40px" : "64px"}
+      <VStack spacing={0} width="100%">
+        <Text
+          display={{base: "block", md:"flex"}}
+          flexDirection="column"
           position="relative"
           zIndex="1"
           width="100%"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="50px"
+          lineHeight="60px"
+          color="#252A32"
           textAlign="center"
-          margin="80px 0px"
+          margin="104px 0 112px"
         >
           {t('products.facilitation_text')}
-          {!isMobileMod() && <br/>}
-          {t('products.analysis_distance')}
-          <span style={{color:"#2B8C4D"}}>{t('products.good_question')}</span>.
-        </Display>
+          <Text as="span">
+            {t('products.analysis_distance')}
+            <Text as="span" color="#2B8C4D">{t('products.good_question')}</Text>.
+          </Text>
+        </Text>
 
         <VStack spacing={isMobileMod() ? 8 : 120}>
           <HStack
@@ -753,7 +726,7 @@ function Support() {
                   fontWeight="500"
                   fontSize="16px"
                   letterSpacing="0.2px"
-                  color="#42B0FF"
+                  color="#0D99FC"
                   href="/contact"
                 >
                   {t('support.contact_us')}

@@ -964,20 +964,6 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     }
   }, [lastScrollY, router.pathname])
 
-  function maxWidthDataset() {
-    if( route === "/search" ||
-        route === "/dataset/[dataset]" ||
-        route === "/user/[username]" ||
-        route === "/blog" ||
-        route === "/transparency" ||
-        route === "/faq" ||
-        route === "/about-us" ||
-        route === "/terms" ||
-        route === "/services"
-      ) return "1440px"
-    return "1264px"
-  }
-
   useEffect(() => {
     if(isLoading) return
     if(userBD !== null && userBD !== "undefined") {
@@ -1132,7 +1118,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
           justifyContent={simpleTemplate || userTemplate ? "flex-start" : { base: "center", lg: "flex-start" }}
           width="100%"
           height="40px"
-          maxWidth={maxWidthDataset()}
+          maxWidth="1440px"
           margin="0 auto"
           spacing={6}
         >

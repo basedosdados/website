@@ -108,7 +108,7 @@ export default function Contact({ pages }) {
       <Stack
         gridGap={{base:"40px", lg: "100px"}}
         width="100%"
-        maxWidth="1264px"
+        maxWidth="1440px"
         justify="space-between"
         direction={{ base: "column", lg: "row" }}
         margin="50px auto auto"

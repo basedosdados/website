@@ -101,7 +101,7 @@ export default function CaseStudies ({ serialize }) {
 
       <Stack
         spacing={0}
-        maxWidth="1264px"
+        maxWidth="1440px"
         margin="50px auto auto"
       >
         <Link

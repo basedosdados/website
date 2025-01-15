@@ -435,7 +435,7 @@ export default function AboutUs() {
         <VStack spacing={0}>
           <Stack
             width="100%"
-            maxWidth="1264px"
+            maxWidth="1440px"
             margin="auto"
             paddingTop={{ base: "128px", lg: "0" }}
             paddingX="24px"
