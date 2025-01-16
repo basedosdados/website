@@ -15,9 +15,9 @@ authors:
 
 > Este é um guia de uso da Relação Anual de Informações Sociais (RAIS). Este material contém informações sobre as variáveis mais importantes, perguntas frequentes e exemplos de uso do conjunto da RAIS 
 
-Essa base possui 2 tabelas: 
-* Microdados Estabelecimentos: cada linha representa um estabelecimento e suas características para cada ano de declaração
-* Microdados Vínculos: cada linha representa um vínculo e suas características para cada ano de declaração
+Essa base possui 2 tabelas com microdados: 
+- **Microdados Estabelecimentos:** Cada linha representa um estabelecimento em um determinado ano. As colunas descrevem características sobre a empresa e seus empregados
+- **Microdados Vínculos:** Cada linha representa um vínculo de trabalho em um determinado ano. As colunas descrevem características sobre o tipo do vínculo, do empregado e da empresa contratante.
 
 # Considerações para análises
 ## Vínculos e filtragem de dados

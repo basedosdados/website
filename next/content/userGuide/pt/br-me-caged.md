@@ -10,6 +10,13 @@ authors:
   - name: Laura Amaral
     role: Texto
 ---
+# Introdução
+Esse conjunto possui cinco tabelas de microdados divididas entre duas do antigo CAGED e três do novo CAGED. As metodologias do modelo antigo e novo não são compatíveis, o que afeta análises temporais. 
+- **Microdados Antigos:** Cada linha representa um registro de admissão ou demissão até dezembro de 2019. As colunas qualificam as características do empregado, do tipo de vínculo e da empresa. 
+- **Microdados Antigos de Ajustes:** Complementa a tabela de Microdados Antigos com ajustes admissões e demissões mensais, inclui o que atualmente está separado entre cancelamentos e movimentações fora do prazo.
+- **Microdados Movimentações:** Cada linha representa um registro de admissão ou demissão a partir de janeiro de 2020. As colunas qualificam as características do empregado, do tipo de vínculo e da empresa. 
+- **Microdados Movimentações Excluídas:** Complementa a tabela de Microdados Movimentações com cancelamentos de uma admissão ou demissão. Esses cancelamentos impactam o saldo do CAGED de forma inversa ao evento original.
+- **Microdados Movimentações Fora do Prazo:** Complementa a tabela de Microdados Movimentações registrando eventos fora do período regular.
 
 # Considerações para análises
 ## Saldo de movimentações
@@ -30,6 +37,7 @@ Foram identificadas inconsistências entre os dados disponíveis e o painel de e
 
 # Observações ao longo tempo
 Cada linha representa uma contratação ou demissão e os dados são desidentificados, assim, não é possível acompanhar um indivíduo ou uma empresa ao longo do tempo. O que é possível fazer é acompanhar o crescimento ou queda de funcionários com carteira em um determinado setor (CNAE), função (CBO) ou combinações de diferentes colunas que são disponibilizadas
+Além disso é importante se atentar que a metodologia caged mudou no início de 2020 e por isso análises temporais devem ser feitas até 2019 ou a partir de 2020. 
 
 # Linhas duplicadas
 Ainda não foram encontrados indícios de linhas duplicadas nas tabelas desse conjunto
@@ -51,9 +59,6 @@ Em 2020, os dados do CAGED passaram por uma reformulação que  trouxe maior aut
 
 # Atualizações
 Os microdados do CAGED são atualizados com 1 mês de defasagem. Isto é, supondo que o mês corrente seja março, os dados de fevereiro serão atualizados no final de março. O MTE disponibiliza um [calendário de atualização](https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/estatisticas-trabalho/o-pdet/calendario-de-divulgacao-do-novo-caged) disponível para consulta
-
-# Dados identificados
-Para obter os dados identificados do CAGED, é preciso realizar uma solicitação por meio deste link ao Ministério do Trabalho. Contudo, vale destacar que o processo pode ser demorado e não há garantia de aprovação.
 
 # Tratamentos feitos pela BD:
 O tratamento das três tabelas mais atualizadas do conjunto é muito similar: 
